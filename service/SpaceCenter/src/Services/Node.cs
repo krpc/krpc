@@ -20,7 +20,7 @@ namespace KRPC.SpaceCenter.Services
 
         readonly Guid vesselId;
 
-        internal Node (global::Vessel vessel, double ut, float prograde, float normal, float radial)
+        internal Node (global::Vessel vessel, double ut, double prograde, double normal, double radial)
         {
             vesselId = vessel.id;
             var node = vessel.patchedConicSolver.AddManeuverNode (ut);
@@ -88,8 +88,8 @@ namespace KRPC.SpaceCenter.Services
         /// The magnitude of the maneuver nodes delta-v in the prograde direction, in meters per second.
         /// </summary>
         [KRPCProperty]
-        public float Prograde {
-            get { return (float)InternalNode.DeltaV.z; }
+        public double Prograde {
+            get { return InternalNode.DeltaV.z; }
             set {
                 InternalNode.DeltaV.z = value;
                 InternalNode.OnGizmoUpdated (InternalNode.DeltaV, InternalNode.UT);
@@ -100,8 +100,8 @@ namespace KRPC.SpaceCenter.Services
         /// The magnitude of the maneuver nodes delta-v in the normal direction, in meters per second.
         /// </summary>
         [KRPCProperty]
-        public float Normal {
-            get { return (float)InternalNode.DeltaV.y; }
+        public double Normal {
+            get { return InternalNode.DeltaV.y; }
             set {
                 InternalNode.DeltaV.y = value;
                 InternalNode.OnGizmoUpdated (InternalNode.DeltaV, InternalNode.UT);
@@ -112,8 +112,8 @@ namespace KRPC.SpaceCenter.Services
         /// The magnitude of the maneuver nodes delta-v in the radial direction, in meters per second.
         /// </summary>
         [KRPCProperty]
-        public float Radial {
-            get { return (float)InternalNode.DeltaV.x; }
+        public double Radial {
+            get { return InternalNode.DeltaV.x; }
             set {
                 InternalNode.DeltaV.x = value;
                 InternalNode.OnGizmoUpdated (InternalNode.DeltaV, InternalNode.UT);
@@ -127,8 +127,8 @@ namespace KRPC.SpaceCenter.Services
         /// Does not change when executing the maneuver node. See <see cref="Node.RemainingDeltaV"/>.
         /// </remarks>
         [KRPCProperty]
-        public float DeltaV {
-            get { return (float)InternalNode.DeltaV.magnitude; }
+        public double DeltaV {
+            get { return InternalNode.DeltaV.magnitude; }
             set {
                 var direction = InternalNode.DeltaV.normalized;
                 InternalNode.OnGizmoUpdated (new Vector3d (direction.x * value, direction.y * value, direction.z * value), InternalNode.UT);
@@ -140,8 +140,8 @@ namespace KRPC.SpaceCenter.Services
         /// is executed. This is equivalent to the delta-v reported in-game.
         /// </summary>
         [KRPCProperty]
-        public float RemainingDeltaV {
-            get { return (float)InternalNode.GetBurnVector (InternalNode.patch).magnitude; }
+        public double RemainingDeltaV {
+            get { return InternalNode.GetBurnVector (InternalNode.patch).magnitude; }
         }
 
         /// <summary>

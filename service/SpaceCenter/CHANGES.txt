@@ -10,6 +10,7 @@ v0.3.7
    other than the stock reaction wheels, RCS thrusters, gimballed engines and control surfaces)
  * Include this 'other' torque in Vessel.AvailableTorque
  * Change required RemoteTech version to 1.8.0
+ * Change maneuver node methods and properties to use double precision values (#357)
 
 v0.3.6
  * Add Part.Tag which can be used to get/set the name tag set via the NameTag mod, or kOS (#297)
