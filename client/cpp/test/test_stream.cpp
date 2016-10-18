@@ -166,3 +166,23 @@ TEST_F(test_stream, test_add_stream_twice) {
   ASSERT_EQ("42", s0());
   ASSERT_EQ("42", s1());
 }
+
+TEST_F(test_stream, test_stream_freeze) {
+  auto s0 = test_service.counter_stream(0);
+  auto s1 = test_service.counter_stream(1);
+  auto x0 = s0();
+  auto x1 = s1();
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  ASSERT_NE(x0, s0());
+  ASSERT_NE(x1, s1());
+  conn.freeze_streams();
+  x0 = s0();
+  x1 = s1();
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  ASSERT_EQ(x0, s0());
+  ASSERT_EQ(x1, s1());
+  conn.thaw_streams();
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  ASSERT_NE(x0, s0());
+  ASSERT_NE(x1, s1());
+}

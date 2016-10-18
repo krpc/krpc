@@ -26,6 +26,8 @@ class Client {
   google::protobuf::uint64 add_stream(const schema::Request& request);
   void remove_stream(google::protobuf::uint64 id);
   std::string get_stream(google::protobuf::uint64 id);
+  void freeze_streams();
+  void thaw_streams();
 
  private:
   std::shared_ptr<Connection> rpc_connection;

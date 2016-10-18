@@ -283,16 +283,18 @@ namespace TestServer
             return l;
         }
 
-        static Dictionary<Guid, int> counters = new Dictionary<Guid, int> ();
+        static IDictionary<Guid, IDictionary<int, int>> counters = new Dictionary<Guid, IDictionary<int, int>> ();
 
         [KRPCProcedure]
-        public static int Counter ()
+        public static int Counter (int id = 0)
         {
             var client = CallContext.Client.Guid;
             if (!counters.ContainsKey (client))
-                counters [client] = 0;
-            counters [client]++;
-            return counters [client];
+                counters [client] = new Dictionary<int, int> ();
+            if (!counters [client].ContainsKey (id))
+                counters [client][id] = 0;
+            counters [client][id]++;
+            return counters [client][id];
         }
 
         [KRPCProcedure]

@@ -1,3 +1,6 @@
+v0.3.7
+ * Add stream freezing
+
 v0.3.6
  * Fix configure script
 
