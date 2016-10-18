@@ -1,3 +1,6 @@
+v0.3.7
+ * Change maneuver node methods and properties to use double precision values (#357)
+
 v0.3.6
  * Add Part.Tag which can be used to get/set the name tag set via the NameTag mod, or kOS (#297)
  * Add Parts.WithTag to get a list of all parts with the given tag value
