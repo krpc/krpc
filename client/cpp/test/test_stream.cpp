@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 
 #include <string>
+#include <vector>
 
 #include <krpc/platform.hpp>
 #include <krpc/services/krpc.hpp>
@@ -172,17 +173,58 @@ TEST_F(test_stream, test_stream_freeze) {
   auto s1 = test_service.counter_stream(1);
   auto x0 = s0();
   auto x1 = s1();
-  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  wait();
   ASSERT_NE(x0, s0());
   ASSERT_NE(x1, s1());
   conn.freeze_streams();
   x0 = s0();
   x1 = s1();
-  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  wait();
   ASSERT_EQ(x0, s0());
   ASSERT_EQ(x1, s1());
   conn.thaw_streams();
-  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  wait();
   ASSERT_NE(x0, s0());
   ASSERT_NE(x1, s1());
+}
+
+TEST_F(test_stream, test_stream_freeze_many) {
+  std::vector<krpc::Stream<int>> streams;
+  for (size_t i = 0; i < 1000; i++)
+    streams.push_back(test_service.counter_stream(i));
+  std::vector<int> values;
+  for (auto stream : streams)
+    values.push_back(stream());
+  wait();
+  for (size_t i = 0; i < streams.size(); i++)
+    ASSERT_NE(values[i], streams[i]());
+  conn.freeze_streams();
+  for (size_t i = 0; i < streams.size(); i++)
+    values[i] = streams[i]();
+  wait();
+  for (size_t i = 0; i < streams.size(); i++)
+    ASSERT_EQ(values[i], streams[i]());
+  conn.thaw_streams();
+  wait();
+  for (size_t i = 0; i < streams.size(); i++)
+    ASSERT_NE(values[i], streams[i]());
+}
+
+TEST_F(test_stream, test_stream_stop_while_frozen) {
+  auto s = test_service.counter_stream(0);
+  conn.freeze_streams();
+}
+
+TEST_F(test_stream, test_default_constructable) {
+  krpc::Stream<int> s;
+  ASSERT_FALSE(s);
+}
+
+TEST_F(test_stream, test_assignable) {
+  krpc::Stream<int> s;
+  ASSERT_FALSE(s);
+  s = test_service.counter_stream(0);
+  ASSERT_TRUE(s);
+  wait();
+  ASSERT_NE(s(), 0);
 }
