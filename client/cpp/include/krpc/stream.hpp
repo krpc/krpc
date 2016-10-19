@@ -10,43 +10,56 @@ namespace krpc {
 template <typename T>
 class Stream {
  public:
+  Stream() = default;
   Stream(Client* client, const schema::Request& request);
-  ~Stream();
   T operator()();
   void remove();
   bool operator==(const Stream<T>& rhs) const;
   bool operator!=(const Stream<T>& rhs) const;
+  explicit operator bool() const;
  private:
-  Client* client;
-  google::protobuf::uint32 id;
+  struct Ptr {
+    Ptr(Client* client, google::protobuf::uint32 id);
+    ~Ptr();
+    Client* client;
+    google::protobuf::uint32 id;
+  };
+  std::shared_ptr<Ptr> ptr;
 };
 
-template <typename T> inline Stream<T>::Stream(Client* client, const schema::Request& request)
-  : client(client) {
-  id = client->add_stream(request);
-}
-
-template <typename T> inline Stream<T>::~Stream() {
-  client->remove_stream(id);
+template <typename T> inline Stream<T>::Stream(Client* client, const schema::Request& request) {
+  ptr = std::make_shared<Ptr>(client, client->add_stream(request));
 }
 
 template <typename T> inline T Stream<T>::operator()() {
-  std::string data = client->get_stream(id);
+  std::string data = ptr->client->get_stream(ptr->id);
   T value;
-  decoder::decode(value, data, client);
+  decoder::decode(value, data, ptr->client);
   return value;
 }
 
 template <typename T> inline void Stream<T>::remove() {
-  client->remove_stream(id);
+  ptr->client->remove_stream(ptr->id);
 }
 
 template <typename T> inline bool Stream<T>::operator==(const Stream<T>& rhs) const {
-  return this->id == rhs.id;
+  return this->ptr->id == rhs.ptr->id;
 }
 
 template <typename T> inline bool Stream<T>::operator!=(const Stream<T>& rhs) const {
-  return this->id != rhs.id;
+  return this->ptr->id != rhs.ptr->id;
+}
+
+template <typename T> Stream<T>::operator bool() const {
+  return ptr.operator bool();
+}
+
+template <typename T> inline Stream<T>::Ptr::Ptr(Client* client, google::protobuf::uint32 id)
+  : client(client), id(id) {
+}
+
+template <typename T> inline Stream<T>::Ptr::~Ptr() {
+  client->remove_stream(id);
 }
 
 }  // namespace krpc
