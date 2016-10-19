@@ -1,5 +1,6 @@
 v0.3.7
- * Add stream freezing
+ * Add stream freezing (#357)
+ * Make stream objects default and copy constructable (#358)
 
 v0.3.6
  * Fix configure script
