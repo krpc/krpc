@@ -50,7 +50,7 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
       while (should_freeze->load()) {
         size_t size = 0;
         std::string data;
-        while (should_freeze->load()) {
+        while (data.size() > 0 || should_freeze->load()) {
           try {
             data += connection->partial_receive(1);
             size = decoder::decode_size_and_position(data).first;
