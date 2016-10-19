@@ -57,6 +57,9 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
             break;
           } catch (decoder::DecodeFailed&) {
           }
+          // Stop if requested
+          if (stop->load())
+            return;
         }
         if (size > 0)
           last_update = connection->receive(size);
