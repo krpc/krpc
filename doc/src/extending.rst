@@ -264,7 +264,7 @@ functionality to the kRPC server.
           }
       }
 
-.. csharp:class:: KRPCProperty
+.. csharp:attribute:: KRPCProperty
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is
    applied to class properties, and comes in two flavors:
@@ -379,6 +379,60 @@ functionality to the kRPC server.
         import krpc
         conn = krpc.connect()
         state = conn.eva.FlagState.lowered
+
+.. csharp:attribute:: KRPCDefaultValue (string Name, Type ValueConstructor)
+
+   :parameters:
+
+    * **Name** -- Name of the parameter to set the default value for.
+    * **ValueConstructor** -- Type of a static class with a Create method that
+      returns an instance of the default value.
+
+   This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_
+   can be applied to a kRPC method or procedure. It provides a workaround to set
+   the default value of a parameter to a non-compile time constant.
+   Ordinarily, C# only allows compile time constants to be used as the values
+   of default arguments.
+
+   The ValueConstructor parameter is the type of a static class that contains a
+   static method, called Create. When invoke, this method should return the
+   default value.
+
+   Note: If you just want to set the default value to a compile time constant,
+   use the C# syntax. kRPC will detect the default values and use them.
+
+   **Examples**
+
+   * Set the default value to a list:
+
+     .. code-block:: csharp
+
+
+        public static class DefaultKerbals
+        {
+            public static IList<string> Create ()
+            {
+                return new List<string> { "Jeb", "Bill", "Bob" };
+            }
+        }
+
+        [KRPCProcedure]
+        [KRPCDefaultValue ("names", typeof(DefaultKerbals))]
+        public static void HireKerbals (IList<string> names)
+        {
+            ...
+        }
+
+   * Set the default value to a compile time constant, which does not require
+     the KRPCDefaultValue attribute:
+
+     .. code-block:: csharp
+
+        [KRPCProcedure]
+        public static void HireKerbal (string name = "Jeb")
+        {
+            ...
+        }
 
 .. _service-api-identifiers:
 
