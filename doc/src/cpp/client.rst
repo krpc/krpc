@@ -239,7 +239,7 @@ Client API Reference
    A stream object. Streams are created by calling a function with ``_stream``
    appended to its name.
 
-   Stream objects are copy constructable and assignable. A stream is removed
+   Stream objects are copy constructible and assignable. A stream is removed
    from the server when all stream objects that refer to it are destroyed.
 
    .. function:: Stream<T>()
