@@ -19,10 +19,10 @@ class Stream {
   explicit operator bool() const;
  private:
   struct Ptr {
-    Ptr(Client* client, google::protobuf::uint32 id);
+    Ptr(Client* client, google::protobuf::uint64 id);
     ~Ptr();
     Client* client;
-    google::protobuf::uint32 id;
+    google::protobuf::uint64 id;
   };
   std::shared_ptr<Ptr> ptr;
 };
@@ -54,7 +54,7 @@ template <typename T> Stream<T>::operator bool() const {
   return ptr.operator bool();
 }
 
-template <typename T> inline Stream<T>::Ptr::Ptr(Client* client, google::protobuf::uint32 id)
+template <typename T> inline Stream<T>::Ptr::Ptr(Client* client, google::protobuf::uint64 id)
   : client(client), id(id) {
 }
 
