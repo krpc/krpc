@@ -1,5 +1,7 @@
 v0.3.7
- * Fix missing headers to automake script
+ * Add missing header to automake script
+ * Add stream freezing (#357)
+ * Make stream objects default and copy constructible (#358)
 
 v0.3.6
  * Fix configure script
