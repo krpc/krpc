@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 
 namespace KRPC.Utils
@@ -93,6 +94,15 @@ namespace KRPC.Utils
             if (attributes.Length != 1)
                 throw new ArgumentException ("Does not have any attributes", "member");
             return (T)attributes [0];
+        }
+
+        /// <summary>
+        /// Return attributes of type T for the given member. Does not follow inheritance.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
+        public static IEnumerable<T> GetAttributes<T> (ICustomAttributeProvider member)
+        {
+            return member.GetCustomAttributes (typeof(T), false).Cast<T> ();
         }
 
         /// <summary>

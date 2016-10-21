@@ -726,6 +726,23 @@ namespace KRPC.Test.Service
         }
 
         /// <summary>
+        /// Test calling a service method that takes an optional tuple as an argument
+        /// </summary>
+        [Test]
+        public void HandleOptionalTupleNotSpecified ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.TupleDefault (It.IsAny<KRPC.Utils.Tuple<int,bool>> ()))
+                .Returns ((KRPC.Utils.Tuple<int,bool> x) => x);
+            TestService.Service = mock.Object;
+            var response = Run (Req ("TestService", "TupleDefault"));
+            response.Time = 0;
+            Assert.AreEqual (String.Empty, response.Error);
+            Assert.AreEqual (TestService.CreateTupleDefault.Create (), response.ReturnValue);
+            mock.Verify (x => x.TupleDefault (It.IsAny<KRPC.Utils.Tuple<int,bool>> ()), Times.Once ());
+        }
+
+        /// <summary>
         /// Test calling a service method that is not active in the current game mode
         /// </summary>
         [Test]
