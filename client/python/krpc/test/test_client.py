@@ -179,6 +179,12 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual("value=jeb", objs[0].get_value())
         self.assertEqual("value=bob", objs[1].get_value())
 
+    def test_colllections_default_values(self):
+        self.assertEqual((1, False), self.conn.test_service.tuple_default())
+        self.assertEqual([1, 2, 3], self.conn.test_service.list_default())
+        self.assertEqual(set([1, 2, 3]), self.conn.test_service.set_default())
+        self.assertEqual({1: False, 2: True}, self.conn.test_service.dictionary_default())
+
     def test_client_members(self):
         self.assertSetEqual(
             set(['krpc', 'test_service', 'add_stream', 'stream', 'close']),
@@ -229,6 +235,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'increment_set',
                 'increment_tuple',
                 'increment_nested_collection',
+                'tuple_default',
+                'dictionary_default',
+                'list_default',
+                'set_default',
                 'add_to_object_list',
 
                 'counter',

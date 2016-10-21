@@ -36,16 +36,24 @@ class Decoder(object):
             object_id = cls._decode_value(data, object_id_typ)
             return typ.python_type(object_id) if object_id != 0 else None
         elif isinstance(typ, ListType):
+            if data == b'\x00':
+                return None
             msg = cls._decode_message(data, cls._types.as_type('KRPC.List'))
             return [cls.decode(item, typ.value_type) for item in msg.items]
         elif isinstance(typ, DictionaryType):
+            if data == b'\x00':
+                return None
             msg = cls._decode_message(data, cls._types.as_type('KRPC.Dictionary'))
             return dict((cls.decode(entry.key, typ.key_type), cls.decode(entry.value, typ.value_type))
                         for entry in msg.entries)
         elif isinstance(typ, SetType):
+            if data == b'\x00':
+                return None
             msg = cls._decode_message(data, cls._types.as_type('KRPC.Set'))
             return set(cls.decode(item, typ.value_type) for item in msg.items)
         elif isinstance(typ, TupleType):
+            if data == b'\x00':
+                return None
             msg = cls._decode_message(data, cls._types.as_type('KRPC.Tuple'))
             return tuple(cls.decode(item, value_type) for item, value_type in zip(msg.items, typ.value_types))
         else:

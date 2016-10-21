@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
@@ -31,9 +32,9 @@ namespace KRPC.Client.Test
         public void Error ()
         {
             var e1 = Assert.Throws<RPCException> (Connection.TestService ().ThrowArgumentException);
-            Assert.That(e1.Message, Is.StringContaining("Invalid argument"));
+            Assert.That (e1.Message, Is.StringContaining ("Invalid argument"));
             var e2 = Assert.Throws<RPCException> (Connection.TestService ().ThrowInvalidOperationException);
-            Assert.That(e2.Message, Is.StringContaining("Invalid operation"));
+            Assert.That (e2.Message, Is.StringContaining ("Invalid operation"));
         }
 
         [Test]
@@ -184,8 +185,8 @@ namespace KRPC.Client.Test
         [Test]
         public void CollectionsTuple ()
         {
-            var input = new System.Tuple<int,long> (0, 1);
-            var output = new System.Tuple<int,long> (1, 2);
+            var input = new Tuple<int,long> (0, 1);
+            var output = new Tuple<int,long> (1, 2);
             Assert.AreEqual (output, Connection.TestService ().IncrementTuple (input));
         }
 
@@ -219,6 +220,15 @@ namespace KRPC.Client.Test
             Assert.AreEqual (2, l.Count);
             Assert.AreEqual ("value=jeb", l [0].GetValue ());
             Assert.AreEqual ("value=bob", l [1].GetValue ());
+        }
+
+        [Test]
+        public void CollectionsDefaultValues ()
+        {
+            Assert.AreEqual (new Tuple<int,bool> (1, false), Connection.TestService ().TupleDefault ());
+            Assert.AreEqual (new List<int> { 1, 2, 3 }, Connection.TestService ().ListDefault ());
+            Assert.AreEqual (new HashSet<int> { 1, 2, 3 }, Connection.TestService ().SetDefault ());
+            Assert.AreEqual (new Dictionary<int, bool> { { 1, false }, { 2,true } }, Connection.TestService ().DictionaryDefault ());
         }
 
         [TestCase ("foo\nbar")]

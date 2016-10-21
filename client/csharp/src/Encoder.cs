@@ -74,7 +74,7 @@ namespace KRPC.Client
             buffer.SetLength (0);
             if (value != null && !type.IsInstanceOfType (value))
                 throw new ArgumentException ("Value of type " + value.GetType () + " cannot be encoded to type " + type);
-            if (value == null && !type.IsSubclassOf (typeof(RemoteObject)))
+            if (value == null && !type.IsSubclassOf (typeof(RemoteObject)) && !IsACollectionType (type))
                 throw new ArgumentException ("null cannot be encoded to type " + type);
             if (value == null)
                 stream.WriteUInt64 (0);
@@ -323,6 +323,11 @@ namespace KRPC.Client
         static bool IsAClassType (Type type)
         {
             return type.IsSubclassOf (typeof(RemoteObject));
+        }
+
+        static bool IsACollectionType (Type type)
+        {
+            return IsATupleType (type) || IsAListType (type) || IsASetType (type) || IsADictionaryType (type);
         }
 
         static bool IsAListType (Type type)

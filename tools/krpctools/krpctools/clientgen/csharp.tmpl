@@ -4,7 +4,7 @@ using System.Collections.Generic;
 {% macro args(parameters) %}
 var _args = new ByteString[] {
 {% for x in parameters %}
-    global::KRPC.Client.Encoder.Encode ({{x.name}}, typeof({{x.type}})){% if not loop.last %},{% endif %}
+    global::KRPC.Client.Encoder.Encode ({{x.name_value}}, typeof({{x.type}})){% if not loop.last %},{% endif %}
 
 {% endfor %}
 };
@@ -80,7 +80,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         {% endif %}
         {% if property.setter %}
             set {
-{{ args([{'name': 'value', 'type': property.type}]) | indent(width=16) }}
+{{ args([{'name': 'value', 'name_value': 'value', 'type': property.type}]) | indent(width=16) }}
 {{ call(service_name, property.setter.remote_name, false, true) | indent(width=16) }}
             }
         {% endif %}
@@ -117,7 +117,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}")]
         public {{ method.return_type }} {{ method_name }} ({{ sig_parameters(method.parameters) }})
         {
-{{ args([{'name': 'this', 'type': service_name+'.'+class_name}] + method.parameters) | indent(width=12) }}
+{{ args([{'name': 'this', 'name_value': 'this', 'type': service_name+'.'+class_name}] + method.parameters) | indent(width=12) }}
 {{ call(service_name, method.remote_name, method.return_type != 'void', true) | indent(width=12) }}
 {% if method.return_type != 'void' %}{{ return(method.return_type) | indent(width=12) }}
 {% endif %}
@@ -146,14 +146,14 @@ namespace KRPC.Client.Services.{{ service_name }}
         public {{ property.type }} {{ property_name }} {
         {% if property.getter %}
             get {
-{{ args([{'name': 'this', 'type': service_name+'.'+class_name }]) | indent(width=16) }}
+{{ args([{'name': 'this', 'name_value': 'this', 'type': service_name+'.'+class_name }]) | indent(width=16) }}
 {{ call(service_name, property.getter.remote_name, true, true) | indent(width=16) }}
 {{ return(property.type, false) | indent(width=16) }}
             }
         {% endif %}
         {% if property.setter %}
             set {
-{{ args([{'name': 'this', 'type': service_name+'.'+class_name }, {'name': 'value', 'type': property.type}]) | indent(width=16) }}
+{{ args([{'name': 'this', 'name_value': 'this', 'type': service_name+'.'+class_name }, {'name': 'value', 'name_value': 'value', 'type': property.type}]) | indent(width=16) }}
 {{ call(service_name, property.setter.remote_name, false, true) | indent(width=16) }}
             }
         {% endif %}

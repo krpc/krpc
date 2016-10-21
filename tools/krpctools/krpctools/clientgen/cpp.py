@@ -86,12 +86,26 @@ class CppGenerator(Generator):
                 return 'true'
             else:
                 return 'false'
-        elif isinstance(typ, krpc.types.ClassType) and value is None:
-            return self.parse_parameter_type(typ) + '()'
         elif isinstance(typ, krpc.types.EnumType):
             return 'static_cast<%s>(%s)' % (self.parse_parameter_type(typ), value)
+        elif value is None:
+            return self.parse_parameter_type(typ) + '()'
+        elif isinstance(typ, krpc.types.TupleType):
+            values = (self.parse_default_value(x, typ.value_types[i]) for i, x in enumerate(value))
+            return '%s{%s}' % (self.parse_type(typ), ', '.join(values))
+        elif isinstance(typ, krpc.types.ListType):
+            values = (self.parse_default_value(x, typ.value_type) for x in value)
+            return '%s{%s}' % (self.parse_type(typ), ', '.join(values))
+        elif isinstance(typ, krpc.types.SetType):
+            values = (self.parse_default_value(x, typ.value_type) for x in value)
+            return '%s{%s}' % (self.parse_type(typ), ', '.join(values))
+        elif isinstance(typ, krpc.types.DictionaryType):
+            entries = ('{%s, %s}' % (self.parse_default_value(k, typ.key_type),
+                                     self.parse_default_value(v, typ.value_type))
+                       for k, v in value.items())
+            return '%s{%s}' % (self.parse_type(typ), ', '.join(entries))
         else:
-            return value
+            return str(value)
 
     def parse_set_client(self, procedure):
         return isinstance(self.get_return_type(procedure), krpc.types.ClassType)
