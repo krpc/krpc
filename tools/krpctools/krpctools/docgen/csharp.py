@@ -51,6 +51,16 @@ class CsharpDomain(Domain):
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
+    @staticmethod
+    def default_value(typ, value):
+        if value is None:
+            return 'null'
+        elif isinstance(typ, TupleType) or isinstance(typ, ListType) or \
+             isinstance(typ, SetType) or isinstance(typ, DictionaryType):
+            return 'null'
+        else:
+            return str(value)
+
     def see(self, obj):
         if isinstance(obj, Property) or isinstance(obj, ClassProperty):
             prefix = 'prop'

@@ -132,6 +132,7 @@
     <Compile Include="Server\TCP\TCPStream.cs" />
     <Compile Include="ServicesChecker.cs" />
     <Compile Include="Service\Attributes\KRPCClassAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCDefaultValueAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCEnumAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCMethodAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCProcedureAttribute.cs" />

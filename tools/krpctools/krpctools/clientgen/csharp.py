@@ -24,7 +24,7 @@ class CsharpGenerator(Generator):
         else:
             return name
 
-    def parse_type(self, typ):
+    def parse_type(self, typ, interface=True):
         if isinstance(typ, krpc.types.ValueType):
             typ = typ.protobuf_type
             if typ == 'string':
@@ -55,20 +55,32 @@ class CsharpGenerator(Generator):
             elif typ.startswith('Test.'):
                 _, _, x = typ.rpartition('.')
                 return 'global::Test.%s' % x
-        elif isinstance(typ, krpc.types.ListType):
-            return 'global::System.Collections.Generic.IList<%s>' % \
-                self.parse_type(self.types.as_type(typ.protobuf_type[5:-1]))
-        elif isinstance(typ, krpc.types.SetType):
-            return 'global::System.Collections.Generic.ISet<%s>' % \
-                self.parse_type(self.types.as_type(typ.protobuf_type[4:-1]))
-        elif isinstance(typ, krpc.types.DictionaryType):
-            typs = split_type_string(typ.protobuf_type[11:-1])
-            return 'global::System.Collections.Generic.IDictionary<%s,%s>' % \
-                (self.parse_type(self.types.as_type(typs[0])), self.parse_type(self.types.as_type(typs[1])))
         elif isinstance(typ, krpc.types.TupleType):
             value_types = split_type_string(typ.protobuf_type[6:-1])
             return 'global::System.Tuple<%s>' % ','.join(self.parse_type(self.types.as_type(t))
                                                          for t in value_types)
+        elif isinstance(typ, krpc.types.ListType):
+            if interface:
+                name = 'IList'
+            else:
+                name = 'List'
+            return 'global::System.Collections.Generic.%s<%s>' % \
+                (name, self.parse_type(self.types.as_type(typ.protobuf_type[5:-1])))
+        elif isinstance(typ, krpc.types.SetType):
+            if interface:
+                name = 'ISet'
+            else:
+                name = 'HashSet'
+            return 'global::System.Collections.Generic.%s<%s>' % \
+                (name, self.parse_type(self.types.as_type(typ.protobuf_type[4:-1])))
+        elif isinstance(typ, krpc.types.DictionaryType):
+            if interface:
+                name = 'IDictionary'
+            else:
+                name = 'Dictionary'
+            typs = split_type_string(typ.protobuf_type[11:-1])
+            return 'global::System.Collections.Generic.%s<%s,%s>' % \
+                (name, self.parse_type(self.types.as_type(typs[0])), self.parse_type(self.types.as_type(typs[1])))
         elif isinstance(typ, krpc.types.ClassType):
             return 'global::KRPC.Client.Services.%s' % typ.protobuf_type[6:-1]
         elif isinstance(typ, krpc.types.EnumType):
@@ -83,8 +95,7 @@ class CsharpGenerator(Generator):
     def parse_parameter_type(self, typ):
         return self.parse_type(typ)
 
-    @staticmethod
-    def parse_default_value(value, typ):
+    def parse_default_value(self, value, typ):
         if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'string':
             return '"%s"' % value
         if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'bool':
@@ -94,12 +105,26 @@ class CsharpGenerator(Generator):
                 return 'false'
         elif isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'float':
             return str(value) + "f"
-        elif isinstance(typ, krpc.types.ClassType) and value is None:
-            return 'null'
         elif isinstance(typ, krpc.types.EnumType):
             return '(global::KRPC.Client.Services.%s)%s' % (typ.protobuf_type[5:-1], value)
+        elif value is None:
+            return 'null'
+        elif isinstance(typ, krpc.types.TupleType):
+            values = (self.parse_default_value(x, typ.value_types[i]) for i, x in enumerate(value))
+            return 'new %s (%s)' % (self.parse_type(typ, False), ', '.join(values))
+        elif isinstance(typ, krpc.types.ListType):
+            values = (self.parse_default_value(x, typ.value_type) for x in value)
+            return 'new %s { %s }' % (self.parse_type(typ, False), ', '.join(values))
+        elif isinstance(typ, krpc.types.SetType):
+            values = (self.parse_default_value(x, typ.value_type) for x in value)
+            return 'new %s { %s }' % (self.parse_type(typ, False), ', '.join(values))
+        elif isinstance(typ, krpc.types.DictionaryType):
+            entries = ('{ %s, %s }' % (self.parse_default_value(k, typ.key_type),
+                                       self.parse_default_value(v, typ.value_type))
+                       for k, v in value.items())
+            return 'new %s {%s}' % (self.parse_type(typ, False), ', '.join(entries))
         else:
-            return value
+            return str(value)
 
     @staticmethod
     def parse_documentation(documentation):
@@ -113,6 +138,25 @@ class CsharpGenerator(Generator):
         content = content.replace('  <remarks', '<remarks')
         return content
 
+    def generate_context_parameters(self, procedure):
+        parameters = super(CsharpGenerator, self).generate_context_parameters(procedure)
+        for parameter in parameters:
+            if 'default_value' not in parameter:
+                parameter['name_value'] = parameter['name']
+                continue
+            typ = parameter['type']
+            default_value = parameter['default_value']
+            if typ.startswith('global::System.Tuple') or \
+               typ.startswith('global::System.Collections.Generic.IList') or \
+               typ.startswith('global::System.Collections.Generic.ISet') or \
+               typ.startswith('global::System.Collections.Generic.IDictionary'):
+                parameter['name_value'] = '%s ?? %s' % (parameter['name'], default_value)
+                parameter['default_value'] = 'null'
+            else:
+                parameter['name_value'] = parameter['name']
+        return parameters
+
     @staticmethod
     def parse_context(context):
         return context
+

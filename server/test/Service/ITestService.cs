@@ -57,5 +57,13 @@ namespace KRPC.Test.Service
         IDictionary<int,IList<string>> EchoNestedCollection (IDictionary<int,IList<string>> c);
 
         IList<TestService.TestClass> EchoListOfObjects (IList<TestService.TestClass> l);
+
+        KRPC.Utils.Tuple<int,bool> TupleDefault (KRPC.Utils.Tuple<int,bool> x);
+
+        IList<int>  ListDefault (IList<int> x);
+
+        HashSet<int> SetDefault (HashSet<int> x);
+
+        IDictionary<int,bool> DictionaryDefault (IDictionary<int,bool> x);
     }
 }

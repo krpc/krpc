@@ -218,6 +218,16 @@ function TestClient:test_collections_of_objects()
   luaunit.assertEquals("value=bob", l[2]:get_value())
 end
 
+function TestClient:test_collections_default_values()
+  luaunit.assertEquals(List{1, false}, self.conn.test_service.tuple_default())
+  luaunit.assertEquals(List{1, 2, 3}, self.conn.test_service.list_default())
+  luaunit.assertEquals(Set{1, 2, 3}, self.conn.test_service.set_default())
+  local m = Map{}
+  m:set(1, false)
+  m:set(2, true)
+  luaunit.assertEquals(m, self.conn.test_service.dictionary_default())
+end
+
 -- FIXME: enable tests
 --def test_client_members(self):
 --    self.assertSetEqual(

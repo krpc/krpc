@@ -176,9 +176,7 @@ class TestReferenceFrame(krpctest.TestCase):
 
     def test_relative_position(self):
         position = (1, 2, 3)
-        #FIXME: remove default arguments when they are fixed on the server
-        ref = self.space_center.ReferenceFrame.create_relative(
-            self.vessel.reference_frame, position, (0, 0, 0, 1), (0, 0, 0), (0, 0, 0))
+        ref = self.space_center.ReferenceFrame.create_relative(self.vessel.reference_frame, position=position)
         self.assertAlmostEqual(tuple(-x for x in position), self.vessel.position(ref))
 
     def test_relative_rotation(self):
@@ -195,22 +193,19 @@ class TestReferenceFrame(krpctest.TestCase):
         ]
         self.assertAlmostEqual((0, 1, 0), self.vessel.direction(self.vessel.reference_frame), places=4)
         for case in cases:
-            #FIXME: remove default arguments when they are fixed on the server
             ref = self.space_center.ReferenceFrame.create_relative(
-                self.vessel.reference_frame, (0, 0, 0), case['rot'], (0, 0, 0), (0, 0, 0))
+                self.vessel.reference_frame, rotation=case['rot'])
             self.assertAlmostEqual(case['dir'], self.vessel.direction(ref), places=4)
 
     def test_relative_velocity(self):
         velocity = (1, 2, 3)
-        #FIXME: remove default arguments when they are fixed on the server
-        ref = self.space_center.ReferenceFrame.create_relative(
-            self.vessel.reference_frame, (0, 0, 0), (0, 0, 0, 1), velocity, (0, 0, 0))
+        ref = self.space_center.ReferenceFrame.create_relative(self.vessel.reference_frame, velocity=velocity)
         self.assertAlmostEqual(tuple(-x for x in velocity), self.vessel.velocity(ref), places=4)
 
     def test_relative_angular_velocity(self):
         angular_velocity = (1, 2, 3)
         ref = self.space_center.ReferenceFrame.create_relative(
-            self.vessel.reference_frame, (0, 0, 0), (0, 0, 0, 1), (0, 0, 0), angular_velocity)
+            self.vessel.reference_frame, angular_velocity=angular_velocity)
         self.assertAlmostEqual(tuple(-x for x in angular_velocity), self.vessel.angular_velocity(ref), places=4)
 
     def test_hybrid(self):

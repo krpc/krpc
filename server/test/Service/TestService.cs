@@ -245,5 +245,72 @@ namespace KRPC.Test.Service
         {
             return Service.EchoListOfObjects (l);
         }
+
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        public static class CreateTupleDefault
+        {
+            public static object Create ()
+            {
+                return new KRPC.Utils.Tuple<int,bool> (1, false);
+            }
+        }
+
+        [KRPCProcedure]
+        [KRPCDefaultValue ("x", typeof(CreateTupleDefault))]
+        public static KRPC.Utils.Tuple<int,bool> TupleDefault (KRPC.Utils.Tuple<int,bool> x)
+        {
+            return Service.TupleDefault (x);
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        public static class CreateListDefault
+        {
+            public static object Create ()
+            {
+                return new List<int> { 1, 2, 3 };
+            }
+        }
+
+        [KRPCProcedure]
+        [KRPCDefaultValue ("x", typeof(CreateListDefault))]
+        public static IList<int> ListDefault (IList<int> x)
+        {
+            return Service.ListDefault (x);
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        public static class CreateSetDefault
+        {
+            public static object Create ()
+            {
+                return new HashSet<int> { 1, 2, 3 };
+            }
+        }
+
+        [KRPCProcedure]
+        [KRPCDefaultValue ("x", typeof(CreateSetDefault))]
+        public static HashSet<int> SetDefault (HashSet<int> x)
+        {
+            return Service.SetDefault (x);
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        public static class CreateDictionaryDefault
+        {
+            public static object Create ()
+            {
+                return new Dictionary<int,bool> {
+                    { 1, false },
+                    { 2, true }
+                };
+            }
+        }
+
+        [KRPCProcedure]
+        [KRPCDefaultValue ("x", typeof(CreateDictionaryDefault))]
+        public static IDictionary<int,bool> DictionaryDefault (IDictionary<int,bool> x)
+        {
+            return Service.DictionaryDefault (x);
+        }
     }
 }

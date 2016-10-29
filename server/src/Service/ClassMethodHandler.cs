@@ -19,7 +19,7 @@ namespace KRPC.Service
         public ClassMethodHandler (MethodInfo methodInfo)
         {
             method = methodInfo;
-            var parameterList = method.GetParameters ().Select (x => new ProcedureParameter (x)).ToList ();
+            var parameterList = method.GetParameters ().Select (x => new ProcedureParameter (methodInfo, x)).ToList ();
             parameterList.Insert (0, new ProcedureParameter (typeof(ulong), "this"));
             parameters = parameterList.ToArray ();
             methodArguments = new object[parameters.Length - 1];

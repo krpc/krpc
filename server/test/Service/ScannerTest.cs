@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Messages;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace KRPC.Test.Service
 {
@@ -33,7 +34,7 @@ namespace KRPC.Test.Service
         public void TestService ()
         {
             var service = services.ServicesList.First (x => x.Name == "TestService");
-            Assert.AreEqual (37, service.Procedures.Count);
+            Assert.AreEqual (41, service.Procedures.Count);
             Assert.AreEqual (2, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
             Assert.AreEqual ("<doc>\n<summary>\nTest service documentation.\n</summary>\n</doc>", service.Documentation);
@@ -344,13 +345,46 @@ namespace KRPC.Test.Service
                     MessageAssert.HasAttribute (proc, 0, "ParameterType(0).List(Class(TestService.TestClass))");
                     MessageAssert.HasAttribute (proc, 1, "ReturnType.List(Class(TestService.TestClass))");
                     MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "TupleDefault") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameterWithDefaultValue (proc, 0, "KRPC.Tuple", "x", new KRPC.Utils.Tuple<int,bool> (1, false));
+                    MessageAssert.HasReturnType (proc, "KRPC.Tuple");
+                    MessageAssert.HasAttributes (proc, 2);
+                    MessageAssert.HasAttribute (proc, 0, "ParameterType(0).Tuple(int32,bool)");
+                    MessageAssert.HasAttribute (proc, 1, "ReturnType.Tuple(int32,bool)");
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "ListDefault") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameterWithDefaultValue (proc, 0, "KRPC.List", "x", new List<int> { 1, 2, 3 });
+                    MessageAssert.HasReturnType (proc, "KRPC.List");
+                    MessageAssert.HasAttributes (proc, 2);
+                    MessageAssert.HasAttribute (proc, 0, "ParameterType(0).List(int32)");
+                    MessageAssert.HasAttribute (proc, 1, "ReturnType.List(int32)");
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "SetDefault") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameterWithDefaultValue (proc, 0, "KRPC.Set", "x", new HashSet<int> { 1, 2, 3 });
+                    MessageAssert.HasReturnType (proc, "KRPC.Set");
+                    MessageAssert.HasAttributes (proc, 2);
+                    MessageAssert.HasAttribute (proc, 0, "ParameterType(0).Set(int32)");
+                    MessageAssert.HasAttribute (proc, 1, "ReturnType.Set(int32)");
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "DictionaryDefault") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameterWithDefaultValue (proc, 0, "KRPC.Dictionary", "x",
+                        new Dictionary<int,bool> { { 1,false }, { 2,true } });
+                    MessageAssert.HasReturnType (proc, "KRPC.Dictionary");
+                    MessageAssert.HasAttributes (proc, 2);
+                    MessageAssert.HasAttribute (proc, 0, "ParameterType(0).Dictionary(int32,bool)");
+                    MessageAssert.HasAttribute (proc, 1, "ReturnType.Dictionary(int32,bool)");
+                    MessageAssert.HasNoDocumentation (proc);
                 } else {
                     Assert.Fail ();
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (37, foundProcedures);
-            Assert.AreEqual (37, service.Procedures.Count);
+            Assert.AreEqual (41, foundProcedures);
+            Assert.AreEqual (41, service.Procedures.Count);
         }
 
         [Test]

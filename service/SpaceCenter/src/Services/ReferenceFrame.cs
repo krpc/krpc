@@ -325,6 +325,24 @@ namespace KRPC.SpaceCenter.Services
             return new ReferenceFrame (ReferenceFrameType.Thrust, part: thruster.Part.InternalPart, thruster: thruster);
         }
 
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
+        static class VectorZero
+        {
+            public static object Create ()
+            {
+                return Vector3.zero.ToTuple ();
+            }
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
+        static class QuaternionIdentity
+        {
+            public static object Create ()
+            {
+                return QuaternionD.identity.ToTuple ();
+            }
+        }
+
         /// <summary>
         /// Create a relative reference frame.
         /// </summary>
@@ -333,16 +351,14 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="rotation">The rotation to apply to the parent frames rotation, as a quaternion. Defaults to zero.</param>
         /// <param name="velocity">The linear velocity to offset the parent frame by. Defaults to zero.</param>
         /// <param name="angularVelocity">The angular velocity to offset the parent frame by. Defaults to zero.</param>
-        //FIXME: make rotation, velocity and angularVelocity default to null when null tuple bug is fixed
         [KRPCMethod]
+        [KRPCDefaultValue ("position", typeof(VectorZero))]
+        [KRPCDefaultValue ("rotation", typeof(QuaternionIdentity))]
+        [KRPCDefaultValue ("velocity", typeof(VectorZero))]
+        [KRPCDefaultValue ("angularVelocity", typeof(VectorZero))]
         public static ReferenceFrame CreateRelative (ReferenceFrame referenceFrame, Tuple3 position, Tuple4 rotation, Tuple3 velocity, Tuple3 angularVelocity)
         {
-            return new ReferenceFrame (
-                referenceFrame,
-                position.ToVector (),
-                rotation != null ? rotation.ToQuaternion () : QuaternionD.identity,
-                velocity != null ? velocity.ToVector () : Vector3d.zero,
-                angularVelocity != null ? angularVelocity.ToVector () : Vector3d.zero);
+            return new ReferenceFrame (referenceFrame, position.ToVector (), rotation.ToQuaternion (), velocity.ToVector (), angularVelocity.ToVector ());
         }
 
         /// <summary>

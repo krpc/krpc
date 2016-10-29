@@ -19,7 +19,9 @@ N: KRPC.Client.Services.KRPC
 R: Gendarme.Rules.Design.DoNotDeclareSettersOnCollectionPropertiesRule
 N: KRPC.Client.Services.Drawing
 R: Gendarme.Rules.Design.Generic.DoNotExposeNestedGenericSignaturesRule
+N: KRPC.Client.Services.KRPC
 N: KRPC.Client.Services.Drawing
+N: KRPC.Client.Services.SpaceCenter
 R: Gendarme.Rules.Naming.AvoidRedundancyInMethodNameRule
 N: KRPC.Client.Services.RemoteTech
 R: Gendarme.Rules.Naming.UseCorrectCasingRule
@@ -33,6 +35,8 @@ N: KRPC.Client.Services.UI
 R: Gendarme.Rules.Smells.AvoidCodeDuplicatedInSameClassRule
 N: KRPC.Client.Services.SpaceCenter
 N: KRPC.Client.Services.UI
+R: Gendarme.Rules.Smells.AvoidLongParameterListsRule
+N: KRPC.Client.Services.SpaceCenter
 
 # Protocol Buffers
 R: Gendarme.Rules.BadPractice.AvoidVisibleConstantFieldRule
