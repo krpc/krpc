@@ -1,20 +1,19 @@
 #!/bin/bash
 
-# Usage tools/serve-docs.sh PORT
+# Usage tools/serve-docs.sh [PORT]
 
 set -e
 
 port=${1:-8080}
-src=bazel-bin/doc/serve/src
+src=bazel-genfiles/doc/srcs
 env=bazel-bin/doc/serve/env
 out=bazel-bin/doc/serve/out
 
+# Build the doc sources
 bazel build //doc:srcs
 
+# Set up python environment
 mkdir -p `dirname $env`
-rm -rf $src
-cp -R bazel-genfiles/doc/srcs $src
-
 if [ ! -d "$env" ]; then
   virtualenv $env --system-site-packages
   source $env/bin/activate
@@ -26,4 +25,5 @@ else
   source $env/bin/activate
 fi
 
-sphinx-autobuild $src $out
+# Auto-serve and auto-build the docs
+python tools/do-serve-docs.py $port $src $out
