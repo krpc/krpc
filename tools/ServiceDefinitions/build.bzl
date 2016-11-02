@@ -15,6 +15,7 @@ service_definitions = rule(
         'service': attr.string(mandatory=True),
         'out': attr.output(mandatory=True),
         '_service_definitions_tool': attr.label(
-            executable=True, default=Label('//tools/ServiceDefinitions:ServiceDefinitions'))
+            executable=True, cfg='host',
+            default=Label('//tools/ServiceDefinitions:ServiceDefinitions'))
      }
 )

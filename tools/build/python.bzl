@@ -223,7 +223,7 @@ py_lint_test = rule(
         'srcs': attr.label_list(allow_files=True),
         'deps': attr.label_list(allow_files=True),
         'rcfile': attr.label(allow_files=True, single_file=True),
-        'pylint': attr.label(default=Label('//tools/build/pylint'), executable=True)
+        'pylint': attr.label(default=Label('//tools/build/pylint'), executable=True, cfg='host')
     },
     test = True
 )
