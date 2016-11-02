@@ -9,7 +9,7 @@ def _ref_impl(ctx):
         mnemonic = 'CSharpReference',
         inputs = [input],
         outputs = [output],
-        command = 'ln -f -s "`pwd`/%s" "`pwd`/%s"' % (input.path, output.path)
+        command = 'cp "%s" "%s"' % (input.path, output.path)
     )
 
     return struct(
