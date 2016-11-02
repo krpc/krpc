@@ -355,7 +355,8 @@ def _nuget_package_impl(ctx):
         mnemonic = 'NuGetPackage',
         inputs = [ctx.file._nuget_exe, assembly, doc, nuspec],
         outputs = [ctx.outputs.out],
-        command = ' && '.join(sub_commands)
+        command = ' && '.join(sub_commands),
+        execution_requirements = {'local': '1'} # FIXME: nuget.exe does not work with the sandbox
     )
 
 nuget_package = rule(
