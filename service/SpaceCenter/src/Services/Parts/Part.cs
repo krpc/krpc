@@ -97,6 +97,30 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Whether the part is highlighted.
+        /// </summary>
+        [KRPCProperty]
+        public bool Highlighted {
+            get { return InternalPart.HighlightActive; }
+            set {
+                var part = InternalPart;
+                if (value)
+                    PartHighlightAddon.Add (part);
+                else
+                    PartHighlightAddon.Remove (part);
+            }
+        }
+
+        /// <summary>
+        /// The color used to highlight the part.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 HighlightColor {
+            get { return InternalPart.highlightColor.ToTuple (); }
+            set { InternalPart.highlightColor = value.ToColor (); }
+        }
+
+        /// <summary>
         /// The cost of the part, in units of funds.
         /// </summary>
         [KRPCProperty]
@@ -594,6 +618,25 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.PositionFromWorldSpace (InternalPart.CenterOfMass ()).ToTuple ();
+        }
+
+        /// <summary>
+        /// The axis-aligned bounding box of the vessel in the given reference frame.
+        /// Returns the minimum and maximum vertices of the box.
+        /// </summary>
+        /// <param name="referenceFrame"></param>
+        /// <remarks>
+        /// This is computed from the collision meshes of the part.
+        /// If the part is not collidable, the box has zero volume and is centered on
+        /// the <see cref="Position"/> of the part.
+        /// </remarks>
+        [KRPCMethod]
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public Tuple<Tuple3,Tuple3> BoundingBox (ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
+            return InternalPart.GetBounds (referenceFrame).ToTuples ();
         }
 
         /// <summary>

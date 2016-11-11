@@ -55,7 +55,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float TransmitValue {
-            get { return GetScienceValue (data.transmitValue); }
+            get { return GetScienceValue (data.baseTransmitValue); }
         }
 
         float GetScienceValue (float transmitValue)

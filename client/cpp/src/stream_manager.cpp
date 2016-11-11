@@ -12,10 +12,20 @@ namespace krpc {
 
 void StreamManager::update_thread_main(StreamManager* stream_manager,
                                        const std::shared_ptr<Connection>& connection,
-                                       const std::shared_ptr<std::atomic_bool>& stop) {
+                                       const std::shared_ptr<std::atomic_bool>& stop,
+                                       const std::shared_ptr<std::atomic_bool>& should_freeze,
+                                       const std::shared_ptr<std::atomic_bool>& frozen) {
   Client * client = stream_manager->client;
 
+  auto apply_update = [stream_manager, client] (const std::string& data) {
+    schema::StreamUpdate update;
+    decoder::decode(update, data, client);
+    for (auto result : update.results())
+      stream_manager->update(result.id(), result.result());
+  };
+
   while (!stop->load()) {
+    // Wait for next update message
     size_t size = 0;
     std::string data;
     while (!stop->load()) {
@@ -29,12 +39,39 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
     if (stop->load())
       break;
 
-    data = connection->receive(size);
-    schema::StreamUpdate update;
-    decoder::decode(update, data, client);
+    // Decode and apply the update
+    apply_update(connection->receive(size));
 
-    for (auto result : update.results())
-      stream_manager->update(result.id(), result.result());
+    // Check if updates should freeze
+    if (should_freeze->load()) {
+      frozen->store(true);
+
+      // While frozen, read and skip update messages
+      std::string last_update;
+      while (should_freeze->load()) {
+        size_t size = 0;
+        std::string data;
+        while (data.size() > 0 || should_freeze->load()) {
+          try {
+            data += connection->partial_receive(1);
+            size = decoder::decode_size(data);
+            break;
+          } catch (EncodingError&) {
+          }
+          // Stop if requested
+          if (stop->load())
+            return;
+        }
+        if (size > 0)
+          last_update = connection->receive(size);
+      }
+
+      // Apply the last received update when thawing
+      if (!last_update.empty())
+        apply_update(last_update);
+
+      frozen->store(false);
+    }
   }
 }
 
@@ -44,7 +81,9 @@ StreamManager::StreamManager(Client * client, const std::shared_ptr<Connection>&
   : client(client), connection(connection),
     data_lock(new std::mutex),
     stop(new std::atomic_bool(false)),
-    update_thread(new std::thread(update_thread_main, this, connection, stop)) {
+    should_freeze(new std::atomic_bool(false)),
+    frozen(new std::atomic_bool(false)),
+    update_thread(new std::thread(update_thread_main, this, connection, stop, should_freeze, frozen)) {
 }
 
 StreamManager::~StreamManager() {
@@ -79,6 +118,18 @@ void StreamManager::update(google::protobuf::uint64 id, const schema::ProcedureR
   if (it == data.end())
     return;
   it->second = result.value();
+}
+
+void StreamManager::freeze() {
+  should_freeze->store(true);
+  while (!frozen->load()) {
+  }
+}
+
+void StreamManager::thaw() {
+  should_freeze->store(false);
+  while (frozen->load()) {
+  }
 }
 
 }  // namespace krpc

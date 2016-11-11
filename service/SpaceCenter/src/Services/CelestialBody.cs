@@ -246,10 +246,10 @@ namespace KRPC.SpaceCenter.Services
         /// The biomes present on this body.
         /// </summary>
         [KRPCProperty]
-        public IList<string> Biomes {
+        public HashSet<string> Biomes {
             get {
                 CheckHasBiomes ();
-                return InternalBody.BiomeMap.Attributes.Select (x => x.name).ToList ();
+                return new HashSet<string> (InternalBody.BiomeMap.Attributes.Select (x => x.name));
             }
         }
 

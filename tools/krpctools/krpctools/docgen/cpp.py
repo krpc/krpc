@@ -102,3 +102,32 @@ class CppDomain(Domain):
 
     def paramref(self, name):
         return super(CppDomain, self).paramref(snake_case(name))
+
+    def default_value(self, typ, value):
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:
+            return '"%s"' % value
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:
+            if value:
+                return 'true'
+            else:
+                return 'false'
+        elif isinstance(typ, EnumerationType):
+            return 'static_cast<%s>(%s)' % (self.type(typ), value)
+        elif value is None:
+            return self.type(typ) + '()'
+        elif isinstance(typ, TupleType):
+            values = (self.default_value(typ.value_types[i], x) for i, x in enumerate(value))
+            return '(%s)' % ', '.join(values)
+        elif isinstance(typ, ListType):
+            values = (self.default_value(typ.value_type, x) for x in value)
+            return '(%s)' % ', '.join(values)
+        elif isinstance(typ, SetType):
+            values = (self.default_value(typ.value_type, x) for x in value)
+            return '(%s)' % ', '.join(values)
+        elif isinstance(typ, DictionaryType):
+            entries = ('(%s, %s)' % (self.default_value(typ.key_type, k),
+                                     self.default_value(typ.value_type, v))
+                       for k, v in value.items())
+            return '(%s)' % ', '.join(entries)
+        else:
+            return str(value)

@@ -195,12 +195,10 @@ class TestParts(krpctest.TestCase):
         self.assertItemsEqual(['AE-FF1 Airstream Protective Shell (1.25m)'], part_titles_in_stage(0))
         self.assertItemsEqual(['TR-XL Stack Separator'], part_titles_in_stage(1))
         self.assertItemsEqual(['Mk2-R Radial-Mount Parachute']*3, part_titles_in_stage(2))
-        self.assertItemsEqual(['RE-L10 "Poodle" Liquid Fuel Engine', 'TR-XL Stack Separator'],
+        self.assertItemsEqual(['Clamp-O-Tron Docking Port', 'Clamp-O-Tron Docking Port Jr.',
+                               'RE-L10 "Poodle" Liquid Fuel Engine', 'TR-XL Stack Separator'],
                               part_titles_in_stage(3))
         self.assertItemsEqual([
-            #TODO: why are docking ports activated in a stage?
-            u'Clamp-O-Tron Docking Port',
-            u'Clamp-O-Tron Docking Port Jr.',
             'RE-I5 "Skipper" Liquid Fuel Engine',
             'TR-XL Stack Separator'
         ], part_titles_in_stage(4))

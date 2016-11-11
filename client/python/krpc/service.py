@@ -110,7 +110,7 @@ def _parse_documentation_node(node):
 
 
 def _parse_documentation_content(node):
-    desc = node.text
+    desc = node.text or ''
     for child in node:
         desc += _parse_documentation_node(child)
         if child.tail:

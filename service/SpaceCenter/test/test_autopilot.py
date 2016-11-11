@@ -287,10 +287,17 @@ class TestAutoPilotSAS(krpctest.TestCase):
         self.ap.target_direction = direction
         self.ap.target_roll = roll
 
+    def check_direction(self, direction, roll=None):
+        flight = self.vessel.flight()
+        self.assertAlmostEqual(direction, flight.direction, delta=0.1)
+        if roll is not None:
+            self.assertAlmostEqual(roll, flight.roll, delta=1)
+
     def test_sas_error(self):
         flight = self.vessel.flight()
         self.set_direction(flight.prograde, roll=27)
         self.wait_for_autopilot()
+        self.check_direction(flight.prograde, roll=27)
 
         self.ap.sas = True
         for wheel in self.vessel.parts.reaction_wheels:

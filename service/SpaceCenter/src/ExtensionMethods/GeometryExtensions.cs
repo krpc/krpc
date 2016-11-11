@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using KRPC.Utils;
 using UnityEngine;
 using Tuple2 = KRPC.Utils.Tuple<double, double>;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
@@ -87,6 +88,15 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 m [1, 0], m [1, 1], m [1, 2],
                 m [2, 0], m [2, 1], m [2, 2]
             });
+        }
+
+        /// <summary>
+        /// Convert a pair of vectors to a pair of tuples
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public static Tuple<Tuple3, Tuple3> ToTuple (this Tuple<Vector3d, Vector3d> v)
+        {
+            return new Tuple<Tuple3,Tuple3> (v.Item1.ToTuple (), v.Item2.ToTuple ());
         }
 
         /// <summary>
@@ -397,6 +407,32 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 for (int j = 0; j < 3; j++)
                     m [i, j] = left [i] * right [j];
             return m;
+        }
+
+        /// <summary>
+        /// Compute the vertices for an axis-aligned bounding box.
+        /// </summary>
+        public static Vector3[] ToVertices (this Bounds box)
+        {
+            return new [] {
+                box.max,
+                box.min,
+                box.center + new Vector3 (-box.extents.x, box.extents.y, box.extents.z),
+                box.center + new Vector3 (box.extents.x, -box.extents.y, box.extents.z),
+                box.center + new Vector3 (box.extents.x, box.extents.y, -box.extents.z),
+                box.center + new Vector3 (-box.extents.x, -box.extents.y, box.extents.z),
+                box.center + new Vector3 (-box.extents.x, box.extents.y, -box.extents.z),
+                box.center + new Vector3 (box.extents.x, -box.extents.y, -box.extents.z)
+            };
+        }
+
+        /// <summary>
+        /// Convert an axis-aligned bounding box to its min and max positions as tuples.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public static Tuple<Tuple3,Tuple3> ToTuples (this Bounds bounds)
+        {
+            return new Tuple<Tuple3, Tuple3> (bounds.min.ToTuple (), bounds.max.ToTuple ());
         }
     }
 }

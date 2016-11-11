@@ -55,40 +55,53 @@ class TestVessel(krpctest.TestCase):
         self.assertAlmostEqual(3492, self.vessel.dry_mass, places=3)
 
     def test_moment_of_inertia(self):
-        self.assertAlmostEqual((13411, 2219, 13366), self.vessel.moment_of_inertia, delta=10)
+        self.assertAlmostEqual((13394, 2255, 13348), self.vessel.moment_of_inertia, delta=1)
 
     def test_inertia_tensor(self):
         self.assertAlmostEqual(
-            [13411, 0, 0,
-             0, 2219, 0,
-             0, 0, 13366],
-            self.vessel.inertia_tensor, delta=10)
+            [13394, 0, 0,
+             0, 2255, 0,
+             0, 0, 13348],
+            self.vessel.inertia_tensor, delta=1)
 
     def test_available_torque(self):
-        self.assertAlmostEqual((5000, 5000, 5000), self.vessel.available_torque, delta=5)
+        self.assertAlmostEqual((5000, 5000, 5000), self.vessel.available_torque[0], delta=5)
+        self.assertAlmostEqual((-5000, -5000, -5000), self.vessel.available_torque[1], delta=5)
 
     def test_available_reaction_wheel_torque(self):
-        self.assertAlmostEqual((5000, 5000, 5000), self.vessel.available_reaction_wheel_torque)
+        self.assertAlmostEqual((5000, 5000, 5000), self.vessel.available_reaction_wheel_torque[0])
+        self.assertAlmostEqual((-5000, -5000, -5000), self.vessel.available_reaction_wheel_torque[1])
         for rw in self.vessel.parts.reaction_wheels:
             rw.active = False
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_reaction_wheel_torque)
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_reaction_wheel_torque[0])
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_reaction_wheel_torque[1])
         for rw in self.vessel.parts.reaction_wheels:
             rw.active = True
 
     def test_available_rcs_torque(self):
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque)
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque[0])
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque[1])
         self.vessel.control.rcs = True
         self.wait()
-        self.assertAlmostEqual((6005, 5575, 6005), self.vessel.available_rcs_torque, delta=5)
+        self.assertAlmostEqual((6005, 5575, 6005), self.vessel.available_rcs_torque[0], delta=5)
+        self.assertAlmostEqual((-6005, -5575, -6005), self.vessel.available_rcs_torque[1], delta=5)
         self.vessel.control.rcs = False
         self.wait()
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque)
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque[0])
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque[1])
 
     def test_available_engine_torque(self):
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_engine_torque)
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_engine_torque[0])
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_engine_torque[1])
 
     def test_available_control_surface_torque(self):
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_control_surface_torque)
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_control_surface_torque[0])
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_control_surface_torque[1])
+
+    def test_bounding_box(self):
+        box = self.vessel.bounding_box(self.vessel.reference_frame)
+        self.assertAlmostEqual((-1.55, -2.57, -1.55), box[0], places=2)
+        self.assertAlmostEqual((1.55, 2.67, 1.55), box[1], places=2)
 
 class TestVesselEngines(krpctest.TestCase):
 
@@ -115,18 +128,18 @@ class TestVesselEngines(krpctest.TestCase):
                 'msl_isp': 100
             },
             'LV-T45 "Swivel" Liquid Fuel Engine': {
-                'max_thrust': 200000,
-                'available_thrust': 200000,
-                'isp': 320,
-                'vac_isp': 320,
-                'msl_isp': 270
-            },
-            'LV-T30 "Reliant" Liquid Fuel Engine': {
                 'max_thrust': 215000,
                 'available_thrust': 215000,
-                'isp': 300,
-                'vac_isp': 300,
-                'msl_isp': 280
+                'isp': 320,
+                'vac_isp': 320,
+                'msl_isp': 250
+            },
+            'LV-T30 "Reliant" Liquid Fuel Engine': {
+                'max_thrust': 240000,
+                'available_thrust': 240000,
+                'isp': 310,
+                'vac_isp': 310,
+                'msl_isp': 265
             },
             'LV-N "Nerv" Atomic Rocket Motor': {
                 'max_thrust': 60000,

@@ -225,8 +225,8 @@ namespace KRPC.Client.Test
         [Test]
         public void CollectionsTuple ()
         {
-            var input = new System.Tuple<int,long> (0, 1);
-            var output = new System.Tuple<int,long> (1, 2);
+            var input = new Tuple<int,long> (0, 1);
+            var output = new Tuple<int,long> (1, 2);
             Assert.AreEqual (output, Connection.TestService ().IncrementTuple (input));
         }
 
@@ -260,6 +260,15 @@ namespace KRPC.Client.Test
             Assert.AreEqual (2, l.Count);
             Assert.AreEqual ("value=jeb", l [0].GetValue ());
             Assert.AreEqual ("value=bob", l [1].GetValue ());
+        }
+
+        [Test]
+        public void CollectionsDefaultValues ()
+        {
+            Assert.AreEqual (new Tuple<int,bool> (1, false), Connection.TestService ().TupleDefault ());
+            Assert.AreEqual (new List<int> { 1, 2, 3 }, Connection.TestService ().ListDefault ());
+            Assert.AreEqual (new HashSet<int> { 1, 2, 3 }, Connection.TestService ().SetDefault ());
+            Assert.AreEqual (new Dictionary<int, bool> { { 1, false }, { 2,true } }, Connection.TestService ().DictionaryDefault ());
         }
 
         [TestCase ("foo\nbar")]

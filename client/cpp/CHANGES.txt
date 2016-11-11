@@ -2,6 +2,11 @@ v0.4.0
  * Updated protocol in line with server changes
  * Remove connection retries. Client will now fail fast if it fails to connect to the server.
 
+v0.3.7
+ * Add missing header to automake script
+ * Add stream freezing (#357)
+ * Make stream objects default and copy constructible (#358)
+
 v0.3.6
  * Fix configure script
 

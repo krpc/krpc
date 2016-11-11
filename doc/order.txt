@@ -78,11 +78,13 @@ SpaceCenter.Vessel.AvailableReactionWheelTorque
 SpaceCenter.Vessel.AvailableRCSTorque
 SpaceCenter.Vessel.AvailableEngineTorque
 SpaceCenter.Vessel.AvailableControlSurfaceTorque
+SpaceCenter.Vessel.AvailableOtherTorque
 SpaceCenter.Vessel.ReferenceFrame
 SpaceCenter.Vessel.OrbitalReferenceFrame
 SpaceCenter.Vessel.SurfaceReferenceFrame
 SpaceCenter.Vessel.SurfaceVelocityReferenceFrame
 SpaceCenter.Vessel.Position
+SpaceCenter.Vessel.BoundingBox
 SpaceCenter.Vessel.Velocity
 SpaceCenter.Vessel.Rotation
 SpaceCenter.Vessel.Direction
@@ -290,6 +292,8 @@ SpaceCenter.Part
 SpaceCenter.Part.Name
 SpaceCenter.Part.Title
 SpaceCenter.Part.Tag
+SpaceCenter.Part.Highlighted
+SpaceCenter.Part.HighlightColor
 SpaceCenter.Part.Cost
 SpaceCenter.Part.Vessel
 SpaceCenter.Part.Parent
@@ -344,6 +348,7 @@ SpaceCenter.Part.Sensor
 SpaceCenter.Part.SolarPanel
 SpaceCenter.Part.Position
 SpaceCenter.Part.CenterOfMass
+SpaceCenter.Part.BoundingBox
 SpaceCenter.Part.Direction
 SpaceCenter.Part.Velocity
 SpaceCenter.Part.Rotation
@@ -459,7 +464,6 @@ SpaceCenter.Propellant.IgnoreForThrustCurve
 SpaceCenter.Propellant.DrawStackGauge
 SpaceCenter.Propellant.IsDeprived
 SpaceCenter.Propellant.Ratio
-SpaceCenter.Propellant.ConnectedResources
 SpaceCenter.Experiment
 SpaceCenter.Experiment.Part
 SpaceCenter.Experiment.Run
@@ -501,6 +505,7 @@ SpaceCenter.LandingGear.Part
 SpaceCenter.LandingGear.State
 SpaceCenter.LandingGear.Deployable
 SpaceCenter.LandingGear.Deployed
+SpaceCenter.LandingGear.IsGrounded
 SpaceCenter.LandingGearState
 SpaceCenter.LandingGearState.Deployed
 SpaceCenter.LandingGearState.Retracted
@@ -511,6 +516,7 @@ SpaceCenter.LandingLeg
 SpaceCenter.LandingLeg.Part
 SpaceCenter.LandingLeg.State
 SpaceCenter.LandingLeg.Deployed
+SpaceCenter.LandingLeg.IsGrounded
 SpaceCenter.LandingLegState
 SpaceCenter.LandingLegState.Deployed
 SpaceCenter.LandingLegState.Retracted
@@ -612,7 +618,6 @@ SpaceCenter.Sensor
 SpaceCenter.Sensor.Part
 SpaceCenter.Sensor.Active
 SpaceCenter.Sensor.Value
-SpaceCenter.Sensor.PowerUsage
 SpaceCenter.SolarPanel
 SpaceCenter.SolarPanel.Part
 SpaceCenter.SolarPanel.Deployed
@@ -679,6 +684,8 @@ SpaceCenter.Node.OrbitalReferenceFrame
 SpaceCenter.Node.Position
 SpaceCenter.Node.Direction
 SpaceCenter.ReferenceFrame
+SpaceCenter.ReferenceFrame.CreateRelative
+SpaceCenter.ReferenceFrame.CreateHybrid
 SpaceCenter.AutoPilot
 SpaceCenter.AutoPilot.Engage
 SpaceCenter.AutoPilot.Disengage
@@ -789,6 +796,7 @@ Drawing.Text.Alignment
 Drawing.Text.LineSpacing
 Drawing.Text.Anchor
 InfernalRobotics
+InfernalRobotics.Available
 InfernalRobotics.ServoGroups
 InfernalRobotics.ServoGroupWithName
 InfernalRobotics.ServoWithName
@@ -832,6 +840,7 @@ InfernalRobotics.Servo.MovePrevPreset
 InfernalRobotics.Servo.MoveTo
 InfernalRobotics.Servo.Stop
 KerbalAlarmClock
+KerbalAlarmClock.Available
 KerbalAlarmClock.Alarms
 KerbalAlarmClock.AlarmWithName
 KerbalAlarmClock.AlarmsWithType
@@ -878,6 +887,7 @@ KerbalAlarmClock.AlarmAction.KillWarpOnly
 KerbalAlarmClock.AlarmAction.MessageOnly
 KerbalAlarmClock.AlarmAction.PauseGame
 RemoteTech
+RemoteTech.Available
 RemoteTech.GroundStations
 RemoteTech.Comms
 RemoteTech.Antenna

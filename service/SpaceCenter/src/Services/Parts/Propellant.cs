@@ -149,15 +149,5 @@ namespace KRPC.SpaceCenter.Services.Parts
             get
             { return InternalPropellant.ratio; }
         }
-
-        /// <summary>
-        /// The reachable resources connected to this propellant.
-        /// </summary>
-        [KRPCProperty]
-        public IList<Resource> ConnectedResources {
-            get {
-                return InternalPropellant.connectedResources.Select (resource => new Resource (resource)).ToList ();
-            }
-        }
     }
 }

@@ -11,6 +11,11 @@ namespace KRPC.UI
         {
             Title = "kRPC";
             Options.Add (new DialogGUIButton ("Allow", () => args.Request.Allow ()));
+            Options.Add (new DialogGUIButton ("Allow (don't ask again)", () => {
+                Addon.config.AutoAcceptConnections = true;
+                Addon.config.Save ();
+                args.Request.Allow ();
+            }));
             Options.Add (new DialogGUIButton ("Deny", () => args.Request.Deny ()));
         }
 
@@ -18,10 +23,7 @@ namespace KRPC.UI
         {
             var clientName = args.Client.Name;
             var clientAddress = args.Client.Address;
-            if (name.Length == 0)
-                Message = "A client is attempting to connect from " + clientAddress;
-            else
-                Message = "'" + clientName + "' is attempting to connect from " + clientAddress;
+            Message = (clientName.Length == 0 ? "A client" : "'" + clientName + "'") + " is attempting to connect from " + clientAddress;
         }
 
         protected override void Closed ()

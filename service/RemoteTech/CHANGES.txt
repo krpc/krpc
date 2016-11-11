@@ -1,3 +1,7 @@
+v0.3.7
+ * Add RemoteTech.Available
+ * Change required RemoteTech version to 1.8.0
+
 v0.3.3
  * Moved from SpaceCenter to separate service
  * Support RemoteTech 1.7

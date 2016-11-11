@@ -274,6 +274,17 @@ TEST_F(test_client, test_collections_of_objects) {
   ASSERT_EQ("value=bob", l3[1].get_value());
 }
 
+TEST_F(test_client, test_collections_default_values) {
+  std::tuple<int, bool> t {1, false};
+  ASSERT_EQ(t, test_service.tuple_default());
+  std::vector<int> l {1, 2, 3};
+  ASSERT_EQ(l, test_service.list_default());
+  std::set<int> s {1, 2, 3};
+  ASSERT_EQ(s, test_service.set_default());
+  std::map<int, bool> m {{1, false}, {2, true}};
+  ASSERT_EQ(m, test_service.dictionary_default());
+}
+
 TEST_F(test_client, test_test_service_enum_members) {
   ASSERT_EQ(0, static_cast<int>(krpc::services::TestService::TestEnum::value_a));
   ASSERT_EQ(1, static_cast<int>(krpc::services::TestService::TestEnum::value_b));

@@ -44,9 +44,6 @@
         <Reference Include="System.Core">
           <HintPath>..\..\lib\ksp\KSP_Data\Managed\System.Core.dll</HintPath>
         </Reference>
-        <Reference Include="System.Xml.Linq">
-          <HintPath>..\..\lib\ksp\KSP_Data\Managed\System.Xml.Linq.dll</HintPath>
-        </Reference>
         <Reference Include="System.Xml">
           <HintPath>..\..\lib\ksp\KSP_Data\Managed\System.Xml.dll</HintPath>
         </Reference>
@@ -57,7 +54,6 @@
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Xml" />
-        <Reference Include="System.Xml.Linq" />
         <Reference Include="System.IO">
           <HintPath>..\..\bazel-krpc\lib\mono-4.5\Facades\System.IO.dll</HintPath>
         </Reference>
@@ -79,9 +75,6 @@
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="KSPUtil">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\KSPUtil.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
       <HintPath>..\..\bazel-krpc\external\csharp_protobuf_net35\file\Google.Protobuf.dll</HintPath>
@@ -160,6 +153,7 @@
     <Compile Include="Server\WebSockets\StreamStream.cs" />
     <Compile Include="ServicesChecker.cs" />
     <Compile Include="Service\Attributes\KRPCClassAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCDefaultValueAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCEnumAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCMethodAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCProcedureAttribute.cs" />
@@ -229,7 +223,6 @@
     <Compile Include="Utils\ExponentialMovingAverage.cs" />
     <Compile Include="Utils\GameScenesExtensions.cs" />
     <Compile Include="Utils\IScheduler.cs" />
-    <Compile Include="Utils\KSPAddonImproved.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\RectStorage.cs" />
     <Compile Include="Utils\Reflection.cs" />

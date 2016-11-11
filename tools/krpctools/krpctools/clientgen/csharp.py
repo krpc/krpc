@@ -37,18 +37,30 @@ class CsharpGenerator(Generator):
         else:
             return name
 
-    def parse_type(self, typ):
+    def parse_type(self, typ, interface=True):
         if isinstance(typ, ValueType):
             return self._type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
             return 'global::KRPC.Schema.KRPC.%s' % typ.python_type.__name__
         elif isinstance(typ, ListType):
-            return 'global::System.Collections.Generic.IList<%s>' % self.parse_type(typ.value_type)
+            if interface:
+                name = 'IList'
+            else:
+                name = 'List'
+            return 'global::System.Collections.Generic.%s<%s>' % (name, self.parse_type(typ.value_type))
         elif isinstance(typ, SetType):
-            return 'global::System.Collections.Generic.ISet<%s>' % self.parse_type(typ.value_type)
+            if interface:
+                name = 'ISet'
+            else:
+                name = 'HashSet'
+            return 'global::System.Collections.Generic.%s<%s>' % (name, self.parse_type(typ.value_type))
         elif isinstance(typ, DictionaryType):
-            return 'global::System.Collections.Generic.IDictionary<%s,%s>' % \
-                (self.parse_type(typ.key_type), self.parse_type(typ.value_type))
+            if interface:
+                name = 'IDictionary'
+            else:
+                name = 'Dictionary'
+            return 'global::System.Collections.Generic.%s<%s,%s>' % \
+                (name, self.parse_type(typ.key_type), self.parse_type(typ.value_type))
         elif isinstance(typ, TupleType):
             return 'global::System.Tuple<%s>' % ','.join(self.parse_type(t) for t in typ.value_types)
         elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
@@ -63,11 +75,10 @@ class CsharpGenerator(Generator):
     def parse_parameter_type(self, typ):
         return self.parse_type(typ)
 
-    @staticmethod
-    def parse_default_value(value, typ):
+    def parse_default_value(self, value, typ):
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:
             return '"%s"' % value
-        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:
+        elif isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:
             if value:
                 return 'true'
             else:
@@ -79,8 +90,24 @@ class CsharpGenerator(Generator):
         elif isinstance(typ, EnumerationType):
             return '(global::KRPC.Client.Services.%s.%s)%s' % \
                 (typ.protobuf_type.service, typ.protobuf_type.name, value)
+        elif value is None:
+            return 'null'
+        elif isinstance(typ, TupleType):
+            values = (self.parse_default_value(x, typ.value_types[i]) for i, x in enumerate(value))
+            return 'new %s (%s)' % (self.parse_type(typ, False), ', '.join(values))
+        elif isinstance(typ, ListType):
+            values = (self.parse_default_value(x, typ.value_type) for x in value)
+            return 'new %s { %s }' % (self.parse_type(typ, False), ', '.join(values))
+        elif isinstance(typ, SetType):
+            values = (self.parse_default_value(x, typ.value_type) for x in value)
+            return 'new %s { %s }' % (self.parse_type(typ, False), ', '.join(values))
+        elif isinstance(typ, DictionaryType):
+            entries = ('{ %s, %s }' % (self.parse_default_value(k, typ.key_type),
+                                       self.parse_default_value(v, typ.value_type))
+                       for k, v in value.items())
+            return 'new %s {%s}' % (self.parse_type(typ, False), ', '.join(entries))
         else:
-            return value
+            return str(value)
 
     @staticmethod
     def parse_documentation(documentation):
@@ -93,6 +120,24 @@ class CsharpGenerator(Generator):
         content = content.replace('  <returns', '<returns')
         content = content.replace('  <remarks', '<remarks')
         return content
+
+    def generate_context_parameters(self, procedure):
+        parameters = super(CsharpGenerator, self).generate_context_parameters(procedure)
+        for parameter in parameters:
+            if 'default_value' not in parameter:
+                parameter['name_value'] = parameter['name']
+                continue
+            typ = parameter['type']
+            default_value = parameter['default_value']
+            if typ.startswith('global::System.Tuple') or \
+               typ.startswith('global::System.Collections.Generic.IList') or \
+               typ.startswith('global::System.Collections.Generic.ISet') or \
+               typ.startswith('global::System.Collections.Generic.IDictionary'):
+                parameter['name_value'] = '%s ?? %s' % (parameter['name'], default_value)
+                parameter['default_value'] = 'null'
+            else:
+                parameter['name_value'] = parameter['name']
+        return parameters
 
     @staticmethod
     def parse_context(context):

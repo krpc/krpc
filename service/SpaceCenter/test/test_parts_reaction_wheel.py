@@ -13,19 +13,26 @@ class TestPartsReactionWheel(krpctest.TestCase):
         cls.wheel = parts.with_title('Advanced Reaction Wheel Module, Large')[0].reaction_wheel
 
     def test_reaction_wheel(self):
-        torque = (30000, 30000, 30000)
+        pos_torque = (30000, 30000, 30000)
+        neg_torque = tuple(-x for x in pos_torque)
         self.assertFalse(self.wheel.broken)
-        self.assertEqual(torque, self.wheel.max_torque)
-        self.assertEqual(torque, self.wheel.available_torque)
+        self.assertEqual(pos_torque, self.wheel.max_torque[0])
+        self.assertEqual(pos_torque, self.wheel.available_torque[0])
+        self.assertEqual(neg_torque, self.wheel.max_torque[1])
+        self.assertEqual(neg_torque, self.wheel.available_torque[1])
         self.assertTrue(self.wheel.active)
         self.wheel.active = False
         self.assertFalse(self.wheel.active)
-        self.assertEqual(torque, self.wheel.max_torque)
-        self.assertEqual((0, 0, 0), self.wheel.available_torque)
+        self.assertEqual(pos_torque, self.wheel.max_torque[0])
+        self.assertEqual(neg_torque, self.wheel.max_torque[1])
+        self.assertEqual((0, 0, 0), self.wheel.available_torque[0])
+        self.assertEqual((0, 0, 0), self.wheel.available_torque[1])
         self.wheel.active = True
         self.assertTrue(self.wheel.active)
-        self.assertEqual(torque, self.wheel.max_torque)
-        self.assertEqual(torque, self.wheel.available_torque)
+        self.assertEqual(pos_torque, self.wheel.max_torque[0])
+        self.assertEqual(pos_torque, self.wheel.available_torque[0])
+        self.assertEqual(neg_torque, self.wheel.max_torque[1])
+        self.assertEqual(neg_torque, self.wheel.available_torque[1])
 
 if __name__ == '__main__':
     unittest.main()

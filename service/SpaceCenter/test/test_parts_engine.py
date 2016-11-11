@@ -10,9 +10,9 @@ class EngineTestBase(object):
             'throttle_locked': False,
             'can_restart': True,
             'can_shutdown': True,
-            'max_vac_thrust': 215000,
-            'msl_isp': 280,
-            'vac_isp': 300,
+            'max_vac_thrust': 240000,
+            'msl_isp': 265,
+            'vac_isp': 310,
             'modes': None
         },
         'LV-T45 "Swivel" Liquid Fuel Engine': {
@@ -22,8 +22,8 @@ class EngineTestBase(object):
             'throttle_locked': False,
             'can_restart': True,
             'can_shutdown': True,
-            'max_vac_thrust': 200000,
-            'msl_isp': 270,
+            'max_vac_thrust': 215000,
+            'msl_isp': 250,
             'vac_isp': 320,
             'modes': None
         },
@@ -51,7 +51,8 @@ class EngineTestBase(object):
         },
         'O-10 "Puff" MonoPropellant Fuel Engine': {
             'propellants': {'MonoPropellant': 1.},
-            'gimballed': False,
+            'gimballed': True,
+            'gimbal_range': 6,
             'throttle_locked': False,
             'can_restart': True,
             'can_shutdown': True,
@@ -156,7 +157,8 @@ class EngineTest(EngineTestBase):
         self.assertAlmostEqual(data['max_thrust'], engine.max_thrust, delta=500)
         self.assertAlmostEqual(0, engine.specific_impulse, delta=5)
         self.assertTrue(engine.has_fuel)
-        self.assertAlmostEqual((0, 0, 0), engine.available_torque)
+        self.assertAlmostEqual((0, 0, 0), engine.available_torque[0])
+        self.assertAlmostEqual((0, 0, 0), engine.available_torque[1])
 
     def check_engine_active(self, engine, throttle):
         """ Check engine properties when engine is activated """
@@ -170,9 +172,11 @@ class EngineTest(EngineTestBase):
         self.assertAlmostEqual(data['isp'], engine.specific_impulse, delta=5)
         self.assertTrue(engine.has_fuel)
         if data['gimballed'] and throttle > 0:
-            self.assertGreater(engine.available_torque, (100, 100, 100))
+            self.assertGreater(engine.available_torque[0], (100, 100, 100))
+            self.assertLess(engine.available_torque[1], (-100, -100, -100))
         else:
-            self.assertAlmostEqual((0, 0, 0), engine.available_torque)
+            self.assertAlmostEqual((0, 0, 0), engine.available_torque[0])
+            self.assertAlmostEqual((0, 0, 0), engine.available_torque[1])
 
     def check_engine(self, engine):
         self.set_idle(engine)
@@ -244,7 +248,7 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
 
     def test_thrust_limit(self):
         engine = self.get_engine('LV-T30 "Reliant" Liquid Fuel Engine')
-        thrust = 201000
+        thrust = 205600
 
         engine.active = False
         engine.thrust_limit = 1
@@ -324,10 +328,10 @@ class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
         cls.parts = cls.vessel.parts
         cls.add_engine_data(
             'LV-T30 "Reliant" Liquid Fuel Engine',
-            {'max_thrust': 201000, 'isp': 280.5})
+            {'max_thrust': 205161, 'isp': 265})
         cls.add_engine_data(
             'LV-T45 "Swivel" Liquid Fuel Engine',
-            {'max_thrust': 169200, 'isp': 270.7})
+            {'max_thrust': 167969, 'isp': 250})
         cls.add_engine_data(
             'LV-N "Nerv" Atomic Rocket Motor',
             {'max_thrust': 14300, 'isp': 190.6})
@@ -388,10 +392,10 @@ class TestPartsEngineVacuum(krpctest.TestCase, EngineTest):
         cls.parts = cls.vessel.parts
         cls.add_engine_data(
             'LV-T30 "Reliant" Liquid Fuel Engine',
-            {'max_thrust': 215000, 'isp': 300})
+            {'max_thrust': 240000, 'isp': 310})
         cls.add_engine_data(
             'LV-T45 "Swivel" Liquid Fuel Engine',
-            {'max_thrust': 200000, 'isp': 320})
+            {'max_thrust': 215000, 'isp': 320})
         cls.add_engine_data(
             'LV-N "Nerv" Atomic Rocket Motor',
             {'max_thrust': 60000, 'isp': 800})

@@ -100,4 +100,12 @@ std::string Client::get_stream(google::protobuf::uint64 id) {
   return stream_manager.get(id);
 }
 
+void Client::freeze_streams() {
+  stream_manager.freeze();
+}
+
+void Client::thaw_streams() {
+  stream_manager.thaw();
+}
+
 }  // namespace krpc

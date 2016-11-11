@@ -8,7 +8,7 @@ namespace KRPC.RemoteTech
 {
     /// <summary>
     /// This service provides functionality to interact with
-    /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/75245-11-remotetech-v1610-2016-04-12/">RemoteTech</a>.
+    /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/139167-12-remotetech-v180-2016-10-15/">RemoteTech</a>.
     /// </summary>
     [KRPCService (GameScene = GameScene.All)]
     public static class RemoteTech
@@ -17,6 +17,14 @@ namespace KRPC.RemoteTech
         {
             if (!API.IsAvailable)
                 throw new InvalidOperationException ("RemoteTech is not available");
+        }
+
+        /// <summary>
+        /// Whether RemoteTech is installed.
+        /// </summary>
+        [KRPCProperty]
+        public static bool Available {
+            get { return API.IsAvailable; }
         }
 
         /// <summary>

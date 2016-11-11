@@ -51,10 +51,6 @@
     <Reference Include="System.Xml">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Xml.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml.Linq">
-      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Xml.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO">

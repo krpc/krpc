@@ -202,7 +202,7 @@ class TestResourcesStaticMethods(krpctest.TestCase, ResourcesTest):
 
     def test_flow_mode(self):
         mode = self.connect().space_center.ResourceFlowMode
-        self.assertEqual(mode.vessel, self.resources.flow_mode('ElectricCharge'))
+        self.assertEqual(mode.stage, self.resources.flow_mode('ElectricCharge'))
         self.assertEqual(mode.vessel, self.resources.flow_mode('IntakeAir'))
         self.assertEqual(mode.stage, self.resources.flow_mode('MonoPropellant'))
         self.assertEqual(mode.stage, self.resources.flow_mode('XenonGas'))

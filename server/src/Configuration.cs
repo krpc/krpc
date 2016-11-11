@@ -7,6 +7,7 @@ using KRPC.Server.TCP;
 using KRPC.Service;
 using KRPC.Utils;
 using UnityEngine;
+using Logger = KRPC.Utils.Logger;
 
 namespace KRPC
 {
@@ -116,7 +117,8 @@ namespace KRPC
         [Persistent] RectStorage infoWindowPosition = new RectStorage ();
         [Persistent] bool autoStartServers;
         [Persistent] bool autoAcceptConnections;
-        [Persistent] string logLevel = Logger.Severity.Info.ToString ();
+        [Persistent] bool confirmRemoveClient = true;
+        [Persistent] string logLevel = KRPC.Utils.Logger.Severity.Info.ToString ();
         [Persistent] bool verboseErrors;
         [Persistent] bool checkDocumented;
         [Persistent] bool oneRPCPerUpdate;
@@ -190,6 +192,11 @@ namespace KRPC
             set { autoAcceptConnections = value; }
         }
 
+        public bool ConfirmRemoveClient {
+            get { return confirmRemoveClient; }
+            set { confirmRemoveClient = value; }
+        }
+
         public bool OneRPCPerUpdate {
             get { return oneRPCPerUpdate; }
             set { oneRPCPerUpdate = value; }
@@ -241,12 +248,12 @@ namespace KRPC
             foreach (var server in servers)
                 server.AfterLoad ();
             try {
-                Logger.Level = (Logger.Severity)Enum.Parse (typeof(Logger.Severity), logLevel);
+                KRPC.Utils.Logger.Level = (KRPC.Utils.Logger.Severity)Enum.Parse (typeof(KRPC.Utils.Logger.Severity), logLevel);
             } catch (ArgumentException) {
                 Console.WriteLine (
                     "[kRPC] Error parsing log level from configuration file. Got '" + logLevel + "'. " +
-                    "Defaulting to " + Logger.Severity.Info);
-                Logger.Level = Logger.Severity.Info;
+                    "Defaulting to " + KRPC.Utils.Logger.Severity.Info);
+                KRPC.Utils.Logger.Level = KRPC.Utils.Logger.Severity.Info;
             }
             RPCException.VerboseErrors = verboseErrors;
             ServicesChecker.CheckDocumented = checkDocumented;

@@ -154,6 +154,13 @@ removed from the server by calling :func:`krpc::Stream<T>::remove()` on the
 stream object. All of a clients streams are automatically stopped when it
 disconnects.
 
+Updates to streams can be paused by calling
+:func:`krpc::Client::freeze_streams()`. After this call, all streams will have
+their values frozen to values from the same physics tick. Updates can be resumed
+by calling :func:`krpc::Client::thaw_streams()`. This is useful if you need to
+perform come computation using stream values and require all of the stream
+values to be from the same physics tick.
+
 Client API Reference
 --------------------
 
@@ -184,6 +191,16 @@ Client API Reference
    This class provides the interface for communicating with the server. It is
    used by service class instances to invoke remote procedure calls. Instances
    of this class can be obtained by calling :func:`krpc::connect`.
+
+   .. function:: void freeze_streams()
+
+      Pause stream updates, after the next stream update message is
+      received. This function blocks until the streams have been frozen.
+
+   .. function:: void thaw_streams()
+
+      Resume stream updates. Before this function returns, the last received
+      update message is applied to the streams.
 
 .. namespace:: krpc::services
 
@@ -222,10 +239,29 @@ Client API Reference
    A stream object. Streams are created by calling a function with ``_stream``
    appended to its name.
 
+   Stream objects are copy constructible and assignable. A stream is removed
+   from the server when all stream objects that refer to it are destroyed.
+
+   .. function:: Stream<T>()
+
+      Create a stream object that is not bound to any stream.
+
    .. function:: T operator()()
 
       Get the most recently received value from the stream.
 
+   .. function:: bool operator==(const Stream<T>& rhs)
+
+      Returns true if the two stream objects are bound to the same stream.
+
+   .. function:: bool operator!=(const Stream<T>& rhs)
+
+      Returns true if the two stream objects are bound to different streams.
+
+   .. function:: operator bool()
+
+      Returns whether the stream object is bound to a stream.
+
    .. function:: void remove()
 
-      Remove the stream from the server.
+      Manually remove the stream from the server.

@@ -67,7 +67,7 @@ def _pkg_zip_impl(ctx):
     # Copy and chmod all the files to a staging directory
     # to get the required directory structure and permissions in the archive
     # (Note: can't use symlinking as we need to set permissions)
-    staging_dir = output.basename + '.package-tmp'
+    staging_dir = output.short_path.replace('/','-') + '.package-tmp'
     for input in inputs:
         if _apply_exclude(exclude, input.short_path):
             continue

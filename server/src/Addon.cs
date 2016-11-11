@@ -10,11 +10,12 @@ namespace KRPC
     /// <summary>
     /// Main KRPC addon. Contains the kRPC core, config and UI.
     /// </summary>
-    [KSPAddonImproved (KSPAddonImproved.Startup.All, false)]
+    [KSPAddon (KSPAddon.Startup.AllGameScenes, false)]
     [SuppressMessage ("Gendarme.Rules.Correctness", "DeclareEventsExplicitlyRule")]
     sealed public class Addon : MonoBehaviour
     {
-        static Configuration config;
+        // TODO: clean this up
+        internal static Configuration config;
         static Core core;
         static Texture textureOnline;
         static Texture textureOffline;
@@ -46,21 +47,21 @@ namespace KRPC
 
             Init ();
 
-            Service.CallContext.SetGameScene (KSPAddonImproved.CurrentGameScene.ToGameScene ());
-            Logger.WriteLine ("Game scene switched to " + Service.CallContext.GameScene);
+            Service.CallContext.SetGameScene (HighLogic.LoadedScene.ToGameScene ());
+            KRPC.Utils.Logger.WriteLine ("Game scene switched to " + Service.CallContext.GameScene);
 
             // If a game is not loaded, ensure the server is stopped and then exit
-            if (KSPAddonImproved.CurrentGameScene != GameScenes.EDITOR &&
-                KSPAddonImproved.CurrentGameScene != GameScenes.FLIGHT &&
-                KSPAddonImproved.CurrentGameScene != GameScenes.SPACECENTER &&
-                KSPAddonImproved.CurrentGameScene != GameScenes.TRACKSTATION) {
+            if (HighLogic.LoadedScene != GameScenes.EDITOR &&
+                HighLogic.LoadedScene != GameScenes.FLIGHT &&
+                HighLogic.LoadedScene != GameScenes.SPACECENTER &&
+                HighLogic.LoadedScene != GameScenes.TRACKSTATION) {
                 core.StopAll ();
                 return;
             }
 
-            // Auto-start the servers, if required
+            // Auto-start the server, if required
             if (config.AutoStartServers) {
-                Logger.WriteLine ("Auto-starting servers");
+                KRPC.Utils.Logger.WriteLine ("Auto-starting server");
                 core.StartAll ();
             }
 
@@ -119,7 +120,7 @@ namespace KRPC
                 try {
                     e.Server.Start ();
                 } catch (ServerException exn) {
-                    Logger.WriteLine ("Server exception: " + exn.Message, Logger.Severity.Error);
+                    KRPC.Utils.Logger.WriteLine ("Server exception: " + exn.Message, KRPC.Utils.Logger.Severity.Error);
                     mainWindow.Errors.Add (exn.Message);
                 }
             };
@@ -165,10 +166,10 @@ namespace KRPC
             // Server events
             core.OnClientRequestingConnection += (s, e) => {
                 if (config.AutoAcceptConnections) {
-                    Logger.WriteLine ("Auto-accepting client connection (" + e.Client.Address + ")");
+                    KRPC.Utils.Logger.WriteLine ("Auto-accepting client connection (" + e.Client.Address + ")");
                     e.Request.Allow ();
                 } else {
-                    Logger.WriteLine ("Asking player to accept client connection (" + e.Client.Address + ")");
+                    KRPC.Utils.Logger.WriteLine ("Asking player to accept client connection (" + e.Client.Address + ")");
                     clientConnectingDialog.OnClientRequestingConnection (s, e);
                 }
             };

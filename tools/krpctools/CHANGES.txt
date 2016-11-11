@@ -1,3 +1,7 @@
+v0.3.7
+ * Fix bug parsing nested collection types
+ * Fix bug generating key type for dictionaries
+
 v0.3.6
  * Fix generating Java client stubs using krpc-clientgen with Python 3 (#308)
 

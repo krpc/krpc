@@ -3,6 +3,9 @@ v0.4.0
  * Remove connection retries. Client will now fail fast if it fails to connect to the server
  * Reorder parameters to krpc.connect() so that name is first - to be consistent with other client libraries
 
+v0.3.7
+ * Fix bug parsing nested collection types
+
 v0.3.6
  * Fix values not being documented in generated enumeration classes
 

@@ -42,17 +42,23 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.fuel_lines_to)
         modules = [
             'FlagDecal',
+            'ModuleColorChanger',
             'ModuleCommand',
             'ModuleConductionMultiplier',
             'ModuleReactionWheel',
             'ModuleScienceContainer',
             'ModuleScienceExperiment',
+            'ModuleDataTransmitter',
             'ModuleTripLogger',
-            'TransferDialogSpawner'
+            'ModuleProbeControlPoint',
+            'ModuleLiftingSurface'
         ]
         if self.far_available:
             modules.extend(['FARBasicDragModel', 'FARControlSys'])
         self.assertItemsEqual(modules, [x.name for x in part.modules])
+        box = part.bounding_box(part.reference_frame)
+        self.assertAlmostEqual((-1.19, -0.49, -1.16), box[0], places=2)
+        self.assertAlmostEqual((1.19, 1.16, 1.16), box[1], places=2)
         self.assertIsNone(part.cargo_bay)
         self.assertIsNone(part.control_surface)
         self.assertIsNone(part.decoupler)
@@ -189,7 +195,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
         #TODO: why is this not -1? Docking ports aren't activated in stages?
-        self.assertEqual(4, part.stage)
+        self.assertEqual(3, part.stage)
         self.assertEqual(3, part.decouple_stage)
         self.assertFalse(part.massless)
         self.assertAlmostEqual(50, part.mass, places=4)
@@ -276,14 +282,16 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual(0, part.stage)
         self.assertEqual(-1, part.decouple_stage)
         self.assertFalse(part.massless)
-        self.assertAlmostEqual(121.74388, part.mass, places=4)
-        self.assertAlmostEqual(121.74388, part.dry_mass, places=4)
+        self.assertAlmostEqual(106.16, part.mass, places=2)
+        self.assertAlmostEqual(106.16, part.dry_mass, places=2)
         self.assertEqual(9, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ['ModuleCargoBay', 'ModuleProceduralFairing', 'ModuleTestSubject']
+        modules = ['ModuleCargoBay', 'ModuleProceduralFairing',
+                   'ModuleTestSubject', 'ModuleStructuralNodeToggle'] + \
+                  ['ModuleStructuralNode'] * 12
         if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertItemsEqual(modules, [x.name for x in part.modules])
@@ -347,7 +355,9 @@ class TestPartsPart(krpctest.TestCase):
             'ModuleWheelDamage',
             'ModuleWheelDeployment',
             'ModuleWheelSteering',
-            'ModuleWheelSuspension'
+            'ModuleWheelSuspension',
+            'ModuleDragModifier',
+            'ModuleDragModifier'
         ]
         if self.far_available:
             modules.append('FARBasicDragModel')
@@ -522,7 +532,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ['ModuleRCS']
+        modules = ['ModuleRCSFX']
         self.assertItemsEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.rcs)
 
@@ -618,7 +628,7 @@ class TestPartsPart(krpctest.TestCase):
         part = self.parts.with_title('PresMat Barometer')[0]
         self.assertEqual('sensorBarometer', part.name)
         self.assertEqual('PresMat Barometer', part.title)
-        self.assertEqual(3300, part.cost)
+        self.assertEqual(880, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Rockomax X200-8 Fuel Tank', part.parent.title)
         self.assertEqual([], part.children)
@@ -629,7 +639,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertTrue(part.massless)
         self.assertAlmostEqual(0, part.mass, places=4)
         self.assertAlmostEqual(0, part.dry_mass, places=4)
-        self.assertFalse(part.shielded)
+        self.assertTrue(part.shielded)
         self.assertAlmostEqual(0, part.dynamic_pressure, places=3)
         self.assertEqual(8, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
@@ -669,6 +679,20 @@ class TestPartsPart(krpctest.TestCase):
             modules.append('FARBasicDragModel')
         self.assertItemsEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.solar_panel)
+
+    def test_highlighting(self):
+        part = self.parts.with_title('Rockomax Jumbo-64 Fuel Tank')[0]
+        init_color = part.highlight_color
+        self.assertEqual((0, 1, 0), init_color)
+        self.assertFalse(part.highlighted)
+        colors = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
+        for color in colors:
+            part.highlight_color = color
+            part.highlighted = True
+            self.wait(0.5)
+            part.highlighted = False
+            self.wait(0.5)
+        part.highlight_color = init_color
 
 class TestPartsPartDecoupleStage(krpctest.TestCase):
 

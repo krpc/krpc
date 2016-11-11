@@ -43,6 +43,7 @@ namespace KRPC.UI
         const float longTextFieldWidth = 90f;
         const float fixedLabelWidth = 125f;
         const float indentWidth = 15f;
+        float scaledIndentWidth;
         const int maxTimePerUpdateMaxLength = 5;
         const int recvTimeoutMaxLength = 5;
         // Text strings
@@ -61,6 +62,7 @@ namespace KRPC.UI
         const string advancedText = "Advanced settings";
         const string autoStartServerText = "Auto-start server";
         const string autoAcceptConnectionsText = "Auto-accept new clients";
+        const string confirmRemoveClientText = "Confirm disconnecting a client";
         const string oneRPCPerUpdateText = "One RPC per update";
         const string maxTimePerUpdateText = "Max. time per update";
         const string adaptiveRateControlText = "Adaptive rate control";
@@ -92,15 +94,12 @@ namespace KRPC.UI
             stretchyLabelStyle.stretchWidth = true;
 
             fixedLabelStyle = new GUIStyle (skin.label);
-            fixedLabelStyle.fixedWidth = fixedLabelWidth;
 
             textFieldStyle = new GUIStyle (skin.textField);
             textFieldStyle.margin = new RectOffset (0, 0, 0, 0);
-            textFieldStyle.fixedWidth = textFieldWidth;
 
             longTextFieldStyle = new GUIStyle (skin.textField);
             longTextFieldStyle.margin = new RectOffset (0, 0, 0, 0);
-            longTextFieldStyle.fixedWidth = longTextFieldWidth;
 
             stretchyTextFieldStyle = new GUIStyle (skin.textField);
             stretchyTextFieldStyle.margin = new RectOffset (0, 0, 0, 0);
@@ -110,7 +109,7 @@ namespace KRPC.UI
             buttonStyle.margin = new RectOffset (0, 0, 0, 0);
 
             toggleStyle = new GUIStyle (skin.toggle);
-            labelStyle.margin = new RectOffset (0, 0, 0, 0);
+            toggleStyle.margin = new RectOffset (0, 0, 0, 0);
             toggleStyle.stretchWidth = false;
             toggleStyle.contentOffset = new Vector2 (4, 0);
 
@@ -143,8 +142,32 @@ namespace KRPC.UI
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        protected override void Draw ()
+        protected override void Draw (bool needRescale)
         {
+            if (needRescale) {
+                int scaledFontSize = Style.fontSize;
+                scaledIndentWidth = indentWidth * GameSettings.UI_SCALE;
+                Style.fixedWidth = windowWidth * GameSettings.UI_SCALE;
+
+                labelStyle.fontSize = scaledFontSize;
+                stretchyLabelStyle.fontSize = scaledFontSize;
+                fixedLabelStyle.fontSize = scaledFontSize;
+                fixedLabelStyle.fixedWidth = fixedLabelWidth * GameSettings.UI_SCALE;
+                textFieldStyle.fontSize = scaledFontSize;
+                textFieldStyle.fixedWidth = textFieldWidth * GameSettings.UI_SCALE;
+                longTextFieldStyle.fontSize = scaledFontSize;
+                longTextFieldStyle.fixedWidth = longTextFieldWidth * GameSettings.UI_SCALE;
+                stretchyTextFieldStyle.fontSize = scaledFontSize;
+                buttonStyle.fontSize = scaledFontSize;
+                toggleStyle.fontSize = scaledFontSize;
+                separatorStyle.fontSize = scaledFontSize;
+                lightStyle.fontSize = scaledFontSize;
+                errorLabelStyle.fontSize = scaledFontSize;
+                comboOptionsStyle.fontSize = scaledFontSize;
+                GUILayoutExtensions.SetLightStyleSize (lightStyle, Style.lineHeight);
+                Resized = true;
+            }
+
             // Force window to resize to height of content
             if (Resized) {
                 Position = new Rect (Position.x, Position.y, Position.width, 0f);
@@ -262,7 +285,10 @@ namespace KRPC.UI
                     GUILayout.Label (description, stretchyLabelStyle);
                     if (GUILayout.Button (new GUIContent (Icons.Instance.ButtonDisconnectClient, "Disconnect client"),
                             buttonStyle, GUILayout.MaxWidth (20), GUILayout.MaxHeight (20))) {
-                        ClientDisconnectDialog.Show (client);
+                        if (config.ConfirmRemoveClient)
+                            ClientDisconnectDialog.Show (client);
+                        else
+                            client.Close ();
                     }
                     GUILayout.EndHorizontal ();
                 }
@@ -291,42 +317,47 @@ namespace KRPC.UI
 
             if (showAdvancedOptions) {
                 GUILayout.BeginHorizontal ();
-                GUILayout.Space (indentWidth);
+                GUILayout.Space (scaledIndentWidth);
                 DrawAutoStartServerToggle ();
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
-                GUILayout.Space (indentWidth);
+                GUILayout.Space (scaledIndentWidth);
                 DrawAutoAcceptConnectionsToggle ();
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
-                GUILayout.Space (indentWidth);
+                GUILayout.Space (scaledIndentWidth);
+                DrawConfirmRemoveClientToggle ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
                 DrawOneRPCPerUpdateToggle ();
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
-                GUILayout.Space (indentWidth);
+                GUILayout.Space (scaledIndentWidth);
                 DrawMaxTimePerUpdate ();
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
-                GUILayout.Space (indentWidth);
+                GUILayout.Space (scaledIndentWidth);
                 DrawAdaptiveRateControlToggle ();
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
-                GUILayout.Space (indentWidth);
+                GUILayout.Space (scaledIndentWidth);
                 DrawBlockingRecvToggle ();
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
-                GUILayout.Space (indentWidth);
+                GUILayout.Space (scaledIndentWidth);
                 DrawRecvTimeout ();
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
-                GUILayout.Space (indentWidth);
+                GUILayout.Space (scaledIndentWidth);
                 DrawDebugLogging ();
                 GUILayout.EndHorizontal ();
             }
@@ -355,6 +386,15 @@ namespace KRPC.UI
             bool autoAcceptConnections = GUILayout.Toggle (config.AutoAcceptConnections, autoAcceptConnectionsText, toggleStyle, new GUILayoutOption[] { });
             if (autoAcceptConnections != config.AutoAcceptConnections) {
                 config.AutoAcceptConnections = autoAcceptConnections;
+                config.Save ();
+            }
+        }
+
+        void DrawConfirmRemoveClientToggle ()
+        {
+            bool confirmRemoveClient = GUILayout.Toggle (config.ConfirmRemoveClient, confirmRemoveClientText, toggleStyle, new GUILayoutOption[] { });
+            if (confirmRemoveClient != config.ConfirmRemoveClient) {
+                config.ConfirmRemoveClient = confirmRemoveClient;
                 config.Save ();
             }
         }

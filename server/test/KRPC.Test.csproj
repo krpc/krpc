@@ -49,9 +49,6 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
-    <Reference Include="KSPUtil">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\KSPUtil.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\bazel-krpc\external\csharp_nunit\bin\net-4.5\nunit.framework.dll</HintPath>
     </Reference>
@@ -63,7 +60,6 @@
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.IO">
       <HintPath>..\..\bazel-krpc\lib\mono-4.5\Facades\System.IO.dll</HintPath>
     </Reference>
