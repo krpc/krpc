@@ -330,7 +330,7 @@ namespace KRPC.SpaceCenter.Services
         {
             public static object Create ()
             {
-                return Vector3.zero.ToTuple ();
+                return new Tuple3 (0, 0, 0);
             }
         }
 
@@ -339,7 +339,7 @@ namespace KRPC.SpaceCenter.Services
         {
             public static object Create ()
             {
-                return QuaternionD.identity.ToTuple ();
+                return new Tuple4 (1, 0, 0, 0);
             }
         }
 
