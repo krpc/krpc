@@ -325,18 +325,30 @@ namespace KRPC.SpaceCenter.Services
             return new ReferenceFrame (ReferenceFrameType.Thrust, part: thruster.Part.InternalPart, thruster: thruster);
         }
 
+        /// <summary>
+        /// Constructor class for default value
+        /// </summary>
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
-        static class VectorZero
+        public static class VectorZero
         {
+            /// <summary>
+            /// Constructor for default value
+            /// </summary>
             public static object Create ()
             {
                 return Vector3.zero.ToTuple ();
             }
         }
 
+        /// <summary>
+        /// Constructor class for default value
+        /// </summary>
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
-        static class QuaternionIdentity
+        public static class QuaternionIdentity
         {
+            /// <summary>
+            /// Constructor for default value
+            /// </summary>
             public static object Create ()
             {
                 return QuaternionD.identity.ToTuple ();
