@@ -39,9 +39,10 @@ def _build_impl(ctx):
         sub_commands.append('(CWD=`pwd` && cd %s && zip --quiet -r $CWD/%s ./)' % (out_dir, out.path))
 
     elif builder == 'latex':
-        exec_reqs['local'] = '' # pdflatex fails to run from the sandbox
+        exec_reqs['local'] = '' # FIXME: pdflatex fails to run from the sandbox
         sub_commands.extend([
-            'make -C %s 1>/dev/null' % out_dir,
+            # FIXME: Use full path to pdflatex binary to workaround Bazel issue
+            'PDFLATEX=/usr/bin/pdflatex make -e -C %s 1>/dev/null' % out_dir,
             'find %s -name *.pdf -exec cp {} %s \;' % (out_dir, out.path),
             'rm -rf %s' % out_dir
         ])
