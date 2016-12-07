@@ -81,6 +81,11 @@ def _spelling_impl(ctx):
         _add_runfile(sub_commands, f.short_path, sphinx_build.basename + '.runfiles/krpc/' + sphinx_build.short_path + '.runfiles/krpc/' + f.short_path)
 
     sphinx_commands = [
+        #FIXME: following copy is a hack to fix sphinx not being able to read the dictionary from a symlink and requiring the file to be writable
+        'cp "`pwd`/doc/srcs/dictionary.txt" "`pwd`/doc/srcs/dictionary.txt.tmp"',
+        'rm "`pwd`/doc/srcs/dictionary.txt"',
+        'mv "`pwd`/doc/srcs/dictionary.txt.tmp" "`pwd`/doc/srcs/dictionary.txt"',
+        'chmod 644 `pwd`/doc/srcs/dictionary.txt',
         '(cd %s.runfiles/krpc; %s -b spelling -E -W -N -T ../../%s ./out %s)' % (sphinx_build.basename, sphinx_build.short_path, src_dir, opts),
         'ret=$?',
         'lines=`cat %s.runfiles/krpc/out/output.txt | wc -l`' % sphinx_build.basename,
