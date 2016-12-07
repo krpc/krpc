@@ -33,7 +33,7 @@ def _build_impl(ctx):
     for f in sphinx_build_runfiles:
         _add_runfile(sub_commands, f.path, runfiles_dir+ '/' + sphinx_build.basename + '.runfiles/krpc/' + f.short_path)
 
-    sub_commands.append('%s/%s -b %s -E -d /tmp/bazel-sphinx-build-%s -W -n -N -q %s %s %s' % (runfiles_dir, sphinx_build.basename, builder, builder, src_dir, out_dir, opts))
+    sub_commands.append('%s/%s -b %s -E -d /tmp/bazel-sphinx-build-%s -W -n -N -T -q %s %s %s' % (runfiles_dir, sphinx_build.basename, builder, builder, src_dir, out_dir, opts))
 
     if builder == 'html':
         sub_commands.append('(CWD=`pwd` && cd %s && zip --quiet -r $CWD/%s ./)' % (out_dir, out.path))
@@ -81,7 +81,7 @@ def _spelling_impl(ctx):
         _add_runfile(sub_commands, f.short_path, sphinx_build.basename + '.runfiles/krpc/' + sphinx_build.short_path + '.runfiles/krpc/' + f.short_path)
 
     sphinx_commands = [
-        '(cd %s.runfiles/krpc; %s -b spelling -E -W -N ../../%s ./out %s)' % (sphinx_build.basename, sphinx_build.short_path, src_dir, opts),
+        '(cd %s.runfiles/krpc; %s -b spelling -E -W -N -T ../../%s ./out %s)' % (sphinx_build.basename, sphinx_build.short_path, src_dir, opts),
         'ret=$?',
         'lines=`cat %s.runfiles/krpc/out/output.txt | wc -l`' % sphinx_build.basename,
         'echo "Spelling checker messages ($lines lines):"',
@@ -127,7 +127,7 @@ def _linkcheck_impl(ctx):
         _add_runfile(sub_commands, f.short_path, sphinx_build.basename + '.runfiles/krpc/' + sphinx_build.short_path + '.runfiles/krpc/' + f.short_path)
 
     sphinx_commands = [
-        '(cd %s.runfiles/krpc; %s -b linkcheck -E -N ../../%s ./out %s)' % (sphinx_build.basename, sphinx_build.short_path, src_dir, opts),
+        '(cd %s.runfiles/krpc; %s -b linkcheck -E -N -T ../../%s ./out %s)' % (sphinx_build.basename, sphinx_build.short_path, src_dir, opts),
         'ret=$?',
         'lines=`cat %s.runfiles/krpc/out/output.txt | wc -l`' % sphinx_build.basename,
         'echo "Link checker messages ($lines lines):"',
