@@ -148,7 +148,7 @@ def _nunit_impl(ctx):
     ])
     ctx.file_action(
         ctx.outputs.executable,
-        ' && \\\n'.join(sub_commands)+'\n'
+        ' ; \\\n'.join(sub_commands)+'\n'
     )
     runfiles = ctx.runfiles(files = runfiles)
 
