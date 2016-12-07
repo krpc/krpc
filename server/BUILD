@@ -116,7 +116,9 @@ csharp_nunit_test(
     define = ['CODE_ANALYSIS'],
     nowarn = ['1591'],
     size = 'small',
-    visibility = ['//:__pkg__']
+    visibility = ['//:__pkg__'],
+    # FIXME: need to run test outside the sandbox to work around nunit file accesses
+    tags = ['local']
 )
 
 csharp_library(
