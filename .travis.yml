@@ -6,14 +6,8 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - gcc-4.8
-      - g++-4.8
       - wget
-      - openjdk-7-jdk
-      - openjdk-7-source
       - pkg-config
-      - zip
-      - zlib1g-dev
       - python
       - python-virtualenv
       - python-pip
