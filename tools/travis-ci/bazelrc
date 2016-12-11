@@ -8,9 +8,6 @@ test --ram_utilization_factor=10
 build --curses=no --show_progress_rate_limit=0 --verbose_failures
 test --curses=no --show_progress_rate_limit=0 --verbose_failures
 
-# Use a recent GCC version when building
-build --crosstool_top //tools/travis-ci/custom_crosstool:CROSSTOOL
-
 # Disable sandbox (travis already runs in a container)
 build --spawn_strategy=standalone --genrule_strategy=standalone
 test --test_strategy=standalone
