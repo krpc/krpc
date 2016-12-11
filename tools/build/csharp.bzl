@@ -118,9 +118,10 @@ def _nunit_impl(ctx):
     mdb_output = ctx.outputs.mdb
     outputs = [lib_output, doc_output, mdb_output]
     srcs = ctx.files.srcs
-    deps = ctx.files._nunit_framework + [dep.lib for dep in ctx.attr.deps]
+    deps = ctx.files._nunit_exe_libs + ctx.files._nunit_framework
+    deps += [dep.lib for dep in ctx.attr.deps]
     inputs = srcs + deps
-    nunit_files = [ctx.file._nunit_exe] + ctx.files._nunit_exe_deps + ctx.files._nunit_framework
+    nunit_files = [ctx.file._nunit_exe] + ctx.files._nunit_exe_libs + ctx.files._nunit_framework
 
     cmd = ctx.attr.csc
     args = _csc_args(
@@ -258,8 +259,8 @@ csharp_binary = rule(
 csharp_nunit_test = rule(
     implementation = _nunit_impl,
     attrs = _COMMON_ATTRS + {
-        '_nunit_exe': attr.label(default=Label('@csharp_nunit_console//:nunit_exe'), allow_files=True, single_file=True),
-        '_nunit_exe_deps': attr.label(default=Label('@csharp_nunit_console//:nunit_exe_deps'), allow_files=True),
+        '_nunit_exe': attr.label(default=Label('@csharp_nunit//:nunit_exe'), allow_files=True, single_file=True),
+        '_nunit_exe_libs': attr.label(default=Label('@csharp_nunit//:nunit_exe_libs'), allow_files=True),
         '_nunit_framework': attr.label(default=Label('@csharp_nunit//:nunit_framework'), allow_files=True)
     },
     outputs = {'lib': '%{name}.dll', 'doc': '%{name}.xml', 'mdb': '%{name}.dll.mdb'},

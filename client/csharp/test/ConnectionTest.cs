@@ -25,39 +25,35 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        public void WrongRpcPort ()
-        {
+        public void WrongRpcPort() {
             Assert.Throws<SocketException> (() => new Connection (
                 "CSharpClientTestWrongRPCPort",
                 rpcPort: RPCPort ^ StreamPort, streamPort: StreamPort));
         }
 
         [Test]
-        public void WrongStreamPort ()
-        {
+        public void WrongStreamPort() {
             Assert.Throws<SocketException> (() => new Connection (
                 "CSharpClientTestWrongStreamPort",
                 rpcPort: RPCPort, streamPort: RPCPort ^ StreamPort));
         }
 
         [Test]
-        public void WrongRPCServer ()
-        {
+        public void WrongRPCServer() {
             var exn = Assert.Throws<ConnectionException> (() => new Connection (
-                          "CSharpClientTestWrongRPCServer",
-                          rpcPort: StreamPort, streamPort: StreamPort));
+                "CSharpClientTestWrongRPCServer",
+                rpcPort: StreamPort, streamPort: StreamPort));
             Assert.AreEqual ("Connection request was for the rpc server, but this is the stream server. " +
-            "Did you connect to the wrong port number?", exn.Message);
+                             "Did you connect to the wrong port number?", exn.Message);
         }
 
         [Test]
-        public void WrongStreamServer ()
-        {
+        public void WrongStreamServer() {
             var exn = Assert.Throws<ConnectionException> (() => new Connection (
-                          "CSharpClientTestWrongStreamServer",
-                          rpcPort: RPCPort, streamPort: RPCPort));
+                "CSharpClientTestWrongStreamServer",
+                rpcPort: RPCPort, streamPort: RPCPort));
             Assert.AreEqual ("Connection request was for the stream server, but this is the rpc server. " +
-            "Did you connect to the wrong port number?", exn.Message);
+                             "Did you connect to the wrong port number?", exn.Message);
         }
 
         [Test]
@@ -70,9 +66,9 @@ namespace KRPC.Client.Test
         public void Error ()
         {
             var e1 = Assert.Throws<RPCException> (Connection.TestService ().ThrowArgumentException);
-            Assert.That (e1.Message, Does.Contain ("Invalid argument"));
+            Assert.That(e1.Message, Is.StringContaining("Invalid argument"));
             var e2 = Assert.Throws<RPCException> (Connection.TestService ().ThrowInvalidOperationException);
-            Assert.That (e2.Message, Does.Contain ("Invalid operation"));
+            Assert.That(e2.Message, Is.StringContaining("Invalid operation"));
         }
 
         [Test]

@@ -51,15 +51,9 @@ http_file(
 new_http_archive(
     name = 'csharp_nunit',
     build_file = 'tools/build/csharp_nunit.BUILD',
-    url = 'https://github.com/nunit/nunit/releases/download/3.5/NUnit-3.5.0.zip',
-    sha256 = '8b59a60cf3c55f78001b0a8aa09d47818206f860e929f696d3d93f33ab1adcd0'
-)
-
-new_http_archive(
-    name = 'csharp_nunit_console',
-    build_file = 'tools/build/csharp_nunit_console.BUILD',
-    url = 'https://github.com/nunit/nunit-console/releases/download/3.5/NUnit.3.5.0.zip',
-    sha256 = '1316b2f6d27edc1b51a8c8ee2d93eef9105c3270cabd7bbb976a3977eba90704'
+    url = 'https://github.com/nunit/nunitv2/releases/download/2.6.4/NUnit-2.6.4.zip',
+    sha256 = '1bd925514f31e7729ccde40a38a512c2accd86895f93465f3dfe6d0b593d7170',
+    strip_prefix = 'NUnit-2.6.4'
 )
 
 new_http_archive(

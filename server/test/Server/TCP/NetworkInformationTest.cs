@@ -20,7 +20,7 @@ namespace KRPC.Test.Server.TCP
         }
 
         [Test]
-        [Ignore ("Native method not available on some platforms")]
+        [Ignore]
         public void GetLoopbackSubnetMask ()
         {
             Assert.AreEqual (String.Empty, NetworkInformation.GetSubnetMask (IPAddress.Loopback).ToString ());
