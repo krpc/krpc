@@ -28,7 +28,7 @@ protobuf_cpp = rule(
         'header': attr.output(mandatory=True),
         'source': attr.output(mandatory=True),
         'include': attr.string(mandatory=True),
-        '_protoc': attr.label(default=Label('@protobuf//:protoc'), allow_files=True, single_file=True)
+        '_protoc': attr.label(default=Label('//tools/build/protobuf:protoc'), allow_files=True, single_file=True)
     },
     output_to_genfiles = True
 )

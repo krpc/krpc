@@ -22,7 +22,7 @@ protobuf_csharp = rule(
     attrs={
         'src': attr.label(allow_files=FileType(['.proto']), single_file=True),
         'out': attr.output(mandatory=True),
-        '_protoc': attr.label(default=Label('@protobuf//:protoc'), allow_files=True, single_file=True),
+        '_protoc': attr.label(default=Label('//tools/build/protobuf:protoc'), allow_files=True, single_file=True),
     },
     output_to_genfiles = True
 )

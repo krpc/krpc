@@ -1,10 +1,31 @@
 workspace(name = "krpc")
 
-http_archive(
-    name = 'protobuf',
-    url = 'https://github.com/google/protobuf/releases/download/v3.1.0/protobuf-cpp-3.1.0.tar.gz',
-    strip_prefix = 'protobuf-3.1.0',
-    sha256 = '51ceea9957c875bdedeb1f64396b5b0f3864fe830eed6a2d9c066448373ea2d6'
+new_http_archive(
+    name = 'protoc_linux_x86_32',
+    build_file = 'tools/build/protobuf/protoc_linux_x86_32.BUILD',
+    url = 'https://github.com/google/protobuf/releases/download/v3.1.0/protoc-3.1.0-linux-x86_32.zip',
+    sha256 = 'ed83ac3226b7d4334054c712a911669351b0a65d88cff04f32d5251b3c1e1bc5'
+)
+
+new_http_archive(
+    name = 'protoc_linux_x86_64',
+    build_file = 'tools/build/protobuf/protoc_linux_x86_64.BUILD',
+    url = 'https://github.com/google/protobuf/releases/download/v3.1.0/protoc-3.1.0-linux-x86_64.zip',
+    sha256 = '7c98f9e8a3d77e49a072861b7a9b18ffb22c98e37d2a80650264661bfaad5b3a'
+)
+
+new_http_archive(
+    name = 'protoc_osx_x86_32',
+    build_file = 'tools/build/protobuf/protoc_osx_x86_32.BUILD',
+    url = 'https://github.com/google/protobuf/releases/download/v3.1.0/protoc-3.1.0-osx-x86_32.zip',
+    sha256 = '8291317f41253b9d8182d272d739b06febf25acd1d9787996a92fe5cae936898'
+)
+
+new_http_archive(
+    name = 'protoc_win32',
+    build_file = 'tools/build/protobuf/protoc_win32.BUILD',
+    url = 'https://github.com/google/protobuf/releases/download/v3.1.0/protoc-3.1.0-win32.zip',
+    sha256 = 'e46b3b7c5c99361bbdd1bbda93c67e5cbf2873b7098482d85ff8e587ff596b23'
 )
 
 http_file(
@@ -57,6 +78,13 @@ new_http_archive(
     url = 'https://www.nuget.org/api/v2/package/NDesk.Options/0.2.1',
     type = 'zip',
     sha256 = 'f7cad7f76b9a738930496310ea47888529fbfd0a39896bdfd3cfd17fd385f53b'
+)
+
+http_archive(
+    name = 'cpp_protobuf',
+    url = 'https://github.com/google/protobuf/releases/download/v3.1.0/protobuf-cpp-3.1.0.tar.gz',
+    strip_prefix = 'protobuf-3.1.0',
+    sha256 = '51ceea9957c875bdedeb1f64396b5b0f3864fe830eed6a2d9c066448373ea2d6'
 )
 
 new_http_archive(
