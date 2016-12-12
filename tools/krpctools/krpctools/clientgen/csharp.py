@@ -159,4 +159,3 @@ class CsharpGenerator(Generator):
     @staticmethod
     def parse_context(context):
         return context
-
