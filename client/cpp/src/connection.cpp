@@ -40,8 +40,7 @@ void Connection::send(const std::string& data) {
 std::string Connection::receive(size_t length) {
   std::string data;
   data.resize(length);
-  size_t read_length = asio::read(socket, asio::buffer(&data[0], length));
-  assert(length == read_length);
+  asio::read(socket, asio::buffer(&data[0], length));
   return data;
 }
 
