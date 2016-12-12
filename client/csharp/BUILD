@@ -130,9 +130,9 @@ test_suite(
 
 client_test(
     name = 'client',
-    test_executable = ':KRPC.Client.Test',
+    test_executable = ':test-KRPC.Client',
     server_executable = '//tools/TestServer',
-    tags = ['requires-network'],
+    tags = ['local', 'requires-network'],
     size = 'small'
 )
 
@@ -144,16 +144,26 @@ csharp_assembly_info(
     cls_compliant = False
 )
 
-csharp_nunit_test(
+test_deps = [':KRPC.Client', '//tools/build/mono-4.5:Moq'] + deps
+
+csharp_library(
     name = 'KRPC.Client.Test',
     srcs = glob(['test/**/*.cs']) + [':TestAssemblyInfo'] + [':services-testservice'],
-    deps = [':KRPC.Client', '//tools/build/mono-4.5:Moq'] + deps,
+    deps = test_deps,
+    nunit_test = True,
     optimize = False,
     define = ['CODE_ANALYSIS'],
     nowarn = ['1591', '1573'],
-    size = 'small',
-    tags = ['requires-network'],
     visibility = ['//:__pkg__']
+)
+
+csharp_nunit_test(
+    name = 'test-KRPC.Client',
+    lib = ':KRPC.Client.Test',
+    deps = test_deps,
+    size = 'small',
+    # FIXME: need to run test outside the sandbox to work around nunit file accesses
+    tags = ['local', 'requires-network']
 )
 
 clientgen_csharp(

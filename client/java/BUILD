@@ -14,7 +14,7 @@ genrule(
     name = 'krpc-jar',
     srcs = [':krpc'],
     outs = ['krpc-java-%s.jar' % version],
-    cmd = 'ln -f -r -s "$<" "$@"',
+    cmd = 'cp "$<" "$@"',
     output_to_bindir = True,
     visibility = ['//visibility:public']
 )

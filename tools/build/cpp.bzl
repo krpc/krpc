@@ -76,7 +76,7 @@ cpp_lint_test = rule(
         'includes': attr.label_list(allow_files=True),
         'extra_files': attr.label_list(allow_files=True),
         'filters': attr.string_list(),
-        'cpplint': attr.label(default=Label('//tools/build/cpplint'), executable=True)
+        'cpplint': attr.label(default=Label('//tools/build/cpplint'), executable=True, cfg='host')
     },
     test = True
 )
