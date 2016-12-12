@@ -14,8 +14,11 @@ def _apply_exclude(exclude, path):
     """ Apply wildcard exclusion patterns to the path. """
     # TODO: improve this
     for pattern in exclude:
-        if pattern[0] == '*' and path.endswith(pattern[1:]):
-            return True
+        if '*' in pattern:
+            if pattern[0] == '*' and path.endswith(pattern[1:]):
+                return True
+        else:
+            return path == pattern
     return False
 
 def _get_mode(mode_map, path):

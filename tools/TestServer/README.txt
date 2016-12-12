@@ -1,0 +1,19 @@
+kRPC TestServer
+===============
+
+This program can be used to run a kRPC server without needing to launch the
+game. It's intended purpose is for automated testing of kRPC clients.
+
+Usage
+-----
+
+To run, execute "TestServer.exe" from a command line.
+Run "TestServer.exe --help" for more information on configuring the server.
+
+Note:
+ - The version of KRPC.dll in this archive will not work with KSP. It is
+   built for Mono 4.5, and is only intended for use with TestServer.
+ - The Mono DLLs included are from Mono 4.5 - they are not the
+   same as those used by KSP.
+ - The KSP DLLs included are not those from KSP. They are stubs generated from
+   the public interface of the proprietary KSP DLLs.
