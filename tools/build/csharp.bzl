@@ -9,7 +9,7 @@ def _ref_impl(ctx):
         mnemonic = 'CSharpReference',
         inputs = [input],
         outputs = [output],
-        command = 'ln -f -s "`pwd`/%s" "`pwd`/%s"' % (input.path, output.path)
+        command = 'cp "%s" "%s"' % (input.path, output.path)
     )
 
     return struct(
@@ -46,7 +46,10 @@ def _lib_impl(ctx):
     outputs = [lib_output, doc_output, mdb_output]
     srcs = ctx.files.srcs
     deps = [dep.lib for dep in ctx.attr.deps]
+    if ctx.attr.nunit_test:
+        deps += ctx.files._nunit_exe_libs + ctx.files._nunit_framework
     inputs = srcs + deps
+
 
     cmd = ctx.attr.csc
     args = _csc_args(
@@ -113,34 +116,14 @@ def _bin_impl(ctx):
     )
 
 def _nunit_impl(ctx):
-    lib_output = ctx.outputs.lib
-    doc_output = ctx.outputs.doc
-    mdb_output = ctx.outputs.mdb
-    outputs = [lib_output, doc_output, mdb_output]
-    srcs = ctx.files.srcs
-    deps = ctx.files._nunit_exe_libs + ctx.files._nunit_framework
-    deps += [dep.lib for dep in ctx.attr.deps]
-    inputs = srcs + deps
+    lib = ctx.attr.lib.lib
     nunit_files = [ctx.file._nunit_exe] + ctx.files._nunit_exe_libs + ctx.files._nunit_framework
-
-    cmd = ctx.attr.csc
-    args = _csc_args(
-        srcs, deps, lib=lib_output, doc=doc_output, optimize=ctx.attr.optimize,
-        warn=ctx.attr.warn, nowarn=ctx.attr.nowarn, warnaserror=ctx.attr.warnaserror, define=ctx.attr.define)
-
-    ctx.action(
-        mnemonic = 'CSharpCompile',
-        inputs = inputs,
-        outputs = outputs,
-        command = '%s %s' % (cmd, ' '.join(args))
-    )
-
-    runfiles = nunit_files + outputs + ctx.files.deps
+    runfiles = nunit_files + [lib] + ctx.files.deps
     sub_commands = []
     for dep in runfiles:
         sub_commands.append('ln -f -s %s %s' % (dep.short_path, dep.basename))
     sub_commands.extend([
-        '/usr/bin/mono --debug %s %s "$@" 2>stderr.txt' % (ctx.file._nunit_exe.basename, lib_output.basename),
+        '/usr/bin/mono --debug %s %s "$@" 2>stderr.txt' % (ctx.file._nunit_exe.basename, lib.basename),
         'RESULT=$?',
         'cat stderr.txt',
         '(if grep "FATAL UNHANDLED EXCEPTION" stderr.txt; then exit 1; fi)',
@@ -148,17 +131,12 @@ def _nunit_impl(ctx):
     ])
     ctx.file_action(
         ctx.outputs.executable,
-        ' && \\\n'.join(sub_commands)+'\n'
+        ' ; \\\n'.join(sub_commands)+'\n'
     )
-    runfiles = ctx.runfiles(files = runfiles)
 
     return struct(
         name = ctx.label.name,
-        lib = lib_output,
-        doc = doc_output,
-        mdb = mdb_output,
-        out = outputs,
-        runfiles = runfiles
+        runfiles = ctx.runfiles(files = runfiles)
     )
 
 def _gendarme_impl(ctx):
@@ -245,7 +223,12 @@ csharp_reference = rule(
 
 csharp_library = rule(
     implementation = _lib_impl,
-    attrs = _COMMON_ATTRS + {'_target_type': attr.string(default='lib')},
+    attrs = _COMMON_ATTRS + {
+        '_target_type': attr.string(default='lib'),
+        'nunit_test': attr.bool(default=False),
+        '_nunit_exe_libs': attr.label(default=Label('@csharp_nunit//:nunit_exe_libs'), allow_files=True),
+        '_nunit_framework': attr.label(default=Label('@csharp_nunit//:nunit_framework'), allow_files=True)
+},
     outputs = {'lib': '%{name}.dll', 'doc': '%{name}.xml', 'mdb': '%{name}.dll.mdb'}
 )
 
@@ -258,12 +241,13 @@ csharp_binary = rule(
 
 csharp_nunit_test = rule(
     implementation = _nunit_impl,
-    attrs = _COMMON_ATTRS + {
+    attrs = {
+        'lib': attr.label(mandatory=True, providers=['out', 'lib', 'target_type']),
+        'deps': attr.label_list(providers=['out', 'lib', 'target_type']),
         '_nunit_exe': attr.label(default=Label('@csharp_nunit//:nunit_exe'), allow_files=True, single_file=True),
         '_nunit_exe_libs': attr.label(default=Label('@csharp_nunit//:nunit_exe_libs'), allow_files=True),
         '_nunit_framework': attr.label(default=Label('@csharp_nunit//:nunit_framework'), allow_files=True)
     },
-    outputs = {'lib': '%{name}.dll', 'doc': '%{name}.xml', 'mdb': '%{name}.dll.mdb'},
     test = True
 )
 
@@ -355,7 +339,8 @@ def _nuget_package_impl(ctx):
         mnemonic = 'NuGetPackage',
         inputs = [ctx.file._nuget_exe, assembly, doc, nuspec],
         outputs = [ctx.outputs.out],
-        command = ' && '.join(sub_commands)
+        command = ' && '.join(sub_commands),
+        execution_requirements = {'local': '1'} # FIXME: nuget.exe does not work with the sandbox
     )
 
 nuget_package = rule(

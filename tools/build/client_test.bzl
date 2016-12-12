@@ -49,8 +49,8 @@ def _impl(ctx):
 client_test = rule(
     implementation = _impl,
     attrs = {
-        'test_executable': attr.label(executable=True),
-        'server_executable': attr.label(executable=True)
+        'test_executable': attr.label(executable=True, cfg='host'),
+        'server_executable': attr.label(executable=True, cfg='host')
     },
     test = True
 )

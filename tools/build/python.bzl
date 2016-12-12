@@ -33,7 +33,7 @@ def _extract_py_env(env, path):
 def _add_runfile(sub_commands, path, runfile_path):
     sub_commands.extend([
         'mkdir -p `dirname %s`' % runfile_path,
-        'ln -f -s "`pwd`/%s" "`pwd`/%s"' % (path, runfile_path)
+        'cp "%s" "%s"' % (path, runfile_path)
     ])
 
 def _sdist_impl(ctx):
@@ -55,7 +55,7 @@ def _sdist_impl(ctx):
             mnemonic = 'PackageFile',
             inputs = [input],
             outputs = [staging_file],
-            command = 'ln -f -s "`pwd`/%s" "`pwd`/%s"' % (input.path, staging_file.path)
+            command = 'cp "%s" "%s"' % (input.path, staging_file.path)
         )
         staging_inputs.append(staging_file)
 
@@ -223,7 +223,7 @@ py_lint_test = rule(
         'srcs': attr.label_list(allow_files=True),
         'deps': attr.label_list(allow_files=True),
         'rcfile': attr.label(allow_files=True, single_file=True),
-        'pylint': attr.label(default=Label('//tools/build/pylint'), executable=True)
+        'pylint': attr.label(default=Label('//tools/build/pylint'), executable=True, cfg='host')
     },
     test = True
 )

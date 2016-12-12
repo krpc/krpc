@@ -14,8 +14,11 @@ def _apply_exclude(exclude, path):
     """ Apply wildcard exclusion patterns to the path. """
     # TODO: improve this
     for pattern in exclude:
-        if pattern[0] == '*' and path.endswith(pattern[1:]):
-            return True
+        if '*' in pattern:
+            if pattern[0] == '*' and path.endswith(pattern[1:]):
+                return True
+        else:
+            return path == pattern
     return False
 
 def _get_mode(mode_map, path):
@@ -35,7 +38,7 @@ def _stage_files_impl(ctx):
         path = ctx.label.name + '/' + _apply_path_map(ctx.attr.path_map, src.short_path)
         out = ctx.new_file(ctx.configuration.genfiles_dir, path)
 
-        sub_commands = ['ln -f -s "`pwd`/%s" "`pwd`/%s"' % (src.path, out.path)]
+        sub_commands = ['cp "%s" "%s"' % (src.path, out.path)]
 
         ctx.action(
             mnemonic = 'StageFile',

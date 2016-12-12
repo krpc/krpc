@@ -9,6 +9,7 @@ fi
 
 DEPLOYPATH=deploy/$NAME/$TRAVIS_JOB_NUMBER
 VERSION=`tools/krpc-version.sh`
+echo $VERSION
 
 rm -rf $DEPLOYPATH
 mkdir -p $DEPLOYPATH
@@ -17,6 +18,7 @@ mkdir -p $DEPLOYPATH
 cp bazel-bin/krpc-$VERSION.zip $DEPLOYPATH/
 cp bazel-bin/tools/krpctools/krpctools-$VERSION.zip $DEPLOYPATH/
 cp bazel-bin/krpc-genfiles-$VERSION.zip $DEPLOYPATH/
+cp bazel-bin/tools/TestServer/TestServer-$VERSION.zip $DEPLOYPATH/
 
 # Extract release archive
 (cd $DEPLOYPATH; unzip -q krpc-$VERSION.zip)

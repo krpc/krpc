@@ -11,6 +11,7 @@ v0.4.0
 
 v0.3.7
  * Add KRPCDefaultValue attribute. Can be used to set default arguments to non-compile time constants.
+ * Update to Protocol Buffers v3.1.0
 
 v0.3.6
  * Add KRPC.Clients that clients can use to get a list of connected clients (#304)

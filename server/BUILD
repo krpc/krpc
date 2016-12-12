@@ -11,13 +11,13 @@ filegroup(
 
 test_suite(
     name = 'test',
-    tests = [':KRPC.Test', ':gendarme-KRPC', ':gendarme-KRPC.Test'],
+    tests = [':test-KRPC', ':gendarme-KRPC', ':gendarme-KRPC.Test'],
     visibility = ['//:__pkg__']
 )
 
 test_suite(
     name = 'ci-test',
-    tests = [':KRPC.Test']
+    tests = [':test-KRPC']
 )
 
 genrule(
@@ -94,30 +94,41 @@ csharp_assembly_info(
     cls_compliant = False
 )
 
-csharp_nunit_test(
+test_deps = [
+    '//server:KRPC',
+    '//tools/build/mono-4.5:Moq',
+    '//tools/build/ksp:Google.Protobuf',
+    '//tools/build/ksp:Assembly-CSharp',
+    '//tools/build/ksp:Assembly-CSharp-firstpass',
+    '//tools/build/ksp:UnityEngine',
+    '//tools/build/ksp:UnityEngine.UI',
+    '//tools/build/mono-4.5:mscorlib',
+    '//tools/build/mono-4.5:System',
+    '//tools/build/mono-4.5:System.Core',
+    '//tools/build/mono-4.5:System.Runtime',
+    '//tools/build/mono-4.5:System.IO',
+    '//tools/build/mono-4.5:System.Xml',
+    '//tools/build/mono-4.5:Newtonsoft.Json'
+]
+
+csharp_library(
     name = 'KRPC.Test',
     srcs = glob(['test/**/*.cs']) + [':TestAssemblyInfo'],
-    deps = [
-        '//server:KRPC',
-        '//tools/build/mono-4.5:Moq',
-        '//tools/build/ksp:Google.Protobuf',
-        '//tools/build/ksp:Assembly-CSharp',
-        '//tools/build/ksp:Assembly-CSharp-firstpass',
-        '//tools/build/ksp:UnityEngine',
-        '//tools/build/ksp:UnityEngine.UI',
-        '//tools/build/mono-4.5:mscorlib',
-        '//tools/build/mono-4.5:System',
-        '//tools/build/mono-4.5:System.Core',
-        '//tools/build/mono-4.5:System.Runtime',
-        '//tools/build/mono-4.5:System.IO',
-        '//tools/build/mono-4.5:System.Xml',
-        '//tools/build/mono-4.5:Newtonsoft.Json'
-    ],
+    deps = test_deps,
+    nunit_test = True,
     optimize = False,
     define = ['CODE_ANALYSIS'],
     nowarn = ['1591'],
-    size = 'small',
     visibility = ['//:__pkg__']
+)
+
+csharp_nunit_test(
+    name = 'test-KRPC',
+    lib = ':KRPC.Test',
+    deps = test_deps,
+    size = 'small',
+    # FIXME: need to run test outside the sandbox to work around nunit file accesses
+    tags = ['local']
 )
 
 csharp_library(
