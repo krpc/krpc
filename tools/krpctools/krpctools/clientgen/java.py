@@ -1,9 +1,9 @@
 import hashlib
+from krpc.utils import snake_case, split_type_string
+import krpc.types
 from .generator import Generator
 from .docparser import DocParser
 from ..utils import lower_camel_case, upper_camel_case
-from krpc.utils import snake_case, split_type_string
-import krpc.types
 
 class JavaGenerator(Generator):
 

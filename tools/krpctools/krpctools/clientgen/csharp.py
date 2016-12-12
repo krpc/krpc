@@ -1,6 +1,6 @@
-from .generator import Generator
 import krpc.types
 from krpc.utils import split_type_string
+from .generator import Generator
 
 class CsharpGenerator(Generator):
 

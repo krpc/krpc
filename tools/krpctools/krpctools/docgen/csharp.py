@@ -1,7 +1,7 @@
+from krpc.types import ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 from .domain import Domain
 from .nodes import Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
 from .nodes import Enumeration, EnumerationValue
-from krpc.types import ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class CsharpDomain(Domain):
     name = 'csharp'
