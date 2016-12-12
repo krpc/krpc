@@ -21,8 +21,7 @@ NuGet <http://www.nuget.org/packages/Google.Protobuf>`_.
 
    The copy of ``Google.Protobuf.dll`` in the GameData folder shipped with the
    kRPC server plugin should be *avoided*. It is a modified version to work
-   within KSP. `See here for more
-   details. <https://github.com/djungelorm/protobuf/releases/tag/v3.0.0-beta-2-net35>`_
+   within KSP. Specifically, it is built to support .NET 3.5.
 
 Connecting to the Server
 ------------------------
