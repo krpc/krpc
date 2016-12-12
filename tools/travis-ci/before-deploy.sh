@@ -15,9 +15,6 @@ rm -rf $DEPLOYPATH
 mkdir -p $DEPLOYPATH
 
 # Copy archives
-ls -lh bazel-bin
-ls -lh bazel-bin/tools
-ls -lh bazel-bin/tools/krpctools
 cp bazel-bin/krpc-$VERSION.zip $DEPLOYPATH/
 cp bazel-bin/tools/krpctools/krpctools-$VERSION.zip $DEPLOYPATH/
 cp bazel-bin/krpc-genfiles-$VERSION.zip $DEPLOYPATH/
