@@ -62,7 +62,11 @@ namespace KRPC
             // Auto-start the server, if required
             if (config.Configuration.AutoStartServers) {
                 KRPC.Utils.Logger.WriteLine ("Auto-starting server");
-                core.StartAll ();
+                try {
+                    core.StartAll ();
+                } catch (ServerException e) {
+                    KRPC.Utils.Logger.WriteLine ("Failed to auto-start servers:" + e, KRPC.Utils.Logger.Severity.Error);
+                }
             }
 
             // (Re)create the UI
