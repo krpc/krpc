@@ -12,7 +12,7 @@ namespace KRPC.UI
             Title = "kRPC";
             Options.Add (new DialogGUIButton ("Allow", () => args.Request.Allow ()));
             Options.Add (new DialogGUIButton ("Allow (don't ask again)", () => {
-                Addon.config.AutoAcceptConnections = true;
+                Addon.config.Configuration.AutoAcceptConnections = true;
                 Addon.config.Save ();
                 args.Request.Allow ();
             }));

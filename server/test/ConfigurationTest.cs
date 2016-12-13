@@ -1,4 +1,3 @@
-using System.Net;
 using KRPC;
 using NUnit.Framework;
 
@@ -10,7 +9,7 @@ namespace KRPC.Test
         [Test]
         public void DefaultConfig ()
         {
-            var config = new Configuration ("settings.cfg");
+            var config = new Configuration ();
             Assert.AreEqual (true, config.MainWindowVisible);
             Assert.AreEqual (false, config.AutoAcceptConnections);
         }

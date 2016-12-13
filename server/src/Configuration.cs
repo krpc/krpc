@@ -4,88 +4,62 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using KRPC.Server;
 using KRPC.Server.TCP;
-using KRPC.Service;
 using KRPC.Utils;
-using UnityEngine;
 using Logger = KRPC.Utils.Logger;
 
 namespace KRPC
 {
-    sealed class Configuration : ConfigurationStorage
+    sealed class Configuration
     {
         static Configuration instance;
 
         public static Configuration Instance {
             get {
                 if (instance == null)
-                    instance = new Configuration ("PluginData/settings.cfg");
+                    instance = new Configuration ();
                 return instance;
             }
+        }
+
+        public Configuration ()
+        {
+            MainWindowVisible = true;
+            MainWindowPosition = new KRPC.Utils.Tuple<float,float,float,float> (0, 0, 0, 0);
+            InfoWindowVisible = false;
+            InfoWindowPosition = new KRPC.Utils.Tuple<float,float,float,float> (0, 0, 0, 0);
+            AutoStartServers = false;
+            AutoAcceptConnections = false;
+            ConfirmRemoveClient = true;
+            OneRPCPerUpdate = false;
+            MaxTimePerUpdate = 5000;
+            AdaptiveRateControl = true;
+            BlockingRecv = true;
+            RecvTimeout = 1000;
         }
 
         [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
         public sealed class Server
         {
-            [Persistent] string id = Guid.NewGuid ().ToString ();
-            [Persistent] string name = "Default Server";
-            [Persistent] string protocol = Protocol.ProtocolBuffersOverTCP.ToString ();
-            [Persistent] string address = "127.0.0.1";
-            [Persistent] ushort rpcPort = 50000;
-            [Persistent] ushort streamPort = 50001;
+            public Guid Id { get; set; }
 
-            public Guid Id {
-                get { return new Guid (id); }
-                set { id = value.ToString (); }
-            }
+            public string Name { get; set; }
 
-            public string Name {
-                get { return name; }
-                set { name = value; }
-            }
+            public Protocol Protocol { get; set; }
 
-            public Protocol Protocol {
-                get { return (Protocol)Enum.Parse (typeof(Protocol), protocol); }
-                set { protocol = value.ToString (); }
-            }
+            public IPAddress Address { get; set; }
 
-            public IPAddress Address {
-                get {
-                    IPAddress result;
-                    IPAddress.TryParse (address, out result);
-                    return result;
-                }
-                set { address = value.ToString (); }
-            }
+            public ushort RPCPort { get; set; }
 
-            public ushort RPCPort {
-                get { return rpcPort; }
-                set { rpcPort = value; }
-            }
+            public ushort StreamPort { get; set; }
 
-            public ushort StreamPort {
-                get { return streamPort; }
-                set { streamPort = value; }
-            }
-
-            [SuppressMessage ("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
-            public void AfterLoad ()
+            public Server ()
             {
-                try {
-                    Enum.Parse (typeof(Protocol), protocol);
-                } catch (ArgumentException) {
-                    Console.WriteLine (
-                        "[kRPC] Error parsing server protocol from configuration file. Got '" + protocol + "'. " +
-                        "Defaulting to " + Protocol.ProtocolBuffersOverTCP);
-                    protocol = Protocol.ProtocolBuffersOverTCP.ToString ();
-                }
-                IPAddress ipAddress;
-                bool validAddress = IPAddress.TryParse (address, out ipAddress);
-                if (!validAddress) {
-                    Console.WriteLine (
-                        "[kRPC] Error parsing IP address from configuration file. Got '" + address + "'. " +
-                        "Defaulting to loopback address " + IPAddress.Loopback);
-                    address = IPAddress.Loopback.ToString ();
-                }
+                Id = Guid.NewGuid ();
+                Name = "Default Server";
+                Protocol = Protocol.ProtocolBuffersOverTCP;
+                Address = IPAddress.Loopback;
+                RPCPort = 50000;
+                StreamPort = 50001;
             }
 
             /// <summary>
@@ -110,22 +84,7 @@ namespace KRPC
             }
         }
 
-        [Persistent] readonly List<Server> servers = new List<Server> ();
-        [Persistent] bool mainWindowVisible = true;
-        [Persistent] RectStorage mainWindowPosition = new RectStorage ();
-        [Persistent] bool infoWindowVisible;
-        [Persistent] RectStorage infoWindowPosition = new RectStorage ();
-        [Persistent] bool autoStartServers;
-        [Persistent] bool autoAcceptConnections;
-        [Persistent] bool confirmRemoveClient = true;
-        [Persistent] string logLevel = KRPC.Utils.Logger.Severity.Info.ToString ();
-        [Persistent] bool verboseErrors;
-        [Persistent] bool checkDocumented;
-        [Persistent] bool oneRPCPerUpdate;
-        [Persistent] uint maxTimePerUpdate = 5000;
-        [Persistent] bool adaptiveRateControl = true;
-        [Persistent] bool blockingRecv = true;
-        [Persistent] uint recvTimeout = 1000;
+        readonly List<Server> servers = new List<Server> ();
 
         public IList<Server> Servers {
             get { return servers; }
@@ -162,102 +121,34 @@ namespace KRPC
             throw new KeyNotFoundException ();
         }
 
-        public bool MainWindowVisible {
-            get { return mainWindowVisible; }
-            set { mainWindowVisible = value; }
-        }
+        public bool MainWindowVisible { get; set; }
 
-        public Rect MainWindowPosition {
-            get { return mainWindowPosition.AsRect (); }
-            set { mainWindowPosition = RectStorage.FromRect (value); }
-        }
+        public KRPC.Utils.Tuple<float,float,float,float> MainWindowPosition { get; set; }
 
-        public bool InfoWindowVisible {
-            get { return infoWindowVisible; }
-            set { infoWindowVisible = value; }
-        }
+        public bool InfoWindowVisible { get; set; }
 
-        public Rect InfoWindowPosition {
-            get { return infoWindowPosition.AsRect (); }
-            set { infoWindowPosition = RectStorage.FromRect (value); }
-        }
+        public KRPC.Utils.Tuple<float,float,float,float> InfoWindowPosition { get; set; }
 
-        public bool AutoStartServers {
-            get { return autoStartServers; }
-            set { autoStartServers = value; }
-        }
+        public bool AutoStartServers { get; set; }
 
-        public bool AutoAcceptConnections {
-            get { return autoAcceptConnections; }
-            set { autoAcceptConnections = value; }
-        }
+        public bool AutoAcceptConnections { get; set; }
 
-        public bool ConfirmRemoveClient {
-            get { return confirmRemoveClient; }
-            set { confirmRemoveClient = value; }
-        }
+        public bool ConfirmRemoveClient { get; set; }
 
-        public bool OneRPCPerUpdate {
-            get { return oneRPCPerUpdate; }
-            set { oneRPCPerUpdate = value; }
-        }
+        public bool OneRPCPerUpdate { get; set; }
 
-        public uint MaxTimePerUpdate {
-            get { return maxTimePerUpdate; }
-            set { maxTimePerUpdate = value; }
-        }
+        public uint MaxTimePerUpdate { get; set; }
 
-        public bool AdaptiveRateControl {
-            get { return adaptiveRateControl; }
-            set { adaptiveRateControl = value; }
-        }
+        public bool AdaptiveRateControl { get; set; }
 
-        public bool BlockingRecv {
-            get { return blockingRecv; }
-            set { blockingRecv = value; }
-        }
+        public bool BlockingRecv { get; set; }
 
-        public uint RecvTimeout {
-            get { return recvTimeout; }
-            set { recvTimeout = value; }
-        }
+        public uint RecvTimeout { get; set; }
 
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public bool DebugLogging {
             get { return Logger.Level == Logger.Severity.Debug; }
             set { Logger.Level = value ? Logger.Severity.Debug : Logger.Severity.Info; }
-        }
-
-        public Configuration (string filePath) :
-            base (filePath, "KRPCConfiguration")
-        {
-            Load ();
-        }
-
-        protected override void BeforeSave ()
-        {
-            Logger.WriteLine ("Saving configuration", Logger.Severity.Debug);
-            logLevel = Logger.Level.ToString ();
-            verboseErrors = RPCException.VerboseErrors;
-            checkDocumented = ServicesChecker.CheckDocumented;
-        }
-
-        [SuppressMessage ("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
-        protected override void AfterLoad ()
-        {
-            foreach (var server in servers)
-                server.AfterLoad ();
-            try {
-                KRPC.Utils.Logger.Level = (KRPC.Utils.Logger.Severity)Enum.Parse (typeof(KRPC.Utils.Logger.Severity), logLevel);
-            } catch (ArgumentException) {
-                Console.WriteLine (
-                    "[kRPC] Error parsing log level from configuration file. Got '" + logLevel + "'. " +
-                    "Defaulting to " + KRPC.Utils.Logger.Severity.Info);
-                KRPC.Utils.Logger.Level = KRPC.Utils.Logger.Severity.Info;
-            }
-            RPCException.VerboseErrors = verboseErrors;
-            ServicesChecker.CheckDocumented = checkDocumented;
-            Logger.WriteLine ("Loaded configuration", Logger.Severity.Debug);
         }
     }
 }

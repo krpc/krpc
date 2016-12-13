@@ -15,7 +15,7 @@ namespace KRPC
     sealed public class Addon : MonoBehaviour
     {
         // TODO: clean this up
-        internal static Configuration config;
+        internal static ConfigurationFile config;
         static Core core;
         static Texture textureOnline;
         static Texture textureOffline;
@@ -30,8 +30,8 @@ namespace KRPC
         {
             if (core == null) {
                 core = Core.Instance;
-                config = Configuration.Instance;
-                foreach (var server in config.Servers)
+                config = ConfigurationFile.Instance;
+                foreach (var server in config.Configuration.Servers)
                     core.Add (server.Create ());
             }
         }
@@ -60,7 +60,7 @@ namespace KRPC
             }
 
             // Auto-start the server, if required
-            if (config.AutoStartServers) {
+            if (config.Configuration.AutoStartServers) {
                 KRPC.Utils.Logger.WriteLine ("Auto-starting server");
                 core.StartAll ();
             }
@@ -81,13 +81,13 @@ namespace KRPC
             // Info window
             infoWindow = gameObject.AddComponent<InfoWindow> ();
             infoWindow.Closable = true;
-            infoWindow.Visible = config.InfoWindowVisible;
-            infoWindow.Position = config.InfoWindowPosition;
+            infoWindow.Visible = config.Configuration.InfoWindowVisible;
+            infoWindow.Position = config.Configuration.InfoWindowPosition.ToRect ();
 
             // Main window
             mainWindow = gameObject.AddComponent<MainWindow> ();
-            mainWindow.Visible = config.MainWindowVisible;
-            mainWindow.Position = config.MainWindowPosition;
+            mainWindow.Visible = config.Configuration.MainWindowVisible;
+            mainWindow.Position = config.Configuration.MainWindowPosition.ToRect ();
             mainWindow.ClientDisconnectDialog = clientDisconnectDialog;
             mainWindow.InfoWindow = infoWindow;
 
@@ -130,42 +130,42 @@ namespace KRPC
             };
             mainWindow.OnHide += (s, e) => {
                 config.Load ();
-                config.MainWindowVisible = false;
+                config.Configuration.MainWindowVisible = false;
                 config.Save ();
             };
             mainWindow.OnShow += (s, e) => {
                 config.Load ();
-                config.MainWindowVisible = true;
+                config.Configuration.MainWindowVisible = true;
                 config.Save ();
             };
             mainWindow.OnMoved += (s, e) => {
                 config.Load ();
                 var window = s as MainWindow;
-                config.MainWindowPosition = window.Position;
+                config.Configuration.MainWindowPosition = window.Position.ToTuple ();
                 config.Save ();
             };
 
             // Info window events
             infoWindow.OnHide += (s, e) => {
                 config.Load ();
-                config.InfoWindowVisible = false;
+                config.Configuration.InfoWindowVisible = false;
                 config.Save ();
             };
             infoWindow.OnShow += (s, e) => {
                 config.Load ();
-                config.InfoWindowVisible = true;
+                config.Configuration.InfoWindowVisible = true;
                 config.Save ();
             };
             infoWindow.OnMoved += (s, e) => {
                 config.Load ();
                 var window = s as InfoWindow;
-                config.InfoWindowPosition = window.Position;
+                config.Configuration.InfoWindowPosition = window.Position.ToTuple ();
                 config.Save ();
             };
 
             // Server events
             core.OnClientRequestingConnection += (s, e) => {
-                if (config.AutoAcceptConnections) {
+                if (config.Configuration.AutoAcceptConnections) {
                     KRPC.Utils.Logger.WriteLine ("Auto-accepting client connection (" + e.Client.Address + ")");
                     e.Request.Allow ();
                 } else {

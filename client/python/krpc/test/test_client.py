@@ -54,9 +54,6 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual('Connection request was for the stream server, but this is the rpc server. ' +
                          'Did you connect to the wrong port number?', str(cm.exception))
 
-    def test_current_game_scene(self):
-        self.assertEqual(self.conn.krpc.GameScene.space_center, self.conn.krpc.current_game_scene)
-
     def test_error(self):
         with self.assertRaises(krpc.client.RPCError) as cm:
             self.conn.test_service.throw_argument_exception()

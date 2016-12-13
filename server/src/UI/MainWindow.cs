@@ -13,7 +13,7 @@ namespace KRPC.UI
     sealed class MainWindow : Window
     {
         Core core;
-        Configuration config;
+        ConfigurationFile config;
 
         public InfoWindow InfoWindow { private get; set; }
 
@@ -77,7 +77,7 @@ namespace KRPC.UI
         protected override void Init ()
         {
             core = Core.Instance;
-            config = Configuration.Instance;
+            config = ConfigurationFile.Instance;
 
             var version = FileVersionInfo.GetVersionInfo (Assembly.GetExecutingAssembly ().Location);
             Title = "kRPC v" + version.FileMajorPart + "." + version.FileMinorPart + "." + version.FileBuildPart;
@@ -135,8 +135,8 @@ namespace KRPC.UI
             comboOptionStyle = GUILayoutExtensions.ComboOptionStyle ();
 
             Errors = new List<string> ();
-            maxTimePerUpdate = config.MaxTimePerUpdate.ToString ();
-            recvTimeout = config.RecvTimeout.ToString ();
+            maxTimePerUpdate = config.Configuration.MaxTimePerUpdate.ToString ();
+            recvTimeout = config.Configuration.RecvTimeout.ToString ();
 
             core.OnClientActivity += (s, e) => SawClientActivity (e.Client);
         }
@@ -242,18 +242,18 @@ namespace KRPC.UI
                     var newServer = editServers [server.Id].Save ();
                     if (newServer != null) {
                         editServers.Remove (server.Id);
-                        config.ReplaceServer (newServer);
+                        config.Configuration.ReplaceServer (newServer);
                         config.Save ();
                         core.Replace (newServer.Create ());
                     }
                 } else {
-                    editServers [server.Id] = new EditServer (this, config.GetServer (server.Id));
+                    editServers [server.Id] = new EditServer (this, config.Configuration.GetServer (server.Id));
                 }
                 Resized = true;
             }
             GUI.enabled = !editingServer && !running;
             if (GUILayout.Button (removeServerText, buttonStyle)) {
-                config.RemoveServer (server.Id);
+                config.Configuration.RemoveServer (server.Id);
                 config.Save ();
                 core.Remove (server.Id);
                 Resized = true;
@@ -285,7 +285,7 @@ namespace KRPC.UI
                     GUILayout.Label (description, stretchyLabelStyle);
                     if (GUILayout.Button (new GUIContent (Icons.Instance.ButtonDisconnectClient, "Disconnect client"),
                             buttonStyle, GUILayout.MaxWidth (20), GUILayout.MaxHeight (20))) {
-                        if (config.ConfirmRemoveClient)
+                        if (config.Configuration.ConfirmRemoveClient)
                             ClientDisconnectDialog.Show (client);
                         else
                             client.Close ();
@@ -303,7 +303,7 @@ namespace KRPC.UI
         {
             if (GUILayout.Button (addServerText, buttonStyle)) {
                 var server = new Configuration.Server ();
-                config.Servers.Add (server);
+                config.Configuration.Servers.Add (server);
                 config.Save ();
                 core.Add (server.Create ());
             }
@@ -374,36 +374,36 @@ namespace KRPC.UI
 
         void DrawAutoStartServerToggle ()
         {
-            bool autoStartServers = GUILayout.Toggle (config.AutoStartServers, autoStartServerText, toggleStyle, new GUILayoutOption[] { });
-            if (autoStartServers != config.AutoStartServers) {
-                config.AutoStartServers = autoStartServers;
+            bool autoStartServers = GUILayout.Toggle (config.Configuration.AutoStartServers, autoStartServerText, toggleStyle, new GUILayoutOption[] { });
+            if (autoStartServers != config.Configuration.AutoStartServers) {
+                config.Configuration.AutoStartServers = autoStartServers;
                 config.Save ();
             }
         }
 
         void DrawAutoAcceptConnectionsToggle ()
         {
-            bool autoAcceptConnections = GUILayout.Toggle (config.AutoAcceptConnections, autoAcceptConnectionsText, toggleStyle, new GUILayoutOption[] { });
-            if (autoAcceptConnections != config.AutoAcceptConnections) {
-                config.AutoAcceptConnections = autoAcceptConnections;
+            bool autoAcceptConnections = GUILayout.Toggle (config.Configuration.AutoAcceptConnections, autoAcceptConnectionsText, toggleStyle, new GUILayoutOption[] { });
+            if (autoAcceptConnections != config.Configuration.AutoAcceptConnections) {
+                config.Configuration.AutoAcceptConnections = autoAcceptConnections;
                 config.Save ();
             }
         }
 
         void DrawConfirmRemoveClientToggle ()
         {
-            bool confirmRemoveClient = GUILayout.Toggle (config.ConfirmRemoveClient, confirmRemoveClientText, toggleStyle, new GUILayoutOption[] { });
-            if (confirmRemoveClient != config.ConfirmRemoveClient) {
-                config.ConfirmRemoveClient = confirmRemoveClient;
+            bool confirmRemoveClient = GUILayout.Toggle (config.Configuration.ConfirmRemoveClient, confirmRemoveClientText, toggleStyle, new GUILayoutOption[] { });
+            if (confirmRemoveClient != config.Configuration.ConfirmRemoveClient) {
+                config.Configuration.ConfirmRemoveClient = confirmRemoveClient;
                 config.Save ();
             }
         }
 
         void DrawOneRPCPerUpdateToggle ()
         {
-            bool oneRPCPerUpdate = GUILayout.Toggle (config.OneRPCPerUpdate, oneRPCPerUpdateText, toggleStyle, new GUILayoutOption[] { });
-            if (oneRPCPerUpdate != config.OneRPCPerUpdate) {
-                config.OneRPCPerUpdate = oneRPCPerUpdate;
+            bool oneRPCPerUpdate = GUILayout.Toggle (config.Configuration.OneRPCPerUpdate, oneRPCPerUpdateText, toggleStyle, new GUILayoutOption[] { });
+            if (oneRPCPerUpdate != config.Configuration.OneRPCPerUpdate) {
+                config.Configuration.OneRPCPerUpdate = oneRPCPerUpdate;
                 config.Save ();
             }
         }
@@ -413,27 +413,27 @@ namespace KRPC.UI
             GUILayout.Label (maxTimePerUpdateText, fixedLabelStyle);
             var newMaxTimePerUpdate = GUILayout.TextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, longTextFieldStyle);
             if (newMaxTimePerUpdate != maxTimePerUpdate) {
-                uint value = config.MaxTimePerUpdate;
+                uint value = config.Configuration.MaxTimePerUpdate;
                 uint.TryParse (newMaxTimePerUpdate, out value);
-                config.MaxTimePerUpdate = value;
+                config.Configuration.MaxTimePerUpdate = value;
                 config.Save ();
             }
         }
 
         void DrawAdaptiveRateControlToggle ()
         {
-            bool adaptiveRateControl = GUILayout.Toggle (config.AdaptiveRateControl, adaptiveRateControlText, toggleStyle, new GUILayoutOption[] { });
-            if (adaptiveRateControl != config.AdaptiveRateControl) {
-                config.AdaptiveRateControl = adaptiveRateControl;
+            bool adaptiveRateControl = GUILayout.Toggle (config.Configuration.AdaptiveRateControl, adaptiveRateControlText, toggleStyle, new GUILayoutOption[] { });
+            if (adaptiveRateControl != config.Configuration.AdaptiveRateControl) {
+                config.Configuration.AdaptiveRateControl = adaptiveRateControl;
                 config.Save ();
             }
         }
 
         void DrawBlockingRecvToggle ()
         {
-            bool blockingRecv = GUILayout.Toggle (config.BlockingRecv, blockingRecvText, toggleStyle, new GUILayoutOption[] { });
-            if (blockingRecv != config.BlockingRecv) {
-                config.BlockingRecv = blockingRecv;
+            bool blockingRecv = GUILayout.Toggle (config.Configuration.BlockingRecv, blockingRecvText, toggleStyle, new GUILayoutOption[] { });
+            if (blockingRecv != config.Configuration.BlockingRecv) {
+                config.Configuration.BlockingRecv = blockingRecv;
                 config.Save ();
             }
         }
@@ -443,18 +443,18 @@ namespace KRPC.UI
             GUILayout.Label (recvTimeoutText, fixedLabelStyle);
             var newRecvTimeout = GUILayout.TextField (recvTimeout, recvTimeoutMaxLength, longTextFieldStyle);
             if (newRecvTimeout != recvTimeout) {
-                uint value = config.RecvTimeout;
+                uint value = config.Configuration.RecvTimeout;
                 uint.TryParse (newRecvTimeout, out value);
-                config.RecvTimeout = value;
+                config.Configuration.RecvTimeout = value;
                 config.Save ();
             }
         }
 
         void DrawDebugLogging ()
         {
-            bool debugLogging = GUILayout.Toggle (config.DebugLogging, debugLoggingText, toggleStyle, new GUILayoutOption[] { });
-            if (debugLogging != config.DebugLogging) {
-                config.DebugLogging = debugLogging;
+            bool debugLogging = GUILayout.Toggle (config.Configuration.DebugLogging, debugLoggingText, toggleStyle, new GUILayoutOption[] { });
+            if (debugLogging != config.Configuration.DebugLogging) {
+                config.Configuration.DebugLogging = debugLogging;
                 config.Save ();
             }
         }

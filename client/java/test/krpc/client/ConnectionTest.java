@@ -87,11 +87,6 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testCurrentGameScene() throws RPCException {
-    assertEquals(KRPC.GameScene.SPACE_CENTER, krpc.getCurrentGameScene());
-  }
-
-  @Test
   public void testErrorInvalidArgument() throws RPCException {
     expectedException.expect(RPCException.class);
     expectedException.expectMessage("Invalid argument");
