@@ -43,7 +43,7 @@ java_checkstyle_test = rule(
                              allow_files=True, single_file=True),
         'properties': attr.label(default=Label('//tools/build/checkstyle:default.properties'),
                                  allow_files=True, single_file=True),
-        'checkstyle': attr.label(default=Label('//tools/build/checkstyle'), executable=True)
+        'checkstyle': attr.label(default=Label('//tools/build/checkstyle'), executable=True, cfg='host')
     },
     test = True
 )
