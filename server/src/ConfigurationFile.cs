@@ -10,6 +10,7 @@ using Logger = KRPC.Utils.Logger;
 
 namespace KRPC
 {
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     sealed class ConfigurationFile : ConfigurationStorage
     {
         static ConfigurationFile instance;
@@ -41,6 +42,7 @@ namespace KRPC
                 streamPort = server.StreamPort;
             }
 
+            [SuppressMessage ("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
             public void AfterLoad (Configuration.Server server)
             {
                 server.Id = new Guid (id);
