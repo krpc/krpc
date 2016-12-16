@@ -7,7 +7,7 @@ namespace KRPC.SpaceCenter.ExternalAPI
     {
         public static void Load ()
         {
-            IsAvailable = APILoader.Load (typeof(AGX), "ActionGroupsExtended", "ActionGroupsExtended.AGExtExternal, AGExt", new Version (2, 2));
+            IsAvailable = APILoader.Load (typeof(AGX), "AGExt", "ActionGroupsExtended.AGExtExternal");
         }
 
         public static bool IsAvailable { get; private set; }

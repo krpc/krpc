@@ -19,7 +19,7 @@ namespace KRPC.Utils
         /// <param name="apiName">Name of the API to load.</param>
         /// <param name="requiredVersion">Required API version.</param>
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        public static bool Load (Type api, string assemblyName, string apiName, Version requiredVersion)
+        public static bool Load (Type api, string assemblyName, string apiName, Version requiredVersion = null)
         {
             if (api == null)
                 throw new ArgumentNullException ("api");
@@ -33,9 +33,11 @@ namespace KRPC.Utils
 
             // Version check
             var version = new Version (assembly.versionMajor, assembly.versionMinor);
-            if (version.CompareTo (requiredVersion) < 0) {
-                Error ("Failed to load " + assemblyName + "; found version " + version + " but version >= " + requiredVersion + " is required");
-                return false;
+            if (requiredVersion != null) {
+                if (version.CompareTo (requiredVersion) < 0) {
+                    Error ("Failed to load " + assemblyName + "; found version " + version + " but version >= " + requiredVersion + " is required");
+                    return false;
+                }
             }
 
             // Get type of APIs static class
