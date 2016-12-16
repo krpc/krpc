@@ -5,6 +5,7 @@ using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.ExternalAPI;
 using KRPC.Utils;
 using KSP.UI.Screens;
 using System.Reflection;
@@ -287,80 +288,76 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Returns <c>true</c> if the given action group is enabled.
         /// </summary>
-        /// <param name="group">A number between 0 and 9 inclusive.</param>
+        /// <param name="group">
+        /// A number between 0 and 9 inclusive,
+        /// or between 0 and 250 inclusive when the <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/67235-12oct3116-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech">Extended Action Groups mod</a> is installed.
+        /// </param>
         [KRPCMethod]
         public bool GetActionGroup (uint group)
         {
-            if (KRPC.SpaceCenter.Services.ActionGroupExtendedMod.AGExtInstalled())
+            var vessel = InternalVessel;
+            if (AGX.IsAvailable)
             {
-                if (group < 251)
-                {
-                    return KRPC.SpaceCenter.Services.ActionGroupExtendedMod.AGXGroupState(InternalVessel.rootPart.flightID, group);
-                }
-                else
-                {
-                    throw new ArgumentException("Action group must be between 1 and 250 inclusive");
-                }
+                if (group > 250)
+                    throw new ArgumentException("Action group must be between 0 and 250 inclusive");
+                return AGX.AGX2VslGroupState(vessel.rootPart.flightID, (int)group);
             }
             else
             {
                 if (group > 9)
                     throw new ArgumentException("Action group must be between 0 and 9 inclusive");
-                return InternalVessel.ActionGroups.groups[BaseAction.GetGroupIndex(ActionGroupExtensions.GetActionGroup(group))];
+                return vessel.ActionGroups.groups[BaseAction.GetGroupIndex(ActionGroupExtensions.GetActionGroup(group))];
             }
         }
 
         /// <summary>
-        /// Sets the state of the given action group (a value between 0 and 9
-        /// inclusive).
+        /// Sets the state of the given action group.
         /// </summary>
-        /// <param name="group">A number between 0 and 9 inclusive.</param>
+        /// <param name="group">
+        /// A number between 0 and 9 inclusive,
+        /// or between 0 and 250 inclusive when the <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/67235-12oct3116-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech">Extended Action Groups mod</a> is installed.
+        /// </param>
         /// <param name="state"></param>
         [KRPCMethod]
         public void SetActionGroup (uint group, bool state)
         {
-            if (KRPC.SpaceCenter.Services.ActionGroupExtendedMod.AGExtInstalled())
+            var vessel = InternalVessel;
+            if (AGX.IsAvailable)
             {
-                if (group < 251)
-                {
-                    KRPC.SpaceCenter.Services.ActionGroupExtendedMod.AGXSetGroup(InternalVessel.rootPart.flightID, group, state);
-                }
-                else
-                {
-                    throw new ArgumentException("Action group must be between 1 and 250 inclusive");
-                }
+                if (group > 250)
+                    throw new ArgumentException("Action group must be between 0 and 250 inclusive");
+                AGX.AGX2VslActivateGroup(vessel.rootPart.flightID, (int)group, state);
             }
             else
             {
                 if (group > 9)
                     throw new ArgumentException("Action group must be between 0 and 9 inclusive");
-                InternalVessel.ActionGroups.SetGroup(ActionGroupExtensions.GetActionGroup(group), state);
+                vessel.ActionGroups.SetGroup(ActionGroupExtensions.GetActionGroup(group), state);
             }
         }
 
         /// <summary>
         /// Toggles the state of the given action group.
         /// </summary>
-        /// <param name="group">A number between 0 and 9 inclusive.</param>
+        /// <param name="group">
+        /// A number between 0 and 9 inclusive,
+        /// or between 0 and 250 inclusive when the <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/67235-12oct3116-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech">Extended Action Groups mod</a> is installed.
+        /// </param>
         [KRPCMethod]
         public void ToggleActionGroup (uint group)
         {
-            if (KRPC.SpaceCenter.Services.ActionGroupExtendedMod.AGExtInstalled())
+            var vessel = InternalVessel;
+            if (AGX.IsAvailable)
             {
-                if (group < 251)
-                {
-                    KRPC.SpaceCenter.Services.ActionGroupExtendedMod.AGXToggleGroup(InternalVessel.rootPart.flightID, group);
-                }
-                else
-                {
-                    throw new ArgumentException("Action group must be between 1 and 250 inclusive");
-                }
+                if (group > 250)
+                    throw new ArgumentException("Action group must be between 0 and 250 inclusive");
+                AGX.AGX2VslToggleGroup(vessel.rootPart.flightID, (int)group);
             }
             else
             {
                 if (group > 9)
                     throw new ArgumentException("Action group must be between 0 and 9 inclusive");
-                InternalVessel.ActionGroups.ToggleGroup(ActionGroupExtensions.GetActionGroup(group));
+                vessel.ActionGroups.ToggleGroup(ActionGroupExtensions.GetActionGroup(group));
             }
         }
 
@@ -416,42 +413,6 @@ namespace KRPC.SpaceCenter.Services
             CheckActiveVessel ();
             if (FlightGlobals.ActiveVessel.patchedConicSolver == null)
                 throw new InvalidOperationException ("Maneuver node editing is not available. Either the vessel is in a situation where maneuver nodes cannot be used, or the tracking station has not been upgraded to support them.");
-        }
-    }
-
-    public static class ActionGroupExtendedMod //Code to support interfacing with the Action Groups Extended mod by Diazo  http://forum.kerbalspaceprogram.com/index.php?/topic/67235-12oct3116-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/&page=1
-    {
-        public static bool AGExtInstalled() //Check to see if AGX is actually installed, uses System.Reflection namespace. Gate all calls to AGX behind this code to prevent errors.
-        {
-            try
-            {
-                Type calledType = Type.GetType("ActionGroupsExtended.AGExtExternal, AGExt");
-                return (bool)calledType.InvokeMember("AGXInstalled", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, null);
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        public static bool AGXGroupState(uint FlightID, int group) //FlightID is Vessel.RootPart.FlightID, group is action group number.
-        {
-            Type calledType = Type.GetType("ActionGroupsExtended.AGExtExternal, AGExt");
-            bool GroupState = (bool)calledType.InvokeMember("AGX2VslGroupState", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, new System.Object[] { FlightID, group });
-            return GroupState;
-        }
-        public static bool AGXToggleGroup(uint FlightID, int group) //FlightID is Vessel.RootPart.FlightID, group is action group number.
-        {
-            Type calledType = Type.GetType("ActionGroupsExtended.AGExtExternal, AGExt");
-            bool GroupState = (bool)calledType.InvokeMember("AGX2VslToggleGroupDelayCheck", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, new System.Object[] { FlightID, group });
-            //AGX2VslToggleGroupDelayCheck respects RemoteTech comm delay. Change to 'AGX2VslToggleGroup' to bypass delay and command from local control.
-            return GroupState;
-        }
-        public static bool AGXSetGroup(uint FlightID, int group, bool direction) //FlightID is Vessel.RootPart.FlightID, group is action group number, direction is what state we are chaning the group TO, so true will activate the gorup
-        {
-            Type calledType = Type.GetType("ActionGroupsExtended.AGExtExternal, AGExt");
-            bool GroupState = (bool)calledType.InvokeMember("AGX2VslActivateGroupDelayCheck", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, new System.Object[] { FlightID, group, direction });
-            //AGX2VslActivateGroupDelayCheck respects RemoteTech comm delay. Change to 'AGX2VslActivateGroup' to bypass delay and command from local control.
-            return GroupState;
         }
     }
 }
