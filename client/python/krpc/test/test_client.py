@@ -15,13 +15,6 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertRegexpMatches(status.version, r'^[0-9]+\.[0-9]+\.[0-9]+$')
         self.assertGreater(status.bytes_read, 0)
 
-    def test_wrong_server_address(self):
-        with self.assertRaises(socket.gaierror):
-            krpc.connect(name='python_client_test_wrong_server_address',
-                         address='doesntexist',
-                         rpc_port=ServerTestCase.rpc_port(),
-                         stream_port=ServerTestCase.stream_port())
-
     def test_wrong_rpc_port(self):
         with self.assertRaises(socket.error):
             krpc.connect(name='python_client_test_wrong_rpc_port',

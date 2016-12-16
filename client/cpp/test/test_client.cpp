@@ -21,12 +21,6 @@ TEST_F(test_client, test_version) {
   ASSERT_THAT(status.version(), testing::MatchesRegex("[0-9]+\\.[0-9]+\\.[0-9]+"));
 }
 
-TEST_F(test_client, test_wrong_server_address) {
-  ASSERT_THROW(
-    krpc::connect("C++ClientTestWrongServerAddress", "doesntexist", get_rpc_port(), get_stream_port()),
-    std::exception);
-}
-
 TEST_F(test_client, test_wrong_rpc_port) {
   ASSERT_THROW(
     krpc::connect("C++ClientTestWrongRpcPort", "localhost", get_rpc_port() ^ get_stream_port(), get_stream_port()),

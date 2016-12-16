@@ -17,12 +17,6 @@ function TestClient:test_version()
   luaunit.assertStrMatches(status.version, '%d+.%d+.%d+')
 end
 
-function TestClient:test_wrong_server_address()
-  luaunit.assertError(
-    krpc.connect, 'LuaClientTestWrongServerAddress',
-    'doesntexist', self.get_rpc_port(), self.get_stream_port())
-end
-
 function TestClient:test_wrong_rpc_port()
   luaunit.assertError(
     krpc.connect, 'LuaClientTestWrongRpcPort',

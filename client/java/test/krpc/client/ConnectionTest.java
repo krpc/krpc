@@ -50,11 +50,6 @@ public class ConnectionTest {
   }
 
   @Test(expected = IOException.class)
-  public void testWrongServerAddress() throws IOException {
-    Connection.newInstance("JavaClientTestWrongAddress", "doesntexist", 10000, 100001);
-  }
-
-  @Test(expected = IOException.class)
   public void testWrongRpcPort() throws IOException {
     Connection.newInstance("JavaClientTestWrongRpcPort", "localhost",
         TestUtils.getRpcPort() ^ TestUtils.getStreamPort(), TestUtils.getStreamPort());
