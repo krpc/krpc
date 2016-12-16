@@ -10,9 +10,15 @@ using Google.Protobuf;
 
 namespace KRPC.Client
 {
+    /// <summary>
+    /// Methods for encoding and decoding messages for kRPCs protocolo bufers over TCP/IP protocol.
+    /// </summary>
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
-    static class Encoder
+    public static class Encoder
     {
+        /// <summary>
+        /// RPC hello message bytes.
+        /// </summary>
         public static readonly byte[] RPCHelloMessage = {
             0x48,
             0x45,
@@ -27,6 +33,10 @@ namespace KRPC.Client
             0x00,
             0x00
         };
+
+        /// <summary>
+        /// Stream hello message bytes.
+        /// </summary>
         public static readonly byte[] StreamHelloMessage = {
             0x48,
             0x45,
@@ -41,11 +51,26 @@ namespace KRPC.Client
             0x41,
             0x4D
         };
+
+        /// <summary>
+        /// OK message bytes.
+        /// </summary>
         public static readonly byte[] OkMessage = { 0x4f, 0x4b };
+
+        /// <summary>
+        /// Length of an encoded client name, in bytes.
+        /// </summary>
         public const int ClientNameLength = 32;
+
+        /// <summary>
+        /// Length of an encoded client identifier, in bytes.
+        /// </summary>
         public const int ClientIdentifierLength = 16;
 
-        internal static byte[] EncodeClientName (string name)
+        /// <summary>
+        /// Encode a client name.
+        /// </summary>
+        public static byte[] EncodeClientName (string name)
         {
             var encoder = new UTF8Encoding (false, true);
             var clientName = encoder.GetBytes (name);

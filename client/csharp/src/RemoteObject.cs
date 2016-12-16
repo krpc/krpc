@@ -7,11 +7,20 @@ namespace KRPC.Client
     /// </summary>
     public class RemoteObject : IEquatable<RemoteObject>
     {
-        internal IConnection connection;
+        /// <summary>
+        /// A connection to the server where the object is stored.
+        /// </summary>
+        public IConnection connection;
 
-        internal UInt64 id { get; private set; }
+        /// <summary>
+        /// The unique identifier for the object on the server.
+        /// </summary>
+        public UInt64 id { get; private set; }
 
-        internal RemoteObject (IConnection serverConnection, UInt64 objectId = 0)
+        /// <summary>
+        /// Construct a remote object.
+        /// </summary>
+        public RemoteObject (IConnection serverConnection, UInt64 objectId = 0)
         {
             connection = serverConnection;
             id = objectId;
