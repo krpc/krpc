@@ -8,7 +8,6 @@ using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
 using KRPC.Utils;
 using KSP.UI.Screens;
-using System.Reflection;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -296,17 +295,14 @@ namespace KRPC.SpaceCenter.Services
         public bool GetActionGroup (uint group)
         {
             var vessel = InternalVessel;
-            if (AGX.IsAvailable)
-            {
+            if (AGX.IsAvailable) {
                 if (group > 250)
-                    throw new ArgumentException("Action group must be between 0 and 250 inclusive");
-                return AGX.AGX2VslGroupState(vessel.rootPart.flightID, (int)group);
-            }
-            else
-            {
+                    throw new ArgumentException ("Action group must be between 0 and 250 inclusive");
+                return AGX.AGX2VslGroupState (vessel.rootPart.flightID, (int)group);
+            } else {
                 if (group > 9)
-                    throw new ArgumentException("Action group must be between 0 and 9 inclusive");
-                return vessel.ActionGroups.groups[BaseAction.GetGroupIndex(ActionGroupExtensions.GetActionGroup(group))];
+                    throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
+                return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (ActionGroupExtensions.GetActionGroup (group))];
             }
         }
 
@@ -322,17 +318,14 @@ namespace KRPC.SpaceCenter.Services
         public void SetActionGroup (uint group, bool state)
         {
             var vessel = InternalVessel;
-            if (AGX.IsAvailable)
-            {
+            if (AGX.IsAvailable) {
                 if (group > 250)
-                    throw new ArgumentException("Action group must be between 0 and 250 inclusive");
-                AGX.AGX2VslActivateGroup(vessel.rootPart.flightID, (int)group, state);
-            }
-            else
-            {
+                    throw new ArgumentException ("Action group must be between 0 and 250 inclusive");
+                AGX.AGX2VslActivateGroup (vessel.rootPart.flightID, (int)group, state);
+            } else {
                 if (group > 9)
-                    throw new ArgumentException("Action group must be between 0 and 9 inclusive");
-                vessel.ActionGroups.SetGroup(ActionGroupExtensions.GetActionGroup(group), state);
+                    throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
+                vessel.ActionGroups.SetGroup (ActionGroupExtensions.GetActionGroup (group), state);
             }
         }
 
@@ -347,17 +340,14 @@ namespace KRPC.SpaceCenter.Services
         public void ToggleActionGroup (uint group)
         {
             var vessel = InternalVessel;
-            if (AGX.IsAvailable)
-            {
+            if (AGX.IsAvailable) {
                 if (group > 250)
-                    throw new ArgumentException("Action group must be between 0 and 250 inclusive");
-                AGX.AGX2VslToggleGroup(vessel.rootPart.flightID, (int)group);
-            }
-            else
-            {
+                    throw new ArgumentException ("Action group must be between 0 and 250 inclusive");
+                AGX.AGX2VslToggleGroup (vessel.rootPart.flightID, (int)group);
+            } else {
                 if (group > 9)
-                    throw new ArgumentException("Action group must be between 0 and 9 inclusive");
-                vessel.ActionGroups.ToggleGroup(ActionGroupExtensions.GetActionGroup(group));
+                    throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
+                vessel.ActionGroups.ToggleGroup (ActionGroupExtensions.GetActionGroup (group));
             }
         }
 
