@@ -73,30 +73,25 @@ class TestVessel(krpctest.TestCase):
         self.assertAlmostEqual((-5000, -5000, -5000), self.vessel.available_reaction_wheel_torque[1])
         for rw in self.vessel.parts.reaction_wheels:
             rw.active = False
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_reaction_wheel_torque[0])
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_reaction_wheel_torque[1])
+        self.assertAlmostEqual(((0, 0, 0), (0, 0, 0)), self.vessel.available_reaction_wheel_torque)
         for rw in self.vessel.parts.reaction_wheels:
             rw.active = True
 
     def test_available_rcs_torque(self):
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque[0])
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque[1])
+        self.assertAlmostEqual(((0, 0, 0), (0, 0, 0)), self.vessel.available_rcs_torque)
         self.vessel.control.rcs = True
         self.wait()
         self.assertAlmostEqual((6005, 5575, 6005), self.vessel.available_rcs_torque[0], delta=5)
         self.assertAlmostEqual((-6005, -5575, -6005), self.vessel.available_rcs_torque[1], delta=5)
         self.vessel.control.rcs = False
         self.wait()
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque[0])
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque[1])
+        self.assertAlmostEqual(((0, 0, 0), (0, 0, 0)), self.vessel.available_rcs_torque)
 
     def test_available_engine_torque(self):
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_engine_torque[0])
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_engine_torque[1])
+        self.assertAlmostEqual(((0, 0, 0), (0, 0, 0)), self.vessel.available_engine_torque)
 
     def test_available_control_surface_torque(self):
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_control_surface_torque[0])
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_control_surface_torque[1])
+        self.assertAlmostEqual(((0, 0, 0), (0, 0, 0)), self.vessel.available_control_surface_torque)
 
     def test_bounding_box(self):
         box = self.vessel.bounding_box(self.vessel.reference_frame)
@@ -206,7 +201,7 @@ class TestVesselEngines(krpctest.TestCase):
         self.assertAlmostEqual(0, self.vessel.specific_impulse)
         self.assertAlmostEqual(0, self.vessel.vacuum_specific_impulse)
         self.assertAlmostEqual(0, self.vessel.kerbin_sea_level_specific_impulse)
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_engine_torque)
+        self.assertAlmostEqual(((0, 0, 0), (0, 0, 0)), self.vessel.available_engine_torque)
 
     def test_one_idle(self):
         self.control.throttle = 0.0
@@ -228,7 +223,7 @@ class TestVesselEngines(krpctest.TestCase):
         self.assertAlmostEqual(info['isp'], self.vessel.specific_impulse, places=3)
         self.assertAlmostEqual(info['vac_isp'], self.vessel.vacuum_specific_impulse, places=3)
         self.assertAlmostEqual(info['msl_isp'], self.vessel.kerbin_sea_level_specific_impulse, places=3)
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_engine_torque, places=3)
+        self.assertAlmostEqual(((0, 0, 0), (0, 0, 0)), self.vessel.available_engine_torque, places=3)
         engine.active = False
         self.wait(0.5)
 
@@ -250,7 +245,7 @@ class TestVesselEngines(krpctest.TestCase):
         self.assertAlmostEqual(self.combined_isp, self.vessel.specific_impulse, delta=1)
         self.assertAlmostEqual(self.vac_combined_isp, self.vessel.vacuum_specific_impulse, delta=1)
         self.assertAlmostEqual(self.msl_combined_isp, self.vessel.kerbin_sea_level_specific_impulse, delta=1)
-        self.assertAlmostEqual((0, 0, 0), self.vessel.available_engine_torque)
+        self.assertAlmostEqual(((0, 0, 0), (0, 0, 0)), self.vessel.available_engine_torque)
         for engine in self.engines:
             engine.active = False
         self.wait(0.5)
