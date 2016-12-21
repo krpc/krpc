@@ -52,13 +52,6 @@
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Xml.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.IO">
-      <HintPath>..\..\..\bazel-krpc\lib\mono-4.5\Facades\System.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime">
-      <HintPath>..\..\..\bazel-krpc\lib\mono-4.5\Facades\System.Runtime.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\bazel-bin\tools\ServiceDefinitions\AssemblyInfo.cs">

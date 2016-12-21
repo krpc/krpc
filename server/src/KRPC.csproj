@@ -52,14 +52,7 @@
     <Otherwise>
       <ItemGroup>
         <Reference Include="System" />
-        <Reference Include="System.Core" />
         <Reference Include="System.Xml" />
-        <Reference Include="System.IO">
-          <HintPath>..\..\bazel-krpc\lib\mono-4.5\Facades\System.IO.dll</HintPath>
-        </Reference>
-        <Reference Include="System.Runtime">
-          <HintPath>..\..\bazel-krpc\lib\mono-4.5\Facades\System.Runtime.dll</HintPath>
-        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
