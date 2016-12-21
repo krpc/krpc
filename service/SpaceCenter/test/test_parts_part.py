@@ -87,7 +87,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual(1400, part.max_temperature)
         self.assertEqual(2400, part.max_skin_temperature)
         self.assertAlmostEqual(3.55, part.thermal_mass, places=2)
-        self.assertAlmostEqual(0.0133, part.thermal_skin_mass, places=4)
+        self.assertAlmostEqual(0.013367, part.thermal_skin_mass, places=4)
         self.assertAlmostEqual(0.36, part.thermal_resource_mass, places=2)
         self.assertAlmostEqual(0, part.thermal_conduction_flux, places=2)
         self.assertAlmostEqual(0, part.thermal_convection_flux, places=2)
