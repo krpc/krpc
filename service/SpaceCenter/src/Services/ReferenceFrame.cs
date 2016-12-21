@@ -339,7 +339,7 @@ namespace KRPC.SpaceCenter.Services
         {
             public static object Create ()
             {
-                return new Tuple4 (1, 0, 0, 0);
+                return new Tuple4 (0, 0, 0, 1);
             }
         }
 
