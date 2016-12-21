@@ -28,7 +28,7 @@ class TestCanvas(krpctest.TestCase):
         self.assertEqual((0, 0), rect.anchor_min)
         self.assertEqual((0.5, 0.5), rect.pivot)
         self.assertEqual((0, 0, 0, 1), rect.rotation)
-        self.assertEqual((1.5, 1.5, 1.5), rect.scale)
+        self.assertEqual((1.0, 1.0, 1.0), rect.scale)
 
 if __name__ == '__main__':
     unittest.main()
