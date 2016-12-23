@@ -5,6 +5,7 @@ using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.ExternalAPI;
 using KRPC.Utils;
 using KSP.UI.Screens;
 
@@ -286,39 +287,68 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Returns <c>true</c> if the given action group is enabled.
         /// </summary>
-        /// <param name="group">A number between 0 and 9 inclusive.</param>
+        /// <param name="group">
+        /// A number between 0 and 9 inclusive,
+        /// or between 0 and 250 inclusive when the <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/67235-12oct3116-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech">Extended Action Groups mod</a> is installed.
+        /// </param>
         [KRPCMethod]
         public bool GetActionGroup (uint group)
         {
-            if (group > 9)
-                throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
-            return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (ActionGroupExtensions.GetActionGroup (group))];
+            var vessel = InternalVessel;
+            if (AGX.IsAvailable) {
+                if (group > 250)
+                    throw new ArgumentException ("Action group must be between 0 and 250 inclusive");
+                return AGX.AGX2VslGroupState (vessel.rootPart.flightID, (int)group);
+            } else {
+                if (group > 9)
+                    throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
+                return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (ActionGroupExtensions.GetActionGroup (group))];
+            }
         }
 
         /// <summary>
-        /// Sets the state of the given action group (a value between 0 and 9
-        /// inclusive).
+        /// Sets the state of the given action group.
         /// </summary>
-        /// <param name="group">A number between 0 and 9 inclusive.</param>
+        /// <param name="group">
+        /// A number between 0 and 9 inclusive,
+        /// or between 0 and 250 inclusive when the <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/67235-12oct3116-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech">Extended Action Groups mod</a> is installed.
+        /// </param>
         /// <param name="state"></param>
         [KRPCMethod]
         public void SetActionGroup (uint group, bool state)
         {
-            if (group > 9)
-                throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
-            InternalVessel.ActionGroups.SetGroup (ActionGroupExtensions.GetActionGroup (group), state);
+            var vessel = InternalVessel;
+            if (AGX.IsAvailable) {
+                if (group > 250)
+                    throw new ArgumentException ("Action group must be between 0 and 250 inclusive");
+                AGX.AGX2VslActivateGroup (vessel.rootPart.flightID, (int)group, state);
+            } else {
+                if (group > 9)
+                    throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
+                vessel.ActionGroups.SetGroup (ActionGroupExtensions.GetActionGroup (group), state);
+            }
         }
 
         /// <summary>
         /// Toggles the state of the given action group.
         /// </summary>
-        /// <param name="group">A number between 0 and 9 inclusive.</param>
+        /// <param name="group">
+        /// A number between 0 and 9 inclusive,
+        /// or between 0 and 250 inclusive when the <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/67235-12oct3116-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech">Extended Action Groups mod</a> is installed.
+        /// </param>
         [KRPCMethod]
         public void ToggleActionGroup (uint group)
         {
-            if (group > 9)
-                throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
-            InternalVessel.ActionGroups.ToggleGroup (ActionGroupExtensions.GetActionGroup (group));
+            var vessel = InternalVessel;
+            if (AGX.IsAvailable) {
+                if (group > 250)
+                    throw new ArgumentException ("Action group must be between 0 and 250 inclusive");
+                AGX.AGX2VslToggleGroup (vessel.rootPart.flightID, (int)group);
+            } else {
+                if (group > 9)
+                    throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
+                vessel.ActionGroups.ToggleGroup (ActionGroupExtensions.GetActionGroup (group));
+            }
         }
 
         /// <summary>

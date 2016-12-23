@@ -212,8 +212,8 @@ class TestFlightVerticalSpeed(krpctest.TestCase):
         ref = self.vessel.orbit.body.reference_frame
         flight = self.vessel.flight(ref)
         self.check_speed(flight, ref)
-        self.assertAlmostEqual(2041.65, flight.speed, places=1)
-        self.assertAlmostEqual(2041.65, flight.horizontal_speed, places=1)
+        self.assertAlmostEqual(2042.04, flight.speed, places=1)
+        self.assertAlmostEqual(2042.04, flight.horizontal_speed, places=1)
         self.assertAlmostEqual(0, flight.vertical_speed, delta=0.5)
 
     def test_orbital_speed(self):
@@ -221,8 +221,8 @@ class TestFlightVerticalSpeed(krpctest.TestCase):
         ref = self.vessel.orbit.body.non_rotating_reference_frame
         flight = self.vessel.flight(ref)
         self.check_speed(flight, ref)
-        self.assertAlmostEqual(2245.75, flight.speed, places=1)
-        self.assertAlmostEqual(2245.75, flight.horizontal_speed, places=1)
+        self.assertAlmostEqual(2246.14, flight.speed, places=1)
+        self.assertAlmostEqual(2246.14, flight.horizontal_speed, places=1)
         self.assertAlmostEqual(0, flight.vertical_speed, delta=0.5)
 
 class TestFlightAtLaunchpad(krpctest.TestCase):

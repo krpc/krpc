@@ -1,6112 +1,2178 @@
 ship = Multi
-version = 1.2.0
-description = 
+version = 1.2.2
+description =
 type = VAB
 size = 1.59660077,7.57972336,1.56613076
 PART
 {
-	part = mk1pod_4294632146
-	partName = Part
-	pos = 0.0119197303,4.14697886,-0.0387383588
-	attPos = 0,0,0
-	attPos0 = 0.0119197303,4.14697886,-0.0387383588
-	rot = 0,0,0,1
-	attRot = 0,0,0,1
-	attRot0 = 0,0,0,1
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 0
-	attm = 0
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	link = dockingPort2_4294625302
-	link = RCSFuelTank_4294472150
-	attN = bottom,RCSFuelTank_4294472150
-	attN = top,dockingPort2_4294625302
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleCommand
-		isEnabled = True
-		hibernation = False
-		hibernateOnWarp = False
-		controlSrcStatusText = 
-		stagingEnabled = True
-		hibernation_UIFlight
-		{
-			controlEnabled = True
-		}
-		hibernateOnWarp_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			MakeReference
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Control From Here
-				guiName = Control From Here
-				category = Control From Here
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			RenameVessel
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = True
-				guiIcon = Rename Vessel
-				guiName = Rename Vessel
-				category = Rename Vessel
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			HibernateToggle
-			{
-				actionGroup = None
-				active = False
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleReactionWheel
-		isEnabled = True
-		actuatorModeCycle = 0
-		authorityLimiter = 100
-		stateString = Active
-		stagingEnabled = True
-		WheelState = Active
-		actuatorModeCycle_UIFlight
-		{
-			controlEnabled = True
-			stateNames = Normal, SAS Only, Pilot Only
-		}
-		authorityLimiter_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.1
-		}
-		EVENTS
-		{
-			OnToggle
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Toggle Torque
-				guiName = Toggle Torque
-				category = Toggle Torque
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			CycleAction
-			{
-				actionGroup = None
-			}
-			Activate
-			{
-				actionGroup = None
-			}
-			Deactivate
-			{
-				actionGroup = None
-			}
-			Toggle
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleColorChanger
-		isEnabled = True
-		animState = False
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleEvent
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Toggle Color
-				guiName = Lights On
-				category = Toggle Color
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 5
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleScienceExperiment
-		isEnabled = True
-		Deployed = False
-		Inoperable = False
-		cooldownToGo = 0
-		stagingEnabled = True
-		EVENTS
-		{
-			DeployExperiment
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Deploy
-				guiName = Deploy
-				category = Deploy
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			CollectDataExternalEvent
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = 
-				guiName = 
-				category = 
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 1.5
-				externalToEVAOnly = True
-			}
-			ReviewDataEvent
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Review Data
-				guiName = Review Data
-				category = Review Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ResetExperiment
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Reset
-				guiName = Reset
-				category = Reset
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			DeployExperimentExternal
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Deploy
-				guiName = Deploy
-				category = Deploy
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ResetExperimentExternal
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Reset
-				guiName = Reset
-				category = Reset
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			CleanUpExperimentExternal
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Restore
-				guiName = Restore
-				category = Restore
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			TransferDataEvent
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Transfer Data
-				guiName = Transfer Data
-				category = Transfer Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Experiment: Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			DeployAction
-			{
-				actionGroup = None
-			}
-			ResetAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleScienceContainer
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			StoreDataExternalEvent
-			{
-				active = False
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = 
-				guiName = Store Experiments (0)
-				category = 
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 1.3
-				externalToEVAOnly = True
-			}
-			CollectDataExternalEvent
-			{
-				active = False
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = 
-				guiName = Take Data (0)
-				category = 
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 1.3
-				externalToEVAOnly = True
-			}
-			TransferDataEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Container: Transfer Data
-				guiName = Container: Transfer Data
-				category = Container: Transfer Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			CollectAllEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Container: Collect All
-				guiName = Container: Collect All
-				category = Container: Collect All
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ReviewDataEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Review Data
-				guiName = Review Stored Data (0)
-				category = Review Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = FlagDecal
-		isEnabled = True
-		flagDisplayed = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleFlag
-			{
-				active = True
-				guiActive = False
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = ToggleFlag
-				guiName = ToggleFlag
-				category = ToggleFlag
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleConductionMultiplier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDataTransmitter
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			StartTransmission
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Transmit Data
-				guiName = Transmit Data
-				category = Transmit Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			TransmitIncompleteToggle
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Toggle Transmit Incomplete
-				guiName = Toggle Transmit Incomplete
-				category = Toggle Transmit Incomplete
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			StopTransmission
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Stop Transmitting
-				guiName = Stop Transmitting
-				category = Stop Transmitting
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			StartTransmissionAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTripLogger
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		Log
-		{
-			flight = 0
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	RESOURCE
-	{
-		name = ElectricCharge
-		amount = 50
-		maxAmount = 50
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
-	RESOURCE
-	{
-		name = MonoPropellant
-		amount = 10
-		maxAmount = 10
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = mk1pod_4294632146
+  partName = Part
+  pos = 0.0119197303,4.14697886,-0.0387383588
+  attPos = 0,0,0
+  attPos0 = 0.0119197303,4.14697886,-0.0387383588
+  rot = 0,0,0,1
+  attRot = 0,0,0,1
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = dockingPort2_4294625302
+  link = RCSFuelTank_4294472150
+  attN = bottom,RCSFuelTank_4294472150
+  attN = top,dockingPort2_4294625302
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleCommand
+    isEnabled = True
+    hibernation = False
+    hibernateOnWarp = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      HibernateToggle
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleReactionWheel
+    isEnabled = True
+    actuatorModeCycle = 0
+    authorityLimiter = 100
+    stateString = Active
+    stagingEnabled = True
+    WheelState = Active
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      CycleAction
+      {
+        actionGroup = None
+      }
+      Activate
+      {
+        actionGroup = None
+      }
+      Deactivate
+      {
+        actionGroup = None
+      }
+      Toggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleColorChanger
+    isEnabled = True
+    animState = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleScienceExperiment
+    isEnabled = True
+    Deployed = False
+    Inoperable = False
+    cooldownToGo = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      DeployAction
+      {
+        actionGroup = None
+      }
+      ResetAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleScienceContainer
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      CollectAllAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = FlagDecal
+    isEnabled = True
+    flagDisplayed = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleConductionMultiplier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDataTransmitter
+    isEnabled = True
+    xmitIncomplete = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      StartTransmissionAction
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleLiftingSurface
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTripLogger
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    Log
+    {
+      flight = 0
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = ElectricCharge
+    amount = 50
+    maxAmount = 50
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+  RESOURCE
+  {
+    name = MonoPropellant
+    amount = 10
+    maxAmount = 10
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }
 PART
 {
-	part = dockingPort2_4294625302
-	partName = Part
-	pos = 0.0119197303,4.78935909,-0.0387383588
-	attPos = 0,0,0
-	attPos0 = 0,0.642375886,0
-	rot = 0,0,0,1
-	attRot = 0,0,0,1
-	attRot0 = 0,0,0,1
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 1
-	attm = 0
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	link = dockingPort2_4294624944
-	attN = top,dockingPort2_4294624944
-	attN = bottom,mk1pod_4294632146
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleDockingNode
-		isEnabled = True
-		crossfeed = True
-		stagingEnabled = False
-		state = Ready
-		dockUId = 0
-		dockNodeIdx = 0
-		EVENTS
-		{
-			Undock
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Undock
-				guiName = Undock
-				category = Undock
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			UndockSameVessel
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Undock
-				guiName = Undock
-				category = Undock
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			Decouple
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Decouple Node
-				guiName = Decouple Node
-				category = Decouple Node
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			SetAsTarget
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Set as Target
-				guiName = Set as Target
-				category = Set as Target
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 200
-				externalToEVAOnly = False
-			}
-			UnsetTarget
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Unset Target
-				guiName = Unset Target
-				category = Unset Target
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 200
-				externalToEVAOnly = False
-			}
-			EnableXFeed
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Enable Crossfeed
-				guiName = Enable Crossfeed
-				category = Enable Crossfeed
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			DisableXFeed
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Disable Crossfeed
-				guiName = Disable Crossfeed
-				category = Disable Crossfeed
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			MakeReferenceTransform
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Control from Here
-				guiName = Control from Here
-				category = Control from Here
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Port: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			UndockAction
-			{
-				actionGroup = None
-			}
-			DecoupleAction
-			{
-				actionGroup = None
-			}
-			EnableXFeedAction
-			{
-				actionGroup = None
-			}
-			DisableXFeedAction
-			{
-				actionGroup = None
-			}
-			ToggleXFeedAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = dockingPort2_4294625302
+  partName = Part
+  pos = 0.0119197303,4.78935909,-0.0387383588
+  attPos = 0,0,0
+  attPos0 = 0,0.642375886,0
+  rot = 0,0,0,1
+  attRot = 0,0,0,1
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 0
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = dockingPort2_4294624944
+  attN = top,dockingPort2_4294624944
+  attN = bottom,mk1pod_4294632146
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleDockingNode
+    isEnabled = True
+    crossfeed = True
+    stagingEnabled = False
+    state = Ready
+    dockUId = 0
+    dockNodeIdx = 0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      UndockAction
+      {
+        actionGroup = None
+      }
+      DecoupleAction
+      {
+        actionGroup = None
+      }
+      EnableXFeedAction
+      {
+        actionGroup = None
+      }
+      DisableXFeedAction
+      {
+        actionGroup = None
+      }
+      ToggleXFeedAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = dockingPort2_4294624944
-	partName = Part
-	pos = 0.0119197303,5.35511923,-0.0387383588
-	attPos = 0,0,0
-	attPos0 = 0,0.565765381,0
-	rot = 0,0,-1,0
-	attRot = 0,0,-0.999999881,0
-	attRot0 = 0,0,-1,0
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 2
-	attm = 0
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	link = mk1pod_4294621954
-	attN = top,dockingPort2_4294625302
-	attN = bottom,mk1pod_4294621954
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleDockingNode
-		isEnabled = True
-		crossfeed = True
-		stagingEnabled = False
-		state = Ready
-		dockUId = 0
-		dockNodeIdx = 0
-		EVENTS
-		{
-			Undock
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Undock
-				guiName = Undock
-				category = Undock
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			UndockSameVessel
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Undock
-				guiName = Undock
-				category = Undock
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			Decouple
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Decouple Node
-				guiName = Decouple Node
-				category = Decouple Node
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			SetAsTarget
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Set as Target
-				guiName = Set as Target
-				category = Set as Target
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 200
-				externalToEVAOnly = False
-			}
-			UnsetTarget
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Unset Target
-				guiName = Unset Target
-				category = Unset Target
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 200
-				externalToEVAOnly = False
-			}
-			EnableXFeed
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Enable Crossfeed
-				guiName = Enable Crossfeed
-				category = Enable Crossfeed
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			DisableXFeed
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Disable Crossfeed
-				guiName = Disable Crossfeed
-				category = Disable Crossfeed
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			MakeReferenceTransform
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Control from Here
-				guiName = Control from Here
-				category = Control from Here
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Port: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			UndockAction
-			{
-				actionGroup = None
-			}
-			DecoupleAction
-			{
-				actionGroup = None
-			}
-			EnableXFeedAction
-			{
-				actionGroup = None
-			}
-			DisableXFeedAction
-			{
-				actionGroup = None
-			}
-			ToggleXFeedAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = dockingPort2_4294624944
+  partName = Part
+  pos = 0.0119197303,5.35511923,-0.0387383588
+  attPos = 0,0,0
+  attPos0 = 0,0.565765381,0
+  rot = 0,0,-1,0
+  attRot = 0,0,-0.999999881,0
+  attRot0 = 0,0,-1,0
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = mk1pod_4294621954
+  attN = top,dockingPort2_4294625302
+  attN = bottom,mk1pod_4294621954
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleDockingNode
+    isEnabled = True
+    crossfeed = True
+    stagingEnabled = False
+    state = Ready
+    dockUId = 0
+    dockNodeIdx = 0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      UndockAction
+      {
+        actionGroup = None
+      }
+      DecoupleAction
+      {
+        actionGroup = None
+      }
+      EnableXFeedAction
+      {
+        actionGroup = None
+      }
+      DisableXFeedAction
+      {
+        actionGroup = None
+      }
+      ToggleXFeedAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = mk1pod_4294621954
-	partName = Part
-	pos = 0.0119197303,5.99749899,-0.0387383588
-	attPos = 0,0,0
-	attPos0 = 0,-0.642375886,0
-	rot = 0,0,-1,0
-	attRot = 0,0,-0.999999881,0
-	attRot0 = 0,0,0,1
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 2
-	attm = 0
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	link = RCSFuelTank_4294451944
-	attN = bottom,RCSFuelTank_4294451944
-	attN = top,dockingPort2_4294624944
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleCommand
-		isEnabled = True
-		hibernation = False
-		hibernateOnWarp = False
-		controlSrcStatusText = 
-		stagingEnabled = True
-		hibernation_UIFlight
-		{
-			controlEnabled = True
-		}
-		hibernateOnWarp_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			MakeReference
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Control From Here
-				guiName = Control From Here
-				category = Control From Here
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			RenameVessel
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = True
-				guiIcon = Rename Vessel
-				guiName = Rename Vessel
-				category = Rename Vessel
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			HibernateToggle
-			{
-				actionGroup = None
-				active = False
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleReactionWheel
-		isEnabled = True
-		actuatorModeCycle = 0
-		authorityLimiter = 100
-		stateString = Active
-		stagingEnabled = True
-		WheelState = Active
-		actuatorModeCycle_UIFlight
-		{
-			controlEnabled = True
-			stateNames = Normal, SAS Only, Pilot Only
-		}
-		authorityLimiter_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.1
-		}
-		EVENTS
-		{
-			OnToggle
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Toggle Torque
-				guiName = Toggle Torque
-				category = Toggle Torque
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			CycleAction
-			{
-				actionGroup = None
-			}
-			Activate
-			{
-				actionGroup = None
-			}
-			Deactivate
-			{
-				actionGroup = None
-			}
-			Toggle
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleColorChanger
-		isEnabled = True
-		animState = False
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleEvent
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Toggle Color
-				guiName = Lights On
-				category = Toggle Color
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 5
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleScienceExperiment
-		isEnabled = True
-		Deployed = False
-		Inoperable = False
-		cooldownToGo = 0
-		stagingEnabled = True
-		EVENTS
-		{
-			DeployExperiment
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Deploy
-				guiName = Deploy
-				category = Deploy
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			CollectDataExternalEvent
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = 
-				guiName = 
-				category = 
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 1.5
-				externalToEVAOnly = True
-			}
-			ReviewDataEvent
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Review Data
-				guiName = Review Data
-				category = Review Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ResetExperiment
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Reset
-				guiName = Reset
-				category = Reset
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			DeployExperimentExternal
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Deploy
-				guiName = Deploy
-				category = Deploy
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ResetExperimentExternal
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Reset
-				guiName = Reset
-				category = Reset
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			CleanUpExperimentExternal
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Restore
-				guiName = Restore
-				category = Restore
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			TransferDataEvent
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Transfer Data
-				guiName = Transfer Data
-				category = Transfer Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Experiment: Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			DeployAction
-			{
-				actionGroup = None
-			}
-			ResetAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleScienceContainer
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			StoreDataExternalEvent
-			{
-				active = False
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = 
-				guiName = Store Experiments (0)
-				category = 
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 1.3
-				externalToEVAOnly = True
-			}
-			CollectDataExternalEvent
-			{
-				active = False
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = 
-				guiName = Take Data (0)
-				category = 
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 1.3
-				externalToEVAOnly = True
-			}
-			TransferDataEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Container: Transfer Data
-				guiName = Container: Transfer Data
-				category = Container: Transfer Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			CollectAllEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Container: Collect All
-				guiName = Container: Collect All
-				category = Container: Collect All
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ReviewDataEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Review Data
-				guiName = Review Stored Data (0)
-				category = Review Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = FlagDecal
-		isEnabled = True
-		flagDisplayed = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleFlag
-			{
-				active = True
-				guiActive = False
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = ToggleFlag
-				guiName = ToggleFlag
-				category = ToggleFlag
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleConductionMultiplier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDataTransmitter
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			StartTransmission
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Transmit Data
-				guiName = Transmit Data
-				category = Transmit Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			TransmitIncompleteToggle
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Toggle Transmit Incomplete
-				guiName = Toggle Transmit Incomplete
-				category = Toggle Transmit Incomplete
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			StopTransmission
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Stop Transmitting
-				guiName = Stop Transmitting
-				category = Stop Transmitting
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			StartTransmissionAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTripLogger
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		Log
-		{
-			flight = 0
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	RESOURCE
-	{
-		name = ElectricCharge
-		amount = 50
-		maxAmount = 50
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
-	RESOURCE
-	{
-		name = MonoPropellant
-		amount = 10
-		maxAmount = 10
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = mk1pod_4294621954
+  partName = Part
+  pos = 0.0119197303,5.99749899,-0.0387383588
+  attPos = 0,0,0
+  attPos0 = 0,-0.642375886,0
+  rot = 0,0,-1,0
+  attRot = 0,0,-0.999999881,0
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = RCSFuelTank_4294451944
+  attN = bottom,RCSFuelTank_4294451944
+  attN = top,dockingPort2_4294624944
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleCommand
+    isEnabled = True
+    hibernation = False
+    hibernateOnWarp = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      HibernateToggle
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleReactionWheel
+    isEnabled = True
+    actuatorModeCycle = 0
+    authorityLimiter = 100
+    stateString = Active
+    stagingEnabled = True
+    WheelState = Active
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      CycleAction
+      {
+        actionGroup = None
+      }
+      Activate
+      {
+        actionGroup = None
+      }
+      Deactivate
+      {
+        actionGroup = None
+      }
+      Toggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleColorChanger
+    isEnabled = True
+    animState = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleScienceExperiment
+    isEnabled = True
+    Deployed = False
+    Inoperable = False
+    cooldownToGo = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      DeployAction
+      {
+        actionGroup = None
+      }
+      ResetAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleScienceContainer
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      CollectAllAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = FlagDecal
+    isEnabled = True
+    flagDisplayed = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleConductionMultiplier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDataTransmitter
+    isEnabled = True
+    xmitIncomplete = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      StartTransmissionAction
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleLiftingSurface
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTripLogger
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    Log
+    {
+      flight = 0
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = ElectricCharge
+    amount = 50
+    maxAmount = 50
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+  RESOURCE
+  {
+    name = MonoPropellant
+    amount = 10
+    maxAmount = 10
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }
 PART
 {
-	part = RCSFuelTank_4294472150
-	partName = Part
-	pos = 0.0119197303,3.45663905,-0.0387383588
-	attPos = 0,0,0
-	attPos0 = 0,-0.690340996,0
-	rot = 0,0,0,1
-	attRot = 0,0,0,1
-	attRot0 = 0,0,0,1
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 0
-	attm = 0
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	link = fuelTank_4294471508
-	link = RCSBlock_4294454862
-	link = RCSBlock_4294454314
-	link = RCSBlock_4294454230
-	link = RCSBlock_4294454146
-	attN = top,mk1pod_4294632146
-	attN = bottom,fuelTank_4294471508
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	RESOURCE
-	{
-		name = MonoPropellant
-		amount = 250
-		maxAmount = 250
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = RCSFuelTank_4294472150
+  partName = Part
+  pos = 0.0119197303,3.45663905,-0.0387383588
+  attPos = 0,0,0
+  attPos0 = 0,-0.690340996,0
+  rot = 0,0,0,1
+  attRot = 0,0,0,1
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = fuelTank_4294471508
+  link = RCSBlock_4294454862
+  link = RCSBlock_4294454314
+  link = RCSBlock_4294454230
+  link = RCSBlock_4294454146
+  attN = top,mk1pod_4294632146
+  attN = bottom,fuelTank_4294471508
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  RESOURCE
+  {
+    name = MonoPropellant
+    amount = 250
+    maxAmount = 250
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }
 PART
 {
-	part = fuelTank_4294471508
-	partName = Part
-	pos = 0.0119197303,2.2056489,-0.0387383588
-	attPos = 0,0,0
-	attPos0 = 0,-1.25099301,0
-	rot = 0,0,0,1
-	attRot = 0,0,0,1
-	attRot0 = 0,0,0,1
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 0
-	attm = 0
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	link = rtg_4294456484
-	link = RCSBlock_4294453834
-	link = RCSBlock_4294452568
-	link = RCSBlock_4294452444
-	link = RCSBlock_4294452320
-	attN = top,RCSFuelTank_4294472150
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	RESOURCE
-	{
-		name = LiquidFuel
-		amount = 180
-		maxAmount = 180
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
-	RESOURCE
-	{
-		name = Oxidizer
-		amount = 220
-		maxAmount = 220
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = fuelTank_4294471508
+  partName = Part
+  pos = 0.0119197303,2.2056489,-0.0387383588
+  attPos = 0,0,0
+  attPos0 = 0,-1.25099301,0
+  rot = 0,0,0,1
+  attRot = 0,0,0,1
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = rtg_4294456484
+  link = RCSBlock_4294453834
+  link = RCSBlock_4294452568
+  link = RCSBlock_4294452444
+  link = RCSBlock_4294452320
+  attN = top,RCSFuelTank_4294472150
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  RESOURCE
+  {
+    name = LiquidFuel
+    amount = 180
+    maxAmount = 180
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+  RESOURCE
+  {
+    name = Oxidizer
+    amount = 220
+    maxAmount = 220
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }
 PART
 {
-	part = rtg_4294456484
-	partName = Part
-	pos = -0.607181489,2.60453892,-0.0387383215
-	attPos = 0,0,0
-	attPos0 = -0.619101286,0.398889512,3.69013193E-08
-	rot = 0.707106829,0,0.707106829,0
-	attRot = 0.707106829,0,0,0.707106829
-	attRot0 = 0.707106829,0,0.707106709,0
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	srfN = srfAttach,fuelTank_4294471508
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleGenerator
-		isEnabled = True
-		generatorIsActive = False
-		throttle = 0
-		stagingEnabled = True
-		EVENTS
-		{
-			Activate
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Activate Generator
-				guiName = Activate Generator
-				category = Activate Generator
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			Shutdown
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Shutdown Generator
-				guiName = Shutdown Generator
-				category = Shutdown Generator
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-			ActivateAction
-			{
-				actionGroup = None
-			}
-			ShutdownAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleCoreHeat
-		isEnabled = True
-		CoreTempGoalAdjustment = 0
-		CoreThermalEnergy = 0
-		stagingEnabled = True
-		lastUpdateTime = 0
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = rtg_4294456484
+  partName = Part
+  pos = -0.607181489,2.60453892,-0.0387383215
+  attPos = 0,0,0
+  attPos0 = -0.619101286,0.398889512,3.69013193E-08
+  rot = 0.707106829,0,0.707106829,0
+  attRot = 0.707106829,0,0,0.707106829
+  attRot0 = 0.707106829,0,0.707106709,0
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,fuelTank_4294471508
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleGenerator
+    isEnabled = True
+    generatorIsActive = False
+    throttle = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+        active = False
+      }
+      ActivateAction
+      {
+        actionGroup = None
+        active = False
+      }
+      ShutdownAction
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleCoreHeat
+    isEnabled = True
+    CoreTempGoalAdjustment = 0
+    CoreThermalEnergy = 0
+    stagingEnabled = True
+    lastUpdateTime = 0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294454862
-	partName = Part
-	pos = -0.650138915,3.49682903,-0.0379960388
-	attPos = 0,0,0
-	attPos0 = -0.662058592,0.0401945114,0.000742311124
-	rot = 0,0,0,1
-	attRot = 0,0,0,1
-	attRot0 = 0,0,0,1
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294454314
-	sym = RCSBlock_4294454230
-	sym = RCSBlock_4294454146
-	srfN = srfAttach,RCSFuelTank_4294472150
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294454862
+  partName = Part
+  pos = -0.650138915,3.49682903,-0.0379960388
+  attPos = 0,0,0
+  attPos0 = -0.662058592,0.0401945114,0.000742311124
+  rot = 0,0,0,1
+  attRot = 0,0,0,1
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294454314
+  sym = RCSBlock_4294454230
+  sym = RCSBlock_4294454146
+  srfN = srfAttach,RCSFuelTank_4294472150
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294454314
-	partName = Part
-	pos = 0.012662,3.49682903,0.623320103
-	attPos = 0,0,0
-	attPos0 = 0.000742271484,0.0401945114,0.662058473
-	rot = 0,0.707106829,0,0.707106829
-	attRot = 0,0,0,1
-	attRot0 = 0,0.707106829,0,0.707106829
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294454862
-	sym = RCSBlock_4294454230
-	sym = RCSBlock_4294454146
-	srfN = srfAttach,RCSFuelTank_4294472150
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294454314
+  partName = Part
+  pos = 0.012662,3.49682903,0.623320103
+  attPos = 0,0,0
+  attPos0 = 0.000742271484,0.0401945114,0.662058473
+  rot = 0,0.707106829,0,0.707106829
+  attRot = 0,0,0,1
+  attRot0 = 0,0.707106829,0,0.707106829
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294454862
+  sym = RCSBlock_4294454230
+  sym = RCSBlock_4294454146
+  srfN = srfAttach,RCSFuelTank_4294472150
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294454230
-	partName = Part
-	pos = 0.673978329,3.49682903,-0.0394807197
-	attPos = 0,0,0
-	attPos0 = 0.662058592,0.0401945114,-0.000742368924
-	rot = 0,1,0,-4.37113883E-08
-	attRot = 0,0,0,1
-	attRot0 = 0,1,0,-4.37113883E-08
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294454862
-	sym = RCSBlock_4294454314
-	sym = RCSBlock_4294454146
-	srfN = srfAttach,RCSFuelTank_4294472150
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294454230
+  partName = Part
+  pos = 0.673978329,3.49682903,-0.0394807197
+  attPos = 0,0,0
+  attPos0 = 0.662058592,0.0401945114,-0.000742368924
+  rot = 0,1,0,-4.37113883E-08
+  attRot = 0,0,0,1
+  attRot0 = 0,1,0,-4.37113883E-08
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294454862
+  sym = RCSBlock_4294454314
+  sym = RCSBlock_4294454146
+  srfN = srfAttach,RCSFuelTank_4294472150
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294454146
-	partName = Part
-	pos = 0.0111773796,3.49682903,-0.700796783
-	attPos = 0,0,0
-	attPos0 = -0.000742350472,0.0401945114,-0.662058473
-	rot = 0,0.707106829,0,-0.707106829
-	attRot = 0,0,0,1
-	attRot0 = 0,0.707106829,0,-0.707106829
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294454862
-	sym = RCSBlock_4294454314
-	sym = RCSBlock_4294454230
-	srfN = srfAttach,RCSFuelTank_4294472150
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294454146
+  partName = Part
+  pos = 0.0111773796,3.49682903,-0.700796783
+  attPos = 0,0,0
+  attPos0 = -0.000742350472,0.0401945114,-0.662058473
+  rot = 0,0.707106829,0,-0.707106829
+  attRot = 0,0,0,1
+  attRot0 = 0,0.707106829,0,-0.707106829
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294454862
+  sym = RCSBlock_4294454314
+  sym = RCSBlock_4294454230
+  srfN = srfAttach,RCSFuelTank_4294472150
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294453834
-	partName = Part
-	pos = -0.667485774,1.61960888,-0.0379960388
-	attPos = 0,0,0
-	attPos0 = -0.67940551,-0.586032927,0.000742321718
-	rot = -7.48678476E-23,8.42937027E-08,-1.77635705E-15,1
-	attRot = 0,0,0,1
-	attRot0 = -7.48678476E-23,8.42937027E-08,-1.77635705E-15,1
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294452568
-	sym = RCSBlock_4294452444
-	sym = RCSBlock_4294452320
-	srfN = srfAttach,fuelTank_4294471508
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294453834
+  partName = Part
+  pos = -0.667485774,1.61960888,-0.0379960388
+  attPos = 0,0,0
+  attPos0 = -0.67940551,-0.586032927,0.000742321718
+  rot = -7.48678476E-23,8.42937027E-08,-1.77635705E-15,1
+  attRot = 0,0,0,1
+  attRot0 = -7.48678476E-23,8.42937027E-08,-1.77635705E-15,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294452568
+  sym = RCSBlock_4294452444
+  sym = RCSBlock_4294452320
+  srfN = srfAttach,fuelTank_4294471508
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294452568
-	partName = Part
-	pos = 0.0126620103,1.61960888,0.640667081
-	attPos = 0,0,0
-	attPos0 = 0.000742281089,-0.586032927,0.67940551
-	rot = -1.25607405E-15,0.707106829,-1.25607405E-15,0.707106829
-	attRot = 0,0,0,1
-	attRot0 = -1.25607405E-15,0.707106829,-1.25607405E-15,0.707106709
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294453834
-	sym = RCSBlock_4294452444
-	sym = RCSBlock_4294452320
-	srfN = srfAttach,fuelTank_4294471508
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294452568
+  partName = Part
+  pos = 0.0126620103,1.61960888,0.640667081
+  attPos = 0,0,0
+  attPos0 = 0.000742281089,-0.586032927,0.67940551
+  rot = -1.25607405E-15,0.707106829,-1.25607405E-15,0.707106829
+  attRot = 0,0,0,1
+  attRot0 = -1.25607405E-15,0.707106829,-1.25607405E-15,0.707106709
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294453834
+  sym = RCSBlock_4294452444
+  sym = RCSBlock_4294452320
+  srfN = srfAttach,fuelTank_4294471508
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294452444
-	partName = Part
-	pos = 0.691325188,1.61960888,-0.0394807309
-	attPos = 0,0,0
-	attPos0 = 0.67940551,-0.586032927,-0.000742380973
-	rot = -1.77635705E-15,1,1.52514896E-22,-1.28005098E-07
-	attRot = 0,0,0,1
-	attRot0 = -1.77635705E-15,1,1.52514896E-22,-1.28005098E-07
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294453834
-	sym = RCSBlock_4294452568
-	sym = RCSBlock_4294452320
-	srfN = srfAttach,fuelTank_4294471508
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294452444
+  partName = Part
+  pos = 0.691325188,1.61960888,-0.0394807309
+  attPos = 0,0,0
+  attPos0 = 0.67940551,-0.586032927,-0.000742380973
+  rot = -1.77635705E-15,1,1.52514896E-22,-1.28005098E-07
+  attRot = 0,0,0,1
+  attRot0 = -1.77635705E-15,1,1.52514896E-22,-1.28005098E-07
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294453834
+  sym = RCSBlock_4294452568
+  sym = RCSBlock_4294452320
+  srfN = srfAttach,fuelTank_4294471508
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294452320
-	partName = Part
-	pos = 0.0111773703,1.61960888,-0.71814388
-	attPos = 0,0,0
-	attPos0 = -0.000742362114,-0.586032927,-0.67940551
-	rot = -1.25607405E-15,0.707106829,1.25607405E-15,-0.707106829
-	attRot = 0,0,0,1
-	attRot0 = -1.25607405E-15,0.707106709,1.25607405E-15,-0.707106829
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294453834
-	sym = RCSBlock_4294452568
-	sym = RCSBlock_4294452444
-	srfN = srfAttach,fuelTank_4294471508
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294452320
+  partName = Part
+  pos = 0.0111773703,1.61960888,-0.71814388
+  attPos = 0,0,0
+  attPos0 = -0.000742362114,-0.586032927,-0.67940551
+  rot = -1.25607405E-15,0.707106829,1.25607405E-15,-0.707106829
+  attRot = 0,0,0,1
+  attRot0 = -1.25607405E-15,0.707106709,1.25607405E-15,-0.707106829
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294453834
+  sym = RCSBlock_4294452568
+  sym = RCSBlock_4294452444
+  srfN = srfAttach,fuelTank_4294471508
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSFuelTank_4294451944
-	partName = Part
-	pos = 0.0119197303,6.68783903,-0.0387383588
-	attPos = 0,0,0
-	attPos0 = 0,-0.69034189,0
-	rot = 1,0,0,0
-	attRot = 0.999999881,0,0,0
-	attRot0 = 0,1,0,0
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 2
-	attm = 0
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	link = fuelTank_4294451912
-	link = RCSBlock_4294451226
-	link = RCSBlock_4294451142
-	link = RCSBlock_4294451018
-	link = RCSBlock_4294450894
-	attN = top,mk1pod_4294621954
-	attN = bottom,fuelTank_4294451912
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	RESOURCE
-	{
-		name = MonoPropellant
-		amount = 250
-		maxAmount = 250
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = RCSFuelTank_4294451944
+  partName = Part
+  pos = 0.0119197303,6.68783903,-0.0387383588
+  attPos = 0,0,0
+  attPos0 = 0,-0.69034189,0
+  rot = 1,0,0,0
+  attRot = 0.999999881,0,0,0
+  attRot0 = 0,1,0,0
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = fuelTank_4294451912
+  link = RCSBlock_4294451226
+  link = RCSBlock_4294451142
+  link = RCSBlock_4294451018
+  link = RCSBlock_4294450894
+  attN = top,mk1pod_4294621954
+  attN = bottom,fuelTank_4294451912
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  RESOURCE
+  {
+    name = MonoPropellant
+    amount = 250
+    maxAmount = 250
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }
 PART
 {
-	part = fuelTank_4294451912
-	partName = Part
-	pos = 0.0119197303,7.93882799,-0.0387383588
-	attPos = 0,0,0
-	attPos0 = 0,-1.25099301,0
-	rot = 1,0,0,0
-	attRot = 0,0,0,1
-	attRot0 = 0,0,0,1
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 2
-	attm = 0
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	link = rtg_4294451874
-	link = RCSBlock_4294451842
-	link = RCSBlock_4294451718
-	link = RCSBlock_4294451554
-	link = RCSBlock_4294451390
-	attN = top,RCSFuelTank_4294451944
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	RESOURCE
-	{
-		name = LiquidFuel
-		amount = 180
-		maxAmount = 180
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
-	RESOURCE
-	{
-		name = Oxidizer
-		amount = 220
-		maxAmount = 220
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = fuelTank_4294451912
+  partName = Part
+  pos = 0.0119197303,7.93882799,-0.0387383588
+  attPos = 0,0,0
+  attPos0 = 0,-1.25099301,0
+  rot = 1,0,0,0
+  attRot = 0,0,0,1
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = rtg_4294451874
+  link = RCSBlock_4294451842
+  link = RCSBlock_4294451718
+  link = RCSBlock_4294451554
+  link = RCSBlock_4294451390
+  attN = top,RCSFuelTank_4294451944
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  RESOURCE
+  {
+    name = LiquidFuel
+    amount = 180
+    maxAmount = 180
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+  RESOURCE
+  {
+    name = Oxidizer
+    amount = 220
+    maxAmount = 220
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }
 PART
 {
-	part = rtg_4294451874
-	partName = Part
-	pos = -0.607181489,7.53993893,-0.0387383886
-	attPos = 0,0,0
-	attPos0 = -0.619101286,0.398889512,3.69013193E-08
-	rot = 0,-0.707106829,0,-0.707106829
-	attRot = 0.707106829,0,0,0.707106829
-	attRot0 = 0.707106829,0,0.707106709,0
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 2
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	srfN = srfAttach,fuelTank_4294451912
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleGenerator
-		isEnabled = True
-		generatorIsActive = False
-		throttle = 0
-		stagingEnabled = True
-		EVENTS
-		{
-			Activate
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Activate Generator
-				guiName = Activate Generator
-				category = Activate Generator
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			Shutdown
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Shutdown Generator
-				guiName = Shutdown Generator
-				category = Shutdown Generator
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-			ActivateAction
-			{
-				actionGroup = None
-			}
-			ShutdownAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleCoreHeat
-		isEnabled = True
-		CoreTempGoalAdjustment = 0
-		CoreThermalEnergy = 0
-		stagingEnabled = True
-		lastUpdateTime = 0
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = rtg_4294451874
+  partName = Part
+  pos = -0.607181489,7.53993893,-0.0387383886
+  attPos = 0,0,0
+  attPos0 = -0.619101286,0.398889512,3.69013193E-08
+  rot = 0,-0.707106829,0,-0.707106829
+  attRot = 0.707106829,0,0,0.707106829
+  attRot0 = 0.707106829,0,0.707106709,0
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,fuelTank_4294451912
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleGenerator
+    isEnabled = True
+    generatorIsActive = False
+    throttle = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+        active = False
+      }
+      ActivateAction
+      {
+        actionGroup = None
+        active = False
+      }
+      ShutdownAction
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleCoreHeat
+    isEnabled = True
+    CoreTempGoalAdjustment = 0
+    CoreThermalEnergy = 0
+    stagingEnabled = True
+    lastUpdateTime = 0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294451842
-	partName = Part
-	pos = -0.667485774,8.52486897,-0.0394806787
-	attPos = 0,0,0
-	attPos0 = -0.67940551,-0.586032927,0.000742321718
-	rot = 1,1.77635705E-15,8.42937027E-08,7.48678476E-23
-	attRot = 0,0,0,1
-	attRot0 = -7.48678476E-23,8.42937027E-08,-1.77635705E-15,1
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 2
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294451718
-	sym = RCSBlock_4294451554
-	sym = RCSBlock_4294451390
-	srfN = srfAttach,fuelTank_4294451912
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294451842
+  partName = Part
+  pos = -0.667485774,8.52486897,-0.0394806787
+  attPos = 0,0,0
+  attPos0 = -0.67940551,-0.586032927,0.000742321718
+  rot = 1,1.77635705E-15,8.42937027E-08,7.48678476E-23
+  attRot = 0,0,0,1
+  attRot0 = -7.48678476E-23,8.42937027E-08,-1.77635705E-15,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294451718
+  sym = RCSBlock_4294451554
+  sym = RCSBlock_4294451390
+  srfN = srfAttach,fuelTank_4294451912
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294451718
-	partName = Part
-	pos = 0.0126620103,8.52486897,-0.71814388
-	attPos = 0,0,0
-	attPos0 = 0.000742281089,-0.586032927,0.67940551
-	rot = 0.707106829,1.25607405E-15,0.707106829,1.25607405E-15
-	attRot = 0,0,0,1
-	attRot0 = -1.25607405E-15,0.707106829,-1.25607405E-15,0.707106709
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 2
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294451842
-	sym = RCSBlock_4294451554
-	sym = RCSBlock_4294451390
-	srfN = srfAttach,fuelTank_4294451912
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294451718
+  partName = Part
+  pos = 0.0126620103,8.52486897,-0.71814388
+  attPos = 0,0,0
+  attPos0 = 0.000742281089,-0.586032927,0.67940551
+  rot = 0.707106829,1.25607405E-15,0.707106829,1.25607405E-15
+  attRot = 0,0,0,1
+  attRot0 = -1.25607405E-15,0.707106829,-1.25607405E-15,0.707106709
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294451842
+  sym = RCSBlock_4294451554
+  sym = RCSBlock_4294451390
+  srfN = srfAttach,fuelTank_4294451912
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294451554
-	partName = Part
-	pos = 0.691325188,8.52486897,-0.0379959792
-	attPos = 0,0,0
-	attPos0 = 0.67940551,-0.586032927,-0.000742380973
-	rot = -1.28005098E-07,-1.52514896E-22,1,1.77635705E-15
-	attRot = 0,0,0,1
-	attRot0 = -1.77635705E-15,1,1.52514896E-22,-1.28005098E-07
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 2
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294451842
-	sym = RCSBlock_4294451718
-	sym = RCSBlock_4294451390
-	srfN = srfAttach,fuelTank_4294451912
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294451554
+  partName = Part
+  pos = 0.691325188,8.52486897,-0.0379959792
+  attPos = 0,0,0
+  attPos0 = 0.67940551,-0.586032927,-0.000742380973
+  rot = -1.28005098E-07,-1.52514896E-22,1,1.77635705E-15
+  attRot = 0,0,0,1
+  attRot0 = -1.77635705E-15,1,1.52514896E-22,-1.28005098E-07
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294451842
+  sym = RCSBlock_4294451718
+  sym = RCSBlock_4294451390
+  srfN = srfAttach,fuelTank_4294451912
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294451390
-	partName = Part
-	pos = 0.0111773703,8.52486897,0.640667081
-	attPos = 0,0,0
-	attPos0 = -0.000742362114,-0.586032927,-0.67940551
-	rot = -0.707106829,-1.25607405E-15,0.707106829,1.25607405E-15
-	attRot = 0,0,0,1
-	attRot0 = -1.25607405E-15,0.707106709,1.25607405E-15,-0.707106829
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 2
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294451842
-	sym = RCSBlock_4294451718
-	sym = RCSBlock_4294451554
-	srfN = srfAttach,fuelTank_4294451912
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294451390
+  partName = Part
+  pos = 0.0111773703,8.52486897,0.640667081
+  attPos = 0,0,0
+  attPos0 = -0.000742362114,-0.586032927,-0.67940551
+  rot = -0.707106829,-1.25607405E-15,0.707106829,1.25607405E-15
+  attRot = 0,0,0,1
+  attRot0 = -1.25607405E-15,0.707106709,1.25607405E-15,-0.707106829
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294451842
+  sym = RCSBlock_4294451718
+  sym = RCSBlock_4294451554
+  srfN = srfAttach,fuelTank_4294451912
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294451226
-	partName = Part
-	pos = -0.650138915,6.64764881,-0.0394806713
-	attPos = 0,0,0
-	attPos0 = -0.662058592,0.0401945114,0.000742311124
-	rot = 1,0,0,0
-	attRot = 0,0,0,1
-	attRot0 = 0,0,0,1
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 2
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294451142
-	sym = RCSBlock_4294451018
-	sym = RCSBlock_4294450894
-	srfN = srfAttach,RCSFuelTank_4294451944
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294451226
+  partName = Part
+  pos = -0.650138915,6.64764881,-0.0394806713
+  attPos = 0,0,0
+  attPos0 = -0.662058592,0.0401945114,0.000742311124
+  rot = 1,0,0,0
+  attRot = 0,0,0,1
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294451142
+  sym = RCSBlock_4294451018
+  sym = RCSBlock_4294450894
+  srfN = srfAttach,RCSFuelTank_4294451944
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294451142
-	partName = Part
-	pos = 0.012662,6.64764881,-0.700796783
-	attPos = 0,0,0
-	attPos0 = 0.000742271484,0.0401945114,0.662058473
-	rot = 0.707106829,0,0.707106829,0
-	attRot = 0,0,0,1
-	attRot0 = 0,0.707106829,0,0.707106829
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 2
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294451226
-	sym = RCSBlock_4294451018
-	sym = RCSBlock_4294450894
-	srfN = srfAttach,RCSFuelTank_4294451944
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294451142
+  partName = Part
+  pos = 0.012662,6.64764881,-0.700796783
+  attPos = 0,0,0
+  attPos0 = 0.000742271484,0.0401945114,0.662058473
+  rot = 0.707106829,0,0.707106829,0
+  attRot = 0,0,0,1
+  attRot0 = 0,0.707106829,0,0.707106829
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294451226
+  sym = RCSBlock_4294451018
+  sym = RCSBlock_4294450894
+  srfN = srfAttach,RCSFuelTank_4294451944
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294451018
-	partName = Part
-	pos = 0.673978329,6.64764881,-0.0379959904
-	attPos = 0,0,0
-	attPos0 = 0.662058592,0.0401945114,-0.000742368924
-	rot = -4.37113883E-08,0,1,0
-	attRot = 0,0,0,1
-	attRot0 = 0,1,0,-4.37113883E-08
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 2
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294451226
-	sym = RCSBlock_4294451142
-	sym = RCSBlock_4294450894
-	srfN = srfAttach,RCSFuelTank_4294451944
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294451018
+  partName = Part
+  pos = 0.673978329,6.64764881,-0.0379959904
+  attPos = 0,0,0
+  attPos0 = 0.662058592,0.0401945114,-0.000742368924
+  rot = -4.37113883E-08,0,1,0
+  attRot = 0,0,0,1
+  attRot0 = 0,1,0,-4.37113883E-08
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294451226
+  sym = RCSBlock_4294451142
+  sym = RCSBlock_4294450894
+  srfN = srfAttach,RCSFuelTank_4294451944
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = RCSBlock_4294450894
-	partName = Part
-	pos = 0.0111773796,6.64764881,0.623320103
-	attPos = 0,0,0
-	attPos0 = -0.000742350472,0.0401945114,-0.662058473
-	rot = -0.707106829,0,0.707106829,0
-	attRot = 0,0,0,1
-	attRot0 = 0,0.707106829,0,-0.707106829
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 2
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = RCSBlock_4294451226
-	sym = RCSBlock_4294451142
-	sym = RCSBlock_4294451018
-	srfN = srfAttach,RCSFuelTank_4294451944
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRCSFX
-		isEnabled = True
-		rcsEnabled = True
-		thrustPercentage = 100
-		currentShowToggles = False
-		enableYaw = True
-		enablePitch = True
-		enableRoll = True
-		enableX = True
-		enableY = True
-		enableZ = True
-		useThrottle = False
-		fullThrust = False
-		stagingEnabled = False
-		rcsEnabled_UIFlight
-		{
-			controlEnabled = True
-		}
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		enableYaw_UIFlight
-		{
-			controlEnabled = True
-		}
-		enablePitch_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableRoll_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableX_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableY_UIFlight
-		{
-			controlEnabled = True
-		}
-		enableZ_UIFlight
-		{
-			controlEnabled = True
-		}
-		useThrottle_UIFlight
-		{
-			controlEnabled = True
-		}
-		fullThrust_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			ToggleToggles
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Actuation Toggles
-				guiName = Show Actuation Toggles
-				category = Actuation Toggles
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = RCS: Enable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = RCSBlock_4294450894
+  partName = Part
+  pos = 0.0111773796,6.64764881,0.623320103
+  attPos = 0,0,0
+  attPos0 = -0.000742350472,0.0401945114,-0.662058473
+  rot = -0.707106829,0,0.707106829,0
+  attRot = 0,0,0,1
+  attRot0 = 0,0.707106829,0,-0.707106829
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = RCSBlock_4294451226
+  sym = RCSBlock_4294451142
+  sym = RCSBlock_4294451018
+  srfN = srfAttach,RCSFuelTank_4294451944
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleRCSFX
+    isEnabled = True
+    rcsEnabled = True
+    thrustPercentage = 100
+    currentShowToggles = False
+    enableYaw = True
+    enablePitch = True
+    enableRoll = True
+    enableX = True
+    enableY = True
+    enableZ = True
+    useThrottle = False
+    fullThrust = False
+    stagingEnabled = False
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }

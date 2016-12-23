@@ -10,8 +10,11 @@ using Google.Protobuf;
 
 namespace KRPC.Client
 {
+    /// <summary>
+    /// Methods for encoding and decoding messages for kRPCs protocolo bufers over TCP/IP protocol.
+    /// </summary>
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
-    static class Encoder
+    public static class Encoder
     {
         /// <summary>
         /// Encode an object of the given type using the protocol buffer encoding scheme.

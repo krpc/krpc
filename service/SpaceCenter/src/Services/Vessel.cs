@@ -322,7 +322,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         internal Vector3d MomentOfInertiaVector {
-            get { return ComputeInertiaTensor ().Diagonal (); }
+            get { return InternalVessel.MOI * 1000; }
         }
 
         /// <summary>

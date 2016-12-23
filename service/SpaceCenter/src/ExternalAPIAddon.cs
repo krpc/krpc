@@ -15,6 +15,7 @@ namespace KRPC.SpaceCenter
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Start ()
         {
+            ExternalAPI.AGX.Load ();
             ExternalAPI.FAR.Load ();
             ExternalAPI.RemoteTech.Load ();
         }

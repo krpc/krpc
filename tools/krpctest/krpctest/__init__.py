@@ -150,7 +150,7 @@ class TestCase(unittest.TestCase):
         if len(expected) != len(actual):
             return False
         for x, y in zip(expected, actual):
-            if not self._is_value_almost_equal(x, y, places, delta):
+            if not self._is_almost_equal(x, y, places, delta):
                 return False
         return True
 
@@ -158,7 +158,7 @@ class TestCase(unittest.TestCase):
         if set(expected.keys()) != set(actual.keys()):
             return False
         for k in expected.keys():
-            if not self._is_value_almost_equal(expected[k], actual[k], places, delta):
+            if not self._is_almost_equal(expected[k], actual[k], places, delta):
                 return False
         return True
 

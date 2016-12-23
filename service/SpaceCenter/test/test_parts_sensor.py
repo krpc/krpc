@@ -31,7 +31,7 @@ class TestPartsSensor(krpctest.TestCase):
         sensor.active = True
         self.wait()
         self.assertTrue(sensor.active)
-        self.assertEqual('09.80m/s^2', sensor.value)
+        self.assertEqual('09.81m/s^2', sensor.value)
         sensor.active = False
         self.wait()
         self.assertFalse(sensor.active)

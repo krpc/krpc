@@ -81,7 +81,7 @@ class TestPartsDockingPort(krpctest.TestCase):
         # Undocking
         self.assertNotEqual(self.vessel, undocked)
         self.assertLess(mass_after, mass_before)
-        self.assertAlmostEqual(mass_after, mass_before - undocked.mass)
+        self.assertAlmostEqual(mass_after, mass_before - undocked.mass, places=2)
         self.assertEqual(self.State.undocking, top_port.state)
         self.assertEqual(self.State.undocking, bottom_port.state)
         self.assertIsNone(bottom_port.docked_part)
@@ -119,7 +119,7 @@ class TestPartsDockingPort(krpctest.TestCase):
         # Undocked (there is no undocking state when undocking from a part)
         self.assertNotEqual(self.vessel, undocked)
         self.assertLess(mass_after, mass_before)
-        self.assertAlmostEqual(mass_after, mass_before - undocked.mass)
+        self.assertAlmostEqual(mass_after, mass_before - undocked.mass, places=2)
         self.assertEqual(self.State.ready, port.state)
         self.assertIsNone(port.docked_part)
 
@@ -175,7 +175,7 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
             self.assertIsNone(port1.docked_part)
             mass_after = vessel.mass
             self.assertLess(mass_after, mass_before)
-            self.assertAlmostEqual(mass_after, mass_before - undocked.mass, places=3)
+            self.assertAlmostEqual(mass_after, mass_before - undocked.mass, places=2)
 
             # Move backwards to reengage distance
             vessel.control.rcs = True

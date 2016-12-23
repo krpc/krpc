@@ -10,6 +10,7 @@ v0.4.0
  * Update to Protocol Buffers v3.1.0
 
 v0.3.7
+ * Support for KSP 1.2.2
  * Add KRPCDefaultValue attribute. Can be used to set default arguments to non-compile time constants.
  * Update to Protocol Buffers v3.1.0
 

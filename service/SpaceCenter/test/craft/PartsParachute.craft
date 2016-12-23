@@ -1,4210 +1,1671 @@
 ship = PartsParachute
-version = 1.2.0
-description = 
+version = 1.2.2
+description =
 type = VAB
 size = 2.84467649,2.36631775,2.84467626
 PART
 {
-	part = Mark1-2Pod_4294717130
-	partName = Part
-	pos = 0.357510686,2.30789399,-1.18792498
-	attPos = 0,0,0
-	attPos0 = 0.357510686,2.30789399,-1.18792498
-	rot = 0,0,0,1
-	attRot = 0,0,0,1
-	attRot0 = 0,0,0,1
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	sepI = 0
-	attm = 0
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	link = parachuteLarge_4294709472
-	link = parachuteRadial_4294708962
-	link = parachuteRadial_4294708586
-	link = parachuteRadial_4294708536
-	link = parachuteRadial_4294708486
-	link = sepMotor1_4294517326
-	link = sepMotor1_4294412830
-	link = sepMotor1_4294412774
-	link = sepMotor1_4294412718
-	link = sepMotor1_4294412662
-	link = sepMotor1_4294412606
-	link = sepMotor1_4294412550
-	link = sepMotor1_4294412494
-	attN = top,parachuteLarge_4294709472
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleCommand
-		isEnabled = True
-		hibernation = False
-		hibernateOnWarp = False
-		controlSrcStatusText = 
-		stagingEnabled = True
-		hibernation_UIFlight
-		{
-			controlEnabled = True
-		}
-		hibernateOnWarp_UIFlight
-		{
-			controlEnabled = True
-		}
-		EVENTS
-		{
-			MakeReference
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Control From Here
-				guiName = Control From Here
-				category = Control From Here
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			RenameVessel
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = True
-				guiIcon = Rename Vessel
-				guiName = Rename Vessel
-				category = Rename Vessel
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			HibernateToggle
-			{
-				actionGroup = None
-				active = False
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleReactionWheel
-		isEnabled = True
-		actuatorModeCycle = 0
-		authorityLimiter = 100
-		stateString = Active
-		stagingEnabled = True
-		WheelState = Active
-		actuatorModeCycle_UIFlight
-		{
-			controlEnabled = True
-			stateNames = Normal, SAS Only, Pilot Only
-		}
-		authorityLimiter_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.1
-		}
-		EVENTS
-		{
-			OnToggle
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Toggle Torque
-				guiName = Toggle Torque
-				category = Toggle Torque
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			CycleAction
-			{
-				actionGroup = None
-			}
-			Activate
-			{
-				actionGroup = None
-			}
-			Deactivate
-			{
-				actionGroup = None
-			}
-			Toggle
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleColorChanger
-		isEnabled = True
-		animState = False
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleEvent
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Toggle Color
-				guiName = Lights On
-				category = Toggle Color
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 5
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleScienceExperiment
-		isEnabled = True
-		Deployed = False
-		Inoperable = False
-		cooldownToGo = 0
-		stagingEnabled = True
-		EVENTS
-		{
-			DeployExperiment
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Deploy
-				guiName = Deploy
-				category = Deploy
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			CollectDataExternalEvent
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = 
-				guiName = 
-				category = 
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 1.5
-				externalToEVAOnly = True
-			}
-			ReviewDataEvent
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Review Data
-				guiName = Review Data
-				category = Review Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ResetExperiment
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Reset
-				guiName = Reset
-				category = Reset
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			DeployExperimentExternal
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Deploy
-				guiName = Deploy
-				category = Deploy
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ResetExperimentExternal
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Reset
-				guiName = Reset
-				category = Reset
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			CleanUpExperimentExternal
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Restore
-				guiName = Restore
-				category = Restore
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			TransferDataEvent
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Transfer Data
-				guiName = Transfer Data
-				category = Transfer Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Experiment: Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			DeployAction
-			{
-				actionGroup = None
-			}
-			ResetAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleScienceContainer
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			StoreDataExternalEvent
-			{
-				active = False
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = 
-				guiName = Store Experiments (0)
-				category = 
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			CollectDataExternalEvent
-			{
-				active = False
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = 
-				guiName = Take Data (0)
-				category = 
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			TransferDataEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Container: Transfer Data
-				guiName = Container: Transfer Data
-				category = Container: Transfer Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			CollectAllEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Container: Collect All
-				guiName = Container: Collect All
-				category = Container: Collect All
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ReviewDataEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Review Data
-				guiName = Review Stored Data (0)
-				category = Review Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = FlagDecal
-		isEnabled = True
-		flagDisplayed = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleFlag
-			{
-				active = True
-				guiActive = False
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = ToggleFlag
-				guiName = ToggleFlag
-				category = ToggleFlag
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleConductionMultiplier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDataTransmitter
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			StartTransmission
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Transmit Data
-				guiName = Transmit Data
-				category = Transmit Data
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			TransmitIncompleteToggle
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Toggle Transmit Incomplete
-				guiName = Toggle Transmit Incomplete
-				category = Toggle Transmit Incomplete
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			StopTransmission
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Stop Transmitting
-				guiName = Stop Transmitting
-				category = Stop Transmitting
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			StartTransmissionAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTripLogger
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		Log
-		{
-			flight = 0
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	RESOURCE
-	{
-		name = ElectricCharge
-		amount = 150
-		maxAmount = 150
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
-	RESOURCE
-	{
-		name = MonoPropellant
-		amount = 30
-		maxAmount = 30
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = Mark1-2Pod_4294717130
+  partName = Part
+  pos = 0.357510686,2.30789399,-1.18792498
+  attPos = 0,0,0
+  attPos0 = 0.357510686,2.30789399,-1.18792498
+  rot = 0,0,0,1
+  attRot = 0,0,0,1
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = parachuteLarge_4294709472
+  link = parachuteRadial_4294708962
+  link = parachuteRadial_4294708586
+  link = parachuteRadial_4294708536
+  link = parachuteRadial_4294708486
+  link = sepMotor1_4294517326
+  link = sepMotor1_4294412830
+  link = sepMotor1_4294412774
+  link = sepMotor1_4294412718
+  link = sepMotor1_4294412662
+  link = sepMotor1_4294412606
+  link = sepMotor1_4294412550
+  link = sepMotor1_4294412494
+  attN = top,parachuteLarge_4294709472
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleCommand
+    isEnabled = True
+    hibernation = False
+    hibernateOnWarp = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      HibernateToggle
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleReactionWheel
+    isEnabled = True
+    actuatorModeCycle = 0
+    authorityLimiter = 100
+    stateString = Active
+    stagingEnabled = True
+    WheelState = Active
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      CycleAction
+      {
+        actionGroup = None
+      }
+      Activate
+      {
+        actionGroup = None
+      }
+      Deactivate
+      {
+        actionGroup = None
+      }
+      Toggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleColorChanger
+    isEnabled = True
+    animState = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleScienceExperiment
+    isEnabled = True
+    Deployed = False
+    Inoperable = False
+    cooldownToGo = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      DeployAction
+      {
+        actionGroup = None
+      }
+      ResetAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleScienceContainer
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      CollectAllAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = FlagDecal
+    isEnabled = True
+    flagDisplayed = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleConductionMultiplier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDataTransmitter
+    isEnabled = True
+    xmitIncomplete = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      StartTransmissionAction
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleProbeControlPoint
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleLiftingSurface
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTripLogger
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    Log
+    {
+      flight = 0
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = ElectricCharge
+    amount = 150
+    maxAmount = 150
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+  RESOURCE
+  {
+    name = MonoPropellant
+    amount = 30
+    maxAmount = 30
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }
 PART
 {
-	part = parachuteLarge_4294709472
-	partName = Part
-	pos = 0.357510686,3.50315404,-1.18792498
-	attPos = 0,0,0
-	attPos0 = 0,1.19525504,0
-	rot = 0,0,0,1
-	attRot = 0,0,0,1
-	attRot0 = 0,0,0,1
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = 1
-	sqor = 0
-	sepI = 0
-	attm = 0
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	attN = bottom,Mark1-2Pod_4294717130
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleParachute
-		isEnabled = True
-		persistentState = STOWED
-		animTime = 0
-		minAirPressureToOpen = 0.00999999978
-		deployAltitude = 500
-		automateSafeDeploy = 0
-		stagingEnabled = True
-		minAirPressureToOpen_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0.01
-			maxValue = 0.5
-			stepIncrement = 0.01
-		}
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
-		automateSafeDeploy_UIFlight
-		{
-			controlEnabled = True
-			stateNames = When Safe, When Risky, Immediate
-		}
-		EVENTS
-		{
-			Deploy
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Deploy Chute
-				guiName = Deploy Chute
-				category = Deploy Chute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			CutParachute
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Cut Parachute
-				guiName = Cut Parachute
-				category = Cut Parachute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Repack
-			{
-				active = False
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Repack Chute
-				guiName = Repack Chute
-				category = Repack Chute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Disarm
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Disarm
-				guiName = Disarm
-				category = Disarm
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			DeployAction
-			{
-				actionGroup = None
-			}
-			CutAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			RunTestEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Run Test
-				guiName = Run Test
-				category = Run Test
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDragModifier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDragModifier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = parachuteLarge_4294709472
+  partName = Part
+  pos = 0.357510686,3.50315404,-1.18792498
+  attPos = 0,0,0
+  attPos0 = 0,1.19525504,0
+  rot = 0,0,0,1
+  attRot = 0,0,0,1
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 0
+  resPri = 0
+  dstg = 0
+  sidx = 1
+  sqor = 0
+  sepI = -1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  attN = bottom,Mark1-2Pod_4294717130
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleParachute
+    isEnabled = True
+    persistentState = STOWED
+    animTime = 0
+    minAirPressureToOpen = 0.00999999978
+    deployAltitude = 500
+    spreadAngle = 7
+    automateSafeDeploy = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      DeployAction
+      {
+        actionGroup = None
+      }
+      CutAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDragModifier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDragModifier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = parachuteRadial_4294708962
-	partName = Part
-	pos = -0.459002912,2.79602408,-0.96914053
-	attPos = 0,0,0
-	attPos0 = -0.816513598,0.488128692,0.218784198
-	rot = 0.120416299,0.777677715,-0.156929493,0.596733212
-	attRot = 0,0,0,1
-	attRot0 = 0.120416299,0.777677715,-0.156929493,0.596733093
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = 0
-	sqor = 0
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = parachuteRadial_4294708586
-	sym = parachuteRadial_4294708536
-	sym = parachuteRadial_4294708486
-	srfN = srfAttach,Mark1-2Pod_4294717130
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleParachute
-		isEnabled = True
-		persistentState = STOWED
-		animTime = 0
-		minAirPressureToOpen = 0.00999999978
-		deployAltitude = 500
-		automateSafeDeploy = 0
-		stagingEnabled = True
-		minAirPressureToOpen_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0.01
-			maxValue = 0.5
-			stepIncrement = 0.01
-		}
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
-		automateSafeDeploy_UIFlight
-		{
-			controlEnabled = True
-			stateNames = When Safe, When Risky, Immediate
-		}
-		EVENTS
-		{
-			Deploy
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Deploy Chute
-				guiName = Deploy Chute
-				category = Deploy Chute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			CutParachute
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Cut Parachute
-				guiName = Cut Parachute
-				category = Cut Parachute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Repack
-			{
-				active = False
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Repack Chute
-				guiName = Repack Chute
-				category = Repack Chute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Disarm
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Disarm
-				guiName = Disarm
-				category = Disarm
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			DeployAction
-			{
-				actionGroup = None
-			}
-			CutAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			RunTestEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Run Test
-				guiName = Run Test
-				category = Run Test
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDragModifier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDragModifier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = parachuteRadial_4294708962
+  partName = Part
+  pos = -0.459002912,2.79602408,-0.96914053
+  attPos = 0,0,0
+  attPos0 = -0.816513598,0.488128692,0.218784198
+  rot = 0.120416299,0.777677715,-0.156929493,0.596733212
+  attRot = 0,0,0,1
+  attRot0 = 0.120416299,0.777677715,-0.156929493,0.596733093
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 0
+  resPri = 0
+  dstg = 0
+  sidx = 0
+  sqor = 0
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = parachuteRadial_4294708586
+  sym = parachuteRadial_4294708536
+  sym = parachuteRadial_4294708486
+  srfN = srfAttach,Mark1-2Pod_4294717130
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleParachute
+    isEnabled = True
+    persistentState = STOWED
+    animTime = 0
+    minAirPressureToOpen = 0.00999999978
+    deployAltitude = 500
+    spreadAngle = 7
+    automateSafeDeploy = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      DeployAction
+      {
+        actionGroup = None
+      }
+      CutAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDragModifier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDragModifier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = parachuteRadial_4294708586
-	partName = Part
-	pos = 0.57629478,2.79602408,-0.371411324
-	attPos = 0,0,0
-	attPos0 = 0.218784094,0.488128692,0.816513479
-	rot = -0.0258187801,0.971855223,-0.196113095,-0.127947196
-	attRot = 0,0,0,1
-	attRot0 = -0.0258187801,0.971855223,-0.196113095,-0.127947196
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = 0
-	sqor = 0
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = parachuteRadial_4294708962
-	sym = parachuteRadial_4294708536
-	sym = parachuteRadial_4294708486
-	srfN = srfAttach,Mark1-2Pod_4294717130
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleParachute
-		isEnabled = True
-		persistentState = STOWED
-		animTime = 0
-		minAirPressureToOpen = 0.00999999978
-		deployAltitude = 500
-		automateSafeDeploy = 0
-		stagingEnabled = True
-		minAirPressureToOpen_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0.01
-			maxValue = 0.5
-			stepIncrement = 0.01
-		}
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
-		automateSafeDeploy_UIFlight
-		{
-			controlEnabled = True
-			stateNames = When Safe, When Risky, Immediate
-		}
-		EVENTS
-		{
-			Deploy
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Deploy Chute
-				guiName = Deploy Chute
-				category = Deploy Chute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			CutParachute
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Cut Parachute
-				guiName = Cut Parachute
-				category = Cut Parachute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Repack
-			{
-				active = False
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Repack Chute
-				guiName = Repack Chute
-				category = Repack Chute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Disarm
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Disarm
-				guiName = Disarm
-				category = Disarm
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			DeployAction
-			{
-				actionGroup = None
-			}
-			CutAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			RunTestEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Run Test
-				guiName = Run Test
-				category = Run Test
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDragModifier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDragModifier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = parachuteRadial_4294708586
+  partName = Part
+  pos = 0.57629478,2.79602408,-0.371411324
+  attPos = 0,0,0
+  attPos0 = 0.218784094,0.488128692,0.816513479
+  rot = -0.0258187801,0.971855223,-0.196113095,-0.127947196
+  attRot = 0,0,0,1
+  attRot0 = -0.0258187801,0.971855223,-0.196113095,-0.127947196
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 0
+  resPri = 0
+  dstg = 0
+  sidx = 0
+  sqor = 0
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = parachuteRadial_4294708962
+  sym = parachuteRadial_4294708536
+  sym = parachuteRadial_4294708486
+  srfN = srfAttach,Mark1-2Pod_4294717130
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleParachute
+    isEnabled = True
+    persistentState = STOWED
+    animTime = 0
+    minAirPressureToOpen = 0.00999999978
+    deployAltitude = 500
+    spreadAngle = 7
+    automateSafeDeploy = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      DeployAction
+      {
+        actionGroup = None
+      }
+      CutAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDragModifier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDragModifier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = parachuteRadial_4294708536
-	partName = Part
-	pos = 1.17402399,2.79602408,-1.40670896
-	attPos = 0,0,0
-	attPos0 = 0.816513598,0.488128692,-0.218784198
-	rot = -0.156929597,0.596733093,-0.120416299,-0.777677774
-	attRot = 0,0,0,1
-	attRot0 = -0.156929597,0.596733093,-0.120416299,-0.777677774
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = 0
-	sqor = 0
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = parachuteRadial_4294708962
-	sym = parachuteRadial_4294708586
-	sym = parachuteRadial_4294708486
-	srfN = srfAttach,Mark1-2Pod_4294717130
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleParachute
-		isEnabled = True
-		persistentState = STOWED
-		animTime = 0
-		minAirPressureToOpen = 0.00999999978
-		deployAltitude = 500
-		automateSafeDeploy = 0
-		stagingEnabled = True
-		minAirPressureToOpen_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0.01
-			maxValue = 0.5
-			stepIncrement = 0.01
-		}
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
-		automateSafeDeploy_UIFlight
-		{
-			controlEnabled = True
-			stateNames = When Safe, When Risky, Immediate
-		}
-		EVENTS
-		{
-			Deploy
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Deploy Chute
-				guiName = Deploy Chute
-				category = Deploy Chute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			CutParachute
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Cut Parachute
-				guiName = Cut Parachute
-				category = Cut Parachute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Repack
-			{
-				active = False
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Repack Chute
-				guiName = Repack Chute
-				category = Repack Chute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Disarm
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Disarm
-				guiName = Disarm
-				category = Disarm
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			DeployAction
-			{
-				actionGroup = None
-			}
-			CutAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			RunTestEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Run Test
-				guiName = Run Test
-				category = Run Test
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDragModifier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDragModifier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = parachuteRadial_4294708536
+  partName = Part
+  pos = 1.17402399,2.79602408,-1.40670896
+  attPos = 0,0,0
+  attPos0 = 0.816513598,0.488128692,-0.218784198
+  rot = -0.156929597,0.596733093,-0.120416299,-0.777677774
+  attRot = 0,0,0,1
+  attRot0 = -0.156929597,0.596733093,-0.120416299,-0.777677774
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 0
+  resPri = 0
+  dstg = 0
+  sidx = 0
+  sqor = 0
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = parachuteRadial_4294708962
+  sym = parachuteRadial_4294708586
+  sym = parachuteRadial_4294708486
+  srfN = srfAttach,Mark1-2Pod_4294717130
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleParachute
+    isEnabled = True
+    persistentState = STOWED
+    animTime = 0
+    minAirPressureToOpen = 0.00999999978
+    deployAltitude = 500
+    spreadAngle = 7
+    automateSafeDeploy = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      DeployAction
+      {
+        actionGroup = None
+      }
+      CutAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDragModifier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDragModifier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = parachuteRadial_4294708486
-	partName = Part
-	pos = 0.138726503,2.79602408,-2.00443792
-	attPos = 0,0,0
-	attPos0 = -0.218784198,0.488128692,-0.816513479
-	rot = -0.196113095,-0.127947196,0.0258187801,-0.971855223
-	attRot = 0,0,0,1
-	attRot0 = -0.196113095,-0.127947196,0.0258187801,-0.971855223
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 0
-	resPri = 0
-	dstg = 0
-	sidx = 0
-	sqor = 0
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = parachuteRadial_4294708962
-	sym = parachuteRadial_4294708586
-	sym = parachuteRadial_4294708536
-	srfN = srfAttach,Mark1-2Pod_4294717130
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleParachute
-		isEnabled = True
-		persistentState = STOWED
-		animTime = 0
-		minAirPressureToOpen = 0.00999999978
-		deployAltitude = 500
-		automateSafeDeploy = 0
-		stagingEnabled = True
-		minAirPressureToOpen_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0.01
-			maxValue = 0.5
-			stepIncrement = 0.01
-		}
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
-		automateSafeDeploy_UIFlight
-		{
-			controlEnabled = True
-			stateNames = When Safe, When Risky, Immediate
-		}
-		EVENTS
-		{
-			Deploy
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Deploy Chute
-				guiName = Deploy Chute
-				category = Deploy Chute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			CutParachute
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Cut Parachute
-				guiName = Cut Parachute
-				category = Cut Parachute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Repack
-			{
-				active = False
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Repack Chute
-				guiName = Repack Chute
-				category = Repack Chute
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Disarm
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Disarm
-				guiName = Disarm
-				category = Disarm
-				advancedTweakable = False
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			DeployAction
-			{
-				actionGroup = None
-			}
-			CutAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			RunTestEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Run Test
-				guiName = Run Test
-				category = Run Test
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDragModifier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDragModifier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
+  part = parachuteRadial_4294708486
+  partName = Part
+  pos = 0.138726503,2.79602408,-2.00443792
+  attPos = 0,0,0
+  attPos0 = -0.218784198,0.488128692,-0.816513479
+  rot = -0.196113095,-0.127947196,0.0258187801,-0.971855223
+  attRot = 0,0,0,1
+  attRot0 = -0.196113095,-0.127947196,0.0258187801,-0.971855223
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 0
+  resPri = 0
+  dstg = 0
+  sidx = 0
+  sqor = 0
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = parachuteRadial_4294708962
+  sym = parachuteRadial_4294708586
+  sym = parachuteRadial_4294708536
+  srfN = srfAttach,Mark1-2Pod_4294717130
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleParachute
+    isEnabled = True
+    persistentState = STOWED
+    animTime = 0
+    minAirPressureToOpen = 0.00999999978
+    deployAltitude = 500
+    spreadAngle = 7
+    automateSafeDeploy = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      DeployAction
+      {
+        actionGroup = None
+      }
+      CutAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDragModifier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDragModifier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
-	part = sepMotor1_4294517326
-	partName = Part
-	pos = -0.591591597,2.18989396,-1.73588896
-	attPos = 0,0,0
-	attPos0 = -0.949102283,-0.118003801,-0.547964573
-	rot = 0.0989025906,0.848914027,0.1713043,-0.49012059
-	attRot = 0,0,0,1
-	attRot0 = 0.0989025831,0.848913908,0.1713043,-0.49012059
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 1
-	resPri = 0
-	dstg = 0
-	sidx = 0
-	sqor = 1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = sepMotor1_4294412830
-	sym = sepMotor1_4294412774
-	sym = sepMotor1_4294412718
-	sym = sepMotor1_4294412662
-	sym = sepMotor1_4294412606
-	sym = sepMotor1_4294412550
-	sym = sepMotor1_4294412494
-	srfN = srfAttach,Mark1-2Pod_4294717130
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleEngines
-		isEnabled = True
-		staged = False
-		flameout = False
-		EngineIgnited = False
-		engineShutdown = False
-		currentThrottle = 0
-		thrustPercentage = 100
-		manuallyOverridden = False
-		stagingEnabled = True
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		EVENTS
-		{
-			Activate
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Activate Engine
-				guiName = Activate Engine
-				category = Activate Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			Shutdown
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Shutdown Engine
-				guiName = Shutdown Engine
-				category = Shutdown Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			OnAction
-			{
-				actionGroup = None
-			}
-			ShutdownAction
-			{
-				actionGroup = None
-			}
-			ActivateAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			RunTestEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Run Test
-				guiName = Run Test
-				category = Run Test
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	RESOURCE
-	{
-		name = SolidFuel
-		amount = 4.8000001907348597
-		maxAmount = 8
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = sepMotor1_4294517326
+  partName = Part
+  pos = -0.591591597,2.18989396,-1.73588896
+  attPos = 0,0,0
+  attPos0 = -0.949102283,-0.118003801,-0.547964573
+  rot = 0.0989025906,0.848914027,0.1713043,-0.49012059
+  attRot = 0,0,0,1
+  attRot0 = 0.0989025831,0.848913908,0.1713043,-0.49012059
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 1
+  resPri = 0
+  dstg = 0
+  sidx = 0
+  sqor = 1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = sepMotor1_4294412830
+  sym = sepMotor1_4294412774
+  sym = sepMotor1_4294412718
+  sym = sepMotor1_4294412662
+  sym = sepMotor1_4294412606
+  sym = sepMotor1_4294412550
+  sym = sepMotor1_4294412494
+  srfN = srfAttach,Mark1-2Pod_4294717130
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleEngines
+    isEnabled = True
+    staged = False
+    flameout = False
+    EngineIgnited = False
+    engineShutdown = False
+    currentThrottle = 0
+    thrustPercentage = 100
+    manuallyOverridden = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      OnAction
+      {
+        actionGroup = None
+      }
+      ShutdownAction
+      {
+        actionGroup = None
+      }
+      ActivateAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = SolidFuel
+    amount = 4.8000001907348597
+    maxAmount = 8
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }
 PART
 {
-	part = sepMotor1_4294412830
-	partName = Part
-	pos = -0.701075315,2.18989396,-0.904277384
-	attPos = 0,0,0
-	attPos0 = -1.058586,-0.118003801,0.283647299
-	rot = 0.156929404,0.596733212,0.120416202,-0.777677774
-	attRot = 0,0,0,1
-	attRot0 = 0.156929404,0.596733212,0.120416202,-0.777677774
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 1
-	resPri = 0
-	dstg = 0
-	sidx = 0
-	sqor = 1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = sepMotor1_4294517326
-	sym = sepMotor1_4294412774
-	sym = sepMotor1_4294412718
-	sym = sepMotor1_4294412662
-	sym = sepMotor1_4294412606
-	sym = sepMotor1_4294412550
-	sym = sepMotor1_4294412494
-	srfN = srfAttach,Mark1-2Pod_4294717130
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleEngines
-		isEnabled = True
-		staged = False
-		flameout = False
-		EngineIgnited = False
-		engineShutdown = False
-		currentThrottle = 0
-		thrustPercentage = 100
-		manuallyOverridden = False
-		stagingEnabled = True
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		EVENTS
-		{
-			Activate
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Activate Engine
-				guiName = Activate Engine
-				category = Activate Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			Shutdown
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Shutdown Engine
-				guiName = Shutdown Engine
-				category = Shutdown Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			OnAction
-			{
-				actionGroup = None
-			}
-			ShutdownAction
-			{
-				actionGroup = None
-			}
-			ActivateAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			RunTestEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Run Test
-				guiName = Run Test
-				category = Run Test
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	RESOURCE
-	{
-		name = SolidFuel
-		amount = 4.8000001907348597
-		maxAmount = 8
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = sepMotor1_4294412830
+  partName = Part
+  pos = -0.701075315,2.18989396,-0.904277384
+  attPos = 0,0,0
+  attPos0 = -1.058586,-0.118003801,0.283647299
+  rot = 0.156929404,0.596733212,0.120416202,-0.777677774
+  attRot = 0,0,0,1
+  attRot0 = 0.156929404,0.596733212,0.120416202,-0.777677774
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 1
+  resPri = 0
+  dstg = 0
+  sidx = 0
+  sqor = 1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = sepMotor1_4294517326
+  sym = sepMotor1_4294412774
+  sym = sepMotor1_4294412718
+  sym = sepMotor1_4294412662
+  sym = sepMotor1_4294412606
+  sym = sepMotor1_4294412550
+  sym = sepMotor1_4294412494
+  srfN = srfAttach,Mark1-2Pod_4294717130
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleEngines
+    isEnabled = True
+    staged = False
+    flameout = False
+    EngineIgnited = False
+    engineShutdown = False
+    currentThrottle = 0
+    thrustPercentage = 100
+    manuallyOverridden = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      OnAction
+      {
+        actionGroup = None
+      }
+      ShutdownAction
+      {
+        actionGroup = None
+      }
+      ActivateAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = SolidFuel
+    amount = 4.8000001907348597
+    maxAmount = 8
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }
 PART
 {
-	part = sepMotor1_4294412774
-	partName = Part
-	pos = -0.190453887,2.18989396,-0.23882252
-	attPos = 0,0,0
-	attPos0 = -0.547964573,-0.118003801,0.949102223
-	rot = 0.191065118,0.253705204,0.0511957631,-0.946840465
-	attRot = 0,0,0,1
-	attRot0 = 0.191065103,0.253705204,0.0511957593,-0.946840525
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 1
-	resPri = 0
-	dstg = 0
-	sidx = 0
-	sqor = 1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = sepMotor1_4294517326
-	sym = sepMotor1_4294412830
-	sym = sepMotor1_4294412718
-	sym = sepMotor1_4294412662
-	sym = sepMotor1_4294412606
-	sym = sepMotor1_4294412550
-	sym = sepMotor1_4294412494
-	srfN = srfAttach,Mark1-2Pod_4294717130
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleEngines
-		isEnabled = True
-		staged = False
-		flameout = False
-		EngineIgnited = False
-		engineShutdown = False
-		currentThrottle = 0
-		thrustPercentage = 100
-		manuallyOverridden = False
-		stagingEnabled = True
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		EVENTS
-		{
-			Activate
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Activate Engine
-				guiName = Activate Engine
-				category = Activate Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			Shutdown
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Shutdown Engine
-				guiName = Shutdown Engine
-				category = Shutdown Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			OnAction
-			{
-				actionGroup = None
-			}
-			ShutdownAction
-			{
-				actionGroup = None
-			}
-			ActivateAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			RunTestEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Run Test
-				guiName = Run Test
-				category = Run Test
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	RESOURCE
-	{
-		name = SolidFuel
-		amount = 4.8000001907348597
-		maxAmount = 8
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = sepMotor1_4294412774
+  partName = Part
+  pos = -0.190453887,2.18989396,-0.23882252
+  attPos = 0,0,0
+  attPos0 = -0.547964573,-0.118003801,0.949102223
+  rot = 0.191065118,0.253705204,0.0511957631,-0.946840465
+  attRot = 0,0,0,1
+  attRot0 = 0.191065103,0.253705204,0.0511957593,-0.946840525
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 1
+  resPri = 0
+  dstg = 0
+  sidx = 0
+  sqor = 1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = sepMotor1_4294517326
+  sym = sepMotor1_4294412830
+  sym = sepMotor1_4294412718
+  sym = sepMotor1_4294412662
+  sym = sepMotor1_4294412606
+  sym = sepMotor1_4294412550
+  sym = sepMotor1_4294412494
+  srfN = srfAttach,Mark1-2Pod_4294717130
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleEngines
+    isEnabled = True
+    staged = False
+    flameout = False
+    EngineIgnited = False
+    engineShutdown = False
+    currentThrottle = 0
+    thrustPercentage = 100
+    manuallyOverridden = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      OnAction
+      {
+        actionGroup = None
+      }
+      ShutdownAction
+      {
+        actionGroup = None
+      }
+      ActivateAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = SolidFuel
+    amount = 4.8000001907348597
+    maxAmount = 8
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }
 PART
 {
-	part = sepMotor1_4294412718
-	partName = Part
-	pos = 0.641157687,2.18989396,-0.129338741
-	attPos = 0,0,0
-	attPos0 = 0.28364709,-0.118003801,1.058586
-	rot = 0.196112901,-0.127947196,-0.0258187391,-0.971855283
-	attRot = 0,0,0,1
-	attRot0 = 0.196112901,-0.127947196,-0.0258187391,-0.971855283
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 1
-	resPri = 0
-	dstg = 0
-	sidx = 0
-	sqor = 1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = sepMotor1_4294517326
-	sym = sepMotor1_4294412830
-	sym = sepMotor1_4294412774
-	sym = sepMotor1_4294412662
-	sym = sepMotor1_4294412606
-	sym = sepMotor1_4294412550
-	sym = sepMotor1_4294412494
-	srfN = srfAttach,Mark1-2Pod_4294717130
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleEngines
-		isEnabled = True
-		staged = False
-		flameout = False
-		EngineIgnited = False
-		engineShutdown = False
-		currentThrottle = 0
-		thrustPercentage = 100
-		manuallyOverridden = False
-		stagingEnabled = True
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		EVENTS
-		{
-			Activate
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Activate Engine
-				guiName = Activate Engine
-				category = Activate Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			Shutdown
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Shutdown Engine
-				guiName = Shutdown Engine
-				category = Shutdown Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			OnAction
-			{
-				actionGroup = None
-			}
-			ShutdownAction
-			{
-				actionGroup = None
-			}
-			ActivateAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			RunTestEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Run Test
-				guiName = Run Test
-				category = Run Test
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	RESOURCE
-	{
-		name = SolidFuel
-		amount = 4.8000001907348597
-		maxAmount = 8
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = sepMotor1_4294412718
+  partName = Part
+  pos = 0.641157687,2.18989396,-0.129338741
+  attPos = 0,0,0
+  attPos0 = 0.28364709,-0.118003801,1.058586
+  rot = 0.196112901,-0.127947196,-0.0258187391,-0.971855283
+  attRot = 0,0,0,1
+  attRot0 = 0.196112901,-0.127947196,-0.0258187391,-0.971855283
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 1
+  resPri = 0
+  dstg = 0
+  sidx = 0
+  sqor = 1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = sepMotor1_4294517326
+  sym = sepMotor1_4294412830
+  sym = sepMotor1_4294412774
+  sym = sepMotor1_4294412662
+  sym = sepMotor1_4294412606
+  sym = sepMotor1_4294412550
+  sym = sepMotor1_4294412494
+  srfN = srfAttach,Mark1-2Pod_4294717130
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleEngines
+    isEnabled = True
+    staged = False
+    flameout = False
+    EngineIgnited = False
+    engineShutdown = False
+    currentThrottle = 0
+    thrustPercentage = 100
+    manuallyOverridden = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      OnAction
+      {
+        actionGroup = None
+      }
+      ShutdownAction
+      {
+        actionGroup = None
+      }
+      ActivateAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = SolidFuel
+    amount = 4.8000001907348597
+    maxAmount = 8
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }
 PART
 {
-	part = sepMotor1_4294412662
-	partName = Part
-	pos = 1.30661297,2.18989396,-0.639960229
-	attPos = 0,0,0
-	attPos0 = 0.949102283,-0.118003801,0.547964513
-	rot = 0.1713043,-0.490120709,-0.0989025831,-0.848913908
-	attRot = 0,0,0,1
-	attRot0 = 0.1713043,-0.490120709,-0.0989025831,-0.848913908
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 1
-	resPri = 0
-	dstg = 0
-	sidx = 0
-	sqor = 1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = sepMotor1_4294517326
-	sym = sepMotor1_4294412830
-	sym = sepMotor1_4294412774
-	sym = sepMotor1_4294412718
-	sym = sepMotor1_4294412606
-	sym = sepMotor1_4294412550
-	sym = sepMotor1_4294412494
-	srfN = srfAttach,Mark1-2Pod_4294717130
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleEngines
-		isEnabled = True
-		staged = False
-		flameout = False
-		EngineIgnited = False
-		engineShutdown = False
-		currentThrottle = 0
-		thrustPercentage = 100
-		manuallyOverridden = False
-		stagingEnabled = True
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		EVENTS
-		{
-			Activate
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Activate Engine
-				guiName = Activate Engine
-				category = Activate Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			Shutdown
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Shutdown Engine
-				guiName = Shutdown Engine
-				category = Shutdown Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			OnAction
-			{
-				actionGroup = None
-			}
-			ShutdownAction
-			{
-				actionGroup = None
-			}
-			ActivateAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			RunTestEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Run Test
-				guiName = Run Test
-				category = Run Test
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	RESOURCE
-	{
-		name = SolidFuel
-		amount = 4.8000001907348597
-		maxAmount = 8
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = sepMotor1_4294412662
+  partName = Part
+  pos = 1.30661297,2.18989396,-0.639960229
+  attPos = 0,0,0
+  attPos0 = 0.949102283,-0.118003801,0.547964513
+  rot = 0.1713043,-0.490120709,-0.0989025831,-0.848913908
+  attRot = 0,0,0,1
+  attRot0 = 0.1713043,-0.490120709,-0.0989025831,-0.848913908
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 1
+  resPri = 0
+  dstg = 0
+  sidx = 0
+  sqor = 1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = sepMotor1_4294517326
+  sym = sepMotor1_4294412830
+  sym = sepMotor1_4294412774
+  sym = sepMotor1_4294412718
+  sym = sepMotor1_4294412606
+  sym = sepMotor1_4294412550
+  sym = sepMotor1_4294412494
+  srfN = srfAttach,Mark1-2Pod_4294717130
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleEngines
+    isEnabled = True
+    staged = False
+    flameout = False
+    EngineIgnited = False
+    engineShutdown = False
+    currentThrottle = 0
+    thrustPercentage = 100
+    manuallyOverridden = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      OnAction
+      {
+        actionGroup = None
+      }
+      ShutdownAction
+      {
+        actionGroup = None
+      }
+      ActivateAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = SolidFuel
+    amount = 4.8000001907348597
+    maxAmount = 8
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }
 PART
 {
-	part = sepMotor1_4294412606
-	partName = Part
-	pos = 1.41609704,2.18989396,-1.47157204
-	attPos = 0,0,0
-	attPos0 = 1.058586,-0.118003801,-0.283647299
-	rot = 0.120416202,-0.777677774,-0.156929404,-0.596733093
-	attRot = 0,0,0,1
-	attRot0 = 0.120416202,-0.777677774,-0.156929404,-0.596733093
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 1
-	resPri = 0
-	dstg = 0
-	sidx = 0
-	sqor = 1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = sepMotor1_4294517326
-	sym = sepMotor1_4294412830
-	sym = sepMotor1_4294412774
-	sym = sepMotor1_4294412718
-	sym = sepMotor1_4294412662
-	sym = sepMotor1_4294412550
-	sym = sepMotor1_4294412494
-	srfN = srfAttach,Mark1-2Pod_4294717130
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleEngines
-		isEnabled = True
-		staged = False
-		flameout = False
-		EngineIgnited = False
-		engineShutdown = False
-		currentThrottle = 0
-		thrustPercentage = 100
-		manuallyOverridden = False
-		stagingEnabled = True
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		EVENTS
-		{
-			Activate
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Activate Engine
-				guiName = Activate Engine
-				category = Activate Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			Shutdown
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Shutdown Engine
-				guiName = Shutdown Engine
-				category = Shutdown Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			OnAction
-			{
-				actionGroup = None
-			}
-			ShutdownAction
-			{
-				actionGroup = None
-			}
-			ActivateAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			RunTestEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Run Test
-				guiName = Run Test
-				category = Run Test
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	RESOURCE
-	{
-		name = SolidFuel
-		amount = 4.8000001907348597
-		maxAmount = 8
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = sepMotor1_4294412606
+  partName = Part
+  pos = 1.41609704,2.18989396,-1.47157204
+  attPos = 0,0,0
+  attPos0 = 1.058586,-0.118003801,-0.283647299
+  rot = 0.120416202,-0.777677774,-0.156929404,-0.596733093
+  attRot = 0,0,0,1
+  attRot0 = 0.120416202,-0.777677774,-0.156929404,-0.596733093
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 1
+  resPri = 0
+  dstg = 0
+  sidx = 0
+  sqor = 1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = sepMotor1_4294517326
+  sym = sepMotor1_4294412830
+  sym = sepMotor1_4294412774
+  sym = sepMotor1_4294412718
+  sym = sepMotor1_4294412662
+  sym = sepMotor1_4294412550
+  sym = sepMotor1_4294412494
+  srfN = srfAttach,Mark1-2Pod_4294717130
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleEngines
+    isEnabled = True
+    staged = False
+    flameout = False
+    EngineIgnited = False
+    engineShutdown = False
+    currentThrottle = 0
+    thrustPercentage = 100
+    manuallyOverridden = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      OnAction
+      {
+        actionGroup = None
+      }
+      ShutdownAction
+      {
+        actionGroup = None
+      }
+      ActivateAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = SolidFuel
+    amount = 4.8000001907348597
+    maxAmount = 8
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }
 PART
 {
-	part = sepMotor1_4294412550
-	partName = Part
-	pos = 0.90547508,2.18989396,-2.13702703
-	attPos = 0,0,0
-	attPos0 = 0.547964513,-0.118003801,-0.949102283
-	rot = 0.0511957631,-0.946840465,-0.191065118,-0.253705204
-	attRot = 0,0,0,1
-	attRot0 = 0.0511957593,-0.946840525,-0.191065103,-0.253705204
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 1
-	resPri = 0
-	dstg = 0
-	sidx = 0
-	sqor = 1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = sepMotor1_4294517326
-	sym = sepMotor1_4294412830
-	sym = sepMotor1_4294412774
-	sym = sepMotor1_4294412718
-	sym = sepMotor1_4294412662
-	sym = sepMotor1_4294412606
-	sym = sepMotor1_4294412494
-	srfN = srfAttach,Mark1-2Pod_4294717130
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleEngines
-		isEnabled = True
-		staged = False
-		flameout = False
-		EngineIgnited = False
-		engineShutdown = False
-		currentThrottle = 0
-		thrustPercentage = 100
-		manuallyOverridden = False
-		stagingEnabled = True
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		EVENTS
-		{
-			Activate
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Activate Engine
-				guiName = Activate Engine
-				category = Activate Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			Shutdown
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Shutdown Engine
-				guiName = Shutdown Engine
-				category = Shutdown Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			OnAction
-			{
-				actionGroup = None
-			}
-			ShutdownAction
-			{
-				actionGroup = None
-			}
-			ActivateAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			RunTestEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Run Test
-				guiName = Run Test
-				category = Run Test
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	RESOURCE
-	{
-		name = SolidFuel
-		amount = 4.8000001907348597
-		maxAmount = 8
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = sepMotor1_4294412550
+  partName = Part
+  pos = 0.90547508,2.18989396,-2.13702703
+  attPos = 0,0,0
+  attPos0 = 0.547964513,-0.118003801,-0.949102283
+  rot = 0.0511957631,-0.946840465,-0.191065118,-0.253705204
+  attRot = 0,0,0,1
+  attRot0 = 0.0511957593,-0.946840525,-0.191065103,-0.253705204
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 1
+  resPri = 0
+  dstg = 0
+  sidx = 0
+  sqor = 1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = sepMotor1_4294517326
+  sym = sepMotor1_4294412830
+  sym = sepMotor1_4294412774
+  sym = sepMotor1_4294412718
+  sym = sepMotor1_4294412662
+  sym = sepMotor1_4294412606
+  sym = sepMotor1_4294412494
+  srfN = srfAttach,Mark1-2Pod_4294717130
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleEngines
+    isEnabled = True
+    staged = False
+    flameout = False
+    EngineIgnited = False
+    engineShutdown = False
+    currentThrottle = 0
+    thrustPercentage = 100
+    manuallyOverridden = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      OnAction
+      {
+        actionGroup = None
+      }
+      ShutdownAction
+      {
+        actionGroup = None
+      }
+      ActivateAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = SolidFuel
+    amount = 4.8000001907348597
+    maxAmount = 8
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }
 PART
 {
-	part = sepMotor1_4294412494
-	partName = Part
-	pos = 0.0738631487,2.18989396,-2.24651098
-	attPos = 0,0,0
-	attPos0 = -0.283647507,-0.118003801,-1.058586
-	rot = -0.0258187801,-0.971855283,-0.196112901,0.127947301
-	attRot = 0,0,0,1
-	attRot0 = -0.0258187801,-0.971855223,-0.196112901,0.127947301
-	mir = 1,1,1
-	symMethod = Radial
-	autostrutMode = Off
-	istg = 1
-	resPri = 0
-	dstg = 0
-	sidx = 0
-	sqor = 1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = 0,0,0
-	sym = sepMotor1_4294517326
-	sym = sepMotor1_4294412830
-	sym = sepMotor1_4294412774
-	sym = sepMotor1_4294412718
-	sym = sepMotor1_4294412662
-	sym = sepMotor1_4294412606
-	sym = sepMotor1_4294412550
-	srfN = srfAttach,Mark1-2Pod_4294717130
-	EVENTS
-	{
-		AimCamera
-		{
-			active = True
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Aim Camera
-			guiName = Aim Camera
-			category = Aim Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		ResetCamera
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = True
-			guiIcon = Reset Camera
-			guiName = Reset Camera
-			category = Reset Camera
-			advancedTweakable = True
-			guiActiveUnfocused = True
-			unfocusedRange = 3.402823E+38
-			externalToEVAOnly = False
-		}
-		SpawnTransferDialog
-		{
-			active = False
-			guiActive = True
-			guiActiveUncommand = True
-			guiIcon = Transfer Crew
-			guiName = Transfer Crew
-			category = Transfer Crew
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ShowUpgradeStats
-		{
-			active = True
-			guiActive = False
-			guiActiveUncommand = False
-			guiIcon = Show Upgraded Stats
-			guiName = Show Upgraded Stats
-			category = Show Upgraded Stats
-			advancedTweakable = False
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-		ToggleAutoStrut
-		{
-			active = True
-			guiActive = True
-			guiActiveEditor = True
-			guiActiveUncommand = False
-			guiIcon = Autostrut: Disabled
-			guiName = Autostrut: Disabled
-			category = Autostrut: Disabled
-			advancedTweakable = True
-			guiActiveUnfocused = False
-			unfocusedRange = 2
-			externalToEVAOnly = True
-		}
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleEngines
-		isEnabled = True
-		staged = False
-		flameout = False
-		EngineIgnited = False
-		engineShutdown = False
-		currentThrottle = 0
-		thrustPercentage = 100
-		manuallyOverridden = False
-		stagingEnabled = True
-		thrustPercentage_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.5
-		}
-		EVENTS
-		{
-			Activate
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Activate Engine
-				guiName = Activate Engine
-				category = Activate Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			Shutdown
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Shutdown Engine
-				guiName = Shutdown Engine
-				category = Shutdown Engine
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			OnAction
-			{
-				actionGroup = None
-			}
-			ShutdownAction
-			{
-				actionGroup = None
-			}
-			ActivateAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			RunTestEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Run Test
-				guiName = Run Test
-				category = Run Test
-				advancedTweakable = False
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				advancedTweakable = True
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	RESOURCE
-	{
-		name = SolidFuel
-		amount = 4.8000001907348597
-		maxAmount = 8
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
+  part = sepMotor1_4294412494
+  partName = Part
+  pos = 0.0738631487,2.18989396,-2.24651098
+  attPos = 0,0,0
+  attPos0 = -0.283647507,-0.118003801,-1.058586
+  rot = -0.0258187801,-0.971855283,-0.196112901,0.127947301
+  attRot = 0,0,0,1
+  attRot0 = -0.0258187801,-0.971855223,-0.196112901,0.127947301
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 1
+  resPri = 0
+  dstg = 0
+  sidx = 0
+  sqor = 1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = sepMotor1_4294517326
+  sym = sepMotor1_4294412830
+  sym = sepMotor1_4294412774
+  sym = sepMotor1_4294412718
+  sym = sepMotor1_4294412662
+  sym = sepMotor1_4294412606
+  sym = sepMotor1_4294412550
+  srfN = srfAttach,Mark1-2Pod_4294717130
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleEngines
+    isEnabled = True
+    staged = False
+    flameout = False
+    EngineIgnited = False
+    engineShutdown = False
+    currentThrottle = 0
+    thrustPercentage = 100
+    manuallyOverridden = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      OnAction
+      {
+        actionGroup = None
+      }
+      ShutdownAction
+      {
+        actionGroup = None
+      }
+      ActivateAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = SolidFuel
+    amount = 4.8000001907348597
+    maxAmount = 8
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
 }

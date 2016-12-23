@@ -81,7 +81,7 @@ def get_changes(path):
                     changes[version] = []
                 changes[version].append(line[3:])
             elif line.startswith('   '):
-                changes[version][0] += line[2:]
+                changes[version][-1] += line[2:]
             else:
                 print('Invalid line in ' + path + ':')
                 print(line)

@@ -89,6 +89,7 @@
     <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
     <Compile Include="ExternalAPIAddon.cs" />
+    <Compile Include="ExternalAPI\AGX.cs" />
     <Compile Include="ExternalAPI\FAR.cs" />
     <Compile Include="ExternalAPI\RemoteTech.cs" />
     <Compile Include="PartForcesAddon.cs" />

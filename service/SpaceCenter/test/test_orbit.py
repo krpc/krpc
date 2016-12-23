@@ -184,7 +184,7 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual(13599840256, orbit.semi_major_axis)
         self.assertAlmostEqual(13599840256, orbit.semi_minor_axis)
         self.assertAlmostEqual(13599840256, orbit.radius)
-        self.assertAlmostEqual(9282.9, orbit.speed, places=1)
+        self.assertAlmostEqual(9284.50, orbit.speed, places=1)
         self.check_radius_and_speed(body, orbit)
         #self.check_time_to_apoapsis_and_periapsis(body, orbit)
         self.assertIsNaN(orbit.time_to_soi_change)

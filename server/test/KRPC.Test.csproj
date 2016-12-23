@@ -50,7 +50,7 @@
       <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\bazel-krpc\external\csharp_nunit\NUnit-2.6.4\bin\framework\nunit.framework.dll</HintPath>
+      <HintPath>..\..\bazel-krpc\external\csharp_nunit\bin\framework\nunit.framework.dll</HintPath>
       <Package>nunit</Package>
     </Reference>
     <Reference Include="Moq">
@@ -62,12 +62,6 @@
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.IO">
-      <HintPath>..\..\bazel-krpc\lib\mono-4.5\Facades\System.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime">
-      <HintPath>..\..\bazel-krpc\lib\mono-4.5\Facades\System.Runtime.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\bazel-krpc\external\csharp_json\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
