@@ -1,6 +1,6 @@
 author = 'djungelorm'
 version = '0.3.6'
-ksp_version = '1.2.2.1612'
+ksp_version = '1.2.2.1622'
 ksp_version_parts = ksp_version.split('.')
 
 version_parts = version.partition('-')[0].split('.')
