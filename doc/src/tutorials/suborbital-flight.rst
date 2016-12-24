@@ -31,13 +31,13 @@ connection to the server. We can also pass a descriptive name for our script
 that will appear in the server window in game:
 
 .. literalinclude:: /scripts/SubOrbitalFlight.py
-   :lines: 1-2
+   :lines: 1-3
 
 Next we need to get an object representing the active vessel. It's via this
 object that we will send instructions to the rocket:
 
 .. literalinclude:: /scripts/SubOrbitalFlight.py
-   :lines: 4
+   :lines: 5
 
 We then need to prepare the rocket for launch. The following code sets the
 throttle to maximum and instructs the auto-pilot to hold a pitch and heading of
@@ -45,7 +45,7 @@ throttle to maximum and instructs the auto-pilot to hold a pitch and heading of
 effect.
 
 .. literalinclude:: /scripts/SubOrbitalFlight.py
-   :lines: 6-10
+   :lines: 7-10
 
 Part Two: Lift-off!
 -------------------
@@ -54,7 +54,7 @@ We're now ready to launch by activating the first stage (equivalent to pressing
 the space bar):
 
 .. literalinclude:: /scripts/SubOrbitalFlight.py
-   :lines: 12-13
+   :lines: 11-13
 
 The rocket has a solid fuel stage that will quickly run out, and will need to be
 jettisoned. We can monitor the amount of solid fuel in the rocket using a while

@@ -1,6 +1,8 @@
-import krpc, curses, time, sys
+import curses
+import time
 import numpy as np
 import numpy.linalg as la
+import krpc
 
 # Set up curses
 stdscr = curses.initscr()
@@ -19,16 +21,16 @@ try:
     while True:
 
         stdscr.clear()
-        stdscr.addstr(0,0,'-- Docking Guidance --')
+        stdscr.addstr(0, 0, '-- Docking Guidance --')
 
         current = conn.space_center.active_vessel.parts.controlling.docking_port
         target = conn.space_center.target_docking_port
 
         if current is None:
-            stdscr.addstr(2,0,'Awaiting control from docking port...')
+            stdscr.addstr(2, 0, 'Awaiting control from docking port...')
 
         elif target is None:
-            stdscr.addstr(2,0,'Awaiting target docking port...')
+            stdscr.addstr(2, 0, 'Awaiting target docking port...')
 
         else:
             # Get positions, distances, velocities and speeds relative to the target docking port
@@ -74,11 +76,11 @@ try:
                 state = 'Unknown'
 
             # Output information
-            stdscr.addstr(2,0,'Current ship: {:30}'.format(current.part.vessel.name[:30]))
-            stdscr.addstr(3,0,'Current port: {:30}'.format(current.part.title[:30]))
-            stdscr.addstr(5,0,'Target ship:  {:30}'.format(target.part.vessel.name[:30]))
-            stdscr.addstr(6,0,'Target port:  {:30}'.format(target.part.title[:30]))
-            stdscr.addstr(8,0,'Status: {:10}'.format(state))
+            stdscr.addstr(2, 0, 'Current ship: {:30}'.format(current.part.vessel.name[:30]))
+            stdscr.addstr(3, 0, 'Current port: {:30}'.format(current.part.title[:30]))
+            stdscr.addstr(5, 0, 'Target ship:  {:30}'.format(target.part.vessel.name[:30]))
+            stdscr.addstr(6, 0, 'Target port:  {:30}'.format(target.part.title[:30]))
+            stdscr.addstr(8, 0, 'Status: {:10}'.format(state))
             stdscr.addstr(10, 0, '          +---------------------------+')
             stdscr.addstr(11, 0, '          |  Distance  |  Speed       |')
             stdscr.addstr(12, 0, '+---------+------------+--------------+')

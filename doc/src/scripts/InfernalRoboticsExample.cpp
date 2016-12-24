@@ -1,10 +1,11 @@
+#include <iostream>
+#include <vector>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
 #include <krpc/services/infernal_robotics.hpp>
-#include <iostream>
-#include <vector>
 
-using namespace krpc::services;
+using SpaceCenter = krpc::services::SpaceCenter;
+using InfernalRobotics = krpc::services::InfernalRobotics;
 
 int main() {
   auto conn = krpc::connect("InfernalRobotics Example");

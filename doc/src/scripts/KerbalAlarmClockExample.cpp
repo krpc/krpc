@@ -1,13 +1,13 @@
+#include <iostream>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
 #include <krpc/services/kerbal_alarm_clock.hpp>
-#include <iostream>
 
-using namespace krpc::services;
+using KerbalAlarmClock = krpc::services::KerbalAlarmClock;
 
 int main() {
   krpc::Client conn = krpc::connect("Kerbal Alarm Clock Example");
-  SpaceCenter sc(&conn);
+  krpc::services::SpaceCenter sc(&conn);
   KerbalAlarmClock kac(&conn);
 
   auto alarm = kac.create_alarm(KerbalAlarmClock::AlarmType::raw,

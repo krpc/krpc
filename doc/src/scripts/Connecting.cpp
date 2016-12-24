@@ -1,6 +1,6 @@
+#include <iostream>
 #include <krpc.hpp>
 #include <krpc/services/krpc.hpp>
-#include <iostream>
 
 int main() {
   krpc::Client conn = krpc::connect("Remote example", "my.domain.name", 1000, 1001);

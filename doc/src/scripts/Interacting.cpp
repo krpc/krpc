@@ -1,8 +1,8 @@
+#include <iostream>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
-#include <iostream>
 
-using namespace krpc::services;
+using SpaceCenter = krpc::services::SpaceCenter;
 
 int main() {
   krpc::Client conn = krpc::connect("Vessel Name");

@@ -1,4 +1,6 @@
-import krpc, time
+import time
+import krpc
+
 conn = krpc.connect(name='Orbital speed')
 vessel = conn.space_center.active_vessel
 
