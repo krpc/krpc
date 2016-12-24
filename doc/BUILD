@@ -1,6 +1,6 @@
 load('/tools/build/sphinx', 'sphinx_build', 'sphinx_spelling_test', 'sphinx_linkcheck_test')
 load('/tools/build/pkg', 'stage_files')
-load('/tools/build/python', 'py_script')
+load('/tools/build/python', 'py_script', 'py_lint_test')
 load('/tools/build/image', 'png_images')
 load('/tools/krpctools/docgen', 'docgen_multiple')
 load('/doc/test', 'check_documented_test')
@@ -154,7 +154,7 @@ docgen_multiple(
 
 test_suite(
     name = 'test',
-    tests = [':spelling', ':check-documented'] # ':linkcheck'
+    tests = [':spelling', ':check-documented', ':lint'] # ':linkcheck'
 )
 
 test_suite(
@@ -297,4 +297,18 @@ java_binary_multiple(
         ':javaprotobuf',
         ':javatuples'
     ]
+)
+
+test_suite(
+    name = 'lint',
+    tests = [
+        ':lint-python'
+    ]
+)
+
+py_lint_test(
+    name = 'lint-python',
+    srcs = glob(['src/scripts/*.py'], exclude=['src/scripts/communication-protocol.py']),
+    rcfile = 'src/scripts/pylint.rc',
+    size = 'small'
 )
