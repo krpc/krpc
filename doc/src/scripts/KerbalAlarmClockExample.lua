@@ -1,5 +1,6 @@
-local krpc = require 'krpc.init'
-local conn = krpc.connect(nil, nil, nil, 'Kerbal Alarm Clock Example')
+local krpc = require 'krpc'
+
+local conn = krpc.connect('Kerbal Alarm Clock Example')
 
 local alarm = conn.kerbal_alarm_clock.create_alarm(
   conn.kerbal_alarm_clock.AlarmType.raw,

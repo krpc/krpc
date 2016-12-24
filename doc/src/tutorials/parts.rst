@@ -35,4 +35,4 @@ The following script calculates the combined specific impulse of all currently
 active and fueled engines on a rocket. See here for a description of the maths:
 http://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
 
-.. literalinclude:: /scripts/CombinedISP.py
+.. literalinclude:: /scripts/CombinedIsp.py

@@ -1,11 +1,13 @@
-using KRPC.Client;
-using KRPC.Client.Services.SpaceCenter;
-using KRPC.Client.Services.KerbalAlarmClock;
 using System;
 using System.Net;
+using KRPC.Client;
+using KRPC.Client.Services.KerbalAlarmClock;
+using KRPC.Client.Services.SpaceCenter;
 
-class KAC {
-    public static void Main () {
+class KerbalAlarmClockExample
+{
+    public static void Main ()
+    {
         var connection = new Connection (name: "Kerbal Alarm Clock Example");
         var kac = connection.KerbalAlarmClock ();
         var alarm = kac.CreateAlarm (AlarmType.Raw, "My New Alarm", connection.SpaceCenter ().UT + 10);

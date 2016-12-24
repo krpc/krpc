@@ -17,14 +17,16 @@ Clients, made by others, are also available for
  * :doc:`Tutorials and Examples <tutorials>`
  * :doc:`Clients, services and tools made by others <third-party>`
 
-The mod exposes most of KSPs API and includes support for Kerbal Alarm Clock and
-Infernal Robotics. This functionality is provided to client programs via a
-Remote Procedure Call server, using protocol buffers for serialization. The
-server component sets up a TCP/IP server that remote scripts can connect
-to. This communication could be on the local machine only, over a local network,
-or even over the wider internet if configured correctly. The server is also
-extensible. Additional remote procedures (grouped into "services") can be added
-to the server using the "Service API".
+The mod exposes most of KSPs API for controlling and interacting with rockets,
+and also includes support several popular mods including Ferram Aerospace
+Research, Kerbal Alarm Clock and Infernal Robotics.
+
+This functionality is provided to client programs via a server running in the
+game. Client scripts connect to this server and use it to execute 'remote
+procedures'. This communication can be done on local machine only, over a local
+network, or even over the wider internet if configured correctly. The server is
+extensible - additional remote procedures (grouped into "services") can be added
+to the server using the :doc:`Service API <extending>`.
 
 .. toctree::
    :hidden:

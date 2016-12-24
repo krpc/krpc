@@ -1,12 +1,10 @@
-local krpc = require 'krpc.init'
-local platform = require 'krpc.platform'
-local Types = require 'krpc.types'
+local krpc = require 'krpc'
 
 local conn = krpc.connect(nil, nil, nil, 'InfernalRobotics Example')
 local vessel = conn.space_center.active_vessel
 
 local group = conn.infernal_robotics.servo_group_with_name(vessel, 'MyGroup')
-if group == Types.none then
+if group == krpc.types.none then
   print('Group not found')
   os.exit(1)
 end
@@ -16,5 +14,5 @@ for _,servo in ipairs(group.servos) do
 end
 
 group:move_right()
-platform.sleep(1)
+krpc.platform.sleep(1)
 group:stop()

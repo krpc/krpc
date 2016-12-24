@@ -1,9 +1,11 @@
-import java.io.IOException;
-import org.javatuples.Quartet;
 import krpc.client.Connection;
 import krpc.client.RPCException;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Vessel;
+
+import org.javatuples.Quartet;
+
+import java.io.IOException;
 
 public class Quaternion {
     public static void main(String[] args) throws IOException, RPCException {

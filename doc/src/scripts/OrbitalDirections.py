@@ -6,15 +6,15 @@ ap.reference_frame = vessel.orbital_reference_frame
 ap.engage()
 
 # Point the vessel in the prograde direction
-ap.target_direction = (0,1,0)
+ap.target_direction = (0, 1, 0)
 ap.wait()
 
 # Point the vessel in the orbit normal direction
-ap.target_direction = (0,0,1)
+ap.target_direction = (0, 0, 1)
 ap.wait()
 
 # Point the vessel in the orbit radial direction
-ap.target_direction = (-1,0,0)
+ap.target_direction = (-1, 0, 0)
 ap.wait()
 
 ap.disengage()

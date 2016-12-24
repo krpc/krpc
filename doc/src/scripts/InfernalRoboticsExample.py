@@ -1,4 +1,6 @@
-import krpc, time
+import time
+import krpc
+
 conn = krpc.connect(name='InfernalRobotics Example')
 vessel = conn.space_center.active_vessel
 
