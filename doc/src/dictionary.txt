@@ -17,6 +17,7 @@ decouplers
 dll
 enum
 erm
+Ferram
 focussed
 framerate
 fuelled
@@ -33,6 +34,7 @@ Kerbal
 Kerbals
 Kerbin
 Kosmo
+kOS
 krpc
 krpctest
 kRPC
@@ -62,6 +64,7 @@ pdflatex
 periapsis
 physicsless
 plugin
+pre
 prebuilt
 prograde
 proto

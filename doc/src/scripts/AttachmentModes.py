@@ -1,7 +1,11 @@
+import krpc
+conn = krpc.connect()
+vessel = conn.space_center.active_vessel
+
 root = vessel.parts.root
 stack = [(root, 0)]
 while len(stack) > 0:
-    part,depth = stack.pop()
+    part, depth = stack.pop()
     if part.axially_attached:
         attach_mode = 'axial'
     else: # radially_attached

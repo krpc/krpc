@@ -1,10 +1,12 @@
-using KRPC.Client;
-using KRPC.Client.Services.SpaceCenter;
 using System;
 using System.Net;
+using KRPC.Client;
+using KRPC.Client.Services.SpaceCenter;
 
-class VectorExample {
-    public static void Main () {
+class VectorExample
+{
+    public static void Main ()
+    {
         var connection = new Connection ();
         var vessel = connection.SpaceCenter ().ActiveVessel;
         Tuple<double,double,double> v = vessel.Flight ().Prograde;

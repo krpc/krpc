@@ -19,6 +19,7 @@ namespace KRPC.Client
         /// <summary>
         /// RPC hello message bytes.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Security", "ArrayFieldsShouldNotBeReadOnlyRule")]
         public static readonly byte[] RPCHelloMessage = {
             0x48,
             0x45,
@@ -37,6 +38,7 @@ namespace KRPC.Client
         /// <summary>
         /// Stream hello message bytes.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Security", "ArrayFieldsShouldNotBeReadOnlyRule")]
         public static readonly byte[] StreamHelloMessage = {
             0x48,
             0x45,
@@ -55,16 +57,19 @@ namespace KRPC.Client
         /// <summary>
         /// OK message bytes.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Security", "ArrayFieldsShouldNotBeReadOnlyRule")]
         public static readonly byte[] OkMessage = { 0x4f, 0x4b };
 
         /// <summary>
         /// Length of an encoded client name, in bytes.
         /// </summary>
+        [SuppressMessage("Gendarme.Rules.BadPractice", "AvoidVisibleConstantFieldRule")]
         public const int ClientNameLength = 32;
 
         /// <summary>
         /// Length of an encoded client identifier, in bytes.
         /// </summary>
+        [SuppressMessage("Gendarme.Rules.BadPractice", "AvoidVisibleConstantFieldRule")]
         public const int ClientIdentifierLength = 16;
 
         /// <summary>
@@ -224,6 +229,10 @@ namespace KRPC.Client
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static object Decode (ByteString value, Type type, IConnection client)
         {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
             var stream = value.CreateCodedInput ();
             if (type.IsEnum)
                 return stream.ReadInt32 ();

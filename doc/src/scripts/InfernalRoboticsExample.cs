@@ -1,12 +1,14 @@
+using System;
+using System.Net;
+using System.Threading;
 using KRPC.Client;
 using KRPC.Client.Services.SpaceCenter;
 using KRPC.Client.Services.InfernalRobotics;
-using System;
-using System.Threading;
-using System.Net;
 
-class IR {
-    public static void Main () {
+class InfernalRoboticsExample
+{
+    public static void Main ()
+    {
         var connection = new Connection (name: "InfernalRobotics Example");
         var vessel = connection.SpaceCenter ().ActiveVessel;
         var ir = connection.InfernalRobotics ();

@@ -168,7 +168,7 @@ test_suite(
         '//service/KerbalAlarmClock:test',
         '//service/RemoteTech:test',
         '//service/UI:test',
-        #'//client/csharp:test',
+        '//client/csharp:test',
         '//client/cpp:test',
         '//client/java:test',
         '//client/lua:test',

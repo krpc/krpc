@@ -1,12 +1,12 @@
+import time
 import krpc
 conn = krpc.connect(name='Sub-orbital flight script')
 
 vessel = conn.space_center.active_vessel
 
-vessel.auto_pilot.target_pitch_and_heading(90,90)
+vessel.auto_pilot.target_pitch_and_heading(90, 90)
 vessel.auto_pilot.engage()
 vessel.control.throttle = 1
-import time
 time.sleep(1)
 
 print('Launch!')
@@ -18,13 +18,13 @@ print('Booster separation')
 vessel.control.activate_next_stage()
 
 while vessel.flight().mean_altitude < 10000:
-   time.sleep(1)
+    time.sleep(1)
 
 print('Gravity turn')
-vessel.auto_pilot.target_pitch_and_heading(60,90)
+vessel.auto_pilot.target_pitch_and_heading(60, 90)
 
 while vessel.orbit.apoapsis_altitude < 100000:
-   time.sleep(1)
+    time.sleep(1)
 print('Launch stage separation')
 vessel.control.throttle = 0
 time.sleep(1)
