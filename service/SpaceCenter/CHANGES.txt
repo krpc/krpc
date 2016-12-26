@@ -1,3 +1,6 @@
+v0.3.8
+ * Add CelestialBody.InitialRotation and RotationAngle (#369)
+
 v0.3.7
  * Add custom reference frames (ReferenceFrame.CreateRelative and CreateHybrid) (#252)
  * Add Vessel.BoundingBox and Part.BoundingBox (#352)
