@@ -7,6 +7,7 @@ using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KSP.UI;
 using KSP.UI.Screens.Flight;
 using UnityEngine;
 using Tuple2 = KRPC.Utils.Tuple<double, double>;
@@ -248,6 +249,22 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public static Camera Camera {
             get { return new Camera (); }
+        }
+
+        /// <summary>
+        /// Whether the HUD is visible.
+        /// </summary>
+        [KRPCProperty]
+        public static bool UIVisible
+        {
+            get { return UIMasterController.Instance.mainCanvas.enabled; }
+            set {
+                var visible = UIVisible;
+                if (value && !visible)
+                    GameEvents.onShowUI.Fire();
+                else if (!value && visible)
+                    GameEvents.onHideUI.Fire();
+            }
         }
 
         /// <summary>

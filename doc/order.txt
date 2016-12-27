@@ -28,6 +28,7 @@ SpaceCenter.Load
 SpaceCenter.Quicksave
 SpaceCenter.Quickload
 SpaceCenter.Camera
+SpaceCenter.UIVisible
 SpaceCenter.Navball
 SpaceCenter.UT
 SpaceCenter.G

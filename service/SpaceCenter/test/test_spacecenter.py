@@ -131,6 +131,15 @@ class TestSpaceCenter(krpctest.TestCase):
     def test_g(self):
         self.assertAlmostEqual(6.67408e-11, self.sc.g, delta=0.001e-11)
 
+    def test_ui_visible(self):
+        self.assertTrue(self.sc.ui_visible)
+        self.sc.ui_visible = False
+        self.wait(1)
+        self.assertFalse(self.sc.ui_visible)
+        self.sc.ui_visible = True
+        self.wait(1)
+        self.assertTrue(self.sc.ui_visible)
+
     def test_navball(self):
         self.assertTrue(self.sc.navball)
         self.sc.navball = False
