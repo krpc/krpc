@@ -1,5 +1,6 @@
 v0.3.8
  * Add CelestialBody.InitialRotation and RotationAngle (#369)
+ * Add SpaceCenter.Navball to show/hide the navball (#355)
 
 v0.3.7
  * Add custom reference frames (ReferenceFrame.CreateRelative and CreateHybrid) (#252)

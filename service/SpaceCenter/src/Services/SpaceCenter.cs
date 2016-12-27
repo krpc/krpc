@@ -7,6 +7,7 @@ using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KSP.UI.Screens.Flight;
 using UnityEngine;
 using Tuple2 = KRPC.Utils.Tuple<double, double>;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
@@ -247,6 +248,21 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public static Camera Camera {
             get { return new Camera (); }
+        }
+
+        /// <summary>
+        /// Whether the navball is visible.
+        /// </summary>
+        [KRPCProperty]
+        public static bool Navball
+        {
+            get { return NavBallToggle.Instance.panel.expanded; }
+            set {
+                if (value)
+                    NavBallToggle.Instance.panel.Expand();
+                else
+                    NavBallToggle.Instance.panel.Collapse();
+            }
         }
 
         /// <summary>
