@@ -6,6 +6,7 @@ using KRPC.Continuations;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
@@ -229,7 +230,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException ("referenceFrame");
-            return referenceFrame.RotationToWorldSpace (port.nodeTransform.rotation).ToTuple ();
+            return referenceFrame.RotationFromWorldSpace (port.nodeTransform.rotation * Quaternion.Euler (90, 0, 0)).ToTuple ();
         }
 
         /// <summary>

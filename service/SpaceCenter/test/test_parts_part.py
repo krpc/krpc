@@ -10,9 +10,10 @@ class TestPartsPart(krpctest.TestCase):
             cls.launch_vessel_from_vab('Parts')
             cls.remove_other_vessels()
             cls.wait(3) #TODO: needed to allow dynamic pressure calculations to settle
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.sc = cls.connect().space_center
+        cls.vessel = cls.sc.active_vessel
         cls.parts = cls.vessel.parts
-        cls.far_available = cls.connect().space_center.far_available
+        cls.far_available = cls.sc.far_available
 
     def test_root_part(self):
         part = self.parts.root
@@ -693,6 +694,12 @@ class TestPartsPart(krpctest.TestCase):
             part.highlighted = False
             self.wait(0.5)
         part.highlight_color = init_color
+
+    def test_rotation(self):
+        part = self.parts.root
+        for target_frame in [part.reference_frame, self.vessel.reference_frame, self.vessel.orbit.body.reference_frame]:
+            expected = self.sc.transform_rotation((0, 0, 0, 1), part.reference_frame, target_frame)
+            self.assertQuaternionsAlmostEqual(expected, part.rotation(target_frame), places=5)
 
 class TestPartsPartDecoupleStage(krpctest.TestCase):
 
