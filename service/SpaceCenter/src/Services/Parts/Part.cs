@@ -673,7 +673,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException ("referenceFrame");
-            return referenceFrame.RotationToWorldSpace (InternalPart.transform.rotation).ToTuple ();
+            return referenceFrame.RotationFromWorldSpace (InternalPart.transform.rotation).ToTuple ();
         }
 
         /// <summary>
