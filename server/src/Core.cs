@@ -6,6 +6,7 @@ using System.Linq;
 using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service;
+using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
 using KRPC.Utils;
 
@@ -629,9 +630,9 @@ namespace KRPC
                     Logger.WriteLine ("Error receiving request from client " + client.Address + ": " + e.Message, Logger.Severity.Error);
                     client.Stream.Close ();
                     continue;
-                } catch (Exception e) {
+                } catch (System.Exception e) {
                     var response = new Response ();
-                    response.Error = "Error receiving message" + Environment.NewLine + e.Message + Environment.NewLine + e.StackTrace;
+                    response.Error = new Error ("Error receiving message" + Environment.NewLine + e.Message, e.StackTrace);
                     if (Logger.ShouldLog (Logger.Severity.Debug))
                         Logger.WriteLine (e.Message + Environment.NewLine + e.StackTrace, Logger.Severity.Error);
                     Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
@@ -660,15 +661,9 @@ namespace KRPC
             } catch (YieldException) {
                 throw;
             } catch (RPCException e) {
-                response = new Response ();
-                response.Error = e.Message;
-                if (Logger.ShouldLog (Logger.Severity.Debug))
-                    Logger.WriteLine (response.Error, Logger.Severity.Debug);
-            } catch (Exception e) {
-                response = new Response ();
-                response.Error = e.Message + Environment.NewLine + e.StackTrace;
-                if (Logger.ShouldLog (Logger.Severity.Debug))
-                    Logger.WriteLine (response.Error, Logger.Severity.Debug);
+                response = HandleException (e);
+            } catch (System.Exception e) {
+                response = HandleException (e);
             } finally {
                 CallContext.Clear ();
             }
@@ -681,6 +676,31 @@ namespace KRPC
                 else
                     Logger.WriteLine ("Sent response to client " + client.Address, Logger.Severity.Debug);
             }
+        }
+
+        /// <summary>
+        /// Convert an exception thrown by an RPC into a response message.
+        /// </summary>
+        static Response HandleException(System.Exception exn)
+        {
+            if (exn is RPCException && exn.InnerException != null)
+                exn = exn.InnerException;
+            var message = exn.Message;
+            var verboseErrors = Configuration.Instance.VerboseErrors;
+            var stackTrace = verboseErrors ? exn.StackTrace : string.Empty;
+            if (Logger.ShouldLog (Logger.Severity.Debug)) {
+                Logger.WriteLine (message, Logger.Severity.Debug);
+                if (verboseErrors)
+                    Logger.WriteLine (stackTrace, Logger.Severity.Debug);
+            }
+            var mappedType = Service.Services.Instance.GetMappedExceptionType(exn.GetType());
+            var type = mappedType ?? exn.GetType();
+            Error error;
+            if (Reflection.HasAttribute<KRPCExceptionAttribute>(type))
+                error = new Error(TypeUtils.GetExceptionServiceName(type), type.Name, message, stackTrace);
+            else
+                error = new Error(message, stackTrace);
+            return new Response { Error = error };
         }
     }
 }

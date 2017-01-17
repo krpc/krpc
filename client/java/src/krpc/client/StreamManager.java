@@ -75,7 +75,7 @@ class StreamManager {
       if (!streamData.containsKey(id)) {
         throw new StreamException("Stream does not exist");
       }
-      if (!result.getError().isEmpty()) {
+      if (result.hasError()) {
         return; // TODO: do something with the error
       }
       streamData.put(id, result.getValue());

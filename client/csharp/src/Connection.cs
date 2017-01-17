@@ -167,10 +167,10 @@ namespace KRPC.Client
                 response = Response.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
             }
 
-            if (response.Error.Length > 0)
-                throw new RPCException (response.Error);
-            if (response.Results[0].Error.Length > 0)
-                throw new RPCException (response.Results[0].Error);
+            if (response.Error != null)
+                throw new RPCException (response.Error.Description);
+            if (response.Results[0].Error != null)
+                throw new RPCException (response.Results[0].Error.Description);
             return response.Results[0].Value;
         }
 

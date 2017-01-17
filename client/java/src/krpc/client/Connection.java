@@ -205,11 +205,11 @@ public class Connection {
         data = rpcInputStream.readRawBytes(size);
       }
       KRPC.Response response = KRPC.Response.parseFrom(data);
-      if (!response.getError().isEmpty()) {
-        throw new RPCException(response.getError());
+      if (response.hasError()) {
+        throw new RPCException(response.getError().getDescription());
       }
-      if (!response.getResultsList().get(0).getError().isEmpty()) {
-        throw new RPCException(response.getResultsList().get(0).getError());
+      if (response.getResultsList().get(0).hasError()) {
+        throw new RPCException(response.getResultsList().get(0).getError().getDescription());
       }
       return response.getResultsList().get(0).getValue();
     } catch (IOException exn) {

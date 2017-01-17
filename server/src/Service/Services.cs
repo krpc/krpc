@@ -12,6 +12,7 @@ namespace KRPC.Service
     sealed class Services
     {
         internal IDictionary<string, ServiceSignature> Signatures { get; private set; }
+        internal IDictionary<Type, Type> MappedExceptionTypes { get; private set; }
 
         static Services instance;
 
@@ -29,6 +30,7 @@ namespace KRPC.Service
         Services ()
         {
             Signatures = Scanner.Scanner.GetServices ();
+            MappedExceptionTypes = Scanner.Scanner.GetMappedExceptionTypes ();
         }
 
         public ProcedureSignature GetProcedureSignature (string service, string procedure)
@@ -39,6 +41,11 @@ namespace KRPC.Service
             if (!serviceSignature.Procedures.ContainsKey (procedure))
                 throw new RPCException ("Procedure " + procedure + " not found, in Service " + service);
             return serviceSignature.Procedures [procedure];
+        }
+
+        public Type GetMappedExceptionType (Type exnType)
+        {
+            return MappedExceptionTypes.ContainsKey(exnType) ? MappedExceptionTypes [exnType] : exnType;
         }
 
         /// <summary>
@@ -60,14 +67,14 @@ namespace KRPC.Service
         public ProcedureResult ExecuteCall (ProcedureSignature procedure, object[] arguments)
         {
             if ((CallContext.GameScene & procedure.GameScene) == 0)
-                throw new RPCException (procedure, "Procedure not available in game scene '" + CallContext.GameScene + "'");
+                throw new RPCException ("Procedure not available in game scene '" + CallContext.GameScene + "'");
             object returnValue;
             try {
                 returnValue = procedure.Handler.Invoke (arguments);
             } catch (TargetInvocationException e) {
                 if (e.InnerException is YieldException)
                     throw e.InnerException;
-                throw new RPCException (procedure, e.InnerException);
+                throw new RPCException (e.InnerException);
             }
             var result = new ProcedureResult ();
             if (procedure.HasReturnType) {
@@ -91,8 +98,8 @@ namespace KRPC.Service
                 returnValue = continuation.RunUntyped ();
             } catch (YieldException) {
                 throw;
-            } catch (Exception e) {
-                throw new RPCException (procedure, e);
+            } catch (System.Exception e) {
+                throw new RPCException (e);
             }
             var result = new ProcedureResult ();
             if (procedure.HasReturnType) {
@@ -126,18 +133,16 @@ namespace KRPC.Service
                 if (!argumentSet [mask]) {
                     // If the argument is not set, set it to the default value
                     if (!parameter.HasDefaultValue)
-                        throw new RPCException (procedure, "Argument not specified for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". ");
+                        throw new RPCException ("Argument not specified for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". ");
                     argumentValues [i] = parameter.DefaultValue;
                 } else if (value != null && !type.IsInstanceOfType (value)) {
                     // Check the type of the non-null argument value
                     throw new RPCException (
-                        procedure,
                         "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
                         "Expected an argument of type " + type + ", got " + value.GetType ());
                 } else if (value == null && !TypeUtils.IsAClassType (type)) {
                     // Check the type of the null argument value
                     throw new RPCException (
-                        procedure,
                         "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
                         "Expected an argument of type " + type + ", got null");
                 }
@@ -154,12 +159,10 @@ namespace KRPC.Service
             // Check if the type of the return value is valid
             if (returnValue != null && !procedure.ReturnType.IsInstanceOfType (returnValue)) {
                 throw new RPCException (
-                    procedure,
                     "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
                     "Expected a value of type " + procedure.ReturnType + ", got " + returnValue.GetType ());
             } else if (returnValue == null && !TypeUtils.IsAClassType (procedure.ReturnType)) {
                 throw new RPCException (
-                    procedure,
                     "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
                     "Expected a value of type " + procedure.ReturnType + ", got null");
             }

@@ -108,7 +108,7 @@ namespace KRPC.Client
             lock (accessLock) {
                 if (!streamData.ContainsKey (id))
                     return;
-                if (result.Error.Length > 0)
+                if (result.Error != null)
                     return; //TODO: do something with the error
                 var data = result.Value;
                 streamData [id] = data;

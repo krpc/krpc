@@ -34,6 +34,11 @@ namespace KRPC.Service.Scanner
         public Dictionary<string,EnumerationSignature> Enumerations { get; private set; }
 
         /// <summary>
+        /// The exceptions defined in this service
+        /// </summary>
+        public Dictionary<string,ExceptionSignature> Exceptions { get; private set; }
+
+        /// <summary>
         /// Which game scene(s) the service should be active during
         /// </summary>
         public GameScene GameScene { get; private set; }
@@ -50,6 +55,7 @@ namespace KRPC.Service.Scanner
             Classes = new Dictionary<string, ClassSignature> ();
             Enumerations = new Dictionary<string, EnumerationSignature> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
+            Exceptions = new Dictionary<string, ExceptionSignature> ();
             GameScene = TypeUtils.GetServiceGameScene (type);
         }
 
@@ -64,6 +70,7 @@ namespace KRPC.Service.Scanner
             Classes = new Dictionary<string, ClassSignature> ();
             Enumerations = new Dictionary<string, EnumerationSignature> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
+            Exceptions = new Dictionary<string, ExceptionSignature> ();
             GameScene = GameScene.All;
         }
 
@@ -135,6 +142,20 @@ namespace KRPC.Service.Scanner
                 values.Add (new EnumerationValueSignature (Name, name, field.Name, (int)field.GetRawConstantValue (), field.GetDocumentation ()));
             }
             Enumerations [name] = new EnumerationSignature (Name, name, values, enumType.GetDocumentation ());
+            return name;
+        }
+
+        /// <summary>
+        /// Add an exception to the service for the given exception type annotated with the KRPCException attribute.
+        /// Returns the name of the exception.
+        /// </summary>
+        public string AddException (Type exnType)
+        {
+            TypeUtils.ValidateKRPCException (exnType);
+            var name = exnType.Name;
+            if (Exceptions.ContainsKey (name))
+                throw new ServiceException ("Service " + Name + " contains duplicate exceptions " + name);
+            Exceptions [name] = new ExceptionSignature (Name, name, exnType.GetDocumentation ());
             return name;
         }
 

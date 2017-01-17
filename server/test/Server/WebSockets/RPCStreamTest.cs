@@ -40,7 +40,7 @@ namespace KRPC.Test.Server.WebSockets
 
             // Create a response object and get the binary representation of it
             expectedResponseMessage = new Response ();
-            expectedResponseMessage.Error = "SomeErrorMessage";
+            expectedResponseMessage.Error = new Error ("SomeErrorMessage", "StackTrace");
             expectedResponse = expectedResponseMessage.ToProtobufMessage ();
             using (var stream = new MemoryStream ()) {
                 expectedResponse.WriteTo (stream);

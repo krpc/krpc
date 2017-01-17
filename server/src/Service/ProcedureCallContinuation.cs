@@ -14,7 +14,7 @@ namespace KRPC.Service
     {
         readonly ProcedureCall call;
         readonly ProcedureSignature procedure;
-        readonly Exception exception;
+        readonly System.Exception exception;
         readonly IContinuation continuation;
 
         [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
@@ -23,7 +23,7 @@ namespace KRPC.Service
             call = procedureCall;
             try {
                 procedure = Services.Instance.GetProcedureSignature (call.Service, call.Procedure);
-            } catch (Exception e) {
+            } catch (System.Exception e) {
                 exception = e;
             }
         }

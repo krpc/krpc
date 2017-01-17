@@ -149,6 +149,7 @@
     <Compile Include="Service\Attributes\KRPCClassAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCDefaultValueAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCEnumAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCExceptionAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCMethodAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCProcedureAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCPropertyAttribute.cs" />
@@ -165,6 +166,8 @@
     <Compile Include="Service\Messages\Class.cs" />
     <Compile Include="Service\Messages\Enumeration.cs" />
     <Compile Include="Service\Messages\EnumerationValue.cs" />
+    <Compile Include="Service\Messages\Error.cs" />
+    <Compile Include="Service\Messages\Exception.cs" />
     <Compile Include="Service\Messages\IMessage.cs" />
     <Compile Include="Service\Messages\NoMessage.cs" />
     <Compile Include="Service\Messages\Parameter.cs" />
@@ -188,6 +191,7 @@
     <Compile Include="Service\Scanner\ClassSignature.cs" />
     <Compile Include="Service\Scanner\EnumerationSignature.cs" />
     <Compile Include="Service\Scanner\EnumerationValueSignature.cs" />
+    <Compile Include="Service\Scanner\ExceptionSignature.cs" />
     <Compile Include="Service\Scanner\ParameterSignature.cs" />
     <Compile Include="Service\Scanner\ProcedureSignature.cs" />
     <Compile Include="Service\Scanner\Scanner.cs" />

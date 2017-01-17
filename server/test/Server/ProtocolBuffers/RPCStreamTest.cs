@@ -37,7 +37,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
 
             // Create a response object and get the binary representation of it
             expectedResponseMessage = new Response ();
-            expectedResponseMessage.Error = "SomeErrorMessage";
+            expectedResponseMessage.Error = new Error ("SomeErrorMessage", "StackTrace");
             expectedResponse = expectedResponseMessage.ToProtobufMessage ();
             using (var stream = new MemoryStream ()) {
                 var codedStream = new CodedOutputStream (stream, true);

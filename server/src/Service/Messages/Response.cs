@@ -9,7 +9,7 @@ namespace KRPC.Service.Messages
 
         public bool HasError { get; private set; }
 
-        public string Error {
+        public Error Error {
             get { return error; }
             set {
                 error = value;
@@ -17,7 +17,7 @@ namespace KRPC.Service.Messages
             }
         }
 
-        string error;
+        Error error;
 
         public Response ()
         {

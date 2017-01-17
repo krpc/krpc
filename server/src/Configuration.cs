@@ -30,6 +30,7 @@ namespace KRPC
             AutoStartServers = false;
             AutoAcceptConnections = false;
             ConfirmRemoveClient = true;
+            VerboseErrors = true;
             OneRPCPerUpdate = false;
             MaxTimePerUpdate = 5000;
             AdaptiveRateControl = true;
@@ -134,6 +135,8 @@ namespace KRPC
         public bool AutoAcceptConnections { get; set; }
 
         public bool ConfirmRemoveClient { get; set; }
+
+        public bool VerboseErrors { get; set; }
 
         public bool OneRPCPerUpdate { get; set; }
 

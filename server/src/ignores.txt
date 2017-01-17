@@ -97,6 +97,10 @@ R: Gendarme.Rules.Serialization.MissingSerializableAttributeOnISerializableTypeR
 T: KRPC.Server.ServerException
 T: KRPC.Server.Message.NoRequestException
 T: KRPC.Service.DocumentationException
+T: KRPC.Service.KRPC/ArgumentException
+T: KRPC.Service.KRPC/ArgumentNullException
+T: KRPC.Service.KRPC/ArgumentOutOfRangeException
+T: KRPC.Service.KRPC/InvalidOperationException
 T: KRPC.Service.RPCException
 T: KRPC.Service.ServiceException
 R: Gendarme.Rules.Serialization.MissingSerializationConstructorRule
@@ -121,6 +125,10 @@ T: KRPC.Server.WebSockets.FramingException
 T: KRPC.Server.WebSockets.HandshakeException
 T: KRPC.Server.ProtocolBuffers.ConnectionException
 T: KRPC.Service.DocumentationException
+T: KRPC.Service.KRPC/ArgumentException
+T: KRPC.Service.KRPC/ArgumentNullException
+T: KRPC.Service.KRPC/ArgumentOutOfRangeException
+T: KRPC.Service.KRPC/InvalidOperationException
 T: KRPC.Service.RPCException
 T: KRPC.Service.ServiceException
 
@@ -129,6 +137,7 @@ R: Gendarme.Rules.Serialization.MissingSerializableAttributeOnISerializableTypeR
 T: KRPC.Service.Scanner.ClassSignature
 T: KRPC.Service.Scanner.EnumerationSignature
 T: KRPC.Service.Scanner.EnumerationValueSignature
+T: KRPC.Service.Scanner.ExceptionSignature
 T: KRPC.Service.Scanner.ParameterSignature
 T: KRPC.Service.Scanner.ProcedureSignature
 T: KRPC.Service.Scanner.ServiceSignature
@@ -142,9 +151,14 @@ T: KRPC.Service.Scanner.ProcedureSignature
 T: KRPC.Service.Scanner.ServiceSignature
 T: KRPC.Continuations.YieldException
 R: Gendarme.Rules.Serialization.MissingSerializationConstructorRule
+T: KRPC.Service.KRPC/ArgumentException
+T: KRPC.Service.KRPC/ArgumentNullException
+T: KRPC.Service.KRPC/ArgumentOutOfRangeException
+T: KRPC.Service.KRPC/InvalidOperationException
 T: KRPC.Service.Scanner.ClassSignature
 T: KRPC.Service.Scanner.EnumerationSignature
 T: KRPC.Service.Scanner.EnumerationValueSignature
+T: KRPC.Service.Scanner.ExceptionSignature
 T: KRPC.Service.Scanner.ParameterSignature
 T: KRPC.Service.Scanner.ProcedureSignature
 T: KRPC.Service.Scanner.ServiceSignature

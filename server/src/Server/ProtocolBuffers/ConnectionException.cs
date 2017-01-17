@@ -14,7 +14,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
         }
 
-        public ConnectionException (string message, Exception innerException) : base (message, innerException)
+        public ConnectionException (string message, System.Exception innerException) : base (message, innerException)
         {
         }
 

@@ -47,13 +47,20 @@ message Argument {
 }
 
 message Response {
-  string error = 1;
+  Error error = 1;
   repeated ProcedureResult results = 2;
 }
 
 message ProcedureResult {
-  string error = 1;
+  Error error = 1;
   bytes value = 2;
+}
+
+message Error {
+  string service = 1;
+  string name = 2;
+  string description = 3;
+  string stack_trace = 4;
 }
 
 // Messages for receiving stream updates
@@ -78,7 +85,8 @@ message Service {
   repeated Procedure procedures = 2;
   repeated Class classes = 3;
   repeated Enumeration enumerations = 4;
-  string documentation = 5;
+  repeated Exception exceptions = 5;
+  string documentation = 6;
 }
 
 message Procedure {
@@ -109,6 +117,11 @@ message EnumerationValue {
   string name = 1;
   int32 value = 2;
   string documentation = 3;
+}
+
+message Exception {
+  string name = 1;
+  string documentation = 2;
 }
 
 message Type {

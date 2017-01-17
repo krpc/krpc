@@ -177,6 +177,16 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Get the name of the service for the given KRPCException annotated type
+        /// </summary>
+        public static string GetExceptionServiceName (Type type)
+        {
+            ValidateKRPCException (type);
+            var attribute = Reflection.GetAttribute<KRPCExceptionAttribute> (type);
+            return attribute.Service ?? GetServiceName (type.DeclaringType);
+        }
+
+        /// <summary>
         /// Check if the string is a valid identifier for a kRPC service, procedure, property, class or method.
         /// </summary>
         public static void ValidateIdentifier (string name)
@@ -376,6 +386,40 @@ namespace KRPC.Service
             var declaringType = property.DeclaringType;
             if (declaringType == null || !declaringType.IsAssignableFrom (cls))
                 throw new ServiceException ("KRPCProperty " + property + " is not declared inside a KRPCClass");
+        }
+
+        /// <summary>
+        /// Check the given type is a valid kRPC exception class
+        ///  1. Must have KRPCException attribute
+        ///  2. Must have a valid identifier
+        ///  3. Must be a public non-static class
+        ///  4. Must be declared inside a kRPC service if it doesn't have the service explicity set
+        ///  5. Must not be declared inside a kRPC service if it does have the service explicity set
+        /// </summary>
+        public static void ValidateKRPCException (Type type)
+        {
+            if (!Reflection.HasAttribute<KRPCExceptionAttribute> (type))
+                throw new ArgumentException (type + " does not have KRPCException attribute");
+            var attribute = Reflection.GetAttribute<KRPCExceptionAttribute> (type);
+            // Note: Type must already be a class, due to AttributeUsage definition
+            // Validate the identifier.
+            ValidateIdentifier (type.Name);
+            // Check it's public non-static
+            if (!((type.IsPublic || type.IsNestedPublic) && !type.IsStatic ()))
+                throw new ServiceException ("KRPCException " + type + " is not public non-static");
+            // If it doesn't have the Service property set, check the class is defined directly inside a KRPCService
+            var declaringType = type.DeclaringType;
+            if (attribute.Service == null && (declaringType == null || !Reflection.HasAttribute<KRPCServiceAttribute> (declaringType)))
+                throw new ServiceException ("KRPCException " + type + " is not declared inside a KRPCService");
+            // If it does have the Service property set, check the class isn't defined in a KRPCService
+            if (attribute.Service != null) {
+                ValidateIdentifier (attribute.Service);
+                while (declaringType != null) {
+                    if (Reflection.HasAttribute<KRPCServiceAttribute> (declaringType))
+                        throw new ServiceException ("KRPCException " + type + " is declared inside a KRPCService, but has the service name explicitly set");
+                    declaringType = declaringType.DeclaringType;
+                }
+            }
         }
 
         /// <summary>

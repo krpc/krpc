@@ -30,11 +30,11 @@ std::string Client::invoke(const schema::Request& request) {
   schema::Response response;
   decoder::decode(response, data, this);
 
-  if (!response.error().empty())
-    throw RPCError(response.error());
+  if (response.has_error())
+    throw RPCError(response.error().description());
 
-  if (!response.results(0).error().empty())
-    throw RPCError(response.results(0).error());
+  if (response.results(0).has_error())
+    throw RPCError(response.results(0).error().description());
 
   return response.results(0).value();
 }

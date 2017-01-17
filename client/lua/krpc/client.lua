@@ -44,12 +44,12 @@ function Client:_invoke(service, procedure, args, param_names, param_types, retu
 
   -- Check for an error response
   if response:HasField('error') then
-    error(response.error)
+    error(response.error.description)
   end
 
   local result = response.results[1]
   if result:HasField('error') then
-    error(result.error)
+    error(result.error.description)
   end
 
   -- Decode the response and return the (optional) result

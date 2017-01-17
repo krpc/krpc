@@ -14,6 +14,14 @@ namespace KRPC.Test.Service
     [SuppressMessage ("Gendarme.Rules.Naming", "AvoidTypeInterfaceInconsistencyRule")]
     public static class TestService
     {
+        [KRPCException]
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "MissingExceptionConstructorsRule")]
+        [SuppressMessage ("Gendarme.Rules.Serialization", "MissingSerializableAttributeOnISerializableTypeRule")]
+        [SuppressMessage ("Gendarme.Rules.Serialization", "MissingSerializationConstructorRule")]
+        public class MyException : System.Exception {
+        };
+
         internal static ITestService Service;
 
         public static void ProcedureWithoutAttribute ()

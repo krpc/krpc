@@ -21,6 +21,13 @@ MESSAGE_TYPES = {
     krpc.schema.KRPC.Type.STATUS: krpc.schema.KRPC.Status,
 }
 
+EXCEPTION_TYPES = {
+    'InvalidOperationException': RuntimeError,
+    'ArgumentException': ValueError,
+    'ArgumentNullException': ValueError,
+    'ArgumentOutOfRangeException': ValueError
+}
+
 def _protobuf_type(code, service=None, name=None, types=None):
     protobuf_type = krpc.schema.KRPC.Type()
     protobuf_type.code = code
@@ -41,6 +48,7 @@ class Types(object):
     def __init__(self):
         # Mapping from protobuf type strings to type objects
         self._types = {}
+        self._exception_types = {}
 
     def as_type(self, protobuf_type, doc=None):
         """ Return a type object given a protocol buffer type """
@@ -130,6 +138,13 @@ class Types(object):
     def enumeration_type(self, service, name, doc=None):
         """ Get an enumeration type """
         return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.ENUMERATION, service, name), doc=doc)
+
+    def exception_type(self, service, name, doc=None):
+        """ Get an exception type """
+        key = (service, name)
+        if key not in self._exception_types:
+            self._exception_types[key] = _create_exception_type(service, name, doc)
+        return self._exception_types[key]
 
     def tuple_type(self, *value_types):
         """ Get a tuple type """
@@ -431,6 +446,13 @@ def _create_enum_type(enum_name, values, doc):
     for name in values.keys():
         setattr(getattr(typ, name), '__doc__', values[name]['doc'])
     return typ
+
+
+def _create_exception_type(service_name, class_name, doc):
+    if service_name == 'KRPC' and class_name in EXCEPTION_TYPES:
+        return EXCEPTION_TYPES[class_name]
+    return type(str(class_name), (RuntimeError,),
+                {'_service_name': service_name, '_class_name': class_name, '__doc__': doc})
 
 
 class DefaultArgument(object):
