@@ -252,7 +252,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Whether the HUD is visible.
+        /// Whether the UI is visible.
         /// </summary>
         [KRPCProperty]
         public static bool UIVisible
