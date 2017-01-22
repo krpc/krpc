@@ -10,3 +10,7 @@
     display: inline;
     padding-right: 0;
 }
+
+.rst-content .tabs ul li {
+    list-style: none;
+}
