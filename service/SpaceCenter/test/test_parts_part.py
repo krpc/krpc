@@ -697,7 +697,9 @@ class TestPartsPart(krpctest.TestCase):
 
     def test_rotation(self):
         part = self.parts.root
-        for target_frame in [part.reference_frame, self.vessel.reference_frame, self.vessel.orbit.body.reference_frame]:
+        for target_frame in [part.reference_frame,
+                             self.vessel.reference_frame,
+                             self.vessel.orbit.body.reference_frame]:
             expected = self.sc.transform_rotation((0, 0, 0, 1), part.reference_frame, target_frame)
             self.assertQuaternionsAlmostEqual(expected, part.rotation(target_frame), places=5)
 

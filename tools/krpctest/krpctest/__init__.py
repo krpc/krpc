@@ -134,7 +134,7 @@ class TestCase(unittest.TestCase):
         """ Check that a pair of quaternions represent the same orientation, within the given error. """
         for mult in [1, -1]:
             if self._is_almost_equal([x * mult for x in expected], actual, places, delta):
-               return
+                return
         if msg is None:
             msg = self._almost_equal_summary(actual, expected, 'not almost equivalent orientations')
             msg = self._almost_equal_error_msg(msg, places, delta)

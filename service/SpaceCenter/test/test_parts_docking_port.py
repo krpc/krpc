@@ -131,7 +131,9 @@ class TestPartsDockingPort(krpctest.TestCase):
 
     def test_rotation(self):
         port = self.port1
-        for target_frame in [port.reference_frame, self.vessel.reference_frame, self.vessel.orbit.body.reference_frame]:
+        for target_frame in [port.reference_frame,
+                             self.vessel.reference_frame,
+                             self.vessel.orbit.body.reference_frame]:
             expected = self.sc.transform_rotation((0, 0, 0, 1), port.reference_frame, target_frame)
             self.assertQuaternionsAlmostEqual(expected, port.rotation(target_frame), places=5)
 
