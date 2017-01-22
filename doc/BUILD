@@ -66,7 +66,8 @@ py_script(
         '@python_sphinx_csharp//file',
         '@python_sphinx_java//file',
         '@python_sphinx_lua//file',
-        '@python_sphinx_rtd_theme//file'
+        '@python_sphinx_rtd_theme//file',
+        '@python_sphinx_tabs//file'
     ],
     visibility = ['//visibility:public']
 )
