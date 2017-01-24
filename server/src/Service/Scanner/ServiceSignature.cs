@@ -207,6 +207,7 @@ namespace KRPC.Service.Scanner
             info.AddValue ("procedures", Procedures);
             info.AddValue ("classes", Classes);
             info.AddValue ("enumerations", Enumerations);
+            info.AddValue ("exceptions", Exceptions);
         }
     }
 }
