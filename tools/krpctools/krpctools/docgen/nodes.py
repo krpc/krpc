@@ -20,7 +20,7 @@ class Appendable(object):
         return '\n\n'.join(self._appended)
 
 class Service(Appendable):
-    def __init__(self, name, procedures, classes, enumerations, documentation, sort):
+    def __init__(self, name, procedures, classes, enumerations, exceptions, documentation, sort):
         super(Service, self).__init__()
         self.name = name
         self.fullname = name
@@ -54,6 +54,8 @@ class Service(Appendable):
                         for (cname, cinfo) in classes.iteritems()}
         self.enumerations = {ename: Enumeration(name, ename, sort=sort, **einfo)
                              for (ename, einfo) in enumerations.iteritems()}
+        self.exceptions = {ename: ExceptionNode(name, ename, **einfo)
+                           for (ename, einfo) in exceptions.iteritems()}
 
         self.members = OrderedDict((member.name, member) for member in sorted(members, key=sort))
 
@@ -219,3 +221,12 @@ class EnumerationValue(Appendable):
         self.value = value
         self.documentation = documentation
         self.cref = 'M:%s.%s.%s' % (service_name, enum_name, name)
+
+class ExceptionNode(Appendable):
+    def __init__(self, service_name, name, documentation):
+        super(ExceptionNode, self).__init__()
+        self.service_name = service_name
+        self.name = name
+        self.fullname = service_name+'.'+name
+        self.documentation = documentation
+        self.cref = 'T:%s.%s' % (service_name, name)
