@@ -47,33 +47,6 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual('Connection request was for the stream server, but this is the rpc server. ' +
                          'Did you connect to the wrong port number?', str(cm.exception))
 
-    def test_invalid_operation_exception(self):
-        with self.assertRaises(RuntimeError) as cm:
-            self.conn.test_service.throw_invalid_operation_exception()
-        self.assertTrue(str(cm.exception).startswith('Invalid operation'))
-
-    def test_argument_exception(self):
-        with self.assertRaises(ValueError) as cm:
-            self.conn.test_service.throw_argument_exception()
-        self.assertTrue(str(cm.exception).startswith('Invalid argument'))
-
-    def test_argument_null_exception(self):
-        with self.assertRaises(ValueError) as cm:
-            self.conn.test_service.throw_argument_null_exception("")
-        self.assertTrue(str(cm.exception).startswith('Value cannot be null.\nParameter name: foo'))
-
-    def test_argument_out_of_range_exception(self):
-        with self.assertRaises(ValueError) as cm:
-            self.conn.test_service.throw_argument_out_of_range_exception(0)
-        self.assertTrue(str(cm.exception).startswith(
-            'Specified argument was out of the range of valid values.\n' +
-            'Parameter name: foo'))
-
-    def test_custom_exception(self):
-        with self.assertRaises(self.conn.test_service.CustomException) as cm:
-            self.conn.test_service.throw_custom_exception()
-        self.assertTrue(str(cm.exception).startswith('A custom kRPC exception'))
-
     def test_value_parameters(self):
         self.assertEqual('3.14159', self.conn.test_service.float_to_string(float(3.14159)))
         self.assertEqual('3.14159', self.conn.test_service.double_to_string(float(3.14159)))
@@ -229,6 +202,33 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual([1, 2, 3], self.conn.test_service.list_default())
         self.assertEqual(set([1, 2, 3]), self.conn.test_service.set_default())
         self.assertEqual({1: False, 2: True}, self.conn.test_service.dictionary_default())
+
+    def test_invalid_operation_exception(self):
+        with self.assertRaises(RuntimeError) as cm:
+            self.conn.test_service.throw_invalid_operation_exception()
+        self.assertTrue(str(cm.exception).startswith('Invalid operation'))
+
+    def test_argument_exception(self):
+        with self.assertRaises(ValueError) as cm:
+            self.conn.test_service.throw_argument_exception()
+        self.assertTrue(str(cm.exception).startswith('Invalid argument'))
+
+    def test_argument_null_exception(self):
+        with self.assertRaises(ValueError) as cm:
+            self.conn.test_service.throw_argument_null_exception("")
+        self.assertTrue(str(cm.exception).startswith('Value cannot be null.\nParameter name: foo'))
+
+    def test_argument_out_of_range_exception(self):
+        with self.assertRaises(ValueError) as cm:
+            self.conn.test_service.throw_argument_out_of_range_exception(0)
+        self.assertTrue(str(cm.exception).startswith(
+            'Specified argument was out of the range of valid values.\n' +
+            'Parameter name: foo'))
+
+    def test_custom_exception(self):
+        with self.assertRaises(self.conn.test_service.CustomException) as cm:
+            self.conn.test_service.throw_custom_exception()
+        self.assertTrue(str(cm.exception).startswith('A custom kRPC exception'))
 
     def test_client_members(self):
         self.assertSetEqual(
