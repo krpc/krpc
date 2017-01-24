@@ -33,6 +33,7 @@ return ::krpc::Stream<{{ type }}>({% if is_static %}&_client{% else %}this->_cli
 #include <krpc/encoder.hpp>
 #include <krpc/decoder.hpp>
 #include <krpc/stream.hpp>
+#include <krpc/error.hpp>
 
 namespace krpc {
 namespace services {
@@ -45,6 +46,16 @@ class {{ service_name }} : public Service {
   // Class forward declarations
   {% for class_name in classes.keys() %}
   class {{ class_name }};
+  {% endfor %}
+  {% endif %}
+  {% if exceptions | length > 0 %}
+  {% for exception_name,exception in exceptions.items() %}
+
+{{ exception.documentation | indent(width=2) }}
+  class {{ exception_name }} : public ::krpc::RPCError {
+   public:
+    inline explicit {{ exception_name }}(const std::string& msg) : ::krpc::RPCError(msg) {}
+  };
   {% endfor %}
   {% endif %}
   {% for enum_name,enm in enumerations.items() %}
@@ -152,7 +163,13 @@ namespace decoder {
 namespace services {
 
 inline {{ service_name }}::{{ service_name }}(Client* client):
-  Service(client) {}
+  Service(client) {
+  {% for exception_name in exceptions.keys() %}
+  client->add_exception_thrower(
+    "{{ service_name }}", "{{ exception_name }}",
+    [] (const std::string& msg) { throw {{ exception_name }}(msg); });
+  {% endfor %}
+}
 {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
 
 inline {{ procedure.return_type }} {{ service_name }}::{{ procedure_name }}({{ impl_parameters(procedure.parameters) }}) {

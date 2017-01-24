@@ -61,21 +61,6 @@ TEST_F(test_client, test_wrong_stream_server) {
   }
 }
 
-TEST_F(test_client, test_error) {
-  ASSERT_THROW(test_service.throw_argument_exception(), krpc::RPCError);
-  try {
-    test_service.throw_argument_exception();
-  } catch(krpc::RPCError& e) {
-    EXPECT_THAT(e.what(), testing::HasSubstr("Invalid argument"));
-  }
-  ASSERT_THROW(test_service.throw_invalid_operation_exception(), krpc::RPCError);
-  try {
-    test_service.throw_invalid_operation_exception();
-  } catch(krpc::RPCError& e) {
-    EXPECT_THAT(e.what(), testing::HasSubstr("Invalid operation"));
-  }
-}
-
 TEST_F(test_client, test_value_parameters) {
   ASSERT_EQ("3.14159", test_service.float_to_string(3.14159f));
   ASSERT_EQ("3.1415901184082", test_service.double_to_string(3.14159f));
@@ -278,6 +263,62 @@ TEST_F(test_client, test_test_service_enum_members) {
   ASSERT_EQ(0, static_cast<int>(krpc::services::TestService::TestEnum::value_a));
   ASSERT_EQ(1, static_cast<int>(krpc::services::TestService::TestEnum::value_b));
   ASSERT_EQ(2, static_cast<int>(krpc::services::TestService::TestEnum::value_c));
+}
+
+TEST_F(test_client, test_invalid_operation_exception) {
+  ASSERT_THROW(
+    test_service.throw_invalid_operation_exception(),
+    krpc::services::KRPC::InvalidOperationException);
+  try {
+    test_service.throw_invalid_operation_exception();
+  } catch(std::runtime_error& e) {
+    EXPECT_THAT(e.what(), testing::HasSubstr("Invalid operation"));
+  }
+}
+
+TEST_F(test_client, test_argument_exception) {
+  ASSERT_THROW(
+    test_service.throw_argument_exception(),
+    krpc::services::KRPC::ArgumentException);
+  try {
+    test_service.throw_argument_exception();
+  } catch(krpc::services::KRPC::ArgumentException& e) {
+    EXPECT_THAT(e.what(), testing::HasSubstr("Invalid argument"));
+  }
+}
+
+TEST_F(test_client, test_argument_null_exception) {
+  ASSERT_THROW(
+    test_service.throw_argument_null_exception(""),
+    krpc::services::KRPC::ArgumentNullException);
+  try {
+    test_service.throw_argument_null_exception("");
+  } catch(krpc::services::KRPC::ArgumentNullException& e) {
+    EXPECT_THAT(e.what(), testing::HasSubstr("Value cannot be null.\nParameter name: foo"));
+  }
+}
+
+TEST_F(test_client, test_argument_out_of_range_exception) {
+  ASSERT_THROW(
+    test_service.throw_argument_out_of_range_exception(0),
+    krpc::services::KRPC::ArgumentOutOfRangeException);
+  try {
+    test_service.throw_argument_out_of_range_exception(0);
+  } catch(krpc::services::KRPC::ArgumentOutOfRangeException& e) {
+    EXPECT_THAT(e.what(), testing::HasSubstr(
+      "Specified argument was out of the range of valid values.\nParameter name: foo"));
+  }
+}
+
+TEST_F(test_client, test_custom_exception) {
+  ASSERT_THROW(
+    test_service.throw_custom_exception(),
+    krpc::services::TestService::CustomException);
+  try {
+    test_service.throw_custom_exception();
+  } catch(krpc::services::TestService::CustomException& e) {
+    EXPECT_THAT(e.what(), testing::HasSubstr("A custom kRPC exception"));
+  }
 }
 
 TEST_F(test_client, test_line_endings) {
