@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "krpc/encoder.hpp"
 #include "krpc/decoder.hpp"
+#include "krpc/encoder.hpp"
 
 namespace krpc {
 

@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 
+#include <cmath>
 #include <limits>
 #include <map>
 #include <set>
 #include <string>
 #include <tuple>
 #include <vector>
-#include <cmath>
 
 #include <krpc/decoder.hpp>
 #include <krpc/encoder.hpp>
