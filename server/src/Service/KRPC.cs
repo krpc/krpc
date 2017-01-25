@@ -89,6 +89,12 @@ namespace KRPC.Service
                     }
                     service.Enumerations.Add (enm);
                 }
+                foreach (var exnSignature in serviceSignature.Exceptions.Values) {
+                    var exn = new Messages.Exception (exnSignature.Name);
+                    if (exnSignature.Documentation.Length > 0)
+                        exn.Documentation = exnSignature.Documentation;
+                    service.Exceptions.Add (exn);
+                }
                 if (serviceSignature.Documentation.Length > 0)
                     service.Documentation = serviceSignature.Documentation;
                 services.ServicesList.Add (service);
@@ -156,7 +162,7 @@ namespace KRPC.Service
                     else if (EditorDriver.editorFacility == EditorFacility.SPH)
                         return GameScene.EditorSPH;
                 }
-                throw new InvalidOperationException ("Unknown game scene");
+                throw new System.InvalidOperationException ("Unknown game scene");
             }
         }
 
@@ -176,6 +182,132 @@ namespace KRPC.Service
         public static void RemoveStream (ulong id)
         {
             Core.Instance.RemoveStream (CallContext.Client, id);
+        }
+
+        /// <summary>
+        /// A method call was made to a method that is invalid
+        /// given the current state of the object.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        [KRPCException (MappedException = typeof (System.InvalidOperationException))]
+        public sealed class InvalidOperationException : System.Exception
+        {
+            /// <summary>
+            /// Construct the exception.
+            /// </summary>
+            public InvalidOperationException ()
+            {
+            }
+
+            /// <summary>
+            /// Construct the exception.
+            /// </summary>
+            public InvalidOperationException (string message) :
+                base (message)
+            {
+            }
+
+            /// <summary>
+            /// Construct the exception.
+            /// </summary>
+            public InvalidOperationException (string message, System.Exception innerException) :
+                base (message, innerException)
+            {
+            }
+        }
+
+        /// <summary>
+        /// A method was invoked where at least one of the passed arguments does not
+        /// meet the parameter specification of the method.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        [KRPCException (MappedException = typeof (System.ArgumentException))]
+        public sealed class ArgumentException : System.Exception
+        {
+            /// <summary>
+            /// Construct the exception.
+            /// </summary>
+            public ArgumentException ()
+            {
+            }
+
+            /// <summary>
+            /// Construct the exception.
+            /// </summary>
+            public ArgumentException (string message) :
+                base (message)
+            {
+            }
+
+            /// <summary>
+            /// Construct the exception.
+            /// </summary>
+            public ArgumentException (string message, System.Exception innerException) :
+                base (message, innerException)
+            {
+            }
+        }
+
+        /// <summary>
+        /// A null reference was passed to a method that does not accept it as a valid argument.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        [KRPCException (MappedException = typeof (System.ArgumentNullException))]
+        public sealed class ArgumentNullException : System.Exception
+        {
+            /// <summary>
+            /// Construct the exception.
+            /// </summary>
+            public ArgumentNullException ()
+            {
+            }
+
+            /// <summary>
+            /// Construct the exception.
+            /// </summary>
+            public ArgumentNullException (string message) :
+                base (message)
+            {
+            }
+
+            /// <summary>
+            /// Construct the exception.
+            /// </summary>
+            public ArgumentNullException (string message, System.Exception innerException) :
+                base (message, innerException)
+            {
+            }
+        }
+
+        /// <summary>
+        /// The value of an argument is outside the allowable range of values as defined by the invoked method.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        [KRPCException (MappedException = typeof (System.ArgumentOutOfRangeException))]
+        public sealed class ArgumentOutOfRangeException : System.Exception
+        {
+            /// <summary>
+            /// Construct the exception.
+            /// </summary>
+            public ArgumentOutOfRangeException ()
+            {
+            }
+
+            /// <summary>
+            /// Construct the exception.
+            /// </summary>
+            public ArgumentOutOfRangeException (string message) :
+                base (message)
+            {
+            }
+
+            /// <summary>
+            /// Construct the exception.
+            /// </summary>
+            public ArgumentOutOfRangeException (string message, System.Exception innerException) :
+                base (message, innerException)
+            {
+            }
         }
     }
 }

@@ -82,20 +82,6 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testErrorInvalidArgument() throws RPCException {
-    expectedException.expect(RPCException.class);
-    expectedException.expectMessage("Invalid argument");
-    TestService.newInstance(connection).throwArgumentException();
-  }
-
-  @Test
-  public void testErrorInvalidOperation() throws RPCException {
-    expectedException.expect(RPCException.class);
-    expectedException.expectMessage("Invalid operation");
-    TestService.newInstance(connection).throwInvalidOperationException();
-  }
-
-  @Test
   public void testValueParameters() throws RPCException {
     assertEquals("3.14159", testService.floatToString(3.14159f));
     assertEquals("3.14159", testService.doubleToString(3.14159));
@@ -254,6 +240,42 @@ public class ConnectionTest {
     assertEquals(2, list.size());
     assertEquals("value=jeb", list.get(0).getValue());
     assertEquals("value=bob", list.get(1).getValue());
+  }
+
+  @Test
+  public void testInvalidOperationException() throws RPCException {
+    expectedException.expect(UnsupportedOperationException.class);
+    expectedException.expectMessage("Invalid operation");
+    TestService.newInstance(connection).throwInvalidOperationException();
+  }
+
+  @Test
+  public void testArgumentException() throws RPCException {
+    expectedException.expect(IllegalArgumentException.class);
+    expectedException.expectMessage("Invalid argument");
+    TestService.newInstance(connection).throwArgumentException();
+  }
+
+  @Test
+  public void testArgumentNullException() throws RPCException {
+    expectedException.expect(IllegalArgumentException.class);
+    expectedException.expectMessage("Value cannot be null.\nParameter name: foo");
+    TestService.newInstance(connection).throwArgumentNullException("");
+  }
+
+  @Test
+  public void testArgumentOutOfBoundsException() throws RPCException {
+    expectedException.expect(IndexOutOfBoundsException.class);
+    expectedException.expectMessage(
+        "Specified argument was out of the range of valid values.\nParameter name: foo");
+    TestService.newInstance(connection).throwArgumentOutOfRangeException(0);
+  }
+
+  @Test
+  public void testCustomException() throws RPCException {
+    expectedException.expect(TestService.CustomException.class);
+    expectedException.expectMessage("A custom kRPC exception");
+    TestService.newInstance(connection).throwCustomException();
   }
 
   @Test

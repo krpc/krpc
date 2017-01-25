@@ -115,7 +115,7 @@ namespace KRPC
             autoAcceptConnections = Configuration.AutoAcceptConnections;
             confirmRemoveClient = Configuration.ConfirmRemoveClient;
             logLevel = Logger.Level.ToString ();
-            verboseErrors = RPCException.VerboseErrors;
+            verboseErrors = Configuration.VerboseErrors;
             checkDocumented = ServicesChecker.CheckDocumented;
             oneRPCPerUpdate = Configuration.OneRPCPerUpdate;
             maxTimePerUpdate = Configuration.MaxTimePerUpdate;
@@ -149,7 +149,7 @@ namespace KRPC
                     "Defaulting to " + Logger.Severity.Info);
                 Logger.Level = Logger.Severity.Info;
             }
-            RPCException.VerboseErrors = verboseErrors;
+            Configuration.VerboseErrors = verboseErrors;
             ServicesChecker.CheckDocumented = checkDocumented;
             Configuration.OneRPCPerUpdate = oneRPCPerUpdate;
             Configuration.MaxTimePerUpdate = maxTimePerUpdate;

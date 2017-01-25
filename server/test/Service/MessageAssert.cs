@@ -96,5 +96,10 @@ namespace KRPC.Test.Service
         {
             Assert.AreEqual (documentation, enumeration.Documentation);
         }
+
+        public static void HasDocumentation (KRPC.Service.Messages.Exception exception, string documentation)
+        {
+            Assert.AreEqual (documentation, exception.Documentation);
+        }
     }
 }

@@ -33,7 +33,6 @@ namespace TestServer
 
             Logger.Enabled = true;
             Logger.Level = Logger.Severity.Info;
-            RPCException.VerboseErrors = true;
             bool serverDebug = false;
             ushort rpcPort = 0;
             ushort streamPort = 0;

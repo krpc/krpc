@@ -44,12 +44,12 @@ function Client:_invoke(service, procedure, args, param_names, param_types, retu
 
   -- Check for an error response
   if response:HasField('error') then
-    error(response.error)
+    error(self:_error_message(response.error))
   end
 
   local result = response.results[1]
   if result:HasField('error') then
-    error(result.error)
+    error(self:_error_message(result.error))
   end
 
   -- Decode the response and return the (optional) result
@@ -86,6 +86,18 @@ function Client:_build_request(service, procedure, args, param_names, param_type
   end
 
   return request
+end
+
+--- Construct an error description from a KRPC.Error object
+function Client:_error_message(err)
+   local msg = err.description
+  if err:HasField('service') and err:HasField('name') then
+    msg = err.service .. '.' .. err.name .. ': ' .. msg
+  end
+  if err:HasField('stack_trace') then
+    msg = msg .. '\nServer stack trace:\n' .. err.stack_trace
+  end
+  return msg
 end
 
 return Client

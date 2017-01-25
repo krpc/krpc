@@ -85,6 +85,25 @@ namespace KRPC.Test.Service
                 }
             }
             Assert.IsTrue (foundEnumeration);
+
+            int foundExceptions = 0;
+            foreach (var exception in service.Exceptions) {
+                if (exception.Name == "InvalidOperationException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nA method call was made to a method that is invalid\ngiven the current state of the object.\n</summary>\n</doc>");
+                } else if (exception.Name == "ArgumentException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nA method was invoked where at least one of the passed arguments does not\nmeet the parameter specification of the method.\n</summary>\n</doc>");
+                } else if (exception.Name == "ArgumentNullException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nA null reference was passed to a method that does not accept it as a valid argument.\n</summary>\n</doc>");
+                } else if (exception.Name == "ArgumentOutOfRangeException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nThe value of an argument is outside the allowable range of values as defined by the invoked method.\n</summary>\n</doc>");
+                }
+                foundExceptions++;
+            }
+            Assert.AreEqual (4, foundExceptions);
         }
     }
 }

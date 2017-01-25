@@ -31,15 +31,6 @@ function TestClient:test_wrong_rpc_server()
     'localhost', self.get_stream_port(), self.get_stream_port())
 end
 
-function TestClient:test_error()
-  luaunit.assertErrorMsgContains('Invalid argument', self.conn.test_service.throw_argument_exception)
-end
-
-function TestClient:test_error()
-  luaunit.assertErrorMsgContains('Invalid argument', self.conn.test_service.throw_argument_exception)
-  luaunit.assertErrorMsgContains('Invalid operation', self.conn.test_service.throw_invalid_operation_exception)
-end
-
 function TestClient:test_value_parameters()
   luaunit.assertEquals('3.14159', self.conn.test_service.float_to_string(3.14159))
   luaunit.assertEquals('3.14159', self.conn.test_service.double_to_string(3.14159))
@@ -219,6 +210,36 @@ function TestClient:test_collections_default_values()
   m:set(1, false)
   m:set(2, true)
   luaunit.assertEquals(m, self.conn.test_service.dictionary_default())
+end
+
+function TestClient:test_invalid_operation_exception()
+  luaunit.assertErrorMsgContains(
+    'KRPC.InvalidOperationException: Invalid operation',
+    self.conn.test_service.throw_invalid_operation_exception)
+end
+
+function TestClient:test_argument_exception()
+  luaunit.assertErrorMsgContains(
+    'KRPC.ArgumentException: Invalid argument',
+    self.conn.test_service.throw_argument_exception)
+end
+
+function TestClient:test_argument_null_exception()
+  luaunit.assertErrorMsgContains(
+    'KRPC.ArgumentNullException: Value cannot be null',
+    self.conn.test_service.throw_argument_null_exception, "")
+end
+
+function TestClient:test_argument_out_of_range_exception()
+  luaunit.assertErrorMsgContains(
+    'KRPC.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.\nParameter name: foo',
+    self.conn.test_service.throw_argument_out_of_range_exception, 0)
+end
+
+function TestClient:test_custom_exception()
+  luaunit.assertErrorMsgContains(
+    'TestService.CustomException: A custom kRPC exception',
+    self.conn.test_service.throw_custom_exception)
 end
 
 -- FIXME: enable tests

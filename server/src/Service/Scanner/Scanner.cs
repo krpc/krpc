@@ -69,6 +69,17 @@ namespace KRPC.Service.Scanner
                 service.AddEnum (enumType);
             }
 
+            // Scan for classes annotated with KRPCException
+            foreach (var exnType in Reflection.GetTypesWith<KRPCExceptionAttribute> ()) {
+                CurrentAssembly = exnType.Assembly;
+                TypeUtils.ValidateKRPCException (exnType);
+                var serviceName = TypeUtils.GetExceptionServiceName (exnType);
+                if (!signatures.ContainsKey (serviceName))
+                    signatures [serviceName] = new ServiceSignature (serviceName);
+                var service = signatures [serviceName];
+                service.AddException (exnType);
+            }
+
             CurrentAssembly = null;
 
             // Check that the main KRPC service was found
@@ -76,6 +87,19 @@ namespace KRPC.Service.Scanner
                 throw new ServiceException ("KRPC service could not be found");
 
             return signatures;
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
+        public static IDictionary<Type, Type> GetMappedExceptionTypes()
+        {
+            IDictionary<Type, Type> mappedExceptionTypes = new Dictionary<Type, Type> ();
+            foreach (var exnType in Reflection.GetTypesWith<KRPCExceptionAttribute> ()) {
+                TypeUtils.ValidateKRPCException (exnType);
+                var mappedExnType = Reflection.GetAttribute<KRPCExceptionAttribute> (exnType).MappedException;
+                if (mappedExnType != null && !mappedExceptionTypes.ContainsKey (mappedExnType))
+                    mappedExceptionTypes [mappedExnType] = exnType;
+            }
+            return mappedExceptionTypes;
         }
     }
 }

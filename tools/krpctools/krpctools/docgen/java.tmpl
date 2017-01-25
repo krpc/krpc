@@ -130,6 +130,14 @@
 {% endfor %}
 {% endmacro %}
 
+{% macro exception(x) %}{{ mark_documented(x) }}
+.. type:: public class {{ x.name }}
+
+{{ gendoc(x.documentation) | indent }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
+{% endmacro %}
+
 {% macro parameters(x) %}
 {% for p in x %}{{ parameter(p) }}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endmacro %}

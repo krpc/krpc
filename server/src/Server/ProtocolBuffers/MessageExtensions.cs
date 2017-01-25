@@ -24,7 +24,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Schema.KRPC.Response ();
             if (response.HasError)
-                result.Error = response.Error;
+                result.Error = response.Error.ToProtobufMessage ();
             result.Results.Add (response.Results.Select (ToProtobufMessage));
             return result;
         }
@@ -33,10 +33,22 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Schema.KRPC.ProcedureResult ();
             if (procedureResult.HasError)
-                result.Error = procedureResult.Error.Length > 0 ? procedureResult.Error : "Unknown error";
+                result.Error = new Schema.KRPC.Error {
+                    Description = procedureResult.Error.Length > 0 ? procedureResult.Error : "Unknown error"
+                };
             if (procedureResult.HasValue)
                 result.Value = Encoder.Encode (procedureResult.Value);
             return result;
+        }
+
+        public static Schema.KRPC.Error ToProtobufMessage (this Error error)
+        {
+            return new Schema.KRPC.Error {
+                Service = error.Service,
+                Name = error.Name,
+                Description = error.Description,
+                StackTrace = error.StackTrace
+            };
         }
 
         public static Schema.KRPC.StreamUpdate ToProtobufMessage (this StreamUpdate streamUpdate)
@@ -68,6 +80,7 @@ namespace KRPC.Server.ProtocolBuffers
             result.Procedures.Add (service.Procedures.Select (ToProtobufMessage));
             result.Classes.Add (service.Classes.Select (ToProtobufMessage));
             result.Enumerations.Add (service.Enumerations.Select (ToProtobufMessage));
+            result.Exceptions.Add (service.Exceptions.Select (ToProtobufMessage));
             result.Documentation = service.Documentation;
             return result;
         }
@@ -116,6 +129,14 @@ namespace KRPC.Server.ProtocolBuffers
             result.Name = enumerationValue.Name;
             result.Value = enumerationValue.Value;
             result.Documentation = enumerationValue.Documentation;
+            return result;
+        }
+
+        public static Schema.KRPC.Exception ToProtobufMessage (this KRPC.Service.Messages.Exception exception)
+        {
+            var result = new Schema.KRPC.Exception ();
+            result.Name = exception.Name;
+            result.Documentation = exception.Documentation;
             return result;
         }
 

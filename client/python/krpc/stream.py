@@ -97,8 +97,8 @@ def update_thread(connection, stop, cache, cache_lock):
                     continue
 
                 # Check for an error response
-                if result.result.error:
-                    cache[result.id].value = RPCError(result.result.error)
+                if result.result.HasField('error'):
+                    cache[result.id].value = RPCError(result.result.error.description)
                     continue
 
                 # Decode the return value and store it in the cache

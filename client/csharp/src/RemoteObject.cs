@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Client
 {
@@ -10,6 +11,7 @@ namespace KRPC.Client
         /// <summary>
         /// A connection to the server where the object is stored.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleFieldsRule")]
         public IConnection connection;
 
         /// <summary>

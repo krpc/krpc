@@ -16,6 +16,10 @@ class Generator(object):
         self._service = service
         self._defs = definitions
 
+    @property
+    def service_name(self):
+        return self._service
+
     types = Types()
 
     def generate_file(self, path):
@@ -59,6 +63,7 @@ class Generator(object):
         properties = {}
         classes = {}
         enumerations = {}
+        exceptions = {}
 
         for name, cls in self._defs['classes'].items():
             classes[name] = {
@@ -76,6 +81,11 @@ class Generator(object):
                     'documentation': self.parse_documentation(x['documentation'])
                 } for x in enumeration['values']],
                 'documentation': self.parse_documentation(enumeration['documentation'])
+            }
+
+        for name, exception in self._defs['exceptions'].items():
+            exceptions[name] = {
+                'documentation': self.parse_documentation(exception['documentation'])
             }
 
         for name, procedure in self._defs['procedures'].items():
@@ -180,7 +190,8 @@ class Generator(object):
             'procedures': sort(procedures),
             'properties': sort(properties),
             'classes': sort(classes),
-            'enumerations': sort(enumerations)
+            'enumerations': sort(enumerations),
+            'exceptions': sort(exceptions)
         }
 
     def decode_default_value(self, value, typ):

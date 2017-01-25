@@ -22,3 +22,7 @@ KRPC API
 {% endappend %}
 {{ macros.service(services['KRPC']) }}
 {{ macros.enumeration(services['KRPC'].enumerations['GameScene']) }}
+{{ macros.exception(services['KRPC'].exceptions['InvalidOperationException']) }}
+{{ macros.exception(services['KRPC'].exceptions['ArgumentException']) }}
+{{ macros.exception(services['KRPC'].exceptions['ArgumentNullException']) }}
+{{ macros.exception(services['KRPC'].exceptions['ArgumentOutOfRangeException']) }}

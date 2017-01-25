@@ -18,6 +18,7 @@ namespace KRPC.Client
     /// A connection to the kRPC server. All interaction with kRPC is performed via an instance of this class.
     /// </summary>
     [SuppressMessage ("Gendarme.Rules.Correctness", "DisposableFieldsShouldBeDisposedRule")]
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public class Connection : IConnection, IDisposable
     {
@@ -76,6 +77,8 @@ namespace KRPC.Client
                     throw new ConnectionException (response.Message);
                 StreamManager = new StreamManager (this, streamClient);
             }
+
+            Services.KRPC.Service.AddExceptionTypes (this);
         }
 
         /// <summary>
@@ -167,10 +170,10 @@ namespace KRPC.Client
                 response = Response.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
             }
 
-            if (response.Error.Length > 0)
-                throw new RPCException (response.Error);
-            if (response.Results[0].Error.Length > 0)
-                throw new RPCException (response.Results[0].Error);
+            if (response.Error != null)
+                ThrowException(response.Error);
+            if (response.Results[0].Error != null)
+                ThrowException (response.Results [0].Error);
             return response.Results[0].Value;
         }
 
@@ -324,6 +327,42 @@ namespace KRPC.Client
                 return 0;
 
             return messageSize;
+        }
+
+        readonly IDictionary<string, System.Type> exceptionTypes = new Dictionary<string, System.Type>();
+
+        /// <summary>
+        /// Add an exception type to the client.
+        /// Should only be called by generated client stubs.
+        /// </summary>
+        public void AddExceptionType (string service, string name, System.Type exnType)
+        {
+            CheckDisposed ();
+            exceptionTypes [service + "." + name] = exnType;
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "InstantiateArgumentExceptionCorrectlyRule")]
+        internal void ThrowException (Error error)
+        {
+            var message = error.Description;
+            if (error.StackTrace.Length > 0) {
+                var newline = Environment.NewLine;
+                message += newline + "Server stack trace: " + newline + error.StackTrace;
+            }
+            if (error.Service.Length > 0 && error.Name.Length > 0) {
+                var key = error.Service + "." + error.Name;
+                if (key == "KRPC.InvalidOperationException")
+                    throw new InvalidOperationException (message);
+                if (key == "KRPC.ArgumentException")
+                    throw new ArgumentException (string.Empty, message);
+                if (key == "KRPC.ArgumentNullException")
+                    throw new ArgumentNullException (string.Empty, message);
+                if (key == "KRPC.ArgumentOutOfRangeException")
+                    throw new ArgumentOutOfRangeException (string.Empty, message);
+                var exnType = exceptionTypes [key];
+                throw (System.Exception)Activator.CreateInstance (exnType, new [] { message });
+            }
+            throw new RPCException (message);
         }
     }
 }

@@ -161,6 +161,8 @@ namespace KRPC.Client
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static object Decode (ByteString value, Type type, IConnection client)
         {
+            if (type == null)
+                throw new ArgumentNullException (nameof (type));
             var stream = value.CreateCodedInput ();
             if (type.IsEnum)
                 return stream.ReadSInt32 ();

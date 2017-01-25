@@ -30,11 +30,11 @@ std::string Client::invoke(const schema::Request& request) {
   schema::Response response;
   decoder::decode(response, data, this);
 
-  if (!response.error().empty())
-    throw RPCError(response.error());
+  if (response.has_error())
+    throw_exception(response.error());
 
-  if (!response.results(0).error().empty())
-    throw RPCError(response.results(0).error());
+  if (response.results(0).has_error())
+    throw_exception(response.results(0).error());
 
   return response.results(0).value();
 }
@@ -86,6 +86,21 @@ schema::ProcedureCall Client::build_call(const std::string& service,
     arg->set_value(args[i]);
   }
   return call;
+}
+
+void Client::add_exception_thrower(const std::string& service, const std::string& name,
+                                   const std::function<void(std::string)>& thrower) {
+  exception_throwers[std::make_pair(service, name)] = thrower;
+}
+
+void Client::throw_exception(const schema::Error& error) const {
+  if (!error.service().empty() && !error.name().empty()) {
+    auto key = std::make_pair(error.service(), error.name());
+    auto thrower = exception_throwers.find(key)->second;
+    thrower(error.description());
+  } else {
+    throw RPCError(error.description());
+  }
 }
 
 google::protobuf::uint64 Client::add_stream(const schema::ProcedureCall& call) {

@@ -94,7 +94,7 @@ namespace KRPC.Client
             Object result;
             lock (accessLock) {
                 if (!streamTypes.ContainsKey (id))
-                    throw new InvalidOperationException ("Stream does not exist or has been closed");
+                    throw new System.InvalidOperationException ("Stream does not exist or has been closed");
                 if (streamValues.ContainsKey (id))
                     return streamValues [id];
                 streamValues [id] = Encoder.Decode (streamData [id], streamTypes [id], connection);
@@ -108,7 +108,7 @@ namespace KRPC.Client
             lock (accessLock) {
                 if (!streamData.ContainsKey (id))
                     return;
-                if (result.Error.Length > 0)
+                if (result.Error != null)
                     return; //TODO: do something with the error
                 var data = result.Value;
                 streamData [id] = data;

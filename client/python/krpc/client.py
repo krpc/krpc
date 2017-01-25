@@ -84,12 +84,12 @@ class Client(object):
             response = self._rpc_connection.receive_message(krpc.schema.KRPC.Response)
 
         # Check for an error response
-        if response.error:
-            raise RPCError(response.error)
+        if response.HasField('error'):
+            raise self._build_error(response.error)
 
         # Check for an error in the procedure results
-        if response.results[0].error:
-            raise RPCError(response.results[0].error)
+        if response.results[0].HasField('error'):
+            raise self._build_error(response.results[0].error)
 
         # Decode the response and return the (optional) result
         result = None
@@ -117,3 +117,24 @@ class Client(object):
             call.arguments.add(position=i, value=Encoder.encode(value, typ))
 
         return call
+
+    def _build_error(self, error):
+        """ Build an exception from an error message that can be thrown to the calling code """
+        # TODO: modify the stack trace of the thrown exception so it looks like it came from the local call
+        if len(error.service) > 0 and len(error.name) > 0:
+            service_name = snake_case(error.service)
+            type_name = error.name
+            if not hasattr(self, service_name):
+                raise RuntimeError('Error building exception; service \'%s\' not found' % service_name)
+            service = getattr(self, service_name)
+            if not hasattr(service, type_name):
+                raise RuntimeError('Error building exception; type \'%s.%s\' not found' % (service_name, type_name))
+            return getattr(service, type_name)(self._error_message(error))
+        return RPCError(self._error_message(error))
+
+    @staticmethod
+    def _error_message(error):
+        msg = error.description
+        if len(error.stack_trace) > 0:
+            msg += '\nServer stack trace:\n' + error.stack_trace
+        return msg

@@ -164,6 +164,10 @@ def create_service(client, service):
     for enumeration in service.enumerations:
         cls._add_service_enumeration(enumeration)
 
+    # Add exception types to service
+    for exception in service.exceptions:
+        cls._add_service_exception(exception)
+
     # Add procedures
     for procedure in service.procedures:
         if Attributes.is_a_procedure(procedure.name):
@@ -233,6 +237,14 @@ class ServiceBase(DynamicType):
                 'value': x.value, 'doc': _parse_documentation(x.documentation)
             }) for x in enumeration.values))
         setattr(cls, name, enumeration_type.python_type)
+
+    @classmethod
+    def _add_service_exception(cls, exception):
+        """ Add an exception type """
+        name = exception.name
+        exception_type = cls._client._types.exception_type(
+            cls._name, name, _parse_documentation(exception.documentation))
+        setattr(cls, name, exception_type)
 
     @classmethod
     def _parse_procedure(cls, procedure):

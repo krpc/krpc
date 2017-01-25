@@ -367,15 +367,57 @@ namespace TestServer
         }
 
         [KRPCProcedure]
+        public static void ThrowInvalidOperationException ()
+        {
+            throw new InvalidOperationException ("Invalid operation");
+        }
+
+        [KRPCProcedure]
         public static void ThrowArgumentException ()
         {
             throw new ArgumentException ("Invalid argument");
         }
 
         [KRPCProcedure]
-        public static void ThrowInvalidOperationException ()
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUnusedParametersRule")]
+        public static void ThrowArgumentNullException (string foo)
         {
-            throw new InvalidOperationException ("Invalid operation");
+            throw new ArgumentNullException (nameof (foo));
+        }
+
+        [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUnusedParametersRule")]
+        public static void ThrowArgumentOutOfRangeException (int foo)
+        {
+            throw new ArgumentOutOfRangeException (nameof (foo));
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "MissingExceptionConstructorsRule")]
+        [SuppressMessage ("Gendarme.Rules.Serialization", "MissingSerializableAttributeOnISerializableTypeRule")]
+        [SuppressMessage ("Gendarme.Rules.Serialization", "MissingSerializationConstructorRule")]
+        [KRPCException]
+        public sealed class CustomException : System.Exception
+        {
+            public CustomException ()
+            {
+            }
+
+            public CustomException (string message)
+            : base (message)
+            {
+            }
+
+            public CustomException (string message, Exception innerException)
+            : base(message, innerException)
+            {
+            }
+        }
+
+        [KRPCProcedure]
+        public static void ThrowCustomException ()
+        {
+            throw new CustomException ("A custom kRPC exception");
         }
     }
 }
