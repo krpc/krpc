@@ -1,5 +1,6 @@
 v0.4.0
  * Updated protocol in line with server changes
+ * Add support for RPCs to throw exceptions
  * Build for .NET 4.5
 
 v0.3.7
