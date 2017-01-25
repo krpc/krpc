@@ -5,14 +5,14 @@ Launch into Orbit
 
 This tutorial launches a two-stage rocket into a 150km circular orbit. The
 program assumes you are using :download:`this craft file
-</crafts/LaunchIntoOrbit.craft>`. The program is available in a variety of
-languages:
+</crafts/LaunchIntoOrbit.craft>`.
 
-* :download:`C# </scripts/LaunchIntoOrbit.cs>`
-* :download:`C++ </scripts/LaunchIntoOrbit.cpp>`
-* :download:`Python </scripts/LaunchIntoOrbit.py>`
-* :download:`Lua </scripts/LaunchIntoOrbit.lua>`
-* :download:`Java </scripts/LaunchIntoOrbit.java>`
+The program is available in a variety of languages:
+:download:`C#</scripts/LaunchIntoOrbit.cs>`,
+:download:`C++</scripts/LaunchIntoOrbit.cpp>`,
+:download:`Python</scripts/LaunchIntoOrbit.py>`,
+:download:`Lua</scripts/LaunchIntoOrbit.lua>`,
+:download:`Java</scripts/LaunchIntoOrbit.java>`.
 
 The following code connects to the server, gets the active vessel, sets up a
 bunch of streams to get flight telemetry then prepares the rocket for launch.
