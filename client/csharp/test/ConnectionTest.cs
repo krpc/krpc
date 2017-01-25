@@ -60,15 +60,6 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        public void Error ()
-        {
-            var e1 = Assert.Throws<RPCException> (Connection.TestService ().ThrowArgumentException);
-            Assert.That (e1.Message, Is.StringContaining ("Invalid argument"));
-            var e2 = Assert.Throws<RPCException> (Connection.TestService ().ThrowInvalidOperationException);
-            Assert.That (e2.Message, Is.StringContaining ("Invalid operation"));
-        }
-
-        [Test]
         public void ValueParameters ()
         {
             Assert.AreEqual ("3.14159", Connection.TestService ().FloatToString (3.14159f));
@@ -262,6 +253,43 @@ namespace KRPC.Client.Test
             Assert.AreEqual (new List<int> { 1, 2, 3 }, Connection.TestService ().ListDefault ());
             Assert.AreEqual (new HashSet<int> { 1, 2, 3 }, Connection.TestService ().SetDefault ());
             Assert.AreEqual (new Dictionary<int, bool> { { 1, false }, { 2,true } }, Connection.TestService ().DictionaryDefault ());
+        }
+
+        [Test]
+        public void InvalidOperationException ()
+        {
+            var exn = Assert.Throws<System.InvalidOperationException> (Connection.TestService ().ThrowInvalidOperationException);
+            Assert.That (exn.Message, Is.StringContaining ("Invalid operation"));
+        }
+
+        [Test]
+        public void ArgumentException ()
+        {
+            var exn = Assert.Throws<System.ArgumentException> (Connection.TestService ().ThrowArgumentException);
+            Assert.That (exn.Message, Is.StringContaining ("Invalid argument"));
+        }
+
+        [Test]
+        [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
+        public void ArgumentNullException ()
+        {
+            var exn = Assert.Throws<System.ArgumentNullException> (() => Connection.TestService ().ThrowArgumentNullException(string.Empty));
+            Assert.That (exn.Message, Is.StringContaining ("Value cannot be null.\nParameter name: foo"));
+        }
+
+        [Test]
+        [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
+        public void ArgumentOutOfRangeException ()
+        {
+            var exn = Assert.Throws<System.ArgumentOutOfRangeException> (() => Connection.TestService ().ThrowArgumentOutOfRangeException (0));
+            Assert.That (exn.Message, Is.StringContaining ("Specified argument was out of the range of valid values.\nParameter name: foo"));
+        }
+
+        [Test]
+        public void CustomException ()
+        {
+            var exn = Assert.Throws<CustomException> (Connection.TestService ().ThrowCustomException);
+            Assert.That (exn.Message, Is.StringContaining ("A custom kRPC exception"));
         }
 
         [TestCase ("foo\nbar")]
