@@ -37,6 +37,30 @@ public class {{ service_name }} {
 
     private {{ service_name }}(Connection connection) {
         this._connection = connection;
+        {% if exceptions.items() | length > 0 %}
+        addExceptionTypes(connection);
+        {% endif %}
+    }
+    {% for exception_name,exception in exceptions.items() %}
+
+{{ exception.documentation | indent(width=4) }}
+    public static class {{ exception_name }} extends krpc.client.RPCException {
+        private static final long serialVersionUID = {{ exception.serial_version_uid }}L;
+
+        public {{ exception_name }}(String message) {
+            super(message);
+        }
+
+        public {{ exception_name }}(String message, Exception innerException) {
+            super(message, innerException);
+        }
+    }
+    {% endfor %}
+
+    private void addExceptionTypes(Connection connection) {
+        {% for exception_name in exceptions.keys() %}
+        connection.addExceptionType("{{ service_name }}", "{{ exception_name }}", {{ exception_name }}.class);
+        {% endfor %}
     }
     {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
 

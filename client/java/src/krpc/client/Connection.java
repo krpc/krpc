@@ -7,12 +7,15 @@ import com.google.protobuf.CodedOutputStream;
 import krpc.schema.KRPC;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Connection {
 
@@ -206,10 +209,10 @@ public class Connection {
       }
       KRPC.Response response = KRPC.Response.parseFrom(data);
       if (response.hasError()) {
-        throw new RPCException(response.getError().getDescription());
+        throwException(response.getError());
       }
       if (response.getResultsList().get(0).hasError()) {
-        throw new RPCException(response.getResultsList().get(0).getError().getDescription());
+        throwException(response.getResultsList().get(0).getError());
       }
       return response.getResultsList().get(0).getValue();
     } catch (IOException exn) {
@@ -238,6 +241,59 @@ public class Connection {
     String service = info.service();
     String procedure = info.procedure();
     return buildCall(service, procedure, args);
+  }
+
+  private Map<String, Class<?>> exceptionTypes = new HashMap<String, Class<?>>();
+
+  /**
+   * Add an exception type.
+   * Should only be called by generated client stubs.
+   */
+  public <T> void addExceptionType(String service, String name, Class<T> exnType) {
+    exceptionTypes.put(service + "." + name, exnType);
+  }
+
+  private void throwException(KRPC.Error error) throws RPCException {
+    String message = error.getDescription();
+    if (!error.getStackTrace().isEmpty()) {
+      message += "\nServer stack trace:\n" + error.getStackTrace();
+    }
+    if (!error.getService().isEmpty() && !error.getName().isEmpty()) {
+      String key = error.getService() + "." + error.getName();
+      if (key.equals("KRPC.InvalidOperationException")) {
+        throw new UnsupportedOperationException(message);
+      }
+      if (key.equals("KRPC.ArgumentException")) {
+        throw new IllegalArgumentException(message);
+      }
+      if (key.equals("KRPC.ArgumentNullException")) {
+        throw new IllegalArgumentException(message);
+      }
+      if (key.equals("KRPC.ArgumentOutOfRangeException")) {
+        throw new IndexOutOfBoundsException(message);
+      }
+      Class<?> exnType = exceptionTypes.get(key);
+      Constructor<?>[] ctors = exnType.getDeclaredConstructors();
+      Constructor<?> ctor = null;
+      for (int i = 0; i < ctors.length; i++) {
+        ctor = ctors[i];
+        if (ctor.getParameterTypes().length == 1) {
+          break;
+        }
+      }
+      try {
+        ctor.setAccessible(true);
+        RPCException exn = (RPCException)ctor.newInstance(message);
+        throw exn;
+      } catch (IllegalAccessException exn) {
+        throw new RPCException("Failed to throw server exception");
+      } catch (InstantiationException exn) {
+        throw new RPCException("Failed to throw server exception");
+      } catch (InvocationTargetException exn) {
+        throw new RPCException("Failed to throw server exception");
+      }
+    }
+    throw new RPCException(message);
   }
 
   /**

@@ -16,6 +16,10 @@ class Generator(object):
         self._service = service
         self._defs = definitions
 
+    @property
+    def service_name(self):
+        return self._service
+
     types = Types()
 
     def generate_file(self, path):

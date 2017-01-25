@@ -223,8 +223,8 @@ class JavaGenerator(Generator):
                 value['name'] = self.parse_const_name(value['name'])
 
         # Add serial version UIDs to classes (generated using seeded hash of class' name)
-        for class_name, cls in context['classes'].items():
-            tohash = 'bada55'+class_name
+        for class_name, cls in context['classes'].items() + context['exceptions'].items():
+            tohash = self.service_name+'.'+class_name
             cls['serial_version_uid'] = int(hashlib.sha1(tohash.encode('utf-8')).hexdigest(), 16) % (10 ** 18)
 
         return context
