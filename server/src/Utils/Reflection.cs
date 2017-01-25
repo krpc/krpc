@@ -21,7 +21,7 @@ namespace KRPC.Utils
                 } catch (ReflectionTypeLoadException) {
                     // FIXME: should include loadable types from partially loadable assembly, but causes MonoDevelop crash:
                     // Assertion at class.c:5594, condition `!mono_loader_get_last_error ()
-                    //types = e.Types.Where (x => x != null).ToArray ();
+                    // types = e.Types.Where (x => x != null).ToArray ();
                     types = Type.EmptyTypes;
                 }
                 foreach (var type in types)

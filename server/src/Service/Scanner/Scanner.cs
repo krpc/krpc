@@ -23,7 +23,7 @@ namespace KRPC.Service.Scanner
             // Scan for static classes annotated with KRPCService
 
             // FIXME: Following is a hack to workaround a bug in Reflection.GetTypesWith
-            //        When running unit tests, Service.KRPC is not found as it contains types that depend on UnityEngine
+            // When running unit tests, Service.KRPC is not found as it contains types that depend on UnityEngine
             var serviceTypes = Reflection.GetTypesWith<KRPCServiceAttribute> ().ToList ();
             if (!serviceTypes.Contains (typeof(KRPC)))
                 serviceTypes.Add (typeof(KRPC));

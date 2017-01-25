@@ -92,6 +92,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             set { parachute.minAirPressureToOpen = value; }
         }
 
-        //TODO: add safe deployment information?
+        // TODO: add safe deployment information?
     }
 }

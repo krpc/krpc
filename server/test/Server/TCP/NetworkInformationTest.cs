@@ -15,8 +15,6 @@ namespace KRPC.Test.Server.TCP
         {
             List<IPAddress> addresses = NetworkInformation.LocalIPAddresses.ToList ();
             Assert.IsTrue (addresses.Contains (IPAddress.Loopback));
-            //foreach (var address in addresses)
-            //    Console.WriteLine (address);
         }
 
         [Test]

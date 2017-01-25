@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services.Parts
@@ -35,7 +35,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        ///  Whether the experiment has been completed.
+        /// Whether the experiment has been completed.
         /// </summary>
         [KRPCProperty]
         public bool IsComplete {

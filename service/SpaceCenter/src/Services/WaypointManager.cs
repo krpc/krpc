@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -8,7 +8,7 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
-    /// Waypoints are the location markers you can see on the map view showing you where contracts are targeted for. 
+    /// Waypoints are the location markers you can see on the map view showing you where contracts are targeted for.
     /// With this structure, you can obtain coordinate data for the locations of these waypoints.
     /// Obtained by calling <see cref="SpaceCenter.WaypointManager"/>.
     /// </summary>
@@ -85,7 +85,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// An example map of known color - seed pairs. 
+        /// An example map of known color - seed pairs.
         /// Any other integers may be used as seed.
         /// </summary>
         [KRPCProperty]

@@ -146,7 +146,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         Vessel PostUndock (IList<Guid> preVesselIds, int wait = 0)
         {
-            //FIXME: sometimes after undocking, KSP changes it's mind as to what the active vessel is, so we wait for 10 frames before getting the active vessel
+            // FIXME: sometimes after undocking, KSP changes it's mind as to what the active vessel is, so we wait for 10 frames before getting the active vessel
             // Wait while the port is docked
             if (wait < 10 || State == DockingPortState.Docked)
                 throw new YieldException (new ParameterizedContinuation<Vessel, IList<Guid>, int> (PostUndock, preVesselIds, wait + 1));

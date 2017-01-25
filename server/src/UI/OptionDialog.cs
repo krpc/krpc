@@ -58,7 +58,7 @@ namespace KRPC.UI
                 try {
                     UnityEngine.Object.Destroy (popup.gameObject);
                 } catch (NullReferenceException) {
-                    //FIXME: Nasty hack catching this. Dialog may have already been removed by other UI logic.
+                    // FIXME: Nasty hack catching this. Dialog may have already been removed by other UI logic.
                 }
                 Visible = false;
                 dialog = null;

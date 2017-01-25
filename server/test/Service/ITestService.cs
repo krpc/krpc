@@ -60,7 +60,7 @@ namespace KRPC.Test.Service
 
         KRPC.Utils.Tuple<int,bool> TupleDefault (KRPC.Utils.Tuple<int,bool> x);
 
-        IList<int>  ListDefault (IList<int> x);
+        IList<int> ListDefault (IList<int> x);
 
         HashSet<int> SetDefault (HashSet<int> x);
 

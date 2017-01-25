@@ -93,7 +93,7 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public Vector3d StoppingTime { get; set; }
 
-        public Vector3d DecelerationTime  { get; set; }
+        public Vector3d DecelerationTime { get; set; }
 
         public Vector3d AttenuationAngle { get; set; }
 
@@ -142,7 +142,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             deltaTime += Time.fixedDeltaTime;
             if (deltaTime < timePerUpdate)
                 return;
-            
+
             var internalVessel = vessel.InternalVessel;
             var torque = vessel.AvailableTorqueVectors.Item1;
             var moi = vessel.MomentOfInertiaVector;
@@ -186,7 +186,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         {
             var worldAngularVelocity = vessel.InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
             var localAngularVelocity = ReferenceFrame.AngularVelocityFromWorldSpace (worldAngularVelocity);
-            //TODO: why does this need to be negative?
+            // TODO: why does this need to be negative?
             return -vessel.ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.DirectionToWorldSpace (localAngularVelocity));
         }
 
@@ -205,13 +205,13 @@ namespace KRPC.SpaceCenter.AutoPilot
                 rotation = targetRotation * currentRotation.Inverse ();
             else
                 // Roll angle not set => use rotation from currentDirection -> targetDirection
-                //FIXME: QuaternionD.FromToRotation method not available at runtime
+                // FIXME: QuaternionD.FromToRotation method not available at runtime
                 rotation = Quaternion.FromToRotation (currentDirection, targetDirection);
 
             // Compute angles for the rotation in pitch (x), roll (y), yaw (z) axes
             float angleFloat;
             Vector3 axisFloat;
-            //FIXME: QuaternionD.ToAngleAxis method not available at runtime
+            // FIXME: QuaternionD.ToAngleAxis method not available at runtime
             ((Quaternion)rotation).ToAngleAxis (out angleFloat, out axisFloat);
             double angle = GeometryExtensions.ClampAngle180 (angleFloat);
             Vector3d axis = axisFloat;

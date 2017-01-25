@@ -397,7 +397,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The current maximum regular "on-rails" warp factor that can be set.
-        /// A value between 0 and 7 inclusive.  See
+        /// A value between 0 and 7 inclusive. See
         /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a> for details.
         /// </summary>
         [KRPCProperty]

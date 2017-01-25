@@ -351,7 +351,7 @@ namespace KRPC.SpaceCenter.Services
                 if (part.rb != null) {
                     Matrix4x4 partTensor = part.rb.inertiaTensor.ToDiagonalMatrix ();
 
-                    // translate:  inertiaTensor frame to part frame, part frame to world frame, world frame to vessel frame
+                    // translate: inertiaTensor frame to part frame, part frame to world frame, world frame to vessel frame
                     Quaternion rot = Quaternion.Inverse (vesselTransform.rotation) * part.transform.rotation * part.rb.inertiaTensorRotation;
                     Quaternion inv = Quaternion.Inverse (rot);
 
@@ -646,7 +646,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {
-            //FIXME: finding the rigidbody is expensive - cache it
+            // FIXME: finding the rigidbody is expensive - cache it
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.AngularVelocityFromWorldSpace (InternalVessel.GetComponent<Rigidbody> ().angularVelocity).ToTuple ();

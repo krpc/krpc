@@ -18,7 +18,7 @@ namespace KRPC
     /// </summary>
     public sealed class Core
     {
-        //TODO: remove servers list, replace with events etc.
+        // TODO: remove servers list, replace with events etc.
         List<Server.Server> servers;
         IDictionary<Guid, IClient<Request, Response>> rpcClients;
         IDictionary<Guid, IClient<NoMessage, StreamMessage>> streamClients;
@@ -471,14 +471,14 @@ namespace KRPC
                             response.HasError = true;
                             response.Error = e.ToString ();
                         } catch (YieldException e) {
-                            //FIXME: handle yields correctly
+                            // FIXME: handle yields correctly
                             response = new Response ();
                             response.HasError = true;
                             response.Error = e.ToString ();
                         }
                         rpcsExecuted++;
                         // Don't send an update if it is the previous one
-                        //FIXME: does the following comparison work?!? The objects have not been serialized
+                        // FIXME: does the following comparison work?!? The objects have not been serialized
                         if (response.ReturnValue == streamResultCache [request.Identifier])
                             continue;
                         // Add the update to the response message

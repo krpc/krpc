@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Messages;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace KRPC.Test.Service
 {

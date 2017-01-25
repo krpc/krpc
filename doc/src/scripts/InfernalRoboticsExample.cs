@@ -2,8 +2,8 @@ using System;
 using System.Net;
 using System.Threading;
 using KRPC.Client;
-using KRPC.Client.Services.SpaceCenter;
 using KRPC.Client.Services.InfernalRobotics;
+using KRPC.Client.Services.SpaceCenter;
 
 class InfernalRoboticsExample
 {

@@ -62,7 +62,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public void Remove ()
         {
             PartForcesAddon.Remove (this);
-            //TODO: delete the object
+            // TODO: delete the object
         }
 
         internal void Update ()
