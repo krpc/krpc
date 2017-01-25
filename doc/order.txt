@@ -11,6 +11,10 @@ KRPC.GameScene.EditorVAB
 KRPC.GameScene.EditorSPH
 KRPC.AddStream
 KRPC.RemoveStream
+KRPC.InvalidOperationException
+KRPC.ArgumentException
+KRPC.ArgumentNullException
+KRPC.ArgumentOutOfRangeException
 SpaceCenter
 SpaceCenter.ActiveVessel
 SpaceCenter.Vessels
