@@ -2,7 +2,7 @@ import krpc
 conn = krpc.connect()
 vessel = conn.space_center.active_vessel
 
-active_engines = filter(lambda e: e.active and e.has_fuel, vessel.parts.engines)
+active_engines = [e for e in vessel.parts.engines if e.active and e.has_fuel]
 
 print('Active engines:')
 for engine in active_engines:
@@ -12,4 +12,4 @@ thrust = sum(engine.thrust for engine in active_engines)
 fuel_consumption = sum(engine.thrust / engine.specific_impulse for engine in active_engines)
 isp = thrust / fuel_consumption
 
-print('Combined vaccuum Isp = %d seconds' % isp)
+print('Combined vacuum Isp = %d seconds' % isp)

@@ -130,6 +130,16 @@ class TestCase(unittest.TestCase):
         else:
             self.assertAlmostEqual(expected_clamped, actual_clamped, msg=msg, places=places)
 
+    def assertQuaternionsAlmostEqual(self, expected, actual, places=7, msg=None, delta=None):
+        """ Check that a pair of quaternions represent the same orientation, within the given error. """
+        for mult in [1, -1]:
+            if self._is_almost_equal([x * mult for x in expected], actual, places, delta):
+                return
+        if msg is None:
+            msg = self._almost_equal_summary(actual, expected, 'not almost equivalent orientations')
+            msg = self._almost_equal_error_msg(msg, places, delta)
+            self.fail(msg)
+
     @staticmethod
     def _is_value_almost_equal(expected, actual, places, delta=None):
         diff = abs(expected - actual)

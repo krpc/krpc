@@ -6,7 +6,7 @@ using KRPC.Utils;
 namespace KRPC.RemoteTech
 {
     /// <summary>
-    /// A RemoteTech antenna. Obtained by calling <see cref="Comms.Antennas"/> or  <see cref="RemoteTech.Antenna"/>.
+    /// A RemoteTech antenna. Obtained by calling <see cref="Comms.Antennas"/> or <see cref="RemoteTech.Antenna"/>.
     /// </summary>
     [KRPCClass (Service = "RemoteTech")]
     public class Antenna : Equatable<Antenna>

@@ -59,7 +59,7 @@ namespace KRPC.SpaceCenter.Services
             this.body = body;
             vesselId = vessel != null ? vessel.id : Guid.Empty;
             this.node = node;
-            //TODO: is it safe to use a part id of 0 to mean no part?
+            // TODO: is it safe to use a part id of 0 to mean no part?
             if (part != null)
                 partId = part.flightID;
             this.dockingPort = dockingPort;
@@ -405,7 +405,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Maneuver:
                 case ReferenceFrameType.ManeuverOrbital:
                     {
-                        //TODO: is there a better way to do this?
+                        // TODO: is there a better way to do this?
                         // node.patch.getPositionAtUT (node.UT) appears to return a position vector
                         // in a different space to vessel.GetWorldPos3D()
                         var vesselPos = FlightGlobals.ActiveVessel.CoM;
@@ -607,7 +607,7 @@ namespace KRPC.SpaceCenter.Services
                     return InternalVessel.GetOrbit ().GetVel ();
                 case ReferenceFrameType.Maneuver:
                 case ReferenceFrameType.ManeuverOrbital:
-                    return Vector3d.zero; //TODO: check this
+                    return Vector3d.zero; // TODO: check this
                 case ReferenceFrameType.Part:
                 case ReferenceFrameType.Thrust:
                     return InternalPart.vessel.GetOrbit ().GetVel ();
@@ -637,7 +637,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.CelestialBodyNonRotating:
                     return Vector3d.zero;
                 case ReferenceFrameType.CelestialBodyOrbital:
-                    return Vector3d.zero; //TODO: check this
+                    return Vector3d.zero; // TODO: check this
                 case ReferenceFrameType.Vessel:
                     return InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
                 case ReferenceFrameType.VesselOrbital:
@@ -648,7 +648,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Part:
                 case ReferenceFrameType.DockingPort:
                 case ReferenceFrameType.Thrust:
-                    return Vector3d.zero; //TODO: check this
+                    return Vector3d.zero; // TODO: check this
                 case ReferenceFrameType.Relative:
                     return parent.AngularVelocityToWorldSpace (relativeAngularVelocity);
                 case ReferenceFrameType.Hybrid:

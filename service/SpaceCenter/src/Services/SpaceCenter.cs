@@ -7,6 +7,8 @@ using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KSP.UI;
+using KSP.UI.Screens.Flight;
 using UnityEngine;
 using Tuple2 = KRPC.Utils.Tuple<double, double>;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
@@ -250,6 +252,37 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether the UI is visible.
+        /// </summary>
+        [KRPCProperty]
+        public static bool UIVisible
+        {
+            get { return UIMasterController.Instance.mainCanvas.enabled; }
+            set {
+                var visible = UIVisible;
+                if (value && !visible)
+                    GameEvents.onShowUI.Fire();
+                else if (!value && visible)
+                    GameEvents.onHideUI.Fire();
+            }
+        }
+
+        /// <summary>
+        /// Whether the navball is visible.
+        /// </summary>
+        [KRPCProperty]
+        public static bool Navball
+        {
+            get { return NavBallToggle.Instance.panel.expanded; }
+            set {
+                if (value)
+                    NavBallToggle.Instance.panel.Expand();
+                else
+                    NavBallToggle.Instance.panel.Collapse();
+            }
+        }
+
+        /// <summary>
         /// The current universal time in seconds.
         /// </summary>
         [KRPCProperty]
@@ -364,7 +397,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The current maximum regular "on-rails" warp factor that can be set.
-        /// A value between 0 and 7 inclusive.  See
+        /// A value between 0 and 7 inclusive. See
         /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a> for details.
         /// </summary>
         [KRPCProperty]

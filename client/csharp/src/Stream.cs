@@ -24,7 +24,7 @@ namespace KRPC.Client
         /// <summary>
         /// Get the most recent value of the stream.
         /// </summary>
-        //FIXME: Change this to a property. This breaks compatibility.
+        // FIXME: Change this to a property. This breaks compatibility.
         [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
         public TReturnType Get ()
         {

@@ -151,7 +151,6 @@ namespace KRPC.SpaceCenter.Services.Parts
                 if (!Active || !HasFuel)
                     return 0f;
                 return CurrentEngine.finalThrust * 1000f;
-                //return GetThrust (CurrentEngine.currentThrottle, Part.InternalPart.staticPressureAtm);
             }
         }
 
@@ -284,7 +283,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <remarks>
         /// The engine must be activated for this property to update correctly.
         /// </remarks>
-        //FIXME: should not have to enable the RCS thruster for this to update
+        // FIXME: should not have to enable the RCS thruster for this to update
         [KRPCProperty]
         public bool HasFuel {
             get {

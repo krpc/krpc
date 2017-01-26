@@ -118,7 +118,7 @@ namespace KRPC.UI
             if (Event.current.type == EventType.Repaint) {
                 var position = GUILayoutUtility.GetLastRect ();
                 // Convert from relative to absolute coordinates
-                //TODO: ugly hack...
+                // TODO: ugly hack...
                 Vector2 mousePosition = Input.mousePosition;
                 mousePosition.y = Screen.height - mousePosition.y;
                 Vector2 clippedMousePos = Event.current.mousePosition;

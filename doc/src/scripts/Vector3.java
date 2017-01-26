@@ -1,9 +1,11 @@
-import java.io.IOException;
-import org.javatuples.Triplet;
 import krpc.client.Connection;
 import krpc.client.RPCException;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Vessel;
+
+import org.javatuples.Triplet;
+
+import java.io.IOException;
 
 public class Vector3 {
     public static void main(String[] args) throws IOException, RPCException {

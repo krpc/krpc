@@ -1,3 +1,10 @@
+v0.3.8
+ * Add CelestialBody.InitialRotation and RotationAngle (#369)
+ * Add SpaceCenter.Navball to show/hide the navball (#355)
+ * Add SpaceCenter.UIVisible to show/hide the UI (#355)
+ * Fix bug with DockingPort.Rotation (#371)
+ * Fix bug with Part.Rotation (#371)
+
 v0.3.7
  * Add custom reference frames (ReferenceFrame.CreateRelative and CreateHybrid) (#252)
  * Add Vessel.BoundingBox and Part.BoundingBox (#352)

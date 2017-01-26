@@ -1,6 +1,6 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service;
@@ -171,7 +171,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <remarks>
         /// An error will be thrown if this property is set to a reference frame that rotates with the vessel being controlled,
-        /// as it is impossible to rotate the vessel in such a reference frame. 
+        /// as it is impossible to rotate the vessel in such a reference frame.
         /// </remarks>
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
@@ -220,7 +220,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <param name="pitch">Target pitch angle, in degrees between -90° and +90°.</param>
         /// <param name="heading">Target heading angle, in degrees between 0° and 360°.</param>
-        //TODO: deprecate this in favour of TargetPitch and TargetHeading properties?
+        // TODO: deprecate this in favour of TargetPitch and TargetHeading properties?
         [KRPCMethod]
         public void TargetPitchAndHeading (float pitch, float heading)
         {
@@ -235,7 +235,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 TargetDirection {
             get { return attitudeController.TargetDirection.ToTuple (); }
             set {
-                //FIXME: QuaternionD.FromToRotation method not available at runtime
+                // FIXME: QuaternionD.FromToRotation method not available at runtime
                 var rotation = (QuaternionD)Quaternion.FromToRotation (Vector3d.up, value.ToVector ());
                 var phr = rotation.PitchHeadingRoll ();
                 attitudeController.TargetPitch = phr.x;
@@ -313,7 +313,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Whether the rotation rate controllers PID parameters should be automatically tuned using the
         /// vessels moment of inertia and available torque. Defaults to <c>true</c>.
-        /// See <see cref="TimeToPeak"/> and  <see cref="Overshoot"/>.
+        /// See <see cref="TimeToPeak"/> and <see cref="Overshoot"/>.
         /// </summary>
         [KRPCProperty]
         public bool AutoTune {

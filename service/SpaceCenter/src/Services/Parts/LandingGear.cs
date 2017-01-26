@@ -20,7 +20,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal static bool Is (Part part)
         {
-            //TODO: is WheelType.FREE correct? Landing gear are the only stock parts with this wheel type. Rover wheels are WheelType.MOTORIZED
+            // TODO: is WheelType.FREE correct? Landing gear are the only stock parts with this wheel type. Rover wheels are WheelType.MOTORIZED
             var internalPart = part.InternalPart;
             return
             internalPart.HasModule<ModuleWheelBase> () &&

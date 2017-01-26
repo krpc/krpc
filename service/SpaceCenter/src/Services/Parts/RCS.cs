@@ -66,7 +66,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Active {
             get {
-                //TODO: what about rcs.shieldedCanThrust?
+                // TODO: what about rcs.shieldedCanThrust?
                 var p = Part.InternalPart;
                 return
                 p.vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.RCS)] &&
@@ -244,7 +244,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <remarks>
         /// The RCS thruster must be activated for this property to update correctly.
         /// </remarks>
-        //FIXME: should not have to enable the RCS thruster for this to update
+        // FIXME: should not have to enable the RCS thruster for this to update
         [KRPCProperty]
         public bool HasFuel {
             get {

@@ -2,8 +2,8 @@
 
 #include <krpc/services/krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <krpc/services/infernal_robotics.hpp>  // NOLINT(build/include_alpha)
 #include <krpc/services/kerbal_alarm_clock.hpp>
-#include <krpc/services/infernal_robotics.hpp>
 
 #include "server_test.hpp"
 

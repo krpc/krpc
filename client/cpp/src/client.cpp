@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
-#include "krpc/encoder.hpp"
 #include "krpc/decoder.hpp"
+#include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
 
 namespace krpc {

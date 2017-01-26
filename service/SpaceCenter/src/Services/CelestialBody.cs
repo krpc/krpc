@@ -115,6 +115,22 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The current rotation angle of the body, in radians.
+        /// </summary>
+        [KRPCProperty]
+        public double RotationAngle {
+            get { return GeometryExtensions.ToRadians (InternalBody.rotationAngle); }
+        }
+
+        /// <summary>
+        /// The initial rotation angle of the body (at UT 0), in radians.
+        /// </summary>
+        [KRPCProperty]
+        public double InitialRotation {
+            get { return GeometryExtensions.ToRadians (InternalBody.initialRotation); }
+        }
+
+        /// <summary>
         /// The equatorial radius of the body, in meters.
         /// </summary>
         [KRPCProperty]

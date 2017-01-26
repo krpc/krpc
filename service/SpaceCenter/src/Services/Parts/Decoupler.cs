@@ -90,7 +90,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         Vessel PostDecouple (IList<Guid> preVesselIds, int wait = 0)
         {
-            //FIXME: sometimes after decoupling, KSP changes it's mind as to what the active vessel is, so we wait for 10 frames before getting the active vessel
+            // FIXME: sometimes after decoupling, KSP changes it's mind as to what the active vessel is, so we wait for 10 frames before getting the active vessel
             // Wait while the decoupler hasn't fired
             if (wait < 10 || !Decoupled)
                 throw new YieldException (new ParameterizedContinuation<Vessel, IList<Guid>, int> (PostDecouple, preVesselIds, wait + 1));

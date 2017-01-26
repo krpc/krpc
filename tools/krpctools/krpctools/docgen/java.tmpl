@@ -126,7 +126,7 @@
 
 {{ gendoc(value.documentation) | indent(width=6) }}
 
-{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent(width=6) }}{% endif %}
+{% if hasdoc(value.documentation, './remarks') %}{{ remarks(value.documentation) | indent(width=6) }}{% endif %}
 {% endfor %}
 {% endmacro %}
 

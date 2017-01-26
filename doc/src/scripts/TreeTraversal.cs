@@ -1,11 +1,13 @@
-using KRPC.Client;
-using KRPC.Client.Services.SpaceCenter;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using KRPC.Client;
+using KRPC.Client.Services.SpaceCenter;
 
-class AttachmentModes {
-    public static void Main () {
+class AttachmentModes
+{
+    public static void Main ()
+    {
         var connection = new Connection ();
         var vessel = connection.SpaceCenter ().ActiveVessel;
         var root = vessel.Parts.Root;

@@ -1,16 +1,15 @@
-using UnityEngine;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KSP.UI.Screens;
 
-namespace LaunchControl {
-
+namespace LaunchControl
+{
     /// <summary>
     /// Service for staging vessels and controlling their throttle.
     /// </summary>
     [KRPCService (GameScene = GameScene.Flight)]
-    public static class LaunchControl {
-
+    public static class LaunchControl
+    {
         /// <summary>
         /// The current throttle setting for the active vessel, between 0 and 1.
         /// </summary>

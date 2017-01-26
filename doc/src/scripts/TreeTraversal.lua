@@ -1,3 +1,7 @@
+local krpc = require 'krpc'
+local conn = krpc.connect()
+local vessel = conn.space_center.active_vessel
+
 local root = vessel.parts.root
 local stack = {{root,0}}
 while #stack > 0 do

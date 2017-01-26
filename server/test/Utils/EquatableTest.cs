@@ -6,7 +6,7 @@ namespace KRPC.Test.Utils
     [SuppressMessage ("Gendarme.Rules.Design", "ImplementEqualsAndGetHashCodeInPairRule")]
     sealed class MyEquatable : KRPC.Utils.Equatable<MyEquatable>
     {
-        readonly public string Key;
+        public readonly string Key;
 
         public MyEquatable (string key)
         {

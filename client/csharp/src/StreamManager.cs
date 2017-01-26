@@ -109,7 +109,7 @@ namespace KRPC.Client
                 if (!streamData.ContainsKey (id))
                     return;
                 if (result.Error != null)
-                    return; //TODO: do something with the error
+                    return; // TODO: do something with the error
                 var data = result.Value;
                 streamData [id] = data;
                 streamValues.Remove (id);
@@ -145,7 +145,7 @@ namespace KRPC.Client
                         if (size == 0 || stop)
                             break;
                         var update = StreamUpdate.Parser.ParseFrom (new CodedInputStream (buffer, 0, size));
-                        //TODO: handle errors
+                        // TODO: handle errors
                         if (stop)
                             break;
                         foreach (var result in update.Results) {
@@ -156,10 +156,10 @@ namespace KRPC.Client
                     }
                 } catch (ObjectDisposedException) {
                     // Connection closed, so exit
-                    //FIXME: is there a better way to handle this?
+                    // FIXME: is there a better way to handle this?
                 } catch (IOException) {
                     // Connection closed, so exit
-                    //FIXME: is there a better way to handle this?
+                    // FIXME: is there a better way to handle this?
                 }
             }
         }

@@ -197,10 +197,10 @@ namespace KRPC.Service
 
         /// <summary>
         /// Check the given type is a valid kRPC service
-        ///  1. Must have KRPCService attribute
-        ///  2. Must have a valid identifier
-        ///  3. Must be a public static class
-        ///  4. Must not be declared inside another kRPC service
+        /// 1. Must have KRPCService attribute
+        /// 2. Must have a valid identifier
+        /// 3. Must be a public static class
+        /// 4. Must not be declared inside another kRPC service
         /// </summary>
         public static void ValidateKRPCService (Type type)
         {
@@ -224,10 +224,10 @@ namespace KRPC.Service
 
         /// <summary>
         /// Check the given method is a valid kRPC procedure
-        ///  1. Must have KRPCProcedure attribute
-        ///  2. Must have a valid identifier
-        ///  3. Must be a public static method
-        ///  4. Must be declared inside a kRPC service
+        /// 1. Must have KRPCProcedure attribute
+        /// 2. Must have a valid identifier
+        /// 3. Must be a public static method
+        /// 4. Must be declared inside a kRPC service
         /// </summary>
         public static void ValidateKRPCProcedure (MethodBase method)
         {
@@ -247,10 +247,10 @@ namespace KRPC.Service
 
         /// <summary>
         /// Check the given type is a valid kRPC property
-        ///  1. Must have KRPCProperty attribute
-        ///  2. Must have a valid identifier
-        ///  3. Must be a public static property
-        ///  4. Must be declared inside a kRPC service
+        /// 1. Must have KRPCProperty attribute
+        /// 2. Must have a valid identifier
+        /// 3. Must be a public static property
+        /// 4. Must be declared inside a kRPC service
         /// </summary>
         public static void ValidateKRPCProperty (PropertyInfo property)
         {
@@ -270,11 +270,11 @@ namespace KRPC.Service
 
         /// <summary>
         /// Check the given type is a valid kRPC class
-        ///  1. Must have KRPCClass attribute
-        ///  2. Must have a valid identifier
-        ///  3. Must be a public non-static class
-        ///  4. Must be declared inside a kRPC service if it doesn't have the service explicity set
-        ///  5. Must not be declared inside a kRPC service if it does have the service explicity set
+        /// 1. Must have KRPCClass attribute
+        /// 2. Must have a valid identifier
+        /// 3. Must be a public non-static class
+        /// 4. Must be declared inside a kRPC service if it doesn't have the service explicity set
+        /// 5. Must not be declared inside a kRPC service if it does have the service explicity set
         /// </summary>
         public static void ValidateKRPCClass (Type type)
         {
@@ -304,12 +304,12 @@ namespace KRPC.Service
 
         /// <summary>
         /// Check the given type is a valid kRPC enumeration
-        ///  1. Must have KRPCEnum attribute
-        ///  2. Must have a valid identifier
-        ///  3. Must be a public enum
-        ///  4. Underlying type must be a 32-bit signed integer (int)
-        ///  5. Must be declared inside a kRPC service if it doesn't have the service explicity set
-        ///  6. Must not be declared inside a kRPC service if it does have the service explicity set
+        /// 1. Must have KRPCEnum attribute
+        /// 2. Must have a valid identifier
+        /// 3. Must be a public enum
+        /// 4. Underlying type must be a 32-bit signed integer (int)
+        /// 5. Must be declared inside a kRPC service if it doesn't have the service explicity set
+        /// 6. Must not be declared inside a kRPC service if it does have the service explicity set
         /// </summary>
         public static void ValidateKRPCEnum (Type type)
         {
@@ -342,10 +342,10 @@ namespace KRPC.Service
 
         /// <summary>
         /// Check the given method is a valid kRPC class method
-        ///  1. Must have KRPCMethod attribute
-        ///  2. Must have a valid identifier
-        ///  3. Must be a public method
-        ///  4. Must be declared inside a class that is assignable from the given kRPC class
+        /// 1. Must have KRPCMethod attribute
+        /// 2. Must have a valid identifier
+        /// 3. Must be a public method
+        /// 4. Must be declared inside a class that is assignable from the given kRPC class
         /// </summary>
         public static void ValidateKRPCMethod (Type cls, MethodBase method)
         {
@@ -366,10 +366,10 @@ namespace KRPC.Service
 
         /// <summary>
         /// Check the given type is a valid kRPC class property
-        ///  1. Must have KRPCProperty attribute
-        ///  2. Must have a valid identifier
-        ///  3. Must be a public non-static property
-        ///  4. Must be declared inside a class that is assignable from the given kRPC class
+        /// 1. Must have KRPCProperty attribute
+        /// 2. Must have a valid identifier
+        /// 3. Must be a public non-static property
+        /// 4. Must be declared inside a class that is assignable from the given kRPC class
         /// </summary>
         public static void ValidateKRPCClassProperty (Type cls, PropertyInfo property)
         {
@@ -390,11 +390,11 @@ namespace KRPC.Service
 
         /// <summary>
         /// Check the given type is a valid kRPC exception class
-        ///  1. Must have KRPCException attribute
-        ///  2. Must have a valid identifier
-        ///  3. Must be a public non-static class
-        ///  4. Must be declared inside a kRPC service if it doesn't have the service explicity set
-        ///  5. Must not be declared inside a kRPC service if it does have the service explicity set
+        /// 1. Must have KRPCException attribute
+        /// 2. Must have a valid identifier
+        /// 3. Must be a public non-static class
+        /// 4. Must be declared inside a kRPC service if it doesn't have the service explicity set
+        /// 5. Must not be declared inside a kRPC service if it does have the service explicity set
         /// </summary>
         public static void ValidateKRPCException (Type type)
         {

@@ -32,6 +32,8 @@ SpaceCenter.Load
 SpaceCenter.Quicksave
 SpaceCenter.Quickload
 SpaceCenter.Camera
+SpaceCenter.UIVisible
+SpaceCenter.Navball
 SpaceCenter.UT
 SpaceCenter.G
 SpaceCenter.WarpMode
@@ -119,6 +121,8 @@ SpaceCenter.CelestialBody.GravitationalParameter
 SpaceCenter.CelestialBody.SurfaceGravity
 SpaceCenter.CelestialBody.RotationalPeriod
 SpaceCenter.CelestialBody.RotationalSpeed
+SpaceCenter.CelestialBody.RotationAngle
+SpaceCenter.CelestialBody.InitialRotation
 SpaceCenter.CelestialBody.EquatorialRadius
 SpaceCenter.CelestialBody.SurfaceHeight
 SpaceCenter.CelestialBody.BedrockHeight

@@ -12,7 +12,7 @@ namespace KRPC.SpaceCenter.Services
     public class Waypoint : Equatable<Waypoint>
     {
         /// <summary>
-        /// 
+        ///
         /// Create a waypoint object.
         /// </summary>
         internal Waypoint (double latitude, double longitude, CelestialBody body, string name)
@@ -180,9 +180,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The integer index of this waypoint amongst its cluster of sibling waypoints. 
-        /// In other words, when you have a cluster of waypoints called "Somewhere Alpha", "Somewhere Beta", and "Somewhere Gamma", 
-        /// then the alpha site has index 0, the beta site has index 1 and the gamma site has index 2. 
+        /// The integer index of this waypoint amongst its cluster of sibling waypoints.
+        /// In other words, when you have a cluster of waypoints called "Somewhere Alpha", "Somewhere Beta", and "Somewhere Gamma",
+        /// then the alpha site has index 0, the beta site has index 1 and the gamma site has index 2.
         /// When <see cref="Clustered"/> is false, this value is zero but meaningless.
         /// </summary>
         [KRPCProperty]
@@ -191,7 +191,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// True if this waypoint is part of a set of clustered waypoints with greek letter names appended (Alpha, Beta, Gamma, etc). 
+        /// True if this waypoint is part of a set of clustered waypoints with greek letter names appended (Alpha, Beta, Gamma, etc).
         /// If true, there is a one-to-one correspondence with the greek letter name and the <see cref="Index"/>.
         /// </summary>
         [KRPCProperty]

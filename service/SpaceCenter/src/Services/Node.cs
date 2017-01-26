@@ -9,7 +9,7 @@ namespace KRPC.SpaceCenter.Services
     /// <summary>
     /// Represents a maneuver node. Can be created using <see cref="Control.AddNode"/>.
     /// </summary>
-    //FIXME: need to perform memory management for node objects
+    // FIXME: need to perform memory management for node objects
     [KRPCClass (Service = "SpaceCenter")]
     public class Node : Equatable<Node>
     {

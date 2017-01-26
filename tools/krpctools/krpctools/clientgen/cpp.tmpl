@@ -29,11 +29,11 @@ return ::krpc::Stream<{{ type }}>({% if is_static %}&_client{% else %}this->_cli
 #include <tuple>
 #include <vector>
 
-#include <krpc/service.hpp>
-#include <krpc/encoder.hpp>
 #include <krpc/decoder.hpp>
-#include <krpc/stream.hpp>
+#include <krpc/encoder.hpp>
 #include <krpc/error.hpp>
+#include <krpc/service.hpp>
+#include <krpc/stream.hpp>
 
 namespace krpc {
 namespace services {

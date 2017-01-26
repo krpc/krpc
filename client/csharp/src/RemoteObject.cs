@@ -11,8 +11,7 @@ namespace KRPC.Client
         /// <summary>
         /// A connection to the server where the object is stored.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleFieldsRule")]
-        public IConnection connection;
+        public IConnection connection { get; private set; }
 
         /// <summary>
         /// The unique identifier for the object on the server.

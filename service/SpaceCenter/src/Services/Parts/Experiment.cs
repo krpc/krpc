@@ -63,7 +63,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new InvalidOperationException ("Experiment already contains data");
             if (Inoperable)
                 throw new InvalidOperationException ("Experiment is inoperable");
-            //FIXME: Don't use private API!!!
+            // FIXME: Don't use private API!!!
             var gatherData = experiment.GetType ().GetMethod ("gatherData", BindingFlags.NonPublic | BindingFlags.Instance);
             var result = (IEnumerator)gatherData.Invoke (experiment, new object[] { false });
             experiment.StartCoroutine (result);

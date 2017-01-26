@@ -10,9 +10,10 @@ class TestPartsDockingPort(krpctest.TestCase):
         cls.new_save()
         cls.remove_other_vessels()
         cls.launch_vessel_from_vab('PartsDockingPort')
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.sc = cls.connect().space_center
+        cls.vessel = cls.sc.active_vessel
         cls.parts = cls.vessel.parts
-        cls.State = cls.connect().space_center.DockingPortState
+        cls.State = cls.sc.DockingPortState
         cls.port1 = cls.parts.with_title('Clamp-O-Tron Docking Port Jr.')[0].docking_port
         cls.port2 = cls.parts.with_title('Clamp-O-Tron Shielded Docking Port')[0].docking_port
         cls.port3 = cls.parts.with_title('Mk2 Clamp-O-Tron')[0].docking_port
@@ -127,6 +128,14 @@ class TestPartsDockingPort(krpctest.TestCase):
         self.assertAlmostEqual((0, 0, -1), self.port1.direction(self.vessel.reference_frame), places=3)
         self.assertAlmostEqual((0, 1, 0), self.port2.direction(self.vessel.reference_frame), places=3)
         self.assertAlmostEqual((1, 0, 0), self.port3.direction(self.vessel.reference_frame), places=3)
+
+    def test_rotation(self):
+        port = self.port1
+        for target_frame in [port.reference_frame,
+                             self.vessel.reference_frame,
+                             self.vessel.orbit.body.reference_frame]:
+            expected = self.sc.transform_rotation((0, 0, 0, 1), port.reference_frame, target_frame)
+            self.assertQuaternionsAlmostEqual(expected, port.rotation(target_frame), places=5)
 
 class TestPartsDockingPortInFlight(krpctest.TestCase):
     """ Test docking and undocking of ports that have been docked

@@ -24,6 +24,10 @@ class TestBody(krpctest.TestCase):
         self.assertAlmostEqual(9.81, kerbin.surface_gravity, places=2)
         self.assertAlmostEqual(21549.425, kerbin.rotational_period, delta=0.1)
         self.assertAlmostEqual((2*3.14159) / 21549.425, kerbin.rotational_speed, delta=0.1)
+        self.assertAlmostEqual(math.pi/2, kerbin.initial_rotation, delta=0.1)
+        self.assertAlmostEqual(
+            kerbin.initial_rotation + (self.space_center.ut * kerbin.rotational_speed),
+            kerbin.rotation_angle, delta=0.1)
         self.assertAlmostEqual(600000, kerbin.equatorial_radius)
         self.assertAlmostEqual(8.4159e7, kerbin.sphere_of_influence, delta=0.0001e7)
         self.assertAlmostEqual(1.36e10, kerbin.orbit.apoapsis, delta=0.0001e10)
@@ -47,6 +51,10 @@ class TestBody(krpctest.TestCase):
         self.assertAlmostEqual(1.6290, mun.surface_gravity, places=4)
         self.assertAlmostEqual(1.3898e5, mun.rotational_period, delta=0.0001e5)
         self.assertAlmostEqual((2 * 3.14159) / 1.3898e5, mun.rotational_speed, delta=0.0001e5)
+        self.assertAlmostEqual(math.pi/2, mun.initial_rotation, delta=0.1)
+        self.assertAlmostEqual(
+            mun.initial_rotation + (self.space_center.ut * mun.rotational_speed),
+            mun.rotation_angle, delta=0.1)
         self.assertAlmostEqual(200000, mun.equatorial_radius)
         self.assertAlmostEqual(2.4296e6, mun.sphere_of_influence, delta=0.0001e6)
         self.assertAlmostEqual(1.2e7, mun.orbit.apoapsis, delta=0.0001e7)
