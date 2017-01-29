@@ -31,7 +31,7 @@ namespace KRPC.RemoteTech
         /// Get a communications object, representing the communication capability of a particular vessel.
         /// </summary>
         [KRPCProcedure]
-        public static Comms Comms (KRPC.SpaceCenter.Services.Vessel vessel)
+        public static Comms Comms (SpaceCenter.Services.Vessel vessel)
         {
             CheckAPI ();
             return new Comms (vessel);
@@ -41,7 +41,7 @@ namespace KRPC.RemoteTech
         /// Get the antenna object for a particular part.
         /// </summary>
         [KRPCProcedure]
-        public static Antenna Antenna (KRPC.SpaceCenter.Services.Parts.Part part)
+        public static Antenna Antenna (SpaceCenter.Services.Parts.Part part)
         {
             CheckAPI ();
             return new Antenna (part);

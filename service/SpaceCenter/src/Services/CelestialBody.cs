@@ -213,7 +213,7 @@ namespace KRPC.SpaceCenter.Services
         Tuple3 PositionAt (double latitude, double longitude, double altitude, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             var position = InternalBody.GetWorldSurfacePosition (latitude, longitude, altitude);
             return referenceFrame.PositionFromWorldSpace (position).ToTuple ();
         }
@@ -370,7 +370,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.PositionFromWorldSpace (InternalBody.position).ToTuple ();
         }
 
@@ -382,7 +382,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.VelocityFromWorldSpace (InternalBody.position, InternalBody.GetWorldVelocity ()).ToTuple ();
         }
 
@@ -394,7 +394,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             var up = Vector3.up;
             var right = InternalBody.GetRelSurfacePosition (0, 0, 1).normalized;
             var forward = Vector3.Cross (right, up);
@@ -412,7 +412,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.DirectionFromWorldSpace (InternalBody.transform.up).ToTuple ();
         }
 
@@ -428,7 +428,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.AngularVelocityFromWorldSpace (InternalBody.angularVelocity).ToTuple ();
         }
     }

@@ -5,7 +5,6 @@ using System.Linq;
 using KRPC.Server;
 using KRPC.Service;
 using UnityEngine;
-using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPC.Drawing
 {

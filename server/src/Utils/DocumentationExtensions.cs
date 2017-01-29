@@ -18,7 +18,7 @@ namespace KRPC.Utils
         /// Remove indentiation from a multi-line string, where the first line
         /// is not indented, and following lines are indented.
         /// </summary>
-        static string Dedent (String content)
+        static string Dedent (string content)
         {
             var lines = content.Split ('\n');
             if (lines.Length == 1)
@@ -36,8 +36,8 @@ namespace KRPC.Utils
             }
             if (indent == int.MaxValue)
                 return content;
-            lines [0] = new String (' ', indent) + lines [0];
-            var result = String.Empty;
+            lines [0] = new string (' ', indent) + lines [0];
+            var result = string.Empty;
             foreach (var line in lines) {
                 if (line.Length > indent)
                     result += line.Substring (indent);
@@ -46,25 +46,25 @@ namespace KRPC.Utils
             return result.Trim ();
         }
 
-        internal static String GetDocumentation (this MemberInfo member)
+        internal static string GetDocumentation (this MemberInfo member)
         {
             var membersNode = GetDocumentation (member.Module.Assembly.Location);
             if (membersNode == null)
-                return String.Empty;
+                return string.Empty;
             var name = GetDocumentationName (member);
             var it = membersNode.ChildNodes.GetEnumerator ();
             while (it.MoveNext ()) {
                 var node = (XmlNode)it.Current;
                 var attr = node.Attributes.GetNamedItem ("name");
                 if (attr != null && attr.Value == name) {
-                    var content = String.Empty;
+                    var content = string.Empty;
                     var descnode = node.GetEnumerator ();
                     while (descnode.MoveNext ())
                         content += Dedent (((XmlNode)descnode.Current).OuterXml.Replace ("\r\n", "\n")) + "\n";
                     return "<doc>\n" + content.TrimEnd () + "\n</doc>";
                 }
             }
-            return String.Empty;
+            return string.Empty;
         }
 
         [SuppressMessage ("Gendarme.Rules.Correctness", "EnsureLocalDisposalRule")]
@@ -95,7 +95,7 @@ namespace KRPC.Utils
             var memberType = member as Type;
             string name = memberType != null ? memberType.FullName : member.DeclaringType.FullName + "." + member.Name;
             name = name.Replace ('+', '.');
-            name = Regex.Replace (name, @"\[\[.+\]\]", String.Empty);
+            name = Regex.Replace (name, @"\[\[.+\]\]", string.Empty);
 
             switch (member.MemberType) {
 
@@ -106,8 +106,8 @@ namespace KRPC.Utils
 
             case MemberTypes.Method:
                 prefix = 'M';
-                var parameters = String.Join (",", ((MethodBase)member).GetParameters ().Select (x => ParameterName (x)).ToArray ());
-                if (!String.IsNullOrEmpty (parameters))
+                var parameters = string.Join (",", ((MethodBase)member).GetParameters ().Select (x => ParameterName (x)).ToArray ());
+                if (!string.IsNullOrEmpty (parameters))
                     name += "(" + parameters + ")";
                 break;
 
@@ -132,7 +132,7 @@ namespace KRPC.Utils
             if (!type.IsGenericType)
                 return name;
             name = name.Remove (name.IndexOf ('`'));
-            var typeArguments = "{" + String.Join (",", type.GetGenericArguments ().Select (x => TypeName (x)).ToArray ()) + "}";
+            var typeArguments = "{" + string.Join (",", type.GetGenericArguments ().Select (x => TypeName (x)).ToArray ()) + "}";
             return name + typeArguments;
         }
 

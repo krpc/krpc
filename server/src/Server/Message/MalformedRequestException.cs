@@ -1,5 +1,4 @@
 using System;
-using KRPC.Server;
 
 namespace KRPC.Server.Message
 {

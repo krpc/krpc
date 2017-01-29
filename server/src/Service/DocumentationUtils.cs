@@ -19,7 +19,7 @@ namespace KRPC.Service
         public static string ResolveCrefs (string documentation)
         {
             if (documentation.Length == 0)
-                return String.Empty;
+                return string.Empty;
 
             var output = new StringBuilder ();
             using (XmlReader reader = XmlReader.Create (new StringReader (documentation))) {
@@ -152,7 +152,7 @@ namespace KRPC.Service
         {
             var parts = reference.Split ('.').ToList ();
             parts.RemoveAt (parts.Count - 1);
-            return String.Join (".", parts.ToArray ());
+            return string.Join (".", parts.ToArray ());
         }
 
         static string GetMemberName (string reference)

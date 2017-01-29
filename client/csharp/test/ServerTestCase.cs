@@ -1,5 +1,4 @@
 using System;
-using KRPC.Client;
 using NUnit.Framework;
 
 namespace KRPC.Client.Test

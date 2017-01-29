@@ -141,10 +141,9 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         {
             if (v.sqrMagnitude < min * min)
                 return v.normalized * min;
-            else if (v.sqrMagnitude > max * max)
+            if (v.sqrMagnitude > max * max)
                 return v.normalized * max;
-            else
-                return v;
+            return v;
         }
 
         /// <summary>
@@ -155,10 +154,9 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         {
             if (value.CompareTo (min) < 0)
                 return min;
-            else if (value.CompareTo (max) > 0)
+            if (value.CompareTo (max) > 0)
                 return max;
-            else
-                return value;
+            return value;
         }
 
         /// <summary>

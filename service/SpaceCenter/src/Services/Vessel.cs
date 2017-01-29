@@ -27,7 +27,7 @@ namespace KRPC.SpaceCenter.Services
         public Vessel (global::Vessel vessel)
         {
             if (ReferenceEquals (vessel, null))
-                throw new ArgumentNullException ("vessel");
+                throw new ArgumentNullException (nameof (vessel));
             Id = vessel.id;
         }
 
@@ -137,7 +137,7 @@ namespace KRPC.SpaceCenter.Services
         /// telemetry for the vessel, in the specified reference frame.
         /// </summary>
         /// <param name="referenceFrame">
-        /// Reference frame. Defaults to the vessel's surface reference frame (<see cref="Vessel.SurfaceReferenceFrame"/>).
+        /// Reference frame. Defaults to the vessel's surface reference frame (<see cref="SurfaceReferenceFrame"/>).
         /// </param>
         [KRPCMethod]
         public Flight Flight (ReferenceFrame referenceFrame = null)
@@ -314,7 +314,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The moment of inertia of the vessel around its center of mass in <math>kg.m^2</math>.
         /// The inertia values are around the pitch, roll and yaw directions respectively.
-        /// This corresponds to the vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// This corresponds to the vessels reference frame (<see cref="ReferenceFrame"/>).
         /// </summary>
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
@@ -326,7 +326,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The inertia tensor of the vessel around its center of mass, in the vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// The inertia tensor of the vessel around its center of mass, in the vessels reference frame (<see cref="ReferenceFrame"/>).
         /// Returns the 3x3 matrix as a list of elements, in row-major order.
         /// </summary>
         [KRPCProperty]
@@ -377,7 +377,7 @@ namespace KRPC.SpaceCenter.Services
         /// The maximum torque that the vessel generate. Includes contributions from reaction wheels,
         /// RCS, gimballed engines and aerodynamic control surfaces.
         /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
-        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty]
@@ -388,7 +388,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The maximum torque that the currently active and powered reaction wheels can generate.
         /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
-        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty]
@@ -399,7 +399,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The maximum torque that the currently active RCS thrusters can generate.
         /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
-        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty]
@@ -410,7 +410,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The maximum torque that the currently active and gimballed engines can generate.
         /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
-        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty]
@@ -421,7 +421,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The maximum torque that the aerodynamic control surfaces can generate.
         /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
-        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty]
@@ -432,7 +432,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The maximum torque that parts (excluding reaction wheels, gimballed engines, RCS and control surfaces) can generate.
         /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
-        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty]
@@ -576,7 +576,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.PositionFromWorldSpace (InternalVessel.CoM).ToTuple ();
         }
 
@@ -590,7 +590,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple<Tuple3,Tuple3> BoundingBox (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             var parts = InternalVessel.parts;
             var bounds = parts [0].GetBounds (referenceFrame);
             for (int i = 1; i < parts.Count; i++)
@@ -606,7 +606,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             var vessel = InternalVessel;
             var worldCoM = vessel.CoM;
             var worldVelocity = vessel.GetOrbit ().GetVel ();
@@ -621,7 +621,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).ToTuple ();
         }
 
@@ -633,7 +633,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.DirectionFromWorldSpace (InternalVessel.ReferenceTransform.up).ToTuple ();
         }
 
@@ -648,7 +648,7 @@ namespace KRPC.SpaceCenter.Services
         {
             // FIXME: finding the rigidbody is expensive - cache it
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.AngularVelocityFromWorldSpace (InternalVessel.GetComponent<Rigidbody> ().angularVelocity).ToTuple ();
         }
     }

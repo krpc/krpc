@@ -13,7 +13,7 @@ namespace KRPC.Test.Service
         public void GetVersion ()
         {
             var status = KRPC.Service.KRPC.GetStatus ();
-            Assert.AreNotEqual (String.Empty, status.Version);
+            Assert.AreNotEqual (string.Empty, status.Version);
         }
 
         [Test]

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Messages;
-using KRPC.Utils;
 using Moq;
 using NUnit.Framework;
 
@@ -412,8 +411,7 @@ namespace KRPC.Test.Service
             BlockingProcedureNoReturnFnCount++;
             if (n == 0)
                 return;
-            else
-                throw new YieldException (new ParameterizedContinuationVoid<int> (BlockingProcedureNoReturnFn, n - 1));
+            throw new YieldException (new ParameterizedContinuationVoid<int> (BlockingProcedureNoReturnFn, n - 1));
         }
 
         int BlockingProcedureReturnsFnCount;
@@ -423,8 +421,7 @@ namespace KRPC.Test.Service
             BlockingProcedureReturnsFnCount++;
             if (n == 0)
                 return sum;
-            else
-                throw new YieldException (new ParameterizedContinuation<int,int,int> (BlockingProcedureReturnsFn, n - 1, sum + n));
+            throw new YieldException (new ParameterizedContinuation<int,int,int> (BlockingProcedureReturnsFn, n - 1, sum + n));
         }
 
         [Test]
@@ -540,9 +537,9 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleEchoNestedCollection ()
         {
-            var list0 = new List<String> { "jeb", "bob" };
-            var list1 = new List<String> ();
-            var list2 = new List<String> { "bill", "edzor" };
+            var list0 = new List<string> { "jeb", "bob" };
+            var list1 = new List<string> ();
+            var list2 = new List<string> { "bill", "edzor" };
             var collection = new Dictionary<int, IList<string>> { { 0, list0 }, { 1, list1 }, { 2, list2 } };
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoNestedCollection (It.IsAny<IDictionary<int,IList<string>>> ()))

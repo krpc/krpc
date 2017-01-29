@@ -8,17 +8,17 @@ namespace KRPC.Service
 
         public ServiceException ()
         {
-            Assembly = Service.Scanner.Scanner.CurrentAssembly;
+            Assembly = Scanner.Scanner.CurrentAssembly;
         }
 
         public ServiceException (string message) : base (message)
         {
-            Assembly = Service.Scanner.Scanner.CurrentAssembly;
+            Assembly = Scanner.Scanner.CurrentAssembly;
         }
 
         public ServiceException (string message, Exception innerException) : base (message, innerException)
         {
-            Assembly = Service.Scanner.Scanner.CurrentAssembly;
+            Assembly = Scanner.Scanner.CurrentAssembly;
         }
     }
 }

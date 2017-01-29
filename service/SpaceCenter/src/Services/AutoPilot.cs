@@ -167,7 +167,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The reference frame for the target direction (<see cref="AutoPilot.TargetDirection"/>).
+        /// The reference frame for the target direction (<see cref="TargetDirection"/>).
         /// </summary>
         /// <remarks>
         /// An error will be thrown if this property is set to a reference frame that rotates with the vessel being controlled,
@@ -177,7 +177,7 @@ namespace KRPC.SpaceCenter.Services
         public ReferenceFrame ReferenceFrame {
             get { return attitudeController.ReferenceFrame; }
             set {
-                if (System.Object.ReferenceEquals (value, null))
+                if (ReferenceEquals (value, null))
                     throw new ArgumentNullException ("ReferenceFrame");
                 if ((value.Type == ReferenceFrameType.Vessel && value.Vessel.Id == vesselId) ||
                     ((value.Type == ReferenceFrameType.Part || value.Type == ReferenceFrameType.PartCenterOfMass ||

@@ -13,7 +13,7 @@ namespace KRPC.SpaceCenter.AutoPilot
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     sealed class AttitudeController
     {
-        readonly KRPC.SpaceCenter.Services.Vessel vessel;
+        readonly Services.Vessel vessel;
         public readonly PIDController PitchPID = new PIDController (0);
         public readonly PIDController RollPID = new PIDController (0);
         public readonly PIDController YawPID = new PIDController (0);
@@ -38,7 +38,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
         public AttitudeController (Vessel vessel)
         {
-            this.vessel = new KRPC.SpaceCenter.Services.Vessel (vessel);
+            this.vessel = new Services.Vessel (vessel);
             ReferenceFrame = this.vessel.SurfaceReferenceFrame;
             StoppingTime = new Vector3d (0.5, 0.5, 0.5);
             DecelerationTime = new Vector3d (5, 5, 5);

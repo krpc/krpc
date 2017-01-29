@@ -35,14 +35,14 @@ namespace KRPC.Server.Message
             client.Close ();
         }
 
-        public override bool Equals (Object obj)
+        public override bool Equals (object obj)
         {
             return obj != null && Equals (obj as RPCClient);
         }
 
         public bool Equals (IClient<Request,Response> other)
         {
-            if ((object)other == null)
+            if (other == null)
                 return false;
             var otherClient = other as RPCClient;
             if ((object)otherClient == null)
@@ -57,7 +57,7 @@ namespace KRPC.Server.Message
 
         public static bool operator == (RPCClient lhs, RPCClient rhs)
         {
-            if (Object.ReferenceEquals (lhs, rhs))
+            if (ReferenceEquals (lhs, rhs))
                 return true;
             if ((object)lhs == null || (object)rhs == null)
                 return false;

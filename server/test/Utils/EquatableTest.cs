@@ -29,10 +29,10 @@ namespace KRPC.Test.Utils
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public class EquatableTest
     {
-        static MyEquatable obj1 = new MyEquatable ("foo");
-        static MyEquatable obj1a = obj1;
-        static MyEquatable obj2 = new MyEquatable ("foo");
-        static MyEquatable obj3 = new MyEquatable ("bar");
+        static readonly MyEquatable obj1 = new MyEquatable ("foo");
+        static readonly MyEquatable obj1a = obj1;
+        static readonly MyEquatable obj2 = new MyEquatable ("foo");
+        static readonly MyEquatable obj3 = new MyEquatable ("bar");
 
         [Test]
         public void EqualsTMethod ()

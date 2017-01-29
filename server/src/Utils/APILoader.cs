@@ -22,7 +22,7 @@ namespace KRPC.Utils
         public static bool Load (Type api, string assemblyName, string apiName, Version requiredVersion = null)
         {
             if (api == null)
-                throw new ArgumentNullException ("api");
+                throw new ArgumentNullException (nameof (api));
 
             // Find the assembly
             var assembly = AssemblyLoader.loadedAssemblies.FirstOrDefault (a => a.assembly.GetName ().Name == assemblyName);

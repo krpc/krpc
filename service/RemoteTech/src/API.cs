@@ -6,7 +6,7 @@ namespace KRPC.RemoteTech
 {
     static class API
     {
-        public static Boolean IsAvailable { get; private set; }
+        public static bool IsAvailable { get; private set; }
 
         public static void Load ()
         {
@@ -33,7 +33,7 @@ namespace KRPC.RemoteTech
 
         public static Func<IEnumerable<string>> GetGroundStations { get; internal set; }
 
-        public static Func<String,Guid> GetGroundStationGuid { get; internal set; }
+        public static Func<string,Guid> GetGroundStationGuid { get; internal set; }
 
         public static Func<CelestialBody,Guid> GetCelestialBodyGuid { get; internal set; }
 

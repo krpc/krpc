@@ -10,13 +10,13 @@ namespace KRPC.UI
         protected override void Init ()
         {
             Title = "kRPC";
-            Options.Add (new DialogGUIButton ("Allow", () => args.Request.Allow ()));
+            Options.Add (new DialogGUIButton ("Allow", args.Request.Allow));
             Options.Add (new DialogGUIButton ("Allow (don't ask again)", () => {
                 Addon.config.Configuration.AutoAcceptConnections = true;
                 Addon.config.Save ();
                 args.Request.Allow ();
             }));
-            Options.Add (new DialogGUIButton ("Deny", () => args.Request.Deny ()));
+            Options.Add (new DialogGUIButton ("Deny", args.Request.Deny));
         }
 
         protected override void Opened ()

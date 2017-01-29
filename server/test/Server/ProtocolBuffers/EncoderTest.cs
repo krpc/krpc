@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Google.Protobuf;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Service;
 using KRPC.Service.Messages;
@@ -70,14 +68,14 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void DecodeValue ()
         {
-            var value = (UInt32)Encoder.Decode ("ac02".ToByteString (), typeof(UInt32));
+            var value = (uint)Encoder.Decode ("ac02".ToByteString (), typeof(uint));
             Assert.AreEqual (300, value);
         }
 
         [Test]
         public void DecodeUnicodeString ()
         {
-            var value = (String)Encoder.Decode ("03e284a2".ToByteString (), typeof(String));
+            var value = (string)Encoder.Decode ("03e284a2".ToByteString (), typeof(string));
             Assert.AreEqual ("\u2122", value);
         }
 
@@ -107,9 +105,9 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [TestCase (3.14159265359f, "db0f4940")]
         [TestCase (-1.0f, "000080bf")]
         [TestCase (0.0f, "00000000")]
-        [TestCase (Single.PositiveInfinity, "0000807f")]
-        [TestCase (Single.NegativeInfinity, "000080ff")]
-        [TestCase (Single.NaN, "0000c0ff")]
+        [TestCase (float.PositiveInfinity, "0000807f")]
+        [TestCase (float.NegativeInfinity, "000080ff")]
+        [TestCase (float.NaN, "0000c0ff")]
         public void FloatValue (float value, string data)
         {
             var encodeResult = Encoder.Encode (value);
@@ -121,9 +119,9 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [TestCase (0.0, "0000000000000000")]
         [TestCase (-1.0, "000000000000f0bf")]
         [TestCase (3.14159265359, "ea2e4454fb210940")]
-        [TestCase (Double.PositiveInfinity, "000000000000f07f")]
-        [TestCase (Double.NegativeInfinity, "000000000000f0ff")]
-        [TestCase (Double.NaN, "000000000000f8ff")]
+        [TestCase (double.PositiveInfinity, "000000000000f07f")]
+        [TestCase (double.NegativeInfinity, "000000000000f0ff")]
+        [TestCase (double.NaN, "000000000000f8ff")]
         public void DoubleValue (double value, string data)
         {
             var encodeResult = Encoder.Encode (value);
@@ -165,7 +163,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [TestCase (1u, "01")]
         [TestCase (42u, "2a")]
         [TestCase (300u, "ac02")]
-        [TestCase (UInt32.MaxValue, "ffffffff0f")]
+        [TestCase (uint.MaxValue, "ffffffff0f")]
         public void UInt32Value (uint value, string data)
         {
             var encodeResult = Encoder.Encode (value);
@@ -179,7 +177,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [TestCase (42u, "2a")]
         [TestCase (300u, "ac02")]
         [TestCase (1234567890000ul, "d088ec8ff723")]
-        [TestCase (UInt64.MaxValue, "ffffffffffffffffff01")]
+        [TestCase (ulong.MaxValue, "ffffffffffffffffff01")]
         public void UInt64Value (ulong value, string data)
         {
             var encodeResult = Encoder.Encode (value);

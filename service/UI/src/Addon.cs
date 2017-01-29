@@ -5,7 +5,6 @@ using System.Linq;
 using KRPC.Server;
 using KRPC.Service;
 using UnityEngine;
-using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPC.UI
 {
@@ -28,7 +27,7 @@ namespace KRPC.UI
                 prefabs = new WWW ("file://" + path).assetBundle;
             }
             var prefab = prefabs.LoadAsset<GameObject> (prefabName);
-            var obj = UnityEngine.Object.Instantiate (prefab);
+            var obj = Instantiate (prefab);
             obj.transform.SetParent (parent.transform, false);
             return obj;
         }

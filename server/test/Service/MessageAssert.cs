@@ -50,12 +50,12 @@ namespace KRPC.Test.Service
 
         public static void HasNoDocumentation (Procedure procedure)
         {
-            Assert.AreEqual (String.Empty, procedure.Documentation);
+            Assert.AreEqual (string.Empty, procedure.Documentation);
         }
 
         public static void HasDocumentation (Procedure procedure)
         {
-            Assert.AreNotEqual (String.Empty, procedure.Documentation);
+            Assert.AreNotEqual (string.Empty, procedure.Documentation);
         }
 
         public static void HasDocumentation (Procedure procedure, string documentation)
@@ -65,7 +65,7 @@ namespace KRPC.Test.Service
 
         public static void HasNoDocumentation (Class cls)
         {
-            Assert.AreEqual (String.Empty, cls.Documentation);
+            Assert.AreEqual (string.Empty, cls.Documentation);
         }
 
         public static void HasDocumentation (Class cls, string documentation)
@@ -80,7 +80,7 @@ namespace KRPC.Test.Service
 
         public static void HasValue (Enumeration enumeration, int position, string name, int value)
         {
-            HasValue (enumeration, position, name, value, String.Empty);
+            HasValue (enumeration, position, name, value, string.Empty);
         }
 
         public static void HasValue (Enumeration enumeration, int position, string name, int value, string documentation)

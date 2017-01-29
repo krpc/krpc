@@ -113,7 +113,7 @@ namespace KRPC.Client
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         static void WriteList (object value, Type type, Stream stream)
         {
-            var encodedList = new KRPC.Schema.KRPC.List ();
+            var encodedList = new Schema.KRPC.List ();
             var list = (IList)value;
             var valueType = type.GetGenericArguments ().Single ();
             using (var internalBuffer = new MemoryStream ()) {
@@ -126,7 +126,7 @@ namespace KRPC.Client
 
         static void WriteSet (object value, Type type, Stream stream)
         {
-            var encodedSet = new KRPC.Schema.KRPC.Set ();
+            var encodedSet = new Schema.KRPC.Set ();
             var set = (IEnumerable)value;
             var valueType = type.GetGenericArguments ().Single ();
             using (var internalBuffer = new MemoryStream ()) {
@@ -227,7 +227,7 @@ namespace KRPC.Client
 
         static object DecodeList (CodedInputStream stream, Type type, IConnection client)
         {
-            var encodedList = KRPC.Schema.KRPC.List.Parser.ParseFrom (stream);
+            var encodedList = Schema.KRPC.List.Parser.ParseFrom (stream);
             var list = (IList)(typeof(List<>)
                 .MakeGenericType (type.GetGenericArguments ().Single ())
                 .GetConstructor (Type.EmptyTypes)
@@ -239,7 +239,7 @@ namespace KRPC.Client
 
         static object DecodeSet (CodedInputStream stream, Type type, IConnection client)
         {
-            var encodedSet = KRPC.Schema.KRPC.Set.Parser.ParseFrom (stream);
+            var encodedSet = Schema.KRPC.Set.Parser.ParseFrom (stream);
             var set = (IEnumerable)(typeof(HashSet<>)
                 .MakeGenericType (type.GetGenericArguments ().Single ())
                 .GetConstructor (Type.EmptyTypes)
@@ -269,7 +269,7 @@ namespace KRPC.Client
 
         static bool IsAGenericType (Type type, Type genericType)
         {
-            while (!Object.ReferenceEquals (type, null)) {
+            while (!ReferenceEquals (type, null)) {
                 if (type.IsGenericType && type.GetGenericTypeDefinition ().Equals (genericType))
                     return true;
                 foreach (var intType in type.GetInterfaces())

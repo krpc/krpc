@@ -27,7 +27,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Part (global::Part part)
         {
             if (ReferenceEquals (part, null))
-                throw new ArgumentNullException ("part");
+                throw new ArgumentNullException (nameof (part));
             partFlightId = part.flightID;
         }
 
@@ -142,7 +142,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The parts parent. Returns <c>null</c> if the part does not have a parent.
-        /// This, in combination with <see cref="Part.Children"/>, can be used to traverse the vessels parts tree.
+        /// This, in combination with <see cref="Children"/>, can be used to traverse the vessels parts tree.
         /// </summary>
         [KRPCProperty]
         public Part Parent {
@@ -151,7 +151,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The parts children. Returns an empty list if the part has no children.
-        /// This, in combination with <see cref="Part.Parent"/>, can be used to traverse the vessels parts tree.
+        /// This, in combination with <see cref="Parent"/>, can be used to traverse the vessels parts tree.
         /// </summary>
         [KRPCProperty]
         public IList<Part> Children {
@@ -603,7 +603,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.PositionFromWorldSpace (InternalPart.transform.position).ToTuple ();
         }
 
@@ -616,7 +616,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Tuple3 CenterOfMass (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.PositionFromWorldSpace (InternalPart.CenterOfMass ()).ToTuple ();
         }
 
@@ -635,7 +635,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Tuple<Tuple3,Tuple3> BoundingBox (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return InternalPart.GetBounds (referenceFrame).ToTuples ();
         }
 
@@ -647,7 +647,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.DirectionFromWorldSpace (InternalPart.transform.up).ToTuple ();
         }
 
@@ -659,7 +659,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             var part = InternalPart;
             return referenceFrame.VelocityFromWorldSpace (part.transform.position, part.orbit.GetVel ()).ToTuple ();
         }
@@ -672,7 +672,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.RotationFromWorldSpace (InternalPart.transform.rotation).ToTuple ();
         }
 

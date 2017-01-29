@@ -10,7 +10,6 @@ using KRPC.SpaceCenter.ExtensionMethods;
 using KSP.UI;
 using KSP.UI.Screens.Flight;
 using UnityEngine;
-using Tuple2 = KRPC.Utils.Tuple<double, double>;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
@@ -613,9 +612,9 @@ namespace KRPC.SpaceCenter.Services
         static void CheckReferenceFrames (ReferenceFrame from, ReferenceFrame to)
         {
             if (ReferenceEquals (from, null))
-                throw new ArgumentNullException ("from");
+                throw new ArgumentNullException (nameof (from));
             if (ReferenceEquals (to, null))
-                throw new ArgumentNullException ("to");
+                throw new ArgumentNullException (nameof (to));
         }
     }
 }

@@ -1,6 +1,4 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
-using KRPC.Client;
 using KRPC.Schema.KRPC;
 
 namespace KRPC.Client

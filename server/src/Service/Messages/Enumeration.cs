@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace KRPC.Service.Messages
@@ -16,7 +15,7 @@ namespace KRPC.Service.Messages
         {
             Name = name;
             Values = new List<EnumerationValue> ();
-            Documentation = String.Empty;
+            Documentation = string.Empty;
         }
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services
@@ -47,9 +46,9 @@ namespace KRPC.SpaceCenter.Services
         public static ResourceTransfer Start (Parts.Part fromPart, Parts.Part toPart, string resource, float maxAmount)
         {
             if (ReferenceEquals (fromPart, null))
-                throw new ArgumentNullException ("fromPart");
+                throw new ArgumentNullException (nameof (fromPart));
             if (ReferenceEquals (toPart, null))
-                throw new ArgumentNullException ("toPart");
+                throw new ArgumentNullException (nameof (toPart));
             // Get the internal part objects
             var internalFromPart = fromPart.InternalPart;
             var internalToPart = toPart.InternalPart;

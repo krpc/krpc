@@ -6,13 +6,13 @@ using KRPC.Service;
 namespace KRPC
 {
     /// <summary>
-    /// Deprecated. See <see cref="KRPC.Core"/>
+    /// Deprecated. See <see cref="Core"/>
     /// </summary>
     [Obsolete ("use KRPC.Core")]
     public static class KRPCCore
     {
         /// <summary>
-        /// Deprecated. See <see cref="KRPC.Service.CallContext"/>
+        /// Deprecated. See <see cref="CallContext"/>
         /// </summary>
         [Obsolete ("use KRPC.Service.CallContext")]
         [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]

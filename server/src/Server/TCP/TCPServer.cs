@@ -45,7 +45,7 @@ namespace KRPC.Server.TCP
         /// Clients requesting a connection. Must be locked before accessing.
         /// </summary>
         List<TCPClient> pendingClients = new List<TCPClient> ();
-        Object pendingClientsLock = new object ();
+        object pendingClientsLock = new object ();
         ulong closedClientsBytesRead;
         ulong closedClientsBytesWritten;
 
@@ -189,7 +189,7 @@ namespace KRPC.Server.TCP
                     return anyClientText;
                 try {
                     var subnet = NetworkInformation.GetSubnetMask (ListenAddress);
-                    return String.Format (subnetAllowedText, subnet);
+                    return string.Format (subnetAllowedText, subnet);
                 } catch (NotImplementedException) {
                 } catch (ArgumentException) {
                 } catch (DllNotFoundException) {

@@ -188,11 +188,11 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The docking port.
         /// </summary>
-        public Parts.DockingPort DockingPort {
+        public DockingPort DockingPort {
             get {
                 if (dockingPort == null)
                     throw new InvalidOperationException ("Reference frame has no docking port");
-                return new Parts.DockingPort (new Parts.Part (dockingPort.part));
+                return new DockingPort (new Parts.Part (dockingPort.part));
             }
         }
 

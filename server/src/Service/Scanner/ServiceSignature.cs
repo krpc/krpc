@@ -66,7 +66,7 @@ namespace KRPC.Service.Scanner
         {
             TypeUtils.ValidateIdentifier (name);
             Name = name;
-            Documentation = String.Empty;
+            Documentation = string.Empty;
             Classes = new Dictionary<string, ClassSignature> ();
             Enumerations = new Dictionary<string, EnumerationSignature> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();

@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Google.Protobuf;
@@ -91,7 +89,7 @@ namespace KRPC.Client
         public Object GetValue (ulong id)
         {
             CheckDisposed ();
-            Object result;
+            object result;
             lock (accessLock) {
                 if (!streamTypes.ContainsKey (id))
                     throw new System.InvalidOperationException ("Stream does not exist or has been closed");
@@ -122,8 +120,8 @@ namespace KRPC.Client
             readonly StreamManager manager;
             readonly NetworkStream stream;
             volatile bool stop;
-            EventWaitHandle stopEvent = new EventWaitHandle (false, EventResetMode.ManualReset);
-            byte[] buffer = new byte [Connection.BUFFER_INITIAL_SIZE];
+            readonly EventWaitHandle stopEvent = new EventWaitHandle (false, EventResetMode.ManualReset);
+            byte [] buffer = new byte [Connection.BUFFER_INITIAL_SIZE];
 
             public UpdateThread (StreamManager streamManager, TcpClient streamClient)
             {

@@ -128,10 +128,10 @@ namespace KRPC.KerbalAlarmClock
         /// The vessel that the alarm is attached to.
         /// </summary>
         [KRPCProperty]
-        public global::KRPC.SpaceCenter.Services.Vessel Vessel {
+        public SpaceCenter.Services.Vessel Vessel {
             get {
                 var vessel = FlightGlobals.Vessels.First (x => x.id.ToString () == alarm.VesselID);
-                return new KRPC.SpaceCenter.Services.Vessel (vessel);
+                return new SpaceCenter.Services.Vessel (vessel);
             }
             set {
                 alarm.VesselID = value.Id.ToString ();
@@ -142,10 +142,10 @@ namespace KRPC.KerbalAlarmClock
         /// The celestial body the vessel is departing from.
         /// </summary>
         [KRPCProperty]
-        public global::KRPC.SpaceCenter.Services.CelestialBody XferOriginBody {
+        public SpaceCenter.Services.CelestialBody XferOriginBody {
             get {
                 var body = FlightGlobals.Bodies.First (x => alarm.XferOriginBodyName == x.bodyName);
-                return new KRPC.SpaceCenter.Services.CelestialBody (body);
+                return new SpaceCenter.Services.CelestialBody (body);
             }
             set {
                 alarm.XferOriginBodyName = value.InternalBody.bodyName;
@@ -156,10 +156,10 @@ namespace KRPC.KerbalAlarmClock
         /// The celestial body the vessel is arriving at.
         /// </summary>
         [KRPCProperty]
-        public KRPC.SpaceCenter.Services.CelestialBody XferTargetBody {
+        public SpaceCenter.Services.CelestialBody XferTargetBody {
             get {
                 var body = FlightGlobals.Bodies.First (x => alarm.XferTargetBodyName == x.bodyName);
-                return new KRPC.SpaceCenter.Services.CelestialBody (body);
+                return new SpaceCenter.Services.CelestialBody (body);
             }
             set {
                 alarm.XferTargetBodyName = value.InternalBody.bodyName;

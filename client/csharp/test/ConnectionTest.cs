@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using KRPC.Client;
 using KRPC.Client.Services.KRPC;
 using KRPC.Client.Services.TestService;
 using NUnit.Framework;

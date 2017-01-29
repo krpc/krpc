@@ -89,7 +89,7 @@ namespace KRPC.Utils
         {
             object[] attributes = member.GetCustomAttributes (typeof(T), false);
             if (attributes.Length != 1)
-                throw new ArgumentException ("Does not have any attributes", "member");
+                throw new ArgumentException ("Does not have any attributes", nameof (member));
             return (T)attributes [0];
         }
 

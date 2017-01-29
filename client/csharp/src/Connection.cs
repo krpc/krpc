@@ -5,7 +5,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Sockets;
-using System.Reflection;
 using System.Threading;
 using Google.Protobuf;
 using KRPC.Client.Attributes;
@@ -22,7 +21,7 @@ namespace KRPC.Client
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public class Connection : IConnection, IDisposable
     {
-        Object invokeLock = new Object ();
+        object invokeLock = new object ();
         TcpClient rpcClient;
         TcpClient streamClient;
         NetworkStream rpcStream;

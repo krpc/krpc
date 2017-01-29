@@ -208,8 +208,8 @@ namespace KRPC
                 OnGUIApplicationLauncherDestroyed ();
             GameEvents.onGUIApplicationLauncherReady.Remove (OnGUIApplicationLauncherReady);
             GameEvents.onGUIApplicationLauncherDestroyed.Remove (OnGUIApplicationLauncherDestroyed);
-            Object.Destroy (mainWindow);
-            Object.Destroy (clientConnectingDialog);
+            Destroy (mainWindow);
+            Destroy (clientConnectingDialog);
             GUILayoutExtensions.Destroy ();
         }
 

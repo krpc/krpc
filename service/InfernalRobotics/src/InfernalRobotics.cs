@@ -31,7 +31,7 @@ namespace KRPC.InfernalRobotics
         /// A list of all the servo groups in the given <paramref name="vessel"/>.
         /// </summary>
         [KRPCProcedure]
-        public static IList<ServoGroup> ServoGroups (KRPC.SpaceCenter.Services.Vessel vessel)
+        public static IList<ServoGroup> ServoGroups (SpaceCenter.Services.Vessel vessel)
         {
             CheckAPI ();
             return IRWrapper.IRController.ServoGroups.Where (x => x.Vessel.id == vessel.Id).Select (x => new ServoGroup (x)).ToList ();
@@ -44,7 +44,7 @@ namespace KRPC.InfernalRobotics
         /// <param name="vessel">Vessel to check.</param>
         /// <param name="name">Name of servo group to find.</param>
         [KRPCProcedure]
-        public static ServoGroup ServoGroupWithName (KRPC.SpaceCenter.Services.Vessel vessel, string name)
+        public static ServoGroup ServoGroupWithName (SpaceCenter.Services.Vessel vessel, string name)
         {
             CheckAPI ();
             var servoGroup = IRWrapper.IRController.ServoGroups.FirstOrDefault (x => x.Vessel.id == vessel.Id && x.Name == name);
@@ -58,7 +58,7 @@ namespace KRPC.InfernalRobotics
         /// <param name="vessel">Vessel to check.</param>
         /// <param name="name">Name of the servo to find.</param>
         [KRPCProcedure]
-        public static Servo ServoWithName (KRPC.SpaceCenter.Services.Vessel vessel, string name)
+        public static Servo ServoWithName (SpaceCenter.Services.Vessel vessel, string name)
         {
             CheckAPI ();
             var servo = IRWrapper.IRController.ServoGroups

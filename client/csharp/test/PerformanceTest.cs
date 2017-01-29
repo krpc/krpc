@@ -20,7 +20,7 @@ namespace KRPC.Client.Test
             for (int i = 0; i < n; i++)
                 testService.FloatToString (3.14159f);
             stopWatch.Stop ();
-            double t = ((double)stopWatch.ElapsedMilliseconds / 1000.0);
+            double t = stopWatch.ElapsedMilliseconds / 1000.0;
             Console.WriteLine ("Total execution time: " + t + " seconds");
             Console.WriteLine ("RPC execution rate: " + (int)(n / t) + " per second");
             Console.WriteLine ("Latency: " + ((t * 1000) / n) + " milliseconds");

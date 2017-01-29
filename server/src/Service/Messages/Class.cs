@@ -12,7 +12,7 @@ namespace KRPC.Service.Messages
         public Class (string name)
         {
             Name = name;
-            Documentation = String.Empty;
+            Documentation = string.Empty;
         }
     }
 }

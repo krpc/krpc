@@ -1,5 +1,4 @@
 using System;
-using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -44,9 +43,9 @@ namespace KRPC.UI
         static Texture2D LoadTexture (string filepath)
         {
             if (!filepath.EndsWith (".png", StringComparison.OrdinalIgnoreCase))
-                throw new ArgumentException ("Not a PNG file", "filepath");
+                throw new ArgumentException ("Not a PNG file", nameof (filepath));
             filepath = iconsPath + "/" + filepath.Substring (0, filepath.Length - 4);
-            KRPC.Utils.Logger.WriteLine ("Loading texture " + filepath);
+            Utils.Logger.WriteLine ("Loading texture " + filepath);
             return GameDatabase.Instance.GetTexture (filepath, false);
         }
     }

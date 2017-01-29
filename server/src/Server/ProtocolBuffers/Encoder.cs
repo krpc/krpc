@@ -103,7 +103,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         static void WriteList (object value, CodedOutputStream stream)
         {
-            var encodedList = new KRPC.Schema.KRPC.List ();
+            var encodedList = new Schema.KRPC.List ();
             var list = (IList)value;
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
@@ -115,7 +115,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         static void WriteSet (object value, CodedOutputStream stream)
         {
-            var encodedSet = new KRPC.Schema.KRPC.Set ();
+            var encodedSet = new Schema.KRPC.Set ();
             var set = (IEnumerable)value;
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
@@ -221,7 +221,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         static object DecodeList (CodedInputStream stream, Type type)
         {
-            var encodedList = KRPC.Schema.KRPC.List.Parser.ParseFrom (stream);
+            var encodedList = Schema.KRPC.List.Parser.ParseFrom (stream);
             var list = (IList)(typeof(System.Collections.Generic.List<>)
                 .MakeGenericType (type.GetGenericArguments ().Single ())
                 .GetConstructor (Type.EmptyTypes)
@@ -233,7 +233,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         static object DecodeSet (CodedInputStream stream, Type type)
         {
-            var encodedSet = KRPC.Schema.KRPC.Set.Parser.ParseFrom (stream);
+            var encodedSet = Schema.KRPC.Set.Parser.ParseFrom (stream);
             var set = (IEnumerable)(typeof(System.Collections.Generic.HashSet<>)
                 .MakeGenericType (type.GetGenericArguments ().Single ())
                 .GetConstructor (Type.EmptyTypes)

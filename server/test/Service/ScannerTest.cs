@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -57,7 +56,7 @@ namespace KRPC.Test.Service
             Assert.AreEqual (1, service.Procedures.Count);
             Assert.AreEqual (1, service.Classes.Count);
             Assert.AreEqual (0, service.Enumerations.Count);
-            Assert.AreEqual (String.Empty, service.Documentation);
+            Assert.AreEqual (string.Empty, service.Documentation);
         }
 
         [Test]
@@ -168,7 +167,7 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "TestClass_static_StaticMethod") {
                     MessageAssert.HasParameters (proc, 1);
-                    MessageAssert.HasParameterWithDefaultValue (proc, 0, typeof(string), "a", String.Empty);
+                    MessageAssert.HasParameterWithDefaultValue (proc, 0, typeof(string), "a", string.Empty);
                     MessageAssert.HasReturnType (proc, typeof(string));
                 } else if (proc.Name == "TestTopLevelClass_AMethod") {
                     MessageAssert.HasParameters (proc, 2);

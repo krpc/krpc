@@ -5,7 +5,7 @@ namespace KRPC.SpaceCenter
 {
     /// <summary>
     /// The time warp mode.
-    /// Returned by <see cref="SpaceCenter.WarpMode"/>
+    /// Returned by <see cref="WarpMode"/>
     /// </summary>
     [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]

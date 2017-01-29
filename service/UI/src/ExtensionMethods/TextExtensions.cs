@@ -25,7 +25,7 @@ namespace KRPC.UI.ExtensionMethods
             case UnityEngine.FontStyle.BoldAndItalic:
                 return FontStyle.BoldAndItalic;
             default:
-                throw new ArgumentOutOfRangeException ("style");
+                throw new ArgumentOutOfRangeException (nameof (style));
             }
         }
 
@@ -44,7 +44,7 @@ namespace KRPC.UI.ExtensionMethods
             case FontStyle.BoldAndItalic:
                 return UnityEngine.FontStyle.BoldAndItalic;
             default:
-                throw new ArgumentOutOfRangeException ("style");
+                throw new ArgumentOutOfRangeException (nameof (style));
             }
         }
 
@@ -61,7 +61,7 @@ namespace KRPC.UI.ExtensionMethods
             case UnityEngine.TextAlignment.Center:
                 return TextAlignment.Center;
             default:
-                throw new ArgumentOutOfRangeException ("style");
+                throw new ArgumentOutOfRangeException (nameof (style));
             }
         }
 
@@ -78,7 +78,7 @@ namespace KRPC.UI.ExtensionMethods
             case TextAlignment.Center:
                 return UnityEngine.TextAlignment.Center;
             default:
-                throw new ArgumentOutOfRangeException ("style");
+                throw new ArgumentOutOfRangeException (nameof (style));
             }
         }
 
@@ -107,7 +107,7 @@ namespace KRPC.UI.ExtensionMethods
             case UnityEngine.TextAnchor.UpperRight:
                 return TextAnchor.UpperRight;
             default:
-                throw new ArgumentOutOfRangeException ("style");
+                throw new ArgumentOutOfRangeException (nameof (style));
             }
         }
 
@@ -136,7 +136,7 @@ namespace KRPC.UI.ExtensionMethods
             case TextAnchor.UpperRight:
                 return UnityEngine.TextAnchor.UpperRight;
             default:
-                throw new ArgumentOutOfRangeException ("style");
+                throw new ArgumentOutOfRangeException (nameof (style));
             }
         }
 
@@ -155,7 +155,7 @@ namespace KRPC.UI.ExtensionMethods
             case MessagePosition.TopRight:
                 return ScreenMessageStyle.UPPER_RIGHT;
             default:
-                throw new ArgumentOutOfRangeException ("position");
+                throw new ArgumentOutOfRangeException (nameof (position));
             }
         }
     }

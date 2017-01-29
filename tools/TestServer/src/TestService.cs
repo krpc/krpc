@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Continuations;
-using KRPC.Server;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -59,7 +58,7 @@ namespace TestServer
         public static string BytesToHexString (byte[] value)
         {
 
-            return BitConverter.ToString (value).Replace ("-", String.Empty).ToLower ();
+            return BitConverter.ToString (value).Replace ("-", string.Empty).ToLower ();
         }
 
         [KRPCProcedure]
@@ -231,7 +230,7 @@ namespace TestServer
         public static IList<int> IncrementList (IList<int> l)
         {
             if (l == null)
-                throw new ArgumentNullException ("l");
+                throw new ArgumentNullException (nameof (l));
             return l.Select (x => x + 1).ToList ();
         }
 
@@ -239,7 +238,7 @@ namespace TestServer
         public static IDictionary<string,int> IncrementDictionary (IDictionary<string,int> d)
         {
             if (d == null)
-                throw new ArgumentNullException ("d");
+                throw new ArgumentNullException (nameof (d));
             var result = new Dictionary<string,int> ();
             foreach (var entry in d)
                 result [entry.Key] = entry.Value + 1;
@@ -251,7 +250,7 @@ namespace TestServer
         public static HashSet<int> IncrementSet (HashSet<int> h)
         {
             if (h == null)
-                throw new ArgumentNullException ("h");
+                throw new ArgumentNullException (nameof (h));
             var result = new HashSet<int> ();
             foreach (var item in h)
                 result.Add (item + 1);
@@ -261,7 +260,7 @@ namespace TestServer
         [KRPCProcedure]
         public static KRPC.Utils.Tuple<int,long> IncrementTuple (KRPC.Utils.Tuple<int,long> t)
         {
-            return KRPC.Utils.Tuple.Create<int,long> (t.Item1 + 1, t.Item2 + 1);
+            return KRPC.Utils.Tuple.Create (t.Item1 + 1, t.Item2 + 1);
         }
 
         [KRPCProcedure]
@@ -269,7 +268,7 @@ namespace TestServer
         public static IDictionary<string,IList<int>> IncrementNestedCollection (IDictionary<string,IList<int>> d)
         {
             if (d == null)
-                throw new ArgumentNullException ("d");
+                throw new ArgumentNullException (nameof (d));
             IDictionary<string,IList<int>> result = new Dictionary<string,IList<int>> ();
             foreach (var entry in d)
                 result [entry.Key] = entry.Value.Select (x => x + 1).ToList ();
@@ -347,7 +346,7 @@ namespace TestServer
         public static IList<TestClass> AddToObjectList (IList<TestClass> l, string value)
         {
             if (l == null)
-                throw new ArgumentNullException ("l");
+                throw new ArgumentNullException (nameof (l));
             l.Add (new TestClass (value));
             return l;
         }
