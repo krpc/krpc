@@ -7,10 +7,42 @@ The following examples demonstrate use of the :ref:`python-api-parts` functional
 achieve various tasks. More details on specific topics can also be found in the
 API documentation:
 
-* :ref:`python-api-parts-trees-of-parts`
-* :ref:`python-api-parts-attachment-modes`
-* :ref:`python-api-parts-fuel-lines`
-* :ref:`python-api-parts-staging`
+.. tabs::
+
+   .. tab:: C#
+
+      * :ref:`csharp-api-parts-trees-of-parts`
+      * :ref:`csharp-api-parts-attachment-modes`
+      * :ref:`csharp-api-parts-fuel-lines`
+      * :ref:`csharp-api-parts-staging`
+
+   .. tab:: C++
+
+      * :ref:`cpp-api-parts-trees-of-parts`
+      * :ref:`cpp-api-parts-attachment-modes`
+      * :ref:`cpp-api-parts-fuel-lines`
+      * :ref:`cpp-api-parts-staging`
+
+   .. tab:: Java
+
+      * :ref:`java-api-parts-trees-of-parts`
+      * :ref:`java-api-parts-attachment-modes`
+      * :ref:`java-api-parts-fuel-lines`
+      * :ref:`java-api-parts-staging`
+
+   .. tab:: Lua
+
+      * :ref:`lua-api-parts-trees-of-parts`
+      * :ref:`lua-api-parts-attachment-modes`
+      * :ref:`lua-api-parts-fuel-lines`
+      * :ref:`lua-api-parts-staging`
+
+   .. tab:: Python
+
+      * :ref:`python-api-parts-trees-of-parts`
+      * :ref:`python-api-parts-attachment-modes`
+      * :ref:`python-api-parts-fuel-lines`
+      * :ref:`python-api-parts-staging`
 
 Deploying all Parachutes
 ------------------------
