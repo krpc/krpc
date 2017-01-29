@@ -1,10 +1,10 @@
-.. _tutorial-reference-frames:
-
 .. csharp:namespace:: KRPC.Client.Services.SpaceCenter
 .. cpp:namespace:: krpc::services::SpaceCenter
 .. java:package:: krpc.client.services.SpaceCenter
 .. lua:currentmodule:: SpaceCenter
 .. py:currentmodule:: SpaceCenter
+
+.. _tutorial-reference-frames:
 
 Reference Frames
 ================
