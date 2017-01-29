@@ -54,7 +54,7 @@ namespace KRPC.Server.TCP
         /// Clients requesting a connection. Must be locked before accessing.
         /// </summary>
         List<TCPClient> pendingClients = new List<TCPClient> ();
-        Object pendingClientsLock = new object ();
+        object pendingClientsLock = new object ();
         ulong closedClientsBytesRead;
         ulong closedClientsBytesWritten;
 
@@ -62,7 +62,7 @@ namespace KRPC.Server.TCP
         /// Create a TCP server. After Start() is called, the server will listen for
         /// connections to the specified local address and port number.
         /// </summary>
-        public TCPServer (String serverName, IPAddress address, ushort port)
+        public TCPServer (string serverName, IPAddress address, ushort port)
         {
             name = serverName;
             ListenAddress = address;
@@ -197,7 +197,7 @@ namespace KRPC.Server.TCP
                     return anyClientText;
                 try {
                     var subnet = NetworkInformation.GetSubnetMask (ListenAddress);
-                    return String.Format (subnetAllowedText, subnet);
+                    return string.Format (subnetAllowedText, subnet);
                 } catch (NotImplementedException) {
                 } catch (ArgumentException) {
                 } catch (DllNotFoundException) {

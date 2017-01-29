@@ -67,7 +67,7 @@ namespace KRPC.SpaceCenter.Services
         /// Gets the apoapsis of the orbit, in meters, from the center of mass of the body being orbited.
         /// </summary>
         /// <remarks>
-        /// For the apoapsis altitude reported on the in-game map view, use <see cref="Orbit.ApoapsisAltitude"/>.
+        /// For the apoapsis altitude reported on the in-game map view, use <see cref="ApoapsisAltitude"/>.
         /// </remarks>
         [KRPCProperty]
         public double Apoapsis {
@@ -78,7 +78,7 @@ namespace KRPC.SpaceCenter.Services
         /// The periapsis of the orbit, in meters, from the center of mass of the body being orbited.
         /// </summary>
         /// <remarks>
-        /// For the periapsis altitude reported on the in-game map view, use <see cref="Orbit.PeriapsisAltitude"/>.
+        /// For the periapsis altitude reported on the in-game map view, use <see cref="PeriapsisAltitude"/>.
         /// </remarks>
         [KRPCProperty]
         public double Periapsis {
@@ -89,7 +89,7 @@ namespace KRPC.SpaceCenter.Services
         /// The apoapsis of the orbit, in meters, above the sea level of the body being orbited.
         /// </summary>
         /// <remarks>
-        /// This is equal to <see cref="Orbit.Apoapsis"/> minus the equatorial radius of the body.
+        /// This is equal to <see cref="Apoapsis"/> minus the equatorial radius of the body.
         /// </remarks>
         [KRPCProperty]
         public double ApoapsisAltitude {
@@ -100,7 +100,7 @@ namespace KRPC.SpaceCenter.Services
         /// The periapsis of the orbit, in meters, above the sea level of the body being orbited.
         /// </summary>
         /// <remarks>
-        /// This is equal to <see cref="Orbit.Periapsis"/> minus the equatorial radius of the body.
+        /// This is equal to <see cref="Periapsis"/> minus the equatorial radius of the body.
         /// </remarks>
         [KRPCProperty]
         public double PeriapsisAltitude {
@@ -257,7 +257,7 @@ namespace KRPC.SpaceCenter.Services
         public static Tuple3 ReferencePlaneNormal (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.DirectionFromWorldSpace (Planetarium.up).normalized.ToTuple ();
         }
 
@@ -270,7 +270,7 @@ namespace KRPC.SpaceCenter.Services
         public static Tuple3 ReferencePlaneDirection (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.DirectionFromWorldSpace (Planetarium.right).normalized.ToTuple ();
         }
 
@@ -280,7 +280,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Orbit NextOrbit {
-            get { return (Double.IsNaN (TimeToSOIChange)) ? null : new Orbit (InternalOrbit.nextPatch); }
+            get { return (double.IsNaN (TimeToSOIChange)) ? null : new Orbit (InternalOrbit.nextPatch); }
         }
 
         /// <summary>
@@ -291,7 +291,7 @@ namespace KRPC.SpaceCenter.Services
         public double TimeToSOIChange {
             get {
                 var time = InternalOrbit.UTsoi - SpaceCenter.UT;
-                return time < 0 ? Double.NaN : time;
+                return time < 0 ? double.NaN : time;
             }
         }
 

@@ -125,9 +125,9 @@ namespace KRPC.UI
             DrawInfo (maxTimePerUpdateText, core.OneRPCPerUpdate ? notApplicableText : core.MaxTimePerUpdate + " ns");
             DrawInfo (rpcReceiveModeText, core.BlockingRecv ? blockingModeText : nonBlockingModeText);
             DrawInfo (recvTimeoutText, core.BlockingRecv ? core.RecvTimeout + " ns" : notApplicableText);
-            DrawInfo (timePerRPCUpdateText, String.Format ("{0:F5} s", core.TimePerRPCUpdate));
-            DrawInfo (pollTimePerRPCUpdateText, String.Format ("{0:F5} s", core.PollTimePerRPCUpdate));
-            DrawInfo (execTimePerRPCUpdateText, String.Format ("{0:F5} s", core.ExecTimePerRPCUpdate));
+            DrawInfo (timePerRPCUpdateText, string.Format ("{0:F5} s", core.TimePerRPCUpdate));
+            DrawInfo (pollTimePerRPCUpdateText, string.Format ("{0:F5} s", core.PollTimePerRPCUpdate));
+            DrawInfo (execTimePerRPCUpdateText, string.Format ("{0:F5} s", core.ExecTimePerRPCUpdate));
 
             GUILayoutExtensions.Separator (separatorStyle);
 
@@ -135,7 +135,7 @@ namespace KRPC.UI
             DrawInfo (streamingRPCsText, core.StreamRPCs.ToString ());
             DrawInfo (streamingRPCsExecutedText, core.StreamRPCsExecuted.ToString ());
             DrawInfo (streamingRPCRateText, Math.Round (core.StreamRPCRate) + " RPC/s");
-            DrawInfo (timePerStreamUpdateText, String.Format ("{0:F5} s", core.TimePerStreamUpdate));
+            DrawInfo (timePerStreamUpdateText, string.Format ("{0:F5} s", core.TimePerStreamUpdate));
 
             GUILayoutExtensions.Separator (separatorStyle);
 
@@ -149,7 +149,7 @@ namespace KRPC.UI
             GUI.DragWindow ();
         }
 
-        static String BytesToString (ulong bytes)
+        static string BytesToString (ulong bytes)
         {
             string[] suffix = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
             if (bytes == 0)

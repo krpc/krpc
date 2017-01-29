@@ -9,12 +9,12 @@ namespace KRPC.Utils
 
         public static double ElapsedSeconds (this Stopwatch stopwatch)
         {
-            return (double)stopwatch.ElapsedTicks * ticksToSeconds;
+            return stopwatch.ElapsedTicks * ticksToSeconds;
         }
 
         public static long MicrosecondsToTicks (long microseconds)
         {
-            return (long)((double)microseconds * microsecondsToTicks);
+            return (long)(microseconds * microsecondsToTicks);
         }
     }
 }

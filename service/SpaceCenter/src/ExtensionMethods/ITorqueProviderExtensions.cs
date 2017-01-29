@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using KRPC.Utils;
 using UnityEngine;
 using Torque = KRPC.Utils.Tuple<Vector3d, Vector3d>;
 

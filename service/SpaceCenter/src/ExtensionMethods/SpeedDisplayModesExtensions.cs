@@ -17,7 +17,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             case FlightGlobals.SpeedDisplayModes.Target:
                 return Services.SpeedMode.Target;
             default:
-                throw new ArgumentOutOfRangeException ("mode");
+                throw new ArgumentOutOfRangeException (nameof (mode));
             }
         }
 
@@ -31,7 +31,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             case Services.SpeedMode.Target:
                 return FlightGlobals.SpeedDisplayModes.Target;
             default:
-                throw new ArgumentOutOfRangeException ("mode");
+                throw new ArgumentOutOfRangeException (nameof (mode));
             }
         }
     }

@@ -55,8 +55,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Deployed {
             get {
                 return
-                panel.deployState == ModuleDeployableSolarPanel.DeployState.EXTENDED ||
-                panel.deployState == ModuleDeployableSolarPanel.DeployState.EXTENDING;
+                panel.deployState == ModuleDeployablePart.DeployState.EXTENDED ||
+                panel.deployState == ModuleDeployablePart.DeployState.EXTENDING;
             }
             set {
                 if (value)

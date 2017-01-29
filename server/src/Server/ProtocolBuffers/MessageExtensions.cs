@@ -158,7 +158,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         public static Request ToMessage (this Schema.KRPC.Request request)
         {
-            var procedureSignature = KRPC.Service.Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
+            var procedureSignature = Service.Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
             var result = new Request (request.Service, request.Procedure);
             foreach (var argument in request.Arguments) {
                 var type = procedureSignature.Parameters [(int)argument.Position].Type;

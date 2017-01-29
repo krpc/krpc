@@ -21,7 +21,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             case ModuleParachute.deploymentStates.STOWED:
                 return ParachuteState.Stowed;
             default:
-                throw new ArgumentOutOfRangeException ("state");
+                throw new ArgumentOutOfRangeException (nameof (state));
             }
         }
     }

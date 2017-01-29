@@ -1,4 +1,3 @@
-using System;
 using KRPC.Server.TCP;
 using NUnit.Framework;
 
@@ -27,7 +26,7 @@ namespace KRPC.Test.Server.TCP
             var client = new TCPClient (new System.Net.Sockets.TcpClient ());
             Assert.IsFalse (client.Connected);
             Assert.AreEqual (client.Guid.ToString (), client.Name);
-            Assert.AreEqual (String.Empty, client.Address);
+            Assert.AreEqual (string.Empty, client.Address);
             Assert.DoesNotThrow (client.Close);
         }
     }

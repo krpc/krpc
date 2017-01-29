@@ -94,11 +94,10 @@ namespace KRPC.SpaceCenter.Services.Parts
                         return DockingPortState.Docked;
                     // Otherwise, this docking port is actually "Docking"
                     return DockingPortState.Docking;
-                } else {
-                    // This docking port is not "Docked", but check if it is connected to another docking port
-                    // If it is, this docking port is "Docking"
-                    return dockedPort != null ? DockingPortState.Docking : state;
                 }
+                // This docking port is not "Docked", but check if it is connected to another docking port
+                // If it is, this docking port is "Docking"
+                return dockedPort != null ? DockingPortState.Docking : state;
             }
         }
 
@@ -207,7 +206,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.PositionFromWorldSpace (port.nodeTransform.position).ToTuple ();
         }
 
@@ -218,7 +217,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.DirectionFromWorldSpace (port.nodeTransform.forward).ToTuple ();
         }
 
@@ -229,7 +228,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.RotationFromWorldSpace (port.nodeTransform.rotation * Quaternion.Euler (90, 0, 0)).ToTuple ();
         }
 
@@ -270,10 +269,9 @@ namespace KRPC.SpaceCenter.Services.Parts
                     if (parent != null && PointsTowards (parent))
                         return parent;
                     throw new InvalidOperationException ("Docking port is 'PreAttached' but is not docked to any parts");
-                } else {
-                    // Find the port that is "Docked" to this port, if any
-                    return part.vessel [port.dockedPartUId];
                 }
+                // Find the port that is "Docked" to this port, if any
+                return part.vessel [port.dockedPartUId];
             }
         }
 
@@ -293,22 +291,19 @@ namespace KRPC.SpaceCenter.Services.Parts
             var state = node.state;
             if (state == "Ready")
                 return DockingPortState.Ready;
-            else if (state.StartsWith ("Docked") || state == "PreAttached")
+            if (state.StartsWith ("Docked", StringComparison.CurrentCulture) || state == "PreAttached")
                 return DockingPortState.Docked;
-            else if (state.Contains ("Acquire"))
+            if (state.Contains ("Acquire"))
                 return DockingPortState.Docking;
-            else if (state == "Disengage")
+            if (state == "Disengage")
                 return DockingPortState.Undocking;
-            else if (state == "Disabled") {
+            if (state == "Disabled") {
                 var shieldModule = node.part.Module<ModuleAnimateGeneric> ();
                 if (shieldModule == null)
                     throw new InvalidOperationException ("Docking port state is '" + node.state + "', but it does not have a shield!");
-                if (shieldModule.status.StartsWith ("Moving"))
-                    return DockingPortState.Moving;
-                else
-                    return DockingPortState.Shielded;
-            } else
-                throw new ArgumentException ("Unknown docking port state '" + node.state + "'");
+                return shieldModule.status.StartsWith ("Moving", StringComparison.CurrentCulture) ? DockingPortState.Moving : DockingPortState.Shielded;
+            }
+            throw new ArgumentException ("Unknown docking port state '" + node.state + "'");
         }
 
         /// <summary>
@@ -323,9 +318,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (e != null) {
                 e.Invoke ();
                 return true;
-            } else {
-                return false;
             }
+            return false;
         }
     }
 }

@@ -163,7 +163,7 @@ namespace KRPC.Client
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         static void WriteList (object value, Type type, Stream stream)
         {
-            var encodedList = new KRPC.Schema.KRPC.List ();
+            var encodedList = new Schema.KRPC.List ();
             var list = (IList)value;
             var valueType = type.GetGenericArguments ().Single ();
             using (var internalBuffer = new MemoryStream ()) {
@@ -178,11 +178,11 @@ namespace KRPC.Client
         {
             var keyType = type.GetGenericArguments () [0];
             var valueType = type.GetGenericArguments () [1];
-            var encodedDictionary = new KRPC.Schema.KRPC.Dictionary ();
+            var encodedDictionary = new Schema.KRPC.Dictionary ();
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
                 foreach (DictionaryEntry entry in (IDictionary) value) {
-                    var encodedEntry = new KRPC.Schema.KRPC.DictionaryEntry ();
+                    var encodedEntry = new Schema.KRPC.DictionaryEntry ();
                     encodedEntry.Key = EncodeObject (entry.Key, keyType, internalBuffer, internalStream);
                     encodedEntry.Value = EncodeObject (entry.Value, valueType, internalBuffer, internalStream);
                     encodedDictionary.Entries.Add (encodedEntry);
@@ -193,7 +193,7 @@ namespace KRPC.Client
 
         static void WriteSet (object value, Type type, Stream stream)
         {
-            var encodedSet = new KRPC.Schema.KRPC.Set ();
+            var encodedSet = new Schema.KRPC.Set ();
             var set = (IEnumerable)value;
             var valueType = type.GetGenericArguments ().Single ();
             using (var internalBuffer = new MemoryStream ()) {
@@ -207,14 +207,14 @@ namespace KRPC.Client
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         static void WriteTuple (object value, Type type, Stream stream)
         {
-            var encodedTuple = new KRPC.Schema.KRPC.Tuple ();
+            var encodedTuple = new Schema.KRPC.Tuple ();
             var valueTypes = type.GetGenericArguments ().ToArray ();
-            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length.ToString ());
+            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length.ToString());
             var tupleType = genericType.MakeGenericType (valueTypes);
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
                 for (int i = 0; i < valueTypes.Length; i++) {
-                    var property = tupleType.GetProperty ("Item" + (i + 1).ToString ());
+                    var property = tupleType.GetProperty ("Item" + (i + 1).ToString());
                     var item = property.GetGetMethod ().Invoke (value, null);
                     encodedTuple.Items.Add (EncodeObject (item, valueTypes [i], internalBuffer, internalStream));
                 }
@@ -279,7 +279,7 @@ namespace KRPC.Client
 
         static object DecodeList (CodedInputStream stream, Type type, IConnection client)
         {
-            var encodedList = KRPC.Schema.KRPC.List.Parser.ParseFrom (stream);
+            var encodedList = Schema.KRPC.List.Parser.ParseFrom (stream);
             var list = (IList)(typeof(List<>)
                 .MakeGenericType (type.GetGenericArguments ().Single ())
                 .GetConstructor (Type.EmptyTypes)
@@ -291,7 +291,7 @@ namespace KRPC.Client
 
         static object DecodeDictionary (CodedInputStream stream, Type type, IConnection client)
         {
-            var encodedDictionary = KRPC.Schema.KRPC.Dictionary.Parser.ParseFrom (stream);
+            var encodedDictionary = Schema.KRPC.Dictionary.Parser.ParseFrom (stream);
             var dictionary = (IDictionary)(typeof(Dictionary<,>)
                 .MakeGenericType (type.GetGenericArguments () [0], type.GetGenericArguments () [1])
                 .GetConstructor (Type.EmptyTypes)
@@ -306,7 +306,7 @@ namespace KRPC.Client
 
         static object DecodeSet (CodedInputStream stream, Type type, IConnection client)
         {
-            var encodedSet = KRPC.Schema.KRPC.Set.Parser.ParseFrom (stream);
+            var encodedSet = Schema.KRPC.Set.Parser.ParseFrom (stream);
             var set = (IEnumerable)(typeof(HashSet<>)
                 .MakeGenericType (type.GetGenericArguments ().Single ())
                 .GetConstructor (Type.EmptyTypes)
@@ -321,9 +321,9 @@ namespace KRPC.Client
 
         static object DecodeTuple (CodedInputStream stream, Type type, IConnection client)
         {
-            var encodedTuple = KRPC.Schema.KRPC.Tuple.Parser.ParseFrom (stream);
+            var encodedTuple = Schema.KRPC.Tuple.Parser.ParseFrom (stream);
             var valueTypes = type.GetGenericArguments ().ToArray ();
-            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length.ToString ());
+            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length.ToString());
             var values = new object[valueTypes.Length];
             for (int i = 0; i < valueTypes.Length; i++) {
                 var item = encodedTuple.Items [i];
@@ -338,7 +338,7 @@ namespace KRPC.Client
 
         static bool IsAGenericType (Type type, Type genericType)
         {
-            while (!Object.ReferenceEquals (type, null)) {
+            while (!ReferenceEquals (type, null)) {
                 if (type.IsGenericType && type.GetGenericTypeDefinition ().Equals (genericType))
                     return true;
                 foreach (var intType in type.GetInterfaces())

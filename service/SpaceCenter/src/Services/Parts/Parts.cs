@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
-using KRPC.SpaceCenter.Services.Parts;
 using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services.Parts

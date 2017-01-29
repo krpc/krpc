@@ -1,6 +1,4 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
-using KRPC.Client;
 using KRPC.Schema.KRPC;
 
 namespace KRPC.Client
@@ -13,7 +11,7 @@ namespace KRPC.Client
     {
         readonly StreamManager streamManager;
 
-        internal UInt32 Id { get; private set; }
+        internal uint Id { get; private set; }
 
         internal Stream (Connection connection, Request request)
         {

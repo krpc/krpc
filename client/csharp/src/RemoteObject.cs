@@ -15,12 +15,12 @@ namespace KRPC.Client
         /// <summary>
         /// The unique identifier for the object on the server.
         /// </summary>
-        public UInt64 id { get; private set; }
+        public ulong id { get; private set; }
 
         /// <summary>
         /// Construct a remote object.
         /// </summary>
-        public RemoteObject (IConnection serverConnection, UInt64 objectId = 0)
+        public RemoteObject (IConnection serverConnection, ulong objectId = 0)
         {
             connection = serverConnection;
             id = objectId;
@@ -37,11 +37,11 @@ namespace KRPC.Client
         /// <summary>
         /// Check if this remote object is equivalent to the given object.
         /// </summary>
-        public override bool Equals (Object obj)
+        public override bool Equals (object obj)
         {
-            if (Object.ReferenceEquals (this, obj))
+            if (ReferenceEquals (this, obj))
                 return true;
-            if (Object.ReferenceEquals (obj, null))
+            if (ReferenceEquals (obj, null))
                 return false;
             var typedObj = obj as RemoteObject;
             return typedObj != null && Equals (typedObj);
@@ -60,12 +60,11 @@ namespace KRPC.Client
         /// </summary>
         public static bool operator == (RemoteObject lhs, RemoteObject rhs)
         {
-            if (Object.ReferenceEquals (lhs, null) || Object.ReferenceEquals (rhs, null))
-                return Object.ReferenceEquals (lhs, rhs);
-            else if (Object.ReferenceEquals (lhs, rhs))
+            if (ReferenceEquals (lhs, null) || ReferenceEquals (rhs, null))
+                return ReferenceEquals (lhs, rhs);
+            if (ReferenceEquals (lhs, rhs))
                 return true;
-            else
-                return lhs.Equals (rhs);
+            return lhs.Equals (rhs);
         }
 
         /// <summary>
@@ -73,12 +72,11 @@ namespace KRPC.Client
         /// </summary>
         public static bool operator != (RemoteObject lhs, RemoteObject rhs)
         {
-            if (Object.ReferenceEquals (lhs, null) || Object.ReferenceEquals (rhs, null))
-                return !Object.ReferenceEquals (lhs, rhs);
-            else if (Object.ReferenceEquals (lhs, rhs))
+            if (ReferenceEquals (lhs, null) || ReferenceEquals (rhs, null))
+                return !ReferenceEquals (lhs, rhs);
+            if (ReferenceEquals (lhs, rhs))
                 return false;
-            else
-                return !(lhs.Equals (rhs));
+            return !(lhs.Equals (rhs));
         }
     }
 }

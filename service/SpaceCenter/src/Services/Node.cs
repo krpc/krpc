@@ -36,9 +36,9 @@ namespace KRPC.SpaceCenter.Services
         public Node (global::Vessel vessel, ManeuverNode node)
         {
             if (ReferenceEquals (vessel, null))
-                throw new ArgumentNullException ("vessel");
+                throw new ArgumentNullException (nameof (vessel));
             if (ReferenceEquals (node, null))
-                throw new ArgumentNullException ("node");
+                throw new ArgumentNullException (nameof (node));
             vesselId = vessel.id;
             InternalNode = node;
         }
@@ -124,7 +124,7 @@ namespace KRPC.SpaceCenter.Services
         /// The delta-v of the maneuver node, in meters per second.
         /// </summary>
         /// <remarks>
-        /// Does not change when executing the maneuver node. See <see cref="Node.RemainingDeltaV"/>.
+        /// Does not change when executing the maneuver node. See <see cref="RemainingDeltaV"/>.
         /// </remarks>
         [KRPCProperty]
         public double DeltaV {
@@ -150,7 +150,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <param name="referenceFrame"></param>
         /// <remarks>
-        /// Does not change when executing the maneuver node. See <see cref="Node.RemainingBurnVector"/>.
+        /// Does not change when executing the maneuver node. See <see cref="RemainingBurnVector"/>.
         /// </remarks>
         [KRPCMethod]
         public Tuple3 BurnVector (ReferenceFrame referenceFrame = null)
@@ -251,7 +251,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.PositionFromWorldSpace (InternalNode.patch.getPositionAtUT (InternalNode.UT)).ToTuple ();
         }
 
@@ -263,7 +263,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException ("referenceFrame");
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.DirectionFromWorldSpace (WorldBurnVector.normalized).ToTuple ();
         }
     }

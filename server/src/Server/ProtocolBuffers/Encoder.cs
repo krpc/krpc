@@ -98,7 +98,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         static void WriteList (object value, CodedOutputStream stream)
         {
-            var encodedList = new KRPC.Schema.KRPC.List ();
+            var encodedList = new Schema.KRPC.List ();
             var list = (IList)value;
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
@@ -110,11 +110,11 @@ namespace KRPC.Server.ProtocolBuffers
 
         static void WriteDictionary (object value, CodedOutputStream stream)
         {
-            var encodedDictionary = new KRPC.Schema.KRPC.Dictionary ();
+            var encodedDictionary = new Schema.KRPC.Dictionary ();
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
                 foreach (DictionaryEntry entry in (IDictionary) value) {
-                    var encodedEntry = new KRPC.Schema.KRPC.DictionaryEntry ();
+                    var encodedEntry = new Schema.KRPC.DictionaryEntry ();
                     encodedEntry.Key = EncodeObject (entry.Key, internalBuffer, internalStream);
                     encodedEntry.Value = EncodeObject (entry.Value, internalBuffer, internalStream);
                     encodedDictionary.Entries.Add (encodedEntry);
@@ -125,7 +125,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         static void WriteSet (object value, CodedOutputStream stream)
         {
-            var encodedSet = new KRPC.Schema.KRPC.Set ();
+            var encodedSet = new Schema.KRPC.Set ();
             var set = (IEnumerable)value;
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
@@ -137,7 +137,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         static void WriteTuple (object value, CodedOutputStream stream)
         {
-            var encodedTuple = new KRPC.Schema.KRPC.Tuple ();
+            var encodedTuple = new Schema.KRPC.Tuple ();
             var valueTypes = value.GetType ().GetGenericArguments ().ToArray ();
             var genericType = Type.GetType ("KRPC.Utils.Tuple`" + valueTypes.Length);
             var tupleType = genericType.MakeGenericType (valueTypes);
@@ -214,7 +214,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         static object DecodeList (CodedInputStream stream, Type type)
         {
-            var encodedList = KRPC.Schema.KRPC.List.Parser.ParseFrom (stream);
+            var encodedList = Schema.KRPC.List.Parser.ParseFrom (stream);
             var list = (IList)(typeof(System.Collections.Generic.List<>)
                 .MakeGenericType (type.GetGenericArguments ().Single ())
                 .GetConstructor (Type.EmptyTypes)
@@ -226,7 +226,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         static object DecodeDictionary (CodedInputStream stream, Type type)
         {
-            var encodedDictionary = KRPC.Schema.KRPC.Dictionary.Parser.ParseFrom (stream);
+            var encodedDictionary = Schema.KRPC.Dictionary.Parser.ParseFrom (stream);
             var dictionary = (IDictionary)(typeof(System.Collections.Generic.Dictionary<,>)
                 .MakeGenericType (type.GetGenericArguments () [0], type.GetGenericArguments () [1])
                 .GetConstructor (Type.EmptyTypes)
@@ -241,7 +241,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         static object DecodeSet (CodedInputStream stream, Type type)
         {
-            var encodedSet = KRPC.Schema.KRPC.Set.Parser.ParseFrom (stream);
+            var encodedSet = Schema.KRPC.Set.Parser.ParseFrom (stream);
             var set = (IEnumerable)(typeof(System.Collections.Generic.HashSet<>)
                 .MakeGenericType (type.GetGenericArguments ().Single ())
                 .GetConstructor (Type.EmptyTypes)
@@ -256,10 +256,10 @@ namespace KRPC.Server.ProtocolBuffers
 
         static object DecodeTuple (CodedInputStream stream, Type type)
         {
-            var encodedTuple = KRPC.Schema.KRPC.Tuple.Parser.ParseFrom (stream);
+            var encodedTuple = Schema.KRPC.Tuple.Parser.ParseFrom (stream);
             var valueTypes = type.GetGenericArguments ().ToArray ();
             var genericType = Type.GetType ("KRPC.Utils.Tuple`" + valueTypes.Length);
-            var values = new Object[valueTypes.Length];
+            var values = new object[valueTypes.Length];
             for (int i = 0; i < valueTypes.Length; i++) {
                 var item = encodedTuple.Items [i];
                 values [i] = Decode (item, valueTypes [i]);

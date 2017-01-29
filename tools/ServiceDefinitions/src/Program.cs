@@ -27,13 +27,13 @@ namespace ServiceDefinitions
 
         [SuppressMessage ("Gendarme.Rules.Portability", "ExitCodeIsLimitedOnUnixRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        public static int Main (string[] args)
+        public static int Main (string [] args)
         {
             bool showHelp = false;
             bool showVersion = false;
-            String outputPath = null;
+            string outputPath = null;
 
-            var options = new OptionSet () { {
+            var options = new OptionSet { {
                     "h|help", "show this help message and exit",
                     v => showHelp = v != null
                 }, {
@@ -41,7 +41,7 @@ namespace ServiceDefinitions
                     v => showVersion = v != null
                 }, {
                     "o|output=", "{PATH} to write the service definitions to. If unspecified, the output is written to stanadard output.",
-                    (String v) => outputPath = v
+                    (string v) => outputPath = v
                 }
             };
             List<string> positionalArgs = options.Parse (args);
@@ -54,7 +54,7 @@ namespace ServiceDefinitions
             if (showVersion) {
                 var assembly = Assembly.GetEntryAssembly ();
                 var info = FileVersionInfo.GetVersionInfo (assembly.Location);
-                var version = String.Format (CultureInfo.InvariantCulture, "{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
+                var version = string.Format (CultureInfo.InvariantCulture, "{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
                 Console.Error.WriteLine ("ServiceDefinitions.exe version " + version);
                 return 0;
             }
@@ -98,7 +98,7 @@ namespace ServiceDefinitions
                 Console.Error.WriteLine ("Service " + service + " not found");
                 return 1;
             }
-            services = new Dictionary<string,KRPC.Service.Scanner.ServiceSignature> { { service, services [service] } };
+            services = new Dictionary<string, KRPC.Service.Scanner.ServiceSignature> { { service, services [service] } };
             string output = JsonConvert.SerializeObject (services, Formatting.Indented);
             if (outputPath != null)
                 File.WriteAllText (outputPath, output);

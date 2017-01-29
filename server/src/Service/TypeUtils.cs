@@ -197,7 +197,7 @@ namespace KRPC.Service
             else if (IsASetCollectionType (type))
                 return "Set(" + GetFullTypeName (type.GetGenericArguments ().Single ()) + ")";
             else if (IsATupleCollectionType (type))
-                return "Tuple(" + String.Join (",", type.GetGenericArguments ().Select (t => GetFullTypeName (t)).ToArray ()) + ")";
+                return "Tuple(" + string.Join (",", type.GetGenericArguments ().Select (t => GetFullTypeName (t)).ToArray ()) + ")";
             else
                 return GetTypeName (type);
         }
@@ -208,7 +208,7 @@ namespace KRPC.Service
         public static string[] ParameterTypeAttributes (int position, Type type)
         {
             if (!IsAValidType (type))
-                throw new ArgumentException ("Not a valid kRPC type", "type");
+                throw new ArgumentException ("Not a valid kRPC type", nameof (type));
             else if (IsAClassType (type) || IsAnEnumType (type) || IsACollectionType (type))
                 return new [] { "ParameterType(" + position + ")." + GetFullTypeName (type) };
             else
@@ -221,7 +221,7 @@ namespace KRPC.Service
         public static string[] ReturnTypeAttributes (Type type)
         {
             if (!IsAValidType (type))
-                throw new ArgumentException ("Not a valid kRPC type", "type");
+                throw new ArgumentException ("Not a valid kRPC type", nameof (type));
             else if (IsAClassType (type) || IsAnEnumType (type) || IsACollectionType (type))
                 return new [] { "ReturnType." + GetFullTypeName (type) };
             else

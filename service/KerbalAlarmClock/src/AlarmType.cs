@@ -20,7 +20,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         Maneuver,
         /// <summary>
-        /// See <see cref="AlarmType.Maneuver"/>.
+        /// See <see cref="Maneuver"/>.
         /// </summary>
         ManeuverAuto,
         /// <summary>
@@ -49,7 +49,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         Contract,
         /// <summary>
-        /// See <see cref="AlarmType.Contract"/>.
+        /// See <see cref="Contract"/>.
         /// </summary>
         ContractAuto,
         /// <summary>
@@ -75,7 +75,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         SOIChange,
         /// <summary>
-        /// See <see cref="AlarmType.SOIChange"/>.
+        /// See <see cref="SOIChange"/>.
         /// </summary>
         SOIChangeAuto,
         /// <summary>
@@ -85,7 +85,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         Transfer,
         /// <summary>
-        /// See <see cref="AlarmType.Transfer"/>.
+        /// See <see cref="Transfer"/>.
         /// </summary>
         TransferModelled
     }

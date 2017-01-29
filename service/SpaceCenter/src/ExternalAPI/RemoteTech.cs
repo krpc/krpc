@@ -33,7 +33,7 @@ namespace KRPC.SpaceCenter.ExternalAPI
 
         public static Func<IEnumerable<string>> GetGroundStations { get; internal set; }
 
-        public static Func<String,Guid> GetGroundStationGuid { get; internal set; }
+        public static Func<string, Guid> GetGroundStationGuid { get; internal set; }
 
         public static Func<CelestialBody,Guid> GetCelestialBodyGuid { get; internal set; }
 

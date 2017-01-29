@@ -306,10 +306,10 @@ namespace KRPC
             updateTimer.Reset ();
             updateTimer.Start ();
 
-            RPCRate = (float)((double)(RPCsExecuted - startRPCsExecuted) / timeElapsed);
-            StreamRPCRate = (float)((double)(StreamRPCsExecuted - startStreamRPCsExecuted) / timeElapsed);
-            BytesReadRate = (float)((double)(BytesRead - startBytesRead) / timeElapsed);
-            BytesWrittenRate = (float)((double)(BytesWritten - startBytesWritten) / timeElapsed);
+            RPCRate = (float)((RPCsExecuted - startRPCsExecuted) / timeElapsed);
+            StreamRPCRate = (float)((StreamRPCsExecuted - startStreamRPCsExecuted) / timeElapsed);
+            BytesReadRate = (float)((BytesRead - startBytesRead) / timeElapsed);
+            BytesWrittenRate = (float)((BytesWritten - startBytesWritten) / timeElapsed);
 
             // Adjust MaxTimePerUpdate to get a target FixedUpdate rate of 59 FPS. This is slightly smaller
             // than 60 FPS, so that it pushes against the target 60 FPS for FixedUpdate.
@@ -465,7 +465,7 @@ namespace KRPC
                         // Run the RPC
                         Response response;
                         try {
-                            response = KRPC.Service.Services.Instance.HandleRequest (request.Procedure, request.Arguments);
+                            response = Service.Services.Instance.HandleRequest (request.Procedure, request.Arguments);
                         } catch (RPCException e) {
                             response = new Response ();
                             response.HasError = true;

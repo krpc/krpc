@@ -1,5 +1,4 @@
 using System.Net;
-using KRPC;
 using NUnit.Framework;
 
 namespace KRPC.Test

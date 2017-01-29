@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
-using KRPC.Client;
 using KRPC.Client.Services.KRPC;
 using KRPC.Client.Services.TestService;
 using NUnit.Framework;

@@ -5,7 +5,8 @@ namespace KRPC.Utils
 {
     sealed class RectStorage : ConfigurationStorageNode
     {
-        [Persistent] Single x, y, width, height;
+        [Persistent]
+        float x, y, width, height;
 
         public static RectStorage FromRect (Rect rect)
         {

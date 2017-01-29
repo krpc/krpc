@@ -49,8 +49,8 @@ namespace KRPC.InfernalRobotics
         /// The part containing the servo.
         /// </summary>
         [KRPCProperty]
-        public KRPC.SpaceCenter.Services.Parts.Part Part {
-            get { return new KRPC.SpaceCenter.Services.Parts.Part (servo.HostPart); }
+        public SpaceCenter.Services.Parts.Part Part {
+            get { return new SpaceCenter.Services.Parts.Part (servo.HostPart); }
         }
 
         /// <summary>

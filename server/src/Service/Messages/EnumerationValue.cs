@@ -1,5 +1,3 @@
-using System;
-
 namespace KRPC.Service.Messages
 {
     #pragma warning disable 1591
@@ -15,7 +13,7 @@ namespace KRPC.Service.Messages
         {
             Name = name;
             Value = value;
-            Documentation = String.Empty;
+            Documentation = string.Empty;
         }
     }
 }

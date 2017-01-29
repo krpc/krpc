@@ -72,7 +72,7 @@ namespace TestServer
                 }, {
                     "server-debug", "Output debug information about the server",
                     v => serverDebug = v != null
-                },
+                }
             };
             options.Parse (args);
 
@@ -84,7 +84,7 @@ namespace TestServer
             if (showVersion) {
                 var assembly = Assembly.GetEntryAssembly ();
                 var info = FileVersionInfo.GetVersionInfo (assembly.Location);
-                var version = String.Format ("{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
+                var version = string.Format ("{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
                 Console.WriteLine ("TestServer.exe version " + version);
                 return;
             }
@@ -130,7 +130,7 @@ namespace TestServer
                     // Output details about whether server.Update() took too little or too long to execute
                     var elapsed = timer.ElapsedTicks;
                     var diffTicks = Math.Abs (ticksPerUpdate - elapsed);
-                    var diffTime = Math.Round ((double)diffTicks / (double)Stopwatch.Frequency * 1000d, 2);
+                    var diffTime = Math.Round (diffTicks / (double)Stopwatch.Frequency * 1000d, 2);
                     if (elapsed > ticksPerUpdate)
                         Console.WriteLine ("Slow by " + diffTime + " ms (" + diffTicks + " ticks)");
                     else

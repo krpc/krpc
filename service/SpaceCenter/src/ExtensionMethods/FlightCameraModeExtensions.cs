@@ -21,7 +21,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             case FlightCamera.Modes.ORBITAL:
                 return CameraMode.Orbital;
             default:
-                throw new ArgumentOutOfRangeException ("mode");
+                throw new ArgumentOutOfRangeException (nameof (mode));
             }
         }
     }

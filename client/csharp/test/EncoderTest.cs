@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Google.Protobuf;
-using KRPC.Client;
 using Moq;
 using NUnit.Framework;
 
@@ -30,32 +28,32 @@ namespace KRPC.Client.Test
         {
             var clientName = Encoder.EncodeClientName ("foo");
             Assert.AreEqual (32, clientName.Length);
-            Assert.AreEqual ("666f6f" + new String ('0', 29 * 2), clientName.ToHexString ());
+            Assert.AreEqual ("666f6f" + new string ('0', 29 * 2), clientName.ToHexString ());
         }
 
         [Test]
         public void EmptyClientName ()
         {
-            var clientName = Encoder.EncodeClientName (String.Empty);
+            var clientName = Encoder.EncodeClientName (string.Empty);
             Assert.AreEqual (32, clientName.Length);
-            Assert.AreEqual (new String ('0', 32 * 2), clientName.ToHexString ());
+            Assert.AreEqual (new string ('0', 32 * 2), clientName.ToHexString ());
         }
 
         [Test]
         public void LongClientName ()
         {
-            var clientName = Encoder.EncodeClientName (new String ('a', 33));
+            var clientName = Encoder.EncodeClientName (new string ('a', 33));
             Assert.AreEqual (32, clientName.Length);
-            Assert.AreEqual (String.Concat (Enumerable.Repeat ("61", 32)), clientName.ToHexString ());
+            Assert.AreEqual (string.Concat (Enumerable.Repeat ("61", 32)), clientName.ToHexString ());
         }
 
         [Test]
         public void EncodeMessage ()
         {
-            var request = new KRPC.Schema.KRPC.Request ();
+            var request = new Schema.KRPC.Request ();
             request.Service = "ServiceName";
             request.Procedure = "ProcedureName";
-            var data = Encoder.Encode (request, typeof(KRPC.Schema.KRPC.Request));
+            var data = Encoder.Encode (request, typeof(Schema.KRPC.Request));
             const string expected = "0a0b536572766963654e616d65120d50726f6365647572654e616d65";
             Assert.AreEqual (expected, data.ToHexString ());
         }
@@ -78,17 +76,17 @@ namespace KRPC.Client.Test
         public void EncodeRemoteObject ()
         {
             var mockClient = new Mock<IConnection> ();
-            var obj = new KRPC.Client.Services.SpaceCenter.Vessel (mockClient.Object, 300);
+            var obj = new Services.SpaceCenter.Vessel (mockClient.Object, 300);
             Assert.AreEqual (300, obj.id);
             Assert.AreSame (mockClient.Object, obj.connection);
-            var data = Encoder.Encode (obj, typeof(KRPC.Client.Services.SpaceCenter.Vessel));
+            var data = Encoder.Encode (obj, typeof(Services.SpaceCenter.Vessel));
             Assert.AreEqual ("ac02", data.ToHexString ());
         }
 
         [Test]
         public void EncodeNullRemoteObject ()
         {
-            var data = Encoder.Encode (null, typeof(KRPC.Client.Services.SpaceCenter.Vessel));
+            var data = Encoder.Encode (null, typeof(Services.SpaceCenter.Vessel));
             Assert.AreEqual ("00", data.ToHexString ());
         }
 
@@ -96,7 +94,7 @@ namespace KRPC.Client.Test
         public void DecodeMessage ()
         {
             var message = "0a0b536572766963654e616d65120d50726f6365647572654e616d65".ToByteString ();
-            var request = (KRPC.Schema.KRPC.Request)Encoder.Decode (message, typeof(KRPC.Schema.KRPC.Request), null);
+            var request = (Schema.KRPC.Request)Encoder.Decode (message, typeof(Schema.KRPC.Request), null);
             Assert.AreEqual ("ServiceName", request.Service);
             Assert.AreEqual ("ProcedureName", request.Procedure);
         }
@@ -119,7 +117,7 @@ namespace KRPC.Client.Test
         public void DecodeRemoteObject ()
         {
             var mockClient = new Mock<IConnection> ();
-            var value = (KRPC.Client.Services.SpaceCenter.Vessel)Encoder.Decode ("ac02".ToByteString (), typeof(KRPC.Client.Services.SpaceCenter.Vessel), mockClient.Object);
+            var value = (Services.SpaceCenter.Vessel)Encoder.Decode ("ac02".ToByteString (), typeof(Services.SpaceCenter.Vessel), mockClient.Object);
             Assert.AreEqual (300, value.id);
             Assert.AreSame (mockClient.Object, value.connection);
         }
@@ -128,16 +126,16 @@ namespace KRPC.Client.Test
         public void DecodeNullRemoteObject ()
         {
             var mockClient = new Mock<IConnection> ();
-            var value = (string)Encoder.Decode ("00".ToByteString (), typeof(KRPC.Client.Services.SpaceCenter.Vessel), mockClient.Object);
+            var value = (string)Encoder.Decode ("00".ToByteString (), typeof(Services.SpaceCenter.Vessel), mockClient.Object);
             Assert.IsNull (value);
         }
 
         [TestCase (3.14159265359f, "db0f4940")]
         [TestCase (-1.0f, "000080bf")]
         [TestCase (0.0f, "00000000")]
-        [TestCase (Single.PositiveInfinity, "0000807f")]
-        [TestCase (Single.NegativeInfinity, "000080ff")]
-        [TestCase (Single.NaN, "0000c0ff")]
+        [TestCase (float.PositiveInfinity, "0000807f")]
+        [TestCase (float.NegativeInfinity, "000080ff")]
+        [TestCase (float.NaN, "0000c0ff")]
         public void SingleValue (float value, string data)
         {
             var encodeResult = Encoder.Encode (value, typeof(float));
@@ -149,9 +147,9 @@ namespace KRPC.Client.Test
         [TestCase (0.0, "0000000000000000")]
         [TestCase (-1.0, "000000000000f0bf")]
         [TestCase (3.14159265359, "ea2e4454fb210940")]
-        [TestCase (Double.PositiveInfinity, "000000000000f07f")]
-        [TestCase (Double.NegativeInfinity, "000000000000f0ff")]
-        [TestCase (Double.NaN, "000000000000f8ff")]
+        [TestCase (double.PositiveInfinity, "000000000000f07f")]
+        [TestCase (double.NegativeInfinity, "000000000000f0ff")]
+        [TestCase (double.NaN, "000000000000f8ff")]
         public void DoubleValue (double value, string data)
         {
             var encodeResult = Encoder.Encode (value, typeof(double));
@@ -165,8 +163,8 @@ namespace KRPC.Client.Test
         [TestCase (42, "2a")]
         [TestCase (300, "ac02")]
         [TestCase (-33, "dfffffffffffffffff01")]
-        [TestCase (Int32.MaxValue, "ffffffff07")]
-        [TestCase (Int32.MinValue, "80808080f8ffffffff01")]
+        [TestCase (int.MaxValue, "ffffffff07")]
+        [TestCase (int.MinValue, "80808080f8ffffffff01")]
         public void Int32Value (int value, string data)
         {
             var encodeResult = Encoder.Encode (value, typeof(int));
@@ -181,8 +179,8 @@ namespace KRPC.Client.Test
         [TestCase (300, "ac02")]
         [TestCase (1234567890000L, "d088ec8ff723")]
         [TestCase (-33, "dfffffffffffffffff01")]
-        [TestCase (Int64.MaxValue, "ffffffffffffffff7f")]
-        [TestCase (Int64.MinValue, "80808080808080808001")]
+        [TestCase (long.MaxValue, "ffffffffffffffff7f")]
+        [TestCase (long.MinValue, "80808080808080808001")]
         public void Int64Value (long value, string data)
         {
             var encodeResult = Encoder.Encode (value, typeof(long));
@@ -195,7 +193,7 @@ namespace KRPC.Client.Test
         [TestCase (1u, "01")]
         [TestCase (42u, "2a")]
         [TestCase (300u, "ac02")]
-        [TestCase (UInt32.MaxValue, "ffffffff0f")]
+        [TestCase (uint.MaxValue, "ffffffff0f")]
         public void UInt32Value (uint value, string data)
         {
             var encodeResult = Encoder.Encode (value, typeof(uint));
@@ -216,7 +214,7 @@ namespace KRPC.Client.Test
         [TestCase (42u, "2a")]
         [TestCase (300u, "ac02")]
         [TestCase (1234567890000ul, "d088ec8ff723")]
-        [TestCase (UInt64.MaxValue, "ffffffffffffffffff01")]
+        [TestCase (ulong.MaxValue, "ffffffffffffffffff01")]
         public void UInt64Value (ulong value, string data)
         {
             var encodeResult = Encoder.Encode (value, typeof(ulong));

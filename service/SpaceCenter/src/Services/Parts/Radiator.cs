@@ -80,8 +80,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 return
                 !Deployable ||
-                deployableRadiator.deployState == ModuleDeployableRadiator.DeployState.EXTENDED ||
-                deployableRadiator.deployState == ModuleDeployableRadiator.DeployState.EXTENDING;
+                deployableRadiator.deployState == ModuleDeployablePart.DeployState.EXTENDED ||
+                deployableRadiator.deployState == ModuleDeployablePart.DeployState.EXTENDING;
             }
             set {
                 if (!Deployable)

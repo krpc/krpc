@@ -161,7 +161,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!match.Success)
                 return 0;
             float result;
-            if (!Single.TryParse (match.Groups [1].Value, out result))
+            if (!float.TryParse (match.Groups [1].Value, out result))
                 return 0;
             return result;
         }

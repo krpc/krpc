@@ -12,7 +12,7 @@ namespace KRPC.Service
 
         public RPCException ()
         {
-            description = String.Empty;
+            description = string.Empty;
         }
 
         public RPCException (string message)

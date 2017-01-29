@@ -7,47 +7,47 @@ namespace KRPC.SpaceCenter.ExtensionMethods
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
     static class VesselTypeExtensions
     {
-        public static KRPC.SpaceCenter.Services.VesselType ToVesselType (this VesselType type)
+        public static Services.VesselType ToVesselType (this VesselType type)
         {
             switch (type) {
             case VesselType.Ship:
-                return KRPC.SpaceCenter.Services.VesselType.Ship;
+                return Services.VesselType.Ship;
             case VesselType.Station:
-                return KRPC.SpaceCenter.Services.VesselType.Station;
+                return Services.VesselType.Station;
             case VesselType.Lander:
-                return KRPC.SpaceCenter.Services.VesselType.Lander;
+                return Services.VesselType.Lander;
             case VesselType.Probe:
-                return KRPC.SpaceCenter.Services.VesselType.Probe;
+                return Services.VesselType.Probe;
             case VesselType.Rover:
-                return KRPC.SpaceCenter.Services.VesselType.Rover;
+                return Services.VesselType.Rover;
             case VesselType.Base:
-                return KRPC.SpaceCenter.Services.VesselType.Base;
+                return Services.VesselType.Base;
             case VesselType.Debris:
-                return KRPC.SpaceCenter.Services.VesselType.Debris;
+                return Services.VesselType.Debris;
             default:
-                throw new ArgumentOutOfRangeException ("type");
+                throw new ArgumentOutOfRangeException (nameof (type));
             }
         }
 
-        public static VesselType FromVesselType (this KRPC.SpaceCenter.Services.VesselType type)
+        public static VesselType FromVesselType (this Services.VesselType type)
         {
             switch (type) {
-            case KRPC.SpaceCenter.Services.VesselType.Ship:
+            case Services.VesselType.Ship:
                 return VesselType.Ship;
-            case KRPC.SpaceCenter.Services.VesselType.Station:
+            case Services.VesselType.Station:
                 return VesselType.Station;
-            case KRPC.SpaceCenter.Services.VesselType.Lander:
+            case Services.VesselType.Lander:
                 return VesselType.Lander;
-            case KRPC.SpaceCenter.Services.VesselType.Probe:
+            case Services.VesselType.Probe:
                 return VesselType.Probe;
-            case KRPC.SpaceCenter.Services.VesselType.Rover:
+            case Services.VesselType.Rover:
                 return VesselType.Rover;
-            case KRPC.SpaceCenter.Services.VesselType.Base:
+            case Services.VesselType.Base:
                 return VesselType.Base;
-            case KRPC.SpaceCenter.Services.VesselType.Debris:
+            case Services.VesselType.Debris:
                 return VesselType.Debris;
             default:
-                throw new ArgumentOutOfRangeException ("type");
+                throw new ArgumentOutOfRangeException (nameof (type));
             }
         }
     }

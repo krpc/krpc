@@ -18,7 +18,7 @@ namespace KRPC.Service.Messages
             get { return returnType; }
             set {
                 if (value == null)
-                    throw new ArgumentNullException ("value");
+                    throw new ArgumentNullException (nameof (value));
                 returnType = value;
                 HasReturnType = value.Length > 0;
             }
@@ -34,9 +34,9 @@ namespace KRPC.Service.Messages
         {
             Name = name;
             Parameters = new List<Parameter> ();
-            ReturnType = String.Empty;
+            ReturnType = string.Empty;
             Attributes = new List<string> ();
-            Documentation = String.Empty;
+            Documentation = string.Empty;
         }
     }
 }

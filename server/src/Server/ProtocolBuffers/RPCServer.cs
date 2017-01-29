@@ -112,7 +112,7 @@ namespace KRPC.Server.ProtocolBuffers
         /// <returns>The decoded client name, or null if not valid.</returns>
         static string CheckAndDecodeClientName (byte[] receivedClientName)
         {
-            string clientNameString = String.Empty;
+            var clientNameString = string.Empty;
 
             // Strip null bytes from the end
             int length = 0;

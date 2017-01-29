@@ -12,10 +12,10 @@ namespace KRPC.RemoteTech
     [KRPCClass (Service = "RemoteTech")]
     public class Comms : Equatable<Comms>
     {
-        readonly KRPC.SpaceCenter.Services.Vessel vessel;
+        readonly SpaceCenter.Services.Vessel vessel;
         readonly Guid vesselId;
 
-        internal Comms (KRPC.SpaceCenter.Services.Vessel innerVessel)
+        internal Comms (SpaceCenter.Services.Vessel innerVessel)
         {
             if (!API.IsAvailable)
                 throw new InvalidOperationException ("RemoteTech is not installed");
@@ -43,7 +43,7 @@ namespace KRPC.RemoteTech
         /// Get the vessel.
         /// </summary>
         [KRPCProperty]
-        public KRPC.SpaceCenter.Services.Vessel Vessel {
+        public SpaceCenter.Services.Vessel Vessel {
             get { return vessel; }
         }
 
@@ -100,7 +100,7 @@ namespace KRPC.RemoteTech
         /// </summary>
         /// <param name="other"></param>
         [KRPCMethod]
-        public double SignalDelayToVessel (KRPC.SpaceCenter.Services.Vessel other)
+        public double SignalDelayToVessel (SpaceCenter.Services.Vessel other)
         {
             return API.GetSignalDelayToSatellite (vesselId, other.Id);
         }

@@ -28,7 +28,7 @@ namespace KRPC.UI
         public event EventHandler OnStartServerPressed;
         public event EventHandler OnStopServerPressed;
 
-        Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
+        readonly Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
         const long lastActivityMillisecondsInterval = 100L;
         int numClientsDisplayed;
         bool resized;
@@ -501,10 +501,10 @@ namespace KRPC.UI
             IPAddress ipAddress;
             ushort ignoreInt;
             bool validAddress = IPAddress.TryParse (address, out ipAddress);
-            bool validRPCPort = UInt16.TryParse (rpcPort, out ignoreInt);
-            bool validStreamPort = UInt16.TryParse (streamPort, out ignoreInt);
-            bool validMaxTimePerUpdate = UInt16.TryParse (maxTimePerUpdate, out ignoreInt);
-            bool validRecvTimeout = UInt16.TryParse (recvTimeout, out ignoreInt);
+            bool validRPCPort = ushort.TryParse (rpcPort, out ignoreInt);
+            bool validStreamPort = ushort.TryParse (streamPort, out ignoreInt);
+            bool validMaxTimePerUpdate = ushort.TryParse (maxTimePerUpdate, out ignoreInt);
+            bool validRecvTimeout = ushort.TryParse (recvTimeout, out ignoreInt);
 
             // Display error message if required
             if (!validAddress)

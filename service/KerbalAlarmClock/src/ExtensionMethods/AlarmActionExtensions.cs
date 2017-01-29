@@ -27,7 +27,7 @@ namespace KRPC.KerbalAlarmClock.ExtensionMethods
         }
 
         [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
-        public static KACWrapper.KACAPI.AlarmActionEnum FromAlarmAction (this KRPC.KerbalAlarmClock.AlarmAction action)
+        public static KACWrapper.KACAPI.AlarmActionEnum FromAlarmAction (this AlarmAction action)
         {
             switch (action) {
             case AlarmAction.DoNothing:

@@ -15,10 +15,10 @@ namespace KRPC.Server.TCP
         public TCPClient (TcpClient innerClient)
         {
             if (innerClient == null)
-                throw new ArgumentNullException ("innerClient");
+                throw new ArgumentNullException (nameof (innerClient));
             guid = Guid.NewGuid ();
             client = innerClient;
-            Address = String.Empty;
+            Address = string.Empty;
             try {
                 var remoteEndPoint = client.Client.RemoteEndPoint as IPEndPoint;
                 if (remoteEndPoint != null)
@@ -69,14 +69,14 @@ namespace KRPC.Server.TCP
             client.Close ();
         }
 
-        public override bool Equals (Object obj)
+        public override bool Equals (object obj)
         {
             return obj != null && Equals (obj as TCPClient);
         }
 
         public bool Equals (IClient<byte,byte> other)
         {
-            if ((object)other == null)
+            if (other == null)
                 return false;
             var otherClient = other as TCPClient;
             if ((object)otherClient == null)
@@ -91,7 +91,7 @@ namespace KRPC.Server.TCP
 
         public static bool operator == (TCPClient lhs, TCPClient rhs)
         {
-            if (Object.ReferenceEquals (lhs, rhs))
+            if (ReferenceEquals (lhs, rhs))
                 return true;
             if ((object)lhs == null || (object)rhs == null)
                 return false;

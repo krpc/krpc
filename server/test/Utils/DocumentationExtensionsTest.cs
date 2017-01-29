@@ -109,7 +109,7 @@ namespace KRPC.Test.Utils
             new object[] {
                 childGenericStaticProperty,
                 "P:KRPC.Test.Utils.TestDocumentedChildGenericClass`1.ChildGenericStaticProperty"
-            },
+            }
         };
         #pragma warning restore 0414
 
@@ -191,7 +191,7 @@ namespace KRPC.Test.Utils
             },
             new object[] {
                 notDocumented,
-                String.Empty
+                string.Empty
             },
             new object[] {
                 crefDocumentation,
@@ -246,7 +246,7 @@ namespace KRPC.Test.Utils
 
         /// <summary>Method arguments docs</summary>
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUnusedParametersRule")]
-        public void MethodArguments (int one, string two, KRPC.Utils.Tuple<int,float,string> three, Response four, TestDocumentedClass.NestedClass five)
+        public void MethodArguments (int one, string two, KRPC.Utils.Tuple<int,float,string> three, Response four, NestedClass five)
         {
         }
 
@@ -278,7 +278,7 @@ namespace KRPC.Test.Utils
         {
         }
 
-        /// <summary>Foo <see cref="TestDocumentedClass.NestedClass"/> bar.</summary>
+        /// <summary>Foo <see cref="NestedClass"/> bar.</summary>
         public void CrefDocumentation ()
         {
         }

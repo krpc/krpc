@@ -59,7 +59,7 @@ namespace KRPC.Service.Scanner
         public ServiceSignature (string name)
         {
             Name = name;
-            Documentation = String.Empty;
+            Documentation = string.Empty;
             Classes = new Dictionary<string, ClassSignature> ();
             Enumerations = new Dictionary<string, EnumerationSignature> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
@@ -101,7 +101,7 @@ namespace KRPC.Service.Scanner
             }
         }
 
-        void AddPropertyMethod (MemberInfo property, MethodInfo method, String attribute)
+        void AddPropertyMethod (MemberInfo property, MethodInfo method, string attribute)
         {
             var handler = new ProcedureHandler (method);
             AddProcedure (new ProcedureSignature (Name, method.Name, property.GetDocumentation (), handler, GameScene, attribute));
@@ -174,7 +174,7 @@ namespace KRPC.Service.Scanner
                 AddClassPropertyMethod (cls, property, setter, "Class.Property.Set(" + Name + "." + cls + "," + name + ")");
         }
 
-        void AddClassPropertyMethod (String cls, MemberInfo property, MethodInfo method, String attribute)
+        void AddClassPropertyMethod (string cls, MemberInfo property, MethodInfo method, string attribute)
         {
             var handler = new ClassMethodHandler (method);
             var parameter_attribute = "ParameterType(0).Class(" + Name + "." + cls + ")";

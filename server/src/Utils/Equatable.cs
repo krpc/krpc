@@ -24,9 +24,9 @@ namespace KRPC.Utils
         /// </summary>
         public sealed override bool Equals (object obj)
         {
-            if (Object.ReferenceEquals (this, obj))
+            if (ReferenceEquals (this, obj))
                 return true;
-            if (Object.ReferenceEquals (obj, null))
+            if (ReferenceEquals (obj, null))
                 return false;
             var typedObj = obj as T;
             return typedObj != null && Equals (typedObj);
@@ -38,9 +38,9 @@ namespace KRPC.Utils
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotDeclareStaticMembersOnGenericTypesRule")]
         public static bool operator == (Equatable<T> lhs, Equatable<T> rhs)
         {
-            if (Object.ReferenceEquals (lhs, null) || Object.ReferenceEquals (rhs, null))
-                return Object.ReferenceEquals (lhs, rhs);
-            else if (Object.ReferenceEquals (lhs, rhs))
+            if (ReferenceEquals (lhs, null) || ReferenceEquals (rhs, null))
+                return ReferenceEquals (lhs, rhs);
+            else if (ReferenceEquals (lhs, rhs))
                 return true;
             else
                 return lhs.Equals (rhs);
@@ -52,9 +52,9 @@ namespace KRPC.Utils
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotDeclareStaticMembersOnGenericTypesRule")]
         public static bool operator != (Equatable<T> lhs, Equatable<T> rhs)
         {
-            if (Object.ReferenceEquals (lhs, null) || Object.ReferenceEquals (rhs, null))
-                return !Object.ReferenceEquals (lhs, rhs);
-            else if (Object.ReferenceEquals (lhs, rhs))
+            if (ReferenceEquals (lhs, null) || ReferenceEquals (rhs, null))
+                return !ReferenceEquals (lhs, rhs);
+            else if (ReferenceEquals (lhs, rhs))
                 return false;
             else
                 return !(lhs.Equals (rhs));

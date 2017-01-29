@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Google.Protobuf;
@@ -17,10 +15,10 @@ namespace KRPC.Client
     sealed class StreamManager : IDisposable
     {
         readonly Connection connection;
-        readonly Object accessLock = new Object ();
-        readonly IDictionary<UInt32, Type> streamTypes = new Dictionary<UInt32, Type> ();
-        readonly IDictionary<UInt32, ByteString> streamData = new Dictionary<UInt32, ByteString> ();
-        readonly IDictionary<UInt32, Object> streamValues = new Dictionary<UInt32, Object> ();
+        readonly object accessLock = new object ();
+        readonly IDictionary<uint, Type> streamTypes = new Dictionary<uint, Type> ();
+        readonly IDictionary<uint, ByteString> streamData = new Dictionary<uint, ByteString> ();
+        readonly IDictionary<uint, object> streamValues = new Dictionary<uint, object> ();
         readonly UpdateThread updateThreadObject;
         readonly Thread updateThread;
 
@@ -63,7 +61,7 @@ namespace KRPC.Client
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
-        public UInt32 AddStream (Request request, Type type)
+        public uint AddStream (Request request, Type type)
         {
             CheckDisposed ();
             var id = connection.KRPC ().AddStream (request);
@@ -77,7 +75,7 @@ namespace KRPC.Client
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
-        public void RemoveStream (UInt32 id)
+        public void RemoveStream (uint id)
         {
             CheckDisposed ();
             connection.KRPC ().RemoveStream (id);
@@ -88,10 +86,10 @@ namespace KRPC.Client
             }
         }
 
-        public Object GetValue (UInt32 id)
+        public object GetValue (uint id)
         {
             CheckDisposed ();
-            Object result;
+            object result;
             lock (accessLock) {
                 if (!streamTypes.ContainsKey (id))
                     throw new InvalidOperationException ("Stream does not exist or has been closed");
@@ -103,7 +101,7 @@ namespace KRPC.Client
             return result;
         }
 
-        void Update (UInt32 id, Response response)
+        void Update (uint id, Response response)
         {
             lock (accessLock) {
                 if (!streamData.ContainsKey (id))
@@ -122,8 +120,8 @@ namespace KRPC.Client
             readonly StreamManager manager;
             readonly NetworkStream stream;
             volatile bool stop;
-            EventWaitHandle stopEvent = new EventWaitHandle (false, EventResetMode.ManualReset);
-            byte[] buffer = new byte [Connection.BUFFER_INITIAL_SIZE];
+            readonly EventWaitHandle stopEvent = new EventWaitHandle (false, EventResetMode.ManualReset);
+            byte [] buffer = new byte [Connection.BUFFER_INITIAL_SIZE];
 
             public UpdateThread (StreamManager streamManager, TcpClient streamClient)
             {

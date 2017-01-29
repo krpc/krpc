@@ -21,8 +21,8 @@ namespace KRPC
         static Server.Server server;
         static TCPServer rpcTcpServer;
         static TCPServer streamTcpServer;
-        static KRPC.Server.ProtocolBuffers.RPCServer rpcServer;
-        static KRPC.Server.ProtocolBuffers.StreamServer streamServer;
+        static Server.ProtocolBuffers.RPCServer rpcServer;
+        static Server.ProtocolBuffers.StreamServer streamServer;
         static Texture textureOnline;
         static Texture textureOffline;
 
@@ -52,8 +52,8 @@ namespace KRPC
             // Set up server
             rpcTcpServer = new TCPServer ("RPCServer", config.Address, config.RPCPort);
             streamTcpServer = new TCPServer ("StreamServer", config.Address, config.StreamPort);
-            rpcServer = new KRPC.Server.ProtocolBuffers.RPCServer (rpcTcpServer);
-            streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamTcpServer);
+            rpcServer = new Server.ProtocolBuffers.RPCServer (rpcTcpServer);
+            streamServer = new Server.ProtocolBuffers.StreamServer (streamTcpServer);
             server = new Server.Server (rpcServer, streamServer);
         }
 
@@ -69,7 +69,7 @@ namespace KRPC
             Init ();
 
             Service.CallContext.SetGameScene (HighLogic.LoadedScene.ToGameScene ());
-            KRPC.Utils.Logger.WriteLine ("Game scene switched to " + Service.CallContext.GameScene);
+            Utils.Logger.WriteLine ("Game scene switched to " + Service.CallContext.GameScene);
             core.GetUniversalTime = Planetarium.GetUniversalTime;
 
             // If a game is not loaded, ensure the server is stopped and then exit
@@ -83,7 +83,7 @@ namespace KRPC
 
             // Auto-start the server, if required
             if (config.AutoStartServer && !server.Running) {
-                KRPC.Utils.Logger.WriteLine ("Auto-starting server");
+                Utils.Logger.WriteLine ("Auto-starting server");
                 StartServer ();
             }
 
@@ -239,8 +239,8 @@ namespace KRPC
                 OnGUIApplicationLauncherDestroyed ();
             GameEvents.onGUIApplicationLauncherReady.Remove (OnGUIApplicationLauncherReady);
             GameEvents.onGUIApplicationLauncherDestroyed.Remove (OnGUIApplicationLauncherDestroyed);
-            Object.Destroy (mainWindow);
-            Object.Destroy (clientConnectingDialog);
+            Destroy (mainWindow);
+            Destroy (clientConnectingDialog);
             GUILayoutExtensions.Destroy ();
         }
 

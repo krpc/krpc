@@ -31,7 +31,7 @@ namespace KRPC.Service
         /// </summary>
         public object Invoke (params object[] arguments)
         {
-            ulong instanceGuid = (ulong)arguments [0];
+            var instanceGuid = (ulong)arguments [0];
             // TODO: should be able to invoke default arguments using Type.Missing, but get "System.ArgumentException : failed to convert parameters"
             for (int i = 1; i < arguments.Length; i++)
                 methodArguments [i - 1] = (arguments [i] == Type.Missing) ? parameters [i].DefaultValue : arguments [i];

@@ -11,14 +11,14 @@ namespace KRPC.RemoteTech
     [KRPCClass (Service = "RemoteTech")]
     public class Antenna : Equatable<Antenna>
     {
-        readonly KRPC.SpaceCenter.Services.Parts.Part part;
+        readonly SpaceCenter.Services.Parts.Part part;
 
-        internal static Boolean Is (KRPC.SpaceCenter.Services.Parts.Part innerPart)
+        internal static bool Is (SpaceCenter.Services.Parts.Part innerPart)
         {
             return innerPart.InternalPart.Modules.Contains ("ModuleRTAntenna");
         }
 
-        internal Antenna (KRPC.SpaceCenter.Services.Parts.Part innerPart)
+        internal Antenna (SpaceCenter.Services.Parts.Part innerPart)
         {
             part = innerPart;
             if (!Is (part))
@@ -45,7 +45,7 @@ namespace KRPC.RemoteTech
         /// Get the part containing this antenna.
         /// </summary>
         [KRPCProperty]
-        public KRPC.SpaceCenter.Services.Parts.Part Part {
+        public SpaceCenter.Services.Parts.Part Part {
             get { return part; }
         }
 

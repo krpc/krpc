@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
-using KRPC.Client;
 using KRPC.Client.Services.TestService;
 using NUnit.Framework;
 
@@ -51,7 +50,7 @@ namespace KRPC.Client.Test
         public void ClassStaticMethod ()
         {
             // Note: have to specify optional parameter "" in expression trees
-            var x = Connection.AddStream (() => TestClass.StaticMethod (Connection, "foo", String.Empty));
+            var x = Connection.AddStream (() => TestClass.StaticMethod (Connection, "foo", string.Empty));
             for (int i = 0; i < 5; i++) {
                 Assert.AreEqual ("jebfoo", x.Get ());
                 Wait ();

@@ -39,14 +39,14 @@ namespace KRPC.Test.Server
             throw new NotSupportedException ();
         }
 
-        public override bool Equals (Object obj)
+        public override bool Equals (object obj)
         {
             return obj != null && Equals (obj as TestClient);
         }
 
         public bool Equals (IClient<byte,byte> other)
         {
-            if ((object)other == null)
+            if (other == null)
                 return false;
             var otherClient = other as TestClient;
             if ((object)otherClient == null)
@@ -61,7 +61,7 @@ namespace KRPC.Test.Server
 
         public static bool operator == (TestClient lhs, TestClient rhs)
         {
-            if (Object.ReferenceEquals (lhs, rhs))
+            if (ReferenceEquals (lhs, rhs))
                 return true;
             if ((object)lhs == null || (object)rhs == null)
                 return false;

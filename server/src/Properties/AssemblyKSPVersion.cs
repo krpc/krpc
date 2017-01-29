@@ -25,7 +25,7 @@ sealed class AssemblyKSPVersionAttribute : Attribute
     int GetVersionPart (int part)
     {
         int result;
-        Int32.TryParse (Version.Split ('.') [part], out result);
+        int.TryParse (Version.Split ('.') [part], out result);
         return result;
     }
 }
