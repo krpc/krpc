@@ -1,6 +1,10 @@
 .. _tutorial-reference-frames:
 
-.. currentmodule:: SpaceCenter
+.. csharp:namespace:: KRPC.Client.Services.SpaceCenter
+.. cpp:namespace:: krpc::services::SpaceCenter
+.. java:package:: krpc.client.services.SpaceCenter
+.. lua:currentmodule:: SpaceCenter
+.. py:currentmodule:: SpaceCenter
 
 Reference Frames
 ================
@@ -16,12 +20,12 @@ to something, and *reference frames* define what that something is.
 
 A reference frame specifies:
 
-* The position of the origin at ``(0,0,0)``,
-* the direction of the coordinate axes ``x``, ``y``, and ``z``,
+* The position of the origin at (0,0,0)
+* the direction of the coordinate axes x, y, and z
 * the linear velocity of the origin (if the reference frame moves)
-* and the angular velocity of the coordinate axes (the speed and direction of rotation of the axes).
+* The angular velocity of the coordinate axes (the speed and direction of rotation of the axes)
 
-.. note:: KSP and kRPC use a left handed coordinate system.
+.. note:: KSP and kRPC use a left handed coordinate system
 
 Origin Position and Axis Orientation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -61,8 +65,32 @@ positions in this reference frame are relative to the center of the planet. The
 following code prints out the position of the active vessel in Kerbin's
 reference frame:
 
-.. literalinclude:: /scripts/VesselPosition.py
-   :linenos:
+.. tabs::
+
+   .. tab:: C#
+
+      .. literalinclude:: /scripts/VesselPosition.cs
+         :language: csharp
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/VesselPosition.cpp
+         :language: cpp
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/VesselPosition.lua
+         :language: lua
+
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/VesselPosition.java
+         :language: java
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/VesselPosition.py
+         :language: python
 
 For a vessel sat on the launchpad, the magnitude of this position vector will be
 roughly 600,000 meters (equal to the radius of Kerbin). The position vector will
@@ -139,19 +167,87 @@ Available Reference Frames
 
 kRPC provides the following reference frames:
 
-* :attr:`Vessel.reference_frame`
-* :attr:`Vessel.orbital_reference_frame`
-* :attr:`Vessel.surface_reference_frame`
-* :attr:`Vessel.surface_velocity_reference_frame`
-* :attr:`CelestialBody.reference_frame`
-* :attr:`CelestialBody.non_rotating_reference_frame`
-* :attr:`CelestialBody.orbital_reference_frame`
-* :attr:`Node.reference_frame`
-* :attr:`Node.orbital_reference_frame`
-* :attr:`Part.reference_frame`
-* :attr:`Part.center_of_mass_reference_frame`
-* :attr:`DockingPort.reference_frame`
-* :attr:`Thruster.thrust_reference_frame`
+.. tabs::
+
+   .. tab:: C#
+
+      * :csharp:prop:`Vessel.ReferenceFrame`
+      * :csharp:prop:`Vessel.OrbitalReferenceFrame`
+      * :csharp:prop:`Vessel.SurfaceReferenceFrame`
+      * :csharp:prop:`Vessel.SurfaceVelocityReferenceFrame`
+      * :csharp:prop:`CelestialBody.ReferenceFrame`
+      * :csharp:prop:`CelestialBody.NonRotatingReferenceFrame`
+      * :csharp:prop:`CelestialBody.OrbitalReferenceFrame`
+      * :csharp:prop:`Node.ReferenceFrame`
+      * :csharp:prop:`Node.OrbitalReferenceFrame`
+      * :csharp:prop:`Part.ReferenceFrame`
+      * :csharp:prop:`Part.CenterOfMassReferenceFrame`
+      * :csharp:prop:`DockingPort.ReferenceFrame`
+      * :csharp:prop:`Thruster.ThrustReferenceFrame`
+
+   .. tab:: C++
+
+      * :cpp:func:`Vessel::reference_frame`
+      * :cpp:func:`Vessel::orbital_reference_frame`
+      * :cpp:func:`Vessel::surface_reference_frame`
+      * :cpp:func:`Vessel::surface_velocity_reference_frame`
+      * :cpp:func:`CelestialBody::reference_frame`
+      * :cpp:func:`CelestialBody::non_rotating_reference_frame`
+      * :cpp:func:`CelestialBody::orbital_reference_frame`
+      * :cpp:func:`Node::reference_frame`
+      * :cpp:func:`Node::orbital_reference_frame`
+      * :cpp:func:`Part::reference_frame`
+      * :cpp:func:`Part::center_of_mass_reference_frame`
+      * :cpp:func:`DockingPort::reference_frame`
+      * :cpp:func:`Thruster::thrust_reference_frame`
+
+   .. tab:: Lua
+
+      * :lua:attr:`Vessel.reference_frame`
+      * :lua:attr:`Vessel.orbital_reference_frame`
+      * :lua:attr:`Vessel.surface_reference_frame`
+      * :lua:attr:`Vessel.surface_velocity_reference_frame`
+      * :lua:attr:`CelestialBody.reference_frame`
+      * :lua:attr:`CelestialBody.non_rotating_reference_frame`
+      * :lua:attr:`CelestialBody.orbital_reference_frame`
+      * :lua:attr:`Node.reference_frame`
+      * :lua:attr:`Node.orbital_reference_frame`
+      * :lua:attr:`Part.reference_frame`
+      * :lua:attr:`Part.center_of_mass_reference_frame`
+      * :lua:attr:`DockingPort.reference_frame`
+      * :lua:attr:`Thruster.thrust_reference_frame`
+
+   .. tab:: Java
+
+      * :java:meth:`Vessel.getReferenceFrame`
+      * :java:meth:`Vessel.getOrbitalReferenceFrame`
+      * :java:meth:`Vessel.getSurfaceReferenceFrame`
+      * :java:meth:`Vessel.getSurfaceVelocityReferenceFrame`
+      * :java:meth:`CelestialBody.getReferenceFrame`
+      * :java:meth:`CelestialBody.getNonRotatingReferenceFrame`
+      * :java:meth:`CelestialBody.getOrbitalReferenceFrame`
+      * :java:meth:`Node.getReferenceFrame`
+      * :java:meth:`Node.getOrbitalReferenceFrame`
+      * :java:meth:`Part.getReferenceFrame`
+      * :java:meth:`Part.getCenterOfMassReferenceFrame`
+      * :java:meth:`DockingPort.getReferenceFrame`
+      * :java:meth:`Thruster.getThrustReferenceFrame`
+
+   .. tab:: Python
+
+      * :py:attr:`Vessel.reference_frame`
+      * :py:attr:`Vessel.orbital_reference_frame`
+      * :py:attr:`Vessel.surface_reference_frame`
+      * :py:attr:`Vessel.surface_velocity_reference_frame`
+      * :py:attr:`CelestialBody.reference_frame`
+      * :py:attr:`CelestialBody.non_rotating_reference_frame`
+      * :py:attr:`CelestialBody.orbital_reference_frame`
+      * :py:attr:`Node.reference_frame`
+      * :py:attr:`Node.orbital_reference_frame`
+      * :py:attr:`Part.reference_frame`
+      * :py:attr:`Part.center_of_mass_reference_frame`
+      * :py:attr:`DockingPort.reference_frame`
+      * :py:attr:`Thruster.thrust_reference_frame`
 
 Relative and hybrid reference frames can also be constructed from the above.
 
@@ -191,10 +287,43 @@ Converting Between Reference Frames
 kRPC provides utility methods to convert positions, directions, rotations and
 velocities between the different reference frames:
 
-* :meth:`SpaceCenter.transform_position`
-* :meth:`SpaceCenter.transform_direction`
-* :meth:`SpaceCenter.transform_rotation`
-* :meth:`SpaceCenter.transform_velocity`
+
+.. tabs::
+
+   .. tab:: C#
+
+      * :csharp:meth:`SpaceCenter.TransformPosition`
+      * :csharp:meth:`SpaceCenter.TransformDirection`
+      * :csharp:meth:`SpaceCenter.TransformRotation`
+      * :csharp:meth:`SpaceCenter.TransformVelocity`
+
+   .. tab:: C++
+
+      * :cpp:func:`SpaceCenter::transform_position`
+      * :cpp:func:`SpaceCenter::transform_direction`
+      * :cpp:func:`SpaceCenter::transform_rotation`
+      * :cpp:func:`SpaceCenter::transform_velocity`
+
+   .. tab:: Lua
+
+      * :lua:meth:`SpaceCenter.transform_position`
+      * :lua:meth:`SpaceCenter.transform_direction`
+      * :lua:meth:`SpaceCenter.transform_rotation`
+      * :lua:meth:`SpaceCenter.transform_velocity`
+
+   .. tab:: Java
+
+      * :java:meth:`SpaceCenter.transformPosition`
+      * :java:meth:`SpaceCenter.transformDirection`
+      * :java:meth:`SpaceCenter.transformRotation`
+      * :java:meth:`SpaceCenter.transformVelocity`
+
+   .. tab:: Python
+
+      * :py:meth:`SpaceCenter.transform_position`
+      * :py:meth:`SpaceCenter.transform_direction`
+      * :py:meth:`SpaceCenter.transform_rotation`
+      * :py:meth:`SpaceCenter.transform_velocity`
 
 Visual Debugging
 ----------------
@@ -207,8 +336,32 @@ visualize direction vectors in-game.
 center of mass of the active vessel. For example, the following code draws the
 direction of the current vessels velocity relative to the surface:
 
-.. literalinclude:: /scripts/VisualDebugging.py
-   :linenos:
+.. tabs::
+
+   .. tab:: C#
+
+      .. literalinclude:: /scripts/VisualDebugging.cs
+         :language: csharp
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/VisualDebugging.cpp
+         :language: cpp
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/VisualDebugging.lua
+         :language: lua
+
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/VisualDebugging.java
+         :language: java
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/VisualDebugging.py
+         :language: python
 
 .. note:: The client must remain connected, otherwise kRPC will stop drawing the
           directions, hence the while loop at the end of this example.
@@ -224,8 +377,32 @@ Navball directions
 This example demonstrates how to make the vessel point in various directions on
 the navball:
 
-.. literalinclude:: /scripts/NavballDirections.py
-   :linenos:
+.. tabs::
+
+   .. tab:: C#
+
+      .. literalinclude:: /scripts/NavballDirections.cs
+         :language: csharp
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/NavballDirections.cpp
+         :language: cpp
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/NavballDirections.lua
+         :language: lua
+
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/NavballDirections.java
+         :language: java
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/NavballDirections.py
+         :language: python
 
 The code uses the vessel's surface reference frame
 (:attr:`Vessel.surface_reference_frame`), pictured below:
@@ -233,17 +410,17 @@ The code uses the vessel's surface reference frame
 .. image:: /images/reference-frames/vessel-surface.png
    :align: center
 
-Line 9 instructs the auto-pilot to point in direction ``(0,1,0)`` (i.e. along
-the y-axis) in the vessel's surface reference frame. The y-axis of the reference
-frame points in the north direction, as required.
+The first part instructs the auto-pilot to point in direction ``(0,1,0)``
+(i.e. along the y-axis) in the vessel's surface reference frame. The y-axis of
+the reference frame points in the north direction, as required.
 
-Line 13 instructs the auto-pilot to point in direction ``(1,0,0)`` (along the
-x-axis) in the vessel's surface reference frame. This x-axis of the reference
-frame points upwards (away from the planet) as required.
+The second part instructs the auto-pilot to point in direction ``(1,0,0)``
+(along the x-axis) in the vessel's surface reference frame. This x-axis of the
+reference frame points upwards (away from the planet) as required.
 
-Line 17 instructs the auto-pilot to point in direction ``(0,0,-1)`` (along the
-negative z axis). The z-axis of the reference frame points east, so the
-requested direction points west -- as required.
+Finally, the code instructs the auto-pilot to point in direction ``(0,0,-1)``
+(along the negative z axis). The z-axis of the reference frame points east, so
+the requested direction points west -- as required.
 
 Orbital directions
 ^^^^^^^^^^^^^^^^^^
@@ -252,8 +429,32 @@ This example demonstrates how to make the vessel point in the various orbital
 directions, as seen on the navball when it is in 'orbit' mode. It uses
 :attr:`Vessel.orbital_reference_frame`.
 
-.. literalinclude:: /scripts/OrbitalDirections.py
-   :linenos:
+.. tabs::
+
+   .. tab:: C#
+
+      .. literalinclude:: /scripts/OrbitalDirections.cs
+         :language: csharp
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/OrbitalDirections.cpp
+         :language: cpp
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/OrbitalDirections.lua
+         :language: lua
+
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/OrbitalDirections.java
+         :language: java
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/OrbitalDirections.py
+         :language: python
 
 This code uses the vessel's orbital reference frame, pictured below:
 
@@ -267,8 +468,32 @@ This example demonstrates how to point the vessel in the 'prograde' direction on
 the navball, when in 'surface' mode. This is the direction of the vessels
 velocity relative to the surface:
 
-.. literalinclude:: /scripts/SurfacePrograde.py
-   :linenos:
+.. tabs::
+
+   .. tab:: C#
+
+      .. literalinclude:: /scripts/SurfacePrograde.cs
+         :language: csharp
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/SurfacePrograde.cpp
+         :language: cpp
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/SurfacePrograde.lua
+         :language: lua
+
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/SurfacePrograde.java
+         :language: java
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/SurfacePrograde.py
+         :language: python
 
 This code uses the :attr:`Vessel.surface_velocity_reference_frame`, pictured
 below:
@@ -286,8 +511,32 @@ to the planet's *non-rotating* reference frame
 (:attr:`CelestialBody.non_rotating_reference_frame`). This reference frame is
 fixed relative to the body, but does not rotate:
 
-.. literalinclude:: /scripts/OrbitalSpeed.py
-   :linenos:
+.. tabs::
+
+   .. tab:: C#
+
+      .. literalinclude:: /scripts/OrbitalSpeed.cs
+         :language: csharp
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/OrbitalSpeed.cpp
+         :language: cpp
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/OrbitalSpeed.lua
+         :language: lua
+
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/OrbitalSpeed.java
+         :language: java
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/OrbitalSpeed.py
+         :language: python
 
 .. _tutorial-reference-frames-surface-speed:
 
@@ -300,8 +549,32 @@ need to get the velocity relative to the planets reference frame
 body, therefore the rotational velocity of the body is taken into account when
 computing the velocity of the vessel:
 
-.. literalinclude:: /scripts/SurfaceSpeed.py
-   :linenos:
+.. tabs::
+
+   .. tab:: C#
+
+      .. literalinclude:: /scripts/SurfaceSpeed.cs
+         :language: csharp
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/SurfaceSpeed.cpp
+         :language: cpp
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/SurfaceSpeed.lua
+         :language: lua
+
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/SurfaceSpeed.java
+         :language: java
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/SurfaceSpeed.py
+         :language: python
 
 Angle of attack
 ^^^^^^^^^^^^^^^
@@ -309,12 +582,36 @@ Angle of attack
 This example computes the angle between the direction the vessel is pointing in,
 and the direction that the vessel is moving in (relative to the surface):
 
-.. literalinclude:: /scripts/AngleOfAttack.py
-   :linenos:
+.. tabs::
+
+   .. tab:: C#
+
+      .. literalinclude:: /scripts/AngleOfAttack.cs
+         :language: csharp
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/AngleOfAttack.cpp
+         :language: cpp
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/AngleOfAttack.lua
+         :language: lua
+
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/AngleOfAttack.java
+         :language: java
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/AngleOfAttack.py
+         :language: python
 
 Note that the orientation of the reference frame used to get the direction and
-velocity vectors (on lines 7 and 8) does not matter, as the angle between two
-vectors is the same regardless of the orientation of the axes. However, if we
-were to use a reference frame that moves with the vessel, line 8 would return
+velocity vectors does not matter, as the angle between two vectors is the same
+regardless of the orientation of the axes. However, if we were to use a
+reference frame that moves with the vessel, the velocity would return
 ``(0,0,0)``. We therefore need a reference frame that is not fixed relative to
 the vessel. :attr:`CelestialBody.reference_frame` fits these requirements.
