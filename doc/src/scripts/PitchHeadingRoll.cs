@@ -44,27 +44,33 @@ class AngleOfAttack
             var vesselDirection = vessel.Direction (vessel.SurfaceReferenceFrame);
 
             // Get the direction of the vessel in the horizon plane
-            var horizonDirection = new Vector3 (0, vesselDirection.Item2, vesselDirection.Item3);
+            var horizonDirection = new Vector3 (
+                0, vesselDirection.Item2, vesselDirection.Item3);
 
-            // Compute the pitch - the angle between the vessels direction and the direction in the horizon plane
+            // Compute the pitch - the angle between the vessels direction and
+            // the direction in the horizon plane
             double pitch = AngleBetweenVectors (vesselDirection, horizonDirection);
             if (vesselDirection.Item1 < 0)
                 pitch = -pitch;
 
-            // Compute the heading - the angle between north and the direction in the horizon plane
+            // Compute the heading - the angle between north and
+            // the direction in the horizon plane
             var north = new Vector3 (0, 1, 0);
             double heading = AngleBetweenVectors (north, horizonDirection);
             if (horizonDirection.Item3 < 0)
                 heading = 360 - heading;
 
             // Compute the roll
-            // Compute the plane running through the vessels direction and the upwards direction
+            // Compute the plane running through the vessels direction
+            // and the upwards direction
             var up = new Vector3 (1, 0, 0);
             var planeNormal = CrossProduct (vesselDirection, up);
             // Compute the upwards direction of the vessel
             var vesselUp = conn.SpaceCenter ().TransformDirection (
-                               new Vector3 (0, 0, -1), vessel.ReferenceFrame, vessel.SurfaceReferenceFrame);
-            // Compute the angle between the upwards direction of the vessel and the plane normal
+                new Vector3 (0, 0, -1),
+                vessel.ReferenceFrame, vessel.SurfaceReferenceFrame);
+            // Compute the angle between the upwards direction of
+            // the vessel and the plane normal
             double roll = AngleBetweenVectors (vesselUp, planeNormal);
             // Adjust so that the angle is between -180 and 180 and
             // rolling right is +ve and left is -ve
@@ -75,7 +81,8 @@ class AngleOfAttack
             else
                 roll -= 180;
 
-            Console.WriteLine ("pitch = " + pitch + ", heading = " + heading + ", roll = " + roll);
+            Console.WriteLine (
+                "pitch = " + pitch + ", heading = " + heading + ", roll = " + roll);
 
             System.Threading.Thread.Sleep (1000);
         }

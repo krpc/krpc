@@ -42,7 +42,8 @@ while true do
         pitch = -pitch
     end
 
-    -- Compute the heading - the angle between north and the direction in the horizon plane
+    -- Compute the heading - the angle between north and
+    -- the direction in the horizon plane
     local north = {0, 1, 0}
     local heading = angle_between_vectors(north, horizon_direction)
     if horizon_direction[3] < 0 then
@@ -50,15 +51,18 @@ while true do
     end
 
     -- Compute the roll
-    -- Compute the plane running through the vessels direction and the upwards direction
+    -- Compute the plane running through the vessels direction
+    -- and the upwards direction
     local up = {1, 0, 0}
     local plane_normal = cross_product(vessel_direction, up)
     -- Compute the upwards direction of the vessel
     local vessel_up = conn.space_center:transform_direction(
         {0, 0, -1}, vessel.reference_frame, vessel.surface_reference_frame)
-    -- Compute the angle between the upwards direction of the vessel and the plane normal
+    -- Compute the angle between the upwards direction of
+    -- the vessel and the plane normal
     local roll = angle_between_vectors(vessel_up, plane_normal)
-    -- Adjust so that the angle is between -180 and 180 and rolling right is +ve and left is -ve
+    -- Adjust so that the angle is between -180 and 180 and
+    -- rolling right is +ve and left is -ve
     if vessel_up[1] > 0 then
         roll = -roll
     elseif roll < 0 then

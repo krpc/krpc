@@ -8,10 +8,13 @@ int main() {
   auto vessel = spaceCenter.active_vessel();
 
   while (true) {
-    auto velocity = vessel.flight(vessel.orbit().body().reference_frame()).velocity();
+    auto velocity = vessel.flight(
+      vessel.orbit().body().reference_frame()).velocity();
     std::cout
       << "Surface velocity = ("
-      << std::get<0>(velocity) << "," << std::get<1>(velocity) << "," << std::get<2>(velocity)
+      << std::get<0>(velocity) << ","
+      << std::get<1>(velocity) << ","
+      << std::get<2>(velocity)
       << ")" << std::endl;
 
     auto speed = vessel.flight(vessel.orbit().body().reference_frame()).speed();

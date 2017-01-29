@@ -9,7 +9,8 @@ for engine in active_engines:
     print('   %s in stage %d' % (engine.part.title, engine.part.stage))
 
 thrust = sum(engine.thrust for engine in active_engines)
-fuel_consumption = sum(engine.thrust / engine.specific_impulse for engine in active_engines)
+fuel_consumption = sum(engine.thrust / engine.specific_impulse
+                       for engine in active_engines)
 isp = thrust / fuel_consumption
 
 print('Combined vacuum Isp = %d seconds' % isp)

@@ -23,7 +23,8 @@ public class CombinedIsp {
 
         System.out.println("Active engines:");
         for (Engine engine : activeEngines) {
-            System.out.println("   " + engine.getPart().getTitle() + " in stage " + engine.getPart().getStage());
+            System.out.println("   " + engine.getPart().getTitle() +
+                               " in stage " + engine.getPart().getStage());
         }
 
         double thrust = 0;

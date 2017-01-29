@@ -10,6 +10,7 @@ public class VesselPosition {
         Connection connection = Connection.newInstance();
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         Vessel vessel = spaceCenter.getActiveVessel();
-        System.out.println(vessel.position(vessel.getOrbit().getBody().getReferenceFrame()));
+        System.out.println(
+            vessel.position(vessel.getOrbit().getBody().getReferenceFrame()));
     }
 }
