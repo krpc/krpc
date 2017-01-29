@@ -27,7 +27,7 @@ namespace KRPC.Server.ProtocolBuffers
 
                     var codedStream = new CodedInputStream (data.GetBuffer (), 0, data.Length);
                     // Get the protobuf message size
-                    int size = (int)codedStream.ReadUInt32 ();
+                    var size = (int)codedStream.ReadUInt32 ();
                     int totalSize = (int)codedStream.Position + size;
                     // Check if enough data is available, if not then delay the decoding
                     if (data.Length < totalSize)

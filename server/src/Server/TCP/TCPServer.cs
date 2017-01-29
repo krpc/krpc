@@ -185,7 +185,7 @@ namespace KRPC.Server.TCP
             get {
                 if (IPAddress.IsLoopback (ListenAddress))
                     return localClientOnlyText;
-                else if (ListenAddress == IPAddress.Any)
+                if (ListenAddress == IPAddress.Any)
                     return anyClientText;
                 try {
                     var subnet = NetworkInformation.GetSubnetMask (ListenAddress);

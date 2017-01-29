@@ -11,11 +11,11 @@ namespace KRPC.Server.ProtocolBuffers
         public static Google.Protobuf.IMessage ToProtobufMessage (this IMessage message)
         {
             var type = message.GetType ();
-            if (type == typeof(KRPC.Service.Messages.Services))
-                return ((KRPC.Service.Messages.Services)message).ToProtobufMessage ();
-            else if (type == typeof(Stream))
+            if (type == typeof(Service.Messages.Services))
+                return ((Service.Messages.Services)message).ToProtobufMessage ();
+            if (type == typeof(Stream))
                 return ((Stream)message).ToProtobufMessage ();
-            else if (type == typeof(Status))
+            if (type == typeof(Status))
                 return ((Status)message).ToProtobufMessage ();
             throw new ArgumentException ("Cannot convert a " + type + " to a protobuf message");
         }
@@ -66,7 +66,7 @@ namespace KRPC.Server.ProtocolBuffers
             return result;
         }
 
-        public static Schema.KRPC.Services ToProtobufMessage (this KRPC.Service.Messages.Services services)
+        public static Schema.KRPC.Services ToProtobufMessage (this Service.Messages.Services services)
         {
             var result = new Schema.KRPC.Services ();
             result.Services_.Add (services.ServicesList.Select (ToProtobufMessage));
@@ -132,7 +132,7 @@ namespace KRPC.Server.ProtocolBuffers
             return result;
         }
 
-        public static Schema.KRPC.Exception ToProtobufMessage (this KRPC.Service.Messages.Exception exception)
+        public static Schema.KRPC.Exception ToProtobufMessage (this Service.Messages.Exception exception)
         {
             var result = new Schema.KRPC.Exception ();
             result.Name = exception.Name;
@@ -177,13 +177,13 @@ namespace KRPC.Server.ProtocolBuffers
                 if (type == typeof(byte[]))
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Bytes;
             } else if (TypeUtils.IsAMessageType (type)) {
-                if (type == typeof(KRPC.Service.Messages.ProcedureCall))
+                if (type == typeof(ProcedureCall))
                     result.Code = Schema.KRPC.Type.Types.TypeCode.ProcedureCall;
-                else if (type == typeof(KRPC.Service.Messages.Stream))
+                else if (type == typeof(Stream))
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Stream;
                 else if (type == typeof(Status))
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Status;
-                else if (type == typeof(KRPC.Service.Messages.Services))
+                else if (type == typeof(Service.Messages.Services))
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Services;
                 else
                     throw new ArgumentException ("Type " + type + " is not valid");
@@ -255,7 +255,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         public static ProcedureCall ToMessage (this Schema.KRPC.ProcedureCall call)
         {
-            var procedureSignature = KRPC.Service.Services.Instance.GetProcedureSignature (call.Service, call.Procedure);
+            var procedureSignature = Service.Services.Instance.GetProcedureSignature (call.Service, call.Procedure);
             var result = new ProcedureCall (call.Service, call.Procedure);
             foreach (var argument in call.Arguments) {
                 var position = (int)argument.Position;

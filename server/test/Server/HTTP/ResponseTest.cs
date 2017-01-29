@@ -39,7 +39,7 @@ namespace KRPC.Test.Server.HTTP
         public void MalformedReason ()
         {
             Assert.DoesNotThrow (() => new Response (404, "Not Found"));
-            Assert.Throws<ArgumentException> (() => new Response (404, String.Empty));
+            Assert.Throws<ArgumentException> (() => new Response (404, string.Empty));
             Assert.Throws<ArgumentException> (() => new Response (404, "Foo\nBar\r"));
         }
 
@@ -47,9 +47,9 @@ namespace KRPC.Test.Server.HTTP
         public void MalformedHeaders ()
         {
             Assert.DoesNotThrow (() => new Response (200, "OK").AddHeaderField ("Foo", "Bar"));
-            Assert.Throws<ArgumentException> (() => new Response (200, "OK").AddHeaderField (String.Empty, String.Empty));
-            Assert.Throws<ArgumentException> (() => new Response (200, "OK").AddHeaderField ("Foo", String.Empty));
-            Assert.Throws<ArgumentException> (() => new Response (200, "OK").AddHeaderField (String.Empty, "Foo"));
+            Assert.Throws<ArgumentException> (() => new Response (200, "OK").AddHeaderField (string.Empty, string.Empty));
+            Assert.Throws<ArgumentException> (() => new Response (200, "OK").AddHeaderField ("Foo", string.Empty));
+            Assert.Throws<ArgumentException> (() => new Response (200, "OK").AddHeaderField (string.Empty, "Foo"));
         }
     }
 }

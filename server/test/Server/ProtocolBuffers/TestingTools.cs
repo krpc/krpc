@@ -1,10 +1,9 @@
-using System;
+using System.IO;
 using Google.Protobuf;
 using KRPC.Schema.KRPC;
 using NUnit.Framework;
-using System.IO;
-using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 using Status = KRPC.Schema.KRPC.ConnectionResponse.Types.Status;
+using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 
 namespace KRPC.Test.Server.ProtocolBuffers
 {

@@ -15,10 +15,10 @@ namespace KRPC.Client
     sealed class StreamManager : IDisposable
     {
         readonly Connection connection;
-        readonly Object accessLock = new Object ();
+        readonly object accessLock = new object ();
         readonly IDictionary<ulong, System.Type> streamTypes = new Dictionary<ulong, System.Type> ();
         readonly IDictionary<ulong, ByteString> streamData = new Dictionary<ulong, ByteString> ();
-        readonly IDictionary<ulong, Object> streamValues = new Dictionary<ulong, Object> ();
+        readonly IDictionary<ulong, object> streamValues = new Dictionary<ulong, object> ();
         readonly UpdateThread updateThreadObject;
         readonly Thread updateThread;
 
@@ -86,7 +86,7 @@ namespace KRPC.Client
             }
         }
 
-        public Object GetValue (ulong id)
+        public object GetValue (ulong id)
         {
             CheckDisposed ();
             object result;

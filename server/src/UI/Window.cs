@@ -67,7 +67,7 @@ namespace KRPC.UI
                 hasInit = true;
             }
             if (Visible) {
-                int newUiScale = (int)(GameSettings.UI_SCALE * 100);
+                var newUiScale = (int)(GameSettings.UI_SCALE * 100);
                 if (uiScale != newUiScale) {
                     rescale = true;
                     uiScale = newUiScale;

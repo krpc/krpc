@@ -19,7 +19,7 @@ namespace KRPC.Test.Service
         [SuppressMessage ("Gendarme.Rules.Exceptions", "MissingExceptionConstructorsRule")]
         [SuppressMessage ("Gendarme.Rules.Serialization", "MissingSerializableAttributeOnISerializableTypeRule")]
         [SuppressMessage ("Gendarme.Rules.Serialization", "MissingSerializationConstructorRule")]
-        public class MyException : System.Exception {
+        public class MyException : Exception {
         };
 
         internal static ITestService Service;

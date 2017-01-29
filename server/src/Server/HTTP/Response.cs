@@ -37,7 +37,7 @@ namespace KRPC.Server.HTTP
         public Response (uint status, string reason, string body = null)
         {
             if (body == null)
-                body = String.Empty;
+                body = string.Empty;
             if (reason.Trim ().Length == 0 || reason.Contains ("\r") || reason.Contains ("\n"))
                 throw new ArgumentException ("Type is malformed");
             contents.Append (PROTOCOL + " " + status + " " + reason + NEWLINE);

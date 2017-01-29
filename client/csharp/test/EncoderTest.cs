@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Moq;
 using NUnit.Framework;
 
@@ -12,10 +11,10 @@ namespace KRPC.Client.Test
         [Test]
         public void EncodeMessage ()
         {
-            var call = new KRPC.Schema.KRPC.ProcedureCall ();
+            var call = new Schema.KRPC.ProcedureCall ();
             call.Service = "ServiceName";
             call.Procedure = "ProcedureName";
-            var data = Encoder.Encode (call, typeof(KRPC.Schema.KRPC.ProcedureCall));
+            var data = Encoder.Encode (call, typeof(Schema.KRPC.ProcedureCall));
             const string expected = "0a0b536572766963654e616d65120d50726f6365647572654e616d65";
             Assert.AreEqual (expected, data.ToHexString ());
         }
@@ -56,7 +55,7 @@ namespace KRPC.Client.Test
         public void DecodeMessage ()
         {
             var message = "0a0b536572766963654e616d65120d50726f6365647572654e616d65".ToByteString ();
-            var call = (KRPC.Schema.KRPC.ProcedureCall)Encoder.Decode (message, typeof(KRPC.Schema.KRPC.ProcedureCall), null);
+            var call = (Schema.KRPC.ProcedureCall)Encoder.Decode (message, typeof(Schema.KRPC.ProcedureCall), null);
             Assert.AreEqual ("ServiceName", call.Service);
             Assert.AreEqual ("ProcedureName", call.Procedure);
         }

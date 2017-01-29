@@ -86,7 +86,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         static void WriteTuple (object value, CodedOutputStream stream)
         {
-            var encodedTuple = new KRPC.Schema.KRPC.Tuple ();
+            var encodedTuple = new Schema.KRPC.Tuple ();
             var valueTypes = value.GetType ().GetGenericArguments ().ToArray ();
             var genericType = Type.GetType ("KRPC.Utils.Tuple`" + valueTypes.Length);
             var tupleType = genericType.MakeGenericType (valueTypes);
@@ -127,11 +127,11 @@ namespace KRPC.Server.ProtocolBuffers
 
         static void WriteDictionary (object value, CodedOutputStream stream)
         {
-            var encodedDictionary = new KRPC.Schema.KRPC.Dictionary ();
+            var encodedDictionary = new Schema.KRPC.Dictionary ();
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
                 foreach (DictionaryEntry entry in (IDictionary) value) {
-                    var encodedEntry = new KRPC.Schema.KRPC.DictionaryEntry ();
+                    var encodedEntry = new Schema.KRPC.DictionaryEntry ();
                     encodedEntry.Key = EncodeObject (entry.Key, internalBuffer, internalStream);
                     encodedEntry.Value = EncodeObject (entry.Value, internalBuffer, internalStream);
                     encodedDictionary.Entries.Add (encodedEntry);
@@ -184,17 +184,17 @@ namespace KRPC.Server.ProtocolBuffers
                 default:
                     if (type == typeof(byte[]))
                         return stream.ReadBytes ().ToByteArray ();
-                    else if (TypeUtils.IsAClassType (type))
+                    if (TypeUtils.IsAClassType (type))
                         return ObjectStore.Instance.GetInstance (stream.ReadUInt64 ());
-                    else if (TypeUtils.IsATupleCollectionType (type))
+                    if (TypeUtils.IsATupleCollectionType (type))
                         return DecodeTuple (stream, type);
-                    else if (TypeUtils.IsAListCollectionType (type))
+                    if (TypeUtils.IsAListCollectionType (type))
                         return DecodeList (stream, type);
-                    else if (TypeUtils.IsASetCollectionType (type))
+                    if (TypeUtils.IsASetCollectionType (type))
                         return DecodeSet (stream, type);
-                    else if (TypeUtils.IsADictionaryCollectionType (type))
+                    if (TypeUtils.IsADictionaryCollectionType (type))
                         return DecodeDictionary (stream, type);
-                    else if (TypeUtils.IsAMessageType (type))
+                    if (TypeUtils.IsAMessageType (type))
                         return DecodeMessage (stream, type);
                     break;
                 }
@@ -204,10 +204,10 @@ namespace KRPC.Server.ProtocolBuffers
 
         static object DecodeTuple (CodedInputStream stream, Type type)
         {
-            var encodedTuple = KRPC.Schema.KRPC.Tuple.Parser.ParseFrom (stream);
+            var encodedTuple = Schema.KRPC.Tuple.Parser.ParseFrom (stream);
             var valueTypes = type.GetGenericArguments ().ToArray ();
             var genericType = Type.GetType ("KRPC.Utils.Tuple`" + valueTypes.Length);
-            var values = new Object[valueTypes.Length];
+            var values = new object[valueTypes.Length];
             for (int i = 0; i < valueTypes.Length; i++) {
                 var item = encodedTuple.Items [i];
                 values [i] = Decode (item, valueTypes [i]);
@@ -248,7 +248,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         static object DecodeDictionary (CodedInputStream stream, Type type)
         {
-            var encodedDictionary = KRPC.Schema.KRPC.Dictionary.Parser.ParseFrom (stream);
+            var encodedDictionary = Schema.KRPC.Dictionary.Parser.ParseFrom (stream);
             var dictionary = (IDictionary)(typeof(System.Collections.Generic.Dictionary<,>)
                 .MakeGenericType (type.GetGenericArguments () [0], type.GetGenericArguments () [1])
                 .GetConstructor (Type.EmptyTypes)

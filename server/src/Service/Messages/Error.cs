@@ -1,5 +1,3 @@
-using System;
-
 namespace KRPC.Service.Messages
 {
     #pragma warning disable 1591
@@ -15,8 +13,8 @@ namespace KRPC.Service.Messages
 
         public Error (string description, string stackTrace)
         {
-            Service = String.Empty;
-            Name = String.Empty;
+            Service = string.Empty;
+            Name = string.Empty;
             Description = description;
             StackTrace = stackTrace;
         }
@@ -26,7 +24,7 @@ namespace KRPC.Service.Messages
             Service = service;
             Name = name;
             Description = description;
-            StackTrace = String.Empty;
+            StackTrace = string.Empty;
         }
 
         public Error (string service, string name, string description, string stackTrace)

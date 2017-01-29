@@ -195,7 +195,7 @@ namespace KRPC.Service.Scanner
                 AddClassPropertyMethod (cls, classType, property, setter);
         }
 
-        void AddClassPropertyMethod (String cls, Type classType, MemberInfo property, MethodInfo method)
+        void AddClassPropertyMethod (string cls, Type classType, MemberInfo property, MethodInfo method)
         {
             var handler = new ClassMethodHandler (classType, method);
             AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, property.GetDocumentation (), handler, GameScene));

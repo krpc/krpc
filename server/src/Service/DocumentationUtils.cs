@@ -77,11 +77,11 @@ namespace KRPC.Service
             var reference = cref.Substring (2);
             if (code == 'T')
                 return ResolveTypeCref (reference);
-            else if (code == 'M')
+            if (code == 'M')
                 return ResolveMethodCref (reference);
-            else if (code == 'P')
+            if (code == 'P')
                 return ResolvePropertyCref (reference);
-            else if (code == 'F')
+            if (code == 'F')
                 return ResolveFieldCref (reference);
             throw new DocumentationException ("Invalid code '" + code + "' in cref '" + cref + "'");
         }

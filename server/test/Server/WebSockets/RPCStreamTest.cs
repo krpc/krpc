@@ -16,19 +16,19 @@ namespace KRPC.Test.Server.WebSockets
     [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class RPCStreamTest
     {
-        KRPC.Schema.KRPC.Request expectedRequest;
+        Schema.KRPC.Request expectedRequest;
         byte[] requestBytes;
         Response expectedResponseMessage;
-        KRPC.Schema.KRPC.Response expectedResponse;
+        Schema.KRPC.Response expectedResponse;
         byte[] responseBytes;
 
         [SetUp]
         public void SetUp ()
         {
             // Create a request object and get the binary representation of it
-            expectedRequest = new KRPC.Schema.KRPC.Request ();
+            expectedRequest = new Schema.KRPC.Request ();
             expectedRequest.Calls.Add (
-                new KRPC.Schema.KRPC.ProcedureCall {
+                new Schema.KRPC.ProcedureCall {
                     Service = "TestService",
                     Procedure = "ProcedureNoArgsNoReturn"
                 });

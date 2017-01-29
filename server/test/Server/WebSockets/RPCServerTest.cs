@@ -1,14 +1,10 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Text;
 using System.Linq;
-using NUnit.Framework;
-using Moq;
+using System.Text;
 using KRPC.Server;
-using KRPC.Test.Server;
-using KRPC.Server.Message;
-using KRPC.Server.WebSockets;
+using Moq;
+using NUnit.Framework;
 
 namespace KRPC.Test.Server.WebSockets
 {
@@ -50,7 +46,7 @@ namespace KRPC.Test.Server.WebSockets
 
             server.Update ();
             Assert.AreEqual (1, server.Clients.Count ());
-            Assert.AreEqual (String.Empty, server.Clients.First ().Name);
+            Assert.AreEqual (string.Empty, server.Clients.First ().Name);
 
             var response = ascii.GetString (responseStream.ToArray ());
             Assert.AreEqual (

@@ -1,4 +1,3 @@
-using KRPC.Server;
 using KRPC.Server.Message;
 using KRPC.Server.WebSockets;
 using NUnit.Framework;

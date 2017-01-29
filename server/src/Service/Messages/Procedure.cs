@@ -22,7 +22,7 @@ namespace KRPC.Service.Messages
         {
             Name = name;
             Parameters = new List<Parameter> ();
-            Documentation = String.Empty;
+            Documentation = string.Empty;
         }
     }
 }

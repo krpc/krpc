@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using KRPC.Server;
 using KRPC.Server.TCP;
-using KRPC.UI;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -125,8 +124,8 @@ namespace KRPC.UI
             ushort rpcPortInt;
             ushort streamPortInt;
             bool validAddress = IPAddress.TryParse (address, out ipAddress);
-            bool validRPCPort = UInt16.TryParse (rpcPort, out rpcPortInt);
-            bool validStreamPort = UInt16.TryParse (streamPort, out streamPortInt);
+            bool validRPCPort = ushort.TryParse (rpcPort, out rpcPortInt);
+            bool validStreamPort = ushort.TryParse (streamPort, out streamPortInt);
 
             // Display error message if required
             if (!validAddress)

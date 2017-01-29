@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
@@ -54,9 +53,9 @@ namespace KRPC.Utils
             // Check that the code point is in the correct range for the number of bytes
             if ((startByte & TWO_BYTE_MASK) == 0)
                 return false;
-            else if ((startByte & THREE_BYTE_MASK) == 0)
+            if ((startByte & THREE_BYTE_MASK) == 0)
                 return false;
-            else if ((startByte & FOUR_BYTE_MASK) == 0)
+            if ((startByte & FOUR_BYTE_MASK) == 0)
                 return false;
             // Get the maximum number of continuation bytes allowed based on the next byte, which must be a start byte
             int maxContinuationBytes;

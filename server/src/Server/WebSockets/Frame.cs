@@ -99,7 +99,7 @@ namespace KRPC.Server.WebSockets
         public static Frame Close (ushort status, string message = null)
         {
             if (message == null)
-                message = String.Empty;
+                message = string.Empty;
             var statusBytes = BitConverter.GetBytes (status);
             var messageBytes = System.Text.Encoding.UTF8.GetBytes (message);
             var payload = new byte [statusBytes.Length + messageBytes.Length];

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using KRPC.Server;
-using KRPC.Server.TCP;
-using KRPC.Service;
 using KRPC.Utils;
 using Logger = KRPC.Utils.Logger;
 
@@ -91,8 +89,7 @@ namespace KRPC
         [Persistent] bool blockingRecv;
         [Persistent] uint recvTimeout;
 
-        public ConfigurationFile (string filePath, Configuration configuration) :
-            base (filePath, "KRPCConfiguration")
+        public ConfigurationFile (string filePath, Configuration configuration) : base (filePath, "KRPCConfiguration")
         {
             Configuration = configuration;
             Load ();

@@ -1,4 +1,3 @@
-using KRPC;
 using NUnit.Framework;
 
 namespace KRPC.Test

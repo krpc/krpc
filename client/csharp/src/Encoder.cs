@@ -5,7 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Google.Protobuf;
 
 namespace KRPC.Client
@@ -95,7 +94,7 @@ namespace KRPC.Client
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         static void WriteTuple (object value, Type type, Stream stream)
         {
-            var encodedTuple = new KRPC.Schema.KRPC.Tuple ();
+            var encodedTuple = new Schema.KRPC.Tuple ();
             var valueTypes = type.GetGenericArguments ().ToArray ();
             var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length.ToString ());
             var tupleType = genericType.MakeGenericType (valueTypes);
@@ -141,11 +140,11 @@ namespace KRPC.Client
         {
             var keyType = type.GetGenericArguments () [0];
             var valueType = type.GetGenericArguments () [1];
-            var encodedDictionary = new KRPC.Schema.KRPC.Dictionary ();
+            var encodedDictionary = new Schema.KRPC.Dictionary ();
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
                 foreach (DictionaryEntry entry in (IDictionary) value) {
-                    var encodedEntry = new KRPC.Schema.KRPC.DictionaryEntry ();
+                    var encodedEntry = new Schema.KRPC.DictionaryEntry ();
                     encodedEntry.Key = EncodeObject (entry.Key, keyType, internalBuffer, internalStream);
                     encodedEntry.Value = EncodeObject (entry.Value, valueType, internalBuffer, internalStream);
                     encodedDictionary.Entries.Add (encodedEntry);
@@ -186,20 +185,21 @@ namespace KRPC.Client
             default:
                 if (type.Equals (typeof(byte[])))
                     return stream.ReadBytes ().ToByteArray ();
-                else if (IsAClassType (type)) {
+                if (IsAClassType (type)) {
                     if (client == null)
                         throw new ArgumentException ("Client not passed when decoding remote object");
                     var id = stream.ReadUInt64 ();
                     return id == 0 ? null : (RemoteObject)Activator.CreateInstance (type, client, id);
-                } else if (IsATupleType (type))
+                }
+                if (IsATupleType (type))
                     return DecodeTuple (stream, type, client);
-                else if (IsAListType (type))
+                if (IsAListType (type))
                     return DecodeList (stream, type, client);
-                else if (IsASetType (type))
+                if (IsASetType (type))
                     return DecodeSet (stream, type, client);
-                else if (IsADictionaryType (type))
+                if (IsADictionaryType (type))
                     return DecodeDictionary (stream, type, client);
-                else if (IsAMessageType (type)) {
+                if (IsAMessageType (type)) {
                     var message = (IMessage)Activator.CreateInstance (type);
                     message.MergeFrom (stream);
                     return message;
@@ -210,7 +210,7 @@ namespace KRPC.Client
 
         static object DecodeTuple (CodedInputStream stream, Type type, IConnection client)
         {
-            var encodedTuple = KRPC.Schema.KRPC.Tuple.Parser.ParseFrom (stream);
+            var encodedTuple = Schema.KRPC.Tuple.Parser.ParseFrom (stream);
             var valueTypes = type.GetGenericArguments ().ToArray ();
             var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length.ToString ());
             var values = new object[valueTypes.Length];
@@ -254,7 +254,7 @@ namespace KRPC.Client
 
         static object DecodeDictionary (CodedInputStream stream, Type type, IConnection client)
         {
-            var encodedDictionary = KRPC.Schema.KRPC.Dictionary.Parser.ParseFrom (stream);
+            var encodedDictionary = Schema.KRPC.Dictionary.Parser.ParseFrom (stream);
             var dictionary = (IDictionary)(typeof(Dictionary<,>)
                 .MakeGenericType (type.GetGenericArguments () [0], type.GetGenericArguments () [1])
                 .GetConstructor (Type.EmptyTypes)

@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using KRPC.Server;
 using KRPC.Server.TCP;
-using KRPC.Utils;
 using Logger = KRPC.Utils.Logger;
 
 namespace KRPC
@@ -24,9 +23,9 @@ namespace KRPC
         public Configuration ()
         {
             MainWindowVisible = true;
-            MainWindowPosition = new KRPC.Utils.Tuple<float,float,float,float> (0, 0, 0, 0);
+            MainWindowPosition = new Utils.Tuple<float,float,float,float> (0, 0, 0, 0);
             InfoWindowVisible = false;
-            InfoWindowPosition = new KRPC.Utils.Tuple<float,float,float,float> (0, 0, 0, 0);
+            InfoWindowPosition = new Utils.Tuple<float,float,float,float> (0, 0, 0, 0);
             AutoStartServers = false;
             AutoAcceptConnections = false;
             ConfirmRemoveClient = true;
@@ -91,7 +90,7 @@ namespace KRPC
             get { return servers; }
         }
 
-        public Configuration.Server GetServer (Guid id)
+        public Server GetServer (Guid id)
         {
             foreach (var server in servers)
                 if (server.Id == id)
@@ -100,7 +99,7 @@ namespace KRPC
         }
 
         [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
-        public void ReplaceServer (Configuration.Server newServer)
+        public void ReplaceServer (Server newServer)
         {
             for (var i = 0; i < servers.Count; i++) {
                 if (servers [i].Id == newServer.Id) {
@@ -124,11 +123,11 @@ namespace KRPC
 
         public bool MainWindowVisible { get; set; }
 
-        public KRPC.Utils.Tuple<float,float,float,float> MainWindowPosition { get; set; }
+        public Utils.Tuple<float,float,float,float> MainWindowPosition { get; set; }
 
         public bool InfoWindowVisible { get; set; }
 
-        public KRPC.Utils.Tuple<float,float,float,float> InfoWindowPosition { get; set; }
+        public Utils.Tuple<float,float,float,float> InfoWindowPosition { get; set; }
 
         public bool AutoStartServers { get; set; }
 

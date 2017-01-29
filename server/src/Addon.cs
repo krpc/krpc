@@ -48,7 +48,7 @@ namespace KRPC
             Init ();
 
             Service.CallContext.SetGameScene (HighLogic.LoadedScene.ToGameScene ());
-            KRPC.Utils.Logger.WriteLine ("Game scene switched to " + Service.CallContext.GameScene);
+            Utils.Logger.WriteLine ("Game scene switched to " + Service.CallContext.GameScene);
 
             // If a game is not loaded, ensure the server is stopped and then exit
             if (HighLogic.LoadedScene != GameScenes.EDITOR &&
@@ -61,11 +61,11 @@ namespace KRPC
 
             // Auto-start the server, if required
             if (config.Configuration.AutoStartServers) {
-                KRPC.Utils.Logger.WriteLine ("Auto-starting server");
+                Utils.Logger.WriteLine ("Auto-starting server");
                 try {
                     core.StartAll ();
                 } catch (ServerException e) {
-                    KRPC.Utils.Logger.WriteLine ("Failed to auto-start servers:" + e, KRPC.Utils.Logger.Severity.Error);
+                    Utils.Logger.WriteLine ("Failed to auto-start servers:" + e, Utils.Logger.Severity.Error);
                 }
             }
 
@@ -124,7 +124,7 @@ namespace KRPC
                 try {
                     e.Server.Start ();
                 } catch (ServerException exn) {
-                    KRPC.Utils.Logger.WriteLine ("Server exception: " + exn.Message, KRPC.Utils.Logger.Severity.Error);
+                    Utils.Logger.WriteLine ("Server exception: " + exn.Message, Utils.Logger.Severity.Error);
                     mainWindow.Errors.Add (exn.Message);
                 }
             };
@@ -170,10 +170,10 @@ namespace KRPC
             // Server events
             core.OnClientRequestingConnection += (s, e) => {
                 if (config.Configuration.AutoAcceptConnections) {
-                    KRPC.Utils.Logger.WriteLine ("Auto-accepting client connection (" + e.Client.Address + ")");
+                    Utils.Logger.WriteLine ("Auto-accepting client connection (" + e.Client.Address + ")");
                     e.Request.Allow ();
                 } else {
-                    KRPC.Utils.Logger.WriteLine ("Asking player to accept client connection (" + e.Client.Address + ")");
+                    Utils.Logger.WriteLine ("Asking player to accept client connection (" + e.Client.Address + ")");
                     clientConnectingDialog.OnClientRequestingConnection (s, e);
                 }
             };

@@ -1,8 +1,6 @@
-using System;
 using KRPC.Server.Message;
 using KRPC.Server.WebSockets;
 using NUnit.Framework;
-using KRPC.Server;
 
 namespace KRPC.Test.Server.WebSockets
 {
@@ -34,13 +32,13 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void FromBytesEmptyUnmaskedPayload ()
         {
-            CheckBytes ("8800", "8800", String.Empty);
+            CheckBytes ("8800", "8800", string.Empty);
         }
 
         [Test]
         public void FromBytesEmptyMaskedPayload ()
         {
-            CheckBytes ("888000000000", "888000000000", String.Empty);
+            CheckBytes ("888000000000", "888000000000", string.Empty);
         }
 
         [Test]
@@ -63,7 +61,7 @@ namespace KRPC.Test.Server.WebSockets
         {
             var frame = FrameFromString ("888412345678");
             Assert.AreEqual ("888412345678", frame.Header.ToBytes ().ToHexString ());
-            Assert.AreEqual (String.Empty, frame.Payload.ToHexString ());
+            Assert.AreEqual (string.Empty, frame.Payload.ToHexString ());
             Assert.AreEqual (6, frame.Length);
             Assert.IsTrue (frame.IsPartial);
         }

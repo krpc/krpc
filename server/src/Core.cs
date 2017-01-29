@@ -518,7 +518,7 @@ namespace KRPC
                         // Run the RPC
                         ProcedureResult result;
                         try {
-                            result = KRPC.Service.Services.Instance.ExecuteCall (request.Procedure, request.Arguments);
+                            result = Service.Services.Instance.ExecuteCall (request.Procedure, request.Arguments);
                         } catch (RPCException e) {
                             result = new ProcedureResult ();
                             result.Error = e.ToString ();
@@ -622,7 +622,7 @@ namespace KRPC
                         EventHandlerExtensions.Invoke (OnClientActivity, this, new ClientActivityEventArgs (client));
                         if (Logger.ShouldLog (Logger.Severity.Debug))
                             Logger.WriteLine ("Received request from client " + client.Address +
-                            " (" + String.Join (", ", request.Calls.Select (call => call.Service + "." + call.Procedure).ToArray ()) + ")",
+                            " (" + string.Join (", ", request.Calls.Select (call => call.Service + "." + call.Procedure).ToArray ()) + ")",
                                 Logger.Severity.Debug);
                         continuations.Add (new RequestContinuation (client, request));
                     }

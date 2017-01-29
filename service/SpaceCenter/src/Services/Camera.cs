@@ -48,9 +48,9 @@ namespace KRPC.SpaceCenter.Services
                 if (MapView.MapIsEnabled)
                     return CameraMode.Map;
                 var mode = CameraManager.Instance.currentCameraMode;
-                if (mode == CameraManager.CameraMode.Flight) {
+                if (mode == CameraManager.CameraMode.Flight)
                     return FlightCamera.fetch.mode.ToCameraMode ();
-                } else if (mode == CameraManager.CameraMode.IVA)
+                if (mode == CameraManager.CameraMode.IVA)
                     return CameraMode.IVA;
                 throw new InvalidOperationException ("Unknown camera mode " + CameraManager.Instance.currentCameraMode);
             }

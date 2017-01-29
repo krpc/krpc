@@ -7,7 +7,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
     {
         [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
-        public static KRPC.SpaceCenter.Services.VesselSituation ToVesselSituation (this Vessel.Situations situation)
+        public static Services.VesselSituation ToVesselSituation (this Vessel.Situations situation)
         {
             switch (situation) {
             case Vessel.Situations.DOCKED:

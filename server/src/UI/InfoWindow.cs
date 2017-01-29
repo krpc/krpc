@@ -126,9 +126,9 @@ namespace KRPC.UI
             DrawInfo (maxTimePerUpdateText, config.OneRPCPerUpdate ? notApplicableText : config.MaxTimePerUpdate + " ns");
             DrawInfo (rpcReceiveModeText, config.BlockingRecv ? blockingModeText : nonBlockingModeText);
             DrawInfo (recvTimeoutText, config.BlockingRecv ? config.RecvTimeout + " ns" : notApplicableText);
-            DrawInfo (timePerRPCUpdateText, String.Format ("{0:F5} s", core.TimePerRPCUpdate));
-            DrawInfo (pollTimePerRPCUpdateText, String.Format ("{0:F5} s", core.PollTimePerRPCUpdate));
-            DrawInfo (execTimePerRPCUpdateText, String.Format ("{0:F5} s", core.ExecTimePerRPCUpdate));
+            DrawInfo (timePerRPCUpdateText, string.Format ("{0:F5} s", core.TimePerRPCUpdate));
+            DrawInfo (pollTimePerRPCUpdateText, string.Format ("{0:F5} s", core.PollTimePerRPCUpdate));
+            DrawInfo (execTimePerRPCUpdateText, string.Format ("{0:F5} s", core.ExecTimePerRPCUpdate));
 
             GUILayoutExtensions.Separator (separatorStyle);
 

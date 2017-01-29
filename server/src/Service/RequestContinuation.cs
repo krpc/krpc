@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service.Messages;
-using KRPC.Service.Scanner;
 
 namespace KRPC.Service
 {

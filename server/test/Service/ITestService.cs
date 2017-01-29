@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using KRPC.Service.Messages;
 
 namespace KRPC.Test.Service
 {

@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Service.Messages
@@ -14,7 +13,7 @@ namespace KRPC.Service.Messages
         public Exception (string name)
         {
             Name = name;
-            Documentation = String.Empty;
+            Documentation = string.Empty;
         }
     }
 }

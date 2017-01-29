@@ -105,12 +105,12 @@ namespace KRPC.Server.WebSockets
                 bytes [1] |= (byte)Length;
             } else if (Length <= 0xffff) {
                 bytes [1] |= 126;
-                byte[] size = BitConverter.GetBytes ((Int16)Length);
+                byte[] size = BitConverter.GetBytes ((short)Length);
                 bytes [2] = size [1];
                 bytes [3] = size [0];
             } else {
                 bytes [1] |= 127;
-                byte[] size = BitConverter.GetBytes ((Int64)Length);
+                byte[] size = BitConverter.GetBytes ((long)Length);
                 for (int i = 0; i < 8; i++)
                     bytes [2 + i] = size [7 - i];
             }
@@ -146,7 +146,7 @@ namespace KRPC.Server.WebSockets
                 throw new FramingException (1002, "Control frames must not be fragmented");
 
             var isMasked = ((secondByte & MASK_MASK) != 0);
-            byte payloadLength = (byte)(secondByte & PAYLOAD_MASK);
+            var payloadLength = (byte)(secondByte & PAYLOAD_MASK);
             var extPayloadLengthSize = 0;
 
             if (payloadLength == 126) {

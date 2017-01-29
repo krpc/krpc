@@ -1,4 +1,3 @@
-using System;
 using Google.Protobuf;
 using KRPC.Schema.KRPC;
 using NUnit.Framework;

@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using KRPC.Schema.KRPC;
 using KRPC.Server;
 using KRPC.Server.ProtocolBuffers;
 using Moq;
@@ -40,7 +39,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (1, server.Clients.Count ());
             Assert.AreEqual ("Jebediah Kerman!!!", server.Clients.First ().Name);
 
-            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 19, Status.Ok, String.Empty, 16);
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 19, Status.Ok, string.Empty, 16);
         }
 
         [Test]

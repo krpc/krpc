@@ -1,7 +1,5 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using KRPC.Continuations;
-using KRPC.Server;
 using KRPC.Service.Messages;
 using KRPC.Service.Scanner;
 
@@ -42,8 +40,7 @@ namespace KRPC.Service
                 var services = Services.Instance;
                 if (continuation == null)
                     return services.ExecuteCall (procedure, call);
-                else
-                    return services.ExecuteCall (procedure, continuation);
+                return services.ExecuteCall (procedure, continuation);
             } catch (YieldException e) {
                 throw new YieldException (new ProcedureCallContinuation (procedure, e.Continuation));
             }

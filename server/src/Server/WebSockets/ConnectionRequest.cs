@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Text;
-using KRPC.Server;
 using KRPC.Server.HTTP;
 using KRPC.Utils;
 
@@ -34,7 +33,7 @@ namespace KRPC.Server.WebSockets
                 stream.Write (e.Response.ToBytes ());
                 return null;
             } catch (MalformedRequestException e) {
-                //TODO: wait for timeout seconds to see if the request was truncated
+                // TODO: wait for timeout seconds to see if the request was truncated
                 Logger.WriteLine ("Malformed WebSockets connection request: " + e.Message, Logger.Severity.Error);
                 args.Request.Deny ();
                 stream.Write (Response.CreateBadRequest ().ToBytes ());

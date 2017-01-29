@@ -152,14 +152,14 @@ namespace KRPC.Service
                 var scene = CallContext.GameScene;
                 if ((scene & Service.GameScene.SpaceCenter) != 0)
                     return GameScene.SpaceCenter;
-                else if ((scene & Service.GameScene.Flight) != 0)
+                if ((scene & Service.GameScene.Flight) != 0)
                     return GameScene.Flight;
-                else if ((scene & Service.GameScene.TrackingStation) != 0)
+                if ((scene & Service.GameScene.TrackingStation) != 0)
                     return GameScene.TrackingStation;
-                else if ((scene & Service.GameScene.Editor) != 0) {
+                if ((scene & Service.GameScene.Editor) != 0) {
                     if (EditorDriver.editorFacility == EditorFacility.VAB)
                         return GameScene.EditorVAB;
-                    else if (EditorDriver.editorFacility == EditorFacility.SPH)
+                    if (EditorDriver.editorFacility == EditorFacility.SPH)
                         return GameScene.EditorSPH;
                 }
                 throw new System.InvalidOperationException ("Unknown game scene");

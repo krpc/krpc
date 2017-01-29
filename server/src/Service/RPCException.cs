@@ -1,6 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
-using KRPC.Service.Scanner;
 
 namespace KRPC.Service
 {
@@ -16,7 +14,7 @@ namespace KRPC.Service
         }
 
         public RPCException (Exception innerException)
-        : base(String.Empty, innerException)
+        : base(string.Empty, innerException)
         {
         }
 

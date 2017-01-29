@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using KRPC.Server;
 using KRPC.Service.Messages;
 
 namespace KRPC.Server.WebSockets
@@ -53,9 +52,9 @@ namespace KRPC.Server.WebSockets
         /// </summary>
         public static Guid GetGuid (HTTP.Request request)
         {
-            //TODO: make this id extraction more robust
+            // TODO: make this id extraction more robust
             var query = request.URI.Query;
-            if (!query.StartsWith ("?id="))
+            if (!query.StartsWith ("?id=", StringComparison.CurrentCulture))
                 return Guid.Empty;
             try {
                 var bytes = Convert.FromBase64String (query.Substring ("?id=".Length));

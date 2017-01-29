@@ -1,6 +1,5 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Server.HTTP;
 using NUnit.Framework;
 
@@ -75,7 +74,7 @@ namespace KRPC.Test.Server.HTTP
         [Test]
         public void EmptyRequest ()
         {
-            Assert.Throws <MalformedRequestException> (() => Request.FromString (String.Empty));
+            Assert.Throws <MalformedRequestException> (() => Request.FromString (string.Empty));
         }
 
         [Test]

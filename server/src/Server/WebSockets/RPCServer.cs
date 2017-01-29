@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using KRPC.Server;
 using KRPC.Service.Messages;
 using KRPC.Utils;
 
@@ -63,10 +62,10 @@ namespace KRPC.Server.WebSockets
         /// </summary>
         public static string GetClientName (HTTP.Request request)
         {
-            string name = String.Empty;
+            string name = string.Empty;
             var query = request.URI.Query;
-            //TODO: make this name extraction more robust
-            if (query.StartsWith ("?name="))
+            // TODO: make this name extraction more robust
+            if (query.StartsWith ("?name=", StringComparison.CurrentCulture))
                 name = query.Substring ("?name=".Length);
             else if (request.Headers.ContainsKey ("Origin"))
                 name = request.Headers ["Origin"];

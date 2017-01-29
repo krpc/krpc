@@ -308,10 +308,9 @@ namespace KRPC.SpaceCenter.Services
             get {
                 if (TimeWarp.CurrentRateIndex == 0)
                     return WarpMode.None;
-                else if (TimeWarp.WarpMode == TimeWarp.Modes.HIGH)
+                if (TimeWarp.WarpMode == TimeWarp.Modes.HIGH)
                     return WarpMode.Rails;
-                else
-                    return WarpMode.Physics;
+                return WarpMode.Physics;
             }
         }
 
@@ -435,9 +434,8 @@ namespace KRPC.SpaceCenter.Services
 
             if (Planetarium.GetUniversalTime () < ut)
                 throw new YieldException (new ParameterizedContinuationVoid<double,float,float> (WarpTo, ut, maxRailsRate, maxPhysicsRate));
-            else if (TimeWarp.CurrentRateIndex > 0) {
+            if (TimeWarp.CurrentRateIndex > 0)
                 SetWarpFactor (TimeWarp.Modes.HIGH, 0);
-            }
         }
 
         static void SetWarpMode (TimeWarp.Modes mode)

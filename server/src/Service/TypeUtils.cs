@@ -488,9 +488,9 @@ namespace KRPC.Service
             } else if (IsAMessageType (type)) {
                 var name = type.ToString ();
                 var camelCase = name.Substring (name.LastIndexOf ('.') + 1);
-                var snakeCase = String.Empty;
+                var snakeCase = string.Empty;
                 for (var i = 0; i < camelCase.Length-1; i++) {
-                    if (Char.IsLower(camelCase[i]) && Char.IsUpper(camelCase[i+1]))
+                    if (char.IsLower(camelCase[i]) && char.IsUpper(camelCase[i+1]))
                         snakeCase += camelCase[i] + "_";
                     else
                         snakeCase += camelCase[i];

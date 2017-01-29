@@ -161,7 +161,8 @@ namespace KRPC.Service
                 throw new RPCException (
                     "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
                     "Expected a value of type " + procedure.ReturnType + ", got " + returnValue.GetType ());
-            } else if (returnValue == null && !TypeUtils.IsAClassType (procedure.ReturnType)) {
+            }
+            if (returnValue == null && !TypeUtils.IsAClassType (procedure.ReturnType)) {
                 throw new RPCException (
                     "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
                     "Expected a value of type " + procedure.ReturnType + ", got null");

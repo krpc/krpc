@@ -1,5 +1,3 @@
-using System;
-using KRPC.Server;
 using KRPC.Schema.KRPC;
 
 namespace KRPC.Server.ProtocolBuffers
