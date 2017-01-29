@@ -77,15 +77,15 @@ reference frame:
       .. literalinclude:: /scripts/VesselPosition.cpp
          :language: cpp
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/VesselPosition.lua
-         :language: lua
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/VesselPosition.java
          :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/VesselPosition.lua
+         :language: lua
 
    .. tab:: Python
 
@@ -201,22 +201,6 @@ kRPC provides the following reference frames:
       * :cpp:func:`DockingPort::reference_frame`
       * :cpp:func:`Thruster::thrust_reference_frame`
 
-   .. tab:: Lua
-
-      * :lua:attr:`Vessel.reference_frame`
-      * :lua:attr:`Vessel.orbital_reference_frame`
-      * :lua:attr:`Vessel.surface_reference_frame`
-      * :lua:attr:`Vessel.surface_velocity_reference_frame`
-      * :lua:attr:`CelestialBody.reference_frame`
-      * :lua:attr:`CelestialBody.non_rotating_reference_frame`
-      * :lua:attr:`CelestialBody.orbital_reference_frame`
-      * :lua:attr:`Node.reference_frame`
-      * :lua:attr:`Node.orbital_reference_frame`
-      * :lua:attr:`Part.reference_frame`
-      * :lua:attr:`Part.center_of_mass_reference_frame`
-      * :lua:attr:`DockingPort.reference_frame`
-      * :lua:attr:`Thruster.thrust_reference_frame`
-
    .. tab:: Java
 
       * :java:meth:`Vessel.getReferenceFrame`
@@ -232,6 +216,22 @@ kRPC provides the following reference frames:
       * :java:meth:`Part.getCenterOfMassReferenceFrame`
       * :java:meth:`DockingPort.getReferenceFrame`
       * :java:meth:`Thruster.getThrustReferenceFrame`
+
+   .. tab:: Lua
+
+      * :lua:attr:`Vessel.reference_frame`
+      * :lua:attr:`Vessel.orbital_reference_frame`
+      * :lua:attr:`Vessel.surface_reference_frame`
+      * :lua:attr:`Vessel.surface_velocity_reference_frame`
+      * :lua:attr:`CelestialBody.reference_frame`
+      * :lua:attr:`CelestialBody.non_rotating_reference_frame`
+      * :lua:attr:`CelestialBody.orbital_reference_frame`
+      * :lua:attr:`Node.reference_frame`
+      * :lua:attr:`Node.orbital_reference_frame`
+      * :lua:attr:`Part.reference_frame`
+      * :lua:attr:`Part.center_of_mass_reference_frame`
+      * :lua:attr:`DockingPort.reference_frame`
+      * :lua:attr:`Thruster.thrust_reference_frame`
 
    .. tab:: Python
 
@@ -304,19 +304,19 @@ velocities between the different reference frames:
       * :cpp:func:`SpaceCenter::transform_rotation`
       * :cpp:func:`SpaceCenter::transform_velocity`
 
-   .. tab:: Lua
-
-      * :lua:meth:`SpaceCenter.transform_position`
-      * :lua:meth:`SpaceCenter.transform_direction`
-      * :lua:meth:`SpaceCenter.transform_rotation`
-      * :lua:meth:`SpaceCenter.transform_velocity`
-
    .. tab:: Java
 
       * :java:meth:`SpaceCenter.transformPosition`
       * :java:meth:`SpaceCenter.transformDirection`
       * :java:meth:`SpaceCenter.transformRotation`
       * :java:meth:`SpaceCenter.transformVelocity`
+
+   .. tab:: Lua
+
+      * :lua:meth:`SpaceCenter.transform_position`
+      * :lua:meth:`SpaceCenter.transform_direction`
+      * :lua:meth:`SpaceCenter.transform_rotation`
+      * :lua:meth:`SpaceCenter.transform_velocity`
 
    .. tab:: Python
 
@@ -348,15 +348,15 @@ direction of the current vessels velocity relative to the surface:
       .. literalinclude:: /scripts/VisualDebugging.cpp
          :language: cpp
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/VisualDebugging.lua
-         :language: lua
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/VisualDebugging.java
          :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/VisualDebugging.lua
+         :language: lua
 
    .. tab:: Python
 
@@ -389,15 +389,15 @@ the navball:
       .. literalinclude:: /scripts/NavballDirections.cpp
          :language: cpp
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/NavballDirections.lua
-         :language: lua
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/NavballDirections.java
          :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/NavballDirections.lua
+         :language: lua
 
    .. tab:: Python
 
@@ -441,15 +441,15 @@ directions, as seen on the navball when it is in 'orbit' mode. It uses
       .. literalinclude:: /scripts/OrbitalDirections.cpp
          :language: cpp
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/OrbitalDirections.lua
-         :language: lua
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/OrbitalDirections.java
          :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/OrbitalDirections.lua
+         :language: lua
 
    .. tab:: Python
 
@@ -480,15 +480,15 @@ velocity relative to the surface:
       .. literalinclude:: /scripts/SurfacePrograde.cpp
          :language: cpp
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/SurfacePrograde.lua
-         :language: lua
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/SurfacePrograde.java
          :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/SurfacePrograde.lua
+         :language: lua
 
    .. tab:: Python
 
@@ -523,15 +523,15 @@ fixed relative to the body, but does not rotate:
       .. literalinclude:: /scripts/OrbitalSpeed.cpp
          :language: cpp
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/OrbitalSpeed.lua
-         :language: lua
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/OrbitalSpeed.java
          :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/OrbitalSpeed.lua
+         :language: lua
 
    .. tab:: Python
 
@@ -561,15 +561,15 @@ computing the velocity of the vessel:
       .. literalinclude:: /scripts/SurfaceSpeed.cpp
          :language: cpp
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/SurfaceSpeed.lua
-         :language: lua
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/SurfaceSpeed.java
          :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/SurfaceSpeed.lua
+         :language: lua
 
    .. tab:: Python
 
@@ -594,15 +594,15 @@ and the direction that the vessel is moving in (relative to the surface):
       .. literalinclude:: /scripts/AngleOfAttack.cpp
          :language: cpp
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/AngleOfAttack.lua
-         :language: lua
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/AngleOfAttack.java
          :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/AngleOfAttack.lua
+         :language: lua
 
    .. tab:: Python
 

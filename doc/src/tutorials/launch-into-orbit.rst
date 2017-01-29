@@ -8,11 +8,12 @@ program assumes you are using :download:`this craft file
 </crafts/LaunchIntoOrbit.craft>`.
 
 The program is available in a variety of languages:
+
 :download:`C#</scripts/LaunchIntoOrbit.cs>`,
 :download:`C++</scripts/LaunchIntoOrbit.cpp>`,
-:download:`Python</scripts/LaunchIntoOrbit.py>`,
+:download:`Java</scripts/LaunchIntoOrbit.java>`,
 :download:`Lua</scripts/LaunchIntoOrbit.lua>`,
-:download:`Java</scripts/LaunchIntoOrbit.java>`.
+:download:`Python</scripts/LaunchIntoOrbit.py>`
 
 The following code connects to the server, gets the active vessel, sets up a
 bunch of streams to get flight telemetry then prepares the rocket for launch.
@@ -33,18 +34,18 @@ bunch of streams to get flight telemetry then prepares the rocket for launch.
          :lines: 1-35
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/LaunchIntoOrbit.lua
-         :language: lua
-         :lines: 1-30
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.java
          :language: java
          :lines: 1-47
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/LaunchIntoOrbit.lua
+         :language: lua
+         :lines: 1-30
          :linenos:
 
    .. tab:: Python
@@ -78,20 +79,20 @@ close to the target apoapsis.
          :lineno-start: 35
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/LaunchIntoOrbit.lua
-         :language: lua
-         :lines: 31-59
-         :lineno-start: 31
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.java
          :language: java
          :lines: 49-83
          :lineno-start: 49
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/LaunchIntoOrbit.lua
+         :language: lua
+         :lines: 31-59
+         :lineno-start: 31
          :linenos:
 
    .. tab:: Python
@@ -123,20 +124,20 @@ the rocket has left Kerbin's atmosphere.
          :lineno-start: 72
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/LaunchIntoOrbit.lua
-         :language: lua
-         :lines: 61-71
-         :lineno-start: 61
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.java
          :language: java
          :lines: 85-95
          :lineno-start: 85
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/LaunchIntoOrbit.lua
+         :language: lua
+         :lines: 61-71
+         :lineno-start: 61
          :linenos:
 
    .. tab:: Python
@@ -171,20 +172,20 @@ time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
          :lineno-start: 84
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/LaunchIntoOrbit.lua
-         :language: lua
-         :lines: 73-90
-         :lineno-start: 73
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.java
          :language: java
          :lines: 97-114
          :lineno-start: 97
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/LaunchIntoOrbit.lua
+         :language: lua
+         :lines: 73-90
+         :lineno-start: 73
          :linenos:
 
    .. tab:: Python
@@ -217,20 +218,20 @@ orientate the ship along the y-axis of the maneuver node's reference frame
          :lineno-start: 103
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/LaunchIntoOrbit.lua
-         :language: lua
-         :lines: 92-102
-         :lineno-start: 92
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.java
          :language: java
          :lines: 116-126
          :lineno-start: 116
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/LaunchIntoOrbit.lua
+         :language: lua
+         :lines: 92-102
+         :lineno-start: 92
          :linenos:
 
    .. tab:: Python
@@ -264,20 +265,20 @@ which point the node has been executed).
          :lineno-start: 115
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/LaunchIntoOrbit.lua
-         :language: lua
-         :lines: 104-
-         :lineno-start: 104
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.java
          :language: java
          :lines: 128-
          :lineno-start: 128
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/LaunchIntoOrbit.lua
+         :language: lua
+         :lines: 104-
+         :lineno-start: 104
          :linenos:
 
    .. tab:: Python

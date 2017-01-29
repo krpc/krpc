@@ -21,11 +21,12 @@ rocket can be :download:`downloaded here </crafts/SubOrbitalFlight.craft>`.
 This tutorial includes source code examples for the main client languages that
 kRPC supports. The entire program, for your chosen language can be downloaded
 from here:
+
 :download:`C#</scripts/SubOrbitalFlight.cs>`,
 :download:`C++</scripts/SubOrbitalFlight.cpp>`,
-:download:`Python</scripts/SubOrbitalFlight.py>`,
+:download:`Java</scripts/SubOrbitalFlight.java>`,
 :download:`Lua</scripts/SubOrbitalFlight.lua>`,
-:download:`Java</scripts/SubOrbitalFlight.java>`.
+:download:`Python</scripts/SubOrbitalFlight.py>`
 
 .. image:: /images/tutorials/SubOrbitalFlight.png
    :align: center
@@ -53,18 +54,18 @@ game:
          :lines: 1-9
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/SubOrbitalFlight.lua
-         :language: lua
-         :lines: 1-2
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/SubOrbitalFlight.java
          :language: java
          :lines: 1-16
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/SubOrbitalFlight.lua
+         :language: lua
+         :lines: 1-2
          :linenos:
 
    .. tab:: Python
@@ -95,20 +96,20 @@ object that we will send instructions to the rocket:
          :lineno-start: 11
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/SubOrbitalFlight.lua
-         :language: lua
-         :lines: 4
-         :lineno-start: 4
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/SubOrbitalFlight.java
          :language: java
          :lines: 18
          :lineno-start: 18
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/SubOrbitalFlight.lua
+         :language: lua
+         :lines: 4
+         :lineno-start: 4
          :linenos:
 
    .. tab:: Python
@@ -142,20 +143,20 @@ effect.
          :lineno-start: 13
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/SubOrbitalFlight.lua
-         :language: lua
-         :lines: 6-9
-         :lineno-start: 6
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/SubOrbitalFlight.java
          :language: java
          :lines: 21-24
          :lineno-start: 21
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/SubOrbitalFlight.lua
+         :language: lua
+         :lines: 6-9
+         :lineno-start: 6
          :linenos:
 
    .. tab:: Python
@@ -190,20 +191,20 @@ the space bar):
          :lineno-start: 18
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/SubOrbitalFlight.lua
-         :language: lua
-         :lines: 11-12
-         :lineno-start: 11
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/SubOrbitalFlight.java
          :language: java
          :lines: 26-27
          :lineno-start: 26
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/SubOrbitalFlight.lua
+         :language: lua
+         :lines: 11-12
+         :lineno-start: 11
          :linenos:
 
    .. tab:: Python
@@ -238,20 +239,20 @@ boosters:
          :lineno-start: 21
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/SubOrbitalFlight.lua
-         :language: lua
-         :lines: 14-18
-         :lineno-start: 14
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/SubOrbitalFlight.java
          :language: java
          :lines: 29-32
          :lineno-start: 29
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/SubOrbitalFlight.lua
+         :language: lua
+         :lines: 14-18
+         :lineno-start: 14
          :linenos:
 
    .. tab:: Python
@@ -290,20 +291,20 @@ rocket reaches 10km:
          :lineno-start: 26
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/SubOrbitalFlight.lua
-         :language: lua
-         :lines: 20-22
-         :lineno-start: 20
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/SubOrbitalFlight.java
          :language: java
          :lines: 34-35
          :lineno-start: 34
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/SubOrbitalFlight.lua
+         :language: lua
+         :lines: 20-22
+         :lineno-start: 20
          :linenos:
 
    .. tab:: Python
@@ -339,20 +340,20 @@ Now we need to angle the rocket over to a pitch of 60° and maintain a heading o
          :lineno-start: 29
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/SubOrbitalFlight.lua
-         :language: lua
-         :lines: 24-25
-         :lineno-start: 24
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/SubOrbitalFlight.java
          :language: java
          :lines: 37-38
          :lineno-start: 38
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/SubOrbitalFlight.lua
+         :language: lua
+         :lines: 24-25
+         :lineno-start: 24
          :linenos:
 
    .. tab:: Python
@@ -384,20 +385,20 @@ jettison the launch stage and turn off the auto-pilot:
          :lineno-start: 32
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/SubOrbitalFlight.lua
-         :language: lua
-         :lines: 27-34
-         :lineno-start: 27
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/SubOrbitalFlight.java
          :language: java
          :lines: 40-46
          :lineno-start: 40
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/SubOrbitalFlight.lua
+         :language: lua
+         :lines: 27-34
+         :lineno-start: 27
          :linenos:
 
    .. tab:: Python
@@ -438,20 +439,20 @@ will continue to work.
          :lineno-start: 40
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/SubOrbitalFlight.lua
-         :language: lua
-         :lines: 36-39
-         :lineno-start: 36
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/SubOrbitalFlight.java
          :language: java
          :lines: 48-50
          :lineno-start: 48
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/SubOrbitalFlight.lua
+         :language: lua
+         :lines: 36-39
+         :lineno-start: 36
          :linenos:
 
    .. tab:: Python
@@ -484,20 +485,20 @@ which will happen when it lands:
          :lineno-start: 44
          :linenos:
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/SubOrbitalFlight.lua
-         :language: lua
-         :lines: 41-
-         :lineno-start: 41
-         :linenos:
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/SubOrbitalFlight.java
          :language: java
          :lines: 52-
          :lineno-start: 52
+         :linenos:
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/SubOrbitalFlight.lua
+         :language: lua
+         :lines: 41-
+         :lineno-start: 41
          :linenos:
 
    .. tab:: Python

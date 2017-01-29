@@ -18,15 +18,15 @@ throttle to maximum.
       .. literalinclude:: /scripts/UserInterface.cpp
          :language: cpp
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/UserInterface.lua
-         :language: lua
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/UserInterface.java
          :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/UserInterface.lua
+         :language: lua
 
    .. tab:: Python
 

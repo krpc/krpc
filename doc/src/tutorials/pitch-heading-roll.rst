@@ -18,6 +18,11 @@ once per second.
       .. literalinclude:: /scripts/PitchHeadingRoll.cs
          :language: csharp
 
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/PitchHeadingRoll.java
+         :language: java
+
    .. tab:: Lua
 
       .. literalinclude:: /scripts/PitchHeadingRoll.lua
@@ -27,8 +32,3 @@ once per second.
 
       .. literalinclude:: /scripts/PitchHeadingRoll.py
          :language: python
-
-   .. tab:: Java
-
-      .. literalinclude:: /scripts/PitchHeadingRoll.java
-         :language: java

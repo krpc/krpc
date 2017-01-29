@@ -62,15 +62,15 @@ your Kerbals by deploying all the parachutes:
       .. literalinclude:: /scripts/DeployParachutes.cpp
          :language: cpp
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/DeployParachutes.lua
-         :language: lua
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/DeployParachutes.java
          :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/DeployParachutes.lua
+         :language: lua
 
    .. tab:: Python
 
@@ -95,15 +95,15 @@ control the vessel from it:
       .. literalinclude:: /scripts/ControlFromHere.cpp
          :language: cpp
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/ControlFromHere.lua
-         :language: lua
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/ControlFromHere.java
          :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/ControlFromHere.lua
+         :language: lua
 
    .. tab:: Python
 
@@ -129,15 +129,15 @@ http://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
       .. literalinclude:: /scripts/CombinedIsp.cpp
          :language: cpp
 
-   .. tab:: Lua
-
-      .. literalinclude:: /scripts/CombinedIsp.lua
-         :language: lua
-
    .. tab:: Java
 
       .. literalinclude:: /scripts/CombinedIsp.java
          :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/CombinedIsp.lua
+         :language: lua
 
    .. tab:: Python
 
