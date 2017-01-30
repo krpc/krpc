@@ -24,7 +24,7 @@ bunch of streams to get flight telemetry then prepares the rocket for launch.
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 1-38
+         :lines: 1-39
          :linenos:
 
    .. tab:: C++
@@ -38,7 +38,7 @@ bunch of streams to get flight telemetry then prepares the rocket for launch.
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.java
          :language: java
-         :lines: 1-47
+         :lines: 1-50
          :linenos:
 
    .. tab:: Lua
@@ -67,31 +67,31 @@ close to the target apoapsis.
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 40-74
-         :lineno-start: 40
+         :lines: 41-78
+         :lineno-start: 41
          :linenos:
 
    .. tab:: C++
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 35-70
-         :lineno-start: 35
+         :lines: 37-71
+         :lineno-start: 37
          :linenos:
 
    .. tab:: Java
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.java
          :language: java
-         :lines: 49-83
-         :lineno-start: 49
+         :lines: 52-89
+         :lineno-start: 52
          :linenos:
 
    .. tab:: Lua
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 31-59
+         :lines: 31-65
          :lineno-start: 31
          :linenos:
 
@@ -99,7 +99,7 @@ close to the target apoapsis.
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.py
          :language: python
-         :lines: 33-61
+         :lines: 33-62
          :lineno-start: 33
          :linenos:
 
@@ -112,40 +112,40 @@ the rocket has left Kerbin's atmosphere.
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 76-86
-         :lineno-start: 76
+         :lines: 80-90
+         :lineno-start: 80
          :linenos:
 
    .. tab:: C++
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 72-82
-         :lineno-start: 72
+         :lines: 73-83
+         :lineno-start: 73
          :linenos:
 
    .. tab:: Java
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.java
          :language: java
-         :lines: 85-95
-         :lineno-start: 85
+         :lines: 91-101
+         :lineno-start: 91
          :linenos:
 
    .. tab:: Lua
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 61-71
-         :lineno-start: 61
+         :lines: 67-77
+         :lineno-start: 67
          :linenos:
 
    .. tab:: Python
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.py
          :language: python
-         :lines: 63-73
-         :lineno-start: 63
+         :lines: 64-74
+         :lineno-start: 64
          :linenos:
 
 It is now time to plan the circularization burn. First, we calculate the delta-v
@@ -160,40 +160,40 @@ time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 88-105
-         :lineno-start: 88
+         :lines: 92-110
+         :lineno-start: 92
          :linenos:
 
    .. tab:: C++
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 84-101
-         :lineno-start: 84
+         :lines: 85-103
+         :lineno-start: 85
          :linenos:
 
    .. tab:: Java
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.java
          :language: java
-         :lines: 97-114
-         :lineno-start: 97
+         :lines: 103-121
+         :lineno-start: 103
          :linenos:
 
    .. tab:: Lua
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 73-90
-         :lineno-start: 73
+         :lines: 79-96
+         :lineno-start: 79
          :linenos:
 
    .. tab:: Python
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.py
          :language: python
-         :lines: 75-92
-         :lineno-start: 75
+         :lines: 76-94
+         :lineno-start: 76
          :linenos:
 
 Next, we need to rotate the craft and wait until the circularization burn. We
@@ -206,40 +206,40 @@ orientate the ship along the y-axis of the maneuver node's reference frame
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 107-117
-         :lineno-start: 107
+         :lines: 112-122
+         :lineno-start: 112
          :linenos:
 
    .. tab:: C++
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 103-113
-         :lineno-start: 103
+         :lines: 105-115
+         :lineno-start: 105
          :linenos:
 
    .. tab:: Java
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.java
          :language: java
-         :lines: 116-126
-         :lineno-start: 116
+         :lines: 123-135
+         :lineno-start: 123
          :linenos:
 
    .. tab:: Lua
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 92-102
-         :lineno-start: 92
+         :lines: 98-108
+         :lineno-start: 98
          :linenos:
 
    .. tab:: Python
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.py
          :language: python
-         :lines: 94-104
-         :lineno-start: 94
+         :lines: 96-106
+         :lineno-start: 96
          :linenos:
 
 This next part executes the burn. It sets maximum throttle, then throttles down
@@ -253,15 +253,15 @@ which point the node has been executed).
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 119-
-         :lineno-start: 119
+         :lines: 124-
+         :lineno-start: 124
          :linenos:
 
    .. tab:: C++
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 115-
+         :lines: 117-
          :lineno-start: 115
          :linenos:
 
@@ -269,24 +269,24 @@ which point the node has been executed).
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.java
          :language: java
-         :lines: 128-
-         :lineno-start: 128
+         :lines: 137-
+         :lineno-start: 137
          :linenos:
 
    .. tab:: Lua
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 104-
-         :lineno-start: 104
+         :lines: 110-
+         :lineno-start: 110
          :linenos:
 
    .. tab:: Python
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.py
          :language: python
-         :lines: 106-
-         :lineno-start: 106
+         :lines: 108-
+         :lineno-start: 108
          :linenos:
 
 The rocket should now be in a circular 150km orbit above Kerbin.

@@ -45,7 +45,8 @@ int main() {
   while (true) {
     // Gravity turn
     if (altitude() > turn_start_altitude && altitude() < turn_end_altitude) {
-      double frac = (altitude() - turn_start_altitude) / (turn_end_altitude - turn_start_altitude);
+      double frac = (altitude() - turn_start_altitude)
+                    / (turn_end_altitude - turn_start_altitude);
       double new_turn_angle = frac * 90.0;
       if (fabs(new_turn_angle - turn_angle) > 0.5) {
         turn_angle = new_turn_angle;
@@ -90,7 +91,8 @@ int main() {
   double v1 = sqrt(mu * ((2.0 / r) - (1.0 / a1)));
   double v2 = sqrt(mu * ((2.0 / r) - (1.0 / a2)));
   double delta_v = v2 - v1;
-  auto node = vessel.control().add_node(ut() + vessel.orbit().time_to_apoapsis(), delta_v);
+  auto node = vessel.control().add_node(
+    ut() + vessel.orbit().time_to_apoapsis(), delta_v);
 
   // Calculate burn time (using rocket equation)
   double F = vessel.available_thrust();
@@ -119,7 +121,8 @@ int main() {
   }
   std::cout << "Executing burn" << std::endl;
   vessel.control().set_throttle(1);
-  std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>((burn_time - 0.1) * 1000)));
+  std::this_thread::sleep_for(
+    std::chrono::milliseconds(static_cast<int>((burn_time - 0.1) * 1000)));
   std::cout << "Fine tuning" << std::endl;
   vessel.control().set_throttle(0.05);
   auto remaining_burn = node.remaining_burn_vector_stream(node.reference_frame());
