@@ -19,7 +19,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
         with self.assertRaises(socket.error):
             krpc.connect(name='python_client_test_wrong_rpc_port',
                          address='localhost',
-                         rpc_port=ServerTestCase.rpc_port() ^ ServerTestCase.stream_port(),
+                         rpc_port=ServerTestCase.rpc_port() ^
+                         ServerTestCase.stream_port(),
                          stream_port=ServerTestCase.stream_port())
 
     def test_wrong_stream_port(self):
@@ -27,7 +28,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
             krpc.connect(name='python_client_test_wrong_stream_port',
                          address='localhost',
                          rpc_port=ServerTestCase.rpc_port(),
-                         stream_port=ServerTestCase.rpc_port() ^ ServerTestCase.stream_port())
+                         stream_port=ServerTestCase.rpc_port() ^
+                         ServerTestCase.stream_port())
 
     def test_wrong_rpc_server(self):
         with self.assertRaises(krpc.error.ConnectionError) as cm:
@@ -35,8 +37,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
                          address='localhost',
                          rpc_port=ServerTestCase.stream_port(),
                          stream_port=ServerTestCase.stream_port())
-        self.assertEqual('Connection request was for the rpc server, but this is the stream server. ' +
-                         'Did you connect to the wrong port number?', str(cm.exception))
+        self.assertEqual('Connection request was for the rpc server, ' +
+                         'but this is the stream server. ' +
+                         'Did you connect to the wrong port number?',
+                         str(cm.exception))
 
     def test_wrong_stream_server(self):
         with self.assertRaises(krpc.error.ConnectionError) as cm:
@@ -44,36 +48,55 @@ class TestClient(ServerTestCase, unittest.TestCase):
                          address='localhost',
                          rpc_port=ServerTestCase.rpc_port(),
                          stream_port=ServerTestCase.rpc_port())
-        self.assertEqual('Connection request was for the stream server, but this is the rpc server. ' +
-                         'Did you connect to the wrong port number?', str(cm.exception))
+        self.assertEqual(
+            'Connection request was for the stream server, ' +
+            'but this is the rpc server. ' +
+            'Did you connect to the wrong port number?', str(cm.exception))
 
     def test_value_parameters(self):
-        self.assertEqual('3.14159', self.conn.test_service.float_to_string(float(3.14159)))
-        self.assertEqual('3.14159', self.conn.test_service.double_to_string(float(3.14159)))
-        self.assertEqual('42', self.conn.test_service.int32_to_string(42))
-        self.assertEqual('123456789000', self.conn.test_service.int64_to_string(123456789000L))
-        self.assertEqual('True', self.conn.test_service.bool_to_string(True))
-        self.assertEqual('False', self.conn.test_service.bool_to_string(False))
-        self.assertEqual(12345, self.conn.test_service.string_to_int32('12345'))
-        self.assertEqual('deadbeef', self.conn.test_service.bytes_to_hex_string(b'\xde\xad\xbe\xef'))
+        self.assertEqual('3.14159',
+                         self.conn.test_service.float_to_string(3.14159))
+        self.assertEqual('3.14159',
+                         self.conn.test_service.double_to_string(3.14159))
+        self.assertEqual('42',
+                         self.conn.test_service.int32_to_string(42))
+        self.assertEqual('123456789000',
+                         self.conn.test_service.int64_to_string(123456789000L))
+        self.assertEqual('True',
+                         self.conn.test_service.bool_to_string(True))
+        self.assertEqual('False',
+                         self.conn.test_service.bool_to_string(False))
+        self.assertEqual(12345,
+                         self.conn.test_service.string_to_int32('12345'))
+        self.assertEqual('deadbeef',
+                         self.conn.test_service.bytes_to_hex_string(
+                             b'\xde\xad\xbe\xef'))
 
     def test_multiple_value_parameters(self):
-        self.assertEqual('3.14159', self.conn.test_service.add_multiple_values(0.14159, 1, 2))
+        self.assertEqual('3.14159',
+                         self.conn.test_service.add_multiple_values(
+                             0.14159, 1, 2))
 
     def test_auto_value_type_conversion(self):
         self.assertEqual('42', self.conn.test_service.float_to_string(42))
         self.assertEqual('42', self.conn.test_service.float_to_string(42L))
-        self.assertEqual('6', self.conn.test_service.add_multiple_values(1L, 2L, 3L))
-        self.assertRaises(TypeError, self.conn.test_service.float_to_string, '42')
+        self.assertEqual(
+            '6', self.conn.test_service.add_multiple_values(1L, 2L, 3L))
+        self.assertRaises(
+            TypeError, self.conn.test_service.float_to_string, '42')
 
     def test_incorrect_parameter_type(self):
-        self.assertRaises(TypeError, self.conn.test_service.float_to_string, 'foo')
-        self.assertRaises(TypeError, self.conn.test_service.add_multiple_values, 0.14159, 'foo', 2)
+        self.assertRaises(
+            TypeError, self.conn.test_service.float_to_string, 'foo')
+        self.assertRaises(
+            TypeError, self.conn.test_service.add_multiple_values,
+            0.14159, 'foo', 2)
 
     def test_properties(self):
         self.conn.test_service.string_property = 'foo'
         self.assertEqual('foo', self.conn.test_service.string_property)
-        self.assertEqual('foo', self.conn.test_service.string_property_private_set)
+        self.assertEqual('foo',
+                         self.conn.test_service.string_property_private_set)
         self.conn.test_service.string_property_private_get = 'foo'
         obj = self.conn.test_service.create_test_object('bar')
         self.conn.test_service.object_property = obj
@@ -98,8 +121,11 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual('bobbill', obj.object_to_string(obj2))
 
     def test_class_static_methods(self):
-        self.assertEqual('jeb', self.conn.test_service.TestClass.static_method())
-        self.assertEqual('jebbobbill', self.conn.test_service.TestClass.static_method('bob', 'bill'))
+        self.assertEqual('jeb',
+                         self.conn.test_service.TestClass.static_method())
+        self.assertEqual('jebbobbill',
+                         self.conn.test_service.TestClass.static_method(
+                             'bob', 'bill'))
 
     def test_class_properties(self):
         obj = self.conn.test_service.create_test_object('jeb')
@@ -112,44 +138,73 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual(obj2._object_id, obj.object_property._object_id)
 
     def test_optional_arguments(self):
-        self.assertEqual('jebfoobarnull', self.conn.test_service.optional_arguments('jeb'))
-        self.assertEqual('jebbobbillnull', self.conn.test_service.optional_arguments('jeb', 'bob', 'bill'))
+        self.assertEqual('jebfoobarnull',
+                         self.conn.test_service.optional_arguments('jeb'))
+        self.assertEqual('jebbobbillnull',
+                         self.conn.test_service.optional_arguments(
+                             'jeb', 'bob', 'bill'))
         obj = self.conn.test_service.create_test_object('kermin')
-        self.assertEqual('jebbobbillkermin', self.conn.test_service.optional_arguments('jeb', 'bob', 'bill', obj))
+        self.assertEqual('jebbobbillkermin',
+                         self.conn.test_service.optional_arguments(
+                             'jeb', 'bob', 'bill', obj))
 
     def test_named_parameters(self):
         obj3 = self.conn.test_service.create_test_object('3')
         obj4 = self.conn.test_service.create_test_object('4')
         obj5 = self.conn.test_service.create_test_object('5')
-        self.assertEqual('1234', self.conn.test_service.optional_arguments(x='1', y='2', z='3', obj=obj4))
-        self.assertEqual('2413', self.conn.test_service.optional_arguments(z='1', x='2', obj=obj3, y='4'))
-        self.assertEqual('1243', self.conn.test_service.optional_arguments('1', '2', obj=obj3, z='4'))
-        self.assertEqual('123null', self.conn.test_service.optional_arguments('1', '2', z='3'))
-        self.assertEqual('12bar3', self.conn.test_service.optional_arguments('1', '2', obj=obj3))
-        self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', '4', obj=obj5)
-        self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', y='4')
-        self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', foo='4')
+        self.assertEqual('1234',
+                         self.conn.test_service.optional_arguments(
+                             x='1', y='2', z='3', obj=obj4))
+        self.assertEqual('2413',
+                         self.conn.test_service.optional_arguments(
+                             z='1', x='2', obj=obj3, y='4'))
+        self.assertEqual('1243',
+                         self.conn.test_service.optional_arguments(
+                             '1', '2', obj=obj3, z='4'))
+        self.assertEqual('123null',
+                         self.conn.test_service.optional_arguments(
+                             '1', '2', z='3'))
+        self.assertEqual('12bar3',
+                         self.conn.test_service.optional_arguments(
+                             '1', '2', obj=obj3))
+        self.assertRaises(TypeError, self.conn.test_service.optional_arguments,
+                          '1', '2', '3', '4', obj=obj5)
+        self.assertRaises(TypeError, self.conn.test_service.optional_arguments,
+                          '1', '2', '3', y='4')
+        self.assertRaises(TypeError, self.conn.test_service.optional_arguments,
+                          '1', foo='4')
 
         obj = self.conn.test_service.create_test_object('jeb')
-        self.assertEqual('1234', obj.optional_arguments(x='1', y='2', z='3', obj=obj4))
-        self.assertEqual('2413', obj.optional_arguments(z='1', x='2', obj=obj3, y='4'))
-        self.assertEqual('1243', obj.optional_arguments('1', '2', obj=obj3, z='4'))
-        self.assertEqual('123null', obj.optional_arguments('1', '2', z='3'))
-        self.assertEqual('12bar3', obj.optional_arguments('1', '2', obj=obj3))
-        self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', '4', obj=obj5)
-        self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', y='4')
-        self.assertRaises(TypeError, obj.optional_arguments, '1', foo='4')
+        self.assertEqual('1234',
+                         obj.optional_arguments(x='1', y='2', z='3', obj=obj4))
+        self.assertEqual('2413',
+                         obj.optional_arguments(z='1', x='2', obj=obj3, y='4'))
+        self.assertEqual('1243',
+                         obj.optional_arguments('1', '2', obj=obj3, z='4'))
+        self.assertEqual('123null',
+                         obj.optional_arguments('1', '2', z='3'))
+        self.assertEqual('12bar3',
+                         obj.optional_arguments('1', '2', obj=obj3))
+        self.assertRaises(TypeError, obj.optional_arguments,
+                          '1', '2', '3', '4', obj=obj5)
+        self.assertRaises(TypeError, obj.optional_arguments,
+                          '1', '2', '3', y='4')
+        self.assertRaises(TypeError, obj.optional_arguments,
+                          '1', foo='4')
 
     def test_blocking_procedure(self):
         self.assertEqual(0, self.conn.test_service.blocking_procedure(0, 0))
         self.assertEqual(1, self.conn.test_service.blocking_procedure(1, 0))
         self.assertEqual(1+2, self.conn.test_service.blocking_procedure(2))
-        self.assertEqual(sum(x for x in range(1, 43)), self.conn.test_service.blocking_procedure(42))
+        self.assertEqual(sum(x for x in range(1, 43)),
+                         self.conn.test_service.blocking_procedure(42))
 
     def test_too_many_arguments(self):
-        self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', '4', '5')
+        self.assertRaises(TypeError, self.conn.test_service.optional_arguments,
+                          '1', '2', '3', '4', '5')
         obj = self.conn.test_service.create_test_object('jeb')
-        self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', '4', '5')
+        self.assertRaises(TypeError, obj.optional_arguments,
+                          '1', '2', '3', '4', '5')
 
     def test_too_few_arguments(self):
         self.assertRaises(TypeError, self.conn.test_service.optional_arguments)
@@ -159,34 +214,55 @@ class TestClient(ServerTestCase, unittest.TestCase):
     def test_enums(self):
         enum = self.conn.test_service.TestEnum
         self.assertEqual(enum.value_b, self.conn.test_service.enum_return())
-        self.assertEqual(enum.value_a, self.conn.test_service.enum_echo(enum.value_a))
-        self.assertEqual(enum.value_b, self.conn.test_service.enum_echo(enum.value_b))
-        self.assertEqual(enum.value_c, self.conn.test_service.enum_echo(enum.value_c))
+        self.assertEqual(enum.value_a,
+                         self.conn.test_service.enum_echo(enum.value_a))
+        self.assertEqual(enum.value_b,
+                         self.conn.test_service.enum_echo(enum.value_b))
+        self.assertEqual(enum.value_c,
+                         self.conn.test_service.enum_echo(enum.value_c))
 
-        self.assertEqual(enum.value_a, self.conn.test_service.enum_default_arg(enum.value_a))
-        self.assertEqual(enum.value_c, self.conn.test_service.enum_default_arg())
-        self.assertEqual(enum.value_b, self.conn.test_service.enum_default_arg(enum.value_b))
+        self.assertEqual(enum.value_a,
+                         self.conn.test_service.enum_default_arg(enum.value_a))
+        self.assertEqual(enum.value_c,
+                         self.conn.test_service.enum_default_arg())
+        self.assertEqual(enum.value_b,
+                         self.conn.test_service.enum_default_arg(enum.value_b))
 
     def test_invalid_enum(self):
         self.assertRaises(ValueError, self.conn.test_service.TestEnum, 9999)
 
     def test_collections(self):
-        self.assertEqual([], self.conn.test_service.increment_list([]))
-        self.assertEqual([1, 2, 3], self.conn.test_service.increment_list([0, 1, 2]))
-        self.assertEqual({}, self.conn.test_service.increment_dictionary({}))
-        self.assertEqual({'a': 1, 'b': 2, 'c': 3},
-                         self.conn.test_service.increment_dictionary({'a': 0, 'b': 1, 'c': 2}))
-        self.assertEqual(set(), self.conn.test_service.increment_set(set()))
-        self.assertEqual(set([1, 2, 3]), self.conn.test_service.increment_set(set([0, 1, 2])))
-        self.assertEqual((2, 3), self.conn.test_service.increment_tuple((1, 2)))
-        self.assertRaises(TypeError, self.conn.test_service.increment_list, None)
-        self.assertRaises(TypeError, self.conn.test_service.increment_set, None)
-        self.assertRaises(TypeError, self.conn.test_service.increment_dictionary, None)
+        self.assertEqual(
+            [], self.conn.test_service.increment_list([]))
+        self.assertEqual(
+            [1, 2, 3], self.conn.test_service.increment_list([0, 1, 2]))
+        self.assertEqual(
+            {}, self.conn.test_service.increment_dictionary({}))
+        self.assertEqual(
+            {'a': 1, 'b': 2, 'c': 3},
+            self.conn.test_service.increment_dictionary(
+                {'a': 0, 'b': 1, 'c': 2}))
+        self.assertEqual(
+            set(), self.conn.test_service.increment_set(set()))
+        self.assertEqual(
+            set([1, 2, 3]),
+            self.conn.test_service.increment_set(set([0, 1, 2])))
+        self.assertEqual(
+            (2, 3), self.conn.test_service.increment_tuple((1, 2)))
+        self.assertRaises(
+            TypeError, self.conn.test_service.increment_list, None)
+        self.assertRaises(
+            TypeError, self.conn.test_service.increment_set, None)
+        self.assertRaises(
+            TypeError, self.conn.test_service.increment_dictionary, None)
 
     def test_nested_collections(self):
-        self.assertEqual({}, self.conn.test_service.increment_nested_collection({}))
-        self.assertEqual({'a': [1, 2], 'b': [], 'c': [3]},
-                         self.conn.test_service.increment_nested_collection({'a': [0, 1], 'b': [], 'c': [2]}))
+        self.assertEqual(
+            {}, self.conn.test_service.increment_nested_collection({}))
+        self.assertEqual(
+            {'a': [1, 2], 'b': [], 'c': [3]},
+            self.conn.test_service.increment_nested_collection(
+                {'a': [0, 1], 'b': [], 'c': [2]}))
 
     def test_collections_of_objects(self):
         objs = self.conn.test_service.add_to_object_list([], "jeb")
@@ -201,7 +277,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual((1, False), self.conn.test_service.tuple_default())
         self.assertEqual([1, 2, 3], self.conn.test_service.list_default())
         self.assertEqual(set([1, 2, 3]), self.conn.test_service.set_default())
-        self.assertEqual({1: False, 2: True}, self.conn.test_service.dictionary_default())
+        self.assertEqual({1: False, 2: True},
+                         self.conn.test_service.dictionary_default())
 
     def test_invalid_operation_exception(self):
         with self.assertRaises(RuntimeError) as cm:
@@ -216,7 +293,9 @@ class TestClient(ServerTestCase, unittest.TestCase):
     def test_argument_null_exception(self):
         with self.assertRaises(ValueError) as cm:
             self.conn.test_service.throw_argument_null_exception("")
-        self.assertTrue(str(cm.exception).startswith('Value cannot be null.\nParameter name: foo'))
+        self.assertTrue(
+            str(cm.exception).startswith('Value cannot be null.\n' +
+                                         'Parameter name: foo'))
 
     def test_argument_out_of_range_exception(self):
         with self.assertRaises(ValueError) as cm:
@@ -228,7 +307,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
     def test_custom_exception(self):
         with self.assertRaises(self.conn.test_service.CustomException) as cm:
             self.conn.test_service.throw_custom_exception()
-        self.assertTrue(str(cm.exception).startswith('A custom kRPC exception'))
+        self.assertTrue(
+            str(cm.exception).startswith('A custom kRPC exception'))
 
     def test_client_members(self):
         self.assertSetEqual(
@@ -298,7 +378,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'throw_argument_null_exception',
                 'throw_argument_out_of_range_exception'
             ]),
-            set(x for x in dir(self.conn.test_service) if not x.startswith('_')))
+            set(x for x in dir(self.conn.test_service)
+                if not x.startswith('_')))
 
     def test_test_service_test_class_members(self):
         self.assertSetEqual(
@@ -314,12 +395,14 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'optional_arguments',
                 'static_method'
             ]),
-            set(x for x in dir(self.conn.test_service.TestClass) if not x.startswith('_')))
+            set(x for x in dir(self.conn.test_service.TestClass)
+                if not x.startswith('_')))
 
     def test_test_service_enum_members(self):
         self.assertSetEqual(
             set(['value_a', 'value_b', 'value_c']),
-            set(x for x in dir(self.conn.test_service.TestEnum) if not x.startswith('_')))
+            set(x for x in dir(self.conn.test_service.TestEnum)
+                if not x.startswith('_')))
         self.assertEqual(0, self.conn.test_service.TestEnum.value_a.value)
         self.assertEqual(1, self.conn.test_service.TestEnum.value_b.value)
         self.assertEqual(2, self.conn.test_service.TestEnum.value_c.value)
@@ -342,9 +425,11 @@ class TestClient(ServerTestCase, unittest.TestCase):
     def test_types_from_different_connections(self):
         conn1 = self.connect()
         conn2 = self.connect()
-        self.assertNotEqual(conn1.test_service.TestClass, conn2.test_service.TestClass)
+        self.assertNotEqual(
+            conn1.test_service.TestClass, conn2.test_service.TestClass)
         obj2 = conn2.test_service.TestClass(0)
-        obj1 = conn1._types.coerce_to(obj2, conn1._types.class_type('TestService', 'TestClass'))
+        obj1 = conn1._types.coerce_to(
+            obj2, conn1._types.class_type('TestService', 'TestClass'))
         self.assertEqual(obj1, obj2)
         self.assertNotEqual(type(obj1), type(obj2))
         self.assertEqual(type(obj1), conn1.test_service.TestClass)
@@ -358,8 +443,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
         def thread_main(latch):
             for _ in range(repeats):
-                self.assertEqual("False", self.conn.test_service.bool_to_string(False))
-                self.assertEqual(12345, self.conn.test_service.string_to_int32("12345"))
+                self.assertEqual(
+                    "False", self.conn.test_service.bool_to_string(False))
+                self.assertEqual(
+                    12345, self.conn.test_service.string_to_int32("12345"))
             with latch[0]:
                 latch[1] -= 1
                 if latch[1] <= 0:

@@ -1,11 +1,14 @@
 from krpc.schema.KRPC import Type
-from krpc.types import ValueType, ClassType, EnumerationType, MessageType
-from krpc.types import TupleType, ListType, SetType, DictionaryType
+from krpc.types import \
+    ValueType, ClassType, EnumerationType, MessageType, \
+    TupleType, ListType, SetType, DictionaryType
 from krpc.utils import snake_case
 from .domain import Domain
-from .nodes import Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
-from .nodes import Enumeration, EnumerationValue
+from .nodes import \
+    Procedure, Property, Class, ClassMethod, ClassStaticMethod, \
+    ClassProperty, Enumeration, EnumerationValue
 from ..utils import lower_camel_case
+
 
 class JavaDomain(Domain):
     name = 'java'
@@ -62,16 +65,21 @@ class JavaDomain(Domain):
         elif isinstance(typ, MessageType):
             return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
         elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
-            return self.shorten_ref('%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
+            return self.shorten_ref(
+                '%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
         elif isinstance(typ, ListType):
             return 'java.util.List<%s>' % self._type(typ.value_type, True)
         elif isinstance(typ, DictionaryType):
-            return 'java.util.Map<%s,%s>' % (self._type(typ.key_type, True), self._type(typ.value_type, True))
+            return 'java.util.Map<%s,%s>' % \
+                (self._type(typ.key_type, True),
+                 self._type(typ.value_type, True))
         elif isinstance(typ, SetType):
             return 'java.util.Set<%s>' % self._type(typ.value_type, True)
         elif isinstance(typ, TupleType):
             name = self.tuple_types[len(typ.value_types)-1]
-            return 'org.javatuples.%s<%s>' % (name, ','.join(self._type(typ, True) for typ in typ.value_types))
+            return 'org.javatuples.%s<%s>' % \
+                (name, ','.join(self._type(typ, True)
+                                for typ in typ.value_types))
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
@@ -85,22 +93,28 @@ class JavaDomain(Domain):
         elif isinstance(typ, EnumerationType):
             return ':class:`%s`' % self.type(typ)
         elif isinstance(typ, ListType):
-            return ':class:`java.util.List<%s>`' % self.type(typ.value_type, True)
+            return ':class:`java.util.List<%s>`' % \
+                self.type(typ.value_type, True)
         elif isinstance(typ, DictionaryType):
-            return ':class:`java.util.Map<%s,%s>`' % (self.type(typ.key_type, True),
-                                                      self.type(typ.value_type, True))
+            return ':class:`java.util.Map<%s,%s>`' % \
+                (self.type(typ.key_type, True),
+                 self.type(typ.value_type, True))
         elif isinstance(typ, SetType):
-            return ':class:`java.util.Set<%s>`' % self.type(typ.value_type, True)
+            return ':class:`java.util.Set<%s>`' % \
+                self.type(typ.value_type, True)
         elif isinstance(typ, TupleType):
             name = self.tuple_types[len(typ.value_types)-1]
-            return ':class:`org.javatuples.%s<%s>`' % (name, ','.join(self.type(typ, True)
-                                                                      for typ in typ.value_types))
+            return ':class:`org.javatuples.%s<%s>`' % \
+                (name, ','.join(self.type(typ, True)
+                                for typ in typ.value_types))
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
     def ref(self, obj):
         name = obj.fullname
-        if isinstance(obj, Procedure) or isinstance(obj, ClassMethod) or isinstance(obj, ClassStaticMethod):
+        if isinstance(obj, Procedure) or \
+           isinstance(obj, ClassMethod) or \
+           isinstance(obj, ClassStaticMethod):
             parameters = [self.type(p.type) for p in obj.parameters]
             if isinstance(obj, ClassMethod):
                 parameters = parameters[1:]
@@ -119,7 +133,8 @@ class JavaDomain(Domain):
 
     def see(self, obj):
         if any(isinstance(obj, cls) for cls in
-               (Procedure, ClassMethod, ClassStaticMethod, Property, ClassProperty, EnumerationValue)):
+               (Procedure, ClassMethod, ClassStaticMethod, Property,
+                ClassProperty, EnumerationValue)):
             prefix = 'meth'
         elif any(isinstance(obj, cls) for cls in (Class, Enumeration)):
             prefix = 'type'

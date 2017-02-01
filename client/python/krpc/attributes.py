@@ -25,7 +25,8 @@ class Attributes(object):
     @classmethod
     def is_a_class_member(cls, name):
         """ Return true if the name is for a class member. """
-        return '_' in name and not (name.startswith('get_') or name.startswith('set_'))
+        return '_' in name and not (name.startswith('get_') or
+                                    name.startswith('set_'))
 
     @classmethod
     def is_a_class_method(cls, name):
@@ -43,7 +44,8 @@ class Attributes(object):
 
     @classmethod
     def is_a_class_property_accessor(cls, name):
-        """ Return true if the name is for a class property getter or setter. """
+        """ Return true if the name is for a
+            class property getter or setter. """
         return '_get_' in name or '_set_' in name
 
     @classmethod
@@ -58,7 +60,8 @@ class Attributes(object):
 
     @classmethod
     def get_property_name(cls, name):
-        """ Return the name of the property handled by a property getter or setter. """
+        """ Return the name of the property handled by
+            a property getter or setter. """
         if not cls.is_a_property_accessor(name):
             raise ValueError('Procedure is not a property')
         # Strip 'get_' or 'set_' off of the start of the name
@@ -66,7 +69,8 @@ class Attributes(object):
 
     @classmethod
     def get_class_name(cls, name):
-        """ Return the name of the class that a method or property accessor is part of. """
+        """ Return the name of the class that a
+            method or property accessor is part of. """
         if not cls.is_a_class_member(name):
             raise ValueError('Procedure is not a class method or property')
         return name.partition('_')[0]

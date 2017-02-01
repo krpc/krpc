@@ -83,8 +83,10 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(self.types.uint32_type, cases)
         self._run_test_decode_value(self.types.uint32_type, cases)
 
-        self.assertRaises(EncodingError, Encoder.encode, -1, self.types.uint32_type)
-        self.assertRaises(EncodingError, Encoder.encode, -849, self.types.uint32_type)
+        self.assertRaises(EncodingError, Encoder.encode,
+                          -1, self.types.uint32_type)
+        self.assertRaises(EncodingError, Encoder.encode,
+                          -849, self.types.uint32_type)
 
     def test_uint64(self):
         cases = [
@@ -97,8 +99,10 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(self.types.uint64_type, cases)
         self._run_test_decode_value(self.types.uint64_type, cases)
 
-        self.assertRaises(EncodingError, Encoder.encode, -1, self.types.uint64_type)
-        self.assertRaises(EncodingError, Encoder.encode, -849, self.types.uint64_type)
+        self.assertRaises(EncodingError, Encoder.encode,
+                          -1, self.types.uint64_type)
+        self.assertRaises(EncodingError, Encoder.encode,
+                          -849, self.types.uint64_type)
 
     def test_bool(self):
         cases = [
@@ -113,10 +117,12 @@ class TestEncodeDecode(unittest.TestCase):
             ('', '00'),
             ('testing', '0774657374696e67'),
             ('One small step for Kerbal-kind!',
-             '1f4f6e6520736d616c6c207374657020666f72204b657262616c2d6b696e6421'),
+             '1f4f6e6520736d616c6c207374657020' +
+             '666f72204b657262616c2d6b696e6421'),
             (b'\xe2\x84\xa2'.decode('utf-8'), '03e284a2'),
             (b'Mystery Goo\xe2\x84\xa2 Containment Unit'.decode('utf-8'),
-             '1f4d79737465727920476f6fe284a220436f6e7461696e6d656e7420556e6974')
+             '1f4d79737465727920476f6fe284a220' +
+             '436f6e7461696e6d656e7420556e6974')
         ]
         self._run_test_encode_value(self.types.string_type, cases)
         self._run_test_decode_value(self.types.string_type, cases)
@@ -132,10 +138,15 @@ class TestEncodeDecode(unittest.TestCase):
 
     def test_tuple(self):
         cases = [((1,), '0a0101')]
-        self._run_test_encode_value(self.types.tuple_type(self.types.uint32_type), cases)
-        self._run_test_decode_value(self.types.tuple_type(self.types.uint32_type), cases)
+        self._run_test_encode_value(
+            self.types.tuple_type(self.types.uint32_type), cases)
+        self._run_test_decode_value(
+            self.types.tuple_type(self.types.uint32_type), cases)
         cases = [((1, 'jeb', False), '0a01010a04036a65620a0100')]
-        typ = self.types.tuple_type(self.types.uint32_type, self.types.string_type, self.types.bool_type)
+        typ = self.types.tuple_type(
+            self.types.uint32_type,
+            self.types.string_type,
+            self.types.bool_type)
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
 
@@ -164,9 +175,11 @@ class TestEncodeDecode(unittest.TestCase):
             ({}, ''),
             ({'': 0}, '0a060a0100120100'),
             ({'foo': 42, 'bar': 365, 'baz': 3},
-             '0a0a0a04036261721202ed020a090a040362617a1201030a090a0403666f6f12012a')
+             '0a0a0a04036261721202ed020a090a0403' +
+             '62617a1201030a090a0403666f6f12012a')
         ]
-        typ = self.types.dictionary_type(self.types.string_type, self.types.uint32_type)
+        typ = self.types.dictionary_type(
+            self.types.string_type, self.types.uint32_type)
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
 

@@ -8,8 +8,9 @@ class TestDecoder(unittest.TestCase):
     types = Types()
 
     def test_guid(self):
-        self.assertEqual('6f271b39-00dd-4de4-9732-f0d3a68838df',
-                         Decoder.guid(unhexlify('391b276fdd00e44d9732f0d3a68838df')))
+        self.assertEqual(
+            '6f271b39-00dd-4de4-9732-f0d3a68838df',
+            Decoder.guid(unhexlify('391b276fdd00e44d9732f0d3a68838df')))
 
     def test_decode_value(self):
         value = Decoder.decode(unhexlify('ac02'), self.types.uint32_type)
@@ -26,7 +27,8 @@ class TestDecoder(unittest.TestCase):
 
     def test_decode_message(self):
         message = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
-        call = Decoder.decode(unhexlify(message), self.types.procedure_call_type)
+        call = Decoder.decode(
+            unhexlify(message), self.types.procedure_call_type)
         self.assertEqual('ServiceName', call.service)
         self.assertEqual('ProcedureName', call.procedure)
 

@@ -28,6 +28,7 @@ EXCEPTION_TYPES = {
     'ArgumentOutOfRangeException': ValueError
 }
 
+
 def _protobuf_type(code, service=None, name=None, types=None):
     protobuf_type = krpc.schema.KRPC.Type()
     protobuf_type.code = code
@@ -41,9 +42,9 @@ def _protobuf_type(code, service=None, name=None, types=None):
 
 
 class Types(object):
-    """ A type store. Used to obtain type objects from protocol buffer type strings,
-        and stores python types for services and service defined class and
-        enumeration types. """
+    """ A type store. Used to obtain type objects from protocol buffer type
+        strings, and stores python types for services and service defined
+        class and enumeration types. """
 
     def __init__(self):
         # Mapping from protobuf type strings to type objects
@@ -133,51 +134,65 @@ class Types(object):
 
     def class_type(self, service, name, doc=None):
         """ Get a class type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.CLASS, service, name), doc=doc)
+        return self.as_type(
+            _protobuf_type(krpc.schema.KRPC.Type.CLASS, service, name),
+            doc=doc)
 
     def enumeration_type(self, service, name, doc=None):
         """ Get an enumeration type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.ENUMERATION, service, name), doc=doc)
+        return self.as_type(
+            _protobuf_type(krpc.schema.KRPC.Type.ENUMERATION, service, name),
+            doc=doc)
 
     def exception_type(self, service, name, doc=None):
         """ Get an exception type """
         key = (service, name)
         if key not in self._exception_types:
-            self._exception_types[key] = _create_exception_type(service, name, doc)
+            self._exception_types[key] = _create_exception_type(
+                service, name, doc)
         return self._exception_types[key]
 
     def tuple_type(self, *value_types):
         """ Get a tuple type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.TUPLE, None, None,
-                                           [t.protobuf_type for t in value_types]))
+        return self.as_type(
+            _protobuf_type(krpc.schema.KRPC.Type.TUPLE, None, None,
+                           [t.protobuf_type for t in value_types]))
 
     def list_type(self, value_type):
         """ Get a list type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.LIST, None, None, [value_type.protobuf_type]))
+        return self.as_type(
+            _protobuf_type(krpc.schema.KRPC.Type.LIST, None, None,
+                           [value_type.protobuf_type]))
 
     def set_type(self, value_type):
         """ Get a set type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.SET, None, None, [value_type.protobuf_type]))
+        return self.as_type(
+            _protobuf_type(krpc.schema.KRPC.Type.SET, None, None,
+                           [value_type.protobuf_type]))
 
     def dictionary_type(self, key_type, value_type):
         """ Get a dictionary type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.DICTIONARY, None, None,
-                                           [key_type.protobuf_type, value_type.protobuf_type]))
+        return self.as_type(
+            _protobuf_type(krpc.schema.KRPC.Type.DICTIONARY, None, None,
+                           [key_type.protobuf_type, value_type.protobuf_type]))
 
     @property
     def procedure_call_type(self):
         """ Get a ProcedureCall message type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.PROCEDURE_CALL))
+        return self.as_type(
+            _protobuf_type(krpc.schema.KRPC.Type.PROCEDURE_CALL))
 
     @property
     def services_type(self):
         """ Get a Services message type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.SERVICES))
+        return self.as_type(
+            _protobuf_type(krpc.schema.KRPC.Type.SERVICES))
 
     @property
     def stream_type(self):
         """ Get a Stream message type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.STREAM))
+        return self.as_type(
+            _protobuf_type(krpc.schema.KRPC.Type.STREAM))
 
     @property
     def status_type(self):
@@ -198,33 +213,36 @@ class Types(object):
         # Coerce identical class types from different client connections
         if isinstance(typ, ClassType) and isinstance(value, ClassBase):
             value_type = type(value)
-            if (
-                    typ.python_type._service_name == value_type._service_name
-                    and typ.python_type._class_name == value_type._class_name
-            ):
+            if typ.python_type._service_name == value_type._service_name and \
+               typ.python_type._class_name == value_type._class_name:
                 return typ.python_type(value._object_id)
         # Collection types
         try:
             # Coerce tuples to lists
-            if isinstance(value, collections.Iterable) and isinstance(typ, ListType):
-                return typ.python_type(self.coerce_to(x, typ.value_type) for x in value)
+            if isinstance(value, collections.Iterable) and \
+               isinstance(typ, ListType):
+                return typ.python_type(
+                    self.coerce_to(x, typ.value_type) for x in value)
             # Coerce lists (with appropriate number of elements) to tuples
-            if isinstance(value, collections.Iterable) and isinstance(typ, TupleType):
+            if isinstance(value, collections.Iterable) and \
+               isinstance(typ, TupleType):
                 if len(value) != len(typ.value_types):
                     raise ValueError
-                return typ.python_type([self.coerce_to(x, typ.value_types[i]) for i, x in enumerate(value)])
+                return typ.python_type(
+                    [self.coerce_to(x, typ.value_types[i])
+                     for i, x in enumerate(value)])
         except ValueError:
-            raise ValueError('Failed to coerce value ' + str(value) + ' of type ' + str(type(value)) +
+            raise ValueError('Failed to coerce value ' + str(value) +
+                             ' of type ' + str(type(value)) +
                              ' to type ' + str(typ))
         # Numeric types
         # See http://docs.python.org/2/reference/datamodel.html#coercion-rules
         numeric_types = (float, int, long)
-        if (
-                isinstance(value, bool)
-                or not any(isinstance(value, t) for t in numeric_types)
-                or typ.python_type not in numeric_types
-        ):
-            raise ValueError('Failed to coerce value ' + str(value) + ' of type ' + str(type(value)) +
+        if isinstance(value, bool) or \
+           not any(isinstance(value, t) for t in numeric_types) or \
+           typ.python_type not in numeric_types:
+            raise ValueError('Failed to coerce value ' + str(value) +
+                             ' of type ' + str(type(value)) +
                              ' to type ' + str(typ))
         if typ.python_type == float:
             return float(value)
@@ -262,8 +280,9 @@ class ValueType(TypeBase):
     def __init__(self, protobuf_type):
         if protobuf_type.code not in VALUE_TYPES:
             raise ValueError('Not a value type')
-        string = krpc.schema.KRPC.Type.TypeCode.Name(protobuf_type.code).lower()
-        super(ValueType, self).__init__(protobuf_type, VALUE_TYPES[protobuf_type.code], string)
+        name = krpc.schema.KRPC.Type.TypeCode.Name(protobuf_type.code)
+        super(ValueType, self).__init__(
+            protobuf_type, VALUE_TYPES[protobuf_type.code], name.lower())
 
 
 class ClassType(TypeBase):
@@ -276,7 +295,8 @@ class ClassType(TypeBase):
             raise ValueError('Class type has no service name')
         if not protobuf_type.name:
             raise ValueError('Class type has no class name')
-        typ = _create_class_type(protobuf_type.service, protobuf_type.name, doc)
+        typ = _create_class_type(
+            protobuf_type.service, protobuf_type.name, doc)
         string = 'Class(%s.%s)' % (protobuf_type.service, protobuf_type.name)
         super(ClassType, self).__init__(protobuf_type, typ, string)
 
@@ -295,12 +315,15 @@ class EnumerationType(TypeBase):
         self._enum_name = protobuf_type.name
         self._doc = doc
         string = 'Enum(%s.%s)' % (protobuf_type.service, protobuf_type.name)
-        # Sets python_type to None, set_values must be called to set the python_type
+        # Sets python_type to None, set_values must
+        # be called to set the python_type
         super(EnumerationType, self).__init__(protobuf_type, None, string)
 
     def set_values(self, values):
-        """ Set the python type. Creates an Enum class using the given values. """
-        self._python_type = _create_enum_type(self._enum_name, values, self._doc)
+        """ Set the python type. Creates an Enum class
+            using the given values. """
+        self._python_type = _create_enum_type(
+            self._enum_name, values, self._doc)
 
 
 class TupleType(TypeBase):
@@ -352,7 +375,8 @@ class DictionaryType(TypeBase):
             raise ValueError('Wrong number of sub-types for dictionary type')
         self.key_type = types.as_type(protobuf_type.types[0])
         self.value_type = types.as_type(protobuf_type.types[1])
-        string = 'Dict(%s,%s)' % (self.key_type._string, self.value_type._string)
+        string = 'Dict(%s,%s)' % \
+                 (self.key_type._string, self.value_type._string)
         super(DictionaryType, self).__init__(protobuf_type, dict, string)
 
 
@@ -403,10 +427,12 @@ class ClassBase(DynamicType):
         self._object_id = object_id
 
     def __eq__(self, other):
-        return isinstance(other, ClassBase) and self._object_id == other._object_id
+        return isinstance(other, ClassBase) and \
+            self._object_id == other._object_id
 
     def __ne__(self, other):
-        return not isinstance(other, ClassBase) or self._object_id != other._object_id
+        return not isinstance(other, ClassBase) or \
+            self._object_id != other._object_id
 
     def __lt__(self, other):
         if not isinstance(other, ClassBase):
@@ -432,16 +458,20 @@ class ClassBase(DynamicType):
         return hash(self._object_id)
 
     def __repr__(self):
-        return '<%s.%s remote object #%d>' % (self._service_name, self._class_name, self._object_id)
+        return '<%s.%s remote object #%d>' % \
+            (self._service_name, self._class_name, self._object_id)
 
 
 def _create_class_type(service_name, class_name, doc):
     return type(str(class_name), (ClassBase,),
-                {'_service_name': service_name, '_class_name': class_name, '__doc__': doc})
+                {'_service_name': service_name,
+                 '_class_name': class_name,
+                 '__doc__': doc})
 
 
 def _create_enum_type(enum_name, values, doc):
-    typ = Enum(str(enum_name), dict((name, x['value']) for name, x in values.items()))
+    typ = Enum(str(enum_name), dict((name, x['value'])
+                                    for name, x in values.items()))
     setattr(typ, '__doc__', doc)
     for name in values.keys():
         setattr(getattr(typ, name), '__doc__', values[name]['doc'])
@@ -452,7 +482,9 @@ def _create_exception_type(service_name, class_name, doc):
     if service_name == 'KRPC' and class_name in EXCEPTION_TYPES:
         return EXCEPTION_TYPES[class_name]
     return type(str(class_name), (RuntimeError,),
-                {'_service_name': service_name, '_class_name': class_name, '__doc__': doc})
+                {'_service_name': service_name,
+                 '_class_name': class_name,
+                 '__doc__': doc})
 
 
 class DefaultArgument(object):

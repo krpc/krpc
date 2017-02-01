@@ -4,7 +4,8 @@ import krpc.schema
 
 
 class Stream(object):
-    """ A streamed request. When invoked, returns the most recent value of the request. """
+    """ A streamed request. When invoked, returns the
+        most recent value of the request. """
 
     def __init__(self, conn, func, *args, **kwargs):
         self._conn = conn
@@ -98,7 +99,8 @@ def update_thread(connection, stop, cache, cache_lock):
 
                 # Check for an error response
                 if result.result.HasField('error'):
-                    cache[result.id].value = RPCError(result.result.error.description)
+                    cache[result.id].value = RPCError(
+                        result.result.error.description)
                     continue
 
                 # Decode the return value and store it in the cache

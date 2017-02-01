@@ -4,10 +4,11 @@ import codecs
 import collections
 import jinja2
 from krpc.attributes import Attributes
-from krpc.types import Types, EnumerationType
 from krpc.decoder import Decoder
+from krpc.types import Types, EnumerationType
 from krpc.utils import snake_case
 from ..utils import lower_camel_case, indent, single_line, as_type
+
 
 class Generator(object):
 
@@ -53,7 +54,8 @@ class Generator(object):
                 'type': self.parse_parameter_type(typ),
             }
             if 'default_value' in parameter:
-                value = self.decode_default_value(parameter['default_value'], typ)
+                value = self.decode_default_value(
+                    parameter['default_value'], typ)
                 info['default_value'] = self.parse_default_value(value, typ)
             parameters.append(info)
         return parameters
@@ -78,14 +80,17 @@ class Generator(object):
                 'values': [{
                     'name': self.parse_name(x['name']),
                     'value': x['value'],
-                    'documentation': self.parse_documentation(x['documentation'])
+                    'documentation': self.parse_documentation(
+                        x['documentation'])
                 } for x in enumeration['values']],
-                'documentation': self.parse_documentation(enumeration['documentation'])
+                'documentation': self.parse_documentation(
+                    enumeration['documentation'])
             }
 
         for name, exception in self._defs['exceptions'].items():
             exceptions[name] = {
-                'documentation': self.parse_documentation(exception['documentation'])
+                'documentation': self.parse_documentation(
+                    exception['documentation'])
             }
 
         for name, procedure in self._defs['procedures'].items():
@@ -95,18 +100,23 @@ class Generator(object):
                     'procedure': procedure,
                     'remote_name': name,
                     'parameters': self.generate_context_parameters(procedure),
-                    'return_type': self.parse_return_type(self.get_return_type(procedure)),
-                    'documentation': self.parse_documentation(procedure['documentation'])
+                    'return_type': self.parse_return_type(
+                        self.get_return_type(procedure)),
+                    'documentation': self.parse_documentation(
+                        procedure['documentation'])
                 }
 
             elif Attributes.is_a_property_getter(name):
-                property_name = self.parse_name(Attributes.get_property_name(name))
+                property_name = self.parse_name(
+                    Attributes.get_property_name(name))
                 if property_name not in properties:
                     properties[property_name] = {
-                        'type': self.parse_return_type(self.get_return_type(procedure)),
+                        'type': self.parse_return_type(
+                            self.get_return_type(procedure)),
                         'getter': None,
                         'setter': None,
-                        'documentation': self.parse_documentation(procedure['documentation'])
+                        'documentation': self.parse_documentation(
+                            procedure['documentation'])
                     }
                 properties[property_name]['getter'] = {
                     'procedure': procedure,
@@ -114,13 +124,16 @@ class Generator(object):
                 }
 
             elif Attributes.is_a_property_setter(name):
-                property_name = self.parse_name(Attributes.get_property_name(name))
+                property_name = self.parse_name(
+                    Attributes.get_property_name(name))
+                params = self.generate_context_parameters(procedure)
                 if property_name not in properties:
                     properties[property_name] = {
-                        'type': self.generate_context_parameters(procedure)[0]['type'],
+                        'type': params[0]['type'],
                         'getter': None,
                         'setter': None,
-                        'documentation': self.parse_documentation(procedure['documentation'])
+                        'documentation': self.parse_documentation(
+                            procedure['documentation'])
                     }
                 properties[property_name]['setter'] = {
                     'procedure': procedure,
@@ -129,35 +142,45 @@ class Generator(object):
 
             elif Attributes.is_a_class_method(name):
                 class_name = Attributes.get_class_name(name)
-                method_name = self.parse_name(Attributes.get_class_member_name(name))
+                method_name = self.parse_name(
+                    Attributes.get_class_member_name(name))
+                params = self.generate_context_parameters(procedure)
                 classes[class_name]['methods'][method_name] = {
                     'procedure': procedure,
                     'remote_name': name,
-                    'parameters': self.generate_context_parameters(procedure)[1:],
-                    'return_type': self.parse_return_type(self.get_return_type(procedure)),
-                    'documentation': self.parse_documentation(procedure['documentation'])
+                    'parameters': params[1:],
+                    'return_type': self.parse_return_type(
+                        self.get_return_type(procedure)),
+                    'documentation': self.parse_documentation(
+                        procedure['documentation'])
                 }
 
             elif Attributes.is_a_class_static_method(name):
                 class_name = Attributes.get_class_name(name)
-                method_name = self.parse_name(Attributes.get_class_member_name(name))
+                method_name = self.parse_name(
+                    Attributes.get_class_member_name(name))
                 classes[class_name]['static_methods'][method_name] = {
                     'procedure': procedure,
                     'remote_name': name,
                     'parameters': self.generate_context_parameters(procedure),
-                    'return_type': self.parse_return_type(self.get_return_type(procedure)),
-                    'documentation': self.parse_documentation(procedure['documentation'])
+                    'return_type': self.parse_return_type(
+                        self.get_return_type(procedure)),
+                    'documentation': self.parse_documentation(
+                        procedure['documentation'])
                 }
 
             elif Attributes.is_a_class_property_getter(name):
                 class_name = Attributes.get_class_name(name)
-                property_name = self.parse_name(Attributes.get_class_member_name(name))
+                property_name = self.parse_name(
+                    Attributes.get_class_member_name(name))
                 if property_name not in classes[class_name]['properties']:
                     classes[class_name]['properties'][property_name] = {
-                        'type': self.parse_return_type(self.get_return_type(procedure)),
+                        'type': self.parse_return_type(
+                            self.get_return_type(procedure)),
                         'getter': None,
                         'setter': None,
-                        'documentation': self.parse_documentation(procedure['documentation'])
+                        'documentation': self.parse_documentation(
+                            procedure['documentation'])
                     }
                 classes[class_name]['properties'][property_name]['getter'] = {
                     'procedure': procedure,
@@ -166,13 +189,16 @@ class Generator(object):
 
             elif Attributes.is_a_class_property_setter(name):
                 class_name = Attributes.get_class_name(name)
-                property_name = self.parse_name(Attributes.get_class_member_name(name))
+                property_name = self.parse_name(
+                    Attributes.get_class_member_name(name))
                 if property_name not in classes[class_name]['properties']:
+                    params = self.generate_context_parameters(procedure)
                     classes[class_name]['properties'][property_name] = {
-                        'type': self.generate_context_parameters(procedure)[1]['type'],
+                        'type': params[1]['type'],
                         'getter': None,
                         'setter': None,
-                        'documentation': self.parse_documentation(procedure['documentation'])
+                        'documentation': self.parse_documentation(
+                            procedure['documentation'])
                     }
                 classes[class_name]['properties'][property_name]['setter'] = {
                     'procedure': procedure,
@@ -181,7 +207,9 @@ class Generator(object):
 
         def sort(objs):
             if isinstance(objs, dict):
-                return collections.OrderedDict(sorted([(x, sort(y)) for x, y in objs.items()], key=lambda x: x[0]))
+                return collections.OrderedDict(
+                    sorted([(x, sort(y)) for x, y in objs.items()],
+                           key=lambda x: x[0]))
             else:
                 return objs
 
@@ -196,7 +224,8 @@ class Generator(object):
 
     def decode_default_value(self, value, typ):
         value = base64.b64decode(value)
-        # Note: following is a workaround for decoding EnumerationType, as set_values has not been called
+        # Note: following is a workaround for decoding EnumerationType,
+        # as set_values has not been called
         value = array.array('B', value).tostring()
         if not isinstance(typ, EnumerationType):
             return Decoder.decode(value, typ)

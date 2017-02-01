@@ -22,7 +22,8 @@ class TestEncoder(unittest.TestCase):
         self.assertEqual('ac02', hexlify(data))
 
     def test_encode_unicode_string(self):
-        data = Encoder.encode(b'\xe2\x84\xa2'.decode('utf-8'), self.types.string_type)
+        data = Encoder.encode(b'\xe2\x84\xa2'.decode('utf-8'),
+                              self.types.string_type)
         self.assertEqual('03e284a2', hexlify(data))
 
     def test_encode_message_with_size(self):
@@ -30,7 +31,9 @@ class TestEncoder(unittest.TestCase):
         call.service = 'ServiceName'
         call.procedure = 'ProcedureName'
         data = Encoder.encode_message_with_size(call)
-        expected = '1c' + '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
+        expected = '1c' + \
+                   '0a0b536572766963654e616d6512' + \
+                   '0d50726f6365647572654e616d65'
         self.assertEqual(expected, hexlify(data))
 
     def test_encode_class(self):
@@ -49,7 +52,10 @@ class TestEncoder(unittest.TestCase):
         self.assertEqual('00', hexlify(data))
 
     def test_encode_tuple_wrong_arity(self):
-        typ = self.types.tuple_type(self.types.uint32_type, self.types.uint32_type, self.types.uint32_type)
+        typ = self.types.tuple_type(
+            self.types.uint32_type,
+            self.types.uint32_type,
+            self.types.uint32_type)
         value = (0, 1)
         self.assertRaises(EncodingError, Encoder.encode, value, typ)
 

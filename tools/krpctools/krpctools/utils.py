@@ -29,9 +29,12 @@ def single_line(string):
     """ Convert the given string into a single line """
     return ' '.join(line.strip() for line in string.split('\n'))
 
+
 def as_type(types, type_info):
-    """ Convert a type parsed from a JSON service definitions file into a type object """
+    """ Convert a type parsed from a JSON service definitions file
+        into a type object """
     return types.as_type(_as_protobuf_type(types, type_info))
+
 
 def _as_protobuf_type(types, type_info):
     protobuf_type = Type()
@@ -41,5 +44,6 @@ def _as_protobuf_type(types, type_info):
     if 'name' in type_info:
         protobuf_type.name = type_info['name']
     if 'types' in type_info:
-        protobuf_type.types.extend([_as_protobuf_type(types, t) for t in type_info['types']])
+        protobuf_type.types.extend(
+            [_as_protobuf_type(types, t) for t in type_info['types']])
     return protobuf_type

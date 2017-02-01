@@ -14,8 +14,9 @@ import krpc.stream
 class Client(object):
     """
     A kRPC client, through which all Remote Procedure Calls are made.
-    Services provided by the server that the client connects to are automatically added.
-    RPCs can be made using client.ServiceName.ProcedureName(parameter)
+    Services provided by the server that the client connects
+    to are automatically added. RPCs can be made using
+    client.ServiceName.ProcedureName(parameter)
     """
 
     def __init__(self, rpc_connection, stream_connection):
@@ -27,18 +28,21 @@ class Client(object):
         self._stream_cache_lock = threading.Lock()
 
         # Get the services
-        services = self._invoke('KRPC', 'GetServices', [], [], [], self._types.services_type).services
+        services = self._invoke('KRPC', 'GetServices', [], [], [],
+                                self._types.services_type).services
 
         # Set up services
         for service in services:
-            setattr(self, snake_case(service.name), create_service(self, service))
+            setattr(self, snake_case(service.name),
+                    create_service(self, service))
 
         # Set up stream update thread
         if stream_connection is not None:
             self._stream_thread_stop = threading.Event()
-            self._stream_thread = threading.Thread(target=krpc.stream.update_thread,
-                                                   args=(stream_connection, self._stream_thread_stop,
-                                                         self._stream_cache, self._stream_cache_lock))
+            self._stream_thread = threading.Thread(
+                target=krpc.stream.update_thread,
+                args=(stream_connection, self._stream_thread_stop,
+                      self._stream_cache, self._stream_cache_lock))
             self._stream_thread.daemon = True
             self._stream_thread.start()
         else:
@@ -70,18 +74,21 @@ class Client(object):
         finally:
             stream.remove()
 
-    def _invoke(self, service, procedure, args, param_names, param_types, return_type):
+    def _invoke(self, service, procedure, args,
+                param_names, param_types, return_type):
         """ Execute an RPC """
 
         # Build the request
-        call = self._build_call(service, procedure, args, param_names, param_types, return_type)
+        call = self._build_call(service, procedure, args,
+                                param_names, param_types, return_type)
         request = krpc.schema.KRPC.Request()
         request.calls.extend([call])
 
         # Send the request
         with self._rpc_connection_lock:
             self._rpc_connection.send_message(request)
-            response = self._rpc_connection.receive_message(krpc.schema.KRPC.Response)
+            response = self._rpc_connection.receive_message(
+                krpc.schema.KRPC.Response)
 
         # Check for an error response
         if response.HasField('error'):
@@ -98,7 +105,8 @@ class Client(object):
         return result
 
     def _build_call(self, service, procedure, args,
-                    param_names, param_types, return_type):  # pylint: disable=unused-argument
+                    param_names, param_types, return_type):
+                    # pylint: disable=unused-argument
         """ Build a KRPC.ProcedureCall object """
 
         call = krpc.schema.KRPC.ProcedureCall()
@@ -112,23 +120,30 @@ class Client(object):
                 try:
                     value = self._types.coerce_to(value, typ)
                 except ValueError:
-                    raise TypeError('%s.%s() argument %d must be a %s, got a %s' %
-                                    (service, procedure, i, typ.python_type, type(value)))
+                    raise TypeError(
+                        '%s.%s() argument %d must be a %s, got a %s' %
+                        (service, procedure, i, typ.python_type, type(value)))
             call.arguments.add(position=i, value=Encoder.encode(value, typ))
 
         return call
 
     def _build_error(self, error):
-        """ Build an exception from an error message that can be thrown to the calling code """
-        # TODO: modify the stack trace of the thrown exception so it looks like it came from the local call
+        """ Build an exception from an error message that
+            can be thrown to the calling code """
+        # TODO: modify the stack trace of the thrown exception so it looks like
+        #       it came from the local call
         if len(error.service) > 0 and len(error.name) > 0:
             service_name = snake_case(error.service)
             type_name = error.name
             if not hasattr(self, service_name):
-                raise RuntimeError('Error building exception; service \'%s\' not found' % service_name)
+                raise RuntimeError(
+                    'Error building exception; service \'%s\' not found' %
+                    service_name)
             service = getattr(self, service_name)
             if not hasattr(service, type_name):
-                raise RuntimeError('Error building exception; type \'%s.%s\' not found' % (service_name, type_name))
+                raise RuntimeError(
+                    'Error building exception; type \'%s.%s\' not found' %
+                    (service_name, type_name))
             return getattr(service, type_name)(self._error_message(error))
         return RPCError(self._error_message(error))
 

@@ -12,12 +12,12 @@ DEFAULT_RPC_PORT = 50000
 DEFAULT_STREAM_PORT = 50001
 
 
-def connect(name=None, address=DEFAULT_ADDRESS, rpc_port=DEFAULT_RPC_PORT, stream_port=DEFAULT_STREAM_PORT):
+def connect(name=None, address=DEFAULT_ADDRESS,
+            rpc_port=DEFAULT_RPC_PORT, stream_port=DEFAULT_STREAM_PORT):
     """
-    Connect to a kRPC server on the specified IP address and port numbers. If
-    stream_port is None, does not connect to the stream server.
-    Optionally give the kRPC server the supplied name to identify the client (up
-    to 32 bytes of UTF-8 encoded text).
+    Connect to a kRPC server on the specified IP address and port numbers.
+    If stream_port is None, does not connect to the stream server.
+    Optionally give the kRPC server the supplied name to identify the client.
     """
 
     # Connect to RPC server
@@ -25,7 +25,7 @@ def connect(name=None, address=DEFAULT_ADDRESS, rpc_port=DEFAULT_RPC_PORT, strea
     rpc_connection.connect()
     request = ConnectionRequest()
     request.type = ConnectionRequest.RPC
-    if name != None:
+    if name is not None:
         request.client_name = name
     rpc_connection.send_message(request)
     response = rpc_connection.receive_message(ConnectionResponse)

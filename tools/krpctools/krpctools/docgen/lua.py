@@ -1,10 +1,13 @@
 from krpc.schema.KRPC import Type
-from krpc.types import ValueType, ClassType, EnumerationType, MessageType
-from krpc.types import TupleType, ListType, SetType, DictionaryType
+from krpc.types import \
+    ValueType, ClassType, EnumerationType, MessageType, \
+    TupleType, ListType, SetType, DictionaryType
 from krpc.utils import snake_case
 from .domain import Domain
-from .nodes import Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
-from .nodes import Enumeration, EnumerationValue
+from .nodes import \
+    Procedure, Property, Class, ClassMethod, ClassStaticMethod, \
+    ClassProperty, Enumeration, EnumerationValue
+
 
 class LuaDomain(Domain):
     name = 'lua'
@@ -43,7 +46,8 @@ class LuaDomain(Domain):
         elif isinstance(typ, MessageType):
             return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
         elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
-            return self.shorten_ref('%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
+            return self.shorten_ref(
+                '%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
         elif isinstance(typ, ListType):
             return 'List'
         elif isinstance(typ, DictionaryType):
@@ -67,19 +71,23 @@ class LuaDomain(Domain):
         elif isinstance(typ, ListType):
             return 'List of %s' % self.type_description(typ.value_type)
         elif isinstance(typ, DictionaryType):
-            return 'Map from %s to %s' % (self.type_description(typ.key_type),
-                                          self.type_description(typ.value_type))
+            return 'Map from %s to %s' % \
+                (self.type_description(typ.key_type),
+                 self.type_description(typ.value_type))
         elif isinstance(typ, SetType):
             return 'Set of %s' % self.type_description(typ.value_type)
         elif isinstance(typ, TupleType):
-            return 'Tuple of (%s)' % ', '.join(self.type_description(typ) for typ in typ.value_types)
+            return 'Tuple of (%s)' % \
+                ', '.join(self.type_description(typ)
+                          for typ in typ.value_types)
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
     def ref(self, obj):
         name = obj.fullname
         if any(isinstance(obj, cls) for cls in
-               (Procedure, Property, ClassMethod, ClassStaticMethod, ClassProperty, EnumerationValue)):
+               (Procedure, Property, ClassMethod, ClassStaticMethod,
+                ClassProperty, EnumerationValue)):
             name = name.split('.')
             name[-1] = snake_case(name[-1])
             name = '.'.join(name)
@@ -90,9 +98,13 @@ class LuaDomain(Domain):
         return name
 
     def see(self, obj):
-        if isinstance(obj, Property) or isinstance(obj, ClassProperty) or isinstance(obj, EnumerationValue):
+        if isinstance(obj, Property) or \
+           isinstance(obj, ClassProperty) or \
+           isinstance(obj, EnumerationValue):
             prefix = 'attr'
-        elif isinstance(obj, Procedure) or isinstance(obj, ClassMethod) or isinstance(obj, ClassStaticMethod):
+        elif (isinstance(obj, Procedure) or
+              isinstance(obj, ClassMethod) or
+              isinstance(obj, ClassStaticMethod)):
             prefix = 'meth'
         elif isinstance(obj, Class) or isinstance(obj, Enumeration):
             prefix = 'class'
