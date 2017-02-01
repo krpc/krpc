@@ -1,3 +1,6 @@
+v0.3.8
+ * Clean up code to meet PEP 8 guidelines
+ 
 v0.3.7
  * Fix bug parsing nested collection types
  * Fix bug generating key type for dictionaries
