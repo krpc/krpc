@@ -8,15 +8,15 @@ once per second.
 
 .. tabs::
 
-   .. tab:: C++
-
-      .. literalinclude:: /scripts/PitchHeadingRoll.cpp
-         :language: cpp
-
    .. tab:: C#
 
       .. literalinclude:: /scripts/PitchHeadingRoll.cs
          :language: csharp
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/PitchHeadingRoll.cpp
+         :language: cpp
 
    .. tab:: Java
 
