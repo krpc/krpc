@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class TestInfernalRobotics(krpctest.TestCase):
 
     @classmethod
@@ -30,6 +31,7 @@ class TestInfernalRobotics(krpctest.TestCase):
         self.assertEqual('Rail', servo1.name)
         self.assertEqual('Rotatron', servo2.name)
         self.assertIsNone(servo3)
+
 
 if __name__ == '__main__':
     unittest.main()

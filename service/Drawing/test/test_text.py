@@ -2,6 +2,7 @@ import unittest
 import krpc
 import krpctest
 
+
 class TestText(krpctest.TestCase):
 
     @classmethod
@@ -16,7 +17,8 @@ class TestText(krpctest.TestCase):
         cls.anchor = ui.TextAnchor
 
     def add_text(self):
-        return self.drawing.add_text("Jebediah Kerman", self.ref, (0, 0, 0), (0, 0, 0, 1))
+        return self.drawing.add_text(
+            "Jebediah Kerman", self.ref, (0, 0, 0), (0, 0, 0, 1))
 
     def test_text(self):
         text = self.add_text()
@@ -60,6 +62,7 @@ class TestText(krpctest.TestCase):
         self.wait()
         text.remove()
         self.assertRaises(krpc.client.RPCError, text.remove)
+
 
 if __name__ == '__main__':
     unittest.main()

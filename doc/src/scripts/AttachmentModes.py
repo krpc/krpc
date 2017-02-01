@@ -8,7 +8,7 @@ while len(stack) > 0:
     part, depth = stack.pop()
     if part.axially_attached:
         attach_mode = 'axial'
-    else: # radially_attached
+    else:  # radially_attached
         attach_mode = 'radial'
     print(' '*depth, part.title, '-', attach_mode)
     for child in part.children:

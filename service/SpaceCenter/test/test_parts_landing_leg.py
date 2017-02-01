@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class TestPartsLandingLeg(krpctest.TestCase):
 
     @classmethod
@@ -10,7 +11,8 @@ class TestPartsLandingLeg(krpctest.TestCase):
             cls.launch_vessel_from_vab('Parts')
             cls.remove_other_vessels()
         cls.State = cls.connect().space_center.LandingLegState
-        cls.leg = cls.connect().space_center.active_vessel.parts.landing_legs[0]
+        cls.leg = cls.connect().space_center.active_vessel \
+                                            .parts.landing_legs[0]
 
     def test_deploy_and_retract(self):
         self.assertEqual(self.State.retracted, self.leg.state)
@@ -32,6 +34,7 @@ class TestPartsLandingLeg(krpctest.TestCase):
         self.assertEqual(self.State.retracted, self.leg.state)
         self.assertFalse(self.leg.deployed)
         self.assertFalse(self.leg.is_grounded)
+
 
 if __name__ == '__main__':
     unittest.main()

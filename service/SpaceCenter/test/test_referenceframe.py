@@ -4,6 +4,7 @@ import krpctest
 from krpctest.geometry import compute_position, norm, dot
 import krpc
 
+
 class TestReferenceFrame(krpctest.TestCase):
 
     @classmethod
@@ -37,26 +38,31 @@ class TestReferenceFrame(krpctest.TestCase):
             if body.orbit is not None:
                 self.check_object_position(body, body.orbital_reference_frame)
             else:
-                self.assertRaises(krpc.client.RPCError, getattr, body, 'orbital_reference_frame')
+                self.assertRaises(krpc.client.RPCError, getattr,
+                                  body, 'orbital_reference_frame')
 
     def test_vessel_position(self):
-        self.check_object_position(self.vessel, self.vessel.reference_frame)
+        self.check_object_position(
+            self.vessel, self.vessel.reference_frame)
 
     def test_vessel_orbital_position(self):
-        self.check_object_position(self.vessel, self.vessel.orbital_reference_frame)
+        self.check_object_position(
+            self.vessel, self.vessel.orbital_reference_frame)
 
     def test_vessel_surface_position(self):
-        self.check_object_position(self.vessel, self.vessel.surface_reference_frame)
+        self.check_object_position(
+            self.vessel, self.vessel.surface_reference_frame)
 
     def test_vessel_surface_velocity_position(self):
-        self.check_object_position(self.vessel, self.vessel.surface_velocity_reference_frame)
+        self.check_object_position(
+            self.vessel, self.vessel.surface_velocity_reference_frame)
 
     def test_node_position(self):
         for node in self.vessel.control.nodes:
             node.remove()
         node = self.vessel.control.add_node(self.space_center.ut, 100, 0, 0)
         pos = self.vessel.position(node.reference_frame)
-        #TODO: large error
+        # TODO: large error
         self.assertAlmostEqual((0, 0, 0), pos, delta=100)
 
     def test_node_orbital_position(self):
@@ -64,28 +70,34 @@ class TestReferenceFrame(krpctest.TestCase):
             node.remove()
         node = self.vessel.control.add_node(self.space_center.ut, 100, 0, 0)
         pos = self.vessel.position(node.orbital_reference_frame)
-        #TODO: large error
+        # TODO: large error
         self.assertAlmostEqual((0, 0, 0), pos, delta=100)
 
     def check_object_velocity(self, obj, ref):
-        # Check velocity vectors are unchanged by converting between the same reference frame
-        self.assertAlmostEqual((1, 2, 3), self.space_center.transform_velocity((0, 0, 0), (1, 2, 3), ref, ref))
+        # Check velocity vectors are unchanged by
+        # converting between the same reference frame
+        self.assertAlmostEqual(
+            (1, 2, 3),
+            self.space_center.transform_velocity(
+                (0, 0, 0), (1, 2, 3), ref, ref))
         if obj.orbit is not None:
             # Check velocity of reference frame is same as orbital speed
             # in reference frame of body being orbited
-            v = self.space_center.transform_velocity((0, 0, 0), (0, 0, 0), ref,
-                                                     obj.orbit.body.non_rotating_reference_frame)
+            v = self.space_center.transform_velocity(
+                (0, 0, 0), (0, 0, 0), ref,
+                obj.orbit.body.non_rotating_reference_frame)
             self.assertAlmostEqual(norm(v), obj.orbit.speed, delta=0.5)
 
     def check_object_surface_velocity(self, obj, ref):
         if obj.orbit is not None:
             # Check rotational component of velocity same as orbital speed
-            v = self.space_center.transform_velocity((0, 0, 0), (0, 0, 0), ref,
-                                                     obj.orbit.body.reference_frame)
-            #if obj.orbit.inclination == 0:
-            #    self.assertAlmostEqual(0, v[1])
-            #else:
-            #    self.assertNotAlmostEqual(0, v[1])
+            v = self.space_center.transform_velocity(
+                (0, 0, 0), (0, 0, 0), ref,
+                obj.orbit.body.reference_frame)
+            # if obj.orbit.inclination == 0:
+            #     self.assertAlmostEqual(0, v[1])
+            # else:
+            #     self.assertNotAlmostEqual(0, v[1])
             angular_velocity = obj.orbit.body.angular_velocity(
                 obj.orbit.body.non_rotating_reference_frame)
             self.assertAlmostEqual(0, angular_velocity[0])
@@ -95,8 +107,9 @@ class TestReferenceFrame(krpctest.TestCase):
             position[1] = 0
             radius = norm(position)
             rotational_speed *= radius
-            #TODO: large error
-            self.assertAlmostEqual(abs(rotational_speed + obj.orbit.speed), norm(v), delta=200)
+            # TODO: large error
+            self.assertAlmostEqual(
+                abs(rotational_speed + obj.orbit.speed), norm(v), delta=200)
 
     def test_celestial_body_velocity(self):
         for body in self.bodies.values():
@@ -107,27 +120,31 @@ class TestReferenceFrame(krpctest.TestCase):
         for body in self.bodies.values():
             if body.orbit is not None:
                 self.check_object_velocity(body, body.orbital_reference_frame)
-                self.check_object_surface_velocity(body, body.orbital_reference_frame)
+                self.check_object_surface_velocity(
+                    body, body.orbital_reference_frame)
 
     def test_vessel_velocity(self):
         self.check_object_velocity(self.vessel, self.vessel.reference_frame)
-        self.check_object_surface_velocity(self.vessel,
-                                           self.vessel.reference_frame)
+        self.check_object_surface_velocity(
+            self.vessel, self.vessel.reference_frame)
 
     def test_vessel_orbital_velocity(self):
-        self.check_object_velocity(self.vessel, self.vessel.orbital_reference_frame)
-        self.check_object_surface_velocity(self.vessel,
-                                           self.vessel.orbital_reference_frame)
+        self.check_object_velocity(
+            self.vessel, self.vessel.orbital_reference_frame)
+        self.check_object_surface_velocity(
+            self.vessel, self.vessel.orbital_reference_frame)
 
     def test_vessel_surface_velocity(self):
-        self.check_object_velocity(self.vessel, self.vessel.surface_reference_frame)
-        self.check_object_surface_velocity(self.vessel,
-                                           self.vessel.surface_reference_frame)
+        self.check_object_velocity(
+            self.vessel, self.vessel.surface_reference_frame)
+        self.check_object_surface_velocity(
+            self.vessel, self.vessel.surface_reference_frame)
 
     def test_vessel_surface_velocity_velocity(self):
-        self.check_object_velocity(self.vessel, self.vessel.surface_velocity_reference_frame)
-        self.check_object_surface_velocity(self.vessel,
-                                           self.vessel.surface_velocity_reference_frame)
+        self.check_object_velocity(
+            self.vessel, self.vessel.surface_velocity_reference_frame)
+        self.check_object_surface_velocity(
+            self.vessel, self.vessel.surface_velocity_reference_frame)
 
     def test_node_velocity(self):
         # TODO: implement
@@ -140,7 +157,8 @@ class TestReferenceFrame(krpctest.TestCase):
     def test_celestial_body_direction(self):
         # Check (0, 1, 0) direction same as body direction
         for body in self.bodies.values():
-            self.assertAlmostEqual((0, 1, 0), body.direction(body.reference_frame))
+            self.assertAlmostEqual(
+                (0, 1, 0), body.direction(body.reference_frame))
 
     def test_celestial_body_orbital_direction(self):
         # TODO: implement
@@ -152,7 +170,9 @@ class TestReferenceFrame(krpctest.TestCase):
 
     def test_vessel_direction(self):
         # Check (0, 1, 0) direction same as vessel direction
-        self.assertAlmostEqual((0, 1, 0), self.vessel.direction(self.vessel.reference_frame), places=3)
+        self.assertAlmostEqual(
+            (0, 1, 0),
+            self.vessel.direction(self.vessel.reference_frame), places=3)
 
     def test_vessel_orbital_direction(self):
         # TODO: implement
@@ -176,52 +196,70 @@ class TestReferenceFrame(krpctest.TestCase):
 
     def test_relative_position(self):
         position = (1, 2, 3)
-        ref = self.space_center.ReferenceFrame.create_relative(self.vessel.reference_frame, position=position)
-        self.assertAlmostEqual(tuple(-x for x in position), self.vessel.position(ref))
+        ref = self.space_center.ReferenceFrame.create_relative(
+            self.vessel.reference_frame, position=position)
+        self.assertAlmostEqual(
+            tuple(-x for x in position), self.vessel.position(ref))
 
     def test_relative_rotation(self):
         cases = [
             # 90 degrees rotation around x
             # vessel points along -z
-            {'rot': (math.sin(math.pi/4), 0, 0, math.cos(math.pi/4)), 'dir': (0, 0, -1)},
+            {'rot': (math.sin(math.pi/4), 0, 0, math.cos(math.pi/4)),
+             'dir': (0, 0, -1)},
             # 90 degrees rotation around y
             # vessel points along y
-            {'rot': (0, math.sin(math.pi/4), 0, math.cos(math.pi/4)), 'dir': (0, 1, 0)},
+            {'rot': (0, math.sin(math.pi/4), 0, math.cos(math.pi/4)),
+             'dir': (0, 1, 0)},
             # 90 degrees rotation around z
             # vessel points along x
-            {'rot': (0, 0, math.sin(math.pi/4), math.cos(math.pi/4)), 'dir': (1, 0, 0)}
+            {'rot': (0, 0, math.sin(math.pi/4), math.cos(math.pi/4)),
+             'dir': (1, 0, 0)}
         ]
-        self.assertAlmostEqual((0, 1, 0), self.vessel.direction(self.vessel.reference_frame), places=4)
+        self.assertAlmostEqual(
+            (0, 1, 0),
+            self.vessel.direction(self.vessel.reference_frame), places=4)
         for case in cases:
             ref = self.space_center.ReferenceFrame.create_relative(
                 self.vessel.reference_frame, rotation=case['rot'])
-            self.assertAlmostEqual(case['dir'], self.vessel.direction(ref), places=4)
+            self.assertAlmostEqual(
+                case['dir'], self.vessel.direction(ref), places=4)
 
     def test_relative_velocity(self):
         velocity = (1, 2, 3)
-        ref = self.space_center.ReferenceFrame.create_relative(self.vessel.reference_frame, velocity=velocity)
-        self.assertAlmostEqual(tuple(-x for x in velocity), self.vessel.velocity(ref), places=4)
+        ref = self.space_center.ReferenceFrame.create_relative(
+            self.vessel.reference_frame, velocity=velocity)
+        self.assertAlmostEqual(
+            tuple(-x for x in velocity), self.vessel.velocity(ref), places=4)
 
     def test_relative_angular_velocity(self):
         angular_velocity = (1, 2, 3)
         ref = self.space_center.ReferenceFrame.create_relative(
             self.vessel.reference_frame, angular_velocity=angular_velocity)
-        self.assertAlmostEqual(tuple(-x for x in angular_velocity), self.vessel.angular_velocity(ref), places=4)
+        self.assertAlmostEqual(
+            tuple(-x for x in angular_velocity),
+            self.vessel.angular_velocity(ref), places=4)
 
     def test_hybrid(self):
         position = self.vessel.reference_frame
         direction = self.vessel.orbital_reference_frame
         velocity = self.vessel.surface_reference_frame
         angular_velocity = self.vessel.parts.root.reference_frame
-        ref = self.space_center.ReferenceFrame.create_hybrid(position, direction, velocity, angular_velocity)
+        ref = self.space_center.ReferenceFrame.create_hybrid(
+            position, direction, velocity, angular_velocity)
         self.assertAlmostEqual(
-            self.vessel.position(position), self.vessel.position(ref), places=3)
+            self.vessel.position(position),
+            self.vessel.position(ref), places=3)
         self.assertAlmostEqual(
-            self.vessel.direction(direction), self.vessel.direction(ref), places=4)
+            self.vessel.direction(direction),
+            self.vessel.direction(ref), places=4)
         self.assertAlmostEqual(
-            self.vessel.velocity(velocity), self.vessel.velocity(ref), places=4)
+            self.vessel.velocity(velocity),
+            self.vessel.velocity(ref), places=4)
         self.assertAlmostEqual(
-            self.vessel.angular_velocity(angular_velocity), self.vessel.angular_velocity(ref), places=4)
+            self.vessel.angular_velocity(angular_velocity),
+            self.vessel.angular_velocity(ref), places=4)
+
 
 if __name__ == '__main__':
     unittest.main()

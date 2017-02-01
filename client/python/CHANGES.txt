@@ -4,6 +4,9 @@ v0.4.0
  * Reorder parameters to krpc.connect() so that name is first - to be consistent with other client libraries
  * Add support for RPCs to throw exceptions
 
+v0.3.8
+ * Clean up code to meet PEP 8 guidelines
+
 v0.3.7
  * Fix bug parsing nested collection types
 

@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class TestPartsParachute(krpctest.TestCase):
 
     def setUp(self):
@@ -74,6 +75,7 @@ class TestPartsParachute(krpctest.TestCase):
         for parachute in self.parachutes:
             self.assertTrue(parachute.deployed)
             self.assertEqual(self.state.cut, parachute.state)
+
 
 if __name__ == '__main__':
     unittest.main()

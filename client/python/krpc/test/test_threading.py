@@ -10,9 +10,12 @@ def worker_thread(conn):
 
 def worker_thread2(conn, test):
     for _ in range(10):
-        test.assertEqual('3.14159', conn.test_service.float_to_string(float(3.14159)))
-        test.assertEqual('3.14159', conn.test_service.double_to_string(float(3.14159)))
-        test.assertEqual('42', conn.test_service.int32_to_string(42))
+        test.assertEqual(
+            '3.14159', conn.test_service.float_to_string(float(3.14159)))
+        test.assertEqual(
+            '3.14159', conn.test_service.double_to_string(float(3.14159)))
+        test.assertEqual(
+            '42', conn.test_service.int32_to_string(42))
 
 
 class TestThreading(ServerTestCase, unittest.TestCase):
@@ -29,7 +32,9 @@ class TestThreading(ServerTestCase, unittest.TestCase):
         thread1.join()
 
     def test_rpc_interleaving(self):
-        threads = [threading.Thread(target=worker_thread2, args=(self.conn, self)) for _ in range(10)]
+        threads = [
+            threading.Thread(target=worker_thread2, args=(self.conn, self))
+            for _ in range(10)]
         for thread in threads:
             thread.start()
         for thread in threads:

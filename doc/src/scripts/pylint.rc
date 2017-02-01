@@ -4,9 +4,6 @@ variable-rgx=[a-z_][a-z0-9_]{1,30}$
 method-rgx=[a-z_][a-z0-9_]{2,60}$
 const-rgx=[a-z_][a-z0-9_]{1,30}$
 
-[FORMAT]
-max-line-length=120
-
 [DESIGN]
 max-args=10
 max-locals=20

@@ -15,12 +15,12 @@ bazel build //doc:srcs
 # Set up python environment
 mkdir -p `dirname $env`
 if [ ! -d "$env" ]; then
-  virtualenv $env --system-site-packages
+  virtualenv $env
   source $env/bin/activate
   pip install \
-    sphinx==1.3.5 sphinx-autobuild sphinx_rtd_theme sphinxcontrib_spelling sphinx-csharp \
+    sphinx==1.3.5 sphinx-autobuild sphinx_rtd_theme sphinxcontrib_spelling sphinx-csharp sphinx-tabs \
     https://github.com/djungelorm/sphinx-lua/releases/download/0.1.2/sphinx-lua-0.1.2.tar.gz \
-    javasphinx
+    javasphinx pyinotify
 else
   source $env/bin/activate
 fi

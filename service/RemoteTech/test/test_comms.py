@@ -1,7 +1,9 @@
 import unittest
 import krpctest
 
-@unittest.skipIf(not krpctest.TestCase.connect().remote_tech.available, "RemoteTech not installed")
+
+@unittest.skipIf(not krpctest.TestCase.connect().remote_tech.available,
+                 "RemoteTech not installed")
 class TestComms(krpctest.TestCase):
 
     @classmethod
@@ -22,9 +24,11 @@ class TestComms(krpctest.TestCase):
         self.assertTrue(self.comms.has_connection_to_ground_station)
         self.assertGreater(self.comms.signal_delay, 0)
         self.assertGreater(self.comms.signal_delay_to_ground_station, 0)
-        self.assertGreater(self.comms.signal_delay_to_vessel(self.other_vessel), 0)
+        self.assertGreater(
+            self.comms.signal_delay_to_vessel(self.other_vessel), 0)
         self.assertItemsEqual(['Reflectron DP-10', 'Reflectron KR-7'],
                               [x.part.title for x in self.comms.antennas])
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -6,7 +6,7 @@ copyright = '2015-2016, djungelorm'
 master_doc = 'index'
 source_suffix = '.rst'
 extensions = ['sphinx.ext.mathjax', 'sphinxcontrib.spelling', 'sphinx.ext.todo', 'sphinx.ext.extlinks',
-              'redjack.sphinx.lua', 'sphinx_csharp.csharp', 'javasphinx']
+              'redjack.sphinx.lua', 'sphinx_csharp.csharp', 'javasphinx', 'sphinx_tabs.tabs']
 templates_path = ['_templates']
 
 pygments_style = 'sphinx'
@@ -14,8 +14,8 @@ import sphinx_rtd_theme
 html_theme = 'sphinx_rtd_theme'
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 htmlhelp_basename = 'krpc-doc'
-html_static_path = ['crafts','scripts','_static']
-html_context = { 'css_files': ['_static/custom.css'] }
+html_static_path = ['crafts', 'scripts', '_static']
+html_context = { 'css_files': ['_static/jquery-ui.min.css', '_static/custom.css'] }
 
 todo_include_todos = True
 

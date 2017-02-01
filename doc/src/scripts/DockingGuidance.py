@@ -11,7 +11,6 @@ stdscr.keypad(1)
 curses.noecho()
 
 try:
-
     # Connect to kRPC
     conn = krpc.connect(name='Docking Guidance')
     vessel = conn.space_center.active_vessel
@@ -19,7 +18,6 @@ try:
     target = None
 
     while True:
-
         stdscr.clear()
         stdscr.addstr(0, 0, '-- Docking Guidance --')
 
@@ -33,7 +31,8 @@ try:
             stdscr.addstr(2, 0, 'Awaiting target docking port...')
 
         else:
-            # Get positions, distances, velocities and speeds relative to the target docking port
+            # Get positions, distances, velocities and
+            # speeds relative to the target docking port
             current_position = current.position(target.reference_frame)
             velocity = current.part.velocity(target.reference_frame)
             displacement = np.array(current_position)
@@ -84,9 +83,12 @@ try:
             stdscr.addstr(10, 0, '          +---------------------------+')
             stdscr.addstr(11, 0, '          |  Distance  |  Speed       |')
             stdscr.addstr(12, 0, '+---------+------------+--------------+')
-            stdscr.addstr(13, 0, '|         |  {:>+6.2f} m  |  {:>+6.2f} m/s  |'.format(distance, speed))
-            stdscr.addstr(14, 0, '|   Axial |  {:>+6.2f} m  |  {:>+6.2f} m/s  |'.format(axial_distance, axial_speed))
-            stdscr.addstr(15, 0, '|  Radial |  {:>+6.2f} m  |  {:>+6.2f} m/s  |'.format(radial_distance, radial_speed))
+            stdscr.addstr(13, 0, '|         |  {:>+6.2f} m  |  {:>+6.2f} m/s  |'
+                          .format(distance, speed))
+            stdscr.addstr(14, 0, '|   Axial |  {:>+6.2f} m  |  {:>+6.2f} m/s  |'
+                          .format(axial_distance, axial_speed))
+            stdscr.addstr(15, 0, '|  Radial |  {:>+6.2f} m  |  {:>+6.2f} m/s  |'
+                          .format(radial_distance, radial_speed))
             stdscr.addstr(16, 0, '+---------+------------+--------------+')
 
         stdscr.refresh()

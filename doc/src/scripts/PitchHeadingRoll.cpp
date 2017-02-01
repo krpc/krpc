@@ -46,27 +46,35 @@ int main() {
     vector3 vessel_direction = vessel.direction(vessel.surface_reference_frame());
 
     // Get the direction of the vessel in the horizon plane
-    vector3 horizon_direction { 0, std::get<1>(vessel_direction), std::get<2>(vessel_direction) };
+    vector3 horizon_direction {
+      0, std::get<1>(vessel_direction), std::get<2>(vessel_direction)
+    };
 
-    // Compute the pitch - the angle between the vessels direction and the direction in the horizon plane
+    // Compute the pitch - the angle between the vessels direction
+    // and the direction in the horizon plane
     double pitch = angle_between_vectors(vessel_direction, horizon_direction);
     if (std::get<0>(vessel_direction) < 0)
       pitch = -pitch;
 
-    // Compute the heading - the angle between north and the direction in the horizon plane
+    // Compute the heading - the angle between north
+    // and the direction in the horizon plane
     vector3 north {0, 1, 0};
     double heading = angle_between_vectors(north, horizon_direction);
     if (std::get<2>(horizon_direction) < 0)
       heading = 360 - heading;
 
     // Compute the roll
-    // Compute the plane running through the vessels direction and the upwards direction
+    // Compute the plane running through the vessels direction
+    // and the upwards direction
     vector3 up {1, 0, 0};
     vector3 plane_normal = cross_product(vessel_direction, up);
     // Compute the upwards direction of the vessel
     vector3 vessel_up = space_center.transform_direction(
-      std::make_tuple(0, 0, -1), vessel.reference_frame(), vessel.surface_reference_frame());
-    // Compute the angle between the upwards direction of the vessel and the plane normal
+      std::make_tuple(0, 0, -1),
+      vessel.reference_frame(),
+      vessel.surface_reference_frame());
+    // Compute the angle between the upwards direction of
+    // the vessel and the plane normal
     double roll = angle_between_vectors(vessel_up, plane_normal);
     // Adjust so that the angle is between -180 and 180 and
     // rolling right is +ve and left is -ve

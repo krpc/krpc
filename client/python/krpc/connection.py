@@ -44,7 +44,8 @@ class Connection(object):
         return Decoder.decode_message(data, typ)
 
     def send(self, data):
-        """ Send data to the connection. Blocks until all data has been sent. """
+        """ Send data to the connection.
+            Blocks until all data has been sent. """
         assert len(data) > 0
         while len(data) > 0:
             sent = self._socket.send(data)
@@ -53,7 +54,8 @@ class Connection(object):
             data = data[sent:]
 
     def receive(self, length):
-        """ Receive data from the connection. Blocks until length bytes have been received. """
+        """ Receive data from the connection.
+            Blocks until length bytes have been received. """
         if length == 0:
             return b''
         assert length > 0

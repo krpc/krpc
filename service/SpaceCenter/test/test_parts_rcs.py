@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class RCSTestBase(object):
 
     rcs_data = {
@@ -40,6 +41,7 @@ class RCSTestBase(object):
             r.enabled = value
         self.wait()
 
+
 class RCSTest(RCSTestBase):
 
     def check_properties(self, rcs):
@@ -53,16 +55,21 @@ class RCSTest(RCSTestBase):
         self.assertTrue(rcs.forward_enabled)
         self.assertTrue(rcs.up_enabled)
         self.assertTrue(rcs.right_enabled)
-        self.assertAlmostEqual(data['pos_torque'], rcs.available_torque[0], delta=10)
-        self.assertAlmostEqual(data['neg_torque'], rcs.available_torque[1], delta=10)
+        self.assertAlmostEqual(
+            data['pos_torque'], rcs.available_torque[0], delta=10)
+        self.assertAlmostEqual(
+            data['neg_torque'], rcs.available_torque[1], delta=10)
         self.assertAlmostEqual(data['max_thrust'], rcs.max_thrust, delta=1)
         self.assertEqual(data['max_vac_thrust'], rcs.max_vacuum_thrust)
         self.assertEqual(data['thrusters'], len(rcs.thrusters))
         self.assertAlmostEqual(data['isp'], rcs.specific_impulse, places=1)
-        self.assertEqual(data['vac_isp'], rcs.vacuum_specific_impulse)
-        self.assertEqual(data['msl_isp'], rcs.kerbin_sea_level_specific_impulse)
+        self.assertEqual(
+            data['vac_isp'], rcs.vacuum_specific_impulse)
+        self.assertEqual(
+            data['msl_isp'], rcs.kerbin_sea_level_specific_impulse)
         self.assertItemsEqual(data['propellants'].keys(), rcs.propellants)
-        self.assertAlmostEqual(data['propellants'], rcs.propellant_ratios, places=3)
+        self.assertAlmostEqual(
+            data['propellants'], rcs.propellant_ratios, places=3)
         self.assertTrue(rcs.has_fuel)
         self.control.rcs = False
         self.wait()
@@ -78,6 +85,7 @@ class RCSTest(RCSTestBase):
     def test_vernor_engine(self):
         rcs = self.get_rcs('Vernor Engine')
         self.check_properties(rcs)
+
 
 class TestPartsRCS(krpctest.TestCase, RCSTestBase):
 
@@ -143,6 +151,7 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
         self.assertFalse(rcs.has_fuel)
         self.set_fuel_enabled(True)
 
+
 class TestPartsRCSMSL(krpctest.TestCase, RCSTest):
 
     @classmethod
@@ -158,25 +167,20 @@ class TestPartsRCSMSL(krpctest.TestCase, RCSTest):
             {'max_thrust': 842,
              'isp': 101,
              'pos_torque': (1260, 360, 2460),
-             'neg_torque': (-1260, -360, -2460)
-            }
-        )
+             'neg_torque': (-1260, -360, -2460)})
         cls.add_rcs_data(
             'RV-105 RCS Thruster Block',
             {'max_thrust': 420,
              'isp': 101,
              'pos_torque': (1020, 470, 805),
-             'neg_torque': (-1020, -470, -805)
-            }
-        )
+             'neg_torque': (-1020, -470, -805)})
         cls.add_rcs_data(
             'Vernor Engine',
             {'max_thrust': 6503,
              'isp': 140.9,
              'pos_torque': (7400, 320, 7570),
-             'neg_torque': (-7400, -320, -7570)
-            }
-        )
+             'neg_torque': (-7400, -320, -7570)})
+
 
 class TestPartsRCSVacuum(krpctest.TestCase, RCSTest):
 
@@ -194,25 +198,20 @@ class TestPartsRCSVacuum(krpctest.TestCase, RCSTest):
             {'max_thrust': 2000,
              'isp': 240,
              'pos_torque': (1210, 325, 2360),
-             'neg_torque': (-1210, -325, -2360)
-            }
-        )
+             'neg_torque': (-1210, -325, -2360)})
         cls.add_rcs_data(
             'RV-105 RCS Thruster Block',
             {'max_thrust': 1000,
              'isp': 240,
              'pos_torque': (960, 510, 820),
-             'neg_torque': (-960, -510, -820)
-            }
-        )
+             'neg_torque': (-960, -510, -820)})
         cls.add_rcs_data(
             'Vernor Engine',
             {'max_thrust': 12000,
              'isp': 260,
              'pos_torque': (6900, 1, 6900),
-             'neg_torque': (-6900, -1, -6900)
-            }
-        )
+             'neg_torque': (-6900, -1, -6900)})
+
 
 if __name__ == '__main__':
     unittest.main()

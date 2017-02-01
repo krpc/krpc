@@ -98,9 +98,9 @@ test_suite(
 
 py_lint_test(
     name = 'lint',
-    src = ':krpctools',
-    pkg = 'krpctools',
+    pkg = ':krpctools',
+    pkg_name = 'krpctools',
     deps = deps,
-    rcfile = 'pylint.rc',
+    pylint_config = 'pylint.rc',
     size = 'small'
 )

@@ -75,9 +75,11 @@ py3_test(
 
 py_lint_test(
     name = 'lint',
-    src = ':python',
-    pkg = 'krpc',
+    pkg = ':python',
+    pkg_name = 'krpc',
+    srcs = glob(['krpc/**/*']),
     deps = deps + ['@python_enum34//file'],
-    rcfile = 'pylint.rc',
+    pep8_config = 'pep8.ini',
+    pylint_config = 'pylint.rc',
     size = 'small'
 )

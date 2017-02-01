@@ -2,6 +2,7 @@ import unittest
 import krpc
 import krpctest
 
+
 class TestPolygon(krpctest.TestCase):
 
     @classmethod
@@ -52,6 +53,7 @@ class TestPolygon(krpctest.TestCase):
         self.assertAlmostEqual(1.234, polygon.thickness)
         self.wait()
         polygon.remove()
+
 
 if __name__ == '__main__':
     unittest.main()

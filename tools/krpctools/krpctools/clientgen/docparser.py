@@ -1,5 +1,6 @@
 from xml.etree import ElementTree
 
+
 class DocParser(object):
 
     def parse(self, xml):

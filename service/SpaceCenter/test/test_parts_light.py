@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class TestPartsLight(krpctest.TestCase):
 
     @classmethod
@@ -46,6 +47,7 @@ class TestPartsLight(krpctest.TestCase):
         self.light.active = False
         while self.light.active:
             self.wait()
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -282,6 +282,12 @@ http_file(
 )
 
 http_file(
+    name = 'python_sphinx_tabs',
+    url = 'https://pypi.python.org/packages/a5/8b/389bd1837fa5661ff5241eea0724f57870226193ad969682a523c63c7831/sphinx-tabs-0.1.0.tar.gz',
+    sha256 = '745e6b2e6beab6d2874d881d9ea7c1f67ba32bc461f257fe73d4ca1f059318a7'
+)
+
+http_file(
     name = 'python_javalang',
     url = 'https://pypi.python.org/packages/e4/99/499d1eee94c53e7708c447e2f91c94c7789814ef0098b3259752c520c76a/javalang-0.10.1.tar.gz',
     sha256 = 'db8c63133e7b0ad0969212d0dda726d13b2bc9fb5c2c95e3fe2449d06f20a4c5'
@@ -363,6 +369,12 @@ http_file(
     name = 'python_snowballstemmer',
     url = 'https://pypi.python.org/packages/20/6b/d2a7cb176d4d664d94a6debf52cd8dbae1f7203c8e42426daa077051d59c/snowballstemmer-1.2.1.tar.gz',
     sha256 = '919f26a68b2c17a7634da993d91339e288964f93c274f1343e3bbbe2096e1128'
+)
+
+http_file(
+    name = 'python_pep8',
+    url = 'https://pypi.python.org/packages/3e/b5/1f717b85fbf5d43d81e3c603a7a2f64c9f1dabc69a1e7745bd394cc06404/pep8-1.7.0.tar.gz',
+    sha256 = 'a113d5f5ad7a7abacef9df5ec3f2af23a20a28005921577b15dd584d099d5900'
 )
 
 http_file(

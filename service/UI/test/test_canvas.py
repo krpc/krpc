@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class TestCanvas(krpctest.TestCase):
 
     @classmethod
@@ -29,6 +30,7 @@ class TestCanvas(krpctest.TestCase):
         self.assertEqual((0.5, 0.5), rect.pivot)
         self.assertEqual((0, 0, 0, 1), rect.rotation)
         self.assertEqual((1.0, 1.0, 1.0), rect.scale)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -19,7 +19,8 @@ int main() {
 
   std::cout << "Active engines:" << std::endl;
   for (auto engine : active_engines)
-    std::cout << "   " << engine.part().title() << " in stage " << engine.part().stage() << std::endl;
+    std::cout << "   " << engine.part().title() << " in stage "
+              << engine.part().stage() << std::endl;
 
   double thrust = 0;
   double fuel_consumption = 0;

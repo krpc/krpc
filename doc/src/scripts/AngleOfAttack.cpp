@@ -36,7 +36,8 @@ int main() {
       angle = fabs(acos(dotProd / vMag) * (180.0 / pi));
 
     std::cout << "Angle of attack = "
-              << std::fixed << std::setprecision(1) << angle << " degrees" << std::endl;
+              << std::fixed << std::setprecision(1)
+              << angle << " degrees" << std::endl;
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }

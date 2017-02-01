@@ -38,10 +38,12 @@ staging of the active vessel. To add this to the server, compile the code and
 place the DLL in your GameData directory.
 
 .. literalinclude:: /scripts/ServiceAPIExample.lib.cs
+   :language: csharp
 
 The following example shows how this service can then be used from a python client:
 
 .. literalinclude:: /scripts/ServiceAPIExample.py
+   :language: python
 
 Some of the client libraries automatically pick up changes to the functionality
 provided by the server, including the Python and Lua clients. However, some

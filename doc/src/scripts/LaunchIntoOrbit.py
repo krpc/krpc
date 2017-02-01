@@ -42,7 +42,8 @@ while True:
 
     # Gravity turn
     if altitude() > turn_start_altitude and altitude() < turn_end_altitude:
-        frac = (altitude() - turn_start_altitude) / (turn_end_altitude - turn_start_altitude)
+        frac = ((altitude() - turn_start_altitude) /
+                (turn_end_altitude - turn_start_altitude))
         new_turn_angle = frac * 90
         if abs(new_turn_angle - turn_angle) > 0.5:
             turn_angle = new_turn_angle
@@ -81,7 +82,8 @@ a2 = r
 v1 = math.sqrt(mu*((2./r)-(1./a1)))
 v2 = math.sqrt(mu*((2./r)-(1./a2)))
 delta_v = v2 - v1
-node = vessel.control.add_node(ut() + vessel.orbit.time_to_apoapsis, prograde=delta_v)
+node = vessel.control.add_node(
+    ut() + vessel.orbit.time_to_apoapsis, prograde=delta_v)
 
 # Calculate burn time (using rocket equation)
 F = vessel.available_thrust

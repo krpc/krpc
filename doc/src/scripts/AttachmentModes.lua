@@ -1,6 +1,6 @@
 local krpc = require 'krpc'
 local conn = krpc.connect()
-local vessel = krpc.space_center.active_vessel
+local vessel = conn.space_center.active_vessel
 
 local root = vessel.parts.root
 local stack = {{root, 0}}
