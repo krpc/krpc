@@ -12,8 +12,7 @@ py_script(
       '@python_mccabe//file',
       '@python_astroid//file',
       '@python_wrapt//file',
-      '@python_lazy_object_proxy//file',
-      '@python_pylint//file'
+      '@python_lazy_object_proxy//file'
   ],
   visibility = ['//visibility:public']
 )

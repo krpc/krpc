@@ -170,23 +170,38 @@ py3_test = rule(
 )
 
 def _lint_impl(ctx):
-
     out = ctx.outputs.executable
     files = []
     deps = list(ctx.files.deps)
-    if ctx.attr.src:
-        # Run pylint on a python package
-        args = [ctx.attr.pkg]
-        deps.append(ctx.file.src)
+    pep8_args = []
+    pylint_args = []
+    if ctx.attr.pep8_config:
+        pep8_args.append('--config=%s' % ctx.file.pep8_config.short_path)
+    if ctx.attr.pylint_config:
+        pylint_args.append('--rcfile=%s' % ctx.file.pylint_config.short_path)
+    if ctx.attr.pkg:
+        # Run on a python package
+        pep8_args.append('env/lib/python*/site-packages/%s' % ctx.attr.pkg_name)
+        pylint_args.append(ctx.attr.pkg_name)
+        deps.append(ctx.file.pkg)
     else:
-        # Run pylint on a list of file paths
-        args = []
+        # Run on a list of file paths
         for x in ctx.files.srcs:
-            args.append(x.short_path)
+            pep8_args.append(x.short_path)
+            pylint_args.append(x.short_path)
         files.extend(ctx.files.srcs)
+
+    pep8 = ctx.executable.pep8
     pylint = ctx.executable.pylint
+    pep8_runfiles = list(ctx.attr.pep8.default_runfiles.files)
     pylint_runfiles = list(ctx.attr.pylint.default_runfiles.files)
-    runfiles = [pylint] + pylint_runfiles + files + deps + [ctx.file.rcfile]
+
+    runfiles = [pep8, pylint] + pep8_runfiles + pylint_runfiles + files + deps
+    if ctx.attr.pep8_config:
+        runfiles.append(ctx.file.pep8_config)
+    if ctx.attr.pylint_config:
+        runfiles.append(ctx.file.pylint_config)
+
     sub_commands = []
 
     # Install dependences in a new virtual env
@@ -194,15 +209,23 @@ def _lint_impl(ctx):
     for dep in deps:
         sub_commands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % dep.short_path)
 
-    # Run the pylint tool
+    # Run pep8
+    runfiles_dir = out.path + '.runfiles/krpc'
+    sub_commands.append('rm -rf %s' % runfiles_dir)
+    _add_runfile(sub_commands, pep8.short_path, runfiles_dir + '/' + pep8.basename)
+    for f in pep8_runfiles:
+        _add_runfile(sub_commands, f.short_path, runfiles_dir+ '/' + pep8.basename + '.runfiles/krpc/' + f.short_path)
+    sub_commands.append('%s/%s %s' % (runfiles_dir, pep8.basename, ' '.join(pep8_args)))
+
+    # Run pylint
     runfiles_dir = out.path + '.runfiles/krpc'
     sub_commands.append('rm -rf %s' % runfiles_dir)
     _add_runfile(sub_commands, pylint.short_path, runfiles_dir + '/' + pylint.basename)
     for f in pylint_runfiles:
         _add_runfile(sub_commands, f.short_path, runfiles_dir+ '/' + pylint.basename + '.runfiles/krpc/' + f.short_path)
-    # Set pythonpath so that pylint finds the dependent packags from the new env
-    #FIXME: make this generic, depends on usingn python2.7
-    sub_commands.append('PYTHONPATH=env/lib/python2.7/site-packages %s/%s %s %s' % (runfiles_dir, pylint.basename, '--rcfile=%s' % ctx.file.rcfile.short_path, ' '.join(args)))
+    # Set pythonpath so that pylint finds the dependent packages from the virtual environment
+    # FIXME: make this generic, depends on usingn python2.7
+    sub_commands.append('PYTHONPATH=env/lib/python2.7/site-packages %s/%s %s' % (runfiles_dir, pylint.basename, ' '.join(pylint_args)))
 
     ctx.file_action(
         ctx.outputs.executable,
@@ -218,11 +241,13 @@ def _lint_impl(ctx):
 py_lint_test = rule(
     implementation = _lint_impl,
     attrs = {
-        'src': attr.label(allow_files=True, single_file=True),
-        'pkg': attr.string(),
+        'pkg': attr.label(allow_files=True, single_file=True),
+        'pkg_name': attr.string(),
         'srcs': attr.label_list(allow_files=True),
         'deps': attr.label_list(allow_files=True),
-        'rcfile': attr.label(mandatory=True, allow_files=True, single_file=True),
+        'pep8_config': attr.label(allow_files=True, single_file=True),
+        'pylint_config': attr.label(allow_files=True, single_file=True),
+        'pep8': attr.label(default=Label('//tools/build/pep8'), executable=True, cfg='host'),
         'pylint': attr.label(default=Label('//tools/build/pylint'), executable=True, cfg='host')
     },
     test = True
