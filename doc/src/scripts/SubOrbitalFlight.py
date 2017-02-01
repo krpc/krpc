@@ -1,6 +1,6 @@
 import time
 import krpc
-conn = krpc.connect(name='Sub-orbital flight script')
+conn = krpc.connect(name='Sub-orbital flight')
 
 vessel = conn.space_center.active_vessel
 

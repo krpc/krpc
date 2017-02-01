@@ -8,14 +8,17 @@ import java.io.IOException;
 import java.lang.Math;
 
 public class AngleOfAttack {
-    public static void main(String[] args) throws IOException, RPCException, InterruptedException {
+    public static void main(String[] args)
+        throws IOException, RPCException, InterruptedException {
         Connection connection = Connection.newInstance("Angle of attack");
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         SpaceCenter.Vessel vessel = spaceCenter.getActiveVessel();
 
         while (true) {
-            Triplet<Double,Double,Double> d = vessel.direction(vessel.getOrbit().getBody().getReferenceFrame());
-            Triplet<Double,Double,Double> v = vessel.velocity(vessel.getOrbit().getBody().getReferenceFrame());
+            Triplet<Double,Double,Double> d =
+                vessel.direction(vessel.getOrbit().getBody().getReferenceFrame());
+            Triplet<Double,Double,Double> v =
+                vessel.velocity(vessel.getOrbit().getBody().getReferenceFrame());
 
             // Compute the dot product of d and v
             double dotProd =

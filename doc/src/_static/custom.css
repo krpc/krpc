@@ -10,3 +10,32 @@
     display: inline;
     padding-right: 0;
 }
+
+.rst-content .ui-tabs .ui-tabs-nav {
+    margin-bottom: 0;
+}
+
+.rst-content .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    padding: 0.2em;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+}
+
+.rst-content .ui-tabs .ui-tabs-nav li {
+    margin-left: 0.4em;
+    list-style: none;
+    border: 1px solid #2980B9;
+    border-radius: 3px;
+}
+
+.rst-content .ui-tabs ul.ui-tabs-nav li.ui-tabs-active {
+    border-color: #404040;
+}
+
+.rst-content .ui-tabs ul.ui-tabs-nav li.ui-tabs-active a {
+    color: #404040;
+}
+
+.rst-content .ui-tabs ul.ui-tabs-nav li.ui-tabs-active a:hover {
+    color: #404040;
+}

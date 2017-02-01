@@ -282,6 +282,12 @@ http_file(
 )
 
 http_file(
+    name = 'python_sphinx_tabs',
+    url = 'https://pypi.python.org/packages/a5/8b/389bd1837fa5661ff5241eea0724f57870226193ad969682a523c63c7831/sphinx-tabs-0.1.0.tar.gz',
+    sha256 = '745e6b2e6beab6d2874d881d9ea7c1f67ba32bc461f257fe73d4ca1f059318a7'
+)
+
+http_file(
     name = 'python_javalang',
     url = 'https://pypi.python.org/packages/e4/99/499d1eee94c53e7708c447e2f91c94c7789814ef0098b3259752c520c76a/javalang-0.10.1.tar.gz',
     sha256 = 'db8c63133e7b0ad0969212d0dda726d13b2bc9fb5c2c95e3fe2449d06f20a4c5'

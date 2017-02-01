@@ -29,7 +29,7 @@ targets = [line.strip() for line in
 paths = targets_to_paths(targets)
 
 # Auto-serve the docs
-p = subprocess.Popen(['sphinx-autobuild', '-B', '-p', sys.argv[1], sys.argv[2], sys.argv[3]])
+p = subprocess.Popen(['sphinx-autobuild', '-H', '0.0.0.0', '-p', sys.argv[1], sys.argv[2], sys.argv[3]])
 
 # Auto-build the docs when a file changes
 class ChangeHandler(pyinotify.ProcessEvent):

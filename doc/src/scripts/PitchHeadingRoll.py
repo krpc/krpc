@@ -37,22 +37,26 @@ while True:
     if vessel_direction[0] < 0:
         pitch = -pitch
 
-    # Compute the heading - the angle between north and the direction in the horizon plane
+    # Compute the heading - the angle between north and
+    # the direction in the horizon plane
     north = (0, 1, 0)
     heading = angle_between_vectors(north, horizon_direction)
     if horizon_direction[2] < 0:
         heading = 360 - heading
 
     # Compute the roll
-    # Compute the plane running through the vessels direction and the upwards direction
+    # Compute the plane running through the vessels direction
+    # and the upwards direction
     up = (1, 0, 0)
     plane_normal = cross_product(vessel_direction, up)
     # Compute the upwards direction of the vessel
     vessel_up = conn.space_center.transform_direction(
         (0, 0, -1), vessel.reference_frame, vessel.surface_reference_frame)
-    # Compute the angle between the upwards direction of the vessel and the plane normal
+    # Compute the angle between the upwards direction of
+    # the vessel and the plane normal
     roll = angle_between_vectors(vessel_up, plane_normal)
-    # Adjust so that the angle is between -180 and 180 and rolling right is +ve and left is -ve
+    # Adjust so that the angle is between -180 and 180 and
+    # rolling right is +ve and left is -ve
     if vessel_up[0] > 0:
         roll *= -1
     elif roll < 0:

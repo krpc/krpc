@@ -20,8 +20,9 @@ class LaunchIntoOrbit
         var flight = vessel.Flight ();
         var altitude = conn.AddStream (() => flight.MeanAltitude);
         var apoapsis = conn.AddStream (() => vessel.Orbit.ApoapsisAltitude);
-        var stage3Resources = vessel.ResourcesInDecoupleStage (stage: 3, cumulative: false);
-        var srbFuel = conn.AddStream (() => stage3Resources.Amount ("SolidFuel"));
+        var stage3Resources =
+            vessel.ResourcesInDecoupleStage (stage: 3, cumulative: false);
+        var srbFuel = conn.AddStream(() => stage3Resources.Amount("SolidFuel"));
 
         // Pre-launch setup
         vessel.Control.SAS = false;
@@ -48,12 +49,15 @@ class LaunchIntoOrbit
         while (true) {
 
             // Gravity turn
-            if (altitude.Get () > turnStartAltitude && altitude.Get () < turnEndAltitude) {
-                double frac = (altitude.Get () - turnStartAltitude) / (turnEndAltitude - turnStartAltitude);
+            if (altitude.Get () > turnStartAltitude &&
+                altitude.Get () < turnEndAltitude) {
+                double frac = (altitude.Get () - turnStartAltitude)
+                              / (turnEndAltitude - turnStartAltitude);
                 double newTurnAngle = frac * 90.0;
                 if (Math.Abs (newTurnAngle - turnAngle) > 0.5) {
                     turnAngle = newTurnAngle;
-                    vessel.AutoPilot.TargetPitchAndHeading ((float)(90 - turnAngle), 90);
+                    vessel.AutoPilot.TargetPitchAndHeading (
+                        (float)(90 - turnAngle), 90);
                 }
             }
 
@@ -94,7 +98,8 @@ class LaunchIntoOrbit
         double v1 = Math.Sqrt (mu * ((2.0 / r) - (1.0 / a1)));
         double v2 = Math.Sqrt (mu * ((2.0 / r) - (1.0 / a2)));
         double deltaV = v2 - v1;
-        var node = vessel.Control.AddNode (ut.Get () + vessel.Orbit.TimeToApoapsis, prograde: (float)deltaV);
+        var node = vessel.Control.AddNode (
+            ut.Get () + vessel.Orbit.TimeToApoapsis, prograde: (float)deltaV);
 
         // Calculate burn time (using rocket equation)
         double F = vessel.AvailableThrust;
@@ -126,7 +131,8 @@ class LaunchIntoOrbit
         System.Threading.Thread.Sleep ((int)((burnTime - 0.1) * 1000));
         Console.WriteLine ("Fine tuning");
         vessel.Control.Throttle = 0.05f;
-        var remainingBurn = conn.AddStream (() => node.RemainingBurnVector (node.ReferenceFrame));
+        var remainingBurn = conn.AddStream (
+            () => node.RemainingBurnVector (node.ReferenceFrame));
         while (remainingBurn.Get ().Item1 > 0) {
         }
         vessel.Control.Throttle = 0;
