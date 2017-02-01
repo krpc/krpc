@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class TestPartsCargoBay(krpctest.TestCase):
 
     @classmethod
@@ -51,6 +52,7 @@ class TestPartsCargoBay(krpctest.TestCase):
     def test_service_bay(self):
         part = self.parts.with_title('Service Bay (2.5m)')[0]
         self.check_open_close(part.cargo_bay)
+
 
 if __name__ == '__main__':
     unittest.main()

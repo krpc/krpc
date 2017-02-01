@@ -2,6 +2,7 @@ import unittest
 import krpc
 import krpctest
 
+
 class TestLine(krpctest.TestCase):
 
     @classmethod
@@ -46,6 +47,7 @@ class TestLine(krpctest.TestCase):
         self.assertAlmostEqual(1.234, line.thickness)
         self.wait()
         line.remove()
+
 
 if __name__ == '__main__':
     unittest.main()

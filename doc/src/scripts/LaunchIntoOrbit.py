@@ -42,8 +42,8 @@ while True:
 
     # Gravity turn
     if altitude() > turn_start_altitude and altitude() < turn_end_altitude:
-        frac = ((altitude() - turn_start_altitude)
-                / (turn_end_altitude - turn_start_altitude))
+        frac = ((altitude() - turn_start_altitude) /
+                (turn_end_altitude - turn_start_altitude))
         new_turn_angle = frac * 90
         if abs(new_turn_angle - turn_angle) > 0.5:
             turn_angle = new_turn_angle

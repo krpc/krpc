@@ -1,11 +1,13 @@
-from google.protobuf.internal import encoder as protobuf_encoder  # pylint: disable=import-error,no-name-in-module
+# pylint: disable=import-error,no-name-in-module
+from google.protobuf.internal import encoder as protobuf_encoder
 from krpc.types import Types, ValueType, MessageType, ClassType, EnumType
 from krpc.types import ListType, DictionaryType, SetType, TupleType
 from krpc.platform import bytelength
 
 
 class Encoder(object):
-    """ Routines for encoding messages and values in the protocol buffer serialization format """
+    """ Routines for encoding messages and values in
+        the protocol buffer serialization format """
 
     RPC_HELLO_MESSAGE = b'\x48\x45\x4C\x4C\x4F\x2D\x52\x50\x43\x00\x00\x00'
     STREAM_HELLO_MESSAGE = b'\x48\x45\x4C\x4C\x4F\x2D\x53\x54\x52\x45\x41\x4D'
@@ -63,9 +65,11 @@ class Encoder(object):
         elif isinstance(typ, TupleType):
             msg = cls._types.as_type('KRPC.Tuple').python_type()
             if len(x) != len(typ.value_types):
-                raise ValueError('Tuple has wrong number of elements. ' +
-                                 'Expected %d, got %d.' % (len(typ.value_types), len(x)))
-            msg.items.extend(cls.encode(item, value_type) for item, value_type in zip(x, typ.value_types))
+                raise ValueError(
+                    'Tuple has wrong number of elements. ' +
+                    'Expected %d, got %d.' % (len(typ.value_types), len(x)))
+            msg.items.extend(cls.encode(item, value_type)
+                             for item, value_type in zip(x, typ.value_types))
             return msg.SerializeToString()
         else:
             raise RuntimeError('Cannot encode objects of type ' + str(type(x)))
@@ -84,7 +88,8 @@ class Encoder(object):
 
 
 class _ValueEncoder(object):
-    """ Routines for encoding values in the protocol buffer serialization format """
+    """ Routines for encoding values in the
+        protocol buffer serialization format """
 
     @classmethod
     def encode_double(cls, value):

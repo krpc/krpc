@@ -3,6 +3,7 @@ import krpctest
 from krpctest.geometry import vector, norm, normalize
 import krpc
 
+
 class TestNode(krpctest.TestCase):
 
     @classmethod
@@ -19,7 +20,8 @@ class TestNode(krpctest.TestCase):
         self.assertAlmostEqual(delta_v[1], node.normal, places=3)
         self.assertAlmostEqual(delta_v[2], node.radial, places=3)
         self.assertAlmostEqual(norm(delta_v), node.delta_v, places=3)
-        self.assertAlmostEqual(norm(delta_v), node.remaining_delta_v, delta=0.2)
+        self.assertAlmostEqual(norm(delta_v),
+                               node.remaining_delta_v, delta=0.2)
 
         bv = node.burn_vector(node.reference_frame)
         self.assertAlmostEqual(norm(delta_v), norm(bv), places=3)
@@ -27,12 +29,15 @@ class TestNode(krpctest.TestCase):
 
         orbital_bv = node.burn_vector(node.orbital_reference_frame)
         self.assertAlmostEqual(norm(delta_v), norm(orbital_bv), places=3)
-        self.assertAlmostEqual((-delta_v[2], delta_v[0], delta_v[1]), orbital_bv, places=3)
+        self.assertAlmostEqual(
+            (-delta_v[2], delta_v[0], delta_v[1]), orbital_bv, places=3)
 
         direction = node.direction(node.reference_frame)
         self.assertAlmostEqual((0, 1, 0), direction, places=3)
         orbital_direction = node.direction(node.orbital_reference_frame)
-        self.assertAlmostEqual(normalize((-delta_v[2], delta_v[0], delta_v[1])), orbital_direction, places=3)
+        self.assertAlmostEqual(
+            normalize((-delta_v[2], delta_v[0], delta_v[1])),
+            orbital_direction, places=3)
 
     def test_add_node(self):
         start_ut = self.space_center.ut
@@ -56,8 +61,8 @@ class TestNode(krpctest.TestCase):
         self.control.add_node(self.space_center.ut+60, 0, 4, 0)
         self.control.remove_nodes()
         # TODO: don't skip the following
-        #with self.assertRaises (krpc.client.RPCError):
-        #    node.prograde = 0
+        # with self.assertRaises (krpc.client.RPCError):
+        #     node.prograde = 0
 
     def test_get_nodes(self):
         self.assertEqual([], self.control.nodes)
@@ -107,7 +112,8 @@ class TestNode(krpctest.TestCase):
         gm = self.space_center.bodies['Kerbin'].gravitational_parameter
         vsq = (orbit0.speed + delta_v[0])**2
         radius = orbit0.radius
-        self.assertAlmostEqual(gm / ((2*gm/radius) - vsq), orbit1.semi_major_axis, delta=1)
+        self.assertAlmostEqual(
+            gm / ((2*gm/radius) - vsq), orbit1.semi_major_axis, delta=1)
 
         # Check there is no inclination change
         self.assertAlmostEqual(orbit0.inclination, orbit1.inclination)
@@ -118,6 +124,7 @@ class TestNode(krpctest.TestCase):
         eccentricit = (radius_ap - radius_pe) / (radius_ap + radius_pe)
         self.assertGreater(orbit1.eccentricity, orbit0.eccentricity)
         self.assertAlmostEqual(eccentricit, orbit1.eccentricity)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -14,8 +14,9 @@ import krpc.schema.KRPC
 class Client(object):
     """
     A kRPC client, through which all Remote Procedure Calls are made.
-    Services provided by the server that the client connects to are automatically added.
-    RPCs can be made using client.ServiceName.ProcedureName(parameter)
+    Services provided by the server that the client connects
+    to are automatically added. RPCs can be made using
+    client.ServiceName.ProcedureName(parameter)
     """
 
     def __init__(self, rpc_connection, stream_connection):
@@ -29,18 +30,21 @@ class Client(object):
         self._response_type = self._types.as_type('KRPC.Response')
 
         # Get the services
-        services = self._invoke('KRPC', 'GetServices', [], [], [], self._types.as_type('KRPC.Services')).services
+        services = self._invoke('KRPC', 'GetServices', [], [], [],
+                                self._types.as_type('KRPC.Services')).services
 
         # Set up services
         for service in services:
-            setattr(self, snake_case(service.name), create_service(self, service))
+            setattr(self, snake_case(service.name),
+                    create_service(self, service))
 
         # Set up stream update thread
         if stream_connection is not None:
             self._stream_thread_stop = threading.Event()
-            self._stream_thread = threading.Thread(target=krpc.stream.update_thread,
-                                                   args=(stream_connection, self._stream_thread_stop,
-                                                         self._stream_cache, self._stream_cache_lock))
+            self._stream_thread = threading.Thread(
+                target=krpc.stream.update_thread,
+                args=(stream_connection, self._stream_thread_stop,
+                      self._stream_cache, self._stream_cache_lock))
             self._stream_thread.daemon = True
             self._stream_thread.start()
         else:
@@ -72,11 +76,13 @@ class Client(object):
         finally:
             stream.remove()
 
-    def _invoke(self, service, procedure, args, param_names, param_types, return_type):
+    def _invoke(self, service, procedure, args,
+                param_names, param_types, return_type):
         """ Execute an RPC """
 
         # Build the request
-        request = self._build_request(service, procedure, args, param_names, param_types, return_type)
+        request = self._build_request(
+            service, procedure, args, param_names, param_types, return_type)
 
         # Send the request
         with self._rpc_connection_lock:
@@ -93,11 +99,13 @@ class Client(object):
             result = Decoder.decode(response.return_value, return_type)
         return result
 
+    # pylint: disable=unused-argument
     def _build_request(self, service, procedure, args,
-                       param_names, param_types, return_type):  # pylint: disable=unused-argument
+                       param_names, param_types, return_type):
         """ Build a KRPC.Request object """
 
-        request = krpc.schema.KRPC.Request(service=service, procedure=procedure)
+        request = krpc.schema.KRPC.Request(
+            service=service, procedure=procedure)
 
         for i, (value, typ) in enumerate(itertools.izip(args, param_types)):
             if isinstance(value, DefaultArgument):
@@ -106,8 +114,9 @@ class Client(object):
                 try:
                     value = self._types.coerce_to(value, typ)
                 except ValueError:
-                    raise TypeError('%s.%s() argument %d must be a %s, got a %s' %
-                                    (service, procedure, i, typ.python_type, type(value)))
+                    raise TypeError(
+                        '%s.%s() argument %d must be a %s, got a %s' %
+                        (service, procedure, i, typ.python_type, type(value)))
             request.arguments.add(position=i, value=Encoder.encode(value, typ))
 
         return request
@@ -118,7 +127,8 @@ class Client(object):
         self._rpc_connection.send(data)
 
     def _receive_response(self):
-        """ Receive data from the server and decode it into a KRPC.Response object """
+        """ Receive data from the server and
+            decode it into a KRPC.Response object """
 
         # Read the size and position of the response message
         data = b''

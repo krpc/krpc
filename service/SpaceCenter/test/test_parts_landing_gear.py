@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class TestPartsLandingGear(krpctest.TestCase):
 
     def setUp(self):
@@ -8,8 +9,10 @@ class TestPartsLandingGear(krpctest.TestCase):
         self.launch_vessel_from_vab('PartsLandingGear')
         self.remove_other_vessels()
         self.parts = self.connect().space_center.active_vessel.parts
-        self.gear = self.parts.with_title('LY-99 Extra Large Landing Gear')[0].landing_gear
-        self.fixed_gear = self.parts.with_title('LY-01 Fixed Landing Gear')[0].landing_gear
+        self.gear = self.parts.with_title(
+            'LY-99 Extra Large Landing Gear')[0].landing_gear
+        self.fixed_gear = self.parts.with_title(
+            'LY-01 Fixed Landing Gear')[0].landing_gear
         self.state = self.connect().space_center.LandingGearState
 
     def test_deploy_and_retract(self):
@@ -44,6 +47,7 @@ class TestPartsLandingGear(krpctest.TestCase):
         self.parts.launch_clamps[0].release()
         self.wait(1)
         self.assertTrue(self.gear.is_grounded)
+
 
 if __name__ == '__main__':
     unittest.main()

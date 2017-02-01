@@ -2,6 +2,7 @@ import unittest
 import krpctest
 import krpc
 
+
 class TestPartsExperiment(krpctest.TestCase):
 
     def setUp(self):
@@ -10,7 +11,8 @@ class TestPartsExperiment(krpctest.TestCase):
         self.remove_other_vessels()
         parts = self.connect().space_center.active_vessel.parts
         self.pod = parts.with_title('Mk1 Command Pod')[0].experiment
-        self.goo = [x for x in parts.all if x.name == 'GooExperiment'][0].experiment
+        self.goo = [x for x in parts.all
+                    if x.name == 'GooExperiment'][0].experiment
 
     def test_pod(self):
         self.assertFalse(self.pod.deployed)
@@ -42,7 +44,9 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertAlmostEqual(1.0, subject.data_scale)
         self.assertAlmostEqual(1.0, subject.scientific_value)
         self.assertAlmostEqual(0.3, subject.subject_value)
-        self.assertEqual(u'Mystery Goo\u2122 Observation from LaunchPadPlatform', subject.title)
+        self.assertEqual(
+            u'Mystery Goo\u2122 Observation from LaunchPadPlatform',
+            subject.title)
 
     def test_run_and_dump_data(self):
         self.assertFalse(self.pod.deployed)
@@ -159,6 +163,7 @@ class TestPartsExperiment(krpctest.TestCase):
             self.assertFalse(self.pod.inoperable)
             self.assertFalse(self.pod.has_data)
             self.assertItemsEqual([], self.pod.data)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -2,6 +2,7 @@ import unittest
 import krpctest
 import krpc
 
+
 class TestPartsFuelLines(krpctest.TestCase):
 
     @classmethod
@@ -56,6 +57,7 @@ class TestPartsFuelLines(krpctest.TestCase):
         with self.assertRaises(krpc.error.RPCError) as cm:
             getattr(part, 'fuel_lines_from')
         self.assertTrue('Part is a fuel line' in str(cm.exception))
+
 
 if __name__ == '__main__':
     unittest.main()

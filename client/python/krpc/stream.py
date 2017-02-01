@@ -5,12 +5,14 @@ from krpc.error import RPCError
 
 class StreamExistsError(RuntimeError):
     def __init__(self, stream_id):
-        super(StreamExistsError, self).__init__('stream %d already exists' % stream_id)
+        super(StreamExistsError, self).__init__(
+            'stream %d already exists' % stream_id)
         self.stream_id = stream_id
 
 
 class Stream(object):
-    """ A streamed request. When invoked, returns the most recent value of the request. """
+    """ A streamed request. When invoked, returns the
+        most recent value of the request. """
 
     def __init__(self, conn, func, *args, **kwargs):
         self._conn = conn
@@ -109,7 +111,8 @@ def update_thread(connection, stop, cache, cache_lock):
 
                 # Check for an error response
                 if response.response.has_error:
-                    cache[response.id].value = RPCError(response.response.error)
+                    cache[response.id].value = RPCError(
+                        response.response.error)
                     continue
 
                 # Decode the return value and store it in the cache

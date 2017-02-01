@@ -47,15 +47,19 @@ class TestEncoder(unittest.TestCase):
         self.assertEqual('ac02', hexlify(data))
 
     def test_encode_unicode_string(self):
-        data = Encoder.encode(b'\xe2\x84\xa2'.decode('utf-8'), self.types.as_type('string'))
+        data = Encoder.encode(
+            b'\xe2\x84\xa2'.decode('utf-8'), self.types.as_type('string'))
         self.assertEqual('03e284a2', hexlify(data))
 
     def test_encode_message_delimited(self):
         request = krpc.schema.KRPC.Request()
         request.service = 'ServiceName'
         request.procedure = 'ProcedureName'
-        data = Encoder.encode_delimited(request, self.types.as_type('KRPC.Request'))
-        expected = '1c' + '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
+        data = Encoder.encode_delimited(
+            request, self.types.as_type('KRPC.Request'))
+        expected = '1c' + \
+                   '0a0b536572766963654e616d6512' + \
+                   '0d50726f6365647572654e616d65'
         self.assertEqual(expected, hexlify(data))
 
     def test_encode_value_delimited(self):

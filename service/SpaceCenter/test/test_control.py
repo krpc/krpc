@@ -3,6 +3,7 @@ import krpctest
 from krpctest.geometry import normalize
 import krpc
 
+
 class TestControlMixin(object):
 
     def test_special_action_groups(self):
@@ -20,9 +21,12 @@ class TestControlMixin(object):
             self.assertTrue(self.control.get_action_group(i))
             self.control.toggle_action_group(i)
             self.assertFalse(self.control.get_action_group(i))
-        self.assertRaises(krpc.client.RPCError, self.control.set_action_group, 11, False)
-        self.assertRaises(krpc.client.RPCError, self.control.get_action_group, 11)
-        self.assertRaises(krpc.client.RPCError, self.control.toggle_action_group, 11)
+        self.assertRaises(krpc.client.RPCError,
+                          self.control.set_action_group, 11, False)
+        self.assertRaises(krpc.client.RPCError,
+                          self.control.get_action_group, 11)
+        self.assertRaises(krpc.client.RPCError,
+                          self.control.toggle_action_group, 11)
 
     def test_pitch_control(self):
         self.connect().testing_tools.clear_rotation(self.vessel)
@@ -64,7 +68,8 @@ class TestControlMixin(object):
         self.control.roll = 0.0
 
         self.assertAlmostEqual(pitch, self.orbital_flight.pitch, delta=1)
-        self.assertDegreesAlmostEqual(heading, self.orbital_flight.heading, delta=1)
+        self.assertDegreesAlmostEqual(
+            heading, self.orbital_flight.heading, delta=1)
 
         # Check flight is rolling in correct direction
         roll = self.orbital_flight.roll
@@ -105,12 +110,12 @@ class TestControlMixin(object):
         self.wait()
         # No target set, should not change
         # TODO: test with a target set
-        #self.control.sas_mode = sas_mode.target
-        #self.assertEqual(self.control.sas_mode, sas_mode.anti_radial)
-        #self.wait()
-        #self.control.sas_mode = sas_mode.anti_target
-        #self.assertEqual(self.control.sas_mode, sas_mode.anti_radial)
-        #self.wait()
+        # self.control.sas_mode = sas_mode.target
+        # self.assertEqual(self.control.sas_mode, sas_mode.anti_radial)
+        # self.wait()
+        # self.control.sas_mode = sas_mode.anti_target
+        # self.assertEqual(self.control.sas_mode, sas_mode.anti_radial)
+        # self.wait()
         self.control.sas_mode = sas_mode.stability_assist
         self.control.sas = False
 
@@ -124,11 +129,12 @@ class TestControlMixin(object):
         self.wait()
         # No target set, should not change
         # TODO: test with a target set
-        #self.control.speed_mode = speed_mode.target
-        #self.assertEqual(self.control.speed_mode, speed_mode.surface)
-        #self.wait()
-        #self.control.speed_mode = speed_mode.orbit
-        #self.assertEqual(self.control.speed_mode, speed_mode.orbit)
+        # self.control.speed_mode = speed_mode.target
+        # self.assertEqual(self.control.speed_mode, speed_mode.surface)
+        # self.wait()
+        # self.control.speed_mode = speed_mode.orbit
+        # self.assertEqual(self.control.speed_mode, speed_mode.orbit)
+
 
 class TestControlActiveVessel(krpctest.TestCase, TestControlMixin):
 
@@ -143,7 +149,8 @@ class TestControlActiveVessel(krpctest.TestCase, TestControlMixin):
         cls.vessel = cls.space_center.active_vessel
         cls.control = cls.vessel.control
         cls.auto_pilot = cls.vessel.auto_pilot
-        cls.orbital_flight = cls.vessel.flight(cls.vessel.orbital_reference_frame)
+        cls.orbital_flight = cls.vessel.flight(
+            cls.vessel.orbital_reference_frame)
 
     def test_equality(self):
         self.assertEqual(self.space_center.active_vessel.control, self.control)
@@ -166,6 +173,7 @@ class TestControlActiveVessel(krpctest.TestCase, TestControlMixin):
         self.assertEqual(self.control.yaw, 0)
         self.assertEqual(self.control.roll, 0)
 
+
 class TestControlNonActiveVessel(krpctest.TestCase, TestControlMixin):
 
     @classmethod
@@ -180,7 +188,8 @@ class TestControlNonActiveVessel(krpctest.TestCase, TestControlMixin):
                           if v != cls.space_center.active_vessel)
         cls.control = cls.vessel.control
         cls.auto_pilot = cls.vessel.auto_pilot
-        cls.orbital_flight = cls.vessel.flight(cls.vessel.orbital_reference_frame)
+        cls.orbital_flight = cls.vessel.flight(
+            cls.vessel.orbital_reference_frame)
 
         # Move the vessels apart
         cls.control.rcs = True
@@ -191,11 +200,14 @@ class TestControlNonActiveVessel(krpctest.TestCase, TestControlMixin):
         cls.wait(1)
 
     def test_equality(self):
-        self.assertNotEqual(self.space_center.active_vessel.control, self.control)
+        self.assertNotEqual(
+            self.space_center.active_vessel.control, self.control)
 
     def test_maneuver_node_editing(self):
-        self.assertRaises(krpc.client.RPCError,
-                          self.control.add_node, self.space_center.ut + 60, 100, 0, 0)
+        self.assertRaises(
+            krpc.client.RPCError,
+            self.control.add_node, self.space_center.ut + 60, 100, 0, 0)
+
 
 class TestControlStaging(krpctest.TestCase):
 
@@ -211,6 +223,7 @@ class TestControlStaging(krpctest.TestCase):
             self.wait(0.5)
             self.control.activate_next_stage()
         self.assertEqual(0, self.control.current_stage)
+
 
 class TestControlRover(krpctest.TestCase):
 
@@ -239,8 +252,10 @@ class TestControlRover(krpctest.TestCase):
         # Check the rover is moving north
         self.assertGreater(self.flight.horizontal_speed, 0)
         direction = normalize(self.flight.velocity)
-        # In the body's reference frame, y-axis points from CoM to north pole
-        # As we are close to the equator, this is very close to the north direction
+        # In the body's reference frame, y-axis points
+        # from the CoM to the north pole
+        # As we are close to the equator,
+        # this is very close to the north direction
         self.assertAlmostEqual((0, 1, 0), direction, delta=0.2)
 
         # Apply brakes
@@ -266,8 +281,10 @@ class TestControlRover(krpctest.TestCase):
         # Check the rover is moving south
         self.assertGreater(self.flight.horizontal_speed, 0)
         direction = normalize(self.flight.velocity)
-        # In the body's reference frame, y-axis points from CoM to north pole
-        # As we are close to the equator, this is very close to the north direction
+        # In the body's reference frame, y-axis points
+        # from the CoM to the north pole
+        # As we are close to the equator,
+        # this is very close to the north direction
         self.assertAlmostEqual((0, -1, 0), direction, delta=0.2)
 
         # Apply brakes
@@ -339,6 +356,7 @@ class TestControlRover(krpctest.TestCase):
         # Wait until the rover has stopped
         while self.flight.horizontal_speed > 0.01:
             self.wait()
+
 
 if __name__ == '__main__':
     unittest.main()

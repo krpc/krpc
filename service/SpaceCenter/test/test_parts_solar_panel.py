@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class TestPartsSolarPanel(krpctest.TestCase):
 
     @classmethod
@@ -12,8 +13,10 @@ class TestPartsSolarPanel(krpctest.TestCase):
         parts = cls.vessel.parts
         cls.state = cls.connect().space_center.SolarPanelState
         cls.panel = parts.with_title('Gigantor XL Solar Array')[0].solar_panel
-        cls.fixed_panel = parts.with_title('OX-STAT Photovoltaic Panels')[0].solar_panel
-        cls.panel_break = parts.with_title('OX-4L 1x6 Photovoltaic Panels')[0].solar_panel
+        cls.fixed_panel = parts.with_title(
+            'OX-STAT Photovoltaic Panels')[0].solar_panel
+        cls.panel_break = parts.with_title(
+            'OX-4L 1x6 Photovoltaic Panels')[0].solar_panel
 
     def test_fixed_panel(self):
         self.assertTrue(self.fixed_panel.deployed)
@@ -68,6 +71,7 @@ class TestPartsSolarPanel(krpctest.TestCase):
         self.vessel.control.activate_next_stage()
         self.wait(1)
         self.assertEqual(self.state.broken, self.panel_break.state)
+
 
 if __name__ == '__main__':
     unittest.main()

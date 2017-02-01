@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class TestServo(krpctest.TestCase):
 
     @classmethod
@@ -75,6 +76,7 @@ class TestServo(krpctest.TestCase):
         while servo.is_moving:
             self.wait()
         self.assertFalse(servo.is_moving)
+
 
 if __name__ == '__main__':
     unittest.main()

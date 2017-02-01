@@ -40,7 +40,8 @@ class TestConnection(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls._started_server = threading.Event()
-        server = threading.Thread(target=server_thread, args=(cls._started_server,))
+        server = threading.Thread(
+            target=server_thread, args=(cls._started_server,))
         server.daemon = True
         server.start()
         cls._started_server.wait()
@@ -75,7 +76,8 @@ class TestConnection(unittest.TestCase):
         conn.send(message)
         partial = conn.partial_receive(4096)
         self.assertEqual(message[:len(partial)], partial)
-        self.assertEqual(message[len(partial):], conn.receive(len(message) - len(partial)))
+        self.assertEqual(message[len(partial):],
+                         conn.receive(len(message) - len(partial)))
 
     def test_receive_on_remote_closed_connection(self):
         conn = self.connect()

@@ -1,18 +1,23 @@
 import math
 import functools
 
+
 def rad2deg(rad):
     return rad * 180 / math.pi
 
+
 def norm(v):
     return math.sqrt(sum(x*x for x in v))
+
 
 def normalize(v):
     mag = norm(v)
     return tuple(x/mag for x in v)
 
+
 def dot(u, v):
     return sum(x*y for x, y in zip(u, v))
+
 
 def cross(u, v):
     return (
@@ -20,6 +25,7 @@ def cross(u, v):
         u[2]*v[0] - u[0]*v[2],
         u[0]*v[1] - u[1]*v[0]
     )
+
 
 def quaternion_axis_angle(axis, angle):
     return (
@@ -29,11 +35,15 @@ def quaternion_axis_angle(axis, angle):
         math.cos(angle/2)
     )
 
+
 def quaternion_vector_mult(q, v):
-    return quaternion_mult(q, quaternion_mult((v[0], v[1], v[2], 0), quaternion_conjugate(q)))[:3]
+    r = quaternion_mult((v[0], v[1], v[2], 0), quaternion_conjugate(q))
+    return quaternion_mult(q, r)[:3]
+
 
 def quaternion_conjugate(q):
     return (-q[0], -q[1], -q[2], q[3])
+
 
 def quaternion_mult(q, r):
     q0, q1, q2, q3 = q
@@ -44,8 +54,10 @@ def quaternion_mult(q, r):
     t3 = - r0*q0 - r1*q1 - r2*q2 + r3*q3
     return (t0, t1, t2, t3)
 
+
 def vector(v):
     return Vector(v)
+
 
 @functools.total_ordering
 class Vector(object):
@@ -100,8 +112,10 @@ class Vector(object):
     def __repr__(self):
         return self.v.__repr__()
 
+
 def compute_position(obj, ref):
-    """ Compute the objects position in the given reference frame (in Mm) from it's orbital elements """
+    """ Compute the objects position in the given
+        reference frame (in Mm) from its orbital elements """
     orbit = obj.orbit
     major_axis = orbit.semi_major_axis / 1000000
     minor_axis = orbit.semi_minor_axis / 1000000

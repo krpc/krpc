@@ -5,7 +5,8 @@ from enum import Enum
 from krpc.attributes import Attributes
 from krpc.utils import split_type_string
 
-PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']
+PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32',
+                        'uint64', 'bool', 'string', 'bytes']
 PYTHON_VALUE_TYPES = [float, int, long, bool, str, bytes]
 PROTOBUF_TO_PYTHON_VALUE_TYPE = {
     'double': float,
@@ -31,7 +32,8 @@ def _load_types(package):
         module = importlib.import_module('krpc.schema.' + package)
         if hasattr(module, 'DESCRIPTOR'):
             for name in module.DESCRIPTOR.message_types_by_name.keys():
-                PROTOBUF_TO_MESSAGE_TYPE[package + '.' + name] = getattr(module, name)
+                PROTOBUF_TO_MESSAGE_TYPE[package + '.' + name] = getattr(
+                    module, name)
     except (KeyError, ImportError, AttributeError, ValueError):
         pass
 
@@ -40,9 +42,9 @@ _load_types.loaded = set()
 
 
 class Types(object):
-    """ A type store. Used to obtain type objects from protocol buffer type strings,
-        and stores python types for services and service defined class and
-        enumeration types. """
+    """ A type store. Used to obtain type objects from protocol buffer type
+        strings, and stores python types for services and service defined
+        class and enumeration types. """
 
     def __init__(self):
         # Mapping from protobuf type strings to type objects
@@ -54,7 +56,8 @@ class Types(object):
             return self._types[type_string]
 
         # TODO: add enumeration types
-        # Update kRPC server to attach type attributes to parameters/return types etc. that are of type KRPCEnum
+        # Update kRPC server to attach type attributes to parameters/return
+        # types etc. that are of type KRPCEnum
         # Will allow proper type checking of enum values passed to procedures
         # pylint: disable=redefined-variable-type
         if type_string in PROTOBUF_VALUE_TYPES:
@@ -65,7 +68,8 @@ class Types(object):
             typ = EnumType(type_string, doc)
         elif type_string.startswith('List(') or type_string == 'List':
             typ = ListType(type_string, self)
-        elif type_string.startswith('Dictionary(') or type_string == 'Dictionary':
+        elif (type_string.startswith('Dictionary(') or
+              type_string == 'Dictionary'):
             typ = DictionaryType(type_string, self)
         elif type_string.startswith('Set(') or type_string == 'Set':
             typ = SetType(type_string, self)
@@ -74,13 +78,15 @@ class Types(object):
         else:
             # A message type
             if not re.match(r'^[A-Za-z0-9_\.]+$', type_string):
-                raise ValueError('\'%s\' is not a valid type string' % type_string)
+                raise ValueError(
+                    '\'%s\' is not a valid type string' % type_string)
             package, _, _ = type_string.rpartition('.')
             _load_types(package)
             if type_string in PROTOBUF_TO_MESSAGE_TYPE:
                 typ = MessageType(type_string)
             else:
-                raise ValueError('\'%s\' is not a valid type string' % type_string)
+                raise ValueError(
+                    '\'%s\' is not a valid type string' % type_string)
         # pylint: enable=redefined-variable-type
 
         self._types[type_string] = typ
@@ -122,33 +128,36 @@ class Types(object):
         # Coerce identical class types from different client connections
         if isinstance(typ, ClassType) and isinstance(value, ClassBase):
             value_type = type(value)
-            if (
-                    typ.python_type._service_name == value_type._service_name
-                    and typ.python_type._class_name == value_type._class_name
-            ):
+            if typ.python_type._service_name == value_type._service_name and \
+               typ.python_type._class_name == value_type._class_name:
                 return typ.python_type(value._object_id)
         # Collection types
         try:
             # Coerce tuples to lists
-            if isinstance(value, collections.Iterable) and isinstance(typ, ListType):
-                return typ.python_type(self.coerce_to(x, typ.value_type) for x in value)
+            if isinstance(value, collections.Iterable) and \
+               isinstance(typ, ListType):
+                return typ.python_type(
+                    self.coerce_to(x, typ.value_type) for x in value)
             # Coerce lists (with appropriate number of elements) to tuples
-            if isinstance(value, collections.Iterable) and isinstance(typ, TupleType):
+            if isinstance(value, collections.Iterable) and \
+               isinstance(typ, TupleType):
                 if len(value) != len(typ.value_types):
                     raise ValueError
-                return typ.python_type([self.coerce_to(x, typ.value_types[i]) for i, x in enumerate(value)])
+                return typ.python_type(
+                    [self.coerce_to(x, typ.value_types[i])
+                     for i, x in enumerate(value)])
         except ValueError:
-            raise ValueError('Failed to coerce value ' + str(value) + ' of type ' + str(type(value)) +
+            raise ValueError('Failed to coerce value ' + str(value) +
+                             ' of type ' + str(type(value)) +
                              ' to type ' + str(typ))
         # Numeric types
         # See http://docs.python.org/2/reference/datamodel.html#coercion-rules
         numeric_types = (float, int, long)
-        if (
-                isinstance(value, bool)
-                or not any(isinstance(value, t) for t in numeric_types)
-                or typ.python_type not in numeric_types
-        ):
-            raise ValueError('Failed to coerce value ' + str(value) + ' of type ' + str(type(value)) +
+        if isinstance(value, bool) or \
+           not any(isinstance(value, t) for t in numeric_types) or \
+           typ.python_type not in numeric_types:
+            raise ValueError('Failed to coerce value ' + str(value) +
+                             ' of type ' + str(type(value)) +
                              ' to type ' + str(typ))
         if typ.python_type == float:
             return float(value)
@@ -184,7 +193,9 @@ class ValueType(TypeBase):
 
     def __init__(self, type_string):
         if type_string not in PROTOBUF_TO_PYTHON_VALUE_TYPE:
-            raise ValueError('\'%s\' is not a valid type string for a value type' % type_string)
+            raise ValueError(
+                '\'%s\' is not a valid type string for a value type' %
+                type_string)
         typ = PROTOBUF_TO_PYTHON_VALUE_TYPE[type_string]
         super(ValueType, self).__init__(type_string, typ)
 
@@ -196,7 +207,9 @@ class MessageType(TypeBase):
         package, _, _ = type_string.rpartition('.')
         _load_types(package)
         if type_string not in PROTOBUF_TO_MESSAGE_TYPE:
-            raise ValueError('\'%s\' is not a valid type string for a message type' % type_string)
+            raise ValueError(
+                '\'%s\' is not a valid type string for a message type' %
+                type_string)
         typ = PROTOBUF_TO_MESSAGE_TYPE[type_string]
         super(MessageType, self).__init__(type_string, typ)
 
@@ -207,7 +220,9 @@ class ClassType(TypeBase):
     def __init__(self, type_string, doc):
         match = re.match(r'Class\(([^\.]+)\.([^\.]+)\)', type_string)
         if not match:
-            raise ValueError('\'%s\' is not a valid type string for a class type' % type_string)
+            raise ValueError(
+                '\'%s\' is not a valid type string for a class type' %
+                type_string)
         service_name = match.group(1)
         class_name = match.group(2)
         typ = _create_class_type(service_name, class_name, doc)
@@ -220,16 +235,21 @@ class EnumType(TypeBase):
     def __init__(self, type_string, doc):
         match = re.match(r'Enum\(([^\.]+)\.([^\.]+)\)', type_string)
         if not match:
-            raise ValueError('\'%s\' is not a valid type string for an enumeration type' % type_string)
+            raise ValueError(
+                '\'%s\' is not a valid type string for an enumeration type' %
+                type_string)
         self._service_name = match.group(1)
         self._enum_name = match.group(2)
         self._doc = doc
-        # Sets python_type to None, set_values must be called to set the python_type
+        # Sets python_type to None, set_values
+        # must be called to set the python_type
         super(EnumType, self).__init__(str(type_string), None)
 
     def set_values(self, values):
-        """ Set the python type. Creates an Enum class using the given values. """
-        self._python_type = _create_enum_type(self._enum_name, values, self._doc)
+        """ Set the python type. Creates an Enum class
+            using the given values. """
+        self._python_type = _create_enum_type(
+            self._enum_name, values, self._doc)
 
 
 class ListType(TypeBase):
@@ -237,7 +257,9 @@ class ListType(TypeBase):
 
     def __init__(self, type_string, types):
         if not (type_string.startswith('List(') and type_string.endswith(')')):
-            raise ValueError('\'%s\' is not a valid type string for a list type' % type_string)
+            raise ValueError(
+                '\'%s\' is not a valid type string for a list type' %
+                type_string)
 
         self.value_type = types.as_type(type_string[5:-1])
 
@@ -248,12 +270,17 @@ class DictionaryType(TypeBase):
     """ A dictionary collection type, represented by a protobuf message """
 
     def __init__(self, type_string, types):
-        if not (type_string.startswith('Dictionary(') and type_string.endswith(')')):
-            raise ValueError('\'%s\' is not a valid type string for a dictionary type' % type_string)
+        if not (type_string.startswith('Dictionary(') and
+                type_string.endswith(')')):
+            raise ValueError(
+                '\'%s\' is not a valid type string for a dictionary type' %
+                type_string)
 
         type_strings = split_type_string(type_string[11:-1])
         if len(type_strings) != 2:
-            raise ValueError('\'%s\' is not a valid type string for a dictionary type' % type_string)
+            raise ValueError(
+                '\'%s\' is not a valid type string for a dictionary type' %
+                type_string)
         self.key_type = types.as_type(type_strings[0])
         self.value_type = types.as_type(type_strings[1])
 
@@ -265,7 +292,9 @@ class SetType(TypeBase):
 
     def __init__(self, type_string, types):
         if not (type_string.startswith('Set(') and type_string.endswith(')')):
-            raise ValueError('\'%s\' is not a valid type string for a set type' % type_string)
+            raise ValueError(
+                '\'%s\' is not a valid type string for a set type' %
+                type_string)
 
         self.value_type = types.as_type(type_string[4:-1])
 
@@ -276,10 +305,14 @@ class TupleType(TypeBase):
     """ A tuple collection type, represented by a protobuf message """
 
     def __init__(self, type_string, types):
-        if not (type_string.startswith('Tuple(') and type_string.endswith(')')):
-            raise ValueError('\'%s\' is not a valid type string for a tuple type' % type_string)
+        if not (type_string.startswith('Tuple(') and
+                type_string.endswith(')')):
+            raise ValueError(
+                '\'%s\' is not a valid type string for a tuple type' %
+                type_string)
 
-        self.value_types = [types.as_type(typ) for typ in split_type_string(type_string[6:-1])]
+        self.value_types = [types.as_type(typ)
+                            for typ in split_type_string(type_string[6:-1])]
 
         super(TupleType, self).__init__(str(type_string), tuple)
 
@@ -321,10 +354,12 @@ class ClassBase(DynamicType):
         self._object_id = object_id
 
     def __eq__(self, other):
-        return isinstance(other, ClassBase) and self._object_id == other._object_id
+        return isinstance(other, ClassBase) and \
+            self._object_id == other._object_id
 
     def __ne__(self, other):
-        return not isinstance(other, ClassBase) or self._object_id != other._object_id
+        return not isinstance(other, ClassBase) or \
+            self._object_id != other._object_id
 
     def __lt__(self, other):
         if not isinstance(other, ClassBase):
@@ -350,16 +385,20 @@ class ClassBase(DynamicType):
         return hash(self._object_id)
 
     def __repr__(self):
-        return '<%s.%s remote object #%d>' % (self._service_name, self._class_name, self._object_id)
+        return '<%s.%s remote object #%d>' % \
+            (self._service_name, self._class_name, self._object_id)
 
 
 def _create_class_type(service_name, class_name, doc):
     return type(str(class_name), (ClassBase,),
-                {'_service_name': service_name, '_class_name': class_name, '__doc__': doc})
+                {'_service_name': service_name,
+                 '_class_name': class_name,
+                 '__doc__': doc})
 
 
 def _create_enum_type(enum_name, values, doc):
-    typ = Enum(str(enum_name), dict((name, x['value']) for name, x in values.items()))
+    typ = Enum(str(enum_name), dict((name, x['value'])
+                                    for name, x in values.items()))
     setattr(typ, '__doc__', doc)
     for name in values.keys():
         setattr(getattr(typ, name), '__doc__', values[name]['doc'])

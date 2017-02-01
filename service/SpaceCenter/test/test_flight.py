@@ -3,6 +3,7 @@ import math
 import krpctest
 from krpctest.geometry import rad2deg, norm, normalize, dot, cross, vector
 
+
 class TestFlight(krpctest.TestCase):
 
     @classmethod
@@ -20,13 +21,17 @@ class TestFlight(krpctest.TestCase):
 
     def test_equality(self):
         flight = self.vessel.flight(self.vessel.reference_frame)
-        self.assertEqual(flight, self.vessel.flight(self.vessel.reference_frame))
+        self.assertEqual(
+            flight, self.vessel.flight(self.vessel.reference_frame))
 
     def check_properties_not_affected_by_reference_frame(self, flight):
-        """ Verify flight properties that aren't affected by reference frames """
+        """ Verify flight properties that aren't
+            affected by reference frames """
         self.assertAlmostEqual(100000, flight.mean_altitude, delta=10)
-        self.assertAlmostEqual(100000 - max(0, flight.elevation), flight.surface_altitude, delta=10)
-        self.assertAlmostEqual(100000 - flight.elevation, flight.bedrock_altitude, delta=10)
+        self.assertAlmostEqual(100000 - max(0, flight.elevation),
+                               flight.surface_altitude, delta=10)
+        self.assertAlmostEqual(100000 - flight.elevation,
+                               flight.bedrock_altitude, delta=10)
 
     def check_directions(self, flight):
         """ Check flight.direction against flight.heading and flight.pitch """
@@ -53,8 +58,10 @@ class TestFlight(krpctest.TestCase):
         vertical_speed = dot(velocity, up_direction)
         horizontal_speed = norm(velocity) - vertical_speed
         self.assertAlmostEqual(norm(velocity), flight.speed, delta=1)
-        self.assertAlmostEqual(horizontal_speed, flight.horizontal_speed, delta=1)
-        self.assertAlmostEqual(vertical_speed, flight.vertical_speed, delta=1)
+        self.assertAlmostEqual(horizontal_speed,
+                               flight.horizontal_speed, delta=1)
+        self.assertAlmostEqual(vertical_speed,
+                               flight.vertical_speed, delta=1)
 
     def check_orbital_vectors(self, flight):
         """ Check orbital direction vectors """
@@ -70,9 +77,12 @@ class TestFlight(krpctest.TestCase):
         self.assertAlmostEqual(1, norm(anti_normal))
         self.assertAlmostEqual(1, norm(radial))
         self.assertAlmostEqual(1, norm(anti_radial))
-        self.assertAlmostEqual(tuple(prograde), [-x for x in retrograde], places=2)
-        self.assertAlmostEqual(tuple(radial), [-x for x in anti_radial], places=2)
-        self.assertAlmostEqual(tuple(normal), [-x for x in anti_normal], places=2)
+        self.assertAlmostEqual(
+            tuple(prograde), [-x for x in retrograde], places=2)
+        self.assertAlmostEqual(
+            tuple(radial), [-x for x in anti_radial], places=2)
+        self.assertAlmostEqual(
+            tuple(normal), [-x for x in anti_normal], places=2)
         self.assertAlmostEqual(0, dot(prograde, radial), places=2)
         self.assertAlmostEqual(0, dot(prograde, normal), places=2)
         self.assertAlmostEqual(0, dot(radial, normal), places=2)
@@ -160,8 +170,9 @@ class TestFlight(krpctest.TestCase):
         self.check_orbital_vectors(flight)
 
     def test_latitude_and_longitude(self):
-        # In a circular orbit, in anti-clockwise direction looking down on north pole of Kerbin.
-        # Latitude should be 0 (we're the equator)
+        # In a circular orbit, in anti-clockwise direction looking down on the
+        # north pole of Kerbin.
+        # Latitude should be 0 (we're at the equator)
         # Longitude should be gradually increasing
         flight = self.vessel.flight()
         longitude = flight.longitude
@@ -172,6 +183,7 @@ class TestFlight(krpctest.TestCase):
             longitude = flight.longitude
             self.wait()
 
+
 class TestFlightVerticalSpeed(krpctest.TestCase):
 
     @classmethod
@@ -181,17 +193,20 @@ class TestFlightVerticalSpeed(krpctest.TestCase):
         cls.vessel = cls.connect().space_center.active_vessel
 
     def check_speed(self, flight, ref):
-        up = normalize(vector(self.vessel.position(ref))
-                       - vector(self.vessel.orbit.body.position(ref)))
+        up = normalize(vector(self.vessel.position(ref)) -
+                       vector(self.vessel.orbit.body.position(ref)))
         v = self.vessel.velocity(ref)
 
         speed = norm(v)
         vertical_speed = dot(v, up)
-        horizontal_speed = math.sqrt(speed*speed - vertical_speed*vertical_speed)
+        horizontal_speed = math.sqrt(
+            speed*speed - vertical_speed*vertical_speed)
 
         self.assertAlmostEqual(speed, flight.speed, delta=0.5)
-        self.assertAlmostEqual(vertical_speed, flight.vertical_speed, delta=0.5)
-        self.assertAlmostEqual(horizontal_speed, flight.horizontal_speed, delta=0.5)
+        self.assertAlmostEqual(vertical_speed,
+                               flight.vertical_speed, delta=0.5)
+        self.assertAlmostEqual(horizontal_speed,
+                               flight.horizontal_speed, delta=0.5)
 
     def test_vertical_speed_positive(self):
         self.set_orbit('Kerbin', 2000000, 0.2, 0, 0, 0, 1, 0)
@@ -224,6 +239,7 @@ class TestFlightVerticalSpeed(krpctest.TestCase):
         self.assertAlmostEqual(2246.14, flight.speed, places=1)
         self.assertAlmostEqual(2246.14, flight.horizontal_speed, places=1)
         self.assertAlmostEqual(0, flight.vertical_speed, delta=0.5)
+
 
 class TestFlightAtLaunchpad(krpctest.TestCase):
 
@@ -258,26 +274,31 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
 
             self.assertAlmostEqual(0.103, flight.drag_coefficient, places=3)
             self.assertAlmostEqual(0, flight.lift_coefficient, places=3)
-            self.assertAlmostEqual(0, flight.pitching_moment_coefficient, places=3)
-            self.assertAlmostEqual(2246.8, flight.ballistic_coefficient, delta=50)
+            self.assertAlmostEqual(
+                0, flight.pitching_moment_coefficient, places=3)
+            self.assertAlmostEqual(
+                2246.8, flight.ballistic_coefficient, delta=50)
             self.assertAlmostEqual(0, flight.thrust_specific_fuel_consumption)
 
             self.assertEqual('Nominal', flight.far_status)
 
-    #def test_drag_coefficient(self):
-    #    if not self.far:
-    #        # Using stock aerodynamic model
-    #        parts = {
-    #            'mk1pod': {'n': 1, 'mass': 0.8, 'drag': 0.2},
-    #            'fuelTank': {'n': 1, 'mass': 0.125, 'drag': 0.2},
-    #            'batteryPack': {'n': 2, 'mass': 0.01, 'drag': 0.2},
-    #            'solarPanels1': {'n': 3, 'mass': 0.02, 'drag': 0.25},
-    #            'liquidEngine2': {'n': 1, 'mass': 1.5, 'drag': 0.2}
-    #        }
-    #        total_mass = sum(x['mass']*x['n'] for x in parts.values())
-    #        mass_drag_products = sum(x['mass']*x['drag']*x['n'] for x in parts.values())
-    #        drag_coefficient = mass_drag_products / total_mass
-    #        self.assertAlmostEqual(drag_coefficient, self.vessel.flight().drag_coefficient)
+    # def test_drag_coefficient(self):
+    #     if not self.far:
+    #         # Using stock aerodynamic model
+    #         parts = {
+    #             'mk1pod': {'n': 1, 'mass': 0.8, 'drag': 0.2},
+    #             'fuelTank': {'n': 1, 'mass': 0.125, 'drag': 0.2},
+    #             'batteryPack': {'n': 2, 'mass': 0.01, 'drag': 0.2},
+    #             'solarPanels1': {'n': 3, 'mass': 0.02, 'drag': 0.25},
+    #             'liquidEngine2': {'n': 1, 'mass': 1.5, 'drag': 0.2}
+    #         }
+    #         total_mass = sum(x['mass']*x['n'] for x in parts.values())
+    #         mass_drag_products = sum(x['mass']*x['drag']*x['n']
+    #                                  for x in parts.values())
+    #         drag_coefficient = mass_drag_products / total_mass
+    #         self.assertAlmostEqual(
+    #             drag_coefficient, self.vessel.flight().drag_coefficient)
+
 
 if __name__ == '__main__':
     unittest.main()

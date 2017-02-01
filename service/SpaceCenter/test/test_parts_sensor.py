@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class TestPartsSensor(krpctest.TestCase):
 
     @classmethod
@@ -25,7 +26,8 @@ class TestPartsSensor(krpctest.TestCase):
         self.assertEqual('Off', sensor.value)
 
     def test_gravity(self):
-        sensor = self.parts.with_title('GRAVMAX Negative Gravioli Detector')[0].sensor
+        sensor = self.parts.with_title(
+            'GRAVMAX Negative Gravioli Detector')[0].sensor
         self.assertFalse(sensor.active)
         self.assertEqual('Off', sensor.value)
         sensor.active = True
@@ -36,6 +38,7 @@ class TestPartsSensor(krpctest.TestCase):
         self.wait()
         self.assertFalse(sensor.active)
         self.assertEqual('Off', sensor.value)
+
 
 if __name__ == '__main__':
     unittest.main()
