@@ -2,6 +2,7 @@ import unittest
 import krpc
 import krpctest
 
+
 class TestInputField(krpctest.TestCase):
 
     @classmethod
@@ -29,6 +30,7 @@ class TestInputField(krpctest.TestCase):
         input_field.changed = False
         self.assertFalse(input_field.changed)
         input_field.remove()
+
 
 if __name__ == '__main__':
     unittest.main()

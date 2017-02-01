@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class TestPartsIntake(krpctest.TestCase):
 
     @classmethod
@@ -23,6 +24,7 @@ class TestPartsIntake(krpctest.TestCase):
         self.assertFalse(self.intake.open)
         self.intake.open = True
         self.assertTrue(self.intake.open)
+
 
 if __name__ == '__main__':
     unittest.main()

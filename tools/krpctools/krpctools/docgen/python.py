@@ -1,8 +1,12 @@
 from krpc.utils import snake_case
-from krpc.types import ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
+from krpc.types import \
+    ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, \
+    SetType, TupleType
 from .domain import Domain
-from .nodes import Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
-from .nodes import Enumeration, EnumerationValue
+from .nodes import \
+    Procedure, Property, Class, ClassMethod, ClassStaticMethod, \
+    ClassProperty, Enumeration, EnumerationValue
+
 
 class PythonDomain(Domain):
     name = 'python'
@@ -55,28 +59,34 @@ class PythonDomain(Domain):
         elif isinstance(typ, ListType):
             return 'list of %s' % self.type_description(typ.value_type)
         elif isinstance(typ, DictionaryType):
-            return 'dict from %s to %s' % (self.type_description(typ.key_type),
-                                           self.type_description(typ.value_type))
+            return 'dict from %s to %s' % \
+                (self.type_description(typ.key_type),
+                 self.type_description(typ.value_type))
         elif isinstance(typ, SetType):
             return 'set of %s' % self.type_description(typ.value_type)
         elif isinstance(typ, TupleType):
-            return 'tuple of (%s)' % ', '.join(self.type_description(typ) for typ in typ.value_types)
+            return 'tuple of (%s)' % \
+                ', '.join(self.type_description(typ)
+                          for typ in typ.value_types)
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
     def ref(self, obj):
         name = obj.fullname
         if any(isinstance(obj, cls) for cls in
-               (Procedure, Property, ClassMethod, ClassStaticMethod, ClassProperty, EnumerationValue)):
+               (Procedure, Property, ClassMethod,
+                ClassStaticMethod, ClassProperty, EnumerationValue)):
             name = name.split('.')
             name[-1] = snake_case(name[-1])
             name = '.'.join(name)
         return self.shorten_ref(name)
 
     def see(self, obj):
-        if any(isinstance(obj, cls) for cls in (Property, ClassProperty, EnumerationValue)):
+        if any(isinstance(obj, cls)
+               for cls in (Property, ClassProperty, EnumerationValue)):
             prefix = 'attr'
-        elif any(isinstance(obj, cls) for cls in (Procedure, ClassMethod, ClassStaticMethod)):
+        elif any(isinstance(obj, cls)
+                 for cls in (Procedure, ClassMethod, ClassStaticMethod)):
             prefix = 'meth'
         elif any(isinstance(obj, cls) for cls in (Class, Enumeration)):
             prefix = 'class'

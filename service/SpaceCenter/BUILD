@@ -46,7 +46,7 @@ test_suite(
 py_lint_test(
     name = 'lint',
     srcs = glob(['test/*.py']),
-    rcfile = 'test/pylint.rc',
+    pylint_config = 'test/pylint.rc',
     deps = ['//client/python', '//tools/krpctest'],
     size = 'small'
 )

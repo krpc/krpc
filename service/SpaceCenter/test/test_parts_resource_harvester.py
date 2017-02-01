@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class TestPartsResourceHarvester(krpctest.TestCase):
 
     @classmethod
@@ -11,7 +12,8 @@ class TestPartsResourceHarvester(krpctest.TestCase):
             cls.remove_other_vessels()
         cls.state = cls.connect().space_center.ResourceHarvesterState
         parts = cls.connect().space_center.active_vessel.parts
-        cls.drill = parts.with_title('\'Drill-O-Matic\' Mining Excavator')[0].resource_harvester
+        cls.drill = parts.with_title(
+            '\'Drill-O-Matic\' Mining Excavator')[0].resource_harvester
 
     def check_inactive_properties(self):
         self.assertEqual(0, self.drill.extraction_rate)
@@ -83,6 +85,7 @@ class TestPartsResourceHarvester(krpctest.TestCase):
         self.drill.active = True
         self.assertFalse(self.drill.deployed)
         self.assertFalse(self.drill.active)
+
 
 if __name__ == '__main__':
     unittest.main()

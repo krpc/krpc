@@ -4,16 +4,20 @@ import krpc
 conn = krpc.connect(name='Pitch/Heading/Roll')
 vessel = conn.space_center.active_vessel
 
+
 def cross_product(u, v):
     return (u[1]*v[2] - u[2]*v[1],
             u[2]*v[0] - u[0]*v[2],
             u[0]*v[1] - u[1]*v[0])
 
+
 def dot_product(u, v):
     return u[0]*v[0] + u[1]*v[1] + u[2]*v[2]
 
+
 def magnitude(v):
     return math.sqrt(dot_product(v, v))
+
 
 def angle_between_vectors(u, v):
     """ Compute the angle between vector u and v """
@@ -23,6 +27,7 @@ def angle_between_vectors(u, v):
     um = magnitude(u)
     vm = magnitude(v)
     return math.acos(dp / (um*vm)) * (180. / math.pi)
+
 
 while True:
 

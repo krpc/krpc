@@ -5,22 +5,27 @@ from .generator import Generator
 from .docparser import DocParser
 from ..utils import lower_camel_case, upper_camel_case
 
+
 class JavaGenerator(Generator):
 
     def __init__(self, macro_template, service, definition_files):
-        super(JavaGenerator, self).__init__(macro_template, service, definition_files)
+        super(JavaGenerator, self).__init__(
+            macro_template, service, definition_files)
 
     _keywords = set([
-        'abstract', 'continue', 'for', 'new', 'switch', 'assert', 'default', 'goto', 'package', 'synchronized',
-        'boolean', 'do', 'if', 'private', 'this', 'break', 'double', 'implements', 'protected', 'throw',
-        'byte', 'else', 'import', 'public', 'throws', 'case', 'enum', 'instanceof', 'return', 'transient',
-        'catch', 'extends', 'int', 'short', 'try', 'char', 'final', 'interface', 'static', 'void',
-        'class', 'finally', 'long', 'strictfp', 'volatile', 'const', 'float', 'native', 'super', 'while',
-        'wait'
+        'abstract', 'continue', 'for', 'new', 'switch', 'assert', 'default',
+        'goto', 'package', 'synchronized', 'boolean', 'do', 'if', 'private',
+        'this', 'break', 'double', 'implements', 'protected', 'throw', 'byte',
+        'else', 'import', 'public', 'throws', 'case', 'enum', 'instanceof',
+        'return', 'transient', 'catch', 'extends', 'int', 'short', 'try',
+        'char', 'final', 'interface', 'static', 'void', 'class', 'finally',
+        'long', 'strictfp', 'volatile', 'const', 'float', 'native', 'super',
+        'while', 'wait'
     ])
 
     _tuple_class_names = [
-        'Unit', 'Pair', 'Triplet', 'Quartet', 'Quintet', 'Sextet', 'Septet', 'Octet', 'Ennead', 'Decade'
+        'Unit', 'Pair', 'Triplet', 'Quartet', 'Quintet', 'Sextet', 'Septet',
+        'Octet', 'Ennead', 'Decade'
     ]
 
     @classmethod
@@ -54,9 +59,9 @@ class JavaGenerator(Generator):
                 return 'boolean'
             elif 'int' in typ:
                 int_type_map = {
-                    'int32' : 'int',
+                    'int32': 'int',
                     'uint32': 'int',
-                    'int64' : 'long',
+                    'int64': 'long',
                     'uint64': 'long'
                 }
                 return int_type_map[typ]
@@ -74,9 +79,9 @@ class JavaGenerator(Generator):
                 return 'Boolean'
             elif 'int' in typ:
                 int_type_map = {
-                    'int32' : 'Integer',
+                    'int32': 'Integer',
                     'uint32': 'Integer',
-                    'int64' : 'Long',
+                    'int64': 'Long',
                     'uint64': 'Long'
                 }
                 return int_type_map[typ]
@@ -90,19 +95,23 @@ class JavaGenerator(Generator):
                 return 'test.Test.%s' % x
         elif isinstance(typ, krpc.types.ListType):
             return 'java.util.List<%s>' % \
-                self.parse_type(self.types.as_type(typ.protobuf_type[5:-1]), True)
+                self.parse_type(
+                    self.types.as_type(typ.protobuf_type[5:-1]), True)
         elif isinstance(typ, krpc.types.SetType):
             return 'java.util.Set<%s>' % \
-                self.parse_type(self.types.as_type(typ.protobuf_type[4:-1]), True)
+                self.parse_type(
+                    self.types.as_type(typ.protobuf_type[4:-1]), True)
         elif isinstance(typ, krpc.types.DictionaryType):
             typs = split_type_string(typ.protobuf_type[11:-1])
-            return 'java.util.Map<%s,%s>' % (self.parse_type(self.types.as_type(typs[0]), True),
-                                             self.parse_type(self.types.as_type(typs[1]), True))
+            return 'java.util.Map<%s,%s>' % \
+                (self.parse_type(self.types.as_type(typs[0]), True),
+                 self.parse_type(self.types.as_type(typs[1]), True))
         elif isinstance(typ, krpc.types.TupleType):
             value_types = split_type_string(typ.protobuf_type[6:-1])
             name = self.get_tuple_class_name(value_types)
-            return 'org.javatuples.'+name+'<%s>' % (','.join(self.parse_type(self.types.as_type(t), True)
-                                                             for t in value_types))
+            return 'org.javatuples.'+name+'<%s>' % \
+                (','.join(self.parse_type(self.types.as_type(t), True)
+                          for t in value_types))
         elif isinstance(typ, krpc.types.ClassType):
             return 'krpc.client.services.%s' % typ.protobuf_type[6:-1]
         elif isinstance(typ, krpc.types.EnumType):
@@ -114,10 +123,12 @@ class JavaGenerator(Generator):
             return None
         if isinstance(typ, krpc.types.ListType):
             return 'new TypeSpecification(java.util.List.class, %s)' % \
-                self.parse_type_specification(self.types.as_type(typ.protobuf_type[5:-1]))
+                self.parse_type_specification(
+                    self.types.as_type(typ.protobuf_type[5:-1]))
         elif isinstance(typ, krpc.types.SetType):
             return 'new TypeSpecification(java.util.Set.class, %s)' % \
-                self.parse_type_specification(self.types.as_type(typ.protobuf_type[4:-1]))
+                self.parse_type_specification(
+                    self.types.as_type(typ.protobuf_type[4:-1]))
         elif isinstance(typ, krpc.types.DictionaryType):
             typs = split_type_string(typ.protobuf_type[11:-1])
             return 'new TypeSpecification(java.util.Map.class, %s, %s)' % \
@@ -127,9 +138,11 @@ class JavaGenerator(Generator):
             value_types = split_type_string(typ.protobuf_type[6:-1])
             return 'new TypeSpecification(org.javatuples.%s.class, %s)' % \
                 (self.get_tuple_class_name(value_types),
-                 ','.join(self.parse_type_specification(self.types.as_type(t)) for t in value_types))
+                 ','.join(self.parse_type_specification(self.types.as_type(t))
+                          for t in value_types))
         else:
-            return 'new TypeSpecification(%s.class)' % self.parse_type(typ, True)
+            return 'new TypeSpecification(%s.class)' % \
+                self.parse_type(typ, True)
 
     def parse_return_type(self, typ):
         if typ is None:
@@ -140,7 +153,7 @@ class JavaGenerator(Generator):
         return self.parse_type(typ)
 
     @staticmethod
-    def parse_default_value(value, typ): #pylint: disable=unused-argument
+    def parse_default_value(value, typ):  # pylint: disable=unused-argument
         # No default arguments in Java
         return None
 
@@ -149,7 +162,8 @@ class JavaGenerator(Generator):
         documentation = JavaDocParser().parse(documentation)
         if documentation == '':
             return ''
-        lines = ['/**'] + [' * ' + line for line in documentation.split('\n')] + [' */']
+        lines = ['/**'] + [' * ' + line
+                           for line in documentation.split('\n')] + [' */']
         return '\n'.join(line.rstrip() for line in lines)
 
     def parse_context(self, context):
@@ -168,7 +182,8 @@ class JavaGenerator(Generator):
                 properties['set'+upper_camel_case(name)] = {
                     'procedure': info['setter']['procedure'],
                     'remote_name': info['setter']['remote_name'],
-                    'parameters': self.generate_context_parameters(info['setter']['procedure']),
+                    'parameters': self.generate_context_parameters(
+                        info['setter']['procedure']),
                     'return_type': 'void',
                     'documentation': info['documentation']
                 }
@@ -190,17 +205,21 @@ class JavaGenerator(Generator):
                     class_properties['set'+upper_camel_case(name)] = {
                         'procedure': info['setter']['procedure'],
                         'remote_name': info['setter']['remote_name'],
-                        'parameters': [self.generate_context_parameters(info['setter']['procedure'])[1]],
+                        'parameters': [
+                            self.generate_context_parameters(
+                                info['setter']['procedure'])[1]],
                         'return_type': 'void',
                         'documentation': info['documentation']
                     }
             class_info['properties'] = class_properties
 
         # Add type specifications to types
-        for info in context['procedures'].values() + context['properties'].values():
+        items = context['procedures'].values() + context['properties'].values()
+        for info in items:
             info['return_type'] = {
                 'name': info['return_type'],
-                'spec': self.parse_type_specification(self.get_return_type(info['procedure']))
+                'spec': self.parse_type_specification(
+                    self.get_return_type(info['procedure']))
             }
             pos = 0
             for pinfo in info['parameters']:
@@ -218,11 +237,13 @@ class JavaGenerator(Generator):
             for name, info in members:
                 info['return_type'] = {
                     'name': info['return_type'],
-                    'spec': self.parse_type_specification(self.get_return_type(info['procedure']))
+                    'spec': self.parse_type_specification(
+                        self.get_return_type(info['procedure']))
                 }
                 pos = 0
                 for pinfo in info['parameters']:
-                    param_type = self.get_parameter_type(info['procedure'], pos)
+                    param_type = self.get_parameter_type(
+                        info['procedure'], pos)
                     pinfo['type'] = {
                         'name': pinfo['type'],
                         'spec': self.parse_type_specification(param_type)
@@ -234,12 +255,16 @@ class JavaGenerator(Generator):
             for value in enm['values']:
                 value['name'] = self.parse_const_name(value['name'])
 
-        # Add serial version UIDs to classes (generated using seeded hash of class' name)
+        # Add serial version UIDs to classes
+        # (generated using seeded hash of class' name)
         for class_name, cls in context['classes'].items():
             tohash = 'bada55'+class_name
-            cls['serial_version_uid'] = int(hashlib.sha1(tohash.encode('utf-8')).hexdigest(), 16) % (10 ** 18)
+            cls['serial_version_uid'] = int(
+                hashlib.sha1(tohash.encode('utf-8')).hexdigest(), 16) % \
+                (10 ** 18)
 
         return context
+
 
 class JavaDocParser(DocParser):
 
@@ -250,7 +275,8 @@ class JavaDocParser(DocParser):
         return '\n\n'+self.parse_node(node).strip()
 
     def parse_param(self, node):
-        return '\n@param %s %s' % (node.attrib['name'], self.parse_node(node).strip())
+        return '\n@param %s %s' % (node.attrib['name'],
+                                   self.parse_node(node).strip())
 
     def parse_returns(self, node):
         return '\n@return %s' % self.parse_node(node).strip()
@@ -275,7 +301,8 @@ class JavaDocParser(DocParser):
         return node.text
 
     def parse_list(self, node):
-        content = ['<li>%s\n' % self.parse_node(item[0], indent=2)[2:].rstrip() for item in node]
+        content = ['<li>%s\n' % self.parse_node(item[0], indent=2)[2:].rstrip()
+                   for item in node]
         return '<p><ul>'+'\n'+''.join(content)+'</ul></p>'
 
     @staticmethod

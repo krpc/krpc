@@ -1,14 +1,23 @@
 import re
 
-_RE_PROPERTY_NAME = re.compile(r'^Property\.(Get|Set)\((.+)\)$')
-_RE_SERVICE_NAME_FROM_CLASS_METHOD = re.compile(r'^Class\.(Static)?Method\(([^,\.]+)\.[^,]+,[^,]+\)$')
-_RE_SERVICE_NAME_FROM_CLASS_PROPERTY = re.compile(r'^Class\.Property.(Get|Set)\(([^,\.]+)\.[^,]+,[^,]+\)$')
-_RE_CLASS_NAME_FROM_CLASS_METHOD = re.compile(r'^Class\.(Static)?Method\([^,\.]+\.([^,\.]+),[^,]+\)$')
-_RE_CLASS_NAME_FROM_CLASS_PROPERTY = re.compile(r'^Class\.Property.(Get|Set)\([^,\.]+\.([^,]+),[^,]+\)$')
-_RE_CLASS_METHOD_NAME = re.compile(r'^Class\.(Static)?Method\([^,]+,([^,]+)\)$')
-_RE_CLASS_PROPERTY_NAME = re.compile(r'^Class\.Property\.(Get|Set)\([^,]+,([^,]+)\)$')
-_RE_RETURN_TYPE = re.compile(r'^ReturnType\.(.+)$')
-_RE_PARAMETER_TYPE = re.compile(r'^ParameterType\((\d+)\)\.(.+)$')
+_RE_PROPERTY_NAME = re.compile(
+    r'^Property\.(Get|Set)\((.+)\)$')
+_RE_SERVICE_NAME_FROM_CLASS_METHOD = re.compile(
+    r'^Class\.(Static)?Method\(([^,\.]+)\.[^,]+,[^,]+\)$')
+_RE_SERVICE_NAME_FROM_CLASS_PROPERTY = re.compile(
+    r'^Class\.Property.(Get|Set)\(([^,\.]+)\.[^,]+,[^,]+\)$')
+_RE_CLASS_NAME_FROM_CLASS_METHOD = re.compile(
+    r'^Class\.(Static)?Method\([^,\.]+\.([^,\.]+),[^,]+\)$')
+_RE_CLASS_NAME_FROM_CLASS_PROPERTY = re.compile(
+    r'^Class\.Property.(Get|Set)\([^,\.]+\.([^,]+),[^,]+\)$')
+_RE_CLASS_METHOD_NAME = re.compile(
+    r'^Class\.(Static)?Method\([^,]+,([^,]+)\)$')
+_RE_CLASS_PROPERTY_NAME = re.compile(
+    r'^Class\.Property\.(Get|Set)\([^,]+,([^,]+)\)$')
+_RE_RETURN_TYPE = re.compile(
+    r'^ReturnType\.(.+)$')
+_RE_PARAMETER_TYPE = re.compile(
+    r'^ParameterType\((\d+)\)\.(.+)$')
 
 
 class Attributes(object):
@@ -18,11 +27,13 @@ class Attributes(object):
     def is_a_procedure(cls, attrs):
         """ Return true if the attributes are for a plain procedure,
             i.e. not a property accessor, class method etc. """
-        return not (cls.is_a_property_accessor(attrs) or cls.is_a_class_member(attrs))
+        return not (cls.is_a_property_accessor(attrs) or
+                    cls.is_a_class_member(attrs))
 
     @classmethod
     def is_a_property_accessor(cls, attrs):
-        """ Return true if the attributes are for a property getter or setter. """
+        """ Return true if the attributes are for
+            a property getter or setter. """
         return any(attr.startswith('Property.') for attr in attrs)
 
     @classmethod
@@ -38,11 +49,9 @@ class Attributes(object):
     @classmethod
     def is_a_class_member(cls, attrs):
         """ Return true if the attributes are for a class member. """
-        return (
-            cls.is_a_class_method(attrs)
-            or cls.is_a_class_static_method(attrs)
-            or cls.is_a_class_property_accessor(attrs)
-        )
+        return (cls.is_a_class_method(attrs) or
+                cls.is_a_class_static_method(attrs) or
+                cls.is_a_class_property_accessor(attrs))
 
     @classmethod
     def is_a_class_method(cls, attrs):
@@ -56,7 +65,8 @@ class Attributes(object):
 
     @classmethod
     def is_a_class_property_accessor(cls, attrs):
-        """ Return true if the attributes are for a class property getter or setter. """
+        """ Return true if the attributes are for
+            a class property getter or setter. """
         return any(attr.startswith('Class.Property.') for attr in attrs)
 
     @classmethod
@@ -71,7 +81,8 @@ class Attributes(object):
 
     @classmethod
     def get_property_name(cls, attrs):
-        """ Return the name of the property handled by a property getter or setter. """
+        """ Return the name of the property handled
+            by a property getter or setter. """
         if cls.is_a_property_accessor(attrs):
             for attr in attrs:
                 match = _RE_PROPERTY_NAME.match(attr)
@@ -81,7 +92,8 @@ class Attributes(object):
 
     @classmethod
     def get_service_name(cls, attrs):
-        """ Return the name of the service that a class method or property accessor is part of. """
+        """ Return the name of the service that
+            a class method or property accessor is part of. """
         if cls.is_a_class_method(attrs) or cls.is_a_class_static_method(attrs):
             for attr in attrs:
                 match = _RE_SERVICE_NAME_FROM_CLASS_METHOD.match(attr)
@@ -92,11 +104,13 @@ class Attributes(object):
                 match = _RE_SERVICE_NAME_FROM_CLASS_PROPERTY.match(attr)
                 if match:
                     return match.group(2)
-        raise ValueError('Procedure attributes are not a class method or property accessor')
+        raise ValueError(
+            'Procedure attributes are not a class method or property accessor')
 
     @classmethod
     def get_class_name(cls, attrs):
-        """ Return the name of the class that a method or property accessor is part of. """
+        """ Return the name of the class that
+            a method or property accessor is part of. """
         if cls.is_a_class_method(attrs) or cls.is_a_class_static_method(attrs):
             for attr in attrs:
                 match = _RE_CLASS_NAME_FROM_CLASS_METHOD.match(attr)
@@ -107,7 +121,8 @@ class Attributes(object):
                 match = _RE_CLASS_NAME_FROM_CLASS_PROPERTY.match(attr)
                 if match:
                     return match.group(2)
-        raise ValueError('Procedure attributes are not a class method or property accessor')
+        raise ValueError(
+            'Procedure attributes are not a class method or property accessor')
 
     @classmethod
     def get_class_method_name(cls, attrs):
@@ -121,13 +136,15 @@ class Attributes(object):
 
     @classmethod
     def get_class_property_name(cls, attrs):
-        """ Return the name of a class property (for a getter or setter procedure). """
+        """ Return the name of a class property
+            (for a getter or setter procedure). """
         if cls.is_a_class_property_accessor(attrs):
             for attr in attrs:
                 match = _RE_CLASS_PROPERTY_NAME.match(attr)
                 if match:
                     return match.group(2)
-        raise ValueError('Procedure attributes are not a class property accessor')
+        raise ValueError(
+            'Procedure attributes are not a class property accessor')
 
     @classmethod
     def get_return_type_attrs(cls, attrs):

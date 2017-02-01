@@ -1,6 +1,3 @@
-[FORMAT]
-max-line-length=116
-
 [BASIC]
 good-names=i,j,k,ex,Run,_,u,v,q,r,g,x,y,z,w
 variable-rgx=[a-z_][a-z0-9_]{1,30}$

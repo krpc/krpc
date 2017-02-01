@@ -7,4 +7,5 @@ class RPCError(RuntimeError):
 class NetworkError(RuntimeError):
     """ Error raised when something goes wrong with the network connection """
     def __init__(self, address, port, message):
-        super(NetworkError, self).__init__('%s (address=%s, port=%s)' % (message, str(address), str(port)))
+        super(NetworkError, self).__init__(
+            '%s (address=%s, port=%s)' % (message, str(address), str(port)))

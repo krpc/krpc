@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class TestPartsReactionWheel(krpctest.TestCase):
 
     @classmethod
@@ -10,7 +11,8 @@ class TestPartsReactionWheel(krpctest.TestCase):
             cls.launch_vessel_from_vab('Parts')
             cls.remove_other_vessels()
         parts = cls.connect().space_center.active_vessel.parts
-        cls.wheel = parts.with_title('Advanced Reaction Wheel Module, Large')[0].reaction_wheel
+        cls.wheel = parts.with_title(
+            'Advanced Reaction Wheel Module, Large')[0].reaction_wheel
 
     def test_reaction_wheel(self):
         pos_torque = (30000, 30000, 30000)
@@ -33,6 +35,7 @@ class TestPartsReactionWheel(krpctest.TestCase):
         self.assertEqual(pos_torque, self.wheel.available_torque[0])
         self.assertEqual(neg_torque, self.wheel.max_torque[1])
         self.assertEqual(neg_torque, self.wheel.available_torque[1])
+
 
 if __name__ == '__main__':
     unittest.main()

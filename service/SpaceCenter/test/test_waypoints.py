@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 
+
 class TestWaypoints(krpctest.TestCase):
 
     @classmethod
@@ -13,8 +14,9 @@ class TestWaypoints(krpctest.TestCase):
     def test_manager(self):
         self.assertItemsEqual([], self.wpm.waypoints)
         self.assertItemsEqual(
-            ['balloon', 'default', 'dish', 'eva', 'gravity', 'marker', 'pressure', 'report',
-             'sample', 'seismic', 'thermometer', 'vessel', 'custom'],
+            ['balloon', 'default', 'dish', 'eva', 'gravity', 'marker',
+             'pressure', 'report', 'sample', 'seismic', 'thermometer',
+             'vessel', 'custom'],
             self.wpm.icons)
         colors = self.wpm.colors
         self.assertTrue('blue' in colors)
@@ -56,7 +58,8 @@ class TestWaypoints(krpctest.TestCase):
         try:
             self.assertAlmostEqual(1234, wp.surface_altitude, places=1)
             self.assertAlmostEqual(1234, wp.mean_altitude, places=1)
-            self.assertAlmostEqual(1234 + 1125.7, wp.bedrock_altitude, places=1)
+            self.assertAlmostEqual(1234 + 1125.7,
+                                   wp.bedrock_altitude, places=1)
         finally:
             wp.remove()
 
@@ -78,6 +81,7 @@ class TestWaypoints(krpctest.TestCase):
             self.assertAlmostEqual(1234, wp.bedrock_altitude, places=1)
         finally:
             wp.remove()
+
 
 if __name__ == '__main__':
     unittest.main()

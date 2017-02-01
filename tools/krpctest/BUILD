@@ -51,9 +51,9 @@ py3_test(
 
 py_lint_test(
     name = 'lint',
-    src = ':krpctest',
-    pkg = 'krpctest',
+    pkg = ':krpctest',
+    pkg_name = 'krpctest',
     deps = deps + ['@python_enum34//file'],
-    rcfile = 'pylint.rc',
+    pylint_config = 'pylint.rc',
     size = 'small'
 )

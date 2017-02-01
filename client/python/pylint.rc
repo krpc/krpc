@@ -6,9 +6,6 @@ good-names=i,j,k,ex,Run,_,u,v,q,r,g,x,y,z,w,setUpClass
 variable-rgx=[a-z_][a-z0-9_]{1,30}$
 method-rgx=[a-z_][a-z0-9_]{2,60}$
 
-[FORMAT]
-max-line-length=116
-
 [DESIGN]
 max-args=10
 max-locals=20

@@ -372,6 +372,12 @@ http_file(
 )
 
 http_file(
+    name = 'python_pep8',
+    url = 'https://pypi.python.org/packages/3e/b5/1f717b85fbf5d43d81e3c603a7a2f64c9f1dabc69a1e7745bd394cc06404/pep8-1.7.0.tar.gz',
+    sha256 = 'a113d5f5ad7a7abacef9df5ec3f2af23a20a28005921577b15dd584d099d5900'
+)
+
+http_file(
     name = 'python_pylint',
     url = 'https://pypi.python.org/packages/92/f3/41deb50322d579517f779c3421b92f84133ddb6d954791bbd37aca1b5854/pylint-1.6.4-py2.py3-none-any.whl',
     sha256 = 'eeeeb81c8095586b417ea0602c01f53d1c87694fcf3c866f8681457f94875a8e'
