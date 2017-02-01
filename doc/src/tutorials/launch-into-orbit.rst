@@ -45,7 +45,7 @@ bunch of streams to get flight telemetry then prepares the rocket for launch.
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 1-30
+         :lines: 1-28
          :linenos:
 
    .. tab:: Python
@@ -91,8 +91,8 @@ close to the target apoapsis.
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 31-65
-         :lineno-start: 31
+         :lines: 30-64
+         :lineno-start: 30
          :linenos:
 
    .. tab:: Python
@@ -136,8 +136,8 @@ the rocket has left Kerbin's atmosphere.
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 67-77
-         :lineno-start: 67
+         :lines: 66-76
+         :lineno-start: 66
          :linenos:
 
    .. tab:: Python
@@ -184,8 +184,8 @@ time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 79-96
-         :lineno-start: 79
+         :lines: 78-95
+         :lineno-start: 78
          :linenos:
 
    .. tab:: Python
@@ -230,8 +230,8 @@ orientate the ship along the y-axis of the maneuver node's reference frame
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 98-108
-         :lineno-start: 98
+         :lines: 97-107
+         :lineno-start: 97
          :linenos:
 
    .. tab:: Python
@@ -277,8 +277,8 @@ which point the node has been executed).
 
       .. literalinclude:: /scripts/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 110-
-         :lineno-start: 110
+         :lines: 109-
+         :lineno-start: 109
          :linenos:
 
    .. tab:: Python

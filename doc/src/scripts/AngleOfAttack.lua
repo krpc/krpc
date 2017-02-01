@@ -1,12 +1,13 @@
 local krpc = require 'krpc'
+local platform = require 'krpc.platform'
 local math = require 'math'
 local conn = krpc.connect('Angle of attack')
 local vessel = conn.space_center.active_vessel
 
-while True do
+while true do
 
-    d = vessel.direction(vessel.orbit.body.reference_frame)
-    v = vessel.velocity(vessel.orbit.body.reference_frame)
+   d = vessel:direction(vessel.orbit.body.reference_frame)
+    v = vessel:velocity(vessel.orbit.body.reference_frame)
 
     -- Compute the dot product of d and v
     dotprod = d[1]*v[1] + d[2]*v[2] + d[3]*v[3]
@@ -21,8 +22,8 @@ while True do
         angle = math.abs(math.acos (dotprod / vmag) * (180. / math.pi))
     end
 
-    print('Angle of attack = ' .. angle)
+    print(string.format('Angle of attack = %.1f', angle))
 
-    krpc.platform.sleep(1)
+    platform.sleep(1)
 
 end

@@ -65,7 +65,7 @@ game:
 
       .. literalinclude:: /scripts/SubOrbitalFlight.lua
          :language: lua
-         :lines: 1-2
+         :lines: 1-3
          :linenos:
 
    .. tab:: Python
@@ -108,8 +108,8 @@ object that we will send instructions to the rocket:
 
       .. literalinclude:: /scripts/SubOrbitalFlight.lua
          :language: lua
-         :lines: 4
-         :lineno-start: 4
+         :lines: 5
+         :lineno-start: 5
          :linenos:
 
    .. tab:: Python
@@ -155,8 +155,8 @@ effect.
 
       .. literalinclude:: /scripts/SubOrbitalFlight.lua
          :language: lua
-         :lines: 6-9
-         :lineno-start: 6
+         :lines: 7-10
+         :lineno-start: 7
          :linenos:
 
    .. tab:: Python
@@ -203,8 +203,8 @@ the space bar):
 
       .. literalinclude:: /scripts/SubOrbitalFlight.lua
          :language: lua
-         :lines: 11-12
-         :lineno-start: 11
+         :lines: 12-13
+         :lineno-start: 12
          :linenos:
 
    .. tab:: Python
@@ -251,8 +251,8 @@ boosters:
 
       .. literalinclude:: /scripts/SubOrbitalFlight.lua
          :language: lua
-         :lines: 14-18
-         :lineno-start: 14
+         :lines: 15-19
+         :lineno-start: 15
          :linenos:
 
    .. tab:: Python
@@ -303,8 +303,8 @@ rocket reaches 10km:
 
       .. literalinclude:: /scripts/SubOrbitalFlight.lua
          :language: lua
-         :lines: 20-22
-         :lineno-start: 20
+         :lines: 21-23
+         :lineno-start: 21
          :linenos:
 
    .. tab:: Python
@@ -352,8 +352,8 @@ Now we need to angle the rocket over to a pitch of 60° and maintain a heading o
 
       .. literalinclude:: /scripts/SubOrbitalFlight.lua
          :language: lua
-         :lines: 24-25
-         :lineno-start: 24
+         :lines: 25-26
+         :lineno-start: 25
          :linenos:
 
    .. tab:: Python
@@ -397,8 +397,8 @@ jettison the launch stage and turn off the auto-pilot:
 
       .. literalinclude:: /scripts/SubOrbitalFlight.lua
          :language: lua
-         :lines: 27-34
-         :lineno-start: 27
+         :lines: 28-35
+         :lineno-start: 28
          :linenos:
 
    .. tab:: Python
@@ -451,8 +451,8 @@ will continue to work.
 
       .. literalinclude:: /scripts/SubOrbitalFlight.lua
          :language: lua
-         :lines: 36-39
-         :lineno-start: 36
+         :lines: 37-40
+         :lineno-start: 37
          :linenos:
 
    .. tab:: Python
@@ -497,8 +497,8 @@ which will happen when it lands:
 
       .. literalinclude:: /scripts/SubOrbitalFlight.lua
          :language: lua
-         :lines: 41-
-         :lineno-start: 41
+         :lines: 42-
+         :lineno-start: 42
          :linenos:
 
    .. tab:: Python
