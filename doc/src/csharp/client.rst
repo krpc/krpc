@@ -31,6 +31,10 @@ connect to a server running on the local machine:
 
 .. literalinclude:: /scripts/Basic.cs
 
+The connection object implements the IDisposable interface, and therefore needs
+to be disposed when finished with. This can be done with a ``using`` block, as in
+the example above, or by calling :meth:`Connection.Dispose` directly.
+
 The class constructor also accepts arguments that specify what address and port
 numbers to connect to. For example:
 
