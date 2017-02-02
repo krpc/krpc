@@ -10,7 +10,7 @@ if group is None:
     exit(1)
 
 for servo in group.servos:
-    print servo.name, servo.position
+    print(servo.name, servo.position)
 
 group.move_right()
 time.sleep(1)
