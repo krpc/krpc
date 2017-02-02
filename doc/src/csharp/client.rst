@@ -92,7 +92,7 @@ Client API Reference
    A connection to the kRPC server. All interaction with kRPC is performed via
    an instance of this class.
 
-   .. method:: Connection (string name = "", IPAddress address = null, int rpcPort = 50000, int streamPort = 50001)
+   .. method:: Connection (string name = "", System.Net.IPAddress address = null, int rpcPort = 50000, int streamPort = 50001)
 
       Connect to a kRPC server on the specified IP address and port numbers. If
       streamPort is 0, does not connect to the stream server. Passes an optional
@@ -104,7 +104,7 @@ Client API Reference
       Create a new stream from the given lambda expression. Returns a stream
       object that can be used to obtain the latest value of the stream.
 
-   .. method:: Dispose ()
+   .. method:: void Dispose ()
 
       Close the connection and free any resources associated with it.
 
