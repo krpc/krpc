@@ -5,9 +5,10 @@ class DeployParachutes
 {
     public static void Main ()
     {
-        var connection = new Connection ();
-        var vessel = connection.SpaceCenter ().ActiveVessel;
-        foreach (var parachute in vessel.Parts.Parachutes)
-            parachute.Deploy ();
+        using (var connection = new Connection ()) {
+            var vessel = connection.SpaceCenter ().ActiveVessel;
+            foreach (var parachute in vessel.Parts.Parachutes)
+                parachute.Deploy ();
+        }
     }
 }

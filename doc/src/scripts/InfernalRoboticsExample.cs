@@ -9,21 +9,23 @@ class InfernalRoboticsExample
 {
     public static void Main ()
     {
-        var connection = new Connection (name: "InfernalRobotics Example");
-        var vessel = connection.SpaceCenter ().ActiveVessel;
-        var ir = connection.InfernalRobotics ();
+        using (var connection = new Connection (
+            name: "InfernalRobotics Example")) {
+            var vessel = connection.SpaceCenter ().ActiveVessel;
+            var ir = connection.InfernalRobotics ();
 
-        var group = ir.ServoGroupWithName (vessel, "MyGroup");
-        if (group == null) {
-            Console.WriteLine ("Group not found");
-            return;
+            var group = ir.ServoGroupWithName (vessel, "MyGroup");
+            if (group == null) {
+                Console.WriteLine ("Group not found");
+                return;
+            }
+
+            foreach (var servo in group.Servos)
+                Console.WriteLine (servo.Name + " " + servo.Position);
+
+            group.MoveRight ();
+            Thread.Sleep (1000);
+            group.Stop ();
         }
-
-        foreach (var servo in group.Servos)
-            Console.WriteLine (servo.Name + " " + servo.Position);
-
-        group.MoveRight ();
-        Thread.Sleep (1000);
-        group.Stop ();
     }
 }
