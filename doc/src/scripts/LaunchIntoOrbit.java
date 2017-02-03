@@ -25,14 +25,15 @@ public class LaunchIntoOrbit {
         float targetAltitude = 150000;
 
         // Set up streams for telemetry
-        Stream<Double> ut = connection.addStream(SpaceCenter.class, "ut");
+        spaceCenter.getUT();
+        Stream<Double> ut = connection.addStream(SpaceCenter.class, "getUT");
         ReferenceFrame refFrame = vessel.getSurfaceReferenceFrame();
         Flight flight = vessel.flight(refFrame);
-        Stream<Double> altitude = connection.addStream(flight, "meanAltitude");
+        Stream<Double> altitude = connection.addStream(flight, "getMeanAltitude");
         Stream<Double> apoapsis =
-            connection.addStream(vessel.getOrbit(), "apoapsisAltitude");
+            connection.addStream(vessel.getOrbit(), "getApoapsisAltitude");
         Resources stage3Resources = vessel.resourcesInDecoupleStage(3, false);
-        Stream<Double> srbFuel =
+        Stream<Float> srbFuel =
             connection.addStream(stage3Resources, "amount", "SolidFuel");
 
         // Pre-launch setup
@@ -74,7 +75,7 @@ public class LaunchIntoOrbit {
 
             // Separate SRBs when finished
             if (!srbsSeparated) {
-                if (srbFuel.get() < 0.1) {
+              if (srbFuel.get() < 0.1) {
                     vessel.getControl().activateNextStage();
                     srbsSeparated = true;
                     System.out.println("SRBs separated");
@@ -137,7 +138,7 @@ public class LaunchIntoOrbit {
         // Execute burn
         System.out.println("Ready to execute burn");
         Stream<Double> timeToApoapsis =
-          connection.addStream(vessel.getOrbit(), "timeToApoapsis");
+          connection.addStream(vessel.getOrbit(), "getTimeToApoapsis");
         while (timeToApoapsis.get() - (burnTime / 2.0) > 0) {
         }
         System.out.println("Executing burn");
@@ -148,11 +149,12 @@ public class LaunchIntoOrbit {
         Stream<Triplet<Double,Double,Double>> remainingBurn =
           connection.addStream(
             node, "remainingBurnVector", node.getReferenceFrame());
-        while (remainingBurn.get().getValue0() > 0) {
+        while (remainingBurn.get().getValue1() > 0) {
         }
         vessel.getControl().setThrottle(0);
         node.remove();
 
         System.out.println("Launch complete");
+        connection.close();
     }
 }

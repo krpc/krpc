@@ -23,6 +23,7 @@ public class RemoteTechExample {
 
         // Get info about the vessels communications
         Comms comms = rt.comms(vessel);
-        System.out.println("Signal delay = " + comms.getSignalDelay());
+        System.out.printf("Signal delay = %.1f seconds\n", comms.getSignalDelay());
+        connection.close();
     }
 }

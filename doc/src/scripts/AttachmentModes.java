@@ -31,5 +31,6 @@ public class AttachmentModes {
                 stack.push(new Pair<Part, Integer>(child, depth + 1));
             }
         }
+        connection.close();
     }
 }

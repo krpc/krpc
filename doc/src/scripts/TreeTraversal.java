@@ -30,5 +30,6 @@ public class TreeTraversal {
                 stack.push(new Pair<Part, Integer>(child, depth + 1));
             }
         }
+        connection.close();
     }
 }

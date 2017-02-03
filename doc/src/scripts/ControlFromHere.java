@@ -12,5 +12,6 @@ public class ControlFromHere {
         Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
         Part part = vessel.getParts().withTitle("Clamp-O-Tron Docking Port").get(0);
         vessel.getParts().setControlling(part);
+        connection.close();
     }
 }

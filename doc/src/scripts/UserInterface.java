@@ -47,7 +47,7 @@ public class UserInterface {
         text.setSize(18);
 
         // Set up a stream to monitor the throttle button
-        Stream<Boolean> buttonClicked = connection.addStream(button, "clicked");
+        Stream<Boolean> buttonClicked = connection.addStream(button, "getClicked");
 
         Vessel vessel = spaceCenter.getActiveVessel();
         while (true) {
@@ -58,7 +58,7 @@ public class UserInterface {
             }
 
             // Update the thrust text
-            text.setContent("Thrust: " + (vessel.getThrust()/1000) + " kN");
+            text.setContent(String.format("Thrust: %.0f kN", (vessel.getThrust()/1000)));
 
             Thread.sleep(1000);
         }

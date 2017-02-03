@@ -20,5 +20,6 @@ public class SurfacePrograde {
         ap.engage();
         ap.wait_();
         ap.disengage();
+        connection.close();
     }
 }
