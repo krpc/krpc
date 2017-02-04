@@ -14,5 +14,6 @@ public class DeployParachutes {
         for (Parachute parachute : vessel.getParts().getParachutes()) {
             parachute.deploy();
         }
+        connection.close();
     }
 }

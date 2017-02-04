@@ -30,5 +30,6 @@ public class OrbitalDirections {
         ap.wait_();
 
         ap.disengage();
+        connection.close();
     }
 }

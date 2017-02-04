@@ -333,8 +333,9 @@ in itself. To aid debugging, kRPCs drawing functionality can be used to
 visualize direction vectors in-game.
 
 :meth:`Drawing.add_direction` will draw a direction vector, starting from the
-center of mass of the active vessel. For example, the following code draws the
-direction of the current vessels velocity relative to the surface:
+origin of the given reference frame. For example, the following code draws the
+direction of the current vessels velocity relative to the surface of the body it
+is orbiting:
 
 .. tabs::
 
@@ -363,8 +364,8 @@ direction of the current vessels velocity relative to the surface:
       .. literalinclude:: /scripts/VisualDebugging.py
          :language: python
 
-.. note:: The client must remain connected, otherwise kRPC will stop drawing the
-          directions, hence the while loop at the end of this example.
+.. note:: The client must remain connected for the line to continue to be drawn,
+          hence the infinite loop at the end of this example.
 
 Examples
 --------

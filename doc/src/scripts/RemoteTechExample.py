@@ -9,4 +9,4 @@ antenna.target_body = conn.space_center.bodies['Jool']
 
 # Get info about the vessels communications
 comms = conn.remote_tech.comms(vessel)
-print 'Signal delay =', comms.signal_delay
+print('Signal delay = %.4f seconds' % comms.signal_delay)

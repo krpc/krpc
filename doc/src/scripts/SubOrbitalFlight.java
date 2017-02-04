@@ -50,9 +50,10 @@ public class SubOrbitalFlight {
         vessel.getControl().activateNextStage();
 
         while (vessel.flight(vessel.getOrbit().getBody().getReferenceFrame()).getVerticalSpeed() < -0.1) {
-            System.out.println("Altitude = " + vessel.flight(refFrame).getSurfaceAltitude() + " meters");
+            System.out.printf("Altitude = %.1f meters\n", vessel.flight(refFrame).getSurfaceAltitude());
             Thread.sleep(1000);
         }
         System.out.println("Landed!");
+        connection.close();
     }
 }

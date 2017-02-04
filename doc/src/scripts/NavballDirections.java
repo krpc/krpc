@@ -30,5 +30,6 @@ public class NavballDirections {
         ap.wait_();
 
         ap.disengage();
+        connection.close();
     }
 }

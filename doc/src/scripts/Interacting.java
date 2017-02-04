@@ -11,5 +11,6 @@ public class Interacting {
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         Vessel vessel = spaceCenter.getActiveVessel();
         System.out.println(vessel.getName());
+        connection.close();
     }
 }

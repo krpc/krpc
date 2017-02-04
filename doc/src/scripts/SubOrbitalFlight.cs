@@ -42,9 +42,10 @@ class SubOrbitalFlight
         vessel.Control.ActivateNextStage ();
 
         while (vessel.Flight (vessel.Orbit.Body.ReferenceFrame).VerticalSpeed < -0.1) {
-            Console.WriteLine ("Altitude = " + vessel.Flight ().SurfaceAltitude + " meters");
+            Console.WriteLine ("Altitude = {0:F1} meters", vessel.Flight ().SurfaceAltitude);
             System.Threading.Thread.Sleep (1000);
         }
         Console.WriteLine ("Landed!");
+        conn.Dispose();
     }
 }

@@ -9,5 +9,6 @@ public class Basic {
         Connection connection = Connection.newInstance();
         KRPC krpc = KRPC.newInstance(connection);
         System.out.println("Connected to kRPC version " + krpc.getStatus().getVersion());
+        connection.close();
     }
 }

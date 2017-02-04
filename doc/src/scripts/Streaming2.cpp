@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <tuple>
 #include <krpc.hpp>
 #include <krpc/services/krpc.hpp>
@@ -15,8 +16,9 @@ int main() {
   krpc::Stream<std::tuple<double, double, double>> pos_stream = vessel.position_stream(ref_frame);
   while (true) {
     std::tuple<double, double, double> pos = pos_stream();
-    std::cout << std::get<0>(pos) << ","
-              << std::get<1>(pos) << ","
+    std::cout << std::fixed << std::setprecision(1);
+    std::cout << std::get<0>(pos) << ", "
+              << std::get<1>(pos) << ", "
               << std::get<2>(pos) << std::endl;
   }
 }

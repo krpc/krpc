@@ -12,6 +12,7 @@ public class Vector3 {
         Connection connection = Connection.newInstance();
         Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
         Triplet<Double, Double, Double> v = vessel.flight(null).getPrograde();
-        System.out.println(v.getValue0() + "," + v.getValue1() + "," + v.getValue2());
+        System.out.println(v.getValue0() + ", " + v.getValue1() + ", " + v.getValue2());
+        connection.close();
     }
 }
