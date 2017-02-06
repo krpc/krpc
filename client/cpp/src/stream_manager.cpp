@@ -82,7 +82,8 @@ StreamManager::StreamManager(Client * client, const std::shared_ptr<Connection>&
     stop(new std::atomic_bool(false)),
     should_freeze(new std::atomic_bool(false)),
     frozen(new std::atomic_bool(false)),
-    update_thread(new std::thread(update_thread_main, this, connection, stop, should_freeze, frozen)) {
+    update_thread(new std::thread(update_thread_main, this, connection,
+                                  stop, should_freeze, frozen)) {
 }
 
 StreamManager::~StreamManager() {

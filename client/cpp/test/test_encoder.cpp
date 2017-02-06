@@ -9,13 +9,15 @@
 #include "services/test_service.hpp"
 
 TEST(test_encoder, test_rpc_hello_message) {
-  std::string message(krpc::encoder::RPC_HELLO_MESSAGE, krpc::encoder::RPC_HELLO_MESSAGE_LENGTH);
+  std::string message(krpc::encoder::RPC_HELLO_MESSAGE,
+                      krpc::encoder::RPC_HELLO_MESSAGE_LENGTH);
   ASSERT_EQ(12, message.size());
   ASSERT_EQ("48454c4c4f2d525043000000", krpc::platform::hexlify(message));
 }
 
 TEST(test_encoder, test_stream_hello_message) {
-  std::string message(krpc::encoder::STREAM_HELLO_MESSAGE, krpc::encoder::STREAM_HELLO_MESSAGE_LENGTH);
+  std::string message(krpc::encoder::STREAM_HELLO_MESSAGE,
+                      krpc::encoder::STREAM_HELLO_MESSAGE_LENGTH);
   ASSERT_EQ(12, message.size());
   ASSERT_EQ("48454c4c4f2d53545245414d", krpc::platform::hexlify(message));
 }

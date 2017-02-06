@@ -62,7 +62,8 @@ template <typename T> void test_list(const std::vector<T>& decoded, std::string 
   ASSERT_TRUE(std::equal(decoded.begin(), decoded.end(), value.begin()));
 }
 
-template <typename K, typename V> void test_dictionary(const std::map<K, V>& decoded, std::string encoded) {
+template <typename K, typename V> void test_dictionary(const std::map<K, V>& decoded,
+                                                       std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   std::map<K, V> value;
   krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
@@ -161,8 +162,8 @@ TEST(test_encode_decode, test_string) {
   test_string("One small step for Kerbal-kind!",
               "1f4f6e6520736d616c6c207374657020666f72204b657262616c2d6b696e6421");
   test_string(krpc::platform::unhexlify("e284a2"), "03e284a2");
-  test_string("Mystery Goo" + krpc::platform::unhexlify("e284a2") +
-              " Containment Unit", "1f4d79737465727920476f6fe284a220436f6e7461696e6d656e7420556e6974");
+  test_string("Mystery Goo" + krpc::platform::unhexlify("e284a2") + " Containment Unit",
+              "1f4d79737465727920476f6fe284a220436f6e7461696e6d656e7420556e6974");
 }
 
 TEST(test_encode_decode, test_bytes) {
