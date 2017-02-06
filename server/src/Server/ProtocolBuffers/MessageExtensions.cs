@@ -32,12 +32,10 @@ namespace KRPC.Server.ProtocolBuffers
         public static Schema.KRPC.ProcedureResult ToProtobufMessage (this ProcedureResult procedureResult)
         {
             var result = new Schema.KRPC.ProcedureResult ();
-            if (procedureResult.HasError)
-                result.Error = new Schema.KRPC.Error {
-                    Description = procedureResult.Error.Length > 0 ? procedureResult.Error : "Unknown error"
-                };
             if (procedureResult.HasValue)
                 result.Value = Encoder.Encode (procedureResult.Value);
+            if (procedureResult.HasError)
+                result.Error = procedureResult.Error.ToProtobufMessage ();
             return result;
         }
 

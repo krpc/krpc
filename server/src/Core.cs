@@ -521,11 +521,11 @@ namespace KRPC
                             result = Service.Services.Instance.ExecuteCall (request.Procedure, request.Arguments);
                         } catch (RPCException e) {
                             result = new ProcedureResult ();
-                            result.Error = e.ToString ();
+                            result.Error = HandleException (e);
                         } catch (YieldException e) {
                             // FIXME: handle yields correctly
                             result = new ProcedureResult ();
-                            result.Error = e.ToString ();
+                            result.Error = HandleException (e);
                         }
                         rpcsExecuted++;
                         // Don't send an update if it is the previous one
@@ -661,9 +661,9 @@ namespace KRPC
             } catch (YieldException) {
                 throw;
             } catch (RPCException e) {
-                response = HandleException (e);
+                response = new Response { Error = HandleException (e) };
             } catch (System.Exception e) {
-                response = HandleException (e);
+                response = new Response { Error = HandleException (e) };
             } finally {
                 CallContext.Clear ();
             }
@@ -679,9 +679,9 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Convert an exception thrown by an RPC into a response message.
+        /// Convert an exception thrown by an RPC into an error message.
         /// </summary>
-        static Response HandleException(System.Exception exn)
+        private static Error HandleException(System.Exception exn)
         {
             if (exn is RPCException && exn.InnerException != null)
                 exn = exn.InnerException;
@@ -700,7 +700,7 @@ namespace KRPC
                 error = new Error(TypeUtils.GetExceptionServiceName(type), type.Name, message, stackTrace);
             else
                 error = new Error(message, stackTrace);
-            return new Response { Error = error };
+            return error;
         }
     }
 }
