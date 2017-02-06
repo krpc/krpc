@@ -139,5 +139,6 @@ class LaunchIntoOrbit
         node.Remove ();
 
         Console.WriteLine ("Launch complete");
+        conn.Dispose();
     }
 }

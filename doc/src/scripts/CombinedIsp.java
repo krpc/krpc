@@ -34,6 +34,7 @@ public class CombinedIsp {
             fuelConsumption += engine.getThrust() / engine.getSpecificImpulse();
         }
         double isp = thrust / fuelConsumption;
-        System.out.println("Combined vacuum Isp = " + isp + " seconds");
+        System.out.printf("Combined vacuum Isp = %.0f\n", isp);
+        connection.close();
     }
 }

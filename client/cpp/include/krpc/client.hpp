@@ -15,7 +15,8 @@ namespace krpc {
 class Client {
  public:
   Client();
-  Client(const std::shared_ptr<Connection>& rpc_connection, const std::shared_ptr<Connection>& stream_connection);
+  Client(const std::shared_ptr<Connection>& rpc_connection,
+         const std::shared_ptr<Connection>& stream_connection);
 
   std::string invoke(const schema::Request& request);
   std::string invoke(const schema::ProcedureCall& call);

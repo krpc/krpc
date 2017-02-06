@@ -92,7 +92,8 @@ inline void decode(std::tuple<T0, T1, T2, T3>& tuple, const std::string& data, C
 }
 
 template <typename T0, typename T1, typename T2, typename T3, typename T4>
-inline void decode(std::tuple<T0, T1, T2, T3, T4>& tuple, const std::string& data, Client * client) {
+inline void decode(std::tuple<T0, T1, T2, T3, T4>& tuple, const std::string& data,
+                   Client * client) {
   krpc::schema::Tuple tupleMessage;
   tupleMessage.ParseFromString(data);
   decode(std::get<0>(tuple), tupleMessage.items(0), client);

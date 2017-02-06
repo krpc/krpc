@@ -27,5 +27,6 @@ public class InfernalRoboticsExample {
         group.moveRight();
         Thread.sleep(1000);
         group.stop();
+        connection.close();
     }
 }

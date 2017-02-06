@@ -43,7 +43,7 @@ int main() {
     }
 
     // Update the thrust text
-    text.set_content("Thrust: " + std::to_string(vessel.thrust()/1000) + " kN");
+    text.set_content("Thrust: " + std::to_string((int)(vessel.thrust()/1000)) + " kN");
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }

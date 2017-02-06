@@ -51,7 +51,7 @@ def _lint_impl(ctx):
     for f in cpplint_runfiles:
         _add_runfile(sub_commands, f.short_path, runfiles_dir+ '/' + cpplint.basename + '.runfiles/krpc/' + f.short_path)
 
-    args = ['--linelength=120']
+    args = ['--linelength=100']
     if filters != None:
         args.append('--filter=%s' % ','.join(filters))
     args.extend([x.short_path for x in srcs + hdrs])

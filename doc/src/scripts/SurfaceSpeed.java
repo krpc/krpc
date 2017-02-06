@@ -19,13 +19,13 @@ public class SurfaceSpeed {
         while (true) {
             Triplet<Double,Double,Double> velocity =
                 vessel.flight(refFrame).getVelocity();
-            System.out.println("Surface velocity = (" +
-                               velocity.getValue0() + "," +
-                               velocity.getValue1() + "," +
-                               velocity.getValue2() + ")");
+            System.out.printf("Surface velocity = (%.1f, %.1f, %.1f)\n",
+                              velocity.getValue0(),
+                              velocity.getValue1(),
+                              velocity.getValue2());
 
             double speed = vessel.flight(refFrame).getSpeed();
-            System.out.println("Surface speed = " + speed + " m/s");
+            System.out.printf("Surface speed = %.1f m/s\n", speed);
 
             Thread.sleep(1000);
         }

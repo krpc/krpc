@@ -23,7 +23,8 @@ class Connection {
   /** Receive data from the connection. Blocks until length bytes have been received. */
   std::string receive(size_t length);
   /** Receive up to length bytes of data from the connection. */
-  std::string partial_receive(size_t length, std::chrono::milliseconds timeout = std::chrono::milliseconds(10));
+  std::string partial_receive(size_t length,
+                              std::chrono::milliseconds timeout = std::chrono::milliseconds(10));
  private:
   asio::io_service io_service;
   asio::ip::tcp::socket socket;

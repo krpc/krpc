@@ -114,7 +114,8 @@ TEST_F(test_client, test_class_methods) {
 
 TEST_F(test_client, test_class_static_methods) {
   ASSERT_EQ("jeb", krpc::services::TestService::TestClass::static_method(conn));
-  ASSERT_EQ("jebbobbill", krpc::services::TestService::TestClass::static_method(conn, "bob", "bill"));
+  ASSERT_EQ("jebbobbill",
+            krpc::services::TestService::TestClass::static_method(conn, "bob", "bill"));
 }
 
 TEST_F(test_client, test_class_properties) {

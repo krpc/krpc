@@ -40,7 +40,7 @@ public class AngleOfAttack {
                 angle = Math.abs(Math.acos(dotProd / vMag) * (180.0 / Math.PI));
             }
 
-            System.out.printf("Angle of attack = %.2f degrees\n", angle);
+            System.out.printf("Angle of attack = %.1f degrees\n", angle);
 
             Thread.sleep(1000);
         }

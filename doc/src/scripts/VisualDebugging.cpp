@@ -9,10 +9,8 @@ int main() {
   krpc::services::Drawing drawing(&conn);
   auto vessel = space_center.active_vessel();
 
-  auto ref_frame = vessel.orbit().body().reference_frame();
-  auto velocity = vessel.flight(ref_frame).velocity();
-  drawing.add_direction(velocity, ref_frame);
-
+  auto ref_frame = vessel.surface_velocity_reference_frame();
+  drawing.add_direction(std::make_tuple(0, 1, 0), ref_frame);
   while (true) {
   }
 }

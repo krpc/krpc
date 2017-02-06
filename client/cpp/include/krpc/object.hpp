@@ -16,8 +16,9 @@ class Object {
   template <typename U> friend std::ostream& operator<<(std::ostream&, const Object<U>&);
   template <typename U> friend bool operator==(const Object<U>&, const Object<U>&);
   template <typename U> friend bool operator<(const Object<U>&, const Object<U>&);
-  // TODO: Ideally the following fields should be private, but they are needed by encoder and decoder.
-  //       They can't be a 'friend' due to the circular dependency that would introduce.
+  // TODO: Ideally the following fields should be private, but they are needed by the
+  // encoder and decoder. They can't be a 'friend' due to the circular dependency
+  // that would introduce.
   Client * _client;
   google::protobuf::uint64 _id;
  private:
@@ -31,7 +32,8 @@ template <typename T> inline Object<T>::Object(
   Client* client, const std::string& name, google::protobuf::uint64 id):
   _client(client), _id(id), _name(name) {}
 
-template <typename T> inline std::ostream& operator<<(std::ostream& stream, const Object<T>& object) {
+template <typename T> inline std::ostream& operator<<(std::ostream& stream,
+                                                      const Object<T>& object) {
   stream << object._name << "<" << object._id << ">";
   return stream;
 }

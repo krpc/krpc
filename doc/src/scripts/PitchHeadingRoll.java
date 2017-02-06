@@ -96,9 +96,8 @@ public class PitchHeadingRoll {
                 roll -= 180;
             }
 
-            System.out.printf(
-                "pitch = " + pitch + ", heading = " + heading + ", roll = " + roll);
-
+            System.out.printf("pitch = %.1f, heading = %.1f, roll = %.1f\n",
+                              pitch, heading, roll);
             Thread.sleep(1000);
         }
     }

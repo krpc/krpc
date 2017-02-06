@@ -81,8 +81,8 @@ class AngleOfAttack
             else
                 roll -= 180;
 
-            Console.WriteLine (
-                "pitch = " + pitch + ", heading = " + heading + ", roll = " + roll);
+            Console.WriteLine ("pitch = {0:F1}, heading = {1:F1}, roll = {2:F1}",
+                               pitch, heading, roll);
 
             System.Threading.Thread.Sleep (1000);
         }
