@@ -47,7 +47,8 @@ class Client {
   std::shared_ptr<Connection> rpc_connection;
   StreamManager stream_manager;
   std::shared_ptr<std::mutex> lock;
-  std::map<std::pair<std::string, std::string>, std::function<void(std::string)>> exception_throwers;
+  std::map<std::pair<std::string, std::string>,
+           std::function<void(std::string)>> exception_throwers;
 };
 
 }  // namespace krpc

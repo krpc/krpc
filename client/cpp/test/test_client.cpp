@@ -23,19 +23,22 @@ TEST_F(test_client, test_version) {
 
 TEST_F(test_client, test_wrong_rpc_port) {
   ASSERT_THROW(
-    krpc::connect("C++ClientTestWrongRpcPort", "localhost", get_rpc_port() ^ get_stream_port(), get_stream_port()),
+    krpc::connect("C++ClientTestWrongRpcPort", "localhost",
+                  get_rpc_port() ^ get_stream_port(), get_stream_port()),
     std::exception);
 }
 
 TEST_F(test_client, test_wrong_stream_port) {
   ASSERT_THROW(
-    krpc::connect("C++ClientTestWrongStreamPort", "localhost", get_rpc_port(), get_rpc_port() ^ get_stream_port()),
+    krpc::connect("C++ClientTestWrongStreamPort", "localhost",
+                  get_rpc_port(), get_rpc_port() ^ get_stream_port()),
     std::exception);
 }
 
 TEST_F(test_client, test_wrong_rpc_server) {
   auto fn = [] () {
-    krpc::connect("C++ClientTestWrongRpcServer", "localhost", get_stream_port(), get_stream_port());
+    krpc::connect("C++ClientTestWrongRpcServer", "localhost",
+                  get_stream_port(), get_stream_port());
   };
   ASSERT_THROW(fn(), krpc::ConnectionError);
   try {
@@ -49,7 +52,8 @@ TEST_F(test_client, test_wrong_rpc_server) {
 
 TEST_F(test_client, test_wrong_stream_server) {
   auto fn = [] () {
-    krpc::connect("C++ClientTestWrongStreamServer", "localhost", get_rpc_port(), get_rpc_port());
+    krpc::connect("C++ClientTestWrongStreamServer", "localhost",
+                  get_rpc_port(), get_rpc_port());
   };
   ASSERT_THROW(fn(), krpc::ConnectionError);
   try {

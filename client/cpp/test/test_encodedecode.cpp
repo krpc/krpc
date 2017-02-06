@@ -224,7 +224,8 @@ TEST(test_encode_decode, test_set) {
 
 TEST(test_encode_decode, test_tuple) {
   test_tuple1(std::tuple<unsigned int>(1), "0a0101");
-  test_tuple3(std::tuple<unsigned int, std::string, bool>(1, "jeb", false), "0a01010a04036a65620a0100");
+  test_tuple3(std::tuple<unsigned int, std::string, bool>(1, "jeb", false),
+              "0a01010a04036a65620a0100");
 }
 
 TEST(test_encode_decode, test_list_of_objects) {

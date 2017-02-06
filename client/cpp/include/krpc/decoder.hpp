@@ -29,7 +29,8 @@ void decode(bool& value, const std::string& data, Client * client = nullptr);
 void decode(std::string& value, const std::string& data, Client * client = nullptr);
 void decode(google::protobuf::Message& message, const std::string& data, Client * client = nullptr);
 
-template <typename T> void decode(Object<T>& object, const std::string& data, Client * client = nullptr);
+template <typename T> void decode(Object<T>& object, const std::string& data,
+                                  Client * client = nullptr);
 
 template <typename T0> void decode(
   std::tuple<T0>& tuple, const std::string& data, Client * client = nullptr);
@@ -42,8 +43,10 @@ template <typename T0, typename T1, typename T2, typename T3> void decode(
 template <typename T0, typename T1, typename T2, typename T3, typename T4> void decode(
   std::tuple<T0, T1, T2, T3, T4>& tuple, const std::string& data, Client * client = nullptr);
 
-template <typename T> void decode(std::vector<T>& list, const std::string& data, Client * client = nullptr);
-template <typename T> void decode(std::set<T>& set, const std::string& data, Client * client = nullptr);
+template <typename T> void decode(std::vector<T>& list, const std::string& data,
+                                  Client * client = nullptr);
+template <typename T> void decode(std::set<T>& set, const std::string& data,
+                                  Client * client = nullptr);
 template <typename K, typename V> void decode(
   std::map<K, V>& dictionary, const std::string& data, Client * client = nullptr);
 
@@ -115,7 +118,8 @@ inline void decode(std::vector<T>& list, const std::string& data, Client * clien
   }
 }
 
-template <typename T> inline void decode(std::set<T>& set, const std::string& data, Client * client) {
+template <typename T> inline void decode(std::set<T>& set, const std::string& data,
+                                         Client * client) {
   set.clear();
   krpc::schema::Set setMessage;
   setMessage.ParseFromString(data);
