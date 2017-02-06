@@ -11,7 +11,6 @@ class Connection(object):
         self._socket = None
 
     def connect(self):
-        socket.getaddrinfo(self._address, self._port)
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._socket.connect((self._address, self._port))
 
