@@ -6,22 +6,30 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - wget
-      - pkg-config
-      - python
-      - python-virtualenv
-      - python-pip
-      - texlive-latex-base
-      - texlive-latex-recommended
-      - texlive-fonts-recommended
-      - texlive-latex-extra
-      - librsvg2-bin
-      - lua5.1
-      - liblua5.1-0-dev
+      - autoconf
+      - automake
+      - curl
+      - g++
       - inotify-tools
-      - python-dev
+      - libasio-dev
+      - liblua5.1-0-dev
+      - librsvg2-bin
+      - libtool
       - libxml2-dev
       - libxslt1-dev
+      - lua5.1
+      - make
+      - pkg-config
+      - python
+      - python-dev
+      - python-pip
+      - python-virtualenv
+      - texlive-fonts-recommended
+      - texlive-latex-base
+      - texlive-latex-extra
+      - texlive-latex-recommended
+      - unzip
+      - wget
 
 language: csharp
 mono:
@@ -29,6 +37,7 @@ mono:
 
 install:
   - ./tools/travis-ci/install-luarocks.sh
+  - ./tools/travis-ci/install-protobuf.sh
   - ./tools/travis-ci/install-bazel.sh
   - ./tools/travis-ci/install-ksp-libs.sh
 
@@ -38,6 +47,7 @@ script:
   - bazel build //:krpc //doc:html //doc:compile-scripts //:csproj //tools/krpctools //tools/TestServer:archive
   - xbuild KRPC.sln
   - bazel test //:ci-test
+  - tools/test-cpp-client-install.sh
   - tools/dist/genfiles.sh
 
 after_script:
