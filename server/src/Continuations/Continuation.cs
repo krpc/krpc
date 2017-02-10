@@ -17,7 +17,7 @@ namespace KRPC.Continuations
         {
             return Run ();
         }
-    };
+    }
 
     /// <summary>
     /// A continuation that does not return a value
@@ -37,5 +37,5 @@ namespace KRPC.Continuations
             Run ();
             return null;
         }
-    };
+    }
 }

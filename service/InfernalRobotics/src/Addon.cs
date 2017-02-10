@@ -7,7 +7,7 @@ namespace KRPC.InfernalRobotics
     /// kRPC InfernalRobotics addon.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    sealed public class Addon : MonoBehaviour
+    public sealed class Addon : MonoBehaviour
     {
         /// <summary>
         /// Load the InfernalRobotics API.

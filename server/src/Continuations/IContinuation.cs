@@ -9,5 +9,5 @@ namespace KRPC.Continuations
         /// Run the continuation and return the result.
         /// </summary>
         object RunUntyped ();
-    };
+    }
 }

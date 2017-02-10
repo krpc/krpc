@@ -9,7 +9,7 @@ namespace KRPC.SpaceCenter
     /// Addon to perform resource transfers between parts.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    sealed public class ResourceTransferAddon : MonoBehaviour
+    public sealed class ResourceTransferAddon : MonoBehaviour
     {
         /// <summary>
         /// The transfers currently in progress.

@@ -12,7 +12,7 @@ namespace KRPC.Drawing
     /// Addon for doing the drawing
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    sealed public class Addon : MonoBehaviour
+    public sealed class Addon : MonoBehaviour
     {
         static IDictionary<IClient, IList<IDrawable>> objects = new Dictionary<IClient, IList<IDrawable>> ();
 

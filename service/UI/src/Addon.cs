@@ -12,7 +12,7 @@ namespace KRPC.UI
     /// Addon for managing the UI
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    sealed public class Addon : MonoBehaviour
+    public sealed class Addon : MonoBehaviour
     {
         static AssetBundle prefabs;
 

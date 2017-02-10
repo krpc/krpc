@@ -7,7 +7,7 @@ namespace KRPC.SpaceCenter
     /// Addon to load external APIs.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    sealed public class ExternalAPIAddon : MonoBehaviour
+    public sealed class ExternalAPIAddon : MonoBehaviour
     {
         /// <summary>
         /// Load external APIs.

@@ -7,7 +7,7 @@ namespace KRPC.KerbalAlarmClock
     /// kRPC KerbalAlarmClock addon.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    sealed public class Addon : MonoBehaviour
+    public sealed class Addon : MonoBehaviour
     {
         /// <summary>
         /// Load the KerbalAlarmClock API.

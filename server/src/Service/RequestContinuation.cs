@@ -53,5 +53,5 @@ namespace KRPC.Service
                 throw new YieldException (new RequestContinuation (Client, request, procedure, e.Continuation));
             }
         }
-    };
+    }
 }

@@ -8,7 +8,7 @@ namespace KRPC.RemoteTech
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
-    sealed public class Addon : MonoBehaviour
+    public sealed class Addon : MonoBehaviour
     {
         /// <summary>
         /// Load the RemoteTech API.

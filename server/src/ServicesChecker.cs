@@ -11,7 +11,7 @@ namespace KRPC
     /// Check kRPC services.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Instantly, true)]
-    sealed public class ServicesChecker : MonoBehaviour
+    public sealed class ServicesChecker : MonoBehaviour
     {
         internal static bool OK { get; private set; }
 
