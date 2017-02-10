@@ -1,5 +1,6 @@
 v0.3.8
  * Update to protobuf v3.2.0
+ * Update build scripts to check for protobuf >= 3.2 (#374)
 
 v0.3.7
  * Add missing header to automake script
