@@ -1,3 +1,6 @@
+v0.3.8
+ * Update to protobuf v3.2.0
+
 v0.2.2
  * Remove support for protobuf enumeration and custom protobuf messages
 

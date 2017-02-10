@@ -1,5 +1,6 @@
 v0.3.8
  * Clean up code to meet PEP 8 guidelines
+ * Update to protobuf v3.2.0
 
 v0.3.7
  * Fix bug parsing nested collection types
