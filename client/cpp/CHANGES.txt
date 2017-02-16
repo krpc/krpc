@@ -1,3 +1,7 @@
+v0.3.8
+ * Update to protobuf v3.2.0
+ * Update build scripts to check for protobuf >= 3.2 (#374)
+
 v0.3.7
  * Add missing header to automake script
  * Add stream freezing (#357)
@@ -7,7 +11,7 @@ v0.3.6
  * Fix configure script
 
 v0.3.4
- * Update protobuf to v3.0.0-beta-3
+ * Update to protobuf v3.0.0-beta-3
 
 v0.2.3
  * Make client thread safe

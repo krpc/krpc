@@ -10,6 +10,7 @@ env=bazel-bin/doc/serve/env
 out=bazel-bin/doc/serve/out
 
 # Build the doc sources
+bazel fetch //...
 bazel build //doc:srcs
 
 # Set up python environment

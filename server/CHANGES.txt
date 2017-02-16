@@ -1,3 +1,6 @@
+v0.3.8
+ * Update to Protobuf Buffers v3.2.0
+
 v0.3.7
  * Support for KSP 1.2.2
  * Add KRPCDefaultValue attribute. Can be used to set default arguments to non-compile time constants.
