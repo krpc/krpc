@@ -47,7 +47,7 @@ script:
   - bazel build //:krpc //doc:html //doc:compile-scripts //:csproj //tools/krpctools //tools/TestServer:archive
   - xbuild KRPC.sln
   - bazel test //:ci-test
-  - tools/test-cpp-client-install.sh
+  - client/cpp/test-build.sh
   - tools/dist/genfiles.sh
 
 after_script:
