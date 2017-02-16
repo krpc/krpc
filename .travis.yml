@@ -44,6 +44,7 @@ install:
 script:
   - stty cols 120
   - ./tools/travis-ci/set-version.py
+  - bazel fetch //...
   - bazel build //:krpc //doc:html //doc:compile-scripts //:csproj //tools/krpctools //tools/TestServer:archive
   - xbuild KRPC.sln
   - bazel test //:ci-test

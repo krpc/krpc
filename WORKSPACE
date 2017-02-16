@@ -4,7 +4,7 @@ new_http_archive(
     name = 'protoc_linux_x86_32',
     build_file = 'tools/build/protobuf/protoc_linux_x86_32.BUILD',
     url = 'https://github.com/google/protobuf/releases/download/v3.2.0/protoc-3.2.0-linux-x86_32.zip',
-    sha256 = 'ed83ac3226b7d4334054c712a911669351b0a65d88cff04f32d5251b3c1e1bc5'
+    sha256 = '62cd0b537122b9659e3684e89d4cc14595b0bce1ba7eaea083b37330bea8b397'
 )
 
 new_http_archive(
@@ -18,14 +18,14 @@ new_http_archive(
     name = 'protoc_osx_x86_32',
     build_file = 'tools/build/protobuf/protoc_osx_x86_32.BUILD',
     url = 'https://github.com/google/protobuf/releases/download/v3.2.0/protoc-3.2.0-osx-x86_32.zip',
-    sha256 = '8291317f41253b9d8182d272d739b06febf25acd1d9787996a92fe5cae936898'
+    sha256 = '2c524f270544823c1533c06aecfbc1047702650153548a8c5f0c42ac331d72c4'
 )
 
 new_http_archive(
     name = 'protoc_win32',
     build_file = 'tools/build/protobuf/protoc_win32.BUILD',
     url = 'https://github.com/google/protobuf/releases/download/v3.2.0/protoc-3.2.0-win32.zip',
-    sha256 = 'e46b3b7c5c99361bbdd1bbda93c67e5cbf2873b7098482d85ff8e587ff596b23'
+    sha256 = '162fbb853fb1ec49c947d0b950b6d225f28967ee062f981cb875d589233cef56'
 )
 
 http_file(
