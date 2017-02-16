@@ -2,7 +2,7 @@
 set -ev
 
 VERSION=0.4.4
-HASH=4d950b6833ab90d54273743bd0fd6988016f95e6afbf9775ab8c24a9862bdf52
+HASH=c0b4df929bc2e1e12fb4ce72961cb77901cf6f594a789e195ea50f7c8673ddea
 
 DEB=bazel_$VERSION-linux-x86_64.deb
 wget https://github.com/bazelbuild/bazel/releases/download/$VERSION/$DEB
