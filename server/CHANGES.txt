@@ -8,6 +8,7 @@ v0.4.0
    * Significantly reduced the size of the message returned by GetServices
    * More compact encoding of signed integers
  * Added ability for RPCs to throw custom exception types in the calling client
+ * Add KRPC.GetClientID
  * Update to Protocol Buffers v3.1.0
 
 v0.3.8

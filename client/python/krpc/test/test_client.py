@@ -317,8 +317,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_krpc_service_members(self):
         self.assertSetEqual(
-            set(['get_services', 'get_status', 'add_stream', 'remove_stream',
-                 'current_game_scene', 'GameScene', 'clients',
+            set(['get_client_id', 'get_services', 'get_status', 'add_stream',
+                 'remove_stream', 'current_game_scene', 'GameScene', 'clients',
                  'InvalidOperationException', 'ArgumentException',
                  'ArgumentNullException', 'ArgumentOutOfRangeException']),
             set(x for x in dir(self.conn.krpc) if not x.startswith('_')))

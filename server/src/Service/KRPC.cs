@@ -14,6 +14,14 @@ namespace KRPC.Service
     public static class KRPC
     {
         /// <summary>
+        /// Returns the identifier for the current client.
+        /// </summary>
+        [KRPCProcedure]
+        public static byte[] GetClientID() {
+          return CallContext.Client.Guid.ToByteArray ();
+        }
+
+        /// <summary>
         /// Returns some information about the server, such as the version.
         /// </summary>
         [KRPCProcedure]

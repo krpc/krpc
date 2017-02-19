@@ -25,13 +25,17 @@ namespace KRPC.Test.Service
             Assert.AreEqual (4, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (6, service.Procedures.Count);
+            Assert.AreEqual (7, service.Procedures.Count);
             Assert.AreEqual (0, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
 
             int foundProcedures = 0;
             foreach (var proc in service.Procedures) {
-                if (proc.Name == "GetStatus") {
+                if (proc.Name == "GetClientID") {
+                    MessageAssert.HasReturnType (proc, typeof(byte[]));
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "GetStatus") {
                     MessageAssert.HasReturnType (proc, typeof(KRPC.Service.Messages.Status));
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
@@ -62,7 +66,7 @@ namespace KRPC.Test.Service
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (6, foundProcedures);
+            Assert.AreEqual (7, foundProcedures);
 
             bool foundEnumeration = false;
             foreach (var enumeration in service.Enumerations) {

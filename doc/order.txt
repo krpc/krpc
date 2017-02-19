@@ -1,4 +1,5 @@
 KRPC
+KRPC.GetClientID
 KRPC.GetStatus
 KRPC.GetServices
 KRPC.Clients
