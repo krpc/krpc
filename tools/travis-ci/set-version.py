@@ -18,7 +18,10 @@ if re.search(r'-[0-9]+$', desc):
 tag = desc
 
 # Get current branch
-branch = os.getenv('TRAVIS_BRANCH')
+if os.getenv('TRAVIS_PULL_REQUEST') == 'false':
+    branch = os.getenv('TRAVIS_BRANCH')
+else:
+    branch = os.getenv('TRAVIS_PULL_REQUEST_BRANCH')
 
 # Compute version number
 if re.match(version_pattern, branch):
