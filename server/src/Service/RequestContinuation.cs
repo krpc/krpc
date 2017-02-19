@@ -72,5 +72,5 @@ namespace KRPC.Service
                 return response;
             }
         }
-    };
+    }
 }

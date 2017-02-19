@@ -12,7 +12,7 @@ namespace KRPC
     /// </summary>
     [KSPAddon (KSPAddon.Startup.AllGameScenes, false)]
     [SuppressMessage ("Gendarme.Rules.Correctness", "DeclareEventsExplicitlyRule")]
-    sealed public class Addon : MonoBehaviour
+    public sealed class Addon : MonoBehaviour
     {
         // TODO: clean this up
         internal static ConfigurationFile config;

@@ -115,7 +115,7 @@ namespace KRPC.SpaceCenter
                 state.CopyFrom (other.state);
                 ThrottleUpdated = other.ThrottleUpdated;
             }
-        };
+        }
 
         /// <summary>
         /// The current control inputs that the craft is using.

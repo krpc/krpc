@@ -7,7 +7,7 @@ namespace TestingTools
     /// Addon that loads a save called "default" and switches to the first active vessel.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.MainMenu, false)]
-    sealed public class AutoLoadPersistentSaveOnStartup : MonoBehaviour
+    public sealed class AutoLoadPersistentSaveOnStartup : MonoBehaviour
     {
         /// <summary>
         /// Whether the addon has been run.

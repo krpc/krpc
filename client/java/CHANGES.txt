@@ -8,8 +8,11 @@ v0.4.0
      as these errors should not occur as a result of user input.
  * Minor code clean up, and source now checked with CheckStyle
 
+v0.3.8
+ * Update to protobuf v3.2.0
+
 v0.3.4
- * Update protobuf to v3.0.0-beta-3
+ * Update to protobuf v3.0.0-beta-3
 
 v0.2.3
  * Make client thread safe

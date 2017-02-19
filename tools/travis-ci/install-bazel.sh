@@ -1,8 +1,8 @@
 #!/bin/bash
 set -ev
 
-VERSION=0.4.2
-HASH=de12abbf8bf1b5ec5f7676afb32019e10e144fe986fb170ebb7d976bb2229539
+VERSION=0.4.4
+HASH=c0b4df929bc2e1e12fb4ce72961cb77901cf6f594a789e195ea50f7c8673ddea
 
 DEB=bazel_$VERSION-linux-x86_64.deb
 wget https://github.com/bazelbuild/bazel/releases/download/$VERSION/$DEB

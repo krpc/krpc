@@ -1,7 +1,7 @@
 using System;
 using KRPC.Client;
-using KRPC.Client.Services.SpaceCenter;
 using KRPC.Client.Services.Drawing;
+using KRPC.Client.Services.SpaceCenter;
 
 class VisualDebugging
 {

@@ -10,6 +10,9 @@ v0.4.0
  * Added ability for RPCs to throw custom exception types in the calling client
  * Update to Protocol Buffers v3.1.0
 
+v0.3.8
+ * Update to Protobuf Buffers v3.2.0
+
 v0.3.7
  * Support for KSP 1.2.2
  * Add KRPCDefaultValue attribute. Can be used to set default arguments to non-compile time constants.

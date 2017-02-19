@@ -10,7 +10,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 # Check for protobuf
-find_package(Protobuf REQUIRED)
+find_package(Protobuf 3.2 REQUIRED)
 
 # Check for ASIO headers
 find_path(HAVE_ASIO asio.hpp)

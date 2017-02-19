@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 tools/install.sh
 DISPLAY=:0 $KSP_DIR/KSP.x86 &
 trap 'kill $(jobs -p)' EXIT
