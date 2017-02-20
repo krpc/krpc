@@ -126,7 +126,7 @@ namespace KRPC
         {
             Servers.Add (server);
             Configure (server);
-            Logger.WriteLine ("Added server '" + server.Name);
+            Logger.WriteLine ("Added server '" + server.Name + "'");
         }
 
         /// <summary>
