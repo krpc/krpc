@@ -31,6 +31,7 @@ namespace TestServer
             bool showHelp = false;
             bool showVersion = false;
 
+            Logger.Format = "{0:G} - {1} - {2}";
             Logger.Enabled = true;
             Logger.Level = Logger.Severity.Info;
             bool serverDebug = false;
@@ -110,17 +111,17 @@ namespace TestServer
                 var streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
                 server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", rpcServer, streamServer);
             } else {
-                Console.WriteLine ("Server type '" + type + "' not supported");
+                Logger.WriteLine ("Server type '" + type + "' not supported", Logger.Severity.Error);
                 return;
             }
             core.Add (server);
 
-            Console.WriteLine ("Starting server...");
+            Logger.WriteLine ("Starting server...");
             core.StartAll ();
-            Console.WriteLine ("type = " + type);
-            Console.WriteLine ("rpc_port = " + rpcTcpServer.ActualPort);
-            Console.WriteLine ("stream_port = " + streamTcpServer.ActualPort);
-            Console.WriteLine ("Server started successfully");
+            Logger.WriteLine ("type = " + type);
+            Logger.WriteLine ("rpc_port = " + rpcTcpServer.ActualPort);
+            Logger.WriteLine ("stream_port = " + streamTcpServer.ActualPort);
+            Logger.WriteLine ("Server started successfully");
 
             const long targetFPS = 60;
             long update = 0;

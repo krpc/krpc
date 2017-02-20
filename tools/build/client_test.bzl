@@ -24,7 +24,7 @@ def _impl(ctx):
     stdout = 'server-executable.runfiles/krpc/stdout'
     sub_commands.extend([
         'pkill TestServer.exe',
-        '(cd server-executable.runfiles/krpc; %s --quiet >stdout) &' % (ctx.executable.server_executable.short_path),
+        '(cd server-executable.runfiles/krpc; %s >stdout) &' % (ctx.executable.server_executable.short_path),
         'while ! grep "Server started successfully" %s >/dev/null 2>&1; do sleep 0.1 ; done' % stdout,
         'RPC_PORT=`awk \'/rpc_port = /{print $NF}\' %s`' % stdout,
         'STREAM_PORT=`awk \'/stream_port = /{print $NF}\' %s`' % stdout,
