@@ -36,7 +36,8 @@ namespace KRPC.Test.Server.WebSockets
 
             expectedUpdate = streamUpdate;
             using (var stream = new MemoryStream ()) {
-                expectedUpdate.ToProtobufMessage ().WriteDelimitedTo (stream);
+                expectedUpdate.ToProtobufMessage ().WriteTo (stream);
+                stream.Flush ();
                 updateBytes = stream.ToArray ();
             }
         }
