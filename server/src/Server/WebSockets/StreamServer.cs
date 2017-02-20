@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using KRPC.Utils;
 using KRPC.Service.Messages;
 
 namespace KRPC.Server.WebSockets
@@ -54,12 +55,21 @@ namespace KRPC.Server.WebSockets
         {
             // TODO: make this id extraction more robust
             var query = request.URI.Query;
-            if (!query.StartsWith ("?id=", StringComparison.CurrentCulture))
+            if (!query.StartsWith ("?id=", StringComparison.CurrentCulture)) {
+                Logger.WriteLine ("Invalid WebSockets URI: id is not set in query string", Logger.Severity.Error);
                 return Guid.Empty;
+            }
+            var id = query.Substring ("?id=".Length);
             try {
-                var bytes = Convert.FromBase64String (query.Substring ("?id=".Length));
-                return bytes.Length == 16 ? new Guid (bytes) : Guid.Empty;
+                var bytes = Convert.FromBase64String (id);
+                var length = bytes.Length;
+                if (length != 16) {
+                    Logger.WriteLine ("Invalid WebSockets URI: id is not 16 bytes, got " + length + " bytes: " + id, Logger.Severity.Error);
+                    return Guid.Empty;
+                }
+                return new Guid (bytes);
             } catch (FormatException) {
+                Logger.WriteLine ("Invalid WebSockets URI: id is not a valid 16 byte Guid", Logger.Severity.Error);
                 return Guid.Empty;
             }
         }
