@@ -538,8 +538,13 @@ namespace KRPC
                         streamResult.Result = result;
                         streamUpdate.Results.Add (streamResult);
                     }
-                    if (streamUpdate.Results.Count > 0)
-                        streamClient.Stream.Write (streamUpdate);
+                    if (streamUpdate.Results.Count > 0) {
+                        try {
+                            streamClient.Stream.Write (streamUpdate);
+                        } catch (ServerException exn) {
+                            Logger.WriteLine ("Failed to send stream update to client " + streamClient.Address + Environment.NewLine + exn, Logger.Severity.Error);
+                        }
+                    }
                 }
             }
 
@@ -635,8 +640,12 @@ namespace KRPC
                     response.Error = new Error ("Error receiving message" + Environment.NewLine + e.Message, e.StackTrace);
                     if (Logger.ShouldLog (Logger.Severity.Debug))
                         Logger.WriteLine (e.Message + Environment.NewLine + e.StackTrace, Logger.Severity.Error);
-                    Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
-                    client.Stream.Write (response);
+                    try {
+                        client.Stream.Write (response);
+                        Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
+                    } catch (ServerException exn) {
+                        Logger.WriteLine ("Failed to send error response to client " + client.Address + Environment.NewLine + exn, Logger.Severity.Error);
+                    }
                 }
                 item = item.Next;
             }
@@ -669,12 +678,16 @@ namespace KRPC
             }
 
             // Send response to the client
-            client.Stream.Write (response);
-            if (Logger.ShouldLog (Logger.Severity.Debug)) {
-                if (response.HasError)
-                    Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
-                else
-                    Logger.WriteLine ("Sent response to client " + client.Address, Logger.Severity.Debug);
+            try {
+                client.Stream.Write (response);
+                if (Logger.ShouldLog (Logger.Severity.Debug)) {
+                    if (response.HasError)
+                        Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
+                    else
+                        Logger.WriteLine ("Sent response to client " + client.Address, Logger.Severity.Debug);
+                }
+            } catch (ServerException exn) {
+                Logger.WriteLine ("Failed to send response to client " + client.Address + Environment.NewLine + exn, Logger.Severity.Error);
             }
         }
 
