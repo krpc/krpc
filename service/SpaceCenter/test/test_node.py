@@ -125,6 +125,15 @@ class TestNode(krpctest.TestCase):
         self.assertGreater(orbit1.eccentricity, orbit0.eccentricity)
         self.assertAlmostEqual(eccentricit, orbit1.eccentricity)
 
+    def test_complex(self):
+        ut = self.space_center.ut
+        node = self.control.add_node(ut + 60, 100, 200, 300)
+        self.wait(0.5)
+        node.remove()
+        node = self.control.add_node(ut+35, 4, -2, 1)
+        self.wait(0.5)
+        self.control.remove_nodes()
+
 
 if __name__ == '__main__':
     unittest.main()
