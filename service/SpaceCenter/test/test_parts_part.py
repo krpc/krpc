@@ -61,8 +61,8 @@ class TestPartsPart(krpctest.TestCase):
             modules.extend(['FARBasicDragModel', 'FARControlSys'])
         self.assertItemsEqual(modules, [x.name for x in part.modules])
         box = part.bounding_box(part.reference_frame)
-        self.assertAlmostEqual((-1.19, -0.49, -1.16), box[0], places=2)
-        self.assertAlmostEqual((1.19, 1.16, 1.16), box[1], places=2)
+        self.assertAlmostEqual((-1.223, -0.574, -1.223), box[0], places=2)
+        self.assertAlmostEqual((1.223, 1.273, 1.223), box[1], places=2)
         self.assertIsNone(part.cargo_bay)
         self.assertIsNone(part.control_surface)
         self.assertIsNone(part.decoupler)
@@ -375,6 +375,9 @@ class TestPartsPart(krpctest.TestCase):
             modules.append('FARBasicDragModel')
         self.assertItemsEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.landing_gear)
+        box = part.bounding_box(part.reference_frame)
+        self.assertAlmostEqual((-0.495, -1.122, -0.569), box[0], places=2)
+        self.assertAlmostEqual((0.495, 0.232, 0.679), box[1], places=2)
 
     def test_landing_leg(self):
         part = self.parts.with_title('LT-1 Landing Struts')[0]
@@ -410,6 +413,9 @@ class TestPartsPart(krpctest.TestCase):
             modules.append('FARBasicDragModel')
         self.assertItemsEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.landing_leg)
+        box = part.bounding_box(part.reference_frame)
+        self.assertAlmostEqual((-0.150, -1.016, -0.279), box[0], places=2)
+        self.assertAlmostEqual((0.150, 0.239, 0.377), box[1], places=2)
 
     def test_launch_clamp(self):
         part = self.parts.with_title('TT18-A Launch Stability Enhancer')[0]
