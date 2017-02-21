@@ -5,6 +5,7 @@ v0.3.8
  * Fix bug with DockingPort.Rotation (#371)
  * Fix bug with Part.Rotation (#371)
  * Fix bug with Part.BoundingBox (#370)
+ * Add support for procedural fairings mod http://forum.kerbalspaceprogram.com/index.php?showtopic=36371 (#368)
 
 v0.3.7
  * Add custom reference frames (ReferenceFrame.CreateRelative and CreateHybrid) (#252)

@@ -14,7 +14,15 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
         public static bool HasModule<T> (this Part part) where T : PartModule
         {
-            return part.Modules.OfType<T> ().Any ();
+            return part.Modules.Contains<T> ();
+        }
+
+        /// <summary>
+        /// Returns true if the part contains the given part module
+        /// </summary>
+        public static bool HasModule (this Part part, string module)
+        {
+            return part.Modules.Contains (module);
         }
 
         /// <summary>
@@ -29,7 +37,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Returns the first part module of the named type, or null if none can be found
         /// </summary>
-        public static object Module (this Part part, string type)
+        public static PartModule Module (this Part part, string type)
         {
             foreach (var module in part.Modules) {
                 if (module.GetType ().Name == type)
