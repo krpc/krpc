@@ -17,16 +17,30 @@ class TestPartsAntenna(krpctest.TestCase):
             'HG-5 High Gain Antenna')[0].antenna
 
     def test_fixed_antenna(self):
-        self.assertEqual(self.state.deployed, self.fixed_antenna.state)
-        self.assertTrue(self.fixed_antenna.deployed)
-        self.assertTrue(self.fixed_antenna.can_transmit)
+        antenna = self.fixed_antenna
+        self.assertEqual(self.state.deployed, antenna.state)
+        self.assertTrue(antenna.deployed)
+        self.assertTrue(antenna.can_transmit)
         self.assertRaises(RuntimeError, setattr,
-                          self.fixed_antenna, 'deployed', True)
+                          antenna, 'deployed', True)
+        self.assertEqual(2e9, antenna.power)
+        self.assertTrue(antenna.combinable)
+        self.assertEqual(0.75, antenna.combinable_exponent)
+        self.assertAlmostEqual(0.35, antenna.packet_interval, places=5)
+        self.assertEqual(1, antenna.packet_size)
+        self.assertEqual(24, antenna.packet_resource_cost)
 
     def test_deployable_antenna(self):
-        self.assertEqual(self.state.retracted, self.deployable_antenna.state)
-        self.assertFalse(self.deployable_antenna.deployed)
-        self.assertTrue(self.deployable_antenna.can_transmit)
+        antenna = self.deployable_antenna
+        self.assertEqual(self.state.retracted, antenna.state)
+        self.assertFalse(antenna.deployed)
+        self.assertTrue(antenna.can_transmit)
+        self.assertEqual(5e6, antenna.power)
+        self.assertTrue(antenna.combinable)
+        self.assertEqual(0.75, antenna.combinable_exponent)
+        self.assertAlmostEqual(0.35, antenna.packet_interval, places=5)
+        self.assertEqual(2, antenna.packet_size)
+        self.assertEqual(18, antenna.packet_resource_cost)
 
     def test_deploy(self):
         self.assertEqual(self.state.retracted, self.deployable_antenna.state)

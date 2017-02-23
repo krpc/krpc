@@ -394,6 +394,12 @@ SpaceCenter.Antenna.CanTransmit
 SpaceCenter.Antenna.Transmit
 SpaceCenter.Antenna.Cancel
 SpaceCenter.Antenna.AllowPartial
+SpaceCenter.Antenna.Power
+SpaceCenter.Antenna.Combinable
+SpaceCenter.Antenna.CombinableExponent
+SpaceCenter.Antenna.PacketInterval
+SpaceCenter.Antenna.PacketSize
+SpaceCenter.Antenna.PacketResourceCost
 SpaceCenter.AntennaState
 SpaceCenter.AntennaState.Deployed
 SpaceCenter.AntennaState.Retracted

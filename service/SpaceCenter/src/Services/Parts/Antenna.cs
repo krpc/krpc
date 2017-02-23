@@ -139,5 +139,53 @@ namespace KRPC.SpaceCenter.Services.Parts
                     transmitter.TransmitIncompleteToggle ();
             }
         }
+
+        /// <summary>
+        /// The power of the antenna.
+        /// </summary>
+        [KRPCProperty]
+        public double Power {
+            get { return transmitter.CommPower; }
+        }
+
+        /// <summary>
+        /// Whether the antenna can be combined with other antennae on the vessel to boost the power.
+        /// </summary>
+        [KRPCProperty]
+        public bool Combinable {
+            get { return transmitter.CommCombinable; }
+        }
+
+        /// <summary>
+        /// Exponent used to calculate the combined power of multiple antennae on a vessel.
+        /// </summary>
+        [KRPCProperty]
+        public double CombinableExponent {
+            get { return transmitter.CommCombinableExponent; }
+        }
+
+        /// <summary>
+        /// Interval between sending packets in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public float PacketInterval {
+            get { return transmitter.packetInterval; }
+        }
+
+        /// <summary>
+        /// Amount of data sent per packet in Mits.
+        /// </summary>
+        [KRPCProperty]
+        public float PacketSize {
+            get { return transmitter.packetSize; }
+        }
+
+        /// <summary>
+        /// Units of electric charge consumed per packet sent.
+        /// </summary>
+        [KRPCProperty]
+        public double PacketResourceCost {
+            get { return transmitter.packetResourceCost; }
+        }
     }
 }
