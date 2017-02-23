@@ -69,16 +69,16 @@
     <Compile Include="..\..\..\bazel-bin\service\SpaceCenter\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AutoPilot\PIDController.cs" />
     <Compile Include="AutoPilot\AttitudeController.cs" />
+    <Compile Include="AutoPilot\PIDController.cs" />
     <Compile Include="ExtensionMethods\ActionGroupExtensions.cs" />
     <Compile Include="ExtensionMethods\AutoPilotModeExtensions.cs" />
     <Compile Include="ExtensionMethods\CelestialBodyExtensions.cs" />
     <Compile Include="ExtensionMethods\ColorExtensions.cs" />
+    <Compile Include="ExtensionMethods\FlightCameraModeExtensions.cs" />
+    <Compile Include="ExtensionMethods\FlightGlobalsExtensions.cs" />
     <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
     <Compile Include="ExtensionMethods\ITorqueProviderExtensions.cs" />
-    <Compile Include="ExtensionMethods\FlightGlobalsExtensions.cs" />
-    <Compile Include="ExtensionMethods\FlightCameraModeExtensions.cs" />
     <Compile Include="ExtensionMethods\ParachuteStateExtensions.cs" />
     <Compile Include="ExtensionMethods\PartExtensions.cs" />
     <Compile Include="ExtensionMethods\RadiatorStateExtensions.cs" />
@@ -104,6 +104,8 @@
     <Compile Include="Services\Flight.cs" />
     <Compile Include="Services\Node.cs" />
     <Compile Include="Services\Orbit.cs" />
+    <Compile Include="Services\Parts\Antenna.cs" />
+    <Compile Include="Services\Parts\AntennaState.cs" />
     <Compile Include="Services\Parts\CargoBay.cs" />
     <Compile Include="Services\Parts\CargoBayState.cs" />
     <Compile Include="Services\Parts\ControlSurface.cs" />
@@ -127,9 +129,9 @@
     <Compile Include="Services\Parts\Part.cs" />
     <Compile Include="Services\Parts\Parts.cs" />
     <Compile Include="Services\Parts\Propellant.cs" />
+    <Compile Include="Services\Parts\RCS.cs" />
     <Compile Include="Services\Parts\Radiator.cs" />
     <Compile Include="Services\Parts\RadiatorState.cs" />
-    <Compile Include="Services\Parts\RCS.cs" />
     <Compile Include="Services\Parts\ReactionWheel.cs" />
     <Compile Include="Services\Parts\ResourceConverter.cs" />
     <Compile Include="Services\Parts\ResourceConverterState.cs" />
@@ -145,8 +147,8 @@
     <Compile Include="Services\ReferenceFrameType.cs" />
     <Compile Include="Services\Resource.cs" />
     <Compile Include="Services\ResourceFlowMode.cs" />
-    <Compile Include="Services\Resources.cs" />
     <Compile Include="Services\ResourceTransfer.cs" />
+    <Compile Include="Services\Resources.cs" />
     <Compile Include="Services\SASMode.cs" />
     <Compile Include="Services\SpaceCenter.cs" />
     <Compile Include="Services\SpeedMode.cs" />

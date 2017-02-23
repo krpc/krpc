@@ -272,6 +272,7 @@ SpaceCenter.Parts.WithModule
 SpaceCenter.Parts.InStage
 SpaceCenter.Parts.InDecoupleStage
 SpaceCenter.Parts.ModulesWithName
+SpaceCenter.Parts.Antennas
 SpaceCenter.Parts.CargoBays
 SpaceCenter.Parts.ControlSurfaces
 SpaceCenter.Parts.Decouplers
@@ -330,6 +331,7 @@ SpaceCenter.Part.IsFuelLine
 SpaceCenter.Part.FuelLinesFrom
 SpaceCenter.Part.FuelLinesTo
 SpaceCenter.Part.Modules
+SpaceCenter.Part.Antenna
 SpaceCenter.Part.CargoBay
 SpaceCenter.Part.ControlSurface
 SpaceCenter.Part.Decoupler
@@ -384,6 +386,20 @@ SpaceCenter.Module.TriggerEvent
 SpaceCenter.Module.Actions
 SpaceCenter.Module.HasAction
 SpaceCenter.Module.SetAction
+SpaceCenter.Antenna
+SpaceCenter.Antenna.Part
+SpaceCenter.Antenna.State
+SpaceCenter.Antenna.Deployed
+SpaceCenter.Antenna.CanTransmit
+SpaceCenter.Antenna.Transmit
+SpaceCenter.Antenna.Cancel
+SpaceCenter.Antenna.AllowPartial
+SpaceCenter.AntennaState
+SpaceCenter.AntennaState.Deployed
+SpaceCenter.AntennaState.Retracted
+SpaceCenter.AntennaState.Deploying
+SpaceCenter.AntennaState.Retracting
+SpaceCenter.AntennaState.Broken
 SpaceCenter.CargoBay
 SpaceCenter.CargoBay.Part
 SpaceCenter.CargoBay.State

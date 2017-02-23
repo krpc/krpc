@@ -63,6 +63,7 @@ class TestPartsPart(krpctest.TestCase):
         box = part.bounding_box(part.reference_frame)
         self.assertAlmostEqual((-1.223, -0.574, -1.223), box[0], places=2)
         self.assertAlmostEqual((1.223, 1.273, 1.223), box[1], places=2)
+        self.assertIsNone(part.antenna)
         self.assertIsNone(part.cargo_bay)
         self.assertIsNone(part.control_surface)
         self.assertIsNone(part.decoupler)
@@ -98,6 +99,35 @@ class TestPartsPart(krpctest.TestCase):
         self.assertAlmostEqual(0, part.thermal_radiation_flux, places=2)
         self.assertAlmostEqual(0, part.thermal_internal_flux, places=2)
         self.assertAlmostEqual(0, part.thermal_skin_to_internal_flux, places=2)
+
+    def test_antenna(self):
+        part = self.parts.with_title('Communotron 16')[0]
+        self.assertEqual('longAntenna', part.name)
+        self.assertEqual('Communotron 16', part.title)
+        self.assertEqual(300, part.cost)
+        self.assertEqual(self.vessel, part.vessel)
+        self.assertEqual('Rockomax X200-8 Fuel Tank', part.parent.title)
+        self.assertItemsEqual([], [p.title for p in part.children])
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEqual(-1, part.stage)
+        self.assertEqual(1, part.decouple_stage)
+        self.assertTrue(part.massless)
+        self.assertAlmostEqual(0, part.mass, places=4)
+        self.assertAlmostEqual(0, part.dry_mass, places=4)
+        self.assertEqual(7, part.impact_tolerance)
+        self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
+        self.assertEqual([], part.fuel_lines_from)
+        self.assertEqual([], part.fuel_lines_to)
+        modules = [
+            'ModuleDataTransmitter',
+            'ModuleDeployableAntenna'
+        ]
+        if self.far_available:
+            modules.append('FARBasicDragModel')
+        self.assertItemsEqual(modules, [x.name for x in part.modules])
+        self.assertIsNotNone(part.antenna)
 
     def test_cargo_bay(self):
         part = self.parts.with_title('Service Bay (2.5m)')[0]

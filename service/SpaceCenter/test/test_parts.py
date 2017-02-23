@@ -249,6 +249,11 @@ class TestParts(krpctest.TestCase):
         modules = self.parts.modules_with_name('DoesntExist')
         self.assertItemsEqual([], modules)
 
+    def test_antennas(self):
+        self.assertItemsEqual(
+            ['Mk1-2 Command Pod', 'Communotron 16'],
+            [p.part.title for p in self.parts.antennas])
+
     def test_cargo_bays(self):
         self.assertItemsEqual(
             ['Service Bay (2.5m)'],
