@@ -221,6 +221,8 @@ SpaceCenter.Orbit.ReferencePlaneDirection
 SpaceCenter.Orbit.TimeToSOIChange
 SpaceCenter.Orbit.NextOrbit
 SpaceCenter.Control
+SpaceCenter.Control.Source
+SpaceCenter.Control.State
 SpaceCenter.Control.SAS
 SpaceCenter.Control.SASMode
 SpaceCenter.Control.SpeedMode
@@ -246,6 +248,14 @@ SpaceCenter.Control.ToggleActionGroup
 SpaceCenter.Control.AddNode
 SpaceCenter.Control.Nodes
 SpaceCenter.Control.RemoveNodes
+SpaceCenter.ControlState
+SpaceCenter.ControlState.Full
+SpaceCenter.ControlState.Partial
+SpaceCenter.ControlState.None
+SpaceCenter.ControlSource
+SpaceCenter.ControlSource.Kerbal
+SpaceCenter.ControlSource.Probe
+SpaceCenter.ControlSource.None
 SpaceCenter.SASMode
 SpaceCenter.SASMode.StabilityAssist
 SpaceCenter.SASMode.Maneuver
