@@ -1,22 +1,24 @@
 GAME
 {
-  version = 1.2.0
+  version = 1.2.2
   Title = krpctest (SANDBOX)
   Description = No description available.
   linkURL =
   linkCaption =
   Mode = SANDBOX
   Status = 1
-  Seed = 1006055809
-  scene = 7
+  Seed = 796869268
+  scene = 5
   editor = None
   flag = Squad/Flags/default
   launchID = 2
   modded = True
-  envInfo =  - Environment Info - Win32NT 7FFFFFFFFFFFFFFF  Args: KSP_x64.exe  -
+  envInfo =  - Environment Info - Unix FFFFFFFFFFFFFFFF  Args: KSP.x86  -
+  versionFull = 1.2.2.1622 (LinuxPlayer)
+  versionCreated = 1.2.2.1622 (LinuxPlayer)
   PARAMETERS
   {
-    preset = Normal
+    preset = Custom
     FLIGHT
     {
       CanQuickSave = True
@@ -34,7 +36,7 @@ GAME
       CanLeaveToEditor = True
       CanLeaveToTrackingStation = True
       CanLeaveToSpaceCenter = True
-      CanLeaveToMainMenu = False
+      CanLeaveToMainMenu = True
     }
     EDITOR
     {
@@ -78,7 +80,7 @@ GAME
       IndestructibleFacilities = False
       ResourceAbundance = 1
       ReentryHeatScale = 1
-      EnableCommNet = False
+      EnableCommNet = True
     }
     CAREER
     {
@@ -96,6 +98,7 @@ GAME
     CommNetParams
     {
       requireSignalForControl = False
+      plasmaBlackout = False
       rangeModifier = 1
       DSNModifier = 1
       occlusionMultiplierVac = 0.9
@@ -106,12 +109,45 @@ GAME
     {
       EnableKerbalExperience = False
       ImmediateLevelUp = False
-      AllowNegativeFunds = False
-      AllowNegativeScience = False
+      AllowNegativeCurrency = False
+      PressurePartLimits = False
+      GPartLimits = False
+      GKerbalLimits = False
+      KerbalGToleranceMult = 1
       ResourceTransferObeyCrossfeed = False
+      ActionGroupsAlways = False
       BuildingImpactDamageMult = 0.05
       PartUpgradesInSandbox = False
       PartUpgradesInCareer = True
+    }
+  }
+  SCENARIO
+  {
+    name = CommNetScenario
+    scene = 7, 8, 5, 6
+  }
+  SCENARIO
+  {
+    name = PartUpgradeManager
+    scene = 6, 5, 7
+    UPGRADES
+    {
+      Unlocks
+      {
+      }
+      Enableds
+      {
+      }
+    }
+  }
+  SCENARIO
+  {
+    name = ResourceScenario
+    scene = 7, 8, 5, 6
+    RESOURCE_SETTINGS
+    {
+      GameSeed = 2010313933
+      MaxDeltaTime = 21600
     }
   }
   SCENARIO
@@ -128,21 +164,6 @@ GAME
     scene = 7, 8, 5
     Progress
     {
-      RecordsAltitude
-      {
-        reached = 115.35999999999419
-        record = 72.799495328799821
-      }
-      RecordsSpeed
-      {
-        reached = 90.619999999999109
-        record = 0.0083801245784216553
-      }
-      RecordsDistance
-      {
-        reached = 121.63999999999294
-        record = 756.38425011144932
-      }
     }
   }
   SCENARIO
@@ -152,52 +173,18 @@ GAME
   }
   SCENARIO
   {
+    name = ScenarioAchievements
+    scene = 7, 8, 5, 6
+  }
+  SCENARIO
+  {
+    name = ScenarioCustomWaypoints
+    scene = 7, 8
+  }
+  SCENARIO
+  {
     name = ScenarioDestructibles
     scene = 5, 7, 6, 8
-    SpaceCenter/VehicleAssemblyBuilding/Facility/VAB2
-    {
-      intact = True
-    }
-    SpaceCenter/TrackingStation/Facility/OuterDish
-    {
-      intact = True
-    }
-    SpaceCenter/TrackingStation/Facility/building
-    {
-      intact = True
-    }
-    SpaceCenter/SpaceplaneHangar/Facility/Building
-    {
-      intact = True
-    }
-    SpaceCenter/ResearchAndDevelopment/Facility/ForeverAlone
-    {
-      intact = True
-    }
-    SpaceCenter/ResearchAndDevelopment/Facility/mainBuilding
-    {
-      intact = True
-    }
-    SpaceCenter/MissionControl/Facility/mainBuilding
-    {
-      intact = True
-    }
-    SpaceCenter/LaunchPad/Facility/Flag
-    {
-      intact = True
-    }
-    SpaceCenter/AstronautComplex/Facility/mainBuilding
-    {
-      intact = True
-    }
-    SpaceCenter/FlagPole/Facility
-    {
-      intact = True
-    }
-    SpaceCenter/Administration/Facility/Building
-    {
-      intact = True
-    }
     SpaceCenter/VehicleAssemblyBuilding/Facility/ksp_pad_cylTank
     {
       intact = True
@@ -342,6 +329,10 @@ GAME
     {
       intact = True
     }
+    SpaceCenter/FlagPole/Facility
+    {
+      intact = True
+    }
     SpaceCenter/AstronautComplex/Facility/building
     {
       intact = True
@@ -350,12 +341,32 @@ GAME
     {
       intact = True
     }
+    SpaceCenter/VehicleAssemblyBuilding/Facility/VAB2
+    {
+      intact = True
+    }
+    SpaceCenter/MissionControl/Facility/mainBuilding
+    {
+      intact = True
+    }
+    SpaceCenter/LaunchPad/Facility/Flag
+    {
+      intact = True
+    }
+    SpaceCenter/TrackingStation/Facility/building
+    {
+      intact = True
+    }
+    SpaceCenter/TrackingStation/Facility/OuterDish
+    {
+      intact = True
+    }
   }
   SCENARIO
   {
     name = ScenarioDiscoverableObjects
     scene = 7, 8, 5
-    lastSeed = 708361694
+    lastSeed = 559298752
     sizeCurve
     {
       key = 0 0 1.5 1.5
@@ -364,54 +375,17 @@ GAME
       key = 1 1 1.5 1.5
     }
   }
-  SCENARIO
-  {
-    name = ResourceScenario
-    scene = 7, 8, 5, 6
-    RESOURCE_SETTINGS
-    {
-      GameSeed = 1212098881
-      MaxDeltaTime = 21600
-    }
-  }
-  SCENARIO
-  {
-    name = CommNetScenario
-    scene = 7, 8, 5, 6
-  }
-  SCENARIO
-  {
-    name = PartUpgradeManager
-    scene = 6, 5, 7
-    UPGRADES
-    {
-      Unlocks
-      {
-      }
-      Enableds
-      {
-      }
-    }
-  }
-  SCENARIO
-  {
-    name = ScenarioAchievements
-    scene = 7, 8, 5, 6
-  }
-  SCENARIO
-  {
-    name = ScenarioCustomWaypoints
-    scene = 7, 8
-  }
   FLIGHTSTATE
   {
-    version = 1.2.0
-    UT = 121.69999999999293
+    version = 1.2.2
+    UT = 16.259999999999742
     activeVessel = 0
     mapViewFiltering = -1026
+    commNetUIModeTracking = Network
+    commNetUIModeFlight = Path
     VESSEL
     {
-      pid = 843bf3627ea244c08acf7b8182cd5617
+      pid = 8a589f20db8a40cdae383d9a8e82ef9c
       name = Untitled Space Craft
       type = Ship
       sit = PRELAUNCH
@@ -419,51 +393,51 @@ GAME
       landedAt = KSC_LaunchPad_Platform
       splashed = False
       met = 0
-      lct = 121.69999999999293
-      lastUT = 121.69999999999293
+      lct = 15.099999999999767
+      lastUT = 15.099999999999767
       root = 0
-      lat = -0.09720778888759439
-      lon = -74.557674276859828
-      alt = 72.799494473263621
-      hgt = 0.33752951
-      nrm = 8.55326653E-06,1.00000024,-1.01327896E-06
-      rot = -0.700964928,-0.092043303,-0.0974342823,0.700487614
+      lat = -0.097207782704932716
+      lon = -74.557673716253618
+      alt = 72.840554784052074
+      hgt = 0.337528914
+      nrm = 2.44379044E-06,1.00000012,-4.76837158E-07
+      rot = -0.700981021,-0.0921616927,-0.0973197818,0.700471938
       CoM = 0,0,0
       stg = 0
       prst = False
-      ref = 3245197545
+      ref = 2146653091
       ctrl = True
-      cPch = 0.2
-      cHdg = 0.3
+      cPch =
+      cHdg =
       cMod = 0
       ORBIT
       {
-        SMA = 300819.0193129789
-        ECC = 0.99479674145878882
-        INC = 0.097207788962308986
-        LPE = 90.002699242916677
-        LAN = 107.47271929185752
-        MNA = -3.1415926230572446
-        EPH = 121.69999999999293
+        SMA = NaN
+        ECC = 1
+        INC = 0.097207782708412349
+        LPE = 90
+        LAN = 285.69491770805365
+        MNA = 0
+        EPH = 15.119999999999767
         REF = 1
       }
       PART
       {
         name = mk1pod
-        cid = 4294754464
-        uid = 3245197545
-        mid = 3929203163
+        cid = 4294749318
+        uid = 2146653091
+        mid = 2503413381
         launchID = 1
         parent = 0
         position = 0,0,0
         rotation = 0,0,0,1
         mirror = 1,1,1
         symMethod = Radial
-        istg = 0
+        istg = -1
         resPri = 0
         dstg = 0
         sqor = -1
-        sepI = 0
+        sepI = -1
         sidx = -1
         attm = 0
         srfN = , -1
@@ -471,85 +445,20 @@ GAME
         attN = top, -1
         mass = 0.800000012
         shielded = False
-        temp = 312.55638736455052
-        tempExt = 312.4708178633162
-        tempExtUnexp = 312.47093853133737
+        temp = 312.48207007079878
+        tempExt = 312.53647834924078
+        tempExtUnexp = 312.53777070251442
         expt = 0.5
         state = 0
         attached = True
         autostrutMode = Off
+        rigidAttachment = False
         flag = Squad/Flags/default
         rTrf = mk1pod
         modCost = 0
         crew = Jebediah Kerman
         EVENTS
         {
-          AimCamera
-          {
-            active = True
-            guiActive = True
-            guiActiveUncommand = True
-            guiIcon = Aim Camera
-            guiName = Aim Camera
-            category = Aim Camera
-            advancedTweakable = True
-            guiActiveUnfocused = True
-            unfocusedRange = 3.402823E+38
-            externalToEVAOnly = False
-          }
-          ResetCamera
-          {
-            active = True
-            guiActive = False
-            guiActiveUncommand = True
-            guiIcon = Reset Camera
-            guiName = Reset Camera
-            category = Reset Camera
-            advancedTweakable = True
-            guiActiveUnfocused = True
-            unfocusedRange = 3.402823E+38
-            externalToEVAOnly = False
-          }
-          SpawnTransferDialog
-          {
-            active = True
-            guiActive = True
-            guiActiveUncommand = True
-            guiIcon = Transfer Crew
-            guiName = Transfer Crew
-            category = Transfer Crew
-            advancedTweakable = False
-            guiActiveUnfocused = False
-            unfocusedRange = 2
-            externalToEVAOnly = True
-          }
-          ShowUpgradeStats
-          {
-            active = True
-            guiActive = False
-            guiActiveUncommand = False
-            guiIcon = Show Upgraded Stats
-            guiName = Show Upgraded Stats
-            category = Show Upgraded Stats
-            advancedTweakable = False
-            guiActiveUnfocused = False
-            unfocusedRange = 2
-            externalToEVAOnly = True
-          }
-          ToggleAutoStrut
-          {
-            active = True
-            guiActive = True
-            guiActiveEditor = True
-            guiActiveUncommand = False
-            guiIcon = Autostrut: Disabled
-            guiName = Autostrut: Disabled
-            category = Autostrut: Disabled
-            advancedTweakable = True
-            guiActiveUnfocused = False
-            unfocusedRange = 2
-            externalToEVAOnly = True
-          }
         }
         ACTIONS
         {
@@ -563,57 +472,9 @@ GAME
           isEnabled = True
           hibernation = False
           hibernateOnWarp = False
-          controlSrcStatusText = Operational
           stagingEnabled = True
-          hibernation_UIFlight
-          {
-            controlEnabled = True
-          }
-          hibernateOnWarp_UIFlight
-          {
-            controlEnabled = True
-          }
           EVENTS
           {
-            MakeReference
-            {
-              active = True
-              guiActive = True
-              guiActiveUncommand = False
-              guiIcon = Control From Here
-              guiName = Control From Here
-              category = Control From Here
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
-            RenameVessel
-            {
-              active = True
-              guiActive = True
-              guiActiveUncommand = True
-              guiIcon = Rename Vessel
-              guiName = Rename Vessel
-              category = Rename Vessel
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
-            ToggleStaging
-            {
-              active = True
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon = Disable Staging
-              guiName = Disable Staging
-              category = Disable Staging
-              advancedTweakable = True
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
           }
           ACTIONS
           {
@@ -636,47 +497,8 @@ GAME
           stateString = Idle
           stagingEnabled = True
           WheelState = Active
-          actuatorModeCycle_UIFlight
-          {
-            controlEnabled = True
-            stateNames = Normal, SAS Only, Pilot Only
-          }
-          authorityLimiter_UIFlight
-          {
-            controlEnabled = True
-            minValue = 0
-            maxValue = 100
-            stepIncrement = 0.1
-          }
           EVENTS
           {
-            OnToggle
-            {
-              active = True
-              guiActive = True
-              guiActiveEditor = True
-              guiActiveUncommand = False
-              guiIcon = Toggle Torque
-              guiName = Toggle Torque
-              category = Toggle Torque
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
-            ToggleStaging
-            {
-              active = True
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon = Disable Staging
-              guiName = Disable Staging
-              category = Disable Staging
-              advancedTweakable = True
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
           }
           ACTIONS
           {
@@ -709,39 +531,12 @@ GAME
           stagingEnabled = True
           EVENTS
           {
-            ToggleEvent
-            {
-              active = True
-              guiActive = True
-              guiActiveEditor = True
-              guiActiveUncommand = False
-              guiIcon = Toggle Color
-              guiName = Lights On
-              category = Toggle Color
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 5
-              externalToEVAOnly = True
-            }
-            ToggleStaging
-            {
-              active = True
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon = Disable Staging
-              guiName = Disable Staging
-              category = Disable Staging
-              advancedTweakable = True
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
           }
           ACTIONS
           {
             ToggleAction
             {
-              actionGroup = None
+              actionGroup = Light
             }
           }
           UPGRADESAPPLIED
@@ -758,123 +553,6 @@ GAME
           stagingEnabled = True
           EVENTS
           {
-            DeployExperiment
-            {
-              active = True
-              guiActive = True
-              guiActiveUncommand = False
-              guiIcon = Deploy
-              guiName = Crew Report
-              category = Deploy
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
-            CollectDataExternalEvent
-            {
-              active = False
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon =
-              guiName = Take Data
-              category =
-              advancedTweakable = False
-              guiActiveUnfocused = True
-              unfocusedRange = 1.5
-              externalToEVAOnly = True
-            }
-            ReviewDataEvent
-            {
-              active = False
-              guiActive = True
-              guiActiveUncommand = False
-              guiIcon = Review Data
-              guiName = Review Report
-              category = Review Data
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
-            ResetExperiment
-            {
-              active = False
-              guiActive = True
-              guiActiveUncommand = False
-              guiIcon = Reset
-              guiName = Discard Crew Report
-              category = Reset
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
-            DeployExperimentExternal
-            {
-              active = True
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon = Deploy
-              guiName = Crew Report
-              category = Deploy
-              advancedTweakable = False
-              guiActiveUnfocused = True
-              unfocusedRange = 1.5
-              externalToEVAOnly = True
-            }
-            ResetExperimentExternal
-            {
-              active = False
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon = Reset
-              guiName = Discard Crew Report
-              category = Reset
-              advancedTweakable = False
-              guiActiveUnfocused = True
-              unfocusedRange = 1.5
-              externalToEVAOnly = True
-            }
-            CleanUpExperimentExternal
-            {
-              active = False
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon = Restore
-              guiName = Restore
-              category = Restore
-              advancedTweakable = False
-              guiActiveUnfocused = True
-              unfocusedRange = 1.5
-              externalToEVAOnly = True
-            }
-            TransferDataEvent
-            {
-              active = False
-              guiActive = True
-              guiActiveUncommand = False
-              guiIcon = Transfer Data
-              guiName = Transfer Data
-              category = Transfer Data
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
-            ToggleStaging
-            {
-              active = True
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon = Disable Staging
-              guiName = Experiment: Disable Staging
-              category = Disable Staging
-              advancedTweakable = True
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
           }
           ACTIONS
           {
@@ -898,87 +576,13 @@ GAME
           stagingEnabled = True
           EVENTS
           {
-            StoreDataExternalEvent
-            {
-              active = False
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon =
-              guiName = Store Experiments (0)
-              category =
-              advancedTweakable = False
-              guiActiveUnfocused = True
-              unfocusedRange = 1.3
-              externalToEVAOnly = True
-            }
-            CollectDataExternalEvent
-            {
-              active = False
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon =
-              guiName = Take Data (0)
-              category =
-              advancedTweakable = False
-              guiActiveUnfocused = True
-              unfocusedRange = 1.3
-              externalToEVAOnly = True
-            }
-            TransferDataEvent
-            {
-              active = False
-              guiActive = True
-              guiActiveUncommand = False
-              guiIcon = Container: Transfer Data
-              guiName = Container: Transfer Data
-              category = Container: Transfer Data
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
-            CollectAllEvent
-            {
-              active = False
-              guiActive = True
-              guiActiveUncommand = False
-              guiIcon = Container: Collect All
-              guiName = Container: Collect All
-              category = Container: Collect All
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
-            ReviewDataEvent
-            {
-              active = False
-              guiActive = True
-              guiActiveUncommand = False
-              guiIcon = Review Data
-              guiName = Review Stored Data (0)
-              category = Review Data
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
-            ToggleStaging
-            {
-              active = True
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon = Disable Staging
-              guiName = Disable Staging
-              category = Disable Staging
-              advancedTweakable = True
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
           }
           ACTIONS
           {
+            CollectAllAction
+            {
+              actionGroup = None
+            }
           }
           UPGRADESAPPLIED
           {
@@ -992,33 +596,6 @@ GAME
           stagingEnabled = True
           EVENTS
           {
-            ToggleFlag
-            {
-              active = True
-              guiActive = False
-              guiActiveEditor = True
-              guiActiveUncommand = False
-              guiIcon = Toggle Flag
-              guiName = Toggle Flag
-              category = Toggle Flag
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
-            ToggleStaging
-            {
-              active = True
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon = Disable Staging
-              guiName = Disable Staging
-              category = Disable Staging
-              advancedTweakable = True
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
           }
           ACTIONS
           {
@@ -1034,19 +611,6 @@ GAME
           stagingEnabled = True
           EVENTS
           {
-            ToggleStaging
-            {
-              active = True
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon = Disable Staging
-              guiName = Disable Staging
-              category = Disable Staging
-              advancedTweakable = True
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
           }
           ACTIONS
           {
@@ -1059,69 +623,34 @@ GAME
         {
           name = ModuleDataTransmitter
           isEnabled = True
+          xmitIncomplete = False
           stagingEnabled = True
           canComm = True
           EVENTS
           {
-            StartTransmission
-            {
-              active = True
-              guiActive = True
-              guiActiveUncommand = False
-              guiIcon = Transmit Data
-              guiName = Transmit Data
-              category = Transmit Data
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
-            TransmitIncompleteToggle
-            {
-              active = True
-              guiActive = True
-              guiActiveUncommand = False
-              guiIcon = Toggle Transmit Incomplete
-              guiName = Require Complete
-              category = Toggle Transmit Incomplete
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
-            StopTransmission
-            {
-              active = False
-              guiActive = True
-              guiActiveUncommand = False
-              guiIcon = Stop Transmitting
-              guiName = Stop Transmitting
-              category = Stop Transmitting
-              advancedTweakable = False
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
-            ToggleStaging
-            {
-              active = True
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon = Disable Staging
-              guiName = Disable Staging
-              category = Disable Staging
-              advancedTweakable = True
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
           }
           ACTIONS
           {
             StartTransmissionAction
             {
               actionGroup = None
+              active = False
             }
+          }
+          UPGRADESAPPLIED
+          {
+          }
+        }
+        MODULE
+        {
+          name = ModuleLiftingSurface
+          isEnabled = True
+          stagingEnabled = True
+          EVENTS
+          {
+          }
+          ACTIONS
+          {
           }
           UPGRADESAPPLIED
           {
@@ -1134,19 +663,6 @@ GAME
           stagingEnabled = True
           EVENTS
           {
-            ToggleStaging
-            {
-              active = True
-              guiActive = False
-              guiActiveUncommand = False
-              guiIcon = Disable Staging
-              guiName = Disable Staging
-              category = Disable Staging
-              advancedTweakable = True
-              guiActiveUnfocused = False
-              unfocusedRange = 2
-              externalToEVAOnly = True
-            }
           }
           ACTIONS
           {
@@ -1231,23 +747,26 @@ GAME
         CommNetVessel
         {
           controlState = KerbalFull
+          canComm = True
         }
       }
     }
   }
   LoaderInfo
   {
-    Google.Protobuf v3.0.0.0 = True
-    KRPC.Drawing v0.3.6.0 = True
-    KRPC.InfernalRobotics v0.3.6.0 = True
-    KRPC.KerbalAlarmClock v0.3.6.0 = True
-    KRPC.RemoteTech v0.3.6.0 = True
-    KRPC.SpaceCenter v0.3.6.0 = True
-    KRPC.UI v0.3.6.0 = True
-    TestingTools v0.3.6.0 = True
+    ProceduralFairings v0.0.3.17 = True
+    Google.Protobuf v0.0.0.0 = True
+    KRPC.Drawing v0.3.7.0 = True
+    KRPC.InfernalRobotics v0.3.7.0 = True
+    KRPC.KerbalAlarmClock v0.3.7.0 = True
+    KRPC.RemoteTech v0.3.7.0 = True
+    KRPC.SpaceCenter v0.3.7.0 = True
+    KRPC.UI v0.3.7.0 = True
+    KRPC v0.3.7.0 = True
+    TestingTools v0.3.7.0 = True
+    ProceduralFairings = True
     kRPC = True
-    KRPC v0.3.6.0 = True
-    System.Xml.Linq v2.0.5.0 / v3.0.40818.0 = True
+    .DS_Store = True
   }
   ROSTER
   {
@@ -1263,6 +782,10 @@ GAME
       veteran = True
       tour = False
       state = Assigned
+      inactive = False
+      inactiveTimeEnd = 0
+      gExperienced = 0
+      outDueToG = False
       ToD = 0
       idx = 0
       extraXP = 0
@@ -1287,6 +810,10 @@ GAME
       veteran = True
       tour = False
       state = Available
+      inactive = False
+      inactiveTimeEnd = 0
+      gExperienced = 0
+      outDueToG = False
       ToD = 0
       idx = -1
       extraXP = 0
@@ -1311,6 +838,10 @@ GAME
       veteran = True
       tour = False
       state = Available
+      inactive = False
+      inactiveTimeEnd = 0
+      gExperienced = 0
+      outDueToG = False
       ToD = 0
       idx = -1
       extraXP = 0
@@ -1335,6 +866,10 @@ GAME
       veteran = True
       tour = False
       state = Available
+      inactive = False
+      inactiveTimeEnd = 0
+      gExperienced = 0
+      outDueToG = False
       ToD = 0
       idx = -1
       extraXP = 0
