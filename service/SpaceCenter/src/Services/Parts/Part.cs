@@ -426,6 +426,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A <see cref="Antenna"/> if the part is an antenna, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public Antenna Antenna {
+            get { return Antenna.Is (this) ? new Antenna (this) : null; }
+        }
+
+        /// <summary>
         /// A <see cref="CargoBay"/> if the part is a cargo bay, otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty]

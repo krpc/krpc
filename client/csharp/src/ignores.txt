@@ -32,6 +32,8 @@ N: KRPC.Client.Services.InfernalRobotics
 N: KRPC.Client.Services.KerbalAlarmClock
 N: KRPC.Client.Services.RemoteTech
 N: KRPC.Client.Services.UI
+R: Gendarme.Rules.Naming.UsePreferredTermsRule
+N: KRPC.Client.Services.SpaceCenter
 R: Gendarme.Rules.Smells.AvoidCodeDuplicatedInSameClassRule
 N: KRPC.Client.Services.SpaceCenter
 N: KRPC.Client.Services.UI
