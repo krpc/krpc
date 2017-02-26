@@ -1,0 +1,12 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.name }}
+{{ domain.currentmodule('SpaceCenter') }}
+{% import domain.macros as macros with context %}
+
+Communications
+==============
+
+{{ macros.class(services['SpaceCenter'].classes['Comms']) }}
+{{ macros.class(services['SpaceCenter'].classes['CommLink']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['CommLinkType']) }}
+{{ macros.class(services['SpaceCenter'].classes['CommNode']) }}
