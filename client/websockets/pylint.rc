@@ -1,0 +1,5 @@
+[MESSAGES CONTROL]
+disable=missing-docstring,import-error
+
+[REPORTS]
+reports=no

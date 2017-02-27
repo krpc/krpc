@@ -173,6 +173,7 @@ test_suite(
         '//client/java:test',
         '//client/lua:test',
         '//client/python:test',
+        '//client/websockets:test',
         '//tools/krpctest:test',
         '//tools/krpctools:test',
         '//tools/ServiceDefinitions:test',
@@ -191,6 +192,7 @@ test_suite(
         '//client/java:ci-test',
         '//client/lua:ci-test',
         '//client/python:ci-test',
+        '//client/websockets:ci-test',
         '//tools/krpctest:ci-test',
         '//doc:ci-test'
     ]

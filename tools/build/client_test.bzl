@@ -1,4 +1,5 @@
 def _impl(ctx):
+    server_type = ctx.attr.server_type
 
     test_executable_runfiles = list(ctx.attr.test_executable.default_runfiles.files)
     server_executable_runfiles = list(ctx.attr.server_executable.default_runfiles.files)
@@ -24,7 +25,7 @@ def _impl(ctx):
     stdout = 'server-executable.runfiles/krpc/stdout'
     sub_commands.extend([
         'pkill TestServer.exe',
-        '(cd server-executable.runfiles/krpc; %s >stdout) &' % (ctx.executable.server_executable.short_path),
+        '(cd server-executable.runfiles/krpc; %s --type=%s >stdout) &' % (ctx.executable.server_executable.short_path, server_type),
         'while ! grep "Server started successfully" %s >/dev/null 2>&1; do sleep 0.1 ; done' % stdout,
         'RPC_PORT=`awk \'/rpc_port = /{print $NF}\' %s`' % stdout,
         'STREAM_PORT=`awk \'/stream_port = /{print $NF}\' %s`' % stdout,
@@ -50,7 +51,8 @@ client_test = rule(
     implementation = _impl,
     attrs = {
         'test_executable': attr.label(executable=True, cfg='host'),
-        'server_executable': attr.label(executable=True, cfg='host')
+        'server_executable': attr.label(executable=True, cfg='host'),
+        'server_type': attr.string(default='protobuf'),
     },
     test = True
 )
