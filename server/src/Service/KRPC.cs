@@ -22,6 +22,16 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Returns the name of the current client.
+        /// This is an empty string if the client has no name.
+        /// </summary>
+        [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
+        public static string GetClientName() {
+          return CallContext.Client.Name;
+        }
+
+        /// <summary>
         /// Returns some information about the server, such as the version.
         /// </summary>
         [KRPCProcedure]
