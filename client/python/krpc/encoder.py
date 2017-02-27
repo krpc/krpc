@@ -130,11 +130,7 @@ class _ValueEncoder(object):
     def _encode_signed_varint(cls, value):
         value = protobuf_wire_format.ZigZagEncode(value)
         data = []
-
-        def write(x):
-            data.append(x)
-
-        protobuf_encoder._SignedVarintEncoder()(write, value)
+        protobuf_encoder._SignedVarintEncoder()(data.append, value)
         return b''.join(data)
 
     @classmethod
