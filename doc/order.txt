@@ -453,6 +453,7 @@ SpaceCenter.ControlSurface.Part
 SpaceCenter.ControlSurface.PitchEnabled
 SpaceCenter.ControlSurface.YawEnabled
 SpaceCenter.ControlSurface.RollEnabled
+SpaceCenter.ControlSurface.AuthorityLimiter
 SpaceCenter.ControlSurface.Inverted
 SpaceCenter.ControlSurface.Deployed
 SpaceCenter.ControlSurface.SurfaceArea
