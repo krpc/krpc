@@ -39,11 +39,11 @@ def EncodeVarint(value):
     data = []
     def write(x):
         data.append(x)
-    google.protobuf.internal.encoder._SignedVarintEncoder()(write, value)
+    google.protobuf.internal.encoder._SignedEncoder()(write, value)
     return b''.join(data)
 
 def DecodeVarint(data):
-    return google.protobuf.internal.decoder._DecodeSignedVarint(data, 0)[0]
+    return google.protobuf.internal.decoder._DecodeVarint(data, 0)[0]
 
 # Create Request message
 request = krpc.schema.KRPC.Request()
