@@ -1,9 +1,13 @@
 v0.3.8
+ * Add support for CommNet
  * Add CelestialBody.InitialRotation and RotationAngle (#369)
  * Add SpaceCenter.Navball to show/hide the navball (#355)
  * Add SpaceCenter.UIVisible to show/hide the UI (#355)
  * Fix bug with DockingPort.Rotation (#371)
  * Fix bug with Part.Rotation (#371)
+ * Fix bug with Part.BoundingBox (#370)
+ * Add support for procedural fairings mod http://forum.kerbalspaceprogram.com/index.php?showtopic=36371 (#368)
+ * Add ControlSurface.AuthorityLimiter (#352)
 
 v0.3.7
  * Add custom reference frames (ReferenceFrame.CreateRelative and CreateHybrid) (#252)

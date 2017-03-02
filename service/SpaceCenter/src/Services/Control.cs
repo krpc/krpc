@@ -55,6 +55,22 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The control state of the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public ControlState State {
+            get { return InternalVessel.Connection.ControlState.ToControlState (); }
+        }
+
+        /// <summary>
+        /// The source of the vessels control, for example by a kerbal or a probe core.
+        /// </summary>
+        [KRPCProperty]
+        public ControlSource Source {
+            get { return InternalVessel.Connection.ControlState.ToControlSource (); }
+        }
+
+        /// <summary>
         /// The state of SAS.
         /// </summary>
         /// <remarks>Equivalent to <see cref="AutoPilot.SAS"/></remarks>
@@ -386,9 +402,8 @@ namespace KRPC.SpaceCenter.Services
         public void RemoveNodes ()
         {
             CheckManeuverNodes ();
-            var pcs = InternalVessel.patchedConicSolver;
-            foreach (var node in pcs.maneuverNodes.ToList())
-                pcs.RemoveManeuverNode (node);
+            foreach (var node in InternalVessel.patchedConicSolver.maneuverNodes.ToArray ())
+                node.RemoveSelf ();
             // TODO: delete the Node objects
         }
 

@@ -83,6 +83,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The authority limiter for the control surface, which controls how far the control surface will move.
+        /// </summary>
+        [KRPCProperty]
+        public float AuthorityLimiter {
+            get { return controlSurface.authorityLimiter; }
+            set { controlSurface.authorityLimiter = value; }
+        }
+
+        /// <summary>
         /// Whether the control surface movement is inverted.
         /// </summary>
         [KRPCProperty]
@@ -120,7 +129,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        internal Tuple<Vector3d,Vector3d> AvailableTorqueVectors {
+        internal Tuple<Vector3d, Vector3d> AvailableTorqueVectors {
             get { return controlSurface.GetPotentialTorque (); }
         }
     }

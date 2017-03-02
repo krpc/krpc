@@ -167,6 +167,15 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Returns a <see cref="Comms"/> object that can be used to interact
+        /// with CommNet for this vessel.
+        /// </summary>
+        [KRPCProperty]
+        public Comms Comms {
+            get { return new Comms (Id); }
+        }
+
+        /// <summary>
         /// An <see cref="AutoPilot"/> object, that can be used to perform
         /// simple auto-piloting of the vessel.
         /// </summary>

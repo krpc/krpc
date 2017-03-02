@@ -56,6 +56,13 @@ class TestPartsControlSurface(krpctest.TestCase):
         self.assertTrue(self.ctrlsrf.yaw_enabled)
         self.assertFalse(self.ctrlsrf.roll_enabled)
 
+    def test_authority_limiter(self):
+        self.assertEqual(100, self.ctrlsrf.authority_limiter)
+        self.ctrlsrf.authority_limiter = 50
+        self.assertEqual(50, self.ctrlsrf.authority_limiter)
+        self.ctrlsrf.authority_limiter = 100
+        self.assertEqual(100, self.ctrlsrf.authority_limiter)
+
     def test_inverted(self):
         self.assertFalse(self.ctrlsrf.inverted)
         self.ctrlsrf.inverted = True

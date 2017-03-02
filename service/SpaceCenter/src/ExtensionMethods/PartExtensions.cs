@@ -14,7 +14,15 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
         public static bool HasModule<T> (this Part part) where T : PartModule
         {
-            return part.Modules.OfType<T> ().Any ();
+            return part.Modules.Contains<T> ();
+        }
+
+        /// <summary>
+        /// Returns true if the part contains the given part module
+        /// </summary>
+        public static bool HasModule (this Part part, string module)
+        {
+            return part.Modules.Contains (module);
         }
 
         /// <summary>
@@ -29,7 +37,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Returns the first part module of the named type, or null if none can be found
         /// </summary>
-        public static object Module (this Part part, string type)
+        public static PartModule Module (this Part part, string type)
         {
             foreach (var module in part.Modules) {
                 if (module.GetType ().Name == type)
@@ -128,13 +136,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </remarks>
         public static Bounds GetBounds (this Part part, ReferenceFrame referenceFrame)
         {
-            var colliders = part.GetComponentsInChildren<MeshCollider> ();
             var bounds = new Bounds (referenceFrame.PositionFromWorldSpace (part.WCoM), Vector3.zero);
-            foreach (var collider in colliders) {
-                var vertices = collider.sharedMesh.bounds.ToVertices ();
-                for (int i = 0; i < vertices.Length; i++) {
-                    // part space -> world space -> reference frame space
-                    var vertex = referenceFrame.PositionFromWorldSpace (collider.transform.TransformPoint (vertices [i]));
+            var meshes = part.GetComponentsInChildren<MeshFilter> ();
+            for (int i = 0; i < meshes.Length; i++) {
+                var mesh = meshes [i];
+                var vertices = mesh.mesh.bounds.ToVertices ();
+                for (int j = 0; j < vertices.Length; j++) {
+                    // mesh space -> world space -> reference frame space
+                    var vertex = referenceFrame.PositionFromWorldSpace (mesh.transform.TransformPoint (vertices [j]));
                     bounds.Encapsulate (vertex);
                 }
             }

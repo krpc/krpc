@@ -33,9 +33,13 @@ T: KRPC.SpaceCenter.Services.AutoPilot
 T: KRPC.SpaceCenter.Services.Camera
 T: KRPC.SpaceCenter.Services.CelestialBody
 T: KRPC.SpaceCenter.Services.Control
+T: KRPC.SpaceCenter.Services.Comms
+T: KRPC.SpaceCenter.Services.CommLink
+T: KRPC.SpaceCenter.Services.CommNode
 T: KRPC.SpaceCenter.Services.Flight
 T: KRPC.SpaceCenter.Services.Node
 T: KRPC.SpaceCenter.Services.Orbit
+T: KRPC.SpaceCenter.Services.Parts.Antenna
 T: KRPC.SpaceCenter.Services.Parts.CargoBay
 T: KRPC.SpaceCenter.Services.Parts.ControlSurface
 T: KRPC.SpaceCenter.Services.Parts.Decoupler

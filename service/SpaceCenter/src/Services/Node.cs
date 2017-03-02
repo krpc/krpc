@@ -23,10 +23,11 @@ namespace KRPC.SpaceCenter.Services
         internal Node (global::Vessel vessel, double ut, double prograde, double normal, double radial)
         {
             vesselId = vessel.id;
+            if (InternalVessel.patchedConicSolver == null)
+                throw new InvalidOperationException ("Cannot add maneuver node");
             var node = vessel.patchedConicSolver.AddManeuverNode (ut);
-            if (node.attachedGizmo == null)
-                node.AttachGizmo (MapView.ManeuverNodePrefab, FlightGlobals.ActiveVessel.patchedConicRenderer);
-            node.OnGizmoUpdated (new Vector3d (radial, normal, prograde), ut);
+            node.DeltaV = new Vector3d (radial, normal, prograde);
+            Update ();
             InternalNode = node;
         }
 
@@ -92,7 +93,7 @@ namespace KRPC.SpaceCenter.Services
             get { return InternalNode.DeltaV.z; }
             set {
                 InternalNode.DeltaV.z = value;
-                InternalNode.OnGizmoUpdated (InternalNode.DeltaV, InternalNode.UT);
+                Update ();
             }
         }
 
@@ -104,7 +105,7 @@ namespace KRPC.SpaceCenter.Services
             get { return InternalNode.DeltaV.y; }
             set {
                 InternalNode.DeltaV.y = value;
-                InternalNode.OnGizmoUpdated (InternalNode.DeltaV, InternalNode.UT);
+                Update ();
             }
         }
 
@@ -116,7 +117,7 @@ namespace KRPC.SpaceCenter.Services
             get { return InternalNode.DeltaV.x; }
             set {
                 InternalNode.DeltaV.x = value;
-                InternalNode.OnGizmoUpdated (InternalNode.DeltaV, InternalNode.UT);
+                Update ();
             }
         }
 
@@ -131,7 +132,8 @@ namespace KRPC.SpaceCenter.Services
             get { return InternalNode.DeltaV.magnitude; }
             set {
                 var direction = InternalNode.DeltaV.normalized;
-                InternalNode.OnGizmoUpdated (new Vector3d (direction.x * value, direction.y * value, direction.z * value), InternalNode.UT);
+                InternalNode.DeltaV = new Vector3d (direction.x * value, direction.y * value, direction.z * value);
+                Update ();
             }
         }
 
@@ -179,7 +181,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public double UT {
             get { return InternalNode.UT; }
-            set { InternalNode.UT = value; }
+            set {
+                InternalNode.UT = value;
+                Update ();
+            }
         }
 
         /// <summary>
@@ -198,6 +203,13 @@ namespace KRPC.SpaceCenter.Services
             get { return new Orbit (InternalNode.nextPatch); }
         }
 
+        void Update () {
+            var vessel = InternalVessel;
+            if (vessel.patchedConicSolver == null)
+                throw new InvalidOperationException ("Cannot update maneuver node");
+            vessel.patchedConicSolver.UpdateFlightPlan ();
+        }
+
         /// <summary>
         /// Removes the maneuver node.
         /// </summary>
@@ -206,7 +218,9 @@ namespace KRPC.SpaceCenter.Services
         {
             if (InternalNode == null)
                 throw new InvalidOperationException ("Node does not exist");
-            InternalVessel.patchedConicSolver.RemoveManeuverNode (InternalNode);
+            if (InternalVessel.patchedConicSolver == null)
+                throw new InvalidOperationException ("Cannot remove maneuver node");
+            InternalNode.RemoveSelf ();
             InternalNode = null;
             // TODO: delete this Node object
         }

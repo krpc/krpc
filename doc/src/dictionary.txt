@@ -43,6 +43,7 @@ javac
 kOS
 kRPC
 kRPCs
+kerbal
 krpc
 krpctest
 laplace

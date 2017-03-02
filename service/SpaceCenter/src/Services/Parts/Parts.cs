@@ -158,6 +158,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A list of all antennas in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Antenna> Antennas {
+            get { return All.Where (Antenna.Is).Select (part => new Antenna (part)).ToList (); }
+        }
+
+        /// <summary>
         /// A list of all control surfaces in the vessel.
         /// </summary>
         [KRPCProperty]

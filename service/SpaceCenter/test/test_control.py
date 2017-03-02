@@ -6,6 +6,12 @@ import krpc
 
 class TestControlMixin(object):
 
+    def test_state(self):
+        self.assertEqual(self.space_center.ControlState.full,
+                         self.control.state)
+        self.assertEqual(self.space_center.ControlSource.kerbal,
+                         self.control.source)
+
     def test_special_action_groups(self):
         for name in ['rcs', 'gear', 'lights', 'brakes', 'abort']:
             setattr(self.control, name, True)
@@ -217,6 +223,12 @@ class TestControlStaging(krpctest.TestCase):
         self.set_circular_orbit('Kerbin', 100000)
         self.control = self.connect().space_center.active_vessel.control
 
+    def test_state(self):
+        self.assertEqual(self.space_center.ControlState.full,
+                         self.control.state)
+        self.assertEqual(self.space_center.ControlSource.kerbal,
+                         self.control.source)
+
     def test_staging(self):
         for i in reversed(range(12)):
             self.assertEqual(i, self.control.current_stage)
@@ -236,6 +248,12 @@ class TestControlRover(krpctest.TestCase):
         cls.vessel = cls.space_center.active_vessel
         cls.control = cls.vessel.control
         cls.flight = cls.vessel.flight(cls.vessel.orbit.body.reference_frame)
+
+    def test_state(self):
+        self.assertEqual(self.space_center.ControlState.full,
+                         self.control.state)
+        self.assertEqual(self.space_center.ControlSource.kerbal,
+                         self.control.source)
 
     def test_move_forward(self):
         self.control = self.space_center.active_vessel.control
@@ -357,6 +375,42 @@ class TestControlRover(krpctest.TestCase):
         while self.flight.horizontal_speed > 0.01:
             self.wait()
 
+
+class TestControlProbe(krpctest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab('Probe')
+        cls.remove_other_vessels()
+        cls.space_center = cls.connect().space_center
+        cls.vessel = cls.space_center.active_vessel
+        cls.control = cls.vessel.control
+
+    def test_state(self):
+        self.assertEqual(self.space_center.ControlState.full,
+                         self.control.state)
+        self.assertEqual(self.space_center.ControlSource.probe,
+                         self.control.source)
+
+
+class TestControlProbePartialControl(krpctest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab('Probe')
+        cls.remove_other_vessels()
+        cls.set_circular_orbit('Jool', 20000000)
+        cls.space_center = cls.connect().space_center
+        cls.vessel = cls.space_center.active_vessel
+        cls.control = cls.vessel.control
+
+    def test_state(self):
+        self.assertEqual(self.space_center.ControlState.partial,
+                         self.control.state)
+        self.assertEqual(self.space_center.ControlSource.probe,
+                         self.control.source)
 
 if __name__ == '__main__':
     unittest.main()
