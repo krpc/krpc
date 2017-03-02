@@ -382,6 +382,31 @@ functionality to the kRPC server.
         conn = krpc.connect()
         state = conn.eva.FlagState.lowered
 
+.. csharp:attribute:: KRPCException (string Service, Type MappedException)
+
+   :parameters:
+
+    * **Service** -- Optional name of the service to add this enum to. If omitted, the enum is added
+      to the service that contains its definition.
+    * **MappedException** -- Optional type of an exception to map to this exception. For example,
+      can be used to map a built-in C# exception type onto this kRPC exception type.
+
+   This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to
+   an exception class type.
+
+   A :csharp:attr:`KRPCException` must be part of a service, just like a
+   :csharp:attr:`KRPCClass`. Similarly, a :csharp:attr:`KRPCException` can be declared outside of a
+   service if it has its ``Service`` parameter set to the name of the service that it is part of.
+
+   The class type to which this attribute is applied must satisfy the following criteria:
+
+   * The class must be ``public``.
+
+   * The name of the class must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
+
+   * The class must either be declared inside a :csharp:attr:`KRPCService`, or have it's ``Service``
+     parameter set to the name of the service it is part of.
+
 .. csharp:attribute:: KRPCDefaultValue (string Name, Type ValueConstructor)
 
    :parameters:
