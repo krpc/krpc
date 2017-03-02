@@ -127,5 +127,4 @@ Going further...
  * Client libraries are available for other languages too, including
    :doc:`C# <csharp>`, :doc:`C++ <cpp>`, :doc:`Java <java>` and :doc:`Lua <lua>`.
  * It is also possible to :doc:`communicate with the server manually
-   <communication-protocol>` from any language you like -- as long as it can do
-   network I/O.
+   <communication-protocols>` from any language you like.

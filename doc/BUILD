@@ -25,7 +25,8 @@ stage_files(
         'src/scripts/*.cpp',
         'src/scripts/*.java',
         'src/scripts/*.lua',
-        'src/scripts/*.py'
+        'src/scripts/*.py',
+        'src/scripts/*.js'
     ]) + [
         ':conf',
         'src/_static/custom.css',

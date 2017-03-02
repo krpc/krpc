@@ -3,6 +3,8 @@ Bazel
 CMake
 Ferram
 IDisposable
+Javascript
+Jeb
 Kerbal
 Kerbals
 Kerbin
@@ -91,3 +93,4 @@ vertices
 virtualenv
 waypoint
 waypoints
+websockets
