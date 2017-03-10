@@ -19,6 +19,38 @@ Client::Client(const std::shared_ptr<Connection>& rpc_connection,
   stream_manager(this, stream_connection),
   lock(new std::mutex) {}
 
+Client::Client(const std::string& name, const std::string& address,
+               unsigned int rpc_port, unsigned int stream_port):
+               lock(new std::mutex)
+               {
+  if (rpc_port == stream_port)
+    throw ConnectionFailed("RPC and Stream port numbers are the same");
+
+  // Connect to RPC server
+  std::shared_ptr<Connection> rpc_conn = std::make_shared<Connection>(address, rpc_port);
+  rpc_conn->connect(10, 0.1f);
+  rpc_conn->send(encoder::RPC_HELLO_MESSAGE, encoder::RPC_HELLO_MESSAGE_LENGTH);
+  rpc_conn->send(encoder::client_name(name));
+  std::string client_identifier = rpc_conn->receive(decoder::GUID_LENGTH);
+
+  // Connect to Stream server
+  std::shared_ptr<Connection> stream_connection = nullptr;
+  if (stream_port != 0) {
+    stream_connection = std::make_shared<Connection>(address, stream_port);
+    stream_connection->connect(10, 0.1f);
+    stream_connection->send(encoder::STREAM_HELLO_MESSAGE, encoder::STREAM_HELLO_MESSAGE_LENGTH);
+    stream_connection->send(client_identifier);
+    std::string ok_message = stream_connection->receive(decoder::OK_MESSAGE_LENGTH);
+    std::string expected(decoder::OK_MESSAGE);
+    if (!std::equal(ok_message.begin(), ok_message.end(), expected.begin()))
+      throw ConnectionFailed("Did not receive OK message from server");
+    StreamManager stream_manager(this, stream_connection);
+  }
+  rpc_connection = rpc_conn;
+}
+
+Client::~Client() {}
+
 schema::Request Client::request(const std::string& service,
                                 const std::string& procedure,
                                 const std::vector<std::string>& args) {
