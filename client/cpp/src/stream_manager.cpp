@@ -74,7 +74,8 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
   }
 }
 
-StreamManager::StreamManager():client(NULL) {}
+StreamManager::StreamManager() : client(nullptr) {
+}
 
 StreamManager::StreamManager(Client * client, const std::shared_ptr<Connection>& connection)
   : client(client), connection(connection),
@@ -87,7 +88,7 @@ StreamManager::StreamManager(Client * client, const std::shared_ptr<Connection>&
 }
 
 StreamManager::~StreamManager() {
-  if(client!=NULL){
+  if (client) {
     stop->store(true);
     update_thread->join();
   }

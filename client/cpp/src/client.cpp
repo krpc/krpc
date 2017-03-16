@@ -49,8 +49,6 @@ Client::Client(const std::string& name, const std::string& address,
   rpc_connection = rpc_conn;
 }
 
-Client::~Client() {}
-
 schema::Request Client::request(const std::string& service,
                                 const std::string& procedure,
                                 const std::vector<std::string>& args) {
