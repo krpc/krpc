@@ -8,11 +8,11 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// A landing leg. Obtained by calling <see cref="Part.LandingLeg"/>.
+    /// A landing leg. Obtained by calling <see cref="Part.Leg"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
-    public class LandingLeg : Equatable<LandingLeg>
+    public class Leg : Equatable<Leg>
     {
         readonly ModuleWheelBase wheel;
         readonly ModuleWheels.ModuleWheelDeployment deployment;
@@ -21,12 +21,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal static bool Is (Part part)
         {
             var internalPart = part.InternalPart;
-            return
-            internalPart.HasModule<ModuleWheelBase> () &&
-            internalPart.Module<ModuleWheelBase> ().wheelType == WheelType.LEG;
+            return internalPart.HasModule<ModuleWheelBase> () &&
+                   internalPart.Module<ModuleWheelBase> ().wheelType == WheelType.LEG;
         }
 
-        internal LandingLeg (Part part)
+        internal Leg (Part part)
         {
             if (!Is (part))
                 throw new ArgumentException ("Part is not a landing leg");
@@ -40,7 +39,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (LandingLeg other)
+        public override bool Equals (Leg other)
         {
             return !ReferenceEquals (other, null) && Part == other.Part && wheel == other.wheel;
         }
@@ -63,22 +62,22 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The current state of the landing leg.
         /// </summary>
         [KRPCProperty]
-        public LandingLegState State {
+        public LegState State {
             get {
                 if (damage != null && damage.isDamaged)
-                    return LandingLegState.Broken;
+                    return LegState.Broken;
                 if (deployment != null) {
                     if (Math.Abs (deployment.position - deployment.deployedPosition) < 0.0001)
-                        return LandingLegState.Deployed;
+                        return LegState.Deployed;
                     else if (Math.Abs (deployment.position - deployment.retractedPosition) < 0.0001)
-                        return LandingLegState.Retracted;
+                        return LegState.Retracted;
                     else if (deployment.stateString.Equals (deployment.st_deploying.name))
-                        return LandingLegState.Deploying;
+                        return LegState.Deploying;
                     else if (deployment.stateString.Equals (deployment.st_retracting.name))
-                        return LandingLegState.Retracting;
+                        return LegState.Retracting;
                     throw new InvalidOperationException ();
                 }
-                return LandingLegState.Deployed;
+                return LegState.Deployed;
             }
         }
 
@@ -91,7 +90,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </remarks>
         [KRPCProperty]
         public bool Deployed {
-            get { return State == LandingLegState.Deployed; }
+            get { return State == LegState.Deployed; }
             set {
                 if (deployment == null)
                     throw new InvalidOperationException ("Landing gear is not deployable");

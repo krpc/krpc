@@ -48,8 +48,7 @@ T: KRPC.SpaceCenter.Services.Parts.Engine
 T: KRPC.SpaceCenter.Services.Parts.Experiment
 T: KRPC.SpaceCenter.Services.Parts.Fairing
 T: KRPC.SpaceCenter.Services.Parts.Intake
-T: KRPC.SpaceCenter.Services.Parts.LandingGear
-T: KRPC.SpaceCenter.Services.Parts.LandingLeg
+T: KRPC.SpaceCenter.Services.Parts.Leg
 T: KRPC.SpaceCenter.Services.Parts.LaunchClamp
 T: KRPC.SpaceCenter.Services.Parts.Light
 T: KRPC.SpaceCenter.Services.Parts.Module
@@ -66,6 +65,7 @@ T: KRPC.SpaceCenter.Services.Parts.ScienceData
 T: KRPC.SpaceCenter.Services.Parts.Sensor
 T: KRPC.SpaceCenter.Services.Parts.SolarPanel
 T: KRPC.SpaceCenter.Services.Parts.Thruster
+T: KRPC.SpaceCenter.Services.Parts.Wheel
 T: KRPC.SpaceCenter.Services.ReferenceFrame
 T: KRPC.SpaceCenter.Services.Resource
 T: KRPC.SpaceCenter.Services.Resources

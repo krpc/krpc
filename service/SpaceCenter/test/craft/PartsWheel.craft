@@ -1,0 +1,1787 @@
+ship = PartsWheel
+version = 1.2.2
+description =
+type = VAB
+size = 5.29314995,4.30968285,6.22622156
+PART
+{
+  part = mk1pod_4294695196
+  partName = Part
+  pos = -1.49711704,3.40968609,0.966450095
+  attPos = 0,0,0
+  attPos0 = -1.49711704,3.40968609,0.966450095
+  rot = -0.707106829,0,0,0.707106829
+  attRot = -0.707106709,0,0,0.707106709
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = Mk1FuselageStructural_4294688548
+  link = launchClamp1_4294167542
+  link = trussPiece3x_4294460352
+  attN = bottom,Mk1FuselageStructural_4294688548
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleCommand
+    isEnabled = True
+    hibernation = False
+    hibernateOnWarp = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      HibernateToggle
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleReactionWheel
+    isEnabled = True
+    actuatorModeCycle = 0
+    authorityLimiter = 100
+    stateString = Active
+    stagingEnabled = True
+    WheelState = Active
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      CycleAction
+      {
+        actionGroup = None
+      }
+      Activate
+      {
+        actionGroup = None
+      }
+      Deactivate
+      {
+        actionGroup = None
+      }
+      Toggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleColorChanger
+    isEnabled = True
+    animState = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = Light
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleScienceExperiment
+    isEnabled = True
+    Deployed = False
+    Inoperable = False
+    cooldownToGo = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      DeployAction
+      {
+        actionGroup = None
+      }
+      ResetAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleScienceContainer
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      CollectAllAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = FlagDecal
+    isEnabled = True
+    flagDisplayed = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleConductionMultiplier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDataTransmitter
+    isEnabled = True
+    xmitIncomplete = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      StartTransmissionAction
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleLiftingSurface
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTripLogger
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    Log
+    {
+      flight = 0
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = ElectricCharge
+    amount = 50
+    maxAmount = 50
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+  RESOURCE
+  {
+    name = MonoPropellant
+    amount = 10
+    maxAmount = 10
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+}
+PART
+{
+  part = Mk1FuselageStructural_4294688548
+  partName = Part
+  pos = -1.49711704,3.4096849,2.30899096
+  attPos = 0,0,0
+  attPos0 = 0,-1.342538,0
+  rot = -0.707106829,0,0,0.707106829
+  attRot = 0,0,0,1
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = GearMedium_4294384838
+  link = GearFree_4294382070
+  link = GearFixed_4294379094
+  link = SmallGearBay_4294372838
+  link = roverWheel1_4294368044
+  link = roverWheel2_4294365290
+  link = wheelMed_4294361434
+  link = trussPiece3x_4294416072
+  attN = top,mk1pod_4294695196
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+}
+PART
+{
+  part = GearMedium_4294384838
+  partName = Part
+  pos = -1.06886864,2.98143649,2.39514947
+  attPos = 0,0,0
+  attPos0 = 0.428248405,-0.0861584917,-0.428248316
+  rot = 0.382686079,-0.923878551,0,0
+  attRot = 0,0,0,1
+  attRot0 = 0.270599902,-0.653280735,-0.653280735,-0.270599902
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = ForceHeaviest
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,Mk1FuselageStructural_4294688548
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleWheelBase
+    isEnabled = True
+    wheelType = FREE
+    isGrounded = False
+    autoFriction = True
+    frictionMultiplier = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoFrictionToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSuspension
+    isEnabled = True
+    springTweakable = 1
+    damperTweakable = 1
+    suspensionPos = (-1, -1, -1)
+    autoBoost = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelBrakes
+    isEnabled = True
+    brakeTweakable = 100
+    brakeInput = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      BrakeAction
+      {
+        actionGroup = Brakes
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDeployment
+    isEnabled = True
+    shieldedCanDeploy = False
+    stateString =
+    stagingEnabled = True
+    position = 1
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActionToggle
+      {
+        actionGroup = Gear
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelBogey
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = FXModuleLookAtConstraint
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleStatusLight
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleLight
+    isEnabled = True
+    isOn = False
+    uiWriteLock = False
+    lightR = 1
+    lightG = 1
+    lightB = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleLightAction
+      {
+        actionGroup = Light
+      }
+      LightOnAction
+      {
+        actionGroup = None
+      }
+      LightOffAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDamage
+    isEnabled = True
+    isDamaged = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDragModifier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDragModifier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = GearFree_4294382070
+  partName = Part
+  pos = -0.966924787,3.71579146,1.45809174
+  attPos = 0,0,0
+  attPos0 = 0.530192256,0.850898325,0.306106597
+  rot = -0.866025448,0.50000006,0,-8.94069672E-08
+  attRot = 0,0,0,1
+  attRot0 = -0.612372518,0.353553414,0.353553414,0.612372398
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = ForceHeaviest
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,Mk1FuselageStructural_4294688548
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleWheelBase
+    isEnabled = True
+    wheelType = FREE
+    isGrounded = False
+    autoFriction = True
+    frictionMultiplier = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoFrictionToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSuspension
+    isEnabled = True
+    springTweakable = 1
+    damperTweakable = 1
+    suspensionPos = (-1, -1, -1)
+    autoBoost = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSteering
+    isEnabled = True
+    steeringEnabled = True
+    steeringInvert = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDamage
+    isEnabled = True
+    isDamaged = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = GearFixed_4294379094
+  partName = Part
+  pos = -0.956528068,3.72179413,2.33368564
+  attPos = 0,0,0
+  attPos0 = 0.540588975,-0.0246946756,0.312109172
+  rot = -0.25881505,0.965911031,-0.00536605716,0.00143787265
+  attRot = 0,0,0,1
+  attRot0 = -0.181993142,0.686796546,0.679207802,0.184026614
+  mir = 1,1,-1
+  symMethod = Radial
+  autostrutMode = ForceHeaviest
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,Mk1FuselageStructural_4294688548
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleWheelBase
+    isEnabled = True
+    wheelType = FREE
+    isGrounded = False
+    autoFriction = True
+    frictionMultiplier = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoFrictionToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSuspension
+    isEnabled = True
+    springTweakable = 1
+    damperTweakable = 1
+    suspensionPos = (-1, -1, -1)
+    autoBoost = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelBrakes
+    isEnabled = True
+    brakeTweakable = 100
+    brakeInput = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      BrakeAction
+      {
+        actionGroup = Brakes
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDamage
+    isEnabled = True
+    isDamaged = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = SmallGearBay_4294372838
+  partName = Part
+  pos = -0.967835367,3.71526575,3.16027164
+  attPos = 0,0,0
+  attPos0 = 0.529281676,-0.85127908,0.305580676
+  rot = -0.866025448,0.50000006,-1.04308128E-07,8.94069672E-08
+  attRot = 0,0,0,1
+  attRot0 = -0.612372398,0.353553474,0.353553355,0.612372518
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = ForceHeaviest
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,Mk1FuselageStructural_4294688548
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleWheelBase
+    isEnabled = True
+    wheelType = FREE
+    isGrounded = False
+    autoFriction = True
+    frictionMultiplier = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoFrictionToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSuspension
+    isEnabled = True
+    springTweakable = 1
+    damperTweakable = 1
+    suspensionPos = (-1, -1, -1)
+    autoBoost = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSteering
+    isEnabled = True
+    steeringEnabled = True
+    steeringInvert = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelBrakes
+    isEnabled = True
+    brakeTweakable = 100
+    brakeInput = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      BrakeAction
+      {
+        actionGroup = Brakes
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleStatusLight
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDeployment
+    isEnabled = True
+    shieldedCanDeploy = False
+    stateString =
+    stagingEnabled = True
+    position = 1
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActionToggle
+      {
+        actionGroup = Gear
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = FXModuleConstrainPosition
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = FXModuleLookAtConstraint
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleLight
+    isEnabled = True
+    isOn = False
+    uiWriteLock = False
+    lightR = 1
+    lightG = 1
+    lightB = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleLightAction
+      {
+        actionGroup = Light
+      }
+      LightOnAction
+      {
+        actionGroup = None
+      }
+      LightOffAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDamage
+    isEnabled = True
+    isDamaged = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDragModifier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDragModifier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = roverWheel1_4294368044
+  partName = Part
+  pos = -2.19750619,4.11007214,3.61307335
+  attPos = 0,0,0
+  attPos0 = -0.700389147,-1.30408061,0.700386941
+  rot = -0.653282046,0.270596772,-0.270596713,0.653282046
+  attRot = 0,0,0,1
+  attRot0 = 0,0.382681578,5.96046377E-08,0.923880279
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = ForceHeaviest
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,Mk1FuselageStructural_4294688548
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleWheelBase
+    isEnabled = True
+    wheelType = MOTORIZED
+    isGrounded = False
+    autoFriction = True
+    frictionMultiplier = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoFrictionToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSuspension
+    isEnabled = True
+    springTweakable = 1
+    damperTweakable = 1
+    suspensionPos = (-1, -1, -1)
+    autoBoost = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSteering
+    isEnabled = True
+    steeringEnabled = True
+    steeringInvert = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelMotor
+    isEnabled = True
+    autoTorque = True
+    motorEnabled = True
+    motorInverted = False
+    driveLimiter = 100
+    tractionControlScale = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoTorqueToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelBrakes
+    isEnabled = True
+    brakeTweakable = 100
+    brakeInput = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      BrakeAction
+      {
+        actionGroup = Brakes
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDamage
+    isEnabled = True
+    isDamaged = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = FXModuleLookAtConstraint
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = roverWheel2_4294365290
+  partName = Part
+  pos = -2.45429993,3.62461424,2.75180435
+  attPos = 0,0,0
+  attPos0 = -0.957182884,-0.442812085,0.214929178
+  rot = 0,-7.4505806E-08,0.382681668,-0.923880398
+  attRot = -0.707106709,0,0,-0.707106709
+  attRot0 = -0.653282046,-0.270596832,0.270596713,-0.653282046
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = ForceHeaviest
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,Mk1FuselageStructural_4294688548
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleWheelBase
+    isEnabled = True
+    wheelType = MOTORIZED
+    isGrounded = False
+    autoFriction = True
+    frictionMultiplier = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoFrictionToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSuspension
+    isEnabled = True
+    springTweakable = 1
+    damperTweakable = 1
+    suspensionPos = (-1, -1, -1)
+    autoBoost = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSteering
+    isEnabled = True
+    steeringEnabled = True
+    steeringInvert = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelMotor
+    isEnabled = True
+    autoTorque = True
+    motorEnabled = True
+    motorInverted = False
+    driveLimiter = 100
+    tractionControlScale = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoTorqueToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelBrakes
+    isEnabled = True
+    brakeTweakable = 100
+    brakeInput = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      BrakeAction
+      {
+        actionGroup = Brakes
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDamage
+    isEnabled = True
+    isDamaged = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = FXModuleLookAtConstraint
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = wheelMed_4294361434
+  partName = Part
+  pos = -2.03496027,3.72020912,1.70240426
+  attPos = 0,0,0
+  attPos0 = -0.537843227,0.60658586,0.310524017
+  rot = -0.683012724,0.183012813,-0.183012664,0.683012724
+  attRot = 0,0,0,1
+  attRot0 = -2.98023188E-08,0.258819073,1.04308114E-07,0.965925813
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = ForceHeaviest
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,Mk1FuselageStructural_4294688548
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleWheelBase
+    isEnabled = True
+    wheelType = MOTORIZED
+    isGrounded = False
+    autoFriction = True
+    frictionMultiplier = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoFrictionToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSuspension
+    isEnabled = True
+    springTweakable = 1.20000005
+    damperTweakable = 0.850000024
+    suspensionPos = (-1, -1, -1)
+    autoBoost = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSteering
+    isEnabled = True
+    steeringEnabled = True
+    steeringInvert = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelMotor
+    isEnabled = True
+    autoTorque = True
+    motorEnabled = True
+    motorInverted = False
+    driveLimiter = 100
+    tractionControlScale = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoTorqueToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelBrakes
+    isEnabled = True
+    brakeTweakable = 100
+    brakeInput = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      BrakeAction
+      {
+        actionGroup = Brakes
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDamage
+    isEnabled = True
+    isDamaged = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = launchClamp1_4294167542
+  partName = Part
+  pos = -1.51755583,4.72872257,-0.465385556
+  attPos = 0,0,0
+  attPos0 = -0.0204387903,1.43183446,1.31903625
+  rot = 0,0,1.00000012,0
+  attRot = 0,0,0,1
+  attRot0 = 0,-0.707106829,0.707106829,0
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 0
+  resPri = 0
+  dstg = 0
+  sidx = 0
+  sqor = 0
+  sepI = 0
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,mk1pod_4294695196
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = LaunchClamp
+    isEnabled = True
+    scaleFactor = 1.1358844
+    height = 2.86606121
+    stagingEnabled = True
+    towerRot = 0,0,-1,0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ReleaseClamp
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleGenerator
+    isEnabled = True
+    generatorIsActive = False
+    throttle = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+        active = False
+      }
+      ActivateAction
+      {
+        actionGroup = None
+        active = False
+      }
+      ShutdownAction
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTestSubject
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = trussPiece3x_4294460352
+  partName = Part
+  pos = -2.65726042,2.24954081,0.0238114595
+  attPos = 0,0,0
+  attPos0 = -1.16014338,0.942637682,-1.16014409
+  rot = 0.133940756,0.323361427,-0.865442634,-0.358478189
+  attRot = -0.173648193,0,0,0.984807789
+  attRot0 = -0.158771887,0.840611279,-0.383309245,-0.348192632
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,mk1pod_4294695196
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+}
+PART
+{
+  part = trussPiece3x_4294416072
+  partName = Part
+  pos = -2.72322798,2.18356419,3.84172392
+  attPos = 0,0,0
+  attPos0 = -1.22611094,-1.53273118,-1.22611845
+  rot = 0.130884707,0.315985769,0.868163586,0.359602928
+  attRot = 0.342020214,-1.27291189E-09,3.49729623E-09,0.939692676
+  attRot0 = 0.34682712,-0.390448689,0.83731997,0.161728144
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,Mk1FuselageStructural_4294688548
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+}

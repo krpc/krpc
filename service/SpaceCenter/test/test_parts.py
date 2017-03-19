@@ -316,15 +316,10 @@ class TestParts(krpctest.TestCase):
             ['Adjustable Ramp Intake (Radial)', 'XM-G50 Radial Air Intake'],
             [p.part.title for p in self.parts.intakes])
 
-    def test_landing_gear(self):
-        self.assertItemsEqual(
-            ['LY-10 Small Landing Gear'],
-            [p.part.title for p in self.parts.landing_gear])
-
-    def test_landing_legs(self):
+    def test_legs(self):
         self.assertItemsEqual(
             ['LT-1 Landing Struts']*3,
-            [p.part.title for p in self.parts.landing_legs])
+            [p.part.title for p in self.parts.legs])
 
     def test_launch_clamps(self):
         self.assertItemsEqual(
@@ -376,6 +371,11 @@ class TestParts(krpctest.TestCase):
             ['Gigantor XL Solar Array', 'OX-STAT Photovoltaic Panels'] +
             ['SP-L 1x6 Photovoltaic Panels'] * 2,
             [p.part.title for p in self.parts.solar_panels])
+
+    def test_wheels(self):
+        self.assertItemsEqual(
+            ['LY-10 Small Landing Gear'],
+            [p.part.title for p in self.parts.wheels])
 
 
 if __name__ == '__main__':

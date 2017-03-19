@@ -234,19 +234,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// A list of all landing gear attached to the vessel.
-        /// </summary>
-        [KRPCProperty]
-        public IList<LandingGear> LandingGear {
-            get { return All.Where (Services.Parts.LandingGear.Is).Select (part => new LandingGear (part)).ToList (); }
-        }
-
-        /// <summary>
         /// A list of all landing legs attached to the vessel.
         /// </summary>
         [KRPCProperty]
-        public IList<LandingLeg> LandingLegs {
-            get { return All.Where (LandingLeg.Is).Select (part => new LandingLeg (part)).ToList (); }
+        public IList<Leg> Legs {
+            get { return All.Where (Leg.Is).Select (part => new Leg (part)).ToList (); }
         }
 
         /// <summary>
@@ -327,6 +319,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public IList<SolarPanel> SolarPanels {
             get { return All.Where (SolarPanel.Is).Select (part => new SolarPanel (part)).ToList (); }
+        }
+
+        /// <summary>
+        /// A list of all wheels in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Wheel> Wheels {
+            get { return All.Where (Wheel.Is).Select (part => new Wheel (part)).ToList (); }
         }
     }
 }
