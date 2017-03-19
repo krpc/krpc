@@ -13,30 +13,22 @@ namespace krpc {
 
 Client::Client(): lock(new std::mutex) {}
 
-Client::Client(const std::shared_ptr<Connection>& rpc_connection,
-               const std::shared_ptr<Connection>& stream_connection):
-  rpc_connection(rpc_connection),
-  stream_manager(this, stream_connection),
-  lock(new std::mutex) {}
-
 Client::Client(const std::string& name, const std::string& address,
-               unsigned int rpc_port, unsigned int stream_port):
-               lock(new std::mutex)
-               {
+               unsigned int rpc_port, unsigned int stream_port) :
+  lock(new std::mutex) {
   if (rpc_port == stream_port)
-    throw ConnectionFailed("RPC and Stream port numbers are the same");
+    throw ConnectionFailed("RPC and stream port numbers are the same");
 
   // Connect to RPC server
-  std::shared_ptr<Connection> rpc_conn = std::make_shared<Connection>(address, rpc_port);
-  rpc_conn->connect(10, 0.1f);
-  rpc_conn->send(encoder::RPC_HELLO_MESSAGE, encoder::RPC_HELLO_MESSAGE_LENGTH);
-  rpc_conn->send(encoder::client_name(name));
-  std::string client_identifier = rpc_conn->receive(decoder::GUID_LENGTH);
+  rpc_connection = std::make_shared<Connection>(address, rpc_port);
+  rpc_connection->connect(10, 0.1f);
+  rpc_connection->send(encoder::RPC_HELLO_MESSAGE, encoder::RPC_HELLO_MESSAGE_LENGTH);
+  rpc_connection->send(encoder::client_name(name));
+  std::string client_identifier = rpc_connection->receive(decoder::GUID_LENGTH);
 
   // Connect to Stream server
-  std::shared_ptr<Connection> stream_connection = nullptr;
   if (stream_port != 0) {
-    stream_connection = std::make_shared<Connection>(address, stream_port);
+    auto stream_connection = std::make_shared<Connection>(address, stream_port);
     stream_connection->connect(10, 0.1f);
     stream_connection->send(encoder::STREAM_HELLO_MESSAGE, encoder::STREAM_HELLO_MESSAGE_LENGTH);
     stream_connection->send(client_identifier);
@@ -44,9 +36,8 @@ Client::Client(const std::string& name, const std::string& address,
     std::string expected(decoder::OK_MESSAGE);
     if (!std::equal(ok_message.begin(), ok_message.end(), expected.begin()))
       throw ConnectionFailed("Did not receive OK message from server");
-    StreamManager stream_manager(this, stream_connection);
+    stream_manager = std::make_shared<StreamManager>(this, stream_connection);
   }
-  rpc_connection = rpc_conn;
 }
 
 schema::Request Client::request(const std::string& service,
@@ -99,23 +90,23 @@ std::string Client::invoke(const std::string& service,
 }
 
 google::protobuf::uint64 Client::add_stream(const schema::Request& request) {
-  return stream_manager.add_stream(request);
+  return stream_manager->add_stream(request);
 }
 
 void Client::remove_stream(google::protobuf::uint64 id) {
-  stream_manager.remove_stream(id);
+  stream_manager->remove_stream(id);
 }
 
 std::string Client::get_stream(google::protobuf::uint64 id) {
-  return stream_manager.get(id);
+  return stream_manager->get(id);
 }
 
 void Client::freeze_streams() {
-  stream_manager.freeze();
+  stream_manager->freeze();
 }
 
 void Client::thaw_streams() {
-  stream_manager.thaw();
+  stream_manager->thaw();
 }
 
 }  // namespace krpc

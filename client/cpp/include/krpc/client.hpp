@@ -13,8 +13,6 @@ namespace krpc {
 class Client {
  public:
   Client();
-  Client(const std::shared_ptr<Connection>& rpc_connection,
-         const std::shared_ptr<Connection>& stream_connection);
   Client(const std::string& name, const std::string& address,
          unsigned int rpc_port = 50000, unsigned int stream_port = 50001);
   schema::Request request(
@@ -33,7 +31,7 @@ class Client {
 
  private:
   std::shared_ptr<Connection> rpc_connection;
-  StreamManager stream_manager;
+  std::shared_ptr<StreamManager> stream_manager;
   std::shared_ptr<std::mutex> lock;
 };
 

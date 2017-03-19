@@ -74,9 +74,6 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
   }
 }
 
-StreamManager::StreamManager() : client(nullptr) {
-}
-
 StreamManager::StreamManager(Client * client, const std::shared_ptr<Connection>& connection)
   : client(client), connection(connection),
     data_lock(new std::mutex),
@@ -88,10 +85,8 @@ StreamManager::StreamManager(Client * client, const std::shared_ptr<Connection>&
 }
 
 StreamManager::~StreamManager() {
-  if (client) {
-    stop->store(true);
-    update_thread->join();
-  }
+  stop->store(true);
+  update_thread->join();
 }
 
 google::protobuf::uint64 StreamManager::add_stream(const schema::Request& request) {
