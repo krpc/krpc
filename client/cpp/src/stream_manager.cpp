@@ -74,8 +74,6 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
   }
 }
 
-StreamManager::StreamManager() {}
-
 StreamManager::StreamManager(Client * client, const std::shared_ptr<Connection>& connection)
   : client(client), connection(connection),
     data_lock(new std::mutex),

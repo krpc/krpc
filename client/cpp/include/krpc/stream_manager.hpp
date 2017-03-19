@@ -16,9 +16,8 @@ class Client;
 
 class StreamManager {
  public:
-  StreamManager();
-  ~StreamManager();
   StreamManager(Client* client, const std::shared_ptr<Connection>& connection);
+  ~StreamManager();
   google::protobuf::uint64 add_stream(const schema::Request& request);
   void remove_stream(google::protobuf::uint64 id);
   std::string get(google::protobuf::uint64 id);

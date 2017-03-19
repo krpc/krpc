@@ -1,6 +1,8 @@
 v0.3.8
  * Update to protobuf v3.2.0
  * Update build scripts to check for protobuf >= 3.2 (#374)
+ * Move krpc::connect into client constructor to allow use of smart pointers
+ * Fix bug in StreamManager when client is not set
 
 v0.3.7
  * Add missing header to automake script
