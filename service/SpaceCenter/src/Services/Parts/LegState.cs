@@ -4,11 +4,11 @@ using KRPC.Service.Attributes;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// The state of a landing leg. See <see cref="LandingLeg.State"/>.
+    /// The state of a landing leg. See <see cref="Leg.State"/>.
     /// </summary>
     [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]
-    public enum LandingLegState
+    public enum LegState
     {
         /// <summary>
         /// Landing leg is fully deployed.

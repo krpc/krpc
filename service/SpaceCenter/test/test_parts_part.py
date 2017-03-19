@@ -72,8 +72,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertIsNotNone(part.experiment)
         self.assertIsNone(part.fairing)
         self.assertIsNone(part.intake)
-        self.assertIsNone(part.landing_gear)
-        self.assertIsNone(part.landing_leg)
+        self.assertIsNone(part.leg)
         self.assertIsNone(part.launch_clamp)
         self.assertIsNone(part.light)
         self.assertIsNone(part.parachute)
@@ -84,6 +83,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertIsNotNone(part.reaction_wheel)
         self.assertIsNone(part.sensor)
         self.assertIsNone(part.solar_panel)
+        self.assertIsNone(part.wheel)
 
     def test_thermal(self):
         part = self.parts.root
@@ -366,50 +366,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertItemsEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.intake)
 
-    def test_landing_gear(self):
-        part = self.parts.with_title('LY-10 Small Landing Gear')[0]
-        self.assertEqual('SmallGearBay', part.name)
-        self.assertEqual('LY-10 Small Landing Gear', part.title)
-        self.assertEqual(600, part.cost)
-        self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual('Mk1-2 Command Pod', part.parent.title)
-        self.assertEqual([], [p.title for p in part.children])
-        self.assertFalse(part.axially_attached)
-        self.assertTrue(part.radially_attached)
-        self.assertEqual(-1, part.stage)
-        self.assertEqual(-1, part.decouple_stage)
-        self.assertFalse(part.massless)
-        self.assertAlmostEqual(45, part.mass, places=4)
-        self.assertAlmostEqual(45, part.dry_mass, places=4)
-        self.assertEqual(50, part.impact_tolerance)
-        self.assertTrue(part.crossfeed)
-        self.assertFalse(part.is_fuel_line)
-        self.assertEqual([], part.fuel_lines_from)
-        self.assertEqual([], part.fuel_lines_to)
-        modules = [
-            'FXModuleConstrainPosition',
-            'FXModuleLookAtConstraint',
-            'ModuleLight',
-            'ModuleStatusLight',
-            'ModuleTestSubject',
-            'ModuleWheelBase',
-            'ModuleWheelBrakes',
-            'ModuleWheelDamage',
-            'ModuleWheelDeployment',
-            'ModuleWheelSteering',
-            'ModuleWheelSuspension',
-            'ModuleDragModifier',
-            'ModuleDragModifier'
-        ]
-        if self.far_available:
-            modules.append('FARBasicDragModel')
-        self.assertItemsEqual(modules, [x.name for x in part.modules])
-        self.assertIsNotNone(part.landing_gear)
-        box = part.bounding_box(part.reference_frame)
-        self.assertAlmostEqual((-0.495, -1.122, -0.569), box[0], places=2)
-        self.assertAlmostEqual((0.495, 0.232, 0.679), box[1], places=2)
-
-    def test_landing_leg(self):
+    def test_leg(self):
         part = self.parts.with_title('LT-1 Landing Struts')[0]
         self.assertEqual('landingLeg1', part.name)
         self.assertEqual('LT-1 Landing Struts', part.title)
@@ -442,7 +399,7 @@ class TestPartsPart(krpctest.TestCase):
         if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertItemsEqual(modules, [x.name for x in part.modules])
-        self.assertIsNotNone(part.landing_leg)
+        self.assertIsNotNone(part.leg)
         box = part.bounding_box(part.reference_frame)
         self.assertAlmostEqual((-0.150, -1.016, -0.279), box[0], places=2)
         self.assertAlmostEqual((0.150, 0.239, 0.377), box[1], places=2)
@@ -734,6 +691,49 @@ class TestPartsPart(krpctest.TestCase):
             modules.append('FARBasicDragModel')
         self.assertItemsEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.solar_panel)
+
+    def test_wheel(self):
+        part = self.parts.with_title('LY-10 Small Landing Gear')[0]
+        self.assertEqual('SmallGearBay', part.name)
+        self.assertEqual('LY-10 Small Landing Gear', part.title)
+        self.assertEqual(600, part.cost)
+        self.assertEqual(self.vessel, part.vessel)
+        self.assertEqual('Mk1-2 Command Pod', part.parent.title)
+        self.assertEqual([], [p.title for p in part.children])
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEqual(-1, part.stage)
+        self.assertEqual(-1, part.decouple_stage)
+        self.assertFalse(part.massless)
+        self.assertAlmostEqual(45, part.mass, places=4)
+        self.assertAlmostEqual(45, part.dry_mass, places=4)
+        self.assertEqual(50, part.impact_tolerance)
+        self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
+        self.assertEqual([], part.fuel_lines_from)
+        self.assertEqual([], part.fuel_lines_to)
+        modules = [
+            'FXModuleConstrainPosition',
+            'FXModuleLookAtConstraint',
+            'ModuleLight',
+            'ModuleStatusLight',
+            'ModuleTestSubject',
+            'ModuleWheelBase',
+            'ModuleWheelBrakes',
+            'ModuleWheelDamage',
+            'ModuleWheelDeployment',
+            'ModuleWheelSteering',
+            'ModuleWheelSuspension',
+            'ModuleDragModifier',
+            'ModuleDragModifier'
+        ]
+        if self.far_available:
+            modules.append('FARBasicDragModel')
+        self.assertItemsEqual(modules, [x.name for x in part.modules])
+        self.assertIsNotNone(part.wheel)
+        box = part.bounding_box(part.reference_frame)
+        self.assertAlmostEqual((-0.495, -1.122, -0.569), box[0], places=2)
+        self.assertAlmostEqual((0.495, 0.232, 0.679), box[1], places=2)
 
     def test_highlighting(self):
         part = self.parts.with_title('Rockomax Jumbo-64 Fuel Tank')[0]

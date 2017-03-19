@@ -8,6 +8,9 @@ v0.3.8
  * Fix bug with Part.BoundingBox (#370)
  * Add support for procedural fairings mod http://forum.kerbalspaceprogram.com/index.php?showtopic=36371 (#368)
  * Add ControlSurface.AuthorityLimiter (#352)
+ * Extend wheels functionality
+ * Rename LandingLeg to Leg
+ * Rename LandingGear to Wheel
 
 v0.3.7
  * Add custom reference frames (ReferenceFrame.CreateRelative and CreateHybrid) (#252)

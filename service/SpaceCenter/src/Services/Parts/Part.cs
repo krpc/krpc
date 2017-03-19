@@ -503,19 +503,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// A <see cref="LandingGear"/> if the part is a landing gear, otherwise <c>null</c>.
+        /// A <see cref="Leg"/> if the part is a landing leg, otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty]
-        public LandingGear LandingGear {
-            get { return LandingGear.Is (this) ? new LandingGear (this) : null; }
-        }
-
-        /// <summary>
-        /// A <see cref="LandingLeg"/> if the part is a landing leg, otherwise <c>null</c>.
-        /// </summary>
-        [KRPCProperty]
-        public LandingLeg LandingLeg {
-            get { return LandingLeg.Is (this) ? new LandingLeg (this) : null; }
+        public Leg Leg {
+            get { return Leg.Is (this) ? new Leg (this) : null; }
         }
 
         /// <summary>
@@ -596,6 +588,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public SolarPanel SolarPanel {
             get { return SolarPanel.Is (this) ? new SolarPanel (this) : null; }
+        }
+
+        /// <summary>
+        /// A <see cref="Wheel"/> if the part is a wheel, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public Wheel Wheel {
+            get { return Wheel.Is (this) ? new Wheel (this) : null; }
         }
 
         /// <summary>

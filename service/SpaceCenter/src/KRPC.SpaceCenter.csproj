@@ -80,6 +80,7 @@
     <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
     <Compile Include="ExtensionMethods\HopTypeExtensions.cs" />
     <Compile Include="ExtensionMethods\ITorqueProviderExtensions.cs" />
+    <Compile Include="ExtensionMethods\MotorStateExtensions.cs" />
     <Compile Include="ExtensionMethods\ParachuteStateExtensions.cs" />
     <Compile Include="ExtensionMethods\PartExtensions.cs" />
     <Compile Include="ExtensionMethods\RadiatorStateExtensions.cs" />
@@ -125,13 +126,12 @@
     <Compile Include="Services\Parts\Fairing.cs" />
     <Compile Include="Services\Parts\Force.cs" />
     <Compile Include="Services\Parts\Intake.cs" />
-    <Compile Include="Services\Parts\LandingGear.cs" />
-    <Compile Include="Services\Parts\LandingGearState.cs" />
-    <Compile Include="Services\Parts\LandingLeg.cs" />
-    <Compile Include="Services\Parts\LandingLegState.cs" />
     <Compile Include="Services\Parts\LaunchClamp.cs" />
+    <Compile Include="Services\Parts\Leg.cs" />
+    <Compile Include="Services\Parts\LegState.cs" />
     <Compile Include="Services\Parts\Light.cs" />
     <Compile Include="Services\Parts\Module.cs" />
+    <Compile Include="Services\Parts\MotorState.cs" />
     <Compile Include="Services\Parts\Parachute.cs" />
     <Compile Include="Services\Parts\ParachuteState.cs" />
     <Compile Include="Services\Parts\Part.cs" />
@@ -151,6 +151,8 @@
     <Compile Include="Services\Parts\SolarPanel.cs" />
     <Compile Include="Services\Parts\SolarPanelState.cs" />
     <Compile Include="Services\Parts\Thruster.cs" />
+    <Compile Include="Services\Parts\Wheel.cs" />
+    <Compile Include="Services\Parts\WheelState.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />
     <Compile Include="Services\ReferenceFrameType.cs" />
     <Compile Include="Services\Resource.cs" />
