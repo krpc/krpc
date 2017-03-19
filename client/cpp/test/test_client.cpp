@@ -26,6 +26,7 @@ TEST_F(test_client, test_shared_ptr) {
   krpc::services::KRPC krpc(client.get());
   krpc::schema::Status status = krpc.get_status();
   ASSERT_THAT(status.version(), testing::MatchesRegex("[0-9]+\\.[0-9]+\\.[0-9]+"));
+  client.reset();
 }
 
 TEST_F(test_client, test_std_container) {
