@@ -1,5 +1,6 @@
 v0.3.8
  * Add support for CommNet
+ * Add support for contracts (#361)
  * Add CelestialBody.InitialRotation and RotationAngle (#369)
  * Add SpaceCenter.Navball to show/hide the navball (#355)
  * Add SpaceCenter.UIVisible to show/hide the UI (#355)
