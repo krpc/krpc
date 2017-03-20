@@ -8,7 +8,7 @@ install:
 
 before_script:
   - ./tools/travis-ci/set-version.py
-  - ln -s /usr/lib/ksp lib/ksp
+  - ln -s /usr/local/lib/ksp lib/ksp
 
 script:
   - stty cols 120
