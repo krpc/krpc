@@ -1,0 +1,16 @@
+startup --batch
+
+# Verbose output
+fetch --curses=no --show_progress_rate_limit=0
+build --curses=no --show_progress_rate_limit=0 --verbose_failures
+test --curses=no --show_progress_rate_limit=0 --verbose_failures
+
+# Disable sandbox (already running in a container)
+build --spawn_strategy=standalone --genrule_strategy=standalone
+test --test_strategy=standalone
+
+# Single threaded testing
+test -j 1 --test_output=streamed
+
+# Host and target configurations are identical
+build --distinct_host_configuration=false
