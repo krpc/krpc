@@ -11,7 +11,7 @@ def _apply_path_map(path_map, path):
     return match
 
 def _create_py_env(out, install):
-    tmp = out+'.tmp-create-py-env'
+    tmp = out+'.tmp-create-py-env.$$'
     cmds = [
         'rm -rf %s' % tmp,
         'virtualenv %s --quiet --no-site-packages' % tmp
@@ -99,7 +99,7 @@ def _script_impl(ctx):
         use_default_shell_env = True
     )
 
-    env = ctx.attr.script+'.py_script-env'
+    env = ctx.attr.script+'.py_script-env-$$'
     sub_commands = _extract_py_env('$0.runfiles/krpc/%s' % script_env.short_path, env)
     sub_commands.append('%s/bin/python %s/bin/%s "$@"' % (env, env, ctx.attr.script))
     ctx.file_action(
