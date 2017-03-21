@@ -207,12 +207,15 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The id of the associated contract.
-        /// Returns 0 if the waypoint does not belong to a contract.
+        /// The associated contract.
         /// </summary>
         [KRPCProperty]
-        public long ContractId {
-            get { return HasContract ? InternalWaypoint.contractReference.ContractID : 0; }
+        public Contract Contract {
+            get {
+                if (!HasContract)
+                    throw new InvalidOperationException("Waypoint does not have an associated contract");
+                return new Contract(InternalWaypoint.contractReference);
+            }
         }
 
         /// <summary>

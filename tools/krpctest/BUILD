@@ -9,6 +9,7 @@ py_sdist(
         'LICENSE', '//:COPYING',
         'setup.py', 'MANIFEST.in', '//:python_version',
         'krpctest/krpctest.sfs',
+        'krpctest/krpctest_career.sfs',
     ] + glob(['krpctest/**/*.py']),
     path_map = {
         'version.py': 'krpctest/version.py',

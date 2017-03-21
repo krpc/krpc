@@ -1,5 +1,6 @@
 import unittest
 import krpctest
+import krpc.error
 
 
 class TestWaypoints(krpctest.TestCase):
@@ -39,7 +40,7 @@ class TestWaypoints(krpctest.TestCase):
             self.assertEqual(0, wp.index)
             self.assertFalse(wp.clustered)
             self.assertFalse(wp.has_contract)
-            self.assertEqual(0, wp.contract_id)
+            self.assertRaises(krpc.error.RPCError, getattr, wp, 'contract')
         finally:
             wp.remove()
 
