@@ -12,6 +12,8 @@ v0.3.8
  * Extend wheels functionality
  * Rename LandingLeg to Leg
  * Rename LandingGear to Wheel
+ * Add Antenna.Deployable, Leg.Deployable and SolarPanel.Deployable
+ * Add properties to Control class to set the state of all solar panels, radiators, legs, etc. on a vessel (#383)
 
 v0.3.7
  * Add custom reference frames (ReferenceFrame.CreateRelative and CreateHybrid) (#252)

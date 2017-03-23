@@ -1,0 +1,1112 @@
+ship = PartsLegs
+version = 1.2.2
+description =
+type = VAB
+size = 2.01062727,1.68641186,2.01062727
+PART
+{
+  part = mk1pod_4294697900
+  partName = Part
+  pos = 0,15,0
+  attPos = 0,0,0
+  attPos0 = 0,15,0
+  rot = 0,0,0,1
+  attRot = 0,0,0,1
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = landingLeg1-2_4294598762
+  link = landingLeg1-2_4294598420
+  link = landingLeg1-2_4294598306
+  link = miniLandingLeg_4294662526
+  link = miniLandingLeg_4294598098
+  link = miniLandingLeg_4294597910
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleCommand
+    isEnabled = True
+    hibernation = False
+    hibernateOnWarp = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      HibernateToggle
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleReactionWheel
+    isEnabled = True
+    actuatorModeCycle = 0
+    authorityLimiter = 100
+    stateString = Active
+    stagingEnabled = True
+    WheelState = Active
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      CycleAction
+      {
+        actionGroup = None
+      }
+      Activate
+      {
+        actionGroup = None
+      }
+      Deactivate
+      {
+        actionGroup = None
+      }
+      Toggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleColorChanger
+    isEnabled = True
+    animState = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = Light
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleScienceExperiment
+    isEnabled = True
+    Deployed = False
+    Inoperable = False
+    cooldownToGo = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      DeployAction
+      {
+        actionGroup = None
+      }
+      ResetAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleScienceContainer
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      CollectAllAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = FlagDecal
+    isEnabled = True
+    flagDisplayed = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleConductionMultiplier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDataTransmitter
+    isEnabled = True
+    xmitIncomplete = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      StartTransmissionAction
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleLiftingSurface
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTripLogger
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    Log
+    {
+      flight = 0
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = ElectricCharge
+    amount = 50
+    maxAmount = 50
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+  RESOURCE
+  {
+    name = MonoPropellant
+    amount = 10
+    maxAmount = 10
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+}
+PART
+{
+  part = landingLeg1-2_4294598762
+  partName = Part
+  pos = 0.235048011,14.6276064,-0.87721169
+  attPos = 0,0,0
+  attPos0 = 0.235048011,-0.372393608,-0.87721169
+  rot = -0.0612532534,0.875495017,0.465264946,0.115261033
+  attRot = 0,0,0,1
+  attRot0 = -0.0612532534,0.875495017,0.465264946,0.115261033
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = ForceHeaviest
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = landingLeg1-2_4294598420
+  sym = landingLeg1-2_4294598306
+  srfN = srfAttach,mk1pod_4294697900
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleWheelBase
+    isEnabled = True
+    wheelType = LEG
+    isGrounded = False
+    autoFriction = False
+    frictionMultiplier = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoFrictionToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSuspension
+    isEnabled = True
+    springTweakable = 1
+    damperTweakable = 1
+    suspensionPos = (-1, -1, -1)
+    autoBoost = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDeployment
+    isEnabled = True
+    shieldedCanDeploy = False
+    stateString = Retracted
+    stagingEnabled = True
+    position = 0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActionToggle
+      {
+        actionGroup = Gear
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelLock
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelBogey
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDamage
+    isEnabled = True
+    isDamaged = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = landingLeg1-2_4294598420
+  partName = Part
+  pos = -0.87721163,14.6276064,0.235048398
+  attPos = 0,0,0
+  attPos0 = -0.87721163,-0.372393608,0.235048398
+  rot = 0.372304648,0.537566483,0.28567934,-0.700570464
+  attRot = 0,0,0,1
+  attRot0 = 0.372304648,0.537566483,0.28567934,-0.700570464
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = ForceHeaviest
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = landingLeg1-2_4294598762
+  sym = landingLeg1-2_4294598306
+  srfN = srfAttach,mk1pod_4294697900
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleWheelBase
+    isEnabled = True
+    wheelType = LEG
+    isGrounded = False
+    autoFriction = False
+    frictionMultiplier = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoFrictionToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSuspension
+    isEnabled = True
+    springTweakable = 1
+    damperTweakable = 1
+    suspensionPos = (-1, -1, -1)
+    autoBoost = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDeployment
+    isEnabled = True
+    shieldedCanDeploy = False
+    stateString = Retracted
+    stagingEnabled = True
+    position = 0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActionToggle
+      {
+        actionGroup = Gear
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelLock
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelBogey
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDamage
+    isEnabled = True
+    isDamaged = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = landingLeg1-2_4294598306
+  partName = Part
+  pos = 0.642163694,14.6276064,0.642163396
+  attPos = 0,0,0
+  attPos0 = 0.642163694,-0.372393608,0.642163396
+  rot = 0.433557898,-0.337928593,-0.179585636,-0.815831423
+  attRot = 0,0,0,1
+  attRot0 = 0.433557898,-0.337928593,-0.179585636,-0.815831423
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = ForceHeaviest
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = landingLeg1-2_4294598762
+  sym = landingLeg1-2_4294598420
+  srfN = srfAttach,mk1pod_4294697900
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleWheelBase
+    isEnabled = True
+    wheelType = LEG
+    isGrounded = False
+    autoFriction = False
+    frictionMultiplier = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoFrictionToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSuspension
+    isEnabled = True
+    springTweakable = 1
+    damperTweakable = 1
+    suspensionPos = (-1, -1, -1)
+    autoBoost = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDeployment
+    isEnabled = True
+    shieldedCanDeploy = False
+    stateString = Retracted
+    stagingEnabled = True
+    position = 0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActionToggle
+      {
+        actionGroup = Gear
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelLock
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelBogey
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDamage
+    isEnabled = True
+    isDamaged = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = miniLandingLeg_4294662526
+  partName = Part
+  pos = -0.405607283,14.9111986,-0.405607283
+  attPos = 0,0,0
+  attPos0 = -0.405607283,-0.088801384,-0.405607283
+  rot = -0.0696567446,0.376290441,0.16816628,-0.908445656
+  attRot = 0,0,0,1
+  attRot0 = -0.0696567446,0.376290441,0.16816628,-0.908445656
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = ForceHeaviest
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = miniLandingLeg_4294598098
+  sym = miniLandingLeg_4294597910
+  srfN = srfAttach,mk1pod_4294697900
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleWheelBase
+    isEnabled = True
+    wheelType = LEG
+    isGrounded = False
+    autoFriction = False
+    frictionMultiplier = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoFrictionToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSuspension
+    isEnabled = True
+    springTweakable = 1
+    damperTweakable = 1
+    suspensionPos = (-1, -1, -1)
+    autoBoost = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDeployment
+    isEnabled = True
+    shieldedCanDeploy = False
+    stateString = Retracted
+    stagingEnabled = True
+    position = 0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActionToggle
+      {
+        actionGroup = Gear
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelLock
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDamage
+    isEnabled = True
+    isDamaged = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = miniLandingLeg_4294598098
+  partName = Part
+  pos = -0.148462519,14.9111986,0.554069877
+  attPos = 0,0,0
+  attPos0 = -0.148462519,-0.088801384,0.554069877
+  rot = 0.110807911,-0.598591864,0.144407645,-0.780099869
+  attRot = 0,0,0,1
+  attRot0 = 0.110807911,-0.598591864,0.144407645,-0.780099869
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = ForceHeaviest
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = miniLandingLeg_4294662526
+  sym = miniLandingLeg_4294597910
+  srfN = srfAttach,mk1pod_4294697900
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleWheelBase
+    isEnabled = True
+    wheelType = LEG
+    isGrounded = False
+    autoFriction = False
+    frictionMultiplier = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoFrictionToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSuspension
+    isEnabled = True
+    springTweakable = 1
+    damperTweakable = 1
+    suspensionPos = (-1, -1, -1)
+    autoBoost = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDeployment
+    isEnabled = True
+    shieldedCanDeploy = False
+    stateString = Retracted
+    stagingEnabled = True
+    position = 0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActionToggle
+      {
+        actionGroup = Gear
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelLock
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDamage
+    isEnabled = True
+    isDamaged = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = miniLandingLeg_4294597910
+  partName = Part
+  pos = 0.554069877,14.9111986,-0.148462608
+  attPos = 0,0,0
+  attPos0 = 0.554069877,-0.088801384,-0.148462608
+  rot = 0.18046464,-0.974882245,-0.0237586405,0.128345802
+  attRot = 0,0,0,1
+  attRot0 = 0.18046464,-0.974882245,-0.0237586405,0.128345802
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = ForceHeaviest
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  sym = miniLandingLeg_4294662526
+  sym = miniLandingLeg_4294598098
+  srfN = srfAttach,mk1pod_4294697900
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleWheelBase
+    isEnabled = True
+    wheelType = LEG
+    isGrounded = False
+    autoFriction = False
+    frictionMultiplier = 1
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActAutoFrictionToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelSuspension
+    isEnabled = True
+    springTweakable = 1
+    damperTweakable = 1
+    suspensionPos = (-1, -1, -1)
+    autoBoost = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDeployment
+    isEnabled = True
+    shieldedCanDeploy = False
+    stateString = Retracted
+    stagingEnabled = True
+    position = 0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ActionToggle
+      {
+        actionGroup = Gear
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelLock
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleWheelDamage
+    isEnabled = True
+    isDamaged = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}

@@ -82,6 +82,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Whether the leg is deployable.
+        /// </summary>
+        [KRPCProperty]
+        public bool Deployable {
+            get { return deployment != null; }
+        }
+
+        /// <summary>
         /// Whether the landing leg is deployed.
         /// </summary>
         /// <remarks>
@@ -93,7 +101,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return State == LegState.Deployed; }
             set {
                 if (deployment == null)
-                    throw new InvalidOperationException ("Landing gear is not deployable");
+                    throw new InvalidOperationException ("Landing leg is not deployable");
                 if (value) {
                     var extend = deployment.Events.FirstOrDefault (x => x.guiName == "Extend");
                     if (extend != null)

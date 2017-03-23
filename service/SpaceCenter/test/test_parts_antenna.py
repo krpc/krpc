@@ -9,16 +9,20 @@ class TestPartsAntenna(krpctest.TestCase):
         cls.new_save()
         cls.remove_other_vessels()
         cls.launch_vessel_from_vab('PartsAntenna')
-        parts = cls.connect().space_center.active_vessel.parts
-        cls.state = cls.connect().space_center.AntennaState
+        vessel = cls.connect().space_center.active_vessel
+        parts = vessel.parts
+        cls.control = vessel.control
+        cls.antennas = parts.antennas
         cls.fixed_antenna = parts.with_title(
             'RA-2 Relay Antenna')[0].antenna
         cls.deployable_antenna = parts.with_title(
             'HG-5 High Gain Antenna')[0].antenna
+        cls.state = cls.connect().space_center.AntennaState
 
     def test_fixed_antenna(self):
         antenna = self.fixed_antenna
         self.assertEqual(self.state.deployed, antenna.state)
+        self.assertFalse(antenna.deployable)
         self.assertTrue(antenna.deployed)
         self.assertTrue(antenna.can_transmit)
         self.assertRaises(RuntimeError, setattr,
@@ -33,6 +37,7 @@ class TestPartsAntenna(krpctest.TestCase):
     def test_deployable_antenna(self):
         antenna = self.deployable_antenna
         self.assertEqual(self.state.retracted, antenna.state)
+        self.assertTrue(antenna.deployable)
         self.assertFalse(antenna.deployed)
         self.assertTrue(antenna.can_transmit)
         self.assertEqual(5e6, antenna.power)
@@ -43,6 +48,8 @@ class TestPartsAntenna(krpctest.TestCase):
         self.assertEqual(18, antenna.packet_resource_cost)
 
     def test_deploy(self):
+        self.assertTrue(self.deployable_antenna.deployable)
+
         self.assertEqual(self.state.retracted, self.deployable_antenna.state)
         self.assertFalse(self.deployable_antenna.deployed)
         self.assertTrue(self.deployable_antenna.can_transmit)
@@ -68,6 +75,23 @@ class TestPartsAntenna(krpctest.TestCase):
         self.assertEqual(self.state.retracted, self.deployable_antenna.state)
         self.assertFalse(self.deployable_antenna.deployed)
         self.assertTrue(self.deployable_antenna.can_transmit)
+
+    def test_control_deploy(self):
+        self.assertFalse(self.control.antennas)
+        self.control.antennas = True
+        for antenna in self.antennas:
+            if antenna.deployable:
+                while antenna.state == self.state.deploying:
+                    self.wait()
+                self.assertTrue(antenna.deployed)
+        self.assertTrue(self.control.antennas)
+        self.control.antennas = False
+        for antenna in self.antennas:
+            if antenna.deployable:
+                while antenna.state == self.state.retracting:
+                    self.wait()
+                self.assertFalse(antenna.deployed)
+        self.assertFalse(self.control.antennas)
 
     def test_transmit(self):
         self.fixed_antenna.transmit()
@@ -99,8 +123,9 @@ class TestPartsAntennaBreak(krpctest.TestCase):
         cls.antenna = parts.with_title('Communotron 16')[0].antenna
 
     def test_break(self):
-        self.assertEqual(self.state.deployed, self.antenna.state)
-        self.assertTrue(self.antenna.deployed)
+        self.antenna.deployed = True
+        while self.antenna.state != self.state.deployed:
+            self.wait()
         self.assertTrue(self.antenna.can_transmit)
 
         self.control.activate_next_stage()
