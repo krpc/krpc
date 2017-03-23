@@ -2,7 +2,7 @@ ship = PartsHarvester
 version = 1.2.2
 description =
 type = VAB
-size = 4.26954269,7.27918625,3.05956244
+size = 3.6592133,7.27918625,3.05956244
 PART
 {
   part = Mark1-2Pod_4294407840
@@ -311,7 +311,6 @@ PART
   link = rcsTankRadialLong_4293133634
   link = ISRU_4294398978
   link = RadialOreTank_4293099976
-  link = MiniDrill_4293091858
   attN = top,Mark1-2Pod_4294407840
   attN = bottom,ISRU_4294398978
   EVENTS
@@ -686,6 +685,7 @@ PART
   link = RadialDrill_4294383500
   link = launchClamp1_4294369322
   link = launchClamp1_4293091152
+  link = MiniDrill_4293705788
   attN = top,batteryBankLarge_4294375044
   EVENTS
   {
@@ -933,164 +933,6 @@ PART
 }
 PART
 {
-  part = MiniDrill_4293091858
-  partName = Part
-  pos = 2.12437391,5.71014118,0.144354403
-  attPos = 0,0,0
-  attPos0 = 1.41770101,-0.0273394603,7.45058131E-08
-  rot = 0,1,0,0
-  attRot = 0,0,0,1
-  attRot0 = 0,1,0,0
-  mir = 1,1,1
-  symMethod = Radial
-  autostrutMode = Off
-  rigidAttachment = False
-  istg = -1
-  resPri = 0
-  dstg = 0
-  sidx = -1
-  sqor = -1
-  sepI = -1
-  attm = 1
-  modCost = 0
-  modMass = 0
-  modSize = 0,0,0
-  srfN = srfAttach,fuelTank4-2_4293135428
-  EVENTS
-  {
-  }
-  ACTIONS
-  {
-  }
-  PARTDATA
-  {
-  }
-  MODULE
-  {
-    name = ModuleOverheatDisplay
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleResourceHarvester
-    isEnabled = True
-    EfficiencyBonus = 1
-    IsActivated = False
-    stagingEnabled = True
-    lastUpdateTime = 0
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      StopResourceConverterAction
-      {
-        actionGroup = None
-      }
-      StartResourceConverterAction
-      {
-        actionGroup = None
-      }
-      ToggleResourceConverterAction
-      {
-        actionGroup = None
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleAsteroidDrill
-    isEnabled = True
-    DirectAttach = False
-    EfficiencyBonus = 1
-    IsActivated = False
-    stagingEnabled = True
-    lastUpdateTime = 0
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      StopResourceConverterAction
-      {
-        actionGroup = None
-      }
-      StartResourceConverterAction
-      {
-        actionGroup = None
-      }
-      ToggleResourceConverterAction
-      {
-        actionGroup = None
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleAnimationGroup
-    isEnabled = True
-    _isActive = False
-    isDeployed = False
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      DeployModuleAction
-      {
-        actionGroup = None
-      }
-      RetractModuleAction
-      {
-        actionGroup = None
-      }
-      ToggleModuleAction
-      {
-        actionGroup = None
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleCoreHeat
-    isEnabled = True
-    CoreTempGoalAdjustment = 0
-    CoreThermalEnergy = 0
-    stagingEnabled = True
-    lastUpdateTime = 0
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-}
-PART
-{
   part = launchClamp1_4294369322
   partName = Part
   pos = 0.706672192,0.669396877,-1.8978529
@@ -1288,6 +1130,164 @@ PART
     name = ModuleTestSubject
     isEnabled = True
     stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = MiniDrill_4293705788
+  partName = Part
+  pos = -0.288802862,1.89012194,-0.851120889
+  attPos = 0,0,0
+  attPos0 = -0.995475233,-0.0336103439,-0.995475173
+  rot = 6.45155964E-08,0.382683426,-1.55754435E-07,-0.923879564
+  attRot = 0,0,0,1
+  attRot0 = 6.45155964E-08,0.382683426,-1.55754435E-07,-0.923879564
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,batteryBankLarge_4294374796
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleOverheatDisplay
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleResourceHarvester
+    isEnabled = True
+    EfficiencyBonus = 1
+    IsActivated = False
+    stagingEnabled = True
+    lastUpdateTime = 0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      StopResourceConverterAction
+      {
+        actionGroup = None
+      }
+      StartResourceConverterAction
+      {
+        actionGroup = None
+      }
+      ToggleResourceConverterAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleAsteroidDrill
+    isEnabled = True
+    DirectAttach = False
+    EfficiencyBonus = 1
+    IsActivated = False
+    stagingEnabled = True
+    lastUpdateTime = 0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      StopResourceConverterAction
+      {
+        actionGroup = None
+      }
+      StartResourceConverterAction
+      {
+        actionGroup = None
+      }
+      ToggleResourceConverterAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleAnimationGroup
+    isEnabled = True
+    _isActive = False
+    isDeployed = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      DeployModuleAction
+      {
+        actionGroup = None
+      }
+      RetractModuleAction
+      {
+        actionGroup = None
+      }
+      ToggleModuleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleCoreHeat
+    isEnabled = True
+    CoreTempGoalAdjustment = 0
+    CoreThermalEnergy = 0
+    stagingEnabled = True
+    lastUpdateTime = 0
     EVENTS
     {
     }

@@ -621,8 +621,8 @@ PART
     isEnabled = True
     currentRotation = (-0.707106829, 0, 0, 0.707106829)
     storedAnimationTime = 0
-    storedAnimationSpeed = 0
-    deployState = EXTENDED
+    storedAnimationSpeed = -10
+    deployState = RETRACTED
     stagingEnabled = True
     EVENTS
     {
@@ -705,7 +705,7 @@ PART
   {
     name = LaunchClamp
     isEnabled = True
-    scaleFactor = 0.631883323
+    scaleFactor = 0.631883383
     height = 1.59436607
     stagingEnabled = True
     towerRot = 0.000433519454,-0.991439402,0.00329290703,-0.130525485

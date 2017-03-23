@@ -8,10 +8,12 @@ class TestPartsWheel(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('PartsWheel')
-        cls.remove_other_vessels()
+        if cls.connect().space_center.active_vessel.name != 'PartsWheel':
+            cls.launch_vessel_from_vab('PartsWheel')
+            cls.remove_other_vessels()
         vessel = cls.connect().space_center.active_vessel
         cls.parts = vessel.parts
+        cls.wheels = cls.parts.wheels
         cls.deployable_wheel = cls.parts.with_title(
             'LY-60 Large Landing Gear')[0].wheel
         cls.fixed_wheel = cls.parts.with_title(
@@ -59,6 +61,7 @@ class TestPartsWheel(krpctest.TestCase):
         self.assertTrue(wheel.deployable)
         self.assertEqual(self.state.deployed, wheel.state)
         self.assertTrue(wheel.deployed)
+        self.assertTrue(self.control.wheels)
         wheel.deployed = False
         self.wait()
         self.assertEqual(self.state.retracting, wheel.state)
@@ -67,6 +70,7 @@ class TestPartsWheel(krpctest.TestCase):
             self.wait()
         self.assertEqual(self.state.retracted, wheel.state)
         self.assertFalse(wheel.deployed)
+        self.assertFalse(self.control.wheels)
         wheel.deployed = True
         self.wait()
         self.assertEqual(self.state.deploying, wheel.state)
@@ -75,12 +79,34 @@ class TestPartsWheel(krpctest.TestCase):
             self.wait()
         self.assertEqual(self.state.deployed, wheel.state)
         self.assertTrue(wheel.deployed)
+        self.assertTrue(self.control.wheels)
 
     def test_fixed_gear_is_deployed(self):
         wheel = self.fixed_wheel
         self.assertFalse(wheel.deployable)
         self.assertEqual(self.state.deployed, wheel.state)
         self.assertTrue(wheel.deployed)
+
+    def test_control_deploy(self):
+        self.assertTrue(self.control.wheels)
+        self.control.wheels = False
+        while self.control.wheels:
+            self.wait()
+        self.assertFalse(self.control.wheels)
+        for wheel in self.wheels:
+            if wheel.deployable:
+                while wheel.state == self.state.retracting:
+                    self.wait()
+                self.assertFalse(wheel.deployed)
+        self.control.wheels = True
+        while not self.control.wheels:
+            self.wait()
+        self.assertTrue(self.control.wheels)
+        for wheel in self.wheels:
+            if wheel.deployable:
+                while wheel.state == self.state.deploying:
+                    self.wait()
+                self.assertTrue(wheel.deployed)
 
     def test_powered(self):
         wheel = self.powered_wheel

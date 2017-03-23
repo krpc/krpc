@@ -228,9 +228,20 @@ SpaceCenter.Control.SAS
 SpaceCenter.Control.SASMode
 SpaceCenter.Control.SpeedMode
 SpaceCenter.Control.RCS
+SpaceCenter.Control.ReactionWheels
 SpaceCenter.Control.Gear
+SpaceCenter.Control.Legs
+SpaceCenter.Control.Wheels
 SpaceCenter.Control.Lights
 SpaceCenter.Control.Brakes
+SpaceCenter.Control.Antennas
+SpaceCenter.Control.CargoBays
+SpaceCenter.Control.Intakes
+SpaceCenter.Control.Parachutes
+SpaceCenter.Control.Radiators
+SpaceCenter.Control.ResourceHarvesters
+SpaceCenter.Control.ResourceHarvestersActive
+SpaceCenter.Control.SolarPanels
 SpaceCenter.Control.Abort
 SpaceCenter.Control.Throttle
 SpaceCenter.Control.Pitch
@@ -422,6 +433,7 @@ SpaceCenter.Module.SetAction
 SpaceCenter.Antenna
 SpaceCenter.Antenna.Part
 SpaceCenter.Antenna.State
+SpaceCenter.Antenna.Deployable
 SpaceCenter.Antenna.Deployed
 SpaceCenter.Antenna.CanTransmit
 SpaceCenter.Antenna.Transmit
@@ -563,6 +575,7 @@ SpaceCenter.Intake.Area
 SpaceCenter.Leg
 SpaceCenter.Leg.Part
 SpaceCenter.Leg.State
+SpaceCenter.Leg.Deployable
 SpaceCenter.Leg.Deployed
 SpaceCenter.Leg.IsGrounded
 SpaceCenter.LegState
@@ -668,6 +681,7 @@ SpaceCenter.Sensor.Active
 SpaceCenter.Sensor.Value
 SpaceCenter.SolarPanel
 SpaceCenter.SolarPanel.Part
+SpaceCenter.SolarPanel.Deployable
 SpaceCenter.SolarPanel.Deployed
 SpaceCenter.SolarPanel.State
 SpaceCenter.SolarPanel.EnergyFlow

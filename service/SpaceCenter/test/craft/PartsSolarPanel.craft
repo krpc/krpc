@@ -2,7 +2,7 @@ ship = PartsSolarPanel
 version = 1.2.2
 description =
 type = VAB
-size = 2.29349613,3.35892487,3.15828514
+size = 2.29349613,2.98522282,3.15993595
 PART
 {
   part = mk1pod_4294736224
@@ -297,8 +297,8 @@ PART
   modSize = 0,0,0
   link = launchClamp1_4294705978
   link = launchClamp1_4294705808
-  link = solarPanels4_4294523398
   link = radialDecoupler2_4294514542
+  link = solarPanels2_4294603812
   attN = top,mk1pod_4294736224
   EVENTS
   {
@@ -615,76 +615,6 @@ PART
 }
 PART
 {
-  part = solarPanels4_4294523398
-  partName = Part
-  pos = 0.000653200026,4.11339378,-0.621598005
-  attPos = 0,0,0
-  attPos0 = -5.41600791E-08,-0.574480116,-0.619519114
-  rot = 2.10734203E-08,0.707106471,-2.10734292E-08,-0.707107127
-  attRot = 0,0,0,1
-  attRot0 = 2.10734203E-08,0.70710659,-2.10734292E-08,-0.707107127
-  mir = 1,1,1
-  symMethod = Radial
-  autostrutMode = Off
-  rigidAttachment = False
-  istg = -1
-  resPri = 0
-  dstg = 0
-  sidx = -1
-  sqor = -1
-  sepI = -1
-  attm = 1
-  modCost = 0
-  modMass = 0
-  modSize = 0,0,0
-  srfN = srfAttach,fuelTank_4294731188
-  EVENTS
-  {
-  }
-  ACTIONS
-  {
-  }
-  PARTDATA
-  {
-  }
-  MODULE
-  {
-    name = ModuleDeployableSolarPanel
-    isEnabled = True
-    efficiencyMult = 1
-    launchUT = -1
-    currentRotation = (-0.5, -0.5, -0.5, 0.5)
-    storedAnimationTime = 0
-    storedAnimationSpeed = 1
-    deployState = RETRACTED
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      ExtendPanelsAction
-      {
-        actionGroup = None
-        active = False
-      }
-      ExtendAction
-      {
-        actionGroup = None
-      }
-      RetractAction
-      {
-        actionGroup = None
-        active = False
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-}
-PART
-{
   part = radialDecoupler2_4294514542
   partName = Part
   pos = 0.000653324474,5.63978386,-0.591923475
@@ -707,7 +637,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  link = fuelTank_4294511608
+  link = fuelTank_4294660876
   srfN = srfAttach,fuelTank_4294731188
   EVENTS
   {
@@ -785,63 +715,6 @@ PART
 }
 PART
 {
-  part = fuelTank_4294511608
-  partName = Part
-  pos = 0.000652847637,6.09818411,-1.83666205
-  attPos = 0,0,0
-  attPos0 = -1.24473798,0.458393186,-1.87099701E-07
-  rot = -2.10734115E-07,0.707106709,2.10734228E-07,-0.707106888
-  attRot = 0,0,0,1
-  attRot0 = 6.57252031E-14,-2.086162E-07,-3.27825404E-07,1
-  mir = 1,1,1
-  symMethod = Radial
-  autostrutMode = Off
-  rigidAttachment = False
-  istg = 1
-  resPri = 0
-  dstg = 2
-  sidx = -1
-  sqor = -1
-  sepI = 1
-  attm = 1
-  modCost = 0
-  modMass = 0
-  modSize = 0,0,0
-  srfN = srfAttach,radialDecoupler2_4294514542
-  EVENTS
-  {
-  }
-  ACTIONS
-  {
-  }
-  PARTDATA
-  {
-  }
-  RESOURCE
-  {
-    name = LiquidFuel
-    amount = 180
-    maxAmount = 180
-    flowState = True
-    isTweakable = True
-    hideFlow = False
-    isVisible = True
-    flowMode = Both
-  }
-  RESOURCE
-  {
-    name = Oxidizer
-    amount = 220
-    maxAmount = 220
-    flowState = True
-    isTweakable = True
-    hideFlow = False
-    isVisible = True
-    flowMode = Both
-  }
-}
-PART
-{
   part = largeSolarPanel_4294712806
   partName = Part
   pos = 0.000653254217,6.29111385,0.411193192
@@ -906,5 +779,130 @@ PART
     UPGRADESAPPLIED
     {
     }
+  }
+}
+PART
+{
+  part = solarPanels2_4294603812
+  partName = Part
+  pos = 0.000653200084,4.113379,-0.621313453
+  attPos = 0,0,0
+  attPos0 = -5.41331246E-08,-0.574494839,-0.619234443
+  rot = 2.10734168E-08,0.707106531,-2.10734346E-08,-0.707107127
+  attRot = 0,0,0,1
+  attRot0 = 2.10734168E-08,0.707106531,-2.10734346E-08,-0.707107127
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,fuelTank_4294731188
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleDeployableSolarPanel
+    isEnabled = True
+    efficiencyMult = 1
+    launchUT = -1
+    currentRotation = (-0.707106829, 0, 0, 0.707106829)
+    storedAnimationTime = 0
+    storedAnimationSpeed = 1
+    deployState = RETRACTED
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ExtendPanelsAction
+      {
+        actionGroup = None
+      }
+      ExtendAction
+      {
+        actionGroup = None
+      }
+      RetractAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = fuelTank_4294660876
+  partName = Part
+  pos = 0.000652132381,5.59037256,-1.83831263
+  attPos = 0,0,0
+  attPos0 = -1.24638915,-0.0494112223,1.1920929E-07
+  rot = 4.214683E-08,0.707106411,-4.21468549E-08,-0.707107186
+  attRot = 0,0,0,1
+  attRot0 = -1.77635663E-15,5.96046377E-08,2.98023135E-08,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = 1
+  resPri = 0
+  dstg = 2
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,radialDecoupler2_4294514542
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  RESOURCE
+  {
+    name = LiquidFuel
+    amount = 180
+    maxAmount = 180
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+  RESOURCE
+  {
+    name = Oxidizer
+    amount = 220
+    maxAmount = 220
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
   }
 }
