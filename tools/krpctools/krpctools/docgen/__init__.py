@@ -75,6 +75,7 @@ def main():
             'Ordering file \'%s\' does not exist' % args.order_file)
     with open(args.order_file, 'r') as fp:
         ordering = [x.strip() for x in fp.readlines()]
+        ordering = {value: i for i, value in enumerate(ordering)}
 
     services_info = {}
     for path in args.definitions:
@@ -88,15 +89,14 @@ def main():
     sort_failed = []
 
     def sort(member):
-        if member.fullname not in ordering:
+        key = ordering.get(member.fullname)
+        if key is None:
             sort_failed.append(member.fullname)
             return 0
-        else:
-            return ordering.index(member.fullname)
+        return key
 
-    services = [Service(name, sort=sort, **info)
-                for name, info in services_info.iteritems()]
-    services = {service.name: service for service in services}
+    services = {name: Service(name, sort=sort, **info)
+                for name, info in services_info.iteritems()}
 
     if len(sort_failed) > 0:
         raise RuntimeError(
