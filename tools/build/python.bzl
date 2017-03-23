@@ -17,7 +17,7 @@ def _create_py_env(out, install):
         'virtualenv %s --quiet --no-site-packages' % tmp
     ]
     for lib in install:
-        cmds.append('%s/bin/python %s/bin/pip install --quiet --no-deps %s' % (tmp, tmp, lib.path))
+        cmds.append('CFLAGS="-O0" %s/bin/python %s/bin/pip install --quiet --no-deps %s' % (tmp, tmp, lib.path))
     cmds.extend([
         '(CWD=`pwd`; cd %s; tar -c -f $CWD/%s *)' % (tmp, out)
     ])
