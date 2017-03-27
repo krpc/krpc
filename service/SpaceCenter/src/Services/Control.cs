@@ -449,8 +449,8 @@ namespace KRPC.SpaceCenter.Services
         /// <returns>A list of vessel objects that are jettisoned from the active vessel.</returns>
         /// <remarks>
         /// When called, the active vessel may change. It is therefore possible that,
-        /// after calling this function, the object returned by <see cref="SpaceCenter.ActiveVessel"/>
-        /// will become stale and no longer refer to the active vessel.
+        /// after calling this function, the object(s) returned by previous call(s) to
+        /// <see cref="SpaceCenter.ActiveVessel"/> no longer refer to the active vessel
         /// </remarks>
         [KRPCMethod]
         public IList<Vessel> ActivateNextStage ()
