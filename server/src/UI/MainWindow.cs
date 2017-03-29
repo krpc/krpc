@@ -185,7 +185,7 @@ namespace KRPC.UI
         void DrawAddress ()
         {
             if (Server.Running)
-                GUILayout.Label (addressLabelText + " " + Server.Address, labelStyle);
+                GUILayout.Label (addressLabelText + " " + Server.Address.Split(':')[0], labelStyle);
             else {
                 GUILayout.Label (addressLabelText, labelStyle);
                 // Get the index of the address in the combo box
@@ -228,7 +228,7 @@ namespace KRPC.UI
         void DrawRPCPort ()
         {
             if (Server.Running)
-                GUILayout.Label (rpcPortLabelText + " n/a", labelStyle);
+                GUILayout.Label (rpcPortLabelText + " " + rpcPort, labelStyle);
             else {
                 GUILayout.Label (rpcPortLabelText, labelStyle);
                 rpcPort = GUILayout.TextField (rpcPort, portMaxLength, textFieldStyle);
@@ -238,7 +238,7 @@ namespace KRPC.UI
         void DrawStreamPort ()
         {
             if (Server.Running)
-                GUILayout.Label (streamPortLabelText + " n/a", labelStyle);
+                GUILayout.Label (streamPortLabelText + " " + streamPort, labelStyle);
             else {
                 GUILayout.Label (streamPortLabelText, labelStyle);
                 streamPort = GUILayout.TextField (streamPort, portMaxLength, textFieldStyle);
