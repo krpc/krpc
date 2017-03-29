@@ -1,20 +1,20 @@
 v0.3.8
  * Add support for CommNet
  * Add support for contracts (#361)
+ * Add support for RealChutes, add Parachute.Arm and Parachute.Armed (#382)
+ * Add support for Procedural Fairings (#368)
  * Add CelestialBody.InitialRotation and RotationAngle (#369)
  * Add SpaceCenter.Navball to show/hide the navball (#355)
  * Add SpaceCenter.UIVisible to show/hide the UI (#355)
- * Fix bug with DockingPort.Rotation (#371)
- * Fix bug with Part.Rotation (#371)
- * Fix bug with Part.BoundingBox (#370)
- * Add support for procedural fairings mod http://forum.kerbalspaceprogram.com/index.php?showtopic=36371 (#368)
  * Add ControlSurface.AuthorityLimiter (#352)
- * Extend wheels functionality
+ * Extended wheels functionality
  * Rename LandingLeg to Leg
  * Rename LandingGear to Wheel
  * Add Antenna.Deployable, Leg.Deployable and SolarPanel.Deployable
  * Add properties to Control class to set the state of all solar panels, radiators, legs, etc. on a vessel (#383)
- * Add support for RealChutes, add Parachute.Arm and Parachute.Armed (#382)
+ * Fix bug with DockingPort.Rotation (#371)
+ * Fix bug with Part.Rotation (#371)
+ * Fix bug with Part.BoundingBox (#370)
 
 v0.3.7
  * Add custom reference frames (ReferenceFrame.CreateRelative and CreateHybrid) (#252)
