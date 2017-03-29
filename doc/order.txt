@@ -596,11 +596,14 @@ SpaceCenter.Parachute
 SpaceCenter.Parachute.Part
 SpaceCenter.Parachute.Deploy
 SpaceCenter.Parachute.Deployed
+SpaceCenter.Parachute.Arm
+SpaceCenter.Parachute.Armed
 SpaceCenter.Parachute.State
 SpaceCenter.Parachute.DeployAltitude
 SpaceCenter.Parachute.DeployMinPressure
 SpaceCenter.ParachuteState
 SpaceCenter.ParachuteState.Stowed
+SpaceCenter.ParachuteState.Armed
 SpaceCenter.ParachuteState.Active
 SpaceCenter.ParachuteState.SemiDeployed
 SpaceCenter.ParachuteState.Deployed
