@@ -1,3 +1,6 @@
+v0.3.9
+ * Add VesselType.Plane and VesselType.Relay (#385)
+
 v0.3.8
  * Add support for CommNet
  * Add support for contracts (#361)
