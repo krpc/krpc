@@ -1,5 +1,6 @@
 v0.3.9
  * Add VesselType.Plane and VesselType.Relay (#385)
+ * Fix Control.WheelThrottle and WheelSteering (#388)
 
 v0.3.8
  * Add support for CommNet
