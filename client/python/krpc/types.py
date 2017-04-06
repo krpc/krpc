@@ -29,7 +29,7 @@ def _load_types(package):
         return
     _load_types.loaded.add(package)
     try:
-        module = importlib.import_module('krpc.schema.' + package)
+        module = importlib.import_module('krpc.schema.' + package + '_pb2')
         if hasattr(module, 'DESCRIPTOR'):
             for name in module.DESCRIPTOR.message_types_by_name.keys():
                 PROTOBUF_TO_MESSAGE_TYPE[package + '.' + name] = getattr(

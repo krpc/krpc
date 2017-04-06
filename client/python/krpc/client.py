@@ -8,7 +8,7 @@ from krpc.decoder import Decoder
 from krpc.utils import snake_case
 from krpc.error import RPCError
 import krpc.stream
-import krpc.schema.KRPC
+import krpc.schema.KRPC_pb2 as KRPC
 
 
 class Client(object):
