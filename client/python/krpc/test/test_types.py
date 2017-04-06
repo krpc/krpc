@@ -3,7 +3,7 @@ from enum import Enum
 from krpc.types import Types, ValueType, MessageType, ClassType, EnumType
 from krpc.types import ListType, DictionaryType, SetType, TupleType
 from krpc.types import ClassBase
-import krpc.schema.KRPC
+import krpc.schema.KRPC_pb2 as KRPC
 
 PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32',
                         'uint64', 'bool', 'string', 'bytes']
@@ -37,7 +37,7 @@ class TestTypes(unittest.TestCase):
         types = Types()
         typ = types.as_type('KRPC.Request')
         self.assertTrue(isinstance(typ, MessageType))
-        self.assertEqual(krpc.schema.KRPC.Request, typ.python_type)
+        self.assertEqual(KRPC.Request, typ.python_type)
         self.assertEqual('KRPC.Request', typ.protobuf_type)
         self.assertRaises(ValueError, types.as_type, 'KRPC.DoesntExist')
         self.assertRaises(ValueError, MessageType, '')
