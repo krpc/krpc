@@ -3,7 +3,7 @@ from krpc.encoder import Encoder
 from krpc.types import Types
 from krpc.types import ClassBase
 from krpc.platform import hexlify
-import krpc.schema.KRPC
+import krpc.schema.KRPC_pb2 as KRPC
 
 
 class TestEncoder(unittest.TestCase):
@@ -35,7 +35,7 @@ class TestEncoder(unittest.TestCase):
         self.assertEqual('61' * 32, hexlify(message))
 
     def test_encode_message(self):
-        request = krpc.schema.KRPC.Request()
+        request = KRPC.Request()
         request.service = 'ServiceName'
         request.procedure = 'ProcedureName'
         data = Encoder.encode(request, self.types.as_type('KRPC.Request'))
@@ -52,7 +52,7 @@ class TestEncoder(unittest.TestCase):
         self.assertEqual('03e284a2', hexlify(data))
 
     def test_encode_message_delimited(self):
-        request = krpc.schema.KRPC.Request()
+        request = KRPC.Request()
         request.service = 'ServiceName'
         request.procedure = 'ProcedureName'
         data = Encoder.encode_delimited(

@@ -73,7 +73,7 @@ def get_changes(path):
             line = line.rstrip('\n')
             if line == '':
                 continue
-            m = re.match('^v([0-9]+\.[0-9]+\.[0-9]+)$', line)
+            m = re.match('^v([0-9]+\.[0-9]+\.[0-9]+).*?$', line)
             if m:
                 version = m.group(1)
             elif line.startswith(' * '):
