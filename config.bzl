@@ -8,7 +8,10 @@ if '-' in version:
    version_parts.extend(version.partition('-')[2].split('-'))
 
 # Python version x.y.z[+w.w]
-python_version = '0.3.8.post1'
+if len(version_parts) == 3:
+  python_version = '.'.join(version_parts)
+else:
+  python_version = '.'.join(version_parts[:3])+'+'+'.'.join(version_parts[3:])
 
 # C# assembly version: x.y.z[.w]
 assembly_version = '.'.join(version_parts[:4])
