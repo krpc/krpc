@@ -17,6 +17,7 @@ namespace KRPC.SpaceCenter
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public sealed class PilotAddon : MonoBehaviour
     {
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
         internal sealed class ControlInputs
         {
             readonly FlightCtrlState state;
