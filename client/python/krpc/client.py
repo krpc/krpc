@@ -8,7 +8,7 @@ from krpc.decoder import Decoder
 from krpc.utils import snake_case
 from krpc.error import RPCError
 import krpc.stream
-import krpc.schema.KRPC
+import krpc.schema.KRPC_pb2 as KRPC
 
 
 class Client(object):
@@ -104,8 +104,7 @@ class Client(object):
                        param_names, param_types, return_type):
         """ Build a KRPC.Request object """
 
-        request = krpc.schema.KRPC.Request(
-            service=service, procedure=procedure)
+        request = KRPC.Request(service=service, procedure=procedure)
 
         for i, (value, typ) in enumerate(itertools.izip(args, param_types)):
             if isinstance(value, DefaultArgument):

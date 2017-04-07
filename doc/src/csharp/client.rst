@@ -87,6 +87,10 @@ automatically stopped when it disconnects.
 Client API Reference
 --------------------
 
+.. class:: IConnection
+
+   Interface implemented by the :type:`Connection` class.
+
 .. class:: Connection
 
    A connection to the kRPC server. All interaction with kRPC is performed via

@@ -15,7 +15,6 @@ import com.google.protobuf.CodedOutputStream;
 import krpc.schema.KRPC;
 
 public class Connection {
-
     private final Object connectionLock = new Object();
 
     private Socket rpcSocket;
@@ -308,5 +307,4 @@ public class Connection {
         }
         return streamManager.add(request, returnTypeSpec);
     }
-
 }
