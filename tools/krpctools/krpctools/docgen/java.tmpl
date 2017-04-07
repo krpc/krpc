@@ -34,7 +34,7 @@
 {% endmacro %}
 
 {% macro procedure(x) %}{{ mark_documented(x) }}
-.. method:: {{ domain.return_type(x.return_type) }} {{ x.name | lower_camelcase  }}({{ parameters(x.parameters) }})
+.. method:: {{ domain.return_type(x.return_type) }} {{ domain.method_name(x.name) | lower_camelcase  }}({{ parameters(x.parameters) }})
 
 {{ gendoc(x.documentation) | indent }}
 
@@ -54,11 +54,11 @@
 
 {% macro property(x) %}{{ mark_documented(x) }}
 {% if x.getter != None %}
-.. method:: {{ domain.return_type(x.type) }} get{{ x.name }}()
+.. method:: {{ domain.return_type(x.type) }} get{{ domain.method_name(x.name) }}()
 {% endif %}
 
 {% if x.setter != None %}
-.. method:: void set{{ x.name }}({{ domain.parameter_type(x.type) }} value)
+.. method:: void set{{ domain.method_name(x.name) }}({{ domain.parameter_type(x.type) }} value)
 {% endif %}
 
 {{ gendoc(x.documentation) | indent }}
@@ -74,7 +74,7 @@
 {% endmacro %}
 
 {% macro class_method(x) %}{{ mark_documented(x) }}
-.. method:: {{ domain.return_type(x.return_type) }} {{ x.name | lower_camelcase }}({{ parameters(x.parameters[1:]) }})
+.. method:: {{ domain.return_type(x.return_type) }} {{ domain.method_name(x.name) | lower_camelcase }}({{ parameters(x.parameters[1:]) }})
 
 {{ gendoc(x.documentation) | indent }}
 
@@ -93,7 +93,7 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. method:: {{ domain.return_type(x.return_type) }} {{ x.name | lower_camelcase }}({{ parameters(x.parameters) }})
+.. method:: static {{ domain.return_type(x.return_type) }} {{ domain.method_name(x.name) | lower_camelcase }}(Connection connection, {{ parameters(x.parameters) }})
 
 {{ gendoc(x.documentation) | indent }}
 

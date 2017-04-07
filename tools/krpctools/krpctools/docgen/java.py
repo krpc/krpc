@@ -15,6 +15,17 @@ class JavaDomain(Domain):
     sphinxname = 'java'
     codeext = 'java'
 
+    _keywords = set([
+        'abstract', 'continue', 'for', 'new', 'switch', 'assert', 'default',
+        'goto', 'package', 'synchronized', 'boolean', 'do', 'if', 'private',
+        'this', 'break', 'double', 'implements', 'protected', 'throw', 'byte',
+        'else', 'import', 'public', 'throws', 'case', 'enum', 'instanceof',
+        'return', 'transient', 'catch', 'extends', 'int', 'short', 'try',
+        'char', 'final', 'interface', 'static', 'void', 'class', 'finally',
+        'long', 'strictfp', 'volatile', 'const', 'float', 'native', 'super',
+        'while', 'wait'
+    ])
+
     type_map = {
         'int32': 'int',
         'int64': 'long',
@@ -50,6 +61,12 @@ class JavaDomain(Domain):
     def currentmodule(self, name):
         super(JavaDomain, self).currentmodule(name)
         return '.. package:: krpc.client.services.%s' % name
+
+    def method_name(self, name):
+        if lower_camel_case(name) in self._keywords:
+            return '%s_' % name
+        else:
+            return name
 
     def type(self, typ):
         return self._type(typ)
