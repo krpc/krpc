@@ -7,20 +7,19 @@ import java.io.Serializable;
  * remote procedure calls.
  */
 public abstract class RemoteObject implements Serializable, Comparable<RemoteObject> {
-
     private static final long serialVersionUID = 3164247842142774386L;
 
-    protected final Connection _connection;
-    final long _id;
+    protected final Connection connection;
+    final long id;
 
     protected RemoteObject(Connection connection, long id) {
-        this._connection = connection;
-        this._id = id;
+        this.connection = connection;
+        this.id = id;
     }
 
     @Override
     public int hashCode() {
-        return (int) this._id;
+        return (int) this.id;
     }
 
     @Override
@@ -32,12 +31,11 @@ public abstract class RemoteObject implements Serializable, Comparable<RemoteObj
         if (getClass() != obj.getClass())
             return false;
         final RemoteObject other = (RemoteObject) obj;
-        return this._id == other._id;
+        return this.id == other.id;
     }
 
     @Override
     public int compareTo(final RemoteObject obj) {
-        return Long.valueOf(this._id).compareTo(Long.valueOf(obj._id));
+        return Long.valueOf(this.id).compareTo(Long.valueOf(obj.id));
     }
-
 }
