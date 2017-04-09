@@ -116,18 +116,20 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The current rotation angle of the body, in radians.
+        /// A value betwen 0 and <math>2\pi</math>
         /// </summary>
         [KRPCProperty]
         public double RotationAngle {
-            get { return GeometryExtensions.ToRadians (InternalBody.rotationAngle); }
+            get { return GeometryExtensions.ToRadians (GeometryExtensions.ClampAngle360 (InternalBody.rotationAngle)); }
         }
 
         /// <summary>
         /// The initial rotation angle of the body (at UT 0), in radians.
+        /// A value betwen 0 and <math>2\pi</math>
         /// </summary>
         [KRPCProperty]
         public double InitialRotation {
-            get { return GeometryExtensions.ToRadians (InternalBody.initialRotation); }
+            get { return GeometryExtensions.ToRadians (GeometryExtensions.ClampAngle360 (InternalBody.initialRotation)); }
         }
 
         /// <summary>
