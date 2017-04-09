@@ -1,5 +1,8 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using KRPC.Utils;
+using UnityEngine;
 
 namespace KRPC.SpaceCenter.ExternalAPI
 {
@@ -7,7 +10,20 @@ namespace KRPC.SpaceCenter.ExternalAPI
     {
         public static void Load ()
         {
-            IsAvailable = APILoader.Load (typeof(FAR), "FerramAerospaceResearch", "FerramAerospaceResearch.FARAPI", new Version (0, 15));
+            var type = APILoader.Load( typeof(FAR), "FerramAerospaceResearch", "FerramAerospaceResearch.FARAPI", new Version (0, 15));
+            IsAvailable = (type != null);
+            if (IsAvailable) {
+                calculateVesselAeroForces = type.GetMethod(
+                    "CalculateVesselAeroForces",
+                    BindingFlags.Public | BindingFlags.Static, null,
+                    new Type[] {
+                        typeof(Vessel),
+                        typeof(Vector3).MakeByRefType(),
+                        typeof(Vector3).MakeByRefType(),
+                        typeof(Vector3),
+                        typeof(double)
+                    }, null);
+            }
         }
 
         public static bool IsAvailable { get; private set; }
@@ -42,6 +58,16 @@ namespace KRPC.SpaceCenter.ExternalAPI
         {
             var aero = vessel.GetComponent ("FARVesselAero");
             return (double)aero.GetType ().GetProperty ("ReynoldsNumber").GetValue (aero, null);
+        }
+
+        static MethodInfo calculateVesselAeroForces;
+
+        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
+        public static void CalculateVesselAeroForces(Vessel vessel, out Vector3 aeroForce, out Vector3 aeroTorque, Vector3 velocityWorldVector, double altitude) {
+            var parameters = new object[] { vessel, Vector3.zero, Vector3.zero, velocityWorldVector, altitude };
+            calculateVesselAeroForces.Invoke(null, parameters);
+            aeroForce = (Vector3)parameters[1];
+            aeroTorque = (Vector3)parameters[2];
         }
     }
 }

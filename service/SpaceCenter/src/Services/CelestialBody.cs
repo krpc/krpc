@@ -336,8 +336,49 @@ namespace KRPC.SpaceCenter.Services
         /// <c>true</c> if there is oxygen in the atmosphere, required for air-breathing engines.
         /// </summary>
         [KRPCProperty]
-        public bool HasAtmosphericOxygen {
+        public bool HasAtmosphericOxygen
+        {
             get { return InternalBody.atmosphereContainsOxygen; }
+        }
+
+        /// <summary>
+        /// The temperature on the body at the given position.
+        /// </summary>
+        /// <remarks>
+        /// This calculation is performed using the bodies current position, which means that the value could be wrong
+        /// if you want to know the temperature in the far future.
+        /// </remarks>
+        [KRPCMethod]
+        public double TemperatureAt (Tuple3 position, ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException (nameof (referenceFrame));
+            return StockAerodynamics.GetTemperature(referenceFrame.PositionToWorldSpace(position.ToVector()), InternalBody);
+        }
+
+        /// <summary>
+        /// Gets the air density for the specified altitude above sea level, in meters.
+        /// </summary>
+        /// <remarks>
+        /// This is an approximation, because actual calculations, taking sun exposure into account to compute air
+        /// temperature, require us to know the exact point on the body where the density is to be computed
+        /// (knowing the altitude is not enough).
+        /// However, the difference is small for high altitudes, so it makes very little difference
+        /// for trajectory prediction.
+        /// </remarks>
+        [KRPCMethod]
+        public double DensityAt (double altitude)
+        {
+            return StockAerodynamics.GetDensity (altitude, InternalBody);
+        }
+
+        /// <summary>
+        /// Gets the air pressure, in Pascals, for the specified altitude above sea level, in meters.
+        /// </summary>
+        [KRPCMethod]
+        public double PressureAt (double altitude)
+        {
+            return StockAerodynamics.GetPressure (altitude, InternalBody);
         }
 
         /// <summary>

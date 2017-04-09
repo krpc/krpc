@@ -490,6 +490,31 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Simulate and return the total aerodynamic forces acting on the vessel, if it where to be traveling with the
+        /// given velocity at the given position in the atmosphere of the given celestial body.
+        /// Returns a vector pointing in the direction of the force, with its magnitude equal to
+        /// the strength of the force in Newtons.
+        /// </summary>
+        [KRPCMethod]
+        public Tuple3 SimulateAerodynamicForceAt(CelestialBody body, Tuple3 position, Tuple3 velocity)
+        {
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            var vessel = InternalVessel;
+            var worldVelocity = referenceFrame.VelocityToWorldSpace(position.ToVector(), velocity.ToVector());
+            var worldPosition = referenceFrame.PositionToWorldSpace(position.ToVector());
+            Vector3 worldForce;
+            if (!FAR.IsAvailable) {
+                worldForce = StockAerodynamics.SimAeroForce(body.InternalBody, vessel, worldVelocity, worldPosition);
+            } else {
+                Vector3 torque;
+                var altitude = (worldPosition - body.InternalBody.position).magnitude - body.InternalBody.Radius;
+                FAR.CalculateVesselAeroForces(vessel, out worldForce, out torque, worldVelocity, altitude);
+            }
+            return referenceFrame.DirectionFromWorldSpace(worldForce).ToTuple();
+        }
+
+        /// <summary>
         /// The <a href="https://en.wikipedia.org/wiki/Aerodynamic_force">aerodynamic lift</a> currently acting on the vessel,
         /// as a vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
         /// </summary>

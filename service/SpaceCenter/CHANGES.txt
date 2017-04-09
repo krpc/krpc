@@ -6,6 +6,8 @@ v0.3.10
 
 v0.3.9
  * Add VesselType.Plane and VesselType.Relay (#385)
+ * Add CelestialBody.TemperatureAt, DensityAt and PressureAt (#350, #352)
+ * Add Flight.SimulateAerodynamicForceAt (#352)
  * Fix Control.WheelThrottle and WheelSteering (#388)
  * Fix off by one error in stage numbers for Vessel.ResourcesInDecoupleStage (#380)
  * Fix CelestialBody.InitialRotation and RotationAngle returning values out of range 0 - 2*PI (#391)
