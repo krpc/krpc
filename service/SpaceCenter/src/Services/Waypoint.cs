@@ -28,6 +28,24 @@ namespace KRPC.SpaceCenter.Services
             InternalWaypoint.isNavigatable = true;
             FinePrint.WaypointManager.AddWaypoint (InternalWaypoint);
         }
+        /// <summary>
+        ///
+        /// Create a waypoint object with altitude specified.
+        /// </summary>
+        internal Waypoint(double latitude, double longitude, double altitude, CelestialBody body, string name)
+        {
+            InternalWaypoint = new FinePrint.Waypoint();
+            Name = name;
+            Body = body;
+            Icon = "report";
+            Latitude = latitude;
+            Color = 1115;
+            Longitude = longitude;
+            MeanAltitude = altitude;
+            InternalWaypoint.isOnSurface = Math.Abs((Body.SurfaceHeight(latitude, longitude) - altitude))>10;
+            InternalWaypoint.isNavigatable = true;
+            FinePrint.WaypointManager.AddWaypoint(InternalWaypoint);
+        }
 
         /// <summary>
         /// Create a waypoint object from a KSP waypoint.
