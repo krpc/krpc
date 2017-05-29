@@ -2,7 +2,7 @@ def _create_py_env(out, install):
     tmp = out+'.tmp-create-py-env'
     cmds = [
         'rm -rf %s' % tmp,
-        'virtualenv %s --quiet --no-site-packages' % tmp
+        'virtualenv %s --quiet --never-download --no-site-packages' % tmp
     ]
     for lib in install:
         cmds.append('%s/bin/python %s/bin/pip install --quiet --no-deps %s' % (tmp, tmp, lib.path))
