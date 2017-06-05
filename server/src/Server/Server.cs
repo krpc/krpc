@@ -39,11 +39,6 @@ namespace KRPC.Server
         public event EventHandler<ClientConnectedEventArgs> OnClientConnected;
 
         /// <summary>
-        /// Event triggered when a client performs some activity
-        /// </summary>
-        public event EventHandler<ClientActivityEventArgs> OnClientActivity;
-
-        /// <summary>
         /// Event triggered when a client has disconnected
         /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;

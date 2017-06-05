@@ -91,7 +91,7 @@ namespace KRPC.UI
         protected override void Init ()
         {
             Title = title;
-            Server.OnClientActivity += (s, e) => SawClientActivity (e.Client);
+            Core.Instance.OnClientActivity += (s, e) => SawClientActivity (e.Client);
 
             Style.fixedWidth = windowWidth;
 
