@@ -1,3 +1,6 @@
+v0.3.9
+ * Update to protobuf v3.3.0
+
 v0.3.8
  * Update to protobuf v3.2.0
 

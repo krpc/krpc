@@ -72,7 +72,7 @@ RUN curl https://bazel.build/bazel-release.pub.gpg | apt-key add - && \
 COPY bazelrc /etc/bazel.bazelrc
 RUN chmod 0644 /etc/bazel.bazelrc
 
-ARG protobuf_version=3.2.0
+ARG protobuf_version=3.3.0
 WORKDIR /usr/local/src/protobuf-cpp-${protobuf_version}
 RUN wget https://github.com/google/protobuf/releases/download/v${protobuf_version}/protobuf-cpp-${protobuf_version}.tar.gz && \
   tar -xf protobuf-cpp-${protobuf_version}.tar.gz --strip=1 && \

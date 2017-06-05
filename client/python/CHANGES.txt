@@ -1,3 +1,6 @@
+v0.3.9
+ * Update to protobuf v3.3.0
+
 v0.3.8.post1
  * Rename protobuf generated files to *_pb2.py to fix issue with protobuf 3.2.0 (#378, #376)
  * Relax package requirements to protobuf >= 3
