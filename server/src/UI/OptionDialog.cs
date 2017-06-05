@@ -47,7 +47,7 @@ namespace KRPC.UI
                 Visible = true;
                 Opened ();
                 EventHandlerExtensions.Invoke (OnOpen, this);
-                dialog = new MultiOptionDialog (Message, Title, Name, Skin, Options.ToArray ());
+                dialog = new MultiOptionDialog (Name, Message, Title, Skin, Options.ToArray ());
                 popup = PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), dialog, false, HighLogic.UISkin);
             }
         }
