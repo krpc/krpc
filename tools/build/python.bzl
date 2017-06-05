@@ -14,7 +14,7 @@ def _create_py_env(out, install):
     tmp = out+'.tmp-create-py-env.$$'
     cmds = [
         'rm -rf %s' % tmp,
-        'virtualenv %s --quiet --no-site-packages' % tmp
+        'virtualenv %s --quiet --never-download --no-site-packages' % tmp
     ]
     for lib in install:
         cmds.append('CFLAGS="-O0" %s/bin/python %s/bin/pip install --quiet --no-deps %s' % (tmp, tmp, lib.path))
@@ -126,7 +126,7 @@ py_script = rule(
 )
 
 def _test_impl(ctx, pyexe='python2'):
-    sub_commands = ['virtualenv env --quiet --no-site-packages --python=%s' % pyexe]
+    sub_commands = ['virtualenv env --quiet --never-download --no-site-packages --python=%s' % pyexe]
     for dep in ctx.files.deps:
         sub_commands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % dep.short_path)
     sub_commands.extend([
@@ -206,7 +206,7 @@ def _lint_impl(ctx):
     sub_commands = []
 
     # Install dependences in a new virtual env
-    sub_commands = ['virtualenv env --quiet --no-site-packages']
+    sub_commands = ['virtualenv env --quiet --never-download --no-site-packages']
     for dep in deps:
         sub_commands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % dep.short_path)
 
