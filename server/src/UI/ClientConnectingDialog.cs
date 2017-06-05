@@ -10,6 +10,7 @@ namespace KRPC.UI
 
         protected override void Init ()
         {
+            Name = "krpc-client-connecting";
             Title = "kRPC";
         }
 
