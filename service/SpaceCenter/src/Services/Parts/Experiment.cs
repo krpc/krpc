@@ -186,6 +186,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Returns null if experiment is unavailable.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Performance", "UseStringEmptyRule")]
         public ScienceSubject ScienceSubject {
             get {
                 if (!Available)

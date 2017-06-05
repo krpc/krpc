@@ -70,7 +70,6 @@ namespace KRPC.Server
 
         event EventHandler<ClientRequestingConnectionEventArgs> OnClientRequestingConnection;
         event EventHandler<ClientConnectedEventArgs> OnClientConnected;
-        event EventHandler<ClientActivityEventArgs> OnClientActivity;
         event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;
     }
 
@@ -87,7 +86,6 @@ namespace KRPC.Server
 
         event EventHandler<ClientRequestingConnectionEventArgs<TIn,TOut>> OnClientRequestingConnection;
         event EventHandler<ClientConnectedEventArgs<TIn,TOut>> OnClientConnected;
-        event EventHandler<ClientActivityEventArgs<TIn,TOut>> OnClientActivity;
         event EventHandler<ClientDisconnectedEventArgs<TIn,TOut>> OnClientDisconnected;
     }
 }
