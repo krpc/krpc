@@ -71,7 +71,8 @@ namespace KRPC.Utils
         static void Error (string message)
         {
             Logger.WriteLine ("Load API: " + message, Logger.Severity.Error);
-            PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "kRPC API Loader", message, "OK", true, HighLogic.UISkin);
+            PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "krpc-api-loader",
+                                          "kRPC API Loader", message, "OK", true, HighLogic.UISkin);
         }
     }
 }
