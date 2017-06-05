@@ -230,7 +230,7 @@ http_file(
 http_file(
     name = 'lua_luaunit',
     url = 'https://luarocks.org/manifests/bluebird75/luaunit-3.2.1-1.src.rock',
-    sha256 = ''
+    sha256 = '7ae20f3b68e77e3be52fc95c147eccfaef33206a7985320061fb9352d8565741'
 )
 
 http_file(
