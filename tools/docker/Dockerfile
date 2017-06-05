@@ -32,6 +32,7 @@ RUN apt-get update && \
     texlive-latex-base \
     texlive-latex-extra \
     texlive-latex-recommended \
+    tzdata \
     unzip \
     virtualenv \
     wget && \
@@ -101,6 +102,7 @@ RUN git clone http://github.com/krpc/krpc --depth 1 && \
       @cpp_protobuf//:protobuf \
       @cpp_googletest//:gtest \
       @cpp_googletest//:gmock && \
+    cd .. && \
     rm -rf krpc
 USER root
 RUN deluser build
