@@ -17,7 +17,7 @@ namespace TestServer
     {
         static void Help (OptionSet options)
         {
-            Console.WriteLine ("usage: TestServer.exe [-h] [-v] [--rpc_port=VALUE] [--stream_port=VALUE]");
+            Console.WriteLine ("usage: TestServer.exe [-h] [-v] [--bind=address] [--rpc_port=VALUE] [--stream_port=VALUE]");
             Console.WriteLine ("                      [--type=TYPE] [--debug] [--quiet] [--server-debug]");
             Console.WriteLine ();
             Console.WriteLine ("A kRPC test server for the client library unit tests");
@@ -35,6 +35,7 @@ namespace TestServer
             Logger.Level = Logger.Severity.Info;
             RPCException.VerboseErrors = true;
             bool serverDebug = false;
+            string bind = "127.0.0.1";
             ushort rpcPort = 0;
             ushort streamPort = 0;
             string type = "protobuf";
@@ -45,6 +46,9 @@ namespace TestServer
                 }, {
                     "v|version", "show program's version number and exit",
                     v => showVersion = v != null
+                }, {
+                    "bind=", "Address to bind the server to. If unspecified, the loopback address is used (127.0.0.1).",
+                    v => bind = v
                 }, {
                     "rpc-port=", "Port number to use for the RPC server. If unspecified, use an ephemeral port.",
                     (ushort v) => rpcPort = v
@@ -96,8 +100,14 @@ namespace TestServer
             var timeSpan = new TimeSpan ();
             Core.Instance.GetUniversalTime = () => timeSpan.TotalSeconds;
 
-            var rpcTcpServer = new TCPServer ("RPCServer", IPAddress.Loopback, rpcPort);
-            var streamTcpServer = new TCPServer ("StreamServer", IPAddress.Loopback, streamPort);
+            IPAddress bindAddress;
+            if (!IPAddress.TryParse(bind, out bindAddress)) {
+                Console.WriteLine("Failed to parse bind address.");
+                return;
+            }
+
+            var rpcTcpServer = new TCPServer ("RPCServer", bindAddress, rpcPort);
+            var streamTcpServer = new TCPServer ("StreamServer", bindAddress, streamPort);
             Server server;
             if (type == "protobuf") {
                 var rpcServer = new KRPC.Server.ProtocolBuffers.RPCServer (rpcTcpServer);
@@ -112,6 +122,7 @@ namespace TestServer
             Console.WriteLine ("Starting server...");
             server.Start ();
             Console.WriteLine ("type = " + type);
+            Console.WriteLine ("bind = " + bindAddress);
             Console.WriteLine ("rpc_port = " + rpcTcpServer.Port);
             Console.WriteLine ("stream_port = " + streamTcpServer.Port);
             Console.WriteLine ("Server started successfully");
