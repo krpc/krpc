@@ -74,13 +74,13 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <param name="latitude">Latitude of the waypoint.</param>
         /// <param name="longitude">Longitude of the waypoint.</param>
-        /// <param name="altitude">Altitude(above sea level) of the waypoint.</param>
+        /// <param name="altitude">Altitude (above sea level) of the waypoint.</param>
         /// <param name="body">Celestial body the waypoint is attached to.</param>
         /// <param name="name">Name of the waypoint.</param>
         /// <returns></returns>
         [KRPCMethod]
         [SuppressMessage("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
-        public Waypoint AddWaypointAtAlt(double latitude, double longitude,double altitude, CelestialBody body, string name)
+        public Waypoint AddWaypointAtAltitude (double latitude, double longitude, double altitude, CelestialBody body, string name)
         {
             return new Waypoint(latitude, longitude, altitude, body, name);
         }
