@@ -89,7 +89,7 @@ namespace KRPC.SpaceCenter.Services
                 var target = FlightGlobals.fetch.VesselTarget as global::CelestialBody;
                 return target != null ? new CelestialBody (target) : null;
             }
-            set { FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalBody); }
+            set { FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalBody, true); }
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace KRPC.SpaceCenter.Services
                 var target = FlightGlobals.fetch.VesselTarget as global::Vessel;
                 return target != null ? new Vessel (target) : null;
             }
-            set { FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalVessel); }
+            set { FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalVessel, true); }
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace KRPC.SpaceCenter.Services
                 var target = FlightGlobals.fetch.VesselTarget as ModuleDockingNode;
                 return target != null ? new Parts.DockingPort (new Parts.Part (target.part)) : null;
             }
-            set { FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalPort); }
+            set { FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalPort, true); }
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static void ClearTarget ()
         {
-            FlightGlobals.fetch.SetVesselTarget (null);
+            FlightGlobals.fetch.SetVesselTarget (null, true);
         }
 
         /// <summary>

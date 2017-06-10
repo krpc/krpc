@@ -128,6 +128,7 @@ SpaceCenter.CelestialBody.BedrockHeight
 SpaceCenter.CelestialBody.MSLPosition
 SpaceCenter.CelestialBody.SurfacePosition
 SpaceCenter.CelestialBody.BedrockPosition
+SpaceCenter.CelestialBody.PositionAtAltitude
 SpaceCenter.CelestialBody.SphereOfInfluence
 SpaceCenter.CelestialBody.HasAtmosphere
 SpaceCenter.CelestialBody.AtmosphereDepth
@@ -847,6 +848,7 @@ SpaceCenter.CameraMode.Map
 SpaceCenter.WaypointManager
 SpaceCenter.WaypointManager.Waypoints
 SpaceCenter.WaypointManager.AddWaypoint
+SpaceCenter.WaypointManager.AddWaypointAtAltitude
 SpaceCenter.WaypointManager.Colors
 SpaceCenter.WaypointManager.Icons
 SpaceCenter.Waypoint

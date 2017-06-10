@@ -63,9 +63,31 @@ namespace KRPC.SpaceCenter.Services
         /// <returns></returns>
         [KRPCMethod]
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
+        [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
         public Waypoint AddWaypoint (double latitude, double longitude, CelestialBody body, string name)
         {
-            return new Waypoint (latitude, longitude, body, name);
+            if (body == null)
+                throw new ArgumentNullException (nameof (body));
+            return new Waypoint (latitude, longitude, body.SurfaceHeight (latitude, longitude), body, name);
+        }
+
+        /// <summary>
+        /// Creates a waypoint at the given position and altitude, and returns a
+        /// <see cref="Waypoint"/> object that can be used to modify it.
+        /// </summary>
+        /// <param name="latitude">Latitude of the waypoint.</param>
+        /// <param name="longitude">Longitude of the waypoint.</param>
+        /// <param name="altitude">Altitude (above sea level) of the waypoint.</param>
+        /// <param name="body">Celestial body the waypoint is attached to.</param>
+        /// <param name="name">Name of the waypoint.</param>
+        /// <returns></returns>
+        [KRPCMethod]
+        [SuppressMessage("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
+        public Waypoint AddWaypointAtAltitude (double latitude, double longitude, double altitude, CelestialBody body, string name)
+        {
+            if (body == null)
+                throw new ArgumentNullException (nameof (body));
+            return new Waypoint (latitude, longitude, altitude, body, name);
         }
 
         /// <summary>
