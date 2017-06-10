@@ -20,9 +20,9 @@ class LaunchIntoOrbit
         var flight = vessel.Flight ();
         var altitude = conn.AddStream (() => flight.MeanAltitude);
         var apoapsis = conn.AddStream (() => vessel.Orbit.ApoapsisAltitude);
-        var stage3Resources =
-            vessel.ResourcesInDecoupleStage (stage: 3, cumulative: false);
-        var srbFuel = conn.AddStream(() => stage3Resources.Amount("SolidFuel"));
+        var stage2Resources =
+            vessel.ResourcesInDecoupleStage (stage: 2, cumulative: false);
+        var srbFuel = conn.AddStream(() => stage2Resources.Amount("SolidFuel"));
 
         // Pre-launch setup
         vessel.Control.SAS = false;

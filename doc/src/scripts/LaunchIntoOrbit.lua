@@ -11,7 +11,7 @@ local conn = krpc.connect('Launch into orbit')
 local vessel = conn.space_center.active_vessel
 
 flight = vessel:flight()
-stage_3_resources = vessel:resources_in_decouple_stage(3, False)
+stage_2_resources = vessel:resources_in_decouple_stage(2, False)
 
 -- Pre-launch setup
 vessel.control.sas = false
@@ -49,7 +49,7 @@ while true do
 
     -- Separate SRBs when finished
     if not srbs_separated then
-        if stage_3_resources:amount('SolidFuel') < 0.1 then
+        if stage_2_resources:amount('SolidFuel') < 0.1 then
             vessel.control:activate_next_stage()
             srbs_separated = true
             print('SRBs separated')
