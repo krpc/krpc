@@ -65,7 +65,7 @@ namespace KRPC.SpaceCenter.Services
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public Waypoint AddWaypoint (double latitude, double longitude, CelestialBody body, string name)
         {
-            return new Waypoint (latitude, longitude, body, name);
+            return new Waypoint (latitude, longitude, body.SurfaceHeight (latitude, longitude), body, name);
         }
 
         /// <summary>
