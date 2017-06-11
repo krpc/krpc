@@ -8,6 +8,7 @@
     <RootNamespace>KRPC.KerbalAlarmClock</RootNamespace>
     <AssemblyName>KRPC.KerbalAlarmClock</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

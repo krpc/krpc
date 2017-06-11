@@ -8,6 +8,7 @@
     <RootNamespace>TestServer</RootNamespace>
     <AssemblyName>TestServer</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>

@@ -8,6 +8,7 @@
     <RootNamespace>ServiceDefinitions</RootNamespace>
     <AssemblyName>ServiceDefinitions</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -51,7 +52,6 @@
     <Reference Include="System.Xml">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Xml.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\bazel-bin\tools\ServiceDefinitions\AssemblyInfo.cs">

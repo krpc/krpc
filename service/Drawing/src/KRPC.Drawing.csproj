@@ -8,6 +8,7 @@
     <RootNamespace>KRPC.Drawing</RootNamespace>
     <AssemblyName>KRPC.Drawing</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

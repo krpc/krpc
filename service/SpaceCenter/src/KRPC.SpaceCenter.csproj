@@ -8,6 +8,7 @@
     <RootNamespace>KRPC.SpaceCenter</RootNamespace>
     <AssemblyName>KRPC.SpaceCenter</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
