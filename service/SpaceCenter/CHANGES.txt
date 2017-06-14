@@ -6,6 +6,7 @@ v0.3.9
  * Add WaypointManager.AddWaypointAtAltitude (#399)
  * Add CelestialBody.PositionAtAltitude (#399)
  * Fix SpaceCenter.SetTarget not correctly setting target if input locks are enabled (#397)
+ * Fix possible null reference exception in ResourceConverter.State
 
 v0.3.8
  * Add support for CommNet
