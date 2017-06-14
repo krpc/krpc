@@ -1,5 +1,5 @@
 ship = PartsDecoupler
-version = 1.2.2
+version = 1.3.0
 description =
 type = VAB
 size = 3.1585114,5.4075222,1.4000001
@@ -288,7 +288,7 @@ PART
   dstg = 1
   sidx = 0
   sqor = 1
-  sepI = 0
+  sepI = -1
   attm = 0
   modCost = 0
   modMass = 0
@@ -389,7 +389,7 @@ PART
   dstg = 2
   sidx = -1
   sqor = -1
-  sepI = 0
+  sepI = -1
   attm = 0
   modCost = 0
   modMass = 0

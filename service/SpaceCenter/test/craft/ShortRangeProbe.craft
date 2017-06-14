@@ -1,5 +1,5 @@
 ship = ShortRangeProbe
-version = 1.2.2
+version = 1.3.0
 description =
 type = VAB
 size = 0.722476482,1.75952053,1.923774
@@ -568,7 +568,7 @@ PART
     isEnabled = True
     currentRotation = (0, 0, 0, 1)
     storedAnimationTime = 0
-    storedAnimationSpeed = 10
+    storedAnimationSpeed = 0
     deployState = EXTENDED
     stagingEnabled = True
     EVENTS
