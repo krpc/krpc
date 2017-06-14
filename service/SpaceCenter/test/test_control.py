@@ -221,7 +221,8 @@ class TestControlStaging(krpctest.TestCase):
         self.launch_vessel_from_vab('Staging')
         self.remove_other_vessels()
         self.set_circular_orbit('Kerbin', 100000)
-        self.control = self.connect().space_center.active_vessel.control
+        self.space_center = self.connect().space_center
+        self.control = self.space_center.active_vessel.control
 
     def test_state(self):
         self.assertEqual(self.space_center.ControlState.full,
