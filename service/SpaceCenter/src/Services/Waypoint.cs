@@ -140,7 +140,7 @@ namespace KRPC.SpaceCenter.Services
                     throw new InvalidOperationException ("Cannot set altitude for waypoint attached to a contract.");
                 InternalWaypoint.altitude = value;
                 var surfaceAltitude = Body.SurfaceHeight (InternalWaypoint.latitude, InternalWaypoint.longitude);
-                InternalWaypoint.isOnSurface = (Math.Abs (surfaceAltitude - value) > 10);
+                InternalWaypoint.isOnSurface = (Math.Abs (surfaceAltitude - value) < 10);
             }
         }
 
