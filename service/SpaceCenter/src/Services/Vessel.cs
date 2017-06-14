@@ -228,7 +228,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float DryMass {
-            get { return InternalVessel.parts.Sum(part => part.WetMass()); }
+            get { return InternalVessel.parts.Sum(part => part.DryMass()); }
         }
 
         IEnumerable<Parts.Engine> ActiveEngines {
