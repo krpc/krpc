@@ -99,7 +99,7 @@ class TestCommsMultiHop(krpctest.TestCase):
         # Mid is relay satellite
         mid = link0.end
         self.assertEqual(mid, link1.start)
-        self.assertEqual('probeCoreOcto2 (MediumRangeProbe)', mid.name)
+        self.assertEqual('MediumRangeProbe (unloaded)', mid.name)
         self.assertFalse(mid.is_home)
         self.assertFalse(mid.is_control_point)
         self.assertTrue(mid.is_vessel)
