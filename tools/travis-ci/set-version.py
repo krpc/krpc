@@ -5,6 +5,7 @@ import re
 import subprocess
 
 version_pattern = r'^v[0-9]+\.[0-9]+\.[0-9]+$'
+branch_version_pattern = r'^v[0-9]+\.[0-9]+\.[0-9]+-.+$'
 
 # Get most recent tag, commits since tag and commit hash
 desc = subprocess.check_output(
@@ -21,9 +22,10 @@ tag = desc
 branch = os.getenv('TRAVIS_BRANCH')
 
 # Compute version number
-if re.match(version_pattern, branch):
+if re.match(branch_version_pattern, branch):
     # Version branch - use version from branch name
-    version = (branch[1:], num_commits, commit_hash)
+    version = branch[1:].partition('-')[0]
+    version = (version, num_commits, commit_hash)
 elif re.match(version_pattern, tag):
     # Version tag - use version from tag, incremented by 0.0.1
     parts = tag[1:].split('.')
