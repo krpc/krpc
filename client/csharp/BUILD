@@ -10,7 +10,7 @@ pkg_zip(
     out = 'krpc-csharp-%s.zip' % version,
     files = ['//:readme', '//:version', 'CHANGES.txt',
              'LICENSE', '//:COPYING', '//:COPYING.LESSER',
-             ':KRPC.Client'],
+             ':KRPC.Client', ':KRPC.Client-net35'],
     path_map = {'client/csharp/': ''},
     exclude = ['*.mdb'],
     visibility = ['//visibility:public']
@@ -19,6 +19,7 @@ pkg_zip(
 nuget_package(
     name = 'nuget',
     assembly = ':KRPC.Client',
+    assembly_net35 = ':KRPC.Client-net35',
     id = 'KRPC.Client',
     version = nuget_version,
     author = author,
@@ -65,6 +66,20 @@ csharp_library(
     name = 'KRPC.Client',
     srcs = srcs,
     deps = deps,
+    visibility = ['//visibility:public']
+)
+
+csharp_library(
+    name = 'KRPC.Client-net35',
+    srcs = srcs,
+    deps = [
+        '//tools/build/ksp:Google.Protobuf',
+        '//tools/build/ksp:mscorlib',
+        '//tools/build/ksp:System',
+        '//tools/build/ksp:System.Core',
+        '//tools/build/ksp:System.Xml'
+    ],
+    define = ['NET35'],
     visibility = ['//visibility:public']
 )
 

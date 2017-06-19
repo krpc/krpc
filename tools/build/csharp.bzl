@@ -286,9 +286,13 @@ def _nuget_package_out(id, version):
     return {'out': '%s.%s.nupkg' % (id, version)}
 
 def _nuget_package_impl(ctx):
-    assembly = ctx.attr.assembly.lib
-    doc = ctx.attr.assembly.doc
-    nuspec = ctx.new_file(assembly, assembly.basename.replace('.dll','.nuspec'))
+    nuspec = ctx.new_file(
+        ctx.attr.assembly.lib, ctx.attr.assembly.lib.basename.replace('.dll','.nuspec'))
+    assemblies = {
+        'net45': ctx.attr.assembly
+    }
+    if ctx.attr.assembly_net35 != None:
+        assemblies['net35'] = ctx.attr.assembly_net35
 
     nuspec_contents = [
         '<?xml version="1.0"?>',
@@ -306,7 +310,7 @@ def _nuget_package_impl(ctx):
     nuspec_contents.extend([
         '  <frameworkAssemblies>'
     ])
-    nuspec_contents.extend(['    <frameworkAssembly assemblyName="%s" targetFramework="net40"/>' % x for x in ctx.attr.framework_deps])
+    nuspec_contents.extend(['    <frameworkAssembly assemblyName="%s" targetFramework="net45"/>' % x for x in ctx.attr.framework_deps])
     nuspec_contents.extend([
         '  </frameworkAssemblies>',
         '  <dependencies>'
@@ -315,9 +319,14 @@ def _nuget_package_impl(ctx):
     nuspec_contents.extend([
         '  </dependencies>',
         '</metadata>',
-        '<files>',
-        '  <file src="%s" target="lib/net40" />' % assembly.basename,
-        '  <file src="%s" target="lib/net40" />' % doc.basename,
+        '<files>'
+    ])
+    for framework, assembly in assemblies.items():
+        nuspec_contents.extend([
+            '  <file src="%s" target="lib/%s" />' % (assembly.lib.basename, framework),
+            '  <file src="%s" target="lib/%s" />' % (assembly.doc.basename, framework)
+        ])
+    nuspec_contents.extend([
         '</files>',
         '</package>'
     ])
@@ -327,19 +336,28 @@ def _nuget_package_impl(ctx):
         content = '\n'.join(nuspec_contents)
     )
 
-    tmpdir = '%s.nuget-package-tmp' % assembly.basename
+    tmpdir = '%s.nuget-package-tmp' % ctx.attr.assembly.lib.basename
     sub_commands = [
         'mkdir -p %s' % tmpdir,
         'cp %s %s' % (nuspec.path, tmpdir),
-        'cp %s %s' % (assembly.path, tmpdir),
-        'cp %s %s' % (doc.path, tmpdir),
+    ]
+    for _, assembly in assemblies.items():
+        sub_commands.extend([
+            'cp %s %s' % (assembly.lib.path, tmpdir),
+            'cp %s %s' % (assembly.doc.path, tmpdir)
+        ])
+    sub_commands.extend([
         'mono %s pack %s -BasePath %s -Verbosity quiet' % (ctx.file._nuget_exe.path, tmpdir+'/'+nuspec.basename, tmpdir),
         'cp %s %s' % (ctx.outputs.out.basename, ctx.outputs.out.path)
-    ]
+    ])
+
+    inputs = [ctx.file._nuget_exe, nuspec]
+    for _, assembly in assemblies.items():
+        inputs.extend([assembly.lib, assembly.doc])
 
     ctx.action(
         mnemonic = 'NuGetPackage',
-        inputs = [ctx.file._nuget_exe, assembly, doc, nuspec],
+        inputs = inputs,
         outputs = [ctx.outputs.out],
         command = ' && '.join(sub_commands),
         execution_requirements = {'local': '1'} # FIXME: nuget.exe does not work with the sandbox
@@ -350,6 +368,7 @@ nuget_package = rule(
     attrs = {
         'id': attr.string(mandatory=True),
         'assembly': attr.label(providers=['out', 'lib', 'doc', 'target_type']),
+        'assembly_net35': attr.label(providers=['out', 'lib', 'doc', 'target_type']),
         'version': attr.string(mandatory=True),
         'author': attr.string(mandatory=True),
         'project_url': attr.string(),
