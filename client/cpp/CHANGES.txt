@@ -1,3 +1,6 @@
+v0.3.10
+ * Set ASIO_STANDLONE in build script instead of source code so that configure script can find the header correctly
+
 v0.3.9
  * Update to protobuf v3.3.0
 

@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 
-#define ASIO_STANDALONE
 #include <asio.hpp>
 
 namespace krpc {
