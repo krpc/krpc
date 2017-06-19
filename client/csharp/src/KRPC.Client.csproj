@@ -71,6 +71,8 @@
     <Compile Include="..\..\..\bazel-genfiles\client\csharp\Services\InfernalRobotics.cs">
       <Link>Services\InfernalRobotics.cs</Link>
     </Compile>
+    <Compile Include="Tuple.cs" />
+    <Compile Include="ISet.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
