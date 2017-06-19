@@ -105,7 +105,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The part that this docking port is docked to. Returns <c>null</c> if this
         /// docking port is not docked to anything.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public Part DockedPart {
             get {

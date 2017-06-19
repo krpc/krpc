@@ -144,7 +144,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The parts parent. Returns <c>null</c> if the part does not have a parent.
         /// This, in combination with <see cref="Children"/>, can be used to traverse the vessels parts tree.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Part Parent {
             get { return HasParent ? new Part (InternalPart.parent) : null; }
         }
@@ -428,7 +428,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="Antenna"/> if the part is an antenna, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Antenna Antenna {
             get { return Antenna.Is (this) ? new Antenna (this) : null; }
         }
@@ -436,7 +436,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="CargoBay"/> if the part is a cargo bay, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public CargoBay CargoBay {
             get { return CargoBay.Is (this) ? new CargoBay (this) : null; }
         }
@@ -444,7 +444,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="ControlSurface"/> if the part is an aerodynamic control surface, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public ControlSurface ControlSurface {
             get { return ControlSurface.Is (this) ? new ControlSurface (this) : null; }
         }
@@ -452,7 +452,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="Decoupler"/> if the part is a decoupler, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Decoupler Decoupler {
             get { return Decoupler.Is (this) ? new Decoupler (this) : null; }
         }
@@ -460,7 +460,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="DockingPort"/> if the part is a docking port, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public DockingPort DockingPort {
             get { return DockingPort.Is (this) ? new DockingPort (this) : null; }
         }
@@ -468,7 +468,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// An <see cref="Engine"/> if the part is an engine, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Engine Engine {
             get { return Engine.Is (this) ? new Engine (this) : null; }
         }
@@ -476,7 +476,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// An <see cref="Experiment"/> if the part is a science experiment, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Experiment Experiment {
             get { return Experiment.Is (this) ? new Experiment (this) : null; }
         }
@@ -484,7 +484,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="Fairing"/> if the part is a fairing, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Fairing Fairing {
             get { return Fairing.Is (this) ? new Fairing (this) : null; }
         }
@@ -497,7 +497,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// including liquid fuel rockets, solid rocket boosters and jet engines.
         /// For RCS thrusters see <see cref="RCS"/>.
         /// </remarks>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Intake Intake {
             get { return Intake.Is (this) ? new Intake (this) : null; }
         }
@@ -505,7 +505,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="Leg"/> if the part is a landing leg, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Leg Leg {
             get { return Leg.Is (this) ? new Leg (this) : null; }
         }
@@ -513,7 +513,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="LaunchClamp"/> if the part is a launch clamp, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public LaunchClamp LaunchClamp {
             get { return LaunchClamp.Is (this) ? new LaunchClamp (this) : null; }
         }
@@ -521,7 +521,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="Light"/> if the part is a light, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Light Light {
             get { return Light.Is (this) ? new Light (this) : null; }
         }
@@ -529,7 +529,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="Parachute"/> if the part is a parachute, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Parachute Parachute {
             get { return Parachute.Is (this) ? new Parachute (this) : null; }
         }
@@ -537,7 +537,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="Radiator"/> if the part is a radiator, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Radiator Radiator {
             get { return Radiator.Is (this) ? new Radiator (this) : null; }
         }
@@ -545,7 +545,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="RCS"/> if the part is an RCS block/thruster, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public RCS RCS {
             get { return RCS.Is (this) ? new RCS (this) : null; }
         }
@@ -553,7 +553,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="ReactionWheel"/> if the part is a reaction wheel, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public ReactionWheel ReactionWheel {
             get { return ReactionWheel.Is (this) ? new ReactionWheel (this) : null; }
         }
@@ -561,7 +561,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="ResourceConverter"/> if the part is a resource converter, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public ResourceConverter ResourceConverter {
             get { return ResourceConverter.Is (this) ? new ResourceConverter (this) : null; }
         }
@@ -569,7 +569,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="ResourceHarvester"/> if the part is a resource harvester, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public ResourceHarvester ResourceHarvester {
             get { return ResourceHarvester.Is (this) ? new ResourceHarvester (this) : null; }
         }
@@ -577,7 +577,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="Sensor"/> if the part is a sensor, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Sensor Sensor {
             get { return Sensor.Is (this) ? new Sensor (this) : null; }
         }
@@ -585,7 +585,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="SolarPanel"/> if the part is a solar panel, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public SolarPanel SolarPanel {
             get { return SolarPanel.Is (this) ? new SolarPanel (this) : null; }
         }
@@ -593,7 +593,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="Wheel"/> if the part is a wheel, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Wheel Wheel {
             get { return Wheel.Is (this) ? new Wheel (this) : null; }
         }

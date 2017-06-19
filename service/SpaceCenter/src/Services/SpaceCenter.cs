@@ -83,7 +83,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The currently targeted celestial body.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public static CelestialBody TargetBody {
             get {
                 var target = FlightGlobals.fetch.VesselTarget as global::CelestialBody;
@@ -95,7 +95,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The currently targeted vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public static Vessel TargetVessel {
             get {
                 var target = FlightGlobals.fetch.VesselTarget as global::Vessel;
@@ -107,7 +107,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The currently targeted docking port.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public static Parts.DockingPort TargetDockingPort {
             get {
                 var target = FlightGlobals.fetch.VesselTarget as ModuleDockingNode;

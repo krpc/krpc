@@ -39,6 +39,8 @@ namespace KRPC.Service.Scanner
 
         public Type ReturnType { get; private set; }
 
+        public bool Nullable { get; private set; }
+
         public bool IsStatic { get; private set; }
 
         public bool IsClassMember { get; private set; }
@@ -73,6 +75,7 @@ namespace KRPC.Service.Scanner
                 // Check it's a valid return type
                 if (!TypeUtils.IsAValidType (returnType))
                     throw new ServiceException (returnType + " is not a valid Procedure return type, " + "in " + FullyQualifiedName);
+                Nullable = handler.Nullable;
             }
 
             var parts = procedureName.Split ('_');
@@ -109,7 +112,7 @@ namespace KRPC.Service.Scanner
         {
             info.AddValue ("parameters", Parameters);
             if (ReturnType != null) {
-                info.AddValue ("return_type", TypeUtils.SerializeType (ReturnType));
+                info.AddValue ("return_type", TypeUtils.SerializeReturnType (ReturnType, Nullable));
             }
             info.AddValue ("documentation", Documentation);
         }

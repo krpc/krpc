@@ -90,7 +90,9 @@ namespace KRPC.Service.Scanner
         public void AddProcedure (MethodInfo method)
         {
             TypeUtils.ValidateKRPCProcedure (method);
-            AddProcedure (new ProcedureSignature (Name, method.Name, method.GetDocumentation (), new ProcedureHandler (method), GameScene));
+            AddProcedure (new ProcedureSignature (
+                Name, method.Name, method.GetDocumentation (),
+                new ProcedureHandler (method, TypeUtils.GetNullable (method)), GameScene));
         }
 
         /// <summary>
@@ -109,7 +111,7 @@ namespace KRPC.Service.Scanner
 
         void AddPropertyProcedure (MemberInfo property, MethodInfo method)
         {
-            var handler = new ProcedureHandler (method);
+            var handler = new ProcedureHandler (method, TypeUtils.GetNullable (property));
             AddProcedure (new ProcedureSignature (Name, method.Name, property.GetDocumentation (), handler, GameScene));
         }
 
@@ -170,10 +172,10 @@ namespace KRPC.Service.Scanner
                 throw new ArgumentException ("Class " + cls + " does not exist");
             var name = method.Name;
             if (!method.IsStatic) {
-                var handler = new ClassMethodHandler (classType, method);
+                var handler = new ClassMethodHandler (classType, method, TypeUtils.GetNullable(method));
                 AddProcedure (new ProcedureSignature (Name, cls + '_' + name, method.GetDocumentation (), handler, GameScene));
             } else {
-                var handler = new ClassStaticMethodHandler (method);
+                var handler = new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method));
                 AddProcedure (new ProcedureSignature (Name, cls + "_static_" + name, method.GetDocumentation (), handler, GameScene));
             }
         }
@@ -190,14 +192,14 @@ namespace KRPC.Service.Scanner
             var getter = property.GetGetMethod ();
             var setter = property.GetSetMethod ();
             if (getter != null)
-                AddClassPropertyMethod (cls, classType, property, getter);
+                AddClassPropertyMethod (cls, classType, property, getter, TypeUtils.GetNullable (property));
             if (setter != null)
-                AddClassPropertyMethod (cls, classType, property, setter);
+                AddClassPropertyMethod (cls, classType, property, setter, false);
         }
 
-        void AddClassPropertyMethod (string cls, Type classType, MemberInfo property, MethodInfo method)
+        void AddClassPropertyMethod (string cls, Type classType, MemberInfo property, MethodInfo method, bool nullable)
         {
-            var handler = new ClassMethodHandler (classType, method);
+            var handler = new ClassMethodHandler (classType, method, nullable);
             AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, property.GetDocumentation (), handler, GameScene));
         }
 

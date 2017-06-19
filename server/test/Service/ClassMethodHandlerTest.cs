@@ -14,7 +14,7 @@ namespace KRPC.Test.Service
         {
             var instance = new TestService.TestClass ("foo");
             var classType = typeof(TestService.TestClass);
-            var handler = new ClassMethodHandler (classType, classType.GetMethod ("FloatToString"));
+            var handler = new ClassMethodHandler (classType, classType.GetMethod ("FloatToString"), false);
             Assert.AreEqual ("foo3.14159", handler.Invoke (new object[] { instance, 3.14159f }));
         }
 
@@ -23,7 +23,7 @@ namespace KRPC.Test.Service
         {
             var instance = new TestService.TestClass ("foo");
             var classType = typeof(TestService.TestClass);
-            var handler = new ClassMethodHandler (classType, classType.GetMethod ("IntToString"));
+            var handler = new ClassMethodHandler (classType, classType.GetMethod ("IntToString"), false);
             Assert.AreEqual ("foo42", handler.Invoke (new object[] { instance, Type.Missing }));
         }
 
@@ -31,7 +31,7 @@ namespace KRPC.Test.Service
         public void NoInstance ()
         {
             var classType = typeof(TestService.TestClass);
-            var handler = new ClassMethodHandler (classType, classType.GetMethod ("FloatToString"));
+            var handler = new ClassMethodHandler (classType, classType.GetMethod ("FloatToString"), false);
             Assert.Throws<TargetException> (() => handler.Invoke (new object[] { null, 3.14159f }));
         }
 
@@ -39,7 +39,7 @@ namespace KRPC.Test.Service
         public void Properties ()
         {
             var classType = typeof(TestService.TestClass);
-            var handler = new ClassMethodHandler (classType, classType.GetMethod ("FloatToString"));
+            var handler = new ClassMethodHandler (classType, classType.GetMethod ("FloatToString"), false);
             var parameters = handler.Parameters.ToList ();
             Assert.AreEqual (2, parameters.Count);
             Assert.AreEqual ("this", parameters [0].Name);
@@ -55,7 +55,7 @@ namespace KRPC.Test.Service
         public void PropertiesDefaultArgument ()
         {
             var classType = typeof(TestService.TestClass);
-            var handler = new ClassMethodHandler (classType, classType.GetMethod ("IntToString"));
+            var handler = new ClassMethodHandler (classType, classType.GetMethod ("IntToString"), false);
             var parameters = handler.Parameters.ToList ();
             Assert.AreEqual (2, parameters.Count);
             Assert.AreEqual ("this", parameters [0].Name);

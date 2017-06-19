@@ -123,7 +123,7 @@ namespace KRPC.Test.Service
                 } else if (proc.Name == "EchoTestObject") {
                     MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "obj");
-                    MessageAssert.HasReturnType (proc, typeof(TestService.TestClass));
+                    MessageAssert.HasReturnType (proc, typeof(TestService.TestClass), true);
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "TestClass_FloatToString") {
                     MessageAssert.HasParameters (proc, 2);
@@ -157,7 +157,7 @@ namespace KRPC.Test.Service
                 } else if (proc.Name == "TestClass_get_ObjectProperty") {
                     MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
-                    MessageAssert.HasReturnType (proc, typeof(TestService.TestClass));
+                    MessageAssert.HasReturnType (proc, typeof(TestService.TestClass), true);
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "TestClass_set_ObjectProperty") {
                     MessageAssert.HasParameters (proc, 2);

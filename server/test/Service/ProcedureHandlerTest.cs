@@ -21,21 +21,21 @@ namespace KRPC.Test.Service
         [Test]
         public void SimpleUsage ()
         {
-            var handler = new ProcedureHandler (typeof(ProcedureHandlerTest).GetMethod ("TestProcedure"));
+            var handler = new ProcedureHandler (typeof(ProcedureHandlerTest).GetMethod ("TestProcedure"), false);
             Assert.AreEqual (3.14159f, handler.Invoke (new object[] { 3, 0.14159f }));
         }
 
         [Test]
         public void DefaultArguments ()
         {
-            var handler = new ProcedureHandler (typeof(ProcedureHandlerTest).GetMethod ("TestProcedureWithDefaultArg"));
+            var handler = new ProcedureHandler (typeof(ProcedureHandlerTest).GetMethod ("TestProcedureWithDefaultArg"), false);
             Assert.AreEqual ("42foo", handler.Invoke (new object[] { 42, Type.Missing }));
         }
 
         [Test]
         public void Properties ()
         {
-            var handler = new ProcedureHandler (typeof(ProcedureHandlerTest).GetMethod ("TestProcedure"));
+            var handler = new ProcedureHandler (typeof(ProcedureHandlerTest).GetMethod ("TestProcedure"), false);
             var parameters = handler.Parameters.ToList ();
             Assert.AreEqual (2, parameters.Count);
             Assert.AreEqual ("x", parameters [0].Name);
@@ -50,7 +50,7 @@ namespace KRPC.Test.Service
         [Test]
         public void PropertiesDefaultArgument ()
         {
-            var handler = new ProcedureHandler (typeof(ProcedureHandlerTest).GetMethod ("TestProcedureWithDefaultArg"));
+            var handler = new ProcedureHandler (typeof(ProcedureHandlerTest).GetMethod ("TestProcedureWithDefaultArg"), false);
             var parameters = handler.Parameters.ToList ();
             Assert.AreEqual (2, parameters.Count);
             Assert.AreEqual ("x", parameters [0].Name);
