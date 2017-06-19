@@ -21,7 +21,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertFalse(self.pod.has_data)
         self.assertItemsEqual([], self.pod.data)
         self.assertEqual(True, self.pod.available)
-        self.assertEqual('LaunchPadPlatform', self.pod.biome)
+        self.assertEqual('LaunchPad', self.pod.biome)
         subject = self.pod.science_subject
         self.assertAlmostEqual(0, subject.science)
         self.assertAlmostEqual(1.5, subject.science_cap)
@@ -29,7 +29,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertAlmostEqual(1.0, subject.data_scale)
         self.assertAlmostEqual(1.0, subject.scientific_value)
         self.assertAlmostEqual(0.3, subject.subject_value)
-        self.assertEqual('Crew Report from LaunchPadPlatform', subject.title)
+        self.assertEqual('Crew Report from LaunchPad', subject.title)
 
     def test_goo_container(self):
         self.assertFalse(self.goo.deployed)
@@ -45,7 +45,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertAlmostEqual(1.0, subject.scientific_value)
         self.assertAlmostEqual(0.3, subject.subject_value)
         self.assertEqual(
-            u'Mystery Goo\u2122 Observation from LaunchPadPlatform',
+            u'Mystery Goo\u2122 Observation from LaunchPad',
             subject.title)
 
     def test_run_and_dump_data(self):

@@ -4,7 +4,7 @@ from google.protobuf.internal import encoder as protobuf_encoder
 from google.protobuf.internal import wire_format as protobuf_wire_format
 from krpc.error import EncodingError
 from krpc.platform import bytelength
-import krpc.schema.KRPC
+import krpc.schema.KRPC_pb2 as KRPC
 from krpc.types import \
     Types, ValueType, ClassType, EnumerationType, MessageType, TupleType, \
     ListType, SetType, DictionaryType
@@ -29,25 +29,25 @@ class Encoder(object):
             object_id = x._object_id if x is not None else 0
             return cls._encode_value(object_id, cls._types.uint64_type)
         elif isinstance(typ, ListType):
-            msg = krpc.schema.KRPC.List()
+            msg = KRPC.List()
             msg.items.extend(cls.encode(item, typ.value_type) for item in x)
             return msg.SerializeToString()
         elif isinstance(typ, DictionaryType):
-            msg = krpc.schema.KRPC.Dictionary()
+            msg = KRPC.Dictionary()
             entries = []
             for key, value in sorted(x.items(), key=lambda i: i[0]):
-                entry = krpc.schema.KRPC.DictionaryEntry()
+                entry = KRPC.DictionaryEntry()
                 entry.key = cls.encode(key, typ.key_type)
                 entry.value = cls.encode(value, typ.value_type)
                 entries.append(entry)
             msg.entries.extend(entries)
             return msg.SerializeToString()
         elif isinstance(typ, SetType):
-            msg = krpc.schema.KRPC.Set()
+            msg = KRPC.Set()
             msg.items.extend(cls.encode(item, typ.value_type) for item in x)
             return msg.SerializeToString()
         elif isinstance(typ, TupleType):
-            msg = krpc.schema.KRPC.Tuple()
+            msg = KRPC.Tuple()
             if len(x) != len(typ.value_types):
                 raise EncodingError(
                     'Tuple has wrong number of elements. ' +
@@ -68,23 +68,23 @@ class Encoder(object):
 
     @classmethod
     def _encode_value(cls, value, typ):
-        if typ.protobuf_type.code == krpc.schema.KRPC.Type.SINT32:
+        if typ.protobuf_type.code == KRPC.Type.SINT32:
             return _ValueEncoder.encode_sint32(value)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.SINT64:
+        elif typ.protobuf_type.code == KRPC.Type.SINT64:
             return _ValueEncoder.encode_sint64(value)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.UINT32:
+        elif typ.protobuf_type.code == KRPC.Type.UINT32:
             return _ValueEncoder.encode_uint32(value)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.UINT64:
+        elif typ.protobuf_type.code == KRPC.Type.UINT64:
             return _ValueEncoder.encode_uint64(value)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.DOUBLE:
+        elif typ.protobuf_type.code == KRPC.Type.DOUBLE:
             return _ValueEncoder.encode_double(value)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.FLOAT:
+        elif typ.protobuf_type.code == KRPC.Type.FLOAT:
             return _ValueEncoder.encode_float(value)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.BOOL:
+        elif typ.protobuf_type.code == KRPC.Type.BOOL:
             return _ValueEncoder.encode_bool(value)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.STRING:
+        elif typ.protobuf_type.code == KRPC.Type.STRING:
             return _ValueEncoder.encode_string(value)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.BYTES:
+        elif typ.protobuf_type.code == KRPC.Type.BYTES:
             return _ValueEncoder.encode_bytes(value)
         else:
             raise EncodingError('Invalid type')

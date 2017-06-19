@@ -3,29 +3,29 @@ workspace(name = "krpc")
 new_http_archive(
     name = 'protoc_linux_x86_32',
     build_file = 'tools/build/protobuf/protoc_linux_x86_32.BUILD',
-    url = 'https://github.com/google/protobuf/releases/download/v3.2.0/protoc-3.2.0-linux-x86_32.zip',
-    sha256 = '62cd0b537122b9659e3684e89d4cc14595b0bce1ba7eaea083b37330bea8b397'
+    url = 'https://github.com/google/protobuf/releases/download/v3.3.0/protoc-3.3.0-linux-x86_32.zip',
+    sha256 = 'c3de489a343f99201eff7848ff9aafaa983032c5765d25e7dc85203d6b6acdb2'
 )
 
 new_http_archive(
     name = 'protoc_linux_x86_64',
     build_file = 'tools/build/protobuf/protoc_linux_x86_64.BUILD',
-    url = 'https://github.com/google/protobuf/releases/download/v3.2.0/protoc-3.2.0-linux-x86_64.zip',
-    sha256 = '9cf9a8661d649b8477fe0ad32a8b28d351a170a62e210bf848d90a29f1f4df9d'
+    url = 'https://github.com/google/protobuf/releases/download/v3.3.0/protoc-3.3.0-linux-x86_64.zip',
+    sha256 = 'feb112bbc11ea4e2f7ef89a359b5e1c04428ba6cfa5ee628c410eccbfe0b64c3'
 )
 
 new_http_archive(
     name = 'protoc_osx_x86_32',
     build_file = 'tools/build/protobuf/protoc_osx_x86_32.BUILD',
-    url = 'https://github.com/google/protobuf/releases/download/v3.2.0/protoc-3.2.0-osx-x86_32.zip',
-    sha256 = '2c524f270544823c1533c06aecfbc1047702650153548a8c5f0c42ac331d72c4'
+    url = 'https://github.com/google/protobuf/releases/download/v3.3.0/protoc-3.3.0-osx-x86_32.zip',
+    sha256 = '8166f64224b4b71a83e3b132fbd3540a9a03aadeba0636b02e7b4d92a66d0ab8'
 )
 
 new_http_archive(
     name = 'protoc_win32',
     build_file = 'tools/build/protobuf/protoc_win32.BUILD',
-    url = 'https://github.com/google/protobuf/releases/download/v3.2.0/protoc-3.2.0-win32.zip',
-    sha256 = '162fbb853fb1ec49c947d0b950b6d225f28967ee062f981cb875d589233cef56'
+    url = 'https://github.com/google/protobuf/releases/download/v3.3.0/protoc-3.3.0-win32.zip',
+    sha256 = '19ec3d3853c1181912dc442840b3a76bfe0607ecc67d0854b323fdd1fdd8ab77'
 )
 
 http_file(
@@ -37,9 +37,9 @@ http_file(
 new_http_archive(
     name = 'csharp_protobuf',
     build_file = 'tools/build/csharp_protobuf.BUILD',
-    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.2.0',
+    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.3.0',
     type = 'zip',
-    sha256 = '4be0c8edd935124ae66a62f1b7ce22f95a509d321f727ba8074e1abd58370a13'
+    sha256 = 'dbae79cacead66402c4e61b6312990dc35f95f6e444d5e9b9ad5930977f1d670'
 )
 
 http_file(
@@ -82,9 +82,9 @@ new_http_archive(
 
 http_archive(
     name = 'cpp_protobuf',
-    url = 'https://github.com/google/protobuf/releases/download/v3.2.0/protobuf-cpp-3.2.0.tar.gz',
-    strip_prefix = 'protobuf-3.2.0',
-    sha256 = '51d773e4297238b282eaa4c1dd317099675b12eef2b414732b851c00459225c6'
+    url = 'https://github.com/google/protobuf/releases/download/v3.3.0/protobuf-cpp-3.3.0.tar.gz',
+    strip_prefix = 'protobuf-3.3.0',
+    sha256 = '5e2587dea2f9287885e3b04d3a94ed4e8b9b2d2c5dd1f0032ceef3ea1d153bd7'
 )
 
 new_http_archive(
@@ -117,8 +117,8 @@ http_file(
 
 http_file(
     name = 'java_protobuf',
-    url = 'https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.2.0/protobuf-java-3.2.0.jar',
-    sha256 = 'b1c2d420d2833429d11e405a58251e13bd7e3f22c266b49227c41e4d21361286'
+    url = 'https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.jar',
+    sha256 = 'f3411ade77523d5f0d013d4f25c36879e66f0c5e1e4310f7096d54d0d2553554'
 )
 
 http_file(
@@ -230,13 +230,13 @@ http_file(
 http_file(
     name = 'lua_luaunit',
     url = 'https://luarocks.org/manifests/bluebird75/luaunit-3.2.1-1.src.rock',
-    sha256 = ''
+    sha256 = '7ae20f3b68e77e3be52fc95c147eccfaef33206a7985320061fb9352d8565741'
 )
 
 http_file(
     name = 'python_protobuf',
-    url = 'https://pypi.python.org/packages/43/16/cdfe80080683b5a76ea489a516bb5859f1550476fdec9b20260987fa42c6/protobuf-3.2.0-py2.py3-none-any.whl',
-    sha256 = '55030bccd91a54836b9c551b99234f5efbc9721c8b93c80569fbe94aca0b9c35'
+    url = 'https://pypi.python.org/packages/56/28/6263d846f60dad93939fd3a22d712d6bae3bf3484332d22bd5933dec8c99/protobuf-3.3.0.tar.gz',
+    sha256 = '1cbcee2c45773f57cb6de7ee0eceb97f92b9b69c0178305509b162c0160c1f04'
 )
 
 http_file(

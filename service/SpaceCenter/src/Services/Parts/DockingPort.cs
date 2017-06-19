@@ -120,7 +120,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Throws an exception if the docking port is not docked to anything.
         /// </summary>
         /// <remarks>
-        /// After undocking, the active vessel may change. See <see cref="SpaceCenter.ActiveVessel"/>.
+        /// When called, the active vessel may change. It is therefore possible that,
+        /// after calling this function, the object(s) returned by previous call(s) to
+        /// <see cref="SpaceCenter.ActiveVessel"/> no longer refer to the active vessel.
         /// </remarks>
         [KRPCMethod]
         public Vessel Undock ()

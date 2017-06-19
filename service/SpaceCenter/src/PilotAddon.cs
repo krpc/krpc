@@ -17,6 +17,7 @@ namespace KRPC.SpaceCenter
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public sealed class PilotAddon : MonoBehaviour
     {
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
         internal sealed class ControlInputs
         {
             readonly FlightCtrlState state;
@@ -25,12 +26,16 @@ namespace KRPC.SpaceCenter
             {
                 state = new FlightCtrlState ();
                 ThrottleUpdated = false;
+                WheelThrottleUpdated = false;
+                WheelSteerUpdated = false;
             }
 
             public ControlInputs (FlightCtrlState ctrlState)
             {
                 state = ctrlState;
                 ThrottleUpdated = false;
+                WheelThrottleUpdated = false;
+                WheelSteerUpdated = false;
             }
 
             public float Throttle {
@@ -75,13 +80,23 @@ namespace KRPC.SpaceCenter
 
             public float WheelThrottle {
                 get { return state.wheelThrottle; }
-                set { state.wheelThrottle = value.Clamp (-1f, 1f); }
+                set {
+                    state.wheelThrottle = value.Clamp (-1f, 1f);
+                    WheelThrottleUpdated = true;
+                }
             }
+
+            public bool WheelThrottleUpdated { get; set; }
 
             public float WheelSteer {
                 get { return state.wheelSteer; }
-                set { state.wheelSteer = value.Clamp (-1f, 1f); }
+                set {
+                    state.wheelSteer = value.Clamp (-1f, 1f);
+                    WheelSteerUpdated = true;
+                }
             }
+
+            public bool WheelSteerUpdated { get; set; }
 
             public void ClearExceptThrottle ()
             {
@@ -106,14 +121,18 @@ namespace KRPC.SpaceCenter
                 state.X += other.state.X;
                 state.Y += other.state.Y;
                 state.Z += other.state.Z;
-                state.wheelThrottle += other.state.wheelThrottle;
-                state.wheelSteer += other.state.wheelSteer;
+                if (other.WheelThrottleUpdated)
+                    state.wheelThrottle = other.state.wheelThrottle;
+                if (other.WheelSteerUpdated)
+                    state.wheelSteer = other.state.wheelSteer;
             }
 
             public void CopyFrom (ControlInputs other)
             {
                 state.CopyFrom (other.state);
                 ThrottleUpdated = other.ThrottleUpdated;
+                WheelThrottleUpdated = other.WheelThrottleUpdated;
+                WheelSteerUpdated = other.WheelSteerUpdated;
             }
         }
 

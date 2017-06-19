@@ -241,7 +241,7 @@ public class Encoder {
   }
 
   static ByteString encodeObject(RemoteObject value) throws IOException {
-    return encodeUInt64(value._id);
+    return encodeUInt64(value.id);
   }
 
   static ByteString encodeEnum(RemoteEnum value) throws IOException {

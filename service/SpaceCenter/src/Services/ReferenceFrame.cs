@@ -614,7 +614,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.DockingPort:
                     return dockingPort.vessel.GetOrbit ().GetVel ();
                 case ReferenceFrameType.Relative:
-                    return parent.VelocityToWorldSpace (Vector3d.zero, relativeVelocity);
+                    return parent.VelocityToWorldSpace (relativePosition, relativeVelocity);
                 case ReferenceFrameType.Hybrid:
                     return hybridVelocity.Velocity;
                 default:

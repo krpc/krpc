@@ -71,6 +71,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Fires the decoupler. Returns the new vessel created when the decoupler fires.
         /// Throws an exception if the decoupler has already fired.
         /// </summary>
+        /// <remarks>
+        /// When called, the active vessel may change. It is therefore possible that,
+        /// after calling this function, the object(s) returned by previous call(s) to
+        /// <see cref="SpaceCenter.ActiveVessel"/> no longer refer to the active vessel.
+        /// </remarks>
         [KRPCMethod]
         public Vessel Decouple ()
         {

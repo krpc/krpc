@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Connection {
-
   private final Object connectionLock = new Object();
 
   private Socket rpcSocket;

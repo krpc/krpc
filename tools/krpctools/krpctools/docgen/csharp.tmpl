@@ -81,7 +81,7 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. method:: static {{ domain.return_type(x.return_type) }} {{ x.name }}({{ parameters(x.parameters) }})
+.. method:: static {{ domain.return_type(x.return_type) }} {{ x.name }}(IConnection connection, {{ parameters(x.parameters) }})
 
 {{ gendoc(x.documentation) | indent }}
 

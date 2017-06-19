@@ -11,13 +11,13 @@ def _apply_path_map(path_map, path):
     return match
 
 def _create_py_env(out, install):
-    tmp = out+'.tmp-create-py-env'
+    tmp = out+'.tmp-create-py-env.$$'
     cmds = [
         'rm -rf %s' % tmp,
-        'virtualenv %s --quiet --no-site-packages' % tmp
+        'virtualenv %s --quiet --never-download --no-site-packages' % tmp
     ]
     for lib in install:
-        cmds.append('%s/bin/python %s/bin/pip install --quiet --no-deps %s' % (tmp, tmp, lib.path))
+        cmds.append('CFLAGS="-O0" %s/bin/python %s/bin/pip install --quiet --no-deps %s' % (tmp, tmp, lib.path))
     cmds.extend([
         '(CWD=`pwd`; cd %s; tar -c -f $CWD/%s *)' % (tmp, out)
     ])
@@ -99,9 +99,10 @@ def _script_impl(ctx):
         use_default_shell_env = True
     )
 
-    env = ctx.attr.script+'.py_script-env'
+    env = ctx.attr.script+'.py_script-env-$$'
     sub_commands = _extract_py_env('$0.runfiles/krpc/%s' % script_env.short_path, env)
     sub_commands.append('%s/bin/python %s/bin/%s "$@"' % (env, env, ctx.attr.script))
+    sub_commands.append('rm -rf %s' % env)
     ctx.file_action(
         output = script_run,
         content = ' && \\\n'.join(sub_commands)+'\n',
@@ -125,7 +126,7 @@ py_script = rule(
 )
 
 def _test_impl(ctx, pyexe='python2'):
-    sub_commands = ['virtualenv env --quiet --no-site-packages --python=%s' % pyexe]
+    sub_commands = ['virtualenv env --quiet --never-download --no-site-packages --python=%s' % pyexe]
     for dep in ctx.files.deps:
         sub_commands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % dep.short_path)
     sub_commands.extend([
@@ -205,7 +206,7 @@ def _lint_impl(ctx):
     sub_commands = []
 
     # Install dependences in a new virtual env
-    sub_commands = ['virtualenv env --quiet --no-site-packages']
+    sub_commands = ['virtualenv env --quiet --never-download --no-site-packages']
     for dep in deps:
         sub_commands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % dep.short_path)
 
@@ -216,6 +217,7 @@ def _lint_impl(ctx):
     for f in pep8_runfiles:
         _add_runfile(sub_commands, f.short_path, runfiles_dir+ '/' + pep8.basename + '.runfiles/krpc/' + f.short_path)
     sub_commands.append('%s/%s %s' % (runfiles_dir, pep8.basename, ' '.join(pep8_args)))
+    sub_commands.append('rm -rf %s' % runfiles_dir)
 
     # Run pylint
     runfiles_dir = out.path + '.runfiles/krpc'
@@ -226,6 +228,7 @@ def _lint_impl(ctx):
     # Set pythonpath so that pylint finds the dependent packages from the virtual environment
     # FIXME: make this generic, depends on usingn python2.7
     sub_commands.append('PYTHONPATH=env/lib/python2.7/site-packages %s/%s %s' % (runfiles_dir, pylint.basename, ' '.join(pylint_args)))
+    sub_commands.append('rm -rf %s' % runfiles_dir)
 
     ctx.file_action(
         ctx.outputs.executable,

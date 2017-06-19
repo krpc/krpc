@@ -45,11 +45,6 @@ namespace KRPC.Server
         public event EventHandler<ClientConnectedEventArgs> OnClientConnected;
 
         /// <summary>
-        /// Event triggered when a client performs some activity
-        /// </summary>
-        public event EventHandler<ClientActivityEventArgs> OnClientActivity;
-
-        /// <summary>
         /// Event triggered when a client has disconnected
         /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;
@@ -68,7 +63,6 @@ namespace KRPC.Server
             RPCServer.OnClientRequestingConnection += (s, e) => EventHandlerExtensions.Invoke (OnClientRequestingConnection, s, e);
             RPCServer.OnClientConnected += (s, e) => EventHandlerExtensions.Invoke (OnClientConnected, s, new ClientConnectedEventArgs (e.Client));
             RPCServer.OnClientDisconnected += (s, e) => EventHandlerExtensions.Invoke (OnClientDisconnected, s, new ClientDisconnectedEventArgs (e.Client));
-            RPCServer.OnClientActivity += (s, e) => EventHandlerExtensions.Invoke (OnClientActivity, s, new ClientActivityEventArgs (e.Client));
 
             // Add/remove clients from the scheduler
             RPCServer.OnClientConnected += (s, e) => Core.Instance.RPCClientConnected (e.Client);

@@ -40,14 +40,15 @@ class TestCase(unittest.TestCase):
         return _connect(use_cached)
 
     @classmethod
-    def new_save(cls, name='krpctest'):
+    def new_save(cls, name='krpctest', always_load=False):
         # Return if the save is already loaded
-        if cls.connect().testing_tools.current_save == name:
+        if not always_load and \
+           cls.connect().testing_tools.current_save == name:
             return
 
         # Load a blank save with the given name
         blank_save = resource_filename(
-            Requirement.parse('krpctest'), 'krpctest/krpctest.sfs')
+            Requirement.parse('krpctest'), 'krpctest/' + name + '.sfs')
         save_path = os.path.join(_get_ksp_dir(), 'saves', name)
         if not os.path.exists(save_path):
             os.makedirs(save_path)

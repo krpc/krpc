@@ -189,9 +189,14 @@ class TestControlNonActiveVessel(krpctest.TestCase, TestControlMixin):
         cls.remove_other_vessels()
         cls.set_circular_orbit('Kerbin', 100000)
         cls.space_center = cls.connect().space_center
+        # Decouple the two vessels
         next(iter(cls.space_center.active_vessel.parts.docking_ports)).undock()
         cls.vessel = next(v for v in cls.space_center.vessels
                           if v != cls.space_center.active_vessel)
+        # Switch vessels so the one with a kerbal is non-active
+        tmp = cls.space_center.active_vessel
+        cls.space_center.active_vessel = cls.vessel
+        cls.vessel = tmp
         cls.control = cls.vessel.control
         cls.auto_pilot = cls.vessel.auto_pilot
         cls.orbital_flight = cls.vessel.flight(
@@ -221,7 +226,8 @@ class TestControlStaging(krpctest.TestCase):
         self.launch_vessel_from_vab('Staging')
         self.remove_other_vessels()
         self.set_circular_orbit('Kerbin', 100000)
-        self.control = self.connect().space_center.active_vessel.control
+        self.space_center = self.connect().space_center
+        self.control = self.space_center.active_vessel.control
 
     def test_state(self):
         self.assertEqual(self.space_center.ControlState.full,

@@ -1,4 +1,4 @@
-from krpc.schema.KRPC import Type
+from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
     ValueType, ClassType, EnumerationType, MessageType, \
     TupleType, ListType, SetType, DictionaryType

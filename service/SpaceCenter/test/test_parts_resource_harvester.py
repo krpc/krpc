@@ -11,7 +11,10 @@ class TestPartsResourceHarvester(krpctest.TestCase):
             cls.launch_vessel_from_vab('PartsHarvester')
             cls.remove_other_vessels()
         cls.state = cls.connect().space_center.ResourceHarvesterState
-        parts = cls.connect().space_center.active_vessel.parts
+        vessel = cls.connect().space_center.active_vessel
+        parts = vessel.parts
+        cls.control = vessel.control
+        cls.drills = parts.resource_harvesters
         cls.drill = parts.with_title(
             '\'Drill-O-Matic\' Mining Excavator')[0].resource_harvester
 
@@ -85,6 +88,73 @@ class TestPartsResourceHarvester(krpctest.TestCase):
         self.drill.active = True
         self.assertFalse(self.drill.deployed)
         self.assertFalse(self.drill.active)
+
+    def test_control(self):
+        for drill in self.drills:
+            self.assertEqual(self.state.retracted, drill.state)
+            self.assertFalse(drill.deployed)
+            self.assertFalse(drill.active)
+
+        self.control.resource_harvesters = True
+        self.wait()
+
+        self.assertFalse(self.control.resource_harvesters)
+        for drill in self.drills:
+            self.assertEqual(self.state.deploying, drill.state)
+            self.assertFalse(drill.deployed)
+            self.assertFalse(drill.active)
+
+        for drill in self.drills:
+            while drill.state == self.state.deploying:
+                self.wait()
+
+        self.assertTrue(self.control.resource_harvesters)
+        for drill in self.drills:
+            self.assertEqual(self.state.deployed, drill.state)
+            self.assertTrue(drill.deployed)
+            self.assertFalse(drill.active)
+
+        self.control.resource_harvesters_active = True
+        self.wait(3)
+
+        self.assertTrue(self.control.resource_harvesters_active)
+        for drill in self.drills:
+            self.assertEqual(self.state.active, drill.state)
+            self.assertTrue(drill.deployed)
+            self.assertTrue(drill.active)
+            self.assertGreater(drill.extraction_rate, 0)
+            self.assertGreater(drill.thermal_efficiency, 0)
+            self.assertLess(drill.thermal_efficiency, 100)
+            self.assertGreater(drill.core_temperature, 0)
+            self.assertEqual(500, drill.optimum_core_temperature)
+
+        self.control.resource_harvesters_active = False
+        self.wait(3)
+
+        self.assertFalse(self.control.resource_harvesters_active)
+        for drill in self.drills:
+            self.assertEqual(self.state.deployed, drill.state)
+            self.assertTrue(drill.deployed)
+            self.assertFalse(drill.active)
+
+        self.control.resource_harvesters = False
+        self.wait()
+
+        self.assertFalse(self.control.resource_harvesters)
+        for drill in self.drills:
+            self.assertEqual(self.state.retracting, drill.state)
+            self.assertFalse(drill.deployed)
+            self.assertFalse(drill.active)
+
+        for drill in self.drills:
+            while drill.state == self.state.retracting:
+                self.wait()
+
+        self.assertFalse(self.control.resource_harvesters)
+        for drill in self.drills:
+            self.assertEqual(self.state.retracted, drill.state)
+            self.assertFalse(drill.deployed)
+            self.assertFalse(drill.active)
 
 
 if __name__ == '__main__':

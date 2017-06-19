@@ -616,3 +616,36 @@ regardless of the orientation of the axes. However, if we were to use a
 reference frame that moves with the vessel, the velocity would return
 ``(0,0,0)``. We therefore need a reference frame that is not fixed relative to
 the vessel. :attr:`CelestialBody.reference_frame` fits these requirements.
+
+Landing Site
+^^^^^^^^^^^^
+
+This example computes a reference frame that is located on the surface of a body
+at a given altitude, which could be used as the target for a landing auto pilot.
+
+.. tabs::
+
+   .. tab:: C#
+
+      .. literalinclude:: /scripts/LandingSite.cs
+         :language: csharp
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/LandingSite.cpp
+         :language: cpp
+
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/LandingSite.java
+         :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/LandingSite.lua
+         :language: lua
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/LandingSite.py
+         :language: python

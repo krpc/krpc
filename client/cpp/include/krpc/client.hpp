@@ -15,8 +15,8 @@ namespace krpc {
 class Client {
  public:
   Client();
-  Client(const std::shared_ptr<Connection>& rpc_connection,
-         const std::shared_ptr<Connection>& stream_connection);
+  Client(const std::string& name, const std::string& address,
+         unsigned int rpc_port = 50000, unsigned int stream_port = 50001);
 
   std::string invoke(const schema::Request& request);
   std::string invoke(const schema::ProcedureCall& call);
@@ -45,7 +45,7 @@ class Client {
 
  private:
   std::shared_ptr<Connection> rpc_connection;
-  StreamManager stream_manager;
+  std::shared_ptr<StreamManager> stream_manager;
   std::shared_ptr<std::mutex> lock;
   std::map<std::pair<std::string, std::string>,
            std::function<void(std::string)>> exception_throwers;

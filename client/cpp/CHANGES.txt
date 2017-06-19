@@ -3,9 +3,17 @@ v0.4.0
  * Remove connection retries. Client will now fail fast if it fails to connect to the server.
  * Add support for RPCs to throw exceptions
 
+v0.3.10
+ * Set ASIO_STANDLONE in build script instead of source code so that configure script can find the header correctly
+
+v0.3.9
+ * Update to protobuf v3.3.0
+
 v0.3.8
  * Update to protobuf v3.2.0
  * Update build scripts to check for protobuf >= 3.2 (#374)
+ * Move krpc::connect into client constructor to allow use of smart pointers
+ * Fix bug in StreamManager when client is not set
 
 v0.3.7
  * Add missing header to automake script

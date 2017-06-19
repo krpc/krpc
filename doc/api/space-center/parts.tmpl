@@ -138,17 +138,11 @@ Intake
 
 {{ macros.class(services['SpaceCenter'].classes['Intake']) }}
 
-Landing Gear
-^^^^^^^^^^^^
+Leg
+^^^
 
-{{ macros.class(services['SpaceCenter'].classes['LandingGear']) }}
-{{ macros.enumeration(services['SpaceCenter'].enumerations['LandingGearState']) }}
-
-Landing Leg
-^^^^^^^^^^^
-
-{{ macros.class(services['SpaceCenter'].classes['LandingLeg']) }}
-{{ macros.enumeration(services['SpaceCenter'].enumerations['LandingLegState']) }}
+{{ macros.class(services['SpaceCenter'].classes['Leg']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['LegState']) }}
 
 Launch Clamp
 ^^^^^^^^^^^^
@@ -209,6 +203,13 @@ Thruster
 ^^^^^^^^
 
 {{ macros.class(services['SpaceCenter'].classes['Thruster']) }}
+
+Wheel
+^^^^^
+
+{{ macros.class(services['SpaceCenter'].classes['Wheel']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['WheelState']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['MotorState']) }}
 
 .. _{{ domain.name }}-api-parts-trees-of-parts:
 

@@ -1,6 +1,6 @@
 from krpc.decoder import Decoder
 from krpc.error import RPCError, StreamError
-import krpc.schema
+import krpc.schema.KRPC_pb2 as KRPC
 
 
 class Stream(object):
@@ -89,7 +89,7 @@ def update_thread(connection, stop, cache, cache_lock):
 
         # Read and decode the update message
         data = connection.receive(size)
-        update = Decoder.decode_message(data, krpc.schema.KRPC.StreamUpdate)
+        update = Decoder.decode_message(data, KRPC.StreamUpdate)
 
         # Add the data to the cache
         with cache_lock:

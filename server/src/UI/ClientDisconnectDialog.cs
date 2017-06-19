@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using KRPC.Server;
 
 namespace KRPC.UI
@@ -8,18 +9,26 @@ namespace KRPC.UI
 
         protected override void Init ()
         {
+            Name = "krpc-client-connecting";
             Title = "kRPC";
-            Options.Add (new DialogGUIButton ("Yes", () => {
-                client.Close ();
-                Close ();
-            }));
-            Options.Add (new DialogGUIButton ("Yes (don't ask again)", () => {
-                client.Close ();
-                Close ();
-                Addon.config.Configuration.ConfirmRemoveClient = false;
-                Addon.config.Save ();
-            }));
-            Options.Add (new DialogGUIButton ("No", Close));
+        }
+
+        protected override IList<DialogGUIButton> Options {
+            get {
+                var options = new List<DialogGUIButton> ();
+                options.Add (new DialogGUIButton ("Yes", () => {
+                    client.Close ();
+                    Close ();
+                }));
+                options.Add (new DialogGUIButton ("Yes (don't ask again)", () => {
+                    client.Close ();
+                    Close ();
+                    Addon.config.Configuration.ConfirmRemoveClient = false;
+                    Addon.config.Save ();
+                }));
+                options.Add (new DialogGUIButton ("No", Close));
+                return options;
+            }
         }
 
         protected override void Opened ()

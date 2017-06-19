@@ -4,30 +4,30 @@ using KRPC.Service.Attributes;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// The state of a landing gear. See <see cref="LandingGear.State"/>.
+    /// The state of a wheel. See <see cref="Wheel.State"/>.
     /// </summary>
     [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]
-    public enum LandingGearState
+    public enum WheelState
     {
         /// <summary>
-        /// Landing gear is fully deployed.
+        /// Wheel is fully deployed.
         /// </summary>
         Deployed,
         /// <summary>
-        /// Landing gear is fully retracted.
+        /// Wheel is fully retracted.
         /// </summary>
         Retracted,
         /// <summary>
-        /// Landing gear is being deployed.
+        /// Wheel is being deployed.
         /// </summary>
         Deploying,
         /// <summary>
-        /// Landing gear is being retracted.
+        /// Wheel is being retracted.
         /// </summary>
         Retracting,
         /// <summary>
-        /// Landing gear is broken.
+        /// Wheel is broken.
         /// </summary>
         Broken
     }

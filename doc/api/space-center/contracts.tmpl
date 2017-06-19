@@ -1,0 +1,12 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.name }}
+{{ domain.currentmodule('SpaceCenter') }}
+{% import domain.macros as macros with context %}
+
+Contracts
+=========
+
+{{ macros.class(services['SpaceCenter'].classes['ContractManager']) }}
+{{ macros.class(services['SpaceCenter'].classes['Contract']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['ContractState']) }}
+{{ macros.class(services['SpaceCenter'].classes['ContractParameter']) }}

@@ -1,5 +1,5 @@
 import re
-from krpc.schema.KRPC import Type
+from krpc.schema.KRPC_pb2 import Type
 
 _CAMEL_CASE_REGEX = re.compile(r'([a-z]+|[A-Z][^A-Z]*)')
 

@@ -82,6 +82,8 @@ namespace KRPC.UI
             var version = FileVersionInfo.GetVersionInfo (Assembly.GetExecutingAssembly ().Location);
             Title = "kRPC v" + version.FileMajorPart + "." + version.FileMinorPart + "." + version.FileBuildPart;
 
+            core.OnClientActivity += (s, e) => SawClientActivity (e.Client);
+
             Style.fixedWidth = windowWidth;
 
             var skin = Skin.DefaultSkin;

@@ -3,7 +3,7 @@ from krpc.client import Client
 from krpc.encoder import Encoder
 from krpc.error import ConnectionError
 from krpc.decoder import Decoder
-from krpc.schema.KRPC import ConnectionRequest, ConnectionResponse
+from krpc.schema.KRPC_pb2 import ConnectionRequest, ConnectionResponse
 
 from krpc.version import __version__
 

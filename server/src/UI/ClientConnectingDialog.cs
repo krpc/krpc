@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using KRPC.Server;
 using KRPC.Utils;
 
@@ -9,14 +10,22 @@ namespace KRPC.UI
 
         protected override void Init ()
         {
+            Name = "krpc-client-connecting";
             Title = "kRPC";
-            Options.Add (new DialogGUIButton ("Allow", args.Request.Allow));
-            Options.Add (new DialogGUIButton ("Allow (don't ask again)", () => {
-                Addon.config.Configuration.AutoAcceptConnections = true;
-                Addon.config.Save ();
-                args.Request.Allow ();
-            }));
-            Options.Add (new DialogGUIButton ("Deny", args.Request.Deny));
+        }
+
+        protected override IList<DialogGUIButton> Options {
+            get {
+                var options = new List<DialogGUIButton> ();
+                options.Add (new DialogGUIButton ("Allow", () => args.Request.Allow ()));
+                options.Add (new DialogGUIButton ("Allow (don't ask again)", () => {
+                    Addon.config.Configuration.AutoAcceptConnections = true;
+                    Addon.config.Save ();
+                    args.Request.Allow ();
+                }));
+                options.Add (new DialogGUIButton ("Deny", args.Request.Deny));
+                return options;
+            }
         }
 
         protected override void Opened ()

@@ -2,7 +2,7 @@ import base64
 import os
 import unittest
 import websocket
-from krpc.schema import KRPC
+import krpc.schema.KRPC_pb2 as KRPC
 from google.protobuf.internal.decoder import _DecodeVarint, _DecodeSignedVarint
 from google.protobuf.internal.encoder import _SignedVarintEncoder
 from google.protobuf.internal.wire_format import ZigZagEncode, ZigZagDecode

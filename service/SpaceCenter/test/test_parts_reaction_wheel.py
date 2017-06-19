@@ -7,10 +7,14 @@ class TestPartsReactionWheel(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != 'Parts':
-            cls.launch_vessel_from_vab('Parts')
+        name = cls.connect().space_center.active_vessel.name
+        if name != 'PartsReactionWheel':
+            cls.launch_vessel_from_vab('PartsReactionWheel')
             cls.remove_other_vessels()
-        parts = cls.connect().space_center.active_vessel.parts
+        vessel = cls.connect().space_center.active_vessel
+        parts = vessel.parts
+        cls.control = vessel.control
+        cls.wheels = parts.wheels
         cls.wheel = parts.with_title(
             'Advanced Reaction Wheel Module, Large')[0].reaction_wheel
 
@@ -35,6 +39,19 @@ class TestPartsReactionWheel(krpctest.TestCase):
         self.assertEqual(pos_torque, self.wheel.available_torque[0])
         self.assertEqual(neg_torque, self.wheel.max_torque[1])
         self.assertEqual(neg_torque, self.wheel.available_torque[1])
+
+    def test_control(self):
+        self.assertTrue(self.control.reaction_wheels)
+        self.control.reaction_wheels = False
+        self.wait()
+        self.assertFalse(self.control.reaction_wheels)
+        for wheel in self.wheels:
+            self.assertFalse(wheel.active)
+        self.control.reaction_wheels = True
+        self.wait()
+        self.assertTrue(self.control.reaction_wheels)
+        for wheel in self.wheels:
+            self.assertTrue(wheel.active)
 
 
 if __name__ == '__main__':

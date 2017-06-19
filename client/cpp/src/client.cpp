@@ -13,11 +13,37 @@ namespace krpc {
 
 Client::Client(): lock(new std::mutex) {}
 
-Client::Client(const std::shared_ptr<Connection>& rpc_connection,
-               const std::shared_ptr<Connection>& stream_connection):
-  rpc_connection(rpc_connection),
-  stream_manager(this, stream_connection),
-  lock(new std::mutex) {}
+Client::Client(const std::string& name, const std::string& address,
+               unsigned int rpc_port, unsigned int stream_port) :
+  lock(new std::mutex) {
+  // Connect to RPC server
+  rpc_connection = std::make_shared<Connection>(address, rpc_port);
+  rpc_connection->connect();
+  schema::ConnectionRequest request;
+  request.set_type(schema::ConnectionRequest::RPC);
+  request.set_client_name(name);
+  rpc_connection->send(encoder::encode_message_with_size(request));
+  schema::ConnectionResponse response;
+  decoder::decode(response, rpc_connection->receive_message(), nullptr);
+  if (response.status() != schema::ConnectionResponse::OK)
+    throw ConnectionError(response.message());
+
+  // Connect to Stream server
+  std::shared_ptr<Connection> stream_connection;
+  if (stream_port != 0) {
+    auto stream_connection = std::make_shared<Connection>(address, stream_port);
+    stream_connection->connect();
+    schema::ConnectionRequest request;
+    request.set_type(schema::ConnectionRequest::STREAM);
+    request.set_client_identifier(response.client_identifier());
+    stream_connection->send(encoder::encode_message_with_size(request));
+    schema::ConnectionResponse response;
+    decoder::decode(response, stream_connection->receive_message(), nullptr);
+    if (response.status() != schema::ConnectionResponse::OK)
+      throw ConnectionError(response.message());
+    stream_manager = std::make_shared<StreamManager>(this, stream_connection);
+  }
+}
 
 std::string Client::invoke(const schema::Request& request) {
   std::string data;
@@ -104,23 +130,23 @@ void Client::throw_exception(const schema::Error& error) const {
 }
 
 google::protobuf::uint64 Client::add_stream(const schema::ProcedureCall& call) {
-  return stream_manager.add_stream(call);
+  return stream_manager->add_stream(call);
 }
 
 void Client::remove_stream(google::protobuf::uint64 id) {
-  stream_manager.remove_stream(id);
+  stream_manager->remove_stream(id);
 }
 
 std::string Client::get_stream(google::protobuf::uint64 id) {
-  return stream_manager.get(id);
+  return stream_manager->get(id);
 }
 
 void Client::freeze_streams() {
-  stream_manager.freeze();
+  stream_manager->freeze();
 }
 
 void Client::thaw_streams() {
-  stream_manager.thaw();
+  stream_manager->thaw();
 }
 
 }  // namespace krpc

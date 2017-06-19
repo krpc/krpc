@@ -19,6 +19,7 @@ if(NOT HAVE_ASIO)
   unset(HAVE_ASIO CACHE)
   message(FATAL_ERROR "asio.hpp not found")
 endif()
+add_definitions(-DASIO_STANDALONE)
 
 if(WIN32)
   add_definitions(-D_SCL_SECURE_NO_WARNINGS)

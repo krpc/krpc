@@ -8,10 +8,10 @@ ByteString[] _args = new ByteString[] {
 };
 {% endmacro %}
 {% macro call(service, procedure, has_return, has_args, is_static=False) %}
-{% if has_return %}ByteString _data = {% endif %}{% if is_static %}_connection{% else %}this._connection{% endif %}.invoke("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
+{% if has_return %}ByteString _data = {% endif %}{% if is_static %}connection{% else %}this.connection{% endif %}.invoke("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
 {% endmacro %}
 {% macro return(type, is_static=False) %}
-return ({{type.name}}) Encoder.decode(_data, {{type.spec}}, {% if is_static %}_connection{% else %}this._connection{% endif %});
+return ({{type.name}}) Encoder.decode(_data, {{type.spec}}, {% if is_static %}connection{% else %}this.connection{% endif %});
 {% endmacro %}
 {% macro sig_parameters(parameters) %}
 {% for x in parameters %}{{x.type.name}} {{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}
@@ -33,10 +33,10 @@ public class {{ service_name }} {
         return new {{ service_name }}(connection);
     }
 
-    private Connection _connection;
+    private Connection connection;
 
     private {{ service_name }}(Connection connection) {
-        this._connection = connection;
+        this.connection = connection;
         {% if exceptions.items() | length > 0 %}
         addExceptionTypes(connection);
         {% endif %}
@@ -135,7 +135,7 @@ public class {{ service_name }} {
 {{ method.documentation | indent(width=8) }}
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
-        public static {{ method.return_type.name }} {{ method_name }}(Connection _connection, {{ sig_parameters(method.parameters) }}) throws RPCException
+        public static {{ method.return_type.name }} {{ method_name }}(Connection connection, {{ sig_parameters(method.parameters) }}) throws RPCException
         {
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=12) }}
 {% endif %}

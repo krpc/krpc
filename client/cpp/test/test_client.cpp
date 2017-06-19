@@ -16,6 +16,27 @@
 class test_client: public server_test {
 };
 
+TEST_F(test_client, test_default_ctor) {
+  krpc::Client client;
+}
+
+TEST_F(test_client, test_shared_ptr) {
+  auto client = std::make_shared<krpc::Client>(
+    "C++ClientTest", "localhost", get_rpc_port(), get_stream_port());
+  krpc::services::KRPC krpc(client.get());
+  krpc::schema::Status status = krpc.get_status();
+  ASSERT_THAT(status.version(), testing::MatchesRegex("[0-9]+\\.[0-9]+\\.[0-9]+"));
+  client.reset();
+}
+
+TEST_F(test_client, test_std_container) {
+  std::vector<krpc::Client> clients;
+  clients.push_back(krpc::connect("C++ClientTest", "localhost", get_rpc_port(), get_stream_port()));
+  krpc::services::KRPC krpc(&(clients[0]));
+  krpc::schema::Status status = krpc.get_status();
+  ASSERT_THAT(status.version(), testing::MatchesRegex("[0-9]+\\.[0-9]+\\.[0-9]+"));
+}
+
 TEST_F(test_client, test_version) {
   krpc::schema::Status status = krpc.get_status();
   ASSERT_THAT(status.version(), testing::MatchesRegex("[0-9]+\\.[0-9]+\\.[0-9]+"));
@@ -36,7 +57,7 @@ TEST_F(test_client, test_wrong_stream_port) {
 }
 
 TEST_F(test_client, test_wrong_rpc_server) {
-  auto fn = [] () {
+  auto fn = [this] () {
     krpc::connect("C++ClientTestWrongRpcServer", "localhost",
                   get_stream_port(), get_stream_port());
   };
@@ -51,7 +72,7 @@ TEST_F(test_client, test_wrong_rpc_server) {
 }
 
 TEST_F(test_client, test_wrong_stream_server) {
-  auto fn = [] () {
+  auto fn = [this] () {
     krpc::connect("C++ClientTestWrongStreamServer", "localhost",
                   get_rpc_port(), get_rpc_port());
   };

@@ -116,18 +116,20 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The current rotation angle of the body, in radians.
+        /// A value between 0 and <math>2\pi</math>
         /// </summary>
         [KRPCProperty]
         public double RotationAngle {
-            get { return GeometryExtensions.ToRadians (InternalBody.rotationAngle); }
+            get { return GeometryExtensions.ToRadians (GeometryExtensions.ClampAngle360 (InternalBody.rotationAngle)); }
         }
 
         /// <summary>
         /// The initial rotation angle of the body (at UT 0), in radians.
+        /// A value between 0 and <math>2\pi</math>
         /// </summary>
         [KRPCProperty]
         public double InitialRotation {
-            get { return GeometryExtensions.ToRadians (InternalBody.initialRotation); }
+            get { return GeometryExtensions.ToRadians (GeometryExtensions.ClampAngle360 (InternalBody.initialRotation)); }
         }
 
         /// <summary>
@@ -209,6 +211,20 @@ namespace KRPC.SpaceCenter.Services
         {
             return PositionAt (latitude, longitude, BedrockHeight (latitude, longitude), referenceFrame);
         }
+
+        /// <summary>
+        /// The position at the given latitude, longitude and altitude, in the given reference frame.
+        /// </summary>
+        /// <param name="latitude">Latitude in degrees</param>
+        /// <param name="longitude">Longitude in degrees</param>
+        /// <param name="altitude">Altitude in meters above sea level</param>
+        /// <param name="referenceFrame">Reference frame for the returned position vector</param>
+        [KRPCMethod]
+        public Tuple3 PositionAtAltitude (double latitude, double longitude, double altitude, ReferenceFrame referenceFrame)
+        {
+            return PositionAt (latitude, longitude, altitude, referenceFrame);
+        }
+
 
         Tuple3 PositionAt (double latitude, double longitude, double altitude, ReferenceFrame referenceFrame)
         {

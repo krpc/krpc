@@ -9,6 +9,7 @@ class TestPartsParachute(krpctest.TestCase):
         self.launch_vessel_from_vab('PartsParachute')
         self.remove_other_vessels()
         self.vessel = self.connect().space_center.active_vessel
+        self.control = self.vessel.control
         self.state = self.connect().space_center.ParachuteState
         self.parachutes = self.vessel.parts.parachutes
 
@@ -56,7 +57,6 @@ class TestPartsParachute(krpctest.TestCase):
         for parachute in self.parachutes:
             parachute.deploy()
         self.wait(0.5)
-
         for parachute in self.parachutes:
             self.assertTrue(parachute.deployed)
             self.assertEqual(self.state.semi_deployed, parachute.state)
@@ -67,6 +67,36 @@ class TestPartsParachute(krpctest.TestCase):
         for parachute in self.parachutes:
             self.assertTrue(parachute.deployed)
             self.assertEqual(self.state.deployed, parachute.state)
+
+        while abs(flight.vertical_speed) > 0.1:
+            pass
+        self.wait(0.5)
+
+        for parachute in self.parachutes:
+            self.assertTrue(parachute.deployed)
+            self.assertEqual(self.state.cut, parachute.state)
+
+    def test_control(self):
+        deploy_altitude = 80
+        for parachute in self.parachutes:
+            parachute.deploy_altitude = deploy_altitude
+
+        self.assertFalse(self.control.parachutes)
+        for parachute in self.parachutes:
+            self.assertFalse(parachute.deployed)
+            self.assertEqual(parachute.state, self.state.stowed)
+
+        flight = self.vessel.flight(self.vessel.orbit.body.reference_frame)
+        self.vessel.control.activate_next_stage()
+        while flight.vertical_speed > 0:
+            pass
+
+        self.control.parachutes = True
+        self.wait(0.5)
+
+        self.assertTrue(self.control.parachutes)
+        for parachute in self.parachutes:
+            self.assertTrue(parachute.deployed)
 
         while abs(flight.vertical_speed) > 0.1:
             pass

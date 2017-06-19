@@ -8,6 +8,7 @@ from krpc.platform import hexlify
 from krpc.types import \
     Types, ValueType, ClassType, EnumerationType, MessageType, TupleType, \
     ListType, SetType, DictionaryType
+import krpc.schema.KRPC_pb2 as KRPC
 
 
 class Decoder(object):
@@ -42,24 +43,24 @@ class Decoder(object):
         elif isinstance(typ, ListType):
             if data == b'\x00':
                 return None
-            msg = cls.decode_message(data, krpc.schema.KRPC.List)
+            msg = cls.decode_message(data, KRPC.List)
             return [cls.decode(item, typ.value_type) for item in msg.items]
         elif isinstance(typ, DictionaryType):
             if data == b'\x00':
                 return None
-            msg = cls.decode_message(data, krpc.schema.KRPC.Dictionary)
+            msg = cls.decode_message(data, KRPC.Dictionary)
             return dict((cls.decode(entry.key, typ.key_type),
                          cls.decode(entry.value, typ.value_type))
                         for entry in msg.entries)
         elif isinstance(typ, SetType):
             if data == b'\x00':
                 return None
-            msg = cls.decode_message(data, krpc.schema.KRPC.Set)
+            msg = cls.decode_message(data, KRPC.Set)
             return set(cls.decode(item, typ.value_type) for item in msg.items)
         elif isinstance(typ, TupleType):
             if data == b'\x00':
                 return None
-            msg = cls.decode_message(data, krpc.schema.KRPC.Tuple)
+            msg = cls.decode_message(data, KRPC.Tuple)
             return tuple(cls.decode(item, value_type)
                          for item, value_type
                          in zip(msg.items, typ.value_types))
@@ -78,23 +79,23 @@ class Decoder(object):
 
     @classmethod
     def _decode_value(cls, data, typ):
-        if typ.protobuf_type.code == krpc.schema.KRPC.Type.SINT32:
+        if typ.protobuf_type.code == KRPC.Type.SINT32:
             return _ValueDecoder.decode_sint32(data)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.SINT64:
+        elif typ.protobuf_type.code == KRPC.Type.SINT64:
             return _ValueDecoder.decode_sint64(data)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.UINT32:
+        elif typ.protobuf_type.code == KRPC.Type.UINT32:
             return _ValueDecoder.decode_uint32(data)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.UINT64:
+        elif typ.protobuf_type.code == KRPC.Type.UINT64:
             return _ValueDecoder.decode_uint64(data)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.DOUBLE:
+        elif typ.protobuf_type.code == KRPC.Type.DOUBLE:
             return _ValueDecoder.decode_double(data)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.FLOAT:
+        elif typ.protobuf_type.code == KRPC.Type.FLOAT:
             return _ValueDecoder.decode_float(data)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.BOOL:
+        elif typ.protobuf_type.code == KRPC.Type.BOOL:
             return _ValueDecoder.decode_bool(data)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.STRING:
+        elif typ.protobuf_type.code == KRPC.Type.STRING:
             return _ValueDecoder.decode_string(data)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.BYTES:
+        elif typ.protobuf_type.code == KRPC.Type.BYTES:
             return _ValueDecoder.decode_bytes(data)
         else:
             raise EncodingError('Invalid type')

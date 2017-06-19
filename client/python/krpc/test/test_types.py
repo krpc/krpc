@@ -3,7 +3,7 @@ from enum import Enum
 from krpc.types import \
     Types, ValueType, ClassType, EnumerationType, MessageType, ClassBase, \
     TupleType, ListType, SetType, DictionaryType
-from krpc.schema.KRPC import Type, ProcedureCall, Stream, Status, Services
+from krpc.schema.KRPC_pb2 import Type, ProcedureCall, Stream, Status, Services
 
 
 class TestTypes(unittest.TestCase):

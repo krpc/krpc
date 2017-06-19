@@ -25,10 +25,12 @@ namespace KRPC.SpaceCenter.Services
     public class Control : Equatable<Control>
     {
         readonly Guid vesselId;
+        readonly Parts.Parts parts;
 
         internal Control (global::Vessel vessel)
         {
             vesselId = vessel.id;
+            parts = new Vessel (vessel).Parts;
         }
 
         /// <summary>
@@ -135,12 +137,58 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Returns whether all reactive wheels on the vessel are active,
+        /// and sets the active state of all reaction wheels.
+        /// See <see cref="Parts.ReactionWheel.Active"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool ReactionWheels {
+            get { return parts.ReactionWheels.All (part => part.Active); }
+            set {
+                foreach (var part in parts.ReactionWheels)
+                    part.Active = value;
+            }
+        }
+
+        /// <summary>
         /// The state of the landing gear/legs.
         /// </summary>
         [KRPCProperty]
         public bool Gear {
             get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Gear)]; }
             set { InternalVessel.ActionGroups.SetGroup (KSPActionGroup.Gear, value); }
+        }
+
+        /// <summary>
+        /// Returns whether all landing legs on the vessel are deployed,
+        /// and sets the deployment state of all landing legs.
+        /// Does not include wheels (for example landing gear).
+        /// See <see cref="Parts.Leg.Deployed"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool Legs {
+            get { return parts.Legs.All (part => part.Deployed); }
+            set {
+                foreach (var part in parts.Legs)
+                    if (part.Deployable)
+                        part.Deployed = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns whether all wheels on the vessel are deployed,
+        /// and sets the deployment state of all wheels.
+        /// Does not include landing legs.
+        /// See <see cref="Parts.Wheel.Deployed"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool Wheels {
+            get { return parts.Wheels.All (part => part.Deployed); }
+            set {
+                foreach (var part in parts.Wheels)
+                    if (part.Deployable)
+                        part.Deployed = value;
+            }
         }
 
         /// <summary>
@@ -159,6 +207,124 @@ namespace KRPC.SpaceCenter.Services
         public bool Brakes {
             get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Brakes)]; }
             set { InternalVessel.ActionGroups.SetGroup (KSPActionGroup.Brakes, value); }
+        }
+
+        /// <summary>
+        /// Returns whether all antennas on the vessel are deployed,
+        /// and sets the deployment state of all antennas.
+        /// See <see cref="Parts.Antenna.Deployed"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool Antennas {
+            get { return parts.Antennas.All (part => part.Deployed); }
+            set {
+                foreach (var part in parts.Antennas)
+                    if (part.Deployable)
+                            part.Deployed = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns whether any of the cargo bays on the vessel are open,
+        /// and sets the open state of all cargo bays.
+        /// See <see cref="Parts.CargoBay.Open"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool CargoBays {
+            get { return parts.CargoBays.Any (part => part.Open); }
+            set {
+                foreach (var part in parts.CargoBays)
+                    part.Open = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns whether all of the air intakes on the vessel are open,
+        /// and sets the open state of all air intakes.
+        /// See <see cref="Parts.Intake.Open"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool Intakes {
+            get { return parts.Intakes.All (part => part.Open); }
+            set {
+                foreach (var part in parts.Intakes)
+                    part.Open = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns whether all parachutes on the vessel are deployed,
+        /// and sets the deployment state of all parachutes.
+        /// Cannot be set to <c>false</c>.
+        /// See <see cref="Parts.Parachute.Deployed"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool Parachutes {
+            get { return parts.Parachutes.All (part => part.Deployed); }
+            set {
+                if (!value)
+                    throw new ArgumentException ("Cannot 'un-deploy' parachutes", nameof (Parachutes));
+                foreach (var part in parts.Parachutes)
+                    part.Deploy ();
+            }
+        }
+
+        /// <summary>
+        /// Returns whether all radiators on the vessel are deployed,
+        /// and sets the deployment state of all radiators.
+        /// See <see cref="Parts.Radiator.Deployed"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool Radiators {
+            get { return parts.Radiators.All (part => part.Deployed); }
+            set {
+                foreach (var part in parts.Radiators)
+                    if (part.Deployable)
+                            part.Deployed = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns whether all of the resource harvesters on the vessel are deployed,
+        /// and sets the deployment state of all resource harvesters.
+        /// See <see cref="Parts.ResourceHarvester.Deployed"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool ResourceHarvesters {
+            get { return parts.ResourceHarvesters.All (part => part.Deployed); }
+            set {
+                foreach (var part in parts.ResourceHarvesters)
+                    part.Deployed = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns whether any of the resource harvesters on the vessel are active,
+        /// and sets the active state of all resource harvesters.
+        /// See <see cref="Parts.ResourceHarvester.Active"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool ResourceHarvestersActive {
+            get { return parts.ResourceHarvesters.Any (part => part.Active); }
+            set {
+                foreach (var part in parts.ResourceHarvesters)
+                    part.Active = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns whether all solar panels on the vessel are deployed,
+        /// and sets the deployment state of all solar panels.
+        /// See <see cref="Parts.SolarPanel.Deployed"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool SolarPanels {
+            get { return parts.SolarPanels.All (part => part.Deployed); }
+            set {
+                foreach (var part in parts.SolarPanels)
+                    if (part.Deployable)
+                        part.Deployed = value;
+            }
         }
 
         /// <summary>
@@ -281,6 +447,11 @@ namespace KRPC.SpaceCenter.Services
         /// Activates the next stage. Equivalent to pressing the space bar in-game.
         /// </summary>
         /// <returns>A list of vessel objects that are jettisoned from the active vessel.</returns>
+        /// <remarks>
+        /// When called, the active vessel may change. It is therefore possible that,
+        /// after calling this function, the object(s) returned by previous call(s) to
+        /// <see cref="SpaceCenter.ActiveVessel"/> no longer refer to the active vessel.
+        /// </remarks>
         [KRPCMethod]
         public IList<Vessel> ActivateNextStage ()
         {

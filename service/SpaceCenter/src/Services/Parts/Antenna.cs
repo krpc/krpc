@@ -81,6 +81,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Whether the antenna is deployable.
+        /// </summary>
+        [KRPCProperty]
+        public bool Deployable {
+            get { return deployment != null; }
+        }
+
+        /// <summary>
         /// Whether the antenna is deployed.
         /// </summary>
         /// <remarks>

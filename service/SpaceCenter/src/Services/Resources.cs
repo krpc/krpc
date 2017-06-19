@@ -87,7 +87,7 @@ namespace KRPC.SpaceCenter.Services
                 var resources = new List<PartResource> ();
                 if (vesselId != Guid.Empty) {
                     foreach (var vesselPart in InternalVessel.Parts) {
-                        if (stage < 0 || vesselPart.DecoupledAt () + 1 == stage || (cumulative && vesselPart.DecoupledAt () < stage)) {
+                        if (vesselPart.DecoupledAt () == stage || (cumulative && vesselPart.DecoupledAt () >= stage)) {
                             foreach (PartResource resource in vesselPart.Resources)
                                 resources.Add (resource);
                         }

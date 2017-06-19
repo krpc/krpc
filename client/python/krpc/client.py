@@ -9,6 +9,7 @@ from krpc.decoder import Decoder
 from krpc.utils import snake_case
 from krpc.error import RPCError
 import krpc.stream
+import krpc.schema.KRPC_pb2 as KRPC
 
 
 class Client(object):
@@ -81,14 +82,13 @@ class Client(object):
         # Build the request
         call = self._build_call(service, procedure, args,
                                 param_names, param_types, return_type)
-        request = krpc.schema.KRPC.Request()
+        request = KRPC.Request()
         request.calls.extend([call])
 
         # Send the request
         with self._rpc_connection_lock:
             self._rpc_connection.send_message(request)
-            response = self._rpc_connection.receive_message(
-                krpc.schema.KRPC.Response)
+            response = self._rpc_connection.receive_message(KRPC.Response)
 
         # Check for an error response
         if response.HasField('error'):
@@ -109,7 +109,7 @@ class Client(object):
                     # pylint: disable=unused-argument
         """ Build a KRPC.ProcedureCall object """
 
-        call = krpc.schema.KRPC.ProcedureCall()
+        call = KRPC.ProcedureCall()
         call.service = service
         call.procedure = procedure
 

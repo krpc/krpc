@@ -2,6 +2,9 @@ def _impl(ctx):
     output = ctx.outputs.out
     protoc_output = output.path + '.tmp-proto-py'
 
+    if (not output.path.endswith('_pb2.py')):
+      fail('protoc output path must end with _pb2.py')
+
     sub_commands = [
         'rm -rf %s' % protoc_output,
         'mkdir -p %s' % protoc_output,

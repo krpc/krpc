@@ -120,7 +120,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             CheckConverterExists (index);
             var status = converters [index].status;
-            if (status.Contains ("load"))
+            if (status == null)
+                return ResourceConverterState.Unknown;
+            else if (status.Contains ("load"))
                 return ResourceConverterState.Running;
             else if (status.Contains ("Inactive"))
                 return ResourceConverterState.Idle;

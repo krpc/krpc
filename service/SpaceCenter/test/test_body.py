@@ -2,7 +2,7 @@ import unittest
 import math
 import krpc
 import krpctest
-from krpctest.geometry import norm, normalize, dot
+from krpctest.geometry import norm, normalize, dot, rad2deg
 
 
 class TestBody(krpctest.TestCase):
@@ -28,10 +28,10 @@ class TestBody(krpctest.TestCase):
         self.assertAlmostEqual((2*3.14159) / 21549.425,
                                kerbin.rotational_speed, delta=0.1)
         self.assertAlmostEqual(math.pi/2, kerbin.initial_rotation, delta=0.1)
-        self.assertAlmostEqual(
-            kerbin.initial_rotation +
-            (self.space_center.ut * kerbin.rotational_speed),
-            kerbin.rotation_angle, delta=0.1)
+        self.assertDegreesAlmostEqual(
+            rad2deg(kerbin.initial_rotation +
+                    (self.space_center.ut * kerbin.rotational_speed)),
+            rad2deg(kerbin.rotation_angle), delta=0.1)
         self.assertAlmostEqual(600000, kerbin.equatorial_radius)
         self.assertAlmostEqual(8.4159e7,
                                kerbin.sphere_of_influence, delta=0.0001e7)
@@ -60,7 +60,7 @@ class TestBody(krpctest.TestCase):
         self.assertAlmostEqual(1.3898e5, mun.rotational_period, delta=0.0001e5)
         self.assertAlmostEqual((2 * 3.14159) / 1.3898e5,
                                mun.rotational_speed, delta=0.0001e5)
-        self.assertAlmostEqual(math.pi/2, mun.initial_rotation, delta=0.1)
+        self.assertAlmostEqual(math.pi * 5/4, mun.initial_rotation, delta=0.1)
         self.assertAlmostEqual(
             mun.initial_rotation +
             (self.space_center.ut * mun.rotational_speed),

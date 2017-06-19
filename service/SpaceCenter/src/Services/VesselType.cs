@@ -12,32 +12,40 @@ namespace KRPC.SpaceCenter.Services
     public enum VesselType
     {
         /// <summary>
-        /// Ship.
-        /// </summary>
-        Ship,
-        /// <summary>
-        /// Station.
-        /// </summary>
-        Station,
-        /// <summary>
-        /// Lander.
-        /// </summary>
-        Lander,
-        /// <summary>
-        /// Probe.
-        /// </summary>
-        Probe,
-        /// <summary>
-        /// Rover.
-        /// </summary>
-        Rover,
-        /// <summary>
         /// Base.
         /// </summary>
         Base,
         /// <summary>
         /// Debris.
         /// </summary>
-        Debris
+        Debris,
+        /// <summary>
+        /// Lander.
+        /// </summary>
+        Lander,
+        /// <summary>
+        /// Plane.
+        /// </summary>
+        Plane,
+        /// <summary>
+        /// Probe.
+        /// </summary>
+        Probe,
+        /// <summary>
+        /// Relay.
+        /// </summary>
+        Relay,
+        /// <summary>
+        /// Rover.
+        /// </summary>
+        Rover,
+        /// <summary>
+        /// Ship.
+        /// </summary>
+        Ship,
+        /// <summary>
+        /// Station.
+        /// </summary>
+        Station
     }
 }
