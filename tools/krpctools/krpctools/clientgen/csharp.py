@@ -62,7 +62,7 @@ class CsharpGenerator(Generator):
                 return 'global::Test.%s' % x
         elif isinstance(typ, krpc.types.TupleType):
             value_types = split_type_string(typ.protobuf_type[6:-1])
-            return 'global::System.Tuple<%s>' % \
+            return 'systemAlias::Tuple<%s>' % \
                 ','.join(self.parse_type(self.types.as_type(t))
                          for t in value_types)
         elif isinstance(typ, krpc.types.ListType):
@@ -75,10 +75,10 @@ class CsharpGenerator(Generator):
                  self.parse_type(self.types.as_type(typ.protobuf_type[5:-1])))
         elif isinstance(typ, krpc.types.SetType):
             if interface:
-                name = 'ISet'
+                name = 'genericCollectionsAlias::ISet'
             else:
-                name = 'HashSet'
-            return 'global::System.Collections.Generic.%s<%s>' % \
+                name = 'global::System.Collections.Generic.HashSet'
+            return '%s<%s>' % \
                 (name,
                  self.parse_type(self.types.as_type(typ.protobuf_type[4:-1])))
         elif isinstance(typ, krpc.types.DictionaryType):
@@ -170,9 +170,9 @@ class CsharpGenerator(Generator):
                 continue
             typ = parameter['type']
             default_value = parameter['default_value']
-            if typ.startswith('global::System.Tuple') or \
+            if typ.startswith('systemAlias::Tuple') or \
                typ.startswith('global::System.Collections.Generic.IList') or \
-               typ.startswith('global::System.Collections.Generic.ISet') or \
+               typ.startswith('genericCollectionsAlias::ISet') or \
                typ.startswith('global::System.Collections' +
                               '.Generic.IDictionary'):
                 parameter['name_value'] = '%s ?? %s' % \
