@@ -11,7 +11,13 @@ pkg_zip(
     files = ['//:readme', '//:version', 'CHANGES.txt',
              'LICENSE', '//:COPYING', '//:COPYING.LESSER',
              ':KRPC.Client', ':KRPC.Client-net35'],
-    path_map = {'client/csharp/': ''},
+    path_map = {
+        'client/csharp/KRPC.Client-net35.dll': 'net35/KRPC.Client.dll',
+        'client/csharp/KRPC.Client-net35.xml': 'net35/KRPC.Client.xml',
+        'client/csharp/KRPC.Client.dll': 'net45/KRPC.Client.dll',
+        'client/csharp/KRPC.Client.xml': 'net45/KRPC.Client.xml',
+        'client/csharp/': ''
+    },
     exclude = ['*.mdb'],
     visibility = ['//visibility:public']
 )
