@@ -100,6 +100,12 @@ namespace TestServer
         [KRPCProperty (Nullable = true)]
         public static TestClass ObjectProperty { get; set; }
 
+        [KRPCProcedure]
+        public static TestClass ReturnNullWhenNotAllowed ()
+        {
+            return null;
+        }
+
         /// <summary>
         /// Class documentation string.
         /// </summary>

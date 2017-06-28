@@ -30,6 +30,8 @@ namespace KRPC.Test.Service
 
         TestService.TestClass EchoTestObject (TestService.TestClass obj);
 
+        TestService.TestClass ReturnNullWhenNotAllowed ();
+
         void ProcedureSingleOptionalArgNoReturn (string x);
 
         void ProcedureThreeOptionalArgsNoReturn (float x, string y, int z);

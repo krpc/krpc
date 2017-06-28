@@ -33,7 +33,7 @@ namespace KRPC.Test.Service
         public void TestService ()
         {
             var service = services.ServicesList.First (x => x.Name == "TestService");
-            Assert.AreEqual (40, service.Procedures.Count);
+            Assert.AreEqual (41, service.Procedures.Count);
             Assert.AreEqual (2, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
             Assert.AreEqual ("<doc>\n<summary>\nTest service documentation.\n</summary>\n</doc>", service.Documentation);
@@ -124,6 +124,10 @@ namespace KRPC.Test.Service
                     MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "obj");
                     MessageAssert.HasReturnType (proc, typeof(TestService.TestClass), true);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "ReturnNullWhenNotAllowed") {
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasReturnType (proc, typeof(TestService.TestClass), false);
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "TestClass_FloatToString") {
                     MessageAssert.HasParameters (proc, 2);
@@ -287,8 +291,8 @@ namespace KRPC.Test.Service
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (40, foundProcedures);
-            Assert.AreEqual (40, service.Procedures.Count);
+            Assert.AreEqual (41, foundProcedures);
+            Assert.AreEqual (41, service.Procedures.Count);
         }
 
         [Test]

@@ -100,6 +100,12 @@ namespace KRPC.Test.Service
             return Service.EchoTestObject (obj);
         }
 
+        [KRPCProcedure (Nullable = false)]
+        public static TestClass ReturnNullWhenNotAllowed ()
+        {
+            return Service.ReturnNullWhenNotAllowed ();
+        }
+
         [KRPCClass]
         [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
         public class TestClass
