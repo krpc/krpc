@@ -94,10 +94,16 @@ namespace KRPC.Test.Service
             Service.DeleteTestObject (obj);
         }
 
-        [KRPCProcedure]
+        [KRPCProcedure (Nullable = true)]
         public static TestClass EchoTestObject (TestClass obj)
         {
             return Service.EchoTestObject (obj);
+        }
+
+        [KRPCProcedure (Nullable = false)]
+        public static TestClass ReturnNullWhenNotAllowed ()
+        {
+            return Service.ReturnNullWhenNotAllowed ();
         }
 
         [KRPCClass]
@@ -132,7 +138,7 @@ namespace KRPC.Test.Service
             [KRPCProperty]
             public int IntProperty { get; set; }
 
-            [KRPCProperty]
+            [KRPCProperty (Nullable = true)]
             public TestClass ObjectProperty { get; set; }
 
             [KRPCMethod]

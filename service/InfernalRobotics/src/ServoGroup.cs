@@ -94,7 +94,7 @@ namespace KRPC.InfernalRobotics
         /// or <c>null</c> if none exists.
         /// </summary>
         /// <param name="name">Name of servo to find.</param>
-        [KRPCMethod]
+        [KRPCMethod (Nullable = true)]
         public Servo ServoWithName (string name)
         {
             var servo = controlGroup.Servos.FirstOrDefault (x => x.Name == name);

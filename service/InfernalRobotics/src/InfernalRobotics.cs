@@ -43,7 +43,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         /// <param name="vessel">Vessel to check.</param>
         /// <param name="name">Name of servo group to find.</param>
-        [KRPCProcedure]
+        [KRPCProcedure (Nullable = true)]
         public static ServoGroup ServoGroupWithName (SpaceCenter.Services.Vessel vessel, string name)
         {
             CheckAPI ();
@@ -57,7 +57,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         /// <param name="vessel">Vessel to check.</param>
         /// <param name="name">Name of the servo to find.</param>
-        [KRPCProcedure]
+        [KRPCProcedure (Nullable = true)]
         public static Servo ServoWithName (SpaceCenter.Services.Vessel vessel, string name)
         {
             CheckAPI ();

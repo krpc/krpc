@@ -91,14 +91,20 @@ namespace TestServer
             return new TestClass (value);
         }
 
-        [KRPCProcedure]
+        [KRPCProcedure (Nullable = true)]
         public static TestClass EchoTestObject (TestClass value)
         {
             return value;
         }
 
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public static TestClass ObjectProperty { get; set; }
+
+        [KRPCProcedure]
+        public static TestClass ReturnNullWhenNotAllowed ()
+        {
+            return null;
+        }
 
         /// <summary>
         /// Class documentation string.
@@ -152,7 +158,7 @@ namespace TestServer
             [KRPCProperty]
             public int IntProperty { get; set; }
 
-            [KRPCProperty]
+            [KRPCProperty (Nullable = true)]
             public TestClass ObjectProperty { get; set; }
 
             [KRPCMethod]

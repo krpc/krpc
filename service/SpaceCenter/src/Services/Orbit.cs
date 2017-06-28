@@ -278,7 +278,7 @@ namespace KRPC.SpaceCenter.Services
         /// If the object is going to change sphere of influence in the future, returns the new orbit
         /// after the change. Otherwise returns <c>null</c>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Orbit NextOrbit {
             get { return (double.IsNaN (TimeToSOIChange)) ? null : new Orbit (InternalOrbit.nextPatch); }
         }

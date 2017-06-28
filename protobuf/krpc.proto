@@ -129,6 +129,7 @@ message Type {
   string service = 2;
   string name = 3;
   repeated Type types = 4;
+  bool nullable = 5;
 
   enum TypeCode {
     NONE = 0;

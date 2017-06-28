@@ -113,6 +113,17 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.conn.test_service.object_property = None
         self.assertIsNone(self.conn.test_service.object_property)
 
+    def test_class_none_value_when_not_allowed(self):
+        with self.assertRaises(krpc.error.RPCError) as cm:
+            self.conn.test_service.return_null_when_not_allowed()
+        self.assertTrue(str(cm.exception).startswith(
+            'Incorrect value returned by '
+            'TestService.ReturnNullWhenNotAllowed. '
+            'Expected a non-null value of type '
+            'TestServer.TestService+TestClass, '
+            'got null, but the procedure is not marked as nullable.'
+        ))
+
     def test_class_methods(self):
         obj = self.conn.test_service.create_test_object('bob')
         self.assertEqual('value=bob', obj.get_value())
@@ -346,6 +357,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'echo_test_object',
 
                 'object_property',
+
+                'return_null_when_not_allowed',
 
                 'TestClass',
 

@@ -231,9 +231,20 @@ namespace KRPC.Test.Service
                 .Returns ((TestService.TestClass x) => x);
             TestService.Service = mock.Object;
             var result = Run (Call ("TestService", "EchoTestObject", Arg (0, null)));
-            mock.Verify (x => x.EchoTestObject (It.IsAny<TestService.TestClass> ()), Times.Once ());
+            //mock.Verify (x => x.EchoTestObject (It.IsAny<TestService.TestClass> ()), Times.Once ());
             CheckResultNotEmpty (result);
             Assert.IsNull (result.Value);
+        }
+
+        [Test]
+        public void ExecuteCallWithNullReturnWhenNotAllowed ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ReturnNullWhenNotAllowed ())
+                .Returns (() => null);
+            TestService.Service = mock.Object;
+            Assert.Throws<RPCException> (() => Run (Call ("TestService", "ReturnNullWhenNotAllowed")));
+            mock.Verify (x => x.ReturnNullWhenNotAllowed (), Times.Once ());
         }
 
         [Test]

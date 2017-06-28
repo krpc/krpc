@@ -336,9 +336,16 @@ namespace KRPC.Test.Service
         [TestCase ("{\"code\":\"LIST\",\"types\":[" +
                    "{\"code\":\"ENUMERATION\",\"service\":\"TestService\",\"name\":\"TestEnum\"}" +
                    "]}", typeof(IList<TestService.TestEnum>))]
-        public void SerializeValue (string name, Type type)
+        public void SerializeType (string name, Type type)
         {
-            Assert.AreEqual (name, JsonConvert.SerializeObject (TypeUtils.SerializeType (type)));
+            Assert.AreEqual (name, JsonConvert.SerializeObject (TypeUtils.SerializeType (type, false, false)));
+        }
+
+        [TestCase ("{\"code\":\"CLASS\",\"service\":\"TestService\",\"name\":\"TestClass\",\"nullable\":true}",
+           typeof (TestService.TestClass))]
+        public void SerializeNullableType (string name, Type type)
+        {
+            Assert.AreEqual (name, JsonConvert.SerializeObject (TypeUtils.SerializeType (type, true, true)));
         }
 
         [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
@@ -346,7 +353,7 @@ namespace KRPC.Test.Service
         [TestCase (typeof(IDictionary<double,string>))]
         public void InvalidSerializeType (Type type)
         {
-            Assert.Throws<ArgumentException> (() => TypeUtils.SerializeType (type));
+            Assert.Throws<ArgumentException> (() => TypeUtils.SerializeType (type, false, false));
         }
     }
 }

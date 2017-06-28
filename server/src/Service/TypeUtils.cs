@@ -423,13 +423,43 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Return the name of the kRPC type used to represent the given C# type
+        /// Returns whether the procedure/method can return null.
+        /// </summary>
+        public static bool GetNullable (ICustomAttributeProvider member)
+        {
+            if (Reflection.HasAttribute<KRPCProcedureAttribute> (member))
+                return Reflection.GetAttribute<KRPCProcedureAttribute> (member).Nullable;
+            if (Reflection.HasAttribute<KRPCMethodAttribute> (member))
+                return Reflection.GetAttribute<KRPCMethodAttribute> (member).Nullable;
+            if (Reflection.HasAttribute<KRPCPropertyAttribute> (member))
+                return Reflection.GetAttribute<KRPCPropertyAttribute> (member).Nullable;
+            throw new ArgumentException ("member is not a kRPC procedure, attribute or property", nameof(member));
+        }
+
+        /// <summary>
+        /// Serialize a type into a dictionary for use in a service definition.
+        /// </summary>
+        public static object SerializeParameterType (Type type)
+        {
+            return SerializeType (type, false, false);
+        }
+
+        /// <summary>
+        /// Serialize a return type into a dictionary for use in a service definition.
+        /// </summary>
+        public static object SerializeReturnType (Type type, bool nullable)
+        {
+            return SerializeType (type, true, nullable);
+        }
+
+        /// <summary>
+        /// Serialize a type into a dictionary for use in a service definition.
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
-        public static object SerializeType (Type type)
+        public static object SerializeType (Type type, bool isReturnType, bool nullable)
         {
             if (!IsAValidType (type))
                 throw new ArgumentException ("Type " + type + " is not a valid kRPC type");
@@ -469,22 +499,24 @@ namespace KRPC.Service
                 result["code"] = "CLASS";
                 result["service"] = GetClassServiceName (type);
                 result["name"] = type.Name;
+                if (isReturnType)
+                    result ["nullable"] = nullable;
             } else if (IsAnEnumType (type)) {
                 result["code"] = "ENUMERATION";
                 result["service"] = GetEnumServiceName (type);
                 result["name"] = type.Name;
             } else if (IsATupleCollectionType (type)) {
                 result["code"] = "TUPLE";
-                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t, false, false)).ToList ();
             } else if (IsAListCollectionType (type)) {
                 result["code"] = "LIST";
-                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t, false, false)).ToList ();
             } else if (IsASetCollectionType (type)) {
                 result["code"] = "SET";
-                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t, false, false)).ToList ();
             } else if (IsADictionaryCollectionType (type)) {
                 result["code"] = "DICTIONARY";
-                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t, false, false)).ToList ();
             } else if (IsAMessageType (type)) {
                 var name = type.ToString ();
                 var camelCase = name.Substring (name.LastIndexOf ('.') + 1);

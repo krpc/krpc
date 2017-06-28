@@ -291,7 +291,7 @@ namespace KRPC.SpaceCenter.Services
         /// Returns <c>null</c> if the camera is not focussed on a celestial body.
         /// Returns an error is the camera is not in map mode.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public CelestialBody FocussedBody {
@@ -313,7 +313,7 @@ namespace KRPC.SpaceCenter.Services
         /// Returns <c>null</c> if the camera is not focussed on a vessel.
         /// Returns an error is the camera is not in map mode.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public Vessel FocussedVessel {
             get {
@@ -333,7 +333,7 @@ namespace KRPC.SpaceCenter.Services
         /// Returns <c>null</c> if the camera is not focussed on a maneuver node.
         /// Returns an error is the camera is not in map mode.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public Node FocussedNode {
             get {

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.Service
 {
@@ -16,13 +18,14 @@ namespace KRPC.Service
         readonly ProcedureParameter[] parameters;
         readonly object[] methodArguments;
 
-        public ClassMethodHandler (Type classType, MethodInfo methodInfo)
+        public ClassMethodHandler (Type classType, MethodInfo methodInfo, bool nullable)
         {
             method = methodInfo;
             var parameterList = method.GetParameters ().Select (x => new ProcedureParameter (method, x)).ToList ();
             parameterList.Insert (0, new ProcedureParameter (classType, "this"));
             parameters = parameterList.ToArray ();
             methodArguments = new object[parameters.Length - 1];
+            Nullable = nullable;
         }
 
         /// <summary>
@@ -45,5 +48,7 @@ namespace KRPC.Service
         public Type ReturnType {
             get { return method.ReturnType; }
         }
+
+        public bool Nullable { get; private set; }
     }
 }

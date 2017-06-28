@@ -42,10 +42,11 @@ namespace KRPC.Test.Service
             Assert.IsNull (procedure.ReturnType);
         }
 
-        public static void HasReturnType (Procedure procedure, Type returnType)
+        public static void HasReturnType (Procedure procedure, Type returnType, bool nullable = false)
         {
             Assert.IsTrue (procedure.HasReturnType);
             Assert.AreEqual (returnType, procedure.ReturnType);
+            Assert.AreEqual (nullable, procedure.Nullable);
         }
 
         public static void HasNoDocumentation (Procedure procedure)

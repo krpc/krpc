@@ -45,7 +45,7 @@ namespace KRPC.KerbalAlarmClock
         /// only returns one of them.
         /// </summary>
         /// <param name="name">Name of the alarm to search for.</param>
-        [KRPCProcedure]
+        [KRPCProcedure (Nullable = true)]
         public static Alarm AlarmWithName (string name)
         {
             CheckAPI ();

@@ -16,6 +16,8 @@ namespace KRPC.Service.Messages
 
         public Type ReturnType { get; set; }
 
+        public bool Nullable { get; set; }
+
         public string Documentation { get; set; }
 
         public Procedure (string name)
