@@ -18,16 +18,16 @@ pkg_zip(
 
 nuget_package(
     name = 'nuget',
+    id = 'KRPC.Client',
     assembly = ':KRPC.Client',
     assembly_net35 = ':KRPC.Client-net35',
-    id = 'KRPC.Client',
     version = nuget_version,
     author = author,
     description = 'C# client for kRPC',
     project_url = 'https://github.com/krpc/krpc',
     license_url = 'https://github.com/krpc/krpc/blob/master/LICENSE',
     deps = {
-        'Google.Protobuf': '3.1.0'
+        'Google.Protobuf': '3.3.0'
     }
 )
 
