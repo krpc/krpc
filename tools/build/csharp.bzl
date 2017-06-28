@@ -323,8 +323,10 @@ def _nuget_package_impl(ctx):
     ])
     for framework, assembly in assemblies.items():
         nuspec_contents.extend([
-            '  <file src="%s" target="lib/%s" />' % (assembly.lib.basename, framework),
-            '  <file src="%s" target="lib/%s" />' % (assembly.doc.basename, framework)
+            '  <file src="%s" target="lib/%s/%s.dll" />'
+            % (assembly.lib.basename, framework, ctx.attr.id),
+            '  <file src="%s" target="lib/%s/%s.xml" />'
+            % (assembly.doc.basename, framework, ctx.attr.id)
         ])
     nuspec_contents.extend([
         '</files>',
