@@ -61,6 +61,13 @@ deps = [
     '//tools/build/mono-4.5:System.IO',
     '//tools/build/mono-4.5:System.Xml'
 ]
+deps_net35 = [
+    '//tools/build/ksp:Google.Protobuf',
+    '//tools/build/ksp:mscorlib',
+    '//tools/build/ksp:System',
+    '//tools/build/ksp:System.Core',
+    '//tools/build/ksp:System.Xml'
+]
 
 csharp_library(
     name = 'KRPC.Client',
@@ -72,13 +79,7 @@ csharp_library(
 csharp_library(
     name = 'KRPC.Client-net35',
     srcs = srcs,
-    deps = [
-        '//tools/build/ksp:Google.Protobuf',
-        '//tools/build/ksp:mscorlib',
-        '//tools/build/ksp:System',
-        '//tools/build/ksp:System.Core',
-        '//tools/build/ksp:System.Xml'
-    ],
+    deps = deps_net35,
     define = ['NET35'],
     visibility = ['//visibility:public']
 )
