@@ -4,9 +4,10 @@ import cog
 import itertools
 
 cog.out("""
+using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace System
+namespace KRPC.Client.Compatibility
 {
     /// <summary>
     /// Interface for tuples.
@@ -89,9 +90,10 @@ cog.outl('    }')
 cog.outl('}')
 ]]]*/
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace System
+namespace KRPC.Client.Compatibility
 {
     /// <summary>
     /// Interface for tuples.
