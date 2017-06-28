@@ -5,7 +5,7 @@ import re
 import subprocess
 
 version_pattern = r'^v[0-9]+\.[0-9]+\.[0-9]+$'
-branch_version_pattern = r'^v[0-9]+\.[0-9]+\.[0-9]+-.+$'
+branch_version_pattern = r'^v[0-9]+\.[0-9]+\.[0-9]+(-.+)?$'
 
 # Get most recent tag, commits since tag and commit hash
 desc = subprocess.check_output(
@@ -27,7 +27,10 @@ else:
 # Compute version number
 if re.match(branch_version_pattern, branch):
     # Version branch - use version from branch name
-    version = branch[1:].partition('-')[0]
+    if '-' in branch:
+        version = branch[1:].partition('-')[0]
+    else:
+        version = branch[1:]
     version = (version, num_commits, commit_hash)
 elif re.match(version_pattern, tag):
     # Version tag - use version from tag, incremented by 0.0.1
