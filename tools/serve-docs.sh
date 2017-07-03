@@ -18,10 +18,21 @@ mkdir -p `dirname $env`
 if [ ! -d "$env" ]; then
   virtualenv $env
   source $env/bin/activate
+  pip install --upgrade \
+      "six==1.10.0" \
+      "pbr==3.1.0" \
+      "setuptools==36.0.1" \
+      "setuptools-git==1.2"
+  pip install "Sphinx==1.6.2"
+  CFLAGS="-O0" pip install "lxml==3.8.0"
   pip install \
-    sphinx==1.3.5 sphinx-autobuild sphinx_rtd_theme sphinxcontrib_spelling sphinx-csharp sphinx-tabs \
-    https://github.com/djungelorm/sphinx-lua/releases/download/0.1.2/sphinx-lua-0.1.2.tar.gz \
-    javasphinx pyinotify
+      "sphinx_rtd_theme==0.1.9" \
+      "sphinxcontrib_spelling==2.3.0" \
+      "sphinx-csharp==0.1.5" \
+      "sphinx-tabs==1.0.0" \
+      "javasphinx==0.9.15" \
+      https://github.com/djungelorm/sphinx-lua/releases/download/0.1.3/sphinx-lua-0.1.3.tar.gz
+  pip install sphinx-autobuild pyinotify
 else
   source $env/bin/activate
 fi
