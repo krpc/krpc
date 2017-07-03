@@ -502,79 +502,93 @@ below:
 .. image:: /images/reference-frames/vessel-surface-velocity.png
    :align: center
 
-.. _tutorial-reference-frames-orbital-speed:
+.. _tutorial-reference-frames-vessel-speed:
 
-Orbital speed
-^^^^^^^^^^^^^
+Vessel Speed
+^^^^^^^^^^^^
+
+This example demonstrates how to get the orbital and surface speeds of the
+vessel, equivalent to the values displayed by the navball.
 
 To compute the orbital speed of a vessel, you need to get the velocity relative
 to the planet's *non-rotating* reference frame
 (:attr:`CelestialBody.non_rotating_reference_frame`). This reference frame is
-fixed relative to the body, but does not rotate:
+fixed relative to the body, but does not rotate.
+
+For the surface speed, the planet's reference frame
+(:attr:`CelestialBody.reference_frame`) is required, as this reference frame
+rotates with the body.
 
 .. tabs::
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/OrbitalSpeed.cs
+      .. literalinclude:: /scripts/VesselSpeed.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/OrbitalSpeed.cpp
+      .. literalinclude:: /scripts/VesselSpeed.cpp
          :language: cpp
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/OrbitalSpeed.java
+      .. literalinclude:: /scripts/VesselSpeed.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/OrbitalSpeed.lua
+      .. literalinclude:: /scripts/VesselSpeed.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/OrbitalSpeed.py
+      .. literalinclude:: /scripts/VesselSpeed.py
          :language: python
 
-.. _tutorial-reference-frames-surface-speed:
+.. _tutorial-reference-frames-vessel-velocity:
 
-Surface speed
-^^^^^^^^^^^^^
+Vessel Velocity
+^^^^^^^^^^^^^^^
 
-To compute the speed of a vessel relative to the surface of a planet/moon, you
-need to get the velocity relative to the planets reference frame
-(:attr:`CelestialBody.reference_frame`). This reference frame rotates with the
-body, therefore the rotational velocity of the body is taken into account when
-computing the velocity of the vessel:
+This example demonstrates how to get the velocity of the vessel (as a vector),
+relative to the surface of the body being orbited.
+
+To do this, a hybrid reference frame is required. This is because we want a
+reference frame that is centered on the vessel, but whose linear velocity is
+fixed relative to the ground.
+
+We therefore create a hybrid reference frame with its rotation set to the
+vessel's surface reference frame (:attr:`Vessel.surface_reference_frame`), and
+all other properties (including position and velocity) set to the body's
+reference frame (:attr:`CelestialBody.reference_frame`) -- which rotates with
+the body.
 
 .. tabs::
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/SurfaceSpeed.cs
+      .. literalinclude:: /scripts/VesselVelocity.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/SurfaceSpeed.cpp
+      .. literalinclude:: /scripts/VesselVelocity.cpp
          :language: cpp
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/SurfaceSpeed.java
+      .. literalinclude:: /scripts/VesselVelocity.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/SurfaceSpeed.lua
+      .. literalinclude:: /scripts/VesselVelocity.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/SurfaceSpeed.py
+      .. literalinclude:: /scripts/VesselVelocity.py
          :language: python
 
 Angle of attack

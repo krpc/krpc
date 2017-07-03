@@ -8,14 +8,18 @@ import org.javatuples.Triplet;
 
 import java.io.IOException;
 
-public class SurfaceSpeed {
+public class VesselVelocity {
     public static void main(String[] args)
         throws IOException, RPCException, InterruptedException {
-        Connection connection = Connection.newInstance("Surface speed");
+      Connection connection = Connection.newInstance("Vessel velocity");
         SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
         Vessel vessel = spaceCenter.getActiveVessel();
-        ReferenceFrame refFrame = vessel.getOrbit().getBody().getReferenceFrame();
-
+        ReferenceFrame refFrame = ReferenceFrame.createHybrid(
+          connection,
+          vessel.getOrbit().getBody().getReferenceFrame(),
+          vessel.getSurfaceReferenceFrame(),
+          vessel.getOrbit().getBody().getReferenceFrame(),
+          vessel.getOrbit().getBody().getReferenceFrame());
         while (true) {
             Triplet<Double,Double,Double> velocity =
                 vessel.flight(refFrame).getVelocity();
@@ -23,10 +27,6 @@ public class SurfaceSpeed {
                               velocity.getValue0(),
                               velocity.getValue1(),
                               velocity.getValue2());
-
-            double speed = vessel.flight(refFrame).getSpeed();
-            System.out.printf("Surface speed = %.1f m/s\n", speed);
-
             Thread.sleep(1000);
         }
     }
