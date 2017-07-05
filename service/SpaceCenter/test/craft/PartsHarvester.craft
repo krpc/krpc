@@ -1,5 +1,5 @@
 ship = PartsHarvester
-version = 1.2.2
+version = 1.3.0
 description =
 type = VAB
 size = 3.6592133,7.27918625,3.05956244
@@ -577,14 +577,17 @@ PART
       DeployModuleAction
       {
         actionGroup = None
+        active = False
       }
       RetractModuleAction
       {
         actionGroup = None
+        active = False
       }
       ToggleModuleAction
       {
         actionGroup = None
+        active = False
       }
     }
     UPGRADESAPPLIED
@@ -833,14 +836,17 @@ PART
       DeployModuleAction
       {
         actionGroup = None
+        active = False
       }
       RetractModuleAction
       {
         actionGroup = None
+        active = False
       }
       ToggleModuleAction
       {
         actionGroup = None
+        active = False
       }
     }
     UPGRADESAPPLIED
@@ -1266,14 +1272,17 @@ PART
       DeployModuleAction
       {
         actionGroup = None
+        active = False
       }
       RetractModuleAction
       {
         actionGroup = None
+        active = False
       }
       ToggleModuleAction
       {
         actionGroup = None
+        active = False
       }
     }
     UPGRADESAPPLIED

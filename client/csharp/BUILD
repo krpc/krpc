@@ -10,23 +10,30 @@ pkg_zip(
     out = 'krpc-csharp-%s.zip' % version,
     files = ['//:readme', '//:version', 'CHANGES.txt',
              'LICENSE', '//:COPYING', '//:COPYING.LESSER',
-             ':KRPC.Client'],
-    path_map = {'client/csharp/': ''},
+             ':KRPC.Client', ':KRPC.Client-net35'],
+    path_map = {
+        'client/csharp/KRPC.Client-net35.dll': 'net35/KRPC.Client.dll',
+        'client/csharp/KRPC.Client-net35.xml': 'net35/KRPC.Client.xml',
+        'client/csharp/KRPC.Client.dll': 'net45/KRPC.Client.dll',
+        'client/csharp/KRPC.Client.xml': 'net45/KRPC.Client.xml',
+        'client/csharp/': ''
+    },
     exclude = ['*.mdb'],
     visibility = ['//visibility:public']
 )
 
 nuget_package(
     name = 'nuget',
-    assembly = ':KRPC.Client',
     id = 'KRPC.Client',
+    assembly = ':KRPC.Client',
+    assembly_net35 = ':KRPC.Client-net35',
     version = nuget_version,
     author = author,
     description = 'C# client for kRPC',
     project_url = 'https://github.com/krpc/krpc',
     license_url = 'https://github.com/krpc/krpc/blob/master/LICENSE',
     deps = {
-        'Google.Protobuf': '3.1.0'
+        'Google.Protobuf': '3.3.0'
     }
 )
 
@@ -60,11 +67,26 @@ deps = [
     '//tools/build/mono-4.5:System.IO',
     '//tools/build/mono-4.5:System.Xml'
 ]
+deps_net35 = [
+    '//tools/build/ksp:Google.Protobuf',
+    '//tools/build/ksp:mscorlib',
+    '//tools/build/ksp:System',
+    '//tools/build/ksp:System.Core',
+    '//tools/build/ksp:System.Xml'
+]
 
 csharp_library(
     name = 'KRPC.Client',
     srcs = srcs,
     deps = deps,
+    visibility = ['//visibility:public']
+)
+
+csharp_library(
+    name = 'KRPC.Client-net35',
+    srcs = srcs,
+    deps = deps_net35,
+    define = ['NET35'],
     visibility = ['//visibility:public']
 )
 

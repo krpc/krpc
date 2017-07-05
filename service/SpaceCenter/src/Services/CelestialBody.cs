@@ -213,17 +213,16 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The position at the given latitude, longitude, and altitude in the given
-        /// reference frame.  
+        /// The position at the given latitude, longitude and altitude, in the given reference frame.
         /// </summary>
         /// <param name="latitude">Latitude in degrees</param>
         /// <param name="longitude">Longitude in degrees</param>
-        /// <param name="altitude">Longitude in degrees</param>
+        /// <param name="altitude">Altitude in meters above sea level</param>
         /// <param name="referenceFrame">Reference frame for the returned position vector</param>
         [KRPCMethod]
-        public Tuple3 PositionAtAlt(double latitude, double longitude, double altitude, ReferenceFrame referenceFrame)
+        public Tuple3 PositionAtAltitude (double latitude, double longitude, double altitude, ReferenceFrame referenceFrame)
         {
-            return PositionAt(latitude, longitude, altitude, referenceFrame);
+            return PositionAt (latitude, longitude, altitude, referenceFrame);
         }
 
 

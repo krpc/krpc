@@ -1,16 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.UI
 {
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSiblingClassesRule")]
     abstract class OptionDialog : MonoBehaviour
     {
         MultiOptionDialog dialog;
         PopupDialog popup;
         bool hasInit;
+
+        protected string Name { get; set; }
 
         protected string Title { get; set; }
 
@@ -43,7 +47,7 @@ namespace KRPC.UI
                 Visible = true;
                 Opened ();
                 EventHandlerExtensions.Invoke (OnOpen, this);
-                dialog = new MultiOptionDialog (Message, Title,"Dialog", Skin, Options.ToArray ());
+                dialog = new MultiOptionDialog (Name, Message, Title, Skin, Options.ToArray ());
                 popup = PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), dialog, false, HighLogic.UISkin);
             }
         }

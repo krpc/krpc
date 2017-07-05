@@ -147,10 +147,10 @@ stream, and then repeatedly gets the position from the stream.
 
 A stream can be created for any function call (except property setters) by
 adding ``_stream`` to the end of the function's name. This returns a stream
-object of type :class:`krpc::Stream<T>`, where ``T`` is the return type of the
+object of type :class:`template <typename T> krpc::Stream`, where ``T`` is the return type of the
 original function. The most recent value of the stream can be obtained by
-calling :func:`krpc::Stream<T>::operator()()`. A stream can be stopped and
-removed from the server by calling :func:`krpc::Stream<T>::remove()` on the
+calling :func:`krpc::Stream::operator()()`. A stream can be stopped and
+removed from the server by calling :func:`krpc::Stream::remove()` on the
 stream object. All of a clients streams are automatically stopped when it
 disconnects.
 
@@ -234,7 +234,7 @@ Client API Reference
 
 .. namespace:: krpc
 
-.. class:: Stream<T>
+.. class:: template <typename T> Stream
 
    A stream object. Streams are created by calling a function with ``_stream``
    appended to its name.
@@ -242,7 +242,7 @@ Client API Reference
    Stream objects are copy constructible and assignable. A stream is removed
    from the server when all stream objects that refer to it are destroyed.
 
-   .. function:: Stream<T>()
+   .. function:: Stream()
 
       Create a stream object that is not bound to any stream.
 

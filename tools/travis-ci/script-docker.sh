@@ -1,6 +1,7 @@
 #!/bin/bash
 set -ev
 cd /build/krpc
+rm -rf lib/ksp && ln -s /usr/local/lib/ksp lib/ksp
 
 bazel fetch //...
 bazel build \
@@ -11,7 +12,7 @@ bazel build \
   //tools/krpctools \
   //tools/TestServer:archive \
   //:ci-test
-xbuild KRPC.sln
+msbuild KRPC.sln /warnaserror /nowarn:MSB3276,MSB3277
 
 bazel test //:ci-test
 client/cpp/test-build.sh

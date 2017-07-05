@@ -17,12 +17,12 @@ class TestContracts(krpctest.TestCase):
             'FinePrint.Contracts.ExplorationContract', contract.type)
         self.assertEqual('Orbit Kerbin!', contract.title)
         self.assertEqual(
-            'Shortly after disproving untrue theories on how the effects of '
-            'being in microgravity were still very much unknown, the chief '
-            'book-keeper visiting Kerbin World-Firsts Record-Keeping Society '
-            'realized that it was truly hard for us to tell if some myths '
-            'about what really happens to things in orbit really were true. '
-            'So we now need your help.',
+            'One of the founding principles of Ionic Symphonic Protonic '
+            'Electronics is to continue to advance the frontiers of science. '
+            'The problem is that we don\'t actually have any idea how '
+            'difficult it is to get a Kerbal to orbit, and we need to find '
+            'out quickly. It\'s time for you to take another step in '
+            'advancing the frontier.',
             contract.description)
         self.assertEqual('', contract.notes)
         self.assertEqual('We need to achieve a stable orbit around Kerbin. '
@@ -87,7 +87,8 @@ class TestContracts(krpctest.TestCase):
              'Contracts.Templates.CollectScience',
              'FinePrint.Contracts.SurveyContract',
              'FinePrint.Contracts.TourismContract',
-             'Contracts.Templates.PartTest'],
+             'Contracts.Templates.PartTest',
+             'SentinelMission.SentinelContract'],
             self.cm.types)
 
     def test_all_contracts(self):

@@ -115,8 +115,8 @@ class TestVessel(krpctest.TestCase):
 
     def test_bounding_box(self):
         box = self.vessel.bounding_box(self.vessel.reference_frame)
-        self.assertAlmostEqual((-1.55, -2.57, -1.55), box[0], places=2)
-        self.assertAlmostEqual((1.55, 2.67, 1.55), box[1], places=2)
+        self.assertAlmostEqual((-1.57, -2.60, -1.57), box[0], places=2)
+        self.assertAlmostEqual((1.57, 2.675, 1.57), box[1], places=2)
 
 
 class TestVesselEngines(krpctest.TestCase):

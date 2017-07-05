@@ -3,6 +3,10 @@ v0.3.9
  * Fix Control.WheelThrottle and WheelSteering (#388)
  * Fix off by one error in stage numbers for Vessel.ResourcesInDecoupleStage (#380)
  * Fix CelestialBody.InitialRotation and RotationAngle returning values out of range 0 - 2*PI (#391)
+ * Add WaypointManager.AddWaypointAtAltitude (#399)
+ * Add CelestialBody.PositionAtAltitude (#399)
+ * Fix SpaceCenter.SetTarget not correctly setting target if input locks are enabled (#397)
+ * Fix possible null reference exception in ResourceConverter.State
 
 v0.3.8
  * Add support for CommNet

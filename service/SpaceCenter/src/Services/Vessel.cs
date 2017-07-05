@@ -220,15 +220,15 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float Mass {
-            get { return InternalVessel.parts.Sum(i => i.WetMass()); }
-        } 
+            get { return InternalVessel.parts.Sum(part => part.WetMass()); }
+        }
 
         /// <summary>
         /// The total mass of the vessel, excluding resources, in kg.
         /// </summary>
         [KRPCProperty]
         public float DryMass {
-            get { return InternalVessel.parts.Sum(i => i.DryMass()); }
+            get { return InternalVessel.parts.Sum(part => part.DryMass()); }
         }
 
         IEnumerable<Parts.Engine> ActiveEngines {

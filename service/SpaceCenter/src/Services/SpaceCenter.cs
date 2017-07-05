@@ -89,11 +89,7 @@ namespace KRPC.SpaceCenter.Services
                 var target = FlightGlobals.fetch.VesselTarget as global::CelestialBody;
                 return target != null ? new CelestialBody (target) : null;
             }
-            set {
-                InputLockManager.lockMask &= (ulong)~ControlTypes.TARGETING;
-                FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalBody);
-                InputLockManager.lockMask &= (ulong)ControlTypes.TARGETING;
-            }
+            set { FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalBody, true); }
         }
 
         /// <summary>
@@ -105,11 +101,7 @@ namespace KRPC.SpaceCenter.Services
                 var target = FlightGlobals.fetch.VesselTarget as global::Vessel;
                 return target != null ? new Vessel (target) : null;
             }
-            set {
-                InputLockManager.lockMask &= (ulong)~ControlTypes.TARGETING;
-                FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalVessel);
-                InputLockManager.lockMask &= (ulong)ControlTypes.TARGETING;
-            }
+            set { FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalVessel, true); }
         }
 
         /// <summary>
@@ -121,11 +113,7 @@ namespace KRPC.SpaceCenter.Services
                 var target = FlightGlobals.fetch.VesselTarget as ModuleDockingNode;
                 return target != null ? new Parts.DockingPort (new Parts.Part (target.part)) : null;
             }
-            set {
-                InputLockManager.lockMask &= (ulong)~ControlTypes.TARGETING;
-                FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalPort);
-                InputLockManager.lockMask &= (ulong)ControlTypes.TARGETING;
-            }
+            set { FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalPort, true); }
         }
 
         /// <summary>
@@ -134,9 +122,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static void ClearTarget ()
         {
-            InputLockManager.lockMask &= (ulong)~ControlTypes.TARGETING;
-            FlightGlobals.fetch.SetVesselTarget (null);
-            InputLockManager.lockMask &= (ulong)ControlTypes.TARGETING;
+            FlightGlobals.fetch.SetVesselTarget (null, true);
         }
 
         /// <summary>

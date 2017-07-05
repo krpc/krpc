@@ -32,6 +32,7 @@ RUN apt-get update && \
     texlive-latex-base \
     texlive-latex-extra \
     texlive-latex-recommended \
+    tzdata \
     unzip \
     virtualenv \
     wget && \
@@ -62,7 +63,7 @@ RUN apt-get update && \
     chmod +x /usr/local/bin/gosu && \
     gosu nobody true
 
-ARG bazel_version=0.4.5
+ARG bazel_version=0.5.0
 RUN curl https://bazel.build/bazel-release.pub.gpg | apt-key add - && \
     echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | \
       tee /etc/apt/sources.list.d/bazel.list && \
@@ -72,7 +73,7 @@ RUN curl https://bazel.build/bazel-release.pub.gpg | apt-key add - && \
 COPY bazelrc /etc/bazel.bazelrc
 RUN chmod 0644 /etc/bazel.bazelrc
 
-ARG protobuf_version=3.2.0
+ARG protobuf_version=3.3.0
 WORKDIR /usr/local/src/protobuf-cpp-${protobuf_version}
 RUN wget https://github.com/google/protobuf/releases/download/v${protobuf_version}/protobuf-cpp-${protobuf_version}.tar.gz && \
   tar -xf protobuf-cpp-${protobuf_version}.tar.gz --strip=1 && \
@@ -101,6 +102,7 @@ RUN git clone http://github.com/krpc/krpc --depth 1 && \
       @cpp_protobuf//:protobuf \
       @cpp_googletest//:gtest \
       @cpp_googletest//:gmock && \
+    cd .. && \
     rm -rf krpc
 USER root
 RUN deluser build

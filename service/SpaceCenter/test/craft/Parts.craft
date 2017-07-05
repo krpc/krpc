@@ -1,8 +1,8 @@
 ship = Parts
-version = 1.2.2
+version = 1.3.0
 description =
 type = VAB
-size = 6.29753351,31.9485779,5.55277777
+size = 6.29753399,31.9485779,5.55277824
 PART
 {
   part = Mark1-2Pod_4294710516
@@ -1083,6 +1083,7 @@ PART
     name = ModuleWheelDeployment
     isEnabled = True
     shieldedCanDeploy = False
+    stateDisplayString = Retracted
     stateString = Retracted
     stagingEnabled = True
     position = 0
@@ -1230,6 +1231,7 @@ PART
     name = ModuleWheelDeployment
     isEnabled = True
     shieldedCanDeploy = False
+    stateDisplayString = Retracted
     stateString = Retracted
     stagingEnabled = True
     position = 0
@@ -1377,6 +1379,7 @@ PART
     name = ModuleWheelDeployment
     isEnabled = True
     shieldedCanDeploy = False
+    stateDisplayString = Retracted
     stateString = Retracted
     stagingEnabled = True
     position = 0
@@ -1575,6 +1578,7 @@ PART
     name = ModuleWheelDeployment
     isEnabled = True
     shieldedCanDeploy = False
+    stateDisplayString = Deployed
     stateString = Deployed
     stagingEnabled = True
     position = 1
@@ -2835,14 +2839,17 @@ PART
       DeployModuleAction
       {
         actionGroup = None
+        active = False
       }
       RetractModuleAction
       {
         actionGroup = None
+        active = False
       }
       ToggleModuleAction
       {
         actionGroup = None
+        active = False
       }
     }
     UPGRADESAPPLIED
@@ -3630,7 +3637,7 @@ PART
 {
   part = MassiveBooster_4294477872
   partName = Part
-  pos = 0.111772418,9.66166115,-2.62912273
+  pos = 0.111772418,9.66166115,-2.62912321
   attPos = 0,0,0
   attPos0 = -1.25272405,0.393947095,5.99293131E-08
   rot = 0,-1.00000012,-1.04308015E-07,0
@@ -3760,7 +3767,7 @@ PART
 {
   part = noseCone_4294475454
   partName = Part
-  pos = 0.111772418,17.0908203,-2.62912083
+  pos = 0.111772418,17.0908203,-2.6291213
   attPos = 0,0,0
   attPos0 = -6.53699317E-13,7.42915916,1.53601405E-07
   rot = 1.42108547E-14,0.866025686,-3.90798505E-14,-0.499999881
@@ -3798,10 +3805,10 @@ PART
 {
   part = spotLight1_4294475422
   partName = Part
-  pos = 0.11177212,17.5286999,-2.3213644
+  pos = 0.11177212,17.5286999,-2.32136464
   attPos = 0,0,0
   attPos0 = 0.266524315,0.437879592,-0.153877705
-  rot = -5.9647931E-07,-0.338174582,0.94108361,-4.47034836E-08
+  rot = -5.9647931E-07,-0.338174641,0.94108361,-4.47034836E-08
   attRot = 0.843391776,0,0,0.537299812
   attRot0 = -0.815001905,0.169087306,-0.470542192,-0.292867512
   mir = 1,1,1
@@ -4140,7 +4147,7 @@ PART
   pos = -1.72683203,17.5286999,0.863192916
   attPos = 0,0,0
   attPos0 = 0.266524315,0.437879592,-0.153877705
-  rot = 0.815001667,-0.169087559,0.470542639,0.292867661
+  rot = 0.815001607,-0.169087589,0.47054261,0.29286772
   attRot = 0.843391776,0,0,0.537299812
   attRot0 = -0.815001905,0.169087306,-0.470542192,-0.292867512
   mir = 1,1,1
@@ -4308,10 +4315,10 @@ PART
 {
   part = MassiveBooster_4294478774
   partName = Part
-  pos = 2.21690297,9.66166115,1.01707232
+  pos = 2.21690345,9.66166115,1.01707268
   attPos = 0,0,0
   attPos0 = -1.25272298,0.393947095,5.96046412E-08
-  rot = -9.03333586E-08,0.500000179,5.21539789E-08,0.866025388
+  rot = -9.03333728E-08,0.500000179,5.21539789E-08,0.866025388
   attRot = 0,0,0,1
   attRot0 = 2.00197505E-07,0.707106829,2.00197505E-07,-0.707106829
   mir = 1,1,1
@@ -4438,10 +4445,10 @@ PART
 {
   part = noseCone_4294476594
   partName = Part
-  pos = 2.21690202,17.0908203,1.01707149
+  pos = 2.21690202,17.0908203,1.0170716
   attPos = 0,0,0
   attPos0 = -1.19209801E-07,7.42915916,3.43921016E-08
-  rot = -1.42108547E-14,-0.866025388,-4.97379915E-14,-0.500000179
+  rot = 0,-0.866025388,-4.61852778E-14,-0.500000179
   attRot = 0,-0.866025627,0,-0.500000119
   attRot0 = -9.0333458E-08,-0.499999911,-5.21540606E-08,-0.866025388
   mir = 1,1,1
@@ -4476,10 +4483,10 @@ PART
 {
   part = spotLight1_4294476562
   partName = Part
-  pos = 1.95037639,17.5286999,0.863192558
+  pos = 1.95037663,17.5286999,0.863192677
   attPos = 0,0,0
   attPos0 = 0.266524315,0.437879592,-0.153877705
-  rot = 0.815002739,0.169087067,-0.47054109,0.29286775
+  rot = 0.81500262,0.169087082,-0.470540971,0.29286775
   attRot = 0.843391776,0,0,0.537299812
   attRot0 = -0.815001905,0.169087306,-0.470542192,-0.292867512
   mir = 1,1,1
@@ -5927,14 +5934,17 @@ PART
       DeployModuleAction
       {
         actionGroup = None
+        active = False
       }
       RetractModuleAction
       {
         actionGroup = None
+        active = False
       }
       ToggleModuleAction
       {
         actionGroup = None
+        active = False
       }
     }
     UPGRADESAPPLIED

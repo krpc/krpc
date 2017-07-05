@@ -1,15 +1,15 @@
 ship = Multi
-version = 1.2.2
+version = 1.3.0
 description =
 type = VAB
-size = 1.59660077,7.57972336,1.56613076
+size = 1.59660077,7.82396984,1.56613076
 PART
 {
   part = mk1pod_4294632146
   partName = Part
-  pos = 0.0119197303,4.14697886,-0.0387383588
+  pos = 0.0171678457,4.55030727,0.062032491
   attPos = 0,0,0
-  attPos0 = 0.0119197303,4.14697886,-0.0387383588
+  attPos0 = 0.0171678457,4.55030727,0.062032491
   rot = 0,0,0,1
   attRot = 0,0,0,1
   attRot0 = 0,0,0,1
@@ -27,429 +27,11 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  link = dockingPort2_4294625302
   link = RCSFuelTank_4294472150
+  link = SurfAntenna_4294163346
+  link = probeCoreOcto2_4294071958
   attN = bottom,RCSFuelTank_4294472150
-  attN = top,dockingPort2_4294625302
-  EVENTS
-  {
-  }
-  ACTIONS
-  {
-  }
-  PARTDATA
-  {
-  }
-  MODULE
-  {
-    name = ModuleCommand
-    isEnabled = True
-    hibernation = False
-    hibernateOnWarp = False
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      HibernateToggle
-      {
-        actionGroup = None
-        active = False
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleReactionWheel
-    isEnabled = True
-    actuatorModeCycle = 0
-    authorityLimiter = 100
-    stateString = Active
-    stagingEnabled = True
-    WheelState = Active
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      CycleAction
-      {
-        actionGroup = None
-      }
-      Activate
-      {
-        actionGroup = None
-      }
-      Deactivate
-      {
-        actionGroup = None
-      }
-      Toggle
-      {
-        actionGroup = None
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleColorChanger
-    isEnabled = True
-    animState = False
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      ToggleAction
-      {
-        actionGroup = None
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleScienceExperiment
-    isEnabled = True
-    Deployed = False
-    Inoperable = False
-    cooldownToGo = 0
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      DeployAction
-      {
-        actionGroup = None
-      }
-      ResetAction
-      {
-        actionGroup = None
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleScienceContainer
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      CollectAllAction
-      {
-        actionGroup = None
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = FlagDecal
-    isEnabled = True
-    flagDisplayed = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleConductionMultiplier
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleDataTransmitter
-    isEnabled = True
-    xmitIncomplete = False
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      StartTransmissionAction
-      {
-        actionGroup = None
-        active = False
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleLiftingSurface
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleTripLogger
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    Log
-    {
-      flight = 0
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  RESOURCE
-  {
-    name = ElectricCharge
-    amount = 50
-    maxAmount = 50
-    flowState = True
-    isTweakable = True
-    hideFlow = False
-    isVisible = True
-    flowMode = Both
-  }
-  RESOURCE
-  {
-    name = MonoPropellant
-    amount = 10
-    maxAmount = 10
-    flowState = True
-    isTweakable = True
-    hideFlow = False
-    isVisible = True
-    flowMode = Both
-  }
-}
-PART
-{
-  part = dockingPort2_4294625302
-  partName = Part
-  pos = 0.0119197303,4.78935909,-0.0387383588
-  attPos = 0,0,0
-  attPos0 = 0,0.642375886,0
-  rot = 0,0,0,1
-  attRot = 0,0,0,1
-  attRot0 = 0,0,0,1
-  mir = 1,1,1
-  symMethod = Radial
-  autostrutMode = Off
-  rigidAttachment = False
-  istg = -1
-  resPri = 0
-  dstg = 0
-  sidx = -1
-  sqor = -1
-  sepI = 0
-  attm = 0
-  modCost = 0
-  modMass = 0
-  modSize = 0,0,0
-  link = dockingPort2_4294624944
-  attN = top,dockingPort2_4294624944
-  attN = bottom,mk1pod_4294632146
-  EVENTS
-  {
-  }
-  ACTIONS
-  {
-  }
-  PARTDATA
-  {
-  }
-  MODULE
-  {
-    name = ModuleDockingNode
-    isEnabled = True
-    crossfeed = True
-    stagingEnabled = False
-    state = Ready
-    dockUId = 0
-    dockNodeIdx = 0
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      UndockAction
-      {
-        actionGroup = None
-      }
-      DecoupleAction
-      {
-        actionGroup = None
-      }
-      EnableXFeedAction
-      {
-        actionGroup = None
-      }
-      DisableXFeedAction
-      {
-        actionGroup = None
-      }
-      ToggleXFeedAction
-      {
-        actionGroup = None
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-}
-PART
-{
-  part = dockingPort2_4294624944
-  partName = Part
-  pos = 0.0119197303,5.35511923,-0.0387383588
-  attPos = 0,0,0
-  attPos0 = 0,0.565765381,0
-  rot = 0,0,-1,0
-  attRot = 0,0,-0.999999881,0
-  attRot0 = 0,0,-1,0
-  mir = 1,1,1
-  symMethod = Radial
-  autostrutMode = Off
-  rigidAttachment = False
-  istg = -1
-  resPri = 0
-  dstg = 0
-  sidx = -1
-  sqor = -1
-  sepI = 1
-  attm = 0
-  modCost = 0
-  modMass = 0
-  modSize = 0,0,0
-  link = mk1pod_4294621954
-  attN = top,dockingPort2_4294625302
-  attN = bottom,mk1pod_4294621954
-  EVENTS
-  {
-  }
-  ACTIONS
-  {
-  }
-  PARTDATA
-  {
-  }
-  MODULE
-  {
-    name = ModuleDockingNode
-    isEnabled = True
-    crossfeed = True
-    stagingEnabled = False
-    state = Ready
-    dockUId = 0
-    dockNodeIdx = 0
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      UndockAction
-      {
-        actionGroup = None
-      }
-      DecoupleAction
-      {
-        actionGroup = None
-      }
-      EnableXFeedAction
-      {
-        actionGroup = None
-      }
-      DisableXFeedAction
-      {
-        actionGroup = None
-      }
-      ToggleXFeedAction
-      {
-        actionGroup = None
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-}
-PART
-{
-  part = mk1pod_4294621954
-  partName = Part
-  pos = 0.0119197303,5.99749899,-0.0387383588
-  attPos = 0,0,0
-  attPos0 = 0,-0.642375886,0
-  rot = 0,0,-1,0
-  attRot = 0,0,-0.999999881,0
-  attRot0 = 0,0,0,1
-  mir = 1,1,1
-  symMethod = Radial
-  autostrutMode = Off
-  rigidAttachment = False
-  istg = -1
-  resPri = 0
-  dstg = 0
-  sidx = -1
-  sqor = -1
-  sepI = 1
-  attm = 0
-  modCost = 0
-  modMass = 0
-  modSize = 0,0,0
-  link = RCSFuelTank_4294451944
-  attN = bottom,RCSFuelTank_4294451944
-  attN = top,dockingPort2_4294624944
+  attN = top,probeCoreOcto2_4294071958
   EVENTS
   {
   }
@@ -694,7 +276,7 @@ PART
 {
   part = RCSFuelTank_4294472150
   partName = Part
-  pos = 0.0119197303,3.45663905,-0.0387383588
+  pos = 0.0171678457,3.85996747,0.062032491
   attPos = 0,0,0
   attPos0 = 0,-0.690340996,0
   rot = 0,0,0,1
@@ -746,7 +328,7 @@ PART
 {
   part = fuelTank_4294471508
   partName = Part
-  pos = 0.0119197303,2.2056489,-0.0387383588
+  pos = 0.0171678457,2.60897732,0.062032491
   attPos = 0,0,0
   attPos0 = 0,-1.25099301,0
   rot = 0,0,0,1
@@ -808,7 +390,7 @@ PART
 {
   part = rtg_4294456484
   partName = Part
-  pos = -0.607181489,2.60453892,-0.0387383215
+  pos = -0.6019333,3.00786734,0.0620325282
   attPos = 0,0,0
   attPos0 = -0.619101286,0.398889512,3.69013193E-08
   rot = 0.707106829,0,0.707106829,0
@@ -893,7 +475,7 @@ PART
 {
   part = RCSBlock_4294454862
   partName = Part
-  pos = -0.650138915,3.49682903,-0.0379960388
+  pos = -0.644890726,3.90015745,0.0627748072
   attPos = 0,0,0
   attPos0 = -0.662058592,0.0401945114,0.000742311124
   rot = 0,0,0,1
@@ -961,7 +543,7 @@ PART
 {
   part = RCSBlock_4294454314
   partName = Part
-  pos = 0.012662,3.49682903,0.623320103
+  pos = 0.0179101154,3.90015745,0.724090934
   attPos = 0,0,0
   attPos0 = 0.000742271484,0.0401945114,0.662058473
   rot = 0,0.707106829,0,0.707106829
@@ -1029,7 +611,7 @@ PART
 {
   part = RCSBlock_4294454230
   partName = Part
-  pos = 0.673978329,3.49682903,-0.0394807197
+  pos = 0.679226458,3.90015745,0.06129013
   attPos = 0,0,0
   attPos0 = 0.662058592,0.0401945114,-0.000742368924
   rot = 0,1,0,-4.37113883E-08
@@ -1097,7 +679,7 @@ PART
 {
   part = RCSBlock_4294454146
   partName = Part
-  pos = 0.0111773796,3.49682903,-0.700796783
+  pos = 0.016425496,3.90015745,-0.600025892
   attPos = 0,0,0
   attPos0 = -0.000742350472,0.0401945114,-0.662058473
   rot = 0,0.707106829,0,-0.707106829
@@ -1165,7 +747,7 @@ PART
 {
   part = RCSBlock_4294453834
   partName = Part
-  pos = -0.667485774,1.61960888,-0.0379960388
+  pos = -0.662237585,2.0229373,0.0627748072
   attPos = 0,0,0
   attPos0 = -0.67940551,-0.586032927,0.000742321718
   rot = -7.48678476E-23,8.42937027E-08,-1.77635705E-15,1
@@ -1233,7 +815,7 @@ PART
 {
   part = RCSBlock_4294452568
   partName = Part
-  pos = 0.0126620103,1.61960888,0.640667081
+  pos = 0.0179101247,2.0229373,0.741437912
   attPos = 0,0,0
   attPos0 = 0.000742281089,-0.586032927,0.67940551
   rot = -1.25607405E-15,0.707106829,-1.25607405E-15,0.707106829
@@ -1301,7 +883,7 @@ PART
 {
   part = RCSBlock_4294452444
   partName = Part
-  pos = 0.691325188,1.61960888,-0.0394807309
+  pos = 0.696573317,2.0229373,0.0612901188
   attPos = 0,0,0
   attPos0 = 0.67940551,-0.586032927,-0.000742380973
   rot = -1.77635705E-15,1,1.52514896E-22,-1.28005098E-07
@@ -1369,7 +951,7 @@ PART
 {
   part = RCSBlock_4294452320
   partName = Part
-  pos = 0.0111773703,1.61960888,-0.71814388
+  pos = 0.0164254848,2.0229373,-0.61737299
   attPos = 0,0,0
   attPos0 = -0.000742362114,-0.586032927,-0.67940551
   rot = -1.25607405E-15,0.707106829,1.25607405E-15,-0.707106829
@@ -1435,9 +1017,772 @@ PART
 }
 PART
 {
+  part = SurfAntenna_4294163346
+  partName = Part
+  pos = -0.482232869,4.70040083,0.0620325506
+  attPos = 0,0,0
+  attPos0 = -0.499400705,0.150093555,5.96046448E-08
+  rot = 0.400636435,-0.582657993,0.400636166,0.58265841
+  attRot = 0,0,0,1
+  attRot0 = 0.400636435,-0.582657993,0.400636166,0.58265841
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,mk1pod_4294632146
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleDataTransmitter
+    isEnabled = True
+    xmitIncomplete = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      StartTransmissionAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = probeCoreOcto2_4294071958
+  partName = Part
+  pos = 0.0171678457,5.25374508,0.062032491
+  attPos = 0,0,0
+  attPos0 = 0,0.703437805,0
+  rot = 0,0,0,1
+  attRot = 0,0,0,1
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = dockingPort2_4294625302
+  attN = bottom,mk1pod_4294632146
+  attN = top,dockingPort2_4294625302
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleCommand
+    isEnabled = True
+    hibernation = False
+    hibernateOnWarp = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      HibernateToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleSAS
+    isEnabled = True
+    standaloneToggle = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleKerbNetAccess
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      OpenKerbNetAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDataTransmitter
+    isEnabled = True
+    xmitIncomplete = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      StartTransmissionAction
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTripLogger
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    Log
+    {
+      flight = 0
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = ElectricCharge
+    amount = 5
+    maxAmount = 5
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+}
+PART
+{
+  part = dockingPort2_4294625302
+  partName = Part
+  pos = 0.0171678457,5.31480694,0.062032491
+  attPos = 0,0,0
+  attPos0 = 0,0.0610618591,0
+  rot = 0,0,0,1
+  attRot = 0,0,0,1
+  attRot0 = 0,0,0,1
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 0
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = dockingPort2_4294624944
+  attN = top,dockingPort2_4294624944
+  attN = bottom,probeCoreOcto2_4294071958
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleDockingNode
+    isEnabled = True
+    crossfeed = True
+    stagingEnabled = False
+    state = Ready
+    dockUId = 0
+    dockNodeIdx = 0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      UndockAction
+      {
+        actionGroup = None
+      }
+      DecoupleAction
+      {
+        actionGroup = None
+      }
+      EnableXFeedAction
+      {
+        actionGroup = None
+      }
+      DisableXFeedAction
+      {
+        actionGroup = None
+      }
+      ToggleXFeedAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = dockingPort2_4294624944
+  partName = Part
+  pos = 0.0171678457,5.88057327,0.062032491
+  attPos = 0,0,0
+  attPos0 = 0,0.565766335,0
+  rot = 0,0,-1,0
+  attRot = 0,0,-0.999999881,0
+  attRot0 = 0,0,-1,0
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = probeCoreOcto2_4294066382
+  attN = top,dockingPort2_4294625302
+  attN = bottom,probeCoreOcto2_4294066382
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleDockingNode
+    isEnabled = True
+    crossfeed = True
+    stagingEnabled = False
+    state = Ready
+    dockUId = 0
+    dockNodeIdx = 0
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      UndockAction
+      {
+        actionGroup = None
+      }
+      DecoupleAction
+      {
+        actionGroup = None
+      }
+      EnableXFeedAction
+      {
+        actionGroup = None
+      }
+      DisableXFeedAction
+      {
+        actionGroup = None
+      }
+      ToggleXFeedAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = probeCoreOcto2_4294066382
+  partName = Part
+  pos = 0.0171678457,5.94163561,0.062032491
+  attPos = 0,0,0
+  attPos0 = 0,-0.061062336,0
+  rot = 0,0,0,1
+  attRot = 0,0,0,1
+  attRot0 = 0,0,1,0
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = mk1pod_4294621954
+  attN = bottom,dockingPort2_4294624944
+  attN = top,mk1pod_4294621954
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleCommand
+    isEnabled = True
+    hibernation = False
+    hibernateOnWarp = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      HibernateToggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleSAS
+    isEnabled = True
+    standaloneToggle = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleKerbNetAccess
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      OpenKerbNetAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDataTransmitter
+    isEnabled = True
+    xmitIncomplete = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      StartTransmissionAction
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTripLogger
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    Log
+    {
+      flight = 0
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = ElectricCharge
+    amount = 5
+    maxAmount = 5
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+}
+PART
+{
+  part = mk1pod_4294621954
+  partName = Part
+  pos = 0.0171678457,6.64507341,0.062032491
+  attPos = 0,0,0
+  attPos0 = 0,0.703437805,0
+  rot = 0,0,-1,0
+  attRot = 0,0,-0.999999881,0
+  attRot0 = 0,0,-1,0
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 0
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  link = RCSFuelTank_4294451944
+  link = SurfAntenna_4294168632
+  attN = bottom,RCSFuelTank_4294451944
+  attN = top,probeCoreOcto2_4294066382
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleCommand
+    isEnabled = True
+    hibernation = False
+    hibernateOnWarp = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      HibernateToggle
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleReactionWheel
+    isEnabled = True
+    actuatorModeCycle = 0
+    authorityLimiter = 100
+    stateString = Active
+    stagingEnabled = True
+    WheelState = Active
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      CycleAction
+      {
+        actionGroup = None
+      }
+      Activate
+      {
+        actionGroup = None
+      }
+      Deactivate
+      {
+        actionGroup = None
+      }
+      Toggle
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleColorChanger
+    isEnabled = True
+    animState = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleScienceExperiment
+    isEnabled = True
+    Deployed = False
+    Inoperable = False
+    cooldownToGo = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      DeployAction
+      {
+        actionGroup = None
+      }
+      ResetAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleScienceContainer
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      CollectAllAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = FlagDecal
+    isEnabled = True
+    flagDisplayed = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleConductionMultiplier
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleDataTransmitter
+    isEnabled = True
+    xmitIncomplete = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      StartTransmissionAction
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleLiftingSurface
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTripLogger
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    Log
+    {
+      flight = 0
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = ElectricCharge
+    amount = 50
+    maxAmount = 50
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+  RESOURCE
+  {
+    name = MonoPropellant
+    amount = 10
+    maxAmount = 10
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+}
+PART
+{
   part = RCSFuelTank_4294451944
   partName = Part
-  pos = 0.0119197303,6.68783903,-0.0387383588
+  pos = 0.0171678457,7.33541346,0.062032491
   attPos = 0,0,0
   attPos0 = 0,-0.69034189,0
   rot = 1,0,0,0
@@ -1489,7 +1834,7 @@ PART
 {
   part = fuelTank_4294451912
   partName = Part
-  pos = 0.0119197303,7.93882799,-0.0387383588
+  pos = 0.0171678457,8.58640289,0.062032491
   attPos = 0,0,0
   attPos0 = 0,-1.25099301,0
   rot = 1,0,0,0
@@ -1551,7 +1896,7 @@ PART
 {
   part = rtg_4294451874
   partName = Part
-  pos = -0.607181489,7.53993893,-0.0387383886
+  pos = -0.6019333,8.18751335,0.0620324612
   attPos = 0,0,0
   attPos0 = -0.619101286,0.398889512,3.69013193E-08
   rot = 0,-0.707106829,0,-0.707106829
@@ -1636,7 +1981,7 @@ PART
 {
   part = RCSBlock_4294451842
   partName = Part
-  pos = -0.667485774,8.52486897,-0.0394806787
+  pos = -0.662237585,9.17244339,0.061290171
   attPos = 0,0,0
   attPos0 = -0.67940551,-0.586032927,0.000742321718
   rot = 1,1.77635705E-15,8.42937027E-08,7.48678476E-23
@@ -1704,7 +2049,7 @@ PART
 {
   part = RCSBlock_4294451718
   partName = Part
-  pos = 0.0126620103,8.52486897,-0.71814388
+  pos = 0.0179101247,9.17244339,-0.61737299
   attPos = 0,0,0
   attPos0 = 0.000742281089,-0.586032927,0.67940551
   rot = 0.707106829,1.25607405E-15,0.707106829,1.25607405E-15
@@ -1772,7 +2117,7 @@ PART
 {
   part = RCSBlock_4294451554
   partName = Part
-  pos = 0.691325188,8.52486897,-0.0379959792
+  pos = 0.696573317,9.17244339,0.0627748668
   attPos = 0,0,0
   attPos0 = 0.67940551,-0.586032927,-0.000742380973
   rot = -1.28005098E-07,-1.52514896E-22,1,1.77635705E-15
@@ -1840,7 +2185,7 @@ PART
 {
   part = RCSBlock_4294451390
   partName = Part
-  pos = 0.0111773703,8.52486897,0.640667081
+  pos = 0.0164254848,9.17244339,0.741437912
   attPos = 0,0,0
   attPos0 = -0.000742362114,-0.586032927,-0.67940551
   rot = -0.707106829,-1.25607405E-15,0.707106829,1.25607405E-15
@@ -1908,7 +2253,7 @@ PART
 {
   part = RCSBlock_4294451226
   partName = Part
-  pos = -0.650138915,6.64764881,-0.0394806713
+  pos = -0.644890726,7.29522324,0.0612901784
   attPos = 0,0,0
   attPos0 = -0.662058592,0.0401945114,0.000742311124
   rot = 1,0,0,0
@@ -1976,7 +2321,7 @@ PART
 {
   part = RCSBlock_4294451142
   partName = Part
-  pos = 0.012662,6.64764881,-0.700796783
+  pos = 0.0179101154,7.29522324,-0.600025892
   attPos = 0,0,0
   attPos0 = 0.000742271484,0.0401945114,0.662058473
   rot = 0.707106829,0,0.707106829,0
@@ -2044,7 +2389,7 @@ PART
 {
   part = RCSBlock_4294451018
   partName = Part
-  pos = 0.673978329,6.64764881,-0.0379959904
+  pos = 0.679226458,7.29522324,0.0627748594
   attPos = 0,0,0
   attPos0 = 0.662058592,0.0401945114,-0.000742368924
   rot = -4.37113883E-08,0,1,0
@@ -2112,7 +2457,7 @@ PART
 {
   part = RCSBlock_4294450894
   partName = Part
-  pos = 0.0111773796,6.64764881,0.623320103
+  pos = 0.016425496,7.29522324,0.724090934
   attPos = 0,0,0
   attPos0 = -0.000742350472,0.0401945114,-0.662058473
   rot = -0.707106829,0,0.707106829,0
@@ -2167,6 +2512,61 @@ PART
     ACTIONS
     {
       ToggleAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+}
+PART
+{
+  part = SurfAntenna_4294168632
+  partName = Part
+  pos = -0.567870438,6.71996593,0.062032491
+  attPos = 0,0,0
+  attPos0 = 0.585038304,-0.0748925209,0
+  rot = 0.58265841,-0.400636166,-0.582657993,-0.400636435
+  attRot = 0,0,0,1
+  attRot0 = 0.400636166,0.58265841,-0.400636435,0.582657993
+  mir = 1,1,1
+  symMethod = Radial
+  autostrutMode = Off
+  rigidAttachment = False
+  istg = -1
+  resPri = 0
+  dstg = 0
+  sidx = -1
+  sqor = -1
+  sepI = 1
+  attm = 1
+  modCost = 0
+  modMass = 0
+  modSize = 0,0,0
+  srfN = srfAttach,mk1pod_4294621954
+  EVENTS
+  {
+  }
+  ACTIONS
+  {
+  }
+  PARTDATA
+  {
+  }
+  MODULE
+  {
+    name = ModuleDataTransmitter
+    isEnabled = True
+    xmitIncomplete = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      StartTransmissionAction
       {
         actionGroup = None
       }

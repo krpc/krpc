@@ -63,7 +63,7 @@ class TestPartsPart(krpctest.TestCase):
         box = part.bounding_box(part.reference_frame)
         self.assertAlmostEqual((-1.223, -0.574, -1.223), box[0], places=2)
         self.assertAlmostEqual((1.223, 1.273, 1.223), box[1], places=2)
-        self.assertIsNone(part.antenna)
+        self.assertIsNotNone(part.antenna)
         self.assertIsNone(part.cargo_bay)
         self.assertIsNone(part.control_surface)
         self.assertIsNone(part.decoupler)
@@ -281,9 +281,9 @@ class TestPartsPart(krpctest.TestCase):
         self.assertIsNotNone(part.engine)
 
     def test_experiment(self):
-        part = self.parts.with_title(u'Mystery Goo\u2122 Containment Unit')[0]
+        part = self.parts.with_title(u'Mystery Goo\u2122 Containment Unit ')[0]
         self.assertEqual('GooExperiment', part.name)
-        self.assertEqual(u'Mystery Goo\u2122 Containment Unit', part.title)
+        self.assertEqual(u'Mystery Goo\u2122 Containment Unit ', part.title)
         self.assertEqual(800, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Rockomax X200-32 Fuel Tank', part.parent.title)
@@ -651,7 +651,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertTrue(part.massless)
         self.assertAlmostEqual(0, part.mass, places=4)
         self.assertAlmostEqual(0, part.dry_mass, places=4)
-        self.assertTrue(part.shielded)
+        self.assertFalse(part.shielded)
         self.assertAlmostEqual(0, part.dynamic_pressure, places=3)
         self.assertEqual(8, part.impact_tolerance)
         self.assertTrue(part.crossfeed)

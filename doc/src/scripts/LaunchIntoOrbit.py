@@ -13,8 +13,8 @@ vessel = conn.space_center.active_vessel
 ut = conn.add_stream(getattr, conn.space_center, 'ut')
 altitude = conn.add_stream(getattr, vessel.flight(), 'mean_altitude')
 apoapsis = conn.add_stream(getattr, vessel.orbit, 'apoapsis_altitude')
-stage_3_resources = vessel.resources_in_decouple_stage(stage=3, cumulative=False)
-srb_fuel = conn.add_stream(stage_3_resources.amount, 'SolidFuel')
+stage_2_resources = vessel.resources_in_decouple_stage(stage=2, cumulative=False)
+srb_fuel = conn.add_stream(stage_2_resources.amount, 'SolidFuel')
 
 # Pre-launch setup
 vessel.control.sas = False
