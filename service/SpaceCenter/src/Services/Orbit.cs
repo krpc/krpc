@@ -362,7 +362,28 @@ namespace KRPC.SpaceCenter.Services
         {
             return InternalOrbit.getOrbitalSpeedAt (time);
         }
- 
+
+        /// <summary>
+        /// The orbital radius at the given time, in meters.
+        /// </summary>
+        /// <param name="time">Time from now, in seconds.</param>
+        [KRPCMethod]
+        public double RadiusAt(double time)
+        {
+            return InternalOrbit.getRelativePositionAtUT(time).magnitude;
+        }
+
+        /// <summary>
+        /// The orbital radius at the given time, in meters.
+        /// </summary>
+        /// <param name="time">Time from now, in seconds.</param>
+        [KRPCMethod]
+        public Tuple3 PositionAt(double time, ReferenceFrame rf)
+        {
+            return rf.PositionFromWorldSpace(InternalOrbit.getPositionAtUT(time)).ToTuple();
+
+        }
+
 
         /// <summary>
         /// Estimates time of closest approach in the next orbit.

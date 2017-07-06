@@ -224,6 +224,8 @@ SpaceCenter.Orbit.ReferencePlaneNormal
 SpaceCenter.Orbit.ReferencePlaneDirection
 SpaceCenter.Orbit.TimeToSOIChange
 SpaceCenter.Orbit.NextOrbit
+SpaceCenter.Orbit.RadiusAt
+SpaceCenter.Orbit.PositionAt
 SpaceCenter.Orbit.ClosestApproach
 SpaceCenter.Orbit.ClosestApproachDistance
 SpaceCenter.Control
