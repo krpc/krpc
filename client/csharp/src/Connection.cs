@@ -221,11 +221,15 @@ namespace KRPC.Client
             // Construct the encoded arguments
             var arguments = new List<ByteString> ();
 
+            // Evaluate the instance on which the method is called
+            // Note: ensures, for example, that the service constructor extension method is called
+            //       such that custom exception types are registered
+            // Note: in the case of class methods, is used to get the id of the object
+            //       with which to make the call
+            var instanceValue = GetInstanceValue (expression.Object);
+
             // Include class instance argument for class methods
             if (ExpressionUtils.IsAClassMethod (expression)) {
-                var instance = expression.Object;
-                var instanceExpr = Expression.Lambda<Func<object>> (Expression.Convert (instance, typeof(object)));
-                var instanceValue = instanceExpr.Compile () ();
                 var instanceType = method.DeclaringType;
                 arguments.Add (Encoder.Encode (instanceValue, instanceType));
             }
@@ -263,18 +267,29 @@ namespace KRPC.Client
             // Construct the encoded arguments
             var arguments = new List<ByteString> ();
 
+            // Evaluate the instance on which the method is called
+            // Note: ensures, for example, that the service constructor extension method is called
+            //       such that custom exception types are registered
+            // Note: in the case of class methods, is used to get the id of the object
+            //       with which to make the call
+            var instanceValue = GetInstanceValue (expression.Expression);
+
             // If it's a class property, pass the class instance as an argument
             if (ExpressionUtils.IsAClassProperty (expression)) {
-                var instance = expression.Expression;
-                var argumentExpr = Expression.Lambda<Func<object>> (Expression.Convert (instance, typeof(object)));
-                var value = argumentExpr.Compile () ();
-                var type = member.DeclaringType;
-                var encodedValue = Encoder.Encode (value, type);
-                arguments.Add (encodedValue);
+                var instanceType = member.DeclaringType;
+                arguments.Add (Encoder.Encode (instanceValue, instanceType));
             }
 
             // Build the call
             return BuildCall (attribute.Service, attribute.Procedure, arguments);
+        }
+
+        static object GetInstanceValue (Expression instance) {
+            if (instance == null)
+                return null;
+            var instanceExpr = Expression.Lambda<Func<object>> (
+                Expression.Convert (instance, typeof(object)));
+            return instanceExpr.Compile () ();
         }
 
         // Initial buffer size of 1 MB
