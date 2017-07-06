@@ -362,5 +362,114 @@ namespace KRPC.SpaceCenter.Services
         {
             return InternalOrbit.getOrbitalSpeedAt (time);
         }
+ 
+
+        /// <summary>
+        /// Estimates time of closest approach in the next orbit.
+        /// </summary>
+        [KRPCMethod]
+        public double ClosestApproach(Vessel target)
+        {           
+            Orbit b = target.Orbit;
+            double approachTime = Planetarium.GetUniversalTime();
+            double approachDistance = double.MaxValue;
+            double mintime = Planetarium.GetUniversalTime();
+            double interval = InternalOrbit.period;
+            if (InternalOrbit.eccentricity > 1.0) { interval = 100 / InternalOrbit.meanMotion; }
+            double maxtime = mintime + interval;
+
+            //Conduct coarse search
+            double timestep = (maxtime - mintime) / 20;
+            double placeholder = mintime;
+            while (placeholder < maxtime)  
+            {
+                Vector3d PosA = InternalOrbit.getPositionAtUT(placeholder);
+                Vector3d PosB = b.InternalOrbit.getPositionAtUT(placeholder);
+                double thisDistance = Vector3d.Distance(PosA, PosB);
+                if (thisDistance < approachDistance)
+                {
+                    approachDistance = thisDistance;
+                    approachTime = placeholder;
+                }
+                placeholder += timestep;
+            }
+
+            //Conduct fine search
+            double fine_mintime = approachTime - timestep;
+            double fine_maxtime = approachTime + timestep;
+            if (fine_maxtime > maxtime) fine_maxtime = maxtime;
+            if (fine_mintime < mintime) fine_mintime = mintime;
+            timestep = (fine_maxtime - fine_mintime) / 50;
+            placeholder = fine_mintime;
+
+            while (placeholder < fine_maxtime)
+            {
+                Vector3d PosA = InternalOrbit.getPositionAtUT(placeholder);
+                Vector3d PosB = b.InternalOrbit.getPositionAtUT(placeholder);
+                double thisDistance = Vector3d.Distance(PosA, PosB);
+                if (thisDistance < approachDistance)
+                {
+                    approachDistance = thisDistance;
+                    approachTime = placeholder;
+                }
+                placeholder += timestep;
+            }
+            return approachTime;
+        }
+
+
+        /// <summary>
+        /// Estimates time of closest approach in the next orbit.
+        /// </summary>
+        [KRPCMethod]
+        public double ClosestApproachDistance(Vessel target)
+        {
+            Orbit b = target.Orbit;
+            double approachTime = Planetarium.GetUniversalTime();
+            double approachDistance = double.MaxValue;
+            double mintime = Planetarium.GetUniversalTime();
+            double interval = InternalOrbit.period;
+            if (InternalOrbit.eccentricity > 1.0) { interval = 100 / InternalOrbit.meanMotion; }
+            double maxtime = mintime + interval;
+
+            //Conduct coarse search
+            double timestep = (maxtime - mintime) / 20;
+            double placeholder = mintime;
+            while (placeholder < maxtime)
+            {
+                Vector3d PosA = InternalOrbit.getPositionAtUT(placeholder);
+                Vector3d PosB = b.InternalOrbit.getPositionAtUT(placeholder);
+                double thisDistance = Vector3d.Distance(PosA, PosB);
+                if (thisDistance < approachDistance)
+                {
+                    approachDistance = thisDistance;
+                    approachTime = placeholder;
+                }
+                placeholder += timestep;
+            }
+
+            //Conduct fine search
+            double fine_mintime = approachTime - timestep;
+            double fine_maxtime = approachTime + timestep;
+            if (fine_maxtime > maxtime) fine_maxtime = maxtime;
+            if (fine_mintime < mintime) fine_mintime = mintime;
+            timestep = (fine_maxtime - fine_mintime) / 50;
+            placeholder = fine_mintime;
+
+            while (placeholder < fine_maxtime)
+            {
+                Vector3d PosA = InternalOrbit.getPositionAtUT(placeholder);
+                Vector3d PosB = b.InternalOrbit.getPositionAtUT(placeholder);
+                double thisDistance = Vector3d.Distance(PosA, PosB);
+                if (thisDistance < approachDistance)
+                {
+                    approachDistance = thisDistance;
+                    approachTime = placeholder;
+                }
+                placeholder += timestep;
+            }
+            return approachDistance;
+        }
+
     }
 }
