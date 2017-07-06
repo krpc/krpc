@@ -8,6 +8,8 @@ namespace KRPC.Service
     {
         public ulong Identifier { get; private set; }
 
+        public ProcedureCall Call { get; private set; }
+
         public ProcedureSignature Procedure { get; private set; }
 
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidReturningArraysOnPropertiesRule")]
@@ -17,6 +19,7 @@ namespace KRPC.Service
 
         public StreamRequest (ProcedureCall call)
         {
+            Call = call;
             Identifier = NextIdentifier;
             var services = Services.Instance;
             Procedure = services.GetProcedureSignature (call.Service, call.Procedure);

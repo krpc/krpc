@@ -203,6 +203,13 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertTrue(
             str(cm.exception).startswith('A custom kRPC exception'))
 
+    def test_yield_exception(self):
+        stream = self.conn.add_stream(
+            self.conn.test_service.blocking_procedure, 10)
+        for _ in range(100):
+            self.assertEqual(55, stream())
+            self.wait()
+
 
 if __name__ == '__main__':
     unittest.main()
