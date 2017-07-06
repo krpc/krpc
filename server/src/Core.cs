@@ -588,10 +588,16 @@ namespace KRPC
                 throw new InvalidOperationException ("No stream client is connected for this RPC client");
             var streamClient = streamClients [id];
 
-            // Check for an existing stream for the request
+            // Unpack the call
             var services = Service.Services.Instance;
             var procedure = services.GetProcedureSignature (call.Service, call.Procedure);
             var arguments = services.GetArguments (procedure, call.Arguments);
+
+            // Check the call returns a value
+            if (!procedure.HasReturnType)
+                throw new InvalidOperationException ("Cannot create a stream for a procedure that does not return a value.");
+
+            // Check for an existing stream for the request
             foreach (var continuation in streamContinuations[streamClient]) {
                 var streamRequest = continuation.Request;
                 if (streamRequest.Procedure == procedure && streamRequest.Arguments.SequenceEqual (arguments))

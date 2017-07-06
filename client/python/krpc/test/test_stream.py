@@ -175,7 +175,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.conn.test_service.reset_invalid_operation_exception_later()
         stream = self.conn.add_stream(
             self.conn.test_service.throw_invalid_operation_exception_later)
-        stream()
+        self.assertEqual(0, stream())
         with self.assertRaises(RuntimeError) as cm:
             while True:
                 self.wait()
@@ -195,7 +195,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.conn.test_service.reset_custom_exception_later()
         stream = self.conn.add_stream(
             self.conn.test_service.throw_custom_exception_later)
-        stream()
+        self.assertEqual(0, stream())
         with self.assertRaises(RuntimeError) as cm:
             while True:
                 self.wait()
