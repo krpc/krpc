@@ -377,6 +377,7 @@ namespace KRPC.SpaceCenter.Services
         /// The orbital radius at the given time, in meters.
         /// </summary>
         /// <param name="time">Time from now, in seconds.</param>
+        /// <param name="rf">Reference Frame.</param>
         [KRPCMethod]
         public Tuple3 PositionAt(double time, ReferenceFrame rf)
         {
@@ -388,6 +389,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Estimates time of closest approach in the next orbit.
         /// </summary>
+        /// <param name="target">Other vessel.</param>
         [KRPCMethod]
         public double ClosestApproach(Vessel target)
         {           
@@ -442,6 +444,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Estimates time of closest approach in the next orbit.
         /// </summary>
+        /// <param name="target">Other vessel.</param>
         [KRPCMethod]
         public double ClosestApproachDistance(Vessel target)
         {
