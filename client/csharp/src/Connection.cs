@@ -169,9 +169,9 @@ namespace KRPC.Client
             }
 
             if (response.Error != null)
-                ThrowException(response.Error);
+                throw GetException(response.Error);
             if (response.Results[0].Error != null)
-                ThrowException (response.Results [0].Error);
+                throw GetException (response.Results [0].Error);
             return response.Results[0].Value;
         }
 
@@ -355,7 +355,7 @@ namespace KRPC.Client
         }
 
         [SuppressMessage ("Gendarme.Rules.Exceptions", "InstantiateArgumentExceptionCorrectlyRule")]
-        internal void ThrowException (Error error)
+        internal System.Exception GetException (Error error)
         {
             var message = error.Description;
             if (error.StackTrace.Length > 0) {
@@ -365,17 +365,17 @@ namespace KRPC.Client
             if (error.Service.Length > 0 && error.Name.Length > 0) {
                 var key = error.Service + "." + error.Name;
                 if (key == "KRPC.InvalidOperationException")
-                    throw new InvalidOperationException (message);
+                    return new InvalidOperationException (message);
                 if (key == "KRPC.ArgumentException")
-                    throw new ArgumentException (string.Empty, message);
+                    return new ArgumentException (string.Empty, message);
                 if (key == "KRPC.ArgumentNullException")
-                    throw new ArgumentNullException (string.Empty, message);
+                    return new ArgumentNullException (string.Empty, message);
                 if (key == "KRPC.ArgumentOutOfRangeException")
-                    throw new ArgumentOutOfRangeException (string.Empty, message);
+                    return new ArgumentOutOfRangeException (string.Empty, message);
                 var exnType = exceptionTypes [key];
-                throw (System.Exception)Activator.CreateInstance (exnType, new [] { message });
+                return (System.Exception)Activator.CreateInstance (exnType, new [] { message });
             }
-            throw new RPCException (message);
+            return new RPCException (message);
         }
     }
 }
