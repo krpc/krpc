@@ -1,5 +1,5 @@
 from krpc.decoder import Decoder
-from krpc.error import RPCError, StreamError
+from krpc.error import StreamError
 import krpc.schema.KRPC_pb2 as KRPC
 
 
@@ -30,7 +30,10 @@ class Stream(object):
             self._call = func._build_call(*args, **kwargs)
             self._return_type = func._return_type
         # Set the initial value by running the RPC once
-        self._value = func(*args, **kwargs)
+        try:
+            self._value = func(*args, **kwargs)
+        except Exception as exn:  # pylint: disable=broad-except
+            self._value = exn
         # Add the stream to the server and add the initial value to the cache
         with self._conn._stream_cache_lock:
             self._stream_id = self._conn.krpc.add_stream(self._call).id
@@ -67,7 +70,7 @@ def add_stream(conn, func, *args, **kwargs):
     return conn._stream_cache[stream._stream_id]
 
 
-def update_thread(connection, stop, cache, cache_lock):
+def update_thread(client, connection, stop, cache, cache_lock):
     while True:
 
         # Read the size and position of the update message
@@ -99,8 +102,8 @@ def update_thread(connection, stop, cache, cache_lock):
 
                 # Check for an error response
                 if result.result.HasField('error'):
-                    cache[result.id].value = RPCError(
-                        result.result.error.description)
+                    cache[result.id].update(
+                        client._build_error(result.result.error))
                     continue
 
                 # Decode the return value and store it in the cache

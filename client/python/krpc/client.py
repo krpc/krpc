@@ -42,7 +42,7 @@ class Client(object):
             self._stream_thread_stop = threading.Event()
             self._stream_thread = threading.Thread(
                 target=krpc.stream.update_thread,
-                args=(stream_connection, self._stream_thread_stop,
+                args=(self, stream_connection, self._stream_thread_stop,
                       self._stream_cache, self._stream_cache_lock))
             self._stream_thread.daemon = True
             self._stream_thread.start()

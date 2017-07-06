@@ -372,9 +372,25 @@ namespace TestServer
         }
 
         [KRPCProcedure]
-        public static void ThrowInvalidOperationException ()
+        public static void ThrowInvalidOperationException()
         {
-            throw new InvalidOperationException ("Invalid operation");
+            throw new InvalidOperationException("Invalid operation");
+        }
+
+        static int invalidOperationExceptionCount;
+
+        [KRPCProcedure]
+        public static void ResetInvalidOperationExceptionLater()
+        {
+            invalidOperationExceptionCount = 0;
+        }
+
+        [KRPCProcedure]
+        public static void ThrowInvalidOperationExceptionLater()
+        {
+            if (invalidOperationExceptionCount > 100)
+                throw new InvalidOperationException("Invalid operation");
+            invalidOperationExceptionCount++;
         }
 
         [KRPCProcedure]
@@ -423,6 +439,22 @@ namespace TestServer
         public static void ThrowCustomException ()
         {
             throw new CustomException ("A custom kRPC exception");
+        }
+
+        static int customExceptionCount;
+
+        [KRPCProcedure]
+        public static void ResetCustomExceptionLater()
+        {
+            customExceptionCount = 0;
+        }
+
+        [KRPCProcedure]
+        public static void ThrowCustomExceptionLater()
+        {
+            if (customExceptionCount > 100)
+                throw new CustomException("A custom kRPC exception");
+            customExceptionCount++;
         }
     }
 }
