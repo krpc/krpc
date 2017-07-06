@@ -168,6 +168,62 @@ TEST_F(test_stream, test_add_stream_twice) {
   ASSERT_EQ("42", s1());
 }
 
+TEST_F(test_stream, test_invalid_operation_exception_immediately) {
+  auto s = test_service.throw_invalid_operation_exception_stream();
+  ASSERT_THROW(s(), krpc::services::KRPC::InvalidOperationException);
+}
+
+TEST_F(test_stream, test_invalid_operation_exception_later) {
+  test_service.reset_invalid_operation_exception_later();
+  auto s = test_service.throw_invalid_operation_exception_later_stream();
+  ASSERT_EQ(0, s());
+  ASSERT_THROW({
+      while (true) {
+        wait();
+        s();
+      }
+    },
+    krpc::services::KRPC::InvalidOperationException);
+}
+
+TEST_F(test_stream, test_custom_exception_immediately) {
+  auto s = test_service.throw_custom_exception_stream();
+  ASSERT_THROW(s(), krpc::services::TestService::CustomException);
+  try {
+    s();
+  } catch(krpc::services::TestService::CustomException& e) {
+    ASSERT_STREQ(e.what(),
+      "A custom kRPC exception");
+  }
+}
+
+TEST_F(test_stream, test_custom_exception_later) {
+  test_service.reset_custom_exception_later();
+  auto s = test_service.throw_custom_exception_later_stream();
+  ASSERT_EQ(0, s());
+  ASSERT_THROW({
+      while (true) {
+        wait();
+        s();
+      }
+    },
+    krpc::services::TestService::CustomException);
+  try {
+    s();
+  } catch(krpc::services::TestService::CustomException& e) {
+    ASSERT_STREQ(e.what(),
+      "A custom kRPC exception");
+  }
+}
+
+TEST_F(test_stream, test_yield_exception) {
+  auto s = test_service.blocking_procedure_stream(10);
+  for (auto i = 0; i < 100; i++) {
+    ASSERT_EQ(55, s());
+    wait();
+  }
+}
+
 TEST_F(test_stream, test_stream_freeze) {
   auto s0 = test_service.counter_stream(0);
   auto s1 = test_service.counter_stream(1);

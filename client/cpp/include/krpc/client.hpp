@@ -34,6 +34,7 @@ class Client {
                              const std::function<void(std::string)>& thrower);
 
  private:
+  friend class StreamManager;
   void throw_exception(const schema::Error& error) const;
 
  public:

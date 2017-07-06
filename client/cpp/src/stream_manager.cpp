@@ -93,7 +93,14 @@ StreamManager::~StreamManager() {
 google::protobuf::uint64 StreamManager::add_stream(const schema::ProcedureCall& call) {
   std::lock_guard<std::mutex> guard(*data_lock);
   schema::Stream stream = services::KRPC(client).add_stream(call);
-  data[stream.id()] = client->invoke(call);
+  std::string value;
+  std::exception_ptr error;
+  try {
+    value = client->invoke(call);
+  } catch (...) {
+    error = std::current_exception();
+  }
+  data[stream.id()] = std::make_pair(value, error);
   return stream.id();
 }
 
@@ -108,7 +115,9 @@ std::string StreamManager::get(google::protobuf::uint64 id) {
   auto it = data.find(id);
   if (it == data.end())
     throw StreamError("Stream does not exist or was removed");
-  return it->second;
+  if (it->second.second)
+    std::rethrow_exception(it->second.second);
+  return it->second.first;
 }
 
 void StreamManager::update(google::protobuf::uint64 id, const schema::ProcedureResult& result) {
@@ -116,7 +125,16 @@ void StreamManager::update(google::protobuf::uint64 id, const schema::ProcedureR
   auto it = data.find(id);
   if (it == data.end())
     return;
-  it->second = result.value();
+  if (!result.has_error()) {
+    it->second.first = result.value();
+  } else {
+    it->second.first = "";
+    try {
+      client->throw_exception(result.error());
+    } catch (...) {
+      it->second.second = std::current_exception();
+    }
+  }
 }
 
 void StreamManager::freeze() {
