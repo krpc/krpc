@@ -489,6 +489,8 @@ namespace KRPC
 
         Stopwatch streamTimer = new Stopwatch ();
 
+        IList<Utils.Tuple<IClient, ulong>> removeStreams = new List<Utils.Tuple<IClient, ulong>>();
+
         /// <summary>
         /// Update the Stream server. Executes all streaming RPCs and sends the results to clients (if they have changed).
         /// </summary>
@@ -530,13 +532,20 @@ namespace KRPC
                         rpcsExecuted++;
                         // Don't send an update if it is the previous one
                         // FIXME: does the following comparison work?!? The objects have not been serialized
-                        if (result.Value == streamResultCache [request.Identifier])
-                            continue;
-                        // Add the update to the response message
-                        streamResultCache [request.Identifier] = result.Value;
-                        var streamResult = request.Result;
-                        streamResult.Result = result;
-                        streamUpdate.Results.Add (streamResult);
+                        if (result.HasError) {
+                            removeStreams.Add(Utils.Tuple.Create(CallContext.Client, request.Identifier));
+                            var streamResult = request.Result;
+                            streamResult.Result = result;
+                            streamUpdate.Results.Add(streamResult);
+                        } else {
+                            if (result.Value == streamResultCache [request.Identifier])
+                                continue;
+                            // Add the update to the response message
+                            streamResultCache [request.Identifier] = result.Value;
+                            var streamResult = request.Result;
+                            streamResult.Result = result;
+                            streamUpdate.Results.Add (streamResult);
+                        }
                     }
                     if (streamUpdate.Results.Count > 0) {
                         try {
@@ -546,6 +555,14 @@ namespace KRPC
                         }
                     }
                 }
+            }
+
+            if (removeStreams.Any()) {
+                foreach (var entry in removeStreams) {
+                    Logger.WriteLine("Removing stream as it returned an error", Logger.Severity.Debug);
+                    RemoveStream(entry.Item1, entry.Item2);
+                }
+                removeStreams.Clear();
             }
 
             streamTimer.Stop ();
