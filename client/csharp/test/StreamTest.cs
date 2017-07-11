@@ -189,5 +189,66 @@ namespace KRPC.Client.Test
             Assert.AreEqual ("42", s0.Get ());
             Assert.AreEqual ("42", s1.Get ());
         }
+
+        [Test]
+        public void InvalidOperationExceptionImmediately ()
+        {
+            var s = Connection.AddStream (
+                () => Connection.TestService ().ThrowInvalidOperationException ());
+            Assert.Throws<InvalidOperationException> (() => s.Get ());
+        }
+
+        [Test]
+        public void InvalidOperationExceptionLater ()
+        {
+            Connection.TestService ().ResetInvalidOperationExceptionLater ();
+            var s = Connection.AddStream (
+                () => Connection.TestService ().ThrowInvalidOperationExceptionLater());
+            Assert.AreEqual (0, s.Get ());
+            Assert.Throws<InvalidOperationException> (
+                () => {
+                    while (true) {
+                        Wait ();
+                        s.Get ();
+                    }
+                });
+        }
+
+        [Test]
+        public void CustomExceptionImmediately ()
+        {
+            var s = Connection.AddStream (
+                () => Connection.TestService ().ThrowCustomException ());
+            var exn = Assert.Throws<CustomException> (() => s.Get ());
+            Assert.That (exn.Message, Is.StringContaining ("A custom kRPC exception"));
+        }
+
+        [Test]
+        public void CustomExceptionLater ()
+        {
+            Connection.TestService ().ResetCustomExceptionLater ();
+            var s = Connection.AddStream (
+                () => Connection.TestService ().ThrowCustomExceptionLater());
+            Assert.AreEqual (0, s.Get ());
+            var exn = Assert.Throws<CustomException> (
+                () => {
+                    while (true) {
+                        Wait ();
+                        s.Get ();
+                    }
+                });
+            Assert.That (exn.Message, Is.StringContaining ("A custom kRPC exception"));
+        }
+
+        [Test]
+        public void YieldException ()
+        {
+            var s = Connection.AddStream (
+                () => Connection.TestService ().BlockingProcedure(10, 0));
+            for (var i = 0; i < 100; i++) {
+                Assert.AreEqual (55, s.Get ());
+                Wait ();
+            }
+        }
     }
 }

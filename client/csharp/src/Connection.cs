@@ -169,9 +169,9 @@ namespace KRPC.Client
             }
 
             if (response.Error != null)
-                ThrowException(response.Error);
+                throw GetException(response.Error);
             if (response.Results[0].Error != null)
-                ThrowException (response.Results [0].Error);
+                throw GetException (response.Results [0].Error);
             return response.Results[0].Value;
         }
 
@@ -221,11 +221,15 @@ namespace KRPC.Client
             // Construct the encoded arguments
             var arguments = new List<ByteString> ();
 
+            // Evaluate the instance on which the method is called
+            // Note: ensures, for example, that the service constructor extension method is called
+            //       such that custom exception types are registered
+            // Note: in the case of class methods, is used to get the id of the object
+            //       with which to make the call
+            var instanceValue = GetInstanceValue (expression.Object);
+
             // Include class instance argument for class methods
             if (ExpressionUtils.IsAClassMethod (expression)) {
-                var instance = expression.Object;
-                var instanceExpr = Expression.Lambda<Func<object>> (Expression.Convert (instance, typeof(object)));
-                var instanceValue = instanceExpr.Compile () ();
                 var instanceType = method.DeclaringType;
                 arguments.Add (Encoder.Encode (instanceValue, instanceType));
             }
@@ -263,18 +267,29 @@ namespace KRPC.Client
             // Construct the encoded arguments
             var arguments = new List<ByteString> ();
 
+            // Evaluate the instance on which the method is called
+            // Note: ensures, for example, that the service constructor extension method is called
+            //       such that custom exception types are registered
+            // Note: in the case of class methods, is used to get the id of the object
+            //       with which to make the call
+            var instanceValue = GetInstanceValue (expression.Expression);
+
             // If it's a class property, pass the class instance as an argument
             if (ExpressionUtils.IsAClassProperty (expression)) {
-                var instance = expression.Expression;
-                var argumentExpr = Expression.Lambda<Func<object>> (Expression.Convert (instance, typeof(object)));
-                var value = argumentExpr.Compile () ();
-                var type = member.DeclaringType;
-                var encodedValue = Encoder.Encode (value, type);
-                arguments.Add (encodedValue);
+                var instanceType = member.DeclaringType;
+                arguments.Add (Encoder.Encode (instanceValue, instanceType));
             }
 
             // Build the call
             return BuildCall (attribute.Service, attribute.Procedure, arguments);
+        }
+
+        static object GetInstanceValue (Expression instance) {
+            if (instance == null)
+                return null;
+            var instanceExpr = Expression.Lambda<Func<object>> (
+                Expression.Convert (instance, typeof(object)));
+            return instanceExpr.Compile () ();
         }
 
         // Initial buffer size of 1 MB
@@ -340,7 +355,7 @@ namespace KRPC.Client
         }
 
         [SuppressMessage ("Gendarme.Rules.Exceptions", "InstantiateArgumentExceptionCorrectlyRule")]
-        internal void ThrowException (Error error)
+        internal System.Exception GetException (Error error)
         {
             var message = error.Description;
             if (error.StackTrace.Length > 0) {
@@ -350,17 +365,17 @@ namespace KRPC.Client
             if (error.Service.Length > 0 && error.Name.Length > 0) {
                 var key = error.Service + "." + error.Name;
                 if (key == "KRPC.InvalidOperationException")
-                    throw new InvalidOperationException (message);
+                    return new InvalidOperationException (message);
                 if (key == "KRPC.ArgumentException")
-                    throw new ArgumentException (string.Empty, message);
+                    return new ArgumentException (string.Empty, message);
                 if (key == "KRPC.ArgumentNullException")
-                    throw new ArgumentNullException (string.Empty, message);
+                    return new ArgumentNullException (string.Empty, message);
                 if (key == "KRPC.ArgumentOutOfRangeException")
-                    throw new ArgumentOutOfRangeException (string.Empty, message);
+                    return new ArgumentOutOfRangeException (string.Empty, message);
                 var exnType = exceptionTypes [key];
-                throw (System.Exception)Activator.CreateInstance (exnType, new [] { message });
+                return (System.Exception)Activator.CreateInstance (exnType, new [] { message });
             }
-            throw new RPCException (message);
+            return new RPCException (message);
         }
     }
 }

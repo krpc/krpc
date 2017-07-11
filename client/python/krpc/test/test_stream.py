@@ -164,6 +164,52 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertEqual('42', s0())
         self.assertEqual('42', s1())
 
+    def test_invalid_operation_exception_immediately(self):
+        stream = self.conn.add_stream(
+            self.conn.test_service.throw_invalid_operation_exception)
+        with self.assertRaises(RuntimeError) as cm:
+            stream()
+        self.assertTrue(str(cm.exception).startswith('Invalid operation'))
+
+    def test_invalid_operation_exception_later(self):
+        self.conn.test_service.reset_invalid_operation_exception_later()
+        stream = self.conn.add_stream(
+            self.conn.test_service.throw_invalid_operation_exception_later)
+        self.assertEqual(0, stream())
+        with self.assertRaises(RuntimeError) as cm:
+            while True:
+                self.wait()
+                stream()
+        self.assertTrue(
+            str(cm.exception).startswith('Invalid operation'))
+
+    def test_custom_exception_immediately(self):
+        stream = self.conn.add_stream(
+            self.conn.test_service.throw_custom_exception)
+        with self.assertRaises(RuntimeError) as cm:
+            stream()
+        self.assertTrue(
+            str(cm.exception).startswith('A custom kRPC exception'))
+
+    def test_custom_exception_later(self):
+        self.conn.test_service.reset_custom_exception_later()
+        stream = self.conn.add_stream(
+            self.conn.test_service.throw_custom_exception_later)
+        self.assertEqual(0, stream())
+        with self.assertRaises(RuntimeError) as cm:
+            while True:
+                self.wait()
+                stream()
+        self.assertTrue(
+            str(cm.exception).startswith('A custom kRPC exception'))
+
+    def test_yield_exception(self):
+        stream = self.conn.add_stream(
+            self.conn.test_service.blocking_procedure, 10)
+        for _ in range(100):
+            self.assertEqual(55, stream())
+            self.wait()
+
 
 if __name__ == '__main__':
     unittest.main()

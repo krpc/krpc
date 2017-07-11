@@ -196,7 +196,16 @@ public class Connection {
     return invoke(buildCall(service, procedure, arguments));
   }
 
-  ByteString invoke(KRPC.ProcedureCall call) throws RPCException {
+  private ByteString invoke(KRPC.ProcedureCall call) throws RPCException {
+    KRPC.Response response = invokeInternal(call);
+    KRPC.Error error = getErrorFromResponse(response);
+    if (error != null) {
+      throwException(error);
+    }
+    return getReturnValueFromResponse(response);
+  }
+
+  KRPC.Response invokeInternal(KRPC.ProcedureCall call) throws RPCException {
     try {
       KRPC.Request request = KRPC.Request.newBuilder().addCalls(call).build();
       byte[] data;
@@ -206,17 +215,24 @@ public class Connection {
         int size = rpcInputStream.readRawVarint32();
         data = rpcInputStream.readRawBytes(size);
       }
-      KRPC.Response response = KRPC.Response.parseFrom(data);
-      if (response.hasError()) {
-        throwException(response.getError());
-      }
-      if (response.getResultsList().get(0).hasError()) {
-        throwException(response.getResultsList().get(0).getError());
-      }
-      return response.getResultsList().get(0).getValue();
+      return KRPC.Response.parseFrom(data);
     } catch (IOException exn) {
       throw new RPCException("Failed to invoke call", exn);
     }
+  }
+
+  KRPC.Error getErrorFromResponse(KRPC.Response response) {
+    if (response.hasError()) {
+      return response.getError();
+    }
+    if (response.getResultsList().get(0).hasError()) {
+      return response.getResultsList().get(0).getError();
+    }
+    return null;
+  }
+
+  ByteString getReturnValueFromResponse(KRPC.Response response) {
+    return response.getResultsList().get(0).getValue();
   }
 
   KRPC.ProcedureCall buildCall(String service, String procedure, ByteString... arguments) {
@@ -252,7 +268,7 @@ public class Connection {
     exceptionTypes.put(service + "." + name, exnType);
   }
 
-  private void throwException(KRPC.Error error) throws RPCException {
+  void throwException(KRPC.Error error) throws RPCException {
     String message = error.getDescription();
     if (!error.getStackTrace().isEmpty()) {
       message += "\nServer stack trace:\n" + error.getStackTrace();

@@ -27,8 +27,8 @@ namespace KRPC
         IDictionary<Guid, IClient<Request, Response>> rpcClients = new Dictionary<Guid, IClient<Request, Response>> ();
         IDictionary<Guid, IClient<NoMessage, StreamUpdate>> streamClients = new Dictionary<Guid, IClient<NoMessage, StreamUpdate>> ();
         RoundRobinScheduler<IClient<Request,Response>> clientScheduler = new RoundRobinScheduler<IClient<Request, Response>> ();
-        List<RequestContinuation> continuations = new List<RequestContinuation> ();
-        IDictionary<IClient<NoMessage,StreamUpdate>, IList<StreamRequest>> streamRequests = new Dictionary<IClient<NoMessage,StreamUpdate>,IList<StreamRequest>> ();
+        List<RequestContinuation> rpcContinuations = new List<RequestContinuation> ();
+        IDictionary<IClient<NoMessage,StreamUpdate>, IList<StreamContinuation>> streamContinuations = new Dictionary<IClient<NoMessage,StreamUpdate>,IList<StreamContinuation>> ();
         IDictionary<ulong, object> streamResultCache = new Dictionary<ulong, object> ();
 
         static Core instance;
@@ -91,13 +91,13 @@ namespace KRPC
         internal void StreamClientConnected (IClient<NoMessage,StreamUpdate> client)
         {
             streamClients [client.Guid] = client;
-            streamRequests [client] = new List<StreamRequest> ();
+            streamContinuations [client] = new List<StreamContinuation> ();
         }
 
         internal void StreamClientDisconnected (IClient<NoMessage,StreamUpdate> client)
         {
             streamClients.Remove (client.Guid);
-            streamRequests.Remove (client);
+            streamContinuations.Remove (client);
         }
 
         /// <summary>
@@ -431,18 +431,18 @@ namespace KRPC
                         break;
                     if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks)
                         break;
-                    if (continuations.Count > 0)
+                    if (rpcContinuations.Count > 0)
                         break;
                 }
                 rpcPollTimer.Stop ();
 
-                if (continuations.Count == 0)
+                if (rpcContinuations.Count == 0)
                     break;
 
                 // Execute RPCs
                 rpcExecTimer.Start ();
-                for (int i = 0; i < continuations.Count; i++) {
-                    var continuation = continuations [i];
+                for (int i = 0; i < rpcContinuations.Count; i++) {
+                    var continuation = rpcContinuations [i];
 
                     // Ignore the continuation if the client has disconnected
                     if (!continuation.Client.Connected)
@@ -462,7 +462,7 @@ namespace KRPC
                     }
                     rpcsExecuted++;
                 }
-                continuations.Clear ();
+                rpcContinuations.Clear ();
                 rpcExecTimer.Stop ();
 
                 // Exit if only execute one RPC per update
@@ -475,8 +475,8 @@ namespace KRPC
             }
 
             // Run yielded continuations on the next update
-            var tmp = continuations;
-            continuations = rpcYieldedContinuations;
+            var tmp = rpcContinuations;
+            rpcContinuations = rpcYieldedContinuations;
             rpcYieldedContinuations = tmp;
 
             rpcTimer.Stop ();
@@ -489,9 +489,12 @@ namespace KRPC
 
         Stopwatch streamTimer = new Stopwatch ();
 
+        IList<Utils.Tuple<IClient, ulong>> removeStreams = new List<Utils.Tuple<IClient, ulong>>();
+
         /// <summary>
         /// Update the Stream server. Executes all streaming RPCs and sends the results to clients (if they have changed).
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         void StreamServerUpdate ()
         {
@@ -499,45 +502,58 @@ namespace KRPC
             streamTimer.Start ();
             uint rpcsExecuted = 0;
 
+            // Update stream servers
             for (int i = 0; i < Servers.Count; i++)
                 Servers [i].StreamServer.Update ();
 
-            // Run streaming requests
-            if (streamRequests.Count > 0) {
-                foreach (var entry in streamRequests) {
+            // Run stream continuations
+            if (streamContinuations.Count > 0) {
+                foreach (var entry in streamContinuations) {
                     var streamClient = entry.Key;
-                    var id = streamClient.Guid;
-                    var requests = entry.Value;
-                    if (requests.Count == 0)
+                    var streamClientId = streamClient.Guid;
+                    var continuations = entry.Value;
+                    var numContinuations = continuations.Count;
+                    if (numContinuations == 0)
                         continue;
-                    if (!rpcClients.ContainsKey (id))
+                    if (!rpcClients.ContainsKey (streamClientId))
                         continue;
-                    CallContext.Set (rpcClients [id]);
+                    CallContext.Set (rpcClients [streamClientId]);
                     var streamUpdate = new StreamUpdate ();
-                    foreach (var request in requests) {
+                    for (int i = 0; i < numContinuations; i++) {
+                        var continuation = continuations [i];
+                        var request = continuation.Request;
                         // Run the RPC
                         ProcedureResult result;
                         try {
-                            result = Service.Services.Instance.ExecuteCall (request.Procedure, request.Arguments);
+                            result = continuation.Run ();
+                        } catch (YieldException) {
+                            continue;
                         } catch (RPCException e) {
                             result = new ProcedureResult ();
                             result.Error = HandleException (e);
-                        } catch (YieldException e) {
-                            // FIXME: handle yields correctly
+                        } catch (System.Exception e) {
                             result = new ProcedureResult ();
                             result.Error = HandleException (e);
                         }
                         rpcsExecuted++;
-                        // Don't send an update if it is the previous one
-                        // FIXME: does the following comparison work?!? The objects have not been serialized
-                        if (result.Value == streamResultCache [request.Identifier])
-                            continue;
-                        // Add the update to the response message
-                        streamResultCache [request.Identifier] = result.Value;
-                        var streamResult = request.Result;
-                        streamResult.Result = result;
-                        streamUpdate.Results.Add (streamResult);
+                        if (result.HasError) {
+                            removeStreams.Add(Utils.Tuple.Create(CallContext.Client, request.Identifier));
+                            var streamResult = request.Result;
+                            streamResult.Result = result;
+                            streamUpdate.Results.Add(streamResult);
+                        } else {
+                            // Don't send an update if it is the previous one
+                            // FIXME: does the following comparison work?!? The objects have not been serialized
+                            if (result.Value == streamResultCache [request.Identifier])
+                                continue;
+                            // Add the update to the response message
+                            streamResultCache [request.Identifier] = result.Value;
+                            var streamResult = request.Result;
+                            streamResult.Result = result;
+                            streamUpdate.Results.Add (streamResult);
+                        }
                     }
+                    CallContext.Clear ();
                     if (streamUpdate.Results.Count > 0) {
                         try {
                             streamClient.Stream.Write (streamUpdate);
@@ -546,6 +562,14 @@ namespace KRPC
                         }
                     }
                 }
+            }
+
+            if (removeStreams.Any()) {
+                foreach (var entry in removeStreams) {
+                    Logger.WriteLine("Removing stream as it returned an error", Logger.Severity.Debug);
+                    RemoveStream(entry.Item1, entry.Item2);
+                }
+                removeStreams.Clear();
             }
 
             streamTimer.Stop ();
@@ -564,11 +588,18 @@ namespace KRPC
                 throw new InvalidOperationException ("No stream client is connected for this RPC client");
             var streamClient = streamClients [id];
 
-            // Check for an existing stream for the request
+            // Unpack the call
             var services = Service.Services.Instance;
             var procedure = services.GetProcedureSignature (call.Service, call.Procedure);
             var arguments = services.GetArguments (procedure, call.Arguments);
-            foreach (var streamRequest in streamRequests[streamClient]) {
+
+            // Check the call returns a value
+            if (!procedure.HasReturnType)
+                throw new InvalidOperationException ("Cannot create a stream for a procedure that does not return a value.");
+
+            // Check for an existing stream for the request
+            foreach (var continuation in streamContinuations[streamClient]) {
+                var streamRequest = continuation.Request;
                 if (streamRequest.Procedure == procedure && streamRequest.Arguments.SequenceEqual (arguments))
                     return streamRequest.Identifier;
             }
@@ -576,7 +607,7 @@ namespace KRPC
             // Create a new stream
             {
                 var streamRequest = new StreamRequest (call);
-                streamRequests [streamClient].Add (streamRequest);
+                streamContinuations [streamClient].Add (new StreamContinuation (streamRequest));
                 streamResultCache [streamRequest.Identifier] = null;
                 return streamRequest.Identifier;
             }
@@ -591,10 +622,10 @@ namespace KRPC
             if (!streamClients.ContainsKey (id))
                 throw new InvalidOperationException ("No stream client is connected for this RPC client");
             var streamClient = streamClients [id];
-            var requests = streamRequests [streamClient].Where (x => x.Identifier == identifier).ToList ();
-            if (!requests.Any ())
+            var continuations = streamContinuations [streamClient].Where (x => x.Request.Identifier == identifier).ToList ();
+            if (!continuations.Any ())
                 return;
-            streamRequests [streamClient].Remove (requests.Single ());
+            streamContinuations [streamClient].Remove (continuations.Single ());
             streamResultCache.Remove (identifier);
         }
 
@@ -613,8 +644,8 @@ namespace KRPC
             if (clientScheduler.Empty)
                 return;
             pollRequestsCurrentClients.Clear ();
-            for (int i = 0; i < continuations.Count; i++)
-                pollRequestsCurrentClients.Add (continuations [i].Client);
+            for (int i = 0; i < rpcContinuations.Count; i++)
+                pollRequestsCurrentClients.Add (rpcContinuations [i].Client);
             for (int i = 0; i < yieldedContinuations.Count; i++)
                 pollRequestsCurrentClients.Add (yieldedContinuations [i].Client);
             var item = clientScheduler.Items.First;
@@ -629,7 +660,7 @@ namespace KRPC
                             Logger.WriteLine ("Received request from client " + client.Address +
                             " (" + string.Join (", ", request.Calls.Select (call => call.Service + "." + call.Procedure).ToArray ()) + ")",
                                 Logger.Severity.Debug);
-                        continuations.Add (new RequestContinuation (client, request));
+                        rpcContinuations.Add (new RequestContinuation (client, request));
                     }
                 } catch (ServerException e) {
                     Logger.WriteLine ("Error receiving request from client " + client.Address + ": " + e.Message, Logger.Severity.Error);

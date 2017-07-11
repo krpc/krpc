@@ -256,14 +256,14 @@ namespace KRPC.Client.Test
         [Test]
         public void InvalidOperationException ()
         {
-            var exn = Assert.Throws<System.InvalidOperationException> (Connection.TestService ().ThrowInvalidOperationException);
+            var exn = Assert.Throws<System.InvalidOperationException> (() => Connection.TestService ().ThrowInvalidOperationException ());
             Assert.That (exn.Message, Is.StringContaining ("Invalid operation"));
         }
 
         [Test]
         public void ArgumentException ()
         {
-            var exn = Assert.Throws<System.ArgumentException> (Connection.TestService ().ThrowArgumentException);
+            var exn = Assert.Throws<System.ArgumentException> (() => Connection.TestService ().ThrowArgumentException ());
             Assert.That (exn.Message, Is.StringContaining ("Invalid argument"));
         }
 
@@ -271,7 +271,7 @@ namespace KRPC.Client.Test
         [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
         public void ArgumentNullException ()
         {
-            var exn = Assert.Throws<System.ArgumentNullException> (() => Connection.TestService ().ThrowArgumentNullException(string.Empty));
+            var exn = Assert.Throws<System.ArgumentNullException> (() => Connection.TestService ().ThrowArgumentNullException (string.Empty));
             Assert.That (exn.Message, Is.StringContaining ("Value cannot be null.\nParameter name: foo"));
         }
 
@@ -286,7 +286,7 @@ namespace KRPC.Client.Test
         [Test]
         public void CustomException ()
         {
-            var exn = Assert.Throws<CustomException> (Connection.TestService ().ThrowCustomException);
+            var exn = Assert.Throws<CustomException> (() => Connection.TestService ().ThrowCustomException ());
             Assert.That (exn.Message, Is.StringContaining ("A custom kRPC exception"));
         }
 

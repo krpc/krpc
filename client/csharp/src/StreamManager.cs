@@ -17,7 +17,6 @@ namespace KRPC.Client
         readonly Connection connection;
         readonly object accessLock = new object ();
         readonly IDictionary<ulong, System.Type> streamTypes = new Dictionary<ulong, System.Type> ();
-        readonly IDictionary<ulong, ByteString> streamData = new Dictionary<ulong, ByteString> ();
         readonly IDictionary<ulong, object> streamValues = new Dictionary<ulong, object> ();
         readonly UpdateThread updateThreadObject;
         readonly Thread updateThread;
@@ -61,6 +60,7 @@ namespace KRPC.Client
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
         public ulong AddStream (ProcedureCall call, System.Type type)
         {
             CheckDisposed ();
@@ -68,7 +68,14 @@ namespace KRPC.Client
             lock (accessLock) {
                 if (!streamTypes.ContainsKey (id)) {
                     streamTypes [id] = type;
-                    streamData [id] = connection.Invoke (call);
+                    ByteString result = null;
+                    object error = null;
+                    try {
+                        result = connection.Invoke (call);
+                    } catch (System.Exception exn) {
+                        error = exn;
+                    }
+                    streamValues [id] = (error == null ? Encoder.Decode (result, type, connection) : error);
                 }
             }
             return id;
@@ -81,7 +88,6 @@ namespace KRPC.Client
             connection.KRPC ().RemoveStream (id);
             lock (accessLock) {
                 streamTypes.Remove (id);
-                streamData.Remove (id);
                 streamValues.Remove (id);
             }
         }
@@ -93,10 +99,10 @@ namespace KRPC.Client
             lock (accessLock) {
                 if (!streamTypes.ContainsKey (id))
                     throw new System.InvalidOperationException ("Stream does not exist or has been closed");
-                if (streamValues.ContainsKey (id))
-                    return streamValues [id];
-                streamValues [id] = Encoder.Decode (streamData [id], streamTypes [id], connection);
                 result = streamValues [id];
+                var exn = result as System.Exception;
+                if (exn != null)
+                    throw exn;
             }
             return result;
         }
@@ -104,13 +110,12 @@ namespace KRPC.Client
         void Update (ulong id, ProcedureResult result)
         {
             lock (accessLock) {
-                if (!streamData.ContainsKey (id))
-                    return;
-                if (result.Error != null)
-                    return; // TODO: do something with the error
-                var data = result.Value;
-                streamData [id] = data;
-                streamValues.Remove (id);
+                object value;
+                if (result.Error == null)
+                    value = Encoder.Decode (result.Value, streamTypes [id], connection);
+                else
+                    value = connection.GetException (result.Error);
+                streamValues [id] = value;
             }
         }
 
@@ -143,7 +148,6 @@ namespace KRPC.Client
                         if (size == 0 || stop)
                             break;
                         var update = StreamUpdate.Parser.ParseFrom (new CodedInputStream (buffer, 0, size));
-                        // TODO: handle errors
                         if (stop)
                             break;
                         foreach (var result in update.Results) {

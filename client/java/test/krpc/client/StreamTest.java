@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import krpc.client.services.TestService;
+import krpc.client.services.TestService.CustomException;
 import krpc.client.services.TestService.TestClass;
 
 import org.junit.Before;
@@ -266,5 +267,73 @@ public class StreamTest {
     pause();
     assertEquals("42", stream0.get());
     assertEquals("42", stream1.get());
+  }
+
+  @Test
+  @SuppressWarnings("checkstyle:emptycatchblock")
+  public void testInvalidOperationExceptionImmediately()
+      throws RPCException, StreamException {
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "throwInvalidOperationException");
+    try {
+      stream.get();
+      fail();
+    } catch (UnsupportedOperationException exn) {
+    }
+  }
+
+  @Test
+  @SuppressWarnings("checkstyle:emptycatchblock")
+  public void testInvalidOperationExceptionLater()
+      throws RPCException, StreamException {
+    testService.resetInvalidOperationExceptionLater();
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "throwInvalidOperationExceptionLater");
+    assertEquals((Integer)0, stream.get());
+    try {
+      while (true) {
+        pause();
+        stream.get();
+      }
+    } catch (UnsupportedOperationException exn) {
+    }
+  }
+
+  @Test
+  public void testCustomExceptionImmediately()
+      throws RPCException, StreamException {
+    Stream<Integer> stream = connection.addStream(TestService.class, "throwCustomException");
+    try {
+      stream.get();
+      fail();
+    } catch (CustomException exn) {
+      assertTrue(exn.getMessage().startsWith("A custom kRPC exception"));
+    }
+  }
+
+  @Test
+  public void testCustomExceptionLater()
+      throws RPCException, StreamException {
+    testService.resetCustomExceptionLater();
+    Stream<Integer> stream = connection.addStream(TestService.class, "throwCustomExceptionLater");
+    assertEquals(0, (int)stream.get());
+    try {
+      while (true) {
+        pause();
+        stream.get();
+      }
+    } catch (CustomException exn) {
+      assertTrue(exn.getMessage().startsWith("A custom kRPC exception"));
+    }
+  }
+
+  @Test
+  public void testYieldException()
+      throws RPCException, StreamException {
+    Stream<Integer> stream = connection.addStream(TestService.class, "blockingProcedure", 10, 0);
+    for (int i = 0; i < 100; i++) {
+      assertEquals(55, (int)stream.get());
+      pause();
+    }
   }
 }

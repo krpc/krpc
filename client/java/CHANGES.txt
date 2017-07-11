@@ -1,6 +1,6 @@
 v0.4.0
  * Updated protocol in line with server changes
- * Add support for RPCs to throw exceptions
+ * Add support for RPCs and streams to throw exceptions
  * Clean up error reporting:
    * ConnectionException thrown when connection to a server fails
      This inherits IOException

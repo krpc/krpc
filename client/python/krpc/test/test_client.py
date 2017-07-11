@@ -386,8 +386,12 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
                 'CustomException',
                 'throw_custom_exception',
+                'reset_custom_exception_later',
+                'throw_custom_exception_later',
 
                 'throw_invalid_operation_exception',
+                'throw_invalid_operation_exception_later',
+                'reset_invalid_operation_exception_later',
                 'throw_argument_exception',
                 'throw_argument_null_exception',
                 'throw_argument_out_of_range_exception'

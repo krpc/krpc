@@ -1,6 +1,6 @@
 v0.4.0
  * Updated protocol in line with server changes
- * Add support for RPCs to throw exceptions
+ * Add support for RPCs and streams to throw exceptions
 
 v0.3.10
  * Add support for .NET 3.5 (allows use of the client from within KSP itself)

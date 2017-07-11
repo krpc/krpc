@@ -372,27 +372,44 @@ namespace TestServer
         }
 
         [KRPCProcedure]
-        public static void ThrowInvalidOperationException ()
+        public static int ThrowInvalidOperationException()
         {
-            throw new InvalidOperationException ("Invalid operation");
+            throw new InvalidOperationException("Invalid operation");
+        }
+
+        static int invalidOperationExceptionCount;
+
+        [KRPCProcedure]
+        public static void ResetInvalidOperationExceptionLater()
+        {
+            invalidOperationExceptionCount = 0;
         }
 
         [KRPCProcedure]
-        public static void ThrowArgumentException ()
+        public static int ThrowInvalidOperationExceptionLater()
+        {
+            if (invalidOperationExceptionCount > 100)
+                throw new InvalidOperationException("Invalid operation");
+            invalidOperationExceptionCount++;
+            return 0;
+        }
+
+        [KRPCProcedure]
+        public static int ThrowArgumentException ()
         {
             throw new ArgumentException ("Invalid argument");
         }
 
         [KRPCProcedure]
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUnusedParametersRule")]
-        public static void ThrowArgumentNullException (string foo)
+        public static int ThrowArgumentNullException (string foo)
         {
             throw new ArgumentNullException (nameof (foo));
         }
 
         [KRPCProcedure]
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUnusedParametersRule")]
-        public static void ThrowArgumentOutOfRangeException (int foo)
+        public static int ThrowArgumentOutOfRangeException (int foo)
         {
             throw new ArgumentOutOfRangeException (nameof (foo));
         }
@@ -420,9 +437,26 @@ namespace TestServer
         }
 
         [KRPCProcedure]
-        public static void ThrowCustomException ()
+        public static int ThrowCustomException ()
         {
             throw new CustomException ("A custom kRPC exception");
+        }
+
+        static int customExceptionCount;
+
+        [KRPCProcedure]
+        public static void ResetCustomExceptionLater()
+        {
+            customExceptionCount = 0;
+        }
+
+        [KRPCProcedure]
+        public static int ThrowCustomExceptionLater()
+        {
+            if (customExceptionCount > 100)
+                throw new CustomException("A custom kRPC exception");
+            customExceptionCount++;
+            return 0;
         }
     }
 }

@@ -198,6 +198,7 @@
     <Compile Include="Service\Scanner\ServiceSignature.cs" />
     <Compile Include="Service\ServiceException.cs" />
     <Compile Include="Service\Services.cs" />
+    <Compile Include="Service\StreamContinuation.cs" />
     <Compile Include="Service\StreamRequest.cs" />
     <Compile Include="Service\TypeUtils.cs" />
     <Compile Include="UI\ClientConnectingDialog.cs" />
