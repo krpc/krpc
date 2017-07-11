@@ -187,7 +187,7 @@ namespace KRPC.Client.Services.{{ service_name }}
 {{ method.documentation | indent(width=8) }}
         /// <param name="connection">A connection object.</param>
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}")]
-        public static {{ method.return_type }} {{ method_name }} (IConnection connection, {{ sig_parameters(method.parameters) }})
+        public static {{ method.return_type }} {{ method_name }} ({{ sig_parameters([{'type': 'IConnection', 'name': 'connection'}] + method.parameters) }})
         {
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=12) }}
 {% endif %}

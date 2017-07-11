@@ -105,7 +105,7 @@ class {{ service_name }} : public Service {
     {% for method_name,method in cls.static_methods.items() %}
 
 {{ method.documentation | indent(width=4) }}
-    static {{ method.return_type }} {{ method_name }}(Client& client, {{ sig_parameters(method.parameters) }});
+    static {{ method.return_type }} {{ method_name }}({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
     {% endfor %}
     {% for property_name,property in cls.properties.items() %}
 
@@ -121,7 +121,7 @@ class {{ service_name }} : public Service {
     {% for method_name,method in cls.static_methods.items() %}
     {% if method.return_type != 'void' %}
 
-    static ::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream(Client& client, {{ sig_parameters(method.parameters) }});
+    static ::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
     {% endif %}
     {% endfor %}
     {% for property_name,property in cls.properties.items() %}
@@ -205,10 +205,10 @@ inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
-inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}(Client& _client, {{ impl_parameters(method.parameters) }}) {
+inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}({{ impl_parameters([{'type': 'Client&', 'name': '_client'}] + method.parameters) }}) {
 {% if method.parameters | length > 0 %}  {{ args(method.parameters) | indent(width=2) }}
 {% endif %}
-{{ call(service_name, method.remote_name, method.return_type != 'void', True, True) | indent(width=2) }}
+{{ call(service_name, method.remote_name, method.return_type != 'void', method.parameters | length > 0, True) | indent(width=2) }}
 {% if method.return_type != 'void' %}  {{ return(method.return_type, method.return_set_client, True) | indent(width=2) }}
 {% endif %}
 }
@@ -225,10 +225,10 @@ inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_nam
 {% for method_name,method in cls.static_methods.items() %}
 {% if method.return_type != 'void' %}
 
-inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_name }}::{{ method_name }}_stream(Client& _client, {{ impl_parameters(method.parameters) }}) {
+inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_name }}::{{ method_name }}_stream({{ impl_parameters([{'type': 'Client&', 'name': '_client'}] + method.parameters) }}) {
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=2) }}
 {% endif %}
-{{ stream(service_name, method.remote_name, method.return_type, True, True) | indent(width=2) }}
+{{ stream(service_name, method.remote_name, method.return_type, method.parameters | length > 0, True) | indent(width=2) }}
 }
 {% endif %}
 {% endfor %}

@@ -135,7 +135,7 @@ public class {{ service_name }} {
 {{ method.documentation | indent(width=8) }}
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
-        public static {{ method.return_type.name }} {{ method_name }}(Connection connection, {{ sig_parameters(method.parameters) }}) throws RPCException
+        public static {{ method.return_type.name }} {{ method_name }}({{ sig_parameters([{'type': {'name': 'Connection'}, 'name': 'connection'}] + method.parameters) }}) throws RPCException
         {
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=12) }}
 {% endif %}

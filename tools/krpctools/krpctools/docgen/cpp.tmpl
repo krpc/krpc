@@ -91,7 +91,7 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. function:: static {{ domain.return_type(x.return_type) }} {{ x.name | snakecase }}(Client& connection, {{ parameters(x.parameters) }})
+.. function:: static {{ domain.return_type(x.return_type) }} {{ x.name | snakecase }}(Client& connection{% if x.parameters | length > 0 %}, {% endif %}{{ parameters(x.parameters) }})
 
 {{ gendoc(x.documentation) | indent }}
 
