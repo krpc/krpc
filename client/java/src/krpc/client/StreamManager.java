@@ -4,8 +4,10 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;
 
 import krpc.client.services.KRPC;
+import krpc.schema.KRPC.Error;
 import krpc.schema.KRPC.ProcedureCall;
 import krpc.schema.KRPC.ProcedureResult;
+import krpc.schema.KRPC.Response;
 import krpc.schema.KRPC.StreamResult;
 import krpc.schema.KRPC.StreamUpdate;
 import krpc.schema.KRPC.Type;
@@ -22,6 +24,7 @@ class StreamManager {
   private Map<Long, ByteString> streamData = new HashMap<Long, ByteString>();
   private Map<Long, Object> streamValues = new HashMap<Long, Object>();
   private Map<Long, Type> streamTypes = new HashMap<Long, Type>();
+  private Map<Long, Error> streamErrors = new HashMap<Long, Error>();
   private Thread updateThread;
 
   StreamManager(Connection connection, Socket socket) {
@@ -40,8 +43,16 @@ class StreamManager {
     long id = krpc.addStream(call).getId();
     synchronized (streamData) {
       if (!streamTypes.containsKey(id)) {
-        streamData.put(id, connection.invoke(call));
         streamTypes.put(id, type);
+        Response response = connection.invokeInternal(call);
+        Error error = connection.getErrorFromResponse(response);
+        if (error == null) {
+          ByteString value = connection.getReturnValueFromResponse(response);
+          streamData.put(id, value);
+        } else {
+          streamData.put(id, null);
+          streamErrors.put(id, error);
+        }
       }
     }
     return new Stream<T>(this, id);
@@ -52,14 +63,18 @@ class StreamManager {
     synchronized (streamData) {
       streamData.remove(id);
       streamTypes.remove(id);
+      streamErrors.remove(id);
     }
   }
 
-  Object get(long id) throws StreamException {
+  Object get(long id) throws RPCException, StreamException {
     Object result;
     synchronized (streamData) {
       if (!streamTypes.containsKey(id)) {
         throw new StreamException("Stream does not exist");
+      }
+      if (streamErrors.containsKey(id)) {
+        connection.throwException(streamErrors.get(id));
       }
       if (streamValues.containsKey(id)) {
         return streamValues.get(id);
@@ -76,10 +91,13 @@ class StreamManager {
         throw new StreamException("Stream does not exist");
       }
       if (result.hasError()) {
-        return; // TODO: do something with the error
+        streamErrors.put(id, result.getError());
+        streamData.remove(id);
+        streamValues.remove(id);
+      } else {
+        streamData.put(id, result.getValue());
+        streamValues.remove(id);
       }
-      streamData.put(id, result.getValue());
-      streamValues.remove(id);
     }
   }
 
