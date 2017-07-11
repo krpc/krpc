@@ -56,15 +56,15 @@ class PythonDomain(Domain):
         elif isinstance(typ, EnumerationType):
             return ':class:`%s`' % self.type(typ)
         elif isinstance(typ, ListType):
-            return 'list of %s' % self.type_description(typ.value_type)
+            return 'list(%s)' % self.type_description(typ.value_type)
         elif isinstance(typ, DictionaryType):
-            return 'dict from %s to %s' % \
+            return 'dict(%s, %s)' % \
                 (self.type_description(typ.key_type),
                  self.type_description(typ.value_type))
         elif isinstance(typ, SetType):
-            return 'set of %s' % self.type_description(typ.value_type)
+            return 'set(%s)' % self.type_description(typ.value_type)
         elif isinstance(typ, TupleType):
-            return 'tuple of (%s)' % \
+            return 'tuple(%s)' % \
                 ', '.join(self.type_description(typ)
                           for typ in typ.value_types)
         else:

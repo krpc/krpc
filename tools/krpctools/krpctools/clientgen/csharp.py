@@ -48,6 +48,9 @@ class CsharpGenerator(Generator):
             return self._type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
             return 'global::KRPC.Schema.KRPC.%s' % typ.python_type.__name__
+        elif isinstance(typ, TupleType):
+            return 'systemAlias::Tuple<%s>' % \
+                ','.join(self.parse_type(t) for t in typ.value_types)
         elif isinstance(typ, ListType):
             if interface:
                 name = 'IList'
@@ -57,10 +60,10 @@ class CsharpGenerator(Generator):
                 (name, self.parse_type(typ.value_type))
         elif isinstance(typ, SetType):
             if interface:
-                name = 'ISet'
+                name = 'genericCollectionsAlias::ISet'
             else:
-                name = 'HashSet'
-            return 'global::System.Collections.Generic.%s<%s>' % \
+                name = 'global::System.Collections.Generic.HashSet'
+            return '%s<%s>' % \
                 (name, self.parse_type(typ.value_type))
         elif isinstance(typ, DictionaryType):
             if interface:
@@ -70,9 +73,6 @@ class CsharpGenerator(Generator):
             return 'global::System.Collections.Generic.%s<%s,%s>' % \
                 (name, self.parse_type(typ.key_type),
                  self.parse_type(typ.value_type))
-        elif isinstance(typ, TupleType):
-            return 'global::System.Tuple<%s>' % \
-                ','.join(self.parse_type(t) for t in typ.value_types)
         elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
             return 'global::KRPC.Client.Services.%s.%s' % \
                 (typ.protobuf_type.service, typ.protobuf_type.name)
@@ -153,9 +153,9 @@ class CsharpGenerator(Generator):
                 continue
             typ = parameter['type']
             default_value = parameter['default_value']
-            if typ.startswith('global::System.Tuple') or \
+            if typ.startswith('systemAlias::Tuple') or \
                typ.startswith('global::System.Collections.Generic.IList') or \
-               typ.startswith('global::System.Collections.Generic.ISet') or \
+               typ.startswith('genericCollectionsAlias::ISet') or \
                typ.startswith('global::System.Collections' +
                               '.Generic.IDictionary'):
                 parameter['name_value'] = '%s ?? %s' % \

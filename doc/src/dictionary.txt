@@ -2,6 +2,7 @@ Autotools
 Bazel
 CMake
 Ferram
+GameData
 IDisposable
 Javascript
 Jeb
@@ -9,6 +10,9 @@ Kerbal
 Kerbals
 Kerbin
 Kosmo
+LaunchPad
+ModuleEngines
+MyGroup
 NUnit
 Olex
 Tron
@@ -31,7 +35,9 @@ crossfeed
 decoupler
 decouplers
 deployable
+dict
 dll
+doesn
 enum
 erm
 focussed
@@ -94,6 +100,7 @@ rsvg
 runtime
 serializable
 shader
+str
 streamPort
 symlink
 targetting
@@ -108,6 +115,7 @@ undocking
 undocks
 unserialize
 varint
+ve
 vertices
 virtualenv
 waypoint

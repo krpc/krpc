@@ -7,6 +7,14 @@ using System.Linq;
 using System.Reflection;
 using Google.Protobuf;
 
+#if NET35
+using systemAlias = global::KRPC.Client.Compatibility;
+using genericCollectionsAlias = global::KRPC.Client.Compatibility;
+#else
+using systemAlias = global::System;
+using genericCollectionsAlias = global::System.Collections.Generic;
+#endif
+
 namespace KRPC.Client
 {
     /// <summary>
@@ -288,14 +296,14 @@ namespace KRPC.Client
         static bool IsATupleType (Type type)
         {
             return
-                IsAGenericType (type, typeof(Tuple<>)) ||
-            IsAGenericType (type, typeof(Tuple<,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,,,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,,,,,>));
+            IsAGenericType (type, typeof(systemAlias::Tuple<>)) ||
+            IsAGenericType (type, typeof(systemAlias::Tuple<,>)) ||
+            IsAGenericType (type, typeof(systemAlias::Tuple<,,>)) ||
+            IsAGenericType (type, typeof(systemAlias::Tuple<,,,>)) ||
+            IsAGenericType (type, typeof(systemAlias::Tuple<,,,,>)) ||
+            IsAGenericType (type, typeof(systemAlias::Tuple<,,,,,>)) ||
+            IsAGenericType (type, typeof(systemAlias::Tuple<,,,,,,>)) ||
+            IsAGenericType (type, typeof(systemAlias::Tuple<,,,,,,,>));
         }
 
         static bool IsACollectionType (Type type)
@@ -310,7 +318,7 @@ namespace KRPC.Client
 
         static bool IsASetType (Type type)
         {
-            return IsAGenericType (type, typeof(ISet<>));
+            return IsAGenericType (type, typeof(genericCollectionsAlias::ISet<>));
         }
 
         static bool IsADictionaryType (Type type)
