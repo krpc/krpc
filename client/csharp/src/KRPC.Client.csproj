@@ -48,6 +48,8 @@
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Attributes\RPCAttribute.cs" />
+    <Compile Include="Compatibility\Tuple.cs" />
+    <Compile Include="Compatibility\ISet.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="ConnectionException.cs" />
     <Compile Include="Encoder.cs" />

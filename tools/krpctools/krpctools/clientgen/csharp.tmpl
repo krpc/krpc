@@ -20,6 +20,14 @@ return ({{type}})global::KRPC.Client.Encoder.Decode (_data, typeof({{type}}), co
 {% for x in parameters %}{{x.type}} {{x.name}}{% if 'default_value' in x %} = {{x.default_value}}{%- endif %}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endmacro %}
 
+#if NET35
+using systemAlias = global::KRPC.Client.Compatibility;
+using genericCollectionsAlias = global::KRPC.Client.Compatibility;
+#else
+using systemAlias = global::System;
+using genericCollectionsAlias = global::System.Collections.Generic;
+#endif
+
 namespace KRPC.Client.Services.{{ service_name }}
 {
     /// <summary>

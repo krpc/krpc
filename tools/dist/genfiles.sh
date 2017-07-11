@@ -22,8 +22,10 @@ zip $FILE \
     bazel-krpc/external/csharp_nunit/license.txt \
     bazel-krpc/external/csharp_nunit/bin/framework/nunit.framework.* \
     bazel-krpc/external/csharp_moq/Moq.nuspec \
+    bazel-krpc/external/csharp_moq/lib/net35/Moq.* \
     bazel-krpc/external/csharp_moq/lib/net40/Moq.* \
     bazel-krpc/external/csharp_json/Newtonsoft.Json.nuspec \
+    bazel-krpc/external/csharp_json/lib/net35/Newtonsoft.Json.* \
     bazel-krpc/external/csharp_json/lib/net45/Newtonsoft.Json.* \
     bazel-krpc/external/csharp_options/NDesk.Options.nuspec \
     bazel-krpc/external/csharp_options/lib/NDesk.Options.*

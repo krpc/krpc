@@ -1,7 +1,10 @@
 v0.4.0
  * Updated protocol in line with server changes
  * Add support for RPCs to throw exceptions
- * Build for .NET 4.5
+
+v0.3.10
+ * Add support for .NET 3.5 (allows use of the client from within KSP itself)
+ * Fix dependecy on protobuf nuget package to require v3.3.0
 
 v0.3.9
  * Update to protobuf v3.3.0
