@@ -189,6 +189,8 @@ namespace KRPC.Client.Services.{{ service_name }}
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}")]
         public static {{ method.return_type }} {{ method_name }} ({{ sig_parameters([{'type': 'IConnection', 'name': 'connection'}] + method.parameters) }})
         {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=12) }}
 {% endif %}
 {{ call(service_name, method.remote_name, method.return_type != 'void', method.parameters | length > 0, true) | indent(width=12) }}
