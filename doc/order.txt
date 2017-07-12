@@ -228,6 +228,7 @@ SpaceCenter.Orbit.RadiusAt
 SpaceCenter.Orbit.PositionAt
 SpaceCenter.Orbit.ClosestApproach
 SpaceCenter.Orbit.ClosestApproachDistance
+SpaceCenter.Orbit.ListClosestApproaches
 SpaceCenter.Control
 SpaceCenter.Control.Source
 SpaceCenter.Control.State
