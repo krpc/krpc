@@ -499,7 +499,9 @@ namespace KRPC.SpaceCenter.Services
 
         }
 
-
+        /// <summary>
+        /// Helper function to clamp Radians 
+        /// </summary>
         public static double ClampRadiansTwoPi(double angle)
         {
             angle = angle % (2 * Math.PI);
