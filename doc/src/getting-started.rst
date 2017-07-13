@@ -101,7 +101,9 @@ On Linux
 --------------------
 
 Run KSP and start the server with the default settings. Then run the following
-python script:
+python script. Note that the game must be running and unpaused for this program
+to work, otherwise it will fail to connect.
+
 
 .. code-block:: python
    :linenos:
