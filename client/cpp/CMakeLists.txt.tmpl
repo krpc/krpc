@@ -1,5 +1,5 @@
+cmake_minimum_required(VERSION 2.8.4)
 project(kRPC)
-cmake_minimum_required(VERSION 2.8)
 
 set(VERSION_NUMBER %VERSION%)
 set(CMAKE_BUILD_TYPE "Release")
@@ -21,16 +21,10 @@ if(NOT HAVE_ASIO)
 endif()
 add_definitions(-DASIO_STANDALONE)
 
-if(WIN32)
+if(WIN32 OR CYGWIN)
   add_definitions(-D_SCL_SECURE_NO_WARNINGS)
-  # set _WIN32_WINNT for ASIO
-  if (CMAKE_SYSTEM_VERSION)
-    set(winver ${CMAKE_SYSTEM_VERSION})
-    string(REPLACE "." "" winver ${winver})
-    string(REGEX REPLACE "([0-9])" "0\\1" winver ${winver})
-    set(winver "0x${winver}")
-  endif()
-  add_definitions(-D_WIN32_WINNT=${winver})
+  add_definitions(-D_WIN32_WINNT=0x0501)
+  add_definitions(-D__USE_W32_SOCKETS)
 endif()
 
 if(MSVC)
@@ -55,6 +49,10 @@ set_target_properties(
                   INSTALL_NAME_DIR lib)
 
 target_link_libraries(krpc ${PROTOBUF_LIBRARIES})
+
+if(WIN32 OR CYGWIN)
+  target_link_libraries(krpc ws2_32 mswsock)
+endif()
 
 install(TARGETS krpc
         LIBRARY DESTINATION lib
