@@ -227,8 +227,8 @@ SpaceCenter.Orbit.TimeToSOIChange
 SpaceCenter.Orbit.NextOrbit
 SpaceCenter.Orbit.RadiusAt
 SpaceCenter.Orbit.PositionAt
-SpaceCenter.Orbit.ClosestApproach
-SpaceCenter.Orbit.ClosestApproachDistance
+SpaceCenter.Orbit.TimeOfClosestApproach
+SpaceCenter.Orbit.DistanceAtClosestApproach
 SpaceCenter.Orbit.ListClosestApproaches
 SpaceCenter.Control
 SpaceCenter.Control.Source
