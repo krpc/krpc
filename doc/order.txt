@@ -211,6 +211,7 @@ SpaceCenter.Orbit.ArgumentOfPeriapsis
 SpaceCenter.Orbit.MeanAnomalyAtEpoch
 SpaceCenter.Orbit.Epoch
 SpaceCenter.Orbit.MeanAnomaly
+SpaceCenter.Orbit.MeanAnomalyAtUT
 SpaceCenter.Orbit.EccentricAnomaly
 SpaceCenter.Orbit.EccentricAnomalyAtUT
 SpaceCenter.Orbit.TrueAnomaly

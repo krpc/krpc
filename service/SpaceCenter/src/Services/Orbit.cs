@@ -297,6 +297,18 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The mean anomaly at the given time.
+        /// </summary>
+        /// <param name="ut">The universal time in seconds.</param>
+        [KRPCMethod]
+        public double MeanAnomalyAtUT(double ut)
+        {
+            var percent = InternalOrbit.getObtAtUT(ut) / InternalOrbit.period;
+            return percent * (2 * Math.PI);
+            
+        }
+
+        /// <summary>
         /// The orbital radius at the point in the orbit given by the true anomaly.
         /// </summary>
         /// <param name="trueAnomaly">The true anomaly.</param>
