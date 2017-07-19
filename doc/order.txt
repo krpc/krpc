@@ -223,6 +223,9 @@ SpaceCenter.Orbit.OrbitalSpeed
 SpaceCenter.Orbit.OrbitalSpeedAt
 SpaceCenter.Orbit.ReferencePlaneNormal
 SpaceCenter.Orbit.ReferencePlaneDirection
+SpaceCenter.Orbit.TrueAnomalyAtAN
+SpaceCenter.Orbit.TrueAnomalyAtDN
+SpaceCenter.Orbit.RelativeInclination
 SpaceCenter.Orbit.TimeToSOIChange
 SpaceCenter.Orbit.NextOrbit
 SpaceCenter.Orbit.RadiusAt
