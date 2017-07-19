@@ -520,5 +520,40 @@ namespace KRPC.SpaceCenter.Services
             if (angle < 0) return angle + 2 * Math.PI;
             else return angle;
         }
+
+        /// <summary>
+        /// Returns True Anomaly of Ascending Node with Target
+        /// </summary>
+        /// <param name="target">Target vessel.</param>
+        [KRPCMethod]
+        public double TrueAnomalyAtAN(Vessel target)
+        {
+            var degrees =  FinePrint.Utilities.OrbitUtilities.AngleOfAscendingNode(InternalOrbit, target.Orbit.InternalOrbit);
+            if (degrees > 180) degrees -= 360;
+            return Math.PI * degrees / 180; 
+        }
+
+        /// <summary>
+        /// Returns True Anomaly of Descending Node with Target
+        /// </summary>
+        /// <param name="target">Target vessel.</param>
+        [KRPCMethod]
+        public double TrueAnomalyAtDN(Vessel target)
+        {
+            var degrees = FinePrint.Utilities.OrbitUtilities.AngleOfDescendingNode(InternalOrbit, target.Orbit.InternalOrbit);
+            if (degrees > 180) degrees -= 360;
+            return Math.PI * degrees / 180;
+        }
+
+        /// <summary>
+        /// Returns Relative Inclination of Target's Orbit
+        /// </summary>
+        /// <param name="target">Target vessel.</param>
+        [KRPCMethod]
+        public double RelativeInclination(Vessel target)
+        {
+            var degrees = FinePrint.Utilities.OrbitUtilities.GetRelativeInclination(InternalOrbit, target.Orbit.InternalOrbit);
+            return Math.PI * degrees / 180;
+        }
     }
 }
