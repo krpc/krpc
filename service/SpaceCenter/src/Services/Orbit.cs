@@ -447,27 +447,27 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Helper function to calculate the closest approach to target in an orbital period.
         /// </summary>
-        /// <param name="my_orbit">Orbit of the controlled vessel</param>
-        /// <param name="target_orbit">Orbit of the target vessel</param>
-        /// <param name="begin_time">Time to begin search - search continues for one orbital period</param>
+        /// <param name="myOrbit">Orbit of the controlled vessel</param>
+        /// <param name="targetOrbit">Orbit of the target vessel</param>
+        /// <param name="beginTime">Time to begin search - search continues for one orbital period</param>
         /// <param name="distance">Out parameter to return distance at the closest approach found</param>
         /// <returns></returns>
-        public static double CalcClosestAproach(Orbit my_orbit, Orbit target_orbit, double begin_time, out double distance)
+        public static double CalcClosestAproach(Orbit myOrbit, Orbit targetOrbit, double beginTime, out double distance)
         {
-            double approachTime = begin_time;
+            double approachTime = beginTime;
             double approachDistance = double.MaxValue;
-            double mintime = begin_time;
-            double interval = my_orbit.Period;
-            if (my_orbit.Eccentricity > 1.0)
-                interval = 100 / my_orbit.InternalOrbit.meanMotion;
+            double mintime = beginTime;
+            double interval = myOrbit.Period;
+            if (myOrbit.Eccentricity > 1.0)
+                interval = 100 / myOrbit.InternalOrbit.meanMotion;
             double maxtime = mintime + interval;
 
             // Conduct coarse search
             double timestep = (maxtime - mintime) / 20;
             double placeholder = mintime;
             while (placeholder < maxtime) {
-                Vector3d PosA = my_orbit.InternalOrbit.getPositionAtUT(placeholder);
-                Vector3d PosB = target_orbit.InternalOrbit.getPositionAtUT(placeholder);
+                Vector3d PosA = myOrbit.InternalOrbit.getPositionAtUT(placeholder);
+                Vector3d PosB = targetOrbit.InternalOrbit.getPositionAtUT(placeholder);
                 double thisDistance = Vector3d.Distance(PosA, PosB);
                 if (thisDistance < approachDistance) {
                     approachDistance = thisDistance;
@@ -485,8 +485,8 @@ namespace KRPC.SpaceCenter.Services
             placeholder = fine_mintime;
 
             while (placeholder < fine_maxtime) {
-                Vector3d PosA = my_orbit.InternalOrbit.getPositionAtUT(placeholder);
-                Vector3d PosB = target_orbit.InternalOrbit.getPositionAtUT(placeholder);
+                Vector3d PosA = myOrbit.InternalOrbit.getPositionAtUT(placeholder);
+                Vector3d PosB = targetOrbit.InternalOrbit.getPositionAtUT(placeholder);
                 double thisDistance = Vector3d.Distance(PosA, PosB);
                 if (thisDistance < approachDistance) {
                     approachDistance = thisDistance;
