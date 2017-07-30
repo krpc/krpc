@@ -508,7 +508,7 @@ namespace KRPC.SpaceCenter.Services
             var degrees =  FinePrint.Utilities.OrbitUtilities.AngleOfAscendingNode(InternalOrbit, target.Orbit.InternalOrbit);
             if (degrees > 180)
                 degrees -= 360;
-            return Math.PI * degrees / 180;
+            return GeometryExtensions.ToRadians (degrees);
         }
 
         /// <summary>
@@ -521,7 +521,7 @@ namespace KRPC.SpaceCenter.Services
             var degrees = FinePrint.Utilities.OrbitUtilities.AngleOfDescendingNode(InternalOrbit, target.Orbit.InternalOrbit);
             if (degrees > 180)
                 degrees -= 360;
-            return Math.PI * degrees / 180;
+            return GeometryExtensions.ToRadians (degrees);
         }
 
         /// <summary>
@@ -532,7 +532,7 @@ namespace KRPC.SpaceCenter.Services
         public double RelativeInclination(Vessel target)
         {
             var degrees = FinePrint.Utilities.OrbitUtilities.GetRelativeInclination(InternalOrbit, target.Orbit.InternalOrbit);
-            return Math.PI * degrees / 180;
+            return GeometryExtensions.ToRadians(degrees);
         }
     }
 }
