@@ -211,6 +211,7 @@ SpaceCenter.Orbit.ArgumentOfPeriapsis
 SpaceCenter.Orbit.MeanAnomalyAtEpoch
 SpaceCenter.Orbit.Epoch
 SpaceCenter.Orbit.MeanAnomaly
+SpaceCenter.Orbit.MeanAnomalyAtUT
 SpaceCenter.Orbit.EccentricAnomaly
 SpaceCenter.Orbit.EccentricAnomalyAtUT
 SpaceCenter.Orbit.TrueAnomaly
@@ -222,8 +223,16 @@ SpaceCenter.Orbit.OrbitalSpeed
 SpaceCenter.Orbit.OrbitalSpeedAt
 SpaceCenter.Orbit.ReferencePlaneNormal
 SpaceCenter.Orbit.ReferencePlaneDirection
+SpaceCenter.Orbit.TrueAnomalyAtAN
+SpaceCenter.Orbit.TrueAnomalyAtDN
+SpaceCenter.Orbit.RelativeInclination
 SpaceCenter.Orbit.TimeToSOIChange
 SpaceCenter.Orbit.NextOrbit
+SpaceCenter.Orbit.RadiusAt
+SpaceCenter.Orbit.PositionAt
+SpaceCenter.Orbit.TimeOfClosestApproach
+SpaceCenter.Orbit.DistanceAtClosestApproach
+SpaceCenter.Orbit.ListClosestApproaches
 SpaceCenter.Control
 SpaceCenter.Control.Source
 SpaceCenter.Control.State

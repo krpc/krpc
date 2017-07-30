@@ -3,6 +3,7 @@ using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using System.Collections.Generic;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -296,6 +297,18 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The mean anomaly at the given time.
+        /// </summary>
+        /// <param name="ut">The universal time in seconds.</param>
+        [KRPCMethod]
+        public double MeanAnomalyAtUT(double ut)
+        {
+            var percent = InternalOrbit.getObtAtUT(ut) / InternalOrbit.period;
+            return percent * (2 * Math.PI);
+            
+        }
+
+        /// <summary>
         /// The orbital radius at the point in the orbit given by the true anomaly.
         /// </summary>
         /// <param name="trueAnomaly">The true anomaly.</param>
@@ -345,6 +358,7 @@ namespace KRPC.SpaceCenter.Services
             return InternalOrbit.EccentricAnomalyAtUT (ut);
         }
 
+ 
         /// <summary>
         /// The current orbital speed in meters per second.
         /// </summary>
@@ -361,6 +375,185 @@ namespace KRPC.SpaceCenter.Services
         public double OrbitalSpeedAt (double time)
         {
             return InternalOrbit.getOrbitalSpeedAt (time);
+        }
+
+        /// <summary>
+        /// The orbital radius at the given time, in meters.
+        /// </summary>
+        /// <param name="time">UT time to measure radius at.</param>
+        [KRPCMethod]
+        public double RadiusAt(double time)
+        {
+            return InternalOrbit.getRelativePositionAtUT(time).magnitude;
+        }
+
+        /// <summary>
+        /// The position at a given time, in the specified reference frame.
+        /// </summary>
+        /// <param name="time">UT time to measure position at.</param>
+        /// <param name="referenceFrame">Reference Frame.</param>
+        [KRPCMethod]
+        public Tuple3 PositionAt(double time, ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.PositionFromWorldSpace(InternalOrbit.getPositionAtUT(time)).ToTuple();
+
+        }
+
+
+        /// <summary>
+        /// Estimates time of closest approach in the next orbit.
+        /// </summary>
+        /// <param name="target">Target Vessel.</param>
+        [KRPCMethod]
+        public double TimeOfClosestApproach(Vessel target)
+        {
+            double distance;
+            return CalcClosestAproach(this, target.Orbit, Planetarium.GetUniversalTime(), out distance);
+        }
+
+
+        /// <summary>
+        /// Estimates time of closest approach in the next orbit.
+        /// </summary>
+        /// <param name="target">Target vessel.</param>
+        [KRPCMethod]
+        public double DistanceAtClosestApproach(Vessel target)
+        {
+
+            double distance;
+            CalcClosestAproach(this, target.Orbit, Planetarium.GetUniversalTime(), out distance);
+            return distance;
+        }
+
+
+        /// <summary>
+        /// Returns a list of two lists - the first of approach times, the second containing 
+        /// the estimated distance for each of those approach times.
+        /// </summary>
+        /// <param name="target">Target Vessel.</param>
+        /// <param name="orbits">Number of orbits to iterate through.</param>
+        [KRPCMethod]
+        public IList<IList<double>> ListClosestApproaches(Vessel target, int orbits)
+        {
+            IList<double> times = new List<double>();
+            IList<double> distances = new List<double>();
+            double distance;
+            double orbitstart = Planetarium.GetUniversalTime();
+            double period = InternalOrbit.period;
+            for (int i = 0; i < orbits; i++)
+            {
+                times.Add(CalcClosestAproach(this, target.Orbit, orbitstart, out distance));
+                distances.Add(distance);
+                orbitstart += period;
+            }
+            IList<IList<double>> combined = new List<IList<double>>();
+            combined.Add(times);
+            combined.Add(distances);
+            return combined;
+        }
+
+        /// <summary>
+        ///  Helper function to calculate the closest approach to target in an orbital period.
+        /// </summary>
+        /// <param name="my_orbit">Orbit of the controlled vessel</param>
+        /// <param name="target_orbit">Orbit of the target vessel</param>
+        /// <param name="begin_time">Time to begin search - search continues for one orbital period</param>
+        /// <param name="distance">Out parameter to return distance at the closest approach found</param>
+        /// <returns></returns>
+        public static double CalcClosestAproach(Orbit my_orbit, Orbit target_orbit, double begin_time, out double distance)
+        {
+             
+            double approachTime = begin_time;
+            double approachDistance = double.MaxValue;
+            double mintime = begin_time;
+            double interval = my_orbit.Period;
+            if (my_orbit.Eccentricity > 1.0) { interval = 100 / my_orbit.InternalOrbit.meanMotion; }
+            double maxtime = mintime + interval;
+
+            //Conduct coarse search
+            double timestep = (maxtime - mintime) / 20;
+            double placeholder = mintime;
+                    while (placeholder<maxtime)  
+                    {
+                        Vector3d PosA = my_orbit.InternalOrbit.getPositionAtUT(placeholder);
+                        Vector3d PosB = target_orbit.InternalOrbit.getPositionAtUT(placeholder);
+                        double thisDistance = Vector3d.Distance(PosA, PosB);
+                        if (thisDistance<approachDistance)
+                        {
+                            approachDistance = thisDistance;
+                            approachTime = placeholder;
+                        }
+                    placeholder += timestep;
+                    }
+
+                    //Conduct fine search
+                    double fine_mintime = approachTime - timestep;
+                    double fine_maxtime = approachTime + timestep;
+                    if (fine_maxtime > maxtime) fine_maxtime = maxtime;
+                    if (fine_mintime<mintime) fine_mintime = mintime;
+                    timestep = (fine_maxtime - fine_mintime) / 50;
+                    placeholder = fine_mintime;
+
+                    while (placeholder<fine_maxtime)
+                    {
+                        Vector3d PosA = my_orbit.InternalOrbit.getPositionAtUT(placeholder);
+                        Vector3d PosB = target_orbit.InternalOrbit.getPositionAtUT(placeholder);
+                        double thisDistance = Vector3d.Distance(PosA, PosB);
+                        if (thisDistance<approachDistance)
+                        {
+                            approachDistance = thisDistance;
+                            approachTime = placeholder;
+                        }
+                        placeholder += timestep;
+                    }
+            distance = approachDistance;
+            return approachTime;
+
+        }
+
+        /// <summary>
+        /// Helper function to clamp Radians 
+        /// </summary>
+        public static double ClampRadiansTwoPi(double angle)
+        {
+            angle = angle % (2 * Math.PI);
+            if (angle < 0) return angle + 2 * Math.PI;
+            else return angle;
+        }
+
+        /// <summary>
+        /// Returns True Anomaly of Ascending Node with Target
+        /// </summary>
+        /// <param name="target">Target vessel.</param>
+        [KRPCMethod]
+        public double TrueAnomalyAtAN(Vessel target)
+        {
+            var degrees =  FinePrint.Utilities.OrbitUtilities.AngleOfAscendingNode(InternalOrbit, target.Orbit.InternalOrbit);
+            if (degrees > 180) degrees -= 360;
+            return Math.PI * degrees / 180; 
+        }
+
+        /// <summary>
+        /// Returns True Anomaly of Descending Node with Target
+        /// </summary>
+        /// <param name="target">Target vessel.</param>
+        [KRPCMethod]
+        public double TrueAnomalyAtDN(Vessel target)
+        {
+            var degrees = FinePrint.Utilities.OrbitUtilities.AngleOfDescendingNode(InternalOrbit, target.Orbit.InternalOrbit);
+            if (degrees > 180) degrees -= 360;
+            return Math.PI * degrees / 180;
+        }
+
+        /// <summary>
+        /// Returns Relative Inclination of Target's Orbit
+        /// </summary>
+        /// <param name="target">Target vessel.</param>
+        [KRPCMethod]
+        public double RelativeInclination(Vessel target)
+        {
+            var degrees = FinePrint.Utilities.OrbitUtilities.GetRelativeInclination(InternalOrbit, target.Orbit.InternalOrbit);
+            return Math.PI * degrees / 180;
         }
     }
 }
