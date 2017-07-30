@@ -3,6 +3,10 @@ N: KRPC
 N: KRPC.Server
 N: KRPC.Service
 
+R: Gendarme.Rules.Design.ImplementEqualsAndGetHashCodeInPairRule
+T: KRPC.Service.EventStream
+T: KRPC.Service.ProcedureCallStream
+
 R: Gendarme.Rules.Globalization.PreferIFormatProviderOverrideRule
 A: *
 
@@ -70,6 +74,9 @@ T: KRPC.UI.MainWindow
 
 R: Gendarme.Rules.Smells.AvoidCodeDuplicatedInSiblingClassesRule
 T: KRPC.UI.MainWindow
+
+R: Gendarme.Rules.Smells.AvoidSpeculativeGeneralityRule
+T: KRPC.Utils.Equatable`1
 
 R: Gendarme.Rules.Performance.UseStringEmptyRule
 M: System.Void KRPC.CompatibilityChecker::Start()

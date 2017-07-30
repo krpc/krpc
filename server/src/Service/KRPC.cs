@@ -190,15 +190,17 @@ namespace KRPC.Service
         /// Add a streaming request and return its identifier.
         /// </summary>
         [KRPCProcedure]
-        public static Stream AddStream (ProcedureCall call)
+        public static Messages.Stream AddStream (ProcedureCall call)
         {
-            return new Stream (Core.Instance.AddStream (CallContext.Client, call));
+            var stream = new ProcedureCallStream (call);
+            return new Messages.Stream (Core.Instance.AddStream (CallContext.Client, stream, false));
         }
 
         /// <summary>
         /// Remove a streaming request.
         /// </summary>
         [KRPCProcedure]
+        // FIXME: should be a Stream not a ulong
         public static void RemoveStream (ulong id)
         {
             Core.Instance.RemoveStream (CallContext.Client, id);

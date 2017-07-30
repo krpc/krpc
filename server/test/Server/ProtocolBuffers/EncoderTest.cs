@@ -13,7 +13,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void EncodeMessage ()
         {
-            var message = new Stream (42);
+            var message = new KRPC.Service.Messages.Stream (42);
             var data = Encoder.Encode (message);
             const string expected = "082a";
             Assert.AreEqual (expected, data.ToHexString ());
