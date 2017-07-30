@@ -428,8 +428,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public IList<IList<double>> ListClosestApproaches(Vessel target, int orbits)
         {
-            IList<double> times = new List<double>();
-            IList<double> distances = new List<double>();
+            var times = new List<double>();
+            var distances = new List<double>();
             double distance;
             double orbitstart = Planetarium.GetUniversalTime();
             double period = InternalOrbit.period;
@@ -438,7 +438,7 @@ namespace KRPC.SpaceCenter.Services
                 distances.Add(distance);
                 orbitstart += period;
             }
-            IList<IList<double>> combined = new List<IList<double>>();
+            var combined = new List<IList<double>>();
             combined.Add(times);
             combined.Add(distances);
             return combined;
