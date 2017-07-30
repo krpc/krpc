@@ -378,30 +378,30 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The orbital radius at the given time, in meters.
         /// </summary>
-        /// <param name="time">UT time to measure radius at.</param>
+        /// <param name="ut">The universal time to measure the radius at.</param>
         [KRPCMethod]
-        public double RadiusAt(double time)
+        public double RadiusAt (double ut)
         {
-            return InternalOrbit.getRelativePositionAtUT(time).magnitude;
+            return InternalOrbit.getRelativePositionAtUT(ut).magnitude;
         }
 
         /// <summary>
         /// The position at a given time, in the specified reference frame.
         /// </summary>
-        /// <param name="time">UT time to measure position at.</param>
-        /// <param name="referenceFrame">Reference Frame.</param>
+        /// <param name="ut">The universal time to measure the position at.</param>
+        /// <param name="referenceFrame">Reference frame for the position.</param>
         [KRPCMethod]
-        public Tuple3 PositionAt(double time, ReferenceFrame referenceFrame)
+        public Tuple3 PositionAt (double ut, ReferenceFrame referenceFrame)
         {
-            return referenceFrame.PositionFromWorldSpace(InternalOrbit.getPositionAtUT(time)).ToTuple();
+            return referenceFrame.PositionFromWorldSpace(InternalOrbit.getPositionAtUT(ut)).ToTuple();
         }
 
         /// <summary>
         /// Estimates time of closest approach in the next orbit.
         /// </summary>
-        /// <param name="target">Target Vessel.</param>
+        /// <param name="target">Target vessel.</param>
         [KRPCMethod]
-        public double TimeOfClosestApproach(Vessel target)
+        public double TimeOfClosestApproach (Vessel target)
         {
             double distance;
             return CalcClosestAproach(this, target.Orbit, Planetarium.GetUniversalTime(), out distance);
@@ -412,7 +412,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <param name="target">Target vessel.</param>
         [KRPCMethod]
-        public double DistanceAtClosestApproach(Vessel target)
+        public double DistanceAtClosestApproach (Vessel target)
         {
             double distance;
             CalcClosestAproach(this, target.Orbit, Planetarium.GetUniversalTime(), out distance);
@@ -423,7 +423,7 @@ namespace KRPC.SpaceCenter.Services
         /// Returns a list of two lists - the first of approach times, the second containing
         /// the estimated distance for each of those approach times.
         /// </summary>
-        /// <param name="target">Target Vessel.</param>
+        /// <param name="target">Target vessel.</param>
         /// <param name="orbits">Number of orbits to iterate through.</param>
         [KRPCMethod]
         public IList<IList<double>> ListClosestApproaches(Vessel target, int orbits)
@@ -499,7 +499,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns True Anomaly of Ascending Node with Target
+        /// The true anomaly of the ascending node with the given target vessel.
         /// </summary>
         /// <param name="target">Target vessel.</param>
         [KRPCMethod]
@@ -510,7 +510,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns True Anomaly of Descending Node with Target
+        /// The true anomaly of the descending node with the given target vessel.
         /// </summary>
         /// <param name="target">Target vessel.</param>
         [KRPCMethod]
@@ -521,7 +521,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns Relative Inclination of Target's Orbit
+        /// Relative inclination of the given target vessels orbit.
         /// </summary>
         /// <param name="target">Target vessel.</param>
         [KRPCMethod]
