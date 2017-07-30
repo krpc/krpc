@@ -499,18 +499,6 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Helper function to clamp Radians
-        /// </summary>
-        public static double ClampRadiansTwoPi(double angle)
-        {
-            angle = angle % (2 * Math.PI);
-            if (angle < 0)
-                return angle + 2 * Math.PI;
-            else
-                return angle;
-        }
-
-        /// <summary>
         /// Returns True Anomaly of Ascending Node with Target
         /// </summary>
         /// <param name="target">Target vessel.</param>
