@@ -506,9 +506,7 @@ namespace KRPC.SpaceCenter.Services
         public double TrueAnomalyAtAN(Vessel target)
         {
             var degrees =  FinePrint.Utilities.OrbitUtilities.AngleOfAscendingNode(InternalOrbit, target.Orbit.InternalOrbit);
-            if (degrees > 180)
-                degrees -= 360;
-            return GeometryExtensions.ToRadians (degrees);
+            return GeometryExtensions.ToRadians (GeometryExtensions.ClampAngle180 (degrees));
         }
 
         /// <summary>
@@ -519,9 +517,7 @@ namespace KRPC.SpaceCenter.Services
         public double TrueAnomalyAtDN(Vessel target)
         {
             var degrees = FinePrint.Utilities.OrbitUtilities.AngleOfDescendingNode(InternalOrbit, target.Orbit.InternalOrbit);
-            if (degrees > 180)
-                degrees -= 360;
-            return GeometryExtensions.ToRadians (degrees);
+            return GeometryExtensions.ToRadians (GeometryExtensions.ClampAngle180 (degrees));
         }
 
         /// <summary>
