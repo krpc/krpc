@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using KRPC;
 using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Service.Messages;
 using KRPC.Utils;
 
 namespace TestServer
@@ -430,7 +432,7 @@ namespace TestServer
             {
             }
 
-            public CustomException (string message, Exception innerException)
+            public CustomException (string message, System.Exception innerException)
             : base(message, innerException)
             {
             }
@@ -457,6 +459,22 @@ namespace TestServer
                 throw new CustomException("A custom kRPC exception");
             customExceptionCount++;
             return 0;
+        }
+
+        [KRPCProcedure]
+        public static KRPC.Service.Messages.Event OnTimer (uint milliseconds, uint repeats = 1) {
+            var evnt = new KRPC.Service.Event ();
+            var timer = new System.Timers.Timer (milliseconds);
+            timer.Elapsed += (s, e) => {
+                evnt.Trigger ();
+                repeats--;
+                if (repeats == 0) {
+                    evnt.Remove ();
+                    timer.Enabled = false;
+                }
+            };
+            timer.Start();
+            return evnt.Message;
         }
     }
 }
