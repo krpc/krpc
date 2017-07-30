@@ -150,10 +150,11 @@ message Type {
     ENUMERATION = 101;
 
     // Messages
-    PROCEDURE_CALL = 200;
-    STREAM = 201;
-    STATUS = 202;
-    SERVICES = 203;
+    EVENT = 200;
+    PROCEDURE_CALL = 201;
+    STREAM = 202;
+    STATUS = 203;
+    SERVICES = 204;
 
     // Collections
     TUPLE = 300;
@@ -190,6 +191,10 @@ message DictionaryEntry {
 
 message Stream {
   uint64 id = 1;
+}
+
+message Event {
+  Stream stream = 1;
 }
 
 message Status {
