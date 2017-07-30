@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -393,6 +394,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 PositionAt (double ut, ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.PositionFromWorldSpace(InternalOrbit.getPositionAtUT(ut)).ToTuple();
         }
 
@@ -403,6 +406,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double TimeOfClosestApproach (Vessel target)
         {
+            if (ReferenceEquals (target, null))
+                throw new ArgumentNullException (nameof (target));
             double distance;
             return CalcClosestAproach(this, target.Orbit, Planetarium.GetUniversalTime(), out distance);
         }
@@ -414,6 +419,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double DistanceAtClosestApproach (Vessel target)
         {
+            if (ReferenceEquals (target, null))
+                throw new ArgumentNullException (nameof (target));
             double distance;
             CalcClosestAproach(this, target.Orbit, Planetarium.GetUniversalTime(), out distance);
             return distance;
@@ -426,8 +433,11 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="target">Target vessel.</param>
         /// <param name="orbits">Number of orbits to iterate through.</param>
         [KRPCMethod]
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public IList<IList<double>> ListClosestApproaches(Vessel target, int orbits)
         {
+            if (ReferenceEquals (target, null))
+                throw new ArgumentNullException (nameof (target));
             var times = new List<double>();
             var distances = new List<double>();
             double distance;
@@ -452,8 +462,13 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="beginTime">Time to begin search - search continues for one orbital period</param>
         /// <param name="distance">Out parameter to return distance at the closest approach found</param>
         /// <returns></returns>
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidRefAndOutParametersRule")]
         public static double CalcClosestAproach(Orbit myOrbit, Orbit targetOrbit, double beginTime, out double distance)
         {
+            if (ReferenceEquals (myOrbit, null))
+                throw new ArgumentNullException (nameof (myOrbit));
+            if (ReferenceEquals (targetOrbit, null))
+                throw new ArgumentNullException (nameof (targetOrbit));
             double approachTime = beginTime;
             double approachDistance = double.MaxValue;
             double mintime = beginTime;
@@ -505,6 +520,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double TrueAnomalyAtAN(Vessel target)
         {
+            if (ReferenceEquals (target, null))
+                throw new ArgumentNullException (nameof (target));
             var degrees = FinePrint.Utilities.OrbitUtilities.AngleOfAscendingNode(InternalOrbit, target.Orbit.InternalOrbit);
             return GeometryExtensions.ToRadians (GeometryExtensions.ClampAngle180 (degrees));
         }
@@ -516,6 +533,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double TrueAnomalyAtDN(Vessel target)
         {
+            if (ReferenceEquals (target, null))
+                throw new ArgumentNullException (nameof (target));
             var degrees = FinePrint.Utilities.OrbitUtilities.AngleOfDescendingNode(InternalOrbit, target.Orbit.InternalOrbit);
             return GeometryExtensions.ToRadians (GeometryExtensions.ClampAngle180 (degrees));
         }
@@ -527,6 +546,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double RelativeInclination(Vessel target)
         {
+            if (ReferenceEquals (target, null))
+                throw new ArgumentNullException (nameof (target));
             var degrees = FinePrint.Utilities.OrbitUtilities.GetRelativeInclination(InternalOrbit, target.Orbit.InternalOrbit);
             return GeometryExtensions.ToRadians(degrees);
         }
