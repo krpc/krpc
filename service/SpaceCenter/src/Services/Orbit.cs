@@ -505,7 +505,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double TrueAnomalyAtAN(Vessel target)
         {
-            var degrees =  FinePrint.Utilities.OrbitUtilities.AngleOfAscendingNode(InternalOrbit, target.Orbit.InternalOrbit);
+            var degrees = FinePrint.Utilities.OrbitUtilities.AngleOfAscendingNode(InternalOrbit, target.Orbit.InternalOrbit);
             return GeometryExtensions.ToRadians (GeometryExtensions.ClampAngle180 (degrees));
         }
 
