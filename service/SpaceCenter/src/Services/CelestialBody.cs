@@ -225,13 +225,54 @@ namespace KRPC.SpaceCenter.Services
             return PositionAt (latitude, longitude, altitude, referenceFrame);
         }
 
-
         Tuple3 PositionAt (double latitude, double longitude, double altitude, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException (nameof (referenceFrame));
             var position = InternalBody.GetWorldSurfacePosition (latitude, longitude, altitude);
             return referenceFrame.PositionFromWorldSpace (position).ToTuple ();
+        }
+
+        /// <summary>
+        /// The latitude of the given position, in the given reference frame.
+        /// </summary>
+        /// <param name="Position">3 element Tuple describing position</param>
+        /// <param name="referenceFrame">Reference frame for the provided position vector</param>
+        [KRPCMethod]
+        public double LatitudeAtPosition (Tuple3 Position, ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals(referenceFrame, null))
+                throw new ArgumentNullException(nameof(referenceFrame));
+            var adjustedPosition = referenceFrame.PositionToWorldSpace(Position.ToVector());
+            return InternalBody.GetLatitude(adjustedPosition);
+        }
+
+        /// <summary>
+        /// The longitude of the given position, in the given reference frame.
+        /// </summary>
+        /// <param name="Position">3 element Tuple describing position</param>
+        /// <param name="referenceFrame">Reference frame for the provided position vector</param>
+        [KRPCMethod]
+        public double LongitudeAtPosition (Tuple3 Position, ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals(referenceFrame, null))
+                throw new ArgumentNullException(nameof(referenceFrame));
+            var adjustedPosition = referenceFrame.PositionToWorldSpace(Position.ToVector());
+            return InternalBody.GetLongitude(adjustedPosition);
+        }
+
+        /// <summary>
+        /// The altitude of the given position, in the given reference frame.
+        /// </summary>
+        /// <param name="Position">3 element Tuple describing position</param>
+        /// <param name="referenceFrame">Reference frame for the provided position vector</param>
+        [KRPCMethod]
+        public double AltitudeAtPosition (Tuple3 Position, ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals(referenceFrame, null))
+                throw new ArgumentNullException(nameof(referenceFrame));
+            var adjustedPosition = referenceFrame.PositionToWorldSpace(Position.ToVector());
+            return InternalBody.GetAltitude(adjustedPosition);
         }
 
         /// <summary>
