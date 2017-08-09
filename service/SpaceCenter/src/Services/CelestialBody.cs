@@ -308,6 +308,28 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The atmospheric density at the given position, in the given reference frame.
+        /// </summary>
+        /// <param name="Position">3 element Tuple describing position</param>
+        /// <param name="referenceFrame">Reference frame for the provided position vector</param>
+        [KRPCMethod]
+        public double AtmosphericDensityAtPosition(Tuple3 Position, ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals(referenceFrame, null))
+                throw new ArgumentNullException(nameof(referenceFrame));
+            var adjustedPosition = referenceFrame.PositionToWorldSpace(Position.ToVector());
+            var altitude = InternalBody.GetAltitude(adjustedPosition);
+            var latitude = InternalBody.GetLatitude(adjustedPosition);
+            var pressure = FlightGlobals.getStaticPressure(adjustedPosition);
+            var temperature = FlightGlobals.getExternalTemperature(altitude, InternalBody)
+                              + InternalBody.atmosphereTemperatureSunMultCurve.Evaluate((float)altitude)
+                              * (InternalBody.latitudeTemperatureBiasCurve.Evaluate((float)latitude)
+                                 + InternalBody.latitudeTemperatureSunMultCurve.Evaluate((float)latitude) // fix that 0 into latitude
+                                 + InternalBody.axialTemperatureSunMultCurve.Evaluate(1));
+            return FlightGlobals.getAtmDensity(pressure, temperature);
+        }
+
+        /// <summary>
         /// <c>true</c> if there is oxygen in the atmosphere, required for air-breathing engines.
         /// </summary>
         [KRPCProperty]
