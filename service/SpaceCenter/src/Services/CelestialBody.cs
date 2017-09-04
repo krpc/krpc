@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -236,43 +237,43 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The latitude of the given position, in the given reference frame.
         /// </summary>
-        /// <param name="Position">3 element Tuple describing position</param>
-        /// <param name="referenceFrame">Reference frame for the provided position vector</param>
+        /// <param name="Position">The position as a vector.</param>
+        /// <param name="referenceFrame">Reference frame that the position vector is in.</param>
         [KRPCMethod]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public double LatitudeAtPosition (Tuple3 Position, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals(referenceFrame, null))
                 throw new ArgumentNullException(nameof(referenceFrame));
-            var adjustedPosition = referenceFrame.PositionToWorldSpace(Position.ToVector());
-            return InternalBody.GetLatitude(adjustedPosition);
+            return InternalBody.GetLatitude(referenceFrame.PositionToWorldSpace(Position.ToVector()));
         }
 
         /// <summary>
         /// The longitude of the given position, in the given reference frame.
         /// </summary>
-        /// <param name="Position">3 element Tuple describing position</param>
-        /// <param name="referenceFrame">Reference frame for the provided position vector</param>
+        /// <param name="Position">The position as a vector.</param>
+        /// <param name="referenceFrame">Reference frame that the position vector is in.</param>
         [KRPCMethod]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public double LongitudeAtPosition (Tuple3 Position, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals(referenceFrame, null))
                 throw new ArgumentNullException(nameof(referenceFrame));
-            var adjustedPosition = referenceFrame.PositionToWorldSpace(Position.ToVector());
-            return InternalBody.GetLongitude(adjustedPosition);
+            return InternalBody.GetLongitude(referenceFrame.PositionToWorldSpace(Position.ToVector()));
         }
 
         /// <summary>
-        /// The altitude of the given position, in the given reference frame.
+        /// The altitude of the given position, in meters, in the given reference frame.
         /// </summary>
         /// <param name="Position">3 element Tuple describing position</param>
         /// <param name="referenceFrame">Reference frame for the provided position vector</param>
         [KRPCMethod]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public double AltitudeAtPosition (Tuple3 Position, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals(referenceFrame, null))
                 throw new ArgumentNullException(nameof(referenceFrame));
-            var adjustedPosition = referenceFrame.PositionToWorldSpace(Position.ToVector());
-            return InternalBody.GetAltitude(adjustedPosition);
+            return InternalBody.GetAltitude(referenceFrame.PositionToWorldSpace(Position.ToVector()));
         }
 
         /// <summary>
@@ -308,24 +309,26 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The atmospheric density at the given position, in the given reference frame.
+        /// The atmospheric density at the given position, in <math>kg/m^3</math>, in the given reference frame.
         /// </summary>
-        /// <param name="Position">3 element Tuple describing position</param>
-        /// <param name="referenceFrame">Reference frame for the provided position vector</param>
+        /// <param name="position">The position to measure the density at.</param>
+        /// <param name="referenceFrame">Reference frame that the position is in.</param>
         [KRPCMethod]
-        public double AtmosphericDensityAtPosition(Tuple3 Position, ReferenceFrame referenceFrame)
+        public double AtmosphericDensityAtPosition(Tuple3 position, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals(referenceFrame, null))
                 throw new ArgumentNullException(nameof(referenceFrame));
-            var adjustedPosition = referenceFrame.PositionToWorldSpace(Position.ToVector());
-            var altitude = InternalBody.GetAltitude(adjustedPosition);
-            var latitude = InternalBody.GetLatitude(adjustedPosition);
-            var pressure = FlightGlobals.getStaticPressure(adjustedPosition);
-            var temperature = FlightGlobals.getExternalTemperature(altitude, InternalBody)
-                              + InternalBody.atmosphereTemperatureSunMultCurve.Evaluate((float)altitude)
-                              * (InternalBody.latitudeTemperatureBiasCurve.Evaluate((float)latitude)
-                                 + InternalBody.latitudeTemperatureSunMultCurve.Evaluate((float)latitude) // fix that 0 into latitude
-                                 + InternalBody.axialTemperatureSunMultCurve.Evaluate(1));
+            var worldPosition = referenceFrame.PositionToWorldSpace(position.ToVector());
+            var body = InternalBody;
+            var altitude = (float) body.GetAltitude(worldPosition);
+            var latitude = (float) body.GetLatitude(worldPosition);
+            var pressure = FlightGlobals.getStaticPressure(worldPosition);
+            var temperature =
+                FlightGlobals.getExternalTemperature(altitude, body)
+                + body.atmosphereTemperatureSunMultCurve.Evaluate(altitude)
+                * (body.latitudeTemperatureBiasCurve.Evaluate(latitude)
+                   + body.latitudeTemperatureSunMultCurve.Evaluate(latitude) // fix that 0 into latitude
+                   + body.axialTemperatureSunMultCurve.Evaluate(1));
             return FlightGlobals.getAtmDensity(pressure, temperature);
         }
 
