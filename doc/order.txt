@@ -129,9 +129,13 @@ SpaceCenter.CelestialBody.MSLPosition
 SpaceCenter.CelestialBody.SurfacePosition
 SpaceCenter.CelestialBody.BedrockPosition
 SpaceCenter.CelestialBody.PositionAtAltitude
+SpaceCenter.CelestialBody.AltitudeAtPosition
+SpaceCenter.CelestialBody.LatitudeAtPosition
+SpaceCenter.CelestialBody.LongitudeAtPosition
 SpaceCenter.CelestialBody.SphereOfInfluence
 SpaceCenter.CelestialBody.HasAtmosphere
 SpaceCenter.CelestialBody.AtmosphereDepth
+SpaceCenter.CelestialBody.AtmosphericDensityAtPosition
 SpaceCenter.CelestialBody.HasAtmosphericOxygen
 SpaceCenter.CelestialBody.Biomes
 SpaceCenter.CelestialBody.BiomeAt
