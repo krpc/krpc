@@ -179,16 +179,16 @@ namespace KRPC.UI
             GUILayout.BeginVertical ();
             foreach (var server in core.Servers.ToList()) {
                 DrawServer (server);
-                GUILayout.Space (5);
+                GUILayoutExtensions.Separator (separatorStyle);
             }
 
             DrawAddServer ();
-            GUILayout.Space (5);
+            GUILayoutExtensions.Separator (separatorStyle);
 
             if (Errors.Any ()) {
                 foreach (var error in Errors)
                     GUILayout.Label (error, errorLabelStyle);
-                GUILayout.Space (5);
+                GUILayoutExtensions.Separator (separatorStyle);
             }
 
             DrawAdvancedOptions ();
