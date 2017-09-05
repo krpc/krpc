@@ -314,6 +314,7 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="position">The position to measure the density at.</param>
         /// <param name="referenceFrame">Reference frame that the position is in.</param>
         [KRPCMethod]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public double AtmosphericDensityAtPosition(Tuple3 position, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals(referenceFrame, null))
