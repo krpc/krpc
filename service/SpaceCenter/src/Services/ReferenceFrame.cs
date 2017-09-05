@@ -501,7 +501,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.VesselSurfaceVelocity:
                     return InternalVessel.srf_velocity;
                 case ReferenceFrameType.Maneuver:
-                    return new Node (InternalVessel, node).WorldBurnVector;
+                    return node.GetBurnVector(node.patch);
                 case ReferenceFrameType.ManeuverOrbital:
                     return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
                 case ReferenceFrameType.Part:

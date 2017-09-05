@@ -1,3 +1,6 @@
+v0.3.10
+ * Fix maneuver node reference frame to point in the direction of the remaining burn, rather than just the initially planned burn (#404)
+
 v0.3.9
  * Add VesselType.Plane and VesselType.Relay (#385)
  * Fix Control.WheelThrottle and WheelSteering (#388)
