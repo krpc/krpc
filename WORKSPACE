@@ -44,8 +44,8 @@ new_http_archive(
 
 http_file(
     name = 'csharp_protobuf_net35',
-    url = 'https://github.com/djungelorm/protobuf/releases/download/v3.1.0-net35/Google.Protobuf.dll',
-    sha256 = 'a2b8e37fcf7e27218073a7a21db456bcf48e9ec44473d6c1a5b4b2e32148044b'
+    url = 'https://s3.amazonaws.com/krpc/lib/protobuf-3.4.0-net35/Google.Protobuf.dll',
+    sha256 = '496bf64ad9887c539cf7cc070d7e42edd4c8a8534286179431971ffa62ec3e4c'
 )
 
 new_http_archive(
