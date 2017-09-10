@@ -84,6 +84,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Blocks until the vessel is pointing in the target direction and has the target roll (if set).
+        /// Throws an exception if the auto-pilot has not been engaged.
         /// </summary>
         [KRPCMethod]
         public void Wait ()
@@ -94,7 +95,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The error, in degrees, between the direction the ship has been asked
-        /// to point in and the direction it is pointing in. Returns zero if the auto-pilot
+        /// to point in and the direction it is pointing in. Throws an exception if the auto-pilot
         /// has not been engaged and SAS is not enabled or is in stability assist mode.
         /// </summary>
         [KRPCProperty]
@@ -116,21 +117,21 @@ namespace KRPC.SpaceCenter.Services
                 } else if (engaged [vesselId] != this && SAS && SASMode != SASMode.StabilityAssist) {
                     return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, SASTargetDirection ()));
                 } else {
-                    return 0f;
+                    throw new InvalidOperationException ("The auto-pilot is not engaged");
                 }
             }
         }
 
         /// <summary>
         /// The error, in degrees, between the vessels current and target pitch.
-        /// Returns zero if the auto-pilot has not been engaged.
+        /// Throws an exception if the auto-pilot has not been engaged.
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float PitchError {
             get {
                 if (engaged [vesselId] != this)
-                    return 0f;
+                    throw new InvalidOperationException("The auto-pilot is not engaged");
                 var currentPitch = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().x;
                 return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetPitch - currentPitch));
             }
@@ -138,14 +139,14 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The error, in degrees, between the vessels current and target heading.
-        /// Returns zero if the auto-pilot has not been engaged.
+        /// Throws an exception if the auto-pilot has not been engaged.
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float HeadingError {
             get {
                 if (engaged [vesselId] != this)
-                    return 0f;
+                    throw new InvalidOperationException("The auto-pilot is not engaged");
                 var currentHeading = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().y;
                 return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetHeading - currentHeading));
             }
@@ -153,14 +154,16 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The error, in degrees, between the vessels current and target roll.
-        /// Returns zero if the auto-pilot has not been engaged or no target roll is set.
+        /// Throws an exception if the auto-pilot has not been engaged or no target roll is set.
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float RollError {
             get {
-                if (engaged [vesselId] != this || double.IsNaN (attitudeController.TargetRoll))
-                    return 0f;
+                if (engaged [vesselId] != this)
+                    throw new InvalidOperationException("The auto-pilot is not engaged");
+                if (double.IsNaN (attitudeController.TargetRoll))
+                    throw new InvalidOperationException("No target roll has been set");
                 var currentRoll = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
                 return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetRoll - currentRoll));
             }
