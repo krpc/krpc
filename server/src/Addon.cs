@@ -142,11 +142,15 @@ namespace KRPC
                 config.Configuration.MainWindowVisible = true;
                 config.Save ();
             };
+            mainWindow.OnStartMoving += (s, e) => {
+                config.Load();
+            };
             mainWindow.OnMoved += (s, e) => {
-                config.Load ();
                 var window = s as MainWindow;
                 config.Configuration.MainWindowPosition = window.Position.ToTuple ();
-                config.Save ();
+            };
+            mainWindow.OnFinishMoving += (s, e) => {
+                config.Save();
             };
 
             // Info window events
@@ -160,11 +164,15 @@ namespace KRPC
                 config.Configuration.InfoWindowVisible = true;
                 config.Save ();
             };
+            infoWindow.OnStartMoving += (s, e) => {
+                config.Load();
+            };
             infoWindow.OnMoved += (s, e) => {
-                config.Load ();
                 var window = s as InfoWindow;
                 config.Configuration.InfoWindowPosition = window.Position.ToTuple ();
-                config.Save ();
+            };
+            infoWindow.OnFinishMoving += (s, e) => {
+                config.Save();
             };
 
             // Server events
