@@ -3,9 +3,25 @@ import os
 import unittest
 import websocket
 import krpc.schema.KRPC_pb2 as KRPC
+import google.protobuf
 from google.protobuf.internal.decoder import _DecodeVarint, _DecodeSignedVarint
-from google.protobuf.internal.encoder import _SignedVarintEncoder
+from google.protobuf.internal import encoder as protobuf_encoder
 from google.protobuf.internal.wire_format import ZigZagEncode, ZigZagDecode
+
+
+# The following unpacks the internal protobuf decoders, whose signature
+# depends on the version of protobuf installed
+# pylint: disable=invalid-name
+_pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()
+_pb_version = google.protobuf.__version__.split('.')
+if int(_pb_version[0]) >= 3 and int(_pb_version[1]) >= 4:
+    # protobuf v3.4.0 and above
+    def _SignedVarintEncoder(write, value):
+        return _pb_SignedVarintEncoder(write, value, True)
+else:
+    # protobuf v3.3.0 and below
+    _SignedVarintEncoder = _pb_SignedVarintEncoder
+# pylint: enable=invalid-name
 
 
 class WebSocketsTest(unittest.TestCase):
@@ -61,7 +77,7 @@ class WebSocketsTest(unittest.TestCase):
     @staticmethod
     def encode_int32(value):
         data = []
-        _SignedVarintEncoder()(data.append, ZigZagEncode(value))
+        _SignedVarintEncoder(data.append, ZigZagEncode(value))
         return b''.join(data)
 
     @staticmethod

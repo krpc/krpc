@@ -16,7 +16,6 @@ int main() {
   krpc::services::Drawing drawing(&conn);
   auto vessel = space_center.active_vessel();
   auto body = vessel.orbit().body();
-  auto create_relative = krpc::services::SpaceCenter::ReferenceFrame::create_relative;
 
   // Define the landing site as the top of the VAB
   double landing_latitude = -(0.0+(5.0/60.0)+(48.38/60.0/60.0));
@@ -40,25 +39,18 @@ int main() {
     cos(landing_latitude * 0.5 * pi / 180.0)
   );
   auto landing_reference_frame =
-    create_relative(
+    krpc::services::SpaceCenter::ReferenceFrame::create_relative(
       conn,
-      create_relative(
+      krpc::services::SpaceCenter::ReferenceFrame::create_relative(
         conn,
-        create_relative(
+        krpc::services::SpaceCenter::ReferenceFrame::create_relative(
           conn,
           body.reference_frame(),
           landing_position,
-          q_long,
-          std::make_tuple(0.0,0.0,0.0),
-          std::make_tuple(0.0,0.0,0.0)),
+          q_long),
         std::make_tuple(0, 0, 0),
-        q_lat,
-        std::make_tuple(0.0,0.0,0.0),
-        std::make_tuple(0.0,0.0,0.0)),
-      std::make_tuple(landing_altitude, 0, 0),
-      std::make_tuple(0.0,0.0,0.0,1.0),
-      std::make_tuple(0.0,0.0,0.0),
-      std::make_tuple(0.0,0.0,0.0));
+        q_lat),
+      std::make_tuple(landing_altitude, 0, 0));
 
   // Draw axes
   drawing.add_line(

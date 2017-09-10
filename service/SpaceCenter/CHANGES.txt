@@ -1,3 +1,9 @@
+v0.3.10
+ * Fix maneuver node reference frame to point in the direction of the remaining burn, rather than just the initially planned burn (#404)
+ * Add following to CelestialBody class: AltitudeAtPosition, LatitudeAtPosition, LongitudeAtPosition and AtmosphericDensityAtPosition (#413)
+ * Add following to Orbit class: RadiusAt, PositionAt, MeanAnomalyAtUT, TrueAnomalyAtAN, TrueAnomalyAtDN
+ * Add rendezvous method to Orbit class: RelativeInclination, TimeOfClosestApproach, DistanceAtClosestApproach, ListClosestApproaches (#407)
+
 v0.3.9
  * Add VesselType.Plane and VesselType.Relay (#385)
  * Fix Control.WheelThrottle and WheelSteering (#388)

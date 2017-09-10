@@ -180,7 +180,8 @@ sphinx_spelling_test(
     srcs = [':srcs'],
     sphinx_build = ':sphinx-build',
     opts = {'version': version},
-    size = 'small'
+    size = 'small',
+    timeout = 'moderate'
 )
 
 sphinx_linkcheck_test(
