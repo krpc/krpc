@@ -31,7 +31,8 @@ namespace KRPC.UI
 
         internal bool Resized { get; set; }
 
-        bool showAdvancedOptions;
+        bool showAdvancedMode;
+        bool showAdvancedServerOptions;
         string maxTimePerUpdate;
         string recvTimeout;
         // Style settings
@@ -40,14 +41,17 @@ namespace KRPC.UI
             buttonStyle, toggleStyle, expandStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
         const float windowWidth = 288f;
         const float textFieldWidth = 45f;
-        const float longTextFieldWidth = 90f;
+        const float longTextFieldWidth = 180f;
         const float fixedLabelWidth = 125f;
         const float indentWidth = 15f;
         float scaledIndentWidth;
         const int maxTimePerUpdateMaxLength = 5;
         const int recvTimeoutMaxLength = 5;
         // Text strings
-        const string addServerText = "Add Server";
+        const string advancedModeText = "Show advanced settings";
+        const string startAllServersText = "Start server";
+        const string stopAllServersText = "Stop server";
+        const string addServerText = "Add server";
         const string removeServerText = "Remove";
         const string startServerText = "Start";
         const string stopServerText = "Stop";
@@ -55,11 +59,12 @@ namespace KRPC.UI
         const string saveServerText = "Save";
         const string serverOnlineText = "Server online";
         const string serverOfflineText = "Server offline";
+        const string protocolText = "Protocol:";
         internal const string protobufOverTcpText = "Protobuf over TCP";
         internal const string protobufOverWebSocketsText = "Protobuf over WebSockets";
         const string unknownClientNameText = "<unknown>";
         const string noClientsConnectedText = "No clients connected";
-        const string advancedText = "Advanced settings";
+        const string advancedServerOptionsText = "Show server settings";
         const string autoStartServerText = "Auto-start server";
         const string autoAcceptConnectionsText = "Auto-accept new clients";
         const string confirmRemoveClientText = "Confirm disconnecting a client";
@@ -137,6 +142,7 @@ namespace KRPC.UI
             comboOptionStyle = GUILayoutExtensions.ComboOptionStyle ();
 
             Errors = new List<string> ();
+            showAdvancedMode = config.Configuration.MainWindowAdvancedMode;
             maxTimePerUpdate = config.Configuration.MaxTimePerUpdate.ToString ();
             recvTimeout = config.Configuration.RecvTimeout.ToString ();
 
@@ -171,51 +177,89 @@ namespace KRPC.UI
             }
 
             // Force window to resize to height of content
-            if (Resized) {
-                Position = new Rect (Position.x, Position.y, Position.width, 0f);
+            if (Resized)
+            {
+                Position = new Rect(Position.x, Position.y, Position.width, 0f);
                 Resized = false;
             }
 
-            GUILayout.BeginVertical ();
-            foreach (var server in core.Servers.ToList()) {
-                DrawServer (server);
-                GUILayoutExtensions.Separator (separatorStyle);
+            GUILayout.BeginVertical();
+
+            DrawStartServer();
+            GUILayoutExtensions.Separator(separatorStyle);
+
+            var servers = core.Servers.ToList();
+            foreach (var server in servers) {
+                DrawServer(server, !showAdvancedMode && servers.Count == 1);
+                GUILayoutExtensions.Separator(separatorStyle);
             }
 
-            DrawAddServer ();
-            GUILayoutExtensions.Separator (separatorStyle);
+            if (showAdvancedMode) {
+                DrawAddServer();
+                GUILayoutExtensions.Separator(separatorStyle);
+            }
 
-            if (Errors.Any ()) {
+            if (Errors.Any()) {
                 foreach (var error in Errors)
-                    GUILayout.Label (error, errorLabelStyle);
-                GUILayoutExtensions.Separator (separatorStyle);
+                    GUILayout.Label(error, errorLabelStyle);
+                GUILayoutExtensions.Separator(separatorStyle);
             }
 
-            DrawAdvancedOptions ();
-            DrawShowInfoWindow ();
+            DrawAdvancedModeToggle();
+            if (showAdvancedMode) {
+                DrawAdvancedServerOptions();
+                DrawShowInfoWindow();
+            }
+            GUILayout.EndVertical();
 
-            GUILayout.EndVertical ();
             GUI.DragWindow ();
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
-        void DrawServer (Server.Server server)
+        void DrawStartServer()
         {
-            bool running = server.Running;
-            bool editingServer = editServers.ContainsKey (server.Id);
-            bool expanded = expandServers.Contains (server.Id);
+            var running = core.AnyRunning;
+            var label = (running ? stopAllServersText : startAllServersText) + (core.Servers.Count > 1 ? "s" : string.Empty);
+            if (GUILayout.Button(label, buttonStyle)) {
+                Errors.Clear ();
+                Resized = true;
+                foreach (var server in core.Servers)
+                    if (server.Running == running)
+                        EventHandlerExtensions.Invoke(running ? OnStopServerPressed : OnStartServerPressed, this, new ServerEventArgs(server));
+            }
+        }
+
+        void DrawAdvancedModeToggle() {
+            bool value = GUILayout.Toggle(showAdvancedMode, advancedModeText, toggleStyle, new GUILayoutOption[] { });
+            if (value != showAdvancedMode)
+            {
+                showAdvancedMode = value;
+                Resized = true;
+                config.Configuration.MainWindowAdvancedMode = value;
+                config.Save();
+            }
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
+        [SuppressMessage("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
+        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
+        void DrawServer (Server.Server server, bool forceExpanded = false)
+        {
+            var running = server.Running;
+            var editingServer = showAdvancedMode && editServers.ContainsKey (server.Id);
+            var expanded = forceExpanded || expandServers.Contains (server.Id);
 
             GUILayout.BeginHorizontal ();
-            var icons = Icons.Instance;
-            if (GUILayout.Button (new GUIContent (expanded ? icons.ButtonCollapse : icons.ButtonExpand, expanded ? "Collapse" : "Expand"),
-                    expandStyle, GUILayout.MaxWidth (20), GUILayout.MaxHeight (20))) {
-                if (expanded)
-                    expandServers.Remove (server.Id);
-                else
-                    expandServers.Add (server.Id);
-                expanded = !expanded;
-                Resized = true;
+            if (!forceExpanded) {
+                var icons = Icons.Instance;
+                if (GUILayout.Button(new GUIContent(expanded ? icons.ButtonCollapse : icons.ButtonExpand, expanded ? "Collapse" : "Expand"),
+                        expandStyle, GUILayout.MaxWidth(20), GUILayout.MaxHeight(20))) {
+                    if (expanded)
+                        expandServers.Remove(server.Id);
+                    else
+                        expandServers.Add(server.Id);
+                    expanded = !expanded;
+                    Resized = true;
+                }
             }
             GUILayoutExtensions.Light (running, lightStyle);
             if (!editingServer)
@@ -227,41 +271,51 @@ namespace KRPC.UI
             if (editingServer) {
                 editServers [server.Id].Draw ();
             } else if (expanded) {
-                GUILayout.Label (server.Protocol == Protocol.ProtocolBuffersOverTCP ? protobufOverTcpText : protobufOverWebSocketsText, labelStyle);
+                GUILayout.Label (protocolText + (server.Protocol == Protocol.ProtocolBuffersOverTCP ? protobufOverTcpText : protobufOverWebSocketsText), labelStyle);
                 GUILayout.Label (server.Info, labelStyle);
                 foreach (var line in server.Address.Split ('\n'))
                     GUILayout.Label (line, labelStyle);
                 DrawClients (server);
             }
 
-            GUILayout.BeginHorizontal ();
-            GUI.enabled = !editingServer;
-            if (GUILayout.Button (running ? stopServerText : startServerText, buttonStyle))
-                EventHandlerExtensions.Invoke (running ? OnStopServerPressed : OnStartServerPressed, this, new ServerEventArgs (server));
-            GUI.enabled = !running;
-            if (GUILayout.Button (editingServer ? saveServerText : editServerText, buttonStyle)) {
-                if (editingServer) {
-                    var newServer = editServers [server.Id].Save ();
-                    if (newServer != null) {
-                        editServers.Remove (server.Id);
-                        config.Configuration.ReplaceServer (newServer);
-                        config.Save ();
-                        core.Replace (newServer.Create ());
-                    }
-                } else {
-                    editServers [server.Id] = new EditServer (this, config.Configuration.GetServer (server.Id));
+            if (showAdvancedMode) {
+                GUILayout.BeginHorizontal();
+                GUI.enabled = !editingServer;
+                if (GUILayout.Button(running ? stopServerText : startServerText, buttonStyle)) {
+                    Errors.Clear();
+                    Resized = true;
+                    EventHandlerExtensions.Invoke(running ? OnStopServerPressed : OnStartServerPressed, this, new ServerEventArgs(server));
                 }
-                Resized = true;
+                GUI.enabled = !running;
+                if (GUILayout.Button(editingServer ? saveServerText : editServerText, buttonStyle))
+                {
+                    if (editingServer)
+                    {
+                        var newServer = editServers[server.Id].Save();
+                        if (newServer != null)
+                        {
+                            editServers.Remove(server.Id);
+                            config.Configuration.ReplaceServer(newServer);
+                            config.Save();
+                            core.Replace(newServer.Create());
+                        }
+                    }
+                    else {
+                        editServers[server.Id] = new EditServer(this, config.Configuration.GetServer(server.Id));
+                    }
+                    Resized = true;
+                }
+                GUI.enabled = !editingServer && !running;
+                if (GUILayout.Button(removeServerText, buttonStyle))
+                {
+                    config.Configuration.RemoveServer(server.Id);
+                    config.Save();
+                    core.Remove(server.Id);
+                    Resized = true;
+                }
+                GUI.enabled = true;
+                GUILayout.EndHorizontal ();
             }
-            GUI.enabled = !editingServer && !running;
-            if (GUILayout.Button (removeServerText, buttonStyle)) {
-                config.Configuration.RemoveServer (server.Id);
-                config.Save ();
-                core.Remove (server.Id);
-                Resized = true;
-            }
-            GUI.enabled = true;
-            GUILayout.EndHorizontal ();
         }
 
         void DrawClients (IServer server)
@@ -311,13 +365,13 @@ namespace KRPC.UI
             }
         }
 
-        void DrawAdvancedOptions ()
+        void DrawAdvancedServerOptions ()
         {
             GUILayout.BeginHorizontal ();
-            DrawAdvancedOptionsToggle ();
+            DrawAdvancedServerOptionsToggle ();
             GUILayout.EndHorizontal ();
 
-            if (showAdvancedOptions) {
+            if (showAdvancedServerOptions) {
                 GUILayout.BeginHorizontal ();
                 GUILayout.Space (scaledIndentWidth);
                 DrawAutoStartServerToggle ();
@@ -365,11 +419,11 @@ namespace KRPC.UI
             }
         }
 
-        void DrawAdvancedOptionsToggle ()
+        void DrawAdvancedServerOptionsToggle ()
         {
-            bool value = GUILayout.Toggle (showAdvancedOptions, advancedText, toggleStyle, new GUILayoutOption[] { });
-            if (value != showAdvancedOptions) {
-                showAdvancedOptions = value;
+            bool value = GUILayout.Toggle (showAdvancedServerOptions, advancedServerOptionsText, toggleStyle, new GUILayoutOption[] { });
+            if (value != showAdvancedServerOptions) {
+                showAdvancedServerOptions = value;
                 Resized = true;
             }
         }

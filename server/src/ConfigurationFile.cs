@@ -75,6 +75,7 @@ namespace KRPC
         [Persistent] readonly List<Server> servers = new List<Server> ();
         [Persistent] bool mainWindowVisible;
         [Persistent] RectStorage mainWindowPosition = new RectStorage ();
+        [Persistent] bool mainWindowAdvancedMode;
         [Persistent] bool infoWindowVisible;
         [Persistent] RectStorage infoWindowPosition = new RectStorage ();
         [Persistent] bool autoStartServers;
@@ -106,6 +107,7 @@ namespace KRPC
             }
             mainWindowVisible = Configuration.MainWindowVisible;
             mainWindowPosition = RectStorage.FromRect (Configuration.MainWindowPosition.ToRect ());
+            mainWindowAdvancedMode = Configuration.MainWindowAdvancedMode;
             infoWindowVisible = Configuration.InfoWindowVisible;
             infoWindowPosition = RectStorage.FromRect (Configuration.InfoWindowPosition.ToRect ());
             autoStartServers = Configuration.AutoStartServers;
@@ -133,6 +135,7 @@ namespace KRPC
             }
             Configuration.MainWindowVisible = mainWindowVisible;
             Configuration.MainWindowPosition = mainWindowPosition.AsRect ().ToTuple ();
+            Configuration.MainWindowAdvancedMode = mainWindowAdvancedMode;
             Configuration.InfoWindowVisible = infoWindowVisible;
             Configuration.InfoWindowPosition = infoWindowPosition.AsRect ().ToTuple ();
             Configuration.AutoStartServers = autoStartServers;
