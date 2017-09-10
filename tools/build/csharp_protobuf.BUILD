@@ -1,1 +1,1 @@
-exports_files(['lib/net45/Google.Protobuf.dll'])
+exports_files(['lib/net451/Google.Protobuf.dll'])

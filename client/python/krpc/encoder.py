@@ -1,8 +1,39 @@
 # pylint: disable=import-error,no-name-in-module
+import google.protobuf
 from google.protobuf.internal import encoder as protobuf_encoder
 from krpc.types import Types, ValueType, MessageType, ClassType, EnumType
 from krpc.types import ListType, DictionaryType, SetType, TupleType
 from krpc.platform import bytelength
+
+
+# The following unpacks the internal protobuf decoders, whose signature
+# depends on the version of protobuf installed
+# pylint: disable=invalid-name
+_pb_VarintEncoder = protobuf_encoder._VarintEncoder()
+_pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()
+_pb_DoubleEncoder = protobuf_encoder.DoubleEncoder(1, False, False)
+_pb_FloatEncoder = protobuf_encoder.FloatEncoder(1, False, False)
+_pb_version = google.protobuf.__version__.split('.')
+if int(_pb_version[0]) >= 3 and int(_pb_version[1]) >= 4:
+    # protobuf v3.4.0 and above
+    def _VarintEncoder(write, value):
+        return _pb_VarintEncoder(write, value, True)
+
+    def _SignedVarintEncoder(write, value):
+        return _pb_SignedVarintEncoder(write, value, True)
+
+    def _DoubleEncoder(write, value):
+        return _pb_DoubleEncoder(write, value, True)
+
+    def _FloatEncoder(write, value):
+        return _pb_FloatEncoder(write, value, True)
+else:
+    # protobuf v3.3.0 and below
+    _VarintEncoder = _pb_VarintEncoder
+    _SignedVarintEncoder = _pb_SignedVarintEncoder
+    _DoubleEncoder = _pb_DoubleEncoder
+    _FloatEncoder = _pb_FloatEncoder
+# pylint: enable=invalid-name
 
 
 class Encoder(object):
@@ -98,8 +129,7 @@ class _ValueEncoder(object):
         def write(x):
             data.append(x)
 
-        encoder = protobuf_encoder.DoubleEncoder(1, False, False)
-        encoder(write, value)
+        _DoubleEncoder(write, value)
         return b''.join(data[1:])  # strips the tag value
 
     @classmethod
@@ -109,8 +139,7 @@ class _ValueEncoder(object):
         def write(x):
             data.append(x)
 
-        encoder = protobuf_encoder.FloatEncoder(1, False, False)
-        encoder(write, value)
+        _FloatEncoder(write, value)
         return b''.join(data[1:])  # strips the tag value
 
     @classmethod
@@ -120,7 +149,7 @@ class _ValueEncoder(object):
         def write(x):
             data.append(x)
 
-        protobuf_encoder._VarintEncoder()(write, value)
+        _VarintEncoder(write, value)
         return b''.join(data)
 
     @classmethod
@@ -130,7 +159,7 @@ class _ValueEncoder(object):
         def write(x):
             data.append(x)
 
-        protobuf_encoder._SignedVarintEncoder()(write, value)
+        _SignedVarintEncoder(write, value)
         return b''.join(data)
 
     @classmethod

@@ -3,28 +3,28 @@ workspace(name = "krpc")
 new_http_archive(
     name = 'protoc_linux_x86_32',
     build_file = 'tools/build/protobuf/protoc_linux_x86_32.BUILD',
-    url = 'https://github.com/google/protobuf/releases/download/v3.3.0/protoc-3.3.0-linux-x86_32.zip',
+    url = 'https://github.com/google/protobuf/releases/download/v3.4.0/protoc-3.4.0-linux-x86_32.zip',
     sha256 = 'c3de489a343f99201eff7848ff9aafaa983032c5765d25e7dc85203d6b6acdb2'
 )
 
 new_http_archive(
     name = 'protoc_linux_x86_64',
     build_file = 'tools/build/protobuf/protoc_linux_x86_64.BUILD',
-    url = 'https://github.com/google/protobuf/releases/download/v3.3.0/protoc-3.3.0-linux-x86_64.zip',
-    sha256 = 'feb112bbc11ea4e2f7ef89a359b5e1c04428ba6cfa5ee628c410eccbfe0b64c3'
+    url = 'https://github.com/google/protobuf/releases/download/v3.4.0/protoc-3.4.0-linux-x86_64.zip',
+    sha256 = 'e4b51de1b75813e62d6ecdde582efa798586e09b5beaebfb866ae7c9eaadace4'
 )
 
 new_http_archive(
     name = 'protoc_osx_x86_32',
     build_file = 'tools/build/protobuf/protoc_osx_x86_32.BUILD',
-    url = 'https://github.com/google/protobuf/releases/download/v3.3.0/protoc-3.3.0-osx-x86_32.zip',
+    url = 'https://github.com/google/protobuf/releases/download/v3.4.0/protoc-3.4.0-osx-x86_32.zip',
     sha256 = '8166f64224b4b71a83e3b132fbd3540a9a03aadeba0636b02e7b4d92a66d0ab8'
 )
 
 new_http_archive(
     name = 'protoc_win32',
     build_file = 'tools/build/protobuf/protoc_win32.BUILD',
-    url = 'https://github.com/google/protobuf/releases/download/v3.3.0/protoc-3.3.0-win32.zip',
+    url = 'https://github.com/google/protobuf/releases/download/v3.4.0/protoc-3.4.0-win32.zip',
     sha256 = '19ec3d3853c1181912dc442840b3a76bfe0607ecc67d0854b323fdd1fdd8ab77'
 )
 
@@ -37,15 +37,15 @@ http_file(
 new_http_archive(
     name = 'csharp_protobuf',
     build_file = 'tools/build/csharp_protobuf.BUILD',
-    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.3.0',
+    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.4.0',
     type = 'zip',
-    sha256 = 'dbae79cacead66402c4e61b6312990dc35f95f6e444d5e9b9ad5930977f1d670'
+    sha256 = 'dfd91888be6ec88af5649407cae4897f0d6793344355c4ba6f3d056c7767409e'
 )
 
 http_file(
     name = 'csharp_protobuf_net35',
-    url = 'https://github.com/djungelorm/protobuf/releases/download/v3.1.0-net35/Google.Protobuf.dll',
-    sha256 = 'a2b8e37fcf7e27218073a7a21db456bcf48e9ec44473d6c1a5b4b2e32148044b'
+    url = 'https://s3.amazonaws.com/krpc/lib/protobuf-3.4.0-net35/Google.Protobuf.dll',
+    sha256 = '496bf64ad9887c539cf7cc070d7e42edd4c8a8534286179431971ffa62ec3e4c'
 )
 
 new_http_archive(
@@ -82,9 +82,9 @@ new_http_archive(
 
 http_archive(
     name = 'cpp_protobuf',
-    url = 'https://github.com/google/protobuf/releases/download/v3.3.0/protobuf-cpp-3.3.0.tar.gz',
-    strip_prefix = 'protobuf-3.3.0',
-    sha256 = '5e2587dea2f9287885e3b04d3a94ed4e8b9b2d2c5dd1f0032ceef3ea1d153bd7'
+    url = 'https://github.com/google/protobuf/releases/download/v3.4.0/protobuf-cpp-3.4.0.tar.gz',
+    strip_prefix = 'protobuf-3.4.0',
+    sha256 = '71434f6f836a1e479c44008bb033b2a8b2560ff539374dcdefb126be739e1635'
 )
 
 new_http_archive(
@@ -117,8 +117,8 @@ http_file(
 
 http_file(
     name = 'java_protobuf',
-    url = 'https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.jar',
-    sha256 = 'f3411ade77523d5f0d013d4f25c36879e66f0c5e1e4310f7096d54d0d2553554'
+    url = 'https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.4.0/protobuf-java-3.4.0.jar',
+    sha256 = 'dce7e66b32456a1b1198da0caff3a8acb71548658391e798c79369241e6490a4'
 )
 
 http_file(
@@ -379,8 +379,8 @@ http_file(
 
 http_file(
     name = 'python_protobuf',
-    url = 'https://pypi.python.org/packages/56/28/6263d846f60dad93939fd3a22d712d6bae3bf3484332d22bd5933dec8c99/protobuf-3.3.0.tar.gz',
-    sha256 = '1cbcee2c45773f57cb6de7ee0eceb97f92b9b69c0178305509b162c0160c1f04'
+    url = 'https://pypi.python.org/packages/89/45/3214bb758646a1a30459ca0f5b8f8164d6893f24725c58b632e663565f44/protobuf-3.4.0.tar.gz',
+    sha256 = 'ef02609ef445987976a3a26bff77119c518e0915c96661c3a3b17856d0ef6374'
 )
 
 http_file(
