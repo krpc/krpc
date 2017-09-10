@@ -14,6 +14,6 @@ namespace KRPC.Service
 
         Type ReturnType { get; }
 
-        bool Nullable { get; }
+        bool ReturnIsNullable { get; }
     }
 }

@@ -15,12 +15,12 @@ namespace KRPC.Service
         readonly ProcedureParameter[] parameters;
         readonly object[] methodArguments;
 
-        public ClassStaticMethodHandler (MethodInfo methodInfo, bool nullable)
+        public ClassStaticMethodHandler (MethodInfo methodInfo, bool returnIsNullable)
         {
             method = methodInfo;
             parameters = method.GetParameters ().Select (x => new ProcedureParameter (methodInfo, x)).ToArray ();
             methodArguments = new object[parameters.Length];
-            Nullable = nullable;
+            ReturnIsNullable = returnIsNullable;
         }
 
         /// <summary>
@@ -42,6 +42,6 @@ namespace KRPC.Service
             get { return method.ReturnType; }
         }
 
-        public bool Nullable { get; private set; }
+        public bool ReturnIsNullable { get; private set; }
     }
 }

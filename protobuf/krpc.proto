@@ -93,7 +93,8 @@ message Procedure {
   string name = 1;
   repeated Parameter parameters = 2;
   Type return_type = 3;
-  string documentation = 4;
+  bool return_is_nullable = 4;
+  string documentation = 5;
 }
 
 message Parameter {
@@ -129,7 +130,6 @@ message Type {
   string service = 2;
   string name = 3;
   repeated Type types = 4;
-  bool nullable = 5;
 
   enum TypeCode {
     NONE = 0;

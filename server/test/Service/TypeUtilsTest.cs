@@ -338,14 +338,7 @@ namespace KRPC.Test.Service
                    "]}", typeof(IList<TestService.TestEnum>))]
         public void SerializeType (string name, Type type)
         {
-            Assert.AreEqual (name, JsonConvert.SerializeObject (TypeUtils.SerializeType (type, false, false)));
-        }
-
-        [TestCase ("{\"code\":\"CLASS\",\"service\":\"TestService\",\"name\":\"TestClass\",\"nullable\":true}",
-           typeof (TestService.TestClass))]
-        public void SerializeNullableType (string name, Type type)
-        {
-            Assert.AreEqual (name, JsonConvert.SerializeObject (TypeUtils.SerializeType (type, true, true)));
+            Assert.AreEqual (name, JsonConvert.SerializeObject (TypeUtils.SerializeType (type)));
         }
 
         [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
@@ -353,7 +346,7 @@ namespace KRPC.Test.Service
         [TestCase (typeof(IDictionary<double,string>))]
         public void InvalidSerializeType (Type type)
         {
-            Assert.Throws<ArgumentException> (() => TypeUtils.SerializeType (type, false, false));
+            Assert.Throws<ArgumentException> (() => TypeUtils.SerializeType (type));
         }
     }
 }

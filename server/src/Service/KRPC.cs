@@ -79,7 +79,7 @@ namespace KRPC.Service
                     var procedure = new Procedure (procedureSignature.Name);
                     if (procedureSignature.HasReturnType) {
                         procedure.ReturnType = procedureSignature.ReturnType;
-                        procedure.Nullable = procedureSignature.Nullable;
+                        procedure.ReturnIsNullable = procedureSignature.ReturnIsNullable;
                     }
                     foreach (var parameterSignature in procedureSignature.Parameters) {
                         var parameter = new Parameter (parameterSignature.Name, parameterSignature.Type);

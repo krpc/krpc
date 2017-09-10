@@ -168,7 +168,7 @@ namespace KRPC.Service
                     "Expected a value of type " + procedure.ReturnType + ", got null");
             }
             // Check if the return value is null, but the procedure is not marked as nullable
-            if (returnValue == null && !procedure.Nullable)
+            if (returnValue == null && !procedure.ReturnIsNullable)
                 throw new RPCException (
                     "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
                     "Expected a non-null value of type " + procedure.ReturnType + ", got null, " +

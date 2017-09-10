@@ -88,10 +88,9 @@ namespace KRPC.Server.ProtocolBuffers
             var result = new Schema.KRPC.Procedure ();
             result.Name = procedure.Name;
             result.Parameters.Add (procedure.Parameters.Select (ToProtobufMessage));
-            if (procedure.ReturnType != null) {
+            if (procedure.ReturnType != null)
                 result.ReturnType = procedure.ReturnType.ToProtobufMessage ();
-                result.ReturnType.Nullable = procedure.Nullable;
-            }
+            result.ReturnIsNullable = procedure.ReturnIsNullable;
             result.Documentation = procedure.Documentation;
             return result;
         }

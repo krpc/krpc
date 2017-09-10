@@ -128,7 +128,7 @@ class Procedure(Appendable):
     member_type = 'procedure'
 
     def __init__(self, service_name, name, parameters,
-                 documentation, return_type=None):
+                 documentation, return_type=None, return_is_nullable=False):
         super(Procedure, self).__init__()
         self.service_name = service_name
         self.name = name
@@ -137,6 +137,7 @@ class Procedure(Appendable):
             self.return_type = as_type(self.types, return_type)
         else:
             self.return_type = None
+        self.return_is_nullable = return_is_nullable
         self.parameters = [Parameter(documentation=documentation, **info)
                            for info in parameters]
         self.documentation = documentation
@@ -166,7 +167,7 @@ class ClassMethod(Appendable):
     member_type = 'class_method'
 
     def __init__(self, service_name, class_name, name, parameters,
-                 documentation, return_type=None):
+                 documentation, return_type=None, return_is_nullable=False):
         super(ClassMethod, self).__init__()
         name = Attributes.get_class_member_name(name)
         self.service_name = service_name
@@ -177,6 +178,7 @@ class ClassMethod(Appendable):
             self.return_type = as_type(self.types, return_type)
         else:
             self.return_type = None
+        self.return_is_nullable = return_is_nullable
         self.parameters = [Parameter(documentation=documentation, **info)
                            for info in parameters]
         self.documentation = documentation
@@ -187,7 +189,7 @@ class ClassStaticMethod(Appendable):
     member_type = 'class_static_method'
 
     def __init__(self, service_name, class_name, name, parameters,
-                 documentation, return_type=None):
+                 documentation, return_type=None, return_is_nullable=False):
         super(ClassStaticMethod, self).__init__()
         name = Attributes.get_class_member_name(name)
         self.service_name = service_name
@@ -198,6 +200,7 @@ class ClassStaticMethod(Appendable):
             self.return_type = as_type(self.types, return_type)
         else:
             self.return_type = None
+        self.return_is_nullable = return_is_nullable
         self.parameters = [Parameter(documentation=documentation, **info)
                            for info in parameters]
         self.documentation = documentation
