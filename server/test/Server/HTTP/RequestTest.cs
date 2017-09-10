@@ -18,18 +18,19 @@ namespace KRPC.Test.Server.HTTP
                               "GET /path/to/resource?arg1=value1&arg2=value1&arg3=value3 HTTP/1.1\r\n" +
                               "Header1: Value1\r\n" +
                               "Header2:Value2\r\n" +
-                              "Header3 : Value3\r\n" +
+                              "Header3 : Value3, Value4\r\n" +
                               "\r\n"
                           );
-            Assert.AreEqual ("HTTP/1.1", request.Protocol);
-            Assert.AreEqual ("GET", request.Method);
+            Assert.AreEqual ("http/1.1", request.Protocol);
+            Assert.AreEqual ("get", request.Method);
             Assert.AreEqual ("/path/to/resource", request.URI.LocalPath);
             Assert.AreEqual ("?arg1=value1&arg2=value1&arg3=value3", request.URI.Query);
-            var expectedHeaders = new Dictionary<string,string> ();
-            expectedHeaders ["Header1"] = "Value1";
-            expectedHeaders ["Header2"] = "Value2";
-            expectedHeaders ["Header3"] = "Value3";
-            CollectionAssert.AreEquivalent (expectedHeaders, request.Headers);
+            var expectedHeaders = new Dictionary<string, IList<string>>();
+            expectedHeaders["header1"] = new List<string> { "Value1" };
+            expectedHeaders["header2"] = new List<string> { "Value2" };
+            expectedHeaders["header3"] = new List<string> { "Value3" };
+            expectedHeaders["header3"] = new List<string> { "Value3", "Value4" };
+            CollectionAssert.AreEquivalent(expectedHeaders, request.Headers);
         }
 
         [Test]
@@ -69,6 +70,7 @@ namespace KRPC.Test.Server.HTTP
             Assert.Throws <MalformedRequestException> (() => Request.FromString (requestString + "Key:\r\n\r\n"));
             Assert.Throws <MalformedRequestException> (() => Request.FromString (requestString + ":Value\r\n\r\n"));
             Assert.Throws <MalformedRequestException> (() => Request.FromString (requestString + "Key: Value\r\nKey: Value\r\n\r\n"));
+            Assert.Throws <MalformedRequestException> (() => Request.FromString (requestString + "Key: Value\r\nkey: Value\r\n\r\n"));
         }
 
         [Test]

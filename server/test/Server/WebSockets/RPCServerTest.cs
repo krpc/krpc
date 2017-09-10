@@ -12,44 +12,36 @@ namespace KRPC.Test.Server.WebSockets
     [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
     public class RPCServerTest
     {
-        [Test]
-        public void ValidConnectionRequestWithNoName ()
+        static void CheckValidConnectionRequest(string request, string name)
         {
             var ascii = Encoding.ASCII;
-            var request = ascii.GetBytes (
-                              "GET / HTTP/1.1\r\n" +
-                              "Host: localhost\r\n" +
-                              "Upgrade: websocket\r\n" +
-                              "Connection: Upgrade\r\n" +
-                              "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n" +
-                              "Sec-WebSocket-Version: 13\r\n\r\n"
-                          );
+            var requestBytes = ascii.GetBytes(request);
 
-            var responseStream = new MemoryStream ();
-            var stream = new TestStream (new MemoryStream (request), responseStream);
+            var responseStream = new MemoryStream();
+            var stream = new TestStream(new MemoryStream(requestBytes), responseStream);
 
             // Create mock byte server and client
-            var mockByteServer = new Mock<IServer<byte,byte>> ();
+            var mockByteServer = new Mock<IServer<byte, byte>>();
             var byteServer = mockByteServer.Object;
-            var byteClient = new TestClient (stream);
+            var byteClient = new TestClient(stream);
 
-            var server = new KRPC.Server.WebSockets.RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
-            server.Start ();
+            var server = new KRPC.Server.WebSockets.RPCServer(byteServer);
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
+            server.Start();
 
             // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
-            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte, byte>(byteClient);
+            mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
 
-            Assert.IsTrue (eventArgs.Request.ShouldAllow);
-            Assert.IsFalse (eventArgs.Request.ShouldDeny);
+            Assert.IsTrue(eventArgs.Request.ShouldAllow);
+            Assert.IsFalse(eventArgs.Request.ShouldDeny);
 
-            server.Update ();
-            Assert.AreEqual (1, server.Clients.Count ());
-            Assert.AreEqual (string.Empty, server.Clients.First ().Name);
+            server.Update();
+            Assert.AreEqual(1, server.Clients.Count());
+            Assert.AreEqual(name, server.Clients.First().Name);
 
-            var response = ascii.GetString (responseStream.ToArray ());
-            Assert.AreEqual (
+            var response = ascii.GetString(responseStream.ToArray());
+            Assert.AreEqual(
                 "HTTP/1.1 101 Switching Protocols\r\n" +
                 "Upgrade: websocket\r\n" +
                 "Connection: Upgrade\r\n" +
@@ -59,48 +51,58 @@ namespace KRPC.Test.Server.WebSockets
         }
 
         [Test]
-        public void ValidConnectionRequestWithName ()
+        public void ValidConnectionRequestWithNoName ()
         {
-            var ascii = Encoding.ASCII;
-            var request = ascii.GetBytes (
-                              "GET /?name=Jebediah%20Kerman!%23%24%25%5E%26 HTTP/1.1\r\n" +
-                              "Host: localhost\r\n" +
-                              "Upgrade: websocket\r\n" +
-                              "Connection: Upgrade\r\n" +
-                              "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n" +
-                              "Sec-WebSocket-Version: 13\r\n\r\n"
-                          );
-
-            var responseStream = new MemoryStream ();
-            var stream = new TestStream (new MemoryStream (request), responseStream);
-
-            // Create mock byte server and client
-            var mockByteServer = new Mock<IServer<byte,byte>> ();
-            var byteServer = mockByteServer.Object;
-            var byteClient = new TestClient (stream);
-
-            var server = new KRPC.Server.WebSockets.RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
-            server.Start ();
-
-            // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
-            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
-
-            Assert.IsTrue (eventArgs.Request.ShouldAllow);
-            Assert.IsFalse (eventArgs.Request.ShouldDeny);
-
-            server.Update ();
-            Assert.AreEqual (1, server.Clients.Count ());
-            Assert.AreEqual ("Jebediah Kerman!#$%^&", server.Clients.First ().Name);
-
-            var response = ascii.GetString (responseStream.ToArray ());
-            Assert.AreEqual (
-                "HTTP/1.1 101 Switching Protocols\r\n" +
+            CheckValidConnectionRequest(
+                "GET / HTTP/1.1\r\n" +
+                "Host: localhost\r\n" +
                 "Upgrade: websocket\r\n" +
                 "Connection: Upgrade\r\n" +
-                "Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=\r\n\r\n",
-                response
+                "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n" +
+                "Sec-WebSocket-Version: 13\r\n\r\n",
+                string.Empty
+            );
+        }
+
+        [Test]
+        public void ValidConnectionRequestWithName ()
+        {
+            CheckValidConnectionRequest(
+                "GET /?name=Jebediah%20Kerman!%23%24%25%5E%26 HTTP/1.1\r\n" +
+                "Host: localhost\r\n" +
+                "Upgrade: websocket\r\n" +
+                "Connection: Upgrade\r\n" +
+                "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n" +
+                "Sec-WebSocket-Version: 13\r\n\r\n",
+                "Jebediah Kerman!#$%^&"
+            );
+        }
+
+        [Test]
+        public void ValidConnectionRequestWithKeepAlive()
+        {
+            CheckValidConnectionRequest(
+                "GET /?name=Jebediah%20Kerman!%23%24%25%5E%26 HTTP/1.1\r\n" +
+                "Host: localhost\r\n" +
+                "Upgrade: websocket\r\n" +
+                "Connection: keep-alive, upgrade\r\n" +
+                "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n" +
+                "Sec-WebSocket-Version: 13\r\n\r\n",
+                "Jebediah Kerman!#$%^&"
+            );
+        }
+
+        [Test]
+        public void ValidConnectionRequestCaseInsensitive()
+        {
+            CheckValidConnectionRequest(
+                "get /?name=Jebediah%20Kerman!%23%24%25%5E%26 HTTP/1.1\r\n" +
+                "host: localhost\r\n" +
+                "upGRADE: websocket\r\n" +
+                "coNNection: keep-alive, upgrade\r\n" +
+                "Sec-websocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n" +
+                "Sec-WEBSOCKET-Version: 13\r\n\r\n",
+                "Jebediah Kerman!#$%^&"
             );
         }
 

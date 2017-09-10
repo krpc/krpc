@@ -11,7 +11,7 @@ from google.protobuf.internal.wire_format import ZigZagEncode, ZigZagDecode
 
 # The following unpacks the internal protobuf decoders, whose signature
 # depends on the version of protobuf installed
-# pylint: disable=invalid-name
+# pylint: disable=invalid-name,protected-access
 _pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()
 _pb_version = google.protobuf.__version__.split('.')
 if int(_pb_version[0]) >= 3 and int(_pb_version[1]) >= 4:
@@ -21,7 +21,7 @@ if int(_pb_version[0]) >= 3 and int(_pb_version[1]) >= 4:
 else:
     # protobuf v3.3.0 and below
     _SignedVarintEncoder = _pb_SignedVarintEncoder
-# pylint: enable=invalid-name
+# pylint: enable=invalid-name,protected-access
 
 
 class WebSocketsTest(unittest.TestCase):

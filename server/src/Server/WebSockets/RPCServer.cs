@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using KRPC.Service.Messages;
 using KRPC.Utils;
 
@@ -39,7 +40,7 @@ namespace KRPC.Server.WebSockets
                 return null;
             }
             var clientName = GetClientName (request);
-            clientKeys [args.Client] = request.Headers ["Sec-WebSocket-Key"];
+            clientKeys [args.Client] = request.Headers ["sec-websocket-key"].Single ();
             return new RPCClient (clientName, args.Client, shouldEcho);
         }
 
@@ -67,8 +68,8 @@ namespace KRPC.Server.WebSockets
             // TODO: make this name extraction more robust
             if (query.StartsWith ("?name=", StringComparison.CurrentCulture))
                 name = query.Substring ("?name=".Length);
-            else if (request.Headers.ContainsKey ("Origin"))
-                name = request.Headers ["Origin"];
+            else if (request.Headers.ContainsKey ("origin"))
+                name = request.Headers ["origin"].First ();
             return Uri.UnescapeDataString (name);
         }
     }

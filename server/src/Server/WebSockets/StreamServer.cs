@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using KRPC.Utils;
 using KRPC.Service.Messages;
+using System.Linq;
 
 namespace KRPC.Server.WebSockets
 {
@@ -31,7 +32,7 @@ namespace KRPC.Server.WebSockets
                 args.Request.Deny ();
                 return null;
             }
-            clientKeys [args.Client] = request.Headers ["Sec-WebSocket-Key"];
+            clientKeys [args.Client] = request.Headers ["sec-websocket-key"].Single ();
             return new StreamClient (guid, args.Client);
         }
 
