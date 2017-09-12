@@ -264,6 +264,7 @@ SpaceCenter.Control.ResourceHarvestersActive
 SpaceCenter.Control.SolarPanels
 SpaceCenter.Control.Abort
 SpaceCenter.Control.Throttle
+SpaceCenter.Control.InputMode
 SpaceCenter.Control.Pitch
 SpaceCenter.Control.Yaw
 SpaceCenter.Control.Roll
@@ -303,6 +304,9 @@ SpaceCenter.SpeedMode
 SpaceCenter.SpeedMode.Orbit
 SpaceCenter.SpeedMode.Surface
 SpaceCenter.SpeedMode.Target
+SpaceCenter.ControlInputMode
+SpaceCenter.ControlInputMode.Additive
+SpaceCenter.ControlInputMode.Override
 SpaceCenter.Comms
 SpaceCenter.Comms.CanCommunicate
 SpaceCenter.Comms.CanTransmitScience
