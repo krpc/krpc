@@ -89,6 +89,7 @@
     <Compile Include="ExtensionMethods\ResourceFlowModeExtensions.cs" />
     <Compile Include="ExtensionMethods\SolarPanelStateExtensions.cs" />
     <Compile Include="ExtensionMethods\SpeedDisplayModesExtensions.cs" />
+    <Compile Include="ExtensionMethods\StockAerodynamics.cs" />
     <Compile Include="ExtensionMethods\TargetableExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselControlStateExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />

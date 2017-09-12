@@ -2,6 +2,10 @@ This license (LGPL v3) applies to all parts of kRPC except for the following:
 
   - service/SpaceCenter/* is under the GPLv3 license.
 
+  - service/SpaceCenter/src/ExtensionMethods/StockAerodynamics.cs
+    is adapted from the KSP Trajectories mod (https://github.com/neuoy/KSPTrajectories)
+    released under the MIT License (MIT) by Youen Toupin, aka neuoy
+
   - tools/clientgen/* is under the GPLv3 license.
 
   - tools/ServiceDefinitions/* is under the GPLv3 license.

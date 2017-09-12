@@ -41,6 +41,16 @@ class TestBody(krpctest.TestCase):
         self.assertTrue(kerbin.has_atmosphere)
         self.assertAlmostEqual(70000, kerbin.atmosphere_depth)
         self.assertTrue(kerbin.has_atmospheric_oxygen)
+        pos = (0, 0, kerbin.equatorial_radius)
+        self.assertAlmostEqual(
+            310, kerbin.temperature_at(pos, kerbin.reference_frame), delta=50)
+        pos = (0, 0, kerbin.equatorial_radius + 10000)
+        self.assertAlmostEqual(
+            220, kerbin.temperature_at(pos, kerbin.reference_frame), delta=50)
+        self.assertAlmostEqual(1.139923, kerbin.density_at(0), places=3)
+        self.assertAlmostEqual(0.281931, kerbin.density_at(10000), places=3)
+        self.assertAlmostEqual(0.015128, kerbin.density_at(25000), places=3)
+        self.assertAlmostEqual(17930, kerbin.pressure_at(10000), delta=100)
         self.assertEqual(['Badlands', 'Deserts', 'Grasslands', 'Highlands',
                           'Ice Caps', 'Mountains', 'Northern Ice Shelf',
                           'Shores', 'Southern Ice Shelf', 'Tundra', 'Water'],
@@ -73,6 +83,16 @@ class TestBody(krpctest.TestCase):
         self.assertFalse(mun.has_atmosphere)
         self.assertAlmostEqual(0, mun.atmosphere_depth)
         self.assertFalse(mun.has_atmospheric_oxygen)
+        pos = (0, 0, mun.equatorial_radius)
+        self.assertAlmostEqual(
+            4, mun.temperature_at(pos, mun.reference_frame), delta=50)
+        pos = (0, 0, mun.equatorial_radius + 10000)
+        self.assertAlmostEqual(
+            4, mun.temperature_at(pos, mun.reference_frame), delta=50)
+        self.assertAlmostEqual(0, mun.density_at(0), places=3)
+        self.assertAlmostEqual(0, mun.density_at(10000), places=3)
+        self.assertAlmostEqual(0, mun.pressure_at(0), places=3)
+        self.assertAlmostEqual(0, mun.pressure_at(10000), places=3)
         self.assertEqual(
             ['Canyons', 'East Crater', 'East Farside Crater', 'Farside Basin',
              'Farside Crater', 'Highland Craters', 'Highlands', 'Lowlands',
