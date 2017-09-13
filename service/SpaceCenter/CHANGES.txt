@@ -3,6 +3,7 @@ v0.3.10
  * Add following to CelestialBody class: AltitudeAtPosition, LatitudeAtPosition, LongitudeAtPosition and AtmosphericDensityAtPosition (#413)
  * Add following to Orbit class: RadiusAt, PositionAt, MeanAnomalyAtUT, TrueAnomalyAtAN, TrueAnomalyAtDN
  * Add rendezvous method to Orbit class: RelativeInclination, TimeOfClosestApproach, DistanceAtClosestApproach, ListClosestApproaches (#407)
+ * Add Control.InputMode to configure the way that control inputs are handled (they are either additive or override the vessels control inputs) (#384)
 
 v0.3.9
  * Add VesselType.Plane and VesselType.Relay (#385)

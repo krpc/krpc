@@ -25,6 +25,7 @@ namespace KRPC.SpaceCenter
             public ControlInputs ()
             {
                 state = new FlightCtrlState ();
+                InputMode = Services.ControlInputMode.Additive;
                 ThrottleUpdated = false;
                 WheelThrottleUpdated = false;
                 WheelSteerUpdated = false;
@@ -33,10 +34,13 @@ namespace KRPC.SpaceCenter
             public ControlInputs (FlightCtrlState ctrlState)
             {
                 state = ctrlState;
+                InputMode = Services.ControlInputMode.Additive;
                 ThrottleUpdated = false;
                 WheelThrottleUpdated = false;
                 WheelSteerUpdated = false;
             }
+
+            public Services.ControlInputMode InputMode { get; set; }
 
             public float Throttle {
                 get { return state.mainThrottle; }
@@ -110,17 +114,33 @@ namespace KRPC.SpaceCenter
                 state.wheelSteer = 0f;
             }
 
+            [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
             public void Add (ControlInputs other)
             {
                 if (other.ThrottleUpdated)
                     state.mainThrottle = other.state.mainThrottle;
                 ThrottleUpdated |= other.ThrottleUpdated;
-                state.pitch += other.state.pitch;
-                state.yaw += other.state.yaw;
-                state.roll += other.state.roll;
-                state.X += other.state.X;
-                state.Y += other.state.Y;
-                state.Z += other.state.Z;
+                if (other.InputMode == Services.ControlInputMode.Additive) {
+                    state.pitch += other.state.pitch;
+                    state.yaw += other.state.yaw;
+                    state.roll += other.state.roll;
+                    state.X += other.state.X;
+                    state.Y += other.state.Y;
+                    state.Z += other.state.Z;
+                } else {
+                    if (Math.Abs(other.state.pitch) > 0.001)
+                        state.pitch = other.state.pitch;
+                    if (Math.Abs(other.state.yaw) > 0.001)
+                        state.yaw = other.state.yaw;
+                    if (Math.Abs(other.state.pitch) > 0.001)
+                        state.roll = other.state.roll;
+                    if (Math.Abs(other.state.X) > 0.001)
+                        state.X = other.state.X;
+                    if (Math.Abs(other.state.Y) > 0.001)
+                        state.Y = other.state.Y;
+                    if (Math.Abs(other.state.Z) > 0.001)
+                        state.Z = other.state.Z;
+                }
                 if (other.WheelThrottleUpdated)
                     state.wheelThrottle = other.state.wheelThrottle;
                 if (other.WheelSteerUpdated)

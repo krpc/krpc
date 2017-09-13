@@ -115,6 +115,7 @@
     <Compile Include="Services\ContractParameter.cs" />
     <Compile Include="Services\ContractState.cs" />
     <Compile Include="Services\Control.cs" />
+    <Compile Include="Services\ControlMode.cs" />
     <Compile Include="Services\ControlSource.cs" />
     <Compile Include="Services\ControlState.cs" />
     <Compile Include="Services\Flight.cs" />
