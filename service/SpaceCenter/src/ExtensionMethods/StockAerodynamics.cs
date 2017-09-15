@@ -1,4 +1,4 @@
-﻿/* Code adapted from KSP Trajectories mod (https://github.com/neuoy/KSPTrajectories)
+/* Code adapted from KSP Trajectories mod (https://github.com/neuoy/KSPTrajectories)
  *
  *
  * The MIT License (MIT)
