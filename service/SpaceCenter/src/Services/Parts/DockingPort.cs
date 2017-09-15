@@ -202,8 +202,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The position of the docking port in the given reference frame.
+        /// The position of the docking port, in the given reference frame.
         /// </summary>
+        /// <returns>The position as a vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// position vector is in.</param>
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
@@ -215,6 +218,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The direction that docking port points in, in the given reference frame.
         /// </summary>
+        /// <returns>The direction as a unit vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// direction is in.</param>
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
@@ -226,6 +232,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The rotation of the docking port, in the given reference frame.
         /// </summary>
+        /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// rotation is in.</param>
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
@@ -238,11 +247,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The reference frame that is fixed relative to this docking port, and
         /// oriented with the port.
         /// <list type="bullet">
-        /// <item><description>The origin is at the position of the docking port.</description></item>
+        /// <item><description>The origin is at the position of the docking port.
+        /// </description></item>
         /// <item><description>The axes rotate with the docking port.</description></item>
-        /// <item><description>The x-axis points out to the right side of the docking port.</description></item>
-        /// <item><description>The y-axis points in the direction the docking port is facing.</description></item>
-        /// <item><description>The z-axis points out of the bottom off the docking port.</description></item>
+        /// <item><description>The x-axis points out to the right side of the docking port.
+        /// </description></item>
+        /// <item><description>The y-axis points in the direction the docking port is facing.
+        /// </description></item>
+        /// <item><description>The z-axis points out of the bottom off the docking port.
+        /// </description></item>
         /// </list>
         /// </summary>
         /// <remarks>
@@ -286,7 +299,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Gets the state of a docking port. Does not consider the state of an attached docking port.
+        /// Gets the state of a docking port. Does not consider the state of
+        /// an attached docking port.
         /// </summary>
         static DockingPortState IndividualState (ModuleDockingNode node)
         {
@@ -309,7 +323,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Try invoking a named event for a docking port. Returns true if an event is found and invoked.
+        /// Try invoking a named event for a docking port. Returns true if an event is found
+        /// and invoked.
         /// </summary>
         // TODO: move to PartModule extension methods
         static bool InvokeEvent (PartModule module, string eventName)

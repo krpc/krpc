@@ -6,8 +6,8 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// This can be used to interact with a specific part module. This includes part modules in stock KSP,
-    /// and those added by mods.
+    /// This can be used to interact with a specific part module. This includes part modules in
+    /// stock KSP, and those added by mods.
     ///
     /// In KSP, each part has zero or more
     /// <a href="http://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES">PartModules</a>
@@ -170,7 +170,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Trigger the named event. Equivalent to clicking the button in the right-click menu of the part.
+        /// Trigger the named event. Equivalent to clicking the button in the right-click menu
+        /// of the part.
         /// </summary>
         /// <param name="name"></param>
         [KRPCMethod]
@@ -180,8 +181,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// A list of all the names of the modules actions. These are the parts actions that can be assigned
-        /// to action groups in the in-game editor.
+        /// A list of all the names of the modules actions. These are the parts actions that can
+        /// be assigned to action groups in the in-game editor.
         /// </summary>
         [KRPCProperty]
         public IList<string> Actions {

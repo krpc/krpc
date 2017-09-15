@@ -19,7 +19,8 @@ namespace KRPC.SpaceCenter.Services
     /// </summary>
     /// <remarks>
     /// If a client engages the auto-pilot and then closes its connection to the server,
-    /// the auto-pilot will be disengaged and its target reference frame, direction and roll reset to default.
+    /// the auto-pilot will be disengaged and its target reference frame, direction and roll
+    /// reset to default.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
     [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
@@ -83,7 +84,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Blocks until the vessel is pointing in the target direction and has the target roll (if set).
+        /// Blocks until the vessel is pointing in the target direction and has
+        /// the target roll (if set).
         /// </summary>
         [KRPCMethod]
         public void Wait ()
@@ -170,8 +172,9 @@ namespace KRPC.SpaceCenter.Services
         /// The reference frame for the target direction (<see cref="TargetDirection"/>).
         /// </summary>
         /// <remarks>
-        /// An error will be thrown if this property is set to a reference frame that rotates with the vessel being controlled,
-        /// as it is impossible to rotate the vessel in such a reference frame.
+        /// An error will be thrown if this property is set to a reference frame that rotates with
+        /// the vessel being controlled, as it is impossible to rotate the vessel in such a
+        /// reference frame.
         /// </remarks>
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
@@ -230,6 +233,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Direction vector corresponding to the target pitch and heading.
+        /// This is in the reference frame specified by <see cref="ReferenceFrame"/>.
         /// </summary>
         [KRPCProperty]
         public Tuple3 TargetDirection {
@@ -255,7 +259,8 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The current <see cref="SASMode"/>.
-        /// These modes are equivalent to the mode buttons to the left of the navball that appear when SAS is enabled.
+        /// These modes are equivalent to the mode buttons to the left of the navball that appear
+        /// when SAS is enabled.
         /// </summary>
         /// <remarks>Equivalent to <see cref="Control.SASMode"/></remarks>
         [KRPCProperty]
@@ -277,8 +282,8 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The maximum amount of time that the vessel should need to come to a complete stop.
         /// This determines the maximum angular velocity of the vessel.
-        /// A vector of three stopping times, in seconds, one for each of the pitch, roll and yaw axes.
-        /// Defaults to 0.5 seconds for each axis.
+        /// A vector of three stopping times, in seconds, one for each of the pitch, roll
+        /// and yaw axes. Defaults to 0.5 seconds for each axis.
         /// </summary>
         [KRPCProperty]
         public Tuple3 StoppingTime {
@@ -299,7 +304,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The angle at which the autopilot considers the vessel to be pointing close to the target.
+        /// The angle at which the autopilot considers the vessel to be pointing
+        /// close to the target.
         /// This determines the midpoint of the target velocity attenuation function.
         /// A vector of three angles, in degrees, one for each of the pitch, roll and yaw axes.
         /// Defaults to 1° for each axis.
@@ -311,8 +317,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Whether the rotation rate controllers PID parameters should be automatically tuned using the
-        /// vessels moment of inertia and available torque. Defaults to <c>true</c>.
+        /// Whether the rotation rate controllers PID parameters should be automatically tuned
+        /// using the vessels moment of inertia and available torque. Defaults to <c>true</c>.
         /// See <see cref="TimeToPeak"/> and <see cref="Overshoot"/>.
         /// </summary>
         [KRPCProperty]
@@ -347,7 +353,8 @@ namespace KRPC.SpaceCenter.Services
         /// Gains for the pitch PID controller.
         /// </summary>
         /// <remarks>
-        /// When <see cref="AutoTune"/> is true, these values are updated automatically, which will overwrite any manual changes.
+        /// When <see cref="AutoTune"/> is true, these values are updated automatically,
+        /// which will overwrite any manual changes.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 PitchPIDGains {
@@ -362,7 +369,8 @@ namespace KRPC.SpaceCenter.Services
         /// Gains for the roll PID controller.
         /// </summary>
         /// <remarks>
-        /// When <see cref="AutoTune"/> is true, these values are updated automatically, which will overwrite any manual changes.
+        /// When <see cref="AutoTune"/> is true, these values are updated automatically,
+        /// which will overwrite any manual changes.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 RollPIDGains {
@@ -377,7 +385,8 @@ namespace KRPC.SpaceCenter.Services
         /// Gains for the yaw PID controller.
         /// </summary>
         /// <remarks>
-        /// When <see cref="AutoTune"/> is true, these values are updated automatically, which will overwrite any manual changes.
+        /// When <see cref="AutoTune"/> is true, these values are updated automatically,
+        /// which will overwrite any manual changes.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 YawPIDGains {
@@ -389,7 +398,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The direction vector that the SAS autopilot is trying to hold in world space
+        /// The direction vector that the SAS autopilot is trying to hold in world space.
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]

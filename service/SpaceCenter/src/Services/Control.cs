@@ -350,7 +350,8 @@ namespace KRPC.SpaceCenter.Services
         /// When set to additive, these inputs are added to the vessels current inputs.
         /// This mode is the default.
         /// When set to override, these inputs (if non-zero) override the vessels inputs.
-        /// This mode prevents keyboard control, or SAS, from interfering with the controls when they are set.
+        /// This mode prevents keyboard control, or SAS, from interfering with the controls when
+        /// they are set.
         /// </summary>
         [KRPCProperty]
         public ControlInputMode InputMode {

@@ -92,7 +92,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The acceleration due to gravity at sea level (mean altitude) on the body, in <math>m/s^2</math>.
+        /// The acceleration due to gravity at sea level (mean altitude) on the body,
+        /// in <math>m/s^2</math>.
         /// </summary>
         [KRPCProperty]
         public float SurfaceGravity {
@@ -142,11 +143,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The height of the surface relative to mean sea level at the given position,
-        /// in meters. When over water this is equal to 0.
+        /// The height of the surface relative to mean sea level, in meters,
+        /// at the given position. When over water this is equal to 0.
         /// </summary>
-        /// <param name="latitude">Latitude in degrees</param>
-        /// <param name="longitude">Longitude in degrees</param>
+        /// <param name="latitude">Latitude in degrees.</param>
+        /// <param name="longitude">Longitude in degrees.</param>
         [KRPCMethod]
         public double SurfaceHeight (double latitude, double longitude)
         {
@@ -154,12 +155,12 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The height of the surface relative to mean sea level at the given position,
-        /// in meters. When over water, this is the height of the sea-bed and is therefore a
-        /// negative value.
+        /// The height of the surface relative to mean sea level, in meters,
+        /// at the given position. When over water, this is the height
+        /// of the sea-bed and is therefore  negative value.
         /// </summary>
-        /// <param name="latitude">Latitude in degrees</param>
-        /// <param name="longitude">Longitude in degrees</param>
+        /// <param name="latitude">Latitude in degrees.</param>
+        /// <param name="longitude">Longitude in degrees.</param>
         [KRPCMethod]
         public double BedrockHeight (double latitude, double longitude)
         {
@@ -176,11 +177,13 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The position at mean sea level at the given latitude and longitude, in the given reference frame.
+        /// The position at mean sea level at the given latitude and longitude,
+        /// in the given reference frame.
         /// </summary>
-        /// <param name="latitude">Latitude in degrees</param>
-        /// <param name="longitude">Longitude in degrees</param>
-        /// <param name="referenceFrame">Reference frame for the returned position vector</param>
+        /// <returns>Position as a vector.</returns>
+        /// <param name="latitude">Latitude in degrees.</param>
+        /// <param name="longitude">Longitude in degrees.</param>
+        /// <param name="referenceFrame">Reference frame for the returned position vector.</param>
         [KRPCMethod]
         public Tuple3 MSLPosition (double latitude, double longitude, ReferenceFrame referenceFrame)
         {
@@ -191,9 +194,10 @@ namespace KRPC.SpaceCenter.Services
         /// The position of the surface at the given latitude and longitude, in the given
         /// reference frame. When over water, this is the position of the surface of the water.
         /// </summary>
-        /// <param name="latitude">Latitude in degrees</param>
-        /// <param name="longitude">Longitude in degrees</param>
-        /// <param name="referenceFrame">Reference frame for the returned position vector</param>
+        /// <returns>Position as a vector.</returns>
+        /// <param name="latitude">Latitude in degrees.</param>
+        /// <param name="longitude">Longitude in degrees.</param>
+        /// <param name="referenceFrame">Reference frame for the returned position vector.</param>
         [KRPCMethod]
         public Tuple3 SurfacePosition (double latitude, double longitude, ReferenceFrame referenceFrame)
         {
@@ -204,9 +208,10 @@ namespace KRPC.SpaceCenter.Services
         /// The position of the surface at the given latitude and longitude, in the given
         /// reference frame. When over water, this is the position at the bottom of the sea-bed.
         /// </summary>
-        /// <param name="latitude">Latitude in degrees</param>
-        /// <param name="longitude">Longitude in degrees</param>
-        /// <param name="referenceFrame">Reference frame for the returned position vector</param>
+        /// <returns>Position as a vector.</returns>
+        /// <param name="latitude">Latitude in degrees.</param>
+        /// <param name="longitude">Longitude in degrees.</param>
+        /// <param name="referenceFrame">Reference frame for the returned position vector.</param>
         [KRPCMethod]
         public Tuple3 BedrockPosition (double latitude, double longitude, ReferenceFrame referenceFrame)
         {
@@ -216,10 +221,11 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The position at the given latitude, longitude and altitude, in the given reference frame.
         /// </summary>
-        /// <param name="latitude">Latitude in degrees</param>
-        /// <param name="longitude">Longitude in degrees</param>
-        /// <param name="altitude">Altitude in meters above sea level</param>
-        /// <param name="referenceFrame">Reference frame for the returned position vector</param>
+        /// <returns>Position as a vector.</returns>
+        /// <param name="latitude">Latitude in degrees.</param>
+        /// <param name="longitude">Longitude in degrees.</param>
+        /// <param name="altitude">Altitude in meters above sea level.</param>
+        /// <param name="referenceFrame">Reference frame for the returned position vector.</param>
         [KRPCMethod]
         public Tuple3 PositionAtAltitude (double latitude, double longitude, double altitude, ReferenceFrame referenceFrame)
         {
@@ -237,43 +243,43 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The latitude of the given position, in the given reference frame.
         /// </summary>
-        /// <param name="Position">The position as a vector.</param>
-        /// <param name="referenceFrame">Reference frame that the position vector is in.</param>
+        /// <param name="position">Position as a vector.</param>
+        /// <param name="referenceFrame">Reference frame for the position vector.</param>
         [KRPCMethod]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
-        public double LatitudeAtPosition (Tuple3 Position, ReferenceFrame referenceFrame)
+        public double LatitudeAtPosition (Tuple3 position, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals(referenceFrame, null))
                 throw new ArgumentNullException(nameof(referenceFrame));
-            return InternalBody.GetLatitude(referenceFrame.PositionToWorldSpace(Position.ToVector()));
+            return InternalBody.GetLatitude(referenceFrame.PositionToWorldSpace(position.ToVector()));
         }
 
         /// <summary>
         /// The longitude of the given position, in the given reference frame.
         /// </summary>
-        /// <param name="Position">The position as a vector.</param>
-        /// <param name="referenceFrame">Reference frame that the position vector is in.</param>
+        /// <param name="position">Position as a vector.</param>
+        /// <param name="referenceFrame">Reference frame for the position vector.</param>
         [KRPCMethod]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
-        public double LongitudeAtPosition (Tuple3 Position, ReferenceFrame referenceFrame)
+        public double LongitudeAtPosition (Tuple3 position, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals(referenceFrame, null))
                 throw new ArgumentNullException(nameof(referenceFrame));
-            return InternalBody.GetLongitude(referenceFrame.PositionToWorldSpace(Position.ToVector()));
+            return InternalBody.GetLongitude(referenceFrame.PositionToWorldSpace(position.ToVector()));
         }
 
         /// <summary>
-        /// The altitude of the given position, in meters, in the given reference frame.
+        /// The altitude, in meters, of the given position in the given reference frame.
         /// </summary>
-        /// <param name="Position">3 element Tuple describing position</param>
-        /// <param name="referenceFrame">Reference frame for the provided position vector</param>
+        /// <param name="position">Position as a vector.</param>
+        /// <param name="referenceFrame">Reference frame for the position vector.</param>
         [KRPCMethod]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
-        public double AltitudeAtPosition (Tuple3 Position, ReferenceFrame referenceFrame)
+        public double AltitudeAtPosition (Tuple3 position, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals(referenceFrame, null))
                 throw new ArgumentNullException(nameof(referenceFrame));
-            return InternalBody.GetAltitude(referenceFrame.PositionToWorldSpace(Position.ToVector()));
+            return InternalBody.GetAltitude(referenceFrame.PositionToWorldSpace(position.ToVector()));
         }
 
         /// <summary>
@@ -309,10 +315,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The atmospheric density at the given position, in <math>kg/m^3</math>, in the given reference frame.
+        /// The atmospheric density at the given position, in <math>kg/m^3</math>,
+        /// in the given reference frame.
         /// </summary>
-        /// <param name="position">The position to measure the density at.</param>
-        /// <param name="referenceFrame">Reference frame that the position is in.</param>
+        /// <param name="position">The position vector at which to measure the density.</param>
+        /// <param name="referenceFrame">Reference frame that the position vector is in.</param>
         [KRPCMethod]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public double AtmosphericDensityAtPosition(Tuple3 position, ReferenceFrame referenceFrame)
@@ -343,11 +350,13 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The temperature on the body at the given position.
+        /// The temperature on the body at the given position, in the given reference frame.
         /// </summary>
+        /// <param name="position">Position as a vector.</param>
+        /// <param name="referenceFrame">The reference frame that the position is in.</param>
         /// <remarks>
-        /// This calculation is performed using the bodies current position, which means that the value could be wrong
-        /// if you want to know the temperature in the far future.
+        /// This calculation is performed using the bodies current position, which means that
+        /// the value could be wrong if you want to know the temperature in the far future.
         /// </remarks>
         [KRPCMethod]
         public double TemperatureAt (Tuple3 position, ReferenceFrame referenceFrame)
@@ -358,12 +367,13 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the air density for the specified altitude above sea level, in meters.
+        /// Gets the air density, in <math>kg/m^3</math>, for the specified
+        /// altitude above sea level, in meters.
         /// </summary>
         /// <remarks>
-        /// This is an approximation, because actual calculations, taking sun exposure into account to compute air
-        /// temperature, require us to know the exact point on the body where the density is to be computed
-        /// (knowing the altitude is not enough).
+        /// This is an approximation, because actual calculations, taking sun exposure into account
+        /// to compute air temperature, require us to know the exact point on the body where the
+        /// density is to be computed (knowing the altitude is not enough).
         /// However, the difference is small for high altitudes, so it makes very little difference
         /// for trajectory prediction.
         /// </remarks>
@@ -374,7 +384,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the air pressure, in Pascals, for the specified altitude above sea level, in meters.
+        /// Gets the air pressure, in Pascals, for the specified
+        /// altitude above sea level, in meters.
         /// </summary>
         [KRPCMethod]
         public double PressureAt (double altitude)
@@ -394,7 +405,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The biomes at the given latitude and longitude, in degrees.
+        /// The biome at the given latitude and longitude, in degrees.
         /// </summary>
         [KRPCMethod]
         public string BiomeAt (double latitude, double longitude)
@@ -411,7 +422,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The altitude, in meters, above which a vessel is considered to be flying "high" when doing science.
+        /// The altitude, in meters, above which a vessel is considered to be
+        /// flying "high" when doing science.
         /// </summary>
         [KRPCProperty]
         public float FlyingHighAltitudeThreshold {
@@ -419,7 +431,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The altitude, in meters, above which a vessel is considered to be in "high" space when doing science.
+        /// The altitude, in meters, above which a vessel is considered to be
+        /// in "high" space when doing science.
         /// </summary>
         [KRPCProperty]
         public float SpaceHighAltitudeThreshold {
@@ -466,7 +479,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the reference frame that is fixed relative to this celestial body, but
+        /// The reference frame that is fixed relative to this celestial body, but
         /// orientated with the body's orbital prograde/normal/radial directions.
         /// <list type="bullet">
         /// <item><description>The origin is at the center of the body.
@@ -487,9 +500,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the position vector of the center of the body in the specified reference frame.
+        /// The position of the center of the body, in the specified reference frame.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The position as a vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// position vector is in.</param>
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
@@ -499,9 +514,12 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the velocity vector of the body in the specified reference frame.
+        /// The linear velocity of the body, in the specified reference frame.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The velocity as a vector. The vector points in the direction of travel,
+        /// and its magnitude is the speed of the body in meters per second.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// velocity vector is in.</param>
         [KRPCMethod]
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
@@ -511,9 +529,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the rotation of the body in the specified reference frame.
+        /// The rotation of the body, in the specified reference frame.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// rotation is in.</param>
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
@@ -528,10 +548,12 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the direction in which the north pole of the celestial body is
-        /// pointing, as a unit vector, in the specified reference frame.
+        /// The direction in which the north pole of the celestial body is pointing,
+        /// in the specified reference frame.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The direction as a unit vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// direction is in.</param>
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
@@ -542,12 +564,13 @@ namespace KRPC.SpaceCenter.Services
 
 
         /// <summary>
-        /// Returns the angular velocity of the body in the specified reference
-        /// frame. The magnitude of the vector is the rotational speed of the body, in
-        /// radians per second, and the direction of the vector indicates the axis of
-        /// rotation, using the right-hand rule.
+        /// The angular velocity of the body in the specified reference frame.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The angular velocity as a vector. The magnitude of the vector is the rotational
+        /// speed of the body, in radians per second. The direction of the vector indicates the axis
+        /// of rotation, using the right-hand rule.</returns>
+        /// <param name="referenceFrame">The reference frame the returned
+        /// angular velocity is in.</param>
         [KRPCMethod]
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {

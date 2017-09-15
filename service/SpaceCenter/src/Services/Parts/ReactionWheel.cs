@@ -77,8 +77,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The available torque in the pitch, roll and yaw axes of the vessel, in Newton meters.
-        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// The available torque, in Newton meters, that can be produced by this reaction wheel,
+        /// in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+        /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// Returns zero if the reaction wheel is inactive or broken.
         /// </summary>
         [KRPCProperty]
@@ -88,9 +89,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The maximum torque the reaction wheel can provide, is it active,
-        /// in the pitch, roll and yaw axes of the vessel, in Newton meters.
-        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// The maximum torque, in Newton meters, that can be produced by this reaction wheel,
+        /// when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
+        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]

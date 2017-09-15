@@ -108,7 +108,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the parachute has been armed or deployed. Only applicable to RealChutes parachutes.
+        /// Whether the parachute has been armed or deployed. Only applicable to
+        /// RealChutes parachutes.
         /// </summary>
         [KRPCProperty]
         public bool Armed {

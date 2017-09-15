@@ -147,9 +147,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns a list of vessels from the given <paramref name="craftDirectory"/> that can be launched.
+        /// Returns a list of vessels from the given <paramref name="craftDirectory"/>
+        /// that can be launched.
         /// </summary>
-        /// <param name="craftDirectory">Name of the directory in the current saves "Ships" directory. For example <c>"VAB"</c> or <c>"SPH"</c>.</param>
+        /// <param name="craftDirectory">Name of the directory in the current saves
+        /// "Ships" directory. For example <c>"VAB"</c> or <c>"SPH"</c>.</param>
         [KRPCProcedure]
         public static IList<string> LaunchableVessels (string craftDirectory)
         {
@@ -164,9 +166,13 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Launch a vessel.
         /// </summary>
-        /// <param name="craftDirectory">Name of the directory in the current saves "Ships" directory, that contains the craft file. For example <c>"VAB"</c> or <c>"SPH"</c>.</param>
-        /// <param name="name">Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.</param>
-        /// <param name="launchSite">Name of the launch site. For example <c>"LaunchPad"</c> or <c>"Runway"</c>.</param>
+        /// <param name="craftDirectory">Name of the directory in the current saves
+        /// "Ships" directory, that contains the craft file.
+        /// For example <c>"VAB"</c> or <c>"SPH"</c>.</param>
+        /// <param name="name">Name of the vessel to launch. This is the name of the ".craft" file
+        /// in the save directory, without the ".craft" file extension.</param>
+        /// <param name="launchSite">Name of the launch site. For example <c>"LaunchPad"</c> or
+        /// <c>"Runway"</c>.</param>
         [KRPCProcedure]
         public static void LaunchVessel (string craftDirectory, string name, string launchSite)
         {
@@ -181,7 +187,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <param name="name">Name of the vessel to launch.</param>
         /// <remarks>
-        /// This is equivalent to calling <see cref="LaunchVessel"/> with the craft directory set to "VAB" and the launch site set to "LaunchPad".
+        /// This is equivalent to calling <see cref="LaunchVessel"/> with the craft directory
+        /// set to "VAB" and the launch site set to "LaunchPad".
         /// </remarks>
         [KRPCProcedure]
         public static void LaunchVesselFromVAB (string name)
@@ -194,7 +201,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <param name="name">Name of the vessel to launch.</param>
         /// <remarks>
-        /// This is equivalent to calling <see cref="LaunchVessel"/> with the craft directory set to "SPH" and the launch site set to "Runway".
+        /// This is equivalent to calling <see cref="LaunchVessel"/> with the craft directory
+        /// set to "SPH" and the launch site set to "Runway".
         /// </remarks>
         [KRPCProcedure]
         public static void LaunchVesselFromSPH (string name)
@@ -204,7 +212,8 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Save the game with a given name.
-        /// This will create a save file called <c>name.sfs</c> in the folder of the current save game.
+        /// This will create a save file called <c>name.sfs</c> in the folder of the
+        /// current save game.
         /// </summary>
         [KRPCProcedure]
         public static void Save (string name)
@@ -214,7 +223,8 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Load the game with the given name.
-        /// This will create a load a save file called <c>name.sfs</c> from the folder of the current save game.
+        /// This will create a load a save file called <c>name.sfs</c> from the folder of the
+        /// current save game.
         /// </summary>
         [KRPCProcedure]
         public static void Load (string name)
@@ -298,8 +308,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The value of the <a href="https://en.wikipedia.org/wiki/Gravitational_constant">gravitational constant</a>
-        /// G in <math>N(m/kg)^2</math>.
+        /// The value of the <a href="https://en.wikipedia.org/wiki/Gravitational_constant">
+        /// gravitational constant</a> G in <math>N(m/kg)^2</math>.
         /// </summary>
         [KRPCProperty]
         public static double G {
@@ -376,7 +386,8 @@ namespace KRPC.SpaceCenter.Services
         /// Returns <c>true</c> if regular "on-rails" time warp can be used, at the specified warp
         /// <paramref name="factor"/>. The maximum time warp rate is limited by various things,
         /// including how close the active vessel is to a planet. See
-        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a> for details.
+        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
+        /// for details.
         /// </summary>
         /// <param name="factor">The warp factor to check.</param>
         [KRPCProcedure]
@@ -405,7 +416,8 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The current maximum regular "on-rails" warp factor that can be set.
         /// A value between 0 and 7 inclusive. See
-        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a> for details.
+        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
+        /// for details.
         /// </summary>
         [KRPCProperty]
         public static int MaximumRailsWarpFactor {
@@ -428,7 +440,8 @@ namespace KRPC.SpaceCenter.Services
         /// time warp, the warp rate is limited by <paramref name="maxPhysicsRate"/>.
         /// </summary>
         /// <param name="ut">The universal time to warp to, in seconds.</param>
-        /// <param name="maxRailsRate">The maximum warp rate in regular "on-rails" time warp.</param>
+        /// <param name="maxRailsRate">The maximum warp rate in regular "on-rails" time warp.
+        /// </param>
         /// <param name="maxPhysicsRate">The maximum warp rate in physical time warp.</param>
         /// <returns>When the time warp is complete.</returns>
         [KRPCProcedure]
@@ -549,12 +562,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Converts a position vector from one reference frame to another.
+        /// Converts a position from one reference frame to another.
         /// </summary>
-        /// <param name="position">Position vector in reference frame <paramref name="from"/>.</param>
-        /// <param name="from">The reference frame that the position vector is in.</param>
-        /// <param name="to">The reference frame to covert the position vector to.</param>
-        /// <returns>The corresponding position vector in reference frame <paramref name="to"/>.</returns>
+        /// <param name="position">Position, as a vector, in reference frame
+        /// <paramref name="from"/>.</param>
+        /// <param name="from">The reference frame that the position is in.</param>
+        /// <param name="to">The reference frame to covert the position to.</param>
+        /// <returns>The corresponding position, as a vector, in reference frame
+        /// <paramref name="to"/>.</returns>
         [KRPCProcedure]
         public static Tuple3 TransformPosition (Tuple3 position, ReferenceFrame from, ReferenceFrame to)
         {
@@ -563,12 +578,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Converts a direction vector from one reference frame to another.
+        /// Converts a direction from one reference frame to another.
         /// </summary>
-        /// <param name="direction">Direction vector in reference frame <paramref name="from"/>.</param>
-        /// <param name="from">The reference frame that the direction vector is in.</param>
-        /// <param name="to">The reference frame to covert the direction vector to.</param>
-        /// <returns>The corresponding direction vector in reference frame <paramref name="to"/>.</returns>
+        /// <param name="direction">Direction, as a vector, in reference frame
+        /// <paramref name="from"/>. </param>
+        /// <param name="from">The reference frame that the direction is in.</param>
+        /// <param name="to">The reference frame to covert the direction to.</param>
+        /// <returns>The corresponding direction, as a vector, in reference frame
+        /// <paramref name="to"/>.</returns>
         [KRPCProcedure]
         public static Tuple3 TransformDirection (Tuple3 direction, ReferenceFrame from, ReferenceFrame to)
         {
@@ -579,10 +596,12 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Converts a rotation from one reference frame to another.
         /// </summary>
-        /// <param name="rotation">Rotation in reference frame <paramref name="from"/>.</param>
+        /// <param name="rotation">Rotation, as a quaternion of the form <math>(x, y, z, w)</math>,
+        /// in reference frame <paramref name="from"/>.</param>
         /// <param name="from">The reference frame that the rotation is in.</param>
-        /// <param name="to">The corresponding rotation in reference frame <paramref name="to"/>.</param>
-        /// <returns>The corresponding rotation in reference frame <paramref name="to"/>.</returns>
+        /// <param name="to">The reference frame to covert the rotation to.</param>
+        /// <returns>The corresponding rotation, as a quaternion of the form
+        /// <math>(x, y, z, w)</math>, in reference frame <paramref name="to"/>.</returns>
         [KRPCProcedure]
         public static Tuple4 TransformRotation (Tuple4 rotation, ReferenceFrame from, ReferenceFrame to)
         {
@@ -591,15 +610,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Converts a velocity vector (acting at the specified position vector) from one
-        /// reference frame to another. The position vector is required to take the
-        /// relative angular velocity of the reference frames into account.
+        /// Converts a velocity (acting at the specified position) from one reference frame
+        /// to another. The position is required to take the relative angular velocity of the
+        /// reference frames into account.
         /// </summary>
-        /// <param name="position">Position vector in reference frame <paramref name="from"/>.</param>
-        /// <param name="velocity">Velocity vector in reference frame <paramref name="from"/>.</param>
-        /// <param name="from">The reference frame that the position and velocity vectors are in.</param>
-        /// <param name="to">The reference frame to covert the velocity vector to.</param>
-        /// <returns>The corresponding velocity in reference frame <paramref name="to"/>.</returns>
+        /// <param name="position">Position, as a vector, in reference frame
+        /// <paramref name="from"/>.</param>
+        /// <param name="velocity">Velocity, as a vector that points in the direction of travel and
+        /// whose magnitude is the speed in meters per second, in reference frame
+        /// <paramref name="from"/>.</param>
+        /// <param name="from">The reference frame that the position and velocity are in.</param>
+        /// <param name="to">The reference frame to covert the velocity to.</param>
+        /// <returns>The corresponding velocity, as a vector, in reference frame
+        /// <paramref name="to"/>.</returns>
         [KRPCProcedure]
         public static Tuple3 TransformVelocity (Tuple3 position, Tuple3 velocity, ReferenceFrame from, ReferenceFrame to)
         {

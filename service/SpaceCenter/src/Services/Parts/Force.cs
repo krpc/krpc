@@ -31,8 +31,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Part Part { get; private set; }
 
         /// <summary>
-        /// The force vector. The magnitude of the vector is the strength of the force in Newtons.
+        /// The force vector, in Newtons.
         /// </summary>
+        /// <returns>A vector pointing in the direction that the force acts,
+        /// with its magnitude equal to the strength of the force in Newtons.</returns>
         [KRPCProperty]
         public Tuple3 ForceVector {
             get { return force.ToTuple (); }
@@ -40,8 +42,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The position at which the force acts.
+        /// The position at which the force acts, in reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
+        /// <returns>The position as a vector.</returns>
         [KRPCProperty]
         public Tuple3 Position {
             get { return position.ToTuple (); }

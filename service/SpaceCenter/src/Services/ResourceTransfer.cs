@@ -31,9 +31,10 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Start transferring a resource transfer between a pair of parts. The transfer will move at most
-        /// <paramref name="maxAmount"/> units of the resource, depending on how much of the resource is
-        /// available in the source part and how much storage is available in the destination part.
+        /// Start transferring a resource transfer between a pair of parts. The transfer will move
+        /// at most <paramref name="maxAmount"/> units of the resource, depending on how much of
+        /// the resource is available in the source part and how much storage is available in the
+        /// destination part.
         /// Use <see cref="Complete"/> to check if the transfer is complete.
         /// Use <see cref="Amount"/> to see how much of the resource has been transferred.
         /// </summary>
@@ -106,8 +107,8 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Update the transfer. Called once per fixed update.
         /// Transfers at most transferRate of resource from the source part to the
-        /// destination part, whilst respecting the amount of resource available in the source and amount
-        /// of storage in the destination.
+        /// destination part, whilst respecting the amount of resource available in the source
+        /// and amount of storage in the destination.
         /// Decrements maxAmount ready for the next update.
         /// </summary>
         internal void Update (float deltaTime)

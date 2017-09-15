@@ -8,7 +8,8 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// A wheel. Includes landing gear and rover wheels. Obtained by calling <see cref="Part.Wheel"/>.
+    /// A wheel. Includes landing gear and rover wheels.
+    /// Obtained by calling <see cref="Part.Wheel"/>.
     /// Can be used to control the motors, steering and deployment of wheels, among other things.
     /// </summary>
     [KRPCClass(Service = "SpaceCenter")]
