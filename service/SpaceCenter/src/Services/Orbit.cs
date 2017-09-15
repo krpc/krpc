@@ -445,9 +445,6 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Returns the times at closest approach and corresponding distances, to a target vessel.
-
-        /// Returns a list of two lists - the first of approach times, the second containing
-        /// the estimated distance for each of those approach times.
         /// </summary>
         /// <returns>
         /// A list of two lists.
