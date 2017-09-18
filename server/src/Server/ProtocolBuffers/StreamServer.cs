@@ -37,8 +37,6 @@ namespace KRPC.Server.ProtocolBuffers
                 WriteErrorConnectionResponse (Status.MalformedMessage, e.Message, stream);
             } catch (TimeoutException e) {
                 WriteErrorConnectionResponse (Status.Timeout, e.Message, stream);
-            } catch (ConnectionException e) {
-                WriteErrorConnectionResponse (e.Status, e.Message, stream);
             }
             args.Request.Deny ();
             return null;

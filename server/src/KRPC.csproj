@@ -114,7 +114,6 @@
     <Compile Include="Server\Message\StreamServer.cs" />
     <Compile Include="Server\Message\StreamStream.cs" />
     <Compile Include="Server\Protocol.cs" />
-    <Compile Include="Server\ProtocolBuffers\ConnectionException.cs" />
     <Compile Include="Server\ProtocolBuffers\Encoder.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageExtensions.cs" />
     <Compile Include="Server\ProtocolBuffers\RPCClient.cs" />
