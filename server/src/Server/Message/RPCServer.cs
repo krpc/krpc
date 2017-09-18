@@ -157,19 +157,19 @@ namespace KRPC.Server.Message
                 if (subArgs.Request.ShouldAllow) {
                     args.Request.Allow ();
                     clients [args.Client] = client;
-                    Logger.WriteLine ("RPCServer: client connection allowed", Logger.Severity.Debug);
+                    Logger.WriteLine ("Message.RPCServer: client connection allowed", Logger.Severity.Debug);
                 } else if (subArgs.Request.ShouldDeny) {
                     args.Request.Deny ();
-                    Logger.WriteLine ("RPCServer: client connection denied", Logger.Severity.Debug);
+                    Logger.WriteLine ("Message.RPCServer: client connection denied", Logger.Severity.Debug);
                 } else {
                     pendingClients.Remove (args.Client);
-                    Logger.WriteLine ("RPCServer: client connection still pending", Logger.Severity.Debug);
+                    Logger.WriteLine ("Message.RPCServer: client connection still pending", Logger.Severity.Debug);
                 }
             } else {
                 // No events configured, so allow the connection
                 args.Request.Allow ();
                 clients [args.Client] = pendingClients [args.Client];
-                Logger.WriteLine ("RPCServer: client connection allowed", Logger.Severity.Debug);
+                Logger.WriteLine ("Message.RPCServer: client connection allowed", Logger.Severity.Debug);
                 pendingClients.Remove (args.Client);
             }
         }
