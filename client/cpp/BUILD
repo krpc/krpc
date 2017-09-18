@@ -31,7 +31,6 @@ autotools_dist(
         'COPYING.LESSER': '%s/COPYING.LESSER' % name,
         'README.txt': '%s/README.txt' % name,
         'VERSION.txt': '%s/VERSION.txt' % name,
-        'client/cpp/': '%s/' % name,
         'protobuf/krpc.pb.hpp': '%s/include/krpc/krpc.pb.hpp' % name,
         'protobuf/krpc.pb.cpp': '%s/src/krpc.pb.cpp' % name,
         '../m4_stdcxx/file/gitweb': '%s/m4/ax_cxx_compile_stdcxx.m4' % name,
