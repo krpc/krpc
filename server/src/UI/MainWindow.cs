@@ -172,6 +172,7 @@ namespace KRPC.UI
                 lightStyle.fontSize = scaledFontSize;
                 errorLabelStyle.fontSize = scaledFontSize;
                 comboOptionsStyle.fontSize = scaledFontSize;
+                comboOptionStyle.fontSize = scaledFontSize;
                 GUILayoutExtensions.SetLightStyleSize (lightStyle, Style.lineHeight);
                 Resized = true;
             }
