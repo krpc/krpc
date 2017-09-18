@@ -271,7 +271,12 @@ namespace KRPC.UI
             if (editingServer) {
                 editServers [server.Id].Draw ();
             } else if (expanded) {
-                GUILayout.Label (protocolText + (server.Protocol == Protocol.ProtocolBuffersOverTCP ? protobufOverTcpText : protobufOverWebSocketsText), labelStyle);
+                string protocol;
+                if (server.Protocol == Protocol.ProtocolBuffersOverTCP)
+                    protocol = protobufOverTcpText;
+                else
+                    protocol = protobufOverWebSocketsText;
+                GUILayout.Label (protocolText + protocol, labelStyle);
                 GUILayout.Label (server.Info, labelStyle);
                 foreach (var line in server.Address.Split ('\n'))
                     GUILayout.Label (line, labelStyle);

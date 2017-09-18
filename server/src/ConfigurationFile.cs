@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
+using System.Linq;
 using KRPC.Server;
 using KRPC.Utils;
 using Logger = KRPC.Utils.Logger;
@@ -21,23 +21,28 @@ namespace KRPC
             }
         }
 
+        public sealed class KeyValuePair
+        {
+            [Persistent] public string key = string.Empty;
+            [Persistent] public string value = string.Empty;
+        }
+
         public sealed class Server
         {
             [Persistent] string id = Guid.NewGuid ().ToString ();
             [Persistent] string name = "Default Server";
             [Persistent] string protocol = Protocol.ProtocolBuffersOverTCP.ToString ();
-            [Persistent] string address = "127.0.0.1";
-            [Persistent] ushort rpcPort = 50000;
-            [Persistent] ushort streamPort = 50001;
+            [Persistent] List<KeyValuePair> settings = new List<KeyValuePair> {
+                new KeyValuePair {key = "address", value = "127.0.0.1"},
+                new KeyValuePair {key = "rpc_port", value = "50000"},
+                new KeyValuePair {key = "stream_port", value = "50001"}};
 
             public void BeforeSave (Configuration.Server server)
             {
                 id = server.Id.ToString ();
                 name = server.Name;
                 protocol = server.Protocol.ToString ();
-                address = server.Address.ToString ();
-                rpcPort = server.RPCPort;
-                streamPort = server.StreamPort;
+                settings = server.Settings.Select(x => new KeyValuePair { key = x.Key, value = x.Value}).ToList();
             }
 
             [SuppressMessage ("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
@@ -54,19 +59,7 @@ namespace KRPC
                     server.Protocol = Protocol.ProtocolBuffersOverTCP;
                     protocol = server.Protocol.ToString ();
                 }
-                IPAddress ipAddress;
-                bool validAddress = IPAddress.TryParse (address, out ipAddress);
-                if (validAddress) {
-                    server.Address = ipAddress;
-                } else {
-                    Console.WriteLine (
-                        "[kRPC] Error parsing IP address from configuration file. Got '" + address + "'. " +
-                        "Defaulting to loopback address " + IPAddress.Loopback);
-                    server.Address = IPAddress.Loopback;
-                    address = server.Address.ToString ();
-                }
-                server.RPCPort = rpcPort;
-                server.StreamPort = streamPort;
+                server.Settings = settings.ToDictionary(x => x.key, x => x.value);
             }
         }
 

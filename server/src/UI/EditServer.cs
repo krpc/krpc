@@ -33,11 +33,9 @@ namespace KRPC.UI
         // Editable fields
         Protocol protocol;
         string name;
-        string address;
+        IDictionary<string, string> settings;
         bool manualAddress;
         List<string> availableAddresses;
-        string rpcPort;
-        string streamPort;
 
         public EditServer (MainWindow mainWindow, Configuration.Server server)
         {
@@ -46,9 +44,7 @@ namespace KRPC.UI
 
             name = server.Name;
             protocol = server.Protocol;
-            address = server.Address.ToString ();
-            rpcPort = server.RPCPort.ToString ();
-            streamPort = server.StreamPort.ToString ();
+            settings = new Dictionary<string,string>(server.Settings);
 
             // Get list of available addresses for drop down
             var interfaceAddresses = NetworkInformation.LocalIPAddresses.Select (x => x.ToString ()).ToList ();
@@ -69,82 +65,97 @@ namespace KRPC.UI
         {
             GUILayout.BeginHorizontal ();
             GUILayout.Label (protocolLabelText, window.labelStyle);
-            int protocolSelected = protocol == Protocol.ProtocolBuffersOverTCP ? 0 : 1;
-            protocolSelected = GUILayoutExtensions.ComboBox ("protocol", protocolSelected, availableProtocols, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
-            protocol = protocolSelected == 0 ? Protocol.ProtocolBuffersOverTCP : Protocol.ProtocolBuffersOverWebsockets;
+            protocol = (Protocol)GUILayoutExtensions.ComboBox ("protocol", (int)protocol, availableProtocols, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
             GUILayout.EndHorizontal ();
 
-            GUILayout.BeginHorizontal ();
-            GUILayout.Label (addressLabelText, window.labelStyle);
-            // Get the index of the address in the combo box
-            int addressSelected;
-            if (!manualAddress && address == IPAddress.Loopback.ToString ())
-                addressSelected = 0;
-            else if (!manualAddress && address == IPAddress.Any.ToString ())
-                addressSelected = 1;
-            else if (!manualAddress && availableAddresses.Contains (address))
-                addressSelected = availableAddresses.IndexOf (address);
-            else
-                addressSelected = availableAddresses.Count - 1;
-            // Display the combo box
-            addressSelected = GUILayoutExtensions.ComboBox ("address", addressSelected, availableAddresses, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
-            // Get the address from the combo box selection
-            if (addressSelected == 0) {
-                address = IPAddress.Loopback.ToString ();
-                manualAddress = false;
-            } else if (addressSelected == 1) {
-                address = IPAddress.Any.ToString ();
-                manualAddress = false;
-            } else if (addressSelected < availableAddresses.Count - 1) {
-                address = availableAddresses [addressSelected];
-                manualAddress = false;
-            } else {
-                // Display a text field when "Manual" is selected
-                address = GUILayout.TextField (address, addressMaxLength, window.stretchyTextFieldStyle);
-                manualAddress = true;
+            if (protocol == Protocol.ProtocolBuffersOverTCP ||
+                protocol == Protocol.ProtocolBuffersOverWebsockets) {
+                GUILayout.BeginHorizontal();
+                GUILayout.Label(addressLabelText, window.labelStyle);
+                if (!settings.ContainsKey("address"))
+                    settings["address"] = IPAddress.Loopback.ToString();
+                var address = settings["address"];
+                // Get the index of the address in the combo box
+                int addressSelected;
+                if (!manualAddress && address == IPAddress.Loopback.ToString())
+                    addressSelected = 0;
+                else if (!manualAddress && address == IPAddress.Any.ToString())
+                    addressSelected = 1;
+                else if (!manualAddress && availableAddresses.Contains(address))
+                    addressSelected = availableAddresses.IndexOf(address);
+                else
+                    addressSelected = availableAddresses.Count - 1;
+                // Display the combo box
+                addressSelected = GUILayoutExtensions.ComboBox("address", addressSelected, availableAddresses, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
+                // Get the address from the combo box selection
+                if (addressSelected == 0) {
+                    address = IPAddress.Loopback.ToString();
+                    manualAddress = false;
+                } else if (addressSelected == 1) {
+                    address = IPAddress.Any.ToString();
+                    manualAddress = false;
+                } else if (addressSelected < availableAddresses.Count - 1) {
+                    address = availableAddresses[addressSelected];
+                    manualAddress = false;
+                } else {
+                    // Display a text field when "Manual" is selected
+                    address = GUILayout.TextField(address, addressMaxLength, window.stretchyTextFieldStyle);
+                    manualAddress = true;
+                }
+                settings["address"] = address;
+                GUILayout.EndHorizontal();
+
+                GUILayout.BeginHorizontal();
+                GUILayout.Label(rpcPortLabelText, window.labelStyle);
+                if (!settings.ContainsKey("rpc_port"))
+                    settings["rpc_port"] = "50000";
+                settings["rpc_port"] = GUILayout.TextField(settings["rpc_port"], portMaxLength, window.longTextFieldStyle);
+                GUILayout.EndHorizontal();
+
+                GUILayout.BeginHorizontal();
+                GUILayout.Label(streamPortLabelText, window.labelStyle);
+                if (!settings.ContainsKey("stream_port"))
+                    settings["stream_port"] = "50000";
+                settings["stream_port"] = GUILayout.TextField(settings["stream_port"], portMaxLength, window.longTextFieldStyle);
+                GUILayout.EndHorizontal();
             }
-            GUILayout.EndHorizontal ();
-
-            GUILayout.BeginHorizontal ();
-            GUILayout.Label (rpcPortLabelText, window.labelStyle);
-            rpcPort = GUILayout.TextField (rpcPort, portMaxLength, window.longTextFieldStyle);
-            GUILayout.EndHorizontal ();
-
-            GUILayout.BeginHorizontal ();
-            GUILayout.Label (streamPortLabelText, window.labelStyle);
-            streamPort = GUILayout.TextField (streamPort, portMaxLength, window.longTextFieldStyle);
-            GUILayout.EndHorizontal ();
         }
 
         public Configuration.Server Save ()
         {
-            // Validate the settings
-            window.Errors.Clear ();
-            IPAddress ipAddress;
-            ushort rpcPortInt;
-            ushort streamPortInt;
-            bool validAddress = IPAddress.TryParse (address, out ipAddress);
-            bool validRPCPort = ushort.TryParse (rpcPort, out rpcPortInt);
-            bool validStreamPort = ushort.TryParse (streamPort, out streamPortInt);
+            if (protocol == Protocol.ProtocolBuffersOverTCP ||
+                protocol == Protocol.ProtocolBuffersOverWebsockets)
+            {
+                // Validate the settings
+                window.Errors.Clear();
 
-            // Display error message if required
-            if (!validAddress)
-                window.Errors.Add (invalidAddressText);
-            if (!validRPCPort)
-                window.Errors.Add (invalidRPCPortText);
-            if (!validStreamPort)
-                window.Errors.Add (invalidStreamPortText);
+                IPAddress ipAddress;
+                ushort rpcPortInt;
+                ushort streamPortInt;
+                bool validAddress = IPAddress.TryParse(settings["address"], out ipAddress);
+                bool validRPCPort = ushort.TryParse(settings["rpc_port"], out rpcPortInt);
+                bool validStreamPort = ushort.TryParse(settings["stream_port"], out streamPortInt);
 
-            if (window.Errors.Any ())
-                return null;
+                // Display error message if required
+                if (!validAddress)
+                    window.Errors.Add(invalidAddressText);
+                if (!validRPCPort)
+                    window.Errors.Add(invalidRPCPortText);
+                if (!validStreamPort)
+                    window.Errors.Add(invalidStreamPortText);
+                if (window.Errors.Any())
+                    return null;
+                var allowedKeys = new List<string> { "address", "rpc_port", "stream_port" };
+                settings = settings
+                    .Where(x => allowedKeys.Contains(x.Key))
+                    .ToDictionary(x => x.Key, x => x.Value);
+            }
 
             return new Configuration.Server {
                 Id = id,
                 Protocol = protocol,
                 Name = name,
-                Address = ipAddress,
-                RPCPort = rpcPortInt,
-                StreamPort = streamPortInt
+                Settings = new Dictionary<string, string>(settings)
             };
         }
     }

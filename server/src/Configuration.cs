@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using KRPC.Server;
 using KRPC.Server.TCP;
+using KRPC.Utils;
 using Logger = KRPC.Utils.Logger;
 
 namespace KRPC
@@ -47,20 +48,17 @@ namespace KRPC
 
             public Protocol Protocol { get; set; }
 
-            public IPAddress Address { get; set; }
+            public IDictionary<string, string> Settings { get; set; }
 
-            public ushort RPCPort { get; set; }
-
-            public ushort StreamPort { get; set; }
-
-            public Server ()
+            public Server()
             {
-                Id = Guid.NewGuid ();
+                Id = Guid.NewGuid();
                 Name = "Default Server";
                 Protocol = Protocol.ProtocolBuffersOverTCP;
-                Address = IPAddress.Loopback;
-                RPCPort = 50000;
-                StreamPort = 50001;
+                Settings = new Dictionary<string, string>{
+                    {"address", IPAddress.Loopback.ToString()},
+                    {"rpc_port", "50000"},
+                    {"stream_port", "50001"}};
             }
 
             /// <summary>
@@ -68,18 +66,27 @@ namespace KRPC
             /// </summary>
             public KRPC.Server.Server Create ()
             {
-                var serverAddress = Address;
+                KRPC.Server.Message.RPCServer rpcServer = null;
+                KRPC.Server.Message.StreamServer streamServer = null;
+
                 var serverProtocol = Protocol;
-                var rpcTcpServer = new TCPServer (serverAddress, RPCPort);
-                var streamTcpServer = new TCPServer (serverAddress, StreamPort);
-                KRPC.Server.Message.RPCServer rpcServer;
-                KRPC.Server.Message.StreamServer streamServer;
-                if (serverProtocol == Protocol.ProtocolBuffersOverTCP) {
-                    rpcServer = new KRPC.Server.ProtocolBuffers.RPCServer (rpcTcpServer);
-                    streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamTcpServer);
-                } else {
-                    rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer);
-                    streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
+                if (serverProtocol == Protocol.ProtocolBuffersOverTCP ||
+                    serverProtocol == Protocol.ProtocolBuffersOverWebsockets) {
+                    var serverAddress = IPAddress.Loopback;
+                    IPAddress.TryParse(Settings.GetValueOrDefault("address", IPAddress.Loopback.ToString()), out serverAddress);
+                    ushort rpcPort = 0;
+                    ushort streamPort = 0;
+                    ushort.TryParse(Settings.GetValueOrDefault("rpc_port", "0"), out rpcPort);
+                    ushort.TryParse(Settings.GetValueOrDefault("stream_port", "0"), out streamPort);
+                    var rpcTcpServer = new TCPServer (serverAddress, rpcPort);
+                    var streamTcpServer = new TCPServer (serverAddress, streamPort);
+                    if (serverProtocol == Protocol.ProtocolBuffersOverTCP) {
+                        rpcServer = new KRPC.Server.ProtocolBuffers.RPCServer (rpcTcpServer);
+                        streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamTcpServer);
+                    } else {
+                        rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer);
+                        streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
+                    }
                 }
                 return new KRPC.Server.Server (Id, serverProtocol, Name, rpcServer, streamServer);
             }
