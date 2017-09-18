@@ -50,9 +50,9 @@ connection, a client must do the following:
          };
        }
 
-    The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``name`` field can be set
-    to the name of the client to display on the in-game UI. The ``client_identifier`` should be left
-    blank.
+    The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``client_name`` field can
+    be set to the name of the client to display on the in-game UI. The ``client_identifier`` should
+    be left blank.
 
  3. Receive a `ConnectionResponse` message from the server. This message is defined as:
 
