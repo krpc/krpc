@@ -10,6 +10,7 @@ using UnityEngine;
 namespace KRPC.UI
 {
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
     sealed class EditServer
     {
         readonly MainWindow window;
