@@ -147,6 +147,8 @@ namespace KRPC.UI
             recvTimeout = config.Configuration.RecvTimeout.ToString ();
 
             core.OnClientActivity += (s, e) => SawClientActivity (e.Client);
+            if (core.Servers.Count == 1)
+                expandServers.Add (core.Servers [0].Id);
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
