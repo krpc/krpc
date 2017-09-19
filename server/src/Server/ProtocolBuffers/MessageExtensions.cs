@@ -254,17 +254,24 @@ namespace KRPC.Server.ProtocolBuffers
 
         public static ProcedureCall ToMessage (this Schema.KRPC.ProcedureCall call)
         {
-            var procedureSignature = Service.Services.Instance.GetProcedureSignature (call.Service, call.Procedure);
-            var result = new ProcedureCall (call.Service, call.Procedure);
-            foreach (var argument in call.Arguments) {
-                var position = (int)argument.Position;
-                // Ignore the argument if its position is not valid
-                if (position >= procedureSignature.Parameters.Count)
-                    continue;
-                var type = procedureSignature.Parameters [position].Type;
+            // Note: this method must not throw an exception, if the call is to an invalid
+            // procedure. If the ProcedureSignature cannot be obtained, returns a
+            // ProcedureCall with no decoded arguments
+            try {
+                var procedureSignature = Service.Services.Instance.GetProcedureSignature (call.Service, call.Procedure);
+                var result = new ProcedureCall (call.Service, call.Procedure);
+                foreach (var argument in call.Arguments) {
+                    var position = (int)argument.Position;
+                    // Ignore the argument if its position is not valid
+                    if (position >= procedureSignature.Parameters.Count)
+                        continue;
+                    var type = procedureSignature.Parameters [position].Type;
                 result.Arguments.Add (argument.ToMessage (type));
+                }
+                return result;
+            } catch (RPCException) {
+                return new ProcedureCall (call.Service, call.Procedure);
             }
-            return result;
         }
 
         public static Argument ToMessage (this Schema.KRPC.Argument argument, Type type)
