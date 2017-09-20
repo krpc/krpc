@@ -1,16 +1,21 @@
 #pragma once
 
+#include <google/protobuf/stubs/port.h>
+
+#include <functional>
 #include <map>
 #include <memory>
+#include <mutex>  // NOLINT(build/c++11)
 #include <string>
 #include <utility>
 #include <vector>
 
-#include "krpc/connection.hpp"
 #include "krpc/krpc.pb.hpp"
-#include "krpc/stream_manager.hpp"
 
 namespace krpc {
+
+class Connection;
+class StreamManager;
 
 class Client {
  public:

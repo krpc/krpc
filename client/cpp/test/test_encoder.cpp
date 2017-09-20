@@ -1,10 +1,13 @@
-#include <gtest/gtest.h>
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
 
 #include <string>
 
-#include <krpc/client.hpp>
-#include <krpc/encoder.hpp>
-#include <krpc/platform.hpp>
+#include "gtest/gtest.h"
+
+#include "krpc/encoder.hpp"
+#include "krpc/krpc.pb.hpp"
+#include "krpc/platform.hpp"
 
 #include "services/test_service.hpp"
 

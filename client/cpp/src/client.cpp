@@ -1,13 +1,15 @@
 #include "krpc/client.hpp"
 
-#include <google/protobuf/io/coded_stream.h>
-
 #include <string>
 #include <vector>
 
+// IWYU pragma: no_include <asio/impl/io_service.ipp>
+
+#include "krpc/connection.hpp"
 #include "krpc/decoder.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
+#include "krpc/stream_manager.hpp"
 
 namespace krpc {
 

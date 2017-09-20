@@ -1,14 +1,25 @@
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
+#include <google/protobuf/stubs/port.h>
 
+#include <gmock/gmock-matchers.h>
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
+
+#include <atomic>
+#include <exception>
+#include <iosfwd>
 #include <map>
+#include <memory>
 #include <set>
+#include <stdexcept>
 #include <string>
-#include <tuple>
+#include <thread>  // NOLINT(build/c++11)
 #include <vector>
 
-#include <krpc/platform.hpp>
-#include <krpc/services/krpc.hpp>
+#include "gtest/gtest.h"
+
+#include "krpc.hpp"
+#include "krpc/platform.hpp"
+#include "krpc/services/krpc.hpp"
 
 #include "server_test.hpp"
 #include "services/test_service.hpp"

@@ -1,18 +1,27 @@
 #pragma once
 
-#include <google/protobuf/message.h>
+#include <google/protobuf/stubs/port.h>
 
+#include <cstddef>
 #include <map>
 #include <set>
 #include <string>
 #include <tuple>
-#include <utility>
 #include <vector>
 
 #include "krpc/krpc.pb.hpp"
-#include "krpc/object.hpp"
+
+namespace google {
+namespace protobuf {
+class Message;
+}
+}
 
 namespace krpc {
+
+class Client;
+template <typename T> class Object;
+
 namespace decoder {
 
 const size_t GUID_LENGTH = 16;

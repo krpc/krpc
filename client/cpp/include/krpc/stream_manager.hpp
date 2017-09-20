@@ -1,6 +1,9 @@
 #pragma once
 
+#include <google/protobuf/stubs/port.h>
+
 #include <atomic>
+#include <exception>
 #include <map>
 #include <memory>
 #include <mutex>  // NOLINT(build/c++11)
@@ -8,12 +11,14 @@
 #include <thread>  // NOLINT(build/c++11)
 #include <utility>
 
-#include "krpc/connection.hpp"
-#include "krpc/krpc.pb.hpp"
-
 namespace krpc {
 
 class Client;
+class Connection;
+namespace schema {
+class ProcedureCall;
+class ProcedureResult;
+}
 
 class StreamManager {
  public:

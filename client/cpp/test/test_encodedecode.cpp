@@ -1,16 +1,21 @@
-#include <gtest/gtest.h>
+#include <google/protobuf/stubs/port.h>
 
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
+
+#include <algorithm>
 #include <cmath>
 #include <limits>
 #include <map>
 #include <set>
 #include <string>
-#include <tuple>
 #include <vector>
 
-#include <krpc/decoder.hpp>
-#include <krpc/encoder.hpp>
-#include <krpc/platform.hpp>
+#include "gtest/gtest.h"
+
+#include "krpc/decoder.hpp"
+#include "krpc/encoder.hpp"
+#include "krpc/platform.hpp"
 
 #include "services/test_service.hpp"
 

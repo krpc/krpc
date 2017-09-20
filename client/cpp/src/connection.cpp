@@ -1,10 +1,23 @@
 #include "krpc/connection.hpp"
 
+#include <memory>
+#include <new>
+#include <ostream>
 #include <string>
-#include <thread>  // NOLINT(build/c++11)
-#include <vector>
 
+#include <asio/buffer.hpp>
+#include <asio/connect.hpp>  // IWYU pragma: keep
+#include <asio/error_code.hpp>
+#include <asio/ip/basic_resolver_iterator.hpp>
+#include <asio/read.hpp>  // IWYU pragma: keep
 #include <asio/steady_timer.hpp>
+#include <asio/stream_socket_service.hpp>
+#include <asio/write.hpp>  // IWYU pragma: keep
+// IWYU pragma: no_include <asio/detail/impl/epoll_reactor.hpp>
+// IWYU pragma: no_include <asio/detail/impl/reactive_socket_service_base.ipp>
+// IWYU pragma: no_include <asio/impl/connect.hpp>
+// IWYU pragma: no_include <asio/impl/read.hpp>
+// IWYU pragma: no_include <asio/impl/write.hpp>
 
 #include "krpc/decoder.hpp"
 #include "krpc/error.hpp"

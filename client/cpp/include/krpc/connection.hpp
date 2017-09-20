@@ -1,14 +1,15 @@
 #pragma once
 
 #include <chrono>  // NOLINT(build/c++11)
-#include <stdexcept>
+#include <cstddef>
 #include <string>
-#include <vector>
 
 #ifndef ASIO_STANDALONE
 #define ASIO_STANDALONE
 #endif
-#include <asio.hpp>
+#include <asio/io_service.hpp>
+#include <asio/ip/tcp.hpp>
+// IWYU pragma: no_include <asio/impl/io_service.ipp>
 
 namespace krpc {
 

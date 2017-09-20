@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <thread>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
 #include <krpc/services/infernal_robotics.hpp>
@@ -21,6 +22,6 @@ int main() {
     std::cout << servo.name() << " " << servo.position() << std::endl;
 
   group.move_right();
-  sleep(1);
+  std::this_thread::sleep_for(std::chrono::seconds(1));
   group.stop();
 }

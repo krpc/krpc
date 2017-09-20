@@ -1,8 +1,10 @@
 #include "krpc/encoder.hpp"
 
 #include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/message.h>
 #include <google/protobuf/wire_format_lite.h>
 
+#include <cstddef>
 #include <string>
 
 #include "krpc/error.hpp"

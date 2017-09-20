@@ -32,6 +32,7 @@ return ::krpc::Stream<{{ type }}>({% if is_static %}&_client{% else %}this->_cli
 #include <krpc/decoder.hpp>
 #include <krpc/encoder.hpp>
 #include <krpc/error.hpp>
+#include <krpc/object.hpp>
 #include <krpc/service.hpp>
 #include <krpc/stream.hpp>
 

@@ -1,8 +1,9 @@
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
 
-#include <krpc/platform.hpp>
-#include <krpc/services/krpc.hpp>
+#include "gtest/gtest.h"
+
+#include "krpc/object.hpp"
 
 #include "server_test.hpp"
 #include "services/test_service.hpp"

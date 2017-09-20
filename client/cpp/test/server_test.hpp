@@ -1,6 +1,8 @@
 #pragma once
 
 #include <krpc.hpp>
+#include <krpc/services/krpc.hpp>
+
 #include "services/test_service.hpp"
 
 class server_test: public ::testing::Test {

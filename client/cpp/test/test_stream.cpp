@@ -1,15 +1,25 @@
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
 
+#include <chrono>  // NOLINT(build/c++11)
+#include <cstddef>
 #include <string>
+#include <thread>  // NOLINT(build/c++11)
 #include <vector>
+// IWYU pragma: no_include <ext/alloc_traits.h>
 
-#include <krpc/platform.hpp>
-#include <krpc/services/krpc.hpp>
-#include <krpc/stream.hpp>
+#include "gtest/gtest.h"
+
+#include "krpc/client.hpp"
+#include "krpc/services/krpc.hpp"
+#include "krpc/stream.hpp"
 
 #include "server_test.hpp"
 #include "services/test_service.hpp"
+
+namespace krpc {
+class StreamError;
+}
 
 class test_stream: public server_test {
 };

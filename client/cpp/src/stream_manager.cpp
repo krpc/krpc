@@ -1,11 +1,13 @@
 #include "krpc/stream_manager.hpp"
 
+#include <cstddef>
 #include <string>
-#include <vector>
 
+#include "krpc/client.hpp"
+#include "krpc/connection.hpp"
 #include "krpc/decoder.hpp"
-#include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
+#include "krpc/krpc.pb.hpp"
 #include "krpc/services/krpc.hpp"
 
 namespace krpc {

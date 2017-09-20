@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <thread>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
 

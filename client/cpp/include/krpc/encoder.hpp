@@ -1,6 +1,6 @@
 #pragma once
 
-#include <google/protobuf/message.h>
+#include <google/protobuf/stubs/port.h>
 
 #include <map>
 #include <set>
@@ -9,9 +9,17 @@
 #include <vector>
 
 #include "krpc/krpc.pb.hpp"
-#include "krpc/object.hpp"
+
+namespace google {
+namespace protobuf {
+class Message;
+}
+}
 
 namespace krpc {
+
+template <typename T> class Object;
+
 namespace encoder {
 
 std::string encode(float value);
