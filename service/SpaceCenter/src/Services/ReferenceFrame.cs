@@ -344,13 +344,23 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Create a relative reference frame.
+        /// Create a relative reference frame. This is a custom reference frame
+        /// whose components offset the components of a parent reference frame.
         /// </summary>
-        /// <param name="referenceFrame">The parent reference frame.</param>
-        /// <param name="position">The offset of the position of the origin.</param>
-        /// <param name="rotation">The rotation to apply to the parent frames rotation, as a quaternion. Defaults to zero.</param>
-        /// <param name="velocity">The linear velocity to offset the parent frame by. Defaults to zero.</param>
-        /// <param name="angularVelocity">The angular velocity to offset the parent frame by. Defaults to zero.</param>
+        /// <param name="referenceFrame">The parent reference frame on which to
+        /// base this reference frame.</param>
+        /// <param name="position">The offset of the position of the origin,
+        /// as a position vector. Defaults to <math>(0, 0, 0)</math></param>
+        /// <param name="rotation">The rotation to apply to the parent frames rotation,
+        /// as a quaternion of the form <math>(x, y, z, w)</math>.
+        /// Defaults to <math>(0, 0, 0, 1)</math> (i.e. no rotation)</param>
+        /// <param name="velocity">The linear velocity to offset the parent frame by,
+        /// as a vector pointing in the direction of travel, whose magnitude is the speed in
+        /// meters per second. Defaults to <math>(0, 0, 0)</math>.</param>
+        /// <param name="angularVelocity">The angular velocity to offset the parent frame by,
+        /// as a vector. This vector points in the direction of the axis of rotation,
+        /// and its magnitude is the speed of the rotation in radians per second.
+        /// Defaults to <math>(0, 0, 0)</math>.</param>
         [KRPCMethod]
         [KRPCDefaultValue ("position", typeof(VectorZero))]
         [KRPCDefaultValue ("rotation", typeof(QuaternionIdentity))]
@@ -362,16 +372,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Create a hybrid reference frame, which is a custom reference frame
-        /// whose components are inherited from other reference frames.
+        /// Create a hybrid reference frame. This is a custom reference frame
+        /// whose components inherited from other reference frames.
         /// </summary>
         /// <param name="position">The reference frame providing the position of the origin.</param>
-        /// <param name="rotation">The reference frame providing the orientation of the frame.</param>
-        /// <param name="velocity">The reference frame providing the linear velocity of the frame.</param>
-        /// <param name="angularVelocity">The reference frame providing the angular velocity of the frame.</param>
+        /// <param name="rotation">The reference frame providing the rotation of the frame.</param>
+        /// <param name="velocity">The reference frame providing the linear velocity of the frame.
+        /// </param>
+        /// <param name="angularVelocity">The reference frame providing the angular velocity
+        /// of the frame.</param>
         /// <remarks>
-        /// The <paramref name="position"/> is required but all other reference frames are optional.
-        /// If omitted, they are set to the <paramref name="position"/> reference frame.
+        /// The <paramref name="position"/> reference frame is required but all other
+        /// reference frames are optional. If omitted, they are set to the
+        /// <paramref name="position"/> reference frame.
         /// </remarks>
         [KRPCMethod]
         public static ReferenceFrame CreateHybrid (ReferenceFrame position, ReferenceFrame rotation = null, ReferenceFrame velocity = null, ReferenceFrame angularVelocity = null)
@@ -433,7 +446,8 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Returns the rotation of the given frame of reference, relative to world space.
-        /// Applying the rotation to a vector in reference-frame-space produces the corresponding vector in world-space.
+        /// Applying the rotation to a vector in reference-frame-space produces the corresponding
+        /// vector in world-space.
         /// </summary>
         public QuaternionD Rotation {
             get {
@@ -723,7 +737,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Convert the given velocity at the given position in world space, to a velocity in this reference frame.
+        /// Convert the given velocity at the given position in world space,
+        /// to a velocity in this reference frame.
         /// </summary>
         public Vector3d VelocityFromWorldSpace (Vector3d worldPosition, Vector3d worldVelocity)
         {
@@ -731,7 +746,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Convert the given velocity at the given position in this reference frame, to a velocity in world space.
+        /// Convert the given velocity at the given position in this reference frame,
+        /// to a velocity in world space.
         /// </summary>
         public Vector3d VelocityToWorldSpace (Vector3d position, Vector3d velocity)
         {
@@ -739,8 +755,10 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Convert the given angular velocity in world space, to an angular velocity in this reference frame.
-        /// This only make sense when considering an object that is rotating at the origin of the reference frame.
+        /// Convert the given angular velocity in world space,
+        /// to an angular velocity in this reference frame.
+        /// This only make sense when considering an object that
+        /// is rotating at the origin of the reference frame.
         /// </summary>
         public Vector3d AngularVelocityFromWorldSpace (Vector3d worldAngularVelocity)
         {
@@ -748,8 +766,10 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Convert the given angular velocity at the given position in this reference frame, to an angular velocity in world space.
-        /// This only make sense when considering an object that is rotating at the origin of the reference frame.
+        /// Convert the given angular velocity at the given position in this reference frame,
+        /// to an angular velocity in world space.
+        /// This only make sense when considering an object that is rotating at the origin
+        /// of the reference frame.
         /// </summary>
         public Vector3d AngularVelocityToWorldSpace (Vector3d angularVelocity)
         {

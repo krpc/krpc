@@ -137,7 +137,8 @@ namespace KRPC.SpaceCenter.Services
         /// telemetry for the vessel, in the specified reference frame.
         /// </summary>
         /// <param name="referenceFrame">
-        /// Reference frame. Defaults to the vessel's surface reference frame (<see cref="SurfaceReferenceFrame"/>).
+        /// Reference frame. Defaults to the vessel's surface reference frame
+        /// (<see cref="SurfaceReferenceFrame"/>).
         /// </param>
         [KRPCMethod]
         public Flight Flight (ReferenceFrame referenceFrame = null)
@@ -322,7 +323,8 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The moment of inertia of the vessel around its center of mass in <math>kg.m^2</math>.
-        /// The inertia values are around the pitch, roll and yaw directions respectively.
+        /// The inertia values in the returned 3-tuple are around the
+        /// pitch, roll and yaw directions respectively.
         /// This corresponds to the vessels reference frame (<see cref="ReferenceFrame"/>).
         /// </summary>
         [KRPCProperty]
@@ -335,7 +337,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The inertia tensor of the vessel around its center of mass, in the vessels reference frame (<see cref="ReferenceFrame"/>).
+        /// The inertia tensor of the vessel around its center of mass,
+        /// in the vessels reference frame (<see cref="ReferenceFrame"/>).
         /// Returns the 3x3 matrix as a list of elements, in row-major order.
         /// </summary>
         [KRPCProperty]
@@ -353,14 +356,16 @@ namespace KRPC.SpaceCenter.Services
             var vessel = InternalVessel;
             Matrix4x4 inertiaTensor = Matrix4x4.zero;
             Vector3 CoM = vessel.CoM;
-            // Use the part ReferenceTransform because we want pitch/roll/yaw relative to controlling part
+            // Use the part ReferenceTransform because we want pitch/roll/yaw
+            // relative to controlling part
             Transform vesselTransform = vessel.GetTransform ();
 
             foreach (var part in vessel.parts) {
                 if (part.rb != null) {
                     Matrix4x4 partTensor = part.rb.inertiaTensor.ToDiagonalMatrix ();
 
-                    // translate: inertiaTensor frame to part frame, part frame to world frame, world frame to vessel frame
+                    // translate: inertiaTensor frame to part frame, part frame to world frame,
+                    // world frame to vessel frame
                     Quaternion rot = Quaternion.Inverse (vesselTransform.rotation) * part.transform.rotation * part.rb.inertiaTensorRotation;
                     Quaternion inv = Quaternion.Inverse (rot);
 
@@ -383,8 +388,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The maximum torque that the vessel generate. Includes contributions from reaction wheels,
-        /// RCS, gimballed engines and aerodynamic control surfaces.
+        /// The maximum torque that the vessel generates. Includes contributions from
+        /// reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
         /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
@@ -439,7 +444,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The maximum torque that parts (excluding reaction wheels, gimballed engines, RCS and control surfaces) can generate.
+        /// The maximum torque that parts (excluding reaction wheels, gimballed engines,
+        /// RCS and control surfaces) can generate.
         /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
@@ -501,7 +507,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The reference frame that is fixed relative to the vessel, and orientated with the vessel.
+        /// The reference frame that is fixed relative to the vessel,
+        /// and orientated with the vessel.
         /// <list type="bullet">
         /// <item><description>The origin is at the center of mass of the vessel.</description></item>
         /// <item><description>The axes rotate with the vessel.</description></item>
@@ -516,8 +523,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The reference frame that is fixed relative to the vessel, and orientated with the vessels
-        /// orbital prograde/normal/radial directions.
+        /// The reference frame that is fixed relative to the vessel,
+        /// and orientated with the vessels orbital prograde/normal/radial directions.
         /// <list type="bullet">
         /// <item><description>The origin is at the center of mass of the vessel.</description></item>
         /// <item><description>The axes rotate with the orbital prograde/normal/radial directions.</description></item>
@@ -535,8 +542,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The reference frame that is fixed relative to the vessel, and orientated with the surface
-        /// of the body being orbited.
+        /// The reference frame that is fixed relative to the vessel,
+        /// and orientated with the surface of the body being orbited.
         /// <list type="bullet">
         /// <item><description>The origin is at the center of mass of the vessel.</description></item>
         /// <item><description>The axes rotate with the north and up directions on the surface of the body.</description></item>
@@ -560,8 +567,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The reference frame that is fixed relative to the vessel, and orientated with the velocity
-        /// vector of the vessel relative to the surface of the body being orbited.
+        /// The reference frame that is fixed relative to the vessel,
+        /// and orientated with the velocity vector of the vessel relative
+        /// to the surface of the body being orbited.
         /// <list type="bullet">
         /// <item><description>The origin is at the center of mass of the vessel.</description></item>
         /// <item><description>The axes rotate with the vessel's velocity vector.</description></item>
@@ -578,9 +586,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the position vector of the center of mass of the vessel in the given reference frame.
+        /// The position of the center of mass of the vessel, in the given reference frame.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The position as a vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// position vector is in.</param>
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
@@ -591,9 +601,11 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The axis-aligned bounding box of the vessel in the given reference frame.
-        /// Returns the minimum and maximum vertices of the box.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The positions of the minimum and maximum vertices of the box,
+        /// as position vectors.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// position vectors are in.</param>
         [KRPCMethod]
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public Tuple<Tuple3,Tuple3> BoundingBox (ReferenceFrame referenceFrame)
@@ -608,9 +620,12 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the velocity vector of the center of mass of the vessel in the given reference frame.
+        /// The velocity of the center of mass of the vessel, in the given reference frame.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The velocity as a vector. The vector points in the direction of travel,
+        /// and its magnitude is the speed of the body in meters per second.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// velocity vector is in.</param>
         [KRPCMethod]
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
@@ -623,9 +638,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the rotation of the center of mass of the vessel in the given reference frame.
+        /// The rotation of the vessel, in the given reference frame.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// rotation is in.</param>
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
@@ -635,9 +652,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the direction in which the vessel is pointing, as a unit vector, in the given reference frame.
+        /// The direction in which the vessel is pointing, in the given reference frame.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The direction as a unit vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// direction is in.</param>
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
@@ -647,11 +666,13 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the angular velocity of the vessel in the given reference frame. The magnitude of the returned
-        /// vector is the rotational speed in radians per second, and the direction of the vector indicates the
-        /// axis of rotation (using the right hand rule).
+        /// The angular velocity of the vessel, in the given reference frame.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The angular velocity as a vector. The magnitude of the vector is the rotational
+        /// speed of the vessel, in radians per second. The direction of the vector indicates the
+        /// axis of rotation, using the right-hand rule.</returns>
+        /// <param name="referenceFrame">The reference frame the returned
+        /// angular velocity is in.</param>
         [KRPCMethod]
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {

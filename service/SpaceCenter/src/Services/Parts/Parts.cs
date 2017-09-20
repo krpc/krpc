@@ -201,8 +201,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A list of all engines in the vessel.
         /// </summary>
         /// <remarks>
-        /// This includes any part that generates thrust. This covers many different types of engine,
-        /// including liquid fuel rockets, solid rocket boosters, jet engines and RCS thrusters.
+        /// This includes any part that generates thrust. This covers many different types
+        /// of engine, including liquid fuel rockets, solid rocket boosters, jet engines and
+        /// RCS thrusters.
         /// </remarks>
         [KRPCProperty]
         public IList<Engine> Engines {

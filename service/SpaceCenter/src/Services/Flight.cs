@@ -292,16 +292,18 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The velocity vector of the vessel. The magnitude of the vector is the speed of the vessel in meters per second.
-        /// The direction of the vector is the direction of the vessels motion.
+        /// The velocity of the vessel, in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
+        /// <returns>The velocity as a vector. The vector points in the direction of travel,
+        /// and its magnitude is the speed of the vessel in meters per second.</returns>
         [KRPCProperty]
         public Tuple3 Velocity {
             get { return referenceFrame.VelocityFromWorldSpace (WorldCoM, WorldVelocity).ToTuple (); }
         }
 
         /// <summary>
-        /// The speed of the vessel in meters per second.
+        /// The speed of the vessel in meters per second,
+        /// in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
         [KRPCProperty]
         public double Speed {
@@ -309,7 +311,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The horizontal speed of the vessel in meters per second.
+        /// The horizontal speed of the vessel in meters per second,
+        /// in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
         [KRPCProperty]
         public double HorizontalSpeed {
@@ -321,7 +324,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The vertical speed of the vessel in meters per second.
+        /// The vertical speed of the vessel in meters per second,
+        /// in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
         [KRPCProperty]
         public double VerticalSpeed {
@@ -334,31 +338,37 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The position of the center of mass of the vessel.
+        /// The position of the center of mass of the vessel,
+        /// in the reference frame <see cref="ReferenceFrame"/>
         /// </summary>
+        /// <returns>The position as a vector.</returns>
         [KRPCProperty]
         public Tuple3 CenterOfMass {
             get { return referenceFrame.PositionFromWorldSpace (WorldCoM).ToTuple (); }
         }
 
         /// <summary>
-        /// The rotation of the vessel.
+        /// The rotation of the vessel, in the reference frame <see cref="ReferenceFrame"/>
         /// </summary>
+        /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
         [KRPCProperty]
         public Tuple4 Rotation {
             get { return VesselRotation.ToTuple (); }
         }
 
         /// <summary>
-        /// The direction vector that the vessel is pointing in.
+        /// The direction that the vessel is pointing in,
+        /// in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
+        /// <returns>The direction as a unit vector.</returns>
         [KRPCProperty]
         public Tuple3 Direction {
             get { return referenceFrame.DirectionFromWorldSpace (WorldDirection).normalized.ToTuple (); }
         }
 
         /// <summary>
-        /// The pitch angle of the vessel relative to the horizon, in degrees. A value between -90° and +90°.
+        /// The pitch of the vessel relative to the horizon, in degrees.
+        /// A value between -90° and +90°.
         /// </summary>
         [KRPCProperty]
         public float Pitch {
@@ -366,7 +376,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The heading angle of the vessel relative to north, in degrees. A value between 0° and 360°.
+        /// The heading of the vessel (its angle relative to north), in degrees.
+        /// A value between 0° and 360°.
         /// </summary>
         [KRPCProperty]
         public float Heading {
@@ -374,7 +385,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The roll angle of the vessel relative to the horizon, in degrees. A value between -180° and +180°.
+        /// The roll of the vessel relative to the horizon, in degrees.
+        /// A value between -180° and +180°.
         /// </summary>
         [KRPCProperty]
         public float Roll {
@@ -382,48 +394,60 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The unit direction vector pointing in the prograde direction.
+        /// The prograde direction of the vessels orbit,
+        /// in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
+        /// <returns>The direction as a unit vector.</returns>
         [KRPCProperty]
         public Tuple3 Prograde {
             get { return referenceFrame.DirectionFromWorldSpace (WorldPrograde).ToTuple (); }
         }
 
         /// <summary>
-        /// The unit direction vector pointing in the retrograde direction.
+        /// The retrograde direction of the vessels orbit,
+        /// in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
+        /// <returns>The direction as a unit vector.</returns>
         [KRPCProperty]
         public Tuple3 Retrograde {
             get { return referenceFrame.DirectionFromWorldSpace (-WorldPrograde).ToTuple (); }
         }
 
         /// <summary>
-        /// The unit direction vector pointing in the normal direction.
+        /// The direction normal to the vessels orbit,
+        /// in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
+        /// <returns>The direction as a unit vector.</returns>
         [KRPCProperty]
         public Tuple3 Normal {
             get { return referenceFrame.DirectionFromWorldSpace (WorldNormal).ToTuple (); }
         }
 
         /// <summary>
-        /// The unit direction vector pointing in the anti-normal direction.
+        /// The direction opposite to the normal of the vessels orbit,
+        /// in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
+        /// <returns>The direction as a unit vector.</returns>
         [KRPCProperty]
         public Tuple3 AntiNormal {
             get { return referenceFrame.DirectionFromWorldSpace (-WorldNormal).ToTuple (); }
         }
 
         /// <summary>
-        /// The unit direction vector pointing in the radial direction.
+        /// The radial direction of the vessels orbit,
+        /// in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
+        /// <returns>The direction as a unit vector.</returns>
         [KRPCProperty]
         public Tuple3 Radial {
             get { return referenceFrame.DirectionFromWorldSpace (WorldRadial).ToTuple (); }
         }
 
         /// <summary>
-        /// The unit direction vector pointing in the anti-radial direction.
+        /// The direction opposite to the radial direction of the vessels orbit,
+        /// in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
+        /// <returns>The direction as a unit vector.</returns>
         [KRPCProperty]
         public Tuple3 AntiRadial {
             get { return referenceFrame.DirectionFromWorldSpace (-WorldRadial).ToTuple (); }
@@ -440,8 +464,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The dynamic pressure acting on the vessel, in Pascals. This is a measure of the strength of the
-        /// aerodynamic forces. It is equal to <math>\frac{1}{2} . \mbox{air density} . \mbox{velocity}^2</math>.
+        /// The dynamic pressure acting on the vessel, in Pascals. This is a measure of the
+        /// strength of the aerodynamic forces. It is equal to
+        /// <math>\frac{1}{2} . \mbox{air density} . \mbox{velocity}^2</math>.
         /// It is commonly denoted <math>Q</math>.
         /// </summary>
         [KRPCProperty]
@@ -476,9 +501,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The total aerodynamic forces acting on the vessel, as a vector pointing in the direction of the force, with its
-        /// magnitude equal to the strength of the force in Newtons.
+        /// The total aerodynamic forces acting on the vessel,
+        /// in reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
+        /// <returns>A vector pointing in the direction that the force acts,
+        /// with its magnitude equal to the strength of the force in Newtons.</returns>
         [KRPCProperty]
         public Tuple3 AerodynamicForce {
             get {
@@ -490,18 +517,47 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="https://en.wikipedia.org/wiki/Aerodynamic_force">aerodynamic lift</a> currently acting on the vessel,
-        /// as a vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
+        /// Simulate and return the total aerodynamic forces acting on the vessel,
+        /// if it where to be traveling with the given velocity at the given position in the
+        /// atmosphere of the given celestial body.
         /// </summary>
+        /// <returns>A vector pointing in the direction that the force acts,
+        /// with its magnitude equal to the strength of the force in Newtons.</returns>
+        [KRPCMethod]
+        public Tuple3 SimulateAerodynamicForceAt(CelestialBody body, Tuple3 position, Tuple3 velocity)
+        {
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            var vessel = InternalVessel;
+            var worldVelocity = referenceFrame.VelocityToWorldSpace(position.ToVector(), velocity.ToVector());
+            var worldPosition = referenceFrame.PositionToWorldSpace(position.ToVector());
+            Vector3 worldForce;
+            if (!FAR.IsAvailable) {
+                worldForce = StockAerodynamics.SimAeroForce(body.InternalBody, vessel, worldVelocity, worldPosition);
+            } else {
+                Vector3 torque;
+                var altitude = (worldPosition - body.InternalBody.position).magnitude - body.InternalBody.Radius;
+                FAR.CalculateVesselAeroForces(vessel, out worldForce, out torque, worldVelocity, altitude);
+            }
+            return referenceFrame.DirectionFromWorldSpace(worldForce).ToTuple();
+        }
+
+        /// <summary>
+        /// The <a href="https://en.wikipedia.org/wiki/Aerodynamic_force">aerodynamic lift</a>
+        /// currently acting on the vessel.
+        /// </summary>
+        /// <returns>A vector pointing in the direction that the force acts,
+        /// with its magnitude equal to the strength of the force in Newtons.</returns>
         [KRPCProperty]
         public Tuple3 Lift {
             get { return (referenceFrame.DirectionFromWorldSpace (WorldLiftDirection) * LiftMagnitude).ToTuple (); }
         }
 
         /// <summary>
-        /// The <a href="https://en.wikipedia.org/wiki/Aerodynamic_force">aerodynamic drag</a> currently acting on the vessel,
-        /// as a vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
+        /// The <a href="https://en.wikipedia.org/wiki/Aerodynamic_force">aerodynamic drag</a> currently acting on the vessel.
         /// </summary>
+        /// <returns>A vector pointing in the direction of the force, with its magnitude
+        /// equal to the strength of the force in Newtons.</returns>
         [KRPCProperty]
         public Tuple3 Drag {
             get { return (referenceFrame.DirectionFromWorldSpace (WorldDragDirection) * DragMagnitude).ToTuple (); }
@@ -543,7 +599,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="https://en.wikipedia.org/wiki/True_airspeed">true air speed</a> of the vessel, in <math>m/s</math>.
+        /// The <a href="https://en.wikipedia.org/wiki/True_airspeed">true air speed</a>
+        /// of the vessel, in meters per second.
         /// </summary>
         [KRPCProperty]
         public float TrueAirSpeed {
@@ -551,7 +608,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="https://en.wikipedia.org/wiki/Equivalent_airspeed">equivalent air speed</a> of the vessel, in <math>m/s</math>.
+        /// The <a href="https://en.wikipedia.org/wiki/Equivalent_airspeed">equivalent air speed</a>
+        /// of the vessel, in meters per second.
         /// </summary>
         [KRPCProperty]
         public float EquivalentAirSpeed {
@@ -562,7 +620,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// An estimate of the current terminal velocity of the vessel, in <math>m/s</math>.
+        /// An estimate of the current terminal velocity of the vessel, in meters per second.
         /// This is the speed at which the drag forces cancel out the force of gravity.
         /// </summary>
         [KRPCProperty]
@@ -580,7 +638,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the pitch angle between the orientation of the vessel and its velocity vector, in degrees.
+        /// The pitch angle between the orientation of the vessel and its velocity vector,
+        /// in degrees.
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
@@ -596,7 +655,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the yaw angle between the orientation of the vessel and its velocity vector, in degrees.
+        /// The yaw angle between the orientation of the vessel and its velocity vector, in degrees.
         /// </summary>
         [KRPCProperty]
         public float SideslipAngle {
@@ -611,8 +670,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="https://en.wikipedia.org/wiki/Total_air_temperature">total air temperature</a> of the atmosphere
-        /// around the vessel, in Kelvin. This temperature includes the <see cref="StaticAirTemperature"/> and the vessel's kinetic energy.
+        /// The <a href="https://en.wikipedia.org/wiki/Total_air_temperature">total air temperature</a>
+        /// of the atmosphere around the vessel, in Kelvin.
+        /// This includes the <see cref="StaticAirTemperature"/> and the vessel's kinetic energy.
         /// </summary>
         [KRPCProperty]
         public float TotalAirTemperature {
@@ -620,8 +680,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="https://en.wikipedia.org/wiki/Total_air_temperature">static (ambient) temperature</a> of the
-        /// atmosphere around the vessel, in Kelvin.
+        /// The <a href="https://en.wikipedia.org/wiki/Total_air_temperature">static (ambient)
+        /// temperature</a> of the atmosphere around the vessel, in Kelvin.
         /// </summary>
         [KRPCProperty]
         public float StaticAirTemperature {
@@ -629,8 +689,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the current amount of stall, between 0 and 1. A value greater than 0.005 indicates a minor stall
-        /// and a value greater than 0.5 indicates a large-scale stall.
+        /// The current amount of stall, between 0 and 1. A value greater than 0.005 indicates
+        /// a minor stall and a value greater than 0.5 indicates a large-scale stall.
         /// </summary>
         /// <remarks>
         /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
@@ -644,8 +704,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the coefficient of drag. This is the amount of drag produced by the vessel. It depends on air speed,
-        /// air density and wing area.
+        /// The coefficient of drag. This is the amount of drag produced by the vessel.
+        /// It depends on air speed, air density and wing area.
         /// </summary>
         /// <remarks>
         /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
@@ -659,7 +719,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the coefficient of lift. This is the amount of lift produced by the vessel, and depends on air speed, air density and wing area.
+        /// The coefficient of lift. This is the amount of lift produced by the vessel, and
+        /// depends on air speed, air density and wing area.
         /// </summary>
         /// <remarks>
         /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
@@ -673,7 +734,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the <a href="https://en.wikipedia.org/wiki/Ballistic_coefficient">ballistic coefficient</a>.
+        /// The <a href="https://en.wikipedia.org/wiki/Ballistic_coefficient">ballistic coefficient</a>.
         /// </summary>
         /// <remarks>
         /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
@@ -687,9 +748,10 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the thrust specific fuel consumption for the jet engines on the vessel. This is a measure of the
-        /// efficiency of the engines, with a lower value indicating a more efficient vessel. This value is the
-        /// number of Newtons of fuel that are burned, per hour, to produce one newton of thrust.
+        /// The thrust specific fuel consumption for the jet engines on the vessel. This is a
+        /// measure of the efficiency of the engines, with a lower value indicating a more
+        /// efficient vessel. This value is the number of Newtons of fuel that are burned,
+        /// per hour, to produce one newton of thrust.
         /// </summary>
         /// <remarks>
         /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.

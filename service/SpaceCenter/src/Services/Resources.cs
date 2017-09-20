@@ -167,7 +167,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the density of a resource, in kg/l.
+        /// Returns the density of a resource, in <math>kg/l</math>.
         /// </summary>
         /// <param name="name">The name of the resource.</param>
         [KRPCMethod]
@@ -190,7 +190,8 @@ namespace KRPC.SpaceCenter.Services
         /// Whether use of all the resources are enabled.
         /// </summary>
         /// <remarks>
-        /// This is true if all of the resources are enabled. If any of the resources are not enabled, this is false.
+        /// This is <c>true</c> if all of the resources are enabled.
+        /// If any of the resources are not enabled, this is <c>false</c>.
         /// </remarks>
         [KRPCProperty]
         public bool Enabled {

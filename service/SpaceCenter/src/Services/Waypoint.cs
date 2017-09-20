@@ -58,7 +58,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Celestial body the waypoint is attached to.
+        /// The celestial body the waypoint is attached to.
         /// </summary>
         [KRPCProperty]
         public CelestialBody Body {
@@ -73,7 +73,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Name of the waypoint as it appears on the map and the contract.
+        /// The name of the waypoint as it appears on the map and the contract.
         /// </summary>
         [KRPCProperty]
         public string Name {
@@ -145,7 +145,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The altitude of the waypoint above the surface of the body or sea level, whichever is closer, in meters.
+        /// The altitude of the waypoint above the surface of the body or sea level,
+        /// whichever is closer, in meters.
         /// </summary>
         [KRPCProperty]
         public double SurfaceAltitude {
@@ -154,7 +155,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The altitude of the waypoint above the surface of the body, in meters. When over water, this is the altitude above the sea floor.
+        /// The altitude of the waypoint above the surface of the body, in meters.
+        /// When over water, this is the altitude above the sea floor.
         /// </summary>
         [KRPCProperty]
         public double BedrockAltitude {
@@ -163,7 +165,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// True if waypoint is a point near or on the body rather than high in orbit.
+        /// <c>true</c> if the waypoint is near to the surface of a body.
         /// </summary>
         [KRPCProperty]
         public bool NearSurface {
@@ -171,7 +173,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// True if waypoint is actually glued to the ground.
+        /// <c>true</c> if the waypoint is attached to the ground.
         /// </summary>
         [KRPCProperty]
         public bool Grounded {
@@ -179,10 +181,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The integer index of this waypoint amongst its cluster of sibling waypoints.
-        /// In other words, when you have a cluster of waypoints called "Somewhere Alpha", "Somewhere Beta", and "Somewhere Gamma",
-        /// then the alpha site has index 0, the beta site has index 1 and the gamma site has index 2.
-        /// When <see cref="Clustered"/> is false, this value is zero but meaningless.
+        /// The integer index of this waypoint within its cluster of sibling waypoints.
+        /// In other words, when you have a cluster of waypoints called "Somewhere Alpha",
+        /// "Somewhere Beta" and "Somewhere Gamma", the alpha site has index 0, the beta
+        /// site has index 1 and the gamma site has index 2.
+        /// When <see cref="Clustered"/> is <c>false</c>, this is zero.
         /// </summary>
         [KRPCProperty]
         public int Index {
@@ -190,8 +193,10 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// True if this waypoint is part of a set of clustered waypoints with greek letter names appended (Alpha, Beta, Gamma, etc).
-        /// If true, there is a one-to-one correspondence with the greek letter name and the <see cref="Index"/>.
+        /// <c>true</c> if this waypoint is part of a set of clustered waypoints with greek letter
+        /// names appended (Alpha, Beta, Gamma, etc).
+        /// If <c>true</c>, there is a one-to-one correspondence with the greek letter name and
+        /// the <see cref="Index"/>.
         /// </summary>
         [KRPCProperty]
         public bool Clustered {

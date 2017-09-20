@@ -83,7 +83,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The authority limiter for the control surface, which controls how far the control surface will move.
+        /// The authority limiter for the control surface, which controls how far the
+        /// control surface will move.
         /// </summary>
         [KRPCProperty]
         public float AuthorityLimiter {
@@ -118,9 +119,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The available torque in the positive pitch, roll and yaw axes and
-        /// negative pitch, roll and yaw axes of the vessel, in Newton meters.
-        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// The available torque, in Newton meters, that can be produced by this control surface,
+        /// in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+        /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]

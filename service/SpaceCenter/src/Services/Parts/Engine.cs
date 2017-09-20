@@ -87,8 +87,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Get the currently active ModuleEngines part module. For a single-mode engine, this is just the
-        /// ModulesEngine for the part. For multi-mode engines, this is the ModulesEngine for the current mode.
+        /// Get the currently active ModuleEngines part module. For a single-mode engine,
+        /// this is just the ModulesEngine for the part. For multi-mode engines, this is
+        /// the ModulesEngine for the current mode.
         /// </summary>
         ModuleEngines CurrentEngine {
             get { return engines [(multiModeEngine == null || multiModeEngine.runningPrimary) ? 0 : 1]; }
@@ -117,7 +118,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Get the thrust of the engine in Newtons, with the given throttle percentage and atmospheric pressure in atmospheres
+        /// Get the thrust of the engine in Newtons, with the given throttle percentage
+        /// and atmospheric pressure in atmospheres.
         /// </summary>
         float GetThrust (float throttle, double pressure)
         {
@@ -158,7 +160,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The amount of thrust, in Newtons, that would be produced by the engine
         /// when activated and with its throttle set to 100%.
         /// Returns zero if the engine does not have any fuel.
-        /// Takes the engine's current <see cref="ThrustLimit"/> and atmospheric conditions into account.
+        /// Takes the engine's current <see cref="ThrustLimit"/> and atmospheric conditions
+        /// into account.
         /// </summary>
         [KRPCProperty]
         public float AvailableThrust {
@@ -265,8 +268,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// to the ratio at which they are consumed by the engine.
         /// </summary>
         /// <remarks>
-        /// For example, if the ratios are 0.6 for LiquidFuel and 0.4 for Oxidizer, then for every 0.6 units of
-        /// LiquidFuel that the engine burns, it will burn 0.4 units of Oxidizer.
+        /// For example, if the ratios are 0.6 for LiquidFuel and 0.4 for Oxidizer, then for every
+        /// 0.6 units of LiquidFuel that the engine burns, it will burn 0.4 units of Oxidizer.
         /// </remarks>
         [KRPCProperty]
         public IDictionary<string, float> PropellantRatios {
@@ -480,8 +483,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The available torque in the pitch, roll and yaw axes of the vessel, in Newton meters.
-        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// The available torque, in Newton meters, that can be produced by this engine,
+        /// in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+        /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// Returns zero if the engine is inactive, or not gimballed.
         /// </summary>
         [KRPCProperty]

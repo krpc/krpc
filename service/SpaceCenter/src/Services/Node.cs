@@ -86,7 +86,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The magnitude of the maneuver nodes delta-v in the prograde direction, in meters per second.
+        /// The magnitude of the maneuver nodes delta-v in the prograde direction,
+        /// in meters per second.
         /// </summary>
         [KRPCProperty]
         public double Prograde {
@@ -98,7 +99,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The magnitude of the maneuver nodes delta-v in the normal direction, in meters per second.
+        /// The magnitude of the maneuver nodes delta-v in the normal direction,
+        /// in meters per second.
         /// </summary>
         [KRPCProperty]
         public double Normal {
@@ -110,7 +112,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The magnitude of the maneuver nodes delta-v in the radial direction, in meters per second.
+        /// The magnitude of the maneuver nodes delta-v in the radial direction,
+        /// in meters per second.
         /// </summary>
         [KRPCProperty]
         public double Radial {
@@ -138,8 +141,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the remaining delta-v of the maneuver node, in meters per second. Changes as the node
-        /// is executed. This is equivalent to the delta-v reported in-game.
+        /// Gets the remaining delta-v of the maneuver node, in meters per second. Changes as the
+        /// node is executed. This is equivalent to the delta-v reported in-game.
         /// </summary>
         [KRPCProperty]
         public double RemainingDeltaV {
@@ -147,10 +150,13 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns a vector whose direction the direction of the maneuver node burn, and whose magnitude
-        /// is the delta-v of the burn in m/s.
+        /// Returns the burn vector for the maneuver node.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <param name="referenceFrame">The reference frame that the returned vector is in.
+        /// Defaults to <see cref="Vessel.OrbitalReferenceFrame"/>.</param>
+        /// <returns>A vector whose direction is the direction of the maneuver node burn, and
+        /// magnitude is the delta-v of the burn in meters per second.
+        /// </returns>
         /// <remarks>
         /// Does not change when executing the maneuver node. See <see cref="RemainingBurnVector"/>.
         /// </remarks>
@@ -163,10 +169,16 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns a vector whose direction the direction of the maneuver node burn, and whose magnitude
-        /// is the delta-v of the burn in m/s. The direction and magnitude change as the burn is executed.
+        /// Returns the remaining burn vector for the maneuver node.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <param name="referenceFrame">The reference frame that the returned vector is in.
+        /// Defaults to <see cref="Vessel.OrbitalReferenceFrame"/>.</param>
+        /// <returns>A vector whose direction is the direction of the maneuver node burn, and
+        /// magnitude is the delta-v of the burn in meters per second.
+        /// </returns>
+        /// <remarks>
+        /// Changes as the maneuver node is executed. See <see cref="BurnVector"/>.
+        /// </remarks>
         [KRPCMethod]
         public Tuple3 RemainingBurnVector (ReferenceFrame referenceFrame = null)
         {
@@ -226,7 +238,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the reference frame that is fixed relative to the maneuver node's burn.
+        /// The reference frame that is fixed relative to the maneuver node's burn.
         /// <list type="bullet">
         /// <item><description>The origin is at the position of the maneuver node.</description></item>
         /// <item><description>The y-axis points in the direction of the burn.</description></item>
@@ -239,7 +251,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the reference frame that is fixed relative to the maneuver node, and
+        /// The reference frame that is fixed relative to the maneuver node, and
         /// orientated with the orbital prograde/normal/radial directions of the
         /// original orbit at the maneuver node's position.
         /// <list type="bullet">
@@ -258,9 +270,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the position vector of the maneuver node in the given reference frame.
+        /// The position vector of the maneuver node in the given reference frame.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The position as a vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// position vector is in.</param>
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
@@ -270,9 +284,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the unit direction vector of the maneuver nodes burn in the given reference frame.
+        /// The direction of the maneuver nodes burn.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The direction as a unit vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// direction is in.</param>
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {

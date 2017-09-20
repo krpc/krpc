@@ -182,8 +182,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Containing information on the corresponding specific science result for the current conditions.
-        /// Returns null if experiment is unavailable.
+        /// Containing information on the corresponding specific science result for the current
+        /// conditions. Returns <c>null</c> if the experiment is unavailable.
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Performance", "UseStringEmptyRule")]

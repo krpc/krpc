@@ -59,9 +59,9 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Whether the RCS thrusters are active.
-        /// An RCS thruster is inactive if the RCS action group is disabled (<see cref="Control.RCS"/>),
-        /// the RCS thruster itself is not enabled (<see cref="Enabled"/>) or
-        /// it is covered by a fairing (<see cref="Part.Shielded"/>).
+        /// An RCS thruster is inactive if the RCS action group is disabled
+        /// (<see cref="Control.RCS"/>), the RCS thruster itself is not enabled
+        /// (<see cref="Enabled"/>) or it is covered by a fairing (<see cref="Part.Shielded"/>).
         /// </summary>
         [KRPCProperty]
         public bool Active {
@@ -141,9 +141,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The available torque in the pitch, roll and yaw axes of the vessel, in Newton meters.
-        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
-        /// Returns zero if the RCS is inactive.
+        /// The available torque, in Newton meters, that can be produced by this RCS,
+        /// in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+        /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
+        /// Returns zero if RCS is disable.
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
@@ -170,7 +171,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The maximum amount of thrust that can be produced by the RCS thrusters when active, in Newtons.
+        /// The maximum amount of thrust that can be produced by the RCS thrusters when active,
+        /// in Newtons.
         /// </summary>
         [KRPCProperty]
         public float MaxThrust {
@@ -178,7 +180,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The maximum amount of thrust that can be produced by the RCS thrusters when active in a vacuum, in Newtons.
+        /// The maximum amount of thrust that can be produced by the RCS thrusters when active
+        /// in a vacuum, in Newtons.
         /// </summary>
         [KRPCProperty]
         public float MaxVacuumThrust {

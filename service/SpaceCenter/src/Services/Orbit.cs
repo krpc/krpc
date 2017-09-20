@@ -66,10 +66,12 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the apoapsis of the orbit, in meters, from the center of mass of the body being orbited.
+        /// Gets the apoapsis of the orbit, in meters, from the center of mass
+        /// of the body being orbited.
         /// </summary>
         /// <remarks>
-        /// For the apoapsis altitude reported on the in-game map view, use <see cref="ApoapsisAltitude"/>.
+        /// For the apoapsis altitude reported on the in-game map view,
+        /// use <see cref="ApoapsisAltitude"/>.
         /// </remarks>
         [KRPCProperty]
         public double Apoapsis {
@@ -77,10 +79,12 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The periapsis of the orbit, in meters, from the center of mass of the body being orbited.
+        /// The periapsis of the orbit, in meters, from the center of mass
+        /// of the body being orbited.
         /// </summary>
         /// <remarks>
-        /// For the periapsis altitude reported on the in-game map view, use <see cref="PeriapsisAltitude"/>.
+        /// For the periapsis altitude reported on the in-game map view,
+        /// use <see cref="PeriapsisAltitude"/>.
         /// </remarks>
         [KRPCProperty]
         public double Periapsis {
@@ -130,7 +134,8 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The current radius of the orbit, in meters. This is the distance between the center
-        /// of mass of the object in orbit, and the center of mass of the body around which it is orbiting.
+        /// of mass of the object in orbit, and the center of mass of the body around which it
+        /// is orbiting.
         /// </summary>
         /// <remarks>
         /// This value will change over time if the orbit is elliptical.
@@ -176,7 +181,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="https://en.wikipedia.org/wiki/Orbital_eccentricity">eccentricity</a> of the orbit.
+        /// The <a href="https://en.wikipedia.org/wiki/Orbital_eccentricity">eccentricity</a>
+        /// of the orbit.
         /// </summary>
         [KRPCProperty]
         public double Eccentricity {
@@ -184,7 +190,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="https://en.wikipedia.org/wiki/Orbital_inclination">inclination</a> of the orbit,
+        /// The <a href="https://en.wikipedia.org/wiki/Orbital_inclination">inclination</a>
+        /// of the orbit,
         /// in radians.
         /// </summary>
         [KRPCProperty]
@@ -193,8 +200,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node">longitude of the
-        /// ascending node</a>, in radians.
+        /// The <a href="https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node">longitude of
+        /// the ascending node</a>, in radians.
         /// </summary>
         [KRPCProperty]
         public double LongitudeOfAscendingNode {
@@ -202,7 +209,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="https://en.wikipedia.org/wiki/Argument_of_periapsis">argument of periapsis</a>, in radians.
+        /// The <a href="https://en.wikipedia.org/wiki/Argument_of_periapsis">argument of
+        /// periapsis</a>, in radians.
         /// </summary>
         [KRPCProperty]
         public double ArgumentOfPeriapsis {
@@ -219,7 +227,8 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The time since the epoch (the point at which the
-        /// <a href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly at epoch</a> was measured, in seconds.
+        /// <a href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly at epoch</a>
+        /// was measured, in seconds.
         /// </summary>
         [KRPCProperty]
         public double Epoch {
@@ -251,10 +260,13 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The unit direction vector that is normal to the orbits reference plane, in the given
-        /// reference frame. The reference plane is the plane from which the orbits inclination is measured.
+        /// The direction that is normal to the orbits reference plane,
+        /// in the given reference frame.
+        /// The reference plane is the plane from which the orbits inclination is measured.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The direction as a unit vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// direction is in.</param>
         [KRPCMethod]
         public static Tuple3 ReferencePlaneNormal (ReferenceFrame referenceFrame)
         {
@@ -264,10 +276,12 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The unit direction vector from which the orbits longitude of ascending node is measured,
+        /// The direction from which the orbits longitude of ascending node is measured,
         /// in the given reference frame.
         /// </summary>
-        /// <param name="referenceFrame"></param>
+        /// <returns>The direction as a unit vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// direction is in.</param>
         [KRPCMethod]
         public static Tuple3 ReferencePlaneDirection (ReferenceFrame referenceFrame)
         {
@@ -277,8 +291,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// If the object is going to change sphere of influence in the future, returns the new orbit
-        /// after the change. Otherwise returns <c>null</c>.
+        /// If the object is going to change sphere of influence in the future, returns the new
+        /// orbit after the change. Otherwise returns <c>null</c>.
         /// </summary>
         [KRPCProperty (Nullable = true)]
         public Orbit NextOrbit {
@@ -286,8 +300,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The time until the object changes sphere of influence, in seconds. Returns <c>NaN</c> if the
-        /// object is not going to change sphere of influence.
+        /// The time until the object changes sphere of influence, in seconds. Returns <c>NaN</c>
+        /// if the object is not going to change sphere of influence.
         /// </summary>
         [KRPCProperty]
         public double TimeToSOIChange {
@@ -389,8 +403,10 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The position at a given time, in the specified reference frame.
         /// </summary>
+        /// <returns>The position as a vector.</returns>
         /// <param name="ut">The universal time to measure the position at.</param>
-        /// <param name="referenceFrame">Reference frame for the position.</param>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// position vector is in.</param>
         [KRPCMethod]
         public Tuple3 PositionAt (double ut, ReferenceFrame referenceFrame)
         {
@@ -400,8 +416,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Estimates time of closest approach in the next orbit.
+        /// Estimates and returns the time at closest approach to a target vessel.
         /// </summary>
+        /// <returns>The universal time at closest approach, in seconds.</returns>
         /// <param name="target">Target vessel.</param>
         [KRPCMethod]
         public double TimeOfClosestApproach (Vessel target)
@@ -413,7 +430,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Estimates time of closest approach in the next orbit.
+        /// Estimates and returns the distance at closest approach to a target vessel, in meters.
         /// </summary>
         /// <param name="target">Target vessel.</param>
         [KRPCMethod]
@@ -427,11 +444,15 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns a list of two lists - the first of approach times, the second containing
-        /// the estimated distance for each of those approach times.
+        /// Returns the times at closest approach and corresponding distances, to a target vessel.
         /// </summary>
+        /// <returns>
+        /// A list of two lists.
+        /// The first is a list of times at closest approach, as universal times in seconds.
+        /// The second is a list of corresponding distances at closest approach, in meters.
+        /// </returns>
         /// <param name="target">Target vessel.</param>
-        /// <param name="orbits">Number of orbits to iterate through.</param>
+        /// <param name="orbits">The number of future orbits to search.</param>
         [KRPCMethod]
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public IList<IList<double>> ListClosestApproaches(Vessel target, int orbits)
@@ -455,13 +476,15 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Helper function to calculate the closest approach to target in an orbital period.
+        /// Helper function to calculate the closest approach distance and time to a target vessel
+        /// in a given orbital period.
         /// </summary>
-        /// <param name="myOrbit">Orbit of the controlled vessel</param>
-        /// <param name="targetOrbit">Orbit of the target vessel</param>
-        /// <param name="beginTime">Time to begin search - search continues for one orbital period</param>
-        /// <param name="distance">Out parameter to return distance at the closest approach found</param>
-        /// <returns></returns>
+        /// <param name="myOrbit">Orbit of the controlled vessel.</param>
+        /// <param name="targetOrbit">Orbit of the target vessel.</param>
+        /// <param name="beginTime">Time to begin search, which continues for
+        /// one orbital period from this time.</param>
+        /// <param name="distance">The distance at the closest approach, in meters.</param>
+        /// <returns>The universal time at closest approach, in seconds.</returns>
         [SuppressMessage ("Gendarme.Rules.Design", "AvoidRefAndOutParametersRule")]
         public static double CalcClosestAproach(Orbit myOrbit, Orbit targetOrbit, double beginTime, out double distance)
         {
@@ -540,7 +563,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Relative inclination of the given target vessels orbit.
+        /// Relative inclination of this orbit and the orbit of the given target vessel, in radians.
         /// </summary>
         /// <param name="target">Target vessel.</param>
         [KRPCMethod]

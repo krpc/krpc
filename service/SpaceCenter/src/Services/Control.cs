@@ -346,6 +346,20 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Sets the behavior of the pitch, yaw, roll and translation control inputs.
+        /// When set to additive, these inputs are added to the vessels current inputs.
+        /// This mode is the default.
+        /// When set to override, these inputs (if non-zero) override the vessels inputs.
+        /// This mode prevents keyboard control, or SAS, from interfering with the controls when
+        /// they are set.
+        /// </summary>
+        [KRPCProperty]
+        public ControlInputMode InputMode {
+            get { return PilotAddon.Set (InternalVessel).InputMode; }
+            set { PilotAddon.Set (InternalVessel).InputMode = value; }
+        }
+
+        /// <summary>
         /// The state of the pitch control.
         /// A value between -1 and 1.
         /// Equivalent to the w and s keys.

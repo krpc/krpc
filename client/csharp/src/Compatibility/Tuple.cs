@@ -1,4 +1,4 @@
-﻿#if NET35
+#if NET35
 /*[[[cog
 import cog
 import itertools

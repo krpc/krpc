@@ -83,7 +83,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The total amount of the underlying resource currently reachable given resource flow rules.
+        /// The total amount of the underlying resource currently reachable given
+        /// resource flow rules.
         /// </summary>
         // TODO: units?
         [KRPCProperty]
@@ -93,7 +94,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The total vehicle capacity for the underlying propellant resource, restricted by resource flow rules.
+        /// The total vehicle capacity for the underlying propellant resource,
+        /// restricted by resource flow rules.
         /// </summary>
         // TODO: units?
         [KRPCProperty]
@@ -103,7 +105,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// If this propellant should be ignored when calculating required mass flow given specific impulse.
+        /// If this propellant should be ignored when calculating required mass flow
+        /// given specific impulse.
         /// </summary>
         // TODO: units?
         [KRPCProperty]

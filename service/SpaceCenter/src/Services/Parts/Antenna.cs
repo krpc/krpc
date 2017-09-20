@@ -157,7 +157,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the antenna can be combined with other antennae on the vessel to boost the power.
+        /// Whether the antenna can be combined with other antennae on the vessel
+        /// to boost the power.
         /// </summary>
         [KRPCProperty]
         public bool Combinable {
