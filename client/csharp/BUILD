@@ -79,7 +79,6 @@ csharp_library(
     name = 'KRPC.Client',
     srcs = srcs,
     deps = deps,
-    nowarn = ['1573'],
     visibility = ['//visibility:public']
 )
 
@@ -88,7 +87,6 @@ csharp_library(
     srcs = srcs,
     deps = deps_net35,
     define = ['NET35'],
-    nowarn = ['1573'],
     visibility = ['//visibility:public']
 )
 
@@ -201,7 +199,6 @@ csharp_library(
     name = 'KRPC.Client.Debug',
     srcs = srcs,
     deps = deps,
-    nowarn = ['1573'],
     optimize = False,
     define = ['CODE_ANALYSIS']
 )
