@@ -1,7 +1,7 @@
 import re
 from krpc.schema.KRPC_pb2 import Type
 
-_CAMEL_CASE_REGEX = re.compile(r'([a-z]+|[A-Z][^A-Z]*)')
+_CAMEL_CASE_REGEX = re.compile(r'([^A-Z]+|[A-Z][^A-Z]*)')
 
 
 def lower_camel_case(string):
