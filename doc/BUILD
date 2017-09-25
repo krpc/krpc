@@ -305,7 +305,7 @@ java_import(
 
 java_binary_multiple(
     name = 'compile-scripts-java',
-    srcs = glob(['src/scripts/*.java']),
+    srcs = glob(['src/scripts/**/*.java']),
     deps = [
         '//client/java:krpc-jar',
         ':javaprotobuf',

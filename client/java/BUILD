@@ -3,7 +3,7 @@ load('/tools/build/client_test', 'client_test')
 load('/tools/build/java', 'java_checkstyle_test')
 load('/config', 'version')
 
-copts = ['-Werror', '-Xlint:all', '-target 1.7', '-source 1.7']
+copts = ['-Werror', '-Xlint:all', '-target 1.8', '-source 1.8']
 
 filegroup(
     name = 'java',

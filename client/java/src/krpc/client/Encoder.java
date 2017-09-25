@@ -149,13 +149,15 @@ public class Encoder {
           return decodeMessage(KRPC.Services.newBuilder(), data);
         case STREAM:
           return decodeMessage(KRPC.Stream.newBuilder(), data);
+        case EVENT:
+          return new Event(connection, KRPC.Event.newBuilder().mergeFrom(data).build());
         case STATUS:
           return decodeMessage(KRPC.Status.newBuilder(), data);
         default:
           throw new EncodingException("Failed to decode value");
       }
     } catch (IOException exn) {
-      throw new EncodingException("Failed to encode value", exn);
+      throw new EncodingException("Failed to decode value", exn);
     }
   }
 
@@ -336,7 +338,7 @@ public class Encoder {
     return stream.readByteArray();
   }
 
-  @SuppressWarnings({ "unchecked" })
+  @SuppressWarnings("unchecked")
   static <T> T decodeObject(ByteString data, KRPC.Type type, Connection connection)
       throws IOException {
     try {
@@ -358,7 +360,7 @@ public class Encoder {
     }
   }
 
-  @SuppressWarnings({ "unchecked" })
+  @SuppressWarnings("unchecked")
   static <T> T decodeEnum(ByteString data, KRPC.Type type) {
     try {
       int value = decodeSInt32(data);
@@ -413,7 +415,7 @@ public class Encoder {
     }
   }
 
-  @SuppressWarnings({ "unchecked" })
+  @SuppressWarnings("unchecked")
   static <T> List<T> decodeList(ByteString data, KRPC.Type valueType, Connection connection)
       throws IOException {
     KRPC.List listMessage = KRPC.List.newBuilder().mergeFrom(data).build();
@@ -424,7 +426,7 @@ public class Encoder {
     return list;
   }
 
-  @SuppressWarnings({ "unchecked" })
+  @SuppressWarnings("unchecked")
   static <T> Set<T> decodeSet(ByteString data, KRPC.Type valueType, Connection connection)
       throws IOException {
     KRPC.Set setMessage = KRPC.Set.newBuilder().mergeFrom(data).build();
@@ -435,7 +437,7 @@ public class Encoder {
     return set;
   }
 
-  @SuppressWarnings({ "unchecked" })
+  @SuppressWarnings("unchecked")
   static <K, V> Map<K, V> decodeDictionary(ByteString data, KRPC.Type keyType, KRPC.Type valueType,
                                            Connection connection) throws IOException {
     KRPC.Dictionary dictionaryMessage = KRPC.Dictionary.newBuilder().mergeFrom(data).build();

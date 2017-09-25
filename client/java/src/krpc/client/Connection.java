@@ -23,7 +23,7 @@ public class Connection {
   private Socket rpcSocket;
   private CodedOutputStream rpcOutputStream;
   private CodedInputStream rpcInputStream;
-  private StreamManager streamManager;
+  StreamManager streamManager;
 
   private static String EMPTY_NAME = "";
   private static InetAddress DEFAULT_ADDRESS = InetAddress.getLoopbackAddress();
@@ -325,11 +325,8 @@ public class Connection {
    */
   public <T> Stream<T> addStream(Class<?> clazz, String method, Object... args)
       throws StreamException, RPCException {
-    try {
-      return internalAddStream(clazz, null, method, args);
-    } catch (IOException exn) {
-      throw new StreamException("Failed to add stream", exn);
-    }
+    Method methodInfo = getMethodByName(clazz, method, args);
+    return new Stream<T>(this, getReturnType(methodInfo), getCall(methodInfo, null, args));
   }
 
   /**
@@ -346,62 +343,60 @@ public class Connection {
    */
   public <T> Stream<T> addStream(RemoteObject instance, String method, Object... args)
       throws StreamException, RPCException {
-    try {
-      return internalAddStream(instance.getClass(), instance, method, args);
-    } catch (IOException exn) {
-      throw new StreamException("Failed to add stream", exn);
-    }
+    Method methodInfo = getMethodByName(instance.getClass(), method, args);
+    return new Stream<T>(this, getReturnType(methodInfo), getCall(methodInfo, instance, args));
   }
 
-  private <T> Stream<T> internalAddStream(
-      Class<?> clazz, Object instance, String methodName, Object... args)
-      throws StreamException, RPCException, IOException {
-    Method[] methods = clazz.getMethods();
-    for (Method method : methods) {
-      if (method.getName() == methodName) {
-        Class<?>[] paramTypes = method.getParameterTypes();
-        if (args.length != paramTypes.length) {
-          continue;
-        }
-        for (int i = 0; i < args.length; i++) {
-          if (!paramTypes[i].isAssignableFrom(args.getClass())) {
-            continue;
-          }
-        }
-        return internalAddStream(method, instance, args);
-      }
-    }
-    String params = "";
-    for (int i = 0; i < args.length; i++) {
-      if (i > 0) {
-        params += ",";
-      }
-      params += args[i].getClass().toString();
-    }
-    throw new StreamException(
-      "Failed to add stream. "
-      + "Method " + clazz.getName() + "." + methodName + "(" + params + ") not found.");
+  /**
+   * Get the procedure call message for a static method call.
+   *
+   * @param clazz
+   *            The class containing the static method.
+   * @param method
+   *            The name of the static method.
+   * @param args
+   *            The arguments to pass to the method.
+   *
+   * @return A procedure call message.
+   */
+  public KRPC.ProcedureCall getCall(Class<?> clazz, String method, Object... args)
+      throws RPCException {
+    return getCall(getMethodByName(clazz, method, args), null, args);
   }
 
-  private <T> Stream<T> internalAddStream(Method method, Object instance, Object... args)
-      throws StreamException, RPCException, IOException {
-    KRPC.Type returnType;
+  /**
+   * Get the procedure call message for a method call on an object.
+   *
+   * @param instance
+   *            An instance of the object.
+   * @param method
+   *            The name of the method.
+   * @param args
+   *            The arguments to pass to the method.
+   *
+   * @return A procedure call message.
+   */
+  public KRPC.ProcedureCall getCall(RemoteObject instance, String method, Object... args)
+      throws RPCException {
+    return getCall(getMethodByName(instance.getClass(), method, args), instance, args);
+  }
+
+  private KRPC.ProcedureCall getCall(Method method, Object instance, Object... args)
+      throws RPCException {
     KRPC.Type[] parameterTypes;
     RPCInfo info = method.getAnnotation(RPCInfo.class);
     if (info == null) {
-      throw new StreamException("Failed to add stream. Method is not an RPC.");
+      throw new RPCException("Method is not a remote procedure call");
     }
     try {
-      Method getReturnType = info.types().getMethod("getReturnType", String.class);
       Method getParameterTypes = info.types().getMethod("getParameterTypes", String.class);
-      returnType = (KRPC.Type) getReturnType.invoke(null, info.procedure());
       parameterTypes = (KRPC.Type[]) getParameterTypes.invoke(null, info.procedure());
     } catch (NoSuchMethodException exn) {
-      throw new StreamException("Failed to add stream", exn);
+      throw new RPCException("Failed to get procedure call message", exn);
     } catch (IllegalAccessException exn) {
-      throw new StreamException("Failed to add stream", exn);
+      throw new RPCException("Failed to get procedure call message", exn);
     } catch (InvocationTargetException exn) {
-      throw new StreamException("Failed to add stream", exn);
+      throw new RPCException("Failed to get procedure call message", exn);
     }
 
     if (instance == null && Modifier.isStatic(method.getModifiers())) {
@@ -416,12 +411,59 @@ public class Connection {
     }
 
     if (args.length != parameterTypes.length) {
-      throw new StreamException("Failed to add stream. Incorrect number of arguments.");
+      throw new RPCException("Incorrect number of arguments to remote procedure call");
     }
     ByteString[] encodedArgs = new ByteString[args.length];
     for (int i = 0; i < args.length; i++) {
       encodedArgs[i] = Encoder.encode(args[i], parameterTypes[i]);
     }
-    return streamManager.add(buildCall(method, encodedArgs), returnType);
+    return buildCall(method, encodedArgs);
+  }
+
+  private KRPC.Type getReturnType(Method method)
+      throws RPCException {
+    KRPC.Type returnType;
+    RPCInfo info = method.getAnnotation(RPCInfo.class);
+    if (info == null) {
+      throw new RPCException("Method is not a remote procedure call");
+    }
+    try {
+      Method getReturnType = info.types().getMethod("getReturnType", String.class);
+      return (KRPC.Type) getReturnType.invoke(null, info.procedure());
+    } catch (NoSuchMethodException exn) {
+      throw new RPCException("Failed to get procedure call message", exn);
+    } catch (IllegalAccessException exn) {
+      throw new RPCException("Failed to get procedure call message", exn);
+    } catch (InvocationTargetException exn) {
+      throw new RPCException("Failed to get procedure call message", exn);
+    }
+  }
+
+  private Method getMethodByName(Class<?> clazz, String methodName, Object... args)
+      throws RPCException {
+    Method[] methods = clazz.getMethods();
+    for (Method method : methods) {
+      if (method.getName() == methodName) {
+        Class<?>[] paramTypes = method.getParameterTypes();
+        if (args.length != paramTypes.length) {
+          continue;
+        }
+        for (int i = 0; i < args.length; i++) {
+          if (!paramTypes[i].isAssignableFrom(args.getClass())) {
+            continue;
+          }
+        }
+        return method;
+      }
+    }
+    String params = "";
+    for (int i = 0; i < args.length; i++) {
+      if (i > 0) {
+        params += ",";
+      }
+      params += args[i].getClass().toString();
+    }
+    throw new RPCException(
+      "Method " + clazz.getName() + "." + methodName + "(" + params + ") not found.");
   }
 }
