@@ -39,7 +39,7 @@
 {% endmacro %}
 
 {% macro procedure(x) %}{{ mark_documented(x) }}
-.. function:: {{ domain.return_type(x.return_type) }} {{ x.name | snakecase }}({{ parameters(x.parameters) }})
+.. function:: {{ domain.return_type(x.return_type) }} {{ domain.method_name(x.name) | snakecase }}({{ parameters(x.parameters) }})
 
 {{ gendoc(x.documentation) | indent }}
 
@@ -56,7 +56,7 @@
 
 {% macro property(x) %}{{ mark_documented(x) }}
 {% if x.getter != None %}
-.. function:: {{ domain.return_type(x.type) }} {{ x.name | snakecase }}()
+.. function:: {{ domain.return_type(x.type) }} {{ domain.method_name(x.name) | snakecase }}()
 {% endif %}
 {% if x.setter != None %}
 .. function:: void set_{{ x.name | snakecase }}({{ domain.parameter_type(x.type) }} value)
@@ -75,7 +75,7 @@
 {% endmacro %}
 
 {% macro class_method(x) %}{{ mark_documented(x) }}
-.. function:: {{ domain.return_type(x.return_type) }} {{ x.name | snakecase }}({{ parameters(x.parameters[1:]) }})
+.. function:: {{ domain.return_type(x.return_type) }} {{ domain.method_name(x.name) | snakecase }}({{ parameters(x.parameters[1:]) }})
 
 {{ gendoc(x.documentation) | indent }}
 
@@ -91,7 +91,7 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. function:: static {{ domain.return_type(x.return_type) }} {{ x.name | snakecase }}(Client& connection{% if x.parameters | length > 0 %}, {% endif %}{{ parameters(x.parameters) }})
+.. function:: static {{ domain.return_type(x.return_type) }} {{ domain.method_name(x.name) | snakecase }}(Client& connection{% if x.parameters | length > 0 %}, {% endif %}{{ parameters(x.parameters) }})
 
 {{ gendoc(x.documentation) | indent }}
 
