@@ -11,7 +11,7 @@ namespace KRPC.Test.Service
         [Test]
         public void GetVersion ()
         {
-            var status = KRPC.Service.KRPC.GetStatus ();
+            var status = KRPC.Service.KRPC.KRPC.GetStatus ();
             Assert.AreNotEqual (string.Empty, status.Version);
         }
 
@@ -20,13 +20,13 @@ namespace KRPC.Test.Service
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void GetServices ()
         {
-            var services = KRPC.Service.KRPC.GetServices ();
+            var services = KRPC.Service.KRPC.KRPC.GetServices ();
             Assert.IsNotNull (services);
             Assert.AreEqual (4, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (9, service.Procedures.Count);
-            Assert.AreEqual (0, service.Classes.Count);
+            Assert.AreEqual (36, service.Procedures.Count);
+            Assert.AreEqual (1, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
 
             int foundProcedures = 0;
@@ -68,11 +68,11 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "get_CurrentGameScene") {
-                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.KRPC.GameScene));
+                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.KRPC.KRPC.GameScene));
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else {
-                    Assert.Fail ();
+                    foundProcedures--;
                 }
                 foundProcedures++;
             }

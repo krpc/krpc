@@ -162,7 +162,12 @@
     <Compile Include="Service\EventStream.cs" />
     <Compile Include="Service\GameScene.cs" />
     <Compile Include="Service\IProcedureHandler.cs" />
-    <Compile Include="Service\KRPC.cs" />
+    <Compile Include="Service\KRPC\ArgumentException.cs" />
+    <Compile Include="Service\KRPC\ArgumentNullException.cs" />
+    <Compile Include="Service\KRPC\ArgumentOutOfRangeException.cs" />
+    <Compile Include="Service\KRPC\Expression.cs" />
+    <Compile Include="Service\KRPC\InvalidOperationException.cs" />
+    <Compile Include="Service\KRPC\KRPC.cs" />
     <Compile Include="Service\Messages\Argument.cs" />
     <Compile Include="Service\Messages\Class.cs" />
     <Compile Include="Service\Messages\Enumeration.cs" />

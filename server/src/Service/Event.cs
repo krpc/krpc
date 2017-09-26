@@ -1,9 +1,10 @@
 using System;
 using KRPC;
+using KRPC.Continuations;
+using KRPC.Server;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using KRPC.Service.Scanner;
-using KRPC.Server;
 using KRPC.Utils;
 
 namespace KRPC.Service
@@ -29,12 +30,23 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Create an event stream, that calls a continuation when it updates to
+        /// determine if the event is triggered.
+        /// </summary>
+        public Event (Continuation<bool> continuation)
+        {
+            stream = new EventStream (continuation);
+            client = CallContext.Client;
+            streamId = Core.Instance.AddStream (client, stream);
+            Message = new Messages.Event (new Messages.Stream (streamId));
+        }
+
+        /// <summary>
         /// Trigger the event.
         /// </summary>
         public void Trigger ()
         {
-            stream.Result.Value = true;
-            stream.Changed = true;
+            stream.Trigger();
         }
 
         /// <summary>
