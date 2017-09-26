@@ -531,8 +531,10 @@ namespace KRPC
                     // Update streams
                     bool changed = false;
                     foreach (var stream in clientStreams) {
-                      stream.Update ();
-                      changed |= stream.Changed;
+                        if (stream.Started) {
+                            stream.Update();
+                            changed |= stream.Changed;
+                        }
                     }
                     // If anything changed, produce an update
                     if (changed) {
@@ -597,6 +599,17 @@ namespace KRPC
             Logger.WriteLine ("Added stream for client " + streamClient.Address, Logger.Severity.Debug);
             StreamRPCs++;
             return streamId;
+        }
+
+        internal void StartStream(IClient rpcClient, ulong streamId)
+        {
+            var id = rpcClient.Guid;
+            if (!streamClients.ContainsKey(id))
+                throw new InvalidOperationException("No stream client is connected for this RPC client");
+            var streamClient = streamClients[id];
+
+            streams [streamClient] [streamId].Start ();
+            Logger.WriteLine("Started stream for client " + streamClient.Address, Logger.Severity.Debug);
         }
 
         /// <summary>

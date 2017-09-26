@@ -21,6 +21,11 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Whether the stream has been started.
+        /// </summary>
+        public bool Started { get; private set; }
+
+        /// <summary>
         /// The value of the stream.
         /// </summary>
         public virtual ProcedureResult Result {
@@ -40,6 +45,15 @@ namespace KRPC.Service
         protected Stream ()
         {
             StreamResult = new StreamResult ();
+            Started = false;
+        }
+
+        /// <summary>
+        /// Start the stream.
+        /// </summary>
+        public void Start()
+        {
+            Started = true;
         }
 
         /// <summary>

@@ -190,10 +190,23 @@ namespace KRPC.Service
         /// Add a streaming request and return its identifier.
         /// </summary>
         [KRPCProcedure]
-        public static Messages.Stream AddStream (ProcedureCall call)
+        public static Messages.Stream AddStream (ProcedureCall call, bool start = true)
         {
-            var stream = new ProcedureCallStream (call);
-            return new Messages.Stream (Core.Instance.AddStream (CallContext.Client, stream, false));
+            var callStream = new ProcedureCallStream (call);
+            var core = Core.Instance;
+            var stream = new Messages.Stream (core.AddStream (CallContext.Client, callStream, false));
+            if (start)
+                core.StartStream (CallContext.Client, stream.Id);
+            return stream;
+        }
+
+        /// <summary>
+        /// Start a previously added streaming request.
+        /// </summary>
+        [KRPCProcedure]
+        public static void StartStream (ulong id)
+        {
+            Core.Instance.StartStream (CallContext.Client, id);
         }
 
         /// <summary>

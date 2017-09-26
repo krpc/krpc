@@ -8,6 +8,7 @@ v0.4.0
    * Significantly reduced the size of the message returned by GetServices
    * More compact encoding of signed integers
  * Added ability for RPCs to throw custom exception types in the calling client
+ * Add start flag to KRPC.AddStream and add KRPC.StartStream. Allows streams to be added but not started until a later time
  * If a stream returns an error, it is removed from the server automatically (#269)
  * Add support for streaming RPCs that yield execution to a future game update
  * Add KRPC.GetClientID and KRPC.GetClientName

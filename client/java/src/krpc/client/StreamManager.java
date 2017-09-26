@@ -40,7 +40,7 @@ class StreamManager {
   }
 
   <T> Stream<T> add(ProcedureCall call, Type type) throws RPCException {
-    long id = krpc.addStream(call).getId();
+    long id = krpc.addStream(call, true).getId();
     synchronized (streamData) {
       if (!streamTypes.containsKey(id)) {
         streamTypes.put(id, type);

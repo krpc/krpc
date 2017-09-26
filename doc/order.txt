@@ -12,6 +12,7 @@ KRPC.GameScene.TrackingStation
 KRPC.GameScene.EditorVAB
 KRPC.GameScene.EditorSPH
 KRPC.AddStream
+KRPC.StartStream
 KRPC.RemoveStream
 KRPC.InvalidOperationException
 KRPC.ArgumentException
