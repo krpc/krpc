@@ -2,13 +2,15 @@ from contextlib import contextmanager
 import itertools
 import threading
 from krpc.error import StreamError
+from krpc.event import Event
 from krpc.types import Types, DefaultArgument
 from krpc.service import create_service
+from krpc.streammanager import StreamManager
 from krpc.encoder import Encoder
 from krpc.decoder import Decoder
 from krpc.utils import snake_case
 from krpc.error import RPCError
-import krpc.stream
+import krpc.streammanager
 import krpc.schema.KRPC_pb2 as KRPC
 
 
@@ -25,8 +27,7 @@ class Client(object):
         self._rpc_connection = rpc_connection
         self._rpc_connection_lock = threading.Lock()
         self._stream_connection = stream_connection
-        self._stream_cache = {}
-        self._stream_cache_lock = threading.Lock()
+        self._stream_manager = StreamManager(self)
 
         # Get the services
         services = self._invoke('KRPC', 'GetServices', [], [], [],
@@ -41,9 +42,9 @@ class Client(object):
         if stream_connection is not None:
             self._stream_thread_stop = threading.Event()
             self._stream_thread = threading.Thread(
-                target=krpc.stream.update_thread,
-                args=(self, stream_connection, self._stream_thread_stop,
-                      self._stream_cache, self._stream_cache_lock))
+                target=krpc.streammanager.update_thread,
+                args=(self._stream_manager, stream_connection,
+                      self._stream_thread_stop))
             self._stream_thread.daemon = True
             self._stream_thread.start()
         else:
@@ -62,18 +63,58 @@ class Client(object):
         self.close()
 
     def add_stream(self, func, *args, **kwargs):
+        """ Add a stream to the server """
         if self._stream_connection is None:
             raise StreamError('Not connected to stream server')
-        return krpc.stream.add_stream(self, func, *args, **kwargs)
+        if func == setattr:
+            raise StreamError('Cannot stream a property setter')
+        return_type = self._get_return_type(func, *args, **kwargs)
+        call = self.get_call(func, *args, **kwargs)
+        return krpc.stream.Stream.from_call(self, return_type, call)
 
     @contextmanager
     def stream(self, func, *args, **kwargs):
-        """ 'with' support """
+        """ 'with' support for add_stream """
         stream = self.add_stream(func, *args, **kwargs)
         try:
             yield stream
         finally:
             stream.remove()
+
+    @staticmethod
+    def get_call(func, *args, **kwargs):
+        """ Convert a remote procedure call to a KRPC.ProcedureCall message """
+        if func == getattr:
+            # A property or class property getter
+            attr = func(args[0].__class__, args[1])
+            return attr.fget._build_call(args[0])
+        elif func == setattr:
+            # A property setter
+            raise StreamError('Cannot create a call for a property setter')
+        elif hasattr(func, '__self__'):
+            # A method
+            return func._build_call(func.__self__, *args, **kwargs)
+        else:
+            # A class method
+            return func._build_call(*args, **kwargs)
+
+    @staticmethod
+    def _get_return_type(func, *args,
+                         **kwargs):  # pylint: disable=unused-argument
+        """ Get the return type for a remote procedure call """
+        if func == getattr:
+            # A property or class property getter
+            attr = func(args[0].__class__, args[1])
+            return attr.fget._return_type
+        elif func == setattr:
+            # A property setter
+            raise StreamError('Cannot get return type for a property setter')
+        elif hasattr(func, '__self__'):
+            # A method
+            return func._return_type
+        else:
+            # A class method
+            return func._return_type
 
     def _invoke(self, service, procedure, args,
                 param_names, param_types, return_type):
@@ -102,6 +143,8 @@ class Client(object):
         result = None
         if return_type is not None:
             result = Decoder.decode(response.results[0].value, return_type)
+            if isinstance(result, KRPC.Event):
+                result = Event(self, result)
         return result
 
     def _build_call(self, service, procedure, args,

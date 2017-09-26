@@ -97,6 +97,7 @@ quickload
 quicksave
 radians
 rect
+rethrow
 rsvg
 runtime
 serializable

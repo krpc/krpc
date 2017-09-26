@@ -1,4 +1,5 @@
 import unittest
+import threading
 import time
 from krpc.error import StreamError
 from krpc.test.servertestcase import ServerTestCase
@@ -151,19 +152,30 @@ class TestStream(ServerTestCase, unittest.TestCase):
     def test_add_stream_twice(self):
         s0 = self.conn.add_stream(
             self.conn.test_service.int32_to_string, 42)
-        stream_id = s0._stream_id
+        stream_impl = s0._stream
         self.assertEqual('42', s0())
         self.wait()
         self.assertEqual('42', s0())
 
         s1 = self.conn.add_stream(
             self.conn.test_service.int32_to_string, 42)
-        self.assertEqual(stream_id, s1._stream_id)
+        self.assertEqual(stream_impl, s1._stream)
         self.assertEqual('42', s0())
         self.assertEqual('42', s1())
         self.wait()
         self.assertEqual('42', s0())
         self.assertEqual('42', s1())
+
+        s2 = self.conn.add_stream(
+            self.conn.test_service.int32_to_string, 43)
+        self.assertNotEqual(stream_impl, s2._stream)
+        self.assertEqual('42', s0())
+        self.assertEqual('42', s1())
+        self.assertEqual('43', s2())
+        self.wait()
+        self.assertEqual('42', s0())
+        self.assertEqual('42', s1())
+        self.assertEqual('43', s2())
 
     def test_invalid_operation_exception_immediately(self):
         stream = self.conn.add_stream(
@@ -210,6 +222,60 @@ class TestStream(ServerTestCase, unittest.TestCase):
         for _ in range(100):
             self.assertEqual(55, stream())
             self.wait()
+
+    def test_wait(self):
+        with self.conn.stream(self.conn.test_service.counter,
+                              "TestStream.test_wait") as x:
+            with x.condition:
+                count = x()
+                self.assertTrue(count < 10)
+                while count < 10:
+                    x.wait()
+                    count += 1
+                    self.assertEqual(count, x())
+
+    def test_wait_timeout_short(self):
+        with self.conn.stream(self.conn.test_service.counter,
+                              "TestStream.test_wait_timeout_short") as x:
+            with x.condition:
+                count = x()
+                x.wait(timeout=0)
+                self.assertEqual(count, x())
+
+    def test_wait_timeout_long(self):
+        with self.conn.stream(self.conn.test_service.counter,
+                              "TestStream.test_wait_timeout_long") as x:
+            with x.condition:
+                count = x()
+                self.assertTrue(count < 10)
+                while count < 10:
+                    x.wait(timeout=10)
+                    count += 1
+                    self.assertEqual(count, x())
+
+    test_callback_value = 0
+
+    def test_callback(self):
+        error = threading.Event()
+        stop = threading.Event()
+
+        def callback(x):
+            if x > 10:
+                stop.set()
+            elif self.test_callback_value+1 != x:
+                error.set()
+                stop.set()
+            else:
+                self.test_callback_value += 1
+
+        with self.conn.stream(self.conn.test_service.counter,
+                              "TestStream.test_callback") as x:
+            x.add_callback(callback)
+            x.start()
+            stop.wait(1)
+
+        self.assertTrue(stop.is_set())
+        self.assertFalse(error.is_set())
 
 
 if __name__ == '__main__':

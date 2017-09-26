@@ -323,7 +323,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_client_members(self):
         self.assertSetEqual(
-            set(['krpc', 'test_service', 'add_stream', 'stream', 'close']),
+            set(['krpc', 'test_service', 'stream', 'add_stream',
+                 'get_call', 'close']),
             set(x for x in dir(self.conn) if not x.startswith('_')))
 
     def test_krpc_service_members(self):

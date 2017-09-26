@@ -21,12 +21,12 @@ stage_files(
         'src/**/*.rst',
         'src/images/**/*.png',
         'src/crafts/*.craft',
-        'src/scripts/*.cs',
-        'src/scripts/*.cpp',
-        'src/scripts/*.java',
-        'src/scripts/*.lua',
-        'src/scripts/*.py',
-        'src/scripts/*.js'
+        'src/scripts/**/*.cs',
+        'src/scripts/**/*.cpp',
+        'src/scripts/**/*.java',
+        'src/scripts/**/*.lua',
+        'src/scripts/**/*.py',
+        'src/scripts/**/*.js'
     ]) + [
         ':conf',
         'src/_static/custom.css',
