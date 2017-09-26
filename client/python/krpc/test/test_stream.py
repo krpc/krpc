@@ -60,7 +60,8 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
     def test_counter(self):
         count = -1
-        with self.conn.stream(self.conn.test_service.counter) as x:
+        with self.conn.stream(self.conn.test_service.counter,
+                              "TestStream.test_counter") as x:
             for _ in range(5):
                 self.assertLess(count, x())
                 count = x()

@@ -92,7 +92,8 @@ public class StreamTest {
   public void testCounter()
       throws RPCException, StreamException, NoSuchMethodException {
     int count = -1;
-    Stream<Integer> stream = connection.addStream(TestService.class, "counter", 0);
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "counter", "StreamTest.testCounter");
     for (int i = 0; i < 5; i++) {
       assertTrue(count < stream.get());
       count = stream.get();

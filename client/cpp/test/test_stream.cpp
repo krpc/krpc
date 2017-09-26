@@ -74,7 +74,7 @@ TEST_F(test_stream, test_class_property) {
 
 TEST_F(test_stream, test_counter) {
   int count = -1;
-  auto x = test_service.counter_stream();
+  auto x = test_service.counter_stream("test_stream.test_counter");
   for (int i = 0; i < 5; i++) {
     ASSERT_LT(count, x());
     count = x();
@@ -235,8 +235,8 @@ TEST_F(test_stream, test_yield_exception) {
 }
 
 TEST_F(test_stream, test_stream_freeze) {
-  auto s0 = test_service.counter_stream(0);
-  auto s1 = test_service.counter_stream(1);
+  auto s0 = test_service.counter_stream("test_stream.test_stream_freeze.0");
+  auto s1 = test_service.counter_stream("test_stream.test_stream_freeze.1");
   auto x0 = s0();
   auto x1 = s1();
   wait();
@@ -257,7 +257,9 @@ TEST_F(test_stream, test_stream_freeze) {
 TEST_F(test_stream, test_stream_freeze_many) {
   std::vector<krpc::Stream<int>> streams;
   for (size_t i = 0; i < 1000; i++)
-    streams.push_back(test_service.counter_stream(i));
+    streams.push_back(
+      test_service.counter_stream(
+        "test_stream.test_stream_freeze_many."+std::to_string(i)));
   std::vector<int> values;
   for (auto stream : streams)
     values.push_back(stream());
@@ -277,7 +279,7 @@ TEST_F(test_stream, test_stream_freeze_many) {
 }
 
 TEST_F(test_stream, test_stream_stop_while_frozen) {
-  auto s = test_service.counter_stream(0);
+  auto s = test_service.counter_stream("test_stream.test_stream_stop_while_frozen");
   conn.freeze_streams();
 }
 
@@ -289,7 +291,7 @@ TEST_F(test_stream, test_default_constructable) {
 TEST_F(test_stream, test_assignable) {
   krpc::Stream<int> s;
   ASSERT_FALSE(s);
-  s = test_service.counter_stream(0);
+  s = test_service.counter_stream("test_stream.test_assignable");
   ASSERT_TRUE(s);
   wait();
   ASSERT_NE(s(), 0);
