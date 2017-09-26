@@ -90,7 +90,7 @@ http_archive(
 new_http_archive(
     name = 'cpp_asio',
     build_file = 'tools/build/cpp_asio.BUILD',
-    url = 'http://downloads.sourceforge.net/project/asio/asio/1.10.6%20%28Stable%29/asio-1.10.6.tar.gz',
+    url = 'https://s3.amazonaws.com/krpc/lib/asio/asio-1.10.6.tar.gz',
     strip_prefix = 'asio-1.10.6',
     sha256 = '70345ca9e372a119c361be5e7f846643ee90997da8f88ec73f7491db96e24bbe'
 )
