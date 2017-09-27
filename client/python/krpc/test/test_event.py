@@ -26,8 +26,9 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         event = self.conn.test_service.on_timer(200)
         with event.condition:
             start_time = time.time()
-            event.wait(0.01)
+            event.wait(0.1)
             self.assertLess(time.time()-start_time, 0.2)
+            self.assertGreater(time.time()-start_time, 0.1)
             self.assertFalse(event.stream())
             event.wait()
             self.assertTrue(event.stream())
