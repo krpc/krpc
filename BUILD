@@ -198,6 +198,20 @@ test_suite(
     ]
 )
 
+test_suite(
+    name = 'lint',
+    tests = [
+        '//server:lint',
+        '//client/csharp:lint',
+        '//client/cpp:lint',
+        '//client/java:lint',
+        '//client/python:lint',
+        '//client/websockets:lint',
+        '//tools/krpctest:lint',
+        '//doc:lint'
+    ]
+)
+
 filegroup(
     name = 'csproj',
     srcs = [

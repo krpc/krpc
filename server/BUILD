@@ -11,13 +11,17 @@ filegroup(
 
 test_suite(
     name = 'test',
-    tests = [':test-KRPC', ':gendarme-KRPC', ':gendarme-KRPC.Test'],
-    visibility = ['//:__pkg__']
+    tests = [':test-KRPC', ':lint']
 )
 
 test_suite(
     name = 'ci-test',
     tests = [':test-KRPC']
+)
+
+test_suite(
+    name = 'lint',
+    tests = [':gendarme-KRPC', ':gendarme-KRPC.Test']
 )
 
 genrule(

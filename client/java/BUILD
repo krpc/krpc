@@ -75,7 +75,7 @@ java_test(
 
 test_suite(
     name = 'test',
-    tests = [':client', ':checkstyle']
+    tests = [':client', ':lint']
 )
 
 test_suite(
@@ -93,7 +93,7 @@ client_test(
 )
 
 java_checkstyle_test(
-    name = 'checkstyle',
+    name = 'lint',
     srcs = glob(['**/*.java']),
     size = 'small'
 )
