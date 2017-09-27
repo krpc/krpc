@@ -20,21 +20,6 @@ genrule(
     visibility = ['//visibility:public']
 )
 
-java_import(
-    name = 'protobuf',
-    jars = ['@java_protobuf//file'],
-)
-
-java_import(
-    name = 'javatuples',
-    jars = ['@java_javatuples//file']
-)
-
-java_import(
-    name = 'junit',
-    jars = ['@java_junit//file', '@java_hamcrest//file']
-)
-
 java_library(
     name = 'krpc',
     srcs = glob(['src/krpc/**/*.java']) + [
@@ -52,8 +37,8 @@ java_library(
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
     ],
     deps = [
-        ':protobuf',
-        ':javatuples'
+        '@java_protobuf//jar',
+        '@java_javatuples//jar'
     ],
     javacopts = copts,
     visibility = ['//visibility:public']
@@ -64,9 +49,10 @@ java_library(
     srcs = glob(['test/**/*.java']) + [':services-testservice'],
     deps = [
         ':krpc',
-        ':protobuf',
-        ':junit',
-        ':javatuples'
+        '@java_protobuf//jar',
+        '@java_junit//jar',
+        '@java_hamcrest//jar',
+        '@java_javatuples//jar'
     ],
     javacopts = copts
 )
@@ -77,9 +63,10 @@ java_test(
     runtime_deps = [
         ':krpc',
         ':testlib',
-        ':protobuf',
-        ':junit',
-        ':javatuples'
+        '@java_protobuf//jar',
+        '@java_junit//jar',
+        '@java_hamcrest//jar',
+        '@java_javatuples//jar'
     ],
     javacopts = copts,
     size = 'small',

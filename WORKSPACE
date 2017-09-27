@@ -2,28 +2,28 @@ workspace(name = "krpc")
 
 new_http_archive(
     name = 'protoc_linux_x86_32',
-    build_file = 'tools/build/protobuf/protoc_linux_x86_32.BUILD',
+    build_file_content = "exports_files(['bin/protoc'])",
     url = 'https://github.com/google/protobuf/releases/download/v3.4.0/protoc-3.4.0-linux-x86_32.zip',
     sha256 = '6cacb05eb9aa7690b85db7fc3c4c9124751c4ecfb4f20d2e6f61eda2b1b789d3'
 )
 
 new_http_archive(
     name = 'protoc_linux_x86_64',
-    build_file = 'tools/build/protobuf/protoc_linux_x86_64.BUILD',
+    build_file_content = "exports_files(['bin/protoc'])",
     url = 'https://github.com/google/protobuf/releases/download/v3.4.0/protoc-3.4.0-linux-x86_64.zip',
     sha256 = 'e4b51de1b75813e62d6ecdde582efa798586e09b5beaebfb866ae7c9eaadace4'
 )
 
 new_http_archive(
     name = 'protoc_osx_x86_32',
-    build_file = 'tools/build/protobuf/protoc_osx_x86_32.BUILD',
+    build_file_content = "exports_files(['bin/protoc'])",
     url = 'https://github.com/google/protobuf/releases/download/v3.4.0/protoc-3.4.0-osx-x86_32.zip',
     sha256 = '8601d7c7afb727ca31c42597a7863a7071ebdf59d3d35b31320379eaa55e23f9'
 )
 
 new_http_archive(
     name = 'protoc_win32',
-    build_file = 'tools/build/protobuf/protoc_win32.BUILD',
+    build_file_content = "exports_files(['bin/protoc.exe'])",
     url = 'https://github.com/google/protobuf/releases/download/v3.4.0/protoc-3.4.0-win32.zip',
     sha256 = '7d8a42ae38fec3ca09833ea16f1d83a049f0580929c3b057042e006105ad864b'
 )
@@ -36,7 +36,7 @@ http_file(
 
 new_http_archive(
     name = 'csharp_protobuf',
-    build_file = 'tools/build/csharp_protobuf.BUILD',
+    build_file_content = "exports_files(['lib/net451/Google.Protobuf.dll'])",
     url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.4.0',
     type = 'zip',
     sha256 = 'dfd91888be6ec88af5649407cae4897f0d6793344355c4ba6f3d056c7767409e'
@@ -50,7 +50,25 @@ http_file(
 
 new_http_archive(
     name = 'csharp_nunit',
-    build_file = 'tools/build/csharp_nunit.BUILD',
+    build_file_content = """
+filegroup(
+    name = 'nunit_exe',
+    srcs = ['bin/nunit-console.exe'],
+    visibility = ['//visibility:public'],
+)
+
+filegroup(
+    name = 'nunit_exe_libs',
+    srcs = glob(['bin/lib/*.dll']),
+    visibility = ['//visibility:public'],
+)
+
+filegroup(
+    name = 'nunit_framework',
+    srcs = glob(['bin/framework/*.dll']),
+    visibility = ['//visibility:public'],
+)
+""",
     url = 'https://github.com/nunit/nunitv2/releases/download/2.6.4/NUnit-2.6.4.zip',
     sha256 = '1bd925514f31e7729ccde40a38a512c2accd86895f93465f3dfe6d0b593d7170',
     strip_prefix = 'NUnit-2.6.4'
@@ -58,7 +76,7 @@ new_http_archive(
 
 new_http_archive(
     name = 'csharp_moq',
-    build_file = 'tools/build/csharp_moq.BUILD',
+    build_file_content = "exports_files(['lib/net40/Moq.dll'])",
     url = 'http://www.nuget.org/api/v2/package/Moq/4.2.1510.2205',
     type = 'zip',
     sha256 = '1f4978e0a3f5b8d82b41635eff8201e5e7021b1fc1aceae4d9caeb79506f3804'
@@ -66,7 +84,7 @@ new_http_archive(
 
 new_http_archive(
     name = 'csharp_json',
-    build_file = 'tools/build/csharp_json.BUILD',
+    build_file_content = "exports_files(['lib/net35/Newtonsoft.Json.dll', 'lib/net45/Newtonsoft.Json.dll'])",
     url = 'https://www.nuget.org/api/v2/package/Newtonsoft.Json/9.0.1',
     type = 'zip',
     sha256 = '23405c5a3814347fb952b74dec0d836b5b63832c02552e17e0b10f88ab555ee1'
@@ -74,7 +92,7 @@ new_http_archive(
 
 new_http_archive(
     name = 'csharp_options',
-    build_file = 'tools/build/csharp_options.BUILD',
+    build_file_content = "exports_files(['lib/NDesk.Options.dll'])",
     url = 'https://www.nuget.org/api/v2/package/NDesk.Options/0.2.1',
     type = 'zip',
     sha256 = 'f7cad7f76b9a738930496310ea47888529fbfd0a39896bdfd3cfd17fd385f53b'
@@ -89,7 +107,14 @@ http_archive(
 
 new_http_archive(
     name = 'cpp_asio',
-    build_file = 'tools/build/cpp_asio.BUILD',
+    build_file_content = """
+cc_library(
+    name = 'asio',
+    hdrs = glob(['include/*', 'include/**/*']),
+    includes = ['include'],
+    visibility = ['//visibility:public']
+)
+""",
     url = 'https://s3.amazonaws.com/krpc/lib/asio/asio-1.10.6.tar.gz',
     strip_prefix = 'asio-1.10.6',
     sha256 = '70345ca9e372a119c361be5e7f846643ee90997da8f88ec73f7491db96e24bbe'
@@ -97,7 +122,36 @@ new_http_archive(
 
 new_http_archive(
     name = 'cpp_googletest',
-    build_file = 'tools/build/cpp_googletest.BUILD',
+    build_file_content = """
+cc_library(
+    name = 'gtest',
+    srcs = glob(['googletest/src/*.cc'], exclude = ['googletest/src/gtest-all.cc']),
+    hdrs = glob(['**/*.h', 'googletest/src/*.cc']),
+    includes = [
+        './',
+        'googletest',
+        'googletest/include',
+        'include'
+    ],
+    linkopts = ['-pthread'],
+    visibility = ['//visibility:public'],
+)
+
+cc_library(
+    name = 'gmock',
+    srcs = glob(['googlemock/src/*.cc'], exclude = ['googlemock/src/gmock-all.cc']),
+    hdrs = glob(['**/*.h', 'googlemock/src/*.cc']),
+    includes = [
+        './',
+        'googlemock',
+        'googlemock/include',
+        'include'
+    ],
+    deps = [':gtest'],
+    linkopts = ['-pthread'],
+    visibility = ['//visibility:public'],
+)
+""",
     url = 'https://github.com/google/googletest/archive/release-1.8.0.zip',
     strip_prefix = 'googletest-release-1.8.0',
     sha256 = 'f3ed3b58511efd272eb074a3a6d6fb79d7c2e6a0e374323d1e6bcbcc1ef141bf'
@@ -115,89 +169,89 @@ http_file(
     sha256 = '98a0053e6b3fda3243cca0a40e7d7b496cb05ce4716cf6f1663e86c8ad36f1e8'
 )
 
-http_file(
+maven_jar(
     name = 'java_protobuf',
-    url = 'https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.4.0/protobuf-java-3.4.0.jar',
-    sha256 = 'dce7e66b32456a1b1198da0caff3a8acb71548658391e798c79369241e6490a4'
+    artifact = 'com.google.protobuf:protobuf-java:3.4.0',
+    sha1 = 'b32aba0cbe737a4ca953f71688725972e3ee927c'
 )
 
-http_file(
+maven_jar(
     name = 'java_junit',
-    url = 'http://central.maven.org/maven2/junit/junit/4.12/junit-4.12.jar',
-    sha256 = '59721f0805e223d84b90677887d9ff567dc534d7c502ca903c0c2b17f05c116a'
+    artifact = 'junit:junit:4.12',
+    sha1 = '2973d150c0dc1fefe998f834810d68f278ea58ec'
 )
 
-http_file(
+maven_jar(
     name = 'java_hamcrest',
-    url = 'http://central.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar',
-    sha256 = '66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9'
+    artifact = 'org.hamcrest:hamcrest-core:1.3',
+    sha1 = '42a25dc3219429f0e5d060061f71acb49bf010a0'
 )
 
-http_file(
+maven_jar(
     name = 'java_checkstyle',
-    url = 'https://repo1.maven.org/maven2/com/puppycrawl/tools/checkstyle/7.1.2/checkstyle-7.1.2.jar',
-    sha256 = 'a3feec7285bda388a227da3bd19bffccc5dba8935c0a89abab82411dfb4f038c'
+    artifact = 'com.puppycrawl.tools:checkstyle:7.1.2',
+    sha1 = 'a140779aa6cf2dbe25187ad22b28e14e57e77f14'
 )
 
-new_http_archive(
+maven_jar(
     name = 'java_apache_commons_beanutils',
-    build_file = 'tools/build/java_apache_commons_beanutils.BUILD',
-    url = 'http://mirror.olnevhost.net/pub/apache/commons/beanutils/binaries/commons-beanutils-1.9.3-bin.zip',
-    sha256 = 'c0186fc504970019654466882e7daa64650cb53f7f303bd2546afb87c047049a',
-    strip_prefix = 'commons-beanutils-1.9.3'
+    artifact = 'commons-beanutils:commons-beanutils:1.9.3',
+    sha1 = 'c845703de334ddc6b4b3cd26835458cb1cba1f3d'
 )
 
-new_http_archive(
+maven_jar(
     name = 'java_apache_commons_cli',
-    build_file = 'tools/build/java_apache_commons_cli.BUILD',
-    url = 'http://mirror.olnevhost.net/pub/apache/commons/cli/binaries/commons-cli-1.3.1-bin.zip',
-    sha256 = '294437b1958b49dc171104cfff6ab90a85fdea473679304ee860a2b3b486f384',
-    strip_prefix = 'commons-cli-1.3.1'
+    artifact = 'commons-cli:commons-cli:1.3.1',
+    sha1 = '1303efbc4b181e5a58bf2e967dc156a3132b97c0'
 )
 
-new_http_archive(
+maven_jar(
     name = 'java_apache_commons_collections',
-    build_file = 'tools/build/java_apache_commons_collections.BUILD',
-    url = 'http://mirror.olnevhost.net/pub/apache/commons/collections/binaries/commons-collections-3.2.2-bin.zip',
-    sha256 = '45c1981cab4a831336bba38903aaa184856b303dfba640083e9103d61d3507b6',
-    strip_prefix = 'commons-collections-3.2.2'
+    artifact = 'commons-collections:commons-collections:3.2.2',
+    sha1 = '8ad72fe39fa8c91eaaf12aadb21e0c3661fe26d5'
 )
 
-new_http_archive(
+maven_jar(
     name = 'java_apache_commons_logging',
-    build_file = 'tools/build/java_apache_commons_logging.BUILD',
-    url = 'http://mirror.olnevhost.net/pub/apache/commons/logging/binaries/commons-logging-1.2-bin.zip',
-    sha256 = '8a5bbf1bc8916a1f99ee7584be494bd9ec069025a345a0f0c78eea7407e395ca',
-    strip_prefix = 'commons-logging-1.2'
+    artifact = 'commons-logging:commons-logging:1.2',
+    sha1 = '4bfc12adfe4842bf07b657f0369c4cb522955686'
 )
 
-http_file(
+maven_jar(
     name = 'java_antlr2',
-    url = 'http://central.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.jar',
-    sha256 = '88fbda4b912596b9f56e8e12e580cc954bacfb51776ecfddd3e18fc1cf56dc4c'
+    artifact = 'antlr:antlr:2.7.7',
+    sha1 = '83cd2cd674a217ade95a4bb83a8a14f351f48bd0'
 )
 
-http_file(
+maven_jar(
     name = 'java_antlr4_runtime',
-    url = 'http://www.antlr.org/download/antlr-runtime-4.5.3.jar',
-    sha256 = '93bca08ec995caeaaf60bdf80035a0be8507fcdabd3c2618fd8c5aab4444a752'
+    artifact = 'org.antlr:antlr4-runtime:4.5.3',
+    sha1 = '2609e36f18f7e8d593cc1cddfb2ac776dc96b8e0'
 )
 
-http_file(
+maven_jar(
     name = 'java_guava',
-    url = 'http://central.maven.org/maven2/com/google/guava/guava/19.0/guava-19.0.jar',
-    sha256 = '58d4cc2e05ebb012bbac568b032f75623be1cb6fb096f3c60c72a86f7f057de4'
+    artifact = 'com.google.guava:guava:19.0',
+    sha1 = '6ce200f6b23222af3d8abb6b6459e6c44f4bb0e9'
 )
 
-http_file(
+maven_jar(
     name = 'java_javatuples',
-    url = 'http://central.maven.org/maven2/org/javatuples/javatuples/1.2/javatuples-1.2.jar',
-    sha256 = '2eda5b19d9820e1cc2f69fcd01639a715a673c11f8507e3d1ed593cf765d5e0a'
+    artifact = 'org.javatuples:javatuples:1.2',
+    sha1 = '507312ac4b601204a72a83380badbca82683dd36'
 )
 
 new_http_archive(
     name = 'protoc_lua',
-    build_file = 'tools/build/protobuf/protoc_lua.BUILD',
+    build_file_content = """
+filegroup(
+    name = 'plugin',
+    srcs = [
+        'protoc-plugin/protoc-gen-lua',
+        'protoc-plugin/plugin_pb2.py'
+    ],
+    visibility = ['//visibility:public']
+)""",
     url = 'https://github.com/djungelorm/protobuf-lua/archive/v1.1.1.tar.gz',
     sha256 = 'bccdd9c65970c42fd29b87084db83777cad75780a67c5107b68f96603b5788a8',
     strip_prefix = 'protobuf-lua-1.1.1'
