@@ -62,6 +62,8 @@ class StreamImpl(object):
 
     def remove(self):
         self._conn._stream_manager.remove_stream(self._stream_id)
+        with self._update_lock:
+            self._value = StreamError("Stream does not exist")
 
 
 class StreamManager(object):
@@ -89,8 +91,6 @@ class StreamManager(object):
         with self._update_lock:
             if stream_id in self._streams:
                 self._conn.krpc.remove_stream(stream_id)
-                self._streams[stream_id].value = StreamError(
-                    "Stream does not exist")
                 del self._streams[stream_id]
 
     def update(self, results):
