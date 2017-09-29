@@ -256,13 +256,14 @@ Client API Reference
       server.
 
       If wait is false, the method starts the stream and returns immediately. Subsequent calls to
-      :meth:`__call__` may return ``None``.
+      :meth:`__call__` may raise a ``StreamError`` exception if the stream does not yet contain a
+      value.
 
    .. method:: __call__()
 
-      Returns the most recent value for the stream, or ``None`` if no update has been received from
-      the server. If executing the remote procedure for the stream throws an exception, calling this
-      method will rethrow the exception.
+      Returns the most recent value for the stream. If executing the remote procedure for the stream
+      throws an exception, calling this method will rethrow the exception. Raises a ``StreamError``
+      exception if no update has been received from the server.
 
       If the stream has not been started this method calls ``start(True)`` to start the stream and
       wait until at least one update has been received.

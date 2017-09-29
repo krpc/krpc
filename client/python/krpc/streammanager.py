@@ -31,6 +31,8 @@ class StreamImpl(object):
 
     @property
     def value(self):
+        if not self._updated:
+            raise StreamError("Stream has no value")
         return self._value
 
     @value.setter
