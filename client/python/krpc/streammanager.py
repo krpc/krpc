@@ -50,15 +50,13 @@ class StreamImpl(object):
     @property
     def callbacks(self):
         with self._update_lock:
-            return self._callbacks[:]
+            return self._callbacks
 
     def add_callback(self, callback):
-        # Makes a copy of the callback as they are iterated over
-        # by the stream update thread
         with self._update_lock:
-            callbacks = self._callbacks[:]
-            callbacks.append(callback)
-            self._callbacks = callbacks
+            self._callbacks = self._callbacks[:]
+            self._callbacks.append(callback)
+            return self._callbacks
 
     def remove(self):
         self._conn._stream_manager.remove_stream(self._stream_id)
