@@ -71,8 +71,8 @@ class StreamManager(object):
         self._streams = {}
 
     def add_stream(self, return_type, call):
+        stream_id = self._conn.krpc.add_stream(call, False).id
         with self._update_lock:
-            stream_id = self._conn.krpc.add_stream(call, False).id
             if stream_id not in self._streams:
                 self._streams[stream_id] = StreamImpl(
                     self._conn, stream_id, return_type, self._update_lock)
