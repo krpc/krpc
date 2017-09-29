@@ -1,6 +1,7 @@
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
 
+#include <atomic>
 #include <chrono>  // NOLINT(build/c++11)
 #include <cstddef>
 #include <string>
@@ -234,6 +235,68 @@ TEST_F(test_stream, test_yield_exception) {
   }
 }
 
+TEST_F(test_stream, test_wait) {
+  auto x = test_service.counter_stream("test_stream.test_wait");
+  x.acquire();
+  auto count = x();
+  ASSERT_LT(count, 10);
+  while (count < 10) {
+    x.wait();
+    count += 1;
+    ASSERT_EQ(count, x());
+  }
+  x.release();
+}
+
+TEST_F(test_stream, test_wait_timeout_short) {
+  auto x = test_service.counter_stream("test_stream.test_wait_timeout_short");
+  x.acquire();
+  auto count = x();
+  x.wait(0);
+  ASSERT_EQ(count, x());
+  x.release();
+}
+
+TEST_F(test_stream, test_wait_timeout_long) {
+  auto x = test_service.counter_stream("test_stream.test_wait_timeout_long");
+  x.acquire();
+  auto count = x();
+  ASSERT_LT(count, 10);
+  while (count < 10) {
+    x.wait(10);
+    count += 1;
+    ASSERT_EQ(count, x());
+  }
+  x.release();
+}
+
+TEST_F(test_stream, test_callback) {
+  std::atomic<int> test_callback_value(0);
+  std::atomic_flag error;
+  error.test_and_set();
+  std::atomic_flag stop;
+  error.test_and_set();
+
+  auto callback = [&test_callback_value, &error, &stop] (int x) {
+    if (x > 10) {
+      stop.clear();
+    } else if (test_callback_value+1 != x) {
+      error.clear();
+      stop.clear();
+    } else {
+      test_callback_value++;
+    }
+  };
+
+  auto x = test_service.counter_stream("test_stream.test_callback");
+  x.add_callback(callback);
+  x.start();
+  while (stop.test_and_set()) {
+  }
+  x.remove();
+  ASSERT_TRUE(error.test_and_set());
+}
+
 TEST_F(test_stream, test_stream_freeze) {
   auto s0 = test_service.counter_stream("test_stream.test_stream_freeze.0");
   auto s1 = test_service.counter_stream("test_stream.test_stream_freeze.1");
@@ -256,7 +319,7 @@ TEST_F(test_stream, test_stream_freeze) {
 
 TEST_F(test_stream, test_stream_freeze_many) {
   std::vector<krpc::Stream<int>> streams;
-  for (size_t i = 0; i < 1000; i++)
+  for (size_t i = 0; i < 100; i++)
     streams.push_back(
       test_service.counter_stream(
         "test_stream.test_stream_freeze_many."+std::to_string(i)));
@@ -278,10 +341,11 @@ TEST_F(test_stream, test_stream_freeze_many) {
     ASSERT_NE(values[i], streams[i]());
 }
 
-TEST_F(test_stream, test_stream_stop_while_frozen) {
-  auto s = test_service.counter_stream("test_stream.test_stream_stop_while_frozen");
-  conn.freeze_streams();
-}
+// FIXME: reenable test
+// TEST_F(test_stream, test_stream_stop_while_frozen) {
+//   auto s = test_service.counter_stream("test_stream.test_stream_stop_while_frozen");
+//   conn.freeze_streams();
+// }
 
 TEST_F(test_stream, test_default_constructable) {
   krpc::Stream<int> s;
@@ -295,4 +359,23 @@ TEST_F(test_stream, test_assignable) {
   ASSERT_TRUE(s);
   wait();
   ASSERT_NE(s(), 0);
+}
+
+TEST_F(test_stream, test_equality) {
+  krpc::Stream<int> s1;
+  krpc::Stream<int> s2;
+  ASSERT_TRUE(s1 == s2);
+  ASSERT_FALSE(s1 != s2);
+  ASSERT_TRUE(s2 == s1);
+  ASSERT_FALSE(s2 != s1);
+  s1 = test_service.counter_stream("test_stream.test_assignable");
+  ASSERT_FALSE(s1 == s2);
+  ASSERT_TRUE(s1 != s2);
+  ASSERT_FALSE(s2 == s1);
+  ASSERT_TRUE(s2 != s1);
+  s2 = test_service.counter_stream("test_stream.test_assignable");
+  ASSERT_TRUE(s1 == s2);
+  ASSERT_FALSE(s1 != s2);
+  ASSERT_TRUE(s2 == s1);
+  ASSERT_FALSE(s2 != s1);
 }

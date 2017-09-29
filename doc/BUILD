@@ -289,7 +289,7 @@ csharp_library_multiple(
 
 cc_binary_multiple(
     name = 'compile-scripts-cpp',
-    srcs = glob(['src/scripts/*.cpp']),
+    srcs = glob(['src/scripts/**/*.cpp']),
     deps = ['//client/cpp:krpc']
 )
 

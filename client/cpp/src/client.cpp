@@ -13,6 +13,8 @@
 
 namespace krpc {
 
+class StreamImpl;
+
 Client::Client(): lock(new std::mutex) {}
 
 Client::Client(const std::string& name, const std::string& address,
@@ -131,16 +133,16 @@ void Client::throw_exception(const schema::Error& error) const {
   }
 }
 
-google::protobuf::uint64 Client::add_stream(const schema::ProcedureCall& call) {
+std::shared_ptr<StreamImpl> Client::add_stream(const schema::ProcedureCall& call) {
   return stream_manager->add_stream(call);
+}
+
+std::shared_ptr<StreamImpl> Client::get_stream(google::protobuf::uint64 id) {
+  return stream_manager->get_stream(id);
 }
 
 void Client::remove_stream(google::protobuf::uint64 id) {
   stream_manager->remove_stream(id);
-}
-
-std::string Client::get_stream(google::protobuf::uint64 id) {
-  return stream_manager->get(id);
 }
 
 void Client::freeze_streams() {

@@ -16,6 +16,7 @@ namespace krpc {
 
 class Connection;
 class StreamManager;
+class StreamImpl;
 
 class Client {
  public:
@@ -43,9 +44,9 @@ class Client {
   void throw_exception(const schema::Error& error) const;
 
  public:
-  google::protobuf::uint64 add_stream(const schema::ProcedureCall& call);
+  std::shared_ptr<StreamImpl> add_stream(const schema::ProcedureCall& call);
+  std::shared_ptr<StreamImpl> get_stream(google::protobuf::uint64 id);
   void remove_stream(google::protobuf::uint64 id);
-  std::string get_stream(google::protobuf::uint64 id);
   void freeze_streams();
   void thaw_streams();
 

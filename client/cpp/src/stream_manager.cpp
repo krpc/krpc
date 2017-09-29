@@ -1,7 +1,11 @@
 #include "krpc/stream_manager.hpp"
 
+#include <condition_variable>  // NOLINT(build/c++11)
 #include <cstddef>
+#include <exception>
+#include <functional>
 #include <string>
+#include <utility>
 
 #include "krpc/client.hpp"
 #include "krpc/connection.hpp"
@@ -9,8 +13,86 @@
 #include "krpc/error.hpp"
 #include "krpc/krpc.pb.hpp"
 #include "krpc/services/krpc.hpp"
+#include "krpc/stream_impl.hpp"
 
 namespace krpc {
+
+StreamManager::StreamManager(Client * client, const std::shared_ptr<Connection>& connection)
+  : client(client), connection(connection),
+    update_lock(new std::recursive_mutex),
+    stop(new std::atomic_bool(false)),
+    should_freeze(new std::atomic_bool(false)),
+    frozen(new std::atomic_bool(false)),
+    update_thread(new std::thread(update_thread_main, this, connection,
+                                  stop, should_freeze, frozen)) {
+}
+
+StreamManager::~StreamManager() {
+  stop->store(true);
+  update_thread->join();
+  update_lock.reset();
+}
+
+std::shared_ptr<StreamImpl> StreamManager::add_stream(const schema::ProcedureCall& call) {
+  schema::Stream stream = services::KRPC(client).add_stream(call, false);
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  auto stream_impl = std::make_shared<StreamImpl>(client, stream.id(), update_lock.get());
+  streams[stream.id()] = stream_impl;
+  return stream_impl;
+}
+
+std::shared_ptr<StreamImpl> StreamManager::get_stream(google::protobuf::uint64 id) {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  auto it = streams.find(id);
+  if (it != streams.end())
+    if (auto stream = it->second.lock())
+      return stream;
+  auto stream_impl = std::make_shared<StreamImpl>(client, id, update_lock.get());
+  streams[id] = stream_impl;
+  return stream_impl;
+}
+
+void StreamManager::remove_stream(google::protobuf::uint64 id) {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  if (streams.find(id) == streams.end())
+    return;
+  services::KRPC(client).remove_stream(id);
+  streams.erase(id);
+}
+
+void StreamManager::update(google::protobuf::uint64 id, const schema::ProcedureResult& result) {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  auto it = streams.find(id);
+  if (it == streams.end())
+    return;
+  auto stream = it->second.lock();
+  if (!stream)
+    return;
+  if (!result.has_error()) {
+    stream->update(result.value(), nullptr);
+  } else {
+    try {
+      client->throw_exception(result.error());
+    } catch (...) {
+      stream->update("", std::current_exception());
+    }
+  }
+  stream->get_condition().notify_all();
+  for (auto callback : stream->get_callbacks())
+    callback(stream->get_data());
+}
+
+void StreamManager::freeze() {
+  should_freeze->store(true);
+  while (!frozen->load()) {
+  }
+}
+
+void StreamManager::thaw() {
+  should_freeze->store(false);
+  while (frozen->load()) {
+  }
+}
 
 void StreamManager::update_thread_main(StreamManager* stream_manager,
                                        const std::shared_ptr<Connection>& connection,
@@ -74,80 +156,6 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
 
       frozen->store(false);
     }
-  }
-}
-
-StreamManager::StreamManager(Client * client, const std::shared_ptr<Connection>& connection)
-  : client(client), connection(connection),
-    data_lock(new std::mutex),
-    stop(new std::atomic_bool(false)),
-    should_freeze(new std::atomic_bool(false)),
-    frozen(new std::atomic_bool(false)),
-    update_thread(new std::thread(update_thread_main, this, connection,
-                                  stop, should_freeze, frozen)) {
-}
-
-StreamManager::~StreamManager() {
-  stop->store(true);
-  update_thread->join();
-}
-
-google::protobuf::uint64 StreamManager::add_stream(const schema::ProcedureCall& call) {
-  std::lock_guard<std::mutex> guard(*data_lock);
-  schema::Stream stream = services::KRPC(client).add_stream(call);
-  std::string value;
-  std::exception_ptr error;
-  try {
-    value = client->invoke(call);
-  } catch (...) {
-    error = std::current_exception();
-  }
-  data[stream.id()] = std::make_pair(value, error);
-  return stream.id();
-}
-
-void StreamManager::remove_stream(google::protobuf::uint64 id) {
-  std::lock_guard<std::mutex> guard(*data_lock);
-  services::KRPC(client).remove_stream(id);
-  data.erase(id);
-}
-
-std::string StreamManager::get(google::protobuf::uint64 id) {
-  std::lock_guard<std::mutex> guard(*data_lock);
-  auto it = data.find(id);
-  if (it == data.end())
-    throw StreamError("Stream does not exist or was removed");
-  if (it->second.second)
-    std::rethrow_exception(it->second.second);
-  return it->second.first;
-}
-
-void StreamManager::update(google::protobuf::uint64 id, const schema::ProcedureResult& result) {
-  std::lock_guard<std::mutex> guard(*data_lock);
-  auto it = data.find(id);
-  if (it == data.end())
-    return;
-  if (!result.has_error()) {
-    it->second.first = result.value();
-  } else {
-    it->second.first = "";
-    try {
-      client->throw_exception(result.error());
-    } catch (...) {
-      it->second.second = std::current_exception();
-    }
-  }
-}
-
-void StreamManager::freeze() {
-  should_freeze->store(true);
-  while (!frozen->load()) {
-  }
-}
-
-void StreamManager::thaw() {
-  should_freeze->store(false);
-  while (frozen->load()) {
   }
 }
 

@@ -7,6 +7,7 @@
 #include <string>
 
 #include "krpc/error.hpp"
+#include "krpc/event.hpp"
 #include "krpc/platform.hpp"
 
 namespace pb = google::protobuf;
@@ -84,6 +85,13 @@ void decode(std::string& value, const std::string& data, Client* client) {
     throw EncodingError("Failed to decode string (length)");
   if (!stream.ReadString(&value, static_cast<int>(length)))
     throw EncodingError("Failed to decode string");
+}
+
+void decode(Event& event, const std::string& data, Client* client) {
+  krpc::schema::Event message;
+  if (!message.ParseFromString(data))
+    throw EncodingError("Failed to decode message");
+  event = Event(client, message);
 }
 
 void decode(pb::Message& message, const std::string& data, Client* client) {

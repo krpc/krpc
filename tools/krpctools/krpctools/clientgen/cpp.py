@@ -60,6 +60,9 @@ class CppGenerator(Generator):
     def parse_type(self, typ):
         if isinstance(typ, ValueType):
             return self._type_map[typ.protobuf_type.code]
+        elif (isinstance(typ, MessageType) and
+              typ.protobuf_type.code == Type.EVENT):
+            return '::krpc::Event'
         elif isinstance(typ, MessageType):
             return 'krpc::schema::%s' % typ.python_type.__name__
         elif isinstance(typ, ListType):
