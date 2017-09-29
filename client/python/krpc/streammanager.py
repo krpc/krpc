@@ -17,16 +17,12 @@ class StreamImpl(object):
         self._callbacks = []
 
     @property
-    def stream_id(self):
-        return self._stream_id
-
-    @property
     def return_type(self):
         return self._return_type
 
     def start(self):
         if not self._started:
-            self._conn.krpc.start_stream(self.stream_id)
+            self._conn.krpc.start_stream(self._stream_id)
             self._started = True
 
     @property
