@@ -10,10 +10,6 @@ class TestEvent(ServerTestCase, unittest.TestCase):
     def setUpClass(cls):
         super(TestEvent, cls).setUpClass()
 
-    @staticmethod
-    def wait():
-        time.sleep(0.01)
-
     def test_event(self):
         event = self.conn.test_service.on_timer(200)
         with event.condition:

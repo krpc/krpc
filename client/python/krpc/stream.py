@@ -60,8 +60,3 @@ class Stream(object):
     def remove(self):
         """ Remove the stream """
         self._stream.remove()
-
-    @property
-    def return_type(self):
-        """ The return type of this stream """
-        return self._stream.return_type
