@@ -2,21 +2,20 @@ class Stream(object):
     """ A streamed remote procedure call. When called, returns the
         most recently received result of the call. """
 
-    def __init__(self, conn, stream):
-        self._conn = conn
+    def __init__(self, stream):
         self._stream = stream
 
     @classmethod
     def from_stream_id(cls, conn, stream_id, return_type):
         """ Create a stream from an existing stream id on the server """
         stream = conn._stream_manager.get_stream(return_type, stream_id)
-        return cls(conn, stream)
+        return cls(stream)
 
     @classmethod
     def from_call(cls, conn, return_type, call):
         """ Create a stream from a remote procedure call """
         stream = conn._stream_manager.add_stream(return_type, call)
-        return cls(conn, stream)
+        return cls(stream)
 
     def start(self, wait=True):
         """ Start the stream. If wait is true,
