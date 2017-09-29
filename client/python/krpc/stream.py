@@ -50,7 +50,7 @@ class Stream(object):
             When timeout is not None, it should be a floating point number
             specifying the timeout in seconds for the operation. """
         if not self._stream.started:
-            self.start(wait=False)
+            self._stream.start()
         self._stream.condition.wait(timeout=timeout)
 
     def add_callback(self, callback):
