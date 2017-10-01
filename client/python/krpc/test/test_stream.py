@@ -225,7 +225,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
     def test_wait(self):
         with self.conn.stream(self.conn.test_service.counter,
-                              "TestStream.test_wait") as x:
+                              "TestStream.test_wait", 10) as x:
             with x.condition:
                 count = x()
                 self.assertTrue(count < 10)
@@ -236,7 +236,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
     def test_wait_timeout_short(self):
         with self.conn.stream(self.conn.test_service.counter,
-                              "TestStream.test_wait_timeout_short") as x:
+                              "TestStream.test_wait_timeout_short", 10) as x:
             with x.condition:
                 count = x()
                 x.wait(timeout=0)
@@ -244,7 +244,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
     def test_wait_timeout_long(self):
         with self.conn.stream(self.conn.test_service.counter,
-                              "TestStream.test_wait_timeout_long") as x:
+                              "TestStream.test_wait_timeout_long", 10) as x:
             with x.condition:
                 count = x()
                 self.assertTrue(count < 10)
@@ -253,14 +253,14 @@ class TestStream(ServerTestCase, unittest.TestCase):
                     count += 1
                     self.assertEqual(count, x())
 
-    test_callback_value = 0
+    test_callback_value = -1
 
     def test_callback(self):
         error = threading.Event()
         stop = threading.Event()
 
         def callback(x):
-            if x > 10:
+            if x > 5:
                 stop.set()
             elif self.test_callback_value+1 != x:
                 error.set()
@@ -269,10 +269,10 @@ class TestStream(ServerTestCase, unittest.TestCase):
                 self.test_callback_value += 1
 
         with self.conn.stream(self.conn.test_service.counter,
-                              "TestStream.test_callback") as x:
+                              "TestStream.test_callback", 10) as x:
             x.add_callback(callback)
             x.start()
-            stop.wait(1)
+            stop.wait(3)
 
         self.assertTrue(stop.is_set())
         self.assertFalse(error.is_set())

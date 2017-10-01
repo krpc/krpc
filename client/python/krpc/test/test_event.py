@@ -46,7 +46,8 @@ class TestEvent(ServerTestCase, unittest.TestCase):
                 event.wait()
                 self.assertTrue(event.stream())
                 repeat += 1
-                self.assertAlmostEqual(time.time()-start_time, 0.2*repeat, delta=0.05)
+                self.assertAlmostEqual(
+                    time.time()-start_time, 0.2*repeat, delta=0.05)
                 if repeat == 5:
                     break
 

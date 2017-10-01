@@ -362,7 +362,7 @@ namespace TestServer
         static IDictionary<Guid, IDictionary<string, int>> counters = new Dictionary<Guid, IDictionary<string, int>> ();
 
         [KRPCProcedure]
-        public static int Counter (string id = "")
+        public static int Counter (string id = "", int divisor = 1)
         {
             var client = CallContext.Client.Guid;
             if (!counters.ContainsKey (client))
@@ -370,7 +370,7 @@ namespace TestServer
             if (!counters [client].ContainsKey (id))
                 counters [client][id] = 0;
             counters [client][id]++;
-            return counters [client][id];
+            return counters [client][id] / divisor;
         }
 
         [KRPCProcedure]

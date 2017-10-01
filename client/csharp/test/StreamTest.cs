@@ -73,7 +73,7 @@ namespace KRPC.Client.Test
         public void Counter ()
         {
             var count = 0;
-            var x = Connection.AddStream (() => Connection.TestService ().Counter ("StreamTest.Counter"));
+            var x = Connection.AddStream (() => Connection.TestService ().Counter ("StreamTest.Counter", 1));
             for (int i = 0; i < 5; i++) {
                 int repeat = 0;
                 while (count == x.Get () && repeat < 1000) {
@@ -175,7 +175,6 @@ namespace KRPC.Client.Test
         {
             var s0 = Connection.AddStream (() => Connection.TestService ().Int32ToString (42));
             Assert.AreEqual ("42", s0.Get ());
-
             Wait ();
             Assert.AreEqual ("42", s0.Get ());
 
@@ -183,10 +182,19 @@ namespace KRPC.Client.Test
             Assert.AreEqual (s0, s1);
             Assert.AreEqual ("42", s0.Get ());
             Assert.AreEqual ("42", s1.Get ());
-
             Wait ();
             Assert.AreEqual ("42", s0.Get ());
             Assert.AreEqual ("42", s1.Get ());
+
+            var s2 = Connection.AddStream (() => Connection.TestService ().Int32ToString (43));
+            Assert.AreNotEqual (s0, s2);
+            Assert.AreEqual ("42", s0.Get ());
+            Assert.AreEqual ("42", s1.Get ());
+            Assert.AreEqual ("43", s2.Get ());
+            Wait ();
+            Assert.AreEqual ("42", s0.Get ());
+            Assert.AreEqual ("42", s1.Get ());
+            Assert.AreEqual ("43", s2.Get ());
         }
 
         [Test]
@@ -253,7 +261,7 @@ namespace KRPC.Client.Test
         [Test]
         public void TestWait () {
             var x = Connection.AddStream (
-                () => Connection.TestService ().Counter ("StreamTest.TestWait"));
+                () => Connection.TestService ().Counter ("StreamTest.TestWait", 10));
             lock (x.Condition) {
                 var count = x.Get ();
                 Assert.Less(count, 10);
@@ -268,7 +276,7 @@ namespace KRPC.Client.Test
         [Test]
         public void TestWaitTimeoutShort () {
             var x = Connection.AddStream (
-                () => Connection.TestService ().Counter ("StreamTest.TestWaitTimeoutShort"));
+                () => Connection.TestService ().Counter ("StreamTest.TestWaitTimeoutShort", 10));
             lock (x.Condition) {
                 var count = x.Get ();
                 x.Wait (0);
@@ -279,7 +287,7 @@ namespace KRPC.Client.Test
         [Test]
         public void TestWaitTimeoutLong () {
             var x = Connection.AddStream (
-                () => Connection.TestService ().Counter ("StreamTest.TestWaitTimeoutLong"));
+                () => Connection.TestService ().Counter ("StreamTest.TestWaitTimeoutLong", 10));
             lock (x.Condition) {
                 var count = x.Get ();
                 Assert.Less(count, 10);
@@ -295,12 +303,12 @@ namespace KRPC.Client.Test
         public void TestCallback () {
             var stop = new ManualResetEvent (false);
             var error = false;
-            int value = 0;
+            int value = -1;
             var s = Connection.AddStream (
-                () => Connection.TestService ().Counter ("StreamTest.TestCallback"));
+                () => Connection.TestService ().Counter ("StreamTest.TestCallback", 10));
             s.AddCallback (
                 (int x) => {
-                    if (x > 10) {
+                    if (x > 5) {
                         stop.Set ();
                     } else if (value+1 != x) {
                         error = true;
@@ -320,11 +328,11 @@ namespace KRPC.Client.Test
         [SuppressMessage ("Gendarme.Rules.Correctness", "CallingEqualsWithNullArgRule")]
         public void TestEquality () {
             var s0 = Connection.AddStream (
-                () => Connection.TestService ().Counter ("StreamTest.TestEquality0"));
+                () => Connection.TestService ().Counter ("StreamTest.TestEquality0", 1));
             var s1 = Connection.AddStream (
-                () => Connection.TestService ().Counter ("StreamTest.TestEquality0"));
+                () => Connection.TestService ().Counter ("StreamTest.TestEquality0", 1));
             var s2 = Connection.AddStream (
-                () => Connection.TestService ().Counter ("StreamTest.TestEquality1"));
+                () => Connection.TestService ().Counter ("StreamTest.TestEquality1", 1));
 
             Assert.True (s0.Equals (s0));
 

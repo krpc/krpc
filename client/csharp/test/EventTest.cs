@@ -103,7 +103,7 @@ namespace KRPC.Client.Test
         public void TestCustomEvent () {
             var counter = Expr.Call(Connection,
                 Connection.GetCall (
-                    () => Connection.TestService ().Counter("TestEvent.TestCustomEvent")));
+                    () => Connection.TestService ().Counter("TestEvent.TestCustomEvent", 1)));
             var expr = Expr.Equal(Connection,
                 Expr.Multiply(Connection,
                     Expr.ConstantInt(Connection, 2),
@@ -112,7 +112,7 @@ namespace KRPC.Client.Test
             var evnt = Connection.KRPC ().AddEvent(expr);
             lock (evnt.Condition) {
                 evnt.Wait();
-                Assert.AreEqual(Connection.TestService ().Counter("TestEvent.TestCustomEvent"), 21);
+                Assert.AreEqual(Connection.TestService ().Counter("TestEvent.TestCustomEvent", 1), 21);
             }
         }
 

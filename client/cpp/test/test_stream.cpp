@@ -164,7 +164,6 @@ TEST_F(test_stream, test_remove_stream_twice) {
 TEST_F(test_stream, test_add_stream_twice) {
   auto s0 = test_service.int32_to_string_stream(42);
   ASSERT_EQ("42", s0());
-
   wait();
   ASSERT_EQ("42", s0());
 
@@ -172,11 +171,19 @@ TEST_F(test_stream, test_add_stream_twice) {
   ASSERT_EQ(s0, s1);
   ASSERT_EQ("42", s0());
   ASSERT_EQ("42", s1());
-
   wait();
-  ASSERT_EQ(s0, s1);
   ASSERT_EQ("42", s0());
   ASSERT_EQ("42", s1());
+
+  auto s2 = test_service.int32_to_string_stream(43);
+  ASSERT_NE(s0, s2);
+  ASSERT_EQ("42", s0());
+  ASSERT_EQ("42", s1());
+  ASSERT_EQ("43", s2());
+  wait();
+  ASSERT_EQ("42", s0());
+  ASSERT_EQ("42", s1());
+  ASSERT_EQ("43", s2());
 }
 
 TEST_F(test_stream, test_invalid_operation_exception_immediately) {
@@ -236,7 +243,7 @@ TEST_F(test_stream, test_yield_exception) {
 }
 
 TEST_F(test_stream, test_wait) {
-  auto x = test_service.counter_stream("test_stream.test_wait");
+  auto x = test_service.counter_stream("test_stream.test_wait", 10);
   x.acquire();
   auto count = x();
   ASSERT_LT(count, 10);
@@ -249,7 +256,7 @@ TEST_F(test_stream, test_wait) {
 }
 
 TEST_F(test_stream, test_wait_timeout_short) {
-  auto x = test_service.counter_stream("test_stream.test_wait_timeout_short");
+  auto x = test_service.counter_stream("test_stream.test_wait_timeout_short", 10);
   x.acquire();
   auto count = x();
   x.wait(0);
@@ -258,7 +265,7 @@ TEST_F(test_stream, test_wait_timeout_short) {
 }
 
 TEST_F(test_stream, test_wait_timeout_long) {
-  auto x = test_service.counter_stream("test_stream.test_wait_timeout_long");
+  auto x = test_service.counter_stream("test_stream.test_wait_timeout_long", 10);
   x.acquire();
   auto count = x();
   ASSERT_LT(count, 10);
@@ -271,14 +278,14 @@ TEST_F(test_stream, test_wait_timeout_long) {
 }
 
 TEST_F(test_stream, test_callback) {
-  std::atomic<int> test_callback_value(0);
+  std::atomic<int> test_callback_value(-1);
   std::atomic_flag error;
   error.test_and_set();
   std::atomic_flag stop;
   error.test_and_set();
 
   auto callback = [&test_callback_value, &error, &stop] (int x) {
-    if (x > 10) {
+    if (x > 5) {
       stop.clear();
     } else if (test_callback_value+1 != x) {
       error.clear();
@@ -288,7 +295,7 @@ TEST_F(test_stream, test_callback) {
     }
   };
 
-  auto x = test_service.counter_stream("test_stream.test_callback");
+  auto x = test_service.counter_stream("test_stream.test_callback", 10);
   x.add_callback(callback);
   x.start();
   while (stop.test_and_set()) {
