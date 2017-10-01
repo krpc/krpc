@@ -16,7 +16,12 @@ namespace KRPC.Client.Test
         public void TestEvent () {
             var e = Connection.TestService ().OnTimer (200);
             lock (e.Condition) {
+                var timer = new Stopwatch ();
+                timer.Start ();
                 e.Wait ();
+                var time = timer.ElapsedMilliseconds;
+                Assert.Less (time, 250);
+                Assert.Greater (time, 150);
                 Assert.True (e.Stream.Get ());
             }
         }
@@ -29,8 +34,8 @@ namespace KRPC.Client.Test
                 timer.Start ();
                 e.Wait (0.1);
                 var time = timer.ElapsedMilliseconds;
-                Assert.LessOrEqual (time, 200);
-                Assert.GreaterOrEqual (time, 100);
+                Assert.Less (time, 150);
+                Assert.Greater (time, 50);
                 e.Wait ();
                 Assert.True (e.Stream.Get ());
             }
@@ -44,7 +49,8 @@ namespace KRPC.Client.Test
                 timer.Start ();
                 e.Wait (1);
                 var time = timer.ElapsedMilliseconds;
-                Assert.GreaterOrEqual (time, 200);
+                Assert.Greater (time, 150);
+                Assert.Less (time, 250);
                 Assert.True (e.Stream.Get ());
             }
         }
@@ -59,8 +65,8 @@ namespace KRPC.Client.Test
             e.Start ();
             called.WaitOne (1000);
             var time = timer.ElapsedMilliseconds;
-            Assert.GreaterOrEqual (time, 199);
-            Assert.LessOrEqual (time, 300);
+            Assert.Greater (time, 150);
+            Assert.Less (time, 250);
         }
 
         [Test]
@@ -73,8 +79,8 @@ namespace KRPC.Client.Test
             e.Start ();
             called.WaitOne (100);
             var time = timer.ElapsedMilliseconds;
-            Assert.GreaterOrEqual (time, 99);
-            Assert.LessOrEqual (time, 200);
+            Assert.Greater (time, 50);
+            Assert.Less (time, 150);
         }
 
         [Test]
@@ -88,7 +94,8 @@ namespace KRPC.Client.Test
             while (count < 5) {
             }
             var time = timer.ElapsedMilliseconds;
-            Assert.GreaterOrEqual (time, 1000);
+            Assert.Greater (time, 950);
+            Assert.Less (time, 1050);
             Assert.AreEqual (count, 5);
         }
 

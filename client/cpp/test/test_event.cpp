@@ -24,7 +24,8 @@ TEST_F(test_event, test_event) {
   event.wait();
   auto end_time = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> duration = end_time - start_time;
-  ASSERT_GT(duration.count(), 0.2);
+  ASSERT_GT(duration.count(), 0.15);
+  ASSERT_LT(duration.count(), 0.25);
   ASSERT_TRUE(event.stream()());
   event.release();
 }
@@ -37,7 +38,7 @@ TEST_F(test_event, test_event_timeout_short) {
   auto end_time = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> duration = end_time - start_time;
   ASSERT_LT(duration.count(), 0.2);
-  ASSERT_GT(duration.count(), 0.1);
+  ASSERT_GT(duration.count(), 0.08);
   ASSERT_FALSE(event.stream()());
   event.wait();
   ASSERT_TRUE(event.stream()());
@@ -51,7 +52,8 @@ TEST_F(test_event, test_event_timeout_long) {
   event.wait(1);
   auto end_time = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> duration = end_time - start_time;
-  ASSERT_GT(duration.count(), 0.2);
+  ASSERT_GT(duration.count(), 0.15);
+  ASSERT_LT(duration.count(), 0.25);
   ASSERT_TRUE(event.stream()());
   event.release();
 }
@@ -67,7 +69,8 @@ TEST_F(test_event, test_event_loop) {
     std::chrono::duration<double> duration = end_time - start_time;
     ASSERT_TRUE(event.stream()());
     repeat++;
-    ASSERT_GT(duration.count(), 0.2*repeat);
+    ASSERT_GT(duration.count(), 0.2*repeat - 0.05);
+    ASSERT_LT(duration.count(), 0.2*repeat + 0.05);
     if (repeat == 5)
       break;
   }
@@ -85,7 +88,8 @@ TEST_F(test_event, test_event_callback) {
   }
   auto end_time = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> duration = end_time - start_time;
-  ASSERT_GT(duration.count(), 0.2);
+  ASSERT_GT(duration.count(), 0.15);
+  ASSERT_LT(duration.count(), 0.25);
 }
 
 TEST_F(test_event, test_event_callback_timeout) {
@@ -103,7 +107,8 @@ TEST_F(test_event, test_event_callback_timeout) {
   }
   auto end_time = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> duration = end_time - start_time;
-  ASSERT_GT(duration.count(), 0.1);
+  ASSERT_GT(duration.count(), 0.05);
+  ASSERT_LT(duration.count(), 0.15);
   ASSERT_TRUE(called.test_and_set());
 }
 
@@ -117,7 +122,8 @@ TEST_F(test_event, test_event_callback_loop) {
   }
   auto end_time = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> duration = end_time - start_time;
-  ASSERT_GT(duration.count(), 1);
+  ASSERT_GT(duration.count(), 0.9);
+  ASSERT_LT(duration.count(), 1.1);
   ASSERT_EQ(count, 5);
 }
 
