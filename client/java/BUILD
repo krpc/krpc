@@ -82,7 +82,7 @@ java_test(
         ':javatuples'
     ],
     javacopts = copts,
-    size = 'small',
+    size = 'medium',
     tags = ['requires-network']
 )
 
@@ -101,7 +101,7 @@ client_test(
     test_executable = ':testexe',
     server_executable = '//tools/TestServer',
     tags = ['requires-network'],
-    size = 'small',
+    size = 'medium',
     visibility = ['//:__pkg__']
 )
 
