@@ -1,8 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using KRPC.Server;
 using KRPC.Service.Messages;
-using KRPC.Service.Scanner;
 using KRPC.Utils;
 
 namespace KRPC.Service
@@ -31,10 +29,15 @@ namespace KRPC.Service
         public virtual ProcedureResult Result {
             get { return StreamResult.Result; }
             set {
-                if (value != null)
-                    Changed |= !value.Equals (StreamResult.Result);
+                if (ReferenceEquals(value, null))
+                    throw new ArgumentNullException ("Result");
+                if (value.HasValue)
+                    if (!ReferenceEquals(value.Value, null))
+                        Changed |= !value.Value.Equals (StreamResult.Result.Value);
+                    else
+                        Changed |= (ReferenceEquals(value.Value, null) ^ ReferenceEquals(StreamResult.Result.Value, null));
                 else
-                    Changed |= (value == null ^ StreamResult.Result == null);
+                    Changed |= value.HasError;
                 StreamResult.Result = value;
             }
         }
