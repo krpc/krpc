@@ -127,8 +127,7 @@ namespace KRPC.Client
         public Stream<TResult> AddStream<TResult> (LambdaExpression expression)
         {
             CheckDisposed ();
-            var call = BuildCall (expression);
-            return new Stream<TResult> (this, call);
+            return new Stream<TResult> (this, GetCall (expression));
         }
 
         /// <summary>
@@ -139,7 +138,7 @@ namespace KRPC.Client
         public Stream<TResult> AddStream<TResult> (Expression<Func<TResult>> expression)
         {
             CheckDisposed ();
-            return AddStream<TResult> ((LambdaExpression)expression);
+            return new Stream<TResult> (this, GetCall (expression));
         }
 
         /// <summary>
@@ -149,7 +148,7 @@ namespace KRPC.Client
         public ByteString Invoke (string service, string procedure, IList<ByteString> arguments = null)
         {
             CheckDisposed ();
-            return Invoke (BuildCall (service, procedure, arguments));
+            return Invoke (GetCall (service, procedure, arguments));
         }
 
         internal ByteString Invoke (ProcedureCall call)
@@ -175,7 +174,7 @@ namespace KRPC.Client
             return response.Results[0].Value;
         }
 
-        internal static ProcedureCall BuildCall (string service, string procedure, IList<ByteString> arguments = null)
+        internal static ProcedureCall GetCall (string service, string procedure, IList<ByteString> arguments = null)
         {
             var call = new ProcedureCall ();
             call.Service = service;
@@ -193,22 +192,38 @@ namespace KRPC.Client
             return call;
         }
 
-        internal static ProcedureCall BuildCall (LambdaExpression expression)
+        /// <summary>
+        /// Return the procedure call message for a remote procedure call.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidUnnecessarySpecializationRule")]
+        public static ProcedureCall GetCall<TResult> (Expression<Func<TResult>> expression)
         {
+            return GetCall ((LambdaExpression) expression);
+        }
+
+        /// <summary>
+        /// Return the procedure call message for a remote procedure call.
+        /// </summary>
+        public static ProcedureCall GetCall (LambdaExpression expression)
+        {
+            if (ReferenceEquals (expression, null))
+                throw new ArgumentNullException (nameof (expression));
+
             Expression body = expression.Body;
 
             var methodCallExpression = body as MethodCallExpression;
             if (methodCallExpression != null)
-                return BuildCall (methodCallExpression);
+                return GetCall (methodCallExpression);
 
             var memberExpression = body as MemberExpression;
             if (memberExpression != null)
-                return BuildCall (memberExpression);
+                return GetCall (memberExpression);
 
             throw new ArgumentException ("Invalid expression. Must consist of a method call or property accessor only.");
         }
 
-        internal static ProcedureCall BuildCall (MethodCallExpression expression)
+        internal static ProcedureCall GetCall (MethodCallExpression expression)
         {
             var method = expression.Method;
 
@@ -250,11 +265,10 @@ namespace KRPC.Client
                 position++;
             }
 
-            // Build the call
-            return BuildCall (attribute.Service, attribute.Procedure, arguments);
+            return GetCall (attribute.Service, attribute.Procedure, arguments);
         }
 
-        internal static ProcedureCall BuildCall (MemberExpression expression)
+        internal static ProcedureCall GetCall (MemberExpression expression)
         {
             var member = expression.Member;
 
@@ -280,8 +294,7 @@ namespace KRPC.Client
                 arguments.Add (Encoder.Encode (instanceValue, instanceType));
             }
 
-            // Build the call
-            return BuildCall (attribute.Service, attribute.Procedure, arguments);
+            return GetCall (attribute.Service, attribute.Procedure, arguments);
         }
 
         static object GetInstanceValue (Expression instance) {

@@ -257,7 +257,7 @@ filegroup(
 
 csharp_binary_multiple(
     name = 'compile-scripts-csharp-exes',
-    srcs = glob(['src/scripts/*.cs'], exclude=['src/scripts/*.lib.cs']),
+    srcs = glob(['src/scripts/**/*.cs'], exclude=['src/scripts/**/*.lib.cs']),
     deps = [
         '//client/csharp:KRPC.Client',
         '//tools/build/mono-4.5:Google.Protobuf',
@@ -272,7 +272,7 @@ csharp_binary_multiple(
 
 csharp_library_multiple(
     name = 'compile-scripts-csharp-libs',
-    srcs = glob(['src/scripts/*.lib.cs']),
+    srcs = glob(['src/scripts/**/*.lib.cs']),
     deps = [
         '//server:KRPC',
         '//tools/build/ksp:Google.Protobuf',
