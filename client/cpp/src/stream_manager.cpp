@@ -36,6 +36,10 @@ StreamManager::~StreamManager() {
 std::shared_ptr<StreamImpl> StreamManager::add_stream(const schema::ProcedureCall& call) {
   schema::Stream stream = services::KRPC(client).add_stream(call, false);
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  auto it = streams.find(stream.id());
+  if (it != streams.end())
+    if (auto stream = it->second.lock())
+      return stream;
   auto stream_impl = std::make_shared<StreamImpl>(client, stream.id(), update_lock.get());
   streams[stream.id()] = stream_impl;
   return stream_impl;
