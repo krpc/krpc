@@ -6,20 +6,15 @@
 KRPC
 ====
 
-{% append services['KRPC'].members['AddStream'] %}
-{% if domain.name == 'lua' %}
-.. note:: Streams are not supported by the Lua client.
-{% else %}
-.. note:: Do not call this method from client code. Use :rst:ref:`streams <{{ domain.name }}-client-streams>` provided by the {{ domain.prettyname }} client library.
-{% endif %}
-{% endappend %}
-{% append services['KRPC'].members['RemoveStream'] %}
-{% if domain.name == 'lua' %}
-.. note:: Streams are not supported by the Lua client.
-{% else %}
-.. note:: Do not call this method from client code. Use :rst:ref:`streams <{{ domain.name }}-client-streams>` provided by the {{ domain.prettyname }} client library.
-{% endif %}
-{% endappend %}
+{{ mark_documented(services['KRPC'].members['AddStream']) }}
+{{ mark_documented(services['KRPC'].members['StartStream']) }}
+{{ mark_documented(services['KRPC'].members['RemoveStream']) }}
+{{ mark_documented(services['KRPC'].members['AddEvent']) }}
+{{ services['KRPC'].remove('AddStream') }}
+{{ services['KRPC'].remove('StartStream') }}
+{{ services['KRPC'].remove('RemoveStream') }}
+{{ services['KRPC'].remove('AddEvent') }}
+
 {{ macros.service(services['KRPC']) }}
 {{ macros.enumeration(services['KRPC'].enumerations['GameScene']) }}
 {{ macros.exception(services['KRPC'].exceptions['InvalidOperationException']) }}

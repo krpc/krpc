@@ -1,9 +1,13 @@
 KRPC
 KRPC.GetClientID
 KRPC.GetClientName
+KRPC.Clients
 KRPC.GetStatus
 KRPC.GetServices
-KRPC.Clients
+KRPC.AddStream
+KRPC.RemoveStream
+KRPC.StartStream
+KRPC.AddEvent
 KRPC.CurrentGameScene
 KRPC.GameScene
 KRPC.GameScene.SpaceCenter
@@ -11,10 +15,6 @@ KRPC.GameScene.Flight
 KRPC.GameScene.TrackingStation
 KRPC.GameScene.EditorVAB
 KRPC.GameScene.EditorSPH
-KRPC.AddStream
-KRPC.StartStream
-KRPC.RemoveStream
-KRPC.AddEvent
 KRPC.Expression
 KRPC.Expression.ConstantDouble
 KRPC.Expression.ConstantFloat
