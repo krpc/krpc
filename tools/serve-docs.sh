@@ -6,14 +6,12 @@ set -e
 
 port=${1:-8080}
 src=bazel-genfiles/doc/srcs
+stage=bazel-genfiles/doc/srcs-stage
 env=bazel-bin/doc/serve/env
 out=bazel-bin/doc/serve/out
 
-# Build the doc sources
-bazel fetch //...
-bazel build //doc:srcs
-
 # Set up python environment
+bazel fetch //...
 mkdir -p `dirname $env`
 if [ ! -d "$env" ]; then
   virtualenv $env
@@ -38,4 +36,4 @@ else
 fi
 
 # Auto-serve and auto-build the docs
-python tools/do-serve-docs.py $port $src $out
+python tools/do-serve-docs.py $port $src $stage $out
