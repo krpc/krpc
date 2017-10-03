@@ -476,5 +476,23 @@ namespace TestServer
             timer.Start();
             return evnt.Message;
         }
+
+        [KRPCProcedure]
+        public static KRPC.Service.Messages.Event OnTimerUsingLambda (uint milliseconds) {
+            bool triggered = false;
+            var timer = new System.Timers.Timer (milliseconds);
+            timer.Elapsed += (s, e) => {
+                triggered = true;
+                timer.Enabled = false;
+            };
+            timer.Start();
+            var evnt = new KRPC.Service.Event (
+                (KRPC.Service.Event e) => {
+                    if (triggered)
+                        e.Remove();
+                    return triggered;
+                });
+            return evnt.Message;
+        }
     }
 }

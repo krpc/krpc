@@ -398,7 +398,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'throw_argument_null_exception',
                 'throw_argument_out_of_range_exception',
 
-                'on_timer'
+                'on_timer',
+                'on_timer_using_lambda'
             ]),
             set(x for x in dir(self.conn.test_service)
                 if not x.startswith('_')))

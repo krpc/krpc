@@ -18,6 +18,14 @@ class TestEvent(ServerTestCase, unittest.TestCase):
             self.assertAlmostEqual(time.time()-start_time, 0.2, delta=0.05)
             self.assertTrue(event.stream())
 
+    def test_event_using_lambda(self):
+        event = self.conn.test_service.on_timer_using_lambda(200)
+        with event.condition:
+            start_time = time.time()
+            event.wait()
+            self.assertAlmostEqual(time.time()-start_time, 0.2, delta=0.05)
+            self.assertTrue(event.stream())
+
     def test_event_timeout_short(self):
         event = self.conn.test_service.on_timer(200)
         with event.condition:
