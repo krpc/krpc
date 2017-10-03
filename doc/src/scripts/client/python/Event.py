@@ -8,13 +8,14 @@ flight = vessel.flight()
 mean_altitude = conn.get_call(getattr, flight, 'mean_altitude')
 
 # Create an expression on the server
-expr = conn.expressions.greater_than(
-    conn.expressions.call(mean_altitude),
-    conn.expressions.constant_int(1000))
+expr = conn.krpc.expression.greater_than(
+    conn.krpc.expression.call(mean_altitude),
+    conn.krpc.expression.constant_int(1000))
 
 # Create an event from the expression
-event = conn.events.create(expr)
+event = conn.krpc.add_event(expr)
 
 # Wait on the event
 with event.condition:
     event.wait()
+    print 'Altitude reached 1000m'

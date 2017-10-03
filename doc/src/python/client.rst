@@ -101,6 +101,11 @@ streamed as follows:
 
 .. literalinclude:: /scripts/client/python/Streaming4.py
 
+A stream can be created for any function call (except property setters). The most recent value of a
+stream can be obtained by calling :func:`krpc.stream.Stream.__call__`. A stream can be stopped and
+removed from the server by calling :func:`krpc.stream.Stream.remove` on the stream object. All of a
+clients streams are automatically stopped when it disconnects.
+
 Synchronizing with Stream Updates
 ---------------------------------
 
@@ -122,8 +127,8 @@ The following example waits until the abort button is pressed in game, by waitin
 .. literalinclude:: /scripts/client/python/ConditionVariables1.py
 
 This code creates a stream, acquires a lock on the streams condition variable (using a ``with``
-statement) and then repeatedly checks the value of ``abort`` when it changes. It leaves the loop
-when the value changes to true.
+statement) and then repeatedly checks the value of ``abort``. It leaves the loop when it changes to
+true.
 
 The body of the loop calls ``wait`` on the stream, which causes the program to block until the value
 changes. This prevents the loop from 'spinning' and so it does not consume processing resources
@@ -332,10 +337,10 @@ Client API Reference
       Adds a callback function that is invoked whenever the event occurs. The callback function
       should be a function that takes zero arguments.
 
-   .. attribute:: stream
-
-      Returns the underlying stream for the event.
-
    .. method:: remove()
 
       Removes the event from the server.
+
+   .. attribute:: stream
+
+      Returns the underlying stream for the event.
