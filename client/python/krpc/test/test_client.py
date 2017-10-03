@@ -323,16 +323,18 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_client_members(self):
         self.assertSetEqual(
-            set(['krpc', 'test_service', 'add_stream', 'stream', 'close']),
+            set(['krpc', 'test_service', 'stream', 'add_stream',
+                 'get_call', 'close']),
             set(x for x in dir(self.conn) if not x.startswith('_')))
 
     def test_krpc_service_members(self):
         self.assertSetEqual(
             set(['get_client_id', 'get_client_name', 'get_services',
-                 'get_status', 'add_stream', 'remove_stream',
-                 'current_game_scene', 'GameScene', 'clients',
-                 'InvalidOperationException', 'ArgumentException',
-                 'ArgumentNullException', 'ArgumentOutOfRangeException']),
+                 'get_status', 'add_stream', 'start_stream', 'remove_stream',
+                 'add_event', 'current_game_scene', 'GameScene', 'clients',
+                 'Expression', 'InvalidOperationException',
+                 'ArgumentException', 'ArgumentNullException',
+                 'ArgumentOutOfRangeException']),
             set(x for x in dir(self.conn.krpc) if not x.startswith('_')))
 
     def test_test_service_service_members(self):
@@ -394,7 +396,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'reset_invalid_operation_exception_later',
                 'throw_argument_exception',
                 'throw_argument_null_exception',
-                'throw_argument_out_of_range_exception'
+                'throw_argument_out_of_range_exception',
+
+                'on_timer',
+                'on_timer_using_lambda'
             ]),
             set(x for x in dir(self.conn.test_service)
                 if not x.startswith('_')))

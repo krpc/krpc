@@ -1,5 +1,6 @@
 Autotools
 Bazel
+Bitwise
 CMake
 Ferram
 GameData
@@ -18,6 +19,7 @@ Olex
 Tron
 amongst
 apoapsis
+arg
 atm
 autotune
 biome
@@ -96,6 +98,7 @@ quickload
 quicksave
 radians
 rect
+rethrow
 rsvg
 runtime
 serializable

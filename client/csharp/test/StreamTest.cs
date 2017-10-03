@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace KRPC.Client.Test
 {
     [TestFixture]
-    public class StreamsTest : ServerTestCase
+    public class StreamTest : ServerTestCase
     {
         static void Wait ()
         {
@@ -73,7 +73,7 @@ namespace KRPC.Client.Test
         public void Counter ()
         {
             var count = 0;
-            var x = Connection.AddStream (() => Connection.TestService ().Counter ("StreamTest.Counter"));
+            var x = Connection.AddStream (() => Connection.TestService ().Counter ("StreamTest.Counter", 1));
             for (int i = 0; i < 5; i++) {
                 int repeat = 0;
                 while (count == x.Get () && repeat < 1000) {
@@ -174,20 +174,27 @@ namespace KRPC.Client.Test
         public void AddStreamTwice ()
         {
             var s0 = Connection.AddStream (() => Connection.TestService ().Int32ToString (42));
-            var streamId = s0.Id;
             Assert.AreEqual ("42", s0.Get ());
-
             Wait ();
             Assert.AreEqual ("42", s0.Get ());
 
             var s1 = Connection.AddStream (() => Connection.TestService ().Int32ToString (42));
-            Assert.AreEqual (streamId, s1.Id);
+            Assert.AreEqual (s0, s1);
             Assert.AreEqual ("42", s0.Get ());
             Assert.AreEqual ("42", s1.Get ());
-
             Wait ();
             Assert.AreEqual ("42", s0.Get ());
             Assert.AreEqual ("42", s1.Get ());
+
+            var s2 = Connection.AddStream (() => Connection.TestService ().Int32ToString (43));
+            Assert.AreNotEqual (s0, s2);
+            Assert.AreEqual ("42", s0.Get ());
+            Assert.AreEqual ("42", s1.Get ());
+            Assert.AreEqual ("43", s2.Get ());
+            Wait ();
+            Assert.AreEqual ("42", s0.Get ());
+            Assert.AreEqual ("42", s1.Get ());
+            Assert.AreEqual ("43", s2.Get ());
         }
 
         [Test]
@@ -249,6 +256,102 @@ namespace KRPC.Client.Test
                 Assert.AreEqual (55, s.Get ());
                 Wait ();
             }
+        }
+
+        [Test]
+        public void TestWait () {
+            var x = Connection.AddStream (
+                () => Connection.TestService ().Counter ("StreamTest.TestWait", 10));
+            lock (x.Condition) {
+                var count = x.Get ();
+                Assert.Less(count, 10);
+                while (count < 10) {
+                    x.Wait ();
+                    count++;
+                    Assert.AreEqual(count, x.Get ());
+                }
+            }
+        }
+
+        [Test]
+        public void TestWaitTimeoutShort () {
+            var x = Connection.AddStream (
+                () => Connection.TestService ().Counter ("StreamTest.TestWaitTimeoutShort", 10));
+            lock (x.Condition) {
+                var count = x.Get ();
+                x.Wait (0);
+                Assert.AreEqual(count, x.Get ());
+            }
+        }
+
+        [Test]
+        public void TestWaitTimeoutLong () {
+            var x = Connection.AddStream (
+                () => Connection.TestService ().Counter ("StreamTest.TestWaitTimeoutLong", 10));
+            lock (x.Condition) {
+                var count = x.Get ();
+                Assert.Less(count, 10);
+                while (count < 10) {
+                    x.Wait (10);
+                    count++;
+                    Assert.AreEqual(count, x.Get ());
+                }
+            }
+        }
+
+        [Test]
+        public void TestCallback () {
+            var stop = new ManualResetEvent (false);
+            var error = false;
+            int value = -1;
+            var s = Connection.AddStream (
+                () => Connection.TestService ().Counter ("StreamTest.TestCallback", 10));
+            s.AddCallback (
+                (int x) => {
+                    if (x > 5) {
+                        stop.Set ();
+                    } else if (value+1 != x) {
+                        error = true;
+                        stop.Set ();
+                    } else {
+                        value++;
+                    }
+                });
+
+            s.Start();
+            stop.WaitOne ();
+            s.Remove();
+            Assert.False(error);
+        }
+
+        [Test]
+        [SuppressMessage ("Gendarme.Rules.Correctness", "CallingEqualsWithNullArgRule")]
+        public void TestEquality () {
+            var s0 = Connection.AddStream (
+                () => Connection.TestService ().Counter ("StreamTest.TestEquality0", 1));
+            var s1 = Connection.AddStream (
+                () => Connection.TestService ().Counter ("StreamTest.TestEquality0", 1));
+            var s2 = Connection.AddStream (
+                () => Connection.TestService ().Counter ("StreamTest.TestEquality1", 1));
+
+            Assert.True (s0.Equals (s0));
+
+            Assert.True (s0.Equals (s1));
+            Assert.True (s0 == s1);
+            Assert.False (s0 != s1);
+
+            Assert.False (s0.Equals (s2));
+            Assert.False (s0 == s2);
+            Assert.True (s0 != s2);
+
+            Assert.False (s0.Equals (null));
+            Assert.False (s0 == null);
+            Assert.True (s0 != null);
+            Assert.False (null == s0);
+            Assert.True (null != s0);
+
+            Assert.AreEqual (s0.GetHashCode (), s1.GetHashCode ());
+            Assert.AreNotEqual (s0.GetHashCode (), s2.GetHashCode ());
         }
     }
 }

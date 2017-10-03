@@ -53,7 +53,7 @@ client_test(
     size = 'small'
 )
 
-deps = ['@python_six//file', '@python_protobuf//file']
+deps = ['@python_protobuf//file']
 
 py_test(
     name = 'py2test',

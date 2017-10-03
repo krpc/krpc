@@ -1,6 +1,7 @@
 package krpc.client;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -93,7 +94,7 @@ public class StreamTest {
       throws RPCException, StreamException, NoSuchMethodException {
     int count = -1;
     Stream<Integer> stream = connection.addStream(
-        TestService.class, "counter", "StreamTest.testCounter");
+        TestService.class, "counter", "StreamTest.testCounter", 1);
     for (int i = 0; i < 5; i++) {
       assertTrue(count < stream.get());
       count = stream.get();
@@ -254,20 +255,27 @@ public class StreamTest {
   public void testAddStreamTwice()
       throws RPCException, StreamException, NoSuchMethodException {
     Stream<String> stream0 = connection.addStream(TestService.class, "int32ToString", 42);
-    // var streamId = stream0.Id;
     assertEquals("42", stream0.get());
-
     pause();
     assertEquals("42", stream0.get());
 
     Stream<String> stream1 = connection.addStream(TestService.class, "int32ToString", 42);
-    // assertEquals(streamId, stream1.Id);
+    assertTrue(stream0.equals(stream1));
     assertEquals("42", stream0.get());
     assertEquals("42", stream1.get());
-
     pause();
     assertEquals("42", stream0.get());
     assertEquals("42", stream1.get());
+
+    Stream<String> stream2 = connection.addStream(TestService.class, "int32ToString", 43);
+    assertFalse(stream0.equals(stream2));
+    assertEquals("42", stream0.get());
+    assertEquals("42", stream1.get());
+    assertEquals("43", stream2.get());
+    pause();
+    assertEquals("42", stream0.get());
+    assertEquals("42", stream1.get());
+    assertEquals("43", stream2.get());
   }
 
   @Test
@@ -336,5 +344,94 @@ public class StreamTest {
       assertEquals(55, (int)stream.get());
       pause();
     }
+  }
+
+  @Test
+  public void testWait()
+      throws RPCException, StreamException {
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "counter", "StreamTest.testWait", 10);
+    synchronized (stream.getCondition()) {
+      int count = stream.get();
+      assertTrue(count < 10);
+      while (count < 10) {
+        stream.waitForUpdate();
+        count++;
+        assertEquals(count, (int)stream.get());
+      }
+    }
+  }
+
+  @Test
+  public void testWaitTimeoutShort()
+      throws RPCException, StreamException {
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "counter", "StreamTest.testWaitTimeoutShort", 10);
+    synchronized (stream.getCondition()) {
+      int count = stream.get();
+      stream.waitForUpdateWithTimeout(0);
+      assertEquals(count, (int)stream.get());
+    }
+  }
+
+  @Test
+  public void testWaitTimeoutLong()
+      throws RPCException, StreamException {
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "counter", "StreamTest.testWaitTimeoutLong", 10);
+    synchronized (stream.getCondition()) {
+      int count = stream.get();
+      assertTrue(count < 10);
+      while (count < 10) {
+        stream.waitForUpdateWithTimeout(10);
+        count++;
+        assertEquals(count, (int)stream.get());
+      }
+    }
+  }
+
+  private volatile boolean testCallbackError = false;
+  private volatile boolean testCallbackStop = false;
+  private volatile int testCallbackValue = -1;
+
+  @Test
+  public void testCallback()
+      throws RPCException, StreamException {
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "counter", "StreamTest.testCallback", 10);
+    stream.addCallback(
+        (Integer value) -> {
+          if (value > 5) {
+            testCallbackStop = true;
+          } else if (testCallbackValue + 1 != value) {
+            testCallbackError = true;
+            testCallbackStop = true;
+          } else {
+            testCallbackValue++;
+          }
+      });
+    stream.start();
+    while (!testCallbackStop) {
+    }
+    stream.remove();
+    assertFalse(testCallbackError);
+  }
+
+  @Test
+  public void testEquality()
+      throws RPCException, StreamException {
+    Stream<Integer> stream0 = connection.addStream(
+        TestService.class, "counter", "StreamTest.testEquality0", 1);
+    Stream<Integer> stream1 = connection.addStream(
+        TestService.class, "counter", "StreamTest.testEquality0", 1);
+    Stream<Integer> stream2 = connection.addStream(
+        TestService.class, "counter", "StreamTest.testEquality1", 1);
+
+    assertTrue(stream0.equals(stream0));
+    assertTrue(stream0.equals(stream1));
+    assertFalse(stream0.equals(stream2));
+    assertFalse(stream0.equals(null));
+    assertTrue(stream0.hashCode() == stream1.hashCode());
+    assertFalse(stream0.hashCode() == stream2.hashCode());
   }
 }

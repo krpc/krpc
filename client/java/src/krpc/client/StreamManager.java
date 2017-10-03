@@ -16,21 +16,21 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 class StreamManager {
   private Connection connection;
   private Socket socket;
   private KRPC krpc;
-  private Map<Long, ByteString> streamData = new HashMap<Long, ByteString>();
-  private Map<Long, Object> streamValues = new HashMap<Long, Object>();
-  private Map<Long, Type> streamTypes = new HashMap<Long, Type>();
-  private Map<Long, Error> streamErrors = new HashMap<Long, Error>();
+  private Object updateLock;
+  private Map<Long, StreamImpl> streams = new HashMap<Long, StreamImpl>();
   private Thread updateThread;
 
   StreamManager(Connection connection, Socket socket) {
     this.connection = connection;
     this.socket = socket;
     krpc = KRPC.newInstance(connection);
+    updateLock = new Object();
     updateThread = new Thread(new UpdateThread(this));
     updateThread.start();
   }
@@ -39,64 +39,53 @@ class StreamManager {
     socket.close();
   }
 
-  <T> Stream<T> add(ProcedureCall call, Type type) throws RPCException {
-    long id = krpc.addStream(call).getId();
-    synchronized (streamData) {
-      if (!streamTypes.containsKey(id)) {
-        streamTypes.put(id, type);
-        Response response = connection.invokeInternal(call);
-        Error error = connection.getErrorFromResponse(response);
-        if (error == null) {
-          ByteString value = connection.getReturnValueFromResponse(response);
-          streamData.put(id, value);
-        } else {
-          streamData.put(id, null);
-          streamErrors.put(id, error);
-        }
+  StreamImpl addStream(Type returnType, ProcedureCall call) throws RPCException {
+    long id = krpc.addStream(call, false).getId();
+    synchronized (updateLock) {
+      if (!streams.containsKey(id)) {
+        streams.put(id, new StreamImpl(connection, id, returnType, updateLock));
       }
-    }
-    return new Stream<T>(this, id);
-  }
-
-  void remove(long id) throws RPCException {
-    krpc.removeStream(id);
-    synchronized (streamData) {
-      streamData.remove(id);
-      streamTypes.remove(id);
-      streamErrors.remove(id);
+      return streams.get(id);
     }
   }
 
-  Object get(long id) throws RPCException, StreamException {
-    Object result;
-    synchronized (streamData) {
-      if (!streamTypes.containsKey(id)) {
-        throw new StreamException("Stream does not exist");
+  StreamImpl getStream(Type returnType, long id) {
+    synchronized (updateLock) {
+      if (!streams.containsKey(id)) {
+        streams.put(id, new StreamImpl(connection, id, returnType, updateLock));
       }
-      if (streamErrors.containsKey(id)) {
-        connection.throwException(streamErrors.get(id));
-      }
-      if (streamValues.containsKey(id)) {
-        return streamValues.get(id);
-      }
-      result = Encoder.decode(streamData.get(id), streamTypes.get(id), connection);
-      streamValues.put(id, result);
+      return streams.get(id);
     }
-    return result;
+  }
+
+  void removeStream(long id) throws RPCException {
+    synchronized (updateLock) {
+      if (streams.containsKey(id)) {
+        krpc.removeStream(id);
+        streams.remove(id);
+      }
+    }
   }
 
   void update(long id, ProcedureResult result) throws StreamException {
-    synchronized (streamData) {
-      if (!streamData.containsKey(id)) {
-        throw new StreamException("Stream does not exist");
+    synchronized (updateLock) {
+      if (!streams.containsKey(id)) {
+        return;
       }
-      if (result.hasError()) {
-        streamErrors.put(id, result.getError());
-        streamData.remove(id);
-        streamValues.remove(id);
+      StreamImpl stream = streams.get(id);
+      Object value;
+      if (!result.hasError()) {
+        value = Encoder.decode(result.getValue(), stream.getReturnType(), connection);
       } else {
-        streamData.put(id, result.getValue());
-        streamValues.remove(id);
+        value = result.getError();
+      }
+      Object condition = stream.getCondition();
+      synchronized (condition) {
+        stream.setValue(value);
+        condition.notifyAll();
+      }
+      for (Consumer<Object> callback : stream.getCallbacks()) {
+        callback.accept(value);
       }
     }
   }

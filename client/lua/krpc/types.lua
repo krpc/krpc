@@ -27,6 +27,7 @@ Types.TUPLE = schema.TYPE_TYPECODE_TUPLE_ENUM.number
 Types.LIST = schema.TYPE_TYPECODE_LIST_ENUM.number
 Types.SET = schema.TYPE_TYPECODE_SET_ENUM.number
 Types.DICTIONARY = schema.TYPE_TYPECODE_DICTIONARY_ENUM.number
+Types.EVENT = schema.TYPE_TYPECODE_EVENT_ENUM.number
 Types.PROCEDURE_CALL = schema.TYPE_TYPECODE_PROCEDURE_CALL_ENUM.number
 Types.STREAM = schema.TYPE_TYPECODE_STREAM_ENUM.number
 Types.SERVICES = schema.TYPE_TYPECODE_SERVICES_ENUM.number
@@ -44,6 +45,7 @@ VALUE_TYPES:set(Types.STRING, 'string')
 VALUE_TYPES:set(Types.BYTES, 'string')
 
 MESSAGE_TYPES = Map{}
+MESSAGE_TYPES:set(Types.EVENT, schema.Event)
 MESSAGE_TYPES:set(Types.PROCEDURE_CALL, schema.ProcedureCall)
 MESSAGE_TYPES:set(Types.STREAM, schema.Stream)
 MESSAGE_TYPES:set(Types.SERVICES, schema.Services)
@@ -59,6 +61,7 @@ CODE_TO_STRING:set(Types.UINT64, 'uint64')
 CODE_TO_STRING:set(Types.BOOL, 'bool')
 CODE_TO_STRING:set(Types.STRING, 'string')
 CODE_TO_STRING:set(Types.BYTES, 'bytes')
+CODE_TO_STRING:set(Types.EVENT, 'Event')
 CODE_TO_STRING:set(Types.PROCEDURE_CALL, 'ProcedureCall')
 CODE_TO_STRING:set(Types.STREAM, 'Stream')
 CODE_TO_STRING:set(Types.SERVICES, 'Services')

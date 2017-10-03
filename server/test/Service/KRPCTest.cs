@@ -11,7 +11,7 @@ namespace KRPC.Test.Service
         [Test]
         public void GetVersion ()
         {
-            var status = KRPC.Service.KRPC.GetStatus ();
+            var status = KRPC.Service.KRPC.KRPC.GetStatus ();
             Assert.AreNotEqual (string.Empty, status.Version);
         }
 
@@ -20,13 +20,13 @@ namespace KRPC.Test.Service
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void GetServices ()
         {
-            var services = KRPC.Service.KRPC.GetServices ();
+            var services = KRPC.Service.KRPC.KRPC.GetServices ();
             Assert.IsNotNull (services);
             Assert.AreEqual (4, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (8, service.Procedures.Count);
-            Assert.AreEqual (0, service.Classes.Count);
+            Assert.AreEqual (36, service.Procedures.Count);
+            Assert.AreEqual (1, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
 
             int foundProcedures = 0;
@@ -49,9 +49,15 @@ namespace KRPC.Test.Service
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "AddStream") {
                     MessageAssert.HasReturnType (proc, typeof(KRPC.Service.Messages.Stream));
-                    MessageAssert.HasParameters (proc, 1);
-                    MessageAssert.HasParameter (proc, 0, typeof(KRPC.Service.Messages.ProcedureCall), "call");
+                    MessageAssert.HasParameters (proc, 2);
+                    MessageAssert.HasParameter (proc, 0, typeof (KRPC.Service.Messages.ProcedureCall), "call");
+                    MessageAssert.HasParameterWithDefaultValue (proc, 1, typeof (bool), "start", true);
                     MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "StartStream") {
+                    MessageAssert.HasNoReturnType(proc);
+                    MessageAssert.HasParameters(proc, 1);
+                    MessageAssert.HasParameter(proc, 0, typeof(ulong), "id");
+                    MessageAssert.HasDocumentation(proc);
                 } else if (proc.Name == "RemoveStream") {
                     MessageAssert.HasNoReturnType (proc);
                     MessageAssert.HasParameters (proc, 1);
@@ -62,15 +68,15 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "get_CurrentGameScene") {
-                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.KRPC.GameScene));
+                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.KRPC.KRPC.GameScene));
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else {
-                    Assert.Fail ();
+                    foundProcedures--;
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (8, foundProcedures);
+            Assert.AreEqual (9, foundProcedures);
 
             bool foundEnumeration = false;
             foreach (var enumeration in service.Enumerations) {

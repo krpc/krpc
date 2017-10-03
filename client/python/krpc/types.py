@@ -16,6 +16,7 @@ VALUE_TYPES = {
 }
 
 MESSAGE_TYPES = {
+    KRPC.Type.EVENT: KRPC.Event,
     KRPC.Type.PROCEDURE_CALL: KRPC.ProcedureCall,
     KRPC.Type.SERVICES: KRPC.Services,
     KRPC.Type.STREAM: KRPC.Stream,

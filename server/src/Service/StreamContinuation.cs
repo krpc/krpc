@@ -11,19 +11,16 @@ namespace KRPC.Service
     /// </summary>
     sealed class StreamContinuation : Continuation<ProcedureResult>
     {
-        public StreamRequest Request { get; private set; }
-
-        ProcedureCallContinuation originalCall;
-        ProcedureCallContinuation call;
+        ProcedureCallContinuation originalContinuation;
+        ProcedureCallContinuation continuation;
 
         /// <summary>
         /// Create a stream continuation used to execute a stream RPC
         /// </summary>
-        public StreamContinuation (StreamRequest request)
+        public StreamContinuation (ProcedureCall call)
         {
-            Request = request;
-            call = new ProcedureCallContinuation (request.Call);
-            originalCall = call;
+            continuation = new ProcedureCallContinuation (call);
+            originalContinuation = continuation;
         }
 
         /// <summary>
@@ -37,18 +34,18 @@ namespace KRPC.Service
         /// </summary>
         public override ProcedureResult Run ()
         {
-            if (call == null)
+            if (continuation == null)
                 throw new InvalidOperationException (
                     "The stream continuation threw an exception previously and cannot be re-run");
             try {
-                var result = call.Run ();
-                call = originalCall;
+                var result = continuation.Run ();
+                continuation = originalContinuation;
                 return result;
             } catch (YieldException e) {
-                call = (ProcedureCallContinuation)e.Continuation;
+                continuation = (ProcedureCallContinuation)e.Continuation;
                 throw new YieldException (this);
             } catch (System.Exception) {
-                call = null;
+                continuation = null;
                 throw;
             }
         }

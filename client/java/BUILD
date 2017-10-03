@@ -3,7 +3,7 @@ load('/tools/build/client_test', 'client_test')
 load('/tools/build/java', 'java_checkstyle_test')
 load('/config', 'version')
 
-copts = ['-Werror', '-Xlint:all', '-target 1.7', '-source 1.7']
+copts = ['-Werror', '-Xlint:all', '-target 1.8', '-source 1.8']
 
 filegroup(
     name = 'java',
@@ -69,7 +69,7 @@ java_test(
         '@java_javatuples//jar'
     ],
     javacopts = copts,
-    size = 'small',
+    size = 'medium',
     tags = ['requires-network']
 )
 
@@ -88,7 +88,7 @@ client_test(
     test_executable = ':testexe',
     server_executable = '//tools/TestServer',
     tags = ['requires-network'],
-    size = 'small',
+    size = 'medium',
     visibility = ['//:__pkg__']
 )
 

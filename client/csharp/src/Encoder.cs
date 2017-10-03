@@ -165,6 +165,7 @@ namespace KRPC.Client
         /// Decode a value of the given type.
         /// Should not be called directly. This interface is used by service client stubs.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static object Decode (ByteString value, Type type, IConnection client)
         {
@@ -211,6 +212,11 @@ namespace KRPC.Client
                     var message = (IMessage)Activator.CreateInstance (type);
                     message.MergeFrom (stream);
                     return message;
+                }
+                if (type == typeof (Event)) {
+                    var message = new Schema.KRPC.Event ();
+                    message.MergeFrom (stream);
+                    return new Event ((Connection)client, message);
                 }
                 throw new ArgumentException (type + " is not a serializable type");
             }

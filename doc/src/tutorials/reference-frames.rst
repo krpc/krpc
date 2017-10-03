@@ -69,27 +69,27 @@ reference frame:
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/VesselPosition.cs
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/VesselPosition.cpp
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.cpp
          :language: cpp
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/VesselPosition.java
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/VesselPosition.lua
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/VesselPosition.py
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.py
          :language: python
 
 For a vessel sat on the launchpad, the magnitude of this position vector will be
@@ -341,27 +341,27 @@ is orbiting:
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/VisualDebugging.cs
+      .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/VisualDebugging.cpp
+      .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.cpp
          :language: cpp
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/VisualDebugging.java
+      .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/VisualDebugging.lua
+      .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/VisualDebugging.py
+      .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.py
          :language: python
 
 .. note:: The client must remain connected for the line to continue to be drawn,
@@ -382,27 +382,27 @@ the navball:
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/NavballDirections.cs
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballDirections.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/NavballDirections.cpp
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballDirections.cpp
          :language: cpp
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/NavballDirections.java
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballDirections.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/NavballDirections.lua
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballDirections.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/NavballDirections.py
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballDirections.py
          :language: python
 
 The code uses the vessel's surface reference frame
@@ -434,27 +434,27 @@ directions, as seen on the navball when it is in 'orbit' mode. It uses
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/OrbitalDirections.cs
+      .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/OrbitalDirections.cpp
+      .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.cpp
          :language: cpp
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/OrbitalDirections.java
+      .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/OrbitalDirections.lua
+      .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/OrbitalDirections.py
+      .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.py
          :language: python
 
 This code uses the vessel's orbital reference frame, pictured below:
@@ -473,27 +473,27 @@ velocity relative to the surface:
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/SurfacePrograde.cs
+      .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/SurfacePrograde.cpp
+      .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.cpp
          :language: cpp
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/SurfacePrograde.java
+      .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/SurfacePrograde.lua
+      .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/SurfacePrograde.py
+      .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.py
          :language: python
 
 This code uses the :attr:`Vessel.surface_velocity_reference_frame`, pictured
@@ -523,27 +523,27 @@ rotates with the body.
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/VesselSpeed.cs
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/VesselSpeed.cpp
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.cpp
          :language: cpp
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/VesselSpeed.java
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/VesselSpeed.lua
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/VesselSpeed.py
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.py
          :language: python
 
 .. _tutorial-reference-frames-vessel-velocity:
@@ -568,27 +568,27 @@ the body.
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/VesselVelocity.cs
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/VesselVelocity.cpp
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.cpp
          :language: cpp
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/VesselVelocity.java
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/VesselVelocity.lua
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/VesselVelocity.py
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.py
          :language: python
 
 Angle of attack
@@ -601,27 +601,27 @@ and the direction that the vessel is moving in (relative to the surface):
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/AngleOfAttack.cs
+      .. literalinclude:: /scripts/tutorials/reference-frames/AngleOfAttack.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/AngleOfAttack.cpp
+      .. literalinclude:: /scripts/tutorials/reference-frames/AngleOfAttack.cpp
          :language: cpp
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/AngleOfAttack.java
+      .. literalinclude:: /scripts/tutorials/reference-frames/AngleOfAttack.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/AngleOfAttack.lua
+      .. literalinclude:: /scripts/tutorials/reference-frames/AngleOfAttack.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/AngleOfAttack.py
+      .. literalinclude:: /scripts/tutorials/reference-frames/AngleOfAttack.py
          :language: python
 
 Note that the orientation of the reference frame used to get the direction and
@@ -641,25 +641,25 @@ at a given altitude, which could be used as the target for a landing auto pilot.
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/LandingSite.cs
+      .. literalinclude:: /scripts/tutorials/reference-frames/LandingSite.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/LandingSite.cpp
+      .. literalinclude:: /scripts/tutorials/reference-frames/LandingSite.cpp
          :language: cpp
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/LandingSite.java
+      .. literalinclude:: /scripts/tutorials/reference-frames/LandingSite.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/LandingSite.lua
+      .. literalinclude:: /scripts/tutorials/reference-frames/LandingSite.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/LandingSite.py
+      .. literalinclude:: /scripts/tutorials/reference-frames/LandingSite.py
          :language: python

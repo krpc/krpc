@@ -20,6 +20,7 @@ class Message;
 namespace krpc {
 
 class Client;
+class Event;
 template <typename T> class Object;
 
 namespace decoder {
@@ -36,6 +37,7 @@ void decode(google::protobuf::uint32& value, const std::string& data, Client * c
 void decode(google::protobuf::uint64& value, const std::string& data, Client * client = nullptr);
 void decode(bool& value, const std::string& data, Client * client = nullptr);
 void decode(std::string& value, const std::string& data, Client * client = nullptr);
+void decode(Event& event, const std::string& data, Client * client = nullptr);
 void decode(google::protobuf::Message& message, const std::string& data, Client * client = nullptr);
 
 template <typename T> void decode(Object<T>& object, const std::string& data,

@@ -77,6 +77,9 @@ class JavaGenerator(Generator):
             return self._type_map[typ.protobuf_type.code]
         elif isinstance(typ, ValueType):
             return self._type_map_classes[typ.protobuf_type.code]
+        elif (isinstance(typ, MessageType) and
+              typ.protobuf_type.code == Type.EVENT):
+            return 'krpc.client.Event'
         elif isinstance(typ, MessageType):
             return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
         elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):

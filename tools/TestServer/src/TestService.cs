@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using KRPC;
 using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Service.Messages;
 using KRPC.Utils;
 
 namespace TestServer
@@ -360,7 +362,7 @@ namespace TestServer
         static IDictionary<Guid, IDictionary<string, int>> counters = new Dictionary<Guid, IDictionary<string, int>> ();
 
         [KRPCProcedure]
-        public static int Counter (string id = "")
+        public static int Counter (string id = "", int divisor = 1)
         {
             var client = CallContext.Client.Guid;
             if (!counters.ContainsKey (client))
@@ -368,7 +370,7 @@ namespace TestServer
             if (!counters [client].ContainsKey (id))
                 counters [client][id] = 0;
             counters [client][id]++;
-            return counters [client][id];
+            return counters [client][id] / divisor;
         }
 
         [KRPCProcedure]
@@ -430,7 +432,7 @@ namespace TestServer
             {
             }
 
-            public CustomException (string message, Exception innerException)
+            public CustomException (string message, System.Exception innerException)
             : base(message, innerException)
             {
             }
@@ -457,6 +459,40 @@ namespace TestServer
                 throw new CustomException("A custom kRPC exception");
             customExceptionCount++;
             return 0;
+        }
+
+        [KRPCProcedure]
+        public static KRPC.Service.Messages.Event OnTimer (uint milliseconds, uint repeats = 1) {
+            var evnt = new KRPC.Service.Event ();
+            var timer = new System.Timers.Timer (milliseconds);
+            timer.Elapsed += (s, e) => {
+                evnt.Trigger ();
+                repeats--;
+                if (repeats == 0) {
+                    evnt.Remove ();
+                    timer.Enabled = false;
+                }
+            };
+            timer.Start();
+            return evnt.Message;
+        }
+
+        [KRPCProcedure]
+        public static KRPC.Service.Messages.Event OnTimerUsingLambda (uint milliseconds) {
+            bool triggered = false;
+            var timer = new System.Timers.Timer (milliseconds);
+            timer.Elapsed += (s, e) => {
+                triggered = true;
+                timer.Enabled = false;
+            };
+            timer.Start();
+            var evnt = new KRPC.Service.Event (
+                (KRPC.Service.Event e) => {
+                    if (triggered)
+                        e.Remove();
+                    return triggered;
+                });
+            return evnt.Message;
         }
     }
 }

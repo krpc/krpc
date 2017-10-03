@@ -21,13 +21,15 @@ namespace KRPC.Test.Server.ProtocolBuffers
             var result1 = new ProcedureResult ();
             result1.Error = new Error ("Foo", string.Empty);
 
-            var streamResult1 = new StreamResult (1263);
+            var streamResult1 = new StreamResult ();
+            streamResult1.Id = 1263;
             streamResult1.Result = result1;
 
             var result2 = new ProcedureResult ();
             result2.Error = new Error ("Bar", string.Empty);
 
-            var streamResult2 = new StreamResult (3443);
+            var streamResult2 = new StreamResult ();
+            streamResult2.Id = 3443;
             streamResult2.Result = result2;
 
             streamUpdate.Results.Add (streamResult1);

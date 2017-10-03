@@ -3,6 +3,9 @@ v0.4.0
  * Remove connection retries. Client will now fail fast if it fails to connect to the server
  * Reorder parameters to krpc.connect() so that name is first - to be consistent with other client libraries
  * Add support for RPCs and streams to throw exceptions
+ * Add stream waiting and update callbacks
+ * Add support for events
+ * Don't execute an initial RPC when a stream is created, wait for the first update instead
 
 v0.3.10
  * Update to protobuf v3.4.0

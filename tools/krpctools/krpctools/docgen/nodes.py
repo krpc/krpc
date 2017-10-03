@@ -68,6 +68,15 @@ class Service(Appendable):
         self.members = OrderedDict(
             (member.name, member) for member in sorted(members, key=sort))
 
+    def remove(self, member_name):
+        if member_name in self.classes:
+            del self.classes[member_name]
+        if member_name in self.enumerations:
+            del self.enumerations[member_name]
+        if member_name in self.exceptions:
+            del self.exceptions[member_name]
+        del self.members[member_name]
+
 
 class Class(Appendable):
     def __init__(self, service_name, name, procedures, documentation, sort):

@@ -10,25 +10,25 @@ once per second.
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/PitchHeadingRoll.cs
+      .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/PitchHeadingRoll.cpp
+      .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.cpp
          :language: cpp
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/PitchHeadingRoll.java
+      .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/PitchHeadingRoll.lua
+      .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/PitchHeadingRoll.py
+      .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.py
          :language: python

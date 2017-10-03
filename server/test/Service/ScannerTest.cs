@@ -16,7 +16,7 @@ namespace KRPC.Test.Service
         [SetUp]
         public void SetUp ()
         {
-            services = KRPC.Service.KRPC.GetServices ();
+            services = KRPC.Service.KRPC.KRPC.GetServices ();
             Assert.IsNotNull (services);
         }
 

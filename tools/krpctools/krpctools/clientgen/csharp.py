@@ -46,6 +46,9 @@ class CsharpGenerator(Generator):
     def parse_type(self, typ, interface=True):
         if isinstance(typ, ValueType):
             return self._type_map[typ.protobuf_type.code]
+        elif (isinstance(typ, MessageType) and
+              typ.protobuf_type.code == Type.EVENT):
+            return 'global::KRPC.Client.Event'
         elif isinstance(typ, MessageType):
             return 'global::KRPC.Schema.KRPC.%s' % typ.python_type.__name__
         elif isinstance(typ, TupleType):
