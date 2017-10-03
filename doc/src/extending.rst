@@ -120,6 +120,10 @@ to add functionality to the kRPC server.
 
 .. csharp:attribute:: KRPCProcedure
 
+   :parameters:
+
+    * **Nullable** -- Whether the return value of the procedure can be null. Defaults to false.
+
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to static
    methods, to add them to the server as procedures.
 
@@ -135,6 +139,9 @@ to add functionality to the kRPC server.
      <service-api-serializable-types>`.
 
    * Parameters can have default arguments.
+
+   If the procedure might return a null value, the ``Nullable`` parameter of the attribute must be
+   set to true.
 
    **Example**
 
@@ -213,6 +220,10 @@ to add functionality to the kRPC server.
 
 .. csharp:attribute:: KRPCMethod
 
+   :parameters:
+
+    * **Nullable** -- Whether the return value of the procedure can be null. Defaults to false.
+
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to methods
    inside a :csharp:attr:`KRPCClass`. This allows a client to call methods on an instance, or static
    methods in the class.
@@ -230,6 +241,9 @@ to add functionality to the kRPC server.
 
    * Parameters can have default arguments.
 
+   If the method might return a null value, the ``Nullable`` parameter of the attribute must be set
+   to true.
+
    **Example**
 
    Declare a ``Remove`` method in the ``Flag`` class:
@@ -246,6 +260,10 @@ to add functionality to the kRPC server.
       }
 
 .. csharp:attribute:: KRPCProperty
+
+   :parameters:
+
+    * **Nullable** -- Whether the return value of the procedure can be null. Defaults to false.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to class
    properties, and comes in two flavors:
@@ -268,6 +286,9 @@ to add functionality to the kRPC server.
       * The name of the property must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
 
       * Must be declared inside a :csharp:attr:`KRPCClass`.
+
+   If the property getter might return a null value, the ``Nullable`` parameter of the attribute
+   must be set to true.
 
    **Examples**
 
