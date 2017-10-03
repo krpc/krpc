@@ -82,7 +82,7 @@ It calls :meth:`Connection.AddStream` once at the start of the program to create
 then repeatedly prints the position returned by the stream. The stream is automatically closed when
 the client disconnects.
 
-A streams can be created for any method call by calling :meth:`Connection.AddStream` and passing it
+A stream can be created for any method call by calling :meth:`Connection.AddStream` and passing it
 a lambda expression that invokes the desired method. This lambda expression must take zero arguments
 and be either a method call expression or a parameter call expression. It returns a stream object of
 type :type:`Stream`. The most recent value of the stream can be obtained by calling
@@ -155,9 +155,9 @@ For example the following program registers two callbacks that are invoked when 
 Custom Events
 -------------
 
-Some procedures return event objects of type :type:`Event`. These allow you to wait
-until an event occurs, by calling :meth:`Event.Wait`. Under the hood, these are
-implemented using streams and condition variables.
+Some procedures return event objects of type :type:`Event`. These allow you to wait until an event
+occurs, by calling :meth:`Event.Wait`. Under the hood, these are implemented using streams and
+condition variables.
 
 Custom events can also be created. An expression API allows you to create code that runs on the
 server and these can be used to build a custom event. For example, the following creates the
