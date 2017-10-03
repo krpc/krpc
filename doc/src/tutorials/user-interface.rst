@@ -10,25 +10,25 @@ throttle to maximum.
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/UserInterface.cs
+      .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/UserInterface.cpp
+      .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.cpp
          :language: cpp
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/UserInterface.java
+      .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/UserInterface.lua
+      .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/UserInterface.py
+      .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.py
          :language: python
