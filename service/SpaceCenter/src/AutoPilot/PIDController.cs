@@ -5,7 +5,7 @@ namespace KRPC.SpaceCenter.AutoPilot
 {
     /// <summary>
     /// Robust, 3-parameter, proportional-integral-derivative controller
-    /// http://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-introduction/
+    /// https://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-introduction/
     /// </summary>
     [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     sealed class PIDController

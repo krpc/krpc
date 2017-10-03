@@ -56,7 +56,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Internal name of the part, as used in
-        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation">part cfg files</a>.
+        /// <a href="https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation">part cfg files</a>.
         /// For example "Mark1-2Pod".
         /// </summary>
         [KRPCProperty]
@@ -78,8 +78,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <remarks>
         /// This requires either the
-        /// <a href="http://github.com/krpc/NameTag/releases/latest">NameTag</a> or
-        /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/61827-/">kOS</a>
+        /// <a href="https://github.com/krpc/NameTag/releases/latest">NameTag</a> or
+        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/">kOS</a>
         /// mod to be installed.
         /// </remarks>
         [KRPCProperty]
@@ -205,7 +205,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Whether the part is
-        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Massless_part">massless</a>.
+        /// <a href="https://wiki.kerbalspaceprogram.com/wiki/Massless_part">massless</a>.
         /// </summary>
         [KRPCProperty]
         public bool Massless {

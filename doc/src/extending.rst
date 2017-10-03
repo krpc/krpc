@@ -329,7 +329,8 @@ to add functionality to the kRPC server.
    * The enumeration must either be declared inside a :csharp:attr:`KRPCService`, or have it's
      ``Service`` parameter set to the name of the service it is part of.
 
-   * The `underlying C# type <https://msdn.microsoft.com/en-gb/library/sbbt4032.aspx>`_ must be an
+   * The `underlying C# type
+     <https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/enum>`_ must be an
      ``int``.
 
    **Examples**

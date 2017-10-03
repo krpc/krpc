@@ -15,9 +15,9 @@ Installation
 1. Download and install the kRPC server plugin from one of these locations:
 
  * :github-download-zip:`Github <krpc>`
- * `SpaceDock <http://spacedock.info/mod/69/kRPC>`_
- * `Curse <http://www.curse.com/project/220219>`_
- * Or the install it using `CKAN <http://forum.kerbalspaceprogram.com/threads/100067>`_
+ * `SpaceDock <https://spacedock.info/mod/69/kRPC>`_
+ * `Curse <https://mods.curse.com/ksp-mods/kerbal/220219-krpc-control-the-game-using-c-c-java-lua-python>`_
+ * Or the install it using `CKAN <https://forum.kerbalspaceprogram.com/index.php?/topic/90246-the-comprehensive-kerbal-archive-network-ckan-package-manager-v1180-19-june-2016/>`_
 
 2. Start up KSP and load a save game.
 

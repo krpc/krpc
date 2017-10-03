@@ -283,7 +283,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The combined specific impulse of all active engines, in seconds. This is computed using the formula
-        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">described here</a>.
+        /// <a href="https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">described here</a>.
         /// </summary>
         [KRPCProperty]
         public float SpecificImpulse {
@@ -296,7 +296,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The combined vacuum specific impulse of all active engines, in seconds. This is computed using the formula
-        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">described here</a>.
+        /// <a href="https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">described here</a>.
         /// </summary>
         [KRPCProperty]
         public float VacuumSpecificImpulse {
@@ -310,7 +310,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The combined specific impulse of all active engines at sea level on Kerbin, in seconds.
         /// This is computed using the formula
-        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">described here</a>.
+        /// <a href="https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">described here</a>.
         /// </summary>
         [KRPCProperty]
         public float KerbinSeaLevelSpecificImpulse {

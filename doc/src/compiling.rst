@@ -10,28 +10,27 @@ line:
 
 .. code-block:: bash
 
-   git clone http://github.com/krpc/krpc
+   git clone https://github.com/krpc/krpc
 
 Install Dependencies
 --------------------
 
-Next you need to install `Bazel <http://bazel.io>`_. This is the build system
+Next you need to install `Bazel <https://bazel.io>`_. This is the build system
 used to compile the project.
 
 The Bazel build scripts will automatically download most of the required
 dependencies for the project, but the following need to be installed manually on
 your system:
 
- * `Mono C# compiler, runtime and tools <http://www.mono-project.com/download/>`_
+ * `Mono C# compiler, runtime and tools <https://www.mono-project.com/download/>`_
  * Python and virtualenv
  * Autotools
  * LuaRocks
  * pdflatex, rsvg, libxml, libxslt and python headers (for building the documentation)
 
-To install these dependencies via apt on Ubuntu, first follow the instructions
-on `Mono's website
-<http://www.mono-project.com/docs/getting-started/install/linux/#debian-ubuntu-and-derivatives>`_
-to add their apt repository. Then run the following command:
+To install these dependencies via apt on Ubuntu, first follow the instructions on `Mono's website
+<http://www.mono-project.com/download>`_ to add their apt repository. Then run the following
+command:
 
 .. code-block:: bash
 

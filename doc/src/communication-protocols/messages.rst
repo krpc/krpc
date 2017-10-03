@@ -170,8 +170,8 @@ created it disconnects from the server. Streams are local to each client and the
 share a stream between clients.
 
 The RPC for each stream is invoked every `fixed update
-<http://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html>`_ and the return values for
-all of these RPCs are collected together into a stream update message. This is then sent to the
+<https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html>`_ and the return values
+for all of these RPCs are collected together into a stream update message. This is then sent to the
 client over the stream servers connection. If the value returned by a streams RPC does not change
 since the last update that was sent, its value is omitted from the update message in order to
 minimize network traffic.

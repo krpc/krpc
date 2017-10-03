@@ -8,7 +8,7 @@ namespace KRPC.InfernalRobotics
 {
     /// <summary>
     /// This service provides functionality to interact with
-    /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/104535-105-magic-smoke-industries-infernal-robotics-0214/">Infernal Robotics</a>.
+    /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/104535-112-magic-smoke-industries-infernal-robotics-202/">Infernal Robotics</a>.
     /// </summary>
     [KRPCService (GameScene = GameScene.Flight)]
     public static class InfernalRobotics

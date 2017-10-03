@@ -362,7 +362,7 @@ namespace KRPC.SpaceCenter.Services
         ///
         /// If requested time warp factor cannot be set, it will be set to the next
         /// lowest possible value. For example, if the vessel is too close to a
-        /// planet. See <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">
+        /// planet. See <a href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">
         /// the KSP wiki</a> for details.
         /// </summary>
         [KRPCProperty]
@@ -385,7 +385,7 @@ namespace KRPC.SpaceCenter.Services
         /// Returns <c>true</c> if regular "on-rails" time warp can be used, at the specified warp
         /// <paramref name="factor"/>. The maximum time warp rate is limited by various things,
         /// including how close the active vessel is to a planet. See
-        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
+        /// <a href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
         /// for details.
         /// </summary>
         /// <param name="factor">The warp factor to check.</param>
@@ -415,7 +415,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The current maximum regular "on-rails" warp factor that can be set.
         /// A value between 0 and 7 inclusive. See
-        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
+        /// <a href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
         /// for details.
         /// </summary>
         [KRPCProperty]
@@ -631,7 +631,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Whether <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
+        /// Whether <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a> is installed.
         /// </summary>
         [KRPCProperty]
         public static bool FARAvailable {

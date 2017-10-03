@@ -588,7 +588,7 @@ namespace KRPC.SpaceCenter.Services
         /// The vessels Reynolds number.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
+        /// Requires <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.
         /// </remarks>
         [KRPCProperty]
         public float ReynoldsNumber {
@@ -693,7 +693,7 @@ namespace KRPC.SpaceCenter.Services
         /// a minor stall and a value greater than 0.5 indicates a large-scale stall.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
+        /// Requires <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.
         /// </remarks>
         [KRPCProperty]
         public float StallFraction {
@@ -708,7 +708,7 @@ namespace KRPC.SpaceCenter.Services
         /// It depends on air speed, air density and wing area.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
+        /// Requires <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.
         /// </remarks>
         [KRPCProperty]
         public float DragCoefficient {
@@ -723,7 +723,7 @@ namespace KRPC.SpaceCenter.Services
         /// depends on air speed, air density and wing area.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
+        /// Requires <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.
         /// </remarks>
         [KRPCProperty]
         public float LiftCoefficient {
@@ -737,7 +737,7 @@ namespace KRPC.SpaceCenter.Services
         /// The <a href="https://en.wikipedia.org/wiki/Ballistic_coefficient">ballistic coefficient</a>.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
+        /// Requires <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.
         /// </remarks>
         [KRPCProperty]
         public float BallisticCoefficient {
@@ -754,7 +754,7 @@ namespace KRPC.SpaceCenter.Services
         /// per hour, to produce one newton of thrust.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
+        /// Requires <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.
         /// </remarks>
         [KRPCProperty]
         public float ThrustSpecificFuelConsumption {
