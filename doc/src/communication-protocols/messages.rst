@@ -163,16 +163,18 @@ Streams allow the client to repeatedly execute an RPC on the server and receive 
 needing to repeatedly call the RPC directly, avoiding the communication overhead that this would
 involve.
 
-A client can create a stream on the server by calling :ref:`communication-protocol-add-stream`. Once
-the client is finished with the stream, it can remove it from the server by calling
-:ref:`communication-protocol-remove-stream`. Streams are automatically removed when the client that
-created it disconnects from the server. Streams are local to each client and there is no way to
-share a stream between clients.
+A client can create a stream on the server by calling :ref:`communication-protocol-add-stream`. This
+procedure takes an optional boolean argument that controls whether the stream starts sending data to
+the client or not. If not, :ref:`communication-protocol-start-stream` can be called later on to
+start the stream. Once the client is finished with the stream, it can remove it from the server by
+calling :ref:`communication-protocol-remove-stream`. Streams are automatically removed when the
+client that created it disconnects from the server. Streams are local to each client and there is no
+way to share a stream between clients.
 
 The RPC for each stream is invoked every `fixed update
 <http://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html>`_ and the return values for
 all of these RPCs are collected together into a stream update message. This is then sent to the
-client over the stream servers connection. If the value returned by a streams RPC does not change
+client over its stream server connection. If the value returned by a streams RPC does not change
 since the last update that was sent, its value is omitted from the update message in order to
 minimize network traffic.
 
@@ -208,6 +210,21 @@ The fields are:
   identical to the ``ProcedureResult`` message returned when calling the RPC directly. See
   :ref:`communication-protocol-anatomy-of-a-response` for details on the format and contents of this
   message.
+
+Events
+------
+
+Events are a wrapper over a stream that returns a boolean value. The event is triggered when the
+stream returns to true. Remote procedures that return an event return an ``Event`` message that
+contains a ``Stream`` message describing the underlying stream for the event.
+
+The format for an ``Event`` message is simply the following:
+
+.. code-block:: protobuf
+
+   message Event {
+     repeated Stream stream = 1;
+   }
 
 .. _communication-protocol-krpc-service:
 
@@ -273,11 +290,22 @@ service provided by the server. The content of these ``Service`` messages are :r
 AddStream
 ^^^^^^^^^
 
-The ``AddStream`` procedure adds a new stream to the server. It takes a single argument containing
-the RPC to invoke, encoded as a ``ProcedureCall`` message, and returns a ``Stream`` message
-describing the stream that was added. See :ref:`communication-protocol-anatomy-of-a-request` for the
-format and contents of this message. See :ref:`communication-protocol-streams` for more information
-on working with streams.
+The ``AddStream`` procedure adds a new stream to the server. Its first argument is the RPC to
+invoke, encoded as a ``ProcedureCall`` message. The second argument is a boolean value indicating
+whether the stream should start sending data to the client immediately. The procedure returns a
+``Stream`` message describing the stream that was added. See
+:ref:`communication-protocol-anatomy-of-a-request` for the format and contents of this message. See
+:ref:`communication-protocol-streams` for more information on working with streams.
+
+.. _communication-protocol-start-stream:
+
+StartStream
+^^^^^^^^^^^
+
+The ``StartStream`` procedure starts a stream sending data to a client, if it has not yet been
+started. It takes a single argument -- the identifier of the stream to start. This is the identifier
+returned when the stream was added by calling :ref:`communication-protocol-add-stream`. See
+:ref:`communication-protocol-streams` for more information on working with streams.
 
 .. _communication-protocol-remove-stream:
 
