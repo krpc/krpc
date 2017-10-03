@@ -17,7 +17,7 @@ class Program {
         // Create an expression on the server
         var expr = Expression.GreaterThan(connection,
             Expression.Call(connection, meanAltitude),
-            Expression.ConstantInt(connection, 1000));
+            Expression.ConstantDouble(connection, 1000));
 
         var evnt = krpc.AddEvent(expr);
         lock (evnt.Condition) {

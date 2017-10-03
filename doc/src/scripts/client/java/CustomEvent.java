@@ -24,7 +24,7 @@ public class CustomEvent {
     // Create an expression on the server
     Expression expr = Expression.greaterThan(connection,
       Expression.call(connection, meanAltitude),
-      Expression.constantInt(connection, 1000));
+      Expression.constantDouble(connection, 1000));
 
     Event event = krpc.addEvent(expr);
     synchronized (event.getCondition()) {

@@ -17,7 +17,7 @@ int main() {
   typedef krpc::services::KRPC::Expression Expr;
   auto expr = Expr::greater_than(conn,
     Expr::call(conn, mean_altitude),
-    Expr::constant_int(conn, 1000));
+    Expr::constant_double(conn, 1000));
 
   auto event = krpc.add_event(expr);
   event.acquire();
