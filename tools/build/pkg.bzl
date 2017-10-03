@@ -48,7 +48,7 @@ def _stage_files_impl(ctx):
         )
         outs.append(out)
 
-    return struct(files = set(outs))
+    return struct(files = depset(outs))
 
 stage_files = rule(
     implementation = _stage_files_impl,
