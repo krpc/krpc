@@ -1,3 +1,6 @@
+v0.3.11
+ * Update to protobuf v3.4.1
+
 v0.3.10
  * Add support for .NET 3.5 (allows use of the client from within KSP itself)
  * Update to protobuf v3.4.0
