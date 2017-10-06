@@ -1,3 +1,6 @@
+v0.3.11
+ * Update to protobuf v3.4.1
+
 v0.3.10
  * Set ASIO_STANDLONE in build script instead of source code so that configure script can find the header correctly
  * Add support for building using Cygwin

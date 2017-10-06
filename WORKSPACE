@@ -37,9 +37,9 @@ http_file(
 new_http_archive(
     name = 'csharp_protobuf',
     build_file = 'tools/build/csharp_protobuf.BUILD',
-    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.4.0',
+    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.4.1',
     type = 'zip',
-    sha256 = 'dfd91888be6ec88af5649407cae4897f0d6793344355c4ba6f3d056c7767409e'
+    sha256 = '3506470bf07fa10dc53bc50c9275d6018a391eda549ef62514f1be12f4ecf2e6'
 )
 
 http_file(
@@ -82,9 +82,9 @@ new_http_archive(
 
 http_archive(
     name = 'cpp_protobuf',
-    url = 'https://github.com/google/protobuf/releases/download/v3.4.0/protobuf-cpp-3.4.0.tar.gz',
-    strip_prefix = 'protobuf-3.4.0',
-    sha256 = '71434f6f836a1e479c44008bb033b2a8b2560ff539374dcdefb126be739e1635'
+    url = 'https://github.com/google/protobuf/releases/download/v3.4.1/protobuf-cpp-3.4.1.tar.gz',
+    strip_prefix = 'protobuf-3.4.1',
+    sha256 = '2bb34b4a8211a30d12ef29fd8660995023d119c99fbab2e5fe46f17528c9cc78'
 )
 
 new_http_archive(
