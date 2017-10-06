@@ -36,7 +36,8 @@ class TestPartsModule(krpctest.TestCase):
         module.trigger_event('Control From Here')
         self.assertRaises(krpc.client.RPCError, module.trigger_event,
                           'DoesntExist')
-        self.assertEqual(['Toggle Hibernation'], module.actions)
+        self.assertEqual(['Control From Here', 'Toggle Hibernation'],
+                         module.actions)
         self.assertFalse(module.has_action('DoesntExist'))
         self.assertRaises(krpc.client.RPCError, module.set_action,
                           'DoesntExist', True)
