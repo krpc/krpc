@@ -41,10 +41,13 @@ RUN apt-get update && \
 RUN apt-key adv \
       --keyserver hkp://keyserver.ubuntu.com:80 \
       --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
-    echo "deb http://download.mono-project.com/repo/debian wheezy main" | \
-      tee /etc/apt/sources.list.d/mono-xamarin.list && \
+    echo "deb http://download.mono-project.com/repo/ubuntu xenial main" | \
+      tee /etc/apt/sources.list.d/mono-official.list && \
     apt-get update && apt-get install -y mono-devel && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    wget http://download.mono-project.com/repo/ubuntu/pool/main/m/mono-tools/gendarme_4.2-2xamarin4+ubuntu1604b1_all.deb && \
+    dpkg -i gendarme_4.2-2xamarin4+ubuntu1604b1_all.deb && \
+    rm gendarme_4.2-2xamarin4+ubuntu1604b1_all.deb
 
 ENV gosu_version 1.9
 RUN apt-get update && \
@@ -63,7 +66,7 @@ RUN apt-get update && \
     chmod +x /usr/local/bin/gosu && \
     gosu nobody true
 
-ARG bazel_version=0.5.4
+ARG bazel_version=0.6.1
 RUN echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | \
       tee /etc/apt/sources.list.d/bazel.list && \
     curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add - && \
@@ -74,7 +77,7 @@ RUN echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8
 COPY bazelrc /etc/bazel.bazelrc
 RUN chmod 0644 /etc/bazel.bazelrc
 
-ARG protobuf_version=3.4.0
+ARG protobuf_version=3.4.1
 WORKDIR /usr/local/src/protobuf-cpp-${protobuf_version}
 RUN wget https://github.com/google/protobuf/releases/download/v${protobuf_version}/protobuf-cpp-${protobuf_version}.tar.gz && \
   tar -xf protobuf-cpp-${protobuf_version}.tar.gz --strip=1 && \
