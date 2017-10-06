@@ -3,6 +3,7 @@ v1.3.0
  * Update to Bazel 0.6.1
  * Update to protobuf v3.4.1
  * Update Mono to use Ubuntu 16.04 repository
+ * Add dependencies for running lint tests
 
 v1.2.0
  * Update to Bazel 0.5.4

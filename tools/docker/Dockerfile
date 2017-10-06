@@ -7,6 +7,7 @@ RUN apt-get update && \
     automake \
     ca-certificates \
     cmake \
+    cppcheck \
     curl \
     g++ \
     git \
