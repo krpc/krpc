@@ -100,8 +100,12 @@ RUN user_id=1000 && \
     adduser -q --system --uid $user_id --home /build --disabled-password --ingroup build build
 USER build
 WORKDIR /build
-RUN git clone http://github.com/krpc/krpc --depth 1 && \
+
+COPY krpc.tar /build/krpc.tar
+RUN mkdir krpc && \
     cd krpc && \
+    tar -xf ../krpc.tar && \
+    rm ../krpc.tar && \
     bazel fetch //... && \
     bazel build \
       @cpp_protobuf//:protobuf \
