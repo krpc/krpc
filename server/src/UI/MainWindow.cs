@@ -31,7 +31,6 @@ namespace KRPC.UI
 
         internal bool Resized { get; set; }
 
-        bool showAdvancedMode;
         bool showAdvancedServerOptions;
         string maxTimePerUpdate;
         string recvTimeout;
@@ -64,7 +63,7 @@ namespace KRPC.UI
         internal const string protobufOverWebSocketsText = "Protobuf over WebSockets";
         const string unknownClientNameText = "<unknown>";
         const string noClientsConnectedText = "No clients connected";
-        const string advancedServerOptionsText = "Show server settings";
+        const string advancedServerOptionsText = "Show advanced settings";
         const string autoStartServerText = "Auto-start server";
         const string autoAcceptConnectionsText = "Auto-accept new clients";
         const string confirmRemoveClientText = "Confirm disconnecting a client";
@@ -142,7 +141,6 @@ namespace KRPC.UI
             comboOptionStyle = GUILayoutExtensions.ComboOptionStyle ();
 
             Errors = new List<string> ();
-            showAdvancedMode = config.Configuration.MainWindowAdvancedMode;
             maxTimePerUpdate = config.Configuration.MaxTimePerUpdate.ToString ();
             recvTimeout = config.Configuration.RecvTimeout.ToString ();
 
@@ -193,14 +191,12 @@ namespace KRPC.UI
 
             var servers = core.Servers.ToList();
             foreach (var server in servers) {
-                DrawServer(server, !showAdvancedMode && servers.Count == 1);
+                DrawServer(server, servers.Count == 1);
                 GUILayoutExtensions.Separator(separatorStyle);
             }
 
-            if (showAdvancedMode) {
-                DrawAddServer();
-                GUILayoutExtensions.Separator(separatorStyle);
-            }
+            DrawAddServer();
+            GUILayoutExtensions.Separator(separatorStyle);
 
             if (Errors.Any()) {
                 foreach (var error in Errors)
@@ -208,11 +204,8 @@ namespace KRPC.UI
                 GUILayoutExtensions.Separator(separatorStyle);
             }
 
-            DrawAdvancedModeToggle();
-            if (showAdvancedMode) {
-                DrawAdvancedServerOptions();
-                DrawShowInfoWindow();
-            }
+            DrawAdvancedServerOptions();
+            DrawShowInfoWindow();
             GUILayout.EndVertical();
 
             GUI.DragWindow ();
@@ -231,24 +224,13 @@ namespace KRPC.UI
             }
         }
 
-        void DrawAdvancedModeToggle() {
-            bool value = GUILayout.Toggle(showAdvancedMode, advancedModeText, toggleStyle, new GUILayoutOption[] { });
-            if (value != showAdvancedMode)
-            {
-                showAdvancedMode = value;
-                Resized = true;
-                config.Configuration.MainWindowAdvancedMode = value;
-                config.Save();
-            }
-        }
-
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         [SuppressMessage("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
         [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
         void DrawServer (Server.Server server, bool forceExpanded = false)
         {
             var running = server.Running;
-            var editingServer = showAdvancedMode && editServers.ContainsKey (server.Id);
+            var editingServer = editServers.ContainsKey (server.Id);
             var expanded = forceExpanded || expandServers.Contains (server.Id);
 
             GUILayout.BeginHorizontal ();
@@ -286,44 +268,42 @@ namespace KRPC.UI
                 DrawClients (server);
             }
 
-            if (showAdvancedMode) {
-                GUILayout.BeginHorizontal();
-                GUI.enabled = !editingServer;
-                if (GUILayout.Button(running ? stopServerText : startServerText, buttonStyle)) {
-                    Errors.Clear();
-                    Resized = true;
-                    EventHandlerExtensions.Invoke(running ? OnStopServerPressed : OnStartServerPressed, this, new ServerEventArgs(server));
-                }
-                GUI.enabled = !running;
-                if (GUILayout.Button(editingServer ? saveServerText : editServerText, buttonStyle))
-                {
-                    if (editingServer)
-                    {
-                        var newServer = editServers[server.Id].Save();
-                        if (newServer != null)
-                        {
-                            editServers.Remove(server.Id);
-                            config.Configuration.ReplaceServer(newServer);
-                            config.Save();
-                            core.Replace(newServer.Create());
-                        }
-                    }
-                    else {
-                        editServers[server.Id] = new EditServer(this, config.Configuration.GetServer(server.Id));
-                    }
-                    Resized = true;
-                }
-                GUI.enabled = !editingServer && !running;
-                if (GUILayout.Button(removeServerText, buttonStyle))
-                {
-                    config.Configuration.RemoveServer(server.Id);
-                    config.Save();
-                    core.Remove(server.Id);
-                    Resized = true;
-                }
-                GUI.enabled = true;
-                GUILayout.EndHorizontal ();
+            GUILayout.BeginHorizontal();
+            GUI.enabled = !editingServer;
+            if (GUILayout.Button(running ? stopServerText : startServerText, buttonStyle)) {
+                Errors.Clear();
+                Resized = true;
+                EventHandlerExtensions.Invoke(running ? OnStopServerPressed : OnStartServerPressed, this, new ServerEventArgs(server));
             }
+            GUI.enabled = !running;
+            if (GUILayout.Button(editingServer ? saveServerText : editServerText, buttonStyle))
+            {
+                if (editingServer)
+                {
+                    var newServer = editServers[server.Id].Save();
+                    if (newServer != null)
+                    {
+                        editServers.Remove(server.Id);
+                        config.Configuration.ReplaceServer(newServer);
+                        config.Save();
+                        core.Replace(newServer.Create());
+                    }
+                }
+                else {
+                    editServers[server.Id] = new EditServer(this, config.Configuration.GetServer(server.Id));
+                }
+                Resized = true;
+            }
+            GUI.enabled = !editingServer && !running;
+            if (GUILayout.Button(removeServerText, buttonStyle))
+            {
+                config.Configuration.RemoveServer(server.Id);
+                config.Save();
+                core.Remove(server.Id);
+                Resized = true;
+            }
+            GUI.enabled = true;
+            GUILayout.EndHorizontal ();
         }
 
         void DrawClients (IServer server)

@@ -25,7 +25,6 @@ namespace KRPC
         {
             MainWindowVisible = true;
             MainWindowPosition = new Utils.Tuple<float,float,float,float> (0, 0, 0, 0);
-            MainWindowAdvancedMode = false;
             InfoWindowVisible = false;
             InfoWindowPosition = new Utils.Tuple<float,float,float,float> (0, 0, 0, 0);
             AutoStartServers = false;
@@ -132,8 +131,6 @@ namespace KRPC
         public bool MainWindowVisible { get; set; }
 
         public Utils.Tuple<float,float,float,float> MainWindowPosition { get; set; }
-
-        public bool MainWindowAdvancedMode { get; set; }
 
         public bool InfoWindowVisible { get; set; }
 
