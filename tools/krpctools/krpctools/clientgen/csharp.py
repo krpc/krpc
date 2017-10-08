@@ -7,10 +7,6 @@ from .generator import Generator
 
 class CsharpGenerator(Generator):
 
-    def __init__(self, macro_template, service, definition_files):
-        super(CsharpGenerator, self).__init__(
-            macro_template, service, definition_files)
-
     _keywords = set([
         'abstract', 'as', 'base', 'bool', 'break', 'byte', 'case', 'catch',
         'char', 'checked', 'class', 'const', 'continue', 'decimal', 'default',
@@ -40,8 +36,7 @@ class CsharpGenerator(Generator):
     def parse_name(self, name):
         if name in self._keywords:
             return '%s_' % name
-        else:
-            return name
+        return name
 
     def parse_type(self, typ, interface=True):
         if isinstance(typ, ValueType):
@@ -76,7 +71,7 @@ class CsharpGenerator(Generator):
             return 'global::System.Collections.Generic.%s<%s,%s>' % \
                 (name, self.parse_type(typ.key_type),
                  self.parse_type(typ.value_type))
-        elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
+        elif isinstance(typ, (ClassType, EnumerationType)):
             return 'global::KRPC.Client.Services.%s.%s' % \
                 (typ.protobuf_type.service, typ.protobuf_type.name)
         raise RuntimeError('Unknown type ' + typ)
@@ -90,15 +85,12 @@ class CsharpGenerator(Generator):
         return self.parse_type(typ)
 
     def parse_default_value(self, value, typ):
-        if isinstance(typ, ValueType) and \
-           typ.protobuf_type.code == Type.STRING:
+        if (isinstance(typ, ValueType) and
+                typ.protobuf_type.code == Type.STRING):
             return '"%s"' % value
         elif (isinstance(typ, ValueType) and
               typ.protobuf_type.code == Type.BOOL):
-            if value:
-                return 'true'
-            else:
-                return 'false'
+            return 'true' if value else 'false'
         elif (isinstance(typ, ValueType) and
               typ.protobuf_type.code == Type.FLOAT):
             return str(value) + "f"
@@ -131,8 +123,7 @@ class CsharpGenerator(Generator):
                        for k, v in value.items())
             return 'new %s {%s}' % \
                 (self.parse_type(typ, False), ', '.join(entries))
-        else:
-            return str(value)
+        return str(value)
 
     @staticmethod
     def parse_documentation(documentation):

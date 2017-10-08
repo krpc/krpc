@@ -10,11 +10,11 @@ from krpc.attributes import Attributes
 def _signature(param_types, return_type):
     """ Generate a signature for a procedure that
         can be used as its docstring """
-    if len(param_types) == 0 and return_type is None:
+    if not param_types and return_type is None:
         return ''
     types = [x.python_type.__name__ for x in param_types]
     sig = ','.join(types)
-    if len(types) == 0:
+    if not types:
         sig = '()'
     elif len(types) > 1:
         sig = '(' + sig + ')'
@@ -102,8 +102,7 @@ def _parse_documentation_node(node):
         replace = {'true': 'True', 'false': 'False', 'null': 'None'}
         if node.text in replace:
             return replace[node.text]
-        else:
-            return node.text
+        return node.text
     elif node.tag == 'list':
         content = '\n'
         for item in node:
@@ -111,8 +110,7 @@ def _parse_documentation_node(node):
             content += '* %s\n' % '\n'.join(
                 _indent(item_content.split('\n'), 2))[2:].rstrip()
         return content
-    else:
-        return node.text
+    return node.text
 
 
 def _parse_documentation_content(node):
@@ -144,7 +142,7 @@ def _parse_documentation(xml):
                       _parse_documentation_content(node).replace('\n', '')
         elif node.tag == 'remarks':
             note = 'Note: %s' % _parse_documentation_content(node)
-    if len(params) > 0:
+    if params:
         params_str = 'Args:\n%s' % '\n'.join('    ' + x for x in params)
     else:
         params_str = ''

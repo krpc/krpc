@@ -26,9 +26,6 @@ class CsharpDomain(Domain):
         Type.BYTES: 'byte[]'
     }
 
-    def __init__(self, macros):
-        super(CsharpDomain, self).__init__(macros)
-
     def currentmodule(self, name):
         super(CsharpDomain, self).currentmodule(name)
         return '.. namespace:: KRPC.Client.Services.%s' % name
@@ -40,7 +37,7 @@ class CsharpDomain(Domain):
             return self.type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
             return 'KRPC.Schema.KRPC.%s' % typ.python_type.__name__
-        elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
+        elif isinstance(typ, (ClassType, EnumerationType)):
             return self.shorten_ref(
                 '%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
         elif isinstance(typ, ListType):
@@ -62,22 +59,18 @@ class CsharpDomain(Domain):
     def default_value(typ, value):
         if value is None:
             return 'null'
-        elif (isinstance(typ, TupleType) or isinstance(typ, ListType) or
-              isinstance(typ, SetType) or isinstance(typ, DictionaryType)):
+        elif isinstance(typ, (TupleType, ListType, SetType, DictionaryType)):
             return 'null'
-        else:
-            return str(value)
+        return str(value)
 
     def see(self, obj):
-        if isinstance(obj, Property) or isinstance(obj, ClassProperty):
+        if isinstance(obj, (Property, ClassProperty)):
             prefix = 'prop'
         elif isinstance(obj, EnumerationValue):
             prefix = 'enum'
-        elif (isinstance(obj, Procedure) or
-              isinstance(obj, ClassMethod) or
-              isinstance(obj, ClassStaticMethod)):
+        elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
             prefix = 'meth'
-        elif isinstance(obj, Class) or isinstance(obj, Enumeration):
+        elif isinstance(obj, (Class, Enumeration)):
             prefix = 'type'
         else:
             raise RuntimeError(str(obj))
@@ -85,6 +78,6 @@ class CsharpDomain(Domain):
 
     def shorten_ref(self, name, obj=None):
         # Only drop service name for non-service members
-        if obj and (isinstance(obj, Procedure) or isinstance(obj, Property)):
+        if obj and isinstance(obj, (Procedure, Property)):
             return name
         return super(CsharpDomain, self).shorten_ref(name, obj)

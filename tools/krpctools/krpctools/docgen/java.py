@@ -56,9 +56,6 @@ class JavaDomain(Domain):
         'Sextet', 'Septet', 'Octet', 'Ennead', 'Decade'
     ]
 
-    def __init__(self, macros):
-        super(JavaDomain, self).__init__(macros)
-
     def currentmodule(self, name):
         super(JavaDomain, self).currentmodule(name)
         return '.. package:: krpc.client.services.%s' % name
@@ -66,8 +63,7 @@ class JavaDomain(Domain):
     def method_name(self, name):
         if lower_camel_case(name) in self._keywords:
             return '%s_' % name
-        else:
-            return name
+        return name
 
     def type(self, typ):
         return self._type(typ)
@@ -81,7 +77,7 @@ class JavaDomain(Domain):
             return self.boxed_type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
             return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
-        elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
+        elif isinstance(typ, (ClassType, EnumerationType)):
             return self.shorten_ref(
                 '%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
         elif isinstance(typ, ListType):
@@ -129,16 +125,14 @@ class JavaDomain(Domain):
 
     def ref(self, obj):
         name = obj.fullname
-        if isinstance(obj, Procedure) or \
-           isinstance(obj, ClassMethod) or \
-           isinstance(obj, ClassStaticMethod):
+        if isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
             parameters = [self.type(p.type) for p in obj.parameters]
             if isinstance(obj, ClassMethod):
                 parameters = parameters[1:]
             name = name.split('.')
             name[-1] = lower_camel_case(name[-1])+'('+', '.join(parameters)+')'
             name = '.'.join(name)
-        elif isinstance(obj, Property) or isinstance(obj, ClassProperty):
+        elif isinstance(obj, (Property, ClassProperty)):
             name = name.split('.')
             name[-1] = 'get'+name[-1]+'()'
             name = '.'.join(name)

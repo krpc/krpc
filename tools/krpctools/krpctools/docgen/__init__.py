@@ -57,7 +57,6 @@ def main():
     macros = resource_filename(__name__, '%s.tmpl' % args.language) \
         .decode('utf-8')
 
-    # pylint: disable=redefined-variable-type
     if args.language == 'csharp':
         domain = CsharpDomain(macros)
     elif args.language == 'cpp':
@@ -68,7 +67,6 @@ def main():
         domain = LuaDomain(macros)
     else:  # python
         domain = PythonDomain(macros)
-    # pylint: enable=redefined-variable-type
 
     if not os.path.exists(args.order_file):
         raise RuntimeError(
@@ -98,7 +96,7 @@ def main():
     services = {name: Service(name, sort=sort, **info)
                 for name, info in services_info.iteritems()}
 
-    if len(sort_failed) > 0:
+    if sort_failed:
         raise RuntimeError(
             'Don\'t know how to order:\n'+'\n'.join(sort_failed))
 

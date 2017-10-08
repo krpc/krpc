@@ -5,9 +5,6 @@ import jinja2.nodes
 class AppendExtension(jinja2.ext.Extension):
     tags = set(['append'])
 
-    def __init__(self, environment):
-        super(AppendExtension, self).__init__(environment)
-
     def parse(self, parser):
         lineno = next(parser.stream).lineno
         args = [parser.parse_expression()]

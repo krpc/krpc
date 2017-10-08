@@ -12,10 +12,6 @@ from ..utils import lower_camel_case, upper_camel_case, as_type
 
 class JavaGenerator(Generator):
 
-    def __init__(self, macro_template, service, definition_files):
-        super(JavaGenerator, self).__init__(
-            macro_template, service, definition_files)
-
     _keywords = set([
         'abstract', 'continue', 'for', 'new', 'switch', 'assert', 'default',
         'goto', 'package', 'synchronized', 'boolean', 'do', 'if', 'private',
@@ -65,8 +61,7 @@ class JavaGenerator(Generator):
         name = lower_camel_case(name)
         if name in cls._keywords:
             return '%s_' % name
-        else:
-            return name
+        return name
 
     @staticmethod
     def parse_const_name(name):
@@ -82,7 +77,7 @@ class JavaGenerator(Generator):
             return 'krpc.client.Event'
         elif isinstance(typ, MessageType):
             return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
-        elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
+        elif isinstance(typ, (ClassType, EnumerationType)):
             return 'krpc.client.services.%s.%s' % \
                 (typ.protobuf_type.service, typ.protobuf_type.name)
         elif isinstance(typ, TupleType):

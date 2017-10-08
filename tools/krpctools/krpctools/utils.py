@@ -20,7 +20,7 @@ def indent(string, width=3):
     """ Indent the lines in the given string with width spaces """
     lines = string.split('\n')
     for i, line in enumerate(lines):
-        if len(line.strip()) > 0:
+        if line.strip():
             lines[i] = (' '*width) + line
     return '\n'.join(lines).strip('\n')
 

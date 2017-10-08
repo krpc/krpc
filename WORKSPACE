@@ -295,8 +295,8 @@ http_file(
 
 http_file(
     name = 'python_astroid',
-    url = 'https://pypi.python.org/packages/7c/80/9122e452bb54640a67933d3ff586b6e03849dca086eed53542521b1cf894/astroid-1.4.8.tar.gz',
-    sha256 = '5f064785a7e45ed519285f2eb30b795e58a4932a0736b32030da6fef3394ddb3'
+    url = 'https://pypi.python.org/packages/d7/b7/112288f75293d6f12b1e41bac1e822fd0f29b0f88e2c4378cdd295b9d838/astroid-1.5.3.tar.gz',
+    sha256 = '492c2a2044adbf6a84a671b7522e9295ad2f6a7c781b899014308db25312dd35'
 )
 
 http_file(
@@ -451,8 +451,8 @@ http_file(
 
 http_file(
     name = 'python_pylint',
-    url = 'https://pypi.python.org/packages/92/f3/41deb50322d579517f779c3421b92f84133ddb6d954791bbd37aca1b5854/pylint-1.6.4-py2.py3-none-any.whl',
-    sha256 = 'eeeeb81c8095586b417ea0602c01f53d1c87694fcf3c866f8681457f94875a8e'
+    url = 'https://pypi.python.org/packages/87/8a/07782ece0b9db20341393f9913fb5368f9e7e4553f17c0bc91eda633f942/pylint-1.7.4-py2.py3-none-any.whl',
+    sha256 = '948679535a28afc54afb9210dabc6973305409042ece8e5768ca1409910c1ed8'
 )
 
 http_file(
@@ -477,6 +477,12 @@ http_file(
     name = 'python_setuptools_git',
     url = 'https://pypi.python.org/packages/d9/c5/396c2c06cc89d4ce2d8ccf1d7e6cf31b33d4466a7c65a67a992adb3c6f29/setuptools-git-1.2.tar.gz',
     sha256 = 'ff64136da01aabba76ae88b050e7197918d8b2139ccbf6144e14d472b9c40445'
+)
+
+http_file(
+    name = 'python_singledispatch',
+    url = 'https://pypi.python.org/packages/d9/e9/513ad8dc17210db12cb14f2d4d190d618fb87dd38814203ea71c87ba5b68/singledispatch-3.4.0.3.tar.gz',
+    sha256 = '5b06af87df13818d14f08a028e42f566640aef80805c3b50c5056b086e3c2b9c'
 )
 
 http_file(

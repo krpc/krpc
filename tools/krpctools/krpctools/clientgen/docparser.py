@@ -24,10 +24,7 @@ class DocParser(object):
             content += self.inner_parse_node(child)
             if child.tail:
                 content += child.tail
-        if indent == 0:
-            return content
-        else:
-            return self.indent(content, indent)
+        return content if indent == 0 else self.indent(content, indent)
 
     def inner_parse_node(self, node):
         if not hasattr(self, 'parse_'+node.tag):
@@ -38,6 +35,6 @@ class DocParser(object):
     def indent(string, width):
         lines = string.split('\n')
         for i, line in enumerate(lines):
-            if len(line.strip()) > 0:
+            if line.strip():
                 lines[i] = (' '*width) + line
         return '\n'.join(lines).strip('\n')

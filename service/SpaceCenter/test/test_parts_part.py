@@ -780,7 +780,7 @@ class TestPartsPartDecoupleStage(krpctest.TestCase):
     def test_stage_numbers(self):
         stage_numbering = []
         stack = [(0, self.parts.root)]
-        while len(stack) > 0:
+        while stack:
             level, part = stack.pop()
             stage_numbering.append(
                 ' '*(level*2) + '%s %d %d' %

@@ -61,7 +61,6 @@ class Types(object):
         if key in self._types:
             return self._types[key]
 
-        # pylint: disable=redefined-variable-type
         if protobuf_type.code in VALUE_TYPES:
             typ = ValueType(protobuf_type)
         elif protobuf_type.code == KRPC.Type.CLASS:
@@ -80,7 +79,6 @@ class Types(object):
             typ = MessageType(protobuf_type)
         else:
             raise ValueError('Invalid type')
-        # pylint: enable=redefined-variable-type
 
         self._types[key] = typ
         return typ
@@ -250,8 +248,7 @@ class Types(object):
             return float(value)
         elif typ.python_type == int:
             return int(value)
-        else:
-            return long(value)
+        return long(value)
 
 
 class TypeBase(object):

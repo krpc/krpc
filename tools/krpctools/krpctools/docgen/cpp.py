@@ -48,9 +48,6 @@ class CppDomain(Domain):
         'null': 'NULL'
     }
 
-    def __init__(self, macros):
-        super(CppDomain, self).__init__(macros)
-
     def currentmodule(self, name):
         super(CppDomain, self).currentmodule(name)
         return '.. namespace:: krpc::services::%s' % name
@@ -58,8 +55,7 @@ class CppDomain(Domain):
     def method_name(self, name):
         if snake_case(name) in self._keywords:
             return '%s_' % name
-        else:
-            return name
+        return name
 
     def type(self, typ):
         if typ is None:
@@ -68,7 +64,7 @@ class CppDomain(Domain):
             return self.type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
             return 'krpc::schema::%s' % typ.python_type.__name__
-        elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
+        elif isinstance(typ, (ClassType, EnumerationType)):
             name = '%s.%s' % \
                    (typ.protobuf_type.service, typ.protobuf_type.name)
             return self.shorten_ref(name).replace('.', '::')
@@ -120,11 +116,9 @@ class CppDomain(Domain):
         return self.shorten_ref('.'.join(name)).replace('.', '::')
 
     def see(self, obj):
-        if isinstance(obj, Property) or isinstance(obj, ClassProperty):
+        if isinstance(obj, (Property, ClassProperty)):
             prefix = 'func'
-        elif (isinstance(obj, Procedure) or
-              isinstance(obj, ClassMethod) or
-              isinstance(obj, ClassStaticMethod)):
+        elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
             prefix = 'func'
         elif isinstance(obj, Class):
             prefix = 'class'
@@ -140,15 +134,12 @@ class CppDomain(Domain):
         return super(CppDomain, self).paramref(snake_case(name))
 
     def default_value(self, typ, value):
-        if isinstance(typ, ValueType) and \
-           typ.protobuf_type.code == Type.STRING:
+        if (isinstance(typ, ValueType) and
+                typ.protobuf_type.code == Type.STRING):
             return '"%s"' % value
-        if isinstance(typ, ValueType) and \
-           typ.protobuf_type.code == Type.BOOL:
-            if value:
-                return 'true'
-            else:
-                return 'false'
+        elif (isinstance(typ, ValueType) and
+              typ.protobuf_type.code == Type.BOOL):
+            return 'true' if value else 'false'
         elif isinstance(typ, EnumerationType):
             return 'static_cast<%s>(%s)' % (self.type(typ), value)
         elif value is None:
@@ -168,5 +159,4 @@ class CppDomain(Domain):
                                      self.default_value(typ.value_type, v))
                        for k, v in value.items())
             return '(%s)' % ', '.join(entries)
-        else:
-            return str(value)
+        return str(value)

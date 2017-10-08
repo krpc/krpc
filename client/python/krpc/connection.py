@@ -45,8 +45,8 @@ class Connection(object):
     def send(self, data):
         """ Send data to the connection.
             Blocks until all data has been sent. """
-        assert len(data) > 0
-        while len(data) > 0:
+        assert data
+        while data:
             sent = self._socket.send(data)
             if sent == 0:
                 raise socket.error("Connection closed")
@@ -62,7 +62,7 @@ class Connection(object):
         while len(data) < length:
             remaining = length - len(data)
             result = self._socket.recv(min(4096, remaining))
-            if len(result) == 0:
+            if not result:
                 raise socket.error("Connection closed")
             data += result
         return data

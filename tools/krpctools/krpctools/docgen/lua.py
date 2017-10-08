@@ -33,9 +33,6 @@ class LuaDomain(Domain):
         Type.BYTES: 'string'
     }
 
-    def __init__(self, macros):
-        super(LuaDomain, self).__init__(macros)
-
     def currentmodule(self, name):
         super(LuaDomain, self).currentmodule(name)
         return '.. currentmodule:: %s' % name
@@ -45,7 +42,7 @@ class LuaDomain(Domain):
             return self.type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
             return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
-        elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
+        elif isinstance(typ, (ClassType, EnumerationType)):
             return self.shorten_ref(
                 '%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
         elif isinstance(typ, ListType):
@@ -98,15 +95,11 @@ class LuaDomain(Domain):
         return name
 
     def see(self, obj):
-        if isinstance(obj, Property) or \
-           isinstance(obj, ClassProperty) or \
-           isinstance(obj, EnumerationValue):
+        if isinstance(obj, (Property, ClassProperty, EnumerationValue)):
             prefix = 'attr'
-        elif (isinstance(obj, Procedure) or
-              isinstance(obj, ClassMethod) or
-              isinstance(obj, ClassStaticMethod)):
+        elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
             prefix = 'meth'
-        elif isinstance(obj, Class) or isinstance(obj, Enumeration):
+        elif isinstance(obj, (Class, Enumeration)):
             prefix = 'class'
         else:
             raise RuntimeError(str(obj))

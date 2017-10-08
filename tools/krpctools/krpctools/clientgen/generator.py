@@ -210,8 +210,7 @@ class Generator(object):
                 return collections.OrderedDict(
                     sorted([(x, sort(y)) for x, y in objs.items()],
                            key=lambda x: x[0]))
-            else:
-                return objs
+            return objs
 
         return {
             'service_name': self._service,
@@ -229,8 +228,7 @@ class Generator(object):
         value = array.array('B', value).tostring()
         if not isinstance(typ, EnumerationType):
             return Decoder.decode(value, typ)
-        else:
-            return Decoder.decode(value, self.types.sint32_type)
+        return Decoder.decode(value, self.types.sint32_type)
 
     def get_return_type(self, procedure):
         if 'return_type' not in procedure:

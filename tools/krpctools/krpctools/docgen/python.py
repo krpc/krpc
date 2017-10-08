@@ -20,9 +20,6 @@ class PythonDomain(Domain):
         'false': 'False'
     }
 
-    def __init__(self, macros):
-        super(PythonDomain, self).__init__(macros)
-
     def currentmodule(self, name):
         super(PythonDomain, self).currentmodule(name)
         return '.. currentmodule:: %s' % name
@@ -32,7 +29,7 @@ class PythonDomain(Domain):
             return typ.python_type.__name__
         elif isinstance(typ, MessageType):
             return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
-        elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
+        elif isinstance(typ, (ClassType, EnumerationType)):
             return self.shorten_ref(
                 '%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
         elif isinstance(typ, ListType):

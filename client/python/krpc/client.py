@@ -175,7 +175,7 @@ class Client(object):
             can be thrown to the calling code """
         # TODO: modify the stack trace of the thrown exception so it looks like
         #       it came from the local call
-        if len(error.service) > 0 and len(error.name) > 0:
+        if error.service and error.name:
             service_name = snake_case(error.service)
             type_name = error.name
             if not hasattr(self, service_name):
@@ -193,6 +193,6 @@ class Client(object):
     @staticmethod
     def _error_message(error):
         msg = error.description
-        if len(error.stack_trace) > 0:
+        if error.stack_trace:
             msg += '\nServer stack trace:\n' + error.stack_trace
         return msg

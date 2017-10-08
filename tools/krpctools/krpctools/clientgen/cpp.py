@@ -9,17 +9,10 @@ from .docparser import DocParser
 
 def cpp_template_fix(typ):
     """ Ensure nested templates are separated by spaces for the C++ parser """
-    if typ.endswith('>>'):
-        return typ[:-2] + '> >'
-    else:
-        return typ
+    return typ[:-2] + '> >' if typ.endswith('>>') else typ
 
 
 class CppGenerator(Generator):
-
-    def __init__(self, macro_template, service, definition_files):
-        super(CppGenerator, self).__init__(
-            macro_template, service, definition_files)
 
     _keywords = set([
         'alignas', 'alignof', 'and', 'and_eq', 'asm', 'auto', 'bitand',
@@ -54,8 +47,7 @@ class CppGenerator(Generator):
         name = snake_case(name)
         if name in self._keywords:
             return '%s_' % name
-        else:
-            return name
+        return name
 
     def parse_type(self, typ):
         if isinstance(typ, ValueType):
@@ -79,7 +71,7 @@ class CppGenerator(Generator):
             return cpp_template_fix(
                 'std::tuple<%s>' % ', '.join(self.parse_type(t)
                                              for t in typ.value_types))
-        elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
+        elif isinstance(typ, (ClassType, EnumerationType)):
             return '%s::%s' % (typ.protobuf_type.service,
                                typ.protobuf_type.name)
         raise RuntimeError('Unknown type ' + typ)
@@ -93,15 +85,12 @@ class CppGenerator(Generator):
         return self.parse_type(typ)
 
     def parse_default_value(self, value, typ):
-        if isinstance(typ, ValueType) and \
-           typ.protobuf_type.code == Type.STRING:
+        if (isinstance(typ, ValueType) and
+                typ.protobuf_type.code == Type.STRING):
             return '"%s"' % value
-        if isinstance(typ, ValueType) and \
-           typ.protobuf_type.code == Type.BOOL:
-            if value:
-                return 'true'
-            else:
-                return 'false'
+        elif (isinstance(typ, ValueType) and
+              typ.protobuf_type.code == Type.BOOL):
+            return 'true' if value else 'false'
         elif isinstance(typ, ClassType) and value is None:
             return self.parse_parameter_type(typ) + '()'
         elif isinstance(typ, EnumerationType):
@@ -127,8 +116,7 @@ class CppGenerator(Generator):
                         self.parse_default_value(v, typ.value_type))
                        for k, v in value.items())
             return '%s{%s}' % (self.parse_type(typ), ', '.join(entries))
-        else:
-            return str(value)
+        return str(value)
 
     def parse_set_client(self, procedure):
         return isinstance(self.get_return_type(procedure), ClassType)
