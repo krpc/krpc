@@ -13,6 +13,7 @@ v0.4.0
  * Add support for streaming RPCs that yield execution to a future game update
  * Add KRPC.GetClientID and KRPC.GetClientName
  * Add support for events
+ * Server no longer freezes if the game is paused (#347)
 
 v0.3.11
  * Support for KSP 1.3.1
