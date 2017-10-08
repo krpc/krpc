@@ -1,6 +1,6 @@
 author = 'djungelorm'
 version = '0.4.0'
-ksp_version = '1.3.0.1804'
+ksp_version = '1.3.1.1891'
 ksp_version_parts = ksp_version.split('.')
 
 def get_version_parts(version):
