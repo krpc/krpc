@@ -21,13 +21,13 @@ if [ ! -d "$env" ]; then
       "pbr==3.1.0" \
       "setuptools==36.0.1" \
       "setuptools-git==1.2"
-  pip install "Sphinx==1.6.2"
+  pip install "Sphinx==1.6.4"
   CFLAGS="-O0" pip install "lxml==3.8.0"
   pip install \
-      "sphinx_rtd_theme==0.1.9" \
+      "sphinx_rtd_theme==0.2.5b1" \
       "sphinxcontrib_spelling==2.3.0" \
       "sphinx-csharp==0.1.5" \
-      "sphinx-tabs==1.0.0" \
+      "sphinx-tabs==1.1.5" \
       "javasphinx==0.9.15" \
       https://github.com/djungelorm/sphinx-lua/releases/download/0.1.3/sphinx-lua-0.1.3.tar.gz
   pip install sphinx-autobuild pyinotify

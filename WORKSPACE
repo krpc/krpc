@@ -499,8 +499,8 @@ http_file(
 
 http_file(
     name = 'python_sphinx',
-    url = 'https://pypi.python.org/packages/72/68/ad424cd0caf5ea9d3b53b0ed5653eb09c4abde99b0c0ec84141935281775/Sphinx-1.6.2.tar.gz',
-    sha256 = '67527d767dff9a2e2159c501265cff47b6d96d39e036e8b971d6c143ff303197'
+    url = 'https://pypi.python.org/packages/90/84/850bda5df345bbccaf21d389d360c07b8499b47bc136cdf53e96d840a55f/Sphinx-1.6.4.tar.gz',
+    sha256 = 'f101efd87fbffed8d8aca6ef307fec57693334f39d32efcbc2fc96ed129f4a3e'
 )
 
 http_file(
@@ -517,14 +517,14 @@ http_file(
 
 http_file(
     name = 'python_sphinx_tabs',
-    url = 'https://pypi.python.org/packages/a8/06/17658a054864be05fe53b793aa037434d969f576ff120823f72cc20b4f9d/sphinx-tabs-1.0.0.tar.gz',
-    sha256 = 'b98f2b8cff9291dac94a2b2cc57c42cd5824847fb1f4d35b99ec07c4693398c4'
+    url = 'https://pypi.python.org/packages/fa/97/9d5d9b345423eea201c6d59bf1359ac6098ee702fc2eca95ac9d7e113a65/sphinx-tabs-1.1.5.tar.gz',
+    sha256 = '06ca23c1fb5590398c46f0c4d06d9e3c01bab129bbbad6e50c41a01704b07698'
 )
 
 http_file(
     name = 'python_sphinx_rtd_theme',
-    url = 'https://pypi.python.org/packages/99/b5/249a803a428b4fd438dd4580a37f79c0d552025fb65619d25f960369d76b/sphinx_rtd_theme-0.1.9.tar.gz',
-    sha256 = '273846f8aacac32bf9542365a593b495b68d8035c2e382c9ccedcac387c9a0a1'
+    url = 'https://pypi.python.org/packages/59/e4/9e3a74a3271e6734911d3f549e8439db53b8ac29adf10c8f698e6c86246b/sphinx_rtd_theme-0.2.5b1.tar.gz',
+    sha256 = 'd99513e7f2f8b9da8fdc189ad83df926b83d7fb15ad7ed07f24665d1f29d38da'
 )
 
 http_file(
