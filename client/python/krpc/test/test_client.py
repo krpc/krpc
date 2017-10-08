@@ -331,8 +331,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertSetEqual(
             set(['get_client_id', 'get_client_name', 'get_services',
                  'get_status', 'add_stream', 'start_stream', 'remove_stream',
-                 'add_event', 'current_game_scene', 'GameScene', 'clients',
-                 'Expression', 'InvalidOperationException',
+                 'add_event', 'current_game_scene', 'GameScene', 'paused',
+                 'clients', 'Expression', 'InvalidOperationException',
                  'ArgumentException', 'ArgumentNullException',
                  'ArgumentOutOfRangeException']),
             set(x for x in dir(self.conn.krpc) if not x.startswith('_')))

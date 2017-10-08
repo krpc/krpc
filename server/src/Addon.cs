@@ -26,7 +26,10 @@ namespace KRPC
         ClientConnectingDialog clientConnectingDialog;
         ClientDisconnectDialog clientDisconnectDialog;
 
-        bool isPaused;
+        /// <summary>
+        /// The instance of the addon
+        /// </summary>
+        public static Addon Instance { get; private set; }
 
         static void Init ()
         {
@@ -48,6 +51,7 @@ namespace KRPC
                 return;
 
             Init ();
+            Instance = this;
 
             Service.CallContext.SetGameScene (HighLogic.LoadedScene.ToGameScene ());
             Utils.Logger.WriteLine ("Game scene switched to " + Service.CallContext.GameScene);
@@ -189,11 +193,12 @@ namespace KRPC
             };
 
             // KSP events
+            IsPaused = false;
             GameEvents.onGamePause.Add (() => {
-                isPaused = true;
+                IsPaused = true;
             });
             GameEvents.onGameUnpause.Add (() => {
-                isPaused = false;
+                IsPaused = false;
             });
         }
 
@@ -262,11 +267,16 @@ namespace KRPC
         }
 
         /// <summary>
+        /// Whether the game is paused
+        /// </summary>
+        public bool IsPaused { get; private set; }
+
+        /// <summary>
         /// Trigger server update, when the game is paused
         /// </summary>
         public void Update()
         {
-            if (isPaused)
+            if (IsPaused)
                 FixedUpdate();
         }
     }

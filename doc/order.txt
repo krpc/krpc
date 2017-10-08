@@ -15,6 +15,7 @@ KRPC.GameScene.Flight
 KRPC.GameScene.TrackingStation
 KRPC.GameScene.EditorVAB
 KRPC.GameScene.EditorSPH
+KRPC.Paused
 KRPC.Expression
 KRPC.Expression.ConstantDouble
 KRPC.Expression.ConstantFloat
