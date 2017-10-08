@@ -26,6 +26,8 @@ namespace KRPC
         ClientConnectingDialog clientConnectingDialog;
         ClientDisconnectDialog clientDisconnectDialog;
 
+        bool isPaused;
+
         static void Init ()
         {
             if (core == null) {
@@ -185,6 +187,14 @@ namespace KRPC
                     clientConnectingDialog.OnClientRequestingConnection (s, e);
                 }
             };
+
+            // KSP events
+            GameEvents.onGamePause.Add (() => {
+                isPaused = true;
+            });
+            GameEvents.onGameUnpause.Add (() => {
+                isPaused = false;
+            });
         }
 
         void OnGUIApplicationLauncherReady ()
@@ -249,6 +259,15 @@ namespace KRPC
                 return;
             if (core != null && core.AnyRunning)
                 core.Update ();
+        }
+
+        /// <summary>
+        /// Trigger server update, when the game is paused
+        /// </summary>
+        public void Update()
+        {
+            if (isPaused)
+                FixedUpdate();
         }
     }
 }
