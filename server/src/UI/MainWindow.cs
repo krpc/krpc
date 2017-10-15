@@ -40,8 +40,8 @@ namespace KRPC.UI
             buttonStyle, toggleStyle, expandStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
         const float windowWidth = 288f;
         const float textFieldWidth = 45f;
-        const float longTextFieldWidth = 180f;
-        const float fixedLabelWidth = 125f;
+        const float longTextFieldWidth = 80f;
+        const float fixedLabelWidth = 160f;
         const float indentWidth = 15f;
         float scaledIndentWidth;
         const int maxTimePerUpdateMaxLength = 5;
