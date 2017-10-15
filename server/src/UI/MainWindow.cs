@@ -215,6 +215,7 @@ namespace KRPC.UI
         {
             var running = core.AnyRunning;
             var label = (running ? stopAllServersText : startAllServersText) + (core.Servers.Count > 1 ? "s" : string.Empty);
+            GUI.enabled = !editServers.Any();
             if (GUILayout.Button(label, buttonStyle)) {
                 Errors.Clear ();
                 Resized = true;
@@ -222,6 +223,7 @@ namespace KRPC.UI
                     if (server.Running == running)
                         EventHandlerExtensions.Invoke(running ? OnStopServerPressed : OnStartServerPressed, this, new ServerEventArgs(server));
             }
+            GUI.enabled = true;
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
