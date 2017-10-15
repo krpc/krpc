@@ -175,6 +175,7 @@ TEST(test_encode_decode, test_bytes) {
   test_bytes("", "00");
   test_bytes(krpc::platform::unhexlify("bada55"), "03bada55");
   test_bytes(krpc::platform::unhexlify("deadbeef"), "04deadbeef");
+  test_bytes(krpc::platform::unhexlify("deadbeef00"), "05deadbeef00");
 }
 
 TEST(test_encode_decode, test_list) {
