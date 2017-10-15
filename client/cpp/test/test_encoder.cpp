@@ -31,7 +31,6 @@ TEST(test_encoder, test_encode_string) {
 }
 
 TEST(test_encoder, test_encode_unicode_string) {
-  krpc::platform::unhexlify("6a");
   std::string in = krpc::platform::unhexlify("e284a2");
   std::string data = krpc::encoder::encode(in);
   ASSERT_EQ("03e284a2", krpc::platform::hexlify(data));
