@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Sockets;
@@ -9,6 +8,7 @@ using System.Threading;
 using Google.Protobuf;
 using KRPC.Client.Attributes;
 using KRPC.Schema.KRPC;
+using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 
 namespace KRPC.Client
 {
@@ -16,6 +16,7 @@ namespace KRPC.Client
     /// A connection to the kRPC server. All interaction with kRPC is performed via an instance of this class.
     /// </summary>
     [SuppressMessage ("Gendarme.Rules.Correctness", "DisposableFieldsShouldBeDisposedRule")]
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public class Connection : IConnection, IDisposable
     {
@@ -45,25 +46,37 @@ namespace KRPC.Client
             rpcClient = new TcpClient ();
             rpcClient.Connect (address, rpcPort);
             rpcStream = rpcClient.GetStream ();
-            rpcStream.Write (Encoder.RPCHelloMessage, 0, Encoder.RPCHelloMessage.Length);
-            var clientName = Encoder.EncodeClientName (name);
-            rpcStream.Write (clientName, 0, clientName.Length);
-            var clientIdentifier = new byte[Encoder.ClientIdentifierLength];
-            rpcStream.Read (clientIdentifier, 0, Encoder.ClientIdentifierLength);
             codedRpcStream = new CodedOutputStream (rpcStream, true);
+            var request = new ConnectionRequest ();
+            request.Type = Type.Rpc;
+            request.ClientName = name;
+            codedRpcStream.WriteLength (request.CalculateSize ());
+            request.WriteTo (codedRpcStream);
+            codedRpcStream.Flush ();
+            int size = ReadMessageData (rpcStream, ref responseBuffer);
+            var response = ConnectionResponse.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
+            if (response.Status != ConnectionResponse.Types.Status.Ok)
+                throw new ConnectionException (response.Message);
 
             if (streamPort != 0) {
                 streamClient = new TcpClient ();
                 streamClient.Connect (address, streamPort);
                 var streamStream = streamClient.GetStream ();
-                streamStream.Write (Encoder.StreamHelloMessage, 0, Encoder.StreamHelloMessage.Length);
-                streamStream.Write (clientIdentifier, 0, clientIdentifier.Length);
-                var recvOkMessage = new byte [Encoder.OkMessage.Length];
-                streamStream.Read (recvOkMessage, 0, Encoder.OkMessage.Length);
-                if (!recvOkMessage.SequenceEqual (Encoder.OkMessage))
-                    throw new InvalidOperationException ("Did not receive OK message from server");
+                request = new ConnectionRequest ();
+                request.Type = Type.Stream;
+                request.ClientIdentifier = response.ClientIdentifier;
+                var codedStreamStream = new CodedOutputStream (streamStream, true);
+                codedStreamStream.WriteLength (request.CalculateSize ());
+                request.WriteTo (codedStreamStream);
+                codedStreamStream.Flush ();
+                size = ReadMessageData (streamStream, ref responseBuffer);
+                response = ConnectionResponse.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
+                if (response.Status != ConnectionResponse.Types.Status.Ok)
+                    throw new ConnectionException (response.Message);
                 StreamManager = new StreamManager (this, streamClient);
             }
+
+            Services.KRPC.Service.AddExceptionTypes (this);
         }
 
         /// <summary>
@@ -114,8 +127,7 @@ namespace KRPC.Client
         public Stream<TResult> AddStream<TResult> (LambdaExpression expression)
         {
             CheckDisposed ();
-            var request = BuildRequest (expression);
-            return new Stream<TResult> (this, request);
+            return new Stream<TResult> (this, GetCall (expression));
         }
 
         /// <summary>
@@ -126,7 +138,7 @@ namespace KRPC.Client
         public Stream<TResult> AddStream<TResult> (Expression<Func<TResult>> expression)
         {
             CheckDisposed ();
-            return AddStream<TResult> ((LambdaExpression)expression);
+            return new Stream<TResult> (this, GetCall (expression));
         }
 
         /// <summary>
@@ -136,11 +148,13 @@ namespace KRPC.Client
         public ByteString Invoke (string service, string procedure, IList<ByteString> arguments = null)
         {
             CheckDisposed ();
-            return Invoke (BuildRequest (service, procedure, arguments));
+            return Invoke (GetCall (service, procedure, arguments));
         }
 
-        internal ByteString Invoke (Request request)
+        internal ByteString Invoke (ProcedureCall call)
         {
+            var request = new Request ();
+            request.Calls.Add (call);
             Response response;
 
             lock (invokeLock) {
@@ -153,45 +167,63 @@ namespace KRPC.Client
                 response = Response.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
             }
 
-            if (response.HasError)
-                throw new RPCException (response.Error);
-            return response.HasReturnValue ? response.ReturnValue : null;
+            if (response.Error != null)
+                throw GetException(response.Error);
+            if (response.Results[0].Error != null)
+                throw GetException (response.Results [0].Error);
+            return response.Results[0].Value;
         }
 
-        internal static Request BuildRequest (string service, string procedure, IList<ByteString> arguments = null)
+        internal static ProcedureCall GetCall (string service, string procedure, IList<ByteString> arguments = null)
         {
-            var request = new Request ();
-            request.Service = service;
-            request.Procedure = procedure;
+            var call = new ProcedureCall ();
+            call.Service = service;
+            call.Procedure = procedure;
             if (arguments != null) {
                 uint position = 0;
                 foreach (var value in arguments) {
                     var argument = new Argument ();
                     argument.Position = position;
                     argument.Value = value;
-                    request.Arguments.Add (argument);
+                    call.Arguments.Add (argument);
                     position++;
                 }
             }
-            return request;
+            return call;
         }
 
-        internal static Request BuildRequest (LambdaExpression expression)
+        /// <summary>
+        /// Return the procedure call message for a remote procedure call.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidUnnecessarySpecializationRule")]
+        public static ProcedureCall GetCall<TResult> (Expression<Func<TResult>> expression)
         {
+            return GetCall ((LambdaExpression) expression);
+        }
+
+        /// <summary>
+        /// Return the procedure call message for a remote procedure call.
+        /// </summary>
+        public static ProcedureCall GetCall (LambdaExpression expression)
+        {
+            if (ReferenceEquals (expression, null))
+                throw new ArgumentNullException (nameof (expression));
+
             Expression body = expression.Body;
 
             var methodCallExpression = body as MethodCallExpression;
             if (methodCallExpression != null)
-                return BuildRequest (methodCallExpression);
+                return GetCall (methodCallExpression);
 
             var memberExpression = body as MemberExpression;
             if (memberExpression != null)
-                return BuildRequest (memberExpression);
+                return GetCall (memberExpression);
 
             throw new ArgumentException ("Invalid expression. Must consist of a method call or property accessor only.");
         }
 
-        internal static Request BuildRequest (MethodCallExpression expression)
+        internal static ProcedureCall GetCall (MethodCallExpression expression)
         {
             var method = expression.Method;
 
@@ -204,11 +236,15 @@ namespace KRPC.Client
             // Construct the encoded arguments
             var arguments = new List<ByteString> ();
 
+            // Evaluate the instance on which the method is called
+            // Note: ensures, for example, that the service constructor extension method is called
+            //       such that custom exception types are registered
+            // Note: in the case of class methods, is used to get the id of the object
+            //       with which to make the call
+            var instanceValue = GetInstanceValue (expression.Object);
+
             // Include class instance argument for class methods
             if (ExpressionUtils.IsAClassMethod (expression)) {
-                var instance = expression.Object;
-                var instanceExpr = Expression.Lambda<Func<object>> (Expression.Convert (instance, typeof(object)));
-                var instanceValue = instanceExpr.Compile () ();
                 var instanceType = method.DeclaringType;
                 arguments.Add (Encoder.Encode (instanceValue, instanceType));
             }
@@ -229,11 +265,10 @@ namespace KRPC.Client
                 position++;
             }
 
-            // Build the request
-            return BuildRequest (attribute.Service, attribute.Procedure, arguments);
+            return GetCall (attribute.Service, attribute.Procedure, arguments);
         }
 
-        internal static Request BuildRequest (MemberExpression expression)
+        internal static ProcedureCall GetCall (MemberExpression expression)
         {
             var member = expression.Member;
 
@@ -246,18 +281,28 @@ namespace KRPC.Client
             // Construct the encoded arguments
             var arguments = new List<ByteString> ();
 
+            // Evaluate the instance on which the method is called
+            // Note: ensures, for example, that the service constructor extension method is called
+            //       such that custom exception types are registered
+            // Note: in the case of class methods, is used to get the id of the object
+            //       with which to make the call
+            var instanceValue = GetInstanceValue (expression.Expression);
+
             // If it's a class property, pass the class instance as an argument
             if (ExpressionUtils.IsAClassProperty (expression)) {
-                var instance = expression.Expression;
-                var argumentExpr = Expression.Lambda<Func<object>> (Expression.Convert (instance, typeof(object)));
-                var value = argumentExpr.Compile () ();
-                var type = member.DeclaringType;
-                var encodedValue = Encoder.Encode (value, type);
-                arguments.Add (encodedValue);
+                var instanceType = member.DeclaringType;
+                arguments.Add (Encoder.Encode (instanceValue, instanceType));
             }
 
-            // Build the request
-            return BuildRequest (attribute.Service, attribute.Procedure, arguments);
+            return GetCall (attribute.Service, attribute.Procedure, arguments);
+        }
+
+        static object GetInstanceValue (Expression instance) {
+            if (instance == null)
+                return null;
+            var instanceExpr = Expression.Lambda<Func<object>> (
+                Expression.Convert (instance, typeof(object)));
+            return instanceExpr.Compile () ();
         }
 
         // Initial buffer size of 1 MB
@@ -308,6 +353,42 @@ namespace KRPC.Client
                 return 0;
 
             return messageSize;
+        }
+
+        readonly IDictionary<string, System.Type> exceptionTypes = new Dictionary<string, System.Type>();
+
+        /// <summary>
+        /// Add an exception type to the client.
+        /// Should only be called by generated client stubs.
+        /// </summary>
+        public void AddExceptionType (string service, string name, System.Type exnType)
+        {
+            CheckDisposed ();
+            exceptionTypes [service + "." + name] = exnType;
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "InstantiateArgumentExceptionCorrectlyRule")]
+        internal System.Exception GetException (Error error)
+        {
+            var message = error.Description;
+            if (error.StackTrace.Length > 0) {
+                var newline = Environment.NewLine;
+                message += newline + "Server stack trace: " + newline + error.StackTrace;
+            }
+            if (error.Service.Length > 0 && error.Name.Length > 0) {
+                var key = error.Service + "." + error.Name;
+                if (key == "KRPC.InvalidOperationException")
+                    return new InvalidOperationException (message);
+                if (key == "KRPC.ArgumentException")
+                    return new ArgumentException (string.Empty, message);
+                if (key == "KRPC.ArgumentNullException")
+                    return new ArgumentNullException (string.Empty, message);
+                if (key == "KRPC.ArgumentOutOfRangeException")
+                    return new ArgumentOutOfRangeException (string.Empty, message);
+                var exnType = exceptionTypes [key];
+                return (System.Exception)Activator.CreateInstance (exnType, new [] { message });
+            }
+            return new RPCException (message);
         }
     }
 }

@@ -1,7 +1,8 @@
-from krpc.utils import snake_case
+from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
-    ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, \
-    SetType, TupleType
+    ValueType, ClassType, EnumerationType, MessageType, \
+    TupleType, ListType, SetType, DictionaryType
+from krpc.utils import snake_case
 from .domain import Domain
 from .nodes import \
     Procedure, Property, Class, ClassMethod, ClassStaticMethod, \
@@ -14,35 +15,59 @@ class CppDomain(Domain):
     sphinxname = 'cpp'
     codeext = 'cpp'
 
+    _keywords = set([
+        'alignas', 'alignof', 'and', 'and_eq', 'asm', 'auto', 'bitand',
+        'bitor', 'bool', 'break', 'case', 'catch', 'char', 'char16_t',
+        'char32_t', 'class', 'compl', 'concept', 'const', 'constexpr',
+        'const_cast', 'continue', 'decltype', 'default', 'delete', 'do',
+        'double', 'dynamic_cast', 'else', 'enum', 'explicit', 'export',
+        'extern', 'false', 'float', 'for', 'friend', 'goto', 'if', 'inline',
+        'int', 'long', 'mutable', 'namespace', 'new', 'noexcept', 'not',
+        'not_eq', 'nullptr', 'operator', 'or', 'or_eq', 'private', 'protected',
+        'public', 'register', 'reinterpret_cast', 'requires', 'return',
+        'short', 'signed', 'sizeof', 'static', 'static_assert', 'static_cast',
+        'struct', 'switch', 'template', 'this', 'thread_local', 'throw',
+        'true', 'try', 'typedef', 'typeid', 'typename', 'union', 'unsigned',
+        'using', 'virtual', 'void', 'volatile', 'wchar_t', 'while', 'xor',
+        'xor_eq'
+    ])
+
     type_map = {
-        'int32': 'int32_t',
-        'uint32': 'uint32_t',
-        'string': 'std::string',
-        'bytes': 'std::string'
+        Type.DOUBLE: 'double',
+        Type.FLOAT: 'float',
+        Type.SINT32: 'int32_t',
+        Type.SINT64: 'int64_t',
+        Type.UINT32: 'uint32_t',
+        Type.UINT64: 'uint64_t',
+        Type.BOOL: 'bool',
+        Type.STRING: 'std::string',
+        Type.BYTES: 'std::string'
     }
 
     value_map = {
         'null': 'NULL'
     }
 
-    def __init__(self, macros):
-        super(CppDomain, self).__init__(macros)
-
     def currentmodule(self, name):
         super(CppDomain, self).currentmodule(name)
         return '.. namespace:: krpc::services::%s' % name
+
+    def method_name(self, name):
+        if snake_case(name) in self._keywords:
+            return '%s_' % name
+        return name
 
     def type(self, typ):
         if typ is None:
             return 'void'
         elif isinstance(typ, ValueType):
-            return self.type_map.get(typ.protobuf_type, typ.protobuf_type)
+            return self.type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
-            return 'krpc::schema::%s' % typ.protobuf_type.split('.')[1]
-        elif isinstance(typ, ClassType):
-            return self.shorten_ref(typ.protobuf_type[6:-1]).replace('.', '::')
-        elif isinstance(typ, EnumType):
-            return self.shorten_ref(typ.protobuf_type[5:-1]).replace('.', '::')
+            return 'krpc::schema::%s' % typ.python_type.__name__
+        elif isinstance(typ, (ClassType, EnumerationType)):
+            name = '%s.%s' % \
+                   (typ.protobuf_type.service, typ.protobuf_type.name)
+            return self.shorten_ref(name).replace('.', '::')
         elif isinstance(typ, ListType):
             return 'std::vector<%s>' % self.type(typ.value_type)
         elif isinstance(typ, DictionaryType):
@@ -60,13 +85,12 @@ class CppDomain(Domain):
         if typ is None:
             return 'void'
         elif isinstance(typ, ValueType):
-            return typ.python_type.__name__
+            return self.type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
-            return ':class:`krpc::schema::%s`' % \
-                typ.protobuf_type.split('.')[1]
+            return ':class:`krpc::schema::%s`' % typ.python_type.__name__
         elif isinstance(typ, ClassType):
             return ':class:`%s`' % self.type(typ)
-        elif isinstance(typ, EnumType):
+        elif isinstance(typ, EnumerationType):
             return ':class:`%s`' % self.type(typ)
         elif isinstance(typ, ListType):
             return 'std::vector<%s>' % self.type_description(typ.value_type)
@@ -92,11 +116,9 @@ class CppDomain(Domain):
         return self.shorten_ref('.'.join(name)).replace('.', '::')
 
     def see(self, obj):
-        if isinstance(obj, Property) or isinstance(obj, ClassProperty):
+        if isinstance(obj, (Property, ClassProperty)):
             prefix = 'func'
-        elif (isinstance(obj, Procedure) or
-              isinstance(obj, ClassMethod) or
-              isinstance(obj, ClassStaticMethod)):
+        elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
             prefix = 'func'
         elif isinstance(obj, Class):
             prefix = 'class'
@@ -112,14 +134,13 @@ class CppDomain(Domain):
         return super(CppDomain, self).paramref(snake_case(name))
 
     def default_value(self, typ, value):
-        if isinstance(typ, ValueType) and typ.protobuf_type == 'string':
+        if (isinstance(typ, ValueType) and
+                typ.protobuf_type.code == Type.STRING):
             return '"%s"' % value
-        if isinstance(typ, ValueType) and typ.protobuf_type == 'bool':
-            if value:
-                return 'true'
-            else:
-                return 'false'
-        elif isinstance(typ, EnumType):
+        elif (isinstance(typ, ValueType) and
+              typ.protobuf_type.code == Type.BOOL):
+            return 'true' if value else 'false'
+        elif isinstance(typ, EnumerationType):
             return 'static_cast<%s>(%s)' % (self.type(typ), value)
         elif value is None:
             return self.type(typ) + '()'
@@ -138,5 +159,4 @@ class CppDomain(Domain):
                                      self.default_value(typ.value_type, v))
                        for k, v in value.items())
             return '(%s)' % ', '.join(entries)
-        else:
-            return str(value)
+        return str(value)

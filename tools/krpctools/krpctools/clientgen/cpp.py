@@ -1,22 +1,18 @@
-import krpc.types
-from krpc.utils import snake_case, split_type_string
+from krpc.schema.KRPC_pb2 import Type
+from krpc.types import \
+    ValueType, ClassType, EnumerationType, MessageType, \
+    TupleType, ListType, SetType, DictionaryType
+from krpc.utils import snake_case
 from .generator import Generator
 from .docparser import DocParser
 
 
 def cpp_template_fix(typ):
     """ Ensure nested templates are separated by spaces for the C++ parser """
-    if typ.endswith('>>'):
-        return typ[:-2] + '> >'
-    else:
-        return typ
+    return typ[:-2] + '> >' if typ.endswith('>>') else typ
 
 
 class CppGenerator(Generator):
-
-    def __init__(self, macro_template, service, definition_files):
-        super(CppGenerator, self).__init__(
-            macro_template, service, definition_files)
 
     _keywords = set([
         'alignas', 'alignof', 'and', 'and_eq', 'asm', 'auto', 'bitand',
@@ -35,54 +31,49 @@ class CppGenerator(Generator):
         'xor_eq'
     ])
 
+    _type_map = {
+        Type.DOUBLE: 'double',
+        Type.FLOAT: 'float',
+        Type.SINT32: 'google::protobuf::int32',
+        Type.SINT64: 'google::protobuf::int64',
+        Type.UINT32: 'google::protobuf::uint32',
+        Type.UINT64: 'google::protobuf::uint64',
+        Type.BOOL: 'bool',
+        Type.STRING: 'std::string',
+        Type.BYTES: 'std::string'
+    }
+
     def parse_name(self, name):
         name = snake_case(name)
         if name in self._keywords:
             return '%s_' % name
-        else:
-            return name
+        return name
 
     def parse_type(self, typ):
-        if isinstance(typ, krpc.types.ValueType):
-            typ = typ.protobuf_type
-            if typ == 'string' or typ == 'bytes':
-                return 'std::string'
-            elif 'int' in typ:
-                return 'google::protobuf::%s' % typ
-            else:
-                return typ
-        elif isinstance(typ, krpc.types.MessageType):
-            typ = typ.protobuf_type
-            if typ.startswith('KRPC.'):
-                _, _, x = typ.rpartition('.')
-                return 'krpc::schema::%s' % x
-            elif typ.startswith('Test.'):
-                _, _, x = typ.rpartition('.')
-                return 'Test::%s' % x
-        elif isinstance(typ, krpc.types.ListType):
+        if isinstance(typ, ValueType):
+            return self._type_map[typ.protobuf_type.code]
+        elif (isinstance(typ, MessageType) and
+              typ.protobuf_type.code == Type.EVENT):
+            return '::krpc::Event'
+        elif isinstance(typ, MessageType):
+            return 'krpc::schema::%s' % typ.python_type.__name__
+        elif isinstance(typ, ListType):
             return cpp_template_fix(
-                'std::vector<%s>' %
-                self.parse_type(self.types.as_type(typ.protobuf_type[5:-1])))
-        elif isinstance(typ, krpc.types.SetType):
+                'std::vector<%s>' % self.parse_type(typ.value_type))
+        elif isinstance(typ, SetType):
             return cpp_template_fix(
-                'std::set<%s>' %
-                self.parse_type(self.types.as_type(typ.protobuf_type[4:-1])))
-        elif isinstance(typ, krpc.types.DictionaryType):
-            typs = split_type_string(typ.protobuf_type[11:-1])
+                'std::set<%s>' % self.parse_type(typ.value_type))
+        elif isinstance(typ, DictionaryType):
             return cpp_template_fix(
-                'std::map<%s, %s>' %
-                (self.parse_type(self.types.as_type(typs[0])),
-                 self.parse_type(self.types.as_type(typs[1]))))
-        elif isinstance(typ, krpc.types.TupleType):
-            value_types = split_type_string(typ.protobuf_type[6:-1])
+                'std::map<%s, %s>' % (self.parse_type(typ.key_type),
+                                      self.parse_type(typ.value_type)))
+        elif isinstance(typ, TupleType):
             return cpp_template_fix(
-                'std::tuple<%s>' %
-                ', '.join(self.parse_type(self.types.as_type(t))
-                          for t in value_types))
-        elif isinstance(typ, krpc.types.ClassType):
-            return typ.protobuf_type[6:-1].replace('.', '::')
-        elif isinstance(typ, krpc.types.EnumType):
-            return typ.protobuf_type[5:-1].replace('.', '::')
+                'std::tuple<%s>' % ', '.join(self.parse_type(t)
+                                             for t in typ.value_types))
+        elif isinstance(typ, (ClassType, EnumerationType)):
+            return '%s::%s' % (typ.protobuf_type.service,
+                               typ.protobuf_type.name)
         raise RuntimeError('Unknown type ' + typ)
 
     def parse_return_type(self, typ):
@@ -94,44 +85,41 @@ class CppGenerator(Generator):
         return self.parse_type(typ)
 
     def parse_default_value(self, value, typ):
-        if isinstance(typ, krpc.types.ValueType) and \
-           typ.protobuf_type == 'string':
+        if (isinstance(typ, ValueType) and
+                typ.protobuf_type.code == Type.STRING):
             return '"%s"' % value
-        if isinstance(typ, krpc.types.ValueType) and \
-           typ.protobuf_type == 'bool':
-            if value:
-                return 'true'
-            else:
-                return 'false'
-        elif isinstance(typ, krpc.types.EnumType):
+        elif (isinstance(typ, ValueType) and
+              typ.protobuf_type.code == Type.BOOL):
+            return 'true' if value else 'false'
+        elif isinstance(typ, ClassType) and value is None:
+            return self.parse_parameter_type(typ) + '()'
+        elif isinstance(typ, EnumerationType):
             return 'static_cast<%s>(%s)' % \
                 (self.parse_parameter_type(typ), value)
         elif value is None:
             return self.parse_parameter_type(typ) + '()'
-        elif isinstance(typ, krpc.types.TupleType):
+        elif isinstance(typ, TupleType):
             values = (self.parse_default_value(x, typ.value_types[i])
                       for i, x in enumerate(value))
             return '%s{%s}' % (self.parse_type(typ), ', '.join(values))
-        elif isinstance(typ, krpc.types.ListType):
+        elif isinstance(typ, ListType):
             values = (self.parse_default_value(x, typ.value_type)
                       for x in value)
             return '%s{%s}' % (self.parse_type(typ), ', '.join(values))
-        elif isinstance(typ, krpc.types.SetType):
+        elif isinstance(typ, SetType):
             values = (self.parse_default_value(x, typ.value_type)
                       for x in value)
             return '%s{%s}' % (self.parse_type(typ), ', '.join(values))
-        elif isinstance(typ, krpc.types.DictionaryType):
+        elif isinstance(typ, DictionaryType):
             entries = ('{%s, %s}' %
                        (self.parse_default_value(k, typ.key_type),
                         self.parse_default_value(v, typ.value_type))
                        for k, v in value.items())
             return '%s{%s}' % (self.parse_type(typ), ', '.join(entries))
-        else:
-            return str(value)
+        return str(value)
 
     def parse_set_client(self, procedure):
-        return isinstance(
-            self.get_return_type(procedure), krpc.types.ClassType)
+        return isinstance(self.get_return_type(procedure), ClassType)
 
     @staticmethod
     def parse_documentation(documentation):

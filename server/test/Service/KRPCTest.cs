@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NUnit.Framework;
@@ -10,7 +11,7 @@ namespace KRPC.Test.Service
         [Test]
         public void GetVersion ()
         {
-            var status = KRPC.Service.KRPC.GetStatus ();
+            var status = KRPC.Service.KRPC.KRPC.GetStatus ();
             Assert.AreNotEqual (string.Empty, status.Version);
         }
 
@@ -19,59 +20,63 @@ namespace KRPC.Test.Service
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void GetServices ()
         {
-            var services = KRPC.Service.KRPC.GetServices ();
+            var services = KRPC.Service.KRPC.KRPC.GetServices ();
             Assert.IsNotNull (services);
             Assert.AreEqual (4, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (6, service.Procedures.Count);
-            Assert.AreEqual (0, service.Classes.Count);
+            Assert.AreEqual (38, service.Procedures.Count);
+            Assert.AreEqual (1, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
 
             int foundProcedures = 0;
-            foreach (var method in service.Procedures) {
-                if (method.Name == "GetStatus") {
-                    MessageAssert.HasReturnType (method, "KRPC.Status");
-                    MessageAssert.HasNoParameters (method);
-                    MessageAssert.HasNoAttributes (method);
-                    MessageAssert.HasDocumentation (method);
-                } else if (method.Name == "GetServices") {
-                    MessageAssert.HasReturnType (method, "KRPC.Services");
-                    MessageAssert.HasNoParameters (method);
-                    MessageAssert.HasNoAttributes (method);
-                    MessageAssert.HasDocumentation (method);
-                } else if (method.Name == "AddStream") {
-                    MessageAssert.HasReturnType (method, "uint32");
-                    MessageAssert.HasParameters (method, 1);
-                    MessageAssert.HasParameter (method, 0, "KRPC.Request", "request");
-                    MessageAssert.HasNoAttributes (method);
-                    MessageAssert.HasDocumentation (method);
-                } else if (method.Name == "RemoveStream") {
-                    MessageAssert.HasNoReturnType (method);
-                    MessageAssert.HasParameters (method, 1);
-                    MessageAssert.HasParameter (method, 0, "uint32", "id");
-                    MessageAssert.HasNoAttributes (method);
-                    MessageAssert.HasDocumentation (method);
-                } else if (method.Name == "get_Clients") {
-                    MessageAssert.HasReturnType (method, "KRPC.List");
-                    MessageAssert.HasNoParameters (method);
-                    MessageAssert.HasAttributes (method, 2);
-                    MessageAssert.HasAttribute (method, 0, "Property.Get(Clients)");
-                    MessageAssert.HasAttribute (method, 1, "ReturnType.List(Tuple(bytes,string,string))");
-                    MessageAssert.HasDocumentation (method);
-                } else if (method.Name == "get_CurrentGameScene") {
-                    MessageAssert.HasReturnType (method, "int32");
-                    MessageAssert.HasNoParameters (method);
-                    MessageAssert.HasAttributes (method, 2);
-                    MessageAssert.HasAttribute (method, 0, "Property.Get(CurrentGameScene)");
-                    MessageAssert.HasAttribute (method, 1, "ReturnType.Enum(KRPC.GameScene)");
-                    MessageAssert.HasDocumentation (method);
+            foreach (var proc in service.Procedures) {
+                if (proc.Name == "GetClientID") {
+                    MessageAssert.HasReturnType (proc, typeof(byte[]));
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "GetClientName") {
+                    MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "GetStatus") {
+                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.Messages.Status));
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "GetServices") {
+                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.Messages.Services));
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "AddStream") {
+                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.Messages.Stream));
+                    MessageAssert.HasParameters (proc, 2);
+                    MessageAssert.HasParameter (proc, 0, typeof (KRPC.Service.Messages.ProcedureCall), "call");
+                    MessageAssert.HasParameterWithDefaultValue (proc, 1, typeof (bool), "start", true);
+                    MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "StartStream") {
+                    MessageAssert.HasNoReturnType(proc);
+                    MessageAssert.HasParameters(proc, 1);
+                    MessageAssert.HasParameter(proc, 0, typeof(ulong), "id");
+                    MessageAssert.HasDocumentation(proc);
+                } else if (proc.Name == "RemoveStream") {
+                    MessageAssert.HasNoReturnType (proc);
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(ulong), "id");
+                    MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "get_Clients") {
+                    MessageAssert.HasReturnType (proc, typeof(IList<KRPC.Utils.Tuple<byte[],string,string>>));
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "get_CurrentGameScene") {
+                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.KRPC.KRPC.GameScene));
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasDocumentation (proc);
                 } else {
-                    Assert.Fail ();
+                    foundProcedures--;
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (6, foundProcedures);
+            Assert.AreEqual (9, foundProcedures);
 
             bool foundEnumeration = false;
             foreach (var enumeration in service.Enumerations) {
@@ -93,6 +98,25 @@ namespace KRPC.Test.Service
                 }
             }
             Assert.IsTrue (foundEnumeration);
+
+            int foundExceptions = 0;
+            foreach (var exception in service.Exceptions) {
+                if (exception.Name == "InvalidOperationException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nA method call was made to a method that is invalid\ngiven the current state of the object.\n</summary>\n</doc>");
+                } else if (exception.Name == "ArgumentException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nA method was invoked where at least one of the passed arguments does not\nmeet the parameter specification of the method.\n</summary>\n</doc>");
+                } else if (exception.Name == "ArgumentNullException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nA null reference was passed to a method that does not accept it as a valid argument.\n</summary>\n</doc>");
+                } else if (exception.Name == "ArgumentOutOfRangeException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nThe value of an argument is outside the allowable range of values as defined by the invoked method.\n</summary>\n</doc>");
+                }
+                foundExceptions++;
+            }
+            Assert.AreEqual (4, foundExceptions);
         }
     }
 }

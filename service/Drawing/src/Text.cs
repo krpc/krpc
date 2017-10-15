@@ -79,10 +79,10 @@ namespace KRPC.Drawing
         /// <summary>
         /// A list of all available fonts.
         /// </summary>
-        [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
-        public IList<string> AvailableFonts {
-            get { return UnityEngine.Font.GetOSInstalledFontNames ().ToList (); }
+        [KRPCMethod]
+        public static IList<string> AvailableFonts ()
+        {
+            return UnityEngine.Font.GetOSInstalledFontNames ().ToList ();
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace KRPC.Drawing
         public string Font {
             get { return mesh.font.name; }
             set {
-                if (!AvailableFonts.Contains (value))
+                if (!AvailableFonts ().Contains (value))
                     throw new ArgumentException ("Font does not exist");
                 mesh.font = UnityEngine.Font.CreateDynamicFontFromOSFont (value, 1024);
                 renderer.material = mesh.font.material;

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Service.Messages
 {
@@ -11,31 +10,20 @@ namespace KRPC.Service.Messages
 
         public IList<Parameter> Parameters { get; private set; }
 
-        public bool HasReturnType { get; private set; }
-
-        [SuppressMessage ("Gendarme.Rules.Exceptions", "InstantiateArgumentExceptionCorrectlyRule")]
-        public string ReturnType {
-            get { return returnType; }
-            set {
-                if (value == null)
-                    throw new ArgumentNullException (nameof (value));
-                returnType = value;
-                HasReturnType = value.Length > 0;
-            }
+        public bool HasReturnType {
+            get { return ReturnType != null; }
         }
 
-        public IList<string> Attributes { get; private set; }
+        public Type ReturnType { get; set; }
+
+        public bool ReturnIsNullable { get; set; }
 
         public string Documentation { get; set; }
-
-        string returnType;
 
         public Procedure (string name)
         {
             Name = name;
             Parameters = new List<Parameter> ();
-            ReturnType = string.Empty;
-            Attributes = new List<string> ();
             Documentation = string.Empty;
         }
     }

@@ -1,5 +1,3 @@
-using System;
-
 namespace KRPC.Service.Messages
 {
     #pragma warning disable 1591

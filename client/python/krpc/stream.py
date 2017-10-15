@@ -1,121 +1,62 @@
-from krpc.types import Types
-from krpc.decoder import Decoder
-from krpc.error import RPCError
-
-
-class StreamExistsError(RuntimeError):
-    def __init__(self, stream_id):
-        super(StreamExistsError, self).__init__(
-            'stream %d already exists' % stream_id)
-        self.stream_id = stream_id
-
-
 class Stream(object):
-    """ A streamed request. When invoked, returns the
-        most recent value of the request. """
+    """ A streamed remote procedure call. When called, returns the
+        most recently received result of the call. """
 
-    def __init__(self, conn, func, *args, **kwargs):
-        self._conn = conn
-        self._func = func
-        self._args = args
-        self._kwargs = kwargs
-        # Get the request and return type
-        if func == getattr:
-            # A property or class property getter
-            attr = func(args[0].__class__, args[1])
-            self._request = attr.fget._build_request(args[0])
-            self._return_type = attr.fget._return_type
-        elif func == setattr:
-            # A property setter
-            raise ValueError('Cannot stream a property setter')
-        elif hasattr(func, '__self__'):
-            # A method
-            self._request = func._build_request(func.__self__, *args, **kwargs)
-            self._return_type = func._return_type
+    def __init__(self, stream):
+        self._stream = stream
+
+    @classmethod
+    def from_stream_id(cls, conn, stream_id, return_type):
+        """ Create a stream from an existing stream id on the server """
+        stream = conn._stream_manager.get_stream(return_type, stream_id)
+        return cls(stream)
+
+    @classmethod
+    def from_call(cls, conn, return_type, call):
+        """ Create a stream from a remote procedure call """
+        stream = conn._stream_manager.add_stream(return_type, call)
+        return cls(stream)
+
+    def start(self, wait=True):
+        """ Start the stream. If wait is true,
+            blocks until the stream has received its first update. """
+        if self._stream.started:
+            return
+        if not wait:
+            self._stream.start()
         else:
-            # A class method
-            self._request = func._build_request(*args, **kwargs)
-            self._return_type = func._return_type
-        # Set the initial value by running the RPC once
-        self._value = func(*args, **kwargs)
-        # Add the stream to the server and add the initial value to the cache
-        with self._conn._stream_cache_lock:
-            self._stream_id = self._conn.krpc.add_stream(self._request)
-            if self._stream_id in self._conn._stream_cache:
-                raise StreamExistsError(self._stream_id)
-            self._conn._stream_cache[self._stream_id] = self
+            with self._stream.condition:
+                self._stream.start()
+                self._stream.condition.wait()
 
     def __call__(self):
-        """ Get the most recent value for this stream """
-        if isinstance(self._value, Exception):
-            raise self._value
-        return self._value
+        """ Get the most recent value for this stream. """
+        if not self._stream.started:
+            self.start()
+        value = self._stream.value
+        if isinstance(value, Exception):
+            raise value  # pylint: disable=raising-bad-type
+        return value
+
+    @property
+    def condition(self):
+        """ Condition variable that is notified when the stream updates. """
+        return self._stream.condition
+
+    def wait(self, timeout=None):
+        """ Wait until the next stream update or a timeout occurs.
+            The condition variable must be locked before calling this method.
+
+            When timeout is not None, it should be a floating point number
+            specifying the timeout in seconds for the operation. """
+        if not self._stream.started:
+            self._stream.start()
+        self._stream.condition.wait(timeout=timeout)
+
+    def add_callback(self, callback):
+        """ Add a callback that is invoked whenever the stream is updated. """
+        self._stream.add_callback(callback)
 
     def remove(self):
         """ Remove the stream """
-        with self._conn._stream_cache_lock:
-            if self._stream_id in self._conn._stream_cache:
-                self._conn.krpc.remove_stream(self._stream_id)
-                del self._conn._stream_cache[self._stream_id]
-                self._value = RuntimeError('Stream has been removed')
-
-    @property
-    def return_type(self):
-        """ The return type of this stream """
-        return self._return_type
-
-    def update(self, value):
-        """ Update the stream's most recent value """
-        self._value = value
-
-
-def add_stream(conn, func, *args, **kwargs):
-    """ Create a stream and return it """
-    try:
-        return Stream(conn, func, *args, **kwargs)
-    except StreamExistsError as ex:
-        return conn._stream_cache[ex.stream_id]
-
-
-def update_thread(connection, stop, cache, cache_lock):
-    stream_message_type = Types().as_type('KRPC.StreamMessage')
-
-    while True:
-
-        # Read the size and position of the response message
-        data = b''
-        while True:
-            try:
-                data += connection.partial_receive(1)
-                size, _ = Decoder.decode_size_and_position(data)
-                break
-            except IndexError:
-                pass
-            except:  # pylint: disable=bare-except
-                # TODO: is there a better way to catch exceptions when the
-                #      thread is forcibly stopped (e.g. by CTRL+c)?
-                return
-            if stop.is_set():
-                connection.close()
-                return
-
-        # Read and decode the response message
-        data = connection.receive(size)
-        response = Decoder.decode(data, stream_message_type)
-
-        # Add the data to the cache
-        with cache_lock:
-            for response in response.responses:
-                if response.id not in cache:
-                    continue
-
-                # Check for an error response
-                if response.response.has_error:
-                    cache[response.id].value = RPCError(
-                        response.response.error)
-                    continue
-
-                # Decode the return value and store it in the cache
-                typ = cache[response.id].return_type
-                value = Decoder.decode(response.response.return_value, typ)
-                cache[response.id].update(value)
+        self._stream.remove()

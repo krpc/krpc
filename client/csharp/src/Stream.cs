@@ -1,4 +1,6 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using KRPC.Schema.KRPC;
 
 namespace KRPC.Client
@@ -7,26 +9,131 @@ namespace KRPC.Client
     /// Object representing a stream.
     /// </summary>
     [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
-    public class Stream<TReturnType>
+    public class Stream<TReturnType> : IEquatable<Stream<TReturnType>>
     {
-        readonly StreamManager streamManager;
+        internal readonly StreamImpl stream;
 
-        internal uint Id { get; private set; }
-
-        internal Stream (Connection connection, Request request)
+        internal Stream (Connection connection, ulong id)
         {
-            streamManager = connection.StreamManager;
-            Id = streamManager.AddStream (request, typeof(TReturnType));
+            stream = connection.StreamManager.GetStream (typeof(TReturnType), id);
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
+        internal Stream (Connection connection, ProcedureCall call)
+        {
+            stream = connection.StreamManager.AddStream (typeof(TReturnType), call);
         }
 
         /// <summary>
-        /// Get the most recent value of the stream.
+        /// Returns true if the objects are equal.
         /// </summary>
-        // FIXME: Change this to a property. This breaks compatibility.
-        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
-        public TReturnType Get ()
+        public override bool Equals (object obj)
         {
-            return (TReturnType)streamManager.GetValue (Id);
+            if (ReferenceEquals (this, obj))
+                return true;
+            if (ReferenceEquals (obj, null))
+                return false;
+            var typedObj = obj as Stream<TReturnType>;
+            return typedObj != null && Equals (typedObj);
+        }
+
+        /// <summary>
+        /// Returns true if the objects are equal.
+        /// </summary>
+        public bool Equals (Stream<TReturnType> other)
+        {
+            return !ReferenceEquals (other, null) && stream.Id == other.stream.Id;
+        }
+
+        /// <summary>
+        /// Returns true if the objects are equal.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotDeclareStaticMembersOnGenericTypesRule")]
+        public static bool operator == (Stream<TReturnType> lhs, Stream<TReturnType> rhs)
+        {
+            if (ReferenceEquals (lhs, null) || ReferenceEquals (rhs, null))
+                return ReferenceEquals (lhs, rhs);
+            if (ReferenceEquals (lhs, rhs))
+                return true;
+            return lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Returns true if the objects are not equal.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotDeclareStaticMembersOnGenericTypesRule")]
+        public static bool operator != (Stream<TReturnType> lhs, Stream<TReturnType> rhs)
+        {
+            if (ReferenceEquals (lhs, null) || ReferenceEquals (rhs, null))
+                return !ReferenceEquals (lhs, rhs);
+            if (ReferenceEquals (lhs, rhs))
+                return false;
+            return !(lhs.Equals (rhs));
+        }
+
+        /// <summary>
+        /// Hash code for the object.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            return stream.GetHashCode ();
+        }
+
+        /// <summary>
+        /// Start the stream
+        /// </summary>
+        public void Start(bool wait = true) {
+            if (stream.Started)
+                return;
+            if (!wait) {
+                stream.Start();
+            } else {
+                var condition = stream.Condition;
+                lock (condition) {
+                    stream.Start();
+                    Monitor.Wait (condition);
+                }
+            }
+        }
+
+        /// <summary>
+        /// The most recent value of the stream.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
+        public TReturnType Get () {
+            if (!stream.Started)
+                Start();
+            var value = stream.Value;
+            var exn = value as System.Exception;
+            if (exn != null)
+                throw exn;
+            return (TReturnType) value;
+        }
+
+        /// <summary>
+        /// Condition variable that is notified when the streams value changes.
+        /// </summary>
+        public object Condition {
+            get { return stream.Condition; }
+        }
+
+        /// <summary>
+        /// Wait until the next stream update.
+        /// </summary>
+        public void Wait (double timeout = -1) {
+            if (!stream.Started)
+                stream.Start();
+            if (timeout >= 0)
+                Monitor.Wait (stream.Condition, (int)(timeout*1000.0));
+            else
+                Monitor.Wait (stream.Condition);
+        }
+
+        /// <summary>
+        /// Add a callback that is invoked whenever the stream is updated.
+        /// </summary>
+        public void AddCallback (Action<TReturnType> callback) {
+            stream.AddCallback ((object x) => callback((TReturnType)x));
         }
 
         /// <summary>
@@ -34,7 +141,7 @@ namespace KRPC.Client
         /// </summary>
         public void Remove ()
         {
-            streamManager.RemoveStream (Id);
+            stream.Remove ();
         }
     }
 }

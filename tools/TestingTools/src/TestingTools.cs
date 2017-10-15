@@ -23,7 +23,7 @@ namespace TestingTools
             get {
                 var title = HighLogic.CurrentGame.Title.Split (' ');
                 var name = title.Take (title.Length - 1).ToArray ();
-                return String.Join (" ", name);
+                return string.Join (" ", name);
             }
         }
 

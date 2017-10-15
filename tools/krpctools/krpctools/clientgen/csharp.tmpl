@@ -1,6 +1,7 @@
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 {% macro args(parameters) %}
 var _args = new ByteString[] {
 {% for x in parameters %}
@@ -54,10 +55,25 @@ namespace KRPC.Client.Services.{{ service_name }}
         internal Service (global::KRPC.Client.IConnection serverConnection)
         {
             connection = serverConnection;
+            {% if exceptions.items() | length > 0 %}
+            AddExceptionTypes (serverConnection);
+            {% endif %}
         }
         {% else %}
         internal Service (global::KRPC.Client.IConnection serverConnection)
         {
+            {% if exceptions.items() | length > 0 %}
+            AddExceptionTypes (serverConnection);
+            {% endif %}
+        }
+        {% endif %}
+        {% if exceptions.items() | length > 0 %}
+
+        internal static void AddExceptionTypes (global::KRPC.Client.IConnection serverConnection)
+        {
+            {% for exception_name in exceptions.keys() %}
+            serverConnection.AddExceptionType ("{{ service_name }}", "{{ exception_name }}", typeof ({{ exception_name }}));
+            {% endfor %}
         }
         {% endif %}
         {% for procedure_name,procedure in procedures.items() %}
@@ -108,6 +124,41 @@ namespace KRPC.Client.Services.{{ service_name }}
         {% endfor %}
     }
     {% endfor %}
+    {% for exception_name,exception in exceptions.items() %}
+
+{{ exception.documentation | indent(width=4) }}
+    [Serializable]
+    public class {{ exception_name }} : global::KRPC.Client.RPCException
+    {
+        /// <summary>
+        /// Construct an {{ exception_name }} with no message.
+        /// </summary>
+        public {{ exception_name }} ()
+        {
+        }
+
+        /// <summary>
+        /// Construct an {{ exception_name }} with the given message.
+        /// </summary>
+        public {{ exception_name }} (string message) : base (message)
+        {
+        }
+
+        /// <summary>
+        /// Construct an {{ exception_name }} with the given message and inner exception.
+        /// </summary>
+        public {{ exception_name }} (string message, Exception inner) : base (message, inner)
+        {
+        }
+
+        /// <summary>
+        /// Construct an {{ exception_name }} with the given serialization info and streaming context.
+        /// </summary>
+        protected {{ exception_name }} (SerializationInfo info, StreamingContext context) : base (info, context)
+        {
+        }
+    }
+    {% endfor %}
     {% for class_name,cls in classes.items() %}
 
 {{ cls.documentation | indent(width=4) }}
@@ -136,8 +187,10 @@ namespace KRPC.Client.Services.{{ service_name }}
 {{ method.documentation | indent(width=8) }}
         /// <param name="connection">A connection object.</param>
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}")]
-        public static {{ method.return_type }} {{ method_name }} (IConnection connection, {{ sig_parameters(method.parameters) }})
+        public static {{ method.return_type }} {{ method_name }} ({{ sig_parameters([{'type': 'IConnection', 'name': 'connection'}] + method.parameters) }})
         {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=12) }}
 {% endif %}
 {{ call(service_name, method.remote_name, method.return_type != 'void', method.parameters | length > 0, true) | indent(width=12) }}

@@ -22,24 +22,12 @@ function service.to_snake_case(camel_case)
   return result:gsub(regex_multi_uppercase, '%1_%2'):lower()
 end
 
-local function get_names(xs)
-  return seq.copy(seq.map(function (x) return service.to_snake_case(x.name) end, xs))
-end
-
-local function get_types(types, xs, attrs)
-  local result = List{}
-  for i,x in ipairs(xs) do
-    result:append(types:get_parameter_type(i, x.type, List(attrs)))
-  end
-  return result
-end
-
 local KEYWORDS = Set{
   'and', 'break', 'do', 'else', 'elseif', 'end', 'false', 'for', 'function', 'if', 'in',
   'local', 'nil', 'not', 'or', 'repeat', 'return', 'then', 'true', 'until', 'while'
 }
 
---- Given a list of parameter names, append underscores to reserved keywords
+-- Given a list of parameter names, append underscores to reserved keywords
 -- without causing parameter names to clash
 local function update_param_names(names)
   local newnames = List{}
@@ -67,8 +55,7 @@ local function _construct_func(invoke, service_name, procedure_name, prefix_para
       ',',
       {'service_name',
        'procedure_name',
-       'nil',
-       'Map{'..stringx.join(',', seq.copy(seq.map(function (x) return x..'='..x end, param_names)))..'}',
+       '{'..stringx.join(',', param_names)..'}',
        'param_names',
        'param_types',
        'return_type'
@@ -84,8 +71,9 @@ end
 local ServiceBase = class(Types.DynamicType)
 
 function ServiceBase:_parse_procedure(procedure)
-  local param_names = get_names(procedure.parameters)
-  local param_types = get_types(self._client._types, procedure.parameters, procedure.attributes)
+
+  local param_names = seq.copy(seq.map(function (x) return service.to_snake_case(x.name) end, procedure.parameters))
+  local param_types = seq.copy(seq.map(function (x) return self._client._types:as_type(x.type) end, procedure.parameters))
   local param_required = seq.copy(seq.map(function (x) return not x:HasField('default_value') end, procedure.parameters))
   local param_default = List{}
   for param,typ in seq.zip(procedure.parameters, param_types) do
@@ -97,21 +85,21 @@ function ServiceBase:_parse_procedure(procedure)
   end
   local return_type = nil
   if procedure:HasField('return_type') then
-    return_type = self._client._types:get_return_type(procedure.return_type, List(procedure.attributes))
+    return_type = self._client._types:as_type(procedure.return_type)
   end
   return param_names, param_types, param_required, param_default, return_type
 end
 
 --- Add a class type
 function ServiceBase:_add_service_class(cls)
-  local class_type = self._client._types:as_type('Class(' .. self._name .. '.' .. cls.name .. ')')
+  local class_type = self._client._types:class_type(self._name, cls.name)
   self[cls.name] = class_type.lua_type
 end
 
 --- Add an enumeration type
 function ServiceBase:_add_service_enumeration(enum)
   local name = enum.name
-  local enum_type = self._client._types:as_type('Enum(' .. self._name .. '.' .. name .. ')')
+  local enum_type = self._client._types:enumeration_type(self._name, name)
   local values = {}
   for _,x in ipairs(enum.values) do
     values[service.to_snake_case(x.name)] = x.value
@@ -146,7 +134,7 @@ end
 
 --- Add a method to a class
 function ServiceBase:_add_service_class_method(class_name, method_name, procedure)
-  local class_cls = self._client._types:as_type('Class('..self._name..'.'..class_name..')').lua_type
+  local class_cls = self._client._types:class_type(self._name, class_name).lua_type
   local param_names, param_types, param_required, param_default, return_type = self:_parse_procedure(procedure)
   -- Rename this to self if it doesn't cause a name clash
   --if 'self' not in param_names:
@@ -159,7 +147,7 @@ end
 
 --- Add a static method to a class
 function ServiceBase:_add_service_class_static_method(class_name, method_name, procedure)
-  local class_cls = self._client._types:as_type('Class('..self._name..'.'..class_name..')').lua_type
+  local class_cls = self._client._types:class_type(self._name, class_name).lua_type
   local param_names, param_types, param_required, param_default, return_type = self:_parse_procedure(procedure)
   local func = _construct_func(self._invoke, self._name, procedure.name, nil, param_names, param_types, param_required, param_default, return_type)
   --local build_request = ...
@@ -169,7 +157,7 @@ end
 
 --- Add a property to a class
 function ServiceBase:_add_service_class_property(class_name, property_name, getter, setter)
-  local class_cls = self._client._types:as_type('Class('..self._name..'.'..class_name..')').lua_type
+  local class_cls = self._client._types:class_type(self._name, class_name).lua_type
   if getter then
     local getter_name = getter.name
     local param_names, param_types, param_required, param_default, return_type = self:_parse_procedure(getter)
@@ -206,7 +194,7 @@ function service.create_service(client, service)
 
   -- Add procedures
   for _,procedure in ipairs(service.procedures) do
-    if Attributes.is_a_procedure(procedure.attributes) then
+    if Attributes.is_a_procedure(procedure.name) then
       cls:_add_service_procedure(procedure)
     end
   end
@@ -214,12 +202,12 @@ function service.create_service(client, service)
   -- Add properties
   local properties = {}
   for _,procedure in ipairs(service.procedures) do
-    if Attributes.is_a_property_accessor(procedure.attributes) then
-      local name = Attributes.get_property_name(List(procedure.attributes))
+    if Attributes.is_a_property_accessor(procedure.name) then
+      local name = Attributes.get_property_name(procedure.name)
       if not properties[name] then
         properties[name] = {}
       end
-      if Attributes.is_a_property_getter(procedure.attributes) then
+      if Attributes.is_a_property_getter(procedure.name) then
         properties[name]['get'] = procedure
       else
         properties[name]['set'] = procedure
@@ -232,18 +220,18 @@ function service.create_service(client, service)
 
   -- Add class methods
   for _,procedure in ipairs(service.procedures) do
-    if Attributes.is_a_class_method(List(procedure.attributes)) then
-      local class_name = Attributes.get_class_name(List(procedure.attributes))
-      local method_name = Attributes.get_class_method_name(List(procedure.attributes))
+    if Attributes.is_a_class_method(procedure.name) then
+      local class_name = Attributes.get_class_name(procedure.name)
+      local method_name = Attributes.get_class_member_name(procedure.name)
       cls:_add_service_class_method(class_name, method_name, procedure)
     end
   end
 
   -- Add static class methods
   for _,procedure in ipairs(service.procedures) do
-    if Attributes.is_a_class_static_method(List(procedure.attributes)) then
-      local class_name = Attributes.get_class_name(List(procedure.attributes))
-      local method_name = Attributes.get_class_method_name(List(procedure.attributes))
+    if Attributes.is_a_class_static_method(procedure.name) then
+      local class_name = Attributes.get_class_name(procedure.name)
+      local method_name = Attributes.get_class_member_name(procedure.name)
       cls:_add_service_class_static_method(class_name, method_name, procedure)
     end
   end
@@ -251,14 +239,14 @@ function service.create_service(client, service)
   -- Add class properties
   local properties = {}
   for _,procedure in ipairs(service.procedures) do
-    if Attributes.is_a_class_property_accessor(List(procedure.attributes)) then
-      local class_name = Attributes.get_class_name(List(procedure.attributes))
-      local property_name = Attributes.get_class_property_name(List(procedure.attributes))
+    if Attributes.is_a_class_property_accessor(procedure.name) then
+      local class_name = Attributes.get_class_name(procedure.name)
+      local property_name = Attributes.get_class_member_name(procedure.name)
       local key = class_name..'.'..property_name
       if not properties[key] then
         properties[key] = {}
       end
-      if Attributes.is_a_class_property_getter(List(procedure.attributes)) then
+      if Attributes.is_a_class_property_getter(procedure.name) then
         properties[key]['get'] = procedure
       else
         properties[key]['set'] = procedure

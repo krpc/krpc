@@ -13,5 +13,7 @@ namespace KRPC.Service
         IEnumerable<ProcedureParameter> Parameters { get; }
 
         Type ReturnType { get; }
+
+        bool ReturnIsNullable { get; }
     }
 }

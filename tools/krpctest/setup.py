@@ -14,7 +14,7 @@ if os.getenv('BAZEL_BUILD') and hasattr(os, 'link'):
 if os.getenv('BAZEL_BUILD') and not os.path.exists(os.path.join(dirpath, 'VERSION.txt')):
     dirpath = os.getcwd()
 
-install_requires=['krpc']
+install_requires=['krpc>=0.4']
 setup(
     name='krpctest',
     version=re.search(r'\'(.+)\'', open(os.path.join(dirpath, 'krpctest/version.py')).read()).group(1),

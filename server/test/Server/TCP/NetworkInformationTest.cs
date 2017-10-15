@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -21,7 +20,7 @@ namespace KRPC.Test.Server.TCP
         [Ignore]
         public void GetLoopbackSubnetMask ()
         {
-            Assert.AreEqual (String.Empty, NetworkInformation.GetSubnetMask (IPAddress.Loopback).ToString ());
+            Assert.AreEqual (string.Empty, NetworkInformation.GetSubnetMask (IPAddress.Loopback).ToString ());
         }
     }
 }

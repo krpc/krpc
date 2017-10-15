@@ -1,9 +1,12 @@
 Autotools
 Bazel
+Bitwise
 CMake
 Ferram
 GameData
 IDisposable
+Javascript
+Jeb
 Kerbal
 Kerbals
 Kerbin
@@ -16,6 +19,7 @@ Olex
 Tron
 amongst
 apoapsis
+arg
 atm
 autotune
 biome
@@ -94,6 +98,7 @@ quickload
 quicksave
 radians
 rect
+rethrow
 rsvg
 runtime
 serializable
@@ -119,3 +124,4 @@ vertices
 virtualenv
 waypoint
 waypoints
+websockets

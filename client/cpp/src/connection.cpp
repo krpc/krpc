@@ -1,32 +1,38 @@
 #include "krpc/connection.hpp"
 
+#include <memory>
+#include <new>
+#include <ostream>
 #include <string>
-#include <thread>  // NOLINT(build/c++11)
-#include <vector>
 
+#include <asio/buffer.hpp>
+#include <asio/connect.hpp>  // IWYU pragma: keep
+#include <asio/error_code.hpp>
+#include <asio/ip/basic_resolver_iterator.hpp>
+#include <asio/read.hpp>  // IWYU pragma: keep
 #include <asio/steady_timer.hpp>
+#include <asio/stream_socket_service.hpp>
+#include <asio/write.hpp>  // IWYU pragma: keep
+// IWYU pragma: no_include <asio/detail/impl/epoll_reactor.hpp>
+// IWYU pragma: no_include <asio/detail/impl/reactive_socket_service_base.ipp>
+// IWYU pragma: no_include <asio/impl/connect.hpp>
+// IWYU pragma: no_include <asio/impl/read.hpp>
+// IWYU pragma: no_include <asio/impl/write.hpp>
+
+#include "krpc/decoder.hpp"
+#include "krpc/error.hpp"
 
 namespace krpc {
 
 Connection::Connection(const std::string& address, unsigned int port):
   socket(io_service), address(address), port(port), resolver(io_service) {}
 
-void Connection::connect(unsigned int retries, float timeout) {
+void Connection::connect() {
   std::ostringstream port_str;
   port_str << port;
   asio::ip::tcp::resolver::query query(asio::ip::tcp::v4(), address, port_str.str());
   asio::ip::tcp::resolver::iterator iterator = resolver.resolve(query);
-  while (true) {
-    try {
-      asio::connect(socket, iterator);
-      break;
-    } catch(const asio::system_error&) {
-      if (retries <= 0)
-        throw;
-      retries -= 1;
-      std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(timeout*1000)));
-    }
-  }
+  asio::connect(socket, iterator);
 }
 
 void Connection::send(const char* data, size_t length) {
@@ -35,6 +41,20 @@ void Connection::send(const char* data, size_t length) {
 
 void Connection::send(const std::string& data) {
   asio::write(socket, asio::buffer(data));
+}
+
+std::string Connection::receive_message() {
+  std::string data;
+  size_t size = 0;
+  while (true) {
+    try {
+      data += this->receive(1);
+      size = decoder::decode_size(data);
+      break;
+    } catch (EncodingError&) {
+    }
+  }
+  return this->receive(size);
 }
 
 std::string Connection::receive(size_t length) {

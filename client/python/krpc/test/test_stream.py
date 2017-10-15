@@ -1,5 +1,7 @@
 import unittest
+import threading
 import time
+from krpc.error import StreamError
 from krpc.test.servertestcase import ServerTestCase
 
 
@@ -51,15 +53,16 @@ class TestStream(ServerTestCase, unittest.TestCase):
                 self.wait()
 
     def test_property_setters_are_invalid(self):
-        self.assertRaises(ValueError, self.conn.add_stream,
+        self.assertRaises(StreamError, self.conn.add_stream,
                           setattr, self.conn.test_service, 'string_property')
         obj = self.conn.test_service.create_test_object('bill')
-        self.assertRaises(ValueError, self.conn.add_stream,
+        self.assertRaises(StreamError, self.conn.add_stream,
                           setattr, obj.int_property, 42)
 
     def test_counter(self):
         count = -1
-        with self.conn.stream(self.conn.test_service.counter) as x:
+        with self.conn.stream(self.conn.test_service.counter,
+                              "TestStream.test_counter") as x:
             for _ in range(5):
                 self.assertLess(count, x())
                 count = x()
@@ -97,41 +100,41 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
         s1.remove()
         self.assertEqual('0', s0())
-        self.assertRaises(RuntimeError, s1)
+        self.assertRaises(StreamError, s1)
 
         self.wait()
         self.assertEqual('0', s0())
-        self.assertRaises(RuntimeError, s1)
+        self.assertRaises(StreamError, s1)
 
         s2 = self.conn.add_stream(self.conn.test_service.int32_to_string, 2)
         self.assertEqual('0', s0())
-        self.assertRaises(RuntimeError, s1)
+        self.assertRaises(StreamError, s1)
         self.assertEqual('2', s2())
 
         self.wait()
         self.assertEqual('0', s0())
-        self.assertRaises(RuntimeError, s1)
+        self.assertRaises(StreamError, s1)
         self.assertEqual('2', s2())
 
         s0.remove()
-        self.assertRaises(RuntimeError, s0)
-        self.assertRaises(RuntimeError, s1)
+        self.assertRaises(StreamError, s0)
+        self.assertRaises(StreamError, s1)
         self.assertEqual('2', s2())
 
         self.wait()
-        self.assertRaises(RuntimeError, s0)
-        self.assertRaises(RuntimeError, s1)
+        self.assertRaises(StreamError, s0)
+        self.assertRaises(StreamError, s1)
         self.assertEqual('2', s2())
 
         s2.remove()
-        self.assertRaises(RuntimeError, s0)
-        self.assertRaises(RuntimeError, s1)
-        self.assertRaises(RuntimeError, s2)
+        self.assertRaises(StreamError, s0)
+        self.assertRaises(StreamError, s1)
+        self.assertRaises(StreamError, s2)
 
         self.wait()
-        self.assertRaises(RuntimeError, s0)
-        self.assertRaises(RuntimeError, s1)
-        self.assertRaises(RuntimeError, s2)
+        self.assertRaises(StreamError, s0)
+        self.assertRaises(StreamError, s1)
+        self.assertRaises(StreamError, s2)
 
     def test_remove_stream_twice(self):
         stream = self.conn.add_stream(
@@ -142,26 +145,137 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertEqual('0', stream())
 
         stream.remove()
-        self.assertRaises(RuntimeError, stream)
+        self.assertRaises(StreamError, stream)
         stream.remove()
-        self.assertRaises(RuntimeError, stream)
+        self.assertRaises(StreamError, stream)
 
     def test_add_stream_twice(self):
         s0 = self.conn.add_stream(
             self.conn.test_service.int32_to_string, 42)
-        stream_id = s0._stream_id
+        stream_impl = s0._stream
         self.assertEqual('42', s0())
         self.wait()
         self.assertEqual('42', s0())
 
         s1 = self.conn.add_stream(
             self.conn.test_service.int32_to_string, 42)
-        self.assertEqual(stream_id, s1._stream_id)
+        self.assertEqual(stream_impl, s1._stream)
         self.assertEqual('42', s0())
         self.assertEqual('42', s1())
         self.wait()
         self.assertEqual('42', s0())
         self.assertEqual('42', s1())
+
+        s2 = self.conn.add_stream(
+            self.conn.test_service.int32_to_string, 43)
+        self.assertNotEqual(stream_impl, s2._stream)
+        self.assertEqual('42', s0())
+        self.assertEqual('42', s1())
+        self.assertEqual('43', s2())
+        self.wait()
+        self.assertEqual('42', s0())
+        self.assertEqual('42', s1())
+        self.assertEqual('43', s2())
+
+    def test_invalid_operation_exception_immediately(self):
+        stream = self.conn.add_stream(
+            self.conn.test_service.throw_invalid_operation_exception)
+        with self.assertRaises(RuntimeError) as cm:
+            stream()
+        self.assertTrue(str(cm.exception).startswith('Invalid operation'))
+
+    def test_invalid_operation_exception_later(self):
+        self.conn.test_service.reset_invalid_operation_exception_later()
+        stream = self.conn.add_stream(
+            self.conn.test_service.throw_invalid_operation_exception_later)
+        self.assertEqual(0, stream())
+        with self.assertRaises(RuntimeError) as cm:
+            while True:
+                self.wait()
+                stream()
+        self.assertTrue(
+            str(cm.exception).startswith('Invalid operation'))
+
+    def test_custom_exception_immediately(self):
+        stream = self.conn.add_stream(
+            self.conn.test_service.throw_custom_exception)
+        with self.assertRaises(RuntimeError) as cm:
+            stream()
+        self.assertTrue(
+            str(cm.exception).startswith('A custom kRPC exception'))
+
+    def test_custom_exception_later(self):
+        self.conn.test_service.reset_custom_exception_later()
+        stream = self.conn.add_stream(
+            self.conn.test_service.throw_custom_exception_later)
+        self.assertEqual(0, stream())
+        with self.assertRaises(RuntimeError) as cm:
+            while True:
+                self.wait()
+                stream()
+        self.assertTrue(
+            str(cm.exception).startswith('A custom kRPC exception'))
+
+    def test_yield_exception(self):
+        stream = self.conn.add_stream(
+            self.conn.test_service.blocking_procedure, 10)
+        for _ in range(100):
+            self.assertEqual(55, stream())
+            self.wait()
+
+    def test_wait(self):
+        with self.conn.stream(self.conn.test_service.counter,
+                              "TestStream.test_wait", 10) as x:
+            with x.condition:
+                count = x()
+                self.assertTrue(count < 10)
+                while count < 10:
+                    x.wait()
+                    count += 1
+                    self.assertEqual(count, x())
+
+    def test_wait_timeout_short(self):
+        with self.conn.stream(self.conn.test_service.counter,
+                              "TestStream.test_wait_timeout_short", 10) as x:
+            with x.condition:
+                count = x()
+                x.wait(timeout=0)
+                self.assertEqual(count, x())
+
+    def test_wait_timeout_long(self):
+        with self.conn.stream(self.conn.test_service.counter,
+                              "TestStream.test_wait_timeout_long", 10) as x:
+            with x.condition:
+                count = x()
+                self.assertTrue(count < 10)
+                while count < 10:
+                    x.wait(timeout=10)
+                    count += 1
+                    self.assertEqual(count, x())
+
+    test_callback_value = -1
+
+    def test_callback(self):
+        error = threading.Event()
+        stop = threading.Event()
+
+        def callback(x):
+            if x > 5:
+                stop.set()
+            elif self.test_callback_value+1 != x:
+                error.set()
+                stop.set()
+            else:
+                self.test_callback_value += 1
+
+        with self.conn.stream(self.conn.test_service.counter,
+                              "TestStream.test_callback", 10) as x:
+            x.add_callback(callback)
+            x.start()
+            stop.wait(3)
+
+        self.assertTrue(stop.is_set())
+        self.assertFalse(error.is_set())
 
 
 if __name__ == '__main__':

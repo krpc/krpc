@@ -23,7 +23,7 @@ namespace KRPC.UI
                 options.Add (new DialogGUIButton ("Yes (don't ask again)", () => {
                     client.Close ();
                     Close ();
-                    Addon.config.ConfirmRemoveClient = false;
+                    Addon.config.Configuration.ConfirmRemoveClient = false;
                     Addon.config.Save ();
                 }));
                 options.Add (new DialogGUIButton ("No", Close));

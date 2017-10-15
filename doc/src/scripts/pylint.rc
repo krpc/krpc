@@ -1,5 +1,5 @@
 [BASIC]
-good-names=i,j,k,ex,Run,_,u,v,q,r,g,x,y,z,w,n,F,Isp,d
+good-names=i,j,k,ex,Run,_,u,v,q,r,g,x,y,z,w,n,F,Isp,d,communication-protocol-rpc,communication-protocol-stream
 variable-rgx=[a-z_][a-z0-9_]{1,30}$
 method-rgx=[a-z_][a-z0-9_]{2,60}$
 const-rgx=[a-z_][a-z0-9_]{1,30}$

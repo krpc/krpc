@@ -131,12 +131,17 @@ cc_library(
 
 test_suite(
     name = 'test',
-    tests = [':client', ':check', ':lint']
+    tests = [':client', ':lint']
 )
 
 test_suite(
     name = 'ci-test',
     tests = [':client']
+)
+
+test_suite(
+    name = 'lint',
+    tests = [':cppcheck', ':cpplint']
 )
 
 client_test(
@@ -160,7 +165,7 @@ cc_binary(
 )
 
 cpp_check_test(
-    name = 'check',
+    name = 'cppcheck',
     srcs = srcs + test_srcs,
     hdrs = hdrs,
     includes = ['include'],
@@ -168,7 +173,7 @@ cpp_check_test(
 )
 
 cpp_lint_test(
-    name = 'lint',
+    name = 'cpplint',
     srcs = srcs + test_srcs,
     hdrs = hdrs,
     includes = ['include'],

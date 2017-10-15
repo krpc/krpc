@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Net.Sockets;
 using System.Threading;
 using KRPC.Client.Services.KRPC;
 using KRPC.Client.Services.TestService;
 using NUnit.Framework;
-using GameScene = KRPC.Client.Services.KRPC.GameScene;
 using TestEnum = KRPC.Client.Services.TestService.TestEnum;
 
 namespace KRPC.Client.Test
@@ -22,18 +22,39 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        public void CurrentGameScene ()
+        public void WrongRpcPort ()
         {
-            Assert.AreEqual (GameScene.SpaceCenter, Connection.KRPC ().CurrentGameScene);
+            Assert.Throws<SocketException> (() => new Connection (
+                "CSharpClientTestWrongRPCPort",
+                rpcPort: RPCPort ^ StreamPort, streamPort: StreamPort));
         }
 
         [Test]
-        public void Error ()
+        public void WrongStreamPort ()
         {
-            var e1 = Assert.Throws<RPCException> (Connection.TestService ().ThrowArgumentException);
-            Assert.That (e1.Message, Is.StringContaining ("Invalid argument"));
-            var e2 = Assert.Throws<RPCException> (Connection.TestService ().ThrowInvalidOperationException);
-            Assert.That (e2.Message, Is.StringContaining ("Invalid operation"));
+            Assert.Throws<SocketException> (() => new Connection (
+                "CSharpClientTestWrongStreamPort",
+                rpcPort: RPCPort, streamPort: RPCPort ^ StreamPort));
+        }
+
+        [Test]
+        public void WrongRPCServer ()
+        {
+            var exn = Assert.Throws<ConnectionException> (() => new Connection (
+                          "CSharpClientTestWrongRPCServer",
+                          rpcPort: StreamPort, streamPort: StreamPort));
+            Assert.AreEqual ("Connection request was for the rpc server, but this is the stream server. " +
+            "Did you connect to the wrong port number?", exn.Message);
+        }
+
+        [Test]
+        public void WrongStreamServer ()
+        {
+            var exn = Assert.Throws<ConnectionException> (() => new Connection (
+                          "CSharpClientTestWrongStreamServer",
+                          rpcPort: RPCPort, streamPort: RPCPort));
+            Assert.AreEqual ("Connection request was for the stream server, but this is the rpc server. " +
+            "Did you connect to the wrong port number?", exn.Message);
         }
 
         [Test]
@@ -124,8 +145,10 @@ namespace KRPC.Client.Test
         [Test]
         public void OptionalArguments ()
         {
-            Assert.AreEqual ("jebfoobarbaz", Connection.TestService ().OptionalArguments ("jeb"));
-            Assert.AreEqual ("jebbobbillbaz", Connection.TestService ().OptionalArguments ("jeb", "bob", "bill"));
+            Assert.AreEqual ("jebfoobarnull", Connection.TestService ().OptionalArguments ("jeb"));
+            Assert.AreEqual ("jebbobbillnull", Connection.TestService ().OptionalArguments ("jeb", "bob", "bill"));
+            var obj = Connection.TestService ().CreateTestObject ("kermin");
+            Assert.AreEqual ("jebbobbillkermin", Connection.TestService ().OptionalArguments ("jeb", "bob", "bill", obj));
         }
 
         [TestCase (0, 0)]
@@ -228,6 +251,43 @@ namespace KRPC.Client.Test
             Assert.AreEqual (new List<int> { 1, 2, 3 }, Connection.TestService ().ListDefault ());
             Assert.AreEqual (new HashSet<int> { 1, 2, 3 }, Connection.TestService ().SetDefault ());
             Assert.AreEqual (new Dictionary<int, bool> { { 1, false }, { 2,true } }, Connection.TestService ().DictionaryDefault ());
+        }
+
+        [Test]
+        public void InvalidOperationException ()
+        {
+            var exn = Assert.Throws<System.InvalidOperationException> (() => Connection.TestService ().ThrowInvalidOperationException ());
+            Assert.That (exn.Message, Is.StringContaining ("Invalid operation"));
+        }
+
+        [Test]
+        public void ArgumentException ()
+        {
+            var exn = Assert.Throws<System.ArgumentException> (() => Connection.TestService ().ThrowArgumentException ());
+            Assert.That (exn.Message, Is.StringContaining ("Invalid argument"));
+        }
+
+        [Test]
+        [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
+        public void ArgumentNullException ()
+        {
+            var exn = Assert.Throws<System.ArgumentNullException> (() => Connection.TestService ().ThrowArgumentNullException (string.Empty));
+            Assert.That (exn.Message, Is.StringContaining ("Value cannot be null.\nParameter name: foo"));
+        }
+
+        [Test]
+        [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
+        public void ArgumentOutOfRangeException ()
+        {
+            var exn = Assert.Throws<System.ArgumentOutOfRangeException> (() => Connection.TestService ().ThrowArgumentOutOfRangeException (0));
+            Assert.That (exn.Message, Is.StringContaining ("Specified argument was out of the range of valid values.\nParameter name: foo"));
+        }
+
+        [Test]
+        public void CustomException ()
+        {
+            var exn = Assert.Throws<CustomException> (() => Connection.TestService ().ThrowCustomException ());
+            Assert.That (exn.Message, Is.StringContaining ("A custom kRPC exception"));
         }
 
         [TestCase ("foo\nbar")]

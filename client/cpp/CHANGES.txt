@@ -1,3 +1,8 @@
+v0.4.0
+ * Updated protocol in line with server changes
+ * Remove connection retries. Client will now fail fast if it fails to connect to the server.
+ * Add support for RPCs and streams to throw exceptions
+
 v0.3.11
  * Update to protobuf v3.4.1
 

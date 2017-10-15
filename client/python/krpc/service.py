@@ -1,20 +1,20 @@
 import keyword
 from collections import defaultdict
 import xml.etree.ElementTree as ElementTree
-from krpc.attributes import Attributes
-from krpc.types import DynamicType, DefaultArgument
+from krpc.types import Types, DynamicType, DefaultArgument
 from krpc.decoder import Decoder
 from krpc.utils import snake_case
+from krpc.attributes import Attributes
 
 
 def _signature(param_types, return_type):
     """ Generate a signature for a procedure that
         can be used as its docstring """
-    if len(param_types) == 0 and return_type is None:
+    if not param_types and return_type is None:
         return ''
     types = [x.python_type.__name__ for x in param_types]
     sig = ','.join(types)
-    if len(types) == 0:
+    if not types:
         sig = '()'
     elif len(types) > 1:
         sig = '(' + sig + ')'
@@ -102,8 +102,7 @@ def _parse_documentation_node(node):
         replace = {'true': 'True', 'false': 'False', 'null': 'None'}
         if node.text in replace:
             return replace[node.text]
-        else:
-            return node.text
+        return node.text
     elif node.tag == 'list':
         content = '\n'
         for item in node:
@@ -111,8 +110,7 @@ def _parse_documentation_node(node):
             content += '* %s\n' % '\n'.join(
                 _indent(item_content.split('\n'), 2))[2:].rstrip()
         return content
-    else:
-        return node.text
+    return node.text
 
 
 def _parse_documentation_content(node):
@@ -144,7 +142,7 @@ def _parse_documentation(xml):
                       _parse_documentation_content(node).replace('\n', '')
         elif node.tag == 'remarks':
             note = 'Note: %s' % _parse_documentation_content(node)
-    if len(params) > 0:
+    if params:
         params_str = 'Args:\n%s' % '\n'.join('    ' + x for x in params)
     else:
         params_str = ''
@@ -169,20 +167,24 @@ def create_service(client, service):
         cls._add_service_class(cls2)
 
     # Add enumeration types to service
-    for enum in service.enumerations:
-        cls._add_service_enumeration(enum)
+    for enumeration in service.enumerations:
+        cls._add_service_enumeration(enumeration)
+
+    # Add exception types to service
+    for exception in service.exceptions:
+        cls._add_service_exception(exception)
 
     # Add procedures
     for procedure in service.procedures:
-        if Attributes.is_a_procedure(procedure.attributes):
+        if Attributes.is_a_procedure(procedure.name):
             cls._add_service_procedure(procedure)
 
     # Add properties
     properties = defaultdict(lambda: [None, None])
     for procedure in service.procedures:
-        if Attributes.is_a_property_accessor(procedure.attributes):
-            name = Attributes.get_property_name(procedure.attributes)
-            if Attributes.is_a_property_getter(procedure.attributes):
+        if Attributes.is_a_property_accessor(procedure.name):
+            name = Attributes.get_property_name(procedure.name)
+            if Attributes.is_a_property_getter(procedure.name):
                 properties[name][0] = procedure
             else:
                 properties[name][1] = procedure
@@ -191,31 +193,27 @@ def create_service(client, service):
 
     # Add class methods
     for procedure in service.procedures:
-        if Attributes.is_a_class_method(procedure.attributes):
-            class_name = Attributes.get_class_name(procedure.attributes)
-            method_name = Attributes.get_class_method_name(
-                procedure.attributes)
-            cls._add_service_class_method(
-                class_name, method_name, procedure)
+        if Attributes.is_a_class_method(procedure.name):
+            class_name = Attributes.get_class_name(procedure.name)
+            method_name = Attributes.get_class_member_name(procedure.name)
+            cls._add_service_class_method(class_name, method_name, procedure)
 
     # Add static class methods
     for procedure in service.procedures:
-        if Attributes.is_a_class_static_method(procedure.attributes):
-            class_name = Attributes.get_class_name(procedure.attributes)
-            method_name = Attributes.get_class_method_name(
-                procedure.attributes)
+        if Attributes.is_a_class_static_method(procedure.name):
+            class_name = Attributes.get_class_name(procedure.name)
+            method_name = Attributes.get_class_member_name(procedure.name)
             cls._add_service_class_static_method(
                 class_name, method_name, procedure)
 
     # Add class properties
     properties = defaultdict(lambda: [None, None])
     for procedure in service.procedures:
-        if Attributes.is_a_class_property_accessor(procedure.attributes):
-            class_name = Attributes.get_class_name(procedure.attributes)
-            property_name = Attributes.get_class_property_name(
-                procedure.attributes)
+        if Attributes.is_a_class_property_accessor(procedure.name):
+            class_name = Attributes.get_class_name(procedure.name)
+            property_name = Attributes.get_class_member_name(procedure.name)
             key = (class_name, property_name)
-            if Attributes.is_a_class_property_getter(procedure.attributes):
+            if Attributes.is_a_class_property_getter(procedure.name):
                 properties[key][0] = procedure
             else:
                 properties[key][1] = procedure
@@ -234,44 +232,47 @@ class ServiceBase(DynamicType):
     def _add_service_class(cls, remote_cls):
         """ Add a class type """
         name = remote_cls.name
-        class_type = cls._client._types.as_type(
-            'Class(' + cls._name + '.' + name + ')',
-            _parse_documentation(remote_cls.documentation))
+        class_type = cls._client._types.class_type(
+            cls._name, name, _parse_documentation(remote_cls.documentation))
         setattr(cls, name, class_type.python_type)
 
     @classmethod
-    def _add_service_enumeration(cls, enum):
-        """ Add an enumeration type """
-        name = enum.name
-        enum_type = cls._client._types.as_type(
-            'Enum(' + cls._name + '.' + name + ')',
-            _parse_documentation(enum.documentation))
-        enum_type.set_values(dict(
+    def _add_service_enumeration(cls, enumeration):
+        """ Add an enum type """
+        name = enumeration.name
+        enumeration_type = cls._client._types.enumeration_type(
+            cls._name, name, _parse_documentation(enumeration.documentation))
+        enumeration_type.set_values(dict(
             (str(snake_case(x.name)), {
                 'value': x.value, 'doc': _parse_documentation(x.documentation)
-            }) for x in enum.values))
-        setattr(cls, name, enum_type.python_type)
+            }) for x in enumeration.values))
+        setattr(cls, name, enumeration_type.python_type)
+
+    @classmethod
+    def _add_service_exception(cls, exception):
+        """ Add an exception type """
+        name = exception.name
+        exception_type = cls._client._types.exception_type(
+            cls._name, name, _parse_documentation(exception.documentation))
+        setattr(cls, name, exception_type)
 
     @classmethod
     def _parse_procedure(cls, procedure):
         param_names = [snake_case(param.name)
                        for param in procedure.parameters]
-        param_types = [
-            cls._client._types.get_parameter_type(
-                i, param.type, procedure.attributes)
-            for i, param in enumerate(procedure.parameters)]
-        param_required = [not param.has_default_value
+        param_types = [cls._client._types.as_type(param.type)
+                       for param in procedure.parameters]
+        param_required = [not param.default_value
                           for param in procedure.parameters]
         param_default = []
         for param, typ in zip(procedure.parameters, param_types):
-            if param.has_default_value:
+            if param.default_value:
                 param_default.append(Decoder.decode(param.default_value, typ))
             else:
                 param_default.append(None)
         return_type = None
-        if procedure.has_return_type:
-            return_type = cls._client._types.get_return_type(
-                procedure.return_type, procedure.attributes)
+        if not Types.is_none_type(procedure.return_type):
+            return_type = cls._client._types.as_type(procedure.return_type)
         return param_names, param_types, param_required, \
             param_default, return_type
 
@@ -282,13 +283,13 @@ class ServiceBase(DynamicType):
             param_default, return_type = cls._parse_procedure(procedure)
         func = _construct_func(
             cls._client._invoke, cls._name, procedure.name, [],
-            param_names, param_types, param_required, param_default,
-            return_type)
-        build_request = _construct_func(
-            cls._client._build_request, cls._name, procedure.name, [],
-            param_names, param_types, param_required, param_default,
-            return_type)
-        setattr(func, '_build_request', build_request)
+            param_names, param_types,
+            param_required, param_default, return_type)
+        build_call = _construct_func(
+            cls._client._build_call, cls._name, procedure.name, [],
+            param_names, param_types,
+            param_required, param_default, return_type)
+        setattr(func, '_build_call', build_call)
         setattr(func, '_return_type', return_type)
         name = str(snake_case(procedure.name))
         return cls._add_static_method(
@@ -308,10 +309,10 @@ class ServiceBase(DynamicType):
             getter = _construct_func(
                 cls._client._invoke, cls._name, getter_name, ['self'],
                 [], [], [], [], return_type)
-            build_request = _construct_func(
-                cls._client._build_request, cls._name, getter_name, ['self'],
+            build_call = _construct_func(
+                cls._client._build_call, cls._name, getter_name, ['self'],
                 [], [], [], [], return_type)
-            setattr(getter, '_build_request', build_request)
+            setattr(getter, '_build_call', build_call)
             setattr(getter, '_return_type', return_type)
         if setter:
             param_names, param_types, _, _, _ = cls._parse_procedure(setter)
@@ -325,8 +326,8 @@ class ServiceBase(DynamicType):
     @classmethod
     def _add_service_class_method(cls, class_name, method_name, procedure):
         """ Add a method to a class """
-        class_cls = cls._client._types.as_type(
-            'Class(' + cls._name + '.' + class_name + ')').python_type
+        class_cls = cls._client._types.class_type(
+            cls._name, class_name).python_type
         param_names, param_types, param_required, \
             param_default, return_type = cls._parse_procedure(procedure)
         # Rename this to self if it doesn't cause a name clash
@@ -334,13 +335,13 @@ class ServiceBase(DynamicType):
             param_names[0] = 'self'
         func = _construct_func(
             cls._client._invoke, cls._name, procedure.name, [],
-            param_names, param_types, param_required, param_default,
-            return_type)
-        build_request = _construct_func(
-            cls._client._build_request, cls._name, procedure.name, [],
-            param_names, param_types, param_required, param_default,
-            return_type)
-        setattr(func, '_build_request', build_request)
+            param_names, param_types,
+            param_required, param_default, return_type)
+        build_call = _construct_func(
+            cls._client._build_call, cls._name, procedure.name, [],
+            param_names, param_types,
+            param_required, param_default, return_type)
+        setattr(func, '_build_call', build_call)
         setattr(func, '_return_type', return_type)
         name = str(snake_case(method_name))
         class_cls._add_method(
@@ -350,19 +351,19 @@ class ServiceBase(DynamicType):
     def _add_service_class_static_method(cls, class_name,
                                          method_name, procedure):
         """ Add a static method to a class """
-        class_cls = cls._client._types.as_type(
-            'Class(' + cls._name + '.' + class_name + ')').python_type
+        class_cls = cls._client._types.class_type(
+            cls._name, class_name).python_type
         param_names, param_types, param_required, \
             param_default, return_type = cls._parse_procedure(procedure)
         func = _construct_func(
             cls._client._invoke, cls._name, procedure.name, [],
-            param_names, param_types, param_required, param_default,
-            return_type)
-        build_request = _construct_func(
-            cls._client._build_request, cls._name, procedure.name, [],
-            param_names, param_types, param_required, param_default,
-            return_type)
-        setattr(func, '_build_request', build_request)
+            param_names, param_types,
+            param_required, param_default, return_type)
+        build_call = _construct_func(
+            cls._client._build_call, cls._name, procedure.name, [],
+            param_names, param_types,
+            param_required, param_default, return_type)
+        setattr(func, '_build_call', build_call)
         setattr(func, '_return_type', return_type)
         name = str(snake_case(method_name))
         class_cls._add_static_method(
@@ -372,8 +373,8 @@ class ServiceBase(DynamicType):
     def _add_service_class_property(cls, class_name, property_name,
                                     getter=None, setter=None):
         """ Add a property to a class """
-        class_cls = cls._client._types.as_type(
-            'Class(' + cls._name + '.' + class_name + ')').python_type
+        class_cls = cls._client._types.class_type(
+            cls._name, class_name).python_type
         doc = None
         if getter:
             doc = _parse_documentation(getter.documentation)
@@ -389,10 +390,10 @@ class ServiceBase(DynamicType):
             getter = _construct_func(
                 cls._client._invoke, cls._name, getter_name, [],
                 param_names, param_types, [True], [None], return_type)
-            build_request = _construct_func(
-                cls._client._build_request, cls._name, getter_name, [],
+            build_call = _construct_func(
+                cls._client._build_call, cls._name, getter_name, [],
                 param_names, param_types, [True], [None], return_type)
-            setattr(getter, '_build_request', build_request)
+            setattr(getter, '_build_call', build_call)
             setattr(getter, '_return_type', return_type)
         if setter:
             param_names, param_types, _, _, \

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.Service
 {
@@ -16,13 +18,14 @@ namespace KRPC.Service
         readonly ProcedureParameter[] parameters;
         readonly object[] methodArguments;
 
-        public ClassMethodHandler (MethodInfo methodInfo)
+        public ClassMethodHandler (Type classType, MethodInfo methodInfo, bool returnIsNullable)
         {
             method = methodInfo;
-            var parameterList = method.GetParameters ().Select (x => new ProcedureParameter (methodInfo, x)).ToList ();
-            parameterList.Insert (0, new ProcedureParameter (typeof(ulong), "this"));
+            var parameterList = method.GetParameters ().Select (x => new ProcedureParameter (method, x)).ToList ();
+            parameterList.Insert (0, new ProcedureParameter (classType, "this"));
             parameters = parameterList.ToArray ();
             methodArguments = new object[parameters.Length - 1];
+            ReturnIsNullable = returnIsNullable;
         }
 
         /// <summary>
@@ -31,11 +34,11 @@ namespace KRPC.Service
         /// </summary>
         public object Invoke (params object[] arguments)
         {
-            var instanceGuid = (ulong)arguments [0];
+            object instance = arguments [0];
             // TODO: should be able to invoke default arguments using Type.Missing, but get "System.ArgumentException : failed to convert parameters"
             for (int i = 1; i < arguments.Length; i++)
                 methodArguments [i - 1] = (arguments [i] == Type.Missing) ? parameters [i].DefaultValue : arguments [i];
-            return method.Invoke (ObjectStore.Instance.GetInstance (instanceGuid), methodArguments);
+            return method.Invoke (instance, methodArguments);
         }
 
         public IEnumerable<ProcedureParameter> Parameters {
@@ -45,6 +48,7 @@ namespace KRPC.Service
         public Type ReturnType {
             get { return method.ReturnType; }
         }
+
+        public bool ReturnIsNullable { get; private set; }
     }
 }
-

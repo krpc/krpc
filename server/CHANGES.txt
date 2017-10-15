@@ -1,3 +1,21 @@
+v0.4.0
+ * New server architecture that allows multiple concurrent servers, using different settings and protocols
+ * Add websockets server protocol for communication with browsers
+ * Improved communication protocol (#325)
+   * Multiple RPCs can now be grouped into a single network message
+   * Remove unnecessary message fields
+   * Improved message encoding when establishing a connection
+   * Significantly reduced the size of the message returned by GetServices
+   * More compact encoding of signed integers
+ * Added ability for RPCs to throw custom exception types in the calling client
+ * Add start flag to KRPC.AddStream and add KRPC.StartStream. Allows streams to be added but not started until a later time
+ * If a stream returns an error, it is removed from the server automatically (#269)
+ * Add support for streaming RPCs that yield execution to a future game update
+ * Add KRPC.GetClientID and KRPC.GetClientName
+ * Add support for events
+ * Server no longer freezes if the game is paused (#347)
+ * Added KRPC.Paused property to get/set whether the game is paused (#422)
+
 v0.3.11
  * Support for KSP 1.3.1
 

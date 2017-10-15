@@ -141,13 +141,18 @@ clientgen_csharp(
 
 test_suite(
     name = 'test',
-    tests = [':client', ':gendarme-KRPC.Client', ':gendarme-KRPC.Client.Test'],
+    tests = [':client', ':lint'],
     visibility = ['//:__pkg__']
 )
 
 test_suite(
     name = 'ci-test',
     tests = [':client']
+)
+
+test_suite(
+    name = 'lint',
+    tests = [':gendarme-KRPC.Client', ':gendarme-KRPC.Client.Test']
 )
 
 client_test(

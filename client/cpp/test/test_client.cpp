@@ -1,14 +1,25 @@
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
+#include <google/protobuf/stubs/port.h>
 
+#include <gmock/gmock-matchers.h>
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
+
+#include <atomic>
+#include <exception>
+#include <iosfwd>
 #include <map>
+#include <memory>
 #include <set>
+#include <stdexcept>
 #include <string>
-#include <tuple>
+#include <thread>  // NOLINT(build/c++11)
 #include <vector>
 
-#include <krpc/platform.hpp>
-#include <krpc/services/krpc.hpp>
+#include "gtest/gtest.h"
+
+#include "krpc.hpp"
+#include "krpc/platform.hpp"
+#include "krpc/services/krpc.hpp"
 
 #include "server_test.hpp"
 #include "services/test_service.hpp"
@@ -42,23 +53,47 @@ TEST_F(test_client, test_version) {
   ASSERT_THAT(status.version(), testing::MatchesRegex("[0-9]+\\.[0-9]+\\.[0-9]+"));
 }
 
-TEST_F(test_client, test_current_game_scene) {
-  krpc::services::KRPC::GameScene scene = krpc.current_game_scene();
-  ASSERT_EQ(krpc::services::KRPC::GameScene::space_center, scene);
+TEST_F(test_client, test_wrong_rpc_port) {
+  ASSERT_THROW(
+    krpc::connect("C++ClientTestWrongRpcPort", "localhost",
+                  get_rpc_port() ^ get_stream_port(), get_stream_port()),
+    std::exception);
 }
 
-TEST_F(test_client, test_error) {
-  ASSERT_THROW(test_service.throw_argument_exception(), krpc::RPCError);
+TEST_F(test_client, test_wrong_stream_port) {
+  ASSERT_THROW(
+    krpc::connect("C++ClientTestWrongStreamPort", "localhost",
+                  get_rpc_port(), get_rpc_port() ^ get_stream_port()),
+    std::exception);
+}
+
+TEST_F(test_client, test_wrong_rpc_server) {
+  auto fn = [this] () {
+    krpc::connect("C++ClientTestWrongRpcServer", "localhost",
+                  get_stream_port(), get_stream_port());
+  };
+  ASSERT_THROW(fn(), krpc::ConnectionError);
   try {
-    test_service.throw_argument_exception();
-  } catch(krpc::RPCError& e) {
-    EXPECT_THAT(e.what(), testing::HasSubstr("Invalid argument"));
+    fn();
+  } catch(krpc::ConnectionError& e) {
+    ASSERT_STREQ(e.what(),
+      "Connection request was for the rpc server, but this is the stream server. "
+      "Did you connect to the wrong port number?");
   }
-  ASSERT_THROW(test_service.throw_invalid_operation_exception(), krpc::RPCError);
+}
+
+TEST_F(test_client, test_wrong_stream_server) {
+  auto fn = [this] () {
+    krpc::connect("C++ClientTestWrongStreamServer", "localhost",
+                  get_rpc_port(), get_rpc_port());
+  };
+  ASSERT_THROW(fn(), krpc::ConnectionError);
   try {
-    test_service.throw_invalid_operation_exception();
-  } catch(krpc::RPCError& e) {
-    EXPECT_THAT(e.what(), testing::HasSubstr("Invalid operation"));
+    fn();
+  } catch(krpc::ConnectionError& e) {
+    ASSERT_STREQ(e.what(),
+      "Connection request was for the stream server, but this is the rpc server. "
+      "Did you connect to the wrong port number?");
   }
 }
 
@@ -131,8 +166,10 @@ TEST_F(test_client, test_class_properties) {
 }
 
 TEST_F(test_client, test_optional_arguments) {
-  ASSERT_EQ("jebfoobarbaz", test_service.optional_arguments("jeb"));
-  ASSERT_EQ("jebbobbillbaz", test_service.optional_arguments("jeb", "bob", "bill"));
+  ASSERT_EQ("jebfoobarnull", test_service.optional_arguments("jeb"));
+  ASSERT_EQ("jebbobbillnull", test_service.optional_arguments("jeb", "bob", "bill"));
+  krpc::services::TestService::TestClass obj = test_service.create_test_object("kermin");
+  ASSERT_EQ("jebbobbillkermin", test_service.optional_arguments("jeb", "bob", "bill", obj));
 }
 
 TEST_F(test_client, test_blocking_procedure) {
@@ -263,6 +300,62 @@ TEST_F(test_client, test_test_service_enum_members) {
   ASSERT_EQ(0, static_cast<int>(krpc::services::TestService::TestEnum::value_a));
   ASSERT_EQ(1, static_cast<int>(krpc::services::TestService::TestEnum::value_b));
   ASSERT_EQ(2, static_cast<int>(krpc::services::TestService::TestEnum::value_c));
+}
+
+TEST_F(test_client, test_invalid_operation_exception) {
+  ASSERT_THROW(
+    test_service.throw_invalid_operation_exception(),
+    krpc::services::KRPC::InvalidOperationException);
+  try {
+    test_service.throw_invalid_operation_exception();
+  } catch(std::runtime_error& e) {
+    EXPECT_THAT(e.what(), testing::HasSubstr("Invalid operation"));
+  }
+}
+
+TEST_F(test_client, test_argument_exception) {
+  ASSERT_THROW(
+    test_service.throw_argument_exception(),
+    krpc::services::KRPC::ArgumentException);
+  try {
+    test_service.throw_argument_exception();
+  } catch(krpc::services::KRPC::ArgumentException& e) {
+    EXPECT_THAT(e.what(), testing::HasSubstr("Invalid argument"));
+  }
+}
+
+TEST_F(test_client, test_argument_null_exception) {
+  ASSERT_THROW(
+    test_service.throw_argument_null_exception(""),
+    krpc::services::KRPC::ArgumentNullException);
+  try {
+    test_service.throw_argument_null_exception("");
+  } catch(krpc::services::KRPC::ArgumentNullException& e) {
+    EXPECT_THAT(e.what(), testing::HasSubstr("Value cannot be null.\nParameter name: foo"));
+  }
+}
+
+TEST_F(test_client, test_argument_out_of_range_exception) {
+  ASSERT_THROW(
+    test_service.throw_argument_out_of_range_exception(0),
+    krpc::services::KRPC::ArgumentOutOfRangeException);
+  try {
+    test_service.throw_argument_out_of_range_exception(0);
+  } catch(krpc::services::KRPC::ArgumentOutOfRangeException& e) {
+    EXPECT_THAT(e.what(), testing::HasSubstr(
+      "Specified argument was out of the range of valid values.\nParameter name: foo"));
+  }
+}
+
+TEST_F(test_client, test_custom_exception) {
+  ASSERT_THROW(
+    test_service.throw_custom_exception(),
+    krpc::services::TestService::CustomException);
+  try {
+    test_service.throw_custom_exception();
+  } catch(krpc::services::TestService::CustomException& e) {
+    EXPECT_THAT(e.what(), testing::HasSubstr("A custom kRPC exception"));
+  }
 }
 
 TEST_F(test_client, test_line_endings) {

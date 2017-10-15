@@ -8,7 +8,7 @@ namespace KRPC.RemoteTech
 {
     /// <summary>
     /// This service provides functionality to interact with
-    /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/139167-12-remotetech-v180-2016-10-15/">RemoteTech</a>.
+    /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/139167-13-remotetech-v188-2017-09-03/">RemoteTech</a>.
     /// </summary>
     [KRPCService (GameScene = GameScene.All)]
     public static class RemoteTech

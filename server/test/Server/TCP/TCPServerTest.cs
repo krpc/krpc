@@ -17,15 +17,18 @@ namespace KRPC.Test.Server.TCP
         {
             bool serverStarted = false;
             bool serverStopped = false;
-            var server = new TCPServer ("Test", IPAddress.Loopback, 0);
+            var server = new TCPServer (IPAddress.Loopback, 0);
             server.OnStarted += (s, e) => serverStarted = true;
             server.OnStopped += (s, e) => serverStopped = true;
+            server.OnClientRequestingConnection += (s, e) => {
+                return;
+            };
             Assert.IsFalse (server.Running);
             server.Start ();
             Assert.IsTrue (server.Running);
             Assert.AreEqual (0, server.Clients.Count ());
             Assert.AreEqual (IPAddress.Loopback, server.ListenAddress);
-            Assert.IsTrue (server.Port > 0);
+            Assert.IsTrue (server.ActualPort > 0);
             server.Stop ();
             Assert.IsFalse (server.Running);
             Assert.AreEqual (0, server.Clients.Count ());
@@ -40,9 +43,12 @@ namespace KRPC.Test.Server.TCP
         {
             int serverStarted = 0;
             int serverStopped = 0;
-            var server = new TCPServer ("Test", IPAddress.Loopback, 0);
+            var server = new TCPServer (IPAddress.Loopback, 0);
             server.OnStarted += (s, e) => serverStarted++;
             server.OnStopped += (s, e) => serverStopped++;
+            server.OnClientRequestingConnection += (s, e) => {
+                return;
+            };
             Assert.IsFalse (server.Running);
             for (int i = 0; i < 5; i++) {
                 server.Start ();
@@ -59,7 +65,7 @@ namespace KRPC.Test.Server.TCP
         [Test]
         public void ClientConnectAndDisconnect ()
         {
-            var server = new TCPServer ("Test", IPAddress.Loopback, 0);
+            var server = new TCPServer (IPAddress.Loopback, 0);
 
             bool clientRequestingConnection = false;
             bool clientConnected = false;
@@ -73,7 +79,7 @@ namespace KRPC.Test.Server.TCP
 
             server.Start ();
 
-            var tcpClient = new TcpClient (server.ListenAddress.ToString (), server.Port);
+            var tcpClient = new TcpClient (server.ListenAddress.ToString (), server.ActualPort);
             UpdateUntil (server, () => clientConnected);
 
             Assert.IsTrue (tcpClient.Connected);
@@ -100,7 +106,7 @@ namespace KRPC.Test.Server.TCP
         [Test]
         public void StillPendingByDefault ()
         {
-            var server = new TCPServer ("Test", IPAddress.Loopback, 0);
+            var server = new TCPServer (IPAddress.Loopback, 0);
 
             bool clientRequestingConnection = false;
             server.OnClientRequestingConnection += (s, e) => clientRequestingConnection = true;
@@ -109,7 +115,7 @@ namespace KRPC.Test.Server.TCP
 
             server.Start ();
 
-            var tcpClient = new TcpClient (server.ListenAddress.ToString (), server.Port);
+            var tcpClient = new TcpClient (server.ListenAddress.ToString (), server.ActualPort);
             UpdateUntil (server, () => clientRequestingConnection);
 
             Assert.IsTrue (clientRequestingConnection);
@@ -125,7 +131,7 @@ namespace KRPC.Test.Server.TCP
         [Test]
         public void StopDisconnectsClient ()
         {
-            var server = new TCPServer ("Test", IPAddress.Loopback, 0);
+            var server = new TCPServer (IPAddress.Loopback, 0);
 
             bool clientConnected = false;
             bool clientDisconnected = false;
@@ -135,7 +141,7 @@ namespace KRPC.Test.Server.TCP
 
             server.Start ();
 
-            var tcpClient = new TcpClient (server.ListenAddress.ToString (), server.Port);
+            var tcpClient = new TcpClient (server.ListenAddress.ToString (), server.ActualPort);
             UpdateUntil (server, () => clientConnected);
 
             Assert.IsFalse (clientDisconnected);
@@ -170,15 +176,18 @@ namespace KRPC.Test.Server.TCP
         {
             bool serverStarted = false;
             bool serverStopped = false;
-            var server = new TCPServer ("Test", IPAddress.Any, 0);
+            var server = new TCPServer (IPAddress.Any, 0);
             server.OnStarted += (s, e) => serverStarted = true;
             server.OnStopped += (s, e) => serverStopped = true;
+            server.OnClientRequestingConnection += (s, e) => {
+                return;
+            };
             Assert.IsFalse (server.Running);
             server.Start ();
             Assert.IsTrue (server.Running);
             Assert.AreEqual (0, server.Clients.Count ());
             Assert.AreEqual (IPAddress.Any, server.ListenAddress);
-            Assert.IsTrue (server.Port > 0);
+            Assert.IsTrue (server.ActualPort > 0);
             server.Stop ();
             Assert.IsFalse (server.Running);
             Assert.AreEqual (0, server.Clients.Count ());

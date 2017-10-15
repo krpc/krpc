@@ -2,9 +2,6 @@
 
 #include <string>
 
-#include "krpc/decoder.hpp"
-#include "krpc/encoder.hpp"
-
 namespace krpc {
 
 Client connect(const std::string& name, const std::string& address,

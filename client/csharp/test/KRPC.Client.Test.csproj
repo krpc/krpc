@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="ConnectionTest.cs" />
     <Compile Include="EncoderTest.cs" />
+    <Compile Include="EventTest.cs" />
     <Compile Include="ObjectTest.cs" />
     <Compile Include="PerformanceTest.cs" />
     <Compile Include="ServerTestCase.cs" />

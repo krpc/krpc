@@ -4,11 +4,11 @@ import static krpc.client.TestUtils.hexlify;
 import static krpc.client.TestUtils.unhexlify;
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import com.google.protobuf.ByteString;
+
+import krpc.client.Types;
+import krpc.schema.KRPC.Type;
+import krpc.schema.KRPC.Type.TypeCode;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,35 +16,40 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.google.protobuf.ByteString;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @RunWith(Parameterized.class)
 public class EncoderSetCollectionTest {
-    @Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-            { new HashSet<Integer>(), "" },
-            { new HashSet<Integer>(Arrays.asList(1)), "0a0101" },
-            { new HashSet<Integer>(Arrays.asList(1, 2, 3, 4)), "0a01010a01020a01030a0104" }
-        });
-    }
+  @Parameters
+  @SuppressWarnings("checkstyle:javadocmethod")
+  public static Collection<Object[]> data() {
+    return Arrays.asList(new Object[][] {
+      { new HashSet<Integer>(), "" },
+      { new HashSet<Integer>(Arrays.asList(1)), "0a0101" },
+      { new HashSet<Integer>(Arrays.asList(1, 2, 3, 4)), "0a01010a01020a01030a0104" }
+    });
+  }
 
-    @Parameter(value = 0)
-    public Set<Integer> value;
-    @Parameter(value = 1)
-    public String data;
+  @Parameter(value = 0)
+  public Set<Integer> value;
+  @Parameter(value = 1)
+  public String data;
 
-    @Test
-    public void testEncode() throws IOException {
-        ByteString encodeResult = Encoder.encode(value);
-        assertEquals(data, hexlify(encodeResult));
-    }
+  Type type = Types.createSet(Types.createValue(TypeCode.UINT32));
 
-    @SuppressWarnings({ "unchecked" })
-    @Test
-    public void testDecode() throws IOException {
-        TypeSpecification typeSpec = new TypeSpecification(Set.class, new TypeSpecification(Integer.class));
-        Set<Integer> decodeResult = (Set<Integer>) Encoder.decode(unhexlify(data), typeSpec, null);
-        assertEquals(value, decodeResult);
-    }
+  @Test
+  public void testEncode() {
+    ByteString encodeResult = Encoder.encode(value, type);
+    assertEquals(data, hexlify(encodeResult));
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testDecode() {
+    Set<Integer> decodeResult = (Set<Integer>) Encoder.decode(unhexlify(data), type, null);
+    assertEquals(value, decodeResult);
+  }
 }

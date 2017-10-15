@@ -1,11 +1,11 @@
-from krpc.utils import snake_case
 from krpc.types import \
-    ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, \
-    SetType, TupleType
+    ValueType, ClassType, EnumerationType, MessageType, \
+    TupleType, ListType, SetType, DictionaryType
+from krpc.utils import snake_case
 from .domain import Domain
 from .nodes import \
-    Procedure, Property, Class, ClassMethod, ClassStaticMethod, \
-    ClassProperty, Enumeration, EnumerationValue
+    Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
+from .nodes import Enumeration, EnumerationValue
 
 
 class PythonDomain(Domain):
@@ -20,9 +20,6 @@ class PythonDomain(Domain):
         'false': 'False'
     }
 
-    def __init__(self, macros):
-        super(PythonDomain, self).__init__(macros)
-
     def currentmodule(self, name):
         super(PythonDomain, self).currentmodule(name)
         return '.. currentmodule:: %s' % name
@@ -31,11 +28,10 @@ class PythonDomain(Domain):
         if isinstance(typ, ValueType):
             return typ.python_type.__name__
         elif isinstance(typ, MessageType):
-            return 'krpc.schema.%s' % typ.protobuf_type
-        elif isinstance(typ, ClassType):
-            return self.shorten_ref(typ.protobuf_type[6:-1])
-        elif isinstance(typ, EnumType):
-            return self.shorten_ref(typ.protobuf_type[5:-1])
+            return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
+        elif isinstance(typ, (ClassType, EnumerationType)):
+            return self.shorten_ref(
+                '%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
         elif isinstance(typ, ListType):
             return 'list'
         elif isinstance(typ, DictionaryType):
@@ -51,10 +47,10 @@ class PythonDomain(Domain):
         if isinstance(typ, ValueType):
             return typ.python_type.__name__
         elif isinstance(typ, MessageType):
-            return ':class:`krpc.schema.%s`' % typ.protobuf_type
+            return ':class:`krpc.schema.KRPC.%s`' % typ.python_type.__name__
         elif isinstance(typ, ClassType):
             return ':class:`%s`' % self.type(typ)
-        elif isinstance(typ, EnumType):
+        elif isinstance(typ, EnumerationType):
             return ':class:`%s`' % self.type(typ)
         elif isinstance(typ, ListType):
             return 'list(%s)' % self.type_description(typ.value_type)

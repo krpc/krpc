@@ -1,27 +1,31 @@
 #pragma once
 
+#include <google/protobuf/stubs/port.h>
+
 #include <atomic>
 #include <map>
 #include <memory>
 #include <mutex>  // NOLINT(build/c++11)
-#include <string>
 #include <thread>  // NOLINT(build/c++11)
-
-#include "krpc/connection.hpp"
-#include "krpc/krpc.pb.hpp"
 
 namespace krpc {
 
 class Client;
+class Connection;
+class StreamImpl;
+namespace schema {
+class ProcedureCall;
+class ProcedureResult;
+}
 
 class StreamManager {
  public:
   StreamManager(Client* client, const std::shared_ptr<Connection>& connection);
   ~StreamManager();
-  google::protobuf::uint64 add_stream(const schema::Request& request);
+  std::shared_ptr<StreamImpl> add_stream(const schema::ProcedureCall& call);
+  std::shared_ptr<StreamImpl> get_stream(google::protobuf::uint64 id);
   void remove_stream(google::protobuf::uint64 id);
-  std::string get(google::protobuf::uint64 id);
-  void update(google::protobuf::uint64 id, const schema::Response& response);
+  void update(google::protobuf::uint64 id, const schema::ProcedureResult& result);
   void freeze();
   void thaw();
 
@@ -33,8 +37,8 @@ class StreamManager {
                                  const std::shared_ptr<std::atomic_bool>& frozen);
   Client* client;
   std::shared_ptr<Connection> connection;
-  std::map<google::protobuf::uint64, std::string> data;
-  std::shared_ptr<std::mutex> data_lock;
+  std::map<google::protobuf::uint64, std::weak_ptr<StreamImpl>> streams;
+  std::shared_ptr<std::recursive_mutex> update_lock;
   std::shared_ptr<std::atomic_bool> stop;
   std::shared_ptr<std::atomic_bool> should_freeze;
   std::shared_ptr<std::atomic_bool> frozen;

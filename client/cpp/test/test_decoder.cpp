@@ -1,10 +1,15 @@
-#include <gtest/gtest.h>
+#include <google/protobuf/stubs/port.h>
+
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
 
 #include <string>
-#include <utility>
 
-#include <krpc/decoder.hpp>
-#include <krpc/platform.hpp>
+#include "gtest/gtest.h"
+
+#include "krpc/decoder.hpp"
+#include "krpc/krpc.pb.hpp"
+#include "krpc/platform.hpp"
 
 #include "services/test_service.hpp"
 
@@ -12,10 +17,10 @@ namespace pb = google::protobuf;
 
 TEST(test_decoder, test_decode_message) {
   std::string message = "0a0b536572766963654e616d65120d50726f6365647572654e616d65";
-  krpc::schema::Request request;
-  krpc::decoder::decode(request, krpc::platform::unhexlify(message));
-  ASSERT_EQ("ServiceName", request.service());
-  ASSERT_EQ("ProcedureName", request.procedure());
+  krpc::schema::ProcedureCall call;
+  krpc::decoder::decode(call, krpc::platform::unhexlify(message));
+  ASSERT_EQ("ServiceName", call.service());
+  ASSERT_EQ("ProcedureName", call.procedure());
 }
 
 TEST(test_decoder, test_decode_value) {
@@ -30,12 +35,10 @@ TEST(test_decoder, test_decode_unicode_string) {
   ASSERT_EQ(krpc::platform::unhexlify("e284a2"), value);
 }
 
-TEST(test_decoder, test_decode_size_and_position) {
+TEST(test_decoder, test_decode_size) {
   std::string message = "1c";
-  std::pair<pb::uint32, pb::uint32> result =
-    krpc::decoder::decode_size_and_position(krpc::platform::unhexlify(message));
-  ASSERT_EQ(28, result.first);
-  ASSERT_EQ(1, result.second);
+  pb::uint32 size = krpc::decoder::decode_size(krpc::platform::unhexlify(message));
+  ASSERT_EQ(28, size);
 }
 
 TEST(test_decoder, test_decode_class) {

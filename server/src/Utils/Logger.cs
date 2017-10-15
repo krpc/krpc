@@ -5,8 +5,15 @@ namespace KRPC.Utils
 {
     static class Logger
     {
+        static string format = "[kRPC] {0} - {1:G} - {2}";
         static bool enabled = true;
         static Severity level = Severity.Info;
+
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
+        public static string Format {
+            get { return format; }
+            set { format = value; }
+        }
 
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
         public static bool Enabled {
@@ -31,10 +38,10 @@ namespace KRPC.Utils
         }
 
         [SuppressMessage ("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
-        internal static void WriteLine (string line, Severity severity = Severity.Info)
+        internal static void WriteLine (string message, Severity severity = Severity.Info)
         {
             if (ShouldLog (severity))
-                Console.WriteLine ("[kRPC] [" + severity + "] " + line);
+                Console.WriteLine (string.Format (format, DateTime.Now, severity, message));
         }
 
         internal static bool ShouldLog (Severity severity)

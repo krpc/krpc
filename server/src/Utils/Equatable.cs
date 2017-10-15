@@ -40,10 +40,9 @@ namespace KRPC.Utils
         {
             if (ReferenceEquals (lhs, null) || ReferenceEquals (rhs, null))
                 return ReferenceEquals (lhs, rhs);
-            else if (ReferenceEquals (lhs, rhs))
+            if (ReferenceEquals (lhs, rhs))
                 return true;
-            else
-                return lhs.Equals (rhs);
+            return lhs.Equals (rhs);
         }
 
         /// <summary>
@@ -54,10 +53,9 @@ namespace KRPC.Utils
         {
             if (ReferenceEquals (lhs, null) || ReferenceEquals (rhs, null))
                 return !ReferenceEquals (lhs, rhs);
-            else if (ReferenceEquals (lhs, rhs))
+            if (ReferenceEquals (lhs, rhs))
                 return false;
-            else
-                return !(lhs.Equals (rhs));
+            return !(lhs.Equals (rhs));
         }
     }
 }

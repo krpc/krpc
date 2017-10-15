@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -14,14 +13,14 @@ namespace KRPC.Test.Utils
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
     public class DocumentationExtentionsTest
     {
-        static readonly Type cls = typeof(TestDocumentedClass);
-        static readonly Type staticClass = typeof(TestDocumentedStaticClass);
+        static readonly System.Type cls = typeof(TestDocumentedClass);
+        static readonly System.Type staticClass = typeof(TestDocumentedStaticClass);
         static readonly MethodInfo method = typeof(TestDocumentedClass).GetMethod ("Method", BindingFlags.Public | BindingFlags.Instance);
         static readonly MethodInfo staticMethod = typeof(TestDocumentedClass).GetMethod ("StaticMethod", BindingFlags.Public | BindingFlags.Static);
         static readonly PropertyInfo property = typeof(TestDocumentedClass).GetProperty ("Property", BindingFlags.Public | BindingFlags.Instance);
         static readonly PropertyInfo staticProperty = typeof(TestDocumentedClass).GetProperty ("StaticProperty", BindingFlags.Public | BindingFlags.Static);
         static readonly MethodInfo methodArguments = typeof(TestDocumentedClass).GetMethods ().Single (m => m.Name == "MethodArguments");
-        static readonly Type nestedClass = typeof(TestDocumentedClass.NestedClass);
+        static readonly System.Type nestedClass = typeof(TestDocumentedClass.NestedClass);
         static readonly MethodInfo nestedClassMethod = typeof(TestDocumentedClass.NestedClass).GetMethod ("Method", BindingFlags.Public | BindingFlags.Instance);
 
         static readonly MethodInfo childMethod = typeof(TestDocumentedParentClass).GetMethod ("ChildMethod", BindingFlags.Public | BindingFlags.Instance);

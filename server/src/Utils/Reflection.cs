@@ -18,11 +18,8 @@ namespace KRPC.Utils
                 Type[] types;
                 try {
                     types = assembly.GetTypes ();
-                } catch (ReflectionTypeLoadException) {
-                    // FIXME: should include loadable types from partially loadable assembly, but causes MonoDevelop crash:
-                    // Assertion at class.c:5594, condition `!mono_loader_get_last_error ()
-                    // types = e.Types.Where (x => x != null).ToArray ();
-                    types = Type.EmptyTypes;
+                } catch (ReflectionTypeLoadException exn) {
+                    types = exn.Types.Where (x => x != null).ToArray ();
                 }
                 foreach (var type in types)
                     yield return type;

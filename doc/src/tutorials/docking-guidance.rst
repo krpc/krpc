@@ -13,5 +13,5 @@ returned by kRPC -- for example computing the dot product or length of a vector
 -- and uses `curses <https://docs.python.org/2/howto/curses.html>`_ for terminal
 output.
 
-.. literalinclude:: /scripts/DockingGuidance.py
+.. literalinclude:: /scripts/tutorials/DockingGuidance.py
    :language: python

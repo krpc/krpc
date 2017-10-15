@@ -1,17 +1,19 @@
 # pylint: disable=import-error,no-name-in-module
 from google.protobuf.internal import decoder as protobuf_decoder
-from krpc.types import Types, ValueType, MessageType, ClassType, EnumType
-from krpc.types import ListType, DictionaryType, SetType, TupleType
+# pylint: disable=import-error,no-name-in-module
+from google.protobuf.internal import wire_format as protobuf_wire_format
+from krpc.error import EncodingError
 import krpc.platform
 from krpc.platform import hexlify
+from krpc.types import \
+    Types, ValueType, ClassType, EnumerationType, MessageType, TupleType, \
+    ListType, SetType, DictionaryType
+import krpc.schema.KRPC_pb2 as KRPC
 
 
 class Decoder(object):
     """ Routines for decoding messages and values from
         the protocol buffer serialization format """
-
-    OK_LENGTH = 2
-    OK_MESSAGE = b'\x4F\x4B'
 
     GUID_LENGTH = 16
 
@@ -28,65 +30,75 @@ class Decoder(object):
     def decode(cls, data, typ):
         """ Given a python type, and serialized data, decode the value """
         if isinstance(typ, MessageType):
-            return cls._decode_message(data, typ)
-        elif isinstance(typ, EnumType):
-            value = cls._decode_value(data, cls._types.as_type('int32'))
+            return cls.decode_message(data, typ.python_type)
+        elif isinstance(typ, EnumerationType):
+            value = cls._decode_value(data, cls._types.sint32_type)
             return typ.python_type(value)
         elif isinstance(typ, ValueType):
             return cls._decode_value(data, typ)
         elif isinstance(typ, ClassType):
-            object_id_typ = cls._types.as_type('uint64')
+            object_id_typ = cls._types.uint64_type
             object_id = cls._decode_value(data, object_id_typ)
             return typ.python_type(object_id) if object_id != 0 else None
         elif isinstance(typ, ListType):
             if data == b'\x00':
                 return None
-            msg = cls._decode_message(data, cls._types.as_type('KRPC.List'))
+            msg = cls.decode_message(data, KRPC.List)
             return [cls.decode(item, typ.value_type) for item in msg.items]
         elif isinstance(typ, DictionaryType):
             if data == b'\x00':
                 return None
-            msg = cls._decode_message(
-                data, cls._types.as_type('KRPC.Dictionary'))
+            msg = cls.decode_message(data, KRPC.Dictionary)
             return dict((cls.decode(entry.key, typ.key_type),
                          cls.decode(entry.value, typ.value_type))
                         for entry in msg.entries)
         elif isinstance(typ, SetType):
             if data == b'\x00':
                 return None
-            msg = cls._decode_message(data, cls._types.as_type('KRPC.Set'))
+            msg = cls.decode_message(data, KRPC.Set)
             return set(cls.decode(item, typ.value_type) for item in msg.items)
         elif isinstance(typ, TupleType):
             if data == b'\x00':
                 return None
-            msg = cls._decode_message(data, cls._types.as_type('KRPC.Tuple'))
-            return tuple(
-                cls.decode(item, value_type)
-                for item, value_type in zip(msg.items, typ.value_types))
+            msg = cls.decode_message(data, KRPC.Tuple)
+            return tuple(cls.decode(item, value_type)
+                         for item, value_type
+                         in zip(msg.items, typ.value_types))
         else:
-            raise RuntimeError('Cannot decode type %s' % str(typ))
+            raise EncodingError('Cannot decode type %s' % str(typ))
 
     @classmethod
-    def decode_size_and_position(cls, data):
-        """ Decode a varint and return the (size, position) """
-        return protobuf_decoder._DecodeVarint(data, 0)
+    def decode_message_size(cls, data):
+        return protobuf_decoder._DecodeVarint(data, 0)[0]
 
     @classmethod
-    def decode_delimited(cls, data, typ):
-        """ Decode a message or value with size information
-            (used in a delimited communication stream) """
-        size, position = cls.decode_size_and_position(data)
-        return cls.decode(data[position:position+size], typ)
-
-    @classmethod
-    def _decode_message(cls, data, typ):
-        message = typ.python_type()
+    def decode_message(cls, data, typ):
+        message = typ()
         message.ParseFromString(data)
         return message
 
     @classmethod
     def _decode_value(cls, data, typ):
-        return getattr(_ValueDecoder, 'decode_' + typ.protobuf_type)(data)
+        if typ.protobuf_type.code == KRPC.Type.SINT32:
+            return _ValueDecoder.decode_sint32(data)
+        elif typ.protobuf_type.code == KRPC.Type.SINT64:
+            return _ValueDecoder.decode_sint64(data)
+        elif typ.protobuf_type.code == KRPC.Type.UINT32:
+            return _ValueDecoder.decode_uint32(data)
+        elif typ.protobuf_type.code == KRPC.Type.UINT64:
+            return _ValueDecoder.decode_uint64(data)
+        elif typ.protobuf_type.code == KRPC.Type.DOUBLE:
+            return _ValueDecoder.decode_double(data)
+        elif typ.protobuf_type.code == KRPC.Type.FLOAT:
+            return _ValueDecoder.decode_float(data)
+        elif typ.protobuf_type.code == KRPC.Type.BOOL:
+            return _ValueDecoder.decode_bool(data)
+        elif typ.protobuf_type.code == KRPC.Type.STRING:
+            return _ValueDecoder.decode_string(data)
+        elif typ.protobuf_type.code == KRPC.Type.BYTES:
+            return _ValueDecoder.decode_bytes(data)
+        else:
+            raise EncodingError('Invalid type')
 
 
 class _ValueDecoder(object):
@@ -102,12 +114,14 @@ class _ValueDecoder(object):
         return protobuf_decoder._DecodeVarint(data, 0)[0]
 
     @classmethod
-    def decode_int32(cls, data):
-        return int(cls._decode_signed_varint(data))
+    def decode_sint32(cls, data):
+        return int(protobuf_wire_format.ZigZagDecode(
+            cls._decode_signed_varint(data)))
 
     @classmethod
-    def decode_int64(cls, data):
-        return cls._decode_signed_varint(data)
+    def decode_sint64(cls, data):
+        return protobuf_wire_format.ZigZagDecode(
+            cls._decode_signed_varint(data))
 
     @classmethod
     def decode_uint32(cls, data):

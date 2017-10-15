@@ -1,7 +1,7 @@
 import socket
 import select
-import time
-from krpc.error import NetworkError
+from krpc.encoder import Encoder
+from krpc.decoder import Decoder
 
 
 class Connection(object):
@@ -10,21 +10,9 @@ class Connection(object):
         self._port = port
         self._socket = None
 
-    def connect(self, retries=0, timeout=0):
-        try:
-            socket.getaddrinfo(self._address, self._port)
-        except socket.gaierror as ex:
-            raise NetworkError(self._address, self._port, str(ex))
+    def connect(self):
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        while True:
-            try:
-                self._socket.connect((self._address, self._port))
-                break
-            except socket.error as ex:
-                if retries <= 0:
-                    raise NetworkError(self._address, self._port, str(ex))
-                retries -= 1
-                time.sleep(timeout)
+        self._socket.connect((self._address, self._port))
 
     def close(self):
         if self._socket is not None:
@@ -33,11 +21,32 @@ class Connection(object):
     def __del__(self):
         self.close()
 
+    def send_message(self, message):
+        """ Send a protobuf message """
+        self.send(Encoder.encode_message_with_size(message))
+
+    def receive_message(self, typ):
+        """ Receive a protobuf message and decode it """
+
+        # Read the size and position of the response message
+        data = b''
+        while True:
+            try:
+                data += self.partial_receive(1)
+                size = Decoder.decode_message_size(data)
+                break
+            except IndexError:
+                pass
+
+        # Read and decode the response message
+        data = self.receive(size)
+        return Decoder.decode_message(data, typ)
+
     def send(self, data):
         """ Send data to the connection.
             Blocks until all data has been sent. """
-        assert len(data) > 0
-        while len(data) > 0:
+        assert data
+        while data:
             sent = self._socket.send(data)
             if sent == 0:
                 raise socket.error("Connection closed")
@@ -53,7 +62,7 @@ class Connection(object):
         while len(data) < length:
             remaining = length - len(data)
             result = self._socket.recv(min(4096, remaining))
-            if len(result) == 0:
+            if not result:
                 raise socket.error("Connection closed")
             data += result
         return data

@@ -1,3 +1,6 @@
+v0.4.0
+ * AutoPilot.Wait and Error methods now throw an exception if the auto-pilot is not engaged (#409)
+
 v0.3.10
  * Fix maneuver node reference frame to point in the direction of the remaining burn, rather than just the initially planned burn (#404)
  * Add following to CelestialBody class: AltitudeAtPosition, LatitudeAtPosition, LongitudeAtPosition and AtmosphericDensityAtPosition (#413)

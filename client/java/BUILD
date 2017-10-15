@@ -1,8 +1,9 @@
 load('/tools/krpctools/clientgen', 'clientgen_java')
 load('/tools/build/client_test', 'client_test')
+load('/tools/build/java', 'java_checkstyle_test')
 load('/config', 'version')
 
-copts = ['-Werror', '-Xlint:all', '-target 1.7', '-source 1.7']
+copts = ['-Werror', '-Xlint:all', '-target 1.8', '-source 1.8']
 
 filegroup(
     name = 'java',
@@ -17,21 +18,6 @@ genrule(
     cmd = 'cp "$<" "$@"',
     output_to_bindir = True,
     visibility = ['//visibility:public']
-)
-
-java_import(
-    name = 'protobuf',
-    jars = ['@java_protobuf//file'],
-)
-
-java_import(
-    name = 'javatuples',
-    jars = ['@java_javatuples//file']
-)
-
-java_import(
-    name = 'junit',
-    jars = ['@java_junit//file', '@java_hamcrest//file']
 )
 
 java_library(
@@ -51,8 +37,8 @@ java_library(
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
     ],
     deps = [
-        ':protobuf',
-        ':javatuples'
+        '@java_protobuf//jar',
+        '@java_javatuples//jar'
     ],
     javacopts = copts,
     visibility = ['//visibility:public']
@@ -63,9 +49,10 @@ java_library(
     srcs = glob(['test/**/*.java']) + [':services-testservice'],
     deps = [
         ':krpc',
-        ':protobuf',
-        ':junit',
-        ':javatuples'
+        '@java_protobuf//jar',
+        '@java_junit//jar',
+        '@java_hamcrest//jar',
+        '@java_javatuples//jar'
     ],
     javacopts = copts
 )
@@ -76,18 +63,19 @@ java_test(
     runtime_deps = [
         ':krpc',
         ':testlib',
-        ':protobuf',
-        ':junit',
-        ':javatuples'
+        '@java_protobuf//jar',
+        '@java_junit//jar',
+        '@java_hamcrest//jar',
+        '@java_javatuples//jar'
     ],
     javacopts = copts,
-    size = 'small',
+    size = 'medium',
     tags = ['requires-network']
 )
 
 test_suite(
     name = 'test',
-    tests = [':client']
+    tests = [':client', ':lint']
 )
 
 test_suite(
@@ -100,8 +88,14 @@ client_test(
     test_executable = ':testexe',
     server_executable = '//tools/TestServer',
     tags = ['requires-network'],
-    size = 'small',
+    size = 'medium',
     visibility = ['//:__pkg__']
+)
+
+java_checkstyle_test(
+    name = 'lint',
+    srcs = glob(['**/*.java']),
+    size = 'small'
 )
 
 clientgen_java(

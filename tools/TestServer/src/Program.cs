@@ -31,9 +31,9 @@ namespace TestServer
             bool showHelp = false;
             bool showVersion = false;
 
+            Logger.Format = "{0:G} - {1} - {2}";
             Logger.Enabled = true;
             Logger.Level = Logger.Severity.Info;
-            RPCException.VerboseErrors = true;
             bool serverDebug = false;
             string bind = "127.0.0.1";
             ushort rpcPort = 0;
@@ -56,7 +56,7 @@ namespace TestServer
                     "stream-port=", "Port number to use for the stream server. If unspecified, use an ephemeral port.",
                     (ushort v) => streamPort = v
                 }, {
-                    "type=", "Type of server to run. Current just 'protobuf'.",
+                    "type=", "Type of server to run. Either protobuf, websockets or websockets-echo.",
                     v => type = v
                 }, {
                     "debug", "Set log level to 'debug', defaults to 'info'",
@@ -97,8 +97,7 @@ namespace TestServer
 
             var core = Core.Instance;
             CallContext.SetGameScene (GameScene.SpaceCenter);
-            var timeSpan = new TimeSpan ();
-            Core.Instance.GetUniversalTime = () => timeSpan.TotalSeconds;
+            core.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
 
             IPAddress bindAddress;
             if (!IPAddress.TryParse(bind, out bindAddress)) {
@@ -106,26 +105,35 @@ namespace TestServer
                 return;
             }
 
-            var rpcTcpServer = new TCPServer ("RPCServer", bindAddress, rpcPort);
-            var streamTcpServer = new TCPServer ("StreamServer", bindAddress, streamPort);
+            var rpcTcpServer = new TCPServer (bindAddress, rpcPort);
+            var streamTcpServer = new TCPServer (bindAddress, streamPort);
+
             Server server;
             if (type == "protobuf") {
                 var rpcServer = new KRPC.Server.ProtocolBuffers.RPCServer (rpcTcpServer);
                 var streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamTcpServer);
-                server = new Server (rpcServer, streamServer);
+                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverTCP, "TestServer", rpcServer, streamServer);
+            } else if (type == "websockets") {
+                var rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer);
+                var streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
+                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", rpcServer, streamServer);
+            } else if (type == "websockets-echo") {
+                var rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer, true);
+                var streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
+                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", rpcServer, streamServer);
             } else {
-                Console.WriteLine ("Server type '" + type + "' not supported");
+                Logger.WriteLine ("Server type '" + type + "' not supported", Logger.Severity.Error);
                 return;
             }
-            server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
+            core.Add (server);
 
-            Console.WriteLine ("Starting server...");
-            server.Start ();
-            Console.WriteLine ("type = " + type);
-            Console.WriteLine ("bind = " + bindAddress);
-            Console.WriteLine ("rpc_port = " + rpcTcpServer.Port);
-            Console.WriteLine ("stream_port = " + streamTcpServer.Port);
-            Console.WriteLine ("Server started successfully");
+            Logger.WriteLine ("Starting server...");
+            core.StartAll ();
+            Logger.WriteLine ("type = " + type);
+            Logger.WriteLine ("bind = " + bindAddress);
+            Logger.WriteLine ("rpc_port = " + rpcTcpServer.ActualPort);
+            Logger.WriteLine ("stream_port = " + streamTcpServer.ActualPort);
+            Logger.WriteLine ("Server started successfully");
 
             const long targetFPS = 60;
             long update = 0;

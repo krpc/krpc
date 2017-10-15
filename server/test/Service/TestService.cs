@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
 using KRPC.Service.Attributes;
-using KRPC.Service.Messages;
 
 namespace KRPC.Test.Service
 {
@@ -15,10 +14,19 @@ namespace KRPC.Test.Service
     [SuppressMessage ("Gendarme.Rules.Naming", "AvoidTypeInterfaceInconsistencyRule")]
     public static class TestService
     {
+        [KRPCException]
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "MissingExceptionConstructorsRule")]
+        [SuppressMessage ("Gendarme.Rules.Serialization", "MissingSerializableAttributeOnISerializableTypeRule")]
+        [SuppressMessage ("Gendarme.Rules.Serialization", "MissingSerializationConstructorRule")]
+        public class MyException : Exception {
+        };
+
         internal static ITestService Service;
 
         public static void ProcedureWithoutAttribute ()
         {
+            Service.ProcedureWithoutAttribute ();
         }
 
         /// <summary>
@@ -34,33 +42,27 @@ namespace KRPC.Test.Service
         /// Procedure with a single return argument.
         /// </summary>
         [KRPCProcedure]
-        public static void ProcedureSingleArgNoReturn (Response data)
+        public static void ProcedureSingleArgNoReturn (string x)
         {
-            Service.ProcedureSingleArgNoReturn (data);
+            Service.ProcedureSingleArgNoReturn (x);
         }
 
         [KRPCProcedure]
-        public static void ProcedureThreeArgsNoReturn (Response x, Request y, Response z)
+        public static void ProcedureThreeArgsNoReturn (string x, int y, string z)
         {
             Service.ProcedureThreeArgsNoReturn (x, y, z);
         }
 
         [KRPCProcedure]
-        public static Response ProcedureNoArgsReturns ()
+        public static string ProcedureNoArgsReturns ()
         {
             return Service.ProcedureNoArgsReturns ();
         }
 
         [KRPCProcedure]
-        public static Response ProcedureSingleArgReturns (Response data)
+        public static string ProcedureSingleArgReturns (string x)
         {
-            return Service.ProcedureSingleArgReturns (data);
-        }
-
-        [KRPCProcedure]
-        public static int ProcedureWithValueTypes (float x, string y, byte[] z)
-        {
-            return Service.ProcedureWithValueTypes (x, y, z);
+            return Service.ProcedureSingleArgReturns (x);
         }
 
         [KRPCProperty]
@@ -92,10 +94,16 @@ namespace KRPC.Test.Service
             Service.DeleteTestObject (obj);
         }
 
-        [KRPCProcedure]
+        [KRPCProcedure (Nullable = true)]
         public static TestClass EchoTestObject (TestClass obj)
         {
             return Service.EchoTestObject (obj);
+        }
+
+        [KRPCProcedure (Nullable = false)]
+        public static TestClass ReturnNullWhenNotAllowed ()
+        {
+            return Service.ReturnNullWhenNotAllowed ();
         }
 
         [KRPCClass]
@@ -130,7 +138,7 @@ namespace KRPC.Test.Service
             [KRPCProperty]
             public int IntProperty { get; set; }
 
-            [KRPCProperty]
+            [KRPCProperty (Nullable = true)]
             public TestClass ObjectProperty { get; set; }
 
             [KRPCMethod]

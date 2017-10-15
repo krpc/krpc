@@ -9,7 +9,7 @@ namespace KRPC.KerbalAlarmClock
 {
     /// <summary>
     /// This service provides functionality to interact with
-    /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/22809-12x-kerbal-alarm-clock-v3800-october-12/">Kerbal Alarm Clock</a>.
+    /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/22809-13x-kerbal-alarm-clock-v3850-may-30/">Kerbal Alarm Clock</a>.
     /// </summary>
     [KRPCService (GameScene = GameScene.All)]
     public static class KerbalAlarmClock
@@ -45,7 +45,7 @@ namespace KRPC.KerbalAlarmClock
         /// only returns one of them.
         /// </summary>
         /// <param name="name">Name of the alarm to search for.</param>
-        [KRPCProcedure]
+        [KRPCProcedure (Nullable = true)]
         public static Alarm AlarmWithName (string name)
         {
             CheckAPI ();

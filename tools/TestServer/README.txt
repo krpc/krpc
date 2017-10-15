@@ -15,5 +15,3 @@ Note:
    built for Mono 4.5, and is only intended for use with TestServer.
  - The Mono DLLs included are from Mono 4.5 - they are not the
    same as those used by KSP.
- - The KSP DLLs included are not those from KSP. They are stubs generated from
-   the public interface of the proprietary KSP DLLs.

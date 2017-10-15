@@ -31,12 +31,12 @@ To connect to a server, use the :func:`krpc.connect` function. This returns a
 connection object through which you can interact with the server. For example to
 connect to a server running on the local machine:
 
-.. literalinclude:: /scripts/Basic.lua
+.. literalinclude:: /scripts/client/lua/Basic.lua
 
 This function also accepts arguments that specify what address and port numbers
 to connect to. For example:
 
-.. literalinclude:: /scripts/Connecting.lua
+.. literalinclude:: /scripts/client/lua/Connecting.lua
 
 Interacting with the Server
 ---------------------------
@@ -115,9 +115,9 @@ Reference
          For example, the following prints out the version string for the
          server:
 
-         .. literalinclude:: /scripts/ServerVersion.lua
+         .. literalinclude:: /scripts/client/lua/ServerVersion.lua
 
          Or to get the rate at which the server is sending and receiving data
          over the network:
 
-         .. literalinclude:: /scripts/ServerStats.lua
+         .. literalinclude:: /scripts/client/lua/ServerStats.lua

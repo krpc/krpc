@@ -119,12 +119,13 @@ namespace KRPC.UI
             GUILayoutExtensions.Separator (separatorStyle);
 
             GUILayout.Label (rpcInfoText, labelStyle);
+            Configuration config = Configuration.Instance;
             DrawInfo (rpcsExecutedText, core.RPCsExecuted.ToString ());
             DrawInfo (rpcRateText, Math.Round (core.RPCRate) + " RPC/s");
-            DrawInfo (rpcExecutionMode, core.OneRPCPerUpdate ? singleRPCModeText : (core.AdaptiveRateControl ? adaptiveModeText : staticModeText));
-            DrawInfo (maxTimePerUpdateText, core.OneRPCPerUpdate ? notApplicableText : core.MaxTimePerUpdate + " ns");
-            DrawInfo (rpcReceiveModeText, core.BlockingRecv ? blockingModeText : nonBlockingModeText);
-            DrawInfo (recvTimeoutText, core.BlockingRecv ? core.RecvTimeout + " ns" : notApplicableText);
+            DrawInfo (rpcExecutionMode, config.OneRPCPerUpdate ? singleRPCModeText : (config.AdaptiveRateControl ? adaptiveModeText : staticModeText));
+            DrawInfo (maxTimePerUpdateText, config.OneRPCPerUpdate ? notApplicableText : config.MaxTimePerUpdate + " ns");
+            DrawInfo (rpcReceiveModeText, config.BlockingRecv ? blockingModeText : nonBlockingModeText);
+            DrawInfo (recvTimeoutText, config.BlockingRecv ? config.RecvTimeout + " ns" : notApplicableText);
             DrawInfo (timePerRPCUpdateText, string.Format ("{0:F5} s", core.TimePerRPCUpdate));
             DrawInfo (pollTimePerRPCUpdateText, string.Format ("{0:F5} s", core.PollTimePerRPCUpdate));
             DrawInfo (execTimePerRPCUpdateText, string.Format ("{0:F5} s", core.ExecTimePerRPCUpdate));

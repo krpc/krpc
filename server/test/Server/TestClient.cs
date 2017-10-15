@@ -25,7 +25,7 @@ namespace KRPC.Test.Server
         }
 
         public string Address {
-            get { throw new NotSupportedException (); }
+            get { return "TestClientAddress"; }
         }
 
         public IStream<byte,byte> Stream { get; private set; }

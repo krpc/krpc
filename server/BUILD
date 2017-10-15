@@ -11,13 +11,17 @@ filegroup(
 
 test_suite(
     name = 'test',
-    tests = [':test-KRPC', ':gendarme-KRPC', ':gendarme-KRPC.Test'],
-    visibility = ['//:__pkg__']
+    tests = [':test-KRPC', ':lint']
 )
 
 test_suite(
     name = 'ci-test',
     tests = [':test-KRPC']
+)
+
+test_suite(
+    name = 'lint',
+    tests = [':gendarme-KRPC', ':gendarme-KRPC.Test']
 )
 
 genrule(
@@ -107,7 +111,8 @@ test_deps = [
     '//tools/build/mono-4.5:System.Core',
     '//tools/build/mono-4.5:System.Runtime',
     '//tools/build/mono-4.5:System.IO',
-    '//tools/build/mono-4.5:System.Xml'
+    '//tools/build/mono-4.5:System.Xml',
+    '//tools/build/mono-4.5:Newtonsoft.Json'
 ]
 
 csharp_library(

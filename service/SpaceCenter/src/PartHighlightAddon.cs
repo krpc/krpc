@@ -21,7 +21,7 @@ namespace KRPC.SpaceCenter
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Awake ()
         {
-            Core.Instance.OnRPCClientDisconnected += (s, e) => Remove (e.Client);
+            Core.Instance.OnClientDisconnected += (s, e) => Remove (e.Client);
         }
 
         /// <summary>

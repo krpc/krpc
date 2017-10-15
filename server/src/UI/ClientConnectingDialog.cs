@@ -19,7 +19,7 @@ namespace KRPC.UI
                 var options = new List<DialogGUIButton> ();
                 options.Add (new DialogGUIButton ("Allow", () => args.Request.Allow ()));
                 options.Add (new DialogGUIButton ("Allow (don't ask again)", () => {
-                    Addon.config.AutoAcceptConnections = true;
+                    Addon.config.Configuration.AutoAcceptConnections = true;
                     Addon.config.Save ();
                     args.Request.Allow ();
                 }));

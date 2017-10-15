@@ -83,7 +83,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The currently targeted celestial body.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public static CelestialBody TargetBody {
             get {
                 var target = FlightGlobals.fetch.VesselTarget as global::CelestialBody;
@@ -95,7 +95,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The currently targeted vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public static Vessel TargetVessel {
             get {
                 var target = FlightGlobals.fetch.VesselTarget as global::Vessel;
@@ -107,7 +107,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The currently targeted docking port.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public static Parts.DockingPort TargetDockingPort {
             get {
                 var target = FlightGlobals.fetch.VesselTarget as ModuleDockingNode;
@@ -326,10 +326,9 @@ namespace KRPC.SpaceCenter.Services
             get {
                 if (TimeWarp.CurrentRateIndex == 0)
                     return WarpMode.None;
-                else if (TimeWarp.WarpMode == TimeWarp.Modes.HIGH)
+                if (TimeWarp.WarpMode == TimeWarp.Modes.HIGH)
                     return WarpMode.Rails;
-                else
-                    return WarpMode.Physics;
+                return WarpMode.Physics;
             }
         }
 
@@ -363,7 +362,7 @@ namespace KRPC.SpaceCenter.Services
         ///
         /// If requested time warp factor cannot be set, it will be set to the next
         /// lowest possible value. For example, if the vessel is too close to a
-        /// planet. See <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">
+        /// planet. See <a href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">
         /// the KSP wiki</a> for details.
         /// </summary>
         [KRPCProperty]
@@ -386,7 +385,7 @@ namespace KRPC.SpaceCenter.Services
         /// Returns <c>true</c> if regular "on-rails" time warp can be used, at the specified warp
         /// <paramref name="factor"/>. The maximum time warp rate is limited by various things,
         /// including how close the active vessel is to a planet. See
-        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
+        /// <a href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
         /// for details.
         /// </summary>
         /// <param name="factor">The warp factor to check.</param>
@@ -416,7 +415,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The current maximum regular "on-rails" warp factor that can be set.
         /// A value between 0 and 7 inclusive. See
-        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
+        /// <a href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
         /// for details.
         /// </summary>
         [KRPCProperty]
@@ -456,9 +455,8 @@ namespace KRPC.SpaceCenter.Services
 
             if (Planetarium.GetUniversalTime () < ut)
                 throw new YieldException (new ParameterizedContinuationVoid<double,float,float> (WarpTo, ut, maxRailsRate, maxPhysicsRate));
-            else if (TimeWarp.CurrentRateIndex > 0) {
+            if (TimeWarp.CurrentRateIndex > 0)
                 SetWarpFactor (TimeWarp.Modes.HIGH, 0);
-            }
         }
 
         static void SetWarpMode (TimeWarp.Modes mode)
@@ -633,7 +631,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Whether <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
+        /// Whether <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a> is installed.
         /// </summary>
         [KRPCProperty]
         public static bool FARAvailable {

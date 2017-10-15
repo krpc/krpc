@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using NUnit.Framework;
+using Newtonsoft.Json;
 
 namespace KRPC.Test.Service
 {
@@ -21,6 +22,7 @@ namespace KRPC.Test.Service
         [TestCase ("")]
         [TestCase ("_Foo")]
         [TestCase ("Foo%")]
+        [TestCase ("foo")]
         public void IsNotAValidIdentifier (string input)
         {
             Assert.IsFalse (TypeUtils.IsAValidIdentifier (input));
@@ -261,108 +263,6 @@ namespace KRPC.Test.Service
             Assert.IsFalse (TypeUtils.IsATupleCollectionType (type));
         }
 
-        [TestCase (typeof(string), "string")]
-        [TestCase (typeof(long), "int64")]
-        [TestCase (typeof(Status), "KRPC.Status")]
-        [TestCase (typeof(TestService.TestClass), "uint64")]
-        [TestCase (typeof(TestService.TestEnum), "int32")]
-        [TestCase (typeof(IList<string>), "KRPC.List")]
-        [TestCase (typeof(IDictionary<int,string>), "KRPC.Dictionary")]
-        [TestCase (typeof(HashSet<long>), "KRPC.Set")]
-        [TestCase (typeof(KRPC.Utils.Tuple<long>), "KRPC.Tuple")]
-        [TestCase (typeof(KRPC.Utils.Tuple<long,int>), "KRPC.Tuple")]
-        [TestCase (typeof(KRPC.Utils.Tuple<long,int,string>), "KRPC.Tuple")]
-        [TestCase (typeof(IList<IDictionary<int,string>>), "KRPC.List")]
-        [TestCase (typeof(IList<TestService.TestClass>), "KRPC.List")]
-        [TestCase (typeof(IList<TestService.TestEnum>), "KRPC.List")]
-        public void GetTypeName (Type type, string name)
-        {
-            Assert.AreEqual (name, TypeUtils.GetTypeName (type));
-        }
-
-        [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
-        [TestCase (typeof(TestService))]
-        [TestCase (typeof(IDictionary<double,string>))]
-        public void InvalidGetTypeName (Type type)
-        {
-            Assert.Throws<ArgumentException> (() => TypeUtils.GetTypeName (type));
-        }
-
-        [TestCase ("string", typeof(string))]
-        [TestCase ("int64", typeof(long))]
-        [TestCase ("KRPC.Status", typeof(Status))]
-        [TestCase ("Class(TestService.TestClass)", typeof(TestService.TestClass))]
-        [TestCase ("Enum(TestService.TestEnum)", typeof(TestService.TestEnum))]
-        [TestCase ("List(string)", typeof(IList<string>))]
-        [TestCase ("Dictionary(int32,string)", typeof(IDictionary<int,string>))]
-        [TestCase ("Set(int64)", typeof(HashSet<long>))]
-        [TestCase ("Tuple(int64)", typeof(KRPC.Utils.Tuple<long>))]
-        [TestCase ("Tuple(int64,int32)", typeof(KRPC.Utils.Tuple<long,int>))]
-        [TestCase ("Tuple(int64,int32,string)", typeof(KRPC.Utils.Tuple<long,int,string>))]
-        [TestCase ("List(Dictionary(int32,string))", typeof(IList<IDictionary<int,string>>))]
-        [TestCase ("List(Class(TestService.TestClass))", typeof(IList<TestService.TestClass>))]
-        [TestCase ("List(Enum(TestService.TestEnum))", typeof(IList<TestService.TestEnum>))]
-        public void GetFullTypeName (string name, Type type)
-        {
-            Assert.AreEqual (name, TypeUtils.GetFullTypeName (type));
-        }
-
-        [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
-        [TestCase (typeof(TestService))]
-        [TestCase (typeof(IDictionary<double,string>))]
-        public void InvalidGetFullTypeName (Type type)
-        {
-            Assert.Throws<ArgumentException> (() => TypeUtils.GetFullTypeName (type));
-        }
-
-        [TestCase (typeof(string), 0, new string[]{ })]
-        [TestCase (typeof(long), 3, new string[]{ })]
-        [TestCase (typeof(TestService.TestClass), 1, new [] { "ParameterType(1).Class(TestService.TestClass)" })]
-        [TestCase (typeof(TestService.TestEnum), 2, new [] { "ParameterType(2).Enum(TestService.TestEnum)" })]
-        [TestCase (typeof(IList<string>), 0, new [] { "ParameterType(0).List(string)" })]
-        [TestCase (typeof(IDictionary<int,string>), 1, new [] { "ParameterType(1).Dictionary(int32,string)" })]
-        [TestCase (typeof(HashSet<long>), 2, new [] { "ParameterType(2).Set(int64)" })]
-        [TestCase (typeof(IDictionary<int,IList<TestService.TestClass>>), 1, new [] { "ParameterType(1).Dictionary(int32,List(Class(TestService.TestClass)))" })]
-        [TestCase (typeof(KRPC.Utils.Tuple<long>), 3, new [] { "ParameterType(3).Tuple(int64)" })]
-        [TestCase (typeof(KRPC.Utils.Tuple<long,int>), 3, new [] { "ParameterType(3).Tuple(int64,int32)" })]
-        [TestCase (typeof(KRPC.Utils.Tuple<long,int,bool>), 3, new [] { "ParameterType(3).Tuple(int64,int32,bool)" })]
-        public void ParameterTypeAttributes (Type type, int position, string[] attributes)
-        {
-            CollectionAssert.AreEqual (attributes, TypeUtils.ParameterTypeAttributes (position, type));
-        }
-
-        [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
-        [TestCase (typeof(TestService))]
-        [TestCase (typeof(IDictionary<double,string>))]
-        public void InvalidParameterTypeAttributes (Type type)
-        {
-            Assert.Throws<ArgumentException> (() => TypeUtils.ParameterTypeAttributes (0, type));
-        }
-
-        [TestCase (typeof(string), new string[]{ })]
-        [TestCase (typeof(long), new string[]{ })]
-        [TestCase (typeof(TestService.TestClass), new [] { "ReturnType.Class(TestService.TestClass)" })]
-        [TestCase (typeof(TestService.TestEnum), new [] { "ReturnType.Enum(TestService.TestEnum)" })]
-        [TestCase (typeof(IList<string>), new [] { "ReturnType.List(string)" })]
-        [TestCase (typeof(IDictionary<int,string>), new [] { "ReturnType.Dictionary(int32,string)" })]
-        [TestCase (typeof(HashSet<long>), new [] { "ReturnType.Set(int64)" })]
-        [TestCase (typeof(IDictionary<int,IList<TestService.TestClass>>), new [] { "ReturnType.Dictionary(int32,List(Class(TestService.TestClass)))" })]
-        [TestCase (typeof(KRPC.Utils.Tuple<long>), new [] { "ReturnType.Tuple(int64)" })]
-        [TestCase (typeof(KRPC.Utils.Tuple<long,int>), new [] { "ReturnType.Tuple(int64,int32)" })]
-        [TestCase (typeof(KRPC.Utils.Tuple<long,int,bool>), new [] { "ReturnType.Tuple(int64,int32,bool)" })]
-        public void ReturnTypeAttributes (Type type, string[] attributes)
-        {
-            CollectionAssert.AreEqual (attributes, TypeUtils.ReturnTypeAttributes (type));
-        }
-
-        [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
-        [TestCase (typeof(TestService))]
-        [TestCase (typeof(IDictionary<double,string>))]
-        public void InvalidReturnTypeAttributes (Type type)
-        {
-            Assert.Throws<ArgumentException> (() => TypeUtils.ReturnTypeAttributes (type));
-        }
-
         [TestCase (typeof(TestService), "TestService")]
         [TestCase (typeof(TestService2), "TestService2")]
         [TestCase (typeof(TestService3), "TestService3Name")]
@@ -408,6 +308,45 @@ namespace KRPC.Test.Service
         public void InvalidIdentifier (string identifier)
         {
             Assert.Throws<ServiceException> (() => TypeUtils.ValidateIdentifier (identifier));
+        }
+
+        [TestCase ("{\"code\":\"STRING\"}", typeof(string))]
+        [TestCase ("{\"code\":\"SINT64\"}", typeof(long))]
+        [TestCase ("{\"code\":\"STATUS\"}", typeof(Status))]
+        [TestCase ("{\"code\":\"CLASS\",\"service\":\"TestService\",\"name\":\"TestClass\"}",
+                   typeof(TestService.TestClass))]
+        [TestCase ("{\"code\":\"ENUMERATION\",\"service\":\"TestService\",\"name\":\"TestEnum\"}",
+                   typeof(TestService.TestEnum))]
+        [TestCase ("{\"code\":\"LIST\",\"types\":[{\"code\":\"STRING\"}]}", typeof(IList<string>))]
+        [TestCase ("{\"code\":\"DICTIONARY\",\"types\":[{\"code\":\"SINT32\"},{\"code\":\"STRING\"}]}",
+                   typeof(IDictionary<int,string>))]
+        [TestCase ("{\"code\":\"SET\",\"types\":[{\"code\":\"SINT64\"}]}", typeof(HashSet<long>))]
+        [TestCase ("{\"code\":\"TUPLE\",\"types\":[{\"code\":\"SINT64\"}]}", typeof(KRPC.Utils.Tuple<long>))]
+        [TestCase ("{\"code\":\"TUPLE\",\"types\":[{\"code\":\"SINT64\"},{\"code\":\"SINT32\"}]}",
+                   typeof(KRPC.Utils.Tuple<long,int>))]
+        [TestCase ("{\"code\":\"TUPLE\",\"types\":[{\"code\":\"SINT64\"}," +
+                   "{\"code\":\"SINT32\"},{\"code\":\"STRING\"}]}",
+                   typeof(KRPC.Utils.Tuple<long,int,string>))]
+        [TestCase ("{\"code\":\"LIST\",\"types\":[" +
+                   "{\"code\":\"DICTIONARY\",\"types\":[{\"code\":\"SINT32\"},{\"code\":\"STRING\"}]}" +
+                   "]}", typeof(IList<IDictionary<int,string>>))]
+        [TestCase ("{\"code\":\"LIST\",\"types\":[" +
+                   "{\"code\":\"CLASS\",\"service\":\"TestService\",\"name\":\"TestClass\"}" +
+                   "]}", typeof(IList<TestService.TestClass>))]
+        [TestCase ("{\"code\":\"LIST\",\"types\":[" +
+                   "{\"code\":\"ENUMERATION\",\"service\":\"TestService\",\"name\":\"TestEnum\"}" +
+                   "]}", typeof(IList<TestService.TestEnum>))]
+        public void SerializeType (string name, Type type)
+        {
+            Assert.AreEqual (name, JsonConvert.SerializeObject (TypeUtils.SerializeType (type)));
+        }
+
+        [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
+        [TestCase (typeof(TestService))]
+        [TestCase (typeof(IDictionary<double,string>))]
+        public void InvalidSerializeType (Type type)
+        {
+            Assert.Throws<ArgumentException> (() => TypeUtils.SerializeType (type));
         }
     }
 }

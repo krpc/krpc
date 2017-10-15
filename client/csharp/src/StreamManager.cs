@@ -11,14 +11,11 @@ using KRPC.Schema.KRPC;
 namespace KRPC.Client
 {
     [SuppressMessage ("Gendarme.Rules.Correctness", "DisposableFieldsShouldBeDisposedRule")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     sealed class StreamManager : IDisposable
     {
         readonly Connection connection;
-        readonly object accessLock = new object ();
-        readonly IDictionary<uint, Type> streamTypes = new Dictionary<uint, Type> ();
-        readonly IDictionary<uint, ByteString> streamData = new Dictionary<uint, ByteString> ();
-        readonly IDictionary<uint, object> streamValues = new Dictionary<uint, object> ();
+        readonly object updateLock = new object ();
+        readonly IDictionary<ulong, StreamImpl> streams = new Dictionary<ulong, StreamImpl> ();
         readonly UpdateThread updateThreadObject;
         readonly Thread updateThread;
 
@@ -60,57 +57,59 @@ namespace KRPC.Client
                 throw new ObjectDisposedException (GetType ().Name);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
-        public uint AddStream (Request request, Type type)
+        public StreamImpl AddStream (System.Type returnType, ProcedureCall call)
         {
             CheckDisposed ();
-            var id = connection.KRPC ().AddStream (request);
-            lock (accessLock) {
-                if (!streamTypes.ContainsKey (id)) {
-                    streamTypes [id] = type;
-                    streamData [id] = connection.Invoke (request);
+            var id = connection.KRPC ().AddStream (call, false).Id;
+            lock (updateLock) {
+                if (!streams.ContainsKey (id))
+                    streams [id] = new StreamImpl(connection, id, returnType, updateLock);
+                return streams [id];
+            }
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
+        public StreamImpl GetStream (System.Type returnType, ulong id)
+        {
+            CheckDisposed ();
+            lock (updateLock) {
+                if (!streams.ContainsKey (id))
+                    streams [id] = new StreamImpl(connection, id, returnType, updateLock);
+                return streams [id];
+            }
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
+        public void RemoveStream (ulong id)
+        {
+            CheckDisposed ();
+            lock (updateLock) {
+                if (streams.ContainsKey (id)) {
+                    connection.KRPC ().RemoveStream (id);
+                    streams.Remove (id);
                 }
             }
-            return id;
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
-        public void RemoveStream (uint id)
+        void Update (ulong id, ProcedureResult result)
         {
-            CheckDisposed ();
-            connection.KRPC ().RemoveStream (id);
-            lock (accessLock) {
-                streamTypes.Remove (id);
-                streamData.Remove (id);
-                streamValues.Remove (id);
-            }
-        }
-
-        public object GetValue (uint id)
-        {
-            CheckDisposed ();
-            object result;
-            lock (accessLock) {
-                if (!streamTypes.ContainsKey (id))
-                    throw new InvalidOperationException ("Stream does not exist or has been closed");
-                if (streamValues.ContainsKey (id))
-                    return streamValues [id];
-                streamValues [id] = Encoder.Decode (streamData [id], streamTypes [id], connection);
-                result = streamValues [id];
-            }
-            return result;
-        }
-
-        void Update (uint id, Response response)
-        {
-            lock (accessLock) {
-                if (!streamData.ContainsKey (id))
+            lock (updateLock) {
+                if (!streams.ContainsKey (id))
                     return;
-                if (response.HasError)
-                    return; // TODO: do something with the error
-                var data = response.ReturnValue;
-                streamData [id] = data;
-                streamValues.Remove (id);
+                var stream = streams [id];
+                object value;
+                if (result.Error == null)
+                    value = Encoder.Decode (result.Value, stream.ReturnType, connection);
+                else
+                    value = connection.GetException (result.Error);
+                var condition = stream.Condition;
+                lock (condition) {
+                    stream.Value = value;
+                    Monitor.PulseAll (condition);
+                }
+                foreach (var callback in stream.Callbacks)
+                    callback (value);
             }
         }
 
@@ -142,12 +141,11 @@ namespace KRPC.Client
                         var size = Connection.ReadMessageData (stream, ref buffer, stopEvent);
                         if (size == 0 || stop)
                             break;
-                        var message = StreamMessage.Parser.ParseFrom (new CodedInputStream (buffer, 0, size));
-                        // TODO: handle errors
+                        var update = StreamUpdate.Parser.ParseFrom (new CodedInputStream (buffer, 0, size));
                         if (stop)
                             break;
-                        foreach (var response in message.Responses) {
-                            manager.Update (response.Id, response.Response);
+                        foreach (var result in update.Results) {
+                            manager.Update (result.Id, result.Result);
                             if (stop)
                                 break;
                         }

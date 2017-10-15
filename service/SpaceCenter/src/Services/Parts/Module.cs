@@ -10,7 +10,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// stock KSP, and those added by mods.
     ///
     /// In KSP, each part has zero or more
-    /// <a href="http://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES">PartModules</a>
+    /// <a href="https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES">PartModules</a>
     /// associated with it. Each one contains some of the functionality of the part.
     /// For example, an engine has a "ModuleEngines" part module that contains all the
     /// functionality of an engine.

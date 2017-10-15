@@ -9,7 +9,7 @@ namespace KRPC.UI
 {
     /// <summary>
     /// A Unity engine Rect Transform for a UI object.
-    /// See the <a href="http://docs.unity3d.com/Manual/class-RectTransform.html">Unity manual</a> for more details.
+    /// See the <a href="https://docs.unity3d.com/Manual/class-RectTransform.html">Unity manual</a> for more details.
     /// </summary>
     [KRPCClass (Service = "UI")]
     public class RectTransform

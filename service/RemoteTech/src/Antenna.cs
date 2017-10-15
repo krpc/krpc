@@ -69,14 +69,13 @@ namespace KRPC.RemoteTech
                 var target = API.GetAntennaTarget (part.InternalPart);
                 if (target == API.GetNoTargetGuid ())
                     return Target.None;
-                else if (target == API.GetActiveVesselGuid ())
+                if (target == API.GetActiveVesselGuid ())
                     return Target.ActiveVessel;
-                else if (RemoteTech.GroundStationIds.ContainsKey (target))
+                if (RemoteTech.GroundStationIds.ContainsKey (target))
                     return Target.GroundStation;
-                else if (FlightGlobals.Vessels.Any (x => x.id == target))
+                if (FlightGlobals.Vessels.Any (x => x.id == target))
                     return Target.Vessel;
-                else
-                    return Target.CelestialBody;
+                return Target.CelestialBody;
             }
             set {
                 if (value == Target.ActiveVessel)

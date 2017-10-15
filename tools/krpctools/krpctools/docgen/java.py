@@ -1,7 +1,8 @@
-from krpc.utils import snake_case
+from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
-    ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, \
-    SetType, TupleType
+    ValueType, ClassType, EnumerationType, MessageType, \
+    TupleType, ListType, SetType, DictionaryType
+from krpc.utils import snake_case
 from .domain import Domain
 from .nodes import \
     Procedure, Property, Class, ClassMethod, ClassStaticMethod, \
@@ -27,36 +28,33 @@ class JavaDomain(Domain):
     ])
 
     type_map = {
-        'int32': 'int',
-        'int64': 'long',
-        'uint32': 'int',
-        'uint64': 'long',
-        'bytes': 'byte[]',
-        'string': 'String',
-        'float': 'float',
-        'double': 'double',
-        'bool': 'boolean'
+        Type.DOUBLE: 'double',
+        Type.FLOAT: 'float',
+        Type.SINT32: 'int',
+        Type.SINT64: 'long',
+        Type.UINT32: 'int',
+        Type.UINT64: 'long',
+        Type.BYTES: 'byte[]',
+        Type.STRING: 'String',
+        Type.BOOL: 'boolean'
     }
 
     boxed_type_map = {
-        'int32': 'Integer',
-        'int64': 'Long',
-        'uint32': 'Integer',
-        'uint64': 'Long',
-        'bytes': 'Byte[]',
-        'string': 'String',
-        'float': 'Single',
-        'double': 'Double',
-        'bool': 'Boolean'
+        Type.DOUBLE: 'Double',
+        Type.FLOAT: 'Single',
+        Type.SINT32: 'Integer',
+        Type.SINT64: 'Long',
+        Type.UINT32: 'Integer',
+        Type.UINT64: 'Long',
+        Type.BYTES: 'Byte[]',
+        Type.STRING: 'String',
+        Type.BOOL: 'Boolean'
     }
 
     tuple_types = [
         'Unit', 'Pair', 'Triplet', 'Quartet', 'Quintet',
         'Sextet', 'Septet', 'Octet', 'Ennead', 'Decade'
     ]
-
-    def __init__(self, macros):
-        super(JavaDomain, self).__init__(macros)
 
     def currentmodule(self, name):
         super(JavaDomain, self).currentmodule(name)
@@ -65,8 +63,7 @@ class JavaDomain(Domain):
     def method_name(self, name):
         if lower_camel_case(name) in self._keywords:
             return '%s_' % name
-        else:
-            return name
+        return name
 
     def type(self, typ):
         return self._type(typ)
@@ -75,15 +72,14 @@ class JavaDomain(Domain):
         if typ is None:
             return 'void'
         elif not generic and isinstance(typ, ValueType):
-            return self.type_map[typ.protobuf_type]
+            return self.type_map[typ.protobuf_type.code]
         elif generic and isinstance(typ, ValueType):
-            return self.boxed_type_map[typ.protobuf_type]
+            return self.boxed_type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
-            return 'krpc.schema.%s' % typ.protobuf_type
-        elif isinstance(typ, ClassType):
-            return self.shorten_ref(typ.protobuf_type[6:-1])
-        elif isinstance(typ, EnumType):
-            return self.shorten_ref(typ.protobuf_type[5:-1])
+            return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
+        elif isinstance(typ, (ClassType, EnumerationType)):
+            return self.shorten_ref(
+                '%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
         elif isinstance(typ, ListType):
             return 'java.util.List<%s>' % self._type(typ.value_type, True)
         elif isinstance(typ, DictionaryType):
@@ -102,12 +98,12 @@ class JavaDomain(Domain):
 
     def type_description(self, typ):
         if isinstance(typ, ValueType):
-            return self.type(typ)
+            return self._type(typ)
         elif isinstance(typ, MessageType):
-            return ':type:`krpc.schema.%s`' % typ.protobuf_type
+            return ':type:`%s`' % self._type(typ)
         elif isinstance(typ, ClassType):
             return ':type:`%s`' % self.type(typ)
-        elif isinstance(typ, EnumType):
+        elif isinstance(typ, EnumerationType):
             return ':class:`%s`' % self.type(typ)
         elif isinstance(typ, ListType):
             return ':class:`java.util.List<%s>`' % \
@@ -129,16 +125,14 @@ class JavaDomain(Domain):
 
     def ref(self, obj):
         name = obj.fullname
-        if isinstance(obj, Procedure) or \
-           isinstance(obj, ClassMethod) or \
-           isinstance(obj, ClassStaticMethod):
+        if isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
             parameters = [self.type(p.type) for p in obj.parameters]
             if isinstance(obj, ClassMethod):
                 parameters = parameters[1:]
             name = name.split('.')
             name[-1] = lower_camel_case(name[-1])+'('+', '.join(parameters)+')'
             name = '.'.join(name)
-        elif isinstance(obj, Property) or isinstance(obj, ClassProperty):
+        elif isinstance(obj, (Property, ClassProperty)):
             name = name.split('.')
             name[-1] = 'get'+name[-1]+'()'
             name = '.'.join(name)

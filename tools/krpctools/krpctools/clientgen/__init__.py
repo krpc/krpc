@@ -92,7 +92,7 @@ def main():
                 '\',\''.join(inputs))
 
         # Check loaded definitions
-        if len(defs.keys()) == 0:
+        if not defs.keys():
             raise RuntimeError('No services found in input.')
         if args.service not in defs.keys():
             raise RuntimeError(

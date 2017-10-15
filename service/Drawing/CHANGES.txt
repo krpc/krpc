@@ -1,2 +1,5 @@
+v0.4.0
+ * Make Test.AvailableFonts a static method
+
 v0.3.4
  * Initial version (#253)

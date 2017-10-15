@@ -41,5 +41,5 @@ to the server using the :doc:`Service API <extending>`.
    third-party
    compiling
    extending
-   communication-protocol
+   communication-protocols
    internals

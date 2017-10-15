@@ -12,6 +12,7 @@ namespace KRPC.Service
     sealed class Services
     {
         internal IDictionary<string, ServiceSignature> Signatures { get; private set; }
+        internal IDictionary<Type, Type> MappedExceptionTypes { get; private set; }
 
         static Services instance;
 
@@ -29,6 +30,7 @@ namespace KRPC.Service
         Services ()
         {
             Signatures = Scanner.Scanner.GetServices ();
+            MappedExceptionTypes = Scanner.Scanner.GetMappedExceptionTypes ();
         }
 
         public ProcedureSignature GetProcedureSignature (string service, string procedure)
@@ -41,65 +43,70 @@ namespace KRPC.Service
             return serviceSignature.Procedures [procedure];
         }
 
-        /// <summary>
-        /// Executes the given request and returns a response builder with the relevant
-        /// fields populated. Throws YieldException, containing a continuation, if the request yields.
-        /// Throws RPCException if processing the request fails.
-        /// </summary>
-        public Response HandleRequest (ProcedureSignature procedure, Request request)
+        public Type GetMappedExceptionType (Type exnType)
         {
-            return HandleRequest (procedure, GetArguments (procedure, request.Arguments));
+            return MappedExceptionTypes.ContainsKey(exnType) ? MappedExceptionTypes [exnType] : exnType;
         }
 
         /// <summary>
-        /// Executes a request (from an array of decoded arguments) and returns a response builder with the relevant
-        /// fields populated. Throws YieldException, containing a continuation, if the request yields.
-        /// Throws RPCException if processing the request fails.
+        /// Executes a procedure call and returns the result.
+        /// Throws YieldException, containing a continuation, if the call yields.
+        /// Throws RPCException if the call fails.
+        /// </summary>
+        public ProcedureResult ExecuteCall (ProcedureSignature procedure, ProcedureCall call)
+        {
+            return ExecuteCall (procedure, GetArguments (procedure, call.Arguments));
+        }
+
+        /// <summary>
+        /// Executes a procedure call and returns the result.
+        /// Throws YieldException, containing a continuation, if the call yields.
+        /// Throws RPCException if the call fails.
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
-        public Response HandleRequest (ProcedureSignature procedure, object[] arguments)
+        public ProcedureResult ExecuteCall (ProcedureSignature procedure, object[] arguments)
         {
             if ((CallContext.GameScene & procedure.GameScene) == 0)
-                throw new RPCException (procedure, "Procedure not available in game scene '" + CallContext.GameScene + "'");
+                throw new RPCException ("Procedure not available in game scene '" + CallContext.GameScene + "'");
             object returnValue;
             try {
                 returnValue = procedure.Handler.Invoke (arguments);
             } catch (TargetInvocationException e) {
                 if (e.InnerException is YieldException)
                     throw e.InnerException;
-                throw new RPCException (procedure, e.InnerException);
+                throw new RPCException (e.InnerException);
             }
-            var response = new Response ();
+            var result = new ProcedureResult ();
             if (procedure.HasReturnType) {
                 CheckReturnValue (procedure, returnValue);
-                response.ReturnValue = returnValue;
+                result.Value = returnValue;
             }
-            return response;
+            return result;
         }
 
         /// <summary>
-        /// Executes the request, continuing using the given continuation. Returns a response builder with the relevant
-        /// fields populated. Throws YieldException, containing a continuation, if the request yields.
-        /// Throws RPCException if processing the request fails.
+        /// Executes a procedure call and returns the result.
+        /// Throws YieldException, containing a continuation, if the call yields.
+        /// Throws RPCException if the call fails.
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
-        public Response HandleRequest (ProcedureSignature procedure, IContinuation continuation)
+        public ProcedureResult ExecuteCall (ProcedureSignature procedure, IContinuation continuation)
         {
             object returnValue;
             try {
                 returnValue = continuation.RunUntyped ();
             } catch (YieldException) {
                 throw;
-            } catch (Exception e) {
-                throw new RPCException (procedure, e);
+            } catch (System.Exception e) {
+                throw new RPCException (e);
             }
-            var response = new Response ();
+            var result = new ProcedureResult ();
             if (procedure.HasReturnType) {
                 CheckReturnValue (procedure, returnValue);
-                response.ReturnValue = returnValue;
+                result.Value = returnValue;
             }
-            return response;
+            return result;
         }
 
         /// <summary>
@@ -126,18 +133,16 @@ namespace KRPC.Service
                 if (!argumentSet [mask]) {
                     // If the argument is not set, set it to the default value
                     if (!parameter.HasDefaultValue)
-                        throw new RPCException (procedure, "Argument not specified for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". ");
+                        throw new RPCException ("Argument not specified for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". ");
                     argumentValues [i] = parameter.DefaultValue;
                 } else if (value != null && !type.IsInstanceOfType (value)) {
                     // Check the type of the non-null argument value
                     throw new RPCException (
-                        procedure,
                         "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
                         "Expected an argument of type " + type + ", got " + value.GetType ());
                 } else if (value == null && !TypeUtils.IsAClassType (type)) {
                     // Check the type of the null argument value
                     throw new RPCException (
-                        procedure,
                         "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
                         "Expected an argument of type " + type + ", got null");
                 }
@@ -154,15 +159,20 @@ namespace KRPC.Service
             // Check if the type of the return value is valid
             if (returnValue != null && !procedure.ReturnType.IsInstanceOfType (returnValue)) {
                 throw new RPCException (
-                    procedure,
                     "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
                     "Expected a value of type " + procedure.ReturnType + ", got " + returnValue.GetType ());
-            } else if (returnValue == null && !TypeUtils.IsAClassType (procedure.ReturnType)) {
+            }
+            if (returnValue == null && !TypeUtils.IsAClassType (procedure.ReturnType)) {
                 throw new RPCException (
-                    procedure,
                     "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
                     "Expected a value of type " + procedure.ReturnType + ", got null");
             }
+            // Check if the return value is null, but the procedure is not marked as nullable
+            if (returnValue == null && !procedure.ReturnIsNullable)
+                throw new RPCException (
+                    "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
+                    "Expected a non-null value of type " + procedure.ReturnType + ", got null, " +
+                    "but the procedure is not marked as nullable.");
         }
     }
 }

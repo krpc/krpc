@@ -14,7 +14,10 @@ decoder::decode(_result, _data, {% if is_static %}&_client{% else %}this->_clien
 return _result;
 {% endmacro %}
 {% macro stream(service, procedure, type, has_args, is_static=False) %}
-return ::krpc::Stream<{{ type }}>({% if is_static %}&_client{% else %}this->_client{% endif %}, {% if is_static %}_client.{% else %}this->_client->{% endif %}request("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %}));
+return ::krpc::Stream<{{ type }}>({% if is_static %}&_client{% else %}this->_client{% endif %}, {% if is_static %}_client.{% else %}this->_client->{% endif %}build_call("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %}));
+{% endmacro %}
+{% macro procedure_call(service, procedure, type, has_args, is_static=False) %}
+return {% if is_static %}_client.{% else %}this->_client->{% endif %}build_call("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
 {% endmacro %}
 {% macro sig_parameters(parameters) %}
 {% for x in parameters %}{{x.type}} {{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}
@@ -31,6 +34,9 @@ return ::krpc::Stream<{{ type }}>({% if is_static %}&_client{% else %}this->_cli
 
 #include <krpc/decoder.hpp>
 #include <krpc/encoder.hpp>
+#include <krpc/error.hpp>
+#include <krpc/event.hpp>
+#include <krpc/object.hpp>
 #include <krpc/service.hpp>
 #include <krpc/stream.hpp>
 
@@ -45,6 +51,16 @@ class {{ service_name }} : public Service {
   // Class forward declarations
   {% for class_name in classes.keys() %}
   class {{ class_name }};
+  {% endfor %}
+  {% endif %}
+  {% if exceptions | length > 0 %}
+  {% for exception_name,exception in exceptions.items() %}
+
+{{ exception.documentation | indent(width=2) }}
+  class {{ exception_name }} : public ::krpc::RPCError {
+   public:
+    inline explicit {{ exception_name }}(const std::string& msg) : ::krpc::RPCError(msg) {}
+  };
   {% endfor %}
   {% endif %}
   {% for enum_name,enm in enumerations.items() %}
@@ -80,6 +96,14 @@ class {{ service_name }} : public Service {
   ::krpc::Stream<{{ property.return_type }}> {{ property_name }}_stream({{ sig_parameters(property.parameters) }});
   {% endif %}
   {% endfor %}
+  {% for procedure_name,procedure in procedures.items() %}
+
+  ::krpc::schema::ProcedureCall {{ procedure_name }}_call({{ sig_parameters(procedure.parameters) }});
+  {% endfor %}
+  {% for property_name,property in properties.items() %}
+
+  ::krpc::schema::ProcedureCall {{ property_name }}_call({{ sig_parameters(property.parameters) }});
+  {% endfor %}
   {% for class_name,cls in classes.items() %}
 
 {{ cls.documentation | indent(width=2) }}
@@ -94,7 +118,7 @@ class {{ service_name }} : public Service {
     {% for method_name,method in cls.static_methods.items() %}
 
 {{ method.documentation | indent(width=4) }}
-    static {{ method.return_type }} {{ method_name }}(Client& client, {{ sig_parameters(method.parameters) }});
+    static {{ method.return_type }} {{ method_name }}({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
     {% endfor %}
     {% for property_name,property in cls.properties.items() %}
 
@@ -110,7 +134,7 @@ class {{ service_name }} : public Service {
     {% for method_name,method in cls.static_methods.items() %}
     {% if method.return_type != 'void' %}
 
-    static ::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream(Client& client, {{ sig_parameters(method.parameters) }});
+    static ::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
     {% endif %}
     {% endfor %}
     {% for property_name,property in cls.properties.items() %}
@@ -118,6 +142,18 @@ class {{ service_name }} : public Service {
 
     ::krpc::Stream<{{ property.return_type }}> {{ property_name }}_stream({{ sig_parameters(property.parameters) }});
     {% endif %}
+    {% endfor %}
+    {% for method_name,method in cls.methods.items() %}
+
+    ::krpc::schema::ProcedureCall {{ method_name }}_call({{ sig_parameters(method.parameters) }});
+    {% endfor %}
+    {% for method_name,method in cls.static_methods.items() %}
+
+    static ::krpc::schema::ProcedureCall {{ method_name }}_call({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
+    {% endfor %}
+    {% for property_name,property in cls.properties.items() %}
+
+    ::krpc::schema::ProcedureCall {{ property_name }}_call({{ sig_parameters(property.parameters) }});
     {% endfor %}
   };
   {% endfor %}
@@ -152,7 +188,13 @@ namespace decoder {
 namespace services {
 
 inline {{ service_name }}::{{ service_name }}(Client* client):
-  Service(client) {}
+  Service(client) {
+  {% for exception_name in exceptions.keys() %}
+  client->add_exception_thrower(
+    "{{ service_name }}", "{{ exception_name }}",
+    [] (const std::string& msg) { throw {{ exception_name }}(msg); });
+  {% endfor %}
+}
 {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
 
 inline {{ procedure.return_type }} {{ service_name }}::{{ procedure_name }}({{ impl_parameters(procedure.parameters) }}) {
@@ -173,6 +215,14 @@ inline ::krpc::Stream<{{ procedure.return_type }}> {{ service_name }}::{{ proced
 }
 {% endif %}
 {% endfor %}
+{% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
+
+inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ procedure_name }}_call({{ impl_parameters(procedure.parameters) }}) {
+{% if procedure.parameters | length > 0 %}{{ args(procedure.parameters) | indent(width=2) }}
+{% endif %}
+{{ procedure_call(service_name, procedure.remote_name, procedure.return_type, procedure.parameters | length > 0) | indent(width=2) }}
+}
+{% endfor %}
 {% for class_name,cls in classes.items() %}
 
 inline {{ service_name }}::{{ class_name }}::{{ class_name }}(Client* client, google::protobuf::uint64 id):
@@ -188,10 +238,10 @@ inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
-inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}(Client& _client, {{ impl_parameters(method.parameters) }}) {
+inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}({{ impl_parameters([{'type': 'Client&', 'name': '_client'}] + method.parameters) }}) {
 {% if method.parameters | length > 0 %}  {{ args(method.parameters) | indent(width=2) }}
 {% endif %}
-{{ call(service_name, method.remote_name, method.return_type != 'void', True, True) | indent(width=2) }}
+{{ call(service_name, method.remote_name, method.return_type != 'void', method.parameters | length > 0, True) | indent(width=2) }}
 {% if method.return_type != 'void' %}  {{ return(method.return_type, method.return_set_client, True) | indent(width=2) }}
 {% endif %}
 }
@@ -208,12 +258,27 @@ inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_nam
 {% for method_name,method in cls.static_methods.items() %}
 {% if method.return_type != 'void' %}
 
-inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_name }}::{{ method_name }}_stream(Client& _client, {{ impl_parameters(method.parameters) }}) {
+inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_name }}::{{ method_name }}_stream({{ impl_parameters([{'type': 'Client&', 'name': '_client'}] + method.parameters) }}) {
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=2) }}
 {% endif %}
-{{ stream(service_name, method.remote_name, method.return_type, True, True) | indent(width=2) }}
+{{ stream(service_name, method.remote_name, method.return_type, method.parameters | length > 0, True) | indent(width=2) }}
 }
 {% endif %}
+{% endfor %}
+{% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
+
+inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ method_name }}_call({{ impl_parameters(method.parameters) }}) {
+{{ args([{'name': '*this'}] + method.parameters) | indent(width=2) }}
+{{ procedure_call(service_name, method.remote_name, method.return_type, True) | indent(width=2) }}
+}
+{% endfor %}
+{% for method_name,method in cls.static_methods.items() %}
+
+inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ method_name }}_call({{ impl_parameters([{'type': 'Client&', 'name': '_client'}] + method.parameters) }}) {
+{% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=2) }}
+{% endif %}
+{{ procedure_call(service_name, method.remote_name, method.return_type, method.parameters | length > 0, True) | indent(width=2) }}
+}
 {% endfor %}
 {% endfor %}
 }  // namespace services

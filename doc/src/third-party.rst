@@ -4,7 +4,7 @@ Other Clients, Services and Scripts
 This page links to clients, services, scripts, tools and other useful things for
 kRPC that have been made by others. If you want your own project added to this
 page, please feel free to ask `on the forum
-<http://forum.kerbalspaceprogram.com/index.php?/topic/130742-105-krpc-control-the-game-using-python-c-c-lua-ruby-v021-10th-feb-2016/>`_.
+<https://forum.kerbalspaceprogram.com/index.php?/topic/130742-130-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-v0310-15th-september-2017/>`_.
 
 Clients
 -------
@@ -23,7 +23,7 @@ Services
 Scripts/Tools/Libraries etc.
 ----------------------------
 
- * `kIPC <http://forum.kerbalspaceprogram.com/index.php?/topic/142979-113-kipc-inter-processor-communication-between-kos-and-krpc-v020-beta-now-available/>`_ -
+ * `kIPC <https://forum.kerbalspaceprogram.com/index.php?/topic/142979-113-kipc-inter-processor-communication-between-kos-and-krpc-v020-beta-now-available/>`_ -
    Inter-Process(or) Communication between kOS and KRPC
  * `kautopilly <https://github.com/Cheaterman/kautopilly>`_ -- an autopilot primarily intended for planes.
  * `KNav <https://github.com/Vivero/KNav>`_ -- a flexible platform for implementing computer-assisted navigation and control of vessels.

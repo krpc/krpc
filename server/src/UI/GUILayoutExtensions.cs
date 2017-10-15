@@ -135,8 +135,8 @@ namespace KRPC.UI
             if (ComboBoxWindow.Instance.Caller == caller && ComboBoxWindow.Instance.SelectedOption != -1) {
                 ComboBoxWindow.Instance.Hide ();
                 return ComboBoxWindow.Instance.SelectedOption;
-            } else
-                return selectedItem;
+            }
+            return selectedItem;
         }
 
         sealed class ComboBoxWindow : Window

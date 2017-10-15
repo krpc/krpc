@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Net;
+using System.Reflection;
 using KRPC.Server;
-using KRPC.Server.TCP;
 using KRPC.Utils;
 using UnityEngine;
 
@@ -12,63 +12,58 @@ namespace KRPC.UI
 {
     sealed class MainWindow : Window
     {
-        public Configuration Config { private get; set; }
-
-        public Server.Server Server { private get; set; }
+        Core core;
+        ConfigurationFile config;
 
         public InfoWindow InfoWindow { private get; set; }
 
-        public ClientDisconnectDialog ClientDisconnectDialog { private get; set; }
+        public ClientDisconnectDialog ClientDisconnectDialog { get; set; }
 
-        /// <summary>
-        /// Errors to display
-        /// </summary>
         public List<string> Errors { get; private set; }
 
-        public event EventHandler OnStartServerPressed;
-        public event EventHandler OnStopServerPressed;
+        public event EventHandler<ServerEventArgs> OnStartServerPressed;
+        public event EventHandler<ServerEventArgs> OnStopServerPressed;
 
-        readonly Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
-        const long lastActivityMillisecondsInterval = 100L;
-        int numClientsDisplayed;
-        bool resized;
-        // Editable fields
-        string address;
-        bool manualAddress;
-        List<string> availableAddresses;
-        string rpcPort;
-        string streamPort;
-        bool advanced;
+        readonly HashSet<Guid> expandServers = new HashSet<Guid> ();
+        readonly IDictionary<Guid, EditServer> editServers = new Dictionary<Guid, EditServer> ();
+        readonly IDictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
+        const long lastActivityMillisecondsInterval = 100;
+
+        internal bool Resized { get; set; }
+
+        bool showAdvancedServerOptions;
         string maxTimePerUpdate;
         string recvTimeout;
         // Style settings
         readonly Color errorColor = Color.yellow;
-        GUIStyle labelStyle, stretchyLabelStyle, fixedLabelStyle, textFieldStyle, longTextFieldStyle, stretchyTextFieldStyle,
-            buttonStyle, toggleStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
+        internal GUIStyle labelStyle, stretchyLabelStyle, fixedLabelStyle, textFieldStyle, longTextFieldStyle, stretchyTextFieldStyle,
+            buttonStyle, toggleStyle, expandStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
         const float windowWidth = 288f;
         const float textFieldWidth = 45f;
-        const float longTextFieldWidth = 90f;
-        const float fixedLabelWidth = 125f;
+        const float longTextFieldWidth = 80f;
+        const float fixedLabelWidth = 160f;
         const float indentWidth = 15f;
         float scaledIndentWidth;
-        const int addressMaxLength = 15;
-        const int portMaxLength = 5;
         const int maxTimePerUpdateMaxLength = 5;
         const int recvTimeoutMaxLength = 5;
         // Text strings
-        const string title = "kRPC Server";
-        const string startButtonText = "Start server";
-        const string stopButtonText = "Stop server";
+        const string advancedModeText = "Show advanced settings";
+        const string startAllServersText = "Start server";
+        const string stopAllServersText = "Stop server";
+        const string addServerText = "Add server";
+        const string removeServerText = "Remove";
+        const string startServerText = "Start";
+        const string stopServerText = "Stop";
+        const string editServerText = "Edit";
+        const string saveServerText = "Save";
         const string serverOnlineText = "Server online";
         const string serverOfflineText = "Server offline";
-        const string addressLabelText = "Address:";
-        const string rpcPortLabelText = "RPC port:";
-        const string streamPortLabelText = "Stream port:";
-        const string localhostText = "localhost";
-        const string manualText = "Manual";
-        const string anyText = "Any";
-        const string showInfoWindowText = "Show Info";
-        const string advancedText = "Advanced settings";
+        const string protocolText = "Protocol:";
+        internal const string protobufOverTcpText = "Protobuf over TCP";
+        internal const string protobufOverWebSocketsText = "Protobuf over WebSockets";
+        const string unknownClientNameText = "<unknown>";
+        const string noClientsConnectedText = "No clients connected";
+        const string advancedServerOptionsText = "Show advanced settings";
         const string autoStartServerText = "Auto-start server";
         const string autoAcceptConnectionsText = "Auto-accept new clients";
         const string confirmRemoveClientText = "Confirm disconnecting a client";
@@ -77,21 +72,21 @@ namespace KRPC.UI
         const string adaptiveRateControlText = "Adaptive rate control";
         const string blockingRecvText = "Blocking receives";
         const string recvTimeoutText = "Receive timeout";
-        const string noClientsConnectedText = "No clients connected";
-        const string unknownClientNameText = "<unknown>";
-        const string invalidAddressText = "Invalid IP address. Must be in dot-decimal notation, e.g. \"192.168.1.0\"";
-        const string invalidRPCPortText = "RPC port must be between 0 and 65535";
-        const string invalidStreamPortText = "Stream port must be between 0 and 65535";
+        const string debugLoggingText = "Debug logging";
         const string invalidMaxTimePerUpdateText = "Max. time per update must be an integer";
         const string invalidRecvTimeoutText = "Receive timeout must be an integer";
-        const string autoAcceptingConnectionsText = "auto-accepting new clients";
-        const string stringSeparatorText = ", ";
+        const string showInfoWindowText = "Show info";
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         protected override void Init ()
         {
-            Title = title;
-            Core.Instance.OnClientActivity += (s, e) => SawClientActivity (e.Client);
+            core = Core.Instance;
+            config = ConfigurationFile.Instance;
+
+            var version = FileVersionInfo.GetVersionInfo (Assembly.GetExecutingAssembly ().Location);
+            Title = "kRPC v" + version.FileMajorPart + "." + version.FileMinorPart + "." + version.FileBuildPart;
+
+            core.OnClientActivity += (s, e) => SawClientActivity (e.Client);
 
             Style.fixedWidth = windowWidth;
 
@@ -124,6 +119,12 @@ namespace KRPC.UI
             toggleStyle.stretchWidth = false;
             toggleStyle.contentOffset = new Vector2 (4, 0);
 
+            expandStyle = new GUIStyle (skin.button);
+            expandStyle.margin = new RectOffset (0, 0, 0, 0);
+            expandStyle.padding = new RectOffset (0, 0, 0, 0);
+            expandStyle.fixedWidth = 16;
+            expandStyle.fixedHeight = 16;
+
             separatorStyle = GUILayoutExtensions.SeparatorStyle (new Color (0f, 0f, 0f, 0.25f));
             separatorStyle.fixedHeight = 2;
             separatorStyle.stretchWidth = true;
@@ -140,237 +141,12 @@ namespace KRPC.UI
             comboOptionStyle = GUILayoutExtensions.ComboOptionStyle ();
 
             Errors = new List<string> ();
-            address = Config.Address.ToString ();
-            rpcPort = Config.RPCPort.ToString ();
-            streamPort = Config.StreamPort.ToString ();
-            maxTimePerUpdate = Config.MaxTimePerUpdate.ToString ();
-            recvTimeout = Config.RecvTimeout.ToString ();
+            maxTimePerUpdate = config.Configuration.MaxTimePerUpdate.ToString ();
+            recvTimeout = config.Configuration.RecvTimeout.ToString ();
 
-            // Get list of available addresses for drop down
-            var interfaceAddresses = NetworkInformation.LocalIPAddresses.Select (x => x.ToString ()).ToList ();
-            interfaceAddresses.Remove (IPAddress.Loopback.ToString ());
-            interfaceAddresses.Remove (IPAddress.Any.ToString ());
-            availableAddresses = new List<string> (new [] { localhostText, anyText });
-            availableAddresses.AddRange (interfaceAddresses);
-            availableAddresses.Add (manualText);
-        }
-
-        void DrawServerStatus ()
-        {
-            bool running = Server.Running;
-            GUILayoutExtensions.Light (running, lightStyle);
-            if (running)
-                GUILayout.Label (serverOnlineText, stretchyLabelStyle);
-            else
-                GUILayout.Label (serverOfflineText, stretchyLabelStyle);
-        }
-
-        void DrawStartStopButton ()
-        {
-            if (Server.Running) {
-                if (GUILayout.Button (stopButtonText, buttonStyle)) {
-                    EventHandlerExtensions.Invoke (OnStopServerPressed, this);
-                    // Force window to resize to height of content
-                    // TODO: better way to do this?
-                    Position = new Rect (Position.x, Position.y, Position.width, 0f);
-                }
-            } else {
-                if (GUILayout.Button (startButtonText, buttonStyle)) {
-                    if (StartServer ())
-                        EventHandlerExtensions.Invoke (OnStartServerPressed, this);
-                }
-            }
-        }
-
-        void DrawAddress ()
-        {
-            if (Server.Running)
-                GUILayout.Label (addressLabelText + " " + Server.Address.Split(':')[0], labelStyle);
-            else {
-                GUILayout.Label (addressLabelText, labelStyle);
-                // Get the index of the address in the combo box
-                int selected;
-                if (!manualAddress && address == IPAddress.Loopback.ToString ())
-                    selected = 0;
-                else if (!manualAddress && address == IPAddress.Any.ToString ())
-                    selected = 1;
-                else if (!manualAddress && availableAddresses.Contains (address))
-                    selected = availableAddresses.IndexOf (address);
-                else
-                    selected = availableAddresses.Count - 1;
-                // Display the combo box
-                selected = GUILayoutExtensions.ComboBox ("address", selected, availableAddresses, buttonStyle, comboOptionsStyle, comboOptionStyle);
-                // Get the address from the combo box selection
-                if (selected == 0) {
-                    address = IPAddress.Loopback.ToString ();
-                    manualAddress = false;
-                } else if (selected == 1) {
-                    address = IPAddress.Any.ToString ();
-                    manualAddress = false;
-                } else if (selected < availableAddresses.Count - 1) {
-                    address = availableAddresses [selected];
-                    manualAddress = false;
-                } else {
-                    // Display a text field when "Manual" is selected
-                    address = GUILayout.TextField (address, addressMaxLength, stretchyTextFieldStyle);
-                    manualAddress = true;
-                }
-            }
-        }
-
-        void DrawShowInfoWindow ()
-        {
-            if (GUILayout.Button (showInfoWindowText, buttonStyle)) {
-                InfoWindow.Visible = true;
-            }
-        }
-
-        void DrawRPCPort ()
-        {
-            if (Server.Running)
-                GUILayout.Label (rpcPortLabelText + " " + rpcPort, labelStyle);
-            else {
-                GUILayout.Label (rpcPortLabelText, labelStyle);
-                rpcPort = GUILayout.TextField (rpcPort, portMaxLength, textFieldStyle);
-            }
-        }
-
-        void DrawStreamPort ()
-        {
-            if (Server.Running)
-                GUILayout.Label (streamPortLabelText + " " + streamPort, labelStyle);
-            else {
-                GUILayout.Label (streamPortLabelText, labelStyle);
-                streamPort = GUILayout.TextField (streamPort, portMaxLength, textFieldStyle);
-            }
-        }
-
-        void DrawAdvancedToggle ()
-        {
-            bool newAdvanced = GUILayout.Toggle (advanced, advancedText, toggleStyle, new GUILayoutOption[] { });
-            if (newAdvanced != advanced) {
-                advanced = newAdvanced;
-                resized = true;
-            }
-        }
-
-        void DrawAutoStartServerToggle ()
-        {
-            bool autoStartServer = GUILayout.Toggle (Config.AutoStartServer, autoStartServerText, toggleStyle, new GUILayoutOption[] { });
-            if (autoStartServer != Config.AutoStartServer) {
-                Config.AutoStartServer = autoStartServer;
-                Config.Save ();
-            }
-        }
-
-        void DrawAutoAcceptConnectionsToggle ()
-        {
-            bool autoAcceptConnections = GUILayout.Toggle (Config.AutoAcceptConnections, autoAcceptConnectionsText, toggleStyle, new GUILayoutOption[] { });
-            if (autoAcceptConnections != Config.AutoAcceptConnections) {
-                Config.AutoAcceptConnections = autoAcceptConnections;
-                Config.Save ();
-            }
-        }
-
-        void DrawConfirmRemoveClientToggle ()
-        {
-            bool confirmRemoveClient = GUILayout.Toggle (Config.ConfirmRemoveClient, confirmRemoveClientText, toggleStyle, new GUILayoutOption[] { });
-            if (confirmRemoveClient != Config.ConfirmRemoveClient) {
-                Config.ConfirmRemoveClient = confirmRemoveClient;
-                Config.Save ();
-            }
-        }
-
-        void DrawOneRPCPerUpdateToggle ()
-        {
-            bool oneRPCPerUpdate = GUILayout.Toggle (Config.OneRPCPerUpdate, oneRPCPerUpdateText, toggleStyle, new GUILayoutOption[] { });
-            if (oneRPCPerUpdate != Config.OneRPCPerUpdate) {
-                Config.OneRPCPerUpdate = oneRPCPerUpdate;
-                Config.Save ();
-            }
-        }
-
-        void DrawMaxTimePerUpdate ()
-        {
-            GUILayout.Label (maxTimePerUpdateText, fixedLabelStyle);
-            maxTimePerUpdate = GUILayout.TextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, longTextFieldStyle);
-        }
-
-        void DrawAdaptiveRateControlToggle ()
-        {
-            bool adaptiveRateControl = GUILayout.Toggle (Config.AdaptiveRateControl, adaptiveRateControlText, toggleStyle, new GUILayoutOption[] { });
-            if (adaptiveRateControl != Config.AdaptiveRateControl) {
-                Config.AdaptiveRateControl = adaptiveRateControl;
-                Config.Save ();
-            }
-        }
-
-        void DrawBlockingRecvToggle ()
-        {
-            bool blockingUpdate = GUILayout.Toggle (Config.BlockingRecv, blockingRecvText, toggleStyle, new GUILayoutOption[] { });
-            if (blockingUpdate != Config.BlockingRecv) {
-                Config.BlockingRecv = blockingUpdate;
-                Config.Save ();
-            }
-        }
-
-        void DrawRecvTimeout ()
-        {
-            GUILayout.Label (recvTimeoutText, fixedLabelStyle);
-            recvTimeout = GUILayout.TextField (recvTimeout, recvTimeoutMaxLength, longTextFieldStyle);
-        }
-
-        void DrawServerInfo ()
-        {
-            string info = Server.Info;
-            if (Config.AutoAcceptConnections)
-                info = info + stringSeparatorText + autoAcceptingConnectionsText;
-            GUILayout.Label (info, labelStyle);
-        }
-
-        void DrawClientsList ()
-        {
-            var clients = Server.Clients.ToList ();
-
-            // Resize window if number of connected clients changes
-            if (clients.Count != numClientsDisplayed) {
-                numClientsDisplayed = clients.Count;
-                resized = true;
-            }
-            // Get list of client descriptions
-            IDictionary<IClient,string> clientDescriptions = new Dictionary<IClient,string> ();
-            if (clients.Count > 0) {
-                foreach (var client in clients) {
-                    try {
-                        var clientName = client.Name;
-                        clientDescriptions [client] = (clientName.Length == 0 ? unknownClientNameText : clientName) + " @ " + client.Address;
-                    } catch (ClientDisconnectedException) {
-                    }
-                }
-            }
-
-            // Display the list of clients
-            if (clientDescriptions.Any ()) {
-                foreach (var entry in clientDescriptions) {
-                    var client = entry.Key;
-                    var description = entry.Value;
-                    GUILayout.BeginHorizontal ();
-                    GUILayoutExtensions.Light (IsClientActive (client), lightStyle);
-                    GUILayout.Label (description, stretchyLabelStyle);
-                    if (GUILayout.Button (new GUIContent (Icons.Instance.ButtonDisconnectClient, "Disconnect client"),
-                            buttonStyle, GUILayout.MaxWidth (20), GUILayout.MaxHeight (20))) {
-                        if (Config.ConfirmRemoveClient)
-                            ClientDisconnectDialog.Show (client);
-                        else
-                            client.Close ();
-                    }
-                    GUILayout.EndHorizontal ();
-                }
-            } else {
-                GUILayout.BeginHorizontal ();
-                GUILayout.Label (noClientsConnectedText, labelStyle);
-                GUILayout.EndHorizontal ();
-            }
+            core.OnClientActivity += (s, e) => SawClientActivity (e.Client);
+            if (core.Servers.Count == 1)
+                expandServers.Add (core.Servers [0].Id);
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
@@ -396,140 +172,344 @@ namespace KRPC.UI
                 lightStyle.fontSize = scaledFontSize;
                 errorLabelStyle.fontSize = scaledFontSize;
                 comboOptionsStyle.fontSize = scaledFontSize;
+                comboOptionStyle.fontSize = scaledFontSize;
                 GUILayoutExtensions.SetLightStyleSize (lightStyle, Style.lineHeight);
-                resized = true;
+                Resized = true;
             }
 
             // Force window to resize to height of content
-            if (resized) {
-                Position = new Rect (Position.x, Position.y, Position.width, 0f);
-                resized = false;
+            if (Resized)
+            {
+                Position = new Rect(Position.x, Position.y, Position.width, 0f);
+                Resized = false;
             }
 
-            var running = Server.Running;
+            GUILayout.BeginVertical();
 
-            GUILayout.BeginVertical ();
+            DrawStartServer();
+            GUILayoutExtensions.Separator(separatorStyle);
 
-            GUILayout.BeginHorizontal ();
-            DrawServerStatus ();
-            DrawStartStopButton ();
-            GUILayout.EndHorizontal ();
-
-            GUILayout.Space (4);
-
-            GUILayout.BeginHorizontal ();
-            DrawAddress ();
-            if (running) {
-                GUILayout.Space (4);
-                DrawShowInfoWindow ();
+            var servers = core.Servers.ToList();
+            foreach (var server in servers) {
+                DrawServer(server, servers.Count == 1);
+                GUILayoutExtensions.Separator(separatorStyle);
             }
-            GUILayout.EndHorizontal ();
 
-            GUILayout.BeginHorizontal ();
-            DrawRPCPort ();
-            GUILayout.Space (4);
-            DrawStreamPort ();
-            GUILayout.EndHorizontal ();
+            DrawAddServer();
+            GUILayoutExtensions.Separator(separatorStyle);
 
-            if (running) {
-                GUILayout.BeginHorizontal ();
-                DrawServerInfo ();
-                GUILayout.EndHorizontal ();
-                GUILayoutExtensions.Separator (separatorStyle);
-                DrawClientsList ();
-            } else {
-                GUILayout.BeginHorizontal ();
-                DrawAdvancedToggle ();
-                GUILayout.EndHorizontal ();
-
-                if (advanced) {
-                    GUILayout.BeginHorizontal ();
-                    GUILayout.Space (scaledIndentWidth);
-                    DrawAutoStartServerToggle ();
-                    GUILayout.EndHorizontal ();
-
-                    GUILayout.BeginHorizontal ();
-                    GUILayout.Space (scaledIndentWidth);
-                    DrawAutoAcceptConnectionsToggle ();
-                    GUILayout.EndHorizontal ();
-
-                    GUILayout.BeginHorizontal ();
-                    GUILayout.Space (scaledIndentWidth);
-                    DrawConfirmRemoveClientToggle ();
-                    GUILayout.EndHorizontal ();
-
-                    GUILayout.BeginHorizontal ();
-                    GUILayout.Space (scaledIndentWidth);
-                    DrawOneRPCPerUpdateToggle ();
-                    GUILayout.EndHorizontal ();
-
-                    GUILayout.BeginHorizontal ();
-                    GUILayout.Space (scaledIndentWidth);
-                    DrawMaxTimePerUpdate ();
-                    GUILayout.EndHorizontal ();
-
-                    GUILayout.BeginHorizontal ();
-                    GUILayout.Space (scaledIndentWidth);
-                    DrawAdaptiveRateControlToggle ();
-                    GUILayout.EndHorizontal ();
-
-                    GUILayout.BeginHorizontal ();
-                    GUILayout.Space (scaledIndentWidth);
-                    DrawBlockingRecvToggle ();
-                    GUILayout.EndHorizontal ();
-
-                    GUILayout.BeginHorizontal ();
-                    GUILayout.Space (scaledIndentWidth);
-                    DrawRecvTimeout ();
-                    GUILayout.EndHorizontal ();
-                }
-
+            if (Errors.Any()) {
                 foreach (var error in Errors)
-                    GUILayout.Label (error, errorLabelStyle);
+                    GUILayout.Label(error, errorLabelStyle);
+                GUILayoutExtensions.Separator(separatorStyle);
             }
-            GUILayout.EndVertical ();
+
+            DrawAdvancedServerOptions();
+            DrawShowInfoWindow();
+            GUILayout.EndVertical();
+
             GUI.DragWindow ();
         }
 
-        bool StartServer ()
+        void DrawStartServer()
         {
-            // Resize the window to the contents
-            resized = true;
-
-            // Validate the settings
-            Errors.Clear ();
-            IPAddress ipAddress;
-            ushort ignoreInt;
-            bool validAddress = IPAddress.TryParse (address, out ipAddress);
-            bool validRPCPort = ushort.TryParse (rpcPort, out ignoreInt);
-            bool validStreamPort = ushort.TryParse (streamPort, out ignoreInt);
-            bool validMaxTimePerUpdate = ushort.TryParse (maxTimePerUpdate, out ignoreInt);
-            bool validRecvTimeout = ushort.TryParse (recvTimeout, out ignoreInt);
-
-            // Display error message if required
-            if (!validAddress)
-                Errors.Add (invalidAddressText);
-            if (!validRPCPort)
-                Errors.Add (invalidRPCPortText);
-            if (!validStreamPort)
-                Errors.Add (invalidStreamPortText);
-            if (!validMaxTimePerUpdate)
-                Errors.Add (invalidMaxTimePerUpdateText);
-            if (!validRecvTimeout)
-                Errors.Add (invalidRecvTimeoutText);
-
-            // Save the settings and trigger start server event
-            if (Errors.Count == 0) {
-                Config.Load ();
-                Config.Address = ipAddress;
-                Config.RPCPort = Convert.ToUInt16 (rpcPort);
-                Config.StreamPort = Convert.ToUInt16 (streamPort);
-                Config.MaxTimePerUpdate = Convert.ToUInt16 (maxTimePerUpdate);
-                Config.RecvTimeout = Convert.ToUInt16 (recvTimeout);
-                Config.Save ();
-                return true;
+            var running = core.AnyRunning;
+            var label = (running ? stopAllServersText : startAllServersText) + (core.Servers.Count > 1 ? "s" : string.Empty);
+            GUI.enabled = !editServers.Any();
+            if (GUILayout.Button(label, buttonStyle)) {
+                Errors.Clear ();
+                Resized = true;
+                foreach (var server in core.Servers)
+                    if (server.Running == running)
+                        EventHandlerExtensions.Invoke(running ? OnStopServerPressed : OnStartServerPressed, this, new ServerEventArgs(server));
             }
-            return false;
+            GUI.enabled = true;
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
+        [SuppressMessage("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
+        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
+        void DrawServer (Server.Server server, bool forceExpanded = false)
+        {
+            var running = server.Running;
+            var editingServer = editServers.ContainsKey (server.Id);
+            var expanded = forceExpanded || expandServers.Contains (server.Id);
+
+            GUILayout.BeginHorizontal ();
+            if (!forceExpanded) {
+                var icons = Icons.Instance;
+                if (GUILayout.Button(new GUIContent(expanded ? icons.ButtonCollapse : icons.ButtonExpand, expanded ? "Collapse" : "Expand"),
+                        expandStyle, GUILayout.MaxWidth(20), GUILayout.MaxHeight(20))) {
+                    if (expanded)
+                        expandServers.Remove(server.Id);
+                    else
+                        expandServers.Add(server.Id);
+                    expanded = !expanded;
+                    Resized = true;
+                }
+            }
+            GUILayoutExtensions.Light (running, lightStyle);
+            if (!editingServer)
+                GUILayout.Label (server.Name, labelStyle);
+            else
+                editServers [server.Id].DrawName ();
+            GUILayout.EndHorizontal ();
+
+            if (editingServer) {
+                editServers [server.Id].Draw ();
+            } else if (expanded) {
+                string protocol;
+                if (server.Protocol == Protocol.ProtocolBuffersOverTCP)
+                    protocol = protobufOverTcpText;
+                else
+                    protocol = protobufOverWebSocketsText;
+                GUILayout.Label (protocolText + protocol, labelStyle);
+                GUILayout.Label (server.Info, labelStyle);
+                foreach (var line in server.Address.Split ('\n'))
+                    GUILayout.Label (line, labelStyle);
+                DrawClients (server);
+            }
+
+            GUILayout.BeginHorizontal();
+            GUI.enabled = !editingServer;
+            if (GUILayout.Button(running ? stopServerText : startServerText, buttonStyle)) {
+                Errors.Clear();
+                Resized = true;
+                EventHandlerExtensions.Invoke(running ? OnStopServerPressed : OnStartServerPressed, this, new ServerEventArgs(server));
+            }
+            GUI.enabled = !running;
+            if (GUILayout.Button(editingServer ? saveServerText : editServerText, buttonStyle))
+            {
+                if (editingServer)
+                {
+                    var newServer = editServers[server.Id].Save();
+                    if (newServer != null)
+                    {
+                        editServers.Remove(server.Id);
+                        config.Configuration.ReplaceServer(newServer);
+                        config.Save();
+                        core.Replace(newServer.Create());
+                    }
+                }
+                else {
+                    editServers[server.Id] = new EditServer(this, config.Configuration.GetServer(server.Id));
+                }
+                Resized = true;
+            }
+            GUI.enabled = !editingServer && !running;
+            if (GUILayout.Button(removeServerText, buttonStyle))
+            {
+                config.Configuration.RemoveServer(server.Id);
+                config.Save();
+                core.Remove(server.Id);
+                Resized = true;
+            }
+            GUI.enabled = true;
+            GUILayout.EndHorizontal ();
+        }
+
+        void DrawClients (IServer server)
+        {
+            var clients = server.Clients.ToList ();
+            IDictionary<IClient,string> clientDescriptions = new Dictionary<IClient,string> ();
+            if (clients.Count > 0) {
+                foreach (var client in clients) {
+                    try {
+                        var clientName = client.Name;
+                        clientDescriptions [client] = (clientName.Length == 0 ? unknownClientNameText : clientName) + " @ " + client.Address;
+                    } catch (ClientDisconnectedException) {
+                    }
+                }
+            }
+
+            if (clientDescriptions.Any ()) {
+                foreach (var entry in clientDescriptions) {
+                    var client = entry.Key;
+                    var description = entry.Value;
+                    GUILayout.BeginHorizontal ();
+                    GUILayoutExtensions.Light (IsClientActive (client), lightStyle);
+                    GUILayout.Label (description, stretchyLabelStyle);
+                    if (GUILayout.Button (new GUIContent (Icons.Instance.ButtonDisconnectClient, "Disconnect client"),
+                            buttonStyle, GUILayout.MaxWidth (20), GUILayout.MaxHeight (20))) {
+                        if (config.Configuration.ConfirmRemoveClient)
+                            ClientDisconnectDialog.Show (client);
+                        else
+                            client.Close ();
+                    }
+                    GUILayout.EndHorizontal ();
+                }
+            } else {
+                GUILayout.BeginHorizontal ();
+                GUILayout.Label (noClientsConnectedText, labelStyle);
+                GUILayout.EndHorizontal ();
+            }
+        }
+
+        void DrawAddServer ()
+        {
+            if (GUILayout.Button (addServerText, buttonStyle)) {
+                var server = new Configuration.Server ();
+                config.Configuration.Servers.Add (server);
+                config.Save ();
+                core.Add (server.Create ());
+            }
+        }
+
+        void DrawAdvancedServerOptions ()
+        {
+            GUILayout.BeginHorizontal ();
+            DrawAdvancedServerOptionsToggle ();
+            GUILayout.EndHorizontal ();
+
+            if (showAdvancedServerOptions) {
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
+                DrawAutoStartServerToggle ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
+                DrawAutoAcceptConnectionsToggle ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
+                DrawConfirmRemoveClientToggle ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
+                DrawOneRPCPerUpdateToggle ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
+                DrawMaxTimePerUpdate ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
+                DrawAdaptiveRateControlToggle ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
+                DrawBlockingRecvToggle ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
+                DrawRecvTimeout ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
+                DrawDebugLogging ();
+                GUILayout.EndHorizontal ();
+            }
+        }
+
+        void DrawAdvancedServerOptionsToggle ()
+        {
+            bool value = GUILayout.Toggle (showAdvancedServerOptions, advancedServerOptionsText, toggleStyle, new GUILayoutOption[] { });
+            if (value != showAdvancedServerOptions) {
+                showAdvancedServerOptions = value;
+                Resized = true;
+            }
+        }
+
+        void DrawAutoStartServerToggle ()
+        {
+            bool autoStartServers = GUILayout.Toggle (config.Configuration.AutoStartServers, autoStartServerText, toggleStyle, new GUILayoutOption[] { });
+            if (autoStartServers != config.Configuration.AutoStartServers) {
+                config.Configuration.AutoStartServers = autoStartServers;
+                config.Save ();
+            }
+        }
+
+        void DrawAutoAcceptConnectionsToggle ()
+        {
+            bool autoAcceptConnections = GUILayout.Toggle (config.Configuration.AutoAcceptConnections, autoAcceptConnectionsText, toggleStyle, new GUILayoutOption[] { });
+            if (autoAcceptConnections != config.Configuration.AutoAcceptConnections) {
+                config.Configuration.AutoAcceptConnections = autoAcceptConnections;
+                config.Save ();
+            }
+        }
+
+        void DrawConfirmRemoveClientToggle ()
+        {
+            bool confirmRemoveClient = GUILayout.Toggle (config.Configuration.ConfirmRemoveClient, confirmRemoveClientText, toggleStyle, new GUILayoutOption[] { });
+            if (confirmRemoveClient != config.Configuration.ConfirmRemoveClient) {
+                config.Configuration.ConfirmRemoveClient = confirmRemoveClient;
+                config.Save ();
+            }
+        }
+
+        void DrawOneRPCPerUpdateToggle ()
+        {
+            bool oneRPCPerUpdate = GUILayout.Toggle (config.Configuration.OneRPCPerUpdate, oneRPCPerUpdateText, toggleStyle, new GUILayoutOption[] { });
+            if (oneRPCPerUpdate != config.Configuration.OneRPCPerUpdate) {
+                config.Configuration.OneRPCPerUpdate = oneRPCPerUpdate;
+                config.Save ();
+            }
+        }
+
+        void DrawMaxTimePerUpdate ()
+        {
+            GUILayout.Label (maxTimePerUpdateText, fixedLabelStyle);
+            var newMaxTimePerUpdate = GUILayout.TextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, longTextFieldStyle);
+            if (newMaxTimePerUpdate != maxTimePerUpdate) {
+                uint value = config.Configuration.MaxTimePerUpdate;
+                uint.TryParse (newMaxTimePerUpdate, out value);
+                config.Configuration.MaxTimePerUpdate = value;
+                config.Save ();
+            }
+        }
+
+        void DrawAdaptiveRateControlToggle ()
+        {
+            bool adaptiveRateControl = GUILayout.Toggle (config.Configuration.AdaptiveRateControl, adaptiveRateControlText, toggleStyle, new GUILayoutOption[] { });
+            if (adaptiveRateControl != config.Configuration.AdaptiveRateControl) {
+                config.Configuration.AdaptiveRateControl = adaptiveRateControl;
+                config.Save ();
+            }
+        }
+
+        void DrawBlockingRecvToggle ()
+        {
+            bool blockingRecv = GUILayout.Toggle (config.Configuration.BlockingRecv, blockingRecvText, toggleStyle, new GUILayoutOption[] { });
+            if (blockingRecv != config.Configuration.BlockingRecv) {
+                config.Configuration.BlockingRecv = blockingRecv;
+                config.Save ();
+            }
+        }
+
+        void DrawRecvTimeout ()
+        {
+            GUILayout.Label (recvTimeoutText, fixedLabelStyle);
+            var newRecvTimeout = GUILayout.TextField (recvTimeout, recvTimeoutMaxLength, longTextFieldStyle);
+            if (newRecvTimeout != recvTimeout) {
+                uint value = config.Configuration.RecvTimeout;
+                uint.TryParse (newRecvTimeout, out value);
+                config.Configuration.RecvTimeout = value;
+                config.Save ();
+            }
+        }
+
+        void DrawDebugLogging ()
+        {
+            bool debugLogging = GUILayout.Toggle (config.Configuration.DebugLogging, debugLoggingText, toggleStyle, new GUILayoutOption[] { });
+            if (debugLogging != config.Configuration.DebugLogging) {
+                config.Configuration.DebugLogging = debugLogging;
+                config.Save ();
+            }
+        }
+
+        void DrawShowInfoWindow ()
+        {
+            bool value = GUILayout.Toggle (InfoWindow.Visible, showInfoWindowText, toggleStyle, new GUILayoutOption[] { });
+            if (value != InfoWindow.Visible)
+                InfoWindow.Visible = value;
         }
 
         void SawClientActivity (IClient client)

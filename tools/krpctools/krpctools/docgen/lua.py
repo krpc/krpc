@@ -1,7 +1,8 @@
-from krpc.utils import snake_case
+from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
-    ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, \
-    SetType, TupleType
+    ValueType, ClassType, EnumerationType, MessageType, \
+    TupleType, ListType, SetType, DictionaryType
+from krpc.utils import snake_case
 from .domain import Domain
 from .nodes import \
     Procedure, Property, Class, ClassMethod, ClassStaticMethod, \
@@ -21,19 +22,16 @@ class LuaDomain(Domain):
     }
 
     type_map = {
-        'double': 'number',
-        'float': 'number',
-        'int32': 'number',
-        'int64': 'number',
-        'uint32': 'number',
-        'uint64': 'number',
-        'bool': 'boolean',
-        'string': 'string',
-        'bytes': 'string'
+        Type.DOUBLE: 'number',
+        Type.FLOAT: 'number',
+        Type.SINT32: 'number',
+        Type.SINT64: 'number',
+        Type.UINT32: 'number',
+        Type.UINT64: 'number',
+        Type.BOOL: 'boolean',
+        Type.STRING: 'string',
+        Type.BYTES: 'string'
     }
-
-    def __init__(self, macros):
-        super(LuaDomain, self).__init__(macros)
 
     def currentmodule(self, name):
         super(LuaDomain, self).currentmodule(name)
@@ -41,13 +39,12 @@ class LuaDomain(Domain):
 
     def type(self, typ):
         if isinstance(typ, ValueType):
-            return self.type_map[typ.protobuf_type]
+            return self.type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
-            return 'krpc.schema.%s' % typ.protobuf_type
-        elif isinstance(typ, ClassType):
-            return self.shorten_ref(typ.protobuf_type[6:-1])
-        elif isinstance(typ, EnumType):
-            return self.shorten_ref(typ.protobuf_type[5:-1])
+            return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
+        elif isinstance(typ, (ClassType, EnumerationType)):
+            return self.shorten_ref(
+                '%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
         elif isinstance(typ, ListType):
             return 'List'
         elif isinstance(typ, DictionaryType):
@@ -61,12 +58,12 @@ class LuaDomain(Domain):
 
     def type_description(self, typ):
         if isinstance(typ, ValueType):
-            return self.type_map[typ.protobuf_type]
+            return self.type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
-            return ':class:`%s`' % 'krpc.schema.%s' % typ.protobuf_type
+            return ':class:`krpc.schema.KRPC.%s`' % typ.python_type.__name__
         elif isinstance(typ, ClassType):
             return ':class:`%s`' % self.type(typ)
-        elif isinstance(typ, EnumType):
+        elif isinstance(typ, EnumerationType):
             return ':class:`%s`' % self.type(typ)
         elif isinstance(typ, ListType):
             return 'List of %s' % self.type_description(typ.value_type)
@@ -98,15 +95,11 @@ class LuaDomain(Domain):
         return name
 
     def see(self, obj):
-        if isinstance(obj, Property) or \
-           isinstance(obj, ClassProperty) or \
-           isinstance(obj, EnumerationValue):
+        if isinstance(obj, (Property, ClassProperty, EnumerationValue)):
             prefix = 'attr'
-        elif (isinstance(obj, Procedure) or
-              isinstance(obj, ClassMethod) or
-              isinstance(obj, ClassStaticMethod)):
+        elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
             prefix = 'meth'
-        elif isinstance(obj, Class) or isinstance(obj, Enumeration):
+        elif isinstance(obj, (Class, Enumeration)):
             prefix = 'class'
         else:
             raise RuntimeError(str(obj))

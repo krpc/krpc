@@ -21,7 +21,9 @@ namespace KRPC.UI
 
         public event EventHandler OnShow;
         public event EventHandler OnHide;
+        public event EventHandler<MovedEventArgs> OnStartMoving;
         public event EventHandler<MovedEventArgs> OnMoved;
+        public event EventHandler<MovedEventArgs> OnFinishMoving;
 
         bool visible = true;
 
@@ -39,6 +41,8 @@ namespace KRPC.UI
         public bool Closable { get; set; }
 
         Rect position;
+        bool moving;
+        int movingCounter;
 
         public Rect Position {
             get { return position; }
@@ -67,7 +71,7 @@ namespace KRPC.UI
                 hasInit = true;
             }
             if (Visible) {
-                int newUiScale = (int)(GameSettings.UI_SCALE * 100);
+                var newUiScale = (int)(GameSettings.UI_SCALE * 100);
                 if (uiScale != newUiScale) {
                     rescale = true;
                     uiScale = newUiScale;
@@ -75,7 +79,22 @@ namespace KRPC.UI
                     closeButtonStyle.fixedWidth = 16 * GameSettings.UI_SCALE;
                     closeButtonStyle.fixedHeight = 16 * GameSettings.UI_SCALE;
                 }
-                Position = GUILayout.Window (id, Position, DrawWindow, Title, Style);
+                var newPosition = GUILayout.Window (id, Position, DrawWindow, Title, Style);
+                if (newPosition != Position) {
+                    if (!moving) {
+                        moving = true;
+                        EventHandlerExtensions.Invoke(OnStartMoving, this, new MovedEventArgs(Position));
+                    }
+                    movingCounter = 0;
+                }
+                Position = newPosition;
+            }
+            if (moving) {
+                if (movingCounter > 50) {
+                    moving = false;
+                    EventHandlerExtensions.Invoke(OnFinishMoving, this, new MovedEventArgs(Position));
+                }
+                movingCounter++;
             }
         }
 

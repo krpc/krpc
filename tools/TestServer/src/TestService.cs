@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using KRPC;
 using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Service.Messages;
 using KRPC.Utils;
 
 namespace TestServer
@@ -91,14 +93,20 @@ namespace TestServer
             return new TestClass (value);
         }
 
-        [KRPCProcedure]
+        [KRPCProcedure (Nullable = true)]
         public static TestClass EchoTestObject (TestClass value)
         {
             return value;
         }
 
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public static TestClass ObjectProperty { get; set; }
+
+        [KRPCProcedure]
+        public static TestClass ReturnNullWhenNotAllowed ()
+        {
+            return null;
+        }
 
         /// <summary>
         /// Class documentation string.
@@ -108,7 +116,7 @@ namespace TestServer
         [SuppressMessage ("Gendarme.Rules.Design", "ImplementEqualsAndGetHashCodeInPairRule")]
         public sealed class TestClass : Equatable<TestClass>
         {
-            readonly string instanceValue;
+            internal readonly string instanceValue;
 
             public TestClass (string value)
             {
@@ -152,14 +160,15 @@ namespace TestServer
             [KRPCProperty]
             public int IntProperty { get; set; }
 
-            [KRPCProperty]
+            [KRPCProperty (Nullable = true)]
             public TestClass ObjectProperty { get; set; }
 
             [KRPCMethod]
             [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
-            public string OptionalArguments (string x, string y = "foo", string z = "bar", string anotherParameter = "baz")
+            [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
+            public string OptionalArguments (string x, string y = "foo", string z = "bar", TestClass obj = null)
             {
-                return x + y + z + anotherParameter;
+                return x + y + z + (obj == null ? "null" : obj.instanceValue);
             }
 
             [KRPCMethod]
@@ -170,9 +179,10 @@ namespace TestServer
         }
 
         [KRPCProcedure]
-        public static string OptionalArguments (string x, string y = "foo", string z = "bar", string anotherParameter = "baz")
+        [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
+        public static string OptionalArguments (string x, string y = "foo", string z = "bar", TestClass obj = null)
         {
-            return x + y + z + anotherParameter;
+            return x + y + z + (obj == null ? "null" : obj.instanceValue);
         }
 
         /// <summary>
@@ -349,30 +359,140 @@ namespace TestServer
             return l;
         }
 
-        static IDictionary<Guid, IDictionary<int, int>> counters = new Dictionary<Guid, IDictionary<int, int>> ();
+        static IDictionary<Guid, IDictionary<string, int>> counters = new Dictionary<Guid, IDictionary<string, int>> ();
 
         [KRPCProcedure]
-        public static int Counter (int id = 0)
+        public static int Counter (string id = "", int divisor = 1)
         {
             var client = CallContext.Client.Guid;
             if (!counters.ContainsKey (client))
-                counters [client] = new Dictionary<int, int> ();
+                counters [client] = new Dictionary<string, int> ();
             if (!counters [client].ContainsKey (id))
                 counters [client][id] = 0;
             counters [client][id]++;
-            return counters [client][id];
+            return counters [client][id] / divisor;
         }
 
         [KRPCProcedure]
-        public static void ThrowArgumentException ()
+        public static int ThrowInvalidOperationException()
+        {
+            throw new InvalidOperationException("Invalid operation");
+        }
+
+        static int invalidOperationExceptionCount;
+
+        [KRPCProcedure]
+        public static void ResetInvalidOperationExceptionLater()
+        {
+            invalidOperationExceptionCount = 0;
+        }
+
+        [KRPCProcedure]
+        public static int ThrowInvalidOperationExceptionLater()
+        {
+            if (invalidOperationExceptionCount > 100)
+                throw new InvalidOperationException("Invalid operation");
+            invalidOperationExceptionCount++;
+            return 0;
+        }
+
+        [KRPCProcedure]
+        public static int ThrowArgumentException ()
         {
             throw new ArgumentException ("Invalid argument");
         }
 
         [KRPCProcedure]
-        public static void ThrowInvalidOperationException ()
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUnusedParametersRule")]
+        public static int ThrowArgumentNullException (string foo)
         {
-            throw new InvalidOperationException ("Invalid operation");
+            throw new ArgumentNullException (nameof (foo));
+        }
+
+        [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUnusedParametersRule")]
+        public static int ThrowArgumentOutOfRangeException (int foo)
+        {
+            throw new ArgumentOutOfRangeException (nameof (foo));
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "MissingExceptionConstructorsRule")]
+        [SuppressMessage ("Gendarme.Rules.Serialization", "MissingSerializableAttributeOnISerializableTypeRule")]
+        [SuppressMessage ("Gendarme.Rules.Serialization", "MissingSerializationConstructorRule")]
+        [KRPCException]
+        public sealed class CustomException : System.Exception
+        {
+            public CustomException ()
+            {
+            }
+
+            public CustomException (string message)
+            : base (message)
+            {
+            }
+
+            public CustomException (string message, System.Exception innerException)
+            : base(message, innerException)
+            {
+            }
+        }
+
+        [KRPCProcedure]
+        public static int ThrowCustomException ()
+        {
+            throw new CustomException ("A custom kRPC exception");
+        }
+
+        static int customExceptionCount;
+
+        [KRPCProcedure]
+        public static void ResetCustomExceptionLater()
+        {
+            customExceptionCount = 0;
+        }
+
+        [KRPCProcedure]
+        public static int ThrowCustomExceptionLater()
+        {
+            if (customExceptionCount > 100)
+                throw new CustomException("A custom kRPC exception");
+            customExceptionCount++;
+            return 0;
+        }
+
+        [KRPCProcedure]
+        public static KRPC.Service.Messages.Event OnTimer (uint milliseconds, uint repeats = 1) {
+            var evnt = new KRPC.Service.Event ();
+            var timer = new System.Timers.Timer (milliseconds);
+            timer.Elapsed += (s, e) => {
+                evnt.Trigger ();
+                repeats--;
+                if (repeats == 0) {
+                    evnt.Remove ();
+                    timer.Enabled = false;
+                }
+            };
+            timer.Start();
+            return evnt.Message;
+        }
+
+        [KRPCProcedure]
+        public static KRPC.Service.Messages.Event OnTimerUsingLambda (uint milliseconds) {
+            bool triggered = false;
+            var timer = new System.Timers.Timer (milliseconds);
+            timer.Elapsed += (s, e) => {
+                triggered = true;
+                timer.Enabled = false;
+            };
+            timer.Start();
+            var evnt = new KRPC.Service.Event (
+                (KRPC.Service.Event e) => {
+                    if (triggered)
+                        e.Remove();
+                    return triggered;
+                });
+            return evnt.Message;
         }
     }
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <google/protobuf/message.h>
+#include <google/protobuf/stubs/port.h>
 
 #include <map>
 #include <set>
@@ -9,29 +9,18 @@
 #include <vector>
 
 #include "krpc/krpc.pb.hpp"
-#include "krpc/object.hpp"
+
+namespace google {
+namespace protobuf {
+class Message;
+}
+}
 
 namespace krpc {
+
+template <typename T> class Object;
+
 namespace encoder {
-
-class EncodeFailed : std::runtime_error {
- public:
-  explicit EncodeFailed(const std::string& msg) : std::runtime_error(msg) {}
-};
-
-const char RPC_HELLO_MESSAGE[] = {
-  0x48, 0x45, 0x4C, 0x4C,
-  0x4F, 0x2D, 0x52, 0x50,
-  0x43, 0x00, 0x00, 0x00
-};
-const size_t RPC_HELLO_MESSAGE_LENGTH = 12;
-const char STREAM_HELLO_MESSAGE[] = {
-  0x48, 0x45, 0x4C, 0x4C,
-  0x4F, 0x2D, 0x53, 0x54,
-  0x52, 0x45, 0x41, 0x4D
-};
-const size_t STREAM_HELLO_MESSAGE_LENGTH = 12;
-std::string client_name(const std::string& name);
 
 std::string encode(float value);
 std::string encode(double value);
@@ -70,7 +59,7 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4>
 std::string encode(const std::tuple<T0, T1, T2, T3, T4>& tuple);
 // [[[end]]]
 
-std::string encode_delimited(const google::protobuf::Message& message);
+std::string encode_message_with_size(const google::protobuf::Message& message);
 
 template <typename T>
 inline std::string encode(const Object<T>& object) {
@@ -80,7 +69,7 @@ inline std::string encode(const Object<T>& object) {
 template <typename T>
 inline std::string encode(const std::vector<T>& list) {
   krpc::schema::List listMessage;
-  for (typename std::vector<T>::const_iterator x = list.begin(); x != list.end(); x++)
+  for (typename std::vector<T>::const_iterator x = list.begin(); x != list.end(); ++x)
     listMessage.add_items(encode(*x));
   return encode(listMessage);
 }
@@ -88,7 +77,7 @@ inline std::string encode(const std::vector<T>& list) {
 template <typename K, typename V>
 inline std::string encode(const std::map<K, V>& dictionary) {
   krpc::schema::Dictionary dictionaryMessage;
-  for (typename std::map<K, V>::const_iterator x = dictionary.begin(); x != dictionary.end(); x++) {
+  for (typename std::map<K, V>::const_iterator x = dictionary.begin(); x != dictionary.end(); ++x) {
     schema::DictionaryEntry* entry = dictionaryMessage.add_entries();
     entry->set_key(encode(x->first));
     entry->set_value(encode(x->second));
@@ -99,7 +88,7 @@ inline std::string encode(const std::map<K, V>& dictionary) {
 template <typename T>
 inline std::string encode(const std::set<T>& set) {
   krpc::schema::Set setMessage;
-  for (typename std::set<T>::const_iterator x = set.begin(); x != set.end(); x++)
+  for (typename std::set<T>::const_iterator x = set.begin(); x != set.end(); ++x)
     setMessage.add_items(encode(*x));
   return encode(setMessage);
 }

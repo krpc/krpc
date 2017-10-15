@@ -6,8 +6,13 @@ import static krpc.client.TestUtils.unhexlify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import com.google.protobuf.ByteString;
+
+import krpc.client.Types;
+import krpc.client.services.TestService;
+import krpc.schema.KRPC;
+import krpc.schema.KRPC.Type;
+import krpc.schema.KRPC.Type.TypeCode;
 
 import org.javatuples.Triplet;
 import org.javatuples.Unit;
@@ -15,142 +20,120 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import com.google.protobuf.ByteString;
-
-import krpc.client.services.TestService;
-import krpc.schema.KRPC;
-
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ EncoderInt32ValueTest.class, EncoderInt64ValueTest.class, EncoderUInt32ValueTest.class, EncoderUInt64ValueTest.class,
-        EncoderSingleValueTest.class, EncoderDoubleValueTest.class, EncoderBooleanValueTest.class, EncoderStringValueTest.class,
-        EncoderBytesValueTest.class, EncoderListCollectionTest.class, EncoderDictionaryCollectionTest.class, EncoderSetCollectionTest.class, })
 public class EncoderTest {
+  @Test
+  public void testEncodeMessage() {
+    KRPC.ProcedureCall call = KRPC.ProcedureCall.newBuilder()
+        .setService("ServiceName").setProcedure("ProcedureName").build();
+    Type type = Types.createMessage(TypeCode.PROCEDURE_CALL);
+    ByteString data = Encoder.encode(call, type);
+    String expected = "0a0b536572766963654e616d65120d50726f6365647572654e616d65";
+    assertEquals(expected, hexlify(data));
+  }
 
-    @Test
-    public void testRPCHelloMessage() {
-        assertEquals(12, Encoder.RPC_HELLO_MESSAGE.length);
-        assertEquals("48454c4c4f2d525043000000", hexlify(Encoder.RPC_HELLO_MESSAGE));
-    }
+  @Test
+  public void testEncodeValue() {
+    Type type = Types.createValue(TypeCode.UINT32);
+    ByteString data = Encoder.encode(300, type);
+    assertEquals("ac02", hexlify(data));
+  }
 
-    @Test
-    public void testStreamHelloMessage() {
-        assertEquals(12, Encoder.STREAM_HELLO_MESSAGE.length);
-        assertEquals("48454c4c4f2d53545245414d", hexlify(Encoder.STREAM_HELLO_MESSAGE));
-    }
+  @Test
+  @SuppressWarnings("checkstyle:avoidescapedunicodecharacters")
+  public void testEncodeUnicodeString() {
+    Type type = Types.createValue(TypeCode.STRING);
+    ByteString data = Encoder.encode("\u2122", type);
+    assertEquals("03e284a2", hexlify(data));
+  }
 
-    @Test
-    public void testClientName() throws UnsupportedEncodingException {
-        byte[] clientName = Encoder.encodeClientName("foo");
-        assertEquals(32, clientName.length);
-        assertEquals("666f6f" + repeatedString("00", 29), hexlify(clientName));
-    }
+  @Test
+  public void testEncodeClass() {
+    TestService.TestClass obj = new TestService.TestClass(null, 300);
+    Type type = Types.createClass("TestService", "TestClass");
+    ByteString data = Encoder.encode(obj, type);
+    assertEquals("ac02", hexlify(data));
+  }
 
-    @Test
-    public void EmptyClientName() throws UnsupportedEncodingException {
-        byte[] clientName = Encoder.encodeClientName("");
-        assertEquals(32, clientName.length);
-        assertEquals(repeatedString("00", 32), hexlify(clientName));
-    }
+  @Test
+  public void testEncodeClassNull() {
+    Type type = Types.createClass("TestService", "TestClass");
+    ByteString data = Encoder.encode(null, type);
+    assertEquals("00", hexlify(data));
+  }
 
-    @Test
-    public void LongClientName() throws UnsupportedEncodingException {
-        byte[] clientName = Encoder.encodeClientName(repeatedString("a", 33));
-        assertEquals(32, clientName.length);
-        assertEquals(repeatedString("61", 32), hexlify(clientName));
-    }
+  @Test
+  public void testDecodeMessage() {
+    ByteString message = unhexlify("0a0b536572766963654e616d65120d50726f6365647572654e616d65");
+    Type type = Types.createMessage(TypeCode.PROCEDURE_CALL);
+    KRPC.ProcedureCall call = (KRPC.ProcedureCall) Encoder.decode(message, type, null);
+    assertEquals("ServiceName", call.getService());
+    assertEquals("ProcedureName", call.getProcedure());
+  }
 
-    @Test
-    public void testEncodeMessage() throws IOException {
-        KRPC.Request request = KRPC.Request.newBuilder().setService("ServiceName").setProcedure("ProcedureName").build();
-        ByteString data = Encoder.encode(request);
-        String expected = "0a0b536572766963654e616d65120d50726f6365647572654e616d65";
-        assertEquals(expected, hexlify(data));
-    }
+  @Test
+  public void testDecodeValue() {
+    Type type = Types.createValue(TypeCode.UINT32);
+    int value = (int) Encoder.decode(unhexlify("ac02"), type, null);
+    assertEquals(300, value);
+  }
 
-    @Test
-    public void testEncodeValue() throws IOException {
-        ByteString data = Encoder.encode(300);
-        assertEquals("ac02", hexlify(data));
-    }
+  @Test
+  @SuppressWarnings("checkstyle:avoidescapedunicodecharacters")
+  public void testDecodeUnicodeString() {
+    Type type = Types.createValue(TypeCode.STRING);
+    String value = (String) Encoder.decode(unhexlify("03e284a2"), type, null);
+    assertEquals("\u2122", value);
+  }
 
-    @Test
-    public void testEncodeUnicodeString() throws IOException {
-        ByteString data = Encoder.encode("\u2122");
-        assertEquals("03e284a2", hexlify(data));
-    }
+  @Test
+  public void testDecodeClass() {
+    Type type = Types.createClass("TestService", "TestClass");
+    TestService.TestClass value =
+        (TestService.TestClass) Encoder.decode(unhexlify("ac02"), type, null);
+    assertEquals(new TestService.TestClass(null, 300), value);
+  }
 
-    @Test
-    public void testEncodeClass() throws IOException {
-        TestService.TestClass obj = new TestService.TestClass(null, 300);
-        ByteString data = Encoder.encode(obj);
-        assertEquals("ac02", hexlify(data));
-    }
+  @Test
+  public void testDecodeClassNull() {
+    Type type = Types.createClass("TestService", "TestClass");
+    TestService.TestClass value =
+        (TestService.TestClass) Encoder.decode(unhexlify("00"), type, null);
+    assertNull(value);
+  }
 
-    @Test
-    public void testEncodeClassNull() throws IOException {
-        ByteString data = Encoder.encode(null);
-        assertEquals("00", hexlify(data));
-    }
+  @Test
+  public void testGuid() {
+    assertEquals(
+        "6f271b39-00dd-4de4-9732-f0d3a68838df",
+        Encoder.guidToString(unhexlify("391b276fdd00e44d9732f0d3a68838df").toByteArray()));
+  }
 
-    @Test
-    public void testDecodeMessage() throws IOException {
-        ByteString message = unhexlify("0a0b536572766963654e616d65120d50726f6365647572654e616d65");
-        KRPC.Request request = (KRPC.Request) Encoder.decodeMessage(KRPC.Request.newBuilder(), message);
-        assertEquals("ServiceName", request.getService());
-        assertEquals("ProcedureName", request.getProcedure());
-    }
+  @SuppressWarnings({ "unchecked" })
+  @Test
+  public void testTupleCollection1() {
+    Unit<Integer> value = new Unit<Integer>(1);
+    String data = "0a0101";
+    Type type = Types.createTuple(Types.createValue(TypeCode.UINT32));
+    ByteString encodeResult = Encoder.encode(value, type);
+    assertEquals(data, hexlify(encodeResult));
+    Unit<Integer> decodeResult = (Unit<Integer>) Encoder.decode(unhexlify(data), type, null);
+    assertEquals(value, decodeResult);
+  }
 
-    @Test
-    public void testDecodeValue() throws IOException {
-        int value = Encoder.decodeUInt32(unhexlify("ac02"));
-        assertEquals(300, value);
-    }
-
-    @Test
-    public void testDecodeUnicodeString() throws IOException {
-        String value = Encoder.decodeString(unhexlify("03e284a2"));
-        assertEquals("\u2122", value);
-    }
-
-    @Test
-    public void testDecodeClass() throws IOException {
-        TestService.TestClass value = Encoder.decodeObject(unhexlify("ac02"), TestService.TestClass.class, null);
-        assertEquals(new TestService.TestClass(null, 300), value);
-    }
-
-    @Test
-    public void testDecodeClassNull() throws IOException {
-        TestService.TestClass value = Encoder.decodeObject(unhexlify("00"), TestService.TestClass.class, null);
-        assertNull(value);
-    }
-
-    @Test
-    public void testGuid() throws IOException {
-        assertEquals("6f271b39-00dd-4de4-9732-f0d3a68838df", Encoder.guidToString(unhexlify("391b276fdd00e44d9732f0d3a68838df").toByteArray()));
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    @Test
-    public void testTupleCollection1() throws IOException {
-        Unit<Integer> value = new Unit<Integer>(1);
-        String data = "0a0101";
-        ByteString encodeResult = Encoder.encode(value);
-        assertEquals(data, hexlify(encodeResult));
-        TypeSpecification typeSpec = new TypeSpecification(Unit.class, new TypeSpecification(Integer.class));
-        Unit<Integer> decodeResult = (Unit<Integer>) Encoder.decodeTuple(unhexlify(data), typeSpec, null);
-        assertEquals(value, decodeResult);
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    @Test
-    public void testTupleCollection2() throws IOException {
-        Triplet<Integer, String, Boolean> value = new Triplet<Integer, String, Boolean>(1, "jeb", false);
-        String data = "0a01010a04036a65620a0100";
-        ByteString encodeResult = Encoder.encode(value);
-        assertEquals(data, hexlify(encodeResult));
-        TypeSpecification typeSpec = new TypeSpecification(Triplet.class, new TypeSpecification(Integer.class), new TypeSpecification(String.class),
-                new TypeSpecification(Boolean.class));
-        Triplet<Integer, String, Boolean> decodeResult = (Triplet<Integer, String, Boolean>) Encoder.decode(unhexlify(data), typeSpec, null);
-        assertEquals(value, decodeResult);
-    }
+  @SuppressWarnings({ "unchecked" })
+  @Test
+  public void testTupleCollection2() {
+    Triplet<Integer, String, Boolean> value =
+        new Triplet<Integer, String, Boolean>(1, "jeb", false);
+    String data = "0a01010a04036a65620a0100";
+    Type type = Types.createTuple(
+        Types.createValue(TypeCode.UINT32),
+        Types.createValue(TypeCode.STRING),
+        Types.createValue(TypeCode.BOOL));
+    ByteString encodeResult = Encoder.encode(value, type);
+    assertEquals(data, hexlify(encodeResult));
+    Triplet<Integer, String, Boolean> decodeResult =
+        (Triplet<Integer, String, Boolean>) Encoder.decode(unhexlify(data), type, null);
+    assertEquals(value, decodeResult);
+  }
 }

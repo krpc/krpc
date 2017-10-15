@@ -1,13 +1,11 @@
-import krpc.types
-from krpc.utils import split_type_string
+from krpc.schema.KRPC_pb2 import Type
+from krpc.types import \
+    ValueType, ClassType, EnumerationType, MessageType, \
+    TupleType, ListType, SetType, DictionaryType
 from .generator import Generator
 
 
 class CsharpGenerator(Generator):
-
-    def __init__(self, macro_template, service, definition_files):
-        super(CsharpGenerator, self).__init__(
-            macro_template, service, definition_files)
 
     _keywords = set([
         'abstract', 'as', 'base', 'bool', 'break', 'byte', 'case', 'catch',
@@ -23,78 +21,59 @@ class CsharpGenerator(Generator):
         'ushort', 'using', 'virtual', 'void', 'volatile', 'while'
     ])
 
+    _type_map = {
+        Type.DOUBLE: 'double',
+        Type.FLOAT: 'float',
+        Type.SINT32: 'int',
+        Type.SINT64: 'long',
+        Type.UINT32: 'uint',
+        Type.UINT64: 'ulong',
+        Type.BOOL: 'bool',
+        Type.STRING: 'string',
+        Type.BYTES: 'byte[]'
+    }
+
     def parse_name(self, name):
         if name in self._keywords:
             return '%s_' % name
-        else:
-            return name
+        return name
 
     def parse_type(self, typ, interface=True):
-        if isinstance(typ, krpc.types.ValueType):
-            typ = typ.protobuf_type
-            if typ == 'string':
-                return 'String'
-            elif typ == 'bytes':
-                return 'byte[]'
-            elif typ == 'float':
-                return 'Single'
-            elif typ == 'double':
-                return 'Double'
-            elif typ == 'bool':
-                return 'Boolean'
-            elif 'int' in typ:
-                int_type_map = {
-                    'int16': 'Int16',
-                    'uint16': 'UInt16',
-                    'int32': 'Int32',
-                    'uint32': 'UInt32',
-                    'int64': 'Int64',
-                    'uint64': 'UInt64'
-                }
-                return int_type_map[typ]
-        elif isinstance(typ, krpc.types.MessageType):
-            typ = typ.protobuf_type
-            if typ.startswith('KRPC.'):
-                _, _, x = typ.rpartition('.')
-                return 'global::KRPC.Schema.KRPC.%s' % x
-            elif typ.startswith('Test.'):
-                _, _, x = typ.rpartition('.')
-                return 'global::Test.%s' % x
-        elif isinstance(typ, krpc.types.TupleType):
-            value_types = split_type_string(typ.protobuf_type[6:-1])
+        if isinstance(typ, ValueType):
+            return self._type_map[typ.protobuf_type.code]
+        elif (isinstance(typ, MessageType) and
+              typ.protobuf_type.code == Type.EVENT):
+            return 'global::KRPC.Client.Event'
+        elif isinstance(typ, MessageType):
+            return 'global::KRPC.Schema.KRPC.%s' % typ.python_type.__name__
+        elif isinstance(typ, TupleType):
             return 'systemAlias::Tuple<%s>' % \
-                ','.join(self.parse_type(self.types.as_type(t))
-                         for t in value_types)
-        elif isinstance(typ, krpc.types.ListType):
+                ','.join(self.parse_type(t) for t in typ.value_types)
+        elif isinstance(typ, ListType):
             if interface:
                 name = 'IList'
             else:
                 name = 'List'
             return 'global::System.Collections.Generic.%s<%s>' % \
-                (name,
-                 self.parse_type(self.types.as_type(typ.protobuf_type[5:-1])))
-        elif isinstance(typ, krpc.types.SetType):
+                (name, self.parse_type(typ.value_type))
+        elif isinstance(typ, SetType):
             if interface:
                 name = 'genericCollectionsAlias::ISet'
             else:
                 name = 'global::System.Collections.Generic.HashSet'
             return '%s<%s>' % \
-                (name,
-                 self.parse_type(self.types.as_type(typ.protobuf_type[4:-1])))
-        elif isinstance(typ, krpc.types.DictionaryType):
+                (name, self.parse_type(typ.value_type))
+        elif isinstance(typ, DictionaryType):
             if interface:
                 name = 'IDictionary'
             else:
                 name = 'Dictionary'
-            typs = split_type_string(typ.protobuf_type[11:-1])
             return 'global::System.Collections.Generic.%s<%s,%s>' % \
-                (name,
-                 self.parse_type(self.types.as_type(typs[0])),
-                 self.parse_type(self.types.as_type(typs[1])))
-        elif isinstance(typ, krpc.types.ClassType):
-            return 'global::KRPC.Client.Services.%s' % typ.protobuf_type[6:-1]
-        elif isinstance(typ, krpc.types.EnumType):
-            return 'global::KRPC.Client.Services.%s' % typ.protobuf_type[5:-1]
+                (name, self.parse_type(typ.key_type),
+                 self.parse_type(typ.value_type))
+        elif isinstance(typ, (ClassType, EnumerationType)):
+            return 'global::KRPC.Client.Services.%s.%s' % \
+                (typ.protobuf_type.service, typ.protobuf_type.name)
         raise RuntimeError('Unknown type ' + typ)
 
     def parse_return_type(self, typ):
@@ -106,47 +85,45 @@ class CsharpGenerator(Generator):
         return self.parse_type(typ)
 
     def parse_default_value(self, value, typ):
-        if isinstance(typ, krpc.types.ValueType) and \
-           typ.protobuf_type == 'string':
+        if (isinstance(typ, ValueType) and
+                typ.protobuf_type.code == Type.STRING):
             return '"%s"' % value
-        if isinstance(typ, krpc.types.ValueType) and \
-           typ.protobuf_type == 'bool':
-            if value:
-                return 'true'
-            else:
-                return 'false'
-        elif (isinstance(typ, krpc.types.ValueType) and
-              typ.protobuf_type == 'float'):
+        elif (isinstance(typ, ValueType) and
+              typ.protobuf_type.code == Type.BOOL):
+            return 'true' if value else 'false'
+        elif (isinstance(typ, ValueType) and
+              typ.protobuf_type.code == Type.FLOAT):
             return str(value) + "f"
-        elif isinstance(typ, krpc.types.EnumType):
-            return '(global::KRPC.Client.Services.%s)%s' % \
-                (typ.protobuf_type[5:-1], value)
+        elif isinstance(typ, ClassType) and value is None:
+            return 'null'
+        elif isinstance(typ, EnumerationType):
+            return '(global::KRPC.Client.Services.%s.%s)%s' % \
+                (typ.protobuf_type.service, typ.protobuf_type.name, value)
         elif value is None:
             return 'null'
-        elif isinstance(typ, krpc.types.TupleType):
+        elif isinstance(typ, TupleType):
             values = (self.parse_default_value(x, typ.value_types[i])
                       for i, x in enumerate(value))
             return 'new %s (%s)' % \
                 (self.parse_type(typ, False), ', '.join(values))
-        elif isinstance(typ, krpc.types.ListType):
+        elif isinstance(typ, ListType):
             values = (self.parse_default_value(x, typ.value_type)
                       for x in value)
             return 'new %s { %s }' % \
                 (self.parse_type(typ, False), ', '.join(values))
-        elif isinstance(typ, krpc.types.SetType):
+        elif isinstance(typ, SetType):
             values = (self.parse_default_value(x, typ.value_type)
                       for x in value)
             return 'new %s { %s }' % \
                 (self.parse_type(typ, False), ', '.join(values))
-        elif isinstance(typ, krpc.types.DictionaryType):
+        elif isinstance(typ, DictionaryType):
             entries = ('{ %s, %s }' %
                        (self.parse_default_value(k, typ.key_type),
                         self.parse_default_value(v, typ.value_type))
                        for k, v in value.items())
             return 'new %s {%s}' % \
                 (self.parse_type(typ, False), ', '.join(entries))
-        else:
-            return str(value)
+        return str(value)
 
     @staticmethod
     def parse_documentation(documentation):

@@ -1,4 +1,5 @@
 import unittest
+import socket
 import threading
 import krpc
 from krpc.test.servertestcase import ServerTestCase
@@ -14,19 +15,43 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertRegexpMatches(status.version, r'^[0-9]+\.[0-9]+\.[0-9]+$')
         self.assertGreater(status.bytes_read, 0)
 
-    def test_current_game_scene(self):
+    def test_wrong_rpc_port(self):
+        with self.assertRaises(socket.error):
+            krpc.connect(name='python_client_test_wrong_rpc_port',
+                         address='localhost',
+                         rpc_port=ServerTestCase.rpc_port() ^
+                         ServerTestCase.stream_port(),
+                         stream_port=ServerTestCase.stream_port())
+
+    def test_wrong_stream_port(self):
+        with self.assertRaises(socket.error):
+            krpc.connect(name='python_client_test_wrong_stream_port',
+                         address='localhost',
+                         rpc_port=ServerTestCase.rpc_port(),
+                         stream_port=ServerTestCase.rpc_port() ^
+                         ServerTestCase.stream_port())
+
+    def test_wrong_rpc_server(self):
+        with self.assertRaises(krpc.error.ConnectionError) as cm:
+            krpc.connect(name='python_client_test_wrong_rpc_server',
+                         address='localhost',
+                         rpc_port=ServerTestCase.stream_port(),
+                         stream_port=ServerTestCase.stream_port())
+        self.assertEqual('Connection request was for the rpc server, ' +
+                         'but this is the stream server. ' +
+                         'Did you connect to the wrong port number?',
+                         str(cm.exception))
+
+    def test_wrong_stream_server(self):
+        with self.assertRaises(krpc.error.ConnectionError) as cm:
+            krpc.connect(name='python_client_test_wrong_stream_server',
+                         address='localhost',
+                         rpc_port=ServerTestCase.rpc_port(),
+                         stream_port=ServerTestCase.rpc_port())
         self.assertEqual(
-            self.conn.krpc.GameScene.space_center,
-            self.conn.krpc.current_game_scene)
-
-    def test_error(self):
-        with self.assertRaises(krpc.client.RPCError) as cm:
-            self.conn.test_service.throw_argument_exception()
-        self.assertTrue('Invalid argument' in str(cm.exception))
-
-        with self.assertRaises(krpc.client.RPCError) as cm:
-            self.conn.test_service.throw_invalid_operation_exception()
-        self.assertTrue('Invalid operation' in str(cm.exception))
+            'Connection request was for the stream server, ' +
+            'but this is the rpc server. ' +
+            'Did you connect to the wrong port number?', str(cm.exception))
 
     def test_value_parameters(self):
         self.assertEqual('3.14159',
@@ -88,6 +113,17 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.conn.test_service.object_property = None
         self.assertIsNone(self.conn.test_service.object_property)
 
+    def test_class_none_value_when_not_allowed(self):
+        with self.assertRaises(krpc.error.RPCError) as cm:
+            self.conn.test_service.return_null_when_not_allowed()
+        self.assertTrue(str(cm.exception).startswith(
+            'Incorrect value returned by '
+            'TestService.ReturnNullWhenNotAllowed. '
+            'Expected a non-null value of type '
+            'TestServer.TestService+TestClass, '
+            'got null, but the procedure is not marked as nullable.'
+        ))
+
     def test_class_methods(self):
         obj = self.conn.test_service.create_test_object('bob')
         self.assertEqual('value=bob', obj.get_value())
@@ -113,68 +149,59 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual(obj2._object_id, obj.object_property._object_id)
 
     def test_optional_arguments(self):
-        self.assertEqual(
-            'jebfoobarbaz',
-            self.conn.test_service.optional_arguments('jeb'))
-        self.assertEqual(
-            'jebbobbillbaz',
-            self.conn.test_service.optional_arguments('jeb', 'bob', 'bill'))
+        self.assertEqual('jebfoobarnull',
+                         self.conn.test_service.optional_arguments('jeb'))
+        self.assertEqual('jebbobbillnull',
+                         self.conn.test_service.optional_arguments(
+                             'jeb', 'bob', 'bill'))
+        obj = self.conn.test_service.create_test_object('kermin')
+        self.assertEqual('jebbobbillkermin',
+                         self.conn.test_service.optional_arguments(
+                             'jeb', 'bob', 'bill', obj))
 
     def test_named_parameters(self):
-        self.assertEqual(
-            '1234',
-            self.conn.test_service.optional_arguments(
-                x='1', y='2', z='3', another_parameter='4'))
-        self.assertEqual(
-            '2413',
-            self.conn.test_service.optional_arguments(
-                z='1', x='2', another_parameter='3', y='4'))
-        self.assertEqual(
-            '1243',
-            self.conn.test_service.optional_arguments(
-                '1', '2', another_parameter='3', z='4'))
-        self.assertEqual(
-            '123baz',
-            self.conn.test_service.optional_arguments(
-                '1', '2', z='3'))
-        self.assertEqual(
-            '12bar3',
-            self.conn.test_service.optional_arguments(
-                '1', '2', another_parameter='3'))
-        self.assertRaises(
-            TypeError,
-            self.conn.test_service.optional_arguments,
-            '1', '2', '3', '4', another_parameter='5')
-        self.assertRaises(
-            TypeError,
-            self.conn.test_service.optional_arguments,
-            '1', '2', '3', y='4')
-        self.assertRaises(
-            TypeError,
-            self.conn.test_service.optional_arguments,
-            '1', foo='4')
+        obj3 = self.conn.test_service.create_test_object('3')
+        obj4 = self.conn.test_service.create_test_object('4')
+        obj5 = self.conn.test_service.create_test_object('5')
+        self.assertEqual('1234',
+                         self.conn.test_service.optional_arguments(
+                             x='1', y='2', z='3', obj=obj4))
+        self.assertEqual('2413',
+                         self.conn.test_service.optional_arguments(
+                             z='1', x='2', obj=obj3, y='4'))
+        self.assertEqual('1243',
+                         self.conn.test_service.optional_arguments(
+                             '1', '2', obj=obj3, z='4'))
+        self.assertEqual('123null',
+                         self.conn.test_service.optional_arguments(
+                             '1', '2', z='3'))
+        self.assertEqual('12bar3',
+                         self.conn.test_service.optional_arguments(
+                             '1', '2', obj=obj3))
+        self.assertRaises(TypeError, self.conn.test_service.optional_arguments,
+                          '1', '2', '3', '4', obj=obj5)
+        self.assertRaises(TypeError, self.conn.test_service.optional_arguments,
+                          '1', '2', '3', y='4')
+        self.assertRaises(TypeError, self.conn.test_service.optional_arguments,
+                          '1', foo='4')
 
         obj = self.conn.test_service.create_test_object('jeb')
-        self.assertEqual(
-            '1234', obj.optional_arguments(
-                x='1', y='2', z='3', another_parameter='4'))
-        self.assertEqual(
-            '2413', obj.optional_arguments(
-                z='1', x='2', another_parameter='3', y='4'))
-        self.assertEqual(
-            '1243', obj.optional_arguments(
-                '1', '2', another_parameter='3', z='4'))
-        self.assertEqual(
-            '123baz', obj.optional_arguments('1', '2', z='3'))
-        self.assertEqual(
-            '12bar3', obj.optional_arguments('1', '2', another_parameter='3'))
-        self.assertRaises(
-            TypeError, obj.optional_arguments,
-            '1', '2', '3', '4', another_parameter='5')
-        self.assertRaises(
-            TypeError, obj.optional_arguments, '1', '2', '3', y='4')
-        self.assertRaises(
-            TypeError, obj.optional_arguments, '1', foo='4')
+        self.assertEqual('1234',
+                         obj.optional_arguments(x='1', y='2', z='3', obj=obj4))
+        self.assertEqual('2413',
+                         obj.optional_arguments(z='1', x='2', obj=obj3, y='4'))
+        self.assertEqual('1243',
+                         obj.optional_arguments('1', '2', obj=obj3, z='4'))
+        self.assertEqual('123null',
+                         obj.optional_arguments('1', '2', z='3'))
+        self.assertEqual('12bar3',
+                         obj.optional_arguments('1', '2', obj=obj3))
+        self.assertRaises(TypeError, obj.optional_arguments,
+                          '1', '2', '3', '4', obj=obj5)
+        self.assertRaises(TypeError, obj.optional_arguments,
+                          '1', '2', '3', y='4')
+        self.assertRaises(TypeError, obj.optional_arguments,
+                          '1', foo='4')
 
     def test_blocking_procedure(self):
         self.assertEqual(0, self.conn.test_service.blocking_procedure(0, 0))
@@ -264,15 +291,50 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual({1: False, 2: True},
                          self.conn.test_service.dictionary_default())
 
+    def test_invalid_operation_exception(self):
+        with self.assertRaises(RuntimeError) as cm:
+            self.conn.test_service.throw_invalid_operation_exception()
+        self.assertTrue(str(cm.exception).startswith('Invalid operation'))
+
+    def test_argument_exception(self):
+        with self.assertRaises(ValueError) as cm:
+            self.conn.test_service.throw_argument_exception()
+        self.assertTrue(str(cm.exception).startswith('Invalid argument'))
+
+    def test_argument_null_exception(self):
+        with self.assertRaises(ValueError) as cm:
+            self.conn.test_service.throw_argument_null_exception("")
+        self.assertTrue(
+            str(cm.exception).startswith('Value cannot be null.\n' +
+                                         'Parameter name: foo'))
+
+    def test_argument_out_of_range_exception(self):
+        with self.assertRaises(ValueError) as cm:
+            self.conn.test_service.throw_argument_out_of_range_exception(0)
+        self.assertTrue(str(cm.exception).startswith(
+            'Specified argument was out of the range of valid values.\n' +
+            'Parameter name: foo'))
+
+    def test_custom_exception(self):
+        with self.assertRaises(self.conn.test_service.CustomException) as cm:
+            self.conn.test_service.throw_custom_exception()
+        self.assertTrue(
+            str(cm.exception).startswith('A custom kRPC exception'))
+
     def test_client_members(self):
         self.assertSetEqual(
-            set(['krpc', 'test_service', 'add_stream', 'stream', 'close']),
+            set(['krpc', 'test_service', 'stream', 'add_stream',
+                 'get_call', 'close']),
             set(x for x in dir(self.conn) if not x.startswith('_')))
 
     def test_krpc_service_members(self):
         self.assertSetEqual(
-            set(['get_services', 'get_status', 'add_stream', 'remove_stream',
-                 'current_game_scene', 'GameScene', 'clients']),
+            set(['get_client_id', 'get_client_name', 'get_services',
+                 'get_status', 'add_stream', 'start_stream', 'remove_stream',
+                 'add_event', 'current_game_scene', 'GameScene', 'paused',
+                 'clients', 'Expression', 'InvalidOperationException',
+                 'ArgumentException', 'ArgumentNullException',
+                 'ArgumentOutOfRangeException']),
             set(x for x in dir(self.conn.krpc) if not x.startswith('_')))
 
     def test_test_service_service_members(self):
@@ -298,6 +360,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
                 'object_property',
 
+                'return_null_when_not_allowed',
+
                 'TestClass',
 
                 'optional_arguments',
@@ -322,8 +386,20 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
                 'counter',
 
+                'CustomException',
+                'throw_custom_exception',
+                'reset_custom_exception_later',
+                'throw_custom_exception_later',
+
+                'throw_invalid_operation_exception',
+                'throw_invalid_operation_exception_later',
+                'reset_invalid_operation_exception_later',
                 'throw_argument_exception',
-                'throw_invalid_operation_exception'
+                'throw_argument_null_exception',
+                'throw_argument_out_of_range_exception',
+
+                'on_timer',
+                'on_timer_using_lambda'
             ]),
             set(x for x in dir(self.conn.test_service)
                 if not x.startswith('_')))
@@ -376,7 +452,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
             conn1.test_service.TestClass, conn2.test_service.TestClass)
         obj2 = conn2.test_service.TestClass(0)
         obj1 = conn1._types.coerce_to(
-            obj2, conn1._types.as_type('Class(TestService.TestClass)'))
+            obj2, conn1._types.class_type('TestService', 'TestClass'))
         self.assertEqual(obj1, obj2)
         self.assertNotEqual(type(obj1), type(obj2))
         self.assertEqual(type(obj1), conn1.test_service.TestClass)

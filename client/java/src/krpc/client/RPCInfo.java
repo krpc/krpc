@@ -7,10 +7,14 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD })
+@SuppressWarnings("checkstyle:abbreviationaswordinname")
 public @interface RPCInfo {
-    String service();
+  /** The name of the service. */
+  String service();
 
-    String procedure();
+  /** The name of the procedure. */
+  String procedure();
 
-    Class<?> returnTypeSpec();
+  /** Parameter and return types. */
+  Class<?> types();
 }
