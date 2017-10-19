@@ -196,14 +196,14 @@ TEST(test_encode_decode, test_list) {
 }
 
 TEST(test_encode_decode, test_dictionary) {
-  test_dictionary(std::map<std::string, unsigned int>(), "");
+  test_dictionary(std::map<std::string, pb::uint32>(), "");
   {
-    std::map<std::string, unsigned int> d;
+    std::map<std::string, pb::uint32> d;
     d[""] = 0;
     test_dictionary(d, "0a060a0100120100");
   }
   {
-    std::map<std::string, unsigned int> d;
+    std::map<std::string, pb::uint32> d;
     d["foo"] = 42;
     d["bar"] = 365;
     d["baz"] = 3;
@@ -212,14 +212,14 @@ TEST(test_encode_decode, test_dictionary) {
 }
 
 TEST(test_encode_decode, test_set) {
-  test_set(std::set<unsigned int>(), "");
+  test_set(std::set<pb::uint32>(), "");
   {
-    std::set<unsigned int> s;
+    std::set<pb::uint32> s;
     s.insert(1);
     test_set(s, "0a0101");
   }
   {
-    std::set<unsigned int> s;
+    std::set<pb::uint32> s;
     s.insert(1);
     s.insert(2);
     s.insert(3);
@@ -229,8 +229,8 @@ TEST(test_encode_decode, test_set) {
 }
 
 TEST(test_encode_decode, test_tuple) {
-  test_tuple1(std::tuple<unsigned int>(1), "0a0101");
-  test_tuple3(std::tuple<unsigned int, std::string, bool>(1, "jeb", false),
+  test_tuple1(std::tuple<pb::uint32>(1), "0a0101");
+  test_tuple3(std::tuple<pb::uint32, std::string, bool>(1, "jeb", false),
               "0a01010a04036a65620a0100");
 }
 
