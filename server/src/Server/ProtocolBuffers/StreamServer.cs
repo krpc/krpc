@@ -22,6 +22,8 @@ namespace KRPC.Server.ProtocolBuffers
             var stream = args.Client.Stream;
             try {
                 var request = Utils.ReadMessage<ConnectionRequest> (stream);
+                if (request == null)
+                    return null;
                 if (request.Type != Type.Stream) {
                     var name = request.Type.ToString ().ToLower ();
                     WriteErrorConnectionResponse (Status.WrongType,
@@ -35,8 +37,6 @@ namespace KRPC.Server.ProtocolBuffers
                 }
             } catch (InvalidProtocolBufferException e) {
                 WriteErrorConnectionResponse (Status.MalformedMessage, e.Message, stream);
-            } catch (TimeoutException e) {
-                WriteErrorConnectionResponse (Status.Timeout, e.Message, stream);
             }
             args.Request.Deny ();
             return null;

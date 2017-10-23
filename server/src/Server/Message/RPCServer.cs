@@ -162,7 +162,6 @@ namespace KRPC.Server.Message
                     args.Request.Deny ();
                     Logger.WriteLine ("Message.RPCServer: client connection denied", Logger.Severity.Debug);
                 } else {
-                    pendingClients.Remove (args.Client);
                     Logger.WriteLine ("Message.RPCServer: client connection still pending", Logger.Severity.Debug);
                 }
             } else {

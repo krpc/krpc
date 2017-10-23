@@ -133,9 +133,9 @@ namespace KRPC.Test.Server.ProtocolBuffers
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
-            Assert.IsTrue (eventArgs.Request.ShouldDeny);
+            Assert.IsFalse (eventArgs.Request.ShouldDeny);
 
-            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 33, Status.Timeout, "The operation has timed out.", 0);
+            Assert.AreEqual (responseStream.ToArray ().Length, 0);
         }
 
         [Test]
@@ -160,9 +160,9 @@ namespace KRPC.Test.Server.ProtocolBuffers
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
-            Assert.IsTrue (eventArgs.Request.ShouldDeny);
+            Assert.IsFalse (eventArgs.Request.ShouldDeny);
 
-            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 33, Status.Timeout, "The operation has timed out.", 0);
+            Assert.AreEqual (responseStream.ToArray ().Length, 0);
         }
     }
 }

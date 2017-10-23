@@ -25,6 +25,8 @@ namespace KRPC.Server.ProtocolBuffers
             try {
                 Logger.WriteLine ("ProtocolBuffers: client requesting connection (" + address + ")", Logger.Severity.Debug);
                 var request = Utils.ReadMessage<ConnectionRequest> (stream);
+                if (request == null)
+                    return null;
                 if (request.Type != Type.Rpc) {
                     var name = request.Type.ToString ().ToLower ();
                     WriteErrorConnectionResponse (Status.WrongType,
@@ -35,8 +37,6 @@ namespace KRPC.Server.ProtocolBuffers
                 }
             } catch (InvalidProtocolBufferException e) {
                 WriteErrorConnectionResponse (Status.MalformedMessage, e.Message, stream);
-            } catch (TimeoutException e) {
-                WriteErrorConnectionResponse (Status.Timeout, e.Message, stream);
             }
             args.Request.Deny ();
             Logger.WriteLine ("ProtocolBuffers: client connection denied (" + address + ")", Logger.Severity.Error);
