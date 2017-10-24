@@ -1,3 +1,6 @@
+v0.4.1
+ * Fix connection timeout when client connects with auto-accept connections disabled (#425)
+
 v0.4.0
  * New server architecture that allows multiple concurrent servers, using different settings and protocols
  * Add websockets server protocol for communication with browsers
