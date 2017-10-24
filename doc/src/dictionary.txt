@@ -22,6 +22,7 @@ apoapsis
 arg
 atm
 autotune
+badass
 biome
 biomes
 boolean

@@ -39,6 +39,7 @@ T: KRPC.SpaceCenter.Services.Contract
 T: KRPC.SpaceCenter.Services.ContractManager
 T: KRPC.SpaceCenter.Services.ContractParameter
 T: KRPC.SpaceCenter.Services.Control
+T: KRPC.SpaceCenter.Services.CrewMember
 T: KRPC.SpaceCenter.Services.Flight
 T: KRPC.SpaceCenter.Services.Node
 T: KRPC.SpaceCenter.Services.Orbit
@@ -51,8 +52,8 @@ T: KRPC.SpaceCenter.Services.Parts.Engine
 T: KRPC.SpaceCenter.Services.Parts.Experiment
 T: KRPC.SpaceCenter.Services.Parts.Fairing
 T: KRPC.SpaceCenter.Services.Parts.Intake
-T: KRPC.SpaceCenter.Services.Parts.Leg
 T: KRPC.SpaceCenter.Services.Parts.LaunchClamp
+T: KRPC.SpaceCenter.Services.Parts.Leg
 T: KRPC.SpaceCenter.Services.Parts.Light
 T: KRPC.SpaceCenter.Services.Parts.Module
 T: KRPC.SpaceCenter.Services.Parts.Parachute

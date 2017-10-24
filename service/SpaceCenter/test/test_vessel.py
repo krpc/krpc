@@ -118,6 +118,22 @@ class TestVessel(krpctest.TestCase):
         self.assertAlmostEqual((-1.57, -2.60, -1.57), box[0], places=2)
         self.assertAlmostEqual((1.57, 2.675, 1.57), box[1], places=2)
 
+    def test_crew(self):
+        self.assertEqual(1, self.vessel.crew_capacity)
+        self.assertEqual(1, self.vessel.crew_count)
+        crew = self.vessel.crew
+        self.assertEqual(1, len(crew))
+        crew_member = crew[0]
+        self.assertEqual('Valentina Kerman', crew_member.name)
+        self.assertEqual(
+            self.space_center.CrewMemberType.crew, crew_member.type)
+        self.assertTrue(crew_member.on_mission)
+        self.assertAlmostEqual(0.55, crew_member.courage)
+        self.assertAlmostEqual(0.4, crew_member.stupidity)
+        self.assertAlmostEqual(99999, crew_member.experience)
+        self.assertTrue(crew_member.badass)
+        self.assertTrue(crew_member.veteran)
+
 
 class TestVesselEngines(krpctest.TestCase):
 
