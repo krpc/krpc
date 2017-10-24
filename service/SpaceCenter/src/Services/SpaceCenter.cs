@@ -631,6 +631,51 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Cast a ray from a given position in a given direction, and return the distance to the hit point.
+        /// If no hit occurs, returns infinity.
+        /// </summary>
+        /// <param name="position">Position, as a vector, of the origin of the ray.</param>
+        /// <param name="direction">Direction of the ray, as a unit vector.</param>
+        /// <param name="referenceFrame">The reference frame that the position and direction are in.</param>
+        /// <returns>The distance to the hit, in meters, or infinity if there was no hit.</returns>
+        [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
+        public static double RaycastDistance (Tuple3 position, Tuple3 direction, ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException (nameof (referenceFrame));
+            var worldPosition = referenceFrame.PositionToWorldSpace (position.ToVector ());
+            var worldDirection = referenceFrame.DirectionToWorldSpace (direction.ToVector ());
+            RaycastHit hitInfo;
+            bool hit = Physics.Raycast(worldPosition, worldDirection, out hitInfo);
+            return hit ? hitInfo.distance : Double.PositiveInfinity;
+        }
+
+        /// <summary>
+        /// Cast a ray from a given position in a given direction, and return the part that it hits.
+        /// If no hit occurs, returns <c>null</c>.
+        /// </summary>
+        /// <param name="position">Position, as a vector, of the origin of the ray.</param>
+        /// <param name="direction">Direction of the ray, as a unit vector.</param>
+        /// <param name="referenceFrame">The reference frame that the position and direction are in.</param>
+        /// <returns>The part that was hit or <c>null</c> if there was no hit.</returns>
+        [KRPCProcedure (Nullable=true)]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
+        public static Parts.Part RaycastPart (Tuple3 position, Tuple3 direction, ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException (nameof (referenceFrame));
+            var worldPosition = referenceFrame.PositionToWorldSpace (position.ToVector ());
+            var worldDirection = referenceFrame.DirectionToWorldSpace (direction.ToVector ());
+            RaycastHit hitInfo;
+            bool hit = Physics.Raycast(worldPosition, worldDirection, out hitInfo);
+            if (!hit)
+                return null;
+            var part = hitInfo.collider.gameObject.GetComponentInParent<global::Part>();
+            return part == null ? null : new Parts.Part (part);
+        }
+
+        /// <summary>
         /// Whether <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a> is installed.
         /// </summary>
         [KRPCProperty]

@@ -273,6 +273,38 @@ class TestSpaceCenter(krpctest.TestCase):
         self.assertAlmostEqual(
             norm(vel), direction * self.kerbin.rotational_speed, places=3)
 
+    def test_raycast_distance(self):
+        vessel = self.sc.active_vessel
+        ref_frame = vessel.reference_frame
+        self.assertEqual(
+            float('inf'),
+            self.sc.raycast_distance((10, 0, 0), (1, 0, 0), ref_frame))
+        self.assertEqual(
+            float('inf'),
+            self.sc.raycast_distance((0, 10, 0), (0, 1, 0), ref_frame))
+        self.assertAlmostEqual(
+            9.38,
+            self.sc.raycast_distance(
+                (-10, 0, 0), (1, 0, 0), ref_frame), places=2)
+        self.assertAlmostEqual(
+            7.80,
+            self.sc.raycast_distance(
+                (0, -10, 0), (0, 1, 0), ref_frame), places=2)
+
+    def test_raycast_part(self):
+        vessel = self.sc.active_vessel
+        ref_frame = vessel.reference_frame
+        self.assertEqual(
+            None, self.sc.raycast_part((10, 0, 0), (1, 0, 0), ref_frame))
+        self.assertEqual(
+            None, self.sc.raycast_part((0, 10, 0), (0, 1, 0), ref_frame))
+        part = self.sc.raycast_part((-10, 0, 0), (1, 0, 0), ref_frame)
+        self.assertIsNotNone(part)
+        self.assertEqual('FL-T400 Fuel Tank', part.title)
+        part = self.sc.raycast_part((0, -10, 0), (0, 1, 0), ref_frame)
+        self.assertIsNotNone(part)
+        self.assertEqual('LV-T45 "Swivel" Liquid Fuel Engine', part.title)
+
 
 class WarpTestBase(object):
 

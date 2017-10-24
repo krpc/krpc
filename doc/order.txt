@@ -80,6 +80,8 @@ SpaceCenter.TransformPosition
 SpaceCenter.TransformDirection
 SpaceCenter.TransformRotation
 SpaceCenter.TransformVelocity
+SpaceCenter.RaycastDistance
+SpaceCenter.RaycastPart
 SpaceCenter.FARAvailable
 SpaceCenter.WarpMode
 SpaceCenter.WarpMode.Rails

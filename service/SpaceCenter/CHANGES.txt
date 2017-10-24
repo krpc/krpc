@@ -1,3 +1,6 @@
+v0.4.1
+ * Add SpaceCenter.RaycastDistance and RaycastPart (#423)
+
 v0.4.0
  * AutoPilot.Wait and Error methods now throw an exception if the auto-pilot is not engaged (#409)
 
