@@ -1,7 +1,9 @@
 load('/tools/build/protobuf/lua', 'protoc_lua_env')
+load('/tools/build/protobuf/nanopb', 'protoc_nanopb_env')
 package(default_visibility = ['//visibility:public'])
 exports_files(['LICENSE'])
 protoc_lua_env(name = 'protoc-lua-env')
+protoc_nanopb_env(name = 'protoc-nanopb-env')
 
 filegroup(
     name = 'protoc',

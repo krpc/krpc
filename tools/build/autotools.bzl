@@ -4,7 +4,8 @@ def _apply_path_map(path_map, path):
     matchlen = 0
     match = path
     for x,y in path_map.items():
-        if path.startswith(x):
+        x, _, z = x.partition('*')
+        if path.startswith(x) and path.endswith(z):
             if len(x) > matchlen:
                 match = y + path[len(x):]
                 matchlen = len(x)

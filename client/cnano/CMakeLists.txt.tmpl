@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 2.8.4)
+project(kRPC-cnano)
+
+set(VERSION_NUMBER %VERSION%)
+set(CMAKE_BUILD_TYPE "Release")
+
+include_directories(include include/krpc)
+
+file(GLOB SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
+add_library(krpc_cnano STATIC ${SRC})
+
+set_target_properties(
+  krpc_cnano PROPERTIES VERSION   ${VERSION_NUMBER}
+                        SOVERSION ${VERSION_NUMBER}
+                        INSTALL_NAME_DIR lib)
+
+install(TARGETS krpc_cnano
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+
+install(DIRECTORY include DESTINATION . FILES_MATCHING PATTERN "*.h")

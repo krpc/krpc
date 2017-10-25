@@ -28,6 +28,46 @@ new_http_archive(
     sha256 = '7d8a42ae38fec3ca09833ea16f1d83a049f0580929c3b057042e006105ad864b'
 )
 
+new_http_archive(
+    name = 'protoc_nanopb',
+    build_file_content = """
+filegroup(
+    name = 'plugin',
+    srcs = ['generator'],
+    visibility = ['//visibility:public']
+)
+""",
+    url = 'https://jpa.kapsi.fi/nanopb/download/nanopb-0.3.8-linux-x86.tar.gz',
+    sha256 = 'f4604648448987b3a469e0a1a217ec8a9defa77f5d59a34db2d5ce61c3a4e5d5',
+    strip_prefix = 'nanopb-0.3.8-linux-x86'
+)
+
+new_http_archive(
+    name = 'c_nanopb',
+    build_file_content = """
+exports_files([
+    'LICENSE.txt', 'pb.h', 'pb_common.h', 'pb_common.c', 'pb_encode.h', 'pb_encode.c', 'pb_decode.h', 'pb_decode.c'
+])
+
+cc_library(
+    name = 'nanopb',
+    srcs = ['pb.h', 'pb_common.h', 'pb_common.c', 'pb_encode.h', 'pb_encode.c', 'pb_decode.h', 'pb_decode.c'],
+    hdrs = ['pb.h', 'pb_common.h', 'pb_encode.h', 'pb_decode.h'],
+    includes = ['./'],
+    visibility = ['//visibility:public']
+)
+
+filegroup(
+    name = 'srcs',
+    srcs = glob(['*.h', '*.c']),
+    visibility = ['//visibility:public']
+)
+""",
+    url = 'https://jpa.kapsi.fi/nanopb/download/nanopb-0.3.8.tar.gz',
+    sha256 = '2072d93c8b59cf3c89beb725589d0824766421745f5b81bde2fd784db0fd6aec',
+    strip_prefix = 'nanopb'
+)
+
 http_file(
     name = 'csharp_nuget',
     url = 'https://dist.nuget.org/win-x86-commandline/v3.4.4/NuGet.exe',

@@ -1,0 +1,8 @@
+AC_INIT([krpc_cnano], [%VERSION%])
+AC_SUBST([LT_RELEASE],[%VERSION%])
+AM_INIT_AUTOMAKE
+AC_CANONICAL_HOST
+AC_PROG_CC
+AC_LANG([C])
+AC_PROG_LIBTOOL
+AC_OUTPUT(Makefile include/Makefile src/Makefile)

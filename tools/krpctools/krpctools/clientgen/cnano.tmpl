@@ -1,0 +1,431 @@
+#pragma once
+
+#include <krpc/decoder.h>
+#include <krpc/encoder.h>
+#include <krpc/error.h>
+#include <krpc/memory.h>
+#include <krpc/types.h>
+#include <pb_decode.h>
+#include <pb_encode.h>
+{% macro call(service, procedure, parameters) %}
+krpc_call_t _call;
+krpc_argument_t _arguments[{{ parameters | length }}];
+KRPC_CHECK(krpc_call(&_call, "{{ service }}", "{{ procedure }}", {{ parameters | length }}, _arguments));
+{% for x in parameters %}
+KRPC_CHECK(krpc_add_argument(&_call, {{ loop.index0 }}, &krpc_encode_callback_{{ x.type.name }}, {{ x.type.getptr }}{{ x.name }}));
+{% endfor %}
+{% endmacro %}
+{% macro return(return_type) %}
+krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+KRPC_CHECK(krpc_init_result(&_result));
+KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+{% if return_type.ctype != 'void' %}
+if (returnValue) {
+  pb_istream_t _stream;
+  KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+  KRPC_CHECK(krpc_decode_{{ return_type.name }}(&_stream, {% if return_type.name == 'enum' %}(int*){% endif %}returnValue));
+}
+{% else %}
+{% endif %}
+KRPC_CHECK(krpc_free_result(&_result));
+return KRPC_OK;
+{% endmacro %}
+{% macro _parameters(parameters) %}
+{% for x in [{'type': {'ccvtype': 'krpc_connection_t'}, 'name': 'connection'}] + parameters %}{{x.type.ccvtype}} {{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endmacro %}
+{% macro parameters(return_type, parameters) %}
+{% if return_type.ctype != 'void' %}{{ _parameters([{'type': return_type, 'name': 'returnValue'}] + parameters) }}{% else %}{{ _parameters(parameters) }}{% endif %}
+{% endmacro %}
+{% macro procedure_parameters(procedure) %}
+{{ parameters(procedure.return_type, procedure.parameters) }}{% endmacro %}
+{% macro method_parameters(service_name, class_name, method) %}
+{{ parameters(method.return_type, [{'type': {'ccvtype': 'krpc_'+service_name+'_'+class_name+'_t', 'name': 'uint64'}, 'name': 'instance'}] + method.parameters) }}{% endmacro %}
+{% macro static_method_parameters(method) %}
+{{ parameters(method.return_type, method.parameters) }}{% endmacro %}
+
+#include <krpc.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+{% if classes | length > 0 %}
+
+{% for class_name,cls in classes.items() %}
+{{ cls.documentation }}
+typedef krpc_object_t krpc_{{ service_name }}_{{ class_name }}_t;
+{% endfor %}
+{% endif %}
+{% for typ in collection_types %}
+
+#ifndef KRPC_TYPE_{{ typ.name | upper }}
+#define KRPC_TYPE_{{ typ.name | upper }}
+
+{% if typ.name.startswith('tuple_') %}
+typedef struct krpc_{{ typ.name }}_s krpc_{{ typ.name }}_t;
+struct krpc_{{ typ.name }}_s {
+{% for value_type in typ.value_types %}
+  {{ value_type.ctype }} e{{ loop.index0 }};
+{% endfor %}
+};
+{% elif typ.name.startswith('list_') or typ.name.startswith('set_') %}
+typedef struct krpc_{{ typ.name }}_s krpc_{{ typ.name }}_t;
+struct krpc_{{ typ.name }}_s {
+  size_t size;
+  {{ typ.value_type.ctype }} * items;
+};
+{% elif typ.name.startswith('dictionary_') %}
+typedef struct krpc_dictionary_entry_{{ typ.key_type.name }}_{{ typ.value_type.name }}_s krpc_dictionary_entry_{{ typ.key_type.name }}_{{ typ.value_type.name }}_t;
+struct krpc_dictionary_entry_{{ typ.key_type.name }}_{{ typ.value_type.name }}_s {
+  {{ typ.key_type.ctype }} key;
+  {{ typ.value_type.ctype }} value;
+};
+
+typedef struct krpc_{{ typ.name }}_s krpc_{{ typ.name }}_t;
+struct krpc_{{ typ.name }}_s {
+  size_t size;
+  krpc_dictionary_entry_{{ typ.key_type.name }}_{{ typ.value_type.name }}_t * entries;
+};
+{% endif %}
+
+krpc_error_t krpc_encode_{{ typ.name }}(
+  pb_ostream_t * stream, {{ typ.ccvtype }} value);
+krpc_error_t krpc_encode_size_{{ typ.name }}(
+  size_t * size, {{ typ.ccvtype }} value);
+bool krpc_encode_callback_{{ typ.name }}(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
+krpc_error_t krpc_decode_{{ typ.name }}(
+  pb_istream_t * stream, {{ typ.ctype }} * value);
+
+#endif  // KRPC_TYPE_{{ typ.name | upper }}
+{% endfor %}
+{% for enum_name,enm in enumerations.items() %}
+
+{{ enm.documentation }}
+typedef enum {
+  {% for value in enm['values'] %}
+{{ value.documentation | indent(width=2) }}
+  KRPC_{{ service_name | upper }}_{{ enum_name | upper }}_{{ value.name | upper }} = {{ value.value }}{% if not loop.last %},{% endif %}
+
+  {% endfor %}
+} krpc_{{service_name}}_{{ enum_name }}_t;
+{% endfor %}
+{% for procedure_name,procedure in procedures.items() %}
+
+{{ procedure.documentation }}
+krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ procedure_parameters(procedure) }});
+{% endfor %}
+{% for property_name,property in properties.items() %}
+
+{{ property.documentation }}
+krpc_error_t krpc_{{ service_name }}_{{ property_name }}({{ procedure_parameters(property) }});
+{% endfor %}
+{% for class_name,cls in classes.items() %}
+{% for method_name,method in cls.methods.items() %}
+
+{{ method.documentation }}
+krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ method_parameters(service_name, class_name, method) }});
+{% endfor %}
+{% for method_name,method in cls.static_methods.items() %}
+
+{{ method.documentation }}
+krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ static_method_parameters(method) }});
+{% endfor %}
+{% for property_name,property in cls.properties.items() %}
+
+{{ property.documentation }}
+krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ property_name }}({{ method_parameters(service_name, class_name, property) }});
+{% endfor %}
+{% endfor %}
+
+// Implementation
+{% for typ in collection_types %}
+
+#ifndef KRPC_IMPL_TYPE_{{ typ.name | upper }}
+#define KRPC_IMPL_TYPE_{{ typ.name | upper }}
+
+{% if typ.name.startswith('tuple_') %}
+static bool krpc_encode_callback_items_{{ typ.name }}(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  const {{ typ.ctype }} * value = (const {{ typ.ctype }}*)(*arg);
+  {% for value_type in typ.value_types %}
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_{{ value_type.name }}(&size, {{ value_type.structgetval }}value->e{{ loop.index0 }}));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_{{ value_type.name }}(stream, {{ value_type.structgetval }}value->e{{ loop.index0 }}));
+  }
+  {% endfor %}
+  return true;
+}
+{% elif typ.name.startswith('list_') %}
+static bool krpc_encode_callback_items_{{ typ.name }}(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  const {{ typ.ctype }} * value = (const {{ typ.ctype }}*)(*arg);
+  size_t i = 0;
+  for (; i < value->size; i++) {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for list item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_{{ typ.value_type.name }}(&size, {{ typ.value_type.structgetval }}value->items[i]));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for list item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_{{ typ.value_type.name }}(stream, {{ typ.value_type.structgetval }}value->items[i]));
+  }
+  return true;
+}
+{% elif typ.name.startswith('set_') %}
+static bool krpc_encode_callback_items_{{ typ.name }}(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  const {{ typ.ctype }} * value = (const {{ typ.ctype }}*)(*arg);
+  size_t i = 0;
+  for (; i < value->size; i++) {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for set item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_{{ typ.value_type.name }}(&size, {{ typ.value_type.structgetval }}value->items[i]));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for set item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_{{ typ.value_type.name }}(stream, {{ typ.value_type.structgetval }}value->items[i]));
+  }
+  return true;
+}
+{% elif typ.name.startswith('dictionary_') %}
+static bool krpc_encode_callback_key_{{ typ.name }}(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  if (!pb_encode_tag_for_field(stream, field))
+    KRPC_CALLBACK_RETURN_ERROR("encoding tag for dictionary entry key");
+  const {{ typ.key_type.ctype }} * key = (const {{ typ.key_type.ctype }}*)(*arg);
+  size_t size = 0;
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_{{ typ.key_type.name }}(&size, {{ typ.key_type.getval }}key));
+  if (!pb_encode_varint(stream, size))
+    KRPC_CALLBACK_RETURN_ERROR("encoding size for dictionary entry key");
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_{{ typ.key_type.name }}(stream, {{ typ.key_type.getval }}key));
+  return true;
+}
+
+static bool krpc_encode_callback_value_{{ typ.name }}(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  if (!pb_encode_tag_for_field(stream, field))
+    KRPC_CALLBACK_RETURN_ERROR("encoding tag for dictionary entry value");
+  const {{ typ.value_type.ctype }} * value = (const {{ typ.value_type.ctype }}*)(*arg);
+  size_t size = 0;
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_{{ typ.value_type.name }}(&size, {{ typ.value_type.getval }}value));
+  if (!pb_encode_varint(stream, size))
+    KRPC_CALLBACK_RETURN_ERROR("encoding size for dictionary entry value");
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_{{ typ.value_type.name }}(stream, {{ typ.value_type.getval }}value));
+  return true;
+}
+
+static bool krpc_encode_callback_entry_{{ typ.name }}(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  const {{ typ.ctype }} * value = (const {{ typ.ctype }}*)(*arg);
+  krpc_schema_DictionaryEntry entry = krpc_schema_DictionaryEntry_init_default;
+  entry.key.funcs.encode = &krpc_encode_callback_key_{{ typ.name }};
+  entry.value.funcs.encode = &krpc_encode_callback_value_{{ typ.name }};
+  size_t i = 0;
+  for (; i < value->size; i++) {
+    entry.key.arg = &value->entries[i].key;
+    entry.value.arg = &value->entries[i].value;
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for dictionary entry");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_message_DictionaryEntry(&size, &entry));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for dictionary item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_message_DictionaryEntry(stream, &entry));
+  }
+  return true;
+}
+{% endif %}
+
+inline krpc_error_t krpc_encode_{{ typ.name }}(
+  pb_ostream_t * stream, {{ typ.ccvtype }} value) {
+{% if typ.name.startswith('tuple_') %}
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.encode = &krpc_encode_callback_items_{{ typ.name }};
+  message.items.arg = {{ typ.removeconst }}{{ typ.getptr }}value;
+  KRPC_RETURN_ON_ERROR(krpc_encode_message_Tuple(stream, &message));
+{% elif typ.name.startswith('list_') %}
+  krpc_schema_List message = krpc_schema_List_init_default;
+  message.items.funcs.encode = &krpc_encode_callback_items_{{ typ.name }};
+  message.items.arg = {{ typ.removeconst }}{{ typ.getptr }}value;
+  KRPC_RETURN_ON_ERROR(krpc_encode_message_List(stream, &message));
+{% elif typ.name.startswith('set_') %}
+  krpc_schema_Set message = krpc_schema_Set_init_default;
+  message.items.funcs.encode = &krpc_encode_callback_items_{{ typ.name }};
+  message.items.arg = {{ typ.removeconst }}{{ typ.getptr }}value;
+  KRPC_RETURN_ON_ERROR(krpc_encode_message_Set(stream, &message));
+{% elif typ.name.startswith('dictionary_') %}
+  krpc_schema_Dictionary message = krpc_schema_Dictionary_init_default;
+  message.entries.funcs.encode = &krpc_encode_callback_entry_{{ typ.name }};
+  message.entries.arg = {{ typ.removeconst }}{{ typ.getptr }}value;
+  KRPC_RETURN_ON_ERROR(krpc_encode_message_Dictionary(stream, &message));
+{% endif %}
+  return KRPC_OK;
+}
+
+inline krpc_error_t krpc_encode_size_{{ typ.name }}(
+  size_t * size, {{ typ.ccvtype }} value) {
+  pb_ostream_t stream = PB_OSTREAM_SIZING;
+  KRPC_RETURN_ON_ERROR(krpc_encode_{{ typ.name }}(&stream, value));
+  *size = stream.bytes_written;
+  return KRPC_OK;
+}
+
+inline bool krpc_encode_callback_{{ typ.name }}(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  if (!pb_encode_tag_for_field(stream, field))
+    KRPC_CALLBACK_RETURN_ERROR("encoding tag for {{ typ.name }}");
+  {{ typ.ctype }} * value = ({{ typ.ctype }}*)(*arg);
+  size_t size;
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_{{ typ.name }}(&size, {{ typ.getval }}value));
+  if (!pb_encode_varint(stream, size))
+    KRPC_CALLBACK_RETURN_ERROR("encoding size for {{ typ.name }}");
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_{{ typ.name }}(stream, {{ typ.getval }}value));
+  return true;
+}
+
+{% if typ.name.startswith('tuple_') %}
+static bool krpc_decode_callback_item_{{ typ.name }}(
+  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
+  typedef struct {size_t pos; {{ typ.ctype }} * value;} State;
+  State * state = (State*)(*arg);
+  {{ typ.ctype }} * value = state->value;
+  switch (state->pos) {
+  {% for value_type in typ.value_types %}
+  case {{ loop.index0 }}:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_{{ value_type.name }}(stream, {{ value_type.structgetptr }}value->e{{ loop.index0 }}));
+    break;
+  {% endfor %}
+  default:
+    KRPC_CALLBACK_RETURN_ERROR("unexpected tuple item");
+  }
+  state->pos++;
+  return true;
+}
+{% elif typ.name.startswith('list_') or typ.name.startswith('set_') %}
+static bool krpc_decode_callback_item_{{ typ.name }}(
+  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
+  typedef struct { size_t capacity; {{ typ.ctype }} * value; } State;
+  State * state = (State*)(*arg);
+  size_t i = state->value->size;
+  state->value->size++;
+  if (state->capacity > 0 && state->value->size > state->capacity) {
+    state->value->items = ({{ typ.value_type.ctype }}*)krpc_recalloc(state->value->items, state->capacity, KRPC_ALLOC_BLOCK_SIZE, sizeof({{ typ.value_type.ctype }}));
+    state->capacity += KRPC_ALLOC_BLOCK_SIZE;
+  }
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_{{ typ.value_type.name }}(stream, {{ typ.value_type.structgetptr }}state->value->items[i]));
+  return true;
+}
+{% elif typ.name.startswith('dictionary_') %}
+static bool krpc_decode_callback_key_{{ typ.name }}(
+  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
+  {{ typ.key_type.ctype }} * key = ({{ typ.key_type.ctype }}*)(*arg);
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_{{ typ.key_type.name }}(stream, key));
+  return true;
+}
+
+static bool krpc_decode_callback_value_{{ typ.name }}(
+  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
+  {{ typ.value_type.ctype }} * value = ({{ typ.value_type.ctype }}*)(*arg);
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_{{ typ.value_type.name }}(stream, value));
+  return true;
+}
+
+static bool krpc_decode_callback_entry_{{ typ.name }}(
+  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
+  typedef struct { size_t capacity; {{ typ.ctype }} * value; } State;
+  State * state = (State*)(*arg);
+  {{ typ.ctype }} * value = state->value;
+  size_t i = value->size;
+  value->size++;
+  if (state->capacity > 0 && state->value->size > state->capacity) {
+    state->value->entries = (krpc_dictionary_entry_{{ typ.key_type.name }}_{{ typ.value_type.name }}_t*)krpc_recalloc(state->value->entries, state->capacity, KRPC_ALLOC_BLOCK_SIZE, sizeof(krpc_dictionary_entry_{{ typ.key_type.name }}_{{ typ.value_type.name }}_t));
+    state->capacity += KRPC_ALLOC_BLOCK_SIZE;
+  }
+  krpc_schema_DictionaryEntry message = krpc_schema_DictionaryEntry_init_default;
+  message.key.funcs.decode = &krpc_decode_callback_key_{{ typ.name }};
+  message.key.arg = {{ typ.key_type.structgetptr }}value->entries[i].key;
+  message.value.funcs.decode = &krpc_decode_callback_value_{{ typ.name }};
+  message.value.arg = {{ typ.value_type.structgetptr }}value->entries[i].value;
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_message_DictionaryEntry(stream, &message));
+  return true;
+}
+{% endif %}
+
+inline krpc_error_t krpc_decode_{{ typ.name }}(
+  pb_istream_t * stream, {{ typ.ctype }} * value) {
+{% if typ.name.startswith('tuple_') %}
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.decode = &krpc_decode_callback_item_{{ typ.name }};
+  typedef struct { size_t pos; {{ typ.ctype }} * value; } State;
+  State state = { 0, value };
+  message.items.arg = &state;
+  KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
+{% elif typ.name.startswith('list_') or typ.name.startswith('set_') %}
+  typedef struct { size_t capacity; {{ typ.ctype }} * value; } State;
+  State state = { 0, value };
+  value->size = 0;
+  if (value->items == NULL) {
+    value->items = ({{ typ.value_type.ctype }}*)krpc_calloc(KRPC_ALLOC_BLOCK_SIZE, sizeof({{ typ.value_type.ctype }}));
+    state.capacity = KRPC_ALLOC_BLOCK_SIZE;
+  }
+  {% if typ.name.startswith('list_') %}
+  krpc_schema_List message = krpc_schema_List_init_default;
+  message.items.funcs.decode = &krpc_decode_callback_item_{{ typ.name }};
+  message.items.arg = &state;
+  KRPC_RETURN_ON_ERROR(krpc_decode_message_List(stream, &message));
+  {% elif typ.name.startswith('set_') %}
+  krpc_schema_Set message = krpc_schema_Set_init_default;
+  message.items.funcs.decode = &krpc_decode_callback_item_{{ typ.name }};
+  message.items.arg = &state;
+  KRPC_RETURN_ON_ERROR(krpc_decode_message_Set(stream, &message));
+  {% endif %}
+{% elif typ.name.startswith('dictionary_') %}
+  typedef struct { size_t capacity; {{ typ.ctype }} * value; } State;
+  State state = { 0, value };
+  value->size = 0;
+  if (value->entries == NULL) {
+    value->entries = (krpc_dictionary_entry_{{ typ.key_type.name }}_{{ typ.value_type.name }}_t*)krpc_calloc(KRPC_ALLOC_BLOCK_SIZE, sizeof(krpc_dictionary_entry_{{ typ.key_type.name }}_{{ typ.value_type.name }}_t));
+    state.capacity = KRPC_ALLOC_BLOCK_SIZE;
+  }
+  krpc_schema_Dictionary message = krpc_schema_Dictionary_init_default;
+  message.entries.funcs.decode = &krpc_decode_callback_entry_{{ typ.name }};
+  message.entries.arg = &state;
+  KRPC_RETURN_ON_ERROR(krpc_decode_message_Dictionary(stream, &message));
+{% endif %}
+  return KRPC_OK;
+}
+
+#endif  // KRPC_IMPL_TYPE_{{ typ.name | upper }}
+{% endfor %}
+{% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
+
+inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ procedure_parameters(procedure) }}) {
+{{ call(service_name, procedure.remote_name, procedure.parameters) | indent(2) }}
+{{ return(procedure.return_type) | indent(2) }}
+}
+{% endfor %}
+{% for class_name,cls in classes.items() %}
+{% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
+
+inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ method_parameters(service_name, class_name, method) }}) {
+{{ call(service_name, method.remote_name, [{'type': {'ccvtype': 'krpc_'+service_name+'_'+class_name+'_t', 'name': 'uint64', 'getptr': '&'}, 'name': 'instance'}] + method.parameters) | indent(2) }}
+{{ return(method.return_type) | indent(2) }}
+}
+{% endfor %}
+{% for method_name,method in cls.static_methods.items() %}
+
+inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ static_method_parameters(method) }}) {
+{{ call(service_name, method.remote_name, method.parameters) | indent(2) }}
+{{ return(method.return_type) | indent(2) }}
+}
+{% endfor %}
+{% endfor %}
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif
