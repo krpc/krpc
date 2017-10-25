@@ -47,6 +47,7 @@ def _impl(ctx):
         ])
         server_args = '--type=serialio --port="$SERVER_PORT"'
         get_server_settings = [
+            'sleep 1',  # FIXME: hack to ensure serial port is established fully before running tests
             'echo "Server started, port = $SERVER_PORT"'
         ]
         test_env = 'PORT=$CLIENT_PORT'
