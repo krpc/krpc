@@ -30,6 +30,7 @@ namespace KRPC
             AutoStartServers = false;
             AutoAcceptConnections = false;
             ConfirmRemoveClient = true;
+            PauseServerWithGame = false;
             VerboseErrors = true;
             OneRPCPerUpdate = false;
             MaxTimePerUpdate = 5000;
@@ -141,6 +142,8 @@ namespace KRPC
         public bool AutoAcceptConnections { get; set; }
 
         public bool ConfirmRemoveClient { get; set; }
+
+        public bool PauseServerWithGame { get; set; }
 
         public bool VerboseErrors { get; set; }
 

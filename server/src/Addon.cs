@@ -276,7 +276,7 @@ namespace KRPC
         /// </summary>
         public void Update()
         {
-            if (IsPaused)
+            if (IsPaused && !config.Configuration.PauseServerWithGame)
                 FixedUpdate();
         }
     }

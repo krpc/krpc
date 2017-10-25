@@ -73,6 +73,7 @@ namespace KRPC
         [Persistent] bool autoStartServers;
         [Persistent] bool autoAcceptConnections;
         [Persistent] bool confirmRemoveClient;
+        [Persistent] bool pauseServerWithGame;
         [Persistent] string logLevel = Logger.Severity.Info.ToString ();
         [Persistent] bool verboseErrors;
         [Persistent] bool checkDocumented;
@@ -104,6 +105,7 @@ namespace KRPC
             autoStartServers = Configuration.AutoStartServers;
             autoAcceptConnections = Configuration.AutoAcceptConnections;
             confirmRemoveClient = Configuration.ConfirmRemoveClient;
+            pauseServerWithGame = Configuration.PauseServerWithGame;
             logLevel = Logger.Level.ToString ();
             verboseErrors = Configuration.VerboseErrors;
             checkDocumented = ServicesChecker.CheckDocumented;
@@ -131,6 +133,7 @@ namespace KRPC
             Configuration.AutoStartServers = autoStartServers;
             Configuration.AutoAcceptConnections = autoAcceptConnections;
             Configuration.ConfirmRemoveClient = confirmRemoveClient;
+            Configuration.PauseServerWithGame = pauseServerWithGame;
             try {
                 Logger.Level = (Logger.Severity)Enum.Parse (typeof(Logger.Severity), logLevel);
             } catch (ArgumentException) {

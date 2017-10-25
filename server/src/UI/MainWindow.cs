@@ -67,6 +67,7 @@ namespace KRPC.UI
         const string autoStartServerText = "Auto-start server";
         const string autoAcceptConnectionsText = "Auto-accept new clients";
         const string confirmRemoveClientText = "Confirm disconnecting a client";
+        const string pauseServerWithGameText = "Pause the server when the game pauses";
         const string oneRPCPerUpdateText = "One RPC per update";
         const string maxTimePerUpdateText = "Max. time per update";
         const string adaptiveRateControlText = "Adaptive rate control";
@@ -379,6 +380,11 @@ namespace KRPC.UI
 
                 GUILayout.BeginHorizontal ();
                 GUILayout.Space (scaledIndentWidth);
+                DrawPauseServerWithGameToggle ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
                 DrawOneRPCPerUpdateToggle ();
                 GUILayout.EndHorizontal ();
 
@@ -429,9 +435,18 @@ namespace KRPC.UI
 
         void DrawAutoAcceptConnectionsToggle ()
         {
-            bool autoAcceptConnections = GUILayout.Toggle (config.Configuration.AutoAcceptConnections, autoAcceptConnectionsText, toggleStyle, new GUILayoutOption[] { });
+            bool autoAcceptConnections = GUILayout.Toggle (config.Configuration.AutoAcceptConnections, autoAcceptConnectionsText, toggleStyle, new GUILayoutOption [] { });
             if (autoAcceptConnections != config.Configuration.AutoAcceptConnections) {
                 config.Configuration.AutoAcceptConnections = autoAcceptConnections;
+                config.Save ();
+            }
+        }
+
+        void DrawPauseServerWithGameToggle ()
+        {
+            bool pauseServerWithGame = GUILayout.Toggle (config.Configuration.PauseServerWithGame, pauseServerWithGameText, toggleStyle, new GUILayoutOption [] { });
+            if (pauseServerWithGame != config.Configuration.PauseServerWithGame) {
+                config.Configuration.PauseServerWithGame = pauseServerWithGame;
                 config.Save ();
             }
         }
