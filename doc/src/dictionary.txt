@@ -117,6 +117,7 @@ uint
 undocked
 undocking
 undocks
+unowned
 unpaused
 unserialize
 varint
