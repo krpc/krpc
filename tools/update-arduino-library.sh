@@ -7,12 +7,12 @@ COMMIT=`git rev-parse HEAD`
 # Build cnano library
 bazel build //client/cnano
 
-# Clone arduino library
+# Clone arduino library repository
 arduino=`pwd`/bazel-genfiles/client/cnano/arduino
 rm -rf $arduino
 git clone git@github.com:krpc/krpc-arduino $arduino
 
-# Update arduino library
+# Update src files
 rm -rf $arduino/src
 mkdir $arduino/src
 cp bazel-bin/client/cnano/krpc-cnano-$VERSION.zip $arduino/src/
@@ -26,6 +26,10 @@ for file in *.c; do
 done
 rm -rf krpc-cnano-$VERSION krpc-cnano-$VERSION.zip
 cd $arduino
+
+# Update library.properties
+sed -i -e "s/version=.*/version=${VERSION}/g" library.properties
+
 git add .
 git diff-index --quiet HEAD || git commit -m "Updated from https://github.com/krpc/krpc commit $COMMIT"
 git push origin master
