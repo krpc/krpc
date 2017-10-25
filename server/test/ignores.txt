@@ -4,6 +4,7 @@ N: KRPC.Test
 N: KRPC.Test.Continuations
 N: KRPC.Test.Server
 N: KRPC.Test.Server.HTTP
+N: KRPC.Test.Server.SerialIO
 N: KRPC.Test.Server.TCP
 N: KRPC.Test.Service.Scanner
 
@@ -13,6 +14,7 @@ N: KRPC.Test.Continuations
 N: KRPC.Test.Server
 N: KRPC.Test.Server.HTTP
 N: KRPC.Test.Server.ProtocolBuffers
+N: KRPC.Test.Server.SerialIO
 N: KRPC.Test.Server.TCP
 N: KRPC.Test.Server.WebSockets
 N: KRPC.Test.Service

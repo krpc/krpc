@@ -48,6 +48,12 @@ http_file(
     sha256 = '496bf64ad9887c539cf7cc070d7e42edd4c8a8534286179431971ffa62ec3e4c'
 )
 
+http_file(
+    name = 'csharp_krpc_io_ports',
+    url = 'https://github.com/krpc/krpc-io-ports/releases/download/v1.0.0/KRPC.IO.Ports.dll',
+    sha256 = '558b0c1649fbc44b518d9de8957fe30e7c9c42d73c62d63d165f6f136fab3ec5'
+)
+
 new_http_archive(
     name = 'csharp_nunit',
     build_file_content = """
@@ -465,6 +471,12 @@ http_file(
     name = 'python_requests',
     url = 'https://pypi.python.org/packages/b0/e1/eab4fc3752e3d240468a8c0b284607899d2fbfb236a56b7377a329aa8d09/requests-2.18.4.tar.gz',
     sha256 = '9c443e7324ba5b85070c4a818ade28bfabedf16ea10206da1132edaa6dda237e'
+)
+
+http_file(
+    name = 'python_serialio',
+    url = 'https://pypi.python.org/packages/cc/74/11b04703ec416717b247d789103277269d567db575d2fd88f25d9767fe3d/pyserial-3.4.tar.gz',
+    sha256 = 'e17c4687fddd6d70a6604ac0ad25e33324cec71b5137267dd5c45e103c4b288a'
 )
 
 http_file(

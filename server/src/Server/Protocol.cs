@@ -17,6 +17,10 @@ namespace KRPC.Server
         /// <summary>
         /// A server using Protocol Buffer messages over a WebSockets server.
         /// </summary>
-        ProtocolBuffersOverWebsockets
+        ProtocolBuffersOverWebsockets,
+        /// <summary>
+        /// A server using Protocol Buffer messages over SerialIO.
+        /// </summary>
+        ProtocolBuffersOverSerialIO
     }
 }

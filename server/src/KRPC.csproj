@@ -72,6 +72,9 @@
     <Reference Include="Google.Protobuf">
       <HintPath>..\..\bazel-krpc\external\csharp_protobuf_net35\file\Google.Protobuf.dll</HintPath>
     </Reference>
+    <Reference Include="KRPC.IO.Ports">
+      <HintPath>..\..\bazel-krpc\external\csharp_krpc_io_ports\file\KRPC.IO.Ports.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\bazel-bin\server\AssemblyInfo.cs">
@@ -113,6 +116,7 @@
     <Compile Include="Server\Message\StreamClient.cs" />
     <Compile Include="Server\Message\StreamServer.cs" />
     <Compile Include="Server\Message\StreamStream.cs" />
+    <Compile Include="Server\NullServer.cs" />
     <Compile Include="Server\Protocol.cs" />
     <Compile Include="Server\ProtocolBuffers\Encoder.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageExtensions.cs" />
@@ -123,6 +127,13 @@
     <Compile Include="Server\ProtocolBuffers\StreamServer.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamStream.cs" />
     <Compile Include="Server\ProtocolBuffers\Utils.cs" />
+    <Compile Include="Server\SerialIO\ByteClient.cs" />
+    <Compile Include="Server\SerialIO\ByteServer.cs" />
+    <Compile Include="Server\SerialIO\ByteStream.cs" />
+    <Compile Include="Server\SerialIO\RPCClient.cs" />
+    <Compile Include="Server\SerialIO\RPCServer.cs" />
+    <Compile Include="Server\SerialIO\RPCStream.cs" />
+    <Compile Include="Server\SerialIO\StreamServer.cs" />
     <Compile Include="Server\Server.cs" />
     <Compile Include="Server\ServerEventArgs.cs" />
     <Compile Include="Server\ServerException.cs" />

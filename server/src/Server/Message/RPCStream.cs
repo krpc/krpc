@@ -29,7 +29,8 @@ namespace KRPC.Server.Message
         /// When <paramref name="request"/> is left unset, a non-zero number of bytes read can be returned.
         /// This allows non-message bytes to be consumed, for example for control traffic not
         /// related to the RPC server. Implementors should throw a MalformedRequestException if malformed
-        /// data is received.
+        /// data is received. Implementors should throw a ClientDisconnectedException if they would
+        /// like the client to be disconnected.
         /// </summary>
         protected abstract int Read (ref Request request, byte[] data, int offset, int length);
 

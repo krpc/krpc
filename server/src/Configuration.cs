@@ -87,6 +87,33 @@ namespace KRPC
                         rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer);
                         streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
                     }
+                } else {
+                    uint baudRate = 0;
+                    ushort dataBits = 0;
+                    KRPC.IO.Ports.Parity parity;
+                    KRPC.IO.Ports.StopBits stopBits;
+                    uint.TryParse(Settings.GetValueOrDefault("baud_rate", "9600"), out baudRate);
+                    ushort.TryParse(Settings.GetValueOrDefault("data_bits", "8"), out dataBits);
+                    // TODO: add helper method for Enum.TryParse (only available in .NET 4)
+                    try {
+                        parity = (KRPC.IO.Ports.Parity)Enum.Parse (
+                            typeof(KRPC.IO.Ports.Parity),
+                            Settings.GetValueOrDefault("parity", "None"));
+                    } catch (ArgumentException) {
+                        parity = KRPC.IO.Ports.Parity.None;
+                    }
+                    try {
+                        stopBits = (KRPC.IO.Ports.StopBits)Enum.Parse (
+                            typeof(KRPC.IO.Ports.StopBits),
+                            Settings.GetValueOrDefault("stop_bits", "One"));
+                    } catch (ArgumentException) {
+                        stopBits = KRPC.IO.Ports.StopBits.None;
+                    }
+                    var serialServer = new KRPC.Server.SerialIO.ByteServer(
+                        Settings.GetValueOrDefault("port", string.Empty),
+                        baudRate, dataBits, parity, stopBits);
+                    rpcServer = new KRPC.Server.SerialIO.RPCServer(serialServer);
+                    streamServer = new KRPC.Server.SerialIO.StreamServer();
                 }
                 return new KRPC.Server.Server (Id, serverProtocol, Name, rpcServer, streamServer);
             }

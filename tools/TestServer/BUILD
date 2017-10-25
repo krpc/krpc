@@ -21,7 +21,8 @@ deps = [
     '//tools/build/mono-4.5:System.Core',
     '//tools/build/mono-4.5:System.Runtime',
     '//tools/build/mono-4.5:System.IO',
-    '//tools/build/mono-4.5:System.Xml'
+    '//tools/build/mono-4.5:System.Xml',
+    '//tools/build/ksp:KRPC.IO.Ports'
 ]
 
 exe_srcs = srcs + ['src/Program.cs']

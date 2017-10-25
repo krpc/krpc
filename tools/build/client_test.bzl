@@ -23,16 +23,42 @@ def _impl(ctx):
         sub_commands.append('ln -f -s "`pwd`/%s" "`pwd`/%s"' % (f.short_path, server_runfiles_dir + '/' + f.short_path))
 
     stdout = 'server-executable.runfiles/krpc/stdout'
+    if server_type != 'serialio':
+        server_args = '--type=%s' % server_type
+        get_server_settings = [
+            'RPC_PORT=`awk \'/rpc_port = /{print $NF}\' %s`' % stdout,
+            'STREAM_PORT=`awk \'/stream_port = /{print $NF}\' %s`' % stdout,
+            'echo "Server started, rpc port = $RPC_PORT, stream port = $STREAM_PORT"'
+        ]
+        test_env = 'RPC_PORT=$RPC_PORT STREAM_PORT=$STREAM_PORT'
+    else:
+        socat_stdout = 'server-executable.runfiles/krpc/socat-stdout'
+        server_port = 'server-executable.runfiles/krpc/server-port'
+        client_port = 'server-executable.runfiles/krpc/client-port'
+        sub_commands.extend([
+            '(cd server-executable.runfiles/krpc; socat -d -d PTY,raw,echo=0,link=server-port PTY,raw,echo=0,link=client-port >socat-stdout 2>&1) &',
+            'SOCAT_PID=$!',
+            'while ! grep "starting data transfer loop" %s >/dev/null 2>&1; do sleep 0.1 ; done' % socat_stdout,
+            'echo "Virtual ports established using socat"',
+            'SERVER_PORT=`pwd`/server-executable.runfiles/krpc/server-port',
+            'CLIENT_PORT=`pwd`/server-executable.runfiles/krpc/client-port',
+            'echo "Server port = $SERVER_PORT"',
+            'echo "Client port = $CLIENT_PORT"',
+        ])
+        server_args = '--type=serialio --port="$SERVER_PORT"'
+        get_server_settings = [
+            'echo "Server started, port = $SERVER_PORT"'
+        ]
+        test_env = 'PORT=$CLIENT_PORT'
+
     sub_commands.extend([
-        'pkill TestServer.exe',
-        '(cd server-executable.runfiles/krpc; %s --type=%s >stdout) &' % (ctx.executable.server_executable.short_path, server_type),
-        'while ! grep "Server started successfully" %s >/dev/null 2>&1; do sleep 0.1 ; done' % stdout,
-        'RPC_PORT=`awk \'/rpc_port = /{print $NF}\' %s`' % stdout,
-        'STREAM_PORT=`awk \'/stream_port = /{print $NF}\' %s`' % stdout,
-        'echo "Server started, rpc port = $RPC_PORT, stream port = $STREAM_PORT"',
-        '(cd test-executable.runfiles/krpc/%s.runfiles/krpc; RPC_PORT=$RPC_PORT STREAM_PORT=$STREAM_PORT ../../%s)' % (ctx.executable.test_executable.short_path, ctx.executable.test_executable.basename),
+        '(cd server-executable.runfiles/krpc; %s %s >stdout) &' % (ctx.executable.server_executable.short_path, server_args),
+        'SERVER_PID=$!',
+        'while ! grep "Server started successfully" %s >/dev/null 2>&1; do sleep 0.1 ; done' % stdout
+    ] + get_server_settings + [
+        '(cd test-executable.runfiles/krpc/%s.runfiles/krpc; %s ../../%s)' % (ctx.executable.test_executable.short_path, test_env, ctx.executable.test_executable.basename),
         'RESULT=$?',
-        'pkill TestServer.exe',
+        'kill $SERVER_PID',
         'exit $RESULT'
     ])
     ctx.file_action(
