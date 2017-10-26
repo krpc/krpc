@@ -16,7 +16,7 @@ class test_client: public server_test {
 TEST_F(test_client, test_version) {
   krpc_schema_Status status = krpc_schema_Status_init_default;
   ASSERT_EQ(KRPC_OK, krpc_KRPC_GetStatus(conn, &status));
-  ASSERT_STREQ("0.4.0", status.version);
+  ASSERT_THAT(status.version, testing::MatchesRegex("[0-9]+\\.[0-9]+\\.[0-9]+"));
 }
 
 TEST_F(test_client, test_optional_return_value) {
