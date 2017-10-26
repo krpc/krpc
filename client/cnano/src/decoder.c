@@ -11,7 +11,9 @@
 #include <krpc/krpc.pb.h>
 #include <krpc/memory.h>
 #include <krpc/types.h>
+#ifdef __AVR__
 #include <krpc/utils.h>
+#endif
 
 // Callback to decode a return value from a procedure result
 static bool krpc_return_value_decoder(

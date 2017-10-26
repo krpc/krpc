@@ -10,7 +10,9 @@
 #include <krpc/error.h>
 #include <krpc/krpc.pb.h>
 #include <krpc/types.h>
+#ifdef __AVR__
 #include <krpc/utils.h>
+#endif
 
 bool krpc_encode_callback_cstring(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
