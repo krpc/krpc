@@ -13,6 +13,7 @@ class CppDomain(Domain):
     name = 'cpp'
     prettyname = 'C++'
     sphinxname = 'cpp'
+    highlight = 'cpp'
     codeext = 'cpp'
 
     _keywords = set([

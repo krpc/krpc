@@ -77,6 +77,11 @@ reference frame:
       .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.cpp
          :language: cpp
 
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.c
+         :language: c
+
    .. tab:: Java
 
       .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.java
@@ -201,6 +206,22 @@ kRPC provides the following reference frames:
       * :cpp:func:`DockingPort::reference_frame`
       * :cpp:func:`Thruster::thrust_reference_frame`
 
+   .. tab:: C
+
+      * :c:func:`krpc_SpaceCenter_Vessel_ReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Vessel_OrbitalReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Vessel_SurfaceReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Vessel_SurfaceVelocityReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_CelestialBody_ReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_CelestialBody_NonRotatingReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_CelestialBody_OrbitalReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Node_ReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Node_OrbitalReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Part_ReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Part_CenterOfMassReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_DockingPort_ReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Thruster_ThrustReferenceFrame`
+
    .. tab:: Java
 
       * :java:meth:`Vessel.getReferenceFrame`
@@ -304,6 +325,13 @@ velocities between the different reference frames:
       * :cpp:func:`SpaceCenter::transform_rotation`
       * :cpp:func:`SpaceCenter::transform_velocity`
 
+   .. tab:: C
+
+      * :c:func:`krpc_SpaceCenter_TransformPosition`
+      * :c:func:`krpc_SpaceCenter_TransformDirection`
+      * :c:func:`krpc_SpaceCenter_TransformRotation`
+      * :c:func:`krpc_SpaceCenter_TransformVelocity`
+
    .. tab:: Java
 
       * :java:meth:`SpaceCenter.transformPosition`
@@ -349,6 +377,11 @@ is orbiting:
       .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.cpp
          :language: cpp
 
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.c
+         :language: c
+
    .. tab:: Java
 
       .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.java
@@ -389,6 +422,11 @@ the navball:
 
       .. literalinclude:: /scripts/tutorials/reference-frames/NavballDirections.cpp
          :language: cpp
+
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballDirections.c
+         :language: c
 
    .. tab:: Java
 
@@ -442,6 +480,11 @@ directions, as seen on the navball when it is in 'orbit' mode. It uses
       .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.cpp
          :language: cpp
 
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.c
+         :language: c
+
    .. tab:: Java
 
       .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.java
@@ -480,6 +523,11 @@ velocity relative to the surface:
 
       .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.cpp
          :language: cpp
+
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.c
+         :language: c
 
    .. tab:: Java
 
@@ -531,6 +579,11 @@ rotates with the body.
       .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.cpp
          :language: cpp
 
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.c
+         :language: c
+
    .. tab:: Java
 
       .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.java
@@ -576,6 +629,11 @@ the body.
       .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.cpp
          :language: cpp
 
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.c
+         :language: c
+
    .. tab:: Java
 
       .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.java
@@ -608,6 +666,11 @@ and the direction that the vessel is moving in (relative to the surface):
 
       .. literalinclude:: /scripts/tutorials/reference-frames/AngleOfAttack.cpp
          :language: cpp
+
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/AngleOfAttack.c
+         :language: c
 
    .. tab:: Java
 
@@ -648,6 +711,11 @@ at a given altitude, which could be used as the target for a landing auto pilot.
 
       .. literalinclude:: /scripts/tutorials/reference-frames/LandingSite.cpp
          :language: cpp
+
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/LandingSite.c
+         :language: c
 
    .. tab:: Java
 

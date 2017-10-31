@@ -18,6 +18,11 @@ once per second.
       .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.cpp
          :language: cpp
 
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.c
+         :language: c
+
    .. tab:: Java
 
       .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.java

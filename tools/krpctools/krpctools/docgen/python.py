@@ -12,6 +12,7 @@ class PythonDomain(Domain):
     name = 'python'
     prettyname = 'Python'
     sphinxname = 'py'
+    highlight = 'py'
     codeext = 'py'
 
     value_map = {

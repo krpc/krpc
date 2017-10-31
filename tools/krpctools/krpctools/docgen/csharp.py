@@ -12,6 +12,7 @@ class CsharpDomain(Domain):
     name = 'csharp'
     prettyname = 'C#'
     sphinxname = 'csharp'
+    highlight = 'csharp'
     codeext = 'cs'
 
     type_map = {

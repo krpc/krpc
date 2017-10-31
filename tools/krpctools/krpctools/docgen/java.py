@@ -14,6 +14,7 @@ class JavaDomain(Domain):
     name = 'java'
     prettyname = 'Java'
     sphinxname = 'java'
+    highlight = 'java'
     codeext = 'java'
 
     _keywords = set([

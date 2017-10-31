@@ -9,8 +9,9 @@ from krpc.types import Types
 from krpc.utils import snake_case
 from ..utils import lower_camel_case, indent, single_line
 from .utils import lookup_cref
-from .csharp import CsharpDomain
+from .cnano import CnanoDomain
 from .cpp import CppDomain
+from .csharp import CsharpDomain
 from .java import JavaDomain
 from .lua import LuaDomain
 from .python import PythonDomain
@@ -29,7 +30,8 @@ def main():
         '-v', '--version', action='version',
         version='%s version %s' % (prog, __version__))
     parser.add_argument(
-        'language', choices=('csharp', 'cpp', 'java', 'lua', 'python'),
+        'language', choices=(
+            'cnano', 'cpp', 'csharp', 'java', 'lua', 'python'),
         help='Language to generate')
     parser.add_argument(
         'source', action='store',
@@ -57,10 +59,12 @@ def main():
     macros = resource_filename(__name__, '%s.tmpl' % args.language) \
         .decode('utf-8')
 
-    if args.language == 'csharp':
-        domain = CsharpDomain(macros)
+    if args.language == 'cnano':
+        domain = CnanoDomain(macros)
     elif args.language == 'cpp':
         domain = CppDomain(macros)
+    elif args.language == 'csharp':
+        domain = CsharpDomain(macros)
     elif args.language == 'java':
         domain = JavaDomain(macros)
     elif args.language == 'lua':
