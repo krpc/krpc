@@ -258,9 +258,9 @@ Client API Reference
    instances to invoke remote procedure calls. Instances of this class can be obtained by calling
    :func:`krpc::connect`.
 
-   .. function:: void close()
+   .. function:: ~Client()
 
-      Closes the connection to the server.
+      Destructs the client object and closes the connection to the server.
 
    .. function:: void freeze_streams()
 
