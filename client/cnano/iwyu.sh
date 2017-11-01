@@ -1,11 +1,12 @@
 #!/bin/bash
 
-IWYU="include-what-you-use -Xiwyu --no_comments -Iinclude -I../../bazel-genfiles/client/cnano/include -I../../bazel-krpc/external/c_nanopb"
+root=$( cd $(dirname $0) ; pwd -P )
+cd $root
 
-${IWYU} src/krpc.c
-${IWYU} src/communication.c
-${IWYU} src/decoder.c
-${IWYU} src/encoder.c
-${IWYU} src/error.c
-${IWYU} src/memory.c
-${IWYU} src/utils.c
+iwyu="include-what-you-use -Xiwyu --no_comments"
+includes="-Iinclude -I../../bazel-genfiles/client/cnano/include -I../../bazel-krpc/external/c_nanopb"
+
+for path in src/*.c; do
+  ${iwyu} ${includes} ${path}
+  ${iwyu} -D__AVR__ ${includes} ${path}
+done
