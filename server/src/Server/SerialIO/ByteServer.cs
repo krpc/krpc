@@ -124,8 +124,11 @@ namespace KRPC.Server.SerialIO
                     pendingClient = new ByteClient (port);
                 }
             } catch (IOException) {
+                Stop ();
             } catch (TimeoutException) {
+                Stop ();
             } catch (ObjectDisposedException) {
+                Stop ();
             }
 
             if (client == null && pendingClient != null) {
