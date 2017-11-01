@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using KRPC.IO.Ports;
 using KRPC.Utils;
 
@@ -115,11 +116,16 @@ namespace KRPC.Server.SerialIO
 
         public void Update ()
         {
-            if (client == null && pendingClient == null && port.IsOpen && port.BytesToRead > 0) {
-                Logger.WriteLine (
-                    "SerialIO.Server[" + Address + "]: client requesting connection",
-                    Logger.Severity.Debug);
-                pendingClient = new ByteClient (port);
+            try {
+                if (client == null && pendingClient == null && port.IsOpen && port.BytesToRead > 0) {
+                    Logger.WriteLine (
+                        "SerialIO.Server[" + Address + "]: client requesting connection",
+                        Logger.Severity.Debug);
+                    pendingClient = new ByteClient (port);
+                }
+            } catch (IOException) {
+            } catch (TimeoutException) {
+            } catch (ObjectDisposedException) {
             }
 
             if (client == null && pendingClient != null) {

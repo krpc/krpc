@@ -22,9 +22,17 @@ namespace KRPC.Server.SerialIO
 
         public bool DataAvailable {
             get {
-                return
-                    (readBuffer != null) ||
-                    (stream != null && stream.IsOpen && stream.BytesToRead > 0);
+                try {
+                    return
+                        (readBuffer != null) ||
+                        (stream != null && stream.IsOpen && stream.BytesToRead > 0);
+                } catch (IOException) {
+                    return false;
+                } catch (TimeoutException) {
+                    return false;
+                } catch (ObjectDisposedException) {
+                    return false;
+                }
             }
         }
 
@@ -57,6 +65,8 @@ namespace KRPC.Server.SerialIO
                 return size;
             } catch (IOException e) {
                 throw new ServerException (e.Message);
+            } catch (TimeoutException e) {
+                throw new ServerException (e.Message);
             } catch (ObjectDisposedException) {
                 throw new ClientDisconnectedException ();
             }
@@ -73,6 +83,8 @@ namespace KRPC.Server.SerialIO
                 BytesRead += (ulong)size;
                 return size;
             } catch (IOException e) {
+                throw new ServerException (e.Message);
+            } catch (TimeoutException e) {
                 throw new ServerException (e.Message);
             } catch (ObjectDisposedException) {
                 throw new ClientDisconnectedException ();
@@ -98,6 +110,8 @@ namespace KRPC.Server.SerialIO
                 stream.Write (buffer, offset, size);
                 BytesWritten += (ulong)size;
             } catch (IOException e) {
+                throw new ServerException (e.Message);
+            } catch (TimeoutException e) {
                 throw new ServerException (e.Message);
             } catch (ObjectDisposedException) {
                 throw new ClientDisconnectedException ();
