@@ -23,11 +23,18 @@ namespace KRPC.Server.SerialIO
             try {
                 Logger.WriteLine (
                     "SerialIO: client requesting connection on " + address, Logger.Severity.Debug);
-                var request = ProtocolBuffers.Utils.ReadMessage<MultiplexedRequest>(client.Stream);
+                bool timeout;
+                var request = ProtocolBuffers.Utils.ReadMessage<MultiplexedRequest> (client, out timeout);
+                if (timeout) {
+                    WriteErrorConnectionResponse (client, Status.Timeout, "Connection request message not received after waiting 3 seconds");
+                    args.Request.Deny ();
+                    Logger.WriteLine ("SerialIO: client connection timed out on " + address, Logger.Severity.Error);
+                    return null;
+                }
                 if (request == null)
                     return null;
                 var connectionRequest = request.ConnectionRequest;
-                if (request == null) {
+                if (connectionRequest == null) {
                     WriteErrorConnectionResponse (
                         client, Status.MalformedMessage, "Expected a ConnectionRequest message");
                 }

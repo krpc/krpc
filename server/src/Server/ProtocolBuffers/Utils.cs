@@ -1,27 +1,64 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Google.Protobuf;
-using KRPC.Server.Message;
 using KRPC.Utils;
 using ConnectionResponse = KRPC.Schema.KRPC.ConnectionResponse;
 using Status = KRPC.Schema.KRPC.ConnectionResponse.Types.Status;
 
 namespace KRPC.Server.ProtocolBuffers
 {
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     static class Utils
     {
-        /// <summary>
-        /// Read a message from the client.
+
+        static IDictionary<IClient<byte, byte>, Stopwatch> readMessageTimers = new Dictionary<IClient<byte, byte>, Stopwatch> ();
+        static IDictionary<IClient<byte, byte>, DynamicBuffer> readMessageBuffers = new Dictionary<IClient<byte, byte>, DynamicBuffer> ();
+
+          /// <summary>
+        /// Read a message from the client. If a partial message is received, its data is saved
+        /// and will be resumed on the next call. Timeout is set to true if the receipt times out.
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
-        public static T ReadMessage<T> (IStream<byte,byte> stream) where T : class, IMessage<T>, new()
+        public static T ReadMessage<T> (IClient<byte, byte> client, out bool timeout) where T : class, IMessage<T>, new()
+        {
+            timeout = false;
+            DynamicBuffer buffer = null;
+            readMessageBuffers.TryGetValue(client, out buffer);
+            var request = ReadMessage<T> (client.Stream, ref buffer);
+            if (request == null) {
+                if (readMessageTimers.ContainsKey (client) && readMessageTimers [client].ElapsedSeconds () > 3) {
+                    readMessageTimers.Remove (client);
+                    readMessageBuffers.Remove (client);
+                    timeout = true;
+                    return null;
+                }
+                readMessageBuffers [client] = buffer;
+                if (!readMessageTimers.ContainsKey (client)) {
+                    var timer = new Stopwatch ();
+                    timer.Start ();
+                    readMessageTimers [client] = timer;
+                }
+                return null;
+            }
+            readMessageBuffers.Remove (client);
+            return request;
+        }
+
+        /// <summary>
+        /// Read a message from the client. If a partial message is received, its data is saved
+        /// in the DynamicBuffer so that this method can be called to try again later.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
+        public static T ReadMessage<T> (IStream<byte,byte> stream, ref DynamicBuffer data) where T : class, IMessage<T>, new()
         {
             if (!stream.DataAvailable)
                 return null;
 
+            if (data == null)
+                data = new DynamicBuffer ();
             byte[] buffer = new byte[4096]; //TODO: sensible default???
-            var data = new DynamicBuffer ();
 
             int read = stream.Read (buffer, 0, buffer.Length);
             if (read == 0)
@@ -30,7 +67,12 @@ namespace KRPC.Server.ProtocolBuffers
 
             var codedStream = new CodedInputStream (data.GetBuffer (), 0, data.Length);
             // Get the protobuf message size
-            var size = (int)codedStream.ReadUInt32 ();
+            int size;
+            try {
+                size = (int)codedStream.ReadUInt32 ();
+            } catch (InvalidProtocolBufferException) {
+                return null;
+            }
             int totalSize = (int)codedStream.Position + size;
             // Check if enough data is available, if not then delay the decoding
             if (data.Length < totalSize)

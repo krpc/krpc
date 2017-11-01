@@ -1,9 +1,7 @@
-using System;
 using Google.Protobuf;
 using KRPC.Service.Messages;
 using KRPC.Utils;
 using ConnectionRequest = KRPC.Schema.KRPC.ConnectionRequest;
-using ConnectionResponse = KRPC.Schema.KRPC.ConnectionResponse;
 using Status = KRPC.Schema.KRPC.ConnectionResponse.Types.Status;
 using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 
@@ -24,7 +22,14 @@ namespace KRPC.Server.ProtocolBuffers
             var address = client.Address;
             try {
                 Logger.WriteLine ("ProtocolBuffers: client requesting connection (" + address + ")", Logger.Severity.Debug);
-                var request = Utils.ReadMessage<ConnectionRequest> (client.Stream);
+                bool timeout;
+                var request = Utils.ReadMessage<ConnectionRequest> (client, out timeout);
+                if (timeout) {
+                    WriteErrorConnectionResponse (client, Status.Timeout, "Connection request message not received after waiting 3 seconds");
+                    args.Request.Deny ();
+                    Logger.WriteLine ("ProtocolBuffers: client connection timed out (" + address + ")", Logger.Severity.Error);
+                    return null;
+                }
                 if (request == null)
                     return null;
                 if (request.Type != Type.Rpc) {
