@@ -13,6 +13,7 @@ class LuaDomain(Domain):
     name = 'lua'
     prettyname = 'Lua'
     sphinxname = 'lua'
+    highlight = 'lua'
     codeext = 'lua'
 
     value_map = {

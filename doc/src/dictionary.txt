@@ -1,7 +1,9 @@
+Arduino
 Autotools
 Bazel
 Bitwise
 CMake
+Cnano
 Ferram
 GameData
 IDisposable
@@ -75,6 +77,8 @@ mits
 namespace
 namespaces
 namespacing
+nano
+nanopb
 navball
 normangle
 nozzel

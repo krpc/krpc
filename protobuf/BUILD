@@ -3,6 +3,7 @@ load('/tools/build/protobuf/python', 'protobuf_py')
 load('/tools/build/protobuf/cpp', 'protobuf_cpp')
 load('/tools/build/protobuf/lua', 'protobuf_lua')
 load('/tools/build/protobuf/java', 'protobuf_java')
+load('/tools/build/protobuf/nanopb', 'protobuf_nanopb')
 
 package(default_visibility = ['//visibility:public'])
 
@@ -46,4 +47,13 @@ protobuf_java(
     name = 'java_gen',
     out = 'KRPC.java.tmp',
     src = 'krpc.proto'
+)
+
+protobuf_nanopb(
+    name = 'cnano',
+    header = 'krpc.pb.h',
+    source = 'krpc.pb.c',
+    include = 'krpc.pb.h',
+    src = 'krpc.proto',
+    options = '//client/cnano:src/krpc.options'
 )

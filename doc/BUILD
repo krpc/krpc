@@ -21,6 +21,7 @@ stage_files(
         'src/**/*.rst',
         'src/images/**/*.png',
         'src/crafts/*.craft',
+        'src/scripts/**/*.c',
         'src/scripts/**/*.cs',
         'src/scripts/**/*.cpp',
         'src/scripts/**/*.java',
@@ -33,6 +34,7 @@ stage_files(
         'src/_templates/layout.html',
         'src/dictionary.txt',
         ':images',
+        ':cnano-api',
         ':csharp-api',
         ':cpp-api',
         ':java-api',
@@ -126,6 +128,14 @@ defs = [
 ]
 
 docgen_multiple(
+    name = 'cnano-api',
+    outdir = 'src/cnano',
+    language = 'cnano',
+    srcs = glob(['api/**/*.tmpl']),
+    defs = defs
+)
+
+docgen_multiple(
     name = 'csharp-api',
     outdir = 'src/csharp',
     language = 'csharp',
@@ -195,12 +205,20 @@ sphinx_linkcheck_test(
 test_suite(
     name = 'check-documented',
     tests = [
+        ':check-documented-cnano',
         ':check-documented-csharp',
         ':check-documented-cpp',
         ':check-documented-java',
         ':check-documented-lua',
         ':check-documented-python'
     ]
+)
+
+check_documented_test(
+    name = 'check-documented-cnano',
+    srcs = [':cnano-api'],
+    members = 'order.txt',
+    size = 'small'
 )
 
 check_documented_test(
@@ -241,6 +259,7 @@ check_documented_test(
 filegroup(
     name = 'compile-scripts',
     srcs = [
+        ':compile-scripts-cnano',
         ':compile-scripts-csharp',
         ':compile-scripts-cpp',
         ':compile-scripts-java'
@@ -253,6 +272,12 @@ filegroup(
         ':compile-scripts-csharp-exes',
         ':compile-scripts-csharp-libs'
     ]
+)
+
+cc_binary_multiple(
+    name = 'compile-scripts-cnano',
+    srcs = glob(['src/scripts/**/*.c']),
+    deps = ['//client/cnano:krpc']
 )
 
 csharp_binary_multiple(

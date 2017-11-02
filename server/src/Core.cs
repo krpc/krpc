@@ -682,6 +682,10 @@ namespace KRPC
                                 Logger.Severity.Debug);
                         rpcContinuations.Add (new RequestContinuation (client, request));
                     }
+                } catch (ClientDisconnectedException) {
+                    Logger.WriteLine ("Client " + client.Address + " disconnected");
+                    client.Stream.Close ();
+                    continue;
                 } catch (ServerException e) {
                     Logger.WriteLine ("Error receiving request from client " + client.Address + ": " + e.Message, Logger.Severity.Error);
                     client.Stream.Close ();

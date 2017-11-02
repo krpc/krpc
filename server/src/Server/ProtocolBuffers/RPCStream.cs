@@ -24,19 +24,12 @@ namespace KRPC.Server.ProtocolBuffers
         protected override int Read (ref Request request, byte[] data, int offset, int length)
         {
             try {
-                var codedStream = new CodedInputStream (data, offset, length);
-                // Get the protobuf message size
-                var size = (int)codedStream.ReadUInt32 ();
-                var totalSize = (int)codedStream.Position + size;
-                // Check if enough data is available, if not then delay the decoding
-                if (length < totalSize)
-                    return 0;
-                // Decode the request
-                // FIXME: If multiple requests are received, decoding a single request fails unless the
-                // coded stream is recreated to be precisely the message size. Why is this?
-                codedStream = new CodedInputStream (data, offset + (int)codedStream.Position, size);
-                request = Schema.KRPC.Request.Parser.ParseFrom (codedStream).ToMessage ();
-                return totalSize;
+                Schema.KRPC.Request message = null;
+                var read = Utils.ReadMessage<Schema.KRPC.Request>(
+                    ref message, Schema.KRPC.Request.Parser, data, offset, length);
+                if (message != null)
+                    request = message.ToMessage ();
+                return read;
             } catch (InvalidProtocolBufferException e) {
                 throw new MalformedRequestException (e.Message);
             }

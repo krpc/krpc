@@ -17,8 +17,10 @@ namespace TestServer
     {
         static void Help (OptionSet options)
         {
-            Console.WriteLine ("usage: TestServer.exe [-h] [-v] [--bind=address] [--rpc_port=VALUE] [--stream_port=VALUE]");
-            Console.WriteLine ("                      [--type=TYPE] [--debug] [--quiet] [--server-debug]");
+            Console.WriteLine ("usage: TestServer.exe [-h] [-v] [--type=TYPE]");
+            Console.WriteLine ("                      [--bind=ADDRESS] [--rpc_port=VALUE] [--stream_port=VALUE]");
+            Console.WriteLine ("                      [--port=PATH]");
+            Console.WriteLine ("                      [--debug] [--quiet] [--server-debug]");
             Console.WriteLine ();
             Console.WriteLine ("A kRPC test server for the client library unit tests");
             Console.WriteLine ();
@@ -35,10 +37,15 @@ namespace TestServer
             Logger.Enabled = true;
             Logger.Level = Logger.Severity.Info;
             bool serverDebug = false;
+            string type = "protobuf";
             string bind = "127.0.0.1";
             ushort rpcPort = 0;
             ushort streamPort = 0;
-            string type = "protobuf";
+            string portName = string.Empty;
+            uint baudRate = 9600;
+            ushort dataBits = 8;
+            KRPC.IO.Ports.Parity parity = KRPC.IO.Ports.Parity.None;
+            KRPC.IO.Ports.StopBits stopBits = KRPC.IO.Ports.StopBits.One;
 
             var options = new OptionSet { {
                     "h|help", "show this help message and exit",
@@ -47,17 +54,32 @@ namespace TestServer
                     "v|version", "show program's version number and exit",
                     v => showVersion = v != null
                 }, {
-                    "bind=", "Address to bind the server to. If unspecified, the loopback address is used (127.0.0.1).",
+                    "type=", "Type of server to run. Either protobuf, websockets, websockets-echo, or serialio.",
+                    v => type = v
+                }, {
+                    "bind=", "For TCP based protocols, the address to bind the server to. If unspecified, the loopback address is used (127.0.0.1).",
                     v => bind = v
                 }, {
-                    "rpc-port=", "Port number to use for the RPC server. If unspecified, use an ephemeral port.",
+                    "rpc-port=", "For TCP based protocols, the port number to use for the RPC server. If unspecified, use an ephemeral port.",
                     (ushort v) => rpcPort = v
                 }, {
-                    "stream-port=", "Port number to use for the stream server. If unspecified, use an ephemeral port.",
+                    "stream-port=", "For TCP based protocols, the port number to use for the stream server. If unspecified, use an ephemeral port.",
                     (ushort v) => streamPort = v
                 }, {
-                    "type=", "Type of server to run. Either protobuf, websockets or websockets-echo.",
-                    v => type = v
+                    "port=", "For SerialIO based protocols, the port name to communicate on.",
+                    v => portName = v
+                }, {
+                    "baud-rate=", "For SerialIO based protocols, the baud rate.",
+                    (uint v) => baudRate = v
+                }, {
+                    "data-bits=", "For SerialIO based protocols, the number of data bits.",
+                    (ushort v) => dataBits = v
+                }, {
+                    "parity=", "For SerialIO based protocols, the parity.",
+                    (KRPC.IO.Ports.Parity v) => parity = v
+                }, {
+                    "stop-bits=", "For SerialIO based protocols, the number of stop bits.",
+                    (KRPC.IO.Ports.StopBits v) => stopBits = v
                 }, {
                     "debug", "Set log level to 'debug', defaults to 'info'",
                     v => {
@@ -105,8 +127,16 @@ namespace TestServer
                 return;
             }
 
-            var rpcTcpServer = new TCPServer (bindAddress, rpcPort);
-            var streamTcpServer = new TCPServer (bindAddress, streamPort);
+            TCPServer rpcTcpServer = null;
+            TCPServer streamTcpServer = null;
+            KRPC.Server.SerialIO.ByteServer serialServer = null;
+            if (type == "protobuf" || type == "websockets" || type == "websockets-echo") {
+                rpcTcpServer = new TCPServer (bindAddress, rpcPort);
+                streamTcpServer = new TCPServer (bindAddress, streamPort);
+            }
+            if (type == "serialio")
+                serialServer = new KRPC.Server.SerialIO.ByteServer (
+                    portName, baudRate, dataBits, parity, stopBits);
 
             Server server;
             if (type == "protobuf") {
@@ -121,6 +151,10 @@ namespace TestServer
                 var rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer, true);
                 var streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
                 server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", rpcServer, streamServer);
+            } else if (type == "serialio") {
+                var rpcServer = new KRPC.Server.SerialIO.RPCServer (serialServer);
+                var streamServer = new KRPC.Server.SerialIO.StreamServer ();
+                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverSerialIO, "TestServer", rpcServer, streamServer);
             } else {
                 Logger.WriteLine ("Server type '" + type + "' not supported", Logger.Severity.Error);
                 return;
@@ -130,9 +164,15 @@ namespace TestServer
             Logger.WriteLine ("Starting server...");
             core.StartAll ();
             Logger.WriteLine ("type = " + type);
-            Logger.WriteLine ("bind = " + bindAddress);
-            Logger.WriteLine ("rpc_port = " + rpcTcpServer.ActualPort);
-            Logger.WriteLine ("stream_port = " + streamTcpServer.ActualPort);
+            if (rpcTcpServer != null) {
+                Logger.WriteLine ("bind = " + bindAddress);
+                Logger.WriteLine ("rpc_port = " + rpcTcpServer.ActualPort);
+                if (streamTcpServer != null)
+                    Logger.WriteLine ("stream_port = " + streamTcpServer.ActualPort);
+            }
+            if (serialServer != null) {
+                Logger.WriteLine ("port = " + serialServer.Address);
+            }
             Logger.WriteLine ("Server started successfully");
 
             const long targetFPS = 60;

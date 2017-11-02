@@ -23,6 +23,13 @@ API documentation:
       * :ref:`cpp-api-parts-fuel-lines`
       * :ref:`cpp-api-parts-staging`
 
+   .. tab:: C
+
+      * :ref:`cnano-api-parts-trees-of-parts`
+      * :ref:`cnano-api-parts-attachment-modes`
+      * :ref:`cnano-api-parts-fuel-lines`
+      * :ref:`cnano-api-parts-staging`
+
    .. tab:: Java
 
       * :ref:`java-api-parts-trees-of-parts`
@@ -62,6 +69,11 @@ your Kerbals by deploying all the parachutes:
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.cpp
          :language: cpp
 
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.c
+         :language: c
+
    .. tab:: Java
 
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.java
@@ -94,6 +106,11 @@ control the vessel from it:
 
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.cpp
          :language: cpp
+
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.c
+         :language: c
 
    .. tab:: Java
 
@@ -128,6 +145,11 @@ https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.cpp
          :language: cpp
+
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.c
+         :language: c
 
    .. tab:: Java
 

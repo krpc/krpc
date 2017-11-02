@@ -1,9 +1,7 @@
-using System;
 using Google.Protobuf;
 using KRPC.Service.Messages;
 using KRPC.Utils;
 using ConnectionRequest = KRPC.Schema.KRPC.ConnectionRequest;
-using ConnectionResponse = KRPC.Schema.KRPC.ConnectionResponse;
 using Status = KRPC.Schema.KRPC.ConnectionResponse.Types.Status;
 using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 
@@ -20,23 +18,30 @@ namespace KRPC.Server.ProtocolBuffers
         /// </summary>
         protected override IClient<Request,Response> CreateClient (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
         {
-            var stream = args.Client.Stream;
-            var address = args.Client.Address;
+            var client = args.Client;
+            var address = client.Address;
             try {
                 Logger.WriteLine ("ProtocolBuffers: client requesting connection (" + address + ")", Logger.Severity.Debug);
-                var request = Utils.ReadMessage<ConnectionRequest> (stream);
+                bool timeout;
+                var request = Utils.ReadMessage<ConnectionRequest> (client, out timeout);
+                if (timeout) {
+                    WriteErrorConnectionResponse (client, Status.Timeout, "Connection request message not received after waiting 3 seconds");
+                    args.Request.Deny ();
+                    Logger.WriteLine ("ProtocolBuffers: client connection timed out (" + address + ")", Logger.Severity.Error);
+                    return null;
+                }
                 if (request == null)
                     return null;
                 if (request.Type != Type.Rpc) {
                     var name = request.Type.ToString ().ToLower ();
-                    WriteErrorConnectionResponse (Status.WrongType,
+                    WriteErrorConnectionResponse (client, Status.WrongType,
                         "Connection request was for the " + name + " server, but this is the rpc server. " +
-                        "Did you connect to the wrong port number?", stream);
+                        "Did you connect to the wrong port number?");
                 } else {
                     return new RPCClient (request.ClientName, args.Client);
                 }
             } catch (InvalidProtocolBufferException e) {
-                WriteErrorConnectionResponse (Status.MalformedMessage, e.Message, stream);
+                WriteErrorConnectionResponse (client, Status.MalformedMessage, e.Message);
             }
             args.Request.Deny ();
             Logger.WriteLine ("ProtocolBuffers: client connection denied (" + address + ")", Logger.Severity.Error);
@@ -49,25 +54,18 @@ namespace KRPC.Server.ProtocolBuffers
         public override void HandleClientRequestingConnection (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
         {
             base.HandleClientRequestingConnection (sender, args);
+            var client = args.Client;
             if (args.Request.ShouldAllow) {
-                var client = args.Client;
-                var response = new ConnectionResponse ();
-                response.Status = Status.Ok;
-                response.ClientIdentifier = ByteString.CopyFrom (client.Guid.ToByteArray ());
-                Utils.WriteMessage (client.Stream, response);
+                Utils.WriteConnectionResponse (client);
                 Logger.WriteLine ("ProtocolBuffers: client connection accepted (" + args.Client.Address + ")");
-            } else if (args.Request.ShouldDeny)
-                args.Client.Stream.Close ();
+            } else if (args.Request.ShouldDeny) {
+                client.Stream.Close ();
+            }
         }
 
-        static void WriteErrorConnectionResponse (Status status, string message, IStream<byte,byte> stream)
+        static void WriteErrorConnectionResponse (IClient<byte,byte> client, Status status, string message)
         {
-            if (status == Status.Ok)
-                throw new ArgumentException ("Error response must have a non-OK status code");
-            var response = new ConnectionResponse ();
-            response.Status = status;
-            response.Message = message;
-            Utils.WriteMessage (stream, response);
+            Utils.WriteConnectionResponse (client, status, message);
             Logger.WriteLine ("ProtocolBuffers: client connection denied: " + status + " " + message, Logger.Severity.Error);
         }
     }

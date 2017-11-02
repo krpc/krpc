@@ -1,0 +1,157 @@
+{% macro service(x) %}{{ mark_documented(x) }}
+Service {{ x.name }}
+
+{{ gendoc(x.documentation) | indent }}
+
+{% for member in x.members.values() %}
+{% if member.member_type == 'procedure' %}
+{{ procedure(x.name, member) | indent }}
+{% elif member.member_type == 'property' %}
+{{ property(x.name, member) | indent }}
+{% endif %}
+
+{% endfor %}
+{% endmacro %}
+
+{% macro class(x) %}{{ mark_documented(x) }}
+.. type:: krpc_{{ x.service_name }}_{{ x.name }}_t
+
+{{ gendoc(x.documentation) | indent }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+{% for member in x.members.values() %}
+{% if member.member_type == 'class_method' %}
+{{ class_method(x.service_name, x.name, member) | indent }}
+{% elif member.member_type == 'class_static_method' %}
+{{ class_static_method(x.service_name, x.name, member) | indent }}
+{% elif member.member_type == 'class_property' %}
+{{ class_property(x.service_name, x.name, member) | indent }}
+{% endif %}
+
+{% endfor %}
+{% endmacro %}
+
+{% macro procedure(service_name, x) %}{{ mark_documented(x) }}
+.. function:: krpc_error_t krpc_{{ service_name }}_{{ domain.method_name(x.name) }}({{ parameters(x.return_type, x.parameters) }})
+
+{{ gendoc(x.documentation) | indent }}
+
+{{ parameters_description(x.parameters) }}
+{% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
+{% endif %}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+{% if x.appended != '' %}{{ x.appended | indent }}
+{% endif %}
+{% endmacro %}
+
+{% macro property(service_name, x) %}{{ mark_documented(x) }}
+{% if x.getter != None %}
+.. function:: krpc_error_t krpc_{{ service_name }}_{{ domain.method_name(x.name) }}(krpc_connection_t connection, {{ domain.return_type(x.type) }} result)
+{% endif %}
+{% if x.setter != None %}
+.. function:: void krpc_{{ service_name }}_set_{{ x.name }}({{ domain.parameter_type(x.type) }} value)
+{% endif %}
+
+{{ gendoc(x.documentation) | indent }}
+
+{% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
+{% endif %}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+{% if x.appended != '' %}{{ x.appended | indent }}
+{% endif %}
+{% endmacro %}
+
+{% macro class_method(service_name, class_name, x) %}{{ mark_documented(x) }}
+.. function:: krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ domain.method_name(x.name) }}({{ parameters(x.return_type, x.parameters[1:]) }})
+
+{{ gendoc(x.documentation) | indent }}
+
+{{ parameters_description(x.parameters[1:]) }}
+{% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
+{% endif %}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+{% if x.appended != '' %}{{ x.appended | indent }}
+{% endif %}
+{% endmacro %}
+
+{% macro class_static_method(service_name, class_name, x) %}{{ mark_documented(x) }}
+.. function:: krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ domain.method_name(x.name) }}({{ parameters(x.return_type, x.parameters) }})
+
+{{ gendoc(x.documentation) | indent }}
+
+{{ parameters_description(x.parameters) }}
+{% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
+{% endif %}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+{% if x.appended != '' %}{{ x.appended | indent }}
+{% endif %}
+{% endmacro %}
+
+{% macro class_property(service_name, class_name, x) %}{{ mark_documented(x) }}
+{{ property(service_name+'_'+class_name, x) }}
+{% endmacro %}
+
+{% macro enumeration(x) %}{{ mark_documented(x) }}
+.. type:: krpc_{{ x.service_name }}_{{ x.name }}_t
+
+{{ gendoc(x.documentation) | indent }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
+{% for value in x.values.values() %}{{ mark_documented(value) }}
+   .. macro:: KRPC_{{ x.service_name | upper }}_{{ x.name | upper }}_{{ value.name | upper }}
+
+{{ gendoc(value.documentation) | indent(width=6) }}
+
+{% if hasdoc(value.documentation, './remarks') %}{{ remarks(value.documentation) | indent(width=6) }}{% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% macro exception(x) %}{{ mark_documented(x) }}
+Exception class {{ x.name }}
+
+{{ gendoc(x.documentation) | indent }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
+{% endmacro %}
+
+{% macro parameters(return_type, parameters) %}
+krpc_connection_t connection{% if domain.return_type(return_type) != 'void' %}, {{ domain.return_type(return_type) }} result{% endif %}{% for p in parameters %}, {{ parameter(p) }}{% endfor %}
+{% endmacro %}
+
+{% macro parameter(x) %}
+{{ domain.parameter_type(x.type) }} {{ x.name }}{% endmacro %}
+
+{% macro parameters_description(x) %}
+{% if x | length > 0 %}
+   :Parameters:
+
+   {% for p in x %}
+   {% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %}    * **{{ p.name }}** -- {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}
+
+   {% endfor %}
+{% endif %}
+{% endmacro %}
+
+{% macro returns(x) %}
+:returns: {{ gendoc(x, './returns') | singleline }}
+{% endmacro %}
+
+{% macro remarks(x) %}
+.. note::
+
+{{ gendoc(x, './remarks') | indent }}
+{% endmacro %}

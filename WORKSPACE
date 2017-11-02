@@ -28,6 +28,46 @@ new_http_archive(
     sha256 = '7d8a42ae38fec3ca09833ea16f1d83a049f0580929c3b057042e006105ad864b'
 )
 
+new_http_archive(
+    name = 'protoc_nanopb',
+    build_file_content = """
+filegroup(
+    name = 'plugin',
+    srcs = ['generator'],
+    visibility = ['//visibility:public']
+)
+""",
+    url = 'https://jpa.kapsi.fi/nanopb/download/nanopb-0.3.8-linux-x86.tar.gz',
+    sha256 = 'f4604648448987b3a469e0a1a217ec8a9defa77f5d59a34db2d5ce61c3a4e5d5',
+    strip_prefix = 'nanopb-0.3.8-linux-x86'
+)
+
+new_http_archive(
+    name = 'c_nanopb',
+    build_file_content = """
+exports_files([
+    'LICENSE.txt', 'pb.h', 'pb_common.h', 'pb_common.c', 'pb_encode.h', 'pb_encode.c', 'pb_decode.h', 'pb_decode.c'
+])
+
+cc_library(
+    name = 'nanopb',
+    srcs = ['pb.h', 'pb_common.h', 'pb_common.c', 'pb_encode.h', 'pb_encode.c', 'pb_decode.h', 'pb_decode.c'],
+    hdrs = ['pb.h', 'pb_common.h', 'pb_encode.h', 'pb_decode.h'],
+    includes = ['./'],
+    visibility = ['//visibility:public']
+)
+
+filegroup(
+    name = 'srcs',
+    srcs = glob(['*.h', '*.c']),
+    visibility = ['//visibility:public']
+)
+""",
+    url = 'https://jpa.kapsi.fi/nanopb/download/nanopb-0.3.8.tar.gz',
+    sha256 = '2072d93c8b59cf3c89beb725589d0824766421745f5b81bde2fd784db0fd6aec',
+    strip_prefix = 'nanopb'
+)
+
 http_file(
     name = 'csharp_nuget',
     url = 'https://dist.nuget.org/win-x86-commandline/v3.4.4/NuGet.exe',
@@ -46,6 +86,12 @@ http_file(
     name = 'csharp_protobuf_net35',
     url = 'https://s3.amazonaws.com/krpc/lib/protobuf-3.4.0-net35/Google.Protobuf.dll',
     sha256 = '496bf64ad9887c539cf7cc070d7e42edd4c8a8534286179431971ffa62ec3e4c'
+)
+
+http_file(
+    name = 'csharp_krpc_io_ports',
+    url = 'https://github.com/krpc/krpc-io-ports/releases/download/v1.0.0/KRPC.IO.Ports.dll',
+    sha256 = '558b0c1649fbc44b518d9de8957fe30e7c9c42d73c62d63d165f6f136fab3ec5'
 )
 
 new_http_archive(
@@ -465,6 +511,12 @@ http_file(
     name = 'python_requests',
     url = 'https://pypi.python.org/packages/b0/e1/eab4fc3752e3d240468a8c0b284607899d2fbfb236a56b7377a329aa8d09/requests-2.18.4.tar.gz',
     sha256 = '9c443e7324ba5b85070c4a818ade28bfabedf16ea10206da1132edaa6dda237e'
+)
+
+http_file(
+    name = 'python_serialio',
+    url = 'https://pypi.python.org/packages/cc/74/11b04703ec416717b247d789103277269d567db575d2fd88f25d9767fe3d/pyserial-3.4.tar.gz',
+    sha256 = 'e17c4687fddd6d70a6604ac0ad25e33324cec71b5137267dd5c45e103c4b288a'
 )
 
 http_file(

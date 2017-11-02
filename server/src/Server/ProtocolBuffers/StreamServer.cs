@@ -19,9 +19,16 @@ namespace KRPC.Server.ProtocolBuffers
         /// </summary>
         protected override IClient<NoMessage,StreamUpdate> CreateClient (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
         {
-            var stream = args.Client.Stream;
+            var client = args.Client;
+            var stream = client.Stream;
             try {
-                var request = Utils.ReadMessage<ConnectionRequest> (stream);
+                bool timeout;
+                var request = Utils.ReadMessage<ConnectionRequest> (client, out timeout);
+                if (timeout) {
+                    WriteErrorConnectionResponse (Status.Timeout, "Connection request message not received after waiting 3 seconds", stream);
+                    args.Request.Deny ();
+                    return null;
+                }
                 if (request == null)
                     return null;
                 if (request.Type != Type.Stream) {

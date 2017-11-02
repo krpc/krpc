@@ -42,6 +42,9 @@
     <Reference Include="Google.Protobuf">
       <HintPath>..\..\..\bazel-krpc\external\csharp_protobuf_net35\file\Google.Protobuf.dll</HintPath>
     </Reference>
+    <Reference Include="KRPC.IO.Ports">
+      <HintPath>..\..\..\bazel-krpc\external\csharp_krpc_io_ports\file\KRPC.IO.Ports.dll</HintPath>
+    </Reference>
     <Reference Include="NDesk.Options">
       <HintPath>..\..\..\bazel-krpc\external\csharp_options\lib\NDesk.Options.dll</HintPath>
     </Reference>

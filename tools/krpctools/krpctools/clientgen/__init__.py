@@ -8,13 +8,15 @@ from pkg_resources import Requirement, resource_filename, resource_string
 from .csharp import CsharpGenerator
 from .cpp import CppGenerator
 from .java import JavaGenerator
+from .cnano import CNanoGenerator
 from ..version import __version__
 from ..servicedefs import servicedefs
 
 GENERATORS = {
     'csharp': CsharpGenerator,
     'cpp': CppGenerator,
-    'java': JavaGenerator
+    'java': JavaGenerator,
+    'cnano': CNanoGenerator
 }
 
 

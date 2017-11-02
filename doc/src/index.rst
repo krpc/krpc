@@ -33,6 +33,7 @@ to the server using the :doc:`Service API <extending>`.
 
    getting-started
    tutorials
+   cnano
    csharp
    cpp
    java

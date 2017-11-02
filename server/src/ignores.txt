@@ -31,6 +31,7 @@ N: KRPC.Server
 N: KRPC.Server.HTTP
 N: KRPC.Server.Message
 N: KRPC.Server.ProtocolBuffers
+N: KRPC.Server.SerialIO
 N: KRPC.Server.TCP
 N: KRPC.Server.WebSockets
 N: KRPC.Service

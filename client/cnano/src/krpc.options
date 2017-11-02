@@ -1,0 +1,8 @@
+# These assume you don't want to batch RPC calls
+krpc.schema.Request.calls          max_count:1
+krpc.schema.Response.results       max_count:1
+krpc.schema.Response.error         type:FT_CALLBACK
+krpc.schema.ProcedureResult.error  type:FT_CALLBACK
+
+# Version string should never exceed this length
+krpc.schema.Status.version  max_size:16

@@ -218,3 +218,15 @@ message Status {
   float stream_rpc_rate = 18;
   float time_per_stream_update = 19;
 }
+
+// Multiplexed request messages
+
+message MultiplexedRequest {
+  ConnectionRequest connection_request = 1;
+  Request request = 2;
+}
+
+message MultiplexedResponse {
+  Response response = 1;
+  StreamUpdate stream_update = 2;
+}
