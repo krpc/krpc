@@ -1,4 +1,5 @@
 v0.4.1
+ * Add SerialIO server
  * Fix connection timeout when client connects with auto-accept connections disabled (#425)
  * Add option to pause the server when the game is paused
  * New connections time out after 3 seconds if a connection request message is not received (#428)
