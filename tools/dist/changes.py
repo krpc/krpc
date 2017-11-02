@@ -26,6 +26,7 @@ def main():
         ('UI service', get_changes('service/UI/CHANGES.txt')),
         ('C# client', get_changes('client/csharp/CHANGES.txt')),
         ('C++ client', get_changes('client/cpp/CHANGES.txt')),
+        ('C-nano client', get_changes('client/cnano/CHANGES.txt')),
         ('Java client', get_changes('client/java/CHANGES.txt')),
         ('Lua client', get_changes('client/lua/CHANGES.txt')),
         ('Python client', get_changes('client/python/CHANGES.txt')),
