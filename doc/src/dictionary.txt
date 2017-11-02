@@ -24,6 +24,7 @@ apoapsis
 arg
 atm
 autotune
+badass
 biome
 biomes
 boolean
@@ -120,6 +121,7 @@ uint
 undocked
 undocking
 undocks
+unowned
 unpaused
 unserialize
 varint

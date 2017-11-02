@@ -176,5 +176,8 @@
     <Compile Include="Services\WarpMode.cs" />
     <Compile Include="Services\Waypoint.cs" />
     <Compile Include="Services\WaypointManager.cs" />
+    <Compile Include="Services\CrewMember.cs" />
+    <Compile Include="Services\CrewMemberType.cs" />
+    <Compile Include="ExtensionMethods\KerbalTypeExtensions.cs" />
   </ItemGroup>
 </Project>

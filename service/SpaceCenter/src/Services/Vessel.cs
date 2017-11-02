@@ -186,6 +186,30 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The number of crew that can occupy the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public int CrewCapacity {
+            get { return InternalVessel.GetCrewCapacity (); }
+        }
+
+        /// <summary>
+        /// The number of crew that are occupying the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public int CrewCount {
+            get { return InternalVessel.GetCrewCount (); }
+        }
+
+        /// <summary>
+        /// The crew in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<CrewMember> Crew {
+            get { return InternalVessel.GetVesselCrew ().Select(x => new CrewMember (x)).ToList (); }
+        }
+
+        /// <summary>
         /// A <see cref="Resources"/> object, that can used to get information
         /// about resources stored in the vessel.
         /// </summary>
