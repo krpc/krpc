@@ -19,6 +19,9 @@ license_text = """This license (LGPL v3) applies to all parts of kRPC except for
   - GameData/kRPC/Google.Protobuf.dll is a binary from Google's protobuf project.
     See LICENSE.Google.Protobuf
 
+  - GameData/kRPC/KRPC.IO.Ports.dll is a modified binary from the Mono project.
+    See LICENSE.KRPC.IO.Ports
+
   - schema/* is under the MIT license. See schema/LICENSE
 
 Copyright 2015-2016 djungelorm
@@ -99,6 +102,8 @@ pkg_zip(
         ':blank_settings',
         '//tools/build/ksp:Google.Protobuf',
         '//tools/build/protobuf:LICENSE',
+        '//tools/build/ksp:KRPC.IO.Ports',
+        '@csharp_krpc_io_ports_license//file',
         # Services
         '//service/SpaceCenter',
         '//service/Drawing',
@@ -132,6 +137,7 @@ pkg_zip(
         'server/src/icons': 'GameData/kRPC/icons',
         'tools/build/ksp/': 'GameData/kRPC/',
         'tools/build/protobuf/LICENSE': 'LICENSE.Google.Protobuf',
+        '../csharp_krpc_io_ports_license/file/LICENSE': 'LICENSE.KRPC.IO.Ports',
         # Services
         'service/SpaceCenter/': 'GameData/kRPC/',
         'service/SpaceCenter/CHANGES.txt': 'GameData/kRPC/CHANGES.SpaceCenter.txt',
