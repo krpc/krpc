@@ -1,3 +1,6 @@
+v0.4.2
+ * Include missing KRPC.IO.Ports DLL
+
 v0.4.1
  * Add SerialIO server
  * Fix connection timeout when client connects with auto-accept connections disabled (#425)
