@@ -44,4 +44,12 @@ else
   echo "Skipping pushing changes (enable by passing 'push' as argument)"
 fi
 
+if [ "$1" == "release" ]; then
+  echo 'Pushing release tag...'
+  git tag -a v$VERSION -m v$VERSION
+  git push --tags
+else
+  echo "Skipping pushing release tag (enable by passing 'release' as argument)"
+fi
+
 echo 'Done'
