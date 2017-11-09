@@ -75,8 +75,8 @@ argument to the compiler.
      an error occurs in a remote procedure call. This should be set to a pointer to a function that
      takes a single parameter of type ``krpc_error_t``.
 
-   * ``KRPC_NO_PRINT_ERROR`` -- when errors occur, they are printed to standard error, unless this
-     is defined.
+   * ``KRPC_PRINT_ERRORS_TO_STDERR`` -- enables printing of a descriptive error message to stderr
+     when an error occurs
    * ``PB_NO_ERRMSG`` -- disables error messages in the nanopb library, which kRPC uses to
      communicate with the server.
 

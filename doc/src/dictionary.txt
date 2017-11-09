@@ -108,6 +108,7 @@ rsvg
 runtime
 serializable
 shader
+stderr
 str
 streamPort
 symlink

@@ -24,10 +24,10 @@ const char * krpc_get_error(krpc_error_t error);
 
 /* Print an error message when it occurs */
 #if !defined(KRPC_PRINT_ERROR)
-#ifdef KRPC_NO_PRINT_ERROR
-#define KRPC_PRINT_ERROR(...)
-#else
+#ifdef KRPC_PRINT_ERRORS_TO_STDERR
 #define KRPC_PRINT_ERROR(...) fprintf(stderr, __VA_ARGS__)
+#else
+#define KRPC_PRINT_ERROR(...)
 #endif
 #endif
 
