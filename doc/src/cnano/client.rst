@@ -78,7 +78,7 @@ argument to the compiler.
    * ``KRPC_PRINT_ERRORS_TO_STDERR`` -- enables printing of a descriptive error message to stderr
      when an error occurs
    * ``PB_NO_ERRMSG`` -- disables error messages in the nanopb library, which kRPC uses to
-     communicate with the server.
+     communicate with the server. Enabled by default on in the Arduino version of the library.
 
  * Communication
 

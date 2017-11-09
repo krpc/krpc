@@ -29,6 +29,8 @@ for file in *.c; do
   mv "$file" "$(basename "$file" .c).cpp"
 done
 rm -rf krpc-cnano-$VERSION krpc-cnano-$VERSION.zip
+# Enable PB_NO_ERRMSG by default
+echo -e "#ifndef PB_NO_ERRMSG\n#define PB_NO_ERRMSG\n#endif\n\n$(cat pb.h)" > pb.h
 cd $arduino
 
 # Update library.properties
