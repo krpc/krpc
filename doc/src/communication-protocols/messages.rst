@@ -46,6 +46,8 @@ format:
    message ProcedureCall {
      string service = 1;
      string procedure = 2;
+     uint32 serviceId = 4;
+     uint32 procedureId = 5;
      repeated Argument arguments = 3;
    }
 
@@ -63,6 +65,10 @@ The fields of a procedure call are:
 
 * ``procedure`` - The name of the remote procedure to invoke.
 
+* ``service_id`` - The integer identifier of the service in which the remote procedure is defined.
+
+* ``procedure_id`` - The integer identifier of the remote procedure to invoke.
+
 * ``arguments`` - A sequence of ``Argument`` messages containing the values of the procedure's
   arguments. The fields of an argument message are:
 
@@ -70,6 +76,13 @@ The fields of a procedure call are:
     signature.
 
   * ``value`` - The value of the argument, encoded in Protocol Buffer format.
+
+The service containing the procedure to call is specified by setting either ``service`` or
+``service_id``. The procedure to call is specified by setting either ``procedure`` or
+``procedure_id``. Use of ``service`` and ``procedure`` (i.e. descriptive strings) should be
+preferred as these will not change between server versions. For clients where code size or
+communication overhead must be kept to an absolute minimum, ``service_id`` and ``procedure_id``
+can be used. However, note that the identifiers may change between server versions.
 
 The ``Argument`` messages have a position field to allow values for default arguments to be
 omitted. See :ref:`communication-protocol-protobuf-encoding` for details on how to encode the

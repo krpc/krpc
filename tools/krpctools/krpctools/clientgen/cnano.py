@@ -196,14 +196,14 @@ class CNanoGenerator(Generator):
         for name, info in context['properties'].items():
             if info['getter']:
                 properties[name] = {
-                    'remote_name': info['getter']['remote_name'],
+                    'remote_id': info['getter']['remote_id'],
                     'parameters': [],
                     'return_type': return_type(info['type']),
                     'documentation': info['documentation']
                 }
             if info['setter']:
                 properties['set_'+name] = {
-                    'remote_name': info['setter']['remote_name'],
+                    'remote_id': info['setter']['remote_id'],
                     'parameters': self.generate_context_parameters(
                         info['setter']['procedure']),
                     'return_type': {
@@ -216,14 +216,14 @@ class CNanoGenerator(Generator):
             for name, info in class_info['properties'].items():
                 if info['getter']:
                     class_properties[name] = {
-                        'remote_name': info['getter']['remote_name'],
+                        'remote_id': info['getter']['remote_id'],
                         'parameters': [],
                         'return_type': return_type(info['type']),
                         'documentation': info['documentation']
                     }
                 if info['setter']:
                     class_properties['set_'+name] = {
-                        'remote_name': info['setter']['remote_name'],
+                        'remote_id': info['setter']['remote_id'],
                         'parameters': [self.generate_context_parameters(
                             info['setter']['procedure'])[1]],
                         'return_type': {

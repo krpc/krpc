@@ -24,6 +24,11 @@ namespace KRPC.Service.Scanner
         public string FullyQualifiedName { get; private set; }
 
         /// <summary>
+        /// Id of the procedure. Uniquely identifies the procedure within the service.
+        /// </summary>
+        public uint Id { get; private set; }
+
+        /// <summary>
         /// Documentation for the procedure
         /// </summary>
         public string Documentation { get; private set; }
@@ -59,10 +64,11 @@ namespace KRPC.Service.Scanner
         public GameScene GameScene { get; private set; }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
-        internal ProcedureSignature (string serviceName, string procedureName, string documentation, IProcedureHandler handler, GameScene gameScene)
+        internal ProcedureSignature (string serviceName, string procedureName, uint id, string documentation, IProcedureHandler handler, GameScene gameScene)
         {
             Name = procedureName;
             FullyQualifiedName = serviceName + "." + Name;
+            Id = id;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Handler = handler;
             GameScene = gameScene;
@@ -110,6 +116,7 @@ namespace KRPC.Service.Scanner
 
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
+            info.AddValue ("id", Id);
             info.AddValue ("parameters", Parameters);
             if (ReturnType != null)
             {

@@ -28,7 +28,7 @@ typedef struct {
 } krpc_call_t;
 
 krpc_error_t krpc_call(
-  krpc_call_t * call, const char * service, const char * procedure,
+  krpc_call_t * call, uint32_t serviceId, uint32_t procedureId,
   size_t numArguments, krpc_argument_t * arguments);
 
 krpc_error_t krpc_add_argument(

@@ -38,6 +38,8 @@ message Request {
 message ProcedureCall {
   string service = 1;
   string procedure = 2;
+  uint32 service_id = 4;
+  uint32 procedure_id = 5;
   repeated Argument arguments = 3;
 }
 

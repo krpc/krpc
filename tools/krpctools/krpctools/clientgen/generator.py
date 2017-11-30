@@ -99,6 +99,7 @@ class Generator(object):
                 procedures[self.parse_name(name)] = {
                     'procedure': procedure,
                     'remote_name': name,
+                    'remote_id': procedure['id'],
                     'parameters': self.generate_context_parameters(procedure),
                     'return_type': self.parse_return_type(
                         self.get_return_type(procedure)),
@@ -120,7 +121,8 @@ class Generator(object):
                     }
                 properties[property_name]['getter'] = {
                     'procedure': procedure,
-                    'remote_name': name
+                    'remote_name': name,
+                    'remote_id': procedure['id']
                 }
 
             elif Attributes.is_a_property_setter(name):
@@ -137,7 +139,8 @@ class Generator(object):
                     }
                 properties[property_name]['setter'] = {
                     'procedure': procedure,
-                    'remote_name': name
+                    'remote_name': name,
+                    'remote_id': procedure['id']
                 }
 
             elif Attributes.is_a_class_method(name):
@@ -148,6 +151,7 @@ class Generator(object):
                 classes[class_name]['methods'][method_name] = {
                     'procedure': procedure,
                     'remote_name': name,
+                    'remote_id': procedure['id'],
                     'parameters': params[1:],
                     'return_type': self.parse_return_type(
                         self.get_return_type(procedure)),
@@ -162,6 +166,7 @@ class Generator(object):
                 classes[class_name]['static_methods'][method_name] = {
                     'procedure': procedure,
                     'remote_name': name,
+                    'remote_id': procedure['id'],
                     'parameters': self.generate_context_parameters(procedure),
                     'return_type': self.parse_return_type(
                         self.get_return_type(procedure)),
@@ -184,7 +189,8 @@ class Generator(object):
                     }
                 classes[class_name]['properties'][property_name]['getter'] = {
                     'procedure': procedure,
-                    'remote_name': name
+                    'remote_name': name,
+                    'remote_id': procedure['id']
                 }
 
             elif Attributes.is_a_class_property_setter(name):
@@ -202,7 +208,8 @@ class Generator(object):
                     }
                 classes[class_name]['properties'][property_name]['setter'] = {
                     'procedure': procedure,
-                    'remote_name': name
+                    'remote_name': name,
+                    'remote_id': procedure['id']
                 }
 
         def sort(objs):
@@ -214,6 +221,7 @@ class Generator(object):
 
         return {
             'service_name': self._service,
+            'service_id': self._defs['id'],
             'procedures': sort(procedures),
             'properties': sort(properties),
             'classes': sort(classes),

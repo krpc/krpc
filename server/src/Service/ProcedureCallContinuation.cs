@@ -20,7 +20,7 @@ namespace KRPC.Service
         {
             call = procedureCall;
             try {
-                procedure = Services.Instance.GetProcedureSignature (call.Service, call.Procedure);
+                procedure = Services.Instance.GetProcedureSignature (call);
             } catch (System.Exception e) {
                 exception = e;
             }
