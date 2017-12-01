@@ -282,7 +282,7 @@ TEST_F(test_stream, test_callback) {
   std::atomic_flag error;
   error.test_and_set();
   std::atomic_flag stop;
-  error.test_and_set();
+  stop.test_and_set();
 
   auto callback = [&test_callback_value, &error, &stop] (int x) {
     if (x > 5) {
@@ -302,6 +302,41 @@ TEST_F(test_stream, test_callback) {
   }
   x.remove();
   ASSERT_TRUE(error.test_and_set());
+  ASSERT_EQ(test_callback_value, 5);
+}
+
+TEST_F(test_stream, test_rate) {
+  std::atomic<int> test_rate_value(0);
+  std::atomic_flag error;
+  error.test_and_set();
+  std::atomic_flag stop;
+  stop.test_and_set();
+
+  auto callback = [&test_rate_value, &error, &stop] (int x) {
+    if (x > 5) {
+      stop.clear();
+    } else if (test_rate_value+1 != x) {
+      error.clear();
+      stop.clear();
+    } else {
+      test_rate_value++;
+    }
+  };
+
+  auto x = test_service.counter_stream("test_stream.test_rate");
+  x.add_callback(callback);
+  x.set_rate(5);
+  x.start();
+  auto start = std::chrono::system_clock::now();
+  while (stop.test_and_set()) {
+  }
+  auto end = std::chrono::system_clock::now();
+  std::chrono::duration<double> elapsed = end - start;
+  ASSERT_GT(elapsed.count(), 1.0);
+  ASSERT_LT(elapsed.count(), 1.2);
+  x.remove();
+  ASSERT_TRUE(error.test_and_set());
+  ASSERT_EQ(test_rate_value, 5);
 }
 
 TEST_F(test_stream, test_stream_freeze) {

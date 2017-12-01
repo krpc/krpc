@@ -42,7 +42,7 @@ namespace KRPC.Service
             return procedure.GetHashCode ();
         }
 
-        public override void Update() {
+        public override void UpdateInternal() {
             try  {
                 Result = continuation.Run ();
             } catch (YieldException) {

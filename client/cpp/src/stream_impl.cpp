@@ -13,7 +13,8 @@ StreamImpl::StreamImpl(Client * client, google::protobuf::uint64 id,
   update_lock(update_lock),
   started(false),
   updated(false),
-  condition_lock(condition_mutex, std::defer_lock) {
+  condition_lock(condition_mutex, std::defer_lock),
+  _rate(0) {
 }
 
 Client * StreamImpl::get_client() const {
@@ -29,6 +30,15 @@ void StreamImpl::start() {
     services::KRPC(client).start_stream(id);
     started = true;
   }
+}
+
+float StreamImpl::rate() const {
+  return _rate;
+}
+
+void StreamImpl::set_rate(float value) {
+  _rate = value;
+  services::KRPC(client).set_stream_rate(id, value);
 }
 
 bool StreamImpl::has_started() const {

@@ -415,6 +415,40 @@ public class StreamTest {
     }
     stream.remove();
     assertFalse(testCallbackError);
+    assertEquals(testCallbackValue, 5);
+  }
+
+  private volatile boolean testRateError = false;
+  private volatile boolean testRateStop = false;
+  private volatile int testRateValue = 0;
+
+  @Test
+  public void testRate()
+      throws RPCException, StreamException {
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "counter", "StreamTest.testRate", 1);
+    stream.addCallback(
+        (Integer value) -> {
+          if (value > 5) {
+            testRateStop = true;
+          } else if (testRateValue + 1 != value) {
+            testRateError = true;
+            testRateStop = true;
+          } else {
+            testRateValue++;
+          }
+      });
+    stream.setRate(5);
+    stream.start();
+    long startTime = System.nanoTime();
+    while (!testRateStop) {
+    }
+    long elapsed = System.nanoTime() - startTime;
+    assertTrue(elapsed > 1000000000);
+    assertTrue(elapsed < 1500000000);
+    stream.remove();
+    assertFalse(testRateError);
+    assertEquals(testRateValue, 5);
   }
 
   @Test

@@ -80,7 +80,7 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Start the stream
+        /// Start the stream.
         /// </summary>
         public void Start(bool wait = true) {
             if (stream.Started)
@@ -94,6 +94,14 @@ namespace KRPC.Client
                     Monitor.Wait (condition);
                 }
             }
+        }
+
+        /// <summary>
+        /// The rate of the stream, in Hertz.
+        /// </summary>
+        public float Rate {
+            get { return stream.Rate; }
+            set { stream.Rate = value; }
         }
 
         /// <summary>

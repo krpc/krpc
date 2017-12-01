@@ -225,6 +225,10 @@ Client API Reference
       :meth:`Get` may raise an ``InvalidOperationException`` if the stream does not yet contain a
       value.
 
+   .. property:: float Rate { get; set; }
+
+      The update rate of the stream in Hertz. When set to zero, the rate is unlimited.
+
    .. method:: ReturnType Get()
 
       Returns the most recent value for the stream. If executing the remote procedure for the stream

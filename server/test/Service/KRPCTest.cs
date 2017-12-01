@@ -25,7 +25,7 @@ namespace KRPC.Test.Service
             Assert.AreEqual (4, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (38, service.Procedures.Count);
+            Assert.AreEqual (39, service.Procedures.Count);
             Assert.AreEqual (1, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
 
@@ -58,6 +58,12 @@ namespace KRPC.Test.Service
                     MessageAssert.HasParameters(proc, 1);
                     MessageAssert.HasParameter(proc, 0, typeof(ulong), "id");
                     MessageAssert.HasDocumentation(proc);
+                } else if (proc.Name == "SetStreamRate") {
+                    MessageAssert.HasNoReturnType(proc);
+                    MessageAssert.HasParameters(proc, 2);
+                    MessageAssert.HasParameter(proc, 0, typeof(ulong), "id");
+                    MessageAssert.HasParameter(proc, 1, typeof(float), "rate");
+                    MessageAssert.HasDocumentation(proc);
                 } else if (proc.Name == "RemoveStream") {
                     MessageAssert.HasNoReturnType (proc);
                     MessageAssert.HasParameters (proc, 1);
@@ -76,7 +82,7 @@ namespace KRPC.Test.Service
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (9, foundProcedures);
+            Assert.AreEqual (10, foundProcedures);
 
             bool foundEnumeration = false;
             foreach (var enumeration in service.Enumerations) {

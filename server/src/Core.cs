@@ -601,6 +601,9 @@ namespace KRPC
             return streamId;
         }
 
+        /// <summary>
+        /// Start a stream.
+        /// </summary>
         internal void StartStream(IClient rpcClient, ulong streamId)
         {
             var id = rpcClient.Guid;
@@ -613,7 +616,21 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Remove a stream from the server, for a given client
+        /// Set the update rate for a stream.
+        /// </summary>
+        internal void SetStreamRate(IClient rpcClient, ulong streamId, float rate)
+        {
+            var id = rpcClient.Guid;
+            if (!streamClients.ContainsKey(id))
+                throw new InvalidOperationException("No stream client is connected for this RPC client");
+            var streamClient = streamClients[id];
+
+            streams [streamClient] [streamId].Rate = rate;
+            Logger.WriteLine("Set rate for stream for client " + streamClient.Address, Logger.Severity.Debug);
+        }
+
+        /// <summary>
+        /// Remove a stream from the server, for a given client.
         /// </summary>
         internal void RemoveStream (IClient rpcClient, ulong streamId)
         {
@@ -628,7 +645,7 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Remove a stream from the server, for all clients
+        /// Remove a stream from the server, for all clients.
         /// </summary>
         internal void RemoveStream (ulong streamId)
         {

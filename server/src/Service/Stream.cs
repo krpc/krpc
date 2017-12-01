@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Messages;
 using KRPC.Utils;
@@ -17,6 +18,10 @@ namespace KRPC.Service
             get { return StreamResult.Id; }
             set { StreamResult.Id = value; }
         }
+
+        float rate;
+        float delay;
+        Stopwatch timer;
 
         /// <summary>
         /// Whether the stream has been started.
@@ -49,6 +54,9 @@ namespace KRPC.Service
         {
             StreamResult = new StreamResult ();
             Started = false;
+            rate = 0;
+            delay = 0;
+            timer = new Stopwatch();
         }
 
         /// <summary>
@@ -57,12 +65,39 @@ namespace KRPC.Service
         public void Start()
         {
             Started = true;
+            timer.Start();
+        }
+
+        /// <summary>
+        /// The update rate of the stream in Hz.
+        /// </summary>
+        public float Rate {
+          get { return rate; }
+          set {
+              rate = value;
+              delay = rate == 0 ? 0 : 1000.0f / rate;
+          }
         }
 
         /// <summary>
         /// Called when the stream value should be updated.
+        /// Rate limiting is applied by this method.
         /// </summary>
-        public virtual void Update() {
+        public void Update() {
+            if (rate != 0 && timer.ElapsedMilliseconds < delay) {
+                return;
+            }
+            UpdateInternal();
+            if (rate != 0) {
+                timer.Reset();
+                timer.Start();
+            }
+        }
+
+        /// <summary>
+        /// Implements the actual stream update.
+        /// </summary>
+        public virtual void UpdateInternal() {
         }
 
         /// <summary>

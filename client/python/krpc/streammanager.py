@@ -15,6 +15,7 @@ class StreamImpl(object):
         self._value = None
         self._condition = threading.Condition()
         self._callbacks = []
+        self._rate = 0
 
     @property
     def return_type(self):
@@ -24,6 +25,15 @@ class StreamImpl(object):
         if not self._started:
             self._conn.krpc.start_stream(self._stream_id)
             self._started = True
+
+    @property
+    def rate(self):
+        return self._rate
+
+    @rate.setter
+    def rate(self, value):
+        self._rate = value
+        self._conn.krpc.set_stream_rate(self._stream_id, value)
 
     @property
     def started(self):

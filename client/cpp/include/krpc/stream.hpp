@@ -19,6 +19,10 @@ class Stream {
   Stream(Client* client, google::protobuf::uint64 id);
   /** Start the stream. */
   void start(bool wait = true);
+  /** The rate of the stream, in Hertz. Zero if the rate is unlimited. */
+  float rate();
+  /** Set the rate of the stream, in Hertz. Zero if the rate is unlimited. */
+  void set_rate(float value);
   /** Get the most recent value for this stream. */
   T operator()();
   /** Condition variable that is notified when the stream updates */
@@ -73,6 +77,16 @@ template <typename T> inline void Stream<T>::start(bool wait) {
     if (!acquired)
       impl->get_condition_lock().unlock();
   }
+}
+
+template <typename T> inline float Stream<T>::rate() {
+  check_exists();
+  return impl->rate();
+}
+
+template <typename T> inline void Stream<T>::set_rate(float value) {
+  check_exists();
+  impl->set_rate(value);
 }
 
 template <typename T> inline T Stream<T>::operator()() {

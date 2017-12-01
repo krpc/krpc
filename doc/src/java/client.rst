@@ -241,6 +241,11 @@ Client API Reference
       The ``start`` method starts the stream and returns immediately. Subsequent calls to ``get()``
       may throw a ``StreamException``.
 
+   .. method:: float getRate()
+   .. method:: void setRate(float rate)
+
+      The update rate of the stream in Hertz. When set to zero, the rate is unlimited.
+
    .. method:: T get()
 
       Returns the most recent value for the stream. If executing the remote procedure for the stream

@@ -224,9 +224,17 @@ namespace KRPC.Service.KRPC
         /// </summary>
         [KRPCProcedure]
         public static void StartStream (ulong id)
-        // FIXME: should be a Stream not a ulong
         {
             Core.Instance.StartStream (CallContext.Client, id);
+        }
+
+        /// <summary>
+        /// Set the update rate for a stream in Hz.
+        /// </summary>
+        [KRPCProcedure]
+        public static void SetStreamRate (ulong id, float rate)
+        {
+            Core.Instance.SetStreamRate (CallContext.Client, id, rate);
         }
 
         /// <summary>

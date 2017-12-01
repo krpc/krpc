@@ -34,7 +34,7 @@ namespace KRPC.Service
             return 0;
         }
 
-        public override void Update() {
+        public override void UpdateInternal() {
             if (continuation != null && continuation.Run())
                 Trigger();
             if (shouldRemove)

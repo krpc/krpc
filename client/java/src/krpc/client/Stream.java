@@ -76,6 +76,20 @@ public class Stream<T> implements Comparable<Stream<T>> {
   }
 
   /**
+   * The rate of the stream, in Hertz. Zero if the rate is unlimted.
+   */
+  public float getRate() throws RPCException {
+    return stream.getRate();
+  }
+
+  /**
+   * Set the rate of the stream, in Hertz. Zero if the rate is unlimted.
+   */
+  public void setRate(float rate) throws RPCException {
+    stream.setRate(rate);
+  }
+
+  /**
    * Get the most recent value for the stream.
    */
   @SuppressWarnings("unchecked")

@@ -18,6 +18,7 @@ class StreamImpl {
   private List<Consumer<Object>> callbacks = new ArrayList<Consumer<Object>>();
   private boolean started = false;
   private boolean updated = false;
+  private float rate = 0;
 
   StreamImpl(Connection connection, long id, Type returnType, Object updateLock) {
     this.connection = connection;
@@ -43,6 +44,14 @@ class StreamImpl {
 
   public boolean getStarted() {
     return started;
+  }
+
+  public float getRate() {
+    return rate;
+  }
+
+  public void setRate(float rate) throws RPCException {
+    KRPC.newInstance(connection).setStreamRate(id, rate);
   }
 
   public Object getValue() throws StreamException {
