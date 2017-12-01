@@ -232,6 +232,15 @@ Client API Reference
    .. method:: void start()
    .. method:: void startAndWait()
 
+      Starts the stream. When a stream is created it does not start sending updates to the client
+      until this method is called.
+
+      The ``startAndWait`` method will block until at least one update has been received from the
+      server.
+
+      The ``start`` method starts the stream and returns immediately. Subsequent calls to ``get()``
+      may throw a ``StreamException``.
+
    .. method:: T get()
 
       Returns the most recent value for the stream. If executing the remote procedure for the stream
