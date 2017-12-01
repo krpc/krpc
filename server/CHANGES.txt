@@ -1,3 +1,6 @@
+v0.4.3
+ * Add ability to call an RPC using an integer identifier for the service and procedure, rather than its full service and procedure name (reduces code size and communication overhead for cnano client)
+
 v0.4.2
  * Include missing KRPC.IO.Ports DLL
 

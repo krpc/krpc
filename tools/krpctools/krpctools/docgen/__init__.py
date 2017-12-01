@@ -97,7 +97,11 @@ def main():
             return 0
         return key
 
-    services = {name: Service(name, sort=sort, **info)
+    def parse_service_info(info):
+        del info['id']
+        return info
+
+    services = {name: Service(name, sort=sort, **parse_service_info(info))
                 for name, info in services_info.iteritems()}
 
     if sort_failed:

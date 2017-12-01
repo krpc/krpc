@@ -35,6 +35,7 @@ class Service(Appendable):
         properties = defaultdict(dict)
 
         for pname, info in procedures.iteritems():
+            del info['id']
 
             if Attributes.is_a_procedure(pname):
                 members.append(Procedure(name, pname, **info))
@@ -91,6 +92,9 @@ class Class(Appendable):
         properties = defaultdict(dict)
 
         for pname, pinfo in procedures.iteritems():
+            if 'id' in pinfo:
+                del pinfo['id']
+
             if Attributes.is_a_class_method(pname):
                 members.append(ClassMethod(service_name, name, pname, **pinfo))
 

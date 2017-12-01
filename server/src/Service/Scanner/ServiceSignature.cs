@@ -14,6 +14,11 @@ namespace KRPC.Service.Scanner
         public string Name { get; private set; }
 
         /// <summary>
+        /// The id of the service
+        /// </summary>
+        public uint Id { get; private set; }
+
+        /// <summary>
         /// Documentation for the service
         /// </summary>
         public string Documentation { get; private set; }
@@ -46,11 +51,11 @@ namespace KRPC.Service.Scanner
         /// <summary>
         /// Create a service signature from a C# type annotated with the KRPCService attribute
         /// </summary>
-        /// <param name="type">Type.</param>
-        public ServiceSignature (Type type)
+        public ServiceSignature (Type type, uint id)
         {
             TypeUtils.ValidateKRPCService (type);
             Name = TypeUtils.GetServiceName (type);
+            Id = id;
             Documentation = DocumentationUtils.ResolveCrefs (type.GetDocumentation ());
             Classes = new Dictionary<string, ClassSignature> ();
             Enumerations = new Dictionary<string, EnumerationSignature> ();
@@ -62,16 +67,23 @@ namespace KRPC.Service.Scanner
         /// <summary>
         /// Create a service with the given name.
         /// </summary>
-        public ServiceSignature (string name)
+        public ServiceSignature (string name, uint id)
         {
             TypeUtils.ValidateIdentifier (name);
             Name = name;
+            Id = id;
             Documentation = string.Empty;
             Classes = new Dictionary<string, ClassSignature> ();
             Enumerations = new Dictionary<string, EnumerationSignature> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
             Exceptions = new Dictionary<string, ExceptionSignature> ();
             GameScene = GameScene.All;
+        }
+
+        uint nextProcedureId = 1;
+
+        uint NextProcedureId {
+            get { return nextProcedureId++; }
         }
 
         /// <summary>
@@ -91,7 +103,7 @@ namespace KRPC.Service.Scanner
         {
             TypeUtils.ValidateKRPCProcedure (method);
             AddProcedure (new ProcedureSignature (
-                Name, method.Name, method.GetDocumentation (),
+                Name, method.Name, NextProcedureId, method.GetDocumentation (),
                 new ProcedureHandler (method, TypeUtils.GetNullable (method)), GameScene));
         }
 
@@ -112,7 +124,7 @@ namespace KRPC.Service.Scanner
         void AddPropertyProcedure (MemberInfo property, MethodInfo method)
         {
             var handler = new ProcedureHandler (method, TypeUtils.GetNullable (property));
-            AddProcedure (new ProcedureSignature (Name, method.Name, property.GetDocumentation (), handler, GameScene));
+            AddProcedure (new ProcedureSignature (Name, method.Name, NextProcedureId, property.GetDocumentation (), handler, GameScene));
         }
 
         /// <summary>
@@ -171,12 +183,13 @@ namespace KRPC.Service.Scanner
             if (!Classes.ContainsKey (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
             var name = method.Name;
+            var id = NextProcedureId;
             if (!method.IsStatic) {
                 var handler = new ClassMethodHandler (classType, method, TypeUtils.GetNullable(method));
-                AddProcedure (new ProcedureSignature (Name, cls + '_' + name, method.GetDocumentation (), handler, GameScene));
+                AddProcedure (new ProcedureSignature (Name, cls + '_' + name, id, method.GetDocumentation (), handler, GameScene));
             } else {
                 var handler = new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method));
-                AddProcedure (new ProcedureSignature (Name, cls + "_static_" + name, method.GetDocumentation (), handler, GameScene));
+                AddProcedure (new ProcedureSignature (Name, cls + "_static_" + name, id, method.GetDocumentation (), handler, GameScene));
             }
         }
 
@@ -200,11 +213,12 @@ namespace KRPC.Service.Scanner
         void AddClassPropertyMethod (string cls, Type classType, MemberInfo property, MethodInfo method, bool nullable)
         {
             var handler = new ClassMethodHandler (classType, method, nullable);
-            AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, property.GetDocumentation (), handler, GameScene));
+            AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, NextProcedureId, property.GetDocumentation (), handler, GameScene));
         }
 
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
+            info.AddValue ("id", Id);
             info.AddValue ("documentation", Documentation);
             info.AddValue ("procedures", Procedures);
             info.AddValue ("classes", Classes);

@@ -7,10 +7,10 @@
 #include <krpc/types.h>
 #include <pb_decode.h>
 #include <pb_encode.h>
-{% macro call(service, procedure, parameters) %}
+{% macro call(service_id, procedure_id, parameters) %}
 krpc_call_t _call;
 krpc_argument_t _arguments[{{ parameters | length }}];
-KRPC_CHECK(krpc_call(&_call, "{{ service }}", "{{ procedure }}", {{ parameters | length }}, _arguments));
+KRPC_CHECK(krpc_call(&_call, {{ service_id }}, {{ procedure_id }}, {{ parameters | length }}, _arguments));
 {% for x in parameters %}
 KRPC_CHECK(krpc_add_argument(&_call, {{ loop.index0 }}, &krpc_encode_callback_{{ x.type.name }}, {{ x.type.getptr }}{{ x.name }}));
 {% endfor %}
@@ -405,7 +405,7 @@ inline krpc_error_t krpc_decode_{{ typ.name }}(
 {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
 
 inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ procedure_parameters(procedure) }}) {
-{{ call(service_name, procedure.remote_name, procedure.parameters) | indent(2) }}
+{{ call(service_id, procedure.remote_id, procedure.parameters) | indent(2) }}
 {{ return(procedure.return_type) | indent(2) }}
 }
 {% endfor %}
@@ -413,14 +413,14 @@ inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ procedure_pa
 {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
 
 inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ method_parameters(service_name, class_name, method) }}) {
-{{ call(service_name, method.remote_name, [{'type': {'ccvtype': 'krpc_'+service_name+'_'+class_name+'_t', 'name': 'uint64', 'getptr': '&'}, 'name': 'instance'}] + method.parameters) | indent(2) }}
+{{ call(service_id, method.remote_id, [{'type': {'ccvtype': 'krpc_'+service_name+'_'+class_name+'_t', 'name': 'uint64', 'getptr': '&'}, 'name': 'instance'}] + method.parameters) | indent(2) }}
 {{ return(method.return_type) | indent(2) }}
 }
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
 inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ static_method_parameters(method) }}) {
-{{ call(service_name, method.remote_name, method.parameters) | indent(2) }}
+{{ call(service_id, method.remote_id, method.parameters) | indent(2) }}
 {{ return(method.return_type) | indent(2) }}
 }
 {% endfor %}

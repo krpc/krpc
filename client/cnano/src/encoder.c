@@ -39,12 +39,10 @@ static bool krpc_encode_callback_arguments(
 }
 
 krpc_error_t krpc_call(
-  krpc_call_t * call, const char * service, const char * procedure,
+  krpc_call_t * call, uint32_t serviceId, uint32_t procedureId,
   size_t numArguments, krpc_argument_t * arguments) {
-  call->message.service.funcs.encode = &krpc_encode_callback_cstring;
-  call->message.service.arg = (char*)service;
-  call->message.procedure.funcs.encode = &krpc_encode_callback_cstring;
-  call->message.procedure.arg = (char*)procedure;
+  call->message.service_id = serviceId;
+  call->message.procedure_id = procedureId;
   call->numArguments = numArguments;
   call->arguments = arguments;
   call->message.arguments.funcs.encode = &krpc_encode_callback_arguments;

@@ -14,6 +14,11 @@ namespace KRPC.Service.Attributes
         public string Name { get; set; }
 
         /// <summary>
+        /// Id of the service. Optional.
+        /// </summary>
+        public uint Id { get; set; }
+
+        /// <summary>
         /// Game scene(s) in which the service is available.
         /// </summary>
         public GameScene GameScene { get; set; }

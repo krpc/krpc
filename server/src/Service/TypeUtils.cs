@@ -147,6 +147,16 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Get the id of the service for the given KRPCService annotated type
+        /// </summary>
+        public static uint GetServiceId (Type type)
+        {
+            ValidateKRPCService (type);
+            var attribute = Reflection.GetAttribute<KRPCServiceAttribute> (type);
+            return attribute.Id;
+        }
+
+        /// <summary>
         /// Get the GameScene that the service should active during
         /// </summary>
         public static GameScene GetServiceGameScene (Type type)

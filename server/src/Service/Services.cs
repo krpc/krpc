@@ -9,9 +9,12 @@ using KRPC.Service.Scanner;
 
 namespace KRPC.Service
 {
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     sealed class Services
     {
         internal IDictionary<string, ServiceSignature> Signatures { get; private set; }
+        internal IDictionary<uint, ServiceSignature> ServicesById { get; private set; }
+        internal IDictionary<string, IDictionary<uint, ProcedureSignature>> ProceduresById { get; private set; }
         internal IDictionary<Type, Type> MappedExceptionTypes { get; private set; }
 
         static Services instance;
@@ -30,17 +33,62 @@ namespace KRPC.Service
         Services ()
         {
             Signatures = Scanner.Scanner.GetServices ();
+            ServicesById = new Dictionary<uint, ServiceSignature> ();
+            ProceduresById = new Dictionary<string, IDictionary<uint, ProcedureSignature>> ();
+            foreach (var service in Signatures.Values) {
+                ServicesById [service.Id] = service;
+                var procedures = new Dictionary<uint, ProcedureSignature> ();
+                foreach (var procedure in service.Procedures.Values)
+                    procedures [procedure.Id] = procedure;
+                ProceduresById [service.Name] = procedures;
+            }
             MappedExceptionTypes = Scanner.Scanner.GetMappedExceptionTypes ();
+        }
+
+        public ServiceSignature GetServiceSignature (string service)
+        {
+            if (!Signatures.ContainsKey (service))
+                throw new RPCException ("Service " + service + " not found");
+            return Signatures [service];
         }
 
         public ProcedureSignature GetProcedureSignature (string service, string procedure)
         {
-            if (!Signatures.ContainsKey (service))
-                throw new RPCException ("Service " + service + " not found");
-            var serviceSignature = Signatures [service];
+            var serviceSignature = GetServiceSignature (service);
             if (!serviceSignature.Procedures.ContainsKey (procedure))
                 throw new RPCException ("Procedure " + procedure + " not found, in Service " + service);
             return serviceSignature.Procedures [procedure];
+        }
+
+        public ProcedureSignature GetProcedureSignature (ProcedureCall call)
+        {
+            string service = call.Service;
+            if (call.ServiceId > 0)
+                service = GetServiceNameById (call.ServiceId);
+            if (!Signatures.ContainsKey (service))
+                throw new RPCException ("Service " + service + " not found");
+            var serviceSignature = Signatures [service];
+            string procedure = call.Procedure;
+            if (call.ProcedureId > 0)
+                procedure = GetProcedureNameById(service, call.ProcedureId);
+            if (!serviceSignature.Procedures.ContainsKey (procedure))
+                throw new RPCException ("Procedure " + procedure + " not found, in service " + service);
+            return serviceSignature.Procedures [procedure];
+        }
+
+        public string GetServiceNameById (uint id) {
+            if (!ServicesById.ContainsKey (id))
+                throw new RPCException ("Service with id " + id + " not found");
+            return ServicesById [id].Name;
+        }
+
+        public string GetProcedureNameById (string service, uint procedureId)
+        {
+            if (!ProceduresById.ContainsKey (service))
+                throw new RPCException ("Service " + service + " not found");
+            if (!ProceduresById [service].ContainsKey (procedureId))
+                throw new RPCException ("Procedure with identifier " + procedureId + " not found");
+            return ProceduresById [service] [procedureId].Name;
         }
 
         public Type GetMappedExceptionType (Type exnType)

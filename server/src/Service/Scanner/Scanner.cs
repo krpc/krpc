@@ -18,13 +18,17 @@ namespace KRPC.Service.Scanner
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static IDictionary<string, ServiceSignature> GetServices ()
         {
+            uint nextServiceId = 1;
             IDictionary<string, ServiceSignature> signatures = new Dictionary<string, ServiceSignature> ();
 
             // Scan for static classes annotated with KRPCService
             var serviceTypes = Reflection.GetTypesWith<KRPCServiceAttribute> ().ToList ();
             foreach (var serviceType in serviceTypes) {
                 CurrentAssembly = serviceType.Assembly;
-                var service = new ServiceSignature (serviceType);
+                var serviceId = TypeUtils.GetServiceId (serviceType);
+                if (serviceId == 0)
+                    serviceId = nextServiceId++;
+                var service = new ServiceSignature (serviceType, serviceId);
                 if (signatures.ContainsKey (service.Name))
                     service = signatures [service.Name];
                 else
@@ -46,8 +50,10 @@ namespace KRPC.Service.Scanner
                 CurrentAssembly = classType.Assembly;
                 TypeUtils.ValidateKRPCClass (classType);
                 var serviceName = TypeUtils.GetClassServiceName (classType);
-                if (!signatures.ContainsKey (serviceName))
-                    signatures [serviceName] = new ServiceSignature (serviceName);
+                if (!signatures.ContainsKey (serviceName)) {
+                    signatures [serviceName] = new ServiceSignature (serviceName, nextServiceId);
+                    nextServiceId++;
+                }
                 var service = signatures [serviceName];
                 var cls = service.AddClass (classType);
                 // Add class methods
@@ -63,8 +69,10 @@ namespace KRPC.Service.Scanner
                 CurrentAssembly = enumType.Assembly;
                 TypeUtils.ValidateKRPCEnum (enumType);
                 var serviceName = TypeUtils.GetEnumServiceName (enumType);
-                if (!signatures.ContainsKey (serviceName))
-                    signatures [serviceName] = new ServiceSignature (serviceName);
+                if (!signatures.ContainsKey (serviceName)) {
+                    signatures [serviceName] = new ServiceSignature (serviceName, nextServiceId);
+                    nextServiceId++;
+                }
                 var service = signatures [serviceName];
                 service.AddEnum (enumType);
             }
@@ -74,8 +82,10 @@ namespace KRPC.Service.Scanner
                 CurrentAssembly = exnType.Assembly;
                 TypeUtils.ValidateKRPCException (exnType);
                 var serviceName = TypeUtils.GetExceptionServiceName (exnType);
-                if (!signatures.ContainsKey (serviceName))
-                    signatures [serviceName] = new ServiceSignature (serviceName);
+                if (!signatures.ContainsKey (serviceName)) {
+                    signatures [serviceName] = new ServiceSignature (serviceName, nextServiceId);
+                    nextServiceId++;
+                }
                 var service = signatures [serviceName];
                 service.AddException (exnType);
             }

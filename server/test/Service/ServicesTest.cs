@@ -19,6 +19,16 @@ namespace KRPC.Test.Service
             return call;
         }
 
+        static ProcedureCall CallById (string service, string procedure, params Argument[] args)
+        {
+            var serviceId = KRPC.Service.Services.Instance.GetServiceSignature (service).Id;
+            var procedureId = KRPC.Service.Services.Instance.GetProcedureSignature (service, procedure).Id;
+            var call = new ProcedureCall (string.Empty, serviceId, string.Empty, procedureId);
+            foreach (var arg in args)
+                call.Arguments.Add (arg);
+            return call;
+        }
+
         static Argument Arg (uint position, object value)
         {
             return new Argument (position, value);
@@ -26,8 +36,8 @@ namespace KRPC.Test.Service
 
         static ProcedureResult Run (ProcedureCall call)
         {
-            var procedure = KRPC.Service.Services.Instance.GetProcedureSignature (call.Service, call.Procedure);
-            return KRPC.Service.Services.Instance.ExecuteCall (procedure, call);
+            var procedureSignature = KRPC.Service.Services.Instance.GetProcedureSignature (call);
+            return KRPC.Service.Services.Instance.ExecuteCall (procedureSignature, call);
         }
 
         static void CheckResultNotEmpty (ProcedureResult result)
@@ -76,6 +86,17 @@ namespace KRPC.Test.Service
             mock.Setup (x => x.ProcedureNoArgsNoReturn ());
             TestService.Service = mock.Object;
             var result = Run (Call ("TestService", "ProcedureNoArgsNoReturn"));
+            mock.Verify (x => x.ProcedureNoArgsNoReturn (), Times.Once ());
+            CheckResultEmpty (result);
+        }
+
+        [Test]
+        public void ExecuteCallNoArgsNoReturnByID ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureNoArgsNoReturn ());
+            TestService.Service = mock.Object;
+            var result = Run (CallById ("TestService", "ProcedureNoArgsNoReturn"));
             mock.Verify (x => x.ProcedureNoArgsNoReturn (), Times.Once ());
             CheckResultEmpty (result);
         }
