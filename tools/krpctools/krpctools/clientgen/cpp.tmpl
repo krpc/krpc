@@ -109,7 +109,7 @@ class {{ service_name }} : public Service {
 {{ cls.documentation | indent(width=2) }}
   class {{ class_name }} : public krpc::Object<{{ class_name }}> {
    public:
-    explicit {{ class_name }}(Client* client = nullptr, google::protobuf::uint64 id = 0);
+    explicit {{ class_name }}(Client* client = nullptr, uint64_t id = 0);
     {% for method_name,method in cls.methods.items() %}
 
 {{ method.documentation | indent(width=4) }}
@@ -166,7 +166,7 @@ namespace encoder {
   {% for enum_name,values in enumerations.items() %}
 
   inline std::string encode(const services::{{ service_name }}::{{ enum_name }}& value) {
-    return krpc::encoder::encode(static_cast<google::protobuf::int32>(value));
+    return krpc::encoder::encode(static_cast<int32_t>(value));
   }
   {% endfor %}
 
@@ -176,7 +176,7 @@ namespace decoder {
   {% for enum_name,values in enumerations.items() %}
 
   inline void decode(services::{{ service_name }}::{{ enum_name }}& value, const std::string& data, Client* client) {
-    google::protobuf::int32 x;
+    int32_t x;
     decode(x, data, client);
     value = static_cast<services::{{ service_name }}::{{ enum_name }}>(x);
   }
@@ -225,7 +225,7 @@ inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ procedure_name }}_ca
 {% endfor %}
 {% for class_name,cls in classes.items() %}
 
-inline {{ service_name }}::{{ class_name }}::{{ class_name }}(Client* client, google::protobuf::uint64 id):
+inline {{ service_name }}::{{ class_name }}::{{ class_name }}(Client* client, uint64_t id):
   Object(client, "{{ service_name }}::{{ class_name }}", id) {}
 {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
 

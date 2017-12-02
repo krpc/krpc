@@ -34,10 +34,10 @@ class CppGenerator(Generator):
     _type_map = {
         Type.DOUBLE: 'double',
         Type.FLOAT: 'float',
-        Type.SINT32: 'google::protobuf::int32',
-        Type.SINT64: 'google::protobuf::int64',
-        Type.UINT32: 'google::protobuf::uint32',
-        Type.UINT64: 'google::protobuf::uint64',
+        Type.SINT32: 'int32_t',
+        Type.SINT64: 'int64_t',
+        Type.UINT32: 'uint32_t',
+        Type.UINT64: 'uint64_t',
         Type.BOOL: 'bool',
         Type.STRING: 'std::string',
         Type.BYTES: 'std::string'
