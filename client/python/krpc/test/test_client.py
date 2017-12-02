@@ -330,7 +330,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
     def test_krpc_service_members(self):
         self.assertSetEqual(
             set(['get_client_id', 'get_client_name', 'get_services',
-                 'get_status', 'add_stream', 'start_stream', 'remove_stream',
+                 'get_status', 'add_stream', 'start_stream',
+                 'set_stream_rate', 'remove_stream',
                  'add_event', 'current_game_scene', 'GameScene', 'paused',
                  'clients', 'Expression', 'InvalidOperationException',
                  'ArgumentException', 'ArgumentNullException',

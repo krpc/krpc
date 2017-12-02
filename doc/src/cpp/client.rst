@@ -292,6 +292,11 @@ Client API Reference
       If wait is false, the method starts the stream and returns immediately. Subsequent calls to
       ``operator()`` may throw a ``krpc::StreamError`` exception.
 
+   .. function:: float rate() const
+   .. function:: void setRate(float rate)
+
+      The update rate of the stream in Hertz. When set to zero, the rate is unlimited.
+
    .. function:: T operator()()
 
       Get the most recently received value from the stream.

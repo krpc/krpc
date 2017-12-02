@@ -7,6 +7,7 @@ KRPC.GetServices
 KRPC.AddStream
 KRPC.RemoveStream
 KRPC.StartStream
+KRPC.SetStreamRate
 KRPC.AddEvent
 KRPC.CurrentGameScene
 KRPC.GameScene

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using KRPC.Client.Services.TestService;
@@ -322,6 +323,39 @@ namespace KRPC.Client.Test
             stop.WaitOne ();
             s.Remove();
             Assert.False(error);
+            Assert.AreEqual(value, 5);
+        }
+
+        [Test]
+        public void TestRate () {
+            var stop = new ManualResetEvent (false);
+            var error = false;
+            int value = 0;
+            var s = Connection.AddStream (
+                () => Connection.TestService ().Counter ("StreamTest.TestRate", 1));
+            s.AddCallback (
+                (int x) => {
+                    if (x > 5) {
+                        stop.Set ();
+                    } else if (value+1 != x) {
+                        error = true;
+                        stop.Set ();
+                    } else {
+                        value++;
+                    }
+                });
+            s.Rate = 5;
+
+            s.Start();
+            var timer = new Stopwatch();
+            timer.Start();
+            stop.WaitOne ();
+            s.Remove();
+            var elapsed = timer.ElapsedMilliseconds;
+            Assert.Greater(elapsed, 1000);
+            Assert.Less(elapsed, 1200);
+            Assert.False(error);
+            Assert.AreEqual(value, 5);
         }
 
         [Test]

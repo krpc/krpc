@@ -29,6 +29,18 @@ class Stream(object):
                 self._stream.start()
                 self._stream.condition.wait()
 
+    @property
+    def rate(self):
+        """ The update rate for the stream in Hertz.
+            Zero if the rate is unlimited. """
+        return self._stream.rate
+
+    @rate.setter
+    def rate(self, value):
+        """ The update rate for the stream in Hertz.
+            Zero if the rate is unlimited. """
+        self._stream.rate = value
+
     def __call__(self):
         """ Get the most recent value for this stream. """
         if not self._stream.started:

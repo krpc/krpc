@@ -1,3 +1,6 @@
+v0.4.3
+ * Add rate control for streams (#116, #141)
+
 v0.4.0
  * Updated protocol in line with server changes
  * Add support for RPCs and streams to throw exceptions

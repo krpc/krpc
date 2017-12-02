@@ -20,6 +20,7 @@ namespace KRPC.Client
         readonly object updateLock;
         readonly object condition = new object ();
         List<Action<object>> callbacks = new List<Action<object>> ();
+        float rate = 0;
 
         [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
         public StreamImpl (Connection connection, ulong id,
@@ -39,6 +40,14 @@ namespace KRPC.Client
             if (!Started) {
                 connection.KRPC ().StartStream (Id);
                 Started = true;
+            }
+        }
+
+        public float Rate {
+            get { return rate; }
+            set {
+                rate = value;
+                connection.KRPC ().SetStreamRate (Id, value);
             }
         }
 

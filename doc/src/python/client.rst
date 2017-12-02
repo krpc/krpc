@@ -264,6 +264,10 @@ Client API Reference
       :meth:`__call__` may raise a ``StreamError`` exception if the stream does not yet contain a
       value.
 
+   .. attribute:: rate
+
+      The update rate of the stream in Hertz. When set to zero, the rate is unlimited.
+
    .. method:: __call__()
 
       Returns the most recent value for the stream. If executing the remote procedure for the stream

@@ -185,11 +185,13 @@ client that created it disconnects from the server. Streams are local to each cl
 way to share a stream between clients.
 
 The RPC for each stream is invoked every `fixed update
-<https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html>`_ and the return values for
-all of these RPCs are collected together into a stream update message. This is then sent to the
+<https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html>`_ and the return values
+for all of these RPCs are collected together into a stream update message. This is then sent to the
 client over its stream server connection. If the value returned by a streams RPC does not change
 since the last update that was sent, its value is omitted from the update message in order to
-minimize network traffic.
+minimize network traffic. A client can also control the rate of the stream, by specifying a target
+number of Hertz. The server computes a time delay from the target rate, and only updates the stream
+if at least that time has passed since the last time the stream was updated.
 
 Anatomy of a Stream Update
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -20,6 +20,8 @@ class StreamImpl {
   google::protobuf::uint64 get_id() const;
   void start();
   bool has_started() const;
+  float rate() const;
+  void set_rate(float value);
   const std::string& get_data();
   void update(const std::string& data, const std::exception_ptr& exception);
   bool has_updated() const;
@@ -43,6 +45,7 @@ class StreamImpl {
   std::mutex condition_mutex;
   std::unique_lock<std::mutex> condition_lock;
   Callbacks callbacks;
+  float _rate;
 };
 
 }  // namespace krpc
