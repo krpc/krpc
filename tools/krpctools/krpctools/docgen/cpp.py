@@ -72,7 +72,7 @@ class CppDomain(Domain):
         elif isinstance(typ, ListType):
             return 'std::vector<%s>' % self.type(typ.value_type)
         elif isinstance(typ, DictionaryType):
-            return 'std::map<%s,%s>' % \
+            return 'std::map<%s, %s>' % \
                 (self.type(typ.key_type), self.type(typ.value_type))
         elif isinstance(typ, SetType):
             return 'std::set<%s>' % self.type(typ.value_type)
@@ -96,7 +96,7 @@ class CppDomain(Domain):
         elif isinstance(typ, ListType):
             return 'std::vector<%s>' % self.type_description(typ.value_type)
         elif isinstance(typ, DictionaryType):
-            return 'std::map<%s,%s>' % \
+            return 'std::map<%s, %s>' % \
                 (self.type_description(typ.key_type),
                  self.type_description(typ.value_type))
         elif isinstance(typ, SetType):
