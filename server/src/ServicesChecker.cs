@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Scanner;
 using UnityEngine;
@@ -25,16 +26,20 @@ namespace KRPC
         public void Start ()
         {
             OK = true;
-            try {
-                var services = Scanner.GetServices ();
-                if (CheckDocumented)
-                    CheckDocumentation (services.Values);
-            } catch (ServiceException e) {
+            var errors = new List<string>();
+            var services = Scanner.GetServices (errors);
+            if (errors.Any()) {
                 OK = false;
-                var msg = e.Message + Environment.NewLine + (e.Assembly == null ? "unknown" : e.Assembly.Location);
-                PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "krpc-service-error",
-                                              "kRPC service error - plugin disabled", msg, "OK", true, HighLogic.UISkin);
+                Utils.Logger.WriteLine("Service errors encountered, plugin has been disabled. Errors were:", Utils.Logger.Severity.Error);
+                foreach (var error in errors)
+                    Utils.Logger.WriteLine(error, Utils.Logger.Severity.Error);
+                PopupDialog.SpawnPopupDialog(
+                    new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "krpc-service-error", "kRPC Service Error",
+                    "Service errors encountered, plugin has been disabled. See the log for more information.",
+                    "OK", true, HighLogic.UISkin);
             }
+            if (CheckDocumented)
+                CheckDocumentation (services.Values);
         }
 
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]

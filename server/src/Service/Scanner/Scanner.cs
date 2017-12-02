@@ -16,7 +16,7 @@ namespace KRPC.Service.Scanner
 
         [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        public static IDictionary<string, ServiceSignature> GetServices ()
+        public static IDictionary<string, ServiceSignature> GetServices (IList<string> errors = null)
         {
             uint nextServiceId = 1;
             IDictionary<string, ServiceSignature> signatures = new Dictionary<string, ServiceSignature> ();
@@ -24,79 +24,130 @@ namespace KRPC.Service.Scanner
             // Scan for static classes annotated with KRPCService
             var serviceTypes = Reflection.GetTypesWith<KRPCServiceAttribute> ().ToList ();
             foreach (var serviceType in serviceTypes) {
-                CurrentAssembly = serviceType.Assembly;
-                var serviceId = TypeUtils.GetServiceId (serviceType);
-                if (serviceId == 0)
-                    serviceId = nextServiceId++;
-                var service = new ServiceSignature (serviceType, serviceId);
-                if (signatures.ContainsKey (service.Name))
-                    service = signatures [service.Name];
-                else
-                    signatures [service.Name] = service;
-                // Add procedures
-                foreach (var method in Reflection.GetMethodsWith<KRPCProcedureAttribute> (serviceType))
-                    service.AddProcedure (method);
-                // Add properties
-                foreach (var property in Reflection.GetPropertiesWith<KRPCPropertyAttribute> (serviceType))
-                    service.AddProperty (property);
-                // Check for methods
-                var invalidMethod = Reflection.GetMethodsWith<KRPCMethodAttribute> (serviceType).FirstOrDefault ();
-                if (invalidMethod != null)
-                    throw new ServiceException ("Service " + service.Name + " contains a class method " + invalidMethod.Name);
+                try {
+                    CurrentAssembly = serviceType.Assembly;
+                    var serviceId = TypeUtils.GetServiceId (serviceType);
+                    if (serviceId == 0)
+                        serviceId = nextServiceId++;
+                    var service = new ServiceSignature (serviceType, serviceId);
+                    if (signatures.ContainsKey (service.Name))
+                        service = signatures [service.Name];
+                    else
+                        signatures [service.Name] = service;
+                    // Add procedures
+                    foreach (var method in Reflection.GetMethodsWith<KRPCProcedureAttribute> (serviceType)) {
+                        try {
+                            service.AddProcedure (method);
+                        } catch (ServiceException exn) {
+                            HandleError(errors, "service " + service.Name, exn);
+                        }
+                    }
+                    // Add properties
+                    foreach (var property in Reflection.GetPropertiesWith<KRPCPropertyAttribute> (serviceType)) {
+                        try {
+                            service.AddProperty (property);
+                        } catch (ServiceException exn) {
+                            HandleError(errors, "service " + service.Name, exn);
+                        }
+                    }
+                    // Check for methods
+                    var invalidMethod = Reflection.GetMethodsWith<KRPCMethodAttribute> (serviceType).FirstOrDefault ();
+                    if (invalidMethod != null)
+                        HandleError(errors, "service " + service.Name, "Service contains a class method " + invalidMethod.Name);
+                } catch (ServiceException exn) {
+                    HandleError(errors, string.Empty, exn);
+                }
             }
 
             // Scan for classes annotated with KRPCClass
             foreach (var classType in Reflection.GetTypesWith<KRPCClassAttribute> ()) {
-                CurrentAssembly = classType.Assembly;
-                TypeUtils.ValidateKRPCClass (classType);
-                var serviceName = TypeUtils.GetClassServiceName (classType);
-                if (!signatures.ContainsKey (serviceName)) {
-                    signatures [serviceName] = new ServiceSignature (serviceName, nextServiceId);
-                    nextServiceId++;
+                try {
+                    CurrentAssembly = classType.Assembly;
+                    TypeUtils.ValidateKRPCClass (classType);
+                    var serviceName = TypeUtils.GetClassServiceName (classType);
+                    if (!signatures.ContainsKey (serviceName)) {
+                        signatures [serviceName] = new ServiceSignature (serviceName, nextServiceId);
+                        nextServiceId++;
+                    }
+                    var service = signatures [serviceName];
+                    var cls = service.AddClass (classType);
+                    // Add class methods
+                    foreach (var method in Reflection.GetMethodsWith<KRPCMethodAttribute> (classType)) {
+                        try {
+                            service.AddClassMethod (cls, classType, method);
+                        } catch (ServiceException exn) {
+                            HandleError(errors, "service " + serviceName + ", class " + cls, exn);
+                        }
+                    }
+                    // Add class properties
+                    foreach (var property in Reflection.GetPropertiesWith<KRPCPropertyAttribute> (classType)) {
+                        try {
+                            service.AddClassProperty (cls, classType, property);
+                        } catch (ServiceException exn) {
+                            HandleError(errors, "service " + serviceName + ", class " + cls, exn);
+                        }
+                    }
+                } catch (ServiceException exn) {
+                    HandleError(errors, string.Empty, exn);
                 }
-                var service = signatures [serviceName];
-                var cls = service.AddClass (classType);
-                // Add class methods
-                foreach (var method in Reflection.GetMethodsWith<KRPCMethodAttribute> (classType))
-                    service.AddClassMethod (cls, classType, method);
-                // Add class properties
-                foreach (var property in Reflection.GetPropertiesWith<KRPCPropertyAttribute> (classType))
-                    service.AddClassProperty (cls, classType, property);
             }
 
             // Scan for enumerations annotated with KRPCEnum
             foreach (var enumType in Reflection.GetTypesWith<KRPCEnumAttribute> ()) {
-                CurrentAssembly = enumType.Assembly;
-                TypeUtils.ValidateKRPCEnum (enumType);
-                var serviceName = TypeUtils.GetEnumServiceName (enumType);
-                if (!signatures.ContainsKey (serviceName)) {
-                    signatures [serviceName] = new ServiceSignature (serviceName, nextServiceId);
-                    nextServiceId++;
+                try {
+                    CurrentAssembly = enumType.Assembly;
+                    TypeUtils.ValidateKRPCEnum (enumType);
+                    var serviceName = TypeUtils.GetEnumServiceName (enumType);
+                    if (!signatures.ContainsKey (serviceName)) {
+                        signatures [serviceName] = new ServiceSignature (serviceName, nextServiceId);
+                        nextServiceId++;
+                    }
+                    var service = signatures [serviceName];
+                    service.AddEnum (enumType);
+                } catch (ServiceException exn) {
+                    HandleError(errors, string.Empty, exn);
                 }
-                var service = signatures [serviceName];
-                service.AddEnum (enumType);
             }
 
             // Scan for classes annotated with KRPCException
             foreach (var exnType in Reflection.GetTypesWith<KRPCExceptionAttribute> ()) {
-                CurrentAssembly = exnType.Assembly;
-                TypeUtils.ValidateKRPCException (exnType);
-                var serviceName = TypeUtils.GetExceptionServiceName (exnType);
-                if (!signatures.ContainsKey (serviceName)) {
-                    signatures [serviceName] = new ServiceSignature (serviceName, nextServiceId);
-                    nextServiceId++;
+                try {
+                    CurrentAssembly = exnType.Assembly;
+                    TypeUtils.ValidateKRPCException (exnType);
+                    var serviceName = TypeUtils.GetExceptionServiceName (exnType);
+                    if (!signatures.ContainsKey (serviceName)) {
+                      signatures [serviceName] = new ServiceSignature (serviceName, nextServiceId);
+                      nextServiceId++;
+                    }
+                    var service = signatures [serviceName];
+                    service.AddException (exnType);
+                } catch (ServiceException exn) {
+                    HandleError(errors, string.Empty, exn);
                 }
-                var service = signatures [serviceName];
-                service.AddException (exnType);
             }
 
             CurrentAssembly = null;
 
             // Check that the main KRPC service was found
             if (!signatures.ContainsKey ("KRPC"))
-                throw new ServiceException ("KRPC service could not be found");
+                HandleError(errors, string.Empty, "KRPC service could not be found");
 
             return signatures;
+        }
+
+        static void HandleError(IList<string> errors, string context, string msg) {
+            HandleError(errors, context, new ServiceException(msg));
+        }
+
+        static void HandleError(IList<string> errors, string context, Exception exn) {
+            if (errors != null) {
+                var msg = exn.Message;
+                if (context.Length > 0)
+                    msg = "In " + context + ": " + msg;
+                errors.Add(msg);
+            } else {
+                throw exn;
+            }
         }
 
         [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
