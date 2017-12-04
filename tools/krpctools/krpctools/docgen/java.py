@@ -35,21 +35,21 @@ class JavaDomain(Domain):
         Type.SINT64: 'long',
         Type.UINT32: 'int',
         Type.UINT64: 'long',
-        Type.BYTES: 'byte[]',
+        Type.BOOL: 'boolean',
         Type.STRING: 'String',
-        Type.BOOL: 'boolean'
+        Type.BYTES: 'byte[]'
     }
 
     boxed_type_map = {
         Type.DOUBLE: 'Double',
-        Type.FLOAT: 'Single',
+        Type.FLOAT: 'Float',
         Type.SINT32: 'Integer',
         Type.SINT64: 'Long',
         Type.UINT32: 'Integer',
         Type.UINT64: 'Long',
-        Type.BYTES: 'Byte[]',
+        Type.BOOL: 'Boolean',
         Type.STRING: 'String',
-        Type.BOOL: 'Boolean'
+        Type.BYTES: 'byte[]'
     }
 
     tuple_types = [
