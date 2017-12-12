@@ -3,29 +3,43 @@ using System;
 [AttributeUsage (AttributeTargets.Assembly)]
 sealed class AssemblyKSPVersionAttribute : Attribute
 {
-    public AssemblyKSPVersionAttribute (string version)
+    public AssemblyKSPVersionAttribute (string maxVersion, string minVersion)
     {
-        Version = version;
+        MaxVersion = maxVersion;
+        MinVersion = minVersion;
     }
 
-    public string Version { get; private set; }
+    public string MaxVersion { get; private set; }
+    public string MinVersion { get; private set; }
 
-    public int Major {
-        get { return GetVersionPart (0); }
+    public int MaxMajor {
+        get { return GetVersionPart (MaxVersion, 0); }
     }
 
-    public int Minor {
-        get { return GetVersionPart (1); }
+    public int MaxMinor {
+        get { return GetVersionPart (MaxVersion, 1); }
     }
 
-    public int Patch {
-        get { return GetVersionPart (2); }
+    public int MaxPatch {
+        get { return GetVersionPart (MaxVersion, 2); }
     }
 
-    int GetVersionPart (int part)
+    public int MinMajor {
+        get { return GetVersionPart (MinVersion, 0); }
+    }
+
+    public int MinMinor {
+        get { return GetVersionPart (MinVersion, 1); }
+    }
+
+    public int MinPatch {
+        get { return GetVersionPart (MinVersion, 2); }
+    }
+
+    static int GetVersionPart (string version, int part)
     {
         int result;
-        int.TryParse (Version.Split ('.') [part], out result);
+        int.TryParse (version.Split ('.') [part], out result);
         return result;
     }
 }

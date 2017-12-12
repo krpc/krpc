@@ -51,8 +51,11 @@ namespace KRPC
             /*-----------------------------------------------*\
             |    BEGIN IMPLEMENTATION-SPECIFIC EDITS HERE.    |
             \*-----------------------------------------------*/
+            var kspVersion = Versioning.version_major * 10000 + Versioning.version_minor * 100 + Versioning.Revision;
             var version = (AssemblyKSPVersionAttribute)(Assembly.GetExecutingAssembly ().GetCustomAttributes (typeof(AssemblyKSPVersionAttribute), false).First ());
-            return (Versioning.version_major == version.Major) && (Versioning.version_minor == version.Minor) && (Versioning.Revision == version.Patch);
+            var maxVersion = version.MaxMajor * 10000 + version.MaxMinor * 100 + version.MaxPatch;
+            var minVersion = version.MinMajor * 10000 + version.MinMinor * 100 + version.MinPatch;
+            return minVersion <= kspVersion && kspVersion <= maxVersion;
             /*-----------------------------------------------*\
             | IMPLEMENTERS SHOULD NOT EDIT BEYOND THIS POINT! |
             \*-----------------------------------------------*/
@@ -149,8 +152,8 @@ namespace KRPC
             }
 
             if ((incompatible.Length > 0) || (incompatibleUnity.Length > 0)) {
-                PopupDialog.SpawnPopupDialog(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), "compatibility-checker",
-                                             "Incompatible Mods Detected", message, "OK", true, HighLogic.UISkin);
+                Utils.Compatibility.SpawnPopupDialog(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), "compatibility-checker",
+                                                     "Incompatible Mods Detected", message, "OK", true, HighLogic.UISkin);
             }
         }
 

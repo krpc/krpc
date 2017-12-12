@@ -1,5 +1,5 @@
 load('/tools/build/pkg', 'pkg_zip')
-load('/config', 'version', 'python_version', 'avc_version', 'ksp_avc_version')
+load('/config', 'version', 'python_version', 'avc_version', 'ksp_avc_version_max', 'ksp_avc_version_min')
 
 exports_files(['COPYING', 'COPYING.LESSER'])
 
@@ -78,8 +78,10 @@ ksp_avc_version = """{
   "URL": "http://ksp-avc.cybutek.net/version.php?id=254",
   "DOWNLOAD": "https://github.com/krpc/krpc/releases/latest",
   "VERSION": { %s },
-  "KSP_VERSION": { %s }
-}""" % (avc_version, ksp_avc_version)
+  "KSP_VERSION": { %s },
+  "KSP_VERSION_MAX": { %s },
+  "KSP_VERSION_MIN": { %s }
+}""" % (avc_version, ksp_avc_version_max, ksp_avc_version_max, ksp_avc_version_min)
 
 genrule(
     name = 'ksp-avc-version',
