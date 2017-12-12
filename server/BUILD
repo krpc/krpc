@@ -1,7 +1,7 @@
 load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test', 'csharp_gendarme_test', 'csharp_assembly_info')
 load('/tools/ServiceDefinitions/build', 'service_definitions')
 load('/tools/build/image', 'png_images')
-load('/config', 'version', 'ksp_version', 'assembly_version', 'author')
+load('/config', 'version', 'ksp_version_max', 'ksp_version_min', 'assembly_version', 'author')
 
 filegroup(
     name = 'server',
@@ -36,7 +36,7 @@ csharp_assembly_info(
     description = 'RPC server for Kerbal Space Program',
     copyright = author,
     version = assembly_version,
-    custom = {'AssemblyKSPVersion': '"%s"' % ksp_version},
+    custom = {'AssemblyKSPVersion': '"%s", "%s"' % (ksp_version_max, ksp_version_min)},
     internals_visible_to = [
         'KRPC.Test',
         'TestServer',

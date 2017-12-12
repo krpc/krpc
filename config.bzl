@@ -1,7 +1,9 @@
 author = 'djungelorm'
 version = '0.4.2'
-ksp_version = '1.3.1.1891'
-ksp_version_parts = ksp_version.split('.')
+ksp_version_max = '1.3.1.1891'
+ksp_version_min = '1.2.2.1622'
+ksp_version_max_parts = ksp_version_max.split('.')
+ksp_version_min_parts = ksp_version_min.split('.')
 
 def get_version_parts(version):
     version_parts = version.partition('-')[0].split('.')
@@ -31,4 +33,5 @@ lua_version = '.'.join(version_parts[:4])
 avc_version = \
     '"MAJOR": %s, "MINOR": %s, "PATCH": %s' % (version_parts[0],version_parts[1],version_parts[2]) if len(version_parts) == 3 \
     else '"MAJOR": %s, "MINOR": %s, "PATCH": %s, "BUILD": %s' % (version_parts[0],version_parts[1],version_parts[2],version_parts[3])
-ksp_avc_version = '"MAJOR": %s, "MINOR": %s, "PATCH": %s' % (ksp_version_parts[0],ksp_version_parts[1],ksp_version_parts[2])
+ksp_avc_version_max = '"MAJOR": %s, "MINOR": %s, "PATCH": %s' % (ksp_version_max_parts[0],ksp_version_max_parts[1],ksp_version_max_parts[2])
+ksp_avc_version_min = '"MAJOR": %s, "MINOR": %s, "PATCH": %s' % (ksp_version_min_parts[0],ksp_version_min_parts[1],ksp_version_min_parts[2])
