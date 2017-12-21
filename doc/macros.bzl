@@ -1,5 +1,4 @@
-load('/tools/build/csharp', 'csharp_binary')
-load('/tools/build/csharp', 'csharp_library')
+load('//tools/build:csharp.bzl', 'csharp_binary', 'csharp_library')
 
 def csharp_binary_multiple(name, srcs, deps):
     names = []

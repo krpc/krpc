@@ -1,7 +1,7 @@
-load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test', 'csharp_gendarme_test', 'csharp_assembly_info')
-load('/tools/ServiceDefinitions/build', 'service_definitions')
-load('/tools/build/image', 'png_images')
-load('/config', 'version', 'ksp_version_max', 'ksp_version_min', 'assembly_version', 'author')
+load('//tools/build:csharp.bzl', 'csharp_library', 'csharp_nunit_test', 'csharp_gendarme_test', 'csharp_assembly_info')
+load('//tools/ServiceDefinitions:build.bzl', 'service_definitions')
+load('//tools/build:image.bzl', 'png_images')
+load('//:config.bzl', 'version', 'ksp_version_max', 'ksp_version_min', 'assembly_version', 'author')
 
 filegroup(
     name = 'server',

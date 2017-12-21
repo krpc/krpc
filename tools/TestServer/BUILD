@@ -1,8 +1,8 @@
-load('/tools/build/csharp', 'csharp_binary', 'csharp_library', 'csharp_assembly_info', 'csharp_gendarme_test')
-load('/tools/build/protobuf/csharp', 'protobuf_csharp')
-load('/tools/build/pkg', 'pkg_zip')
-load('/tools/ServiceDefinitions/build', 'service_definitions')
-load('/config', 'version', 'assembly_version', 'author')
+load('//tools/build:csharp.bzl', 'csharp_binary', 'csharp_library', 'csharp_assembly_info', 'csharp_gendarme_test')
+load('//tools/build/protobuf:csharp.bzl', 'protobuf_csharp')
+load('//tools/build:pkg.bzl', 'pkg_zip')
+load('//tools/ServiceDefinitions:build.bzl', 'service_definitions')
+load('//:config.bzl', 'version', 'assembly_version', 'author')
 
 csharp_assembly_info(
     name = 'AssemblyInfo',

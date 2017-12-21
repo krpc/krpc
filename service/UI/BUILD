@@ -1,8 +1,8 @@
-load('/config', 'assembly_version', 'author')
-load('/tools/build/csharp', 'csharp_library', 'csharp_assembly_info', 'csharp_gendarme_test')
-load('/tools/build/python', 'py_lint_test')
-load('/tools/ServiceDefinitions/build', 'service_definitions')
-load('/service/build', 'service_deps')
+load('//:config.bzl', 'assembly_version', 'author')
+load('//tools/build:csharp.bzl', 'csharp_library', 'csharp_assembly_info', 'csharp_gendarme_test')
+load('//tools/build:python.bzl', 'py_lint_test')
+load('//tools/ServiceDefinitions:build.bzl', 'service_definitions')
+load('//service:build.bzl', 'service_deps')
 
 filegroup(
     name = 'UI',

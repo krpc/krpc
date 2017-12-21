@@ -1,11 +1,11 @@
-load('/tools/build/sphinx', 'sphinx_build', 'sphinx_spelling_test', 'sphinx_linkcheck_test')
-load('/tools/build/pkg', 'stage_files')
-load('/tools/build/python', 'py_script', 'py_lint_test')
-load('/tools/build/image', 'png_images')
-load('/tools/krpctools/docgen', 'docgen_multiple')
-load('/doc/test', 'check_documented_test')
-load('/config', 'version')
-load('macros', 'csharp_binary_multiple', 'csharp_library_multiple', 'cc_binary_multiple', 'java_binary_multiple')
+load('//tools/build:sphinx.bzl', 'sphinx_build', 'sphinx_spelling_test', 'sphinx_linkcheck_test')
+load('//tools/build:pkg.bzl', 'stage_files')
+load('//tools/build:python.bzl', 'py_script', 'py_lint_test')
+load('//tools/build:image.bzl', 'png_images')
+load('//tools/krpctools:docgen.bzl', 'docgen_multiple')
+load('//doc:test.bzl', 'check_documented_test')
+load('//:config.bzl', 'version')
+load('//doc:macros.bzl', 'csharp_binary_multiple', 'csharp_library_multiple', 'cc_binary_multiple', 'java_binary_multiple')
 
 filegroup(
     name = 'doc',

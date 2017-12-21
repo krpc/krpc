@@ -1,9 +1,9 @@
-load('/tools/build/csharp', 'csharp_library', 'csharp_assembly_info', 'nuget_package')
-load('/tools/build/csharp', 'csharp_nunit_test', 'csharp_gendarme_test')
-load('/tools/build/client_test', 'client_test')
-load('/tools/krpctools/clientgen', 'clientgen_csharp')
-load('/tools/build/pkg', 'pkg_zip')
-load('/config', 'version', 'assembly_version', 'nuget_version', 'author')
+load('//tools/build:csharp.bzl', 'csharp_library', 'csharp_assembly_info', 'nuget_package')
+load('//tools/build:csharp.bzl', 'csharp_nunit_test', 'csharp_gendarme_test')
+load('//tools/build:client_test.bzl', 'client_test')
+load('//tools/krpctools:clientgen.bzl', 'clientgen_csharp')
+load('//tools/build:pkg.bzl', 'pkg_zip')
+load('//:config.bzl', 'version', 'assembly_version', 'nuget_version', 'author')
 
 pkg_zip(
     name = 'csharp',

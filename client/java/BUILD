@@ -1,7 +1,7 @@
-load('/tools/krpctools/clientgen', 'clientgen_java')
-load('/tools/build/client_test', 'client_test')
-load('/tools/build/java', 'java_checkstyle_test')
-load('/config', 'version')
+load('//tools/krpctools:clientgen.bzl', 'clientgen_java')
+load('//tools/build:client_test.bzl', 'client_test')
+load('//tools/build:java.bzl', 'java_checkstyle_test')
+load('//:config.bzl', 'version')
 
 copts = ['-Werror', '-Xlint:all', '-target 1.8', '-source 1.8']
 

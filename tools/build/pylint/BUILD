@@ -1,4 +1,4 @@
-load('/tools/build/python', 'py_script')
+load('//tools/build:python.bzl', 'py_script')
 
 py_script(
   name = 'pylint',

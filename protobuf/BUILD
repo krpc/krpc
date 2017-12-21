@@ -1,9 +1,9 @@
-load('/tools/build/protobuf/csharp', 'protobuf_csharp')
-load('/tools/build/protobuf/python', 'protobuf_py')
-load('/tools/build/protobuf/cpp', 'protobuf_cpp')
-load('/tools/build/protobuf/lua', 'protobuf_lua')
-load('/tools/build/protobuf/java', 'protobuf_java')
-load('/tools/build/protobuf/nanopb', 'protobuf_nanopb')
+load('//tools/build/protobuf:cpp.bzl', 'protobuf_cpp')
+load('//tools/build/protobuf:csharp.bzl', 'protobuf_csharp')
+load('//tools/build/protobuf:java.bzl', 'protobuf_java')
+load('//tools/build/protobuf:lua.bzl', 'protobuf_lua')
+load('//tools/build/protobuf:nanopb.bzl', 'protobuf_nanopb')
+load('//tools/build/protobuf:python.bzl', 'protobuf_py')
 
 package(default_visibility = ['//visibility:public'])
 

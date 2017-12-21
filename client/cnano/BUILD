@@ -1,10 +1,10 @@
-load('/tools/build/autotools', 'autotools_dist')
-load('/tools/build/cpp', 'cpp_check_test', 'cpp_lint_test')
-load('/tools/build/protobuf/nanopb', 'protobuf_nanopb')
-load('/tools/build/client_test', 'client_test')
-load('/tools/krpctools/clientgen', 'clientgen_cnano')
-load('/tools/build/pkg', 'pkg_zip')
-load('/config', 'version')
+load('//tools/build:autotools.bzl', 'autotools_dist')
+load('//tools/build:cpp.bzl', 'cpp_check_test', 'cpp_lint_test')
+load('//tools/build/protobuf:nanopb.bzl', 'protobuf_nanopb')
+load('//tools/build:client_test.bzl', 'client_test')
+load('//tools/krpctools:clientgen.bzl', 'clientgen_cnano')
+load('//tools/build:pkg.bzl', 'pkg_zip')
+load('//:config.bzl', 'version')
 
 name = 'krpc-cnano-%s' % version
 

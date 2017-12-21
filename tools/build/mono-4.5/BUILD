@@ -1,4 +1,4 @@
-load('/tools/build/csharp', 'csharp_reference')
+load('//tools/build:csharp.bzl', 'csharp_reference')
 
 package(default_visibility = ['//visibility:public'])
 

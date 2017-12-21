@@ -1,5 +1,5 @@
-load('/tools/build/pkg', 'pkg_zip')
-load('/config', 'version', 'python_version', 'avc_version', 'ksp_avc_version_max', 'ksp_avc_version_min')
+load('//tools/build:pkg.bzl', 'pkg_zip')
+load('//:config.bzl', 'version', 'python_version', 'avc_version', 'ksp_avc_version_max', 'ksp_avc_version_min')
 
 exports_files(['COPYING', 'COPYING.LESSER'])
 
