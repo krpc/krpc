@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -15,10 +17,11 @@ namespace KRPC.Service.Scanner
         public static bool CheckDocumented { get; set; }
 
         [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static IDictionary<string, ServiceSignature> GetServices (IList<string> errors = null)
         {
-            uint nextServiceId = 1;
+            var serviceIds = new HashSet<uint> ();
             IDictionary<string, ServiceSignature> signatures = new Dictionary<string, ServiceSignature> ();
 
             // Scan for static classes annotated with KRPCService
@@ -27,8 +30,17 @@ namespace KRPC.Service.Scanner
                 try {
                     CurrentAssembly = serviceType.Assembly;
                     var serviceId = TypeUtils.GetServiceId (serviceType);
-                    if (serviceId == 0)
-                        serviceId = nextServiceId++;
+                    if (serviceId == 0) {
+                        // Generate a service id from the service name
+                        var serviceName = TypeUtils.GetServiceName(serviceType);
+                        using (var sha256 = SHA256.Create()) {
+                            var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(serviceName));
+                            serviceId = (uint)BitConverter.ToInt64(hash, 0);
+                        }
+                    }
+                    if (serviceIds.Contains (serviceId))
+                        HandleError(errors, "service " + TypeUtils.GetServiceName(serviceType), "Service id clashes with another service");
+                    serviceIds.Add (serviceId);
                     var service = new ServiceSignature (serviceType, serviceId);
                     if (signatures.ContainsKey (service.Name))
                         service = signatures [service.Name];
@@ -65,10 +77,8 @@ namespace KRPC.Service.Scanner
                     CurrentAssembly = classType.Assembly;
                     TypeUtils.ValidateKRPCClass (classType);
                     var serviceName = TypeUtils.GetClassServiceName (classType);
-                    if (!signatures.ContainsKey (serviceName)) {
-                        signatures [serviceName] = new ServiceSignature (serviceName, nextServiceId);
-                        nextServiceId++;
-                    }
+                    if (!signatures.ContainsKey (serviceName))
+                        HandleError(errors, "service " + serviceName, "Service does not exist, when loading class");
                     var service = signatures [serviceName];
                     var cls = service.AddClass (classType);
                     // Add class methods
@@ -98,10 +108,8 @@ namespace KRPC.Service.Scanner
                     CurrentAssembly = enumType.Assembly;
                     TypeUtils.ValidateKRPCEnum (enumType);
                     var serviceName = TypeUtils.GetEnumServiceName (enumType);
-                    if (!signatures.ContainsKey (serviceName)) {
-                        signatures [serviceName] = new ServiceSignature (serviceName, nextServiceId);
-                        nextServiceId++;
-                    }
+                    if (!signatures.ContainsKey (serviceName))
+                        HandleError(errors, "service " + serviceName, "Service does not exist, when loading enumeration");
                     var service = signatures [serviceName];
                     service.AddEnum (enumType);
                 } catch (ServiceException exn) {
@@ -115,10 +123,8 @@ namespace KRPC.Service.Scanner
                     CurrentAssembly = exnType.Assembly;
                     TypeUtils.ValidateKRPCException (exnType);
                     var serviceName = TypeUtils.GetExceptionServiceName (exnType);
-                    if (!signatures.ContainsKey (serviceName)) {
-                      signatures [serviceName] = new ServiceSignature (serviceName, nextServiceId);
-                      nextServiceId++;
-                    }
+                    if (!signatures.ContainsKey (serviceName))
+                        HandleError(errors, "service " + serviceName, "Service does not exist, when loading exception");
                     var service = signatures [serviceName];
                     service.AddException (exnType);
                 } catch (ServiceException exn) {
@@ -136,7 +142,16 @@ namespace KRPC.Service.Scanner
         }
 
         static void HandleError(IList<string> errors, string context, string msg) {
-            HandleError(errors, context, new ServiceException(msg));
+            if (context.Length > 0)
+                msg = "In " + context + ": " + msg;
+            HandleError(errors, new ServiceException(msg));
+        }
+
+        static void HandleError(IList<string> errors, Exception exn) {
+            if (errors != null)
+                errors.Add(exn.Message);
+            else
+                throw exn;
         }
 
         static void HandleError(IList<string> errors, string context, Exception exn) {

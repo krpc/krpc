@@ -13,7 +13,7 @@ namespace KRPC.Service.KRPC
     /// <summary>
     /// Main kRPC service, used by clients to interact with basic server functionality.
     /// </summary>
-    [KRPCService]
+    [KRPCService (Id = 1)]
     public static class KRPC
     {
         /// <summary>

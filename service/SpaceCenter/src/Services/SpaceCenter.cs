@@ -19,7 +19,7 @@ namespace KRPC.SpaceCenter.Services
     /// Provides functionality to interact with Kerbal Space Program. This includes controlling
     /// the active vessel, managing its resources, planning maneuver nodes and auto-piloting.
     /// </summary>
-    [KRPCService (GameScene = GameScene.Flight)]
+    [KRPCService (Id = 2, GameScene = GameScene.Flight)]
     public static class SpaceCenter
     {
         /// <summary>

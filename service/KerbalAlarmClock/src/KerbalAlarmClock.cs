@@ -11,7 +11,7 @@ namespace KRPC.KerbalAlarmClock
     /// This service provides functionality to interact with
     /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/22809-13x-kerbal-alarm-clock-v3850-may-30/">Kerbal Alarm Clock</a>.
     /// </summary>
-    [KRPCService (GameScene = GameScene.All)]
+    [KRPCService (Id = 5, GameScene = GameScene.All)]
     public static class KerbalAlarmClock
     {
         static void CheckAPI ()

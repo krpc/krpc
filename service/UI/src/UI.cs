@@ -10,7 +10,7 @@ namespace KRPC.UI
     /// <remarks>
     /// For drawing 3D objects in the flight scene, see the Drawing service.
     /// </remarks>
-    [KRPCService (GameScene = GameScene.All)]
+    [KRPCService (Id = 7, GameScene = GameScene.All)]
     public static class UI
     {
         /// <summary>

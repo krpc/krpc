@@ -16,7 +16,7 @@ namespace KRPC.Drawing
     /// <remarks>
     /// For drawing and interacting with the user interface, see the UI service.
     /// </remarks>
-    [KRPCService (GameScene = GameScene.Flight)]
+    [KRPCService (Id = 3, GameScene = GameScene.Flight)]
     public static class Drawing
     {
         /// <summary>
