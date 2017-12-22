@@ -279,6 +279,7 @@ test_suite(
         '//client/python:lint',
         '//client/websockets:lint',
         '//tools/krpctest:lint',
+        '//tools/krpctools:lint',
         '//doc:lint'
     ]
 )

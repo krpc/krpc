@@ -7,6 +7,7 @@ from krpc.utils import snake_case
 from .generator import Generator
 from .docparser import DocParser
 
+
 def cpp_template_fix(typ):
     """ Ensure nested templates are separated by spaces for the C++ parser """
     return typ[:-2] + '> >' if typ.endswith('>>') else typ
