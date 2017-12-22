@@ -1,3 +1,4 @@
+import collections
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
     ValueType, ClassType, EnumerationType, MessageType, \
@@ -5,7 +6,6 @@ from krpc.types import \
 from krpc.utils import snake_case
 from .generator import Generator
 from .docparser import DocParser
-
 
 def cpp_template_fix(typ):
     """ Ensure nested templates are separated by spaces for the C++ parser """
@@ -135,7 +135,7 @@ class CppGenerator(Generator):
             info['return_set_client'] = self.parse_set_client(
                 info['procedure'])
 
-        properties = {}
+        properties = collections.OrderedDict()
         for name, info in context['properties'].items():
             if info['getter']:
                 properties[name] = {
@@ -165,7 +165,7 @@ class CppGenerator(Generator):
                 info['return_set_client'] = self.parse_set_client(
                     info['procedure'])
 
-            class_properties = {}
+            class_properties = collections.OrderedDict()
             for name, info in class_info['properties'].items():
                 if info['getter']:
                     class_properties[name] = {
