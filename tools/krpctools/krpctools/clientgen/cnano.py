@@ -9,8 +9,6 @@ from .docparser import DocParser
 
 class CNanoGenerator(Generator):
 
-    _collection_types = []
-
     _keywords = set([
         'alignas', 'alignof', 'and', 'and_eq', 'asm', 'auto', 'bitand',
         'bitor', 'bool', 'break', 'case', 'catch', 'char', 'char16_t',
@@ -52,28 +50,18 @@ class CNanoGenerator(Generator):
         Type.BYTES: 'bytes'
     }
 
+    def __init__(self, *args, **kwargs):
+        super(CNanoGenerator, self).__init__(*args, **kwargs)
+        self._collection_types = set()
+
     def parse_name(self, name):
         if name in self._keywords:
             return '%s_' % name
         return name
 
-    def add_collection_type(self, typ):
-        if isinstance(typ, TupleType):
-            for value_type in typ.value_types:
-                self.add_collection_type(value_type)
-        elif isinstance(typ, (ListType, SetType)):
-            self.add_collection_type(typ.value_type)
-        elif isinstance(typ, DictionaryType):
-            self.add_collection_type(typ.key_type)
-            self.add_collection_type(typ.value_type)
-        else:
-            return
-        if typ not in self._collection_types:
-            self._collection_types.append(typ)
-
-    def parse_type(self, typ):
+    def parse_type(self, typ, in_collection=False):
         ptr = True
-        self.add_collection_type(typ)
+        self._collection_types.add(typ)
         if isinstance(typ, ValueType):
             ctype = self._type_map[typ.protobuf_type.code]
             ptr = False
@@ -91,7 +79,13 @@ class CNanoGenerator(Generator):
             ctype = 'krpc_tuple_%s_t' % \
                     '_'.join(self.parse_type_name(t) for t in typ.value_types)
         elif isinstance(typ, (ClassType, EnumerationType)):
-            ctype = 'krpc_%s_%s_t' % \
+            if in_collection:
+                if isinstance(typ, ClassType):
+                    ctype = 'krpc_object_t'
+                else:
+                    ctype = 'krpc_enum_t'
+            else:
+                ctype = 'krpc_%s_%s_t' % \
                     (typ.protobuf_type.service, typ.protobuf_type.name)
             ptr = False
         else:
@@ -125,16 +119,21 @@ class CNanoGenerator(Generator):
         result = self.parse_type(typ)
         if isinstance(typ, TupleType):
             result.update({
-                'value_types': [self.parse_type(t) for t in typ.value_types]
+                'value_types': [
+                    self.parse_type(t, in_collection=True)
+                    for t in typ.value_types]
             })
         elif isinstance(typ, (ListType, SetType)):
             result.update({
-                'value_type': self.parse_type(typ.value_type)
+                'value_type': self.parse_type(
+                    typ.value_type, in_collection=True)
             })
         elif isinstance(typ, DictionaryType):
             result.update({
-                'key_type': self.parse_type(typ.key_type),
-                'value_type': self.parse_type(typ.value_type)
+                'key_type': self.parse_type(
+                    typ.key_type, in_collection=True),
+                'value_type': self.parse_type(
+                    typ.value_type, in_collection=True)
             })
         else:
             raise RuntimeError('Unknown type ' + str(typ))
@@ -234,9 +233,27 @@ class CNanoGenerator(Generator):
             class_info['properties'] = class_properties
 
         context['properties'] = properties
-        context['collection_types'] = [
-            self.parse_collection_type(typ) for typ in self._collection_types
-        ]
+
+        context['collection_types'] = []
+
+        def build_collection_types(typ):
+            if isinstance(typ, TupleType):
+                for value_type in typ.value_types:
+                    build_collection_types(value_type)
+            elif isinstance(typ, (ListType, SetType)):
+                build_collection_types(typ.value_type)
+            elif isinstance(typ, DictionaryType):
+                build_collection_types(typ.key_type)
+                build_collection_types(typ.value_type)
+            else:
+                return
+            typ = self.parse_collection_type(typ)
+            if typ not in context['collection_types']:
+                context['collection_types'].append(typ)
+
+        for typ in sorted(self._collection_types, key=self.parse_type_name):
+            build_collection_types(typ)
+
         return context
 
 
