@@ -1,3 +1,4 @@
+import collections
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
     ValueType, ClassType, EnumerationType, MessageType, \
@@ -191,7 +192,7 @@ class CNanoGenerator(Generator):
             typ['ccvtype'] = typ['cvtype']
             return typ
 
-        properties = {}
+        properties = collections.OrderedDict()
         for name, info in context['properties'].items():
             if info['getter']:
                 properties[name] = {
@@ -211,7 +212,7 @@ class CNanoGenerator(Generator):
                 }
 
         for _, class_info in context['classes'].items():
-            class_properties = {}
+            class_properties = collections.OrderedDict()
             for name, info in class_info['properties'].items():
                 if info['getter']:
                     class_properties[name] = {

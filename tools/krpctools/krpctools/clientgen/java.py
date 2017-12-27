@@ -1,3 +1,4 @@
+import collections
 import hashlib
 import itertools
 from krpc.schema.KRPC_pb2 import Type
@@ -151,7 +152,7 @@ class JavaGenerator(Generator):
 
     def parse_context(self, context):
         # Expand service properties into get and set methods
-        properties = {}
+        properties = collections.OrderedDict()
         for name, info in context['properties'].items():
             if info['getter']:
                 properties['get'+upper_camel_case(name)] = {
@@ -174,7 +175,7 @@ class JavaGenerator(Generator):
 
         # Expand class properties into get and set methods
         for class_name, class_info in context['classes'].items():
-            class_properties = {}
+            class_properties = collections.OrderedDict()
             for name, info in class_info['properties'].items():
                 if info['getter']:
                     class_properties['get'+upper_camel_case(name)] = {
