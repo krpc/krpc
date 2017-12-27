@@ -56,7 +56,9 @@ py_sdist(
         '//tools/build/mono-4.5:System.IO',
         '//tools/build/mono-4.5:System.Xml',
         '//tools/TestServer:ServiceDefinitions'
-    ] + glob(['krpctools/**/*.py', 'krpctools/**/*.tmpl', 'krpctools/test/*.json', 'krpctools/test/**/*.txt']),
+    ] +
+    glob(['krpctools/**/*.py', 'krpctools/**/*.tmpl', 'krpctools/test/*.json',
+          'krpctools/test/**/*.txt', 'krpctools/test/**/*.rst']),
     path_map = {
         'version.py': 'krpctools/version.py',
         'tools/krpctools/': '',
