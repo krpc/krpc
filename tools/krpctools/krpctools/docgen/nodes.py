@@ -169,7 +169,7 @@ class Property(Appendable):
             self.type = getter.return_type
             self.documentation = getter.documentation
         else:
-            self.type = setter.parameters[1].type
+            self.type = setter.parameters[0].type
             self.documentation = setter.documentation
         self.getter = getter
         self.setter = setter
