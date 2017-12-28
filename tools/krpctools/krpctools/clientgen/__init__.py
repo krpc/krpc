@@ -3,7 +3,6 @@ import importlib
 import json
 import os
 import sys
-import tempfile
 from pkg_resources import Requirement, resource_filename, resource_string
 from .csharp import CsharpGenerator
 from .cpp import CppGenerator
