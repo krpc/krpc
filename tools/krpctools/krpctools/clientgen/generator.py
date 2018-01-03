@@ -1,13 +1,12 @@
-import array
-import base64
 import codecs
 import collections
 import jinja2
 from krpc.attributes import Attributes
-from krpc.decoder import Decoder
-from krpc.types import Types, EnumerationType
+from krpc.types import Types
 from krpc.utils import snake_case
-from ..utils import lower_camel_case, indent, single_line, as_type
+from ..utils import \
+    lower_camel_case, indent, single_line, \
+    as_type, decode_default_value
 
 
 class Generator(object):
@@ -54,8 +53,7 @@ class Generator(object):
                 'type': self.parse_parameter_type(typ),
             }
             if 'default_value' in parameter:
-                value = self.decode_default_value(
-                    parameter['default_value'], typ)
+                value = decode_default_value(parameter['default_value'], typ)
                 info['default_value'] = self.parse_default_value(value, typ)
             parameters.append(info)
         return parameters
@@ -240,15 +238,6 @@ class Generator(object):
             cls['properties'] = sort_dict(cls['properties'])
 
         return context
-
-    def decode_default_value(self, value, typ):
-        value = base64.b64decode(value)
-        # Note: following is a workaround for decoding EnumerationType,
-        # as set_values has not been called
-        value = array.array('B', value).tostring()
-        if not isinstance(typ, EnumerationType):
-            return Decoder.decode(value, typ)
-        return Decoder.decode(value, self.types.sint32_type)
 
     def get_return_type(self, procedure):
         if 'return_type' not in procedure:
