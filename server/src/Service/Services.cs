@@ -45,32 +45,23 @@ namespace KRPC.Service
             MappedExceptionTypes = Scanner.Scanner.GetMappedExceptionTypes ();
         }
 
-        public ServiceSignature GetServiceSignature (string service)
-        {
-            if (!Signatures.ContainsKey (service))
-                throw new RPCException ("Service " + service + " not found");
-            return Signatures [service];
-        }
-
-        public ProcedureSignature GetProcedureSignature (string service, string procedure)
-        {
-            var serviceSignature = GetServiceSignature (service);
-            if (!serviceSignature.Procedures.ContainsKey (procedure))
-                throw new RPCException ("Procedure " + procedure + " not found, in Service " + service);
-            return serviceSignature.Procedures [procedure];
-        }
-
-        public ProcedureSignature GetProcedureSignature (ProcedureCall call)
+        public ServiceSignature GetServiceSignature (ProcedureCall call)
         {
             string service = call.Service;
             if (call.ServiceId > 0)
                 service = GetServiceNameById (call.ServiceId);
             if (!Signatures.ContainsKey (service))
                 throw new RPCException ("Service " + service + " not found");
-            var serviceSignature = Signatures [service];
+            return Signatures [service];
+        }
+
+        public ProcedureSignature GetProcedureSignature (ProcedureCall call)
+        {
+            var serviceSignature = GetServiceSignature (call);
+            var service = serviceSignature.Name;
             string procedure = call.Procedure;
             if (call.ProcedureId > 0)
-                procedure = GetProcedureNameById(service, call.ProcedureId);
+                procedure = GetProcedureNameById (service, call.ProcedureId);
             if (!serviceSignature.Procedures.ContainsKey (procedure))
                 throw new RPCException ("Procedure " + procedure + " not found, in service " + service);
             return serviceSignature.Procedures [procedure];

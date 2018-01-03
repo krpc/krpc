@@ -19,7 +19,7 @@ namespace KRPC.Service
         public ProcedureCallStream (ProcedureCall call)
         {
             var services = Services.Instance;
-            procedure = services.GetProcedureSignature (call.Service, call.Procedure);
+            procedure = services.GetProcedureSignature (call);
             if (!procedure.HasReturnType)
                 throw new InvalidOperationException ("Cannot create a stream for a procedure that does not return a value.");
             arguments = services.GetArguments (procedure, call.Arguments);

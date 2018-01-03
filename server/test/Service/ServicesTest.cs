@@ -21,9 +21,9 @@ namespace KRPC.Test.Service
 
         static ProcedureCall CallById (string service, string procedure, params Argument[] args)
         {
-            var serviceId = KRPC.Service.Services.Instance.GetServiceSignature (service).Id;
-            var procedureId = KRPC.Service.Services.Instance.GetProcedureSignature (service, procedure).Id;
-            var call = new ProcedureCall (string.Empty, serviceId, string.Empty, procedureId);
+            var serviceSignature = KRPC.Service.Services.Instance.GetServiceSignature (new ProcedureCall (service, procedure));
+            var procedureSignature = KRPC.Service.Services.Instance.GetProcedureSignature (new ProcedureCall (service, procedure));
+            var call = new ProcedureCall (string.Empty, serviceSignature.Id, string.Empty, procedureSignature.Id);
             foreach (var arg in args)
                 call.Arguments.Add (arg);
             return call;

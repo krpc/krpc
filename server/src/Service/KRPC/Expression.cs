@@ -87,7 +87,7 @@ namespace KRPC.Service.KRPC
             if (ReferenceEquals (call, null))
                 throw new ArgumentNullException (nameof (call));
             var services = Services.Instance;
-            var procedure = services.GetProcedureSignature(call.Service, call.Procedure);
+            var procedure = services.GetProcedureSignature(call);
             if (!procedure.HasReturnType)
                 throw new InvalidOperationException(
                     "Cannot use a procedure that does not return a value.");
