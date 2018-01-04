@@ -52,14 +52,14 @@ namespace KRPC.Test.Service
 
         HashSet<int> EchoSet (HashSet<int> h);
 
-        KRPC.Utils.Tuple<int,bool> EchoTuple (KRPC.Utils.Tuple<int,bool> t);
+        global::KRPC.Utils.Tuple<int,bool> EchoTuple (global::KRPC.Utils.Tuple<int,bool> t);
 
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         IDictionary<int,IList<string>> EchoNestedCollection (IDictionary<int,IList<string>> c);
 
         IList<TestService.TestClass> EchoListOfObjects (IList<TestService.TestClass> l);
 
-        KRPC.Utils.Tuple<int,bool> TupleDefault (KRPC.Utils.Tuple<int,bool> x);
+        global::KRPC.Utils.Tuple<int,bool> TupleDefault (global::KRPC.Utils.Tuple<int,bool> x);
 
         IList<int> ListDefault (IList<int> x);
 

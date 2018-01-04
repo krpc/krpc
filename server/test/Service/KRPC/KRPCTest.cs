@@ -3,15 +3,16 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NUnit.Framework;
 
-namespace KRPC.Test.Service
+namespace KRPC.Test.Service.KRPC
 {
     [TestFixture]
+    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInTypeNameRule")]
     public class KRPCTest
     {
         [Test]
         public void GetVersion ()
         {
-            var status = KRPC.Service.KRPC.KRPC.GetStatus ();
+            var status = global::KRPC.Service.KRPC.KRPC.GetStatus ();
             Assert.AreNotEqual (string.Empty, status.Version);
         }
 
@@ -20,13 +21,13 @@ namespace KRPC.Test.Service
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void GetServices ()
         {
-            var services = KRPC.Service.KRPC.KRPC.GetServices ();
+            var services = global::KRPC.Service.KRPC.KRPC.GetServices ();
             Assert.IsNotNull (services);
             Assert.AreEqual (4, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (39, service.Procedures.Count);
-            Assert.AreEqual (1, service.Classes.Count);
+            Assert.AreEqual (67, service.Procedures.Count);
+            Assert.AreEqual (2, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
 
             int foundProcedures = 0;
@@ -40,17 +41,17 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "GetStatus") {
-                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.Messages.Status));
+                    MessageAssert.HasReturnType (proc, typeof(global::KRPC.Service.Messages.Status));
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "GetServices") {
-                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.Messages.Services));
+                    MessageAssert.HasReturnType (proc, typeof(global::KRPC.Service.Messages.Services));
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "AddStream") {
-                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.Messages.Stream));
+                    MessageAssert.HasReturnType (proc, typeof(global::KRPC.Service.Messages.Stream));
                     MessageAssert.HasParameters (proc, 2);
-                    MessageAssert.HasParameter (proc, 0, typeof (KRPC.Service.Messages.ProcedureCall), "call");
+                    MessageAssert.HasParameter (proc, 0, typeof (global::KRPC.Service.Messages.ProcedureCall), "call");
                     MessageAssert.HasParameterWithDefaultValue (proc, 1, typeof (bool), "start", true);
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "StartStream") {
@@ -70,11 +71,11 @@ namespace KRPC.Test.Service
                     MessageAssert.HasParameter (proc, 0, typeof(ulong), "id");
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "get_Clients") {
-                    MessageAssert.HasReturnType (proc, typeof(IList<KRPC.Utils.Tuple<byte[],string,string>>));
+                    MessageAssert.HasReturnType (proc, typeof(IList<global::KRPC.Utils.Tuple<byte[],string,string>>));
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "get_CurrentGameScene") {
-                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.KRPC.KRPC.GameScene));
+                    MessageAssert.HasReturnType (proc, typeof(global::KRPC.Service.KRPC.KRPC.GameScene));
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else {

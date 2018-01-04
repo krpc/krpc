@@ -100,7 +100,6 @@
     <Compile Include="Service\ClassMethodHandlerTest.cs" />
     <Compile Include="Service\DocumentationUtilsTest.cs" />
     <Compile Include="Service\ITestService.cs" />
-    <Compile Include="Service\KRPCTest.cs" />
     <Compile Include="Service\MessageAssert.cs" />
     <Compile Include="Service\ObjectStoreTest.cs" />
     <Compile Include="Service\ProcedureHandlerTest.cs" />
@@ -123,5 +122,10 @@
     <Compile Include="Server\SerialIO\RPCServerTest.cs" />
     <Compile Include="Server\SerialIO\RPCStreamTest.cs" />
     <Compile Include="Server\SerialIO\TestingTools.cs" />
+    <Compile Include="Service\KRPC\KRPCTest.cs" />
+    <Compile Include="Service\KRPC\ExpressionTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Service\KRPC\" />
   </ItemGroup>
 </Project>

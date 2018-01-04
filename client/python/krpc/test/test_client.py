@@ -333,7 +333,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                  'get_status', 'add_stream', 'start_stream',
                  'set_stream_rate', 'remove_stream',
                  'add_event', 'current_game_scene', 'GameScene', 'paused',
-                 'clients', 'Expression', 'InvalidOperationException',
+                 'clients', 'Expression', 'Type', 'InvalidOperationException',
                  'ArgumentException', 'ArgumentNullException',
                  'ArgumentOutOfRangeException']),
             set(x for x in dir(self.conn.krpc) if not x.startswith('_')))

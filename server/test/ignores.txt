@@ -6,6 +6,7 @@ N: KRPC.Test.Server
 N: KRPC.Test.Server.HTTP
 N: KRPC.Test.Server.SerialIO
 N: KRPC.Test.Server.TCP
+N: KRPC.Test.Service.KRPC
 N: KRPC.Test.Service.Scanner
 
 R: Gendarme.Rules.Naming.UseCorrectCasingRule
@@ -18,6 +19,7 @@ N: KRPC.Test.Server.SerialIO
 N: KRPC.Test.Server.TCP
 N: KRPC.Test.Server.WebSockets
 N: KRPC.Test.Service
+N: KRPC.Test.Service.KRPC
 N: KRPC.Test.Service.Scanner
 N: KRPC.Test.Utils
 
