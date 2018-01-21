@@ -736,6 +736,9 @@ SpaceCenter.ResourceConverter.State
 SpaceCenter.ResourceConverter.StatusInfo
 SpaceCenter.ResourceConverter.Inputs
 SpaceCenter.ResourceConverter.Outputs
+SpaceCenter.ResourceConverter.OptimumCoreTemperature
+SpaceCenter.ResourceConverter.CoreTemperature
+SpaceCenter.ResourceConverter.ThermalEfficiency
 SpaceCenter.ResourceConverterState
 SpaceCenter.ResourceConverterState.Running
 SpaceCenter.ResourceConverterState.Idle
