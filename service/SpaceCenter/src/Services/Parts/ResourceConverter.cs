@@ -14,7 +14,6 @@ namespace KRPC.SpaceCenter.Services.Parts
     public class ResourceConverter: Equatable<ResourceConverter>
     {
         readonly IList<ModuleResourceConverter> converters;
-        readonly ModuleResourceConverter core;
 
         internal static bool Is (Part part)
         {
@@ -24,7 +23,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal ResourceConverter (Part part)
         {
             Part = part;
-            core = part.InternalPart.Module<ModuleResourceConverter> ();
             converters = part.InternalPart.Modules.OfType<ModuleResourceConverter> ().ToList ();
             if (converters.Count == 0)
                 throw new ArgumentException ("Part is does not contain any resource converters");
@@ -171,26 +169,25 @@ namespace KRPC.SpaceCenter.Services.Parts
             CheckConverterExists (index);
             return converters [index].outputList.Select (x => x.ResourceName).ToList ();
         }
-        
+
         /// <summary>
         /// The thermal efficiency of the converter, as a percentage of its maximum.
         /// </summary>
         [KRPCProperty]
         public float ThermalEfficiency {
-            get { 
+            get {
+                var core = converters[0];
                 var temp = Convert.ToSingle(core.GetCoreTemperature());
                 return core.ThermalEfficiency.Evaluate(temp);
             }
         }
-        
+
         /// <summary>
         /// The core temperature of the converter, in Kelvin.
         /// </summary>
         [KRPCProperty]
         public float CoreTemperature {
-            get {
-                return (float)core.GetCoreTemperature ();
-            }
+            get { return (float)converters[0].GetCoreTemperature (); }
         }
 
         /// <summary>
@@ -198,7 +195,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float OptimumCoreTemperature {
-            get { return (float)core.GetGoalTemperature (); }
+            get { return (float)converters[0].GetGoalTemperature (); }
         }
     }
 }
