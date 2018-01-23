@@ -1,3 +1,6 @@
+v0.4.4
+ * Add ResourceConverter.ThermalEfficiency, CoreTemperature and OptimumCoreTemperature (#439)
+
 v0.4.1
  * Add SpaceCenter.RaycastDistance and RaycastPart (#423)
  * Add Vessel.CrewCount, CrewCapacity and Crew (#426)
