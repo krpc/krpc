@@ -42,6 +42,10 @@ class TestPartsResourceConverter(krpctest.TestCase):
         ]
 
     def test_properties(self):
+        self.assertAlmostEqual(
+            0.66, self.converter.thermal_efficiency, delta=0.01)
+        self.assertGreater(self.converter.core_temperature, 0)
+        self.assertEqual(1000, self.converter.optimum_core_temperature)
         self.assertEqual(len(self.infos), self.converter.count)
         for i, info in enumerate(self.infos):
             self.assertFalse(self.converter.active(i))
@@ -70,6 +74,8 @@ class TestPartsResourceConverter(krpctest.TestCase):
         self.assertTrue(self.converter.active(index))
         self.assertEqual(
             self.converter_state.running, self.converter.state(index))
+        self.assertGreater(self.converter.core_temperature, 0)
+        self.assertEqual(1000, self.converter.optimum_core_temperature)
         self.converter.stop(index)
         while self.converter.state(index) != self.converter_state.idle:
             self.wait()
