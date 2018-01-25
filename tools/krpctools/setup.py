@@ -26,6 +26,7 @@ setup(
     long_description=open(os.path.join(dirpath, 'README.txt')).read(),
     packages=[
         'krpctools',
+        'krpctools.lang',
         'krpctools.clientgen',
         'krpctools.docgen',
         'krpctools.servicedefs'

@@ -1,4 +1,3 @@
-from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
     ValueType, ClassType, EnumerationType, MessageType, \
     TupleType, ListType, SetType, DictionaryType
@@ -6,6 +5,7 @@ from .domain import Domain
 from .nodes import \
     Procedure, Property, Class, ClassMethod, ClassStaticMethod, \
     ClassProperty, Enumeration, EnumerationValue
+from ..lang.csharp import CsharpLanguage
 
 
 class CsharpDomain(Domain):
@@ -14,18 +14,7 @@ class CsharpDomain(Domain):
     sphinxname = 'csharp'
     highlight = 'csharp'
     codeext = 'cs'
-
-    type_map = {
-        Type.DOUBLE: 'double',
-        Type.FLOAT: 'float',
-        Type.SINT32: 'int',
-        Type.SINT64: 'long',
-        Type.UINT32: 'uint',
-        Type.UINT64: 'ulong',
-        Type.BOOL: 'bool',
-        Type.STRING: 'string',
-        Type.BYTES: 'byte[]'
-    }
+    language = CsharpLanguage()
 
     def currentmodule(self, name):
         super(CsharpDomain, self).currentmodule(name)
@@ -35,7 +24,7 @@ class CsharpDomain(Domain):
         if typ is None:
             return 'void'
         elif isinstance(typ, ValueType):
-            return self.type_map[typ.protobuf_type.code]
+            return self.language.type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
             return 'KRPC.Schema.KRPC.%s' % typ.python_type.__name__
         elif isinstance(typ, (ClassType, EnumerationType)):

@@ -1,70 +1,35 @@
 import collections
-from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
     ValueType, ClassType, EnumerationType, MessageType, \
     TupleType, ListType, SetType, DictionaryType
 from krpc.utils import snake_case
 from .generator import Generator
 from .docparser import DocParser
+from ..lang.cnano import CnanoLanguage
 
 
-class CNanoGenerator(Generator):
+class CnanoGenerator(Generator):
 
-    _keywords = set([
-        'alignas', 'alignof', 'and', 'and_eq', 'asm', 'auto', 'bitand',
-        'bitor', 'bool', 'break', 'case', 'catch', 'char', 'char16_t',
-        'char32_t', 'class', 'compl', 'concept', 'const', 'constexpr',
-        'const_cast', 'continue', 'decltype', 'default', 'delete', 'do',
-        'double', 'dynamic_cast', 'else', 'enum', 'explicit', 'export',
-        'extern', 'false', 'float', 'for', 'friend', 'goto', 'if', 'inline',
-        'int', 'long', 'mutable', 'namespace', 'new', 'noexcept', 'not',
-        'not_eq', 'nullptr', 'operator', 'or', 'or_eq', 'private', 'protected',
-        'public', 'register', 'reinterpret_cast', 'requires', 'return',
-        'short', 'signed', 'sizeof', 'static', 'static_assert', 'static_cast',
-        'struct', 'switch', 'template', 'this', 'thread_local', 'throw',
-        'true', 'try', 'typedef', 'typeid', 'typename', 'union', 'unsigned',
-        'using', 'virtual', 'void', 'volatile', 'wchar_t', 'while', 'xor',
-        'xor_eq'
-    ])
+    language = CnanoLanguage()
 
-    _type_map = {
-        Type.DOUBLE: 'double',
-        Type.FLOAT: 'float',
-        Type.SINT32: 'int32_t',
-        Type.SINT64: 'int64_t',
-        Type.UINT32: 'uint32_t',
-        Type.UINT64: 'uint64_t',
-        Type.BOOL: 'bool',
-        Type.STRING: 'char *',
-        Type.BYTES: 'krpc_bytes_t'
-    }
-
-    _type_name_map = {
-        Type.DOUBLE: 'double',
-        Type.FLOAT: 'float',
-        Type.SINT32: 'int32',
-        Type.SINT64: 'int64',
-        Type.UINT32: 'uint32',
-        Type.UINT64: 'uint64',
-        Type.BOOL: 'bool',
-        Type.STRING: 'string',
-        Type.BYTES: 'bytes'
-    }
-
-    def __init__(self, *args, **kwargs):
-        super(CNanoGenerator, self).__init__(*args, **kwargs)
+    def __init__(self, macro_template, service, definitions):
+        super(CnanoGenerator, self).__init__(
+            macro_template, service, definitions)
         self._collection_types = set()
 
     def parse_name(self, name):
-        if name in self._keywords:
+        if name in self.language.keywords:
             return '%s_' % name
         return name
 
-    def parse_type(self, typ, in_collection=False):
+    def parse_type(self, typ):
+        return self._parse_type(typ)
+
+    def _parse_type(self, typ, in_collection=False):
         ptr = True
         self._collection_types.add(typ)
         if isinstance(typ, ValueType):
-            ctype = self._type_map[typ.protobuf_type.code]
+            ctype = self.language.type_map[typ.protobuf_type.code]
             ptr = False
         elif isinstance(typ, MessageType):
             ctype = 'krpc_schema_%s' % typ.python_type.__name__
@@ -121,19 +86,19 @@ class CNanoGenerator(Generator):
         if isinstance(typ, TupleType):
             result.update({
                 'value_types': [
-                    self.parse_type(t, in_collection=True)
+                    self._parse_type(t, in_collection=True)
                     for t in typ.value_types]
             })
         elif isinstance(typ, (ListType, SetType)):
             result.update({
-                'value_type': self.parse_type(
+                'value_type': self._parse_type(
                     typ.value_type, in_collection=True)
             })
         elif isinstance(typ, DictionaryType):
             result.update({
-                'key_type': self.parse_type(
+                'key_type': self._parse_type(
                     typ.key_type, in_collection=True),
-                'value_type': self.parse_type(
+                'value_type': self._parse_type(
                     typ.value_type, in_collection=True)
             })
         else:
@@ -142,7 +107,7 @@ class CNanoGenerator(Generator):
 
     def parse_type_name(self, typ):
         if isinstance(typ, ValueType):
-            return self._type_name_map[typ.protobuf_type.code]
+            return self.language.type_name_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
             return 'message_%s' % typ.python_type.__name__
         elif isinstance(typ, ListType):

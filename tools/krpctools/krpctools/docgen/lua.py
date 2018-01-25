@@ -1,4 +1,3 @@
-from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
     ValueType, ClassType, EnumerationType, MessageType, \
     TupleType, ListType, SetType, DictionaryType
@@ -7,6 +6,7 @@ from .domain import Domain
 from .nodes import \
     Procedure, Property, Class, ClassMethod, ClassStaticMethod, \
     ClassProperty, Enumeration, EnumerationValue
+from ..lang.lua import LuaLanguage
 
 
 class LuaDomain(Domain):
@@ -15,51 +15,15 @@ class LuaDomain(Domain):
     sphinxname = 'lua'
     highlight = 'lua'
     codeext = 'lua'
-
-    value_map = {
-        'null': 'nil',
-        'true': 'True',
-        'false': 'False'
-    }
-
-    type_map = {
-        Type.DOUBLE: 'number',
-        Type.FLOAT: 'number',
-        Type.SINT32: 'number',
-        Type.SINT64: 'number',
-        Type.UINT32: 'number',
-        Type.UINT64: 'number',
-        Type.BOOL: 'boolean',
-        Type.STRING: 'string',
-        Type.BYTES: 'string'
-    }
+    language = LuaLanguage()
 
     def currentmodule(self, name):
         super(LuaDomain, self).currentmodule(name)
         return '.. currentmodule:: %s' % name
 
-    def type(self, typ):
-        if isinstance(typ, ValueType):
-            return self.type_map[typ.protobuf_type.code]
-        elif isinstance(typ, MessageType):
-            return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
-        elif isinstance(typ, (ClassType, EnumerationType)):
-            return self.shorten_ref(
-                '%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
-        elif isinstance(typ, ListType):
-            return 'List'
-        elif isinstance(typ, DictionaryType):
-            return 'Map'
-        elif isinstance(typ, SetType):
-            return 'Set'
-        elif isinstance(typ, TupleType):
-            return 'Tuple'
-        else:
-            raise RuntimeError('Unknown type \'%s\'' % str(typ))
-
     def type_description(self, typ):
         if isinstance(typ, ValueType):
-            return self.type_map[typ.protobuf_type.code]
+            return self.language.type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
             return ':class:`krpc.schema.KRPC.%s`' % typ.python_type.__name__
         elif isinstance(typ, ClassType):
