@@ -1,0 +1,39 @@
+using Google.Protobuf;
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+
+#if NET35
+using systemAlias = global::KRPC.Client.Compatibility;
+using genericCollectionsAlias = global::KRPC.Client.Compatibility;
+#else
+using systemAlias = global::System;
+using genericCollectionsAlias = global::System.Collections.Generic;
+#endif
+
+namespace KRPC.Client.Services.EmptyService
+{
+    /// <summary>
+    /// Extension methods for EmptyService service.
+    /// </summary>
+    public static class ExtensionMethods
+    {
+        /// <summary>
+        /// Create an instance of the EmptyService service.
+        /// </summary>
+        public static global::KRPC.Client.Services.EmptyService.Service EmptyService (this global::KRPC.Client.IConnection connection)
+        {
+            return new global::KRPC.Client.Services.EmptyService.Service (connection);
+        }
+    }
+
+    /// <summary>
+    /// EmptyService service.
+    /// </summary>
+    public class Service
+    {
+        internal Service (global::KRPC.Client.IConnection serverConnection)
+        {
+        }
+    }
+}

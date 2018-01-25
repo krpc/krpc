@@ -265,6 +265,7 @@ test_suite(
         '//client/serialio:ci-test',
         '//client/websockets:ci-test',
         '//tools/krpctest:ci-test',
+        '//tools/krpctools:ci-test',
         '//doc:ci-test'
     ]
 )

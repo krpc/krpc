@@ -1,0 +1,41 @@
+package krpc.client.services;
+
+import com.google.protobuf.ByteString;
+
+import krpc.client.Connection;
+import krpc.client.Encoder;
+import krpc.client.RemoteEnum;
+import krpc.client.RemoteObject;
+import krpc.client.RPCInfo;
+import krpc.client.RPCException;
+import krpc.client.Types;
+
+public class EmptyService {
+
+    public static EmptyService newInstance(Connection connection) {
+        return new EmptyService(connection);
+    }
+
+    private Connection connection;
+
+    private EmptyService(Connection connection) {
+        this.connection = connection;
+    }
+
+    private void addExceptionTypes(Connection connection) {
+    }
+
+    public static class _Types {
+        public static krpc.schema.KRPC.Type getReturnType(String procedure) {
+            switch (procedure) {
+            }
+            throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+        }
+
+        public static krpc.schema.KRPC.Type[] getParameterTypes(String procedure) {
+            switch (procedure) {
+            }
+            throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+        }
+    }
+}
