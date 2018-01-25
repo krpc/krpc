@@ -95,8 +95,3 @@ class JavaLanguage(Language):
                 (self._parse_type(typ.key_type, True),
                  self._parse_type(typ.value_type, True))
         raise RuntimeError('Unknown type \'%s\'', str(typ))
-
-    @staticmethod
-    def parse_default_value(value, typ):  # pylint: disable=unused-argument
-        # No default arguments in Java
-        return None

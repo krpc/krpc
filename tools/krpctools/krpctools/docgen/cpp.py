@@ -78,20 +78,20 @@ class CppDomain(Domain):
     def paramref(self, name):
         return super(CppDomain, self).paramref(snake_case(name))
 
-    def default_value(self, typ, value):
+    def default_value(self, value, typ):
         if isinstance(typ, TupleType):
-            values = (self.default_value(typ.value_types[i], x)
+            values = (self.default_value(x, typ.value_types[i])
                       for i, x in enumerate(value))
             return '(%s)' % ', '.join(values)
         elif isinstance(typ, ListType):
-            values = (self.default_value(typ.value_type, x) for x in value)
+            values = (self.default_value(x, typ.value_type) for x in value)
             return '(%s)' % ', '.join(values)
         elif isinstance(typ, SetType):
-            values = (self.default_value(typ.value_type, x) for x in value)
+            values = (self.default_value(x, typ.value_type) for x in value)
             return '(%s)' % ', '.join(values)
         elif isinstance(typ, DictionaryType):
-            entries = ('(%s, %s)' % (self.default_value(typ.key_type, k),
-                                     self.default_value(typ.value_type, v))
+            entries = ('(%s, %s)' % (self.default_value(k, typ.key_type),
+                                     self.default_value(v, typ.value_type))
                        for k, v in value.items())
             return '(%s)' % ', '.join(entries)
         return self.language.parse_default_value(value, typ)

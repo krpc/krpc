@@ -1,8 +1,8 @@
+from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
     ValueType, ClassType, EnumerationType, MessageType, \
     TupleType, ListType, SetType, DictionaryType
 from .language import Language
-from krpc.schema.KRPC_pb2 import Type
 
 
 class PythonLanguage(Language):

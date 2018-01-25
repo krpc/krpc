@@ -38,7 +38,7 @@
 
       :parameters:
 
-   .. method:: int Counter(string id = , int divisor = 1)
+   .. method:: int Counter(string id = "", int divisor = 1)
 
 
 
@@ -50,7 +50,7 @@
 
       :parameters:
 
-   .. method:: System.Collections.Generic.IDictionary<int,bool> DictionaryDefault(System.Collections.Generic.IDictionary<int,bool> x = null)
+   .. method:: System.Collections.Generic.IDictionary<int,bool> DictionaryDefault(System.Collections.Generic.IDictionary<int,bool> x = { 1: false, 2: true })
 
 
 
@@ -130,7 +130,7 @@
 
       :parameters:
 
-   .. method:: System.Collections.Generic.IList<int> ListDefault(System.Collections.Generic.IList<int> x = null)
+   .. method:: System.Collections.Generic.IList<int> ListDefault(System.Collections.Generic.IList<int> x = { 1, 2, 3 })
 
 
 
@@ -150,7 +150,7 @@
 
       :parameters:
 
-   .. method:: string OptionalArguments(string x, string y = foo, string z = bar, TestClass obj = null)
+   .. method:: string OptionalArguments(string x, string y = "foo", string z = "bar", TestClass obj = null)
 
 
 
@@ -162,7 +162,7 @@
 
    .. method:: TestClass ReturnNullWhenNotAllowed()
 
-   .. method:: System.Collections.Generic.ISet<int> SetDefault(System.Collections.Generic.ISet<int> x = null)
+   .. method:: System.Collections.Generic.ISet<int> SetDefault(System.Collections.Generic.ISet<int> x = { 1, 2, 3 })
 
 
 
@@ -204,7 +204,7 @@
 
    .. method:: int ThrowInvalidOperationExceptionLater()
 
-   .. method:: System.Tuple<int,bool> TupleDefault(System.Tuple<int,bool> x = null)
+   .. method:: System.Tuple<int,bool> TupleDefault(System.Tuple<int,bool> x = { 1, false })
 
 
 
@@ -238,13 +238,13 @@
 
       :parameters:
 
-   .. method:: string OptionalArguments(string x, string y = foo, string z = bar, TestClass obj = null)
+   .. method:: string OptionalArguments(string x, string y = "foo", string z = "bar", TestClass obj = null)
 
 
 
       :parameters:
 
-   .. method:: static string StaticMethod(IConnection connection, string a = , string b = )
+   .. method:: static string StaticMethod(IConnection connection, string a = "", string b = "")
 
 
 

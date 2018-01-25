@@ -166,8 +166,3 @@ class CnanoLanguage(Language):
 
     def parse_parameter_type(self, typ):
         return self.parse_type(typ)
-
-    @staticmethod
-    def parse_default_value(value, typ):  # pylint: disable=unused-argument
-        # No default arguments in C
-        return None

@@ -25,6 +25,9 @@ class Domain(object):
             return value
         return self.language.value_map.get(value, value)
 
+    def default_value(self, value, typ):
+        return self.language.parse_default_value(value, typ)
+
     def ref(self, obj):
         return self.shorten_ref(obj.fullname, obj)
 

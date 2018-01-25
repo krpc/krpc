@@ -43,3 +43,13 @@ class LuaLanguage(Language):
             return 'Tuple'
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
+
+    def parse_default_value(self, value, typ):
+        if (isinstance(typ, ValueType) and
+                typ.protobuf_type.code == Type.STRING):
+            return '\'%s\'' % value
+        # python2 fix: convert set to string manually
+        if isinstance(typ, SetType):
+            return '{'+', '.join(self.parse_default_value(x, typ.value_type)
+                                 for x in value)+'}'
+        return str(value)

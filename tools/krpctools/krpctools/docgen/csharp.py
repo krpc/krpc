@@ -45,13 +45,28 @@ class CsharpDomain(Domain):
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
-    @staticmethod
-    def default_value(typ, value):
-        if value is None:
-            return 'null'
-        elif isinstance(typ, (TupleType, ListType, SetType, DictionaryType)):
-            return 'null'
-        return str(value)
+    def default_value(self, value, typ):
+        if isinstance(typ, EnumerationType):
+            return '%s' % value
+        elif isinstance(typ, TupleType):
+            values = (self.default_value(x, typ.value_types[i])
+                      for i, x in enumerate(value))
+            return '{ %s }' % ', '.join(values)
+        elif isinstance(typ, ListType):
+            values = (self.default_value(x, typ.value_type)
+                      for x in value)
+            return '{ %s }' % ', '.join(values)
+        elif isinstance(typ, SetType):
+            values = (self.default_value(x, typ.value_type)
+                      for x in value)
+            return '{ %s }' % ', '.join(values)
+        elif isinstance(typ, DictionaryType):
+            entries = ('%s: %s' %
+                       (self.default_value(k, typ.key_type),
+                        self.default_value(v, typ.value_type))
+                       for k, v in value.items())
+            return '{ %s }' % ', '.join(entries)
+        return self.language.parse_default_value(value, typ)
 
     def see(self, obj):
         if isinstance(obj, (Property, ClassProperty)):
