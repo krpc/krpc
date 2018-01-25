@@ -131,7 +131,7 @@
 {% if not x.has_default_value -%}
 {{ domain.parameter_type(x.type) }} {{ x.name }}
 {%- else -%}
-{{ domain.parameter_type(x.type) }} {{ x.name }} = {{ domain.default_value(x.type, x.default_value) }}
+{{ domain.parameter_type(x.type) }} {{ x.name }} = {{ domain.default_value(x.default_value, x.type) }}
 {%- endif %}
 {% endmacro %}
 

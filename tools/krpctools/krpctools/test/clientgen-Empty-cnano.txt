@@ -1,0 +1,21 @@
+#pragma once
+
+#include <krpc/decoder.h>
+#include <krpc/encoder.h>
+#include <krpc/error.h>
+#include <krpc/memory.h>
+#include <krpc/types.h>
+#include <pb_decode.h>
+#include <pb_encode.h>
+
+#include <krpc.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+// Implementation
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif

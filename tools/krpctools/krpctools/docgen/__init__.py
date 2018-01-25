@@ -108,7 +108,7 @@ def main():
         raise RuntimeError(
             'Don\'t know how to order:\n'+'\n'.join(sort_failed))
 
-    content, documented = process_file(args, domain, services, args.source)
+    content, documented = process_file(domain, services, args.source)
 
     output = os.path.abspath(
         os.path.expanduser(os.path.expandvars(args.output)))
@@ -126,7 +126,7 @@ def main():
             fp.write('\n'.join(documented)+'\n')
 
 
-def process_file(args, domain, services, path):
+def process_file(domain, services, path):
     loader = jinja2.FileSystemLoader(searchpath=['./', '/'])
     template_env = jinja2.Environment(
         loader=loader,
@@ -153,7 +153,7 @@ def process_file(args, domain, services, path):
         return ''
 
     context = {
-        'language': args.language,
+        'language': domain.name,
         'domain': domain,
         'services': services,
         'hasdoc': hasdoc,

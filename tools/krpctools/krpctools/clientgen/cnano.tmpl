@@ -51,7 +51,8 @@ extern "C" {
 {% if classes | length > 0 %}
 
 {% for class_name,cls in classes.items() %}
-{{ cls.documentation }}
+{% if cls.documentation %}{{ cls.documentation }}
+{% endif %}
 typedef krpc_object_t krpc_{{ service_name }}_{{ class_name }}_t;
 {% endfor %}
 {% endif %}
@@ -100,10 +101,12 @@ krpc_error_t krpc_decode_{{ typ.name }}(
 {% endfor %}
 {% for enum_name,enm in enumerations.items() %}
 
-{{ enm.documentation }}
+{% if enm.documentation %}{{ enm.documentation }}
+{% endif %}
 typedef enum {
   {% for value in enm['values'] %}
-{{ value.documentation | indent(width=2) }}
+{% if value.documentation %}{{ value.documentation | indent(width=2) }}
+{% endif %}
   KRPC_{{ service_name | upper }}_{{ enum_name | upper }}_{{ value.name | upper }} = {{ value.value }}{% if not loop.last %},{% endif %}
 
   {% endfor %}
@@ -111,28 +114,33 @@ typedef enum {
 {% endfor %}
 {% for procedure_name,procedure in procedures.items() %}
 
-{{ procedure.documentation }}
+{% if procedure.documentation %}{{ procedure.documentation }}
+{% endif %}
 krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ procedure_parameters(procedure) }});
 {% endfor %}
 {% for property_name,property in properties.items() %}
 
-{{ property.documentation }}
+{% if property.documentation %}{{ property.documentation }}
+{% endif %}
 krpc_error_t krpc_{{ service_name }}_{{ property_name }}({{ procedure_parameters(property) }});
 {% endfor %}
 {% for class_name,cls in classes.items() %}
 {% for method_name,method in cls.methods.items() %}
 
-{{ method.documentation }}
+{% if method.documentation %}{{ method.documentation }}
+{% endif %}
 krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ method_parameters(service_name, class_name, method) }});
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
-{{ method.documentation }}
+{% if method.documentation %}{{ method.documentation }}
+{% endif %}
 krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ static_method_parameters(method) }});
 {% endfor %}
 {% for property_name,property in cls.properties.items() %}
 
-{{ property.documentation }}
+{% if property.documentation %}{{ property.documentation }}
+{% endif %}
 krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ property_name }}({{ method_parameters(service_name, class_name, property) }});
 {% endfor %}
 {% endfor %}

@@ -56,7 +56,8 @@ class {{ service_name }} : public Service {
   {% if exceptions | length > 0 %}
   {% for exception_name,exception in exceptions.items() %}
 
-{{ exception.documentation | indent(width=2) }}
+{% if exception.documentation %}{{ exception.documentation | indent(width=2) }}
+{% endif %}
   class {{ exception_name }} : public ::krpc::RPCError {
    public:
     inline explicit {{ exception_name }}(const std::string& msg) : ::krpc::RPCError(msg) {}
@@ -65,10 +66,12 @@ class {{ service_name }} : public Service {
   {% endif %}
   {% for enum_name,enm in enumerations.items() %}
 
-{{ enm.documentation | indent(width=2) }}
+{% if enm.documentation %}{{ enm.documentation | indent(width=2) }}
+{% endif %}
   enum struct {{ enum_name }} {
     {% for value in enm['values'] %}
-{{ value.documentation | indent(width=4) }}
+{% if value.documentation %}{{ value.documentation | indent(width=4) }}
+{% endif %}
     {{ value.name }} = {{ value.value }}{% if not loop.last %},{% endif %}
 
     {% endfor %}
@@ -76,12 +79,14 @@ class {{ service_name }} : public Service {
   {% endfor %}
   {% for procedure_name,procedure in procedures.items() %}
 
-{{ procedure.documentation | indent(width=2) }}
+{% if procedure.documentation %}{{ procedure.documentation | indent(width=2) }}
+{% endif %}
   {{ procedure.return_type }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }});
   {% endfor %}
   {% for property_name,property in properties.items() %}
 
-{{ property.documentation | indent(width=2) }}
+{% if property.documentation %}{{ property.documentation | indent(width=2) }}
+{% endif %}
   {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
   {% endfor %}
   {% for procedure_name,procedure in procedures.items() %}
@@ -106,23 +111,27 @@ class {{ service_name }} : public Service {
   {% endfor %}
   {% for class_name,cls in classes.items() %}
 
-{{ cls.documentation | indent(width=2) }}
+{% if cls.documentation %}{{ cls.documentation | indent(width=2) }}
+{% endif %}
   class {{ class_name }} : public krpc::Object<{{ class_name }}> {
    public:
     explicit {{ class_name }}(Client* client = nullptr, uint64_t id = 0);
     {% for method_name,method in cls.methods.items() %}
 
-{{ method.documentation | indent(width=4) }}
+{% if method.documentation %}{{ method.documentation | indent(width=4) }}
+{% endif %}
     {{ method.return_type }} {{ method_name }}({{ sig_parameters(method.parameters) }});
     {% endfor %}
     {% for method_name,method in cls.static_methods.items() %}
 
-{{ method.documentation | indent(width=4) }}
+{% if method.documentation %}{{ method.documentation | indent(width=4) }}
+{% endif %}
     static {{ method.return_type }} {{ method_name }}({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
     {% endfor %}
     {% for property_name,property in cls.properties.items() %}
 
-{{ property.documentation | indent(width=4) }}
+{% if property.documentation %}{{ property.documentation | indent(width=4) }}
+{% endif %}
     {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
     {% endfor %}
     {% for method_name,method in cls.methods.items() %}

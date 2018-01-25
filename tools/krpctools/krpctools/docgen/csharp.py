@@ -1,4 +1,3 @@
-from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
     ValueType, ClassType, EnumerationType, MessageType, \
     TupleType, ListType, SetType, DictionaryType
@@ -6,6 +5,7 @@ from .domain import Domain
 from .nodes import \
     Procedure, Property, Class, ClassMethod, ClassStaticMethod, \
     ClassProperty, Enumeration, EnumerationValue
+from ..lang.csharp import CsharpLanguage
 
 
 class CsharpDomain(Domain):
@@ -14,18 +14,7 @@ class CsharpDomain(Domain):
     sphinxname = 'csharp'
     highlight = 'csharp'
     codeext = 'cs'
-
-    type_map = {
-        Type.DOUBLE: 'double',
-        Type.FLOAT: 'float',
-        Type.SINT32: 'int',
-        Type.SINT64: 'long',
-        Type.UINT32: 'uint',
-        Type.UINT64: 'ulong',
-        Type.BOOL: 'bool',
-        Type.STRING: 'string',
-        Type.BYTES: 'byte[]'
-    }
+    language = CsharpLanguage()
 
     def currentmodule(self, name):
         super(CsharpDomain, self).currentmodule(name)
@@ -35,7 +24,7 @@ class CsharpDomain(Domain):
         if typ is None:
             return 'void'
         elif isinstance(typ, ValueType):
-            return self.type_map[typ.protobuf_type.code]
+            return self.language.type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
             return 'KRPC.Schema.KRPC.%s' % typ.python_type.__name__
         elif isinstance(typ, (ClassType, EnumerationType)):
@@ -56,13 +45,28 @@ class CsharpDomain(Domain):
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
-    @staticmethod
-    def default_value(typ, value):
-        if value is None:
-            return 'null'
-        elif isinstance(typ, (TupleType, ListType, SetType, DictionaryType)):
-            return 'null'
-        return str(value)
+    def default_value(self, value, typ):
+        if isinstance(typ, EnumerationType):
+            return '%s' % value
+        elif isinstance(typ, TupleType):
+            values = (self.default_value(x, typ.value_types[i])
+                      for i, x in enumerate(value))
+            return '{ %s }' % ', '.join(values)
+        elif isinstance(typ, ListType):
+            values = (self.default_value(x, typ.value_type)
+                      for x in value)
+            return '{ %s }' % ', '.join(values)
+        elif isinstance(typ, SetType):
+            values = (self.default_value(x, typ.value_type)
+                      for x in value)
+            return '{ %s }' % ', '.join(values)
+        elif isinstance(typ, DictionaryType):
+            entries = ('%s: %s' %
+                       (self.default_value(k, typ.key_type),
+                        self.default_value(v, typ.value_type))
+                       for k, v in value.items())
+            return '{ %s }' % ', '.join(entries)
+        return self.language.parse_default_value(value, typ)
 
     def see(self, obj):
         if isinstance(obj, (Property, ClassProperty)):

@@ -5,95 +5,15 @@ from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
     ValueType, ClassType, EnumerationType, MessageType, \
     TupleType, ListType, SetType, DictionaryType
-from krpc.utils import snake_case
 from .generator import Generator
 from .docparser import DocParser
 from ..utils import lower_camel_case, upper_camel_case, as_type
+from ..lang.java import JavaLanguage
 
 
 class JavaGenerator(Generator):
 
-    _keywords = set([
-        'abstract', 'continue', 'for', 'new', 'switch', 'assert', 'default',
-        'goto', 'package', 'synchronized', 'boolean', 'do', 'if', 'private',
-        'this', 'break', 'double', 'implements', 'protected', 'throw', 'byte',
-        'else', 'import', 'public', 'throws', 'case', 'enum', 'instanceof',
-        'return', 'transient', 'catch', 'extends', 'int', 'short', 'try',
-        'char', 'final', 'interface', 'static', 'void', 'class', 'finally',
-        'long', 'strictfp', 'volatile', 'const', 'float', 'native', 'super',
-        'while', 'wait'
-    ])
-
-    _tuple_class_names = [
-        'Unit', 'Pair', 'Triplet', 'Quartet', 'Quintet', 'Sextet', 'Septet',
-        'Octet', 'Ennead', 'Decade'
-    ]
-
-    _type_map = {
-        Type.DOUBLE: 'double',
-        Type.FLOAT: 'float',
-        Type.SINT32: 'int',
-        Type.SINT64: 'long',
-        Type.UINT32: 'int',
-        Type.UINT64: 'long',
-        Type.BOOL: 'boolean',
-        Type.STRING: 'String',
-        Type.BYTES: 'byte[]'
-    }
-
-    _type_map_classes = {
-        Type.DOUBLE: 'Double',
-        Type.FLOAT: 'Float',
-        Type.SINT32: 'Integer',
-        Type.SINT64: 'Long',
-        Type.UINT32: 'Integer',
-        Type.UINT64: 'Long',
-        Type.BOOL: 'Boolean',
-        Type.STRING: 'String',
-        Type.BYTES: 'byte[]'
-    }
-
-    @classmethod
-    def get_tuple_class_name(cls, value_types):
-        return cls._tuple_class_names[len(value_types)-1]
-
-    @classmethod
-    def parse_name(cls, name):
-        name = lower_camel_case(name)
-        if name in cls._keywords:
-            return '%s_' % name
-        return name
-
-    @staticmethod
-    def parse_const_name(name):
-        return snake_case(name).upper()
-
-    def parse_type(self, typ, in_collection=False):
-        if not in_collection and isinstance(typ, ValueType):
-            return self._type_map[typ.protobuf_type.code]
-        elif isinstance(typ, ValueType):
-            return self._type_map_classes[typ.protobuf_type.code]
-        elif (isinstance(typ, MessageType) and
-              typ.protobuf_type.code == Type.EVENT):
-            return 'krpc.client.Event'
-        elif isinstance(typ, MessageType):
-            return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
-        elif isinstance(typ, (ClassType, EnumerationType)):
-            return 'krpc.client.services.%s.%s' % \
-                (typ.protobuf_type.service, typ.protobuf_type.name)
-        elif isinstance(typ, TupleType):
-            name = self.get_tuple_class_name(typ.value_types)
-            return 'org.javatuples.'+name+'<%s>' % \
-                (','.join(self.parse_type(t, True) for t in typ.value_types))
-        elif isinstance(typ, ListType):
-            return 'java.util.List<%s>' % self.parse_type(typ.value_type, True)
-        elif isinstance(typ, SetType):
-            return 'java.util.Set<%s>' % self.parse_type(typ.value_type, True)
-        elif isinstance(typ, DictionaryType):
-            return 'java.util.Map<%s,%s>' % \
-                (self.parse_type(typ.key_type, True),
-                 self.parse_type(typ.value_type, True))
-        raise RuntimeError('Unknown type ' + typ)
+    language = JavaLanguage()
 
     def parse_type_specification(self, typ):
         if typ is None:
@@ -127,19 +47,6 @@ class JavaGenerator(Generator):
                 (self.parse_type_specification(typ.key_type),
                  self.parse_type_specification(typ.value_type))
         raise RuntimeError('Unknown type ' + typ)
-
-    def parse_return_type(self, typ):
-        if typ is None:
-            return 'void'
-        return self.parse_type(typ)
-
-    def parse_parameter_type(self, typ):
-        return self.parse_type(typ)
-
-    @staticmethod
-    def parse_default_value(value, typ):  # pylint: disable=unused-argument
-        # No default arguments in Java
-        return None
 
     @staticmethod
     def parse_documentation(documentation):
@@ -243,7 +150,7 @@ class JavaGenerator(Generator):
         # Make enumeration members UPPER_SNAKE_CASE
         for enm in context['enumerations'].values():
             for value in enm['values']:
-                value['name'] = self.parse_const_name(value['name'])
+                value['name'] = self.language.parse_const_name(value['name'])
 
         # Add serial version UIDs to classes
         items = context['classes'].items() + context['exceptions'].items()

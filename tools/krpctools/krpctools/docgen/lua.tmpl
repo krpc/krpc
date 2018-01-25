@@ -152,7 +152,7 @@
 {% if not x.has_default_value -%}
 {{ x.name | snakecase }}
 {%- else -%}
-[{{ x.name | snakecase }} = {{ x.default_value }}]
+[{{ x.name | snakecase }} = {{ domain.default_value(x.default_value, x.type) }}]
 {%- endif %}
 {% endmacro %}
 

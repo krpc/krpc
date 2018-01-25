@@ -1,4 +1,3 @@
-from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
     ValueType, ClassType, EnumerationType, MessageType, \
     TupleType, ListType, SetType, DictionaryType
@@ -8,6 +7,7 @@ from .nodes import \
     Procedure, Property, Class, ClassMethod, ClassStaticMethod, \
     ClassProperty, Enumeration, EnumerationValue
 from ..utils import lower_camel_case
+from ..lang.java import JavaLanguage
 
 
 class JavaDomain(Domain):
@@ -16,53 +16,14 @@ class JavaDomain(Domain):
     sphinxname = 'java'
     highlight = 'java'
     codeext = 'java'
-
-    _keywords = set([
-        'abstract', 'continue', 'for', 'new', 'switch', 'assert', 'default',
-        'goto', 'package', 'synchronized', 'boolean', 'do', 'if', 'private',
-        'this', 'break', 'double', 'implements', 'protected', 'throw', 'byte',
-        'else', 'import', 'public', 'throws', 'case', 'enum', 'instanceof',
-        'return', 'transient', 'catch', 'extends', 'int', 'short', 'try',
-        'char', 'final', 'interface', 'static', 'void', 'class', 'finally',
-        'long', 'strictfp', 'volatile', 'const', 'float', 'native', 'super',
-        'while', 'wait'
-    ])
-
-    type_map = {
-        Type.DOUBLE: 'double',
-        Type.FLOAT: 'float',
-        Type.SINT32: 'int',
-        Type.SINT64: 'long',
-        Type.UINT32: 'int',
-        Type.UINT64: 'long',
-        Type.BOOL: 'boolean',
-        Type.STRING: 'String',
-        Type.BYTES: 'byte[]'
-    }
-
-    boxed_type_map = {
-        Type.DOUBLE: 'Double',
-        Type.FLOAT: 'Float',
-        Type.SINT32: 'Integer',
-        Type.SINT64: 'Long',
-        Type.UINT32: 'Integer',
-        Type.UINT64: 'Long',
-        Type.BOOL: 'Boolean',
-        Type.STRING: 'String',
-        Type.BYTES: 'byte[]'
-    }
-
-    tuple_types = [
-        'Unit', 'Pair', 'Triplet', 'Quartet', 'Quintet',
-        'Sextet', 'Septet', 'Octet', 'Ennead', 'Decade'
-    ]
+    language = JavaLanguage()
 
     def currentmodule(self, name):
         super(JavaDomain, self).currentmodule(name)
         return '.. package:: krpc.client.services.%s' % name
 
     def method_name(self, name):
-        if lower_camel_case(name) in self._keywords:
+        if lower_camel_case(name) in self.language.keywords:
             return '%s_' % name
         return name
 
@@ -73,9 +34,9 @@ class JavaDomain(Domain):
         if typ is None:
             return 'void'
         elif not generic and isinstance(typ, ValueType):
-            return self.type_map[typ.protobuf_type.code]
+            return self.language.type_map[typ.protobuf_type.code]
         elif generic and isinstance(typ, ValueType):
-            return self.boxed_type_map[typ.protobuf_type.code]
+            return self.language.type_map_classes[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
             return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
         elif isinstance(typ, (ClassType, EnumerationType)):
@@ -90,7 +51,7 @@ class JavaDomain(Domain):
         elif isinstance(typ, SetType):
             return 'java.util.Set<%s>' % self._type(typ.value_type, True)
         elif isinstance(typ, TupleType):
-            name = self.tuple_types[len(typ.value_types)-1]
+            name = self.language.tuple_types[len(typ.value_types)-1]
             return 'org.javatuples.%s<%s>' % \
                 (name, ','.join(self._type(typ, True)
                                 for typ in typ.value_types))

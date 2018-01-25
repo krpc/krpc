@@ -1,4 +1,3 @@
-from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
     ValueType, ClassType, EnumerationType, MessageType, \
     TupleType, ListType, SetType, DictionaryType
@@ -6,6 +5,7 @@ from .domain import Domain
 from .nodes import \
     Procedure, Property, Class, ClassMethod, ClassStaticMethod, \
     ClassProperty, Enumeration, EnumerationValue
+from ..lang.cnano import CnanoLanguage
 
 
 class CnanoDomain(Domain):
@@ -14,64 +14,20 @@ class CnanoDomain(Domain):
     sphinxname = 'c'
     highlight = 'c'
     codeext = 'c'
-
-    _keywords = set([
-        'alignas', 'alignof', 'and', 'and_eq', 'asm', 'auto', 'bitand',
-        'bitor', 'bool', 'break', 'case', 'catch', 'char', 'char16_t',
-        'char32_t', 'class', 'compl', 'concept', 'const', 'constexpr',
-        'const_cast', 'continue', 'decltype', 'default', 'delete', 'do',
-        'double', 'dynamic_cast', 'else', 'enum', 'explicit', 'export',
-        'extern', 'false', 'float', 'for', 'friend', 'goto', 'if', 'inline',
-        'int', 'long', 'mutable', 'namespace', 'new', 'noexcept', 'not',
-        'not_eq', 'nullptr', 'operator', 'or', 'or_eq', 'private', 'protected',
-        'public', 'register', 'reinterpret_cast', 'requires', 'return',
-        'short', 'signed', 'sizeof', 'static', 'static_assert', 'static_cast',
-        'struct', 'switch', 'template', 'this', 'thread_local', 'throw',
-        'true', 'try', 'typedef', 'typeid', 'typename', 'union', 'unsigned',
-        'using', 'virtual', 'void', 'volatile', 'wchar_t', 'while', 'xor',
-        'xor_eq'
-    ])
-
-    _type_map = {
-        Type.DOUBLE: 'double',
-        Type.FLOAT: 'float',
-        Type.SINT32: 'int32_t',
-        Type.SINT64: 'int64_t',
-        Type.UINT32: 'uint32_t',
-        Type.UINT64: 'uint64_t',
-        Type.BOOL: 'bool',
-        Type.STRING: 'char *',
-        Type.BYTES: 'krpc_bytes_t'
-    }
-
-    _type_name_map = {
-        Type.DOUBLE: 'double',
-        Type.FLOAT: 'float',
-        Type.SINT32: 'int32',
-        Type.SINT64: 'int64',
-        Type.UINT32: 'uint32',
-        Type.UINT64: 'uint64',
-        Type.BOOL: 'bool',
-        Type.STRING: 'string',
-        Type.BYTES: 'bytes'
-    }
-
-    value_map = {
-        'null': 'nullptr'
-    }
+    language = CnanoLanguage()
 
     def currentmodule(self, name):
         super(CnanoDomain, self).currentmodule(name)
         return ''
 
     def method_name(self, name):
-        if name in self._keywords:
+        if name in self.language.keywords:
             return '%s_' % name
         return name
 
     def parse_type_name(self, typ):
         if isinstance(typ, ValueType):
-            return self._type_name_map[typ.protobuf_type.code]
+            return self.language.type_name_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
             return 'message_%s' % typ.python_type.__name__
         elif isinstance(typ, ListType):
@@ -95,7 +51,7 @@ class CnanoDomain(Domain):
         if typ is None:
             return {'ctype': 'void', 'cvtype': None, 'name': None}
         elif isinstance(typ, ValueType):
-            ctype = self._type_map[typ.protobuf_type.code]
+            ctype = self.language.type_map[typ.protobuf_type.code]
             ptr = False
         elif isinstance(typ, MessageType):
             ctype = 'krpc_schema_%s' % typ.python_type.__name__
