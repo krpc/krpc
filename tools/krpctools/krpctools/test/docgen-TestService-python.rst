@@ -57,13 +57,13 @@ Service documentation string.
 
 
 
-   :param str value:
+   :param bytes value:
    :rtype: str
 
 
 
 
-.. staticmethod:: counter([id = ], [divisor = 1])
+.. staticmethod:: counter([id = ''], [divisor = 1])
 
 
 
@@ -98,7 +98,7 @@ Service documentation string.
 
 
 
-   :param float value:
+   :param double value:
    :rtype: str
 
 
@@ -264,7 +264,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: optional_arguments(x, [y = foo], [z = bar], [obj = None])
+.. staticmethod:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = None])
 
 
 
@@ -302,7 +302,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: set_default([x = set([1, 2, 3])])
+.. staticmethod:: set_default([x = {1, 2, 3}])
 
 
 
@@ -466,7 +466,7 @@ Service documentation string.
       :param TestClass other:
       :rtype: str
 
-   .. method:: optional_arguments(x, [y = foo], [z = bar], [obj = None])
+   .. method:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = None])
 
 
 
@@ -476,7 +476,7 @@ Service documentation string.
       :param TestClass obj:
       :rtype: str
 
-   .. staticmethod:: static_method([a = ], [b = ])
+   .. staticmethod:: static_method([a = ''], [b = ''])
 
 
 

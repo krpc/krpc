@@ -23,7 +23,7 @@ class PythonDomain(Domain):
 
     def type_description(self, typ):
         if isinstance(typ, ValueType):
-            return typ.python_type.__name__
+            return self.language.parse_type(typ)
         elif isinstance(typ, MessageType):
             return ':class:`krpc.schema.KRPC.%s`' % typ.python_type.__name__
         elif isinstance(typ, ClassType):
@@ -70,3 +70,6 @@ class PythonDomain(Domain):
 
     def paramref(self, name):
         return super(PythonDomain, self).paramref(snake_case(name))
+
+    def default_value(self, typ, value):
+        return self.language.parse_default_value(value, typ)
