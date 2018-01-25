@@ -22,6 +22,7 @@ stage_files(
         'src/images/**/*.png',
         'src/crafts/*.craft',
         'src/scripts/**/*.c',
+        'src/scripts/**/*.ino',
         'src/scripts/**/*.cs',
         'src/scripts/**/*.cpp',
         'src/scripts/**/*.java',
