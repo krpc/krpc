@@ -9,10 +9,12 @@ KRPC
 {{ mark_documented(services['KRPC'].members['AddStream']) }}
 {{ mark_documented(services['KRPC'].members['StartStream']) }}
 {{ mark_documented(services['KRPC'].members['RemoveStream']) }}
+{{ mark_documented(services['KRPC'].members['SetStreamRate']) }}
 {{ mark_documented(services['KRPC'].members['AddEvent']) }}
 {{ services['KRPC'].remove('AddStream') }}
 {{ services['KRPC'].remove('StartStream') }}
 {{ services['KRPC'].remove('RemoveStream') }}
+{{ services['KRPC'].remove('SetStreamRate') }}
 {{ services['KRPC'].remove('AddEvent') }}
 
 {{ macros.service(services['KRPC']) }}
