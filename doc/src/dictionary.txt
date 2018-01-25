@@ -27,6 +27,7 @@ autotune
 badass
 biome
 biomes
+bool
 boolean
 circularization
 clickable

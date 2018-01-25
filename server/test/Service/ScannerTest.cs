@@ -16,7 +16,7 @@ namespace KRPC.Test.Service
         [SetUp]
         public void SetUp ()
         {
-            services = KRPC.Service.KRPC.KRPC.GetServices ();
+            services = global::KRPC.Service.KRPC.KRPC.GetServices ();
             Assert.IsNotNull (services);
         }
 
@@ -244,8 +244,8 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "EchoTuple") {
                     MessageAssert.HasParameters (proc, 1);
-                    MessageAssert.HasParameter (proc, 0, typeof(KRPC.Utils.Tuple<int,bool>), "t");
-                    MessageAssert.HasReturnType (proc, typeof(KRPC.Utils.Tuple<int,bool>));
+                    MessageAssert.HasParameter (proc, 0, typeof(global::KRPC.Utils.Tuple<int,bool>), "t");
+                    MessageAssert.HasReturnType (proc, typeof(global::KRPC.Utils.Tuple<int,bool>));
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "EchoNestedCollection") {
                     MessageAssert.HasParameters (proc, 1);
@@ -259,8 +259,8 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "TupleDefault") {
                     MessageAssert.HasParameters (proc, 1);
-                    MessageAssert.HasParameterWithDefaultValue (proc, 0, typeof(KRPC.Utils.Tuple<int,bool>), "x", new KRPC.Utils.Tuple<int,bool> (1, false));
-                    MessageAssert.HasReturnType (proc, typeof(KRPC.Utils.Tuple<int,bool>));
+                    MessageAssert.HasParameterWithDefaultValue (proc, 0, typeof(global::KRPC.Utils.Tuple<int,bool>), "x", new global::KRPC.Utils.Tuple<int,bool> (1, false));
+                    MessageAssert.HasReturnType (proc, typeof(global::KRPC.Utils.Tuple<int,bool>));
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "ListDefault") {
                     MessageAssert.HasParameters (proc, 1);

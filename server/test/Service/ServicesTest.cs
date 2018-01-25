@@ -21,8 +21,8 @@ namespace KRPC.Test.Service
 
         static ProcedureCall CallById (string service, string procedure, params Argument[] args)
         {
-            var serviceSignature = KRPC.Service.Services.Instance.GetServiceSignature (new ProcedureCall (service, procedure));
-            var procedureSignature = KRPC.Service.Services.Instance.GetProcedureSignature (new ProcedureCall (service, procedure));
+            var serviceSignature = global::KRPC.Service.Services.Instance.GetServiceSignature (new ProcedureCall (service, procedure));
+            var procedureSignature = global::KRPC.Service.Services.Instance.GetProcedureSignature (new ProcedureCall (service, procedure));
             var call = new ProcedureCall (string.Empty, serviceSignature.Id, string.Empty, procedureSignature.Id);
             foreach (var arg in args)
                 call.Arguments.Add (arg);
@@ -36,8 +36,8 @@ namespace KRPC.Test.Service
 
         static ProcedureResult Run (ProcedureCall call)
         {
-            var procedureSignature = KRPC.Service.Services.Instance.GetProcedureSignature (call);
-            return KRPC.Service.Services.Instance.ExecuteCall (procedureSignature, call);
+            var procedureSignature = global::KRPC.Service.Services.Instance.GetProcedureSignature (call);
+            return global::KRPC.Service.Services.Instance.ExecuteCall (procedureSignature, call);
         }
 
         static void CheckResultNotEmpty (ProcedureResult result)
@@ -554,16 +554,16 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleEchoTuple ()
         {
-            var tuple = KRPC.Utils.Tuple.Create (42, false);
+            var tuple = global::KRPC.Utils.Tuple.Create (42, false);
             var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.EchoTuple (It.IsAny<KRPC.Utils.Tuple<int,bool>> ()))
-                .Returns ((KRPC.Utils.Tuple<int,bool> x) => x);
+            mock.Setup (x => x.EchoTuple (It.IsAny<global::KRPC.Utils.Tuple<int,bool>> ()))
+                .Returns ((global::KRPC.Utils.Tuple<int,bool> x) => x);
             TestService.Service = mock.Object;
             var result = Run (Call ("TestService", "EchoTuple", Arg (0, tuple)));
-            mock.Verify (x => x.EchoTuple (It.IsAny<KRPC.Utils.Tuple<int,bool>> ()), Times.Once ());
+            mock.Verify (x => x.EchoTuple (It.IsAny<global::KRPC.Utils.Tuple<int,bool>> ()), Times.Once ());
             CheckResultNotEmpty (result);
             Assert.IsNotNull (result.Value);
-            Assert.AreEqual (tuple, (KRPC.Utils.Tuple<int,bool>)result.Value);
+            Assert.AreEqual (tuple, (global::KRPC.Utils.Tuple<int,bool>)result.Value);
         }
 
         [Test]
@@ -609,11 +609,11 @@ namespace KRPC.Test.Service
         public void HandleOptionalTupleNotSpecified ()
         {
             var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.TupleDefault (It.IsAny<KRPC.Utils.Tuple<int,bool>> ()))
-                .Returns ((KRPC.Utils.Tuple<int,bool> x) => x);
+            mock.Setup (x => x.TupleDefault (It.IsAny<global::KRPC.Utils.Tuple<int,bool>> ()))
+                .Returns ((global::KRPC.Utils.Tuple<int,bool> x) => x);
             TestService.Service = mock.Object;
             var result = Run (Call ("TestService", "TupleDefault"));
-            mock.Verify (x => x.TupleDefault (It.IsAny<KRPC.Utils.Tuple<int,bool>> ()), Times.Once ());
+            mock.Verify (x => x.TupleDefault (It.IsAny<global::KRPC.Utils.Tuple<int,bool>> ()), Times.Once ());
             CheckResultNotEmpty (result);
             Assert.AreEqual (TestService.CreateTupleDefault.Create (), result.Value);
         }

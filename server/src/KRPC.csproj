@@ -155,7 +155,6 @@
     <Compile Include="Server\WebSockets\StreamClient.cs" />
     <Compile Include="Server\WebSockets\StreamServer.cs" />
     <Compile Include="Server\WebSockets\StreamStream.cs" />
-    <Compile Include="ServicesChecker.cs" />
     <Compile Include="Service\Attributes\KRPCClassAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCDefaultValueAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCEnumAttribute.cs" />
@@ -179,6 +178,7 @@
     <Compile Include="Service\KRPC\Expression.cs" />
     <Compile Include="Service\KRPC\InvalidOperationException.cs" />
     <Compile Include="Service\KRPC\KRPC.cs" />
+    <Compile Include="Service\KRPC\Type.cs" />
     <Compile Include="Service\Messages\Argument.cs" />
     <Compile Include="Service\Messages\Class.cs" />
     <Compile Include="Service\Messages\Enumeration.cs" />
@@ -192,8 +192,8 @@
     <Compile Include="Service\Messages\Procedure.cs" />
     <Compile Include="Service\Messages\ProcedureCall.cs" />
     <Compile Include="Service\Messages\ProcedureResult.cs" />
-    <Compile Include="Service\Messages\Response.cs" />
     <Compile Include="Service\Messages\Request.cs" />
+    <Compile Include="Service\Messages\Response.cs" />
     <Compile Include="Service\Messages\Service.cs" />
     <Compile Include="Service\Messages\Services.cs" />
     <Compile Include="Service\Messages\Status.cs" />
@@ -205,8 +205,8 @@
     <Compile Include="Service\ProcedureCallStream.cs" />
     <Compile Include="Service\ProcedureHandler.cs" />
     <Compile Include="Service\ProcedureParameter.cs" />
-    <Compile Include="Service\RequestContinuation.cs" />
     <Compile Include="Service\RPCException.cs" />
+    <Compile Include="Service\RequestContinuation.cs" />
     <Compile Include="Service\Scanner\ClassSignature.cs" />
     <Compile Include="Service\Scanner\EnumerationSignature.cs" />
     <Compile Include="Service\Scanner\EnumerationValueSignature.cs" />
@@ -220,6 +220,7 @@
     <Compile Include="Service\Stream.cs" />
     <Compile Include="Service\StreamContinuation.cs" />
     <Compile Include="Service\TypeUtils.cs" />
+    <Compile Include="ServicesChecker.cs" />
     <Compile Include="UI\ClientConnectingDialog.cs" />
     <Compile Include="UI\ClientDisconnectDialog.cs" />
     <Compile Include="UI\EditServer.cs" />
