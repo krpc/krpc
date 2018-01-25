@@ -43,7 +43,8 @@ public class {{ service_name }} {
     }
     {% for exception_name,exception in exceptions.items() %}
 
-{{ exception.documentation | indent(width=4) }}
+{% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
+{% endif %}
     public static class {{ exception_name }} extends krpc.client.RPCException {
         private static final long serialVersionUID = {{ exception.serial_version_uid }}L;
 
@@ -64,7 +65,8 @@ public class {{ service_name }} {
     }
     {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
 
-{{ procedure.documentation | indent(width=4) }}
+{% if procedure.documentation %}{{ procedure.documentation | indent(width=4) }}
+{% endif %}
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "{{ service_name }}", procedure = "{{ procedure.remote_name }}", types = _Types.class)
     public {{ procedure.return_type.name }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }}) throws RPCException {
@@ -77,10 +79,12 @@ public class {{ service_name }} {
     {% endfor %}
     {% for enum_name,enm in enumerations.items() %}
 
-{{ enm.documentation | indent(width=4) }}
+{% if enm.documentation %}{{ enm.documentation | indent(width=4) }}
+{% endif %}
     public enum {{ enum_name }} implements RemoteEnum {
         {% for value in enm['values'] %}
-{{ value.documentation | indent(width=8) }}
+{% if value.documentation %}{{ value.documentation | indent(width=8) }}
+{% endif %}
         {{ value.name }}({{ value.value }}){% if not loop.last %},{% else %};{% endif %}
 
 
@@ -109,7 +113,8 @@ public class {{ service_name }} {
     {% endfor %}
     {% for class_name,cls in classes.items() %}
 
-{{ cls.documentation | indent(width=4) }}
+{% if cls.documentation %}{{ cls.documentation | indent(width=4) }}
+{% endif %}
     public static class {{ class_name }} extends RemoteObject {
 
         private static final long serialVersionUID = {{ cls.serial_version_uid }}L;
@@ -119,7 +124,8 @@ public class {{ service_name }} {
         }
         {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
 
-{{ method.documentation | indent(width=8) }}
+{% if method.documentation %}{{ method.documentation | indent(width=8) }}
+{% endif %}
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
         public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }}) throws RPCException
@@ -132,7 +138,8 @@ public class {{ service_name }} {
         {% endfor %}
         {% for method_name,method in cls.static_methods.items() %}
 
-{{ method.documentation | indent(width=8) }}
+{% if method.documentation %}{{ method.documentation | indent(width=8) }}
+{% endif %}
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
         public static {{ method.return_type.name }} {{ method_name }}({{ sig_parameters([{'type': {'name': 'Connection'}, 'name': 'connection'}] + method.parameters) }}) throws RPCException

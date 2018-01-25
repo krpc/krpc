@@ -1,13 +1,12 @@
-import array
-import base64
 import codecs
 import collections
 import jinja2
 from krpc.attributes import Attributes
-from krpc.decoder import Decoder
-from krpc.types import Types, EnumerationType
+from krpc.types import Types
 from krpc.utils import snake_case
-from ..utils import lower_camel_case, indent, single_line, as_type
+from ..utils import \
+    lower_camel_case, indent, single_line, \
+    as_type, decode_default_value
 
 
 class Generator(object):
@@ -54,29 +53,36 @@ class Generator(object):
                 'type': self.parse_parameter_type(typ),
             }
             if 'default_value' in parameter:
-                value = self.decode_default_value(
-                    parameter['default_value'], typ)
+                value = decode_default_value(parameter['default_value'], typ)
                 info['default_value'] = self.parse_default_value(value, typ)
             parameters.append(info)
         return parameters
 
-    def generate_context(self):
-        procedures = {}
-        properties = {}
-        classes = {}
-        enumerations = {}
-        exceptions = {}
+    def _get_defs(self, key):
+        return self._defs.get(key, {}).items()
 
-        for name, cls in self._defs['classes'].items():
-            classes[name] = {
+    def generate_context(self):
+        context = {
+            'service_name': self._service,
+            'service_id': self._defs['id'],
+            'procedures': {},
+            'properties': {},
+            'classes': {},
+            'enumerations': {},
+            'exceptions': {}
+        }
+
+        for name, cls in self._get_defs('classes'):
+            context['classes'][name] = {
                 'methods': {},
                 'static_methods': {},
                 'properties': {},
-                'documentation': self.parse_documentation(cls['documentation'])
+                'documentation': self.parse_documentation(
+                    cls['documentation'])
             }
 
-        for name, enumeration in self._defs['enumerations'].items():
-            enumerations[name] = {
+        for name, enumeration in self._get_defs('enumerations'):
+            context['enumerations'][name] = {
                 'values': [{
                     'name': self.parse_name(x['name']),
                     'value': x['value'],
@@ -87,20 +93,20 @@ class Generator(object):
                     enumeration['documentation'])
             }
 
-        for name, exception in self._defs['exceptions'].items():
-            exceptions[name] = {
+        for name, exception in self._get_defs('exceptions'):
+            context['exceptions'][name] = {
                 'documentation': self.parse_documentation(
                     exception['documentation'])
             }
 
-        for name, procedure in self._defs['procedures'].items():
-
+        for name, procedure in self._get_defs('procedures'):
             if Attributes.is_a_procedure(name):
-                procedures[self.parse_name(name)] = {
+                context['procedures'][self.parse_name(name)] = {
                     'procedure': procedure,
                     'remote_name': name,
                     'remote_id': procedure['id'],
-                    'parameters': self.generate_context_parameters(procedure),
+                    'parameters': self.generate_context_parameters(
+                        procedure),
                     'return_type': self.parse_return_type(
                         self.get_return_type(procedure)),
                     'documentation': self.parse_documentation(
@@ -110,8 +116,8 @@ class Generator(object):
             elif Attributes.is_a_property_getter(name):
                 property_name = self.parse_name(
                     Attributes.get_property_name(name))
-                if property_name not in properties:
-                    properties[property_name] = {
+                if property_name not in context['properties']:
+                    context['properties'][property_name] = {
                         'type': self.parse_return_type(
                             self.get_return_type(procedure)),
                         'getter': None,
@@ -119,7 +125,7 @@ class Generator(object):
                         'documentation': self.parse_documentation(
                             procedure['documentation'])
                     }
-                properties[property_name]['getter'] = {
+                context['properties'][property_name]['getter'] = {
                     'procedure': procedure,
                     'remote_name': name,
                     'remote_id': procedure['id']
@@ -129,15 +135,15 @@ class Generator(object):
                 property_name = self.parse_name(
                     Attributes.get_property_name(name))
                 params = self.generate_context_parameters(procedure)
-                if property_name not in properties:
-                    properties[property_name] = {
+                if property_name not in context['properties']:
+                    context['properties'][property_name] = {
                         'type': params[0]['type'],
                         'getter': None,
                         'setter': None,
                         'documentation': self.parse_documentation(
                             procedure['documentation'])
                     }
-                properties[property_name]['setter'] = {
+                context['properties'][property_name]['setter'] = {
                     'procedure': procedure,
                     'remote_name': name,
                     'remote_id': procedure['id']
@@ -148,7 +154,7 @@ class Generator(object):
                 method_name = self.parse_name(
                     Attributes.get_class_member_name(name))
                 params = self.generate_context_parameters(procedure)
-                classes[class_name]['methods'][method_name] = {
+                context['classes'][class_name]['methods'][method_name] = {
                     'procedure': procedure,
                     'remote_name': name,
                     'remote_id': procedure['id'],
@@ -161,13 +167,15 @@ class Generator(object):
 
             elif Attributes.is_a_class_static_method(name):
                 class_name = Attributes.get_class_name(name)
+                cls = context['classes'][class_name]
                 method_name = self.parse_name(
                     Attributes.get_class_member_name(name))
-                classes[class_name]['static_methods'][method_name] = {
+                cls['static_methods'][method_name] = {
                     'procedure': procedure,
                     'remote_name': name,
                     'remote_id': procedure['id'],
-                    'parameters': self.generate_context_parameters(procedure),
+                    'parameters': self.generate_context_parameters(
+                        procedure),
                     'return_type': self.parse_return_type(
                         self.get_return_type(procedure)),
                     'documentation': self.parse_documentation(
@@ -176,10 +184,11 @@ class Generator(object):
 
             elif Attributes.is_a_class_property_getter(name):
                 class_name = Attributes.get_class_name(name)
+                cls = context['classes'][class_name]
                 property_name = self.parse_name(
                     Attributes.get_class_member_name(name))
-                if property_name not in classes[class_name]['properties']:
-                    classes[class_name]['properties'][property_name] = {
+                if property_name not in cls['properties']:
+                    cls['properties'][property_name] = {
                         'type': self.parse_return_type(
                             self.get_return_type(procedure)),
                         'getter': None,
@@ -187,7 +196,7 @@ class Generator(object):
                         'documentation': self.parse_documentation(
                             procedure['documentation'])
                     }
-                classes[class_name]['properties'][property_name]['getter'] = {
+                cls['properties'][property_name]['getter'] = {
                     'procedure': procedure,
                     'remote_name': name,
                     'remote_id': procedure['id']
@@ -195,50 +204,57 @@ class Generator(object):
 
             elif Attributes.is_a_class_property_setter(name):
                 class_name = Attributes.get_class_name(name)
+                cls = context['classes'][class_name]
                 property_name = self.parse_name(
                     Attributes.get_class_member_name(name))
-                if property_name not in classes[class_name]['properties']:
+                if property_name not in cls['properties']:
                     params = self.generate_context_parameters(procedure)
-                    classes[class_name]['properties'][property_name] = {
+                    cls['properties'][property_name] = {
                         'type': params[1]['type'],
                         'getter': None,
                         'setter': None,
                         'documentation': self.parse_documentation(
                             procedure['documentation'])
                     }
-                classes[class_name]['properties'][property_name]['setter'] = {
+                cls['properties'][property_name]['setter'] = {
                     'procedure': procedure,
                     'remote_name': name,
                     'remote_id': procedure['id']
                 }
 
-        def sort(objs):
-            if isinstance(objs, dict):
-                return collections.OrderedDict(
-                    sorted([(x, sort(y)) for x, y in objs.items()],
-                           key=lambda x: x[0]))
-            return objs
+        # Sort the context
+        def sort_dict(x):
+            return collections.OrderedDict(
+                sorted(x.items(), key=lambda x: x[0]))
 
-        return {
-            'service_name': self._service,
-            'service_id': self._defs['id'],
-            'procedures': sort(procedures),
-            'properties': sort(properties),
-            'classes': sort(classes),
-            'enumerations': sort(enumerations),
-            'exceptions': sort(exceptions)
-        }
+        context['procedures'] = sort_dict(context['procedures'])
+        context['properties'] = sort_dict(context['properties'])
+        context['enumerations'] = sort_dict(context['enumerations'])
+        context['classes'] = sort_dict(context['classes'])
+        context['exceptions'] = sort_dict(context['exceptions'])
+        for cls in context['classes'].values():
+            cls['methods'] = sort_dict(cls['methods'])
+            cls['static_methods'] = sort_dict(cls['static_methods'])
+            cls['properties'] = sort_dict(cls['properties'])
 
-    def decode_default_value(self, value, typ):
-        value = base64.b64decode(value)
-        # Note: following is a workaround for decoding EnumerationType,
-        # as set_values has not been called
-        value = array.array('B', value).tostring()
-        if not isinstance(typ, EnumerationType):
-            return Decoder.decode(value, typ)
-        return Decoder.decode(value, self.types.sint32_type)
+        return context
 
     def get_return_type(self, procedure):
         if 'return_type' not in procedure:
             return None
         return as_type(self.types, procedure['return_type'])
+
+    def parse_name(self, name):
+        return self.language.parse_name(name)
+
+    def parse_type(self, typ):
+        return self.language.parse_type(typ)
+
+    def parse_return_type(self, typ):
+        return self.parse_type(typ)
+
+    def parse_parameter_type(self, typ):
+        return self.parse_type(typ)
+
+    def parse_default_value(self, value, typ):
+        return self.language.parse_default_value(value, typ)

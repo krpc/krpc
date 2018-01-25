@@ -26,9 +26,11 @@ setup(
     long_description=open(os.path.join(dirpath, 'README.txt')).read(),
     packages=[
         'krpctools',
+        'krpctools.lang',
         'krpctools.clientgen',
         'krpctools.docgen',
-        'krpctools.servicedefs'
+        'krpctools.servicedefs',
+        'krpctools.test'
     ],
     entry_points={
         'console_scripts': [
@@ -37,8 +39,9 @@ setup(
             'krpc-servicedefs = krpctools.servicedefs:main'
         ]
     },
-    package_data={'': ['*.txt', '*.tmpl', 'bin/*.exe', 'bin/*.dll', 'bin/*.xml']},
+    package_data={'': ['*.txt', '*.tmpl', '*.json', '*.rst', 'bin/*.exe', 'bin/*.dll', 'bin/*.xml']},
     install_requires=install_requires,
+    test_suite='krpctools.test',
     use_2to3=True,
     classifiers=[
         'Development Status :: 5 - Production/Stable',

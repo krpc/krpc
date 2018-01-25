@@ -1,0 +1,1448 @@
+#pragma once
+
+#include <map>
+#include <set>
+#include <string>
+#include <tuple>
+#include <vector>
+
+#include <krpc/decoder.hpp>
+#include <krpc/encoder.hpp>
+#include <krpc/error.hpp>
+#include <krpc/event.hpp>
+#include <krpc/object.hpp>
+#include <krpc/service.hpp>
+#include <krpc/stream.hpp>
+
+namespace krpc {
+namespace services {
+
+class TestService : public Service {
+ public:
+  explicit TestService(Client* client);
+
+  // Class forward declarations
+  class TestClass;
+
+  class CustomException : public ::krpc::RPCError {
+   public:
+    inline explicit CustomException(const std::string& msg) : ::krpc::RPCError(msg) {}
+  };
+
+  /**
+   * Enum documentation string.
+   */
+  enum struct TestEnum {
+    /**
+     * Enum ValueA documentation string.
+     */
+    value_a = 0,
+    /**
+     * Enum ValueB documentation string.
+     */
+    value_b = 1,
+    /**
+     * Enum ValueC documentation string.
+     */
+    value_c = 2
+  };
+
+  std::string add_multiple_values(float x, int32_t y, int64_t z);
+
+  std::vector<TestService::TestClass> add_to_object_list(std::vector<TestService::TestClass> l, std::string value);
+
+  int32_t blocking_procedure(int32_t n, int32_t sum);
+
+  std::string bool_to_string(bool value);
+
+  std::string bytes_to_hex_string(std::string value);
+
+  int32_t counter(std::string id, int32_t divisor);
+
+  TestService::TestClass create_test_object(std::string value);
+
+  std::map<int32_t, bool> dictionary_default(std::map<int32_t, bool> x);
+
+  std::string double_to_string(double value);
+
+  TestService::TestClass echo_test_object(TestService::TestClass value);
+
+  TestService::TestEnum enum_default_arg(TestService::TestEnum x);
+
+  TestService::TestEnum enum_echo(TestService::TestEnum x);
+
+  TestService::TestEnum enum_return();
+
+  /**
+   * Procedure documentation string.
+   */
+  std::string float_to_string(float value);
+
+  std::map<std::string, int32_t> increment_dictionary(std::map<std::string, int32_t> d);
+
+  std::vector<int32_t> increment_list(std::vector<int32_t> l);
+
+  std::map<std::string, std::vector<int32_t> > increment_nested_collection(std::map<std::string, std::vector<int32_t> > d);
+
+  std::set<int32_t> increment_set(std::set<int32_t> h);
+
+  std::tuple<int32_t, int64_t> increment_tuple(std::tuple<int32_t, int64_t> t);
+
+  std::string int32_to_string(int32_t value);
+
+  std::string int64_to_string(int64_t value);
+
+  std::vector<int32_t> list_default(std::vector<int32_t> x);
+
+  ::krpc::Event on_timer(uint32_t milliseconds, uint32_t repeats);
+
+  ::krpc::Event on_timer_using_lambda(uint32_t milliseconds);
+
+  std::string optional_arguments(std::string x, std::string y, std::string z, TestService::TestClass obj);
+
+  void reset_custom_exception_later();
+
+  void reset_invalid_operation_exception_later();
+
+  TestService::TestClass return_null_when_not_allowed();
+
+  std::set<int32_t> set_default(std::set<int32_t> x);
+
+  int32_t string_to_int32(std::string value);
+
+  int32_t throw_argument_exception();
+
+  int32_t throw_argument_null_exception(std::string foo);
+
+  int32_t throw_argument_out_of_range_exception(int32_t foo);
+
+  int32_t throw_custom_exception();
+
+  int32_t throw_custom_exception_later();
+
+  int32_t throw_invalid_operation_exception();
+
+  int32_t throw_invalid_operation_exception_later();
+
+  std::tuple<int32_t, bool> tuple_default(std::tuple<int32_t, bool> x);
+
+  TestService::TestClass object_property();
+
+  void set_object_property(TestService::TestClass value);
+
+  /**
+   * Property documentation string.
+   */
+  std::string string_property();
+
+  /**
+   * Property documentation string.
+   */
+  void set_string_property(std::string value);
+
+  void set_string_property_private_get(std::string value);
+
+  std::string string_property_private_set();
+
+  ::krpc::Stream<std::string> add_multiple_values_stream(float x, int32_t y, int64_t z);
+
+  ::krpc::Stream<std::vector<TestService::TestClass>> add_to_object_list_stream(std::vector<TestService::TestClass> l, std::string value);
+
+  ::krpc::Stream<int32_t> blocking_procedure_stream(int32_t n, int32_t sum);
+
+  ::krpc::Stream<std::string> bool_to_string_stream(bool value);
+
+  ::krpc::Stream<std::string> bytes_to_hex_string_stream(std::string value);
+
+  ::krpc::Stream<int32_t> counter_stream(std::string id, int32_t divisor);
+
+  ::krpc::Stream<TestService::TestClass> create_test_object_stream(std::string value);
+
+  ::krpc::Stream<std::map<int32_t, bool>> dictionary_default_stream(std::map<int32_t, bool> x);
+
+  ::krpc::Stream<std::string> double_to_string_stream(double value);
+
+  ::krpc::Stream<TestService::TestClass> echo_test_object_stream(TestService::TestClass value);
+
+  ::krpc::Stream<TestService::TestEnum> enum_default_arg_stream(TestService::TestEnum x);
+
+  ::krpc::Stream<TestService::TestEnum> enum_echo_stream(TestService::TestEnum x);
+
+  ::krpc::Stream<TestService::TestEnum> enum_return_stream();
+
+  ::krpc::Stream<std::string> float_to_string_stream(float value);
+
+  ::krpc::Stream<std::map<std::string, int32_t>> increment_dictionary_stream(std::map<std::string, int32_t> d);
+
+  ::krpc::Stream<std::vector<int32_t>> increment_list_stream(std::vector<int32_t> l);
+
+  ::krpc::Stream<std::map<std::string, std::vector<int32_t> >> increment_nested_collection_stream(std::map<std::string, std::vector<int32_t> > d);
+
+  ::krpc::Stream<std::set<int32_t>> increment_set_stream(std::set<int32_t> h);
+
+  ::krpc::Stream<std::tuple<int32_t, int64_t>> increment_tuple_stream(std::tuple<int32_t, int64_t> t);
+
+  ::krpc::Stream<std::string> int32_to_string_stream(int32_t value);
+
+  ::krpc::Stream<std::string> int64_to_string_stream(int64_t value);
+
+  ::krpc::Stream<std::vector<int32_t>> list_default_stream(std::vector<int32_t> x);
+
+  ::krpc::Stream<::krpc::Event> on_timer_stream(uint32_t milliseconds, uint32_t repeats);
+
+  ::krpc::Stream<::krpc::Event> on_timer_using_lambda_stream(uint32_t milliseconds);
+
+  ::krpc::Stream<std::string> optional_arguments_stream(std::string x, std::string y, std::string z, TestService::TestClass obj);
+
+  ::krpc::Stream<TestService::TestClass> return_null_when_not_allowed_stream();
+
+  ::krpc::Stream<std::set<int32_t>> set_default_stream(std::set<int32_t> x);
+
+  ::krpc::Stream<int32_t> string_to_int32_stream(std::string value);
+
+  ::krpc::Stream<int32_t> throw_argument_exception_stream();
+
+  ::krpc::Stream<int32_t> throw_argument_null_exception_stream(std::string foo);
+
+  ::krpc::Stream<int32_t> throw_argument_out_of_range_exception_stream(int32_t foo);
+
+  ::krpc::Stream<int32_t> throw_custom_exception_stream();
+
+  ::krpc::Stream<int32_t> throw_custom_exception_later_stream();
+
+  ::krpc::Stream<int32_t> throw_invalid_operation_exception_stream();
+
+  ::krpc::Stream<int32_t> throw_invalid_operation_exception_later_stream();
+
+  ::krpc::Stream<std::tuple<int32_t, bool>> tuple_default_stream(std::tuple<int32_t, bool> x);
+
+  ::krpc::Stream<TestService::TestClass> object_property_stream();
+
+  ::krpc::Stream<std::string> string_property_stream();
+
+  ::krpc::Stream<std::string> string_property_private_set_stream();
+
+  ::krpc::schema::ProcedureCall add_multiple_values_call(float x, int32_t y, int64_t z);
+
+  ::krpc::schema::ProcedureCall add_to_object_list_call(std::vector<TestService::TestClass> l, std::string value);
+
+  ::krpc::schema::ProcedureCall blocking_procedure_call(int32_t n, int32_t sum);
+
+  ::krpc::schema::ProcedureCall bool_to_string_call(bool value);
+
+  ::krpc::schema::ProcedureCall bytes_to_hex_string_call(std::string value);
+
+  ::krpc::schema::ProcedureCall counter_call(std::string id, int32_t divisor);
+
+  ::krpc::schema::ProcedureCall create_test_object_call(std::string value);
+
+  ::krpc::schema::ProcedureCall dictionary_default_call(std::map<int32_t, bool> x);
+
+  ::krpc::schema::ProcedureCall double_to_string_call(double value);
+
+  ::krpc::schema::ProcedureCall echo_test_object_call(TestService::TestClass value);
+
+  ::krpc::schema::ProcedureCall enum_default_arg_call(TestService::TestEnum x);
+
+  ::krpc::schema::ProcedureCall enum_echo_call(TestService::TestEnum x);
+
+  ::krpc::schema::ProcedureCall enum_return_call();
+
+  ::krpc::schema::ProcedureCall float_to_string_call(float value);
+
+  ::krpc::schema::ProcedureCall increment_dictionary_call(std::map<std::string, int32_t> d);
+
+  ::krpc::schema::ProcedureCall increment_list_call(std::vector<int32_t> l);
+
+  ::krpc::schema::ProcedureCall increment_nested_collection_call(std::map<std::string, std::vector<int32_t> > d);
+
+  ::krpc::schema::ProcedureCall increment_set_call(std::set<int32_t> h);
+
+  ::krpc::schema::ProcedureCall increment_tuple_call(std::tuple<int32_t, int64_t> t);
+
+  ::krpc::schema::ProcedureCall int32_to_string_call(int32_t value);
+
+  ::krpc::schema::ProcedureCall int64_to_string_call(int64_t value);
+
+  ::krpc::schema::ProcedureCall list_default_call(std::vector<int32_t> x);
+
+  ::krpc::schema::ProcedureCall on_timer_call(uint32_t milliseconds, uint32_t repeats);
+
+  ::krpc::schema::ProcedureCall on_timer_using_lambda_call(uint32_t milliseconds);
+
+  ::krpc::schema::ProcedureCall optional_arguments_call(std::string x, std::string y, std::string z, TestService::TestClass obj);
+
+  ::krpc::schema::ProcedureCall reset_custom_exception_later_call();
+
+  ::krpc::schema::ProcedureCall reset_invalid_operation_exception_later_call();
+
+  ::krpc::schema::ProcedureCall return_null_when_not_allowed_call();
+
+  ::krpc::schema::ProcedureCall set_default_call(std::set<int32_t> x);
+
+  ::krpc::schema::ProcedureCall string_to_int32_call(std::string value);
+
+  ::krpc::schema::ProcedureCall throw_argument_exception_call();
+
+  ::krpc::schema::ProcedureCall throw_argument_null_exception_call(std::string foo);
+
+  ::krpc::schema::ProcedureCall throw_argument_out_of_range_exception_call(int32_t foo);
+
+  ::krpc::schema::ProcedureCall throw_custom_exception_call();
+
+  ::krpc::schema::ProcedureCall throw_custom_exception_later_call();
+
+  ::krpc::schema::ProcedureCall throw_invalid_operation_exception_call();
+
+  ::krpc::schema::ProcedureCall throw_invalid_operation_exception_later_call();
+
+  ::krpc::schema::ProcedureCall tuple_default_call(std::tuple<int32_t, bool> x);
+
+  ::krpc::schema::ProcedureCall object_property_call();
+
+  ::krpc::schema::ProcedureCall set_object_property_call(TestService::TestClass value);
+
+  ::krpc::schema::ProcedureCall string_property_call();
+
+  ::krpc::schema::ProcedureCall set_string_property_call(std::string value);
+
+  ::krpc::schema::ProcedureCall set_string_property_private_get_call(std::string value);
+
+  ::krpc::schema::ProcedureCall string_property_private_set_call();
+
+  /**
+   * Class documentation string.
+   */
+  class TestClass : public krpc::Object<TestClass> {
+   public:
+    explicit TestClass(Client* client = nullptr, uint64_t id = 0);
+
+    std::string float_to_string(float x);
+
+    /**
+     * Method documentation string.
+     */
+    std::string get_value();
+
+    std::string object_to_string(TestService::TestClass other);
+
+    std::string optional_arguments(std::string x, std::string y, std::string z, TestService::TestClass obj);
+
+    static std::string static_method(Client& client, std::string a, std::string b);
+
+    /**
+     * Property documentation string.
+     */
+    int32_t int_property();
+
+    /**
+     * Property documentation string.
+     */
+    void set_int_property(int32_t value);
+
+    TestService::TestClass object_property();
+
+    void set_object_property(TestService::TestClass value);
+
+    ::krpc::Stream<std::string> float_to_string_stream(float x);
+
+    ::krpc::Stream<std::string> get_value_stream();
+
+    ::krpc::Stream<std::string> object_to_string_stream(TestService::TestClass other);
+
+    ::krpc::Stream<std::string> optional_arguments_stream(std::string x, std::string y, std::string z, TestService::TestClass obj);
+
+    static ::krpc::Stream<std::string> static_method_stream(Client& client, std::string a, std::string b);
+
+    ::krpc::Stream<int32_t> int_property_stream();
+
+    ::krpc::Stream<TestService::TestClass> object_property_stream();
+
+    ::krpc::schema::ProcedureCall float_to_string_call(float x);
+
+    ::krpc::schema::ProcedureCall get_value_call();
+
+    ::krpc::schema::ProcedureCall object_to_string_call(TestService::TestClass other);
+
+    ::krpc::schema::ProcedureCall optional_arguments_call(std::string x, std::string y, std::string z, TestService::TestClass obj);
+
+    static ::krpc::schema::ProcedureCall static_method_call(Client& client, std::string a, std::string b);
+
+    ::krpc::schema::ProcedureCall int_property_call();
+
+    ::krpc::schema::ProcedureCall set_int_property_call(int32_t value);
+
+    ::krpc::schema::ProcedureCall object_property_call();
+
+    ::krpc::schema::ProcedureCall set_object_property_call(TestService::TestClass value);
+  };
+};
+
+}  // namespace services
+
+namespace encoder {
+
+  inline std::string encode(const services::TestService::TestEnum& value) {
+    return krpc::encoder::encode(static_cast<int32_t>(value));
+  }
+
+}  // namespace encoder
+
+namespace decoder {
+
+  inline void decode(services::TestService::TestEnum& value, const std::string& data, Client* client) {
+    int32_t x;
+    decode(x, data, client);
+    value = static_cast<services::TestService::TestEnum>(x);
+  }
+
+}  // namespace decoder
+
+namespace services {
+
+inline TestService::TestService(Client* client):
+  Service(client) {
+  client->add_exception_thrower(
+    "TestService", "CustomException",
+    [] (const std::string& msg) { throw CustomException(msg); });
+}
+
+inline std::string TestService::add_multiple_values(float x, int32_t y, int64_t z) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  _args.push_back(encoder::encode(y));
+  _args.push_back(encoder::encode(z));
+  std::string _data = this->_client->invoke("TestService", "AddMultipleValues", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::vector<TestService::TestClass> TestService::add_to_object_list(std::vector<TestService::TestClass> l, std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(l));
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "AddToObjectList", _args);
+  std::vector<TestService::TestClass> _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline int32_t TestService::blocking_procedure(int32_t n, int32_t sum = 0) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(n));
+  _args.push_back(encoder::encode(sum));
+  std::string _data = this->_client->invoke("TestService", "BlockingProcedure", _args);
+  int32_t _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::string TestService::bool_to_string(bool value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "BoolToString", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::string TestService::bytes_to_hex_string(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "BytesToHexString", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline int32_t TestService::counter(std::string id = "", int32_t divisor = 1) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(id));
+  _args.push_back(encoder::encode(divisor));
+  std::string _data = this->_client->invoke("TestService", "Counter", _args);
+  int32_t _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline TestService::TestClass TestService::create_test_object(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "CreateTestObject", _args);
+  TestService::TestClass _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::map<int32_t, bool> TestService::dictionary_default(std::map<int32_t, bool> x = std::map<int32_t, bool>{{1, false}, {2, true}}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  std::string _data = this->_client->invoke("TestService", "DictionaryDefault", _args);
+  std::map<int32_t, bool> _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::string TestService::double_to_string(double value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "DoubleToString", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline TestService::TestClass TestService::echo_test_object(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "EchoTestObject", _args);
+  TestService::TestClass _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline TestService::TestEnum TestService::enum_default_arg(TestService::TestEnum x = static_cast<TestService::TestEnum>(2)) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  std::string _data = this->_client->invoke("TestService", "EnumDefaultArg", _args);
+  TestService::TestEnum _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline TestService::TestEnum TestService::enum_echo(TestService::TestEnum x) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  std::string _data = this->_client->invoke("TestService", "EnumEcho", _args);
+  TestService::TestEnum _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline TestService::TestEnum TestService::enum_return() {
+  std::string _data = this->_client->invoke("TestService", "EnumReturn");
+  TestService::TestEnum _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::string TestService::float_to_string(float value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "FloatToString", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::map<std::string, int32_t> TestService::increment_dictionary(std::map<std::string, int32_t> d) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(d));
+  std::string _data = this->_client->invoke("TestService", "IncrementDictionary", _args);
+  std::map<std::string, int32_t> _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::vector<int32_t> TestService::increment_list(std::vector<int32_t> l) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(l));
+  std::string _data = this->_client->invoke("TestService", "IncrementList", _args);
+  std::vector<int32_t> _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::map<std::string, std::vector<int32_t> > TestService::increment_nested_collection(std::map<std::string, std::vector<int32_t> > d) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(d));
+  std::string _data = this->_client->invoke("TestService", "IncrementNestedCollection", _args);
+  std::map<std::string, std::vector<int32_t> > _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::set<int32_t> TestService::increment_set(std::set<int32_t> h) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(h));
+  std::string _data = this->_client->invoke("TestService", "IncrementSet", _args);
+  std::set<int32_t> _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::tuple<int32_t, int64_t> TestService::increment_tuple(std::tuple<int32_t, int64_t> t) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(t));
+  std::string _data = this->_client->invoke("TestService", "IncrementTuple", _args);
+  std::tuple<int32_t, int64_t> _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::string TestService::int32_to_string(int32_t value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "Int32ToString", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::string TestService::int64_to_string(int64_t value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "Int64ToString", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::vector<int32_t> TestService::list_default(std::vector<int32_t> x = std::vector<int32_t>{1, 2, 3}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  std::string _data = this->_client->invoke("TestService", "ListDefault", _args);
+  std::vector<int32_t> _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline ::krpc::Event TestService::on_timer(uint32_t milliseconds, uint32_t repeats = 1) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(milliseconds));
+  _args.push_back(encoder::encode(repeats));
+  std::string _data = this->_client->invoke("TestService", "OnTimer", _args);
+  ::krpc::Event _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline ::krpc::Event TestService::on_timer_using_lambda(uint32_t milliseconds) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(milliseconds));
+  std::string _data = this->_client->invoke("TestService", "OnTimerUsingLambda", _args);
+  ::krpc::Event _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::string TestService::optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", TestService::TestClass obj = TestService::TestClass()) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  _args.push_back(encoder::encode(y));
+  _args.push_back(encoder::encode(z));
+  _args.push_back(encoder::encode(obj));
+  std::string _data = this->_client->invoke("TestService", "OptionalArguments", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline void TestService::reset_custom_exception_later() {
+  this->_client->invoke("TestService", "ResetCustomExceptionLater");
+}
+
+inline void TestService::reset_invalid_operation_exception_later() {
+  this->_client->invoke("TestService", "ResetInvalidOperationExceptionLater");
+}
+
+inline TestService::TestClass TestService::return_null_when_not_allowed() {
+  std::string _data = this->_client->invoke("TestService", "ReturnNullWhenNotAllowed");
+  TestService::TestClass _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::set<int32_t> TestService::set_default(std::set<int32_t> x = std::set<int32_t>{1, 2, 3}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  std::string _data = this->_client->invoke("TestService", "SetDefault", _args);
+  std::set<int32_t> _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline int32_t TestService::string_to_int32(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "StringToInt32", _args);
+  int32_t _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline int32_t TestService::throw_argument_exception() {
+  std::string _data = this->_client->invoke("TestService", "ThrowArgumentException");
+  int32_t _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline int32_t TestService::throw_argument_null_exception(std::string foo) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(foo));
+  std::string _data = this->_client->invoke("TestService", "ThrowArgumentNullException", _args);
+  int32_t _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline int32_t TestService::throw_argument_out_of_range_exception(int32_t foo) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(foo));
+  std::string _data = this->_client->invoke("TestService", "ThrowArgumentOutOfRangeException", _args);
+  int32_t _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline int32_t TestService::throw_custom_exception() {
+  std::string _data = this->_client->invoke("TestService", "ThrowCustomException");
+  int32_t _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline int32_t TestService::throw_custom_exception_later() {
+  std::string _data = this->_client->invoke("TestService", "ThrowCustomExceptionLater");
+  int32_t _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline int32_t TestService::throw_invalid_operation_exception() {
+  std::string _data = this->_client->invoke("TestService", "ThrowInvalidOperationException");
+  int32_t _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline int32_t TestService::throw_invalid_operation_exception_later() {
+  std::string _data = this->_client->invoke("TestService", "ThrowInvalidOperationExceptionLater");
+  int32_t _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::tuple<int32_t, bool> TestService::tuple_default(std::tuple<int32_t, bool> x = std::tuple<int32_t, bool>{1, false}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  std::string _data = this->_client->invoke("TestService", "TupleDefault", _args);
+  std::tuple<int32_t, bool> _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline TestService::TestClass TestService::object_property() {
+  std::string _data = this->_client->invoke("TestService", "get_ObjectProperty");
+  TestService::TestClass _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline void TestService::set_object_property(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  this->_client->invoke("TestService", "set_ObjectProperty", _args);
+}
+
+inline std::string TestService::string_property() {
+  std::string _data = this->_client->invoke("TestService", "get_StringProperty");
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline void TestService::set_string_property(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  this->_client->invoke("TestService", "set_StringProperty", _args);
+}
+
+inline void TestService::set_string_property_private_get(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  this->_client->invoke("TestService", "set_StringPropertyPrivateGet", _args);
+}
+
+inline std::string TestService::string_property_private_set() {
+  std::string _data = this->_client->invoke("TestService", "get_StringPropertyPrivateSet");
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline ::krpc::Stream<std::string> TestService::add_multiple_values_stream(float x, int32_t y, int64_t z) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  _args.push_back(encoder::encode(y));
+  _args.push_back(encoder::encode(z));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "AddMultipleValues", _args));
+}
+
+inline ::krpc::Stream<std::vector<TestService::TestClass>> TestService::add_to_object_list_stream(std::vector<TestService::TestClass> l, std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(l));
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<std::vector<TestService::TestClass>>(this->_client, this->_client->build_call("TestService", "AddToObjectList", _args));
+}
+
+inline ::krpc::Stream<int32_t> TestService::blocking_procedure_stream(int32_t n, int32_t sum = 0) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(n));
+  _args.push_back(encoder::encode(sum));
+  return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "BlockingProcedure", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::bool_to_string_stream(bool value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "BoolToString", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::bytes_to_hex_string_stream(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "BytesToHexString", _args));
+}
+
+inline ::krpc::Stream<int32_t> TestService::counter_stream(std::string id = "", int32_t divisor = 1) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(id));
+  _args.push_back(encoder::encode(divisor));
+  return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "Counter", _args));
+}
+
+inline ::krpc::Stream<TestService::TestClass> TestService::create_test_object_stream(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "CreateTestObject", _args));
+}
+
+inline ::krpc::Stream<std::map<int32_t, bool>> TestService::dictionary_default_stream(std::map<int32_t, bool> x = std::map<int32_t, bool>{{1, false}, {2, true}}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  return ::krpc::Stream<std::map<int32_t, bool>>(this->_client, this->_client->build_call("TestService", "DictionaryDefault", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::double_to_string_stream(double value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "DoubleToString", _args));
+}
+
+inline ::krpc::Stream<TestService::TestClass> TestService::echo_test_object_stream(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "EchoTestObject", _args));
+}
+
+inline ::krpc::Stream<TestService::TestEnum> TestService::enum_default_arg_stream(TestService::TestEnum x = static_cast<TestService::TestEnum>(2)) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  return ::krpc::Stream<TestService::TestEnum>(this->_client, this->_client->build_call("TestService", "EnumDefaultArg", _args));
+}
+
+inline ::krpc::Stream<TestService::TestEnum> TestService::enum_echo_stream(TestService::TestEnum x) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  return ::krpc::Stream<TestService::TestEnum>(this->_client, this->_client->build_call("TestService", "EnumEcho", _args));
+}
+
+inline ::krpc::Stream<TestService::TestEnum> TestService::enum_return_stream() {
+  return ::krpc::Stream<TestService::TestEnum>(this->_client, this->_client->build_call("TestService", "EnumReturn"));
+}
+
+inline ::krpc::Stream<std::string> TestService::float_to_string_stream(float value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "FloatToString", _args));
+}
+
+inline ::krpc::Stream<std::map<std::string, int32_t>> TestService::increment_dictionary_stream(std::map<std::string, int32_t> d) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(d));
+  return ::krpc::Stream<std::map<std::string, int32_t>>(this->_client, this->_client->build_call("TestService", "IncrementDictionary", _args));
+}
+
+inline ::krpc::Stream<std::vector<int32_t>> TestService::increment_list_stream(std::vector<int32_t> l) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(l));
+  return ::krpc::Stream<std::vector<int32_t>>(this->_client, this->_client->build_call("TestService", "IncrementList", _args));
+}
+
+inline ::krpc::Stream<std::map<std::string, std::vector<int32_t> >> TestService::increment_nested_collection_stream(std::map<std::string, std::vector<int32_t> > d) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(d));
+  return ::krpc::Stream<std::map<std::string, std::vector<int32_t> >>(this->_client, this->_client->build_call("TestService", "IncrementNestedCollection", _args));
+}
+
+inline ::krpc::Stream<std::set<int32_t>> TestService::increment_set_stream(std::set<int32_t> h) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(h));
+  return ::krpc::Stream<std::set<int32_t>>(this->_client, this->_client->build_call("TestService", "IncrementSet", _args));
+}
+
+inline ::krpc::Stream<std::tuple<int32_t, int64_t>> TestService::increment_tuple_stream(std::tuple<int32_t, int64_t> t) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(t));
+  return ::krpc::Stream<std::tuple<int32_t, int64_t>>(this->_client, this->_client->build_call("TestService", "IncrementTuple", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::int32_to_string_stream(int32_t value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "Int32ToString", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::int64_to_string_stream(int64_t value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "Int64ToString", _args));
+}
+
+inline ::krpc::Stream<std::vector<int32_t>> TestService::list_default_stream(std::vector<int32_t> x = std::vector<int32_t>{1, 2, 3}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  return ::krpc::Stream<std::vector<int32_t>>(this->_client, this->_client->build_call("TestService", "ListDefault", _args));
+}
+
+inline ::krpc::Stream<::krpc::Event> TestService::on_timer_stream(uint32_t milliseconds, uint32_t repeats = 1) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(milliseconds));
+  _args.push_back(encoder::encode(repeats));
+  return ::krpc::Stream<::krpc::Event>(this->_client, this->_client->build_call("TestService", "OnTimer", _args));
+}
+
+inline ::krpc::Stream<::krpc::Event> TestService::on_timer_using_lambda_stream(uint32_t milliseconds) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(milliseconds));
+  return ::krpc::Stream<::krpc::Event>(this->_client, this->_client->build_call("TestService", "OnTimerUsingLambda", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::optional_arguments_stream(std::string x, std::string y = "foo", std::string z = "bar", TestService::TestClass obj = TestService::TestClass()) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  _args.push_back(encoder::encode(y));
+  _args.push_back(encoder::encode(z));
+  _args.push_back(encoder::encode(obj));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "OptionalArguments", _args));
+}
+
+inline ::krpc::Stream<TestService::TestClass> TestService::return_null_when_not_allowed_stream() {
+  return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "ReturnNullWhenNotAllowed"));
+}
+
+inline ::krpc::Stream<std::set<int32_t>> TestService::set_default_stream(std::set<int32_t> x = std::set<int32_t>{1, 2, 3}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  return ::krpc::Stream<std::set<int32_t>>(this->_client, this->_client->build_call("TestService", "SetDefault", _args));
+}
+
+inline ::krpc::Stream<int32_t> TestService::string_to_int32_stream(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "StringToInt32", _args));
+}
+
+inline ::krpc::Stream<int32_t> TestService::throw_argument_exception_stream() {
+  return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "ThrowArgumentException"));
+}
+
+inline ::krpc::Stream<int32_t> TestService::throw_argument_null_exception_stream(std::string foo) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(foo));
+  return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "ThrowArgumentNullException", _args));
+}
+
+inline ::krpc::Stream<int32_t> TestService::throw_argument_out_of_range_exception_stream(int32_t foo) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(foo));
+  return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "ThrowArgumentOutOfRangeException", _args));
+}
+
+inline ::krpc::Stream<int32_t> TestService::throw_custom_exception_stream() {
+  return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "ThrowCustomException"));
+}
+
+inline ::krpc::Stream<int32_t> TestService::throw_custom_exception_later_stream() {
+  return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "ThrowCustomExceptionLater"));
+}
+
+inline ::krpc::Stream<int32_t> TestService::throw_invalid_operation_exception_stream() {
+  return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "ThrowInvalidOperationException"));
+}
+
+inline ::krpc::Stream<int32_t> TestService::throw_invalid_operation_exception_later_stream() {
+  return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "ThrowInvalidOperationExceptionLater"));
+}
+
+inline ::krpc::Stream<std::tuple<int32_t, bool>> TestService::tuple_default_stream(std::tuple<int32_t, bool> x = std::tuple<int32_t, bool>{1, false}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  return ::krpc::Stream<std::tuple<int32_t, bool>>(this->_client, this->_client->build_call("TestService", "TupleDefault", _args));
+}
+
+inline ::krpc::Stream<TestService::TestClass> TestService::object_property_stream() {
+  return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "get_ObjectProperty"));
+}
+
+inline ::krpc::Stream<std::string> TestService::string_property_stream() {
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "get_StringProperty"));
+}
+
+inline ::krpc::Stream<std::string> TestService::string_property_private_set_stream() {
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "get_StringPropertyPrivateSet"));
+}
+
+inline ::krpc::schema::ProcedureCall TestService::add_multiple_values_call(float x, int32_t y, int64_t z) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  _args.push_back(encoder::encode(y));
+  _args.push_back(encoder::encode(z));
+  return this->_client->build_call("TestService", "AddMultipleValues", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::add_to_object_list_call(std::vector<TestService::TestClass> l, std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(l));
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "AddToObjectList", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::blocking_procedure_call(int32_t n, int32_t sum = 0) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(n));
+  _args.push_back(encoder::encode(sum));
+  return this->_client->build_call("TestService", "BlockingProcedure", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::bool_to_string_call(bool value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "BoolToString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::bytes_to_hex_string_call(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "BytesToHexString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::counter_call(std::string id = "", int32_t divisor = 1) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(id));
+  _args.push_back(encoder::encode(divisor));
+  return this->_client->build_call("TestService", "Counter", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::create_test_object_call(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "CreateTestObject", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::dictionary_default_call(std::map<int32_t, bool> x = std::map<int32_t, bool>{{1, false}, {2, true}}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  return this->_client->build_call("TestService", "DictionaryDefault", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::double_to_string_call(double value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "DoubleToString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_test_object_call(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "EchoTestObject", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::enum_default_arg_call(TestService::TestEnum x = static_cast<TestService::TestEnum>(2)) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  return this->_client->build_call("TestService", "EnumDefaultArg", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::enum_echo_call(TestService::TestEnum x) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  return this->_client->build_call("TestService", "EnumEcho", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::enum_return_call() {
+  return this->_client->build_call("TestService", "EnumReturn");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::float_to_string_call(float value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "FloatToString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::increment_dictionary_call(std::map<std::string, int32_t> d) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(d));
+  return this->_client->build_call("TestService", "IncrementDictionary", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::increment_list_call(std::vector<int32_t> l) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(l));
+  return this->_client->build_call("TestService", "IncrementList", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::increment_nested_collection_call(std::map<std::string, std::vector<int32_t> > d) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(d));
+  return this->_client->build_call("TestService", "IncrementNestedCollection", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::increment_set_call(std::set<int32_t> h) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(h));
+  return this->_client->build_call("TestService", "IncrementSet", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::increment_tuple_call(std::tuple<int32_t, int64_t> t) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(t));
+  return this->_client->build_call("TestService", "IncrementTuple", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::int32_to_string_call(int32_t value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "Int32ToString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::int64_to_string_call(int64_t value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "Int64ToString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::list_default_call(std::vector<int32_t> x = std::vector<int32_t>{1, 2, 3}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  return this->_client->build_call("TestService", "ListDefault", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::on_timer_call(uint32_t milliseconds, uint32_t repeats = 1) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(milliseconds));
+  _args.push_back(encoder::encode(repeats));
+  return this->_client->build_call("TestService", "OnTimer", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::on_timer_using_lambda_call(uint32_t milliseconds) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(milliseconds));
+  return this->_client->build_call("TestService", "OnTimerUsingLambda", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::optional_arguments_call(std::string x, std::string y = "foo", std::string z = "bar", TestService::TestClass obj = TestService::TestClass()) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  _args.push_back(encoder::encode(y));
+  _args.push_back(encoder::encode(z));
+  _args.push_back(encoder::encode(obj));
+  return this->_client->build_call("TestService", "OptionalArguments", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::reset_custom_exception_later_call() {
+  return this->_client->build_call("TestService", "ResetCustomExceptionLater");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::reset_invalid_operation_exception_later_call() {
+  return this->_client->build_call("TestService", "ResetInvalidOperationExceptionLater");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::return_null_when_not_allowed_call() {
+  return this->_client->build_call("TestService", "ReturnNullWhenNotAllowed");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::set_default_call(std::set<int32_t> x = std::set<int32_t>{1, 2, 3}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  return this->_client->build_call("TestService", "SetDefault", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_int32_call(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "StringToInt32", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_argument_exception_call() {
+  return this->_client->build_call("TestService", "ThrowArgumentException");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_argument_null_exception_call(std::string foo) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(foo));
+  return this->_client->build_call("TestService", "ThrowArgumentNullException", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_argument_out_of_range_exception_call(int32_t foo) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(foo));
+  return this->_client->build_call("TestService", "ThrowArgumentOutOfRangeException", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_custom_exception_call() {
+  return this->_client->build_call("TestService", "ThrowCustomException");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_custom_exception_later_call() {
+  return this->_client->build_call("TestService", "ThrowCustomExceptionLater");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_invalid_operation_exception_call() {
+  return this->_client->build_call("TestService", "ThrowInvalidOperationException");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::throw_invalid_operation_exception_later_call() {
+  return this->_client->build_call("TestService", "ThrowInvalidOperationExceptionLater");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::tuple_default_call(std::tuple<int32_t, bool> x = std::tuple<int32_t, bool>{1, false}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  return this->_client->build_call("TestService", "TupleDefault", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::object_property_call() {
+  return this->_client->build_call("TestService", "get_ObjectProperty");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::set_object_property_call(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "set_ObjectProperty", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_property_call() {
+  return this->_client->build_call("TestService", "get_StringProperty");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::set_string_property_call(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "set_StringProperty", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::set_string_property_private_get_call(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "set_StringPropertyPrivateGet", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_property_private_set_call() {
+  return this->_client->build_call("TestService", "get_StringPropertyPrivateSet");
+}
+
+inline TestService::TestClass::TestClass(Client* client, uint64_t id):
+  Object(client, "TestService::TestClass", id) {}
+
+inline std::string TestService::TestClass::float_to_string(float x) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(x));
+  std::string _data = this->_client->invoke("TestService", "TestClass_FloatToString", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::string TestService::TestClass::get_value() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  std::string _data = this->_client->invoke("TestService", "TestClass_GetValue", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::string TestService::TestClass::object_to_string(TestService::TestClass other) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(other));
+  std::string _data = this->_client->invoke("TestService", "TestClass_ObjectToString", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::string TestService::TestClass::optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", TestService::TestClass obj = TestService::TestClass()) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(x));
+  _args.push_back(encoder::encode(y));
+  _args.push_back(encoder::encode(z));
+  _args.push_back(encoder::encode(obj));
+  std::string _data = this->_client->invoke("TestService", "TestClass_OptionalArguments", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline int32_t TestService::TestClass::int_property() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  std::string _data = this->_client->invoke("TestService", "TestClass_get_IntProperty", _args);
+  int32_t _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline void TestService::TestClass::set_int_property(int32_t value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(value));
+  this->_client->invoke("TestService", "TestClass_set_IntProperty", _args);
+}
+
+inline TestService::TestClass TestService::TestClass::object_property() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  std::string _data = this->_client->invoke("TestService", "TestClass_get_ObjectProperty", _args);
+  TestService::TestClass _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline void TestService::TestClass::set_object_property(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(value));
+  this->_client->invoke("TestService", "TestClass_set_ObjectProperty", _args);
+}
+
+inline std::string TestService::TestClass::static_method(Client& _client, std::string a = "", std::string b = "") {
+    std::vector<std::string> _args;
+  _args.push_back(encoder::encode(a));
+  _args.push_back(encoder::encode(b));
+  std::string _data = _client.invoke("TestService", "TestClass_static_StaticMethod", _args);
+    std::string _result;
+  decoder::decode(_result, _data, &_client);
+  return _result;
+}
+
+inline ::krpc::Stream<std::string> TestService::TestClass::float_to_string_stream(float x) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(x));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "TestClass_FloatToString", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::TestClass::get_value_stream() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "TestClass_GetValue", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::TestClass::object_to_string_stream(TestService::TestClass other) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(other));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "TestClass_ObjectToString", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::TestClass::optional_arguments_stream(std::string x, std::string y = "foo", std::string z = "bar", TestService::TestClass obj = TestService::TestClass()) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(x));
+  _args.push_back(encoder::encode(y));
+  _args.push_back(encoder::encode(z));
+  _args.push_back(encoder::encode(obj));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "TestClass_OptionalArguments", _args));
+}
+
+inline ::krpc::Stream<int32_t> TestService::TestClass::int_property_stream() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "TestClass_get_IntProperty", _args));
+}
+
+inline ::krpc::Stream<TestService::TestClass> TestService::TestClass::object_property_stream() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "TestClass_get_ObjectProperty", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::TestClass::static_method_stream(Client& _client, std::string a = "", std::string b = "") {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(a));
+  _args.push_back(encoder::encode(b));
+  return ::krpc::Stream<std::string>(&_client, _client.build_call("TestService", "TestClass_static_StaticMethod", _args));
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::float_to_string_call(float x) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(x));
+  return this->_client->build_call("TestService", "TestClass_FloatToString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::get_value_call() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  return this->_client->build_call("TestService", "TestClass_GetValue", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::object_to_string_call(TestService::TestClass other) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(other));
+  return this->_client->build_call("TestService", "TestClass_ObjectToString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::optional_arguments_call(std::string x, std::string y = "foo", std::string z = "bar", TestService::TestClass obj = TestService::TestClass()) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(x));
+  _args.push_back(encoder::encode(y));
+  _args.push_back(encoder::encode(z));
+  _args.push_back(encoder::encode(obj));
+  return this->_client->build_call("TestService", "TestClass_OptionalArguments", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::int_property_call() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  return this->_client->build_call("TestService", "TestClass_get_IntProperty", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::set_int_property_call(int32_t value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "TestClass_set_IntProperty", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::object_property_call() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  return this->_client->build_call("TestService", "TestClass_get_ObjectProperty", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::set_object_property_call(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "TestClass_set_ObjectProperty", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::static_method_call(Client& _client, std::string a = "", std::string b = "") {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(a));
+  _args.push_back(encoder::encode(b));
+  return _client.build_call("TestService", "TestClass_static_StaticMethod", _args);
+}
+}  // namespace services
+
+}  // namespace krpc

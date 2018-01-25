@@ -26,7 +26,7 @@ if [ ! -d "$env" ]; then
   pip install \
       "sphinx_rtd_theme==0.2.5b1" \
       "sphinxcontrib_spelling==2.3.0" \
-      "sphinx-csharp==0.1.5" \
+      "sphinx-csharp==0.1.6" \
       "sphinx-tabs==1.1.5" \
       "javasphinx==0.9.15" \
       https://github.com/djungelorm/sphinx-lua/releases/download/0.1.3/sphinx-lua-0.1.3.tar.gz

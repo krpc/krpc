@@ -108,10 +108,11 @@ argument to the compiler.
    On embedded systems you probably want to define ``KRPC_NO_PRINT_ERROR`` and ``PB_NO_ERRMSG`` to
    minimize the memory footprint of kRPC.
 
-Using the Library
------------------
+Using the Library on a POSIX System
+-----------------------------------
 
-The following example program connects to the server, queries it for its version and prints it out:
+On POSIX systems (such as Linux) the following example program connects to the server, queries it
+for its version and prints it out:
 
 .. literalinclude:: /scripts/client/cnano/Basic.c
 
@@ -121,13 +122,19 @@ To compile this program using GCC, save the source as ``main.c`` and run the fol
 
    gcc main.c -lkrpc_cnano
 
-Connecting to the Server
-------------------------
-
 The :func:`krpc_connect` function is used to open a connection to a server. It takes as its first
 argument a connection object into which the connection information is written. This is passed to
 subsequent calls to interact with the server. The second argument is a name for the connection
 (displayed in game) and the third is the name of the serial port to connect over.
+
+Using the Library on from an Arduino
+------------------------------------
+
+The following example demonstrates how to connect to the server from an Arduino, through its serial
+port interface:
+
+.. literalinclude:: /scripts/client/cnano/BasicArduino.ino
+   :language: c
 
 Calling Remote Procedures
 -------------------------

@@ -1,5 +1,9 @@
+import array
+import base64
 import re
+from krpc.decoder import Decoder
 from krpc.schema.KRPC_pb2 import Type
+from krpc.types import Types, EnumerationType
 
 _CAMEL_CASE_REGEX = re.compile(r'([^A-Z]+|[A-Z][^A-Z]*)')
 
@@ -47,3 +51,13 @@ def _as_protobuf_type(types, type_info):
         protobuf_type.types.extend(
             [_as_protobuf_type(types, t) for t in type_info['types']])
     return protobuf_type
+
+
+def decode_default_value(value, typ):
+    value = base64.b64decode(value)
+    value = array.array('B', value).tostring()
+    # Note: following is a workaround for decoding EnumerationType,
+    # as set_values has not been called
+    if not isinstance(typ, EnumerationType):
+        return Decoder.decode(value, typ)
+    return Decoder.decode(value, Types().sint32_type)

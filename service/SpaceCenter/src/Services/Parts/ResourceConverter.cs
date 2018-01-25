@@ -169,5 +169,33 @@ namespace KRPC.SpaceCenter.Services.Parts
             CheckConverterExists (index);
             return converters [index].outputList.Select (x => x.ResourceName).ToList ();
         }
+
+        /// <summary>
+        /// The thermal efficiency of the converter, as a percentage of its maximum.
+        /// </summary>
+        [KRPCProperty]
+        public float ThermalEfficiency {
+            get {
+                var core = converters[0];
+                var temp = Convert.ToSingle(core.GetCoreTemperature());
+                return core.ThermalEfficiency.Evaluate(temp);
+            }
+        }
+
+        /// <summary>
+        /// The core temperature of the converter, in Kelvin.
+        /// </summary>
+        [KRPCProperty]
+        public float CoreTemperature {
+            get { return (float)converters[0].GetCoreTemperature (); }
+        }
+
+        /// <summary>
+        /// The core temperature at which the converter will operate with peak efficiency, in Kelvin.
+        /// </summary>
+        [KRPCProperty]
+        public float OptimumCoreTemperature {
+            get { return (float)converters[0].GetGoalTemperature (); }
+        }
     }
 }

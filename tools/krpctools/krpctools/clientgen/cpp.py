@@ -1,126 +1,25 @@
 import collections
-from krpc.schema.KRPC_pb2 import Type
-from krpc.types import \
-    ValueType, ClassType, EnumerationType, MessageType, \
-    TupleType, ListType, SetType, DictionaryType
+from krpc.types import ClassType
 from krpc.utils import snake_case
 from .generator import Generator
 from .docparser import DocParser
+from ..lang.cpp import CppLanguage
 
 
-def cpp_template_fix(typ):
+def _cpp_template_fix(typ):
     """ Ensure nested templates are separated by spaces for the C++ parser """
     return typ[:-2] + '> >' if typ.endswith('>>') else typ
 
 
 class CppGenerator(Generator):
 
-    _keywords = set([
-        'alignas', 'alignof', 'and', 'and_eq', 'asm', 'auto', 'bitand',
-        'bitor', 'bool', 'break', 'case', 'catch', 'char', 'char16_t',
-        'char32_t', 'class', 'compl', 'concept', 'const', 'constexpr',
-        'const_cast', 'continue', 'decltype', 'default', 'delete', 'do',
-        'double', 'dynamic_cast', 'else', 'enum', 'explicit', 'export',
-        'extern', 'false', 'float', 'for', 'friend', 'goto', 'if', 'inline',
-        'int', 'long', 'mutable', 'namespace', 'new', 'noexcept', 'not',
-        'not_eq', 'nullptr', 'operator', 'or', 'or_eq', 'private', 'protected',
-        'public', 'register', 'reinterpret_cast', 'requires', 'return',
-        'short', 'signed', 'sizeof', 'static', 'static_assert', 'static_cast',
-        'struct', 'switch', 'template', 'this', 'thread_local', 'throw',
-        'true', 'try', 'typedef', 'typeid', 'typename', 'union', 'unsigned',
-        'using', 'virtual', 'void', 'volatile', 'wchar_t', 'while', 'xor',
-        'xor_eq'
-    ])
-
-    _type_map = {
-        Type.DOUBLE: 'double',
-        Type.FLOAT: 'float',
-        Type.SINT32: 'int32_t',
-        Type.SINT64: 'int64_t',
-        Type.UINT32: 'uint32_t',
-        Type.UINT64: 'uint64_t',
-        Type.BOOL: 'bool',
-        Type.STRING: 'std::string',
-        Type.BYTES: 'std::string'
-    }
-
-    def parse_name(self, name):
-        name = snake_case(name)
-        if name in self._keywords:
-            return '%s_' % name
-        return name
-
-    def parse_type(self, typ):
-        if isinstance(typ, ValueType):
-            return self._type_map[typ.protobuf_type.code]
-        elif (isinstance(typ, MessageType) and
-              typ.protobuf_type.code == Type.EVENT):
-            return '::krpc::Event'
-        elif isinstance(typ, MessageType):
-            return 'krpc::schema::%s' % typ.python_type.__name__
-        elif isinstance(typ, ListType):
-            return cpp_template_fix(
-                'std::vector<%s>' % self.parse_type(typ.value_type))
-        elif isinstance(typ, SetType):
-            return cpp_template_fix(
-                'std::set<%s>' % self.parse_type(typ.value_type))
-        elif isinstance(typ, DictionaryType):
-            return cpp_template_fix(
-                'std::map<%s, %s>' % (self.parse_type(typ.key_type),
-                                      self.parse_type(typ.value_type)))
-        elif isinstance(typ, TupleType):
-            return cpp_template_fix(
-                'std::tuple<%s>' % ', '.join(self.parse_type(t)
-                                             for t in typ.value_types))
-        elif isinstance(typ, (ClassType, EnumerationType)):
-            return '%s::%s' % (typ.protobuf_type.service,
-                               typ.protobuf_type.name)
-        raise RuntimeError('Unknown type ' + typ)
-
-    def parse_return_type(self, typ):
-        if typ is None:
-            return 'void'
-        return self.parse_type(typ)
-
-    def parse_parameter_type(self, typ):
-        return self.parse_type(typ)
-
-    def parse_default_value(self, value, typ):
-        if (isinstance(typ, ValueType) and
-                typ.protobuf_type.code == Type.STRING):
-            return '"%s"' % value
-        elif (isinstance(typ, ValueType) and
-              typ.protobuf_type.code == Type.BOOL):
-            return 'true' if value else 'false'
-        elif isinstance(typ, ClassType) and value is None:
-            return self.parse_parameter_type(typ) + '()'
-        elif isinstance(typ, EnumerationType):
-            return 'static_cast<%s>(%s)' % \
-                (self.parse_parameter_type(typ), value)
-        elif value is None:
-            return self.parse_parameter_type(typ) + '()'
-        elif isinstance(typ, TupleType):
-            values = (self.parse_default_value(x, typ.value_types[i])
-                      for i, x in enumerate(value))
-            return '%s{%s}' % (self.parse_type(typ), ', '.join(values))
-        elif isinstance(typ, ListType):
-            values = (self.parse_default_value(x, typ.value_type)
-                      for x in value)
-            return '%s{%s}' % (self.parse_type(typ), ', '.join(values))
-        elif isinstance(typ, SetType):
-            values = (self.parse_default_value(x, typ.value_type)
-                      for x in value)
-            return '%s{%s}' % (self.parse_type(typ), ', '.join(values))
-        elif isinstance(typ, DictionaryType):
-            entries = ('{%s, %s}' %
-                       (self.parse_default_value(k, typ.key_type),
-                        self.parse_default_value(v, typ.value_type))
-                       for k, v in value.items())
-            return '%s{%s}' % (self.parse_type(typ), ', '.join(entries))
-        return str(value)
+    language = CppLanguage()
 
     def parse_set_client(self, procedure):
         return isinstance(self.get_return_type(procedure), ClassType)
+
+    def parse_type(self, typ):
+        return _cpp_template_fix(self.language.parse_type(typ))
 
     @staticmethod
     def parse_documentation(documentation):
@@ -157,7 +56,7 @@ class CppGenerator(Generator):
                     'documentation': info['documentation']
                 }
 
-        for _, class_info in context['classes'].items():
+        for class_info in context['classes'].values():
             for info in class_info['methods'].values():
                 info['return_set_client'] = self.parse_set_client(
                     info['procedure'])

@@ -5,12 +5,11 @@ class Domain(object):
 
     def currentmodule(self, name):
         self.module = name
+        self.language.module = name
         return ''
 
     def type(self, typ):
-        if not hasattr(self, 'type_map'):
-            return typ
-        return self.type_map.get(typ, typ)
+        return self.language.parse_type(typ)
 
     def return_type(self, typ):
         return self.type(typ)
@@ -22,9 +21,12 @@ class Domain(object):
         return self.type(typ)
 
     def value(self, value):
-        if not hasattr(self, 'value_map'):
+        if not hasattr(self.language, 'value_map'):
             return value
-        return self.value_map.get(value, value)
+        return self.language.value_map.get(value, value)
+
+    def default_value(self, value, typ):
+        return self.language.parse_default_value(value, typ)
 
     def ref(self, obj):
         return self.shorten_ref(obj.fullname, obj)
