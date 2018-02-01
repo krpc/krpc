@@ -27,5 +27,20 @@ cd build-cmake
 cmake .. -DCMAKE_INSTALL_PREFIX=`pwd`/../local-cmake
 make -j`nproc`
 make install -j`nproc`
+cd ..
+
+# Build test app
+echo "#include <iostream>
+#include <krpc.hpp>
+#include <krpc/services/krpc.hpp>
+int main() {
+  auto conn = krpc::connect();
+  krpc::services::KRPC krpc(&conn);
+  std::cout << krpc.get_status().version() << std::endl;
+}" > main.cpp
+mkdir -p test-configure test-cmake
+args="main.cpp -std=c++11 -lkrpc -lprotobuf"
+g++ -Ilocal-configure/include -Llocal-configure/lib $args -o test-configure/main
+g++ -Ilocal-cmake/include -Llocal-cmake/lib $args -o test-cmake/main
 
 popd

@@ -1,3 +1,6 @@
+v0.4.4.post1
+ * Add missing files to build scripts
+
 v0.4.3
  * Add rate control for streams (#116, #141)
 
