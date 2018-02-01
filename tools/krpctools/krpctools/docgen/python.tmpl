@@ -34,7 +34,7 @@
 {% endmacro %}
 
 {% macro procedure(x) %}{{ mark_documented(x) }}
-.. staticmethod:: {{ x.name | snakecase }}({{ parameters(x.parameters) }})
+.. staticmethod:: {{ domain.method_name(x.name) }}({{ parameters(x.parameters) }})
 
 {{ gendoc(x.documentation) | indent }}
 
@@ -56,7 +56,7 @@
 {% endmacro %}
 
 {% macro property(x) %}{{ mark_documented(x) }}
-.. attribute:: {{ x.name | snakecase }}
+.. attribute:: {{ domain.method_name(x.name) }}
 
 {{ gendoc(x.documentation) | indent }}
 
@@ -74,7 +74,7 @@
 {% endmacro %}
 
 {% macro class_method(x) %}{{ mark_documented(x) }}
-.. method:: {{ x.name | snakecase }}({{ parameters(x.parameters[1:]) }})
+.. method:: {{ domain.method_name(x.name) }}({{ parameters(x.parameters[1:]) }})
 
 {{ gendoc(x.documentation) | indent }}
 
@@ -96,7 +96,7 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. staticmethod:: {{ x.name | snakecase }}({{ parameters(x.parameters) }})
+.. staticmethod:: {{ domain.method_name(x.name) }}({{ parameters(x.parameters) }})
 
 {{ gendoc(x.documentation) | indent }}
 

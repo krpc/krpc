@@ -21,6 +21,12 @@ class PythonDomain(Domain):
         super(PythonDomain, self).currentmodule(name)
         return '.. currentmodule:: %s' % name
 
+    def method_name(self, name):
+        name = snake_case(name)
+        if name in self.language.keywords:
+            return '%s_' % name
+        return name
+
     def type_description(self, typ):
         if isinstance(typ, ValueType):
             return self.language.parse_type(typ)

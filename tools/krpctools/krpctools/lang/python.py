@@ -1,3 +1,4 @@
+import keyword
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
     ValueType, ClassType, EnumerationType, MessageType, \
@@ -6,6 +7,8 @@ from .language import Language
 
 
 class PythonLanguage(Language):
+
+    keywords = keyword.kwlist
 
     value_map = {
         'null': 'None',
