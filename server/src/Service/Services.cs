@@ -51,7 +51,7 @@ namespace KRPC.Service
             if (call.ServiceId > 0)
                 service = GetServiceNameById (call.ServiceId);
             if (!Signatures.ContainsKey (service))
-                throw new RPCException ("Service " + service + " not found");
+                throw new RPCException ("Service \"" + service + "\" not found");
             return Signatures [service];
         }
 
@@ -63,22 +63,22 @@ namespace KRPC.Service
             if (call.ProcedureId > 0)
                 procedure = GetProcedureNameById (service, call.ProcedureId);
             if (!serviceSignature.Procedures.ContainsKey (procedure))
-                throw new RPCException ("Procedure " + procedure + " not found, in service " + service);
+                throw new RPCException ("Procedure \"" + procedure + "\" not found, in service \"" + service + "\"");
             return serviceSignature.Procedures [procedure];
         }
 
-        public string GetServiceNameById (uint id) {
+        string GetServiceNameById (uint id) {
             if (!ServicesById.ContainsKey (id))
                 throw new RPCException ("Service with id " + id + " not found");
             return ServicesById [id].Name;
         }
 
-        public string GetProcedureNameById (string service, uint procedureId)
+        string GetProcedureNameById (string service, uint procedureId)
         {
             if (!ProceduresById.ContainsKey (service))
-                throw new RPCException ("Service " + service + " not found");
+                throw new RPCException ("Service \"" + service + "\" not found");
             if (!ProceduresById [service].ContainsKey (procedureId))
-                throw new RPCException ("Procedure with identifier " + procedureId + " not found");
+                throw new RPCException ("Procedure with id " + procedureId + " not found");
             return ProceduresById [service] [procedureId].Name;
         }
 
