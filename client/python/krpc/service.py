@@ -29,9 +29,13 @@ def _as_literal(value, typ):
     return str(value)
 
 
-def _update_param_names(names):
-    """ Given a list of parameter names, append underscores to
-        reserved keywords without causing parameter names to clash """
+def _member_name(name):
+    return str(_update_names(snake_case(name))[0])
+
+
+def _update_names(*names):
+    """ Given a list of names, append underscores to reserved keywords
+        without causing names to clash """
     newnames = []
     for name in names:
         if keyword.iskeyword(name):
@@ -47,8 +51,8 @@ def _construct_func(invoke, service_name, procedure_name,
                     param_types, param_required, param_default, return_type):
     """ Build function to invoke a remote procedure """
 
-    prefix_param_names = _update_param_names(prefix_param_names)
-    param_names = _update_param_names(param_names)
+    prefix_param_names = _update_names(*prefix_param_names)
+    param_names = _update_names(*param_names)
 
     params = []
     for name, required, default, typ in zip(
@@ -291,7 +295,7 @@ class ServiceBase(DynamicType):
             param_required, param_default, return_type)
         setattr(func, '_build_call', build_call)
         setattr(func, '_return_type', return_type)
-        name = str(snake_case(procedure.name))
+        name = _member_name(procedure.name)
         return cls._add_static_method(
             name, func, doc=_parse_documentation(procedure.documentation))
 
@@ -320,7 +324,7 @@ class ServiceBase(DynamicType):
                                      setter.name, ['self'],
                                      param_names, param_types,
                                      [True], [None], None)
-        name = str(snake_case(name))
+        name = _member_name(name)
         return cls._add_property(name, getter, setter, doc=doc)
 
     @classmethod
@@ -343,7 +347,7 @@ class ServiceBase(DynamicType):
             param_required, param_default, return_type)
         setattr(func, '_build_call', build_call)
         setattr(func, '_return_type', return_type)
-        name = str(snake_case(method_name))
+        name = _member_name(method_name)
         class_cls._add_method(
             name, func, doc=_parse_documentation(procedure.documentation))
 
@@ -365,7 +369,7 @@ class ServiceBase(DynamicType):
             param_required, param_default, return_type)
         setattr(func, '_build_call', build_call)
         setattr(func, '_return_type', return_type)
-        name = str(snake_case(method_name))
+        name = _member_name(method_name)
         class_cls._add_static_method(
             name, func, doc=_parse_documentation(procedure.documentation))
 
@@ -401,5 +405,5 @@ class ServiceBase(DynamicType):
             setter = _construct_func(
                 cls._client._invoke, cls._name, setter.name, [],
                 param_names, param_types, [True, True], [None, None], None)
-        property_name = str(snake_case(property_name))
+        property_name = _member_name(property_name)
         return class_cls._add_property(property_name, getter, setter, doc=doc)
