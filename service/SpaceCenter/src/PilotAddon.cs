@@ -132,7 +132,7 @@ namespace KRPC.SpaceCenter
                         state.pitch = other.state.pitch;
                     if (Math.Abs(other.state.yaw) > 0.001)
                         state.yaw = other.state.yaw;
-                    if (Math.Abs(other.state.pitch) > 0.001)
+                    if (Math.Abs(other.state.roll) > 0.001)
                         state.roll = other.state.roll;
                     if (Math.Abs(other.state.X) > 0.001)
                         state.X = other.state.X;
