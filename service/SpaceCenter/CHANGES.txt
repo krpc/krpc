@@ -1,3 +1,6 @@
+v0.4.5
+ * Fixed roll input when input mode is override (#445)
+
 v0.4.4
  * Add ResourceConverter.ThermalEfficiency, CoreTemperature and OptimumCoreTemperature (#439)
 
