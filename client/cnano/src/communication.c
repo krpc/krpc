@@ -60,9 +60,12 @@ krpc_error_t krpc_close(krpc_connection_t connection) {
 }
 
 krpc_error_t krpc_read(krpc_connection_t connection, uint8_t * buf, size_t count) {
-  if (count != connection->readBytes(buf, count))
-    KRPC_RETURN_ERROR(IO, "read failed");
-  return KRPC_OK;
+  size_t read = 0;
+  while (true) {
+    read += connection->readBytes(buf, count);
+    if (count == read)
+      return KRPC_OK;
+  }
 }
 
 krpc_error_t krpc_write(krpc_connection_t connection, const uint8_t * buf, size_t count) {
