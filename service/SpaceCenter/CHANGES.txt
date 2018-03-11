@@ -1,5 +1,6 @@
 v0.4.5
  * Fixed roll input when input mode is override (#445)
+ * Marked CelestialBody.Orbit as nullable, as it returns null for the sun
 
 v0.4.4
  * Add ResourceConverter.ThermalEfficiency, CoreTemperature and OptimumCoreTemperature (#439)

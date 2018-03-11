@@ -293,7 +293,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The orbit of the body.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty(Nullable = true)]
         public Orbit Orbit {
             get { return orbit; }
         }
