@@ -1,6 +1,5 @@
 import unittest
 import krpctest
-import krpc
 
 
 class TestResourceTransfer(krpctest.TestCase):
@@ -75,14 +74,14 @@ class TestResourceTransfer(krpctest.TestCase):
     def test_transfer_between_different_vessels(self):
         from_part = self.parts.all[0]
         to_part = self.other_parts.all[0]
-        with self.assertRaises(krpc.error.RPCError) as cm:
+        with self.assertRaises(ValueError) as cm:
             self.sc.ResourceTransfer.start(from_part, to_part, 'Oxidizer', 100)
         self.assertTrue(
             'Parts are not on the same vessel' in str(cm.exception))
 
     def test_transfer_between_same_parts(self):
         part = self.parts.with_title('FL-T400 Fuel Tank')[0]
-        with self.assertRaises(krpc.error.RPCError) as cm:
+        with self.assertRaises(ValueError) as cm:
             self.sc.ResourceTransfer.start(part, part, 'Oxidizer', 100)
         self.assertTrue(
             'Source and destination parts are the same' in str(cm.exception))
@@ -90,7 +89,7 @@ class TestResourceTransfer(krpctest.TestCase):
     def test_transfer_unknown_resource(self):
         from_part = self.parts.with_title('FL-T400 Fuel Tank')[0]
         to_part = self.parts.with_title('FL-T100 Fuel Tank')[0]
-        with self.assertRaises(krpc.error.RPCError) as cm:
+        with self.assertRaises(ValueError) as cm:
             self.sc.ResourceTransfer.start(
                 from_part, to_part, 'DoesntExist', 100)
         self.assertTrue(
@@ -100,7 +99,7 @@ class TestResourceTransfer(krpctest.TestCase):
         from_part = self.parts.with_title(
             'Stratus-V Roundified Monopropellant Tank')[0]
         to_part = self.parts.with_title('FL-T100 Fuel Tank')[0]
-        with self.assertRaises(krpc.error.RPCError) as cm:
+        with self.assertRaises(ValueError) as cm:
             self.sc.ResourceTransfer.start(from_part, to_part, 'Oxidizer', 100)
         self.assertTrue('Source part does not contain' in str(cm.exception))
 
@@ -108,7 +107,7 @@ class TestResourceTransfer(krpctest.TestCase):
         from_part = self.parts.with_title('FL-T100 Fuel Tank')[0]
         to_part = self.parts.with_title(
             'Stratus-V Roundified Monopropellant Tank')[0]
-        with self.assertRaises(krpc.error.RPCError) as cm:
+        with self.assertRaises(ValueError) as cm:
             self.sc.ResourceTransfer.start(from_part, to_part, 'Oxidizer', 100)
         self.assertTrue('Destination part cannot store' in str(cm.exception))
 

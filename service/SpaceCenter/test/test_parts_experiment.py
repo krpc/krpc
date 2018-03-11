@@ -1,6 +1,5 @@
 import unittest
 import krpctest
-import krpc
 
 
 class TestPartsExperiment(krpctest.TestCase):
@@ -119,7 +118,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertFalse(self.pod.inoperable)
         self.assertTrue(self.pod.has_data)
 
-        self.assertRaises(krpc.client.RPCError, self.pod.run)
+        self.assertRaises(RuntimeError, self.pod.run)
 
         self.pod.dump()
         self.wait()

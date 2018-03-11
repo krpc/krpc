@@ -1,5 +1,4 @@
 import unittest
-import krpc
 import krpctest
 
 
@@ -27,7 +26,7 @@ class TestText(krpctest.TestCase):
         self.assertEqual(1, text.line_spacing)
         self.wait()
         text.remove()
-        self.assertRaises(krpc.client.RPCError, text.remove)
+        self.assertRaises(ValueError, text.remove)
 
     def test_properties(self):
         text = self.canvas.add_text('Jebediah Kerman')
@@ -46,7 +45,7 @@ class TestText(krpctest.TestCase):
         self.assertEqual(2, text.line_spacing)
         self.wait()
         text.remove()
-        self.assertRaises(krpc.client.RPCError, text.remove)
+        self.assertRaises(ValueError, text.remove)
 
 
 if __name__ == '__main__':

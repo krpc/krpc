@@ -1,5 +1,4 @@
 import unittest
-import krpc
 import krpctest
 
 
@@ -34,7 +33,7 @@ class TestVessel(krpctest.TestCase):
 
     def test_recoverable(self):
         self.assertFalse(self.vessel.recoverable)
-        self.assertRaises(krpc.client.RPCError, self.vessel.recover)
+        self.assertRaises(RuntimeError, self.vessel.recover)
 
     def test_met(self):
         ut = self.space_center.ut

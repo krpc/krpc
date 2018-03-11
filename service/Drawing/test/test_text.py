@@ -1,5 +1,4 @@
 import unittest
-import krpc
 import krpctest
 
 
@@ -27,7 +26,7 @@ class TestText(krpctest.TestCase):
         self.assertEqual((0, 0, 0), text.position)
         self.assertEqual((0, 0, 0, 1), text.rotation)
         self.assertEqual("Arial", text.font)
-        self.assertGreater(len(text.available_fonts), 0)
+        self.assertGreater(len(text.available_fonts()), 0)
         self.assertEqual(12, text.size)
         self.assertEqual(1, text.character_size)
         self.assertEqual(self.style.normal, text.style)
@@ -38,11 +37,11 @@ class TestText(krpctest.TestCase):
         self.assertEqual(self.anchor.upper_left, text.anchor)
         self.wait()
         text.remove()
-        self.assertRaises(krpc.client.RPCError, text.remove)
+        self.assertRaises(ValueError, text.remove)
 
     def test_text_properties(self):
         text = self.add_text()
-        font = text.available_fonts[-1:][0]
+        font = text.available_fonts()[-1]
         text.font = font
         text.size = 20
         text.character_size = 2
@@ -61,7 +60,7 @@ class TestText(krpctest.TestCase):
         self.assertEqual(self.anchor.upper_right, text.anchor)
         self.wait()
         text.remove()
-        self.assertRaises(krpc.client.RPCError, text.remove)
+        self.assertRaises(ValueError, text.remove)
 
 
 if __name__ == '__main__':

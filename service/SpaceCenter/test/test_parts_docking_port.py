@@ -1,7 +1,6 @@
 import unittest
 import krpctest
 from krpctest.geometry import norm
-import krpc
 
 
 class TestPartsDockingPort(krpctest.TestCase):
@@ -225,11 +224,11 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
             self.wait(0.5)
 
             # Check undocking when not docked
-            with self.assertRaises(krpc.error.RPCError) as cm:
+            with self.assertRaises(RuntimeError) as cm:
                 port1.undock()
             self.assertTrue(
                 'The docking port is not docked' in str(cm.exception))
-            with self.assertRaises(krpc.error.RPCError) as cm:
+            with self.assertRaises(RuntimeError) as cm:
                 port2.undock()
             self.assertTrue(
                 'The docking port is not docked' in str(cm.exception))

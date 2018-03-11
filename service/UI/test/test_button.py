@@ -1,5 +1,4 @@
 import unittest
-import krpc
 import krpctest
 
 
@@ -19,7 +18,7 @@ class TestButton(krpctest.TestCase):
         self.assertFalse(button.clicked)
         self.wait()
         button.remove()
-        self.assertRaises(krpc.client.RPCError, button.remove)
+        self.assertRaises(ValueError, button.remove)
 
 
 if __name__ == '__main__':

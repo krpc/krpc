@@ -1,5 +1,4 @@
 import unittest
-import krpc
 import krpctest
 
 
@@ -32,7 +31,7 @@ class TestPolygon(krpctest.TestCase):
         self.assertAlmostEqual(0.1, polygon.thickness)
         self.wait()
         polygon.remove()
-        self.assertRaises(krpc.client.RPCError, polygon.remove)
+        self.assertRaises(ValueError, polygon.remove)
 
     def test_color(self):
         polygon = self.add_polygon()

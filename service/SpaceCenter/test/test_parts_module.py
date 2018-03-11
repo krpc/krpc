@@ -1,6 +1,5 @@
 import unittest
 import krpctest
-import krpc
 
 
 class TestPartsModule(krpctest.TestCase):
@@ -27,22 +26,20 @@ class TestPartsModule(krpctest.TestCase):
         self.assertTrue(module.has_field('Command State'))
         self.assertFalse(module.has_field('DoesntExist'))
         self.assertEqual('Operational', module.get_field('Command State'))
-        self.assertRaises(
-            krpc.client.RPCError, module.get_field, 'DoesntExist')
+        self.assertRaises(RuntimeError, module.get_field, 'DoesntExist')
         self.assertItemsEqual(['Control From Here', 'Rename Vessel'],
                               module.events)
         self.assertTrue(module.has_event('Control From Here'))
         self.assertFalse(module.has_event('DoesntExist'))
         module.trigger_event('Control From Here')
-        self.assertRaises(krpc.client.RPCError, module.trigger_event,
-                          'DoesntExist')
+        self.assertRaises(RuntimeError, module.trigger_event, 'DoesntExist')
         self.assertEqual(['Control From Here', 'Toggle Hibernation'],
                          module.actions)
         self.assertFalse(module.has_action('DoesntExist'))
-        self.assertRaises(krpc.client.RPCError, module.set_action,
-                          'DoesntExist', True)
-        self.assertRaises(krpc.client.RPCError, module.set_action,
-                          'DoesntExist', False)
+        self.assertRaises(
+            RuntimeError, module.set_action, 'DoesntExist', True)
+        self.assertRaises(
+            RuntimeError, module.set_action, 'DoesntExist', False)
 
     def test_solar_panel(self):
         part = self.parts.with_title('SP-L 1x6 Photovoltaic Panels')[0]
@@ -56,20 +53,18 @@ class TestPartsModule(krpctest.TestCase):
         self.assertTrue(module.has_field('Status'))
         self.assertFalse(module.has_field('DoesntExist'))
         self.assertEqual('Retracted', module.get_field('Status'))
-        self.assertRaises(
-            krpc.client.RPCError, module.get_field, 'DoesntExist')
+        self.assertRaises(RuntimeError, module.get_field, 'DoesntExist')
         self.assertItemsEqual(['Extend Solar Panel'], module.events)
         self.assertTrue(module.has_event('Extend Solar Panel'))
         self.assertFalse(module.has_event('DoesntExist'))
-        self.assertRaises(krpc.client.RPCError, module.trigger_event,
-                          'DoesntExist')
+        self.assertRaises(RuntimeError, module.trigger_event, 'DoesntExist')
         self.assertItemsEqual(['Extend Solar Panel', 'Retract Solar Panel',
                                'Toggle Solar Panel'], module.actions)
         self.assertFalse(module.has_action('DoesntExist'))
-        self.assertRaises(krpc.client.RPCError, module.set_action,
-                          'DoesntExist', True)
-        self.assertRaises(krpc.client.RPCError, module.set_action,
-                          'DoesntExist', False)
+        self.assertRaises(
+            RuntimeError, module.set_action, 'DoesntExist', True)
+        self.assertRaises(
+            RuntimeError, module.set_action, 'DoesntExist', False)
 
     def test_set_field_int(self):
         part = self.parts.with_title('LY-10 Small Landing Gear')[0]

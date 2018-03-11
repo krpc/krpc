@@ -1,6 +1,5 @@
 import unittest
 import krpctest
-import krpc
 
 
 class ResourcesTest(object):
@@ -231,7 +230,7 @@ class TestResourcesStaticMethods(krpctest.TestCase, ResourcesTest):
     def test_density(self):
         for name, expected in self.density.items():
             self.assertEqual(expected, self.resources.density(name))
-        self.assertRaises(krpc.error.RPCError, self.resources.density, 'Foo')
+        self.assertRaises(ValueError, self.resources.density, 'Foo')
 
     def test_flow_mode(self):
         mode = self.connect().space_center.ResourceFlowMode
@@ -253,7 +252,7 @@ class TestResourcesStaticMethods(krpctest.TestCase, ResourcesTest):
             mode.vessel, self.resources.flow_mode('Ore'))
         self.assertEqual(
             mode.none, self.resources.flow_mode('Ablator'))
-        self.assertRaises(krpc.error.RPCError, self.resources.flow_mode, 'Foo')
+        self.assertRaises(ValueError, self.resources.flow_mode, 'Foo')
 
 
 if __name__ == '__main__':

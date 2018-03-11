@@ -2,7 +2,6 @@ import unittest
 import math
 import krpctest
 from krpctest.geometry import compute_position, norm, dot
-import krpc
 
 
 class TestReferenceFrame(krpctest.TestCase):
@@ -38,7 +37,7 @@ class TestReferenceFrame(krpctest.TestCase):
             if body.orbit is not None:
                 self.check_object_position(body, body.orbital_reference_frame)
             else:
-                self.assertRaises(krpc.client.RPCError, getattr,
+                self.assertRaises(ValueError, getattr,
                                   body, 'orbital_reference_frame')
 
     def test_vessel_position(self):

@@ -1,5 +1,4 @@
 import unittest
-import krpc
 import krpctest
 
 
@@ -19,7 +18,7 @@ class TestInputField(krpctest.TestCase):
         self.assertFalse(input_field.changed)
         self.wait()
         input_field.remove()
-        self.assertRaises(krpc.client.RPCError, input_field.remove)
+        self.assertRaises(ValueError, input_field.remove)
 
     def test_value(self):
         input_field = self.canvas.add_input_field()

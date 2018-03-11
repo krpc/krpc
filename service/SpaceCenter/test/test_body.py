@@ -1,6 +1,5 @@
 import unittest
 import math
-import krpc
 import krpctest
 from krpctest.geometry import norm, normalize, dot, rad2deg
 
@@ -135,9 +134,9 @@ class TestBody(krpctest.TestCase):
         self.assertTrue(sun.has_atmosphere)
         self.assertAlmostEqual(600000, sun.atmosphere_depth)
         self.assertFalse(sun.has_atmospheric_oxygen)
-        self.assertRaises(krpc.client.RPCError, getattr, sun, 'biomes')
-        self.assertRaises(krpc.client.RPCError, sun.biome_at, 0, 0)
-        self.assertRaises(krpc.client.RPCError, sun.biome_at, 42, 4)
+        self.assertRaises(RuntimeError, getattr, sun, 'biomes')
+        self.assertRaises(RuntimeError, sun.biome_at, 0, 0)
+        self.assertRaises(RuntimeError, sun.biome_at, 42, 4)
         self.assertEqual(18000, sun.flying_high_altitude_threshold)
         self.assertEqual(1e9, sun.space_high_altitude_threshold)
 

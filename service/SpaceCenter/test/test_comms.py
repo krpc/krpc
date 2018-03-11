@@ -1,7 +1,5 @@
 import unittest
 import math
-import krpc
-import krpc.error
 import krpctest
 
 
@@ -56,7 +54,7 @@ class TestCommsSingleHop(krpctest.TestCase):
         self.assertTrue(end.is_home)
         self.assertTrue(end.is_control_point)
         self.assertFalse(end.is_vessel)
-        self.assertRaises(krpc.error.RPCError, getattr, end, 'vessel')
+        self.assertRaises(RuntimeError, getattr, end, 'vessel')
 
 
 class TestCommsMultiHop(krpctest.TestCase):
@@ -110,7 +108,7 @@ class TestCommsMultiHop(krpctest.TestCase):
         self.assertTrue(end.is_home)
         self.assertTrue(end.is_control_point)
         self.assertFalse(end.is_vessel)
-        self.assertRaises(krpc.error.RPCError, getattr, end, 'vessel')
+        self.assertRaises(RuntimeError, getattr, end, 'vessel')
 
 
 if __name__ == '__main__':

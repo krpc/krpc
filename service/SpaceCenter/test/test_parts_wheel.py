@@ -1,5 +1,4 @@
 import unittest
-import krpc.error
 import krpctest
 
 
@@ -41,7 +40,7 @@ class TestPartsWheel(krpctest.TestCase):
     def test_no_brakes(self):
         wheel = self.free_wheel
         self.assertFalse(wheel.has_brakes)
-        self.assertRaises(krpc.error.RPCError, getattr, wheel, 'brakes')
+        self.assertRaises(RuntimeError, getattr, wheel, 'brakes')
 
     def test_friction_control(self):
         wheel = self.fixed_wheel
@@ -126,12 +125,9 @@ class TestPartsWheel(krpctest.TestCase):
     def test_unpowered(self):
         wheel = self.free_wheel
         self.assertFalse(wheel.powered)
-        self.assertRaises(krpc.error.RPCError,
-                          getattr, wheel, 'motor_inverted')
-        self.assertRaises(krpc.error.RPCError,
-                          getattr, wheel, 'motor_state')
-        self.assertRaises(krpc.error.RPCError,
-                          getattr, wheel, 'motor_output')
+        self.assertRaises(RuntimeError, getattr, wheel, 'motor_inverted')
+        self.assertRaises(RuntimeError, getattr, wheel, 'motor_state')
+        self.assertRaises(RuntimeError, getattr, wheel, 'motor_output')
 
     def test_traction_control(self):
         wheel = self.powered_wheel
@@ -172,10 +168,8 @@ class TestPartsWheel(krpctest.TestCase):
     def test_unsteerable(self):
         wheel = self.fixed_wheel
         self.assertFalse(wheel.steerable)
-        self.assertRaises(krpc.error.RPCError,
-                          getattr, wheel, 'steering_enabled')
-        self.assertRaises(krpc.error.RPCError,
-                          getattr, wheel, 'steering_inverted')
+        self.assertRaises(RuntimeError, getattr, wheel, 'steering_enabled')
+        self.assertRaises(RuntimeError, getattr, wheel, 'steering_inverted')
 
     def test_suspension(self):
         wheel = self.suspension_wheel
@@ -187,9 +181,9 @@ class TestPartsWheel(krpctest.TestCase):
         # TODO: there are no wheel with no suspension to test!
         # wheel = self.fixed_wheel
         # self.assertFalse(wheel.has_suspension)
-        # self.assertRaises(krpc.error.RPCError,
+        # self.assertRaises(RuntimeError,
         #                   getattr, wheel, 'suspension_spring_strength')
-        # self.assertRaises(krpc.error.RPCError,
+        # self.assertRaises(RuntimeError,
         #                   getattr, wheel, 'suspension_damper_strength')
         pass
 

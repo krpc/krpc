@@ -1,6 +1,5 @@
 import unittest
 import krpctest
-import krpc
 
 
 class TestPartsFuelLines(krpctest.TestCase):
@@ -51,10 +50,10 @@ class TestPartsFuelLines(krpctest.TestCase):
 
     def test_error_on_fuel_line_part(self):
         part = self.parts.with_title('FTX-2 External Fuel Duct')[0]
-        with self.assertRaises(krpc.error.RPCError) as cm:
+        with self.assertRaises(RuntimeError) as cm:
             getattr(part, 'fuel_lines_to')
         self.assertTrue('Part is a fuel line' in str(cm.exception))
-        with self.assertRaises(krpc.error.RPCError) as cm:
+        with self.assertRaises(RuntimeError) as cm:
             getattr(part, 'fuel_lines_from')
         self.assertTrue('Part is a fuel line' in str(cm.exception))
 

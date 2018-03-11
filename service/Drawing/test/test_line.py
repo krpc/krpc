@@ -1,5 +1,4 @@
 import unittest
-import krpc
 import krpctest
 
 
@@ -26,7 +25,7 @@ class TestLine(krpctest.TestCase):
         self.assertAlmostEqual(0.1, line.thickness)
         self.wait()
         line.remove()
-        self.assertRaises(krpc.client.RPCError, line.remove)
+        self.assertRaises(ValueError, line.remove)
 
     def test_color(self):
         line = self.add_line()

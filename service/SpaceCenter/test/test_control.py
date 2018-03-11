@@ -1,7 +1,6 @@
 import unittest
 import krpctest
 from krpctest.geometry import normalize
-import krpc
 
 
 class TestControlMixin(object):
@@ -27,11 +26,11 @@ class TestControlMixin(object):
             self.assertTrue(self.control.get_action_group(i))
             self.control.toggle_action_group(i)
             self.assertFalse(self.control.get_action_group(i))
-        self.assertRaises(krpc.client.RPCError,
+        self.assertRaises(ValueError,
                           self.control.set_action_group, 11, False)
-        self.assertRaises(krpc.client.RPCError,
+        self.assertRaises(ValueError,
                           self.control.get_action_group, 11)
-        self.assertRaises(krpc.client.RPCError,
+        self.assertRaises(ValueError,
                           self.control.toggle_action_group, 11)
 
     def test_pitch_control(self):
@@ -216,7 +215,7 @@ class TestControlNonActiveVessel(krpctest.TestCase, TestControlMixin):
 
     def test_maneuver_node_editing(self):
         self.assertRaises(
-            krpc.client.RPCError,
+            RuntimeError,
             self.control.add_node, self.space_center.ut + 60, 100, 0, 0)
 
 
