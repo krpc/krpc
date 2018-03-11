@@ -274,6 +274,11 @@ test_suite(
     name = 'lint',
     tests = [
         '//server:lint',
+        '//service/SpaceCenter:lint',
+        '//service/Drawing:lint',
+        '//service/InfernalRobotics:lint',
+        '//service/RemoteTech:lint',
+        '//service/UI:lint',
         '//client/csharp:lint',
         '//client/cpp:lint',
         '//client/java:lint',
