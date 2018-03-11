@@ -47,13 +47,13 @@ class TestVessel(krpctest.TestCase):
         # 260 l of monoprop at 4 kg/l
         # 180 l of LiquidFuel at 5 kg/l
         # 220 l of Oxidizer at 5 kg/l
-        dry_mass = 3492
+        dry_mass = 3422
         resource_mass = 260 * 4 + 180 * 5 + 220 * 5
         self.assertAlmostEqual(
             dry_mass + resource_mass, self.vessel.mass, places=3)
 
     def test_dry_mass(self):
-        self.assertAlmostEqual(3492, self.vessel.dry_mass, places=3)
+        self.assertAlmostEqual(3422, self.vessel.dry_mass, places=3)
 
     def test_moment_of_inertia(self):
         self.assertAlmostEqual(
