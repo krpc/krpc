@@ -65,8 +65,6 @@ krpc_error_t krpc_read(krpc_connection_t connection, uint8_t * buf, size_t count
     read += connection->readBytes(buf+read, count-read);
     if (read == count)
       return KRPC_OK;
-    if (read > count)
-      KRPC_RETURN_ERROR(IO, "read failed");
   }
 }
 
