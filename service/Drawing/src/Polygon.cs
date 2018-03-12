@@ -27,7 +27,7 @@ namespace KRPC.Drawing
             renderer = GameObject.GetComponent<LineRenderer> ();
             renderer.useWorldSpace = true;
             var numVertices = polygonVertices.Count + 1;
-            renderer.SetVertexCount (numVertices);
+            renderer.positionCount = numVertices;
             for (int i = 0; i < numVertices; i++)
                 renderer.SetPosition (i, Vector3d.zero);
             vertices = polygonVertices;
@@ -78,7 +78,8 @@ namespace KRPC.Drawing
             set {
                 color = value;
                 var rgbColor = color.ToColor ();
-                renderer.SetColors (rgbColor, rgbColor);
+                renderer.startColor = rgbColor;
+                renderer.endColor = rgbColor;
             }
         }
 
@@ -90,7 +91,8 @@ namespace KRPC.Drawing
             get { return thickness; }
             set {
                 thickness = value;
-                renderer.SetWidth (thickness, thickness);
+                renderer.startWidth = thickness;
+                renderer.endWidth = thickness;
             }
         }
     }
