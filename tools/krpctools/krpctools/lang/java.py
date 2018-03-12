@@ -94,4 +94,4 @@ class JavaLanguage(Language):
             return 'java.util.Map<%s,%s>' % \
                 (self._parse_type(typ.key_type, True),
                  self._parse_type(typ.value_type, True))
-        raise RuntimeError('Unknown type \'%s\'', str(typ))
+        raise RuntimeError('Unknown type \'%s\'' % str(typ))

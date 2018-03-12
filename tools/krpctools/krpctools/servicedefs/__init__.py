@@ -43,6 +43,8 @@ def main():
     else:
         print defs
 
+    return 0
+
 
 def servicedefs(ksp, service, assemblies):
     """ Generate service definitions from assembly DLLs

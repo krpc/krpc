@@ -120,6 +120,8 @@ def main():
         sys.stderr.write('Error: %s\n' % str(ex))
         return 1
 
+    return 0
+
 
 def load_generator(path):
     path = os.path.abspath(os.path.expanduser(os.path.expandvars(path)))

@@ -17,19 +17,19 @@ if [ ! -d "$env" ]; then
   virtualenv $env
   source $env/bin/activate
   pip install --upgrade \
-      "six==1.10.0" \
-      "pbr==3.1.0" \
-      "setuptools==36.0.1" \
+      "six==1.11.0" \
+      "pbr==3.1.1" \
+      "setuptools==38.5.2" \
       "setuptools-git==1.2"
   pip install "Sphinx==1.6.4"
-  CFLAGS="-O0" pip install "lxml==3.8.0"
+  CFLAGS="-O0" pip install "lxml==4.1.1"
   pip install \
       "sphinx_rtd_theme==0.2.5b1" \
-      "sphinxcontrib_spelling==2.3.0" \
+      "sphinxcontrib_spelling==4.1.0" \
       "sphinx-csharp==0.1.6" \
-      "sphinx-tabs==1.1.5" \
+      "sphinx-tabs==1.1.7" \
       "javasphinx==0.9.15" \
-      https://github.com/djungelorm/sphinx-lua/releases/download/0.1.3/sphinx-lua-0.1.3.tar.gz
+      https://github.com/djungelorm/sphinx-lua/releases/download/0.1.4/sphinx-lua-0.1.4.tar.gz
   pip install sphinx-autobuild pyinotify
 else
   source $env/bin/activate
