@@ -1,3 +1,6 @@
+v0.4.5
+ * Update to protobuf v3.5.1
+
 v0.4.0
  * Updated protocol in line with server changes
 
