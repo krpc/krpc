@@ -43,6 +43,8 @@ namespace KRPC.Server.SerialIO
                 }
                 request = multiplexedRequest.Request.ToMessage ();
                 return read;
+            } catch (System.InvalidOperationException e) {
+                throw new MalformedRequestException (e.Message);
             } catch (InvalidProtocolBufferException e) {
                 throw new MalformedRequestException (e.Message);
             }

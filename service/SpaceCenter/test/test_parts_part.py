@@ -331,7 +331,8 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
         modules = ['ModuleCargoBay', 'ModuleProceduralFairing',
-                   'ModuleTestSubject', 'ModuleStructuralNodeToggle'] + \
+                   'ModuleTestSubject', 'ModuleStructuralNodeToggle',
+                   'ModulePartVariants'] + \
                   ['ModuleStructuralNode'] * 12
         if self.far_available:
             modules.append('FARBasicDragModel')
@@ -651,7 +652,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertTrue(part.massless)
         self.assertAlmostEqual(0, part.mass, places=4)
         self.assertAlmostEqual(0, part.dry_mass, places=4)
-        self.assertFalse(part.shielded)
+        self.assertTrue(part.shielded)
         self.assertAlmostEqual(0, part.dynamic_pressure, places=3)
         self.assertEqual(8, part.impact_tolerance)
         self.assertTrue(part.crossfeed)

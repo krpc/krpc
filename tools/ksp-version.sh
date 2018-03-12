@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cat config.bzl | grep '^ksp_version = ' | sed -n -e "s/ksp_version\s*=\s*'\(.*\)'/\1/p"
+cat config.bzl | grep '^ksp_version_max = ' | sed -n -e "s/ksp_version_max\s*=\s*'\(.*\)'/\1/p"

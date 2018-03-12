@@ -1,3 +1,7 @@
+v1.5.0
+ * Update the Bazel 0.11.1
+ * Update to protobuf v3.5.1
+
 v1.4.0
  * Update to Bazel 0.7.0
  * Add socat for SerialIO tests

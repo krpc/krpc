@@ -68,7 +68,7 @@ RUN apt-get update && \
     chmod +x /usr/local/bin/gosu && \
     gosu nobody true
 
-ARG bazel_version=0.7.0
+ARG bazel_version=0.11.1
 RUN echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | \
       tee /etc/apt/sources.list.d/bazel.list && \
     curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add - && \
@@ -79,7 +79,7 @@ RUN echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8
 COPY bazelrc /etc/bazel.bazelrc
 RUN chmod 0644 /etc/bazel.bazelrc
 
-ARG protobuf_version=3.4.1
+ARG protobuf_version=3.5.1
 WORKDIR /usr/local/src/protobuf-cpp-${protobuf_version}
 RUN wget https://github.com/google/protobuf/releases/download/v${protobuf_version}/protobuf-cpp-${protobuf_version}.tar.gz && \
   tar -xf protobuf-cpp-${protobuf_version}.tar.gz --strip=1 && \

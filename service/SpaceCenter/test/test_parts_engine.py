@@ -73,15 +73,16 @@ class EngineTestBase(object):
             'vac_isp': 195,
             'modes': None
         },
-        'J-33 "Wheesley" Turbofan Engine': {
-            'propellants': {'IntakeAir': 1., 'LiquidFuel': 0.007874},
-            'gimballed': False,
+        'J-33 "Wheesley" Basic Jet Engine': {
+            'propellants': {'IntakeAir': 1., 'LiquidFuel': 0.09090909},
+            'gimballed': True,
+            'gimbal_range': 1,
             'throttle_locked': False,
             'can_restart': True,
             'can_shutdown': True,
-            'max_vac_thrust': 120000,
-            'msl_isp': 10500,
-            'vac_isp': 10500,
+            'max_vac_thrust': 80000,
+            'msl_isp': 9600,
+            'vac_isp': 9600,
             'modes': None
         },
         'CR-7 R.A.P.I.E.R. Engine': {
@@ -359,14 +360,14 @@ class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
             'RT-10 "Hammer" Solid Fuel Booster',
             {'max_thrust': 197897, 'isp': 170.4})
         cls.add_engine_data(
-            'J-33 "Wheesley" Turbofan Engine',
-            {'max_thrust': 110096, 'isp': 10500})
+            'J-33 "Wheesley" Basic Jet Engine',
+            {'max_thrust': 74884, 'isp': 9600})
         cls.add_engine_data(
             'CR-7 R.A.P.I.E.R. Engine',
-            {'max_thrust': 95250, 'isp': 3200})
+            {'max_thrust': 96895, 'isp': 3200})
 
     def test_jet_engine(self):
-        engine = self.get_engine('J-33 "Wheesley" Turbofan Engine')
+        engine = self.get_engine('J-33 "Wheesley" Basic Jet Engine')
         self.set_idle(engine)
         self.check_engine_properties(engine)
         self.check_engine_idle(engine)

@@ -1,3 +1,6 @@
+v0.4.5
+ * Update to protobuf v3.5.1
+
 v0.4.4
  * Add support for more complex server side expressions including function definitions and calls, and operations on collections (#435)
  * Fix service ids to not clash (affected cnano client) (#433)

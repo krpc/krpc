@@ -30,6 +30,8 @@ namespace KRPC.Server.ProtocolBuffers
                 if (message != null)
                     request = message.ToMessage ();
                 return read;
+            } catch (System.InvalidOperationException e) {
+                throw new MalformedRequestException (e.Message);
             } catch (InvalidProtocolBufferException e) {
                 throw new MalformedRequestException (e.Message);
             }
