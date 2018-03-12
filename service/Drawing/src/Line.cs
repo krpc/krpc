@@ -25,7 +25,9 @@ namespace KRPC.Drawing
         {
             renderer = GameObject.GetComponent<LineRenderer> ();
             renderer.useWorldSpace = true;
-            renderer.positionCount = 2;
+            #pragma warning disable CS0618
+            renderer.SetVertexCount (2);
+            #pragma warning restore
             renderer.SetPosition (0, Vector3d.zero);
             renderer.SetPosition (1, Vector3d.zero);
             start = lineStart;
@@ -73,8 +75,9 @@ namespace KRPC.Drawing
             set {
                 color = value;
                 var rgbColor = color.ToColor ();
-                renderer.startColor = rgbColor;
-                renderer.endColor = rgbColor;
+                #pragma warning disable CS0618
+                renderer.SetColors (rgbColor, rgbColor);
+                #pragma warning restore
             }
         }
 
@@ -86,8 +89,9 @@ namespace KRPC.Drawing
             get { return thickness; }
             set {
                 thickness = value;
-                renderer.startWidth = thickness;
-                renderer.endWidth = thickness;
+                #pragma warning disable CS0618
+                renderer.SetWidth (thickness, thickness);
+                #pragma warning restore
             }
         }
     }
