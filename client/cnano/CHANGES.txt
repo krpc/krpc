@@ -1,3 +1,6 @@
+v0.4.4
+ * Fix connection timing out on ArRduino when connecting to a server with new client confirmation enabled (#446)
+
 v0.4.3
  * Remove KRPC_NO_PRINT_ERRORS option (now enabled by default) and replace with KRPC_PRINT_ERRORS_TO_STDERR
  * Enable PB_NO_ERRMSG by default in Arduino version of library
