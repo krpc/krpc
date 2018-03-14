@@ -1,4 +1,8 @@
+v1.6.0
+ * Update to KSP 1.4.1
+
 v1.5.0
+ * Update to KSP 1.4.0
  * Update the Bazel 0.11.1
  * Update to protobuf v3.5.1
 

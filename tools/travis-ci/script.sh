@@ -7,4 +7,4 @@ docker run -t -i \
   -e "TRAVIS_BRANCH=${TRAVIS_BRANCH}" \
   -e "TRAVIS_PULL_REQUEST=${TRAVIS_PULL_REQUEST}" \
   -e "TRAVIS_JOB_NUMBER=${TRAVIS_JOB_NUMBER}" \
-  krpc/buildenv:1.5.0 /build/krpc/tools/travis-ci/script-docker.sh
+  krpc/buildenv:1.6.0 /build/krpc/tools/travis-ci/script-docker.sh
