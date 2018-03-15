@@ -1,4 +1,5 @@
 v0.4.5
+ * Support KSP 1.4.1
  * Update to protobuf v3.5.1
  * Fix server error and client hang when quickly removing and re-adding a stream
 
