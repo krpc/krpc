@@ -188,6 +188,15 @@ class TestStream(ServerTestCase, unittest.TestCase):
             self.conn.test_service.int32_to_string, 0)
         self.assertEqual('0', stream())
 
+    def test_restart_stream(self):
+        stream = self.conn.add_stream(
+            self.conn.test_service.int32_to_string, 0)
+        stream.start()
+        stream.remove()
+        stream = self.conn.add_stream(
+            self.conn.test_service.int32_to_string, 0)
+        stream.start()
+
     def test_invalid_operation_exception_immediately(self):
         stream = self.conn.add_stream(
             self.conn.test_service.throw_invalid_operation_exception)

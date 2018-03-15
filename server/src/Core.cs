@@ -615,7 +615,7 @@ namespace KRPC
             if (!streams[streamClient].ContainsKey(streamId))
                 throw new InvalidOperationException("Stream does not exist with this id");
             streams [streamClient] [streamId].Start ();
-            Logger.WriteLine("Started stream for client " + streamClient.Address, Logger.Severity.Debug);
+            Logger.WriteLine("Started stream " + streamId + " for client " + streamClient.Address, Logger.Severity.Debug);
         }
 
         /// <summary>
