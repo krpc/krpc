@@ -29,7 +29,7 @@ namespace KRPC
         RoundRobinScheduler<IClient<Request,Response>> clientScheduler = new RoundRobinScheduler<IClient<Request, Response>> ();
         List<RequestContinuation> rpcContinuations = new List<RequestContinuation> ();
         IDictionary<IClient<NoMessage,StreamUpdate>, IDictionary<ulong, Service.Stream>> streams = new Dictionary<IClient<NoMessage,StreamUpdate>,IDictionary<ulong, Service.Stream>> ();
-        IList<Utils.Tuple<IClient<NoMessage,StreamUpdate>, ulong>> removeStreams = new List<Utils.Tuple<IClient<NoMessage,StreamUpdate>, ulong>> ();
+        IDictionary<ulong, IClient<NoMessage, StreamUpdate>> removeStreams = new Dictionary<ulong, IClient<NoMessage, StreamUpdate>> ();
         ulong nextStreamId = 0;
 
         static Core instance;
@@ -510,8 +510,8 @@ namespace KRPC
 
             if (removeStreams.Any()) {
                 foreach (var entry in removeStreams) {
-                    Logger.WriteLine("Removing stream " + entry.Item2, Logger.Severity.Debug);
-                    RemoveStreamInternal(entry.Item1, entry.Item2);
+                    Logger.WriteLine("Removing stream " + entry.Key, Logger.Severity.Debug);
+                    RemoveStreamInternal(entry.Value, entry.Key);
                 }
                 removeStreams.Clear();
             }
@@ -544,7 +544,7 @@ namespace KRPC
                                 var result = stream.StreamResult;
                                 streamUpdate.Results.Add (result);
                                 if (result.Result.HasError)
-                                    removeStreams.Add(Utils.Tuple.Create(streamClient, stream.Id));
+                                    removeStreams[stream.Id] = streamClient;
                             }
                         }
                         try {
@@ -562,7 +562,7 @@ namespace KRPC
                 if (removeStreams.Any()) {
                     foreach (var entry in removeStreams) {
                         Logger.WriteLine("Removing stream as it returned an error", Logger.Severity.Debug);
-                        RemoveStreamInternal(entry.Item1, entry.Item2);
+                        RemoveStreamInternal(entry.Value, entry.Key);
                     }
                     removeStreams.Clear();
                 }
@@ -585,6 +585,8 @@ namespace KRPC
 
             foreach (var entry in streams [streamClient]) {
                 if (stream == entry.Value) {
+                    // Prevent race condition when removing and re-adding streams by checking if the added stream was marked for removal
+                    removeStreams.Remove(entry.Key);
                     if (requireNew)
                         throw new ArgumentException ("Stream already exists", nameof (stream));
                     return entry.Key;
@@ -596,7 +598,7 @@ namespace KRPC
 
             var streamId = stream.Id;
             streams [streamClient] [streamId] = stream;
-            Logger.WriteLine ("Added stream for client " + streamClient.Address, Logger.Severity.Debug);
+            Logger.WriteLine ("Added stream " + streamId + " for client " + streamClient.Address, Logger.Severity.Debug);
             StreamRPCs++;
             return streamId;
         }
@@ -610,9 +612,10 @@ namespace KRPC
             if (!streamClients.ContainsKey(id))
                 throw new InvalidOperationException("No stream client is connected for this RPC client");
             var streamClient = streamClients[id];
-
+            if (!streams[streamClient].ContainsKey(streamId))
+                throw new InvalidOperationException("Stream does not exist with this id");
             streams [streamClient] [streamId].Start ();
-            Logger.WriteLine("Started stream for client " + streamClient.Address, Logger.Severity.Debug);
+            Logger.WriteLine("Started stream " + streamId + " for client " + streamClient.Address, Logger.Severity.Debug);
         }
 
         /// <summary>
@@ -641,7 +644,7 @@ namespace KRPC
             var clientStreams = streams [streamClient];
             if (!clientStreams.ContainsKey (streamId))
                 return;
-            removeStreams.Add (new Utils.Tuple<IClient<NoMessage,StreamUpdate>, ulong> (streamClient, streamId));
+            removeStreams[streamId] = streamClient;
         }
 
         /// <summary>
@@ -653,7 +656,7 @@ namespace KRPC
                 var streamClient = entry.Key;
                 var clientStreams = entry.Value;
                 if (clientStreams.ContainsKey (streamId))
-                    removeStreams.Add (new Utils.Tuple<IClient<NoMessage,StreamUpdate>, ulong> (streamClient, streamId));
+                    removeStreams[streamId] = streamClient;
             }
         }
 
@@ -661,7 +664,7 @@ namespace KRPC
         {
             if (streams.ContainsKey (client) && streams [client].ContainsKey (id)) {
                 streams [client].Remove (id);
-                Logger.WriteLine ("Removed stream for client " + client.Address, Logger.Severity.Debug);
+                Logger.WriteLine ("Removed stream " + id + " for client " + client.Address, Logger.Severity.Debug);
                 StreamRPCs--;
             }
         }

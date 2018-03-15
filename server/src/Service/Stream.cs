@@ -65,6 +65,7 @@ namespace KRPC.Service
         public void Start()
         {
             Started = true;
+            Changed |= StreamResult.Result.HasValue || StreamResult.Result.HasError;
             timer.Start();
         }
 

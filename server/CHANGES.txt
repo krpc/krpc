@@ -1,5 +1,6 @@
 v0.4.5
  * Update to protobuf v3.5.1
+ * Fix server error and client hang when quickly removing and re-adding a stream
 
 v0.4.4
  * Add support for more complex server side expressions including function definitions and calls, and operations on collections (#435)
