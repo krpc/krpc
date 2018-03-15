@@ -1,6 +1,6 @@
 .PHONY: build deploy
 
-VERSION=1.5.0
+VERSION=1.6.0
 
 build:
 	tar -cf ./krpc.tar ../.. --exclude="bazel-*" --exclude=.git*

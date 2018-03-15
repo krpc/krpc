@@ -109,7 +109,7 @@ RUN mkdir krpc && \
     rm ../krpc.tar && \
     bazel fetch //... && \
     bazel build \
-      @cpp_protobuf//:protobuf \
+      @com_google_protobuf//:protobuf \
       @cpp_googletest//:gtest \
       @cpp_googletest//:gmock && \
     cd .. && \
