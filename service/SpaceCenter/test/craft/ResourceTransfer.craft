@@ -1,12 +1,17 @@
 ship = ResourceTransfer
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 2.00845885,5.534832,1.63315058
+persistentId = 1930053937
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4294689466
   partName = Part
+  persistentId = 482860664
   pos = 0.510231376,5.57354212,-0.554430723
   attPos = 0,0,0
   attPos0 = 0.510231376,5.57354212,-0.554430723
@@ -29,8 +34,8 @@ PART
   modSize = 0,0,0
   link = fuelTank_4294683166
   link = xenonTankLarge_4294669602
-  attN = bottom,fuelTank_4294683166
-  attN = top,xenonTankLarge_4294669602
+  attN = bottom,fuelTank_4294683166_0|-0.4050379|0
+  attN = top,xenonTankLarge_4294669602_0|0.6423756|0
   EVENTS
   {
   }
@@ -52,6 +57,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -275,6 +284,7 @@ PART
 {
   part = fuelTank_4294683166
   partName = Part
+  persistentId = 469599271
   pos = 0.510231376,4.2028141,-0.554430723
   attPos = 0,0,0
   attPos0 = 0,-1.37072802,0
@@ -300,8 +310,8 @@ PART
   link = launchClamp1_4294678992
   link = launchClamp1_4294642980
   link = fuelTankSmallFlat_4294633530
-  attN = top,mk1pod_4294689466
-  attN = bottom,fuelTankSmallFlat_4294633530
+  attN = top,mk1pod_4294689466_0|0.96569|0
+  attN = bottom,fuelTankSmallFlat_4294633530_0|-0.9125|0
   EVENTS
   {
   }
@@ -338,6 +348,7 @@ PART
 {
   part = rcsTankRadialLong_4294643806
   partName = Part
+  persistentId = 2653543337
   pos = 0.241299897,4.60700703,-0.399163008
   attPos = 0,0,0
   attPos0 = -0.268931508,0.404192895,0.155267701
@@ -384,6 +395,7 @@ PART
 {
   part = radialRCSTank_4294643508
   partName = Part
+  persistentId = 1065572981
   pos = -0.218657613,5.04335213,-0.975254893
   attPos = 0,0,0
   attPos0 = -0.728888988,0.840538025,-0.420824111
@@ -430,6 +442,7 @@ PART
 {
   part = launchClamp1_4294678992
   partName = Part
+  persistentId = 211415164
   pos = 0.510230899,2.98795295,-1.98045599
   attPos = 0,0,0
   attPos0 = -4.51336291E-07,-1.21486104,-1.42602503
@@ -535,6 +548,7 @@ PART
 {
   part = launchClamp1_4294642980
   partName = Part
+  persistentId = 1671588449
   pos = 0.510231972,2.98795295,0.871594191
   attPos = 0,0,0
   attPos0 = 5.76003288E-07,-1.21486104,1.42602503
@@ -640,6 +654,7 @@ PART
 {
   part = fuelTankSmallFlat_4294633530
   partName = Part
+  persistentId = 2525917828
   pos = 0.510231376,2.97781396,-0.554430723
   attPos = 0,0,0
   attPos0 = 0,-1.22500002,0
@@ -661,8 +676,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = stackDecoupler_4294676658
-  attN = top,fuelTank_4294683166
-  attN = bottom,stackDecoupler_4294676658
+  attN = top,fuelTank_4294683166_0|0.3125|0
+  attN = bottom,stackDecoupler_4294676658_0|-0.3125|0
   EVENTS
   {
   }
@@ -699,6 +714,7 @@ PART
 {
   part = stackDecoupler_4294676658
   partName = Part
+  persistentId = 2196678064
   pos = 0.510231376,2.60026193,-0.554430723
   attPos = 0,0,0
   attPos0 = 0,-0.377552003,0
@@ -720,8 +736,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = fuelTankSmall_4294682768
-  attN = bottom,fuelTankSmall_4294682768
-  attN = top,fuelTankSmallFlat_4294633530
+  attN = bottom,fuelTankSmall_4294682768_0|-0.1329949|0
+  attN = top,fuelTankSmallFlat_4294633530_0|0.0650517|0
   EVENTS
   {
   }
@@ -780,26 +796,12 @@ PART
     {
     }
   }
-  MODULE
-  {
-    name = ModuleTestSubject
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
 }
 PART
 {
   part = fuelTankSmall_4294682768
   partName = Part
+  persistentId = 3507074589
   pos = 0.510231376,1.91201687,-0.554430723
   attPos = 0,0,0
   attPos0 = 0,-0.68824482,0
@@ -822,7 +824,7 @@ PART
   modSize = 0,0,0
   link = launchClamp1_4294628172
   srfN = srfAttach,fuelTank_4294683166
-  attN = top,stackDecoupler_4294676658
+  attN = top,stackDecoupler_4294676658_0|0.55525|0
   EVENTS
   {
   }
@@ -859,6 +861,7 @@ PART
 {
   part = launchClamp1_4294628172
   partName = Part
+  persistentId = 1385982324
   pos = 1.87862206,0.574766159,-0.554430723
   attPos = 0,0,0
   attPos0 = 1.36839104,-1.33725095,-1.46298298E-08
@@ -963,6 +966,7 @@ PART
 {
   part = xenonTankLarge_4294669602
   partName = Part
+  persistentId = 1231310658
   pos = 0.510231376,6.51091814,-0.554430723
   attPos = 0,0,0
   attPos0 = 0,0.937375486,0
@@ -984,7 +988,7 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = xenonTankRadial_4294670512
-  attN = bottom,mk1pod_4294689466
+  attN = bottom,mk1pod_4294689466_0|-0.295|0
   EVENTS
   {
   }
@@ -1010,6 +1014,7 @@ PART
 {
   part = xenonTankRadial_4294670512
   partName = Part
+  persistentId = 2838452710
   pos = 0.927303612,6.50251007,-0.554430783
   attPos = 0,0,0
   attPos0 = 0.417072207,-0.00840806961,-5.96046412E-08

@@ -1,6 +1,6 @@
 GAME
 {
-  version = 1.3.0
+  version = 1.4.1
   Title = krpctest (SANDBOX)
   Description = No description available.
   linkURL =
@@ -12,9 +12,11 @@ GAME
   editor = None
   flag = Squad/Flags/default
   launchID = 2
+  defaultVABLaunchSite = LaunchPad
+  defaultSPHLaunchSite = Runway
   modded = True
-  envInfo =  - Environment Info - Unix FFFFFFFFFFFFFFFF  Args: KSP.x86  -
-  versionFull = 1.3.0.1804 (LinuxPlayer)
+  envInfo =  - Environment Info - Unix 7FFFFFFFFFFFFFFF  Args: KSP.x86_64  -
+  versionFull = 1.4.1.2089 (LinuxPlayer)
   versionCreated = 1.2.2.1622 (LinuxPlayer)
   PARAMETERS
   {
@@ -81,6 +83,7 @@ GAME
       ResourceAbundance = 1
       ReentryHeatScale = 1
       EnableCommNet = True
+      AllowOtherLaunchSites = False
     }
     CAREER
     {
@@ -119,6 +122,39 @@ GAME
       BuildingImpactDamageMult = 0.05
       PartUpgradesInSandbox = False
       PartUpgradesInCareer = True
+      PartUpgradesInMission = False
+    }
+    MissionParamsGeneral
+    {
+      enableFunding = True
+      startingFunds = 100000
+      spacer =
+      enableKerbalLevels = True
+      kerbalLevelPilot = 5
+      kerbalLevelScientist = 5
+      kerbalLevelEngineer = 5
+    }
+    MissionParamsExtras
+    {
+      facilityOpenAC = False
+      astronautHiresAreFree = True
+      spacer =
+      facilityOpenEditor = False
+      launchSitesOpen = False
+      spacer2 =
+      cheatsEnabled = False
+    }
+    MissionParamsFacilities
+    {
+      facilityLevelAdmin = 3
+      facilityLevelAC = 3
+      facilityLevelLaunchpad = 3
+      facilityLevelMC = 3
+      facilityLevelRD = 3
+      facilityLevelRunway = 3
+      facilityLevelSPH = 3
+      facilityLevelTS = 3
+      facilityLevelVAB = 3
     }
   }
   SCENARIO
@@ -143,7 +179,7 @@ GAME
   SCENARIO
   {
     name = ResourceScenario
-    scene = 7, 8, 5, 6
+    scene = 7, 8, 5, 6, 21
     RESOURCE_SETTINGS
     {
       GameSeed = 2010313933
@@ -179,7 +215,7 @@ GAME
   SCENARIO
   {
     name = ScenarioCustomWaypoints
-    scene = 7, 8
+    scene = 7, 8, 21
   }
   SCENARIO
   {
@@ -383,8 +419,8 @@ GAME
   }
   FLIGHTSTATE
   {
-    version = 1.3.0
-    UT = 21.51999999999963
+    version = 1.4.1
+    UT = 25.179999999999552
     activeVessel = 0
     mapViewFiltering = -1026
     commNetUIModeTracking = Network
@@ -392,40 +428,47 @@ GAME
     VESSEL
     {
       pid = 8a589f20db8a40cdae383d9a8e82ef9c
+      persistentId = 3283288814
       name = Untitled Space Craft
       type = Ship
       sit = PRELAUNCH
       landed = True
+      skipGroundPositioning = True
+      vesselSpawning = False
+      launchedFrom =
       landedAt = LaunchPad
       displaylandedAt = #autoLOC_6002112
       splashed = False
       met = 0
-      lct = 21.499999999999631
-      lastUT = 21.51999999999963
+      lct = 25.159999999999553
+      lastUT = 25.179999999999552
+      distanceTraveled = 0
       root = 0
-      lat = -0.097207781002107585
-      lon = -74.557673721732087
-      alt = 72.9109464911744
-      hgt = 0.337530017
-      nrm = 8.58306885E-06,1.00000012,-1.66893005E-06
-      rot = -0.700977862,-0.0921378136,-0.0973396227,0.700475454
+      lat = -0.097207779445478079
+      lon = -74.557673722481994
+      alt = 72.938342492794618
+      hgt = 0.337526053
+      nrm = 2.2649765E-06,1.00000012,5.36441803E-07
+      rot = -0.70097661,-0.0921272933,-0.0973544866,0.70047605
       CoM = 0,0,0
       stg = 0
       prst = False
       ref = 2146653091
       ctrl = True
+      PQSMin = 0
+      PQSMax = 0
       cPch = 0.2
       cHdg = 0.3
       cMod = 0
       ORBIT
       {
-        SMA = 300818.80846991163
-        ECC = 0.99479851010217502
-        INC = 0.097207781294911699
-        LPE = 90.004465187480477
-        LAN = 105.79736943963456
-        MNA = -3.1415926031145212
-        EPH = 21.51999999999963
+        SMA = 300818.82228034642
+        ECC = 0.99479850959345351
+        INC = 0.09720777945398637
+        LPE = 90.000756969314878
+        LAN = 105.86222078402545
+        MNA = -3.1415925754367424
+        EPH = 25.179999999999552
         REF = 1
       }
       PART
@@ -434,6 +477,7 @@ GAME
         cid = 4294749318
         uid = 2146653091
         mid = 2503413381
+        persistentId = 1315519487
         launchID = 1
         parent = 0
         position = 0,0,0
@@ -452,9 +496,9 @@ GAME
         attN = top, -1
         mass = 0.800000012
         shielded = False
-        temp = 312.48304684000993
-        tempExt = 312.67728204497797
-        tempExtUnexp = 312.67815160589646
+        temp = 312.48386183060126
+        tempExt = 312.62248348825722
+        tempExtUnexp = 312.62358518734698
         expt = 0.5
         state = 0
         attached = True
@@ -485,6 +529,10 @@ GAME
           }
           ACTIONS
           {
+            MakeReferenceToggle
+            {
+              actionGroup = None
+            }
             HibernateToggle
             {
               actionGroup = None
@@ -762,7 +810,7 @@ GAME
   LoaderInfo
   {
     ProceduralFairings v0.0.3.17 = False
-    Google.Protobuf v0.0.0.0 = True
+    Google.Protobuf v0.0.0.0 = False
     KRPC.Drawing v0.3.7.0 = False
     KRPC.InfernalRobotics v0.3.7.0 = False
     KRPC.KerbalAlarmClock v0.3.7.0 = False
@@ -773,15 +821,25 @@ GAME
     TestingTools v0.3.7.0 = False
     ProceduralFairings = False
     kRPC = True
-    .DS_Store = True
-    KRPC.Drawing v0.3.8.0 = True
-    KRPC.InfernalRobotics v0.3.8.0 = True
-    KRPC.KerbalAlarmClock v0.3.8.0 = True
-    KRPC.RemoteTech v0.3.8.0 = True
-    KRPC.SpaceCenter v0.3.8.0 = True
-    KRPC.UI v0.3.8.0 = True
-    KRPC v0.3.8.0 = True
-    TestingTools v0.3.8.0 = True
+    .DS_Store = False
+    KRPC.Drawing v0.3.8.0 = False
+    KRPC.InfernalRobotics v0.3.8.0 = False
+    KRPC.KerbalAlarmClock v0.3.8.0 = False
+    KRPC.RemoteTech v0.3.8.0 = False
+    KRPC.SpaceCenter v0.3.8.0 = False
+    KRPC.UI v0.3.8.0 = False
+    KRPC v0.3.8.0 = False
+    TestingTools v0.3.8.0 = False
+    Google.Protobuf v3.5.1.0 / v3.5.1 = True
+    KRPC.Drawing v0.4.5.0 = True
+    KRPC.IO.Ports v0.0.0.0 = True
+    KRPC.InfernalRobotics v0.4.5.0 = True
+    KRPC.KerbalAlarmClock v0.4.5.0 = True
+    KRPC.RemoteTech v0.4.5.0 = True
+    KRPC.SpaceCenter v0.4.5.0 = True
+    KRPC.UI v0.4.5.0 = True
+    KRPC v0.4.5.0 = True
+    TestingTools v0.4.5.0 = True
   }
   ROSTER
   {
@@ -804,6 +862,7 @@ GAME
       ToD = 0
       idx = 0
       extraXP = 0
+      hero = False
       CAREER_LOG
       {
         flight = 0
@@ -832,6 +891,7 @@ GAME
       ToD = 0
       idx = -1
       extraXP = 0
+      hero = False
       CAREER_LOG
       {
         flight = 0
@@ -860,6 +920,7 @@ GAME
       ToD = 0
       idx = -1
       extraXP = 0
+      hero = False
       CAREER_LOG
       {
         flight = 0
@@ -888,6 +949,7 @@ GAME
       ToD = 0
       idx = -1
       extraXP = 0
+      hero = False
       CAREER_LOG
       {
         flight = 0
@@ -897,9 +959,5 @@ GAME
         flight = 0
       }
     }
-  }
-  MESSAGESYSTEM
-  {
-    flash = False
   }
 }

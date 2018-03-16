@@ -1,12 +1,17 @@
 ship = PartsFuelLines
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
-size = 7.98665714,10.4904785,9.1191597
+size = 7.98665857,10.4904785,9.1191597
+persistentId = 2759694905
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4294711442
   partName = Part
+  persistentId = 1214762531
   pos = -0.0516679808,11.03127,0.0283721592
   attPos = 0,0,0
   attPos0 = -0.0516679808,11.03127,0.0283721592
@@ -28,7 +33,7 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = fuelTank_4294705296
-  attN = bottom,fuelTank_4294705296
+  attN = bottom,fuelTank_4294705296_0|-0.4050379|0
   EVENTS
   {
   }
@@ -50,6 +55,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -273,6 +282,7 @@ PART
 {
   part = fuelTank_4294705296
   partName = Part
+  persistentId = 1891768343
   pos = -0.0516679808,9.6605444,0.0283721592
   attPos = 0,0,0
   attPos0 = 0,-1.37072802,0
@@ -296,8 +306,8 @@ PART
   link = trussPiece1x_4294699012
   link = fuelTank.long_4294680430
   link = launchClamp1_4294644504
-  attN = top,mk1pod_4294711442
-  attN = bottom,fuelTank.long_4294680430
+  attN = top,mk1pod_4294711442_0|0.96569|0
+  attN = bottom,fuelTank.long_4294680430_0|-0.9125|0
   EVENTS
   {
   }
@@ -334,6 +344,7 @@ PART
 {
   part = trussPiece1x_4294699012
   partName = Part
+  persistentId = 3718420075
   pos = -1.23126495,10.2315302,0.0283722002
   attPos = 0,0,0
   attPos0 = -1.17959702,0.570990622,3.69741784E-08
@@ -370,6 +381,7 @@ PART
 {
   part = fuelTankSmall_4294694238
   partName = Part
+  persistentId = 3754426064
   pos = -2.34751511,10.0353298,0.0283720959
   attPos = 0,0,0
   attPos0 = -1.05577897E-07,1.11625004,0.196206093
@@ -428,6 +440,7 @@ PART
 {
   part = fuelLine_4294693652
   partName = CompoundPart
+  persistentId = 3369037385
   pos = -1.78350306,9.71888447,0.0283720214
   attPos = 0,0,0
   attPos0 = 0.564011574,-0.31645,1.47558197E-08
@@ -497,6 +510,7 @@ PART
 {
   part = fuelTank.long_4294680430
   partName = Part
+  persistentId = 1346518002
   pos = -0.0516679808,6.87304497,0.0283721592
   attPos = 0,0,0
   attPos0 = 0,-2.7874999,0
@@ -519,8 +533,8 @@ PART
   modSize = 0,0,0
   link = trussPiece1x_4294688330
   link = fuelTank1-2_4294621984
-  attN = top,fuelTank_4294705296
-  attN = bottom,fuelTank1-2_4294621984
+  attN = top,fuelTank_4294705296_0|1.875|0
+  attN = bottom,fuelTank1-2_4294621984_0|-1.8875|0
   EVENTS
   {
   }
@@ -557,6 +571,7 @@ PART
 {
   part = trussPiece1x_4294688330
   partName = Part
+  persistentId = 156904338
   pos = -1.23406005,7.33127499,0.0283722002
   attPos = 0,0,0
   attPos0 = -1.182392,0.45822531,3.71407687E-08
@@ -593,6 +608,7 @@ PART
 {
   part = fuelTankSmallFlat_4294683440
   partName = Part
+  persistentId = 2048049709
   pos = -2.22406006,7.1870451,0.0283722449
   attPos = 0,0,0
   attPos0 = 4.9378059E-08,0.990000486,0.144231796
@@ -652,6 +668,7 @@ PART
 {
   part = fuelLine_4294682580
   partName = CompoundPart
+  persistentId = 4037186559
   pos = -2.06771588,7.07702398,-0.555113316
   attPos = 0,0,0
   attPos0 = 0.156344399,-0.110014901,-0.583485425
@@ -721,6 +738,7 @@ PART
 {
   part = fuelLine_4294679088
   partName = CompoundPart
+  persistentId = 3057530170
   pos = -2.06698203,7.13336515,0.614595115
   attPos = 0,0,0
   attPos0 = 0.157077998,-0.053670831,0.586222827
@@ -790,6 +808,7 @@ PART
 {
   part = launchClamp1_4294644504
   partName = Part
+  persistentId = 1629275726
   pos = 1.37558603,8.44697475,0.0283721499
   attPos = 0,0,0
   attPos0 = 1.42725396,-1.21357298,-1.11213199E-08
@@ -894,6 +913,7 @@ PART
 {
   part = fuelTank1-2_4294621984
   partName = Part
+  persistentId = 2989395721
   pos = -0.0516679808,3.11054516,0.0283721592
   attPos = 0,0,0
   attPos0 = 0,-3.76250005,0
@@ -918,7 +938,7 @@ PART
   link = radialDecoupler2_4294609932
   link = radialDecoupler2_4294613048
   link = radialDecoupler2_4294603432
-  attN = top,fuelTank.long_4294680430
+  attN = top,fuelTank.long_4294680430_0|1.875|0
   EVENTS
   {
   }
@@ -955,6 +975,7 @@ PART
 {
   part = radialDecoupler2_4294610678
   partName = Part
+  persistentId = 443838745
   pos = 0.26343289,3.12459183,-1.14760101
   attPos = 0,0,0
   attPos0 = 0.315100908,0.01404572,-1.17597306
@@ -1056,6 +1077,7 @@ PART
 {
   part = fuelTank2-2_4294603994
   partName = Part
+  persistentId = 2092716792
   pos = 0.74672842,3.38776302,-2.95128417
   attPos = 0,0,0
   attPos0 = -1.867311,0.263167113,-2.97380211E-07
@@ -1115,6 +1137,7 @@ PART
 {
   part = radialDecoupler2_4294609932
   partName = Part
+  persistentId = 340591805
   pos = -0.366768807,3.12459183,1.20434499
   attPos = 0,0,0
   attPos0 = -0.315100789,0.01404572,1.17597306
@@ -1216,10 +1239,11 @@ PART
 {
   part = fuelTank2-2_4294603580
   partName = Part
-  pos = -0.85006398,3.38776302,3.00802803
+  persistentId = 4206780538
+  pos = -0.85006386,3.38776302,3.00802827
   attPos = 0,0,0
   attPos0 = -1.867311,0.263167113,-2.70940603E-07
-  rot = 8.70044914E-07,-0.608761489,1.13386386E-06,-0.793353319
+  rot = 8.70044971E-07,-0.608761489,1.13386386E-06,-0.793353319
   attRot = 0,0,0,1
   attRot0 = 3.65808492E-14,-4.72875392E-08,-3.16272889E-07,1
   mir = 1,1,1
@@ -1275,6 +1299,7 @@ PART
 {
   part = radialDecoupler2_4294613048
   partName = Part
+  persistentId = 2269258744
   pos = -0.900310814,3.13789511,-0.820270419
   attPos = 0,0,0
   attPos0 = -0.848642826,0.0273485202,-0.848642588
@@ -1376,6 +1401,7 @@ PART
 {
   part = fuelTank4-2_4294602402
   partName = Part
+  persistentId = 418432402
   pos = -2.22065806,3.18734074,-2.14061809
   attPos = 0,0,0
   attPos0 = -1.86725402,0.0494425111,-2.07935599E-07
@@ -1435,6 +1461,7 @@ PART
 {
   part = radialDecoupler2_4294603432
   partName = Part
+  persistentId = 1446575006
   pos = 0.796974897,3.13789511,0.877014816
   attPos = 0,0,0
   attPos0 = 0.848642886,0.0273485202,0.848642588
@@ -1536,7 +1563,8 @@ PART
 {
   part = fuelTank4-2_4294601840
   partName = Part
-  pos = 2.11732483,3.18734074,2.19736362
+  persistentId = 1774721845
+  pos = 2.11732554,3.18734074,2.19736433
   attPos = 0,0,0
   attPos0 = -1.86725402,0.0494425111,-1.46209203E-07
   rot = 1.13430303E-06,-0.923879623,4.69843485E-07,-0.382683396
@@ -1595,10 +1623,11 @@ PART
 {
   part = fuelLine_4294593648
   partName = CompoundPart
+  persistentId = 80823095
   pos = -1.70450509,3.37189102,2.1535871
   attPos = 0,0,0
   attPos0 = 0.604181111,-0.0158702899,-1.04647195
-  rot = 1.09545567E-06,0.382684767,5.89666286E-07,-0.923878908
+  rot = 1.0954559E-06,0.382684767,5.89666399E-07,-0.923878968
   attRot = 0,0,0,1
   attRot0 = 7.27611507E-07,-0.866026223,-4.20085087E-07,0.499998689
   mir = 1,1,1
@@ -1665,10 +1694,11 @@ PART
 {
   part = fuelLine_4294666110
   partName = CompoundPart
+  persistentId = 4103427627
   pos = 1.60117042,3.37189102,-2.096843
   attPos = 0,0,0
   attPos0 = 0.604181111,-0.0158702899,-1.04647303
-  rot = -5.8966657E-07,0.923878908,1.09545613E-06,0.382684767
+  rot = -5.89666683E-07,0.923878968,1.09545635E-06,0.382684767
   attRot = 0,0,0,1
   attRot0 = 7.27611507E-07,-0.866026223,-4.200852E-07,0.499998689
   mir = 1,1,1
@@ -1735,7 +1765,8 @@ PART
 {
   part = fuelLine_4294592500
   partName = CompoundPart
-  pos = 1.80363011,3.19720602,3.3681004
+  persistentId = 3756557173
+  pos = 1.80363035,3.19720602,3.36810112
   attPos = 0,0,0
   attPos0 = -0.606016576,0.00986331794,-1.04964995
   rot = -1.14815884E-06,0.608762205,2.5030414E-07,0.793352783
@@ -1805,7 +1836,8 @@ PART
 {
   part = fuelLine_4294665686
   partName = CompoundPart
-  pos = -1.90696216,3.19720602,-3.31135178
+  persistentId = 1390356284
+  pos = -1.90696216,3.19720602,-3.31135201
   attPos = 0,0,0
   attPos0 = -0.606016576,0.00986331794,-1.04964995
   rot = -2.50304396E-07,-0.793352783,-1.14815884E-06,0.608762205

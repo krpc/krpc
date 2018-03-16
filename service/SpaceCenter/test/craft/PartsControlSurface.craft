@@ -1,12 +1,17 @@
 ship = PartsControlSurface
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 4.32162142,4.88779831,5.00412464
+persistentId = 2580781388
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4294682792
   partName = Part
+  persistentId = 3232611499
   pos = -1.35388505,5.4993329,0.895606816
   attPos = 0,0,0
   attPos0 = -1.35388505,5.4993329,0.895606816
@@ -29,7 +34,7 @@ PART
   modSize = 0,0,0
   link = fuelTank.long_4294669568
   link = launchClamp1_4294653222
-  attN = bottom,fuelTank.long_4294669568
+  attN = bottom,fuelTank.long_4294669568_0|-0.4050379|0
   EVENTS
   {
   }
@@ -51,6 +56,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -274,6 +283,7 @@ PART
 {
   part = fuelTank.long_4294669568
   partName = Part
+  persistentId = 787376309
   pos = -1.35388505,3.21929502,0.895606816
   attPos = 0,0,0
   attPos0 = 0,-2.28003812,0
@@ -297,7 +307,7 @@ PART
   link = winglet3_4294651602
   link = winglet3_4294649916
   link = deltaWing_4294640220
-  attN = top,mk1pod_4294682792
+  attN = top,mk1pod_4294682792_0|1.875|0
   EVENTS
   {
   }
@@ -334,6 +344,7 @@ PART
 {
   part = launchClamp1_4294653222
   partName = Part
+  persistentId = 3275316106
   pos = -1.35388398,4.69415808,2.57140994
   attPos = 0,0,0
   attPos0 = 2.75913209E-07,-0.805174828,1.67580295
@@ -438,6 +449,7 @@ PART
 {
   part = winglet3_4294651602
   partName = Part
+  persistentId = 3989103925
   pos = -2.45103908,2.5557251,0.895606875
   attPos = 0,0,0
   attPos0 = -1.09715402,-0.663570404,3.68998094E-08
@@ -510,6 +522,7 @@ PART
 {
   part = winglet3_4294649916
   partName = Part
+  persistentId = 3112101948
   pos = -0.256730676,2.5557251,0.895606697
   attPos = 0,0,0
   attPos0 = 1.09715402,-0.663570404,-1.32816098E-07
@@ -582,6 +595,7 @@ PART
 {
   part = deltaWing_4294640220
   partName = Part
+  persistentId = 961777932
   pos = -1.35388505,3.17832994,0.275549412
   attPos = 0,0,0
   attPos0 = -5.4207149E-08,-0.0409650803,-0.620057523
@@ -633,6 +647,7 @@ PART
 {
   part = airlinerCtrlSrf_4294639150
   partName = Part
+  persistentId = 1311710809
   pos = -1.35388601,2.13592005,-1.58927202
   attPos = 0,0,0
   attPos0 = -1.86482096,-1.04241002,1.11152097E-07

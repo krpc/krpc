@@ -1,12 +1,17 @@
 ship = PartsIntake
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 1.26889658,3.8032217,2.05282354
+persistentId = 1236342046
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4294560654
   partName = Part
+  persistentId = 1080882908
   pos = 0.00722686946,3.18653226,-0.0491713062
   attPos = 0,0,0
   attPos0 = 0.00722686946,3.18653226,-0.0491713062
@@ -29,8 +34,8 @@ PART
   modSize = 0,0,0
   link = Mk1FuselageStructural_4294518752
   link = miniIntake_4294513506
-  attN = bottom,Mk1FuselageStructural_4294518752
-  attN = top,miniIntake_4294513506
+  attN = bottom,Mk1FuselageStructural_4294518752_0|-0.4050379|0
+  attN = top,miniIntake_4294513506_0|0.6423756|0
   EVENTS
   {
   }
@@ -52,6 +57,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -275,6 +284,7 @@ PART
 {
   part = Mk1FuselageStructural_4294518752
   partName = Part
+  persistentId = 1508946369
   pos = 0.00722686946,1.84399438,-0.0491713062
   attPos = 0,0,0
   attPos0 = 0,-1.34253788,0
@@ -298,7 +308,7 @@ PART
   link = airScoop_4294528330
   link = IntakeRadialLong_4294503772
   link = launchClamp1_4294496378
-  attN = top,mk1pod_4294560654
+  attN = top,mk1pod_4294560654_0|0.9375|0
   EVENTS
   {
   }
@@ -313,6 +323,7 @@ PART
 {
   part = airScoop_4294528330
   partName = Part
+  persistentId = 2874919535
   pos = 0.00722695654,2.17658353,-1.0032717
   attPos = 0,0,0
   attPos0 = 8.72769021E-08,0.332589149,-0.95410037
@@ -379,6 +390,7 @@ PART
 {
   part = miniIntake_4294513506
   partName = Part
+  persistentId = 3428891452
   pos = 0.00722686946,3.82890821,-0.0491713062
   attPos = 0,0,0
   attPos0 = 0,0.642375946,0
@@ -399,7 +411,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = bottom01,mk1pod_4294560654
+  attN = bottom01,mk1pod_4294560654_0|0|0
   EVENTS
   {
   }
@@ -445,6 +457,7 @@ PART
 {
   part = IntakeRadialLong_4294503772
   partName = Part
+  persistentId = 2864509593
   pos = 0.00722686946,1.88434434,0.575490654
   attPos = 0,0,0
   attPos0 = 0,0.0403499603,0.624661982
@@ -511,6 +524,7 @@ PART
 {
   part = launchClamp1_4294496378
   partName = Part
+  persistentId = 159613593
   pos = -1.42257392,0.797136545,-0.0491711721
   attPos = 0,0,0
   attPos0 = -1.42980075,-1.04685783,1.33318906E-07

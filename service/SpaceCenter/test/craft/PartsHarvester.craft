@@ -1,12 +1,17 @@
 ship = PartsHarvester
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
-size = 3.6592133,7.27918625,3.05956244
+size = 3.65921354,7.27918625,3.05956244
+persistentId = 3422984500
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = Mark1-2Pod_4294407840
   partName = Part
+  persistentId = 2385700868
   pos = 0.70667237,6.68547106,0.144354299
   attPos = 0,0,0
   attPos0 = 0.70667237,6.68547106,0.144354299
@@ -28,7 +33,7 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = fuelTank4-2_4293135428
-  attN = bottom,fuelTank4-2_4293135428
+  attN = bottom,fuelTank4-2_4293135428_0|-0.47924|0
   EVENTS
   {
   }
@@ -50,6 +55,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -288,6 +297,7 @@ PART
 {
   part = fuelTank4-2_4293135428
   partName = Part
+  persistentId = 155648077
   pos = 0.70667237,5.73748112,0.144354299
   attPos = 0,0,0
   attPos0 = 0,-0.947989881,0
@@ -311,8 +321,8 @@ PART
   link = rcsTankRadialLong_4293133634
   link = ISRU_4294398978
   link = RadialOreTank_4293099976
-  attN = top,Mark1-2Pod_4294407840
-  attN = bottom,ISRU_4294398978
+  attN = top,Mark1-2Pod_4294407840_0|0.46875|0
+  attN = bottom,ISRU_4294398978_0|-0.46875|0
   EVENTS
   {
   }
@@ -349,6 +359,7 @@ PART
 {
   part = rcsTankRadialLong_4293133634
   partName = Part
+  persistentId = 3878240638
   pos = -0.190505683,5.71286392,0.144354403
   attPos = 0,0,0
   attPos0 = -0.897178113,-0.0246172007,1.11758702E-07
@@ -395,6 +406,7 @@ PART
 {
   part = ISRU_4294398978
   partName = Part
+  persistentId = 2794427853
   pos = 0.70667237,3.76873112,0.144354299
   attPos = 0,0,0
   attPos0 = 0,-1.96875,0
@@ -416,8 +428,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = batteryBankLarge_4294375044
-  attN = top,fuelTank4-2_4293135428
-  attN = bottom,batteryBankLarge_4294375044
+  attN = top,fuelTank4-2_4293135428_0|1.5|0
+  attN = bottom,batteryBankLarge_4294375044_0|-1.5|0
   EVENTS
   {
   }
@@ -566,7 +578,6 @@ PART
   {
     name = ModuleAnimationGroup
     isEnabled = True
-    _isActive = False
     isDeployed = True
     stagingEnabled = True
     EVENTS
@@ -617,6 +628,7 @@ PART
 {
   part = batteryBankLarge_4294375044
   partName = Part
+  persistentId = 1750757446
   pos = 0.70667237,2.15873194,0.144354299
   attPos = 0,0,0
   attPos0 = 0,-1.61000001,0
@@ -638,8 +650,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = batteryBankLarge_4294374796
-  attN = top,ISRU_4294398978
-  attN = bottom,batteryBankLarge_4294374796
+  attN = top,ISRU_4294398978_0|0.11|0
+  attN = bottom,batteryBankLarge_4294374796_0|-0.125|0
   EVENTS
   {
   }
@@ -665,6 +677,7 @@ PART
 {
   part = batteryBankLarge_4294374796
   partName = Part
+  persistentId = 3161203719
   pos = 0.70667237,1.92373228,0.144354299
   attPos = 0,0,0
   attPos0 = 0,-0.234999701,0
@@ -689,7 +702,7 @@ PART
   link = launchClamp1_4294369322
   link = launchClamp1_4293091152
   link = MiniDrill_4293705788
-  attN = top,batteryBankLarge_4294375044
+  attN = top,batteryBankLarge_4294375044_0|0.11|0
   EVENTS
   {
   }
@@ -715,6 +728,7 @@ PART
 {
   part = RadialDrill_4294383500
   partName = Part
+  persistentId = 3898476516
   pos = -0.627844989,1.92184591,0.144354403
   attPos = 0,0,0
   attPos0 = -1.334517,-0.00188636803,7.35829815E-08
@@ -825,7 +839,6 @@ PART
   {
     name = ModuleAnimationGroup
     isEnabled = True
-    _isActive = False
     isDeployed = False
     stagingEnabled = True
     EVENTS
@@ -876,6 +889,7 @@ PART
 {
   part = RadialOreTank_4293099976
   partName = Part
+  persistentId = 2484432948
   pos = 0.706672192,5.7344451,-1.065207
   attPos = 0,0,0
   attPos0 = -1.19209304E-07,-0.00303602195,-1.20956194
@@ -941,6 +955,7 @@ PART
 {
   part = launchClamp1_4294369322
   partName = Part
+  persistentId = 4046953310
   pos = 0.706672192,0.669396877,-1.8978529
   attPos = 0,0,0
   attPos0 = -1.78813906E-07,-1.25433397,-2.04220796
@@ -1046,6 +1061,7 @@ PART
 {
   part = launchClamp1_4293091152
   partName = Part
+  persistentId = 1356454038
   pos = 0.706672728,0.669396877,2.18656206
   attPos = 0,0,0
   attPos0 = 3.57627897E-07,-1.25433397,2.04220796
@@ -1151,6 +1167,7 @@ PART
 {
   part = MiniDrill_4293705788
   partName = Part
+  persistentId = 452530324
   pos = -0.288802862,1.89012194,-0.851120889
   attPos = 0,0,0
   attPos0 = -0.995475233,-0.0336103439,-0.995475173
@@ -1261,7 +1278,6 @@ PART
   {
     name = ModuleAnimationGroup
     isEnabled = True
-    _isActive = False
     isDeployed = False
     stagingEnabled = True
     EVENTS

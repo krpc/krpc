@@ -1,12 +1,17 @@
 ship = PartsRCS
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 1.29830921,2.79931259,1.270908
+persistentId = 2910359973
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4294712276
   partName = Part
+  persistentId = 3605580824
   pos = -0.268932909,3.05110097,0.136595905
   attPos = 0,0,0
   attPos0 = -0.268932909,3.05110097,0.136595905
@@ -31,7 +36,7 @@ PART
   link = RCSBlock_4294703222
   link = linearRcs_4294700824
   link = vernierEngine_4294707462
-  attN = bottom,RCSFuelTank_4294704742
+  attN = bottom,RCSFuelTank_4294704742_0|-0.4050379|0
   EVENTS
   {
   }
@@ -53,6 +58,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -276,6 +285,7 @@ PART
 {
   part = RCSFuelTank_4294704742
   partName = Part
+  persistentId = 380141182
   pos = -0.268932909,2.36075997,0.136595905
   attPos = 0,0,0
   attPos0 = 0,-0.690340996,0
@@ -297,8 +307,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = fuelTankSmall_4294666078
-  attN = top,mk1pod_4294712276
-  attN = bottom,fuelTankSmall_4294666078
+  attN = top,mk1pod_4294712276_0|0.2853027|0
+  attN = bottom,fuelTankSmall_4294666078_0|-0.2853027|0
   EVENTS
   {
   }
@@ -324,6 +334,7 @@ PART
 {
   part = RCSBlock_4294703222
   partName = Part
+  persistentId = 962474558
   pos = -0.761925519,3.23474002,0.137338206
   attPos = 0,0,0
   attPos0 = -0.492992699,0.183638602,0.000742337317
@@ -389,6 +400,7 @@ PART
 {
   part = linearRcs_4294700824
   partName = Part
+  persistentId = 1772723275
   pos = -0.417092294,3.58978891,0.393215507
   attPos = 0,0,0
   attPos0 = -0.148159504,0.538686812,0.256619692
@@ -454,6 +466,7 @@ PART
 {
   part = vernierEngine_4294707462
   partName = Part
+  persistentId = 4172886498
   pos = -0.50834471,3.49850202,-0.102815896
   attPos = 0,0,0
   attPos0 = -0.239411801,0.447399586,-0.239411697
@@ -519,6 +532,7 @@ PART
 {
   part = fuelTankSmall_4294666078
   partName = Part
+  persistentId = 3895464473
   pos = -0.268932909,1.520208,0.136595905
   attPos = 0,0,0
   attPos0 = 0,-0.840552628,0
@@ -540,7 +554,7 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = launchClamp1_4294696302
-  attN = top,RCSFuelTank_4294704742
+  attN = top,RCSFuelTank_4294704742_0|0.55525|0
   EVENTS
   {
   }
@@ -577,6 +591,7 @@ PART
 {
   part = launchClamp1_4294696302
   partName = Part
+  persistentId = 2382791230
   pos = -1.63849998,0.15070796,0.136595994
   attPos = 0,0,0
   attPos0 = -1.36956704,-1.36950004,1.34110493E-07

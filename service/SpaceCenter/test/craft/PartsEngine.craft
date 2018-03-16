@@ -1,12 +1,17 @@
 ship = PartsEngine
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
-size = 3.93262506,8.46046066,4.26187468
+size = 3.93262506,8.46046066,4.2618742
+persistentId = 1791077101
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4294756890
   partName = Part
+  persistentId = 2705128251
   pos = 0.0155636696,8.08554459,-0.215783894
   attPos = 0,0,0
   attPos0 = 0.0155636696,8.08554459,-0.215783894
@@ -29,8 +34,8 @@ PART
   modSize = 0,0,0
   link = fuelTank_4294769072
   link = fuelTankSmall_4294687852
-  attN = bottom,fuelTank_4294769072
-  attN = top,fuelTankSmall_4294687852
+  attN = bottom,fuelTank_4294769072_0|-0.4050379|0
+  attN = top,fuelTankSmall_4294687852_0|0.6423756|0
   EVENTS
   {
   }
@@ -52,6 +57,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -275,6 +284,7 @@ PART
 {
   part = fuelTank_4294769072
   partName = Part
+  persistentId = 2682910962
   pos = 0.0155636696,6.71481514,-0.215783894
   attPos = 0,0,0
   attPos0 = 0,-1.37072897,0
@@ -300,8 +310,8 @@ PART
   link = solidBooster_4294750942
   link = MK1Fuselage_4294729502
   link = fuelTank_4294720424
-  attN = top,mk1pod_4294756890
-  attN = bottom,liquidEngine2_4294764816
+  attN = top,mk1pod_4294756890_0|0.96569|0
+  attN = bottom,liquidEngine2_4294764816_0|-0.9125|0
   EVENTS
   {
   }
@@ -338,6 +348,7 @@ PART
 {
   part = liquidEngine2_4294764816
   partName = Part
+  persistentId = 3499801412
   pos = 0.0155636696,4.90048599,-0.215783894
   attPos = 0,0,0
   attPos0 = 0,-1.814327,0
@@ -358,7 +369,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = top,fuelTank_4294769072
+  attN = top,fuelTank_4294769072_0|0.9018263|0
   EVENTS
   {
   }
@@ -406,6 +417,7 @@ PART
   {
     name = ModuleJettison
     isEnabled = True
+    activejettisonName = fairing
     isJettisoned = True
     shroudHideOverride = False
     stagingEnabled = True
@@ -546,6 +558,7 @@ PART
 {
   part = fuelTank_4294761946
   partName = Part
+  persistentId = 4191171366
   pos = -1.23368597,6.62501478,-0.215783805
   attPos = 0,0,0
   attPos0 = -1.24925005,-0.0897941589,1.49011598E-07
@@ -570,8 +583,8 @@ PART
   link = launchClamp1_4294744832
   link = RCSFuelTank_4294686558
   srfN = srfAttach,fuelTank_4294769072
-  attN = top,RCSFuelTank_4294686558
-  attN = bottom,liquidEngine_4294765214
+  attN = top,RCSFuelTank_4294686558_0|0.96569|0
+  attN = bottom,liquidEngine_4294765214_0|-0.9125|0
   EVENTS
   {
   }
@@ -608,6 +621,7 @@ PART
 {
   part = liquidEngine_4294765214
   partName = Part
+  persistentId = 3837731052
   pos = -1.23368597,4.81068611,-0.215783805
   attPos = 0,0,0
   attPos0 = 6.44578605E-15,-1.814327,2.88149103E-22
@@ -628,7 +642,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = top,fuelTank_4294761946
+  attN = top,fuelTank_4294761946_0|0.9018263|0
   EVENTS
   {
   }
@@ -676,6 +690,7 @@ PART
   {
     name = ModuleJettison
     isEnabled = True
+    activejettisonName = fairing
     isJettisoned = True
     shroudHideOverride = False
     stagingEnabled = True
@@ -755,6 +770,7 @@ PART
 {
   part = launchClamp1_4294744832
   partName = Part
+  persistentId = 3714206673
   pos = -2.66171694,5.41178513,-0.215783402
   attPos = 0,0,0
   attPos0 = -1.42803097,-1.21322799,1.19209304E-07
@@ -859,6 +875,7 @@ PART
 {
   part = solidBooster_4294750942
   partName = Part
+  persistentId = 3483526367
   pos = 1.26062298,6.32220411,-0.215783998
   attPos = 0,0,0
   attPos0 = 1.24505901,-0.392601013,-5.96046412E-08
@@ -882,7 +899,7 @@ PART
   link = launchClamp1_4294746662
   link = xenonTank_4294695328
   srfN = srfAttach,fuelTank_4294769072
-  attN = top,xenonTank_4294695328
+  attN = top,xenonTank_4294695328_0|1.281837|0
   EVENTS
   {
   }
@@ -988,7 +1005,8 @@ PART
 {
   part = launchClamp1_4294746662
   partName = Part
-  pos = 2.60722899,5.54076576,-0.215783879
+  persistentId = 1800083450
+  pos = 2.60722923,5.54076576,-0.215783879
   attPos = 0,0,0
   attPos0 = -2.38418608E-07,-0.781448305,1.34660494
   rot = -0.00234846887,0.707103014,-0.00234846887,-0.707102776
@@ -1092,6 +1110,7 @@ PART
 {
   part = MK1Fuselage_4294729502
   partName = Part
+  persistentId = 1730607616
   pos = 0.0155637702,6.70516586,1.04130316
   attPos = 0,0,0
   attPos0 = 5.96046412E-08,-0.00964546204,1.25708699
@@ -1121,8 +1140,8 @@ PART
   link = airScoop_4294427304
   link = airScoop_4294427250
   srfN = srfAttach,fuelTank_4294769072
-  attN = top,CircularIntake_4294701156
-  attN = bottom,JetEngine_4294736848
+  attN = top,CircularIntake_4294701156_0|0.9375|0
+  attN = bottom,JetEngine_4294736848_0|-0.9375|0
   EVENTS
   {
   }
@@ -1148,6 +1167,7 @@ PART
 {
   part = JetEngine_4294736848
   partName = Part
+  persistentId = 2076764037
   pos = 0.0155637702,4.79478407,1.04130316
   attPos = 0,0,0
   attPos0 = 0,-1.91037595,-1.13867301E-07
@@ -1168,7 +1188,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = top,MK1Fuselage_4294729502
+  attN = top,MK1Fuselage_4294729502_0|0.972875|0
   EVENTS
   {
   }
@@ -1313,6 +1333,7 @@ PART
 {
   part = fuelTank_4294720424
   partName = Part
+  persistentId = 2851649980
   pos = 0.01556338,6.64096403,-1.46153784
   attPos = 0,0,0
   attPos0 = -2.83122091E-07,-0.0738410875,-1.245754
@@ -1336,8 +1357,8 @@ PART
   link = nuclearEngine_4294723338
   link = stackDecoupler_4293758552
   srfN = srfAttach,fuelTank_4294769072
-  attN = top,stackDecoupler_4293758552
-  attN = bottom,nuclearEngine_4294723338
+  attN = top,stackDecoupler_4293758552_0|0.96569|0
+  attN = bottom,nuclearEngine_4294723338_0|-0.9125|0
   EVENTS
   {
   }
@@ -1374,6 +1395,7 @@ PART
 {
   part = nuclearEngine_4294723338
   partName = Part
+  persistentId = 1847026225
   pos = 0.01556338,4.32463408,-1.46153784
   attPos = 0,0,0
   attPos0 = -1.38063996E-07,-2.31632996,0
@@ -1394,7 +1416,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = top,fuelTank_4294720424
+  attN = top,fuelTank_4294720424_0|1.40383|0
   EVENTS
   {
   }
@@ -1442,6 +1464,7 @@ PART
   {
     name = ModuleJettison
     isEnabled = True
+    activejettisonName = fairingL
     isJettisoned = True
     shroudHideOverride = False
     stagingEnabled = True
@@ -1463,6 +1486,7 @@ PART
   {
     name = ModuleJettison
     isEnabled = True
+    activejettisonName = fairingR
     isJettisoned = True
     shroudHideOverride = False
     stagingEnabled = True
@@ -1556,6 +1580,7 @@ PART
 {
   part = CircularIntake_4294701156
   partName = Part
+  persistentId = 1203591769
   pos = 0.0155637702,7.64266586,1.04130316
   attPos = 0,0,0
   attPos0 = 0,0.9375,5.58793509E-08
@@ -1576,7 +1601,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = bottom01,MK1Fuselage_4294729502
+  attN = bottom01,MK1Fuselage_4294729502_0|0|0
   EVENTS
   {
   }
@@ -1637,6 +1662,7 @@ PART
 {
   part = xenonTank_4294695328
   partName = Part
+  persistentId = 1187996802
   pos = 1.26062298,7.74451399,-0.215783998
   attPos = 0,0,0
   attPos0 = -3.01184595E-22,1.42230403,-5.053039E-15
@@ -1659,8 +1685,8 @@ PART
   modSize = 0,0,0
   link = ionEngine_4294715648
   link = batteryPack_4294656478
-  attN = top,ionEngine_4294715648
-  attN = bottom,solidBooster_4294750942
+  attN = top,ionEngine_4294715648_0|0.1404661|0
+  attN = bottom,solidBooster_4294750942_0|-0.1404661|0
   EVENTS
   {
   }
@@ -1686,6 +1712,7 @@ PART
 {
   part = ionEngine_4294715648
   partName = Part
+  persistentId = 294504345
   pos = 1.26062298,8.09853554,-0.215783998
   attPos = 0,0,0
   attPos0 = -1.05879099E-22,0.35402301,1.49934602E-22
@@ -1706,7 +1733,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = top,xenonTank_4294695328
+  attN = top,xenonTank_4294695328_0|0.2135562|0
   EVENTS
   {
   }
@@ -1786,6 +1813,7 @@ PART
 {
   part = RCSFuelTank_4294686558
   partName = Part
+  persistentId = 2658649884
   pos = -1.23368597,7.87601519,-0.215783805
   attPos = 0,0,0
   attPos0 = -4.44442296E-15,1.25099397,-1.87318405E-22
@@ -1807,7 +1835,7 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = omsEngine_4294715156
-  attN = bottom,fuelTank_4294761946
+  attN = bottom,fuelTank_4294761946_0|-0.2853027|0
   EVENTS
   {
   }
@@ -1833,6 +1861,7 @@ PART
 {
   part = omsEngine_4294715156
   partName = Part
+  persistentId = 2613934498
   pos = -1.53582299,7.872015,-0.739100754
   attPos = 0,0,0
   attPos0 = -0.302136987,-0.00399589492,-0.523316622
@@ -1948,7 +1977,8 @@ PART
 {
   part = batteryPack_4294656478
   partName = Part
-  pos = 1.55297244,7.84088516,-0.215783998
+  persistentId = 3052268732
+  pos = 1.55297256,7.84088516,-0.215783998
   attPos = 0,0,0
   attPos0 = 0.292348713,0.0963745117,2.98023295E-08
   rot = 6.28037502E-16,0.707106888,6.28037396E-16,-0.707106888
@@ -1994,6 +2024,7 @@ PART
 {
   part = stackDecoupler_4293758552
   partName = Part
+  persistentId = 2716638349
   pos = 0.01556338,7.73964882,-1.46153784
   attPos = 0,0,0
   attPos0 = 6.54867165E-08,1.09868503,1.75649104E-14
@@ -2015,8 +2046,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = liquidEngine3_4293755140
-  attN = bottom,fuelTank_4294720424
-  attN = top,liquidEngine3_4293755140
+  attN = bottom,fuelTank_4294720424_0|-0.1329949|0
+  attN = top,liquidEngine3_4293755140_0|0.0650517|0
   EVENTS
   {
   }
@@ -2075,26 +2106,12 @@ PART
     {
     }
   }
-  MODULE
-  {
-    name = ModuleTestSubject
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
 }
 PART
 {
   part = liquidEngine3_4293755140
   partName = Part
+  persistentId = 1288994519
   pos = 0.01556338,8.0753231,-1.46153784
   attPos = 0,0,0
   attPos0 = -5.96277314E-16,0.335674286,-1.77635197E-15
@@ -2115,7 +2132,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = top,stackDecoupler_4293758552
+  attN = top,stackDecoupler_4293758552_0|0.2706225|0
   EVENTS
   {
   }
@@ -2225,6 +2242,7 @@ PART
   {
     name = ModuleJettison
     isEnabled = True
+    activejettisonName = fairing
     isJettisoned = True
     shroudHideOverride = False
     stagingEnabled = True
@@ -2277,6 +2295,7 @@ PART
 {
   part = fuelTankSmall_4294687852
   partName = Part
+  persistentId = 3808986559
   pos = 0.0155636696,9.2831707,-0.215783894
   attPos = 0,0,0
   attPos0 = 0,1.19762599,0
@@ -2298,8 +2317,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = RAPIER_4294681790
-  attN = top,RAPIER_4294681790
-  attN = bottom,mk1pod_4294756890
+  attN = top,RAPIER_4294681790_0|0.55525|0
+  attN = bottom,mk1pod_4294756890_0|-0.55525|0
   EVENTS
   {
   }
@@ -2336,6 +2355,7 @@ PART
 {
   part = RAPIER_4294681790
   partName = Part
+  persistentId = 1055449138
   pos = 0.0155636696,10.7653503,-0.215783894
   attPos = 0,0,0
   attPos0 = 0,1.48218203,0
@@ -2356,7 +2376,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = top,fuelTankSmall_4294687852
+  attN = top,fuelTankSmall_4294687852_0|0.9269313|0
   EVENTS
   {
   }
@@ -2582,6 +2602,7 @@ PART
 {
   part = airScoop_4294430076
   partName = Part
+  persistentId = 2299085985
   pos = -0.935793996,7.24042511,1.0413034
   attPos = 0,0,0
   attPos0 = -0.951357782,0.535259247,1.87152182E-07
@@ -2649,6 +2670,7 @@ PART
 {
   part = airScoop_4294429406
   partName = Part
+  persistentId = 4170651494
   pos = 0.966921568,7.24042511,1.04130292
   attPos = 0,0,0
   attPos0 = 0.951357782,0.535259247,-1.23344307E-07
@@ -2716,6 +2738,7 @@ PART
 {
   part = airScoop_4294427534
   partName = Part
+  persistentId = 2302858217
   pos = 0.015563854,7.18628407,2.00006843
   attPos = 0,0,0
   attPos0 = 1.10844667E-12,0.481118143,0.958765268
@@ -2782,6 +2805,7 @@ PART
 {
   part = airScoop_4294427342
   partName = Part
+  persistentId = 1912577459
   pos = 0.964908361,5.90958548,1.04130316
   attPos = 0,0,0
   attPos0 = 0.949344575,-0.795580387,3.55740575E-08
@@ -2849,6 +2873,7 @@ PART
 {
   part = airScoop_4294427304
   partName = Part
+  persistentId = 1528042262
   pos = -0.933780789,5.90958548,1.0413034
   attPos = 0,0,0
   attPos0 = -0.949344575,-0.795580387,1.08003945E-07
@@ -2916,6 +2941,7 @@ PART
 {
   part = airScoop_4294427250
   partName = Part
+  persistentId = 541784650
   pos = 0.0155638633,5.89448071,1.99902344
   attPos = 0,0,0
   attPos0 = 9.40568867E-09,-0.810685217,0.95772022

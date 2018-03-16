@@ -1,12 +1,17 @@
 ship = PartsCargoBay
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 17.1373024,3.85698128,3.31010008
+persistentId = 3677580210
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk3Cockpit.Shuttle_4294635650
   partName = Part
+  persistentId = 138270512
   pos = -2.687675,6.24956799,2.32561994
   attPos = 0,0,0
   attPos0 = -2.687675,6.24956799,2.32561994
@@ -31,8 +36,8 @@ PART
   link = ServiceBay.250_4294596778
   link = launchClamp1_4294591006
   link = launchClamp1_4294590792
-  attN = bottom,mk3CargoBayS_4294684252
-  attN = top,ServiceBay.250_4294596778
+  attN = bottom,mk3CargoBayS_4294684252_0|-1.25|0
+  attN = top,ServiceBay.250_4294596778_0|3.1875|0.625
   EVENTS
   {
   }
@@ -54,6 +59,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -252,6 +261,7 @@ PART
 {
   part = mk3CargoBayS_4294684252
   partName = Part
+  persistentId = 942686707
   pos = -0.187674999,6.24956799,2.32561994
   attPos = 0,0,0
   attPos0 = 0,-2.5,0
@@ -275,8 +285,8 @@ PART
   link = mk3CargoRamp_4294650614
   link = launchClamp1_4294627770
   link = launchClamp1_4294627368
-  attN = top,mk3Cockpit.Shuttle_4294635650
-  attN = bottom,mk3CargoRamp_4294650614
+  attN = top,mk3Cockpit.Shuttle_4294635650_0|1.25|0
+  attN = bottom,mk3CargoRamp_4294650614_0|-1.25|0
   EVENTS
   {
   }
@@ -331,6 +341,7 @@ PART
 {
   part = mk3CargoRamp_4294650614
   partName = Part
+  persistentId = 4289104679
   pos = 4.06232405,6.24956799,2.32561994
   attPos = 0,0,0
   attPos0 = 0,-4.24999905,0
@@ -351,7 +362,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = top,mk3CargoBayS_4294684252
+  attN = top,mk3CargoBayS_4294684252_0|3|0
   EVENTS
   {
   }
@@ -406,6 +417,7 @@ PART
 {
   part = launchClamp1_4294627770
   partName = Part
+  persistentId = 3568335686
   pos = 0.983971834,6.24956799,-0.105626345
   attPos = 0,0,0
   attPos0 = -2.43124509,-1.17164803,0
@@ -511,6 +523,7 @@ PART
 {
   part = launchClamp1_4294627368
   partName = Part
+  persistentId = 986818655
   pos = 0.983971834,6.24956799,4.75686407
   attPos = 0,0,0
   attPos0 = 2.43124509,-1.17164803,0
@@ -616,6 +629,7 @@ PART
 {
   part = ServiceBay.250_4294596778
   partName = Part
+  persistentId = 1207222950
   pos = -6.52517509,5.62456799,2.32561994
   attPos = 0,0,0
   attPos0 = 0,3.8375001,0.625
@@ -637,8 +651,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = ServiceBay.125_4294595734
-  attN = top,mk3Cockpit.Shuttle_4294635650
-  attN = bottom,ServiceBay.125_4294595734
+  attN = top,mk3Cockpit.Shuttle_4294635650_0|0.65|0
+  attN = bottom,ServiceBay.125_4294595734_0|-0.65|0
   EVENTS
   {
   }
@@ -723,7 +737,8 @@ PART
 {
   part = ServiceBay.125_4294595734
   partName = Part
-  pos = -7.47517729,5.62456799,2.32561994
+  persistentId = 1565402649
+  pos = -7.47517776,5.62456799,2.32561994
   attPos = 0,0,0
   attPos0 = 0,-0.950000525,0
   rot = 0,0,-0.707106829,0.707106829
@@ -743,7 +758,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = top,ServiceBay.250_4294596778
+  attN = top,ServiceBay.250_4294596778_0|0.3|0
   EVENTS
   {
   }
@@ -828,6 +843,7 @@ PART
 {
   part = launchClamp1_4294591006
   partName = Part
+  persistentId = 1356939118
   pos = -3.37819791,6.24956799,0.0737583637
   attPos = 0,0,0
   attPos0 = -2.2518599,0.690522671,0
@@ -933,6 +949,7 @@ PART
 {
   part = launchClamp1_4294590792
   partName = Part
+  persistentId = 3794508843
   pos = -3.37819791,6.24956799,4.57747889
   attPos = 0,0,0
   attPos0 = 2.2518611,0.690522671,0

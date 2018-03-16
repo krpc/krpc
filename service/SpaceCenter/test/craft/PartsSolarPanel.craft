@@ -1,12 +1,17 @@
 ship = PartsSolarPanel
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 2.29349613,2.98522282,3.15993547
+persistentId = 1341173530
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4294736224
   partName = Part
+  persistentId = 308851498
   pos = 0.000653254217,6.05860376,-0.00207899697
   attPos = 0,0,0
   attPos0 = 0.000653254217,6.05860376,-0.00207899697
@@ -30,7 +35,7 @@ PART
   link = fuelTank_4294731188
   link = solarPanels5_4294697490
   link = largeSolarPanel_4294712806
-  attN = bottom,fuelTank_4294731188
+  attN = bottom,fuelTank_4294731188_0|-0.4050379|0
   EVENTS
   {
   }
@@ -52,6 +57,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -275,6 +284,7 @@ PART
 {
   part = fuelTank_4294731188
   partName = Part
+  persistentId = 960650863
   pos = 0.000653254217,4.68787384,-0.00207899697
   attPos = 0,0,0
   attPos0 = 0,-1.37072802,0
@@ -299,7 +309,7 @@ PART
   link = launchClamp1_4294705808
   link = radialDecoupler2_4294514542
   link = solarPanels2_4294603812
-  attN = top,mk1pod_4294736224
+  attN = top,mk1pod_4294736224_0|0.96569|0
   EVENTS
   {
   }
@@ -336,6 +346,7 @@ PART
 {
   part = launchClamp1_4294705978
   partName = Part
+  persistentId = 673453213
   pos = -1.42643595,3.27548409,-0.00207886402
   attPos = 0,0,0
   attPos0 = -1.42708898,-1.412395,1.331573E-07
@@ -441,6 +452,7 @@ PART
 {
   part = launchClamp1_4294705808
   partName = Part
+  persistentId = 63625529
   pos = 1.427742,3.27548409,-0.00207925402
   attPos = 0,0,0
   attPos0 = 1.42708898,-1.412395,-2.57917293E-07
@@ -546,6 +558,7 @@ PART
 {
   part = solarPanels5_4294697490
   partName = Part
+  persistentId = 4173690722
   pos = -0.0308088008,6.68351412,0.00635123812
   attPos = 0,0,0
   attPos0 = -0.0314620584,0.624914229,0.00843023416
@@ -617,6 +630,7 @@ PART
 {
   part = radialDecoupler2_4294514542
   partName = Part
+  persistentId = 3749605063
   pos = 0.000653324474,5.63978386,-0.591923475
   attPos = 0,0,0
   attPos0 = 7.02817715E-08,0.95191288,-0.589844406
@@ -717,6 +731,7 @@ PART
 {
   part = largeSolarPanel_4294712806
   partName = Part
+  persistentId = 3845034766
   pos = 0.000653254217,6.29111385,0.411193192
   attPos = 0,0,0
   attPos0 = 0,0.232511505,0.413272202
@@ -785,6 +800,7 @@ PART
 {
   part = solarPanels2_4294603812
   partName = Part
+  persistentId = 1992154298
   pos = 0.000653200084,4.113379,-0.621313453
   attPos = 0,0,0
   attPos0 = -5.41331246E-08,-0.574494839,-0.619234443
@@ -853,6 +869,7 @@ PART
 {
   part = fuelTank_4294660876
   partName = Part
+  persistentId = 567216730
   pos = 0.000652132381,5.59037256,-1.83831263
   attPos = 0,0,0
   attPos0 = -1.24638915,-0.0494112223,1.1920929E-07

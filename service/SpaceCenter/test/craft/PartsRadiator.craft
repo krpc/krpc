@@ -1,12 +1,17 @@
 ship = PartsRadiator
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 1.40513301,3.44750023,3.63896632
+persistentId = 3766594417
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4294736224
   partName = Part
+  persistentId = 2826337809
   pos = -0.167361498,6.05407381,0.235475704
   attPos = 0,0,0
   attPos0 = -0.167361498,6.05407381,0.235475704
@@ -30,7 +35,7 @@ PART
   link = fuelTank_4294731188
   link = foldingRadMed_4294632424
   link = radPanelSm_4294620374
-  attN = bottom,fuelTank_4294731188
+  attN = bottom,fuelTank_4294731188_0|-0.4050379|0
   EVENTS
   {
   }
@@ -52,6 +57,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -275,6 +284,7 @@ PART
 {
   part = fuelTank_4294731188
   partName = Part
+  persistentId = 3756561264
   pos = -0.167361498,4.68334389,0.235475704
   attPos = 0,0,0
   attPos0 = 0,-1.37072802,0
@@ -299,7 +309,7 @@ PART
   link = launchClamp1_4294705808
   link = radialDecoupler2_4294514542
   link = foldingRadSmall_4294630724
-  attN = top,mk1pod_4294736224
+  attN = top,mk1pod_4294736224_0|0.96569|0
   EVENTS
   {
   }
@@ -336,6 +346,7 @@ PART
 {
   part = launchClamp1_4294705978
   partName = Part
+  persistentId = 1168980763
   pos = -1.59445095,3.27095389,0.235475793
   attPos = 0,0,0
   attPos0 = -1.42708898,-1.412395,1.331573E-07
@@ -441,6 +452,7 @@ PART
 {
   part = launchClamp1_4294705808
   partName = Part
+  persistentId = 2730835061
   pos = 1.259727,3.27095389,0.235475406
   attPos = 0,0,0
   attPos0 = 1.42708898,-1.412395,-2.57917293E-07
@@ -546,6 +558,7 @@ PART
 {
   part = radialDecoupler2_4294514542
   partName = Part
+  persistentId = 2527030424
   pos = -0.167361394,5.63525391,-0.354368806
   attPos = 0,0,0
   attPos0 = 7.02817715E-08,0.95191288,-0.589844406
@@ -646,6 +659,7 @@ PART
 {
   part = fuelTank_4294511608
   partName = Part
+  persistentId = 2019118401
   pos = -0.16736187,6.09365416,-1.59910691
   attPos = 0,0,0
   attPos0 = -1.24473798,0.458393186,-1.87099701E-07
@@ -703,6 +717,7 @@ PART
 {
   part = foldingRadMed_4294632424
   partName = Part
+  persistentId = 1717323778
   pos = -0.167361394,6.07275915,0.837930024
   attPos = 0,0,0
   attPos0 = 3.25380789E-08,0.0186853409,0.602454305
@@ -800,6 +815,7 @@ PART
 {
   part = foldingRadSmall_4294630724
   partName = Part
+  persistentId = 829694204
   pos = -0.167361498,4.01921082,-0.483890474
   attPos = 0,0,0
   attPos0 = -8.49831761E-09,-0.664133489,-0.719366312
@@ -897,6 +913,7 @@ PART
 {
   part = radPanelSm_4294620374
   partName = Part
+  persistentId = 2846982450
   pos = -0.600166798,6.24085522,0.235475704
   attPos = 0,0,0
   attPos0 = -0.43280521,0.186781406,2.58441997E-08

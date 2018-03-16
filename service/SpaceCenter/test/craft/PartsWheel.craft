@@ -1,12 +1,17 @@
 ship = PartsWheel
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
-size = 5.29314995,4.30968285,6.22622252
+size = 5.29314995,4.30968332,6.22622395
+persistentId = 2789403597
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4294695196
   partName = Part
+  persistentId = 1440980100
   pos = -1.49711704,3.40968609,0.966450095
   attPos = 0,0,0
   attPos0 = -1.49711704,3.40968609,0.966450095
@@ -30,7 +35,7 @@ PART
   link = Mk1FuselageStructural_4294688548
   link = launchClamp1_4294167542
   link = trussPiece3x_4294460352
-  attN = bottom,Mk1FuselageStructural_4294688548
+  attN = bottom,Mk1FuselageStructural_4294688548_0|-0.4050379|0
   EVENTS
   {
   }
@@ -52,6 +57,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -275,7 +284,8 @@ PART
 {
   part = Mk1FuselageStructural_4294688548
   partName = Part
-  pos = -1.49711704,3.4096849,2.30899119
+  persistentId = 3002646806
+  pos = -1.49711704,3.4096849,2.30899143
   attPos = 0,0,0
   attPos0 = 0,-1.342538,0
   rot = -0.707106829,0,0,0.707106829
@@ -303,7 +313,7 @@ PART
   link = roverWheel2_4294365290
   link = wheelMed_4294361434
   link = trussPiece3x_4294416072
-  attN = top,mk1pod_4294695196
+  attN = top,mk1pod_4294695196_0|0.9375|0
   EVENTS
   {
   }
@@ -318,7 +328,8 @@ PART
 {
   part = GearMedium_4294384838
   partName = Part
-  pos = -1.06886864,2.98143649,2.39514971
+  persistentId = 2952583692
+  pos = -1.06886864,2.98143625,2.39515018
   attPos = 0,0,0
   attPos0 = 0.428248405,-0.0861584917,-0.428248316
   rot = 0.382686079,-0.923878551,0,0
@@ -577,7 +588,8 @@ PART
 {
   part = GearFree_4294382070
   partName = Part
-  pos = -0.966924787,3.71579146,1.45809186
+  persistentId = 894657421
+  pos = -0.966924787,3.71579146,1.45809197
   attPos = 0,0,0
   attPos0 = 0.530192256,0.850898325,0.306106597
   rot = -0.866025448,0.50000006,0,-8.94069672E-08
@@ -661,6 +673,10 @@ PART
     }
     ACTIONS
     {
+      SteeringToggle
+      {
+        actionGroup = None
+      }
     }
     UPGRADESAPPLIED
     {
@@ -687,7 +703,8 @@ PART
 {
   part = GearFixed_4294379094
   partName = Part
-  pos = -0.956528068,3.72179413,2.33368587
+  persistentId = 1712383812
+  pos = -0.956528068,3.72179413,2.33368611
   attPos = 0,0,0
   attPos0 = 0.540588975,-0.0246946756,0.312109172
   rot = -0.25881505,0.965911031,-0.00536605716,0.00143787265
@@ -801,7 +818,8 @@ PART
 {
   part = SmallGearBay_4294372838
   partName = Part
-  pos = -0.967835367,3.71526575,3.16027212
+  persistentId = 1440054729
+  pos = -0.967835367,3.71526575,3.1602726
   attPos = 0,0,0
   attPos0 = 0.529281676,-0.85127908,0.305580676
   rot = -0.866025448,0.50000006,-1.04308128E-07,8.94069672E-08
@@ -885,6 +903,10 @@ PART
     }
     ACTIONS
     {
+      SteeringToggle
+      {
+        actionGroup = None
+      }
     }
     UPGRADESAPPLIED
     {
@@ -1077,7 +1099,8 @@ PART
 {
   part = roverWheel1_4294368044
   partName = Part
-  pos = -2.19750619,4.11007214,3.61307383
+  persistentId = 1374088391
+  pos = -2.19750619,4.11007214,3.6130743
   attPos = 0,0,0
   attPos0 = -0.700389147,-1.30408061,0.700386941
   rot = -0.653282046,0.270596772,-0.270596713,0.653282046
@@ -1161,6 +1184,10 @@ PART
     }
     ACTIONS
     {
+      SteeringToggle
+      {
+        actionGroup = None
+      }
     }
     UPGRADESAPPLIED
     {
@@ -1181,6 +1208,10 @@ PART
     }
     ACTIONS
     {
+      MotorToggle
+      {
+        actionGroup = None
+      }
       ActAutoTorqueToggle
       {
         actionGroup = None
@@ -1262,7 +1293,8 @@ PART
 {
   part = roverWheel2_4294365290
   partName = Part
-  pos = -2.45429993,3.62461424,2.75180483
+  persistentId = 4131680641
+  pos = -2.45429993,3.62461424,2.75180531
   attPos = 0,0,0
   attPos0 = -0.957182884,-0.442812085,0.214929178
   rot = 0,-7.4505806E-08,0.382681668,-0.923880398
@@ -1346,6 +1378,10 @@ PART
     }
     ACTIONS
     {
+      SteeringToggle
+      {
+        actionGroup = None
+      }
     }
     UPGRADESAPPLIED
     {
@@ -1366,6 +1402,10 @@ PART
     }
     ACTIONS
     {
+      MotorToggle
+      {
+        actionGroup = None
+      }
       ActAutoTorqueToggle
       {
         actionGroup = None
@@ -1447,7 +1487,8 @@ PART
 {
   part = wheelMed_4294361434
   partName = Part
-  pos = -2.03496027,3.72020912,1.70240438
+  persistentId = 1227324186
+  pos = -2.03496027,3.72020912,1.7024045
   attPos = 0,0,0
   attPos0 = -0.537843227,0.60658586,0.310524017
   rot = -0.683012724,0.183012813,-0.183012664,0.683012724
@@ -1531,6 +1572,10 @@ PART
     }
     ACTIONS
     {
+      SteeringToggle
+      {
+        actionGroup = None
+      }
     }
     UPGRADESAPPLIED
     {
@@ -1551,6 +1596,10 @@ PART
     }
     ACTIONS
     {
+      MotorToggle
+      {
+        actionGroup = None
+      }
       ActAutoTorqueToggle
       {
         actionGroup = None
@@ -1617,7 +1666,8 @@ PART
 {
   part = launchClamp1_4294167542
   partName = Part
-  pos = -1.51755583,4.72872257,-0.465385795
+  persistentId = 2540590553
+  pos = -1.51755583,4.72872257,-0.465386033
   attPos = 0,0,0
   attPos0 = -0.0204387903,1.43183446,1.31903625
   rot = 0,0,1.00000012,0
@@ -1651,8 +1701,8 @@ PART
   {
     name = LaunchClamp
     isEnabled = True
-    scaleFactor = 1.1358844
-    height = 2.86606121
+    scaleFactor = 1.13588405
+    height = 2.86606073
     stagingEnabled = True
     towerRot = 0,0,-1,0
     EVENTS
@@ -1721,7 +1771,8 @@ PART
 {
   part = trussPiece3x_4294460352
   partName = Part
-  pos = -2.65726042,2.24954057,0.0238112211
+  persistentId = 3944525805
+  pos = -2.65726042,2.24954033,0.0238109827
   attPos = 0,0,0
   attPos0 = -1.16014338,0.942637682,-1.16014409
   rot = 0.133940756,0.323361427,-0.865442634,-0.358478189
@@ -1756,7 +1807,8 @@ PART
 {
   part = trussPiece3x_4294416072
   partName = Part
-  pos = -2.72322798,2.18356371,3.8417244
+  persistentId = 840436406
+  pos = -2.72322798,2.18356323,3.84172487
   attPos = 0,0,0
   attPos0 = -1.22611094,-1.53273118,-1.22611845
   rot = 0.130884707,0.315985769,0.868163586,0.359602928

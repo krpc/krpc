@@ -1,12 +1,17 @@
 ship = ShortRangeProbe
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 0.722476482,1.75952053,1.923774
+persistentId = 4207474828
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = probeCoreOcto2_4294427210
   partName = Part
+  persistentId = 700166866
   pos = -0.472132534,2.92247891,0.42988041
   attPos = 0,0,0
   attPos0 = -0.472132534,2.92247891,0.42988041
@@ -29,7 +34,7 @@ PART
   modSize = 0,0,0
   link = batteryBankMini_4294379326
   link = HighGainAntenna5_4293929336
-  attN = bottom,batteryBankMini_4294379326
+  attN = bottom,batteryBankMini_4294379326_0|-0.0610621|0
   EVENTS
   {
   }
@@ -51,6 +56,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -151,6 +160,7 @@ PART
 {
   part = batteryBankMini_4294379326
   partName = Part
+  persistentId = 4011230006
   pos = -0.472132534,2.76141691,0.42988041
   attPos = 0,0,0
   attPos0 = 0,-0.161062002,0
@@ -175,7 +185,7 @@ PART
   link = rtg_4294377974
   link = SurfAntenna_4294616088
   link = launchClamp1_4294686050
-  attN = top,probeCoreOcto2_4294427210
+  attN = top,probeCoreOcto2_4294427210_0|0.1|0
   EVENTS
   {
   }
@@ -201,6 +211,7 @@ PART
 {
   part = rtg_4294634494
   partName = Part
+  persistentId = 2094704545
   pos = -0.472132593,2.775177,-0.203814238
   attPos = 0,0,0
   attPos0 = -5.96046448E-08,0.0137600899,-0.633694649
@@ -287,6 +298,7 @@ PART
 {
   part = rtg_4294377974
   partName = Part
+  persistentId = 2580683007
   pos = -0.472132415,2.775177,1.06357503
   attPos = 0,0,0
   attPos0 = 1.1920929E-07,0.0137600899,0.633694649
@@ -373,6 +385,7 @@ PART
 {
   part = SurfAntenna_4294616088
   partName = Part
+  persistentId = 3540862548
   pos = -0.827106416,2.76890874,0.42988044
   attPos = 0,0,0
   attPos0 = -0.354973882,0.00749182701,2.98023224E-08
@@ -428,6 +441,7 @@ PART
 {
   part = launchClamp1_4294686050
   partName = Part
+  persistentId = 4145954103
   pos = 0.64012146,1.35591841,0.42988053
   attPos = 0,0,0
   attPos0 = 1.11225402,-1.4054985,1.1920929E-07
@@ -532,6 +546,7 @@ PART
 {
   part = HighGainAntenna5_4293929336
   partName = Part
+  persistentId = 1132547699
   pos = -0.44922024,2.97317624,0.416651994
   attPos = 0,0,0
   attPos0 = 0.0229122937,0.0506973267,-0.0132284164

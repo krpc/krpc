@@ -1,12 +1,17 @@
 ship = PartsDecoupler
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 3.1585114,5.4075222,1.4000001
+persistentId = 4152845310
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4294591094
   partName = Part
+  persistentId = 1001143446
   pos = -0.221232206,6.09634686,0.594926298
   attPos = 0,0,0
   attPos0 = -0.221232206,6.09634686,0.594926298
@@ -28,7 +33,7 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = stackSeparator_4294662244
-  attN = bottom,stackSeparator_4294662244
+  attN = bottom,stackSeparator_4294662244_0|-0.4050379|0
   EVENTS
   {
   }
@@ -50,6 +55,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -273,6 +282,7 @@ PART
 {
   part = stackSeparator_4294662244
   partName = Part
+  persistentId = 2094701980
   pos = -0.221232206,5.50800323,0.594926298
   attPos = 0,0,0
   attPos0 = 0,-0.588344276,0
@@ -294,8 +304,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = fuelTank_4294366504
-  attN = bottom,fuelTank_4294366504
-  attN = top,mk1pod_4294591094
+  attN = bottom,fuelTank_4294366504_0|-0.1833064|0
+  attN = top,mk1pod_4294591094_0|0.1833064|0
   EVENTS
   {
   }
@@ -354,26 +364,12 @@ PART
     {
     }
   }
-  MODULE
-  {
-    name = ModuleTestSubject
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
 }
 PART
 {
   part = fuelTank_4294366504
   partName = Part
+  persistentId = 1126435263
   pos = -0.221232206,4.35900593,0.594926298
   attPos = 0,0,0
   attPos0 = 0,-1.14899695,0
@@ -398,8 +394,8 @@ PART
   link = stackDecoupler_4294361384
   link = launchClamp1_4294350112
   link = launchClamp1_4294349942
-  attN = top,stackSeparator_4294662244
-  attN = bottom,stackDecoupler_4294361384
+  attN = top,stackSeparator_4294662244_0|0.96569|0
+  attN = bottom,stackDecoupler_4294361384_0|-0.9125|0
   EVENTS
   {
   }
@@ -436,6 +432,7 @@ PART
 {
   part = radialDecoupler2_4294369258
   partName = Part
+  persistentId = 465113278
   pos = -0.811565876,4.44958591,0.594926298
   attPos = 0,0,0
   attPos0 = -0.590333879,0.0905780792,3.19171605E-08
@@ -536,6 +533,7 @@ PART
 {
   part = fuelTank_4294365752
   partName = Part
+  persistentId = 4050090639
   pos = -2.05474305,4.33610487,0.594926596
   attPos = 0,0,0
   attPos0 = -1.24317801,-0.113480799,1.48043696E-07
@@ -558,7 +556,7 @@ PART
   modSize = 0,0,0
   link = fuelTank_4294542216
   srfN = srfAttach,radialDecoupler2_4294369258
-  attN = bottom,fuelTank_4294542216
+  attN = bottom,fuelTank_4294542216_0|-0.9125|0
   EVENTS
   {
   }
@@ -595,6 +593,7 @@ PART
 {
   part = fuelTank_4294542216
   partName = Part
+  persistentId = 2686503714
   pos = -2.05474305,2.45791507,0.594926596
   attPos = 0,0,0
   attPos0 = 2.09376907E-07,-1.87819004,3.43418805E-09
@@ -616,7 +615,7 @@ PART
   modMass = 0
   modSize = 0,0,0
   srfN = srfAttach,radialDecoupler2_4294369258
-  attN = top,fuelTank_4294365752
+  attN = top,fuelTank_4294365752_0|0.96569|0
   EVENTS
   {
   }
@@ -653,6 +652,7 @@ PART
 {
   part = stackDecoupler_4294361384
   partName = Part
+  persistentId = 3957968880
   pos = -0.221232206,3.38145709,0.594926298
   attPos = 0,0,0
   attPos0 = 0,-0.977552414,0
@@ -674,8 +674,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = fuelTank_4294358142
-  attN = bottom,fuelTank_4294358142
-  attN = top,fuelTank_4294366504
+  attN = bottom,fuelTank_4294358142_0|-0.1329949|0
+  attN = top,fuelTank_4294366504_0|0.0650517|0
   EVENTS
   {
   }
@@ -734,26 +734,12 @@ PART
     {
     }
   }
-  MODULE
-  {
-    name = ModuleTestSubject
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
 }
 PART
 {
   part = fuelTank_4294358142
   partName = Part
+  persistentId = 3076624923
   pos = -0.221232206,2.28277707,0.594926298
   attPos = 0,0,0
   attPos0 = 0,-1.09868395,0
@@ -774,7 +760,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = top,stackDecoupler_4294361384
+  attN = top,stackDecoupler_4294361384_0|0.96569|0
   EVENTS
   {
   }
@@ -811,6 +797,7 @@ PART
 {
   part = launchClamp1_4294350112
   partName = Part
+  persistentId = 772513335
   pos = -0.221232504,3.15855694,-0.833118975
   attPos = 0,0,0
   attPos0 = -4.51159707E-07,-1.20045602,-1.42804503
@@ -916,6 +903,7 @@ PART
 {
   part = launchClamp1_4294349942
   partName = Part
+  persistentId = 3970900416
   pos = -0.221231595,3.15855694,2.02297211
   attPos = 0,0,0
   attPos0 = 5.76003288E-07,-1.20045602,1.42804503

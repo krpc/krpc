@@ -1,12 +1,17 @@
 ship = Multi
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
-size = 1.59660077,7.82396984,1.56613076
+size = 1.59660077,7.82397079,1.56613076
+persistentId = 492671978
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4294632146
   partName = Part
+  persistentId = 1629330625
   pos = 0.0171678457,4.55030727,0.062032491
   attPos = 0,0,0
   attPos0 = 0.0171678457,4.55030727,0.062032491
@@ -30,8 +35,8 @@ PART
   link = RCSFuelTank_4294472150
   link = SurfAntenna_4294163346
   link = probeCoreOcto2_4294071958
-  attN = bottom,RCSFuelTank_4294472150
-  attN = top,probeCoreOcto2_4294071958
+  attN = bottom,RCSFuelTank_4294472150_0|-0.4050379|0
+  attN = top,probeCoreOcto2_4294071958_0|0.6423756|0
   EVENTS
   {
   }
@@ -53,6 +58,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -276,6 +285,7 @@ PART
 {
   part = RCSFuelTank_4294472150
   partName = Part
+  persistentId = 1377829540
   pos = 0.0171678457,3.85996747,0.062032491
   attPos = 0,0,0
   attPos0 = 0,-0.690340996,0
@@ -301,8 +311,8 @@ PART
   link = RCSBlock_4294454314
   link = RCSBlock_4294454230
   link = RCSBlock_4294454146
-  attN = top,mk1pod_4294632146
-  attN = bottom,fuelTank_4294471508
+  attN = top,mk1pod_4294632146_0|0.2853027|0
+  attN = bottom,fuelTank_4294471508_0|-0.2853027|0
   EVENTS
   {
   }
@@ -328,6 +338,7 @@ PART
 {
   part = fuelTank_4294471508
   partName = Part
+  persistentId = 1972380700
   pos = 0.0171678457,2.60897732,0.062032491
   attPos = 0,0,0
   attPos0 = 0,-1.25099301,0
@@ -353,7 +364,7 @@ PART
   link = RCSBlock_4294452568
   link = RCSBlock_4294452444
   link = RCSBlock_4294452320
-  attN = top,RCSFuelTank_4294472150
+  attN = top,RCSFuelTank_4294472150_0|0.96569|0
   EVENTS
   {
   }
@@ -390,6 +401,7 @@ PART
 {
   part = rtg_4294456484
   partName = Part
+  persistentId = 2903107930
   pos = -0.6019333,3.00786734,0.0620325282
   attPos = 0,0,0
   attPos0 = -0.619101286,0.398889512,3.69013193E-08
@@ -475,6 +487,7 @@ PART
 {
   part = RCSBlock_4294454862
   partName = Part
+  persistentId = 893489771
   pos = -0.644890726,3.90015745,0.0627748072
   attPos = 0,0,0
   attPos0 = -0.662058592,0.0401945114,0.000742311124
@@ -543,6 +556,7 @@ PART
 {
   part = RCSBlock_4294454314
   partName = Part
+  persistentId = 3548892512
   pos = 0.0179101154,3.90015745,0.724090934
   attPos = 0,0,0
   attPos0 = 0.000742271484,0.0401945114,0.662058473
@@ -611,6 +625,7 @@ PART
 {
   part = RCSBlock_4294454230
   partName = Part
+  persistentId = 4233845908
   pos = 0.679226458,3.90015745,0.06129013
   attPos = 0,0,0
   attPos0 = 0.662058592,0.0401945114,-0.000742368924
@@ -679,6 +694,7 @@ PART
 {
   part = RCSBlock_4294454146
   partName = Part
+  persistentId = 79101795
   pos = 0.016425496,3.90015745,-0.600025892
   attPos = 0,0,0
   attPos0 = -0.000742350472,0.0401945114,-0.662058473
@@ -747,6 +763,7 @@ PART
 {
   part = RCSBlock_4294453834
   partName = Part
+  persistentId = 2045831504
   pos = -0.662237585,2.0229373,0.0627748072
   attPos = 0,0,0
   attPos0 = -0.67940551,-0.586032927,0.000742321718
@@ -815,6 +832,7 @@ PART
 {
   part = RCSBlock_4294452568
   partName = Part
+  persistentId = 75951992
   pos = 0.0179101247,2.0229373,0.741437912
   attPos = 0,0,0
   attPos0 = 0.000742281089,-0.586032927,0.67940551
@@ -883,6 +901,7 @@ PART
 {
   part = RCSBlock_4294452444
   partName = Part
+  persistentId = 4056518424
   pos = 0.696573317,2.0229373,0.0612901188
   attPos = 0,0,0
   attPos0 = 0.67940551,-0.586032927,-0.000742380973
@@ -951,6 +970,7 @@ PART
 {
   part = RCSBlock_4294452320
   partName = Part
+  persistentId = 3912842912
   pos = 0.0164254848,2.0229373,-0.61737299
   attPos = 0,0,0
   attPos0 = -0.000742362114,-0.586032927,-0.67940551
@@ -1019,6 +1039,7 @@ PART
 {
   part = SurfAntenna_4294163346
   partName = Part
+  persistentId = 1900346464
   pos = -0.482232869,4.70040083,0.0620325506
   attPos = 0,0,0
   attPos0 = -0.499400705,0.150093555,5.96046448E-08
@@ -1074,6 +1095,7 @@ PART
 {
   part = probeCoreOcto2_4294071958
   partName = Part
+  persistentId = 2747656614
   pos = 0.0171678457,5.25374508,0.062032491
   attPos = 0,0,0
   attPos0 = 0,0.703437805,0
@@ -1095,8 +1117,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = dockingPort2_4294625302
-  attN = bottom,mk1pod_4294632146
-  attN = top,dockingPort2_4294625302
+  attN = bottom,mk1pod_4294632146_0|-0.0610621|0
+  attN = top,dockingPort2_4294625302_0|0.0610621|0
   EVENTS
   {
   }
@@ -1118,6 +1140,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -1218,6 +1244,7 @@ PART
 {
   part = dockingPort2_4294625302
   partName = Part
+  persistentId = 2694272704
   pos = 0.0171678457,5.31480694,0.062032491
   attPos = 0,0,0
   attPos0 = 0,0.0610618591,0
@@ -1239,8 +1266,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = dockingPort2_4294624944
-  attN = top,dockingPort2_4294624944
-  attN = bottom,probeCoreOcto2_4294071958
+  attN = top,dockingPort2_4294624944_0|0.2828832|0
+  attN = bottom,probeCoreOcto2_4294071958_0|0|0
   EVENTS
   {
   }
@@ -1269,6 +1296,10 @@ PART
         actionGroup = None
       }
       DecoupleAction
+      {
+        actionGroup = None
+      }
+      MakeReferenceToggle
       {
         actionGroup = None
       }
@@ -1294,6 +1325,7 @@ PART
 {
   part = dockingPort2_4294624944
   partName = Part
+  persistentId = 287346140
   pos = 0.0171678457,5.88057327,0.062032491
   attPos = 0,0,0
   attPos0 = 0,0.565766335,0
@@ -1315,8 +1347,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = probeCoreOcto2_4294066382
-  attN = top,dockingPort2_4294625302
-  attN = bottom,probeCoreOcto2_4294066382
+  attN = top,dockingPort2_4294625302_0|0.2828832|0
+  attN = bottom,probeCoreOcto2_4294066382_0|0|0
   EVENTS
   {
   }
@@ -1348,6 +1380,10 @@ PART
       {
         actionGroup = None
       }
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       EnableXFeedAction
       {
         actionGroup = None
@@ -1370,6 +1406,7 @@ PART
 {
   part = probeCoreOcto2_4294066382
   partName = Part
+  persistentId = 936808671
   pos = 0.0171678457,5.94163561,0.062032491
   attPos = 0,0,0
   attPos0 = 0,-0.061062336,0
@@ -1391,8 +1428,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = mk1pod_4294621954
-  attN = bottom,dockingPort2_4294624944
-  attN = top,mk1pod_4294621954
+  attN = bottom,dockingPort2_4294624944_0|-0.0610621|0
+  attN = top,mk1pod_4294621954_0|0.0610621|0
   EVENTS
   {
   }
@@ -1414,6 +1451,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -1514,6 +1555,7 @@ PART
 {
   part = mk1pod_4294621954
   partName = Part
+  persistentId = 4263155399
   pos = 0.0171678457,6.64507341,0.062032491
   attPos = 0,0,0
   attPos0 = 0,0.703437805,0
@@ -1536,8 +1578,8 @@ PART
   modSize = 0,0,0
   link = RCSFuelTank_4294451944
   link = SurfAntenna_4294168632
-  attN = bottom,RCSFuelTank_4294451944
-  attN = top,probeCoreOcto2_4294066382
+  attN = bottom,RCSFuelTank_4294451944_0|-0.4050379|0
+  attN = top,probeCoreOcto2_4294066382_0|0.6423756|0
   EVENTS
   {
   }
@@ -1559,6 +1601,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -1782,6 +1828,7 @@ PART
 {
   part = RCSFuelTank_4294451944
   partName = Part
+  persistentId = 3021551579
   pos = 0.0171678457,7.33541346,0.062032491
   attPos = 0,0,0
   attPos0 = 0,-0.69034189,0
@@ -1807,8 +1854,8 @@ PART
   link = RCSBlock_4294451142
   link = RCSBlock_4294451018
   link = RCSBlock_4294450894
-  attN = top,mk1pod_4294621954
-  attN = bottom,fuelTank_4294451912
+  attN = top,mk1pod_4294621954_0|0.2853027|0
+  attN = bottom,fuelTank_4294451912_0|-0.2853027|0
   EVENTS
   {
   }
@@ -1834,6 +1881,7 @@ PART
 {
   part = fuelTank_4294451912
   partName = Part
+  persistentId = 2986324993
   pos = 0.0171678457,8.58640289,0.062032491
   attPos = 0,0,0
   attPos0 = 0,-1.25099301,0
@@ -1859,7 +1907,7 @@ PART
   link = RCSBlock_4294451718
   link = RCSBlock_4294451554
   link = RCSBlock_4294451390
-  attN = top,RCSFuelTank_4294451944
+  attN = top,RCSFuelTank_4294451944_0|0.96569|0
   EVENTS
   {
   }
@@ -1896,6 +1944,7 @@ PART
 {
   part = rtg_4294451874
   partName = Part
+  persistentId = 223823727
   pos = -0.6019333,8.18751335,0.0620324612
   attPos = 0,0,0
   attPos0 = -0.619101286,0.398889512,3.69013193E-08
@@ -1981,6 +2030,7 @@ PART
 {
   part = RCSBlock_4294451842
   partName = Part
+  persistentId = 3332265421
   pos = -0.662237585,9.17244339,0.061290171
   attPos = 0,0,0
   attPos0 = -0.67940551,-0.586032927,0.000742321718
@@ -2049,6 +2099,7 @@ PART
 {
   part = RCSBlock_4294451718
   partName = Part
+  persistentId = 1796271273
   pos = 0.0179101247,9.17244339,-0.61737299
   attPos = 0,0,0
   attPos0 = 0.000742281089,-0.586032927,0.67940551
@@ -2117,6 +2168,7 @@ PART
 {
   part = RCSBlock_4294451554
   partName = Part
+  persistentId = 2934782102
   pos = 0.696573317,9.17244339,0.0627748668
   attPos = 0,0,0
   attPos0 = 0.67940551,-0.586032927,-0.000742380973
@@ -2185,6 +2237,7 @@ PART
 {
   part = RCSBlock_4294451390
   partName = Part
+  persistentId = 132325622
   pos = 0.0164254848,9.17244339,0.741437912
   attPos = 0,0,0
   attPos0 = -0.000742362114,-0.586032927,-0.67940551
@@ -2253,6 +2306,7 @@ PART
 {
   part = RCSBlock_4294451226
   partName = Part
+  persistentId = 637640517
   pos = -0.644890726,7.29522324,0.0612901784
   attPos = 0,0,0
   attPos0 = -0.662058592,0.0401945114,0.000742311124
@@ -2321,6 +2375,7 @@ PART
 {
   part = RCSBlock_4294451142
   partName = Part
+  persistentId = 749651796
   pos = 0.0179101154,7.29522324,-0.600025892
   attPos = 0,0,0
   attPos0 = 0.000742271484,0.0401945114,0.662058473
@@ -2389,6 +2444,7 @@ PART
 {
   part = RCSBlock_4294451018
   partName = Part
+  persistentId = 3383363572
   pos = 0.679226458,7.29522324,0.0627748594
   attPos = 0,0,0
   attPos0 = 0.662058592,0.0401945114,-0.000742368924
@@ -2457,6 +2513,7 @@ PART
 {
   part = RCSBlock_4294450894
   partName = Part
+  persistentId = 2563757785
   pos = 0.016425496,7.29522324,0.724090934
   attPos = 0,0,0
   attPos0 = -0.000742350472,0.0401945114,-0.662058473
@@ -2525,6 +2582,7 @@ PART
 {
   part = SurfAntenna_4294168632
   partName = Part
+  persistentId = 885315630
   pos = -0.567870438,6.71996593,0.062032491
   attPos = 0,0,0
   attPos0 = 0.585038304,-0.0748925209,0

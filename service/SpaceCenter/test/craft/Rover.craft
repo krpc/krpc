@@ -1,12 +1,17 @@
 ship = Rover
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 2.66683769,1.96896219,2.5814085
+persistentId = 30682751
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = landerCabinSmall_4294446268
   partName = Part
+  persistentId = 2572123858
   pos = 0.0391011983,2.91046,-0.127776697
   attPos = 0,0,0
   attPos0 = 0.0391011983,2.91046,-0.127776697
@@ -29,7 +34,7 @@ PART
   modSize = 0,0,0
   link = structuralPanel2_4294442124
   link = rtg_4294394752
-  attN = bottom,structuralPanel2_4294442124
+  attN = bottom,structuralPanel2_4294442124_0|-0.625|0
   EVENTS
   {
   }
@@ -51,6 +56,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -244,6 +253,7 @@ PART
 {
   part = structuralPanel2_4294442124
   partName = Part
+  persistentId = 1952160038
   pos = 0.0391011983,2.25796008,-0.127776697
   attPos = 0,0,0
   attPos0 = 0,-0.652500212,0
@@ -270,7 +280,7 @@ PART
   link = roverWheel2_4294433794
   link = roverWheel2_4294433612
   link = roverWheel2_4294433478
-  attN = top,landerCabinSmall_4294446268
+  attN = top,landerCabinSmall_4294446268_0|0.0275|0
   EVENTS
   {
   }
@@ -285,6 +295,7 @@ PART
 {
   part = roverWheel2_4294434250
   partName = Part
+  persistentId = 1308090514
   pos = -1.07223499,1.74978006,-1.01580799
   attPos = 0,0,0
   attPos0 = -1.11133599,-0.508183479,-0.888030827
@@ -370,6 +381,10 @@ PART
     }
     ACTIONS
     {
+      SteeringToggle
+      {
+        actionGroup = None
+      }
     }
     UPGRADESAPPLIED
     {
@@ -390,6 +405,10 @@ PART
     }
     ACTIONS
     {
+      MotorToggle
+      {
+        actionGroup = None
+      }
       ActAutoTorqueToggle
       {
         actionGroup = None
@@ -471,6 +490,7 @@ PART
 {
   part = roverWheel2_4294434110
   partName = Part
+  persistentId = 1293481926
   pos = 1.150437,1.74978006,0.760253787
   attPos = 0,0,0
   attPos0 = 1.11133599,-0.508183479,0.888030589
@@ -556,6 +576,10 @@ PART
     }
     ACTIONS
     {
+      SteeringToggle
+      {
+        actionGroup = None
+      }
     }
     UPGRADESAPPLIED
     {
@@ -576,6 +600,10 @@ PART
     }
     ACTIONS
     {
+      MotorToggle
+      {
+        actionGroup = None
+      }
       ActAutoTorqueToggle
       {
         actionGroup = None
@@ -657,6 +685,7 @@ PART
 {
   part = roverWheel2_4294433928
   partName = Part
+  persistentId = 3245108097
   pos = -1.07258499,1.74978006,-0.127776504
   attPos = 0,0,0
   attPos0 = -1.11168599,-0.508183479,2.40653208E-07
@@ -742,6 +771,10 @@ PART
     }
     ACTIONS
     {
+      SteeringToggle
+      {
+        actionGroup = None
+      }
     }
     UPGRADESAPPLIED
     {
@@ -762,6 +795,10 @@ PART
     }
     ACTIONS
     {
+      MotorToggle
+      {
+        actionGroup = None
+      }
       ActAutoTorqueToggle
       {
         actionGroup = None
@@ -843,6 +880,7 @@ PART
 {
   part = roverWheel2_4294433794
   partName = Part
+  persistentId = 4094002815
   pos = 1.150787,1.74978006,-0.1277771
   attPos = 0,0,0
   attPos0 = 1.11168599,-0.508183479,-3.37839793E-07
@@ -928,6 +966,10 @@ PART
     }
     ACTIONS
     {
+      SteeringToggle
+      {
+        actionGroup = None
+      }
     }
     UPGRADESAPPLIED
     {
@@ -948,6 +990,10 @@ PART
     }
     ACTIONS
     {
+      MotorToggle
+      {
+        actionGroup = None
+      }
       ActAutoTorqueToggle
       {
         actionGroup = None
@@ -1029,6 +1075,7 @@ PART
 {
   part = roverWheel2_4294433612
   partName = Part
+  persistentId = 3928629452
   pos = -1.08996201,1.74978006,0.777980685
   attPos = 0,0,0
   attPos0 = -1.12906301,-0.508183479,0.905757427
@@ -1114,6 +1161,10 @@ PART
     }
     ACTIONS
     {
+      SteeringToggle
+      {
+        actionGroup = None
+      }
     }
     UPGRADESAPPLIED
     {
@@ -1134,6 +1185,10 @@ PART
     }
     ACTIONS
     {
+      MotorToggle
+      {
+        actionGroup = None
+      }
       ActAutoTorqueToggle
       {
         actionGroup = None
@@ -1215,6 +1270,7 @@ PART
 {
   part = roverWheel2_4294433478
   partName = Part
+  persistentId = 2243175982
   pos = 1.16816401,1.74978006,-1.03353405
   attPos = 0,0,0
   attPos0 = 1.12906301,-0.508183479,-0.905757487
@@ -1300,6 +1356,10 @@ PART
     }
     ACTIONS
     {
+      SteeringToggle
+      {
+        actionGroup = None
+      }
     }
     UPGRADESAPPLIED
     {
@@ -1320,6 +1380,10 @@ PART
     }
     ACTIONS
     {
+      MotorToggle
+      {
+        actionGroup = None
+      }
       ActAutoTorqueToggle
       {
         actionGroup = None
@@ -1401,6 +1465,7 @@ PART
 {
   part = rtg_4294394752
   partName = Part
+  persistentId = 1172288440
   pos = 0.0391011983,2.73851991,1.00878203
   attPos = 0,0,0
   attPos0 = 0,-0.171944603,1.13655901

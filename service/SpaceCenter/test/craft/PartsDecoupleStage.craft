@@ -1,12 +1,17 @@
 ship = PartsDecoupleStage
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
-size = 4.36485195,7.29626751,4.36485147
+size = 4.36485291,7.29626751,4.36485195
+persistentId = 343720227
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4294617058
   partName = Part
+  persistentId = 2136266832
   pos = -0.168652698,7.66758108,0.175679997
   attPos = 0,0,0
   attPos0 = -0.168652698,7.66758108,0.175679997
@@ -28,7 +33,7 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = stackSeparator_4294585338
-  attN = bottom,stackSeparator_4294585338
+  attN = bottom,stackSeparator_4294585338_0|-0.4050379|0
   EVENTS
   {
   }
@@ -50,6 +55,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -273,6 +282,7 @@ PART
 {
   part = stackSeparator_4294585338
   partName = Part
+  persistentId = 4120516557
   pos = -0.168652698,7.07923603,0.175679997
   attPos = 0,0,0
   attPos0 = 0,-0.588344574,0
@@ -294,8 +304,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = fuelTank_4294609290
-  attN = bottom,fuelTank_4294609290
-  attN = top,mk1pod_4294617058
+  attN = bottom,fuelTank_4294609290_0|-0.1833064|0
+  attN = top,mk1pod_4294617058_0|0.1833064|0
   EVENTS
   {
   }
@@ -354,26 +364,12 @@ PART
     {
     }
   }
-  MODULE
-  {
-    name = ModuleTestSubject
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
 }
 PART
 {
   part = fuelTank_4294609290
   partName = Part
+  persistentId = 1753087038
   pos = -0.168652698,5.93024015,0.175679997
   attPos = 0,0,0
   attPos0 = 0,-1.148996,0
@@ -399,8 +395,8 @@ PART
   link = stackDecoupler_4294578944
   link = radialDecoupler2_4294471026
   link = radialDecoupler2_4294470330
-  attN = top,stackSeparator_4294585338
-  attN = bottom,stackDecoupler_4294578944
+  attN = top,stackSeparator_4294585338_0|0.96569|0
+  attN = bottom,stackDecoupler_4294578944_0|-0.9125|0
   EVENTS
   {
   }
@@ -437,6 +433,7 @@ PART
 {
   part = launchClamp1_4294595556
   partName = Part
+  persistentId = 3326908106
   pos = -1.59483898,4.8325038,0.175680101
   attPos = 0,0,0
   attPos0 = -1.42618597,-1.09773505,1.33103498E-07
@@ -542,6 +539,7 @@ PART
 {
   part = launchClamp1_4294594932
   partName = Part
+  persistentId = 2562286963
   pos = 1.25753295,4.8325038,0.175679699
   attPos = 0,0,0
   attPos0 = 1.42618597,-1.09773505,-2.57784592E-07
@@ -647,6 +645,7 @@ PART
 {
   part = stackDecoupler_4294578944
   partName = Part
+  persistentId = 236633220
   pos = -0.168652698,4.88474512,0.175679997
   attPos = 0,0,0
   attPos0 = 0,-1.04549503,0
@@ -668,8 +667,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = fuelTank.long_4294527070
-  attN = bottom,fuelTank_4294609290
-  attN = top,fuelTank.long_4294527070
+  attN = bottom,fuelTank_4294609290_0|-0.1329949|0
+  attN = top,fuelTank.long_4294527070_0|0.0650517|0
   EVENTS
   {
   }
@@ -728,26 +727,12 @@ PART
     {
     }
   }
-  MODULE
-  {
-    name = ModuleTestSubject
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
 }
 PART
 {
   part = fuelTank.long_4294527070
   partName = Part
+  persistentId = 3593465520
   pos = -0.168652698,2.94469404,0.175679997
   attPos = 0,0,0
   attPos0 = 0,1.94005096,0
@@ -772,7 +757,7 @@ PART
   link = radialDecoupler2_4294520614
   link = radialDecoupler2_4294520522
   link = radialDecoupler2_4294520430
-  attN = top,stackDecoupler_4294578944
+  attN = top,stackDecoupler_4294578944_0|1.875|0
   EVENTS
   {
   }
@@ -809,6 +794,7 @@ PART
 {
   part = radialDecoupler2_4294525912
   partName = Part
+  persistentId = 4273641308
   pos = -0.599937081,2.68412066,-0.255604386
   attPos = 0,0,0
   attPos0 = -0.431284487,-0.260572404,-0.431284398
@@ -912,10 +898,11 @@ PART
 {
   part = fuelTankSmall_4294525372
   partName = Part
+  persistentId = 812541343
   pos = -1.47969401,2.8056798,-1.13536096
   attPos = 0,0,0
   attPos0 = -1.24416399,0.121559203,1.49011598E-07
-  rot = 6.21724894E-15,0.382683396,3.55271368E-15,-0.923879623
+  rot = 7.10542736E-15,0.382683396,3.55271368E-15,-0.923879623
   attRot = 0,0,0,1
   attRot0 = -2.66453505E-15,2.98023206E-08,-2.58095696E-08,1
   mir = 1,1,1
@@ -937,7 +924,7 @@ PART
   sym = fuelTankSmall_4294520468
   sym = fuelTankSmall_4294520376
   srfN = srfAttach,radialDecoupler2_4294525912
-  attN = bottom,stackDecoupler_4294500228
+  attN = bottom,stackDecoupler_4294500228_0|-0.55525|0
   EVENTS
   {
   }
@@ -974,6 +961,7 @@ PART
 {
   part = radialDecoupler2_4294520614
   partName = Part
+  persistentId = 3375024411
   pos = -0.599937081,2.68412066,0.60696429
   attPos = 0,0,0
   attPos0 = -0.431284398,-0.260572404,0.431284398
@@ -1077,6 +1065,7 @@ PART
 {
   part = fuelTankSmall_4294520560
   partName = Part
+  persistentId = 1908023686
   pos = -1.47969401,2.8056798,1.48672104
   attPos = 0,0,0
   attPos0 = -1.24416399,0.121559203,1.49011598E-07
@@ -1102,7 +1091,7 @@ PART
   sym = fuelTankSmall_4294520468
   sym = fuelTankSmall_4294520376
   srfN = srfAttach,radialDecoupler2_4294520614
-  attN = bottom,stackDecoupler_4294497438
+  attN = bottom,stackDecoupler_4294497438_0|-0.55525|0
   EVENTS
   {
   }
@@ -1139,6 +1128,7 @@ PART
 {
   part = radialDecoupler2_4294520522
   partName = Part
+  persistentId = 2023421937
   pos = 0.262631774,2.68412066,0.60696429
   attPos = 0,0,0
   attPos0 = 0.431284487,-0.260572404,0.431284398
@@ -1242,7 +1232,8 @@ PART
 {
   part = fuelTankSmall_4294520468
   partName = Part
-  pos = 1.14238989,2.8056798,1.48672211
+  persistentId = 3890255388
+  pos = 1.14239025,2.8056798,1.48672247
   attPos = 0,0,0
   attPos0 = -1.24416399,0.121559203,1.49011598E-07
   rot = 3.55271368E-15,-0.923879683,-4.61889353E-15,-0.382683277
@@ -1267,7 +1258,7 @@ PART
   sym = fuelTankSmall_4294520560
   sym = fuelTankSmall_4294520376
   srfN = srfAttach,radialDecoupler2_4294520522
-  attN = bottom,stackDecoupler_4294497392
+  attN = bottom,stackDecoupler_4294497392_0|-0.55525|0
   EVENTS
   {
   }
@@ -1304,6 +1295,7 @@ PART
 {
   part = radialDecoupler2_4294520430
   partName = Part
+  persistentId = 3422070092
   pos = 0.262631714,2.68412066,-0.255604506
   attPos = 0,0,0
   attPos0 = 0.431284398,-0.260572404,-0.431284487
@@ -1407,6 +1399,7 @@ PART
 {
   part = fuelTankSmall_4294520376
   partName = Part
+  persistentId = 1665365482
   pos = 1.14238799,2.8056798,-1.13536084
   attPos = 0,0,0
   attPos0 = -1.24416399,0.121559203,1.49011598E-07
@@ -1432,7 +1425,7 @@ PART
   sym = fuelTankSmall_4294520560
   sym = fuelTankSmall_4294520468
   srfN = srfAttach,radialDecoupler2_4294520430
-  attN = bottom,stackDecoupler_4294497346
+  attN = bottom,stackDecoupler_4294497346_0|-0.55525|0
   EVENTS
   {
   }
@@ -1469,6 +1462,7 @@ PART
 {
   part = stackDecoupler_4294500228
   partName = Part
+  persistentId = 3931949115
   pos = -1.47969401,2.18537807,-1.13536096
   attPos = 0,0,0
   attPos0 = 3.20194715E-08,-0.6203022,-2.98023295E-08
@@ -1493,8 +1487,8 @@ PART
   sym = stackDecoupler_4294497438
   sym = stackDecoupler_4294497392
   sym = stackDecoupler_4294497346
-  attN = bottom,RCSFuelTank_4294483338
-  attN = top,fuelTankSmall_4294525372
+  attN = bottom,RCSFuelTank_4294483338_0|-0.1329949|0
+  attN = top,fuelTankSmall_4294525372_0|0.0650517|0
   EVENTS
   {
   }
@@ -1553,26 +1547,12 @@ PART
     {
     }
   }
-  MODULE
-  {
-    name = ModuleTestSubject
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
 }
 PART
 {
   part = stackDecoupler_4294497438
   partName = Part
+  persistentId = 3114519902
   pos = -1.47969306,2.18537807,1.4867208
   attPos = 0,0,0
   attPos0 = 3.20194609E-08,-0.6203022,8.94069672E-08
@@ -1597,8 +1577,8 @@ PART
   sym = stackDecoupler_4294500228
   sym = stackDecoupler_4294497392
   sym = stackDecoupler_4294497346
-  attN = bottom,RCSFuelTank_4294482744
-  attN = top,fuelTankSmall_4294520560
+  attN = bottom,RCSFuelTank_4294482744_0|-0.1329949|0
+  attN = top,fuelTankSmall_4294520560_0|0.0650517|0
   EVENTS
   {
   }
@@ -1657,27 +1637,13 @@ PART
     {
     }
   }
-  MODULE
-  {
-    name = ModuleTestSubject
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
 }
 PART
 {
   part = stackDecoupler_4294497392
   partName = Part
-  pos = 1.14238989,2.18537807,1.48672211
+  persistentId = 77854625
+  pos = 1.14239013,2.18537807,1.48672247
   attPos = 0,0,0
   attPos0 = -8.7189818E-08,-0.6203022,-2.98023295E-08
   rot = 1.77635684E-15,-1.00000012,-8.8817842E-16,0
@@ -1701,8 +1667,8 @@ PART
   sym = stackDecoupler_4294500228
   sym = stackDecoupler_4294497438
   sym = stackDecoupler_4294497346
-  attN = bottom,RCSFuelTank_4294482712
-  attN = top,fuelTankSmall_4294520468
+  attN = bottom,RCSFuelTank_4294482712_0|-0.1329949|0
+  attN = top,fuelTankSmall_4294520468_0|0.0650517|0
   EVENTS
   {
   }
@@ -1761,30 +1727,16 @@ PART
     {
     }
   }
-  MODULE
-  {
-    name = ModuleTestSubject
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
 }
 PART
 {
   part = stackDecoupler_4294497346
   partName = Part
+  persistentId = 1300829343
   pos = 1.14238775,2.18537807,-1.13536084
   attPos = 0,0,0
   attPos0 = 2.70438107E-07,-0.6203022,-2.980231E-08
-  rot = -1.77635684E-15,-0.707106829,-2.66453526E-15,0.707106829
+  rot = -3.55271368E-15,-0.707106829,-3.55271368E-15,0.707106829
   attRot = 0,0,0,-0.999999881
   attRot0 = 4.26334806E-15,0.382683396,3.0903851E-15,0.923879623
   mir = 1,1,1
@@ -1805,8 +1757,8 @@ PART
   sym = stackDecoupler_4294500228
   sym = stackDecoupler_4294497438
   sym = stackDecoupler_4294497392
-  attN = bottom,RCSFuelTank_4294482680
-  attN = top,fuelTankSmall_4294520376
+  attN = bottom,RCSFuelTank_4294482680_0|-0.1329949|0
+  attN = top,fuelTankSmall_4294520376_0|0.0650517|0
   EVENTS
   {
   }
@@ -1865,26 +1817,12 @@ PART
     {
     }
   }
-  MODULE
-  {
-    name = ModuleTestSubject
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
 }
 PART
 {
   part = RCSFuelTank_4294483338
   partName = Part
+  persistentId = 3600477856
   pos = -1.47969425,1.76708078,-1.13536108
   attPos = 0,0,0
   attPos0 = 1.52679505E-08,-0.418297291,1.52679593E-08
@@ -1908,7 +1846,7 @@ PART
   sym = RCSFuelTank_4294482744
   sym = RCSFuelTank_4294482712
   sym = RCSFuelTank_4294482680
-  attN = top,stackDecoupler_4294500228
+  attN = top,stackDecoupler_4294500228_0|0.2853027|0
   EVENTS
   {
   }
@@ -1934,6 +1872,7 @@ PART
 {
   part = RCSFuelTank_4294482744
   partName = Part
+  persistentId = 1667189955
   pos = -1.47969306,1.76708078,1.48672104
   attPos = 0,0,0
   attPos0 = -6.90257522E-08,-0.418297291,9.95616531E-08
@@ -1957,7 +1896,7 @@ PART
   sym = RCSFuelTank_4294483338
   sym = RCSFuelTank_4294482712
   sym = RCSFuelTank_4294482680
-  attN = top,stackDecoupler_4294497438
+  attN = top,stackDecoupler_4294497438_0|0.2853027|0
   EVENTS
   {
   }
@@ -1983,7 +1922,8 @@ PART
 {
   part = RCSFuelTank_4294482712
   partName = Part
-  pos = 1.14238989,1.76708078,1.48672211
+  persistentId = 2631204086
+  pos = 1.14239037,1.76708078,1.48672259
   attPos = 0,0,0
   attPos0 = -6.90257593E-08,-0.418297291,-6.90257522E-08
   rot = -1.77635684E-15,1.00000012,8.8817842E-16,0
@@ -2006,7 +1946,7 @@ PART
   sym = RCSFuelTank_4294483338
   sym = RCSFuelTank_4294482744
   sym = RCSFuelTank_4294482680
-  attN = top,stackDecoupler_4294497392
+  attN = top,stackDecoupler_4294497392_0|0.2853027|0
   EVENTS
   {
   }
@@ -2032,10 +1972,11 @@ PART
 {
   part = RCSFuelTank_4294482680
   partName = Part
+  persistentId = 1864643822
   pos = 1.14238787,1.76708078,-1.13536084
   attPos = 0,0,0
   attPos0 = 9.95616531E-08,-0.418297291,-6.90257522E-08
-  rot = 1.77635684E-15,0.707106829,2.66453526E-15,-0.707106829
+  rot = 3.55271368E-15,0.707106829,3.55271368E-15,-0.707106829
   attRot = 0,0,0,1
   attRot0 = 0,0,0,-1
   mir = 1,1,1
@@ -2055,7 +1996,7 @@ PART
   sym = RCSFuelTank_4294483338
   sym = RCSFuelTank_4294482744
   sym = RCSFuelTank_4294482712
-  attN = top,stackDecoupler_4294497346
+  attN = top,stackDecoupler_4294497346_0|0.2853027|0
   EVENTS
   {
   }
@@ -2081,6 +2022,7 @@ PART
 {
   part = radialDecoupler2_4294471026
   partName = Part
+  persistentId = 3824894686
   pos = -0.168652698,5.90267706,-0.415419936
   attPos = 0,0,0
   attPos0 = -4.470348E-08,-0.0275631007,-0.591099918
@@ -2182,6 +2124,7 @@ PART
 {
   part = radialDecoupler2_4294470330
   partName = Part
+  persistentId = 1989697288
   pos = -0.168652594,5.90267706,0.76677978
   attPos = 0,0,0
   attPos0 = 8.94069672E-08,-0.0275631007,0.591099918
@@ -2283,6 +2226,7 @@ PART
 {
   part = rcsTankMini_4294463318
   partName = Part
+  persistentId = 84100738
   pos = -0.168653414,5.92433882,-1.28235996
   attPos = 0,0,0
   attPos0 = -0.86694032,0.0216627605,3.55672114E-08
@@ -2330,7 +2274,8 @@ PART
 {
   part = rcsTankMini_4294463064
   partName = Part
-  pos = -0.168651521,5.92433882,1.63372076
+  persistentId = 1166100313
+  pos = -0.168651521,5.92433882,1.63372099
   attPos = 0,0,0
   attPos0 = -0.866940498,0.0216627605,3.94102209E-08
   rot = -4.21468584E-08,-0.707107186,-4.214683E-08,-0.707106471

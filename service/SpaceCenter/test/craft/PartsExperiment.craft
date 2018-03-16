@@ -1,12 +1,17 @@
 ship = PartsExperiment
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 1.54151285,1.13253558,1.270908
+persistentId = 3520136064
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4294520352
   partName = Part
+  persistentId = 2017601902
   pos = 0.0480170697,1.11848795,-0.0263419207
   attPos = 0,0,0
   attPos0 = 0.0480170697,1.11848795,-0.0263419207
@@ -51,6 +56,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -274,6 +283,7 @@ PART
 {
   part = longAntenna_4294512792
   partName = Part
+  persistentId = 447202856
   pos = -0.332852364,1.43669105,-0.0263419002
   attPos = 0,0,0
   attPos0 = -0.380869508,0.318203002,2.27015899E-08
@@ -360,6 +370,7 @@ PART
 {
   part = GooExperiment_4294511786
   partName = Part
+  persistentId = 1244418558
   pos = 0.408639729,1.24346602,-0.0263418406
   attPos = 0,0,0
   attPos0 = 0.360622615,0.124978103,8.18242967E-08
@@ -446,6 +457,7 @@ PART
 {
   part = launchClamp1_4294505138
   partName = Part
+  persistentId = 426047182
   pos = 0.0480173491,0.230700731,1.68116999
   attPos = 0,0,0
   attPos0 = 2.719961E-07,-0.887786925,1.70751202

@@ -1,12 +1,17 @@
 ship = PartsReactionWheel
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 2.5,1.97377205,2.50000024
+persistentId = 3592607819
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4293811060
   partName = Part
+  persistentId = 3034282508
   pos = -0.0100210328,2.88632131,0.0315013155
   attPos = 0,0,0
   attPos0 = -0.0100210328,2.88632131,0.0315013155
@@ -29,7 +34,7 @@ PART
   modSize = 0,0,0
   link = advSasModule_4293802312
   link = launchClamp1_4293787246
-  attN = bottom,advSasModule_4293802312
+  attN = bottom,advSasModule_4293802312_0|-0.4050379|0
   EVENTS
   {
   }
@@ -51,6 +56,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -274,6 +283,7 @@ PART
 {
   part = advSasModule_4293802312
   partName = Part
+  persistentId = 1600280639
   pos = -0.0100210328,2.28225636,0.0315013155
   attPos = 0,0,0
   attPos0 = 0,-0.604064941,0
@@ -295,8 +305,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = asasmodule1-2_4293800080
-  attN = top,mk1pod_4293811060
-  attN = bottom,asasmodule1-2_4293800080
+  attN = top,mk1pod_4293811060_0|0.1990267|0
+  attN = bottom,asasmodule1-2_4293800080_0|-0.1990267|0
   EVENTS
   {
   }
@@ -346,6 +356,7 @@ PART
 {
   part = asasmodule1-2_4293800080
   partName = Part
+  persistentId = 3763678793
   pos = -0.0100210328,1.8332293,0.0315013155
   attPos = 0,0,0
   attPos0 = 0,-0.449027061,0
@@ -366,7 +377,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = top,advSasModule_4293802312
+  attN = top,advSasModule_4293802312_0|0.25|0
   EVENTS
   {
   }
@@ -416,6 +427,7 @@ PART
 {
   part = launchClamp1_4293787246
   partName = Part
+  persistentId = 3756454183
   pos = -1.68046165,2.09402752,0.0315021798
   attPos = 0,0,0
   attPos0 = -1.67044055,-0.792293787,8.64267349E-07

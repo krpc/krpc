@@ -1,12 +1,17 @@
 ship = PartsDockingPort
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 7.3781414,6.87176895,2.64765644
+persistentId = 1454108689
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = mk1pod_4294757656
   partName = Part
+  persistentId = 3916079055
   pos = -0.100811496,6.64805603,0.0404372402
   attPos = 0,0,0
   attPos0 = -0.100811496,6.64805603,0.0404372402
@@ -29,8 +34,8 @@ PART
   modSize = 0,0,0
   link = trussPiece1x_4294707260
   link = dockingPort1_4294746914
-  attN = bottom,trussPiece1x_4294707260
-  attN = top,dockingPort1_4294746914
+  attN = bottom,trussPiece1x_4294707260_0|-0.4050379|0
+  attN = top,dockingPort1_4294746914_0|0.6423756|0
   EVENTS
   {
   }
@@ -52,6 +57,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -275,6 +284,7 @@ PART
 {
   part = trussPiece1x_4294707260
   partName = Part
+  persistentId = 700425911
   pos = -0.100811496,5.68374491,0.0404372402
   attPos = 0,0,0
   attPos0 = 0,-0.964310586,0
@@ -298,8 +308,8 @@ PART
   link = stationHub_4294750608
   link = trussPiece3x_4294708012
   link = launchClamp1_4294747360
-  attN = bottom,stationHub_4294750608
-  attN = top,mk1pod_4294757656
+  attN = bottom,stationHub_4294750608_0|-0.5592728|0
+  attN = top,mk1pod_4294757656_0|0.5592728|0
   EVENTS
   {
   }
@@ -314,6 +324,7 @@ PART
 {
   part = stationHub_4294750608
   partName = Part
+  persistentId = 1762130180
   pos = -0.100811496,4.21231699,0.0404372402
   attPos = 0,0,0
   attPos0 = 0,-1.47142601,0
@@ -336,9 +347,9 @@ PART
   modSize = 0,0,0
   link = dockingPort3_4294741630
   link = mk2DockingPort_4294738612
-  attN = front,dockingPort3_4294741630
-  attN = top,trussPiece1x_4294707260
-  attN = bottom,mk2DockingPort_4294738612
+  attN = front,dockingPort3_4294741630_0|0|-0.9121535
+  attN = top,trussPiece1x_4294707260_0|0.9121535|0
+  attN = bottom,mk2DockingPort_4294738612_0|-0.9121535|0
   EVENTS
   {
   }
@@ -353,6 +364,7 @@ PART
 {
   part = dockingPort3_4294741630
   partName = Part
+  persistentId = 388626767
   pos = -0.100811496,4.21231699,-0.871716321
   attPos = 0,0,0
   attPos0 = 0,0,-0.912153482
@@ -373,7 +385,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = bottom,stationHub_4294750608
+  attN = bottom,stationHub_4294750608_0|0|0
   EVENTS
   {
   }
@@ -402,6 +414,10 @@ PART
         actionGroup = None
       }
       DecoupleAction
+      {
+        actionGroup = None
+      }
+      MakeReferenceToggle
       {
         actionGroup = None
       }
@@ -427,6 +443,7 @@ PART
 {
   part = mk2DockingPort_4294738612
   partName = Part
+  persistentId = 2566621037
   pos = -0.100811496,2.67516494,0.0404372402
   attPos = 0,0,0
   attPos0 = 0,-1.53715301,0
@@ -448,8 +465,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = dockingPortLateral_4294656828
-  attN = top,stationHub_4294750608
-  attN = bottom,dockingPortLateral_4294656828
+  attN = top,stationHub_4294750608_0|0.625|0
+  attN = bottom,dockingPortLateral_4294656828_0|-0.625|0
   EVENTS
   {
   }
@@ -478,6 +495,10 @@ PART
         actionGroup = None
       }
       DecoupleAction
+      {
+        actionGroup = None
+      }
+      MakeReferenceToggle
       {
         actionGroup = None
       }
@@ -554,6 +575,7 @@ PART
 {
   part = dockingPort1_4294746914
   partName = Part
+  persistentId = 4200462973
   pos = -0.100811496,7.29573584,0.0404372402
   attPos = 0,0,0
   attPos0 = 0,0.647684097,0
@@ -574,7 +596,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = bottom,mk1pod_4294757656
+  attN = bottom,mk1pod_4294757656_0|-0.005308203|0
   EVENTS
   {
   }
@@ -603,6 +625,10 @@ PART
         actionGroup = None
       }
       DecoupleAction
+      {
+        actionGroup = None
+      }
+      MakeReferenceToggle
       {
         actionGroup = None
       }
@@ -653,6 +679,7 @@ PART
 {
   part = trussPiece3x_4294708012
   partName = Part
+  persistentId = 1603415549
   pos = -1.90064204,5.6520648,0.0404372513
   attPos = 0,0,0
   attPos0 = -1.79982996,-0.0316781998,1.86264497E-08
@@ -690,6 +717,7 @@ PART
 {
   part = launchClamp1_4294747360
   partName = Part
+  persistentId = 305232351
   pos = 1.03068399,4.32170486,0.0404373594
   attPos = 0,0,0
   attPos0 = 1.13149595,-1.36203599,1.15483999E-07
@@ -794,6 +822,7 @@ PART
 {
   part = strutCube_4294696318
   partName = Part
+  persistentId = 1182967765
   pos = -2.4558959,5.19675493,0.0404372513
   attPos = 0,0,0
   attPos0 = 0,0.555254579,0.455307007
@@ -816,7 +845,7 @@ PART
   modSize = 0,0,0
   link = dockingPort2_4294740474
   srfN = srfAttach,trussPiece3x_4294708012
-  attN = top,dockingPort2_4294740474
+  attN = top,dockingPort2_4294740474_0|0.1287344|0
   EVENTS
   {
   }
@@ -831,6 +860,7 @@ PART
 {
   part = dockingPort2_4294740474
   partName = Part
+  persistentId = 444805879
   pos = -2.4558959,5.06802702,0.0404372513
   attPos = 0,0,0
   attPos0 = 0,0.128734604,-1.53463606E-08
@@ -852,8 +882,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = dockingPort2_4294689602
-  attN = top,dockingPort2_4294689602
-  attN = bottom,strutCube_4294696318
+  attN = top,dockingPort2_4294689602_0|0.2828832|0
+  attN = bottom,strutCube_4294696318_0|0|0
   EVENTS
   {
   }
@@ -882,6 +912,10 @@ PART
         actionGroup = None
       }
       DecoupleAction
+      {
+        actionGroup = None
+      }
+      MakeReferenceToggle
       {
         actionGroup = None
       }
@@ -907,6 +941,7 @@ PART
 {
   part = dockingPort2_4294689602
   partName = Part
+  persistentId = 3999921946
   pos = -2.4558959,4.50225449,0.0404372513
   attPos = 0,0,0
   attPos0 = -6.46758807E-08,0.565767288,-9.06179687E-10
@@ -928,7 +963,7 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = launchClamp1_4294711084
-  attN = top,dockingPort2_4294740474
+  attN = top,dockingPort2_4294740474_0|0.2828832|0
   EVENTS
   {
   }
@@ -960,6 +995,10 @@ PART
       {
         actionGroup = None
       }
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       EnableXFeedAction
       {
         actionGroup = None
@@ -982,6 +1021,7 @@ PART
 {
   part = trussPiece3x_4294650604
   partName = Part
+  persistentId = 2339841957
   pos = -4.75087881,5.62972593,0.0791303664
   attPos = 0,0,0
   attPos0 = 0.0386931188,2.85023808,0.0223398209
@@ -1019,10 +1059,11 @@ PART
 {
   part = strutCube_4294650578
   partName = Part
+  persistentId = 956483954
   pos = -5.30613279,5.17441702,0.0791302621
   attPos = 0,0,0
   attPos0 = 0,0.555254579,0.455307007
-  rot = 0.707106829,0,0.707106829,1.29770683E-09
+  rot = 0.707106829,0,0.707106829,6.48853415E-10
   attRot = 0,0,0,1
   attRot0 = 0.707106829,0,0,0.707106829
   mir = 1,1,1
@@ -1041,7 +1082,7 @@ PART
   modSize = 0,0,0
   link = dockingPortLarge_4294463484
   srfN = srfAttach,trussPiece3x_4294650604
-  attN = top,dockingPortLarge_4294463484
+  attN = top,dockingPortLarge_4294463484_0|0.1287344|0
   EVENTS
   {
   }
@@ -1056,6 +1097,7 @@ PART
 {
   part = launchClamp1_4294703550
   partName = Part
+  persistentId = 3223581495
   pos = -6.93279886,4.1937871,0.220305234
   attPos = 0,0,0
   attPos0 = 0.141175196,2.1819191,1.43594503
@@ -1160,7 +1202,8 @@ PART
 {
   part = launchClamp1_4294711084
   partName = Part
-  pos = -2.45589709,3.20414209,-1.31559968
+  persistentId = 815490934
+  pos = -2.45589709,3.20414162,-1.31559992
   attPos = 0,0,0
   attPos0 = -3.85046292E-07,-1.29811096,-1.35603702
   rot = 0,-2.38418579E-07,0,-1.00000012
@@ -1194,8 +1237,8 @@ PART
   {
     name = LaunchClamp
     isEnabled = True
-    scaleFactor = 1.53150666
-    height = 3.86429358
+    scaleFactor = 1.5315063
+    height = 3.86429286
     stagingEnabled = True
     towerRot = 0,3.27825518E-07,0,-1
     EVENTS
@@ -1264,6 +1307,7 @@ PART
 {
   part = dockingPortLarge_4294463484
   partName = Part
+  persistentId = 3372976054
   pos = -5.30613279,5.04568481,0.0791302621
   attPos = 0,0,0
   attPos0 = 0,0.128734604,-1.53463606E-08
@@ -1285,8 +1329,8 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = RCSFuelTank_4294480208
-  attN = top,RCSFuelTank_4294480208
-  attN = bottom,strutCube_4294650578
+  attN = top,RCSFuelTank_4294480208_0|0.29|0
+  attN = bottom,strutCube_4294650578_0|0|0
   EVENTS
   {
   }
@@ -1315,6 +1359,10 @@ PART
         actionGroup = None
       }
       DecoupleAction
+      {
+        actionGroup = None
+      }
+      MakeReferenceToggle
       {
         actionGroup = None
       }
@@ -1340,6 +1388,7 @@ PART
 {
   part = dockingPortLateral_4294656828
   partName = Part
+  persistentId = 138699700
   pos = -0.100811496,1.47485209,0.0404372402
   attPos = 0,0,0
   attPos0 = 0,-1.20031404,0
@@ -1360,7 +1409,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = top,mk2DockingPort_4294738612
+  attN = top,mk2DockingPort_4294738612_0|0.5753132|0
   EVENTS
   {
   }
@@ -1389,6 +1438,10 @@ PART
         actionGroup = None
       }
       DecoupleAction
+      {
+        actionGroup = None
+      }
+      MakeReferenceToggle
       {
         actionGroup = None
       }
@@ -1439,6 +1492,7 @@ PART
 {
   part = RCSFuelTank_4294480208
   partName = Part
+  persistentId = 856710009
   pos = -5.30613279,4.47038698,0.0791303217
   attPos = 0,0,0
   attPos0 = 6.01349797E-08,0.575303078,4.72121897E-09
@@ -1460,7 +1514,7 @@ PART
   modMass = 0
   modSize = 0,0,0
   link = launchClamp1_4294479826
-  attN = top,dockingPortLarge_4294463484
+  attN = top,dockingPortLarge_4294463484_0|0.2853027|0
   EVENTS
   {
   }
@@ -1486,7 +1540,8 @@ PART
 {
   part = launchClamp1_4294479826
   partName = Part
-  pos = -5.30613279,2.93944263,-1.3335712
+  persistentId = 69963981
+  pos = -5.30613279,2.93944168,-1.3335712
   attPos = 0,0,0
   attPos0 = -2.69591993E-07,-1.53093505,-1.41270101
   rot = 1.78813934E-07,-2.38418579E-07,8.94069672E-08,-1.00000012
@@ -1520,10 +1575,10 @@ PART
   {
     name = LaunchClamp
     isEnabled = True
-    scaleFactor = 1.42660022
-    height = 3.59959388
+    scaleFactor = 1.42659974
+    height = 3.59959292
     stagingEnabled = True
-    towerRot = -1.68587363E-07,2.08616228E-07,-4.21468869E-08,-1
+    towerRot = -1.68587363E-07,2.08616228E-07,-4.21468762E-08,-1
     EVENTS
     {
     }

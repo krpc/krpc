@@ -1,12 +1,17 @@
 ship = PartsFairing
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 2.44576693,5.23672867,2.4457674
+persistentId = 360828296
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = Mark1-2Pod_4294723380
   partName = Part
+  persistentId = 1915263711
   pos = -2.06279898,2.11558795,1.56610894
   attPos = 0,0,0
   attPos0 = -2.06279898,2.11558795,1.56610894
@@ -29,7 +34,7 @@ PART
   modSize = 0,0,0
   link = fairingSize1_4294642750
   link = launchClamp1_4294638038
-  attN = top,fairingSize1_4294642750
+  attN = top,fairingSize1_4294642750_0|1.19319|0
   EVENTS
   {
   }
@@ -51,6 +56,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -289,6 +298,7 @@ PART
 {
   part = fairingSize1_4294642750
   partName = Part
+  persistentId = 3349408489
   pos = -2.06279898,3.50877905,1.56610894
   attPos = 0,0,0
   attPos0 = 0,1.39319003,0
@@ -309,7 +319,7 @@ PART
   modCost = 58.46632
   modMass = 0.0974438637
   modSize = 0,0,0
-  attN = bottom,Mark1-2Pod_4294723380
+  attN = bottom,Mark1-2Pod_4294723380_0|-0.2|0
   EVENTS
   {
   }
@@ -609,11 +619,27 @@ PART
     {
     }
   }
+  MODULE
+  {
+    name = ModulePartVariants
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
 }
 PART
 {
   part = launchClamp1_4294638038
   partName = Part
+  persistentId = 1602265637
   pos = -4.20057583,1.41314697,2.13892508
   attPos = 0,0,0
   attPos0 = -2.13777709,-0.702441216,0.572815478

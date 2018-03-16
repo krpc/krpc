@@ -1,12 +1,17 @@
 ship = PartsParachute
-version = 1.3.0
+version = 1.4.1
 description =
 type = VAB
 size = 2.84467649,2.36631775,2.84467626
+persistentId = 2724584264
+rot = 0,0,0,1
+missionFlag = Squad/Flags/default
+vesselType = Debris
 PART
 {
   part = Mark1-2Pod_4294717130
   partName = Part
+  persistentId = 4284010209
   pos = 0.357510686,2.30789399,-1.18792498
   attPos = 0,0,0
   attPos0 = 0.357510686,2.30789399,-1.18792498
@@ -40,7 +45,7 @@ PART
   link = sepMotor1_4294412606
   link = sepMotor1_4294412550
   link = sepMotor1_4294412494
-  attN = top,parachuteLarge_4294709472
+  attN = top,parachuteLarge_4294709472_0|1.19319|0
   EVENTS
   {
   }
@@ -62,6 +67,10 @@ PART
     }
     ACTIONS
     {
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
       HibernateToggle
       {
         actionGroup = None
@@ -300,6 +309,7 @@ PART
 {
   part = parachuteLarge_4294709472
   partName = Part
+  persistentId = 572122844
   pos = 0.357510686,3.50315404,-1.18792498
   attPos = 0,0,0
   attPos0 = 0,1.19525504,0
@@ -320,7 +330,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  attN = bottom,Mark1-2Pod_4294717130
+  attN = bottom,Mark1-2Pod_4294717130_0|-0.0020649|0
   EVENTS
   {
   }
@@ -409,6 +419,7 @@ PART
 {
   part = parachuteRadial_4294708962
   partName = Part
+  persistentId = 3235670584
   pos = -0.459002912,2.79602408,-0.96914053
   attPos = 0,0,0
   attPos0 = -0.816513598,0.488128692,0.218784198
@@ -521,6 +532,7 @@ PART
 {
   part = parachuteRadial_4294708586
   partName = Part
+  persistentId = 3043020592
   pos = 0.57629478,2.79602408,-0.371411324
   attPos = 0,0,0
   attPos0 = 0.218784094,0.488128692,0.816513479
@@ -633,6 +645,7 @@ PART
 {
   part = parachuteRadial_4294708536
   partName = Part
+  persistentId = 3619524973
   pos = 1.17402399,2.79602408,-1.40670896
   attPos = 0,0,0
   attPos0 = 0.816513598,0.488128692,-0.218784198
@@ -745,6 +758,7 @@ PART
 {
   part = parachuteRadial_4294708486
   partName = Part
+  persistentId = 86148385
   pos = 0.138726503,2.79602408,-2.00443792
   attPos = 0,0,0
   attPos0 = -0.218784198,0.488128692,-0.816513479
@@ -857,6 +871,7 @@ PART
 {
   part = sepMotor1_4294517326
   partName = Part
+  persistentId = 3682984078
   pos = -0.591591597,2.18989396,-1.73588896
   attPos = 0,0,0
   attPos0 = -0.949102283,-0.118003801,-0.547964573
@@ -959,6 +974,7 @@ PART
 {
   part = sepMotor1_4294412830
   partName = Part
+  persistentId = 125424650
   pos = -0.701075315,2.18989396,-0.904277384
   attPos = 0,0,0
   attPos0 = -1.058586,-0.118003801,0.283647299
@@ -1061,6 +1077,7 @@ PART
 {
   part = sepMotor1_4294412774
   partName = Part
+  persistentId = 59719000
   pos = -0.190453887,2.18989396,-0.23882252
   attPos = 0,0,0
   attPos0 = -0.547964573,-0.118003801,0.949102223
@@ -1163,6 +1180,7 @@ PART
 {
   part = sepMotor1_4294412718
   partName = Part
+  persistentId = 2577772452
   pos = 0.641157687,2.18989396,-0.129338741
   attPos = 0,0,0
   attPos0 = 0.28364709,-0.118003801,1.058586
@@ -1265,6 +1283,7 @@ PART
 {
   part = sepMotor1_4294412662
   partName = Part
+  persistentId = 3854947032
   pos = 1.30661297,2.18989396,-0.639960229
   attPos = 0,0,0
   attPos0 = 0.949102283,-0.118003801,0.547964513
@@ -1367,6 +1386,7 @@ PART
 {
   part = sepMotor1_4294412606
   partName = Part
+  persistentId = 2564942526
   pos = 1.41609704,2.18989396,-1.47157204
   attPos = 0,0,0
   attPos0 = 1.058586,-0.118003801,-0.283647299
@@ -1469,6 +1489,7 @@ PART
 {
   part = sepMotor1_4294412550
   partName = Part
+  persistentId = 2859888958
   pos = 0.90547508,2.18989396,-2.13702703
   attPos = 0,0,0
   attPos0 = 0.547964513,-0.118003801,-0.949102283
@@ -1571,6 +1592,7 @@ PART
 {
   part = sepMotor1_4294412494
   partName = Part
+  persistentId = 1717687322
   pos = 0.0738631487,2.18989396,-2.24651098
   attPos = 0,0,0
   attPos0 = -0.283647507,-0.118003801,-1.058586
