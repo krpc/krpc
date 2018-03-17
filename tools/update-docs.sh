@@ -3,7 +3,7 @@
 # Update the documentation site
 # Must be run with master as the current bracnh and a clean working directory
 
-set -ev
+set -e
 
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 COMMIT=`git rev-parse HEAD`
@@ -30,7 +30,14 @@ git add .
 if [[ $(git diff --cached | wc -l) == 0 ]]; then
     echo "No changes to commit"
     git co $BRANCH
-    exit 1
+else
+    git commit -m "Update site from branch $BRANCH ($COMMIT)"
+    git co $BRANCH
 fi
-git commit -m "Update site from branch $BRANCH ($COMMIT)"
-git co $BRANCH
+
+if [[ $1 == "push" ]]; then
+    echo "Pushing to origin"
+    git co gh-pages
+    git push
+    git co $BRANCH
+fi
