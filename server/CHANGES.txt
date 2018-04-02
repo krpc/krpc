@@ -1,3 +1,6 @@
+v0.4.6
+ * Support for KSP 1.4.2
+
 v0.4.5
  * Support KSP 1.4.1
  * Update to protobuf v3.5.1
