@@ -4,7 +4,7 @@ services:
   - docker
 
 install:
-  - docker pull krpc/buildenv:1.6.0
+  - docker pull krpc/buildenv:1.7.0
 
 before_script:
   - ./tools/travis-ci/set-version.py
