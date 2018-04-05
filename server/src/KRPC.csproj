@@ -101,9 +101,9 @@
     <Compile Include="Server\ClientDisconnectedException.cs" />
     <Compile Include="Server\ClientEventArgs.cs" />
     <Compile Include="Server\ClientRequestingConnectionEventArgs.cs" />
+    <Compile Include="Server\HTTP\MalformedRequestException.cs" />
     <Compile Include="Server\HTTP\Request.cs" />
     <Compile Include="Server\HTTP\Response.cs" />
-    <Compile Include="Server\HTTP\MalformedRequestException.cs" />
     <Compile Include="Server\IClient.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Server\IStream.cs" />
@@ -219,6 +219,7 @@
     <Compile Include="Service\Stream.cs" />
     <Compile Include="Service\StreamContinuation.cs" />
     <Compile Include="Service\TypeUtils.cs" />
+    <Compile Include="Service\ValueUtils.cs" />
     <Compile Include="ServicesChecker.cs" />
     <Compile Include="UI\ClientConnectingDialog.cs" />
     <Compile Include="UI\ClientDisconnectDialog.cs" />

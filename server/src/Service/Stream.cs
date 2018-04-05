@@ -38,7 +38,7 @@ namespace KRPC.Service
                     throw new ArgumentNullException ("Result");
                 if (value.HasValue)
                     if (!ReferenceEquals(value.Value, null))
-                        Changed |= !value.Value.Equals (StreamResult.Result.Value);
+                        Changed |= !ValueUtils.Equal(value.Value, StreamResult.Result.Value);
                     else
                         Changed |= (ReferenceEquals(value.Value, null) ^ ReferenceEquals(StreamResult.Result.Value, null));
                 else

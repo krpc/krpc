@@ -85,6 +85,10 @@
     <Compile Include="Server\ProtocolBuffers\StreamServerTest.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamStreamTest.cs" />
     <Compile Include="Server\ProtocolBuffers\TestingTools.cs" />
+    <Compile Include="Server\SerialIO\ByteClientTest.cs" />
+    <Compile Include="Server\SerialIO\RPCServerTest.cs" />
+    <Compile Include="Server\SerialIO\RPCStreamTest.cs" />
+    <Compile Include="Server\SerialIO\TestingTools.cs" />
     <Compile Include="Server\TCP\AssumptionsTest.cs" />
     <Compile Include="Server\TCP\NetworkInformationTest.cs" />
     <Compile Include="Server\TCP\TCPClientTest.cs" />
@@ -100,6 +104,8 @@
     <Compile Include="Service\ClassMethodHandlerTest.cs" />
     <Compile Include="Service\DocumentationUtilsTest.cs" />
     <Compile Include="Service\ITestService.cs" />
+    <Compile Include="Service\KRPC\ExpressionTest.cs" />
+    <Compile Include="Service\KRPC\KRPCTest.cs" />
     <Compile Include="Service\MessageAssert.cs" />
     <Compile Include="Service\ObjectStoreTest.cs" />
     <Compile Include="Service\ProcedureHandlerTest.cs" />
@@ -111,19 +117,14 @@
     <Compile Include="Service\TestService3.cs" />
     <Compile Include="Service\TestTopLevelClass.cs" />
     <Compile Include="Service\TypeUtilsTest.cs" />
+    <Compile Include="Service\ValueUtilsTest.cs" />
     <Compile Include="TestingTools.cs" />
     <Compile Include="Utils\DocumentationExtensionsTest.cs" />
+    <Compile Include="Utils\DynamicBufferTest.cs" />
     <Compile Include="Utils\EquatableTest.cs" />
     <Compile Include="Utils\ReflectionTest.cs" />
     <Compile Include="Utils\RoundRobinSchedulerTest.cs" />
     <Compile Include="Utils\TupleTest.cs" />
-    <Compile Include="Utils\DynamicBufferTest.cs" />
-    <Compile Include="Server\SerialIO\ByteClientTest.cs" />
-    <Compile Include="Server\SerialIO\RPCServerTest.cs" />
-    <Compile Include="Server\SerialIO\RPCStreamTest.cs" />
-    <Compile Include="Server\SerialIO\TestingTools.cs" />
-    <Compile Include="Service\KRPC\KRPCTest.cs" />
-    <Compile Include="Service\KRPC\ExpressionTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service\KRPC\" />
