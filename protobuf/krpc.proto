@@ -3,6 +3,7 @@ package krpc.schema;
 option csharp_namespace = 'KRPC.Schema.KRPC';
 option java_package = 'krpc.schema';
 option java_outer_classname = 'KRPC';
+option objc_class_prefix = "KRPC";
 
 // Messages for connecting to the server
 
