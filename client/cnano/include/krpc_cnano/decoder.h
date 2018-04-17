@@ -1,10 +1,10 @@
 #pragma once
 
-#include <krpc/error.h>
-#include <krpc/krpc.pb.h>
-#include <krpc/types.h>
+#include <krpc_cnano/error.h>
+#include <krpc_cnano/krpc.pb.h>
+#include <krpc_cnano/types.h>
 
-#include <pb.h>
+#include <krpc_cnano/pb.h>
 
 #include <stdbool.h>
 #include <stddef.h>

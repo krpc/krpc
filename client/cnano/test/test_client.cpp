@@ -1,8 +1,8 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include <krpc.h>
-#include <krpc/services/krpc.h>
+#include <krpc_cnano.h>
+#include <krpc_cnano/services/krpc.h>
 
 #include <cstdio>
 #include <cstdlib>

@@ -27,5 +27,25 @@ cd build-cmake
 cmake .. -DCMAKE_INSTALL_PREFIX=`pwd`/../local-cmake
 make -j`nproc`
 make install -j`nproc`
+cd ..
+
+# Build test app
+echo "#include <stdio.h>
+#include <krpc_cnano.h>
+#include <krpc_cnano/services/krpc.h>
+int main() {
+  krpc_connection_t conn;
+  krpc_open(&conn, \"COM0\");
+  krpc_connect(conn, NULL);
+  krpc_schema_Status status;
+  krpc_KRPC_GetStatus(conn, &status);
+  printf(\"%s\n\", status.version);
+  return 0;
+}" > main.c
+mkdir -p test-configure test-cmake
+args="main.c -lkrpc_cnano -Wall -Werror"
+pwd
+gcc -Ilocal-configure/include -Llocal-configure/lib $args -o test-configure/main
+gcc -Ilocal-cmake/include -Llocal-cmake/lib $args -o test-cmake/main
 
 popd

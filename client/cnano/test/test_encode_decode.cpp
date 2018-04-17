@@ -1,10 +1,10 @@
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
 
-#include <krpc.h>
-#include <krpc/decoder.h>
-#include <krpc/encoder.h>
-#include <krpc/services/krpc.h>
+#include <krpc_cnano.h>
+#include <krpc_cnano/decoder.h>
+#include <krpc_cnano/encoder.h>
+#include <krpc_cnano/services/krpc.h>
 
 #include <algorithm>
 #include <cmath>

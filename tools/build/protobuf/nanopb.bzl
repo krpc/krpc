@@ -28,6 +28,8 @@ def _impl(ctx):
     protoc_nanopb_env = ctx.file._protoc_nanopb_env
     protoc_nanopb = ctx.files._protoc_nanopb
     protoc_nanopb_dir = protoc_nanopb[0].dirname+'/generator'
+    protoc_nanopb_opts = '-Q \\"#include \\\\\\"'+include+'/%s\\\\\\"\\" ' + \
+                         '-L \\"#include <'+include+'/%s>\\"'
 
     protoc_input = source.path + '.src-proto-nanopb'
     protoc_output = source.path + '.tmp-proto-nanopb'
@@ -40,10 +42,10 @@ def _impl(ctx):
         'mkdir -p %s' % protoc_output,
         'cp %s %s' % (input.path, protoc_input),
         'cp %s %s' % (options.path, protoc_input),
-        'PATH=%s/bin:%s:$PATH %s --nanopb_out=%s %s/%s' % (pyenv, protoc_nanopb_dir, protoc.path, protoc_output, protoc_input, input.basename),
+        'PATH=%s/bin:%s:$PATH %s "--nanopb_out=%s:%s" %s/%s' % (pyenv, protoc_nanopb_dir, protoc.path, protoc_nanopb_opts, protoc_output, protoc_input, input.basename),
         'cp %s/%s/*.pb.h %s' % (protoc_output, protoc_input, header.path),
-        'cp %s/%s/*.pb.c %s' % (protoc_output, protoc_input, source.path),
-        'sed -i \'s/#include ".\\+"/#include "%s"/g\' %s' % (include.replace('/', '\\/'), source.path)
+        'cp %s/%s/*.pb.c %s' % (protoc_output, protoc_input, source.path)
+        #'sed -i \'s/#include ".\\+"/#include "%s"/g\' %s' % (include.replace('/', '\\/'), source.path)
     ])
 
     ctx.action(

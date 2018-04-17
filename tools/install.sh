@@ -39,8 +39,6 @@ cp -R -L \
     service/UI/KRPC.UI.ksp \
     bazel-krpc/external/csharp_protobuf_net35/file/Google.Protobuf.dll \
     bazel-krpc/external/csharp_krpc_io_ports/file/KRPC.IO.Ports.dll \
-    bazel-bin/tools/TestingTools/TestingTools.dll \
-    bazel-bin/tools/TestingTools/TestingTools.xml \
     $GAMEDATA/
 
 mkdir -p $GAMEDATA/PluginData

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <krpc.h>
+#include <krpc_cnano.h>
 
 #include <string>
 

@@ -1,5 +1,5 @@
-#include <krpc.h>
-#include <krpc/services/krpc.h>
+#include <krpc_cnano.h>
+#include <krpc_cnano/services/krpc.h>
 
 int main() {
   krpc_connection_t conn;
