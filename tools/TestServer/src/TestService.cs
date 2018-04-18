@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
-using KRPC;
 using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
-using KRPC.Service.Messages;
 using KRPC.Utils;
 
 namespace TestServer
@@ -23,25 +22,25 @@ namespace TestServer
         [KRPCProcedure]
         public static string FloatToString (float value)
         {
-            return value.ToString ();
+            return value.ToString (CultureInfo.InvariantCulture);
         }
 
         [KRPCProcedure]
         public static string DoubleToString (double value)
         {
-            return value.ToString ();
+            return value.ToString (CultureInfo.InvariantCulture);
         }
 
         [KRPCProcedure]
         public static string Int32ToString (int value)
         {
-            return value.ToString ();
+            return value.ToString (CultureInfo.InvariantCulture);
         }
 
         [KRPCProcedure]
         public static string Int64ToString (long value)
         {
-            return value.ToString ();
+            return value.ToString (CultureInfo.InvariantCulture);
         }
 
         [KRPCProcedure]
@@ -66,7 +65,7 @@ namespace TestServer
         [KRPCProcedure]
         public static string AddMultipleValues (float x, int y, long z)
         {
-            return (x + y + z).ToString ();
+            return (x + y + z).ToString (CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -145,7 +144,7 @@ namespace TestServer
             [KRPCMethod]
             public string FloatToString (float x)
             {
-                return instanceValue + x;
+                return instanceValue + x.ToString (CultureInfo.InvariantCulture);
             }
 
             [KRPCMethod]
