@@ -60,7 +60,8 @@
     <Compile Include="..\..\..\bazel-bin\tools\TestingTools\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AutoLoadPersistentSaveOnStartup.cs" />
+    <Compile Include="AutoLoadGame.cs" />
+    <Compile Include="AutoSwitchVessel.cs" />
     <Compile Include="OrbitTools.cs" />
     <Compile Include="TestingTools.cs" />
   </ItemGroup>
