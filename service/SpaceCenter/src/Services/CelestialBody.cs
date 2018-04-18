@@ -399,8 +399,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public HashSet<string> Biomes {
             get {
-                CheckHasBiomes ();
-                return new HashSet<string> (InternalBody.BiomeMap.Attributes.Select (x => x.name));
+                var body = InternalBody;
+                if (body.BiomeMap == null)
+                    return new HashSet<string>();
+                return new HashSet<string> (body.BiomeMap.Attributes.Select (x => x.name));
             }
         }
 
