@@ -1,3 +1,7 @@
+v0.4.6
+ * Added SpaceCenter.GameMode (#455)
+ * Added SpaceCenter.Science, Funds and Reputation (#455)
+
 v0.4.5
  * Fixed roll input when input mode is override (#445)
  * Marked CelestialBody.Orbit as nullable, as it returns null for the sun
