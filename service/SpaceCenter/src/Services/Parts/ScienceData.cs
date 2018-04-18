@@ -47,7 +47,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float ScienceValue {
-            get { return GetScienceValue (1); }
+            get {
+                var subject = ResearchAndDevelopment.GetSubjectByID (data.subjectID);
+                if (subject == null)
+                    return 0;
+                return ResearchAndDevelopment.GetScienceValue (data.dataAmount, subject, 1) * HighLogic.CurrentGame.Parameters.Career.ScienceGainMultiplier;
+            }
         }
 
         /// <summary>
@@ -55,15 +60,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float TransmitValue {
-            get { return GetScienceValue (data.baseTransmitValue); }
+            get {
+                // Use ExperimentResultDialogPage to compute the science value
+                ExperimentResultDialogPage page = new ExperimentResultDialogPage(
+                    experiment.part, data, data.baseTransmitValue, data.transmitBonus,
+                    false, string.Empty, false,
+                    new ScienceLabSearch(experiment.part.vessel, data),
+                    null, null, null, null);
+                return page.baseTransmitValue * page.TransmitBonus;
+            }
         }
 
-        float GetScienceValue (float transmitValue)
-        {
-            var subject = ResearchAndDevelopment.GetSubjectByID (data.subjectID);
-            if (subject == null)
-                return 0;
-            return ResearchAndDevelopment.GetScienceValue (data.dataAmount, subject, transmitValue) * HighLogic.CurrentGame.Parameters.Career.ScienceGainMultiplier;
-        }
     }
 }

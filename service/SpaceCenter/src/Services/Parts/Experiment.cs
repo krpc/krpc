@@ -73,19 +73,27 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Transmit all experimental data contained by this part.
         /// </summary>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Performance", "ReviewLinqMethodRule")]
+        [SuppressMessage ("Gendarme.Rules.Performance", "DoNotIgnoreMethodResultRule")]
         public void Transmit ()
         {
             var data = experiment.GetData ();
-            if (!data.Any ())
-                return;
-            var transmitters = experiment.vessel.FindPartModulesImplementing<IScienceDataTransmitter> ();
-            if (!transmitters.Any ())
+            for (int i = 0; i < data.Length; i++) {
+                // Use ExperimentResultDialogPage to compute the science value
+                // This object creation modifies the data object
+                new ExperimentResultDialogPage(
+                    experiment.part, data[i], data[i].baseTransmitValue, data[i].transmitBonus,
+                    false, string.Empty, false,
+                    new ScienceLabSearch(experiment.part.vessel, data[i]),
+                    null, null, null, null);
+            }
+            var transmitter = ScienceUtil.GetBestTransmitter(experiment.vessel);
+            if (transmitter == null)
                 throw new InvalidOperationException ("No transmitters available to transmit the data");
-            transmitters.OrderBy (ScienceUtil.GetTransmitterScore).First ().TransmitData (data.ToList ());
-            if (!experiment.IsRerunnable ())
-                experiment.SetInoperable ();
-            Dump ();
+            transmitter.TransmitData (data.ToList ());
+            for (int i = 0; i < data.Length; i++)
+                experiment.DumpData(data[i]);
+            if (experiment.useCooldown)
+                experiment.cooldownToGo = experiment.cooldownTimer;
         }
 
         /// <summary>

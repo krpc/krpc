@@ -1,20 +1,20 @@
 ship = PartsExperiment
-version = 1.4.1
+version = 1.4.2
 description =
 type = VAB
-size = 1.54151285,1.13253558,1.270908
-persistentId = 3520136064
-rot = 0,0,0,1
+size = 1.54209089,2.17995071,1.270908
+persistentId = 1259692107
+rot = 0,0,0,0
 missionFlag = Squad/Flags/default
 vesselType = Debris
 PART
 {
-  part = mk1pod_4294520352
+  part = mk1pod_4294262216
   partName = Part
-  persistentId = 2017601902
-  pos = 0.0480170697,1.11848795,-0.0263419207
+  persistentId = 2129269208
+  pos = 0,15,0
   attPos = 0,0,0
-  attPos0 = 0.0480170697,1.11848795,-0.0263419207
+  attPos0 = 0,15,0
   rot = 0,0,0,1
   attRot = 0,0,0,1
   attRot0 = 0,0,0,1
@@ -32,9 +32,10 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  link = longAntenna_4294512792
-  link = GooExperiment_4294511786
-  link = launchClamp1_4294505138
+  link = longAntenna_4294259024
+  link = GooExperiment_4294257360
+  link = mk1pod_4294255412
+  attN = bottom,mk1pod_4294255412_0|-0.4050379|0
   EVENTS
   {
   }
@@ -118,7 +119,7 @@ PART
     {
       ToggleAction
       {
-        actionGroup = None
+        actionGroup = Light
       }
     }
     UPGRADESAPPLIED
@@ -281,15 +282,15 @@ PART
 }
 PART
 {
-  part = longAntenna_4294512792
+  part = longAntenna_4294259024
   partName = Part
-  persistentId = 447202856
-  pos = -0.332852364,1.43669105,-0.0263419002
+  persistentId = 3427621504
+  pos = -0.392870426,15.2855625,0.00500719249
   attPos = 0,0,0
-  attPos0 = -0.380869508,0.318203002,2.27015899E-08
-  rot = 0.400636494,-0.582657993,0.400636196,0.58265841
+  attPos0 = -0.392870426,0.285562515,0.00500719249
+  rot = 0.400636435,-0.582657993,0.400636166,0.58265841
   attRot = 0,0,0,1
-  attRot0 = 0.400636494,-0.582657993,0.400636196,0.58265841
+  attRot0 = 0.400636435,-0.582657993,0.400636166,0.58265841
   mir = 1,1,1
   symMethod = Radial
   autostrutMode = Off
@@ -304,7 +305,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  srfN = srfAttach,mk1pod_4294520352
+  srfN = srfAttach,mk1pod_4294262216
   EVENTS
   {
   }
@@ -368,15 +369,15 @@ PART
 }
 PART
 {
-  part = GooExperiment_4294511786
+  part = GooExperiment_4294257360
   partName = Part
-  persistentId = 1244418558
-  pos = 0.408639729,1.24346602,-0.0263418406
+  persistentId = 3045707647
+  pos = 0.349199772,15.1480532,-0.00207882049
   attPos = 0,0,0
-  attPos0 = 0.360622615,0.124978103,8.18242967E-08
-  rot = -0.128709003,0.695294023,-0.128708899,-0.69529438
+  attPos0 = 0.349199772,0.148053169,-0.00207882049
+  rot = -0.128708974,0.695293963,-0.128708884,-0.69529444
   attRot = 0,0,0,1
-  attRot0 = -0.128709003,0.695294023,-0.128708899,-0.69529438
+  attRot0 = -0.128708974,0.695293963,-0.128708884,-0.69529444
   mir = 1,1,1
   symMethod = Radial
   autostrutMode = Off
@@ -391,7 +392,7 @@ PART
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  srfN = srfAttach,mk1pod_4294520352
+  srfN = srfAttach,mk1pod_4294262216
   EVENTS
   {
   }
@@ -455,30 +456,30 @@ PART
 }
 PART
 {
-  part = launchClamp1_4294505138
+  part = mk1pod_4294255412
   partName = Part
-  persistentId = 426047182
-  pos = 0.0480173491,0.230700731,1.68116999
+  persistentId = 1983025587
+  pos = 0,13.9525862,0
   attPos = 0,0,0
-  attPos0 = 2.719961E-07,-0.887786925,1.70751202
-  rot = -1.99910097E-08,0.983294487,-0.182021797,-1.07992904E-07
+  attPos0 = 0,-1.04741383,0
+  rot = 0,0,0,1
   attRot = 0,0,0,1
-  attRot0 = -1.99910097E-08,0.983294487,-0.182021797,-1.07992904E-07
+  attRot0 = 0,0,0,1
   mir = 1,1,1
   symMethod = Radial
   autostrutMode = Off
   rigidAttachment = False
-  istg = 0
+  istg = -1
   resPri = 0
   dstg = 0
-  sidx = 0
-  sqor = 0
-  sepI = 0
-  attm = 1
+  sidx = -1
+  sqor = -1
+  sepI = -1
+  attm = 0
   modCost = 0
   modMass = 0
   modSize = 0,0,0
-  srfN = srfAttach,mk1pod_4294520352
+  attN = top,mk1pod_4294262216_0|0.6423756|0
   EVENTS
   {
   }
@@ -490,18 +491,57 @@ PART
   }
   MODULE
   {
-    name = LaunchClamp
+    name = ModuleCommand
     isEnabled = True
-    scaleFactor = 0.454796374
-    height = 1.14754081
+    hibernation = False
+    hibernateOnWarp = False
     stagingEnabled = True
-    towerRot = 1.99910097E-08,-0.983294487,0.182021797,-1.07992904E-07
     EVENTS
     {
     }
     ACTIONS
     {
-      ReleaseClamp
+      MakeReferenceToggle
+      {
+        actionGroup = None
+      }
+      HibernateToggle
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleReactionWheel
+    isEnabled = True
+    actuatorModeCycle = 0
+    authorityLimiter = 100
+    stateString = Active
+    stagingEnabled = True
+    WheelState = Active
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      CycleAction
+      {
+        actionGroup = None
+      }
+      Activate
+      {
+        actionGroup = None
+      }
+      Deactivate
+      {
+        actionGroup = None
+      }
+      Toggle
       {
         actionGroup = None
       }
@@ -512,10 +552,9 @@ PART
   }
   MODULE
   {
-    name = ModuleGenerator
+    name = ModuleColorChanger
     isEnabled = True
-    generatorIsActive = False
-    throttle = 0
+    animState = False
     stagingEnabled = True
     EVENTS
     {
@@ -524,18 +563,7 @@ PART
     {
       ToggleAction
       {
-        actionGroup = None
-        active = False
-      }
-      ActivateAction
-      {
-        actionGroup = None
-        active = False
-      }
-      ShutdownAction
-      {
-        actionGroup = None
-        active = False
+        actionGroup = Light
       }
     }
     UPGRADESAPPLIED
@@ -544,7 +572,68 @@ PART
   }
   MODULE
   {
-    name = ModuleTestSubject
+    name = ModuleScienceExperiment
+    isEnabled = True
+    Deployed = False
+    Inoperable = False
+    cooldownToGo = 0
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      DeployAction
+      {
+        actionGroup = None
+      }
+      ResetAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleScienceContainer
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      CollectAllAction
+      {
+        actionGroup = None
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = FlagDecal
+    isEnabled = True
+    flagDisplayed = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleConductionMultiplier
     isEnabled = True
     stagingEnabled = True
     EVENTS
@@ -556,5 +645,82 @@ PART
     UPGRADESAPPLIED
     {
     }
+  }
+  MODULE
+  {
+    name = ModuleDataTransmitter
+    isEnabled = True
+    xmitIncomplete = False
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+      StartTransmissionAction
+      {
+        actionGroup = None
+        active = False
+      }
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleLiftingSurface
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  MODULE
+  {
+    name = ModuleTripLogger
+    isEnabled = True
+    stagingEnabled = True
+    EVENTS
+    {
+    }
+    ACTIONS
+    {
+    }
+    Log
+    {
+      flight = 0
+    }
+    UPGRADESAPPLIED
+    {
+    }
+  }
+  RESOURCE
+  {
+    name = ElectricCharge
+    amount = 50
+    maxAmount = 50
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
+  }
+  RESOURCE
+  {
+    name = MonoPropellant
+    amount = 10
+    maxAmount = 10
+    flowState = True
+    isTweakable = True
+    hideFlow = False
+    isVisible = True
+    flowMode = Both
   }
 }
