@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # Run the Travis CI tests locally using Docker
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $ROOT/../..
 bazel clean
 rm -rf deploy
 docker run -t -i \
