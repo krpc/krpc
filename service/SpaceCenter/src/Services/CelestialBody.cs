@@ -397,6 +397,7 @@ namespace KRPC.SpaceCenter.Services
         /// The biomes present on this body.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public HashSet<string> Biomes {
             get {
                 var body = InternalBody;
