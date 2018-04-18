@@ -134,7 +134,7 @@ class TestBody(krpctest.TestCase):
         self.assertTrue(sun.has_atmosphere)
         self.assertAlmostEqual(600000, sun.atmosphere_depth)
         self.assertFalse(sun.has_atmospheric_oxygen)
-        self.assertRaises(RuntimeError, getattr, sun, 'biomes')
+        self.assertEqual([], sorted(sun.biomes))
         self.assertRaises(RuntimeError, sun.biome_at, 0, 0)
         self.assertRaises(RuntimeError, sun.biome_at, 42, 4)
         self.assertEqual(18000, sun.flying_high_altitude_threshold)

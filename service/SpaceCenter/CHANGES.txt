@@ -1,6 +1,7 @@
 v0.4.6
  * Added SpaceCenter.GameMode (#455)
  * Added SpaceCenter.Science, Funds and Reputation (#455)
+ * Change CelestialBody.Biomes to return an empty list instead of throwing an exception if the body has no biomes (#457)
 
 v0.4.5
  * Fixed roll input when input mode is override (#445)
