@@ -30,6 +30,14 @@ class TestSpaceCenter(krpctest.TestCase):
         cls.ref_nr_kerbin = cls.kerbin.non_rotating_reference_frame
         cls.ref_nr_mun = cls.mun.non_rotating_reference_frame
 
+    def test_game_mode(self):
+        self.assertEqual(self.sc.GameMode.sandbox, self.sc.game_mode)
+
+    def test_career_parameters(self):
+        self.assertRaises(RuntimeError, getattr, self.sc, 'science')
+        self.assertRaises(RuntimeError, getattr, self.sc, 'funds')
+        self.assertRaises(RuntimeError, getattr, self.sc, 'reputation')
+
     def test_launchable_vessels(self):
         # TODO: implement test
         # print self.sc.launchable_vessels("SPH")
@@ -473,6 +481,22 @@ class TestWarpInSpace(krpctest.TestCase, WarpTestBase):
         cls.maximum_rails_warp_factor = 7
         cls.landed = False
         cls.wait(1)  # TODO: why is this wait needed?
+
+
+class TestSpaceCenterCareer(krpctest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save('krpctest_career', always_load=True)
+        cls.sc = cls.connect().space_center
+
+    def test_game_mode(self):
+        self.assertEquals(self.sc.GameMode.career, self.sc.game_mode)
+
+    def test_career_parameters(self):
+        self.assertAlmostEquals(12, self.sc.science, places=3)
+        self.assertAlmostEquals(100352.04, self.sc.funds, places=3)
+        self.assertAlmostEquals(9, self.sc.reputation, places=3)
 
 
 if __name__ == '__main__':

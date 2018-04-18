@@ -23,6 +23,52 @@ namespace KRPC.SpaceCenter.Services
     public static class SpaceCenter
     {
         /// <summary>
+        /// The current mode the game is in.
+        /// </summary>
+        [KRPCProperty]
+        public static GameMode GameMode {
+            get { return HighLogic.CurrentGame.Mode.ToGameMode(); }
+        }
+
+        /// <summary>
+        /// The current amount of science.
+        /// </summary>
+        [KRPCProperty]
+        public static float Science
+        {
+            get {
+                if (ReferenceEquals(ResearchAndDevelopment.Instance, null))
+                    throw new InvalidOperationException("Science not available");
+                return ResearchAndDevelopment.Instance.Science;
+            }
+        }
+
+        /// <summary>
+        /// The current amount of funds.
+        /// </summary>
+        [KRPCProperty]
+        public static double Funds {
+            get {
+                if (ReferenceEquals(Funding.Instance, null))
+                    throw new InvalidOperationException("Funding not available");
+                return Funding.Instance.Funds;
+            }
+        }
+
+        /// <summary>
+        /// The current amount of reputation.
+        /// </summary>
+        [KRPCProperty]
+        public static float Reputation
+        {
+            get {
+                if (ReferenceEquals(global::Reputation.Instance, null))
+                    throw new InvalidOperationException("Reputation not available");
+                return global::Reputation.Instance.reputation;
+            }
+        }
+
+        /// <summary>
         /// The currently active vessel.
         /// </summary>
         [KRPCProperty]

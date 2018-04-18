@@ -79,9 +79,11 @@
     <Compile Include="ExtensionMethods\ContractStateExtensions.cs" />
     <Compile Include="ExtensionMethods\FlightCameraModeExtensions.cs" />
     <Compile Include="ExtensionMethods\FlightGlobalsExtensions.cs" />
+    <Compile Include="ExtensionMethods\GameModeExtensions.cs" />
     <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
     <Compile Include="ExtensionMethods\HopTypeExtensions.cs" />
     <Compile Include="ExtensionMethods\ITorqueProviderExtensions.cs" />
+    <Compile Include="ExtensionMethods\KerbalTypeExtensions.cs" />
     <Compile Include="ExtensionMethods\MotorStateExtensions.cs" />
     <Compile Include="ExtensionMethods\ParachuteStateExtensions.cs" />
     <Compile Include="ExtensionMethods\PartExtensions.cs" />
@@ -178,6 +180,6 @@
     <Compile Include="Services\WaypointManager.cs" />
     <Compile Include="Services\CrewMember.cs" />
     <Compile Include="Services\CrewMemberType.cs" />
-    <Compile Include="ExtensionMethods\KerbalTypeExtensions.cs" />
+    <Compile Include="Services\GameMode.cs" />
   </ItemGroup>
 </Project>
