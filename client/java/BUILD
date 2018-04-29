@@ -88,7 +88,7 @@ client_test(
     test_executable = ':testexe',
     server_executable = '//tools/TestServer',
     tags = ['requires-network'],
-    size = 'medium',
+    size = 'small',
     visibility = ['//:__pkg__']
 )
 

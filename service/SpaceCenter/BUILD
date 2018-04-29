@@ -48,7 +48,7 @@ py_lint_test(
     srcs = glob(['test/*.py']),
     pylint_config = 'test/pylint.rc',
     deps = ['//client/python', '//tools/krpctest'],
-    size = 'small'
+    size = 'medium'
 )
 
 csharp_library(
