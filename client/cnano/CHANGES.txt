@@ -1,3 +1,6 @@
+v0.4.6
+ * Include directory and main header now suffixed with "_cnano" to avoid name clashes with C++ client
+
 v0.4.5
  * Fix connection timing out on Arduino when connecting to a server with new client confirmation enabled (#446)
 

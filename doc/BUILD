@@ -277,7 +277,7 @@ filegroup(
 cc_binary_multiple(
     name = 'compile-scripts-cnano',
     srcs = glob(['src/scripts/**/*.c']),
-    deps = ['//client/cnano:krpc']
+    deps = ['//client/cnano:krpc_cnano']
 )
 
 csharp_binary_multiple(

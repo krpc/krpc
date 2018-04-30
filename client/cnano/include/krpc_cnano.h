@@ -1,8 +1,8 @@
 #pragma once
 
-#include "krpc/communication.h"
-#include "krpc/error.h"
-#include "krpc/krpc.pb.h"
+#include "krpc_cnano/communication.h"
+#include "krpc_cnano/error.h"
+#include "krpc_cnano/krpc.pb.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,7 +1,7 @@
 #include <math.h>
 #include <unistd.h>
-#include <krpc.h>
-#include <krpc/services/space_center.h>
+#include <krpc_cnano.h>
+#include <krpc_cnano/services/space_center.h>
 
 static double pi = 3.1415926535897;
 typedef krpc_tuple_double_double_double_t vector3;

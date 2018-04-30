@@ -54,6 +54,7 @@ cc_library(
     srcs = ['pb.h', 'pb_common.h', 'pb_common.c', 'pb_encode.h', 'pb_encode.c', 'pb_decode.h', 'pb_decode.c'],
     hdrs = ['pb.h', 'pb_common.h', 'pb_encode.h', 'pb_decode.h'],
     includes = ['./'],
+    include_prefix = 'krpc_cnano', # FIXME: don't do this here
     visibility = ['//visibility:public']
 )
 

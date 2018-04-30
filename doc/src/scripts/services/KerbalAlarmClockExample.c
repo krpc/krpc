@@ -1,6 +1,6 @@
-#include <krpc.h>
-#include <krpc/services/space_center.h>
-#include <krpc/services/kerbal_alarm_clock.h>
+#include <krpc_cnano.h>
+#include <krpc_cnano/services/space_center.h>
+#include <krpc_cnano/services/kerbal_alarm_clock.h>
 
 int main() {
   krpc_connection_t conn;

@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <math.h>
-#include <krpc.h>
-#include <krpc/services/space_center.h>
+#include <krpc_cnano.h>
+#include <krpc_cnano/services/space_center.h>
 
 typedef krpc_tuple_double_double_double_t vector3;
 
