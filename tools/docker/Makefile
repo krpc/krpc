@@ -1,6 +1,6 @@
 .PHONY: build deploy
 
-VERSION=1.7.0
+VERSION=1.8.0
 
 build:
 	tar -cf ./krpc.tar ../.. --exclude="bazel-*" --exclude=.git*
@@ -9,6 +9,9 @@ build:
 		-t krpc/buildenv .
 	rm krpc.tar
 	docker tag krpc/buildenv krpc/buildenv:$(VERSION)
+
+test:
+	docker run -t -i krpc/buildenv:$(VERSION)
 
 deploy:
 	docker push krpc/buildenv
