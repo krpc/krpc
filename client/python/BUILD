@@ -50,7 +50,7 @@ client_test(
     test_executable = ':py3test',
     server_executable = '//tools/TestServer',
     tags = ['requires-network'],
-    size = 'small'
+    size = 'medium'
 )
 
 deps = ['@python_protobuf//file']
