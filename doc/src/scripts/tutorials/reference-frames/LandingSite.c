@@ -1,9 +1,9 @@
 #include <unistd.h>
 #include <math.h>
-#include <krpc.h>
-#include <krpc/services/space_center.h>
-#include <krpc/services/ui.h>
-#include <krpc/services/drawing.h>
+#include <krpc_cnano.h>
+#include <krpc_cnano/services/space_center.h>
+#include <krpc_cnano/services/ui.h>
+#include <krpc_cnano/services/drawing.h>
 
 typedef krpc_tuple_double_double_double_t vector3;
 typedef krpc_tuple_double_double_double_double_t quaternion;

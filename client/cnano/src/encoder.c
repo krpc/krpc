@@ -1,17 +1,17 @@
-#include <krpc/encoder.h>
+#include <krpc_cnano/encoder.h>
 
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
 
-#include <pb.h>
-#include <pb_encode.h>
+#include <krpc_cnano/pb.h>
+#include <krpc_cnano/pb_encode.h>
 
-#include <krpc/error.h>
-#include <krpc/krpc.pb.h>
-#include <krpc/types.h>
+#include <krpc_cnano/error.h>
+#include <krpc_cnano/krpc.pb.h>
+#include <krpc_cnano/types.h>
 #ifdef __AVR__
-#include <krpc/utils.h>
+#include <krpc_cnano/utils.h>
 #endif
 
 bool krpc_encode_callback_cstring(

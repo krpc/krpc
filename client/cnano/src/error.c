@@ -1,4 +1,4 @@
-#include <krpc/error.h>
+#include <krpc_cnano/error.h>
 
 #ifdef KRPC_ERROR_CHECK_FN
 void (*krpc_error_handler)(krpc_error_t);

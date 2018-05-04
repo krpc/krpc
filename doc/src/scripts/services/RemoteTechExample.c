@@ -1,6 +1,6 @@
-#include <krpc.h>
-#include <krpc/services/space_center.h>
-#include <krpc/services/remote_tech.h>
+#include <krpc_cnano.h>
+#include <krpc_cnano/services/space_center.h>
+#include <krpc_cnano/services/remote_tech.h>
 
 int main() {
   krpc_connection_t conn;

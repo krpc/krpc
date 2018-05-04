@@ -36,7 +36,7 @@ autotools_dist(
     ],
     path_map = {
         '../c_nanopb/LICENSE.txt': '%s/LICENSE.nanopb' % name,
-        '../c_nanopb/*.h': '%s/include/' % name,
+        '../c_nanopb/*.h': '%s/include/krpc_cnano/' % name,
         '../c_nanopb/*.c': '%s/src/' % name,
         'client/cnano/': '%s/' % name,
         'COPYING': '%s/COPYING' % name,
@@ -65,49 +65,49 @@ clientgen_cnano(
     name = 'services-krpc',
     service = 'KRPC',
     defs = '//server:ServiceDefinitions',
-    out = 'include/krpc/services/krpc.h'
+    out = 'include/krpc_cnano/services/krpc.h'
 )
 
 clientgen_cnano(
     name = 'services-spacecenter',
     service = 'SpaceCenter',
     defs = '//service/SpaceCenter:ServiceDefinitions',
-    out = 'include/krpc/services/space_center.h'
+    out = 'include/krpc_cnano/services/space_center.h'
 )
 
 clientgen_cnano(
     name = 'services-drawing',
     service = 'Drawing',
     defs = '//service/Drawing:ServiceDefinitions',
-    out = 'include/krpc/services/drawing.h'
+    out = 'include/krpc_cnano/services/drawing.h'
 )
 
 clientgen_cnano(
     name = 'services-infernalrobotics',
     service = 'InfernalRobotics',
     defs = '//service/InfernalRobotics:ServiceDefinitions',
-    out = 'include/krpc/services/infernal_robotics.h'
+    out = 'include/krpc_cnano/services/infernal_robotics.h'
 )
 
 clientgen_cnano(
     name = 'services-kerbalalarmclock',
     service = 'KerbalAlarmClock',
     defs = '//service/KerbalAlarmClock:ServiceDefinitions',
-    out = 'include/krpc/services/kerbal_alarm_clock.h'
+    out = 'include/krpc_cnano/services/kerbal_alarm_clock.h'
 )
 
 clientgen_cnano(
     name = 'services-remotetech',
     service = 'RemoteTech',
     defs = '//service/RemoteTech:ServiceDefinitions',
-    out = 'include/krpc/services/remote_tech.h'
+    out = 'include/krpc_cnano/services/remote_tech.h'
 )
 
 clientgen_cnano(
     name = 'services-ui',
     service = 'UI',
     defs = '//service/UI:ServiceDefinitions',
-    out = 'include/krpc/services/ui.h'
+    out = 'include/krpc_cnano/services/ui.h'
 )
 
 clientgen_cnano(
@@ -129,7 +129,7 @@ hdrs = glob(['include/**/*.h']) + [
 ]
 
 cc_library(
-    name = 'krpc',
+    name = 'krpc_cnano',
     srcs = srcs + [':protobuf'],
     hdrs = hdrs + [':protobuf'],
     includes = ['include'],
@@ -162,7 +162,7 @@ cc_binary(
     name = 'cnanotest',
     srcs = test_srcs,
     includes = ['test'],
-    deps = [':krpc', '@cpp_googletest//:gtest', '@cpp_googletest//:gmock']
+    deps = [':krpc_cnano', '@cpp_googletest//:gtest', '@cpp_googletest//:gmock']
 )
 
 cpp_check_test(
@@ -179,16 +179,16 @@ cpp_lint_test(
     hdrs = hdrs,
     includes = ['include'],
     filters = ['+build/include_alpha', '-legal/copyright', '-readability/todo', '-readability/casting', '-build/header_guard'],
-    extra_files = ['include/krpc/services/CPPLINT.cfg', 'test/services/CPPLINT.cfg'],
+    extra_files = ['include/krpc_cnano/services/CPPLINT.cfg', 'test/services/CPPLINT.cfg'],
     size = 'small'
 )
 
 #TODO: use targets in //protobuf:... instead of the following
 protobuf_nanopb(
     name = 'protobuf',
-    header = 'include/krpc/krpc.pb.h',
+    header = 'include/krpc_cnano/krpc.pb.h',
     source = 'src/krpc.pb.c',
-    include = 'krpc/krpc.pb.h',
+    include = 'krpc_cnano',
     src = '//protobuf:krpc.proto',
     options = 'src/krpc.options'
 )

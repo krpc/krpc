@@ -4,7 +4,7 @@ project(kRPC-cnano)
 set(VERSION_NUMBER %VERSION%)
 set(CMAKE_BUILD_TYPE "Release")
 
-include_directories(include include/krpc)
+include_directories(include include/krpc_cnano)
 
 file(GLOB SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 add_library(krpc_cnano STATIC ${SRC})

@@ -1,7 +1,7 @@
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
 
-#include <krpc/utils.h>
+#include <krpc_cnano/utils.h>
 
 #include "gtest/gtest.h"
 

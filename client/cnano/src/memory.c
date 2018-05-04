@@ -1,4 +1,4 @@
-#include <krpc/memory.h>
+#include <krpc_cnano/memory.h>
 
 #include <assert.h>
 #include <stdint.h>
