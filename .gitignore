@@ -5,3 +5,10 @@ bin
 obj
 KSP.log
 PartDatabase.cfg
+
+# Visual Studio Code
+.vs/
+
+# Jetbrains' Rider and friends
+.idea/
+
