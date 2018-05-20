@@ -8,6 +8,13 @@ AC_LANG([C++])
 AX_CXX_COMPILE_STDCXX_11(noext, mandatory)
 AC_PROG_LIBTOOL
 PKG_CHECK_MODULES([protobuf], [protobuf >= 3.3])
+AC_CHECK_PROG(PROTOC,protoc,protoc,no)
+AM_CONDITIONAL([HAVE_PROTOC], [test x$PROTOC = xprotoc])
+AC_CHECK_PROG(CP,cp,cp)
+AC_CHECK_PROG(RM,rm,rm -f)
+AC_CHECK_PROG(MV,mv,mv)
+AC_CHECK_PROG(MKDIR,mkdir,mkdir)
+AC_CHECK_PROG(SED,sed,sed)
 AC_DEFINE([ASIO_STANDALONE], [1], [Define ASIO standalone])
 case $host in
   *-*-linux*)

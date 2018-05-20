@@ -1,5 +1,6 @@
 v0.4.6
  * Add methods to remove callbacks from streams and events (#451)
+ * Improve Autotools and CMake build scripts to regenerate the protobuf source if protoc is installed
 
 v0.4.5
  * Update to protobuf v3.5.1

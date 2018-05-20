@@ -25,7 +25,7 @@ protobuf_cpp(
     name = 'cpp',
     header = 'krpc.pb.hpp',
     source = 'krpc.pb.cpp',
-    include = 'krpc.pb.hpp',
+    include = 'krpc/krpc.pb.hpp',
     src = 'krpc.proto'
 )
 
