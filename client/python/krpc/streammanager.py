@@ -70,6 +70,11 @@ class StreamImpl(object):
             self._callbacks.append(callback)
             return self._callbacks
 
+    def remove_callback(self, callback):
+        with self._update_lock:
+            self._callbacks = [x for x in self._callbacks if x != callback]
+            return self._callbacks
+
     def remove(self):
         self._conn._stream_manager.remove_stream(self._stream_id)
         with self._update_lock:

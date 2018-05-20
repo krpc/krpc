@@ -92,14 +92,23 @@ public class Event implements Comparable<Event> {
 
   /**
    * Add a callback that is invoked whenever the stream is updated.
+   * Returns an integer tag for the callback which uniquely identifies it,
+   * and allows it to be removed using removeCallback()
    */
-  public void addCallback(Runnable callback) {
-    stream.addCallback(
+  public int addCallback(Runnable callback) {
+    return stream.addCallback(
         (Boolean value) -> {
           if (value) {
             callback.run();
           }
         });
+  }
+
+  /**
+   * Remove a callback, based on its tag.
+   */
+  public void removeCallback(int tag) {
+    stream.removeCallback(tag);
   }
 
   /**

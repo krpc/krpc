@@ -83,7 +83,7 @@ void StreamManager::update(google::protobuf::uint64 id, const schema::ProcedureR
   }
   stream->get_condition().notify_all();
   for (auto callback : stream->get_callbacks())
-    callback(stream->get_data());
+    callback.second(stream->get_data());
 }
 
 void StreamManager::freeze() {

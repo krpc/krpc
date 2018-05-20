@@ -95,6 +95,20 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         self.assertGreater(time.time()-start_time, 0.95)
         self.assertEqual(self.test_event_callback_loop_count, 5)
 
+    def test_event_remove_callback(self):
+        event = self.conn.test_service.on_timer(200)
+        called1 = threading.Event()
+        called2 = threading.Event()
+        event.add_callback(called1.set)
+        event.add_callback(called2.set)
+        event.remove_callback(called2.set)
+        start_time = time.time()
+        event.start()
+        called1.wait(1)
+        self.assertAlmostEqual(time.time()-start_time, 0.2, delta=0.05)
+        self.assertTrue(called1.is_set())
+        self.assertFalse(called2.is_set())
+
     def test_custom_event(self):
         expression = self.conn.krpc.Expression
 

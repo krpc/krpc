@@ -108,7 +108,7 @@ namespace KRPC.Client
                     stream.Value = value;
                     Monitor.PulseAll (condition);
                 }
-                foreach (var callback in stream.Callbacks)
+                foreach (var callback in stream.Callbacks.Values)
                     callback (value);
             }
         }

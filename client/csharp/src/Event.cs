@@ -104,8 +104,15 @@ namespace KRPC.Client
         /// <summary>
         /// Add a callback that is invoked whenever the stream is updated.
         /// </summary>
-        public void AddCallback (Action callback) {
-            stream.AddCallback ((bool x) => { if (x) callback(); });
+        public int AddCallback (Action callback) {
+            return stream.AddCallback ((bool x) => { if (x) callback(); });
+        }
+
+        /// <summary>
+        /// Remove a callback, based on its key.
+        /// </summary>
+        public void RemoveCallback (int key) {
+            stream.RemoveCallback (key);
         }
 
         /// <summary>

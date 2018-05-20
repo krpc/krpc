@@ -1,3 +1,6 @@
+v0.4.6
+ * Add methods to remove callbacks from streams and events (#451)
+
 v0.4.5
  * Update to protobuf v3.5.1
 

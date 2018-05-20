@@ -49,8 +49,12 @@ void Event::wait(double timeout) {
   }
 }
 
-void Event::add_callback(const Callback& callback) {
-  _stream.add_callback([callback] (bool _) { callback(); });
+int Event::add_callback(const Callback& callback) {
+  return _stream.add_callback([callback] (bool _) { callback(); });
+}
+
+void Event::remove_callback(int tag) {
+  return _stream.remove_callback(tag);
 }
 
 void Event::remove() {

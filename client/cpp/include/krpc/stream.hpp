@@ -1,6 +1,7 @@
 #pragma once
 
 #include <condition_variable>  // NOLINT(build/c++11)
+#include <map>
 #include <string>
 
 #include "krpc/client.hpp"
@@ -37,8 +38,14 @@ class Stream {
       operation times out after that many seconds. */
   void wait(double timeout = -1);
   typedef std::function<void(T)> Callback;
-  /** Add a callback that is invoked whenever the stream is updated */
-  void add_callback(const Callback& callback);
+  /**
+   * Add a callback that is invoked whenever the stream is updated.
+   * Returns an integer tag for the callback which uniquely identifies it,
+   * and allows it to be removed using remove_callback()
+   */
+  int add_callback(const Callback& callback);
+  /** Remove a callback, based on its tag */
+  void remove_callback(int tag);
   void remove();
   bool operator==(const Stream<T>& rhs) const;
   bool operator!=(const Stream<T>& rhs) const;
@@ -133,14 +140,19 @@ template <typename T> inline void Stream<T>::wait(double timeout) {
   }
 }
 
-template <typename T> inline void Stream<T>::add_callback(const Callback& callback) {
+template <typename T> inline int Stream<T>::add_callback(const Callback& callback) {
   check_exists();
   auto callback_wrapper = [this, callback] (const std::string& data) {
     T value;
     decoder::decode(value, data, this->impl->get_client());
     callback(value);
   };
-  impl->add_callback(callback_wrapper);
+  return impl->add_callback(callback_wrapper);
+}
+
+template <typename T> inline void Stream<T>::remove_callback(int tag) {
+  check_exists();
+  impl->remove_callback(tag);
 }
 
 template <typename T> inline void Stream<T>::remove() {

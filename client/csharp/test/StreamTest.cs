@@ -327,6 +327,28 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void TestRemoveCallback () {
+            var stop = new ManualResetEvent (false);
+            var called1 = false;
+            var called2 = false;
+            var s = Connection.AddStream (
+                () => Connection.TestService ().Counter ("StreamTest.TestRemoveCallback", 10));
+            s.AddCallback ((int x) => {
+                called1 = true;
+                stop.Set ();
+            });
+            int callback2Tag = s.AddCallback (
+                (int x) => called2 = true
+            );
+            s.RemoveCallback (callback2Tag);
+            s.Start();
+            stop.WaitOne ();
+            s.Remove();
+            Assert.IsTrue(called1);
+            Assert.IsFalse(called2);
+        }
+
+        [Test]
         public void TestRate () {
             var stop = new ManualResetEvent (false);
             var error = false;

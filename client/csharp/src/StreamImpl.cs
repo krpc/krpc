@@ -19,7 +19,8 @@ namespace KRPC.Client
         object _value;
         readonly object updateLock;
         readonly object condition = new object ();
-        List<Action<object>> callbacks = new List<Action<object>> ();
+        IDictionary<int, Action<object>> callbacks = new Dictionary<int, Action<object>> ();
+        int nextCallbackKey;
         float rate = 0;
 
         [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
@@ -75,15 +76,24 @@ namespace KRPC.Client
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
-        public List<Action<object>> Callbacks {
+        public IDictionary<int, Action<object>> Callbacks {
             get { return callbacks; }
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
-        public void AddCallback (Action<object> callback) {
+        public int AddCallback (Action<object> callback) {
             lock (updateLock) {
-                callbacks = new List<Action<object>>(callbacks);
-                callbacks.Add (callback);
+                int key = nextCallbackKey;
+                nextCallbackKey++;
+                callbacks[key] = callback;
+                return key;
+            }
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
+        public void RemoveCallback (int key) {
+            lock (updateLock) {
+                callbacks.Remove (key);
             }
         }
 
