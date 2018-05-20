@@ -127,6 +127,26 @@ TEST_F(test_event, test_event_callback_loop) {
   ASSERT_EQ(count, 5);
 }
 
+TEST_F(test_event, test_event_remove_callback) {
+  auto event = test_service.on_timer(200);
+  std::atomic_flag called1;
+  called1.test_and_set();
+  std::atomic_flag called2;
+  called2.test_and_set();
+  event.add_callback([&called1] () { called1.clear(); });
+  auto called2_tag = event.add_callback([&called2] () { called2.clear(); });
+  event.remove_callback(called2_tag);
+  auto start_time = std::chrono::high_resolution_clock::now();
+  event.start();
+  while (called1.test_and_set()) {
+  }
+  auto end_time = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double> duration = end_time - start_time;
+  ASSERT_GT(duration.count(), 0.15);
+  ASSERT_LT(duration.count(), 0.25);
+  ASSERT_TRUE(called2.test_and_set());
+}
+
 TEST_F(test_event, test_custom_event) {
   typedef krpc::services::KRPC::Expression Expr;
   auto counter = Expr::call(conn, test_service.counter_call("test_event.test_custom_event"));

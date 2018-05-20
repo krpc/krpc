@@ -14,6 +14,7 @@ StreamImpl::StreamImpl(Client * client, google::protobuf::uint64 id,
   started(false),
   updated(false),
   condition_lock(condition_mutex, std::defer_lock),
+  next_callback_tag(0),
   _rate(0) {
 }
 
@@ -76,9 +77,17 @@ const StreamImpl::Callbacks& StreamImpl::get_callbacks() const {
   return callbacks;
 }
 
-void StreamImpl::add_callback(const Callback& callback) {
+int StreamImpl::add_callback(const Callback& callback) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  callbacks.push_back(callback);
+  auto tag = next_callback_tag;
+  next_callback_tag++;
+  callbacks[tag] = callback;
+  return tag;
+}
+
+void StreamImpl::remove_callback(int tag) {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  callbacks.erase(tag);
 }
 
 void StreamImpl::remove() {
