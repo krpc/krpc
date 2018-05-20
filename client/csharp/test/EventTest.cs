@@ -100,6 +100,31 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void TestEventRemoveCallback () {
+            var e = Connection.TestService ().OnTimer (200);
+            var stop = new ManualResetEvent (false);
+            bool called1 = false;
+            bool called2 = false;
+            e.AddCallback (() => {
+                called1 = true;
+                stop. Set();
+            });
+            int callback2Tag = e.AddCallback (() => {
+                called2 = true;
+            });
+            e.RemoveCallback (callback2Tag);
+            var timer = new Stopwatch ();
+            timer.Start ();
+            e.Start ();
+            stop.WaitOne ();
+            var time = timer.ElapsedMilliseconds;
+            Assert.Greater (time, 150);
+            Assert.Less (time, 250);
+            Assert.IsTrue (called1);
+            Assert.IsFalse (called2);
+        }
+
+        [Test]
         public void TestCustomEvent () {
             var counter = Expr.Call(Connection,
                 Connection.GetCall (
