@@ -2,13 +2,13 @@ import binascii
 import socket
 from google.protobuf.internal.encoder import _VarintEncoder
 from google.protobuf.internal.decoder import _DecodeVarint
-from krpc.schema import KRPC
+from krpc.schema import KRPC_pb2 as KRPC
 
 
 def encode_varint(value):
     """ Encode an int as a protobuf varint """
     data = []
-    _VarintEncoder()(data.append, value)
+    _VarintEncoder()(data.append, value, False)
     return b''.join(data)
 
 
