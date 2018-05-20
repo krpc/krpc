@@ -7,6 +7,7 @@ class Event(object):
         self._stream = Stream.from_stream_id(
             conn, event.stream.id, conn._types.bool_type)
         self._conn = conn
+        self._callback_mapping = {}
 
     def start(self):
         """ Start the underlying stream for the event """
@@ -37,7 +38,14 @@ class Event(object):
         def callback_wrapper(x):
             if x:
                 callback()
+        self._callback_mapping[callback] = callback_wrapper
         self._stream.add_callback(callback_wrapper)
+
+    def remove_callback(self, callback):
+        if callback in self._callback_mapping:
+            callback_wrapper = self._callback_mapping[callback]
+            del self._callback_mapping[callback]
+            self._stream.remove_callback(callback_wrapper)
 
     @property
     def stream(self):

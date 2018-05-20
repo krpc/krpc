@@ -298,6 +298,27 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertFalse(error.is_set())
         self.assertEquals(self.test_callback_value, 5)
 
+    def test_remove_callback(self):
+        called1 = threading.Event()
+        called2 = threading.Event()
+
+        def callback1(x):  # pylint: disable=unused-argument
+            called1.set()
+
+        def callback2(x):  # pylint: disable=unused-argument
+            called2.set()
+
+        with self.conn.stream(self.conn.test_service.counter,
+                              "TestStream.test_remove_callback", 10) as x:
+            x.add_callback(callback1)
+            x.add_callback(callback2)
+            x.remove_callback(callback2)
+            x.start()
+            called1.wait(3)
+
+        self.assertTrue(called1.is_set())
+        self.assertFalse(called2.is_set())
+
     test_rate_value = 0
 
     def test_rate(self):

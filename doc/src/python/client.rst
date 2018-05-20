@@ -305,6 +305,10 @@ Client API Reference
          stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
 
+   .. method:: remove_callback(callback)
+
+      Removes a callback function from the stream.
+
    .. method:: remove()
 
       Removes the stream from the server.
@@ -340,6 +344,10 @@ Client API Reference
 
       Adds a callback function that is invoked whenever the event occurs. The callback function
       should be a function that takes zero arguments.
+
+   .. method:: remove_callback(callback)
+
+      Removes a callback function from the event.
 
    .. method:: remove()
 
