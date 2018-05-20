@@ -272,16 +272,22 @@ Client API Reference
       If the stream has not been started this method calls ``start`` to start the stream (without
       waiting for at least one update to be received).
 
-   .. method:: void addCallback(java.util.function.Consumer<T> callback)
+   .. method:: int addCallback(java.util.function.Consumer<T> callback)
 
       Adds a callback function that is invoked whenever the value of the stream changes. The
-      callback function should take one argument, which is passed the new value of the stream.
+      callback function should take one argument, which is passed the new value of the
+      stream. Returns a unique identifier for the callback which can be used to remove it.
 
       .. note::
 
          The callback function may be called from a different thread to that which created the
          stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
+
+   .. method:: void removeCallback(int tag)
+
+      Removes a callback function from the stream. The tag is the identifier returned when the
+      callback was added.
 
    .. method:: void remove()
 
@@ -316,10 +322,15 @@ Client API Reference
       If the event has not been started this method calls ``start()`` to start the underlying
       stream.
 
-   .. method:: void addCallback(java.lang.Callable callback)
+   .. method:: int addCallback(java.lang.Callable callback)
 
       Adds a callback function that is invoked whenever the event occurs. The callback function
-      should be a function that takes zero arguments.
+      should be a function that takes zero arguments. Returns an integer tag identifying the
+      callback which can be used to remove it later.
+
+   .. method:: void removeCallback(int tag)
+
+      Removes a callback function from the event.
 
    .. method:: void remove()
 
