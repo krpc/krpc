@@ -110,7 +110,7 @@ if response.HasField('error'):
 # Check for an error in the results
 assert(len(response.results) == 1)
 if response.results[0].HasField('error'):
-    raise RuntimeError('ERROR: ' + str(response.error))
+    raise RuntimeError('ERROR: ' + str(response.results[0].error))
 
 # Decode the return value as a Stream message
 stream = KRPC.Stream()
