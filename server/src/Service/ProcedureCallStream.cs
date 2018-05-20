@@ -48,7 +48,9 @@ namespace KRPC.Service
             } catch (YieldException) {
                 return;
             } catch (System.Exception e) {
-                Result = new ProcedureResult { Error = Core.HandleException (e) };
+                Result = new ProcedureResult {
+                    Error = Service.Services.Instance.HandleException (e)
+                };
             }
         }
     }
