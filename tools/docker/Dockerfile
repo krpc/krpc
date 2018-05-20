@@ -12,8 +12,6 @@ RUN apt-get update && \
     g++ \
     git \
     inotify-tools \
-    libasio-dev \
-    libboost-dev \
     libenchant1c2a \
     liblua5.1-0-dev \
     librsvg2-bin \
@@ -68,7 +66,7 @@ RUN apt-get update && \
     chmod +x /usr/local/bin/gosu && \
     gosu nobody true
 
-ARG bazel_version=0.12.0
+ARG bazel_version=0.13.0
 RUN echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | \
       tee /etc/apt/sources.list.d/bazel.list && \
     curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add - && \
@@ -78,16 +76,6 @@ RUN echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8
     rm -rf /var/lib/apt/lists/*
 COPY bazelrc /etc/bazel.bazelrc
 RUN chmod 0644 /etc/bazel.bazelrc
-
-ARG protobuf_version=3.5.1
-WORKDIR /usr/local/src/protobuf-cpp-${protobuf_version}
-RUN wget https://github.com/google/protobuf/releases/download/v${protobuf_version}/protobuf-cpp-${protobuf_version}.tar.gz && \
-  tar -xf protobuf-cpp-${protobuf_version}.tar.gz --strip=1 && \
-  ./configure && \
-  make -j`nproc` && \
-  make install && \
-  ldconfig && \
-  rm -rf rm -rf protobuf-cpp-$VERSION protobuf-cpp-$VERSION.tar.gz
 
 ARG ksp_version
 WORKDIR /usr/local/lib/ksp-${ksp_version}
