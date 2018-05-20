@@ -745,9 +745,9 @@ namespace KRPC
             } catch (YieldException) {
                 throw;
             } catch (RPCException e) {
-                response = new Response { Error = HandleException (e) };
+                response = new Response { Error = Service.Services.Instance.HandleException (e) };
             } catch (System.Exception e) {
-                response = new Response { Error = HandleException (e) };
+                response = new Response { Error = Service.Services.Instance.HandleException (e) };
             } finally {
                 CallContext.Clear ();
             }
@@ -764,31 +764,6 @@ namespace KRPC
             } catch (ServerException exn) {
                 Logger.WriteLine ("Failed to send response to client " + client.Address + Environment.NewLine + exn, Logger.Severity.Error);
             }
-        }
-
-        /// <summary>
-        /// Convert an exception thrown by an RPC into an error message.
-        /// </summary>
-        internal static Error HandleException(System.Exception exn)
-        {
-            if (exn is RPCException && exn.InnerException != null)
-                exn = exn.InnerException;
-            var message = exn.Message;
-            var verboseErrors = Configuration.Instance.VerboseErrors;
-            var stackTrace = verboseErrors ? exn.StackTrace : string.Empty;
-            if (Logger.ShouldLog (Logger.Severity.Debug)) {
-                Logger.WriteLine (message, Logger.Severity.Debug);
-                if (verboseErrors)
-                    Logger.WriteLine (stackTrace, Logger.Severity.Debug);
-            }
-            var mappedType = Service.Services.Instance.GetMappedExceptionType(exn.GetType());
-            var type = mappedType ?? exn.GetType();
-            Error error;
-            if (Reflection.HasAttribute<KRPCExceptionAttribute>(type))
-                error = new Error(TypeUtils.GetExceptionServiceName(type), type.Name, message, stackTrace);
-            else
-                error = new Error(message, stackTrace);
-            return error;
         }
     }
 }

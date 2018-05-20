@@ -36,8 +36,8 @@ namespace KRPC.Test.Service
 
         static ProcedureResult Run (ProcedureCall call)
         {
-            var procedureSignature = global::KRPC.Service.Services.Instance.GetProcedureSignature (call);
-            return global::KRPC.Service.Services.Instance.ExecuteCall (procedureSignature, call);
+            var continuation = new ProcedureCallContinuation(call);
+            return continuation.Run();
         }
 
         static void CheckResultNotEmpty (ProcedureResult result)
@@ -52,6 +52,14 @@ namespace KRPC.Test.Service
             Assert.IsFalse (result.HasError);
         }
 
+        static void CheckError (string name, string description, ProcedureResult result)
+        {
+            Assert.IsFalse (result.HasValue);
+            Assert.IsTrue (result.HasError);
+            Assert.AreEqual (result.Error.Name, name);
+            Assert.AreEqual (result.Error.Description, description);
+        }
+
         [SetUp]
         public void SetUp ()
         {
@@ -61,13 +69,16 @@ namespace KRPC.Test.Service
         [Test]
         public void NonExistantService ()
         {
-            Assert.Throws<RPCException> (() => Run (Call ("NonExistantService", "NonExistantProcedure")));
+            CheckError (String.Empty, "Service \"NonExistantService\" not found",
+                        Run (Call ("NonExistantService", "NonExistantProcedure")));
         }
 
         [Test]
         public void NonExistantProcedure ()
         {
-            Assert.Throws<RPCException> (() => Run (Call ("TestService", "NonExistantProcedure")));
+            CheckError (String.Empty, "Procedure \"NonExistantProcedure\" not found, " +
+                        "in service \"TestService\"",
+                        Run (Call ("TestService", "NonExistantProcedure")));
         }
 
         [Test]
@@ -75,7 +86,9 @@ namespace KRPC.Test.Service
         {
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureWithoutAttribute ());
-            Assert.Throws<RPCException> (() => Run (Call ("TestService", "ProcedureWithoutAttribute")));
+            CheckError (String.Empty, "Procedure \"ProcedureWithoutAttribute\" not found, " +
+                        "in service \"TestService\"",
+                        Run (Call ("TestService", "ProcedureWithoutAttribute")));
             mock.Verify (x => x.ProcedureWithoutAttribute (), Times.Never ());
         }
 
@@ -108,7 +121,10 @@ namespace KRPC.Test.Service
             mock.Setup (x => x.CreateTestObject (It.IsAny<string> ()));
             // should pass a string, not an int
             var request = Call ("TestService", "CreateTestObject", Arg (0, 42));
-            Assert.Throws<RPCException> (() => Run (request));
+            CheckError (String.Empty, "Incorrect argument type for parameter value in " +
+                        "TestService.CreateTestObject. Expected an argument of type System.String, " +
+                        "got System.Int32",
+                        Run (request));
             mock.Verify (x => x.CreateTestObject (It.IsAny<string> ()), Times.Never ());
         }
 
@@ -118,7 +134,9 @@ namespace KRPC.Test.Service
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns ((string)null);
             TestService.Service = mock.Object;
-            Assert.Throws<RPCException> (() => Run (Call ("TestService", "ProcedureNoArgsReturns")));
+            CheckError (String.Empty, "Incorrect value returned by TestService.ProcedureNoArgsReturns. " +
+                        "Expected a value of type System.String, got null",
+                        Run (Call ("TestService", "ProcedureNoArgsReturns")));
             mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Once ());
         }
 
@@ -128,7 +146,8 @@ namespace KRPC.Test.Service
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureNoArgsReturns ()).Throws (new ArgumentException ("test exception"));
             TestService.Service = mock.Object;
-            Assert.Throws<RPCException> (() => Run (Call ("TestService", "ProcedureNoArgsReturns")));
+            CheckError ("ArgumentException", "test exception",
+                        Run (Call ("TestService", "ProcedureNoArgsReturns")));
             mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Once ());
         }
 
@@ -264,7 +283,10 @@ namespace KRPC.Test.Service
             mock.Setup (x => x.ReturnNullWhenNotAllowed ())
                 .Returns (() => null);
             TestService.Service = mock.Object;
-            Assert.Throws<RPCException> (() => Run (Call ("TestService", "ReturnNullWhenNotAllowed")));
+            CheckError (String.Empty, "Incorrect value returned by TestService.ReturnNullWhenNotAllowed. " +
+                        "Expected a non-null value of type KRPC.Test.Service.TestService+TestClass, " +
+                        "got null, but the procedure is not marked as nullable.",
+                        Run (Call ("TestService", "ReturnNullWhenNotAllowed")));
             mock.Verify (x => x.ReturnNullWhenNotAllowed (), Times.Once ());
         }
 
@@ -395,7 +417,9 @@ namespace KRPC.Test.Service
             mock.Setup (x => x.ProcedureThreeOptionalArgsNoReturn (
                 It.IsAny<float> (), It.IsAny<string> (), It.IsAny<int> ()));
             TestService.Service = mock.Object;
-            Assert.Throws<RPCException> (() => Run (Call ("TestService", "ProcedureThreeOptionalArgsNoReturn")));
+            CheckError (String.Empty, "Argument not specified for parameter x in " +
+                        "TestService.ProcedureThreeOptionalArgsNoReturn",
+                        Run (Call ("TestService", "ProcedureThreeOptionalArgsNoReturn")));
             mock.Verify (x => x.ProcedureThreeOptionalArgsNoReturn (
                 It.IsAny<float> (), It.IsAny<string> (), It.IsAny<int> ()), Times.Never ());
         }
@@ -432,7 +456,9 @@ namespace KRPC.Test.Service
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureEnumArg (It.IsAny<TestService.TestEnum> ()));
             TestService.Service = mock.Object;
-            Assert.Throws<RPCException> (() => Run (Call ("TestService", "ProcedureTestEnumArg", Arg (0, arg))));
+            CheckError (String.Empty, "Incorrect argument type for parameter x in TestService.ProcedureEnumArg. " +
+                        "Expected an argument of type KRPC.Test.Service.TestService+TestEnum, got System.Int32",
+                        Run (Call ("TestService", "ProcedureEnumArg", Arg (0, arg))));
             mock.Verify (x => x.ProcedureEnumArg (It.IsAny<TestService.TestEnum> ()), Times.Never ());
         }
 
@@ -628,7 +654,8 @@ namespace KRPC.Test.Service
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureNoArgsNoReturn ());
             TestService.Service = mock.Object;
-            Assert.Throws<RPCException> (() => Run (Call ("TestService", "ProcedureNoArgsNoReturn")));
+            CheckError (String.Empty, "Procedure not available in game scene 'TrackingStation'",
+                        Run (Call ("TestService", "ProcedureNoArgsNoReturn")));
             mock.Verify (x => x.ProcedureNoArgsNoReturn (), Times.Never ());
         }
     }
