@@ -1,13 +1,13 @@
 import socket
 from google.protobuf.internal.encoder import _VarintEncoder
 from google.protobuf.internal.decoder import _DecodeVarint
-from krpc.schema import KRPC
+from krpc.schema import KRPC_pb2 as KRPC
 
 
 def encode_varint(value):
     """ Encode an int as a protobuf varint """
     data = []
-    _VarintEncoder()(data.append, value)
+    _VarintEncoder()(data.append, value, False)
     return b''.join(data)
 
 
@@ -78,7 +78,7 @@ if response.HasField('error'):
 # Check for an error in the results
 assert(len(response.results) == 1)
 if response.results[0].HasField('error'):
-    raise RuntimeError('ERROR: ' + str(response.error))
+    raise RuntimeError('ERROR: ' + str(response.results[0].error))
 
 # Decode the return value as a Status message
 status = KRPC.Status()

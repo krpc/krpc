@@ -305,6 +305,31 @@ TEST_F(test_stream, test_callback) {
   ASSERT_EQ(test_callback_value, 5);
 }
 
+TEST_F(test_stream, test_remove_callback) {
+  std::atomic_flag called1;
+  called1.test_and_set();
+  std::atomic_flag called2;
+  called2.test_and_set();
+
+  auto callback1 = [&called1] (int x) {
+    called1.clear();
+  };
+
+  auto callback2 = [&called2] (int x) {
+    called2.clear();
+  };
+
+  auto x = test_service.counter_stream("test_stream.test_remove_callback", 10);
+  x.add_callback(callback1);
+  auto callback2_tag = x.add_callback(callback2);
+  x.remove_callback(callback2_tag);
+  x.start();
+  while (called1.test_and_set()) {
+  }
+  x.remove();
+  ASSERT_TRUE(called2.test_and_set());
+}
+
 TEST_F(test_stream, test_rate) {
   std::atomic<int> test_rate_value(0);
   std::atomic_flag error;

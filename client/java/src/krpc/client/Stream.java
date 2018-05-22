@@ -148,10 +148,19 @@ public class Stream<T> implements Comparable<Stream<T>> {
 
   /**
    * Add a callback that is invoked whenever the stream is updated.
+   * Returns an integer tag for the callback which uniquely identifies it,
+   * and allows it to be removed using remove_callback()
    */
   @SuppressWarnings("unchecked")
-  public void addCallback(Consumer<T> callback) {
-    stream.addCallback((Object value) -> callback.accept((T)value));
+  public int addCallback(Consumer<T> callback) {
+    return stream.addCallback((Object value) -> callback.accept((T)value));
+  }
+
+  /**
+   * Remove a callback based on its tag.
+   */
+  public void removeCallback(int tag) {
+    stream.removeCallback(tag);
   }
 
   /**

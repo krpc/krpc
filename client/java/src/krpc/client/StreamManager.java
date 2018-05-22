@@ -84,7 +84,7 @@ class StreamManager {
         stream.setValue(value);
         condition.notifyAll();
       }
-      for (Consumer<Object> callback : stream.getCallbacks()) {
+      for (Consumer<Object> callback : stream.getCallbacks().values()) {
         callback.accept(value);
       }
     }

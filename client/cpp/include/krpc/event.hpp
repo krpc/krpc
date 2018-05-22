@@ -31,8 +31,14 @@ class Event {
       operation times out after that many seconds. */
   void wait(double timeout = -1);
   typedef std::function<void()> Callback;
-  /** Add a callback that is invoked whenever the event occurs */
-  void add_callback(const Callback& callback);
+  /**
+   * Add a callback that is invoked whenever the event occurs.
+   * Returns an integer tag for the callback which uniquely identifies it,
+   * and allows it to be removed using remove_callback()
+   */
+  int add_callback(const Callback& callback);
+  /** Remove a callback, based on its tag */
+  void remove_callback(int tag);
   /** Remove the event from the server */
   void remove();
   /** Returns the underlying stream for the event */

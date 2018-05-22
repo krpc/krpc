@@ -69,6 +69,10 @@ class Stream(object):
         """ Add a callback that is invoked whenever the stream is updated. """
         self._stream.add_callback(callback)
 
+    def remove_callback(self, callback):
+        """ Remove a callback. """
+        self._stream.remove_callback(callback)
+
     def remove(self):
         """ Remove the stream """
         self._stream.remove()

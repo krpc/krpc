@@ -418,6 +418,32 @@ public class StreamTest {
     assertEquals(testCallbackValue, 5);
   }
 
+  private volatile boolean testRemoveCallbackCalled1 = false;
+  private volatile boolean testRemoveCallbackCalled2 = false;
+
+  @Test
+  public void testRemoveCallback()
+      throws RPCException, StreamException {
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "counter", "StreamTest.testRemoveCallback", 10);
+    stream.addCallback(
+        (Integer value) -> {
+          testRemoveCallbackCalled1 = true;
+        }
+    );
+    int callback2Tag = stream.addCallback(
+        (Integer value) -> {
+          testRemoveCallbackCalled2 = true;
+        }
+    );
+    stream.removeCallback(callback2Tag);
+    stream.start();
+    while (!testRemoveCallbackCalled1) {
+    }
+    stream.remove();
+    assertFalse(testRemoveCallbackCalled2);
+  }
+
   private volatile boolean testRateError = false;
   private volatile boolean testRateStop = false;
   private volatile int testRateValue = 0;

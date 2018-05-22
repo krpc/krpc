@@ -6,6 +6,8 @@ using System.Reflection;
 using KRPC.Continuations;
 using KRPC.Service.Messages;
 using KRPC.Service.Scanner;
+using KRPC.Utils;
+using KRPC.Service.Attributes;
 
 namespace KRPC.Service
 {
@@ -92,9 +94,19 @@ namespace KRPC.Service
         /// Throws YieldException, containing a continuation, if the call yields.
         /// Throws RPCException if the call fails.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
+
         public ProcedureResult ExecuteCall (ProcedureSignature procedure, ProcedureCall call)
         {
-            return ExecuteCall (procedure, GetArguments (procedure, call.Arguments));
+            try {
+                return ExecuteCall (procedure, GetArguments (procedure, call.Arguments));
+            } catch (YieldException) {
+                throw;
+            } catch (RPCException e) {
+                return new ProcedureResult { Error = HandleException (e) };
+            } catch (System.Exception e) {
+                return new ProcedureResult { Error = HandleException (e) };
+            }
         }
 
         /// <summary>
@@ -103,24 +115,33 @@ namespace KRPC.Service
         /// Throws RPCException if the call fails.
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
         public ProcedureResult ExecuteCall (ProcedureSignature procedure, object[] arguments)
         {
-            if ((CallContext.GameScene & procedure.GameScene) == 0)
-                throw new RPCException ("Procedure not available in game scene '" + CallContext.GameScene + "'");
-            object returnValue;
             try {
-                returnValue = procedure.Handler.Invoke (arguments);
-            } catch (TargetInvocationException e) {
-                if (e.InnerException is YieldException)
-                    throw e.InnerException;
-                throw new RPCException (e.InnerException);
+                if ((CallContext.GameScene & procedure.GameScene) == 0)
+                    throw new RPCException ("Procedure not available in game scene '" + CallContext.GameScene + "'");
+                object returnValue;
+                try {
+                    returnValue = procedure.Handler.Invoke (arguments);
+                } catch (TargetInvocationException e) {
+                    if (e.InnerException is YieldException)
+                        throw e.InnerException;
+                    throw new RPCException (e.InnerException);
+                }
+                var result = new ProcedureResult ();
+                if (procedure.HasReturnType) {
+                    CheckReturnValue (procedure, returnValue);
+                    result.Value = returnValue;
+                }
+                return result;
+            } catch (YieldException) {
+                throw;
+            } catch (RPCException e) {
+                return new ProcedureResult { Error = HandleException (e) };
+            } catch (System.Exception e) {
+                return new ProcedureResult { Error = HandleException (e) };
             }
-            var result = new ProcedureResult ();
-            if (procedure.HasReturnType) {
-                CheckReturnValue (procedure, returnValue);
-                result.Value = returnValue;
-            }
-            return result;
         }
 
         /// <summary>
@@ -172,7 +193,7 @@ namespace KRPC.Service
                 if (!argumentSet [mask]) {
                     // If the argument is not set, set it to the default value
                     if (!parameter.HasDefaultValue)
-                        throw new RPCException ("Argument not specified for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". ");
+                        throw new RPCException ("Argument not specified for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName);
                     argumentValues [i] = parameter.DefaultValue;
                 } else if (value != null && !type.IsInstanceOfType (value)) {
                     // Check the type of the non-null argument value
@@ -212,6 +233,31 @@ namespace KRPC.Service
                     "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
                     "Expected a non-null value of type " + procedure.ReturnType + ", got null, " +
                     "but the procedure is not marked as nullable.");
+        }
+
+        /// <summary>
+        /// Convert an exception thrown by an RPC into an error message.
+        /// </summary>
+        internal Error HandleException(System.Exception exn)
+        {
+            if (exn is RPCException && exn.InnerException != null)
+                exn = exn.InnerException;
+            var message = exn.Message;
+            var verboseErrors = Configuration.Instance.VerboseErrors;
+            var stackTrace = verboseErrors ? exn.StackTrace : string.Empty;
+            if (Logger.ShouldLog (Logger.Severity.Debug)) {
+                Logger.WriteLine (message, Logger.Severity.Debug);
+                if (verboseErrors)
+                    Logger.WriteLine (stackTrace, Logger.Severity.Debug);
+            }
+            var mappedType = GetMappedExceptionType(exn.GetType());
+            var type = mappedType ?? exn.GetType();
+            Error error;
+            if (Reflection.HasAttribute<KRPCExceptionAttribute>(type))
+                error = new Error(TypeUtils.GetExceptionServiceName(type), type.Name, message, stackTrace);
+            else
+                error = new Error(message, stackTrace);
+            return error;
         }
     }
 }

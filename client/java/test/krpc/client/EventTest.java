@@ -128,6 +128,31 @@ public class EventTest {
     assertEquals(testEventCallbackLoopCount, 5);
   }
 
+  private volatile boolean testEventRemoveCallbackCalled1 = false;
+  private volatile boolean testEventRemoveCallbackCalled2 = false;
+
+  @Test
+  public void testEventRemoveCallback()
+      throws RPCException, StreamException {
+    Event event = testService.onTimer(200, 1);
+    event.addCallback(
+        () -> {
+          testEventRemoveCallbackCalled1 = true;
+        });
+    int called2Tag = event.addCallback(
+        () -> {
+          testEventRemoveCallbackCalled2 = true;
+        });
+    event.removeCallback(called2Tag);
+    long startTime = System.currentTimeMillis();
+    event.start();
+    while (!testEventRemoveCallbackCalled1) {
+    }
+    long time = System.currentTimeMillis() - startTime;
+    assertTrue(150 < time && time < 250);
+    assertFalse(testEventRemoveCallbackCalled2);
+  }
+
   @Test
   public void testCustomEvent()
       throws RPCException, StreamException {

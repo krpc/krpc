@@ -14,7 +14,6 @@ find_package(Protobuf 3.2 REQUIRED)
 
 # Check for ASIO headers
 find_path(HAVE_ASIO asio.hpp)
-message(${HAVE_ASIO})
 if(NOT HAVE_ASIO)
   unset(HAVE_ASIO CACHE)
   message(FATAL_ERROR "asio.hpp not found")
@@ -40,8 +39,38 @@ endif()
 
 include_directories(include include/krpc ${PROTOBUF_INCLUDE_DIRS})
 
+if ("${PROTOBUF_PROTOC_EXECUTABLE}" STREQUAL "")
+  message(STATUS "Protobuf compiler not found; using pre-built source files")
+  set(PROTO_HDR_ORIG ${CMAKE_CURRENT_SOURCE_DIR}/protobuf/krpc.pb.hpp)
+  set(PROTO_SRC_ORIG ${CMAKE_CURRENT_SOURCE_DIR}/protobuf/krpc.pb.cpp)
+else()
+  message(STATUS "Found Protobuf compiler")
+  protobuf_generate_cpp(PROTO_SRC_ORIG PROTO_HDR_ORIG protobuf/krpc.proto)
+endif()
+
+set(PROTO_HDR ${CMAKE_CURRENT_BINARY_DIR}/protobuf/include/krpc/krpc.pb.hpp)
+set(PROTO_SRC ${CMAKE_CURRENT_BINARY_DIR}/protobuf/src/krpc.pb.cpp)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/protobuf/include)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/protobuf/include/krpc)
+
+add_custom_command(
+  OUTPUT ${PROTO_HDR}
+  COMMAND ${CMAKE_COMMAND} -E copy ${PROTO_HDR_ORIG} ${PROTO_HDR}
+  DEPENDS ${PROTO_HDR_ORIG}
+  COMMENT "Copying ${PROTO_HDR_ORIG} to ${PROTO_HDR}"
+)
+add_custom_command(
+  OUTPUT ${PROTO_SRC}
+  COMMAND ${CMAKE_COMMAND}
+          -Dinput=${PROTO_SRC_ORIG}
+          -Doutput=${PROTO_SRC}
+          -P ${CMAKE_SOURCE_DIR}/protobuf-include.cmake
+  DEPENDS ${PROTO_SRC_ORIG}
+  COMMENT "Copying ${PROTO_SRC_ORIG} to ${PROTO_SRC}"
+)
+
 file(GLOB SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-add_library(krpc SHARED ${SRC})
+add_library(krpc SHARED ${SRC} ${PROTO_HDR} ${PROTO_SRC})
 
 set_target_properties(
   krpc PROPERTIES VERSION   ${VERSION_NUMBER}
@@ -59,3 +88,4 @@ install(TARGETS krpc
         ARCHIVE DESTINATION lib)
 
 install(DIRECTORY include DESTINATION . FILES_MATCHING PATTERN "*.hpp")
+install(FILES ${PROTO_HDR} DESTINATION include/krpc)

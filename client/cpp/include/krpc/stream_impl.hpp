@@ -5,9 +5,9 @@
 #include <condition_variable>  // NOLINT(build/c++11)
 #include <exception>
 #include <functional>
+#include <map>
 #include <mutex>  // NOLINT(build/c++11)
 #include <string>
-#include <vector>
 
 namespace krpc {
 
@@ -28,9 +28,10 @@ class StreamImpl {
   std::condition_variable& get_condition();
   std::unique_lock<std::mutex>& get_condition_lock();
   typedef std::function<void(const std::string&)> Callback;
-  typedef std::vector<Callback> Callbacks;
+  typedef std::map<int, Callback> Callbacks;
   const Callbacks& get_callbacks() const;
-  void add_callback(const Callback& callback);
+  int add_callback(const Callback& callback);
+  void remove_callback(int tag);
   void remove();
 
  private:
@@ -45,6 +46,7 @@ class StreamImpl {
   std::mutex condition_mutex;
   std::unique_lock<std::mutex> condition_lock;
   Callbacks callbacks;
+  int next_callback_tag;
   float _rate;
 };
 

@@ -1,8 +1,9 @@
 v0.4.6
- * Support for KSP 1.4.2
+ * Support for KSP 1.4.3
  * Remove CompatibilityChecker as it's deprecated - instead rely on CKAN and KSP-AVC version checks
  * Update icons to be 64x64 to fix blurring when loading as textures (#453)
  * Fix equality checking for streams of collections (#452)
+ * Fix RPC errors being reported in Response.error instead of individual ProcedureResult.error fields (#467)
 
 v0.4.5
  * Support KSP 1.4.1

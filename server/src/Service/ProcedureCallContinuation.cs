@@ -21,6 +21,8 @@ namespace KRPC.Service
             call = procedureCall;
             try {
                 procedure = Services.Instance.GetProcedureSignature (call);
+            } catch (RPCException e) {
+                exception = e;
             } catch (System.Exception e) {
                 exception = e;
             }
@@ -34,10 +36,10 @@ namespace KRPC.Service
 
         public override ProcedureResult Run ()
         {
+            var services = Services.Instance;
             if (exception != null)
-                throw exception;
+              return new ProcedureResult { Error = services.HandleException (exception) };
             try {
-                var services = Services.Instance;
                 if (continuation == null)
                     return services.ExecuteCall (procedure, call);
                 return services.ExecuteCall (procedure, continuation);

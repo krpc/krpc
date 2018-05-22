@@ -4,8 +4,8 @@ import krpc.client.StreamException;
 import krpc.client.services.KRPC;
 import krpc.schema.KRPC.Type;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 class StreamImpl {
@@ -15,7 +15,8 @@ class StreamImpl {
   private Object value;
   private Object updateLock;
   private Object condition = new Object();
-  private List<Consumer<Object>> callbacks = new ArrayList<Consumer<Object>>();
+  private Map<Integer, Consumer<Object>> callbacks = new HashMap<Integer, Consumer<Object>>();
+  private int nextCallbackTag = 0;
   private boolean started = false;
   private boolean updated = false;
   private float rate = 0;
@@ -76,12 +77,23 @@ class StreamImpl {
     return condition;
   }
 
-  public List<Consumer<Object>> getCallbacks() {
+  public Map<Integer, Consumer<Object>> getCallbacks() {
     return callbacks;
   }
 
-  public void addCallback(Consumer<Object> callback) {
-    callbacks.add(callback);
+  public int addCallback(Consumer<Object> callback) {
+    synchronized (updateLock) {
+      int tag = nextCallbackTag;
+      nextCallbackTag++;
+      callbacks.put(tag, callback);
+      return tag;
+    }
+  }
+
+  public void removeCallback(int tag) {
+    synchronized (updateLock) {
+      callbacks.remove(tag);
+    }
   }
 
   public void remove() throws RPCException {
