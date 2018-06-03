@@ -1,7 +1,10 @@
 bazel-*
+.vs/
+.idea/
 lib/ksp
 KRPC.userprefs
 bin
 obj
 KSP.log
 PartDatabase.cfg
+

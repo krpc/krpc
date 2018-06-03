@@ -27,7 +27,7 @@ namespace KRPC.Drawing
             renderer = GameObject.GetComponent<LineRenderer> ();
             renderer.useWorldSpace = true;
             var numVertices = polygonVertices.Count + 1;
-            #pragma warning disable CS0618
+            #pragma warning disable 618
             renderer.SetVertexCount (numVertices);
             #pragma warning restore
             for (int i = 0; i < numVertices; i++)
@@ -80,7 +80,7 @@ namespace KRPC.Drawing
             set {
                 color = value;
                 var rgbColor = color.ToColor ();
-                #pragma warning disable CS0618
+                #pragma warning disable 618
                 renderer.SetColors (rgbColor, rgbColor);
                 #pragma warning restore
             }
@@ -94,7 +94,7 @@ namespace KRPC.Drawing
             get { return thickness; }
             set {
                 thickness = value;
-                #pragma warning disable CS0618
+                #pragma warning disable 618
                 renderer.SetWidth (thickness, thickness);
                 #pragma warning restore
             }
