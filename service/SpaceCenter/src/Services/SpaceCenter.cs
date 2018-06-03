@@ -7,6 +7,7 @@ using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
 using KSP.UI;
 using KSP.UI.Screens.Flight;
 using PreFlightTests;
@@ -239,7 +240,7 @@ namespace KRPC.SpaceCenter.Services
                 preFlightCheck.AddTest(new FacilityOperational(launchSite, launchSite));
                 preFlightCheck.AddTest(new NoControlSources(manifest));
                 if (!Recover)
-                    preFlightCheck.AddTest(new LaunchSiteClear(launchSite, launchSite, HighLogic.CurrentGame));
+                    preFlightCheck.AddTest(Compatibility.NewLaunchSiteClear(launchSite, HighLogic.CurrentGame));
                 return preFlightCheck;
             }
 
@@ -325,7 +326,7 @@ namespace KRPC.SpaceCenter.Services
         {
             // Recover existing vessels if the launch site is not clear
             if (config.Recover) {
-                var launchSiteClear = new LaunchSiteClear(config.LaunchSite, config.LaunchSite, HighLogic.CurrentGame);
+                var launchSiteClear = Compatibility.NewLaunchSiteClear(config.LaunchSite, HighLogic.CurrentGame);
                 if (!launchSiteClear.Test()) {
                     var vesselsToRecover = launchSiteClear.GetObstructingVessels();
                     config.vesselsToRecover = vesselsToRecover.Count;
