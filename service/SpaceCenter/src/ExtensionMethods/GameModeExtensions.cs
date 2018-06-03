@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
@@ -11,10 +12,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             switch (mode) {
                 case Game.Modes.CAREER:
                     return GameMode.Career;
-                case Game.Modes.MISSION:
-                    return GameMode.Mission;
-                case Game.Modes.MISSION_BUILDER:
-                    return GameMode.MissionBuilder;
                 case Game.Modes.SANDBOX:
                     return GameMode.Sandbox;
                 case Game.Modes.SCENARIO:
@@ -24,6 +21,10 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 case Game.Modes.SCIENCE_SANDBOX:
                     return GameMode.ScienceSandbox;
                 default:
+                    if (Compatibility.GameModeIsMission(mode))
+                        return GameMode.Mission;
+                    if (Compatibility.GameModeIsMissionBuilder(mode))
+                        return GameMode.MissionBuilder;
                     throw new ArgumentOutOfRangeException (nameof (mode));
             }
         }
