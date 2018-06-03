@@ -9,6 +9,7 @@ using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KSP.UI;
 using KSP.UI.Screens.Flight;
+using PreFlightTests;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
@@ -193,6 +194,90 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Helper class for launching a new vessel.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
+        sealed class LaunchConfig {
+            public LaunchConfig(string craftDirectory, string name, string launchSite, bool recover) {
+                LaunchSite = launchSite;
+                Recover = recover;
+                // Load the vessel and its default crew
+                if (craftDirectory == "VAB")
+                    EditorDriver.editorFacility = EditorFacility.VAB;
+                else if (craftDirectory == "SPH")
+                    EditorDriver.editorFacility = EditorFacility.SPH;
+                else
+                    throw new ArgumentException("Invalid craftDirectory, should be VAB or SPH");
+                Path = ShipConstruction.GetSavePath(name);
+                template = ShipConstruction.LoadTemplate(Path);
+                if (template == null)
+                    throw new InvalidOperationException("Failed to load template for vessel");
+                manifest = VesselCrewManifest.FromConfigNode(template.config);
+                manifest = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (template.config, manifest);
+
+                facility = (craftDirectory == "SPH") ? SpaceCenterFacility.SpaceplaneHangar : SpaceCenterFacility.VehicleAssemblyBuilding;
+                facilityLevel = ScenarioUpgradeableFacilities.GetFacilityLevel(facility);
+                site = (launchSite == "Runway") ? SpaceCenterFacility.Runway : SpaceCenterFacility.LaunchPad;
+                siteLevel = ScenarioUpgradeableFacilities.GetFacilityLevel(site);
+                isPad = (site == SpaceCenterFacility.LaunchPad);
+            }
+
+            // This should avoid a vessel being recovered and then the next vessel failing to launch
+            public PreFlightCheck RunPreFlightChecks() {
+                var preFlightCheck = new PreFlightCheck(
+                    () => {
+                    preFlightComplete = true;
+                },
+                    () => error = "Failed to launch vessel. Did not pass pre-flight checks.");
+                var gameVars = GameVariables.Instance;
+                preFlightCheck.AddTest(new CraftWithinPartCountLimit(template, facility, gameVars.GetPartCountLimit(facilityLevel, isPad)));
+                preFlightCheck.AddTest(new CraftWithinSizeLimits(template, site, gameVars.GetCraftSizeLimit(siteLevel, isPad)));
+                preFlightCheck.AddTest(new CraftWithinMassLimits(template, site, gameVars.GetCraftMassLimit(siteLevel, isPad)));
+                preFlightCheck.AddTest(new ExperimentalPartsAvailable(manifest));
+                preFlightCheck.AddTest(new CanAffordLaunchTest(template, Funding.Instance));
+                var launchSite = LaunchSite;
+                preFlightCheck.AddTest(new FacilityOperational(launchSite, launchSite));
+                preFlightCheck.AddTest(new NoControlSources(manifest));
+                if (!Recover)
+                    preFlightCheck.AddTest(new LaunchSiteClear(launchSite, launchSite, HighLogic.CurrentGame));
+                return preFlightCheck;
+            }
+
+            public void AddRecoveryEventHandler(ProtoVessel vessel) {
+                EventData<ProtoVessel, bool>.OnEvent eventHandler = (eventVessel, value) => {
+                    if (vessel.persistentId == eventVessel.persistentId)
+                        vesselsRecovered++;
+                };
+                GameEvents.onVesselRecovered.Add(eventHandler);
+                recoveryEventHandlers.Add(eventHandler);
+            }
+
+            public void RemoveRecoveryEventHandlers() {
+                foreach (var eventHandler in recoveryEventHandlers)
+                    GameEvents.onVesselRecovered.Remove(eventHandler);
+            }
+
+            public string LaunchSite { get; private set; }
+            public bool Recover { get; private set; }
+            public string Path { get; private set; }
+
+            ShipTemplate template;
+            public VesselCrewManifest manifest;
+            SpaceCenterFacility facility;
+            float facilityLevel;
+            SpaceCenterFacility site;
+            float siteLevel;
+            bool isPad;
+
+            public IList<EventData<ProtoVessel, bool>.OnEvent> recoveryEventHandlers =
+                                                         new List<EventData<ProtoVessel, bool>.OnEvent>();
+            public int vesselsToRecover;
+            public int vesselsRecovered;
+            public bool preFlightComplete;
+            public string error;
+        };
+
+        /// <summary>
         /// Returns a list of vessels from the given <paramref name="craftDirectory"/>
         /// that can be launched.
         /// </summary>
@@ -219,12 +304,54 @@ namespace KRPC.SpaceCenter.Services
         /// in the save directory, without the ".craft" file extension.</param>
         /// <param name="launchSite">Name of the launch site. For example <c>"LaunchPad"</c> or
         /// <c>"Runway"</c>.</param>
+        /// <param name="recover">If true and there is a vessel on the launch site,
+        /// recover it before launching.</param>
+        /// <remarks>
+        /// Throws an exception if any of the games pre-flight checks fail.
+        /// </remarks>
         [KRPCProcedure]
-        public static void LaunchVessel (string craftDirectory, string name, string launchSite)
+        public static void LaunchVessel (string craftDirectory, string name, string launchSite, bool recover = true)
         {
-            var craft = GetFullCraftDirectory (craftDirectory) + "/" + name + ".craft";
-            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
-            FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, launchSite, crew);
+            var config = new LaunchConfig(craftDirectory, name, launchSite, recover);
+            config.RunPreFlightChecks();
+            throw new YieldException (new ParameterizedContinuationVoid<LaunchConfig> (WaitForVesselPreFlightComplete, config));
+        }
+
+        /// <summary>
+        /// Wait until pre-flight checks for new vessel are complete.
+        /// </summary>
+        /// <param name="config">Config.</param>
+        static void WaitForVesselPreFlightComplete(LaunchConfig config)
+        {
+            // Recover existing vessels if the launch site is not clear
+            if (config.Recover) {
+                var launchSiteClear = new LaunchSiteClear(config.LaunchSite, config.LaunchSite, HighLogic.CurrentGame);
+                if (!launchSiteClear.Test()) {
+                    var vesselsToRecover = launchSiteClear.GetObstructingVessels();
+                    config.vesselsToRecover = vesselsToRecover.Count;
+                    foreach (var vessel in vesselsToRecover)
+                        config.AddRecoveryEventHandler(vessel);
+                    foreach (var protoVessel in vesselsToRecover)
+                        GameEvents.OnVesselRecoveryRequested.Fire(protoVessel.vesselRef);
+                }
+            }
+            WaitForVesselRecovery(config);
+        }
+
+        /// <summary>
+        /// Wait until vessels on the launchpad have been recovered, then launch new vessel.
+        /// </summary>
+        static void WaitForVesselRecovery(LaunchConfig config)
+        {
+            if (config.error != null) {
+                config.RemoveRecoveryEventHandlers ();
+                throw new InvalidOperationException(config.error);
+            }
+            if (config.vesselsToRecover != config.vesselsRecovered)
+                throw new YieldException (new ParameterizedContinuationVoid<LaunchConfig> (WaitForVesselRecovery, config));
+            config.RemoveRecoveryEventHandlers ();
+
+            FlightDriver.StartWithNewLaunch(config.Path, EditorLogic.FlagURL, config.LaunchSite, config.manifest);
             throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
         }
 
@@ -232,28 +359,34 @@ namespace KRPC.SpaceCenter.Services
         /// Launch a new vessel from the VAB onto the launchpad.
         /// </summary>
         /// <param name="name">Name of the vessel to launch.</param>
+        /// <param name="attemptRecovery">If true and there is a vessel on the launch pad,
+        /// attempt to recover it before launching.</param>
         /// <remarks>
         /// This is equivalent to calling <see cref="LaunchVessel"/> with the craft directory
         /// set to "VAB" and the launch site set to "LaunchPad".
+        /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
-        public static void LaunchVesselFromVAB (string name)
+        public static void LaunchVesselFromVAB (string name, bool attemptRecovery = true)
         {
-            LaunchVessel ("VAB", name, "LaunchPad");
+            LaunchVessel ("VAB", name, "LaunchPad", attemptRecovery);
         }
 
         /// <summary>
         /// Launch a new vessel from the SPH onto the runway.
         /// </summary>
         /// <param name="name">Name of the vessel to launch.</param>
+        /// <param name="attemptRecovery">If true and there is a vessel on the runway,
+        /// attempt to recover it before launching.</param>
         /// <remarks>
         /// This is equivalent to calling <see cref="LaunchVessel"/> with the craft directory
         /// set to "SPH" and the launch site set to "Runway".
+        /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
-        public static void LaunchVesselFromSPH (string name)
+        public static void LaunchVesselFromSPH (string name, bool attemptRecovery = true)
         {
-            LaunchVessel ("SPH", name, "Runway");
+            LaunchVessel ("SPH", name, "Runway", attemptRecovery);
         }
 
         /// <summary>

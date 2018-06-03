@@ -1,6 +1,8 @@
 v0.4.6
  * Added SpaceCenter.GameMode (#455)
  * Added SpaceCenter.Science, Funds and Reputation (#455)
+ * Fix pre-flight checks not happending in SpaceCenter.LaunchVessel (#469)
+ * Add 'recover' boolean argument to SpaceCenter.LaunchVessel to recover existing vessels on the launch pad (#469)
  * Change CelestialBody.Biomes to return an empty list instead of throwing an exception if the body has no biomes (#457)
  * Fixed science transmission not working correctly (#456)
 
