@@ -1,14 +1,10 @@
 bazel-*
+.vs/
+.idea/
 lib/ksp
 KRPC.userprefs
 bin
 obj
 KSP.log
 PartDatabase.cfg
-
-# Visual Studio Code
-.vs/
-
-# Jetbrains' Rider and friends
-.idea/
 
