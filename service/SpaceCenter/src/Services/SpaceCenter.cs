@@ -359,34 +359,34 @@ namespace KRPC.SpaceCenter.Services
         /// Launch a new vessel from the VAB onto the launchpad.
         /// </summary>
         /// <param name="name">Name of the vessel to launch.</param>
-        /// <param name="attemptRecovery">If true and there is a vessel on the launch pad,
-        /// attempt to recover it before launching.</param>
+        /// <param name="recovery">If true and there is a vessel on the launch pad,
+        /// recover it before launching.</param>
         /// <remarks>
         /// This is equivalent to calling <see cref="LaunchVessel"/> with the craft directory
         /// set to "VAB" and the launch site set to "LaunchPad".
         /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
-        public static void LaunchVesselFromVAB (string name, bool attemptRecovery = true)
+        public static void LaunchVesselFromVAB (string name, bool recover = true)
         {
-            LaunchVessel ("VAB", name, "LaunchPad", attemptRecovery);
+            LaunchVessel ("VAB", name, "LaunchPad", recover);
         }
 
         /// <summary>
         /// Launch a new vessel from the SPH onto the runway.
         /// </summary>
         /// <param name="name">Name of the vessel to launch.</param>
-        /// <param name="attemptRecovery">If true and there is a vessel on the runway,
-        /// attempt to recover it before launching.</param>
+        /// <param name="recover">If true and there is a vessel on the runway,
+        /// recover it before launching.</param>
         /// <remarks>
         /// This is equivalent to calling <see cref="LaunchVessel"/> with the craft directory
         /// set to "SPH" and the launch site set to "Runway".
         /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
-        public static void LaunchVesselFromSPH (string name, bool attemptRecovery = true)
+        public static void LaunchVesselFromSPH (string name, bool recover = true)
         {
-            LaunchVessel ("SPH", name, "Runway", attemptRecovery);
+            LaunchVessel ("SPH", name, "Runway", recover);
         }
 
         /// <summary>
