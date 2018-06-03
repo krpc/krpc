@@ -245,7 +245,7 @@ namespace KRPC.SpaceCenter.Services
 
             public void AddRecoveryEventHandler(ProtoVessel vessel) {
                 EventData<ProtoVessel, bool>.OnEvent eventHandler = (eventVessel, value) => {
-                    if (vessel.persistentId == eventVessel.persistentId)
+                    if (vessel.vesselID == eventVessel.vesselID)
                         vesselsRecovered++;
                 };
                 GameEvents.onVesselRecovered.Add(eventHandler);
@@ -359,7 +359,7 @@ namespace KRPC.SpaceCenter.Services
         /// Launch a new vessel from the VAB onto the launchpad.
         /// </summary>
         /// <param name="name">Name of the vessel to launch.</param>
-        /// <param name="recovery">If true and there is a vessel on the launch pad,
+        /// <param name="recover">If true and there is a vessel on the launch pad,
         /// recover it before launching.</param>
         /// <remarks>
         /// This is equivalent to calling <see cref="LaunchVessel"/> with the craft directory
