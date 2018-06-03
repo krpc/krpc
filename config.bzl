@@ -1,5 +1,5 @@
 author = 'djungelorm'
-version = '0.4.5'
+version = '0.4.6'
 ksp_version_max = '1.4.3.2152'
 ksp_version_min = '1.2.2.1622'
 ksp_version_max_parts = ksp_version_max.split('.')
