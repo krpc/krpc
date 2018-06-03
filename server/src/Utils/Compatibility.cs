@@ -98,6 +98,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Returns true if the given game mode is Game.Modes.Mission
         /// </summary>
+        [SuppressMessage("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public static bool GameModeIsMission(Game.Modes mode)
         {
             if (Versioning.version_major * 100 + Versioning.version_minor < 104)
@@ -110,6 +111,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Returns true if the given game mode is Game.Modes.MissionBuilder
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public static bool GameModeIsMissionBuilder(Game.Modes mode)
         {
             if (Versioning.version_major * 100 + Versioning.version_minor < 104)
