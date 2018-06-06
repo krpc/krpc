@@ -271,6 +271,14 @@ namespace KRPC.Test.Service
             Assert.AreEqual (name, TypeUtils.GetServiceName (type));
         }
 
+        [TestCase (typeof(TestService), 857051661)]
+        [TestCase (typeof(TestService2), 333031042)]
+        [TestCase (typeof(TestService3), 1234)]
+        public void GetServiceId (Type type, int id)
+        {
+            Assert.AreEqual (id, TypeUtils.GetServiceId(type));
+        }
+
         [TestCase (typeof(TestService), GameScene.Flight)]
         [TestCase (typeof(TestService2), GameScene.All)]
         [TestCase (typeof(TestService3), GameScene.Editor)]

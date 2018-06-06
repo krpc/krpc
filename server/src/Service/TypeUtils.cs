@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
@@ -153,7 +155,16 @@ namespace KRPC.Service
         {
             ValidateKRPCService (type);
             var attribute = Reflection.GetAttribute<KRPCServiceAttribute> (type);
-            return attribute.Id;
+            var id = attribute.Id;
+            if (id == 0) {
+                // Generate a service id from the service name
+                var serviceName = TypeUtils.GetServiceName(type);
+                using (var sha256 = SHA256.Create()) {
+                    var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(serviceName));
+                    id= (uint)BitConverter.ToInt64(hash, 0);
+                }
+            }
+            return id;
         }
 
         /// <summary>

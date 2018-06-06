@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -30,14 +28,6 @@ namespace KRPC.Service.Scanner
                 try {
                     CurrentAssembly = serviceType.Assembly;
                     var serviceId = TypeUtils.GetServiceId (serviceType);
-                    if (serviceId == 0) {
-                        // Generate a service id from the service name
-                        var serviceName = TypeUtils.GetServiceName(serviceType);
-                        using (var sha256 = SHA256.Create()) {
-                            var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(serviceName));
-                            serviceId = (uint)BitConverter.ToInt64(hash, 0);
-                        }
-                    }
                     if (serviceIds.Contains (serviceId))
                         HandleError(errors, "service " + TypeUtils.GetServiceName(serviceType), "Service id clashes with another service");
                     serviceIds.Add (serviceId);
