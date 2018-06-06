@@ -33,7 +33,7 @@ namespace KRPC.Test.Service
         public void TestService ()
         {
             var service = services.ServicesList.First (x => x.Name == "TestService");
-            Assert.AreEqual (41, service.Procedures.Count);
+            Assert.AreEqual (49, service.Procedures.Count);
             Assert.AreEqual (2, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
             Assert.AreEqual ("<doc>\n<summary>\nTest service documentation.\n</summary>\n</doc>", service.Documentation);
@@ -173,6 +173,26 @@ namespace KRPC.Test.Service
                     MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasParameterWithDefaultValue (proc, 0, typeof(string), "a", string.Empty);
                     MessageAssert.HasReturnType (proc, typeof(string));
+                } else if (proc.Name == "TestClass_MethodAvailableInInheritedGameScene") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "TestClass_MethodAvailableInSpecifiedGameScene") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "TestClass_get_ClassPropertyAvailableInInheritedGameScene") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "TestClass_get_ClassPropertyAvailableInSpecifiedGameScene") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "TestTopLevelClass_AMethod") {
                     MessageAssert.HasParameters (proc, 2);
                     MessageAssert.HasParameter (proc, 0, typeof(TestTopLevelClass), "this");
@@ -286,13 +306,29 @@ namespace KRPC.Test.Service
                         new Dictionary<int,bool> { { 1,false }, { 2,true } });
                     MessageAssert.HasReturnType (proc, typeof(IDictionary<int,bool>));
                     MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "ProcedureAvailableInInheritedGameScene") {
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasNoReturnType (proc);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "ProcedureAvailableInSpecifiedGameScene") {
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasNoReturnType (proc);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "get_PropertyAvailableInInheritedGameScene") {
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "get_PropertyAvailableInSpecifiedGameScene") {
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasNoDocumentation (proc);
                 } else {
                     Assert.Fail ("Procedure not found");
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (41, foundProcedures);
-            Assert.AreEqual (41, service.Procedures.Count);
+            Assert.AreEqual (49, foundProcedures);
+            Assert.AreEqual (49, service.Procedures.Count);
         }
 
         [Test]

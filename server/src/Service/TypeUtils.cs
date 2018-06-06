@@ -168,12 +168,38 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Get the GameScene that the service should active during
+        /// Get the game scene(s) that the service should be available during
         /// </summary>
         public static GameScene GetServiceGameScene (Type type)
         {
             ValidateKRPCService (type);
             var attribute = Reflection.GetAttribute<KRPCServiceAttribute> (type);
+            if (attribute.GameScene == GameScene.Inherit)
+                return GameScene.All;
+            return attribute.GameScene;
+        }
+
+        /// <summary>
+        /// Get the game scene(s) that the procedure should be available during
+        /// </summary>
+        public static GameScene GetProcedureGameScene (MethodBase method, GameScene serviceGameScene)
+        {
+            ValidateKRPCProcedure (method);
+            var attribute = Reflection.GetAttribute<KRPCProcedureAttribute> (method);
+            if (attribute.GameScene == GameScene.Inherit)
+                return serviceGameScene;
+            return attribute.GameScene;
+        }
+
+        /// <summary>
+        /// Get the game scene(s) that the property should be available during
+        /// </summary>
+        public static GameScene GetPropertyGameScene (PropertyInfo property, GameScene serviceGameScene)
+        {
+            ValidateKRPCProperty (property);
+            var attribute = Reflection.GetAttribute<KRPCPropertyAttribute> (property);
+            if (attribute.GameScene == GameScene.Inherit)
+                return serviceGameScene;
             return attribute.GameScene;
         }
 
@@ -185,6 +211,42 @@ namespace KRPC.Service
             ValidateKRPCClass (type);
             var attribute = Reflection.GetAttribute<KRPCClassAttribute> (type);
             return attribute.Service ?? GetServiceName (type.DeclaringType);
+        }
+
+        /// <summary>
+        /// Get the game scene(s) that the class should be available during
+        /// </summary>
+        public static GameScene GetClassGameScene (Type type, GameScene serviceGameScene)
+        {
+            ValidateKRPCClass (type);
+            var attribute = Reflection.GetAttribute<KRPCClassAttribute> (type);
+            if (attribute.GameScene == GameScene.Inherit)
+                return serviceGameScene;
+            return attribute.GameScene;
+        }
+
+        /// <summary>
+        /// Get the game scene(s) that the class method should be available during
+        /// </summary>
+        public static GameScene GetMethodGameScene (Type cls, MethodBase method, GameScene classGameScene)
+        {
+            ValidateKRPCMethod (cls, method);
+            var attribute = Reflection.GetAttribute<KRPCMethodAttribute> (method);
+            if (attribute.GameScene == GameScene.Inherit)
+                return classGameScene;
+            return attribute.GameScene;
+        }
+
+        /// <summary>
+        /// Get the game scene(s) that the class property should be available during
+        /// </summary>
+        public static GameScene GetClassPropertyGameScene (Type cls, PropertyInfo property, GameScene serviceGameScene)
+        {
+            ValidateKRPCClassProperty (cls, property);
+            var attribute = Reflection.GetAttribute<KRPCPropertyAttribute> (property);
+            if (attribute.GameScene == GameScene.Inherit)
+                return serviceGameScene;
+            return attribute.GameScene;
         }
 
         /// <summary>

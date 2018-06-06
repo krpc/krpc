@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace KRPC.Service
 {
@@ -13,9 +14,14 @@ namespace KRPC.Service
     public enum GameScene
     {
         /// <summary>
-        /// None of the scenes
+        /// No game scene.
         /// </summary>
         None = 0,
+
+        /// <summary>
+        /// Inherit the game scene from the enclosing service or class.
+        /// </summary>
+        Inherit = 0,
 
         /// <summary>
         /// The space center overview
@@ -43,13 +49,25 @@ namespace KRPC.Service
         EditorSPH = 1 << 4,
 
         /// <summary>
-        /// All game scenes
-        /// </summary>
-        All = ~0,
-
-        /// <summary>
         /// The VAB or SPH editors
         /// </summary>
-        Editor = EditorSPH | EditorVAB
+        Editor = EditorSPH | EditorVAB,
+
+        /// <summary>
+        /// The mission builder
+        /// </summary>
+        MissionBuilder = 1 << 5,
+
+        /// <summary>
+        /// All game scenes
+        /// </summary>
+        All = ~0
     }
+
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
+    static class GameSceneUtils {
+        public static string Name(GameScene scene) {
+            return string.Join(", ", scene.ToString().Split(',').Where(x => x != "Inherit").Select(x => x.Trim()).ToArray());
+        }
+    };
 }

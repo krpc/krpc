@@ -66,5 +66,13 @@ namespace KRPC.Test.Service
         HashSet<int> SetDefault (HashSet<int> x);
 
         IDictionary<int,bool> DictionaryDefault (IDictionary<int,bool> x);
+
+        void ProcedureAvailableInInheritedGameScene();
+
+        void ProcedureAvailableInSpecifiedGameScene();
+
+        string PropertyAvailableInInheritedGameScene { get; }
+
+        string PropertyAvailableInSpecifiedGameScene { get; }
     }
 }

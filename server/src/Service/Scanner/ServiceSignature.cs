@@ -44,9 +44,9 @@ namespace KRPC.Service.Scanner
         public Dictionary<string,ExceptionSignature> Exceptions { get; private set; }
 
         /// <summary>
-        /// Which game scene(s) the service should be active during
+        /// The game scene of the service, to be inherited by procedures in the service.
         /// </summary>
-        public GameScene GameScene { get; private set; }
+        GameScene gameScene;
 
         /// <summary>
         /// Create a service signature from a C# type annotated with the KRPCService attribute
@@ -61,7 +61,7 @@ namespace KRPC.Service.Scanner
             Enumerations = new Dictionary<string, EnumerationSignature> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
             Exceptions = new Dictionary<string, ExceptionSignature> ();
-            GameScene = TypeUtils.GetServiceGameScene (type);
+            gameScene = TypeUtils.GetServiceGameScene (type);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace KRPC.Service.Scanner
             Enumerations = new Dictionary<string, EnumerationSignature> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
             Exceptions = new Dictionary<string, ExceptionSignature> ();
-            GameScene = GameScene.All;
+            gameScene = GameScene.All;
         }
 
         uint nextProcedureId = 1;
@@ -104,7 +104,8 @@ namespace KRPC.Service.Scanner
             TypeUtils.ValidateKRPCProcedure (method);
             AddProcedure (new ProcedureSignature (
                 Name, method.Name, NextProcedureId, method.GetDocumentation (),
-                new ProcedureHandler (method, TypeUtils.GetNullable (method)), GameScene));
+                new ProcedureHandler (method, TypeUtils.GetNullable (method)),
+                TypeUtils.GetProcedureGameScene(method, gameScene)));
         }
 
         /// <summary>
@@ -121,10 +122,12 @@ namespace KRPC.Service.Scanner
                 AddPropertyProcedure (property, setter);
         }
 
-        void AddPropertyProcedure (MemberInfo property, MethodInfo method)
+        void AddPropertyProcedure (PropertyInfo property, MethodInfo method)
         {
             var handler = new ProcedureHandler (method, TypeUtils.GetNullable (property));
-            AddProcedure (new ProcedureSignature (Name, method.Name, NextProcedureId, property.GetDocumentation (), handler, GameScene));
+            AddProcedure (new ProcedureSignature (
+                Name, method.Name, NextProcedureId, property.GetDocumentation (), handler,
+                TypeUtils.GetPropertyGameScene(property, gameScene)));
         }
 
         /// <summary>
@@ -184,12 +187,17 @@ namespace KRPC.Service.Scanner
                 throw new ArgumentException ("Class " + cls + " does not exist");
             var name = method.Name;
             var id = NextProcedureId;
+            var classGameScene = TypeUtils.GetClassGameScene(classType, gameScene);
             if (!method.IsStatic) {
                 var handler = new ClassMethodHandler (classType, method, TypeUtils.GetNullable(method));
-                AddProcedure (new ProcedureSignature (Name, cls + '_' + name, id, method.GetDocumentation (), handler, GameScene));
+                AddProcedure (new ProcedureSignature (
+                    Name, cls + '_' + name, id, method.GetDocumentation (), handler,
+                    TypeUtils.GetMethodGameScene(classType, method, classGameScene)));
             } else {
                 var handler = new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method));
-                AddProcedure (new ProcedureSignature (Name, cls + "_static_" + name, id, method.GetDocumentation (), handler, GameScene));
+                AddProcedure (new ProcedureSignature (
+                    Name, cls + "_static_" + name, id, method.GetDocumentation (), handler,
+                    TypeUtils.GetMethodGameScene(classType, method, classGameScene)));
             }
         }
 
@@ -210,10 +218,13 @@ namespace KRPC.Service.Scanner
                 AddClassPropertyMethod (cls, classType, property, setter, false);
         }
 
-        void AddClassPropertyMethod (string cls, Type classType, MemberInfo property, MethodInfo method, bool nullable)
+        void AddClassPropertyMethod (string cls, Type classType, PropertyInfo property, MethodInfo method, bool nullable)
         {
             var handler = new ClassMethodHandler (classType, method, nullable);
-            AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, NextProcedureId, property.GetDocumentation (), handler, GameScene));
+            var classGameScene = TypeUtils.GetClassGameScene(classType, gameScene);
+            AddProcedure (new ProcedureSignature (
+                Name, cls + '_' + method.Name, NextProcedureId, property.GetDocumentation (), handler,
+                TypeUtils.GetClassPropertyGameScene(classType, property, classGameScene)));
         }
 
         public void GetObjectData (SerializationInfo info, StreamingContext context)

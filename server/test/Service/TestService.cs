@@ -106,7 +106,7 @@ namespace KRPC.Test.Service
             return Service.ReturnNullWhenNotAllowed ();
         }
 
-        [KRPCClass]
+        [KRPCClass (GameScene = GameScene.Flight | GameScene.SpaceCenter)]
         [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
         public class TestClass
         {
@@ -145,6 +145,30 @@ namespace KRPC.Test.Service
             public static string StaticMethod (string a = "")
             {
                 return "jeb" + a;
+            }
+
+            [KRPCMethod]
+            public string MethodAvailableInInheritedGameScene()
+            {
+                return "foo";
+            }
+
+            [KRPCMethod (GameScene = GameScene.EditorVAB)]
+            public string MethodAvailableInSpecifiedGameScene()
+            {
+                return "foo";
+            }
+
+            [KRPCProperty]
+            public string ClassPropertyAvailableInInheritedGameScene
+            {
+                get { return "foo"; }
+            }
+
+            [KRPCProperty (GameScene = GameScene.EditorVAB)]
+            public string ClassPropertyAvailableInSpecifiedGameScene
+            {
+                get { return "foo"; }
             }
         }
 
@@ -319,6 +343,30 @@ namespace KRPC.Test.Service
         public static IDictionary<int,bool> DictionaryDefault (IDictionary<int,bool> x)
         {
             return Service.DictionaryDefault (x);
+        }
+
+        [KRPCProcedure]
+        public static void ProcedureAvailableInInheritedGameScene()
+        {
+            Service.ProcedureAvailableInInheritedGameScene();
+        }
+
+        [KRPCProcedure (GameScene = GameScene.EditorVAB)]
+        public static void ProcedureAvailableInSpecifiedGameScene()
+        {
+            Service.ProcedureAvailableInSpecifiedGameScene();
+        }
+
+        [KRPCProperty]
+        public static string PropertyAvailableInInheritedGameScene
+        {
+            get { return Service.PropertyAvailableInInheritedGameScene; }
+        }
+
+        [KRPCProperty (GameScene = GameScene.EditorVAB)]
+        public static string PropertyAvailableInSpecifiedGameScene
+        {
+            get { return Service.PropertyAvailableInSpecifiedGameScene; }
         }
     }
 }

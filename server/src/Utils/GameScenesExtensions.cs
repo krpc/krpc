@@ -6,8 +6,9 @@ namespace KRPC.Utils
     static class GameScenesExtensions
     {
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
-        internal static GameScene ToGameScene (this GameScenes scene)
+        internal static GameScene CurrentGameScene ()
         {
+            var scene = HighLogic.LoadedScene;
             switch (scene) {
             case GameScenes.SPACECENTER:
                 return GameScene.SpaceCenter;
@@ -16,7 +17,10 @@ namespace KRPC.Utils
             case GameScenes.TRACKSTATION:
                 return GameScene.TrackingStation;
             case GameScenes.EDITOR:
-                return GameScene.Editor;
+                return EditorDriver.editorFacility == EditorFacility.VAB ?
+                    GameScene.EditorVAB : GameScene.EditorSPH;
+            case GameScenes.MISSIONBUILDER:
+                return GameScene.MissionBuilder;
             default:
                 return GameScene.None;
             }

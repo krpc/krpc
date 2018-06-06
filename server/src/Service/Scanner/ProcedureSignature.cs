@@ -38,6 +38,11 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public IProcedureHandler Handler { get; private set; }
 
+        /// <summary>
+        /// Which game scene(s) the service should be available during
+        /// </summary>
+        public GameScene GameScene { get; private set; }
+
         public IList<ParameterSignature> Parameters { get; private set; }
 
         public bool HasReturnType { get; private set; }
@@ -57,11 +62,6 @@ namespace KRPC.Service.Scanner
         public bool IsPropertySetter { get; private set; }
 
         public string PropertyName { get; private set; }
-
-        /// <summary>
-        /// Which game scene(s) the service should be active during
-        /// </summary>
-        public GameScene GameScene { get; private set; }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         internal ProcedureSignature (string serviceName, string procedureName, uint id, string documentation, IProcedureHandler handler, GameScene gameScene)
