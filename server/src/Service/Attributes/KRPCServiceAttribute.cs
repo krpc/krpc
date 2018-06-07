@@ -28,7 +28,7 @@ namespace KRPC.Service.Attributes
         /// </summary>
         public KRPCServiceAttribute ()
         {
-            GameScene = GameScene.Inherit;
+            GameScene = GameScene.All;
         }
     }
 }
