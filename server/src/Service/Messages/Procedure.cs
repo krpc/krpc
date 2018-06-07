@@ -18,6 +18,8 @@ namespace KRPC.Service.Messages
 
         public bool ReturnIsNullable { get; set; }
 
+        public GameScene GameScene { get; set; }
+
         public string Documentation { get; set; }
 
         public Procedure (string name)

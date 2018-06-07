@@ -90,6 +90,7 @@ namespace KRPC.Service.KRPC
                             parameter.DefaultValue = parameterSignature.DefaultValue;
                         procedure.Parameters.Add (parameter);
                     }
+                    procedure.GameScene = procedureSignature.GameScene;
                     if (procedureSignature.Documentation.Length > 0)
                         procedure.Documentation = procedureSignature.Documentation;
                     service.Procedures.Add (procedure);

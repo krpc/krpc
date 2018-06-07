@@ -1,4 +1,5 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Messages;
 using NUnit.Framework;
 
@@ -47,6 +48,11 @@ namespace KRPC.Test.Service
             Assert.IsTrue (procedure.HasReturnType);
             Assert.AreEqual (returnType, procedure.ReturnType);
             Assert.AreEqual (returnIsNullable, procedure.ReturnIsNullable);
+        }
+
+        public static void HasGameScene (Procedure procedure, GameScene gameScene)
+        {
+            Assert.AreEqual (gameScene, procedure.GameScene);
         }
 
         public static void HasNoDocumentation (Procedure procedure)
