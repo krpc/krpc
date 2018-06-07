@@ -123,6 +123,8 @@ namespace KRPC.Service.Scanner
                 info.AddValue("return_type", TypeUtils.SerializeType(ReturnType));
                 info.AddValue("return_is_nullable", ReturnIsNullable);
             }
+            if (GameScene != GameScene.All)
+                info.AddValue ("game_scene", GameSceneUtils.Serialize(GameScene));
             info.AddValue ("documentation", Documentation);
         }
     }
