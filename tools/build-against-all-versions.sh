@@ -5,7 +5,7 @@ set -e
 mkdir -p bazel-bin/lib
 pushd bazel-bin/lib
 
-versions="1.2.1.1604 1.2.2.1622 1.3.0.1804 1.3.1.1891 1.4.0.2077 1.4.1.2089 1.4.1.2110 1.4.1.2152"
+versions="1.2.1.1604 1.2.2.1622 1.3.0.1804 1.3.1.1891 1.4.0.2077 1.4.1.2089 1.4.2.2110 1.4.3.2152"
 
 for version in $versions; do
     if [ ! -f ksp-$version.tar.gz ]; then
