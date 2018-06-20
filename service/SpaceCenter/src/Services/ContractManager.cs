@@ -8,7 +8,7 @@ namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
     /// Contracts manager.
-    /// Obtained by calling <see cref="SpaceCenter.WaypointManager"/>.
+    /// Obtained by calling <see cref="SpaceCenter.ContractManager"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class ContractManager : Equatable<ContractManager>
