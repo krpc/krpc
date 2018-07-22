@@ -1,4 +1,5 @@
 v1.10.0
+ * Update to KSP 1.4.3
  * Update to Bazel 0.15.2
 
 v1.9.0
