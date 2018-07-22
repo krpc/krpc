@@ -22,15 +22,26 @@ mkdir $arduino/src
 cp bazel-bin/client/cnano/krpc-cnano-$VERSION.zip $arduino/src/
 cd $arduino/src
 unzip -q krpc-cnano-$VERSION.zip
+# Restructure files
 mv krpc-cnano-$VERSION/include/* ./
 mv krpc-cnano-$VERSION/src/*.c ./
 rm Makefile.*
+mv krpc_cnano.h krpc.h
+mv krpc_cnano krpc
+rm -rf krpc-cnano-$VERSION krpc-cnano-$VERSION.zip
+# Rename .c to .cpp for arduino builder
 for file in *.c; do
   mv "$file" "$(basename "$file" .c).cpp"
 done
-rm -rf krpc-cnano-$VERSION krpc-cnano-$VERSION.zip
+# Fix up includes to krpc/... instead of krpc_cnano/...
+pwd
+for file in `find . -name "*.h" -o -name "*.cpp"`; do
+    sed -i -r -e "s/#include ([<\"])krpc_cnano\/(.+)([>\"])/#include \1krpc\/\2\3/g" $file
+    sed -i -e "s/#include <krpc_cnano\.h>/#include <krpc\.h>/g" $file
+    sed -i -r -e "s/#include \"(pb.*\.h)\"/#include \"krpc\/\1\"/g" $file
+done
 # Enable PB_NO_ERRMSG by default
-echo -e "#ifndef PB_NO_ERRMSG\n#define PB_NO_ERRMSG\n#endif\n\n$(cat pb.h)" > pb.h
+echo -e "#ifndef PB_NO_ERRMSG\n#define PB_NO_ERRMSG\n#endif\n\n$(cat krpc/pb.h)" > krpc/pb.h
 cd $arduino
 
 # Update library.properties

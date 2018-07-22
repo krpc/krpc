@@ -136,6 +136,11 @@ port interface:
 .. literalinclude:: /scripts/client/cnano/BasicArduino.ino
    :language: c
 
+.. note::
+
+   The main include file and include directory are named ``krpc`` instead of ``krpc_cnano`` in the
+   Arduino version of the library.
+
 Calling Remote Procedures
 -------------------------
 

@@ -1,3 +1,6 @@
+v0.4.7
+ * Fix include paths on Arduino (#482)
+
 v0.4.6
  * Include directory and main header now suffixed with "_cnano" to avoid name clashes with C++ client
 
