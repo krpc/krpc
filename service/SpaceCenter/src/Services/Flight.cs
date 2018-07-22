@@ -109,7 +109,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Sum of the lift forces acting every part.
+        /// Sum of the lift forces acting every part, in Newtons.
         /// Note this is NOT the force in the vessel's lift direction.
         /// </summary>
         Vector3d WorldPartsLift {
@@ -128,12 +128,12 @@ namespace KRPC.SpaceCenter.Services
                             lift += wing.liftForce;
                     }
                 }
-                return lift;
+                return lift * 1000f;
             }
         }
 
         /// <summary>
-        /// Sum of the drag forces acting on every part.
+        /// Sum of the drag forces acting on every part, in Newtons.
         /// Note this is NOT the force in the vessel's drag direction.
         /// </summary>
         Vector3d WorldPartsDrag {
@@ -150,7 +150,7 @@ namespace KRPC.SpaceCenter.Services
                             drag += wing.dragForce;
                     }
                 }
-                return drag;
+                return drag * 1000f;
             }
         }
 
@@ -183,7 +183,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Magnitude of the lift force acting on the vessel.
+        /// Magnitude of the lift force acting on the vessel, in Newtons.
         /// </summary>
         double LiftMagnitude {
             get {

@@ -1,3 +1,6 @@
+v0.4.7
+ * Fix Flight.Lift and Flight.Drag should return values in Newtons (#475)
+
 v0.4.6
  * Added SpaceCenter.GameMode (#455)
  * Added SpaceCenter.Science, Funds and Reputation (#455)
