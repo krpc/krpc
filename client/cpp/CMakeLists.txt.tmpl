@@ -27,6 +27,8 @@ if(WIN32 OR CYGWIN)
 endif()
 
 if(MSVC)
+  # Esure .lib files are generated
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
   # protobuf statically links against MT, so need to compile with /MT not /MD
   foreach(var
         CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
