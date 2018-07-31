@@ -48,7 +48,7 @@ krpc_error_t krpc_write(krpc_connection_t connection, const uint8_t * buf, size_
 #if defined(KRPC_COMMUNICATION_ARDUINO)
 
 krpc_error_t krpc_open(krpc_connection_t * connection, const void * arg) {
-  (*connection)->begin(9600);
+  (*connection)->begin(arg);
   while (!*connection) {
   }
   return KRPC_OK;
