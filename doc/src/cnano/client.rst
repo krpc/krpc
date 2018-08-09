@@ -166,17 +166,41 @@ These features are not yet supported by this client.
 Client API Reference
 --------------------
 
-.. function:: krpc_error_t krpc_open(krpc_connection_t * connection, void * arg)
+.. function:: krpc_error_t krpc_open(krpc_connection_t * connection, const krpc_connection_config_t * arg)
 
    Create a communication handle over which the client can talk to a server.
 
    When the library is built using ``KRPC_COMMUNICATION_POSIX`` (which is defined by default)
    calling this function opens a serial port using the port name passed as *arg*, using a call to
-   ``open(arg, ...)``.
+   ``open(arg, ...)``. In this case the type of the *arg* parameter is ``const char *``. For example:
+
+   .. code-block:: c
+
+     krpc_connection_t conn;
+     krpc_open(&conn, "COM0");
 
    When the library is built using ``KRPC_COMMUNICATION_ARDUINO``, *connection* must be a pointer to
-   a ``HardwareSerial`` object. Calling this function opens the serial port using
-   ``(*(HardwareSerial*)connection)->begin(9600)``. *arg* is not used.
+   a ``HardwareSerial`` object. *arg* is optionally used to pass additional configuration options
+   used to initialize the connection, including baud rate for the serial port.
+
+   If *arg* is set to ``NULL`` the connection is initialized with a baud rate of 9600 and
+   defaults ``SERIAL_8N1`` for data, parity and stop bits. For example:
+
+   .. code-block:: c
+
+     krpc_connection_t conn;
+     krpc_open(&conn, NULL);
+
+   When *arg* set to a pointer to a structure of type ``krpc_connection_config_t``, the baud rate, and data, parity and stop
+   bits in the structure are used to initialize the connection. For example:
+
+   .. code-block:: c
+
+     krpc_connection_t conn;
+     krpc_connection_config_t config;
+     config.speed = 115200;
+     config.config = SERIAL_5N1;
+     krpc_open(&conn, &config);
 
 .. function:: krpc_error_t krpc_connect(krpc_connection_t connection, const char * name)
 
