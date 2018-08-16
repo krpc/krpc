@@ -1,5 +1,3 @@
-startup --batch
-
 # Verbose output
 fetch --curses=no --show_progress_rate_limit=0
 build --curses=no --show_progress_rate_limit=0 --verbose_failures
@@ -14,3 +12,7 @@ test -j 1 --test_output=streamed
 
 # Host and target configurations are identical
 build --distinct_host_configuration=false
+
+# Use JDK 8
+build --java_toolchain=@bazel_tools//tools/jdk:toolchain_hostjdk8
+test --java_toolchain=@bazel_tools//tools/jdk:toolchain_hostjdk8
