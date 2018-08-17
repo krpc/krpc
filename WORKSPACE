@@ -621,3 +621,9 @@ http_file(
     url = 'https://pypi.python.org/packages/c9/bb/8d3dd9063cfe0cd5d03fe6a1f74ddd948f384e9c1eff0eb978f3976a7d27/websocket_client-0.47.0.tar.gz',
     sha256 = 'a453dc4dfa6e0db3d8fd7738a308a88effe6240c59f3226eb93e8f020c216149'
 )
+
+http_file(
+    name = 'module_manager',
+    url = 'https://ksp.sarbian.com/jenkins/job/ModuleManager/142/artifact/ModuleManager.3.0.7.dll',
+    sha256 = '2875f916cbdb2414c34a8b2acf34129968b425b7b517c83ef603436fca1fc489'
+)
