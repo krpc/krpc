@@ -77,3 +77,29 @@ T: KRPC.SpaceCenter.Services.Resources
 T: KRPC.SpaceCenter.Services.Vessel
 T: KRPC.SpaceCenter.Services.Waypoint
 T: KRPC.SpaceCenter.Services.WaypointManager
+
+# NameTag
+R: Gendarme.Rules.Performance.AvoidUnneededFieldInitializationRule
+M: System.Void KRPC.SpaceCenter.NameTag.Window::.ctor()
+R: Gendarme.Rules.Maintainability.AvoidLackOfCohesionOfMethodsRule
+T: KRPC.SpaceCenter.NameTag.Window
+R: Gendarme.Rules.Design.AvoidRefAndOutParametersRule
+M: System.Boolean KRPC.SpaceCenter.NameTag.Career::CanTagInEditor(EditorFacility,System.String&)
+R: Gendarme.Rules.Performance.AvoidUnneededFieldInitializationRule
+M: System.Void KRPC.SpaceCenter.NameTag.Window::.ctor()
+R: Gendarme.Rules.Design.AvoidVisibleFieldsRule
+T: KRPC.SpaceCenter.NameTag.KOSNameTag
+R: Gendarme.Rules.Naming.UseCorrectCasingRule
+N: KRPC.SpaceCenter.NameTag
+R: Gendarme.Rules.Naming.UsePreferredTermsRule
+M: System.Boolean KRPC.SpaceCenter.NameTag.Career::CanTagInEditor(EditorFacility,System.String&)
+R: Gendarme.Rules.Naming.UsePreferredTermsRule
+M: System.Boolean KRPC.SpaceCenter.NameTag.Career::CanTagInEditor(EditorFacility)
+R: Gendarme.Rules.Performance.UseStringEmptyRule
+M: System.Void KRPC.SpaceCenter.NameTag.KOSNameTag::.ctor()
+R: Gendarme.Rules.Design.AvoidSmallNamespaceRule
+N: KRPC.SpaceCenter.NameTag
+R: Gendarme.Rules.Design.ConsiderConvertingMethodToPropertyRule
+M: UnityEngine.Camera KRPC.SpaceCenter.NameTag.Utils::GetCurrentCamera()
+R: Gendarme.Rules.Correctness.MethodCanBeMadeStaticRule
+M: UnityEngine.Vector3 KRPC.SpaceCenter.NameTag.Window::GetViewportPosFor(UnityEngine.Vector3)
