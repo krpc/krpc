@@ -15,7 +15,7 @@ namespace KRPC.InfernalRobotics
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Start ()
         {
-            IRWrapper.InitWrapper ();
+            IRWrapper.IRWrapper.InitWrapper ();
         }
     }
 }
