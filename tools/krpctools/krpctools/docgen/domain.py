@@ -1,6 +1,10 @@
+import os.path
+
+
 class Domain(object):
     def __init__(self, macros):
-        self.macros = macros
+        self.macros = os.path.basename(macros)
+        self.macros_dir = os.path.abspath(os.path.dirname(macros))
         self.module = None
 
     def currentmodule(self, name):

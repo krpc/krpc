@@ -126,7 +126,9 @@ def main():
 
 
 def process_file(domain, services, path):
-    loader = jinja2.FileSystemLoader(searchpath=['./', '/'])
+    loader = jinja2.FileSystemLoader(searchpath=[
+        domain.macros_dir,
+        os.path.abspath(os.path.dirname(path))])
     template_env = jinja2.Environment(
         loader=loader,
         trim_blocks=True,
@@ -166,7 +168,7 @@ def process_file(domain, services, path):
     template_env.filters['indent'] = indent
     template_env.filters['singleline'] = single_line
 
-    template = template_env.get_template(path)
+    template = template_env.get_template(os.path.basename(path))
     content = template.render(context)
 
     return (content.rstrip()+'\n', sorted(documented))
