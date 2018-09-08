@@ -56,8 +56,7 @@ def main():
         help='Path to output a list of documented members')
     args = parser.parse_args()
 
-    macros = resource_filename(__name__, '%s.tmpl' % args.language) \
-        .decode('utf-8')
+    macros = resource_filename(__name__, '%s.tmpl' % args.language)
 
     if args.language == 'cnano':
         domain = CnanoDomain(macros)
