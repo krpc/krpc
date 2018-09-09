@@ -1,3 +1,4 @@
+from __future__ import print_function
 import argparse
 import glob
 import os
@@ -84,7 +85,7 @@ def main():
             services_info.update(json.load(fp))
 
     if services_info == {}:
-        print 'No services found in services definition files'
+        print('No services found in services definition files')
         exit(1)
 
     sort_failed = []
@@ -101,7 +102,7 @@ def main():
         return info
 
     services = {name: Service(name, sort=sort, **parse_service_info(info))
-                for name, info in services_info.iteritems()}
+                for name, info in services_info.items()}
 
     if sort_failed:
         raise RuntimeError(
