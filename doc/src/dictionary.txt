@@ -37,6 +37,7 @@ combusting
 comms
 constructible
 convecting
+cppcheck
 crossfeed
 decoupler
 decouplers
@@ -75,6 +76,7 @@ lua
 luarocks
 mach
 massless
+maths
 mits
 namespace
 namespaces
@@ -109,9 +111,11 @@ rsvg
 runtime
 serializable
 shader
+socat
 stderr
 str
 streamPort
+sudo
 symlink
 targetting
 thruster
