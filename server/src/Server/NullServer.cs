@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Server
 {
@@ -7,6 +8,7 @@ namespace KRPC.Server
     /// A byte server that never has any clients.
     /// Used when a server instance is required, but the protocol does not require it.
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     sealed class NullServer : IServer<byte,byte>
     {
         #pragma warning disable 0067
