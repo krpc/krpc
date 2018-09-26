@@ -1,3 +1,6 @@
+v0.4.8
+ * Make Connection class implement AutoClosable (#491)
+
 v0.4.6
  * Add methods to remove callbacks from streams and events (#451)
 

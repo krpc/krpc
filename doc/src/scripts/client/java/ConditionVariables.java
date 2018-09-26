@@ -10,13 +10,14 @@ import java.io.IOException;
 
 public class ConditionVariables {
   public static void main(String[] args) throws IOException, RPCException, StreamException {
-    Connection connection = Connection.newInstance();
-    SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
-    Control control = spaceCenter.getActiveVessel().getControl();
-    Stream<Boolean> abort = connection.addStream(control, "getAbort");
-    synchronized (abort.getCondition()) {
-      while (!abort.get()) {
-        abort.waitForUpdate();
+    try (Connection connection = Connection.newInstance()) {
+      SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
+      Control control = spaceCenter.getActiveVessel().getControl();
+      Stream<Boolean> abort = connection.addStream(control, "getAbort");
+      synchronized (abort.getCondition()) {
+        while (!abort.get()) {
+          abort.waitForUpdate();
+        }
       }
     }
   }
