@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Connection {
+public class Connection implements AutoCloseable {
   private final Object connectionLock = new Object();
 
   private Socket rpcSocket;
@@ -180,6 +180,7 @@ public class Connection {
   }
 
   /** Close the connection. */
+  @Override
   public void close() throws IOException {
     synchronized (connectionLock) {
       rpcSocket.close();
