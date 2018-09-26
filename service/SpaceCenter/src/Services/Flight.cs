@@ -232,7 +232,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The current G force acting on the vessel in <math>m/s^2</math>.
+        /// The current G force acting on the vessel in <math>g</math>.
         /// </summary>
         [KRPCProperty]
         public float GForce {
