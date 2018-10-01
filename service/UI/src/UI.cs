@@ -1,6 +1,7 @@
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.UI.ExtensionMethods;
+using UnityEngine;
 
 namespace KRPC.UI
 {
@@ -47,8 +48,8 @@ namespace KRPC.UI
         [KRPCProcedure]
         public static void Message(string content, float size = 30, float duration = 1f, Color color = new Color(), MessagePosition position = MessagePosition.TopCenter)
         {
-            if (color == new Color()) { color = Color.Yellow; } //Default to standard yellow colour.
-            string htmlColor = "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2"); //Convert to hex colour notation.
+            if (color == new Color()) { color = Color.yellow; } //Default to yellow
+            string htmlColor = "#" + color.r.ToString("X2") + color.g.ToString("X2") + color.b.ToString("X2"); //Convert to hex colour notation.
             ScreenMessages.PostScreenMessage("<color=" + htmlColor + "><size=" + size + ">" + content + "</size></color>", duration, position.ToScreenMessageStyle()); //Draw message
         }
 
