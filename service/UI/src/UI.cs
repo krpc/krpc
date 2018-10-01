@@ -45,7 +45,7 @@ namespace KRPC.UI
         /// <param name="color">The color of the message.</param>
         /// <param name="position">Position to display the message.</param>
         [KRPCProcedure]
-        public static void Message(string content, float size = 5, float duration = 1f, Color color = new Color(), MessagePosition position = MessagePosition.TopCenter)
+        public static void Message(string content, float size = 30, float duration = 1f, Color color = new Color(), MessagePosition position = MessagePosition.TopCenter)
         {
             if (color == new Color()) { color = Color.Yellow; } //Default to standard yellow colour.
             string htmlColor = "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2"); //Convert to hex colour notation.
