@@ -1,6 +1,7 @@
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.UI.ExtensionMethods;
+using System.Drawing;
 
 namespace KRPC.UI
 {
@@ -40,12 +41,16 @@ namespace KRPC.UI
         /// The message appears just like a stock message, for example quicksave or quickload messages.
         /// </remarks>
         /// <param name="content">Message content.</param>
+        /// <param name="size">Size of the message, differs per position.</param>
         /// <param name="duration">Duration before the message disappears, in seconds.</param>
+        /// <param name="color">The color of the message.</param>
         /// <param name="position">Position to display the message.</param>
         [KRPCProcedure]
-        public static void Message (string content, float duration = 1f, MessagePosition position = MessagePosition.TopCenter)
+        public static void Message(string content, float size = 30, float duration = 1f, Color color = new UnityEngine.Color(), MessagePosition position = MessagePosition.TopCenter)
         {
-            ScreenMessages.PostScreenMessage (content, duration, position.ToScreenMessageStyle ());
+            if (color == new Color()) { color = Color.yellow; } //Default to yellow
+            string htmlColor = "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2"); //Convert to hex colour notation.
+            ScreenMessages.PostScreenMessage("<color=" + htmlColor + "><size=" + size + ">" + content + "</size></color>", duration, position.ToScreenMessageStyle()); //Draw message
         }
 
         /// <summary>
