@@ -23,14 +23,20 @@ extern "C" {
 
 #ifdef KRPC_COMMUNICATION_POSIX
 typedef int krpc_connection_t;
+typedef char krpc_connection_config_t;
 #endif
 
 #ifdef KRPC_COMMUNICATION_ARDUINO
 typedef HardwareSerial * krpc_connection_t;
+
+typedef struct {
+  uint32_t speed;
+  byte config;
+} krpc_connection_config_t;
 #endif
 
 /* Open a connection */
-krpc_error_t krpc_open(krpc_connection_t * connection, const void * arg);
+krpc_error_t krpc_open(krpc_connection_t * connection, const krpc_connection_config_t * config);
 /* Close a connection */
 krpc_error_t krpc_close(krpc_connection_t connection);
 /* Read count bytes of data from the connection into buf */
