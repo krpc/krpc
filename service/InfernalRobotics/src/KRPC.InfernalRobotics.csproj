@@ -75,9 +75,17 @@
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Addon.cs" />
-    <Compile Include="IRWrapper.cs" />
+    <Compile Include="IRWrapper\IControlGroup.cs" />
+    <Compile Include="IRWrapper\IRAPI.cs" />
+    <Compile Include="IRWrapper\IRNext.cs" />
+    <Compile Include="IRWrapper\IROrig.cs" />
+    <Compile Include="IRWrapper\IRWrapper.cs" />
+    <Compile Include="IRWrapper\IServo.cs" />
     <Compile Include="InfernalRobotics.cs" />
     <Compile Include="Servo.cs" />
     <Compile Include="ServoGroup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IRWrapper\" />
   </ItemGroup>
 </Project>
