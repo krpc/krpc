@@ -1,7 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.UI.ExtensionMethods;
+using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPC.UI
@@ -79,9 +81,8 @@ namespace KRPC.UI
         [KRPCDefaultValue("color", typeof(CreateDefaultColor))]
         [SuppressMessage("Gendarme.Rules.Globalization", "PreferIFormatProviderOverrideRule")]
         public static void Message(string content, float duration, MessagePosition position,
-                                   Tuple3 color, float size = 30)
-        {
-            var htmlColor = "#" + color.Item1.ToString("X2") + color.Item2.ToString("X2") + color.Item3.ToString("X2");
+                                   Tuple3 color, float size = 20) {
+            var htmlColor = "#" + ColorUtility.ToHtmlStringRGB(color.ToColor());
             var message = "<color=" + htmlColor + "><size=" + size.ToString() + ">" + content + "</size></color>";
             ScreenMessages.PostScreenMessage(message, duration, position.ToScreenMessageStyle());
         }
