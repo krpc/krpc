@@ -85,8 +85,8 @@ new_http_archive(
 
 http_file(
     name = 'csharp_protobuf_net35',
-    url = 'https://s3.amazonaws.com/krpc/lib/protobuf-3.5.1-net35/Google.Protobuf.dll',
-    sha256 = 'a325b41c95c1b4c65e6144451adb2eb140dc851207170d072a6ce15110d5bea2'
+    url = 'https://s3.amazonaws.com/krpc/lib/protobuf-3.6.1-net35/Google.Protobuf.dll',
+    sha256 = 'd6c437bfbee9a2534744c5bae3ab6359caf0382ff61ea402f334fd6c3edf9f89'
 )
 
 http_file(
