@@ -1,5 +1,6 @@
 v0.4.8
  * Merge NameTag (http://github.com/krpc/NameTag) into the main kRPC release
+ * Fix air-relative velocity calculation for SimulateAeroDynamicForceAt with FAR (#500)
 
 v0.4.7
  * Fix Flight.Lift and Flight.Drag should return values in Newtons (#475)
