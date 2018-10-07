@@ -1,3 +1,4 @@
+from __future__ import print_function
 import argparse
 import importlib
 import json
@@ -114,7 +115,7 @@ def main():
         if args.output:
             g.generate_file(args.output)
         else:
-            print g.generate()
+            print(g.generate())
 
     except RuntimeError, ex:
         sys.stderr.write('Error: %s\n' % str(ex))

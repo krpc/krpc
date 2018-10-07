@@ -42,6 +42,13 @@ namespace KRPC.Drawing
         [KRPCProcedure]
         public static Line AddDirection (Tuple3 direction, ReferenceFrame referenceFrame, float length = 10f, bool visible = true)
         {
+            var activeVesselRefFrame = SpaceCenter.Services.SpaceCenter.ActiveVessel.ReferenceFrame;
+            referenceFrame = ReferenceFrame.CreateHybrid(
+                activeVesselRefFrame,
+                referenceFrame,
+                referenceFrame,
+                referenceFrame
+            );
             return new Line (Vector3d.zero, direction.ToVector () * length, referenceFrame, visible);
         }
 

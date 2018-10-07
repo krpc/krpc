@@ -25,7 +25,7 @@ int main() {
     vector3 d;
     vector3 v;
     krpc_SpaceCenter_Vessel_Direction(conn, &d, vessel, body_ref);
-    krpc_SpaceCenter_Vessel_Velocity(conn, &d, vessel, body_ref);
+    krpc_SpaceCenter_Vessel_Velocity(conn, &v, vessel, body_ref);
 
     // Compute the dot product of d and v
     double dotProd = d.e0*v.e0 + d.e1*v.e1 + d.e2*v.e2;

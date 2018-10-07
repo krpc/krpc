@@ -416,46 +416,46 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Estimates and returns the time at closest approach to a target vessel.
+        /// Estimates and returns the time at closest approach to a target orbit.
         /// </summary>
         /// <returns>The universal time at closest approach, in seconds.</returns>
-        /// <param name="target">Target vessel.</param>
+        /// <param name="target">Target orbit.</param>
         [KRPCMethod]
-        public double TimeOfClosestApproach (Vessel target)
+        public double TimeOfClosestApproach (Orbit target)
         {
             if (ReferenceEquals (target, null))
                 throw new ArgumentNullException (nameof (target));
             double distance;
-            return CalcClosestAproach(this, target.Orbit, Planetarium.GetUniversalTime(), out distance);
+            return CalcClosestAproach(this, target, Planetarium.GetUniversalTime(), out distance);
         }
 
         /// <summary>
-        /// Estimates and returns the distance at closest approach to a target vessel, in meters.
+        /// Estimates and returns the distance at closest approach to a target orbit, in meters.
         /// </summary>
-        /// <param name="target">Target vessel.</param>
+        /// <param name="target">Target orbit.</param>
         [KRPCMethod]
-        public double DistanceAtClosestApproach (Vessel target)
+        public double DistanceAtClosestApproach (Orbit target)
         {
             if (ReferenceEquals (target, null))
                 throw new ArgumentNullException (nameof (target));
             double distance;
-            CalcClosestAproach(this, target.Orbit, Planetarium.GetUniversalTime(), out distance);
+            CalcClosestAproach(this, target, Planetarium.GetUniversalTime(), out distance);
             return distance;
         }
 
         /// <summary>
-        /// Returns the times at closest approach and corresponding distances, to a target vessel.
+        /// Returns the times at closest approach and corresponding distances, to a target orbit.
         /// </summary>
         /// <returns>
         /// A list of two lists.
         /// The first is a list of times at closest approach, as universal times in seconds.
         /// The second is a list of corresponding distances at closest approach, in meters.
         /// </returns>
-        /// <param name="target">Target vessel.</param>
+        /// <param name="target">Target orbit.</param>
         /// <param name="orbits">The number of future orbits to search.</param>
         [KRPCMethod]
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        public IList<IList<double>> ListClosestApproaches(Vessel target, int orbits)
+        public IList<IList<double>> ListClosestApproaches(Orbit target, int orbits)
         {
             if (ReferenceEquals (target, null))
                 throw new ArgumentNullException (nameof (target));
@@ -465,7 +465,7 @@ namespace KRPC.SpaceCenter.Services
             double orbitstart = Planetarium.GetUniversalTime();
             double period = InternalOrbit.period;
             for (int i = 0; i < orbits; i++) {
-                times.Add(CalcClosestAproach(this, target.Orbit, orbitstart, out distance));
+                times.Add(CalcClosestAproach(this, target, orbitstart, out distance));
                 distances.Add(distance);
                 orbitstart += period;
             }
@@ -476,11 +476,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Helper function to calculate the closest approach distance and time to a target vessel
+        /// Helper function to calculate the closest approach distance and time to a target orbit
         /// in a given orbital period.
         /// </summary>
         /// <param name="myOrbit">Orbit of the controlled vessel.</param>
-        /// <param name="targetOrbit">Orbit of the target vessel.</param>
+        /// <param name="targetOrbit">Orbit of the target.</param>
         /// <param name="beginTime">Time to begin search, which continues for
         /// one orbital period from this time.</param>
         /// <param name="distance">The distance at the closest approach, in meters.</param>
@@ -537,41 +537,41 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The true anomaly of the ascending node with the given target vessel.
+        /// The true anomaly of the ascending node with the given target orbit.
         /// </summary>
-        /// <param name="target">Target vessel.</param>
+        /// <param name="target">Target orbit.</param>
         [KRPCMethod]
-        public double TrueAnomalyAtAN(Vessel target)
+        public double TrueAnomalyAtAN(Orbit target)
         {
             if (ReferenceEquals (target, null))
                 throw new ArgumentNullException (nameof (target));
-            var degrees = FinePrint.Utilities.OrbitUtilities.AngleOfAscendingNode(InternalOrbit, target.Orbit.InternalOrbit);
+            var degrees = FinePrint.Utilities.OrbitUtilities.AngleOfAscendingNode(InternalOrbit, target.InternalOrbit);
             return GeometryExtensions.ToRadians (GeometryExtensions.ClampAngle180 (degrees));
         }
 
         /// <summary>
-        /// The true anomaly of the descending node with the given target vessel.
+        /// The true anomaly of the descending node with the given target orbit.
         /// </summary>
-        /// <param name="target">Target vessel.</param>
+        /// <param name="target">Target orbit.</param>
         [KRPCMethod]
-        public double TrueAnomalyAtDN(Vessel target)
+        public double TrueAnomalyAtDN(Orbit target)
         {
             if (ReferenceEquals (target, null))
                 throw new ArgumentNullException (nameof (target));
-            var degrees = FinePrint.Utilities.OrbitUtilities.AngleOfDescendingNode(InternalOrbit, target.Orbit.InternalOrbit);
+            var degrees = FinePrint.Utilities.OrbitUtilities.AngleOfDescendingNode(InternalOrbit, target.InternalOrbit);
             return GeometryExtensions.ToRadians (GeometryExtensions.ClampAngle180 (degrees));
         }
 
         /// <summary>
-        /// Relative inclination of this orbit and the orbit of the given target vessel, in radians.
+        /// Relative inclination of this orbit and the target orbit, in radians.
         /// </summary>
-        /// <param name="target">Target vessel.</param>
+        /// <param name="target">Target orbit.</param>
         [KRPCMethod]
-        public double RelativeInclination(Vessel target)
+        public double RelativeInclination(Orbit target)
         {
             if (ReferenceEquals (target, null))
                 throw new ArgumentNullException (nameof (target));
-            var degrees = FinePrint.Utilities.OrbitUtilities.GetRelativeInclination(InternalOrbit, target.Orbit.InternalOrbit);
+            var degrees = FinePrint.Utilities.OrbitUtilities.GetRelativeInclination(InternalOrbit, target.InternalOrbit);
             return GeometryExtensions.ToRadians(degrees);
         }
     }

@@ -77,24 +77,18 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// in-game user interface.
         /// </summary>
         /// <remarks>
-        /// This requires either the
-        /// <a href="https://github.com/krpc/NameTag/releases/latest">NameTag</a> or
+        /// This string is shared with
         /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/">kOS</a>
-        /// mod to be installed.
+        /// if it is installed.
         /// </remarks>
         [KRPCProperty]
         public string Tag {
             get {
                 var module = InternalPart.Module ("KOSNameTag");
-                if (module == null) {
-                    throw new InvalidOperationException ("NameTag mod is not installed");
-                }
                 return (string)module.GetType ().GetField ("nameTag").GetValue (module);
             }
             set {
                 var module = InternalPart.Module ("KOSNameTag");
-                if (module == null)
-                    throw new InvalidOperationException ("NameTag mod is not installed");
                 module.GetType ().GetField ("nameTag").SetValue (module, value);
             }
         }

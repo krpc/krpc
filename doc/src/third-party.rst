@@ -18,7 +18,8 @@ Clients
 Services
 --------
 
- * `krpcmj <https://github.com/artwhaley/krpcmj>`_ -- remote procedures to interact with MechJeb
+ * `kRPC.MechJeb <https://genhis.github.io/KRPC.MechJeb>`_ -- remote procedures to interact with
+   MechJeb (an up-to-date service based on `krpcmj <https://github.com/artwhaley/krpcmj>`_)
 
 Scripts/Tools/Libraries etc.
 ----------------------------

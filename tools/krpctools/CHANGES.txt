@@ -1,3 +1,7 @@
+v0.4.8
+ * Fix Python 3 compatibility
+ * Fix template loading in docgen on Windows
+
 v0.3.8
  * Clean up code to meet PEP 8 guidelines
 

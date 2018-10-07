@@ -6,6 +6,10 @@ This license (LGPL v3) applies to all parts of kRPC except for the following:
     is adapted from the KSP Trajectories mod (https://github.com/neuoy/KSPTrajectories)
     released under the MIT License (MIT) by Youen Toupin, aka neuoy
 
+  - service/SpaceCenter/src/NameTag/*
+    is adapted from the kOS mod (https://github.com/KSP-KOS/KOS)
+    released under the GPLv3 license
+
   - tools/clientgen/* is under the GPLv3 license.
 
   - tools/ServiceDefinitions/* is under the GPLv3 license.
