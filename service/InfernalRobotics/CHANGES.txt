@@ -1,5 +1,5 @@
 v0.4.8
- * Add suport for both origin Infernal Robotics and Infernal Robotics Next (#476)
+ * Add suport for both original Infernal Robotics and Infernal Robotics Next (#476)
  * Add InfernalRobotics.Ready which indicates if the IR is on the current vessel and ready to receive commands
  * Change InfernalRobotics.Available to return whether the IR mod is installed (not if the IR API is "ready")
 
