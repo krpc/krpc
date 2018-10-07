@@ -3,29 +3,29 @@ workspace(name = "krpc")
 new_http_archive(
     name = 'protoc_linux_x86_32',
     build_file_content = "exports_files(['bin/protoc'])",
-    url = 'https://github.com/google/protobuf/releases/download/v3.5.1/protoc-3.5.1-linux-x86_32.zip',
-    sha256 = '8adb292c06bb4888fbc14759591b965803d07dd497a8520e5852f06f8e0f01a2'
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_32.zip',
+    sha256 = 'f4d9235c1ecf2c520ff3d3ebec44457810023fc3093181f76c06871d2e47f413'
 )
 
 new_http_archive(
     name = 'protoc_linux_x86_64',
     build_file_content = "exports_files(['bin/protoc'])",
-    url = 'https://github.com/google/protobuf/releases/download/v3.5.1/protoc-3.5.1-linux-x86_64.zip',
-    sha256 = 'cd40f10bcdaff36429ec4652210f2bb8d6c7349e7b78f3a38ef42168401d7285'
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip',
+    sha256 = '6003de742ea3fcf703cfec1cd4a3380fd143081a2eb0e559065563496af27807'
 )
 
 new_http_archive(
     name = 'protoc_osx_x86_32',
     build_file_content = "exports_files(['bin/protoc'])",
-    url = 'https://github.com/google/protobuf/releases/download/v3.5.1/protoc-3.5.1-osx-x86_32.zip',
-    sha256 = '088fa1ca3e8962a961b7255497ec2981b03fec0839786fe8432e343b05266e3a'
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-osx-x86_32.zip',
+    sha256 = '95aef29c7780130e6b84ea6037ee8ff146ae35d05962ee76f949f7ccb8116b8b'
 )
 
 new_http_archive(
     name = 'protoc_win32',
     build_file_content = "exports_files(['bin/protoc.exe'])",
-    url = 'https://github.com/google/protobuf/releases/download/v3.5.1/protoc-3.5.1-win32.zip',
-    sha256 = 'b2aff99dcad1e2e7678fb8e4f2bfc8e8d30ac19d11896c16dc9a1339d6578800'
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-win32.zip',
+    sha256 = '65e5d6f890e8df5b6b411e3fdbad04c33b2bd34a3576f343a8986589bd8d05e2'
 )
 
 new_http_archive(
@@ -37,9 +37,9 @@ filegroup(
     visibility = ['//visibility:public']
 )
 """,
-    url = 'https://jpa.kapsi.fi/nanopb/download/nanopb-0.3.8-linux-x86.tar.gz',
-    sha256 = 'f4604648448987b3a469e0a1a217ec8a9defa77f5d59a34db2d5ce61c3a4e5d5',
-    strip_prefix = 'nanopb-0.3.8-linux-x86'
+    url = 'https://jpa.kapsi.fi/nanopb/download/nanopb-0.3.9.1-linux-x86.tar.gz',
+    sha256 = 'ee18b12ea11376e6b6d89a2cab4592fb1fbaeff3252f180608c9a7632594a12e',
+    strip_prefix = 'nanopb-0.3.9.1-linux-x86'
 )
 
 new_http_archive(
@@ -64,23 +64,23 @@ filegroup(
     visibility = ['//visibility:public']
 )
 """,
-    url = 'https://jpa.kapsi.fi/nanopb/download/nanopb-0.3.8.tar.gz',
+    url = 'https://jpa.kapsi.fi/nanopb/download/nanopb-0.3.9.1-linux-x86.tar.gz',
     sha256 = '2072d93c8b59cf3c89beb725589d0824766421745f5b81bde2fd784db0fd6aec',
     strip_prefix = 'nanopb'
 )
 
 http_file(
     name = 'csharp_nuget',
-    url = 'https://dist.nuget.org/win-x86-commandline/v3.4.4/NuGet.exe',
-    sha256 = 'c12d583dd1b5447ac905a334262e02718f641fca3877d0b6117fe44674072a27'
+    url = 'https://dist.nuget.org/win-x86-commandline/v4.7.1/nuget.exe',
+    sha256 = '82e3aa0205415cd18d8ae34613911717dad3ed4e8ac58143e55ca432a5bf3c0a'
 )
 
 new_http_archive(
     name = 'csharp_protobuf',
     build_file_content = "exports_files(['lib/net45/Google.Protobuf.dll'])",
-    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.5.1',
+    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.6.1',
     type = 'zip',
-    sha256 = '9a90c6e166e8250e53a9cd5019dd9c6a5a9ee88eedf16af705ed63711c6edeed'
+    sha256 = 'bfa7666aa55e60aa2ee65502966336f812702acaaf7c62d12f276a01ab3aa9a4'
 )
 
 http_file(
@@ -153,9 +153,9 @@ new_http_archive(
 
 http_archive(
     name = 'com_google_protobuf',
-    url = 'https://github.com/google/protobuf/releases/download/v3.5.1/protobuf-cpp-3.5.1.tar.gz',
-    strip_prefix = 'protobuf-3.5.1',
-    sha256 = 'c28dba8782da2cfea1e11c61d335958c31a9c1bc553063546af9cbe98f204092'
+    url = 'https://github.com/google/protobuf/releases/download/v3.6.1/protobuf-cpp-3.6.1.tar.gz',
+    strip_prefix = 'protobuf-3.6.1',
+    sha256 = 'b3732e471a9bb7950f090fd0457ebd2536a9ba0891b7f3785919c654fe2a2529'
 )
 
 new_http_archive(
@@ -224,7 +224,7 @@ http_file(
 
 maven_jar(
     name = 'java_protobuf',
-    artifact = 'com.google.protobuf:protobuf-java:3.5.1',
+    artifact = 'com.google.protobuf:protobuf-java:3.6.1',
     sha1 = '8c3492f7662fa1cbf8ca76a0f5eb1146f7725acd'
 )
 

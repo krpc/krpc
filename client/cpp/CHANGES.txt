@@ -1,3 +1,6 @@
+v0.4.8
+ * Update to protobuf v3.6.1
+
 v0.4.7
  * Ensure .lib files are generated when building using CMake with MSVC (#474)
 
