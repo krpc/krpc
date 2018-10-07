@@ -1,3 +1,6 @@
+v0.4.8
+ * Update to protobuf v3.6.1
+
 v0.4.7
  * Support for KSP 1.4.4
  * Fix launch site clear checks (#483)

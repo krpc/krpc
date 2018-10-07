@@ -14,7 +14,8 @@ py_script(
       '@python_singledispatch//file',
       '@python_astroid//file',
       '@python_wrapt//file',
-      '@python_lazy_object_proxy//file'
+      '@python_lazy_object_proxy//file',
+      '@python_futures//file'
   ],
   visibility = ['//visibility:public']
 )
