@@ -416,7 +416,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Estimates and returns the time at closest approach to a target vessel.
+        /// Estimates and returns the time at closest approach to a target orbit.
         /// </summary>
         /// <returns>The universal time at closest approach, in seconds.</returns>
         /// <param name="target">Target orbit.</param>
@@ -430,7 +430,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Estimates and returns the distance at closest approach to a target vessel, in meters.
+        /// Estimates and returns the distance at closest approach to a target orbit, in meters.
         /// </summary>
         /// <param name="target">Target orbit.</param>
         [KRPCMethod]
@@ -444,7 +444,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the times at closest approach and corresponding distances, to a target vessel.
+        /// Returns the times at closest approach and corresponding distances, to a target orbit.
         /// </summary>
         /// <returns>
         /// A list of two lists.
@@ -476,11 +476,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Helper function to calculate the closest approach distance and time to a target vessel
+        /// Helper function to calculate the closest approach distance and time to a target orbit
         /// in a given orbital period.
         /// </summary>
         /// <param name="myOrbit">Orbit of the controlled vessel.</param>
-        /// <param name="targetOrbit">Orbit of the target vessel.</param>
+        /// <param name="targetOrbit">Orbit of the target.</param>
         /// <param name="beginTime">Time to begin search, which continues for
         /// one orbital period from this time.</param>
         /// <param name="distance">The distance at the closest approach, in meters.</param>
@@ -537,7 +537,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The true anomaly of the ascending node with the given target vessel.
+        /// The true anomaly of the ascending node with the given target orbit.
         /// </summary>
         /// <param name="target">Target orbit.</param>
         [KRPCMethod]
@@ -550,7 +550,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The true anomaly of the descending node with the given target vessel.
+        /// The true anomaly of the descending node with the given target orbit.
         /// </summary>
         /// <param name="target">Target orbit.</param>
         [KRPCMethod]
@@ -563,7 +563,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Relative inclination of this orbit and the orbit of the given target vessel, in radians.
+        /// Relative inclination of this orbit and the target orbit, in radians.
         /// </summary>
         /// <param name="target">Target orbit.</param>
         [KRPCMethod]
