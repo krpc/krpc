@@ -537,7 +537,7 @@ namespace KRPC.SpaceCenter.Services
             } else {
                 Vector3 torque;
                 var altitude = (worldPosition - body.InternalBody.position).magnitude - body.InternalBody.Radius;
-                FAR.CalculateVesselAeroForces(vessel, out worldForce, out torque, worldVelocity, altitude);
+                FAR.CalculateVesselAeroForces(vessel, out worldForce, out torque, worldVelocity - body.InternalBody.getRFrmVel(worldPosition), altitude);
             }
             return referenceFrame.DirectionFromWorldSpace(worldForce).ToTuple();
         }
