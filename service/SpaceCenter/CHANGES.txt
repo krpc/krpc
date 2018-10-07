@@ -5,6 +5,7 @@ v0.4.8
  * Trying to enable SAS while the autopilot is engaged now throws an exception as this is not permitted (#492)
  * Add color and size paramters to UI.Message (#499)
  * Fix Flight.TerminalVelocity (#485)
+ * Fix null reference exception when deploying fairings after reverting to launch (#501)
 
 v0.4.7
  * Fix Flight.Lift and Flight.Drag should return values in Newtons (#475)

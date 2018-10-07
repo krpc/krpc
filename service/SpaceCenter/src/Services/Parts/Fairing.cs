@@ -11,7 +11,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Fairing : Equatable<Fairing>
     {
-        readonly ModuleProceduralFairing fairing;
+        readonly Module fairing;
         readonly Module proceduralFairing;
 
         internal static bool Is (Part part)
@@ -24,9 +24,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             Part = part;
             var internalPart = part.InternalPart;
-            fairing = internalPart.Module<ModuleProceduralFairing> ();
-            if (internalPart.HasModule ("ProceduralFairingDecoupler"))
-                proceduralFairing = new Module (part, internalPart.Module ("ProceduralFairingDecoupler"));
+            if (internalPart.HasModule("ModuleProceduralFairing"))
+                fairing = new Module(part, internalPart.Module("ModuleProceduralFairing"));
+            if (internalPart.HasModule("ProceduralFairingDecoupler"))
+                proceduralFairing = new Module(part, internalPart.Module("ProceduralFairingDecoupler"));
             if (fairing == null && proceduralFairing == null)
                 throw new ArgumentException ("Part is not a fairing");
         }
@@ -36,7 +37,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Fairing other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part;
+            return !ReferenceEquals (other, null) &&
+                Part == other.Part && fairing == other.fairing && proceduralFairing == other.proceduralFairing;
         }
 
         /// <summary>
@@ -44,7 +46,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode ();
+            int h = Part.GetHashCode ();
+            if (fairing != null)
+                h ^= fairing.GetHashCode();
+            if (proceduralFairing != null)
+                h ^= proceduralFairing.GetHashCode();
+            return h;
         }
 
         /// <summary>
@@ -61,9 +68,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             if (!Jettisoned) {
                 if (fairing != null)
-                    fairing.DeployFairing ();
+                    fairing.TriggerEvent("Deploy");
                 else
-                    proceduralFairing.TriggerEvent ("Jettison");
+                    proceduralFairing.TriggerEvent("Jettison");
             }
         }
 
@@ -71,8 +78,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether the fairing has been jettisoned.
         /// </summary>
         [KRPCProperty]
-        public bool Jettisoned {
-            get { return fairing != null ? !fairing.CanMove : !proceduralFairing.Events.Contains ("Jettison"); }
+        public bool Jettisoned
+        {
+            get {
+                if (fairing != null)
+                    return !fairing.Events.Contains("Deploy");
+                else
+                    return !proceduralFairing.Events.Contains("Jettison");
+            }
         }
     }
 }
