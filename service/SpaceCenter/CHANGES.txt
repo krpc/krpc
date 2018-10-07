@@ -3,6 +3,7 @@ v0.4.8
  * Fix air-relative velocity calculation for SimulateAeroDynamicForceAt with FAR (#500)
  * Changed Orbit API to accept target orbits as Orbit objects instead of Vessel objects, to allow computing closest approach etc. to planets (#479)
  * Trying to enable SAS while the autopilot is engaged now throws an exception as this is not permitted (#492)
+ * Add color and size paramters to UI.Message (#499)
 
 v0.4.7
  * Fix Flight.Lift and Flight.Drag should return values in Newtons (#475)
