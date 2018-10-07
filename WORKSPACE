@@ -342,229 +342,247 @@ http_file(
 
 http_file(
     name = 'python_alabaster',
-    url = 'https://pypi.python.org/packages/d0/a5/e3a9ad3ee86aceeff71908ae562580643b955ea1b1d4f08ed6f7e8396bd7/alabaster-0.7.10.tar.gz',
-    sha256 = '37cdcb9e9954ed60912ebc1ca12a9d12178c26637abdf124e3cde2341c257fe0'
+    url = 'https://files.pythonhosted.org/packages/cc/b4/ed8dcb0d67d5cfb7f83c4d5463a7614cb1d078ad7ae890c9143edebbf072/alabaster-0.7.12.tar.gz',
+    sha256 = 'a661d72d58e6ea8a57f7a86e37d86716863ee5e92788398526d58b26a4e4dc02'
 )
 
 http_file(
     name = 'python_astroid',
-    url = 'https://pypi.python.org/packages/48/63/1e366849160817cc06e273d38e93ac0826ba83da84e8b7879786b5c67d04/astroid-1.6.1.tar.gz',
-    sha256 = 'f0a0e386dbca9f93ea9f3ea6f32b37a24720502b7baa9cb17c3976a680d43a06'
+    url = 'https://files.pythonhosted.org/packages/04/58/2dc2c7769c37eac4665870a8e925334837bfe9b23599d28f3767a72e593a/astroid-1.6.5.tar.gz',
+    sha256 = 'fc9b582dba0366e63540982c3944a9230cbc6f303641c51483fa547dcc22393a'
 )
 
 http_file(
     name = 'python_babel',
-    url = 'https://pypi.python.org/packages/0e/d5/9b1d6a79c975d0e9a32bd337a1465518c2519b14b214682ca9892752417e/Babel-2.5.3.tar.gz',
-    sha256 = '8ce4cb6fdd4393edd323227cba3a077bceb2a6ce5201c902c65e730046f41f14'
+    url = 'https://files.pythonhosted.org/packages/be/cc/9c981b249a455fa0c76338966325fc70b7265521bad641bf2932f77712f4/Babel-2.6.0.tar.gz',
+    sha256 = '8cba50f48c529ca3fa18cf81fa9403be176d374ac4d60738b839122dfaaa3d23'
 )
 
 http_file(
     name = 'python_backports_functools_lru_cache',
-    url = 'https://pypi.python.org/packages/03/8e/2424c0e65c4a066e28f539364deee49b6451f8fcd4f718fefa50cc3dcf48/backports.functools_lru_cache-1.5-py2.py3-none-any.whl',
-    sha256 = 'f0b0e4eba956de51238e17573b7087e852dfe9854afd2e9c873f73fc0ca0a6dd'
+    url = 'https://files.pythonhosted.org/packages/57/d4/156eb5fbb08d2e85ab0a632e2bebdad355798dece07d4752f66a8d02d1ea/backports.functools_lru_cache-1.5.tar.gz',
+    sha256 = '9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a'
 )
 
 http_file(
     name = 'python_beautifulsoup4',
-    url = 'https://pypi.python.org/packages/fa/8d/1d14391fdaed5abada4e0f63543fef49b8331a34ca60c88bd521bcf7f782/beautifulsoup4-4.6.0.tar.gz',
-    sha256 = '808b6ac932dccb0a4126558f7dfdcf41710dd44a4ef497a0bb59a77f9f078e89'
+    url = 'https://files.pythonhosted.org/packages/88/df/86bffad6309f74f3ff85ea69344a078fc30003270c8df6894fca7a3c72ff/beautifulsoup4-4.6.3.tar.gz',
+    sha256 = '90f8e61121d6ae58362ce3bed8cd997efb00c914eae0ff3d363c32f9a9822d10'
 )
 
 http_file(
     name = 'python_certifi',
-    url = 'https://pypi.python.org/packages/15/d4/2f888fc463d516ff7bf2379a4e9a552fef7f22a94147655d9b1097108248/certifi-2018.1.18.tar.gz',
-    sha256 = 'edbc3f203427eef571f79a7692bb160a2b0f7ccaa31953e99bd17e307cf63f7d'
+    url = 'https://files.pythonhosted.org/packages/e1/0f/f8d5e939184547b3bdc6128551b831a62832713aa98c2ccdf8c47ecc7f17/certifi-2018.8.24.tar.gz',
+    sha256 = '376690d6f16d32f9d1fe8932551d80b23e9d393a8578c5633a2ed39a64861638'
 )
 
 http_file(
     name = 'python_chardet',
-    url = 'https://pypi.python.org/packages/fc/bb/a5768c230f9ddb03acc9ef3f0d4a3cf93462473795d18e9535498c8f929d/chardet-3.0.4.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/fc/bb/a5768c230f9ddb03acc9ef3f0d4a3cf93462473795d18e9535498c8f929d/chardet-3.0.4.tar.gz',
     sha256 = '84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae'
 )
 
 http_file(
     name = 'python_configparser',
-    url = 'https://pypi.python.org/packages/7c/69/c2ce7e91c89dc073eb1aa74c0621c3eefbffe8216b3f9af9d3885265c01c/configparser-3.5.0.tar.gz',
-    sha256 = '5308b47021bc2340965c371f0f058cc6971a04502638d4244225c49d80db273a'
+    url = 'https://files.pythonhosted.org/packages/61/a7/48f627413200d5dfd0a5da8b494d34ccac03f8a87a6b2d765b7d81e175e3/configparser-3.5.0b2.tar.gz',
+    sha256 = '16810160ff28233efac6c1dc0eea8d4c9b87042f9210541dab4f92a90a7d8597'
 )
 
 http_file(
     name = 'python_cpplint',
-    url = 'https://pypi.python.org/packages/95/42/27a16ef7fc609aba82bec923e2d29a1fa163bc95a267eaf1acc780e949fc/cpplint-1.3.0.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/95/42/27a16ef7fc609aba82bec923e2d29a1fa163bc95a267eaf1acc780e949fc/cpplint-1.3.0.tar.gz',
     sha256 = '6876139c3944c6dc84cc9095b6c4be3c5397b534b0c00230ba59c4b893936719'
 )
 
 http_file(
     name = 'python_docutils',
-    url = 'https://pypi.python.org/packages/84/f4/5771e41fdf52aabebbadecc9381d11dea0fa34e4759b4071244fa094804c/docutils-0.14.tar.gz',
-    sha256 = '51e64ef2ebfb29cae1faa133b3710143496eca21c530f3f71424d77687764274'
+    url = 'https://files.pythonhosted.org/packages/6b/57/6e68a5457ea9579f970d7854c090a6c991c8ab481df12e6be25ff505a4b0/docutils-0.14rc2.tar.gz',
+    sha256 = '3caee0bcb2a49fdf24fcfa70849a60abb7a181aa68b030f7cb7494096181830c'
 )
 
 http_file(
     name = 'python_enum34',
-    url = 'https://pypi.python.org/packages/bf/3e/31d502c25302814a7c2f1d3959d2a3b3f78e509002ba91aea64993936876/enum34-1.1.6.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/bf/3e/31d502c25302814a7c2f1d3959d2a3b3f78e509002ba91aea64993936876/enum34-1.1.6.tar.gz',
     sha256 = '8ad8c4783bf61ded74527bffb48ed9b54166685e4230386a9ed9b1279e2df5b1'
 )
 
 http_file(
     name = 'python_future',
-    url = 'https://pypi.python.org/packages/00/2b/8d082ddfed935f3608cc61140df6dcbf0edea1bc3ab52fb6c29ae3e81e85/future-0.16.0.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/00/2b/8d082ddfed935f3608cc61140df6dcbf0edea1bc3ab52fb6c29ae3e81e85/future-0.16.0.tar.gz',
     sha256 = 'e39ced1ab767b5936646cedba8bcce582398233d6a627067d4c6a454c90cfedb'
 )
 
 http_file(
+    name = 'python_futures',
+    url = 'https://files.pythonhosted.org/packages/1f/9e/7b2ff7e965fc654592269f2906ade1c7d705f1bf25b7d469fa153f7d19eb/futures-3.2.0.tar.gz',
+    sha256 = '9ec02aa7d674acb8618afb127e27fde7fc68994c0437ad759fa094a574adb265'
+)
+
+http_file(
     name = 'python_idna',
-    url = 'https://pypi.python.org/packages/f4/bd/0467d62790828c23c47fc1dfa1b1f052b24efdf5290f071c7a91d0d82fd3/idna-2.6.tar.gz',
-    sha256 = '2c6a5de3089009e3da7c5dde64a141dbc8551d5b7f6cf4ed7c2568d0cc520a8f'
+    url = 'https://files.pythonhosted.org/packages/65/c4/80f97e9c9628f3cac9b98bfca0402ede54e0563b56482e3e6e45c43c4935/idna-2.7.tar.gz',
+    sha256 = '684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16'
 )
 
 http_file(
     name = 'python_imagesize',
-    url = 'https://pypi.python.org/packages/c6/3f/1db2da33804e8d7ef3a868b27b7bdc1aae6a4f693f0162d2aeeaf503864f/imagesize-1.0.0.tar.gz',
-    sha256 = '5b326e4678b6925158ccc66a9fa3122b6106d7c876ee32d7de6ce59385b96315'
+    url = 'https://files.pythonhosted.org/packages/41/f5/3cf63735d54aa9974e544aa25858d8f9670ac5b4da51020bbfc6aaade741/imagesize-1.1.0.tar.gz',
+    sha256 = 'f3832918bc3c66617f92e35f5d70729187676313caa60c187eb0f28b8fe5e3b5'
 )
 
 http_file(
     name = 'python_isort',
-    url = 'https://pypi.python.org/packages/b1/de/a628d16fdba0d38cafb3d7e34d4830f2c9cb3881384ce5c08c44762e1846/isort-4.3.4.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/b1/de/a628d16fdba0d38cafb3d7e34d4830f2c9cb3881384ce5c08c44762e1846/isort-4.3.4.tar.gz',
     sha256 = 'b9c40e9750f3d77e6e4d441d8b0266cf555e7cdabdcff33c4fd06366ca761ef8'
 )
 
 http_file(
     name = 'python_javalang',
-    url = 'https://pypi.python.org/packages/39/51/fc4d3cdcf8f46509887d8771ce18ca6cfafd1d02eb429d69da95866a0b5e/javalang-0.11.0.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/39/51/fc4d3cdcf8f46509887d8771ce18ca6cfafd1d02eb429d69da95866a0b5e/javalang-0.11.0.tar.gz',
     sha256 = '3fcab8c0d4a1c51512bc7de1f4aaf9de8fb582833746b572478da6c0ac318a0b'
 )
 
 http_file(
     name = 'python_javasphinx',
-    url = 'https://pypi.python.org/packages/34/ea/08bc47c6aafcf5ebf06784c0ec60aa0e8bd130bc96f923755f061471a3c8/javasphinx-0.9.15.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/34/ea/08bc47c6aafcf5ebf06784c0ec60aa0e8bd130bc96f923755f061471a3c8/javasphinx-0.9.15.tar.gz',
     sha256 = '165f787172a99ceaedd0230a69b44de19cebd3a103e970b89bf667210ae6b65b'
 )
 
 http_file(
     name = 'python_jinja2',
-    url = 'https://pypi.python.org/packages/56/e6/332789f295cf22308386cf5bbd1f4e00ed11484299c5d7383378cf48ba47/Jinja2-2.10.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/56/e6/332789f295cf22308386cf5bbd1f4e00ed11484299c5d7383378cf48ba47/Jinja2-2.10.tar.gz',
     sha256 = 'f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4'
 )
 
 http_file(
     name = 'python_lazy_object_proxy',
-    url = 'https://pypi.python.org/packages/55/08/23c0753599bdec1aec273e322f277c4e875150325f565017f6280549f554/lazy-object-proxy-1.3.1.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/55/08/23c0753599bdec1aec273e322f277c4e875150325f565017f6280549f554/lazy-object-proxy-1.3.1.tar.gz',
     sha256 = 'eb91be369f945f10d3a49f5f9be8b3d0b93a4c2be8f8a5b83b0571b8123e0a7a'
 )
 
 http_file(
     name = 'python_lxml',
-    url = 'https://pypi.python.org/packages/e1/4c/d83979fbc66a2154850f472e69405572d89d2e6a6daee30d18e83e39ef3a/lxml-4.1.1.tar.gz',
-    sha256 = '940caef1ec7c78e0c34b0f6b94fe42d0f2022915ffc78643d28538a5cfd0f40e'
+    url = 'https://files.pythonhosted.org/packages/4b/20/ddf5eb3bd5c57582d2b4652b4bbcf8da301bdfe5d805cb94e805f4d7464d/lxml-4.2.5.tar.gz',
+    sha256 = '36720698c29e7a9626a0dc802ef8885f8f0239bfd1689628ecd459a061f2807f'
 )
 
 http_file(
     name = 'python_markupsafe',
-    url = 'https://pypi.python.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/MarkupSafe-1.0.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/MarkupSafe-1.0.tar.gz',
     sha256 = 'a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665'
 )
 
 http_file(
     name = 'python_mccabe',
-    url = 'https://pypi.python.org/packages/87/89/479dc97e18549e21354893e4ee4ef36db1d237534982482c3681ee6e7b57/mccabe-0.6.1-py2.py3-none-any.whl',
-    sha256 = 'ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42'
+    url = 'https://files.pythonhosted.org/packages/06/18/fa675aa501e11d6d6ca0ae73a101b2f3571a565e0f7d38e062eec18a91ee/mccabe-0.6.1.tar.gz',
+    sha256 = 'dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f'
+)
+
+http_file(
+    name = 'python_packaging',
+    url = 'https://files.pythonhosted.org/packages/cf/50/1f10d2626df0aa97ce6b62cf6ebe14f605f4e101234f7748b8da4138a8ed/packaging-18.0.tar.gz',
+    sha256 = '0886227f54515e592aaa2e5a553332c73962917f2831f1b0f9b9f4380a4b9807'
+)
+
+http_file(
+    name = 'python_pyparsing',
+    url = 'https://files.pythonhosted.org/packages/1a/e2/4a7ad8f2808e03caebd3ec0a250b4afbb26d4ba063c39c3286185dd06dd1/pyparsing-2.2.2.tar.gz',
+    sha256 = 'bc6c7146b91af3f567cf6daeaec360bc07d45ffec4cf5353f4d7a208ce7ca30a'
 )
 
 http_file(
     name = 'python_pbr',
-    url = 'https://pypi.python.org/packages/d5/d6/f2bf137d71e4f213b575faa9eb426a8775732432edb67588a8ee836ecb80/pbr-3.1.1.tar.gz',
-    sha256 = '05f61c71aaefc02d8e37c0a3eeb9815ff526ea28b3b76324769e6158d7f95be1'
+    url = 'https://files.pythonhosted.org/packages/4c/22/91722b7d842a9e2e6ae41346f691fea95d9ac08678de7ac51c38754f9961/pbr-4.3.0.tar.gz',
+    sha256 = '1be135151a0da949af8c5d0ee9013d9eafada71237eb80b3ba8896b4f12ec5dc'
 )
 
 http_file(
     name = 'python_pep8',
-    url = 'https://pypi.python.org/packages/01/a0/64ba19519db49e4094d82599412a9660dee8c26a7addbbb1bf17927ceefe/pep8-1.7.1.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/01/a0/64ba19519db49e4094d82599412a9660dee8c26a7addbbb1bf17927ceefe/pep8-1.7.1.tar.gz',
     sha256 = 'fe249b52e20498e59e0b5c5256aa52ee99fc295b26ec9eaa85776ffdb9fe6374'
 )
 
 http_file(
     name = 'python_protobuf',
-    url = 'https://pypi.python.org/packages/14/03/ff5279abda7b46e9538bfb1411d42831b7e65c460d73831ed2445649bc02/protobuf-3.5.1.tar.gz',
-    sha256 = '95b78959572de7d7fafa3acb718ed71f482932ddddddbd29ba8319c10639d863'
+    url = 'https://files.pythonhosted.org/packages/1b/90/f531329e628ff34aee79b0b9523196eb7b5b6b398f112bb0c03b24ab1973/protobuf-3.6.1.tar.gz',
+    sha256 = '1489b376b0f364bcc6f89519718c057eb191d7ad6f1b395ffd93d1aa45587811'
 )
 
 http_file(
     name = 'python_pyenchant',
-    url = 'https://pypi.python.org/packages/9e/54/04d88a59efa33fefb88133ceb638cdf754319030c28aadc5a379d82140ed/pyenchant-2.0.0.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/9e/54/04d88a59efa33fefb88133ceb638cdf754319030c28aadc5a379d82140ed/pyenchant-2.0.0.tar.gz',
     sha256 = 'fc31cda72ace001da8fe5d42f11c26e514a91fa8c70468739216ddd8de64e2a0'
 )
 
 http_file(
     name = 'python_pygments',
-    url = 'https://pypi.python.org/packages/71/2a/2e4e77803a8bd6408a2903340ac498cb0a2181811af7c9ec92cb70b0308a/Pygments-2.2.0.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/71/2a/2e4e77803a8bd6408a2903340ac498cb0a2181811af7c9ec92cb70b0308a/Pygments-2.2.0.tar.gz',
     sha256 = 'dbae1046def0efb574852fab9e90209b23f556367b5a320c0bcb871c77c3e8cc'
 )
 
 http_file(
     name = 'python_pylint',
-    url = 'https://pypi.python.org/packages/fc/fe/32faf5617f1b32478c626f93ad533d06b59d2663521403799aac408789ef/pylint-1.8.2-py2.py3-none-any.whl',
-    sha256 = '156839bedaa798febee72893beef00c650c2e7abafb5586fc7a6a56be7f80412'
+    url = 'https://files.pythonhosted.org/packages/96/d3/dd70fe131595547120ddc24931f813e2d55999dfae3f18d0d2bba7b90139/pylint-1.9.3.tar.gz',
+    sha256 = '09bc539f85706f2cca720a7ddf28f5c6cf8185708d6cb5bbf7a90a32c3b3b0aa'
 )
 
 http_file(
     name = 'python_pytz',
-    url = 'https://pypi.python.org/packages/60/88/d3152c234da4b2a1f7a989f89609ea488225eaea015bc16fbde2b3fdfefa/pytz-2017.3.zip',
+    url = 'https://files.pythonhosted.org/packages/60/88/d3152c234da4b2a1f7a989f89609ea488225eaea015bc16fbde2b3fdfefa/pytz-2017.3.zip',
     sha256 = 'fae4cffc040921b8a2d60c6cf0b5d662c1190fe54d718271db4eb17d44a185b7'
 )
 
 http_file(
     name = 'python_requests',
-    url = 'https://pypi.python.org/packages/b0/e1/eab4fc3752e3d240468a8c0b284607899d2fbfb236a56b7377a329aa8d09/requests-2.18.4.tar.gz',
-    sha256 = '9c443e7324ba5b85070c4a818ade28bfabedf16ea10206da1132edaa6dda237e'
+    url = 'https://files.pythonhosted.org/packages/54/1f/782a5734931ddf2e1494e4cd615a51ff98e1879cbe9eecbdfeaf09aa75e9/requests-2.19.1.tar.gz',
+    sha256 = 'ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a'
 )
 
 http_file(
     name = 'python_serialio',
-    url = 'https://pypi.python.org/packages/cc/74/11b04703ec416717b247d789103277269d567db575d2fd88f25d9767fe3d/pyserial-3.4.tar.gz',
-    sha256 = 'e17c4687fddd6d70a6604ac0ad25e33324cec71b5137267dd5c45e103c4b288a'
+    url = 'https://files.pythonhosted.org/packages/cc/74/11b04703ec416717b247d789103277269d567db575d2fd88f25d9767fe3d/pyserial-3.4.tar.gz',
+    sha256 = '6e2d401fdee0eab996cf734e67773a0143b932772ca8b42451440cfed942c627'
 )
 
 http_file(
     name = 'python_setuptools',
-    url = 'https://pypi.python.org/packages/e0/02/2b14188e06ddf61e5b462e216b15d893e8472fca28b1b0c5d9272ad7e87c/setuptools-38.5.2.zip',
-    sha256 = '8246123e984cadf687163bdcd1bb58eb325e2891b066e1f0224728a41c8d9064'
+    url = 'https://files.pythonhosted.org/packages/6e/9c/6a003320b00ef237f94aa74e4ad66c57a7618f6c79d67527136e2544b728/setuptools-40.4.3.zip',
+    sha256 = 'acbc5740dd63f243f46c2b4b8e2c7fd92259c2ddb55a4115b16418a2ed371b15'
 )
 
 http_file(
     name = 'python_setuptools_git',
-    url = 'https://pypi.python.org/packages/d9/c5/396c2c06cc89d4ce2d8ccf1d7e6cf31b33d4466a7c65a67a992adb3c6f29/setuptools-git-1.2.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/d9/c5/396c2c06cc89d4ce2d8ccf1d7e6cf31b33d4466a7c65a67a992adb3c6f29/setuptools-git-1.2.tar.gz',
     sha256 = 'ff64136da01aabba76ae88b050e7197918d8b2139ccbf6144e14d472b9c40445'
 )
 
 http_file(
     name = 'python_singledispatch',
-    url = 'https://pypi.python.org/packages/d9/e9/513ad8dc17210db12cb14f2d4d190d618fb87dd38814203ea71c87ba5b68/singledispatch-3.4.0.3.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/d9/e9/513ad8dc17210db12cb14f2d4d190d618fb87dd38814203ea71c87ba5b68/singledispatch-3.4.0.3.tar.gz',
     sha256 = '5b06af87df13818d14f08a028e42f566640aef80805c3b50c5056b086e3c2b9c'
 )
 
 http_file(
     name = 'python_six',
-    url = 'https://pypi.python.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe/six-1.11.0.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe/six-1.11.0.tar.gz',
     sha256 = '70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9'
 )
 
 http_file(
     name = 'python_snowballstemmer',
-    url = 'https://pypi.python.org/packages/20/6b/d2a7cb176d4d664d94a6debf52cd8dbae1f7203c8e42426daa077051d59c/snowballstemmer-1.2.1.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/20/6b/d2a7cb176d4d664d94a6debf52cd8dbae1f7203c8e42426daa077051d59c/snowballstemmer-1.2.1.tar.gz',
     sha256 = '919f26a68b2c17a7634da993d91339e288964f93c274f1343e3bbbe2096e1128'
 )
 
 http_file(
     name = 'python_sphinx',
-    url = 'https://pypi.python.org/packages/90/84/850bda5df345bbccaf21d389d360c07b8499b47bc136cdf53e96d840a55f/Sphinx-1.6.4.tar.gz',
-    sha256 = 'f101efd87fbffed8d8aca6ef307fec57693334f39d32efcbc2fc96ed129f4a3e'
+    url = 'https://files.pythonhosted.org/packages/c7/e9/b1bed881847680cecc70159b8b9d5fd1cd4e85627c534712c2c7b339f8b6/Sphinx-1.8.1.tar.gz',
+    sha256 = '652eb8c566f18823a022bb4b6dbc868d366df332a11a0226b5bc3a798a479f17'
 )
 
 http_file(
     name = 'python_sphinx_csharp',
-    url = 'https://pypi.python.org/packages/16/6c/e585372b8ab807b697044eeaf4117bcd0c55087559772e75abd041d4466f/sphinx-csharp-0.1.6.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/16/6c/e585372b8ab807b697044eeaf4117bcd0c55087559772e75abd041d4466f/sphinx-csharp-0.1.6.tar.gz',
     sha256 = '4a6a019c6bc12e246e9ff065114b3df47fe3692a9536b014e4530f47a7645ab5'
 )
 
@@ -576,50 +594,50 @@ http_file(
 
 http_file(
     name = 'python_sphinx_tabs',
-    url = 'https://pypi.python.org/packages/f6/27/b858d292315beab1930387d8e4eb53ebfa31b46975d974574634fb773dc4/sphinx-tabs-1.1.7.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/f6/27/b858d292315beab1930387d8e4eb53ebfa31b46975d974574634fb773dc4/sphinx-tabs-1.1.7.tar.gz',
     sha256 = 'a2702405f77e0a8207468b349f516d1677dda0af9c9fb042d46421d196ab9fc5'
 )
 
 http_file(
     name = 'python_sphinx_rtd_theme',
-    url = 'https://pypi.python.org/packages/59/e4/9e3a74a3271e6734911d3f549e8439db53b8ac29adf10c8f698e6c86246b/sphinx_rtd_theme-0.2.5b1.tar.gz',
-    sha256 = 'd99513e7f2f8b9da8fdc189ad83df926b83d7fb15ad7ed07f24665d1f29d38da'
+    url = 'https://files.pythonhosted.org/packages/db/37/f57c7a99827aa03fa8efc24037ff9990deb1c6a7bb2f23c388bd36b8748a/sphinx_rtd_theme-0.4.2.tar.gz',
+    sha256 = '02f02a676d6baabb758a20c7a479d58648e0f64f13e07d1b388e9bb2afe86a09'
 )
 
 http_file(
     name = 'python_sphinxcontrib_spelling',
-    url = 'https://pypi.python.org/packages/6d/89/661b55c8b5e88734ccd376239e926a5c3ecaba8054a8137b1ced60a4c33c/sphinxcontrib-spelling-4.1.0.tar.gz',
-    sha256 = '769381eb5c791b7ff671457feeae5702142d231ba091a415e0eda695f221358b'
+    url = 'https://files.pythonhosted.org/packages/74/22/3fc121b8a7acd4952e0a280ced4703ed0082ae61533204731ef4cdfa01cb/sphinxcontrib-spelling-4.2.0.tar.gz',
+    sha256 = '44a9445b237ade895ae1fccbe6f41422489b1ffb2a026c1b78b0c1c1c229f9bf'
 )
 
 http_file(
     name = 'python_sphinxcontrib_websupport',
-    url = 'https://pypi.python.org/packages/c5/6b/f0630436b931ad4f8331a9399ca18a7d447f0fcc0c7178fb56b1aee68d01/sphinxcontrib-websupport-1.0.1.tar.gz',
-    sha256 = '7a85961326aa3a400cd4ad3c816d70ed6f7c740acd7ce5d78cd0a67825072eb9'
+    url = 'https://files.pythonhosted.org/packages/07/7a/e74b06dce85555ffee33e1d6b7381314169ebf7e31b62c18fcb2815626b7/sphinxcontrib-websupport-1.1.0.tar.gz',
+    sha256 = '9de47f375baf1ea07cdb3436ff39d7a9c76042c10a769c52353ec46e4e8fc3b9'
 )
 
 http_file(
     name = 'python_typing',
-    url = 'https://pypi.python.org/packages/ec/cc/28444132a25c113149cec54618abc909596f0b272a74c55bab9593f8876c/typing-3.6.4.tar.gz',
-    sha256 = 'd400a9344254803a2368533e4533a4200d21eb7b6b729c173bc38201a74db3f2'
+    url = 'https://files.pythonhosted.org/packages/bf/9b/2bf84e841575b633d8d91ad923e198a415e3901f228715524689495b4317/typing-3.6.6.tar.gz',
+    sha256 = '4027c5f6127a6267a435201981ba156de91ad0d1d98e9ddc2aa173453453492d'
 )
 
 http_file(
     name = 'python_urllib3',
-    url = 'https://pypi.python.org/packages/ee/11/7c59620aceedcc1ef65e156cc5ce5a24ef87be4107c2b74458464e437a5d/urllib3-1.22.tar.gz',
-    sha256 = 'cc44da8e1145637334317feebd728bd869a35285b93cbb4cca2577da7e62db4f'
+    url = 'https://files.pythonhosted.org/packages/3c/d2/dc5471622bd200db1cd9319e02e71bc655e9ea27b8e0ce65fc69de0dac15/urllib3-1.23.tar.gz',
+    sha256 = 'a68ac5e15e76e7e5dd2b8f94007233e01effe3e50e8daddf69acfd81cb686baf'
 )
 
 http_file(
     name = 'python_wrapt',
-    url = 'https://pypi.python.org/packages/a0/47/66897906448185fcb77fc3c2b1bc20ed0ecca81a0f2f88eda3fc5a34fc3d/wrapt-1.10.11.tar.gz',
+    url = 'https://files.pythonhosted.org/packages/a0/47/66897906448185fcb77fc3c2b1bc20ed0ecca81a0f2f88eda3fc5a34fc3d/wrapt-1.10.11.tar.gz',
     sha256 = 'd4d560d479f2c21e1b5443bbd15fe7ec4b37fe7e53d335d3b9b0a7b1226fe3c6'
 )
 
 http_file(
     name = 'python_websocket_client',
-    url = 'https://pypi.python.org/packages/c9/bb/8d3dd9063cfe0cd5d03fe6a1f74ddd948f384e9c1eff0eb978f3976a7d27/websocket_client-0.47.0.tar.gz',
-    sha256 = 'a453dc4dfa6e0db3d8fd7738a308a88effe6240c59f3226eb93e8f020c216149'
+    url = 'https://files.pythonhosted.org/packages/fb/1f/9acd71b77e66fafb19cfb023e50cbb7ed2c3be3c72db999162bd36c518c4/websocket_client-0.53.0.tar.gz',
+    sha256 = 'c42b71b68f9ef151433d6dcc6a7cb98ac72d2ad1e3a74981ca22bc5d9134f166'
 )
 
 http_file(

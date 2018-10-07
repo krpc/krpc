@@ -82,16 +82,20 @@ class CppDomain(Domain):
         if isinstance(typ, TupleType):
             values = (self.default_value(x, typ.value_types[i])
                       for i, x in enumerate(value))
-            return '(%s)' % ', '.join(values)
+            return '%s(%s)' % (self.language.parse_type(typ),
+                               ', '.join(values))
         elif isinstance(typ, ListType):
             values = (self.default_value(x, typ.value_type) for x in value)
-            return '(%s)' % ', '.join(values)
+            return '%s(%s)' % (self.language.parse_type(typ),
+                               ', '.join(values))
         elif isinstance(typ, SetType):
             values = (self.default_value(x, typ.value_type) for x in value)
-            return '(%s)' % ', '.join(values)
+            return '%s(%s)' % (self.language.parse_type(typ),
+                               ', '.join(values))
         elif isinstance(typ, DictionaryType):
-            entries = ('(%s, %s)' % (self.default_value(k, typ.key_type),
+            entries = ('{%s, %s}' % (self.default_value(k, typ.key_type),
                                      self.default_value(v, typ.value_type))
                        for k, v in value.items())
-            return '(%s)' % ', '.join(entries)
+            return '%s(%s)' % (self.language.parse_type(typ),
+                               ', '.join(entries))
         return self.language.parse_default_value(value, typ)
