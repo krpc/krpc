@@ -1,3 +1,7 @@
+v0.4.8
+ * Update to protobuf v3.6.1
+ * Change second parameter of krpc_open to be a configuration parameter of type krpc_connection_config_t to allow additional configuration options to be passed, such as baud rate for Arduino serial port (#487)
+
 v0.4.7
  * Fix include paths on Arduino (#482)
 

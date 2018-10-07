@@ -128,6 +128,9 @@ py_script = rule(
 def _test_impl(ctx, pyexe='python2'):
     sub_commands = ['virtualenv env --quiet --never-download --no-site-packages --python=%s' % pyexe]
     for dep in ctx.files.deps:
+        if dep.basename.startswith('enum34') and pyexe == 'python3':
+            # enum34 not required with Python 3
+            continue
         sub_commands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % dep.short_path)
     sub_commands.extend([
         'unzip -o %s' % (ctx.file.src.short_path), #TODO: install the package then run the tests??

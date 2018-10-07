@@ -116,6 +116,19 @@ Running the Tests
 kRPC contains a suite of tests for the server plugin, services, client
 libraries and others.
 
+To run the tests, the following dependencies should be installed. Without them, some of the tests
+will fail.
+
+ * Gendarme
+ * CppCheck
+ * socat
+
+To install these dependencies via apt on Ubuntu run the following command:
+
+.. code-block:: bash
+
+   sudo apt-get install gendarme cppcheck socat
+
 The tests, which do not require KSP to be running, can be executed using:
 ``bazel test //:test``
 

@@ -9,12 +9,13 @@ import java.io.IOException;
 
 public class Streaming1 {
   public static void main(String[] args) throws IOException, RPCException {
-    Connection connection = Connection.newInstance();
-    SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
-    Vessel vessel = spaceCenter.getActiveVessel();
-    ReferenceFrame refframe = vessel.getOrbit().getBody().getReferenceFrame();
-    while (true) {
-      System.out.println(vessel.position(refframe));
+    try (Connection connection = Connection.newInstance()) {
+      SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
+      Vessel vessel = spaceCenter.getActiveVessel();
+      ReferenceFrame refframe = vessel.getOrbit().getBody().getReferenceFrame();
+      while (true) {
+        System.out.println(vessel.position(refframe));
+      }
     }
   }
 }

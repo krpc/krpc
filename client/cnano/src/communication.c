@@ -8,8 +8,8 @@
 #include <stdint.h>
 #include <unistd.h>
 
-krpc_error_t krpc_open(krpc_connection_t * connection, const void * arg) {
-  const char * port = (const char *)arg;
+krpc_error_t krpc_open(krpc_connection_t * connection, const krpc_connection_config_t * arg) {
+  const char * port = arg;
   int fd = open(port, O_RDWR | O_NOCTTY);
   if (fd < 0)
     KRPC_RETURN_ERROR(IO, "failed to open serial port");
@@ -47,8 +47,11 @@ krpc_error_t krpc_write(krpc_connection_t connection, const uint8_t * buf, size_
 
 #if defined(KRPC_COMMUNICATION_ARDUINO)
 
-krpc_error_t krpc_open(krpc_connection_t * connection, const void * arg) {
-  (*connection)->begin(9600);
+krpc_error_t krpc_open(krpc_connection_t * connection, const krpc_connection_config_t * arg) {
+  if (arg)
+    (*connection)->begin(arg->speed, arg->config);
+  else
+    (*connection)->begin(9600, SERIAL_8N1);
   while (!*connection) {
   }
   return KRPC_OK;

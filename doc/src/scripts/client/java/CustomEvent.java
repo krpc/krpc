@@ -12,24 +12,26 @@ import java.io.IOException;
 
 public class CustomEvent {
   public static void main(String[] args) throws IOException, RPCException, StreamException {
-    Connection connection = Connection.newInstance();
-    KRPC krpc = KRPC.newInstance(connection);
-    SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
-    Flight flight = spaceCenter.getActiveVessel().flight(null);
+    try (Connection connection = Connection.newInstance()) {
+      KRPC krpc = KRPC.newInstance(connection);
+      SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
+      Flight flight = spaceCenter.getActiveVessel().flight(null);
 
-    // Get the remote procedure call as a message object,
-    // so it can be passed to the server
-    ProcedureCall meanAltitude = connection.getCall(flight, "getMeanAltitude");
+      // Get the remote procedure call as a message object,
+      // so it can be passed to the server
+      ProcedureCall meanAltitude = connection.getCall(flight, "getMeanAltitude");
 
-    // Create an expression on the server
-    Expression expr = Expression.greaterThan(connection,
-      Expression.call(connection, meanAltitude),
-      Expression.constantDouble(connection, 1000));
+      // Create an expression on the server
+      Expression expr = Expression.greaterThan(
+        connection,
+        Expression.call(connection, meanAltitude),
+        Expression.constantDouble(connection, 1000));
 
-    Event event = krpc.addEvent(expr);
-    synchronized (event.getCondition()) {
-      event.waitFor();
-      System.out.println("Altitude reached 1000m");
+      Event event = krpc.addEvent(expr);
+      synchronized (event.getCondition()) {
+        event.waitFor();
+        System.out.println("Altitude reached 1000m");
+      }
     }
   }
 }
