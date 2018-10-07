@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -109,7 +110,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Sum of the lift forces acting every part.
+        /// Sum of the lift forces acting every part, in Newtons.
         /// Note this is NOT the force in the vessel's lift direction.
         /// </summary>
         Vector3d WorldPartsLift {
@@ -128,12 +129,12 @@ namespace KRPC.SpaceCenter.Services
                             lift += wing.liftForce;
                     }
                 }
-                return lift;
+                return lift * 1000f;
             }
         }
 
         /// <summary>
-        /// Sum of the drag forces acting on every part.
+        /// Sum of the drag forces acting on every part, in Newtons.
         /// Note this is NOT the force in the vessel's drag direction.
         /// </summary>
         Vector3d WorldPartsDrag {
@@ -150,7 +151,7 @@ namespace KRPC.SpaceCenter.Services
                             drag += wing.dragForce;
                     }
                 }
-                return drag;
+                return drag * 1000f;
             }
         }
 
@@ -183,7 +184,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Magnitude of the lift force acting on the vessel.
+        /// Magnitude of the lift force acting on the vessel, in Newtons.
         /// </summary>
         double LiftMagnitude {
             get {
@@ -232,7 +233,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The current G force acting on the vessel in <math>m/s^2</math>.
+        /// The current G force acting on the vessel in <math>g</math>.
         /// </summary>
         [KRPCProperty]
         public float GForce {
@@ -537,7 +538,7 @@ namespace KRPC.SpaceCenter.Services
             } else {
                 Vector3 torque;
                 var altitude = (worldPosition - body.InternalBody.position).magnitude - body.InternalBody.Radius;
-                FAR.CalculateVesselAeroForces(vessel, out worldForce, out torque, worldVelocity, altitude);
+                FAR.CalculateVesselAeroForces(vessel, out worldForce, out torque, worldVelocity - body.InternalBody.getRFrmVel(worldPosition), altitude);
             }
             return referenceFrame.DirectionFromWorldSpace(worldForce).ToTuple();
         }
@@ -631,8 +632,11 @@ namespace KRPC.SpaceCenter.Services
                 if (FAR.IsAvailable) {
                     return (float)FAR.VesselTermVelEst (vessel);
                 } else {
-                    var gravity = Math.Sqrt (vessel.GetTotalMass () * FlightGlobals.getGeeForceAtPosition (WorldCoM).magnitude);
-                    return (float)(Math.Sqrt (gravity / DragMagnitude) * vessel.speed);
+                    var mass = vessel.parts.Sum(part => part.WetMass());
+                    var gForce = FlightGlobals.getGeeForceAtPosition(WorldCoM).magnitude;
+                    var drag = FlightGlobals.ActiveVessel.parts.Sum(part => part.DragCubes.AreaDrag) * PhysicsGlobals.DragCubeMultiplier * PhysicsGlobals.DragMultiplier;
+                    var atmDensity = FlightGlobals.ActiveVessel.atmDensity;
+                    return (float)Math.Sqrt((2.0 * mass * gForce) / (atmDensity * drag));
                 }
             }
         }

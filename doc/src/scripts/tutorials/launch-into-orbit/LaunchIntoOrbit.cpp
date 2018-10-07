@@ -1,5 +1,6 @@
 #include <iostream>
 #include <chrono>
+#include <cmath>
 #include <thread>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
@@ -48,7 +49,7 @@ int main() {
       double frac = (altitude() - turn_start_altitude)
                     / (turn_end_altitude - turn_start_altitude);
       double new_turn_angle = frac * 90.0;
-      if (fabs(new_turn_angle - turn_angle) > 0.5) {
+      if (std::abs(new_turn_angle - turn_angle) > 0.5) {
         turn_angle = new_turn_angle;
         vessel.auto_pilot().target_pitch_and_heading(90.0 - turn_angle, 90.0);
       }
@@ -88,8 +89,8 @@ int main() {
   double r = vessel.orbit().apoapsis();
   double a1 = vessel.orbit().semi_major_axis();
   double a2 = r;
-  double v1 = sqrt(mu * ((2.0 / r) - (1.0 / a1)));
-  double v2 = sqrt(mu * ((2.0 / r) - (1.0 / a2)));
+  double v1 = std::sqrt(mu * ((2.0 / r) - (1.0 / a1)));
+  double v2 = std::sqrt(mu * ((2.0 / r) - (1.0 / a2)));
   double delta_v = v2 - v1;
   auto node = vessel.control().add_node(
     ut() + vessel.orbit().time_to_apoapsis(), delta_v);
@@ -98,7 +99,7 @@ int main() {
   double F = vessel.available_thrust();
   double Isp = vessel.specific_impulse() * 9.82;
   double m0 = vessel.mass();
-  double m1 = m0 / exp(delta_v / Isp);
+  double m1 = m0 / std::exp(delta_v / Isp);
   double flow_rate = F / Isp;
   double burn_time = (m0 - m1) / flow_rate;
 

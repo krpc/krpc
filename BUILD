@@ -144,6 +144,7 @@ pkg_zip(
         'service/SpaceCenter/': 'GameData/kRPC/',
         'service/SpaceCenter/CHANGES.txt': 'GameData/kRPC/CHANGES.SpaceCenter.txt',
         'service/SpaceCenter/LICENSE': 'LICENSE.KRPC.SpaceCenter',
+        'service/SpaceCenter/src/module-manager.cfg': 'GameData/kRPC/module-manager.cfg',
         'service/Drawing/': 'GameData/kRPC/',
         'service/Drawing/CHANGES.txt': 'GameData/kRPC/CHANGES.Drawing.txt',
         'service/InfernalRobotics/': 'GameData/kRPC/',
@@ -154,6 +155,8 @@ pkg_zip(
         'service/RemoteTech/CHANGES.txt': 'GameData/kRPC/CHANGES.RemoteTech.txt',
         'service/UI/': 'GameData/kRPC/',
         'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt',
+        # Module Manager
+        '../module_manager/file/ModuleManager.3.0.7.dll': 'GameData/ModuleManager.3.0.7.dll',
         # Clients
         'client/cnano/': 'client/',
         'client/cpp/': 'client/',

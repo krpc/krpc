@@ -55,7 +55,7 @@
 
       :Parameters:
 
-   .. function:: std::map<int32_t, bool> dictionary_default(std::map<int32_t, bool> x = ((1, false), (2, true)))
+   .. function:: std::map<int32_t, bool> dictionary_default(std::map<int32_t, bool> x = std::map<int32_t, bool>({1, false}, {2, true}))
 
 
 
@@ -135,7 +135,7 @@
 
       :Parameters:
 
-   .. function:: std::vector<int32_t> list_default(std::vector<int32_t> x = (1, 2, 3))
+   .. function:: std::vector<int32_t> list_default(std::vector<int32_t> x = std::vector<int32_t>(1, 2, 3))
 
 
 
@@ -168,7 +168,7 @@
 
    .. function:: TestClass return_null_when_not_allowed()
 
-   .. function:: std::set<int32_t> set_default(std::set<int32_t> x = (1, 2, 3))
+   .. function:: std::set<int32_t> set_default(std::set<int32_t> x = std::set<int32_t>(1, 2, 3))
 
 
 
@@ -211,7 +211,7 @@
 
    .. function:: int32_t throw_invalid_operation_exception_later()
 
-   .. function:: std::tuple<int32_t, bool> tuple_default(std::tuple<int32_t, bool> x = (1, false))
+   .. function:: std::tuple<int32_t, bool> tuple_default(std::tuple<int32_t, bool> x = std::tuple<int32_t, bool>(1, false))
 
 
 

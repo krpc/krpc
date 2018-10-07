@@ -74,23 +74,21 @@ namespace KRPC.Utils
         /// </summary>
         public static LaunchSiteClear NewLaunchSiteClear(string launchSite, Game game)
         {
-            if (Versioning.version_major * 100 + Versioning.version_minor >= 103)
-            {
+            if (Versioning.version_major * 100 + Versioning.version_minor >= 103) {
                 // KSP 1.3.0 and up
-                var ctor = typeof(LaunchSiteClear).GetConstructor(new Type[] {
-                    typeof(string), typeof(Game)
-                });
-                return (LaunchSiteClear)ctor.Invoke(null, new object[] {
-                    launchSite, game
-                });
-            }
-            else {
-                // KSP 1.2.2 and below
                 var ctor = typeof(LaunchSiteClear).GetConstructor(new Type[] {
                     typeof(string), typeof(string), typeof(Game)
                 });
                 return (LaunchSiteClear)ctor.Invoke(null, new object[] {
                     launchSite, launchSite, game
+                });
+            } else {
+                // KSP 1.2.2 and below
+                var ctor = typeof(LaunchSiteClear).GetConstructor(new Type[] {
+                    typeof(string), typeof(Game)
+                });
+                return (LaunchSiteClear)ctor.Invoke(null, new object[] {
+                    launchSite, game
                 });
             }
         }

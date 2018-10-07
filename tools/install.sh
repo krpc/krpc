@@ -41,7 +41,9 @@ cp -R -L \
     bazel-krpc/external/csharp_krpc_io_ports/file/KRPC.IO.Ports.dll \
     bazel-bin/tools/TestingTools/TestingTools.dll \
     bazel-bin/tools/TestingTools/TestingTools.xml \
+    service/SpaceCenter/src/module-manager.cfg \
     $GAMEDATA/
+  cp -L bazel-krpc/external/module_manager/file/ModuleManager.3.0.7.dll $GAMEDATA/../
 
 mkdir -p $GAMEDATA/PluginData
 cp tools/settings.cfg $GAMEDATA/PluginData/

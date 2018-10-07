@@ -100,6 +100,10 @@
     <Compile Include="ExternalAPI\AGX.cs" />
     <Compile Include="ExternalAPI\FAR.cs" />
     <Compile Include="ExternalAPI\RemoteTech.cs" />
+    <Compile Include="NameTag\Career.cs" />
+    <Compile Include="NameTag\NameTag.cs" />
+    <Compile Include="NameTag\Utils.cs" />
+    <Compile Include="NameTag\Window.cs" />
     <Compile Include="PartForcesAddon.cs" />
     <Compile Include="PartHighlightAddon.cs" />
     <Compile Include="PilotAddon.cs" />
@@ -120,7 +124,10 @@
     <Compile Include="Services\ControlMode.cs" />
     <Compile Include="Services\ControlSource.cs" />
     <Compile Include="Services\ControlState.cs" />
+    <Compile Include="Services\CrewMember.cs" />
+    <Compile Include="Services\CrewMemberType.cs" />
     <Compile Include="Services\Flight.cs" />
+    <Compile Include="Services\GameMode.cs" />
     <Compile Include="Services\Node.cs" />
     <Compile Include="Services\Orbit.cs" />
     <Compile Include="Services\Parts\Antenna.cs" />
@@ -178,8 +185,5 @@
     <Compile Include="Services\WarpMode.cs" />
     <Compile Include="Services\Waypoint.cs" />
     <Compile Include="Services\WaypointManager.cs" />
-    <Compile Include="Services\CrewMember.cs" />
-    <Compile Include="Services\CrewMemberType.cs" />
-    <Compile Include="Services\GameMode.cs" />
   </ItemGroup>
 </Project>

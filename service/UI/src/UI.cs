@@ -1,9 +1,40 @@
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.UI.ExtensionMethods;
+using UnityEngine;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPC.UI
 {
+    [SuppressMessage("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
+    static class CreateDefaultDuration
+    {
+        public static object Create()
+        {
+            return 1f;
+        }
+    }
+
+    [SuppressMessage("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
+    static class CreateDefaultPosition
+    {
+        public static object Create()
+        {
+            return MessagePosition.TopCenter;
+        }
+    }
+
+    [SuppressMessage("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
+    static class CreateDefaultColor
+    {
+        public static object Create()
+        {
+            return new Tuple3(1, 0.92, 0.016);
+        }
+    }
+
     /// <summary>
     /// Provides functionality for drawing and interacting with in-game user interface elements.
     /// </summary>
@@ -42,10 +73,18 @@ namespace KRPC.UI
         /// <param name="content">Message content.</param>
         /// <param name="duration">Duration before the message disappears, in seconds.</param>
         /// <param name="position">Position to display the message.</param>
+        /// <param name="size">Size of the message, differs per position.</param>
+        /// <param name="color">The color of the message.</param>
         [KRPCProcedure]
-        public static void Message (string content, float duration = 1f, MessagePosition position = MessagePosition.TopCenter)
-        {
-            ScreenMessages.PostScreenMessage (content, duration, position.ToScreenMessageStyle ());
+        [KRPCDefaultValue("duration", typeof(CreateDefaultDuration))]
+        [KRPCDefaultValue("position", typeof(CreateDefaultPosition))]
+        [KRPCDefaultValue("color", typeof(CreateDefaultColor))]
+        [SuppressMessage("Gendarme.Rules.Globalization", "PreferIFormatProviderOverrideRule")]
+        public static void Message(string content, float duration, MessagePosition position,
+                                   Tuple3 color, float size = 20) {
+            var htmlColor = "#" + ColorUtility.ToHtmlStringRGB(color.ToColor());
+            var message = "<color=" + htmlColor + "><size=" + size.ToString() + ">" + content + "</size></color>";
+            ScreenMessages.PostScreenMessage(message, duration, position.ToScreenMessageStyle());
         }
 
         /// <summary>

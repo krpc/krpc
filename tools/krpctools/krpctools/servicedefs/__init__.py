@@ -1,3 +1,4 @@
+from __future__ import print_function
 import argparse
 import json
 import os
@@ -41,7 +42,7 @@ def main():
         with open(args.output, 'w') as fp:
             fp.write(defs)
     else:
-        print defs
+        print(defs)
 
     return 0
 

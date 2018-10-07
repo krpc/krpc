@@ -3,6 +3,7 @@
 #include <tuple>
 #include <thread>
 #include <chrono>
+#include <cmath>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
 
@@ -24,7 +25,7 @@ double dot_product(const vector3& u, const vector3& v) {
 }
 
 double magnitude(const vector3& v) {
-  return sqrt(dot_product(v, v));
+  return std::sqrt(dot_product(v, v));
 }
 
 // Compute the angle between vector u and v
@@ -34,7 +35,7 @@ double angle_between_vectors(const vector3& u, const vector3& v) {
     return 0;
   double um = magnitude(u);
   double vm = magnitude(v);
-  return acos(dp / (um*vm)) * (180.0 / pi);
+  return std::acos(dp / (um*vm)) * (180.0 / pi);
 }
 
 int main() {

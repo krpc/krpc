@@ -10,22 +10,27 @@ stage=bazel-genfiles/doc/srcs-stage
 env=bazel-bin/doc/serve/env
 out=bazel-bin/doc/serve/out
 
-# Set up python environment
+# Set up bazel
+if [ ! -d "bazel-bin" ]; then
+    bazel build //:krpc
+fi
 bazel fetch //...
 mkdir -p `dirname $env`
+
+# Set up python environment
 if [ ! -d "$env" ]; then
   virtualenv $env
   source $env/bin/activate
   pip install --upgrade \
       "six==1.11.0" \
-      "pbr==3.1.1" \
-      "setuptools==38.5.2" \
+      "pbr==4.3.0" \
+      "setuptools==40.4.3" \
       "setuptools-git==1.2"
-  pip install "Sphinx==1.6.4"
-  CFLAGS="-O0" pip install "lxml==4.1.1"
+  pip install "Sphinx==1.8.1"
+  CFLAGS="-O0" pip install "lxml==4.2.5"
   pip install \
-      "sphinx_rtd_theme==0.2.5b1" \
-      "sphinxcontrib_spelling==4.1.0" \
+      "sphinx_rtd_theme==0.4.2" \
+      "sphinxcontrib_spelling==4.2.0" \
       "sphinx-csharp==0.1.6" \
       "sphinx-tabs==1.1.7" \
       "javasphinx==0.9.15" \

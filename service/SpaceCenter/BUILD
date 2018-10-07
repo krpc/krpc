@@ -6,7 +6,9 @@ load('//service:build.bzl', 'service_deps')
 
 filegroup(
     name = 'SpaceCenter',
-    srcs = [':KRPC.SpaceCenter', ':ServiceDefinitions', 'CHANGES.txt', 'LICENSE'],
+    srcs = [':KRPC.SpaceCenter', ':ServiceDefinitions',
+            'CHANGES.txt', 'LICENSE',
+            'src/module-manager.cfg', '@module_manager//file'],
     visibility = ['//:__pkg__']
 )
 

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import argparse
 import glob
 import os
@@ -56,8 +57,7 @@ def main():
         help='Path to output a list of documented members')
     args = parser.parse_args()
 
-    macros = resource_filename(__name__, '%s.tmpl' % args.language) \
-        .decode('utf-8')
+    macros = resource_filename(__name__, '%s.tmpl' % args.language)
 
     if args.language == 'cnano':
         domain = CnanoDomain(macros)
@@ -85,7 +85,7 @@ def main():
             services_info.update(json.load(fp))
 
     if services_info == {}:
-        print 'No services found in services definition files'
+        print('No services found in services definition files')
         exit(1)
 
     sort_failed = []
@@ -102,7 +102,7 @@ def main():
         return info
 
     services = {name: Service(name, sort=sort, **parse_service_info(info))
-                for name, info in services_info.iteritems()}
+                for name, info in services_info.items()}
 
     if sort_failed:
         raise RuntimeError(
@@ -127,7 +127,9 @@ def main():
 
 
 def process_file(domain, services, path):
-    loader = jinja2.FileSystemLoader(searchpath=['./', '/'])
+    loader = jinja2.FileSystemLoader(searchpath=[
+        domain.macros_dir,
+        os.path.abspath(os.path.dirname(path))])
     template_env = jinja2.Environment(
         loader=loader,
         trim_blocks=True,
@@ -167,7 +169,7 @@ def process_file(domain, services, path):
     template_env.filters['indent'] = indent
     template_env.filters['singleline'] = single_line
 
-    template = template_env.get_template(path)
+    template = template_env.get_template(os.path.basename(path))
     content = template.render(context)
 
     return (content.rstrip()+'\n', sorted(documented))
