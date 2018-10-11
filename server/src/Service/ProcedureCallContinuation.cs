@@ -47,5 +47,9 @@ namespace KRPC.Service
                 throw new YieldException (new ProcedureCallContinuation (procedure, e.Continuation));
             }
         }
+
+        public ProcedureSignature Procedure {
+            get { return procedure; }
+        }
     };
 }

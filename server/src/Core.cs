@@ -696,11 +696,17 @@ namespace KRPC
                     if (!pollRequestsCurrentClients.Contains (client) && stream.DataAvailable) {
                         Request request = stream.Read ();
                         EventHandlerExtensions.Invoke (OnClientActivity, this, new ClientActivityEventArgs (client));
-                        if (Logger.ShouldLog (Logger.Severity.Debug))
-                            Logger.WriteLine ("Received request from client " + client.Address +
-                            " (" + string.Join (", ", request.Calls.Select (call => call.Service + "." + call.Procedure).ToArray ()) + ")",
-                                Logger.Severity.Debug);
-                        rpcContinuations.Add (new RequestContinuation (client, request));
+                        if (Logger.ShouldLog (Logger.Severity.Debug)) {
+                            var calls = string.Join(
+                                ", ", request.Calls.Select(call => call.ServiceId > 0 ? call.ServiceId + "." + call.ProcedureId : call.Service + "." + call.Procedure).ToArray());
+                            Logger.WriteLine ("Received request from client " + client.Address + " (" + calls + ")", Logger.Severity.Debug);
+                        }
+                        var requestContinuation = new RequestContinuation (client, request);
+                        rpcContinuations.Add (requestContinuation);
+                        if (Logger.ShouldLog (Logger.Severity.Debug)) {
+                            var calls = string.Join(", ", requestContinuation.Calls.Select(call => call.Procedure.FullyQualifiedName).ToArray());
+                            Logger.WriteLine ("Decoded request from client " + client.Address + " (" + calls + ")", Logger.Severity.Debug);
+                        }
                     }
                 } catch (ClientDisconnectedException) {
                     Logger.WriteLine ("Client " + client.Address + " disconnected");
