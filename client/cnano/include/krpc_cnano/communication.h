@@ -31,7 +31,7 @@ typedef HardwareSerial * krpc_connection_t;
 
 typedef struct {
   uint32_t speed;
-  byte config;
+  uint8_t config;
 } krpc_connection_config_t;
 #endif
 
