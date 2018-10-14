@@ -5,12 +5,12 @@ serviceinclude_HEADERS = krpc/services/drawing.hpp krpc/services/infernal_roboti
 
 if HAVE_PROTOC
 krpc/krpc.pb.hpp:
-	${MKDIR} krpc
+	${MKDIR} -p krpc
 	$(PROTOC) --proto_path=${top_srcdir}/protobuf --cpp_out=krpc ${top_srcdir}/protobuf/krpc.proto
 	$(RM) krpc/krpc.pb.cc
 	$(MV) krpc/krpc.pb.h krpc/krpc.pb.hpp
 else
 krpc/krpc.pb.hpp:
-	${MKDIR} krpc
+	${MKDIR} -p krpc
 	$(CP) ${top_srcdir}/protobuf/krpc.pb.hpp krpc/krpc.pb.hpp
 endif
