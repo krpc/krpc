@@ -12,6 +12,7 @@ namespace KRPC.InfernalRobotics
     public class IROrigWrapper : IRWrapper.IRWrapper
     {
         static IROrigWrapper instance;
+        internal object ActualController { get; set; }
         internal Type IRServoPartType { get; set; }
         internal Type IRServoMechanismType { get; set; }
         internal Type IRServoMotorType { get; set; }

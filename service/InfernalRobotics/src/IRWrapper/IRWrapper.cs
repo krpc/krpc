@@ -12,7 +12,6 @@ namespace KRPC.InfernalRobotics.IRWrapper
         internal Type IRControlGroupType { get; set; }
         internal Type IRServoType { get; set; }
         internal Type IRMotorType { get; set; }
-        internal object ActualController { get; set; }
         internal IRAPI IRController { get; set; }
         internal bool AssemblyExists { get { return (IRControllerType != null); } }
         internal bool InstanceExists { get { return (IRController != null); } }
@@ -23,8 +22,7 @@ namespace KRPC.InfernalRobotics.IRWrapper
         public static IRWrapper Instance { get { return instance; } }
 
         public static void InitWrapper () {
-            if (instance == null)
-            {
+            if (instance == null) {
                 // Try loading IR Next
                 var irNext = new IRNextWrapper();
                 irNext.InternalInitWrapper();

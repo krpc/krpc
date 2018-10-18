@@ -10,13 +10,13 @@ namespace KRPC.InfernalRobotics
 {
     public class IRNextWrapper : IRWrapper.IRWrapper
     {
+        static PropertyInfo Controller;
         static IRNextWrapper instance;
 
         internal bool InternalInitWrapper ()
         {
             instance = this;
             isWrapped = false;
-            ActualController = null;
             IRController = null;
             LogFormatted ("Attempting to Grab IR Types...");
 
@@ -62,23 +62,9 @@ namespace KRPC.InfernalRobotics
 
             LogFormatted ("Got Assembly Types, grabbing Instance");
 
-            try
-            {
-                var propertyInfo = IRControllerType.GetProperty ("Instance", BindingFlags.Public | BindingFlags.Static);
-
-                if(propertyInfo == null)
-                    LogFormatted ("[IR Wrapper] Cannot find Instance Property");
-                else
-                    ActualController = propertyInfo.GetValue(null, null);
-            }
-            catch (Exception e)
-            {
-                LogFormatted ("No Instance found, " + e.Message);
-            }
-
-            if(ActualController == null)
-            {
-                LogFormatted ("Failed grabbing Instance");
+            Controller = IRControllerType.GetProperty ("Instance", BindingFlags.Public | BindingFlags.Static);
+            if (Controller == null) {
+                LogFormatted ("[IR Wrapper] Cannot find Instance Property");
                 return false;
             }
 
@@ -104,12 +90,13 @@ namespace KRPC.InfernalRobotics
             private void BuildServoGroups ()
             {
                 var servoGroupsField = instance.IRControllerType.GetField ("ServoGroups");
-                if(servoGroupsField == null)
+                if (servoGroupsField == null)
                     instance.LogFormatted ("Failed Getting ServoGroups fieldinfo");
-                else if(instance.ActualController == null)
+                else if (Controller == null)
                     instance.LogFormatted ("ServoController Instance not found");
                 else
-                    actualServoGroups = servoGroupsField.GetValue(instance.ActualController);
+                    actualServoGroups = servoGroupsField.GetValue(
+                        Controller.GetValue(null, null));
             }
 
             private void DetermineReady ()
