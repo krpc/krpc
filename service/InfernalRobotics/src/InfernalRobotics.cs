@@ -16,7 +16,8 @@ namespace KRPC.InfernalRobotics
         static void CheckAPI ()
         {
             if (!Ready)
-                throw new InvalidOperationException ("Infernal Robotics is not ready");
+                throw new InvalidOperationException(
+                    "Infernal Robotics is not ready. Does the vessel have an Infernal Robotics part?");
         }
 
         /// <summary>

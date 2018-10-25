@@ -108,6 +108,15 @@ argument to the compiler.
    On embedded systems you probably want to define ``KRPC_NO_PRINT_ERROR`` and ``PB_NO_ERRMSG`` to
    minimize the memory footprint of kRPC.
 
+Configuring the Server
+----------------------
+
+The C-nano client library communicates with the server over a serial port using `protobuf messages
+<https://github.com/nanopb/nanopb>`_. The kRPC server, which runs in the game, needs to be
+configured to use the serial port protocol (instead of the default TCP/IP protocol). This can be
+done from the in-game server configuration window, which also allows settings such as the port name
+and baud rate to be configured.
+
 Using the Library on a POSIX System
 -----------------------------------
 

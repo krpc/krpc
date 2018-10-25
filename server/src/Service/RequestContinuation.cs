@@ -1,4 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service.Messages;
@@ -29,6 +31,17 @@ namespace KRPC.Service
                 results = new ProcedureResult[size];
                 for (int i = 0; i < size; i++)
                     calls [i] = new ProcedureCallContinuation (request.Calls [i]);
+            }
+        }
+
+        public ReadOnlyCollection<ProcedureCallContinuation> Calls {
+            get {
+                if (call != null) {
+                    var tmp = new List<ProcedureCallContinuation>();
+                    tmp.Add(call);
+                    return new ReadOnlyCollection<ProcedureCallContinuation>(tmp);
+                }
+                return new ReadOnlyCollection<ProcedureCallContinuation>(calls);
             }
         }
 
