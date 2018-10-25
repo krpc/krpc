@@ -17,6 +17,8 @@ Service documentation string.
    :param int y:
    :param long z:
    :rtype: str
+   :Game Scenes: All
+
 
 
 
@@ -28,6 +30,8 @@ Service documentation string.
    :param list l:
    :param str value:
    :rtype: list(:class:`TestClass`)
+   :Game Scenes: All
+
 
 
 
@@ -39,6 +43,8 @@ Service documentation string.
    :param int n:
    :param int sum:
    :rtype: int
+   :Game Scenes: All
+
 
 
 
@@ -49,6 +55,8 @@ Service documentation string.
 
    :param bool value:
    :rtype: str
+   :Game Scenes: All
+
 
 
 
@@ -59,6 +67,8 @@ Service documentation string.
 
    :param bytes value:
    :rtype: str
+   :Game Scenes: All
+
 
 
 
@@ -70,6 +80,8 @@ Service documentation string.
    :param str id:
    :param int divisor:
    :rtype: int
+   :Game Scenes: All
+
 
 
 
@@ -80,6 +92,8 @@ Service documentation string.
 
    :param str value:
    :rtype: :class:`TestClass`
+   :Game Scenes: All
+
 
 
 
@@ -90,6 +104,8 @@ Service documentation string.
 
    :param dict x:
    :rtype: dict(int, bool)
+   :Game Scenes: All
+
 
 
 
@@ -100,6 +116,8 @@ Service documentation string.
 
    :param double value:
    :rtype: str
+   :Game Scenes: All
+
 
 
 
@@ -110,6 +128,8 @@ Service documentation string.
 
    :param TestClass value:
    :rtype: :class:`TestClass`
+   :Game Scenes: All
+
 
 
 
@@ -120,6 +140,8 @@ Service documentation string.
 
    :param TestEnum x:
    :rtype: :class:`TestEnum`
+   :Game Scenes: All
+
 
 
 
@@ -130,6 +152,8 @@ Service documentation string.
 
    :param TestEnum x:
    :rtype: :class:`TestEnum`
+   :Game Scenes: All
+
 
 
 
@@ -139,6 +163,8 @@ Service documentation string.
 
 
    :rtype: :class:`TestEnum`
+   :Game Scenes: All
+
 
 
 
@@ -149,6 +175,8 @@ Service documentation string.
 
    :param float value:
    :rtype: str
+   :Game Scenes: All
+
 
 
 
@@ -159,6 +187,8 @@ Service documentation string.
 
    :param dict d:
    :rtype: dict(str, int)
+   :Game Scenes: All
+
 
 
 
@@ -169,6 +199,8 @@ Service documentation string.
 
    :param list l:
    :rtype: list(int)
+   :Game Scenes: All
+
 
 
 
@@ -179,6 +211,8 @@ Service documentation string.
 
    :param dict d:
    :rtype: dict(str, list(int))
+   :Game Scenes: All
+
 
 
 
@@ -189,6 +223,8 @@ Service documentation string.
 
    :param set h:
    :rtype: set(int)
+   :Game Scenes: All
+
 
 
 
@@ -199,6 +235,8 @@ Service documentation string.
 
    :param tuple t:
    :rtype: tuple(int, long)
+   :Game Scenes: All
+
 
 
 
@@ -209,6 +247,8 @@ Service documentation string.
 
    :param int value:
    :rtype: str
+   :Game Scenes: All
+
 
 
 
@@ -219,6 +259,8 @@ Service documentation string.
 
    :param long value:
    :rtype: str
+   :Game Scenes: All
+
 
 
 
@@ -229,6 +271,8 @@ Service documentation string.
 
    :param list x:
    :rtype: list(int)
+   :Game Scenes: All
+
 
 
 
@@ -239,6 +283,8 @@ Service documentation string.
 
    :Attribute: Can be read or written
    :rtype: :class:`TestClass`
+   :Game Scenes: All
+
 
 
 
@@ -250,6 +296,8 @@ Service documentation string.
    :param int milliseconds:
    :param int repeats:
    :rtype: :class:`krpc.schema.KRPC.Event`
+   :Game Scenes: All
+
 
 
 
@@ -260,6 +308,8 @@ Service documentation string.
 
    :param int milliseconds:
    :rtype: :class:`krpc.schema.KRPC.Event`
+   :Game Scenes: All
+
 
 
 
@@ -273,6 +323,8 @@ Service documentation string.
    :param str z:
    :param TestClass obj:
    :rtype: str
+   :Game Scenes: All
+
 
 
 
@@ -281,6 +333,8 @@ Service documentation string.
 
 
 
+   :Game Scenes: All
+
 
 
 
@@ -288,6 +342,8 @@ Service documentation string.
 .. staticmethod:: reset_invalid_operation_exception_later()
 
 
+
+   :Game Scenes: All
 
 
 
@@ -298,6 +354,8 @@ Service documentation string.
 
 
    :rtype: :class:`TestClass`
+   :Game Scenes: All
+
 
 
 
@@ -308,6 +366,8 @@ Service documentation string.
 
    :param set x:
    :rtype: set(int)
+   :Game Scenes: All
+
 
 
 
@@ -318,6 +378,8 @@ Service documentation string.
 
    :Attribute: Can be read or written
    :rtype: str
+   :Game Scenes: All
+
 
 
 
@@ -328,6 +390,8 @@ Service documentation string.
 
    :Attribute: Write-only, cannot be read
    :rtype: str
+   :Game Scenes: All
+
 
 
 
@@ -338,6 +402,8 @@ Service documentation string.
 
    :Attribute: Read-only, cannot be set
    :rtype: str
+   :Game Scenes: All
+
 
 
 
@@ -348,6 +414,8 @@ Service documentation string.
 
    :param str value:
    :rtype: int
+   :Game Scenes: All
+
 
 
 
@@ -357,6 +425,8 @@ Service documentation string.
 
 
    :rtype: int
+   :Game Scenes: All
+
 
 
 
@@ -367,6 +437,8 @@ Service documentation string.
 
    :param str foo:
    :rtype: int
+   :Game Scenes: All
+
 
 
 
@@ -377,6 +449,8 @@ Service documentation string.
 
    :param int foo:
    :rtype: int
+   :Game Scenes: All
+
 
 
 
@@ -386,6 +460,8 @@ Service documentation string.
 
 
    :rtype: int
+   :Game Scenes: All
+
 
 
 
@@ -395,6 +471,8 @@ Service documentation string.
 
 
    :rtype: int
+   :Game Scenes: All
+
 
 
 
@@ -404,6 +482,8 @@ Service documentation string.
 
 
    :rtype: int
+   :Game Scenes: All
+
 
 
 
@@ -413,6 +493,8 @@ Service documentation string.
 
 
    :rtype: int
+   :Game Scenes: All
+
 
 
 
@@ -423,6 +505,8 @@ Service documentation string.
 
    :param tuple x:
    :rtype: tuple(int, bool)
+   :Game Scenes: All
+
 
 
 
@@ -438,12 +522,14 @@ Service documentation string.
 
       :param float x:
       :rtype: str
+      :Game Scenes: All
 
    .. method:: get_value()
 
       Method documentation string.
 
       :rtype: str
+      :Game Scenes: All
 
    .. attribute:: int_property
 
@@ -451,6 +537,7 @@ Service documentation string.
 
       :Attribute: Can be read or written
       :rtype: int
+      :Game Scenes: All
 
    .. attribute:: object_property
 
@@ -458,6 +545,7 @@ Service documentation string.
 
       :Attribute: Can be read or written
       :rtype: :class:`TestClass`
+      :Game Scenes: All
 
    .. method:: object_to_string(other)
 
@@ -465,6 +553,7 @@ Service documentation string.
 
       :param TestClass other:
       :rtype: str
+      :Game Scenes: All
 
    .. method:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = None])
 
@@ -475,6 +564,7 @@ Service documentation string.
       :param str z:
       :param TestClass obj:
       :rtype: str
+      :Game Scenes: All
 
    .. staticmethod:: static_method([a = ''], [b = ''])
 
@@ -483,6 +573,7 @@ Service documentation string.
       :param str a:
       :param str b:
       :rtype: str
+      :Game Scenes: All
 
 
 
