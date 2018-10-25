@@ -1,4 +1,5 @@
 v0.4.8
+ * Allows RPCs to be accessed from game scenes other than just flight (#471)
  * Merge NameTag (http://github.com/krpc/NameTag) into the main kRPC release
  * Fix air-relative velocity calculation for SimulateAeroDynamicForceAt with FAR (#500)
  * Changed Orbit API to accept target orbits as Orbit objects instead of Vessel objects, to allow computing closest approach etc. to planets (#479)
