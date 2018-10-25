@@ -132,7 +132,7 @@ new_http_archive(
     build_file_content = "exports_files(['lib/net40/Moq.dll'])",
     url = 'http://www.nuget.org/api/v2/package/Moq/4.2.1510.2205',
     type = 'zip',
-    sha256 = '1f4978e0a3f5b8d82b41635eff8201e5e7021b1fc1aceae4d9caeb79506f3804'
+    sha256 = '7a86f2ed0e134601e75a4fa28c7f7c399f6abc33f091dbc024ad8b212b8c3c85'
 )
 
 new_http_archive(
@@ -140,7 +140,7 @@ new_http_archive(
     build_file_content = "exports_files(['lib/net35/Newtonsoft.Json.dll', 'lib/net45/Newtonsoft.Json.dll'])",
     url = 'https://www.nuget.org/api/v2/package/Newtonsoft.Json/9.0.1',
     type = 'zip',
-    sha256 = '23405c5a3814347fb952b74dec0d836b5b63832c02552e17e0b10f88ab555ee1'
+    sha256 = '998081ae052120917346e2cb57d488888147a2fcdf47c52ea9f83a7b4f049e55'
 )
 
 new_http_archive(
@@ -225,7 +225,7 @@ http_file(
 maven_jar(
     name = 'java_protobuf',
     artifact = 'com.google.protobuf:protobuf-java:3.6.1',
-    sha1 = '8c3492f7662fa1cbf8ca76a0f5eb1146f7725acd'
+    sha1 = '0d06d46ecfd92ec6d0f3b423b4cd81cb38d8b924'
 )
 
 maven_jar(
