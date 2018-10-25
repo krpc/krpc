@@ -66,7 +66,7 @@ RUN apt-get update && \
     chmod +x /usr/local/bin/gosu && \
     gosu nobody true
 
-ARG bazel_version=0.16.1
+ARG bazel_version=0.18.0
 RUN echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | \
       tee /etc/apt/sources.list.d/bazel.list && \
     curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add - && \
