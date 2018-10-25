@@ -230,6 +230,8 @@ N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Correctness.ReviewInconsistentIdentityRule
 N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Design.AvoidVisibleNestedTypesRule
+T: KRPC.Schema.KRPC.Procedure/Types
+T: KRPC.Schema.KRPC.Procedure/Types/GameScene
 T: KRPC.Schema.KRPC.Type/Types
 T: KRPC.Schema.KRPC.Type/Types/TypeCode
 T: KRPC.Schema.KRPC.ConnectionRequest/Types
@@ -251,6 +253,7 @@ N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Performance.UseStringEmptyRule
 N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Serialization.MarkEnumerationsAsSerializableRule
+T: KRPC.Schema.KRPC.Procedure/Types/GameScene
 T: KRPC.Schema.KRPC.Type/Types/TypeCode
 T: KRPC.Schema.KRPC.ConnectionRequest/Types/Type
 T: KRPC.Schema.KRPC.ConnectionResponse/Types/Status

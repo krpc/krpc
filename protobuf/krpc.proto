@@ -97,7 +97,17 @@ message Procedure {
   repeated Parameter parameters = 2;
   Type return_type = 3;
   bool return_is_nullable = 4;
+  repeated GameScene game_scenes = 6;
   string documentation = 5;
+
+  enum GameScene {
+    SPACE_CENTER = 0;
+    FLIGHT = 1;
+    TRACKING_STATION = 2;
+    EDITOR_VAB = 3;
+    EDITOR_SPH = 4;
+    MISSION_BUILDER = 5;
+  };
 }
 
 message Parameter {

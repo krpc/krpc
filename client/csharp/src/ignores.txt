@@ -54,6 +54,8 @@ T: KRPC.Schema.KRPC.ConnectionRequest/Types
 T: KRPC.Schema.KRPC.ConnectionRequest/Types/Type
 T: KRPC.Schema.KRPC.ConnectionResponse/Types
 T: KRPC.Schema.KRPC.ConnectionResponse/Types/Status
+T: KRPC.Schema.KRPC.Procedure/Types
+T: KRPC.Schema.KRPC.Procedure/Types/GameScene
 T: KRPC.Schema.KRPC.Type/Types
 T: KRPC.Schema.KRPC.Type/Types/TypeCode
 R: Gendarme.Rules.Maintainability.AvoidLackOfCohesionOfMethodsRule
@@ -76,6 +78,7 @@ R: Gendarme.Rules.Serialization.MarkEnumerationsAsSerializableRule
 N: KRPC.Schema.KRPC
 T: KRPC.Schema.KRPC.ConnectionRequest/Types/Type
 T: KRPC.Schema.KRPC.ConnectionResponse/Types/Status
+T: KRPC.Schema.KRPC.Procedure/Types/GameScene
 T: KRPC.Schema.KRPC.Type/Types/TypeCode
 R: Gendarme.Rules.Smells.AvoidLargeClassesRule
 N: KRPC.Schema.KRPC

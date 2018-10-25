@@ -35,6 +35,12 @@ class Service(Appendable):
         for pname, info in procedures.iteritems():
             del info['id']
 
+            if 'game_scenes' in info:
+                info['game_scenes'] = ', '.join(x.replace('_', ' ').title()
+                                                for x in info['game_scenes'])
+            else:
+                info['game_scenes'] = 'All'
+
             if Attributes.is_a_procedure(pname):
                 members.append(Procedure(name, pname, **info))
 
@@ -133,7 +139,7 @@ class Procedure(Appendable):
 
     def __init__(self, service_name, name, parameters,
                  documentation, return_type=None,
-                 return_is_nullable=False, game_scene=None):
+                 return_is_nullable=False, game_scenes=None):
         super(Procedure, self).__init__()
         self.service_name = service_name
         self.name = name
@@ -145,7 +151,7 @@ class Procedure(Appendable):
         self.return_is_nullable = return_is_nullable
         self.parameters = [Parameter(documentation=documentation, **info)
                            for info in parameters]
-        self.game_scene = game_scene
+        self.game_scenes = game_scenes
         self.documentation = documentation
         self.cref = 'M:%s.%s' % (service_name, name)
 
@@ -160,11 +166,11 @@ class Property(Appendable):
         self.fullname = service_name+'.'+name
         if getter is not None:
             self.type = getter.return_type
-            self.game_scene = getter.game_scene
+            self.game_scenes = getter.game_scenes
             self.documentation = getter.documentation
         else:
             self.type = setter.parameters[0].type
-            self.game_scene = setter.game_scene
+            self.game_scenes = setter.game_scenes
             self.documentation = setter.documentation
         self.getter = getter
         self.setter = setter
@@ -176,7 +182,7 @@ class ClassMethod(Appendable):
 
     def __init__(self, service_name, class_name, name, parameters,
                  documentation, return_type=None,
-                 return_is_nullable=False, game_scene=None):
+                 return_is_nullable=False, game_scenes=None):
         super(ClassMethod, self).__init__()
         name = Attributes.get_class_member_name(name)
         self.service_name = service_name
@@ -190,7 +196,7 @@ class ClassMethod(Appendable):
         self.return_is_nullable = return_is_nullable
         self.parameters = [Parameter(documentation=documentation, **info)
                            for info in parameters]
-        self.game_scene = game_scene
+        self.game_scenes = game_scenes
         self.documentation = documentation
         self.cref = 'M:%s.%s.%s' % (service_name, class_name, name)
 
@@ -200,7 +206,7 @@ class ClassStaticMethod(Appendable):
 
     def __init__(self, service_name, class_name, name, parameters,
                  documentation, return_type=None,
-                 return_is_nullable=False, game_scene=None):
+                 return_is_nullable=False, game_scenes=None):
         super(ClassStaticMethod, self).__init__()
         name = Attributes.get_class_member_name(name)
         self.service_name = service_name
@@ -214,7 +220,7 @@ class ClassStaticMethod(Appendable):
         self.return_is_nullable = return_is_nullable
         self.parameters = [Parameter(documentation=documentation, **info)
                            for info in parameters]
-        self.game_scene = game_scene
+        self.game_scenes = game_scenes
         self.documentation = documentation
         self.cref = 'M:%s.%s.%s' % (service_name, class_name, name)
 
@@ -229,11 +235,11 @@ class ClassProperty(Appendable):
         self.class_name = class_name
         if getter is not None:
             self.type = getter.return_type
-            self.game_scene = getter.game_scene
+            self.game_scenes = getter.game_scenes
             self.documentation = getter.documentation
         else:
             self.type = setter.parameters[1].type
-            self.game_scene = setter.game_scene
+            self.game_scenes = setter.game_scenes
             self.documentation = setter.documentation
         self.name = name
         self.fullname = service_name+'.'+class_name+'.'+name
