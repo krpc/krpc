@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Continuations;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
@@ -21,7 +22,7 @@ namespace KRPC.SpaceCenter.Services
     /// Control inputs (such as pitch, yaw and roll) are zeroed when all clients
     /// that have set one or more of these inputs are no longer connected.
     /// </remarks>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Control : Equatable<Control>
     {
         readonly Guid vesselId;

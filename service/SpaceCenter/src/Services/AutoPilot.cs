@@ -22,7 +22,7 @@ namespace KRPC.SpaceCenter.Services
     /// the auto-pilot will be disengaged and its target reference frame, direction and roll
     /// reset to default.
     /// </remarks>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class AutoPilot : Equatable<AutoPilot>
     {

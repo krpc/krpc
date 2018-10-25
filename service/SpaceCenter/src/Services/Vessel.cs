@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -140,7 +141,7 @@ namespace KRPC.SpaceCenter.Services
         /// Reference frame. Defaults to the vessel's surface reference frame
         /// (<see cref="SurfaceReferenceFrame"/>).
         /// </param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Flight Flight (ReferenceFrame referenceFrame = null)
         {
             var vessel = InternalVessel;
@@ -162,7 +163,7 @@ namespace KRPC.SpaceCenter.Services
         /// the vessel's control inputs. For example, its pitch/yaw/roll controls,
         /// RCS and thrust.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Control Control {
             get { return new Control (InternalVessel); }
         }
@@ -171,7 +172,7 @@ namespace KRPC.SpaceCenter.Services
         /// Returns a <see cref="Comms"/> object that can be used to interact
         /// with CommNet for this vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Comms Comms {
             get { return new Comms (Id); }
         }
@@ -180,7 +181,7 @@ namespace KRPC.SpaceCenter.Services
         /// An <see cref="AutoPilot"/> object, that can be used to perform
         /// simple auto-piloting of the vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public AutoPilot AutoPilot {
             get { return new AutoPilot (InternalVessel); }
         }
@@ -213,7 +214,7 @@ namespace KRPC.SpaceCenter.Services
         /// A <see cref="Resources"/> object, that can used to get information
         /// about resources stored in the vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Resources Resources {
             get { return new Resources (InternalVessel); }
         }
@@ -226,7 +227,7 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="cumulative">When <c>false</c>, returns the resources for parts
         /// decoupled in just the given stage. When <c>true</c> returns the resources decoupled in
         /// the given stage and all subsequent stages combined.</param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Resources ResourcesInDecoupleStage (int stage, bool cumulative = true)
         {
             return new Resources (InternalVessel, stage, cumulative);
@@ -235,7 +236,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// A <see cref="Parts.Parts"/> object, that can used to interact with the parts that make up this vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Parts.Parts Parts {
             get { return new Parts.Parts (InternalVessel); }
         }
@@ -243,7 +244,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The total mass of the vessel, including resources, in kg.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float Mass {
             get { return InternalVessel.parts.Sum(part => part.WetMass()); }
         }
@@ -251,7 +252,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The total mass of the vessel, excluding resources, in kg.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float DryMass {
             get { return InternalVessel.parts.Sum(part => part.DryMass()); }
         }
@@ -265,7 +266,7 @@ namespace KRPC.SpaceCenter.Services
         /// Newtons. This is computed by summing <see cref="Parts.Engine.Thrust"/> for
         /// every engine in the vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float Thrust {
             get { return Parts.Engines.Sum (e => e.Thrust); }
         }
@@ -275,7 +276,7 @@ namespace KRPC.SpaceCenter.Services
         /// active engines, in Newtons. This is computed by summing
         /// <see cref="Parts.Engine.AvailableThrust"/> for every active engine in the vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float AvailableThrust {
             get { return ActiveEngines.Sum (e => e.AvailableThrust); }
         }
@@ -285,7 +286,7 @@ namespace KRPC.SpaceCenter.Services
         /// engines, in Newtons. This is computed by summing
         /// <see cref="Parts.Engine.MaxThrust"/> for every active engine.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float MaxThrust {
             get { return ActiveEngines.Sum (e => e.MaxThrust); }
         }
@@ -295,7 +296,7 @@ namespace KRPC.SpaceCenter.Services
         /// engines when the vessel is in a vacuum, in Newtons. This is computed by
         /// summing <see cref="Parts.Engine.MaxVacuumThrust"/> for every active engine.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float MaxVacuumThrust {
             get { return ActiveEngines.Sum (e => e.MaxVacuumThrust); }
         }
@@ -309,7 +310,7 @@ namespace KRPC.SpaceCenter.Services
         /// The combined specific impulse of all active engines, in seconds. This is computed using the formula
         /// <a href="https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">described here</a>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float SpecificImpulse {
             get {
                 var activeEngines = ActiveEngines.ToList ();
@@ -322,7 +323,7 @@ namespace KRPC.SpaceCenter.Services
         /// The combined vacuum specific impulse of all active engines, in seconds. This is computed using the formula
         /// <a href="https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">described here</a>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float VacuumSpecificImpulse {
             get {
                 var activeEngines = ActiveEngines.ToList ();
@@ -336,7 +337,7 @@ namespace KRPC.SpaceCenter.Services
         /// This is computed using the formula
         /// <a href="https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">described here</a>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float KerbinSeaLevelSpecificImpulse {
             get {
                 var activeEngines = ActiveEngines.ToList ();
@@ -351,7 +352,7 @@ namespace KRPC.SpaceCenter.Services
         /// pitch, roll and yaw directions respectively.
         /// This corresponds to the vessels reference frame (<see cref="ReferenceFrame"/>).
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Tuple3 MomentOfInertia {
             get { return MomentOfInertiaVector.ToTuple (); }
         }
@@ -418,7 +419,7 @@ namespace KRPC.SpaceCenter.Services
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Tuple<Tuple3,Tuple3> AvailableTorque {
             get { return AvailableTorqueVectors.ToTuple (); }
         }
@@ -429,7 +430,7 @@ namespace KRPC.SpaceCenter.Services
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Tuple<Tuple3, Tuple3> AvailableReactionWheelTorque {
             get { return AvailableReactionWheelTorqueVectors.ToTuple (); }
         }
@@ -440,7 +441,7 @@ namespace KRPC.SpaceCenter.Services
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Tuple<Tuple3, Tuple3> AvailableRCSTorque {
             get { return AvailableRCSTorqueVectors.ToTuple (); }
         }
@@ -451,7 +452,7 @@ namespace KRPC.SpaceCenter.Services
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Tuple<Tuple3, Tuple3> AvailableEngineTorque {
             get { return AvailableEngineTorqueVectors.ToTuple (); }
         }
@@ -462,7 +463,7 @@ namespace KRPC.SpaceCenter.Services
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Tuple<Tuple3, Tuple3> AvailableControlSurfaceTorque {
             get { return AvailableControlSurfaceTorqueVectors.ToTuple (); }
         }
@@ -474,7 +475,7 @@ namespace KRPC.SpaceCenter.Services
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Tuple<Tuple3, Tuple3> AvailableOtherTorque {
             get { return AvailableOtherTorqueVectors.ToTuple (); }
         }
@@ -541,7 +542,7 @@ namespace KRPC.SpaceCenter.Services
         /// <item><description>The z-axis points out of the bottom off the vessel.</description></item>
         /// </list>
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public ReferenceFrame ReferenceFrame {
             get { return ReferenceFrame.Object (InternalVessel); }
         }
@@ -560,7 +561,7 @@ namespace KRPC.SpaceCenter.Services
         /// <remarks>
         /// Be careful not to confuse this with 'orbit' mode on the navball.
         /// </remarks>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public ReferenceFrame OrbitalReferenceFrame {
             get { return ReferenceFrame.Orbital (InternalVessel); }
         }
@@ -585,7 +586,7 @@ namespace KRPC.SpaceCenter.Services
         /// <remarks>
         /// Be careful not to confuse this with 'surface' mode on the navball.
         /// </remarks>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public ReferenceFrame SurfaceReferenceFrame {
             get { return ReferenceFrame.Surface (InternalVessel); }
         }
@@ -604,7 +605,7 @@ namespace KRPC.SpaceCenter.Services
         /// <item><description>The x-axis is orthogonal to the other two axes.</description></item>
         /// </list>
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public ReferenceFrame SurfaceVelocityReferenceFrame {
             get { return ReferenceFrame.SurfaceVelocity (InternalVessel); }
         }
@@ -615,7 +616,7 @@ namespace KRPC.SpaceCenter.Services
         /// <returns>The position as a vector.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// position vector is in.</param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
@@ -630,7 +631,7 @@ namespace KRPC.SpaceCenter.Services
         /// as position vectors.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// position vectors are in.</param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public Tuple<Tuple3,Tuple3> BoundingBox (ReferenceFrame referenceFrame)
         {
@@ -650,7 +651,7 @@ namespace KRPC.SpaceCenter.Services
         /// and its magnitude is the speed of the body in meters per second.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// velocity vector is in.</param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
@@ -667,7 +668,7 @@ namespace KRPC.SpaceCenter.Services
         /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// rotation is in.</param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
@@ -681,7 +682,7 @@ namespace KRPC.SpaceCenter.Services
         /// <returns>The direction as a unit vector.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// direction is in.</param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
@@ -697,7 +698,7 @@ namespace KRPC.SpaceCenter.Services
         /// axis of rotation, using the right-hand rule.</returns>
         /// <param name="referenceFrame">The reference frame the returned
         /// angular velocity is in.</param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {
             // FIXME: finding the rigidbody is expensive - cache it

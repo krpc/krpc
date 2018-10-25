@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -14,7 +15,7 @@ namespace KRPC.SpaceCenter.Services
     /// <see cref="Vessel.ResourcesInDecoupleStage"/> or
     /// <see cref="Parts.Part.Resources"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Resources : Equatable<Resources>
     {
         readonly Guid vesselId;
