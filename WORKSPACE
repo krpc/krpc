@@ -65,8 +65,8 @@ filegroup(
 )
 """,
     url = 'https://jpa.kapsi.fi/nanopb/download/nanopb-0.3.9.1-linux-x86.tar.gz',
-    sha256 = '2072d93c8b59cf3c89beb725589d0824766421745f5b81bde2fd784db0fd6aec',
-    strip_prefix = 'nanopb'
+    sha256 = 'ee18b12ea11376e6b6d89a2cab4592fb1fbaeff3252f180608c9a7632594a12e',
+    strip_prefix = 'nanopb-0.3.9.1-linux-x86'
 )
 
 http_file(
