@@ -287,12 +287,58 @@ namespace KRPC.Test.Service
             Assert.AreEqual (gameScene, TypeUtils.GetServiceGameScene (type));
         }
 
+        [TestCase (typeof(TestService), "ProcedureAvailableInInheritedGameScene", GameScene.Flight)]
+        [TestCase (typeof(TestService), "ProcedureAvailableInSpecifiedGameScene", GameScene.EditorVAB)]
+        public void GetProcedureGameScene (Type service, string name, GameScene gameScene)
+        {
+            var serviceGameScene = TypeUtils.GetServiceGameScene (service);
+            var method = service.GetMethod(name);
+            Assert.AreEqual (gameScene, TypeUtils.GetProcedureGameScene (method, serviceGameScene));
+        }
+
+        [TestCase (typeof(TestService), "PropertyAvailableInInheritedGameScene", GameScene.Flight)]
+        [TestCase (typeof(TestService), "PropertyAvailableInSpecifiedGameScene", GameScene.EditorVAB)]
+        public void GetPropertyGameScene (Type service, string name, GameScene gameScene)
+        {
+            var serviceGameScene = TypeUtils.GetServiceGameScene (service);
+            var property = service.GetProperty(name);
+            Assert.AreEqual (gameScene, TypeUtils.GetPropertyGameScene (property, serviceGameScene));
+        }
+
         [TestCase (typeof(TestService.TestClass), "TestService")]
         [TestCase (typeof(TestClass3), "TestService3Name")]
         [TestCase (typeof(TestTopLevelClass), "TestService")]
         public void GetClassServiceName (Type type, string name)
         {
             Assert.AreEqual (name, TypeUtils.GetClassServiceName (type));
+        }
+
+        [TestCase (typeof(TestService), typeof(TestService.TestClass), GameScene.Flight | GameScene.SpaceCenter)]
+        [TestCase (typeof(TestService3), typeof(TestClass3), GameScene.Editor)]
+        public void GetClassGameScene (Type service, Type cls, GameScene gameScene)
+        {
+            var serviceGameScene = TypeUtils.GetServiceGameScene (service);
+            Assert.AreEqual (gameScene, TypeUtils.GetClassGameScene (cls, serviceGameScene));
+        }
+
+        [TestCase (typeof(TestService), typeof(TestService.TestClass), "MethodAvailableInInheritedGameScene", GameScene.Flight | GameScene.SpaceCenter)]
+        [TestCase (typeof(TestService), typeof(TestService.TestClass), "MethodAvailableInSpecifiedGameScene", GameScene.EditorVAB)]
+        public void GetClassMethodGameScene (Type service, Type cls, string name, GameScene gameScene)
+        {
+            var serviceGameScene = TypeUtils.GetServiceGameScene (service);
+            var classGameScene = TypeUtils.GetClassGameScene (cls, serviceGameScene);
+            var method = cls.GetMethod(name);
+            Assert.AreEqual (gameScene, TypeUtils.GetMethodGameScene (cls, method, classGameScene));
+        }
+
+        [TestCase (typeof(TestService), typeof(TestService.TestClass), "ClassPropertyAvailableInInheritedGameScene", GameScene.Flight | GameScene.SpaceCenter)]
+        [TestCase (typeof(TestService), typeof(TestService.TestClass), "ClassPropertyAvailableInSpecifiedGameScene", GameScene.EditorVAB)]
+        public void GetClassPropertyGameScene (Type service, Type cls, string name, GameScene gameScene)
+        {
+            var serviceGameScene = TypeUtils.GetServiceGameScene (service);
+            var classGameScene = TypeUtils.GetClassGameScene (cls, serviceGameScene);
+            var property = cls.GetProperty(name);
+            Assert.AreEqual (gameScene, TypeUtils.GetClassPropertyGameScene (cls, property, classGameScene));
         }
 
         [TestCase (typeof(TestService.TestEnum), "TestService")]

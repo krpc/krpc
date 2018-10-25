@@ -1,4 +1,5 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -10,7 +11,7 @@ namespace KRPC.SpaceCenter.Services
     /// Represents a maneuver node. Can be created using <see cref="Control.AddNode"/>.
     /// </summary>
     // FIXME: need to perform memory management for node objects
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Node : Equatable<Node>
     {
         /// Note: Maneuver node delta-v vectors use a special coordinate system.

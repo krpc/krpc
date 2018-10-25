@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Diagnostics.CodeAnalysis;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
@@ -20,7 +21,7 @@ namespace KRPC.SpaceCenter.Services
     /// <remarks>
     /// To get orbital information, such as the apoapsis or inclination, see <see cref="Orbit"/>.
     /// </remarks>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Flight : Equatable<Flight>
     {
         readonly Guid vesselId;

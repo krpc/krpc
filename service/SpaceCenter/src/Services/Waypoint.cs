@@ -1,4 +1,5 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -7,7 +8,7 @@ namespace KRPC.SpaceCenter.Services
     /// <summary>
     /// Represents a waypoint. Can be created using <see cref="WaypointManager.AddWaypoint"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Waypoint : Equatable<Waypoint>
     {
         /// <summary>

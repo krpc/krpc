@@ -53,14 +53,16 @@ Attributes
 The following `C# attributes <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ can be used
 to add functionality to the kRPC server.
 
-.. csharp:attribute:: KRPCService (string Name, KRPC.Service.GameScene GameScene)
+.. csharp:attribute:: KRPCService (string Name, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.All)
 
    :parameters:
 
     * **Name** -- Optional name for the service. If omitted, the service name is set to the name of
       the class this attribute is applied to.
 
-    * **GameScene** -- The game scenes in which the services procedures are available.
+    * **GameScene** -- The game scenes in which the services procedures are available. Defaults to
+      all game scenes. If this is set to :csharp:enum:`KRPC.Service.GameScene.Inherit` the service
+      will be available in all game scenes.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to a static
    class, to indicate that all methods, properties and classes declared within it are part of the
@@ -118,11 +120,14 @@ to add functionality to the kRPC server.
             ...
         }
 
-.. csharp:attribute:: KRPCProcedure
+.. csharp:attribute:: KRPCProcedure (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
 
    :parameters:
 
     * **Nullable** -- Whether the return value of the procedure can be null. Defaults to false.
+
+    * **GameScene** -- The game scenes in which the procedure is available. Defaults to inherit this
+      setting from the service the procedure is defined in.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to static
    methods, to add them to the server as procedures.
@@ -167,12 +172,15 @@ to add functionality to the kRPC server.
       conn = krpc.connect()
       flag = conn.eva.plant_flag('Landing Site', 'One small step for Kerbal-kind')
 
-.. csharp:attribute:: KRPCClass (string Service)
+.. csharp:attribute:: KRPCClass (string Service, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
 
    :parameters:
 
     * **Service** -- Optional name of the service to add this class to. If omitted, the class is
       added to the service that contains its definition.
+
+    * **GameScene** -- The game scenes in which the class' methods and properties are
+      available. Defaults to inherit this setting from the service the class is defined in.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to
    non-static classes. It adds the class to the server, so that references to instances of the class
@@ -185,6 +193,12 @@ to add functionality to the kRPC server.
    parameter set to the name of the service that it is part of. Also, the service that the
    ``Service`` parameter refers to does not have to exist. If it does not exist, a service with the
    given name is created.
+
+   A class' methods and properties can be configured to be available in specific :ref:`game scenes
+   <service-api-game-scenes>` via the ``GameScene`` parameter on the class. If the ``GameScene``
+   parameter is not specified, the class' methods and properties are available in the same game
+   scenes as the service the class is defined in. Individual class methods and properties can
+   override this setting.
 
    The class to which this attribute is applied must satisfy the following criteria:
 
@@ -218,11 +232,14 @@ to add functionality to the kRPC server.
             ...
         }
 
-.. csharp:attribute:: KRPCMethod
+.. csharp:attribute:: KRPCMethod (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
 
    :parameters:
 
     * **Nullable** -- Whether the return value of the procedure can be null. Defaults to false.
+
+    * **GameScene** -- The game scenes in which the method is available. Defaults to inherit this
+      setting from the class the method is defined in.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to methods
    inside a :csharp:attr:`KRPCClass`. This allows a client to call methods on an instance, or static
@@ -259,11 +276,14 @@ to add functionality to the kRPC server.
           }
       }
 
-.. csharp:attribute:: KRPCProperty
+.. csharp:attribute:: KRPCProperty (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
 
    :parameters:
 
     * **Nullable** -- Whether the return value of the procedure can be null. Defaults to false.
+
+    * **GameScene** -- The game scenes in which the property is available. Defaults to inherit this
+      setting from the class the property is defined in.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to class
    properties, and comes in two flavors:
@@ -554,9 +574,19 @@ altitude. The event is removed the first time it triggers.
 Game Scenes
 ^^^^^^^^^^^
 
-Each service is configured to be available from a particular game scene, or scenes.
+Anything that can be called is configured to be available from a particular game scene, or
+scenes. This includes service procedures and properties, and class methods and properties. This is
+controlled by the following enumeration:
 
 .. csharp:enum:: KRPC.Service.GameScene
+
+   .. csharp:value:: Inherit
+
+      Inherit the game scene from the containing service or class. This is the default.
+
+   .. csharp:value:: All
+
+      All game scenes.
 
    .. csharp:value:: SpaceCenter
 
@@ -582,14 +612,32 @@ Each service is configured to be available from a particular game scene, or scen
 
       Either the VAB or the SPH.
 
-   .. csharp:value:: All
+   .. csharp:value:: MissionBuilder
 
-      All game scenes.
+      The mission builder.
+
+The special enumeration value :csharp:enum:`KRPC.Service.GameScene.Inherit` can be used to inherit
+the game scene setting from the containing service or class. Game scene inheritance works as
+follows:
+
+* A service set to :csharp:enum:`KRPC.Service.GameScene.Inherit` will be available in all game
+  scenes. This is equivalent to setting it to :csharp:enum:`KRPC.Service.GameScene.All`.
+
+* A service procedure or property set to :csharp:enum:`KRPC.Service.GameScene.Inherit` will be
+  available in the same game scenes as the containing service.
+
+* A class set to :csharp:enum:`KRPC.Service.GameScene.Inherit` will be available in the same game
+  scenes as the containing service.
+
+* A class method or property set to :csharp:enum:`KRPC.Service.GameScene.Inherit` will be available
+  in the same game scenes as the containing class. If the containing class is set to
+  :csharp:enum:`KRPC.Service.GameScene.Inherit` the class method or property will be available in
+  the same game scenes as the containing service.
 
 **Examples**
 
-* Declare a service that is available in the :csharp:enum:`KRPC.Service.GameScene.Flight` game
-  scene:
+* Declare a service whose procedures are available in the
+  :csharp:enum:`KRPC.Service.GameScene.Flight` game scene:
 
   .. code-block:: csharp
 
@@ -598,13 +646,32 @@ Each service is configured to be available from a particular game scene, or scen
         ...
      }
 
-* Declare a service that is available in the :csharp:enum:`KRPC.Service.GameScene.Flight` and
-  :csharp:enum:`KRPC.Service.GameScene.Editor` game scenes:
+* Declare a service whose procedures are available in the
+  :csharp:enum:`KRPC.Service.GameScene.Flight` and :csharp:enum:`KRPC.Service.GameScene.Editor` game
+  scenes:
 
   .. code-block:: csharp
 
      [KRPCService (GameScene = (GameScene.Flight | GameScene.Editor))]
      public static class MyService {
+        ...
+     }
+
+* Declare a service whose procedures are available in the
+  :csharp:enum:`KRPC.Service.GameScene.Flight` game scene by default, and declare a procedure which
+  overrides this and is available in all game scenes:
+
+  .. code-block:: csharp
+
+     [KRPCService (GameScene = GameScene.Flight)]
+     public static class MyService {
+        ...
+
+        [KRPCProcedure (GameScene = GameScene.All)]
+        public static string MyProcedure() {
+           ...
+        }
+
         ...
      }
 

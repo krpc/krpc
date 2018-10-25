@@ -120,7 +120,7 @@ namespace KRPC.Service
         {
             try {
                 if ((CallContext.GameScene & procedure.GameScene) == 0)
-                    throw new RPCException ("Procedure not available in game scene '" + CallContext.GameScene + "'");
+                    throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name(CallContext.GameScene) + "'");
                 object returnValue;
                 try {
                     returnValue = procedure.Handler.Invoke (arguments);

@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -11,7 +12,7 @@ namespace KRPC.SpaceCenter.Services
     /// Controls the game's camera.
     /// Obtained by calling <see cref="SpaceCenter.Camera"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Camera : Equatable<Camera>
     {
         /// <summary>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -11,7 +12,7 @@ namespace KRPC.SpaceCenter.Services
     /// Used to interact with CommNet for a given vessel.
     /// Obtained by calling <see cref="Vessel.Comms"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Comms : Equatable<Comms>
     {
         /// <summary>

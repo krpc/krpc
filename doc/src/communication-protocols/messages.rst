@@ -383,6 +383,7 @@ Details about a procedure are given by a ``Procedure`` message, with the format:
      string name = 1;
      repeated Parameter parameters = 2;
      Type return_type = 3;
+     repeated GameScene game_scenes = 5;
      string documentation = 4;
    }
 
@@ -409,6 +410,9 @@ The fields are:
 
 * ``return_type`` - The :ref:`return type <communication-protocol-type>` of the procedure. If the
   procedure does not return anything its type is set to ``NONE``.
+
+* ``game_scenes`` - The :ref:`game scenes <communication-protocol-game-scene>` that the procedure is
+  available in. If this repeated field is empty, the procedure is available in all game scenes.
 
 * ``documentation`` - Documentation for the procedure, as `C# XML documentation`_.
 
@@ -566,6 +570,27 @@ For collection types the ``types`` repeated field will contain the sub-types:
    order.
 
 For all other types the ``types`` field is empty.
+
+.. _communication-protocol-game-scene:
+
+GameScene
+---------
+
+The ``GetServices`` procedure returns information about which game scenes a procedure can be called
+from. These are returned as a repeated field containing ``GameScene`` enumeration values. If the
+procedure is available in all game scenes, this field is empty. The enumeration is defined as
+follows:
+
+.. code-block:: protobuf
+
+   enum GameScene {
+     SPACE_CENTER = 1;
+     FLIGHT = 2;
+     TRACKING_STATION = 3;
+     EDITOR_VAB = 4;
+     EDITOR_SPH = 5;
+     MISSION_BUILDER = 6;
+   };
 
 .. _communication-protocol-proxy-objects:
 

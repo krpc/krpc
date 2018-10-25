@@ -1,5 +1,6 @@
 v0.4.8
  * Update to protobuf v3.6.1
+ * Add support for specifying more granular game scenes for RPCs (#471)
 
 v0.4.7
  * Support for KSP 1.4.4

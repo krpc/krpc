@@ -29,8 +29,8 @@ namespace KRPC.Test.Utils
         [Test]
         public void GetMethodsWithAttribute ()
         {
-            Assert.AreEqual (26, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(TestService)).Count ());
-            Assert.AreEqual (4, Reflection.GetMethodsWith<KRPCMethodAttribute> (typeof(TestService.TestClass)).Count ());
+            Assert.AreEqual (28, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(TestService)).Count ());
+            Assert.AreEqual (6, Reflection.GetMethodsWith<KRPCMethodAttribute> (typeof(TestService.TestClass)).Count ());
             Assert.AreEqual (0, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(TestService.TestClass)).Count ());
             Assert.AreEqual (0, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(string)).Count ());
         }
@@ -38,8 +38,8 @@ namespace KRPC.Test.Utils
         [Test]
         public void GetPropertiesWithAttribute ()
         {
-            Assert.AreEqual (3, Reflection.GetPropertiesWith<KRPCPropertyAttribute> (typeof(TestService)).Count ());
-            Assert.AreEqual (2, Reflection.GetPropertiesWith<KRPCPropertyAttribute> (typeof(TestService.TestClass)).Count ());
+            Assert.AreEqual (5, Reflection.GetPropertiesWith<KRPCPropertyAttribute> (typeof(TestService)).Count ());
+            Assert.AreEqual (4, Reflection.GetPropertiesWith<KRPCPropertyAttribute> (typeof(TestService.TestClass)).Count ());
             Assert.AreEqual (0, Reflection.GetPropertiesWith<KRPCPropertyAttribute> (typeof(string)).Count ());
         }
 

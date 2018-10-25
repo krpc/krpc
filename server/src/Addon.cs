@@ -53,14 +53,12 @@ namespace KRPC
             Init ();
             Instance = this;
 
-            Service.CallContext.SetGameScene (HighLogic.LoadedScene.ToGameScene ());
-            Utils.Logger.WriteLine ("Game scene switched to " + Service.CallContext.GameScene);
+            var gameScene = GameScenesExtensions.CurrentGameScene();
+            Service.CallContext.SetGameScene (gameScene);
+            Utils.Logger.WriteLine ("Game scene switched to " + gameScene);
 
             // If a game is not loaded, ensure the server is stopped and then exit
-            if (HighLogic.LoadedScene != GameScenes.EDITOR &&
-                HighLogic.LoadedScene != GameScenes.FLIGHT &&
-                HighLogic.LoadedScene != GameScenes.SPACECENTER &&
-                HighLogic.LoadedScene != GameScenes.TRACKSTATION) {
+            if (gameScene == Service.GameScene.None) {
                 core.StopAll ();
                 return;
             }

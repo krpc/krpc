@@ -56,8 +56,8 @@ namespace KRPC.Test.Service
         {
             Assert.IsFalse (result.HasValue);
             Assert.IsTrue (result.HasError);
-            Assert.AreEqual (result.Error.Name, name);
-            Assert.AreEqual (result.Error.Description, description);
+            Assert.AreEqual (name, result.Error.Name);
+            Assert.AreEqual (description, result.Error.Description);
         }
 
         [SetUp]
@@ -645,7 +645,7 @@ namespace KRPC.Test.Service
         }
 
         /// <summary>
-        /// Test calling a service method that is not active in the current game mode
+        /// Test calling a service method that is not available in the current game mode
         /// </summary>
         [Test]
         public void ExecuteCallWrongGameMode ()
@@ -655,8 +655,151 @@ namespace KRPC.Test.Service
             mock.Setup (x => x.ProcedureNoArgsNoReturn ());
             TestService.Service = mock.Object;
             CheckError (String.Empty, "Procedure not available in game scene 'TrackingStation'",
-                        Run (Call ("TestService", "ProcedureNoArgsNoReturn")));
+                Run (Call ("TestService", "ProcedureNoArgsNoReturn")));
             mock.Verify (x => x.ProcedureNoArgsNoReturn (), Times.Never ());
+        }
+
+        /// <summary>
+        /// Test that a service procedure inherits the game mode its available in
+        /// </summary>
+        [Test]
+        public void ProcedureGameModeInheritedFromService ()
+        {
+            CallContext.SetGameScene (GameScene.TrackingStation);
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureAvailableInInheritedGameScene ());
+            TestService.Service = mock.Object;
+            CheckError (String.Empty, "Procedure not available in game scene 'TrackingStation'",
+                Run (Call ("TestService", "ProcedureAvailableInInheritedGameScene")));
+            mock.Verify (x => x.ProcedureAvailableInInheritedGameScene (), Times.Never ());
+            CallContext.SetGameScene (GameScene.Flight);
+            Run (Call ("TestService", "ProcedureAvailableInInheritedGameScene"));
+            mock.Verify (x => x.ProcedureAvailableInInheritedGameScene (), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test that a service procedure can override the inherited the game mode its available in
+        /// </summary>
+        [Test]
+        public void ProcedureGameModeSpecifiedInAttribute ()
+        {
+            CallContext.SetGameScene (GameScene.Flight);
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureAvailableInSpecifiedGameScene ());
+            TestService.Service = mock.Object;
+            CheckError (String.Empty, "Procedure not available in game scene 'Flight'",
+                Run (Call ("TestService", "ProcedureAvailableInSpecifiedGameScene")));
+            mock.Verify (x => x.ProcedureAvailableInSpecifiedGameScene (), Times.Never ());
+            CallContext.SetGameScene (GameScene.EditorVAB);
+            Run (Call ("TestService", "ProcedureAvailableInSpecifiedGameScene"));
+            mock.Verify (x => x.ProcedureAvailableInSpecifiedGameScene (), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test that a service property inherits the game mode its available in
+        /// </summary>
+        [Test]
+        public void PropertyGameModeInheritedFromService ()
+        {
+            CallContext.SetGameScene (GameScene.TrackingStation);
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.PropertyAvailableInInheritedGameScene).Returns("foo");
+            TestService.Service = mock.Object;
+            CheckError (String.Empty, "Procedure not available in game scene 'TrackingStation'",
+                Run (Call ("TestService", "get_PropertyAvailableInInheritedGameScene")));
+            mock.Verify (x => x.PropertyAvailableInInheritedGameScene, Times.Never ());
+            CallContext.SetGameScene (GameScene.Flight);
+            Run (Call ("TestService", "get_PropertyAvailableInInheritedGameScene"));
+            mock.Verify (x => x.PropertyAvailableInInheritedGameScene, Times.Once ());
+        }
+
+        /// <summary>
+        /// Test that a service property can override the inherited the game mode its available in
+        /// </summary>
+        [Test]
+        public void PropertyGameModeSpecifiedInAttribute ()
+        {
+            CallContext.SetGameScene (GameScene.Flight);
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.PropertyAvailableInSpecifiedGameScene).Returns("foo");
+            TestService.Service = mock.Object;
+            CheckError (String.Empty, "Procedure not available in game scene 'Flight'",
+                Run (Call ("TestService", "get_PropertyAvailableInSpecifiedGameScene")));
+            mock.Verify (x => x.PropertyAvailableInSpecifiedGameScene, Times.Never ());
+            CallContext.SetGameScene (GameScene.EditorVAB);
+            Run (Call ("TestService", "get_PropertyAvailableInSpecifiedGameScene"));
+            mock.Verify (x => x.PropertyAvailableInSpecifiedGameScene, Times.Once ());
+        }
+
+        /// <summary>
+        /// Test that a class method inherits the game mode its available in
+        /// </summary>
+        [Test]
+        public void ClassMethodGameModeInheritedFromService ()
+        {
+            var instance = new TestService.TestClass ("jeb");
+            CallContext.SetGameScene (GameScene.TrackingStation);
+            CheckError (String.Empty, "Procedure not available in game scene 'TrackingStation'",
+                Run (Call ("TestService", "TestClass_MethodAvailableInInheritedGameScene", Arg(0, instance))));
+            CallContext.SetGameScene (GameScene.Flight);
+            var result = Run (Call ("TestService", "TestClass_MethodAvailableInInheritedGameScene", Arg(0, instance)));
+            CheckResultNotEmpty (result);
+            Assert.AreEqual ("foo", result.Value);
+        }
+
+        /// <summary>
+        /// Test that a class method can override the inherited the game mode its available in
+        /// </summary>
+        [Test]
+        public void ClassMethodGameModeSpecifiedInAttribute ()
+        {
+            var instance = new TestService.TestClass ("jeb");
+            CallContext.SetGameScene (GameScene.Flight);
+            CheckError (String.Empty, "Procedure not available in game scene 'Flight'",
+                Run (Call ("TestService", "TestClass_MethodAvailableInSpecifiedGameScene", Arg(0, instance))));
+            CallContext.SetGameScene (GameScene.EditorVAB);
+            var result = Run (Call ("TestService", "TestClass_MethodAvailableInSpecifiedGameScene", Arg(0, instance)));
+            CheckResultNotEmpty (result);
+            Assert.AreEqual ("foo", result.Value);
+        }
+
+        /// <summary>
+        /// Test that a class property inherits the game mode its available in
+        /// </summary>
+        [Test]
+        public void ClassPropertyGameModeInheritedFromService ()
+        {
+            var instance = new TestService.TestClass ("jeb");
+            CallContext.SetGameScene (GameScene.TrackingStation);
+            CheckError (String.Empty, "Procedure not available in game scene 'TrackingStation'",
+                Run (Call ("TestService", "TestClass_get_ClassPropertyAvailableInInheritedGameScene", Arg(0, instance))));
+            CallContext.SetGameScene (GameScene.SpaceCenter);
+            var result = Run (Call ("TestService", "TestClass_get_ClassPropertyAvailableInInheritedGameScene", Arg(0, instance)));
+            CheckResultNotEmpty (result);
+            Assert.AreEqual ("foo", result.Value);
+            CallContext.SetGameScene (GameScene.Flight);
+            result = Run (Call ("TestService", "TestClass_get_ClassPropertyAvailableInInheritedGameScene", Arg(0, instance)));
+            CheckResultNotEmpty (result);
+            Assert.AreEqual ("foo", result.Value);
+        }
+
+        /// <summary>
+        /// Test that a class property can override the inherited the game mode its available in
+        /// </summary>
+        [Test]
+        public void ClassPropertyGameModeSpecifiedInAttribute ()
+        {
+            var instance = new TestService.TestClass ("jeb");
+            CallContext.SetGameScene (GameScene.Flight);
+            CheckError (String.Empty, "Procedure not available in game scene 'Flight'",
+                Run (Call ("TestService", "TestClass_get_ClassPropertyAvailableInSpecifiedGameScene", Arg(0, instance))));
+            CallContext.SetGameScene (GameScene.SpaceCenter);
+            CheckError (String.Empty, "Procedure not available in game scene 'SpaceCenter'",
+                Run (Call ("TestService", "TestClass_get_ClassPropertyAvailableInSpecifiedGameScene", Arg(0, instance))));
+            CallContext.SetGameScene (GameScene.EditorVAB);
+            var result = Run (Call ("TestService", "TestClass_get_ClassPropertyAvailableInSpecifiedGameScene", Arg(0, instance)));
+            CheckResultNotEmpty (result);
+            Assert.AreEqual ("foo", result.Value);
         }
     }
 }

@@ -12,5 +12,18 @@ namespace KRPC.Service.Attributes
         /// Name of the service in which the class is declared.
         /// </summary>
         public string Service { get; set; }
+
+        /// <summary>
+        /// Game scene(s) in which the class' members are available.
+        /// </summary>
+        public GameScene GameScene { get; set; }
+
+        /// <summary>
+        /// A kRPC class.
+        /// </summary>
+        public KRPCClassAttribute ()
+        {
+            GameScene = GameScene.Inherit;
+        }
     }
 }
