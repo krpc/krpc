@@ -5,7 +5,19 @@ set -e
 mkdir -p bazel-bin/lib
 pushd bazel-bin/lib
 
-versions="1.2.1.1604 1.2.2.1622 1.3.0.1804 1.3.1.1891 1.4.0.2077 1.4.1.2089 1.4.2.2110 1.4.3.2152 1.4.4.2215"
+read -d '' versions << EOM || true
+1.2.2.1622
+1.3.0.1804
+1.3.1.1891
+1.4.0.2077
+1.4.1.2089
+1.4.2.2110
+1.4.3.2152
+1.4.4.2215
+1.4.5.2243
+1.5.0.2332
+1.5.1.2335
+EOM
 
 for version in $versions; do
     if [ ! -f ksp-$version.tar.gz ]; then
@@ -25,4 +37,4 @@ for version in $versions; do
     pushd bazel-bin/lib
 done
 
-#bazel build //:krpc
+popd
