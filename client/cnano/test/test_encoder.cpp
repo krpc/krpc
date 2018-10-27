@@ -19,7 +19,7 @@ TEST(test_encoder, test_encode_procedure_message) {
   ASSERT_EQ(KRPC_OK, krpc_call(&call, 99, 42, 0, arguments));
   pb_ostream_t stream = pb_ostream_from_buffer(data, sizeof(data));
   ASSERT_EQ(KRPC_OK, krpc_encode_message_ProcedureCall(&stream, &call.message));
-  std::string expected = "0a0012002063282a";
+  std::string expected = "2063282a";
   ASSERT_EQ(expected, hexlify(data, stream.bytes_written));
 }
 
@@ -34,7 +34,7 @@ TEST(test_encoder, test_encode_procedure_message_with_args) {
   ASSERT_EQ(KRPC_OK, krpc_add_argument(&call, 1, &krpc_encode_callback_double, &y));
   pb_ostream_t stream = pb_ostream_from_buffer(data, sizeof(data));
   ASSERT_EQ(KRPC_OK, krpc_encode_message_ProcedureCall(&stream, &call.message));
-  std::string expected = "0a0012001a031201541a0c080112086e861bf0f92109402063282a";
+  std::string expected = "1a031201541a0c080112086e861bf0f92109402063282a";
   ASSERT_EQ(expected, hexlify(data, stream.bytes_written));
 }
 
