@@ -118,5 +118,18 @@ namespace KRPC.Utils
             // KSP 1.4.0 and up
             return mode.ToString() == "MISSION_BUILDER";
         }
+
+        /// <summary>
+        /// Returns true if the given game scene is GameScenes.MissionBuilder
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
+        public static bool GameSceneIsMissionBuilder(GameScenes scene)
+        {
+            if (Versioning.version_major * 100 + Versioning.version_minor < 104)
+                // Below KSP 1.4.0
+                return false;
+            // KSP 1.4.0 and up
+            return scene.ToString() == "MISSIONBUILDER";
+        }
     }
 }

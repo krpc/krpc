@@ -19,9 +19,9 @@ namespace KRPC.Utils
             case GameScenes.EDITOR:
                 return EditorDriver.editorFacility == EditorFacility.VAB ?
                     GameScene.EditorVAB : GameScene.EditorSPH;
-            case GameScenes.MISSIONBUILDER:
-                return GameScene.MissionBuilder;
             default:
+                if (Compatibility.GameSceneIsMissionBuilder(scene))
+                    return GameScene.MissionBuilder;
                 return GameScene.None;
             }
         }
