@@ -79,8 +79,7 @@ new_http_archive(
     name = 'csharp_protobuf',
     build_file_content = "exports_files(['lib/net45/Google.Protobuf.dll'])",
     url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.6.1',
-    type = 'zip',
-    sha256 = 'bfa7666aa55e60aa2ee65502966336f812702acaaf7c62d12f276a01ab3aa9a4'
+    type = 'zip'
 )
 
 http_file(
@@ -131,24 +130,21 @@ new_http_archive(
     name = 'csharp_moq',
     build_file_content = "exports_files(['lib/net40/Moq.dll'])",
     url = 'http://www.nuget.org/api/v2/package/Moq/4.2.1510.2205',
-    type = 'zip',
-    sha256 = '7a86f2ed0e134601e75a4fa28c7f7c399f6abc33f091dbc024ad8b212b8c3c85'
+    type = 'zip'
 )
 
 new_http_archive(
     name = 'csharp_json',
     build_file_content = "exports_files(['lib/net35/Newtonsoft.Json.dll', 'lib/net45/Newtonsoft.Json.dll'])",
     url = 'https://www.nuget.org/api/v2/package/Newtonsoft.Json/9.0.1',
-    type = 'zip',
-    sha256 = '998081ae052120917346e2cb57d488888147a2fcdf47c52ea9f83a7b4f049e55'
+    type = 'zip'
 )
 
 new_http_archive(
     name = 'csharp_options',
     build_file_content = "exports_files(['lib/NDesk.Options.dll'])",
     url = 'https://www.nuget.org/api/v2/package/NDesk.Options/0.2.1',
-    type = 'zip',
-    sha256 = '0fa76d0ed1eb9fba757b0aa677903e1b8873735eec136a51dde24eda57d10c61'
+    type = 'zip'
 )
 
 http_archive(
