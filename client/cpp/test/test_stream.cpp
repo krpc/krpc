@@ -277,6 +277,41 @@ TEST_F(test_stream, test_wait_timeout_long) {
   x.release();
 }
 
+TEST_F(test_stream, test_wait_update) {
+  auto x = test_service.counter_stream("test_stream.test_wait_update", 10);
+  conn.acquire_stream_update();
+  auto count = x();
+  ASSERT_LT(count, 10);
+  while (count < 10) {
+    conn.wait_for_stream_update();
+    count += 1;
+    ASSERT_EQ(count, x());
+  }
+  conn.release_stream_update();
+}
+
+TEST_F(test_stream, test_wait_update_timeout_short) {
+  auto x = test_service.counter_stream("test_stream.test_wait_update_timeout_short", 10);
+  conn.acquire_stream_update();
+  auto count = x();
+  conn.wait_for_stream_update(0);
+  ASSERT_EQ(count, x());
+  conn.release_stream_update();
+}
+
+TEST_F(test_stream, test_wait_update_timeout_long) {
+  auto x = test_service.counter_stream("test_stream.test_wait_update_timeout_long", 10);
+  conn.acquire_stream_update();
+  auto count = x();
+  ASSERT_LT(count, 10);
+  while (count < 10) {
+    conn.wait_for_stream_update(10);
+    count += 1;
+    ASSERT_EQ(count, x());
+  }
+  conn.release_stream_update();
+}
+
 TEST_F(test_stream, test_callback) {
   std::atomic<int> test_callback_value(-1);
   std::atomic_flag error;
@@ -323,6 +358,47 @@ TEST_F(test_stream, test_remove_callback) {
   x.add_callback(callback1);
   auto callback2_tag = x.add_callback(callback2);
   x.remove_callback(callback2_tag);
+  x.start();
+  while (called1.test_and_set()) {
+  }
+  x.remove();
+  ASSERT_TRUE(called2.test_and_set());
+}
+
+TEST_F(test_stream, test_update_callback) {
+  std::atomic_flag stop;
+  stop.test_and_set();
+
+  auto callback = [&stop] () {
+    stop.clear();
+  };
+
+  auto x = test_service.counter_stream("test_stream.test_update_callback", 10);
+  conn.add_stream_update_callback(callback);
+  x.start();
+  while (stop.test_and_set()) {
+  }
+  x.remove();
+}
+
+TEST_F(test_stream, test_remove_update_callback) {
+  std::atomic_flag called1;
+  called1.test_and_set();
+  std::atomic_flag called2;
+  called2.test_and_set();
+
+  auto callback1 = [&called1] () {
+    called1.clear();
+  };
+
+  auto callback2 = [&called2] () {
+    called2.clear();
+  };
+
+  auto x = test_service.counter_stream("test_stream.test_remove_update_callback", 10);
+  conn.add_stream_update_callback(callback1);
+  auto callback2_tag = conn.add_stream_update_callback(callback2);
+  conn.remove_stream_update_callback(callback2_tag);
   x.start();
   while (called1.test_and_set()) {
   }

@@ -24,7 +24,9 @@ StreamManager::StreamManager(Client * client, const std::shared_ptr<Connection>&
     should_freeze(new std::atomic_bool(false)),
     frozen(new std::atomic_bool(false)),
     update_thread(new std::thread(update_thread_main, this, connection,
-                                  stop, should_freeze, frozen)) {
+                                  stop, should_freeze, frozen)),
+    condition_lock(condition_mutex, std::defer_lock),
+    next_callback_tag(0) {
 }
 
 StreamManager::~StreamManager() {
@@ -98,6 +100,27 @@ void StreamManager::thaw() {
   }
 }
 
+std::condition_variable& StreamManager::get_update_condition() {
+  return condition;
+}
+
+std::unique_lock<std::mutex>& StreamManager::get_update_condition_lock() {
+  return condition_lock;
+}
+
+int StreamManager::add_update_callback(const Callback& callback) {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  auto tag = next_callback_tag;
+  next_callback_tag++;
+  callbacks[tag] = callback;
+  return tag;
+}
+
+void StreamManager::remove_update_callback(int tag) {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  callbacks.erase(tag);
+}
+
 void StreamManager::update_thread_main(StreamManager* stream_manager,
                                        const std::shared_ptr<Connection>& connection,
                                        const std::shared_ptr<std::atomic_bool>& stop,
@@ -110,6 +133,9 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
     decoder::decode(update, data, client);
     for (auto result : update.results())
       stream_manager->update(result.id(), result.result());
+    stream_manager->condition.notify_all();
+    for (auto callback : stream_manager->callbacks)
+      callback.second();
   };
 
   while (!stop->load()) {

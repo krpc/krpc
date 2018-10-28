@@ -85,7 +85,9 @@ class StreamManager(object):
     def __init__(self, conn):
         self._conn = conn
         self._update_lock = threading.RLock()
+        self._condition = threading.Condition()
         self._streams = {}
+        self._callbacks = []
 
     def add_stream(self, return_type, call):
         stream_id = self._conn.krpc.add_stream(call, False).id
@@ -108,6 +110,29 @@ class StreamManager(object):
                 self._conn.krpc.remove_stream(stream_id)
                 del self._streams[stream_id]
 
+    @property
+    def update_condition(self):
+        return self._condition
+
+    def wait_for_update(self, timeout=None):
+        self._condition.wait(timeout=timeout)
+
+    @property
+    def update_callbacks(self):
+        with self._update_lock:
+            return self._callbacks
+
+    def add_update_callback(self, callback):
+        with self._update_lock:
+            self._callbacks = self._callbacks[:]
+            self._callbacks.append(callback)
+            return self._callbacks
+
+    def remove_update_callback(self, callback):
+        with self._update_lock:
+            self._callbacks = [x for x in self._callbacks if x != callback]
+            return self._callbacks
+
     def update(self, results):
         with self._update_lock:
             for result in results:
@@ -125,6 +150,10 @@ class StreamManager(object):
                 typ = self._streams[result.id].return_type
                 value = Decoder.decode(result.result.value, typ)
                 self._update_stream(result.id, value)
+            with self._condition:
+                self._condition.notify_all()
+            for fn in self._callbacks:
+                fn()
 
     def _update_stream(self, stream_id, value):
         stream = self._streams[stream_id]

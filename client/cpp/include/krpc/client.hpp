@@ -2,6 +2,7 @@
 
 #include <google/protobuf/stubs/port.h>
 
+#include <condition_variable>  // NOLINT(build/c++11)
 #include <functional>
 #include <map>
 #include <memory>
@@ -49,6 +50,31 @@ class Client {
   void remove_stream(google::protobuf::uint64 id);
   void freeze_streams();
   void thaw_streams();
+
+  /**
+   * Condition variable that is notified when a stream update
+   * message has finished being processed.
+   */
+  std::condition_variable& get_stream_update_condition() const;
+  /** Lock used with the condition variable */
+  std::unique_lock<std::mutex>& get_stream_update_condition_lock() const;
+  /** Acquire a lock on the condition variable */
+  void acquire_stream_update();
+  /** Release the lock on the condition variable */
+  void release_stream_update();
+  /** Wait until the next stream update message. If timeout >= 0, the
+      operation times out after that many seconds. */
+  void wait_for_stream_update(double timeout = -1);
+  typedef std::function<void()> Callback;
+  /**
+   * Add a callback that is invoked whenever a stream update message has
+   * finished being processed.
+   * Returns an integer tag for the callback which uniquely identifies it,
+   * and allows it to be removed using remove_stream_update_callback()
+   */
+  int add_stream_update_callback(const Callback& callback);
+  /** Remove a callback, based on its tag */
+  void remove_stream_update_callback(int tag);
 
  private:
   std::shared_ptr<Connection> rpc_connection;

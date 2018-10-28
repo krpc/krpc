@@ -62,7 +62,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
     def test_counter(self):
         count = -1
         with self.conn.stream(self.conn.test_service.counter,
-                              "TestStream.test_counter") as x:
+                              'TestStream.test_counter') as x:
             for _ in range(5):
                 self.assertLess(count, x())
                 count = x()
@@ -245,7 +245,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
     def test_wait(self):
         with self.conn.stream(self.conn.test_service.counter,
-                              "TestStream.test_wait", 10) as x:
+                              'TestStream.test_wait', 10) as x:
             with x.condition:
                 count = x()
                 self.assertTrue(count < 10)
@@ -256,7 +256,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
     def test_wait_timeout_short(self):
         with self.conn.stream(self.conn.test_service.counter,
-                              "TestStream.test_wait_timeout_short", 10) as x:
+                              'TestStream.test_wait_timeout_short', 10) as x:
             with x.condition:
                 count = x()
                 x.wait(timeout=0)
@@ -264,12 +264,51 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
     def test_wait_timeout_long(self):
         with self.conn.stream(self.conn.test_service.counter,
-                              "TestStream.test_wait_timeout_long", 10) as x:
+                              'TestStream.test_wait_timeout_long', 10) as x:
             with x.condition:
                 count = x()
                 self.assertTrue(count < 10)
                 while count < 10:
                     x.wait(timeout=10)
+                    count += 1
+                    self.assertEqual(count, x())
+
+    def test_wait_update(self):
+        with self.conn.stream(self.conn.test_service.counter,
+                              'TestStream.test_wait_update',
+                              10) as x:
+            with self.conn.stream_update_condition:
+                x.start()
+                self.conn.wait_for_stream_update()
+                count = x()
+                self.assertTrue(count < 10)
+                while count < 10:
+                    self.conn.wait_for_stream_update()
+                    count += 1
+                    self.assertEqual(count, x())
+
+    def test_wait_update_timeout_short(self):
+        with self.conn.stream(self.conn.test_service.counter,
+                              'TestStream.test_wait_update_timeout_short',
+                              10) as x:
+            with self.conn.stream_update_condition:
+                x.start()
+                self.conn.wait_for_stream_update()
+                count = x()
+                self.conn.wait_for_stream_update(timeout=0)
+                self.assertEqual(count, x())
+
+    def test_wait_update_timeout_long(self):
+        with self.conn.stream(self.conn.test_service.counter,
+                              'TestStream.test_wait_update_timeout_long',
+                              10) as x:
+            with self.conn.stream_update_condition:
+                x.start()
+                self.conn.wait_for_stream_update()
+                count = x()
+                self.assertTrue(count < 10)
+                while count < 10:
+                    self.conn.wait_for_stream_update(timeout=10)
                     count += 1
                     self.assertEqual(count, x())
 
@@ -289,7 +328,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
                 self.test_callback_value += 1
 
         with self.conn.stream(self.conn.test_service.counter,
-                              "TestStream.test_callback", 10) as x:
+                              'TestStream.test_callback', 10) as x:
             x.add_callback(callback)
             x.start()
             stop.wait(3)
@@ -309,10 +348,48 @@ class TestStream(ServerTestCase, unittest.TestCase):
             called2.set()
 
         with self.conn.stream(self.conn.test_service.counter,
-                              "TestStream.test_remove_callback", 10) as x:
+                              'TestStream.test_remove_callback',
+                              10) as x:
             x.add_callback(callback1)
             x.add_callback(callback2)
             x.remove_callback(callback2)
+            x.start()
+            called1.wait(3)
+
+        self.assertTrue(called1.is_set())
+        self.assertFalse(called2.is_set())
+
+    def test_update_callback(self):
+        stop = threading.Event()
+
+        def callback():
+            stop.set()
+
+        with self.conn.stream(self.conn.test_service.counter,
+                              'TestStream.test_update_callback',
+                              10) as x:
+            self.conn.add_stream_update_callback(callback)
+            x.start()
+            stop.wait(3)
+
+        self.assertTrue(stop.is_set())
+
+    def test_remove_update_callback(self):
+        called1 = threading.Event()
+        called2 = threading.Event()
+
+        def callback1():
+            called1.set()
+
+        def callback2():
+            called2.set()
+
+        with self.conn.stream(self.conn.test_service.counter,
+                              'TestStream.test_remove_update_callback',
+                              10) as x:
+            self.conn.add_stream_update_callback(callback1)
+            self.conn.add_stream_update_callback(callback2)
+            self.conn.remove_stream_update_callback(callback2)
             x.start()
             called1.wait(3)
 
@@ -335,7 +412,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
                 self.test_rate_value += 1
 
         with self.conn.stream(self.conn.test_service.counter,
-                              "TestStream.test_rate") as x:
+                              'TestStream.test_rate') as x:
             x.add_callback(callback)
             x.rate = 5
             x.start()

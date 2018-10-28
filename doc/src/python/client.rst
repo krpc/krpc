@@ -222,6 +222,34 @@ Client API Reference
       server when it goes out of scope. The function to be streamed should be passed as *func*, and
       its arguments as *args* and *kwargs*.
 
+   .. attribute:: stream_update_condition
+
+      A condition variable (of type ``threading.Condition``) that is notified whenever a stream
+      update finishes processing.
+
+   .. method:: wait_for_stream_update(timeout=None)
+
+      This method blocks until a stream update finishes processing or the operation times out.
+
+      The stream update condition variable must be locked before calling this method.
+
+      If *timeout* is specified and is not ``None``, it should be a floating point number specifying
+      the timeout in seconds for the operation.
+
+   .. method:: add_stream_update_callback(callback)
+
+      Adds a callback function that is invoked whenever a stream update finishes processing.
+
+      .. note::
+
+         The callback function may be called from a different thread to that which created the
+         stream. Any changes to shared state must therefore be protected with appropriate
+         synchronization.
+
+   .. method:: remove_callback(callback)
+
+      Removes a stream update callback function.
+
    .. method:: get_call(func, *args, **kwargs)
 
       Converts a call to function *func* with arguments *args* and *kwargs* into a message

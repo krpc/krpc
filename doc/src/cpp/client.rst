@@ -272,6 +272,48 @@ Client API Reference
       Resume stream updates. Before this function returns, the last received update message is
       applied to the streams.
 
+   .. function:: std::condition_variable& get_stream_update_condition() const
+
+      A condition variable that is notified whenever a stream update message finishes processing.
+
+   .. function:: std::unique_lock<std::mutex>& get_stream_update_condition_lock() const
+
+      The lock for the stream update condition variable.
+
+   .. function:: void acquire_stream_update()
+
+      Acquires a lock on the mutex for the stream update condition variable.
+
+   .. function:: void release_stream_update()
+
+      Releases the lock on the mutex for the stream update condition variable.
+
+   .. function:: void wait_for_stream_update(double timeout = -1)
+
+      This method blocks until a stream update message finishes processing or the operation times out.
+
+      The stream update condition variable must be locked (by calling ``acquire_stream_update``)
+      before calling this method.
+
+      If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
+      the operation.
+
+   .. function:: int add_callback(const std::function<void()>& callback)
+
+      Adds a callback function that is invoked whenever a stream update message finishes
+      processing. Returns a unique identifier for the callback which can be used to remove it.
+
+      .. note::
+
+         The callback function may be called from a different thread to that which created the
+         stream. Any changes to shared state must therefore be protected with appropriate
+         synchronization.
+
+   .. function:: void remove_callback(int tag)
+
+      Removes a stream update callback function. The tag is the identifier returned when the
+      callback was added.
+
 .. class:: template <typename T> Stream
 
    This class represents a stream. See :ref:`cpp-client-streams`.
