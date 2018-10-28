@@ -2,6 +2,7 @@
 
 set -e
 
+bazel build //:LICENSE  # Build something to create symlinks
 mkdir -p bazel-bin/lib
 pushd bazel-bin/lib
 
