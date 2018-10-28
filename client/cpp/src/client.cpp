@@ -153,4 +153,38 @@ void Client::thaw_streams() {
   stream_manager->thaw();
 }
 
+std::condition_variable& Client::get_stream_update_condition() const {
+  return stream_manager->get_update_condition();
+}
+
+std::unique_lock<std::mutex>& Client::get_stream_update_condition_lock() const  {
+  return stream_manager->get_update_condition_lock();
+}
+
+void Client::acquire_stream_update() {
+  stream_manager->get_update_condition_lock().lock();
+}
+
+void Client::release_stream_update() {
+  stream_manager->get_update_condition_lock().unlock();
+}
+
+void Client::wait_for_stream_update(double timeout) {
+  if (timeout < 0) {
+    stream_manager->get_update_condition().wait(stream_manager->get_update_condition_lock());
+  } else {
+    auto rel_time = std::chrono::milliseconds(static_cast<int>(timeout*1000));
+    stream_manager->get_update_condition().wait_for(
+      stream_manager->get_update_condition_lock(), rel_time);
+  }
+}
+
+int Client::add_stream_update_callback(const Callback& callback) {
+  return stream_manager->add_update_callback(callback);
+}
+
+void Client::remove_stream_update_callback(int tag) {
+  stream_manager->remove_update_callback(tag);
+}
+
 }  // namespace krpc

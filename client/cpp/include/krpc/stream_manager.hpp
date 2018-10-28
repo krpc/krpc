@@ -3,6 +3,8 @@
 #include <google/protobuf/stubs/port.h>
 
 #include <atomic>
+#include <condition_variable>  // NOLINT(build/c++11)
+#include <functional>
 #include <map>
 #include <memory>
 #include <mutex>  // NOLINT(build/c++11)
@@ -28,6 +30,12 @@ class StreamManager {
   void update(google::protobuf::uint64 id, const schema::ProcedureResult& result);
   void freeze();
   void thaw();
+  std::condition_variable& get_update_condition();
+  std::unique_lock<std::mutex>& get_update_condition_lock();
+  typedef std::function<void()> Callback;
+  typedef std::map<int, Callback> Callbacks;
+  int add_update_callback(const Callback& callback);
+  void remove_update_callback(int tag);
 
  private:
   static void update_thread_main(StreamManager* stream_manager,
@@ -43,6 +51,11 @@ class StreamManager {
   std::shared_ptr<std::atomic_bool> should_freeze;
   std::shared_ptr<std::atomic_bool> frozen;
   std::shared_ptr<std::thread> update_thread;
+  std::condition_variable condition;
+  std::mutex condition_mutex;
+  std::unique_lock<std::mutex> condition_lock;
+  Callbacks callbacks;
+  int next_callback_tag;
 };
 
 }  // namespace krpc
