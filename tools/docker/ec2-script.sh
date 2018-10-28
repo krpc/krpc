@@ -39,6 +39,6 @@ make -C tools/docker build
 docker images
 
 echo "Build complete. Run:"
-echo "  docker login"
-echo "  make -C krpc/tools/docker deploy"
+echo "  sudo docker login"
+echo "  sudo make -C krpc/tools/docker deploy"
 echo "to deploy the new image to Docker Hub"
