@@ -34,6 +34,7 @@ cd krpc
 git fetch origin
 git branch -v -a
 git checkout $BRANCH
+git pull
 
 make -C tools/docker build
 docker images
