@@ -3,6 +3,7 @@ using KRPC.Service;
 
 namespace KRPC.Utils
 {
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
     static class GameScenesExtensions
     {
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
