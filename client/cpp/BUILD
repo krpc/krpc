@@ -153,7 +153,7 @@ client_test(
     size = 'small'
 )
 
-test_srcs = glob(['test/test_*.cpp']) + [
+test_srcs = glob(['test/test_stream*.cpp']) + [
     ':services-test-service',
     'test/server_test.hpp'
 ]

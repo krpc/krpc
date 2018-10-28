@@ -29,6 +29,7 @@ static void wait() {
   std::this_thread::sleep_for(std::chrono::milliseconds(50));
 }
 
+/*
 TEST_F(test_stream, test_method) {
   krpc::Stream<std::string> x = test_service.float_to_string_stream(3.14159);
   for (int i = 0; i < 5; i++) {
@@ -276,6 +277,7 @@ TEST_F(test_stream, test_wait_timeout_long) {
   }
   x.release();
 }
+*/
 
 TEST_F(test_stream, test_wait_update) {
   auto x = test_service.counter_stream("test_stream.test_wait_update", 10);
@@ -290,6 +292,7 @@ TEST_F(test_stream, test_wait_update) {
   conn.release_stream_update();
 }
 
+/*
 TEST_F(test_stream, test_wait_update_timeout_short) {
   auto x = test_service.counter_stream("test_stream.test_wait_update_timeout_short", 10);
   conn.acquire_stream_update();
@@ -522,3 +525,4 @@ TEST_F(test_stream, test_equality) {
   ASSERT_TRUE(s2 == s1);
   ASSERT_FALSE(s2 != s1);
 }
+*/
