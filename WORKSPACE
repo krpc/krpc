@@ -148,7 +148,7 @@ new_http_archive(
     build_file_content = "exports_files(['lib/NDesk.Options.dll'])",
     url = 'https://www.nuget.org/api/v2/package/NDesk.Options/0.2.1',
     type = 'zip',
-    sha256 = 'f7cad7f76b9a738930496310ea47888529fbfd0a39896bdfd3cfd17fd385f53b'
+    sha256 = '0fa76d0ed1eb9fba757b0aa677903e1b8873735eec136a51dde24eda57d10c61'
 )
 
 http_archive(
