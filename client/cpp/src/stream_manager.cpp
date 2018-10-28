@@ -76,6 +76,10 @@ void StreamManager::update(google::protobuf::uint64 id, const schema::ProcedureR
     return;
   if (!result.has_error()) {
     stream->update(result.value(), nullptr);
+    std::cout << "LIB: update: ";
+    for (auto x : result.value())
+        std::cout << std::hex << (int)x;
+    std::cout << std::endl;
   } else {
     try {
       client->throw_exception(result.error());
@@ -83,6 +87,7 @@ void StreamManager::update(google::protobuf::uint64 id, const schema::ProcedureR
       stream->update("", std::current_exception());
     }
   }
+  std::cout << "LIB: notify_all" << std::endl;
   stream->get_condition().notify_all();
   for (auto callback : stream->get_callbacks())
     callback.second(stream->get_data());
