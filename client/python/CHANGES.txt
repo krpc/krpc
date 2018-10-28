@@ -1,5 +1,6 @@
 v0.4.8
  * Update to protobuf v3.6.1
+ * Add condition variable and callbacks that are called when a stream update message is processed (#473)
 
 v0.4.6
  * Add methods to remove callbacks from streams and events (#451)

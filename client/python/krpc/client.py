@@ -81,6 +81,29 @@ class Client(object):
         finally:
             stream.remove()
 
+    @property
+    def stream_update_condition(self):
+        """ Condition variable that is notified when
+            a stream update message has finished being processed. """
+        return self._stream_manager.update_condition
+
+    def wait_for_stream_update(self, timeout=None):
+        """ Wait until the next stream update message or a timeout occurs.
+            The condition variable must be locked before calling this method.
+
+            When timeout is not None, it should be a floating point number
+            specifying the timeout in seconds for the operation. """
+        self._stream_manager.wait_for_update(timeout)
+
+    def add_stream_update_callback(self, callback):
+        """ Add a callback that is invoked whenever
+            a stream update message has finished being processed. """
+        self._stream_manager.add_update_callback(callback)
+
+    def remove_stream_update_callback(self, callback):
+        """ Remove a stream update callback. """
+        self._stream_manager.remove_update_callback(callback)
+
     @staticmethod
     def get_call(func, *args, **kwargs):
         """ Convert a remote procedure call to a KRPC.ProcedureCall message """
