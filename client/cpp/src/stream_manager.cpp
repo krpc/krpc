@@ -76,6 +76,7 @@ void StreamManager::update(google::protobuf::uint64 id, const schema::ProcedureR
     return;
   if (!result.has_error()) {
     stream->update(result.value(), nullptr);
+    std::cout << "update " << std::hex << (int)(result.value()[0]) << std::endl;
   } else {
     try {
       client->throw_exception(result.error());
