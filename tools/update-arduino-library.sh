@@ -41,7 +41,7 @@ for file in `find . -name "*.h" -o -name "*.cpp"`; do
     sed -i -r -e "s/#include \"(pb.*\.h)\"/#include \"krpc\/\1\"/g" $file
 done
 # Enable PB_NO_ERRMSG by default
-echo -e "#ifndef PB_NO_ERRMSG\n#define PB_NO_ERRMSG\n#endif\n\n$(cat krpc_cnano/pb.h)" > krpc_cnano/pb.h
+echo -e "#ifndef PB_NO_ERRMSG\n#define PB_NO_ERRMSG\n#endif\n\n$(cat krpc/pb.h)" > krpc/pb.h
 cd $arduino
 
 # Update library.properties
