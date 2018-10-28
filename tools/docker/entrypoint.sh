@@ -10,4 +10,4 @@ passwd -q -d build
 chown build:build -R /build
 cd /build
 
-exec /usr/local/bin/gosu build ${@:-bash}
+exec /usr/sbin/gosu build ${@:-bash}

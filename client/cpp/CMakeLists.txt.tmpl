@@ -41,13 +41,13 @@ endif()
 
 include_directories(include include/krpc ${PROTOBUF_INCLUDE_DIRS})
 
-if ("${PROTOBUF_PROTOC_EXECUTABLE}" STREQUAL "")
+if (PROTOBUF_PROTOC_EXECUTABLE)
+  message(STATUS "Found Protobuf compiler ${PROTOBUF_PROTOC_EXECUTABLE}")
+  protobuf_generate_cpp(PROTO_SRC_ORIG PROTO_HDR_ORIG protobuf/krpc.proto)
+else()
   message(STATUS "Protobuf compiler not found; using pre-built source files")
   set(PROTO_HDR_ORIG ${CMAKE_CURRENT_SOURCE_DIR}/protobuf/krpc.pb.hpp)
   set(PROTO_SRC_ORIG ${CMAKE_CURRENT_SOURCE_DIR}/protobuf/krpc.pb.cpp)
-else()
-  message(STATUS "Found Protobuf compiler")
-  protobuf_generate_cpp(PROTO_SRC_ORIG PROTO_HDR_ORIG protobuf/krpc.proto)
 endif()
 
 set(PROTO_HDR ${CMAKE_CURRENT_BINARY_DIR}/protobuf/include/krpc/krpc.pb.hpp)

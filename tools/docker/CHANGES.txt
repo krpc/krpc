@@ -1,3 +1,6 @@
+v2.0.0
+ * Move to Ubuntu 18.04
+
 v1.12.0
  * Update to KSP 1.5.1
  * Update to Bazel 0.18.0
