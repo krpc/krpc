@@ -9,6 +9,8 @@ using KRPC.Utils;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
+using TupleV3 = KRPC.Utils.Tuple<Vector3d, Vector3d>;
+using TupleT3 = KRPC.Utils.Tuple<KRPC.Utils.Tuple<double, double, double>, KRPC.Utils.Tuple<double, double, double>>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -661,7 +663,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </remarks>
         [KRPCMethod]
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        public Tuple<Tuple3,Tuple3> BoundingBox (ReferenceFrame referenceFrame)
+        public TupleT3 BoundingBox (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException (nameof (referenceFrame));
