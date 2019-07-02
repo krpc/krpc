@@ -6,7 +6,7 @@ namespace KRPC.SpaceCenter
     {
         public static Vessel GetVesselById (Guid id)
         {
-            if (FlightGlobals.ActiveVessel.id == id)
+            if (FlightGlobals.ActiveVessel != null && FlightGlobals.ActiveVessel.id == id)
                 return FlightGlobals.ActiveVessel;
             foreach (var vessel in FlightGlobals.Vessels)
                 if (vessel.id == id)
