@@ -1,3 +1,6 @@
+v0.4.9
+ * Fix null reference exception when checking active vessel (#528, #530)
+
 v0.4.8
  * Allows RPCs to be accessed from game scenes other than just flight (#471)
  * Merge NameTag (http://github.com/krpc/NameTag) into the main kRPC release
