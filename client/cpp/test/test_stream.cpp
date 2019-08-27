@@ -300,18 +300,18 @@ TEST_F(test_stream, test_wait_timeout_long) {
 //   conn.release_stream_update();
 // }
 //
-//TEST_F(test_stream, test_wait_update_timeout_long) {
-//  auto x = test_service.counter_stream("test_stream.test_wait_update_timeout_long", 10);
-//  conn.acquire_stream_update();
-//  auto count = x();
-//  ASSERT_LT(count, 10);
-//  while (count < 10) {
-//    conn.wait_for_stream_update(10);
-//    count += 1;
-//    ASSERT_EQ(count, x());
-//  }
-//  conn.release_stream_update();
-//}
+// TEST_F(test_stream, test_wait_update_timeout_long) {
+//   auto x = test_service.counter_stream("test_stream.test_wait_update_timeout_long", 10);
+//   conn.acquire_stream_update();
+//   auto count = x();
+//   ASSERT_LT(count, 10);
+//   while (count < 10) {
+//     conn.wait_for_stream_update(10);
+//     count += 1;
+//     ASSERT_EQ(count, x());
+//   }
+//   conn.release_stream_update();
+// }
 
 TEST_F(test_stream, test_callback) {
   std::atomic<int> test_callback_value(-1);
