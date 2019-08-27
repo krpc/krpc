@@ -13,11 +13,14 @@ def _apply_path_map(path_map, path):
 def _create_py_env(out, install):
     tmp = out+'.tmp-create-py-env.$$'
     cmds = [
+        'PWD=`pwd`',
         'rm -rf %s' % tmp,
         'virtualenv %s --quiet --never-download --no-site-packages' % tmp
     ]
     for lib in install:
-        cmds.append('CFLAGS="-O0" %s/bin/python %s/bin/pip install --quiet --no-deps %s' % (tmp, tmp, lib.path))
+        cmds.append(
+            'CFLAGS="-O0" %s/bin/python %s/bin/pip install --quiet --no-deps --no-cache-dir file:$PWD/%s'
+            % (tmp, tmp, lib.path))
     cmds.extend([
         '(CWD=`pwd`; cd %s; tar -c -f $CWD/%s *)' % (tmp, out)
     ])
@@ -131,7 +134,9 @@ def _test_impl(ctx, pyexe='python2'):
         if dep.basename.startswith('enum34') and pyexe == 'python3':
             # enum34 not required with Python 3
             continue
-        sub_commands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % dep.short_path)
+        sub_commands.append(
+            'env/bin/python env/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s'
+            % dep.short_path)
     sub_commands.extend([
         'unzip -o %s' % (ctx.file.src.short_path), #TODO: install the package then run the tests??
         '(cd %s ; ../env/bin/python setup.py test)' % ctx.attr.pkg
@@ -211,7 +216,9 @@ def _lint_impl(ctx):
     # Install dependences in a new virtual env
     sub_commands = ['virtualenv env --quiet --never-download --no-site-packages']
     for dep in deps:
-        sub_commands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % dep.short_path)
+        sub_commands.append(
+            'env/bin/python env/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s'
+            % dep.short_path)
 
     # Run pep8
     runfiles_dir = out.path + '.runfiles/krpc'
