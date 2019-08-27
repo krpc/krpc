@@ -40,5 +40,6 @@ class TestThreading(ServerTestCase, unittest.TestCase):
         for thread in threads:
             thread.join()
 
+
 if __name__ == '__main__':
     unittest.main()

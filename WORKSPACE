@@ -557,9 +557,9 @@ http_file(
 )
 
 http_file(
-    name = 'python_pep8',
-    urls = ['https://files.pythonhosted.org/packages/01/a0/64ba19519db49e4094d82599412a9660dee8c26a7addbbb1bf17927ceefe/pep8-1.7.1.tar.gz'],
-    sha256 = 'fe249b52e20498e59e0b5c5256aa52ee99fc295b26ec9eaa85776ffdb9fe6374'
+    name = 'python_pycodestyle',
+    urls = ['https://files.pythonhosted.org/packages/1c/d1/41294da5915f4cae7f4b388cea6c2cd0d6cd53039788635f6875dfe8c72f/pycodestyle-2.5.0.tar.gz'],
+    sha256 = 'e40a936c9a450ad81df37f549d676d127b1b66000a6c500caa2b085bc0ca976c'
 )
 
 http_file(

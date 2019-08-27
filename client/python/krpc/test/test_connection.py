@@ -33,6 +33,7 @@ def server_thread(started):
             connection.close()
             sock.settimeout(None)
 
+
 server_thread.port = None
 
 
@@ -103,6 +104,7 @@ class TestConnection(unittest.TestCase):
         conn = self.connect()
         conn.close()
         self.assertRaises(socket.error, conn.partial_receive, 1)
+
 
 if __name__ == '__main__':
     unittest.main()

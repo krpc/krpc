@@ -1,8 +1,8 @@
 load('//tools/build:python.bzl', 'py_script')
 
 py_script(
-  name = 'pep8',
-  script = 'pep8',
-  pkg = '@python_pep8//file',
+  name = 'pycodestyle',
+  script = 'pycodestyle',
+  pkg = '@python_pycodestyle//file',
   visibility = ['//visibility:public']
 )

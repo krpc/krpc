@@ -28,5 +28,6 @@ class TestSnakeCase(unittest.TestCase):
         self.assertEqual('foo__bar', t('foo_bar'))
         self.assertEqual('_foobar', t('_foobar'))
 
+
 if __name__ == '__main__':
     unittest.main()

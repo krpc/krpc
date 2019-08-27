@@ -196,9 +196,9 @@ class _ValueDecoder(object):
     @classmethod
     def decode_string(cls, data):
         (size, position) = protobuf_decoder._DecodeVarint(data, 0)
-        return data[position:position+size].decode('utf-8')
+        return data[position:position + size].decode('utf-8')
 
     @classmethod
     def decode_bytes(cls, data):
         (size, position) = protobuf_decoder._DecodeVarint(data, 0)
-        return data[position:position+size]
+        return data[position:position + size]

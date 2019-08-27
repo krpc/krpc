@@ -172,7 +172,7 @@ class Client(object):
 
     def _build_call(self, service, procedure, args,
                     param_names, param_types, return_type):
-                    # pylint: disable=unused-argument
+        # pylint: disable=unused-argument
         """ Build a KRPC.ProcedureCall object """
 
         call = KRPC.ProcedureCall()

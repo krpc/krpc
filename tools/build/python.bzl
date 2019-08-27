@@ -182,32 +182,32 @@ def _lint_impl(ctx):
     out = ctx.outputs.executable
     files = []
     deps = list(ctx.files.deps)
-    pep8_args = []
+    pycodestyle_args = []
     pylint_args = []
-    if ctx.attr.pep8_config:
-        pep8_args.append('--config=%s' % ctx.file.pep8_config.short_path)
+    if ctx.attr.pycodestyle_config:
+        pycodestyle_args.append('--config=%s' % ctx.file.pycodestyle_config.short_path)
     if ctx.attr.pylint_config:
         pylint_args.append('--rcfile=%s' % ctx.file.pylint_config.short_path)
     if ctx.attr.pkg:
         # Run on a python package
-        pep8_args.append('env/lib/python*/site-packages/%s' % ctx.attr.pkg_name)
+        pycodestyle_args.append('env/lib/python*/site-packages/%s' % ctx.attr.pkg_name)
         pylint_args.append(ctx.attr.pkg_name)
         deps.append(ctx.file.pkg)
     else:
         # Run on a list of file paths
         for x in ctx.files.srcs:
-            pep8_args.append(x.short_path)
+            pycodestyle_args.append(x.short_path)
             pylint_args.append(x.short_path)
         files.extend(ctx.files.srcs)
 
-    pep8 = ctx.executable.pep8
+    pycodestyle = ctx.executable.pycodestyle
     pylint = ctx.executable.pylint
-    pep8_runfiles = ctx.attr.pep8.default_runfiles.files.to_list()
+    pycodestyle_runfiles = ctx.attr.pycodestyle.default_runfiles.files.to_list()
     pylint_runfiles = ctx.attr.pylint.default_runfiles.files.to_list()
 
-    runfiles = [pep8, pylint] + pep8_runfiles + pylint_runfiles + files + deps
-    if ctx.attr.pep8_config:
-        runfiles.append(ctx.file.pep8_config)
+    runfiles = [pycodestyle, pylint] + pycodestyle_runfiles + pylint_runfiles + files + deps
+    if ctx.attr.pycodestyle_config:
+        runfiles.append(ctx.file.pycodestyle_config)
     if ctx.attr.pylint_config:
         runfiles.append(ctx.file.pylint_config)
 
@@ -220,13 +220,13 @@ def _lint_impl(ctx):
             'env/bin/python env/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s'
             % dep.short_path)
 
-    # Run pep8
+    # Run pycodestyle
     runfiles_dir = out.path + '.runfiles/krpc'
     sub_commands.append('rm -rf %s' % runfiles_dir)
-    _add_runfile(sub_commands, pep8.short_path, runfiles_dir + '/' + pep8.basename)
-    for f in pep8_runfiles:
-        _add_runfile(sub_commands, f.short_path, runfiles_dir+ '/' + pep8.basename + '.runfiles/krpc/' + f.short_path)
-    sub_commands.append('%s/%s %s' % (runfiles_dir, pep8.basename, ' '.join(pep8_args)))
+    _add_runfile(sub_commands, pycodestyle.short_path, runfiles_dir + '/' + pycodestyle.basename)
+    for f in pycodestyle_runfiles:
+        _add_runfile(sub_commands, f.short_path, runfiles_dir+ '/' + pycodestyle.basename + '.runfiles/krpc/' + f.short_path)
+    sub_commands.append('%s/%s %s' % (runfiles_dir, pycodestyle.basename, ' '.join(pycodestyle_args)))
     sub_commands.append('rm -rf %s' % runfiles_dir)
 
     # Run pylint
@@ -258,9 +258,9 @@ py_lint_test = rule(
         'pkg_name': attr.string(),
         'srcs': attr.label_list(allow_files=True),
         'deps': attr.label_list(allow_files=True),
-        'pep8_config': attr.label(allow_single_file=True),
+        'pycodestyle_config': attr.label(allow_single_file=True),
         'pylint_config': attr.label(allow_single_file=True),
-        'pep8': attr.label(default=Label('//tools/build/pep8'), executable=True, cfg='host'),
+        'pycodestyle': attr.label(default=Label('//tools/build/pycodestyle'), executable=True, cfg='host'),
         'pylint': attr.label(default=Label('//tools/build/pylint'), executable=True, cfg='host')
     },
     test = True
