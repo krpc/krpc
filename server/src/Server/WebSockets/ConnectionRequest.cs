@@ -82,8 +82,8 @@ namespace KRPC.Server.WebSockets
                 var key = Convert.FromBase64String (request.Headers ["sec-websocket-key"].SingleOrDefault ());
                 if (key.Length != 16)
                     throw new HandshakeException (Response.CreateBadRequest ("Failed to decode Sec-WebSocket-Key\nExpected 16 bytes, got " + key.Length + " bytes."));
-            } catch (FormatException e) {
-                throw new HandshakeException (Response.CreateBadRequest ("Failed to decode Sec-WebSocket-Key\n" + e.Message));
+            } catch (FormatException) {
+                throw new HandshakeException (Response.CreateBadRequest ("Failed to decode Sec-WebSocket-Key\nNot a valid base64 string."));
             }
 
             // Check version field

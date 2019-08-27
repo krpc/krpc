@@ -307,7 +307,7 @@ namespace KRPC.Test.Server.WebSockets
                                "Sec-WebSocket-Key: foo\r\n" +
                                "Sec-WebSocket-Version: 12\r\n\r\n"
                            );
-            Assert.AreEqual ("HTTP/1.1 400 Bad Request\r\n\r\nFailed to decode Sec-WebSocket-Key\nInvalid length for a Base-64 char array or string.", response);
+            Assert.AreEqual ("HTTP/1.1 400 Bad Request\r\n\r\nFailed to decode Sec-WebSocket-Key\nNot a valid base64 string.", response);
         }
 
         [Test]
