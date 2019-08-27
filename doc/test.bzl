@@ -26,10 +26,10 @@ def _check_documented_impl(ctx):
 check_documented_test = rule(
     implementation = _check_documented_impl,
     attrs = {
-        'members': attr.label(allow_files=True, single_file=True),
+        'members': attr.label(allow_single_file=True),
         'srcs': attr.label_list(allow_files=True),
-        '_tool': attr.label(default=Label('//doc:test.py'), allow_files=True,
-                            single_file=True, executable=True, cfg='host'),
+        '_tool': attr.label(default=Label('//doc:test.py'), allow_single_file=True,
+                            executable=True, cfg='host'),
     },
     test = True
 )

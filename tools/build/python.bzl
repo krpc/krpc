@@ -74,7 +74,7 @@ def _sdist_impl(ctx):
 py_sdist = rule(
     implementation = _sdist_impl,
     attrs = {
-        'files': attr.label_list(allow_files=True, mandatory=True, non_empty=True),
+        'files': attr.label_list(allow_files=True, mandatory=True, allow_empty=True),
         'path_map': attr.string_dict(),
         'out': attr.output(mandatory=True)
     }
@@ -119,7 +119,7 @@ py_script = rule(
     implementation = _script_impl,
     attrs = {
         'script': attr.string(mandatory=True),
-        'pkg': attr.label(allow_files=True, single_file=True),
+        'pkg': attr.label(allow_single_file=True),
         'deps': attr.label_list(allow_files=True)
     },
     executable = True
@@ -153,7 +153,7 @@ def _test_impl(ctx, pyexe='python2'):
 py_test = rule(
     implementation = _test_impl,
     attrs = {
-        'src': attr.label(allow_files=True, single_file=True),
+        'src': attr.label(allow_single_file=True),
         'pkg': attr.string(mandatory=True),
         'deps': attr.label_list(allow_files=True)
     },
@@ -166,7 +166,7 @@ def _test3_impl(ctx):
 py3_test = rule(
     implementation = _test3_impl,
     attrs = {
-        'src': attr.label(allow_files=True, single_file=True),
+        'src': attr.label(allow_single_file=True),
         'pkg': attr.string(mandatory=True),
         'deps': attr.label_list(allow_files=True)
     },
@@ -197,8 +197,8 @@ def _lint_impl(ctx):
 
     pep8 = ctx.executable.pep8
     pylint = ctx.executable.pylint
-    pep8_runfiles = list(ctx.attr.pep8.default_runfiles.files)
-    pylint_runfiles = list(ctx.attr.pylint.default_runfiles.files)
+    pep8_runfiles = ctx.attr.pep8.default_runfiles.files.to_list()
+    pylint_runfiles = ctx.attr.pylint.default_runfiles.files.to_list()
 
     runfiles = [pep8, pylint] + pep8_runfiles + pylint_runfiles + files + deps
     if ctx.attr.pep8_config:
@@ -247,12 +247,12 @@ def _lint_impl(ctx):
 py_lint_test = rule(
     implementation = _lint_impl,
     attrs = {
-        'pkg': attr.label(allow_files=True, single_file=True),
+        'pkg': attr.label(allow_single_file=True),
         'pkg_name': attr.string(),
         'srcs': attr.label_list(allow_files=True),
         'deps': attr.label_list(allow_files=True),
-        'pep8_config': attr.label(allow_files=True, single_file=True),
-        'pylint_config': attr.label(allow_files=True, single_file=True),
+        'pep8_config': attr.label(allow_single_file=True),
+        'pylint_config': attr.label(allow_single_file=True),
         'pep8': attr.label(default=Label('//tools/build/pep8'), executable=True, cfg='host'),
         'pylint': attr.label(default=Label('//tools/build/pylint'), executable=True, cfg='host')
     },

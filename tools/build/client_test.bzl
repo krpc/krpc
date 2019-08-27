@@ -1,8 +1,8 @@
 def _impl(ctx):
     server_type = ctx.attr.server_type
 
-    test_executable_runfiles = list(ctx.attr.test_executable.default_runfiles.files)
-    server_executable_runfiles = list(ctx.attr.server_executable.default_runfiles.files)
+    test_executable_runfiles = ctx.attr.test_executable.default_runfiles.files.to_list()
+    server_executable_runfiles = ctx.attr.server_executable.default_runfiles.files.to_list()
 
     sub_commands = [
         'mkdir -p `dirname test-executable.runfiles/krpc/%s`' % ctx.executable.test_executable.short_path,

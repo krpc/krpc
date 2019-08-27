@@ -30,10 +30,10 @@ def _test_impl(ctx):
 lua_test = rule(
     implementation = _test_impl,
     attrs = {
-        'rockspec': attr.label(allow_files=True, single_file=True),
-        'src': attr.label(allow_files=True, single_file=True),
+        'rockspec': attr.label(allow_single_file=True),
+        'src': attr.label(allow_single_file=True),
         'deps': attr.label_list(allow_files=True),
-        '_luaunit': attr.label(default=Label('@lua_luaunit//file'), allow_files=True, single_file=True)
+        '_luaunit': attr.label(default=Label('@lua_luaunit//file'), allow_single_file=True)
     },
     test = True
 )

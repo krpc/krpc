@@ -20,8 +20,8 @@ def _impl(ctx):
 protobuf_java = rule(
     implementation = _impl,
     attrs = {
-        'src': attr.label(allow_files=FileType(['.proto']), single_file=True),
-        '_protoc': attr.label(default=Label('//tools/build/protobuf:protoc'), allow_files=True, single_file=True),
+        'src': attr.label(allow_single_file=['.proto']),
+        '_protoc': attr.label(default=Label('//tools/build/protobuf:protoc'), allow_single_file=True),
         'out': attr.output(mandatory=True)
     },
     output_to_genfiles = True
