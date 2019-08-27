@@ -9,6 +9,8 @@ using KRPC.Utils;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
+using TupleV3 = KRPC.Utils.Tuple<Vector3d, Vector3d>;
+using TupleT3 = KRPC.Utils.Tuple<KRPC.Utils.Tuple<double, double, double>, KRPC.Utils.Tuple<double, double, double>>;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -420,7 +422,7 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public Tuple<Tuple3,Tuple3> AvailableTorque {
+        public TupleT3 AvailableTorque {
             get { return AvailableTorqueVectors.ToTuple (); }
         }
 
@@ -431,7 +433,7 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public Tuple<Tuple3, Tuple3> AvailableReactionWheelTorque {
+        public TupleT3 AvailableReactionWheelTorque {
             get { return AvailableReactionWheelTorqueVectors.ToTuple (); }
         }
 
@@ -442,7 +444,7 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public Tuple<Tuple3, Tuple3> AvailableRCSTorque {
+        public TupleT3 AvailableRCSTorque {
             get { return AvailableRCSTorqueVectors.ToTuple (); }
         }
 
@@ -453,7 +455,7 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public Tuple<Tuple3, Tuple3> AvailableEngineTorque {
+        public TupleT3 AvailableEngineTorque {
             get { return AvailableEngineTorqueVectors.ToTuple (); }
         }
 
@@ -464,7 +466,7 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public Tuple<Tuple3, Tuple3> AvailableControlSurfaceTorque {
+        public TupleT3 AvailableControlSurfaceTorque {
             get { return AvailableControlSurfaceTorqueVectors.ToTuple (); }
         }
 
@@ -476,11 +478,11 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public Tuple<Tuple3, Tuple3> AvailableOtherTorque {
+        public TupleT3 AvailableOtherTorque {
             get { return AvailableOtherTorqueVectors.ToTuple (); }
         }
 
-        internal Tuple<Vector3d,Vector3d> AvailableTorqueVectors {
+        internal TupleV3 AvailableTorqueVectors {
             get {
                 return ITorqueProviderExtensions.Sum (new [] {
                     AvailableReactionWheelTorqueVectors,
@@ -492,25 +494,25 @@ namespace KRPC.SpaceCenter.Services
             }
         }
 
-        Tuple<Vector3d,Vector3d> AvailableReactionWheelTorqueVectors {
+        TupleV3 AvailableReactionWheelTorqueVectors {
             get { return ITorqueProviderExtensions.Sum (Parts.ReactionWheels.Select (x => x.AvailableTorqueVectors)); }
         }
 
-        Tuple<Vector3d,Vector3d> AvailableRCSTorqueVectors {
+        TupleV3 AvailableRCSTorqueVectors {
             get { return ITorqueProviderExtensions.Sum (Parts.RCS.Select (x => x.AvailableTorqueVectors)); }
         }
 
-        Tuple<Vector3d,Vector3d> AvailableEngineTorqueVectors {
+        TupleV3 AvailableEngineTorqueVectors {
             get { return ITorqueProviderExtensions.Sum (Parts.Engines.Select (x => x.AvailableTorqueVectors)); }
         }
 
-        Tuple<Vector3d,Vector3d> AvailableControlSurfaceTorqueVectors {
+        TupleV3 AvailableControlSurfaceTorqueVectors {
             get { return ITorqueProviderExtensions.Sum (Parts.ControlSurfaces.Select (x => x.AvailableTorqueVectors)); }
         }
 
-        Tuple<Vector3d,Vector3d> AvailableOtherTorqueVectors {
+        TupleV3 AvailableOtherTorqueVectors {
             get {
-                var torques = new List<Tuple<Vector3d,Vector3d>> ();
+                var torques = new List<TupleV3> ();
                 // Include contributions from other ITorqueProviders
                 var parts = InternalVessel.parts;
                 for (var i = 0; i < parts.Count; i++) {
@@ -633,7 +635,7 @@ namespace KRPC.SpaceCenter.Services
         /// position vectors are in.</param>
         [KRPCMethod (GameScene = GameScene.Flight)]
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        public Tuple<Tuple3,Tuple3> BoundingBox (ReferenceFrame referenceFrame)
+        public TupleT3 BoundingBox (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException (nameof (referenceFrame));

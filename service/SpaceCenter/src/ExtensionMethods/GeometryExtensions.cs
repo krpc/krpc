@@ -6,6 +6,8 @@ using UnityEngine;
 using Tuple2 = KRPC.Utils.Tuple<double, double>;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
+using TupleV3 = KRPC.Utils.Tuple<Vector3d, Vector3d>;
+using TupleT3 = KRPC.Utils.Tuple<KRPC.Utils.Tuple<double, double, double>, KRPC.Utils.Tuple<double, double, double>>;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
@@ -94,9 +96,9 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// Convert a pair of vectors to a pair of tuples
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        public static Tuple<Tuple3, Tuple3> ToTuple (this Tuple<Vector3d, Vector3d> v)
+        public static TupleT3 ToTuple (this TupleV3 v)
         {
-            return new Tuple<Tuple3,Tuple3> (v.Item1.ToTuple (), v.Item2.ToTuple ());
+            return new TupleT3 (v.Item1.ToTuple (), v.Item2.ToTuple ());
         }
 
         /// <summary>
@@ -428,9 +430,9 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// Convert an axis-aligned bounding box to its min and max positions as tuples.
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        public static Tuple<Tuple3,Tuple3> ToTuples (this Bounds bounds)
+        public static TupleT3 ToTuples (this Bounds bounds)
         {
-            return new Tuple<Tuple3, Tuple3> (bounds.min.ToTuple (), bounds.max.ToTuple ());
+            return new TupleT3 (bounds.min.ToTuple (), bounds.max.ToTuple ());
         }
     }
 }

@@ -4,6 +4,8 @@ using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using TupleV3 = KRPC.Utils.Tuple<Vector3d, Vector3d>;
+using TupleT3 = KRPC.Utils.Tuple<KRPC.Utils.Tuple<double, double, double>, KRPC.Utils.Tuple<double, double, double>>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -84,7 +86,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        public Tuple<Tuple3,Tuple3> AvailableTorque {
+        public TupleT3 AvailableTorque {
             get { return AvailableTorqueVectors.ToTuple (); }
         }
 
@@ -95,26 +97,26 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        public Tuple<Tuple3,Tuple3> MaxTorque {
+        public TupleT3 MaxTorque {
             get { return MaxTorqueVectors.ToTuple (); }
         }
 
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        internal Tuple<Vector3d,Vector3d> AvailableTorqueVectors {
+        internal TupleV3 AvailableTorqueVectors {
             get {
                 if (!Active || Broken)
                     return ITorqueProviderExtensions.zero;
                 var torque = reactionWheel.GetPotentialTorque ();
                 // Note: GetPotentialTorque returns negative torques with incorrect sign
-                return new Tuple<Vector3d,Vector3d> (torque.Item1, -torque.Item2);
+                return new TupleV3 (torque.Item1, -torque.Item2);
             }
         }
 
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        internal Tuple<Vector3d,Vector3d> MaxTorqueVectors {
+        internal TupleV3 MaxTorqueVectors {
             get {
                 var torque = new Vector3d (reactionWheel.PitchTorque, reactionWheel.RollTorque, reactionWheel.YawTorque) * 1000.0d;
-                return new Tuple<Vector3d,Vector3d> (torque, -torque);
+                return new TupleV3 (torque, -torque);
             }
         }
     }
