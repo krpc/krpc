@@ -7,6 +7,8 @@ using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using TupleV3 = KRPC.Utils.Tuple<Vector3d, Vector3d>;
+using TupleT3 = KRPC.Utils.Tuple<KRPC.Utils.Tuple<double, double, double>, KRPC.Utils.Tuple<double, double, double>>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -490,18 +492,18 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        public Tuple<Tuple3, Tuple3> AvailableTorque {
+        public TupleT3 AvailableTorque {
             get { return AvailableTorqueVectors.ToTuple (); }
         }
 
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        internal Tuple<Vector3d, Vector3d> AvailableTorqueVectors {
+        internal TupleV3 AvailableTorqueVectors {
             get {
                 if (!Active || !Gimballed)
                     return ITorqueProviderExtensions.zero;
                 var torque = gimbal.GetPotentialTorque ();
                 // Note: GetPotentialTorque returns negative torques with incorrect sign
-                return new Tuple<Vector3d,Vector3d> (torque.Item1, -torque.Item2);
+                return new TupleV3 (torque.Item1, -torque.Item2);
             }
         }
     }

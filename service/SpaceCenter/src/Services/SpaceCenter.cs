@@ -89,7 +89,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         static void WaitForVesselSwitch (int tick)
         {
-            if (FlightGlobals.ActiveVessel.packed)
+            if (FlightGlobals.ActiveVessel == null || FlightGlobals.ActiveVessel.packed)
                 throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
             if (tick < 25)
                 throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, tick + 1));
