@@ -378,7 +378,7 @@ http_file(
 
 http_file(
     name = 'lua_luasocket',
-    urls = ['https://luarocks.org/manifests/luarocks/luasocket-3.0rc1-2.src.rock'],
+    urls = ['https://luarocks.org/manifests/luasocket/luasocket-3.0rc1-2.src.rock'],
     sha256 = '3882f2a1e1c6145ceb43ead385b861b97fa2f8d487e8669ec5b747406ab251c7'
 )
 
