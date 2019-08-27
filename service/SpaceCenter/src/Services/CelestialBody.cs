@@ -151,7 +151,25 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double SurfaceHeight (double latitude, double longitude)
         {
-            return Math.Max (0, BedrockHeight (latitude, longitude));
+            var alt = Math.Max (0, BedrockHeight (latitude, longitude));
+            // Using raycast to find real surface height.
+            const double raySource = 1000;
+            const double raySecondPoint = 500;
+            Vector3d rayCastStart = InternalBody.GetWorldSurfacePosition(latitude, longitude, alt + raySource);
+            Vector3d rayCastStop = InternalBody.GetWorldSurfacePosition(latitude, longitude, alt + raySecondPoint);
+            RaycastHit hit;
+            //Casting a ray on the surface (layer 15 in KSP).
+            if (Physics.Raycast(rayCastStart, (rayCastStop - rayCastStart), out hit, float.MaxValue, 1 << 15))
+
+            {
+                // Ensure hit is on the topside of planet, near the rayCastStart, not on the far side.
+                if (Mathf.Abs(hit.distance) < 3000)
+                {
+                    // Okay, a hit was found, use it instead of PQS alt:
+                    alt = alt + raySource - hit.distance;
+                }
+            }
+            return alt;
         }
 
         /// <summary>
