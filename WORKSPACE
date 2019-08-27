@@ -4,31 +4,88 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 http_archive(
+    name = 'bazel_skylib',
+    urls = ['https://github.com/bazelbuild/bazel-skylib/archive/2169ae1c374aab4a09aa90e65efe1a3aad4e279b.tar.gz'],
+    sha256 = 'bbccf674aa441c266df9894182d80de104cabd19be98be002f6d478aaa31574d',
+    strip_prefix = 'bazel-skylib-2169ae1c374aab4a09aa90e65efe1a3aad4e279b'
+)
+
+http_archive(
+    name = 'bazel_skylib',
+    urls = ['https://github.com/bazelbuild/bazel-skylib/archive/2169ae1c374aab4a09aa90e65efe1a3aad4e279b.tar.gz'],
+    sha256 = 'bbccf674aa441c266df9894182d80de104cabd19be98be002f6d478aaa31574d',
+    strip_prefix = 'bazel-skylib-2169ae1c374aab4a09aa90e65efe1a3aad4e279b'
+)
+
+http_archive(
+    name = 'zlib',
+    urls = ['https://zlib.net/zlib-1.2.11.tar.gz'],
+    build_file = '@com_google_protobuf//:third_party/zlib.BUILD',
+    sha256 = 'c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1',
+    strip_prefix = 'zlib-1.2.11'
+)
+
+http_archive(
+    name = 'six',
+    urls = ['https://pypi.python.org/packages/source/s/six/six-1.12.0.tar.gz'],
+    build_file = '@com_google_protobuf//:third_party/six.BUILD',
+    sha256 = 'd16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73'
+)
+
+http_archive(
+    name = 'rules_cc',
+    urls = ['https://github.com/bazelbuild/rules_cc/archive/b7fe9697c0c76ab2fd431a891dbb9a6a32ed7c3e.tar.gz'],
+    sha256 = '29daf0159f0cf552fcff60b49d8bcd4f08f08506d2da6e41b07058ec50cfeaec',
+    strip_prefix = 'rules_cc-b7fe9697c0c76ab2fd431a891dbb9a6a32ed7c3e'
+)
+
+http_archive(
+    name = 'rules_java',
+    urls = ['https://github.com/bazelbuild/rules_java/archive/981f06c3d2bd10225e85209904090eb7b5fb26bd.tar.gz'],
+    sha256 = 'f5a3e477e579231fca27bf202bb0e8fbe4fc6339d63b38ccb87c2760b533d1c3',
+    strip_prefix = 'rules_java-981f06c3d2bd10225e85209904090eb7b5fb26bd'
+)
+
+http_archive(
+    name = 'rules_proto',
+    urls = ['https://github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz'],
+    sha256 = '602e7161d9195e50246177e7c55b2f39950a9cf7366f74ed5f22fd45750cd208',
+    strip_prefix = 'rules_proto-97d8af4dc474595af3900dd85cb3a29ad28cc313'
+)
+
+http_archive(
+    name = 'rules_python',
+    urls = ['https://github.com/bazelbuild/rules_python/archive/4b84ad270387a7c439ebdccfd530e2339601ef27.tar.gz'],
+    sha256 = 'e5470e92a18aa51830db99a4d9c492cc613761d5bdb7131c04bd92b9834380f6',
+    strip_prefix = 'rules_python-4b84ad270387a7c439ebdccfd530e2339601ef27'
+)
+
+http_archive(
     name = 'protoc_linux_x86_32',
     build_file_content = "exports_files(['bin/protoc'])",
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_32.zip',
-    sha256 = 'f4d9235c1ecf2c520ff3d3ebec44457810023fc3093181f76c06871d2e47f413'
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-linux-x86_32.zip',
+    sha256 = '1094d7896f93b8987b0e05c110c0635bab7cf63aa24592c5d34cd37b590b5aeb'
 )
 
 http_archive(
     name = 'protoc_linux_x86_64',
     build_file_content = "exports_files(['bin/protoc'])",
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip',
-    sha256 = '6003de742ea3fcf703cfec1cd4a3380fd143081a2eb0e559065563496af27807'
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-linux-x86_64.zip',
+    sha256 = '77410d08e9a3c1ebb68afc13ee0c0fb4272c01c20bfd289adfb51b1c622bab07'
 )
 
 http_archive(
     name = 'protoc_osx_x86_32',
     build_file_content = "exports_files(['bin/protoc'])",
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-osx-x86_32.zip',
-    sha256 = '95aef29c7780130e6b84ea6037ee8ff146ae35d05962ee76f949f7ccb8116b8b'
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-osx-x86_32.zip',
+    sha256 = 'e7b7377917f6b9ec22c80188936c60380edc684e5bdc96c2993fc79e3e54c042'
 )
 
 http_archive(
     name = 'protoc_win32',
     build_file_content = "exports_files(['bin/protoc.exe'])",
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-win32.zip',
-    sha256 = '65e5d6f890e8df5b6b411e3fdbad04c33b2bd34a3576f343a8986589bd8d05e2'
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-win32.zip',
+    sha256 = '6543fe3fffb6caeb9c8a091afeefbb1a7e7112bc0e00d7b7e89e69e3a1844069'
 )
 
 http_archive(
@@ -81,14 +138,15 @@ http_file(
 http_archive(
     name = 'csharp_protobuf',
     build_file_content = "exports_files(['lib/net45/Google.Protobuf.dll'])",
-    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.6.1',
+    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.9.1',
+    sha256 = 'b4363bb9d1c2b6721624571936e3e1f14ebdf2ecd8788d2584b549c6dce8348b',
     type = 'zip'
 )
 
 http_file(
     name = 'csharp_protobuf_net35',
-    urls = ['https://s3.amazonaws.com/krpc/lib/protobuf-3.6.1-net35/Google.Protobuf.dll'],
-    sha256 = 'd6c437bfbee9a2534744c5bae3ab6359caf0382ff61ea402f334fd6c3edf9f89'
+    urls = ['https://s3.amazonaws.com/krpc/lib/protobuf-3.9.1-net35/Google.Protobuf.dll'],
+    sha256 = 'd0ddb80510810fa53ee124afbd57845e657eaa9016ed7a6edd4d8ecffedf66b5'
 )
 
 http_file(
@@ -147,14 +205,15 @@ http_archive(
     name = 'csharp_options',
     build_file_content = "exports_files(['lib/NDesk.Options.dll'])",
     url = 'https://www.nuget.org/api/v2/package/NDesk.Options/0.2.1',
+    sha256 = '0fa76d0ed1eb9fba757b0aa677903e1b8873735eec136a51dde24eda57d10c61',
     type = 'zip'
 )
 
 http_archive(
     name = 'com_google_protobuf',
-    url = 'https://github.com/google/protobuf/releases/download/v3.6.1/protobuf-cpp-3.6.1.tar.gz',
-    strip_prefix = 'protobuf-3.6.1',
-    sha256 = 'b3732e471a9bb7950f090fd0457ebd2536a9ba0891b7f3785919c654fe2a2529'
+    url = 'https://github.com/google/protobuf/releases/download/v3.9.1/protobuf-cpp-3.9.1.tar.gz',
+    strip_prefix = 'protobuf-3.9.1',
+    sha256 = '29a1db3b9bebcf054c540f13400563120ff29fbdd849b2c7a097ffe9d3d508eb'
 )
 
 http_archive(
@@ -223,8 +282,8 @@ http_file(
 
 maven_jar(
     name = 'java_protobuf',
-    artifact = 'com.google.protobuf:protobuf-java:3.6.1',
-    sha1 = '0d06d46ecfd92ec6d0f3b423b4cd81cb38d8b924'
+    artifact = 'com.google.protobuf:protobuf-java:3.9.1',
+    sha1 = '3b4d448bd1e12b25727efea58e9e1a79c3dc29bd'
 )
 
 maven_jar(
@@ -504,7 +563,7 @@ http_file(
 http_file(
     name = 'python_protobuf',
     urls = ['https://files.pythonhosted.org/packages/6d/54/12c5c92ffab546538ea5b544c6afbfcce333fd47e99c1198e24a8efdef1f/protobuf-3.9.1.tar.gz'],
-    sha256 = '1489b376b0f364bcc6f89519718c057eb191d7ad6f1b395ffd93d1aa45587811'
+    sha256 = 'd831b047bd69becaf64019a47179eb22118a50dd008340655266a906c69c6417'
 )
 
 http_file(
