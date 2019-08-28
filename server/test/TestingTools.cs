@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Google.Protobuf;
 
@@ -6,6 +7,7 @@ namespace KRPC.Test
 {
     static class TestingTools
     {
+        [SuppressMessage ("Gendarme.Rules.Globalization", "PreferStringComparisonOverrideRule")]
         public static string ToHexString (this byte[] data)
         {
             return BitConverter.ToString (data).Replace ("-", string.Empty).ToLower ();

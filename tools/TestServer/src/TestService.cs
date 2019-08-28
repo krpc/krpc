@@ -56,9 +56,9 @@ namespace TestServer
         }
 
         [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Globalization", "PreferStringComparisonOverrideRule")]
         public static string BytesToHexString (byte[] value)
         {
-
             return BitConverter.ToString (value).Replace ("-", string.Empty).ToLower ();
         }
 
