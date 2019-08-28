@@ -178,7 +178,7 @@ filegroup(
 
 filegroup(
     name = 'nunit_framework',
-    srcs = glob(['bin/framework/*.dll']),
+    srcs = ['bin/framework/nunit.framework.dll'],
     visibility = ['//visibility:public'],
 )
 """,

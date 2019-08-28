@@ -70,10 +70,10 @@
       <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\bazel-krpc\external\csharp_protobuf_net35\file\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\bazel-genfiles\tools\cslibs\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="KRPC.IO.Ports">
-      <HintPath>..\..\bazel-krpc\external\csharp_krpc_io_ports\file\KRPC.IO.Ports.dll</HintPath>
+      <HintPath>..\..\bazel-genfiles\tools\cslibs\KRPC.IO.Ports.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

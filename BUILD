@@ -296,6 +296,7 @@ test_suite(
 filegroup(
     name = 'csproj',
     srcs = [
+        '//tools/cslibs',
         '//server',
         '//server:KRPC.Test',
         '//service/SpaceCenter',
