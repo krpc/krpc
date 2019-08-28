@@ -131,7 +131,7 @@ py_script = rule(
 def _test_impl(ctx, pyexe='python2'):
     sub_commands = ['virtualenv env --quiet --never-download --no-site-packages --python=%s' % pyexe]
     for dep in ctx.files.deps:
-        if dep.basename.startswith('enum34') and pyexe == 'python3':
+        if pyexe == 'python3' and dep.path == 'external/python_enum34/file/downloaded':
             # enum34 not required with Python 3
             continue
         sub_commands.append(
