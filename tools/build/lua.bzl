@@ -2,6 +2,7 @@ _LUA_VERSION = '5.1'
 
 def _test_impl(ctx):
     sub_commands = []
+    sub_commands.append('export HOME=/tmp')  # so that lua .cache directory is placed in /tmp
     for dep in [ctx.file._luaunit] + ctx.files.deps:
         sub_commands.append('luarocks --tree=lua-tree install %s' % dep.short_path)
     sub_commands.extend([

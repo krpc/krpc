@@ -373,30 +373,35 @@ filegroup(
 http_file(
     name = 'lua_protobuf',
     urls = ['https://github.com/djungelorm/protobuf-lua/releases/download/v1.1.1/protobuf-1.1.1-0.src.rock'],
+    downloaded_file_path = 'protobuf-1.1.1-0.src.rock',
     sha256 = 'eec6a738cd6acbf0ae695c95bac6f89036cd37f23335272cb3717b01834f1dbb'
 )
 
 http_file(
     name = 'lua_luasocket',
     urls = ['https://luarocks.org/manifests/luasocket/luasocket-3.0rc1-2.src.rock'],
+    downloaded_file_path = 'luasocket-3.0rc1-2.src.rock',
     sha256 = '3882f2a1e1c6145ceb43ead385b861b97fa2f8d487e8669ec5b747406ab251c7'
 )
 
 http_file(
     name = 'lua_luafilesystem',
     urls = ['https://luarocks.org/manifests/hisham/luafilesystem-1.6.3-2.src.rock'],
+    downloaded_file_path = 'luafilesystem-1.6.3-2.src.rock',
     sha256 = '872914421d4585f37ce72be40003e2bfdd22e017b55e87b0f89c467cc0df30e0'
 )
 
 http_file(
     name = 'lua_penlight',
     urls = ['http://luarocks.org/repositories/rocks/penlight-1.3.1-1.src.rock'],
+    downloaded_file_path = 'penlight-1.3.1-1.src.rock',
     sha256 = '13c6fcc5058a998505ddc4b52496f591d7d37ed2efa9a46a2c39db6183f38783'
 )
 
 http_file(
     name = 'lua_luaunit',
     urls = ['https://luarocks.org/manifests/bluebird75/luaunit-3.2.1-1.src.rock'],
+    downloaded_file_path = 'luaunit-3.2.1-1.src.rock',
     sha256 = '7ae20f3b68e77e3be52fc95c147eccfaef33206a7985320061fb9352d8565741'
 )
 
