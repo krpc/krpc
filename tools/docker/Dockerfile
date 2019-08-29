@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 MAINTAINER djungelorm <djungelorm@users.noreply.github.com>
 
-ARG bazel_version=0.18.0
+ARG bazel_version=0.29.0
 ARG ksp_version
 
 RUN apt-get update && \
@@ -27,7 +27,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
     echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | \
       tee /etc/apt/sources.list.d/mono-official-stable.list && \
     apt-get update && \
-    apt-get install -y mono-devel gendarme && \
+    apt-get install -y mono-devel && \
     rm -rf /var/lib/apt/lists/*
 
 # Set up KSP libs

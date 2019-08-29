@@ -76,7 +76,7 @@ To compile this program using GCC, save the source as ``main.cpp`` and run the f
 
 .. code-block:: bash
 
-   g++ main.cpp -std=c++11 -lkrpc -lprotobuf
+   g++ main.cpp -std=c++11 -lkrpc -lprotobuf -lz
 
 .. note::
 
@@ -84,6 +84,10 @@ To compile this program using GCC, save the source as ``main.cpp`` and run the f
    ``google::protobuf::...`` you probably have an older version of protobuf installed on your
    system. In this case, replace ``-lprotobuf`` with ``-l:libprotobuf.so.10`` in the above command
    so that GCC uses the correct version of the library.
+
+.. note::
+
+   Protobuf requires libz to be linked, hence the ``-lz`` flag
 
 Connecting to the Server
 ------------------------

@@ -24,11 +24,11 @@ def _impl(ctx):
 protobuf_cpp = rule(
     implementation = _impl,
     attrs = {
-        'src': attr.label(allow_files=FileType(['.proto']), single_file=True),
+        'src': attr.label(allow_single_file=['.proto']),
         'header': attr.output(mandatory=True),
         'source': attr.output(mandatory=True),
         'include': attr.string(mandatory=True),
-        '_protoc': attr.label(default=Label('//tools/build/protobuf:protoc'), allow_files=True, single_file=True)
+        '_protoc': attr.label(default=Label('//tools/build/protobuf:protoc'), allow_single_file=True)
     },
     output_to_genfiles = True
 )

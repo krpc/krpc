@@ -257,5 +257,6 @@ class TestTypes(unittest.TestCase):
         self.assertRaises(ValueError, types.coerce_to,
                           [1], types.tuple_type(types.string_type))
 
+
 if __name__ == '__main__':
     unittest.main()

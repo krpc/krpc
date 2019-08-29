@@ -20,9 +20,9 @@ def _impl(ctx):
 protobuf_csharp = rule(
     implementation = _impl,
     attrs={
-        'src': attr.label(allow_files=FileType(['.proto']), single_file=True),
+        'src': attr.label(allow_single_file=['.proto']),
         'out': attr.output(mandatory=True),
-        '_protoc': attr.label(default=Label('//tools/build/protobuf:protoc'), allow_files=True, single_file=True),
+        '_protoc': attr.label(default=Label('//tools/build/protobuf:protoc'), allow_single_file=True),
     },
     output_to_genfiles = True
 )

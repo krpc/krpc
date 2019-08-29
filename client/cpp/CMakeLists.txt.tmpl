@@ -79,7 +79,7 @@ set_target_properties(
                   SOVERSION ${VERSION_NUMBER}
                   INSTALL_NAME_DIR lib)
 
-target_link_libraries(krpc ${PROTOBUF_LIBRARIES})
+target_link_libraries(krpc ${PROTOBUF_LIBRARIES} z)
 
 if(WIN32 OR CYGWIN)
   target_link_libraries(krpc ws2_32 mswsock)

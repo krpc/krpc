@@ -21,5 +21,6 @@ class TestPerformance(ServerTestCase, unittest.TestCase):
         print('RPC execution rate: %d per second' % (samples/delta_t))
         print('Latency: %.3f milliseconds' % ((delta_t*1000)/samples))
 
+
 if __name__ == '__main__':
     unittest.main()

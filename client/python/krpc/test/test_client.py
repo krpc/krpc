@@ -488,5 +488,6 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 latch[0].wait(10)
         self.assertEqual(0, latch[1])
 
+
 if __name__ == '__main__':
     unittest.main()

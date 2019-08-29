@@ -280,10 +280,12 @@ test_suite(
         '//service/SpaceCenter:lint',
         '//service/Drawing:lint',
         '//service/InfernalRobotics:lint',
+        '//service/KerbalAlarmClock:lint',
         '//service/RemoteTech:lint',
         '//service/UI:lint',
-        '//client/csharp:lint',
+        '//client/cnano:lint',
         '//client/cpp:lint',
+        '//client/csharp:lint',
         '//client/java:lint',
         '//client/python:lint',
         '//client/websockets:lint',
@@ -296,6 +298,7 @@ test_suite(
 filegroup(
     name = 'csproj',
     srcs = [
+        '//tools/cslibs',
         '//server',
         '//server:KRPC.Test',
         '//service/SpaceCenter',

@@ -38,6 +38,11 @@ service_definitions(
 
 test_suite(
     name = 'test',
+    tests = [':lint']
+)
+
+test_suite(
+    name = 'lint',
     tests = [':gendarme']
 )
 

@@ -19,5 +19,6 @@ class TestPlatform(unittest.TestCase):
         self.assertEqual(unhexlify('000102'), b'\x00\x01\x02')
         self.assertEqual(unhexlify('ff'), b'\xFF')
 
+
 if __name__ == '__main__':
     unittest.main()

@@ -113,5 +113,6 @@ class TestAttributes(unittest.TestCase):
                          Attributes.get_class_member_name(
                              'ClassName_set_PropertyName'))
 
+
 if __name__ == '__main__':
     unittest.main()

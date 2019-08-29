@@ -417,5 +417,6 @@ class TestControlProbePartialControl(krpctest.TestCase):
         self.assertEqual(self.space_center.ControlSource.probe,
                          self.control.source)
 
+
 if __name__ == '__main__':
     unittest.main()

@@ -10,7 +10,7 @@ def _impl(ctx):
 
 png_image = rule(
     implementation = _impl,
-    attrs = {'src': attr.label(allow_files=FileType(['.svg']), single_file=True)},
+    attrs = {'src': attr.label(allow_single_file=['.svg'])},
     outputs = {'out': '%{name}.png'}
 )
 

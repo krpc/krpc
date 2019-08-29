@@ -41,7 +41,7 @@ def _lint_impl(ctx):
     extra_files = ctx.files.extra_files
     filters = ctx.attr.filters
     cpplint = ctx.executable.cpplint
-    cpplint_runfiles = list(ctx.attr.cpplint.default_runfiles.files)
+    cpplint_runfiles = ctx.attr.cpplint.default_runfiles.files.to_list()
     runfiles = [cpplint] + cpplint_runfiles + srcs + hdrs + extra_files
     sub_commands = []
 

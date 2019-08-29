@@ -172,5 +172,6 @@ class TestContracts(krpctest.TestCase):
             [],
             [x.title for x in self.cm.failed_contracts])
 
+
 if __name__ == '__main__':
     unittest.main()

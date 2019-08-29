@@ -21,7 +21,7 @@ def _build_impl(ctx):
     out = ctx.outputs.out
     out_dir = out.path+'.sphinx-build-out'
     sphinx_build = ctx.executable.sphinx_build
-    sphinx_build_runfiles = list(ctx.attr.sphinx_build.default_runfiles.files)
+    sphinx_build_runfiles = ctx.attr.sphinx_build.default_runfiles.files.to_list()
     builder = ctx.attr.builder
     opts = ' '.join(['-D%s=%s' % x for x in ctx.attr.opts.items()])
     exec_reqs = {}
@@ -75,7 +75,7 @@ def _spelling_impl(ctx):
     src_dir = _get_src_dir(srcs, short_path=True)
     out = ctx.outputs.executable
     sphinx_build = ctx.executable.sphinx_build
-    sphinx_build_runfiles = list(ctx.attr.sphinx_build.default_runfiles.files)
+    sphinx_build_runfiles = ctx.attr.sphinx_build.default_runfiles.files.to_list()
     opts = ' '.join(['-D%s=%s' % x for x in ctx.attr.opts.items()])
     sub_commands = []
 
@@ -114,8 +114,8 @@ sphinx_spelling_test = rule(
     implementation = _spelling_impl,
     attrs = {
         'srcs': attr.label_list(allow_files=True),
-        'sphinx_build': attr.label(executable=True, single_file=True,
-                                   allow_files=True, mandatory=True, cfg='host'),
+        'sphinx_build': attr.label(executable=True, allow_single_file=True,
+                                   mandatory=True, cfg='host'),
         'opts': attr.string_dict()
     },
     test = True
@@ -126,7 +126,7 @@ def _linkcheck_impl(ctx):
     src_dir = _get_src_dir(srcs, short_path=True)
     out = ctx.outputs.executable
     sphinx_build = ctx.executable.sphinx_build
-    sphinx_build_runfiles = list(ctx.attr.sphinx_build.default_runfiles.files)
+    sphinx_build_runfiles = ctx.attr.sphinx_build.default_runfiles.files.to_list()
     opts = ' '.join(['-D%s=%s' % x for x in ctx.attr.opts.items()])
     sub_commands = []
 
@@ -160,8 +160,8 @@ sphinx_linkcheck_test = rule(
     implementation = _linkcheck_impl,
     attrs = {
         'srcs': attr.label_list(allow_files=True),
-        'sphinx_build': attr.label(executable=True, single_file=True,
-                                   allow_files=True, mandatory=True, cfg='host'),
+        'sphinx_build': attr.label(executable=True, allow_single_file=True,
+                                   mandatory=True, cfg='host'),
         'opts': attr.string_dict()
     },
     test = True

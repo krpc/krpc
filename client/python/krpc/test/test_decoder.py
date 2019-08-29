@@ -43,5 +43,6 @@ class TestDecoder(unittest.TestCase):
         value = Decoder.decode(unhexlify('00'), typ)
         self.assertIsNone(value)
 
+
 if __name__ == '__main__':
     unittest.main()

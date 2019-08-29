@@ -340,7 +340,7 @@ test_suite(
 py_lint_test(
     name = 'lint-python',
     srcs = glob(['src/scripts/*.py'], exclude=['src/scripts/communication-protocol.py']),
-    pep8_config = 'src/scripts/pep8.ini',
+    pycodestyle_config = 'src/scripts/pycodestyle.ini',
     pylint_config = 'src/scripts/pylint.rc',
     size = 'small'
 )

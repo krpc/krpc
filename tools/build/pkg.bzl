@@ -94,7 +94,7 @@ def _pkg_zip_impl(ctx):
 pkg_zip = rule(
     implementation = _pkg_zip_impl,
     attrs = {
-        'files': attr.label_list(allow_files=True, mandatory=True, non_empty=True),
+        'files': attr.label_list(allow_files=True, mandatory=True, allow_empty=True),
         'path_map': attr.string_dict(),
         'mode_map': attr.string_dict(),
         'exclude': attr.string_list(),

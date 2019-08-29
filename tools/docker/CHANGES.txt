@@ -1,3 +1,6 @@
+v2.1.0
+ * Update to Bazel 0.28.0
+
 v2.0.0
  * Move to Ubuntu 18.04
 

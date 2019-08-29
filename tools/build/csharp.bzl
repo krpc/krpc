@@ -206,7 +206,7 @@ def _assembly_info_impl(ctx):
 _COMMON_ATTRS = {
     'csc': attr.string(default=_MCS),
     'deps': attr.label_list(providers=['out', 'lib', 'target_type']),
-    'srcs': attr.label_list(allow_files=FileType(['.cs'])),
+    'srcs': attr.label_list(allow_files=['.cs']),
     'optimize': attr.bool(default=True),
     'warn': attr.int(default=4),
     'nowarn': attr.string_list(),
@@ -217,26 +217,34 @@ _COMMON_ATTRS = {
 csharp_reference = rule(
     implementation = _ref_impl,
     attrs = {
-        'file': attr.label(mandatory=True, allow_files=True, single_file=True),
+        'file': attr.label(mandatory=True, allow_single_file=True),
         '_target_type': attr.string(default='ref')
     },
     outputs = {'lib': '%{name}.dll'}
 )
 
+csharp_library_attrs = {}
+csharp_library_attrs.update(_COMMON_ATTRS)
+csharp_library_attrs.update({
+    '_target_type': attr.string(default='lib'),
+    'nunit_test': attr.bool(default=False),
+    '_nunit_exe_libs': attr.label(default=Label('@csharp_nunit//:nunit_exe_libs'), allow_files=True),
+    '_nunit_framework': attr.label(default=Label('@csharp_nunit//:nunit_framework'), allow_files=True)
+})
+
 csharp_library = rule(
     implementation = _lib_impl,
-    attrs = _COMMON_ATTRS + {
-        '_target_type': attr.string(default='lib'),
-        'nunit_test': attr.bool(default=False),
-        '_nunit_exe_libs': attr.label(default=Label('@csharp_nunit//:nunit_exe_libs'), allow_files=True),
-        '_nunit_framework': attr.label(default=Label('@csharp_nunit//:nunit_framework'), allow_files=True)
-},
+    attrs = csharp_library_attrs,
     outputs = {'lib': '%{name}.dll', 'doc': '%{name}.xml', 'mdb': '%{name}.dll.mdb'}
 )
 
+csharp_binary_attrs = {}
+csharp_binary_attrs.update(_COMMON_ATTRS)
+csharp_binary_attrs.update({'runargs': attr.string_list(), '_target_type': attr.string(default='bin')})
+
 csharp_binary = rule(
     implementation = _bin_impl,
-    attrs = _COMMON_ATTRS + {'runargs': attr.string_list(), '_target_type': attr.string(default='bin')},
+    attrs = csharp_binary_attrs,
     outputs = {'bin': '%{name}.exe', 'doc': '%{name}.xml', 'mdb': '%{name}.exe.mdb'},
     executable = True
 )
@@ -246,7 +254,7 @@ csharp_nunit_test = rule(
     attrs = {
         'lib': attr.label(mandatory=True, providers=['out', 'lib', 'target_type']),
         'deps': attr.label_list(providers=['out', 'lib', 'target_type']),
-        '_nunit_exe': attr.label(default=Label('@csharp_nunit//:nunit_exe'), allow_files=True, single_file=True),
+        '_nunit_exe': attr.label(default=Label('@csharp_nunit//:nunit_exe'), allow_single_file=True),
         '_nunit_exe_libs': attr.label(default=Label('@csharp_nunit//:nunit_exe_libs'), allow_files=True),
         '_nunit_framework': attr.label(default=Label('@csharp_nunit//:nunit_framework'), allow_files=True)
     },
@@ -259,16 +267,16 @@ csharp_gendarme_test = rule(
         'lib': attr.label(allow_files=True),
         'exe': attr.label(allow_files=True),
         'config': attr.label(default=Label('//tools/build:csharp_gendarme_rules.xml'),
-                             allow_files=True, single_file=True),
+                             allow_single_file=True),
         'ruleset': attr.string(default='default'),
-        'ignores': attr.label(allow_files=True, single_file=True)
+        'ignores': attr.label(allow_single_file=True)
     },
     test = True
 )
 
 csharp_assembly_info = rule(
     implementation = _assembly_info_impl,
-    attrs= {
+    attrs = {
         'title': attr.string(mandatory=True),
         'description': attr.string(),
         'copyright': attr.string(mandatory=True),
@@ -378,7 +386,7 @@ nuget_package = rule(
         'description': attr.string(mandatory=True),
         'framework_deps': attr.string_list(),
         'deps': attr.string_dict(),
-        '_nuget_exe': attr.label(default=Label('@csharp_nuget//file'), allow_files=True, single_file=True)
+        '_nuget_exe': attr.label(default=Label('@csharp_nuget//file'), allow_single_file=True)
     },
     outputs = _nuget_package_out
 )

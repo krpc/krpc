@@ -176,7 +176,7 @@ def update_thread(manager, connection, stop):
                 break
             except IndexError:
                 pass
-            except:  # pylint: disable=bare-except
+            except:  # noqa pylint: disable=bare-except
                 # TODO: is there a better way to catch exceptions when the
                 #      thread is forcibly stopped (e.g. by CTRL+c)?
                 return

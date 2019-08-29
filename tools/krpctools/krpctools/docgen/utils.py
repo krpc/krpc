@@ -16,4 +16,5 @@ def lookup_cref(cref, services):
         lookup_cref.services_lookup = dict([(x.cref, x) for x in objs])
     return lookup_cref.services_lookup[cref]
 
+
 lookup_cref.services_lookup = None

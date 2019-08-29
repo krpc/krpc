@@ -79,7 +79,7 @@ py_lint_test(
     pkg_name = 'krpc',
     srcs = glob(['krpc/**/*']),
     deps = deps + ['@python_enum34//file'],
-    pep8_config = 'pep8.ini',
+    pycodestyle_config = 'pycodestyle.ini',
     pylint_config = 'pylint.rc',
     size = 'small'
 )

@@ -79,3 +79,5 @@ T: KRPC.InfernalRobotics.IRNextWrapper/IRServo
 R: Gendarme.Rules.Smells.AvoidMessageChainsRule
 T: KRPC.InfernalRobotics.IROrigWrapper
 T: KRPC.InfernalRobotics.IRNextWrapper
+R: Gendarme.Rules.Globalization.PreferStringComparisonOverrideRule
+T: KRPC.InfernalRobotics.IROrigWrapper

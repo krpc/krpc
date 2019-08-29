@@ -9,8 +9,8 @@ def _impl(ctx):
     )
 
 service_definitions = rule(
-    implementation=_impl,
-    attrs={
+    implementation = _impl,
+    attrs = {
         'assemblies': attr.label_list(allow_files=True),
         'service': attr.string(mandatory=True),
         'out': attr.output(mandatory=True),
