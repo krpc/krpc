@@ -659,8 +659,8 @@ http_file(
 
 http_file(
     name = 'python_sphinx_tabs',
-    urls = ['https://files.pythonhosted.org/packages/f6/27/b858d292315beab1930387d8e4eb53ebfa31b46975d974574634fb773dc4/sphinx-tabs-1.1.7.tar.gz'],
-    sha256 = 'a2702405f77e0a8207468b349f516d1677dda0af9c9fb042d46421d196ab9fc5'
+    urls = ['https://files.pythonhosted.org/packages/5e/e3/9852e2831e7311cec8c4f5a9b044c7cb99ac8bcf7cc968910e5a2450f941/sphinx-tabs-1.1.12.tar.gz'],
+    sha256 = '0e9e79817910c1011c141ef46becdfcb67cb356f1cdcad326107176ce9cb4d3a'
 )
 
 http_file(
