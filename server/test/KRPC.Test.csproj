@@ -52,7 +52,7 @@
       <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\bazel-genfiles\tools\cslibs\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\bazel-genfiles\tools\cslibs\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="KRPC.IO.Ports">
       <HintPath>..\..\bazel-genfiles\tools\cslibs\KRPC.IO.Ports.dll</HintPath>
@@ -62,11 +62,11 @@
       <Package>nunit</Package>
     </Reference>
     <Reference Include="Moq">
-      <HintPath>..\..\bazel-genfiles\tools\cslibs\Moq.dll</HintPath>
+      <HintPath>..\..\bazel-genfiles\tools\cslibs\net40\Moq.dll</HintPath>
       <Package>Moq</Package>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\bazel-genfiles\tools\cslibs\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\bazel-genfiles\tools\cslibs\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
