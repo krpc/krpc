@@ -19,7 +19,7 @@ def _impl(ctx):
     ]
     args.extend([f.path for f in ctx.files.defs])
 
-    ctx.action(
+    ctx.actions.run(
         inputs = ctx.files.defs + [src, ctx.file._order],
         outputs = [out, documented],
         progress_message = 'Generating %s documentation %s' % (language, out.path),

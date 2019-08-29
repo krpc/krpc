@@ -4,7 +4,7 @@ def _impl(ctx):
     defs = ctx.file.defs
     output = ctx.outputs.out
 
-    ctx.action(
+    ctx.actions.run(
         inputs = [defs],
         outputs = [output],
         progress_message = 'Generating %s code for %s service' % (language, service),

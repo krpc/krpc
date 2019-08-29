@@ -50,7 +50,7 @@ def _impl(ctx):
         #'sed -i \'s/#include ".\\+"/#include "%s"/g\' %s' % (include.replace('/', '\\/'), source.path)
     ])
 
-    ctx.action(
+    ctx.actions.run_shell(
         inputs = [input, options, protoc, protoc_nanopb_env] + protoc_nanopb,
         outputs = [header, source],
         mnemonic = 'ProtobufNanopb',
@@ -74,13 +74,13 @@ protobuf_nanopb = rule(
 
 def _env_impl(ctx):
     pylibs = [ctx.file._protobuf, ctx.file._six]
-    setup = ctx.new_file(ctx.configuration.genfiles_dir, 'protoc-nanopb-setup')
-    ctx.file_action(
+    setup = ctx.actions.declare_file('protoc-nanopb-setup')
+    ctx.actions.write(
         output = setup,
         content = ' && \\\n'.join(_create_py_env(ctx.outputs.out.path, pylibs))+'\n',
-        executable = True
+        is_executable = True
     )
-    ctx.action(
+    ctx.actions.run(
         inputs = pylibs,
         outputs = [ctx.outputs.out],
         progress_message = 'Setting up protoc-nanopb python environment',

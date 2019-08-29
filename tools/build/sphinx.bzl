@@ -43,7 +43,7 @@ def _build_impl(ctx):
             'rm -rf %s' % out_dir
         ])
 
-    ctx.action(
+    ctx.actions.run_shell(
         tools = [sphinx_build],
         inputs = srcs,
         outputs = [out],
@@ -94,10 +94,10 @@ def _spelling_impl(ctx):
     ]
     sub_commands.append('('+'; '.join(sphinx_commands)+')')
 
-    ctx.file_action(
+    ctx.actions.write(
         output = out,
         content = ' &&\n'.join(sub_commands)+'\n',
-        executable = True
+        is_executable = True
     )
 
     return struct(
@@ -141,10 +141,10 @@ def _linkcheck_impl(ctx):
     ]
     sub_commands.append('('+'; '.join(sphinx_commands)+')')
 
-    ctx.file_action(
+    ctx.actions.write(
         output = out,
         content = ' &&\n'.join(sub_commands)+'\n',
-        executable = True
+        is_executable = True
     )
 
     return struct(

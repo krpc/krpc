@@ -12,7 +12,7 @@ def _impl(ctx):
         'cp %s/protobuf/*.py %s' % (protoc_output, output.path)
     ]
 
-    ctx.action(
+    ctx.actions.run_shell(
         inputs = [ctx.file.src, ctx.file._protoc],
         outputs = [output],
         command = ' && '.join(sub_commands),

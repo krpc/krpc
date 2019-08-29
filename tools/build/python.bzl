@@ -47,14 +47,12 @@ def _sdist_impl(ctx):
     # Symlink all the files to a staging directory
     # to get the required directory structure in the archive
     staging_dir = output.basename + '.py-sdist-tmp'
-    staging_dir_path = output.path.replace(
-        ctx.configuration.bin_dir.path, ctx.configuration.genfiles_dir.path) + '.py-sdist-tmp'
     staging_inputs = []
     for input in inputs:
         staging_path = staging_dir + '/' + _apply_path_map(path_map, input.short_path)
-        staging_file = ctx.new_file(ctx.configuration.genfiles_dir, staging_path)
+        staging_file = ctx.actions.declare_file(staging_path)
 
-        ctx.action(
+        ctx.actions.run_shell(
             mnemonic = 'PackageFile',
             inputs = [input],
             outputs = [staging_file],
@@ -63,11 +61,13 @@ def _sdist_impl(ctx):
         staging_inputs.append(staging_file)
 
     # Run setup.py sdist from the staging directory
+    staging_dir_path = output.path.replace(
+        ctx.configuration.bin_dir.path, ctx.configuration.genfiles_dir.path) + '.py-sdist-tmp'
     sub_commands = [
         '(cd %s ; BAZEL_BUILD=1 python setup.py --quiet sdist --formats=zip)' % staging_dir_path,
         'cp %s/dist/*.zip %s' % (staging_dir_path, output.path)
     ]
-    ctx.action(
+    ctx.actions.run_shell(
         inputs = staging_inputs,
         outputs = [output],
         progress_message = 'Packaging files into %s' % output.short_path,
@@ -84,17 +84,17 @@ py_sdist = rule(
 )
 
 def _script_impl(ctx):
-    script_setup = ctx.new_file(ctx.configuration.genfiles_dir, 'py_script-setup-%s' % ctx.attr.script)
-    script_env = ctx.new_file(ctx.configuration.genfiles_dir, 'py_script-env-%s' % ctx.attr.script)
+    script_setup = ctx.actions.declare_file('py_script-setup-%s' % ctx.attr.script)
+    script_env = ctx.actions.declare_file('py_script-env-%s' % ctx.attr.script)
     script_run = ctx.outputs.executable
 
-    ctx.file_action(
+    ctx.actions.write(
         output = script_setup,
         content = '&& \\\n'.join(_create_py_env(script_env.path, install = ctx.files.deps + [ctx.file.pkg]))+'\n',
-        executable = True
+        is_executable = True
     )
 
-    ctx.action(
+    ctx.actions.run(
         inputs = [ctx.file.pkg] + ctx.files.deps,
         outputs = [script_env],
         progress_message = 'Setting up python script %s' % ctx.attr.script,
@@ -106,10 +106,10 @@ def _script_impl(ctx):
     sub_commands = _extract_py_env('$0.runfiles/krpc/%s' % script_env.short_path, env)
     sub_commands.append('%s/bin/python %s/bin/%s "$@"' % (env, env, ctx.attr.script))
     sub_commands.append('rm -rf %s' % env)
-    ctx.file_action(
+    ctx.actions.write(
         output = script_run,
         content = ' && \\\n'.join(sub_commands)+'\n',
-        executable = True
+        is_executable = True
     )
 
     return struct(
@@ -141,10 +141,10 @@ def _test_impl(ctx, pyexe='python2'):
         'unzip -o %s' % (ctx.file.src.short_path), #TODO: install the package then run the tests??
         '(cd %s ; ../env/bin/python setup.py test)' % ctx.attr.pkg
     ])
-    ctx.file_action(
+    ctx.actions.write(
         output = ctx.outputs.executable,
         content = '&& \\\n'.join(sub_commands)+'\n',
-        executable = True
+        is_executable = True
     )
 
     runfiles = ctx.runfiles(files = [ctx.file.src] + ctx.files.deps)
@@ -240,10 +240,10 @@ def _lint_impl(ctx):
     sub_commands.append('PYTHONPATH=env/lib/python2.7/site-packages PYLINTHOME=%s %s/%s %s' % (runfiles_dir, runfiles_dir, pylint.basename, ' '.join(pylint_args)))
     sub_commands.append('rm -rf %s' % runfiles_dir)
 
-    ctx.file_action(
+    ctx.actions.write(
         ctx.outputs.executable,
         content = ' &&\n'.join(sub_commands)+'\n',
-        executable = True
+        is_executable = True
     )
 
     return struct(

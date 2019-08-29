@@ -1,2 +1,1 @@
 test --legacy_bazel_java_test
-build --incompatible_new_actions_api=false

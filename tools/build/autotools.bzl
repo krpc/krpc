@@ -53,7 +53,7 @@ def _impl(ctx):
         'zip --quiet -r $CWD/%s ./' % output.path
     ])
 
-    ctx.action(
+    ctx.actions.run_shell(
         inputs = inputs + macros,
         outputs = [output],
         progress_message = 'Running autotools and creating package %s' % output.short_path,

@@ -36,11 +36,11 @@ def _stage_files_impl(ctx):
     outs = []
     for src in ctx.files.srcs:
         path = ctx.label.name + '/' + _apply_path_map(ctx.attr.path_map, src.short_path)
-        out = ctx.new_file(ctx.configuration.genfiles_dir, path)
+        out = ctx.actions.declare_file(path)
 
         sub_commands = ['cp "%s" "%s"' % (src.path, out.path)]
 
-        ctx.action(
+        ctx.actions.run_shell(
             mnemonic = 'StageFile',
             inputs = [src],
             outputs = [out],
@@ -84,7 +84,7 @@ def _pkg_zip_impl(ctx):
     sub_commands.append('(CWD=`pwd` && cd %s && zip --quiet -r $CWD/%s ./)' % (staging_dir, output.path))
 
     # Generate a zip file from the staging directory
-    ctx.action(
+    ctx.actions.run_shell(
         inputs = inputs,
         outputs = [output],
         progress_message = 'Packaging files into %s' % output.short_path,
