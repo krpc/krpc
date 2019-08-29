@@ -44,7 +44,7 @@
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\..\bazel-genfiles\tools\cslibs\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\..\bazel-genfiles\tools\cslibs\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="KRPC.IO.Ports">
       <HintPath>..\..\..\bazel-genfiles\tools\cslibs\KRPC.IO.Ports.dll</HintPath>
