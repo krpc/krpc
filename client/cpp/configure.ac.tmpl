@@ -7,6 +7,7 @@ AC_PROG_CXX
 AC_LANG([C++])
 AX_CXX_COMPILE_STDCXX_11(noext, mandatory)
 AC_PROG_LIBTOOL
+AX_CHECK_ZLIB()
 PKG_CHECK_MODULES([protobuf], [protobuf >= 3.3])
 AC_CHECK_PROG(PROTOC,protoc,protoc,no)
 AM_CONDITIONAL([HAVE_PROTOC], [test x$PROTOC = xprotoc])

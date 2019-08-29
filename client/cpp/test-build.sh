@@ -74,7 +74,7 @@ int main() {
     -L$out/$1/lib \
     -L$protobuf_library \
     -o $out/main.exe $out/main.cpp \
-    -lkrpc -lprotobuf -lprotobuf_lite
+    -lkrpc -lprotobuf -lprotobuf_lite -lz
 }
 
 export LDFLAGS=-L$protobuf_library
