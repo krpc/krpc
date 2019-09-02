@@ -13,9 +13,9 @@ endif()
 find_package(Protobuf 3.2 REQUIRED)
 
 # Check for ASIO headers
-find_path(HAVE_ASIO asio.hpp)
-if(NOT HAVE_ASIO)
-  unset(HAVE_ASIO CACHE)
+find_path(ASIO_INCLUDE_DIR asio.hpp)
+if(NOT ASIO_INCLUDE_DIR)
+  unset(ASIO_INCLUDE_DIR CACHE)
   message(FATAL_ERROR "asio.hpp not found")
 endif()
 add_definitions(-DASIO_STANDALONE)
@@ -39,7 +39,7 @@ if(MSVC)
     endforeach()
 endif()
 
-include_directories(include include/krpc ${PROTOBUF_INCLUDE_DIRS})
+include_directories(include include/krpc ${PROTOBUF_INCLUDE_DIRS} ${ASIO_INCLUDE_DIR})
 
 if (PROTOBUF_PROTOC_EXECUTABLE)
   message(STATUS "Found Protobuf compiler ${PROTOBUF_PROTOC_EXECUTABLE}")
@@ -72,7 +72,11 @@ add_custom_command(
 )
 
 file(GLOB SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-add_library(krpc SHARED ${SRC} ${PROTO_HDR} ${PROTO_SRC})
+if(MSVC)
+  add_library(krpc STATIC ${SRC} ${PROTO_HDR} ${PROTO_SRC})
+else()
+  add_library(krpc SHARED ${SRC} ${PROTO_HDR} ${PROTO_SRC})
+endif()
 
 set_target_properties(
   krpc PROPERTIES VERSION   ${VERSION_NUMBER}
