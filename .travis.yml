@@ -1,18 +1,25 @@
-sudo: required
-
-services:
-  - docker
-
-install:
-  - docker pull krpc/buildenv:2.1.0
-
-before_script:
-  - ./tools/travis-ci/set-version.py
-  - ln -s /usr/local/lib/ksp lib/ksp
-
-script:
-  - stty cols 120
-  - ./tools/travis-ci/script.sh
+jobs:
+  include:
+    - name: Build, Test and Deploy
+      language: minimal
+      services:
+        - docker
+      install:
+        - docker pull krpc/buildenv:2.1.0
+      before_script:
+        - ./tools/travis-ci/set-version.py
+        - ln -s /usr/local/lib/ksp lib/ksp
+      script:
+        - stty cols 120
+        - ./tools/travis-ci/script.sh
+    - stage: windows
+      name: Windows Build and Deploy
+      os: windows
+      language: cpp
+      before_script:
+        - ./tools/travis-ci/set-version.py
+      script:
+        - ./tools/travis-ci/script-windows.sh
 
 deploy:
   provider: s3
@@ -20,8 +27,7 @@ deploy:
   secret_access_key:
     secure: shO089eufeIp6PHqa9bVWww2iQIxGgNwhTDwPZkuKuup9ZKr9QuGAhO2VFzhYQHCy3FZuSsxcfB3PjX6wsw2HU0qW0g6VFKHSkEV2/1EOO+vf0EA+jT1E7NZquq/VQ43vqYEWKszbiwO/ZYcM+eNmf+8IBaizaM2Q3eGNk0mI/PjKPHu3EgYRUelXVhVTr7hxgoixQVATjCzHMZzo2iYXETnAZryFn3dgmPgzXmD13DZHsHzdITM86fOadk391s31Vfk79YkQXEyEUoYIRUYZmNBxZzRzXU9d6DSihvpTsNAhqTmTMVEabDup+vjy1kKZJ1J/KC1JaVjWhyV4632/tUeQelPhcgGS5/58qeZu9GWIz5IdP5r7RFsJyJvE4/BjSUAEy7iGi4V1csTa5xe5x0fQYGy5Q96q5za5328MYLgr8MtfWjuersbi1vEsisiUlrukFTj6s7pJio/Y9Qon6iz3yqAwfb0vNWTFLCvc/mveoX70lhTZgih/nvevVTZsnPfKnF1PFhx1yUYIKCV5JYQwVNhLP7/SJqKCh3Byi/ZE1wdvD/XQ8rPKlcBXYhfEZe2D7kJMxENGMI7FyyG6zY0PRKu9fk0rsFrosT4V0v20VYIvLJ1PWMVF86YaM29T13J1grNVF3OSS/y76gPNX1OGYP1THYYDW0At/a3DV0=
   bucket: krpc
-  upload-dir: deploy
   skip_cleanup: true
-  local_dir: deploy
+  local_dir: s3-deploy
   on:
     all_branches: true
