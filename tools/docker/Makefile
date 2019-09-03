@@ -1,4 +1,4 @@
-.PHONY: build deploy
+.PHONY: build test deploy
 
 VERSION=`cat VERSION.txt`
 
