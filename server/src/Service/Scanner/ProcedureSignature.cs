@@ -84,7 +84,7 @@ namespace KRPC.Service.Scanner
                 ReturnIsNullable = handler.ReturnIsNullable;
             }
 
-            var parts = procedureName.Split ('_');
+            var parts = procedureName.Split (new char[]{'_'});
             if (parts.Length == 2) {
                 if (parts [0] == ("get")) {
                     IsPropertyGetter = true;

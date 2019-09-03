@@ -20,7 +20,7 @@ namespace KRPC.Utils
         /// </summary>
         static string Dedent (string content)
         {
-            var lines = content.Split ('\n');
+            var lines = content.Split (new char[]{'\n'});
             if (lines.Length == 1)
                 return lines [0].Trim ();
             var indent = int.MaxValue;
@@ -61,7 +61,7 @@ namespace KRPC.Utils
                     var descnode = node.GetEnumerator ();
                     while (descnode.MoveNext ())
                         content += Dedent (((XmlNode)descnode.Current).OuterXml.Replace ("\r\n", "\n")) + "\n";
-                    return "<doc>\n" + content.TrimEnd () + "\n</doc>";
+                    return "<doc>\n" + content.TrimEnd (null) + "\n</doc>";
                 }
             }
             return string.Empty;
