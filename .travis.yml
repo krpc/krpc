@@ -1,6 +1,11 @@
+stages:
+  - linux
+  - windows
+
 jobs:
   include:
-    - name: Build, Test and Deploy
+    - stage: linux
+      name: Build, Test and Deploy
       language: minimal
       services:
         - docker
@@ -13,7 +18,7 @@ jobs:
         - stty cols 120
         - ./tools/travis-ci/script.sh
     - stage: windows
-      name: Windows Build and Deploy
+      name: Build and Deploy
       os: windows
       language: cpp
       before_script:
