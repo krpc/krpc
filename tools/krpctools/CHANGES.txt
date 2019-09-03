@@ -1,3 +1,6 @@
+v0.4.9
+ * Fix issue finding KSP_x64_Data directory (#523)
+
 v0.4.8
  * Fix Python 3 compatibility
  * Fix template loading in docgen on Windows
