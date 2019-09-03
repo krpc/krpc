@@ -1,3 +1,6 @@
+v2.1.2
+ * Add latexmk
+
 v2.1.1
  * Remove Bazel workarounds
 
