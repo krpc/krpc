@@ -105,7 +105,7 @@ namespace KRPC.Service
 
         static string ResolveMethodCref (string reference)
         {
-            reference = reference.Split ('(') [0];
+            reference = reference.Split (new char[]{'('}) [0];
             var type = GetType (GetTypeName (reference));
             var method = GetMethod (type, GetMemberName (reference));
             var name = type.Name + "." + method.Name;
@@ -150,14 +150,14 @@ namespace KRPC.Service
 
         static string GetTypeName (string reference)
         {
-            var parts = reference.Split ('.').ToList ();
+            var parts = reference.Split (new char[]{'.'}).ToList ();
             parts.RemoveAt (parts.Count - 1);
             return string.Join (".", parts.ToArray ());
         }
 
         static string GetMemberName (string reference)
         {
-            var parts = reference.Split ('.').ToList ();
+            var parts = reference.Split (new char[]{'.'}).ToList ();
             return parts [parts.Count - 1];
         }
 

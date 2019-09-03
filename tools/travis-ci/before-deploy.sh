@@ -7,7 +7,8 @@ else
     NAME=$TRAVIS_BRANCH
 fi
 
-DEPLOYPATH=deploy/$NAME/$TRAVIS_JOB_NUMBER
+JOB_NUMBER=$(echo $TRAVIS_JOB_NUMBER | cut -d. -f1)
+DEPLOYPATH=s3-deploy/deploy/$NAME/$JOB_NUMBER
 VERSION=`tools/krpc-version.sh`
 echo $VERSION
 
