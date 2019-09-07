@@ -11,10 +11,10 @@ def _check_documented_impl(ctx):
         'doc/test.py %s %s' % (expected, actual)
     ])
 
-    ctx.file_action(
+    ctx.actions.write(
         output = ctx.outputs.executable,
         content = '&& \\\n'.join(sub_commands)+'\n',
-        executable = True
+        is_executable = True
     )
 
     return struct(

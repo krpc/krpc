@@ -44,7 +44,7 @@ RUN apt-get update && \
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     python-setuptools python-virtualenv \
-    python-dev autoconf libtool luarocks texlive-latex-base \
+    python-dev autoconf libtool luarocks latexmk texlive-latex-base \
     texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra \
     libxml2-dev libxslt1-dev librsvg2-bin && \
     rm -rf /var/lib/apt/lists/*

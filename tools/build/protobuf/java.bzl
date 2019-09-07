@@ -9,7 +9,7 @@ def _impl(ctx):
         'cp `find %s -name *.java` %s' % (protoc_output, output.path)
     ]
 
-    ctx.action(
+    ctx.actions.run_shell(
         inputs = [ctx.file.src, ctx.file._protoc],
         outputs = [output],
         command = ' && '.join(sub_commands),

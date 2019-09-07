@@ -1,7 +1,7 @@
 def _impl(ctx):
     output = ctx.outputs.out
     input = ctx.file.src
-    ctx.action(
+    ctx.actions.run_shell(
         inputs = [input],
         outputs = [output],
         progress_message = 'Generating PNG image %s' % output.short_path,

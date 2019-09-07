@@ -16,7 +16,3 @@ build --distinct_host_configuration=false
 # Use JDK 8
 build --java_toolchain=@bazel_tools//tools/jdk:toolchain_hostjdk8
 test --java_toolchain=@bazel_tools//tools/jdk:toolchain_hostjdk8
-
-# Workarounds for API changes in Bazel
-test --legacy_bazel_java_test
-build --incompatible_merge_genfiles_directory=false --incompatible_new_actions_api=false --incompatible_no_support_tools_in_action_inputs=false

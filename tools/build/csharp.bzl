@@ -5,7 +5,7 @@ def _ref_impl(ctx):
     input = ctx.file.file
     output = ctx.outputs.lib
 
-    ctx.action(
+    ctx.actions.run_shell(
         mnemonic = 'CSharpReference',
         inputs = [input],
         outputs = [output],
@@ -56,7 +56,7 @@ def _lib_impl(ctx):
         srcs, deps, lib=lib_output, doc=doc_output, optimize=ctx.attr.optimize,
         warn=ctx.attr.warn, nowarn=ctx.attr.nowarn, warnaserror=ctx.attr.warnaserror, define=ctx.attr.define)
 
-    ctx.action(
+    ctx.actions.run_shell(
         mnemonic = 'CSharpCompile',
         inputs = inputs,
         outputs = outputs,
@@ -86,7 +86,7 @@ def _bin_impl(ctx):
         srcs, deps, exe=bin_output, doc=doc_output, optimize=ctx.attr.optimize,
         warn=ctx.attr.warn, nowarn=ctx.attr.nowarn, warnaserror=ctx.attr.warnaserror, define=ctx.attr.define)
 
-    ctx.action(
+    ctx.actions.run_shell(
         mnemonic = 'CSharpCompile',
         inputs = inputs,
         outputs = outputs,
@@ -101,7 +101,7 @@ def _bin_impl(ctx):
         sub_commands.append('ln -f -s ../%s %s/%s/%s' % (dep.short_path, runfile_dir, tmp_dir, dep.basename))
     sub_commands.append('/usr/bin/mono %s/%s/%s "$@" %s' % (runfile_dir, tmp_dir, bin_output.basename, ' '.join(ctx.attr.runargs)))
     sub_commands.append('rm -rf %s/%s' % (runfile_dir, tmp_dir))
-    ctx.file_action(
+    ctx.actions.write(
         ctx.outputs.executable,
         ' && \\\n'.join(sub_commands)+'\n'
     )
@@ -131,7 +131,7 @@ def _nunit_impl(ctx):
         '(if grep "FATAL UNHANDLED EXCEPTION" stderr.txt; then exit 1; fi)',
         'exit $RESULT'
     ])
-    ctx.file_action(
+    ctx.actions.write(
         ctx.outputs.executable,
         ' ; \\\n'.join(sub_commands)+'\n'
     )
@@ -159,7 +159,7 @@ def _gendarme_impl(ctx):
         args.append('--ignore=%s' % ctx.file.ignores.short_path)
     args.append(src.short_path)
 
-    ctx.file_action(
+    ctx.actions.write(
         ctx.outputs.executable,
         'MONO_OPTIONS="--debug" /usr/bin/gendarme %s\n' % ' '.join(args)
     )
@@ -198,7 +198,7 @@ def _assembly_info_impl(ctx):
         com_visible = 'false'
     content.append('[assembly: ComVisible (%s)]' % com_visible)
 
-    ctx.file_action(
+    ctx.actions.write(
         output = ctx.outputs.out,
         content = '\n'.join(content)+'\n'
     )
@@ -294,8 +294,8 @@ def _nuget_package_out(id, version):
     return {'out': '%s.%s.nupkg' % (id, version)}
 
 def _nuget_package_impl(ctx):
-    nuspec = ctx.new_file(
-        ctx.attr.assembly.lib, ctx.attr.assembly.lib.basename.replace('.dll','.nuspec'))
+    nuspec = ctx.actions.declare_file(
+        ctx.attr.assembly.lib.basename.replace('.dll','.nuspec'), sibling=ctx.attr.assembly.lib)
     assemblies = {
         'net45': ctx.attr.assembly
     }
@@ -341,7 +341,7 @@ def _nuget_package_impl(ctx):
         '</package>'
     ])
 
-    ctx.file_action(
+    ctx.actions.write(
         output = nuspec,
         content = '\n'.join(nuspec_contents)
     )
@@ -365,7 +365,7 @@ def _nuget_package_impl(ctx):
     for _, assembly in assemblies.items():
         inputs.extend([assembly.lib, assembly.doc])
 
-    ctx.action(
+    ctx.actions.run_shell(
         mnemonic = 'NuGetPackage',
         inputs = inputs,
         outputs = [ctx.outputs.out],

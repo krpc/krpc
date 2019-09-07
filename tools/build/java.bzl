@@ -24,10 +24,10 @@ def _java_checkstyle_impl(ctx):
     args.extend([x.short_path for x in srcs])
     sub_commands.append('%s/%s %s' % (runfiles_dir, checkstyle.basename, ' '.join(args)))
 
-    ctx.file_action(
+    ctx.actions.write(
         ctx.outputs.executable,
         content = ' &&\n'.join(sub_commands)+'\n',
-        executable = True
+        is_executable = True
     )
 
     return struct(

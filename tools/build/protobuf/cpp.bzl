@@ -13,7 +13,7 @@ def _impl(ctx):
         'sed -i \'s/#include ".\\+"/#include "%s"/g\' %s' % (include.replace('/', '\\/'), source.path)
     ]
 
-    ctx.action(
+    ctx.actions.run_shell(
         inputs = [ctx.file.src, ctx.file._protoc],
         command = ' && '.join(sub_commands),
         outputs = [header, source],

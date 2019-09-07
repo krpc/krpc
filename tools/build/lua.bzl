@@ -14,10 +14,10 @@ def _test_impl(ctx):
         'LUA_CPATH="lua-tree/lib/lua/'+_LUA_VERSION+'/?.so;lua-tree/lib/lua/'+_LUA_VERSION+'/?/init.so;;" ' + \
         'lua'+_LUA_VERSION+' lua-tree/share/lua/'+_LUA_VERSION+'/krpc/test/init.lua -v'
     ])
-    ctx.file_action(
+    ctx.actions.write(
         output = ctx.outputs.executable,
         content = ' &&\n'.join(sub_commands)+'\n',
-        executable = True
+        is_executable = True
     )
 
     runfiles = ctx.runfiles(files = [ctx.file.src, ctx.file.rockspec, ctx.file._luaunit] + ctx.files.deps)

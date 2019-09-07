@@ -63,10 +63,10 @@ def _impl(ctx):
         'kill $SERVER_PID',
         'exit $RESULT'
     ])
-    ctx.file_action(
+    ctx.actions.write(
         output = ctx.outputs.executable,
         content = '\n'.join(sub_commands)+'\n',
-        executable = True
+        is_executable = True
     )
 
     return struct(

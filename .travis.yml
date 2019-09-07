@@ -10,7 +10,7 @@ jobs:
       services:
         - docker
       install:
-        - docker pull krpc/buildenv:2.1.0
+        - docker pull krpc/buildenv:2.1.2
       before_script:
         - ./tools/travis-ci/set-version.py
         - ln -s /usr/local/lib/ksp lib/ksp
