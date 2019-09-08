@@ -90,8 +90,8 @@ connection, a client must first connect to the RPC server (as above) then do the
    `ConnectionResponse` message received when connecting to the RPC server earlier.
 
 3. Receive a `ConnectionResponse` message, similarly to the RPC server, and check that the value of
-    the `status` field is `ConnectionResponse.OK`. If not, then the connection was not successful,
-    and the `message` field contains a description of what went wrong.
+   the `status` field is `ConnectionResponse.OK`. If not, then the connection was not successful,
+   and the `message` field contains a description of what went wrong.
 
 Connecting to the stream server is optional. If the client doesn't require stream functionality,
 there is no need to connect.
