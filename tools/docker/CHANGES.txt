@@ -1,3 +1,6 @@
+v2.2.0
+ * Update to KSP 1.7.3
+
 v2.1.2
  * Add latexmk
 
