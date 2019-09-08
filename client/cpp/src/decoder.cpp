@@ -27,7 +27,7 @@ std::string guid(const std::string& data) {
 }
 
 void decode(double& value, const std::string& data, Client* client) {
-  pb::io::CodedInputStream stream((pb::uint8*)&data[0], int(data.size()));
+  pb::io::CodedInputStream stream((pb::uint8*)&data[0], static_cast<int>(data.size()));
   pb::uint64 value2 = 0;
   if (!stream.ReadLittleEndian64(&value2))
     throw EncodingError("Failed to decode double");
@@ -35,7 +35,7 @@ void decode(double& value, const std::string& data, Client* client) {
 }
 
 void decode(float& value, const std::string& data, Client* client) {
-  pb::io::CodedInputStream stream((pb::uint8*)(&data[0]), int(data.size()));
+  pb::io::CodedInputStream stream((pb::uint8*)(&data[0]), static_cast<int>(data.size()));
   pb::uint32 value2;
   if (!stream.ReadLittleEndian32(&value2))
     throw EncodingError("Failed to decode float");
@@ -43,7 +43,7 @@ void decode(float& value, const std::string& data, Client* client) {
 }
 
 void decode(pb::int32& value, const std::string& data, Client* client) {
-  pb::io::CodedInputStream stream((pb::uint8*)&data[0], int(data.size()));
+  pb::io::CodedInputStream stream((pb::uint8*)&data[0], static_cast<int>(data.size()));
   pb::uint32 zigZagValue = 0;
   if (!stream.ReadVarint32(&zigZagValue))
     throw EncodingError("Failed to decode sint32");
@@ -51,7 +51,7 @@ void decode(pb::int32& value, const std::string& data, Client* client) {
 }
 
 void decode(pb::int64& value, const std::string& data, Client* client) {
-  pb::io::CodedInputStream stream((pb::uint8*)&data[0], int(data.size()));
+  pb::io::CodedInputStream stream((pb::uint8*)&data[0], static_cast<int>(data.size()));
   pb::uint64 zigZagValue = 0;
   if (!stream.ReadVarint64(&zigZagValue))
     throw EncodingError("Failed to decode sint64");
@@ -59,19 +59,19 @@ void decode(pb::int64& value, const std::string& data, Client* client) {
 }
 
 void decode(pb::uint32& value, const std::string& data, Client* client) {
-  pb::io::CodedInputStream stream((pb::uint8*)&data[0], int(data.size()));
+  pb::io::CodedInputStream stream((pb::uint8*)&data[0], static_cast<int>(data.size()));
   if (!stream.ReadVarint32(&value))
     throw EncodingError("Failed to decode uint32");
 }
 
 void decode(pb::uint64& value, const std::string& data, Client* client) {
-  pb::io::CodedInputStream stream((pb::uint8*)&data[0], int(data.size()));
+  pb::io::CodedInputStream stream((pb::uint8*)&data[0], static_cast<int>(data.size()));
   if (!stream.ReadVarint64(&value))
     throw EncodingError("Failed to decode uint64");
 }
 
 void decode(bool& value, const std::string& data, Client* client) {
-  pb::io::CodedInputStream stream((pb::uint8*)&data[0], int(data.size()));
+  pb::io::CodedInputStream stream((pb::uint8*)&data[0], static_cast<int>(data.size()));
   pb::uint64 value2 = 0;
   if (!stream.ReadVarint64(&value2))
     throw EncodingError("Failed to decode bool");
@@ -79,7 +79,7 @@ void decode(bool& value, const std::string& data, Client* client) {
 }
 
 void decode(std::string& value, const std::string& data, Client* client) {
-  pb::io::CodedInputStream stream((pb::uint8*)&data[0], int(data.size()));
+  pb::io::CodedInputStream stream((pb::uint8*)&data[0], static_cast<int>(data.size()));
   pb::uint64 length;
   if (!stream.ReadVarint64(&length))
     throw EncodingError("Failed to decode string (length)");
@@ -101,7 +101,7 @@ void decode(pb::Message& message, const std::string& data, Client* client) {
 
 pb::uint32 decode_size(const std::string& data) {
   pb::uint32 result;
-  pb::io::CodedInputStream stream((pb::uint8*)&data[0], int(data.size()));
+  pb::io::CodedInputStream stream((pb::uint8*)&data[0], static_cast<int>(data.size()));
   if (!stream.ReadVarint32(&result))
     throw EncodingError("Failed to decode size");
   return result;
