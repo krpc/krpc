@@ -166,10 +166,25 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Get the thrust of the RCS thruster with the given atmospheric conditions, in Newtons.
         /// </summary>
-        float GetThrust (double pressure)
+        float GetThrust (double throttle, double pressure)
         {
             pressure *= PhysicsGlobals.KpaToAtmospheres;
-            return 1000f * (float)rcs.maxFuelFlow * (float)rcs.G * rcs.atmosphereCurve.Evaluate ((float)pressure);
+            return 1000f * (float)rcs.maxFuelFlow * (float)throttle * (float)rcs.G * rcs.atmosphereCurve.Evaluate ((float)pressure);
+        }
+
+        /// <summary>
+        /// The amount of thrust, in Newtons, that would be produced by the thruster when activated.
+        /// Returns zero if the thruster does not have any fuel.
+        /// Takes the thrusters current <see cref="ThrustLimit"/> and atmospheric conditions
+        /// into account.
+        /// </summary>
+        [KRPCProperty]
+        public float AvailableThrust {
+            get {
+                if (!HasFuel)
+                    return 0f;
+                return GetThrust (ThrustLimit, Part.InternalPart.staticPressureAtm);
+            }
         }
 
         /// <summary>
@@ -178,7 +193,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float MaxThrust {
-            get { return GetThrust (rcs.vessel.staticPressurekPa); }
+            get { return GetThrust (1f, rcs.vessel.staticPressurekPa); }
         }
 
         /// <summary>
@@ -188,6 +203,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float MaxVacuumThrust {
             get { return rcs.thrusterPower * 1000f; }
+        }
+
+        /// <summary>
+        /// The thrust limiter of the thruster. A value between 0 and 1.
+        /// </summary>
+        [KRPCProperty]
+        public float ThrustLimit {
+            get { return rcs.thrustPercentage / 100f; }
+            set { rcs.thrustPercentage = (value * 100f).Clamp (0f, 100f); }
         }
 
         /// <summary>
