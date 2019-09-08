@@ -18,9 +18,20 @@ read -d '' versions << EOM || true
 1.4.5.2243
 1.5.0.2332
 1.5.1.2335
+1.6.1.2401
+1.7.0.2483
+1.7.1.2539
+1.7.2.2556
+1.7.3.2594
 EOM
 
+# Save lib/ksp symlink
+popd
+mv lib/ksp lib/krpc-orig
+pushd bazel-bin/lib
+
 for version in $versions; do
+    # Download and extract ksp libs
     if [ ! -f ksp-$version.tar.gz ]; then
         wget -O ksp-$version.tar.gz https://krpc.s3.amazonaws.com/lib/ksp-$version.tar.gz
     fi
@@ -31,11 +42,17 @@ for version in $versions; do
         popd
     fi
 
+    # Build plugin
     popd
     rm -f lib/ksp
     ln -s -r bazel-bin/lib/ksp-$version lib/ksp
     bazel build //:krpc
     pushd bazel-bin/lib
 done
+
+# Restore lib/ksp symlink
+popd
+mv lib/krpc-orig lib/ksp
+pushd bazel-bin/lib
 
 popd
