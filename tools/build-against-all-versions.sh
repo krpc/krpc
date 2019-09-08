@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ev
 
 bazel build //:LICENSE  # Build something to create symlinks
 mkdir -p bazel-bin/lib
@@ -27,7 +27,8 @@ EOM
 
 # Save lib/ksp symlink
 popd
-mv lib/ksp lib/krpc-orig
+rm -f lib/ksp-orig
+mv lib/ksp lib/ksp-orig
 pushd bazel-bin/lib
 
 for version in $versions; do
@@ -52,7 +53,5 @@ done
 
 # Restore lib/ksp symlink
 popd
-mv lib/krpc-orig lib/ksp
-pushd bazel-bin/lib
-
-popd
+rm -f lib/ksp
+mv lib/ksp-orig lib/ksp
