@@ -323,9 +323,10 @@ namespace KRPC.SpaceCenter.Services
                 return vessel == null ? null : new Vessel (vessel);
             }
             set {
+                if (ReferenceEquals (value, null))
+                    throw new ArgumentNullException ("FocussedVessel");
                 CheckCameraFocus ();
-                var mapObject = PlanetariumCamera.fetch.targets.Single (x => x.vessel == value.InternalVessel);
-                PlanetariumCamera.fetch.SetTarget (mapObject);
+                PlanetariumCamera.fetch.SetTarget (value.InternalVessel.mapObject);
             }
         }
 
