@@ -56,6 +56,12 @@ genrule(
     cmd = 'cp $< $@'
 )
 
+genrule(
+    name = 'ModuleManager',
+    srcs = ['@module_manager//file'],
+    outs = ['ModuleManager.3.0.7.dll'],
+    cmd = 'cp $< $@'
+)
 filegroup(
     name = 'cslibs',
     srcs = [
@@ -66,6 +72,7 @@ filegroup(
         ':Moq',
         ':Newtonsoft.Json_net35',
         ':Newtonsoft.Json_net45',
-        ':NDesk.Options'
+        ':NDesk.Options',
+        ':ModuleManager'
     ]
 )
