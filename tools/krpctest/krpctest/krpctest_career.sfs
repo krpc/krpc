@@ -1,6 +1,6 @@
 GAME
 {
-  version = 1.4.2
+  version = 1.7.3
   Title = krpctest_career  (CAREER)
   Description = No  description  available.
   linkURL =
@@ -8,7 +8,7 @@ GAME
   Mode = CAREER
   Status = 1
   Seed = 284602355
-  scene = 7
+  scene = 5
   editor = None
   flag = Squad/Flags/default
   launchID = 4
@@ -16,7 +16,7 @@ GAME
   defaultSPHLaunchSite = Runway
   modded = True
   envInfo =  - Environment Info - Unix 7FFFFFFFFFFFFFFF  Args: KSP.x86_64  -
-  versionFull = 1.4.2.2110 (LinuxPlayer)
+  versionFull = 1.7.3.2594 (LinuxPlayer)
   versionCreated = 1.2.2.1622  (WindowsPlayer)
   PARAMETERS
   {
@@ -87,7 +87,7 @@ GAME
     }
     CAREER
     {
-      TechTreeUrl = GameData/Squad/Resources/TechTree.cfg
+      TechTreeUrl = GameData/ModuleManager.TechTree
       StartingFunds = 25000
       StartingScience = 0
       StartingReputation = 0
@@ -123,6 +123,7 @@ GAME
       PartUpgradesInSandbox = False
       PartUpgradesInCareer = True
       PartUpgradesInMission = False
+      EnableFullSASInSandbox = False
     }
     MissionParamsGeneral
     {
@@ -185,6 +186,7 @@ GAME
     RESOURCE_SETTINGS
     {
       GameSeed = 1513103279
+      ROCMissionSeed = 0
       MaxDeltaTime = 21600
     }
   }
@@ -192,8 +194,8 @@ GAME
   {
     name = ContractSystem
     scene = 7, 8, 5, 6
-    update = 9264096.0651779734
-    version = 1.4.2
+    update = 9264097.8651779331
+    version = 1.7.3
     WEIGHTS
     {
       TourismContract = 30
@@ -207,7 +209,7 @@ GAME
       ARMContract = 30
       RecoverAsset = 30
       PlantFlag = 30
-      PartTest = 34
+      PartTest = 30
       GrandTour = 30
       CollectScience = 30
       Eeloo = 30
@@ -239,6 +241,7 @@ GAME
         state = Offered
         viewed = Seen
         agent = FLOOYD Dynamics Research Labs
+        agentName = FLOOYD Dynamics Research Labs
         deadlineType = Floating
         expiryType = Floating
         values = 86400,46008000,7425.74259638786,13774.7518907458,7874.99964237213,0,2.116191,2.2,9350356.53247179,0,0,0
@@ -283,6 +286,7 @@ GAME
         state = Offered
         viewed = Seen
         agent = FLOOYD Dynamics Research Labs
+        agentName = FLOOYD Dynamics Research Labs
         deadlineType = Floating
         expiryType = Floating
         values = 21600,46008000,7724.99978542328,14329.8739511967,8111.24940633775,0,1.804179,1.95122,9285556.53247179,0,0,0
@@ -327,6 +331,7 @@ GAME
         state = Offered
         viewed = Read
         agent = WinterOwl Aircraft Emporium
+        agentName = WinterOwl Aircraft Emporium
         deadlineType = Floating
         expiryType = Floating
         values = 38631.7921490736,41142858.6387633,7799.27853565376,14467.6610266169,8111.24940633775,0,2.048266,2,9302588.32462086,0,0,0
@@ -371,6 +376,7 @@ GAME
         state = Offered
         viewed = Read
         agent = StrutCo
+        agentName = StrutCo
         deadlineType = Floating
         expiryType = Floating
         values = 129600,46008000,7724.99978542328,14329.8739511967,8111.24940633775,0,1.804179,1.95122,9393556.53247179,0,0,0
@@ -415,6 +421,7 @@ GAME
         state = Offered
         viewed = Read
         agent = Rokea Inc
+        agentName = Rokea Inc
         deadlineType = Floating
         expiryType = Floating
         values = 64800,46008000,7500,13250,7500,0,2,2,9328756.53247179,0,0,0
@@ -459,6 +466,7 @@ GAME
         state = Offered
         viewed = Read
         agent = STEADLER Engineering Corps
+        agentName = STEADLER Engineering Corps
         deadlineType = None
         expiryType = Floating
         ignoresWeight = True
@@ -476,55 +484,6 @@ GAME
       }
       CONTRACT
       {
-        guid = 9afe909f-2263-465a-9677-9935bbf0eda9
-        type = PartTest
-        prestige = 0
-        seed = -1187229150
-        state = Offered
-        viewed = Read
-        agent = Dinkelstein Kerman's Construction Emporium
-        deadlineType = Floating
-        expiryType = Floating
-        values = 43200,9201600,1800,4500,1800,1,1,1,9266864.18972765,0,0,0
-        part = solidBooster.sm
-        haul = False
-        dest = 1
-        sit = PRELAUNCH
-        exp = False
-        PARAM
-        {
-          name = PartTest
-          state = Incomplete
-          values = 0,0,0,0,0
-          part = solidBooster.sm
-          body = Kerbin
-          situation = PRELAUNCH
-          uniqueID = 0.056166864492076848
-          haul = False
-          repeatability = ONCEPERPART
-          notes = To  perform  the  test,  activate  the  part  through  the  staging  sequence  when  all  test  conditions  are  met.
-          PARAM
-          {
-            name = ReachDestination
-            state = Incomplete
-            disableOnStateChange = False
-            values = 0,0,0,0,0
-            dest = 1
-            title =
-          }
-          PARAM
-          {
-            name = ReachSituation
-            state = Incomplete
-            disableOnStateChange = False
-            values = 0,0,0,0,0
-            sit = PRELAUNCH
-            title =
-          }
-        }
-      }
-      CONTRACT
-      {
         guid = 43b63551-ee01-4f2a-8356-3394e74694d8
         type = ExplorationContract
         prestige = 1
@@ -532,6 +491,7 @@ GAME
         state = Offered
         viewed = Read
         agent = StrutCo
+        agentName = StrutCo
         deadlineType = None
         expiryType = Floating
         ignoresWeight = True
@@ -556,6 +516,7 @@ GAME
         state = Offered
         viewed = Read
         agent = Kerbodyne
+        agentName = Kerbodyne
         deadlineType = Floating
         expiryType = Floating
         values = 43200,9201600,8438,21094,8438,2,5,4,9266864.18972765,0,0,0
@@ -615,72 +576,6 @@ GAME
       }
       CONTRACT
       {
-        guid = 45a24cfd-53aa-47ab-82c8-09879fc5be92
-        type = PartTest
-        prestige = 1
-        seed = -1180071198
-        state = Offered
-        viewed = Read
-        agent = Moving Parts Experts Group
-        deadlineType = Floating
-        expiryType = Floating
-        values = 21600,9201600,8438,21094,8438,2,5,4,9285556.53247179,0,0,0
-        part = solidBooster
-        haul = True
-        dest = 1
-        sit = FLYING
-        exp = True
-        PARAM
-        {
-          name = PartTest
-          state = Incomplete
-          values = 0,0,0,0,0
-          part = solidBooster
-          body = Kerbin
-          situation = FLYING
-          uniqueID = 0.94676545306423932
-          haul = True
-          repeatability = ONCEPERPART
-        }
-        PARAM
-        {
-          name = ReachDestination
-          state = Incomplete
-          disableOnStateChange = False
-          values = 0,0,0,0,0
-          dest = 1
-          title =
-        }
-        PARAM
-        {
-          name = ReachSituation
-          state = Incomplete
-          disableOnStateChange = False
-          values = 0,0,0,0,0
-          sit = FLYING
-          title =
-        }
-        PARAM
-        {
-          name = ReachAltitudeEnvelope
-          state = Incomplete
-          disableOnStateChange = False
-          values = 0,0,0,0,0
-          minAlt = 19000
-          maxAlt = 23000
-        }
-        PARAM
-        {
-          name = ReachSpeedEnvelope
-          state = Incomplete
-          disableOnStateChange = False
-          values = 0,0,0,0,0
-          minSpd = 320
-          maxSpd = 390
-        }
-      }
-      CONTRACT
-      {
         guid = 69d809b8-bce4-4bb9-98ec-47011727ae41
         type = ExplorationContract
         prestige = 2
@@ -688,6 +583,7 @@ GAME
         state = Active
         viewed = Read
         agent = Ionic Symphonic Protonic Electronics
+        agentName = Ionic Symphonic Protonic Electronics
         deadlineType = None
         expiryType = Floating
         ignoresWeight = True
@@ -703,6 +599,124 @@ GAME
           targetType = ORBIT
         }
       }
+      CONTRACT
+      {
+        guid = fbd4dd5b-0204-4fa0-980f-af23d38249ba
+        type = PartTest
+        prestige = 0
+        seed = 1308938724
+        state = Offered
+        viewed = Unseen
+        agent = Research & Development Department
+        agentName = Research & Development Department
+        deadlineType = Floating
+        expiryType = Floating
+        values = 43200,9201600,1800,4500,1800,1,1,1,9307297.54517794,0,0,0
+        part = solidBooster.v2
+        haul = False
+        dest = 1
+        sit = PRELAUNCH
+        exp = True
+        PARAM
+        {
+          name = PartTest
+          state = Incomplete
+          values = 0,0,0,0,0
+          part = solidBooster.v2
+          body = Kerbin
+          situation = PRELAUNCH
+          uniqueID = 0.79293712312026743
+          haul = False
+          repeatability = BODYANDSITUATION
+          notes = To perform the test, activate the part through the staging sequence when all test conditions are met.
+          PARAM
+          {
+            name = ReachDestination
+            state = Incomplete
+            disableOnStateChange = False
+            values = 0,0,0,0,0
+            dest = 1
+            title =
+          }
+          PARAM
+          {
+            name = ReachSituation
+            state = Incomplete
+            disableOnStateChange = False
+            values = 0,0,0,0,0
+            sit = PRELAUNCH
+            title =
+          }
+        }
+      }
+      CONTRACT
+      {
+        guid = 9a5801c7-fd05-4cb6-ac80-09d894801476
+        type = PartTest
+        prestige = 1
+        seed = 1308938730
+        state = Offered
+        viewed = Unseen
+        agent = O.M.B. Demolition Enterprises
+        agentName = O.M.B. Demolition Enterprises
+        deadlineType = Floating
+        expiryType = Floating
+        values = 43200,9201600,11250,30937.5006705523,12375.0002682209,4,7.272727,5,9307297.54517794,0,0,0
+        part = HeatShield0
+        haul = False
+        dest = 1
+        sit = FLYING
+        exp = True
+        PARAM
+        {
+          name = PartTest
+          state = Incomplete
+          values = 0,0,0,0,0
+          part = HeatShield0
+          body = Kerbin
+          situation = FLYING
+          uniqueID = 0.93953599079490457
+          haul = False
+          repeatability = BODYANDSITUATION
+          notes = To perform the test, use the [Run Test] option in the part's context menu when all test conditions are met.
+          PARAM
+          {
+            name = ReachDestination
+            state = Incomplete
+            disableOnStateChange = False
+            values = 0,0,0,0,0
+            dest = 1
+            title =
+          }
+          PARAM
+          {
+            name = ReachSituation
+            state = Incomplete
+            disableOnStateChange = False
+            values = 0,0,0,0,0
+            sit = FLYING
+            title =
+          }
+          PARAM
+          {
+            name = ReachAltitudeEnvelope
+            state = Incomplete
+            disableOnStateChange = False
+            values = 0,0,0,0,0
+            minAlt = 49000
+            maxAlt = 61000
+          }
+          PARAM
+          {
+            name = ReachSpeedEnvelope
+            state = Incomplete
+            disableOnStateChange = False
+            values = 0,0,0,0,0
+            minSpd = 1880
+            maxSpd = 2250
+          }
+        }
+      }
       CONTRACT_FINISHED
       {
         guid = c5e7e980-1e6b-4b4b-b81c-26d23ad8f1b5
@@ -712,6 +726,7 @@ GAME
         state = Completed
         viewed = Read
         agent = Rokea Inc
+        agentName = Rokea Inc
         deadlineType = None
         expiryType = Floating
         ignoresWeight = True
@@ -737,6 +752,7 @@ GAME
         state = Cancelled
         viewed = Read
         agent = Sean's Cannery
+        agentName = Sean's Cannery
         deadlineType = Floating
         expiryType = Floating
         values = 21600,9201600,11250,28125,11250,4,8,5,43416.2251379395,21837.9447570802,9223437.94475708,21842.5447570803
@@ -804,6 +820,7 @@ GAME
         state = DeadlineExpired
         viewed = Read
         agent = STEADLER Engineering Corps
+        agentName = STEADLER Engineering Corps
         deadlineType = Floating
         expiryType = Floating
         values = 43200,9201600,1800,4500,1800,1,1,1,43208.02,21842.5447570803,9223442.54475708,9223442.54475708
@@ -934,13 +951,15 @@ GAME
       part = GooExperiment
       part = trussPiece1x
       part = parachuteSingle
+      part = mk1pod.v2
+      part = solidBooster.sm.v2
     }
     Tech
     {
       id = engineering101
       state = Available
       cost = 5
-      part = stackDecoupler
+      part = Decoupler.1
       part = longAntenna
       part = SurfAntenna
       part = sensorThermometer
@@ -954,6 +973,7 @@ GAME
       scv = 0.166666672
       sbv = 5
       sci = 5
+      asc = True
       cap = 6
     }
   }
@@ -1251,12 +1271,17 @@ GAME
     scene = 7, 8, 5
     NextSpawnTime = 9279376.6804703642
   }
+  SCENARIO
+  {
+    name = DeployedScience
+    scene = 7, 8, 5, 6
+  }
   FLIGHTSTATE
   {
-    version = 1.4.2
-    UT = 9264097.4851779416
+    version = 1.7.3
+    UT = 9264100.7851778679
     activeVessel = 0
-    mapViewFiltering = -1026
+    mapViewFiltering = -17410
     commNetUIModeTracking = Network
     commNetUIModeFlight = Path
     VESSEL
@@ -1274,8 +1299,8 @@ GAME
       displaylandedAt = #autoLOC_6002112
       splashed = False
       met = 0
-      lct = 9264097.4651779421
-      lastUT = 9264097.4851779416
+      lct = 9264097.7651779354
+      lastUT = 9264097.7651779354
       distanceTraveled = 0
       root = 0
       lat = -0.097207700035034858
@@ -1284,25 +1309,31 @@ GAME
       hgt = 0.337527484
       nrm = 2.29477882E-06,1.00000012,-5.96046448E-08
       rot = -0.700971365,-0.0920909196,-0.0973909423,0.700480938
-      CoM = 0,0,0
+      CoM = -2.12108716E-07,0.0320588797,5.58793545E-08
       stg = 0
       prst = False
       ref = 4140579200
       ctrl = True
       PQSMin = 0
       PQSMax = 0
+      GroupOverride = 0
+      OverrideDefault = False,False,False,False
+      OverrideActionControl = 0,0,0,0
+      OverrideAxisControl = 0,0,0,0
+      OverrideGroupNames = ,,,
+      altDispState = ASL
       cPch = 0.2
       cHdg = 0.3
       cMod = 0
       ORBIT
       {
-        SMA = 300816.33639010123
-        ECC = 0.99479863819455649
-        INC = 0.097207700039209866
-        LPE = 90.000514875017387
-        LAN = 69.435107821511906
-        MNA = -3.1415926257940923
-        EPH = 9264097.4851779416
+        SMA = NaN
+        ECC = 1
+        INC = 0.097207700016713805
+        LPE = 90
+        LAN = 249.44063447022342
+        MNA = 0
+        EPH = 9264097.7851779349
         REF = 1
       }
       PART
@@ -1325,21 +1356,23 @@ GAME
         sepI = -1
         sidx = -1
         attm = 0
+        sameVesselCollision = False
         srfN = , -1
         attN = bottom, -1
         attN = top, -1
         mass = 0.800000012
         shielded = False
-        temp = 310.53393171483759
-        tempExt = 310.5329095034831
-        tempExtUnexp = 310.53310573793783
+        temp = 310.53393376557858
+        tempExt = 310.55468630425196
+        tempExtUnexp = 310.55274841906288
+        staticPressureAtm = 0.98996086882980194
         expt = 0.5
         state = 0
         attached = True
         autostrutMode = Off
         rigidAttachment = False
         flag = Squad/Flags/default
-        rTrf = mk1pod (Untitled  Space  Craft)
+        rTrf = _default
         modCost = 0
         crew = Jebediah  Kerman
         EVENTS
@@ -1357,6 +1390,7 @@ GAME
           isEnabled = True
           hibernation = False
           hibernateOnWarp = False
+          activeControlPointName = _default
           stagingEnabled = True
           EVENTS
           {
@@ -1547,6 +1581,22 @@ GAME
         }
         MODULE
         {
+          name = KOSNameTag
+          isEnabled = True
+          nameTag =
+          stagingEnabled = True
+          EVENTS
+          {
+          }
+          ACTIONS
+          {
+          }
+          UPGRADESAPPLIED
+          {
+          }
+        }
+        MODULE
+        {
           name = ModuleTripLogger
           isEnabled = True
           stagingEnabled = True
@@ -1638,6 +1688,9 @@ GAME
           controlState = KerbalFull
           canComm = True
         }
+        AxisGroupsModule
+        {
+        }
       }
     }
   }
@@ -1663,16 +1716,31 @@ GAME
     KRPC v0.3.8.0 = False
     TestingTools v0.3.8.0 = False
     .DS_Store = False
-    Google.Protobuf v3.5.1.0 / v3.5.1 = True
-    KRPC.Drawing v0.4.5.0 = True
+    Google.Protobuf v3.5.1.0 / v3.5.1 = False
+    KRPC.Drawing v0.4.5.0 = False
     KRPC.IO.Ports v0.0.0.0 = True
-    KRPC.InfernalRobotics v0.4.5.0 = True
-    KRPC.KerbalAlarmClock v0.4.5.0 = True
-    KRPC.RemoteTech v0.4.5.0 = True
-    KRPC.SpaceCenter v0.4.5.0 = True
-    KRPC.UI v0.4.5.0 = True
-    KRPC v0.4.5.0 = True
-    TestingTools v0.4.5.0 = True
+    KRPC.InfernalRobotics v0.4.5.0 = False
+    KRPC.KerbalAlarmClock v0.4.5.0 = False
+    KRPC.RemoteTech v0.4.5.0 = False
+    KRPC.SpaceCenter v0.4.5.0 = False
+    KRPC.UI v0.4.5.0 = False
+    KRPC v0.4.5.0 = False
+    TestingTools v0.4.5.0 = False
+    ModuleManager v3.0.7.0 = True
+    Google.Protobuf v3.9.1.0 / v3.9.1 = True
+    KRPC.Drawing v0.4.8.0 = True
+    KRPC.InfernalRobotics v0.4.8.0 = True
+    KRPC.KerbalAlarmClock v0.4.8.0 = True
+    KRPC.RemoteTech v0.4.8.0 = True
+    KRPC.SpaceCenter v0.4.8.0 = True
+    KRPC.UI v0.4.8.0 = True
+    KRPC v0.4.8.0 = True
+    TestingTools v0.4.8.0 = True
+    ModuleManager.3.0.7.dll = True
+    ModuleManager.ConfigCache = True
+    ModuleManager.ConfigSHA = True
+    ModuleManager.Physics = True
+    ModuleManager.TechTree = True
   }
   ROSTER
   {
@@ -1695,6 +1763,12 @@ GAME
       ToD = 0
       idx = 0
       extraXP = 0
+      hasHelmetOn = False
+      hasNeckRingOn = False
+      lightR = 1
+      lightG = 0.5176
+      lightB = 0
+      completedFirstEVA = False
       hero = False
       CAREER_LOG
       {
@@ -1728,6 +1802,12 @@ GAME
       ToD = 0
       idx = -1
       extraXP = 0
+      hasHelmetOn = False
+      hasNeckRingOn = False
+      lightR = 1
+      lightG = 0.5176
+      lightB = 0
+      completedFirstEVA = False
       hero = False
       CAREER_LOG
       {
@@ -1757,6 +1837,12 @@ GAME
       ToD = 0
       idx = -1
       extraXP = 0
+      hasHelmetOn = False
+      hasNeckRingOn = False
+      lightR = 1
+      lightG = 0.5176
+      lightB = 0
+      completedFirstEVA = False
       hero = False
       CAREER_LOG
       {
@@ -1786,6 +1872,12 @@ GAME
       ToD = 0
       idx = -1
       extraXP = 0
+      hasHelmetOn = False
+      hasNeckRingOn = False
+      lightR = 1
+      lightG = 0.5176
+      lightB = 0
+      completedFirstEVA = False
       hero = False
       CAREER_LOG
       {
@@ -1800,13 +1892,5 @@ GAME
   MESSAGESYSTEM
   {
     flash = False
-    MESSAGE
-    {
-      title = World First Milestones
-      message = The recent accomplishments of our space program have attracted contributions from numerous organizations!~n~nWe have broken a speed record of 25m/s.~n<color=#b4d455><sprite="CurrencySpriteAsset" name="Funds" tint=1> 9,600 </color><color=#6dcff6><sprite="CurrencySpriteAsset" name="Science" tint=1> 1 </color><color=#e0d503><sprite="CurrencySpriteAsset" name="Reputation" tint=1> 2 </color>~n~n We have launched our first vessel.~n <color=#b4d455><sprite="CurrencySpriteAsset" name="Funds" tint=1>  1,600 </color>~n~n We have broken a speed record of 80m/s.~n <color=#b4d455><sprite="CurrencySpriteAsset" name="Funds" tint=1>  9,600 </color><color=#6dcff6><sprite="CurrencySpriteAsset" name="Science" tint=1> 1 </color><color=#e0d503><sprite="CurrencySpriteAsset" name="Reputation" tint=1> 2 </color>~n~n We have broken an altitude record of 500m.~n <color=#b4d455><sprite="CurrencySpriteAsset" name="Funds" tint=1>  9,600 </color><color=#6dcff6><sprite="CurrencySpriteAsset" name="Science" tint=1> 1 </color><color=#e0d503><sprite="CurrencySpriteAsset" name="Reputation" tint=1> 2 </color>~n~n We have broken a speed record of 250m/s.~n <color=#b4d455><sprite="CurrencySpriteAsset" name="Funds" tint=1>  9,600 </color><color=#6dcff6><sprite="CurrencySpriteAsset" name="Science" tint=1> 1 </color><color=#e0d503><sprite="CurrencySpriteAsset" name="Reputation" tint=1> 2 </color>~n~n We have broken a land distance record of 1,000m.~n <color=#b4d455><sprite="CurrencySpriteAsset" name="Funds" tint=1>  9,600 </color><color=#6dcff6><sprite="CurrencySpriteAsset" name="Science" tint=1> 1 </color><color=#e0d503><sprite="CurrencySpriteAsset" name="Reputation" tint=1> 2 </color>~n~n We have broken an altitude record of 2,000m.~n <color=#b4d455><sprite="CurrencySpriteAsset" name="Funds" tint=1>  9,600 </color><color=#6dcff6><sprite="CurrencySpriteAsset" name="Science" tint=1> 1 </color><color=#e0d503><sprite="CurrencySpriteAsset" name="Reputation" tint=1> 2 </color>~n~n We have broken a land distance record of 3,000m.~n <color=#b4d455><sprite="CurrencySpriteAsset" name="Funds" tint=1>  9,600 </color><color=#6dcff6><sprite="CurrencySpriteAsset" name="Science" tint=1> 1 </color><color=#e0d503><sprite="CurrencySpriteAsset" name="Reputation" tint=1> 2 </color>~n~n We have broken an altitude record of 7,000m.~n <color=#b4d455><sprite="CurrencySpriteAsset" name="Funds" tint=1>  9,600 </color><color=#6dcff6><sprite="CurrencySpriteAsset" name="Science" tint=1> 1 </color><color=#e0d503><sprite="CurrencySpriteAsset" name="Reputation" tint=1> 2 </color>~n~n We have broken a land distance record of 10km.~n <color=#b4d455><sprite="CurrencySpriteAsset" name="Funds" tint=1>  9,600 </color><color=#6dcff6><sprite="CurrencySpriteAsset" name="Science" tint=1> 1 </color><color=#e0d503><sprite="CurrencySpriteAsset" name="Reputation" tint=1> 2 </color>~n~n We have splashed into the ocean.~n <color=#b4d455><sprite="CurrencySpriteAsset" name="Funds" tint=1>  4,800 </color><color=#e0d503><sprite="CurrencySpriteAsset" name="Reputation" tint=1> 1 </color>~n~n We have recovered our first crew from a mission.~n <color=#b4d455><sprite="CurrencySpriteAsset" name="Funds" tint=1>  1,600 </color>~n~n We have performed the first one of our experiments at home.~n <color=#b4d455><sprite="CurrencySpriteAsset" name="Funds" tint=1>  3,200 </color><color=#e0d503><sprite="CurrencySpriteAsset" name="Reputation" tint=1> 1 </color>~n
-      color = 3
-      icon = 6
-      read = False
-    }
   }
 }
