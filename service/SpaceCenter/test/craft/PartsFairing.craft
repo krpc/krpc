@@ -1,742 +1,844 @@
 ship = PartsFairing
-version = 1.4.1
-description =
+version = 1.7.3
+description = 
 type = VAB
-size = 2.44576693,5.23672867,2.4457674
+size = 2.44576597,5.23672915,2.44576597
+steamPublishedFileId = 0
 persistentId = 360828296
 rot = 0,0,0,1
 missionFlag = Squad/Flags/default
 vesselType = Debris
+OverrideDefault = False,False,False,False
+OverrideActionControl = 0,0,0,0
+OverrideAxisControl = 0,0,0,0
+OverrideGroupNames = ,,,
 PART
 {
-  part = Mark1-2Pod_4294723380
-  partName = Part
-  persistentId = 1915263711
-  pos = -2.06279898,2.11558795,1.56610894
-  attPos = 0,0,0
-  attPos0 = -2.06279898,2.11558795,1.56610894
-  rot = 0,0,0,1
-  attRot = 0,0,0,1
-  attRot0 = 0,0,0,1
-  mir = 1,1,1
-  symMethod = Radial
-  autostrutMode = Off
-  rigidAttachment = False
-  istg = -1
-  resPri = 0
-  dstg = 0
-  sidx = -1
-  sqor = -1
-  sepI = -1
-  attm = 0
-  modCost = 0
-  modMass = 0
-  modSize = 0,0,0
-  link = fairingSize1_4294642750
-  link = launchClamp1_4294638038
-  attN = top,fairingSize1_4294642750_0|1.19319|0
-  EVENTS
-  {
-  }
-  ACTIONS
-  {
-  }
-  PARTDATA
-  {
-  }
-  MODULE
-  {
-    name = ModuleCommand
-    isEnabled = True
-    hibernation = False
-    hibernateOnWarp = False
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      MakeReferenceToggle
-      {
-        actionGroup = None
-      }
-      HibernateToggle
-      {
-        actionGroup = None
-        active = False
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleReactionWheel
-    isEnabled = True
-    actuatorModeCycle = 0
-    authorityLimiter = 100
-    stateString = Active
-    stagingEnabled = True
-    WheelState = Active
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      CycleAction
-      {
-        actionGroup = None
-      }
-      Activate
-      {
-        actionGroup = None
-      }
-      Deactivate
-      {
-        actionGroup = None
-      }
-      Toggle
-      {
-        actionGroup = None
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleColorChanger
-    isEnabled = True
-    animState = False
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      ToggleAction
-      {
-        actionGroup = None
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleScienceExperiment
-    isEnabled = True
-    Deployed = False
-    Inoperable = False
-    cooldownToGo = 0
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      DeployAction
-      {
-        actionGroup = None
-      }
-      ResetAction
-      {
-        actionGroup = None
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleScienceContainer
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      CollectAllAction
-      {
-        actionGroup = None
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = FlagDecal
-    isEnabled = True
-    flagDisplayed = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleConductionMultiplier
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleDataTransmitter
-    isEnabled = True
-    xmitIncomplete = False
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      StartTransmissionAction
-      {
-        actionGroup = None
-        active = False
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleProbeControlPoint
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleLiftingSurface
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleTripLogger
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    Log
-    {
-      flight = 0
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  RESOURCE
-  {
-    name = ElectricCharge
-    amount = 150
-    maxAmount = 150
-    flowState = True
-    isTweakable = True
-    hideFlow = False
-    isVisible = True
-    flowMode = Both
-  }
-  RESOURCE
-  {
-    name = MonoPropellant
-    amount = 30
-    maxAmount = 30
-    flowState = True
-    isTweakable = True
-    hideFlow = False
-    isVisible = True
-    flowMode = Both
-  }
+	part = mk1-3pod_4294723380
+	partName = Part
+	persistentId = 3136311297
+	pos = -2.06279898,2.11558795,1.56610894
+	attPos = 0,0,0
+	attPos0 = -2.06279898,2.11558795,1.56610894
+	rot = 0,0,0,1
+	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
+	mir = 1,1,1
+	symMethod = Radial
+	autostrutMode = Off
+	rigidAttachment = False
+	istg = -1
+	resPri = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = -1
+	attm = 0
+	sameVesselCollision = False
+	modCost = 0
+	modMass = 0
+	modSize = 0,0,0
+	link = fairingSize1_4294642750
+	link = launchClamp1_4294638038
+	attN = bottom,Null_0_0|-0.47924|0_0|-1|0_0|-0.47924|0_0|-1|0
+	attN = top,fairingSize1_4294642750_0|1.19318998|0_0|1|0_0|1.19318998|0_0|1|0
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleCommand
+		isEnabled = True
+		hibernation = False
+		hibernateOnWarp = False
+		activeControlPointName = _default
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			MakeReferenceToggle
+			{
+				actionGroup = None
+			}
+			HibernateToggle
+			{
+				actionGroup = None
+				active = False
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleReactionWheel
+		isEnabled = True
+		actuatorModeCycle = 0
+		authorityLimiter = 100
+		stateString = Active
+		stagingEnabled = True
+		WheelState = Active
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			CycleAction
+			{
+				actionGroup = None
+			}
+			Activate
+			{
+				actionGroup = None
+			}
+			Deactivate
+			{
+				actionGroup = None
+			}
+			Toggle
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleColorChanger
+		isEnabled = True
+		animState = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			ToggleAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleScienceExperiment
+		isEnabled = True
+		Deployed = False
+		Inoperable = False
+		cooldownToGo = 0
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			DeployAction
+			{
+				actionGroup = None
+			}
+			ResetAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleScienceContainer
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			CollectAllAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = FlagDecal
+		isEnabled = True
+		flagDisplayed = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleConductionMultiplier
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDataTransmitter
+		isEnabled = True
+		xmitIncomplete = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			StartTransmissionAction
+			{
+				actionGroup = None
+				active = False
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleProbeControlPoint
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleLiftingSurface
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleRCSFX
+		isEnabled = True
+		rcsEnabled = True
+		thrustPercentage = 100
+		currentShowToggles = False
+		enableYaw = True
+		enablePitch = True
+		enableRoll = True
+		enableX = True
+		enableY = True
+		enableZ = True
+		useThrottle = False
+		fullThrust = False
+		stagingEnabled = False
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			ToggleAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = KOSNameTag
+		isEnabled = True
+		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleTripLogger
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		Log
+		{
+			flight = 0
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	RESOURCE
+	{
+		name = ElectricCharge
+		amount = 150
+		maxAmount = 150
+		flowState = True
+		isTweakable = True
+		hideFlow = False
+		isVisible = True
+		flowMode = Both
+	}
+	RESOURCE
+	{
+		name = MonoPropellant
+		amount = 30
+		maxAmount = 30
+		flowState = True
+		isTweakable = True
+		hideFlow = False
+		isVisible = True
+		flowMode = Both
+	}
 }
 PART
 {
-  part = fairingSize1_4294642750
-  partName = Part
-  persistentId = 3349408489
-  pos = -2.06279898,3.50877905,1.56610894
-  attPos = 0,0,0
-  attPos0 = 0,1.39319003,0
-  rot = 0,0,0,1
-  attRot = 0,0,0,1
-  attRot0 = 0,0,0,1
-  mir = 1,1,1
-  symMethod = Radial
-  autostrutMode = Off
-  rigidAttachment = False
-  istg = 0
-  resPri = 0
-  dstg = 1
-  sidx = 0
-  sqor = 0
-  sepI = -1
-  attm = 0
-  modCost = 58.46632
-  modMass = 0.0974438637
-  modSize = 0,0,0
-  attN = bottom,Mark1-2Pod_4294723380_0|-0.2|0
-  EVENTS
-  {
-  }
-  ACTIONS
-  {
-  }
-  PARTDATA
-  {
-  }
-  MODULE
-  {
-    name = ModuleProceduralFairing
-    isEnabled = True
-    interstageCraftID = 0
-    nArcs = 2
-    ejectionForce = 100
-    useClamshell = False
-    stagingEnabled = True
-    fsm = st_idle
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      DeployFairingAction
-      {
-        actionGroup = None
-      }
-    }
-    XSECTION
-    {
-      h = 0
-      r = 0.625
-    }
-    XSECTION
-    {
-      h = 2
-      r = 0.625
-    }
-    XSECTION
-    {
-      h = 2.51266098
-      r = 0.200000003
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleCargoBay
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleTestSubject
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleStructuralNode
-    isEnabled = True
-    spawnState = False
-    visibilityState = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleStructuralNode
-    isEnabled = True
-    spawnState = False
-    visibilityState = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleStructuralNode
-    isEnabled = True
-    spawnState = False
-    visibilityState = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleStructuralNode
-    isEnabled = True
-    spawnState = False
-    visibilityState = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleStructuralNode
-    isEnabled = True
-    spawnState = False
-    visibilityState = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleStructuralNode
-    isEnabled = True
-    spawnState = False
-    visibilityState = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleStructuralNode
-    isEnabled = True
-    spawnState = False
-    visibilityState = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleStructuralNode
-    isEnabled = True
-    spawnState = False
-    visibilityState = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleStructuralNode
-    isEnabled = True
-    spawnState = False
-    visibilityState = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleStructuralNode
-    isEnabled = True
-    spawnState = False
-    visibilityState = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleStructuralNode
-    isEnabled = True
-    spawnState = False
-    visibilityState = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleStructuralNode
-    isEnabled = True
-    spawnState = False
-    visibilityState = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleStructuralNodeToggle
-    isEnabled = True
-    showMesh = True
-    showNodes = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModulePartVariants
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
+	part = fairingSize1_4294642750
+	partName = Part
+	persistentId = 3137202512
+	pos = -2.06279898,3.50877905,1.56610894
+	attPos = 0,0,0
+	attPos0 = 0,1.39319003,0
+	rot = 0,0,0,1
+	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
+	mir = 1,1,1
+	symMethod = Radial
+	autostrutMode = Off
+	rigidAttachment = False
+	istg = 0
+	resPri = 0
+	dstg = 1
+	sidx = 0
+	sqor = 0
+	sepI = -1
+	attm = 0
+	sameVesselCollision = False
+	modCost = 58.46632
+	modMass = 0.0974438637
+	modSize = 0,0,0
+	attN = interstage01a,Null_0_0|0.699999988|0_0|-1|0_0|0.699999988|0_0|-1|0
+	attN = interstage01b,Null_0_0|0.74000001|0_0|1|0_0|0.74000001|0_0|1|0
+	attN = interstage02a,Null_0_0|1.20000005|0_0|-1|0_0|1.20000005|0_0|-1|0
+	attN = interstage02b,Null_0_0|1.24000001|0_0|1|0_0|1.24000001|0_0|1|0
+	attN = interstage03a,Null_0_0|1.70000005|0_0|-1|0_0|1.70000005|0_0|-1|0
+	attN = interstage03b,Null_0_0|1.74000001|0_0|1|0_0|1.74000001|0_0|1|0
+	attN = interstage04a,Null_0_0|2.20000005|0_0|-1|0_0|2.20000005|0_0|-1|0
+	attN = interstage04b,Null_0_0|2.24000001|0_0|1|0_0|2.24000001|0_0|1|0
+	attN = interstage05a,Null_0_0|2.70000005|0_0|-1|0_0|2.70000005|0_0|-1|0
+	attN = interstage05b,Null_0_0|2.74000001|0_0|1|0_0|2.74000001|0_0|1|0
+	attN = interstage06a,Null_0_0|3.20000005|0_0|-1|0_0|3.20000005|0_0|-1|0
+	attN = interstage06b,Null_0_0|3.24000001|0_0|1|0_0|3.24000001|0_0|1|0
+	attN = top,Null_0_0|0.219999999|0_0|1|0_0|0.219999999|0_0|1|0
+	attN = bottom,mk1-3pod_4294723380_0|-0.200000003|0_0|-1|0_0|-0.200000003|0_0|-1|0
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleProceduralFairing
+		isEnabled = True
+		interstageCraftID = 0
+		nArcs = 2
+		ejectionForce = 100
+		useClamshell = False
+		stagingEnabled = True
+		fsm = st_idle
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			DeployFairingAction
+			{
+				actionGroup = None
+			}
+		}
+		XSECTION
+		{
+			h = 0
+			r = 0.625
+		}
+		XSECTION
+		{
+			h = 2
+			r = 0.625
+		}
+		XSECTION
+		{
+			h = 2.51266098
+			r = 0.200000003
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoBay
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleStructuralNode
+		isEnabled = True
+		spawnState = False
+		visibilityState = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleStructuralNode
+		isEnabled = True
+		spawnState = False
+		visibilityState = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleStructuralNode
+		isEnabled = True
+		spawnState = False
+		visibilityState = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleStructuralNode
+		isEnabled = True
+		spawnState = False
+		visibilityState = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleStructuralNode
+		isEnabled = True
+		spawnState = False
+		visibilityState = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleStructuralNode
+		isEnabled = True
+		spawnState = False
+		visibilityState = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleStructuralNode
+		isEnabled = True
+		spawnState = False
+		visibilityState = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleStructuralNode
+		isEnabled = True
+		spawnState = False
+		visibilityState = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleStructuralNode
+		isEnabled = True
+		spawnState = False
+		visibilityState = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleStructuralNode
+		isEnabled = True
+		spawnState = False
+		visibilityState = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleStructuralNode
+		isEnabled = True
+		spawnState = False
+		visibilityState = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleStructuralNode
+		isEnabled = True
+		spawnState = False
+		visibilityState = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleStructuralNodeToggle
+		isEnabled = True
+		showMesh = True
+		showNodes = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = KOSNameTag
+		isEnabled = True
+		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
 }
 PART
 {
-  part = launchClamp1_4294638038
-  partName = Part
-  persistentId = 1602265637
-  pos = -4.20057583,1.41314697,2.13892508
-  attPos = 0,0,0
-  attPos0 = -2.13777709,-0.702441216,0.572815478
-  rot = 0.120416299,0.777677715,-0.156929493,0.596733212
-  attRot = 0,0,0,1
-  attRot0 = 0.120416299,0.777677715,-0.156929493,0.596733212
-  mir = 1,1,1
-  symMethod = Radial
-  autostrutMode = Off
-  rigidAttachment = False
-  istg = 0
-  resPri = 0
-  dstg = 0
-  sidx = 1
-  sqor = 0
-  sepI = 0
-  attm = 1
-  modCost = 0
-  modMass = 0
-  modSize = 0,0,0
-  srfN = srfAttach,Mark1-2Pod_4294723380
-  EVENTS
-  {
-  }
-  ACTIONS
-  {
-  }
-  PARTDATA
-  {
-  }
-  MODULE
-  {
-    name = LaunchClamp
-    isEnabled = True
-    scaleFactor = 0.928671539
-    height = 2.34322071
-    stagingEnabled = True
-    towerRot = -0.120416299,-0.777677715,0.156929493,0.596733212
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      ReleaseClamp
-      {
-        actionGroup = None
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleGenerator
-    isEnabled = True
-    generatorIsActive = False
-    throttle = 0
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-      ToggleAction
-      {
-        actionGroup = None
-        active = False
-      }
-      ActivateAction
-      {
-        actionGroup = None
-        active = False
-      }
-      ShutdownAction
-      {
-        actionGroup = None
-        active = False
-      }
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
-  MODULE
-  {
-    name = ModuleTestSubject
-    isEnabled = True
-    stagingEnabled = True
-    EVENTS
-    {
-    }
-    ACTIONS
-    {
-    }
-    UPGRADESAPPLIED
-    {
-    }
-  }
+	part = launchClamp1_4294638038
+	partName = Part
+	persistentId = 2498294647
+	pos = -4.20057583,1.41314697,2.13892508
+	attPos = 0,0,0
+	attPos0 = -2.13777709,-0.702441216,0.572815478
+	rot = 0.120416299,0.777677715,-0.156929493,0.596733212
+	attRot = 0,0,0,1
+	attRot0 = 0.120416299,0.777677715,-0.156929493,0.596733212
+	mir = 1,1,1
+	symMethod = Radial
+	autostrutMode = Off
+	rigidAttachment = False
+	istg = 0
+	resPri = 0
+	dstg = 0
+	sidx = 1
+	sqor = 0
+	sepI = 0
+	attm = 1
+	sameVesselCollision = False
+	modCost = 0
+	modMass = 0
+	modSize = 0,0,0
+	srfN = srfAttach,mk1-3pod_4294723380
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = LaunchClamp
+		isEnabled = True
+		scaleFactor = 0.928671539
+		height = 2.34322071
+		stagingEnabled = True
+		towerRot = -0.120416299,-0.777677715,0.156929493,0.596733212
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			ReleaseClamp
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleGenerator
+		isEnabled = True
+		generatorIsActive = False
+		throttle = 0
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			ToggleAction
+			{
+				actionGroup = None
+				active = False
+			}
+			ActivateAction
+			{
+				actionGroup = None
+				active = False
+			}
+			ShutdownAction
+			{
+				actionGroup = None
+				active = False
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = KOSNameTag
+		isEnabled = True
+		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
 }

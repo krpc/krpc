@@ -12,82 +12,63 @@ namespace TestingTools
      */
     static class OrbitTools
     {
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
-        public static Orbit CreateOrbit (CelestialBody body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+        [SuppressMessage("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
+        public static Orbit CreateOrbit(CelestialBody body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
         {
-            if (Math.Sign (eccentricity - 1) == Math.Sign (semiMajorAxis))
+            if (Math.Sign(eccentricity - 1) == Math.Sign(semiMajorAxis))
                 semiMajorAxis = -semiMajorAxis;
-            if (Math.Sign (semiMajorAxis) >= 0) {
+            if (Math.Sign(semiMajorAxis) >= 0)
+            {
                 while (meanAnomalyAtEpoch < 0)
                     meanAnomalyAtEpoch += Math.PI * 2;
                 while (meanAnomalyAtEpoch > Math.PI * 2)
                     meanAnomalyAtEpoch -= Math.PI * 2;
             }
-            return new Orbit (inclination, eccentricity, semiMajorAxis, longitudeOfAscendingNode, argumentOfPeriapsis, meanAnomalyAtEpoch, epoch, body);
+            return new Orbit(inclination, eccentricity, semiMajorAxis, longitudeOfAscendingNode, argumentOfPeriapsis, meanAnomalyAtEpoch, epoch, body);
         }
 
-        public static OrbitDriver OrbitDriver {
-            get {
-                if (FlightGlobals.fetch == null || FlightGlobals.fetch.activeVessel == null)
-                    throw new InvalidOperationException ("No active vessel");
-                return FlightGlobals.fetch.activeVessel.orbitDriver;
-            }
-        }
-
-        public static void Set (this Orbit orbit, Orbit newOrbit)
+        public static void SetOrbit(this Vessel vessel, Orbit newOrbit)
         {
-            var vessel = FlightGlobals.fetch == null ? null : FlightGlobals.Vessels.FirstOrDefault (v => v.orbitDriver != null && v.orbit == orbit);
-            var body = FlightGlobals.fetch == null ? null : FlightGlobals.Bodies.FirstOrDefault (v => v.orbitDriver != null && v.orbit == orbit);
-            if (vessel != null)
-                WarpShip (vessel, newOrbit);
-            else if (body != null)
-                WarpPlanet (body, newOrbit);
-            else
-                HardSet (orbit, newOrbit);
-        }
+            var destinationMagnitude = newOrbit.getRelativePositionAtUT(Planetarium.GetUniversalTime()).magnitude;
+            if (destinationMagnitude > newOrbit.referenceBody.sphereOfInfluence)
+                throw new ArgumentException("Destination position was above the sphere of influence");
+            if (destinationMagnitude < newOrbit.referenceBody.Radius)
+                throw new ArgumentException("Destination position was below the surface");
 
-        static void WarpShip (Vessel vessel, Orbit newOrbit)
-        {
-            if (newOrbit.getRelativePositionAtUT (Planetarium.GetUniversalTime ()).magnitude > newOrbit.referenceBody.sphereOfInfluence)
-                throw new ArgumentException ("Destination position was above the sphere of influence");
+            vessel.PrepTeleport();
 
-            vessel.Landed = false;
-            vessel.Splashed = false;
-            vessel.landedAt = string.Empty;
-            var parts = vessel.parts;
-            if (parts != null) {
-                var clamps = parts.Where (p => p.Modules != null && p.Modules.OfType<LaunchClamp> ().Any ()).ToList ();
-                foreach (var clamp in clamps)
-                    clamp.Die ();
+            try
+            {
+                OrbitPhysicsManager.HoldVesselUnpack(60);
+            }
+            catch (NullReferenceException)
+            {
+                // ignore
             }
 
-            try {
-                OrbitPhysicsManager.HoldVesselUnpack (60);
-            } catch (NullReferenceException) {
-            }
+            var allVessels = FlightGlobals.fetch?.vessels ?? (IEnumerable<Vessel>)new[] { vessel };
+            foreach (var v in allVessels)
+                v.GoOnRails();
 
-            foreach (var v in (FlightGlobals.fetch == null ? (IEnumerable<Vessel>)new[] { vessel } : FlightGlobals.Vessels).Where(v => !v.packed))
-                v.GoOnRails ();
+            var oldBody = vessel.orbitDriver.orbit.referenceBody;
 
-            HardSet (vessel.orbit, newOrbit);
+            HardsetOrbit(vessel.orbitDriver, newOrbit);
 
             vessel.orbitDriver.pos = vessel.orbit.pos.xzy;
             vessel.orbitDriver.vel = vessel.orbit.vel;
-        }
 
-        static void WarpPlanet (CelestialBody body, Orbit newOrbit)
-        {
-            var oldBody = body.referenceBody;
-            HardSet (body.orbit, newOrbit);
-            if (oldBody != newOrbit.referenceBody) {
-                oldBody.orbitingBodies.Remove (body);
-                newOrbit.referenceBody.orbitingBodies.Add (body);
+            var newBody = vessel.orbitDriver.orbit.referenceBody;
+            if (newBody != oldBody)
+            {
+                var evnt = new GameEvents.HostedFromToAction<Vessel, CelestialBody>(vessel, oldBody, newBody);
+                GameEvents.onVesselSOIChanged.Fire(evnt);
             }
-            body.CBUpdate ();
         }
 
-        static void HardSet (Orbit orbit, Orbit newOrbit)
+        [SuppressMessage("Gendarme.Rules.Interoperability", "DelegatesPassedToNativeCodeMustIncludeExceptionHandlingRule")]
+        private static void HardsetOrbit(OrbitDriver orbitDriver, Orbit newOrbit)
         {
+            var orbit = orbitDriver.orbit;
             orbit.inclination = newOrbit.inclination;
             orbit.eccentricity = newOrbit.eccentricity;
             orbit.semiMajorAxis = newOrbit.semiMajorAxis;
@@ -96,8 +77,48 @@ namespace TestingTools
             orbit.meanAnomalyAtEpoch = newOrbit.meanAnomalyAtEpoch;
             orbit.epoch = newOrbit.epoch;
             orbit.referenceBody = newOrbit.referenceBody;
-            orbit.Init ();
-            orbit.UpdateFromUT (Planetarium.GetUniversalTime ());
+            orbit.Init();
+            orbit.UpdateFromUT(Planetarium.GetUniversalTime());
+            if (orbit.referenceBody != newOrbit.referenceBody)
+                orbitDriver.OnReferenceBodyChange?.Invoke(newOrbit.referenceBody);
+        }
+
+        public static void PrepTeleport(this Vessel vessel)
+        {
+            if (vessel.protoVessel.landed)
+            {
+                vessel.protoVessel.landed = false;
+            }
+            if (vessel.protoVessel.splashed)
+            {
+                vessel.protoVessel.splashed = false;
+            }
+            if (vessel.protoVessel.landedAt.Length != 0)
+            {
+                vessel.protoVessel.landedAt = String.Empty;
+            }
+            if (vessel.Landed)
+            {
+                vessel.Landed = false;
+            }
+            if (vessel.Splashed)
+            {
+                vessel.Splashed = false;
+            }
+            if (vessel.landedAt.Length != 0)
+            {
+                vessel.landedAt = string.Empty;
+            }
+            var parts = vessel.parts;
+            if (parts != null)
+            {
+                var killcount = 0;
+                foreach (var part in parts.Where(part => part.Modules.OfType<LaunchClamp>().Any()).ToList())
+                {
+                    killcount++;
+                    part.Die();
+                }
+            }
         }
     }
 }

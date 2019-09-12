@@ -215,6 +215,7 @@ namespace KRPC.SpaceCenter.Services
         /// Helper class for launching a new vessel.
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
         sealed class LaunchConfig {
             public LaunchConfig(string craftDirectory, string name, string launchSite, bool recover) {
                 LaunchSite = launchSite;
@@ -230,8 +231,8 @@ namespace KRPC.SpaceCenter.Services
                 template = ShipConstruction.LoadTemplate(Path);
                 if (template == null)
                     throw new InvalidOperationException("Failed to load template for vessel");
-                manifest = VesselCrewManifest.FromConfigNode(template.config);
-                manifest = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (template.config, manifest);
+                manifest = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel(
+                    template.config, VesselCrewManifest.FromConfigNode(template.config));
 
                 facility = (craftDirectory == "SPH") ? SpaceCenterFacility.SpaceplaneHangar : SpaceCenterFacility.VehicleAssemblyBuilding;
                 facilityLevel = ScenarioUpgradeableFacilities.GetFacilityLevel(facility);
@@ -240,58 +241,36 @@ namespace KRPC.SpaceCenter.Services
                 isPad = (site == SpaceCenterFacility.LaunchPad);
             }
 
-            // This should avoid a vessel being recovered and then the next vessel failing to launch
-            public PreFlightCheck RunPreFlightChecks() {
-                var preFlightCheck = new PreFlightCheck(
-                    () => {
-                    preFlightComplete = true;
-                },
+            public void RunPreFlightChecks()
+            {
+                var checks = new PreFlightCheck(
+                    () => { preFlightChecksComplete = true; },
                     () => error = "Failed to launch vessel. Did not pass pre-flight checks.");
                 var gameVars = GameVariables.Instance;
-                preFlightCheck.AddTest(new CraftWithinPartCountLimit(template, facility, gameVars.GetPartCountLimit(facilityLevel, isPad)));
-                preFlightCheck.AddTest(new CraftWithinSizeLimits(template, site, gameVars.GetCraftSizeLimit(siteLevel, isPad)));
-                preFlightCheck.AddTest(new CraftWithinMassLimits(template, site, gameVars.GetCraftMassLimit(siteLevel, isPad)));
-                preFlightCheck.AddTest(new ExperimentalPartsAvailable(manifest));
-                preFlightCheck.AddTest(new CanAffordLaunchTest(template, Funding.Instance));
+                checks.AddTest(new CraftWithinPartCountLimit(template, facility, gameVars.GetPartCountLimit(facilityLevel, isPad)));
+                checks.AddTest(new CraftWithinSizeLimits(template, site, gameVars.GetCraftSizeLimit(siteLevel, isPad)));
+                checks.AddTest(new CraftWithinMassLimits(template, site, gameVars.GetCraftMassLimit(siteLevel, isPad)));
+                checks.AddTest(new ExperimentalPartsAvailable(manifest));
+                checks.AddTest(new CanAffordLaunchTest(template, Funding.Instance));
                 var launchSite = LaunchSite;
-                preFlightCheck.AddTest(new FacilityOperational(launchSite, launchSite));
-                preFlightCheck.AddTest(new NoControlSources(manifest));
-                if (!Recover)
-                    preFlightCheck.AddTest(Compatibility.NewLaunchSiteClear(launchSite, HighLogic.CurrentGame));
-                return preFlightCheck;
-            }
-
-            public void AddRecoveryEventHandler(ProtoVessel vessel) {
-                EventData<ProtoVessel, bool>.OnEvent eventHandler = (eventVessel, value) => {
-                    if (vessel.vesselID == eventVessel.vesselID)
-                        vesselsRecovered++;
-                };
-                GameEvents.onVesselRecovered.Add(eventHandler);
-                recoveryEventHandlers.Add(eventHandler);
-            }
-
-            public void RemoveRecoveryEventHandlers() {
-                foreach (var eventHandler in recoveryEventHandlers)
-                    GameEvents.onVesselRecovered.Remove(eventHandler);
+                checks.AddTest(new FacilityOperational(launchSite, launchSite));
+                checks.AddTest(new NoControlSources(manifest));
+                checks.RunTests();
             }
 
             public string LaunchSite { get; private set; }
             public bool Recover { get; private set; }
             public string Path { get; private set; }
 
-            ShipTemplate template;
-            public VesselCrewManifest manifest;
-            SpaceCenterFacility facility;
-            float facilityLevel;
-            SpaceCenterFacility site;
-            float siteLevel;
-            bool isPad;
+            readonly ShipTemplate template;
+            readonly public VesselCrewManifest manifest;
+            readonly SpaceCenterFacility facility;
+            readonly float facilityLevel;
+            readonly SpaceCenterFacility site;
+            readonly float siteLevel;
+            readonly bool isPad;
 
-            public IList<EventData<ProtoVessel, bool>.OnEvent> recoveryEventHandlers =
-                                                         new List<EventData<ProtoVessel, bool>.OnEvent>();
-            public int vesselsToRecover;
-            public int vesselsRecovered;
-            public bool preFlightComplete;
+            public bool preFlightChecksComplete;
             public string error;
         };
 
@@ -315,45 +294,31 @@ namespace KRPC.SpaceCenter.Services
         {
             var config = new LaunchConfig(craftDirectory, name, launchSite, recover);
             config.RunPreFlightChecks();
-            throw new YieldException (new ParameterizedContinuationVoid<LaunchConfig> (WaitForVesselPreFlightComplete, config));
+            throw new YieldException (new ParameterizedContinuationVoid<LaunchConfig> (WaitForVesselPreFlightChecks, config));
         }
 
         /// <summary>
         /// Wait until pre-flight checks for new vessel are complete.
         /// </summary>
         /// <param name="config">Config.</param>
-        static void WaitForVesselPreFlightComplete(LaunchConfig config)
+        static void WaitForVesselPreFlightChecks(LaunchConfig config)
         {
-            // Recover existing vessels if the launch site is not clear
-            if (config.Recover) {
-                var launchSiteClear = Compatibility.NewLaunchSiteClear(config.LaunchSite, HighLogic.CurrentGame);
-                if (!launchSiteClear.Test()) {
-                    var vesselsToRecover = launchSiteClear.GetObstructingVessels();
-                    config.vesselsToRecover = vesselsToRecover.Count;
-                    foreach (var vessel in vesselsToRecover)
-                        config.AddRecoveryEventHandler(vessel);
-                    foreach (var protoVessel in vesselsToRecover)
-                        GameEvents.OnVesselRecoveryRequested.Fire(protoVessel.vesselRef);
-                }
-            }
-            WaitForVesselRecovery(config);
-        }
-
-        /// <summary>
-        /// Wait until vessels on the launchpad have been recovered, then launch new vessel.
-        /// </summary>
-        static void WaitForVesselRecovery(LaunchConfig config)
-        {
-            if (config.error != null) {
-                config.RemoveRecoveryEventHandlers ();
+            if (config.error != null)
                 throw new InvalidOperationException(config.error);
+            if (!config.preFlightChecksComplete)
+                throw new YieldException(new ParameterizedContinuationVoid<LaunchConfig>(WaitForVesselPreFlightChecks, config));
+            // Check launch site clear
+            var vesselsToRecover = ShipConstruction.FindVesselsLandedAt(HighLogic.CurrentGame.flightState, config.LaunchSite);
+            if (vesselsToRecover.Any()) {
+                // Recover existing vessels if the launch site is not clear
+                if (!config.Recover)
+                    throw new InvalidOperationException("Launch site not clear");
+                foreach (var vessel in vesselsToRecover)
+                    ShipConstruction.RecoverVesselFromFlight(vessel, HighLogic.CurrentGame.flightState, true);
             }
-            if (config.vesselsToRecover != config.vesselsRecovered)
-                throw new YieldException (new ParameterizedContinuationVoid<LaunchConfig> (WaitForVesselRecovery, config));
-            config.RemoveRecoveryEventHandlers ();
-
+            // Do the actual launch - passed pre-flight checks, and launch site is clear.
             FlightDriver.StartWithNewLaunch(config.Path, EditorLogic.FlagURL, config.LaunchSite, config.manifest);
-            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+            throw new YieldException(new ParameterizedContinuationVoid<int>(WaitForVesselSwitch, 0));
         }
 
         /// <summary>

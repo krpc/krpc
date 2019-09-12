@@ -8,6 +8,7 @@ class TestBody(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        cls.new_save()
         cls.space_center = cls.connect().space_center
 
     def test_equality(self):

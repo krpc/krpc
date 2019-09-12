@@ -14,6 +14,8 @@ class TestPartsSensor(krpctest.TestCase):
 
     def test_barometer(self):
         sensor = self.parts.with_title('PresMat Barometer')[0].sensor
+        sensor.active = False
+        self.wait()
         self.assertFalse(sensor.active)
         self.assertEqual('Off', sensor.value)
         sensor.active = True
@@ -28,6 +30,8 @@ class TestPartsSensor(krpctest.TestCase):
     def test_gravity(self):
         sensor = self.parts.with_title(
             'GRAVMAX Negative Gravioli Detector')[0].sensor
+        sensor.active = False
+        self.wait()
         self.assertFalse(sensor.active)
         self.assertEqual('Off', sensor.value)
         sensor.active = True

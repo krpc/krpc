@@ -14,7 +14,7 @@ class TestPartsModule(krpctest.TestCase):
         cls.parts = cls.vessel.parts
 
     def test_command_module(self):
-        part = self.parts.with_title('Mk1-2 Command Pod')[0]
+        part = self.parts.with_title('Mk1-3 Command Pod')[0]
         module = next(m for m in part.modules if m.name == 'ModuleCommand')
         self.assertEqual('ModuleCommand', module.name)
         self.assertEqual(part, module.part)
@@ -27,7 +27,8 @@ class TestPartsModule(krpctest.TestCase):
         self.assertFalse(module.has_field('DoesntExist'))
         self.assertEqual('Operational', module.get_field('Command State'))
         self.assertRaises(RuntimeError, module.get_field, 'DoesntExist')
-        self.assertItemsEqual(['Control From Here', 'Rename Vessel'],
+        self.assertItemsEqual(['Control From Here', 'Rename Vessel',
+                               'Control Point: Default'],
                               module.events)
         self.assertTrue(module.has_event('Control From Here'))
         self.assertFalse(module.has_event('DoesntExist'))

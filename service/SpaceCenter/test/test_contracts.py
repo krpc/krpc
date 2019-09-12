@@ -62,13 +62,13 @@ class TestContracts(krpctest.TestCase):
         self.assertEquals(6, parameter.science_completion)
 
     def test_child_parameters(self):
-        contract = self.cm.all_contracts[6]
-        self.assertEqual('Test RT-5 "Flea" Solid Fuel Booster '
+        contract = self.cm.all_contracts[13]
+        self.assertEqual('Test RT-10 "Hammer" Solid Fuel Booster '
                          'at the Launch Site.', contract.title)
         self.assertEqual(1, len(contract.parameters))
         parameter = contract.parameters[0]
         self.assertEqual(
-            'Test RT-5 "Flea" Solid Fuel Booster', parameter.title)
+            'Test RT-10 "Hammer" Solid Fuel Booster', parameter.title)
         self.assertEqual(2, len(parameter.children))
         self.assertEqual(['Kerbin', 'Launch Site'],
                          [x.title for x in parameter.children])
@@ -95,15 +95,14 @@ class TestContracts(krpctest.TestCase):
         self.assertItemsEqual(
             ['Conduct a focused observational survey of Kerbin.']*5 +
             ['Gather scientific data from Kerbin.',
-             'Test RT-5 "Flea" Solid Fuel Booster at the Launch Site.',
              'Escape the atmosphere!',
              'Haul Mk16 Parachute into flight above Kerbin.',
-             'Haul RT-10 "Hammer" Solid Fuel Booster '
-             'into flight above Kerbin.',
              'Orbit Kerbin!',
              'Launch our first vessel!',
              'Test Mk16 Parachute in flight over Kerbin.',
-             'Test RT-10 "Hammer" Solid Fuel Booster at the Launch Site.'],
+             'Test RT-10 "Hammer" Solid Fuel Booster at the Launch Site.',
+             'Test RT-10 "Hammer" Solid Fuel Booster at the Launch Site.',
+             'Test Heat Shield (0.625m) in flight over Kerbin.'],
             [x.title for x in self.cm.all_contracts])
 
     def test_active_contracts(self):
@@ -129,11 +128,10 @@ class TestContracts(krpctest.TestCase):
         self.assertItemsEqual(
             ['Conduct a focused observational survey of Kerbin.']*5 +
             ['Gather scientific data from Kerbin.',
-             'Test RT-5 "Flea" Solid Fuel Booster at the Launch Site.',
              'Escape the atmosphere!',
              'Haul Mk16 Parachute into flight above Kerbin.',
-             'Haul RT-10 "Hammer" Solid Fuel Booster into '
-             'flight above Kerbin.'],
+             'Test RT-10 "Hammer" Solid Fuel Booster at the Launch Site.',
+             'Test Heat Shield (0.625m) in flight over Kerbin.'],
             [x.title for x in contracts])
         contract = contracts[0]
         self.assertEqual('FinePrint.Contracts.SurveyContract', contract.type)
