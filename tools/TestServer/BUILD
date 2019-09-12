@@ -44,7 +44,8 @@ pkg_zip(
         'tools/build/ksp/': '',
         'tools/ServiceDefinitions/': ''
     },
-    exclude = ['*.mdb', 'tools/TestServer/TestServer']
+    exclude = ['*.mdb', 'tools/TestServer/TestServer'],
+    visibility = ['//visibility:public']
 )
 
 csharp_binary(

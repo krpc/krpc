@@ -39,7 +39,8 @@ setup(
             'krpc-servicedefs = krpctools.servicedefs:main'
         ]
     },
-    package_data={'': ['*.txt', '*.tmpl', '*.json', '*.rst', 'bin/*.exe', 'bin/*.dll', 'bin/*.xml']},
+    package_data={'': ['*.txt', '*.tmpl', '*.json', '*.rst',
+                       'bin/*.exe', 'bin/*.dll', 'bin/*.xml', 'bin/*.zip']},
     install_requires=install_requires,
     test_suite='krpctools.test',
     use_2to3=True,

@@ -55,7 +55,8 @@ py_sdist(
         '//tools/build/mono-4.5:System.Runtime',
         '//tools/build/mono-4.5:System.IO',
         '//tools/build/mono-4.5:System.Xml',
-        '//tools/TestServer:ServiceDefinitions'
+        '//tools/TestServer:ServiceDefinitions',
+        '//tools/TestServer:archive'
     ] +
     glob(['krpctools/**/*.py', 'krpctools/**/*.tmpl', 'krpctools/test/*.json',
           'krpctools/test/**/*.txt', 'krpctools/test/**/*.rst']),
@@ -66,7 +67,8 @@ py_sdist(
         'tools/ServiceDefinitions/KRPC.dll': 'krpctools/bin/KRPC.dll',
         'tools/ServiceDefinitions/KRPC.xml': 'krpctools/bin/KRPC.xml',
         'tools/TestServer/TestService.json': 'krpctools/test/TestService.json',
-        'tools/build/mono-4.5/': 'krpctools/bin/'
+        'tools/build/mono-4.5/': 'krpctools/bin/',
+        'tools/TestServer/': 'krpctools/bin/'
     }
 )
 

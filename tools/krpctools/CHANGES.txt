@@ -1,5 +1,6 @@
 v0.4.9
  * Fix issue finding KSP_x64_Data directory (#523)
+ * Add TestServer archive to bin directory (#532)
 
 v0.4.8
  * Fix Python 3 compatibility
