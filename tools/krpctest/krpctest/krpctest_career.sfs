@@ -1,8 +1,8 @@
 GAME
 {
   version = 1.7.3
-  Title = krpctest_career  (CAREER)
-  Description = No  description  available.
+  Title = krpctest_career (CAREER)
+  Description = No description available.
   linkURL =
   linkCaption =
   Mode = CAREER
