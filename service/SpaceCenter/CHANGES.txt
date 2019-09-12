@@ -2,6 +2,7 @@ v0.4.9
  * Use raycast to measure surface height more precisely in CelestialBody.SurfaceHeight (#524)
  * Fix null reference exception when checking active vessel (#528, #530)
  * Fix null reference exception when waiting for active vessel change (#516, #529)
+ * Fix launch checks and automatic vessel recovery in SpaceCenter.LaunchVessel
 
 v0.4.8
  * Allows RPCs to be accessed from game scenes other than just flight (#471)
