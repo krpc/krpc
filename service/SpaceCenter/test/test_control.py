@@ -234,6 +234,23 @@ class TestControlStaging(krpctest.TestCase):
         self.assertEqual(self.space_center.ControlSource.kerbal,
                          self.control.source)
 
+    def test_stage_lock(self):
+        self.control.stage_lock = False
+        self.assertFalse(self.control.stage_lock)
+        stage = self.control.current_stage
+        self.control.activate_next_stage()
+        stage -= 1
+        self.assertEqual(stage, self.control.current_stage)
+        self.control.stage_lock = True
+        self.assertTrue(self.control.stage_lock)
+        self.assertRaises(RuntimeError, self.control.activate_next_stage)
+        self.assertEqual(stage, self.control.current_stage)
+        self.control.stage_lock = False
+        self.assertFalse(self.control.stage_lock)
+        self.control.activate_next_stage()
+        stage -= 1
+        self.assertEqual(stage, self.control.current_stage)
+
     def test_staging(self):
         for i in reversed(range(12)):
             self.assertEqual(i, self.control.current_stage)
