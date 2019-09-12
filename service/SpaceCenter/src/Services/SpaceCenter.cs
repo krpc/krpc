@@ -258,35 +258,6 @@ namespace KRPC.SpaceCenter.Services
                 checks.RunTests();
             }
 
-            public bool CheckLaunchSiteClear()
-            {
-                vesselsToRecover = ShipConstruction.FindVesselsLandedAt(HighLogic.CurrentGame.flightState, LaunchSite);
-                return !vesselsToRecover.Any();
-            }
-
-            public void RecoverVessels() {
-                numVesselsToRecover = vesselsToRecover.Count;
-                foreach (var vessel in vesselsToRecover)
-                {
-                    EventData<ProtoVessel, bool>.OnEvent eventHandler = (eventVessel, value) =>
-                    {
-                        if (vessel.vesselID == eventVessel.vesselID)
-                        {
-                            numVesselsToRecover--;
-                            if (numVesselsToRecover == 0)
-                            {
-                                foreach (var handler in vesselRecoveryEventHandlers)
-                                    GameEvents.onVesselRecovered.Remove(handler);
-                            }
-                        }
-                    };
-                    GameEvents.onVesselRecovered.Add(eventHandler);
-                    vesselRecoveryEventHandlers.Add(eventHandler);
-                }
-                foreach (var vessel in vesselsToRecover)
-                    GameEvents.OnVesselRecoveryRequested.Fire(vessel.vesselRef);
-            }
-
             public string LaunchSite { get; private set; }
             public bool Recover { get; private set; }
             public string Path { get; private set; }
@@ -300,14 +271,7 @@ namespace KRPC.SpaceCenter.Services
             readonly bool isPad;
 
             public bool preFlightChecksComplete;
-            private List<ProtoVessel> vesselsToRecover;
-            private int numVesselsToRecover;
             public string error;
-            public IList<EventData<ProtoVessel, bool>.OnEvent> vesselRecoveryEventHandlers = new List<EventData<ProtoVessel, bool>.OnEvent>();
-
-            public bool VesselRecoveryComplete {
-                get { return numVesselsToRecover == 0; }
-            }
         };
 
         /// <summary>
@@ -343,36 +307,16 @@ namespace KRPC.SpaceCenter.Services
                 throw new InvalidOperationException(config.error);
             if (!config.preFlightChecksComplete)
                 throw new YieldException(new ParameterizedContinuationVoid<LaunchConfig>(WaitForVesselPreFlightChecks, config));
-            if (!config.CheckLaunchSiteClear())
-            {
+            // Check launch site clear
+            var vesselsToRecover = ShipConstruction.FindVesselsLandedAt(HighLogic.CurrentGame.flightState, config.LaunchSite);
+            if (vesselsToRecover.Any()) {
                 // Recover existing vessels if the launch site is not clear
                 if (!config.Recover)
                     throw new InvalidOperationException("Launch site not clear");
-                config.RecoverVessels();
-                throw new YieldException(new ParameterizedContinuationVoid<LaunchConfig>(WaitForVesselRecovery, config));
-            } else {
-                // Launch the new vessel
-                DoLaunch(config);
+                foreach (var vessel in vesselsToRecover)
+                    ShipConstruction.RecoverVesselFromFlight(vessel, HighLogic.CurrentGame.flightState, true);
             }
-        }
-
-        /// <summary>
-        /// Wait until vessels have been recovered.
-        /// </summary>
-        static void WaitForVesselRecovery(LaunchConfig config)
-        {
-            if (config.error != null)
-                throw new InvalidOperationException(config.error);
-            if (!config.VesselRecoveryComplete)
-                throw new YieldException(new ParameterizedContinuationVoid<LaunchConfig>(WaitForVesselRecovery, config));
-            DoLaunch(config);
-        }
-
-        /// <summary>
-        /// Do the actual launch - passed pre-flight checks, and launch site is clear.
-        /// </summary>
-        static void DoLaunch(LaunchConfig config)
-        {
+            // Do the actual launch - passed pre-flight checks, and launch site is clear.
             FlightDriver.StartWithNewLaunch(config.Path, EditorLogic.FlagURL, config.LaunchSite, config.manifest);
             throw new YieldException(new ParameterizedContinuationVoid<int>(WaitForVesselSwitch, 0));
         }
