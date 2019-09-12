@@ -75,7 +75,7 @@ class TestCommsMultiHop(krpctest.TestCase):
     def test_properties(self):
         self.assertTrue(self.comms.can_communicate)
         self.assertTrue(self.comms.can_transmit_science)
-        self.assertAlmostEqual(0.155, self.comms.signal_strength, places=2)
+        self.assertAlmostEqual(0.0444, self.comms.signal_strength, places=3)
         self.assertAlmostEqual(0, self.comms.signal_delay, places=4)
 
     def test_control_path(self):
@@ -86,7 +86,7 @@ class TestCommsMultiHop(krpctest.TestCase):
         self.assertEqual(self.CommLinkType.relay, link0.type)
         self.assertEqual(self.CommLinkType.home, link1.type)
         self.assertAlmostEqual(1, link0.signal_strength, places=2)
-        self.assertAlmostEqual(0.155, link1.signal_strength, places=2)
+        self.assertAlmostEqual(0.0444, link1.signal_strength, places=3)
         # Start is vessel
         start = link0.start
         self.assertEqual('probeCoreOcto2', start.name)

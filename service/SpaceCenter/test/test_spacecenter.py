@@ -291,7 +291,7 @@ class TestSpaceCenter(krpctest.TestCase):
             float('inf'),
             self.sc.raycast_distance((0, 10, 0), (0, 1, 0), ref_frame))
         self.assertAlmostEqual(
-            9.38,
+            9.396297,
             self.sc.raycast_distance(
                 (-10, 0, 0), (1, 0, 0), ref_frame), places=2)
         self.assertAlmostEqual(
@@ -494,7 +494,7 @@ class TestSpaceCenterCareer(krpctest.TestCase):
         self.assertEquals(self.sc.GameMode.career, self.sc.game_mode)
 
     def test_career_parameters(self):
-        self.assertAlmostEquals(12, self.sc.science, places=3)
+        self.assertAlmostEquals(7, self.sc.science, places=3)
         self.assertAlmostEquals(100352.04, self.sc.funds, places=3)
         self.assertAlmostEquals(9, self.sc.reputation, places=3)
 
