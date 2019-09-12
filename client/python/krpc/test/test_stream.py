@@ -52,6 +52,13 @@ class TestStream(ServerTestCase, unittest.TestCase):
                 self.assertEqual(42, x())
                 self.wait()
 
+    def test_null_initial_value(self):
+        """ Test that the server sends a first stream update
+            even if the value is null. See github issue #515 """
+        with self.conn.stream(self.conn.test_service.echo_test_object,
+                              None) as x:
+            self.assertEqual(None, x())
+
     def test_property_setters_are_invalid(self):
         self.assertRaises(StreamError, self.conn.add_stream,
                           setattr, self.conn.test_service, 'string_property')

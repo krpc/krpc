@@ -36,13 +36,16 @@ namespace KRPC.Service
             set {
                 if (ReferenceEquals(value, null))
                     throw new ArgumentNullException ("Result");
-                if (value.HasValue)
-                    if (!ReferenceEquals(value.Value, null))
+                if (value.HasValue) {
+                    if (!StreamResult.Result.HasValue)
+                        Changed = true;
+                    else if (!ReferenceEquals(value.Value, null))
                         Changed |= !ValueUtils.Equal(value.Value, StreamResult.Result.Value);
                     else
                         Changed |= (ReferenceEquals(value.Value, null) ^ ReferenceEquals(StreamResult.Result.Value, null));
-                else
+                } else {
                     Changed |= value.HasError;
+                }
                 StreamResult.Result = value;
             }
         }

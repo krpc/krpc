@@ -1,6 +1,7 @@
 v0.4.9
  * Support for KSP 1.7.3
  * Update to protobuf v3.9.1
+ * Fix bug with streams where a stream update is not sent initially after a stream is created, if the stream value is null (#515)
 
 v0.4.8
  * Support for KSP 1.5.1
