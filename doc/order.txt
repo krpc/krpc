@@ -752,8 +752,10 @@ SpaceCenter.RCS.ForwardEnabled
 SpaceCenter.RCS.UpEnabled
 SpaceCenter.RCS.RightEnabled
 SpaceCenter.RCS.AvailableTorque
+SpaceCenter.RCS.AvailableThrust
 SpaceCenter.RCS.MaxThrust
 SpaceCenter.RCS.MaxVacuumThrust
+SpaceCenter.RCS.ThrustLimit
 SpaceCenter.RCS.Thrusters
 SpaceCenter.RCS.SpecificImpulse
 SpaceCenter.RCS.VacuumSpecificImpulse

@@ -59,8 +59,23 @@ class RCSTest(RCSTestBase):
             data['pos_torque'], rcs.available_torque[0], delta=10)
         self.assertAlmostEqual(
             data['neg_torque'], rcs.available_torque[1], delta=10)
+
+        rcs.thrust_limit = 1
+        self.assertAlmostEqual(data['max_thrust'], rcs.available_thrust,
+                               delta=1)
         self.assertAlmostEqual(data['max_thrust'], rcs.max_thrust, delta=1)
         self.assertEqual(data['max_vac_thrust'], rcs.max_vacuum_thrust)
+        self.assertAlmostEqual(1.0, rcs.thrust_limit)
+
+        rcs.thrust_limit = 0.25
+        self.assertAlmostEqual(data['max_thrust'] * 0.25, rcs.available_thrust,
+                               delta=1)
+        self.assertAlmostEqual(data['max_thrust'], rcs.max_thrust, delta=1)
+        self.assertEqual(data['max_vac_thrust'], rcs.max_vacuum_thrust)
+        self.assertAlmostEqual(0.25, rcs.thrust_limit)
+
+        rcs.thrust_limit = 1
+
         self.assertEqual(data['thrusters'], len(rcs.thrusters))
         self.assertAlmostEqual(data['isp'], rcs.specific_impulse, places=1)
         self.assertEqual(
