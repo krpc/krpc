@@ -359,6 +359,7 @@ SpaceCenter.Control.WheelThrottle
 SpaceCenter.Control.WheelSteering
 SpaceCenter.Control.CurrentStage
 SpaceCenter.Control.ActivateNextStage
+SpaceCenter.Control.StageLock
 SpaceCenter.Control.GetActionGroup
 SpaceCenter.Control.SetActionGroup
 SpaceCenter.Control.ToggleActionGroup

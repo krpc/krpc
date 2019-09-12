@@ -466,11 +466,14 @@ namespace KRPC.SpaceCenter.Services
         /// When called, the active vessel may change. It is therefore possible that,
         /// after calling this function, the object(s) returned by previous call(s) to
         /// <see cref="SpaceCenter.ActiveVessel"/> no longer refer to the active vessel.
+        /// Throws an exception if staging is locked.
         /// </remarks>
         [KRPCMethod]
         public IList<Vessel> ActivateNextStage ()
         {
             CheckActiveVessel ();
+            if (StageLock)
+                throw new InvalidOperationException("Staging is locked");
             if (!StageManager.CanSeparate)
                 throw new YieldException (new ParameterizedContinuation<IList<Vessel>> (ActivateNextStage));
             var preVessels = FlightGlobals.Vessels.ToArray ();
@@ -484,6 +487,25 @@ namespace KRPC.SpaceCenter.Services
                 throw new YieldException (new ParameterizedContinuation<IList<Vessel>, global::Vessel[]> (PostActivateStage, preVessels));
             var postVessels = FlightGlobals.Vessels;
             return postVessels.Except (preVessels).Select (vessel => new Vessel (vessel)).ToList ();
+        }
+
+        /// <summary>
+        /// Whether staging is locked on the vessel.
+        /// </summary>
+        /// <remarks>
+        /// This is equivalent to locking the staging using Alt+L
+        /// </remarks>
+        [KRPCProperty]
+        [SuppressMessage("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
+        public bool StageLock
+        {
+            get { return InputLockManager.GetControlLock("manualStageLock") == ControlTypes.STAGING; }
+            set {
+                if (value)
+                    InputLockManager.SetControlLock(ControlTypes.STAGING, "manualStageLock");
+                else
+                    InputLockManager.RemoveControlLock("manualStageLock");
+            }
         }
 
         /// <summary>
