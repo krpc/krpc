@@ -499,7 +499,7 @@ namespace KRPC.SpaceCenter.Services
         [SuppressMessage("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public bool StageLock
         {
-            get { return InputLockManager.IsLocked(ControlTypes.STAGING); }
+            get { return InputLockManager.GetControlLock("manualStageLock") == ControlTypes.STAGING; }
             set {
                 if (value)
                     InputLockManager.SetControlLock(ControlTypes.STAGING, "manualStageLock");
