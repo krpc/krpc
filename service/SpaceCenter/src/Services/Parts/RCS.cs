@@ -248,6 +248,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Ensures the propellant amounts have been updated, which may not have
+        /// happened if the engine has not been activated.
+        /// </summary>
+        void UpdateConnectedResources()
+        {
+            foreach (var propellant in rcs.propellants)
+                propellant.UpdateConnectedResources(rcs.part);
+        }
+
+        /// <summary>
         /// The names of resources that the RCS consumes.
         /// </summary>
         [KRPCProperty]
@@ -261,7 +271,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IDictionary<string, float> PropellantRatios {
-            get {
+            get
+            {
+                UpdateConnectedResources();
                 var max = rcs.propellants.Max (p => p.ratio);
                 return rcs.propellants.ToDictionary (p => p.name, p => p.ratio / max);
             }
@@ -270,15 +282,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the RCS has fuel available.
         /// </summary>
-        /// <remarks>
-        /// The RCS thruster must be activated for this property to update correctly.
-        /// </remarks>
-        // FIXME: should not have to enable the RCS thruster for this to update
         [KRPCProperty]
         public bool HasFuel {
-            get {
+            get
+            {
+                UpdateConnectedResources();
                 foreach (var propellant in rcs.propellants)
-                    if (propellant.isDeprived && !propellant.ignoreForIsp)
+                    if (propellant.actualTotalAvailable < 0.001)
                         return false;
                 return true;
             }

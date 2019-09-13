@@ -15,6 +15,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal Propellant (global::Propellant propellantResource, global::Part underlyingPart)
         {
+            propellantResource.UpdateConnectedResources(underlyingPart);
             resourceId = propellantResource.id;
             partId = underlyingPart.flightID;
         }

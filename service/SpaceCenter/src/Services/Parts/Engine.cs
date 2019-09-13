@@ -6,7 +6,6 @@ using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using UnityEngine;
-using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using TupleV3 = KRPC.Utils.Tuple<Vector3d, Vector3d>;
 using TupleT3 = KRPC.Utils.Tuple<KRPC.Utils.Tuple<double, double, double>, KRPC.Utils.Tuple<double, double, double>>;
 
@@ -52,8 +51,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         Engine (ModuleEngines engine)
         {
             Part = new Part (engine.part);
-            engines = new List<ModuleEngines> ();
-            engines.Add (engine);
+            engines = new List<ModuleEngines>
+            {
+                engine
+            };
             gimbal = Part.InternalPart.Module<ModuleGimbal> ();
             if (engine == null)
                 throw new ArgumentException ("Part does not have a ModuleEngines PartModule");
@@ -95,6 +96,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         ModuleEngines CurrentEngine {
             get { return engines [(multiModeEngine == null || multiModeEngine.runningPrimary) ? 0 : 1]; }
+        }
+
+        /// <summary>
+        /// Ensures the propellant amounts have been updated, which may not have
+        /// happened if the engine has not been activated.
+        /// </summary>
+        void UpdateConnectedResources()
+        {
+            var engine = CurrentEngine;
+            foreach (var propellant in engine.propellants)
+                propellant.UpdateConnectedResources(engine.part);
         }
 
         /// <summary>
@@ -260,7 +272,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<Propellant> Propellants {
-            get {
+            get
+            {
+                UpdateConnectedResources();
                 return CurrentEngine.propellants.Select (propellant => new Propellant (propellant, CurrentEngine.part)).ToList ();
             }
         }
@@ -276,6 +290,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public IDictionary<string, float> PropellantRatios {
             get {
+                UpdateConnectedResources();
                 var engine = CurrentEngine;
                 var max = engine.propellants.Max (p => p.ratio);
                 return engine.propellants.ToDictionary (p => p.name, p => p.ratio / max);
@@ -285,18 +300,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the engine has any fuel available.
         /// </summary>
-        /// <remarks>
-        /// The engine must be activated for this property to update correctly.
-        /// </remarks>
-        // FIXME: should not have to enable the RCS thruster for this to update
         [KRPCProperty]
         public bool HasFuel {
-            get {
-                var engine = CurrentEngine;
-                if (engine.flameout)
-                    return false;
-                foreach (var propellant in engine.propellants)
-                    if (propellant.isDeprived)
+            get
+            {
+                UpdateConnectedResources();
+                foreach (var propellant in CurrentEngine.propellants)
+                    if (propellant.actualTotalAvailable < 0.001)
                         return false;
                 return true;
             }
@@ -388,9 +398,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IDictionary<string,Engine> Modes {
             get {
                 CheckMultiMode ();
-                var result = new Dictionary<string,Engine> ();
-                result [multiModeEngine.primaryEngineID] = new Engine (engines [0]);
-                result [multiModeEngine.secondaryEngineID] = new Engine (engines [1]);
+                var result = new Dictionary<string, Engine>
+                {
+                    [multiModeEngine.primaryEngineID] = new Engine(engines[0]),
+                    [multiModeEngine.secondaryEngineID] = new Engine(engines[1])
+                };
                 return result;
             }
         }

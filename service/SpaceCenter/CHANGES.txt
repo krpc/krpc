@@ -9,6 +9,7 @@ v0.4.9
  * Fix Control.Legs and Control.Wheels not deploying/retracting legs/wheels correctly (#509, #261)
  * Allow legs/wheels can be individually deployed/retracted using Leg.Deployed and Wheel.Deployed (#509, #261)
  * Allow lights to be individually turned on and off (#261)
+ * Fix Engine and RCS fuel calculations only being done when they are enabled (#514, #254)
 
 v0.4.8
  * Allows RPCs to be accessed from game scenes other than just flight (#471)
