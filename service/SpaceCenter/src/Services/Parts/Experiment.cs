@@ -18,15 +18,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     {
         readonly ModuleScienceExperiment experiment;
 
-        internal static bool Is (Part part)
-        {
-            return part.InternalPart.HasModule<ModuleScienceExperiment> ();
-        }
-
-        internal Experiment (Part part)
+        internal Experiment(Part part, ModuleScienceExperiment experiment_)
         {
             Part = part;
-            experiment = part.InternalPart.Module<ModuleScienceExperiment> ();
+            experiment = experiment_;
             if (experiment == null)
                 throw new ArgumentException ("Part is not a science experiment");
         }
@@ -52,6 +47,26 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Part Part { get; private set; }
+
+
+        /// <summary>
+        /// Internal name of the experiment, as used in
+        /// <a href="https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation">part cfg files</a>.
+        /// </summary>
+        [KRPCProperty]
+        public string Name
+        {
+            get { return experiment.experimentID; }
+        }
+
+        /// <summary>
+        /// Title of the experiment, as shown on the in-game UI.
+        /// </summary>
+        [KRPCProperty]
+        public string Title
+        {
+            get { return experiment.experiment.experimentTitle; }
+        }
 
         /// <summary>
         /// Run the experiment.

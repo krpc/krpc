@@ -505,6 +505,7 @@ SpaceCenter.Part.Decoupler
 SpaceCenter.Part.DockingPort
 SpaceCenter.Part.Engine
 SpaceCenter.Part.Experiment
+SpaceCenter.Part.Experiments
 SpaceCenter.Part.Fairing
 SpaceCenter.Part.Intake
 SpaceCenter.Part.Leg
@@ -661,6 +662,8 @@ SpaceCenter.Propellant.IsDeprived
 SpaceCenter.Propellant.Ratio
 SpaceCenter.Experiment
 SpaceCenter.Experiment.Part
+SpaceCenter.Experiment.Name
+SpaceCenter.Experiment.Title
 SpaceCenter.Experiment.Run
 SpaceCenter.Experiment.Transmit
 SpaceCenter.Experiment.Dump

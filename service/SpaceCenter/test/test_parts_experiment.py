@@ -9,12 +9,18 @@ class TestPartsExperiment(krpctest.TestCase):
         self.launch_vessel_from_vab('PartsExperiment')
         self.remove_other_vessels()
         self.sc = self.connect().space_center
-        parts = self.sc.active_vessel.parts
-        self.pod = parts.with_title('Mk1 Command Pod')[0].experiment
-        self.goo = [x for x in parts.all
-                    if x.name == 'GooExperiment'][0].experiment
+        self.parts = self.sc.active_vessel.parts
+        self.pod = self.parts.with_name('mk1pod')[0].experiment
+        self.pod = self.parts.with_name('GooExperiment')[0].experiment
+
+    def test_experiments(self):
+        self.assertItemsEqual(
+            ['crewReport', 'crewReport', 'mysteryGoo'],
+            [x.name for x in self.parts.experiments])
 
     def test_pod(self):
+        self.assertEqual('crewReport', self.pod.name)
+        self.assertEqual('Crew Report', self.pod.title)
         self.assertFalse(self.pod.deployed)
         self.assertTrue(self.pod.rerunnable)
         self.assertFalse(self.pod.inoperable)
@@ -32,6 +38,8 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertEqual('Crew Report from LaunchPad', subject.title)
 
     def test_goo_container(self):
+        self.assertEqual('mysteryGoo', self.goo.name)
+        self.assertEqual(u'Mystery Goo\u2122 Observation', self.goo.title)
         self.assertFalse(self.goo.deployed)
         self.assertFalse(self.goo.rerunnable)
         self.assertFalse(self.goo.inoperable)

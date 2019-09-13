@@ -489,11 +489,36 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// An <see cref="Experiment"/> if the part is a science experiment, otherwise <c>null</c>.
+        /// An <see cref="Experiment"/> if the part contains a
+        /// single science experiment, otherwise <c>null</c>.
         /// </summary>
-        [KRPCProperty (Nullable = true)]
-        public Experiment Experiment {
-            get { return Experiment.Is (this) ? new Experiment (this) : null; }
+        /// <remarks>
+        /// Throws an exception if the part contains more than one experiment.
+        /// In that case, use <see cref="Experiments"/> to get the list of experiments in the part.
+        /// </remarks>
+        [KRPCProperty(Nullable = true)]
+        public Experiment Experiment
+        {
+            get {
+                var modules = InternalPart.Modules.OfType<ModuleScienceExperiment>();
+                if (modules.Count() > 1)
+                    throw new InvalidOperationException("Part contains multiple experiments.");
+                if (!modules.Any())
+                    return null;
+                return new Experiment(this, modules.First());
+            }
+        }
+
+        /// <summary>
+        /// A list of <see cref="Experiment"/> objects that the part contains.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public IList<Experiment> Experiments
+        {
+            get {
+                return InternalPart.Modules.OfType<ModuleScienceExperiment>()
+                    .Select((module) => new Experiment(this, module)).ToList();
+            }
         }
 
         /// <summary>

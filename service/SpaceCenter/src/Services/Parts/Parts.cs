@@ -215,7 +215,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<Experiment> Experiments {
-            get { return All.Where (Experiment.Is).Select (part => new Experiment (part)).ToList (); }
+            get { return All.SelectMany((arg) => arg.Experiments).ToList(); }
         }
 
         /// <summary>

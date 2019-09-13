@@ -10,6 +10,11 @@ v0.4.9
  * Allow legs/wheels can be individually deployed/retracted using Leg.Deployed and Wheel.Deployed (#509, #261)
  * Allow lights to be individually turned on and off (#261)
  * Fix Engine and RCS fuel calculations only being done when they are enabled (#514, #254)
+ * Add support for parts that contain multiple experiments (#533)
+   * Part.Experiment now throws an exception if the part has more than one experiment
+   * Add Part.Experiments which returns a list of experiments in the part
+   * Update Parts.Experiments to return all experiments contained in the parts
+ * Add Experiment.Name and Experiment.Title
 
 v0.4.8
  * Allows RPCs to be accessed from game scenes other than just flight (#471)
