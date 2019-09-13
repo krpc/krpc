@@ -102,15 +102,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             set {
                 if (deployment == null)
                     throw new InvalidOperationException ("Landing leg is not deployable");
-                if (value) {
-                    var extend = deployment.Events.FirstOrDefault (x => x.guiName == "Extend");
-                    if (extend != null)
-                        extend.Invoke ();
-                } else {
-                    var retract = deployment.Events.FirstOrDefault (x => x.guiName == "Retract");
-                    if (retract != null)
-                        retract.Invoke ();
-                }
+                deployment.ActionToggle(new KSPActionParam(0, value ? KSPActionType.Activate : KSPActionType.Deactivate));
             }
         }
 

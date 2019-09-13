@@ -6,6 +6,8 @@ v0.4.9
  * Add Control.StageLock (#541)
  * Fix launch checks and automatic vessel recovery in SpaceCenter.LaunchVessel
  * Fix setting camera target to an unloaded vessel (#536)
+ * Fix Control.Legs and Control.Wheels not deploying/retracting legs/wheels correctly (#509, #261)
+ * Allow legs/wheels can be individually deployed/retracted using Leg.Deployed and Wheel.Deployed (#509, #261)
 
 v0.4.8
  * Allows RPCs to be accessed from game scenes other than just flight (#471)

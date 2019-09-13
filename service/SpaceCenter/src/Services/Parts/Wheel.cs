@@ -202,15 +202,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return State == WheelState.Deployed; }
             set {
                 CheckDeployment();
-                if (value) {
-                    var extend = deployment.Events.FirstOrDefault(x => x.guiName == "Extend");
-                    if (extend != null)
-                        extend.Invoke();
-                } else {
-                    var retract = deployment.Events.FirstOrDefault(x => x.guiName == "Retract");
-                    if (retract != null)
-                        retract.Invoke();
-                }
+                deployment.ActionToggle(new KSPActionParam(0, value ? KSPActionType.Activate : KSPActionType.Deactivate));
             }
         }
 

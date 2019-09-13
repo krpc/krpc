@@ -161,6 +161,25 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Deploy or retract all wheels of the given type.
+        /// </summary>
+        void DeployWheels(WheelType wheelType, bool state)
+        {
+            foreach (var part in InternalVessel.parts)
+            {
+                foreach (var deployment in part.FindModulesImplementing<ModuleWheels.ModuleWheelDeployment>())
+                {
+                    var gear = part.Modules[deployment.baseModuleIndex] as ModuleWheelBase;
+                    if (gear != null && gear.wheelType == wheelType)
+                    {
+                        deployment.ActionToggle(new KSPActionParam(0, state ? KSPActionType.Activate : KSPActionType.Deactivate));
+                    }
+                }
+            }
+
+        }
+
+        /// <summary>
         /// Returns whether all landing legs on the vessel are deployed,
         /// and sets the deployment state of all landing legs.
         /// Does not include wheels (for example landing gear).
@@ -169,11 +188,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public bool Legs {
             get { return parts.Legs.All (part => part.Deployed); }
-            set {
-                foreach (var part in parts.Legs)
-                    if (part.Deployable)
-                        part.Deployed = value;
-            }
+            set { DeployWheels(WheelType.LEG, value); }
         }
 
         /// <summary>
@@ -186,9 +201,8 @@ namespace KRPC.SpaceCenter.Services
         public bool Wheels {
             get { return parts.Wheels.All (part => part.Deployed); }
             set {
-                foreach (var part in parts.Wheels)
-                    if (part.Deployable)
-                        part.Deployed = value;
+                DeployWheels(WheelType.FREE, value);
+                DeployWheels(WheelType.MOTORIZED, value);
             }
         }
 
