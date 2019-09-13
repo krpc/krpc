@@ -14,7 +14,7 @@ int main() {
   krpc_SpaceCenter_ReferenceFrame_t ref_frame;
   krpc_SpaceCenter_Vessel_SurfaceVelocityReferenceFrame(conn, &ref_frame, vessel);
   krpc_tuple_double_double_double_t direction = { 0, 1, 0 };
-  krpc_Drawing_AddDirection(conn, NULL, &direction, ref_frame, 10, true);
+  krpc_Drawing_AddDirectionFromCom(conn, NULL, &direction, ref_frame, 10, true);
   while (true) {
   }
 }

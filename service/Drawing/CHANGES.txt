@@ -1,3 +1,7 @@
+v0.4.9
+ * Add Drawing.AddDirectionFromCoM
+ * Change Drawing.AddDirection to start the line at the origin of the reference frame (#518)
+
 v0.4.8
  * Fix reference frames for AddDirection so that the line always starts at the active vessel's CoM (#486)
 

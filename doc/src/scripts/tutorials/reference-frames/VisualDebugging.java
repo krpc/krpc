@@ -16,7 +16,7 @@ public class VisualDebugging {
         SpaceCenter.Vessel vessel = spaceCenter.getActiveVessel();
 
         ReferenceFrame refFrame = vessel.getSurfaceVelocityReferenceFrame();
-        drawing.addDirection(
+        drawing.addDirectionFromCom(
           new Triplet<Double, Double, Double>(0.0, 1.0, 0.0), refFrame, 10, true);
         while (true) {
         }
