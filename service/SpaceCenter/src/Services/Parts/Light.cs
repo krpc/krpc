@@ -56,12 +56,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Active {
             get { return light.isOn; }
-            set {
-                if (value)
-                    light.LightsOn ();
-                else
-                    light.LightsOff ();
-            }
+            set { light.ToggleLightAction(new KSPActionParam(0, value ? KSPActionType.Activate : KSPActionType.Deactivate)); }
         }
 
         /// <summary>
