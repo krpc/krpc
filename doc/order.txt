@@ -1054,6 +1054,7 @@ SpaceCenter.ContractParameter.ScienceCompletion
 Drawing
 Drawing.AddLine
 Drawing.AddDirection
+Drawing.AddDirectionFromCom
 Drawing.AddPolygon
 Drawing.AddText
 Drawing.Clear

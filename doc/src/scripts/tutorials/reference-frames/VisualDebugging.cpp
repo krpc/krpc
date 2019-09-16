@@ -10,7 +10,7 @@ int main() {
   auto vessel = space_center.active_vessel();
 
   auto ref_frame = vessel.surface_velocity_reference_frame();
-  drawing.add_direction(std::make_tuple(0, 1, 0), ref_frame);
+  drawing.add_direction_from_com(std::make_tuple(0, 1, 0), ref_frame);
   while (true) {
   }
 }

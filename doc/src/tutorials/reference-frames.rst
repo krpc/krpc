@@ -360,8 +360,8 @@ References frames can be confusing, and choosing the correct one is a challenge
 in itself. To aid debugging, kRPCs drawing functionality can be used to
 visualize direction vectors in-game.
 
-:meth:`Drawing.add_direction` will draw a direction vector, starting from the
-origin of the given reference frame. For example, the following code draws the
+:meth:`Drawing.add_direction_from_com` will draw a direction vector, starting from the
+center of mass of the active vessel. For example, the following code draws the
 direction of the current vessels velocity relative to the surface of the body it
 is orbiting:
 
