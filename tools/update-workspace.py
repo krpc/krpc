@@ -14,6 +14,7 @@ def read_workspace():
         lines = f.readlines()
 
     header = ''
+    loads = []
     workspace = []
 
     in_entry = False
@@ -30,6 +31,11 @@ def read_workspace():
         if len(header) == 0:
             if line.strip().startswith('workspace'):
                 header = line.strip()
+            i += 1
+            continue
+
+        if line.strip().startswith('load'):
+            loads.append(line.strip())
             i += 1
             continue
 
@@ -69,11 +75,14 @@ def read_workspace():
                 value = '\n'.join(multiline_value)
             workspace[-1]['props'][key.strip()] = value
             continue
-    return header, workspace
+    return header, loads, workspace
 
 
-def write_workspace(header, workspace):
+def write_workspace(header, loads, workspace):
     lines = [header]
+    if len(loads) > 0:
+        lines.append('')
+        lines.extend(loads)
     for entry in workspace:
         lines.append('')
         lines.append(entry['type']+'(')
@@ -121,11 +130,11 @@ def get_python_package_versions(package, typ):
 
 def is_pypi_dep(props):
     """ Return true if the given workspace entry is a pypi package """
-    if 'url' not in props:
+    if 'urls' not in props:
         return False
-    if 'python.org' in props['url']:
+    if 'python.org' in props['urls']:
         return True
-    if 'pythonhosted.org' in props['url']:
+    if 'pythonhosted.org' in props['urls']:
         return True
     return False
 
@@ -145,11 +154,11 @@ def sha256file(path):
 
 def main():
     print('Updating WORKSPACE')
-    workspace_header, workspace = read_workspace()
+    workspace_header, loads, workspace = read_workspace()
     for entry in workspace:
         props = entry['props']
         if is_pypi_dep(props):
-            url = props['url'][1:-1]
+            url = props['urls'][2:-2]
             path = url.rpartition('/')[2]
             package, version, typ = parse_python_package(path)
             versions = get_python_package_versions(package, typ)
@@ -157,15 +166,15 @@ def main():
                 latest_version = sorted(versions.keys(), key=distutils.version.LooseVersion)[-1]
             except TypeError:
                 latest_version = list(versions.keys())[-1]
-            path = '\'%s\'' % versions[latest_version]
-            if props['url'] == path:
+            path = '[\'%s\']' % versions[latest_version]
+            if props['urls'] == path:
                 print(props['name'][1:-1], 'is up to date')
             else:
                 print('Updating', props['name'][1:-1], 'to', latest_version)
-                props['url'] = path
-                result = urllib.request.urlretrieve(props['url'][1:-1])
+                props['urls'] = path
+                result = urllib.request.urlretrieve(props['urls'][2:-2])
                 entry['props']['sha256'] = '\'%s\'' % sha256file(result[0])
-    write_workspace(workspace_header, workspace)
+    write_workspace(workspace_header, loads, workspace)
     print('Done')
 
 
