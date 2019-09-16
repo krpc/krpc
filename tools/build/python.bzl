@@ -15,7 +15,7 @@ def _create_py_env(out, install):
     cmds = [
         'PWD=`pwd`',
         'rm -rf %s' % tmp,
-        'virtualenv %s --quiet --never-download --no-site-packages' % tmp
+        'virtualenv %s --python python3 --quiet --never-download --no-site-packages' % tmp
     ]
     for lib in install:
         cmds.append(
@@ -129,7 +129,7 @@ py_script = rule(
 )
 
 def _test_impl(ctx, pyexe='python2'):
-    sub_commands = ['virtualenv env --quiet --never-download --no-site-packages --python=%s' % pyexe]
+    sub_commands = ['virtualenv env --python %s --quiet --never-download --no-site-packages' % pyexe]
     for dep in ctx.files.deps:
         if pyexe == 'python3' and dep.path == 'external/python_enum34/file/downloaded':
             # enum34 not required with Python 3
@@ -155,8 +155,14 @@ def _test_impl(ctx, pyexe='python2'):
         runfiles = runfiles
     )
 
-py_test = rule(
-    implementation = _test_impl,
+def _test2_impl(ctx):
+    return _test_impl(ctx, pyexe='python2')
+
+def _test3_impl(ctx):
+    return _test_impl(ctx, pyexe='python3')
+
+py2_test = rule(
+    implementation = _test2_impl,
     attrs = {
         'src': attr.label(allow_single_file=True),
         'pkg': attr.string(mandatory=True),
@@ -164,9 +170,6 @@ py_test = rule(
     },
     test = True
 )
-
-def _test3_impl(ctx):
-    return _test_impl(ctx, pyexe='python3')
 
 py3_test = rule(
     implementation = _test3_impl,
@@ -177,6 +180,8 @@ py3_test = rule(
     },
     test = True
 )
+
+py_test = py3_test
 
 def _lint_impl(ctx):
     out = ctx.outputs.executable
@@ -214,7 +219,7 @@ def _lint_impl(ctx):
     sub_commands = []
 
     # Install dependences in a new virtual env
-    sub_commands = ['virtualenv env --quiet --never-download --no-site-packages']
+    sub_commands = ['virtualenv env --python python3 --quiet --never-download --no-site-packages']
     for dep in deps:
         sub_commands.append(
             'env/bin/python env/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s'
@@ -237,6 +242,7 @@ def _lint_impl(ctx):
         _add_runfile(sub_commands, f.short_path, runfiles_dir+ '/' + pylint.basename + '.runfiles/krpc/' + f.short_path)
     # Set pythonpath so that pylint finds the dependent packages from the virtual environment
     # FIXME: make this generic, depends on using python2.7
+    # FIXME: need to fix this now!!!
     sub_commands.append('PYTHONPATH=env/lib/python2.7/site-packages PYLINTHOME=%s %s/%s %s' % (runfiles_dir, runfiles_dir, pylint.basename, ' '.join(pylint_args)))
     sub_commands.append('rm -rf %s' % runfiles_dir)
 

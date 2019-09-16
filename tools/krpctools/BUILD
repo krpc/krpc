@@ -75,7 +75,6 @@ py_sdist(
 deps = [
     '//client/python',
     '@python_protobuf//file',
-    '@python_enum34//file',
     '@python_six//file',
     '@python_jinja2//file',
     '@python_markupsafe//file'

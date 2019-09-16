@@ -5,7 +5,7 @@ bazel build //tools/TestServer
 
 TMP_DIR=bazel-bin/wstest
 REPORT_DIR=`pwd`/bazel-bin/wstest-report
-virtualenv $TMP_DIR/env --system-site-packages
+virtualenv $TMP_DIR/env --python python3 --system-site-packages
 source $TMP_DIR/env/bin/activate
 pip install autobahntestsuite
 
