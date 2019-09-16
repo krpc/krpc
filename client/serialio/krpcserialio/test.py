@@ -98,7 +98,7 @@ class SerialIOTest(unittest.TestCase):
 
     @classmethod
     def decode_string(cls, data):
-        return str(cls.decode_bytes(data))
+        return cls.decode_bytes(data).decode('utf-8')
 
     def rpc_send(self, msg):
         return self.send(self.rpc_conn, msg)

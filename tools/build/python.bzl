@@ -241,9 +241,8 @@ def _lint_impl(ctx):
     for f in pylint_runfiles:
         _add_runfile(sub_commands, f.short_path, runfiles_dir+ '/' + pylint.basename + '.runfiles/krpc/' + f.short_path)
     # Set pythonpath so that pylint finds the dependent packages from the virtual environment
-    # FIXME: make this generic, depends on using python2.7
-    # FIXME: need to fix this now!!!
-    sub_commands.append('PYTHONPATH=env/lib/python2.7/site-packages PYLINTHOME=%s %s/%s %s' % (runfiles_dir, runfiles_dir, pylint.basename, ' '.join(pylint_args)))
+    sub_commands.append('pylibdir=`find env/lib -maxdepth 1 -name "python*"`')
+    sub_commands.append('PYTHONPATH=${pylibdir}/site-packages PYLINTHOME=%s %s/%s %s' % (runfiles_dir, runfiles_dir, pylint.basename, ' '.join(pylint_args)))
     sub_commands.append('rm -rf %s' % runfiles_dir)
 
     ctx.actions.write(

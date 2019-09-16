@@ -36,7 +36,6 @@ client_test(
 deps = [
     '@python_six//file',
     '@python_protobuf//file',
-    '@python_enum34//file',
     '//client/python'
 ]
 

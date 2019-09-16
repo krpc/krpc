@@ -4,9 +4,9 @@ import glob
 import os
 import codecs
 import json
+from io import open
 import jinja2
 from pkg_resources import resource_filename
-from io import open
 from krpc.types import Types
 from krpc.utils import snake_case
 from ..utils import lower_camel_case, indent, single_line

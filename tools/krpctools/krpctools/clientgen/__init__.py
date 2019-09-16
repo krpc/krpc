@@ -4,8 +4,8 @@ import importlib
 import json
 import os
 import sys
-from pkg_resources import Requirement, resource_filename, resource_string
 from io import open
+from pkg_resources import Requirement, resource_filename, resource_string
 from .csharp import CsharpGenerator
 from .cpp import CppGenerator
 from .java import JavaGenerator

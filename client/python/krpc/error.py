@@ -1,4 +1,4 @@
-class ConnectionError(RuntimeError):
+class ConnectionError(RuntimeError):  # pylint: disable=redefined-builtin
     """ Raised when an error occurs connecting to the server """
 
 

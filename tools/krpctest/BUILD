@@ -1,4 +1,4 @@
-load('//tools/build:python.bzl', 'py_sdist', 'py_test', 'py3_test', 'py_lint_test')
+load('//tools/build:python.bzl', 'py_sdist', 'py2_test', 'py3_test', 'py_lint_test')
 load('//:config.bzl', 'version', 'python_version')
 
 py_sdist(
@@ -34,7 +34,7 @@ deps = [
     '@python_protobuf//file'
 ]
 
-py_test(
+py2_test(
     name = 'test2',
     src = ':krpctest',
     pkg = 'krpctest-'+python_version,
@@ -54,7 +54,7 @@ py_lint_test(
     name = 'lint',
     pkg = ':krpctest',
     pkg_name = 'krpctest',
-    deps = deps + ['@python_enum34//file'],
+    deps = deps,
     pylint_config = 'pylint.rc',
     size = 'small'
 )

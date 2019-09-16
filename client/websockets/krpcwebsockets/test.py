@@ -57,7 +57,8 @@ class WebSocketsTest(unittest.TestCase):
             cls.send(cls.rpc_conn, request)
             response = cls.recv(cls.rpc_conn, KRPC.Response)
             client_identifier = cls.decode_bytes(response.results[0].value)
-            client_identifier = base64.b64encode(client_identifier)
+            client_identifier = \
+                base64.b64encode(client_identifier).decode('utf-8')
             cls.stream_conn = websocket.create_connection(
                 'ws://%s:%d/?id=%s' %
                 (address, stream_port, client_identifier))
@@ -90,7 +91,7 @@ class WebSocketsTest(unittest.TestCase):
 
     @classmethod
     def decode_string(cls, data):
-        return str(cls.decode_bytes(data))
+        return cls.decode_bytes(data).decode('utf-8')
 
     def rpc_send(self, msg):
         return self.send(self.rpc_conn, msg)
