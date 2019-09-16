@@ -90,7 +90,7 @@ def _script_impl(ctx):
 
     ctx.actions.write(
         output = script_setup,
-        content = '&& \\\n'.join(_create_py_env(script_env.path, install = ctx.files.deps + [ctx.file.pkg]))+'\n',
+        content = ' && \\\n'.join(_create_py_env(script_env.path, install = ctx.files.deps + [ctx.file.pkg]))+'\n',
         is_executable = True
     )
 
@@ -143,7 +143,7 @@ def _test_impl(ctx, pyexe='python2'):
     ])
     ctx.actions.write(
         output = ctx.outputs.executable,
-        content = '&& \\\n'.join(sub_commands)+'\n',
+        content = ' && \\\n'.join(sub_commands)+'\n',
         is_executable = True
     )
 
