@@ -653,8 +653,8 @@ http_file(
 
 http_file(
     name = 'python_sphinx_lua',
-    urls = ['https://github.com/djungelorm/sphinx-lua/releases/download/0.1.4/sphinx-lua-0.1.4.tar.gz'],
-    sha256 = 'ebfd6a228fe99f2349d07c9cb0a6f411132b1726ad203238feaa44c67b2aad95'
+    urls = ['https://github.com/djungelorm/sphinx-lua/releases/download/0.1.5/sphinx-lua-0.1.5.tar.gz'],
+    sha256 = 'e081abafa3a5baaebab7adb57c8a485ac1de48d8d5d5982fa642131f29c04eda'
 )
 
 http_file(
