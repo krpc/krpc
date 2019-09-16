@@ -5,6 +5,7 @@ import json
 import os
 import sys
 from pkg_resources import Requirement, resource_filename, resource_string
+from io import open
 from .csharp import CsharpGenerator
 from .cpp import CppGenerator
 from .java import JavaGenerator
@@ -67,7 +68,7 @@ def main():
 
         if len(inputs) == 1 and inputs[0].endswith('.json'):
             # From JSON file
-            with open(inputs[0], 'r') as fp:
+            with open(inputs[0], 'r', encoding='utf-8') as fp:
                 defs = json.load(fp)
             if args.output_defs:
                 sys.stderr.write(

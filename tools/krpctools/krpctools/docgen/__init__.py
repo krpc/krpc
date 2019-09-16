@@ -6,6 +6,7 @@ import codecs
 import json
 import jinja2
 from pkg_resources import resource_filename
+from io import open
 from krpc.types import Types
 from krpc.utils import snake_case
 from ..utils import lower_camel_case, indent, single_line
@@ -75,13 +76,13 @@ def main():
     if not os.path.exists(args.order_file):
         raise RuntimeError(
             'Ordering file \'%s\' does not exist' % args.order_file)
-    with open(args.order_file, 'r') as fp:
+    with open(args.order_file, 'r', encoding='utf-8') as fp:
         ordering = [x.strip() for x in fp.readlines()]
         ordering = {value: i for i, value in enumerate(ordering)}
 
     services_info = {}
     for path in args.definitions:
-        with open(path, 'r') as fp:
+        with open(path, 'r', encoding='utf-8') as fp:
             services_info.update(json.load(fp))
 
     if services_info == {}:
@@ -122,7 +123,7 @@ def main():
             os.path.expanduser(os.path.expandvars(args.documented)))
         if not os.path.exists(os.path.dirname(documented_path)):
             os.makedirs(os.path.dirname(documented_path))
-        with open(documented_path, 'w') as fp:
+        with open(documented_path, 'w', encoding='utf-8') as fp:
             fp.write('\n'.join(documented)+'\n')
 
 
