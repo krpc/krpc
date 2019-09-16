@@ -360,13 +360,12 @@ http_archive(
 filegroup(
     name = 'plugin',
     srcs = [
-        'protoc-plugin/protoc-gen-lua',
-        'protoc-plugin/plugin_pb2.py'
+        'protoc-plugin/protoc-gen-lua'
     ],
     visibility = ['//visibility:public']
 )""",
     url = 'https://github.com/djungelorm/protobuf-lua/archive/v1.1.2.tar.gz',
-    sha256 = '8940611a448b0318589c0101e256edcee31a0260f6fea90c8f6cad862f39a2a6',
+    sha256 = '28f4daa026effb81cebfdf580b0fc5732e520c0f4ade53e940052d89cddf4264',
     strip_prefix = 'protobuf-lua-1.1.2'
 )
 
@@ -374,7 +373,7 @@ http_file(
     name = 'lua_protobuf',
     urls = ['https://github.com/djungelorm/protobuf-lua/releases/download/v1.1.2/protobuf-1.1.2-0.src.rock'],
     downloaded_file_path = 'protobuf-1.1.2-0.src.rock',
-    sha256 = 'ac5994852eeff805fe27564460bb6e9c4c2f9d1fb0cad34a23bce241a6006446'
+    sha256 = 'bae53a6fdfef5e7e99fc7db07eb958002878c768b2951af93e47f40da1724005'
 )
 
 http_file(
