@@ -365,16 +365,16 @@ filegroup(
     ],
     visibility = ['//visibility:public']
 )""",
-    url = 'https://github.com/djungelorm/protobuf-lua/archive/v1.1.1.tar.gz',
-    sha256 = 'bccdd9c65970c42fd29b87084db83777cad75780a67c5107b68f96603b5788a8',
-    strip_prefix = 'protobuf-lua-1.1.1'
+    url = 'https://github.com/djungelorm/protobuf-lua/archive/v1.1.2.tar.gz',
+    sha256 = '8940611a448b0318589c0101e256edcee31a0260f6fea90c8f6cad862f39a2a6',
+    strip_prefix = 'protobuf-lua-1.1.2'
 )
 
 http_file(
     name = 'lua_protobuf',
-    urls = ['https://github.com/djungelorm/protobuf-lua/releases/download/v1.1.1/protobuf-1.1.1-0.src.rock'],
-    downloaded_file_path = 'protobuf-1.1.1-0.src.rock',
-    sha256 = 'eec6a738cd6acbf0ae695c95bac6f89036cd37f23335272cb3717b01834f1dbb'
+    urls = ['https://github.com/djungelorm/protobuf-lua/releases/download/v1.1.2/protobuf-1.1.2-0.src.rock'],
+    downloaded_file_path = 'protobuf-1.1.2-0.src.rock',
+    sha256 = 'ac5994852eeff805fe27564460bb6e9c4c2f9d1fb0cad34a23bce241a6006446'
 )
 
 http_file(
