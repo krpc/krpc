@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
-MAINTAINER djungelorm <djungelorm@users.noreply.github.com>
+LABEL maintainer="djungelorm <djungelorm@users.noreply.github.com>"
 
-ARG bazel_version=0.29.0
+ARG bazel_version=0.29.1
 ARG ksp_version
 
 RUN apt-get update && \
@@ -12,14 +12,21 @@ RUN apt-get update && \
 # Install Bazel
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    pkg-config zip g++ zlib1g-dev unzip python && \
+    pkg-config zip g++ zlib1g-dev unzip python3 wget && \
     echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | \
       tee /etc/apt/sources.list.d/bazel.list && \
     curl https://bazel.build/bazel-release.pub.gpg | apt-key add - && \
     apt-get update && \
     apt-get install -y --no-install-recommends openjdk-8-jdk && \
-    apt-get install -y --no-install-recommends bazel=${bazel_version} && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    wget https://github.com/bazelbuild/bazel/releases/download/${bazel_version}/bazel-${bazel_version}-installer-linux-x86_64.sh && \
+    chmod +x bazel-${bazel_version}-installer-linux-x86_64.sh && \
+    ./bazel-${bazel_version}-installer-linux-x86_64.sh && \
+    rm bazel-${bazel_version}-installer-linux-x86_64.sh
+# Note: uses Bazel installer rather than apt to avoid pulling in python2 dependencies
+#       and because apt package of the specified version may not be available
+#       if a new Bazel release has been made since. Use the following to install via apt:
+# apt-get install -y --no-install-recommends bazel=${bazel_version} && \
 
 # Install Mono
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
@@ -43,8 +50,8 @@ RUN apt-get update && \
 # Install kRPC build dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    python-setuptools python-virtualenv \
-    python-dev autoconf libtool luarocks latexmk texlive-latex-base \
+    python3-setuptools python3-virtualenv \
+    python3-dev autoconf libtool luarocks latexmk texlive-latex-base \
     texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra \
     libxml2-dev libxslt1-dev librsvg2-bin && \
     rm -rf /var/lib/apt/lists/*
@@ -52,7 +59,8 @@ RUN apt-get update && \
 # Install kRPC test dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    virtualenv automake python-pip \
+    virtualenv automake python3-pip python-pip python-setuptools \
+    python-virtualenv python python-dev  \
     libenchant1c2a socat cmake && \
     rm -rf /var/lib/apt/lists/*
 

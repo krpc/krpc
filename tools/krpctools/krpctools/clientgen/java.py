@@ -153,7 +153,8 @@ class JavaGenerator(Generator):
                 value['name'] = self.language.parse_const_name(value['name'])
 
         # Add serial version UIDs to classes
-        items = context['classes'].items() + context['exceptions'].items()
+        items = context['classes'].items() + \
+            context['exceptions'].items()
         for class_name, cls in items:
             tohash = self.service_name+'.'+class_name
             hsh = hashlib.sha1(tohash.encode('utf-8')).hexdigest()

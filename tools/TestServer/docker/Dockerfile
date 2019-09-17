@@ -1,4 +1,5 @@
 FROM mono:6
+LABEL maintainer="djungelorm <djungelorm@users.noreply.github.com>"
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends unzip && \

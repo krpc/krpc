@@ -79,6 +79,7 @@ mach
 massless
 maths
 mits
+mutex
 namespace
 namespaces
 namespacing

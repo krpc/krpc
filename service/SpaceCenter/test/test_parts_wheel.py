@@ -173,9 +173,9 @@ class TestPartsWheel(krpctest.TestCase):
     def test_suspension(self):
         wheel = self.suspension_wheel
         self.assertTrue(wheel.has_suspension)
-        self.assertAlmostEquals(
+        self.assertAlmostEqual(
             1.00, wheel.suspension_spring_strength, places=2)
-        self.assertAlmostEquals(
+        self.assertAlmostEqual(
             1.00, wheel.suspension_damper_strength, places=2)
 
     def test_no_suspension(self):

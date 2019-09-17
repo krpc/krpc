@@ -10,12 +10,10 @@ py_script(
       '@python_six//file',
       '@python_isort//file',
       '@python_mccabe//file',
-      '@python_enum34//file',
       '@python_singledispatch//file',
       '@python_astroid//file',
       '@python_wrapt//file',
-      '@python_lazy_object_proxy//file',
-      '@python_futures//file'
+      '@python_lazy_object_proxy//file'
   ],
   visibility = ['//visibility:public']
 )

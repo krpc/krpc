@@ -1,7 +1,7 @@
 from krpc.connection import Connection
 from krpc.client import Client
 from krpc.encoder import Encoder
-from krpc.error import ConnectionError
+from krpc.error import ConnectionError  # pylint: disable=redefined-builtin
 from krpc.decoder import Decoder
 from krpc.schema.KRPC_pb2 import ConnectionRequest, ConnectionResponse
 

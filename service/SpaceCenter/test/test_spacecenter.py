@@ -491,12 +491,12 @@ class TestSpaceCenterCareer(krpctest.TestCase):
         cls.sc = cls.connect().space_center
 
     def test_game_mode(self):
-        self.assertEquals(self.sc.GameMode.career, self.sc.game_mode)
+        self.assertEqual(self.sc.GameMode.career, self.sc.game_mode)
 
     def test_career_parameters(self):
-        self.assertAlmostEquals(7, self.sc.science, places=3)
-        self.assertAlmostEquals(100352.04, self.sc.funds, places=3)
-        self.assertAlmostEquals(9, self.sc.reputation, places=3)
+        self.assertAlmostEqual(7, self.sc.science, places=3)
+        self.assertAlmostEqual(100352.04, self.sc.funds, places=3)
+        self.assertAlmostEqual(9, self.sc.reputation, places=3)
 
 
 if __name__ == '__main__':

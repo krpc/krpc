@@ -360,21 +360,20 @@ http_archive(
 filegroup(
     name = 'plugin',
     srcs = [
-        'protoc-plugin/protoc-gen-lua',
-        'protoc-plugin/plugin_pb2.py'
+        'protoc-plugin/protoc-gen-lua'
     ],
     visibility = ['//visibility:public']
 )""",
-    url = 'https://github.com/djungelorm/protobuf-lua/archive/v1.1.1.tar.gz',
-    sha256 = 'bccdd9c65970c42fd29b87084db83777cad75780a67c5107b68f96603b5788a8',
-    strip_prefix = 'protobuf-lua-1.1.1'
+    url = 'https://github.com/djungelorm/protobuf-lua/archive/v1.1.2.tar.gz',
+    sha256 = '28f4daa026effb81cebfdf580b0fc5732e520c0f4ade53e940052d89cddf4264',
+    strip_prefix = 'protobuf-lua-1.1.2'
 )
 
 http_file(
     name = 'lua_protobuf',
-    urls = ['https://github.com/djungelorm/protobuf-lua/releases/download/v1.1.1/protobuf-1.1.1-0.src.rock'],
-    downloaded_file_path = 'protobuf-1.1.1-0.src.rock',
-    sha256 = 'eec6a738cd6acbf0ae695c95bac6f89036cd37f23335272cb3717b01834f1dbb'
+    urls = ['https://github.com/djungelorm/protobuf-lua/releases/download/v1.1.2/protobuf-1.1.2-0.src.rock'],
+    downloaded_file_path = 'protobuf-1.1.2-0.src.rock',
+    sha256 = 'bae53a6fdfef5e7e99fc7db07eb958002878c768b2951af93e47f40da1724005'
 )
 
 http_file(
@@ -653,8 +652,8 @@ http_file(
 
 http_file(
     name = 'python_sphinx_lua',
-    urls = ['https://github.com/djungelorm/sphinx-lua/releases/download/0.1.4/sphinx-lua-0.1.4.tar.gz'],
-    sha256 = 'ebfd6a228fe99f2349d07c9cb0a6f411132b1726ad203238feaa44c67b2aad95'
+    urls = ['https://github.com/djungelorm/sphinx-lua/releases/download/0.1.5/sphinx-lua-0.1.5.tar.gz'],
+    sha256 = 'e081abafa3a5baaebab7adb57c8a485ac1de48d8d5d5982fa642131f29c04eda'
 )
 
 http_file(

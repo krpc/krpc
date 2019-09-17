@@ -23,7 +23,7 @@ dependencies for the project, but the following need to be installed manually on
 your system:
 
  * `Mono C# compiler, runtime and tools <https://www.mono-project.com/download/>`_
- * Python and virtualenv
+ * Python 3.4 or higher, and virtualenv
  * Autotools
  * LuaRocks
  * pdflatex, rsvg, libxml, libxslt and python headers (for building the documentation)
@@ -34,9 +34,9 @@ command:
 
 .. code-block:: bash
 
-   sudo apt-get install mono-complete python-setuptools python-virtualenv \
-   python-dev autoconf libtool luarocks texlive-latex-base \
-   texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra \
+   sudo apt-get install mono-complete python3-setuptools python3-virtualenv \
+   python3-dev autoconf libtool luarocks texlive-latex-base \
+   texlive-latex-recommended texlive-fonts-recommended \
    libxml2-dev libxslt1-dev librsvg2-bin
 
 Set Up your Environment
@@ -119,6 +119,7 @@ libraries and others.
 To run the tests, the following dependencies should be installed. Without them, some of the tests
 will fail.
 
+ * Python 2.7
  * Gendarme
  * CppCheck
  * socat
