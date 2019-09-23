@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.SpaceCenter.Services;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
@@ -82,31 +83,24 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             do {
                 int candidate = -1;
                 var parent = part.parent;
-                var moduleDecouple = part.Module<ModuleDecouple> ();
-                var moduleAnchoredDecoupler = part.Module<ModuleAnchoredDecoupler> ();
+                var decoupler = new Compatibility.ModuleDecoupler(part);
 
                 // If the part will decouple itself from its parent, use the parts activation stage
                 if (part.HasModule<LaunchClamp> ()) {
                     candidate = part.inverseStage;
-                } else if (moduleDecouple != null && moduleDecouple.isEnabled) {
-                    if (moduleDecouple.isOmniDecoupler)
+                } else if (decoupler.Instance != null && decoupler.IsEnabled) {
+                    if (decoupler.IsOmniDecoupler)
                         candidate = part.inverseStage;
-                    else if (parent != null && moduleDecouple.ExplosiveNode != null && moduleDecouple.ExplosiveNode.attachedPart == parent)
-                        candidate = part.inverseStage;
-                } else if (moduleAnchoredDecoupler != null && moduleAnchoredDecoupler.isEnabled) {
-                    if (parent != null && moduleAnchoredDecoupler.ExplosiveNode != null && moduleAnchoredDecoupler.ExplosiveNode.attachedPart == parent)
+                    else if (parent != null && decoupler.ExplosiveNode != null && decoupler.ExplosiveNode.attachedPart == parent)
                         candidate = part.inverseStage;
                 }
 
                 // If the part will be decoupled by its parent, use the parents activation stage
                 if (candidate == -1 && parent != null) {
-                    if (moduleDecouple != null) {
-                        if (moduleDecouple.isOmniDecoupler && moduleDecouple.isEnabled)
+                    if (decoupler.Instance != null) {
+                        if (decoupler.IsOmniDecoupler && decoupler.IsEnabled)
                             candidate = parent.inverseStage;
-                        else if (moduleDecouple.ExplosiveNode != null && moduleDecouple.ExplosiveNode.attachedPart == part)
-                            candidate = parent.inverseStage;
-                    } else if (moduleAnchoredDecoupler != null && moduleAnchoredDecoupler.isEnabled) {
-                        if (moduleAnchoredDecoupler.ExplosiveNode != null && moduleAnchoredDecoupler.ExplosiveNode.attachedPart == part)
+                        else if (decoupler.ExplosiveNode != null && decoupler.ExplosiveNode.attachedPart == part)
                             candidate = parent.inverseStage;
                     }
                 }

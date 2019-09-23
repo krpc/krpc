@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service.Attributes;
@@ -15,8 +14,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Decoupler : Equatable<Decoupler>
     {
-        readonly ModuleDecouple decoupler;
-        readonly ModuleAnchoredDecoupler anchoredDecoupler;
+        readonly Compatibility.ModuleDecoupler decoupler;
 
         internal static bool Is (Part part)
         {
@@ -29,11 +27,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Decoupler (Part part)
         {
             Part = part;
-            var internalPart = part.InternalPart;
-            decoupler = internalPart.Module<ModuleDecouple> ();
-            anchoredDecoupler = internalPart.Module<ModuleAnchoredDecoupler> ();
-            if (decoupler == null && anchoredDecoupler == null)
-                throw new ArgumentException ("Part is not a decoupler");
+            decoupler = new Compatibility.ModuleDecoupler(part.InternalPart);
+            if (decoupler.Instance == null)
+                throw new ArgumentException("Part is not a decoupler");
         }
 
         /// <summary>
@@ -42,10 +38,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         public override bool Equals (Decoupler other)
         {
             return
-            !ReferenceEquals (other, null) &&
+            !ReferenceEquals(other, null) &&
             Part != other.Part &&
-            (decoupler == other.decoupler || decoupler.Equals (other.decoupler)) &&
-            (anchoredDecoupler == other.anchoredDecoupler || anchoredDecoupler.Equals (other.anchoredDecoupler));
+            (decoupler.Instance == other.decoupler.Instance || decoupler.Instance.Equals(other.decoupler.Instance));
         }
 
         /// <summary>
@@ -53,12 +48,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = Part.GetHashCode ();
-            if (decoupler != null)
-                hash ^= decoupler.GetHashCode ();
-            if (anchoredDecoupler != null)
-                hash ^= anchoredDecoupler.GetHashCode ();
-            return hash;
+            return Part.GetHashCode () ^ decoupler.Instance.GetHashCode();
         }
 
         /// <summary>
@@ -85,10 +75,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             var preVesselIds = FlightGlobals.Vessels.Select (v => v.id).ToList ();
 
             // Fire the decoupler
-            if (decoupler != null)
-                decoupler.Decouple ();
-            else
-                anchoredDecoupler.Decouple ();
+            decoupler.Decouple();
 
             return PostDecouple (preVesselIds);
         }
@@ -107,27 +94,26 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether the decoupler has fired.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public bool Decoupled {
-            get { return decoupler != null ? decoupler.isDecoupled : anchoredDecoupler.isDecoupled; }
+            get {
+                return decoupler.IsDecoupled;
+            }
         }
 
         /// <summary>
         /// Whether the decoupler is enabled in the staging sequence.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public bool Staged {
-            get { return decoupler != null ? decoupler.StagingEnabled () : anchoredDecoupler.StagingEnabled (); }
+            get { return decoupler.StagingEnabled; }
         }
 
         /// <summary>
         /// The impulse that the decoupler imparts when it is fired, in Newton seconds.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float Impulse {
-            get { return (decoupler != null ? decoupler.ejectionForce : anchoredDecoupler.ejectionForce) * 10f; }
+            get { return decoupler.EjectionForce * 10f; }
         }
     }
 }
