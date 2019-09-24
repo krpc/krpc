@@ -15,6 +15,7 @@ v0.4.9
    * Add Part.Experiments which returns a list of experiments in the part
    * Update Parts.Experiments to return all experiments contained in the parts
  * Add Experiment.Name and Experiment.Title
+ * Fix Fairing.Jettison and Fairing.Jettisoned for parts from the ProceduralFairings mod (#549)
 
 v0.4.8
  * Allows RPCs to be accessed from game scenes other than just flight (#471)

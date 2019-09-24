@@ -7,6 +7,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
     /// A fairing. Obtained by calling <see cref="Part.Fairing"/>.
+    /// Supports both stock fairings, and those from the ProceduralFairings mod.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class Fairing : Equatable<Fairing>
@@ -17,6 +18,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal static bool Is (Part part)
         {
             var internalPart = part.InternalPart;
+            // ProceduralFairingDecoupler is from the ProceduralFairings mod
             return internalPart.HasModule<ModuleProceduralFairing> () || internalPart.HasModule("ProceduralFairingDecoupler");
         }
 
@@ -24,8 +26,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             Part = part;
             var internalPart = part.InternalPart;
-            if (internalPart.HasModule("ModuleProceduralFairing"))
-                fairing = new Module(part, internalPart.Module("ModuleProceduralFairing"));
+            if (internalPart.HasModule<ModuleProceduralFairing>())
+                fairing = new Module(part, internalPart.Module<ModuleProceduralFairing>());
             if (internalPart.HasModule("ProceduralFairingDecoupler"))
                 proceduralFairing = new Module(part, internalPart.Module("ProceduralFairingDecoupler"));
             if (fairing == null && proceduralFairing == null)
@@ -67,10 +69,18 @@ namespace KRPC.SpaceCenter.Services.Parts
         public void Jettison ()
         {
             if (!Jettisoned) {
-                if (fairing != null)
+                if (fairing != null) {
                     fairing.TriggerEvent("Deploy");
-                else
-                    proceduralFairing.TriggerEvent("Jettison");
+                } else {
+                    // Note: older versions of ProceduralFairings have the "Jettison" event,
+                    // newer versions have the "Jettison Fairing" event
+                    foreach (var e in proceduralFairing.Events) {
+                        if (e == "Jettison")
+                            proceduralFairing.TriggerEvent("Jettison");
+                        if (e == "Jettison Fairing")
+                            proceduralFairing.TriggerEvent("Jettison Fairing");
+                    }
+                }
             }
         }
 
@@ -81,10 +91,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Jettisoned
         {
             get {
-                if (fairing != null)
+                if (fairing != null) {
                     return !fairing.Events.Contains("Deploy");
-                else
-                    return !proceduralFairing.Events.Contains("Jettison");
+                } else {
+                    // Note: older versions of ProceduralFairings have the "Jettison" event,
+                    // newer versions have the "Jettison Fairing" event
+                    var events = proceduralFairing.Events;
+                    return !(events.Contains("Jettison") ||
+                             events.Contains("Jettison Fairing"));
+                }
             }
         }
     }
