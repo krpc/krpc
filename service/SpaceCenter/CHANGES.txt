@@ -17,6 +17,7 @@ v0.4.9
  * Add Experiment.Name and Experiment.Title
  * Fix Fairing.Jettison and Fairing.Jettisoned for parts from the ProceduralFairings mod (#549)
  * Fix Engine.SpecificImpulse returning 0 for Realism Overhaul engines that are active but not throttled up (#548)
+ * Fix compatibility with DMagic science experiments mod (#550)
 
 v0.4.8
  * Allows RPCs to be accessed from game scenes other than just flight (#471)

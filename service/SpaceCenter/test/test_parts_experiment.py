@@ -11,7 +11,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.sc = self.connect().space_center
         self.parts = self.sc.active_vessel.parts
         self.pod = self.parts.with_name('mk1pod')[0].experiment
-        self.pod = self.parts.with_name('GooExperiment')[0].experiment
+        self.goo = self.parts.with_name('GooExperiment')[0].experiment
 
     def test_experiments(self):
         self.assertItemsEqual(
