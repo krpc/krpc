@@ -240,7 +240,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float SpecificImpulse {
-            get { return CurrentEngine.realIsp; }
+            get {
+                var engine = CurrentEngine;
+                if (engine.realIsp < 0.01) {
+                    // If the realIsp hasn't been calculated, get the specific impuse from the
+                    // atmosphere curve of the engine. This works around an issue with RO mod engines
+                    // not computing realIsp unless they are activate *and* throttled is greater than 0
+                    return engine.atmosphereCurve.Evaluate(
+                        (float)(engine.vessel.staticPressurekPa * PhysicsGlobals.KpaToAtmospheres));
+                }
+                return engine.realIsp;
+            }
         }
 
         /// <summary>
