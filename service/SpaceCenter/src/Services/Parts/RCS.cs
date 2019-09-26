@@ -174,11 +174,13 @@ namespace KRPC.SpaceCenter.Services.Parts
 				if (!Active)
 					return ITorqueProviderExtensions.zero;
 				return GetTorqueVectors();
-				//return rcs.GetPotentialTorque();
 			}
 		}
 
-
+		/// <summary>
+		/// Calculates available torque vectors.
+		/// </summary>
+		/// <returns></returns>
 		private Torque GetTorqueVectors()
 		{
 			ReferenceFrame frame = Part.Vessel.ReferenceFrame;
@@ -188,7 +190,6 @@ namespace KRPC.SpaceCenter.Services.Parts
 			double torqueZn = 0;
 			double torqueY = 0;
 			double torqueYn = 0;
-			Tuple3 position = Part.Position(frame);
 			float thrust = MaxThrust;
 			foreach (var thruster in Thrusters)
 			{
@@ -197,10 +198,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 				double forceDirX = thruster.ThrustDirection(frame).Item1;
 				double forceDirY = thruster.ThrustDirection(frame).Item2;
 				double forceDirZ = thruster.ThrustDirection(frame).Item3;
-				//Tuple3 thrustPosition = thruster.ThrustPosition(frame);
-				//Tuple3 direction = thrustPosition.Subtract(position).Normalise;
 				
-				//
 				double posX = thrustPosition.Item1;
 				double posY = thrustPosition.Item2;
 				double posZ = thrustPosition.Item3;
@@ -228,8 +226,6 @@ namespace KRPC.SpaceCenter.Services.Parts
 				torque = posX * forceDirZ * thrust;
 				if (torque < 0) torqueYn += torque;
 				else torqueY += torque;
-
-
 			}
 			Vector3d posd = new Vector3d(torqueX, torqueZ, torqueY).ToPositive();
 			Vector3d negd = new Vector3d(torqueXn, torqueZn, torqueYn).ToPositive();
