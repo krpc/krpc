@@ -8,7 +8,6 @@ using KRPC.Utils;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using TupleV3 = KRPC.Utils.Tuple<Vector3d, Vector3d>;
 using TupleT3 = KRPC.Utils.Tuple<KRPC.Utils.Tuple<double, double, double>, KRPC.Utils.Tuple<double, double, double>>;
-using Torque = KRPC.Utils.Tuple<Vector3d, Vector3d>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -168,55 +167,54 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Calculates available torque vectors.
         /// We use this custom code rather than KSPs ITorqueProvider as it produces erroneous values.
         /// </summary>
-        private Torque GetTorqueVectors()
+        private TupleV3 GetTorqueVectors()
         {
-            ReferenceFrame frame = Part.Vessel.ReferenceFrame;
+            var frame = Part.Vessel.ReferenceFrame;
+            var thrust = MaxThrust;
             double torqueX = 0;
             double torqueXn = 0;
             double torqueY = 0;
             double torqueYn = 0;
             double torqueZ = 0;
             double torqueZn = 0;
-            float thrust = MaxThrust;
-            foreach (var thruster in Thrusters)
-            {
-                Tuple3 thrustPosition = thruster.ThrustPosition(frame);
+            foreach (var thruster in Thrusters) {
+                var thrustPosition = thruster.ThrustPosition(frame);
+                var thrustDirection = thruster.ThrustDirection(frame);
+                var forceX = thrustDirection.Item1 * thrust;
+                var forceY = thrustDirection.Item2 * thrust;
+                var forceZ = thrustDirection.Item3 * thrust;
+                var posX = thrustPosition.Item1;
+                var posY = thrustPosition.Item2;
+                var posZ = thrustPosition.Item3;
                 double torque = 0;
-                double forceDirX = thruster.ThrustDirection(frame).Item1;
-                double forceDirY = thruster.ThrustDirection(frame).Item2;
-                double forceDirZ = thruster.ThrustDirection(frame).Item3;
-
-                double posX = thrustPosition.Item1;
-                double posY = thrustPosition.Item2;
-                double posZ = thrustPosition.Item3;
-                //Pitch torque, around X (position of RCS module projected on Z):
-                torque = posZ * forceDirY * thrust;
+                // Pitch torque, around X (position of RCS module projected on Z):
+                torque = posZ * forceY;
                 if (torque > 0) torqueX += torque;
                 else torqueXn += torque;
-                //Pitch torque, around X (position projected on Y):
-                torque = posY * forceDirZ * thrust;
+                // Pitch torque, around X (position projected on Y):
+                torque = posY * forceZ;
                 if (torque < 0) torqueX += torque;
                 else torqueXn += torque;
-                //Yaw torque, around Z (position projected on X):
-                torque = posX * forceDirY * thrust;
+                // Yaw torque, around Z (position projected on X):
+                torque = posX * forceY;
                 if (torque > 0) torqueZn += torque;
                 else torqueZ += torque;
-                //Yaw torque, around Z (position projected on Y):
-                torque = posY * forceDirX * thrust;
+                // Yaw torque, around Z (position projected on Y):
+                torque = posY * forceX;
                 if (torque < 0) torqueZn += torque;
                 else torqueZ += torque;
-                //Roll torque, around Y (position projected on Z):
-                torque = posZ * forceDirX * thrust;
+                // Roll torque, around Y (position projected on Z):
+                torque = posZ * forceX;
                 if (torque < 0) torqueY += torque;
                 else torqueYn += torque;
-                //Roll torque, around Y (position projected on X):
-                torque = posX * forceDirZ * thrust;
+                // Roll torque, around Y (position projected on X):
+                torque = posX * forceZ;
                 if (torque < 0) torqueYn += torque;
                 else torqueY += torque;
             }
-            Vector3d posd = new Vector3d(torqueX, torqueY, torqueZ).ToPositive();
-            Vector3d negd = new Vector3d(torqueXn, torqueYn, torqueZn).ToNegative();
-            return new Torque(posd, negd);
+            return new TupleV3(
+                new Vector3d(torqueX, torqueY, torqueZ).ToPositive(),
+                new Vector3d(torqueXn, torqueYn, torqueZn).ToNegative());
         }
 
         /// <summary>
