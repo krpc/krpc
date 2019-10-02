@@ -101,6 +101,9 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             return new TupleT3 (v.Item1.ToTuple (), v.Item2.ToTuple ());
         }
 
+        /// <summary>
+        /// Make a vector's components positive
+        /// </summary>
 		public static Vector3d ToPositive(this Vector3d v)
 		{
 			return new Vector3d(
