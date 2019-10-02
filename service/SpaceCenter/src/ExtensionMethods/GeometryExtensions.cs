@@ -104,14 +104,10 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Make a vector's components positive
         /// </summary>
-		public static Vector3d ToPositive(this Vector3d v)
-		{
-			return new Vector3d(
-				Math.Abs(v.x),
-				Math.Abs(v.y),
-				Math.Abs(v.z)
-				);
-		}
+        public static Vector3d ToPositive(this Vector3d v)
+        {
+            return new Vector3d(Math.Abs(v.x), Math.Abs(v.y), Math.Abs(v.z));
+        }
 
         /// <summary>
         /// Swap the Y and Z components of a vector

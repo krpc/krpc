@@ -163,64 +163,65 @@ namespace KRPC.SpaceCenter.Services.Parts
                 return GetTorqueVectors();
             }
         }
-		/// <summary>
-		/// Calculates available torque vectors.
-		/// </summary>
-		/// <returns></returns>
-		private Torque GetTorqueVectors()
-		{
-			ReferenceFrame frame = Part.Vessel.ReferenceFrame;
-			double torqueXn = 0;
-			double torqueX = 0;
-			double torqueZ = 0;
-			double torqueZn = 0;
-			double torqueY = 0;
-			double torqueYn = 0;
-			float thrust = MaxThrust;
-			foreach (var thruster in Thrusters)
-			{
-				Tuple3 thrustPosition = thruster.ThrustPosition(frame);
-				double torque = 0;
-				double forceDirX = thruster.ThrustDirection(frame).Item1;
-				double forceDirY = thruster.ThrustDirection(frame).Item2;
-				double forceDirZ = thruster.ThrustDirection(frame).Item3;
 
-				double posX = thrustPosition.Item1;
-				double posY = thrustPosition.Item2;
-				double posZ = thrustPosition.Item3;
-				//Pitch torque, around X (position of RCS module projected on Z):
-				torque = posZ * forceDirY * thrust;
-				if (torque > 0) torqueX += torque;
-				else torqueXn += torque;
-				//Pitch torque, around X (position projected on Y):
-				torque = posY * forceDirZ * thrust;
-				if (torque < 0) torqueX += torque;
-				else torqueXn += torque;
-				//Yaw torque, around Z (position projected on X):
-				torque = posX * forceDirY * thrust;
-				if (torque > 0) torqueZn += torque;
-				else torqueZ += torque;
-				//Yaw torque, around Z (position projected on Y):
-				torque = posY * forceDirX * thrust;
-				if (torque < 0) torqueZn += torque;
-				else torqueZ += torque;
-				//Roll torque, around Y (position projected on Z):
-				torque = posZ * forceDirX * thrust;
-				if (torque < 0) torqueY += torque;
-				else torqueYn += torque;
-				//Roll torque, around Y (position projected on X):
-				torque = posX * forceDirZ * thrust;
-				if (torque < 0) torqueYn += torque;
-				else torqueY += torque;
-			}
-			Vector3d posd = new Vector3d(torqueX, torqueY, torqueZ).ToPositive();
-			Vector3d negd = new Vector3d(-torqueXn, -torqueYn, -torqueZn).ToPositive();
-			return new Torque(posd, negd);
-		}
-		/// <summary>
-		/// Get the thrust of the RCS thruster with the given atmospheric conditions, in Newtons.
-		/// </summary>
-		float GetThrust (double throttle, double pressure)
+        /// <summary>
+        /// Calculates available torque vectors.
+        /// </summary>
+        private Torque GetTorqueVectors()
+        {
+            ReferenceFrame frame = Part.Vessel.ReferenceFrame;
+            double torqueX = 0;
+            double torqueXn = 0;
+            double torqueY = 0;
+            double torqueYn = 0;
+            double torqueZ = 0;
+            double torqueZn = 0;
+            float thrust = MaxThrust;
+            foreach (var thruster in Thrusters)
+            {
+                Tuple3 thrustPosition = thruster.ThrustPosition(frame);
+                double torque = 0;
+                double forceDirX = thruster.ThrustDirection(frame).Item1;
+                double forceDirY = thruster.ThrustDirection(frame).Item2;
+                double forceDirZ = thruster.ThrustDirection(frame).Item3;
+
+                double posX = thrustPosition.Item1;
+                double posY = thrustPosition.Item2;
+                double posZ = thrustPosition.Item3;
+                //Pitch torque, around X (position of RCS module projected on Z):
+                torque = posZ * forceDirY * thrust;
+                if (torque > 0) torqueX += torque;
+                else torqueXn += torque;
+                //Pitch torque, around X (position projected on Y):
+                torque = posY * forceDirZ * thrust;
+                if (torque < 0) torqueX += torque;
+                else torqueXn += torque;
+                //Yaw torque, around Z (position projected on X):
+                torque = posX * forceDirY * thrust;
+                if (torque > 0) torqueZn += torque;
+                else torqueZ += torque;
+                //Yaw torque, around Z (position projected on Y):
+                torque = posY * forceDirX * thrust;
+                if (torque < 0) torqueZn += torque;
+                else torqueZ += torque;
+                //Roll torque, around Y (position projected on Z):
+                torque = posZ * forceDirX * thrust;
+                if (torque < 0) torqueY += torque;
+                else torqueYn += torque;
+                //Roll torque, around Y (position projected on X):
+                torque = posX * forceDirZ * thrust;
+                if (torque < 0) torqueYn += torque;
+                else torqueY += torque;
+            }
+            Vector3d posd = new Vector3d(torqueX, torqueY, torqueZ).ToPositive();
+            Vector3d negd = new Vector3d(-torqueXn, -torqueYn, -torqueZn).ToPositive();
+            return new Torque(posd, negd);
+        }
+
+        /// <summary>
+        /// Get the thrust of the RCS thruster with the given atmospheric conditions, in Newtons.
+        /// </summary>
+        float GetThrust (double throttle, double pressure)
         {
             pressure *= PhysicsGlobals.KpaToAtmospheres;
             return 1000f * (float)rcs.maxFuelFlow * (float)throttle * (float)rcs.G * rcs.atmosphereCurve.Evaluate ((float)pressure);
