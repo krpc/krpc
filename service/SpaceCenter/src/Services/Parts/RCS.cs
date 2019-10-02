@@ -167,6 +167,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Calculates available torque vectors.
         /// We use this custom code rather than KSPs ITorqueProvider as it produces erroneous values.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
+        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
         private TupleV3 GetTorqueVectors()
         {
             var frame = Part.Vessel.ReferenceFrame;
