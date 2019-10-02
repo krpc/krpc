@@ -101,6 +101,15 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             return new TupleT3 (v.Item1.ToTuple (), v.Item2.ToTuple ());
         }
 
+		public static Vector3d ToPositive(this Vector3d v)
+		{
+			return new Vector3d(
+				Math.Abs(v.x),
+				Math.Abs(v.y),
+				Math.Abs(v.z)
+				);
+		}
+
         /// <summary>
         /// Swap the Y and Z components of a vector
         /// </summary>
