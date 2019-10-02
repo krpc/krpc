@@ -159,8 +159,53 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Active)
                     return ITorqueProviderExtensions.zero;
-                return rcs.GetPotentialTorque ();
+                return GetTorqueVectors();
             }
+        }
+
+        /// <summary>
+        /// Calculates available torque vectors.
+        /// We use this custom code rather than KSPs ITorqueProvider as it produces erroneous values.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
+        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
+        private TupleV3 GetTorqueVectors()
+        {
+            var frame = Part.Vessel.ReferenceFrame;
+            var thrust = MaxThrust;
+            double torqueX = 0;
+            double torqueXn = 0;
+            double torqueY = 0;
+            double torqueYn = 0;
+            double torqueZ = 0;
+            double torqueZn = 0;
+            foreach (var thruster in Thrusters) {
+                // torque = cross product of position and force
+                var thrustPosition = thruster.ThrustPosition(frame);
+                var thrustDirection = thruster.ThrustDirection(frame);
+                var forceX = thrustDirection.Item1 * thrust;
+                var forceY = thrustDirection.Item2 * thrust;
+                var forceZ = thrustDirection.Item3 * thrust;
+                var posX = thrustPosition.Item1;
+                var posY = thrustPosition.Item2;
+                var posZ = thrustPosition.Item3;
+                double torque = 0;
+                // Torque around X axis (pitch)
+                torque = posY * forceZ - posZ * forceY;
+                if (torque > 0) torqueX += torque;
+                else torqueXn += -torque;
+                // Torque around Y axis (yaw)
+                torque = posZ * forceX - posX * forceZ;
+                if (torque > 0) torqueY += torque;
+                else torqueYn += -torque;
+                // Torque around Z axis (roll)
+                torque = posX * forceY - posY * forceX;
+                if (torque > 0) torqueZ += torque;
+                else torqueZn += -torque;
+            }
+            return new TupleV3(
+                new Vector3d(torqueX, torqueY, torqueZ),
+                new Vector3d(-torqueXn, -torqueYn, -torqueZn));
         }
 
         /// <summary>
