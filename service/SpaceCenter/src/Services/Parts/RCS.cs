@@ -166,6 +166,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Calculates available torque vectors.
+        /// We use this custom code rather than KSPs ITorqueProvider as it produces erroneous values.
         /// </summary>
         private Torque GetTorqueVectors()
         {
