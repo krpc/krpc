@@ -213,8 +213,8 @@ namespace KRPC.SpaceCenter.Services.Parts
 				if (torque < 0) torqueYn += torque;
 				else torqueY += torque;
 			}
-			Vector3d posd = new Vector3d(torqueX, torqueZ, torqueY).ToPositive();
-			Vector3d negd = new Vector3d(torqueXn, torqueZn, torqueYn).ToPositive();
+			Vector3d posd = new Vector3d(torqueX, torqueY, torqueZ).ToPositive();
+			Vector3d negd = new Vector3d(-torqueXn, -torqueYn, -torqueZn).ToPositive();
 			return new Torque(posd, negd);
 		}
 		/// <summary>
