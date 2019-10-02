@@ -181,20 +181,20 @@ class TestPartsRCSMSL(krpctest.TestCase, RCSTest):
             'Place-Anywhere 7 Linear RCS Port',
             {'max_thrust': 842,
              'isp': 101,
-             'pos_torque': (1260, 360, 2460),
-             'neg_torque': (-1260, -360, -2460)})
+             'pos_torque': (0, 153, 0),
+             'neg_torque': (-534, 0, -1040)})
         cls.add_rcs_data(
             'RV-105 RCS Thruster Block',
             {'max_thrust': 420,
              'isp': 101,
-             'pos_torque': (1020, 470, 805),
-             'neg_torque': (-1020, -470, -805)})
+             'pos_torque': (432, 198, 339),
+             'neg_torque': (-432, -198, -339)})
         cls.add_rcs_data(
             'Vernor Engine',
             {'max_thrust': 6503,
              'isp': 140.9,
-             'pos_torque': (7400, 320, 7570),
-             'neg_torque': (-7400, -320, -7570)})
+             'pos_torque': (4032, 0, 0),
+             'neg_torque': (0, -178, -4129)})
 
 
 class TestPartsRCSVacuum(krpctest.TestCase, RCSTest):
@@ -212,8 +212,8 @@ class TestPartsRCSVacuum(krpctest.TestCase, RCSTest):
             'Place-Anywhere 7 Linear RCS Port',
             {'max_thrust': 2000,
              'isp': 240,
-             'pos_torque': (1210, 325, 2360),
-             'neg_torque': (-1210, -325, -2360)})
+             'pos_torque': (0, 326, 0),
+             'neg_torque': (-1212, 0, -2367)})
         cls.add_rcs_data(
             'RV-105 RCS Thruster Block',
             {'max_thrust': 1000,
@@ -224,8 +224,8 @@ class TestPartsRCSVacuum(krpctest.TestCase, RCSTest):
             'Vernor Engine',
             {'max_thrust': 12000,
              'isp': 260,
-             'pos_torque': (6900, 1, 6900),
-             'neg_torque': (-6900, -1, -6900)})
+             'pos_torque': (6931, 0, 0),
+             'neg_torque': (0, 0, -6931)})
 
 
 if __name__ == '__main__':
