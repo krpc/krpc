@@ -19,6 +19,7 @@ v0.4.9
  * Fix Engine.SpecificImpulse returning 0 for Realism Overhaul engines that are active but not throttled up (#548)
  * Fix compatibility with DMagic science experiments mod (#550)
  * Fix available torque calculations for RCS (#552, #354)
+ * Fix RCS.MaxThrust returning incorrect values
 
 v0.4.8
  * Allows RPCs to be accessed from game scenes other than just flight (#471)

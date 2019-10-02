@@ -228,13 +228,15 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!HasFuel)
                     return 0f;
-                return GetThrust (ThrustLimit, Part.InternalPart.staticPressureAtm);
+                return GetThrust (ThrustLimit, rcs.vessel.staticPressurekPa);
             }
         }
 
         /// <summary>
         /// The maximum amount of thrust that can be produced by the RCS thrusters when active,
         /// in Newtons.
+        /// Takes the thrusters current <see cref="ThrustLimit"/> and atmospheric conditions
+        /// into account.
         /// </summary>
         [KRPCProperty]
         public float MaxThrust {
