@@ -180,6 +180,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             double torqueZ = 0;
             double torqueZn = 0;
             foreach (var thruster in Thrusters) {
+                // torque = cross product of position and force
                 var thrustPosition = thruster.ThrustPosition(frame);
                 var thrustDirection = thruster.ThrustDirection(frame);
                 var forceX = thrustDirection.Item1 * thrust;
@@ -189,34 +190,22 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var posY = thrustPosition.Item2;
                 var posZ = thrustPosition.Item3;
                 double torque = 0;
-                // Pitch torque, around X (position of RCS module projected on Z):
-                torque = posZ * forceY;
+                // Torque around X axis (pitch)
+                torque = posY * forceZ - posZ * forceY;
                 if (torque > 0) torqueX += torque;
-                else torqueXn += torque;
-                // Pitch torque, around X (position projected on Y):
-                torque = posY * forceZ;
-                if (torque < 0) torqueX += torque;
-                else torqueXn += torque;
-                // Yaw torque, around Z (position projected on X):
-                torque = posX * forceY;
-                if (torque > 0) torqueZn += torque;
-                else torqueZ += torque;
-                // Yaw torque, around Z (position projected on Y):
-                torque = posY * forceX;
-                if (torque < 0) torqueZn += torque;
-                else torqueZ += torque;
-                // Roll torque, around Y (position projected on Z):
-                torque = posZ * forceX;
-                if (torque < 0) torqueY += torque;
-                else torqueYn += torque;
-                // Roll torque, around Y (position projected on X):
-                torque = posX * forceZ;
-                if (torque < 0) torqueYn += torque;
-                else torqueY += torque;
+                else torqueXn += -torque;
+                // Torque around Y axis (yaw)
+                torque = posZ * forceX - posX * forceZ;
+                if (torque > 0) torqueY += torque;
+                else torqueYn += -torque;
+                // Torque around Z axis (roll)
+                torque = posX * forceY - posY * forceX;
+                if (torque > 0) torqueZ += torque;
+                else torqueZn += -torque;
             }
             return new TupleV3(
-                new Vector3d(torqueX, torqueY, torqueZ).ToPositive(),
-                new Vector3d(torqueXn, torqueYn, torqueZn).ToNegative());
+                new Vector3d(torqueX, torqueY, torqueZ),
+                new Vector3d(-torqueXn, -torqueYn, -torqueZn));
         }
 
         /// <summary>
