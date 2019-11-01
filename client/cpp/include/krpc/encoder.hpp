@@ -8,7 +8,7 @@
 #include <tuple>
 #include <vector>
 
-#include "krpc/krpc.pb.hpp"
+#include "krpc.pb.h"
 
 namespace google {
 namespace protobuf {
