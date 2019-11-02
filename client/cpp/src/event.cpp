@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-#include "krpc/krpc.pb.hpp"
+#include "krpc.pb.h"
 #include "krpc/stream_impl.hpp"
 
 namespace krpc {
@@ -50,7 +50,7 @@ void Event::wait(double timeout) {
 }
 
 int Event::add_callback(const Callback& callback) {
-  return _stream.add_callback([callback] (bool _) { callback(); });
+  return _stream.add_callback([callback] (bool _ [[maybe_unused]]) { callback(); });
 }
 
 void Event::remove_callback(int tag) {

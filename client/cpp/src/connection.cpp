@@ -73,14 +73,14 @@ std::string Connection::partial_receive(size_t length, std::chrono::milliseconds
   asio::steady_timer timer(socket.get_io_service());
   timer.expires_from_now(timeout);
   timer.async_wait(
-    [&timer_complete] (const asio::error_code& error) {
+    [&timer_complete] (const asio::error_code& error [[maybe_unused]]) {
       timer_complete = true;
     });
 
   bool read_complete = false;
   asio::async_read(
     socket, asio::buffer(&data[0], length),
-    [&read, &read_complete] (const asio::error_code& error, size_t length) {
+    [&read, &read_complete] (const asio::error_code& error [[maybe_unused]], size_t length) {
       read = length;
       read_complete = true;
     });

@@ -11,7 +11,7 @@
 #include <utility>
 #include <vector>
 
-#include "krpc/krpc.pb.hpp"
+#include "krpc.pb.h"
 
 namespace krpc {
 
