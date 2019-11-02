@@ -7,7 +7,7 @@
 #include "krpc/client.hpp"
 #include "krpc/decoder.hpp"
 #include "krpc/error.hpp"
-#include "krpc.pb.h"
+#include "krpc/krpc.pb.hpp"
 #include "krpc/stream_impl.hpp"
 
 namespace krpc {

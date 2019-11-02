@@ -9,7 +9,7 @@
 #include <tuple>
 #include <vector>
 
-#include "krpc.pb.h"
+#include "krpc/krpc.pb.hpp"
 
 namespace google {
 namespace protobuf {

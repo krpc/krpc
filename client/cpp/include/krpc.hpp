@@ -4,7 +4,7 @@
 
 #include "krpc/client.hpp"  // IWYU pragma: export
 #include "krpc/error.hpp"  // IWYU pragma: export
-#include "krpc.pb.h"  // IWYU pragma: export
+#include "krpc/krpc.pb.hpp"  // IWYU pragma: export
 #include "krpc/object.hpp"  // IWYU pragma: export
 
 namespace krpc {

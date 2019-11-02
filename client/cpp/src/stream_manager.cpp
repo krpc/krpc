@@ -11,7 +11,7 @@
 #include "krpc/connection.hpp"
 #include "krpc/decoder.hpp"
 #include "krpc/error.hpp"
-#include "krpc.pb.h"
+#include "krpc/krpc.pb.hpp"
 #include "krpc/services/krpc.hpp"
 #include "krpc/stream_impl.hpp"
 
