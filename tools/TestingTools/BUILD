@@ -9,6 +9,7 @@ deps = [
     '//tools/build/ksp:Assembly-CSharp',
     '//tools/build/ksp:Assembly-CSharp-firstpass',
     '//tools/build/ksp:UnityEngine',
+    '//tools/build/ksp:UnityEngine.CoreModule',
     '//tools/build/ksp:UnityEngine.UI',
     '//tools/build/ksp:mscorlib',
     '//tools/build/ksp:System',
