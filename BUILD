@@ -156,7 +156,7 @@ pkg_zip(
         'service/UI/': 'GameData/kRPC/',
         'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt',
         # Module Manager
-        '../module_manager/file/ModuleManager.4.0.3.dll': 'GameData/ModuleManager.4.0.3.dll',
+        '../module_manager/file/ModuleManager.4.1.3.dll': 'GameData/ModuleManager.4.1.3.dll',
         # Clients
         'client/cnano/': 'client/',
         'client/cpp/': 'client/',

@@ -59,7 +59,7 @@ genrule(
 genrule(
     name = 'ModuleManager',
     srcs = ['@module_manager//file'],
-    outs = ['ModuleManager.4.0.3.dll'],
+    outs = ['ModuleManager.4.1.3.dll'],
     cmd = 'cp $< $@'
 )
 filegroup(

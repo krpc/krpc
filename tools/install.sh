@@ -44,13 +44,13 @@ cp -R -L \
     bazel-bin/tools/TestingTools/TestingTools.xml \
     service/SpaceCenter/src/module-manager.cfg \
     $GAMEDATA/
-cp -L bazel-bin/tools/cslibs/ModuleManager.4.0.3.dll $GAMEDATA/../
+cp -L bazel-bin/tools/cslibs/ModuleManager.4.1.3.dll $GAMEDATA/../
 
 mkdir -p $GAMEDATA/PluginData
 cp tools/settings.cfg $GAMEDATA/PluginData/
 
 find $GAMEDATA -type f -exec chmod 644 {} \;
 find $GAMEDATA -type d -exec chmod 755 {} \;
-chmod 644 $GAMEDATA/../ModuleManager.4.0.3.dll
+chmod 644 $GAMEDATA/../ModuleManager.4.1.3.dll
 
 ls -lR $GAMEDATA
