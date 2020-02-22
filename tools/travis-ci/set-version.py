@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 import re
@@ -9,7 +9,7 @@ branch_version_pattern = r'^v[0-9]+\.[0-9]+\.[0-9]+(-.+)?$'
 
 # Get most recent tag, commits since tag and commit hash
 desc = subprocess.check_output(
-    ['git', 'describe', '--long', '--always']).strip()
+    ['git', 'describe', '--long', '--always']).decode('utf-8').strip()
 commit_hash = ''
 num_commits = ''
 if re.search(r'-g[0-9a-f]+$', desc):
@@ -43,7 +43,7 @@ else:
 
 # Compute version string
 version = '%s-%s-%s' % version
-print 'version =', version
+print('version =', version)
 
 # Update config.bzl
 with open('config.bzl', 'r') as f:
