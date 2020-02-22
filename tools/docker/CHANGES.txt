@@ -1,3 +1,6 @@
+v2.4.0
+ * Update to KSP 1.9.0
+
 v2.3.0
  * Update build tools to use python 3
  * Update to Bazel 0.28.1
