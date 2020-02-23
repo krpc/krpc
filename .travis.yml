@@ -25,7 +25,7 @@ jobs:
       os: windows
       language: cpp
       before_script:
-        - ./tools/travis-ci/set-version.py
+        - python ./tools/travis-ci/set-version.py
       script:
         - ./tools/travis-ci/script-windows.sh
 
