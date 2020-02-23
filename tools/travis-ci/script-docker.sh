@@ -12,7 +12,7 @@ bazel build \
   //tools/krpctools \
   //tools/TestServer:archive \
   //:ci-test
-msbuild KRPC.sln /warnaserror /nowarn:MSB3276,MSB3277
+# msbuild KRPC.sln /warnaserror /nowarn:MSB3276,MSB3277
 
 bazel test //:ci-test
 client/cpp/test-build.sh

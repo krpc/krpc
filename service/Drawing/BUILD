@@ -31,7 +31,7 @@ csharp_library(
 
 service_definitions(
     name = 'ServiceDefinitions',
-    assemblies = [':KRPC.Drawing', '//service/UI:KRPC.UI', '//service/SpaceCenter:KRPC.SpaceCenter'],
+    assemblies = [':KRPC.Drawing', '//service/UI:KRPC.UI', '//service/SpaceCenter:KRPC.SpaceCenter', '//tools/build/ksp:UnityEngine.TextRenderingModule'],
     service = 'Drawing',
     out = 'KRPC.Drawing.json',
     visibility = ['//visibility:public']
