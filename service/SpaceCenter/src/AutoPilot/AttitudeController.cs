@@ -182,41 +182,64 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// <summary>
         /// Compute current angular velocity in pitch,roll,yaw axes
         /// </summary>
-        Vector3 ComputeCurrentAngularVelocity ()
+        Vector3 ComputeTargetAngularVelocity(Vector3d torque, Vector3d moi)
         {
-            var worldAngularVelocity = vessel.InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
-            var localAngularVelocity = ReferenceFrame.AngularVelocityFromWorldSpace (worldAngularVelocity);
-            // TODO: why does this need to be negative?
-            return -vessel.ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.DirectionToWorldSpace (localAngularVelocity));
-        }
-
-        /// <summary>
-        /// Compute target angular velocity in pitch,roll,yaw axes
-        /// </summary>
-        Vector3 ComputeTargetAngularVelocity (Vector3d torque, Vector3d moi)
-        {
+            var angles = new Vector3d(0, 0, 0);
             var internalVessel = vessel.InternalVessel;
-            var currentRotation = ReferenceFrame.RotationFromWorldSpace (internalVessel.ReferenceTransform.rotation);
-            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (internalVessel.ReferenceTransform.up);
+            var currentRotation = ReferenceFrame.RotationFromWorldSpace(internalVessel.ReferenceTransform.rotation);
+            var tmpTargetRotation = TargetRotation;
+            var tmpTargetDirection = TargetDirection;
 
-            QuaternionD rotation;
-            if (!double.IsNaN (TargetRoll))
-                // Roll angle set => use rotation from currentRotation -> targetRotation
-                rotation = targetRotation * currentRotation.Inverse ();
-            else
-                // Roll angle not set => use rotation from currentDirection -> targetDirection
-                // FIXME: QuaternionD.FromToRotation method not available at runtime
-                rotation = Quaternion.FromToRotation (currentDirection, targetDirection);
+            currentRotation = directionBiasQuaternion * currentRotation;
+            var currentDirection = currentRotation * Vector3d.up;
+/*
+            //in the plane mode,the pitch and yaw means angle of attack and side slip angle
+            if (PlaneMode)
+            {
+                var tmpdirection = internalVessel.GetSrfVelocity();
+                if (tmpdirection.magnitude<=0)
+                {
+                    tmpdirection = ReferenceFrame.Rotation * currentDirection;
+                }
+                tmpdirection = vessel.SurfaceReferenceFrame.Rotation.Inverse() * tmpdirection;
+                var sq =  GeometryExtensions.ToQuaternion(tmpdirection.normalized, TargetRoll);
+                sq = ReferenceFrame.Rotation.Inverse() * vessel.SurfaceReferenceFrame.Rotation * sq;
+                var right = sq * Vector3d.right;
+                var forward = sq * Vector3d.forward;
+                var tmpq = QuaternionD.AngleAxis(-(float)TargetPitch,right);
+                tmpTargetRotation = tmpq * sq;
+                tmpq= QuaternionD.AngleAxis(-(float)TargetHeading, forward);
+                tmpTargetRotation = tmpq * tmpTargetRotation;
+                tmpTargetDirection = tmpTargetRotation*Vector3d.up;
+            }
 
+*/
+            QuaternionD rotation = Quaternion.FromToRotation(currentDirection, tmpTargetDirection);
             // Compute angles for the rotation in pitch (x), roll (y), yaw (z) axes
             float angleFloat;
             Vector3 axisFloat;
             // FIXME: QuaternionD.ToAngleAxis method not available at runtime
-            ((Quaternion)rotation).ToAngleAxis (out angleFloat, out axisFloat);
-            double angle = GeometryExtensions.ClampAngle180 (angleFloat);
+            ((Quaternion)rotation).ToAngleAxis(out angleFloat, out axisFloat);
+            double angle = GeometryExtensions.ClampAngle180(angleFloat);
             Vector3d axis = axisFloat;
-            var angles = axis * angle;
-            angles = vessel.ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.DirectionToWorldSpace (angles));
+            angles = angles + axis * angle;
+            if (!double.IsNaN(TargetRoll))
+            {
+                // Roll angle set => use rotation from currentRotation -> targetRotation
+                rotation = rotation.Inverse() * tmpTargetRotation;
+                rotation = rotation*currentRotation.Inverse();
+                ((Quaternion)rotation).ToAngleAxis(out angleFloat, out axisFloat);
+                if (!float.IsInfinity(axisFloat.magnitude))
+                {
+                    angle = GeometryExtensions.ClampAngle180(angleFloat);
+                    axis = axisFloat;
+                    angles = angles + axis * angle;
+                }
+            }
+            // else Roll angle not set => use rotation from currentDirection -> targetDirection
+            // FIXME: QuaternionD.FromToRotation method not available at runtime
+            angles = directionBiasQuaternion * angles;
+            angles = vessel.ReferenceFrame.DirectionFromWorldSpace(ReferenceFrame.DirectionToWorldSpace(angles));
             return AnglesToAngularVelocity (angles, torque, moi);
         }
 
