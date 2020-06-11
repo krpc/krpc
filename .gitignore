@@ -7,4 +7,4 @@ bin
 obj
 KSP.log
 PartDatabase.cfg
-
+*.user
