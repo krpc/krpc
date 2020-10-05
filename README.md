@@ -1,3 +1,8 @@
+kRPC Extension
+==============
+
+This fork is to enable better compatibility with the kRPC PLC project and with the multi-beam LiDAR mod (see [here](https://github.com/nullprofile/LaserDist)). 
+
 kRPC [![Build Status](https://travis-ci.org/krpc/krpc.svg?branch=master)](https://travis-ci.org/krpc/krpc)
 ====
 
