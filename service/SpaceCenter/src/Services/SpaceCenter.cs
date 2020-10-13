@@ -468,7 +468,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The current time warp mode. Returns <see cref="WarpMode.None"/> if time
         /// warp is not active, <see cref="WarpMode.Rails"/> if regular "on-rails" time warp
-        /// is active, or <see cref="Physics"/> if physical time warp is active.
+        /// is active, or <see cref="WarpMode.Physics"/> if physical time warp is active.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public static WarpMode WarpMode {
