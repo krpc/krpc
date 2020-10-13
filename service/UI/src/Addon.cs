@@ -24,7 +24,10 @@ namespace KRPC.UI
             if (prefabs == null) {
                 var dir = System.IO.Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location);
                 var path = System.IO.Path.Combine (dir, "KRPC.UI.ksp");
-                prefabs = AssetBundle.LoadFromFile ("file://" + path);
+                using (var www = new WWW("file://" + path))
+                {
+                    prefabs = www.assetBundle;
+                }
             }
             var prefab = prefabs.LoadAsset<GameObject> (prefabName);
             var obj = Instantiate (prefab);
