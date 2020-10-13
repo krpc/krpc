@@ -114,23 +114,23 @@ pkg_zip(
         '//service/RemoteTech',
         '//service/UI',
         # Clients
-        '//client/cnano',
-        '//client/cpp',
+        # '//client/cnano',
+        # '//client/cpp',
         '//client/csharp',
-        '//client/java',
-        '//client/lua',
+        # '//client/java',
+        # '//client/lua',
         '//client/python',
         # Schema
         '//protobuf:krpc.proto',
-        '//protobuf:cnano',
-        '//protobuf:cpp',
+        # '//protobuf:cnano',
+        # '//protobuf:cpp',
         '//protobuf:csharp',
-        '//protobuf:java',
-        '//protobuf:lua',
+        # '//protobuf:java',
+        # '//protobuf:lua',
         '//protobuf:python',
         '//protobuf:LICENSE',
         # Docs
-        '//doc:pdf'
+        # '//doc:pdf'
     ],
     path_map = {
         'kRPC.version': 'GameData/kRPC/kRPC.version',
