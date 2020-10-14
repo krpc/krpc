@@ -68,6 +68,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\bazel-bin\service\Drawing\AssemblyInfo.cs">
+      <Link>AssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Addon.cs" />
     <Compile Include="Drawable.cs" />
     <Compile Include="Drawing.cs" />

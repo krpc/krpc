@@ -32,12 +32,18 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+    <ProjectReference Include="..\..\..\server\src\KRPC.csproj">
+      <Project>{3707639F-5EA3-461B-B939-587E51A25CCA}</Project>
+      <Name>KRPC</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule">
@@ -74,6 +80,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\bazel-bin\service\SpaceCenter\AssemblyInfo.cs">
+      <Link>AssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AutoPilot\AttitudeController.cs" />
     <Compile Include="AutoPilot\PIDController.cs" />
     <Compile Include="ExtensionMethods\ActionGroupExtensions.cs" />
@@ -189,11 +198,5 @@
     <Compile Include="Services\WarpMode.cs" />
     <Compile Include="Services\Waypoint.cs" />
     <Compile Include="Services\WaypointManager.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\server\src\KRPC.csproj">
-      <Project>{3707639f-5ea3-461b-b939-587e51a25cca}</Project>
-      <Name>KRPC</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>

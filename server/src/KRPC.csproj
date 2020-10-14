@@ -65,14 +65,6 @@
       <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Google.Protobuf">
-      <HintPath>..\..\lib\Google.Protobuf.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="KRPC.IO.Ports">
-      <HintPath>..\..\lib\KRPC.IO.Ports.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine.AnimationModule">
       <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
       <Private>False</Private>
@@ -93,8 +85,22 @@
       <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\..\bazel-genfiles\tools\cslibs\net35\Google.Protobuf.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="KRPC.IO.Ports">
+      <HintPath>..\..\bazel-genfiles\tools\cslibs\KRPC.IO.Ports.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\bazel-bin\server\AssemblyInfo.cs">
+      <Link>AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\bazel-genfiles\protobuf\KRPC.cs">
+      <Link>KRPC.cs</Link>
+    </Compile>
     <Compile Include="Addon.cs" />
     <Compile Include="Compatibility.cs" />
     <Compile Include="Configuration.cs" />
@@ -104,7 +110,6 @@
     <Compile Include="Continuations\ParameterizedContinuation.cs" />
     <Compile Include="Continuations\YieldException.cs" />
     <Compile Include="Core.cs" />
-    <Compile Include="KRPC.cs" />
     <Compile Include="Properties\AssemblyKSPVersion.cs" />
     <Compile Include="Server\ByteOutputAdapterStream.cs" />
     <Compile Include="Server\ClientActivityEventArgs.cs" />
@@ -265,8 +270,5 @@
     <Compile Include="Utils\StopwatchExtensions.cs" />
     <Compile Include="Utils\Text.cs" />
     <Compile Include="Utils\Tuple.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -54,6 +54,10 @@
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="mscorlib">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
       <Private>False</Private>
@@ -66,10 +70,6 @@
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine.UIModule">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UIModule.dll</HintPath>
       <Private>False</Private>
@@ -80,6 +80,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\bazel-bin\service\UI\AssemblyInfo.cs">
+      <Link>AssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Addon.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="Canvas.cs" />
