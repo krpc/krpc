@@ -7,8 +7,6 @@ using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
-using KRPC.SpaceCenter.ExternalAPI;
-using KRPC.SpaceCenter.Services.Parts;
 using KRPC.Utils;
 using KSP.UI;
 using KSP.UI.Screens.Flight;
@@ -158,10 +156,10 @@ namespace KRPC.SpaceCenter.Services
         /// The currently targeted docking port.
         /// </summary>
         [KRPCProperty (Nullable = true, GameScene = GameScene.Flight)]
-        public static DockingPort TargetDockingPort {
+        public static Parts.DockingPort TargetDockingPort {
             get {
                 var target = FlightGlobals.fetch.VesselTarget as ModuleDockingNode;
-                return target != null ? new DockingPort (new Parts.Part (target.part)) : null;
+                return target != null ? new Parts.DockingPort (new Parts.Part (target.part)) : null;
             }
             set { FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalPort, true); }
         }
@@ -828,7 +826,7 @@ namespace KRPC.SpaceCenter.Services
             bool hit = Physics.Raycast(worldPosition, worldDirection, out hitInfo);
             if (!hit)
                 return null;
-            var part = hitInfo.collider.gameObject.GetComponentInParent<Part>();
+            var part = hitInfo.collider.gameObject.GetComponentInParent<global::Part>();
             return part == null ? null : new Parts.Part (part);
         }
 
@@ -837,7 +835,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public static bool FARAvailable {
-            get { return FAR.IsAvailable; }
+            get { return ExternalAPI.FAR.IsAvailable; }
         }
     }
 }
