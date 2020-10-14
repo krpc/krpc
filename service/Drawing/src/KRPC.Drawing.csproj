@@ -62,7 +62,7 @@
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="UnityEngine.TextRenderingModule">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
