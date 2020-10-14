@@ -13,6 +13,7 @@ service_deps = [
     '//tools/build/ksp:UnityEngine.TextRenderingModule',
     '//tools/build/ksp:UnityEngine.UI',
     '//tools/build/ksp:UnityEngine.UIModule',
+    '//tools/build/ksp:UnityEngine.UnityWebRequestWWWModule',
     '//tools/build/ksp:mscorlib',
     '//tools/build/ksp:System',
     '//tools/build/ksp:System.Core',
