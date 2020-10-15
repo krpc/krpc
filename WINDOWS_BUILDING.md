@@ -30,4 +30,11 @@ python3-virtualenv enchant latexmk openjdk-8-jdk
 17) cd to `/krpc`
 18) Build using `bazel build //:krpc`
 
+To get build output in Windows:
+1) Run `wsl -l` in command prompt. Find the entry that doesn't have docker in its name. This will be refered to as `Distro`
+2) cd to `/krpc/bazel-bin` in Ubuntu
+3) Run `pwd -P` and copy the result to clipboard. This will be refered to as `OutputPath`
+4) cd to `/krpc` in Windows
+5) Run `mklink /D build-out "\\wsl$\{Distro goes here}/{Paste OutputPath here}"`
+6) Build output is now in `build-out` in repository root
 ## Special thanks to Tamer1an, Enroy, and jh0ker for helping me figure this all out.
