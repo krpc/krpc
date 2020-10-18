@@ -86,19 +86,19 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\bazel-genfiles\tools\cslibs\net35\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\generated_deps\tools\cslibs\net35\Google.Protobuf.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="KRPC.IO.Ports">
-      <HintPath>..\..\bazel-genfiles\tools\cslibs\KRPC.IO.Ports.dll</HintPath>
+      <HintPath>..\..\generated_deps\tools\cslibs\KRPC.IO.Ports.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\bazel-bin\server\AssemblyInfo.cs">
+    <Compile Include="..\..\generated_deps\server\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\bazel-genfiles\protobuf\KRPC.cs">
+    <Compile Include="..\..\generated_deps\protobuf\KRPC.cs">
       <Link>KRPC.cs</Link>
     </Compile>
     <Compile Include="Addon.cs" />

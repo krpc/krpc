@@ -25,13 +25,14 @@ clientgen = rule(
     output_to_genfiles = True
 )
 
-def clientgen_csharp(name, service, defs, out):
+def clientgen_csharp(name, service, defs, out, visibility = []):
     clientgen(
         name = name,
         service = service,
         defs = defs,
         out = out,
-        language = 'csharp'
+        language = 'csharp',
+        visibility = visibility
     )
 
 def clientgen_cpp(name, service, defs, out):

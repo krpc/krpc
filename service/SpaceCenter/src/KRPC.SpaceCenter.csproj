@@ -80,7 +80,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\bazel-bin\service\SpaceCenter\AssemblyInfo.cs">
+    <Compile Include="..\..\..\generated_deps\service\SpaceCenter\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AutoPilot\AttitudeController.cs" />

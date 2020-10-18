@@ -44,7 +44,10 @@ csharp_assembly_info(
     copyright = author,
     version = assembly_version,
     internals_visible_to = ['KRPC.Client.Test'],
-    cls_compliant = False
+    cls_compliant = False,
+    visibility = [
+        '//:__pkg__' # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ]
 )
 
 srcs = glob(['src/**/*.cs']) + [
@@ -94,14 +97,20 @@ clientgen_csharp(
     name = 'services-krpc',
     service = 'KRPC',
     defs = '//server:ServiceDefinitions',
-    out = 'Services/KRPC.cs'
+    out = 'Services/KRPC.cs',
+    visibility = [
+        '//:__pkg__'
+    ]
 )
 
 clientgen_csharp(
     name = 'services-spacecenter',
     service = 'SpaceCenter',
     defs = '//service/SpaceCenter:ServiceDefinitions',
-    out = 'Services/SpaceCenter.cs'
+    out = 'Services/SpaceCenter.cs',
+    visibility = [
+        '//:__pkg__'
+    ]
 )
 
 clientgen_csharp(
@@ -115,14 +124,20 @@ clientgen_csharp(
     name = 'services-infernalrobotics',
     service = 'InfernalRobotics',
     defs = '//service/InfernalRobotics:ServiceDefinitions',
-    out = 'Services/InfernalRobotics.cs'
+    out = 'Services/InfernalRobotics.cs',
+    visibility = [
+        '//:__pkg__'
+    ]
 )
 
 clientgen_csharp(
     name = 'services-kerbalalarmclock',
     service = 'KerbalAlarmClock',
     defs = '//service/KerbalAlarmClock:ServiceDefinitions',
-    out = 'Services/KerbalAlarmClock.cs'
+    out = 'Services/KerbalAlarmClock.cs',
+    visibility = [
+        '//:__pkg__'
+    ]
 )
 
 clientgen_csharp(
@@ -197,7 +212,10 @@ clientgen_csharp(
     name = 'services-testservice',
     service = 'TestService',
     defs = '//tools/TestServer:ServiceDefinitions',
-    out = 'Services/TestService.cs'
+    out = 'Services/TestService.cs',
+    visibility = [
+        '//:__pkg__'
+    ]
 )
 
 csharp_library(

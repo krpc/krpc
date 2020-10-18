@@ -43,6 +43,13 @@ genrule(
 )
 
 genrule(
+    name = 'Newtonsoft.Json_net40',
+    srcs = ['@csharp_json//:lib/net40/Newtonsoft.Json.dll'],
+    outs = ['net40/Newtonsoft.Json.dll'],
+    cmd = 'cp $< $@'
+)
+
+genrule(
     name = 'Newtonsoft.Json_net45',
     srcs = ['@csharp_json//:lib/net45/Newtonsoft.Json.dll'],
     outs = ['net45/Newtonsoft.Json.dll'],
@@ -71,6 +78,7 @@ filegroup(
         ':nunit.framework',
         ':Moq',
         ':Newtonsoft.Json_net35',
+        ':Newtonsoft.Json_net40',
         ':Newtonsoft.Json_net45',
         ':NDesk.Options',
         ':ModuleManager'

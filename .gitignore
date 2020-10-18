@@ -2,6 +2,7 @@ bazel-*
 .vs/
 .idea/
 lib/ksp
+generated_deps
 KRPC.userprefs
 bin
 obj
