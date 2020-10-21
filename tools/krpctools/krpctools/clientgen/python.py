@@ -72,7 +72,7 @@ class PythonGenerator(Generator):
         for class_name, class_info in context['classes'].items():
             class_properties = collections.OrderedDict()
             for name, info in class_info['properties'].items():
-                if  name not in class_properties:
+                if name not in class_properties:
                     class_properties[name] = {}
                 if info['getter']:
                     class_properties[name]['getter'] = {
@@ -98,48 +98,52 @@ class PythonGenerator(Generator):
         dependencies = set()
         procedures = \
             context['procedures'].values() + \
-            [procedure \
-                for property_accessors in context['properties'].values() \
-                for getter_or_setter, procedure in property_accessors.items()] + \
+            [procedure
+                for property in context['properties'].values()
+                for procedure in property.values()] + \
             list(itertools.chain(
                 *[class_info['static_methods'].values()
                   for class_info in context['classes'].values()]))
         for info in procedures:
             if 'return_type' in info['procedure']:
-                return_type = info['procedure']['return_type']
-                if 'service' in return_type and context['service_name'] != return_type['service']:
-                    dependencies.add(return_type['service'])
+                rtype = info['procedure']['return_type']
+                if 'service' in rtype \
+                        and context['service_name'] != rtype['service']:
+                    dependencies.add(rtype['service'])
             pos = 0
             for i, pinfo in enumerate(info['parameters']):
-                param_type = info['procedure']['parameters'][i]['type']
-                if 'service' in param_type and context['service_name'] != param_type['service']:
-                    dependencies.add(param_type['service'])
+                ptype = info['procedure']['parameters'][i]['type']
+                if 'service' in ptype \
+                        and context['service_name'] != ptype['service']:
+                    dependencies.add(ptype['service'])
                 pos += 1
 
         for class_info in context['classes'].values():
             items = class_info['methods'].values() + \
-                    [procedure \
-                        for property_accessors in class_info['properties'].values()\
-                        for getter_or_setter, procedure in property_accessors.items()]
+                    [procedure
+                        for property in class_info['properties'].values()
+                        for procedure in property.values()]
             for info in items:
                 if 'return_type' in info['procedure']:
-                    return_type = info['procedure']['return_type']
-                    if 'service' in return_type and context['service_name'] != return_type['service']:
-                        dependencies.add(return_type['service'])
+                    rtype = info['procedure']['return_type']
+                    if 'service' in rtype \
+                            and context['service_name'] != rtype['service']:
+                        dependencies.add(rtype['service'])
                 pos = 0
                 for i, pinfo in enumerate(info['parameters']):
-                    param_type = info['procedure']['parameters'][i]['type']
-                    if 'service' in param_type and context['service_name'] != param_type['service']:
-                        dependencies.add(param_type['service'])
+                    ptype = info['procedure']['parameters'][i]['type']
+                    if 'service' in ptype \
+                            and context['service_name'] != ptype['service']:
+                        dependencies.add(ptype['service'])
                     pos += 1
         context['dependencies'] = dependencies
 
         # Add type specifications to types
         procedures = \
             context['procedures'].values() + \
-            [procedure \
-                for property_accessors in context['properties'].values() \
-                for getter_or_setter, procedure in property_accessors.items()] + \
+            [procedure
+                for property in context['properties'].values()
+                for _, procedure in property.items()] + \
             list(itertools.chain(
                 *[class_info['static_methods'].values()
                   for class_info in context['classes'].values()]))
@@ -151,19 +155,19 @@ class PythonGenerator(Generator):
             }
             pos = 0
             for i, pinfo in enumerate(info['parameters']):
-                param_type = as_type(
+                ptype = as_type(
                     self.types, info['procedure']['parameters'][i]['type'])
                 pinfo['type'] = {
                     'name': pinfo['type'],
-                    'spec': self.parse_type_specification(param_type)
+                    'spec': self.parse_type_specification(ptype)
                 }
                 pos += 1
 
         for class_info in context['classes'].values():
             items = class_info['methods'].values() + \
-                    [procedure \
-                        for property_accessors in class_info['properties'].values()\
-                        for getter_or_setter, procedure in property_accessors.items()]
+                    [procedure
+                        for property in class_info['properties'].values()
+                        for _, procedure in property.items()]
             for info in items:
                 info['return_type'] = {
                     'name': info['return_type'],
@@ -172,12 +176,12 @@ class PythonGenerator(Generator):
                 }
                 pos = 0
                 for i, pinfo in enumerate(info['parameters']):
-                    param_type = as_type(
+                    ptype = as_type(
                         self.types,
                         info['procedure']['parameters'][i+1]['type'])
                     pinfo['type'] = {
                         'name': pinfo['type'],
-                        'spec': self.parse_type_specification(param_type)
+                        'spec': self.parse_type_specification(ptype)
                     }
                     pos += 1
 
@@ -194,6 +198,7 @@ class PythonGenerator(Generator):
         # content = content.replace('  <remarks', '<remarks')
         return documentation
 
+
 class PythonDocParser(DocParser):
     def parse_summary(self, node):
         return self.parse_node(node).strip()
@@ -203,7 +208,7 @@ class PythonDocParser(DocParser):
 
     def parse_param(self, node):
         return '\n:%s %s' % (snake_case(node.attrib['name']),
-                                   self.parse_node(node).strip())
+                             self.parse_node(node).strip())
 
     def parse_returns(self, node):
         return '\n@return %s' % self.parse_node(node).strip()

@@ -242,14 +242,17 @@ class Client(object):
         return msg
 
     krpc = None  # type: KRPC_Service
-    """Main kRPC service, used by clients to interact with basic server functionality."""
+    """Main kRPC service, used by clients to interact with basic server
+    functionality."""
     space_center = None  # type: SpaceCenter
-    """Provides functionality to interact with Kerbal Space Program. 
-    This includes controlling the active vessel, managing its resources, planning maneuver nodes and auto-piloting."""
+    """Provides functionality to interact with Kerbal Space Program.
+    This includes controlling the active vessel, managing its resources,
+    planning maneuver nodes and auto-piloting."""
     drawing = None  # type: Drawing
     """Provides functionality for drawing objects in the flight scene."""
     ui = None  # type: UI
-    """Provides functionality for drawing and interacting with in-game user interface elements."""
+    """Provides functionality for drawing and interacting with in-game
+    user interface elements."""
     infernal_robotics = None  # type: InfernalRobotics
     """Requires Infernal Robotics to be installed"""
     kerbal_alarm_clock = None  # type: KerbalAlarmClock

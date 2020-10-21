@@ -326,7 +326,9 @@ class TestClient(ServerTestCase, unittest.TestCase):
             set(['krpc', 'test_service', 'stream', 'add_stream',
                  'stream_update_condition', 'wait_for_stream_update',
                  'add_stream_update_callback', 'remove_stream_update_callback',
-                 'get_call', 'close']),
+                 'get_call', 'close', 'remote_tech', 'ui',
+                 'kerbal_alarm_clock', 'drawing', 'infernal_robotics',
+                 'space_center']),
             set(x for x in dir(self.conn) if not x.startswith('_')))
 
     def test_krpc_service_members(self):

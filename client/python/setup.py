@@ -17,6 +17,8 @@ if os.getenv('BAZEL_BUILD') and not os.path.exists(os.path.join(dirpath, 'VERSIO
 install_requires = ['protobuf >= 3.6']
 if sys.version_info < (3, 4):
     install_requires.append('enum34 >= 0.9')
+if sys.version_info < (3, 5):
+    install_requires.append('typing')
 
 setup(
     name='krpc',

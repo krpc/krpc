@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     import krpc.schema.KRPC_pb2 as KRPC
     from krpc.client import Client
 
+
 class Event(object):
     """ An event. """
     def __init__(self, conn, event):
