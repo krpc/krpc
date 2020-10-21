@@ -7,9 +7,9 @@ VALUE_TYPES = {
     KRPC.Type.DOUBLE: float,
     KRPC.Type.FLOAT: float,
     KRPC.Type.SINT32: int,
-    KRPC.Type.SINT64: long,
+    KRPC.Type.SINT64: int,
     KRPC.Type.UINT32: int,
-    KRPC.Type.UINT64: long,
+    KRPC.Type.UINT64: int,
     KRPC.Type.BOOL: bool,
     KRPC.Type.STRING: str,
     KRPC.Type.BYTES: bytes
