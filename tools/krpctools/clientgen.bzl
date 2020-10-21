@@ -61,3 +61,12 @@ def clientgen_cnano(name, service, defs, out):
         out = out,
         language = 'cnano'
     )
+
+def clientgen_python(name, service, defs, out):
+    clientgen(
+        name = name,
+        service = service,
+        defs = defs,
+        out = out,
+        language = 'python'
+    )

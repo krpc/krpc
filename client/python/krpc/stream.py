@@ -1,4 +1,12 @@
-class Stream(object):
+import threading
+from typing import Callable, Any, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from krpc import Client
+    from krpc.types import TypeBase
+
+
+class Stream:
     """ A streamed remote procedure call. When called, returns the
         most recently received result of the call. """
 
@@ -7,12 +15,14 @@ class Stream(object):
 
     @classmethod
     def from_stream_id(cls, conn, stream_id, return_type):
+        # type: (Client, int, TypeBase) -> Stream
         """ Create a stream from an existing stream id on the server """
         stream = conn._stream_manager.get_stream(return_type, stream_id)
         return cls(stream)
 
     @classmethod
     def from_call(cls, conn, return_type, call):
+        # type: (Set[float], TypeBase, Any) -> Stream
         """ Create a stream from a remote procedure call """
         stream = conn._stream_manager.add_stream(return_type, call)
         return cls(stream)
@@ -31,12 +41,14 @@ class Stream(object):
 
     @property
     def rate(self):
+        # type: () -> float
         """ The update rate for the stream in Hertz.
             Zero if the rate is unlimited. """
         return self._stream.rate
 
     @rate.setter
     def rate(self, value):
+        # type: (float) -> None
         """ The update rate for the stream in Hertz.
             Zero if the rate is unlimited. """
         self._stream.rate = value
@@ -52,10 +64,12 @@ class Stream(object):
 
     @property
     def condition(self):
+        # type: () -> threading.Condition
         """ Condition variable that is notified when the stream updates. """
         return self._stream.condition
 
     def wait(self, timeout=None):
+        # type: (Optional[float]) -> None
         """ Wait until the next stream update or a timeout occurs.
             The condition variable must be locked before calling this method.
 
@@ -66,10 +80,12 @@ class Stream(object):
         self._stream.condition.wait(timeout=timeout)
 
     def add_callback(self, callback):
+        # type: (Callable) -> None
         """ Add a callback that is invoked whenever the stream is updated. """
         self._stream.add_callback(callback)
 
     def remove_callback(self, callback):
+        # type: (Callable) -> None
         """ Remove a callback. """
         self._stream.remove_callback(callback)
 

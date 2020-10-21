@@ -20,11 +20,11 @@ class PythonLanguage(Language):
         if isinstance(typ, ValueType):
             # python3 fix: get type name from protobuf type code
             if typ.protobuf_type.code in (Type.SINT64, Type.UINT64):
-                return 'long'
+                return 'int'
             if typ.protobuf_type.code == Type.BYTES:
                 return 'bytes'
             if typ.protobuf_type.code == Type.DOUBLE:
-                return 'double'
+                return 'float'
             return typ.python_type.__name__
         elif isinstance(typ, MessageType):
             return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
@@ -40,6 +40,8 @@ class PythonLanguage(Language):
             return 'set'
         elif isinstance(typ, TupleType):
             return 'tuple'
+        elif typ is None:
+            return 'None'
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
