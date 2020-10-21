@@ -53,7 +53,8 @@ namespace KRPC.UI
                 position = value;
             }
         }
-
+        
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
         private void Awake()
         {
             id = UnityEngine.Random.Range(1000, 2000000);

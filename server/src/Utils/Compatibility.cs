@@ -46,6 +46,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Constructs a MultiOptionDialog
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static MultiOptionDialog NewMultiOptionDialog (
             string name, string msg, string windowTitle, UISkinDef skin,
             params DialogGUIBase[] options) {

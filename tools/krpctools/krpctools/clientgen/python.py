@@ -3,12 +3,11 @@ import itertools
 from krpc.types import \
     ValueType, ClassType, EnumerationType, MessageType, \
     TupleType, ListType, SetType, DictionaryType
-from krpc.schema.KRPC_pb2 import Type
 from krpc.utils import snake_case
 from .generator import Generator
 from .docparser import DocParser
 from ..lang.python import PythonLanguage
-from ..utils import lower_camel_case, upper_camel_case, as_type
+from ..utils import lower_camel_case, as_type
 
 
 class PythonGenerator(Generator):
@@ -69,7 +68,7 @@ class PythonGenerator(Generator):
         context['properties'] = properties
 
         # Expand class properties into get and set methods
-        for class_name, class_info in context['classes'].items():
+        for class_info in context['classes'].values():
             class_properties = collections.OrderedDict()
             for name, info in class_info['properties'].items():
                 if name not in class_properties:
@@ -99,8 +98,8 @@ class PythonGenerator(Generator):
         procedures = \
             context['procedures'].values() + \
             [procedure
-                for property in context['properties'].values()
-                for procedure in property.values()] + \
+             for property in context['properties'].values()
+             for procedure in property.values()] + \
             list(itertools.chain(
                 *[class_info['static_methods'].values()
                   for class_info in context['classes'].values()]))
@@ -110,40 +109,36 @@ class PythonGenerator(Generator):
                 if 'service' in rtype \
                         and context['service_name'] != rtype['service']:
                     dependencies.add(rtype['service'])
-            pos = 0
             for i, pinfo in enumerate(info['parameters']):
                 ptype = info['procedure']['parameters'][i]['type']
                 if 'service' in ptype \
                         and context['service_name'] != ptype['service']:
                     dependencies.add(ptype['service'])
-                pos += 1
 
         for class_info in context['classes'].values():
             items = class_info['methods'].values() + \
                     [procedure
-                        for property in class_info['properties'].values()
-                        for procedure in property.values()]
+                     for property in class_info['properties'].values()
+                     for procedure in property.values()]
             for info in items:
                 if 'return_type' in info['procedure']:
                     rtype = info['procedure']['return_type']
                     if 'service' in rtype \
                             and context['service_name'] != rtype['service']:
                         dependencies.add(rtype['service'])
-                pos = 0
                 for i, pinfo in enumerate(info['parameters']):
                     ptype = info['procedure']['parameters'][i]['type']
                     if 'service' in ptype \
                             and context['service_name'] != ptype['service']:
                         dependencies.add(ptype['service'])
-                    pos += 1
         context['dependencies'] = dependencies
 
         # Add type specifications to types
         procedures = \
             context['procedures'].values() + \
             [procedure
-                for property in context['properties'].values()
-                for _, procedure in property.items()] + \
+             for property in context['properties'].values()
+             for _, procedure in property.items()] + \
             list(itertools.chain(
                 *[class_info['static_methods'].values()
                   for class_info in context['classes'].values()]))
@@ -166,8 +161,8 @@ class PythonGenerator(Generator):
         for class_info in context['classes'].values():
             items = class_info['methods'].values() + \
                     [procedure
-                        for property in class_info['properties'].values()
-                        for _, procedure in property.items()]
+                     for property in class_info['properties'].values()
+                     for _, procedure in property.items()]
             for info in items:
                 info['return_type'] = {
                     'name': info['return_type'],

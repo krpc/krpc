@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 import sys
 import threading
-from typing import TypeVar, Callable, Any, Optional, TYPE_CHECKING
+from typing import Callable, Any, Optional, TYPE_CHECKING
 
 
 from krpc.error import StreamError
