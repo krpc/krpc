@@ -1,5 +1,6 @@
 v0.4.9
  * Update to protobuf v3.9.1
+ * Update to ASIO 1.18.0
  * Fix include path to ASIO header in CMake build scripts
  * Fix CMake build scripts not building a static library with MSVC on Windows
  * Add pre-built Windows binary for the C++ client to the GitHub releases page

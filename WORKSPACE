@@ -228,9 +228,9 @@ cc_library(
     visibility = ['//visibility:public']
 )
 """,
-    url = 'https://s3.amazonaws.com/krpc/lib/asio/asio-1.12.1.tar.gz',
-    strip_prefix = 'asio-1.12.1',
-    sha256 = '636269fe2d98df2155c2ddf509eaa00f775b560452a36d6b45c883c2555f6456'
+    url = 'https://s3.amazonaws.com/krpc/lib/asio/asio-1.18.0.tar.gz',
+    strip_prefix = 'asio-1.18.0',
+    sha256 = '57104cf9d102f283eb484034eb14914d9491f2c2027730ba055fa3639f7cb385'
 )
 
 http_archive(
