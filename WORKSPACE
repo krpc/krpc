@@ -197,7 +197,7 @@ http_archive(
 
 http_archive(
     name = 'csharp_json',
-    build_file_content = "exports_files(['lib/net35/Newtonsoft.Json.dll', 'lib/net45/Newtonsoft.Json.dll'])",
+    build_file_content = "exports_files(['lib/net35/Newtonsoft.Json.dll', 'lib/net40/Newtonsoft.Json.dll', 'lib/net45/Newtonsoft.Json.dll'])",
     url = 'https://www.nuget.org/api/v2/package/Newtonsoft.Json/9.0.1',
     sha256 = '998081ae052120917346e2cb57d488888147a2fcdf47c52ea9f83a7b4f049e55',
     type = 'zip'

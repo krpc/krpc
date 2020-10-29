@@ -1,11 +1,19 @@
 import threading
+from typing import Any, TYPE_CHECKING, Callable, List
+
+from krpc.stream import Stream
+from krpc.types import TypeBase
 from krpc.decoder import Decoder
 from krpc.error import StreamError
 import krpc.schema.KRPC_pb2 as KRPC
 
+if TYPE_CHECKING:
+    from krpc.krpc import KRPC_Client
+
 
 class StreamImpl(object):
     def __init__(self, conn, stream_id, return_type, update_lock):
+        # type: (KRPC_Client, int, TypeBase, Any) -> None
         self._conn = conn
         self._stream_id = stream_id
         self._return_type = return_type
@@ -14,7 +22,7 @@ class StreamImpl(object):
         self._updated = False
         self._value = None
         self._condition = threading.Condition()
-        self._callbacks = []
+        self._callbacks = []  # type: List[Callable]
         self._rate = 0
 
     @property
@@ -83,6 +91,7 @@ class StreamImpl(object):
 
 class StreamManager(object):
     def __init__(self, conn):
+        # type: (KRPC_Client) -> None
         self._conn = conn
         self._update_lock = threading.RLock()
         self._condition = threading.Condition()
@@ -90,6 +99,7 @@ class StreamManager(object):
         self._callbacks = []
 
     def add_stream(self, return_type, call):
+        # type: (TypeBase, Any) -> StreamImpl
         stream_id = self._conn.krpc.add_stream(call, False).id
         with self._update_lock:
             if stream_id not in self._streams:
@@ -98,6 +108,7 @@ class StreamManager(object):
             return self._streams[stream_id]
 
     def get_stream(self, return_type, stream_id):
+        # type: (TypeBase, int) -> StreamImpl
         with self._update_lock:
             if stream_id not in self._streams:
                 self._streams[stream_id] = StreamImpl(
@@ -105,6 +116,7 @@ class StreamManager(object):
             return self._streams[stream_id]
 
     def remove_stream(self, stream_id):
+        # type: (int) -> None
         with self._update_lock:
             if stream_id in self._streams:
                 self._conn.krpc.remove_stream(stream_id)

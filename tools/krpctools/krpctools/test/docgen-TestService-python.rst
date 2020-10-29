@@ -15,7 +15,7 @@ Service documentation string.
 
    :param float x:
    :param int y:
-   :param long z:
+   :param int z:
    :rtype: str
    :Game Scenes: All
 
@@ -114,7 +114,7 @@ Service documentation string.
 
 
 
-   :param double value:
+   :param float value:
    :rtype: str
    :Game Scenes: All
 
@@ -234,7 +234,7 @@ Service documentation string.
 
 
    :param tuple t:
-   :rtype: tuple(int, long)
+   :rtype: tuple(int, int)
    :Game Scenes: All
 
 
@@ -257,7 +257,7 @@ Service documentation string.
 
 
 
-   :param long value:
+   :param int value:
    :rtype: str
    :Game Scenes: All
 

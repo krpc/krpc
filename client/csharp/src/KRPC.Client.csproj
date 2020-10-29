@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\..\bazel-genfiles\tools\cslibs\net45\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\..\generated_deps\tools\cslibs\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,7 +44,7 @@
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\bazel-bin\client\csharp\AssemblyInfo.cs">
+    <Compile Include="..\..\..\generated_deps\client\csharp\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Attributes\RPCAttribute.cs" />
@@ -61,19 +61,19 @@
     <Compile Include="Stream.cs" />
     <Compile Include="StreamImpl.cs" />
     <Compile Include="StreamManager.cs" />
-    <Compile Include="..\..\..\bazel-genfiles\protobuf\KRPC.cs">
+    <Compile Include="..\..\..\generated_deps\protobuf\KRPC.cs">
       <Link>KRPC.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\bazel-genfiles\client\csharp\Services\KRPC.cs">
+    <Compile Include="..\..\..\generated_deps\client\csharp\Services\KRPC.cs">
       <Link>Services\KRPC.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\bazel-genfiles\client\csharp\Services\SpaceCenter.cs">
+    <Compile Include="..\..\..\generated_deps\client\csharp\Services\SpaceCenter.cs">
       <Link>Services\SpaceCenter.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\bazel-genfiles\client\csharp\Services\KerbalAlarmClock.cs">
+    <Compile Include="..\..\..\generated_deps\client\csharp\Services\KerbalAlarmClock.cs">
       <Link>Services\KerbalAlarmClock.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\bazel-genfiles\client\csharp\Services\InfernalRobotics.cs">
+    <Compile Include="..\..\..\generated_deps\client\csharp\Services\InfernalRobotics.cs">
       <Link>Services\InfernalRobotics.cs</Link>
     </Compile>
   </ItemGroup>

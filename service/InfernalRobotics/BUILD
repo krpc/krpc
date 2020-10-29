@@ -16,7 +16,10 @@ csharp_assembly_info(
     description = 'Infernal Robotics API for kRPC',
     version = assembly_version,
     copyright = author,
-    cls_compliant = False
+    cls_compliant = False,
+    visibility = [
+        '//:__pkg__' # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ]
 )
 
 srcs = [':AssemblyInfo'] + glob(['src/**/*.cs'])

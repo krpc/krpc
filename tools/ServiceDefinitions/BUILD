@@ -36,7 +36,10 @@ csharp_assembly_info(
     name = 'AssemblyInfo',
     title = 'ServiceDefinitions',
     version = assembly_version,
-    copyright = author
+    copyright = author,
+    visibility = [
+        '//:__pkg__' # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ]
 )
 
 # Build KRPC.dll using .Net 4.5 libraries as references instead of KSP libraries

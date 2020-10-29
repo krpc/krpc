@@ -10,6 +10,7 @@ from .csharp import CsharpGenerator
 from .cpp import CppGenerator
 from .java import JavaGenerator
 from .cnano import CnanoGenerator
+from .python import PythonGenerator
 from ..version import __version__
 from ..servicedefs import servicedefs
 
@@ -17,7 +18,8 @@ GENERATORS = {
     'csharp': CsharpGenerator,
     'cpp': CppGenerator,
     'java': JavaGenerator,
-    'cnano': CnanoGenerator
+    'cnano': CnanoGenerator,
+    'python': PythonGenerator
 }
 
 
@@ -65,7 +67,6 @@ def main():
             inputs.append(path)
 
         # Get service defs
-
         if len(inputs) == 1 and inputs[0].endswith('.json'):
             # From JSON file
             with open(inputs[0], 'r', encoding='utf-8') as fp:

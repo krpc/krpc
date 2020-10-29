@@ -7,7 +7,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>ServiceDefinitions</RootNamespace>
     <AssemblyName>ServiceDefinitions</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -38,10 +38,10 @@
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_json\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\generated_deps\tools\cslibs\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NDesk.Options">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_options\lib\NDesk.Options.dll</HintPath>
+      <HintPath>..\..\..\generated_deps\tools\cslibs\NDesk.Options.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
@@ -54,7 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\bazel-bin\tools\ServiceDefinitions\AssemblyInfo.cs">
+    <Compile Include="..\..\..\generated_deps\tools\ServiceDefinitions\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />

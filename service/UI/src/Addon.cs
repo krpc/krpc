@@ -24,7 +24,15 @@ namespace KRPC.UI
             if (prefabs == null) {
                 var dir = System.IO.Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location);
                 var path = System.IO.Path.Combine (dir, "KRPC.UI.ksp");
-                prefabs = AssetBundle.LoadFromFile ("file://" + path);
+                
+                // Disable warning as replacement is a UnityAsyncOperation
+                // and this works fine.
+#pragma warning disable 618
+                using (var www = new WWW("file://" + path))
+#pragma warning restore 618
+                {
+                    prefabs = www.assetBundle;
+                }
             }
             var prefab = prefabs.LoadAsset<GameObject> (prefabName);
             var obj = Instantiate (prefab);

@@ -19,7 +19,10 @@ csharp_assembly_info(
     version = assembly_version,
     copyright = author,
     cls_compliant = False,
-    internals_visible_to = ['TestingTools']
+    internals_visible_to = ['TestingTools'],
+    visibility = [
+        '//:__pkg__' # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ]
 )
 
 srcs = [':AssemblyInfo'] + glob(['src/**/*.cs'])

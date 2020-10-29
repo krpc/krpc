@@ -46,10 +46,21 @@ namespace KRPC.Utils
         /// <summary>
         /// Constructs a MultiOptionDialog
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static MultiOptionDialog NewMultiOptionDialog (
             string name, string msg, string windowTitle, UISkinDef skin,
             params DialogGUIBase[] options) {
-            if (Versioning.version_major * 100 + Versioning.version_minor >= 103) {
+            if (Versioning.version_major * 100 + Versioning.version_minor >= 108)
+            {
+                // KSP 1.8.0 and up
+                var ctor = typeof(MultiOptionDialog).GetConstructor(new Type[] {
+                    typeof(string), typeof(string), typeof(string),
+                    typeof(UISkinDef), typeof(DialogGUIBase[])
+                });
+                return (MultiOptionDialog)ctor.Invoke( new object[] {
+                    name, msg, windowTitle, skin, options
+                });
+            } else if (Versioning.version_major * 100 + Versioning.version_minor >= 103) {
                 // KSP 1.3.0 and up
                 var ctor = typeof(MultiOptionDialog).GetConstructor(new Type[] {
                     typeof(string), typeof(string), typeof(string),

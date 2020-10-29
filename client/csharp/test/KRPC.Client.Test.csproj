@@ -29,14 +29,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Moq">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_moq\lib\net40\Moq.dll</HintPath>
+      <HintPath>..\..\..\generated_deps\tools\cslibs\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_nunit\bin\framework\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\generated_deps\tools\cslibs\nunit.framework.dll</HintPath>
       <Package>nunit</Package>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_protobuf\lib\net45\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\..\generated_deps\tools\cslibs\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -61,7 +61,7 @@
     <Compile Include="ServerTestCase.cs" />
     <Compile Include="StreamTest.cs" />
     <Compile Include="TestingTools.cs" />
-    <Compile Include="..\..\..\bazel-genfiles\client\csharp\Services\TestService.cs">
+    <Compile Include="..\..\..\generated_deps\client\csharp\Services\TestService.cs">
       <Link>Services\TestService.cs</Link>
     </Compile>
   </ItemGroup>
