@@ -1,6 +1,7 @@
 #!/bin/bash
 set -ev
 cd /build/krpc
+ln -s /usr/lib/mono/4.5 lib/mono-4.5
 rm -rf lib/ksp && ln -s /usr/local/lib/ksp lib/ksp
 
 bazel fetch //...
