@@ -12,7 +12,7 @@ DEPLOYPATH=s3-deploy/deploy/$NAME/$JOB_NUMBER
 VERSION=`tools/krpc-version.sh`
 echo $VERSION
 
-ASIO_VERSION=1.12.1
+ASIO_VERSION=1.18.0
 PROTOBUF_VERSION=3.9.1
 
 asio() {
