@@ -13,6 +13,7 @@ jobs:
       services:
         - docker
       install:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker pull krpc/buildenv:`cat tools/docker/VERSION.txt`
       before_script:
         - ./tools/travis-ci/set-version.py
