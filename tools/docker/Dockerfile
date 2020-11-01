@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 LABEL maintainer="djungelorm <djungelorm@users.noreply.github.com>"
 
-ARG bazel_version=0.29.1
+ARG bazel_version
 ARG ksp_version
 
 RUN apt-get update && \
@@ -51,7 +51,7 @@ RUN apt-get update && \
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     python3-setuptools python3-virtualenv \
-    python3-dev autoconf libtool luarocks latexmk texlive-latex-base \
+    python3-dev autoconf libtool luarocks latexmk maven texlive-latex-base \
     texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra \
     libxml2-dev libxslt1-dev librsvg2-bin && \
     rm -rf /var/lib/apt/lists/*
