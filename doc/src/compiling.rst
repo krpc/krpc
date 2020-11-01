@@ -26,7 +26,7 @@ your system:
  * Python 3.4 or higher, and virtualenv
  * Autotools
  * LuaRocks
- * Mazen
+ * Maven
  * pdflatex, rsvg, libxml, libxslt and python headers (for building the documentation)
 
 To install these dependencies via apt on Ubuntu, first follow the instructions on `Mono's website
