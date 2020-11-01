@@ -2,6 +2,7 @@ workspace(name = "krpc")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+load("@bazel_tools//tools/build_defs/repo:maven_rules.bzl", "maven_jar")
 
 http_archive(
     name = 'bazel_skylib',
