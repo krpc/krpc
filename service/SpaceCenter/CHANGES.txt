@@ -1,4 +1,5 @@
 v0.4.9
+ * Update to work with KSP 1.10
  * Use raycast to measure surface height more precisely in CelestialBody.SurfaceHeight (#524)
  * Fix null reference exception when checking active vessel (#528, #530)
  * Fix null reference exception when waiting for active vessel change (#516, #529)
@@ -20,6 +21,7 @@ v0.4.9
  * Fix compatibility with DMagic science experiments mod (#550)
  * Fix available torque calculations for RCS (#552, #354)
  * Fix RCS.MaxThrust returning incorrect values
+ * Fix SimulateAerodynamicForceAt (#587)
 
 v0.4.8
  * Allows RPCs to be accessed from game scenes other than just flight (#471)

@@ -535,7 +535,8 @@ namespace KRPC.SpaceCenter.Services
             var worldPosition = referenceFrame.PositionToWorldSpace(position.ToVector());
             Vector3 worldForce;
             if (!FAR.IsAvailable) {
-                worldForce = StockAerodynamics.SimAeroForce(body.InternalBody, vessel, worldVelocity, worldPosition);
+                var relativeWorldVelocity = worldVelocity - body.InternalBody.getRFrmVel(worldPosition);
+                worldForce = StockAerodynamics.SimAeroForce(body.InternalBody, vessel, relativeWorldVelocity, worldPosition);
             } else {
                 Vector3 torque;
                 var altitude = (worldPosition - body.InternalBody.position).magnitude - body.InternalBody.Radius;
