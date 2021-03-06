@@ -26,6 +26,7 @@ your system:
  * Python 3.4 or higher, and virtualenv
  * Autotools
  * LuaRocks
+ * Maven
  * pdflatex, rsvg, libxml, libxslt and python headers (for building the documentation)
 
 To install these dependencies via apt on Ubuntu, first follow the instructions on `Mono's website
@@ -35,7 +36,7 @@ command:
 .. code-block:: bash
 
    sudo apt-get install mono-complete python3-setuptools python3-virtualenv \
-   python3-dev autoconf libtool luarocks texlive-latex-base \
+   python3-dev autoconf libtool luarocks maven texlive-latex-base \
    texlive-latex-recommended texlive-fonts-recommended \
    libxml2-dev libxslt1-dev librsvg2-bin
 

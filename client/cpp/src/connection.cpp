@@ -11,7 +11,6 @@
 #include <asio/ip/basic_resolver_iterator.hpp>
 #include <asio/read.hpp>  // IWYU pragma: keep
 #include <asio/steady_timer.hpp>
-#include <asio/stream_socket_service.hpp>
 #include <asio/write.hpp>  // IWYU pragma: keep
 // IWYU pragma: no_include <asio/detail/impl/epoll_reactor.hpp>
 // IWYU pragma: no_include <asio/detail/impl/reactive_socket_service_base.ipp>
@@ -70,7 +69,7 @@ std::string Connection::partial_receive(size_t length, std::chrono::milliseconds
   data.resize(length);
 
   bool timer_complete = false;
-  asio::steady_timer timer(socket.get_io_service());
+  asio::steady_timer timer(socket.get_executor());
   timer.expires_from_now(timeout);
   timer.async_wait(
     [&timer_complete] (const asio::error_code& error) {
@@ -85,8 +84,8 @@ std::string Connection::partial_receive(size_t length, std::chrono::milliseconds
       read_complete = true;
     });
 
-  socket.get_io_service().reset();
-  while (socket.get_io_service().run_one()) {
+  io_service.reset();
+  while (io_service.run_one()) {
     if (read_complete)
       timer.cancel();
     else if (timer_complete)

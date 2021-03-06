@@ -13,19 +13,19 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
+    <OutputPath>..\..\bin\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <DocumentationFile>bin\Debug\KRPC.Test.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Debug\KRPC.Test.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>..\..\bin\Release</OutputPath>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <DocumentationFile>bin\Release\KRPC.Test.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Release\KRPC.Test.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -52,25 +52,25 @@
       <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\bazel-genfiles\tools\cslibs\net45\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\generated_deps\tools\cslibs\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="KRPC.IO.Ports">
-      <HintPath>..\..\bazel-genfiles\tools\cslibs\KRPC.IO.Ports.dll</HintPath>
+      <HintPath>..\..\generated_deps\tools\cslibs\KRPC.IO.Ports.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\bazel-genfiles\tools\cslibs\nunit.framework.dll</HintPath>
+      <HintPath>..\..\generated_deps\tools\cslibs\nunit.framework.dll</HintPath>
       <Package>nunit</Package>
     </Reference>
     <Reference Include="Moq">
-      <HintPath>..\..\bazel-genfiles\tools\cslibs\net40\Moq.dll</HintPath>
+      <HintPath>..\..\generated_deps\tools\cslibs\net40\Moq.dll</HintPath>
       <Package>Moq</Package>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\bazel-genfiles\tools\cslibs\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\generated_deps\tools\cslibs\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\bazel-bin\server\TestAssemblyInfo.cs">
+    <Compile Include="..\..\generated_deps\server\TestAssemblyInfo.cs">
       <Link>TestAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ConfigurationTest.cs" />

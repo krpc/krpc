@@ -1,9 +1,16 @@
+from typing import TYPE_CHECKING, Any, Optional, Callable
+
 from krpc.stream import Stream
+
+if TYPE_CHECKING:
+    import krpc.schema.KRPC_pb2 as KRPC
+    from krpc.client import Client
 
 
 class Event(object):
     """ An event. """
     def __init__(self, conn, event):
+        # type: (Client, KRPC.Event) -> None
         self._stream = Stream.from_stream_id(
             conn, event.stream.id, conn._types.bool_type)
         self._conn = conn
@@ -19,6 +26,7 @@ class Event(object):
         return self._stream.condition
 
     def wait(self, timeout=None):
+        # type: (Optional[float]) -> None
         """ Blocks until the event is triggered or a timeout occurs.
             The condition variable must be locked before calling this method.
 
@@ -35,6 +43,7 @@ class Event(object):
                 return
 
     def add_callback(self, callback):
+        # type: (Callable) -> None
         def callback_wrapper(x):
             if x:
                 callback()
@@ -42,6 +51,7 @@ class Event(object):
         self._stream.add_callback(callback_wrapper)
 
     def remove_callback(self, callback):
+        # type: (Callable) -> None
         if callback in self._callback_mapping:
             callback_wrapper = self._callback_mapping[callback]
             del self._callback_mapping[callback]

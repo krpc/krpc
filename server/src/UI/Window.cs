@@ -7,7 +7,7 @@ namespace KRPC.UI
 {
     abstract class Window : MonoBehaviour
     {
-        int id = UnityEngine.Random.Range (1000, 2000000);
+        int id;
         bool hasInit;
         GUIStyle closeButtonStyle;
         bool rescale = true;
@@ -52,6 +52,12 @@ namespace KRPC.UI
                     EventHandlerExtensions.Invoke (OnMoved, this, new MovedEventArgs (value));
                 position = value;
             }
+        }
+        
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
+        private void Awake()
+        {
+            id = UnityEngine.Random.Range(1000, 2000000);
         }
 
         protected abstract void Init ();

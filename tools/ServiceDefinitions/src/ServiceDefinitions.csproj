@@ -41,10 +41,17 @@
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
+<<<<<<< HEAD
       <HintPath>..\..\..\..\..\robotics\krpc-master\bazel-genfiles\tools\cslibs\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NDesk.Options">
       <HintPath>..\..\..\..\..\robotics\krpc-master\bazel-genfiles\tools\cslibs\NDesk.Options.dll</HintPath>
+=======
+      <HintPath>..\..\..\generated_deps\tools\cslibs\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NDesk.Options">
+      <HintPath>..\..\..\generated_deps\tools\cslibs\NDesk.Options.dll</HintPath>
+>>>>>>> 3d75f6255e91b101189d4b92900d61555fecf7bb
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
@@ -57,7 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\bazel-bin\tools\ServiceDefinitions\AssemblyInfo.cs">
+    <Compile Include="..\..\..\generated_deps\tools\ServiceDefinitions\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />

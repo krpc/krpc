@@ -2,6 +2,7 @@ workspace(name = "krpc")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+load("@bazel_tools//tools/build_defs/repo:maven_rules.bzl", "maven_jar")
 
 http_archive(
     name = 'bazel_skylib',
@@ -197,7 +198,7 @@ http_archive(
 
 http_archive(
     name = 'csharp_json',
-    build_file_content = "exports_files(['lib/net35/Newtonsoft.Json.dll', 'lib/net45/Newtonsoft.Json.dll'])",
+    build_file_content = "exports_files(['lib/net35/Newtonsoft.Json.dll', 'lib/net40/Newtonsoft.Json.dll', 'lib/net45/Newtonsoft.Json.dll'])",
     url = 'https://www.nuget.org/api/v2/package/Newtonsoft.Json/9.0.1',
     sha256 = '998081ae052120917346e2cb57d488888147a2fcdf47c52ea9f83a7b4f049e55',
     type = 'zip'
@@ -228,9 +229,9 @@ cc_library(
     visibility = ['//visibility:public']
 )
 """,
-    url = 'https://s3.amazonaws.com/krpc/lib/asio/asio-1.12.1.tar.gz',
-    strip_prefix = 'asio-1.12.1',
-    sha256 = '636269fe2d98df2155c2ddf509eaa00f775b560452a36d6b45c883c2555f6456'
+    url = 'https://s3.amazonaws.com/krpc/lib/asio/asio-1.18.0.tar.gz',
+    strip_prefix = 'asio-1.18.0',
+    sha256 = '57104cf9d102f283eb484034eb14914d9491f2c2027730ba055fa3639f7cb385'
 )
 
 http_archive(

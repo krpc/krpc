@@ -1,6 +1,9 @@
 from contextlib import contextmanager
 import sys
 import threading
+from typing import Callable, Any, Optional, TYPE_CHECKING
+
+
 from krpc.error import StreamError
 from krpc.event import Event
 from krpc.types import Types, DefaultArgument
@@ -12,6 +15,16 @@ from krpc.utils import snake_case
 from krpc.error import RPCError
 import krpc.streammanager
 import krpc.schema.KRPC_pb2 as KRPC
+
+if TYPE_CHECKING:
+    from krpc.stream import Stream
+    from krpc.drawing import Drawing
+    from krpc.krpc import KRPC as KRPC_Service
+    from krpc.spacecenter import SpaceCenter
+    from krpc.ui import UI
+    from krpc.infernalrobotics import InfernalRobotics
+    from krpc.kerbalalarmclock import KerbalAlarmClock
+    from krpc.remotetech import RemoteTech
 
 if sys.version_info < (3, 0):
     from future_builtins import zip  # noqa  # pylint: disable=redefined-builtin,import-error
@@ -66,6 +79,7 @@ class Client(object):
         self.close()
 
     def add_stream(self, func, *args, **kwargs):
+        # type: (Callable, ..., ...) -> Stream
         """ Add a stream to the server """
         if self._stream_connection is None:
             raise StreamError('Not connected to stream server')
@@ -91,6 +105,7 @@ class Client(object):
         return self._stream_manager.update_condition
 
     def wait_for_stream_update(self, timeout=None):
+        # type: (Optional[float]) -> None
         """ Wait until the next stream update message or a timeout occurs.
             The condition variable must be locked before calling this method.
 
@@ -99,16 +114,19 @@ class Client(object):
         self._stream_manager.wait_for_update(timeout)
 
     def add_stream_update_callback(self, callback):
+        # type: (Callable) -> None
         """ Add a callback that is invoked whenever
             a stream update message has finished being processed. """
         self._stream_manager.add_update_callback(callback)
 
     def remove_stream_update_callback(self, callback):
+        # type: (Callable) -> None
         """ Remove a stream update callback. """
         self._stream_manager.remove_update_callback(callback)
 
     @staticmethod
     def get_call(func, *args, **kwargs):
+        # type: (Callable, Any, Any) -> Any
         """ Convert a remote procedure call to a KRPC.ProcedureCall message """
         if func == getattr:
             # A property or class property getter
@@ -222,3 +240,22 @@ class Client(object):
         if error.stack_trace:
             msg += '\nServer stack trace:\n' + error.stack_trace
         return msg
+
+    krpc = None  # type: KRPC_Service
+    """Main kRPC service, used by clients to interact with basic server
+    functionality."""
+    space_center = None  # type: SpaceCenter
+    """Provides functionality to interact with Kerbal Space Program.
+    This includes controlling the active vessel, managing its resources,
+    planning maneuver nodes and auto-piloting."""
+    drawing = None  # type: Drawing
+    """Provides functionality for drawing objects in the flight scene."""
+    ui = None  # type: UI
+    """Provides functionality for drawing and interacting with in-game
+    user interface elements."""
+    infernal_robotics = None  # type: InfernalRobotics
+    """Requires Infernal Robotics to be installed"""
+    kerbal_alarm_clock = None  # type: KerbalAlarmClock
+    """Requires Kerbal Alarm Clock to be installed"""
+    remote_tech = None  # type: RemoteTech
+    """Requires Remote Tech to be installed"""

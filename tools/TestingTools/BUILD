@@ -29,7 +29,10 @@ csharp_assembly_info(
     title = 'TestingTools',
     version = assembly_version,
     copyright = author,
-    cls_compliant = False
+    cls_compliant = False,
+    visibility = [
+        '//:__pkg__' # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ]
 )
 
 csharp_library(

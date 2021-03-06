@@ -35,35 +35,33 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\..\server\src\KRPC.csproj">
-      <Project>{3707639F-5EA3-461B-B939-587E51A25CCA}</Project>
-      <Name>KRPC</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="mscorlib">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\..\bazel-genfiles\tools\cslibs\net45\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\..\generated_deps\tools\cslibs\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="KRPC.IO.Ports">
-      <HintPath>..\..\..\bazel-genfiles\tools\cslibs\KRPC.IO.Ports.dll</HintPath>
+      <HintPath>..\..\..\generated_deps\tools\cslibs\KRPC.IO.Ports.dll</HintPath>
     </Reference>
     <Reference Include="NDesk.Options">
-      <HintPath>..\..\..\bazel-genfiles\tools\cslibs\NDesk.Options.dll</HintPath>
+      <HintPath>..\..\..\generated_deps\tools\cslibs\NDesk.Options.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\bazel-bin\tools\TestServer\AssemblyInfo.cs">
+    <Compile Include="..\..\..\generated_deps\tools\TestServer\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="TestService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <ProjectReference Include="..\..\..\server\src\KRPC.csproj">
+      <Project>{3707639f-5ea3-461b-b939-587e51a25cca}</Project>
+      <Name>KRPC</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
+>>>>>>> 3d75f6255e91b101189d4b92900d61555fecf7bb

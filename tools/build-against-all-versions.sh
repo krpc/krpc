@@ -7,15 +7,12 @@ mkdir -p bazel-bin/lib
 pushd bazel-bin/lib
 
 read -d '' versions << EOM || true
-1.8.0.2686
-1.8.1.2694
-1.9.0.2781
+1.10.1.2939
 EOM
 
 # Save lib/ksp symlink
 popd
-rm -f lib/ksp-orig
-mv lib/ksp lib/ksp-orig
+[[ -e lib/ksp ]] && mv lib/ksp lib/ksp-orig
 pushd bazel-bin/lib
 
 for version in $versions; do
@@ -41,4 +38,4 @@ done
 # Restore lib/ksp symlink
 popd
 rm -f lib/ksp
-mv lib/ksp-orig lib/ksp
+[[ -e lib/ksp-orig ]] && mv lib/ksp-orig lib/ksp

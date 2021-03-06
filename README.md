@@ -1,10 +1,3 @@
-kRPC Extension
-==============
-
-This fork is to enable better compatibility with the kRPC PLC project and with the multi-beam LiDAR mod (see [here](https://github.com/nullprofile/LaserDist)). 
-
-kRPC [![Build Status](https://travis-ci.org/krpc/krpc.svg?branch=master)](https://travis-ci.org/krpc/krpc)
-====
 
 kRPC allows you to control Kerbal Space Program from scripts running outside of
 the game, and comes with client libraries for many popular languages.
@@ -16,6 +9,6 @@ Links for Developers
 --------------------
 
 * [Forum development thread](https://forum.kerbalspaceprogram.com/index.php?/topic/62902-14113x122-krpc-remote-procedure-call-server-v045-17th-march-2018/)
-* [Travis CI page](https://travis-ci.org/krpc/krpc)
+* [Travis CI page](https://travis-ci.com/krpc/krpc)
 * [Travis CI build outputs](http://krpc.s3-website-us-east-1.amazonaws.com/deploy/)
 * [Release guide](Release-Guide.md)

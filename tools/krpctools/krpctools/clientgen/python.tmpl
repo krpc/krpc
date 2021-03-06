@@ -1,0 +1,111 @@
+from typing import Tuple, Set, Dict, List, TYPE_CHECKING, Optional, Any, Callable
+{% for dep in dependencies %}
+from krpc.{{dep|lower()}} import {{dep}}
+{% endfor %}
+
+{% macro arg_list(parameters) %}
+{% for x in parameters %}{% if loop.first %}, {% endif %}{{x.name|snake_case()}}{%if 'default_value' in x %}={{x.default_value}}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
+{% macro static_arg_list(parameters) %}
+{% for x in parameters %}{% if loop.first %}, {% endif %}{{x.name|snake_case()}}{%if 'default_value' in x %}={{x.default_value}}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
+{% macro procedure_types(procedure) %}
+{{'#'}} type: ({% for x in procedure.parameters %}{{x.type.spec}}{% if not loop.last %}, {% endif %}{% endfor %}) {{'->'}} {% if 'return_is_nullable' in procedure.procedure and procedure.procedure['return_is_nullable'] %}Optional[{% endif %}{{ procedure.return_type.spec }}{% if 'return_is_nullable' in procedure.procedure and procedure.procedure['return_is_nullable'] %}]{% endif %}{% endmacro %}
+
+class {{ service_name }}:
+
+    {# Service properties #}
+    {% for prop_name, prop in properties.items() %}
+    {% if 'getter' in prop %}
+    @property
+    def {{prop_name|snake_case()}}(self{{ arg_list(prop.getter.parameters) }}): 
+        {{ procedure_types(prop.getter) }}
+{% if prop.getter.documentation %}{{ prop.getter.documentation | indent(width=8) }}
+{% endif %}
+        ...
+    
+    {% endif %}
+    {% if 'getter' in prop and 'setter' in prop %}
+    @{{prop_name|snake_case()}}.setter
+    def {{prop_name|snake_case()}}(self{{ arg_list(prop.setter.parameters) }}):
+        {{ procedure_types(prop.setter) }}
+        ...
+
+    {# Set only property #}
+    {% elif 'setter' in prop %}
+    def {{prop_name|snake_case()}}(self{{ arg_list(prop.setter.parameters) }}): 
+        {{ procedure_types(prop.setter) }}
+{% if prop.setter.documentation %}{{ prop.setter.documentation | indent(width=8) }}
+{% endif %}
+        ...
+    {{prop_name|snake_case()}} = property(None, {{prop_name|snake_case()}})
+
+    {% endif %}
+    {% endfor %}
+    {# Service Procedures #}
+    {% for proc_name, procedure in procedures.items() %}
+    def {{proc_name|snake_case()}}(self{{ arg_list(procedure.parameters) }}):
+        {{ procedure_types(procedure) }}
+{% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
+{% endif %}
+        ...
+
+    {% endfor %}
+    {% for class_name, class in classes.items() %}
+    class {{class_name}}:
+        {# Class properties #}
+        {% for prop_name, prop in class['properties'].items() %}
+        {% if 'getter' in prop %}
+        @property
+        def {{prop_name|snake_case()}}(self{{ arg_list(prop.getter.parameters) }}): 
+            {{ procedure_types(prop.getter) }}
+{% if prop.getter.documentation %}{{ prop.getter.documentation | indent(width=12) }}
+{% endif %}
+            ...
+        
+        {% endif %}
+        {% if 'getter' in prop and 'setter' in prop %}
+        @{{prop_name|snake_case()}}.setter
+        def {{prop_name|snake_case()}}(self{{ arg_list(prop.setter.parameters) }}):
+            {{ procedure_types(prop.setter) }}
+            ...
+
+        {# Set only property #}
+        {% elif 'setter' in prop %}
+        def {{prop_name|snake_case()}}(self{{ arg_list(prop.setter.parameters) }}): 
+            {{ procedure_types(prop.setter) }}
+{% if prop.setter.documentation %}{{ prop.setter.documentation | indent(width=12) }}
+{% endif %}
+            ...
+        {{prop_name|snake_case()}} = property(None, {{prop_name|snake_case()}})
+
+        {% endif %}
+        {% endfor %}
+        {# Class Procedures #}
+        {% for proc_name, procedure in class['methods'].items() %}
+        def {{proc_name|snake_case()}}(self{{ arg_list(procedure.parameters) }}):
+            {{ procedure_types(procedure) }}
+{% if procedure.documentation %}{{ procedure.documentation | indent(width=12) }}
+{% endif %}
+            ...
+
+        {% endfor %}
+        {# Class Static Procedures #}
+        {% for proc_name, procedure in class['static_methods'].items() %}
+        @staticmethod
+        def {{proc_name|snake_case()}}({{ static_arg_list(procedure.parameters) }}):
+            {{ procedure_types(procedure) }}
+{% if procedure.documentation %}{{ procedure.documentation | indent(width=12) }}
+{% endif %}
+            ...
+
+        {% endfor %}
+    {% endfor %}
+    {# Service Enums #}
+    {% for enum_name,enumeration in enumerations.items()|list %}
+    class {{enum_name}}:
+{% if enumeration.documentation %}{{ enumeration.documentation | indent(width=8) }}
+{% endif %}
+        {% for enum_value in enumeration['values'] %}
+        {{enum_value['name']|snake_case()}} = {{enum_value['value']}}
+        {% endfor %}
+
+    {% endfor %}
