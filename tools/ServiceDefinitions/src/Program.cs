@@ -61,6 +61,8 @@ namespace ServiceDefinitions
 
             if (positionalArgs.Count < 2) {
                 Console.Error.WriteLine ("Not enough arguments");
+                foreach(string s in positionalArgs)
+                    Console.Error.WriteLine ("  " + s);
                 return 1;
             }
 

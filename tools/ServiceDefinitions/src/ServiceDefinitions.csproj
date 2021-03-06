@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -7,8 +7,9 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>ServiceDefinitions</RootNamespace>
     <AssemblyName>ServiceDefinitions</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <NoStdLib>true</NoStdLib>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -16,6 +17,7 @@
     <OutputPath>bin\Release</OutputPath>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,6 +27,7 @@
     <WarningLevel>4</WarningLevel>
     <DefineConstants>DEBUG;</DefineConstants>
     <Externalconsole>true</Externalconsole>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -38,10 +41,10 @@
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_json\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\..\robotics\krpc-master\bazel-genfiles\tools\cslibs\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NDesk.Options">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_options\lib\NDesk.Options.dll</HintPath>
+      <HintPath>..\..\..\..\..\robotics\krpc-master\bazel-genfiles\tools\cslibs\NDesk.Options.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
@@ -58,5 +61,8 @@
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
 </Project>

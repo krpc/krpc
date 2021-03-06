@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -29,14 +29,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Moq">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_moq\lib\net40\Moq.dll</HintPath>
+      <HintPath>..\..\..\bazel-genfiles\tools\cslibs\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_nunit\bin\framework\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\bazel-genfiles\tools\cslibs\nunit.framework.dll</HintPath>
       <Package>nunit</Package>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_protobuf\lib\net45\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\..\..\..\robotics\krpc-master\bazel-genfiles\tools\cslibs\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -49,9 +49,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="ConnectionTest.cs" />
     <Compile Include="EncoderTest.cs" />
