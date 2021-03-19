@@ -62,6 +62,9 @@ namespace KRPC.SpaceCenter.Services.Parts
             return controller.HasPart(part.InternalPart);
         }
 
+        /// <summary>
+        /// List the axes for the controller.
+        /// </summary>
         [KRPCMethod]
         public IList<IList<string>> ListAxes()
         {
@@ -74,9 +77,9 @@ namespace KRPC.SpaceCenter.Services.Parts
             return output;
         }
 
-
-
-        // Add value to axis control
+        /// <summary>
+        /// Add key frame value for controller axis.
+        /// </summary>
         [KRPCMethod]
         public bool AddKey(string part, string field, float time, float value)
         {
@@ -97,7 +100,9 @@ namespace KRPC.SpaceCenter.Services.Parts
             return false;
         }
 
-        // Clear axis
+        /// <summary>
+        /// Clear axis.
+        /// </summary>
         [KRPCMethod]
         public bool ClearAxis(string part, string field)
         {
@@ -120,10 +125,12 @@ namespace KRPC.SpaceCenter.Services.Parts
             return false;
         }
 
-        public void test()
-        {
-            Expansions.Serenity.ControlledAxis t;
-            
-        }
+        // <summary>
+        // Axis test.
+        // </summary>
+        //public void test()
+        //{
+        //    Expansions.Serenity.ControlledAxis t;
+        //}
     }
 }
