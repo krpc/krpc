@@ -640,6 +640,44 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return Wheel.Is (this) ? new Wheel (this) : null; }
         }
 
+
+        /// <summary>
+        /// A <see cref="RoboticHinge"/> if the part is a robotic hinge, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public RoboticHinge RoboticHinge
+        {
+            get { return RoboticHinge.Is(this) ? new RoboticHinge(this) : null; }
+        }
+
+
+        /// <summary>
+        /// A <see cref="RoboticPiston"/> if the part is a robotic hinge, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public RoboticPiston RoboticPiston
+        {
+            get { return RoboticPiston.Is(this) ? new RoboticPiston(this) : null; }
+        }
+
+        /// <summary>
+        /// A <see cref="RoboticRotation"/> if the part is a robotic rotation servo, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public RoboticRotation RoboticRotation
+        {
+            get { return RoboticRotation.Is(this) ? new RoboticRotation(this) : null; }
+        }
+
+        /// <summary>
+        /// A <see cref="RoboticRotor"/> if the part is a robotic rotation servo, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public RoboticRotor RoboticRotor
+        {
+            get { return RoboticRotor.Is(this) ? new RoboticRotor(this) : null; }
+        }
+
         /// <summary>
         /// The position of the part in the given reference frame.
         /// </summary>
