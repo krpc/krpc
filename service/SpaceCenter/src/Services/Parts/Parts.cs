@@ -329,5 +329,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<Wheel> Wheels {
             get { return All.Where (Wheel.Is).Select (part => new Wheel (part)).ToList (); }
         }
+
+        /// <summary>
+        /// A list of all resource drains in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<ResourceDrain> ResourceDrains
+        {
+            get { return All.Where(ResourceDrain.Is).Select(part => new ResourceDrain(part)).ToList(); }
+        }
     }
 }
