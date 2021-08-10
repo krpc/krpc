@@ -241,7 +241,16 @@ namespace KRPC.SpaceCenter.Services.Parts
             set { port.targetAngle = value; }
         }
 
-      
+        /// <summary>
+        /// Set the Docking Port Rotation as Locked to allow Autostrut to function across joint
+        /// </summary>
+        [KRPCProperty]
+        public bool RotationLocked
+        {
+            get { return port.nodeIsLocked; }
+            set { port.nodeIsLocked = value; }
+        }
+
 
         /// <summary>
         /// The position of the docking port, in the given reference frame.
