@@ -353,6 +353,62 @@ namespace KRPC.SpaceCenter.Services.Parts
                 steering.steeringInvert = value;
             }
         }
+        // Isn't working.   Will figure out later
+        ///// <summary>
+        ///// Whether the wheel steering is limited in relationship to speed.  1.12 feature
+        ///// </summary>
+        //[KRPCProperty]
+        //public bool SteeringAngleAuto
+        //{
+        //    get
+        //    {
+        //        CheckSteering();
+        //        return steering.autoSteeringAdjust;
+        //    }
+        //    set
+        //    {
+        //        CheckSteering();
+        //        steering.autoSteeringAdjust = value;
+        //        steering.steer
+        //    }
+        //}
+
+        /// <summary>
+        /// Manually set steering angle limit.  1.12 feature
+        /// </summary>
+        [KRPCProperty]
+        public float SteeringAngleLimiter
+        {
+            get
+            {
+                CheckSteering();
+                return steering.angleTweakable;
+            }
+            set
+            {
+                CheckSteering();
+                steering.angleTweakable = value;
+            }
+        }
+
+        /// <summary>
+        /// Steering Response Time  - 1.12 feature
+        /// </summary>
+        [KRPCProperty]
+        public float SteeringAngleResponse
+        {
+            get
+            {
+                CheckSteering();
+                return steering.responseTweakable;
+            }
+            set
+            {
+                CheckSteering();
+                steering.responseTweakable = value;
+            }
+        }
+
 
         /// <summary>
         /// Whether the wheel has suspension.
