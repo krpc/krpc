@@ -185,10 +185,12 @@ namespace KRPC.SpaceCenter.Services
         /// The contract manager.
         /// </summary>
         [KRPCProperty]
-        public static ContractManager ContractManager {
+        public static ContractManager ContractManager
+        {
             get { return new ContractManager(); }
         }
 
+       
         static string GetFullCraftDirectory (string craftDirectory)
         {
             return KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/" + craftDirectory;
