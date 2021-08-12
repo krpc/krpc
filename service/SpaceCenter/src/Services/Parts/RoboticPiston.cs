@@ -4,6 +4,8 @@ using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using UnityEngine;
+using System.Reflection;
+
 
 
 namespace KRPC.SpaceCenter.Services.Parts
@@ -53,7 +55,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The KSP Robotic Servo Hinge object.
+        /// The KSP Robotic Servo Piston object.
         /// </summary>
         public ModuleRoboticServoPiston InternalPiston
         {
@@ -61,19 +63,19 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The part object for this robotic hinge.
+        /// The part object for this robotic piston.
         /// </summary>
         [KRPCProperty]
         public Part Part { get; private set; }
 
         /// <summary>
-        ///Target Angle for Robotic Hinge
+        ///Target Extension for robotic piston.
         /// </summary>
         [KRPCProperty]
-        public float TargetPosition { get { return servo.targetExtension; } set { servo.targetExtension = value;  } }
+        public float TargetPosition { get { return servo.targetExtension; } set { SetExtension(value);  } }
 
         /// <summary>
-        ///Current Angle for Robotic Hinge
+        ///Current Extension of piston
         /// </summary>
         [KRPCProperty]
         public float CurrentPosition { get { return servo.currentExtension; } }
@@ -120,20 +122,22 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        ///Torque Limit Percentage
-        /// </summary>
-        [KRPCProperty]
-        public float TorqueLimit { get { return servo.servoMotorLimit; } set { servo.servoMotorLimit = value; } }
-
-        /// <summary>
-        /// Returns Hinge to Build Angle Position
+        /// Returns Piston to VAB Position
         /// </summary>
         [KRPCMethod]
         public void Home()
         {
-            servo.targetExtension = servo.launchPosition;
+            SetExtension(servo.launchPosition);
             
         }
+
+        public void SetExtension(float value)
+        {
+            BaseAxisField field = (BaseAxisField)typeof(ModuleRoboticServoPiston)
+                .GetField("targetExtensionAxisField", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(servo);
+            field.SetValue((float)value, field.module);
+        }
+
 
     }
 }

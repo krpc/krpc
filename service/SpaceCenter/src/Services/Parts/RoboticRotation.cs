@@ -9,7 +9,7 @@ using UnityEngine;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// A Robotic Piston Part. Obtained by calling <see cref="Part.RoboticPiston"/>
+    /// A Robotic Rotation servo. Obtained by calling <see cref="Part.RoboticRotation"/>
     /// </summary>
     [KRPCClass(Service = "SpaceCenter")]
     public class RoboticRotation : Equatable<RoboticRotation>
@@ -53,7 +53,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The KSP Robotic Servo Hinge object.
+        /// The KSP Robotic Rotation Servo object.
         /// </summary>
         public ModuleRoboticRotationServo InternalRotation
         {
@@ -61,16 +61,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The part object for this robotic hinge.
+        /// The part object for this robotic servo.
         /// </summary>
         [KRPCProperty]
         public Part Part { get; private set; }
 
         /// <summary>
-        ///Target Angle for Robotic Hinge
+        ///Target Angle for Robotic Servo
         /// </summary>
         [KRPCProperty]
-        public float TargetPosition { get { return servo.targetAngle; } set { servo.targetAngle= value; servo.OnPreModifyServo(); } }
+        public float TargetPosition { get { return servo.targetAngle; } set { servo.targetAngle= value; } }
+      
 
         /// <summary>
         ///Current Angle for Robotic Hinge
@@ -119,13 +120,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        ///Torque Limit Percentage
-        /// </summary>
-        [KRPCProperty]
-        public float TorqueLimit { get { return servo.servoMotorLimit; } set { servo.servoMotorLimit = value; } }
-
-        /// <summary>
-        /// Returns Hinge to Build Angle Position
+        /// Returns Servo to Build Angle Position
         /// </summary>
         [KRPCMethod]
         public void Home()
