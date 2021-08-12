@@ -365,5 +365,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             get { return All.Where(RoboticRotor.Is).Select(part => new RoboticRotor(part)).ToList(); }
         }
+
+        /// <summary>
+        /// A list of all resource drains in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<ResourceDrain> ResourceDrains
+        {
+            get { return All.Where(ResourceDrain.Is).Select(part => new ResourceDrain(part)).ToList(); }
+        }
+
     }
 }

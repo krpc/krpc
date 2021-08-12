@@ -77,7 +77,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             } }
 
         /// <summary>
-        ///Current RPM for Robotic Hinge
+        ///Current RPM for Robotic Rotor
         /// </summary>
         [KRPCProperty]
         public float CurrentRPM { get { return servo.currentRPM; } }
@@ -87,6 +87,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Inverted { get { return servo.inverted; } set { servo.inverted = value; } }
+
 
         /// <summary>
         /// Lock Movement
@@ -121,6 +122,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float TorqueLimit { get { return servo.servoMotorLimit; } set { servo.Fields["servoMotorLimit"].SetValue((float)value, servo); } }
+
 
     }
 }

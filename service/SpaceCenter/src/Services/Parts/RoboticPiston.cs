@@ -7,6 +7,7 @@ using UnityEngine;
 using System.Reflection;
 
 
+
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
@@ -120,8 +121,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
         }
 
-      
-
         /// <summary>
         /// Returns Piston to VAB Position
         /// </summary>
@@ -138,6 +137,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 .GetField("targetExtensionAxisField", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(servo);
             field.SetValue((float)value, field.module);
         }
+
 
     }
 }
