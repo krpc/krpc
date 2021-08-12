@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Expansions.Serenity;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -76,7 +77,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         ///Current Angle for Robotic Hinge
         /// </summary>
         [KRPCProperty]
-        public float CurrentAngle { get { return servo.currentAngle; } }
+        public float CurrentAngle { get 
+            { return  servo.modelInitialAngle + (float)typeof(ModuleRoboticServoHinge)
+                .GetMethod("currentTransformAngle", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(servo, null);
+               
+            } }
 
         /// <summary>
         /// Target Movement Rate in Degrees/s
@@ -109,12 +115,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 else servo.DisengageMotor();
             } }
 
-        /// <summary>
-        ///Torque Limit Percentage
-        /// </summary>
-        [KRPCProperty]
-        public float TorqueLimit { get { return servo.servoMotorLimit; } set { servo.servoMotorLimit = value; } }
-
+       
         /// <summary>
         /// Returns Hinge to Build Angle Position
         /// </summary>

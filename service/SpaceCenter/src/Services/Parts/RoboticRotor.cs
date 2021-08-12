@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Expansions.Serenity;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -9,7 +10,7 @@ using UnityEngine;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// A Robotic Piston Part. Obtained by calling <see cref="Part.RoboticRotor"/>
+    /// A Robotic Rotor Part. Obtained by calling <see cref="Part.RoboticRotor"/>
     /// </summary>
     [KRPCClass(Service = "SpaceCenter")]
     public class RoboticRotor : Equatable<RoboticRotor>
@@ -53,7 +54,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The KSP Robotic Servo Hinge object.
+        /// The KSP Robotic Servo Rotor object.
         /// </summary>
         public ModuleRoboticServoRotor InternalRotor
         {
@@ -61,24 +62,31 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The part object for this robotic hinge.
+        /// The part object for this robotic rotor.
         /// </summary>
         [KRPCProperty]
         public Part Part { get; private set; }
 
         /// <summary>
-        ///Target Angle for Robotic Hinge
+        ///Target RPM for Robotic Rotor
         /// </summary>
         [KRPCProperty]
-        public float TargetPosition { get { return servo.rpmLimit; } set { servo.rpmLimit = value; servo.OnPreModifyServo(); } }
+        public float TargetRPM { get { return servo.rpmLimit; } set {
+                BaseAxisField field = (BaseAxisField)typeof(ModuleRoboticServoRotor).GetField("rpmLimitAxisField", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(servo);
+                field.SetValue(value, field.module);
+            } }
 
         /// <summary>
-        ///Current Angle for Robotic Hinge
+        ///Current RPM for Robotic Hinge
         /// </summary>
         [KRPCProperty]
-        public float CurrentPosition { get { return servo.currentRPM; } }
+        public float CurrentRPM { get { return servo.currentRPM; } }
 
-       
+        /// <summary>
+        ///Invert Rotor Direction?
+        /// </summary>
+        [KRPCProperty]
+        public bool Inverted { get { return servo.inverted; } set { servo.inverted = value; } }
 
         /// <summary>
         /// Lock Movement
@@ -112,16 +120,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         ///Torque Limit Percentage
         /// </summary>
         [KRPCProperty]
-        public float TorqueLimit { get { return servo.servoMotorLimit; } set { servo.servoMotorLimit = value; } }
-
-        /// <summary>
-        /// Returns Hinge to Build Angle Position
-        /// </summary>
-        [KRPCMethod]
-        public void Home()
-        {
-            servo.rpmLimit = servo.launchPosition;
-        }
+        public float TorqueLimit { get { return servo.servoMotorLimit; } set { servo.Fields["servoMotorLimit"].SetValue((float)value, servo); } }
 
     }
 }
