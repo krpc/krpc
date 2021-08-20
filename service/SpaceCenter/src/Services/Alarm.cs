@@ -71,7 +71,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Notes for the contract.
+        /// Time the Alarm will trigger
         /// </summary>
         [KRPCProperty]
         public double UT
@@ -80,7 +80,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Synopsis for the contract.
+        /// Time until the alarm triggers
         /// </summary>
         [KRPCProperty]
         public double TimeTill
@@ -89,7 +89,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Synopsis for the contract.
+        /// Seconds betwen the alarm going off and the event it references 
         /// </summary>
         [KRPCProperty]
         public double EventOffset
@@ -98,7 +98,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Synopsis for the contract.
+        /// Vessel the alarm references
         /// </summary>
         [KRPCProperty(Nullable = true)]
         public Vessel Vessel
@@ -115,7 +115,11 @@ namespace KRPC.SpaceCenter.Services
 
 
         /// <summary>
-        /// Synopsis for the contract.
+        /// Unique ID of alarm
+        /// KSP destroys an old alarm and creates a new one each time an alarm is edited.
+        /// This ID will remain constant between the old and new alarms though, so this is the value
+        /// you want to store and each time you want to access an alarm, get the current alarm with the 
+        /// correct ID value.
         /// </summary>
         [KRPCProperty(Nullable = true)]
         public int ID
@@ -126,6 +130,7 @@ namespace KRPC.SpaceCenter.Services
                 return (int)InternalAlarm.Id;
             }
         }
+
 
         public void UdateAlarm() 
         {

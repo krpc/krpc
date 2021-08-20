@@ -33,6 +33,10 @@ namespace KRPC.SpaceCenter.Services
             return 0;
         }
 
+        /// <summary>
+        /// Make a Simple Alarm
+        /// Parameter 'time' is the number of seconds from now that the alarm should trigger.
+        /// </summary>
         [KRPCMethod]
         public Alarm MakeRawAlarm(double time, string title="Raw Alarm", string description = "")
         {
@@ -51,7 +55,10 @@ namespace KRPC.SpaceCenter.Services
             return new Alarm(alarm);
         }
 
-       
+        /// <summary>
+        /// Make a Simple Alarm linked to a Vessel
+        /// Parameter 'time' is the number of seconds from now that the alarm should trigger.
+        /// </summary>
         [KRPCMethod]
         public Alarm MakeRawAlarmVessel(double time, Vessel V, string title="Raw Alarm", string description="")
         {
@@ -72,7 +79,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
 
-
+        /// <summary>
+        /// Create an alarm for the given vessel's next Apoapsis
+        /// </summary>
         [KRPCMethod]
         public Alarm MakeApaAlarm(Vessel V, double offset = 60, string title="APA Alarm", string description="")
         {
@@ -91,7 +100,10 @@ namespace KRPC.SpaceCenter.Services
             AlarmClockScenario.AddAlarm(alarm);
             return new Alarm(alarm);
         }
-
+        
+                /// <summary>
+        /// Create an alarm for the given vessel's next Periapsis
+        /// </summary>
         [KRPCMethod]
         public Alarm MakePeaAlarm(Vessel V, double offset = 60, string title="PEA Alarm", string description = "")
         {
@@ -111,6 +123,9 @@ namespace KRPC.SpaceCenter.Services
             return new Alarm(alarm);
         }
 
+        /// <summary>
+        /// Create an alarm for the given vessel and maneuver node
+        /// </summary>
         [KRPCMethod]
         public Alarm MakeManeuverAlarm(Vessel V, Node Man, double offset = 60, bool AddBurnTime = true, string title="Maneuver Alarm", string description="" )
         {
@@ -133,6 +148,9 @@ namespace KRPC.SpaceCenter.Services
             return new Alarm(alarm);
         }
 
+        /// <summary>
+        /// Create an alarm for the given vessel's next SOI change
+        /// </summary>
         [KRPCMethod]
         public Alarm MakeSOIAlarm(Vessel V, double offset = 60, string title="SOI Change", string description="" )
         {
@@ -152,28 +170,34 @@ namespace KRPC.SpaceCenter.Services
             return new Alarm(alarm);
         }
 
+        //Not working - to be dealt with later
+        ///// <summary>
+        ///// Create an alarm for the given vessel's next transfer window
+        ///// </summary>
+        //[KRPCMethod]
+        //public Alarm MakeWindowAlarm(Vessel V, CelestialBody Target, string title="Transfer Window", string description="")
+        //{
+        //    AlarmTypeTransferWindow alarm = new AlarmTypeTransferWindow
+        //    {
+        //        title = title,
+        //        description = description,
+        //        actions =
+        //        {
+        //            warp = AlarmActions.WarpEnum.KillWarp,
+        //            message = AlarmActions.MessageEnum.Yes
+        //        },
+        //        vesselId = V.InternalVessel.persistentId,
+        //        dest = Target.InternalBody,
+        //        source = V.InternalVessel.orbit.referenceBody
+        //};
 
-        [KRPCMethod]
-        public Alarm MakeWindowAlarm(Vessel V, CelestialBody Target, string title="Transfer Window", string description="")
-        {
-            AlarmTypeTransferWindow alarm = new AlarmTypeTransferWindow
-            {
-                title = title,
-                description = description,
-                actions =
-                {
-                    warp = AlarmActions.WarpEnum.KillWarp,
-                    message = AlarmActions.MessageEnum.Yes
-                },
-                vesselId = V.InternalVessel.persistentId,
-                dest = Target.InternalBody,
-                source = V.InternalVessel.orbit.referenceBody
-        };
-           
-            AlarmClockScenario.AddAlarm(alarm);
-            return new Alarm(alarm);
-        }
+        //    AlarmClockScenario.AddAlarm(alarm);
+        //    return new Alarm(alarm);
+        //}
 
+        /// <summary>
+        /// Returns a list of all alarms
+        /// </summary>
         [KRPCMethod]
         public IList<Alarm> GetAlarms()
         {
