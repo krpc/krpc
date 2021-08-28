@@ -853,5 +853,20 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             PartForcesAddon.AddInstantaneous (new Force (this, force, position, referenceFrame));
         }
+
+        [KRPCProperty]
+        public bool Glow
+        {
+            set
+            {
+                if (value == false) { InternalPart.SetHighlightDefault(); }
+                else
+                {
+                    InternalPart.SetHighlight(true, true);
+                    InternalPart.SetHighlightColor(Color.yellow);
+                    InternalPart.SetHighlightType(global::Part.HighlightType.AlwaysOn);
+                }
+            }
+        }
     }
 }
