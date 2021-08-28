@@ -124,6 +124,8 @@
     <Compile Include="PartHighlightAddon.cs" />
     <Compile Include="PilotAddon.cs" />
     <Compile Include="ResourceTransferAddon.cs" />
+    <Compile Include="Services\Alarm.cs" />
+    <Compile Include="Services\AlarmClock.cs" />
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\Camera.cs" />
     <Compile Include="Services\CameraMode.cs" />

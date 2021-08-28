@@ -190,7 +190,15 @@ namespace KRPC.SpaceCenter.Services
             get { return new ContractManager(); }
         }
 
-       
+        /// <summary>
+        /// The Alarm Clock Module.
+        /// </summary>
+        [KRPCProperty]
+        public static AlarmClock AlarmClock
+        {
+            get { return new AlarmClock(); }
+        }
+
         static string GetFullCraftDirectory (string craftDirectory)
         {
             return KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/" + craftDirectory;
