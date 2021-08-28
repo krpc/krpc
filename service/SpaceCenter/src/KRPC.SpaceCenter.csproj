@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -7,8 +7,9 @@
     <OutputType>Library</OutputType>
     <RootNamespace>KRPC.SpaceCenter</RootNamespace>
     <AssemblyName>KRPC.SpaceCenter</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <NoStdLib>true</NoStdLib>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <ConsolePause>false</ConsolePause>
     <DocumentationFile>..\..\..\bin\Debug\KRPC.SpaceCenter.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -29,6 +31,7 @@
     <DebugType>full</DebugType>
     <DocumentationFile>..\..\..\bin\Release\KRPC.SpaceCenter.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -38,12 +41,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule">
@@ -147,6 +150,7 @@
     <Compile Include="Services\Orbit.cs" />
     <Compile Include="Services\Parts\Antenna.cs" />
     <Compile Include="Services\Parts\AntennaState.cs" />
+    <Compile Include="Services\Parts\AutostrutState.cs" />
     <Compile Include="Services\Parts\CargoBay.cs" />
     <Compile Include="Services\Parts\CargoBayState.cs" />
     <Compile Include="Services\Parts\ControlSurface.cs" />
@@ -175,8 +179,13 @@
     <Compile Include="Services\Parts\ReactionWheel.cs" />
     <Compile Include="Services\Parts\ResourceConverter.cs" />
     <Compile Include="Services\Parts\ResourceConverterState.cs" />
+    <Compile Include="Services\Parts\ResourceDrain.cs" />
     <Compile Include="Services\Parts\ResourceHarvester.cs" />
     <Compile Include="Services\Parts\ResourceHarvesterState.cs" />
+    <Compile Include="Services\Parts\RoboticHinge.cs" />
+    <Compile Include="Services\Parts\RoboticPiston.cs" />
+    <Compile Include="Services\Parts\RoboticRotation.cs" />
+    <Compile Include="Services\Parts\RoboticRotor.cs" />
     <Compile Include="Services\Parts\ScienceData.cs" />
     <Compile Include="Services\Parts\ScienceSubject.cs" />
     <Compile Include="Services\Parts\Sensor.cs" />
