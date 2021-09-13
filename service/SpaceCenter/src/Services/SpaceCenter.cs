@@ -185,8 +185,7 @@ namespace KRPC.SpaceCenter.Services
         /// The contract manager.
         /// </summary>
         [KRPCProperty]
-        public static ContractManager ContractManager
-        {
+        public static ContractManager ContractManager {
             get { return new ContractManager(); }
         }
 

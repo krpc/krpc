@@ -107,7 +107,7 @@ def main():
 
     if sort_failed:
         raise RuntimeError(
-            'Don\'t know how to order:\n'+'\n'.join(sort_failed))
+            'DOCGEN: Don\'t know how to order:\n'+'\n'.join(sort_failed))
 
     content, documented = process_file(domain, services, args.source)
 

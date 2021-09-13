@@ -374,6 +374,5 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             get { return All.Where(ResourceDrain.Is).Select(part => new ResourceDrain(part)).ToList(); }
         }
-
     }
 }

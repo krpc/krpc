@@ -480,15 +480,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return DockingPort.Is (this) ? new DockingPort (this) : null; }
         }
 
-        /// <summary>        /// A <see cref="ResourceDrain"/> if the part is a resource drain, otherwise <c>null</c>.
-        /// </summary>
-        [KRPCProperty(Nullable = true)]
-        public ResourceDrain ResourceDrain
-        {
-            get { return ResourceDrain.Is(this) ? new ResourceDrain(this) : null; }
-        }
-
-
         /// <summary>
         /// An <see cref="Engine"/> if the part is an engine, otherwise <c>null</c>.
         /// </summary>
@@ -623,6 +614,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty (Nullable = true)]
         public ResourceHarvester ResourceHarvester {
             get { return ResourceHarvester.Is (this) ? new ResourceHarvester (this) : null; }
+        }
+
+        /// <summary>
+        /// A <see cref="RoboticController"/> if the part is a robotic controller,
+        /// otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public RoboticController RoboticController
+        {
+            get { return RoboticController.Is(this) ? new RoboticController(this) : null; }
         }
 
         /// <summary>
