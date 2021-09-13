@@ -15,7 +15,7 @@ def _create_py_env(out, install):
     cmds = [
         'PWD=`pwd`',
         'rm -rf %s' % tmp,
-        'virtualenv %s --python python3 --quiet --never-download --no-site-packages' % tmp
+        'virtualenv %s --python python3 --quiet --never-download' % tmp
     ]
     for lib in install:
         cmds.append(
@@ -174,7 +174,7 @@ py_script = rule(
 )
 
 def _test_impl(ctx, pyexe='python2'):
-    sub_commands = ['virtualenv env --python %s --quiet --never-download --no-site-packages' % pyexe]
+    sub_commands = ['virtualenv env --python %s --quiet --never-download' % pyexe]
     for dep in ctx.files.deps:
         if pyexe == 'python3' and dep.path == 'external/python_enum34/file/downloaded':
             # enum34 not required with Python 3
@@ -264,7 +264,7 @@ def _lint_impl(ctx):
     sub_commands = []
 
     # Install dependences in a new virtual env
-    sub_commands = ['virtualenv env --python python3 --quiet --never-download --no-site-packages']
+    sub_commands = ['virtualenv env --python python3 --quiet --never-download']
     for dep in deps:
         sub_commands.append(
             'env/bin/python env/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s'

@@ -39,20 +39,22 @@ def _impl(ctx):
     for input in inputs:
         staging_path = staging_dir + '/' + _apply_path_map(path_map, input.short_path)
         mode = _get_mode(mode_map, input.short_path)
+        
         sub_commands.extend([
             'mkdir -p `dirname "%s"`' % staging_path,
             'cp %s %s' % (input.path, staging_path),
             'chmod %s %s' % (mode, staging_path)
         ])
-
+        
     sub_commands.extend([
         'CWD=`pwd`',
         'cd %s' % staging_dir,
-        '(cd %s; autoreconf --force --install --warnings=error 2>/dev/null 1>&2)' % source_dir,
+        #'(cd %s; autoreconf --force --install --warnings=error 2>/dev/null 1>&2)' % source_dir,
+        '(cd %s; autoreconf --force --install --warnings=error )' % source_dir,
         'rm -rf %s/autom4te.cache' % source_dir,
         'zip --quiet -r $CWD/%s ./' % output.path
     ])
-
+    
     ctx.actions.run_shell(
         inputs = inputs + macros,
         outputs = [output],

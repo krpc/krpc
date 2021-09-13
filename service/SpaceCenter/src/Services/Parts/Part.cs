@@ -626,6 +626,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A <see cref="RoboticController"/> if the part is a robotic controller,
+        /// otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public RoboticController RoboticController
+        {
+            get { return RoboticController.Is(this) ? new RoboticController(this) : null; }
+        }
+
+        /// <summary>
         /// A <see cref="Sensor"/> if the part is a sensor, otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty (Nullable = true)]

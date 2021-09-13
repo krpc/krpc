@@ -22,7 +22,7 @@ if sys.version_info < (3, 5):
 
 setup(
     name='krpc',
-    version=re.search(r'\'(.+)\'', open(os.path.join(dirpath, 'krpc/version.py')).read()).group(1),
+    version='1.0',
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
     packages=['krpc', 'krpc.schema', 'krpc.test', 'krpc.test.schema'],

@@ -81,6 +81,9 @@
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\generated_deps\service\SpaceCenter\AssemblyInfo.cs">
@@ -186,6 +189,7 @@
     <Compile Include="Services\Parts\RoboticPiston.cs" />
     <Compile Include="Services\Parts\RoboticRotation.cs" />
     <Compile Include="Services\Parts\RoboticRotor.cs" />
+    <Compile Include="Services\Parts\RoboticController.cs" />
     <Compile Include="Services\Parts\ScienceData.cs" />
     <Compile Include="Services\Parts\ScienceSubject.cs" />
     <Compile Include="Services\Parts\Sensor.cs" />
