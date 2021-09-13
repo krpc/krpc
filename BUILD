@@ -128,9 +128,9 @@ pkg_zip(
         '//protobuf:java',
         '//protobuf:lua',
         '//protobuf:python',
-        '//protobuf:LICENSE',
+        '//protobuf:LICENSE'
         # Docs
-        '//doc:pdf'
+        #'//doc:pdf'
     ],
     path_map = {
         'kRPC.version': 'GameData/kRPC/kRPC.version',
@@ -165,9 +165,9 @@ pkg_zip(
         'client/lua/': 'client/',
         'client/python/': 'client/',
         # Schema
-        'protobuf/': 'schema/',
+        'protobuf/': 'schema/'
         # Docs
-        'doc/kRPC.pdf': 'kRPC.pdf'
+        #'doc/kRPC.pdf': 'kRPC.pdf'
     },
     exclude = ['*.mdb']
 )
@@ -250,8 +250,8 @@ test_suite(
         '//tools/krpctools:test',
         '//tools/ServiceDefinitions:test',
         '//tools/TestingTools:test',
-        '//tools/TestServer:test',
-        '//doc:test'
+        '//tools/TestServer:test'
+        #'//doc:test'
     ]
 )
 
@@ -268,8 +268,8 @@ test_suite(
         '//client/serialio:ci-test',
         '//client/websockets:ci-test',
         '//tools/krpctest:ci-test',
-        '//tools/krpctools:ci-test',
-        '//doc:ci-test'
+        '//tools/krpctools:ci-test'
+        #'//doc:ci-test'
     ]
 )
 
@@ -290,8 +290,8 @@ test_suite(
         '//client/python:lint',
         '//client/websockets:lint',
         '//tools/krpctest:lint',
-        '//tools/krpctools:lint',
-        '//doc:lint'
+        '//tools/krpctools:lint'
+        #'//doc:lint'
     ]
 )
 

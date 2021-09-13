@@ -29,7 +29,7 @@ http_archive(
 http_archive(
     name = 'six',
     urls = ['https://pypi.python.org/packages/source/s/six/six-1.12.0.tar.gz'],
-    build_file = '@com_google_protobuf//:third_party/six.BUILD',
+    build_file = '@com_google_protobuf//:six.BUILD',
     sha256 = 'd16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73'
 )
 
@@ -629,8 +629,8 @@ http_file(
 
 http_file(
     name = 'python_six',
-    urls = ['https://files.pythonhosted.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe/six-1.11.0.tar.gz'],
-    sha256 = '70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9'
+    urls = ['https://files.pythonhosted.org/packages/dd/bf/4138e7bfb757de47d1f4b6994648ec67a51efe58fa907c1e11e350cddfca/six-1.12.0.tar.gz'],
+    sha256 = 'd16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73'
 )
 
 http_file(

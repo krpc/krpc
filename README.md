@@ -1,5 +1,3 @@
-kRPC [![Build Status](https://travis-ci.com/krpc/krpc.svg?branch=master)](https://travis-ci.com/krpc/krpc)
-====
 
 kRPC allows you to control Kerbal Space Program from scripts running outside of
 the game, and comes with client libraries for many popular languages.
