@@ -901,5 +901,57 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             PartForcesAddon.AddInstantaneous (new Force (this, force, position, referenceFrame));
         }
+
+        [KRPCProperty]
+
+        public bool Glow
+        {
+            set
+            {
+                if (value == false) { InternalPart.SetHighlightDefault(); }
+                else
+                {
+                    InternalPart.SetHighlight(true, true);
+                    InternalPart.SetHighlightColor(Color.yellow);
+                    InternalPart.SetHighlightType(global::Part.HighlightType.AlwaysOn);
+                }
+            }
+
+        public AutostrutState AutoStrutMode
+        {
+            get
+            {
+                switch (InternalPart.autoStrutMode)
+                {
+                    case global::Part.AutoStrutMode.Off:
+                        return AutostrutState.Off;
+                       
+                    case global::Part.AutoStrutMode.Heaviest:
+                        return AutostrutState.Heaviest;
+                      
+                    case global::Part.AutoStrutMode.ForceHeaviest:
+                        return AutostrutState.ForceHeaviest;
+                       
+                    case global::Part.AutoStrutMode.Grandparent:
+                        return AutostrutState.Grandparent;
+                      
+                    case global::Part.AutoStrutMode.ForceGrandparent:
+                        return AutostrutState.ForceGrandparent;
+                     
+                    case global::Part.AutoStrutMode.Root:
+                        return AutostrutState.Root;
+           
+                    default:
+                        return AutostrutState.ForceRoot;
+                      
+
+                }
+            }
+
+            set
+            {
+
+            }
+        }
     }
 }
