@@ -71,7 +71,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float TargetPosition { get { return servo.targetAngle; } set { servo.targetAngle= value; } }
-      
 
         /// <summary>
         ///Current Angle for Robotic Hinge
@@ -119,6 +118,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
         }
 
+       
         /// <summary>
         /// Returns Servo to Build Angle Position
         /// </summary>

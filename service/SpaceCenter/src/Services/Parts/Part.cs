@@ -480,15 +480,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return DockingPort.Is (this) ? new DockingPort (this) : null; }
         }
 
-        /// <summary>        /// A <see cref="ResourceDrain"/> if the part is a resource drain, otherwise <c>null</c>.
-        /// </summary>
-        [KRPCProperty(Nullable = true)]
-        public ResourceDrain ResourceDrain
-        {
-            get { return ResourceDrain.Is(this) ? new ResourceDrain(this) : null; }
-        }
-
-
         /// <summary>
         /// An <see cref="Engine"/> if the part is an engine, otherwise <c>null</c>.
         /// </summary>
@@ -909,45 +900,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         public void InstantaneousForce (Tuple3 force, Tuple3 position, ReferenceFrame referenceFrame)
         {
             PartForcesAddon.AddInstantaneous (new Force (this, force, position, referenceFrame));
-        }
-
-        [KRPCProperty]
-
-        public AutostrutState AutoStrutMode
-        {
-            get
-            {
-                switch (InternalPart.autoStrutMode)
-                {
-                    case global::Part.AutoStrutMode.Off:
-                        return AutostrutState.Off;
-                       
-                    case global::Part.AutoStrutMode.Heaviest:
-                        return AutostrutState.Heaviest;
-                      
-                    case global::Part.AutoStrutMode.ForceHeaviest:
-                        return AutostrutState.ForceHeaviest;
-                       
-                    case global::Part.AutoStrutMode.Grandparent:
-                        return AutostrutState.Grandparent;
-                      
-                    case global::Part.AutoStrutMode.ForceGrandparent:
-                        return AutostrutState.ForceGrandparent;
-                     
-                    case global::Part.AutoStrutMode.Root:
-                        return AutostrutState.Root;
-           
-                    default:
-                        return AutostrutState.ForceRoot;
-                      
-
-                }
-            }
-
-            set
-            {
-
-            }
         }
     }
 }
