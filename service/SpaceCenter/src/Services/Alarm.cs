@@ -47,7 +47,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public string Type
         {
-            get { UdateAlarm(); return InternalAlarm.TypeName; }
+            get { UpdateAlarm(); return InternalAlarm.TypeName; }
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public string Title
         {
-            get { UdateAlarm(); return InternalAlarm.title; }
+            get { UpdateAlarm(); return InternalAlarm.title; }
 
 
         }
@@ -67,7 +67,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public string Description
         {
-            get { UdateAlarm(); return InternalAlarm.description; }
+            get { UpdateAlarm(); return InternalAlarm.description; }
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public double UT
         {
-            get { UdateAlarm(); return InternalAlarm.ut; }
+            get { UpdateAlarm(); return InternalAlarm.ut; }
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public double TimeTill
         {
-            get { UdateAlarm(); return InternalAlarm.TimeToAlarm; }
+            get { UpdateAlarm(); return InternalAlarm.TimeToAlarm; }
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public double EventOffset
         {
-            get { UdateAlarm(); return InternalAlarm.eventOffset; }
+            get { UpdateAlarm(); return InternalAlarm.eventOffset; }
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace KRPC.SpaceCenter.Services
         {
             get
             {
-                UdateAlarm();
+                UpdateAlarm();
                 KRPC.SpaceCenter.Services.Vessel V = new Vessel(InternalAlarm.Vessel);
 
 
@@ -126,13 +126,13 @@ namespace KRPC.SpaceCenter.Services
         {
             get
             {
-                UdateAlarm();
+                UpdateAlarm();
                 return (int)InternalAlarm.Id;
             }
         }
 
 
-        public void UdateAlarm() 
+        private void UpdateAlarm() 
         {
             AlarmTypeBase newalarm;
             AlarmClockScenario.TryGetAlarm(InternalAlarm.Id, out newalarm);

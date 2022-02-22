@@ -480,6 +480,14 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return DockingPort.Is (this) ? new DockingPort (this) : null; }
         }
 
+        /// <summary>        /// A <see cref="ResourceDrain"/> if the part is a resource drain, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public ResourceDrain ResourceDrain
+        {
+            get { return ResourceDrain.Is(this) ? new ResourceDrain(this) : null; }
+        }
+
         /// <summary>
         /// An <see cref="Engine"/> if the part is an engine, otherwise <c>null</c>.
         /// </summary>
@@ -902,8 +910,10 @@ namespace KRPC.SpaceCenter.Services.Parts
             PartForcesAddon.AddInstantaneous (new Force (this, force, position, referenceFrame));
         }
 
+        /// <summary>
+        /// Glow
+        /// </summary>
         [KRPCProperty]
-
         public bool Glow
         {
             set
@@ -916,7 +926,11 @@ namespace KRPC.SpaceCenter.Services.Parts
                     InternalPart.SetHighlightType(global::Part.HighlightType.AlwaysOn);
                 }
             }
+        }
 
+        /// <summary>
+        /// Autostrut
+        /// </summary>
         public AutostrutState AutoStrutMode
         {
             get

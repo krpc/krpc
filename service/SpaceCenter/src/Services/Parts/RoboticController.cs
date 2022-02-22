@@ -124,13 +124,5 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
             return false;
         }
-
-        // <summary>
-        // Axis test.
-        // </summary>
-        //public void test()
-        //{
-        //    Expansions.Serenity.ControlledAxis t;
-        //}
     }
 }

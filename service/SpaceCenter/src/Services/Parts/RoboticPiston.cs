@@ -120,8 +120,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
         }
 
-      
-
         /// <summary>
         /// Returns Piston to VAB Position
         /// </summary>
@@ -132,6 +130,9 @@ namespace KRPC.SpaceCenter.Services.Parts
             
         }
 
+        /// <summary>
+        /// Set piston extension
+        /// </summary>
         public void SetExtension(float value)
         {
             BaseAxisField field = (BaseAxisField)typeof(ModuleRoboticServoPiston)
