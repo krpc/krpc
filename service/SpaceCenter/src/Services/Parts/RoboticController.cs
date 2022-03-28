@@ -78,6 +78,25 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Add an axis to the controller
+        /// </summary>
+        [KRPCMethod]
+        public bool AddAxis(Module module, string field_name)
+        {
+            var internalPart = module.Part.InternalPart;
+            var internalModule = internalPart.Modules[module.Name];
+            var axisField = (BaseAxisField)internalModule.Fields[field_name];
+
+            if (axisField != null)
+            {
+                controller.AddPartAxis(internalPart, internalModule, axisField);
+                return true;
+            }
+            
+            return false;
+        }
+
+        /// <summary>
         /// Add key frame value for controller axis.
         /// </summary>
         [KRPCMethod]

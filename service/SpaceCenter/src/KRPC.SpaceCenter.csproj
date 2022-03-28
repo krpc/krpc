@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -150,6 +150,7 @@
     <Compile Include="Services\Orbit.cs" />
     <Compile Include="Services\Parts\Antenna.cs" />
     <Compile Include="Services\Parts\AntennaState.cs" />
+    <Compile Include="Services\Parts\AutostrutState.cs" />
     <Compile Include="Services\Parts\CargoBay.cs" />
     <Compile Include="Services\Parts\CargoBayState.cs" />
     <Compile Include="Services\Parts\ControlSurface.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Services\Parts\ReactionWheel.cs" />
     <Compile Include="Services\Parts\ResourceConverter.cs" />
     <Compile Include="Services\Parts\ResourceConverterState.cs" />
+    <Compile Include="Services\Parts\ResourceDrain.cs" />
     <Compile Include="Services\Parts\ResourceHarvester.cs" />
     <Compile Include="Services\Parts\ResourceHarvesterState.cs" />
     <Compile Include="Services\Parts\RoboticHinge.cs" />
