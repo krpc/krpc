@@ -29,7 +29,7 @@ jobs:
       - name: Unpack KSP libraries
         uses: edgarrc/action-7z@v1
         with:
-          args: 7z x lib/KSP_Data.7z -p${{secrets.BIN_PWD}} -olib/ksp
+          args: 7z x lib/KSP_Data-1.12.3.7z -p${{secrets.BIN_PWD}} -olib/ksp
       - name: Setup lib directory
         run: |
           sudo chown -R $(id -un) lib/ksp
