@@ -81,14 +81,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Add an axis to the controller
         /// </summary>
         [KRPCMethod]
-        public bool AddAxis(Module module, string field_name)
+        public bool AddAxis(Module module, string fieldName)
         {
             var internalPart = module.Part.InternalPart;
             var internalModule = internalPart.Modules[module.Name];
 
             foreach (var field in internalModule.Fields)
             {
-                if (field.guiName == field_name)
+                if (field.guiName == fieldName)
                 {
                     var axisField = (BaseAxisField)internalModule.Fields[field.name];
 
@@ -100,7 +100,6 @@ namespace KRPC.SpaceCenter.Services.Parts
                     return false;
                 }
             }   
-            
             return false;
         }
 
@@ -108,11 +107,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Add key frame value for controller axis.
         /// </summary>
         [KRPCMethod]
-        public bool AddKey(string part, string field, float time, float value)
+        public bool AddKey(Module module, string fieldName, float time, float value)
         {
+            var internalPart = module.Part.InternalPart;
+            var internalModule = internalPart.Modules[module.Name];
+
             foreach (var axis in controller.ControlledAxes)
             {
-                if (part == axis.Part.name && field == axis.AxisField.name)
+                if (internalModule == axis.Module && fieldName == axis.AxisField.name)
                 {
                     Expansions.Serenity.ControlledAxis outAxis;
                     controller.TryGetPartAxisField(axis.Part, axis.AxisField, out outAxis);
