@@ -85,13 +85,21 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             var internalPart = module.Part.InternalPart;
             var internalModule = internalPart.Modules[module.Name];
-            var axisField = (BaseAxisField)internalModule.Fields[field_name];
 
-            if (axisField != null)
+            foreach (var field in internalModule.Fields)
             {
-                controller.AddPartAxis(internalPart, internalModule, axisField);
-                return true;
-            }
+                if (field.guiName == field_name)
+                {
+                    var axisField = (BaseAxisField)internalModule.Fields[field.name];
+
+                    if (axisField != null)
+                    {
+                        controller.AddPartAxis(internalPart, internalModule, axisField);
+                        return true;
+                    }
+                    return false;
+                }
+            }   
             
             return false;
         }
