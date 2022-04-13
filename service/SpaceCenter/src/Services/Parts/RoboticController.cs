@@ -114,7 +114,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
             foreach (var axis in controller.ControlledAxes)
             {
-                if (internalModule == axis.Module && fieldName == axis.AxisField.name)
+                if (internalModule == axis.Module && fieldName == axis.AxisField.guiName)
                 {
                     Expansions.Serenity.ControlledAxis outAxis;
                     controller.TryGetPartAxisField(axis.Part, axis.AxisField, out outAxis);
@@ -133,11 +133,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Clear axis.
         /// </summary>
         [KRPCMethod]
-        public bool ClearAxis(string part, string field)
+        public bool ClearAxis(Module module, string fieldName)
         {
+            var internalPart = module.Part.InternalPart;
+            var internalModule = internalPart.Modules[module.Name];
+
             foreach (var axis in controller.ControlledAxes)
             {
-                if (part == axis.Part.name && field == axis.AxisField.name)
+                if (internalModule == axis.Module && fieldName == axis.AxisField.guiName)
                 {
                     Expansions.Serenity.ControlledAxis outAxis;
                     controller.TryGetPartAxisField(axis.Part, axis.AxisField, out outAxis);

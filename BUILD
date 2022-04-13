@@ -113,6 +113,8 @@ pkg_zip(
         '//service/KerbalAlarmClock',
         '//service/RemoteTech',
         '//service/UI',
+        '//service/LiDAR',
+        '//service/DockingCamera',
         # Clients
         '//client/cnano',
         '//client/cpp',
@@ -155,6 +157,8 @@ pkg_zip(
         'service/RemoteTech/CHANGES.txt': 'GameData/kRPC/CHANGES.RemoteTech.txt',
         'service/UI/': 'GameData/kRPC/',
         'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt',
+		'service/LiDAR/': 'GameData/kRPC/',
+		'service/DockingCamera/': 'GameData/kRPC/',
         # Module Manager
         '../module_manager/file/ModuleManager.4.1.3.dll': 'GameData/ModuleManager.4.1.3.dll',
         # Clients
@@ -195,7 +199,9 @@ pkg_zip(
         '//service/InfernalRobotics',
         '//service/KerbalAlarmClock',
         '//service/RemoteTech',
-        '//service/UI'
+        '//service/UI',
+        '//service/LiDAR',
+        '//service/DockingCamera'
     ],
     path_map = {
         'kRPC.version': 'GameData/kRPC/kRPC.version',
@@ -223,7 +229,9 @@ pkg_zip(
         'service/RemoteTech/': 'GameData/kRPC/',
         'service/RemoteTech/CHANGES.txt': 'GameData/kRPC/CHANGES.RemoteTech.txt',
         'service/UI/': 'GameData/kRPC/',
-        'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt'
+        'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt',
+		'service/LiDAR/': 'GameData/kRPC/',
+		'service/DockingCamera/': 'GameData/kRPC/'
     },
     exclude = ['*.mdb']
 )
@@ -315,6 +323,8 @@ filegroup (
         '//service/RemoteTech:AssemblyInfo',
         '//service/SpaceCenter:AssemblyInfo',
         '//service/UI:AssemblyInfo',
+        '//service/LiDAR:AssemblyInfo',
+        '//service/DockingCamera:AssemblyInfo',
 
         '//tools/ServiceDefinitions:AssemblyInfo',
         '//tools/TestServer:AssemblyInfo',
@@ -358,6 +368,8 @@ filegroup(
         '//service/KerbalAlarmClock',
         '//service/RemoteTech',
         '//service/UI',
+        '//service/LiDAR',
+        '//service/DockingCamera',
         '//client/csharp',
         '//client/csharp:KRPC.Client.Test',
         '//tools/ServiceDefinitions',

@@ -10,3 +10,4 @@ KSP.log
 PartDatabase.cfg
 lib/mono-4.5
 *.user
+build-out

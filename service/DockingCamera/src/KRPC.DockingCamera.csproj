@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3C4BE33F-15AF-4EB8-B490-C466AAE70258}</ProjectGuid>
+    <ProjectGuid>{1555BA26-0DF2-4E56-B191-EE4D9DB14539}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>KRPC.LiDAR</RootNamespace>
-    <AssemblyName>KRPC.LiDAR</AssemblyName>
+    <RootNamespace>KRPC.Camera</RootNamespace>
+    <AssemblyName>KRPC.Camera</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -24,7 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+	<PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -35,8 +35,8 @@
   <ItemGroup>
     <Compile Include="Addon.cs" />
     <Compile Include="API.cs" />
-    <Compile Include="Laser.cs" />
-    <Compile Include="LiDAR.cs" />
+    <Compile Include="Camera.cs" />
+    <Compile Include="DockingCamera.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
