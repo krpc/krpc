@@ -101,7 +101,7 @@ class EngineTestBase(object):
 
     @classmethod
     def add_engine_data(cls, title, data):
-        for k, v in data.items():
+        for k, v in list(data.items()):
             cls.engine_data[title][k] = v
 
     def get_engine(self, title):
@@ -132,7 +132,7 @@ class EngineTest(EngineTestBase):
         self.assertAlmostEqual(
             data['max_vac_thrust'], engine.max_vacuum_thrust)
         self.assertItemsEqual(
-            data['propellants'].keys(), engine.propellant_names)
+            list(data['propellants'].keys()), engine.propellant_names)
         self.assertAlmostEqual(
             data['propellants'], engine.propellant_ratios, places=3)
         self.assertTrue(engine.has_fuel)
@@ -144,7 +144,7 @@ class EngineTest(EngineTestBase):
         self.assertEqual(data['can_shutdown'], engine.can_shutdown)
         self.assertEqual(data['modes'] is not None, engine.has_modes)
         if data['modes'] is not None:
-            self.assertItemsEqual(data['modes'], engine.modes.keys())
+            self.assertItemsEqual(data['modes'], list(engine.modes.keys()))
             self.assertTrue(engine.mode in data['modes'])
         self.assertEqual(data['gimballed'], engine.gimballed)
         if not data['gimballed']:

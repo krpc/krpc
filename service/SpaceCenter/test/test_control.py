@@ -252,7 +252,7 @@ class TestControlStaging(krpctest.TestCase):
         self.assertEqual(stage, self.control.current_stage)
 
     def test_staging(self):
-        for i in reversed(range(12)):
+        for i in reversed(list(range(12))):
             self.assertEqual(i, self.control.current_stage)
             self.wait(0.5)
             self.control.activate_next_stage()
