@@ -32,7 +32,6 @@ setup(
     long_description=open(os.path.join(dirpath, 'README.txt')).read(),
     install_requires=install_requires,
     test_suite='krpc.test',
-    use_2to3=True,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: End Users/Desktop',

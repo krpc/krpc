@@ -43,7 +43,6 @@ setup(
                        'bin/*.exe', 'bin/*.dll', 'bin/*.xml', 'bin/*.zip']},
     install_requires=install_requires,
     test_suite='krpctools.test',
-    use_2to3=True,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: End Users/Desktop',
