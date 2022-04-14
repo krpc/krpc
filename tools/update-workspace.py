@@ -24,7 +24,7 @@ def read_workspace():
         line = lines[i]
 
         def error(msg):
-            print('ERROR on line %d' % i)
+            print(('ERROR on line %d' % i))
             print(msg)
             exit(1)
 
@@ -86,7 +86,7 @@ def write_workspace(header, loads, workspace):
     for entry in workspace:
         lines.append('')
         lines.append(entry['type']+'(')
-        props = ['    %s = %s' % entry for entry in entry['props'].items()]
+        props = ['    %s = %s' % entry for entry in list(entry['props'].items())]
         lines.append(',\n'.join(props))
         lines.append(')')
     with open('WORKSPACE', 'w') as f:
@@ -163,14 +163,14 @@ def main():
             package, version, typ = parse_python_package(path)
             versions = get_python_package_versions(package, typ)
             try:
-                latest_version = sorted(versions.keys(), key=distutils.version.LooseVersion)[-1]
+                latest_version = sorted(list(versions.keys()), key=distutils.version.LooseVersion)[-1]
             except TypeError:
                 latest_version = list(versions.keys())[-1]
             path = '[\'%s\']' % versions[latest_version]
             if props['urls'] == path:
-                print(props['name'][1:-1], 'is up to date')
+                print((props['name'][1:-1], 'is up to date'))
             else:
-                print('Updating', props['name'][1:-1], 'to', latest_version)
+                print(('Updating', props['name'][1:-1], 'to', latest_version))
                 props['urls'] = path
                 result = urllib.request.urlretrieve(props['urls'][2:-2])
                 entry['props']['sha256'] = '\'%s\'' % sha256file(result[0])

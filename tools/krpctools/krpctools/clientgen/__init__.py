@@ -117,7 +117,7 @@ def main():
         if args.output:
             g.generate_file(args.output)
         else:
-            print(g.generate())
+            print((g.generate()))
 
     except RuntimeError as ex:
         sys.stderr.write('Error: %s\n' % str(ex))

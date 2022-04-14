@@ -27,7 +27,7 @@ class DocGenTestCase(object):
             return info
 
         services = {name: Service(name, sort=sort, **parse_service_info(info))
-                    for name, info in defs.items()}
+                    for name, info in list(defs.items())}
 
         rst_content = [
             '.. default-domain:: {{ domain.sphinxname }}',
