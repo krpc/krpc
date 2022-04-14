@@ -219,12 +219,12 @@ class Types(object):
         # Collection types
         try:
             # Coerce tuples to lists
-            if isinstance(value, collections.Iterable) and \
+            if isinstance(value, collections.abc.Iterable) and \
                isinstance(typ, ListType):
                 return typ.python_type(
                     self.coerce_to(x, typ.value_type) for x in value)
             # Coerce lists (with appropriate number of elements) to tuples
-            if isinstance(value, collections.Iterable) and \
+            if isinstance(value, collections.abc.Iterable) and \
                isinstance(typ, TupleType):
                 if len(value) != len(typ.value_types):
                     raise ValueError
