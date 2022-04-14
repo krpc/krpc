@@ -66,7 +66,7 @@ class TestEncodeDecode(unittest.TestCase):
             (1, '02'),
             (42, '54'),
             (300, 'd804'),
-            (1234567890000L, 'a091d89fee47'),
+            (1234567890000, 'a091d89fee47'),
             (-33, '41')
         ]
         self._run_test_encode_value(self.types.sint64_type, cases)
@@ -78,7 +78,7 @@ class TestEncodeDecode(unittest.TestCase):
             (1, '01'),
             (42, '2a'),
             (300, 'ac02'),
-            (sys.maxint, 'ffffffffffffffff7f')
+            (sys.maxsize, 'ffffffffffffffff7f')
         ]
         self._run_test_encode_value(self.types.uint32_type, cases)
         self._run_test_decode_value(self.types.uint32_type, cases)
@@ -94,7 +94,7 @@ class TestEncodeDecode(unittest.TestCase):
             (1, '01'),
             (42, '2a'),
             (300, 'ac02'),
-            (1234567890000L, 'd088ec8ff723')
+            (1234567890000, 'd088ec8ff723')
         ]
         self._run_test_encode_value(self.types.uint64_type, cases)
         self._run_test_decode_value(self.types.uint64_type, cases)

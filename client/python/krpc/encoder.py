@@ -66,7 +66,7 @@ class Encoder(object):
         elif isinstance(typ, DictionaryType):
             msg = KRPC.Dictionary()
             entries = []
-            for key, value in sorted(x.items(), key=lambda i: i[0]):
+            for key, value in sorted(list(x.items()), key=lambda i: i[0]):
                 entry = KRPC.DictionaryEntry()
                 entry.key = cls.encode(key, typ.key_type)
                 entry.value = cls.encode(value, typ.value_type)
