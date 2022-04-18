@@ -10,7 +10,7 @@ namespace KRPC.LiDAR
 
         public static void Load()
         {
-            IsAvailable = (APILoader.Load(typeof(API), "LiDAR", "LiDAR.API", new Version(1, 0)) != null);
+            IsAvailable = (APILoader.Load(typeof(API), "LiDAR", "LiDAR.API") != null);
         }
 
         public static Func<Part, IList<double>> GetCloud { get; internal set; }

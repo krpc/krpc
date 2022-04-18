@@ -14,6 +14,8 @@ bazel build \
     //service/KerbalAlarmClock \
     //service/RemoteTech \
     //service/UI \
+    //service/LiDAR \
+    //service/DockingCamera \
     //tools/cslibs \
     //tools/TestingTools
 
@@ -37,6 +39,10 @@ cp -R -L \
     bazel-bin/service/RemoteTech/KRPC.RemoteTech.xml \
     bazel-bin/service/UI/KRPC.UI.dll \
     bazel-bin/service/UI/KRPC.UI.xml \
+	bazel-bin/service/LiDAR/KRPC.LiDAR.dll \
+    bazel-bin/service/LiDAR/KRPC.LiDAR.xml \
+	bazel-bin/service/DockingCamera/KRPC.DockingCamera.dll \
+    bazel-bin/service/DockingCamera/KRPC.DockingCamera.xml \
     service/UI/KRPC.UI.ksp \
     bazel-bin/tools/cslibs/net35/Google.Protobuf.dll \
     bazel-bin/tools/cslibs/KRPC.IO.Ports.dll \

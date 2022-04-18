@@ -61,10 +61,26 @@ namespace KRPC.DockingCamera
         public byte[] Image
         {
             get {
-                if (API.IsAvailable)          
-                    return API.GetImage(part.InternalPart);
+                if (API.IsAvailable)
+                {
+                    try
+                    {
+                        var image = API.GetImage(part.InternalPart);
+                        Debug.Log("CAMERA IMAGE: OK");
+                        return image;
+                    }
+                    catch(System.Exception e)
+                    {
+                        Debug.Log("CAMERA IMAGE: " + e.Message + Environment.NewLine + e.StackTrace);
+                        return Array.Empty<byte>();
+                    }
+                    
+                }
                 else
+                {
+                    Debug.Log("CAMERA IMAGE: FAILED");
                     return Array.Empty<byte>();
+                }
             }
         }
     }

@@ -49,10 +49,10 @@
       <HintPath>..\..\..\..\..\robotics\krpc-master\bazel-genfiles\tools\cslibs\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="KRPC">
-      <HintPath>..\..\..\server\src\bin\Release\KRPC.dll</HintPath>
+      <HintPath>..\..\..\server\src\obj\Release\KRPC.dll</HintPath>
     </Reference>
     <Reference Include="KRPC.SpaceCenter">
-      <HintPath>..\..\SpaceCenter\src\bin\Release\KRPC.SpaceCenter.dll</HintPath>
+      <HintPath>..\..\SpaceCenter\src\obj\Release\KRPC.SpaceCenter.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>

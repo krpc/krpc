@@ -4,7 +4,7 @@ using UnityEngine;
 namespace KRPC.DockingCamera
 {
     /// <summary>
-    /// kRPC LiDAR addon.
+    /// kRPC Camera addon.
     /// </summary>
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     [SuppressMessage("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]

@@ -28,6 +28,7 @@ namespace KRPC.Utils
             var assembly = AssemblyLoader.loadedAssemblies.FirstOrDefault (a => a.assembly.GetName ().Name == assemblyName);
             if (assembly == null) {
                 Logger.WriteLine ("Load API: " + assemblyName + " not found; skipping");
+                Console.WriteLine ("Load API: " + assemblyName + " not found; skipping");
                 return null;
             }
 
@@ -65,6 +66,7 @@ namespace KRPC.Utils
             }
 
             Logger.WriteLine ("Load API: Successfully loaded " + assemblyName + " version " + version);
+            Console.WriteLine ("Load API: Successfully loaded " + assemblyName + " version " + version);
             return type;
         }
 

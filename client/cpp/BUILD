@@ -25,7 +25,9 @@ autotools_dist(
         ':services-infernalrobotics',
         ':services-kerbalalarmclock',
         ':services-remotetech',
-        ':services-ui'
+        ':services-ui',
+        ':services-lidar',
+        ':services-dockingcamera'
     ],
     path_map = {
         'client/cpp/': '%s/' % name,
@@ -104,6 +106,20 @@ clientgen_cpp(
 )
 
 clientgen_cpp(
+    name = 'services-lidar',
+    service = 'LiDAR',
+    defs = '//service/LiDAR:ServiceDefinitions',
+    out = 'include/krpc/services/lidar.hpp'
+)
+
+clientgen_cpp(
+    name = 'services-dockingcamera',
+    service = 'DockingCamera',
+    defs = '//service/DockingCamera:ServiceDefinitions',
+    out = 'include/krpc/services/docking_camera.hpp'
+)
+
+clientgen_cpp(
     name = 'services-test-service',
     service = 'TestService',
     defs = '//tools/TestServer:ServiceDefinitions',
@@ -118,7 +134,9 @@ hdrs = glob(['include/**/*.hpp']) + [
     ':services-infernalrobotics',
     ':services-kerbalalarmclock',
     ':services-remotetech',
-    ':services-ui'
+    ':services-ui',
+    ':services-lidar',
+    ':services-dockingcamera'
 ]
 
 cc_library(
