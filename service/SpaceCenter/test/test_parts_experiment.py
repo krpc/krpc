@@ -39,7 +39,7 @@ class TestPartsExperiment(krpctest.TestCase):
 
     def test_goo_container(self):
         self.assertEqual('mysteryGoo', self.goo.name)
-        self.assertEqual(u'Mystery Goo\u2122 Observation', self.goo.title)
+        self.assertEqual('Mystery Goo\\u2122 Observation', self.goo.title)
         self.assertFalse(self.goo.deployed)
         self.assertFalse(self.goo.rerunnable)
         self.assertFalse(self.goo.inoperable)
@@ -53,7 +53,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertAlmostEqual(1.0, subject.scientific_value)
         self.assertAlmostEqual(0.3, subject.subject_value)
         self.assertEqual(
-            u'Mystery Goo\u2122 Observation from LaunchPad',
+            'Mystery Goo\\u2122 Observation from LaunchPad',
             subject.title)
 
     def test_run_and_dump_data(self):

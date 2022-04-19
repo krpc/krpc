@@ -60,7 +60,7 @@ class JavaGenerator(Generator):
     def parse_context(self, context):
         # Expand service properties into get and set methods
         properties = collections.OrderedDict()
-        for name, info in context['properties'].items():
+        for name, info in list(context['properties'].items()):
             if info['getter']:
                 properties['get'+upper_camel_case(name)] = {
                     'procedure': info['getter']['procedure'],
@@ -81,9 +81,9 @@ class JavaGenerator(Generator):
         context['properties'] = properties
 
         # Expand class properties into get and set methods
-        for class_name, class_info in context['classes'].items():
+        for class_name, class_info in list(context['classes'].items()):
             class_properties = collections.OrderedDict()
-            for name, info in class_info['properties'].items():
+            for name, info in list(class_info['properties'].items()):
                 if info['getter']:
                     class_properties['get'+upper_camel_case(name)] = {
                         'procedure': info['getter']['procedure'],
@@ -106,11 +106,11 @@ class JavaGenerator(Generator):
 
         # Add type specifications to types
         procedures = \
-            context['procedures'].values() + \
-            context['properties'].values() + \
+            list(context['procedures'].values()) + \
+            list(context['properties'].values()) + \
             list(itertools.chain(
-                *[class_info['static_methods'].values()
-                  for class_info in context['classes'].values()]))
+                *[list(class_info['static_methods'].values())
+                  for class_info in list(context['classes'].values())]))
         for info in procedures:
             info['return_type'] = {
                 'name': info['return_type'],
@@ -127,9 +127,9 @@ class JavaGenerator(Generator):
                 }
                 pos += 1
 
-        for class_info in context['classes'].values():
-            items = class_info['methods'].values() + \
-                    class_info['properties'].values()
+        for class_info in list(context['classes'].values()):
+            items = list(class_info['methods'].values()) + \
+                    list(class_info['properties'].values())
             for info in items:
                 info['return_type'] = {
                     'name': info['return_type'],
@@ -148,13 +148,13 @@ class JavaGenerator(Generator):
                     pos += 1
 
         # Make enumeration members UPPER_SNAKE_CASE
-        for enm in context['enumerations'].values():
+        for enm in list(context['enumerations'].values()):
             for value in enm['values']:
                 value['name'] = self.language.parse_const_name(value['name'])
 
         # Add serial version UIDs to classes
-        items = context['classes'].items() + \
-            context['exceptions'].items()
+        items = list(context['classes'].items()) + \
+            list(context['exceptions'].items())
         for class_name, cls in items:
             tohash = self.service_name+'.'+class_name
             hsh = hashlib.sha1(tohash.encode('utf-8')).hexdigest()

@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import argparse
 import importlib
 import json
@@ -96,9 +96,9 @@ def main():
                 '\',\''.join(inputs))
 
         # Check loaded definitions
-        if not defs.keys():
+        if not list(defs.keys()):
             raise RuntimeError('No services found in input.')
-        if args.service not in defs.keys():
+        if args.service not in list(defs.keys()):
             raise RuntimeError(
                 'Service \'%s\' not found in input.' % args.service)
 
@@ -117,9 +117,9 @@ def main():
         if args.output:
             g.generate_file(args.output)
         else:
-            print(g.generate())
+            print((g.generate()))
 
-    except RuntimeError, ex:
+    except RuntimeError as ex:
         sys.stderr.write('Error: %s\n' % str(ex))
         return 1
 

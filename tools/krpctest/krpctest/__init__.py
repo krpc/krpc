@@ -195,7 +195,7 @@ class TestCase(unittest.TestCase):
     def _dict_is_almost_equal(self, second, first, places, delta=None):
         if set(second.keys()) != set(first.keys()):
             return False
-        for k in second.keys():
+        for k in list(second.keys()):
             if not self._is_almost_equal(
                     second[k], first[k], places, delta):
                 return False

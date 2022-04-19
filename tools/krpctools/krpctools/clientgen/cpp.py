@@ -31,12 +31,12 @@ class CppGenerator(Generator):
         return '\n'.join(line.rstrip() for line in lines)
 
     def parse_context(self, context):
-        for info in context['procedures'].values():
+        for info in list(context['procedures'].values()):
             info['return_set_client'] = self.parse_set_client(
                 info['procedure'])
 
         properties = collections.OrderedDict()
-        for name, info in context['properties'].items():
+        for name, info in list(context['properties'].items()):
             if info['getter']:
                 properties[name] = {
                     'remote_name': info['getter']['remote_name'],
@@ -56,17 +56,17 @@ class CppGenerator(Generator):
                     'documentation': info['documentation']
                 }
 
-        for class_info in context['classes'].values():
-            for info in class_info['methods'].values():
+        for class_info in list(context['classes'].values()):
+            for info in list(class_info['methods'].values()):
                 info['return_set_client'] = self.parse_set_client(
                     info['procedure'])
 
-            for info in class_info['static_methods'].values():
+            for info in list(class_info['static_methods'].values()):
                 info['return_set_client'] = self.parse_set_client(
                     info['procedure'])
 
             class_properties = collections.OrderedDict()
-            for name, info in class_info['properties'].items():
+            for name, info in list(class_info['properties'].items()):
                 if info['getter']:
                     class_properties[name] = {
                         'remote_name': info['getter']['remote_name'],

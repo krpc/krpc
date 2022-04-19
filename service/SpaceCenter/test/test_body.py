@@ -14,7 +14,7 @@ class TestBody(krpctest.TestCase):
     def test_equality(self):
         bodies = self.space_center.bodies
         bodies2 = self.space_center.bodies
-        for key, body in bodies.items():
+        for key, body in list(bodies.items()):
             self.assertEqual(bodies2[key], body)
 
     def test_kerbin(self):
@@ -170,7 +170,7 @@ class TestBody(krpctest.TestCase):
         self.assertEqual(set(), set(mun.satellites))
 
     def test_position(self):
-        for body in self.space_center.bodies.values():
+        for body in list(self.space_center.bodies.values()):
 
             # Check body position in body's reference frame
             pos = body.position(body.reference_frame)
@@ -187,7 +187,7 @@ class TestBody(krpctest.TestCase):
                 self.assertAlmostEqual(body.orbit.radius, norm(pos), delta=100)
 
     def test_velocity(self):
-        for body in self.space_center.bodies.values():
+        for body in list(self.space_center.bodies.values()):
             if body.orbit is None:
                 continue
 
@@ -219,7 +219,7 @@ class TestBody(krpctest.TestCase):
                 abs(rotational_speed + body.orbit.speed), norm(v), delta=500)
 
     def test_rotation(self):
-        for body in self.space_center.bodies.values():
+        for body in list(self.space_center.bodies.values()):
             # Check body's rotation relative to itself is zero
             r = body.rotation(body.reference_frame)
             # TODO: better test for identity quaternion
@@ -228,7 +228,7 @@ class TestBody(krpctest.TestCase):
             # TODO: more thorough testing
 
     def test_angular_velocity(self):
-        for body in self.space_center.bodies.values():
+        for body in list(self.space_center.bodies.values()):
             # Check body's angular velocity relative to itself is zero
             av = body.angular_velocity(body.reference_frame)
             self.assertAlmostEqual((0, 0, 0), av)

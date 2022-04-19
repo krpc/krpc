@@ -112,7 +112,7 @@ class CsharpLanguage(Language):
             entries = ('{ %s, %s }' %
                        (self.parse_default_value(k, typ.key_type),
                         self.parse_default_value(v, typ.value_type))
-                       for k, v in value.items())
+                       for k, v in list(value.items()))
             return 'new %s {%s}' % \
                 (self._parse_type(typ, False), ', '.join(entries))
         return str(value)

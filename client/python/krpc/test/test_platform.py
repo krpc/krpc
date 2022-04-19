@@ -7,7 +7,7 @@ class TestPlatform(unittest.TestCase):
         self.assertEqual(0, bytelength(''))
         self.assertEqual(3, bytelength('foo'))
         self.assertEqual(3, bytelength(b'\xe2\x84\xa2'.decode('utf-8')))
-        self.assertEqual(3, bytelength(u'\u2122'))
+        self.assertEqual(3, bytelength('\\u2122'))
 
     def test_hexlify(self):
         self.assertEqual(hexlify(b''), '')

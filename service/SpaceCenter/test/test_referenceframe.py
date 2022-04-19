@@ -29,11 +29,11 @@ class TestReferenceFrame(krpctest.TestCase):
             self.assertAlmostEqual(expected_pos, actual_pos, delta=1)
 
     def test_celestial_body_position(self):
-        for body in self.bodies.values():
+        for body in list(self.bodies.values()):
             self.check_object_position(body, body.reference_frame)
 
     def test_celestial_body_orbital_position(self):
-        for body in self.bodies.values():
+        for body in list(self.bodies.values()):
             if body.orbit is not None:
                 self.check_object_position(body, body.orbital_reference_frame)
             else:
@@ -111,12 +111,12 @@ class TestReferenceFrame(krpctest.TestCase):
                 abs(rotational_speed + obj.orbit.speed), norm(v), delta=200)
 
     def test_celestial_body_velocity(self):
-        for body in self.bodies.values():
+        for body in list(self.bodies.values()):
             self.check_object_velocity(body, body.reference_frame)
             self.check_object_surface_velocity(body, body.reference_frame)
 
     def test_celestial_body_orbital_velocity(self):
-        for body in self.bodies.values():
+        for body in list(self.bodies.values()):
             if body.orbit is not None:
                 self.check_object_velocity(body, body.orbital_reference_frame)
                 self.check_object_surface_velocity(
@@ -155,7 +155,7 @@ class TestReferenceFrame(krpctest.TestCase):
 
     def test_celestial_body_direction(self):
         # Check (0, 1, 0) direction same as body direction
-        for body in self.bodies.values():
+        for body in list(self.bodies.values()):
             self.assertAlmostEqual(
                 (0, 1, 0), body.direction(body.reference_frame))
 

@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import argparse
 import glob
 import os
@@ -103,7 +103,7 @@ def main():
         return info
 
     services = {name: Service(name, sort=sort, **parse_service_info(info))
-                for name, info in services_info.items()}
+                for name, info in list(services_info.items())}
 
     if sort_failed:
         raise RuntimeError(

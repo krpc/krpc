@@ -100,7 +100,7 @@ class CppLanguage(Language):
             entries = ('{%s, %s}' %
                        (self.parse_default_value(k, typ.key_type),
                         self.parse_default_value(v, typ.value_type))
-                       for k, v in value.items())
+                       for k, v in list(value.items()))
             return '%s{%s}' % (self.parse_type(typ), ', '.join(entries))
         return str(value)
 

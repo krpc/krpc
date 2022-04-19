@@ -27,7 +27,7 @@ class DocGenTestCase(object):
             return info
 
         services = {name: Service(name, sort=sort, **parse_service_info(info))
-                    for name, info in defs.iteritems()}
+                    for name, info in list(defs.items())}
 
         rst_content = [
             '.. default-domain:: {{ domain.sphinxname }}',
@@ -38,15 +38,15 @@ class DocGenTestCase(object):
             '',
             '{{ macros.service(services[\'%s\']) }}' % service_name
         ]
-        for cls in defs[service_name]['classes'].keys():
+        for cls in list(defs[service_name]['classes'].keys()):
             rst_content.append(
                 "{{ macros.class(services['%s'].classes['%s']) }}"
                 % (service_name, cls))
-        for enm in defs[service_name]['enumerations'].keys():
+        for enm in list(defs[service_name]['enumerations'].keys()):
             rst_content.append(
                 "{{ macros.enumeration(services['%s'].enumerations['%s']) }}"
                 % (service_name, enm))
-        for exn in defs[service_name]['exceptions'].keys():
+        for exn in list(defs[service_name]['exceptions'].keys()):
             rst_content.append(
                 "{{ macros.exception(services['%s'].exceptions['%s']) }}"
                 % (service_name, exn))

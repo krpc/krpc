@@ -32,7 +32,7 @@ class Service(Appendable):
         cprocedures = defaultdict(dict)
         properties = defaultdict(dict)
 
-        for pname, info in procedures.iteritems():
+        for pname, info in list(procedures.items()):
             del info['id']
 
             if 'game_scenes' in info:
@@ -57,18 +57,18 @@ class Service(Appendable):
                 cname = Attributes.get_class_name(pname)
                 cprocedures[cname][pname] = info
 
-        for propname, prop in properties.iteritems():
+        for propname, prop in list(properties.items()):
             members.append(Property(name, propname, **prop))
 
         self.classes = {
             cname: Class(name, cname, cprocedures[cname], sort=sort, **cinfo)
-            for (cname, cinfo) in classes.iteritems()}
+            for (cname, cinfo) in list(classes.items())}
         self.enumerations = {
             ename: Enumeration(name, ename, sort=sort, **einfo)
-            for (ename, einfo) in enumerations.iteritems()}
+            for (ename, einfo) in list(enumerations.items())}
         self.exceptions = {
             ename: ExceptionNode(name, ename, **einfo)
-            for (ename, einfo) in exceptions.iteritems()}
+            for (ename, einfo) in list(exceptions.items())}
 
         self.members = OrderedDict(
             (member.name, member) for member in sorted(members, key=sort))
@@ -95,7 +95,7 @@ class Class(Appendable):
         members = []
         properties = defaultdict(dict)
 
-        for pname, pinfo in procedures.iteritems():
+        for pname, pinfo in list(procedures.items()):
             if 'id' in pinfo:
                 del pinfo['id']
 
@@ -114,7 +114,7 @@ class Class(Appendable):
                 else:
                     properties[propname]['setter'] = proc
 
-        for propname, prop in properties.iteritems():
+        for propname, prop in list(properties.items()):
             members.append(ClassProperty(service_name, name, propname, **prop))
 
         self.members = OrderedDict((member.name, member)

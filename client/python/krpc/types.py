@@ -7,9 +7,9 @@ VALUE_TYPES = {
     KRPC.Type.DOUBLE: float,
     KRPC.Type.FLOAT: float,
     KRPC.Type.SINT32: int,
-    KRPC.Type.SINT64: long,
+    KRPC.Type.SINT64: int,
     KRPC.Type.UINT32: int,
-    KRPC.Type.UINT64: long,
+    KRPC.Type.UINT64: int,
     KRPC.Type.BOOL: bool,
     KRPC.Type.STRING: str,
     KRPC.Type.BYTES: bytes
@@ -205,7 +205,7 @@ class Types(object):
         if isinstance(value, typ.python_type):
             return value
         # A unicode type can be coerced to a string
-        if typ.python_type == str and isinstance(value, unicode):
+        if typ.python_type == str and isinstance(value, str):
             return value
         # A NoneType can be coerced to a ClassType
         if isinstance(typ, ClassType) and value is None:
@@ -219,12 +219,12 @@ class Types(object):
         # Collection types
         try:
             # Coerce tuples to lists
-            if isinstance(value, collections.Iterable) and \
+            if isinstance(value, collections.abc.Iterable) and \
                isinstance(typ, ListType):
                 return typ.python_type(
                     self.coerce_to(x, typ.value_type) for x in value)
             # Coerce lists (with appropriate number of elements) to tuples
-            if isinstance(value, collections.Iterable) and \
+            if isinstance(value, collections.abc.Iterable) and \
                isinstance(typ, TupleType):
                 if len(value) != len(typ.value_types):
                     raise ValueError
@@ -237,7 +237,7 @@ class Types(object):
                              ' to type ' + str(typ))
         # Numeric types
         # See http://docs.python.org/2/reference/datamodel.html#coercion-rules
-        numeric_types = (float, int, long)
+        numeric_types = (float, int, int)
         if isinstance(value, bool) or \
            not any(isinstance(value, t) for t in numeric_types) or \
            typ.python_type not in numeric_types:
@@ -248,7 +248,7 @@ class Types(object):
             return float(value)
         elif typ.python_type == int:
             return int(value)
-        return long(value)
+        return int(value)
 
 
 class TypeBase(object):
@@ -470,9 +470,9 @@ def _create_class_type(service_name, class_name, doc):
 
 def _create_enum_type(enum_name, values, doc):
     typ = Enum(str(enum_name), dict((name, x['value'])
-                                    for name, x in values.items()))
+                                    for name, x in list(values.items())))
     setattr(typ, '__doc__', doc)
-    for name in values.keys():
+    for name in list(values.keys()):
         setattr(getattr(typ, name), '__doc__', values[name]['doc'])
     return typ
 

@@ -158,7 +158,7 @@ class CnanoGenerator(Generator):
             return typ
 
         properties = collections.OrderedDict()
-        for name, info in context['properties'].items():
+        for name, info in list(context['properties'].items()):
             if info['getter']:
                 properties[name] = {
                     'remote_id': info['getter']['remote_id'],
@@ -176,9 +176,9 @@ class CnanoGenerator(Generator):
                     'documentation': info['documentation']
                 }
 
-        for _, class_info in context['classes'].items():
+        for _, class_info in list(context['classes'].items()):
             class_properties = collections.OrderedDict()
-            for name, info in class_info['properties'].items():
+            for name, info in list(class_info['properties'].items()):
                 if info['getter']:
                     class_properties[name] = {
                         'remote_id': info['getter']['remote_id'],

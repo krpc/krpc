@@ -287,9 +287,9 @@ class TestPartsPart(krpctest.TestCase):
         self.assertIsNotNone(part.engine)
 
     def test_experiment(self):
-        part = self.parts.with_title(u'Mystery Goo\u2122 Containment Unit')[0]
+        part = self.parts.with_title('Mystery Goo\\u2122 Containment Unit')[0]
         self.assertEqual('GooExperiment', part.name)
-        self.assertEqual(u'Mystery Goo\u2122 Containment Unit', part.title)
+        self.assertEqual('Mystery Goo\\u2122 Containment Unit', part.title)
         self.assertEqual(800, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Rockomax X200-32 Fuel Tank', part.parent.title)

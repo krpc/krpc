@@ -95,7 +95,7 @@ class CppDomain(Domain):
         elif isinstance(typ, DictionaryType):
             entries = ('{%s, %s}' % (self.default_value(k, typ.key_type),
                                      self.default_value(v, typ.value_type))
-                       for k, v in value.items())
+                       for k, v in list(value.items()))
             return '%s(%s)' % (self.language.parse_type(typ),
                                ', '.join(entries))
         return self.language.parse_default_value(value, typ)

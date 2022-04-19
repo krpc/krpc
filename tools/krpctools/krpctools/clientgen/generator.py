@@ -59,7 +59,7 @@ class Generator(object):
         return parameters
 
     def _get_defs(self, key):
-        return self._defs.get(key, {}).items()
+        return list(self._defs.get(key, {}).items())
 
     def generate_context(self):
         context = {
@@ -225,14 +225,14 @@ class Generator(object):
         # Sort the context
         def sort_dict(x):
             return collections.OrderedDict(
-                sorted(x.items(), key=lambda x: x[0]))
+                sorted(list(x.items()), key=lambda x: x[0]))
 
         context['procedures'] = sort_dict(context['procedures'])
         context['properties'] = sort_dict(context['properties'])
         context['enumerations'] = sort_dict(context['enumerations'])
         context['classes'] = sort_dict(context['classes'])
         context['exceptions'] = sort_dict(context['exceptions'])
-        for cls in context['classes'].values():
+        for cls in list(context['classes'].values()):
             cls['methods'] = sort_dict(cls['methods'])
             cls['static_methods'] = sort_dict(cls['static_methods'])
             cls['properties'] = sort_dict(cls['properties'])

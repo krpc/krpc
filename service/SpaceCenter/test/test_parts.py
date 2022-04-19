@@ -45,9 +45,9 @@ class TestParts(krpctest.TestCase):
             'Mk2-R Radial-Mount Parachute',
             'Mk2-R Radial-Mount Parachute',
             'Mk2-R Radial-Mount Parachute',
-            u'Mystery Goo\u2122 Containment Unit ',
-            u'Mystery Goo\u2122 Containment Unit ',
-            u'Mystery Goo\u2122 Containment Unit ',
+            'Mystery Goo\\u2122 Containment Unit ',
+            'Mystery Goo\\u2122 Containment Unit ',
+            'Mystery Goo\\u2122 Containment Unit ',
             'OX-STAT Photovoltaic Panels',
             'PresMat Barometer',
             'RE-I5 "Skipper" Liquid Fuel Engine',
@@ -178,9 +178,9 @@ class TestParts(krpctest.TestCase):
             'LT-1 Landing Struts',
             'LY-10 Small Landing Gear',
             'Mk1-2 Command Pod',
-            u'Mystery Goo\u2122 Containment Unit ',
-            u'Mystery Goo\u2122 Containment Unit ',
-            u'Mystery Goo\u2122 Containment Unit ',
+            'Mystery Goo\\u2122 Containment Unit ',
+            'Mystery Goo\\u2122 Containment Unit ',
+            'Mystery Goo\\u2122 Containment Unit ',
             'OX-STAT Photovoltaic Panels',
             'PresMat Barometer',
             'RV-105 RCS Thruster Block',
@@ -303,7 +303,7 @@ class TestParts(krpctest.TestCase):
             ['Mk1-2 Command Pod',
              'GRAVMAX Negative Gravioli Detector',
              'PresMat Barometer'] +
-            [u'Mystery Goo\u2122 Containment Unit ']*3,
+            ['Mystery Goo\\u2122 Containment Unit ']*3,
             [p.part.title for p in self.parts.experiments])
 
     def test_fairings(self):

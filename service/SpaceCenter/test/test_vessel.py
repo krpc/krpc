@@ -216,12 +216,12 @@ class TestVesselEngines(krpctest.TestCase):
                 'msl_isp': 0
             }
         }
-        max_thrusts = [x['max_thrust'] for x in cls.engine_info.values()]
+        max_thrusts = [x['max_thrust'] for x in list(cls.engine_info.values())]
         available_thrusts = [x['available_thrust']
-                             for x in cls.engine_info.values()]
-        isps = [x['isp'] for x in cls.engine_info.values()]
-        vac_isps = [x['vac_isp'] for x in cls.engine_info.values()]
-        msl_isps = [x['msl_isp'] for x in cls.engine_info.values()]
+                             for x in list(cls.engine_info.values())]
+        isps = [x['isp'] for x in list(cls.engine_info.values())]
+        vac_isps = [x['vac_isp'] for x in list(cls.engine_info.values())]
+        msl_isps = [x['msl_isp'] for x in list(cls.engine_info.values())]
         cls.max_thrust = sum(max_thrusts)
         cls.available_thrust = sum(available_thrusts)
         cls.combined_isp = \
