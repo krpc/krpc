@@ -127,7 +127,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The crew member's current roster status.  One of "Avialable", "Assigned", "dead", or "Missing"
+        /// The crew member's current roster status.  One of "Available", "Assigned", "dead", or "Missing"
         /// </summary>
         [KRPCProperty]
         public string RosterStatus {
