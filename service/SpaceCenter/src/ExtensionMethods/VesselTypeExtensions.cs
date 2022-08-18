@@ -28,8 +28,24 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 return Services.VesselType.Ship;
             case VesselType.Station:
                 return Services.VesselType.Station;
+            case VesselType.SpaceObject:
+                return Services.VesselType.SpaceObject;
+            case VesselType.Unknown:
+                return Services.VesselType.Unknown;
+            case VesselType.EVA:
+                return Services.VesselType.EVA;
+            case VesselType.Flag:
+                return Services.VesselType.Flag;
+            case VesselType.DeployedScienceController:
+                return Services.VesselType.DeployedScienceController;
+            case VesselType.DeployedSciencePart:
+                return Services.VesselType.DeployedSciencePart;
+            case VesselType.DroppedPart:
+                return Services.VesselType.DroppedPart;
+            case VesselType.DeployedGroundPart:
+                return Services.VesselType.DeployedGroundPart;
             default:
-                throw new ArgumentOutOfRangeException (nameof (type));
+                throw new ArgumentOutOfRangeException(nameof(type));
             }
         }
 
@@ -54,6 +70,22 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 return VesselType.Ship;
             case Services.VesselType.Station:
                 return VesselType.Station;
+            case Services.VesselType.SpaceObject:
+                return VesselType.SpaceObject;
+            case Services.VesselType.Unknown:
+                return VesselType.Unknown;
+            case Services.VesselType.EVA:
+                return VesselType.EVA;
+            case Services.VesselType.Flag:
+                return VesselType.Flag;
+            case Services.VesselType.DeployedScienceController:
+                return VesselType.DeployedScienceController;
+            case Services.VesselType.DeployedSciencePart:
+                return VesselType.DeployedSciencePart;
+            case Services.VesselType.DroppedPart:
+                return VesselType.DroppedPart;
+            case Services.VesselType.DeployedGroundPart:
+                return VesselType.DeployedGroundPart;
             default:
                 throw new ArgumentOutOfRangeException (nameof (type));
             }

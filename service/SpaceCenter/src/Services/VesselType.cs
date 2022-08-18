@@ -46,6 +46,38 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Station.
         /// </summary>
-        Station
+        Station,
+        /// <summary>
+        /// SpaceObject.
+        /// </summary>
+        SpaceObject,
+        /// <summary>
+        /// Unknown.
+        /// </summary>
+        Unknown,
+        /// <summary>
+        /// EVA.
+        /// </summary>
+        EVA,
+        /// <summary>
+        /// Flag.
+        /// </summary>
+        Flag,
+        /// <summary>
+        /// DeployedScienceController.
+        /// </summary>
+        DeployedScienceController,
+        /// <summary>
+        /// DeploedSciencePart.
+        /// </summary>
+        DeployedSciencePart,
+        /// <summary>
+        /// DroppedPart.
+        /// </summary>
+        DroppedPart,
+        /// <summary>
+        /// DeployedGroundPart.
+        /// </summary>
+        DeployedGroundPart,
     }
 }
