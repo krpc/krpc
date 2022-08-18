@@ -96,6 +96,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Gets or sets the asset url for the part's flag
+        /// </summary>
+        [KRPCProperty]
+        public string FlagURL
+        {
+            get { return InternalPart.flagURL; }
+            set { InternalPart.flagURL = value; }
+        }
+
+        /// <summary>
         /// Whether the part is highlighted.
         /// </summary>
         [KRPCProperty]
