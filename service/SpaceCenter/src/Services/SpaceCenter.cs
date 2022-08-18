@@ -366,6 +366,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static void LaunchVessel (string craftDirectory, string name, string launchSite, bool recover = true, string crew = null, string flagUrl = null)
         {
+            CloseDialogs();
             var config = new LaunchConfig(craftDirectory, name, launchSite, recover, crew, flagUrl);
             config.RunPreFlightChecks();
             throw new YieldException (new ParameterizedContinuationVoid<LaunchConfig> (WaitForVesselPreFlightChecks, config));
@@ -448,6 +449,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static void Load (string name)
         {
+            CloseDialogs ();
             var game = GamePersistence.LoadGame (name, HighLogic.SaveFolder, true, false);
             if (game == null || game.flightState == null || !game.compatible)
                 throw new ArgumentException ("Failed to load " + name);
@@ -477,6 +479,39 @@ namespace KRPC.SpaceCenter.Services
         public static void Quickload ()
         {
             Load ("quicksave");
+        }
+
+        /// <summary>
+        /// Indicates whether the current flight can be reverted.
+        /// </summary>
+        /// <returns>True if RevertToLaunch will succeed.</returns>
+        [KRPCProcedure]
+        public static bool CanRevertToLaunch()
+		{
+            return FlightDriver.CanRevert;
+		}
+
+        /// <summary>
+        /// Reverts the current flight to launch.  Call CanRevertToLaunch first - some conditions may prevent reverting.
+        /// </summary>
+        [KRPCProcedure]
+        public static void RevertToLaunch()
+        {
+            if (FlightDriver.CanRevert)
+            {
+                CloseDialogs();
+                FlightDriver.RevertToLaunch();
+            }
+        }
+
+        private static void CloseDialogs()
+        {
+			KSP.UI.Dialogs.FlightResultsDialog.Close();
+            var recoveryDialog = UnityEngine.Object.FindObjectOfType<KSP.UI.Screens.MissionRecoveryDialog>();
+            if (recoveryDialog != null)
+			{
+                recoveryDialog.gameObject.DestroyGameObject();
+			}
         }
 
         /// <summary>
