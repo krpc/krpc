@@ -1005,5 +1005,15 @@ namespace KRPC.SpaceCenter.Services
         {
             HighLogic.LoadScene(GameScenes.SPACECENTER);
         }
+
+        /// <summary>
+        /// Gets or sets the visible objects in map mode.
+        /// </summary>
+        [KRPCProperty(GameScene = GameScene.All)]
+        public static MapFilterType MapFilter
+		{
+            get { return (MapFilterType)MapViewFiltering.GetFilterState(); }
+            set { MapViewFiltering.SetFilter((MapViewFiltering.VesselTypeFilter)value); }
+		}
     }
 }
