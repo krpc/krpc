@@ -996,5 +996,14 @@ namespace KRPC.SpaceCenter.Services
             }
             return null;
         }
+
+        /// <summary>
+        /// Returns to the spacecenter view.
+        /// </summary>
+        [KRPCProcedure]
+        public static void LoadSpaceCenter()
+        {
+            HighLogic.LoadScene(GameScenes.SPACECENTER);
+        }
     }
 }
