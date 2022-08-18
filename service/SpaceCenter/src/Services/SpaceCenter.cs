@@ -515,6 +515,20 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Tranfsers a crew member to a different part.
+        /// </summary>
+        /// <param name="crewMember">The crew member to transfer.</param>
+        /// <param name="targetPart">The part to move them to.</param>
+        [KRPCProcedure(GameScene = GameScene.Flight)]
+        public static void TransferCrew(CrewMember crewMember, KRPC.SpaceCenter.Services.Parts.Part targetPart)
+        {
+            CrewTransfer transfer = CrewTransfer.Create(crewMember.InternalCrewMember.seat.part, crewMember.InternalCrewMember, delegate {});
+            transfer.crew = crewMember.InternalCrewMember;
+            transfer.tgtPart = targetPart.InternalPart;
+            transfer.MoveCrewTo(targetPart.InternalPart);
+        }
+
+        /// <summary>
         /// An object that can be used to control the camera.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
