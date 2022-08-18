@@ -96,6 +96,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Gets or sets the asset url for the part's flag
+        /// </summary>
+        [KRPCProperty]
+        public string FlagURL
+        {
+            get { return InternalPart.flagURL; }
+            set { InternalPart.flagURL = value; }
+        }
+
+        /// <summary>
         /// Whether the part is highlighted.
         /// </summary>
         [KRPCProperty]
@@ -453,6 +463,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty (Nullable = true)]
         public CargoBay CargoBay {
             get { return CargoBay.Is (this) ? new CargoBay (this) : null; }
+        }
+
+        /// <summary>
+        /// Returns true if the part has any open seats.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasAvailableSeats
+        {
+            get { return InternalPart.internalModel ? InternalPart.internalModel.GetAvailableSeatCount() > 0 : false; }
         }
 
         /// <summary>
