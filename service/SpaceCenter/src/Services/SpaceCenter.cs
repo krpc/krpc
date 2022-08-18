@@ -115,6 +115,26 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Gets a list of available launchsites.
+        /// </summary>
+        [KRPCProperty]
+        public static IList<LaunchSite> LaunchSites
+        {
+            get {
+                List<LaunchSite> list = new List<LaunchSite>(PSystemSetup.Instance.LaunchSites.Count + PSystemSetup.Instance.SpaceCenterFacilities.Length);
+                foreach (var launchSite in PSystemSetup.Instance.LaunchSites) {
+                    list.Add(new LaunchSite(launchSite.name, new CelestialBody(launchSite.Body), launchSite.editorFacility));
+                }
+                foreach (var facility in PSystemSetup.Instance.SpaceCenterFacilities) {
+                    if (facility.IsLaunchFacility()) {
+                        list.Add(new LaunchSite(facility.facilityName, new CelestialBody(facility.hostBody), facility.editorFacility));
+                    }
+                }
+                return list;
+            }
+        }
+
+        /// <summary>
         /// A dictionary of all celestial bodies (planets, moons, etc.) in the game,
         /// keyed by the name of the body.
         /// </summary>
@@ -226,9 +246,10 @@ namespace KRPC.SpaceCenter.Services
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
         [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
         sealed class LaunchConfig {
-            public LaunchConfig(string craftDirectory, string name, string launchSite, bool recover) {
+            public LaunchConfig(string craftDirectory, string name, string launchSite, bool recover, string crew, string flagUrl) {
                 LaunchSite = launchSite;
                 Recover = recover;
+                FlagUrl = string.IsNullOrEmpty(flagUrl) ? EditorLogic.FlagURL : flagUrl;
                 // Load the vessel and its default crew
                 if (craftDirectory == "VAB")
                     EditorDriver.editorFacility = EditorFacility.VAB;
@@ -236,18 +257,59 @@ namespace KRPC.SpaceCenter.Services
                     EditorDriver.editorFacility = EditorFacility.SPH;
                 else
                     throw new ArgumentException("Invalid craftDirectory, should be VAB or SPH");
-                Path = ShipConstruction.GetSavePath(name);
+                Path = GetFullCraftDirectory(craftDirectory) + "/" + name + ".craft";
                 template = ShipConstruction.LoadTemplate(Path);
                 if (template == null)
                     throw new InvalidOperationException("Failed to load template for vessel");
-                manifest = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel(
-                    template.config, VesselCrewManifest.FromConfigNode(template.config));
+                manifest = VesselCrewManifest.FromConfigNode(template.config);
+                if (string.IsNullOrEmpty(crew)) {
+                    manifest = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel(template.config, manifest, true, false);
+                }
+                else {
+                    string[] crewNames = crew.Split(';');
+                    KerbalRoster crewRoster = new KerbalRoster(HighLogic.CurrentGame.Mode);
+                    foreach (var crewName in crewNames) {
+                        CrewMember kerbal = GetKerbal(crewName);
+                        if (kerbal != null && kerbal.InternalCrewMember.rosterStatus == ProtoCrewMember.RosterStatus.Available) {
+                            crewRoster.AddCrewMember(kerbal.InternalCrewMember);
+                        }
+                    }
+                    manifest = crewRoster.DefaultCrewForVessel(template.config, manifest, true, false);
+                    if (manifest.CrewCount < crewRoster.Count)
+                    {
+                        // Debug.Log("=========manifest is missing crew.  before:==============");
+                        // manifest.DebugManifest();
+                        foreach (ProtoCrewMember crewMember in crewRoster.Crew) {
+                            if (!manifest.Contains(crewMember)) {
+                                // Debug.Log($"{crewMember.name} is missing from crew");
+                                if (!AddCrewToManifest(manifest, crewMember)) {
+                                    Debug.LogError($"failed to add {crewMember.name} to a seat");
+                                }
+                            }
+                            // Debug.Log("===========manifest after updates:=============");
+                            // manifest.DebugManifest();
+                        }
+                    }
+                }
 
                 facility = (craftDirectory == "SPH") ? SpaceCenterFacility.SpaceplaneHangar : SpaceCenterFacility.VehicleAssemblyBuilding;
                 facilityLevel = ScenarioUpgradeableFacilities.GetFacilityLevel(facility);
                 site = (launchSite == "Runway") ? SpaceCenterFacility.Runway : SpaceCenterFacility.LaunchPad;
                 siteLevel = ScenarioUpgradeableFacilities.GetFacilityLevel(site);
                 isPad = (site == SpaceCenterFacility.LaunchPad);
+            }
+
+            bool AddCrewToManifest(VesselCrewManifest manifest, ProtoCrewMember pcm)
+            {
+                foreach (PartCrewManifest partManifest in manifest.PartManifests) {
+                    for (int seatIndex = 0; seatIndex < partManifest.partCrew.Length; seatIndex++) {
+                        if (string.IsNullOrEmpty(partManifest.partCrew[seatIndex])) {
+                            partManifest.AddCrewToSeat(pcm, seatIndex);
+                            return true;
+                        }
+                    }
+                }
+                return false;
             }
 
             public void RunPreFlightChecks()
@@ -270,6 +332,7 @@ namespace KRPC.SpaceCenter.Services
             public string LaunchSite { get; private set; }
             public bool Recover { get; private set; }
             public string Path { get; private set; }
+            public string FlagUrl { get; private set; }
 
             readonly ShipTemplate template;
             readonly public VesselCrewManifest manifest;
@@ -295,13 +358,15 @@ namespace KRPC.SpaceCenter.Services
         /// <c>"Runway"</c>.</param>
         /// <param name="recover">If true and there is a vessel on the launch site,
         /// recover it before launching.</param>
+        /// <param name="crew">if not null, a semicolon-delimited list of crew names of kerbals to place in the craft.  Otherwise the crew will use default assignments.</param>
+        /// <param name="flagUrl">If not null, the asset url of the mission flag to use for the launch.</param>
         /// <remarks>
         /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
-        public static void LaunchVessel (string craftDirectory, string name, string launchSite, bool recover = true)
+        public static void LaunchVessel (string craftDirectory, string name, string launchSite, bool recover = true, string crew = null, string flagUrl = null)
         {
-            var config = new LaunchConfig(craftDirectory, name, launchSite, recover);
+            var config = new LaunchConfig(craftDirectory, name, launchSite, recover, crew, flagUrl);
             config.RunPreFlightChecks();
             throw new YieldException (new ParameterizedContinuationVoid<LaunchConfig> (WaitForVesselPreFlightChecks, config));
         }
@@ -326,7 +391,7 @@ namespace KRPC.SpaceCenter.Services
                     ShipConstruction.RecoverVesselFromFlight(vessel, HighLogic.CurrentGame.flightState, true);
             }
             // Do the actual launch - passed pre-flight checks, and launch site is clear.
-            FlightDriver.StartWithNewLaunch(config.Path, EditorLogic.FlagURL, config.LaunchSite, config.manifest);
+            FlightDriver.StartWithNewLaunch(config.Path, config.FlagUrl, config.LaunchSite, config.manifest);
             throw new YieldException(new ParameterizedContinuationVoid<int>(WaitForVesselSwitch, 0));
         }
 
