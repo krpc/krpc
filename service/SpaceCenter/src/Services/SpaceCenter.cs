@@ -1011,9 +1011,20 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty(GameScene = GameScene.All)]
         public static MapFilterType MapFilter
-		{
+        {
             get { return (MapFilterType)MapViewFiltering.GetFilterState(); }
             set { MapViewFiltering.SetFilter((MapViewFiltering.VesselTypeFilter)value); }
-		}
+        }
+
+        /// <summary>
+        /// Saves a screenshot.
+        /// </summary>
+        /// <param name="fileName">The path to the file to save.</param>
+        /// <param name="superSize">Resolution scaling factor (1 = default)</param>
+        [KRPCProcedure(GameScene = GameScene.Flight)]
+        public static void Screenshot(string fileName, int superSize = 1)
+        {
+            ScreenCapture.CaptureScreenshot(fileName, superSize);
+        }
     }
 }
