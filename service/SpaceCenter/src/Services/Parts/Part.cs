@@ -456,6 +456,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Returns true if the part has any open seats.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasAvailableSeats
+        {
+            get { return InternalPart.internalModel ? InternalPart.internalModel.GetAvailableSeatCount() > 0 : false; }
+        }
+
+        /// <summary>
         /// A <see cref="ControlSurface"/> if the part is an aerodynamic control surface,
         /// otherwise <c>null</c>.
         /// </summary>
