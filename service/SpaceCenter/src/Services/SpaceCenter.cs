@@ -846,5 +846,41 @@ namespace KRPC.SpaceCenter.Services
         public static bool FARAvailable {
             get { return ExternalAPI.FAR.IsAvailable; }
         }
+
+        /// <summary>
+        /// Creates a kerbal.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="job"></param>
+        /// <param name="male"></param>
+        [KRPCProcedure]
+        public static void CreateKerbal(string name, string job, bool male)
+        {
+            ProtoCrewMember val = new ProtoCrewMember(ProtoCrewMember.KerbalType.Crew, name);
+            val.gender = male ? ProtoCrewMember.Gender.Male : ProtoCrewMember.Gender.Female;
+            KerbalRoster.SetExperienceTrait(val, job);
+            if (HighLogic.CurrentGame.Mode == Game.Modes.CAREER)
+            {
+                Funding.Instance.AddFunds(-GameVariables.Instance.GetRecruitHireCost(HighLogic.CurrentGame.CrewRoster.GetActiveCrewCount()), TransactionReasons.CrewRecruited);
+            }
+            
+            HighLogic.CurrentGame.CrewRoster.AddCrewMember(val);
+        }
+
+        /// <summary>
+        /// Finds a kerbal by name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [KRPCProcedure(Nullable = true)]
+        public static CrewMember GetKerbal(string name)
+        {
+            ProtoCrewMember val = HighLogic.CurrentGame.CrewRoster.Crew.FirstOrDefault((ProtoCrewMember pcm) => pcm.name == name);
+            if (val != null)
+            {
+                return new CrewMember(val);
+            }
+            return null;
+        }
     }
 }

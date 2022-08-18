@@ -1,6 +1,9 @@
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -108,5 +111,54 @@ namespace KRPC.SpaceCenter.Services
             get { return InternalCrewMember.veteran; }
             set { InternalCrewMember.veteran = value; }
         }
+
+        /// <summary>
+        /// The crewmember's job.
+        /// </summary>
+        [KRPCProperty]
+        public string Trait => InternalCrewMember.trait;
+
+        /// <summary>
+        /// The crewmember's gender.
+        /// </summary>
+        [KRPCProperty]
+        public string Gender {
+            get { return InternalCrewMember.gender.ToString(); }
+        }
+
+        /// <summary>
+        /// The crew member's current roster status.  One of "Available", "Assigned", "dead", or "Missing"
+        /// </summary>
+        [KRPCProperty]
+        public string RosterStatus {
+            get { return InternalCrewMember.rosterStatus.ToString(); }
+        }
+
+        /// <summary>
+        /// The crew member's current suit type.  One of "Default", "Vintage", "Future", "Slim"
+        /// </summary>
+        [KRPCProperty]
+        public string SuitType {
+            get { return InternalCrewMember.suit.ToString(); }
+            set { InternalCrewMember.suit = (ProtoCrewMember.KerbalSuit)Enum.Parse(typeof(ProtoCrewMember.KerbalSuit), value, true); }
+        }
+
+        /// <summary>
+        /// The flight IDs for each entry in the career flight log.
+        /// </summary>
+        [KRPCProperty]
+        public IList<int> CareerLogFlights => InternalCrewMember.careerLog.Entries.Select((FlightLog.Entry entry) => entry.flight).ToList();
+
+        /// <summary>
+        /// The type for each entry in the career flight log.
+        /// </summary>
+        [KRPCProperty]
+        public IList<string> CareerLogTypes => InternalCrewMember.careerLog.Entries.Select((FlightLog.Entry entry) => entry.type).ToList();
+
+        /// <summary>
+        /// The body name for each entry in the career flight log.
+        /// </summary>
+        [KRPCProperty]
+        public IList<string> CareerLogTargets => InternalCrewMember.careerLog.Entries.Select((FlightLog.Entry entry) => entry.target).ToList();
     }
 }
