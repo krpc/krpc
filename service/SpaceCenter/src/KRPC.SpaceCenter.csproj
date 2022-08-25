@@ -78,8 +78,8 @@
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.UIModule">
-      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+    <Reference Include="UnityEngine.ScreenCaptureModule">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.ScreenCaptureModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +130,7 @@
     <Compile Include="Services\Camera.cs" />
     <Compile Include="Services\CameraMode.cs" />
     <Compile Include="Services\CelestialBody.cs" />
+    <Compile Include="Services\LaunchSite.cs" />
     <Compile Include="Services\CommLink.cs" />
     <Compile Include="Services\CommLinkType.cs" />
     <Compile Include="Services\CommNode.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="Services\CrewMemberType.cs" />
     <Compile Include="Services\Flight.cs" />
     <Compile Include="Services\GameMode.cs" />
+    <Compile Include="Services\MapFilterType.cs" />
     <Compile Include="Services\Node.cs" />
     <Compile Include="Services\Orbit.cs" />
     <Compile Include="Services\Parts\Antenna.cs" />
