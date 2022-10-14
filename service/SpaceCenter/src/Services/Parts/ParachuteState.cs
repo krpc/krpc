@@ -15,14 +15,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         Stowed,
         /// <summary>
-        /// The parachute is armed for deployment. (RealChutes only)
+        /// The parachute is armed for deployment.
         /// </summary>
         Armed,
-        /// <summary>
-        /// The parachute is still stowed, but ready to semi-deploy.
-        /// (Stock parachutes only)
-        /// </summary>
-        Active,
         /// <summary>
         /// The parachute has been deployed and is providing some drag,
         /// but is not fully deployed yet. (Stock parachutes only)

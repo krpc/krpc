@@ -11,7 +11,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         {
             switch (state) {
             case ModuleParachute.deploymentStates.ACTIVE:
-                return ParachuteState.Active;
+                return ParachuteState.Armed;
             case ModuleParachute.deploymentStates.CUT:
                 return ParachuteState.Cut;
             case ModuleParachute.deploymentStates.DEPLOYED:
