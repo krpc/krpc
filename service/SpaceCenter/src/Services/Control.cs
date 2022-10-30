@@ -464,6 +464,43 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The state of CustomAxis01.
+        /// A value between -1 and 1.
+        /// </summary>
+        [KRPCProperty]
+        public float CustomAxis01 {
+            get { return PilotAddon.Get (InternalVessel).CustomAxis01; }
+            set { PilotAddon.Set (InternalVessel).CustomAxis01 = value; }
+        }
+        /// <summary>
+        /// The state of CustomAxis02.
+        /// A value between -1 and 1.
+        /// </summary>
+        [KRPCProperty]
+        public float CustomAxis02 {
+            get { return PilotAddon.Get (InternalVessel).CustomAxis02; }
+            set { PilotAddon.Set (InternalVessel).CustomAxis02 = value; }
+        }
+        /// <summary>
+        /// The state of CustomAxis03.
+        /// A value between -1 and 1.
+        /// </summary>
+        [KRPCProperty]
+        public float CustomAxis03 {
+            get { return PilotAddon.Get (InternalVessel).CustomAxis03; }
+            set { PilotAddon.Set (InternalVessel).CustomAxis03 = value; }
+        }
+        /// <summary>
+        /// The state of CustomAxis04.
+        /// A value between -1 and 1.
+        /// </summary>
+        [KRPCProperty]
+        public float CustomAxis04 {
+            get { return PilotAddon.Get (InternalVessel).CustomAxis04; }
+            set { PilotAddon.Set (InternalVessel).CustomAxis04 = value; }
+        }
+
+        /// <summary>
         /// The current stage of the vessel. Corresponds to the stage number in
         /// the in-game UI.
         /// </summary>
