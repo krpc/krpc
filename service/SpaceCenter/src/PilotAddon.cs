@@ -21,6 +21,7 @@ namespace KRPC.SpaceCenter
         internal sealed class ControlInputs
         {
             readonly FlightCtrlState state;
+            AxisGroupsModule axisModule;
 
             public ControlInputs ()
             {
@@ -29,6 +30,7 @@ namespace KRPC.SpaceCenter
                 ThrottleUpdated = false;
                 WheelThrottleUpdated = false;
                 WheelSteerUpdated = false;
+                axisModule = FlightGlobals.ActiveVessel.FindVesselModuleImplementing<AxisGroupsModule>();
             }
 
             public ControlInputs (FlightCtrlState ctrlState)
@@ -102,6 +104,34 @@ namespace KRPC.SpaceCenter
 
             public bool WheelSteerUpdated { get; set; }
 
+            public float CustomAxis01 {
+                get { return state.custom_axes[0]; }
+                set {
+                    axisModule.SetAxisGroup(KSPAxisGroup.Custom01, value.Clamp (-1f, 1f));
+                }
+            }
+
+            public float CustomAxis02 {
+                get { return state.custom_axes[1]; }
+                set {
+                    axisModule.SetAxisGroup(KSPAxisGroup.Custom02, value.Clamp (-1f, 1f));
+                }
+            }
+
+            public float CustomAxis03 {
+                get { return state.custom_axes[2]; }
+                set {
+                    axisModule.SetAxisGroup(KSPAxisGroup.Custom03, value.Clamp (-1f, 1f));
+                }
+            }
+
+            public float CustomAxis04 {
+                get { return state.custom_axes[3]; }
+                set {
+                    axisModule.SetAxisGroup(KSPAxisGroup.Custom04, value.Clamp (-1f, 1f));
+                }
+            }
+
             public void ClearExceptThrottle ()
             {
                 state.roll = 0f;
@@ -112,6 +142,10 @@ namespace KRPC.SpaceCenter
                 state.Z = 0f;
                 state.wheelThrottle = 0f;
                 state.wheelSteer = 0f;
+                state.custom_axes[0] = 0f;
+                state.custom_axes[1] = 0f;
+                state.custom_axes[2] = 0f;
+                state.custom_axes[3] = 0f;
             }
 
             [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
@@ -127,6 +161,10 @@ namespace KRPC.SpaceCenter
                     state.X += other.state.X;
                     state.Y += other.state.Y;
                     state.Z += other.state.Z;
+                    axisModule.SetAxisGroup(KSPAxisGroup.Custom01, state.custom_axes[0] + other.state.custom_axes[0]);
+                    axisModule.SetAxisGroup(KSPAxisGroup.Custom02, state.custom_axes[1] + other.state.custom_axes[1]);
+                    axisModule.SetAxisGroup(KSPAxisGroup.Custom03, state.custom_axes[2] + other.state.custom_axes[2]);
+                    axisModule.SetAxisGroup(KSPAxisGroup.Custom04, state.custom_axes[3] + other.state.custom_axes[3]);
                 } else {
                     if (Math.Abs(other.state.pitch) > 0.001)
                         state.pitch = other.state.pitch;
@@ -140,6 +178,14 @@ namespace KRPC.SpaceCenter
                         state.Y = other.state.Y;
                     if (Math.Abs(other.state.Z) > 0.001)
                         state.Z = other.state.Z;
+                    if (Math.Abs(other.state.custom_axes[0]) > 0.001)
+                        axisModule.SetAxisGroup(KSPAxisGroup.Custom01, other.state.custom_axes[0]);
+                    if (Math.Abs(other.state.custom_axes[1]) > 0.001)
+                        axisModule.SetAxisGroup(KSPAxisGroup.Custom02, other.state.custom_axes[1]);
+                    if (Math.Abs(other.state.custom_axes[2]) > 0.001)
+                        axisModule.SetAxisGroup(KSPAxisGroup.Custom03, other.state.custom_axes[2]);
+                    if (Math.Abs(other.state.custom_axes[3]) > 0.001)
+                        axisModule.SetAxisGroup(KSPAxisGroup.Custom04, other.state.custom_axes[3]);
                 }
                 if (other.WheelThrottleUpdated)
                     state.wheelThrottle = other.state.wheelThrottle;
