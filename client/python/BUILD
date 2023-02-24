@@ -1,4 +1,4 @@
-load('//tools/build:python.bzl', 'py_sdist', 'py2_test', 'py3_test', 'py_lint_test')
+load('//tools/build:python.bzl', 'py_sdist', 'py3_test', 'py_lint_test')
 load('//tools/build:client_test.bzl', 'client_test')
 load('//tools/krpctools:clientgen.bzl', 'clientgen_python')
 load('//:config.bzl', 'version', 'python_version')
@@ -121,20 +121,12 @@ clientgen_python(
 
 test_suite(
     name = 'test',
-    tests = [':test2', ':test3', ':lint']
+    tests = [':test3', ':lint']
 )
 
 test_suite(
     name = 'ci-test',
-    tests = [':test2', ':test3']
-)
-
-client_test(
-    name = 'test2',
-    test_executable = ':py2test',
-    server_executable = '//tools/TestServer',
-    tags = ['requires-network'],
-    size = 'small'
+    tests = [':test3']
 )
 
 client_test(
@@ -146,15 +138,6 @@ client_test(
 )
 
 deps = ['@python_protobuf//file']
-
-py2_test(
-    name = 'py2test',
-    src = ':python',
-    pkg = 'krpc-'+python_version,
-    deps = deps + ['@python_enum34//file'],
-    tags = ['requires-network'],
-    size = 'small'
-)
 
 py3_test(
     name = 'py3test',

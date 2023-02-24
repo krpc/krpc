@@ -200,21 +200,8 @@ def _test_impl(ctx, pyexe='python3'):
         runfiles = runfiles
     )
 
-def _test2_impl(ctx):
-    return _test_impl(ctx, pyexe='python2')
-
 def _test3_impl(ctx):
     return _test_impl(ctx, pyexe='python3')
-
-py2_test = rule(
-    implementation = _test2_impl,
-    attrs = {
-        'src': attr.label(allow_single_file=True),
-        'pkg': attr.string(mandatory=True),
-        'deps': attr.label_list(allow_files=True)
-    },
-    test = True
-)
 
 py3_test = rule(
     implementation = _test3_impl,
