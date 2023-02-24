@@ -7,7 +7,7 @@ ARG ksp_version
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     curl ca-certificates gnupg git && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get clean
 
 # Install Bazel
 RUN apt-get update && \
@@ -18,15 +18,11 @@ RUN apt-get update && \
     curl https://bazel.build/bazel-release.pub.gpg | apt-key add - && \
     apt-get update && \
     apt-get install -y --no-install-recommends openjdk-8-jdk && \
-    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean && \
     wget https://github.com/bazelbuild/bazel/releases/download/${bazel_version}/bazel-${bazel_version}-installer-linux-x86_64.sh && \
     chmod +x bazel-${bazel_version}-installer-linux-x86_64.sh && \
     ./bazel-${bazel_version}-installer-linux-x86_64.sh && \
     rm bazel-${bazel_version}-installer-linux-x86_64.sh
-# Note: uses Bazel installer rather than apt to avoid pulling in python2 dependencies
-#       and because apt package of the specified version may not be available
-#       if a new Bazel release has been made since. Use the following to install via apt:
-# apt-get install -y --no-install-recommends bazel=${bazel_version} && \
 
 # Install Mono
 RUN apt-get update && \
@@ -37,7 +33,7 @@ RUN apt-get update && \
 WORKDIR /usr/local/lib/ksp-${ksp_version}
 RUN apt-get update && \
     apt-get install -y wget && \
-    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean && \
     wget https://s3.amazonaws.com/krpc/lib/ksp-${ksp_version}.tar.gz && \
     tar -xf ksp-${ksp_version}.tar.gz && \
     ln -s /usr/local/lib/ksp-${ksp_version} /usr/local/lib/ksp && \
@@ -50,19 +46,19 @@ RUN apt-get update && \
     python3-dev autoconf libtool luarocks latexmk maven texlive-latex-base \
     texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra \
     libxml2-dev libxslt1-dev librsvg2-bin && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get clean
 
 # Install kRPC test dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     automake python3-pip socat cmake && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get clean
 
 # Install gosu
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     sudo gosu && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get clean
 
 # Configure Bazel
 COPY bazelrc /etc/bazel.bazelrc
