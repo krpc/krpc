@@ -6,6 +6,7 @@ the game, and comes with client libraries for many popular languages.
 
 * [Documentation](https://krpc.github.io/krpc)
 * [Forum release thread](http://forum.kerbalspaceprogram.com/index.php?/topic/130742-105-krpc-remote-control-your-ships-using-python-c-c-lua-v021-10th-feb-2016/)
+* [Discord](https://discord.gg/bXuaTrj)
 
 Links for Developers
 --------------------
