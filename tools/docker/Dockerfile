@@ -42,7 +42,7 @@ RUN apt-get update && \
 # Install kRPC build dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    python3-setuptools python3-virtualenv \
+    python-is-python3 python3-setuptools python3-virtualenv \
     python3-dev autoconf libtool luarocks latexmk maven texlive-latex-base \
     texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra \
     libxml2-dev libxslt1-dev librsvg2-bin && \
