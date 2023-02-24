@@ -81,11 +81,11 @@ project. They can be built using ``bazel build <target>``:
 
 * Targets for building protobuf definitions for individual languages:
 
-  * ``//protobuf/csharp``
-  * ``//protobuf/cpp``
-  * ``//protobuf/java``
-  * ``//protobuf/lua``
-  * ``//protobuf/python``
+  * ``//protobuf:csharp``
+  * ``//protobuf:cpp``
+  * ``//protobuf:java``
+  * ``//protobuf:lua``
+  * ``//protobuf:python``
 
 * ``//doc:html`` builds the HTML documentation
 * ``//doc:pdf`` builds the PDF documentation
