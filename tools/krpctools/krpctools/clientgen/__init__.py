@@ -119,7 +119,7 @@ def main():
         else:
             print(g.generate())
 
-    except RuntimeError, ex:
+    except RuntimeError as ex:
         sys.stderr.write('Error: %s\n' % str(ex))
         return 1
 
