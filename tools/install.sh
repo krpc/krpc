@@ -21,7 +21,7 @@ rm -f $GAMEDATA/KRPC.dll
 rm -rf $GAMEDATA
 mkdir -p $GAMEDATA
 cp -R -L \
-    bazel-genfiles/kRPC.version \
+    bazel-bin/kRPC.version \
     bazel-bin/server/KRPC.dll \
     bazel-bin/server/KRPC.xml \
     bazel-bin/server/src/icons \
