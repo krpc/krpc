@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 LABEL maintainer="djungelorm <djungelorm@users.noreply.github.com>"
 
 ARG bazel_version
@@ -29,13 +29,9 @@ RUN apt-get update && \
 # apt-get install -y --no-install-recommends bazel=${bazel_version} && \
 
 # Install Mono
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
-      --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
-    echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | \
-      tee /etc/apt/sources.list.d/mono-official-stable.list && \
-    apt-get update && \
-    apt-get install -y mono-devel && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y mono-devel && \
+    apt-get clean
 
 # Set up KSP libs
 WORKDIR /usr/local/lib/ksp-${ksp_version}
@@ -59,9 +55,7 @@ RUN apt-get update && \
 # Install kRPC test dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    virtualenv automake python3-pip python-pip python-setuptools \
-    python-virtualenv python python-dev  \
-    libenchant1c2a socat cmake && \
+    automake python3-pip socat cmake && \
     rm -rf /var/lib/apt/lists/*
 
 # Install gosu
