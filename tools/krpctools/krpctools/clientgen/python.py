@@ -96,7 +96,7 @@ class PythonGenerator(Generator):
         # Find all service dependencies
         dependencies = set()
         procedures = \
-            context['procedures'].values() + \
+            list(context['procedures'].values()) + \
             [procedure
              for property in context['properties'].values()
              for procedure in property.values()] + \
@@ -116,7 +116,7 @@ class PythonGenerator(Generator):
                     dependencies.add(ptype['service'])
 
         for class_info in context['classes'].values():
-            items = class_info['methods'].values() + \
+            items = list(class_info['methods'].values()) + \
                     [procedure
                      for property in class_info['properties'].values()
                      for procedure in property.values()]
@@ -135,7 +135,7 @@ class PythonGenerator(Generator):
 
         # Add type specifications to types
         procedures = \
-            context['procedures'].values() + \
+            list(context['procedures'].values()) + \
             [procedure
              for property in context['properties'].values()
              for _, procedure in property.items()] + \
@@ -159,7 +159,7 @@ class PythonGenerator(Generator):
                 pos += 1
 
         for class_info in context['classes'].values():
-            items = class_info['methods'].values() + \
+            items = list(class_info['methods'].values()) + \
                     [procedure
                      for property in class_info['properties'].values()
                      for _, procedure in property.items()]

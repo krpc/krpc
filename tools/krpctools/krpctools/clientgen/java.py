@@ -106,8 +106,8 @@ class JavaGenerator(Generator):
 
         # Add type specifications to types
         procedures = \
-            context['procedures'].values() + \
-            context['properties'].values() + \
+            list(context['procedures'].values()) + \
+            list(context['properties'].values()) + \
             list(itertools.chain(
                 *[class_info['static_methods'].values()
                   for class_info in context['classes'].values()]))
@@ -128,8 +128,8 @@ class JavaGenerator(Generator):
                 pos += 1
 
         for class_info in context['classes'].values():
-            items = class_info['methods'].values() + \
-                    class_info['properties'].values()
+            items = list(class_info['methods'].values()) + \
+                    list(class_info['properties'].values())
             for info in items:
                 info['return_type'] = {
                     'name': info['return_type'],
@@ -153,8 +153,8 @@ class JavaGenerator(Generator):
                 value['name'] = self.language.parse_const_name(value['name'])
 
         # Add serial version UIDs to classes
-        items = context['classes'].items() + \
-            context['exceptions'].items()
+        items = list(context['classes'].items()) + \
+            list(context['exceptions'].items())
         for class_name, cls in items:
             tohash = self.service_name+'.'+class_name
             hsh = hashlib.sha1(tohash.encode('utf-8')).hexdigest()

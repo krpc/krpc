@@ -27,9 +27,9 @@ class TestTypes(unittest.TestCase):
             (types.double_type, Type.DOUBLE, float),
             (types.float_type, Type.FLOAT, float),
             (types.sint32_type, Type.SINT32, int),
-            (types.sint64_type, Type.SINT64, long),
+            (types.sint64_type, Type.SINT64, int),
             (types.uint32_type, Type.UINT32, int),
-            (types.uint64_type, Type.UINT64, long),
+            (types.uint64_type, Type.UINT64, int),
             (types.bool_type, Type.BOOL, bool),
             (types.string_type, Type.STRING, str),
             (types.bytes_type, Type.BYTES, bytes)
@@ -149,7 +149,7 @@ class TestTypes(unittest.TestCase):
         self.assertTrue(isinstance(typ.value_types[1], ValueType))
         self.assertTrue(isinstance(typ.value_types[2], ValueType))
         self.assertEqual(float, typ.value_types[0].python_type)
-        self.assertEqual(long, typ.value_types[1].python_type)
+        self.assertEqual(int, typ.value_types[1].python_type)
         self.assertEqual(str, typ.value_types[2].python_type)
         self.check_protobuf_type(
             Type.FLOAT, '', '', 0, typ.value_types[0].protobuf_type)
@@ -212,13 +212,13 @@ class TestTypes(unittest.TestCase):
             (42.0, 42, types.double_type),
             (42.0, 42, types.float_type),
             (42, 42.0, types.sint32_type),
-            (42, 42L, types.sint32_type),
-            (42L, 42.0, types.sint64_type),
-            (42L, 42, types.sint64_type),
+            (42, 42, types.sint32_type),
+            (42, 42.0, types.sint64_type),
+            (42, 42, types.sint64_type),
             (42, 42.0, types.uint32_type),
-            (42, 42L, types.uint32_type),
-            (42L, 42.0, types.uint64_type),
-            (42L, 42, types.uint64_type),
+            (42, 42, types.uint32_type),
+            (42, 42.0, types.uint64_type),
+            (42, 42, types.uint64_type),
             (list(), tuple(), types.list_type(types.string_type)),
             ((0, 1, 2), [0, 1, 2],
              types.tuple_type(types.sint32_type,

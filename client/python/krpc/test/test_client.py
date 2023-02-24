@@ -61,7 +61,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual('42',
                          self.conn.test_service.int32_to_string(42))
         self.assertEqual('123456789000',
-                         self.conn.test_service.int64_to_string(123456789000L))
+                         self.conn.test_service.int64_to_string(123456789000))
         self.assertEqual('True',
                          self.conn.test_service.bool_to_string(True))
         self.assertEqual('False',
@@ -79,9 +79,9 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_auto_value_type_conversion(self):
         self.assertEqual('42', self.conn.test_service.float_to_string(42))
-        self.assertEqual('42', self.conn.test_service.float_to_string(42L))
+        self.assertEqual('42', self.conn.test_service.float_to_string(42))
         self.assertEqual(
-            '6', self.conn.test_service.add_multiple_values(1L, 2L, 3L))
+            '6', self.conn.test_service.add_multiple_values(1, 2, 3))
         self.assertRaises(
             TypeError, self.conn.test_service.float_to_string, '42')
 

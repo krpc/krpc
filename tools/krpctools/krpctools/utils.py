@@ -55,7 +55,7 @@ def _as_protobuf_type(types, type_info):
 
 def decode_default_value(value, typ):
     value = base64.b64decode(value)
-    value = array.array('B', value).tostring()
+    value = array.array('B', value).tobytes()
     # Note: following is a workaround for decoding EnumerationType,
     # as set_values has not been called
     if not isinstance(typ, EnumerationType):
