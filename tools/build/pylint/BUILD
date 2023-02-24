@@ -13,7 +13,12 @@ py_script(
       '@python_singledispatch//file',
       '@python_astroid//file',
       '@python_wrapt//file',
-      '@python_lazy_object_proxy//file'
+      '@python_lazy_object_proxy//file',
+      '@python_typing_extensions//file',
+      '@python_tomlkit//file',
+      '@python_tomli//file',
+      '@python_platformdirs//file',
+      '@python_dill//file'
   ],
   visibility = ['//visibility:public']
 )
