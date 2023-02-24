@@ -4,5 +4,6 @@ AM_INIT_AUTOMAKE
 AC_CANONICAL_HOST
 AC_PROG_CC
 AC_LANG([C])
-AC_PROG_LIBTOOL
-AC_OUTPUT(Makefile include/Makefile src/Makefile)
+LT_INIT
+AC_CONFIG_FILES([Makefile include/Makefile src/Makefile])
+AC_OUTPUT
