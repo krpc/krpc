@@ -26,7 +26,7 @@ RUN apt-get update && \
 
 # Install Mono
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y mono-devel && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y mono-complete && \
     apt-get clean
 
 # Set up KSP libs
