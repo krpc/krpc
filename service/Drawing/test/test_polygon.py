@@ -27,7 +27,7 @@ class TestPolygon(krpctest.TestCase):
         self.assertEqual(self.ref, polygon.reference_frame)
         self.assertTrue(polygon.visible)
         self.assertEqual((1, 1, 1), polygon.color)
-        self.assertEqual("Particles/Additive", polygon.material)
+        self.assertEqual("Legacy Shaders/Particles/Additive", polygon.material)
         self.assertAlmostEqual(0.1, polygon.thickness)
         self.wait()
         polygon.remove()
