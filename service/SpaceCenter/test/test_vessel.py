@@ -128,10 +128,15 @@ class TestVessel(krpctest.TestCase):
         self.assertEqual(
             self.space_center.CrewMemberType.crew, crew_member.type)
         self.assertTrue(crew_member.on_mission)
+        # pylint: disable=pointless-statement
         crew_member.courage
+        # pylint: disable=pointless-statement
         crew_member.stupidity
+        # pylint: disable=pointless-statement
         crew_member.experience
+        # pylint: disable=pointless-statement
         crew_member.badass
+        # pylint: disable=pointless-statement
         crew_member.veteran
 
 
