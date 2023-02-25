@@ -1,8 +1,8 @@
 ship = PartsCargoBay
-version = 1.7.3
+version = 1.12.5
 description = 
 type = VAB
-size = 17.1373024,3.85698223,3.31010008
+size = 17.1390934,3.76625824,3.31010008
 steamPublishedFileId = 0
 persistentId = 3677580210
 rot = 0,0,0,1
@@ -39,16 +39,28 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	link = mk3CargoBayS_4294684252
-	link = ServiceBay.250_4294596778
+	link = ServiceBay.250.v2_4294596778
 	link = launchClamp1_4294591006
 	link = launchClamp1_4294590792
 	attN = bottom,mk3CargoBayS_4294684252_0|-1.25|0_0|-1|0_0|-1.25|0_0|-1|0
-	attN = top,ServiceBay.250_4294596778_0|3.1875|0.625_0|1|0_0|3.1875|0.625_0|1|0
+	attN = top,ServiceBay.250.v2_4294596778_0|3.1875|0.625_0|1|0_0|3.1875|0.625_0|1|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -165,6 +177,7 @@ PART
 		name = FlagDecal
 		isEnabled = True
 		flagDisplayed = True
+		isMirrored = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -178,14 +191,9 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleAnimateGeneric
+		name = ModuleColorChanger
 		isEnabled = True
-		aniState = LOCKED
-		animSwitch = True
-		animTime = 0
-		animSpeed = 1
-		deployPercent = 100
-		animationIsDisabled = False
+		animState = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -194,20 +202,7 @@ PART
 		{
 			ToggleAction
 			{
-				actionGroup = None
-			}
-		}
-		AXISGROUPS
-		{
-			deployPercent
-			{
-				axisGroup = None
-				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
-				axisInverted = None
-				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
-				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
-				overrideIncremental2 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
-				overrideIncremental3 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				actionGroup = Light
 			}
 		}
 		UPGRADESAPPLIED
@@ -230,6 +225,24 @@ PART
 				actionGroup = None
 				active = False
 			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleInventoryPart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		STOREDPARTS
+		{
 		}
 		UPGRADESAPPLIED
 		{
@@ -331,6 +344,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -362,6 +387,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -438,6 +464,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -469,6 +507,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -539,12 +578,24 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	sym = launchClamp1_4294627368
-	srfN = srfAttach,mk3CargoBayS_4294684252
+	srfN = srfAttach,mk3CargoBayS_4294684252,,0|1.35443699|0.806919396,0|0|-1,0|1.35443699|0.806919396
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -553,7 +604,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 2.23855352
+		scaleFactor = 2.238554
 		height = 5.64831257
 		stagingEnabled = True
 		towerRot = 5.96046448E-08,5.96046448E-08,-0.707106829,0.707106829
@@ -662,12 +713,24 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	sym = launchClamp1_4294627770
-	srfN = srfAttach,mk3CargoBayS_4294684252
+	srfN = srfAttach,mk3CargoBayS_4294684252,,0|1.35443699|0.806919396,0|0|-1,0|1.35443699|0.806919396
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -676,7 +739,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 2.23855352
+		scaleFactor = 2.238554
 		height = 5.64831257
 		stagingEnabled = True
 		towerRot = 0.707106829,-0.707106829,0,-1.1920929E-07
@@ -760,7 +823,7 @@ PART
 }
 PART
 {
-	part = ServiceBay.250_4294596778
+	part = ServiceBay.250.v2_4294596778
 	partName = Part
 	persistentId = 1207222950
 	pos = -6.52517509,5.62456799,2.32561994
@@ -784,16 +847,28 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	link = ServiceBay.125_4294595734
+	link = ServiceBay.125.v2_4294595734
 	attN = top2,Null_0_0|0.550000012|0_0|-1|0_0|0.550000012|0_0|-1|0
 	attN = bottom2,Null_0_0|-0.550000012|0_0|1|0_0|-0.550000012|0_0|1|0
 	attN = top,mk3Cockpit.Shuttle_4294635650_0|0.649999976|0_0|1|0_0|0.649999976|0_0|1|0
-	attN = bottom,ServiceBay.125_4294595734_0|-0.649999976|0_0|-1|0_0|-0.649999976|0_0|-1|0
+	attN = bottom,ServiceBay.125.v2_4294595734_0|-0.649999976|0_0|-1|0_0|-0.649999976|0_0|-1|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -825,6 +900,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -853,7 +929,7 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleSeeThroughObject
+		name = ModuleConductionMultiplier
 		isEnabled = True
 		stagingEnabled = True
 		EVENTS
@@ -868,8 +944,11 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleConductionMultiplier
+		name = ModuleCargoPart
 		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -900,10 +979,10 @@ PART
 }
 PART
 {
-	part = ServiceBay.125_4294595734
+	part = ServiceBay.125.v2_4294595734
 	partName = Part
 	persistentId = 1565402649
-	pos = -7.47517824,5.62456799,2.32561994
+	pos = -7.47517872,5.62456799,2.32561994
 	attPos = 0,0,0
 	attPos0 = 0,-0.950000525,0
 	rot = 0,0,-0.707106829,0.707106829
@@ -926,13 +1005,25 @@ PART
 	modSize = 0,0,0
 	attN = top2,Null_0_0|0.25|0_0|-1|0_0|0.25|0_0|-1|0
 	attN = bottom2,Null_0_0|-0.25|0_0|1|0_0|-0.25|0_0|1|0
-	attN = top,ServiceBay.250_4294596778_0|0.300000012|0_0|1|0_0|0.300000012|0_0|1|0
+	attN = top,ServiceBay.250.v2_4294596778_0|0.300000012|0_0|1|0_0|0.300000012|0_0|1|0
 	attN = bottom,Null_0_0|-0.300000012|0_0|-1|0_0|-0.300000012|0_0|-1|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -964,6 +1055,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -992,7 +1084,7 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleSeeThroughObject
+		name = ModuleConductionMultiplier
 		isEnabled = True
 		stagingEnabled = True
 		EVENTS
@@ -1007,8 +1099,11 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleConductionMultiplier
+		name = ModuleCargoPart
 		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -1064,12 +1159,24 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	sym = launchClamp1_4294590792
-	srfN = srfAttach,mk3Cockpit.Shuttle_4294635650
+	srfN = srfAttach,mk3Cockpit.Shuttle_4294635650,,0|1.35443699|0.806919396,0|0|-1,0|1.35443699|0.806919396
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1187,12 +1294,24 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	sym = launchClamp1_4294591006
-	srfN = srfAttach,mk3Cockpit.Shuttle_4294635650
+	srfN = srfAttach,mk3Cockpit.Shuttle_4294635650,,0|1.35443699|0.806919396,0|0|-1,0|1.35443699|0.806919396
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{

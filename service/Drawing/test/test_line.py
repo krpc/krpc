@@ -21,7 +21,7 @@ class TestLine(krpctest.TestCase):
         self.assertEqual(self.ref, line.reference_frame)
         self.assertTrue(line.visible)
         self.assertEqual((1, 1, 1), line.color)
-        self.assertEqual("Particles/Additive", line.material)
+        self.assertEqual("Legacy Shaders/Particles/Additive", line.material)
         self.assertAlmostEqual(0.1, line.thickness)
         self.wait()
         line.remove()
