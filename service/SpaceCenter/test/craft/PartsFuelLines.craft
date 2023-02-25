@@ -1,8 +1,8 @@
 ship = PartsFuelLines
-version = 1.7.3
+version = 1.12.5
 description = 
 type = VAB
-size = 7.87353325,10.4909382,9.0212183
+size = 7.8735342,10.4812813,9.0212183
 steamPublishedFileId = 0
 persistentId = 2759694905
 rot = 0,0,0,1
@@ -14,7 +14,7 @@ OverrideAxisControl = 0,0,0,0
 OverrideGroupNames = ,,,
 PART
 {
-	part = mk1pod_4294711442
+	part = mk1pod.v2_4294711442
 	partName = Part
 	persistentId = 2143222119
 	pos = -0.0516679808,11.03127,0.0283721592
@@ -46,6 +46,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -179,22 +191,6 @@ PART
 	}
 	MODULE
 	{
-		name = FlagDecal
-		isEnabled = True
-		flagDisplayed = True
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
 		name = ModuleConductionMultiplier
 		isEnabled = True
 		stagingEnabled = True
@@ -238,6 +234,75 @@ PART
 		{
 		}
 		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = FlagDecal
+		isEnabled = True
+		flagDisplayed = True
+		isMirrored = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleInventoryPart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		STOREDPARTS
 		{
 		}
 		UPGRADESAPPLIED
@@ -331,13 +396,25 @@ PART
 	link = trussPiece1x_4294699012
 	link = fuelTank.long_4294680430
 	link = launchClamp1_4294644504
-	attN = top,mk1pod_4294711442_0|0.981724977|0_0|1|0_0|0.981724977|0_0|1|0
+	attN = top,mk1pod.v2_4294711442_0|0.981724977|0_0|1|0_0|0.981724977|0_0|1|0
 	attN = bottom,fuelTank.long_4294680430_0|-0.912500024|0_0|-1|0_0|-0.912500024|0_0|-1|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -347,6 +424,24 @@ PART
 		name = ModulePartVariants
 		isEnabled = True
 		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -424,7 +519,7 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	link = fuelTankSmall_4294694238
-	srfN = srfAttach,fuelTank_4294705296
+	srfN = srfAttach,fuelTank_4294705296,,0|-0.559272826|0,0|-1|0,0|-0.559272826|0
 	attN = bottom,Null_0_0|-0.559272826|0_0|-1|0_0|-0.559272826|0_0|-1|0
 	attN = top,Null_0_0|0.559272826|0_0|1|0_0|0.559272826|0_0|1|0
 	EVENTS
@@ -432,9 +527,39 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
 	}
 	MODULE
 	{
@@ -480,7 +605,7 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	link = fuelLine_4294693652
-	srfN = srfAttach,trussPiece1x_4294699012
+	srfN = srfAttach,trussPiece1x_4294699012,,0.625|0|0,1|0|0,0.625|0|0
 	attN = top,Null_0_0|0.555249989|0_0|1|0_0|0.555249989|0_0|1|0
 	attN = bottom,Null_0_0|-0.555249989|0_0|-1|0_0|-0.555249989|0_0|-1|0
 	EVENTS
@@ -488,6 +613,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -497,6 +634,24 @@ PART
 		name = ModulePartVariants
 		isEnabled = True
 		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -573,16 +728,33 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	srfN = srfAttach,fuelTankSmall_4294694238
+	srfN = srfAttach,fuelTankSmall_4294694238,,0|0|0,0.125|0|0,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		DisconnectAction
+		{
+			actionGroup = None
+		}
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
 		tgt = 4294705296
+		tpersID = 1567601516
 		pos = -1.11276102,-0.00241928804,0.0391663797
 		rot = 0,0,0,1
 		dir = -0.9993788,-0.00217277999,0.0351754799
@@ -606,6 +778,40 @@ PART
 	{
 		name = CModuleFuelLine
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -669,6 +875,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -755,7 +973,7 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	link = fuelTankSmallFlat_4294683440
-	srfN = srfAttach,fuelTank.long_4294680430
+	srfN = srfAttach,fuelTank.long_4294680430,,0|-0.559272826|0,0|-1|0,0|-0.559272826|0
 	attN = bottom,Null_0_0|-0.559272826|0_0|-1|0_0|-0.559272826|0_0|-1|0
 	attN = top,Null_0_0|0.559272826|0_0|1|0_0|0.559272826|0_0|1|0
 	EVENTS
@@ -763,9 +981,39 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
 	}
 	MODULE
 	{
@@ -812,7 +1060,7 @@ PART
 	modSize = 0,0,0
 	link = fuelLine_4294682580
 	link = fuelLine_4294679088
-	srfN = srfAttach,trussPiece1x_4294688330
+	srfN = srfAttach,trussPiece1x_4294688330,,0.625|0|0,1|0|0,0.625|0|0
 	attN = top,Null_0_0|0.3125|0_0|1|0_0|0.3125|0_0|1|0
 	attN = bottom,Null_0_0|-0.3125|0_0|-1|0_0|-0.3125|0_0|-1|0
 	EVENTS
@@ -820,6 +1068,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -829,6 +1089,24 @@ PART
 		name = ModulePartVariants
 		isEnabled = True
 		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -905,16 +1183,33 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	srfN = srfAttach,fuelTankSmallFlat_4294683440
+	srfN = srfAttach,fuelTankSmallFlat_4294683440,,0|0|0,0.125|0|0,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		DisconnectAction
+		{
+			actionGroup = None
+		}
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
 		tgt = 4294680430
+		tpersID = 1402260924
 		pos = -0.511651695,-0.722128689,-1.77633297
 		rot = 0,0.923879683,1.38542305E-07,-0.38268289
 		dir = -0.257811397,-0.363867491,-0.895060778
@@ -938,6 +1233,40 @@ PART
 	{
 		name = CModuleFuelLine
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -992,16 +1321,33 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	srfN = srfAttach,fuelTankSmallFlat_4294683440
+	srfN = srfAttach,fuelTankSmallFlat_4294683440,,0|0|0,0.125|0|0,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		DisconnectAction
+		{
+			actionGroup = None
+		}
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
 		tgt = 4294680430
+		tpersID = 1402260924
 		pos = -0.396274507,-0.739836574,1.66378999
 		rot = 0,0.923879802,1.53723292E-08,0.3826828
 		dir = -0.212651998,-0.397017002,0.892836273
@@ -1025,6 +1371,40 @@ PART
 	{
 		name = CModuleFuelLine
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -1079,12 +1459,24 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	srfN = srfAttach,fuelTank_4294705296
+	srfN = srfAttach,fuelTank_4294705296,,0|1.35443699|0.806919396,0|0|-1,0|1.35443699|0.806919396
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1212,6 +1604,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1299,12 +1703,24 @@ PART
 	modSize = 0,0,0
 	link = Rockomax16.BW_4294603994
 	sym = radialDecoupler2_4294609932
-	srfN = srfAttach,Rockomax32.BW_4294621984
+	srfN = srfAttach,Rockomax32.BW_4294621984,,-0.0299999993|0|0,1|0|0,-0.0299999993|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1375,6 +1791,24 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -1418,7 +1852,7 @@ PART
 	modSize = 0,0,0
 	link = fuelLine_4294666110
 	sym = Rockomax16.BW_4294603580
-	srfN = srfAttach,radialDecoupler2_4294610678
+	srfN = srfAttach,radialDecoupler2_4294610678,,1.25|0|0,1|0|0,1.25|0|0
 	attN = top,Null_0_0|0.920000017|0_0|1|0_0|0.920000017|0_0|1|0
 	attN = bottom,Null_0_0|-0.920000017|0_0|-1|0_0|-0.920000017|0_0|-1|0
 	EVENTS
@@ -1426,6 +1860,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1513,12 +1959,24 @@ PART
 	modSize = 0,0,0
 	link = Rockomax16.BW_4294603580
 	sym = radialDecoupler2_4294610678
-	srfN = srfAttach,Rockomax32.BW_4294621984
+	srfN = srfAttach,Rockomax32.BW_4294621984,,-0.0299999993|0|0,1|0|0,-0.0299999993|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1589,6 +2047,24 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -1632,7 +2108,7 @@ PART
 	modSize = 0,0,0
 	link = fuelLine_4294593648
 	sym = Rockomax16.BW_4294603994
-	srfN = srfAttach,radialDecoupler2_4294609932
+	srfN = srfAttach,radialDecoupler2_4294609932,,1.25|0|0,1|0|0,1.25|0|0
 	attN = top,Null_0_0|0.920000017|0_0|1|0_0|0.920000017|0_0|1|0
 	attN = bottom,Null_0_0|-0.920000017|0_0|-1|0_0|-0.920000017|0_0|-1|0
 	EVENTS
@@ -1640,6 +2116,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1727,12 +2215,24 @@ PART
 	modSize = 0,0,0
 	link = Rockomax8BW_4294602402
 	sym = radialDecoupler2_4294603432
-	srfN = srfAttach,Rockomax32.BW_4294621984
+	srfN = srfAttach,Rockomax32.BW_4294621984,,-0.0299999993|0|0,1|0|0,-0.0299999993|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1803,6 +2303,24 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -1846,7 +2364,7 @@ PART
 	modSize = 0,0,0
 	link = fuelLine_4294665686
 	sym = Rockomax8BW_4294601840
-	srfN = srfAttach,radialDecoupler2_4294613048
+	srfN = srfAttach,radialDecoupler2_4294613048,,1.25|0|0,1|0|0,1.25|0|0
 	attN = top,Null_0_0|0.455000013|0_0|1|0_0|0.455000013|0_0|1|0
 	attN = bottom,Null_0_0|-0.455000013|0_0|-1|0_0|-0.455000013|0_0|-1|0
 	EVENTS
@@ -1854,6 +2372,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1941,12 +2471,24 @@ PART
 	modSize = 0,0,0
 	link = Rockomax8BW_4294601840
 	sym = radialDecoupler2_4294613048
-	srfN = srfAttach,Rockomax32.BW_4294621984
+	srfN = srfAttach,Rockomax32.BW_4294621984,,-0.0299999993|0|0,1|0|0,-0.0299999993|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -2017,6 +2559,24 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -2037,7 +2597,7 @@ PART
 	part = Rockomax8BW_4294601840
 	partName = Part
 	persistentId = 1969109685
-	pos = 2.11732674,3.18630552,2.19736576
+	pos = 2.11732817,3.18630552,2.19736695
 	attPos = 0,0,0
 	attPos0 = -1.86725402,0.0494425111,-1.46209203E-07
 	rot = 1.13430303E-06,-0.923879623,4.69843485E-07,-0.382683396
@@ -2060,7 +2620,7 @@ PART
 	modSize = 0,0,0
 	link = fuelLine_4294592500
 	sym = Rockomax8BW_4294602402
-	srfN = srfAttach,radialDecoupler2_4294603432
+	srfN = srfAttach,radialDecoupler2_4294603432,,1.25|0|0,1|0|0,1.25|0|0
 	attN = top,Null_0_0|0.455000013|0_0|1|0_0|0.455000013|0_0|1|0
 	attN = bottom,Null_0_0|-0.455000013|0_0|-1|0_0|-0.455000013|0_0|-1|0
 	EVENTS
@@ -2068,6 +2628,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -2135,7 +2707,7 @@ PART
 	pos = -1.70450509,3.37085581,2.1535871
 	attPos = 0,0,0
 	attPos0 = 0.604181111,-0.0158702899,-1.04647195
-	rot = 1.09545601E-06,0.382684767,5.89666286E-07,-0.923878908
+	rot = 1.09545613E-06,0.382684767,5.89666399E-07,-0.923878968
 	attRot = 0,0,0,1
 	attRot0 = 7.27611507E-07,-0.866026223,-4.20085087E-07,0.499998689
 	mir = 1,1,1
@@ -2154,16 +2726,33 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	sym = fuelLine_4294666110
-	srfN = srfAttach,Rockomax16.BW_4294603580
+	srfN = srfAttach,Rockomax16.BW_4294603580,,0|0|0,0.125|0|0,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		DisconnectAction
+		{
+			actionGroup = None
+		}
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
 		tgt = 4294621984
+		tpersID = 237774779
 		pos = -0.621610403,-0.285461694,-1.49854398
 		rot = 0,-0.793352783,-2.93138305E-06,0.608762324
 		dir = -0.377356201,-0.173292801,-0.909709811
@@ -2200,6 +2789,40 @@ PART
 	}
 	MODULE
 	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -2223,7 +2846,7 @@ PART
 	pos = 1.60117042,3.37085581,-2.096843
 	attPos = 0,0,0
 	attPos0 = 0.604181111,-0.0158702899,-1.04647303
-	rot = -5.89666797E-07,0.923878908,1.09545635E-06,0.382684767
+	rot = -5.89666854E-07,0.923878968,1.09545647E-06,0.382684767
 	attRot = 0,0,0,1
 	attRot0 = 7.27611507E-07,-0.866026223,-4.200852E-07,0.499998689
 	mir = 1,1,1
@@ -2242,16 +2865,33 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	sym = fuelLine_4294593648
-	srfN = srfAttach,Rockomax16.BW_4294603994
+	srfN = srfAttach,Rockomax16.BW_4294603994,,0|0|0,0.125|0|0,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		DisconnectAction
+		{
+			actionGroup = None
+		}
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
 		tgt = 4294621984
+		tpersID = 237774779
 		pos = -0.621610701,-0.285461187,-1.49854398
 		rot = 0,-0.79335171,-1.10319002E-06,0.608763814
 		dir = -0.377356201,-0.173292801,-0.909709811
@@ -2288,6 +2928,40 @@ PART
 	}
 	MODULE
 	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -2308,7 +2982,7 @@ PART
 	part = fuelLine_4294592500
 	partName = CompoundPart
 	persistentId = 3645850244
-	pos = 1.80363154,3.19617081,3.36810327
+	pos = 1.80363321,3.19617081,3.36810589
 	attPos = 0,0,0
 	attPos0 = -0.606016576,0.00986331794,-1.04964995
 	rot = -1.14815884E-06,0.608762205,2.5030414E-07,0.793352783
@@ -2330,16 +3004,33 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	sym = fuelLine_4294665686
-	srfN = srfAttach,Rockomax8BW_4294601840
+	srfN = srfAttach,Rockomax8BW_4294601840,,0|0|0,0.125|0|0,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		DisconnectAction
+		{
+			actionGroup = None
+		}
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
 		tgt = 4294603580
+		tpersID = 1407057738
 		pos = -0.932613909,0.0776735395,-1.60497606
 		rot = 0,-0.866025388,-2.59316698E-06,0.500000119
 		dir = -0.501974523,0.0418074913,-0.863871396
@@ -2376,6 +3067,40 @@ PART
 	}
 	MODULE
 	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -2396,7 +3121,7 @@ PART
 	part = fuelLine_4294665686
 	partName = CompoundPart
 	persistentId = 3661504551
-	pos = -1.90696239,3.19617081,-3.31135273
+	pos = -1.90696239,3.19617081,-3.31135321
 	attPos = 0,0,0
 	attPos0 = -0.606016576,0.00986331794,-1.04964995
 	rot = -2.50304396E-07,-0.793352783,-1.14815884E-06,0.608762205
@@ -2418,16 +3143,33 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	sym = fuelLine_4294592500
-	srfN = srfAttach,Rockomax8BW_4294602402
+	srfN = srfAttach,Rockomax8BW_4294602402,,0|0|0,0.125|0|0,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		DisconnectAction
+		{
+			actionGroup = None
+		}
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
 		tgt = 4294603994
+		tpersID = 4238242469
 		pos = -0.93261081,0.0776735395,-1.60497403
 		rot = 0,0.866025388,2.94531492E-06,-0.5
 		dir = -0.501974523,0.0418074913,-0.863871396
@@ -2451,6 +3193,40 @@ PART
 	{
 		name = CModuleFuelLine
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{

@@ -1,8 +1,8 @@
 ship = PartsDecoupler
-version = 1.7.3
+version = 1.12.5
 description = 
 type = VAB
-size = 3.09296441,5.09169388,1.270908
+size = 3.08352804,5.08203888,1.25001788
 steamPublishedFileId = 0
 persistentId = 4152845310
 rot = 0,0,0,1
@@ -14,7 +14,7 @@ OverrideAxisControl = 0,0,0,0
 OverrideGroupNames = ,,,
 PART
 {
-	part = mk1pod_4294591094
+	part = mk1pod.v2_4294591094
 	partName = Part
 	persistentId = 1001143446
 	pos = -0.221232206,6.09634686,0.594926298
@@ -46,6 +46,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -179,22 +191,6 @@ PART
 	}
 	MODULE
 	{
-		name = FlagDecal
-		isEnabled = True
-		flagDisplayed = True
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
 		name = ModuleConductionMultiplier
 		isEnabled = True
 		stagingEnabled = True
@@ -238,6 +234,75 @@ PART
 		{
 		}
 		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = FlagDecal
+		isEnabled = True
+		flagDisplayed = True
+		isMirrored = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleInventoryPart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		STOREDPARTS
 		{
 		}
 		UPGRADESAPPLIED
@@ -307,7 +372,7 @@ PART
 	part = Separator.1_4294662244
 	partName = Part
 	persistentId = 2094701980
-	pos = -0.221232206,5.64130974,0.594926298
+	pos = -0.221232206,5.64130926,0.594926298
 	attPos = 0,0,0
 	attPos0 = 0,-0.455037773,0
 	rot = 0,0,0,1
@@ -329,13 +394,25 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	link = fuelTank_4294366504
-	attN = top,mk1pod_4294591094_0|0.0499998927|0_0|1|0_0|0.0499998927|0_0|1|0
-	attN = bottom,fuelTank_4294366504_0|-0.0499998927|0_0|-1|0_0|-0.0499998927|0_0|-1|0
+	attN = top,mk1pod.v2_4294591094_0|0.0500000007|0_0|1|0_0|0.0500000007|0_0|1|0
+	attN = bottom,fuelTank_4294366504_0|-0.0500000007|0_0|-1|0_0|-0.0500000007|0_0|-1|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -406,6 +483,40 @@ PART
 	}
 	MODULE
 	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -426,7 +537,7 @@ PART
 	part = fuelTank_4294366504
 	partName = Part
 	persistentId = 1126435263
-	pos = -0.221232206,4.60958433,0.594926298
+	pos = -0.221232206,4.60958338,0.594926298
 	attPos = 0,0,0
 	attPos0 = 0,-1.14899695,0
 	rot = 0,0,0,1
@@ -458,6 +569,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -467,6 +590,24 @@ PART
 		name = ModulePartVariants
 		isEnabled = True
 		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -522,7 +663,7 @@ PART
 	part = radialDecoupler2_4294369258
 	partName = Part
 	persistentId = 465113278
-	pos = -0.811565876,4.70016432,0.594926298
+	pos = -0.811565876,4.70016336,0.594926298
 	attPos = 0,0,0
 	attPos0 = -0.590333879,0.0905780792,3.19171605E-08
 	rot = -7.48678476E-23,8.42937027E-08,-1.77635705E-15,1
@@ -544,12 +685,24 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	link = fuelTank_4294365752
-	srfN = srfAttach,fuelTank_4294366504
+	srfN = srfAttach,fuelTank_4294366504,,-0.0299999993|0|0,1|0|0,-0.0299999993|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -620,6 +773,24 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -640,7 +811,7 @@ PART
 	part = fuelTank_4294365752
 	partName = Part
 	persistentId = 4050090639
-	pos = -2.05474305,4.58668327,0.594926596
+	pos = -2.05474305,4.58668232,0.594926596
 	attPos = 0,0,0
 	attPos0 = -1.24317801,-0.113480799,1.48043696E-07
 	rot = 1.00485899E-14,1.68587405E-07,8.94069672E-08,1
@@ -662,7 +833,7 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	link = fuelTank_4294542216
-	srfN = srfAttach,radialDecoupler2_4294369258
+	srfN = srfAttach,radialDecoupler2_4294369258,,0.625|0|0,1|0|0,0.625|0|0
 	attN = top,Null_0_0|0.981724977|0_0|1|0_0|0.981724977|0_0|1|0
 	attN = bottom,fuelTank_4294542216_0|-0.912500024|0_0|-1|0_0|-0.912500024|0_0|-1|0
 	EVENTS
@@ -670,6 +841,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -679,6 +862,24 @@ PART
 		name = ModulePartVariants
 		isEnabled = True
 		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -734,7 +935,7 @@ PART
 	part = fuelTank_4294542216
 	partName = Part
 	persistentId = 2686503714
-	pos = -2.05474305,2.69245839,0.594926596
+	pos = -2.05474305,2.69245744,0.594926596
 	attPos = 0,0,0
 	attPos0 = 2.09376907E-07,-1.87819004,3.43418805E-09
 	rot = 6.02915612E-14,0,2.08616299E-07,1
@@ -755,7 +956,7 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	srfN = srfAttach,radialDecoupler2_4294369258
+	srfN = srfAttach,radialDecoupler2_4294369258,,0.625|0|0,1|0|0,0.625|0|0
 	attN = top,fuelTank_4294365752_0|0.981724977|0_0|1|0_0|0.981724977|0_0|1|0
 	attN = bottom,Null_0_0|-0.912500024|0_0|-1|0_0|-0.912500024|0_0|-1|0
 	EVENTS
@@ -763,6 +964,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -772,6 +985,24 @@ PART
 		name = ModulePartVariants
 		isEnabled = True
 		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -827,7 +1058,7 @@ PART
 	part = Decoupler.1_4294361384
 	partName = Part
 	persistentId = 3957968880
-	pos = -0.221232206,3.64708734,0.594926298
+	pos = -0.221232206,3.64708638,0.594926298
 	attPos = 0,0,0
 	attPos0 = 0,-0.962500632,0
 	rot = 0,0,0,1
@@ -849,13 +1080,25 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	link = fuelTank_4294358142
-	attN = top,fuelTank_4294366504_0|0.0499998964|0_0|1|0_0|0.0499998964|0_0|1|0
-	attN = bottom,fuelTank_4294358142_0|-0.0500000045|0_0|-1|0_0|-0.0500000045|0_0|-1|0
+	attN = top,fuelTank_4294366504_0|0.0500000007|0_0|1|0_0|0.0500000007|0_0|1|0
+	attN = bottom,fuelTank_4294358142_0|-0.0500000007|0_0|-1|0_0|-0.0500000007|0_0|-1|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -926,6 +1169,40 @@ PART
 	}
 	MODULE
 	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -946,7 +1223,7 @@ PART
 	part = fuelTank_4294358142
 	partName = Part
 	persistentId = 3076624923
-	pos = -0.221232206,2.61536717,0.594926298
+	pos = -0.221232206,2.61536622,0.594926298
 	attPos = 0,0,0
 	attPos0 = 0,-1.09868395,0
 	rot = 0,0,0,1
@@ -974,6 +1251,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -983,6 +1272,24 @@ PART
 		name = ModulePartVariants
 		isEnabled = True
 		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -1038,7 +1345,7 @@ PART
 	part = launchClamp1_4294350112
 	partName = Part
 	persistentId = 772513335
-	pos = -0.221232504,3.40913534,-0.833118975
+	pos = -0.221232504,3.40913439,-0.833118975
 	attPos = 0,0,0
 	attPos0 = -4.51159707E-07,-1.20045602,-1.42804503
 	rot = 2.98023206E-08,-3.13203714E-07,-9.33419635E-15,-1
@@ -1060,12 +1367,24 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	sym = launchClamp1_4294349942
-	srfN = srfAttach,fuelTank_4294366504
+	srfN = srfAttach,fuelTank_4294366504,,0|1.35443699|0.806919396,0|0|-1,0|1.35443699|0.806919396
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1074,8 +1393,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.61275017
-		height = 4.06928635
+		scaleFactor = 1.61274981
+		height = 4.06928539
 		stagingEnabled = True
 		towerRot = -2.98023206E-08,3.13203714E-07,9.33419635E-15,-1
 		EVENTS
@@ -1161,7 +1480,7 @@ PART
 	part = launchClamp1_4294349942
 	partName = Part
 	persistentId = 3970900416
-	pos = -0.221231595,3.40913534,2.02297211
+	pos = -0.221231595,3.40913439,2.02297211
 	attPos = 0,0,0
 	attPos0 = 5.76003288E-07,-1.20045602,1.42804503
 	rot = -1.06369E-14,-1,-2.98023206E-08,3.56915109E-07
@@ -1183,12 +1502,24 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	sym = launchClamp1_4294350112
-	srfN = srfAttach,fuelTank_4294366504
+	srfN = srfAttach,fuelTank_4294366504,,0|1.35443699|0.806919396,0|0|-1,0|1.35443699|0.806919396
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1197,8 +1528,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.61275017
-		height = 4.06928635
+		scaleFactor = 1.61274981
+		height = 4.06928539
 		stagingEnabled = True
 		towerRot = 1.06369E-14,1,2.98023206E-08,3.56915109E-07
 		EVENTS

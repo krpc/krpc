@@ -1,8 +1,8 @@
 ship = Resources
-version = 1.7.3
+version = 1.12.5
 description = 
 type = VAB
-size = 6.2720437,24.5197525,6.2720499
+size = 6.17074871,26.5423508,6.17075443
 steamPublishedFileId = 0
 persistentId = 1505799747
 rot = 0,0,0,1
@@ -50,6 +50,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -186,6 +198,7 @@ PART
 		name = FlagDecal
 		isEnabled = True
 		flagDisplayed = True
+		isMirrored = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -295,6 +308,24 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleInventoryPart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		STOREDPARTS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -379,12 +410,24 @@ PART
 	modSize = 0,0,0
 	sym = parachuteRadial_4294824668
 	sym = parachuteRadial_4294824622
-	srfN = srfAttach,mk1-3pod_4294824824
+	srfN = srfAttach,mk1-3pod_4294824824,,0|0|0,0|0|-1,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -452,6 +495,24 @@ PART
 	{
 		name = ModuleDragModifier
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -508,12 +569,24 @@ PART
 	modSize = 0,0,0
 	sym = parachuteRadial_4294824714
 	sym = parachuteRadial_4294824622
-	srfN = srfAttach,mk1-3pod_4294824824
+	srfN = srfAttach,mk1-3pod_4294824824,,0|0|0,0|0|-1,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -581,6 +654,24 @@ PART
 	{
 		name = ModuleDragModifier
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -637,12 +728,24 @@ PART
 	modSize = 0,0,0
 	sym = parachuteRadial_4294824714
 	sym = parachuteRadial_4294824668
-	srfN = srfAttach,mk1-3pod_4294824824
+	srfN = srfAttach,mk1-3pod_4294824824,,0|0|0,0|0|-1,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -710,6 +813,24 @@ PART
 	{
 		name = ModuleDragModifier
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -772,6 +893,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -842,6 +975,40 @@ PART
 	}
 	MODULE
 	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -884,13 +1051,25 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	link = LaunchEscapeSystem_4294824496
-	attN = top,mk1-3pod_4294824824_0|0.0499998964|0_0|1|0_0|0.0499998964|0_0|1|0
-	attN = bottom,LaunchEscapeSystem_4294824496_0|-0.0500000045|0_0|-1|0_0|-0.0500000045|0_0|-1|0
+	attN = top,mk1-3pod_4294824824_0|0.0500000007|0_0|1|0_0|0.0500000007|0_0|1|0
+	attN = bottom,LaunchEscapeSystem_4294824496_0|-0.0500000007|0_0|-1|0_0|-0.0500000007|0_0|-1|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -948,6 +1127,40 @@ PART
 	{
 		name = ModuleTestSubject
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -1008,6 +1221,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1055,6 +1280,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -1065,6 +1291,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -1080,6 +1307,24 @@ PART
 	{
 		name = ModuleTestSubject
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -1145,17 +1390,29 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	link = engineLargeSkipper_4294824376
+	link = engineLargeSkipper.v2_4294824376
 	link = solarPanels1_4294822788
 	link = solarPanels1_4294822678
 	link = solarPanels1_4294822568
 	attN = top,Separator.2_4294824576_0|1.86000001|0_0|1|0_0|1.86000001|0_0|1|0
-	attN = bottom,engineLargeSkipper_4294824376_0|-1.86000001|0_0|-1|0_0|-1.86000001|0_0|-1|0
+	attN = bottom,engineLargeSkipper.v2_4294824376_0|-1.86000001|0_0|-1|0_0|-1.86000001|0_0|-1|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1217,12 +1474,12 @@ PART
 }
 PART
 {
-	part = engineLargeSkipper_4294824376
+	part = engineLargeSkipper.v2_4294824376
 	partName = Part
 	persistentId = 3288617697
-	pos = 0.130872697,18.8255997,-0.449185699
+	pos = 0.130872697,16.7995987,-0.449185699
 	attPos = 0,0,0
-	attPos0 = 0,0,0
+	attPos0 = 0,-1.01300001,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -1242,13 +1499,25 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	link = Decoupler.2_4294824266
-	attN = top,Rockomax32.BW_4294824404_0|0|0_0|1|0_0|0|0_0|1|0
-	attN = bottom,Decoupler.2_4294824266_0|-2.375|0_0|-1|0_0|-2.375|0_0|-1|0
+	attN = top,Rockomax32.BW_4294824404_0|1.01300001|0_0|1|0_0|1.01300001|0_0|1|0
+	attN = bottom,Decoupler.2_4294824266_0|-1.36199999|0_0|-1|0_0|-1.36199999|0_0|-1|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1296,6 +1565,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -1306,6 +1576,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -1321,7 +1592,7 @@ PART
 	{
 		name = ModuleJettison
 		isEnabled = True
-		activejettisonName = obj_fairing
+		activejettisonName = fairing1
 		isJettisoned = False
 		shroudHideOverride = False
 		stagingEnabled = True
@@ -1448,6 +1719,22 @@ PART
 	}
 	MODULE
 	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -1479,7 +1766,7 @@ PART
 	part = Decoupler.2_4294824266
 	partName = Part
 	persistentId = 33177244
-	pos = 0.130872697,16.3505859,-0.449185699
+	pos = 0.130872697,14.3245869,-0.449185699
 	attPos = 0,0,0
 	attPos0 = 0,0.350856692,0
 	rot = 0,0,0,1
@@ -1501,13 +1788,25 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	link = Rockomax16.BW_4294824198
-	attN = top,engineLargeSkipper_4294824376_0|0.100000501|0_0|1|0_0|0.100000501|0_0|1|0
-	attN = bottom,Rockomax16.BW_4294824198_0|-0.099999994|0_0|-1|0_0|-0.099999994|0_0|-1|0
+	attN = top,engineLargeSkipper.v2_4294824376_0|0.100000001|0_0|1|0_0|0.100000001|0_0|1|0
+	attN = bottom,Rockomax16.BW_4294824198_0|-0.100000001|0_0|-1|0_0|-0.100000001|0_0|-1|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1578,6 +1877,40 @@ PART
 	}
 	MODULE
 	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -1598,7 +1931,7 @@ PART
 	part = Rockomax16.BW_4294824198
 	partName = Part
 	persistentId = 1562940831
-	pos = 0.130872697,15.330595,-0.449185699
+	pos = 0.130872697,13.3045959,-0.449185699
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,0,0,1
@@ -1627,6 +1960,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1691,7 +2036,7 @@ PART
 	part = Rockomax32.BW_4294824170
 	partName = Part
 	persistentId = 77555709
-	pos = 0.130872697,12.5505943,-0.449185699
+	pos = 0.130872697,10.5245953,-0.449185699
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,0,0,1
@@ -1724,6 +2069,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1788,7 +2145,7 @@ PART
 	part = Rockomax32.BW_4294824142
 	partName = Part
 	persistentId = 4199873787
-	pos = 0.130872697,8.83058929,-0.449185699
+	pos = 0.130872697,6.80458832,-0.449185699
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,0,0,1
@@ -1809,18 +2166,30 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	link = liquidEngine1-2_4294824114
+	link = liquidEngineMainsail.v2_4294824114
 	link = radialDecoupler2_4294824012
 	link = radialDecoupler2_4294823814
 	link = radialDecoupler2_4294823616
 	link = radialDecoupler2_4294823418
 	attN = top,Rockomax32.BW_4294824170_0|1.86000001|0_0|1|0_0|1.86000001|0_0|1|0
-	attN = bottom,liquidEngine1-2_4294824114_0|-1.86000001|0_0|-1|0_0|-1.86000001|0_0|-1|0
+	attN = bottom,liquidEngineMainsail.v2_4294824114_0|-1.86000001|0_0|-1|0_0|-1.86000001|0_0|-1|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -1882,12 +2251,12 @@ PART
 }
 PART
 {
-	part = liquidEngine1-2_4294824114
+	part = liquidEngineMainsail.v2_4294824114
 	partName = Part
 	persistentId = 3555492407
-	pos = 0.130872697,5.90528488,-0.449185699
+	pos = 0.130872697,3.98272133,-0.449185699
 	attPos = 0,0,0
-	attPos0 = 0,0,0
+	attPos0 = 0,0.0517180003,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -1906,16 +2275,44 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	attN = top,Rockomax32.BW_4294824142_0|1.06530797|0_0|1|0_0|1.06530797|0_0|1|0
-	attN = bottom,Null_0_0|-1.93078804|0_0|-1|0_0|-1.93078804|0_0|-1|0
+	attN = top,Rockomax32.BW_4294824142_0|1.01358998|0_0|1|0_0|1.01358998|0_0|1|0
+	attN = bottom,Null_0_0|-1.95704997|0_0|-1|0_0|-1.95704997|0_0|-1|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
+	}
+	MODULE
+	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
 	}
 	MODULE
 	{
@@ -1960,6 +2357,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -1970,6 +2368,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -2112,6 +2511,21 @@ PART
 	}
 	MODULE
 	{
+		name = FXModuleLookAtConstraint
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -2143,7 +2557,7 @@ PART
 	part = radialDecoupler2_4294824012
 	partName = Part
 	persistentId = 2059541264
-	pos = 1.31127501,7.90984726,-0.44918561
+	pos = 1.31127501,5.88384628,-0.44918561
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,1,0,0
@@ -2168,12 +2582,24 @@ PART
 	sym = radialDecoupler2_4294823814
 	sym = radialDecoupler2_4294823616
 	sym = radialDecoupler2_4294823418
-	srfN = srfAttach,Rockomax32.BW_4294824142
+	srfN = srfAttach,Rockomax32.BW_4294824142,,-0.0299999993|0|0,1|0|0,-0.0299999993|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -2244,6 +2670,24 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -2264,7 +2708,7 @@ PART
 	part = solidBooster1-1_4294823966
 	partName = Part
 	persistentId = 416100870
-	pos = 2.56624699,7.80508232,-0.449185699
+	pos = 2.56624699,5.77908325,-0.449185699
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,0.707106829,0,0.707106829
@@ -2292,7 +2736,7 @@ PART
 	sym = solidBooster1-1_4294823768
 	sym = solidBooster1-1_4294823570
 	sym = solidBooster1-1_4294823372
-	srfN = srfAttach,radialDecoupler2_4294824012
+	srfN = srfAttach,radialDecoupler2_4294824012,,0|0|-0.63499999,0|0|1,0|0|-0.63499999
 	attN = bottom,Null_0_0|-3.91461706|0_0|-1|0_0|-3.91461706|0_0|-1|0
 	attN = top,noseCone_4294823898_0|3.92000008|0_0|1|0_0|3.92000008|0_0|1|0
 	EVENTS
@@ -2300,6 +2744,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -2347,6 +2803,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -2357,6 +2814,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -2447,7 +2905,7 @@ PART
 	part = noseCone_4294823898
 	partName = Part
 	persistentId = 16408617
-	pos = 2.56624699,11.7445841,-0.449185699
+	pos = 2.56624699,9.71858406,-0.449185699
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,-0.707106829,0,0.707106829
@@ -2477,6 +2935,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -2486,6 +2956,24 @@ PART
 		name = ModulePartVariants
 		isEnabled = True
 		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -2519,7 +3007,7 @@ PART
 	part = strutConnector_4294823870
 	partName = CompoundPart
 	persistentId = 1429763266
-	pos = 1.95589805,11.4213438,-0.449185461
+	pos = 1.95589781,9.39534378,-0.449185461
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.00436188653,-0.000293523073,0.0671690851,-0.997732162
@@ -2543,16 +3031,33 @@ PART
 	sym = strutConnector_4294823474
 	sym = strutConnector_4294823672
 	sym = strutConnector_4294823276
-	srfN = srfAttach,solidBooster1-1_4294823966
+	srfN = srfAttach,solidBooster1-1_4294823966,,0|0|0,0.125|0|0,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		DisconnectAction
+		{
+			actionGroup = None
+		}
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
 		tgt = 4294824170
+		tpersID = 77555709
 		pos = -0.764255583,1.04255903,0.0284907892
 		rot = 0,0,0,0
 		dir = -0.591075122,0.806315482,0.0220346209
@@ -2589,6 +3094,40 @@ PART
 	}
 	MODULE
 	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -2609,7 +3148,7 @@ PART
 	part = radialDecoupler2_4294823814
 	partName = Part
 	persistentId = 3136174465
-	pos = 0.130872905,7.90984726,-1.62958801
+	pos = 0.130872905,5.88384628,-1.62958801
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,0.707106829,0,-0.707106829
@@ -2634,12 +3173,24 @@ PART
 	sym = radialDecoupler2_4294824012
 	sym = radialDecoupler2_4294823616
 	sym = radialDecoupler2_4294823418
-	srfN = srfAttach,Rockomax32.BW_4294824142
+	srfN = srfAttach,Rockomax32.BW_4294824142,,-0.0299999993|0|0,1|0|0,-0.0299999993|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -2710,6 +3261,24 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -2730,7 +3299,7 @@ PART
 	part = solidBooster1-1_4294823768
 	partName = Part
 	persistentId = 1547801414
-	pos = 0.130873024,7.80508232,-2.88456225
+	pos = 0.130873024,5.77908325,-2.88456249
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,1.00000012,0,-1.1920929E-07
@@ -2758,7 +3327,7 @@ PART
 	sym = solidBooster1-1_4294823966
 	sym = solidBooster1-1_4294823570
 	sym = solidBooster1-1_4294823372
-	srfN = srfAttach,radialDecoupler2_4294823814
+	srfN = srfAttach,radialDecoupler2_4294823814,,0|0|-0.63499999,0|0|1,0|0|-0.63499999
 	attN = bottom,Null_0_0|-3.91461706|0_0|-1|0_0|-3.91461706|0_0|-1|0
 	attN = top,noseCone_4294823700_0|3.92000008|0_0|1|0_0|3.92000008|0_0|1|0
 	EVENTS
@@ -2766,6 +3335,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -2813,6 +3394,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -2823,6 +3405,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -2913,7 +3496,7 @@ PART
 	part = noseCone_4294823700
 	partName = Part
 	persistentId = 4145854867
-	pos = 0.130873024,11.7445841,-2.88456273
+	pos = 0.130873024,9.71858406,-2.88456321
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,-2.38418579E-07,0,1.00000012
@@ -2943,6 +3526,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -2952,6 +3547,24 @@ PART
 		name = ModulePartVariants
 		isEnabled = True
 		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -2985,10 +3598,10 @@ PART
 	part = strutConnector_4294823672
 	partName = CompoundPart
 	persistentId = 502896787
-	pos = 0.130873203,11.4213438,-2.27421188
+	pos = 0.130873203,9.39534378,-2.27421188
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = 0.0444113985,-0.705710828,0.0505800694,-0.705295622
+	rot = 0.0444113985,-0.705710828,0.050580062,-0.705295622
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
@@ -3009,16 +3622,33 @@ PART
 	sym = strutConnector_4294823474
 	sym = strutConnector_4294823870
 	sym = strutConnector_4294823276
-	srfN = srfAttach,solidBooster1-1_4294823768
+	srfN = srfAttach,solidBooster1-1_4294823768,,0|0|0,0.125|0|0,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		DisconnectAction
+		{
+			actionGroup = None
+		}
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
 		tgt = 4294824170
+		tpersID = 77555709
 		pos = -0.764256001,1.04255903,0.0284908395
 		rot = 0,0,0,0
 		dir = -0.591075122,0.806315482,0.0220346209
@@ -3055,6 +3685,40 @@ PART
 	}
 	MODULE
 	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -3075,7 +3739,7 @@ PART
 	part = radialDecoupler2_4294823616
 	partName = Part
 	persistentId = 2828694660
-	pos = -1.049528,7.90984726,-0.44918561
+	pos = -1.049528,5.88384628,-0.44918561
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,-4.37113883E-08,0,-1
@@ -3100,12 +3764,24 @@ PART
 	sym = radialDecoupler2_4294824012
 	sym = radialDecoupler2_4294823814
 	sym = radialDecoupler2_4294823418
-	srfN = srfAttach,Rockomax32.BW_4294824142
+	srfN = srfAttach,Rockomax32.BW_4294824142,,-0.0299999993|0|0,1|0|0,-0.0299999993|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -3176,6 +3852,24 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -3196,7 +3890,7 @@ PART
 	part = solidBooster1-1_4294823570
 	partName = Part
 	persistentId = 1828369892
-	pos = -2.30450106,7.80508232,-0.449185401
+	pos = -2.30450106,5.77908325,-0.449185401
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,0.707106709,0,-0.707106888
@@ -3224,7 +3918,7 @@ PART
 	sym = solidBooster1-1_4294823966
 	sym = solidBooster1-1_4294823768
 	sym = solidBooster1-1_4294823372
-	srfN = srfAttach,radialDecoupler2_4294823616
+	srfN = srfAttach,radialDecoupler2_4294823616,,0|0|-0.63499999,0|0|1,0|0|-0.63499999
 	attN = bottom,Null_0_0|-3.91461706|0_0|-1|0_0|-3.91461706|0_0|-1|0
 	attN = top,noseCone_4294823502_0|3.92000008|0_0|1|0_0|3.92000008|0_0|1|0
 	EVENTS
@@ -3232,6 +3926,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -3279,6 +3985,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -3289,6 +3996,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -3379,7 +4087,7 @@ PART
 	part = noseCone_4294823502
 	partName = Part
 	persistentId = 1899585852
-	pos = -2.30450106,11.7445841,-0.449185401
+	pos = -2.30450106,9.71858406,-0.449185401
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,0.707106769,0,0.707106829
@@ -3409,6 +4117,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -3418,6 +4138,24 @@ PART
 		name = ModulePartVariants
 		isEnabled = True
 		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -3451,7 +4189,7 @@ PART
 	part = strutConnector_4294823474
 	partName = CompoundPart
 	persistentId = 3833047985
-	pos = -1.69415295,11.4213438,-0.449185401
+	pos = -1.69415295,9.39534378,-0.449185401
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0.0671691597,-0.997732162,0.00436193589,0.000293298479
@@ -3475,16 +4213,33 @@ PART
 	sym = strutConnector_4294823870
 	sym = strutConnector_4294823672
 	sym = strutConnector_4294823276
-	srfN = srfAttach,solidBooster1-1_4294823570
+	srfN = srfAttach,solidBooster1-1_4294823570,,0|0|0,0.125|0|0,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		DisconnectAction
+		{
+			actionGroup = None
+		}
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
 		tgt = 4294824170
+		tpersID = 77555709
 		pos = -0.764255881,1.04255998,0.0284905694
 		rot = 0,0,0,0
 		dir = -0.591075122,0.806315482,0.0220346209
@@ -3521,6 +4276,40 @@ PART
 	}
 	MODULE
 	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -3541,7 +4330,7 @@ PART
 	part = radialDecoupler2_4294823418
 	partName = Part
 	persistentId = 3373724415
-	pos = 0.130872801,7.90984726,0.731215715
+	pos = 0.130872801,5.88384628,0.731215715
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,-0.707106829,0,-0.707106829
@@ -3566,12 +4355,24 @@ PART
 	sym = radialDecoupler2_4294824012
 	sym = radialDecoupler2_4294823814
 	sym = radialDecoupler2_4294823616
-	srfN = srfAttach,Rockomax32.BW_4294824142
+	srfN = srfAttach,Rockomax32.BW_4294824142,,-0.0299999993|0|0,1|0|0,-0.0299999993|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -3642,6 +4443,24 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -3662,7 +4481,7 @@ PART
 	part = solidBooster1-1_4294823372
 	partName = Part
 	persistentId = 1327152590
-	pos = 0.130873039,7.80508232,1.98619139
+	pos = 0.130873039,5.77908325,1.98619163
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,-1.1920929E-07,0,-1.00000012
@@ -3690,7 +4509,7 @@ PART
 	sym = solidBooster1-1_4294823966
 	sym = solidBooster1-1_4294823768
 	sym = solidBooster1-1_4294823570
-	srfN = srfAttach,radialDecoupler2_4294823418
+	srfN = srfAttach,radialDecoupler2_4294823418,,0|0|-0.63499999,0|0|1,0|0|-0.63499999
 	attN = bottom,Null_0_0|-3.91461706|0_0|-1|0_0|-3.91461706|0_0|-1|0
 	attN = top,noseCone_4294823304_0|3.92000008|0_0|1|0_0|3.92000008|0_0|1|0
 	EVENTS
@@ -3698,6 +4517,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -3745,6 +4576,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -3755,6 +4587,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -3845,7 +4678,7 @@ PART
 	part = noseCone_4294823304
 	partName = Part
 	persistentId = 4156351539
-	pos = 0.130873039,11.7445841,1.98619187
+	pos = 0.130873039,9.71858406,1.98619235
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,1.00000012,0,2.38418579E-07
@@ -3875,6 +4708,18 @@ PART
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -3884,6 +4729,24 @@ PART
 		name = ModulePartVariants
 		isEnabled = True
 		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -3917,10 +4780,10 @@ PART
 	part = strutConnector_4294823276
 	partName = CompoundPart
 	persistentId = 3920964202
-	pos = 0.13087298,11.4213438,1.37583995
+	pos = 0.13087298,9.39534378,1.37583995
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = 0.0505800694,-0.705295622,-0.0444113985,0.705710828
+	rot = 0.050580062,-0.705295622,-0.0444113985,0.705710828
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
@@ -3941,16 +4804,33 @@ PART
 	sym = strutConnector_4294823474
 	sym = strutConnector_4294823870
 	sym = strutConnector_4294823672
-	srfN = srfAttach,solidBooster1-1_4294823372
+	srfN = srfAttach,solidBooster1-1_4294823372,,0|0|0,0.125|0|0,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		DisconnectAction
+		{
+			actionGroup = None
+		}
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
 		tgt = 4294824170
+		tpersID = 77555709
 		pos = -0.764256001,1.04255903,0.0284903292
 		rot = 0,0,0,0
 		dir = -0.591075122,0.806315482,0.0220346209
@@ -3987,6 +4867,40 @@ PART
 	}
 	MODULE
 	{
+		name = ModulePartVariants
+		isEnabled = True
+		useVariantMass = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -4007,7 +4921,7 @@ PART
 	part = launchClamp1_4294823220
 	partName = Part
 	persistentId = 1830401209
-	pos = -1.31767905,11.873414,-1.89773798
+	pos = -1.31767905,9.84741497,-1.89773798
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -5.37154392E-07,-0.382683396,1.43930805E-07,-0.923879623
@@ -4031,12 +4945,24 @@ PART
 	sym = launchClamp1_4294823112
 	sym = launchClamp1_4294823004
 	sym = launchClamp1_4294822896
-	srfN = srfAttach,Rockomax32.BW_4294824170
+	srfN = srfAttach,Rockomax32.BW_4294824170,,0|1.35443699|0.806919396,0|0|-1,0|1.35443699|0.806919396
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -4045,8 +4971,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.96733618
-		height = 12.5335655
+		scaleFactor = 4.16438675
+		height = 10.5075665
 		stagingEnabled = True
 		towerRot = 5.37154392E-07,0.382683396,-1.43930805E-07,-0.923879623
 		EVENTS
@@ -4132,7 +5058,7 @@ PART
 	part = launchClamp1_4294823112
 	partName = Part
 	persistentId = 1637852121
-	pos = -1.31767905,11.873414,0.999365926
+	pos = -1.31767905,9.84741497,0.999365926
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -2.78051004E-07,-0.923879504,4.81600011E-07,-0.382683486
@@ -4156,12 +5082,24 @@ PART
 	sym = launchClamp1_4294823220
 	sym = launchClamp1_4294823004
 	sym = launchClamp1_4294822896
-	srfN = srfAttach,Rockomax32.BW_4294824170
+	srfN = srfAttach,Rockomax32.BW_4294824170,,0|1.35443699|0.806919396,0|0|-1,0|1.35443699|0.806919396
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -4170,8 +5108,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.96733618
-		height = 12.5335655
+		scaleFactor = 4.16438675
+		height = 10.5075665
 		stagingEnabled = True
 		towerRot = 2.78051004E-07,0.923879504,-4.81600011E-07,-0.382683486
 		EVENTS
@@ -4257,7 +5195,7 @@ PART
 	part = launchClamp1_4294823004
 	partName = Part
 	persistentId = 3352256014
-	pos = 1.57942498,11.873414,0.999366522
+	pos = 1.57942498,9.84741497,0.999366522
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 1.43930905E-07,-0.923879623,5.37154392E-07,0.382683396
@@ -4281,12 +5219,24 @@ PART
 	sym = launchClamp1_4294823220
 	sym = launchClamp1_4294823112
 	sym = launchClamp1_4294822896
-	srfN = srfAttach,Rockomax32.BW_4294824170
+	srfN = srfAttach,Rockomax32.BW_4294824170,,0|1.35443699|0.806919396,0|0|-1,0|1.35443699|0.806919396
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -4295,8 +5245,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.96733618
-		height = 12.5335655
+		scaleFactor = 4.16438675
+		height = 10.5075665
 		stagingEnabled = True
 		towerRot = -1.43930905E-07,0.923879623,-5.37154392E-07,0.382683396
 		EVENTS
@@ -4382,7 +5332,7 @@ PART
 	part = launchClamp1_4294822896
 	partName = Part
 	persistentId = 165671053
-	pos = 1.57942605,11.873414,-1.89773798
+	pos = 1.57942605,9.84741497,-1.89773798
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 4.81600011E-07,-0.382683486,2.78051004E-07,0.923879504
@@ -4406,12 +5356,24 @@ PART
 	sym = launchClamp1_4294823220
 	sym = launchClamp1_4294823112
 	sym = launchClamp1_4294823004
-	srfN = srfAttach,Rockomax32.BW_4294824170
+	srfN = srfAttach,Rockomax32.BW_4294824170,,0|1.35443699|0.806919396,0|0|-1,0|1.35443699|0.806919396
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -4420,8 +5382,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.96733618
-		height = 12.5335655
+		scaleFactor = 4.16438675
+		height = 10.5075665
 		stagingEnabled = True
 		towerRot = -4.81600011E-07,0.382683486,-2.78051004E-07,0.923879504
 		EVENTS
@@ -4530,12 +5492,24 @@ PART
 	modSize = 0,0,0
 	sym = solarPanels1_4294822678
 	sym = solarPanels1_4294822568
-	srfN = srfAttach,Rockomax32.BW_4294824404
+	srfN = srfAttach,Rockomax32.BW_4294824404,,0|0|0,1|0|0,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -4568,6 +5542,24 @@ PART
 			{
 				actionGroup = None
 			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
 		}
 		UPGRADESAPPLIED
 		{
@@ -4618,12 +5610,24 @@ PART
 	modSize = 0,0,0
 	sym = solarPanels1_4294822788
 	sym = solarPanels1_4294822568
-	srfN = srfAttach,Rockomax32.BW_4294824404
+	srfN = srfAttach,Rockomax32.BW_4294824404,,0|0|0,1|0|0,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -4656,6 +5660,24 @@ PART
 			{
 				actionGroup = None
 			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
 		}
 		UPGRADESAPPLIED
 		{
@@ -4706,12 +5728,24 @@ PART
 	modSize = 0,0,0
 	sym = solarPanels1_4294822788
 	sym = solarPanels1_4294822678
-	srfN = srfAttach,Rockomax32.BW_4294824404
+	srfN = srfAttach,Rockomax32.BW_4294824404,,0|0|0,1|0|0,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -4751,6 +5785,24 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
@@ -4771,7 +5823,7 @@ PART
 	part = sepMotor1_4294822298
 	partName = Part
 	persistentId = 1635847929
-	pos = -2.4608891,9.07797909,-1.03283298
+	pos = -2.4608891,7.05197906,-1.03283298
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.701057434,0.701057434,0.0922959447,-0.0922959447
@@ -4795,12 +5847,24 @@ PART
 	sym = sepMotor1_4294822258
 	sym = sepMotor1_4294822218
 	sym = sepMotor1_4294822178
-	srfN = srfAttach,solidBooster1-1_4294823570
+	srfN = srfAttach,solidBooster1-1_4294823570,,0|0|0,0|0|1.25,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -4848,6 +5912,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -4858,6 +5923,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -4873,6 +5939,24 @@ PART
 	{
 		name = ModuleTestSubject
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -4917,7 +6001,7 @@ PART
 	part = sepMotor1_4294822258
 	partName = Part
 	persistentId = 2863879964
-	pos = 2.72263503,9.07797909,0.134465128
+	pos = 2.72263503,7.05197906,0.134465247
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.0922959149,0.0922959149,-0.701057434,0.701057434
@@ -4941,12 +6025,24 @@ PART
 	sym = sepMotor1_4294822298
 	sym = sepMotor1_4294822218
 	sym = sepMotor1_4294822178
-	srfN = srfAttach,solidBooster1-1_4294823966
+	srfN = srfAttach,solidBooster1-1_4294823966,,0|0|0,0|0|1.25,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -4994,6 +6090,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -5004,6 +6101,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -5019,6 +6117,24 @@ PART
 	{
 		name = ModuleTestSubject
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -5063,7 +6179,7 @@ PART
 	part = sepMotor1_4294822218
 	partName = Part
 	persistentId = 3319140438
-	pos = 0.714523792,9.07797909,-3.04095006
+	pos = 0.714523911,7.05197906,-3.0409503
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.560985625,0.560985625,-0.43045938,0.43045938
@@ -5087,12 +6203,24 @@ PART
 	sym = sepMotor1_4294822298
 	sym = sepMotor1_4294822258
 	sym = sepMotor1_4294822178
-	srfN = srfAttach,solidBooster1-1_4294823768
+	srfN = srfAttach,solidBooster1-1_4294823768,,0|0|0,0|0|1.25,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -5140,6 +6268,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -5150,6 +6279,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -5165,6 +6295,24 @@ PART
 	{
 		name = ModuleTestSubject
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -5209,7 +6357,7 @@ PART
 	part = sepMotor1_4294822178
 	partName = Part
 	persistentId = 1071171535
-	pos = -0.452777714,9.07797909,2.14258218
+	pos = -0.452777952,7.05197906,2.14258265
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.43045938,0.43045938,0.560985625,-0.560985625
@@ -5233,12 +6381,24 @@ PART
 	sym = sepMotor1_4294822298
 	sym = sepMotor1_4294822258
 	sym = sepMotor1_4294822218
-	srfN = srfAttach,solidBooster1-1_4294823372
+	srfN = srfAttach,solidBooster1-1_4294823372,,0|0|0,0|0|1.25,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -5286,6 +6446,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -5296,6 +6457,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -5311,6 +6473,24 @@ PART
 	{
 		name = ModuleTestSubject
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -5355,7 +6535,7 @@ PART
 	part = sepMotor1_4294822138
 	partName = Part
 	persistentId = 2631154130
-	pos = -0.452458054,9.0661087,-3.04086423
+	pos = -0.452458292,7.04010773,-3.04086447
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.560985625,-0.560985625,0.43045938,0.43045938
@@ -5379,12 +6559,24 @@ PART
 	sym = sepMotor1_4294822098
 	sym = sepMotor1_4294822058
 	sym = sepMotor1_4294822018
-	srfN = srfAttach,solidBooster1-1_4294823768
+	srfN = srfAttach,solidBooster1-1_4294823768,,0|0|0,0|0|1.25,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -5432,6 +6624,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -5442,6 +6635,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -5457,6 +6651,24 @@ PART
 	{
 		name = ModuleTestSubject
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -5501,7 +6713,7 @@ PART
 	part = sepMotor1_4294822098
 	partName = Part
 	persistentId = 3897878577
-	pos = 2.72254992,9.0661087,-1.03251457
+	pos = 2.72254992,7.04010773,-1.03251469
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.701057434,-0.701057434,-0.0922961533,-0.0922961533
@@ -5525,12 +6737,24 @@ PART
 	sym = sepMotor1_4294822138
 	sym = sepMotor1_4294822058
 	sym = sepMotor1_4294822018
-	srfN = srfAttach,solidBooster1-1_4294823966
+	srfN = srfAttach,solidBooster1-1_4294823966,,0|0|0,0|0|1.25,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -5578,6 +6802,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -5588,6 +6813,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -5603,6 +6829,24 @@ PART
 	{
 		name = ModuleTestSubject
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -5647,7 +6891,7 @@ PART
 	part = sepMotor1_4294822058
 	partName = Part
 	persistentId = 180589570
-	pos = -2.46080399,9.0661087,0.134142667
+	pos = -2.46080399,7.04010773,0.134142667
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.0922961533,-0.0922961533,0.701057374,0.701057374
@@ -5671,12 +6915,24 @@ PART
 	sym = sepMotor1_4294822138
 	sym = sepMotor1_4294822098
 	sym = sepMotor1_4294822018
-	srfN = srfAttach,solidBooster1-1_4294823570
+	srfN = srfAttach,solidBooster1-1_4294823570,,0|0|0,0|0|1.25,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -5724,6 +6980,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -5734,6 +6991,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -5749,6 +7007,24 @@ PART
 	{
 		name = ModuleTestSubject
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -5793,7 +7069,7 @@ PART
 	part = sepMotor1_4294822018
 	partName = Part
 	persistentId = 1785175118
-	pos = 0.714203835,9.0661087,2.14249444
+	pos = 0.714203954,7.04010773,2.14249444
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0.43045938,0.43045938,0.560985625,0.560985625
@@ -5817,12 +7093,24 @@ PART
 	sym = sepMotor1_4294822138
 	sym = sepMotor1_4294822098
 	sym = sepMotor1_4294822058
-	srfN = srfAttach,solidBooster1-1_4294823372
+	srfN = srfAttach,solidBooster1-1_4294823372,,0|0|0,0|0|1.25,0|0|0
 	EVENTS
 	{
 	}
 	ACTIONS
 	{
+		ToggleSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		SetSameVesselInteraction
+		{
+			actionGroup = None
+		}
+		RemoveSameVesselInteraction
+		{
+			actionGroup = None
+		}
 	}
 	PARTDATA
 	{
@@ -5870,6 +7158,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -5880,6 +7169,7 @@ PART
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
 				axisInverted = None
 				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -5895,6 +7185,24 @@ PART
 	{
 		name = ModuleTestSubject
 		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoPart
+		isEnabled = True
+		beingAttached = False
+		beingSettled = False
+		reinitResourcesOnStoreInVessel = False
 		stagingEnabled = True
 		EVENTS
 		{
