@@ -10,7 +10,7 @@ max-returns=25
 max-branches=25
 
 [MESSAGES CONTROL]
-disable=no-member,missing-docstring,similarities,locally-disabled,locally-enabled,fixme
+disable=no-member,missing-docstring,similarities,locally-disabled,fixme,consider-using-f-string,unspecified-encoding,too-many-statements
 
 [REPORTS]
 reports=no

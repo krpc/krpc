@@ -9,7 +9,7 @@ from ..utils import \
     as_type, decode_default_value
 
 
-class Generator(object):
+class Generator:
 
     def __init__(self, macro_template, service, definitions):
         self._macro_template = macro_template

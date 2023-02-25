@@ -30,7 +30,7 @@ if sys.version_info < (3, 0):
     from future_builtins import zip  # noqa  # pylint: disable=redefined-builtin,import-error
 
 
-class Client(object):
+class Client:
     """
     A kRPC client, through which all Remote Procedure Calls are made.
     Services provided by the server that the client connects
@@ -132,15 +132,14 @@ class Client(object):
             # A property or class property getter
             attr = func(args[0].__class__, args[1])
             return attr.fget._build_call(args[0])
-        elif func == setattr:
+        if func == setattr:
             # A property setter
             raise StreamError('Cannot create a call for a property setter')
-        elif hasattr(func, '__self__'):
+        if hasattr(func, '__self__'):
             # A method
             return func._build_call(func.__self__, *args, **kwargs)
-        else:
-            # A class method
-            return func._build_call(*args, **kwargs)
+        # A class method
+        return func._build_call(*args, **kwargs)
 
     @staticmethod
     def _get_return_type(func, *args,
@@ -150,15 +149,14 @@ class Client(object):
             # A property or class property getter
             attr = func(args[0].__class__, args[1])
             return attr.fget._return_type
-        elif func == setattr:
+        if func == setattr:
             # A property setter
             raise StreamError('Cannot get return type for a property setter')
-        elif hasattr(func, '__self__'):
+        if hasattr(func, '__self__'):
             # A method
             return func._return_type
-        else:
-            # A class method
-            return func._return_type
+        # A class method
+        return func._return_type
 
     def _invoke(self, service, procedure, args,
                 param_names, param_types, return_type):
@@ -206,10 +204,11 @@ class Client(object):
             if not isinstance(value, typ.python_type):
                 try:
                     value = self._types.coerce_to(value, typ)
-                except ValueError:
+                except ValueError as exc:
                     raise TypeError(
                         '%s.%s() argument %d must be a %s, got a %s' %
-                        (service, procedure, i, typ.python_type, type(value)))
+                        (service, procedure, i, typ.python_type, type(value))
+                    ) from exc
             call.arguments.add(position=i, value=Encoder.encode(value, typ))
 
         return call

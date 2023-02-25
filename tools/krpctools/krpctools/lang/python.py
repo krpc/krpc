@@ -26,24 +26,23 @@ class PythonLanguage(Language):
             if typ.protobuf_type.code == Type.DOUBLE:
                 return 'float'
             return typ.python_type.__name__
-        elif isinstance(typ, MessageType):
+        if isinstance(typ, MessageType):
             return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
-        elif isinstance(typ, (ClassType, EnumerationType)):
+        if isinstance(typ, (ClassType, EnumerationType)):
             return self.shorten_ref(
                 '%s.%s' % (typ.protobuf_type.service,
                            typ.protobuf_type.name))
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             return 'list'
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             return 'dict'
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             return 'set'
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             return 'tuple'
-        elif typ is None:
+        if typ is None:
             return 'None'
-        else:
-            raise RuntimeError('Unknown type \'%s\'' % str(typ))
+        raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
     def parse_default_value(self, value, typ):
         if (isinstance(typ, ValueType) and

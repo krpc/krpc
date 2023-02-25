@@ -2,7 +2,7 @@ import unittest
 import krpctest
 
 
-class RCSTestBase(object):
+class RCSTestBase:
 
     rcs_data = {
         'Place-Anywhere 7 Linear RCS Port': {

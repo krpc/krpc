@@ -71,12 +71,12 @@ class TestTypes(unittest.TestCase):
         })
         self.assertTrue(issubclass(typ.python_type, Enum))
         self.assertEqual('enum documentation', typ.python_type.__doc__)
-        self.assertEquals(0, typ.python_type.a.value)
-        self.assertEquals(42, typ.python_type.b.value)
-        self.assertEquals(100, typ.python_type.c.value)
-        self.assertEquals('doca', typ.python_type.a.__doc__)
-        self.assertEquals('docb', typ.python_type.b.__doc__)
-        self.assertEquals('docc', typ.python_type.c.__doc__)
+        self.assertEqual(0, typ.python_type.a.value)
+        self.assertEqual(42, typ.python_type.b.value)
+        self.assertEqual(100, typ.python_type.c.value)
+        self.assertEqual('doca', typ.python_type.a.__doc__)
+        self.assertEqual('docb', typ.python_type.b.__doc__)
+        self.assertEqual('docc', typ.python_type.c.__doc__)
         typ2 = types.as_type(typ.protobuf_type)
         self.assertEqual(typ, typ2)
 
@@ -219,7 +219,7 @@ class TestTypes(unittest.TestCase):
             (42, 42, types.uint32_type),
             (42, 42.0, types.uint64_type),
             (42, 42, types.uint64_type),
-            (list(), tuple(), types.list_type(types.string_type)),
+            ([], tuple(), types.list_type(types.string_type)),
             ((0, 1, 2), [0, 1, 2],
              types.tuple_type(types.sint32_type,
                               types.sint32_type,
@@ -235,9 +235,9 @@ class TestTypes(unittest.TestCase):
             self.assertEqual(type(expected), type(coerced_value))
 
         strings = [
-            u'foo',
-            u'\xe2\x84\xa2',
-            u'Mystery Goo\xe2\x84\xa2 Containment Unit'
+            'foo',
+            '\xe2\x84\xa2',
+            'Mystery Goo\xe2\x84\xa2 Containment Unit'
         ]
         for string in strings:
             self.assertEqual(
@@ -251,7 +251,7 @@ class TestTypes(unittest.TestCase):
                           True, types.float_type)
 
         self.assertRaises(ValueError, types.coerce_to,
-                          list(), types.tuple_type(types.uint32_type))
+                          [], types.tuple_type(types.uint32_type))
         self.assertRaises(ValueError, types.coerce_to,
                           ['foo', 2], types.tuple_type(types.string_type))
         self.assertRaises(ValueError, types.coerce_to,

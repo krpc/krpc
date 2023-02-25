@@ -42,29 +42,29 @@ class CppLanguage(Language):
     }
 
     def parse_name(self, name):
-        return super(CppLanguage, self).parse_name(snake_case(name))
+        return super().parse_name(snake_case(name))
 
     def parse_type(self, typ):
         if typ is None:
             return 'void'
-        elif isinstance(typ, ValueType):
+        if isinstance(typ, ValueType):
             return self.type_map[typ.protobuf_type.code]
-        elif (isinstance(typ, MessageType) and
-              typ.protobuf_type.code == Type.EVENT):
+        if isinstance(typ, MessageType) and \
+           typ.protobuf_type.code == Type.EVENT:
             return '::krpc::Event'
-        elif isinstance(typ, MessageType):
+        if isinstance(typ, MessageType):
             return 'krpc::schema::%s' % typ.python_type.__name__
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             return 'std::vector<%s>' % self.parse_type(typ.value_type)
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             return 'std::set<%s>' % self.parse_type(typ.value_type)
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             return 'std::map<%s, %s>' % (self.parse_type(typ.key_type),
                                          self.parse_type(typ.value_type))
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             return 'std::tuple<%s>' % ', '.join(self.parse_type(t)
                                                 for t in typ.value_types)
-        elif isinstance(typ, (ClassType, EnumerationType)):
+        if isinstance(typ, (ClassType, EnumerationType)):
             name = '%s.%s' % (typ.protobuf_type.service,
                               typ.protobuf_type.name)
             return self.shorten_ref(name).replace('.', '::')
@@ -74,29 +74,29 @@ class CppLanguage(Language):
         if (isinstance(typ, ValueType) and
                 typ.protobuf_type.code == Type.STRING):
             return '"%s"' % value
-        elif (isinstance(typ, ValueType) and
-              typ.protobuf_type.code == Type.BOOL):
+        if isinstance(typ, ValueType) and \
+           typ.protobuf_type.code == Type.BOOL:
             return 'true' if value else 'false'
-        elif isinstance(typ, ClassType) and value is None:
+        if isinstance(typ, ClassType) and value is None:
             return self.parse_type(typ) + '()'
-        elif isinstance(typ, EnumerationType):
+        if isinstance(typ, EnumerationType):
             return 'static_cast<%s>(%s)' % \
                 (self.parse_type(typ), value)
-        elif value is None:
+        if value is None:
             return self.parse_type(typ) + '()'
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             values = (self.parse_default_value(x, typ.value_types[i])
                       for i, x in enumerate(value))
             return '%s{%s}' % (self.parse_type(typ), ', '.join(values))
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             values = (self.parse_default_value(x, typ.value_type)
                       for x in value)
             return '%s{%s}' % (self.parse_type(typ), ', '.join(values))
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             values = (self.parse_default_value(x, typ.value_type)
                       for x in value)
             return '%s{%s}' % (self.parse_type(typ), ', '.join(values))
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             entries = ('{%s, %s}' %
                        (self.parse_default_value(k, typ.key_type),
                         self.parse_default_value(v, typ.value_type))

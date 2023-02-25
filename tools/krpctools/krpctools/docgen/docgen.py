@@ -1,9 +1,9 @@
-import xml.etree.ElementTree as ElementTree
+from xml.etree import ElementTree
 from ..utils import indent
 from .utils import lookup_cref
 
 
-class DocumentationGenerator(object):
+class DocumentationGenerator:
     def __init__(self, domain, services, xml):
         self.domain = domain
         self.services = services
@@ -41,19 +41,18 @@ class DocumentationGenerator(object):
         if node.tag == 'see':
             return self.domain.see(
                 lookup_cref(node.attrib['cref'], self.services))
-        elif node.tag == 'paramref':
+        if node.tag == 'paramref':
             return self.domain.paramref(node.attrib['name'])
-        elif node.tag == 'a':
+        if node.tag == 'a':
             return '`%s <%s>`_' % \
                 (node.text.replace('\n', ' ').strip(), node.attrib['href'])
-        elif node.tag == 'c':
+        if node.tag == 'c':
             return self.domain.code(node.text)
-        elif node.tag == 'math':
+        if node.tag == 'math':
             return self.domain.math(node.text)
-        elif node.tag == 'list':
+        if node.tag == 'list':
             content = ['* %s\n' %
                        indent(self._generate(item[0]), width=2)[2:].rstrip()
                        for item in node]
             return '\n'+''.join(content)
-        else:
-            raise RuntimeError('Unknown node \'%s\'' % node.tag)
+        raise RuntimeError('Unknown node \'%s\'' % node.tag)

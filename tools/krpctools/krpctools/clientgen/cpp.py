@@ -137,7 +137,6 @@ class CppDocParser(DocParser):
             member = snake_case(cref[-1])
             del cref[-1]
             return '::'.join(cref)+'::'+member
-        elif cref[0] == 'T':
+        if cref[0] == 'T':
             return cref[2:].replace('.', '::')
-        else:
-            raise RuntimeError('Unknown cref \'%s\'' % cref)
+        raise RuntimeError('Unknown cref \'%s\'' % cref)

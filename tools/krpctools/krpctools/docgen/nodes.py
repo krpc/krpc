@@ -4,8 +4,7 @@ from krpc.types import Types
 from ..utils import as_type, decode_default_value
 
 
-class Appendable(object):
-
+class Appendable:
     def __init__(self):
         self._appended = []
 
@@ -22,7 +21,7 @@ class Appendable(object):
 class Service(Appendable):
     def __init__(self, name, procedures, classes, enumerations,
                  exceptions, documentation, sort):
-        super(Service, self).__init__()
+        super().__init__()
         self.name = name
         self.fullname = name
         self.documentation = documentation
@@ -85,7 +84,7 @@ class Service(Appendable):
 
 class Class(Appendable):
     def __init__(self, service_name, name, procedures, documentation, sort):
-        super(Class, self).__init__()
+        super().__init__()
         self.service_name = service_name
         self.name = name
         self.fullname = service_name+'.'+name
@@ -124,7 +123,7 @@ class Class(Appendable):
 class Parameter(Appendable):
     # pylint: disable=redefined-builtin
     def __init__(self, name, type, documentation, default_value=None):
-        super(Parameter, self).__init__()
+        super().__init__()
         self.name = name
         self.type = as_type(self.types, type)
         self.has_default_value = default_value is not None
@@ -140,7 +139,7 @@ class Procedure(Appendable):
     def __init__(self, service_name, name, parameters,
                  documentation, return_type=None,
                  return_is_nullable=False, game_scenes=None):
-        super(Procedure, self).__init__()
+        super().__init__()
         self.service_name = service_name
         self.name = name
         self.fullname = service_name+'.'+name
@@ -160,7 +159,7 @@ class Property(Appendable):
     member_type = 'property'
 
     def __init__(self, service_name, name, getter=None, setter=None):
-        super(Property, self).__init__()
+        super().__init__()
         self.service_name = service_name
         self.name = name
         self.fullname = service_name+'.'+name
@@ -183,7 +182,7 @@ class ClassMethod(Appendable):
     def __init__(self, service_name, class_name, name, parameters,
                  documentation, return_type=None,
                  return_is_nullable=False, game_scenes=None):
-        super(ClassMethod, self).__init__()
+        super().__init__()
         name = Attributes.get_class_member_name(name)
         self.service_name = service_name
         self.class_name = class_name
@@ -207,7 +206,7 @@ class ClassStaticMethod(Appendable):
     def __init__(self, service_name, class_name, name, parameters,
                  documentation, return_type=None,
                  return_is_nullable=False, game_scenes=None):
-        super(ClassStaticMethod, self).__init__()
+        super().__init__()
         name = Attributes.get_class_member_name(name)
         self.service_name = service_name
         self.class_name = class_name
@@ -230,7 +229,7 @@ class ClassProperty(Appendable):
 
     def __init__(self, service_name, class_name, name,
                  getter=None, setter=None):
-        super(ClassProperty, self).__init__()
+        super().__init__()
         self.service_name = service_name
         self.class_name = class_name
         if getter is not None:
@@ -250,7 +249,7 @@ class ClassProperty(Appendable):
 
 class Enumeration(Appendable):
     def __init__(self, service_name, name, values, documentation, sort):
-        super(Enumeration, self).__init__()
+        super().__init__()
         self.service_name = service_name
         self.name = name
         self.fullname = service_name+'.'+name
@@ -264,7 +263,7 @@ class Enumeration(Appendable):
 
 class EnumerationValue(Appendable):
     def __init__(self, service_name, enum_name, name, value, documentation):
-        super(EnumerationValue, self).__init__()
+        super().__init__()
         self.service_name = service_name
         self.enum_name = enum_name
         self.name = name
@@ -276,7 +275,7 @@ class EnumerationValue(Appendable):
 
 class ExceptionNode(Appendable):
     def __init__(self, service_name, name, documentation):
-        super(ExceptionNode, self).__init__()
+        super().__init__()
         self.service_name = service_name
         self.name = name
         self.fullname = service_name+'.'+name

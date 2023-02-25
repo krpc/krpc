@@ -2,11 +2,11 @@ import base64
 import os
 import unittest
 import websocket
-import krpc.schema.KRPC_pb2 as KRPC
 import google.protobuf
 from google.protobuf.internal.decoder import _DecodeVarint, _DecodeSignedVarint
 from google.protobuf.internal import encoder as protobuf_encoder
 from google.protobuf.internal.wire_format import ZigZagEncode, ZigZagDecode
+import krpc.schema.KRPC_pb2 as KRPC
 
 
 # The following unpacks the internal protobuf decoders, whose signature
@@ -32,11 +32,11 @@ class WebSocketsTest(unittest.TestCase):
 
     @staticmethod
     def rpc_port():
-        return int(os.getenv('RPC_PORT', 50000))
+        return int(os.getenv('RPC_PORT', '50000'))
 
     @staticmethod
     def stream_port():
-        return int(os.getenv('STREAM_PORT', 50001))
+        return int(os.getenv('STREAM_PORT', '50001'))
 
     @classmethod
     def connect(cls, address, rpc_port, stream_port, name=None):

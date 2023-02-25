@@ -1,7 +1,7 @@
 import os.path
 
 
-class Domain(object):
+class Domain:
     def __init__(self, macros):
         self.macros = os.path.basename(macros)
         self.macros_dir = os.path.abspath(os.path.dirname(macros))

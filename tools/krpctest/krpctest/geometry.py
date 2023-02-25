@@ -60,7 +60,7 @@ def vector(v):
 
 
 @functools.total_ordering
-class Vector(object):
+class Vector:
     def __init__(self, v):
         self.v = v
 

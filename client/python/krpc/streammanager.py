@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from krpc.krpc import KRPC_Client
 
 
-class StreamImpl(object):
+class StreamImpl:
     def __init__(self, conn, stream_id, return_type, update_lock):
         # type: (KRPC_Client, int, TypeBase, Any) -> None
         self._conn = conn
@@ -89,7 +89,7 @@ class StreamImpl(object):
             self._value = StreamError("Stream does not exist")
 
 
-class StreamManager(object):
+class StreamManager:
     def __init__(self, conn):
         # type: (KRPC_Client) -> None
         self._conn = conn

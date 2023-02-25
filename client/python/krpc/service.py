@@ -1,6 +1,6 @@
 import keyword
 from collections import defaultdict
-import xml.etree.ElementTree as ElementTree
+from xml.etree import ElementTree
 from krpc.types import Types, DynamicType, DefaultArgument
 from krpc.decoder import Decoder
 from krpc.utils import snake_case
@@ -100,14 +100,14 @@ def _parse_documentation_node(node):
             ref[-1] = snake_case(ref[-1])
             ref = '.'.join(ref)
         return ref[2:]
-    elif node.tag == 'paramref':
+    if node.tag == 'paramref':
         return snake_case(node.attrib['name'])
-    elif node.tag == 'c':
+    if node.tag == 'c':
         replace = {'true': 'True', 'false': 'False', 'null': 'None'}
         if node.text in replace:
             return replace[node.text]
         return node.text
-    elif node.tag == 'list':
+    if node.tag == 'list':
         content = '\n'
         for item in node:
             item_content = _parse_documentation_content(item[0])

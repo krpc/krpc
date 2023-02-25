@@ -141,7 +141,7 @@ class TestOrbit(krpctest.TestCase):
                                orbit.apoapsis_altitude, delta=100)
         self.assertAlmostEqual(864000 - 200000,
                                orbit.periapsis_altitude, delta=50)
-        sma = (0.5 * (2736000 + 864000))
+        sma = 0.5 * (2736000 + 864000)
         ecc = 0.52
         self.assertAlmostEqual(sma, orbit.semi_major_axis, delta=50)
         self.assertAlmostEqual(sma * math.sqrt(1 - (ecc*ecc)),
@@ -174,7 +174,7 @@ class TestOrbit(krpctest.TestCase):
                                orbit.apoapsis_altitude, delta=50)
         self.assertAlmostEqual(160000 - 60000,
                                orbit.periapsis_altitude, delta=50)
-        sma = (0.5 * (-320000 + 160000))
+        sma = 0.5 * (-320000 + 160000)
         ecc = 3
         self.assertAlmostEqual(sma, orbit.semi_major_axis, delta=50)
         self.assertIsNaN(orbit.semi_minor_axis)

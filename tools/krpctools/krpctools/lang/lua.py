@@ -28,21 +28,20 @@ class LuaLanguage(Language):
     def parse_type(self, typ):
         if isinstance(typ, ValueType):
             return self.type_map[typ.protobuf_type.code]
-        elif isinstance(typ, MessageType):
+        if isinstance(typ, MessageType):
             return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
-        elif isinstance(typ, (ClassType, EnumerationType)):
+        if isinstance(typ, (ClassType, EnumerationType)):
             return '%s.%s' % (typ.protobuf_type.service,
                               typ.protobuf_type.name)
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             return 'List'
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             return 'Map'
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             return 'Set'
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             return 'Tuple'
-        else:
-            raise RuntimeError('Unknown type \'%s\'' % str(typ))
+        raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
     def parse_default_value(self, value, typ):
         if (isinstance(typ, ValueType) and

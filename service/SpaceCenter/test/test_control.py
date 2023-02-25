@@ -3,7 +3,7 @@ import krpctest
 from krpctest.geometry import normalize
 
 
-class TestControlMixin(object):
+class TestControlMixin:
 
     def test_state(self):
         self.assertEqual(self.space_center.ControlState.full,

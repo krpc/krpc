@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from krpc.client import Client
 
 
-class Event(object):
+class Event:
     """ An event. """
     def __init__(self, conn, event):
         # type: (Client, KRPC.Event) -> None

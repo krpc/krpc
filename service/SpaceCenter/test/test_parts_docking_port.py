@@ -97,8 +97,7 @@ class TestPartsDockingPort(krpctest.TestCase):
 
         # Drop the port
         launch_clamp.release()
-        while (top_port.state == self.State.undocking or
-               bottom_port.state == self.State.undocking):
+        while self.State.undocking in (top_port.state, bottom_port.state):
             pass
 
         # Undocked
@@ -173,7 +172,7 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
 
     def test_docking_port2(self):
         port1, port2 = self.sc.active_vessel.parts.docking_ports
-        self.undock_and_dock(port2, port1)
+        self.undock_and_dock(port1=port2, port2=port1)
 
     def undock_and_dock(self, port1, port2):
         vessel = self.sc.active_vessel
@@ -211,8 +210,7 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
             vessel.control.forward = -0.5
             self.wait(0.5)
             vessel.control.forward = 0.0
-            while (port1.state == self.state.undocking or
-                   port2.state == self.state.undocking):
+            while self.state.undocking in (port1.state, port2.state):
                 self.wait()
             self.assertEqual(self.state.ready, port1.state)
             self.assertEqual(self.state.ready, port2.state)
@@ -238,15 +236,13 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
             self.wait(1)
             vessel.control.forward = 0.0
             vessel.control.rcs = False
-            while (port1.state == self.state.ready or
-                   port2.state == self.state.ready):
+            while self.state.ready in (port1.state, port2.state):
                 self.wait()
 
             # Docking
             self.assertEqual(self.state.docking, port1.state)
             self.assertEqual(self.state.docking, port2.state)
-            while (port1.state == self.state.docking or
-                   port2.state == self.state.docking):
+            while self.state.docking in (port1.state, port2.state):
                 self.wait()
 
             # Docked

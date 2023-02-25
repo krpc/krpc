@@ -2,8 +2,7 @@ import os
 import krpc
 
 
-class ServerTestCase(object):
-
+class ServerTestCase:
     conn = None
 
     @classmethod
@@ -19,8 +18,8 @@ class ServerTestCase(object):
 
     @staticmethod
     def rpc_port():
-        return int(os.getenv('RPC_PORT', 50000))
+        return int(os.getenv('RPC_PORT', '50000'))
 
     @staticmethod
     def stream_port():
-        return int(os.getenv('STREAM_PORT', 50001))
+        return int(os.getenv('STREAM_PORT', '50001'))

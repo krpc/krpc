@@ -5,7 +5,7 @@ from ..docgen.nodes import Service
 from ..docgen import process_file
 
 
-class DocGenTestCase(object):
+class DocGenTestCase:
     def run_test(self, service_name, name):
         defs = json.loads(resource_string(
             'krpctools.test', name+'.json').decode('utf-8'))

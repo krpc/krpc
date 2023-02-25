@@ -12,7 +12,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_get_status(self):
         status = self.conn.krpc.get_status()
-        self.assertRegexpMatches(status.version, r'^[0-9]+\.[0-9]+\.[0-9]+$')
+        self.assertRegex(status.version, r'^[0-9]+\.[0-9]+\.[0-9]+$')
         self.assertGreater(status.bytes_read, 0)
 
     def test_wrong_rpc_port(self):
