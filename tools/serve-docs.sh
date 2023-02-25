@@ -19,7 +19,7 @@ mkdir -p `dirname $env`
 
 # Set up python environment
 if [ ! -d "$env" ]; then
-  virtualenv $env --python python3 --no-site-packages
+  virtualenv $env --python python3
   source $env/bin/activate
   pip install --upgrade \
       "six==1.11.0" \

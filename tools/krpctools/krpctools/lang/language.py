@@ -1,5 +1,4 @@
-class Language(object):
-
+class Language:
     def __init__(self):
         self.module = None
 
@@ -8,10 +7,9 @@ class Language(object):
             return '%s_' % name
         return name
 
-    def parse_type(  # pylint: disable=no-self-use
-            self, typ):  # pylint: disable=unused-argument
+    def parse_type(self, typ):  # pylint: disable=unused-argument
         raise NotImplementedError
 
-    def parse_default_value(  # pylint: disable=no-self-use
+    def parse_default_value(
             self, value, typ):  # pylint: disable=unused-argument
         return None

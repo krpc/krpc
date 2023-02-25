@@ -44,7 +44,7 @@ class TestCamera(krpctest.TestCase):
         self.assertEqual(self.mode.automatic, self.camera.mode)
 
 
-class CameraTestBase(object):
+class CameraTestBase:
 
     def test_distance(self):
         # TODO: not supported in IVA mode

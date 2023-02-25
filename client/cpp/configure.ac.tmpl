@@ -6,7 +6,7 @@ AC_CONFIG_MACRO_DIR(m4)
 AC_PROG_CXX
 AC_LANG([C++])
 AX_CXX_COMPILE_STDCXX_11(noext, mandatory)
-AC_PROG_LIBTOOL
+LT_INIT
 AX_CHECK_ZLIB()
 PKG_CHECK_MODULES([protobuf], [protobuf >= 3.3])
 AC_CHECK_PROG(PROTOC,protoc,protoc,no)
@@ -54,4 +54,5 @@ case $host in
     ;;
 esac
 AC_CHECK_HEADER(asio.hpp, , AC_MSG_ERROR([Couldn't find ASIO headers.]))
-AC_OUTPUT(Makefile include/Makefile src/Makefile)
+AC_CONFIG_FILES([Makefile include/Makefile src/Makefile])
+AC_OUTPUT

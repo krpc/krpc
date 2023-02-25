@@ -19,7 +19,7 @@ class JavaDomain(Domain):
     language = JavaLanguage()
 
     def currentmodule(self, name):
-        super(JavaDomain, self).currentmodule(name)
+        super().currentmodule(name)
         return '.. package:: krpc.client.services.%s' % name
 
     def method_name(self, name):
@@ -33,57 +33,55 @@ class JavaDomain(Domain):
     def _type(self, typ, generic=False):
         if typ is None:
             return 'void'
-        elif not generic and isinstance(typ, ValueType):
+        if not generic and isinstance(typ, ValueType):
             return self.language.type_map[typ.protobuf_type.code]
-        elif generic and isinstance(typ, ValueType):
+        if generic and isinstance(typ, ValueType):
             return self.language.type_map_classes[typ.protobuf_type.code]
-        elif isinstance(typ, MessageType):
+        if isinstance(typ, MessageType):
             return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
-        elif isinstance(typ, (ClassType, EnumerationType)):
+        if isinstance(typ, (ClassType, EnumerationType)):
             return self.shorten_ref(
                 '%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             return 'java.util.List<%s>' % self._type(typ.value_type, True)
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             return 'java.util.Map<%s,%s>' % \
                 (self._type(typ.key_type, True),
                  self._type(typ.value_type, True))
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             return 'java.util.Set<%s>' % self._type(typ.value_type, True)
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             name = self.language.tuple_types[len(typ.value_types)-1]
             return 'org.javatuples.%s<%s>' % \
                 (name, ','.join(self._type(typ, True)
                                 for typ in typ.value_types))
-        else:
-            raise RuntimeError('Unknown type \'%s\'' % str(typ))
+        raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
     def type_description(self, typ):
         if isinstance(typ, ValueType):
             return self._type(typ)
-        elif isinstance(typ, MessageType):
+        if isinstance(typ, MessageType):
             return ':type:`%s`' % self._type(typ)
-        elif isinstance(typ, ClassType):
+        if isinstance(typ, ClassType):
             return ':type:`%s`' % self.type(typ)
-        elif isinstance(typ, EnumerationType):
+        if isinstance(typ, EnumerationType):
             return ':class:`%s`' % self.type(typ)
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             return ':class:`java.util.List<%s>`' % \
-                self.type(typ.value_type, True)
-        elif isinstance(typ, DictionaryType):
+                self._type(typ.value_type, True)
+        if isinstance(typ, DictionaryType):
             return ':class:`java.util.Map<%s,%s>`' % \
-                (self.type(typ.key_type, True),
-                 self.type(typ.value_type, True))
-        elif isinstance(typ, SetType):
+                (self._type(typ.key_type, True),
+                 self._type(typ.value_type, True))
+        if isinstance(typ, SetType):
             return ':class:`java.util.Set<%s>`' % \
-                self.type(typ.value_type, True)
-        elif isinstance(typ, TupleType):
+                self._type(typ.value_type, True)
+        if isinstance(typ, TupleType):
             name = self.tuple_types[len(typ.value_types)-1]
             return ':class:`org.javatuples.%s<%s>`' % \
-                (name, ','.join(self.type(typ, True)
+                (name, ','.join(self._type(typ, True)
                                 for typ in typ.value_types))
-        else:
-            raise RuntimeError('Unknown type \'%s\'' % str(typ))
+        raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
     def ref(self, obj):
         name = obj.fullname

@@ -13,7 +13,7 @@ def lookup_cref(cref, services):
                 objs.extend(enumeration.values.values())
                 for value in enumeration.values.values():
                     objs.append(value)
-        lookup_cref.services_lookup = dict([(x.cref, x) for x in objs])
+        lookup_cref.services_lookup = {x.cref: x for x in objs}
     return lookup_cref.services_lookup[cref]
 
 

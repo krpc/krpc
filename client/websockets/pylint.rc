@@ -1,5 +1,5 @@
 [MESSAGES CONTROL]
-disable=no-member,missing-docstring,import-error,locally-disabled,locally-enabled
+disable=no-member,missing-docstring,import-error,locally-disabled,consider-using-f-string
 
 [REPORTS]
 reports=no

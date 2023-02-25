@@ -342,7 +342,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
         self.assertTrue(stop.is_set())
         self.assertFalse(error.is_set())
-        self.assertEquals(self.test_callback_value, 5)
+        self.assertEqual(self.test_callback_value, 5)
 
     def test_remove_callback(self):
         called1 = threading.Event()

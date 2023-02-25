@@ -91,9 +91,9 @@ def main():
         else:
             # No valid inputs found
             raise RuntimeError(
-                'Failed to read service definitions from \'%s\'. Expected a ' +
-                'single JSON file, or one or more assembly DLLs.' %
-                '\',\''.join(inputs))
+                ('Failed to read service definitions from \'%s\'. ' +
+                 'Expected a single JSON file, or one or more ' +
+                 'assembly DLLs.') % '\',\''.join(inputs))
 
         # Check loaded definitions
         if not defs.keys():
@@ -119,7 +119,7 @@ def main():
         else:
             print(g.generate())
 
-    except RuntimeError, ex:
+    except RuntimeError as ex:
         sys.stderr.write('Error: %s\n' % str(ex))
         return 1
 

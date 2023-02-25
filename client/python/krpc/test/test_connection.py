@@ -88,7 +88,7 @@ class TestConnection(unittest.TestCase):
     def test_partial_receive_on_remote_closed_connection(self):
         conn = self.connect()
         self.server_close_connection(conn)
-        self.assertEquals(b'', conn.partial_receive(1))
+        self.assertEqual(b'', conn.partial_receive(1))
 
     def test_send_on_closed_connection(self):
         conn = self.connect()

@@ -1,4 +1,4 @@
-class Attributes(object):
+class Attributes:
     """ Methods for extracting information from procedure attributes """
 
     @classmethod

@@ -2,7 +2,7 @@ import json
 from pkg_resources import resource_string
 
 
-class ClientGenTestCase(object):
+class ClientGenTestCase:
     def run_test(self, service_name, name):
         macro_template = resource_string(
             'krpctools.clientgen', self.language+'.tmpl').decode('utf-8')

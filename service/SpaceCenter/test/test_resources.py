@@ -2,7 +2,7 @@ import unittest
 import krpctest
 
 
-class ResourcesTest(object):
+class ResourcesTest:
 
     density = {
         'MonoPropellant': 4,

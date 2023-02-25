@@ -22,27 +22,27 @@ class JavaGenerator(Generator):
             return 'krpc.client.Types.createValue(' + \
                 'krpc.schema.KRPC.Type.TypeCode.%s)' % \
                 Type.TypeCode.Name(typ.protobuf_type.code)
-        elif isinstance(typ, MessageType):
+        if isinstance(typ, MessageType):
             return 'krpc.client.Types.createMessage(' + \
                 'krpc.schema.KRPC.Type.TypeCode.%s)' % \
                 Type.TypeCode.Name(typ.protobuf_type.code)
-        elif isinstance(typ, ClassType):
+        if isinstance(typ, ClassType):
             return 'krpc.client.Types.createClass("%s", "%s")' % \
                 (typ.protobuf_type.service, typ.protobuf_type.name)
-        elif isinstance(typ, EnumerationType):
+        if isinstance(typ, EnumerationType):
             return 'krpc.client.Types.createEnumeration("%s", "%s")' % \
                 (typ.protobuf_type.service, typ.protobuf_type.name)
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             return 'krpc.client.Types.createTuple(%s)' % \
                 ','.join(self.parse_type_specification(t)
                          for t in typ.value_types)
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             return 'krpc.client.Types.createList(%s)' % \
                 self.parse_type_specification(typ.value_type)
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             return 'krpc.client.Types.createSet(%s)' % \
                 self.parse_type_specification(typ.value_type)
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             return 'krpc.client.Types.createDictionary(%s, %s)' % \
                 (self.parse_type_specification(typ.key_type),
                  self.parse_type_specification(typ.value_type))
@@ -106,8 +106,8 @@ class JavaGenerator(Generator):
 
         # Add type specifications to types
         procedures = \
-            context['procedures'].values() + \
-            context['properties'].values() + \
+            list(context['procedures'].values()) + \
+            list(context['properties'].values()) + \
             list(itertools.chain(
                 *[class_info['static_methods'].values()
                   for class_info in context['classes'].values()]))
@@ -128,8 +128,8 @@ class JavaGenerator(Generator):
                 pos += 1
 
         for class_info in context['classes'].values():
-            items = class_info['methods'].values() + \
-                    class_info['properties'].values()
+            items = list(class_info['methods'].values()) + \
+                    list(class_info['properties'].values())
             for info in items:
                 info['return_type'] = {
                     'name': info['return_type'],
@@ -153,8 +153,8 @@ class JavaGenerator(Generator):
                 value['name'] = self.language.parse_const_name(value['name'])
 
         # Add serial version UIDs to classes
-        items = context['classes'].items() + \
-            context['exceptions'].items()
+        items = list(context['classes'].items()) + \
+            list(context['exceptions'].items())
         for class_name, cls in items:
             tohash = self.service_name+'.'+class_name
             hsh = hashlib.sha1(tohash.encode('utf-8')).hexdigest()
@@ -209,7 +209,6 @@ class JavaDocParser(DocParser):
             member = lower_camel_case(cref[-1])
             del cref[-1]
             return '.'.join(cref)+'#'+member
-        elif cref[0] == 'T':
+        if cref[0] == 'T':
             return cref[2:]
-        else:
-            raise RuntimeError('Unknown cref \'%s\'' % cref)
+        raise RuntimeError('Unknown cref \'%s\'' % cref)

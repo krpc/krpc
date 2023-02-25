@@ -15,7 +15,7 @@ def _create_py_env(out, install):
     cmds = [
         'PWD=`pwd`',
         'rm -rf %s' % tmp,
-        'virtualenv %s --python python3 --quiet --never-download --no-site-packages' % tmp
+        'virtualenv %s --python python3 --quiet --never-download ' % tmp
     ]
     for lib in install:
         cmds.append(
@@ -173,8 +173,8 @@ py_script = rule(
     executable = True
 )
 
-def _test_impl(ctx, pyexe='python2'):
-    sub_commands = ['virtualenv env --python %s --quiet --never-download --no-site-packages' % pyexe]
+def _test_impl(ctx, pyexe='python3'):
+    sub_commands = ['virtualenv env --python %s --quiet --never-download ' % pyexe]
     for dep in ctx.files.deps:
         if pyexe == 'python3' and dep.path == 'external/python_enum34/file/downloaded':
             # enum34 not required with Python 3
@@ -200,21 +200,8 @@ def _test_impl(ctx, pyexe='python2'):
         runfiles = runfiles
     )
 
-def _test2_impl(ctx):
-    return _test_impl(ctx, pyexe='python2')
-
 def _test3_impl(ctx):
     return _test_impl(ctx, pyexe='python3')
-
-py2_test = rule(
-    implementation = _test2_impl,
-    attrs = {
-        'src': attr.label(allow_single_file=True),
-        'pkg': attr.string(mandatory=True),
-        'deps': attr.label_list(allow_files=True)
-    },
-    test = True
-)
 
 py3_test = rule(
     implementation = _test3_impl,
@@ -264,7 +251,7 @@ def _lint_impl(ctx):
     sub_commands = []
 
     # Install dependences in a new virtual env
-    sub_commands = ['virtualenv env --python python3 --quiet --never-download --no-site-packages']
+    sub_commands = ['virtualenv env --python python3 --quiet --never-download ']
     for dep in deps:
         sub_commands.append(
             'env/bin/python env/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s'

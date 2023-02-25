@@ -54,7 +54,7 @@ class JavaLanguage(Language):
         return cls.tuple_types[len(value_types)-1]
 
     def parse_name(self, name):
-        return super(JavaLanguage, self).parse_name(lower_camel_case(name))
+        return super().parse_name(lower_camel_case(name))
 
     @staticmethod
     def parse_const_name(name):
@@ -68,29 +68,29 @@ class JavaLanguage(Language):
             if in_collection:
                 raise RuntimeError('void type not allowed in collection type')
             return 'void'
-        elif not in_collection and isinstance(typ, ValueType):
+        if not in_collection and isinstance(typ, ValueType):
             return self.type_map[typ.protobuf_type.code]
-        elif isinstance(typ, ValueType):
+        if isinstance(typ, ValueType):
             return self.type_map_classes[typ.protobuf_type.code]
-        elif (isinstance(typ, MessageType) and
-              typ.protobuf_type.code == Type.EVENT):
+        if isinstance(typ, MessageType) and \
+           typ.protobuf_type.code == Type.EVENT:
             return 'krpc.client.Event'
-        elif isinstance(typ, MessageType):
+        if isinstance(typ, MessageType):
             return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
-        elif isinstance(typ, (ClassType, EnumerationType)):
+        if isinstance(typ, (ClassType, EnumerationType)):
             return 'krpc.client.services.%s.%s' % \
                 (typ.protobuf_type.service, typ.protobuf_type.name)
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             name = self.get_tuple_class_name(typ.value_types)
             return 'org.javatuples.'+name+'<%s>' % \
                 (','.join(self._parse_type(t, True) for t in typ.value_types))
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             return 'java.util.List<%s>' % \
                 self._parse_type(typ.value_type, True)
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             return 'java.util.Set<%s>' % \
                 self._parse_type(typ.value_type, True)
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             return 'java.util.Map<%s,%s>' % \
                 (self._parse_type(typ.key_type, True),
                  self._parse_type(typ.value_type, True))

@@ -21,7 +21,9 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         obj1a = self.conn.test_service.object_property
         self.assertEqual(obj1, obj1a)
 
+        # pylint: disable=unnecessary-dunder-call
         self.assertFalse(obj1.__eq__(None))
+        # pylint: disable=unnecessary-dunder-call
         self.assertTrue(obj1.__ne__(None))
 
     def test_hash(self):
@@ -45,6 +47,7 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         self.assertEqual([obj1, obj2, obj3], sorted([obj2, obj3, obj1]))
         self.assertTrue(obj1 < obj2)
         self.assertTrue(obj2 < obj3)
+        # pylint: disable=comparison-with-itself
         self.assertTrue(obj1 <= obj1)
         self.assertTrue(obj1 <= obj2)
         self.assertTrue(obj2 <= obj3)
@@ -52,6 +55,7 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         self.assertTrue(obj3 > obj2)
         self.assertTrue(obj2 >= obj1)
         self.assertTrue(obj3 >= obj2)
+        # pylint: disable=comparison-with-itself
         self.assertTrue(obj1 >= obj1)
 
     def test_memory_allocation(self):

@@ -28,13 +28,11 @@ setup(
     package_data={'': ['krpctest.sfs', 'krpctest_career.sfs']},
     install_requires=install_requires,
     test_suite='krpctest.test',
-    use_2to3=True,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: Unix'

@@ -8,7 +8,7 @@ method-rgx=[a-z_][a-z0-9_]{2,60}$
 max-statements=60
 
 [MESSAGES CONTROL]
-disable=no-member,missing-docstring,similarities,too-few-public-methods,too-many-public-methods,fixme
+disable=no-member,missing-docstring,similarities,too-few-public-methods,too-many-public-methods,fixme,consider-using-f-string
 
 [REPORTS]
 reports=no

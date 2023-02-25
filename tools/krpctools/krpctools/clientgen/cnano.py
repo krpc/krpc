@@ -13,8 +13,7 @@ class CnanoGenerator(Generator):
     language = CnanoLanguage()
 
     def __init__(self, macro_template, service, definitions):
-        super(CnanoGenerator, self).__init__(
-            macro_template, service, definitions)
+        super().__init__(macro_template, service, definitions)
         self._collection_types = set()
 
     def parse_name(self, name):
@@ -108,21 +107,21 @@ class CnanoGenerator(Generator):
     def parse_type_name(self, typ):
         if isinstance(typ, ValueType):
             return self.language.type_name_map[typ.protobuf_type.code]
-        elif isinstance(typ, MessageType):
+        if isinstance(typ, MessageType):
             return 'message_%s' % typ.python_type.__name__
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             return 'list_%s' % self.parse_type_name(typ.value_type)
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             return 'set_%s' % self.parse_type_name(typ.value_type)
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             return 'dictionary_%s_%s' % (self.parse_type_name(typ.key_type),
                                          self.parse_type_name(typ.value_type))
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             return 'tuple_%s' % \
                 '_'.join(self.parse_type_name(t) for t in typ.value_types)
-        elif isinstance(typ, ClassType):
+        if isinstance(typ, ClassType):
             return 'object'
-        elif isinstance(typ, EnumerationType):
+        if isinstance(typ, EnumerationType):
             return 'enum'
         raise RuntimeError('Unknown type ' + str(typ))
 
@@ -137,8 +136,8 @@ class CnanoGenerator(Generator):
     def parse_parameter_type(self, typ):
         return self.parse_type(typ)
 
-    @staticmethod
-    def parse_default_value(value, typ):  # pylint: disable=unused-argument
+    def parse_default_value(
+            self, value, typ):  # pylint: disable=unused-argument
         # No default arguments in C
         return None
 
@@ -269,7 +268,6 @@ class CNanoDocParser(DocParser):
             member = snake_case(cref[-1])
             del cref[-1]
             return '::'.join(cref)+'::'+member
-        elif cref[0] == 'T':
+        if cref[0] == 'T':
             return cref[2:].replace('.', '::')
-        else:
-            raise RuntimeError('Unknown cref \'%s\'' % cref)
+        raise RuntimeError('Unknown cref \'%s\'' % cref)

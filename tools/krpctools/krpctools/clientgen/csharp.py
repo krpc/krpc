@@ -20,8 +20,7 @@ class CsharpGenerator(Generator):
         return content
 
     def generate_context_parameters(self, procedure):
-        parameters = super(CsharpGenerator, self) \
-            .generate_context_parameters(procedure)
+        parameters = super().generate_context_parameters(procedure)
         for parameter in parameters:
             if 'default_value' not in parameter:
                 parameter['name_value'] = parameter['name']

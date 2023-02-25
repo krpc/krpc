@@ -2,7 +2,7 @@ import unittest
 import krpctest
 
 
-class EngineTestBase(object):
+class EngineTestBase:
 
     engine_data = {
         'LV-T30 "Reliant" Liquid Fuel Engine': {

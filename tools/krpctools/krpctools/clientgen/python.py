@@ -19,23 +19,23 @@ class PythonGenerator(Generator):
             return 'None'
         if isinstance(typ, ValueType):
             return self.language.parse_type(typ)
-        elif isinstance(typ, MessageType):
+        if isinstance(typ, MessageType):
             return self.language.parse_type(typ)
-        elif isinstance(typ, ClassType):
+        if isinstance(typ, ClassType):
             return self.language.parse_type(typ)
-        elif isinstance(typ, EnumerationType):
+        if isinstance(typ, EnumerationType):
             return self.language.parse_type(typ)
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             return 'Tuple[%s]' % \
                 ','.join(self.parse_type_specification(t)
                          for t in typ.value_types)
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             return 'List[%s]' % \
                 self.parse_type_specification(typ.value_type)
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             return 'Set[%s]' % \
                 self.parse_type_specification(typ.value_type)
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             return 'Dict[%s, %s]' % \
                 (self.parse_type_specification(typ.key_type),
                  self.parse_type_specification(typ.value_type))
@@ -96,7 +96,7 @@ class PythonGenerator(Generator):
         # Find all service dependencies
         dependencies = set()
         procedures = \
-            context['procedures'].values() + \
+            list(context['procedures'].values()) + \
             [procedure
              for property in context['properties'].values()
              for procedure in property.values()] + \
@@ -116,7 +116,7 @@ class PythonGenerator(Generator):
                     dependencies.add(ptype['service'])
 
         for class_info in context['classes'].values():
-            items = class_info['methods'].values() + \
+            items = list(class_info['methods'].values()) + \
                     [procedure
                      for property in class_info['properties'].values()
                      for procedure in property.values()]
@@ -135,7 +135,7 @@ class PythonGenerator(Generator):
 
         # Add type specifications to types
         procedures = \
-            context['procedures'].values() + \
+            list(context['procedures'].values()) + \
             [procedure
              for property in context['properties'].values()
              for _, procedure in property.items()] + \
@@ -159,7 +159,7 @@ class PythonGenerator(Generator):
                 pos += 1
 
         for class_info in context['classes'].values():
-            items = class_info['methods'].values() + \
+            items = list(class_info['methods'].values()) + \
                     [procedure
                      for property in class_info['properties'].values()
                      for _, procedure in property.items()]
@@ -239,7 +239,6 @@ class PythonDocParser(DocParser):
             member = lower_camel_case(cref[-1])
             del cref[-1]
             return '.'.join(cref)+'#'+member
-        elif cref[0] == 'T':
+        if cref[0] == 'T':
             return cref[2:]
-        else:
-            raise RuntimeError('Unknown cref \'%s\'' % cref)
+        raise RuntimeError('Unknown cref \'%s\'' % cref)

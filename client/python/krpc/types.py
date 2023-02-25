@@ -7,9 +7,9 @@ VALUE_TYPES = {
     KRPC.Type.DOUBLE: float,
     KRPC.Type.FLOAT: float,
     KRPC.Type.SINT32: int,
-    KRPC.Type.SINT64: long,
+    KRPC.Type.SINT64: int,
     KRPC.Type.UINT32: int,
-    KRPC.Type.UINT64: long,
+    KRPC.Type.UINT64: int,
     KRPC.Type.BOOL: bool,
     KRPC.Type.STRING: str,
     KRPC.Type.BYTES: bytes
@@ -43,7 +43,7 @@ def _protobuf_type(code, service=None, name=None, types=None):
     return protobuf_type
 
 
-class Types(object):
+class Types:
     """ A type store. Used to obtain type objects from protocol buffer type
         strings, and stores python types for services and service defined
         class and enumeration types. """
@@ -204,9 +204,6 @@ class Types(object):
             Raises ValueError if the coercion is not possible. """
         if isinstance(value, typ.python_type):
             return value
-        # A unicode type can be coerced to a string
-        if typ.python_type == str and isinstance(value, unicode):
-            return value
         # A NoneType can be coerced to a ClassType
         if isinstance(typ, ClassType) and value is None:
             return None
@@ -219,25 +216,25 @@ class Types(object):
         # Collection types
         try:
             # Coerce tuples to lists
-            if isinstance(value, collections.Iterable) and \
+            if isinstance(value, collections.abc.Iterable) and \
                isinstance(typ, ListType):
                 return typ.python_type(
                     self.coerce_to(x, typ.value_type) for x in value)
             # Coerce lists (with appropriate number of elements) to tuples
-            if isinstance(value, collections.Iterable) and \
+            if isinstance(value, collections.abc.Iterable) and \
                isinstance(typ, TupleType):
                 if len(value) != len(typ.value_types):
                     raise ValueError
                 return typ.python_type(
                     [self.coerce_to(x, typ.value_types[i])
                      for i, x in enumerate(value)])
-        except ValueError:
+        except ValueError as exn:
             raise ValueError('Failed to coerce value ' + str(value) +
                              ' of type ' + str(type(value)) +
-                             ' to type ' + str(typ))
+                             ' to type ' + str(typ)) from exn
         # Numeric types
         # See http://docs.python.org/2/reference/datamodel.html#coercion-rules
-        numeric_types = (float, int, long)
+        numeric_types = (float, int)
         if isinstance(value, bool) or \
            not any(isinstance(value, t) for t in numeric_types) or \
            typ.python_type not in numeric_types:
@@ -246,12 +243,10 @@ class Types(object):
                              ' to type ' + str(typ))
         if typ.python_type == float:
             return float(value)
-        elif typ.python_type == int:
-            return int(value)
-        return long(value)
+        return int(value)
 
 
-class TypeBase(object):
+class TypeBase:
     """ Base class for all type objects """
 
     def __init__(self, protobuf_type, python_type, string):
@@ -280,7 +275,7 @@ class ValueType(TypeBase):
         if protobuf_type.code not in VALUE_TYPES:
             raise ValueError('Not a value type')
         name = KRPC.Type.TypeCode.Name(protobuf_type.code)
-        super(ValueType, self).__init__(
+        super().__init__(
             protobuf_type, VALUE_TYPES[protobuf_type.code], name.lower())
 
 
@@ -297,7 +292,7 @@ class ClassType(TypeBase):
         typ = _create_class_type(
             protobuf_type.service, protobuf_type.name, doc)
         string = 'Class(%s.%s)' % (protobuf_type.service, protobuf_type.name)
-        super(ClassType, self).__init__(protobuf_type, typ, string)
+        super().__init__(protobuf_type, typ, string)
 
 
 class EnumerationType(TypeBase):
@@ -316,7 +311,7 @@ class EnumerationType(TypeBase):
         string = 'Enum(%s.%s)' % (protobuf_type.service, protobuf_type.name)
         # Sets python_type to None, set_values must
         # be called to set the python_type
-        super(EnumerationType, self).__init__(protobuf_type, None, string)
+        super().__init__(protobuf_type, None, string)
 
     def set_values(self, values):
         """ Set the python type. Creates an Enum class
@@ -335,7 +330,7 @@ class TupleType(TypeBase):
             raise ValueError('Wrong number of sub-types for tuple type')
         self.value_types = [types.as_type(t) for t in protobuf_type.types]
         string = 'Tuple(%s)' % ','.join(t._string for t in self.value_types)
-        super(TupleType, self).__init__(protobuf_type, tuple, string)
+        super().__init__(protobuf_type, tuple, string)
 
 
 class ListType(TypeBase):
@@ -348,7 +343,7 @@ class ListType(TypeBase):
             raise ValueError('Wrong number of sub-types for list type')
         self.value_type = types.as_type(protobuf_type.types[0])
         string = 'List(%s)' % self.value_type._string
-        super(ListType, self).__init__(protobuf_type, list, string)
+        super().__init__(protobuf_type, list, string)
 
 
 class SetType(TypeBase):
@@ -361,7 +356,7 @@ class SetType(TypeBase):
             raise ValueError('Wrong number of sub-types for set type')
         self.value_type = types.as_type(protobuf_type.types[0])
         string = 'Set(%s)' % self.value_type._string
-        super(SetType, self).__init__(protobuf_type, set, string)
+        super().__init__(protobuf_type, set, string)
 
 
 class DictionaryType(TypeBase):
@@ -376,7 +371,7 @@ class DictionaryType(TypeBase):
         self.value_type = types.as_type(protobuf_type.types[1])
         string = 'Dict(%s,%s)' % \
                  (self.key_type._string, self.value_type._string)
-        super(DictionaryType, self).__init__(protobuf_type, dict, string)
+        super().__init__(protobuf_type, dict, string)
 
 
 class MessageType(TypeBase):
@@ -386,10 +381,10 @@ class MessageType(TypeBase):
         if protobuf_type.code not in MESSAGE_TYPES:
             raise ValueError('Not a message type')
         typ = MESSAGE_TYPES[protobuf_type.code]
-        super(MessageType, self).__init__(protobuf_type, typ, typ.__name__)
+        super().__init__(protobuf_type, typ, typ.__name__)
 
 
-class DynamicType(object):
+class DynamicType:
     @classmethod
     def _add_method(cls, name, func, doc=None):
         """ Add a method """
@@ -486,7 +481,7 @@ def _create_exception_type(service_name, class_name, doc):
                  '__doc__': doc})
 
 
-class DefaultArgument(object):
+class DefaultArgument:
     """ A sentinel value for default arguments """
 
     def __init__(self, value):

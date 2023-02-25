@@ -4,7 +4,7 @@ from krpc.encoder import Encoder
 from krpc.decoder import Decoder
 
 
-class Connection(object):
+class Connection:
     def __init__(self, address, port):
         self._address = address
         self._port = port
@@ -72,8 +72,8 @@ class Connection(object):
         assert length > 0
         try:
             ready = select.select([self._socket], [], [], timeout)
-        except ValueError:
-            raise socket.error("Connection closed")
+        except ValueError as exn:
+            raise socket.error("Connection closed") from exn
         if ready[0]:
             return self._socket.recv(length)
         return b''

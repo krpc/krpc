@@ -1,3 +1,4 @@
+import struct
 # pylint: disable=import-error,no-name-in-module
 from google.protobuf.internal import decoder as protobuf_decoder
 # pylint: disable=import-error,no-name-in-module
@@ -11,7 +12,7 @@ from krpc.types import \
 import krpc.schema.KRPC_pb2 as KRPC
 
 
-class Decoder(object):
+class Decoder:
     """ Routines for decoding messages and values from
         the protocol buffer serialization format """
 
@@ -31,41 +32,40 @@ class Decoder(object):
         """ Given a python type, and serialized data, decode the value """
         if isinstance(typ, MessageType):
             return cls.decode_message(data, typ.python_type)
-        elif isinstance(typ, EnumerationType):
+        if isinstance(typ, EnumerationType):
             value = cls._decode_value(data, cls._types.sint32_type)
             return typ.python_type(value)
-        elif isinstance(typ, ValueType):
+        if isinstance(typ, ValueType):
             return cls._decode_value(data, typ)
-        elif isinstance(typ, ClassType):
+        if isinstance(typ, ClassType):
             object_id_typ = cls._types.uint64_type
             object_id = cls._decode_value(data, object_id_typ)
             return typ.python_type(object_id) if object_id != 0 else None
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             if data == b'\x00':
                 return None
             msg = cls.decode_message(data, KRPC.List)
             return [cls.decode(item, typ.value_type) for item in msg.items]
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             if data == b'\x00':
                 return None
             msg = cls.decode_message(data, KRPC.Dictionary)
             return dict((cls.decode(entry.key, typ.key_type),
                          cls.decode(entry.value, typ.value_type))
                         for entry in msg.entries)
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             if data == b'\x00':
                 return None
             msg = cls.decode_message(data, KRPC.Set)
             return set(cls.decode(item, typ.value_type) for item in msg.items)
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             if data == b'\x00':
                 return None
             msg = cls.decode_message(data, KRPC.Tuple)
             return tuple(cls.decode(item, value_type)
                          for item, value_type
                          in zip(msg.items, typ.value_types))
-        else:
-            raise EncodingError('Cannot decode type %s' % str(typ))
+        raise EncodingError('Cannot decode type %s' % str(typ))
 
     @classmethod
     def decode_message_size(cls, data):
@@ -81,27 +81,26 @@ class Decoder(object):
     def _decode_value(cls, data, typ):
         if typ.protobuf_type.code == KRPC.Type.SINT32:
             return _ValueDecoder.decode_sint32(data)
-        elif typ.protobuf_type.code == KRPC.Type.SINT64:
+        if typ.protobuf_type.code == KRPC.Type.SINT64:
             return _ValueDecoder.decode_sint64(data)
-        elif typ.protobuf_type.code == KRPC.Type.UINT32:
+        if typ.protobuf_type.code == KRPC.Type.UINT32:
             return _ValueDecoder.decode_uint32(data)
-        elif typ.protobuf_type.code == KRPC.Type.UINT64:
+        if typ.protobuf_type.code == KRPC.Type.UINT64:
             return _ValueDecoder.decode_uint64(data)
-        elif typ.protobuf_type.code == KRPC.Type.DOUBLE:
+        if typ.protobuf_type.code == KRPC.Type.DOUBLE:
             return _ValueDecoder.decode_double(data)
-        elif typ.protobuf_type.code == KRPC.Type.FLOAT:
+        if typ.protobuf_type.code == KRPC.Type.FLOAT:
             return _ValueDecoder.decode_float(data)
-        elif typ.protobuf_type.code == KRPC.Type.BOOL:
+        if typ.protobuf_type.code == KRPC.Type.BOOL:
             return _ValueDecoder.decode_bool(data)
-        elif typ.protobuf_type.code == KRPC.Type.STRING:
+        if typ.protobuf_type.code == KRPC.Type.STRING:
             return _ValueDecoder.decode_string(data)
-        elif typ.protobuf_type.code == KRPC.Type.BYTES:
+        if typ.protobuf_type.code == KRPC.Type.BYTES:
             return _ValueDecoder.decode_bytes(data)
-        else:
-            raise EncodingError('Invalid type')
+        raise EncodingError('Invalid type')
 
 
-class _ValueDecoder(object):
+class _ValueDecoder:
     """ Routines for encoding values from
         the protocol buffer serialization format """
 
@@ -138,7 +137,6 @@ class _ValueDecoder(object):
 
     @classmethod
     def decode_double(cls, data):
-        import struct
         local_unpack = struct.unpack
 
         # We expect a 64-bit value in little-endian byte order.  Bit 1 is the
@@ -161,7 +159,6 @@ class _ValueDecoder(object):
 
     @classmethod
     def decode_float(cls, data):
-        import struct
         local_unpack = struct.unpack
 
         # We expect a 32-bit value in little-endian byte order.  Bit 1 is the

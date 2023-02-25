@@ -9,7 +9,7 @@ method-rgx=([a-z_][a-z0-9_]{2,60}|assertDegreesAlmostEqual|assertQuaternionsAlmo
 max-args=10
 
 [MESSAGES CONTROL]
-disable=no-member,missing-docstring,similarities,too-few-public-methods
+disable=no-member,missing-docstring,similarities,too-few-public-methods,consider-using-f-string
 
 [REPORTS]
 reports=no

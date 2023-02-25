@@ -18,32 +18,31 @@ class LuaDomain(Domain):
     language = LuaLanguage()
 
     def currentmodule(self, name):
-        super(LuaDomain, self).currentmodule(name)
+        super().currentmodule(name)
         return '.. currentmodule:: %s' % name
 
     def type_description(self, typ):
         if isinstance(typ, ValueType):
             return self.language.type_map[typ.protobuf_type.code]
-        elif isinstance(typ, MessageType):
+        if isinstance(typ, MessageType):
             return ':class:`krpc.schema.KRPC.%s`' % typ.python_type.__name__
-        elif isinstance(typ, ClassType):
+        if isinstance(typ, ClassType):
             return ':class:`%s`' % self.type(typ)
-        elif isinstance(typ, EnumerationType):
+        if isinstance(typ, EnumerationType):
             return ':class:`%s`' % self.type(typ)
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             return 'List of %s' % self.type_description(typ.value_type)
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             return 'Map from %s to %s' % \
                 (self.type_description(typ.key_type),
                  self.type_description(typ.value_type))
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             return 'Set of %s' % self.type_description(typ.value_type)
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             return 'Tuple of (%s)' % \
                 ', '.join(self.type_description(typ)
                           for typ in typ.value_types)
-        else:
-            raise RuntimeError('Unknown type \'%s\'' % str(typ))
+        raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
     def ref(self, obj):
         name = obj.fullname
@@ -70,5 +69,6 @@ class LuaDomain(Domain):
             raise RuntimeError(str(obj))
         return ':%s:`%s`' % (prefix, self.ref(obj))
 
-    def paramref(self, name):
-        return super(LuaDomain, self).paramref(snake_case(name))
+    @staticmethod
+    def paramref(name):
+        return Domain.paramref(snake_case(name))

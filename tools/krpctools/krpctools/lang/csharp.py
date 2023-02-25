@@ -39,31 +39,31 @@ class CsharpLanguage(Language):
     def _parse_type(self, typ, interface=True):
         if typ is None:
             return 'void'
-        elif isinstance(typ, ValueType):
+        if isinstance(typ, ValueType):
             return self.type_map[typ.protobuf_type.code]
-        elif (isinstance(typ, MessageType) and
-              typ.protobuf_type.code == Type.EVENT):
+        if isinstance(typ, MessageType) and \
+           typ.protobuf_type.code == Type.EVENT:
             return 'global::KRPC.Client.Event'
-        elif isinstance(typ, MessageType):
+        if isinstance(typ, MessageType):
             return 'global::KRPC.Schema.KRPC.%s' % typ.python_type.__name__
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             return 'systemAlias::Tuple<%s>' % \
                 ','.join(self._parse_type(t) for t in typ.value_types)
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             if interface:
                 name = 'IList'
             else:
                 name = 'List'
             return 'global::System.Collections.Generic.%s<%s>' % \
                 (name, self._parse_type(typ.value_type))
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             if interface:
                 name = 'genericCollectionsAlias::ISet'
             else:
                 name = 'global::System.Collections.Generic.HashSet'
             return '%s<%s>' % \
                 (name, self._parse_type(typ.value_type))
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             if interface:
                 name = 'IDictionary'
             else:
@@ -71,44 +71,44 @@ class CsharpLanguage(Language):
             return 'global::System.Collections.Generic.%s<%s,%s>' % \
                 (name, self._parse_type(typ.key_type),
                  self._parse_type(typ.value_type))
-        elif isinstance(typ, (ClassType, EnumerationType)):
+        if isinstance(typ, (ClassType, EnumerationType)):
             return 'global::KRPC.Client.Services.%s.%s' % \
                 (typ.protobuf_type.service, typ.protobuf_type.name)
         raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
     def parse_default_value(self, value, typ):
-        if (isinstance(typ, ValueType) and
-                typ.protobuf_type.code == Type.STRING):
+        if isinstance(typ, ValueType) and \
+           typ.protobuf_type.code == Type.STRING:
             return '"%s"' % value
-        elif (isinstance(typ, ValueType) and
-              typ.protobuf_type.code == Type.BOOL):
+        if isinstance(typ, ValueType) and \
+           typ.protobuf_type.code == Type.BOOL:
             return 'true' if value else 'false'
-        elif (isinstance(typ, ValueType) and
-              typ.protobuf_type.code == Type.FLOAT):
+        if isinstance(typ, ValueType) and \
+           typ.protobuf_type.code == Type.FLOAT:
             return str(value) + "f"
-        elif isinstance(typ, ClassType) and value is None:
+        if isinstance(typ, ClassType) and value is None:
             return 'null'
-        elif isinstance(typ, EnumerationType):
+        if isinstance(typ, EnumerationType):
             return '(global::KRPC.Client.Services.%s.%s)%s' % \
                 (typ.protobuf_type.service, typ.protobuf_type.name, value)
-        elif value is None:
+        if value is None:
             return 'null'
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             values = (self.parse_default_value(x, typ.value_types[i])
                       for i, x in enumerate(value))
             return 'new %s (%s)' % \
                 (self._parse_type(typ, False), ', '.join(values))
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             values = (self.parse_default_value(x, typ.value_type)
                       for x in value)
             return 'new %s { %s }' % \
                 (self._parse_type(typ, False), ', '.join(values))
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             values = (self.parse_default_value(x, typ.value_type)
                       for x in value)
             return 'new %s { %s }' % \
                 (self._parse_type(typ, False), ', '.join(values))
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             entries = ('{ %s, %s }' %
                        (self.parse_default_value(k, typ.key_type),
                         self.parse_default_value(v, typ.value_type))

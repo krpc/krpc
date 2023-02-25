@@ -1,7 +1,7 @@
 from xml.etree import ElementTree
 
 
-class DocParser(object):
+class DocParser:
 
     def parse(self, xml):
         if xml.strip() == '':

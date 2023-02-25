@@ -18,7 +18,7 @@ class PythonDomain(Domain):
     language = PythonLanguage()
 
     def currentmodule(self, name):
-        super(PythonDomain, self).currentmodule(name)
+        super().currentmodule(name)
         return '.. currentmodule:: %s' % name
 
     def method_name(self, name):
@@ -30,26 +30,25 @@ class PythonDomain(Domain):
     def type_description(self, typ):
         if isinstance(typ, ValueType):
             return self.language.parse_type(typ)
-        elif isinstance(typ, MessageType):
+        if isinstance(typ, MessageType):
             return ':class:`krpc.schema.KRPC.%s`' % typ.python_type.__name__
-        elif isinstance(typ, ClassType):
+        if isinstance(typ, ClassType):
             return ':class:`%s`' % self.type(typ)
-        elif isinstance(typ, EnumerationType):
+        if isinstance(typ, EnumerationType):
             return ':class:`%s`' % self.type(typ)
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             return 'list(%s)' % self.type_description(typ.value_type)
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             return 'dict(%s, %s)' % \
                 (self.type_description(typ.key_type),
                  self.type_description(typ.value_type))
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             return 'set(%s)' % self.type_description(typ.value_type)
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             return 'tuple(%s)' % \
                 ', '.join(self.type_description(typ)
                           for typ in typ.value_types)
-        else:
-            raise RuntimeError('Unknown type \'%s\'' % str(typ))
+        raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
     def ref(self, obj):
         name = obj.fullname
@@ -74,5 +73,6 @@ class PythonDomain(Domain):
             raise RuntimeError(str(obj))
         return ':%s:`%s`' % (prefix, self.ref(obj))
 
-    def paramref(self, name):
-        return super(PythonDomain, self).paramref(snake_case(name))
+    @staticmethod
+    def paramref(name):
+        return Domain.paramref(snake_case(name))

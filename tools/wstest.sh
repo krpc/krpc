@@ -1,5 +1,6 @@
 #!/bin/bash
 # Run the autobahn test suite for the websockets server
+set -ev
 
 bazel build //tools/TestServer
 

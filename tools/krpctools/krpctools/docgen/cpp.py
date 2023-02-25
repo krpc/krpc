@@ -18,7 +18,7 @@ class CppDomain(Domain):
     language = CppLanguage()
 
     def currentmodule(self, name):
-        super(CppDomain, self).currentmodule(name)
+        super().currentmodule(name)
         return '.. namespace:: krpc::services::%s' % name
 
     def method_name(self, name):
@@ -29,28 +29,27 @@ class CppDomain(Domain):
     def type_description(self, typ):
         if typ is None:
             return 'void'
-        elif isinstance(typ, ValueType):
+        if isinstance(typ, ValueType):
             return self.language.type_map[typ.protobuf_type.code]
-        elif isinstance(typ, MessageType):
+        if isinstance(typ, MessageType):
             return ':class:`krpc::schema::%s`' % typ.python_type.__name__
-        elif isinstance(typ, ClassType):
+        if isinstance(typ, ClassType):
             return ':class:`%s`' % self.type(typ)
-        elif isinstance(typ, EnumerationType):
+        if isinstance(typ, EnumerationType):
             return ':class:`%s`' % self.type(typ)
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             return 'std::vector<%s>' % self.type_description(typ.value_type)
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             return 'std::map<%s, %s>' % \
                 (self.type_description(typ.key_type),
                  self.type_description(typ.value_type))
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             return 'std::set<%s>' % self.type_description(typ.value_type)
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             return 'std::tuple<%s>' \
                 % ', '.join(self.type_description(typ)
                             for typ in typ.value_types)
-        else:
-            raise RuntimeError('Unknown type \'%s\'' % str(typ))
+        raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
     def ref(self, obj):
         name = obj.fullname.split('.')
@@ -75,8 +74,9 @@ class CppDomain(Domain):
             raise RuntimeError(str(obj))
         return ':%s:`%s`' % (prefix, self.ref(obj))
 
-    def paramref(self, name):
-        return super(CppDomain, self).paramref(snake_case(name))
+    @staticmethod
+    def paramref(name):
+        return Domain.paramref(snake_case(name))
 
     def default_value(self, value, typ):
         if isinstance(typ, TupleType):
@@ -84,15 +84,15 @@ class CppDomain(Domain):
                       for i, x in enumerate(value))
             return '%s(%s)' % (self.language.parse_type(typ),
                                ', '.join(values))
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             values = (self.default_value(x, typ.value_type) for x in value)
             return '%s(%s)' % (self.language.parse_type(typ),
                                ', '.join(values))
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             values = (self.default_value(x, typ.value_type) for x in value)
             return '%s(%s)' % (self.language.parse_type(typ),
                                ', '.join(values))
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             entries = ('{%s, %s}' % (self.default_value(k, typ.key_type),
                                      self.default_value(v, typ.value_type))
                        for k, v in value.items())

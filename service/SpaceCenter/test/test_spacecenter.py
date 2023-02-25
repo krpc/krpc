@@ -314,7 +314,7 @@ class TestSpaceCenter(krpctest.TestCase):
         self.assertEqual('LV-T45 "Swivel" Liquid Fuel Engine', part.title)
 
 
-class WarpTestBase(object):
+class WarpTestBase:
 
     def test_no_warp(self):
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)

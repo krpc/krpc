@@ -16,7 +16,7 @@ class TestAttributes(unittest.TestCase):
 
     def check(self, method, *returnsTrue):
         for case in self.cases:
-            self.assertEquals(case in returnsTrue, method(case))
+            self.assertEqual(case in returnsTrue, method(case))
 
     def test_is_a_procedure(self):
         self.check(Attributes.is_a_procedure, 'ProcedureName')

@@ -5,6 +5,7 @@ import os
 import codecs
 import json
 from io import open
+import sys
 import jinja2
 from pkg_resources import resource_filename
 from krpc.types import Types
@@ -85,9 +86,9 @@ def main():
         with open(path, 'r', encoding='utf-8') as fp:
             services_info.update(json.load(fp))
 
-    if services_info == {}:
+    if not services_info:
         print('No services found in services definition files')
-        exit(1)
+        sys.exit(1)
 
     sort_failed = []
 

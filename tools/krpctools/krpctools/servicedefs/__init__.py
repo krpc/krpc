@@ -34,7 +34,7 @@ def main():
 
     try:
         defs = servicedefs(args.ksp, args.service, args.assemblies)
-    except RuntimeError, ex:
+    except RuntimeError as ex:
         sys.stderr.write("Error: %s\n" % str(ex))
         return 1
 
@@ -85,8 +85,8 @@ def servicedefs(ksp, service, assemblies):
             [bindir+'/ServiceDefinitions.exe',
              '--output=%s' % tmpout, service] + assemblies,
             stderr=subprocess.STDOUT)
-    except subprocess.CalledProcessError, ex:
-        raise RuntimeError(ex.output)
+    except subprocess.CalledProcessError as ex:
+        raise RuntimeError(ex.output) from ex
 
     with open(tmpout, 'r') as fp:
         return fp.read()

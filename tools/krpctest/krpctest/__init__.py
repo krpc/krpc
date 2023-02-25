@@ -139,16 +139,11 @@ class TestCase(unittest.TestCase):
         if delta is not None:
             min_degrees = clamp_degrees(first - delta)
             max_degrees = clamp_degrees(first + delta)
-            if max_degrees >= second_clamped and \
-               second_clamped >= min_degrees:
+            if max_degrees >= second_clamped >= min_degrees:
                 return
-            if min_degrees > max_degrees and \
-               max_degrees >= second_clamped and \
-               second_clamped >= 0:
+            if min_degrees > max_degrees >= second_clamped >= 0:
                 return
-            if min_degrees > max_degrees and \
-               min_degrees <= second_clamped and \
-               second_clamped <= 360:
+            if max_degrees < min_degrees <= second_clamped <= 360:
                 return
             self.fail(msg)
 
@@ -171,33 +166,33 @@ class TestCase(unittest.TestCase):
             self.fail(msg)
 
     @staticmethod
-    def _is_value_almost_equal(second, first, places, delta=None):
-        diff = abs(second - first)
+    def _is_value_almost_equal(first, second, places, delta=None):
+        diff = abs(first - second)
         if delta is not None:
             return diff <= delta
         return round(diff, places) == 0
 
-    def _is_almost_equal(self, second, first, places, delta=None):
-        if isinstance(second, (list, tuple)):
-            return self._list_is_almost_equal(second, first, places, delta)
-        elif isinstance(second, dict):
-            return self._dict_is_almost_equal(second, first, places, delta)
-        return self._is_value_almost_equal(second, first, places, delta)
+    def _is_almost_equal(self, first, second, places, delta=None):
+        if isinstance(first, (list, tuple)):
+            return self._list_is_almost_equal(first, second, places, delta)
+        if isinstance(first, dict):
+            return self._dict_is_almost_equal(first, second, places, delta)
+        return self._is_value_almost_equal(first, second, places, delta)
 
-    def _list_is_almost_equal(self, second, first, places, delta=None):
-        if len(second) != len(first):
+    def _list_is_almost_equal(self, first, second, places, delta=None):
+        if len(first) != len(second):
             return False
-        for x, y in zip(second, first):
+        for x, y in zip(first, second):
             if not self._is_almost_equal(x, y, places, delta):
                 return False
         return True
 
-    def _dict_is_almost_equal(self, second, first, places, delta=None):
-        if set(second.keys()) != set(first.keys()):
+    def _dict_is_almost_equal(self, first, second, places, delta=None):
+        if set(first.keys()) != set(second.keys()):
             return False
-        for k in second.keys():
+        for k in first.keys():
             if not self._is_almost_equal(
-                    second[k], first[k], places, delta):
+                    first[k], second[k], places, delta):
                 return False
         return True
 
@@ -205,7 +200,7 @@ class TestCase(unittest.TestCase):
     def _almost_equal_summary(first, second, comparison):
         if isinstance(second, (list, tuple)):
             return '%s is %s to %s' % (str(first), comparison, str(second))
-        elif isinstance(second, dict):
+        if isinstance(second, dict):
             return '%s is %s to %s' % (str(first), comparison, str(second))
         return '%f is %s to %f' % (first, comparison, second)
 

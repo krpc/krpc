@@ -1,11 +1,11 @@
 import os
 import unittest
-import krpc.schema.KRPC_pb2 as KRPC
 import google.protobuf
 from google.protobuf.internal.decoder import _DecodeVarint, _DecodeSignedVarint
 from google.protobuf.internal import encoder as protobuf_encoder
 from google.protobuf.internal.wire_format import ZigZagEncode, ZigZagDecode
 import serial
+import krpc.schema.KRPC_pb2 as KRPC
 
 
 # The following unpacks the internal protobuf decoders, whose signature

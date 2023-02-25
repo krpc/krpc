@@ -41,7 +41,7 @@ else:
 # pylint: enable=invalid-name
 
 
-class Encoder(object):
+class Encoder:
     """ Routines for encoding messages and values in
         the protocol buffer serialization format """
 
@@ -52,18 +52,18 @@ class Encoder(object):
         """ Encode a message or value of the given protocol buffer type """
         if isinstance(typ, MessageType):
             return x.SerializeToString()
-        elif isinstance(typ, ValueType):
+        if isinstance(typ, ValueType):
             return cls._encode_value(x, typ)
-        elif isinstance(typ, EnumerationType):
+        if isinstance(typ, EnumerationType):
             return cls._encode_value(x.value, cls._types.sint32_type)
-        elif isinstance(typ, ClassType):
+        if isinstance(typ, ClassType):
             object_id = x._object_id if x is not None else 0
             return cls._encode_value(object_id, cls._types.uint64_type)
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             msg = KRPC.List()
             msg.items.extend(cls.encode(item, typ.value_type) for item in x)
             return msg.SerializeToString()
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             msg = KRPC.Dictionary()
             entries = []
             for key, value in sorted(x.items(), key=lambda i: i[0]):
@@ -73,11 +73,11 @@ class Encoder(object):
                 entries.append(entry)
             msg.entries.extend(entries)
             return msg.SerializeToString()
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             msg = KRPC.Set()
             msg.items.extend(cls.encode(item, typ.value_type) for item in x)
             return msg.SerializeToString()
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             msg = KRPC.Tuple()
             if len(x) != len(typ.value_types):
                 raise EncodingError(
@@ -86,8 +86,7 @@ class Encoder(object):
             msg.items.extend(cls.encode(item, value_type)
                              for item, value_type in zip(x, typ.value_types))
             return msg.SerializeToString()
-        else:
-            raise EncodingError(
+        raise EncodingError(
                 'Cannot encode objects of type ' + str(type(x)))
 
     @classmethod
@@ -101,27 +100,26 @@ class Encoder(object):
     def _encode_value(cls, value, typ):
         if typ.protobuf_type.code == KRPC.Type.SINT32:
             return _ValueEncoder.encode_sint32(value)
-        elif typ.protobuf_type.code == KRPC.Type.SINT64:
+        if typ.protobuf_type.code == KRPC.Type.SINT64:
             return _ValueEncoder.encode_sint64(value)
-        elif typ.protobuf_type.code == KRPC.Type.UINT32:
+        if typ.protobuf_type.code == KRPC.Type.UINT32:
             return _ValueEncoder.encode_uint32(value)
-        elif typ.protobuf_type.code == KRPC.Type.UINT64:
+        if typ.protobuf_type.code == KRPC.Type.UINT64:
             return _ValueEncoder.encode_uint64(value)
-        elif typ.protobuf_type.code == KRPC.Type.DOUBLE:
+        if typ.protobuf_type.code == KRPC.Type.DOUBLE:
             return _ValueEncoder.encode_double(value)
-        elif typ.protobuf_type.code == KRPC.Type.FLOAT:
+        if typ.protobuf_type.code == KRPC.Type.FLOAT:
             return _ValueEncoder.encode_float(value)
-        elif typ.protobuf_type.code == KRPC.Type.BOOL:
+        if typ.protobuf_type.code == KRPC.Type.BOOL:
             return _ValueEncoder.encode_bool(value)
-        elif typ.protobuf_type.code == KRPC.Type.STRING:
+        if typ.protobuf_type.code == KRPC.Type.STRING:
             return _ValueEncoder.encode_string(value)
-        elif typ.protobuf_type.code == KRPC.Type.BYTES:
+        if typ.protobuf_type.code == KRPC.Type.BYTES:
             return _ValueEncoder.encode_bytes(value)
-        else:
-            raise EncodingError('Invalid type')
+        raise EncodingError('Invalid type')
 
 
-class _ValueEncoder(object):
+class _ValueEncoder:
     """ Routines for encoding values in the
         protocol buffer serialization format """
 

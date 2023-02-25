@@ -17,7 +17,7 @@ class CnanoDomain(Domain):
     language = CnanoLanguage()
 
     def currentmodule(self, name):
-        super(CnanoDomain, self).currentmodule(name)
+        super().currentmodule(name)
         return ''
 
     def method_name(self, name):
@@ -28,21 +28,21 @@ class CnanoDomain(Domain):
     def parse_type_name(self, typ):
         if isinstance(typ, ValueType):
             return self.language.type_name_map[typ.protobuf_type.code]
-        elif isinstance(typ, MessageType):
+        if isinstance(typ, MessageType):
             return 'message_%s' % typ.python_type.__name__
-        elif isinstance(typ, ListType):
+        if isinstance(typ, ListType):
             return 'list_%s' % self.parse_type_name(typ.value_type)
-        elif isinstance(typ, SetType):
+        if isinstance(typ, SetType):
             return 'set_%s' % self.parse_type_name(typ.value_type)
-        elif isinstance(typ, DictionaryType):
+        if isinstance(typ, DictionaryType):
             return 'dictionary_%s_%s' % (self.parse_type_name(typ.key_type),
                                          self.parse_type_name(typ.value_type))
-        elif isinstance(typ, TupleType):
+        if isinstance(typ, TupleType):
             return 'tuple_%s' % \
                 '_'.join(self.parse_type_name(t) for t in typ.value_types)
-        elif isinstance(typ, ClassType):
+        if isinstance(typ, ClassType):
             return 'object'
-        elif isinstance(typ, EnumerationType):
+        if isinstance(typ, EnumerationType):
             return 'enum'
         raise RuntimeError('Unknown type ' + str(typ))
 
@@ -50,7 +50,7 @@ class CnanoDomain(Domain):
         ptr = True
         if typ is None:
             return {'ctype': 'void', 'cvtype': None, 'name': None}
-        elif isinstance(typ, ValueType):
+        if isinstance(typ, ValueType):
             ctype = self.language.type_map[typ.protobuf_type.code]
             ptr = False
         elif isinstance(typ, MessageType):
