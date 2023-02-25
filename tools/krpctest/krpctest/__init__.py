@@ -75,6 +75,8 @@ class TestCase(unittest.TestCase):
             os.makedirs(ships_path)
         shutil.copy(os.path.join(fixtures_path, name + '.craft'),
                     os.path.join(ships_path, name + '.craft'))
+        shutil.copy(os.path.join(fixtures_path, name + '.loadmeta'),
+                    os.path.join(ships_path, name + '.loadmeta'))
         # Launch the craft
         cls.connect().space_center.launch_vessel_from_vab(name)
 
