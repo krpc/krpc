@@ -37,7 +37,7 @@ def _build_impl(ctx):
     elif builder == 'latex':
         sub_commands.extend([
             'make -e -C %s 1>/dev/null 2>/dev/null' % out_dir,
-            'find %s -name *.pdf -exec cp {} %s \;' % (out_dir, out.path),
+            'find %s -name *.pdf -exec cp {} %s \\;' % (out_dir, out.path),
             'rm -rf %s' % out_dir
         ])
 
