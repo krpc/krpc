@@ -46,9 +46,9 @@ csharp_assembly_info(
 # to work around issue with KSP libraries failing strong name validation
 csharp_library(
     name = 'KRPC',
-    srcs = ['//server:KRPC-src', '//server:AssemblyInfo', '//protobuf:csharp'],
+    srcs = ['//server:KRPC-src', '//server:AssemblyInfo', '//protobuf:csharp_3.9.1'],
     deps = [
-        '//tools/build/mono-4.5:Google.Protobuf',
+        '//tools/build/protobuf-3.9.1:Google.Protobuf',
         '//tools/build/ksp:Assembly-CSharp',
         '//tools/build/ksp:Assembly-CSharp-firstpass',
         '//tools/build/ksp:UnityEngine',

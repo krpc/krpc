@@ -1,8 +1,8 @@
 package(default_visibility = ["//visibility:public"])
 
 genrule(
-    name = 'Google.Protobuf_net35',
-    srcs = ['@csharp_protobuf_net35//file'],
+    name = 'Google.Protobuf_3.9.1_net35',
+    srcs = ['@csharp_protobuf_3.9.1_net35//file'],
     outs = ['net35/Google.Protobuf.dll'],
     cmd = 'cp $< $@'
 )

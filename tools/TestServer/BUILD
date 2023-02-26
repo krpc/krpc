@@ -18,7 +18,7 @@ csharp_assembly_info(
 srcs = ['src/TestService.cs', ':AssemblyInfo']
 deps = [
     '//tools/ServiceDefinitions:KRPC',
-    '//tools/build/mono-4.5:Google.Protobuf',
+    '//tools/build/protobuf-3.9.1:Google.Protobuf',
     '//tools/build/mono-4.5:mscorlib',
     '//tools/build/mono-4.5:System',
     '//tools/build/mono-4.5:System.Core',

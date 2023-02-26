@@ -15,6 +15,13 @@ protobuf_csharp(
     src = 'krpc.proto'
 )
 
+protobuf_csharp(
+    name = 'csharp_3.9.1',
+    out = 'KRPC_3_9_1.cs',
+    src = 'krpc.proto',
+    protoc = '//tools/build/protobuf:protoc_3.9.1'
+)
+
 protobuf_py(
     name = 'python',
     out = 'KRPC_pb2.py',

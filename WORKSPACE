@@ -62,28 +62,62 @@ http_archive(
 )
 
 http_archive(
+    name = 'rules_pkg',
+    urls = ['https://github.com/bazelbuild/rules_pkg/releases/download/0.8.1/rules_pkg-0.8.1.tar.gz'],
+    sha256 = '8c20f74bca25d2d442b327ae26768c02cf3c99e93fad0381f32be9aab1967675'
+)
+
+http_archive(
     name = 'protoc_linux_x86_32',
+    build_file_content = "exports_files(['bin/protoc'])",
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v22.0/protoc-22.0-linux-x86_32.zip',
+    sha256 = 'fdb8aea58cc156989f500d12cba50625dd1718f48c4c29f29300e5dcb8fd653e'
+)
+
+http_archive(
+    name = 'protoc_linux_x86_64',
+    build_file_content = "exports_files(['bin/protoc'])",
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v22.0/protoc-22.0-linux-x86_64.zip',
+    sha256 = '9ceff6c3945d521d1d0f42f9f57f6ef7cf3f581a9d303a027ba19b192045d1a2'
+)
+
+http_archive(
+    name = 'protoc_osx_x86_32',
+    build_file_content = "exports_files(['bin/protoc'])",
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v22.0/protoc-22.0-osx-x86_64.zip',
+    sha256 = '1e0ad38fcf20a4b1cdeffe40f9188c4d1c30a9dd515cf92c8b57f629227f0eb3'
+)
+
+http_archive(
+    name = 'protoc_win32',
+    build_file_content = "exports_files(['bin/protoc.exe'])",
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v22.0/protoc-22.0-win32.zip',
+    sha256 = '1cf031ba53b6963de475fcd07a2dbcada6c4b74ef3f8e587346603a940bbf772'
+)
+
+http_archive(
+    name = 'protoc_3.9.1_linux_x86_32',
     build_file_content = "exports_files(['bin/protoc'])",
     url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-linux-x86_32.zip',
     sha256 = '1094d7896f93b8987b0e05c110c0635bab7cf63aa24592c5d34cd37b590b5aeb'
 )
 
 http_archive(
-    name = 'protoc_linux_x86_64',
+    name = 'protoc_3.9.1_linux_x86_64',
     build_file_content = "exports_files(['bin/protoc'])",
     url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-linux-x86_64.zip',
     sha256 = '77410d08e9a3c1ebb68afc13ee0c0fb4272c01c20bfd289adfb51b1c622bab07'
 )
 
 http_archive(
-    name = 'protoc_osx_x86_32',
+    name = 'protoc_3.9.1_osx_x86_32',
     build_file_content = "exports_files(['bin/protoc'])",
     url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-osx-x86_32.zip',
     sha256 = 'e7b7377917f6b9ec22c80188936c60380edc684e5bdc96c2993fc79e3e54c042'
 )
 
 http_archive(
-    name = 'protoc_win32',
+    name = 'protoc_3.9.1_win32',
     build_file_content = "exports_files(['bin/protoc.exe'])",
     url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-win32.zip',
     sha256 = '6543fe3fffb6caeb9c8a091afeefbb1a7e7112bc0e00d7b7e89e69e3a1844069'
@@ -98,9 +132,9 @@ filegroup(
     visibility = ['//visibility:public']
 )
 """,
-    url = 'https://jpa.kapsi.fi/nanopb/download/nanopb-0.3.9.1-linux-x86.tar.gz',
-    sha256 = 'ee18b12ea11376e6b6d89a2cab4592fb1fbaeff3252f180608c9a7632594a12e',
-    strip_prefix = 'nanopb-0.3.9.1-linux-x86'
+    url = 'https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.7-linux-x86.tar.gz',
+    sha256 = 'e8a154d3b6631696cb42e3acba338ab738509af56571ebc9c35d7a754d6e5b48',
+    strip_prefix = 'nanopb-0.4.7-linux-x86'
 )
 
 http_archive(
@@ -125,9 +159,9 @@ filegroup(
     visibility = ['//visibility:public']
 )
 """,
-    url = 'https://jpa.kapsi.fi/nanopb/download/nanopb-0.3.9.1-linux-x86.tar.gz',
-    sha256 = 'ee18b12ea11376e6b6d89a2cab4592fb1fbaeff3252f180608c9a7632594a12e',
-    strip_prefix = 'nanopb-0.3.9.1-linux-x86'
+    url = 'https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.7-linux-x86.tar.gz',
+    sha256 = 'e8a154d3b6631696cb42e3acba338ab738509af56571ebc9c35d7a754d6e5b48',
+    strip_prefix = 'nanopb-0.4.7-linux-x86'
 )
 
 http_file(
@@ -137,7 +171,23 @@ http_file(
 )
 
 http_archive(
+    name = 'csharp_system_memory',
+    build_file_content = "exports_files(['lib/netstandard1.1/System.Memory.dll'])",
+    url = 'https://www.nuget.org/api/v2/package/System.Memory/4.5.3',
+    sha256 = '0af97b45b45b46ef6a2b37910568dabd492c793da3859054595d523e2a545859',
+    type = 'zip'
+)
+
+http_archive(
     name = 'csharp_protobuf',
+    build_file_content = "exports_files(['lib/net45/Google.Protobuf.dll'])",
+    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.22.0',
+    sha256 = 'c7c6700c8cbeba874cff61f65385684857bca37e4b237f87034bcadc30ed5df2',
+    type = 'zip'
+)
+
+http_archive(
+    name = 'csharp_protobuf_3.9.1',
     build_file_content = "exports_files(['lib/net45/Google.Protobuf.dll'])",
     url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.9.1',
     sha256 = 'b4363bb9d1c2b6721624571936e3e1f14ebdf2ecd8788d2584b549c6dce8348b',
@@ -145,7 +195,7 @@ http_archive(
 )
 
 http_file(
-    name = 'csharp_protobuf_net35',
+    name = 'csharp_protobuf_3.9.1_net35',
     urls = ['https://s3.amazonaws.com/krpc/lib/protobuf-3.9.1-net35/Google.Protobuf.dll'],
     sha256 = 'd0ddb80510810fa53ee124afbd57845e657eaa9016ed7a6edd4d8ecffedf66b5'
 )
@@ -214,9 +264,9 @@ http_archive(
 
 http_archive(
     name = 'com_google_protobuf',
-    url = 'https://github.com/google/protobuf/releases/download/v3.9.1/protobuf-cpp-3.9.1.tar.gz',
-    strip_prefix = 'protobuf-3.9.1',
-    sha256 = '29a1db3b9bebcf054c540f13400563120ff29fbdd849b2c7a097ffe9d3d508eb'
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v22.0/protobuf-22.0.tar.gz',
+    strip_prefix = 'protobuf-22.0',
+    sha256 = 'e340f39fad1e35d9237540bcd6a2592ccac353e5d21d0f0521f6ab77370e0142'
 )
 
 http_archive(
@@ -285,8 +335,8 @@ http_file(
 
 maven_jar(
     name = 'java_protobuf',
-    artifact = 'com.google.protobuf:protobuf-java:3.9.1',
-    sha1 = '3b4d448bd1e12b25727efea58e9e1a79c3dc29bd'
+    artifact = 'com.google.protobuf:protobuf-java:3.22.0',
+    sha1 = 'aa58e31e88e9974452f0498e237532df5732257a'
 )
 
 maven_jar(
@@ -581,8 +631,8 @@ http_file(
 
 http_file(
     name = 'python_protobuf',
-    urls = ['https://files.pythonhosted.org/packages/6d/54/12c5c92ffab546538ea5b544c6afbfcce333fd47e99c1198e24a8efdef1f/protobuf-3.9.1.tar.gz'],
-    sha256 = 'd831b047bd69becaf64019a47179eb22118a50dd008340655266a906c69c6417'
+    urls = ['https://files.pythonhosted.org/packages/f6/95/797a257a5db4a91dc2bc864c487ead56440014d741933a28c86d966b949e/protobuf-4.22.0.tar.gz'],
+    sha256 = '652d8dfece122a24d98eebfef30e31e455d300efa41999d1182e015984ac5930'
 )
 
 http_file(
