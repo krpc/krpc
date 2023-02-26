@@ -90,7 +90,7 @@ std::string encode(const pb::Message& message) {
 }
 
 std::string encode_message_with_size(const pb::Message& message) {
-  size_t length = message.ByteSize();
+  size_t length = message.ByteSizeLong();
   size_t header_length = pb::io::CodedOutputStream::VarintSize64(length);
   std::string data(header_length + length, 0);
   pb::io::CodedOutputStream::WriteVarint64ToArray(length, (pb::uint8*)&data[0]);
