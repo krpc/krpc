@@ -72,7 +72,7 @@ genrule(
 filegroup(
     name = 'cslibs',
     srcs = [
-        ':Google.Protobuf_net35',
+        ':Google.Protobuf_3.9.1_net35',
         ':Google.Protobuf_net45',
         ':KRPC.IO.Ports',
         ':nunit.framework',
