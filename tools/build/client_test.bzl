@@ -36,7 +36,6 @@ def _impl(ctx):
         server_port = 'server-executable.runfiles/krpc/server-port'
         client_port = 'server-executable.runfiles/krpc/client-port'
         sub_commands.extend([
-            'socat --help',
             '(cd server-executable.runfiles/krpc; socat -d -d PTY,raw,echo=0,link=server-port PTY,raw,echo=0,link=client-port >socat-stdout 2>&1) &',
             'SOCAT_PID=$!',
             'while ! grep "starting data transfer loop" %s >/dev/null 2>&1; do sleep 0.1 ; done' % socat_stdout,
