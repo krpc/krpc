@@ -3,6 +3,8 @@ def _impl(ctx):
     source = ctx.outputs.source
     include = ctx.attr.include
     proto_output = source.path + '.tmp-proto-cpp'
+    proto_path = ctx.attr.src.files.to_list()[0].path
+    proto_include = proto_path.replace('.proto', '.pb.h')
 
     sub_commands = [
         'rm -rf %s' % proto_output,
@@ -10,7 +12,7 @@ def _impl(ctx):
         '%s --cpp_out=%s %s' % (ctx.file._protoc.path, proto_output, ctx.file.src.path),
         'cp %s/protobuf/*.pb.h %s' % (proto_output, header.path),
         'cp %s/protobuf/*.pb.cc %s' % (proto_output, source.path),
-        'sed -i \'s/#include ".\\+"/#include "%s"/g\' %s' % (include.replace('/', '\\/'), source.path)
+        'sed -i \'s/#include "%s"/#include "%s"/g\' %s' % (proto_include.replace('/', '\\/'), include.replace('/', '\\/'), source.path)
     ]
 
     ctx.actions.run_shell(
