@@ -1,4 +1,4 @@
-v0.4.9
+v0.5.0
  * Add Drawing.AddDirectionFromCoM
  * Change Drawing.AddDirection to start the line at the origin of the reference frame (#518)
 

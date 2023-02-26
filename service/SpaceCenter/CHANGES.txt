@@ -1,5 +1,5 @@
-v0.4.9
- * Update to work with KSP 1.10
+v0.5.0
+ * Update to work with KSP 1.8+
  * Use raycast to measure surface height more precisely in CelestialBody.SurfaceHeight (#524)
  * Fix null reference exception when checking active vessel (#528, #530)
  * Fix null reference exception when waiting for active vessel change (#516, #529)
