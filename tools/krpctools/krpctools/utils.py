@@ -2,6 +2,7 @@ import array
 import base64
 import re
 from krpc.decoder import Decoder
+# pylint: disable=no-name-in-module
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import Types, EnumerationType
 

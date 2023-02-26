@@ -5,12 +5,12 @@ def _impl(ctx):
     sub_commands = [
         'rm -rf %s' % protoc_output,
         'mkdir -p %s' % protoc_output,
-        '%s --csharp_out=%s %s' % (ctx.file._protoc.path, protoc_output, ctx.file.src.path),
+        '%s --csharp_out=%s %s' % (ctx.file.protoc.path, protoc_output, ctx.file.src.path),
         'cp %s/*.cs %s' % (protoc_output, output.path)
     ]
 
     ctx.actions.run_shell(
-        inputs = [ctx.file.src, ctx.file._protoc],
+        inputs = [ctx.file.src, ctx.file.protoc],
         outputs = [output],
         command = ' && '.join(sub_commands),
         mnemonic = 'ProtobufCSharp',
@@ -22,7 +22,7 @@ protobuf_csharp = rule(
     attrs={
         'src': attr.label(allow_single_file=['.proto']),
         'out': attr.output(mandatory=True),
-        '_protoc': attr.label(default=Label('//tools/build/protobuf:protoc'), allow_single_file=True),
+        'protoc': attr.label(default=Label('//tools/build/protobuf:protoc'), allow_single_file=True),
     },
     output_to_genfiles = True
 )

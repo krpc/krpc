@@ -20,6 +20,21 @@ filegroup(
     visibility = ['//visibility:public']
 )
 
+filegroup(
+    name = 'protoc_3.9.1',
+    srcs = select({
+        ':windows_mingw': ['@protoc_3.9.1_win32//:bin/protoc.exe'],
+        ':windows_msys64_mingw64': ['@protoc_3.9.1_win32//:bin/protoc.exe'],
+        ':windows_msys64': ['@protoc_3.9.1_win32//:bin/protoc.exe'],
+        ':windows_clang': ['@protoc_3.9.1_win32//:bin/protoc.exe'],
+        ':darwin': ['@protoc_3.9.1_osx_x86_32//:bin/protoc'],
+        ':k8': ['@protoc_3.9.1_linux_x86_64//:bin/protoc'],
+        ':piii': ['@protoc_3.9.1_linux_x86_32//:bin/protoc'],
+        ':freebsd': ['@protoc_3.9.1_linux_x86_32//:bin/protoc']
+    }),
+    visibility = ['//visibility:public']
+)
+
 config_setting(
     name = 'windows_mingw',
     values = {'compiler': 'windows_mingw'},

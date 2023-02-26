@@ -5,6 +5,8 @@ exports_files ([
     'mono-4.5/Facades/System.Runtime.dll',
     'mono-4.5/Facades/System.IO.dll',
     'mono-4.5/System.Xml.dll',
+    'mono-4.5/System.Memory.dll',
+    'mono-4.5/System.Runtime.CompilerServices.Unsafe.dll',
 
     'ksp/KSP_Data/Managed/Assembly-CSharp.dll',
     'ksp/KSP_Data/Managed/Assembly-CSharp-firstpass.dll',

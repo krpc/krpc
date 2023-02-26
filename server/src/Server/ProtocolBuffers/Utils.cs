@@ -16,7 +16,7 @@ namespace KRPC.Server.ProtocolBuffers
         static IDictionary<IClient<byte, byte>, Stopwatch> readMessageTimers = new Dictionary<IClient<byte, byte>, Stopwatch> ();
         static IDictionary<IClient<byte, byte>, DynamicBuffer> readMessageBuffers = new Dictionary<IClient<byte, byte>, DynamicBuffer> ();
 
-          /// <summary>
+        /// <summary>
         /// Read a message from the client. If a partial message is received, its data is saved
         /// and will be resumed on the next call. Timeout is set to true if the receipt times out.
         /// </summary>

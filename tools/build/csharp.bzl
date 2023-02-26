@@ -299,8 +299,6 @@ def _nuget_package_impl(ctx):
     assemblies = {
         'net45': ctx.attr.assembly
     }
-    if ctx.attr.assembly_net35 != None:
-        assemblies['net35'] = ctx.attr.assembly_net35
 
     nuspec_contents = [
         '<?xml version="1.0"?>',
@@ -378,7 +376,6 @@ nuget_package = rule(
     attrs = {
         'id': attr.string(mandatory=True),
         'assembly': attr.label(providers=['out', 'lib', 'doc', 'target_type']),
-        'assembly_net35': attr.label(providers=['out', 'lib', 'doc', 'target_type']),
         'version': attr.string(mandatory=True),
         'author': attr.string(mandatory=True),
         'project_url': attr.string(),

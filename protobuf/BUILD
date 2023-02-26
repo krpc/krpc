@@ -15,6 +15,13 @@ protobuf_csharp(
     src = 'krpc.proto'
 )
 
+protobuf_csharp(
+    name = 'csharp_3.9.1',
+    out = 'KRPC_3_9_1.cs',
+    src = 'krpc.proto',
+    protoc = '//tools/build/protobuf:protoc_3.9.1'
+)
+
 protobuf_py(
     name = 'python',
     out = 'KRPC_pb2.py',
@@ -35,17 +42,9 @@ protobuf_lua(
     src = 'krpc.proto'
 )
 
-# Workaround to fix redundant casts in protobuf v3.1.0 generated output
-genrule(
-    name = 'java',
-    srcs = [':java_gen'],
-    outs = ['KRPC.java'],
-    cmd = 'sed \'s/(Builder) super/super/g\' $(location :java_gen) > "$@"'
-)
-
 protobuf_java(
-    name = 'java_gen',
-    out = 'KRPC.java.tmp',
+    name = 'java',
+    out = 'KRPC.java',
     src = 'krpc.proto'
 )
 
