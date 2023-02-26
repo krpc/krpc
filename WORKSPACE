@@ -3,19 +3,12 @@ workspace(name = "krpc")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 load("@bazel_tools//tools/build_defs/repo:maven_rules.bzl", "maven_jar")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 http_archive(
-    name = 'bazel_skylib',
-    urls = ['https://github.com/bazelbuild/bazel-skylib/archive/2169ae1c374aab4a09aa90e65efe1a3aad4e279b.tar.gz'],
-    sha256 = 'bbccf674aa441c266df9894182d80de104cabd19be98be002f6d478aaa31574d',
-    strip_prefix = 'bazel-skylib-2169ae1c374aab4a09aa90e65efe1a3aad4e279b'
-)
-
-http_archive(
-    name = 'bazel_skylib',
-    urls = ['https://github.com/bazelbuild/bazel-skylib/archive/2169ae1c374aab4a09aa90e65efe1a3aad4e279b.tar.gz'],
-    sha256 = 'bbccf674aa441c266df9894182d80de104cabd19be98be002f6d478aaa31574d',
-    strip_prefix = 'bazel-skylib-2169ae1c374aab4a09aa90e65efe1a3aad4e279b'
+    name = "bazel_skylib",
+    urls = ["https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz"],
+    sha256 = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7",
 )
 
 http_archive(
@@ -65,6 +58,42 @@ http_archive(
     name = 'rules_pkg',
     urls = ['https://github.com/bazelbuild/rules_pkg/releases/download/0.8.1/rules_pkg-0.8.1.tar.gz'],
     sha256 = '8c20f74bca25d2d442b327ae26768c02cf3c99e93fad0381f32be9aab1967675'
+)
+
+git_repository(
+    name = "bazelruby_rules_ruby",
+    remote = "https://github.com/bazelruby/rules_ruby.git",
+    branch = "master"
+)
+
+git_repository(
+    name = "rules_ruby",
+    remote = "https://github.com/bazelruby/rules_ruby.git",
+    branch = "master"
+)
+
+git_repository(
+    name = "upb",
+    remote = "https://github.com/protocolbuffers/upb.git",
+    branch = "main"
+)
+
+git_repository(
+    name = "com_google_absl",
+    remote = "https://github.com/abseil/abseil-cpp.git",
+    branch = "lts_2023_01_25"
+)
+
+git_repository(
+    name = "utf8_range",
+    remote = "https://github.com/protocolbuffers/utf8_range.git",
+    branch = "main"
+)
+
+git_repository(
+    name = "com_google_googletest",
+    remote = "https://github.com/google/googletest.git",
+    branch = "main"
 )
 
 http_archive(
