@@ -19,6 +19,7 @@ krpc_error_t krpc_connect(krpc_connection_t connection, const char * client_name
   {
     // Send connection request message
     krpc_schema_MultiplexedRequest request = krpc_schema_MultiplexedRequest_init_default;
+    request.has_connection_request = true;
     request.connection_request.type = krpc_schema_ConnectionRequest_Type_RPC;
     request.connection_request.client_name.funcs.encode = &krpc_encode_callback_cstring;
     request.connection_request.client_name.arg = (void*)client_name;
@@ -64,6 +65,7 @@ krpc_error_t krpc_invoke(krpc_connection_t connection, krpc_schema_ProcedureResu
 
     // Create request message containing the procedure call
     krpc_schema_MultiplexedRequest m_request = krpc_schema_MultiplexedRequest_init_default;
+    m_request.has_request = true;
     m_request.request.calls[0] = *call;
     m_request.request.calls_count = 1;
 
