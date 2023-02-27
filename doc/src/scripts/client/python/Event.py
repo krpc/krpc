@@ -18,4 +18,4 @@ event = conn.krpc.add_event(expr)
 # Wait on the event
 with event.condition:
     event.wait()
-    print 'Altitude reached 1000m'
+    print('Altitude reached 1000m')
