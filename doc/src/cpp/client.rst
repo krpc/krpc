@@ -57,12 +57,6 @@ following:
    sudo make install
    sudo ldconfig
 
-Windows Binaries
-^^^^^^^^^^^^^^^^
-
-Pre-built Windows binaries (built using Visual Studio 2017 for 64 bit) are available from `the GitHub
-releases page <https://github.com/google/protobuf/releases>`_.
-
 Manual installation
 ^^^^^^^^^^^^^^^^^^^
 
