@@ -28,7 +28,7 @@ class TestContracts(krpctest.TestCase):
         self.assertEqual('We need to achieve a stable orbit around Kerbin. '
                          'All you should need to do is throw yourself at '
                          'the ground and miss.', contract.synopsis)
-        self.assertItemsEqual([], contract.keywords)
+        self.assertCountEqual([], contract.keywords)
         self.assertEqual(self.ContractState.active, contract.state)
         self.assertTrue(contract.seen)
         self.assertTrue(contract.read)
@@ -51,7 +51,7 @@ class TestContracts(krpctest.TestCase):
             'parallel with the surface until you are in a stable orbit to '
             'achieve this goal.',
             parameter.notes)
-        self.assertItemsEqual([], parameter.children)
+        self.assertCountEqual([], parameter.children)
         self.assertFalse(parameter.completed)
         self.assertFalse(parameter.failed)
         self.assertFalse(parameter.optional)
@@ -74,7 +74,7 @@ class TestContracts(krpctest.TestCase):
                          [x.title for x in parameter.children])
 
     def test_types(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['FinePrint.Contracts.ISRUContract',
              'FinePrint.Contracts.ExplorationContract',
              'Contracts.Templates.PlantFlag',
@@ -92,7 +92,7 @@ class TestContracts(krpctest.TestCase):
             self.cm.types)
 
     def test_all_contracts(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Conduct a focused observational survey of Kerbin.']*5 +
             ['Gather scientific data from Kerbin.',
              'Escape the atmosphere!',
@@ -107,7 +107,7 @@ class TestContracts(krpctest.TestCase):
 
     def test_active_contracts(self):
         contracts = self.cm.active_contracts
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Orbit Kerbin!'],
             [x.title for x in contracts])
         contract = contracts[0]
@@ -125,7 +125,7 @@ class TestContracts(krpctest.TestCase):
 
     def test_offered_contracts(self):
         contracts = self.cm.offered_contracts
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Conduct a focused observational survey of Kerbin.']*5 +
             ['Gather scientific data from Kerbin.',
              'Escape the atmosphere!',
@@ -148,7 +148,7 @@ class TestContracts(krpctest.TestCase):
 
     def test_completed_contracts(self):
         contracts = self.cm.completed_contracts
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Launch our first vessel!'],
             [x.title for x in contracts])
         contract = contracts[0]
@@ -166,7 +166,7 @@ class TestContracts(krpctest.TestCase):
 
     def test_failed_contracts(self):
         # TODO: fail a contract to test this
-        self.assertItemsEqual(
+        self.assertCountEqual(
             [],
             [x.title for x in self.cm.failed_contracts])
 

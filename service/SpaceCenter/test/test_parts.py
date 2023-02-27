@@ -15,7 +15,7 @@ class TestParts(krpctest.TestCase):
         cls.parts = cls.vessel.parts
 
     def test_all_parts(self):
-        self.assertItemsEqual([
+        self.assertCountEqual([
             '\'Drill-O-Matic Junior\' Mining Excavator',
             'AE-FF1 Airstream Protective Shell (1.25m)',
             'Adjustable Ramp Intake (Radial)',
@@ -134,27 +134,27 @@ class TestParts(krpctest.TestCase):
 
     def test_parts_with_name(self):
         parts = self.parts.with_name('spotLight1')
-        self.assertItemsEqual(['spotLight1']*3, [p.name for p in parts])
+        self.assertCountEqual(['spotLight1']*3, [p.name for p in parts])
         parts = self.parts.with_name('doesntExist')
-        self.assertItemsEqual([], parts)
+        self.assertCountEqual([], parts)
 
     def test_parts_with_title(self):
         parts = self.parts.with_title('Illuminator Mk1')
-        self.assertItemsEqual(['Illuminator Mk1']*3, [p.title for p in parts])
+        self.assertCountEqual(['Illuminator Mk1']*3, [p.title for p in parts])
         parts = self.parts.with_title('Doesn\'t Exist')
-        self.assertItemsEqual([], parts)
+        self.assertCountEqual([], parts)
 
     def test_parts_with_module(self):
         parts = self.parts.with_module('ModuleLight')
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['spotLight1']*3 + ['SmallGearBay'], [p.name for p in parts])
         parts = self.parts.with_module('DoesntExist')
-        self.assertItemsEqual([], parts)
+        self.assertCountEqual([], parts)
 
     def test_parts_in_stage(self):
         def part_titles_in_stage(stage):
             return [part.title for part in self.parts.in_stage(stage)]
-        self.assertItemsEqual([
+        self.assertCountEqual([
             '\'Drill-O-Matic Junior\' Mining Excavator',
             'Adjustable Ramp Intake (Radial)',
             'Advanced Reaction Wheel Module, Large',
@@ -194,83 +194,83 @@ class TestParts(krpctest.TestCase):
             'XM-G50 Radial Air Intake',
             'Z-400 Rechargeable Battery'
         ], part_titles_in_stage(-1))
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['AE-FF1 Airstream Protective Shell (1.25m)'],
             part_titles_in_stage(0))
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['TR-XL Stack Separator'], part_titles_in_stage(1))
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Mk2-R Radial-Mount Parachute']*3, part_titles_in_stage(2))
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Clamp-O-Tron Docking Port', 'Clamp-O-Tron Docking Port Jr.',
              'RE-L10 "Poodle" Liquid Fuel Engine', 'TR-XL Stack Separator'],
             part_titles_in_stage(3))
-        self.assertItemsEqual([
+        self.assertCountEqual([
             'RE-I5 "Skipper" Liquid Fuel Engine',
             'TR-XL Stack Separator'
         ], part_titles_in_stage(4))
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['TT-70 Radial Decoupler']*3, part_titles_in_stage(5))
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['RE-M3 "Mainsail" Liquid Fuel Engine'] +
             ['S1 SRB-KD25k "Kickback" Solid Fuel Booster']*3 +
             ['TT18-A Launch Stability Enhancer']*6,
             part_titles_in_stage(6))
-        self.assertItemsEqual([], part_titles_in_stage(7))
+        self.assertCountEqual([], part_titles_in_stage(7))
 
     def test_parts_in_decouple_stage(self):
         def part_titles_in_decouple_stage(stage):
             return [part.title for part in self.parts.in_decouple_stage(stage)]
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['AE-FF1 Airstream Protective Shell (1.25m)'] +
             ['LT-1 Landing Struts']*3 +
             ['LY-10 Small Landing Gear', 'Mk1-2 Command Pod'],
             part_titles_in_decouple_stage(-1))
-        self.assertItemsEqual([], part_titles_in_decouple_stage(0))
-        self.assertItemsEqual([
+        self.assertCountEqual([], part_titles_in_decouple_stage(0))
+        self.assertCountEqual([
             'RE-M3 "Mainsail" Liquid Fuel Engine',
             'Rockomax Jumbo-64 Fuel Tank',
             'TR-XL Stack Separator'
         ], part_titles_in_decouple_stage(4))
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Aerodynamic Nose Cone']*3 +
             ['Illuminator Mk1']*3 +
             ['S1 SRB-KD25k "Kickback" Solid Fuel Booster']*3 +
             ['TT-70 Radial Decoupler']*3,
             part_titles_in_decouple_stage(5))
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['TT18-A Launch Stability Enhancer']*6,
             part_titles_in_decouple_stage(6))
-        self.assertItemsEqual([], part_titles_in_decouple_stage(7))
+        self.assertCountEqual([], part_titles_in_decouple_stage(7))
 
     def test_modules_with_name(self):
         modules = self.parts.modules_with_name('ModuleLight')
-        self.assertItemsEqual(['ModuleLight']*4, [m.name for m in modules])
+        self.assertCountEqual(['ModuleLight']*4, [m.name for m in modules])
         modules = self.parts.modules_with_name('DoesntExist')
-        self.assertItemsEqual([], modules)
+        self.assertCountEqual([], modules)
 
     def test_antennas(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Mk1-2 Command Pod', 'Communotron 16'],
             [p.part.title for p in self.parts.antennas])
 
     def test_cargo_bays(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Service Bay (2.5m)'],
             [p.part.title for p in self.parts.cargo_bays])
 
     def test_control_surfaces(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Delta-Deluxe Winglet'],
             [p.part.title for p in self.parts.control_surfaces])
 
     def test_decouplers(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['TR-XL Stack Separator', 'TT-70 Radial Decoupler'] * 3,
             [p.part.title for p in self.parts.decouplers])
 
     def test_docking_ports(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Clamp-O-Tron Docking Port', 'Clamp-O-Tron Docking Port Jr.'],
             [p.part.title for p in self.parts.docking_ports])
 
@@ -291,7 +291,7 @@ class TestParts(krpctest.TestCase):
         port.name = name
 
     def test_engines(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['RE-I5 "Skipper" Liquid Fuel Engine',
              'RE-L10 "Poodle" Liquid Fuel Engine',
              'RE-M3 "Mainsail" Liquid Fuel Engine'] +
@@ -299,7 +299,7 @@ class TestParts(krpctest.TestCase):
             [p.part.title for p in self.parts.engines])
 
     def test_experiments(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Mk1-2 Command Pod',
              'GRAVMAX Negative Gravioli Detector',
              'PresMat Barometer'] +
@@ -307,73 +307,73 @@ class TestParts(krpctest.TestCase):
             [p.part.title for p in self.parts.experiments])
 
     def test_fairings(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['AE-FF1 Airstream Protective Shell (1.25m)'],
             [p.part.title for p in self.parts.fairings])
 
     def test_intakes(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Adjustable Ramp Intake (Radial)', 'XM-G50 Radial Air Intake'],
             [p.part.title for p in self.parts.intakes])
 
     def test_legs(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['LT-1 Landing Struts']*3,
             [p.part.title for p in self.parts.legs])
 
     def test_launch_clamps(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['TT18-A Launch Stability Enhancer']*6,
             [p.part.title for p in self.parts.launch_clamps])
 
     def test_lights(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Illuminator Mk1']*3 + ['LY-10 Small Landing Gear'],
             [p.part.title for p in self.parts.lights])
 
     def test_parachutes(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Mk2-R Radial-Mount Parachute']*3,
             [p.part.title for p in self.parts.parachutes])
 
     def test_radiators(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Thermal Control System (small)'],
             [p.part.title for p in self.parts.radiators])
 
     def test_rcs(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['RV-105 RCS Thruster Block'],
             [p.part.title for p in self.parts.rcs])
 
     def test_reaction_wheels(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Advanced Reaction Wheel Module, Large', 'Mk1-2 Command Pod'],
             [p.part.title for p in self.parts.reaction_wheels])
 
     def test_resource_converters(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Convert-O-Tron 250'],
             [p.part.title for p in self.parts.resource_converters])
 
     def test_resource_harvesters(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['\'Drill-O-Matic Junior\' Mining Excavator'],
             [p.part.title for p in self.parts.resource_harvesters])
 
     def test_sensors(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['GRAVMAX Negative Gravioli Detector', 'PresMat Barometer'],
             [p.part.title for p in self.parts.sensors])
 
     def test_solar_panels(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Gigantor XL Solar Array', 'OX-STAT Photovoltaic Panels'] +
             ['SP-L 1x6 Photovoltaic Panels'] * 2,
             [p.part.title for p in self.parts.solar_panels])
 
     def test_wheels(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['LY-10 Small Landing Gear'],
             [p.part.title for p in self.parts.wheels])
 

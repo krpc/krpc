@@ -27,7 +27,7 @@ class TestPartsModule(krpctest.TestCase):
         self.assertFalse(module.has_field('DoesntExist'))
         self.assertEqual('Operational', module.get_field('Command State'))
         self.assertRaises(RuntimeError, module.get_field, 'DoesntExist')
-        self.assertItemsEqual(['Control From Here', 'Rename Vessel',
+        self.assertCountEqual(['Control From Here', 'Rename Vessel',
                                'Control Point: Default'],
                               module.events)
         self.assertTrue(module.has_event('Control From Here'))
@@ -55,11 +55,11 @@ class TestPartsModule(krpctest.TestCase):
         self.assertFalse(module.has_field('DoesntExist'))
         self.assertEqual('Retracted', module.get_field('Status'))
         self.assertRaises(RuntimeError, module.get_field, 'DoesntExist')
-        self.assertItemsEqual(['Extend Solar Panel'], module.events)
+        self.assertCountEqual(['Extend Solar Panel'], module.events)
         self.assertTrue(module.has_event('Extend Solar Panel'))
         self.assertFalse(module.has_event('DoesntExist'))
         self.assertRaises(RuntimeError, module.trigger_event, 'DoesntExist')
-        self.assertItemsEqual(['Extend Solar Panel', 'Retract Solar Panel',
+        self.assertCountEqual(['Extend Solar Panel', 'Retract Solar Panel',
                                'Toggle Solar Panel'], module.actions)
         self.assertFalse(module.has_action('DoesntExist'))
         self.assertRaises(

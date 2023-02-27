@@ -12,8 +12,8 @@ class TestWaypoints(krpctest.TestCase):
         cls.body = cls.space_center.bodies['Kerbin']
 
     def test_manager(self):
-        self.assertItemsEqual([], self.wpm.waypoints)
-        self.assertItemsEqual(
+        self.assertCountEqual([], self.wpm.waypoints)
+        self.assertCountEqual(
             ['balloon', 'default', 'dish', 'eva', 'gravity', 'marker',
              'pressure', 'report', 'sample', 'seismic', 'thermometer',
              'vessel', 'custom'],

@@ -14,7 +14,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.goo = self.parts.with_name('GooExperiment')[0].experiment
 
     def test_experiments(self):
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['crewReport', 'crewReport', 'mysteryGoo'],
             [x.name for x in self.parts.experiments])
 
@@ -25,7 +25,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertTrue(self.pod.rerunnable)
         self.assertFalse(self.pod.inoperable)
         self.assertFalse(self.pod.has_data)
-        self.assertItemsEqual([], self.pod.data)
+        self.assertCountEqual([], self.pod.data)
         self.assertEqual(True, self.pod.available)
         self.assertEqual('LaunchPad', self.pod.biome)
         subject = self.pod.science_subject
@@ -44,7 +44,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertFalse(self.goo.rerunnable)
         self.assertFalse(self.goo.inoperable)
         self.assertFalse(self.goo.has_data)
-        self.assertItemsEqual([], self.goo.data)
+        self.assertCountEqual([], self.goo.data)
         subject = self.goo.science_subject
         self.assertAlmostEqual(0, subject.science)
         self.assertAlmostEqual(3.9, subject.science_cap, places=4)
@@ -61,7 +61,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertTrue(self.pod.rerunnable)
         self.assertFalse(self.pod.inoperable)
         self.assertFalse(self.pod.has_data)
-        self.assertItemsEqual([], self.pod.data)
+        self.assertCountEqual([], self.pod.data)
 
         self.pod.run()
         self.wait()
@@ -71,9 +71,9 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertFalse(self.pod.inoperable)
         self.assertTrue(self.pod.has_data)
 
-        self.assertItemsEqual([5], [x.data_amount for x in self.pod.data])
-        self.assertItemsEqual([1.5], [x.science_value for x in self.pod.data])
-        self.assertItemsEqual([1.5], [x.transmit_value for x in self.pod.data])
+        self.assertCountEqual([5], [x.data_amount for x in self.pod.data])
+        self.assertCountEqual([1.5], [x.science_value for x in self.pod.data])
+        self.assertCountEqual([1.5], [x.transmit_value for x in self.pod.data])
 
         self.pod.dump()
         self.wait()
@@ -82,7 +82,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertTrue(self.pod.rerunnable)
         self.assertFalse(self.pod.inoperable)
         self.assertFalse(self.pod.has_data)
-        self.assertItemsEqual([], self.pod.data)
+        self.assertCountEqual([], self.pod.data)
 
     def test_run_and_transmit_data(self):
         self.assertEqual(7, self.sc.science)
@@ -91,7 +91,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertTrue(self.pod.rerunnable)
         self.assertFalse(self.pod.inoperable)
         self.assertFalse(self.pod.has_data)
-        self.assertItemsEqual([], self.pod.data)
+        self.assertCountEqual([], self.pod.data)
 
         self.pod.run()
         self.wait()
@@ -101,9 +101,9 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertFalse(self.pod.inoperable)
         self.assertTrue(self.pod.has_data)
 
-        self.assertItemsEqual([5], [x.data_amount for x in self.pod.data])
-        self.assertItemsEqual([1.5], [x.science_value for x in self.pod.data])
-        self.assertItemsEqual([1.5], [x.transmit_value for x in self.pod.data])
+        self.assertCountEqual([5], [x.data_amount for x in self.pod.data])
+        self.assertCountEqual([1.5], [x.science_value for x in self.pod.data])
+        self.assertCountEqual([1.5], [x.transmit_value for x in self.pod.data])
 
         self.pod.transmit()
         self.wait()
@@ -112,7 +112,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertTrue(self.pod.rerunnable)
         self.assertFalse(self.pod.inoperable)
         self.assertFalse(self.pod.has_data)
-        self.assertItemsEqual([], self.pod.data)
+        self.assertCountEqual([], self.pod.data)
 
         self.assertEqual(7, self.sc.science)
         self.wait(5)
@@ -123,7 +123,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertTrue(self.pod.rerunnable)
         self.assertFalse(self.pod.inoperable)
         self.assertFalse(self.pod.has_data)
-        self.assertItemsEqual([], self.pod.data)
+        self.assertCountEqual([], self.pod.data)
 
         self.pod.run()
         self.wait()
@@ -142,14 +142,14 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertTrue(self.pod.rerunnable)
         self.assertFalse(self.pod.inoperable)
         self.assertFalse(self.pod.has_data)
-        self.assertItemsEqual([], self.pod.data)
+        self.assertCountEqual([], self.pod.data)
 
     def test_run_twice_success(self):
         self.assertFalse(self.pod.deployed)
         self.assertTrue(self.pod.rerunnable)
         self.assertFalse(self.pod.inoperable)
         self.assertFalse(self.pod.has_data)
-        self.assertItemsEqual([], self.pod.data)
+        self.assertCountEqual([], self.pod.data)
 
         for _ in range(2):
             self.pod.run()
@@ -167,7 +167,7 @@ class TestPartsExperiment(krpctest.TestCase):
             self.assertTrue(self.pod.rerunnable)
             self.assertFalse(self.pod.inoperable)
             self.assertFalse(self.pod.has_data)
-            self.assertItemsEqual([], self.pod.data)
+            self.assertCountEqual([], self.pod.data)
 
             self.pod.reset()
             self.wait()
@@ -176,7 +176,7 @@ class TestPartsExperiment(krpctest.TestCase):
             self.assertTrue(self.pod.rerunnable)
             self.assertFalse(self.pod.inoperable)
             self.assertFalse(self.pod.has_data)
-            self.assertItemsEqual([], self.pod.data)
+            self.assertCountEqual([], self.pod.data)
 
 
 if __name__ == '__main__':
