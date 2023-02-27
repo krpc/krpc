@@ -26,6 +26,7 @@ setup(
     long_description=open(os.path.join(dirpath, 'README.txt')).read(),
     packages=['krpctest', 'krpctest.test'],
     package_data={'': ['krpctest.sfs', 'krpctest_career.sfs']},
+    python_requires=">=3.4",
     install_requires=install_requires,
     test_suite='krpctest.test',
     classifiers=[
