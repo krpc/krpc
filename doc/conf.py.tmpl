@@ -6,7 +6,7 @@ copyright = '2015-2017, djungelorm'
 master_doc = 'index'
 source_suffix = '.rst'
 extensions = ['sphinx.ext.mathjax', 'sphinxcontrib.spelling', 'sphinx.ext.todo', 'sphinx.ext.extlinks',
-              'redjack.sphinx.lua', 'sphinx_csharp.csharp', 'javasphinx', 'sphinx_tabs.tabs']
+              'sphinxcontrib.luadomain', 'sphinx_csharp.csharp', 'javasphinx', 'sphinx_tabs.tabs']
 templates_path = ['_templates']
 
 pygments_style = 'sphinx'
@@ -122,15 +122,15 @@ nitpick_ignore = [
     ('java:type', 'krpc.schema.KRPC.Status'),
     ('java:type', 'krpc.schema.KRPC.Stream'),
 
-    ('lua:obj', 'boolean'),
-    ('lua:obj', 'number'),
-    ('lua:obj', 'string'),
-    ('lua:obj', 'Tuple'),
-    ('lua:obj', 'List'),
-    ('lua:obj', 'Set'),
-    ('lua:obj', 'Map'),
+    ('lua:class', 'boolean'),
+    ('lua:class', 'number'),
+    ('lua:class', 'string'),
+    ('lua:class', 'Tuple'),
+    ('lua:class', 'List'),
+    ('lua:class', 'Set'),
+    ('lua:class', 'Map'),
     ('lua:class', 'krpc.schema.KRPC.Event'),
-    ('lua:obj', 'krpc.schema.KRPC.ProcedureCall'),
+    ('lua:class', 'krpc.schema.KRPC.ProcedureCall'),
     ('lua:class', 'krpc.schema.KRPC.Services'),
     ('lua:class', 'krpc.schema.KRPC.Status'),
     ('lua:class', 'krpc.schema.KRPC.Stream'),

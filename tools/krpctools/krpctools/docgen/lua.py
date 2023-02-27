@@ -31,17 +31,13 @@ class LuaDomain(Domain):
         if isinstance(typ, EnumerationType):
             return ':class:`%s`' % self.type(typ)
         if isinstance(typ, ListType):
-            return 'List of %s' % self.type_description(typ.value_type)
+            return 'List'
         if isinstance(typ, DictionaryType):
-            return 'Map from %s to %s' % \
-                (self.type_description(typ.key_type),
-                 self.type_description(typ.value_type))
+            return 'Map'
         if isinstance(typ, SetType):
-            return 'Set of %s' % self.type_description(typ.value_type)
+            return 'Set'
         if isinstance(typ, TupleType):
-            return 'Tuple of (%s)' % \
-                ', '.join(self.type_description(typ)
-                          for typ in typ.value_types)
+            return 'Tuple'
         raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
     def ref(self, obj):

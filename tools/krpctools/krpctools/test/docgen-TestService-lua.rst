@@ -27,7 +27,7 @@ Service documentation string.
 
    :param List l:
    :param string value:
-   :rtype: List of :class:`TestService.TestClass`
+   :rtype: List
 
 
 
@@ -89,7 +89,7 @@ Service documentation string.
 
 
    :param Map x:
-   :rtype: Map from number to boolean
+   :rtype: Map
 
 
 
@@ -158,7 +158,7 @@ Service documentation string.
 
 
    :param Map d:
-   :rtype: Map from string to number
+   :rtype: Map
 
 
 
@@ -168,7 +168,7 @@ Service documentation string.
 
 
    :param List l:
-   :rtype: List of number
+   :rtype: List
 
 
 
@@ -178,7 +178,7 @@ Service documentation string.
 
 
    :param Map d:
-   :rtype: Map from string to List of number
+   :rtype: Map
 
 
 
@@ -188,7 +188,7 @@ Service documentation string.
 
 
    :param Set h:
-   :rtype: Set of number
+   :rtype: Set
 
 
 
@@ -198,7 +198,7 @@ Service documentation string.
 
 
    :param Tuple t:
-   :rtype: Tuple of (number, number)
+   :rtype: Tuple
 
 
 
@@ -228,12 +228,12 @@ Service documentation string.
 
 
    :param List x:
-   :rtype: List of number
+   :rtype: List
 
 
 
 
-.. attribute:: object_property
+.. attribute:: object_property: TestService.TestClass
 
 
 
@@ -307,12 +307,12 @@ Service documentation string.
 
 
    :param Set x:
-   :rtype: Set of number
+   :rtype: Set
 
 
 
 
-.. attribute:: string_property
+.. attribute:: string_property: string
 
    Property documentation string.
 
@@ -322,7 +322,7 @@ Service documentation string.
 
 
 
-.. attribute:: string_property_private_get
+.. attribute:: string_property_private_get: string
 
 
 
@@ -332,7 +332,7 @@ Service documentation string.
 
 
 
-.. attribute:: string_property_private_set
+.. attribute:: string_property_private_set: string
 
 
 
@@ -422,7 +422,7 @@ Service documentation string.
 
 
    :param Tuple x:
-   :rtype: Tuple of (number, boolean)
+   :rtype: Tuple
 
 
 
@@ -445,14 +445,14 @@ Service documentation string.
 
       :rtype: string
 
-   .. attribute:: int_property
+   .. attribute:: int_property: number
 
       Property documentation string.
 
       :Attribute: Can be read or written
       :rtype: number
 
-   .. attribute:: object_property
+   .. attribute:: object_property: TestService.TestClass
 
 
 

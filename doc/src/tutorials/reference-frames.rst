@@ -240,19 +240,19 @@ kRPC provides the following reference frames:
 
    .. tab:: Lua
 
-      * :lua:attr:`Vessel.reference_frame`
-      * :lua:attr:`Vessel.orbital_reference_frame`
-      * :lua:attr:`Vessel.surface_reference_frame`
-      * :lua:attr:`Vessel.surface_velocity_reference_frame`
-      * :lua:attr:`CelestialBody.reference_frame`
-      * :lua:attr:`CelestialBody.non_rotating_reference_frame`
-      * :lua:attr:`CelestialBody.orbital_reference_frame`
-      * :lua:attr:`Node.reference_frame`
-      * :lua:attr:`Node.orbital_reference_frame`
-      * :lua:attr:`Part.reference_frame`
-      * :lua:attr:`Part.center_of_mass_reference_frame`
-      * :lua:attr:`DockingPort.reference_frame`
-      * :lua:attr:`Thruster.thrust_reference_frame`
+      * :lua:attr:`SpaceCenter.Vessel.reference_frame`
+      * :lua:attr:`SpaceCenter.Vessel.orbital_reference_frame`
+      * :lua:attr:`SpaceCenter.Vessel.surface_reference_frame`
+      * :lua:attr:`SpaceCenter.Vessel.surface_velocity_reference_frame`
+      * :lua:attr:`SpaceCenter.CelestialBody.reference_frame`
+      * :lua:attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame`
+      * :lua:attr:`SpaceCenter.CelestialBody.orbital_reference_frame`
+      * :lua:attr:`SpaceCenter.Node.reference_frame`
+      * :lua:attr:`SpaceCenter.Node.orbital_reference_frame`
+      * :lua:attr:`SpaceCenter.Part.reference_frame`
+      * :lua:attr:`SpaceCenter.Part.center_of_mass_reference_frame`
+      * :lua:attr:`SpaceCenter.DockingPort.reference_frame`
+      * :lua:attr:`SpaceCenter.Thruster.thrust_reference_frame`
 
    .. tab:: Python
 

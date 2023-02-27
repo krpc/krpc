@@ -31,7 +31,7 @@ def targets_to_paths(targets):
 # Get paths to source files
 targets = [line.strip() for line in
            subprocess.check_output([
-               'bazel', 'query', 'kind(file, deps(//doc:srcs))']).split('\n')
+               'bazel', 'query', 'kind(file, deps(//doc:srcs))']).decode().split('\n')
            if len(line) > 0]
 dependencies = set(targets_to_paths(targets))
 
@@ -75,7 +75,7 @@ UpdateStagedFiles().process_default(None)
 
 # Auto-serve the docs
 p = subprocess.Popen(['sphinx-autobuild', '-W', '-n', '-T',
-                      '-H', '0.0.0.0', '-p', port, stage, out])
+                      '--host', '0.0.0.0', '--port', port, stage, out])
 
 # Auto-update the stage directory when a dependency changes
 watch_manager = pyinotify.WatchManager()

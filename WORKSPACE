@@ -97,6 +97,13 @@ git_repository(
 )
 
 http_archive(
+   name = "com_googlesource_code_re2",
+   sha256 = "906d0df8ff48f8d3a00a808827f009a840190f404559f649cb8e4d7143255ef9",
+   strip_prefix = "re2-a276a8c738735a0fe45a6ee590fe2df69bcf4502",
+   urls = ["https://github.com/google/re2/archive/a276a8c738735a0fe45a6ee590fe2df69bcf4502.zip"]
+)
+
+http_archive(
     name = 'protoc_linux_x86_32',
     build_file_content = "exports_files(['bin/protoc'])",
     url = 'https://github.com/protocolbuffers/protobuf/releases/download/v22.0/protoc-22.0-linux-x86_32.zip',
@@ -612,8 +619,8 @@ http_file(
 
 http_file(
     name = 'python_jinja2',
-    urls = ['https://files.pythonhosted.org/packages/4f/e7/65300e6b32e69768ded990494809106f87da1d436418d5f1367ed3966fd7/Jinja2-2.11.3.tar.gz'],
-    sha256 = 'a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6',
+    urls = ['https://files.pythonhosted.org/packages/7b/db/1d037ccd626d05a7a47a1b81ea73775614af83c2b3e53d86a0bb41d8d799/Jinja2-2.10.3.tar.gz'],
+    sha256 = '9fe95f19286cfefaa917656583d020be14e7859c6b0252588391e47db34527de',
     downloaded_file_path = 'package.tar.gz'
 )
 
@@ -779,9 +786,9 @@ http_file(
 )
 
 http_file(
-    name = 'python_sphinx_lua',
-    urls = ['https://github.com/djungelorm/sphinx-lua/releases/download/0.1.5/sphinx-lua-0.1.5.tar.gz'],
-    sha256 = 'e081abafa3a5baaebab7adb57c8a485ac1de48d8d5d5982fa642131f29c04eda',
+    name = 'python_sphinxcontrib_luadomain',
+    urls = ['https://files.pythonhosted.org/packages/54/15/eb8f5c1b2d8cbdbc9eb0444a5aa72b564b1640573b5132b1ec1b79efc06d/sphinxcontrib-luadomain-1.1.2.tar.gz'],
+    sha256 = 'c3286ffdb3157350ca7a345addc3b4a6531008b9d8b2b03ead2d64943b33d141',
     downloaded_file_path = 'package.tar.gz'
 )
 

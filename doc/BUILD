@@ -82,7 +82,7 @@ py_script(
         '@python_sphinxcontrib_websupport//file',
         '@python_sphinx_csharp//file',
         '@python_javasphinx//file',
-        '@python_sphinx_lua//file',
+        '@python_sphinxcontrib_luadomain//file',
         '@python_sphinx_rtd_theme//file',
         '@python_sphinx_tabs//file'
     ],
