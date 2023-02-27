@@ -8,7 +8,7 @@ namespace KRPC.InfernalRobotics
 {
     /// <summary>
     /// This service provides functionality to interact with
-    /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/104535-112-magic-smoke-industries-infernal-robotics-202/">Infernal Robotics</a>.
+    /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/184787-infernal-robotics-next/">Infernal Robotics</a>.
     /// </summary>
     [KRPCService (Id = 4, GameScene = GameScene.Flight)]
     public static class InfernalRobotics
@@ -25,7 +25,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public static bool Available {
-            get { return IRWrapper.IRWrapper.Instance.AssemblyExists; }
+            get { return IRWrapper.AssemblyExists; }
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public static bool Ready{
-            get { return IRWrapper.IRWrapper.Instance.APIReady; }
+            get { return IRWrapper.APIReady; }
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace KRPC.InfernalRobotics
         public static IList<ServoGroup> ServoGroups (SpaceCenter.Services.Vessel vessel)
         {
             CheckAPI ();
-            return IRWrapper.IRWrapper.Instance.IRController.ServoGroups.Where (x => x.Vessel.id == vessel.Id).Select (x => new ServoGroup (x)).ToList ();
+            return IRWrapper.IRController.ServoGroups.Where (x => x.Vessel.id == vessel.Id).Select (x => new ServoGroup (x)).ToList ();
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace KRPC.InfernalRobotics
         public static ServoGroup ServoGroupWithName (SpaceCenter.Services.Vessel vessel, string name)
         {
             CheckAPI ();
-            var servoGroup = IRWrapper.IRWrapper.Instance.IRController.ServoGroups.FirstOrDefault (x => x.Vessel.id == vessel.Id && x.Name == name);
+            var servoGroup = IRWrapper.IRController.ServoGroups.FirstOrDefault (x => x.Vessel.id == vessel.Id && x.Name == name);
             return servoGroup != null ? new ServoGroup (servoGroup) : null;
         }
 
@@ -70,7 +70,7 @@ namespace KRPC.InfernalRobotics
         public static Servo ServoWithName (SpaceCenter.Services.Vessel vessel, string name)
         {
             CheckAPI ();
-            var servo = IRWrapper.IRWrapper.Instance.IRController.ServoGroups
+            var servo = IRWrapper.IRController.ServoGroups
                 .Where (x => x.Vessel.id == vessel.Id)
                 .SelectMany (x => x.Servos)
                 .FirstOrDefault (x => x.Name == name);

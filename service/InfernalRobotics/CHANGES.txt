@@ -1,3 +1,7 @@
+v0.5.0
+ * Update to work with Infernal Robotics Next v3.1.9
+ * Drop support for original Infernal Robotics mod
+
 v0.4.8
  * Add suport for both original Infernal Robotics and Infernal Robotics Next (#476)
  * Add InfernalRobotics.Ready which indicates if the IR is on the current vessel and ready to receive commands

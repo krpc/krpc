@@ -7,7 +7,7 @@ class TestServo(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('InfernalRobotics', directory='./')
+        cls.launch_vessel_from_vab('InfernalRobotics')
         cls.remove_other_vessels()
         cls.ir = cls.connect().infernal_robotics
         cls.vessel = cls.connect().space_center.active_vessel
