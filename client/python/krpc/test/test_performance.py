@@ -1,4 +1,3 @@
-from __future__ import print_function
 import unittest
 import timeit
 from krpc.test.servertestcase import ServerTestCase
