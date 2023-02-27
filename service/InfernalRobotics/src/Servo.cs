@@ -200,24 +200,6 @@ namespace KRPC.InfernalRobotics
         }
 
         /// <summary>
-        /// Moves the servo to the next preset.
-        /// </summary>
-        [KRPCMethod]
-        public void MoveNextPreset ()
-        {
-            servo.MoveNextPreset ();
-        }
-
-        /// <summary>
-        /// Moves the servo to the previous preset.
-        /// </summary>
-        [KRPCMethod]
-        public void MovePrevPreset ()
-        {
-            servo.MovePrevPreset ();
-        }
-
-        /// <summary>
         /// Moves the servo to <paramref name="position"/> and sets the
         /// speed multiplier to <paramref name="speed"/>.
         /// </summary>
