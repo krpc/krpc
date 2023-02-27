@@ -173,12 +173,9 @@ py_script = rule(
     executable = True
 )
 
-def _test_impl(ctx, pyexe='python3'):
-    sub_commands = ['virtualenv env --python %s --quiet --never-download ' % pyexe]
+def _test_impl(ctx):
+    sub_commands = ['virtualenv env --python python3 --quiet --never-download']
     for dep in ctx.files.deps:
-        if pyexe == 'python3' and dep.path == 'external/python_enum34/file/downloaded':
-            # enum34 not required with Python 3
-            continue
         sub_commands.append(
             'env/bin/python env/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s'
             % dep.short_path)
@@ -200,11 +197,8 @@ def _test_impl(ctx, pyexe='python3'):
         runfiles = runfiles
     )
 
-def _test3_impl(ctx):
-    return _test_impl(ctx, pyexe='python3')
-
-py3_test = rule(
-    implementation = _test3_impl,
+py_test = rule(
+    implementation = _test_impl,
     attrs = {
         'src': attr.label(allow_single_file=True),
         'pkg': attr.string(mandatory=True),
@@ -212,8 +206,6 @@ py3_test = rule(
     },
     test = True
 )
-
-py_test = py3_test
 
 def _lint_impl(ctx):
     out = ctx.outputs.executable

@@ -1,4 +1,4 @@
-load('//tools/build:python.bzl', 'py_sdist', 'py3_test', 'py_lint_test')
+load('//tools/build:python.bzl', 'py_sdist', 'py_test', 'py_lint_test')
 load('//:config.bzl', 'version', 'python_version')
 
 py_sdist(
@@ -20,12 +20,12 @@ py_sdist(
 
 test_suite(
     name = 'test',
-    tests = [':test3', ':lint']
+    tests = [':krpctesttest', ':lint']
 )
 
 test_suite(
     name = 'ci-test',
-    tests = [':test3']
+    tests = [':krpctesttest']
 )
 
 deps = [
@@ -34,8 +34,8 @@ deps = [
     '@python_protobuf//file'
 ]
 
-py3_test(
-    name = 'test3',
+py_test(
+    name = 'krpctesttest',
     src = ':krpctest',
     pkg = 'krpctest-'+python_version,
     deps = deps,
