@@ -15,10 +15,8 @@ namespace KRPC.InfernalRobotics
 		protected internal static Type IRControllerType { get; set; }
 
 		protected internal static Type IRServoGroupType { get; set; }
-		protected internal static Type IRMotorGroupType { get; set; }
 
 		protected internal static Type IRServoType { get; set; }
-		protected internal static Type IRMotorType { get; set; }
 
 		protected internal static object ActualController { get; set; }
 
@@ -44,16 +42,6 @@ namespace KRPC.InfernalRobotics
 
 			LogFormatted("IR Version:{0}", IRControllerType.Assembly.GetName().Version.ToString());
 
-			IRMotorType = null;
-			AssemblyLoader.loadedAssemblies.TypeOperation (t => {
-				if(t.FullName == "InfernalRobotics_v3.Interfaces.IMotor") { IRMotorType = t; } });
-
-			if(IRMotorType == null)
-			{
-				LogFormatted("[IR Wrapper] Failed to grab Motor Type");
-				return false;
-			}
-
 			IRServoType = null;
 			AssemblyLoader.loadedAssemblies.TypeOperation (t => {
 				if(t.FullName == "InfernalRobotics_v3.Interfaces.IServo") { IRServoType = t; } });
@@ -64,19 +52,9 @@ namespace KRPC.InfernalRobotics
 				return false;
 			}
 
-			IRMotorGroupType = null;
-			AssemblyLoader.loadedAssemblies.TypeOperation (t => {
-				if(t.FullName == "InfernalRobotics_v3.Command.IMotorGroup") { IRMotorGroupType = t; } });
-
-			if(IRMotorGroupType == null)
-			{
-				LogFormatted("[IR Wrapper] Failed to grab MotorGroup Type");
-				return false;
-			}
-
 			IRServoGroupType = null;
 			AssemblyLoader.loadedAssemblies.TypeOperation (t => {
-				if(t.FullName == "InfernalRobotics_v3.Command.IServoGroup") { IRServoGroupType = t; } });
+				if(t.FullName == "InfernalRobotics_v3.Interfaces.IServoGroup") { IRServoGroupType = t; } });
 
 			if(IRServoGroupType == null)
 			{
@@ -344,7 +322,7 @@ namespace KRPC.InfernalRobotics
 			private PropertyInfo minPositionLimitProperty;
 			private PropertyInfo maxPositionLimitProperty;
 
-			private PropertyInfo torqueLimitProperty;
+			private PropertyInfo forceLimitProperty;
 			private PropertyInfo accelerationLimitProperty;
 			private PropertyInfo speedLimitProperty;
 			private PropertyInfo defaultSpeedProperty;
@@ -364,8 +342,6 @@ namespace KRPC.InfernalRobotics
 			private MethodInfo moveLeftMethod;
 			private MethodInfo moveCenterMethod;
 			private MethodInfo moveRightMethod;
-			private MethodInfo moveNextPresetMethod;
-			private MethodInfo movePrevPresetMethod;
 			private MethodInfo moveToMethod;
 			private MethodInfo stopMethod;
 
@@ -391,17 +367,17 @@ namespace KRPC.InfernalRobotics
 				minPositionLimitProperty = IRServoType.GetProperty("MinPositionLimit");
 				maxPositionLimitProperty = IRServoType.GetProperty("MaxPositionLimit");
 
-				torqueLimitProperty = IRMotorType.GetProperty("TorqueLimit");
-				accelerationLimitProperty = IRMotorType.GetProperty("AccelerationLimit");
-				speedLimitProperty = IRMotorType.GetProperty("SpeedLimit");
-				defaultSpeedProperty = IRMotorType.GetProperty("DefaultSpeed");
+				forceLimitProperty = IRServoType.GetProperty("ForceLimit");
+				accelerationLimitProperty = IRServoType.GetProperty("AccelerationLimit");
+				speedLimitProperty = IRServoType.GetProperty("SpeedLimit");
+				defaultSpeedProperty = IRServoType.GetProperty("DefaultSpeed");
 
 				isMovingProperty = IRServoType.GetProperty("IsMoving");
 				isLockedProperty = IRServoType.GetProperty("IsLocked");
-				isInvertedProperty = IRMotorType.GetProperty("IsInverted");
+				isInvertedProperty = IRServoType.GetProperty("IsInverted");
 
-				commandedPositionProperty = IRMotorType.GetProperty("CommandedPosition");
-				commandedSpeedProperty = IRMotorType.GetProperty("CommandedSpeed");
+				commandedPositionProperty = IRServoType.GetProperty("CommandedPosition");
+				commandedSpeedProperty = IRServoType.GetProperty("CommandedSpeed");
 
 				positionProperty = IRServoType.GetProperty("Position");
 
@@ -411,13 +387,11 @@ namespace KRPC.InfernalRobotics
 
 			private void FindMethods()
 			{
-				moveLeftMethod = IRMotorType.GetMethod("MoveLeft", BindingFlags.Public | BindingFlags.Instance);
-				moveCenterMethod = IRMotorType.GetMethod("MoveCenter", BindingFlags.Public | BindingFlags.Instance);
-				moveRightMethod = IRMotorType.GetMethod("MoveRight", BindingFlags.Public | BindingFlags.Instance);
-				moveNextPresetMethod = IRMotorType.GetMethod("MoveNextPreset", BindingFlags.Public | BindingFlags.Instance);
-				movePrevPresetMethod = IRMotorType.GetMethod("MovePrevPreset", BindingFlags.Public | BindingFlags.Instance);
-				moveToMethod = IRMotorType.GetMethod("MoveTo", new [] { typeof(float), typeof(float) });
-				stopMethod = IRMotorType.GetMethod("Stop", BindingFlags.Public | BindingFlags.Instance);
+				moveLeftMethod = IRServoType.GetMethod("MoveLeft", BindingFlags.Public | BindingFlags.Instance);
+				moveCenterMethod = IRServoType.GetMethod("MoveCenter", BindingFlags.Public | BindingFlags.Instance);
+				moveRightMethod = IRServoType.GetMethod("MoveRight", BindingFlags.Public | BindingFlags.Instance);
+				moveToMethod = IRServoType.GetMethod("MoveTo", new [] { typeof(float), typeof(float) });
+				stopMethod = IRServoType.GetMethod("Stop", BindingFlags.Public | BindingFlags.Instance);
 			}
 
 			private readonly object actualServo;
@@ -474,10 +448,10 @@ namespace KRPC.InfernalRobotics
 				set { maxPositionLimitProperty.SetValue(actualServo, value, null); }
 			}
 
-			public float TorqueLimit
+			public float ForceLimit
 			{
-				get { return (float)torqueLimitProperty.GetValue(actualServo, null); }
-				set { torqueLimitProperty.SetValue(actualServo, value, null); }
+				get { return (float)forceLimitProperty.GetValue(actualServo, null); }
+				set { forceLimitProperty.SetValue(actualServo, value, null); }
 			}
 
 			public float AccelerationLimit
@@ -544,17 +518,6 @@ namespace KRPC.InfernalRobotics
 			{
 				moveRightMethod.Invoke(actualServo, new object [] {});
 			}
-
-			public void MoveNextPreset()
-			{
-				moveNextPresetMethod.Invoke(actualServo, new object [] {});
-			}
-
-			public void MovePrevPreset()
-			{
-				movePrevPresetMethod.Invoke(actualServo, new object [] {});
-			}
-
 			public void MoveTo(float position, float speed)
 			{
 				moveToMethod.Invoke(actualServo, new object [] { position, speed });
@@ -665,7 +628,7 @@ namespace KRPC.InfernalRobotics
 			float MinPositionLimit { get; set; }
 			float MaxPositionLimit { get; set; }
 
-			float TorqueLimit { get; set;}
+			float ForceLimit { get; set;}
 
 			float AccelerationLimit { get; set; }
 
@@ -687,9 +650,6 @@ namespace KRPC.InfernalRobotics
 			void MoveLeft();
 			void MoveCenter();
 			void MoveRight();
-
-			void MoveNextPreset();
-			void MovePrevPreset();
 
 			void MoveTo (float position, float speed);
 
