@@ -1133,8 +1133,6 @@ InfernalRobotics.Servo.IsAxisInverted
 InfernalRobotics.Servo.MoveRight
 InfernalRobotics.Servo.MoveLeft
 InfernalRobotics.Servo.MoveCenter
-InfernalRobotics.Servo.MoveNextPreset
-InfernalRobotics.Servo.MovePrevPreset
 InfernalRobotics.Servo.MoveTo
 InfernalRobotics.Servo.Stop
 KerbalAlarmClock
