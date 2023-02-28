@@ -148,7 +148,7 @@ def _gendarme_impl(ctx):
     else:
         src = ctx.attr.exe.bin
         mdb = ctx.attr.exe.mdb
-    runfiles = [src, mdb, ctx.file.config]
+    runfiles = [src, mdb, ctx.file.config, ctx.file._gendarme_summary]
     if ctx.attr.ignores:
         runfiles.append(ctx.file.ignores)
 
@@ -161,7 +161,7 @@ def _gendarme_impl(ctx):
 
     ctx.actions.write(
         ctx.outputs.executable,
-        'MONO_OPTIONS="--debug" /usr/bin/gendarme %s\n' % ' '.join(args)
+        'MONO_OPTIONS="--debug" /usr/bin/gendarme %s | python %s\n' % (' '.join(args), ctx.file._gendarme_summary.path)
     )
 
     return struct(
@@ -269,7 +269,9 @@ csharp_gendarme_test = rule(
         'config': attr.label(default=Label('//tools/build:csharp_gendarme_rules.xml'),
                              allow_single_file=True),
         'ruleset': attr.string(default='default'),
-        'ignores': attr.label(allow_single_file=True)
+        'ignores': attr.label(allow_single_file=True),
+        '_gendarme_summary': attr.label(default=Label('//tools/build:gendarme_summary.py'),
+                             allow_single_file=True)
     },
     test = True
 )

@@ -76,7 +76,7 @@ if response.HasField('error'):
     raise RuntimeError('ERROR: ' + str(response.error))
 
 # Check for an error in the results
-assert(len(response.results) == 1)
+assert len(response.results) == 1
 if response.results[0].HasField('error'):
     raise RuntimeError('ERROR: ' + str(response.results[0].error))
 

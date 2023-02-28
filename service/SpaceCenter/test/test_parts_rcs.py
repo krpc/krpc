@@ -82,7 +82,7 @@ class RCSTest(RCSTestBase):
             data['vac_isp'], rcs.vacuum_specific_impulse)
         self.assertEqual(
             data['msl_isp'], rcs.kerbin_sea_level_specific_impulse)
-        self.assertItemsEqual(data['propellants'].keys(), rcs.propellants)
+        self.assertCountEqual(data['propellants'].keys(), rcs.propellants)
         self.assertAlmostEqual(
             data['propellants'], rcs.propellant_ratios, places=3)
         self.assertTrue(rcs.has_fuel)

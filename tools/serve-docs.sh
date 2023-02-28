@@ -5,8 +5,8 @@
 set -e
 
 port=${1:-8080}
-src=bazel-genfiles/doc/srcs
-stage=bazel-genfiles/doc/srcs-stage
+src=bazel-bin/doc/srcs
+stage=bazel-bin/doc/srcs-stage
 env=bazel-bin/doc/serve/env
 out=bazel-bin/doc/serve/out
 
@@ -22,20 +22,21 @@ if [ ! -d "$env" ]; then
   virtualenv $env --python python3
   source $env/bin/activate
   pip install --upgrade \
-      "six==1.11.0" \
-      "pbr==4.3.0" \
-      "setuptools==40.4.3" \
-      "setuptools-git==1.2"
-  pip install "Sphinx==1.8.1"
-  CFLAGS="-O0" pip install "lxml==4.2.5"
+      "jinja2==3.1.2" \
+      "markupsafe==2.1.2"
+  pip install "Sphinx==6.1.3"
+  pip install "lxml==4.9.2"
   pip install \
-      "sphinx_rtd_theme==0.4.2" \
-      "sphinxcontrib_spelling==4.2.0" \
-      "sphinx-csharp==0.1.6" \
-      "sphinx-tabs==1.1.7" \
-      "javasphinx==0.9.15" \
-      https://github.com/djungelorm/sphinx-lua/releases/download/0.1.4/sphinx-lua-0.1.4.tar.gz
-  pip install sphinx-autobuild pyinotify
+      "sphinx_rtd_theme==1.2.0" \
+      "sphinxcontrib_spelling==8.0.0" \
+      "sphinx-csharp==0.1.8" \
+      "sphinx-tabs==3.4.1" \
+      "sphinxcontrib-luadomain==1.1.2" \
+      "https://krpc.s3.amazonaws.com/lib/javasphinx/javalang-0.13.1.tar.gz" \
+      "https://krpc.s3.amazonaws.com/lib/javasphinx/javasphinx-0.9.16.tar.gz"
+  pip install \
+      "sphinx-autobuild==2021.3.14" \
+      "pyinotify==0.9.6"
 else
   source $env/bin/activate
 fi

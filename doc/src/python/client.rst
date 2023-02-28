@@ -4,8 +4,7 @@
 Python Client
 =============
 
-This client provides a Python API for interacting with a kRPC server. It supports Python 2.7+ and
-3.x
+This client provides a Python API for interacting with a kRPC server.
 
 Installing the Library
 ----------------------

@@ -1,4 +1,4 @@
-load('//tools/build:python.bzl', 'py_sdist', 'py_script', 'py3_test', 'py_lint_test')
+load('//tools/build:python.bzl', 'py_sdist', 'py_script', 'py_test', 'py_lint_test')
 load('//:config.bzl', 'version', 'python_version')
 
 license_text = """This license (GPL v3) applies to all parts of krpc.clientgen except for the following:
@@ -75,7 +75,6 @@ py_sdist(
 deps = [
     '//client/python:python_base',
     '@python_protobuf//file',
-    '@python_six//file',
     '@python_jinja2//file',
     '@python_markupsafe//file'
 ]
@@ -98,16 +97,16 @@ py_script(
 
 test_suite(
     name = 'test',
-    tests = [':test3', ':lint']
+    tests = [':krpctoolstest', ':lint']
 )
 
 test_suite(
     name = 'ci-test',
-    tests = [':test3']
+    tests = [':krpctoolstest']
 )
 
-py3_test(
-    name = 'test3',
+py_test(
+    name = 'krpctoolstest',
     src = ':krpctools',
     pkg = 'krpctools-'+python_version,
     deps = deps,

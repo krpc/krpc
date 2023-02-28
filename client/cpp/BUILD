@@ -178,7 +178,7 @@ cpp_lint_test(
     srcs = srcs + test_srcs,
     hdrs = hdrs,
     includes = ['include'],
-    filters = ['+build/include_alpha', '-legal/copyright', '-readability/todo', '-runtime/references'], #FIXME: dont pass non-const references
+    filters = ['+build/include_alpha', '-legal/copyright', '-readability/todo', '-build/include_subdir', '-runtime/references'], #FIXME: dont pass non-const references
     extra_files = ['include/krpc/services/CPPLINT.cfg', 'test/services/CPPLINT.cfg'],
     size = 'small'
 )

@@ -41,6 +41,7 @@ setup(
     },
     package_data={'': ['*.txt', '*.tmpl', '*.json', '*.rst',
                        'bin/*.exe', 'bin/*.dll', 'bin/*.xml', 'bin/*.zip']},
+    python_requires=">=3.4",
     install_requires=install_requires,
     test_suite='krpctools.test',
     classifiers=[

@@ -13,7 +13,7 @@ if expected != actual:
     print('Following were expected to be documented but where not:')
     for x in expected.difference(actual):
         print(x)
-    print
+    print()
     print('Following were documented but where not expected to be:')
     for x in actual.difference(expected):
         print(x)

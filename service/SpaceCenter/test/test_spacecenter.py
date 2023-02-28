@@ -66,7 +66,7 @@ class TestSpaceCenter(krpctest.TestCase):
         active = self.sc.active_vessel
         active.name = 'Active'
         vessels = self.sc.vessels
-        self.assertItemsEqual(
+        self.assertCountEqual(
             ['Active', 'OtherVessel'], [v.name for v in vessels])
         self.assertEqual(self.sc.vessels, vessels)
 

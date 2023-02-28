@@ -31,7 +31,7 @@ def targets_to_paths(targets):
 # Get paths to source files
 targets = [line.strip() for line in
            subprocess.check_output([
-               'bazel', 'query', 'kind(file, deps(//doc:srcs))']).split('\n')
+               'bazel', 'query', 'kind(file, deps(//doc:srcs))']).decode().split('\n')
            if len(line) > 0]
 dependencies = set(targets_to_paths(targets))
 
@@ -49,7 +49,7 @@ class UpdateStagedFiles(pyinotify.ProcessEvent):
             for filename in filenames:
                 path = os.path.relpath(os.path.join(basepath, filename), stage)
                 if not os.path.exists(os.path.join(src, path)):
-                    print 'Removing', path
+                    print('Removing', path)
                     os.unlink(os.path.join(stage, path))
 
         # Update stale files in stage directory
@@ -60,12 +60,12 @@ class UpdateStagedFiles(pyinotify.ProcessEvent):
                 srcpath = os.path.join(src, path)
                 stagepath = os.path.join(stage, path)
                 if not os.path.exists(stagepath):
-                    print 'Staging new file', path
+                    print('Staging new file', path)
                     if not os.path.exists(os.path.dirname(stagepath)):
                         os.makedirs(os.path.dirname(stagepath))
                     shutil.copy(srcpath, stagepath)
                 elif not filecmp.cmp(srcpath, stagepath):
-                    print 'Updating file', path
+                    print('Updating file', path)
                     os.unlink(stagepath)
                     shutil.copy(srcpath, stagepath)
 
@@ -75,7 +75,7 @@ UpdateStagedFiles().process_default(None)
 
 # Auto-serve the docs
 p = subprocess.Popen(['sphinx-autobuild', '-W', '-n', '-T',
-                      '-H', '0.0.0.0', '-p', port, stage, out])
+                      '--host', '0.0.0.0', '--port', port, stage, out])
 
 # Auto-update the stage directory when a dependency changes
 watch_manager = pyinotify.WatchManager()

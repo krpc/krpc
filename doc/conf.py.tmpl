@@ -6,7 +6,7 @@ copyright = '2015-2017, djungelorm'
 master_doc = 'index'
 source_suffix = '.rst'
 extensions = ['sphinx.ext.mathjax', 'sphinxcontrib.spelling', 'sphinx.ext.todo', 'sphinx.ext.extlinks',
-              'redjack.sphinx.lua', 'sphinx_csharp.csharp', 'javasphinx', 'sphinx_tabs.tabs']
+              'sphinxcontrib.luadomain', 'sphinx_csharp.csharp', 'javasphinx', 'sphinx_tabs.tabs']
 templates_path = ['_templates']
 
 pygments_style = 'sphinx'
@@ -17,11 +17,12 @@ htmlhelp_basename = 'krpc-doc'
 html_static_path = ['crafts', 'scripts', '_static']
 
 def setup(app):
-    app.add_stylesheet('custom.css')
+    app.add_css_file('custom.css')
 
 todo_include_todos = True
 
 spelling_word_list_filename = 'dictionary.txt'
+spelling_ignore_contributor_names = True
 
 javadoc_url_map = {
     'org.javatuples' : ('http://www.javatuples.org/apidocs/', 'javadoc')
@@ -36,36 +37,42 @@ add_module_names = False
 
 sphinx_tabs_nowarn = True
 
+nitpick_ignore_regex = [
+    ('c:func', '.+'),
+    ('c:macro', '.+'),
+]
+
 nitpick_ignore = [
-    ('c:type', 'bool'),
-    ('c:type', 'int32_t'),
-    ('c:type', 'int64_t'),
-    ('c:type', 'uint32_t'),
-    ('c:type', 'uint64_t'),
-    ('c:type', 'krpc_bytes_t'),
-    ('c:type', 'krpc_connection_t'),
-    ('c:type', 'krpc_connection_config_t'),
-    ('c:type', 'krpc_error_t'),
-    ('c:type', 'krpc_schema_ProcedureCall'),
-    ('c:type', 'krpc_schema_Status'),
-    ('c:type', 'krpc_schema_Services'),
-    ('c:type', 'krpc_tuple_double_double_t'),
-    ('c:type', 'krpc_tuple_double_double_double_t'),
-    ('c:type', 'krpc_tuple_double_double_double_double_t'),
-    ('c:type', 'krpc_tuple_float_float_float_t'),
-    ('c:type', 'krpc_tuple_tuple_double_double_double_tuple_double_double_double_t'),
-    ('c:type', 'krpc_list_string_t'),
-    ('c:type', 'krpc_list_object_t'),
-    ('c:type', 'krpc_list_double_t'),
-    ('c:type', 'krpc_list_list_double_t'),
-    ('c:type', 'krpc_list_tuple_double_double_double_t'),
-    ('c:type', 'krpc_list_tuple_bytes_string_string_t'),
-    ('c:type', 'krpc_set_object_t'),
-    ('c:type', 'krpc_set_string_t'),
-    ('c:type', 'krpc_dictionary_string_string_t'),
-    ('c:type', 'krpc_dictionary_string_float_t'),
-    ('c:type', 'krpc_dictionary_string_int32_t'),
-    ('c:type', 'krpc_dictionary_string_object_t'),
+    ('c:identifier', 'bool'),
+    ('c:identifier', 'int32_t'),
+    ('c:identifier', 'int64_t'),
+    ('c:identifier', 'uint32_t'),
+    ('c:identifier', 'uint64_t'),
+    ('c:identifier', 'krpc_bytes_t'),
+    ('c:identifier', 'krpc_connection_t'),
+    ('c:identifier', 'krpc_connection_t'),
+    ('c:identifier', 'krpc_connection_config_t'),
+    ('c:identifier', 'krpc_error_t'),
+    ('c:identifier', 'krpc_schema_ProcedureCall'),
+    ('c:identifier', 'krpc_schema_Status'),
+    ('c:identifier', 'krpc_schema_Services'),
+    ('c:identifier', 'krpc_tuple_double_double_t'),
+    ('c:identifier', 'krpc_tuple_double_double_double_t'),
+    ('c:identifier', 'krpc_tuple_double_double_double_double_t'),
+    ('c:identifier', 'krpc_tuple_float_float_float_t'),
+    ('c:identifier', 'krpc_tuple_tuple_double_double_double_tuple_double_double_double_t'),
+    ('c:identifier', 'krpc_list_string_t'),
+    ('c:identifier', 'krpc_list_object_t'),
+    ('c:identifier', 'krpc_list_double_t'),
+    ('c:identifier', 'krpc_list_list_double_t'),
+    ('c:identifier', 'krpc_list_tuple_double_double_double_t'),
+    ('c:identifier', 'krpc_list_tuple_bytes_string_string_t'),
+    ('c:identifier', 'krpc_set_object_t'),
+    ('c:identifier', 'krpc_set_string_t'),
+    ('c:identifier', 'krpc_dictionary_string_string_t'),
+    ('c:identifier', 'krpc_dictionary_string_float_t'),
+    ('c:identifier', 'krpc_dictionary_string_int32_t'),
+    ('c:identifier', 'krpc_dictionary_string_object_t'),
 
     ('csharp:type', 'void'),
     ('csharp:type', 'object'),
@@ -109,6 +116,9 @@ nitpick_ignore = [
     ('java:type', 'long'),
     ('java:type', 'double'),
     ('java:type', 'Single'),
+    ('java:type', 'Double,Double,Double'),
+    ('java:type', 'Double,Double,Double,Double'),
+    ('java:type', 'String,Expression'),
     ('java:type', 'T'),
     ('java:type', 'org'),
     ('java:type', 'java'),
@@ -122,15 +132,15 @@ nitpick_ignore = [
     ('java:type', 'krpc.schema.KRPC.Status'),
     ('java:type', 'krpc.schema.KRPC.Stream'),
 
-    ('lua:obj', 'boolean'),
-    ('lua:obj', 'number'),
-    ('lua:obj', 'string'),
-    ('lua:obj', 'Tuple'),
-    ('lua:obj', 'List'),
-    ('lua:obj', 'Set'),
-    ('lua:obj', 'Map'),
+    ('lua:class', 'boolean'),
+    ('lua:class', 'number'),
+    ('lua:class', 'string'),
+    ('lua:class', 'Tuple'),
+    ('lua:class', 'List'),
+    ('lua:class', 'Set'),
+    ('lua:class', 'Map'),
     ('lua:class', 'krpc.schema.KRPC.Event'),
-    ('lua:obj', 'krpc.schema.KRPC.ProcedureCall'),
+    ('lua:class', 'krpc.schema.KRPC.ProcedureCall'),
     ('lua:class', 'krpc.schema.KRPC.Services'),
     ('lua:class', 'krpc.schema.KRPC.Status'),
     ('lua:class', 'krpc.schema.KRPC.Stream'),

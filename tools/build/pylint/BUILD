@@ -5,20 +5,16 @@ py_script(
   script = 'pylint',
   pkg = '@python_pylint//file',
   deps = [
-      '@python_configparser//file',
-      '@python_backports_functools_lru_cache//file',
-      '@python_six//file',
-      '@python_isort//file',
-      '@python_mccabe//file',
-      '@python_singledispatch//file',
       '@python_astroid//file',
-      '@python_wrapt//file',
+      '@python_dill//file',
+      '@python_isort//file',
       '@python_lazy_object_proxy//file',
-      '@python_typing_extensions//file',
-      '@python_tomlkit//file',
-      '@python_tomli//file',
+      '@python_mccabe//file',
       '@python_platformdirs//file',
-      '@python_dill//file'
+      '@python_tomli//file',
+      '@python_tomlkit//file',
+      '@python_typing_extensions//file',
+      '@python_wrapt//file'
   ],
   visibility = ['//visibility:public']
 )

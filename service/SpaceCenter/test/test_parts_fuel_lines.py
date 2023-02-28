@@ -37,14 +37,14 @@ class TestPartsFuelLines(krpctest.TestCase):
         central_tank = self.parts.with_title('Rockomax X200-32 Fuel Tank')[0]
         middle_tanks = self.parts.with_title('Rockomax X200-16 Fuel Tank')
         outer_tanks = self.parts.with_title('Rockomax X200-8 Fuel Tank')
-        self.assertItemsEqual(middle_tanks, central_tank.fuel_lines_from)
-        self.assertItemsEqual([], central_tank.fuel_lines_to)
+        self.assertCountEqual(middle_tanks, central_tank.fuel_lines_from)
+        self.assertCountEqual([], central_tank.fuel_lines_to)
         for tank in middle_tanks:
             self.assertEqual(1, len(tank.fuel_lines_from))
             self.assertTrue(tank.fuel_lines_from[0] in outer_tanks)
-            self.assertItemsEqual([central_tank], tank.fuel_lines_to)
+            self.assertCountEqual([central_tank], tank.fuel_lines_to)
         for tank in outer_tanks:
-            self.assertItemsEqual([], tank.fuel_lines_from)
+            self.assertCountEqual([], tank.fuel_lines_from)
             self.assertEqual(1, len(tank.fuel_lines_to))
             self.assertTrue(tank.fuel_lines_to[0] in middle_tanks)
 

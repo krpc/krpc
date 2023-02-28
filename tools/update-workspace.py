@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import distutils.version
+import packaging.version
 import urllib.parse
 import urllib.request
 import hashlib
@@ -124,17 +124,25 @@ def get_python_package_versions(package, typ):
             assert(url.path.startswith('/packages/'))
             if url.path.endswith(typ):
                 _, version, _ = parse_python_package(url.path.rpartition('/')[2])
+                try:
+                    packaging.version.Version(version)
+                except packaging.version.InvalidVersion:
+                    continue
+                if 'a' in version or 'b' in version:
+                    continue
                 versions[version] = url.geturl()
     return versions
 
 
 def is_pypi_dep(props):
     """ Return true if the given workspace entry is a pypi package """
-    if 'urls' not in props:
+    if 'name' not in props:
         return False
-    if 'python.org' in props['urls']:
-        return True
-    if 'pythonhosted.org' in props['urls']:
+    if not props['name'].startswith('\'python_'):
+        return False
+    if 'url' not in props:
+        return False
+    if 'pythonhosted.org' in props['url']:
         return True
     return False
 
@@ -158,22 +166,21 @@ def main():
     for entry in workspace:
         props = entry['props']
         if is_pypi_dep(props):
-            url = props['urls'][2:-2]
+            url = props['url'][1:-1]
             path = url.rpartition('/')[2]
             package, version, typ = parse_python_package(path)
             versions = get_python_package_versions(package, typ)
-            try:
-                latest_version = sorted(versions.keys(), key=distutils.version.LooseVersion)[-1]
-            except TypeError:
-                latest_version = list(versions.keys())[-1]
-            path = '[\'%s\']' % versions[latest_version]
-            if props['urls'] == path:
+            latest_version = sorted(versions.keys(), key=packaging.version.Version)[-1]
+            url = versions[latest_version]
+            path = '\'%s\'' % url
+            if props['url'] == path and props['sha256'] != '\'\'':
                 print(props['name'][1:-1], 'is up to date')
             else:
                 print('Updating', props['name'][1:-1], 'to', latest_version)
-                props['urls'] = path
-                result = urllib.request.urlretrieve(props['urls'][2:-2])
+                props['url'] = path
+                result = urllib.request.urlretrieve(props['url'][1:-1])
                 entry['props']['sha256'] = '\'%s\'' % sha256file(result[0])
+            entry['props']['downloaded_file_path'] = f"'{url.rpartition('/')[2]}'"
     write_workspace(workspace_header, loads, workspace)
     print('Done')
 

@@ -1,4 +1,4 @@
-load('//tools/build:python.bzl', 'py_sdist', 'py_test', 'py3_test', 'py_lint_test')
+load('//tools/build:python.bzl', 'py_sdist', 'py_test', 'py_lint_test')
 load('//tools/build:client_test.bzl', 'client_test')
 load('//:config.bzl', 'version', 'python_version')
 
@@ -34,7 +34,6 @@ client_test(
 )
 
 deps = [
-    '@python_six//file',
     '@python_protobuf//file',
     '//client/python'
 ]

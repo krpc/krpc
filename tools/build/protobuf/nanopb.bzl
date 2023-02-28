@@ -77,7 +77,7 @@ protobuf_nanopb = rule(
 )
 
 def _env_impl(ctx):
-    pylibs = [ctx.file._protobuf, ctx.file._six]
+    pylibs = [ctx.file._protobuf]
     setup = ctx.actions.declare_file('protoc-nanopb-setup')
     ctx.actions.write(
         output = setup,
@@ -95,8 +95,7 @@ def _env_impl(ctx):
 protoc_nanopb_env = rule(
     implementation = _env_impl,
     attrs = {
-        '_protobuf': attr.label(default=Label('@python_protobuf//file'), allow_single_file=True),
-        '_six': attr.label(default=Label('@python_six//file'), allow_single_file=True)
+        '_protobuf': attr.label(default=Label('@python_protobuf//file'), allow_single_file=True)
     },
     outputs = {'out': '%{name}.tar'},
     output_to_genfiles = True

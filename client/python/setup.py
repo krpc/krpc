@@ -15,10 +15,6 @@ if os.getenv('BAZEL_BUILD') and not os.path.exists(os.path.join(dirpath, 'VERSIO
     dirpath = os.getcwd()
 
 install_requires = ['protobuf >= 3.6']
-if sys.version_info < (3, 4):
-    install_requires.append('enum34 >= 0.9')
-if sys.version_info < (3, 5):
-    install_requires.append('typing')
 
 setup(
     name='krpc',
@@ -30,6 +26,7 @@ setup(
     license='GNU LGPL v3',
     description='Client library for kRPC, a Remote Procedure Call server for Kerbal Space Program',
     long_description=open(os.path.join(dirpath, 'README.txt')).read(),
+    python_requires='>=3.4',
     install_requires=install_requires,
     test_suite='krpc.test',
     classifiers=[

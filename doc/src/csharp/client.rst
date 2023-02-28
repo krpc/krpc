@@ -11,8 +11,7 @@ Installing the Library
 ----------------------
 
 The C# client can be `installed using NuGet <https://www.nuget.com/packages/KRPC.Client>`_ or
-:github-download-zip:`downloaded from GitHub <krpc-csharp>`. Two versions of the client are
-provided: one compatible with .NET 4.5 and one for .NET 3.5.
+:github-download-zip:`downloaded from GitHub <krpc-csharp>`. The client is compatible with .NET 4.5+.
 
 You also need to `install Google.Protobuf using NuGet
 <https://www.nuget.org/packages/Google.Protobuf>`_.
@@ -21,7 +20,7 @@ You also need to `install Google.Protobuf using NuGet
 
    The copy of ``Google.Protobuf.dll`` in the GameData folder included with the kRPC server plugin
    is *not* the official release of this assembly. It is a modified version built for .NET 3.5 so
-   that it works within KSP.
+   that it works within KSP. Do not use it with the client library.
 
 Connecting to the Server
 ------------------------

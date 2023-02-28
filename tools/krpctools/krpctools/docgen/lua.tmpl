@@ -56,7 +56,7 @@
 {% endmacro %}
 
 {% macro property(x) %}{{ mark_documented(x) }}
-.. attribute:: {{ x.name | snakecase }}
+.. attribute:: {{ x.name | snakecase }}: {{ domain.type(x.type) }}
 
 {{ gendoc(x.documentation) | indent }}
 
