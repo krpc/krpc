@@ -101,7 +101,7 @@ class EngineTestBase:
 
     @classmethod
     def add_engine_data(cls, title, data):
-        for k, v in list(data.items()):
+        for k, v in data.items():
             cls.engine_data[title][k] = v
 
     def get_engine(self, title):
