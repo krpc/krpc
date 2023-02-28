@@ -12,7 +12,8 @@ Clients
  * `Ruby client <https://github.com/TeWu/krpc-rb>`_
  * `Haskell client <https://github.com/Cahu/krpc-hs>`_
  * `Node.js client <https://github.com/eXigentCoder/krpc-node>`_
-   (requires the v0.4.0 pre-release version of kRPC)
+ * `Julia client <https://github.com/BenChung/kRPC.jl>`_
+ * `Rust client <https://github.com/Cahu/krpc-mars>`_
  * `Using the plugin in F# <http://fssnip.net/7Pi>`_
 
 Services
