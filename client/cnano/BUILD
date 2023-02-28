@@ -178,7 +178,7 @@ cpp_lint_test(
     srcs = srcs + test_srcs,
     hdrs = hdrs,
     includes = ['include'],
-    filters = ['+build/include_alpha', '-legal/copyright', '-readability/todo', '-readability/casting', '-build/header_guard'],
+    filters = ['+build/include_alpha', '-legal/copyright', '-readability/todo', '-readability/casting', '-build/header_guard', '-build/include_subdir'],
     extra_files = ['include/krpc_cnano/services/CPPLINT.cfg', 'test/services/CPPLINT.cfg'],
     size = 'small'
 )

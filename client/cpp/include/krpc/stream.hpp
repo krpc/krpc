@@ -2,6 +2,7 @@
 
 #include <condition_variable>  // NOLINT(build/c++11)
 #include <map>
+#include <memory>
 #include <string>
 
 #include "krpc/client.hpp"
