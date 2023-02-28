@@ -103,11 +103,11 @@ def main():
         return info
 
     services = {name: Service(name, sort=sort, **parse_service_info(info))
-                for name, info in list(services_info.items())}
+                for name, info in services_info.items()}
 
     if sort_failed:
         raise RuntimeError(
-            'DOCGEN: Don\'t know how to order:\n'+'\n'.join(sort_failed))
+            'Don\'t know how to order:\n'+'\n'.join(sort_failed))
 
     content, documented = process_file(domain, services, args.source)
 

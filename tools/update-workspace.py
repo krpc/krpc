@@ -24,7 +24,7 @@ def read_workspace():
         line = lines[i]
 
         def error(msg):
-            print(('ERROR on line %d' % i))
+            print('ERROR on line %d' % i)
             print(msg)
             exit(1)
 
@@ -86,7 +86,7 @@ def write_workspace(header, loads, workspace):
     for entry in workspace:
         lines.append('')
         lines.append(entry['type']+'(')
-        props = ['    %s = %s' % entry for entry in list(entry['props'].items())]
+        props = ['    %s = %s' % entry for entry in entry['props'].items()]
         lines.append(',\n'.join(props))
         lines.append(')')
     with open('WORKSPACE', 'w') as f:
