@@ -659,36 +659,6 @@ http_file(
 )
 
 http_file(
-    name = 'python_serialio',
-    urls = ['https://files.pythonhosted.org/packages/cc/74/11b04703ec416717b247d789103277269d567db575d2fd88f25d9767fe3d/pyserial-3.4.tar.gz'],
-    sha256 = '6e2d401fdee0eab996cf734e67773a0143b932772ca8b42451440cfed942c627'
-)
-
-http_file(
-    name = 'python_setuptools',
-    urls = ['https://files.pythonhosted.org/packages/6e/9c/6a003320b00ef237f94aa74e4ad66c57a7618f6c79d67527136e2544b728/setuptools-40.4.3.zip'],
-    sha256 = 'acbc5740dd63f243f46c2b4b8e2c7fd92259c2ddb55a4115b16418a2ed371b15'
-)
-
-http_file(
-    name = 'python_setuptools_git',
-    urls = ['https://files.pythonhosted.org/packages/d9/c5/396c2c06cc89d4ce2d8ccf1d7e6cf31b33d4466a7c65a67a992adb3c6f29/setuptools-git-1.2.tar.gz'],
-    sha256 = 'ff64136da01aabba76ae88b050e7197918d8b2139ccbf6144e14d472b9c40445'
-)
-
-http_file(
-    name = 'python_singledispatch',
-    urls = ['https://files.pythonhosted.org/packages/d9/e9/513ad8dc17210db12cb14f2d4d190d618fb87dd38814203ea71c87ba5b68/singledispatch-3.4.0.3.tar.gz'],
-    sha256 = '5b06af87df13818d14f08a028e42f566640aef80805c3b50c5056b086e3c2b9c'
-)
-
-http_file(
-    name = 'python_six',
-    urls = ['https://files.pythonhosted.org/packages/dd/bf/4138e7bfb757de47d1f4b6994648ec67a51efe58fa907c1e11e350cddfca/six-1.12.0.tar.gz'],
-    sha256 = 'd16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73'
-)
-
-http_file(
     name = 'python_snowballstemmer',
     url = 'https://files.pythonhosted.org/packages/44/7b/af302bebf22c749c56c9c3e8ae13190b5b5db37a33d9068652e8f73b7089/snowballstemmer-2.2.0.tar.gz',
     sha256 = '09b16deb8547d3412ad7b590689584cd0fe25ec8db3be37788be3810cbf19cb1',
