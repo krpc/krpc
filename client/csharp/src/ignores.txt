@@ -10,13 +10,17 @@ N: KRPC.Client.Attributes
 R: Gendarme.Rules.Correctness.CheckParametersNullityInVisibleMethodsRule
 N: KRPC.Client.Services.SpaceCenter
 R: Gendarme.Rules.Design.AvoidPropertiesWithoutGetAccessorRule
+N: KRPC.Client.Services.SpaceCenter
 N: KRPC.Client.Services.UI
 N: KRPC.Client.Services.InfernalRobotics
 R: Gendarme.Rules.Design.AvoidSmallNamespaceRule
 N: KRPC.Client.Services.KRPC
 N: KRPC.Client.Services.InfernalRobotics
+N: KRPC.Client.Services.LiDAR
+N: KRPC.Client.Services.DockingCamera
 R: Gendarme.Rules.Design.ConsiderConvertingMethodToPropertyRule
 N: KRPC.Client.Services.KRPC
+N: KRPC.Client.Services.SpaceCenter
 R: Gendarme.Rules.Design.DoNotDeclareSettersOnCollectionPropertiesRule
 N: KRPC.Client.Services.Drawing
 R: Gendarme.Rules.Design.Generic.DoNotExposeNestedGenericSignaturesRule
@@ -24,6 +28,7 @@ N: KRPC.Client.Services.KRPC
 N: KRPC.Client.Services.Drawing
 N: KRPC.Client.Services.SpaceCenter
 R: Gendarme.Rules.Naming.AvoidRedundancyInMethodNameRule
+N: KRPC.Client.Services.SpaceCenter
 N: KRPC.Client.Services.RemoteTech
 R: Gendarme.Rules.Naming.UseCorrectCasingRule
 N: KRPC.Client.Services.KRPC
@@ -33,6 +38,8 @@ N: KRPC.Client.Services.InfernalRobotics
 N: KRPC.Client.Services.KerbalAlarmClock
 N: KRPC.Client.Services.RemoteTech
 N: KRPC.Client.Services.UI
+N: KRPC.Client.Services.LiDAR
+N: KRPC.Client.Services.DockingCamera
 R: Gendarme.Rules.Naming.UsePreferredTermsRule
 N: KRPC.Client.Services.SpaceCenter
 R: Gendarme.Rules.Smells.AvoidCodeDuplicatedInSameClassRule
@@ -40,6 +47,12 @@ N: KRPC.Client.Services.InfernalRobotics
 N: KRPC.Client.Services.SpaceCenter
 N: KRPC.Client.Services.UI
 R: Gendarme.Rules.Smells.AvoidLongParameterListsRule
+N: KRPC.Client.Services.SpaceCenter
+R: Gendarme.Rules.Performance.AvoidReturningArraysOnPropertiesRule
+N: KRPC.Client.Services.DockingCamera
+R: Gendarme.Rules.Design.PreferUriOverStringRule
+N: KRPC.Client.Services.SpaceCenter
+R: Gendarme.Rules.Naming.UseSingularNameInEnumsUnlessAreFlagsRule
 N: KRPC.Client.Services.SpaceCenter
 
 # Protocol Buffers
