@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copy this script to a new EC2 instance (running Ubuntu server 18.04), make it executable, and run it as root
+# Copy this script to a new EC2 instance (running Ubuntu server 22.04), make it executable, and run it as root
 # to build a new kRPC build-env docker image.
 # This script expects a parameter giving the name of the branch to check out and build from the repository.
 
@@ -28,7 +28,7 @@ apt-get install -y docker-ce
 docker run hello-world
 
 if [ ! -d krpc ]; then
-  git clone http://github.com/djungelorm/krpc
+  git clone http://github.com/krpc/krpc
 fi
 cd krpc
 git fetch origin

@@ -1,5 +1,6 @@
 v2.6.0
  * Update base image to Ubuntu 22.04
+ * Update to Bazel 6.0.0
  * Update to KSP 1.12.5
 
 v2.5.1
