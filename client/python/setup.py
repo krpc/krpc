@@ -18,7 +18,7 @@ install_requires = ['protobuf >= 3.6']
 
 setup(
     name='krpc',
-    version='1.0',
+    version=re.search(r'\'(.+)\'', open(os.path.join(dirpath, 'krpc/version.py')).read()).group(1),
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
     packages=['krpc', 'krpc.schema', 'krpc.test', 'krpc.test.schema'],

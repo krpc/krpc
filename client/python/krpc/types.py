@@ -465,9 +465,9 @@ def _create_class_type(service_name, class_name, doc):
 
 def _create_enum_type(enum_name, values, doc):
     typ = Enum(str(enum_name), dict((name, x['value'])
-                                    for name, x in list(values.items())))
+                                    for name, x in values.items()))
     setattr(typ, '__doc__', doc)
-    for name in list(values.keys()):
+    for name in values.keys():
         setattr(getattr(typ, name), '__doc__', values[name]['doc'])
     return typ
 
