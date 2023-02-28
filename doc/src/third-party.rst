@@ -12,7 +12,8 @@ Clients
  * `Ruby client <https://github.com/TeWu/krpc-rb>`_
  * `Haskell client <https://github.com/Cahu/krpc-hs>`_
  * `Node.js client <https://github.com/eXigentCoder/krpc-node>`_
-   (requires the v0.4.0 pre-release version of kRPC)
+ * `Julia client <https://github.com/BenChung/kRPC.jl>`_
+ * `Rust client <https://github.com/Cahu/krpc-mars>`_
  * `Using the plugin in F# <http://fssnip.net/7Pi>`_
 
 Services
@@ -30,3 +31,5 @@ Scripts/Tools/Libraries etc.
  * `KNav <https://github.com/Vivero/KNav>`_ -- a flexible platform for implementing computer-assisted navigation and control of vessels.
  * `wernher <https://github.com/theodoregoetz/wernher>`_ -- a toolkit for flight control and orbit analysis.
  * `A small logging script. <https://gist.github.com/fat-lobyte/4326afa551fa04dd028f>`_
+ * `Universal Powered Guidance <https://github.com/denebwang/ksp_UPG>`_
+ * `Flight control software for rockets and torchships <https://github.com/object-Object/kRPC-or-Bust>`_
