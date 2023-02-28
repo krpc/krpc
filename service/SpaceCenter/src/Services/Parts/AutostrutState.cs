@@ -4,7 +4,7 @@ using KRPC.Service.Attributes;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// The state of a Autostrut. <see cref="RadiatorState"/>
+    /// The state of a Autostrut. <see cref="Part.AutoStrutMode"/>
     /// </summary>
     [Serializable]
     [KRPCEnum(Service = "SpaceCenter")]
@@ -39,6 +39,4 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         ForceGrandparent
     }
-
-
 }

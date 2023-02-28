@@ -30,7 +30,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals(Alarm other)
         {
-            return !ReferenceEquals(other, null) && InternalAlarm.Id == other.InternalAlarm.Id; //Interna.ContractID == other.InternalContract.ContractID;
+            return !ReferenceEquals(other, null) && InternalAlarm.Id == other.InternalAlarm.Id;
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Seconds betwen the alarm going off and the event it references 
+        /// Seconds betwen the alarm going off and the event it references
         /// </summary>
         [KRPCProperty]
         public double EventOffset
@@ -118,8 +118,8 @@ namespace KRPC.SpaceCenter.Services
         /// Unique ID of alarm
         /// KSP destroys an old alarm and creates a new one each time an alarm is edited.
         /// This ID will remain constant between the old and new alarms though, so this is the value
-        /// you want to store and each time you want to access an alarm, get the current alarm with the 
-        /// correct ID value.
+        /// you want to store and each time you want to access an alarm, get the current alarm with
+        /// the correct ID value.
         /// </summary>
         [KRPCProperty(Nullable = true)]
         public int ID
@@ -132,12 +132,12 @@ namespace KRPC.SpaceCenter.Services
         }
 
 
-        private void UpdateAlarm() 
+        private void UpdateAlarm()
         {
             AlarmTypeBase newalarm;
             AlarmClockScenario.TryGetAlarm(InternalAlarm.Id, out newalarm);
             InternalAlarm = newalarm;
         }
-       
+
     }
 }

@@ -45,7 +45,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             case VesselType.DeployedGroundPart:
                 return Services.VesselType.DeployedGroundPart;
             default:
-                throw new ArgumentOutOfRangeException(nameof(type));
+                throw new ArgumentOutOfRangeException (nameof (type));
             }
         }
 

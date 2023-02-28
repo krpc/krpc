@@ -63,7 +63,6 @@ namespace KRPC.LiDAR
             get {
                 if (API.IsAvailable)
                 {
-                    
                     var cloud = API.GetCloud(part.InternalPart);
                     IList<double> outCloud = new List<double>();
 

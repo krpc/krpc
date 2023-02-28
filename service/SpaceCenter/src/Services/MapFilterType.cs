@@ -4,7 +4,8 @@ using System;
 namespace KRPC.SpaceCenter
 {
     /// <summary>
-    /// The set of things that are visible in map mode.  These may be combined with bitwise logic.  Note this corresponds directly to KSP's MapViewFiltering.VesselTypeFilter enum.
+    /// The set of things that are visible in map mode.
+    /// These may be combined with bitwise logic.
     /// </summary>
     [Serializable]
     [Flags]

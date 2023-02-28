@@ -6,7 +6,6 @@ using KRPC.Utils;
 using UnityEngine;
 using System.Reflection;
 
-
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
@@ -116,7 +115,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             {
                 if (value == true) servo.EngageMotor();
                 else servo.DisengageMotor();
-                
             }
         }
 
@@ -127,7 +125,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         public void Home()
         {
             SetExtension(servo.launchPosition);
-            
         }
 
         /// <summary>
@@ -139,6 +136,5 @@ namespace KRPC.SpaceCenter.Services.Parts
                 .GetField("targetExtensionAxisField", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(servo);
             field.SetValue((float)value, field.module);
         }
-
     }
 }

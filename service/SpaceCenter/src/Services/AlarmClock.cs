@@ -100,8 +100,8 @@ namespace KRPC.SpaceCenter.Services
             AlarmClockScenario.AddAlarm(alarm);
             return new Alarm(alarm);
         }
-        
-                /// <summary>
+
+        /// <summary>
         /// Create an alarm for the given vessel's next Periapsis
         /// </summary>
         [KRPCMethod]
@@ -170,30 +170,29 @@ namespace KRPC.SpaceCenter.Services
             return new Alarm(alarm);
         }
 
-        //Not working - to be dealt with later
-        ///// <summary>
-        ///// Create an alarm for the given vessel's next transfer window
-        ///// </summary>
-        //[KRPCMethod]
-        //public Alarm MakeWindowAlarm(Vessel V, CelestialBody Target, string title="Transfer Window", string description="")
-        //{
-        //    AlarmTypeTransferWindow alarm = new AlarmTypeTransferWindow
-        //    {
-        //        title = title,
-        //        description = description,
-        //        actions =
-        //        {
-        //            warp = AlarmActions.WarpEnum.KillWarp,
-        //            message = AlarmActions.MessageEnum.Yes
-        //        },
-        //        vesselId = V.InternalVessel.persistentId,
-        //        dest = Target.InternalBody,
-        //        source = V.InternalVessel.orbit.referenceBody
-        //};
-
-        //    AlarmClockScenario.AddAlarm(alarm);
-        //    return new Alarm(alarm);
-        //}
+        // FIXME: Not working
+        // /// <summary>
+        // /// Create an alarm for the given vessel's next transfer window
+        // /// </summary>
+        // [KRPCMethod]
+        // public Alarm MakeWindowAlarm(Vessel V, CelestialBody Target, string title="Transfer Window", string description="")
+        // {
+        //     AlarmTypeTransferWindow alarm = new AlarmTypeTransferWindow
+        //     {
+        //         title = title,
+        //         description = description,
+        //         actions =
+        //         {
+        //             warp = AlarmActions.WarpEnum.KillWarp,
+        //             message = AlarmActions.MessageEnum.Yes
+        //         },
+        //         vesselId = V.InternalVessel.persistentId,
+        //         dest = Target.InternalBody,
+        //         source = V.InternalVessel.orbit.referenceBody
+        //     };
+        //     AlarmClockScenario.AddAlarm(alarm);
+        //     return new Alarm(alarm);
+        // }
 
         /// <summary>
         /// Returns a list of all alarms

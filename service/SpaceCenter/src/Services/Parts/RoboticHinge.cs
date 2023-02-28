@@ -6,7 +6,6 @@ using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using UnityEngine;
 
-
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
@@ -77,12 +76,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         ///Current Angle for Robotic Hinge
         /// </summary>
         [KRPCProperty]
-        public float CurrentAngle { get 
-            { return  servo.modelInitialAngle + (float)typeof(ModuleRoboticServoHinge)
-                .GetMethod("currentTransformAngle", BindingFlags.Instance | BindingFlags.NonPublic)
-                .Invoke(servo, null);
-               
-            } }
+        public float CurrentAngle
+        {
+            get
+            {
+                return servo.modelInitialAngle + (float)typeof(ModuleRoboticServoHinge)
+                    .GetMethod("currentTransformAngle", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(servo, null);
+
+            }
+        }
 
         /// <summary>
         /// Target Movement Rate in Degrees/s
@@ -100,30 +103,48 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Lock Movement
         /// </summary>
         [KRPCProperty]
-        public bool HingeLocked { get { return servo.servoIsLocked; } set {
-                if (value == true) servo.EngageServoLock();
-                else servo.DisengageServoLock();
-            } }
+        public bool HingeLocked
+        {
+            get
+            {
+                return servo.servoIsLocked;
+            }
+            set
+            {
+                if (value == true)
+                    servo.EngageServoLock();
+                else
+                    servo.DisengageServoLock();
+            }
+        }
 
         /// <summary>
         /// Engage/Disengage Motor
         /// </summary>
         [KRPCProperty]
-        public bool MotorEngaged { get { return servo.servoMotorIsEngaged; } set
+        public bool MotorEngaged
+        {
+            get
             {
-                if (value == true) servo.EngageMotor();
-                else servo.DisengageMotor();
-            } }
+                return servo.servoMotorIsEngaged;
+            }
+            set
+            {
+                if (value == true)
+                    servo.EngageMotor();
+                else
+                    servo.DisengageMotor();
+            }
+        }
 
-       
+
         /// <summary>
         /// Returns Hinge to Build Angle Position
         /// </summary>
         [KRPCMethod]
         public void Home()
-        { 
+        {
             servo.targetAngle = servo.modelInitialAngle;
         }
-
     }
 }

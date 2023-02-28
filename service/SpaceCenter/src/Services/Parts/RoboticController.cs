@@ -99,7 +99,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                     }
                     return false;
                 }
-            }   
+            }
             return false;
         }
 

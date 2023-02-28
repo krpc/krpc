@@ -107,9 +107,8 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Possible modes for resource draining.
-        /// 
-        /// part mode drains only from the parent part.
-        /// vessel mode drains from all available tanks.
+        /// Part mode drains only from the parent part.
+        /// Pessel mode drains from all available tanks.
         /// </summary>
         [KRPCEnum(Service = "SpaceCenter")]
         public enum DrainModes {
@@ -176,7 +175,5 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             drain.TurnOffDrain();
         }
-
-
     }
 }

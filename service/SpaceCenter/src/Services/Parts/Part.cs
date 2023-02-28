@@ -499,7 +499,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return DockingPort.Is (this) ? new DockingPort (this) : null; }
         }
 
-        /// <summary>        /// A <see cref="ResourceDrain"/> if the part is a resource drain, otherwise <c>null</c>.
+        /// <summary>
+        /// A <see cref="ResourceDrain"/> if the part is a resource drain, otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty(Nullable = true)]
         public ResourceDrain ResourceDrain
@@ -958,32 +959,19 @@ namespace KRPC.SpaceCenter.Services.Parts
                 {
                     case global::Part.AutoStrutMode.Off:
                         return AutostrutState.Off;
-                       
                     case global::Part.AutoStrutMode.Heaviest:
                         return AutostrutState.Heaviest;
-                      
                     case global::Part.AutoStrutMode.ForceHeaviest:
                         return AutostrutState.ForceHeaviest;
-                       
                     case global::Part.AutoStrutMode.Grandparent:
                         return AutostrutState.Grandparent;
-                      
                     case global::Part.AutoStrutMode.ForceGrandparent:
                         return AutostrutState.ForceGrandparent;
-                     
                     case global::Part.AutoStrutMode.Root:
                         return AutostrutState.Root;
-           
                     default:
                         return AutostrutState.ForceRoot;
-                      
-
                 }
-            }
-
-            set
-            {
-
             }
         }
     }

@@ -59,5 +59,4 @@ namespace KRPC.SpaceCenter.Services
             return Name.GetHashCode();
         }
     }
-
 }

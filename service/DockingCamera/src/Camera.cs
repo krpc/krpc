@@ -74,7 +74,6 @@ namespace KRPC.DockingCamera
                         Debug.Log("CAMERA IMAGE: " + e.Message + Environment.NewLine + e.StackTrace);
                         return Array.Empty<byte>();
                     }
-                    
                 }
                 else
                 {

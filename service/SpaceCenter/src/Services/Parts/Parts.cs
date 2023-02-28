@@ -330,7 +330,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return All.Where (Wheel.Is).Select (part => new Wheel (part)).ToList (); }
         }
 
-        /// <summary>        
+        /// <summary>
         /// A list of all robotic hinges in the vessel.
         /// </summary>
         [KRPCProperty]

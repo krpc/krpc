@@ -5,7 +5,6 @@ using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using UnityEngine;
 
-
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
@@ -118,7 +117,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
         }
 
-       
         /// <summary>
         /// Returns Servo to Build Angle Position
         /// </summary>
@@ -127,6 +125,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             servo.targetAngle = servo.launchPosition;
         }
-
     }
 }
+

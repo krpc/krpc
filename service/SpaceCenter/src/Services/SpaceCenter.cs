@@ -977,7 +977,7 @@ namespace KRPC.SpaceCenter.Services
             {
                 Funding.Instance.AddFunds(-GameVariables.Instance.GetRecruitHireCost(HighLogic.CurrentGame.CrewRoster.GetActiveCrewCount()), TransactionReasons.CrewRecruited);
             }
-            
+
             HighLogic.CurrentGame.CrewRoster.AddCrewMember(val);
         }
 
