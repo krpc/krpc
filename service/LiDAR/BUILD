@@ -73,6 +73,6 @@ csharp_library(
 csharp_gendarme_test(
     name = 'gendarme',
     lib = ':KRPC.LiDAR.Debug',
-    # ignores = 'src/ignores.txt',
+    ignores = 'src/ignores.txt',
     size = 'small'
 )

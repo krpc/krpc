@@ -65,10 +65,10 @@ namespace KRPC.LiDAR
                 {
                     var cloud = API.GetCloud(part.InternalPart);
                     IList<double> outCloud = new List<double>();
-
-                    if (cloud.Count%3 == 0)
+                    var count = cloud.Count;
+                    if (count%3 == 0)
                     {
-                        for (int i = 0; i < cloud.Count; i += 3)
+                        for (int i = 0; i < count; i += 3)
                         {
                             Vector3d p = new Vector3d(cloud[i], cloud[i + 1], cloud[i + 2]);
                             outCloud.Add(p.x);

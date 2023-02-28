@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using UnityEngine;
@@ -58,6 +59,8 @@ namespace KRPC.DockingCamera
         /// Get the image.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidReturningArraysOnPropertiesRule")]
         public byte[] Image
         {
             get {
