@@ -61,6 +61,7 @@ Part
    Mk1 Command Pod reference frame origin and axes
 {% endappend %}
 {{ macros.class(services['SpaceCenter'].classes['Part']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['AutostrutState']) }}
 {{ macros.class(services['SpaceCenter'].classes['Force']) }}
 
 Module
@@ -182,6 +183,37 @@ Reaction Wheel
 ^^^^^^^^^^^^^^
 
 {{ macros.class(services['SpaceCenter'].classes['ReactionWheel']) }}
+
+Resource Drain
+^^^^^^^^^^^^^^
+
+{{ macros.class(services['SpaceCenter'].classes['ResourceDrain']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['DrainModes']) }}
+
+Robotic Controller
+^^^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['SpaceCenter'].classes['RoboticController']) }}
+
+Robotic Hinge
+^^^^^^^^^^^^^
+
+{{ macros.class(services['SpaceCenter'].classes['RoboticHinge']) }}
+
+Robotic Piston
+^^^^^^^^^^^^^^
+
+{{ macros.class(services['SpaceCenter'].classes['RoboticPiston']) }}
+
+Robotic Rotation
+^^^^^^^^^^^^^^^^
+
+{{ macros.class(services['SpaceCenter'].classes['RoboticRotation']) }}
+
+Robotic Rotor
+^^^^^^^^^^^^^
+
+{{ macros.class(services['SpaceCenter'].classes['RoboticRotor']) }}
 
 RCS
 ^^^

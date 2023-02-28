@@ -11,3 +11,5 @@ Java
    java/api/kerbal-alarm-clock
    java/api/remote-tech
    java/api/ui
+   java/api/lidar
+   java/api/docking-camera

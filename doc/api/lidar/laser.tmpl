@@ -1,0 +1,9 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('LiDAR') }}
+{% import domain.macros as macros with context %}
+
+LiDAR
+=====
+
+{{ macros.class(services['LiDAR'].classes['Laser']) }}

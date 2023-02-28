@@ -123,7 +123,9 @@ defs = [
     '//service/InfernalRobotics:ServiceDefinitions',
     '//service/KerbalAlarmClock:ServiceDefinitions',
     '//service/RemoteTech:ServiceDefinitions',
-    '//service/UI:ServiceDefinitions'
+    '//service/UI:ServiceDefinitions',
+    '//service/LiDAR:ServiceDefinitions',
+    '//service/DockingCamera:ServiceDefinitions'
 ]
 
 docgen_multiple(

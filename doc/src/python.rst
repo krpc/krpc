@@ -11,3 +11,5 @@ Python
    python/api/kerbal-alarm-clock
    python/api/remote-tech
    python/api/ui
+   python/api/lidar
+   python/api/docking-camera
