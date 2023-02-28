@@ -951,6 +951,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Autostrut
         /// </summary>
+        [KRPCProperty]
         public AutostrutState AutoStrutMode
         {
             get
