@@ -7,7 +7,7 @@ class TestInfernalRobotics(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('InfernalRobotics', directory='./')
+        cls.launch_vessel_from_vab('InfernalRobotics')
         cls.remove_other_vessels()
         cls.ir = cls.connect().infernal_robotics
         cls.vessel = cls.connect().space_center.active_vessel
@@ -25,11 +25,11 @@ class TestInfernalRobotics(krpctest.TestCase):
         self.assertIsNone(group3)
 
     def test_servo_with_name(self):
-        servo1 = self.ir.servo_with_name(self.vessel, 'Rail')
-        servo2 = self.ir.servo_with_name(self.vessel, 'Rotatron')
+        servo1 = self.ir.servo_with_name(self.vessel, 'Rail Gantry - Short')
+        servo2 = self.ir.servo_with_name(self.vessel, 'Rotatron - Basic')
         servo3 = self.ir.servo_with_name(self.vessel, 'Foo')
-        self.assertEqual('Rail', servo1.name)
-        self.assertEqual('Rotatron', servo2.name)
+        self.assertEqual('Rail Gantry - Short', servo1.name)
+        self.assertEqual('Rotatron - Basic', servo2.name)
         self.assertIsNone(servo3)
 
 

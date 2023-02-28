@@ -75,7 +75,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float MinConfigPosition {
-            get { return servo.MinConfigPosition; }
+            get { return servo.MinPosition; }
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float MaxConfigPosition {
-            get { return servo.MaxConfigPosition; }
+            get { return servo.MaxPosition; }
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float ConfigSpeed {
-            get { return servo.ConfigSpeed; }
+            get { return servo.DefaultSpeed; }
         }
 
         /// <summary>
@@ -117,8 +117,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float Speed {
-            get { return servo.Speed; }
-            set { servo.Speed = value; }
+            get { return servo.SpeedLimit; }
+            set { servo.SpeedLimit = value; }
         }
 
         /// <summary>
@@ -126,8 +126,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float CurrentSpeed {
-            get { return servo.CurrentSpeed; }
-            set { servo.CurrentSpeed = value; }
+            get { return servo.CommandedSpeed; }
         }
 
         /// <summary>
@@ -135,8 +134,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float Acceleration {
-            get { return servo.Acceleration; }
-            set { servo.Acceleration = value; }
+            get { return servo.AccelerationLimit; }
+            set { servo.AccelerationLimit = value; }
         }
 
         /// <summary>
@@ -169,8 +168,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool IsAxisInverted {
-            get { return servo.IsAxisInverted; }
-            set { servo.IsAxisInverted = value; }
+            get { return servo.IsInverted; }
+            set { servo.IsInverted = value; }
         }
 
         /// <summary>
@@ -198,24 +197,6 @@ namespace KRPC.InfernalRobotics
         public void MoveCenter ()
         {
             servo.MoveCenter ();
-        }
-
-        /// <summary>
-        /// Moves the servo to the next preset.
-        /// </summary>
-        [KRPCMethod]
-        public void MoveNextPreset ()
-        {
-            servo.MoveNextPreset ();
-        }
-
-        /// <summary>
-        /// Moves the servo to the previous preset.
-        /// </summary>
-        [KRPCMethod]
-        public void MovePrevPreset ()
-        {
-            servo.MovePrevPreset ();
         }
 
         /// <summary>

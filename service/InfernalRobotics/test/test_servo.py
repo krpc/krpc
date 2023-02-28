@@ -7,21 +7,21 @@ class TestServo(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('InfernalRobotics', directory='./')
+        cls.launch_vessel_from_vab('InfernalRobotics')
         cls.remove_other_vessels()
         cls.ir = cls.connect().infernal_robotics
         cls.vessel = cls.connect().space_center.active_vessel
 
     def test_rotatron(self):
-        servo = self.ir.servo_with_name(self.vessel, 'Rotatron')
-        self.assertEqual('Rotatron', servo.name)
-        self.assertEqual('IR Rotatron', servo.part.title)
+        servo = self.ir.servo_with_name(self.vessel, 'Rotatron - Basic')
+        self.assertEqual('Rotatron - Basic', servo.name)
+        self.assertEqual('Rotatron - Basic', servo.part.title)
         self.assertEqual(0, servo.position)
         self.assertEqual(-360, servo.min_config_position)
         self.assertEqual(360, servo.max_config_position)
         self.assertEqual(-360, servo.min_position)
         self.assertEqual(360, servo.max_position)
-        self.assertAlmostEqual(50, servo.config_speed)
+        self.assertAlmostEqual(1, servo.config_speed)
         self.assertAlmostEqual(1, servo.speed)
         self.assertAlmostEqual(0, servo.current_speed)
         self.assertAlmostEqual(4, servo.acceleration)
@@ -31,16 +31,16 @@ class TestServo(krpctest.TestCase):
         self.assertFalse(servo.is_axis_inverted)
 
     def test_rail(self):
-        servo = self.ir.servo_with_name(self.vessel, 'Rail')
-        self.assertEqual('Rail', servo.name)
-        self.assertEqual('Adjustable Rail', servo.part.title)
-        self.assertEqual(0, servo.position)
-        self.assertEqual(0, servo.min_config_position)
-        self.assertEqual(2, servo.max_config_position)
-        self.assertEqual(0, servo.min_position)
-        self.assertEqual(2, servo.max_position)
-        self.assertAlmostEqual(0.3, servo.config_speed)
-        self.assertAlmostEqual(4, servo.speed)
+        servo = self.ir.servo_with_name(self.vessel, 'Rail Gantry - Short')
+        self.assertEqual('Rail Gantry - Short', servo.name)
+        self.assertEqual('Rail Gantry - Short', servo.part.title)
+        self.assertAlmostEqual(0, servo.position, places=3)
+        self.assertEqual(-1.25, servo.min_config_position)
+        self.assertEqual(1.25, servo.max_config_position)
+        self.assertEqual(-1.25, servo.min_position)
+        self.assertEqual(1.25, servo.max_position)
+        self.assertAlmostEqual(1, servo.config_speed)
+        self.assertAlmostEqual(1, servo.speed)
         self.assertAlmostEqual(0, servo.current_speed)
         self.assertAlmostEqual(4, servo.acceleration)
         self.assertFalse(servo.is_moving)
@@ -49,7 +49,7 @@ class TestServo(krpctest.TestCase):
         self.assertFalse(servo.is_axis_inverted)
 
     def test_move(self):
-        servo = self.ir.servo_with_name(self.vessel, 'Rail')
+        servo = self.ir.servo_with_name(self.vessel, 'Rail Gantry - Short')
         self.assertFalse(servo.is_moving)
         servo.move_right()
         self.wait()
@@ -63,7 +63,7 @@ class TestServo(krpctest.TestCase):
         self.assertFalse(servo.is_moving)
 
     def test_stop(self):
-        servo = self.ir.servo_with_name(self.vessel, 'Rail')
+        servo = self.ir.servo_with_name(self.vessel, 'Rail Gantry - Short')
         self.assertFalse(servo.is_moving)
         servo.move_right()
         self.wait()

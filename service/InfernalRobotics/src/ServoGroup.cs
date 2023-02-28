@@ -13,27 +13,27 @@ namespace KRPC.InfernalRobotics
     [KRPCClass (Service = "InfernalRobotics")]
     public class ServoGroup : Equatable<ServoGroup>
     {
-        readonly IRWrapper.IControlGroup controlGroup;
+        readonly IRWrapper.IServoGroup servoGroup;
 
-        internal ServoGroup (IRWrapper.IControlGroup innerControlGroup)
+        internal ServoGroup (IRWrapper.IServoGroup innerServoGroup)
         {
-            controlGroup = innerControlGroup;
+            servoGroup = innerServoGroup;
         }
 
         /// <summary>
-        /// Check if control groups are equivalent.
+        /// Check if servo groups are equivalent.
         /// </summary>
         public override bool Equals (ServoGroup other)
         {
-            return !ReferenceEquals (other, null) && controlGroup == other.controlGroup;
+            return !ReferenceEquals (other, null) && servoGroup == other.servoGroup;
         }
 
         /// <summary>
-        /// Hash the control group.
+        /// Hash the servo group.
         /// </summary>
         public override int GetHashCode ()
         {
-            return controlGroup.GetHashCode ();
+            return servoGroup.GetHashCode ();
         }
 
         /// <summary>
@@ -41,8 +41,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public string Name {
-            get { return controlGroup.Name; }
-            set { controlGroup.Name = value; }
+            get { return servoGroup.Name; }
+            set { servoGroup.Name = value; }
         }
 
         /// <summary>
@@ -50,8 +50,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public string ForwardKey {
-            get { return controlGroup.ForwardKey; }
-            set { controlGroup.ForwardKey = value; }
+            get { return servoGroup.ForwardKey; }
+            set { servoGroup.ForwardKey = value; }
         }
 
         /// <summary>
@@ -59,8 +59,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public string ReverseKey {
-            get { return controlGroup.ReverseKey; }
-            set { controlGroup.ReverseKey = value; }
+            get { return servoGroup.ReverseKey; }
+            set { servoGroup.ReverseKey = value; }
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float Speed {
-            get { return controlGroup.Speed; }
-            set { controlGroup.Speed = value; }
+            get { return servoGroup.GroupSpeedFactor; }
+            set { servoGroup.GroupSpeedFactor = value; }
         }
 
         /// <summary>
@@ -77,8 +77,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool Expanded {
-            get { return controlGroup.Expanded; }
-            set { controlGroup.Expanded = value; }
+            get { return servoGroup.Expanded; }
+            set { servoGroup.Expanded = value; }
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public IList<Servo> Servos {
-            get { return controlGroup.Servos.Select (x => new Servo (x)).ToList (); }
+            get { return servoGroup.Servos.Select (x => new Servo (x)).ToList (); }
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod (Nullable = true)]
         public Servo ServoWithName (string name)
         {
-            var servo = controlGroup.Servos.FirstOrDefault (x => x.Name == name);
+            var servo = servoGroup.Servos.FirstOrDefault (x => x.Name == name);
             return servo != null ? new Servo (servo) : null;
         }
 
@@ -106,7 +106,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public IList<SpaceCenter.Services.Parts.Part> Parts {
-            get { return controlGroup.Servos.Select (x => new SpaceCenter.Services.Parts.Part (x.HostPart)).ToList (); }
+            get { return servoGroup.Servos.Select (x => new SpaceCenter.Services.Parts.Part (x.HostPart)).ToList (); }
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void MoveRight ()
         {
-            controlGroup.MoveRight ();
+            servoGroup.MoveRight ();
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void MoveLeft ()
         {
-            controlGroup.MoveLeft ();
+            servoGroup.MoveLeft ();
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void MoveCenter ()
         {
-            controlGroup.MoveCenter ();
+            servoGroup.MoveCenter ();
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void MoveNextPreset ()
         {
-            controlGroup.MoveNextPreset ();
+            servoGroup.MoveNextPreset ();
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void MovePrevPreset ()
         {
-            controlGroup.MovePrevPreset ();
+            servoGroup.MovePrevPreset ();
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void Stop ()
         {
-            controlGroup.Stop ();
+            servoGroup.Stop ();
         }
     }
 }

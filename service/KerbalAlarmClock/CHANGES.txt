@@ -1,3 +1,6 @@
+v0.5.0
+ * Update API wrapper to work with KerbalAlarmClock v3.13.0.0
+
 v0.3.7
  * Add KerbalAlarmClock.Available
 
