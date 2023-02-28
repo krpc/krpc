@@ -34,7 +34,6 @@ client_test(
 )
 
 deps = [
-    '@python_six//file',
     '@python_protobuf//file',
     '//client/python'
 ]

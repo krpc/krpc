@@ -30,7 +30,6 @@ test_suite(
 
 deps = [
     '//client/python',
-    '@python_six//file',
     '@python_protobuf//file'
 ]
 
