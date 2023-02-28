@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -78,6 +78,9 @@
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.ScreenCaptureModule">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.ScreenCaptureModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\generated_deps\service\SpaceCenter\AssemblyInfo.cs">
@@ -121,10 +124,13 @@
     <Compile Include="PartHighlightAddon.cs" />
     <Compile Include="PilotAddon.cs" />
     <Compile Include="ResourceTransferAddon.cs" />
+    <Compile Include="Services\Alarm.cs" />
+    <Compile Include="Services\AlarmClock.cs" />
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\Camera.cs" />
     <Compile Include="Services\CameraMode.cs" />
     <Compile Include="Services\CelestialBody.cs" />
+    <Compile Include="Services\LaunchSite.cs" />
     <Compile Include="Services\CommLink.cs" />
     <Compile Include="Services\CommLinkType.cs" />
     <Compile Include="Services\CommNode.cs" />
@@ -141,10 +147,12 @@
     <Compile Include="Services\CrewMemberType.cs" />
     <Compile Include="Services\Flight.cs" />
     <Compile Include="Services\GameMode.cs" />
+    <Compile Include="Services\MapFilterType.cs" />
     <Compile Include="Services\Node.cs" />
     <Compile Include="Services\Orbit.cs" />
     <Compile Include="Services\Parts\Antenna.cs" />
     <Compile Include="Services\Parts\AntennaState.cs" />
+    <Compile Include="Services\Parts\AutostrutState.cs" />
     <Compile Include="Services\Parts\CargoBay.cs" />
     <Compile Include="Services\Parts\CargoBayState.cs" />
     <Compile Include="Services\Parts\ControlSurface.cs" />
@@ -173,8 +181,14 @@
     <Compile Include="Services\Parts\ReactionWheel.cs" />
     <Compile Include="Services\Parts\ResourceConverter.cs" />
     <Compile Include="Services\Parts\ResourceConverterState.cs" />
+    <Compile Include="Services\Parts\ResourceDrain.cs" />
     <Compile Include="Services\Parts\ResourceHarvester.cs" />
     <Compile Include="Services\Parts\ResourceHarvesterState.cs" />
+    <Compile Include="Services\Parts\RoboticHinge.cs" />
+    <Compile Include="Services\Parts\RoboticPiston.cs" />
+    <Compile Include="Services\Parts\RoboticRotation.cs" />
+    <Compile Include="Services\Parts\RoboticRotor.cs" />
+    <Compile Include="Services\Parts\RoboticController.cs" />
     <Compile Include="Services\Parts\ScienceData.cs" />
     <Compile Include="Services\Parts\ScienceSubject.cs" />
     <Compile Include="Services\Parts\Sensor.cs" />

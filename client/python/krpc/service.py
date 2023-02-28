@@ -192,7 +192,7 @@ def create_service(client, service):
                 properties[name][0] = procedure
             else:
                 properties[name][1] = procedure
-    for name, procedures in properties.items():
+    for name, procedures in list(properties.items()):
         cls._add_service_property(name, procedures[0], procedures[1])
 
     # Add class methods
@@ -221,7 +221,7 @@ def create_service(client, service):
                 properties[key][0] = procedure
             else:
                 properties[key][1] = procedure
-    for (class_name, property_name), procedures in properties.items():
+    for (class_name, property_name), procedures in list(properties.items()):
         cls._add_service_class_property(
             class_name, property_name, procedures[0], procedures[1])
 

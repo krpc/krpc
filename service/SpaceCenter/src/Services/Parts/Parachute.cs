@@ -97,26 +97,47 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Deploys the parachute. This has no effect if the parachute has already
-        /// been armed or deployed. Only applicable to RealChutes parachutes.
+        /// been armed or deployed.
         /// </summary>
         [KRPCMethod]
         public void Arm ()
         {
-            CheckRealChute ();
-            if (realChute.HasEvent ("Arm parachute"))
-                realChute.TriggerEvent ("Arm parachute");
+            if (realChute != null)
+            {
+                if (realChute.HasEvent("Arm parachute"))
+                    realChute.TriggerEvent("Arm parachute");
+            }
+            else if (parachute)
+                parachute.Deploy();
         }
 
         /// <summary>
-        /// Whether the parachute has been armed or deployed. Only applicable to
-        /// RealChutes parachutes.
+        /// Whether the parachute has been armed or deployed.
         /// </summary>
         [KRPCProperty]
         public bool Armed {
             get {
-                CheckRealChute ();
-                return realChute.HasEvent ("Disarm parachute");
+                if (realChute != null)
+                    return realChute.HasEvent("Disarm parachute");
+                else if (parachute)
+                    return parachute.deploymentState == ModuleParachute.deploymentStates.ACTIVE;
+                else
+                    return false;
             }
+        }
+
+        /// <summary>
+        /// Cuts the parachute.
+        /// </summary>
+        [KRPCMethod]
+        public void Cut()
+        {
+            if (realChute != null) {
+                if (realChute.HasEvent("Cut main chute"))
+                    realChute.TriggerEvent("Cut main chute");
+            }
+            else if (parachute)
+                parachute.CutParachute();
         }
 
         /// <summary>
@@ -127,10 +148,10 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (parachute)
                     return parachute.deploymentState.ToParachuteState ();
-                if (Deployed)
-                    return ParachuteState.Deployed;
                 if (Armed)
                     return ParachuteState.Armed;
+                if (Deployed)
+                    return ParachuteState.Deployed;
                 if (realChute.Events.Any(x => x.Contains("Deploy")))
                     return ParachuteState.Stowed;
                 return ParachuteState.Cut;

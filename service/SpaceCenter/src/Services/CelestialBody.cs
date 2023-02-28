@@ -317,6 +317,18 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether or not the body is a star.
+        /// </summary>
+        [KRPCProperty]
+        public bool IsStar => InternalBody.isStar;
+
+        /// <summary>
+        /// Whether or not the body has a solid surface.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasSolidSurface => InternalBody.hasSolidSurface;
+
+        /// <summary>
         /// <c>true</c> if the body has an atmosphere.
         /// </summary>
         [KRPCProperty]

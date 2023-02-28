@@ -43,7 +43,7 @@ else:
 
 # Compute version string
 version = '%s-%s-%s' % version
-print('version =', version)
+print(('version =', version))
 
 # Update config.bzl
 with open('config.bzl', 'r') as f:

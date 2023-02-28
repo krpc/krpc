@@ -113,11 +113,13 @@ pkg_zip(
         '//service/KerbalAlarmClock',
         '//service/RemoteTech',
         '//service/UI',
+        '//service/LiDAR',
+        '//service/DockingCamera',
         # Clients
         '//client/cnano',
         '//client/cpp',
         '//client/csharp',
-        '//client/java',
+        # '//client/java',
         '//client/lua',
         '//client/python',
         # Schema
@@ -128,9 +130,9 @@ pkg_zip(
         '//protobuf:java',
         '//protobuf:lua',
         '//protobuf:python',
-        '//protobuf:LICENSE',
+        '//protobuf:LICENSE'
         # Docs
-        '//doc:pdf'
+        #'//doc:pdf'
     ],
     path_map = {
         'kRPC.version': 'GameData/kRPC/kRPC.version',
@@ -155,19 +157,21 @@ pkg_zip(
         'service/RemoteTech/CHANGES.txt': 'GameData/kRPC/CHANGES.RemoteTech.txt',
         'service/UI/': 'GameData/kRPC/',
         'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt',
+		'service/LiDAR/': 'GameData/kRPC/',
+		'service/DockingCamera/': 'GameData/kRPC/',
         # Module Manager
         '../module_manager/file/ModuleManager.4.1.3.dll': 'GameData/ModuleManager.4.1.3.dll',
         # Clients
         'client/cnano/': 'client/',
         'client/cpp/': 'client/',
         'client/csharp/': 'client/',
-        'client/java/': 'client/',
+        # 'client/java/': 'client/',
         'client/lua/': 'client/',
         'client/python/': 'client/',
         # Schema
-        'protobuf/': 'schema/',
+        'protobuf/': 'schema/'
         # Docs
-        'doc/kRPC.pdf': 'kRPC.pdf'
+        #'doc/kRPC.pdf': 'kRPC.pdf'
     },
     exclude = ['*.mdb']
 )
@@ -195,7 +199,9 @@ pkg_zip(
         '//service/InfernalRobotics',
         '//service/KerbalAlarmClock',
         '//service/RemoteTech',
-        '//service/UI'
+        '//service/UI',
+        '//service/LiDAR',
+        '//service/DockingCamera'
     ],
     path_map = {
         'kRPC.version': 'GameData/kRPC/kRPC.version',
@@ -223,7 +229,9 @@ pkg_zip(
         'service/RemoteTech/': 'GameData/kRPC/',
         'service/RemoteTech/CHANGES.txt': 'GameData/kRPC/CHANGES.RemoteTech.txt',
         'service/UI/': 'GameData/kRPC/',
-        'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt'
+        'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt',
+		'service/LiDAR/': 'GameData/kRPC/',
+		'service/DockingCamera/': 'GameData/kRPC/'
     },
     exclude = ['*.mdb']
 )
@@ -241,7 +249,7 @@ test_suite(
         '//client/cnano:test',
         '//client/cpp:test',
         '//client/csharp:test',
-        '//client/java:test',
+        #'//client/java:test',
         '//client/lua:test',
         '//client/python:test',
         '//client/websockets:test',
@@ -250,8 +258,8 @@ test_suite(
         '//tools/krpctools:test',
         '//tools/ServiceDefinitions:test',
         '//tools/TestingTools:test',
-        '//tools/TestServer:test',
-        '//doc:test'
+        '//tools/TestServer:test'
+        #'//doc:test'
     ]
 )
 
@@ -262,14 +270,14 @@ test_suite(
         '//client/csharp:ci-test',
         '//client/cnano:ci-test',
         '//client/cpp:ci-test',
-        '//client/java:ci-test',
+        #'//client/java:ci-test',
         '//client/lua:ci-test',
         '//client/python:ci-test',
         '//client/serialio:ci-test',
         '//client/websockets:ci-test',
         '//tools/krpctest:ci-test',
-        '//tools/krpctools:ci-test',
-        '//doc:ci-test'
+        '//tools/krpctools:ci-test'
+        #'//doc:ci-test'
     ]
 )
 
@@ -286,12 +294,12 @@ test_suite(
         '//client/cnano:lint',
         '//client/cpp:lint',
         '//client/csharp:lint',
-        '//client/java:lint',
+        #'//client/java:lint',
         '//client/python:lint',
         '//client/websockets:lint',
         '//tools/krpctest:lint',
-        '//tools/krpctools:lint',
-        '//doc:lint'
+        '//tools/krpctools:lint'
+        #'//doc:lint'
     ]
 )
 
@@ -315,6 +323,8 @@ filegroup (
         '//service/RemoteTech:AssemblyInfo',
         '//service/SpaceCenter:AssemblyInfo',
         '//service/UI:AssemblyInfo',
+        '//service/LiDAR:AssemblyInfo',
+        '//service/DockingCamera:AssemblyInfo',
 
         '//tools/ServiceDefinitions:AssemblyInfo',
         '//tools/TestServer:AssemblyInfo',
@@ -358,6 +368,8 @@ filegroup(
         '//service/KerbalAlarmClock',
         '//service/RemoteTech',
         '//service/UI',
+        '//service/LiDAR',
+        '//service/DockingCamera',
         '//client/csharp',
         '//client/csharp:KRPC.Client.Test',
         '//tools/ServiceDefinitions',

@@ -98,8 +98,8 @@ class TestCameraFlight(krpctest.TestCase, CameraTestBase):
         if cls.camera.mode != cls.mode.automatic:
             cls.camera.mode = cls.mode.automatic
         cls.wait(1)
-        cls.pitches = range(-90, 90, 5)
-        cls.headings = range(0, 360, 5)
+        cls.pitches = list(range(-90, 90, 5))
+        cls.headings = list(range(0, 360, 5))
         cls.distances = (1, 5, 10, 20)
 
 
@@ -114,8 +114,8 @@ class TestCameraIVA(krpctest.TestCase, CameraTestBase):
         if cls.camera.mode != cls.mode.iva:
             cls.camera.mode = cls.mode.iva
         cls.wait(1)
-        cls.pitches = range(-30, 30, 5)
-        cls.headings = range(-60, 60, 5)
+        cls.pitches = list(range(-30, 30, 5))
+        cls.headings = list(range(-60, 60, 5))
 
     @classmethod
     def tearDownClass(cls):
@@ -135,8 +135,8 @@ class TestCameraMap(krpctest.TestCase, CameraTestBase):
         if cls.camera.mode != cls.mode.map:
             cls.camera.mode = cls.mode.map
         cls.wait(1)
-        cls.pitches = range(-90, 90, 5)
-        cls.headings = range(0, 360, 5)
+        cls.pitches = list(range(-90, 90, 5))
+        cls.headings = list(range(0, 360, 5))
         cls.distances = (100000, 120000, 200000)
 
     @classmethod

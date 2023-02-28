@@ -96,6 +96,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Gets or sets the asset url for the part's flag
+        /// </summary>
+        [KRPCProperty]
+        public string FlagURL
+        {
+            get { return InternalPart.flagURL; }
+            set { InternalPart.flagURL = value; }
+        }
+
+        /// <summary>
         /// Whether the part is highlighted.
         /// </summary>
         [KRPCProperty]
@@ -456,6 +466,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Returns true if the part has any open seats.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasAvailableSeats
+        {
+            get { return InternalPart.internalModel ? InternalPart.internalModel.GetAvailableSeatCount() > 0 : false; }
+        }
+
+        /// <summary>
         /// A <see cref="ControlSurface"/> if the part is an aerodynamic control surface,
         /// otherwise <c>null</c>.
         /// </summary>
@@ -478,6 +497,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty (Nullable = true)]
         public DockingPort DockingPort {
             get { return DockingPort.Is (this) ? new DockingPort (this) : null; }
+        }
+
+        /// <summary>        /// A <see cref="ResourceDrain"/> if the part is a resource drain, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public ResourceDrain ResourceDrain
+        {
+            get { return ResourceDrain.Is(this) ? new ResourceDrain(this) : null; }
         }
 
         /// <summary>
@@ -617,6 +644,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A <see cref="RoboticController"/> if the part is a robotic controller,
+        /// otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public RoboticController RoboticController
+        {
+            get { return RoboticController.Is(this) ? new RoboticController(this) : null; }
+        }
+
+        /// <summary>
         /// A <see cref="Sensor"/> if the part is a sensor, otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty (Nullable = true)]
@@ -638,6 +675,44 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty (Nullable = true)]
         public Wheel Wheel {
             get { return Wheel.Is (this) ? new Wheel (this) : null; }
+        }
+
+
+        /// <summary>
+        /// A <see cref="RoboticHinge"/> if the part is a robotic hinge, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public RoboticHinge RoboticHinge
+        {
+            get { return RoboticHinge.Is(this) ? new RoboticHinge(this) : null; }
+        }
+
+
+        /// <summary>
+        /// A <see cref="RoboticPiston"/> if the part is a robotic hinge, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public RoboticPiston RoboticPiston
+        {
+            get { return RoboticPiston.Is(this) ? new RoboticPiston(this) : null; }
+        }
+
+        /// <summary>
+        /// A <see cref="RoboticRotation"/> if the part is a robotic rotation servo, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public RoboticRotation RoboticRotation
+        {
+            get { return RoboticRotation.Is(this) ? new RoboticRotation(this) : null; }
+        }
+
+        /// <summary>
+        /// A <see cref="RoboticRotor"/> if the part is a robotic rotation servo, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public RoboticRotor RoboticRotor
+        {
+            get { return RoboticRotor.Is(this) ? new RoboticRotor(this) : null; }
         }
 
         /// <summary>
@@ -852,6 +927,64 @@ namespace KRPC.SpaceCenter.Services.Parts
         public void InstantaneousForce (Tuple3 force, Tuple3 position, ReferenceFrame referenceFrame)
         {
             PartForcesAddon.AddInstantaneous (new Force (this, force, position, referenceFrame));
+        }
+
+        /// <summary>
+        /// Glow
+        /// </summary>
+        [KRPCProperty]
+        public bool Glow
+        {
+            set
+            {
+                if (value == false) { InternalPart.SetHighlightDefault(); }
+                else
+                {
+                    InternalPart.SetHighlight(true, true);
+                    InternalPart.SetHighlightColor(Color.yellow);
+                    InternalPart.SetHighlightType(global::Part.HighlightType.AlwaysOn);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Autostrut
+        /// </summary>
+        public AutostrutState AutoStrutMode
+        {
+            get
+            {
+                switch (InternalPart.autoStrutMode)
+                {
+                    case global::Part.AutoStrutMode.Off:
+                        return AutostrutState.Off;
+                       
+                    case global::Part.AutoStrutMode.Heaviest:
+                        return AutostrutState.Heaviest;
+                      
+                    case global::Part.AutoStrutMode.ForceHeaviest:
+                        return AutostrutState.ForceHeaviest;
+                       
+                    case global::Part.AutoStrutMode.Grandparent:
+                        return AutostrutState.Grandparent;
+                      
+                    case global::Part.AutoStrutMode.ForceGrandparent:
+                        return AutostrutState.ForceGrandparent;
+                     
+                    case global::Part.AutoStrutMode.Root:
+                        return AutostrutState.Root;
+           
+                    default:
+                        return AutostrutState.ForceRoot;
+                      
+
+                }
+            }
+
+            set
+            {
+
+            }
         }
     }
 }

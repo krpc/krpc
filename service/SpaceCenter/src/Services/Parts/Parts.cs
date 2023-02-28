@@ -329,5 +329,50 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<Wheel> Wheels {
             get { return All.Where (Wheel.Is).Select (part => new Wheel (part)).ToList (); }
         }
+
+        /// <summary>        
+        /// A list of all robotic hinges in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<RoboticHinge> RoboticHinges
+        {
+            get { return All.Where(RoboticHinge.Is).Select(part => new RoboticHinge(part)).ToList(); }
+        }
+
+        /// <summary>
+        /// A list of all robotic pistons in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<RoboticPiston> RoboticPistons
+        {
+            get { return All.Where(RoboticPiston.Is).Select(part => new RoboticPiston(part)).ToList(); }
+        }
+
+        /// <summary>
+        /// A list of all robotic pistons in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<RoboticRotation> RoboticRotations
+        {
+            get { return All.Where(RoboticRotation.Is).Select(part => new RoboticRotation(part)).ToList(); }
+        }
+
+        /// <summary>
+        /// A list of all robotic rotors in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<RoboticRotor> RoboticRotors
+        {
+            get { return All.Where(RoboticRotor.Is).Select(part => new RoboticRotor(part)).ToList(); }
+        }
+
+        /// <summary>
+        /// A list of all resource drains in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<ResourceDrain> ResourceDrains
+        {
+            get { return All.Where(ResourceDrain.Is).Select(part => new ResourceDrain(part)).ToList(); }
+        }
     }
 }

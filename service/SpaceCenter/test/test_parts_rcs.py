@@ -30,7 +30,7 @@ class RCSTestBase:
 
     @classmethod
     def add_rcs_data(cls, title, data):
-        for k, v in data.items():
+        for k, v in list(data.items()):
             cls.rcs_data[title][k] = v
 
     def get_rcs(self, title):

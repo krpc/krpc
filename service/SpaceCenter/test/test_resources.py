@@ -20,7 +20,7 @@ class TestResources(krpctest.TestCase, ResourcesTest):
         if cls.connect().space_center.active_vessel.name != 'Resources':
             cls.launch_vessel_from_vab('Resources')
         cls.vessel = cls.connect().space_center.active_vessel
-        cls.num_stages = len(cls.expected.keys())-1
+        cls.num_stages = len(list(cls.expected.keys()))-1
 
     expected = {
         -1: {
@@ -228,7 +228,7 @@ class TestResourcesStaticMethods(krpctest.TestCase, ResourcesTest):
         cls.resources = cls.connect().space_center.Resources
 
     def test_density(self):
-        for name, expected in self.density.items():
+        for name, expected in list(self.density.items()):
             self.assertEqual(expected, self.resources.density(name))
         self.assertRaises(ValueError, self.resources.density, 'Foo')
 

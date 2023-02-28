@@ -1,5 +1,7 @@
-kRPC [![Build Status](https://travis-ci.com/krpc/krpc.svg?branch=master)](https://travis-ci.com/krpc/krpc)
-====
+This fork contains two main additions to the base kRPC project:
+
+* Integration for multi-beam LiDAR parts. The mod for the LiDAR parts is located [here](https://github.com/nullprofile/LaserDist).
+* Integration for a modified DockingCamera mod part. The camera can be triggered from kRPC and an image in PNG format is received. The supported DockingCamera mod fork is located [here](https://github.com/nullprofile/DockingCam).
 
 kRPC allows you to control Kerbal Space Program from scripts running outside of
 the game, and comes with client libraries for many popular languages.
