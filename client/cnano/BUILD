@@ -25,6 +25,8 @@ autotools_dist(
         ':services-kerbalalarmclock',
         ':services-remotetech',
         ':services-ui',
+        ':services-lidar',
+        ':services-dockingcamera',
         '@c_nanopb//:LICENSE.txt',
         '@c_nanopb//:pb.h',
         '@c_nanopb//:pb_common.h',
@@ -111,6 +113,20 @@ clientgen_cnano(
 )
 
 clientgen_cnano(
+    name = 'services-lidar',
+    service = 'LiDAR',
+    defs = '//service/LiDAR:ServiceDefinitions',
+    out = 'include/krpc_cnano/services/lidar.h'
+)
+
+clientgen_cnano(
+    name = 'services-dockingcamera',
+    service = 'DockingCamera',
+    defs = '//service/DockingCamera:ServiceDefinitions',
+    out = 'include/krpc_cnano/services/dockingcamera.h'
+)
+
+clientgen_cnano(
     name = 'services-test-service',
     service = 'TestService',
     defs = '//tools/TestServer:ServiceDefinitions',
@@ -125,7 +141,9 @@ hdrs = glob(['include/**/*.h']) + [
     ':services-infernalrobotics',
     ':services-kerbalalarmclock',
     ':services-remotetech',
-    ':services-ui'
+    ':services-ui',
+    ':services-lidar',
+    ':services-dockingcamera'
 ]
 
 cc_library(

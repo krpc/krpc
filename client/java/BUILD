@@ -30,7 +30,9 @@ java_library(
         ':services-infernalrobotics',
         ':services-kerbalalarmclock',
         ':services-remotetech',
-        ':services-ui'
+        ':services-ui',
+        ':services-lidar',
+        ':services-dockingcamera'
     ],
     resources = [
         '//:readme', '//:version', 'CHANGES.txt',
@@ -145,6 +147,20 @@ clientgen_java(
     service = 'UI',
     defs = '//service/UI:ServiceDefinitions',
     out = 'services/UI.java'
+)
+
+clientgen_java(
+    name = 'services-lidar',
+    service = 'LiDAR',
+    defs = '//service/LiDAR:ServiceDefinitions',
+    out = 'services/LiDAR.java'
+)
+
+clientgen_java(
+    name = 'services-dockingcamera',
+    service = 'DockingCamera',
+    defs = '//service/DockingCamera:ServiceDefinitions',
+    out = 'services/DockingCamera.java'
 )
 
 clientgen_java(

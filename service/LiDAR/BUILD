@@ -6,7 +6,7 @@ load('//service:build.bzl', 'service_deps')
 
 filegroup(
     name = 'LiDAR',
-    srcs = [':KRPC.LiDAR', ':ServiceDefinitions'],
+    srcs = [':KRPC.LiDAR', ':ServiceDefinitions', 'CHANGES.txt'],
     visibility = ['//:__pkg__']
 )
 
@@ -40,6 +40,27 @@ service_definitions(
     visibility = ['//visibility:public']
 )
 
+test_suite(
+    name = 'test',
+    tests = [':lint']
+)
+
+test_suite(
+    name = 'lint',
+    tests = [
+        # ':pylint',
+        ':gendarme'
+    ]
+)
+
+# FIXME: add tests
+# py_lint_test(
+#     name = 'pylint',
+#     srcs = glob(['test/*.py']),
+#     pylint_config = 'test/pylint.rc',
+#     deps = ['//client/python', '//tools/krpctest'],
+#     size = 'small'
+# )
 
 csharp_library(
     name = 'KRPC.LiDAR.Debug',
@@ -47,4 +68,11 @@ csharp_library(
     deps = deps,
     optimize = False,
     define = ['CODE_ANALYSIS']
+)
+
+csharp_gendarme_test(
+    name = 'gendarme',
+    lib = ':KRPC.LiDAR.Debug',
+    # ignores = 'src/ignores.txt',
+    size = 'small'
 )

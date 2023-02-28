@@ -56,7 +56,9 @@ srcs = glob(['src/**/*.cs']) + [
     ':services-infernalrobotics',
     ':services-kerbalalarmclock',
     ':services-remotetech',
-    ':services-ui'
+    ':services-ui',
+    ':services-lidar',
+    ':services-dockingcamera'
 ]
 deps = [
     '//tools/build/mono-4.5:Google.Protobuf',
@@ -137,6 +139,20 @@ clientgen_csharp(
     service = 'UI',
     defs = '//service/UI:ServiceDefinitions',
     out = 'Services/UI.cs'
+)
+
+clientgen_csharp(
+    name = 'services-lidar',
+    service = 'LiDAR',
+    defs = '//service/LiDAR:ServiceDefinitions',
+    out = 'Services/LiDAR.cs'
+)
+
+clientgen_csharp(
+    name = 'services-dockingcamera',
+    service = 'DockingCamera',
+    defs = '//service/DockingCamera:ServiceDefinitions',
+    out = 'Services/DockingCamera.cs'
 )
 
 test_suite(

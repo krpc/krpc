@@ -158,7 +158,9 @@ pkg_zip(
         'service/UI/': 'GameData/kRPC/',
         'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt',
         'service/LiDAR/': 'GameData/kRPC/',
+        'service/LiDAR/CHANGES.txt': 'GameData/kRPC/CHANGES.LiDAR.txt',
         'service/DockingCamera/': 'GameData/kRPC/',
+        'service/DockingCamera/CHANGES.txt': 'GameData/kRPC/CHANGES.DockingCamera.txt',
         # Module Manager
         '../module_manager/file/ModuleManager.4.1.3.dll': 'GameData/ModuleManager.4.1.3.dll',
         # Clients
@@ -231,7 +233,9 @@ pkg_zip(
         'service/UI/': 'GameData/kRPC/',
         'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt',
         'service/LiDAR/': 'GameData/kRPC/',
-        'service/DockingCamera/': 'GameData/kRPC/'
+        'service/LiDAR/CHANGES.txt': 'GameData/kRPC/CHANGES.LiDAR.txt',
+        'service/DockingCamera/': 'GameData/kRPC/',
+        'service/DockingCamera/CHANGES.txt': 'GameData/kRPC/CHANGES.DockingCamera.txt',
     },
     exclude = ['*.mdb']
 )
@@ -246,6 +250,8 @@ test_suite(
         '//service/KerbalAlarmClock:test',
         '//service/RemoteTech:test',
         '//service/UI:test',
+        '//service/LiDAR:test',
+        '//service/DockingCamera:test',
         '//client/cnano:test',
         '//client/cpp:test',
         '//client/csharp:test',
@@ -291,6 +297,8 @@ test_suite(
         '//service/KerbalAlarmClock:lint',
         '//service/RemoteTech:lint',
         '//service/UI:lint',
+        '//service/LiDAR:lint',
+        '//service/DockingCamera:lint',
         '//client/cnano:lint',
         '//client/cpp:lint',
         '//client/csharp:lint',
