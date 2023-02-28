@@ -3,7 +3,8 @@
 {{ domain.currentmodule('SpaceCenter') }}
 {% import domain.macros as macros with context %}
 
-Launch Site
-===========
+Alarms
+======
 
-{{ macros.class(services['SpaceCenter'].classes['LaunchSite']) }}
+{{ macros.class(services['SpaceCenter'].classes['AlarmManager']) }}
+{{ macros.class(services['SpaceCenter'].classes['Alarm']) }}

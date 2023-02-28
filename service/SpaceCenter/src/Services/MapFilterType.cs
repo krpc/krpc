@@ -1,5 +1,5 @@
-﻿using KRPC.Service.Attributes;
-using System;
+﻿using System;
+using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter
 {
@@ -8,7 +8,6 @@ namespace KRPC.SpaceCenter
     /// These may be combined with bitwise logic.
     /// </summary>
     [Serializable]
-    [Flags]
     [KRPCEnum(Service = "SpaceCenter")]
     public enum MapFilterType
     {

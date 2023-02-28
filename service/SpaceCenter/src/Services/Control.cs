@@ -472,6 +472,7 @@ namespace KRPC.SpaceCenter.Services
             get { return PilotAddon.Get (InternalVessel).CustomAxis01; }
             set { PilotAddon.Set (InternalVessel).CustomAxis01 = value; }
         }
+
         /// <summary>
         /// The state of CustomAxis02.
         /// A value between -1 and 1.
@@ -481,6 +482,7 @@ namespace KRPC.SpaceCenter.Services
             get { return PilotAddon.Get (InternalVessel).CustomAxis02; }
             set { PilotAddon.Set (InternalVessel).CustomAxis02 = value; }
         }
+
         /// <summary>
         /// The state of CustomAxis03.
         /// A value between -1 and 1.
@@ -490,6 +492,7 @@ namespace KRPC.SpaceCenter.Services
             get { return PilotAddon.Get (InternalVessel).CustomAxis03; }
             set { PilotAddon.Set (InternalVessel).CustomAxis03 = value; }
         }
+
         /// <summary>
         /// The state of CustomAxis04.
         /// A value between -1 and 1.

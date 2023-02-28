@@ -113,34 +113,34 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The crewmember's job.
+        /// The crew member's job.
         /// </summary>
         [KRPCProperty]
         public string Trait => InternalCrewMember.trait;
 
         /// <summary>
-        /// The crewmember's gender.
+        /// The crew member's gender.
         /// </summary>
         [KRPCProperty]
-        public string Gender {
-            get { return InternalCrewMember.gender.ToString(); }
+        public CrewMemberGender Gender {
+            get { return (CrewMemberGender)InternalCrewMember.gender; }
         }
 
         /// <summary>
-        /// The crew member's current roster status.  One of "Available", "Assigned", "dead", or "Missing"
+        /// The crew member's current roster status.
         /// </summary>
         [KRPCProperty]
-        public string RosterStatus {
-            get { return InternalCrewMember.rosterStatus.ToString(); }
+        public RosterStatus RosterStatus {
+            get { return (RosterStatus)InternalCrewMember.rosterStatus; }
         }
 
         /// <summary>
-        /// The crew member's current suit type.  One of "Default", "Vintage", "Future", "Slim"
+        /// The crew member's suit type.
         /// </summary>
         [KRPCProperty]
-        public string SuitType {
-            get { return InternalCrewMember.suit.ToString(); }
-            set { InternalCrewMember.suit = (ProtoCrewMember.KerbalSuit)Enum.Parse(typeof(ProtoCrewMember.KerbalSuit), value, true); }
+        public SuitType SuitType {
+            get { return (SuitType)InternalCrewMember.suit; }
+            set { InternalCrewMember.suit = (ProtoCrewMember.KerbalSuit)value; }
         }
 
         /// <summary>

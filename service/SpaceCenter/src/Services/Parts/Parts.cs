@@ -349,7 +349,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// A list of all robotic pistons in the vessel.
+        /// A list of all robotic rotations in the vessel.
         /// </summary>
         [KRPCProperty]
         public IList<RoboticRotation> RoboticRotations

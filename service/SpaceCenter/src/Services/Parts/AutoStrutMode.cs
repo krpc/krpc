@@ -4,39 +4,39 @@ using KRPC.Service.Attributes;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// The state of a Autostrut. <see cref="Part.AutoStrutMode"/>
+    /// The state of an auto-strut. <see cref="Part.AutoStrutMode"/>
     /// </summary>
     [Serializable]
     [KRPCEnum(Service = "SpaceCenter")]
-    public enum AutostrutState
+    public enum AutoStrutMode
     {
         /// <summary>
         /// Off
         /// </summary>
-        Off,
+        Off = global::Part.AutoStrutMode.Off,
         /// <summary>
         /// Root
         /// </summary>
-        Root,
+        Root = global::Part.AutoStrutMode.Root,
         /// <summary>
         /// Heaviest
         /// </summary>
-        Heaviest,
+        Heaviest = global::Part.AutoStrutMode.Heaviest,
         /// <summary>
         /// Grandparent
         /// </summary>
-        Grandparent,
+        Grandparent = global::Part.AutoStrutMode.Grandparent,
         /// <summary>
         /// ForceRoot
         /// </summary>
-        ForceRoot,
+        ForceRoot = global::Part.AutoStrutMode.ForceRoot,
         /// <summary>
         /// ForceHeaviest
         /// </summary>
-        ForceHeaviest,
+        ForceHeaviest = global::Part.AutoStrutMode.ForceHeaviest,
         /// <summary>
         /// ForceGrandparent
         /// </summary>
-        ForceGrandparent
+        ForceGrandparent = global::Part.AutoStrutMode.ForceGrandparent
     }
 }

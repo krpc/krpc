@@ -9,7 +9,7 @@ using UnityEngine;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// A Robotic Hinge Part. Obtained by calling <see cref="Part.RoboticHinge"/>
+    /// A robotic hinge. Obtained by calling <see cref="Part.RoboticHinge"/>.
     /// </summary>
     [KRPCClass(Service = "SpaceCenter")]
     public class RoboticHinge : Equatable<RoboticHinge>
@@ -23,12 +23,11 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal RoboticHinge(Part part)
         {
+            if (!Is(part))
+                throw new ArgumentException("Part is not a robotic hinge");
             Part = part;
             var internalPart = part.InternalPart;
             servo = internalPart.Module<ModuleRoboticServoHinge>();
-
-            if (servo == null)
-                throw new ArgumentException("Part is not a robotic servo");
         }
 
         /// <summary>
@@ -36,10 +35,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals(RoboticHinge other)
         {
-            return
-            !ReferenceEquals(other, null) &&
-            Part == other.Part &&
-            servo.Equals(other.servo);
+            return !ReferenceEquals(other, null) && Part == other.Part && servo.Equals(other.servo);
         }
 
         /// <summary>
@@ -47,17 +43,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode()
         {
-            int hash = Part.GetHashCode() ^ servo.GetHashCode();
-
-            return hash;
-        }
-
-        /// <summary>
-        /// The KSP Robotic Servo Hinge object.
-        /// </summary>
-        public ModuleRoboticServoHinge InternalHinge
-        {
-            get { return servo; }
+            return Part.GetHashCode() ^ servo.GetHashCode();
         }
 
         /// <summary>
@@ -67,13 +53,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Part Part { get; private set; }
 
         /// <summary>
-        ///Target Angle for Robotic Hinge
+        /// Target angle.
         /// </summary>
         [KRPCProperty]
-        public float TargetAngle { get { return servo.targetAngle; } set { servo.targetAngle = value; } }
+        public float TargetAngle {
+            get { return servo.targetAngle; }
+            set { servo.targetAngle = value; }
+        }
 
         /// <summary>
-        ///Current Angle for Robotic Hinge
+        /// Current angle.
         /// </summary>
         [KRPCProperty]
         public float CurrentAngle
@@ -83,34 +72,37 @@ namespace KRPC.SpaceCenter.Services.Parts
                 return servo.modelInitialAngle + (float)typeof(ModuleRoboticServoHinge)
                     .GetMethod("currentTransformAngle", BindingFlags.Instance | BindingFlags.NonPublic)
                     .Invoke(servo, null);
-
             }
         }
 
         /// <summary>
-        /// Target Movement Rate in Degrees/s
+        /// Target movement rate in degrees per second.
         /// </summary>
         [KRPCProperty]
-        public float Rate { get { return servo.traverseVelocity; } set { servo.traverseVelocity = value; } }
-
-        /// <summary>
-        ///Damping Percentage>
-        /// </summary>
-        [KRPCProperty]
-        public float Damping { get { return servo.hingeDamping; } set { servo.hingeDamping = value; } }
-
-        /// <summary>
-        /// Lock Movement
-        /// </summary>
-        [KRPCProperty]
-        public bool HingeLocked
+        public float Rate
         {
-            get
-            {
-                return servo.servoIsLocked;
-            }
-            set
-            {
+            get { return servo.traverseVelocity; }
+            set { servo.traverseVelocity = value; }
+        }
+
+        /// <summary>
+        /// Damping percentage.
+        /// </summary>
+        [KRPCProperty]
+        public float Damping
+        {
+            get { return servo.hingeDamping; }
+            set { servo.hingeDamping = value; }
+        }
+
+        /// <summary>
+        /// Lock movement.
+        /// </summary>
+        [KRPCProperty]
+        public bool Locked
+        {
+            get { return servo.servoIsLocked; }
+            set {
                 if (value == true)
                     servo.EngageServoLock();
                 else
@@ -119,15 +111,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Engage/Disengage Motor
+        /// Whether the motor is engaged.
         /// </summary>
         [KRPCProperty]
         public bool MotorEngaged
         {
-            get
-            {
-                return servo.servoMotorIsEngaged;
-            }
+            get { return servo.servoMotorIsEngaged; }
             set
             {
                 if (value == true)
@@ -137,12 +126,11 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
         }
 
-
         /// <summary>
-        /// Returns Hinge to Build Angle Position
+        /// Move hinge to it's built position.
         /// </summary>
         [KRPCMethod]
-        public void Home()
+        public void MoveHome()
         {
             servo.targetAngle = servo.modelInitialAngle;
         }

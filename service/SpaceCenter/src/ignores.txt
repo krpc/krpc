@@ -28,7 +28,12 @@ N: KRPC.SpaceCenter.Services.Parts
 R: Gendarme.Rules.Performance.AvoidConcatenatingCharsRule
 A: *
 
+R: Gendarme.Rules.Design.PreferUriOverStringRule
+A: *
+
 R: Gendarme.Rules.Design.ImplementEqualsAndGetHashCodeInPairRule
+T: KRPC.SpaceCenter.Services.Alarm
+T: KRPC.SpaceCenter.Services.AlarmManager
 T: KRPC.SpaceCenter.Services.AutoPilot
 T: KRPC.SpaceCenter.Services.Camera
 T: KRPC.SpaceCenter.Services.CelestialBody
@@ -41,6 +46,7 @@ T: KRPC.SpaceCenter.Services.ContractParameter
 T: KRPC.SpaceCenter.Services.Control
 T: KRPC.SpaceCenter.Services.CrewMember
 T: KRPC.SpaceCenter.Services.Flight
+T: KRPC.SpaceCenter.Services.LaunchSite
 T: KRPC.SpaceCenter.Services.Node
 T: KRPC.SpaceCenter.Services.Orbit
 T: KRPC.SpaceCenter.Services.Parts.Antenna
@@ -64,7 +70,13 @@ T: KRPC.SpaceCenter.Services.Parts.RCS
 T: KRPC.SpaceCenter.Services.Parts.Radiator
 T: KRPC.SpaceCenter.Services.Parts.ReactionWheel
 T: KRPC.SpaceCenter.Services.Parts.ResourceConverter
+T: KRPC.SpaceCenter.Services.Parts.ResourceDrain
 T: KRPC.SpaceCenter.Services.Parts.ResourceHarvester
+T: KRPC.SpaceCenter.Services.Parts.RoboticController
+T: KRPC.SpaceCenter.Services.Parts.RoboticHinge
+T: KRPC.SpaceCenter.Services.Parts.RoboticPiston
+T: KRPC.SpaceCenter.Services.Parts.RoboticRotation
+T: KRPC.SpaceCenter.Services.Parts.RoboticRotor
 T: KRPC.SpaceCenter.Services.Parts.ScienceData
 T: KRPC.SpaceCenter.Services.Parts.Sensor
 T: KRPC.SpaceCenter.Services.Parts.SolarPanel

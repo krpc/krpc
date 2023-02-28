@@ -7,13 +7,13 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
-    /// An Alarm. Can be accessed using <see cref="SpaceCenter.AlarmClock"/>.
+    /// An alarm. Can be accessed using <see cref="SpaceCenter.AlarmManager"/>.
     /// </summary>
     [KRPCClass(Service = "SpaceCenter")]
     public class Alarm : Equatable<Alarm>
     {
         /// <summary>
-        /// Create a alarm object from a KSP alarmTypeBase
+        /// Create a alarm object from a KSP AlarmTypeBase
         /// </summary>
         public Alarm(AlarmTypeBase alarm)
         {
@@ -42,63 +42,94 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Type of Alarm
+        /// Unique identifier of the alarm.
+        /// KSP destroys and recreates an alarm when it is edited.
+        /// This id will remain constant between the old and new alarms.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public uint ID
+        {
+            get
+            {
+                UpdateAlarm();
+                return InternalAlarm.Id;
+            }
+        }
+
+        /// <summary>
+        /// Type of alarm
         /// </summary>
         [KRPCProperty]
         public string Type
         {
-            get { UpdateAlarm(); return InternalAlarm.TypeName; }
+            get {
+                UpdateAlarm();
+                return InternalAlarm.TypeName;
+            }
         }
 
         /// <summary>
-        /// Title of the Alarm
+        /// Title of the alarm
         /// </summary>
         [KRPCProperty]
         public string Title
         {
-            get { UpdateAlarm(); return InternalAlarm.title; }
-
-
+            get {
+                UpdateAlarm();
+                return InternalAlarm.title;
+            }
         }
 
         /// <summary>
-        /// Description of the contract.
+        /// Description of the alarm.
         /// </summary>
         [KRPCProperty]
         public string Description
         {
-            get { UpdateAlarm(); return InternalAlarm.description; }
+            get {
+                UpdateAlarm();
+                return InternalAlarm.description;
+            }
         }
 
         /// <summary>
-        /// Time the Alarm will trigger
+        /// Time the alarm will trigger.
         /// </summary>
         [KRPCProperty]
-        public double UT
+        public double Time
         {
-            get { UpdateAlarm(); return InternalAlarm.ut; }
+            get {
+                UpdateAlarm();
+                return InternalAlarm.ut;
+            }
         }
 
         /// <summary>
-        /// Time until the alarm triggers
+        /// Time until the alarm triggers.
         /// </summary>
         [KRPCProperty]
-        public double TimeTill
+        public double TimeUntil
         {
-            get { UpdateAlarm(); return InternalAlarm.TimeToAlarm; }
+            get {
+                UpdateAlarm();
+                return InternalAlarm.TimeToAlarm;
+            }
         }
 
         /// <summary>
-        /// Seconds betwen the alarm going off and the event it references
+        /// Seconds between the alarm going off and the event it references.
         /// </summary>
         [KRPCProperty]
         public double EventOffset
         {
-            get { UpdateAlarm(); return InternalAlarm.eventOffset; }
+            get {
+                UpdateAlarm();
+                return InternalAlarm.eventOffset;
+            }
         }
 
         /// <summary>
-        /// Vessel the alarm references
+        /// Vessel the alarm references. <c>null</c> if it does not reference a vesssel.
         /// </summary>
         [KRPCProperty(Nullable = true)]
         public Vessel Vessel
@@ -106,38 +137,16 @@ namespace KRPC.SpaceCenter.Services
             get
             {
                 UpdateAlarm();
-                KRPC.SpaceCenter.Services.Vessel V = new Vessel(InternalAlarm.Vessel);
-
-
-                return V;
+                var vessel = InternalAlarm.Vessel;
+                return vessel != null ? new Vessel(vessel) : null;
             }
         }
-
-
-        /// <summary>
-        /// Unique ID of alarm
-        /// KSP destroys an old alarm and creates a new one each time an alarm is edited.
-        /// This ID will remain constant between the old and new alarms though, so this is the value
-        /// you want to store and each time you want to access an alarm, get the current alarm with
-        /// the correct ID value.
-        /// </summary>
-        [KRPCProperty(Nullable = true)]
-        public int ID
-        {
-            get
-            {
-                UpdateAlarm();
-                return (int)InternalAlarm.Id;
-            }
-        }
-
 
         private void UpdateAlarm()
         {
-            AlarmTypeBase newalarm;
-            AlarmClockScenario.TryGetAlarm(InternalAlarm.Id, out newalarm);
-            InternalAlarm = newalarm;
+            AlarmTypeBase alarm;
+            AlarmClockScenario.TryGetAlarm(InternalAlarm.Id, out alarm);
+            InternalAlarm = alarm;
         }
-
     }
 }

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// A Robotic Rotation servo. Obtained by calling <see cref="Part.RoboticRotation"/>
+    /// A robotic rotation servo. Obtained by calling <see cref="Part.RoboticRotation"/>.
     /// </summary>
     [KRPCClass(Service = "SpaceCenter")]
     public class RoboticRotation : Equatable<RoboticRotation>
@@ -22,12 +22,11 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal RoboticRotation(Part part)
         {
+            if (!Is(part))
+                throw new ArgumentException("Part is not a robotic rotation servo");
             Part = part;
             var internalPart = part.InternalPart;
             servo = internalPart.Module<ModuleRoboticRotationServo>();
-
-            if (servo == null)
-                throw new ArgumentException("Part is not a robotic piston");
         }
 
         /// <summary>
@@ -35,10 +34,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals(RoboticRotation other)
         {
-            return
-            !ReferenceEquals(other, null) &&
-            Part == other.Part &&
-            servo.Equals(other.servo);
+            return !ReferenceEquals(other, null) && Part == other.Part && servo.Equals(other.servo);
         }
 
         /// <summary>
@@ -46,13 +42,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode()
         {
-            int hash = Part.GetHashCode() ^ servo.GetHashCode();
-
-            return hash;
+            return Part.GetHashCode() ^ servo.GetHashCode();
         }
 
         /// <summary>
-        /// The KSP Robotic Rotation Servo object.
+        /// The KSP object.
         /// </summary>
         public ModuleRoboticRotationServo InternalRotation
         {
@@ -60,51 +54,67 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The part object for this robotic servo.
+        /// The part object for this robotic rotation servo.
         /// </summary>
         [KRPCProperty]
         public Part Part { get; private set; }
 
         /// <summary>
-        ///Target Angle for Robotic Servo
+        /// Target angle.
         /// </summary>
         [KRPCProperty]
-        public float TargetPosition { get { return servo.targetAngle; } set { servo.targetAngle= value; } }
+        public float TargetAngle
+        {
+            get { return servo.targetAngle; }
+            set { servo.targetAngle= value; }
+        }
 
         /// <summary>
-        ///Current Angle for Robotic Hinge
+        /// Current angle.
         /// </summary>
         [KRPCProperty]
-        public float CurrentPosition { get { return servo.currentAngle; } }
+        public float CurrentAngle {
+            get { return servo.currentAngle; }
+        }
 
         /// <summary>
-        /// Target Movement Rate in Degrees/s
+        /// Target movement rate in degrees per second.
         /// </summary>
         [KRPCProperty]
-        public float Rate { get { return servo.traverseVelocity; } set { servo.traverseVelocity = value; } }
+        public float Rate
+        {
+            get { return servo.traverseVelocity; }
+            set { servo.traverseVelocity = value; }
+        }
 
         /// <summary>
-        ///Damping Percentage>
+        /// Damping percentage.
         /// </summary>
         [KRPCProperty]
-        public float Damping { get { return servo.hingeDamping; } set { servo.hingeDamping = value; } }
+        public float Damping
+        {
+            get { return servo.hingeDamping; }
+            set { servo.hingeDamping = value; }
+        }
 
         /// <summary>
         /// Lock Movement
         /// </summary>
         [KRPCProperty]
-        public bool RotationLocked
+        public bool Locked
         {
             get { return servo.servoIsLocked; }
             set
             {
-                if (value == true) servo.EngageServoLock();
-                else servo.DisengageServoLock();
+                if (value == true)
+                    servo.EngageServoLock();
+                else
+                    servo.DisengageServoLock();
             }
         }
 
         /// <summary>
-        /// Engage/Disengage Motor
+        /// Whether the motor is engaged.
         /// </summary>
         [KRPCProperty]
         public bool MotorEngaged
@@ -112,16 +122,18 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return servo.servoMotorIsEngaged; }
             set
             {
-                if (value == true) servo.EngageMotor();
-                else servo.DisengageMotor();
+                if (value == true)
+                    servo.EngageMotor();
+                else
+                    servo.DisengageMotor();
             }
         }
 
         /// <summary>
-        /// Returns Servo to Build Angle Position
+        /// Move rotation servo to it's built position.
         /// </summary>
         [KRPCMethod]
-        public void Home()
+        public void MoveHome()
         {
             servo.targetAngle = servo.launchPosition;
         }

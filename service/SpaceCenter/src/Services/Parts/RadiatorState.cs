@@ -27,7 +27,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         Retracting,
         /// <summary>
-        /// Radiator is being broken.
+        /// Radiator is broken.
         /// </summary>
         Broken
     }

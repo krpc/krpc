@@ -48,50 +48,55 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The part object for this antenna.
+        /// The part object for this controller.
         /// </summary>
         [KRPCProperty]
         public Part Part { get; private set; }
 
         /// <summary>
-        /// Whether the controller any axisfield from the part
+        /// Whether the controller has a part.
         /// </summary>
         [KRPCMethod]
+        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
         public bool HasPart(Part part)
         {
+            if (ReferenceEquals (part, null))
+                throw new ArgumentNullException (nameof (part));
             return controller.HasPart(part.InternalPart);
         }
 
         /// <summary>
-        /// List the axes for the controller.
+        /// The axes for the controller.
         /// </summary>
         [KRPCMethod]
-        public IList<IList<string>> ListAxes()
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public IList<IList<string>> Axes()
         {
-            IList<IList<string>> output = new List<IList<string>>();
+            var output = new List<IList<string>>();
             foreach (var axis in controller.ControlledAxes)
             {
-                IList<string> data = new List<string>() { axis.Part.name, axis.AxisField.name };
-                output.Add(data);
+                output.Add(new List<string>() { axis.Part.name, axis.AxisField.name });
             }
             return output;
         }
 
         /// <summary>
-        /// Add an axis to the controller
+        /// Add an axis to the controller.
         /// </summary>
+        /// <returns>Returns <c>true</c> if the axis is added successfully.</returns>
         [KRPCMethod]
+        [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
         public bool AddAxis(Module module, string fieldName)
         {
+            if (module == null)
+                throw new ArgumentNullException (nameof (module));
             var internalPart = module.Part.InternalPart;
             var internalModule = internalPart.Modules[module.Name];
-
             foreach (var field in internalModule.Fields)
             {
                 if (field.guiName == fieldName)
                 {
                     var axisField = (BaseAxisField)internalModule.Fields[field.name];
-
                     if (axisField != null)
                     {
                         controller.AddPartAxis(internalPart, internalModule, axisField);
@@ -106,9 +111,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Add key frame value for controller axis.
         /// </summary>
+        /// <returns>Returns <c>true</c> if the key frame is added successfully.</returns>
         [KRPCMethod]
-        public bool AddKey(Module module, string fieldName, float time, float value)
+        [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
+        public bool AddKeyFrame(Module module, string fieldName, float time, float value)
         {
+            if (module == null)
+                throw new ArgumentNullException (nameof (module));
             var internalPart = module.Part.InternalPart;
             var internalModule = internalPart.Modules[module.Name];
 
@@ -132,9 +141,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Clear axis.
         /// </summary>
+        /// <returns>Returns <c>true</c> if the axis is cleared successfully.</returns>
         [KRPCMethod]
+        [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
         public bool ClearAxis(Module module, string fieldName)
         {
+            if (module == null)
+                throw new ArgumentNullException (nameof (module));
             var internalPart = module.Part.InternalPart;
             var internalModule = internalPart.Modules[module.Name];
 

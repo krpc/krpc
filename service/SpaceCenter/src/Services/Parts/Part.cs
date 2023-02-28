@@ -96,7 +96,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Gets or sets the asset url for the part's flag
+        /// The asset URL for the part's flag.
         /// </summary>
         [KRPCProperty]
         public string FlagURL
@@ -384,6 +384,19 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// How many open seats the part has.
+        /// </summary>
+        [KRPCProperty]
+        public uint AvailableSeats
+        {
+            get
+            {
+                var model = InternalPart.internalModel;
+                return model ? (uint)model.GetAvailableSeatCount() : 0;
+            }
+        }
+
+        /// <summary>
         /// Whether this part is crossfeed capable.
         /// </summary>
         [KRPCProperty]
@@ -463,15 +476,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty (Nullable = true)]
         public CargoBay CargoBay {
             get { return CargoBay.Is (this) ? new CargoBay (this) : null; }
-        }
-
-        /// <summary>
-        /// Returns true if the part has any open seats.
-        /// </summary>
-        [KRPCProperty]
-        public bool HasAvailableSeats
-        {
-            get { return InternalPart.internalModel ? InternalPart.internalModel.GetAvailableSeatCount() > 0 : false; }
         }
 
         /// <summary>
@@ -645,16 +649,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// A <see cref="RoboticController"/> if the part is a robotic controller,
-        /// otherwise <c>null</c>.
-        /// </summary>
-        [KRPCProperty(Nullable = true)]
-        public RoboticController RoboticController
-        {
-            get { return RoboticController.Is(this) ? new RoboticController(this) : null; }
-        }
-
-        /// <summary>
         /// A <see cref="Sensor"/> if the part is a sensor, otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty (Nullable = true)]
@@ -678,6 +672,15 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return Wheel.Is (this) ? new Wheel (this) : null; }
         }
 
+        /// <summary>
+        /// A <see cref="RoboticController"/> if the part is a robotic controller,
+        /// otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty(Nullable = true)]
+        public RoboticController RoboticController
+        {
+            get { return RoboticController.Is(this) ? new RoboticController(this) : null; }
+        }
 
         /// <summary>
         /// A <see cref="RoboticHinge"/> if the part is a robotic hinge, otherwise <c>null</c>.
@@ -690,7 +693,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
 
         /// <summary>
-        /// A <see cref="RoboticPiston"/> if the part is a robotic hinge, otherwise <c>null</c>.
+        /// A <see cref="RoboticPiston"/> if the part is a robotic piston, otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty(Nullable = true)]
         public RoboticPiston RoboticPiston
@@ -708,7 +711,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// A <see cref="RoboticRotor"/> if the part is a robotic rotation servo, otherwise <c>null</c>.
+        /// A <see cref="RoboticRotor"/> if the part is a robotic rotor, otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty(Nullable = true)]
         public RoboticRotor RoboticRotor
@@ -931,49 +934,33 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Glow
+        /// Whether the part is glowing.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidPropertiesWithoutGetAccessorRule")]
         public bool Glow
         {
             set
             {
-                if (value == false) { InternalPart.SetHighlightDefault(); }
+                var internalPart = InternalPart;
+                if (value == false)
+                    internalPart.SetHighlightDefault();
                 else
                 {
-                    InternalPart.SetHighlight(true, true);
-                    InternalPart.SetHighlightColor(Color.yellow);
-                    InternalPart.SetHighlightType(global::Part.HighlightType.AlwaysOn);
+                    internalPart.SetHighlight(true, true);
+                    internalPart.SetHighlightColor(Color.yellow);
+                    internalPart.SetHighlightType(global::Part.HighlightType.AlwaysOn);
                 }
             }
         }
 
         /// <summary>
-        /// Autostrut
+        /// Auto-strut mode.
         /// </summary>
         [KRPCProperty]
-        public AutostrutState AutoStrutMode
+        public AutoStrutMode AutoStrutMode
         {
-            get
-            {
-                switch (InternalPart.autoStrutMode)
-                {
-                    case global::Part.AutoStrutMode.Off:
-                        return AutostrutState.Off;
-                    case global::Part.AutoStrutMode.Heaviest:
-                        return AutostrutState.Heaviest;
-                    case global::Part.AutoStrutMode.ForceHeaviest:
-                        return AutostrutState.ForceHeaviest;
-                    case global::Part.AutoStrutMode.Grandparent:
-                        return AutostrutState.Grandparent;
-                    case global::Part.AutoStrutMode.ForceGrandparent:
-                        return AutostrutState.ForceGrandparent;
-                    case global::Part.AutoStrutMode.Root:
-                        return AutostrutState.Root;
-                    default:
-                        return AutostrutState.ForceRoot;
-                }
-            }
+            get { return (AutoStrutMode)InternalPart.autoStrutMode; }
         }
     }
 }

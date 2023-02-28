@@ -12,6 +12,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
     public class Parachute : Equatable<Parachute>
     {
         readonly ModuleParachute parachute;
@@ -56,12 +57,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             if (parachute == null || realChute != null)
                 throw new InvalidOperationException ("Operation not defined for a RealChutes parachute");
-        }
-
-        void CheckRealChute ()
-        {
-            if (parachute != null || realChute == null)
-                throw new InvalidOperationException ("Operation only defined for a RealChutes parachute");
         }
 
         /// <summary>
