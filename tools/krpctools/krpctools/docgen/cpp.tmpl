@@ -130,7 +130,7 @@
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
-   .. enumerator:: {{ value.name | snakecase }}
+   .. enumerator:: {{ domain.enumeration_name(value.name) | snakecase }}
 
 {{ gendoc(value.documentation) | indent(width=6) }}
 

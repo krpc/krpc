@@ -26,6 +26,11 @@ class CppDomain(Domain):
             return '%s_' % name
         return name
 
+    def enumeration_name(self, name):
+        if snake_case(name) in self.language.keywords:
+            return '%s_' % name
+        return name
+
     def type_description(self, typ):
         if typ is None:
             return 'void'
