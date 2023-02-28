@@ -108,7 +108,7 @@ if response.HasField('error'):
     raise RuntimeError('ERROR: ' + str(response.error))
 
 # Check for an error in the results
-assert(len(response.results) == 1)
+assert len(response.results) == 1
 if response.results[0].HasField('error'):
     raise RuntimeError('ERROR: ' + str(response.results[0].error))
 
@@ -119,8 +119,8 @@ stream.ParseFromString(response.results[0].value)
 # Repeatedly receive stream updates from the stream server
 while True:
     update = recv_message(stream_conn, KRPC.StreamUpdate)
-    assert(len(update.results) == 1)
-    assert(stream.id == update.results[0].id)
+    assert len(update.results) == 1
+    assert stream.id == update.results[0].id
     # Decode and print the return value
     status = KRPC.Status()
     status.ParseFromString(update.results[0].result.value)

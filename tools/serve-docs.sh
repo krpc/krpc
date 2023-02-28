@@ -22,22 +22,21 @@ if [ ! -d "$env" ]; then
   virtualenv $env --python python3
   source $env/bin/activate
   pip install --upgrade \
-      "six==1.11.0" \
-      "pbr==5.11.1" \
-      "setuptools==67.4.0" \
-      "setuptools-git==1.2" \
-      "jinja2==2.10.3" \
-      "markupsafe==1.1.1"
-  pip install "Sphinx==1.8.1"
+      "jinja2==3.1.2" \
+      "markupsafe==2.1.2"
+  pip install "Sphinx==6.1.3"
   pip install "lxml==4.9.2"
   pip install \
-      "sphinx_rtd_theme==0.4.2" \
-      "sphinxcontrib_spelling==4.2.0" \
-      "sphinx-csharp==0.1.6" \
-      "sphinx-tabs==1.1.12" \
-      "javasphinx==0.9.15" \
-      "sphinxcontrib-luadomain==1.1.2"
-  pip install sphinx-autobuild pyinotify
+      "sphinx_rtd_theme==1.2.0" \
+      "sphinxcontrib_spelling==8.0.0" \
+      "sphinx-csharp==0.1.8" \
+      "sphinx-tabs==3.4.1" \
+      "sphinxcontrib-luadomain==1.1.2" \
+      "https://krpc.s3.amazonaws.com/lib/javasphinx/javalang-0.13.1.tar.gz" \
+      "https://krpc.s3.amazonaws.com/lib/javasphinx/javasphinx-0.9.16.tar.gz"
+  pip install \
+      "sphinx-autobuild==2021.3.14" \
+      "pyinotify==0.9.6"
 else
   source $env/bin/activate
 fi
