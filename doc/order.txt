@@ -180,9 +180,12 @@ SpaceCenter.Vessel.Mass
 SpaceCenter.Vessel.DryMass
 SpaceCenter.Vessel.Thrust
 SpaceCenter.Vessel.AvailableThrust
+SpaceCenter.Vessel.AvailableThrustAt
 SpaceCenter.Vessel.MaxThrust
+SpaceCenter.Vessel.MaxThrustAt
 SpaceCenter.Vessel.MaxVacuumThrust
 SpaceCenter.Vessel.SpecificImpulse
+SpaceCenter.Vessel.SpecificImpulseAt
 SpaceCenter.Vessel.VacuumSpecificImpulse
 SpaceCenter.Vessel.KerbinSeaLevelSpecificImpulse
 SpaceCenter.Vessel.MomentOfInertia
@@ -725,11 +728,14 @@ SpaceCenter.Engine.Part
 SpaceCenter.Engine.Active
 SpaceCenter.Engine.Thrust
 SpaceCenter.Engine.AvailableThrust
+SpaceCenter.Engine.AvailableThrustAt
 SpaceCenter.Engine.MaxThrust
+SpaceCenter.Engine.MaxThrustAt
 SpaceCenter.Engine.MaxVacuumThrust
 SpaceCenter.Engine.ThrustLimit
 SpaceCenter.Engine.Thrusters
 SpaceCenter.Engine.SpecificImpulse
+SpaceCenter.Engine.SpecificImpulseAt
 SpaceCenter.Engine.VacuumSpecificImpulse
 SpaceCenter.Engine.KerbinSeaLevelSpecificImpulse
 SpaceCenter.Engine.PropellantNames
