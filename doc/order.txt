@@ -703,6 +703,11 @@ SpaceCenter.DockingPort.Undock
 SpaceCenter.DockingPort.ReengageDistance
 SpaceCenter.DockingPort.HasShield
 SpaceCenter.DockingPort.Shielded
+SpaceCenter.DockingPort.CanRotate
+SpaceCenter.DockingPort.MaximumRotation
+SpaceCenter.DockingPort.MinimumRotation
+SpaceCenter.DockingPort.RotationTarget
+SpaceCenter.DockingPort.RotationLocked
 SpaceCenter.DockingPort.Position
 SpaceCenter.DockingPort.Direction
 SpaceCenter.DockingPort.Rotation
@@ -812,6 +817,8 @@ SpaceCenter.Light
 SpaceCenter.Light.Part
 SpaceCenter.Light.Active
 SpaceCenter.Light.Color
+SpaceCenter.Light.Blink
+SpaceCenter.Light.BlinkRate
 SpaceCenter.Light.PowerUsage
 SpaceCenter.Parachute
 SpaceCenter.Parachute.Part
@@ -1006,6 +1013,8 @@ SpaceCenter.Wheel.DriveLimiter
 SpaceCenter.Wheel.Steerable
 SpaceCenter.Wheel.SteeringEnabled
 SpaceCenter.Wheel.SteeringInverted
+SpaceCenter.Wheel.SteeringAngleLimit
+SpaceCenter.Wheel.SteeringResponseTime
 SpaceCenter.Wheel.HasSuspension
 SpaceCenter.Wheel.SuspensionSpringStrength
 SpaceCenter.Wheel.SuspensionDamperStrength

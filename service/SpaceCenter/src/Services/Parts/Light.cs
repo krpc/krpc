@@ -69,9 +69,30 @@ namespace KRPC.SpaceCenter.Services.Parts
                 light.lightR = value.Item1;
                 light.lightG = value.Item2;
                 light.lightB = value.Item3;
+                light.SetFlareColor(new Color(value.Item1, value.Item2, value.Item3));
                 foreach (var unityLight in light.lights)
                     unityLight.color = new Color (value.Item1, value.Item2, value.Item3);
             }
+        }
+
+        /// <summary>
+        /// Whether blinking is enabled.
+        /// </summary>
+        [KRPCProperty]
+        public bool Blink
+        {
+            get { return light.blinkState; }
+            set { light.SetBlinkState(value); }
+        }
+
+        /// <summary>
+        /// The blink rate of the light.
+        /// </summary>
+        [KRPCProperty]
+        public float BlinkRate
+        {
+            get { return light.blinkRate; }
+            set { light.blinkRate = value; }
         }
 
         /// <summary>

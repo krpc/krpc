@@ -354,6 +354,62 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
         }
 
+        // FIXME: isn't working
+        // /// <summary>
+        // /// Whether the wheel steering is limited in relationship to speed.
+        // /// </summary>
+        // [KRPCProperty]
+        // public bool SteeringAngleAuto
+        // {
+        //     get
+        //     {
+        //         CheckSteering();
+        //         return steering.autoSteeringAdjust;
+        //     }
+        //     set
+        //     {
+        //         CheckSteering();
+        //         steering.autoSteeringAdjust = value;
+        //         steering.steer
+        //     }
+        // }
+
+        /// <summary>
+        /// The steering angle limit.
+        /// </summary>
+        [KRPCProperty]
+        public float SteeringAngleLimit
+        {
+            get
+            {
+                CheckSteering();
+                return steering.angleTweakable;
+            }
+            set
+            {
+                CheckSteering();
+                steering.angleTweakable = value;
+            }
+        }
+
+        /// <summary>
+        /// Steering response time.
+        /// </summary>
+        [KRPCProperty]
+        public float SteeringResponseTime
+        {
+            get
+            {
+                CheckSteering();
+                return steering.responseTweakable;
+            }
+            set
+            {
+                CheckSteering();
+                steering.responseTweakable = value;
+            }
+        }
+
         /// <summary>
         /// Whether the wheel has suspension.
         /// </summary>
