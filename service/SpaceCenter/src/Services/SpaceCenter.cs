@@ -250,7 +250,7 @@ namespace KRPC.SpaceCenter.Services
         [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
         sealed class LaunchConfig {
             [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
-            public LaunchConfig(string craftDirectory, string name, string launchSite, bool recover, string crew, string flagUrl) {
+            public LaunchConfig(string craftDirectory, string name, string launchSite, bool recover, IList<string> crew, string flagUrl) {
                 LaunchSite = launchSite;
                 Recover = recover;
                 FlagUrl = string.IsNullOrEmpty(flagUrl) ? EditorLogic.FlagURL : flagUrl;
@@ -266,13 +266,12 @@ namespace KRPC.SpaceCenter.Services
                 if (template == null)
                     throw new InvalidOperationException("Failed to load template for vessel");
                 manifest = VesselCrewManifest.FromConfigNode(template.config);
-                if (string.IsNullOrEmpty(crew)) {
+                if (crew.Count == 0) {
                     manifest = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel(template.config, manifest, true, false);
                 }
                 else {
-                    var crewNames = crew.Split(';');
                     var crewRoster = new KerbalRoster(HighLogic.CurrentGame.Mode);
-                    foreach (var crewName in crewNames) {
+                    foreach (var crewName in crew) {
                         var kerbal = GetKerbal(crewName);
                         if (kerbal != null && kerbal.InternalCrewMember.rosterStatus == ProtoCrewMember.RosterStatus.Available) {
                             crewRoster.AddCrewMember(kerbal.InternalCrewMember);
@@ -357,14 +356,14 @@ namespace KRPC.SpaceCenter.Services
         /// <c>"Runway"</c>.</param>
         /// <param name="recover">If true and there is a vessel on the launch site,
         /// recover it before launching.</param>
-        /// <param name="crew">If not <c>null</c>, a semicolon-delimited list of crew names of Kerbals to place in the craft. Otherwise the crew will use default assignments.</param>
+        /// <param name="crew">If not <c>null</c>, a list of names of Kerbals to place in the craft. Otherwise the crew will use default assignments.</param>
         /// <param name="flagUrl">If not <c>null</c>, the asset URL of the mission flag to use for the launch.</param>
         /// <remarks>
         /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
-        public static void LaunchVessel (string craftDirectory, string name, string launchSite, bool recover = true, string crew = null, string flagUrl = null)
+        public static void LaunchVessel (string craftDirectory, string name, string launchSite, bool recover = true, IList<string> crew = null, string flagUrl = null)
         {
             CloseDialogs();
             var config = new LaunchConfig(craftDirectory, name, launchSite, recover, crew, flagUrl);
