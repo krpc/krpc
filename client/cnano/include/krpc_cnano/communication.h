@@ -12,7 +12,7 @@
     #error "Require a C++ compiler to build kRPC for Arduino"
     #endif
     #include <HardwareSerial.h>
-  #elif !defined(KRPC_COMMS_CUSTOM)
+  #elif !defined(KRPC_COMMUNICATION_CUSTOM)
     #define KRPC_COMMUNICATION_POSIX
   #endif
 #endif
