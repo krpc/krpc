@@ -353,31 +353,32 @@ namespace KRPC.SpaceCenter.Services.Parts
                 steering.steeringInvert = value;
             }
         }
-        // Isn't working.   Will figure out later
-        ///// <summary>
-        ///// Whether the wheel steering is limited in relationship to speed.  1.12 feature
-        ///// </summary>
-        //[KRPCProperty]
-        //public bool SteeringAngleAuto
-        //{
-        //    get
-        //    {
-        //        CheckSteering();
-        //        return steering.autoSteeringAdjust;
-        //    }
-        //    set
-        //    {
-        //        CheckSteering();
-        //        steering.autoSteeringAdjust = value;
-        //        steering.steer
-        //    }
-        //}
+
+        // FIXME: isn't working
+        // /// <summary>
+        // /// Whether the wheel steering is limited in relationship to speed.
+        // /// </summary>
+        // [KRPCProperty]
+        // public bool SteeringAngleAuto
+        // {
+        //     get
+        //     {
+        //         CheckSteering();
+        //         return steering.autoSteeringAdjust;
+        //     }
+        //     set
+        //     {
+        //         CheckSteering();
+        //         steering.autoSteeringAdjust = value;
+        //         steering.steer
+        //     }
+        // }
 
         /// <summary>
-        /// Manually set steering angle limit.  1.12 feature
+        /// The steering angle limit.
         /// </summary>
         [KRPCProperty]
-        public float SteeringAngleLimiter
+        public float SteeringAngleLimit
         {
             get
             {
@@ -392,10 +393,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Steering Response Time  - 1.12 feature
+        /// Steering response time.
         /// </summary>
         [KRPCProperty]
-        public float SteeringAngleResponse
+        public float SteeringResponseTime
         {
             get
             {
@@ -408,7 +409,6 @@ namespace KRPC.SpaceCenter.Services.Parts
                 steering.responseTweakable = value;
             }
         }
-
 
         /// <summary>
         /// Whether the wheel has suspension.

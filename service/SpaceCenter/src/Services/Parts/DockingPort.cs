@@ -202,10 +202,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Can the docking port use the 1.12 version rotation feature
-        ///
-        /// Returns <c>true</c> if the docking port can be commanded to rotate while docked.
-        ///  Otherwise returns <c>false</c>. 
+        /// Whether the docking port can be commanded to rotate while docked.
         /// </summary>
         [KRPCProperty]
         public bool CanRotate
@@ -214,7 +211,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Maximum Rotation Angle
+        /// Maximum rotation angle in degrees.
         /// </summary>
         [KRPCProperty]
         public float MaximumRotation
@@ -223,7 +220,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Minimum Rotation Angle
+        /// Minimum rotation angle in degrees.
         /// </summary>
         [KRPCProperty]
         public float MinimumRotation
@@ -232,7 +229,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Set the rotation target angle
+        /// Rotation target angle in degrees.
         /// </summary>
         [KRPCProperty]
         public float RotationTarget
@@ -242,7 +239,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Set the Docking Port Rotation as Locked to allow Autostrut to function across joint
+        /// Lock rotation. When locked, allows auto-strut to work across the joint.
         /// </summary>
         [KRPCProperty]
         public bool RotationLocked
@@ -250,7 +247,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return port.nodeIsLocked; }
             set { port.nodeIsLocked = value; }
         }
-
 
         /// <summary>
         /// The position of the docking port, in the given reference frame.
