@@ -164,6 +164,27 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The available force, in Newton, that can be produced by this RCS,
+        /// in the positive and negative x, y and z axes of the vessel. These axes
+        /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
+        /// Returns zero if RCS is disable.
+        /// </summary>
+        [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public TupleT3 AvailableForce {
+            get { return AvailableForceVectors.ToTuple (); }
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        internal TupleV3 AvailableForceVectors {
+            get {
+                if (!Active)
+                    return ITorqueProviderExtensions.zero;
+                return GetForceVectors ();
+            }
+        }
+
+        /// <summary>
         /// Calculates available torque vectors.
         /// We use this custom code rather than KSPs ITorqueProvider as it produces erroneous values.
         /// </summary>
@@ -206,6 +227,32 @@ namespace KRPC.SpaceCenter.Services.Parts
             return new TupleV3(
                 new Vector3d(torqueX, torqueY, torqueZ),
                 new Vector3d(-torqueXn, -torqueYn, -torqueZn));
+        }
+
+        /// <summary>
+        /// Calculates available force vectors.
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
+        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
+        private TupleV3 GetForceVectors ()
+        {
+            var frame = Part.Vessel.ReferenceFrame;
+            var thrust = MaxThrust;
+            Vector3d force = Vector3d.zero;
+            Vector3d forceN = Vector3d.zero;
+            foreach (var thruster in Thrusters) {
+                var thrustDirection = thruster.ThrustDirection (frame);
+                var forceX = thrustDirection.Item1 * thrust;
+                var forceY = thrustDirection.Item2 * thrust;
+                var forceZ = thrustDirection.Item3 * thrust;
+                if (forceX > 0) force.x += forceX;
+                else forceN.x += forceX;
+                if (forceY > 0) force.y += forceY;
+                else forceN.y += forceY;
+                if (forceZ > 0) force.z += forceZ;
+                else forceN.z += forceZ;
+            }
+            return new TupleV3 (force, forceN);
         }
 
         /// <summary>

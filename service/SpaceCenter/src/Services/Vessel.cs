@@ -449,6 +449,17 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The maximum force that the currently active RCS thrusters can generate.
+        /// Returns the forces in <math>N</math> along each of the coordinate axes of the
+        /// vessels reference frame (<see cref="ReferenceFrame"/>).
+        /// These axes are equivalent to the right, forward and bottom directions of the vessel.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public TupleT3 AvailableRCSForce {
+            get { return AvailableRCSForceVectors.ToTuple (); }
+        }
+
+        /// <summary>
         /// The maximum torque that the currently active and gimballed engines can generate.
         /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
@@ -500,6 +511,10 @@ namespace KRPC.SpaceCenter.Services
 
         TupleV3 AvailableRCSTorqueVectors {
             get { return ITorqueProviderExtensions.Sum (Parts.RCS.Select (x => x.AvailableTorqueVectors)); }
+        }
+
+        TupleV3 AvailableRCSForceVectors {
+            get { return ITorqueProviderExtensions.Sum (Parts.RCS.Select (x => x.AvailableForceVectors)); }
         }
 
         TupleV3 AvailableEngineTorqueVectors {
