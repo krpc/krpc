@@ -13,6 +13,6 @@ namespace KRPC.DockingCamera
             IsAvailable = (APILoader.Load(typeof(API), "DockingCamKURS_", "OLDD_camera_.API") != null);
         }
 
-        public static Func<Part, byte[]>  GetImage { get; internal set; }
+        public static Func<Part, byte[]> GetImage { get; internal set; }
     }
 }

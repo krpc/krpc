@@ -39,20 +39,21 @@
     <Compile Include="DockingCamera.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\server\src\KRPC.csproj">
+      <Project>{3707639F-5EA3-461B-B939-587E51A25CCA}</Project>
+      <Name>KRPC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SpaceCenter\src\KRPC.SpaceCenter.csproj">
+      <Project>{48205F2E-3CEE-4480-873A-DEAFCD291407}</Project>
+      <Name>KRPC.SpaceCenter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Protobuf">
-      <HintPath>..\..\..\..\..\robotics\krpc-master\bazel-genfiles\tools\cslibs\net45\Google.Protobuf.dll</HintPath>
-    </Reference>
-    <Reference Include="KRPC">
-      <HintPath>..\..\..\server\src\bin\Release\KRPC.dll</HintPath>
-    </Reference>
-    <Reference Include="KRPC.SpaceCenter">
-      <HintPath>..\..\SpaceCenter\src\bin\Release\KRPC.SpaceCenter.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>

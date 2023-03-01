@@ -13,20 +13,16 @@ namespace KRPC.LiDAR
     [KRPCClass(Service = "LiDAR")]
     public class Laser : Equatable<Laser>
     {
-        readonly SpaceCenter.Services.Parts.Part part;
-
-        internal static bool Is(SpaceCenter.Services.Parts.Part innerPart)
+        internal static bool Is(SpaceCenter.Services.Parts.Part part)
         {
-            return innerPart.InternalPart.Modules.Contains("LiDARModule");
+            return part.InternalPart.Modules.Contains("LiDARModule");
         }
 
-        internal Laser(SpaceCenter.Services.Parts.Part innerPart)
+        internal Laser(SpaceCenter.Services.Parts.Part part)
         {
-            part = innerPart;
             if (!Is(part))
-            {
                 throw new ArgumentException("Part is not a LiDAR");
-            }
+            Part = part;
         }
 
         /// <summary>
@@ -34,7 +30,7 @@ namespace KRPC.LiDAR
         /// </summary>
         public override bool Equals(Laser other)
         {
-            return !ReferenceEquals(other, null) && part == other.part;
+            return !ReferenceEquals(other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -42,7 +38,7 @@ namespace KRPC.LiDAR
         /// </summary>
         public override int GetHashCode()
         {
-            return part.GetHashCode();
+            return Part.GetHashCode();
         }
 
         /// <summary>
@@ -51,33 +47,19 @@ namespace KRPC.LiDAR
         [KRPCProperty]
         public SpaceCenter.Services.Parts.Part Part
         {
-            get { return part; }
+            get; private set;
         }
 
         /// <summary>
-        /// Get the pointcloud.
+        /// Get the point cloud from the LiDAR.
+        /// Returns an empty list on failure.
         /// </summary>
         [KRPCProperty]
         public IList<double> Cloud
         {
             get {
                 if (API.IsAvailable)
-                {
-                    var cloud = API.GetCloud(part.InternalPart);
-                    IList<double> outCloud = new List<double>();
-                    var count = cloud.Count;
-                    if (count%3 == 0)
-                    {
-                        for (int i = 0; i < count; i += 3)
-                        {
-                            Vector3d p = new Vector3d(cloud[i], cloud[i + 1], cloud[i + 2]);
-                            outCloud.Add(p.x);
-                            outCloud.Add(p.y);
-                            outCloud.Add(p.z);
-                        }
-                    }
-                    return outCloud;
-                }
+                    return API.GetCloud(Part.InternalPart);
                 else
                     return new List<double>();
             }

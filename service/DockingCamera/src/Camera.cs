@@ -14,28 +14,24 @@ namespace KRPC.DockingCamera
     [KRPCClass(Service = "DockingCamera")]
     public class Camera : Equatable<Camera>
     {
-        readonly SpaceCenter.Services.Parts.Part part;
-
         internal static bool Is(SpaceCenter.Services.Parts.Part innerPart)
         {
             return innerPart.InternalPart.Modules.Contains("PartCameraModule");
         }
 
-        internal Camera(SpaceCenter.Services.Parts.Part innerPart)
+        internal Camera(SpaceCenter.Services.Parts.Part part)
         {
-            part = innerPart;
             if (!Is(part))
-            {
                 throw new ArgumentException("Part is not a Camera");
-            }
+            Part = part;
         }
 
         /// <summary>
-        /// Check that the Camera are the same.
+        /// Check that the cameras are the same.
         /// </summary>
         public override bool Equals(Camera other)
         {
-            return !ReferenceEquals(other, null) && part == other.part;
+            return !ReferenceEquals(other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -43,20 +39,21 @@ namespace KRPC.DockingCamera
         /// </summary>
         public override int GetHashCode()
         {
-            return part.GetHashCode();
+            return Part.GetHashCode();
         }
 
         /// <summary>
-        /// Get the part containing this Camera.
+        /// Get the part containing this camera.
         /// </summary>
         [KRPCProperty]
         public SpaceCenter.Services.Parts.Part Part
         {
-            get { return part; }
+            get; private set;
         }
 
         /// <summary>
-        /// Get the image.
+        /// Get an image.
+        /// Returns an empty byte array on failure.
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
@@ -68,7 +65,7 @@ namespace KRPC.DockingCamera
                 {
                     try
                     {
-                        var image = API.GetImage(part.InternalPart);
+                        var image = API.GetImage(Part.InternalPart);
                         Debug.Log("CAMERA IMAGE: OK");
                         return image;
                     }
