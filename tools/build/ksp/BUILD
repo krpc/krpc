@@ -14,6 +14,7 @@ csharp_reference(name = 'UnityEngine.TextRenderingModule', file = '//lib:ksp/KSP
 csharp_reference(name = 'UnityEngine.UI', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.UI.dll')
 csharp_reference(name = 'UnityEngine.UIModule', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.UIModule.dll')
 csharp_reference(name = 'UnityEngine.UnityWebRequestWWWModule', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll')
+csharp_reference(name = 'UnityEngine.ScreenCaptureModule', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.ScreenCaptureModule.dll')
 csharp_reference(name = 'Assembly-CSharp', file = '//lib:ksp/KSP_Data/Managed/Assembly-CSharp.dll')
 csharp_reference(name = 'Assembly-CSharp-firstpass', file = '//lib:ksp/KSP_Data/Managed/Assembly-CSharp-firstpass.dll')
 

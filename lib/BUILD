@@ -22,6 +22,7 @@ exports_files ([
     'ksp/KSP_Data/Managed/UnityEngine.UI.dll',
     'ksp/KSP_Data/Managed/UnityEngine.UIModule.dll',
     'ksp/KSP_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll',
+    'ksp/KSP_Data/Managed/UnityEngine.ScreenCaptureModule.dll',
 
     'ksp/KSP_Data/Managed/mscorlib.dll',
     'ksp/KSP_Data/Managed/System.dll',

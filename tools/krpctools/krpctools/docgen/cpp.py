@@ -26,6 +26,11 @@ class CppDomain(Domain):
             return '%s_' % name
         return name
 
+    def enumeration_name(self, name):
+        if snake_case(name) in self.language.keywords:
+            return '%s_' % name
+        return name
+
     def type_description(self, typ):
         if typ is None:
             return 'void'
@@ -80,19 +85,27 @@ class CppDomain(Domain):
 
     def default_value(self, value, typ):
         if isinstance(typ, TupleType):
+            if value is None:
+                value = tuple()
             values = (self.default_value(x, typ.value_types[i])
                       for i, x in enumerate(value))
             return '%s(%s)' % (self.language.parse_type(typ),
                                ', '.join(values))
         if isinstance(typ, ListType):
+            if value is None:
+                value = []
             values = (self.default_value(x, typ.value_type) for x in value)
             return '%s(%s)' % (self.language.parse_type(typ),
                                ', '.join(values))
         if isinstance(typ, SetType):
+            if value is None:
+                value = set()
             values = (self.default_value(x, typ.value_type) for x in value)
             return '%s(%s)' % (self.language.parse_type(typ),
                                ', '.join(values))
         if isinstance(typ, DictionaryType):
+            if value is None:
+                value = {}
             entries = ('{%s, %s}' % (self.default_value(k, typ.key_type),
                                      self.default_value(v, typ.value_type))
                        for k, v in value.items())

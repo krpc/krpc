@@ -1,0 +1,10 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('SpaceCenter') }}
+{% import domain.macros as macros with context %}
+
+Alarms
+======
+
+{{ macros.class(services['SpaceCenter'].classes['AlarmManager']) }}
+{{ macros.class(services['SpaceCenter'].classes['Alarm']) }}

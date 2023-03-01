@@ -15,7 +15,7 @@ def _create_py_env(out, install):
     cmds = [
         'PWD=`pwd`',
         'rm -rf %s' % tmp,
-        'virtualenv %s --python python3 --quiet --never-download ' % tmp
+        'virtualenv %s --python python3 --quiet --never-download' % tmp
     ]
     for lib in install:
         cmds.append(
@@ -243,7 +243,7 @@ def _lint_impl(ctx):
     sub_commands = []
 
     # Install dependences in a new virtual env
-    sub_commands = ['virtualenv env --python python3 --quiet --never-download ']
+    sub_commands = ['virtualenv env --python python3 --quiet --never-download']
     for dep in deps:
         sub_commands.append(
             'env/bin/python env/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s'

@@ -1,0 +1,5 @@
+R: Gendarme.Rules.Design.ImplementEqualsAndGetHashCodeInPairRule
+T: KRPC.DockingCamera.Camera
+
+R: Gendarme.Rules.Naming.UseCorrectCasingRule
+N: KRPC.DockingCamera

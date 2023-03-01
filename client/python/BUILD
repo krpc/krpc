@@ -60,6 +60,8 @@ py_sdist(
         ':services-kerbalalarmclock-stub',
         ':services-remotetech-stub',
         ':services-ui-stub',
+        ':services-lidar-stub',
+        ':services-dockingcamera-stub',
     ]
 )
 
@@ -110,6 +112,20 @@ clientgen_python(
     service = 'UI',
     defs = '//service/UI:ServiceDefinitions',
     out = 'krpc/ui.pyi'
+)
+
+clientgen_python(
+    name = 'services-lidar-stub',
+    service = 'LiDAR',
+    defs = '//service/LiDAR:ServiceDefinitions',
+    out = 'krpc/lidar.pyi'
+)
+
+clientgen_python(
+    name = 'services-dockingcamera-stub',
+    service = 'DockingCamera',
+    defs = '//service/DockingCamera:ServiceDefinitions',
+    out = 'krpc/dockingcamera.pyi'
 )
 
 clientgen_python(

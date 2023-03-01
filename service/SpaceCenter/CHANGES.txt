@@ -1,5 +1,29 @@
 v0.5.0
  * Update to work with KSP 1.8+
+ * Add to SpaceCenter:
+   * LaunchSites
+   * CanRevertToLaunch
+   * RevertToLaunch
+   * TransferCrew
+   * CreateKerbal
+   * GetKerbal
+   * LoadSpaceCenter
+   * MapFilter
+   * Screenshot
+ * Add crew and flagUrl parameters to SpaceCenter.LaunchVessel
+ * Add support for more vessel types
+ * Add LaunchSite
+ * Add CelestialBody.IsStar and CelestialBody.HasSolidSurface
+ * Add custom axes to Control class
+ * Add Part.FlagURL
+ * Add Part.AvailableSeats
+ * Add Part.Glow
+ * Add Part.AutoStrutMode
+ * Add support for resource drain parts
+ * Add support for stock robotic parts
+ * Add Parachute.Cut
+ * Fix ParachuteState.Active state and clean up real chute vs. stock parachute logic
+ * Add support for stock alarms (AlarmManager and Alarm classes)
  * Use raycast to measure surface height more precisely in CelestialBody.SurfaceHeight (#524)
  * Fix null reference exception when checking active vessel (#528, #530)
  * Fix null reference exception when waiting for active vessel change (#516, #529)

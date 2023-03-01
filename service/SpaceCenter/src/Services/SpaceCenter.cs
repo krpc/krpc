@@ -14,6 +14,7 @@ using PreFlightTests;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
+using KSPEditorFacility = EditorFacility;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -115,6 +116,27 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// A list of available launch sites.
+        /// </summary>
+        [KRPCProperty]
+        public static IList<LaunchSite> LaunchSites
+        {
+            get {
+                var psystem = PSystemSetup.Instance;
+                var list = new List<LaunchSite>(psystem.LaunchSites.Count + psystem.SpaceCenterFacilities.Length);
+                foreach (var launchSite in psystem.LaunchSites) {
+                    list.Add(new LaunchSite(launchSite.name, new CelestialBody(launchSite.Body), launchSite.editorFacility));
+                }
+                foreach (var facility in psystem.SpaceCenterFacilities) {
+                    if (facility.IsLaunchFacility()) {
+                        list.Add(new LaunchSite(facility.facilityName, new CelestialBody(facility.hostBody), facility.editorFacility));
+                    }
+                }
+                return list;
+            }
+        }
+
+        /// <summary>
         /// A dictionary of all celestial bodies (planets, moons, etc.) in the game,
         /// keyed by the name of the body.
         /// </summary>
@@ -189,6 +211,15 @@ namespace KRPC.SpaceCenter.Services
             get { return new ContractManager(); }
         }
 
+        /// <summary>
+        /// The alarm manager.
+        /// </summary>
+        [KRPCProperty]
+        public static AlarmManager AlarmManager
+        {
+            get { return new AlarmManager(); }
+        }
+
         static string GetFullCraftDirectory (string craftDirectory)
         {
             return KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/" + craftDirectory;
@@ -216,29 +247,67 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
         [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
         sealed class LaunchConfig {
-            public LaunchConfig(string craftDirectory, string name, string launchSite, bool recover) {
+            [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
+            public LaunchConfig(string craftDirectory, string name, string launchSite, bool recover, IList<string> crew, string flagUrl) {
                 LaunchSite = launchSite;
                 Recover = recover;
+                FlagUrl = string.IsNullOrEmpty(flagUrl) ? EditorLogic.FlagURL : flagUrl;
                 // Load the vessel and its default crew
                 if (craftDirectory == "VAB")
-                    EditorDriver.editorFacility = EditorFacility.VAB;
+                    EditorDriver.editorFacility = KSPEditorFacility.VAB;
                 else if (craftDirectory == "SPH")
-                    EditorDriver.editorFacility = EditorFacility.SPH;
+                    EditorDriver.editorFacility = KSPEditorFacility.SPH;
                 else
                     throw new ArgumentException("Invalid craftDirectory, should be VAB or SPH");
-                Path = ShipConstruction.GetSavePath(name);
+                Path = GetFullCraftDirectory(craftDirectory) + "/" + name + ".craft";
                 template = ShipConstruction.LoadTemplate(Path);
                 if (template == null)
                     throw new InvalidOperationException("Failed to load template for vessel");
-                manifest = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel(
-                    template.config, VesselCrewManifest.FromConfigNode(template.config));
+                manifest = VesselCrewManifest.FromConfigNode(template.config);
+                if (crew.Count == 0) {
+                    manifest = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel(template.config, manifest, true, false);
+                }
+                else {
+                    var crewRoster = new KerbalRoster(HighLogic.CurrentGame.Mode);
+                    foreach (var crewName in crew) {
+                        var kerbal = GetKerbal(crewName);
+                        if (kerbal != null && kerbal.InternalCrewMember.rosterStatus == ProtoCrewMember.RosterStatus.Available) {
+                            crewRoster.AddCrewMember(kerbal.InternalCrewMember);
+                        }
+                    }
+                    manifest = crewRoster.DefaultCrewForVessel(template.config, manifest, true, false);
+                    if (manifest.CrewCount < crewRoster.Count)
+                    {
+                        foreach (var crewMember in crewRoster.Crew) {
+                            if (!manifest.Contains(crewMember)) {
+                                if (!AddCrewToManifest(manifest, crewMember)) {
+                                    Debug.LogError($"Failed to add {crewMember.name} to a seat");
+                                }
+                            }
+                        }
+                    }
+                }
 
                 facility = (craftDirectory == "SPH") ? SpaceCenterFacility.SpaceplaneHangar : SpaceCenterFacility.VehicleAssemblyBuilding;
                 facilityLevel = ScenarioUpgradeableFacilities.GetFacilityLevel(facility);
                 site = (launchSite == "Runway") ? SpaceCenterFacility.Runway : SpaceCenterFacility.LaunchPad;
                 siteLevel = ScenarioUpgradeableFacilities.GetFacilityLevel(site);
                 isPad = (site == SpaceCenterFacility.LaunchPad);
+            }
+
+            static bool AddCrewToManifest(VesselCrewManifest manifest, ProtoCrewMember protoCrewMember)
+            {
+                foreach (var partManifest in manifest.PartManifests) {
+                    for (int seatIndex = 0; seatIndex < partManifest.partCrew.Length; seatIndex++) {
+                        if (string.IsNullOrEmpty(partManifest.partCrew[seatIndex])) {
+                            partManifest.AddCrewToSeat(protoCrewMember, seatIndex);
+                            return true;
+                        }
+                    }
+                }
+                return false;
             }
 
             public void RunPreFlightChecks()
@@ -261,6 +330,7 @@ namespace KRPC.SpaceCenter.Services
             public string LaunchSite { get; private set; }
             public bool Recover { get; private set; }
             public string Path { get; private set; }
+            public string FlagUrl { get; private set; }
 
             readonly ShipTemplate template;
             readonly public VesselCrewManifest manifest;
@@ -286,13 +356,17 @@ namespace KRPC.SpaceCenter.Services
         /// <c>"Runway"</c>.</param>
         /// <param name="recover">If true and there is a vessel on the launch site,
         /// recover it before launching.</param>
+        /// <param name="crew">If not <c>null</c>, a list of names of Kerbals to place in the craft. Otherwise the crew will use default assignments.</param>
+        /// <param name="flagUrl">If not <c>null</c>, the asset URL of the mission flag to use for the launch.</param>
         /// <remarks>
         /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
-        public static void LaunchVessel (string craftDirectory, string name, string launchSite, bool recover = true)
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
+        public static void LaunchVessel (string craftDirectory, string name, string launchSite, bool recover = true, IList<string> crew = null, string flagUrl = null)
         {
-            var config = new LaunchConfig(craftDirectory, name, launchSite, recover);
+            CloseDialogs();
+            var config = new LaunchConfig(craftDirectory, name, launchSite, recover, crew, flagUrl);
             config.RunPreFlightChecks();
             throw new YieldException (new ParameterizedContinuationVoid<LaunchConfig> (WaitForVesselPreFlightChecks, config));
         }
@@ -317,7 +391,7 @@ namespace KRPC.SpaceCenter.Services
                     ShipConstruction.RecoverVesselFromFlight(vessel, HighLogic.CurrentGame.flightState, true);
             }
             // Do the actual launch - passed pre-flight checks, and launch site is clear.
-            FlightDriver.StartWithNewLaunch(config.Path, EditorLogic.FlagURL, config.LaunchSite, config.manifest);
+            FlightDriver.StartWithNewLaunch(config.Path, config.FlagUrl, config.LaunchSite, config.manifest);
             throw new YieldException(new ParameterizedContinuationVoid<int>(WaitForVesselSwitch, 0));
         }
 
@@ -374,6 +448,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static void Load (string name)
         {
+            CloseDialogs ();
             var game = GamePersistence.LoadGame (name, HighLogic.SaveFolder, true, false);
             if (game == null || game.flightState == null || !game.compatible)
                 throw new ArgumentException ("Failed to load " + name);
@@ -403,6 +478,59 @@ namespace KRPC.SpaceCenter.Services
         public static void Quickload ()
         {
             Load ("quicksave");
+        }
+
+        /// <summary>
+        /// Whether the current flight can be reverted to launch.
+        /// </summary>
+        [KRPCProcedure]
+        public static bool CanRevertToLaunch()
+        {
+            return FlightDriver.CanRevert;
+        }
+
+        /// <summary>
+        /// Revert the current flight to launch.
+        /// </summary>
+        [KRPCProcedure]
+        public static void RevertToLaunch()
+        {
+            if (FlightDriver.CanRevert)
+            {
+                CloseDialogs();
+                FlightDriver.RevertToLaunch();
+            }
+        }
+
+        private static void CloseDialogs()
+        {
+            KSP.UI.Dialogs.FlightResultsDialog.Close();
+            var recoveryDialog = UnityEngine.Object.FindObjectOfType<KSP.UI.Screens.MissionRecoveryDialog>();
+            if (recoveryDialog != null)
+            {
+                recoveryDialog.gameObject.DestroyGameObject();
+            }
+        }
+
+        /// <summary>
+        /// Tranfsers a crew member to a different part.
+        /// </summary>
+        /// <param name="crewMember">The crew member to transfer.</param>
+        /// <param name="targetPart">The part to move them to.</param>
+        [KRPCProcedure(GameScene = GameScene.Flight)]
+        [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
+        public static void TransferCrew(CrewMember crewMember, Parts.Part targetPart)
+        {
+            if (crewMember == null)
+                throw new ArgumentNullException (nameof (crewMember));
+            if (targetPart == null)
+                throw new ArgumentNullException (nameof (targetPart));
+            var internalCrewMember = crewMember.InternalCrewMember;
+            var transfer = CrewTransfer.Create(internalCrewMember.seat.part, internalCrewMember, delegate {});
+            transfer.crew = internalCrewMember;
+            var part = targetPart.InternalPart;
+            transfer.tgtPart = part;
+            transfer.MoveCrewTo(part);
         }
 
         /// <summary>
@@ -836,6 +964,71 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public static bool FARAvailable {
             get { return ExternalAPI.FAR.IsAvailable; }
+        }
+
+        /// <summary>
+        /// Creates a Kerbal.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="job"></param>
+        /// <param name="male"></param>
+        [KRPCProcedure]
+        public static void CreateKerbal(string name, string job, bool male)
+        {
+            var crewMember = new ProtoCrewMember(ProtoCrewMember.KerbalType.Crew, name);
+            crewMember.gender = male ? ProtoCrewMember.Gender.Male : ProtoCrewMember.Gender.Female;
+            KerbalRoster.SetExperienceTrait(crewMember, job);
+            if (HighLogic.CurrentGame.Mode == Game.Modes.CAREER)
+            {
+                Funding.Instance.AddFunds(-GameVariables.Instance.GetRecruitHireCost(HighLogic.CurrentGame.CrewRoster.GetActiveCrewCount()), TransactionReasons.CrewRecruited);
+            }
+            HighLogic.CurrentGame.CrewRoster.AddCrewMember(crewMember);
+        }
+
+        /// <summary>
+        /// Find a Kerbal by name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns><c>null</c> if no Kerbal with the given name exists.</returns>
+        [KRPCProcedure(Nullable = true)]
+        public static CrewMember GetKerbal(string name)
+        {
+            var crewMember = HighLogic.CurrentGame.CrewRoster.Crew.FirstOrDefault((ProtoCrewMember pcm) => pcm.name == name);
+            if (crewMember != null)
+            {
+                return new CrewMember(crewMember);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Switch to the spacecenter view.
+        /// </summary>
+        [KRPCProcedure]
+        public static void LoadSpaceCenter()
+        {
+            HighLogic.LoadScene(GameScenes.SPACECENTER);
+        }
+
+        /// <summary>
+        /// The visible objects in map mode.
+        /// </summary>
+        [KRPCProperty(GameScene = GameScene.All)]
+        public static MapFilterType MapFilter
+        {
+            get { return (MapFilterType)MapViewFiltering.GetFilterState(); }
+            set { MapViewFiltering.SetFilter((MapViewFiltering.VesselTypeFilter)value); }
+        }
+
+        /// <summary>
+        /// Saves a screenshot.
+        /// </summary>
+        /// <param name="filePath">The path of the file to save.</param>
+        /// <param name="scale">Resolution scaling factor</param>
+        [KRPCProcedure(GameScene = GameScene.Flight)]
+        public static void Screenshot(string filePath, int scale = 1)
+        {
+            ScreenCapture.CaptureScreenshot(filePath, scale);
         }
     }
 }

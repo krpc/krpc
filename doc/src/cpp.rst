@@ -11,3 +11,5 @@ C++
    cpp/api/kerbal-alarm-clock
    cpp/api/remote-tech
    cpp/api/ui
+   cpp/api/lidar
+   cpp/api/docking-camera

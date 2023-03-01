@@ -113,6 +113,8 @@ pkg_zip(
         '//service/KerbalAlarmClock',
         '//service/RemoteTech',
         '//service/UI',
+        '//service/LiDAR',
+        '//service/DockingCamera',
         # Clients
         '//client/cnano',
         '//client/cpp',
@@ -155,6 +157,10 @@ pkg_zip(
         'service/RemoteTech/CHANGES.txt': 'GameData/kRPC/CHANGES.RemoteTech.txt',
         'service/UI/': 'GameData/kRPC/',
         'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt',
+        'service/LiDAR/': 'GameData/kRPC/',
+        'service/LiDAR/CHANGES.txt': 'GameData/kRPC/CHANGES.LiDAR.txt',
+        'service/DockingCamera/': 'GameData/kRPC/',
+        'service/DockingCamera/CHANGES.txt': 'GameData/kRPC/CHANGES.DockingCamera.txt',
         # Module Manager
         '../module_manager/file/ModuleManager.4.1.3.dll': 'GameData/ModuleManager.4.1.3.dll',
         # Clients
@@ -195,7 +201,9 @@ pkg_zip(
         '//service/InfernalRobotics',
         '//service/KerbalAlarmClock',
         '//service/RemoteTech',
-        '//service/UI'
+        '//service/UI',
+        '//service/LiDAR',
+        '//service/DockingCamera'
     ],
     path_map = {
         'kRPC.version': 'GameData/kRPC/kRPC.version',
@@ -223,7 +231,11 @@ pkg_zip(
         'service/RemoteTech/': 'GameData/kRPC/',
         'service/RemoteTech/CHANGES.txt': 'GameData/kRPC/CHANGES.RemoteTech.txt',
         'service/UI/': 'GameData/kRPC/',
-        'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt'
+        'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt',
+        'service/LiDAR/': 'GameData/kRPC/',
+        'service/LiDAR/CHANGES.txt': 'GameData/kRPC/CHANGES.LiDAR.txt',
+        'service/DockingCamera/': 'GameData/kRPC/',
+        'service/DockingCamera/CHANGES.txt': 'GameData/kRPC/CHANGES.DockingCamera.txt',
     },
     exclude = ['*.mdb']
 )
@@ -238,6 +250,8 @@ test_suite(
         '//service/KerbalAlarmClock:test',
         '//service/RemoteTech:test',
         '//service/UI:test',
+        '//service/LiDAR:test',
+        '//service/DockingCamera:test',
         '//client/cnano:test',
         '//client/cpp:test',
         '//client/csharp:test',
@@ -283,6 +297,8 @@ test_suite(
         '//service/KerbalAlarmClock:lint',
         '//service/RemoteTech:lint',
         '//service/UI:lint',
+        '//service/LiDAR:lint',
+        '//service/DockingCamera:lint',
         '//client/cnano:lint',
         '//client/cpp:lint',
         '//client/csharp:lint',
@@ -315,6 +331,8 @@ filegroup (
         '//service/RemoteTech:AssemblyInfo',
         '//service/SpaceCenter:AssemblyInfo',
         '//service/UI:AssemblyInfo',
+        '//service/LiDAR:AssemblyInfo',
+        '//service/DockingCamera:AssemblyInfo',
 
         '//tools/ServiceDefinitions:AssemblyInfo',
         '//tools/TestServer:AssemblyInfo',
@@ -358,6 +376,8 @@ filegroup(
         '//service/KerbalAlarmClock',
         '//service/RemoteTech',
         '//service/UI',
+        '//service/LiDAR',
+        '//service/DockingCamera',
         '//client/csharp',
         '//client/csharp:KRPC.Client.Test',
         '//tools/ServiceDefinitions',

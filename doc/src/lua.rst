@@ -11,3 +11,5 @@ Lua
    lua/api/kerbal-alarm-clock
    lua/api/remote-tech
    lua/api/ui
+   lua/api/lidar
+   lua/api/docking-camera

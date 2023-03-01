@@ -48,18 +48,26 @@ class CsharpDomain(Domain):
         if isinstance(typ, EnumerationType):
             return '%s' % value
         if isinstance(typ, TupleType):
+            if value is None:
+                value = tuple()
             values = (self.default_value(x, typ.value_types[i])
                       for i, x in enumerate(value))
             return '{ %s }' % ', '.join(values)
         if isinstance(typ, ListType):
+            if value is None:
+                value = []
             values = (self.default_value(x, typ.value_type)
                       for x in value)
             return '{ %s }' % ', '.join(values)
         if isinstance(typ, SetType):
+            if value is None:
+                value = set()
             values = (self.default_value(x, typ.value_type)
                       for x in value)
             return '{ %s }' % ', '.join(values)
         if isinstance(typ, DictionaryType):
+            if value is None:
+                value = {}
             entries = ('%s: %s' %
                        (self.default_value(k, typ.key_type),
                         self.default_value(v, typ.value_type))

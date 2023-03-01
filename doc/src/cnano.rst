@@ -11,3 +11,5 @@ C-nano
    cnano/api/kerbal-alarm-clock
    cnano/api/remote-tech
    cnano/api/ui
+   cnano/api/lidar
+   cnano/api/docking-camera

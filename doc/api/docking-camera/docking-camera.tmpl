@@ -1,0 +1,9 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('DockingCamera') }}
+{% import domain.macros as macros with context %}
+
+DockingCamera
+=============
+
+{{ macros.service(services['DockingCamera']) }}

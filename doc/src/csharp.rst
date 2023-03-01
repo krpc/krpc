@@ -11,3 +11,5 @@ C#
    csharp/api/kerbal-alarm-clock
    csharp/api/remote-tech
    csharp/api/ui
+   csharp/api/lidar
+   csharp/api/docking-camera

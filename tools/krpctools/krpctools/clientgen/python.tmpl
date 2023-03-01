@@ -16,12 +16,12 @@ class {{ service_name }}:
     {% for prop_name, prop in properties.items() %}
     {% if 'getter' in prop %}
     @property
-    def {{prop_name|snake_case()}}(self{{ arg_list(prop.getter.parameters) }}): 
+    def {{prop_name|snake_case()}}(self{{ arg_list(prop.getter.parameters) }}):
         {{ procedure_types(prop.getter) }}
 {% if prop.getter.documentation %}{{ prop.getter.documentation | indent(width=8) }}
 {% endif %}
         ...
-    
+
     {% endif %}
     {% if 'getter' in prop and 'setter' in prop %}
     @{{prop_name|snake_case()}}.setter
@@ -31,7 +31,7 @@ class {{ service_name }}:
 
     {# Set only property #}
     {% elif 'setter' in prop %}
-    def {{prop_name|snake_case()}}(self{{ arg_list(prop.setter.parameters) }}): 
+    def {{prop_name|snake_case()}}(self{{ arg_list(prop.setter.parameters) }}):
         {{ procedure_types(prop.setter) }}
 {% if prop.setter.documentation %}{{ prop.setter.documentation | indent(width=8) }}
 {% endif %}
@@ -55,12 +55,12 @@ class {{ service_name }}:
         {% for prop_name, prop in class['properties'].items() %}
         {% if 'getter' in prop %}
         @property
-        def {{prop_name|snake_case()}}(self{{ arg_list(prop.getter.parameters) }}): 
+        def {{prop_name|snake_case()}}(self{{ arg_list(prop.getter.parameters) }}):
             {{ procedure_types(prop.getter) }}
 {% if prop.getter.documentation %}{{ prop.getter.documentation | indent(width=12) }}
 {% endif %}
             ...
-        
+
         {% endif %}
         {% if 'getter' in prop and 'setter' in prop %}
         @{{prop_name|snake_case()}}.setter
@@ -70,7 +70,7 @@ class {{ service_name }}:
 
         {# Set only property #}
         {% elif 'setter' in prop %}
-        def {{prop_name|snake_case()}}(self{{ arg_list(prop.setter.parameters) }}): 
+        def {{prop_name|snake_case()}}(self{{ arg_list(prop.setter.parameters) }}):
             {{ procedure_types(prop.setter) }}
 {% if prop.setter.documentation %}{{ prop.setter.documentation | indent(width=12) }}
 {% endif %}
