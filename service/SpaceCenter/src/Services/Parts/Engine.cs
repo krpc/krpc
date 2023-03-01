@@ -188,11 +188,38 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The amount of thrust, in Newtons, that would be produced by the engine
+        /// when activated and with its throttle set to 100%.
+        /// Returns zero if the engine does not have any fuel.
+        /// Takes the given pressure into account.
+        /// </summary>
+        /// <param name="pressure">Atmospheric pressure in atmospheres</param>
+        [KRPCMethod]
+        public float AvailableThrustAt (double pressure)
+        {
+            if (!HasFuel)
+                return 0f;
+            return GetThrust (ThrustLimit, pressure);
+        }
+
+        /// <summary>
+        /// The amount of thrust, in Newtons, that would be produced by the engine
         /// when activated and fueled, with its throttle and throttle limiter set to 100%.
         /// </summary>
         [KRPCProperty]
         public float MaxThrust {
             get { return GetThrust (1f, Part.InternalPart.staticPressureAtm); }
+        }
+
+        /// <summary>
+        /// The amount of thrust, in Newtons, that would be produced by the engine
+        /// when activated and fueled, with its throttle and throttle limiter set to 100%.
+        /// Takes the given pressure into account.
+        /// </summary>
+        /// <param name="pressure">Atmospheric pressure in atmospheres</param>
+        [KRPCMethod]
+        public float MaxThrustAt (double pressure)
+        {
+            return GetThrust (1f, pressure);
         }
 
         /// <summary>
@@ -251,6 +278,17 @@ namespace KRPC.SpaceCenter.Services.Parts
                 }
                 return engine.realIsp;
             }
+        }
+
+        /// <summary>
+        /// The specific impulse of the engine under the given pressure, in seconds. Returns zero
+        /// if the engine is not active.
+        /// </summary>
+        /// <param name="pressure">Atmospheric pressure in atmospheres</param>
+        [KRPCMethod]
+        public float SpecificImpulseAt (double pressure)
+        {
+            return CurrentEngine.atmosphereCurve.Evaluate ((float)pressure);
         }
 
         /// <summary>

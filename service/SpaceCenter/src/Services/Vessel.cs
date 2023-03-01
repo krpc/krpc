@@ -284,6 +284,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Gets the total available thrust that can be produced by the vessel's
+        /// active engines, in Newtons. This is computed by summing
+        /// <see cref="Parts.Engine.AvailableThrustAt"/> for every active engine in the vessel.
+        /// Takes the given pressure into account.
+        /// </summary>
+        /// <param name="pressure">Atmospheric pressure in atmospheres</param>
+        [KRPCMethod (GameScene = GameScene.Flight)]
+        public float AvailableThrustAt (double pressure)
+        {
+            return ActiveEngines.Sum (e => e.AvailableThrustAt (pressure));
+        }
+
+        /// <summary>
         /// The total maximum thrust that can be produced by the vessel's active
         /// engines, in Newtons. This is computed by summing
         /// <see cref="Parts.Engine.MaxThrust"/> for every active engine.
@@ -291,6 +304,19 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty (GameScene = GameScene.Flight)]
         public float MaxThrust {
             get { return ActiveEngines.Sum (e => e.MaxThrust); }
+        }
+
+        /// <summary>
+        /// The total maximum thrust that can be produced by the vessel's active
+        /// engines, in Newtons. This is computed by summing
+        /// <see cref="Parts.Engine.MaxThrustAt"/> for every active engine.
+        /// Takes the given pressure into account.
+        /// </summary>
+        /// <param name="pressure">Atmospheric pressure in atmospheres</param>
+        [KRPCMethod (GameScene = GameScene.Flight)]
+        public float MaxThrustAt (double pressure)
+        {
+            return ActiveEngines.Sum (e => e.MaxThrustAt (pressure));
         }
 
         /// <summary>
@@ -319,6 +345,20 @@ namespace KRPC.SpaceCenter.Services
                 var fuelConsumption = activeEngines.Sum (e => e.MaxThrust / e.SpecificImpulse);
                 return SpecificImpulseAtConsumption (activeEngines, fuelConsumption);
             }
+        }
+
+        /// <summary>
+        /// The combined specific impulse of all active engines, in seconds. This is computed using the formula
+        /// <a href="https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">described here</a>.
+        /// Takes the given pressure into account.
+        /// </summary>
+        /// <param name="pressure">Atmospheric pressure in atmospheres</param>
+        [KRPCMethod (GameScene = GameScene.Flight)]
+        public float SpecificImpulseAt (double pressure)
+        {
+            var activeEngines = ActiveEngines.ToList ();
+            var fuelConsumption = activeEngines.Sum (e => e.MaxThrust / e.SpecificImpulseAt (pressure));
+            return SpecificImpulseAtConsumption (activeEngines, fuelConsumption);
         }
 
         /// <summary>
