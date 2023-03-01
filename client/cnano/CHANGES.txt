@@ -1,6 +1,7 @@
 v0.5.0
  * Update to protobuf 22.0
  * Update to nanopb 0.4.7
+ * Rename KRPC_COMMS_CUSTOM to KRPC_COMMUNICATION_CUSTOM
 
 v0.4.8
  * Update to protobuf v3.6.1
