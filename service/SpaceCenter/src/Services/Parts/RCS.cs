@@ -191,15 +191,15 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var posZ = thrustPosition.Item3;
                 double torque = 0;
                 // Torque around X axis (pitch)
-                torque = posY * forceZ - posZ * forceY;
+                torque = rcs.enablePitch ? posY * forceZ - posZ * forceY : 0d;
                 if (torque > 0) torqueX += torque;
                 else torqueXn += -torque;
                 // Torque around Y axis (yaw)
-                torque = posZ * forceX - posX * forceZ;
+                torque = rcs.enableRoll ? posZ * forceX - posX * forceZ : 0d;
                 if (torque > 0) torqueY += torque;
                 else torqueYn += -torque;
                 // Torque around Z axis (roll)
-                torque = posX * forceY - posY * forceX;
+                torque = rcs.enableYaw ? posX * forceY - posY * forceX : 0d;
                 if (torque > 0) torqueZ += torque;
                 else torqueZn += -torque;
             }
