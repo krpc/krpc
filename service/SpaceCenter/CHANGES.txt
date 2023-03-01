@@ -22,6 +22,9 @@ v0.5.0
  * Add support for resource drain parts
  * Add support for stock robotic parts
  * Add Parachute.Cut
+ * Add support for docking port rotation
+ * Add support for Light blinking
+ * Add support for wheel steering angle limit and response time
  * Fix ParachuteState.Active state and clean up real chute vs. stock parachute logic
  * Add support for stock alarms (AlarmManager and Alarm classes)
  * Use raycast to measure surface height more precisely in CelestialBody.SurfaceHeight (#524)
