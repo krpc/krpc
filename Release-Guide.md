@@ -5,7 +5,7 @@ This document details the steps necessary to make a release of kRPC.
 
 1. The repository should be clean from changes, and run a `bazel clean`.
 1. Bump the kRPC version number in `config.bzl` and commit the file. Make an annotated tag
-for the new version (using `git tag -a vx.x.x)
+for the new version (using `git tag -a vx.x.x) and move the latest-version tag to this commit.
 1. Run `tools/build-against-all-versions.sh` to check that the mod at least builds against all
 supported versions of the KSP API
 1. Build kRPC and run all of the tests locally to check that they pass using `bazel build //... && bazel test //:test`
