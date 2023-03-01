@@ -26,7 +26,7 @@ csharp_assembly_info(
 )
 
 srcs = [':AssemblyInfo'] + glob(['src/**/*.cs'])
-deps = service_deps + ['//tools/build/ksp:UnityEngine.ScreenCaptureModule']
+deps = service_deps
 
 csharp_library(
     name = 'KRPC.SpaceCenter',

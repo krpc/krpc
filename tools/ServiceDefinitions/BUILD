@@ -1,29 +1,16 @@
 load('//tools/build:csharp.bzl', 'csharp_binary', 'csharp_library', 'csharp_assembly_info', 'csharp_gendarme_test')
 load('//:config.bzl', 'assembly_version', 'author')
+load('//tools/build/ksp:build.bzl', 'ksp_unity_libs')
+load('//tools/build/mono-4.5:build.bzl', 'mono_net_libs')
 
 srcs = glob(['**/*.cs']) + [':AssemblyInfo']
 deps = [
     ':KRPC',
     '//tools/build/ksp:Google.Protobuf',
-    '//tools/build/ksp:Assembly-CSharp',
-    '//tools/build/ksp:Assembly-CSharp-firstpass',
-    '//tools/build/ksp:UnityEngine',
-    '//tools/build/ksp:UnityEngine.AnimationModule',
-    '//tools/build/ksp:UnityEngine.CoreModule',
-    '//tools/build/ksp:UnityEngine.IMGUIModule',
-    '//tools/build/ksp:UnityEngine.InputLegacyModule',
-    '//tools/build/ksp:UnityEngine.UI',
-    '//tools/build/ksp:UnityEngine.SharedInternalsModule',
     '//tools/build/ksp:KRPC.IO.Ports',
-    '//tools/build/mono-4.5:mscorlib',
-    '//tools/build/mono-4.5:System',
-    '//tools/build/mono-4.5:System.Core',
-    '//tools/build/mono-4.5:System.Runtime',
-    '//tools/build/mono-4.5:System.IO',
-    '//tools/build/mono-4.5:System.Xml',
     '//tools/build/mono-4.5:Newtonsoft.Json',
     '//tools/build/mono-4.5:NDesk.Options'
-]
+] + ksp_unity_libs + mono_net_libs
 
 csharp_binary(
     name = 'ServiceDefinitions',
@@ -49,23 +36,8 @@ csharp_library(
     srcs = ['//server:KRPC-src', '//server:AssemblyInfo', '//protobuf:csharp_3.9.1'],
     deps = [
         '//tools/build/protobuf-3.9.1:Google.Protobuf',
-        '//tools/build/ksp:Assembly-CSharp',
-        '//tools/build/ksp:Assembly-CSharp-firstpass',
-        '//tools/build/ksp:UnityEngine',
-        '//tools/build/ksp:UnityEngine.AnimationModule',
-        '//tools/build/ksp:UnityEngine.CoreModule',
-        '//tools/build/ksp:UnityEngine.IMGUIModule',
-        '//tools/build/ksp:UnityEngine.InputLegacyModule',
-        '//tools/build/ksp:UnityEngine.UI',
-        '//tools/build/ksp:UnityEngine.SharedInternalsModule',
-        '//tools/build/ksp:KRPC.IO.Ports',
-        '//tools/build/mono-4.5:mscorlib',
-        '//tools/build/mono-4.5:System',
-        '//tools/build/mono-4.5:System.Core',
-        '//tools/build/mono-4.5:System.Xml',
-        '//tools/build/mono-4.5:System.Runtime',
-        '//tools/build/mono-4.5:System.IO'
-    ],
+        '//tools/build/ksp:KRPC.IO.Ports'
+    ] + ksp_unity_libs + mono_net_libs,
     visibility = ['//tools/krpctools:__pkg__', '//tools/TestServer:__pkg__']
 )
 

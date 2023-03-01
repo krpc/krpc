@@ -1,6 +1,8 @@
 load('//tools/build:csharp.bzl', 'csharp_library', 'csharp_nunit_test', 'csharp_gendarme_test', 'csharp_assembly_info')
 load('//tools/ServiceDefinitions:build.bzl', 'service_definitions')
 load('//tools/build:image.bzl', 'png_images')
+load('//tools/build/ksp:build.bzl', 'ksp_libs', 'ksp_unity_libs')
+load('//tools/build/mono-4.5:build.bzl', 'mono_net_libs')
 load('//:config.bzl', 'version', 'ksp_version_max', 'ksp_version_min', 'assembly_version', 'author')
 
 filegroup(
@@ -63,20 +65,8 @@ srcs = [':KRPC-src', ':AssemblyInfo', '//protobuf:csharp_3.9.1']
 
 deps = [
     '//tools/build/ksp:Google.Protobuf',
-    '//tools/build/ksp:Assembly-CSharp',
-    '//tools/build/ksp:Assembly-CSharp-firstpass',
-    '//tools/build/ksp:UnityEngine',
-    '//tools/build/ksp:UnityEngine.AnimationModule',
-    '//tools/build/ksp:UnityEngine.CoreModule',
-    '//tools/build/ksp:UnityEngine.IMGUIModule',
-    '//tools/build/ksp:UnityEngine.InputLegacyModule',
-    '//tools/build/ksp:UnityEngine.UI',
-    '//tools/build/ksp:mscorlib',
-    '//tools/build/ksp:System',
-    '//tools/build/ksp:System.Core',
-    '//tools/build/ksp:System.Xml',
     '//tools/build/ksp:KRPC.IO.Ports'
-]
+] + ksp_libs
 
 csharp_library(
     name = 'KRPC',
@@ -113,19 +103,9 @@ test_deps = [
     '//server:KRPC',
     '//tools/build/mono-4.5:Moq',
     '//tools/build/ksp:Google.Protobuf',
-    '//tools/build/ksp:Assembly-CSharp',
-    '//tools/build/ksp:Assembly-CSharp-firstpass',
-    '//tools/build/ksp:UnityEngine',
-    '//tools/build/ksp:UnityEngine.UI',
     '//tools/build/ksp:KRPC.IO.Ports',
-    '//tools/build/mono-4.5:mscorlib',
-    '//tools/build/mono-4.5:System',
-    '//tools/build/mono-4.5:System.Core',
-    '//tools/build/mono-4.5:System.Runtime',
-    '//tools/build/mono-4.5:System.IO',
-    '//tools/build/mono-4.5:System.Xml',
     '//tools/build/mono-4.5:Newtonsoft.Json'
-]
+] + ksp_unity_libs + mono_net_libs
 
 csharp_library(
     name = 'KRPC.Test',

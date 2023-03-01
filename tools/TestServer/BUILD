@@ -2,6 +2,7 @@ load('//tools/build:csharp.bzl', 'csharp_binary', 'csharp_library', 'csharp_asse
 load('//tools/build/protobuf:csharp.bzl', 'protobuf_csharp')
 load('//tools/build:pkg.bzl', 'pkg_zip')
 load('//tools/ServiceDefinitions:build.bzl', 'service_definitions')
+load('//tools/build/mono-4.5:build.bzl', 'mono_net_libs')
 load('//:config.bzl', 'version', 'assembly_version', 'author')
 
 csharp_assembly_info(
@@ -19,14 +20,8 @@ srcs = ['src/TestService.cs', ':AssemblyInfo']
 deps = [
     '//tools/ServiceDefinitions:KRPC',
     '//tools/build/protobuf-3.9.1:Google.Protobuf',
-    '//tools/build/mono-4.5:mscorlib',
-    '//tools/build/mono-4.5:System',
-    '//tools/build/mono-4.5:System.Core',
-    '//tools/build/mono-4.5:System.Runtime',
-    '//tools/build/mono-4.5:System.IO',
-    '//tools/build/mono-4.5:System.Xml',
     '//tools/build/ksp:KRPC.IO.Ports'
-]
+] + mono_net_libs
 
 exe_srcs = srcs + ['src/Program.cs']
 exe_deps = deps + ['//tools/build/mono-4.5:NDesk.Options']

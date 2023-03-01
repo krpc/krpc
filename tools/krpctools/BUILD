@@ -1,4 +1,5 @@
 load('//tools/build:python.bzl', 'py_sdist', 'py_script', 'py_test', 'py_lint_test')
+load('//tools/build/mono-4.5:build.bzl', 'mono_net_libs')
 load('//:config.bzl', 'version', 'python_version')
 
 license_text = """This license (GPL v3) applies to all parts of krpc.clientgen except for the following:
@@ -49,15 +50,9 @@ py_sdist(
         '//tools/build/mono-4.5:Google.Protobuf.dll',
         '//tools/build/mono-4.5:Newtonsoft.Json.dll',
         '//tools/build/mono-4.5:NDesk.Options.dll',
-        '//tools/build/mono-4.5:mscorlib',
-        '//tools/build/mono-4.5:System',
-        '//tools/build/mono-4.5:System.Core',
-        '//tools/build/mono-4.5:System.Runtime',
-        '//tools/build/mono-4.5:System.IO',
-        '//tools/build/mono-4.5:System.Xml',
         '//tools/TestServer:ServiceDefinitions',
         '//tools/TestServer:archive'
-    ] +
+    ] + mono_net_libs +
     glob(['krpctools/**/*.py', 'krpctools/**/*.tmpl', 'krpctools/test/*.json',
           'krpctools/test/**/*.txt', 'krpctools/test/**/*.rst']),
     path_map = {
