@@ -35,10 +35,10 @@ command:
 
 .. code-block:: bash
 
-   sudo apt-get install mono-complete python3-setuptools python3-virtualenv \
-   python3-dev autoconf libtool luarocks maven texlive-latex-base \
-   texlive-latex-recommended texlive-fonts-recommended \
-   libxml2-dev libxslt1-dev librsvg2-bin
+   sudo apt-get install mono-complete python-is-python3 python3-dev python3-setuptools \
+   python3-virtualenv autoconf libtool luarocks maven latexmk texlive-latex-base \
+   texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra \
+   tex-gyre libxml2-dev libxslt1-dev librsvg2-bin libenchant-2-2 build-essential make
 
 Set Up your Environment
 -----------------------
