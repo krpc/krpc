@@ -50,6 +50,7 @@ v0.5.0
  * Fix RCS.MaxThrust returning incorrect values
  * Fix SimulateAerodynamicForceAt (#587)
  * Fix RCS.GetTorqueVectors not considering if each direction is enabled (#591)
+ * Add RCS.AvailableForce and Vessel.AvailableRCSForce (#597)
 
 v0.4.8
  * Allows RPCs to be accessed from game scenes other than just flight (#471)
