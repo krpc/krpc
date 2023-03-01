@@ -190,6 +190,7 @@ SpaceCenter.Vessel.InertiaTensor
 SpaceCenter.Vessel.AvailableTorque
 SpaceCenter.Vessel.AvailableReactionWheelTorque
 SpaceCenter.Vessel.AvailableRCSTorque
+SpaceCenter.Vessel.AvailableRCSForce
 SpaceCenter.Vessel.AvailableEngineTorque
 SpaceCenter.Vessel.AvailableControlSurfaceTorque
 SpaceCenter.Vessel.AvailableOtherTorque
@@ -869,6 +870,7 @@ SpaceCenter.RCS.ForwardEnabled
 SpaceCenter.RCS.UpEnabled
 SpaceCenter.RCS.RightEnabled
 SpaceCenter.RCS.AvailableTorque
+SpaceCenter.RCS.AvailableForce
 SpaceCenter.RCS.AvailableThrust
 SpaceCenter.RCS.MaxThrust
 SpaceCenter.RCS.MaxVacuumThrust
