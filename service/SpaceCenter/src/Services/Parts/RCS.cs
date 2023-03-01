@@ -164,10 +164,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The available force, in Newton, that can be produced by this RCS,
+        /// The available force, in Newtons, that can be produced by this RCS,
         /// in the positive and negative x, y and z axes of the vessel. These axes
         /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
-        /// Returns zero if RCS is disable.
+        /// Returns zero if RCS is disabled.
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
@@ -238,21 +238,27 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             var frame = Part.Vessel.ReferenceFrame;
             var thrust = MaxThrust;
-            Vector3d force = Vector3d.zero;
-            Vector3d forceN = Vector3d.zero;
+            var force = Vector3d.zero;
+            var forceN = Vector3d.zero;
             foreach (var thruster in Thrusters) {
                 var thrustDirection = thruster.ThrustDirection (frame);
                 var forceX = thrustDirection.Item1 * thrust;
                 var forceY = thrustDirection.Item2 * thrust;
                 var forceZ = thrustDirection.Item3 * thrust;
-                if (forceX > 0) force.x += forceX;
-                else forceN.x += forceX;
-                if (forceY > 0) force.y += forceY;
-                else forceN.y += forceY;
-                if (forceZ > 0) force.z += forceZ;
-                else forceN.z += forceZ;
+                if (forceX > 0)
+                    force.x += forceX;
+                else
+                    forceN.x += forceX;
+                if (forceY > 0)
+                    force.y += forceY;
+                else
+                    forceN.y += forceY;
+                if (forceZ > 0)
+                    force.z += forceZ;
+                else
+                    forceN.z += forceZ;
             }
-            return new TupleV3 (force, forceN);
+            return new TupleV3(force, forceN);
         }
 
         /// <summary>
