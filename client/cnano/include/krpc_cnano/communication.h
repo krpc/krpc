@@ -5,7 +5,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#if !defined(KRPC_COMMS_CUSTOM)
+#if !defined(KRPC_COMMUNICATION_CUSTOM)
   #if defined(ARDUINO)
     #define KRPC_COMMUNICATION_ARDUINO
     #ifndef __cplusplus
