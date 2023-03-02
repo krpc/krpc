@@ -97,6 +97,12 @@ class Encoder:
         return size + data
 
     @classmethod
+    def encode_message_with_end_tag(cls, message):
+        """ Encode a protobuf message, with end-of-message tag """
+        # print('message:', message)
+        return message.SerializeToString() + b'\x00'
+
+    @classmethod
     def _encode_value(cls, value, typ):
         if typ.protobuf_type.code == KRPC.Type.SINT32:
             return _ValueEncoder.encode_sint32(value)

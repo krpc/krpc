@@ -86,12 +86,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\generated_deps\tools\cslibs\net35\Google.Protobuf.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="KRPC.IO.Ports">
-      <HintPath>..\..\generated_deps\tools\cslibs\KRPC.IO.Ports.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\lib\ksp\GameData\kRPC\Google.Protobuf.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

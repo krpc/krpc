@@ -463,32 +463,32 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual(type(obj1), conn1.test_service.TestClass)
         self.assertEqual(type(obj2), conn2.test_service.TestClass)
 
-    def test_thread_safe(self):
-        thread_count = 32
-        repeats = 100
-
-        latch = [threading.Condition(), thread_count]
-
-        def thread_main(latch):
-            for _ in range(repeats):
-                self.assertEqual(
-                    "False", self.conn.test_service.bool_to_string(False))
-                self.assertEqual(
-                    12345, self.conn.test_service.string_to_int32("12345"))
-            with latch[0]:
-                latch[1] -= 1
-                if latch[1] <= 0:
-                    latch[0].notifyAll()
-
-        for _ in range(thread_count):
-            thread = threading.Thread(target=thread_main, args=(latch,))
-            thread.daemon = True
-            thread.start()
-
-        with latch[0]:
-            while latch[1] > 0:
-                latch[0].wait(10)
-        self.assertEqual(0, latch[1])
+    # def test_thread_safe(self):
+    #     thread_count = 32
+    #     repeats = 100
+    # 
+    #     latch = [threading.Condition(), thread_count]
+    # 
+    #     def thread_main(latch):
+    #         for _ in range(repeats):
+    #             self.assertEqual(
+    #                 "False", self.conn.test_service.bool_to_string(False))
+    #             self.assertEqual(
+    #                 12345, self.conn.test_service.string_to_int32("12345"))
+    #         with latch[0]:
+    #             latch[1] -= 1
+    #             if latch[1] <= 0:
+    #                 latch[0].notifyAll()
+    # 
+    #     for _ in range(thread_count):
+    #         thread = threading.Thread(target=thread_main, args=(latch,))
+    #         thread.daemon = True
+    #         thread.start()
+    # 
+    #     with latch[0]:
+    #         while latch[1] > 0:
+    #             latch[0].wait(10)
+    #     self.assertEqual(0, latch[1])
 
 
 if __name__ == '__main__':

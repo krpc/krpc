@@ -63,7 +63,8 @@ namespace KRPC.Server.TCP
 
         public void Write (byte value)
         {
-            throw new NotSupportedException ();
+            byte[] buffer = {value};
+            Write(buffer);
         }
 
         [SuppressMessage ("Gendarme.Rules.Naming", "ParameterNamesShouldMatchOverriddenMethodRule")]

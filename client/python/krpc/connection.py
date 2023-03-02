@@ -23,7 +23,9 @@ class Connection:
 
     def send_message(self, message):
         """ Send a protobuf message """
-        self.send(Encoder.encode_message_with_size(message))
+        x = Encoder.encode_message_with_end_tag(message)
+        # print('send:', x)
+        self.send(x)
 
     def receive_message(self, typ):
         """ Receive a protobuf message and decode it """
@@ -31,16 +33,33 @@ class Connection:
         # Read the size and position of the response message
         data = b''
         while True:
-            try:
-                data += self.partial_receive(1)
-                size = Decoder.decode_message_size(data)
-                break
-            except IndexError:
-                pass
+            byte = self.partial_receive(1)
+            #if len(byte) == 1:
+            #    print('recv byte:', byte)
+            if byte == b'\x00':
+                #print('recv:', data)
+                # try decoding the message
+                try:
+                    x = Decoder.decode_message(data, typ)
+                    #print('ok')
+                    return x
+                except Exception as exn:
+                    #print(exn)
+                    #print('error')
+                    pass
+            data += byte
 
-        # Read and decode the response message
-        data = self.receive(size)
-        return Decoder.decode_message(data, typ)
+        # while True:
+        #     try:
+        #         data += self.partial_receive(1)
+        #         size = Decoder.decode_message_size(data)
+        #         break
+        #     except IndexError:
+        #         pass
+        #
+        # # Read and decode the response message
+        # data = self.receive(size)
+        # return Decoder.decode_message(data, typ)
 
     def send(self, data):
         """ Send data to the connection.

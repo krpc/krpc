@@ -64,23 +64,43 @@ namespace KRPC.Server.ProtocolBuffers
             if (read == 0)
                 return null;
             data.Append (buffer, 0, read);
+            Console.WriteLine("read message (1)...");
 
-            var codedStream = new CodedInputStream (data.GetBuffer (), 0, data.Length);
-            // Get the protobuf message size
-            int size;
-            try {
-                size = (int)codedStream.ReadUInt32 ();
-            } catch (InvalidProtocolBufferException) {
-                return null;
+            var dataBuffer = data.GetBuffer ();
+            Console.WriteLine(dataBuffer);
+            for (int i = 0; i < dataBuffer.Length;i++) {
+                var x = dataBuffer[i];
+                if (x == 0) {
+                    try {
+                        var codedStream = new CodedInputStream (dataBuffer, 0, i);
+                        var message = new T ();
+                        message.MergeFrom (codedStream);
+                        Console.WriteLine(message);
+                        Console.WriteLine("message decoded (1)");
+                        return message;
+                    } catch {
+                        Console.WriteLine("failed (1)");
+                    }
+                }
             }
-            int totalSize = (int)codedStream.Position + size;
-            // Check if enough data is available, if not then delay the decoding
-            if (data.Length < totalSize)
-                return null;
-            // Decode the request
-            var message = new T ();
-            message.MergeFrom (codedStream);
-            return message;
+            return null;
+
+            // var codedStream = new CodedInputStream (data.GetBuffer (), 0, data.Length);
+            // // Get the protobuf message size
+            // int size;
+            // try {
+            //     size = (int)codedStream.ReadUInt32 ();
+            // } catch (InvalidProtocolBufferException) {
+            //     return null;
+            // }
+            // int totalSize = (int)codedStream.Position + size;
+            // // Check if enough data is available, if not then delay the decoding
+            // if (data.Length < totalSize)
+            //     return null;
+            // // Decode the request
+            // var message = new T ();
+            // message.MergeFrom (codedStream);
+            // return message;
         }
 
         /// <summary>
@@ -90,19 +110,36 @@ namespace KRPC.Server.ProtocolBuffers
         public static int ReadMessage <T> (ref T message, MessageParser<T> parser, byte[] data,
                                            int offset, int length) where T : IMessage<T>, new()
         {
-            var codedStream = new CodedInputStream (data, offset, length);
-            // Get the protobuf message size
-            var size = (int)codedStream.ReadUInt32 ();
-            var totalSize = (int)codedStream.Position + size;
-            // Check if enough data is available
-            if (length < totalSize)
-                return 0;
-            // Decode the message
-            // FIXME: If multiple requests are received, decoding a single request fails unless
-            // the coded stream is recreated to be precisely the message size. Why is this?
-            codedStream = new CodedInputStream (data, offset + (int)codedStream.Position, size);
-            message = parser.ParseFrom (codedStream);
-            return totalSize;
+            Console.WriteLine("read message (2)... " + offset + " " + length);
+            for (int i = 0; i < length; i++) {
+                var pos = i + offset;
+                var x = data[pos];
+                if (x == 0) {
+                    Console.WriteLine("try at " + pos);
+                    try {
+                        var codedStream = new CodedInputStream (data, offset, pos);
+                        message = parser.ParseFrom (codedStream);
+                        Console.WriteLine("decoded message (2)...");
+                        return pos + 1;
+                    } catch {
+                    }
+                }
+            }
+            return 0;
+
+            // var codedStream = new CodedInputStream (data, offset, length);
+            // // Get the protobuf message size
+            // var size = (int)codedStream.ReadUInt32 ();
+            // var totalSize = (int)codedStream.Position + size;
+            // // Check if enough data is available
+            // if (length < totalSize)
+            //     return 0;
+            // // Decode the message
+            // // FIXME: If multiple requests are received, decoding a single request fails unless
+            // // the coded stream is recreated to be precisely the message size. Why is this?
+            // codedStream = new CodedInputStream (data, offset + (int)codedStream.Position, size);
+            // message = parser.ParseFrom (codedStream);
+            // return totalSize;
         }
 
         /// <summary>
@@ -111,8 +148,10 @@ namespace KRPC.Server.ProtocolBuffers
         public static void WriteMessage (IStream<byte,byte> stream, IMessage message)
         {
             var codedOutputStream = new CodedOutputStream (new ByteOutputAdapterStream (stream), true);
-            codedOutputStream.WriteMessage (message);
+            Console.WriteLine("write message (2)");
+            message.WriteTo(codedOutputStream);
             codedOutputStream.Flush ();
+            stream.Write((byte)0);
         }
 
         /// <summary>

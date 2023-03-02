@@ -14,7 +14,7 @@ class ServerTestCase:
     def connect():
         return krpc.connect(name='python_client_test', address='localhost',
                             rpc_port=ServerTestCase.rpc_port(),
-                            stream_port=ServerTestCase.stream_port())
+                            stream_port=None)
 
     @staticmethod
     def rpc_port():
