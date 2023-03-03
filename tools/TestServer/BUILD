@@ -40,6 +40,7 @@ pkg_zip(
         'tools/build/protobuf/LICENSE': 'LICENSE.protobuf',
         'tools/build/mono-4.5/': '',
         'tools/build/ksp/': '',
+        'tools/build/protobuf-3.9.1/': '',
         'tools/ServiceDefinitions/': ''
     },
     exclude = ['*.mdb', 'tools/TestServer/TestServer'],
