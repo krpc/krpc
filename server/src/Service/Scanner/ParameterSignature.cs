@@ -6,6 +6,7 @@ namespace KRPC.Service.Scanner
     /// <summary>
     /// Signature information for a parameter.
     /// </summary>
+    [Serializable]
     sealed class ParameterSignature : ISerializable
     {
         /// <summary>
