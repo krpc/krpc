@@ -200,8 +200,8 @@ filegroup(
 
 http_file(
     name = 'csharp_nuget',
-    url = 'https://dist.nuget.org/win-x86-commandline/v4.7.1/nuget.exe',
-    sha256 = '82e3aa0205415cd18d8ae34613911717dad3ed4e8ac58143e55ca432a5bf3c0a'
+    url = 'https://dist.nuget.org/win-x86-commandline/v6.4.0/nuget.exe',
+    sha256 = '26730829b240581a3e6a4e276b9ace088930032df0c680d5591beccf6452374e'
 )
 
 http_archive(
