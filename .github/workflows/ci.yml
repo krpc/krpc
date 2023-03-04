@@ -6,7 +6,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: krpc/buildenv:2.6.0
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: checkout
         uses: actions/checkout@v2
