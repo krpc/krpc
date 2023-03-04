@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:2.6.0
+      image: krpc/buildenv:2.6.0
     steps:
       - name: checkout
         uses: actions/checkout@v2
