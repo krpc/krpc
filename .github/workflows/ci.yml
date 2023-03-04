@@ -11,7 +11,7 @@ jobs:
       - name: build
         uses: addnab/docker-run-action@v3
         with:
-          image: krpc/buildenv:2.6.0
+          image: ghcr.io/krpc/buildenv:2.6.0
           options: -v ${{ github.workspace }}:/build/krpc
           run: |
             cd /build/krpc
