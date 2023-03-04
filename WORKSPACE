@@ -240,28 +240,18 @@ http_file(
 
 http_archive(
     name = 'csharp_nunit',
-    url = 'https://github.com/nunit/nunitv2/releases/download/2.6.4/NUnit-2.6.4.zip',
-    sha256 = '1bd925514f31e7729ccde40a38a512c2accd86895f93465f3dfe6d0b593d7170',
-    strip_prefix = 'NUnit-2.6.4',
-    build_file_content = """
-filegroup(
-    name = 'nunit_exe',
-    srcs = ['bin/nunit-console.exe'],
-    visibility = ['//visibility:public'],
+    url = 'http://www.nuget.org/api/v2/package/NUnit/3.13.3',
+    sha256 = '667fac24817b89e36abbfb76470271e963c56f58e5f54b8d1e275bfcfc74bf71',
+    type = 'zip',
+    build_file_content = "exports_files(['lib/net45/nunit.framework.dll'])"
 )
 
-filegroup(
-    name = 'nunit_exe_libs',
-    srcs = glob(['bin/lib/*.dll']),
-    visibility = ['//visibility:public'],
-)
-
-filegroup(
-    name = 'nunit_framework',
-    srcs = ['bin/framework/nunit.framework.dll'],
-    visibility = ['//visibility:public'],
-)
-"""
+http_archive(
+    name = 'csharp_nunit_consolerunner',
+    url = 'https://www.nuget.org/api/v2/package/NUnit.ConsoleRunner/3.16.3',
+    sha256 = '31056acd318b87da12628f58f8fc3a66b443e58b411da8b650c649775c07b1e4',
+    type = 'zip',
+    build_file_content = "exports_files(['tools/nunit3-console.exe', 'tools/nunit.engine.dll', 'tools/nunit.engine.core.dll', 'tools/nunit.engine.api.dll', 'tools/testcentric.engine.metadata.dll'])"
 )
 
 http_archive(

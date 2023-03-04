@@ -47,7 +47,7 @@ def _lib_impl(ctx):
     srcs = ctx.files.srcs
     deps = [dep.lib for dep in ctx.attr.deps]
     if ctx.attr.nunit_test:
-        deps += ctx.files._nunit_exe_libs + ctx.files._nunit_framework
+        deps += ctx.files._nunit_framework
     inputs = srcs + deps
 
 
@@ -119,13 +119,20 @@ def _bin_impl(ctx):
 
 def _nunit_impl(ctx):
     lib = ctx.attr.lib.lib
-    nunit_files = [ctx.file._nunit_exe] + ctx.files._nunit_exe_libs + ctx.files._nunit_framework
+    nunit_files = [
+        ctx.file._nunit_console_runner,
+        ctx.file._nunit_engine,
+        ctx.file._nunit_engine_core,
+        ctx.file._nunit_engine_api,
+        ctx.file._testcentric_engine_metadata,
+        ctx.file._nunit_framework
+    ]
     runfiles = nunit_files + [lib] + ctx.files.deps
     sub_commands = []
     for dep in runfiles:
         sub_commands.append('ln -f -s %s %s' % (dep.short_path, dep.basename))
     sub_commands.extend([
-        '/usr/bin/mono --debug %s %s "$@" 2>stderr.txt' % (ctx.file._nunit_exe.basename, lib.basename),
+        '/usr/bin/mono --debug %s %s "$@" 2>stderr.txt' % (ctx.file._nunit_console_runner.basename, lib.basename),
         'RESULT=$?',
         'cat stderr.txt',
         '(if grep "FATAL UNHANDLED EXCEPTION" stderr.txt; then exit 1; fi)',
@@ -228,8 +235,7 @@ csharp_library_attrs.update(_COMMON_ATTRS)
 csharp_library_attrs.update({
     '_target_type': attr.string(default='lib'),
     'nunit_test': attr.bool(default=False),
-    '_nunit_exe_libs': attr.label(default=Label('@csharp_nunit//:nunit_exe_libs'), allow_files=True),
-    '_nunit_framework': attr.label(default=Label('@csharp_nunit//:nunit_framework'), allow_files=True)
+    '_nunit_framework': attr.label(default=Label('@csharp_nunit//:lib/net45/nunit.framework.dll'), allow_single_file=True)
 })
 
 csharp_library = rule(
@@ -254,9 +260,12 @@ csharp_nunit_test = rule(
     attrs = {
         'lib': attr.label(mandatory=True, providers=['out', 'lib', 'target_type']),
         'deps': attr.label_list(providers=['out', 'lib', 'target_type']),
-        '_nunit_exe': attr.label(default=Label('@csharp_nunit//:nunit_exe'), allow_single_file=True),
-        '_nunit_exe_libs': attr.label(default=Label('@csharp_nunit//:nunit_exe_libs'), allow_files=True),
-        '_nunit_framework': attr.label(default=Label('@csharp_nunit//:nunit_framework'), allow_files=True)
+        '_nunit_console_runner': attr.label(default=Label('@csharp_nunit_consolerunner//:tools/nunit3-console.exe'), allow_single_file=True),
+        '_nunit_engine': attr.label(default=Label('@csharp_nunit_consolerunner//:tools/nunit.engine.dll'), allow_single_file=True),
+        '_nunit_engine_core': attr.label(default=Label('@csharp_nunit_consolerunner//:tools/nunit.engine.core.dll'), allow_single_file=True),
+        '_nunit_engine_api': attr.label(default=Label('@csharp_nunit_consolerunner//:tools/nunit.engine.api.dll'), allow_single_file=True),
+        '_testcentric_engine_metadata': attr.label(default=Label('@csharp_nunit_consolerunner//:tools/testcentric.engine.metadata.dll'), allow_single_file=True),
+        '_nunit_framework': attr.label(default=Label('@csharp_nunit//:lib/net45/nunit.framework.dll'), allow_single_file=True)
     },
     test = True
 )

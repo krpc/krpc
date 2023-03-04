@@ -257,14 +257,14 @@ namespace KRPC.Client.Test
         public void InvalidOperationException ()
         {
             var exn = Assert.Throws<System.InvalidOperationException> (() => Connection.TestService ().ThrowInvalidOperationException ());
-            Assert.That (exn.Message, Is.StringContaining ("Invalid operation"));
+            Assert.That (exn.Message, Does.Contain ("Invalid operation"));
         }
 
         [Test]
         public void ArgumentException ()
         {
             var exn = Assert.Throws<System.ArgumentException> (() => Connection.TestService ().ThrowArgumentException ());
-            Assert.That (exn.Message, Is.StringContaining ("Invalid argument"));
+            Assert.That (exn.Message, Does.Contain ("Invalid argument"));
         }
 
         [Test]
@@ -272,7 +272,7 @@ namespace KRPC.Client.Test
         public void ArgumentNullException ()
         {
             var exn = Assert.Throws<System.ArgumentNullException> (() => Connection.TestService ().ThrowArgumentNullException (string.Empty));
-            Assert.That (exn.Message, Is.StringContaining ("Value cannot be null.\nParameter name: foo"));
+            Assert.That (exn.Message, Does.Contain ("Value cannot be null.\nParameter name: foo"));
         }
 
         [Test]
@@ -280,14 +280,14 @@ namespace KRPC.Client.Test
         public void ArgumentOutOfRangeException ()
         {
             var exn = Assert.Throws<System.ArgumentOutOfRangeException> (() => Connection.TestService ().ThrowArgumentOutOfRangeException (0));
-            Assert.That (exn.Message, Is.StringContaining ("Specified argument was out of the range of valid values.\nParameter name: foo"));
+            Assert.That (exn.Message, Does.Contain ("Specified argument was out of the range of valid values.\nParameter name: foo"));
         }
 
         [Test]
         public void CustomException ()
         {
             var exn = Assert.Throws<CustomException> (() => Connection.TestService ().ThrowCustomException ());
-            Assert.That (exn.Message, Is.StringContaining ("A custom kRPC exception"));
+            Assert.That (exn.Message, Does.Contain ("A custom kRPC exception"));
         }
 
         [TestCase ("foo\nbar")]
