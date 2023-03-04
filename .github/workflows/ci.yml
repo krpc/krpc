@@ -9,7 +9,7 @@ jobs:
       image: ghcr.io/krpc/buildenv:2.6.0
       credentials:
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ secrets.github_token }}
     steps:
       - name: checkout
         uses: actions/checkout@v2
