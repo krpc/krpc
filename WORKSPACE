@@ -256,10 +256,18 @@ http_archive(
 
 http_archive(
     name = 'csharp_moq',
-    url = 'http://www.nuget.org/api/v2/package/Moq/4.2.1510.2205',
-    sha256 = '7a86f2ed0e134601e75a4fa28c7f7c399f6abc33f091dbc024ad8b212b8c3c85',
+    url = 'http://www.nuget.org/api/v2/package/Moq/4.17.2',
+    sha256 = '121803242a31ec27b21b3a1742767d0d1447d481442ed48d71ae81e8a552e9fc',
     type = 'zip',
-    build_file_content = "exports_files(['lib/net40/Moq.dll'])"
+    build_file_content = "exports_files(['lib/net45/Moq.dll'])"
+)
+
+http_archive(
+    name = 'csharp_castle_core',
+    url = 'http://www.nuget.org/api/v2/package/Castle.Core/4.4.1',
+    sha256 = '278352f29f4aa9bb8b97a24c98dc29b6c7dc707dfb4df84084fc17da6550b28d',
+    type = 'zip',
+    build_file_content = "exports_files(['lib/net45/Castle.Core.dll'])"
 )
 
 http_archive(

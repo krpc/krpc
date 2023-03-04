@@ -10,8 +10,10 @@ csharp_reference(name = 'System.IO', file = '//lib:mono-4.5/Facades/System.IO.dl
 csharp_reference(name = 'System.Xml', file = '//lib:mono-4.5/System.Xml.dll')
 csharp_reference(name = 'System.Memory', file = '//lib:mono-4.5/System.Memory.dll')
 csharp_reference(name = 'System.Runtime.CompilerServices.Unsafe', file = '//lib:mono-4.5/System.Runtime.CompilerServices.Unsafe.dll')
+csharp_reference(name = 'System.Threading.Tasks.Extensions', file = '//lib:mono-4.5/System.Threading.Tasks.Extensions.dll')
 
 csharp_reference(name = 'Google.Protobuf', file = '@csharp_protobuf//:lib/net45/Google.Protobuf.dll')
 csharp_reference(name = 'Newtonsoft.Json', file = '@csharp_json//:lib/net45/Newtonsoft.Json.dll')
 csharp_reference(name = 'NDesk.Options', file = '@csharp_options//:lib/NDesk.Options.dll')
-csharp_reference(name = 'Moq', file = '@csharp_moq//:lib/net40/Moq.dll')
+csharp_reference(name = 'Moq', file = '@csharp_moq//:lib/net45/Moq.dll')
+csharp_reference(name = 'Castle.Core', file = '@csharp_castle_core//:lib/net45/Castle.Core.dll')
