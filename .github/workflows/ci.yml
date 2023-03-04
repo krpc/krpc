@@ -11,7 +11,10 @@ jobs:
       - name: build
         uses: addnab/docker-run-action@v3
         with:
-          image: ghcr.io/krpc/buildenv:2.6.0
+          registry: ghcr.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          image: krpc/buildenv:2.6.0
           options: -v ${{ github.workspace }}:/build/krpc
           run: |
             cd /build/krpc
