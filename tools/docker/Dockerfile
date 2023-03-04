@@ -17,7 +17,7 @@ RUN apt-get update && \
       tee /etc/apt/sources.list.d/bazel.list && \
     curl https://bazel.build/bazel-release.pub.gpg | apt-key add - && \
     apt-get update && \
-    apt-get install -y --no-install-recommends openjdk-8-jdk && \
+    apt-get install -y --no-install-recommends openjdk-11-jdk && \
     apt-get clean && \
     wget https://github.com/bazelbuild/bazel/releases/download/${bazel_version}/bazel-${bazel_version}-installer-linux-x86_64.sh && \
     chmod +x bazel-${bazel_version}-installer-linux-x86_64.sh && \
@@ -25,9 +25,13 @@ RUN apt-get update && \
     rm bazel-${bazel_version}-installer-linux-x86_64.sh
 
 # Install Mono
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y mono-complete && \
-    apt-get clean
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
+      --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
+    echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | \
+      tee /etc/apt/sources.list.d/mono-official-stable.list && \
+    apt-get update && \
+    apt-get install -y mono-devel && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set up KSP libs
 WORKDIR /usr/local/lib/ksp-${ksp_version}

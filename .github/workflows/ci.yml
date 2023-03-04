@@ -1,0 +1,37 @@
+name: ci
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: build
+        run: |
+          rm -f lib/mono-4.5
+          ln -s /usr/lib/mono/4.5 lib/mono-4.5
+          rm -f lib/ksp
+          ln -s /usr/local/lib/ksp lib/ksp
+          bazel build \
+            //:krpc \
+            //:csproj \
+            //doc:html \
+            //doc:compile-scripts \
+            //tools/krpctools \
+            //tools/TestServer:archive \
+            //:ci-test
+          # msbuild KRPC.sln /warnaserror /nowarn:MSB3276,MSB3277,CS1685
+
+          bazel test //:ci-test
+          # client/cpp/test-build.sh
+          # client/cnano/test-build.sh
+
+          # tools/dist/genfiles.sh
+          # tools/travis-ci/before-deploy.sh
