@@ -1,4 +1,3 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC", "server\src\KRPC.csproj", "{3707639F-5EA3-461B-B939-587E51A25CCA}"
@@ -13,6 +12,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.KerbalAlarmClock", "se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.RemoteTech", "service\RemoteTech\src\KRPC.RemoteTech.csproj", "{9A462E66-1D3C-4F35-97CC-9510FCC1165D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Drawing", "service\Drawing\src\KRPC.Drawing.csproj", "{6373C212-899C-402C-8C2E-187C96318B81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.UI", "service\UI\src\KRPC.UI.csproj", "{AB9F4881-4C8E-4E54-8412-B3FB92861CE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.LiDAR", "service\LiDAR\src\KRPC.LiDAR.csproj", "{3C4BE33F-15AF-4EB8-B490-C466AAE70258}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.DockingCamera", "service\DockingCamera\src\KRPC.DockingCamera.csproj", "{1555BA26-0DF2-4E56-B191-EE4D9DB14539}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDefinitions", "tools\ServiceDefinitions\src\ServiceDefinitions.csproj", "{3F97909B-0ABE-49F2-8CA0-100F4286E03F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "tools\TestServer\src\TestServer.csproj", "{A75677CB-9D81-4C3F-8B53-C99110B4F124}"
@@ -22,10 +29,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Client", "client\csharp\src\KRPC.Client.csproj", "{5D390973-8F07-4B28-827F-FB3A1E739FD7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Client.Test", "client\csharp\test\KRPC.Client.Test.csproj", "{2E186057-56B2-499B-BFE8-C414FF24E55F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Drawing", "service\Drawing\src\KRPC.Drawing.csproj", "{6373C212-899C-402C-8C2E-187C96318B81}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.UI", "service\UI\src\KRPC.UI.csproj", "{AB9F4881-4C8E-4E54-8412-B3FB92861CE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,5 +88,13 @@ Global
 		{D0F002FB-E12F-4EE3-9A95-AC3AC08086A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0F002FB-E12F-4EE3-9A95-AC3AC08086A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0F002FB-E12F-4EE3-9A95-AC3AC08086A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C4BE33F-15AF-4EB8-B490-C466AAE70258}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C4BE33F-15AF-4EB8-B490-C466AAE70258}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C4BE33F-15AF-4EB8-B490-C466AAE70258}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C4BE33F-15AF-4EB8-B490-C466AAE70258}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1555BA26-0DF2-4E56-B191-EE4D9DB14539}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1555BA26-0DF2-4E56-B191-EE4D9DB14539}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1555BA26-0DF2-4E56-B191-EE4D9DB14539}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1555BA26-0DF2-4E56-B191-EE4D9DB14539}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
