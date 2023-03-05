@@ -163,7 +163,6 @@
     <Compile Include="Utils\EquatableTest.cs" />
     <Compile Include="Utils\ReflectionTest.cs" />
     <Compile Include="Utils\RoundRobinSchedulerTest.cs" />
-    <Compile Include="Utils\TupleTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service\KRPC\" />

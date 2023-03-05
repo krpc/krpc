@@ -260,7 +260,7 @@ namespace KRPC.Test.Service
         }
 
         [KRPCProcedure]
-        public static global::KRPC.Utils.Tuple<int,bool> EchoTuple (global::KRPC.Utils.Tuple<int,bool> t)
+        public static Tuple<int,bool> EchoTuple (Tuple<int,bool> t)
         {
             return Service.EchoTuple (t);
         }
@@ -283,13 +283,13 @@ namespace KRPC.Test.Service
         {
             public static object Create ()
             {
-                return new global::KRPC.Utils.Tuple<int,bool> (1, false);
+                return new Tuple<int,bool> (1, false);
             }
         }
 
         [KRPCProcedure]
         [KRPCDefaultValue ("x", typeof(CreateTupleDefault))]
-        public static global::KRPC.Utils.Tuple<int,bool> TupleDefault (global::KRPC.Utils.Tuple<int,bool> x)
+        public static Tuple<int,bool> TupleDefault (Tuple<int,bool> x)
         {
             return Service.TupleDefault (x);
         }

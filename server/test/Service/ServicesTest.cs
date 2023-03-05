@@ -580,16 +580,16 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleEchoTuple ()
         {
-            var tuple = global::KRPC.Utils.Tuple.Create (42, false);
+            var tuple = Tuple.Create (42, false);
             var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.EchoTuple (It.IsAny<global::KRPC.Utils.Tuple<int,bool>> ()))
-                .Returns ((global::KRPC.Utils.Tuple<int,bool> x) => x);
+            mock.Setup (x => x.EchoTuple (It.IsAny<Tuple<int,bool>> ()))
+                .Returns ((Tuple<int,bool> x) => x);
             TestService.Service = mock.Object;
             var result = Run (Call ("TestService", "EchoTuple", Arg (0, tuple)));
-            mock.Verify (x => x.EchoTuple (It.IsAny<global::KRPC.Utils.Tuple<int,bool>> ()), Times.Once ());
+            mock.Verify (x => x.EchoTuple (It.IsAny<Tuple<int,bool>> ()), Times.Once ());
             CheckResultNotEmpty (result);
             Assert.IsNotNull (result.Value);
-            Assert.AreEqual (tuple, (global::KRPC.Utils.Tuple<int,bool>)result.Value);
+            Assert.AreEqual (tuple, (Tuple<int,bool>)result.Value);
         }
 
         [Test]
@@ -635,11 +635,11 @@ namespace KRPC.Test.Service
         public void HandleOptionalTupleNotSpecified ()
         {
             var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.TupleDefault (It.IsAny<global::KRPC.Utils.Tuple<int,bool>> ()))
-                .Returns ((global::KRPC.Utils.Tuple<int,bool> x) => x);
+            mock.Setup (x => x.TupleDefault (It.IsAny<Tuple<int,bool>> ()))
+                .Returns ((Tuple<int,bool> x) => x);
             TestService.Service = mock.Object;
             var result = Run (Call ("TestService", "TupleDefault"));
-            mock.Verify (x => x.TupleDefault (It.IsAny<global::KRPC.Utils.Tuple<int,bool>> ()), Times.Once ());
+            mock.Verify (x => x.TupleDefault (It.IsAny<Tuple<int,bool>> ()), Times.Once ());
             CheckResultNotEmpty (result);
             Assert.AreEqual (TestService.CreateTupleDefault.Create (), result.Value);
         }

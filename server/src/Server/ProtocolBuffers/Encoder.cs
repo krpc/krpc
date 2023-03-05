@@ -88,7 +88,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var encodedTuple = new Schema.KRPC.Tuple ();
             var valueTypes = value.GetType ().GetGenericArguments ().ToArray ();
-            var genericType = Type.GetType ("KRPC.Utils.Tuple`" + valueTypes.Length);
+            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length);
             var tupleType = genericType.MakeGenericType (valueTypes);
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
@@ -206,7 +206,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var encodedTuple = Schema.KRPC.Tuple.Parser.ParseFrom (stream);
             var valueTypes = type.GetGenericArguments ().ToArray ();
-            var genericType = Type.GetType ("KRPC.Utils.Tuple`" + valueTypes.Length);
+            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length);
             var values = new object[valueTypes.Length];
             for (int i = 0; i < valueTypes.Length; i++) {
                 var item = encodedTuple.Items [i];

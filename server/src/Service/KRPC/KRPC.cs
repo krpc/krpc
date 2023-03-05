@@ -132,8 +132,8 @@ namespace KRPC.Service.KRPC
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        public static IList<Utils.Tuple<byte[], string, string>> Clients {
-            get { return Core.Instance.RPCClients.Select (x => new Utils.Tuple<byte[], string, string> (x.Guid.ToByteArray (), x.Name, x.Address)).ToList (); }
+        public static IList<Tuple<byte[], string, string>> Clients {
+            get { return Core.Instance.RPCClients.Select (x => new Tuple<byte[], string, string> (x.Guid.ToByteArray (), x.Name, x.Address)).ToList (); }
         }
 
         /// <summary>

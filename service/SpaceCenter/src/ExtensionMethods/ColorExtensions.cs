@@ -1,5 +1,6 @@
+using System;
 using UnityEngine;
-using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
@@ -21,6 +22,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static Color ToColor (this Tuple3 tuple)
         {
+            if (tuple == null)
+                throw new ArgumentNullException (nameof (tuple));
             return new Color ((float)tuple.Item1, (float)tuple.Item2, (float)tuple.Item3);
         }
     }

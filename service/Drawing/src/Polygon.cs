@@ -5,7 +5,7 @@ using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
 using UnityEngine;
-using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.Drawing
 {

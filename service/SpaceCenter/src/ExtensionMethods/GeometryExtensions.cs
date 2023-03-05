@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using KRPC.Utils;
 using UnityEngine;
-using Tuple2 = KRPC.Utils.Tuple<double, double>;
-using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
-using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
-using TupleV3 = KRPC.Utils.Tuple<Vector3d, Vector3d>;
-using TupleT3 = KRPC.Utils.Tuple<KRPC.Utils.Tuple<double, double, double>, KRPC.Utils.Tuple<double, double, double>>;
+using Tuple2 = System.Tuple<double, double>;
+using Tuple3 = System.Tuple<double, double, double>;
+using Tuple4 = System.Tuple<double, double, double, double>;
+using TupleV3 = System.Tuple<Vector3d, Vector3d>;
+using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
@@ -45,6 +45,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static Vector2 ToVector (this Tuple2 t)
         {
+            if (t == null)
+                throw new ArgumentNullException (nameof (t));
             return new Vector2 ((float)t.Item1, (float)t.Item2);
         }
 
@@ -53,6 +55,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static Vector3d ToVector (this Tuple3 t)
         {
+            if (t == null)
+                throw new ArgumentNullException (nameof (t));
             return new Vector3d (t.Item1, t.Item2, t.Item3);
         }
 
@@ -77,6 +81,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static QuaternionD ToQuaternion (this Tuple4 t)
         {
+            if (t == null)
+                throw new ArgumentNullException (nameof (t));
             return new QuaternionD (t.Item1, t.Item2, t.Item3, t.Item4);
         }
 
@@ -98,6 +104,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public static TupleT3 ToTuple (this TupleV3 v)
         {
+            if (v == null)
+                throw new ArgumentNullException (nameof (v));
             return new TupleT3 (v.Item1.ToTuple (), v.Item2.ToTuple ());
         }
 

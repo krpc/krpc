@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
 using LinqExpression = System.Linq.Expressions.Expression;
@@ -403,7 +404,7 @@ namespace KRPC.Service.KRPC
         public static Expression CreateTuple (IList<Expression> elements)
         {
             var elementTypes = elements.Select (e => e.Type).ToArray ();
-            var method = typeof (Utils.Tuple)
+            var method = typeof (Tuple)
                 .GetMethods ()
                 .Single (m => m.Name == "Create" && m.GetGenericArguments ().Length == elements.Count);
             if (method == null)
@@ -513,7 +514,7 @@ namespace KRPC.Service.KRPC
             if (ReferenceEquals (arg, null))
                 throw new ArgumentNullException (nameof (arg));
             var argType = arg.Type;
-            if (typeof (Utils.ITuple).IsAssignableFrom (argType)) {
+            if (argType.Name.StartsWith("Tuple`", StringComparison.CurrentCulture)) {
                 var tupleIndex = LinqExpression.Lambda<Func<int>> (index).Compile () ();
                 var property = argType.GetProperty ("Item" + (tupleIndex + 1));
                 if (property == null)

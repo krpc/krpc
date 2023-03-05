@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -52,14 +53,14 @@ namespace KRPC.Test.Service
 
         HashSet<int> EchoSet (HashSet<int> h);
 
-        global::KRPC.Utils.Tuple<int,bool> EchoTuple (global::KRPC.Utils.Tuple<int,bool> t);
+        Tuple<int,bool> EchoTuple (Tuple<int,bool> t);
 
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         IDictionary<int,IList<string>> EchoNestedCollection (IDictionary<int,IList<string>> c);
 
         IList<TestService.TestClass> EchoListOfObjects (IList<TestService.TestClass> l);
 
-        global::KRPC.Utils.Tuple<int,bool> TupleDefault (global::KRPC.Utils.Tuple<int,bool> x);
+        Tuple<int,bool> TupleDefault (Tuple<int,bool> x);
 
         IList<int> ListDefault (IList<int> x);
 

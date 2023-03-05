@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -71,7 +72,7 @@ namespace KRPC.Test.Service.KRPC
                     MessageAssert.HasParameter (proc, 0, typeof(ulong), "id");
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "get_Clients") {
-                    MessageAssert.HasReturnType (proc, typeof(IList<global::KRPC.Utils.Tuple<byte[],string,string>>));
+                    MessageAssert.HasReturnType (proc, typeof(IList<Tuple<byte[],string,string>>));
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "get_CurrentGameScene") {

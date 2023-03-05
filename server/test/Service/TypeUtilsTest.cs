@@ -36,9 +36,9 @@ namespace KRPC.Test.Service
         [TestCase (typeof(IList<string>))]
         [TestCase (typeof(IDictionary<int,string>))]
         [TestCase (typeof(HashSet<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int,string>))]
+        [TestCase (typeof(Tuple<long>))]
+        [TestCase (typeof(Tuple<long,int>))]
+        [TestCase (typeof(Tuple<long,int,string>))]
         [TestCase (typeof(IList<IDictionary<int,string>>))]
         [TestCase (typeof(IList<TestService.TestClass>))]
         [TestCase (typeof(IList<TestService.TestEnum>))]
@@ -49,7 +49,6 @@ namespace KRPC.Test.Service
 
         [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
         [TestCase (typeof(TestService))]
-        [TestCase (typeof(Tuple<long>))]
         [TestCase (typeof(IDictionary<double,string>))]
         [TestCase (typeof(IDictionary<TestService.TestClass,string>))]
         [TestCase (typeof(IList<TestService.TestEnumWithoutAttribute>))]
@@ -80,9 +79,9 @@ namespace KRPC.Test.Service
         [TestCase (typeof(IList<string>))]
         [TestCase (typeof(IDictionary<int,string>))]
         [TestCase (typeof(HashSet<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int,string>))]
+        [TestCase (typeof(Tuple<long>))]
+        [TestCase (typeof(Tuple<long,int>))]
+        [TestCase (typeof(Tuple<long,int,string>))]
         [TestCase (typeof(IList<IDictionary<int,string>>))]
         [TestCase (typeof(IList<TestService.TestClass>))]
         [TestCase (typeof(IList<TestService.TestEnum>))]
@@ -111,9 +110,9 @@ namespace KRPC.Test.Service
         [TestCase (typeof(IList<string>))]
         [TestCase (typeof(IDictionary<int,string>))]
         [TestCase (typeof(HashSet<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int,string>))]
+        [TestCase (typeof(Tuple<long>))]
+        [TestCase (typeof(Tuple<long,int>))]
+        [TestCase (typeof(Tuple<long,int,string>))]
         [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidUnnecessarySpecializationRule")]
         public void IsNotAClassType (Type type)
         {
@@ -135,9 +134,9 @@ namespace KRPC.Test.Service
         [TestCase (typeof(IList<string>))]
         [TestCase (typeof(IDictionary<int,string>))]
         [TestCase (typeof(HashSet<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int,string>))]
+        [TestCase (typeof(Tuple<long>))]
+        [TestCase (typeof(Tuple<long,int>))]
+        [TestCase (typeof(Tuple<long,int,string>))]
         public void IsNotAnEnumType (Type type)
         {
             Assert.IsFalse (TypeUtils.IsAnEnumType (type));
@@ -146,9 +145,9 @@ namespace KRPC.Test.Service
         [TestCase (typeof(IList<string>))]
         [TestCase (typeof(IDictionary<int,string>))]
         [TestCase (typeof(HashSet<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int,string>))]
+        [TestCase (typeof(Tuple<long>))]
+        [TestCase (typeof(Tuple<long,int>))]
+        [TestCase (typeof(Tuple<long,int,string>))]
         [TestCase (typeof(IList<IDictionary<int,string>>))]
         [TestCase (typeof(IList<TestService.TestClass>))]
         [TestCase (typeof(IList<TestService.TestEnum>))]
@@ -191,9 +190,9 @@ namespace KRPC.Test.Service
         [TestCase (typeof(TestService))]
         [TestCase (typeof(IDictionary<int,string>))]
         [TestCase (typeof(HashSet<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int,string>))]
+        [TestCase (typeof(Tuple<long>))]
+        [TestCase (typeof(Tuple<long,int>))]
+        [TestCase (typeof(Tuple<long,int,string>))]
         [TestCase (typeof(IDictionary<double,string>))]
         [TestCase (typeof(IDictionary<TestService.TestClass,string>))]
         [TestCase (typeof(IList<TestService.TestEnumWithoutAttribute>))]
@@ -218,9 +217,9 @@ namespace KRPC.Test.Service
         [TestCase (typeof(TestService))]
         [TestCase (typeof(IList<string>))]
         [TestCase (typeof(HashSet<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int,string>))]
+        [TestCase (typeof(Tuple<long>))]
+        [TestCase (typeof(Tuple<long,int>))]
+        [TestCase (typeof(Tuple<long,int,string>))]
         [TestCase (typeof(IList<IDictionary<int,string>>))]
         [TestCase (typeof(IList<TestService.TestClass>))]
         [TestCase (typeof(IList<TestService.TestEnum>))]
@@ -233,9 +232,9 @@ namespace KRPC.Test.Service
             Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (type));
         }
 
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int>))]
-        [TestCase (typeof(global::KRPC.Utils.Tuple<long,int,string>))]
+        [TestCase (typeof(Tuple<long>))]
+        [TestCase (typeof(Tuple<long,int>))]
+        [TestCase (typeof(Tuple<long,int,string>))]
         public void IsATupleCollectionType (Type type)
         {
             Assert.IsTrue (TypeUtils.IsATupleCollectionType (type));
@@ -375,12 +374,12 @@ namespace KRPC.Test.Service
         [TestCase ("{\"code\":\"DICTIONARY\",\"types\":[{\"code\":\"SINT32\"},{\"code\":\"STRING\"}]}",
                    typeof(IDictionary<int,string>))]
         [TestCase ("{\"code\":\"SET\",\"types\":[{\"code\":\"SINT64\"}]}", typeof(HashSet<long>))]
-        [TestCase ("{\"code\":\"TUPLE\",\"types\":[{\"code\":\"SINT64\"}]}", typeof(global::KRPC.Utils.Tuple<long>))]
+        [TestCase ("{\"code\":\"TUPLE\",\"types\":[{\"code\":\"SINT64\"}]}", typeof(Tuple<long>))]
         [TestCase ("{\"code\":\"TUPLE\",\"types\":[{\"code\":\"SINT64\"},{\"code\":\"SINT32\"}]}",
-                   typeof(global::KRPC.Utils.Tuple<long,int>))]
+                   typeof(Tuple<long,int>))]
         [TestCase ("{\"code\":\"TUPLE\",\"types\":[{\"code\":\"SINT64\"}," +
                    "{\"code\":\"SINT32\"},{\"code\":\"STRING\"}]}",
-                   typeof(global::KRPC.Utils.Tuple<long,int,string>))]
+                   typeof(Tuple<long,int,string>))]
         [TestCase ("{\"code\":\"LIST\",\"types\":[" +
                    "{\"code\":\"DICTIONARY\",\"types\":[{\"code\":\"SINT32\"},{\"code\":\"STRING\"}]}" +
                    "]}", typeof(IList<IDictionary<int,string>>))]

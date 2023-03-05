@@ -24,9 +24,9 @@ namespace KRPC
         public Configuration ()
         {
             MainWindowVisible = true;
-            MainWindowPosition = new Utils.Tuple<float,float,float,float> (0, 0, 0, 0);
+            MainWindowPosition = new Tuple<float,float,float,float> (0, 0, 0, 0);
             InfoWindowVisible = false;
-            InfoWindowPosition = new Utils.Tuple<float,float,float,float> (0, 0, 0, 0);
+            InfoWindowPosition = new Tuple<float,float,float,float> (0, 0, 0, 0);
             AutoStartServers = false;
             AutoAcceptConnections = false;
             ConfirmRemoveClient = true;
@@ -94,21 +94,8 @@ namespace KRPC
                     KRPC.IO.Ports.StopBits stopBits;
                     uint.TryParse(Settings.GetValueOrDefault("baud_rate", "9600"), out baudRate);
                     ushort.TryParse(Settings.GetValueOrDefault("data_bits", "8"), out dataBits);
-                    // TODO: add helper method for Enum.TryParse (only available in .NET 4)
-                    try {
-                        parity = (KRPC.IO.Ports.Parity)Enum.Parse (
-                            typeof(KRPC.IO.Ports.Parity),
-                            Settings.GetValueOrDefault("parity", "None"));
-                    } catch (ArgumentException) {
-                        parity = KRPC.IO.Ports.Parity.None;
-                    }
-                    try {
-                        stopBits = (KRPC.IO.Ports.StopBits)Enum.Parse (
-                            typeof(KRPC.IO.Ports.StopBits),
-                            Settings.GetValueOrDefault("stop_bits", "One"));
-                    } catch (ArgumentException) {
-                        stopBits = KRPC.IO.Ports.StopBits.None;
-                    }
+                    Enum.TryParse<KRPC.IO.Ports.Parity>(Settings.GetValueOrDefault("parity", "None"), out parity);
+                    Enum.TryParse<KRPC.IO.Ports.StopBits>(Settings.GetValueOrDefault("stop_bits", "One"), out stopBits);
                     var serialServer = new KRPC.Server.SerialIO.ByteServer(
                         Settings.GetValueOrDefault("port", string.Empty),
                         baudRate, dataBits, parity, stopBits);
@@ -158,11 +145,11 @@ namespace KRPC
 
         public bool MainWindowVisible { get; set; }
 
-        public Utils.Tuple<float,float,float,float> MainWindowPosition { get; set; }
+        public Tuple<float,float,float,float> MainWindowPosition { get; set; }
 
         public bool InfoWindowVisible { get; set; }
 
-        public Utils.Tuple<float,float,float,float> InfoWindowPosition { get; set; }
+        public Tuple<float,float,float,float> InfoWindowPosition { get; set; }
 
         public bool AutoStartServers { get; set; }
 

@@ -3,9 +3,9 @@ using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
-using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
-using TupleV3 = KRPC.Utils.Tuple<Vector3d, Vector3d>;
-using TupleT3 = KRPC.Utils.Tuple<KRPC.Utils.Tuple<double, double, double>, KRPC.Utils.Tuple<double, double, double>>;
+using Tuple3 = System.Tuple<double, double, double>;
+using TupleV3 = System.Tuple<Vector3d, Vector3d>;
+using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {

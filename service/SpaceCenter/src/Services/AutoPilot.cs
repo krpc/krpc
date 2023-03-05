@@ -9,7 +9,7 @@ using KRPC.SpaceCenter.AutoPilot;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using UnityEngine;
-using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -368,7 +368,11 @@ namespace KRPC.SpaceCenter.Services
                 var pid = attitudeController.PitchPID;
                 return new Tuple3 (pid.Kp, pid.Ki, pid.Kd);
             }
-            set { attitudeController.PitchPID.SetParameters (value.Item1, value.Item2, value.Item3); }
+            set {
+                if (value == null)
+                    throw new ArgumentNullException (nameof (PitchPIDGains));
+                attitudeController.PitchPID.SetParameters (value.Item1, value.Item2, value.Item3);
+            }
         }
 
         /// <summary>
@@ -384,7 +388,11 @@ namespace KRPC.SpaceCenter.Services
                 var pid = attitudeController.RollPID;
                 return new Tuple3 (pid.Kp, pid.Ki, pid.Kd);
             }
-            set { attitudeController.RollPID.SetParameters (value.Item1, value.Item2, value.Item3); }
+            set {
+                if (value == null)
+                    throw new ArgumentNullException (nameof (RollPIDGains));
+                attitudeController.RollPID.SetParameters (value.Item1, value.Item2, value.Item3);
+            }
         }
 
         /// <summary>
@@ -400,7 +408,11 @@ namespace KRPC.SpaceCenter.Services
                 var pid = attitudeController.YawPID;
                 return new Tuple3 (pid.Kp, pid.Ki, pid.Kd);
             }
-            set { attitudeController.YawPID.SetParameters (value.Item1, value.Item2, value.Item3); }
+            set {
+                if (value == null)
+                    throw new ArgumentNullException (nameof (YawPIDGains));
+                attitudeController.YawPID.SetParameters (value.Item1, value.Item2, value.Item3);
+            }
         }
 
         /// <summary>

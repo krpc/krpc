@@ -12,8 +12,8 @@ using KSP.UI;
 using KSP.UI.Screens.Flight;
 using PreFlightTests;
 using UnityEngine;
-using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
-using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
+using Tuple3 = System.Tuple<double, double, double>;
+using Tuple4 = System.Tuple<double, double, double, double>;
 using KSPEditorFacility = EditorFacility;
 
 namespace KRPC.SpaceCenter.Services

@@ -3,7 +3,7 @@ using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using UnityEngine;
-using Tuple3 = KRPC.Utils.Tuple<float, float, float>;
+using Tuple3 = System.Tuple<float, float, float>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -66,6 +66,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Tuple3 Color {
             get { return new Tuple3 (light.lightR, light.lightG, light.lightB); }
             set {
+                if (value == null)
+                    throw new ArgumentNullException (nameof (Color));
                 light.lightR = value.Item1;
                 light.lightG = value.Item2;
                 light.lightB = value.Item3;
