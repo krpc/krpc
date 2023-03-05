@@ -96,7 +96,7 @@
     <Compile Include="..\..\bazel-bin\server\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\bazel-bin/protobuf/KRPC_3_9_1.cs">
+    <Compile Include="..\..\bazel-bin/protobuf/KRPC_unity.cs">
       <Link>KRPC.cs</Link>
     </Compile>
     <Compile Include="Addon.cs" />
