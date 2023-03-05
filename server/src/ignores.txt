@@ -2,6 +2,7 @@ R: Gendarme.Rules.Design.AvoidSmallNamespaceRule
 N: KRPC
 N: KRPC.Server
 N: KRPC.Service
+N: KRPC.Utils
 
 R: Gendarme.Rules.Design.ImplementEqualsAndGetHashCodeInPairRule
 T: KRPC.Service.EventStream
