@@ -8,39 +8,39 @@
     <RootNamespace>KRPC.Client.Test</RootNamespace>
     <AssemblyName>KRPC.Client.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Moq">
-      <HintPath>..\..\..\generated_deps\tools\cslibs\net40\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\..\generated_deps\tools\cslibs\nunit.framework.dll</HintPath>
-      <Package>nunit</Package>
-    </Reference>
-    <Reference Include="Google.Protobuf">
-      <HintPath>..\..\..\generated_deps\tools\cslibs\net45\Google.Protobuf.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Memory">
+      <HintPath>..\..\..\lib\mono-4.5\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\..\..\bazel-bin\tools\build\mono-4.5\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\bazel-krpc\external\csharp_nunit\bin\framework\nunit.framework.dll</HintPath>
+      <Package>nunit</Package>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\..\..\bazel-krpc\external\csharp_moq\lib\net40\Moq.dll</HintPath>
+      <Package>Moq</Package>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\KRPC.Client.csproj">
@@ -50,9 +50,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="ConnectionTest.cs" />
     <Compile Include="EncoderTest.cs" />
     <Compile Include="EventTest.cs" />
@@ -61,7 +58,7 @@
     <Compile Include="ServerTestCase.cs" />
     <Compile Include="StreamTest.cs" />
     <Compile Include="TestingTools.cs" />
-    <Compile Include="..\..\..\generated_deps\client\csharp\Services\TestService.cs">
+    <Compile Include="..\..\..\bazel-bin\client\csharp\Services\TestService.cs">
       <Link>Services\TestService.cs</Link>
     </Compile>
   </ItemGroup>

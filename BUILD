@@ -328,6 +328,14 @@ filegroup(
         '//client/csharp:KRPC.Client.Test',
         '//tools/ServiceDefinitions',
         '//tools/TestingTools',
-        '//tools/TestServer'
+        '//tools/TestServer',
+        '//tools/build/mono-4.5:Google.Protobuf.dll',
+        '//tools/build/ksp:Google.Protobuf.dll',
+        '//tools/build/ksp:KRPC.IO.Ports.dll',
+        '//protobuf:csharp_3.9.1',
+        '@csharp_nunit//:nunit_framework',
+        '@csharp_moq//:lib/net40/Moq.dll',
+        '@csharp_json//:lib/net35/Newtonsoft.Json.dll',
+        '@csharp_options//:lib/NDesk.Options.dll'
     ]
 )
