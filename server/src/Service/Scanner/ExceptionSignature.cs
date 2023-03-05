@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.Serialization;
 
 namespace KRPC.Service.Scanner
@@ -5,6 +6,7 @@ namespace KRPC.Service.Scanner
     /// <summary>
     /// Signature information for an exception, including class name and documentation.
     /// </summary>
+    [Serializable]
     sealed class ExceptionSignature : ISerializable
     {
         /// <summary>

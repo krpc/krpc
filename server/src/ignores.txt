@@ -155,6 +155,7 @@ R: Gendarme.Rules.Serialization.ImplementISerializableCorrectlyRule
 T: KRPC.Service.Scanner.ClassSignature
 T: KRPC.Service.Scanner.EnumerationSignature
 T: KRPC.Service.Scanner.EnumerationValueSignature
+T: KRPC.Service.Scanner.ExceptionSignature
 T: KRPC.Service.Scanner.ParameterSignature
 T: KRPC.Service.Scanner.ProcedureSignature
 T: KRPC.Service.Scanner.ServiceSignature

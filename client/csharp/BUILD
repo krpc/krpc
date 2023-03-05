@@ -187,7 +187,12 @@ csharp_assembly_info(
     cls_compliant = False
 )
 
-test_deps = [':KRPC.Client', '//tools/build/mono-4.5:Moq'] + deps
+test_deps = [
+    ':KRPC.Client',
+    '//tools/build/mono-4.5:Moq',
+    '//tools/build/mono-4.5:System.Threading.Tasks.Extensions',
+    '//tools/build/mono-4.5:Castle.Core'
+] + deps
 
 csharp_library(
     name = 'KRPC.Client.Test',

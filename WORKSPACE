@@ -136,30 +136,30 @@ http_archive(
 )
 
 http_archive(
-    name = 'protoc_3.9.1_linux_x86_32',
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-linux-x86_32.zip',
-    sha256 = '1094d7896f93b8987b0e05c110c0635bab7cf63aa24592c5d34cd37b590b5aeb',
+    name = 'protoc_unity_linux_x86_32',
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.10.1/protoc-3.10.1-linux-x86_32.zip',
+    sha256 = '0c97a75c8f8fafc55323599053626a0a822e5b66299f6643a2b086f859b56afd',
     build_file_content = "exports_files(['bin/protoc'])"
 )
 
 http_archive(
-    name = 'protoc_3.9.1_linux_x86_64',
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-linux-x86_64.zip',
-    sha256 = '77410d08e9a3c1ebb68afc13ee0c0fb4272c01c20bfd289adfb51b1c622bab07',
+    name = 'protoc_unity_linux_x86_64',
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.10.1/protoc-3.10.1-linux-x86_64.zip',
+    sha256 = '0c97a75c8f8fafc55323599053626a0a822e5b66299f6643a2b086f859b56afd',
     build_file_content = "exports_files(['bin/protoc'])"
 )
 
 http_archive(
-    name = 'protoc_3.9.1_osx_x86_32',
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-osx-x86_32.zip',
-    sha256 = 'e7b7377917f6b9ec22c80188936c60380edc684e5bdc96c2993fc79e3e54c042',
+    name = 'protoc_unity_osx_x86_32',
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.10.1/protoc-3.10.1-osx-x86_64.zip',
+    sha256 = 'ee3f4051e55830596729efe48183218bdb44cf2f83b188460859bd63b2a09576',
     build_file_content = "exports_files(['bin/protoc'])"
 )
 
 http_archive(
-    name = 'protoc_3.9.1_win32',
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-win32.zip',
-    sha256 = '6543fe3fffb6caeb9c8a091afeefbb1a7e7112bc0e00d7b7e89e69e3a1844069',
+    name = 'protoc_unity_win32',
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.10.1/protoc-3.10.1-win32.zip',
+    sha256 = '964f055db26372e46d8232a09fe6d661de3ca1b82fbbc1ede33696b1e379a11b',
     build_file_content = "exports_files(['bin/protoc.exe'])"
 )
 
@@ -200,8 +200,8 @@ filegroup(
 
 http_file(
     name = 'csharp_nuget',
-    url = 'https://dist.nuget.org/win-x86-commandline/v4.7.1/nuget.exe',
-    sha256 = '82e3aa0205415cd18d8ae34613911717dad3ed4e8ac58143e55ca432a5bf3c0a'
+    url = 'https://dist.nuget.org/win-x86-commandline/v6.4.0/nuget.exe',
+    sha256 = '26730829b240581a3e6a4e276b9ace088930032df0c680d5591beccf6452374e'
 )
 
 http_archive(
@@ -213,17 +213,11 @@ http_archive(
 )
 
 http_archive(
-    name = 'csharp_protobuf_3.9.1',
-    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.9.1',
-    sha256 = 'b4363bb9d1c2b6721624571936e3e1f14ebdf2ecd8788d2584b549c6dce8348b',
+    name = 'csharp_protobuf_unity',
+    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.10.1',
+    sha256 = '17eb7c37e702750d3aa53823571be7662a87a2111c6b2c844ba1c20641424084',
     type = 'zip',
     build_file_content = "exports_files(['lib/net45/Google.Protobuf.dll'])"
-)
-
-http_file(
-    name = 'csharp_protobuf_3.9.1_net35',
-    url = 'https://s3.amazonaws.com/krpc/lib/protobuf-3.9.1-net35/Google.Protobuf.dll',
-    sha256 = 'd0ddb80510810fa53ee124afbd57845e657eaa9016ed7a6edd4d8ecffedf66b5'
 )
 
 http_file(
@@ -240,44 +234,42 @@ http_file(
 
 http_archive(
     name = 'csharp_nunit',
-    url = 'https://github.com/nunit/nunitv2/releases/download/2.6.4/NUnit-2.6.4.zip',
-    sha256 = '1bd925514f31e7729ccde40a38a512c2accd86895f93465f3dfe6d0b593d7170',
-    strip_prefix = 'NUnit-2.6.4',
-    build_file_content = """
-filegroup(
-    name = 'nunit_exe',
-    srcs = ['bin/nunit-console.exe'],
-    visibility = ['//visibility:public'],
+    url = 'http://www.nuget.org/api/v2/package/NUnit/3.13.3',
+    sha256 = '667fac24817b89e36abbfb76470271e963c56f58e5f54b8d1e275bfcfc74bf71',
+    type = 'zip',
+    build_file_content = "exports_files(['lib/net45/nunit.framework.dll'])"
 )
 
-filegroup(
-    name = 'nunit_exe_libs',
-    srcs = glob(['bin/lib/*.dll']),
-    visibility = ['//visibility:public'],
-)
-
-filegroup(
-    name = 'nunit_framework',
-    srcs = ['bin/framework/nunit.framework.dll'],
-    visibility = ['//visibility:public'],
-)
-"""
+http_archive(
+    name = 'csharp_nunit_consolerunner',
+    url = 'https://www.nuget.org/api/v2/package/NUnit.ConsoleRunner/3.16.3',
+    sha256 = '31056acd318b87da12628f58f8fc3a66b443e58b411da8b650c649775c07b1e4',
+    type = 'zip',
+    build_file_content = "exports_files(['tools/nunit3-console.exe', 'tools/nunit.engine.dll', 'tools/nunit.engine.core.dll', 'tools/nunit.engine.api.dll', 'tools/testcentric.engine.metadata.dll'])"
 )
 
 http_archive(
     name = 'csharp_moq',
-    url = 'http://www.nuget.org/api/v2/package/Moq/4.2.1510.2205',
-    sha256 = '7a86f2ed0e134601e75a4fa28c7f7c399f6abc33f091dbc024ad8b212b8c3c85',
+    url = 'http://www.nuget.org/api/v2/package/Moq/4.17.2',
+    sha256 = '121803242a31ec27b21b3a1742767d0d1447d481442ed48d71ae81e8a552e9fc',
     type = 'zip',
-    build_file_content = "exports_files(['lib/net40/Moq.dll'])"
+    build_file_content = "exports_files(['lib/net45/Moq.dll'])"
+)
+
+http_archive(
+    name = 'csharp_castle_core',
+    url = 'http://www.nuget.org/api/v2/package/Castle.Core/4.4.1',
+    sha256 = '278352f29f4aa9bb8b97a24c98dc29b6c7dc707dfb4df84084fc17da6550b28d',
+    type = 'zip',
+    build_file_content = "exports_files(['lib/net45/Castle.Core.dll'])"
 )
 
 http_archive(
     name = 'csharp_json',
-    url = 'https://www.nuget.org/api/v2/package/Newtonsoft.Json/9.0.1',
-    sha256 = '998081ae052120917346e2cb57d488888147a2fcdf47c52ea9f83a7b4f049e55',
+    url = 'https://www.nuget.org/api/v2/package/Newtonsoft.Json/13.0.2',
+    sha256 = '112ca3b7f47bcbd743befcf949fb68ce4f9eff73ad9f7f1b39c2c61a1ebd3add',
     type = 'zip',
-    build_file_content = "exports_files(['lib/net35/Newtonsoft.Json.dll', 'lib/net40/Newtonsoft.Json.dll', 'lib/net45/Newtonsoft.Json.dll'])"
+    build_file_content = "exports_files(['lib/net45/Newtonsoft.Json.dll'])"
 )
 
 http_archive(

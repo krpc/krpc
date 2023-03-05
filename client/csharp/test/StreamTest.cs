@@ -228,7 +228,7 @@ namespace KRPC.Client.Test
             var s = Connection.AddStream (
                 () => Connection.TestService ().ThrowCustomException ());
             var exn = Assert.Throws<CustomException> (() => s.Get ());
-            Assert.That (exn.Message, Is.StringContaining ("A custom kRPC exception"));
+            Assert.That (exn.Message, Does.Contain ("A custom kRPC exception"));
         }
 
         [Test]
@@ -245,7 +245,7 @@ namespace KRPC.Client.Test
                         s.Get ();
                     }
                 });
-            Assert.That (exn.Message, Is.StringContaining ("A custom kRPC exception"));
+            Assert.That (exn.Message, Does.Contain ("A custom kRPC exception"));
         }
 
         [Test]

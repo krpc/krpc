@@ -17,7 +17,7 @@ namespace KRPC.Test.Server.TCP
         }
 
         [Test]
-        [Ignore]
+        [Ignore("returns empty string")]
         public void GetLoopbackSubnetMask ()
         {
             Assert.AreEqual (string.Empty, NetworkInformation.GetSubnetMask (IPAddress.Loopback).ToString ());

@@ -61,7 +61,7 @@ filegroup(
     visibility = ['//tools/ServiceDefinitions:__pkg__']
 )
 
-srcs = [':KRPC-src', ':AssemblyInfo', '//protobuf:csharp_3.9.1']
+srcs = [':KRPC-src', ':AssemblyInfo', '//protobuf:csharp_unity']
 
 deps = [
     '//tools/build/ksp:Google.Protobuf',
@@ -104,7 +104,9 @@ test_deps = [
     '//tools/build/mono-4.5:Moq',
     '//tools/build/ksp:Google.Protobuf',
     '//tools/build/ksp:KRPC.IO.Ports',
-    '//tools/build/mono-4.5:Newtonsoft.Json'
+    '//tools/build/mono-4.5:Newtonsoft.Json',
+    '//tools/build/mono-4.5:System.Threading.Tasks.Extensions',
+    '//tools/build/mono-4.5:Castle.Core'
 ] + ksp_unity_libs + mono_net_libs
 
 csharp_library(
@@ -114,7 +116,7 @@ csharp_library(
     nunit_test = True,
     optimize = False,
     define = ['CODE_ANALYSIS'],
-    nowarn = ['1591'],
+    nowarn = ['1591', '1685'],
     visibility = ['//:__pkg__']
 )
 
