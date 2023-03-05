@@ -311,63 +311,9 @@ test_suite(
     ]
 )
 
-filegroup (
-    name = 'csproj-deps',
-    srcs = [
-
-        '//server:AssemblyInfo',
-        '//server:TestAssemblyInfo',
-
-        '//client/csharp:AssemblyInfo',
-        '//client/csharp:services-krpc',
-        '//client/csharp:services-spacecenter',
-        '//client/csharp:services-infernalrobotics',
-        '//client/csharp:services-kerbalalarmclock',
-        '//client/csharp:services-testservice',
-
-        '//service/Drawing:AssemblyInfo',
-        '//service/InfernalRobotics:AssemblyInfo',
-        '//service/KerbalAlarmClock:AssemblyInfo',
-        '//service/RemoteTech:AssemblyInfo',
-        '//service/SpaceCenter:AssemblyInfo',
-        '//service/UI:AssemblyInfo',
-        '//service/LiDAR:AssemblyInfo',
-        '//service/DockingCamera:AssemblyInfo',
-
-        '//tools/ServiceDefinitions:AssemblyInfo',
-        '//tools/TestServer:AssemblyInfo',
-        '//tools/TestingTools:AssemblyInfo',
-        '//tools/cslibs',
-
-        '//protobuf:csharp',
-    ]
-)
-
-# Copies all dependencies needed for :csproj to "$WORKSPACE/generated_deps".
-# This goes against Bazel guidelines but the folder is an easier way to build
-# the .sln for non-Bazel users and users who use bazel for packaging but
-# an IDE for programming and quick builds.
-genrule(
-    name = 'copy_csproj_deps',
-    srcs = ['csproj-deps'],
-    outs = ['build_files/a'],
-    local = 1,
-    cmd_bash = """origPath=$$(pwd -P);
-    cd -P server/..;
-    for path in $$(echo $(SRCS) | tr " " "\n") # foreach file in :csproj-deps
-    do
-    endpath=$$(echo $$(echo $$path | sed s#bazel-out/k8-fastbuild/bin/##g)); # cleans up the path to be relative to the workspace dir
-    install -D /dev/null "generated_deps/$$endpath";                         # https://unix.stackexchange.com/a/63105
-    cp $$path generated_deps/$$endpath;
-    done;
-    cd -P $$origPath;
-    touch $@ # create the output file """
-)
-
 filegroup(
     name = 'csproj',
     srcs = [
-        '//tools/cslibs',
         '//server',
         '//server:KRPC.Test',
         '//service/SpaceCenter',
@@ -382,7 +328,6 @@ filegroup(
         '//client/csharp:KRPC.Client.Test',
         '//tools/ServiceDefinitions',
         '//tools/TestingTools',
-        '//tools/TestServer',
-        ':copy_csproj_deps'
+        '//tools/TestServer'
     ]
 )
