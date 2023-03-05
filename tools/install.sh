@@ -44,7 +44,7 @@ cp -R -L \
     bazel-bin/service/DockingCamera/KRPC.DockingCamera.dll \
     bazel-bin/service/DockingCamera/KRPC.DockingCamera.xml \
     service/UI/KRPC.UI.ksp \
-    bazel-bin/tools/cslibs/net35/Google.Protobuf.dll \
+    bazel-bin/tools/cslibs/unity/Google.Protobuf.dll \
     bazel-bin/tools/cslibs/KRPC.IO.Ports.dll \
     bazel-bin/tools/TestingTools/TestingTools.dll \
     bazel-bin/tools/TestingTools/TestingTools.xml \

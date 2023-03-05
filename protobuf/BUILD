@@ -16,10 +16,10 @@ protobuf_csharp(
 )
 
 protobuf_csharp(
-    name = 'csharp_3.9.1',
-    out = 'KRPC_3_9_1.cs',
+    name = 'csharp_unity',
+    out = 'KRPC_unity.cs',
     src = 'krpc.proto',
-    protoc = '//tools/build/protobuf:protoc_3.9.1'
+    protoc = '//tools/build/protobuf:protoc_unity'
 )
 
 protobuf_py(

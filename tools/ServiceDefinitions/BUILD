@@ -29,13 +29,11 @@ csharp_assembly_info(
     ]
 )
 
-# Build KRPC.dll using .Net 4.5 libraries as references instead of KSP libraries
-# to work around issue with KSP libraries failing strong name validation
 csharp_library(
     name = 'KRPC',
-    srcs = ['//server:KRPC-src', '//server:AssemblyInfo', '//protobuf:csharp_3.9.1'],
+    srcs = ['//server:KRPC-src', '//server:AssemblyInfo', '//protobuf:csharp_unity'],
     deps = [
-        '//tools/build/protobuf-3.9.1:Google.Protobuf',
+        '//tools/build/ksp:Google.Protobuf',
         '//tools/build/ksp:KRPC.IO.Ports'
     ] + ksp_unity_libs + mono_net_libs,
     visibility = ['//tools/krpctools:__pkg__', '//tools/TestServer:__pkg__']

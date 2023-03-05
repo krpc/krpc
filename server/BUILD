@@ -61,7 +61,7 @@ filegroup(
     visibility = ['//tools/ServiceDefinitions:__pkg__']
 )
 
-srcs = [':KRPC-src', ':AssemblyInfo', '//protobuf:csharp_3.9.1']
+srcs = [':KRPC-src', ':AssemblyInfo', '//protobuf:csharp_unity']
 
 deps = [
     '//tools/build/ksp:Google.Protobuf',

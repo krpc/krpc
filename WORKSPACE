@@ -136,30 +136,30 @@ http_archive(
 )
 
 http_archive(
-    name = 'protoc_3.9.1_linux_x86_32',
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-linux-x86_32.zip',
-    sha256 = '1094d7896f93b8987b0e05c110c0635bab7cf63aa24592c5d34cd37b590b5aeb',
+    name = 'protoc_unity_linux_x86_32',
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.10.1/protoc-3.10.1-linux-x86_32.zip',
+    sha256 = '0c97a75c8f8fafc55323599053626a0a822e5b66299f6643a2b086f859b56afd',
     build_file_content = "exports_files(['bin/protoc'])"
 )
 
 http_archive(
-    name = 'protoc_3.9.1_linux_x86_64',
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-linux-x86_64.zip',
-    sha256 = '77410d08e9a3c1ebb68afc13ee0c0fb4272c01c20bfd289adfb51b1c622bab07',
+    name = 'protoc_unity_linux_x86_64',
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.10.1/protoc-3.10.1-linux-x86_64.zip',
+    sha256 = '0c97a75c8f8fafc55323599053626a0a822e5b66299f6643a2b086f859b56afd',
     build_file_content = "exports_files(['bin/protoc'])"
 )
 
 http_archive(
-    name = 'protoc_3.9.1_osx_x86_32',
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-osx-x86_32.zip',
-    sha256 = 'e7b7377917f6b9ec22c80188936c60380edc684e5bdc96c2993fc79e3e54c042',
+    name = 'protoc_unity_osx_x86_32',
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.10.1/protoc-3.10.1-osx-x86_64.zip',
+    sha256 = 'ee3f4051e55830596729efe48183218bdb44cf2f83b188460859bd63b2a09576',
     build_file_content = "exports_files(['bin/protoc'])"
 )
 
 http_archive(
-    name = 'protoc_3.9.1_win32',
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-win32.zip',
-    sha256 = '6543fe3fffb6caeb9c8a091afeefbb1a7e7112bc0e00d7b7e89e69e3a1844069',
+    name = 'protoc_unity_win32',
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.10.1/protoc-3.10.1-win32.zip',
+    sha256 = '964f055db26372e46d8232a09fe6d661de3ca1b82fbbc1ede33696b1e379a11b',
     build_file_content = "exports_files(['bin/protoc.exe'])"
 )
 
@@ -213,17 +213,11 @@ http_archive(
 )
 
 http_archive(
-    name = 'csharp_protobuf_3.9.1',
-    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.9.1',
-    sha256 = 'b4363bb9d1c2b6721624571936e3e1f14ebdf2ecd8788d2584b549c6dce8348b',
+    name = 'csharp_protobuf_unity',
+    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.10.1',
+    sha256 = '17eb7c37e702750d3aa53823571be7662a87a2111c6b2c844ba1c20641424084',
     type = 'zip',
     build_file_content = "exports_files(['lib/net45/Google.Protobuf.dll'])"
-)
-
-http_file(
-    name = 'csharp_protobuf_3.9.1_net35',
-    url = 'https://s3.amazonaws.com/krpc/lib/protobuf-3.9.1-net35/Google.Protobuf.dll',
-    sha256 = 'd0ddb80510810fa53ee124afbd57845e657eaa9016ed7a6edd4d8ecffedf66b5'
 )
 
 http_file(

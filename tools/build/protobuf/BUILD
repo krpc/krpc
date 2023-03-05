@@ -21,16 +21,16 @@ filegroup(
 )
 
 filegroup(
-    name = 'protoc_3.9.1',
+    name = 'protoc_unity',
     srcs = select({
-        ':windows_mingw': ['@protoc_3.9.1_win32//:bin/protoc.exe'],
-        ':windows_msys64_mingw64': ['@protoc_3.9.1_win32//:bin/protoc.exe'],
-        ':windows_msys64': ['@protoc_3.9.1_win32//:bin/protoc.exe'],
-        ':windows_clang': ['@protoc_3.9.1_win32//:bin/protoc.exe'],
-        ':darwin': ['@protoc_3.9.1_osx_x86_32//:bin/protoc'],
-        ':k8': ['@protoc_3.9.1_linux_x86_64//:bin/protoc'],
-        ':piii': ['@protoc_3.9.1_linux_x86_32//:bin/protoc'],
-        ':freebsd': ['@protoc_3.9.1_linux_x86_32//:bin/protoc']
+        ':windows_mingw': ['@protoc_unity_win32//:bin/protoc.exe'],
+        ':windows_msys64_mingw64': ['@protoc_unity_win32//:bin/protoc.exe'],
+        ':windows_msys64': ['@protoc_unity_win32//:bin/protoc.exe'],
+        ':windows_clang': ['@protoc_unity_win32//:bin/protoc.exe'],
+        ':darwin': ['@protoc_unity_osx_x86_32//:bin/protoc'],
+        ':k8': ['@protoc_unity_linux_x86_64//:bin/protoc'],
+        ':piii': ['@protoc_unity_linux_x86_32//:bin/protoc'],
+        ':freebsd': ['@protoc_unity_linux_x86_32//:bin/protoc']
     }),
     visibility = ['//visibility:public']
 )

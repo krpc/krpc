@@ -19,7 +19,7 @@ csharp_assembly_info(
 srcs = ['src/TestService.cs', ':AssemblyInfo']
 deps = [
     '//tools/ServiceDefinitions:KRPC',
-    '//tools/build/protobuf-3.9.1:Google.Protobuf',
+    '//tools/build/ksp:Google.Protobuf',
     '//tools/build/ksp:KRPC.IO.Ports'
 ] + mono_net_libs
 
@@ -40,7 +40,6 @@ pkg_zip(
         'tools/build/protobuf/LICENSE': 'LICENSE.protobuf',
         'tools/build/mono-4.5/': '',
         'tools/build/ksp/': '',
-        'tools/build/protobuf-3.9.1/': '',
         'tools/ServiceDefinitions/': ''
     },
     exclude = ['*.mdb', 'tools/TestServer/TestServer'],
