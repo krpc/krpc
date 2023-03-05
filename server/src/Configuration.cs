@@ -94,21 +94,8 @@ namespace KRPC
                     KRPC.IO.Ports.StopBits stopBits;
                     uint.TryParse(Settings.GetValueOrDefault("baud_rate", "9600"), out baudRate);
                     ushort.TryParse(Settings.GetValueOrDefault("data_bits", "8"), out dataBits);
-                    // TODO: add helper method for Enum.TryParse (only available in .NET 4)
-                    try {
-                        parity = (KRPC.IO.Ports.Parity)Enum.Parse (
-                            typeof(KRPC.IO.Ports.Parity),
-                            Settings.GetValueOrDefault("parity", "None"));
-                    } catch (ArgumentException) {
-                        parity = KRPC.IO.Ports.Parity.None;
-                    }
-                    try {
-                        stopBits = (KRPC.IO.Ports.StopBits)Enum.Parse (
-                            typeof(KRPC.IO.Ports.StopBits),
-                            Settings.GetValueOrDefault("stop_bits", "One"));
-                    } catch (ArgumentException) {
-                        stopBits = KRPC.IO.Ports.StopBits.None;
-                    }
+                    Enum.TryParse<KRPC.IO.Ports.Parity>(Settings.GetValueOrDefault("parity", "None"), out parity);
+                    Enum.TryParse<KRPC.IO.Ports.StopBits>(Settings.GetValueOrDefault("stop_bits", "One"), out stopBits);
                     var serialServer = new KRPC.Server.SerialIO.ByteServer(
                         Settings.GetValueOrDefault("port", string.Empty),
                         baudRate, dataBits, parity, stopBits);
