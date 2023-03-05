@@ -329,13 +329,6 @@ filegroup(
         '//tools/ServiceDefinitions',
         '//tools/TestingTools',
         '//tools/TestServer',
-        '//tools/build/mono-4.5:Google.Protobuf.dll',
-        '//tools/build/ksp:Google.Protobuf.dll',
-        '//tools/build/ksp:KRPC.IO.Ports.dll',
-        '//protobuf:csharp_unity',
-        '@csharp_nunit//:lib/net45/nunit.framework.dll',
-        '@csharp_moq//:lib/net45/Moq.dll',
-        '@csharp_json//:lib/net45/Newtonsoft.Json.dll',
-        '@csharp_options//:lib/NDesk.Options.dll'
+        '//tools/build/ksp:KRPC.IO.Ports.dll'
     ]
 )
