@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -102,8 +103,8 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsATupleCollectionType (Type type)
         {
-            return typeof(ITuple).IsAssignableFrom (type) &&
-            type.GetGenericArguments ().All (IsAValidType);
+            return type.Name.StartsWith("Tuple`", StringComparison.CurrentCulture) &&
+            type.GetGenericArguments().All(IsAValidType);
         }
 
         /// <summary>

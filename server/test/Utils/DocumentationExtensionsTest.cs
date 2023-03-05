@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -66,7 +67,7 @@ namespace KRPC.Test.Utils
             new object[] {
                 methodArguments,
                 "M:KRPC.Test.Utils.TestDocumentedClass.MethodArguments(" +
-                "System.Int32,System.String,KRPC.Utils.Tuple{System.Int32,System.Single,System.String}," +
+                "System.Int32,System.String,System.Tuple{System.Int32,System.Single,System.String}," +
                 "KRPC.Schema.KRPC.Response,KRPC.Test.Utils.TestDocumentedClass.NestedClass)"
             },
             new object[] {
@@ -245,7 +246,7 @@ namespace KRPC.Test.Utils
 
         /// <summary>Method arguments docs</summary>
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUnusedParametersRule")]
-        public void MethodArguments (int one, string two, KRPC.Utils.Tuple<int,float,string> three, Response four, NestedClass five)
+        public void MethodArguments (int one, string two, Tuple<int,float,string> three, Response four, NestedClass five)
         {
         }
 

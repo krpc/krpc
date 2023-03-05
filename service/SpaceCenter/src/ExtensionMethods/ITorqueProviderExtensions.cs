@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
-using Torque = KRPC.Utils.Tuple<Vector3d, Vector3d>;
+using Torque = System.Tuple<Vector3d, Vector3d>;
 
 namespace KRPC.SpaceCenter
 {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Service;
@@ -261,22 +262,22 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void TupleCollection1 ()
         {
-            var value = new KRPC.Utils.Tuple<uint> (1);
+            var value = new Tuple<uint> (1);
             const string data = "0a0101";
             var encodeResult = Encoder.Encode (value);
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (KRPC.Utils.Tuple<uint>)Encoder.Decode (data.ToByteString (), value.GetType ());
+            var decodeResult = (Tuple<uint>)Encoder.Decode (data.ToByteString (), value.GetType ());
             Assert.AreEqual (value.Item1, decodeResult.Item1);
         }
 
         [Test]
         public void TupleCollection2 ()
         {
-            var value = new KRPC.Utils.Tuple<uint,string,bool> (1, "jeb", false);
+            var value = new Tuple<uint,string,bool> (1, "jeb", false);
             const string data = "0a01010a04036a65620a0100";
             var encodeResult = Encoder.Encode (value);
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (KRPC.Utils.Tuple<uint,string,bool>)Encoder.Decode (data.ToByteString (), value.GetType ());
+            var decodeResult = (Tuple<uint,string,bool>)Encoder.Decode (data.ToByteString (), value.GetType ());
             Assert.AreEqual (value.Item1, decodeResult.Item1);
             Assert.AreEqual (value.Item2, decodeResult.Item2);
             Assert.AreEqual (value.Item3, decodeResult.Item3);

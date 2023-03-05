@@ -1,9 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
-using Tuple2 = KRPC.Utils.Tuple<double, double>;
-using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
-using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
+using Tuple2 = System.Tuple<double, double>;
+using Tuple3 = System.Tuple<double, double, double>;
+using Tuple4 = System.Tuple<double, double, double, double>;
 
 namespace KRPC.UI
 {

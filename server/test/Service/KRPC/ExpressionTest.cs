@@ -293,8 +293,8 @@ namespace KRPC.Test.Service.KRPC
         public void CreateTuple ()
         {
             Assert.AreEqual (
-                global::KRPC.Utils.Tuple.Create (1, false),
-                Eval<global::KRPC.Utils.Tuple<int, bool>> (tuple));
+                System.Tuple.Create (1, false),
+                Eval<System.Tuple<int, bool>> (tuple));
         }
 
         [Test]

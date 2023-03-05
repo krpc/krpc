@@ -265,9 +265,11 @@ namespace TestServer
         }
 
         [KRPCProcedure]
-        public static KRPC.Utils.Tuple<int,long> IncrementTuple (KRPC.Utils.Tuple<int,long> t)
+        public static Tuple<int,long> IncrementTuple (Tuple<int,long> t)
         {
-            return KRPC.Utils.Tuple.Create (t.Item1 + 1, t.Item2 + 1);
+            if (t == null)
+                throw new ArgumentNullException (nameof (t));
+            return Tuple.Create (t.Item1 + 1, t.Item2 + 1);
         }
 
         [KRPCProcedure]
@@ -287,13 +289,13 @@ namespace TestServer
         {
             public static object Create ()
             {
-                return new KRPC.Utils.Tuple<int,bool> (1, false);
+                return new Tuple<int,bool> (1, false);
             }
         }
 
         [KRPCProcedure]
         [KRPCDefaultValue ("x", typeof(CreateTupleDefault))]
-        public static KRPC.Utils.Tuple<int,bool> TupleDefault (KRPC.Utils.Tuple<int,bool> x)
+        public static Tuple<int,bool> TupleDefault (Tuple<int,bool> x)
         {
             return x;
         }

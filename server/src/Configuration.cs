@@ -24,9 +24,9 @@ namespace KRPC
         public Configuration ()
         {
             MainWindowVisible = true;
-            MainWindowPosition = new Utils.Tuple<float,float,float,float> (0, 0, 0, 0);
+            MainWindowPosition = new Tuple<float,float,float,float> (0, 0, 0, 0);
             InfoWindowVisible = false;
-            InfoWindowPosition = new Utils.Tuple<float,float,float,float> (0, 0, 0, 0);
+            InfoWindowPosition = new Tuple<float,float,float,float> (0, 0, 0, 0);
             AutoStartServers = false;
             AutoAcceptConnections = false;
             ConfirmRemoveClient = true;
@@ -158,11 +158,11 @@ namespace KRPC
 
         public bool MainWindowVisible { get; set; }
 
-        public Utils.Tuple<float,float,float,float> MainWindowPosition { get; set; }
+        public Tuple<float,float,float,float> MainWindowPosition { get; set; }
 
         public bool InfoWindowVisible { get; set; }
 
-        public Utils.Tuple<float,float,float,float> InfoWindowPosition { get; set; }
+        public Tuple<float,float,float,float> InfoWindowPosition { get; set; }
 
         public bool AutoStartServers { get; set; }
 

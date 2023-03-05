@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -303,8 +304,8 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "EchoTuple") {
                     MessageAssert.HasParameters (proc, 1);
-                    MessageAssert.HasParameter (proc, 0, typeof(global::KRPC.Utils.Tuple<int,bool>), "t");
-                    MessageAssert.HasReturnType (proc, typeof(global::KRPC.Utils.Tuple<int,bool>));
+                    MessageAssert.HasParameter (proc, 0, typeof(Tuple<int,bool>), "t");
+                    MessageAssert.HasReturnType (proc, typeof(Tuple<int,bool>));
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "EchoNestedCollection") {
@@ -321,8 +322,8 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "TupleDefault") {
                     MessageAssert.HasParameters (proc, 1);
-                    MessageAssert.HasParameterWithDefaultValue (proc, 0, typeof(global::KRPC.Utils.Tuple<int,bool>), "x", new global::KRPC.Utils.Tuple<int,bool> (1, false));
-                    MessageAssert.HasReturnType (proc, typeof(global::KRPC.Utils.Tuple<int,bool>));
+                    MessageAssert.HasParameterWithDefaultValue (proc, 0, typeof(Tuple<int,bool>), "x", new Tuple<int,bool> (1, false));
+                    MessageAssert.HasReturnType (proc, typeof(Tuple<int,bool>));
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "ListDefault") {

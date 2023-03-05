@@ -267,6 +267,5 @@
     <Compile Include="Utils\RoundRobinScheduler.cs" />
     <Compile Include="Utils\StopwatchExtensions.cs" />
     <Compile Include="Utils\Text.cs" />
-    <Compile Include="Utils\Tuple.cs" />
   </ItemGroup>
 </Project>

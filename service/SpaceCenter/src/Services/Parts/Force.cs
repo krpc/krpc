@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using UnityEngine;
-using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {

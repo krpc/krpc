@@ -1,6 +1,6 @@
 using KRPC.Service.Attributes;
 using UnityEngine;
-using Tuple2 = KRPC.Utils.Tuple<double, double>;
+using Tuple2 = System.Tuple<double, double>;
 
 namespace KRPC.UI
 {

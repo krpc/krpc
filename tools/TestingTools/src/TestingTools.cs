@@ -108,8 +108,10 @@ namespace TestingTools
         /// Apply a rotation to the given vessel.
         /// </summary>
         [KRPCProcedure]
-        public static void ApplyRotation (float angle, KRPC.Utils.Tuple<float,float,float> axis, KRPC.SpaceCenter.Services.Vessel vessel = null)
+        public static void ApplyRotation (float angle, Tuple<float,float,float> axis, KRPC.SpaceCenter.Services.Vessel vessel = null)
         {
+            if (axis == null)
+                throw new ArgumentNullException (nameof (axis));
             Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
             var axisVector = new Vector3 (axis.Item1, axis.Item2, axis.Item3).normalized;
             var rotation = internalVessel.transform.rotation * Quaternion.AngleAxis (angle, axisVector);
