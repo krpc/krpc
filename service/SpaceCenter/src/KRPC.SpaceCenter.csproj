@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -7,28 +7,24 @@
     <OutputType>Library</OutputType>
     <RootNamespace>KRPC.SpaceCenter</RootNamespace>
     <AssemblyName>KRPC.SpaceCenter</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\bin\Debug</OutputPath>
+    <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <DocumentationFile>..\..\..\bin\Debug\KRPC.SpaceCenter.xml</DocumentationFile>
-    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Debug\KRPC.SpaceCenter.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\bin\Release</OutputPath>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <DebugType>full</DebugType>
-    <DocumentationFile>..\..\..\bin\Release\KRPC.SpaceCenter.xml</DocumentationFile>
-    <NoWarn>1591</NoWarn>
+    <OutputPath>bin\Release</OutputPath>
+    <DocumentationFile>bin\Release\KRPC.SpaceCenter.xml</DocumentationFile>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -38,52 +34,72 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System">
-      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="mscorlib">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
-      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.dll</HintPath>
     </Reference>
     <Reference Include="System.Core">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Core.dll</HintPath>
-      <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.UIModule">
-      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UIModule.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="System.Xml">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ScreenCaptureModule">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.ScreenCaptureModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.SharedInternalsModule">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.SharedInternalsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\..\..\bazel-bin\tools\build\ksp\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="KRPC.IO.Ports">
+      <HintPath>..\..\..\bazel-bin\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\generated_deps\service\SpaceCenter\AssemblyInfo.cs">
+    <Compile Include="..\..\..\bazel-bin\service\SpaceCenter\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AutoPilot\AttitudeController.cs" />
@@ -125,7 +141,7 @@
     <Compile Include="PilotAddon.cs" />
     <Compile Include="ResourceTransferAddon.cs" />
     <Compile Include="Services\Alarm.cs" />
-    <Compile Include="Services\AlarmClock.cs" />
+    <Compile Include="Services\AlarmManager.cs" />
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\Camera.cs" />
     <Compile Include="Services\CameraMode.cs" />
@@ -144,6 +160,7 @@
     <Compile Include="Services\ControlSource.cs" />
     <Compile Include="Services\ControlState.cs" />
     <Compile Include="Services\CrewMember.cs" />
+    <Compile Include="Services\CrewMemberGender.cs" />
     <Compile Include="Services\CrewMemberType.cs" />
     <Compile Include="Services\Flight.cs" />
     <Compile Include="Services\GameMode.cs" />
@@ -152,13 +169,14 @@
     <Compile Include="Services\Orbit.cs" />
     <Compile Include="Services\Parts\Antenna.cs" />
     <Compile Include="Services\Parts\AntennaState.cs" />
-    <Compile Include="Services\Parts\AutostrutState.cs" />
+    <Compile Include="Services\Parts\AutoStrutMode.cs" />
     <Compile Include="Services\Parts\CargoBay.cs" />
     <Compile Include="Services\Parts\CargoBayState.cs" />
     <Compile Include="Services\Parts\ControlSurface.cs" />
     <Compile Include="Services\Parts\Decoupler.cs" />
     <Compile Include="Services\Parts\DockingPort.cs" />
     <Compile Include="Services\Parts\DockingPortState.cs" />
+    <Compile Include="Services\Parts\DrainMode.cs" />
     <Compile Include="Services\Parts\Engine.cs" />
     <Compile Include="Services\Parts\Experiment.cs" />
     <Compile Include="Services\Parts\Fairing.cs" />
@@ -203,9 +221,11 @@
     <Compile Include="Services\ResourceFlowMode.cs" />
     <Compile Include="Services\ResourceTransfer.cs" />
     <Compile Include="Services\Resources.cs" />
+    <Compile Include="Services\RosterStatus.cs" />
     <Compile Include="Services\SASMode.cs" />
     <Compile Include="Services\SpaceCenter.cs" />
     <Compile Include="Services\SpeedMode.cs" />
+    <Compile Include="Services\SuitType.cs" />
     <Compile Include="Services\Vessel.cs" />
     <Compile Include="Services\VesselSituation.cs" />
     <Compile Include="Services\VesselType.cs" />
