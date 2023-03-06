@@ -100,7 +100,6 @@
       <Link>KRPC.cs</Link>
     </Compile>
     <Compile Include="Addon.cs" />
-    <Compile Include="Compatibility.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationFile.cs" />
     <Compile Include="Continuations\Continuation.cs" />
