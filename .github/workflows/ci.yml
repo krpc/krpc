@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v2
       - name: build
         run: |
+          tools/github-actions/set-version.py
           rm -f lib/mono-4.5
           ln -s /usr/lib/mono/4.5 lib/mono-4.5
           rm -f lib/ksp
@@ -34,5 +35,13 @@ jobs:
           # client/cpp/test-build.sh
           # client/cnano/test-build.sh
 
-          # tools/dist/genfiles.sh
+          tools/dist/genfiles.sh
           # tools/travis-ci/before-deploy.sh
+      - name: upload-artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          path: |
+            bazel-bin/krpc-*.zip
+            bazel-bin/tools/krpctools/krpctools-*.zip
+            bazel-bin/tools/TestServer/TestServer-*.zip
+            bazel-bin/doc/html.zip
