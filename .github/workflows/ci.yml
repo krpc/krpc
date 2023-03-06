@@ -13,9 +13,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - run: git config --system --add safe.directory $GITHUB_WORKSPACE
       - name: build
         run: |
+          git config --system --add safe.directory $GITHUB_WORKSPACE
           tools/github-actions/set-version.py
           rm -f lib/mono-4.5
           ln -s /usr/lib/mono/4.5 lib/mono-4.5
