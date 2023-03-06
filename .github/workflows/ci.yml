@@ -37,11 +37,14 @@ jobs:
           #
           # tools/dist/genfiles.sh
           # # tools/travis-ci/before-deploy.sh
+
+          mkdir deploy
+          cp bazel-bin/krpc-*.zip deploy/
+          cp bazel-bin/tools/krpctools/krpctools-*.zip deploy/
+          cp bazel-bin/tools/TestServer/TestServer-*.zip deploy/
+          cp bazel-bin/doc/html.zip deploy/doc-html.zip
+
       - name: upload-artifacts
         uses: actions/upload-artifact@v3
         with:
-          path: |
-            bazel-bin/krpc-*.zip
-            # bazel-bin/tools/krpctools/krpctools-*.zip
-            # bazel-bin/tools/TestServer/TestServer-*.zip
-            # bazel-bin/doc/html.zip
+          path: deploy
