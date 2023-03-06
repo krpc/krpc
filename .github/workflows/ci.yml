@@ -16,12 +16,12 @@ jobs:
       - name: build
         run: |
           tools/github-actions/set-version.py
-          # rm -f lib/mono-4.5
-          # ln -s /usr/lib/mono/4.5 lib/mono-4.5
-          # rm -f lib/ksp
-          # ln -s /usr/local/lib/ksp lib/ksp
-          # bazel build \
-          #   //:krpc \
+          rm -f lib/mono-4.5
+          ln -s /usr/lib/mono/4.5 lib/mono-4.5
+          rm -f lib/ksp
+          ln -s /usr/local/lib/ksp lib/ksp
+          bazel build \
+            //:krpc
           #   //:csproj \
           #   //doc:html \
           #   //doc:compile-scripts \
@@ -41,8 +41,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path: |
-            config.bzl
-            # bazel-bin/krpc-*.zip
+            bazel-bin/krpc-*.zip
             # bazel-bin/tools/krpctools/krpctools-*.zip
             # bazel-bin/tools/TestServer/TestServer-*.zip
             # bazel-bin/doc/html.zip
