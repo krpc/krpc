@@ -16,7 +16,6 @@ bazel build \
     //service/UI \
     //service/LiDAR \
     //service/DockingCamera \
-    //tools/cslibs \
     //tools/TestingTools
 
 rm -f $GAMEDATA/KRPC.dll
@@ -44,13 +43,13 @@ cp -R -L \
     bazel-bin/service/DockingCamera/KRPC.DockingCamera.dll \
     bazel-bin/service/DockingCamera/KRPC.DockingCamera.xml \
     service/UI/KRPC.UI.ksp \
-    bazel-bin/tools/cslibs/unity/Google.Protobuf.dll \
-    bazel-bin/tools/cslibs/KRPC.IO.Ports.dll \
+    bazel-bin/tools/build/ksp/Google.Protobuf.dll \
+    bazel-bin/tools/build/ksp/KRPC.IO.Ports.dll \
     bazel-bin/tools/TestingTools/TestingTools.dll \
     bazel-bin/tools/TestingTools/TestingTools.xml \
     service/SpaceCenter/src/module-manager.cfg \
     $GAMEDATA/
-cp -L bazel-bin/tools/cslibs/ModuleManager.4.2.2.dll $GAMEDATA/../
+cp -L bazel-krpc/external/module_manager/file/ModuleManager.4.2.2.dll $GAMEDATA/../
 
 mkdir -p $GAMEDATA/PluginData
 cp tools/settings.cfg $GAMEDATA/PluginData/

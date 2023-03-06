@@ -12,9 +12,10 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: build
         run: |
+          tools/github-actions/set-version.py
           rm -f lib/mono-4.5
           ln -s /usr/lib/mono/4.5 lib/mono-4.5
           rm -f lib/ksp
@@ -34,5 +35,17 @@ jobs:
           # client/cpp/test-build.sh
           # client/cnano/test-build.sh
 
-          # tools/dist/genfiles.sh
+          tools/dist/genfiles.sh
           # tools/travis-ci/before-deploy.sh
+
+          mkdir deploy
+          cp bazel-bin/krpc-*.zip deploy/
+          cp bazel-bin/tools/krpctools/krpctools-*.zip deploy/
+          cp bazel-bin/tools/TestServer/TestServer-*.zip deploy/
+          cp bazel-bin/krpc-genfiles-*.zip deploy/
+          cp bazel-bin/doc/html.zip deploy/doc-html.zip
+
+      - name: upload-artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          path: deploy

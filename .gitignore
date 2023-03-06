@@ -11,3 +11,4 @@ PartDatabase.cfg
 lib/mono-4.5
 *.user
 *.pyc
+packages

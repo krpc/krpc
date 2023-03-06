@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\..\packages\NUnit.3.13.3\build\NUnit.props" Condition="Exists('..\..\packages\NUnit.3.13.3\build\NUnit.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -27,6 +28,9 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>..\..\..\lib\mono-4.5\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Memory">
       <HintPath>..\..\..\lib\mono-4.5\System.Memory.dll</HintPath>
     </Reference>
@@ -40,6 +44,10 @@
     <Reference Include="Moq">
       <HintPath>..\..\..\bazel-krpc\external\csharp_moq\lib\net45\Moq.dll</HintPath>
       <Package>Moq</Package>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\..\bazel-krpc\external\csharp_castle_core\lib\net45\Castle.Core.dll</HintPath>
+      <Package>Castle.Core</Package>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -61,5 +69,8 @@
     <Compile Include="..\..\..\bazel-bin\client\csharp\Services\TestService.cs">
       <Link>Services\TestService.cs</Link>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
