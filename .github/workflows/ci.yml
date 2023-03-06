@@ -22,27 +22,28 @@ jobs:
           ln -s /usr/local/lib/ksp lib/ksp
           bazel build \
             //:krpc \
+            //:csproj \
+            //doc:html \
+            //doc:compile-scripts \
             //tools/krpctools \
-            //tools/TestServer:archive
-          #   //:csproj \
-          #   //doc:html \
-          #   //doc:compile-scripts \
-          #   //:ci-test
-          # msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
-          # msbuild KRPC.sln /t:Clean,Build -p:Configuration=Release /warnaserror
-          #
-          # bazel test //:ci-test
-          # # client/cpp/test-build.sh
-          # # client/cnano/test-build.sh
-          #
-          # tools/dist/genfiles.sh
-          # # tools/travis-ci/before-deploy.sh
+            //tools/TestServer:archive \
+            //:ci-test
+          msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
+          msbuild KRPC.sln /t:Clean,Build -p:Configuration=Release /warnaserror
+
+          bazel test //:ci-test
+          # client/cpp/test-build.sh
+          # client/cnano/test-build.sh
+
+          tools/dist/genfiles.sh
+          # tools/travis-ci/before-deploy.sh
 
           mkdir deploy
           cp bazel-bin/krpc-*.zip deploy/
           cp bazel-bin/tools/krpctools/krpctools-*.zip deploy/
           cp bazel-bin/tools/TestServer/TestServer-*.zip deploy/
-          #cp bazel-bin/doc/html.zip deploy/doc-html.zip
+          cp bazel-bin/krpc-genfiles-*.zip deploy/
+          cp bazel-bin/doc/html.zip deploy/doc-html.zip
 
       - name: upload-artifacts
         uses: actions/upload-artifact@v3
