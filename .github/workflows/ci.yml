@@ -13,6 +13,7 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        run: git config --system --add safe.directory ${{ github.workspace }}
       - name: build
         run: |
           tools/github-actions/set-version.py
