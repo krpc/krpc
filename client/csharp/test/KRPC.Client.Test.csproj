@@ -27,6 +27,9 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>..\..\..\lib\mono-4.5\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Memory">
       <HintPath>..\..\..\lib\mono-4.5\System.Memory.dll</HintPath>
     </Reference>
@@ -40,6 +43,10 @@
     <Reference Include="Moq">
       <HintPath>..\..\..\bazel-krpc\external\csharp_moq\lib\net45\Moq.dll</HintPath>
       <Package>Moq</Package>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\..\bazel-krpc\external\csharp_castle_core\lib\net45\Castle.Core.dll</HintPath>
+      <Package>Castle.Core</Package>
     </Reference>
   </ItemGroup>
   <ItemGroup>
