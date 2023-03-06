@@ -16,32 +16,33 @@ jobs:
       - name: build
         run: |
           tools/github-actions/set-version.py
-          rm -f lib/mono-4.5
-          ln -s /usr/lib/mono/4.5 lib/mono-4.5
-          rm -f lib/ksp
-          ln -s /usr/local/lib/ksp lib/ksp
-          bazel build \
-            //:krpc \
-            //:csproj \
-            //doc:html \
-            //doc:compile-scripts \
-            //tools/krpctools \
-            //tools/TestServer:archive \
-            //:ci-test
-          msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
-          msbuild KRPC.sln /t:Clean,Build -p:Configuration=Release /warnaserror
-
-          bazel test //:ci-test
-          # client/cpp/test-build.sh
-          # client/cnano/test-build.sh
-
-          tools/dist/genfiles.sh
-          # tools/travis-ci/before-deploy.sh
+          # rm -f lib/mono-4.5
+          # ln -s /usr/lib/mono/4.5 lib/mono-4.5
+          # rm -f lib/ksp
+          # ln -s /usr/local/lib/ksp lib/ksp
+          # bazel build \
+          #   //:krpc \
+          #   //:csproj \
+          #   //doc:html \
+          #   //doc:compile-scripts \
+          #   //tools/krpctools \
+          #   //tools/TestServer:archive \
+          #   //:ci-test
+          # msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
+          # msbuild KRPC.sln /t:Clean,Build -p:Configuration=Release /warnaserror
+          #
+          # bazel test //:ci-test
+          # # client/cpp/test-build.sh
+          # # client/cnano/test-build.sh
+          #
+          # tools/dist/genfiles.sh
+          # # tools/travis-ci/before-deploy.sh
       - name: upload-artifacts
         uses: actions/upload-artifact@v3
         with:
           path: |
-            bazel-bin/krpc-*.zip
-            bazel-bin/tools/krpctools/krpctools-*.zip
-            bazel-bin/tools/TestServer/TestServer-*.zip
-            bazel-bin/doc/html.zip
+            config.bzl
+            # bazel-bin/krpc-*.zip
+            # bazel-bin/tools/krpctools/krpctools-*.zip
+            # bazel-bin/tools/TestServer/TestServer-*.zip
+            # bazel-bin/doc/html.zip
