@@ -23,6 +23,7 @@ zip -r $FILE \
     bazel-krpc/external/csharp_moq \
     bazel-krpc/external/csharp_json \
     bazel-krpc/external/csharp_options \
+    bazel-krpc/external/csharp_castle_core \
     bazel-bin/tools/build/ksp/Google.Protobuf.dll \
     bazel-bin/tools/build/ksp/KRPC.IO.Ports.dll \
     bazel-bin/tools/build/mono-4.5/Google.Protobuf.dll
