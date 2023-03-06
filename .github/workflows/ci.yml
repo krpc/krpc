@@ -21,12 +21,12 @@ jobs:
           rm -f lib/ksp
           ln -s /usr/local/lib/ksp lib/ksp
           bazel build \
-            //:krpc
+            //:krpc \
+            //tools/krpctools \
+            //tools/TestServer:archive
           #   //:csproj \
           #   //doc:html \
           #   //doc:compile-scripts \
-          #   //tools/krpctools \
-          #   //tools/TestServer:archive \
           #   //:ci-test
           # msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
           # msbuild KRPC.sln /t:Clean,Build -p:Configuration=Release /warnaserror
@@ -42,7 +42,7 @@ jobs:
           cp bazel-bin/krpc-*.zip deploy/
           cp bazel-bin/tools/krpctools/krpctools-*.zip deploy/
           cp bazel-bin/tools/TestServer/TestServer-*.zip deploy/
-          cp bazel-bin/doc/html.zip deploy/doc-html.zip
+          #cp bazel-bin/doc/html.zip deploy/doc-html.zip
 
       - name: upload-artifacts
         uses: actions/upload-artifact@v3
