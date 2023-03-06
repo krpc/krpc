@@ -1,0 +1,4 @@
+v1.0.0
+======
+
+ * Separated out from KRPC.dll
