@@ -1,21 +1,25 @@
+from __future__ import annotations
+from typing import Iterable, List, Tuple
 import unittest
 import sys
 from krpc.encoder import Encoder
 from krpc.error import EncodingError
 from krpc.decoder import Decoder
-from krpc.types import Types
+from krpc.types import Types, TypeBase
 from krpc.platform import hexlify, unhexlify
 
 
 class TestEncodeDecode(unittest.TestCase):
     types = Types()
 
-    def _run_test_encode_value(self, typ, cases):
+    def _run_test_encode_value(self, typ: TypeBase,
+                               cases: Iterable[Tuple[object, str]]) -> None:
         for decoded, encoded in cases:
             data = Encoder.encode(decoded, typ)
             self.assertEqual(encoded, hexlify(data))
 
-    def _run_test_decode_value(self, typ, cases):
+    def _run_test_decode_value(self, typ: TypeBase,
+                               cases: Iterable[Tuple[object, str]]) -> None:
         for decoded, encoded in cases:
             value = Decoder.decode(unhexlify(encoded), typ)
             if typ.python_type == float:
@@ -23,8 +27,8 @@ class TestEncodeDecode(unittest.TestCase):
             else:
                 self.assertEqual(decoded, value)
 
-    def test_double(self):
-        cases = [
+    def test_double(self) -> None:
+        cases: List[Tuple[object, str]] = [
             (0.0, '0000000000000000'),
             (-1.0, '000000000000f0bf'),
             (3.14159265359, 'ea2e4454fb210940'),
@@ -35,8 +39,8 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(self.types.double_type, cases)
         self._run_test_decode_value(self.types.double_type, cases)
 
-    def test_float(self):
-        cases = [
+    def test_float(self) -> None:
+        cases: List[Tuple[object, str]] = [
             (3.14159265359, 'db0f4940'),
             (-1.0, '000080bf'),
             (0.0, '00000000'),
@@ -47,8 +51,8 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(self.types.float_type, cases)
         self._run_test_decode_value(self.types.float_type, cases)
 
-    def test_sint32(self):
-        cases = [
+    def test_sint32(self) -> None:
+        cases: List[Tuple[object, str]] = [
             (0, '00'),
             (1, '02'),
             (42, '54'),
@@ -60,8 +64,8 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(self.types.sint32_type, cases)
         self._run_test_decode_value(self.types.sint32_type, cases)
 
-    def test_sint64(self):
-        cases = [
+    def test_sint64(self) -> None:
+        cases: List[Tuple[object, str]] = [
             (0, '00'),
             (1, '02'),
             (42, '54'),
@@ -72,7 +76,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(self.types.sint64_type, cases)
         self._run_test_decode_value(self.types.sint64_type, cases)
 
-    def test_uint32(self):
+    def test_uint32(self) -> None:
         cases = [
             (0, '00'),
             (1, '01'),
@@ -88,8 +92,8 @@ class TestEncodeDecode(unittest.TestCase):
         self.assertRaises(EncodingError, Encoder.encode,
                           -849, self.types.uint32_type)
 
-    def test_uint64(self):
-        cases = [
+    def test_uint64(self) -> None:
+        cases: List[Tuple[object, str]] = [
             (0, '00'),
             (1, '01'),
             (42, '2a'),
@@ -104,16 +108,16 @@ class TestEncodeDecode(unittest.TestCase):
         self.assertRaises(EncodingError, Encoder.encode,
                           -849, self.types.uint64_type)
 
-    def test_bool(self):
-        cases = [
+    def test_bool(self) -> None:
+        cases: List[Tuple[object, str]] = [
             (True, '01'),
             (False, '00')
         ]
         self._run_test_encode_value(self.types.bool_type, cases)
         self._run_test_decode_value(self.types.bool_type, cases)
 
-    def test_string(self):
-        cases = [
+    def test_string(self) -> None:
+        cases: List[Tuple[object, str]] = [
             ('', '00'),
             ('testing', '0774657374696e67'),
             ('One small step for Kerbal-kind!',
@@ -127,8 +131,8 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(self.types.string_type, cases)
         self._run_test_decode_value(self.types.string_type, cases)
 
-    def test_bytes(self):
-        cases = [
+    def test_bytes(self) -> None:
+        cases: List[Tuple[object, str]] = [
             (b'', '00'),
             (b'\xba\xda\x55', '03bada55'),
             (b'\xde\xad\xbe\xef', '04deadbeef')
@@ -136,8 +140,8 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(self.types.bytes_type, cases)
         self._run_test_decode_value(self.types.bytes_type, cases)
 
-    def test_tuple(self):
-        cases = [((1,), '0a0101')]
+    def test_tuple(self) -> None:
+        cases: List[Tuple[object, str]] = [((1,), '0a0101')]
         self._run_test_encode_value(
             self.types.tuple_type(self.types.uint32_type), cases)
         self._run_test_decode_value(
@@ -150,8 +154,8 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
 
-    def test_list(self):
-        cases = [
+    def test_list(self) -> None:
+        cases: List[Tuple[object, str]] = [
             ([], ''),
             ([1], '0a0101'),
             ([1, 2, 3, 4], '0a01010a01020a01030a0104')
@@ -160,8 +164,8 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
 
-    def test_set(self):
-        cases = [
+    def test_set(self) -> None:
+        cases: List[Tuple[object, str]] = [
             (set(), ''),
             (set([1]), '0a0101'),
             (set([1, 2, 3, 4]), '0a01010a01020a01030a0104')
@@ -170,8 +174,8 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
 
-    def test_dictionary(self):
-        cases = [
+    def test_dictionary(self) -> None:
+        cases: List[Tuple[object, str]] = [
             ({}, ''),
             ({'': 0}, '0a060a0100120100'),
             ({'foo': 42, 'bar': 365, 'baz': 3},

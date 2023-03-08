@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import cast, Optional
 from krpc.connection import Connection
 from krpc.client import Client
 from krpc.encoder import Encoder
@@ -12,9 +14,9 @@ DEFAULT_RPC_PORT = 50000
 DEFAULT_STREAM_PORT = 50001
 
 
-def connect(name=None, address=DEFAULT_ADDRESS,
-            rpc_port=DEFAULT_RPC_PORT, stream_port=DEFAULT_STREAM_PORT):
-    # type: (str, str, int, int) -> Client
+def connect(name: Optional[str] = None, address: str = DEFAULT_ADDRESS,
+            rpc_port: int = DEFAULT_RPC_PORT,
+            stream_port: int = DEFAULT_STREAM_PORT) -> Client:
     """
     Connect to a kRPC server on the specified IP address and port numbers.
     If stream_port is None, does not connect to the stream server.
@@ -29,7 +31,7 @@ def connect(name=None, address=DEFAULT_ADDRESS,
     if name is not None:
         request.client_name = name
     rpc_connection.send_message(request)
-    response = rpc_connection.receive_message(ConnectionResponse)
+    response = cast(ConnectionResponse, rpc_connection.receive_message(ConnectionResponse))
     if response.status != ConnectionResponse.OK:
         raise ConnectionError(response.message)
     client_identifier = response.client_identifier
@@ -42,7 +44,7 @@ def connect(name=None, address=DEFAULT_ADDRESS,
         request.type = ConnectionRequest.STREAM
         request.client_identifier = client_identifier
         stream_connection.send_message(request)
-        response = stream_connection.receive_message(ConnectionResponse)
+        response = cast(ConnectionResponse, stream_connection.receive_message(ConnectionResponse))
         if response.status != ConnectionResponse.OK:
             raise ConnectionError(response.message)
     else:

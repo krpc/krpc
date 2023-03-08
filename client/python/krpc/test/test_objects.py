@@ -4,10 +4,10 @@ from krpc.test.servertestcase import ServerTestCase
 
 class TestObjects(ServerTestCase, unittest.TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         super(TestObjects, cls).setUpClass()
 
-    def test_equality(self):
+    def test_equality(self) -> None:
         obj1 = self.conn.test_service.create_test_object('jeb')
         obj2 = self.conn.test_service.create_test_object('jeb')
         self.assertTrue(obj1 == obj2)
@@ -26,7 +26,7 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         # pylint: disable=unnecessary-dunder-call
         self.assertTrue(obj1.__ne__(None))
 
-    def test_hash(self):
+    def test_hash(self) -> None:
         obj1 = self.conn.test_service.create_test_object('jeb')
         obj2 = self.conn.test_service.create_test_object('jeb')
         obj3 = self.conn.test_service.create_test_object('bob')
@@ -40,7 +40,7 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         obj1a = self.conn.test_service.object_property
         self.assertEqual(hash(obj1), hash(obj1a))
 
-    def test_sorting(self):
+    def test_sorting(self) -> None:
         obj1 = self.conn.test_service.create_test_object('object_sorting_1')
         obj2 = self.conn.test_service.create_test_object('object_sorting_2')
         obj3 = self.conn.test_service.create_test_object('object_sorting_3')
@@ -58,7 +58,7 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         # pylint: disable=comparison-with-itself
         self.assertTrue(obj1 >= obj1)
 
-    def test_memory_allocation(self):
+    def test_memory_allocation(self) -> None:
         obj1 = self.conn.test_service.create_test_object('jeb')
         obj2 = self.conn.test_service.create_test_object('jeb')
         obj3 = self.conn.test_service.create_test_object('bob')

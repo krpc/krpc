@@ -1,14 +1,16 @@
+from __future__ import annotations
+from typing import cast, Callable, Generator, Iterable, Iterator, Optional, Type
+from types import TracebackType
 from contextlib import contextmanager
 import sys
 import threading
-from typing import Callable, Any, Optional, TYPE_CHECKING
-
-
+from krpc.connection import Connection
 from krpc.error import StreamError
 from krpc.event import Event
-from krpc.types import Types, DefaultArgument
+from krpc.types import Types, TypeBase, DefaultArgument, EXCEPTION_TYPES
 from krpc.service import create_service
 from krpc.streammanager import StreamManager
+from krpc.stream import Stream
 from krpc.encoder import Encoder
 from krpc.decoder import Decoder
 from krpc.utils import snake_case
@@ -16,18 +18,6 @@ from krpc.error import RPCError
 import krpc.streammanager
 import krpc.schema.KRPC_pb2 as KRPC
 
-if TYPE_CHECKING:
-    from krpc.stream import Stream
-    from krpc.drawing import Drawing
-    from krpc.krpc import KRPC as KRPC_Service
-    from krpc.spacecenter import SpaceCenter
-    from krpc.ui import UI
-    from krpc.infernalrobotics import InfernalRobotics
-    from krpc.kerbalalarmclock import KerbalAlarmClock
-    from krpc.remotetech import RemoteTech
-
-if sys.version_info < (3, 0):
-    from future_builtins import zip  # noqa  # pylint: disable=redefined-builtin,import-error
 
 
 class Client:
@@ -38,7 +28,7 @@ class Client:
     client.ServiceName.ProcedureName(parameter)
     """
 
-    def __init__(self, rpc_connection, stream_connection):
+    def __init__(self, rpc_connection: Connection, stream_connection: Connection -> None:
         self._types = Types()
         self._rpc_connection = rpc_connection
         self._rpc_connection_lock = threading.Lock()
@@ -66,20 +56,23 @@ class Client:
         else:
             self._stream_thread = None
 
-    def close(self):
+    def close(self) -> None:
         self._rpc_connection.close()
         if self._stream_thread is not None:
             self._stream_thread_stop.set()
             self._stream_thread.join()
 
-    def __enter__(self):
+    def __enter__(self) -> Client:
         return self
 
-    def __exit__(self, typ, value, traceback):
+    def __exit__(self,
+                 exc_type: Optional[Type[BaseException]],
+                 exc_value: Optional[BaseException],
+                 exc_tb: Optional[TracebackType]) -> None:
         self.close()
 
-    def add_stream(self, func, *args, **kwargs):
-        # type: (Callable, ..., ...) -> Stream
+    def add_stream(self, func: Callable,  # type: ignore[type-arg]
+                   *args: object, **kwargs: object) -> Stream:
         """ Add a stream to the server """
         if self._stream_connection is None:
             raise StreamError('Not connected to stream server')
@@ -90,7 +83,8 @@ class Client:
         return krpc.stream.Stream.from_call(self, return_type, call)
 
     @contextmanager
-    def stream(self, func, *args, **kwargs):
+    def stream(self, func: Callable,  # type: ignore[type-arg]
+               *args: object, **kwargs: object) -> Iterator[Stream]:
         """ 'with' support for add_stream """
         stream = self.add_stream(func, *args, **kwargs)
         try:
@@ -99,13 +93,12 @@ class Client:
             stream.remove()
 
     @property
-    def stream_update_condition(self):
+    def stream_update_condition(self) -> threading.Condition:
         """ Condition variable that is notified when
             a stream update message has finished being processed. """
         return self._stream_manager.update_condition
 
-    def wait_for_stream_update(self, timeout=None):
-        # type: (Optional[float]) -> None
+    def wait_for_stream_update(self, timeout: Optional[float] = None) -> None:
         """ Wait until the next stream update message or a timeout occurs.
             The condition variable must be locked before calling this method.
 
@@ -113,20 +106,18 @@ class Client:
             specifying the timeout in seconds for the operation. """
         self._stream_manager.wait_for_update(timeout)
 
-    def add_stream_update_callback(self, callback):
-        # type: (Callable) -> None
+    def add_stream_update_callback(self, callback: Callable[[], None]) -> None:
         """ Add a callback that is invoked whenever
             a stream update message has finished being processed. """
         self._stream_manager.add_update_callback(callback)
 
-    def remove_stream_update_callback(self, callback):
-        # type: (Callable) -> None
+    def remove_stream_update_callback(self, callback: Callable[[], None]) -> None:
         """ Remove a stream update callback. """
         self._stream_manager.remove_update_callback(callback)
 
     @staticmethod
-    def get_call(func, *args, **kwargs):
-        # type: (Callable, Any, Any) -> Any
+    def get_call(func: Callable,  # type: ignore[type-arg]
+                 *args: object, **kwargs: object) -> KRPC.ProcedureCall:
         """ Convert a remote procedure call to a KRPC.ProcedureCall message """
         if func == getattr:
             # A property or class property getter
@@ -137,13 +128,16 @@ class Client:
             raise StreamError('Cannot create a call for a property setter')
         if hasattr(func, '__self__'):
             # A method
-            return func._build_call(func.__self__, *args, **kwargs)
+            return func._build_call(  # type: ignore[attr-defined]
+                func.__self__, *args, **kwargs
+            )
         # A class method
-        return func._build_call(*args, **kwargs)
+        return func._build_call(*args, **kwargs)  # type: ignore[attr-defined]
 
     @staticmethod
-    def _get_return_type(func, *args,
-                         **kwargs):  # pylint: disable=unused-argument
+    def _get_return_type(func: Callable,  # type: ignore[type-arg] # pylint: disable=unused-argument
+                         *args: object,
+                         **kwargs: object) -> TypeBase:
         """ Get the return type for a remote procedure call """
         if func == getattr:
             # A property or class property getter
@@ -158,8 +152,9 @@ class Client:
         # A class method
         return func._return_type
 
-    def _invoke(self, service, procedure, args,
-                param_names, param_types, return_type):
+    def _invoke(self, service: str, procedure: str, args: Iterable[object],
+                param_names: Iterable[str], param_types: Iterable[TypeBase],
+                return_type: Optional[TypeBase]) -> object:
         """ Execute an RPC """
 
         # Build the request
@@ -171,7 +166,7 @@ class Client:
         # Send the request
         with self._rpc_connection_lock:
             self._rpc_connection.send_message(request)
-            response = self._rpc_connection.receive_message(KRPC.Response)
+            response = cast(KRPC.Response, self._rpc_connection.receive_message(KRPC.Response))
 
         # Check for an error response
         if response.HasField('error'):
@@ -189,9 +184,15 @@ class Client:
                 result = Event(self, result)
         return result
 
-    def _build_call(self, service, procedure, args,
-                    param_names, param_types, return_type):
-        # pylint: disable=unused-argument
+    def _build_call(
+            self,
+            service: str,
+            procedure: str,
+            args: Iterable[object],
+            param_names: Iterable[str],  # pylint: disable=unused-argument
+            param_types: Iterable[TypeBase],
+            return_type: Optional[TypeBase]  # pylint: disable=unused-argument
+    ) -> KRPC.ProcedureCall:
         """ Build a KRPC.ProcedureCall object """
 
         call = KRPC.ProcedureCall()
@@ -213,7 +214,7 @@ class Client:
 
         return call
 
-    def _build_error(self, error):
+    def _build_error(self, error: KRPC.Error) -> Exception:
         """ Build an exception from an error message that
             can be thrown to the calling code """
         # TODO: modify the stack trace of the thrown exception so it looks like
