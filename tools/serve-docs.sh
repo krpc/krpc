@@ -29,6 +29,7 @@ if [ ! -d "$env" ]; then
   pip install \
       "sphinx_rtd_theme==1.2.0" \
       "sphinxcontrib_spelling==8.0.0" \
+      "sphinxcontrib-jquery==2.0.0" \
       "sphinx-csharp==0.1.8" \
       "sphinx-tabs==3.4.1" \
       "sphinxcontrib-luadomain==1.1.2" \

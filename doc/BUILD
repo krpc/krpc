@@ -75,6 +75,7 @@ py_script(
         '@python_sphinxcontrib_applehelp//file',
         '@python_sphinxcontrib_devhelp//file',
         '@python_sphinxcontrib_htmlhelp//file',
+        '@python_sphinxcontrib_jquery//file',
         '@python_sphinxcontrib_jsmath//file',
         '@python_sphinxcontrib_luadomain//file',
         '@python_sphinxcontrib_qthelp//file',

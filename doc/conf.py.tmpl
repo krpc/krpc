@@ -6,8 +6,17 @@ author = ''
 
 master_doc = 'index'
 source_suffix = '.rst'
-extensions = ['sphinx.ext.mathjax', 'sphinxcontrib.spelling', 'sphinx.ext.todo', 'sphinx.ext.extlinks',
-              'sphinxcontrib.luadomain', 'sphinx_csharp.csharp', 'javasphinx', 'sphinx_tabs.tabs']
+extensions = [
+    'sphinx.ext.mathjax',
+    'sphinx.ext.todo',
+    'sphinx.ext.extlinks',
+    'sphinxcontrib.spelling',
+    'sphinxcontrib.jquery',
+    'sphinx_tabs.tabs',
+    'sphinxcontrib.luadomain',
+    'sphinx_csharp.csharp',
+    'javasphinx'
+]
 templates_path = ['_templates']
 
 pygments_style = 'sphinx'
