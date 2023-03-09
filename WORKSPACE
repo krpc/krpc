@@ -707,6 +707,13 @@ http_file(
 )
 
 http_file(
+    name = 'python_sphinxcontrib_jquery',
+    url = 'https://files.pythonhosted.org/packages/38/e8/8ba91a585a8d0b6a1952eeeb8ea392e025e4efc7c860f4679794a776b116/sphinxcontrib-jquery-2.0.0.tar.gz',
+    sha256 = '8fb65f6dba84bf7bcd1aea1f02ab3955ac34611d838bcc95d4983b805b234daa',
+    downloaded_file_path = 'sphinxcontrib-jquery-2.0.0.tar.gz'
+)
+
+http_file(
     name = 'python_sphinxcontrib_jsmath',
     url = 'https://files.pythonhosted.org/packages/b2/e8/9ed3830aeed71f17c026a07a5097edcf44b692850ef215b161b8ad875729/sphinxcontrib-jsmath-1.0.1.tar.gz',
     sha256 = 'a9925e4a4587247ed2191a22df5f6970656cb8ca2bd6284309578f2153e0c4b8',
