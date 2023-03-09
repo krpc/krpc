@@ -33,3 +33,5 @@ Scripts/Tools/Libraries etc.
  * `A small logging script. <https://gist.github.com/fat-lobyte/4326afa551fa04dd028f>`_
  * `Universal Powered Guidance <https://github.com/denebwang/ksp_UPG>`_
  * `Flight control software for rockets and torchships <https://github.com/object-Object/kRPC-or-Bust>`_
+ * `MechPeste <https://github.com/Pesterenan/MechPeste-Java>`_ -- a java app for controlling
+   rockets.
