@@ -7,7 +7,7 @@ Lua Client
 This client provides functionality to interact with a kRPC server from programs
 written in Lua. It can be `installed using LuaRocks
 <https://luarocks.org/modules/djungelorm/krpc>`_ or
-:github-download-zip:`downloaded from GitHub <krpc-lua>`.
+`downloaded from GitHub <https://github.com/krpc/krpc/releases>`_.
 
 Installing the Library
 ----------------------

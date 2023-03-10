@@ -14,8 +14,8 @@ Manually include the source in your project
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The source files can be included in your project manually, by downloading and extracting the
-:github-download-zip:`source archive <krpc-cnano>`. The header files can be found in the ``include``
-directory and the source files are in ``src``.
+source archive from the `GitHub release page <https://github.com/krpc/krpc/releases>`_.
+The header files can be found in the ``include`` directory and the source files are in ``src``.
 
 Arduino Library Manager
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -33,8 +33,8 @@ Using the configure script
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can build and install the client library and headers using the configure script provided with
-the source. :github-download-zip:`Download the source archive <krpc-cnano>`, extract it and then
-execute the following:
+the source. `Download the source archive <https://github.com/krpc/krpc/releases>_`, extract it
+and then execute the following:
 
 .. code-block:: bash
 
@@ -46,8 +46,8 @@ execute the following:
 Using CMake
 ^^^^^^^^^^^
 
-Alternatively, you can install the client library and headers using
-CMake. :github-download-zip:`Download the source archive <krpc-cnano>`, extract it and execute the
+Alternatively, you can install the client library and headers using CMake.
+`Download the source archive <https://github.com/krpc/krpc/releases>_`, extract it and execute the
 following:
 
 .. code-block:: bash
