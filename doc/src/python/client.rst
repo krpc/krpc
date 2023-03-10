@@ -10,7 +10,7 @@ Installing the Library
 ----------------------
 
 The library can be found on `PyPI <https://pypi.python.org/pypi/krpc>`_ or
-:github-download-zip:`downloaded from GitHub <krpc-python>`.
+`downloaded from GitHub <https://github.com/krpc/krpc/releases>`_.
 
 To install using pip on Linux:
 

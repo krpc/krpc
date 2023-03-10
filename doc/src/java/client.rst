@@ -5,8 +5,8 @@ Java Client
 ===========
 
 This client provides a Java API for interacting with a kRPC server. A jar containing the
-``krpc.client`` package can be :github-download-jar:`downloaded from GitHub <krpc-java>`. It
-requires Java version 1.8.
+``krpc.client`` package can be `downloaded from GitHub <https://github.com/krpc/krpc/releases>`_.
+It requires Java version 1.8.
 
 Using the Library
 -----------------
