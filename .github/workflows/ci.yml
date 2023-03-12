@@ -28,7 +28,6 @@ jobs:
           cp bazel-bin/krpc-*.zip deploy/
           cp bazel-bin/tools/krpctools/krpctools-*.zip deploy/
           cp bazel-bin/tools/TestServer/TestServer-*.zip deploy/
-          cp bazel-bin/krpc-genfiles-*.zip deploy/
       - name: upload-artifacts
         uses: actions/upload-artifact@v3
         with:
