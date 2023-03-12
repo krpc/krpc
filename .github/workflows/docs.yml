@@ -38,5 +38,4 @@ jobs:
         with:
           path: gh-pages
       - name: deploy
-        id: deployment
         uses: actions/deploy-pages@v1
