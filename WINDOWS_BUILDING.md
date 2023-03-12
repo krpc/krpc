@@ -1,3 +1,5 @@
+# These instructions are likely out of date. We are working on better build instructions for Windows
+
 Note: Tested with Windows 10 2004 using WSL 2
 
 1) git clone https://github.com/kylewill0725/krpc to a folder in Windows. This folder from now on will be called `/krpc`
