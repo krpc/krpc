@@ -48,12 +48,14 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: build
-        run: tools/dist/genfiles.sh
+        run: |
+          tools/dist/genfiles.sh
+          cp bazel-bin/krpc-genfiles-*.zip ./
       - name: upload-artifact
         uses: actions/upload-artifact@v3
         with:
           name: genfiles
-          path: bazel-bin/krpc-genfiles-*.zip
+          path: krpc-genfiles-*.zip
 
   build-csharp-sln:
     needs: build-genfiles
@@ -73,7 +75,9 @@ jobs:
         with:
           name: genfiles
       - name: extract-genfiles
-        run: unzip bazel-bin/krpc-genfiles-*.zip -d ./
+        run: |
+          unzip krpc-genfiles-*.zip -d ./
+          rm krpc-genfiles-*.zip
       - name: build
         run: |
           msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
