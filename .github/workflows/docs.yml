@@ -1,0 +1,40 @@
+name: docs
+
+on:
+  push:
+    branches:
+      - docs
+
+permissions:
+  contents: read
+  packages: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: build
+        run: |
+          rm -f lib/mono-4.5
+          ln -s /usr/lib/mono/4.5 lib/mono-4.5
+          rm -f lib/ksp
+          ln -s /usr/local/lib/ksp lib/ksp
+          bazel build //doc:html
+          mkdir gh-pages
+          echo "" > gh-pages/.nojekyll
+          (cd gh-pages; unzip -q ../bazel-bin/doc/html.zip)
+      - name: upload-artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: gh-pages
+      - name: deploy
+        uses: actions/deploy-pages@v1
