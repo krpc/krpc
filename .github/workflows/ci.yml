@@ -3,7 +3,7 @@ name: ci
 on: pull_request
 
 jobs:
-  build:
+  build-krpc:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:2.6.0
@@ -22,14 +22,8 @@ jobs:
             //:csproj \
             //tools/krpctools \
             //tools/TestServer:archive
-      - name: save-build-cache
-        uses: actions/cache/save@v3
-        id: build-cache
-        with:
-          path: ~/.cache/bazel
-          key: ${{ github.run_number }}-${{ github.run_attempt }}
       - name: collect-artifacts
-        run : |
+        run: |
           tools/dist/genfiles.sh
           mkdir deploy
           cp bazel-bin/krpc-*.zip deploy/
@@ -41,8 +35,7 @@ jobs:
         with:
           path: deploy
 
-  build-docs:
-    needs: build
+  build-csharp-sln:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:2.6.0
@@ -52,16 +45,44 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-      - name: restore-build-cache
-        uses: actions/cache/restore@v3
-        id: build-cache
-        with:
-          path: ~/.cache/bazel
-          key: ${{ github.run_number }}-${{ github.run_attempt }}
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: build
+        run: |
+          msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
+          msbuild KRPC.sln /t:Clean,Build -p:Configuration=Release /warnaserror
+
+  build-docs:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
       - name: setup
         uses: ./.github/actions/build-setup
       - name: build
         run: bazel build //doc:html
+
+  test-docs:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: build
+        run: |
+          bazel test //doc:ci-test
+          bazel build //doc:compile-scripts
 
   test-server:
     needs: build
@@ -74,25 +95,158 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-      - name: restore-build-cache
-        uses: actions/cache/restore@v3
-        id: build-cache
-        with:
-          path: ~/.cache/bazel
-          key: ${{ github.run_number }}-${{ github.run_attempt }}
       - name: setup
         uses: ./.github/actions/build-setup
       - name: test
         run: bazel test //server:ci-test
 
-# job: compile docs scripts
-#   bazel build //doc:compile-scripts
+  test-client-cnano:
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: test
+        run: bazel test //client/cnano:ci-test
+      - name: test-build
+        run: client/cnano/test-build.sh
 
-# job: build using sln file
-#   msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
-#   msbuild KRPC.sln /t:Clean,Build -p:Configuration=Release /warnaserror
+  test-client-cpp:
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: test
+        run: bazel test //client/cpp:ci-test &&
+      - name: test-build
+        run: client/cpp/test-build.sh
 
-# multiple jobs from following:
-#   bazel test //:ci-test
-#   client/cpp/test-build.sh
-#   client/cnano/test-build.sh
+  test-client-csharp:
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: test
+        run: bazel test //client/csharp:ci-test
+
+  test-client-java:
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: test
+        run: bazel test //client/java:ci-test
+
+  test-client-python:
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: test
+        run: bazel test //client/python:ci-test
+
+  test-client-lua:
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: test
+        run: bazel test //client/lua:ci-test
+
+  test-client-serialio:
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: test
+        run: bazel test //client/serialio:ci-test
+
+  test-client-websockets:
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: test
+        run: bazel test //client/websockets:ci-test
+
+  test-tools:
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: test
+        run: |
+          bazel test \
+            //tools/krpctest:ci-test \
+            //tools/krpctools:ci-test
