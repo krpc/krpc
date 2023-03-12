@@ -24,7 +24,6 @@ jobs:
             //tools/TestServer:archive
       - name: collect-artifacts
         run: |
-          tools/dist/genfiles.sh
           mkdir deploy
           cp bazel-bin/krpc-*.zip deploy/
           cp bazel-bin/tools/krpctools/krpctools-*.zip deploy/
@@ -33,9 +32,10 @@ jobs:
       - name: upload-artifacts
         uses: actions/upload-artifact@v3
         with:
+          name: build-artifacts
           path: deploy
 
-  build-csharp-sln:
+  build-genfiles:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:2.6.0
@@ -47,6 +47,33 @@ jobs:
         uses: actions/checkout@v3
       - name: setup
         uses: ./.github/actions/build-setup
+      - name: build
+        run: tools/dist/genfiles.sh
+      - name: upload-artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: genfiles
+          path: bazel-bin/krpc-genfiles-*.zip
+
+  build-csharp-sln:
+    needs: build-genfiles
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: download-genfiles
+        uses: actions/download-artifact@v3
+        with:
+          name: genfiles
+      - name: extract-genfiles
+        run: unzip bazel-bin/krpc-genfiles-*.zip -d ./
       - name: build
         run: |
           msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
