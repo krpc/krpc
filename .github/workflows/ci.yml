@@ -129,7 +129,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: test
-        run: bazel test //client/cpp:ci-test &&
+        run: bazel test //client/cpp:ci-test
       - name: test-build
         run: client/cpp/test-build.sh
 
