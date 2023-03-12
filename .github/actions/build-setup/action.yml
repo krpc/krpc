@@ -7,3 +7,4 @@ runs:
         ln -s /usr/lib/mono/4.5 lib/mono-4.5
         rm -f lib/ksp
         ln -s /usr/local/lib/ksp lib/ksp
+      shell: bash
