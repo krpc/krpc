@@ -1,10 +1,9 @@
 name: docs
 
-#on:
-#  push:
-#    branches:
-#      - docs
-on: push
+on:
+  push:
+    branches:
+      - docs
 
 permissions:
   contents: read
