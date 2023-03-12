@@ -42,6 +42,7 @@ jobs:
           path: deploy
 
   build-docs:
+    needs: build
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:2.6.0
