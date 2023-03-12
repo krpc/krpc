@@ -6,6 +6,9 @@ name: docs
 #      - docs
 on: push
 
+permissions:
+  pages: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
