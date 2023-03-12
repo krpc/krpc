@@ -108,8 +108,9 @@ scripts. You need to run ``bazel build //:csproj`` to generate these files
 before the solution can be built.
 
 Alternatively, if you are unable to run Bazel to build these files, you can
-:github-download-zip:`download them from GitHub<krpc-genfiles>`. Simply extract
-this archive over your copy of the source and you are good to go.
+`download them from GitHub <https://github.com/krpc/krpc/releases>`_.
+Download the latest krpc-genfiles.zip, extract the archive over your copy of the source and you
+are good to go.
 
 Running the Tests
 ^^^^^^^^^^^^^^^^^

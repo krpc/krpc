@@ -10,8 +10,8 @@ named ``KRPC.Client.dll``.
 Installing the Library
 ----------------------
 
-The C# client can be `installed using NuGet <https://www.nuget.com/packages/KRPC.Client>`_ or
-:github-download-zip:`downloaded from GitHub <krpc-csharp>`. The client is compatible with .NET 4.5+.
+The C# client can be `installed using NuGet <https://www.nuget.org/packages/KRPC.Client>`_ or
+`downloaded from GitHub <https://github.com/krpc/krpc/releases>`_. The client is compatible with .NET 4.5+.
 
 You also need to `install Google.Protobuf using NuGet
 <https://www.nuget.org/packages/Google.Protobuf>`_.

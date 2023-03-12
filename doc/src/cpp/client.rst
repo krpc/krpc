@@ -33,8 +33,9 @@ Using the configure script
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Once the dependencies have been installed, you can install the kRPC client library and headers using
-the configure script provided with the source. :github-download-zip:`Download the source archive
-<krpc-cpp>`, extract it and then execute the following:
+the configure script provided with the source.
+`Download the source archive <https://github.com/krpc/krpc/releases>`_,
+extract it and then execute the following:
 
 .. code-block:: bash
 
@@ -46,8 +47,8 @@ the configure script provided with the source. :github-download-zip:`Download th
 Using CMake
 ^^^^^^^^^^^
 
-Alternatively, you can install the client library and headers using
-CMake. :github-download-zip:`Download the source archive <krpc-cpp>`, extract it and execute the
+Alternatively, you can install the client library and headers using CMake.
+`Download the source archive <https://github.com/krpc/krpc/releases>`_, extract it and execute the
 following:
 
 .. code-block:: bash
