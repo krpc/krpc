@@ -27,7 +27,7 @@ jobs:
         id: build-cache
         with:
           path: ~/.cache/bazel
-          key: ${{ GITHUB_RUN_NUMBER }}-${{ GITHUB_RUN_ATTEMPT }}
+          key: ${{ env.GITHUB_RUN_NUMBER }}-${{ env.GITHUB_RUN_ATTEMPT }}
       - name: collect-artifacts
         run : |
           tools/dist/genfiles.sh
@@ -56,7 +56,7 @@ jobs:
         id: build-cache
         with:
           path: ~/.cache/bazel
-          key: ${{ GITHUB_RUN_NUMBER }}-${{ GITHUB_RUN_ATTEMPT }}
+          key: ${{ env.GITHUB_RUN_NUMBER }}-${{ env.GITHUB_RUN_ATTEMPT }}
       - name: setup
         uses: ./.github/actions/build-setup
       - name: build
@@ -78,7 +78,7 @@ jobs:
         id: build-cache
         with:
           path: ~/.cache/bazel
-          key: ${{ GITHUB_RUN_NUMBER }}-${{ GITHUB_RUN_ATTEMPT }}
+          key: ${{ env.GITHUB_RUN_NUMBER }}-${{ env.GITHUB_RUN_ATTEMPT }}
       - name: setup
         uses: ./.github/actions/build-setup
       - name: test
