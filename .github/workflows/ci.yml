@@ -22,9 +22,15 @@ jobs:
             //:csproj \
             //tools/krpctools \
             //tools/TestServer:archive
-
+      - name: save-build-cache
+        uses: actions/cache/save@v3
+        id: build-cache
+        with:
+          path: ~/.cache/bazel
+          key: ${{ GITHUB_RUN_NUMBER }}-${{ GITHUB_RUN_ATTEMPT }}
+      - name: collect-artifacts
+        run : |
           tools/dist/genfiles.sh
-
           mkdir deploy
           cp bazel-bin/krpc-*.zip deploy/
           cp bazel-bin/tools/krpctools/krpctools-*.zip deploy/
@@ -34,6 +40,27 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path: deploy
+
+  build-docs:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:2.6.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: restore-build-cache
+        uses: actions/cache/restore@v3
+        id: build-cache
+        with:
+          path: ~/.cache/bazel
+          key: ${{ GITHUB_RUN_NUMBER }}-${{ GITHUB_RUN_ATTEMPT }}
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: build
+        run: bazel build //doc:html
 
   test-server:
     needs: build
@@ -46,14 +73,16 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
+      - name: restore-build-cache
+        uses: actions/cache/restore@v3
+        id: build-cache
+        with:
+          path: ~/.cache/bazel
+          key: ${{ GITHUB_RUN_NUMBER }}-${{ GITHUB_RUN_ATTEMPT }}
       - name: setup
         uses: ./.github/actions/build-setup
       - name: test
         run: bazel test //server:ci-test
-
-
-# job: build docs
-#   bazel build //doc:html
 
 # job: compile docs scripts
 #   bazel build //doc:compile-scripts
