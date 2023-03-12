@@ -7,6 +7,8 @@ name: docs
 on: push
 
 permissions:
+  contents: read
+  packages: read
   pages: write
 
 jobs:
