@@ -131,7 +131,7 @@ jobs:
       - name: upload-artifact
         uses: ./.github/actions/upload-artifact
         with:
-          name: docs-html
+          name: docs-pdf
           path: bazel-bin/doc/krpc-*.pdf
 
   build-docs-examples:
