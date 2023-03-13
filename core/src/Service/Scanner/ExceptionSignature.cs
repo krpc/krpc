@@ -7,7 +7,7 @@ namespace KRPC.Service.Scanner
     /// Signature information for an exception, including class name and documentation.
     /// </summary>
     [Serializable]
-    sealed class ExceptionSignature : ISerializable
+    public sealed class ExceptionSignature : ISerializable
     {
         /// <summary>
         /// Name of the exception, not including the service it is in.

@@ -7,7 +7,7 @@ using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 
 namespace KRPC.Server.ProtocolBuffers
 {
-    sealed class RPCServer : Message.RPCServer
+    public sealed class RPCServer : Message.RPCServer
     {
         public RPCServer (IServer<byte,byte> server) : base (server)
         {

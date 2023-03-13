@@ -8,7 +8,7 @@ using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 
 namespace KRPC.Server.ProtocolBuffers
 {
-    sealed class StreamServer : Message.StreamServer
+    public sealed class StreamServer : Message.StreamServer
     {
         public StreamServer (IServer<byte,byte> server) : base (server)
         {

@@ -13,7 +13,7 @@ namespace KRPC.Server
     /// <summary>
     /// Arguments passed to a client disconnected event
     /// </summary>
-    sealed class ClientDisconnectedEventArgs<TIn,TOut> : ClientEventArgs<TIn,TOut>
+    public sealed class ClientDisconnectedEventArgs<TIn,TOut> : ClientEventArgs<TIn,TOut>
     {
         internal ClientDisconnectedEventArgs (IClient<TIn,TOut> client) : base (client)
         {

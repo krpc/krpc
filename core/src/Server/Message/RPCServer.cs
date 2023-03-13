@@ -8,7 +8,7 @@ namespace KRPC.Server.Message
     /// <summary>
     /// Abstract RPC server for receiving requests and sending responses over a byte server.
     /// </summary>
-    abstract class RPCServer : IServer<Request,Response>
+    public abstract class RPCServer : IServer<Request,Response>
     {
         const double defaultTimeout = 0.1;
 

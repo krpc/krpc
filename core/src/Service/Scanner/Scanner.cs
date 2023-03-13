@@ -8,7 +8,7 @@ using KRPC.Utils;
 
 namespace KRPC.Service.Scanner
 {
-    static class Scanner
+    public static class Scanner
     {
         public static Assembly CurrentAssembly { get; private set; }
 

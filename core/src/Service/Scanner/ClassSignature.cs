@@ -7,7 +7,7 @@ namespace KRPC.Service.Scanner
     /// Signature information for a class, including class name and documentation.
     /// </summary>
     [Serializable]
-    sealed class ClassSignature : ISerializable
+    public sealed class ClassSignature : ISerializable
     {
         /// <summary>
         /// Name of the class, not including the service it is in.

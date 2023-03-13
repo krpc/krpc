@@ -2,7 +2,7 @@ using System;
 
 namespace KRPC.Server
 {
-    sealed class ClientDisconnectedException: ServerException
+    public sealed class ClientDisconnectedException: ServerException
     {
         public ClientDisconnectedException ()
         {

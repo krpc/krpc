@@ -9,7 +9,7 @@ using Logger = KRPC.Utils.Logger;
 
 namespace KRPC
 {
-    sealed class Configuration
+    public sealed class Configuration
     {
         static Configuration instance;
 
@@ -21,7 +21,7 @@ namespace KRPC
             }
         }
 
-        public Configuration ()
+        private Configuration ()
         {
             MainWindowVisible = true;
             MainWindowPosition = new Tuple<float,float,float,float> (0, 0, 0, 0);

@@ -8,7 +8,7 @@ using KRPC.Utils;
 
 namespace KRPC.Server.TCP
 {
-    sealed class TCPServer : IServer<byte,byte>
+    public sealed class TCPServer : IServer<byte,byte>
     {
         public event EventHandler OnStarted;
         public event EventHandler OnStopped;

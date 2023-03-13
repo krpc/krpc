@@ -8,7 +8,7 @@ namespace KRPC.Server.Message
     /// <summary>
     /// Abstract Stream server for sending stream messages over a byte server.
     /// </summary>
-    abstract class StreamServer : IServer<NoMessage,StreamUpdate>
+    public abstract class StreamServer : IServer<NoMessage,StreamUpdate>
     {
         const double defaultTimeout = 0.1;
 

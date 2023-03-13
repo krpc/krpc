@@ -6,7 +6,7 @@ namespace KRPC.Service
     /// <summary>
     /// Use to invoke the method that implement an RPC
     /// </summary>
-    interface IProcedureHandler
+    public interface IProcedureHandler
     {
         object Invoke (params object[] arguments);
 

@@ -11,7 +11,7 @@ namespace KRPC.Service.Scanner
     /// parameter types and return types.
     /// </summary>
     [Serializable]
-    sealed class ProcedureSignature : ISerializable
+    public sealed class ProcedureSignature : ISerializable
     {
         /// <summary>
         /// Name of the procedure, not including the service it is in.

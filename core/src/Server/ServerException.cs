@@ -2,7 +2,7 @@ using System;
 
 namespace KRPC.Server
 {
-    class ServerException : Exception
+    public class ServerException : Exception
     {
         public ServerException ()
         {

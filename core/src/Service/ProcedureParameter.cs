@@ -7,7 +7,7 @@ using KRPC.Utils;
 
 namespace KRPC.Service
 {
-    sealed class ProcedureParameter
+    public sealed class ProcedureParameter
     {
         public Type Type { get; private set; }
 
