@@ -136,75 +136,75 @@ namespace KRPC.Service.KRPC
             get { return Core.Instance.RPCClients.Select (x => new Tuple<byte[], string, string> (x.Guid.ToByteArray (), x.Name, x.Address)).ToList (); }
         }
 
-        /// <summary>
-        /// The game scene. See <see cref="CurrentGameScene"/>.
-        /// </summary>
-        [KRPCEnum]
-        [Serializable]
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
-        [SuppressMessage ("Gendarme.Rules.Naming", "UsePluralNameInEnumFlagsRule")]
-        public enum GameScene
-        {
-            /// <summary>
-            /// The game scene showing the Kerbal Space Center buildings.
-            /// </summary>
-            SpaceCenter,
-            /// <summary>
-            /// The game scene showing a vessel in flight (or on the launchpad/runway).
-            /// </summary>
-            Flight,
-            /// <summary>
-            /// The tracking station.
-            /// </summary>
-            TrackingStation,
-            /// <summary>
-            /// The Vehicle Assembly Building.
-            /// </summary>
-            EditorVAB,
-            /// <summary>
-            /// The Space Plane Hangar.
-            /// </summary>
-            EditorSPH
-        }
+        // /// <summary>
+        // /// The game scene. See <see cref="CurrentGameScene"/>.
+        // /// </summary>
+        // [KRPCEnum]
+        // [Serializable]
+        // [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        // [SuppressMessage ("Gendarme.Rules.Naming", "UsePluralNameInEnumFlagsRule")]
+        // public enum GameScene
+        // {
+        //     /// <summary>
+        //     /// The game scene showing the Kerbal Space Center buildings.
+        //     /// </summary>
+        //     SpaceCenter,
+        //     /// <summary>
+        //     /// The game scene showing a vessel in flight (or on the launchpad/runway).
+        //     /// </summary>
+        //     Flight,
+        //     /// <summary>
+        //     /// The tracking station.
+        //     /// </summary>
+        //     TrackingStation,
+        //     /// <summary>
+        //     /// The Vehicle Assembly Building.
+        //     /// </summary>
+        //     EditorVAB,
+        //     /// <summary>
+        //     /// The Space Plane Hangar.
+        //     /// </summary>
+        //     EditorSPH
+        // }
 
-        /// <summary>
-        /// Get the current game scene.
-        /// </summary>
-        [KRPCProperty]
-        public static GameScene CurrentGameScene {
-            get {
-                var scene = CallContext.GameScene;
-                if ((scene & Service.GameScene.SpaceCenter) != 0)
-                    return GameScene.SpaceCenter;
-                if ((scene & Service.GameScene.Flight) != 0)
-                    return GameScene.Flight;
-                if ((scene & Service.GameScene.TrackingStation) != 0)
-                    return GameScene.TrackingStation;
-                if ((scene & Service.GameScene.Editor) != 0) {
-                    if (EditorDriver.editorFacility == EditorFacility.VAB)
-                        return GameScene.EditorVAB;
-                    if (EditorDriver.editorFacility == EditorFacility.SPH)
-                        return GameScene.EditorSPH;
-                }
-                throw new System.InvalidOperationException ("Unknown game scene");
-            }
-        }
+        // /// <summary>
+        // /// Get the current game scene.
+        // /// </summary>
+        // [KRPCProperty]
+        // public static GameScene CurrentGameScene {
+        //     get {
+        //         var scene = CallContext.GameScene;
+        //         if ((scene & Service.GameScene.SpaceCenter) != 0)
+        //             return GameScene.SpaceCenter;
+        //         if ((scene & Service.GameScene.Flight) != 0)
+        //             return GameScene.Flight;
+        //         if ((scene & Service.GameScene.TrackingStation) != 0)
+        //             return GameScene.TrackingStation;
+        //         if ((scene & Service.GameScene.Editor) != 0) {
+        //             if (EditorDriver.editorFacility == EditorFacility.VAB)
+        //                 return GameScene.EditorVAB;
+        //             if (EditorDriver.editorFacility == EditorFacility.SPH)
+        //                 return GameScene.EditorSPH;
+        //         }
+        //         throw new System.InvalidOperationException ("Unknown game scene");
+        //     }
+        // }
 
-        /// <summary>
-        /// Whether the game is paused.
-        /// </summary>
-        [KRPCProperty]
-        public static bool Paused {
-            get {
-                return Addon.Instance.IsPaused;
-            }
-            set {
-                if (value)
-                    PauseMenu.Display ();
-                else
-                    PauseMenu.Close ();
-            }
-        }
+        // /// <summary>
+        // /// Whether the game is paused.
+        // /// </summary>
+        // [KRPCProperty]
+        // public static bool Paused {
+        //     get {
+        //         return Addon.Instance.IsPaused;
+        //     }
+        //     set {
+        //         if (value)
+        //             PauseMenu.Display ();
+        //         else
+        //             PauseMenu.Close ();
+        //     }
+        // }
 
         /// <summary>
         /// Add a streaming request and return its identifier.
