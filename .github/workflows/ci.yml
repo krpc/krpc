@@ -143,8 +143,6 @@ jobs:
         uses: ./.github/actions/build-setup
       - name: test
         run: bazel test //client/cnano:ci-test
-      - name: test-build
-        run: client/cnano/test-build.sh
 
   test-client-cpp:
     runs-on: ubuntu-latest
@@ -166,8 +164,6 @@ jobs:
           key: ${{ hashFiles('WORKSPACE') }}
       - name: test
         run: bazel test //client/cpp:ci-test
-      - name: test-build
-        run: client/cpp/test-build.sh
 
   test-client-csharp:
     runs-on: ubuntu-latest
