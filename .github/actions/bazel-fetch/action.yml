@@ -8,11 +8,11 @@ runs:
         path: ~/.cache/bazel
         key: bazel-cache-${{ hashFiles('WORKSPACE') }}
     - name: bazel-fetch
-      if: steps.bazel-cache.cache-hit != 'true'
+      if: steps.bazel-cache.outputs.cache-hit != 'true'
       run: bazel fetch //...
       shell: bash
     - name: save-bazel-cache
-      if: steps.bazel-cache.cache-hit != 'true'
+      if: steps.bazel-cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v3
       with:
         path: ~/.cache/bazel
