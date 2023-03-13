@@ -111,7 +111,7 @@ jobs:
         uses: ./.github/actions/build-setup
       - name: build
         run: |
-          bazel test //doc:ci-test
+          bazel test //doc:test
           bazel build //doc:compile-scripts
 
   test-server:
@@ -127,7 +127,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: test
-        run: bazel test //server:ci-test
+        run: bazel test //server:test
 
   test-client-cnano:
     runs-on: ubuntu-latest
@@ -142,7 +142,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: test
-        run: bazel test //client/cnano:ci-test
+        run: bazel test //client/cnano:test
 
   test-client-cpp:
     runs-on: ubuntu-latest
@@ -157,7 +157,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: test
-        run: bazel test //client/cpp:ci-test --cache_test_results=no
+        run: bazel test //client/cpp:test --cache_test_results=no
 
   test-client-csharp:
     runs-on: ubuntu-latest
@@ -172,7 +172,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: test
-        run: bazel test //client/csharp:ci-test
+        run: bazel test //client/csharp:test
 
   test-client-java:
     runs-on: ubuntu-latest
@@ -187,7 +187,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: test
-        run: bazel test //client/java:ci-test
+        run: bazel test //client/java:test
 
   test-client-python:
     runs-on: ubuntu-latest
@@ -202,7 +202,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: test
-        run: bazel test //client/python:ci-test
+        run: bazel test //client/python:test
 
   test-client-lua:
     runs-on: ubuntu-latest
@@ -217,7 +217,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: test
-        run: bazel test //client/lua:ci-test
+        run: bazel test //client/lua:test
 
   test-client-serialio:
     runs-on: ubuntu-latest
@@ -232,7 +232,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: test
-        run: bazel test //client/serialio:ci-test
+        run: bazel test //client/serialio:test
 
   test-client-websockets:
     runs-on: ubuntu-latest
@@ -247,7 +247,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: test
-        run: bazel test //client/websockets:ci-test
+        run: bazel test //client/websockets:test
 
   test-tools:
     runs-on: ubuntu-latest
@@ -264,5 +264,5 @@ jobs:
       - name: test
         run: |
           bazel test \
-            //tools/krpctest:ci-test \
-            //tools/krpctools:ci-test
+            //tools/krpctest:test \
+            //tools/krpctools:test
