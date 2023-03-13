@@ -205,7 +205,7 @@ jobs:
       - name: fetch
         uses: ./.github/actions/bazel-fetch
       - name: test
-        run: bazel test //client/cpp:test --cache_test_results=no
+        run: bazel test //client/cpp:test
 
   test-client-csharp:
     runs-on: ubuntu-latest
