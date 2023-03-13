@@ -2,7 +2,6 @@ runs:
   using: composite
   steps:
     - name: restore-bazel-cache
-      id: bazel-cache
       uses: actions/cache/restore@v3
       with:
         path: ~/.cache/bazel
@@ -11,7 +10,6 @@ runs:
         bazel fetch //...
       shell: bash
     - name: save-bazel-cache
-      id: bazel-cache
       uses: actions/cache/save@v3
       with:
         path: ~/.cache/bazel
