@@ -53,7 +53,7 @@ RUN apt-get update && \
 # Install other build tools
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    librsvg2-bin autoconf libtool luarocks maven cppcheck socat && \
+    librsvg2-bin autoconf libtool luarocks maven cppcheck socat openjdk-11-jdk && \
     apt-get clean
 
 # Configure Bazel
