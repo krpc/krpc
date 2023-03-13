@@ -138,7 +138,7 @@ http_archive(
 http_archive(
     name = 'protoc_unity_linux_x86_32',
     url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.10.1/protoc-3.10.1-linux-x86_32.zip',
-    sha256 = '0c97a75c8f8fafc55323599053626a0a822e5b66299f6643a2b086f859b56afd',
+    sha256 = 'd047b4b4a5ac424d7e8a58912a5712195d2ea31570a4d95bb21cf9b19c6bb0b9',
     build_file_content = "exports_files(['bin/protoc'])"
 )
 
