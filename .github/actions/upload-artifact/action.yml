@@ -1,0 +1,23 @@
+name: upload-artifact
+description: Custom upload-artifact action to workaround issue using files in bazel-bin
+inputs:
+  name:
+    required: true
+  path:
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: collect
+      run: |
+        mkdir tmp-artifact-dir
+        cp ${{ inputs.path }} tmp-artifact-dir/
+      shell: bash
+    - name: upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.name }}
+        path: tmp-artifact-dir/
+    - name: cleanup
+      run: rm -rf tmp-artifact-dir
+      shell: bash

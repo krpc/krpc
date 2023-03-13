@@ -24,17 +24,21 @@ jobs:
             //:csproj \
             //tools/krpctools \
             //tools/TestServer:archive
-      - name: collect-artifacts
-        run: |
-          mkdir deploy
-          cp bazel-bin/krpc-*.zip deploy/
-          cp bazel-bin/tools/krpctools/krpctools-*.zip deploy/
-          cp bazel-bin/tools/TestServer/TestServer-*.zip deploy/
-      - name: upload-artifacts
-        uses: actions/upload-artifact@v3
+      - name: upload-krpc-artifact
+        uses: ./.github/actions/upload-artifact
         with:
-          name: build-artifacts
-          path: deploy
+          name: krpc
+          path: bazel-bin/krpc-*.zip
+      - name: upload-krpctools-artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: krpctools
+          path: bazel-bin/tools/krpctools/krpctools-*.zip
+      - name: upload-testserver-artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: testserver
+          path: bazel-bin/tools/TestServer/TestServer-*.zip
 
   build-genfiles:
     runs-on: ubuntu-latest
@@ -51,14 +55,12 @@ jobs:
       - name: fetch
         uses: ./.github/actions/bazel-fetch
       - name: build
-        run: |
-          tools/dist/genfiles.sh
-          cp bazel-bin/krpc-genfiles-*.zip ./
+        run: tools/dist/genfiles.sh
       - name: upload-artifact
-        uses: actions/upload-artifact@v3
+        uses: ./.github/actions/upload-artifact
         with:
           name: genfiles
-          path: krpc-genfiles-*.zip
+          path: bazel-bin/krpc-genfiles-*.zip
 
   build-csharp-sln:
     needs: build-genfiles
@@ -104,6 +106,10 @@ jobs:
         uses: ./.github/actions/bazel-fetch
       - name: build
         run: bazel build //doc:html
+      - name: ./.github/actions/upload-artifact
+        with:
+          name: docs-html
+          path: bazel-bin/doc/html.zip
 
   build-docs-pdf:
     runs-on: ubuntu-latest
@@ -121,6 +127,10 @@ jobs:
         uses: ./.github/actions/bazel-fetch
       - name: build
         run: bazel build //doc:pdf
+      - name: ./.github/actions/upload-artifact
+        with:
+          name: docs-html
+          path: bazel-bin/doc/krpc-*.pdf
 
   build-docs-examples:
     runs-on: ubuntu-latest
@@ -187,8 +197,14 @@ jobs:
         uses: ./.github/actions/build-setup
       - name: fetch
         uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: bazel build //client/cnano:cnano
       - name: test
         run: bazel test //client/cnano:test
+      - name: ./.github/actions/upload-artifact
+        with:
+          name: client-cnano
+          path: bazel-bin/client/cnano/krpc-cnano-*.zip
 
   test-client-cpp:
     runs-on: ubuntu-latest
@@ -204,8 +220,14 @@ jobs:
         uses: ./.github/actions/build-setup
       - name: fetch
         uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: bazel build //client/cpp:cpp
       - name: test
         run: bazel test //client/cpp:test
+      - name: ./.github/actions/upload-artifact
+        with:
+          name: client-cpp
+          path: bazel-bin/client/cpp/krpc-cpp-*.zip
 
   test-client-csharp:
     runs-on: ubuntu-latest
@@ -221,8 +243,18 @@ jobs:
         uses: ./.github/actions/build-setup
       - name: fetch
         uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: bazel build //client/csharp:csharp
       - name: test
         run: bazel test //client/csharp:test
+      - name: ./.github/actions/upload-artifact
+        with:
+          name: client-csharp
+          path: bazel-bin/client/csharp/krpc-csharp-*.zip
+      - name: ./.github/actions/upload-artifact
+        with:
+          name: client-csharp-nuget
+          path: bazel-bin/client/csharp/KRPC.Client.*.nupkg
 
   test-client-java:
     runs-on: ubuntu-latest
@@ -239,7 +271,13 @@ jobs:
       - name: fetch
         uses: ./.github/actions/bazel-fetch
       - name: test
+        run: bazel build //client/java:java
+      - name: test
         run: bazel test //client/java:test
+      - name: ./.github/actions/upload-artifact
+        with:
+          name: client-java
+          path: bazel-bin/client/java/krpc-java-*.jar
 
   test-client-python:
     runs-on: ubuntu-latest
@@ -255,8 +293,14 @@ jobs:
         uses: ./.github/actions/build-setup
       - name: fetch
         uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: bazel build //client/python:python
       - name: test
         run: bazel test //client/python:test
+      - name: ./.github/actions/upload-artifact
+        with:
+          name: client-python
+          path: bazel-bin/client/python/krpc-python-*.zip
 
   test-client-lua:
     runs-on: ubuntu-latest
@@ -272,8 +316,14 @@ jobs:
         uses: ./.github/actions/build-setup
       - name: fetch
         uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: bazel build //client/lua:lua
       - name: test
         run: bazel test //client/lua:test
+      - name: ./.github/actions/upload-artifact
+        with:
+          name: client-lua
+          path: bazel-bin/client/lua/krpc-lua-*.zip
 
   test-client-serialio:
     runs-on: ubuntu-latest
