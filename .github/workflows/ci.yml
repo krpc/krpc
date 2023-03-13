@@ -82,7 +82,7 @@ jobs:
           msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
           msbuild KRPC.sln /t:Clean,Build -p:Configuration=Release /warnaserror
 
-  build-docs:
+  build-docs-html:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.0.0
@@ -96,6 +96,21 @@ jobs:
         uses: ./.github/actions/build-setup
       - name: build
         run: bazel build //doc:html
+
+  build-docs-pdf:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: build
+        run: bazel build //doc:pdf
 
   test-docs:
     runs-on: ubuntu-latest
