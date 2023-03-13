@@ -106,7 +106,8 @@ jobs:
         uses: ./.github/actions/bazel-fetch
       - name: build
         run: bazel build //doc:html
-      - name: ./.github/actions/upload-artifact
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
         with:
           name: docs-html
           path: bazel-bin/doc/html.zip
@@ -127,7 +128,8 @@ jobs:
         uses: ./.github/actions/bazel-fetch
       - name: build
         run: bazel build //doc:pdf
-      - name: ./.github/actions/upload-artifact
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
         with:
           name: docs-html
           path: bazel-bin/doc/krpc-*.pdf
@@ -201,7 +203,8 @@ jobs:
         run: bazel build //client/cnano:cnano
       - name: test
         run: bazel test //client/cnano:test
-      - name: ./.github/actions/upload-artifact
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
         with:
           name: client-cnano
           path: bazel-bin/client/cnano/krpc-cnano-*.zip
@@ -224,7 +227,8 @@ jobs:
         run: bazel build //client/cpp:cpp
       - name: test
         run: bazel test //client/cpp:test
-      - name: ./.github/actions/upload-artifact
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
         with:
           name: client-cpp
           path: bazel-bin/client/cpp/krpc-cpp-*.zip
@@ -247,11 +251,13 @@ jobs:
         run: bazel build //client/csharp:csharp
       - name: test
         run: bazel test //client/csharp:test
-      - name: ./.github/actions/upload-artifact
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
         with:
           name: client-csharp
           path: bazel-bin/client/csharp/krpc-csharp-*.zip
-      - name: ./.github/actions/upload-artifact
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
         with:
           name: client-csharp-nuget
           path: bazel-bin/client/csharp/KRPC.Client.*.nupkg
@@ -274,7 +280,8 @@ jobs:
         run: bazel build //client/java:java
       - name: test
         run: bazel test //client/java:test
-      - name: ./.github/actions/upload-artifact
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
         with:
           name: client-java
           path: bazel-bin/client/java/krpc-java-*.jar
@@ -297,7 +304,8 @@ jobs:
         run: bazel build //client/python:python
       - name: test
         run: bazel test //client/python:test
-      - name: ./.github/actions/upload-artifact
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
         with:
           name: client-python
           path: bazel-bin/client/python/krpc-python-*.zip
@@ -320,7 +328,8 @@ jobs:
         run: bazel build //client/lua:lua
       - name: test
         run: bazel test //client/lua:test
-      - name: ./.github/actions/upload-artifact
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
         with:
           name: client-lua
           path: bazel-bin/client/lua/krpc-lua-*.zip
