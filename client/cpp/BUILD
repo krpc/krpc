@@ -144,7 +144,7 @@ cc_library(
     srcs = srcs + [':protobuf'],
     hdrs = hdrs + [':protobuf'],
     includes = ['include'],
-    deps = ['@com_google_protobuf//:protobuf', '@cpp_asio//:asio'],
+    deps = ['@com_google_protobuf//:protobuf_lite', '@cpp_asio//:asio'],
     visibility = ['//visibility:public']
 )
 

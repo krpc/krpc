@@ -1,7 +1,7 @@
 #include "krpc/encoder.hpp"
 
 #include <google/protobuf/io/coded_stream.h>
-#include <google/protobuf/message.h>
+#include <google/protobuf/message_lite.h>
 #include <google/protobuf/wire_format_lite.h>
 
 #include <cstddef>
@@ -82,14 +82,14 @@ std::string encode(const std::string& value) {
   return data;
 }
 
-std::string encode(const pb::Message& message) {
+std::string encode(const pb::MessageLite& message) {
   std::string data;
   if (!message.SerializeToString(&data))
     throw EncodingError("Failed to encode message");
   return data;
 }
 
-std::string encode_message_with_size(const pb::Message& message) {
+std::string encode_message_with_size(const pb::MessageLite& message) {
   size_t length = message.ByteSizeLong();
   size_t header_length = pb::io::CodedOutputStream::VarintSize64(length);
   std::string data(header_length + length, 0);
