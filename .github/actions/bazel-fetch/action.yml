@@ -7,11 +7,12 @@ runs:
       with:
         path: ~/.cache/bazel
         key: bazel-cache-${{ hashFiles('WORKSPACE') }}
-    - if: ${{ steps.bazel-cache.cache-hit != 'true' }}
+    - name: bazel-fetch
+      if: steps.bazel-cache.cache-hit != 'true'
       run: bazel fetch //...
       shell: bash
-    - if: ${{ steps.bazel-cache.cache-hit != 'true' }}
-      name: save-bazel-cache
+    - name: save-bazel-cache
+      if: steps.bazel-cache.cache-hit != 'true'
       uses: actions/cache/save@v3
       with:
         path: ~/.cache/bazel
