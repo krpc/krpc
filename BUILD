@@ -117,9 +117,7 @@ pkg_zip(
         '//service/DockingCamera',
         # Schema
         '//protobuf:krpc.proto',
-        '//protobuf:LICENSE',
-        # Docs
-        '//doc:pdf'
+        '//protobuf:LICENSE'
     ],
     path_map = {
         'kRPC.version': 'GameData/kRPC/kRPC.version',
@@ -152,8 +150,6 @@ pkg_zip(
         '../module_manager/file/ModuleManager.4.1.3.dll': 'GameData/ModuleManager.4.1.3.dll',
         # Schema
         'protobuf/': 'schema/',
-        # Docs
-        'doc/kRPC.pdf': 'kRPC.pdf'
     },
     exclude = ['*.mdb']
 )
