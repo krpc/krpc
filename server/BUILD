@@ -41,10 +41,6 @@ csharp_assembly_info(
     custom = {'AssemblyKSPVersion': '"%s", "%s"' % (ksp_version_max, ksp_version_min)},
     internals_visible_to = [
         'KRPC.Test',
-        'TestServer',
-        'TestServer.Debug',
-        'ServiceDefinitions',
-        'ServiceDefinitions.Debug',
         'DynamicProxyGenAssembly2'
     ],
     cls_compliant = False,

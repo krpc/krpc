@@ -38,10 +38,6 @@ csharp_assembly_info(
     version = assembly_version,
     internals_visible_to = [
         'KRPC.Core.Test',
-        'TestServer',
-        'TestServer.Debug',
-        'ServiceDefinitions',
-        'ServiceDefinitions.Debug',
         'DynamicProxyGenAssembly2'
     ],
     cls_compliant = False,
