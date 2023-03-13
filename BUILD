@@ -115,24 +115,9 @@ pkg_zip(
         '//service/UI',
         '//service/LiDAR',
         '//service/DockingCamera',
-        # Clients
-        '//client/cnano',
-        '//client/cpp',
-        '//client/csharp',
-        '//client/java',
-        '//client/lua',
-        '//client/python',
         # Schema
         '//protobuf:krpc.proto',
-        '//protobuf:cnano',
-        '//protobuf:cpp',
-        '//protobuf:csharp',
-        '//protobuf:java',
-        '//protobuf:lua',
-        '//protobuf:python',
-        '//protobuf:LICENSE',
-        # Docs
-        '//doc:pdf'
+        '//protobuf:LICENSE'
     ],
     path_map = {
         'kRPC.version': 'GameData/kRPC/kRPC.version',
@@ -162,18 +147,9 @@ pkg_zip(
         'service/DockingCamera/': 'GameData/kRPC/',
         'service/DockingCamera/CHANGES.txt': 'GameData/kRPC/CHANGES.DockingCamera.txt',
         # Module Manager
-        '../module_manager/file/ModuleManager.4.1.3.dll': 'GameData/ModuleManager.4.1.3.dll',
-        # Clients
-        'client/cnano/': 'client/',
-        'client/cpp/': 'client/',
-        'client/csharp/': 'client/',
-        'client/java/': 'client/',
-        'client/lua/': 'client/',
-        'client/python/': 'client/',
+        '../module_manager/file/ModuleManager.4.2.2.dll': 'GameData/ModuleManager.4.2.2.dll',
         # Schema
         'protobuf/': 'schema/',
-        # Docs
-        'doc/kRPC.pdf': 'kRPC.pdf'
     },
     exclude = ['*.mdb']
 )
