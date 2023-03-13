@@ -248,7 +248,7 @@ jobs:
       - name: fetch
         uses: ./.github/actions/bazel-fetch
       - name: build
-        run: bazel build //client/csharp:csharp
+        run: bazel build //client/csharp:csharp //client/csharp:nuget
       - name: test
         run: bazel test //client/csharp:test
       - name: upload-artifact
