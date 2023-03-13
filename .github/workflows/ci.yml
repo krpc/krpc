@@ -163,7 +163,7 @@ jobs:
           path: ~/.cache/bazel
           key: ${{ hashFiles('WORKSPACE') }}
       - name: test
-        run: bazel test //client/cpp:ci-test
+        run: bazel test //client/cpp:ci-test --cache_test_results=no
 
   test-client-csharp:
     runs-on: ubuntu-latest
