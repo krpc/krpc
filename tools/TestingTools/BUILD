@@ -3,6 +3,7 @@ load('//:config.bzl', 'assembly_version', 'author')
 
 srcs = glob(['**/*.cs']) + [':AssemblyInfo']
 deps = [
+    '//core:KRPC.Core',
     '//server:KRPC',
     '//service/SpaceCenter:KRPC.SpaceCenter',
     '//tools/build/ksp:Google.Protobuf',

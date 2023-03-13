@@ -44,7 +44,18 @@ csharp_assembly_info(
         'ServiceDefinitions.Debug',
         'DynamicProxyGenAssembly2'
     ],
-    cls_compliant = False
+    cls_compliant = False,
+    visibility = [
+        '//tools/ServiceDefinitions:__pkg__', # Make visible to ServiceDefinitions so it can build KRPC.Core.dll with .NET 4.5 references
+        '//:__pkg__' # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ]
+)
+
+# Make sources visible to ServiceDefinitions so it can build KRPC.Core.dll with .NET 4.5 references
+filegroup(
+    name = 'KRPC.Core-src',
+    srcs = glob(['src/**/*.cs']),
+    visibility = ['//tools/ServiceDefinitions:__pkg__']
 )
 
 srcs = glob(['src/**/*.cs']) + [':AssemblyInfo', '//protobuf:csharp_unity']
@@ -58,7 +69,8 @@ csharp_library(
     name = 'KRPC.Core',
     srcs = srcs,
     deps = deps,
-    visibility = ['//visibility:public']
+    visibility = ['//visibility:public'],
+    nowarn = ['CS1591']  # FIXME: remove this
 )
 
 service_definitions(

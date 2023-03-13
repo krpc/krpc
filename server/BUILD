@@ -61,9 +61,10 @@ filegroup(
     visibility = ['//tools/ServiceDefinitions:__pkg__']
 )
 
-srcs = [':KRPC-src', ':AssemblyInfo', '//protobuf:csharp_unity']
+srcs = [':KRPC-src', ':AssemblyInfo']
 
 deps = [
+    '//core:KRPC.Core',
     '//tools/build/ksp:Google.Protobuf',
     '//tools/build/ksp:KRPC.IO.Ports'
 ] + ksp_libs
