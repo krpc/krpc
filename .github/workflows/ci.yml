@@ -210,6 +210,8 @@ jobs:
         run: bazel build //client/cnano:cnano
       - name: test
         run: bazel test //client/cnano:test
+      - name: test-build
+        run: client/cnano/test-build.sh
       - name: upload-artifact
         uses: ./.github/actions/upload-artifact
         with:
