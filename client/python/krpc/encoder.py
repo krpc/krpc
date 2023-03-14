@@ -13,32 +13,10 @@ from krpc.types import \
 
 # The following unpacks the internal protobuf decoders, whose signature
 # depends on the version of protobuf installed
-# pylint: disable=invalid-name
 _pb_VarintEncoder = protobuf_encoder._VarintEncoder()
 _pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()
 _pb_DoubleEncoder = protobuf_encoder.DoubleEncoder(1, False, False)
 _pb_FloatEncoder = protobuf_encoder.FloatEncoder(1, False, False)
-_pb_version = google.protobuf.__version__.split('.')
-if int(_pb_version[0]) >= 3 and int(_pb_version[1]) >= 4:
-    # protobuf v3.4.0 and above
-    def _VarintEncoder(write, value):
-        return _pb_VarintEncoder(write, value, True)
-
-    def _SignedVarintEncoder(write, value):
-        return _pb_SignedVarintEncoder(write, value, True)
-
-    def _DoubleEncoder(write, value):
-        return _pb_DoubleEncoder(write, value, True)
-
-    def _FloatEncoder(write, value):
-        return _pb_FloatEncoder(write, value, True)
-else:
-    # protobuf v3.3.0 and below
-    _VarintEncoder = _pb_VarintEncoder
-    _SignedVarintEncoder = _pb_SignedVarintEncoder
-    _DoubleEncoder = _pb_DoubleEncoder
-    _FloatEncoder = _pb_FloatEncoder
-# pylint: enable=invalid-name
 
 
 class Encoder:
@@ -130,7 +108,7 @@ class _ValueEncoder:
         def write(x):
             data.append(x)
 
-        _DoubleEncoder(write, value)
+        _pb_DoubleEncoder(write, value, True)
         return b''.join(data[1:])  # strips the tag value
 
     @classmethod
@@ -140,7 +118,7 @@ class _ValueEncoder:
         def write(x):
             data.append(x)
 
-        _FloatEncoder(write, value)
+        _pb_FloatEncoder(write, value, True)
         return b''.join(data[1:])  # strips the tag value
 
     @classmethod
@@ -150,14 +128,14 @@ class _ValueEncoder:
         def write(x):
             data.append(x)
 
-        _VarintEncoder(write, value)
+        _pb_VarintEncoder(write, value, True)
         return b''.join(data)
 
     @classmethod
     def _encode_signed_varint(cls, value):
         value = protobuf_wire_format.ZigZagEncode(value)
         data = []
-        _SignedVarintEncoder(data.append, value)
+        _pb_SignedVarintEncoder(data.append, value, True)
         return b''.join(data)
 
     @classmethod
