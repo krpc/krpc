@@ -93,7 +93,7 @@ namespace TestServer
         }
 
         [KRPCProcedure (Nullable = true)]
-        public static TestClass EchoTestObject (TestClass value)
+        public static TestClass EchoTestObject ([KRPCNullable] TestClass value)
         {
             return value;
         }
