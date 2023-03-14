@@ -53,9 +53,10 @@ def _impl(ctx):
         test_env = 'PORT=$CLIENT_PORT'
 
     sub_commands.extend([
-        '(cd server-executable.runfiles/krpc; %s %s >stdout) &' % (ctx.executable.server_executable.short_path, server_args),
+        'echo "" > %s' % stdout,
+        '(cd server-executable.runfiles/krpc; %s %s >> stdout) &' % (ctx.executable.server_executable.short_path, server_args),
         'SERVER_PID=$!',
-        'while ! grep "Server started successfully" %s >/dev/null 2>&1; do sleep 0.1 ; done' % stdout
+        'tail -n0 -f %s | sed "/Server started successfully/ q"' % stdout
     ] + get_server_settings + [
         '(cd test-executable.runfiles/krpc/%s.runfiles/krpc; %s ../../%s)' % (ctx.executable.test_executable.short_path, test_env, ctx.executable.test_executable.basename),
         'RESULT=$?',
