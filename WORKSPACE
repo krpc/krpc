@@ -276,12 +276,6 @@ http_file(
     sha256 = 'a6f7cdef49579d995976baece6e605aca1f2c8b0cb771bbae4d7b816710dcb4c'
 )
 
-http_file(
-    name = 'm4_stdcxx_11',
-    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx_11.m4;hb=34104ea9e635fae5551fd1d6495a80f8041c4adc',
-    sha256 = '98a0053e6b3fda3243cca0a40e7d7b496cb05ce4716cf6f1663e86c8ad36f1e8'
-)
-
 maven_jar(
     name = 'java_protobuf',
     artifact = 'com.google.protobuf:protobuf-java:3.22.0',

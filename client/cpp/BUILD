@@ -14,7 +14,7 @@ autotools_dist(
     files = glob(['include/**/*.hpp', 'src/*.cpp', '**/Makefile.am']) + [
         '//:readme', '//:version', 'CHANGES.txt', 'INSTALL.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
-        ':autotools', '@m4_stdcxx//file', '@m4_stdcxx_11//file',
+        ':autotools', '@m4_stdcxx//file',
         ':cmake',
         '//protobuf:cpp',
         '//protobuf:krpc.proto',
@@ -36,8 +36,7 @@ autotools_dist(
         'README.txt': '%s/README.txt' % name,
         'VERSION.txt': '%s/VERSION.txt' % name,
         'protobuf/': '%s/protobuf/' % name,
-        '../m4_stdcxx/file/downloaded': '%s/m4/ax_cxx_compile_stdcxx.m4' % name,
-        '../m4_stdcxx_11/file/downloaded': '%s/m4/ax_cxx_compile_stdcxx_11.m4' % name
+        '../m4_stdcxx/file/downloaded': '%s/m4/ax_cxx_compile_stdcxx.m4' % name
     },
     visibility = ['//:__pkg__']
 )
