@@ -1,51 +1,400 @@
 name: ci
 
-on: pull_request
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-krpc:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:2.6.0
+      image: ghcr.io/krpc/buildenv:3.0.1
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
       - name: build
         run: |
-          tools/github-actions/set-version.py
-          rm -f lib/mono-4.5
-          ln -s /usr/lib/mono/4.5 lib/mono-4.5
-          rm -f lib/ksp
-          ln -s /usr/local/lib/ksp lib/ksp
           bazel build \
             //:krpc \
             //:csproj \
-            //doc:html \
-            //doc:compile-scripts \
             //tools/krpctools \
-            //tools/TestServer:archive \
-            //:ci-test
+            //tools/TestServer:archive
+      - name: upload-krpc-artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: krpc
+          path: bazel-bin/krpc-*.zip
+      - name: upload-krpctools-artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: krpctools
+          path: bazel-bin/tools/krpctools/krpctools-*.zip
+      - name: upload-testserver-artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: testserver
+          path: bazel-bin/tools/TestServer/TestServer-*.zip
+
+  build-genfiles:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: tools/dist/genfiles.sh
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: genfiles
+          path: bazel-bin/krpc-genfiles-*.zip
+
+  build-csharp-sln:
+    needs: build-genfiles
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: download-genfiles
+        uses: actions/download-artifact@v3
+        with:
+          name: genfiles
+      - name: extract-genfiles
+        run: |
+          unzip krpc-genfiles-*.zip -d ./
+          rm krpc-genfiles-*.zip
+      - name: build
+        run: |
           msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
           msbuild KRPC.sln /t:Clean,Build -p:Configuration=Release /warnaserror
 
-          bazel test //:ci-test
-          # client/cpp/test-build.sh
-          # client/cnano/test-build.sh
-
-          tools/dist/genfiles.sh
-          # tools/travis-ci/before-deploy.sh
-
-          mkdir deploy
-          cp bazel-bin/krpc-*.zip deploy/
-          cp bazel-bin/tools/krpctools/krpctools-*.zip deploy/
-          cp bazel-bin/tools/TestServer/TestServer-*.zip deploy/
-          cp bazel-bin/krpc-genfiles-*.zip deploy/
-          cp bazel-bin/doc/html.zip deploy/doc-html.zip
-
-      - name: upload-artifacts
-        uses: actions/upload-artifact@v3
+  build-docs-html:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: bazel build //doc:html
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
         with:
-          path: deploy
+          name: docs-html
+          path: bazel-bin/doc/html.zip
+
+  build-docs-pdf:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: bazel build //doc:pdf
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: docs-pdf
+          path: bazel-bin/doc/krpc-*.pdf
+
+  build-docs-examples:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: bazel build //doc:compile-scripts
+
+  test-docs:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: bazel test //doc:test
+
+  test-server:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: test
+        run: bazel test //server:test
+
+  test-client-cnano:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: bazel build //client/cnano:cnano
+      - name: test
+        run: bazel test //client/cnano:test
+      - name: test-build
+        run: client/cnano/test-build.sh
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: client-cnano
+          path: bazel-bin/client/cnano/krpc-cnano-*.zip
+
+  test-client-cpp:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: bazel build //client/cpp:cpp
+      - name: test
+        run: bazel test //client/cpp:test
+      - name: test-build
+        run: client/cpp/test-build.sh
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: client-cpp
+          path: bazel-bin/client/cpp/krpc-cpp-*.zip
+
+  test-client-csharp:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: bazel build //client/csharp:csharp //client/csharp:nuget
+      - name: test
+        run: bazel test //client/csharp:test
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: client-csharp
+          path: bazel-bin/client/csharp/krpc-csharp-*.zip
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: client-csharp-nuget
+          path: bazel-bin/client/csharp/KRPC.Client.*.nupkg
+
+  test-client-java:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: test
+        run: bazel build //client/java:java
+      - name: test
+        run: bazel test //client/java:test
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: client-java
+          path: bazel-bin/client/java/krpc-java-*.jar
+
+  test-client-python:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: bazel build //client/python:python
+      - name: test
+        run: bazel test //client/python:test
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: client-python
+          path: bazel-bin/client/python/krpc-python-*.zip
+
+  test-client-lua:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: build
+        run: bazel build //client/lua:lua
+      - name: test
+        run: bazel test //client/lua:test
+      - name: upload-artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: client-lua
+          path: bazel-bin/client/lua/krpc-lua-*.zip
+
+  test-client-serialio:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: test
+        run: bazel test //client/serialio:test
+
+  test-client-websockets:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: test
+        run: bazel test //client/websockets:test
+
+  test-tools:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: test
+        run: |
+          bazel test \
+            //tools/krpctest:test \
+            //tools/krpctools:test

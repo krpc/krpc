@@ -11,18 +11,16 @@ root=`pwd`
 out=$root/bazel-bin/client/cpp/test-build
 version=`tools/krpc-version.sh`
 
-bazel build //client/cpp
-
-# Build dependencies
+# Build library and dependencies
 bazel build \
-  @com_google_protobuf//:protobuf \
+  //client/cpp \
+  @protoc_linux_x86_64//:bin/protoc \
   @com_google_protobuf//:protobuf_lite \
-  @com_google_protobuf//:protoc \
   @cpp_asio//:asio
 protobuf_include=$root/bazel-krpc/external/com_google_protobuf/src
 protobuf_library=$root/bazel-bin/external/com_google_protobuf
 asio_include=$root/bazel-krpc/external/cpp_asio/include
-protoc_dir=$root/bazel-bin/external/com_google_protobuf
+protoc_dir=$root/bazel-krpc/external/protoc_linux_x86_64/bin
 
 # Extract source
 rm -rf $out
@@ -48,7 +46,7 @@ function cmake_build {
   pushd $out/$1
   cmake $out \
     -DCMAKE_INSTALL_PREFIX=$out/$2 \
-    -DPROTOBUF_LIBRARY=$protobuf_library/libprotobuf.so \
+    -DPROTOBUF_LIBRARY=$protobuf_library/libprotobuf_lite.so \
     -DPROTOBUF_INCLUDE_DIR=$protobuf_include \
     -DPROTOBUF_PROTOC_EXECUTABLE=$protoc \
     -DCMAKE_INCLUDE_PATH=$asio_include
@@ -67,14 +65,13 @@ int main() {
   krpc::services::KRPC krpc(&conn);
   std::cout << krpc.get_status().version() << std::endl;
 }" > $out/main.cpp
-  # Note: libprotobuf is NOT built to contains libprotobuf_lite by the bazel build files, so both must be included
   g++ \
     -Wall -Werror -std=c++11 \
     -I$out/$1/include \
     -L$out/$1/lib \
     -L$protobuf_library \
     -o $out/main.exe $out/main.cpp \
-    -lkrpc -lprotobuf -lprotobuf_lite -lz
+    -lkrpc -lprotobuf_lite -lz
 }
 
 export LDFLAGS=-L$protobuf_library

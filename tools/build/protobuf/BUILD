@@ -12,7 +12,7 @@ filegroup(
         ':windows_msys64_mingw64': ['@protoc_win32//:bin/protoc.exe'],
         ':windows_msys64': ['@protoc_win32//:bin/protoc.exe'],
         ':windows_clang': ['@protoc_win32//:bin/protoc.exe'],
-        ':darwin': ['@protoc_osx_x86_32//:bin/protoc'],
+        ':darwin': ['@protoc_osx_x86_64//:bin/protoc'],
         ':k8': ['@protoc_linux_x86_64//:bin/protoc'],
         ':piii': ['@protoc_linux_x86_32//:bin/protoc'],
         ':freebsd': ['@protoc_linux_x86_32//:bin/protoc']
@@ -27,7 +27,7 @@ filegroup(
         ':windows_msys64_mingw64': ['@protoc_unity_win32//:bin/protoc.exe'],
         ':windows_msys64': ['@protoc_unity_win32//:bin/protoc.exe'],
         ':windows_clang': ['@protoc_unity_win32//:bin/protoc.exe'],
-        ':darwin': ['@protoc_unity_osx_x86_32//:bin/protoc'],
+        ':darwin': ['@protoc_unity_osx_x86_64//:bin/protoc'],
         ':k8': ['@protoc_unity_linux_x86_64//:bin/protoc'],
         ':piii': ['@protoc_unity_linux_x86_32//:bin/protoc'],
         ':freebsd': ['@protoc_unity_linux_x86_32//:bin/protoc']

@@ -13,7 +13,7 @@
 
 namespace google {
 namespace protobuf {
-class Message;
+class MessageLite;
 }
 }
 
@@ -38,7 +38,8 @@ void decode(google::protobuf::uint64& value, const std::string& data, Client * c
 void decode(bool& value, const std::string& data, Client * client = nullptr);
 void decode(std::string& value, const std::string& data, Client * client = nullptr);
 void decode(Event& event, const std::string& data, Client * client = nullptr);
-void decode(google::protobuf::Message& message, const std::string& data, Client * client = nullptr);
+void decode(google::protobuf::MessageLite& message, const std::string& data,
+            Client * client = nullptr);
 
 template <typename T> void decode(Object<T>& object, const std::string& data,
                                   Client * client = nullptr);

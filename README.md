@@ -1,4 +1,6 @@
-# kRPC [![Build Status](https://travis-ci.com/krpc/krpc.svg?branch=master)](https://travis-ci.com/krpc/krpc)
+# kRPC - Remote Procedure Calls for Kerbal Space Program
+
+[![ci](https://github.com/krpc/krpc/actions/workflows/ci.yml/badge.svg)](https://github.com/krpc/krpc/actions/workflows/ci.yml) [![docs](https://github.com/krpc/krpc/actions/workflows/docs.yml/badge.svg?branch=docs)](https://github.com/krpc/krpc/actions/workflows/docs.yml)
 
 kRPC allows you to control Kerbal Space Program from scripts running outside of
 the game, and comes with client libraries for many popular languages.
@@ -14,6 +16,4 @@ Contributions to kRPC are very welcome. [Please refer to this guide.](CONTRIBUTI
 ## Links for Developers
 
  * [Forum development thread](https://forum.kerbalspaceprogram.com/index.php?/topic/62902-14113x122-krpc-remote-procedure-call-server-v045-17th-march-2018/)
- * [Travis CI page](https://travis-ci.com/krpc/krpc)
- * [Travis CI build outputs](http://krpc.s3-website-us-east-1.amazonaws.com/deploy/)
  * [Release guide](Release-Guide.md)

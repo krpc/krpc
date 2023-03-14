@@ -1,3 +1,7 @@
+v0.5.2
+ * Use protobuf-lite
+ * Roll back to protobuf v3.21.12 to avoid absl dependency
+
 v0.5.0
  * Update to protobuf v3.22.0
  * Update to ASIO 1.24.0
