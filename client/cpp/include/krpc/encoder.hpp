@@ -12,7 +12,7 @@
 
 namespace google {
 namespace protobuf {
-class Message;
+class MessageLite;
 }
 }
 
@@ -31,7 +31,7 @@ std::string encode(google::protobuf::uint64 value);
 std::string encode(bool value);
 std::string encode(const char* value);
 std::string encode(const std::string& value);
-std::string encode(const google::protobuf::Message& message);
+std::string encode(const google::protobuf::MessageLite& message);
 template <typename T> std::string encode(const Object<T>& object);
 
 template <typename T> std::string encode(const std::vector<T>& list);
@@ -59,7 +59,7 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4>
 std::string encode(const std::tuple<T0, T1, T2, T3, T4>& tuple);
 // [[[end]]]
 
-std::string encode_message_with_size(const google::protobuf::Message& message);
+std::string encode_message_with_size(const google::protobuf::MessageLite& message);
 
 template <typename T>
 inline std::string encode(const Object<T>& object) {

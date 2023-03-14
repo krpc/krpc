@@ -1,7 +1,7 @@
 #include "krpc/decoder.hpp"
 
 #include <google/protobuf/io/coded_stream.h>
-#include <google/protobuf/message.h>
+#include <google/protobuf/message_lite.h>
 #include <google/protobuf/wire_format_lite.h>
 
 #include <string>
@@ -94,7 +94,7 @@ void decode(Event& event, const std::string& data, Client* client) {
   event = Event(client, message);
 }
 
-void decode(pb::Message& message, const std::string& data, Client* client) {
+void decode(pb::MessageLite& message, const std::string& data, Client* client) {
   if (!message.ParseFromString(data))
     throw EncodingError("Failed to decode message");
 }
