@@ -472,6 +472,18 @@
 
       :Game Scenes: All
 
+   .. function:: void set_string_property_private_get(std::string value)
+
+
+
+      :Game Scenes: All
+
+   .. function:: std::string string_property_private_set()
+
+
+
+      :Game Scenes: All
+
 
 
 .. namespace:: krpc::services::TestService

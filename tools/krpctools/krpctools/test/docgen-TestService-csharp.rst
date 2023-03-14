@@ -463,6 +463,18 @@
 
       :Game Scenes: All
 
+   .. property:: string StringPropertyPrivateGet { set; }
+
+
+
+      :Game Scenes: All
+
+   .. property:: string StringPropertyPrivateSet { get; }
+
+
+
+      :Game Scenes: All
+
 
 
 .. enum:: TestEnum
