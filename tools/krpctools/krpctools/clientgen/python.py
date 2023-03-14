@@ -67,7 +67,9 @@ class PythonGenerator(Generator):
             else:
                 return 'KRPC_pb2.%s' % typ.python_type.__name__
         elif isinstance(typ, ClassType):
-            spec = self.language.parse_type(typ)
+            spec = typ.protobuf_type.name
+            if typ.protobuf_type.service != self.service_name:
+                spec = typ.protobuf_type.service.lower() + "." + spec
         elif isinstance(typ, EnumerationType):
             spec = self.language.parse_type(typ)
         elif isinstance(typ, TupleType):

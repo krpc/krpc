@@ -7,8 +7,8 @@ from krpc.types import TypeBase, ClassBase, WrappedClass, DocEnum
 from krpc.event import Event
 if TYPE_CHECKING:
     from krpc.services import Client
-{% for dep in dependencies %}
-from krpc.services.{{dep|lower()}} import {{dep}}
+{% for service in dependencies %}
+from krpc.services import {{service|lower()}}
 {% endfor %}
 
 {% macro arg_list(parameters) %}
