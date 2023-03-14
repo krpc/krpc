@@ -5,13 +5,13 @@ from krpc.test.servertestcase import ServerTestCase
 
 class TestPerformance(ServerTestCase, unittest.TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         super(TestPerformance, cls).setUpClass()
 
-    def test_performance(self):
+    def test_performance(self) -> None:
         samples = 100
 
-        def wrapper():
+        def wrapper() -> None:
             self.conn.test_service.float_to_string(float(3.14159))
 
         delta_t = timeit.timeit(stmt=wrapper, number=samples)

@@ -3,7 +3,7 @@ from krpc.utils import snake_case as t
 
 
 class TestSnakeCase(unittest.TestCase):
-    def test_examples(self):
+    def test_examples(self) -> None:
         # Simple cases
         self.assertEqual('server', t('Server'))
         self.assertEqual('my_server', t('MyServer'))
@@ -23,7 +23,7 @@ class TestSnakeCase(unittest.TestCase):
         self.assertEqual('_http_server', t('_HTTPServer'))
         self.assertEqual('http__server', t('HTTP_Server'))
 
-    def test_non_camel_case_examples(self):
+    def test_non_camel_case_examples(self) -> None:
         self.assertEqual('foobar', t('foobar'))
         self.assertEqual('foo__bar', t('foo_bar'))
         self.assertEqual('_foobar', t('_foobar'))

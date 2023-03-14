@@ -148,7 +148,7 @@ namespace TestServer
             }
 
             [KRPCMethod]
-            public string ObjectToString (TestClass other)
+            public string ObjectToString ([KRPCNullable] TestClass other)
             {
                 return instanceValue + (ReferenceEquals (other, null) ? "null" : other.instanceValue);
             }

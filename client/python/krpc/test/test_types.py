@@ -1,27 +1,27 @@
 import unittest
 from enum import Enum
-from krpc.types import \
-    Types, ValueType, ClassType, EnumerationType, MessageType, ClassBase, \
+from krpc.types import (
+    Types, ValueType, ClassType, EnumerationType, MessageType, ClassBase,
     TupleType, ListType, SetType, DictionaryType
+)
 from krpc.schema.KRPC_pb2 import Type, ProcedureCall, Stream, Status, Services
 
 
 class TestTypes(unittest.TestCase):
-
-    def check_protobuf_type(self, code, service, name,
-                            numtypes, protobuf_type):
+    def check_protobuf_type(self, code: Type.TypeCode, service: str, name: str,
+                            numtypes: int, protobuf_type: Type) -> None:
         self.assertEqual(code, protobuf_type.code)
         self.assertEqual(service, protobuf_type.service)
         self.assertEqual(name, protobuf_type.name)
         self.assertEqual(numtypes, len(protobuf_type.types))
 
-    def test_none_type(self):
+    def test_none_type(self) -> None:
         types = Types()
         none_type = Type()
         none_type.code = Type.NONE
         self.assertRaises(ValueError, types.as_type, none_type)
 
-    def test_value_types(self):
+    def test_value_types(self) -> None:
         types = Types()
         cases = [
             (types.double_type, Type.DOUBLE, float),
@@ -40,7 +40,7 @@ class TestTypes(unittest.TestCase):
                 protobuf_code, '', '', 0, typ.protobuf_type)
             self.assertEqual(python_type, typ.python_type)
 
-    def test_class_types(self):
+    def test_class_types(self) -> None:
         types = Types()
         typ = types.class_type(
             'ServiceName', 'ClassName', 'class documentation')
@@ -49,14 +49,14 @@ class TestTypes(unittest.TestCase):
         self.assertEqual('class documentation', typ.python_type.__doc__)
         self.check_protobuf_type(
             Type.CLASS, 'ServiceName', 'ClassName', 0, typ.protobuf_type)
-        instance = typ.python_type(42)
+        instance = typ.python_type(None, 42)
         self.assertEqual(42, instance._object_id)
         self.assertEqual('ServiceName', instance._service_name)
         self.assertEqual('ClassName', instance._class_name)
         typ2 = types.as_type(typ.protobuf_type)
         self.assertEqual(typ, typ2)
 
-    def test_enumeration_types(self):
+    def test_enumeration_types(self) -> None:
         types = Types()
         typ = types.enumeration_type(
             'ServiceName', 'EnumName', 'enum documentation')
@@ -71,16 +71,16 @@ class TestTypes(unittest.TestCase):
         })
         self.assertTrue(issubclass(typ.python_type, Enum))
         self.assertEqual('enum documentation', typ.python_type.__doc__)
-        self.assertEqual(0, typ.python_type.a.value)
-        self.assertEqual(42, typ.python_type.b.value)
-        self.assertEqual(100, typ.python_type.c.value)
-        self.assertEqual('doca', typ.python_type.a.__doc__)
-        self.assertEqual('docb', typ.python_type.b.__doc__)
-        self.assertEqual('docc', typ.python_type.c.__doc__)
+        self.assertEqual(0, typ.python_type.a.value)  # type: ignore[attr-defined]
+        self.assertEqual(42, typ.python_type.b.value)  # type: ignore[attr-defined]
+        self.assertEqual(100, typ.python_type.c.value)  # type: ignore[attr-defined]
+        self.assertEqual('doca', typ.python_type.a.__doc__)  # type: ignore[attr-defined]
+        self.assertEqual('docb', typ.python_type.b.__doc__)  # type: ignore[attr-defined]
+        self.assertEqual('docc', typ.python_type.c.__doc__)  # type: ignore[attr-defined]
         typ2 = types.as_type(typ.protobuf_type)
         self.assertEqual(typ, typ2)
 
-    def test_message_types(self):
+    def test_message_types(self) -> None:
         types = Types()
         cases = [
             (types.procedure_call_type, Type.PROCEDURE_CALL, ProcedureCall),
@@ -94,7 +94,7 @@ class TestTypes(unittest.TestCase):
             self.check_protobuf_type(
                 protobuf_code, '', '', 0, typ.protobuf_type)
 
-    def test_tuple_1_types(self):
+    def test_tuple_1_types(self) -> None:
         types = Types()
         typ = types.tuple_type(types.bool_type)
         self.assertTrue(isinstance(typ, TupleType))
@@ -109,7 +109,7 @@ class TestTypes(unittest.TestCase):
         self.check_protobuf_type(
             Type.BOOL, '', '', 0, typ.value_types[0].protobuf_type)
 
-    def test_tuple_2_types(self):
+    def test_tuple_2_types(self) -> None:
         types = Types()
         typ = types.tuple_type(types.uint32_type, types.string_type)
         self.assertTrue(isinstance(typ, TupleType))
@@ -130,7 +130,7 @@ class TestTypes(unittest.TestCase):
         self.check_protobuf_type(
             Type.STRING, '', '', 0, typ.value_types[1].protobuf_type)
 
-    def test_tuple_3_types(self):
+    def test_tuple_3_types(self) -> None:
         types = Types()
         typ = types.tuple_type(
             types.float_type, types.uint64_type, types.string_type)
@@ -158,7 +158,7 @@ class TestTypes(unittest.TestCase):
         self.check_protobuf_type(
             Type.STRING, '', '', 0, typ.value_types[2].protobuf_type)
 
-    def test_list_types(self):
+    def test_list_types(self) -> None:
         types = Types()
         typ = types.list_type(types.uint32_type)
         self.assertTrue(isinstance(typ, ListType))
@@ -172,7 +172,7 @@ class TestTypes(unittest.TestCase):
         self.check_protobuf_type(
             Type.UINT32, '', '', 0, typ.value_type.protobuf_type)
 
-    def test_set_types(self):
+    def test_set_types(self) -> None:
         types = Types()
         typ = types.set_type(types.string_type)
         self.assertTrue(isinstance(typ, SetType))
@@ -186,7 +186,7 @@ class TestTypes(unittest.TestCase):
         self.check_protobuf_type(
             Type.STRING, '', '', 0, typ.value_type.protobuf_type)
 
-    def test_dictionary_types(self):
+    def test_dictionary_types(self) -> None:
         types = Types()
         typ = types.dictionary_type(types.string_type, types.uint32_type)
         self.assertTrue(isinstance(typ, DictionaryType))
@@ -206,7 +206,7 @@ class TestTypes(unittest.TestCase):
         self.check_protobuf_type(
             Type.UINT32, '', '', 0, typ.value_type.protobuf_type)
 
-    def test_coerce_to(self):
+    def test_coerce_to(self) -> None:
         types = Types()
         cases = [
             (42.0, 42, types.double_type),

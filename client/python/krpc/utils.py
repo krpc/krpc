@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import List
 import re
 
 _REGEX_MULTI_UPPERCASE = re.compile(r'([A-Z]+)([A-Z][a-z0-9])')
@@ -5,22 +7,23 @@ _REGEX_SINGLE_UPPERCASE = re.compile(r'([a-z0-9])([A-Z])')
 _REGEX_UNDERSCORES = re.compile(r'(.)_')
 
 
-def snake_case(camel_case):
+def snake_case(camel_case: str) -> str:
     """ Convert camel case to snake case, e.g. GetServices -> get_services """
     result = re.sub(_REGEX_UNDERSCORES, r'\1__', camel_case)
     result = re.sub(_REGEX_SINGLE_UPPERCASE, r'\1_\2', result)
     return re.sub(_REGEX_MULTI_UPPERCASE, r'\1_\2', result).lower()
 
 
-def split_type_string(type_string):
+def split_type_string(type_string: str) -> List[str]:
     parts = []
-    while type_string is not None:
-        part, type_string = _split_type_string(type_string)
+    rest: str | None = type_string
+    while rest is not None:
+        part, rest = _split_type_string(rest)
         parts.append(part)
     return parts
 
 
-def _split_type_string(typ):
+def _split_type_string(typ: str) -> tuple[str, str | None]:
     """ Given a string, extract a substring up to the first comma.
         Parses parentheses. Multiple calls can be used to separate
         a string by commas. """

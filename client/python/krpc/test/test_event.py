@@ -5,12 +5,11 @@ from krpc.test.servertestcase import ServerTestCase
 
 
 class TestEvent(ServerTestCase, unittest.TestCase):
-
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         super(TestEvent, cls).setUpClass()
 
-    def test_event(self):
+    def test_event(self) -> None:
         event = self.conn.test_service.on_timer(200)
         with event.condition:
             start_time = time.time()
@@ -18,7 +17,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
             self.assertAlmostEqual(time.time()-start_time, 0.2, delta=0.05)
             self.assertTrue(event.stream())
 
-    def test_event_using_lambda(self):
+    def test_event_using_lambda(self) -> None:
         event = self.conn.test_service.on_timer_using_lambda(200)
         with event.condition:
             start_time = time.time()
@@ -26,7 +25,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
             self.assertAlmostEqual(time.time()-start_time, 0.2, delta=0.05)
             self.assertTrue(event.stream())
 
-    def test_event_timeout_short(self):
+    def test_event_timeout_short(self) -> None:
         event = self.conn.test_service.on_timer(200)
         with event.condition:
             start_time = time.time()
@@ -37,7 +36,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
             event.wait()
             self.assertTrue(event.stream())
 
-    def test_event_timeout_long(self):
+    def test_event_timeout_long(self) -> None:
         event = self.conn.test_service.on_timer(200)
         with event.condition:
             start_time = time.time()
@@ -45,7 +44,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
             self.assertAlmostEqual(time.time()-start_time, 0.2, delta=0.05)
             self.assertTrue(event.stream())
 
-    def test_event_loop(self):
+    def test_event_loop(self) -> None:
         start_time = time.time()
         event = self.conn.test_service.on_timer(200, repeats=5)
         with event.condition:
@@ -59,7 +58,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
                 if repeat == 5:
                     break
 
-    def test_event_callback(self):
+    def test_event_callback(self) -> None:
         event = self.conn.test_service.on_timer(200)
         called = threading.Event()
         event.add_callback(called.set)
@@ -69,7 +68,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         self.assertAlmostEqual(time.time()-start_time, 0.2, delta=0.05)
         self.assertTrue(called.is_set())
 
-    def test_event_callback_timeout(self):
+    def test_event_callback_timeout(self) -> None:
         event = self.conn.test_service.on_timer(1000)
         called = threading.Event()
         event.add_callback(called.set)
@@ -81,10 +80,10 @@ class TestEvent(ServerTestCase, unittest.TestCase):
 
     test_event_callback_loop_count = 0
 
-    def test_event_callback_loop(self):
+    def test_event_callback_loop(self) -> None:
         event = self.conn.test_service.on_timer(200, repeats=5)
 
-        def callback():
+        def callback() -> None:
             self.test_event_callback_loop_count += 1
 
         event.add_callback(callback)
@@ -95,7 +94,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         self.assertGreater(time.time()-start_time, 0.95)
         self.assertEqual(self.test_event_callback_loop_count, 5)
 
-    def test_event_remove_callback(self):
+    def test_event_remove_callback(self) -> None:
         event = self.conn.test_service.on_timer(200)
         called1 = threading.Event()
         called2 = threading.Event()
@@ -109,7 +108,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         self.assertTrue(called1.is_set())
         self.assertFalse(called2.is_set())
 
-    def test_custom_event(self):
+    def test_custom_event(self) -> None:
         expression = self.conn.krpc.Expression
 
         counter = expression.call(

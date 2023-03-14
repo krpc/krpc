@@ -6,7 +6,7 @@ load('//:config.bzl', 'version', 'python_version')
 # Needed as clientgen depends on these files
 genrule(
     name = 'python_base',
-    srcs = [':python-without-stubs'],
+    srcs = [':python-without-services'],
     outs = ['krpc-python-base-%s.zip' % version],
     cmd = 'cp "$<" "$@"',
     output_to_bindir = True,
@@ -14,7 +14,7 @@ genrule(
 )
 
 py_sdist(
-    name = 'python-without-stubs',
+    name = 'python-without-services',
     out = 'krpc-base-%s.zip' % version,
     files = [
         '//:readme', '//:version', 'CHANGES.txt',
@@ -45,94 +45,93 @@ py_sdist(
         '//:readme', '//:version', 'CHANGES.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
         'setup.py', 'MANIFEST.in', '//:python_version',
-        '//protobuf:python'
+        '//protobuf:python',
+        ':services-krpc',
+        ':services-testservice',
+        ':services-spacecenter',
+        ':services-drawing',
+        ':services-infernalrobotics',
+        ':services-kerbalalarmclock',
+        ':services-remotetech',
+        ':services-ui',
+        ':services-lidar',
+        ':services-dockingcamera'
     ] + glob(['krpc/**/*']),
     path_map = {
         'version.py': 'krpc/version.py',
         'client/python/': '',
         'protobuf/': 'krpc/schema/'
-    },
-    stub_files = [
-        ':services-krpc-stub',
-        ':services-spacecenter-stub',
-        ':services-drawing-stub',
-        ':services-infernalrobotics-stub',
-        ':services-kerbalalarmclock-stub',
-        ':services-remotetech-stub',
-        ':services-ui-stub',
-        ':services-lidar-stub',
-        ':services-dockingcamera-stub',
-    ]
+    }
 )
 
 clientgen_python(
-    name = 'services-krpc-stub',
+    name = 'services-krpc',
     service = 'KRPC',
     defs = '//server:ServiceDefinitions',
-    out = 'krpc/krpc.pyi'
+    out = 'krpc/services/krpc.py'
 )
 
 clientgen_python(
-    name = 'services-spacecenter-stub',
-    service = 'SpaceCenter',
-    defs = '//service/SpaceCenter:ServiceDefinitions',
-    out = 'krpc/spacecenter.pyi'
-)
-
-clientgen_python(
-    name = 'services-drawing-stub',
-    service = 'Drawing',
-    defs = '//service/Drawing:ServiceDefinitions',
-    out = 'krpc/drawing.pyi'
-)
-
-clientgen_python(
-    name = 'services-infernalrobotics-stub',
-    service = 'InfernalRobotics',
-    defs = '//service/InfernalRobotics:ServiceDefinitions',
-    out = 'krpc/infernalrobotics.pyi'
-)
-
-clientgen_python(
-    name = 'services-kerbalalarmclock-stub',
-    service = 'KerbalAlarmClock',
-    defs = '//service/KerbalAlarmClock:ServiceDefinitions',
-    out = 'krpc/kerbalalarmclock.pyi'
-)
-
-clientgen_python(
-    name = 'services-remotetech-stub',
-    service = 'RemoteTech',
-    defs = '//service/RemoteTech:ServiceDefinitions',
-    out = 'krpc/remotetech.pyi'
-)
-
-clientgen_python(
-    name = 'services-ui-stub',
-    service = 'UI',
-    defs = '//service/UI:ServiceDefinitions',
-    out = 'krpc/ui.pyi'
-)
-
-clientgen_python(
-    name = 'services-lidar-stub',
-    service = 'LiDAR',
-    defs = '//service/LiDAR:ServiceDefinitions',
-    out = 'krpc/lidar.pyi'
-)
-
-clientgen_python(
-    name = 'services-dockingcamera-stub',
-    service = 'DockingCamera',
-    defs = '//service/DockingCamera:ServiceDefinitions',
-    out = 'krpc/dockingcamera.pyi'
-)
-
-clientgen_python(
-    name = 'services-test-service-stub',
+    name = 'services-testservice',
     service = 'TestService',
     defs = '//tools/TestServer:ServiceDefinitions',
-    out = 'test/testservice.pyi'
+    out = 'krpc/services/testservice.py'
+)
+
+clientgen_python(
+    name = 'services-spacecenter',
+    service = 'SpaceCenter',
+    defs = '//service/SpaceCenter:ServiceDefinitions',
+    out = 'krpc/services/spacecenter.py'
+)
+
+clientgen_python(
+    name = 'services-drawing',
+    service = 'Drawing',
+    defs = '//service/Drawing:ServiceDefinitions',
+    out = 'krpc/services/drawing.py'
+)
+
+clientgen_python(
+    name = 'services-infernalrobotics',
+    service = 'InfernalRobotics',
+    defs = '//service/InfernalRobotics:ServiceDefinitions',
+    out = 'krpc/services/infernalrobotics.py'
+)
+
+clientgen_python(
+    name = 'services-kerbalalarmclock',
+    service = 'KerbalAlarmClock',
+    defs = '//service/KerbalAlarmClock:ServiceDefinitions',
+    out = 'krpc/services/kerbalalarmclock.py'
+)
+
+clientgen_python(
+    name = 'services-remotetech',
+    service = 'RemoteTech',
+    defs = '//service/RemoteTech:ServiceDefinitions',
+    out = 'krpc/services/remotetech.py'
+)
+
+clientgen_python(
+    name = 'services-ui',
+    service = 'UI',
+    defs = '//service/UI:ServiceDefinitions',
+    out = 'krpc/services/ui.py'
+)
+
+clientgen_python(
+    name = 'services-lidar',
+    service = 'LiDAR',
+    defs = '//service/LiDAR:ServiceDefinitions',
+    out = 'krpc/services/lidar.py'
+)
+
+clientgen_python(
+    name = 'services-dockingcamera',
+    service = 'DockingCamera',
+    defs = '//service/DockingCamera:ServiceDefinitions',
+    out = 'krpc/services/dockingcamera.py'
 )
 
 test_suite(

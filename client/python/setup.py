@@ -21,12 +21,12 @@ setup(
     version=re.search(r'\'(.+)\'', open(os.path.join(dirpath, 'krpc/version.py')).read()).group(1),
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
-    packages=['krpc', 'krpc.schema', 'krpc.test', 'krpc.test.schema'],
+    packages=['krpc', 'krpc.schema', 'krpc.services', 'krpc.test', 'krpc.test.schema'],
     url='https://krpc.github.io/krpc',
     license='GNU LGPL v3',
     description='Client library for kRPC, a Remote Procedure Call server for Kerbal Space Program',
     long_description=open(os.path.join(dirpath, 'README.txt')).read(),
-    python_requires='>=3.4',
+    python_requires='>=3.7',
     install_requires=install_requires,
     test_suite='krpc.test',
     classifiers=[
@@ -41,5 +41,9 @@ setup(
         'Topic :: Games/Entertainment :: Simulation',
         'Topic :: Internet'
     ],
-    {typed_files}
+    package_data = {
+        "krpc": ["py.typed"],
+        "krpc.schema": ["KRPC_pb2.pyi"],
+        "krpc.services": ["py.typed"]
+    }
 )

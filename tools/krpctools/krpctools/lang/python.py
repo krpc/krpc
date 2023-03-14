@@ -4,6 +4,7 @@ from krpc.schema.KRPC_pb2 import Type
 from krpc.types import \
     ValueType, ClassType, EnumerationType, MessageType, \
     TupleType, ListType, SetType, DictionaryType
+from krpc.utils import snake_case
 from .language import Language
 
 
@@ -16,6 +17,9 @@ class PythonLanguage(Language):
         'true': 'True',
         'false': 'False'
     }
+
+    def parse_name(self, name):
+        return super().parse_name(snake_case(name))
 
     def parse_type(self, typ):
         if isinstance(typ, ValueType):
@@ -49,10 +53,10 @@ class PythonLanguage(Language):
         if (isinstance(typ, ValueType) and
                 typ.protobuf_type.code == Type.STRING):
             return '\'%s\'' % value
-        # python2 fix: convert set to string manually
-        if isinstance(typ, SetType):
-            return '{'+', '.join(self.parse_default_value(x, typ.value_type)
-                                 for x in value)+'}'
+        if value is None:
+            return 'None'
+        if isinstance(typ, EnumerationType):
+            return self.parse_type(typ) + '(%d)' % value
         return str(value)
 
     def shorten_ref(self, name):
