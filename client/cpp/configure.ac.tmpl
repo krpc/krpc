@@ -5,7 +5,7 @@ AC_CANONICAL_HOST
 AC_CONFIG_MACRO_DIR(m4)
 AC_PROG_CXX
 AC_LANG([C++])
-AX_CXX_COMPILE_STDCXX_11(noext, mandatory)
+AX_CXX_COMPILE_STDCXX(11, noext, mandatory)
 LT_INIT
 AX_CHECK_ZLIB()
 PKG_CHECK_MODULES([protobuf], [protobuf >= 3.3])

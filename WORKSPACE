@@ -11,26 +11,6 @@ http_archive(
 )
 
 http_archive(
-    name = 'rules_cc',
-    url = 'https://github.com/bazelbuild/rules_cc/releases/download/0.0.6/rules_cc-0.0.6.tar.gz',
-    sha256 = '3d9e271e2876ba42e114c9b9bc51454e379cbf0ec9ef9d40e2ae4cec61a31b40',
-    strip_prefix = 'rules_cc-0.0.6'
-)
-
-http_archive(
-    name = 'rules_java',
-    url = 'https://github.com/bazelbuild/rules_java/releases/download/5.4.1/rules_java-5.4.1.tar.gz',
-    sha256 = 'a1f82b730b9c6395d3653032bd7e3a660f9d5ddb1099f427c1e1fe768f92e395'
-)
-
-http_archive(
-    name = 'rules_proto',
-    url = 'https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.7.tar.gz',
-    sha256 = 'dc3fb206a2cb3441b485eb1e423165b231235a1ea9b031b4433cf7bc1fa460dd',
-    strip_prefix = 'rules_proto-5.3.0-21.7'
-)
-
-http_archive(
     name = 'rules_python',
     url = 'https://github.com/bazelbuild/rules_python/releases/download/0.18.1/rules_python-0.18.1.tar.gz',
     sha256 = '29a801171f7ca190c543406f9894abf2d483c206e14d6acbd695623662320097',
@@ -44,24 +24,10 @@ http_archive(
 )
 
 http_archive(
-    name = 'rules_ruby',
-    url = 'https://github.com/bazelruby/rules_ruby/archive/refs/tags/v0.6.0.tar.gz',
-    sha256 = '5035393cb5043d49ca9de78acb9e8c8622a193f6463a57ad02383a622b6dc663',
-    strip_prefix = 'rules_ruby-0.6.0'
-)
-
-http_archive(
-    name = 'bazelruby_rules_ruby',
-    url = 'https://github.com/bazelruby/rules_ruby/archive/refs/tags/v0.6.0.tar.gz',
-    sha256 = '5035393cb5043d49ca9de78acb9e8c8622a193f6463a57ad02383a622b6dc663',
-    strip_prefix = 'rules_ruby-0.6.0'
-)
-
-http_archive(
     name = 'com_google_protobuf',
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v22.0/protobuf-22.0.tar.gz',
-    sha256 = 'e340f39fad1e35d9237540bcd6a2592ccac353e5d21d0f0521f6ab77370e0142',
-    strip_prefix = 'protobuf-22.0'
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protobuf-all-21.12.tar.gz',
+    sha256 = '2c6a36c7b5a55accae063667ef3c55f2642e67476d96d355ff0acb13dbb47f09',
+    strip_prefix = 'protobuf-21.12'
 )
 
 http_archive(
@@ -69,34 +35,6 @@ http_archive(
     url = 'https://github.com/google/googletest/archive/refs/tags/v1.13.0.tar.gz',
     sha256 = 'ad7fdba11ea011c1d925b3289cf4af2c66a352e18d4c7264392fead75e919363',
     strip_prefix = 'googletest-1.13.0'
-)
-
-http_archive(
-    name = 'com_google_absl',
-    url = 'https://github.com/abseil/abseil-cpp/archive/refs/tags/20230125.1.tar.gz',
-    sha256 = '81311c17599b3712069ded20cca09a62ab0bf2a89dfa16993786c8782b7ed145',
-    strip_prefix = 'abseil-cpp-20230125.1'
-)
-
-http_archive(
-    name = 'com_googlesource_code_re2',
-    url = 'https://github.com/google/re2/archive/refs/tags/2023-02-01.tar.gz',
-    sha256 = 'cbce8b7803e856827201a132862e41af386e7afd9cc6d9a9bc7a4fa4d8ddbdde',
-    strip_prefix = 're2-2023-02-01'
-)
-
-http_archive(
-    name = 'upb',
-    url = 'https://github.com/protocolbuffers/upb/archive/c4b98ddfb5f9cb925ffb556f45c33e2f83c9578a.zip',
-    sha256 = '8da22f8933e4e01fd5aacd17ae1d6bf82e57daf1f84ac7059fba2e01f0188cba',
-    strip_prefix = 'upb-c4b98ddfb5f9cb925ffb556f45c33e2f83c9578a'
-)
-
-http_archive(
-    name = 'utf8_range',
-    url = 'https://github.com/protocolbuffers/utf8_range/archive/72c943dea2b9240cd09efde15191e144bc7c7d38.zip',
-    sha256 = 'dffb52973f0226fe5df6d9ed40b0d1af1bb89f54beec6a64b66d25e7db9c4152',
-    strip_prefix = 'utf8_range-72c943dea2b9240cd09efde15191e144bc7c7d38'
 )
 
 http_archive(
@@ -109,29 +47,29 @@ http_archive(
 
 http_archive(
     name = 'protoc_linux_x86_32',
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v22.0/protoc-22.0-linux-x86_32.zip',
-    sha256 = 'fdb8aea58cc156989f500d12cba50625dd1718f48c4c29f29300e5dcb8fd653e',
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-linux-x86_32.zip',
+    sha256 = 'dd4b5972cb3de92bfff9d7d3b361a7c281d27a010c8872d1e6efc43895253f71',
     build_file_content = "exports_files(['bin/protoc'])"
 )
 
 http_archive(
     name = 'protoc_linux_x86_64',
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v22.0/protoc-22.0-linux-x86_64.zip',
-    sha256 = '9ceff6c3945d521d1d0f42f9f57f6ef7cf3f581a9d303a027ba19b192045d1a2',
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-linux-x86_64.zip',
+    sha256 = '3a4c1e5f2516c639d3079b1586e703fc7bcfa2136d58bda24d1d54f949c315e8',
     build_file_content = "exports_files(['bin/protoc'])"
 )
 
 http_archive(
-    name = 'protoc_osx_x86_32',
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v22.0/protoc-22.0-osx-x86_64.zip',
-    sha256 = '1e0ad38fcf20a4b1cdeffe40f9188c4d1c30a9dd515cf92c8b57f629227f0eb3',
+    name = 'protoc_osx_x86_64',
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-osx-x86_64.zip',
+    sha256 = '9448ff40278504a7ae5139bb70c962acc78c32d8fc54b4890a55c14c68b9d10a',
     build_file_content = "exports_files(['bin/protoc'])"
 )
 
 http_archive(
     name = 'protoc_win32',
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v22.0/protoc-22.0-win32.zip',
-    sha256 = '1cf031ba53b6963de475fcd07a2dbcada6c4b74ef3f8e587346603a940bbf772',
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-win32.zip',
+    sha256 = '6de4ef4e65c7edb834a2a9fca6d85388adc5dd71fc8bff8b60569717d01dabea',
     build_file_content = "exports_files(['bin/protoc.exe'])"
 )
 
@@ -150,7 +88,7 @@ http_archive(
 )
 
 http_archive(
-    name = 'protoc_unity_osx_x86_32',
+    name = 'protoc_unity_osx_x86_64',
     url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.10.1/protoc-3.10.1-osx-x86_64.zip',
     sha256 = 'ee3f4051e55830596729efe48183218bdb44cf2f83b188460859bd63b2a09576',
     build_file_content = "exports_files(['bin/protoc'])"
@@ -336,12 +274,6 @@ http_file(
     name = 'm4_stdcxx',
     url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx.m4;hb=34104ea9e635fae5551fd1d6495a80f8041c4adc',
     sha256 = 'a6f7cdef49579d995976baece6e605aca1f2c8b0cb771bbae4d7b816710dcb4c'
-)
-
-http_file(
-    name = 'm4_stdcxx_11',
-    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx_11.m4;hb=34104ea9e635fae5551fd1d6495a80f8041c4adc',
-    sha256 = '98a0053e6b3fda3243cca0a40e7d7b496cb05ce4716cf6f1663e86c8ad36f1e8'
 )
 
 maven_jar(
