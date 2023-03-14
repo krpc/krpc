@@ -17,10 +17,10 @@ from krpc.utils import snake_case
 from krpc.error import RPCError
 import krpc.streammanager
 import krpc.schema.KRPC_pb2 as KRPC
+import krpc.services
 
 
-
-class Client:
+class Client(krpc.services.Client):
     """
     A kRPC client, through which all Remote Procedure Calls are made.
     Services provided by the server that the client connects
@@ -28,21 +28,35 @@ class Client:
     client.ServiceName.ProcedureName(parameter)
     """
 
-    def __init__(self, rpc_connection: Connection, stream_connection: Connection -> None:
+    def __init__(self, rpc_connection: Connection, stream_connection: Connection,
+                 use_pregenerated_stubs: bool = True) -> None:
+        super().__init__()
         self._types = Types()
         self._rpc_connection = rpc_connection
         self._rpc_connection_lock = threading.Lock()
         self._stream_connection = stream_connection
         self._stream_manager = StreamManager(self)
 
-        # Get the services
-        services = self._invoke('KRPC', 'GetServices', [], [], [],
-                                self._types.services_type).services
+        services = cast(KRPC.Services,
+                        self._invoke(
+                            'KRPC', 'GetServices', [], [], [],
+                            self._types.services_type)).services
 
-        # Set up services
-        for service in services:
-            setattr(self, snake_case(service.name),
-                    create_service(self, service))
+        # Load services
+        for service_info in services:
+            service = None
+            if use_pregenerated_stubs:
+                service = self._services.get(service_info.name)
+            if service is not None:
+                # Load from pre-generated .py code
+                for name, typ in service._classes.items():  # type: ignore[attr-defined]
+                    self._types.register_class_type(service_info.name, name, typ)
+                for name, typ in service._enumerations.items():  # type: ignore[attr-defined]
+                    self._types.register_enum_type(service_info.name, name, typ)
+            else:
+                # Dynamically create
+                setattr(self, snake_case(service_info.name),
+                        create_service(self, service_info))
 
         # Set up stream update thread
         if stream_connection is not None:
@@ -120,19 +134,25 @@ class Client:
                  *args: object, **kwargs: object) -> KRPC.ProcedureCall:
         """ Convert a remote procedure call to a KRPC.ProcedureCall message """
         if func == getattr:
-            # A property or class property getter
-            attr = func(args[0].__class__, args[1])
-            return attr.fget._build_call(args[0])
-        if func == setattr:
-            # A property setter
+            attr = func(args[0].__class__, args[1]).fget
+            if hasattr(attr, '_build_call'):
+                builder = attr._build_call
+            else:
+                builder = getattr(args[0], '_build_call_' + attr.__name__)
+            args = tuple()
+            kwargs = {}
+        elif func == setattr:
             raise StreamError('Cannot create a call for a property setter')
-        if hasattr(func, '__self__'):
-            # A method
-            return func._build_call(  # type: ignore[attr-defined]
-                func.__self__, *args, **kwargs
-            )
-        # A class method
-        return func._build_call(*args, **kwargs)  # type: ignore[attr-defined]
+        else:
+            if hasattr(func, '_build_call'):
+                builder = func._build_call
+            else:
+                builder = getattr(
+                    func.__self__,  # type: ignore[attr-defined]
+                    '_build_call_' + func.__name__
+                )
+
+        return cast(KRPC.ProcedureCall, builder(*args, **kwargs))
 
     @staticmethod
     def _get_return_type(func: Callable,  # type: ignore[type-arg] # pylint: disable=unused-argument
@@ -140,17 +160,23 @@ class Client:
                          **kwargs: object) -> TypeBase:
         """ Get the return type for a remote procedure call """
         if func == getattr:
-            # A property or class property getter
-            attr = func(args[0].__class__, args[1])
-            return attr.fget._return_type
-        if func == setattr:
-            # A property setter
+            attr = func(args[0].__class__, args[1]).fget
+            if hasattr(attr, '_return_type'):
+                return_type_fn = getattr(attr, '_return_type')
+            else:
+                return_type_fn = getattr(args[0], '_return_type_' + attr.__name__)
+        elif func == setattr:
             raise StreamError('Cannot get return type for a property setter')
-        if hasattr(func, '__self__'):
-            # A method
-            return func._return_type
-        # A class method
-        return func._return_type
+        else:
+            if hasattr(func, '_return_type'):
+                return_type_fn = getattr(func, '_return_type')
+            else:
+                return_type_fn = getattr(
+                    func.__self__,  # type: ignore[attr-defined]
+                    '_return_type_' + func.__name__
+                )
+
+        return cast(TypeBase, return_type_fn())
 
     def _invoke(self, service: str, procedure: str, args: Iterable[object],
                 param_names: Iterable[str], param_types: Iterable[TypeBase],
@@ -179,7 +205,9 @@ class Client:
         # Decode the response and return the (optional) result
         result = None
         if return_type is not None:
-            result = Decoder.decode(response.results[0].value, return_type)
+            result = Decoder.decode(
+                self, response.results[0].value, return_type
+            )
             if isinstance(result, KRPC.Event):
                 result = Event(self, result)
         return result
@@ -231,31 +259,17 @@ class Client:
                 raise RuntimeError(
                     'Error building exception; type \'%s.%s\' not found' %
                     (service_name, type_name))
-            return getattr(service, type_name)(self._error_message(error))
+            if error.service == 'KRPC' and error.name in EXCEPTION_TYPES:
+                # Use a built-in exception type if it's in the mapping
+                cls = EXCEPTION_TYPES[type_name]
+            else:
+                cls = getattr(service, type_name)
+            return cls(self._error_message(error))
         return RPCError(self._error_message(error))
 
     @staticmethod
-    def _error_message(error):
+    def _error_message(error: KRPC.Error) -> str:
         msg = error.description
         if error.stack_trace:
             msg += '\nServer stack trace:\n' + error.stack_trace
         return msg
-
-    krpc = None  # type: KRPC_Service
-    """Main kRPC service, used by clients to interact with basic server
-    functionality."""
-    space_center = None  # type: SpaceCenter
-    """Provides functionality to interact with Kerbal Space Program.
-    This includes controlling the active vessel, managing its resources,
-    planning maneuver nodes and auto-piloting."""
-    drawing = None  # type: Drawing
-    """Provides functionality for drawing objects in the flight scene."""
-    ui = None  # type: UI
-    """Provides functionality for drawing and interacting with in-game
-    user interface elements."""
-    infernal_robotics = None  # type: InfernalRobotics
-    """Requires Infernal Robotics to be installed"""
-    kerbal_alarm_clock = None  # type: KerbalAlarmClock
-    """Requires Kerbal Alarm Clock to be installed"""
-    remote_tech = None  # type: RemoteTech
-    """Requires Remote Tech to be installed"""

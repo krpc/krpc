@@ -1,111 +1,289 @@
-from typing import Tuple, Set, Dict, List, TYPE_CHECKING, Optional, Any, Callable
+# pylint: disable=line-too-long,invalid-name,redefined-builtin,too-many-lines
+from __future__ import annotations
+from typing import Tuple, Set, Dict, List, Optional, TYPE_CHECKING
+import krpc.schema
+from krpc.schema import KRPC_pb2
+from krpc.types import TypeBase, ClassBase, WrappedClass, DocEnum
+from krpc.event import Event
+if TYPE_CHECKING:
+    from krpc.services import Client
 {% for dep in dependencies %}
-from krpc.{{dep|lower()}} import {{dep}}
+from krpc.services.{{dep|lower()}} import {{dep}}
 {% endfor %}
 
 {% macro arg_list(parameters) %}
-{% for x in parameters %}{% if loop.first %}, {% endif %}{{x.name|snake_case()}}{%if 'default_value' in x %}={{x.default_value}}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
+self{% for x in parameters %}, {{x.name}}: {{ x.type.spec }}{%if 'default_value' in x %} = {{x.default_value}}{% endif %}{% endfor %}{% endmacro %}
 {% macro static_arg_list(parameters) %}
-{% for x in parameters %}{% if loop.first %}, {% endif %}{{x.name|snake_case()}}{%if 'default_value' in x %}={{x.default_value}}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
-{% macro procedure_types(procedure) %}
-{{'#'}} type: ({% for x in procedure.parameters %}{{x.type.spec}}{% if not loop.last %}, {% endif %}{% endfor %}) {{'->'}} {% if 'return_is_nullable' in procedure.procedure and procedure.procedure['return_is_nullable'] %}Optional[{% endif %}{{ procedure.return_type.spec }}{% if 'return_is_nullable' in procedure.procedure and procedure.procedure['return_is_nullable'] %}]{% endif %}{% endmacro %}
+{% for x in parameters %}{{x.name}}: {{ x.type.spec }}{%if 'default_value' in x %} = {{x.default_value}}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
+{% macro arg_names(parameters) %}
+{% for x in parameters %}"{{x.name}}"{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
+{% macro arg_values(parameters) %}
+{% for x in parameters %}{{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
+{% macro arg_types(parameters) %}
+{% for x in parameters %}{{x.type.python_type}}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
 
+{% for enum_name, enumeration in enumerations.items() %}
+class {{enum_name}}(DocEnum):
+{% if enumeration.documentation %}{{ enumeration.documentation | indent(width=4) }}
+{% endif %}
+    {% for enum_value in enumeration['values'] %}
+    {{enum_value['name']}} = {{enum_value['value']}}{% if enum_value.documentation %}, {{ enum_value.documentation }}
+{% endif %}
+    {% endfor %}
+
+
+{% endfor %}
+{% for exception_name, exception in exceptions.items() %}
+class {{exception_name}}(RuntimeError):
+{% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
+{% endif %}
+    pass
+
+
+{% endfor %}
+{% for class_name, class in classes.items() %}
+class {{class_name}}(ClassBase):
+{% if class.documentation %}{{ class.documentation | indent(width=4) }}
+{% endif %}
+    {% for prop_name, prop in class['properties'].items() %}
+    {% if 'getter' in prop %}
+    @property
+    def {{prop_name}}(self) -> {{ prop.getter.return_type.spec }}:
+{% if prop.getter.documentation %}{{ prop.getter.documentation | indent(width=8) }}
+{% endif %}
+        return self._client._invoke(
+            "{{ service_name }}",
+            "{{ prop.getter.remote_name }}",
+            [self],
+            ["self"],
+            [self._client._types.class_type("{{ service_name }}", "{{ class_name }}")],
+            {{ prop.getter.return_type.python_type }}
+        )
+
+    {% else %}
+    @property
+    def {{prop_name}}(self) -> {{ prop.setter.parameters[0].type.spec }}:
+        raise NotImplementedError
+
+    {% endif %}
+    {% if 'setter' in prop %}
+    @{{prop_name}}.setter
+    def {{prop_name}}({{ arg_list(prop.setter.parameters) }}) -> None:
+        return self._client._invoke(
+            "{{ service_name }}",
+            "{{ prop.setter.remote_name }}",
+            [self, {{ arg_values(prop.setter.parameters) }}],
+            ["self", {{ arg_names(prop.setter.parameters) }}],
+            [self._client._types.class_type("{{ service_name }}", "{{ class_name }}"), {{ arg_types(prop.setter.parameters) }}],
+            None
+        )
+
+    {% endif %}
+    {% if 'getter' in prop %}
+    def _return_type_{{prop_name}}(self) -> TypeBase:
+        return {{ prop.getter.return_type.python_type }}
+
+    def _build_call_{{prop_name}}(self) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "{{ service_name }}",
+            "{{ prop.getter.remote_name }}",
+            [self],
+            ["self"],
+            [self._client._types.class_type("{{ service_name }}", "{{ class_name }}")],
+            {{ prop.getter.return_type.python_type }}
+        )
+
+    {% endif %}
+    {% endfor %}
+    {% for proc_name, procedure in class['methods'].items() %}
+    def {{proc_name}}({{ arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
+{% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
+{% endif %}
+        return self._client._invoke(
+            "{{ service_name }}",
+            "{{ procedure.remote_name }}",
+            [self, {{ arg_values(procedure.parameters) }}],
+            ["self", {{ arg_names(procedure.parameters) }}],
+            [self._client._types.class_type("{{ service_name }}", "{{ class_name }}"), {{ arg_types(procedure.parameters) }}],
+            {{ procedure.return_type.python_type }}
+        )
+
+    def _return_type_{{proc_name}}(self) -> TypeBase:
+        return {{ procedure.return_type.python_type }}
+
+    def _build_call_{{proc_name}}({{ arg_list(procedure.parameters) }}) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "{{ service_name }}",
+            "{{ procedure.remote_name }}",
+            [self, {{ arg_values(procedure.parameters) }}],
+            ["self", {{ arg_names(procedure.parameters) }}],
+            [self._client._types.class_type("{{ service_name }}", "{{ class_name }}"), {{ arg_types(procedure.parameters) }}],
+            {{ procedure.return_type.python_type }}
+        )
+
+    {% endfor %}
+    {% for proc_name, procedure in class['static_methods'].items() %}
+    @classmethod
+    def {{proc_name}}(cls, {{ static_arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
+{% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
+{% endif %}
+        self = cls
+        return cls._client._invoke(
+            "{{ service_name }}",
+            "{{ procedure.remote_name }}",
+            [{{ arg_values(procedure.parameters) }}],
+            [{{ arg_names(procedure.parameters) }}],
+            [{{ arg_types(procedure.parameters) }}],
+            {{ procedure.return_type.python_type }}
+        )
+
+    @classmethod
+    def _return_type_{{proc_name}}(cls) -> TypeBase:
+        self = cls
+        return {{ procedure.return_type.python_type }}
+
+    @classmethod
+    def _build_call_{{proc_name}}(cls, {{ static_arg_list(procedure.parameters) }}) -> KRPC_pb2.ProcedureCall:
+        self = cls
+        return self._client._build_call(
+            "{{ service_name }}",
+            "{{ procedure.remote_name }}",
+            [{{ arg_values(procedure.parameters) }}],
+            [{{ arg_names(procedure.parameters) }}],
+            [{{ arg_types(procedure.parameters) }}],
+            {{ procedure.return_type.python_type }}
+        )
+
+    {% endfor %}
+
+
+{% endfor %}
 class {{ service_name }}:
+{% if service_documentation %}{{ service_documentation | indent(width=4) }}
+{% endif %}
 
-    {# Service properties #}
+    def __init__(self, client: Client) -> None:
+        self._client = client
+
+    def __getattribute__(self, name):
+        # Intercepts calls to obtain classes from the service,
+        # to inject the client instance so that it can be used
+        # for static method calls
+        classes = object.__getattribute__(self, "_classes")
+        if name in classes:
+            client = object.__getattribute__(self, "_client")
+            return WrappedClass(client, classes[name])
+
+        # Intercept calls to obtain enumeration types
+        enumerations = object.__getattribute__(self, "_enumerations")
+        if name in enumerations:
+           return enumerations[name]
+
+        # Intercept calls to obtain exception types
+        exceptions = object.__getattribute__(self, "_exceptions")
+        if name in exceptions:
+           return exceptions[name]
+
+        # Fall back to default behaviour
+        return object.__getattribute__(self, name)
+
+    def __dir__(self):
+        result = object.__dir__(self)
+        result.extend(object.__getattribute__(self, "_classes").keys())
+        result.extend(object.__getattribute__(self, "_enumerations").keys())
+        result.extend(object.__getattribute__(self, "_exceptions").keys())
+        return result
+
+    _classes = {
+    {% for class_name in classes.keys() %}
+        "{{class_name}}": {{ class_name }},
+    {% endfor %}
+    }
+    _enumerations = {
+    {% for enum_name in enumerations.keys() %}
+        "{{ enum_name }}": {{ enum_name }},
+    {% endfor %}
+    }
+    _exceptions = {
+    {% for exception_name in exceptions.keys() %}
+        "{{ exception_name }}": {{ exception_name }},
+    {% endfor %}
+    }
+
     {% for prop_name, prop in properties.items() %}
     {% if 'getter' in prop %}
     @property
-    def {{prop_name|snake_case()}}(self{{ arg_list(prop.getter.parameters) }}):
-        {{ procedure_types(prop.getter) }}
+    def {{prop_name}}(self) -> {{ prop.getter.return_type.spec }}:
 {% if prop.getter.documentation %}{{ prop.getter.documentation | indent(width=8) }}
 {% endif %}
-        ...
+        return self._client._invoke(
+            "{{ service_name }}",
+            "{{ prop.getter.remote_name }}",
+            [],
+            [],
+            [],
+            {{ prop.getter.return_type.python_type }}
+        )
+
+    {% else %}
+    @property
+    def {{prop_name}}(self) -> {{ prop.setter.parameters[0].type.spec }}:
+        raise NotImplementedError
 
     {% endif %}
-    {% if 'getter' in prop and 'setter' in prop %}
-    @{{prop_name|snake_case()}}.setter
-    def {{prop_name|snake_case()}}(self{{ arg_list(prop.setter.parameters) }}):
-        {{ procedure_types(prop.setter) }}
-        ...
+    {% if 'setter' in prop %}
+    @{{prop_name}}.setter
+    def {{prop_name}}({{ arg_list(prop.setter.parameters) }}) -> None:
+        return self._client._invoke(
+            "{{ service_name }}",
+            "{{ prop.setter.remote_name }}",
+            [{{ arg_values(prop.setter.parameters) }}],
+            [{{ arg_names(prop.setter.parameters) }}],
+            [{{ arg_types(prop.setter.parameters) }}],
+            None
+        )
 
-    {# Set only property #}
-    {% elif 'setter' in prop %}
-    def {{prop_name|snake_case()}}(self{{ arg_list(prop.setter.parameters) }}):
-        {{ procedure_types(prop.setter) }}
-{% if prop.setter.documentation %}{{ prop.setter.documentation | indent(width=8) }}
-{% endif %}
-        ...
-    {{prop_name|snake_case()}} = property(None, {{prop_name|snake_case()}})
+    {% endif %}
+    {% if 'getter' in prop %}
+    def _return_type_{{prop_name}}(self) -> TypeBase:
+        return {{ prop.getter.return_type.python_type }}
+
+    def _build_call_{{prop_name}}(self) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "{{ service_name }}",
+            "{{ prop.getter.remote_name }}",
+            [],
+            [],
+            [],
+            {{ prop.getter.return_type.python_type }}
+        )
 
     {% endif %}
     {% endfor %}
-    {# Service Procedures #}
     {% for proc_name, procedure in procedures.items() %}
-    def {{proc_name|snake_case()}}(self{{ arg_list(procedure.parameters) }}):
-        {{ procedure_types(procedure) }}
+    def {{proc_name}}({{ arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
 {% endif %}
-        ...
+        return self._client._invoke(
+            "{{ service_name }}",
+            "{{ procedure.remote_name }}",
+            [{{ arg_values(procedure.parameters) }}],
+            [{{ arg_names(procedure.parameters) }}],
+            [{{ arg_types(procedure.parameters) }}],
+            {{ procedure.return_type.python_type }}
+        )
 
-    {% endfor %}
-    {% for class_name, class in classes.items() %}
-    class {{class_name}}:
-        {# Class properties #}
-        {% for prop_name, prop in class['properties'].items() %}
-        {% if 'getter' in prop %}
-        @property
-        def {{prop_name|snake_case()}}(self{{ arg_list(prop.getter.parameters) }}):
-            {{ procedure_types(prop.getter) }}
-{% if prop.getter.documentation %}{{ prop.getter.documentation | indent(width=12) }}
-{% endif %}
-            ...
+    def _return_type_{{proc_name}}(self) -> TypeBase:
+        return {{ procedure.return_type.python_type }}
 
-        {% endif %}
-        {% if 'getter' in prop and 'setter' in prop %}
-        @{{prop_name|snake_case()}}.setter
-        def {{prop_name|snake_case()}}(self{{ arg_list(prop.setter.parameters) }}):
-            {{ procedure_types(prop.setter) }}
-            ...
-
-        {# Set only property #}
-        {% elif 'setter' in prop %}
-        def {{prop_name|snake_case()}}(self{{ arg_list(prop.setter.parameters) }}):
-            {{ procedure_types(prop.setter) }}
-{% if prop.setter.documentation %}{{ prop.setter.documentation | indent(width=12) }}
-{% endif %}
-            ...
-        {{prop_name|snake_case()}} = property(None, {{prop_name|snake_case()}})
-
-        {% endif %}
-        {% endfor %}
-        {# Class Procedures #}
-        {% for proc_name, procedure in class['methods'].items() %}
-        def {{proc_name|snake_case()}}(self{{ arg_list(procedure.parameters) }}):
-            {{ procedure_types(procedure) }}
-{% if procedure.documentation %}{{ procedure.documentation | indent(width=12) }}
-{% endif %}
-            ...
-
-        {% endfor %}
-        {# Class Static Procedures #}
-        {% for proc_name, procedure in class['static_methods'].items() %}
-        @staticmethod
-        def {{proc_name|snake_case()}}({{ static_arg_list(procedure.parameters) }}):
-            {{ procedure_types(procedure) }}
-{% if procedure.documentation %}{{ procedure.documentation | indent(width=12) }}
-{% endif %}
-            ...
-
-        {% endfor %}
-    {% endfor %}
-    {# Service Enums #}
-    {% for enum_name,enumeration in enumerations.items()|list %}
-    class {{enum_name}}:
-{% if enumeration.documentation %}{{ enumeration.documentation | indent(width=8) }}
-{% endif %}
-        {% for enum_value in enumeration['values'] %}
-        {{enum_value['name']|snake_case()}} = {{enum_value['value']}}
-        {% endfor %}
+    def _build_call_{{proc_name}}({{ arg_list(procedure.parameters) }}) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "{{ service_name }}",
+            "{{ procedure.remote_name }}",
+            [{{ arg_values(procedure.parameters) }}],
+            [{{ arg_names(procedure.parameters) }}],
+            [{{ arg_types(procedure.parameters) }}],
+            {{ procedure.return_type.python_type }}
+        )
 
     {% endfor %}

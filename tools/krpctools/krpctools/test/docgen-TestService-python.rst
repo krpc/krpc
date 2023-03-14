@@ -134,7 +134,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: enum_default_arg([x = 2])
+.. staticmethod:: enum_default_arg([x = TestEnum(2)])
 
 
 

@@ -290,7 +290,9 @@ class ServiceBase(DynamicType):
         param_default: List[Optional[object]] = []
         for param, typ in zip(procedure.parameters, param_types):
             if param.default_value:
-                param_default.append(Decoder.decode(param.default_value, typ))
+                param_default.append(
+                    Decoder.decode(cls._client, param.default_value, typ)
+                )
             else:
                 param_default.append(None)
         return_type: Optional[TypeBase] = None

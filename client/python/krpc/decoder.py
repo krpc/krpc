@@ -34,7 +34,7 @@ class Decoder:
             hexlify(data[8:10]), hexlify(data[10:16])))
 
     @classmethod
-    def decode(cls, data: bytes, typ: TypeBase) -> object:
+    def decode(cls, client: Optional[Client], data: bytes, typ: TypeBase) -> object:
         """ Given a python type, and serialized data, decode the value """
         if isinstance(typ, MessageType):
             return cls.decode_message(data, typ.python_type)

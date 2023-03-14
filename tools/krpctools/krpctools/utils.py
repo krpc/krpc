@@ -60,5 +60,5 @@ def decode_default_value(value, typ):
     # Note: following is a workaround for decoding EnumerationType,
     # as set_values has not been called
     if not isinstance(typ, EnumerationType):
-        return Decoder.decode(value, typ)
-    return Decoder.decode(value, Types().sint32_type)
+        return Decoder.decode(None, value, typ)
+    return Decoder.decode(None, value, Types().sint32_type)

@@ -60,6 +60,18 @@ class Types:
         self._types: dict[bytes, TypeBase] = {}
         self._exception_types: dict[tuple[str, str], Type[Exception]] = {}
 
+    def register_class_type(self, service: str, name: str, python_type: type) -> None:
+        protobuf_type = _protobuf_type(KRPC.Type.CLASS, service, name)
+        key = protobuf_type.SerializeToString()
+        assert key not in self._types
+        self._types[key] = ClassType(protobuf_type, None, python_type)
+
+    def register_enum_type(self, service: str, name: str, python_type: type) -> None:
+        protobuf_type = _protobuf_type(KRPC.Type.ENUMERATION, service, name)
+        key = protobuf_type.SerializeToString()
+        assert key not in self._types
+        self._types[key] = EnumerationType(protobuf_type, None, python_type)
+
     def as_type(self, protobuf_type: KRPC.Type, doc: str | None = None) -> TypeBase:
         """ Return a type object given a protocol buffer type """
 
@@ -189,6 +201,11 @@ class Types:
                            [key_type.protobuf_type, value_type.protobuf_type])))
 
     @property
+    def event_type(self) -> MessageType:
+        """ Get an Event message type """
+        return cast(MessageType, self.as_type(_protobuf_type(KRPC.Type.EVENT)))
+
+    @property
     def procedure_call_type(self) -> MessageType:
         """ Get a ProcedureCall message type """
         return cast(MessageType, self.as_type(_protobuf_type(KRPC.Type.PROCEDURE_CALL)))
@@ -225,7 +242,7 @@ class Types:
                 typ.python_type._class_name ==  # type: ignore[attr-defined]
                 value_type._class_name  # type: ignore[attr-defined]
             ):
-                return typ.python_type(value._object_id)
+                return typ.python_type(value._client, value._object_id)
         # Collection types
         try:
             # Coerce tuples to lists
@@ -295,15 +312,16 @@ class ValueType(TypeBase):
 class ClassType(TypeBase):
     """ A class type, represented by a uint64 identifier """
 
-    def __init__(self, protobuf_type: KRPC.Type, doc: Optional[str]) -> None:
+    def __init__(self, protobuf_type: KRPC.Type, doc: Optional[str],
+                 typ: Optional[type] = None) -> None:
         if protobuf_type.code != KRPC.Type.CLASS:
             raise ValueError('Not a class type')
         if not protobuf_type.service:
             raise ValueError('Class type has no service name')
         if not protobuf_type.name:
             raise ValueError('Class type has no class name')
-        typ = _create_class_type(
-            protobuf_type.service, protobuf_type.name, doc)
+        if typ is None:
+            typ = _create_class_type(protobuf_type.service, protobuf_type.name, doc)
         string = 'Class(%s.%s)' % (protobuf_type.service, protobuf_type.name)
         super().__init__(protobuf_type, typ, string)
 
@@ -311,7 +329,8 @@ class ClassType(TypeBase):
 class EnumerationType(TypeBase):
     """ An enumeration type, represented by an sint32 value """
 
-    def __init__(self, protobuf_type: KRPC.Type, doc: Optional[str]) -> None:
+    def __init__(self, protobuf_type: KRPC.Type, doc: Optional[str],
+                 typ: Optional[type] = None) -> None:
         if protobuf_type.code != KRPC.Type.ENUMERATION:
             raise ValueError('Not an enum type')
         if not protobuf_type.service:
@@ -322,13 +341,14 @@ class EnumerationType(TypeBase):
         self._enum_name = protobuf_type.name
         self._doc = doc
         string = 'Enum(%s.%s)' % (protobuf_type.service, protobuf_type.name)
-        # Sets python_type to None, set_values must
+        # When typ in None, set_values must
         # be called to set the python_type
         super().__init__(protobuf_type, cast(type, typ), string)
 
     def set_values(self, values: Mapping[str, Mapping[str, object]]) -> None:
         """ Set the python type. Creates an Enum class
             using the given values. """
+        assert self._python_type is None
         self._python_type = _create_enum_type(
             self._enum_name, values, self._doc)
 
@@ -435,12 +455,12 @@ class DynamicType:
         return getattr(cls, name)
 
 
-class ClassBase(DynamicType):
+class ClassBase:
     """ Base class for service-defined class types """
-
-    _client = None
-
-    def __init__(self, object_id: int) -> None:
+    def __init__(self,
+                 client: Client,
+                 object_id: int) -> None:
+        self._client = client
         self._object_id = object_id
 
     def __eq__(self, other: object) -> bool:
@@ -474,13 +494,15 @@ class ClassBase(DynamicType):
     def __hash__(self) -> int:
         return hash(self._object_id)
 
+
+class DynamicClassBase(ClassBase, DynamicType):
     def __repr__(self) -> str:
         return '<%s.%s remote object #%d>' % \
             (self._service_name, self._class_name, self._object_id)  # type: ignore[attr-defined]
 
 
 def _create_class_type(service_name: str, class_name: str, doc: Optional[str]) -> type:
-    return type(str(class_name), (ClassBase,),
+    return type(str(class_name), (DynamicClassBase,),
                 {'_service_name': service_name,
                  '_class_name': class_name,
                  '__doc__': doc})
@@ -517,3 +539,35 @@ class DefaultArgument:
 
     def __repr__(self) -> str:
         return self._value
+
+
+class WrappedClass:
+    """ Wraps a class type, to allow injection of a client object
+        for static method calls """
+
+    def __init__(self, client: Client, class_type: type) -> None:
+        self._client = client
+        self._class_type = class_type
+        self.__doc__ = class_type.__doc__
+
+    def __call__(self, *args: object, **kwargs: object) -> object:
+        return self._class_type(*args, **kwargs)
+
+    def __getattr__(self, name: str) -> object:
+        # FIXME: is this the best place to set it?
+        # Might be better to dynamically create a type that derives from _class_type
+        # and adds the _client field
+        self._class_type._client = self._client  # type: ignore[attr-defined]
+        return getattr(self._class_type, name)
+
+    def __dir__(self) -> List[str]:
+        return dir(self._class_type)
+
+
+class DocEnum(Enum):
+    def __new__(cls, value: int, doc: Optional[str] = None):  # type: ignore[no-untyped-def]
+        self = object.__new__(cls)
+        self._value_ = value
+        if doc is not None:
+            self.__doc__ = doc.strip()
+        return self

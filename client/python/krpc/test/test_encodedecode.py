@@ -21,7 +21,7 @@ class TestEncodeDecode(unittest.TestCase):
     def _run_test_decode_value(self, typ: TypeBase,
                                cases: Iterable[Tuple[object, str]]) -> None:
         for decoded, encoded in cases:
-            value = Decoder.decode(unhexlify(encoded), typ)
+            value = Decoder.decode(None, unhexlify(encoded), typ)
             if typ.python_type == float:
                 self.assertEqual(str(decoded)[0:8], str(value)[0:8])
             else:

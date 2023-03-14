@@ -16,7 +16,8 @@ DEFAULT_STREAM_PORT = 50001
 
 def connect(name: Optional[str] = None, address: str = DEFAULT_ADDRESS,
             rpc_port: int = DEFAULT_RPC_PORT,
-            stream_port: int = DEFAULT_STREAM_PORT) -> Client:
+            stream_port: int = DEFAULT_STREAM_PORT,
+            use_pregenerated_stubs: bool = True) -> Client:
     """
     Connect to a kRPC server on the specified IP address and port numbers.
     If stream_port is None, does not connect to the stream server.
@@ -50,4 +51,4 @@ def connect(name: Optional[str] = None, address: str = DEFAULT_ADDRESS,
     else:
         stream_connection = None
 
-    return Client(rpc_connection, stream_connection)
+    return Client(rpc_connection, stream_connection, use_pregenerated_stubs)

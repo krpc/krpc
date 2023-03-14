@@ -68,40 +68,12 @@ def _sdist_impl(ctx):
         staging_path = staging_dir + '/' + _apply_path_map(path_map, input.short_path)
         staging_file = ctx.actions.declare_file(staging_path)
 
-        if "setup.py" in input.path:
-            typed_sub = ''
-            if len(ctx.files.stub_files) > 0:
-                package = _get_parent_dirname(ctx.files.stub_files[0].path)
-                typed_sub = 'package_data = {"%s": ["py.typed",%s]},' % (package, ','.join([ '"%s"' % stub_file.basename for stub_file in ctx.files.stub_files]))
-
-            # Uses setup.py as a template and replaces "{typed_files}" with '' or package_data when there are stubs
-            ctx.actions.expand_template(
-                template = input,
-                output = staging_file,
-                substitutions = {
-                    "{typed_files}": typed_sub,
-                },
-            )
-        else:
-            ctx.actions.run_shell(
-                mnemonic = 'PackageFile',
-                inputs = [input],
-                outputs = [staging_file],
-                command = 'cp "%s" "%s"' % (input.path, staging_file.path)
-            )
-        staging_inputs.append(staging_file)
-
-    for stub_file in ctx.files.stub_files:
-        staging_path = staging_dir + '/' + _apply_path_map(path_map, stub_file.short_path)
-        staging_file = ctx.actions.declare_file(staging_path)
-
         ctx.actions.run_shell(
             mnemonic = 'PackageFile',
-            inputs = [stub_file],
+            inputs = [input],
             outputs = [staging_file],
-            command = 'cp "%s" "%s"' % (stub_file.path, staging_file.path)
+            command = 'cp "%s" "%s"' % (input.path, staging_file.path)
         )
-
         staging_inputs.append(staging_file)
 
     # Run setup.py sdist from the staging directory
@@ -123,8 +95,7 @@ py_sdist = rule(
     attrs = {
         'files': attr.label_list(allow_files=True, mandatory=True, allow_empty=True),
         'path_map': attr.string_dict(),
-        'out': attr.output(mandatory=True),
-        'stub_files': attr.label_list(allow_files=True, allow_empty=True),
+        'out': attr.output(mandatory=True)
     }
 )
 
