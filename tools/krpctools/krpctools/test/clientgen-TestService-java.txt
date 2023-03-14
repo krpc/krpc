@@ -614,6 +614,28 @@ public class TestService {
         }
 
         @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "TestService", procedure = "TestClass_set_StringPropertyPrivateGet", types = _Types.class)
+        public void setStringPropertyPrivateGet(String value) throws RPCException
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass")),
+                Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
+            };
+            this.connection.invoke("TestService", "TestClass_set_StringPropertyPrivateGet", _args);
+        }
+
+        @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "TestService", procedure = "TestClass_get_StringPropertyPrivateSet", types = _Types.class)
+        public String getStringPropertyPrivateSet() throws RPCException
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass"))
+            };
+            ByteString _data = this.connection.invoke("TestService", "TestClass_get_StringPropertyPrivateSet", _args);
+            return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        }
+
+        @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_static_StaticMethod", types = _Types.class)
         public static String staticMethod(Connection connection, String a, String b) throws RPCException
         {
@@ -735,6 +757,10 @@ public class TestService {
                 return krpc.client.Types.createClass("TestService", "TestClass");
             case "TestClass_set_ObjectProperty":
                 return null;
+            case "TestClass_set_StringPropertyPrivateGet":
+                return null;
+            case "TestClass_get_StringPropertyPrivateSet":
+                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
             }
             throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
         }
@@ -952,6 +978,15 @@ public class TestService {
             case "TestClass_set_ObjectProperty":
                 return new krpc.schema.KRPC.Type[] {
                     krpc.client.Types.createClass("TestService", "TestClass"),
+                    krpc.client.Types.createClass("TestService", "TestClass")
+                };
+            case "TestClass_set_StringPropertyPrivateGet":
+                return new krpc.schema.KRPC.Type[] {
+                    krpc.client.Types.createClass("TestService", "TestClass"),
+                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
+                };
+            case "TestClass_get_StringPropertyPrivateSet":
+                return new krpc.schema.KRPC.Type[] {
                     krpc.client.Types.createClass("TestService", "TestClass")
                 };
             case "TestClass_static_StaticMethod":

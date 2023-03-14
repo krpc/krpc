@@ -622,5 +622,26 @@ namespace KRPC.Client.Services.TestService
                 connection.Invoke ("TestService", "TestClass_set_ObjectProperty", _args);
             }
         }
+
+        public string StringPropertyPrivateGet {
+            set {
+                var _args = new ByteString[] {
+                    global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass)),
+                    global::KRPC.Client.Encoder.Encode (value, typeof(string))
+                };
+                connection.Invoke ("TestService", "TestClass_set_StringPropertyPrivateGet", _args);
+            }
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_get_StringPropertyPrivateSet")]
+        public string StringPropertyPrivateSet {
+            get {
+                var _args = new ByteString[] {
+                    global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass))
+                };
+                ByteString _data = connection.Invoke ("TestService", "TestClass_get_StringPropertyPrivateSet", _args);
+                return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            }
+        }
     }
 }

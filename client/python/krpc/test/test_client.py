@@ -147,6 +147,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
         obj2 = self.conn.test_service.create_test_object('kermin')
         obj.object_property = obj2
         self.assertEqual(obj2._object_id, obj.object_property._object_id)
+        obj.string_property_private_get = "bob"
+        self.assertEqual("bob", obj.string_property_private_set)
 
     def test_optional_arguments(self):
         self.assertEqual('jebfoobarnull',
@@ -419,6 +421,9 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'int_property',
 
                 'object_property',
+
+                'string_property_private_get',
+                'string_property_private_set',
 
                 'optional_arguments',
                 'static_method'

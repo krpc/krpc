@@ -575,6 +575,22 @@ Service documentation string.
       :rtype: str
       :Game Scenes: All
 
+   .. attribute:: string_property_private_get
+
+
+
+      :Attribute: Write-only, cannot be read
+      :rtype: str
+      :Game Scenes: All
+
+   .. attribute:: string_property_private_set
+
+
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+      :Game Scenes: All
+
 
 
 .. class:: TestEnum

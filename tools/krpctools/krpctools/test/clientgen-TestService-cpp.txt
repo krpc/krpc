@@ -344,6 +344,10 @@ class TestService : public Service {
 
     void set_object_property(TestService::TestClass value);
 
+    void set_string_property_private_get(std::string value);
+
+    std::string string_property_private_set();
+
     ::krpc::Stream<std::string> float_to_string_stream(float x);
 
     ::krpc::Stream<std::string> get_value_stream();
@@ -357,6 +361,8 @@ class TestService : public Service {
     ::krpc::Stream<int32_t> int_property_stream();
 
     ::krpc::Stream<TestService::TestClass> object_property_stream();
+
+    ::krpc::Stream<std::string> string_property_private_set_stream();
 
     ::krpc::schema::ProcedureCall float_to_string_call(float x);
 
@@ -375,6 +381,10 @@ class TestService : public Service {
     ::krpc::schema::ProcedureCall object_property_call();
 
     ::krpc::schema::ProcedureCall set_object_property_call(TestService::TestClass value);
+
+    ::krpc::schema::ProcedureCall set_string_property_private_get_call(std::string value);
+
+    ::krpc::schema::ProcedureCall string_property_private_set_call();
   };
 };
 
@@ -1322,6 +1332,22 @@ inline void TestService::TestClass::set_object_property(TestService::TestClass v
   this->_client->invoke("TestService", "TestClass_set_ObjectProperty", _args);
 }
 
+inline void TestService::TestClass::set_string_property_private_get(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(value));
+  this->_client->invoke("TestService", "TestClass_set_StringPropertyPrivateGet", _args);
+}
+
+inline std::string TestService::TestClass::string_property_private_set() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  std::string _data = this->_client->invoke("TestService", "TestClass_get_StringPropertyPrivateSet", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
 inline std::string TestService::TestClass::static_method(Client& _client, std::string a = "", std::string b = "") {
     std::vector<std::string> _args;
   _args.push_back(encoder::encode(a));
@@ -1372,6 +1398,12 @@ inline ::krpc::Stream<TestService::TestClass> TestService::TestClass::object_pro
   std::vector<std::string> _args;
   _args.push_back(encoder::encode(*this));
   return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "TestClass_get_ObjectProperty", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::TestClass::string_property_private_set_stream() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "TestClass_get_StringPropertyPrivateSet", _args));
 }
 
 inline ::krpc::Stream<std::string> TestService::TestClass::static_method_stream(Client& _client, std::string a = "", std::string b = "") {
@@ -1435,6 +1467,19 @@ inline ::krpc::schema::ProcedureCall TestService::TestClass::set_object_property
   _args.push_back(encoder::encode(*this));
   _args.push_back(encoder::encode(value));
   return this->_client->build_call("TestService", "TestClass_set_ObjectProperty", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::set_string_property_private_get_call(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "TestClass_set_StringPropertyPrivateGet", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::string_property_private_set_call() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  return this->_client->build_call("TestService", "TestClass_get_StringPropertyPrivateSet", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::TestClass::static_method_call(Client& _client, std::string a = "", std::string b = "") {

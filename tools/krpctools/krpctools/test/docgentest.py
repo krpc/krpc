@@ -61,7 +61,7 @@ class DocGenTestCase:
 
         actual, _ = process_file(domain, services, path)
 
-        # with open('/home/alex/workspaces/ksp/krpc/' +
+        # with open('/home/alex/workspaces/krpc/krpc/' +
         #           'tools/krpctools/krpctools/test/' +
         #           'docgen-'+name+'-'+self.language+'.rst', 'w') as f:
         #     f.write(actual)

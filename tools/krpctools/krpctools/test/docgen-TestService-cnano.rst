@@ -467,6 +467,18 @@ Service TestService
 
       :Game Scenes: All
 
+   .. function:: void krpc_TestService_TestClass_set_StringPropertyPrivateGet(const char * value)
+
+
+
+      :Game Scenes: All
+
+   .. function:: krpc_error_t krpc_TestService_TestClass_StringPropertyPrivateSet(krpc_connection_t connection, char * * result)
+
+
+
+      :Game Scenes: All
+
 
 
 .. type:: krpc_TestService_TestEnum_t

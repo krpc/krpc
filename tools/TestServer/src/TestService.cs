@@ -115,7 +115,7 @@ namespace TestServer
         [SuppressMessage ("Gendarme.Rules.Design", "ImplementEqualsAndGetHashCodeInPairRule")]
         public sealed class TestClass : Equatable<TestClass>
         {
-            internal readonly string instanceValue;
+            internal string instanceValue;
 
             public TestClass (string value)
             {
@@ -161,6 +161,17 @@ namespace TestServer
 
             [KRPCProperty (Nullable = true)]
             public TestClass ObjectProperty { get; set; }
+
+            [KRPCProperty]
+            [SuppressMessage ("Gendarme.Rules.Design", "AvoidPropertiesWithoutGetAccessorRule")]
+            public string StringPropertyPrivateGet {
+                set { instanceValue = value; }
+            }
+
+            [KRPCProperty]
+            public string StringPropertyPrivateSet {
+                get { return instanceValue; }
+            }
 
             [KRPCMethod]
             [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
