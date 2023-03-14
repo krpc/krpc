@@ -1,3 +1,11 @@
+v3.0.0
+ * Clean up to only include necessary dependencies
+ * Remove bazel caching (done using github actions caching instead)
+ * Remove costly user management
+ * Add gendarme tool
+ * Update bazel config to allow testing in parallel
+ * Update bazel config to do less verbose logging
+
 v2.6.0
  * Update base image to Ubuntu 22.04
  * Update to Bazel 6.0.0
