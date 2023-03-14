@@ -146,6 +146,8 @@ public class ConnectionTest {
     TestService.TestClass obj2 = testService.createTestObject("kermin");
     obj.setObjectProperty(obj2);
     assertEquals(obj2, obj.getObjectProperty());
+    obj.setStringPropertyPrivateGet("bob");
+    assertEquals("bob", obj.getStringPropertyPrivateSet());
   }
 
   @Test

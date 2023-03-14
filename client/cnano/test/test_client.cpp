@@ -147,6 +147,11 @@ TEST_F(test_client, test_class_properties) {
   krpc_TestService_TestClass_t object3;
   ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_ObjectProperty(conn, &object3, object));
   ASSERT_EQ(object2, object3);
+  krpc_TestService_TestClass_set_StringPropertyPrivateGet(conn, object, "bob");
+  auto string = new char[32];
+  krpc_TestService_TestClass_StringPropertyPrivateSet(conn, &string, object);
+  ASSERT_STREQ("bob", string);
+  delete[] string;
 }
 
 TEST_F(test_client, test_blocking_procedure) {
