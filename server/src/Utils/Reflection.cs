@@ -12,14 +12,11 @@ namespace KRPC.Utils
         {
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
                 // Get all types that can be loaded from the assembly
-                // FIXME: manually skip inspecting Assembly-CSharp as it causes a crash when running nunit tests
+                // Note: We skip Assembly-CSharp as it causes a crash when running nunit tests.
                 if (assembly.FullName.Contains ("Assembly-CSharp"))
                     continue;
                 Type[] types;
                 try {
-                    // FIXME: on 2nd pass or later, GetTypes start raising exception like below
-                    // > Could not load type of field 'KRPC.Drawing.Text:mesh' (1) due to: Could not load file or assembly 'UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null' or one of its dependencies.
-                    // Workaround seems to load complaining assembly to this program.
                     types = assembly.GetTypes ();
                 } catch (ReflectionTypeLoadException exn) {
                     types = exn.Types.Where (x => x != null).ToArray ();
