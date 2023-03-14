@@ -1,5 +1,7 @@
 # kRPC - Remote Procedure Calls for Kerbal Space Program
 
+[![ci](https://github.com/krpc/krpc/actions/workflows/ci.yml/badge.svg)](https://github.com/krpc/krpc/actions/workflows/ci.yml) [![docs](https://github.com/krpc/krpc/actions/workflows/docs.yml/badge.svg?branch=docs)](https://github.com/krpc/krpc/actions/workflows/docs.yml)
+
 kRPC allows you to control Kerbal Space Program from scripts running outside of
 the game, and comes with client libraries for many popular languages.
 
