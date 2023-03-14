@@ -29,6 +29,11 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public object DefaultValue { get; private set; }
 
+        /// <summary>
+        /// True if this parameter is nullable.
+        /// </summary>
+        public bool Nullable { get; private set; }
+
         public ParameterSignature (string fullProcedureName, ProcedureParameter parameter)
         {
             Name = parameter.Name;
@@ -41,6 +46,7 @@ namespace KRPC.Service.Scanner
             HasDefaultValue = parameter.HasDefaultValue;
             if (HasDefaultValue)
                 DefaultValue = parameter.DefaultValue;
+            Nullable = parameter.Nullable;
         }
 
         public void GetObjectData (SerializationInfo info, StreamingContext context)
@@ -49,6 +55,9 @@ namespace KRPC.Service.Scanner
             info.AddValue ("type", TypeUtils.SerializeType (Type));
             if (HasDefaultValue)
                 info.AddValue ("default_value", Server.ProtocolBuffers.Encoder.Encode (DefaultValue).ToByteArray ());
+            if (Nullable) {
+                info.AddValue ("nullable", Nullable);
+            }
         }
     }
 }
