@@ -122,7 +122,8 @@ class Class(Appendable):
 
 class Parameter(Appendable):
     # pylint: disable=redefined-builtin
-    def __init__(self, name, type, documentation, default_value=None):
+    def __init__(self, name, type, documentation,
+                 default_value=None, nullable=False):
         super().__init__()
         self.name = name
         self.type = as_type(self.types, type)
@@ -130,6 +131,7 @@ class Parameter(Appendable):
         if default_value is not None:
             default_value = decode_default_value(default_value, self.type)
         self.default_value = default_value
+        self.nullable = nullable
         self.documentation = documentation
 
 
