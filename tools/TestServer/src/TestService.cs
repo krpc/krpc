@@ -163,6 +163,7 @@ namespace TestServer
             public TestClass ObjectProperty { get; set; }
 
             [KRPCProperty]
+            [SuppressMessage ("Gendarme.Rules.Design", "AvoidPropertiesWithoutGetAccessorRule")]
             public string StringPropertyPrivateGet {
                 set { instanceValue = value; }
             }
