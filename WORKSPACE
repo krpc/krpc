@@ -60,8 +60,8 @@ http_archive(
 )
 
 http_archive(
-    name = 'protoc_osx_x86_32',
-    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-osx-x86_32.zip',
+    name = 'protoc_osx_x86_64',
+    url = 'https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-osx-x86_64.zip',
     sha256 = '9448ff40278504a7ae5139bb70c962acc78c32d8fc54b4890a55c14c68b9d10a',
     build_file_content = "exports_files(['bin/protoc'])"
 )
@@ -88,7 +88,7 @@ http_archive(
 )
 
 http_archive(
-    name = 'protoc_unity_osx_x86_32',
+    name = 'protoc_unity_osx_x86_64',
     url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.10.1/protoc-3.10.1-osx-x86_64.zip',
     sha256 = 'ee3f4051e55830596729efe48183218bdb44cf2f83b188460859bd63b2a09576',
     build_file_content = "exports_files(['bin/protoc'])"
