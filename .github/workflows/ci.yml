@@ -1,6 +1,13 @@
 name: ci
 
-on: pull_request
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+  workflow_dispatch:
 
 jobs:
   build-krpc:
