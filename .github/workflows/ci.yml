@@ -234,6 +234,8 @@ jobs:
         run: bazel build //client/cpp:cpp
       - name: test
         run: bazel test //client/cpp:test
+      - name: test-build
+        run: client/cpp/test-build.sh
       - name: upload-artifact
         uses: ./.github/actions/upload-artifact
         with:
