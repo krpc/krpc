@@ -24,7 +24,7 @@ license_text = """This license (LGPL v3) applies to all parts of kRPC except for
 
   - schema/* is under the MIT license. See schema/LICENSE
 
-Copyright 2015-2016 djungelorm
+Copyright 2015-2023 kRPC Org
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the Lesser GNU General Public License as published by
