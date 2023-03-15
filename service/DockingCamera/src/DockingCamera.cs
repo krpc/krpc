@@ -8,7 +8,7 @@ using KRPC.Utils;
 namespace KRPC.DockingCamera
 {
     /// <summary>
-    /// Camera Service
+    /// Camera service.
     /// </summary>
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
     [KRPCService(Id = 11, GameScene = GameScene.All)]
@@ -21,7 +21,7 @@ namespace KRPC.DockingCamera
         }
 
         /// <summary>
-        /// Check if the Camera API is avaiable
+        /// Check if the Camera API is available.
         /// </summary>
         [KRPCProperty]
         public static bool Available
@@ -30,7 +30,7 @@ namespace KRPC.DockingCamera
         }
 
         /// <summary>
-        /// Get a Camera part
+        /// Get a Camera part.
         /// </summary>
         [KRPCProcedure]
         public static Camera Camera(SpaceCenter.Services.Parts.Part part)

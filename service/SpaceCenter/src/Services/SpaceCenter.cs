@@ -513,7 +513,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Tranfsers a crew member to a different part.
+        /// Transfers a crew member to a different part.
         /// </summary>
         /// <param name="crewMember">The crew member to transfer.</param>
         /// <param name="targetPart">The part to move them to.</param>
@@ -1002,7 +1002,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Switch to the spacecenter view.
+        /// Switch to the space center view.
         /// </summary>
         [KRPCProcedure]
         public static void LoadSpaceCenter()
