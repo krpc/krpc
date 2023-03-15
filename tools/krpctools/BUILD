@@ -16,7 +16,7 @@ license_text = """This license (GPL v3) applies to all parts of krpc.clientgen e
   - krpctools/bin/Google.Protobuf.dll is from Google's protobuf project.
     See https://github.com/google/protobuf
 
-Copyright 2015-2016 djungelorm
+Copyright 2015-2023 kRPC Org
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
