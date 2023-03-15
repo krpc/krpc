@@ -87,12 +87,11 @@ def _spelling_impl(ctx):
         # end of hack
         'chmod 644 `pwd`/doc/srcs/dictionary.txt',
         # FIXME: re-add -W flag. Fails currently as it gets a warning looking for contributors
-        '%s -b spelling -E -N -T %s ./out %s' % (sphinx_build.short_path, src_dir, opts),
+        '%s -b spelling -E -N -T %s ./out %s 2>&1 | tee stdout' % (sphinx_build.short_path, src_dir, opts),
+        'grep "misspelled words" stdout',
         'ret=$?',
-        'lines=`cat ./out/output.txt | wc -l`',
-        'echo "Spelling checker messages ($lines lines):"',
-        'cat ./out/output.txt',
-        'if [ $ret -ne 0 ]; then exit 1; fi'
+        'echo "ret=$ret"',
+        'if [ $ret -eq 0 ]; then exit 1; fi'
     ]
     sub_commands.append('('+'; '.join(sphinx_commands)+')')
 

@@ -129,7 +129,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Vessel the alarm references. <c>null</c> if it does not reference a vesssel.
+        /// Vessel the alarm references. <c>null</c> if it does not reference a vessel.
         /// </summary>
         [KRPCProperty(Nullable = true)]
         public Vessel Vessel
