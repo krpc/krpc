@@ -163,6 +163,8 @@ TEST_F(test_client, test_class_properties) {
   krpc::services::TestService::TestClass object2 = test_service.create_test_object("kermin");
   object.set_object_property(object2);
   ASSERT_EQ(object2, object.object_property());
+  object.set_string_property_private_get("bob");
+  ASSERT_EQ("bob", object.string_property_private_set());
 }
 
 TEST_F(test_client, test_optional_arguments) {

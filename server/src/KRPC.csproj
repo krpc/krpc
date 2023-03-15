@@ -288,6 +288,7 @@
     <Compile Include="Service\Attributes\KRPCEnumAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCExceptionAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCMethodAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCNullableAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCProcedureAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCPropertyAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCServiceAttribute.cs" />

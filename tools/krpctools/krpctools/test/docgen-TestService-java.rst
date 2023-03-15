@@ -363,6 +363,19 @@
       :param String b:
       :Game Scenes: All
 
+   .. method:: void setStringPropertyPrivateGet(String value)
+
+
+
+      :Game Scenes: All
+
+   .. method:: String getStringPropertyPrivateSet()
+
+
+
+
+      :Game Scenes: All
+
 
 
 .. type:: public enum TestEnum

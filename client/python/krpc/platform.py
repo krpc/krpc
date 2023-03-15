@@ -6,16 +6,16 @@ NEG_INF = -POS_INF
 NAN = POS_INF * 0
 
 
-def bytelength(string):
+def bytelength(string: str) -> int:
     """ Get the number of bytes in a string """
     return len(string.encode('utf-8'))
 
 
-def hexlify(value):
+def hexlify(value: bytes) -> str:
     return binascii.hexlify(value).decode()
 
 
-def unhexlify(data):
+def unhexlify(data: str) -> bytes:
     value = []
     for i in range(0, len(data), 2):
         x = data[i:i + 2]

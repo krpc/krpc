@@ -115,6 +115,8 @@ function TestClient:test_class_properties()
   local obj2 = self.conn.test_service.create_test_object('kermin')
   obj.object_property = obj2
   luaunit.assertEquals(obj2._object_id, obj.object_property._object_id)
+  obj.string_property_private_get = 'bob'
+  luaunit.assertEquals('bob', obj.string_property_private_set)
 end
 
 function TestClient:test_optional_arguments()

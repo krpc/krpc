@@ -484,6 +484,20 @@ Service documentation string.
       :param string b:
       :rtype: string
 
+   .. attribute:: string_property_private_get: string
+
+
+
+      :Attribute: Write-only, cannot be read
+      :rtype: string
+
+   .. attribute:: string_property_private_set: string
+
+
+
+      :Attribute: Read-only, cannot be set
+      :rtype: string
+
 
 
 .. class:: TestEnum

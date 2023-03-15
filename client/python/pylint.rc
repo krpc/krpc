@@ -1,5 +1,5 @@
 [MASTER]
-ignore=schema
+ignore=schema,services
 
 [BASIC]
 good-names=i,j,k,ex,Run,_,u,v,q,r,g,x,y,z,w,setUpClass

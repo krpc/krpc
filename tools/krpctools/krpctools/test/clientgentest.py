@@ -11,6 +11,12 @@ class ClientGenTestCase:
         g = self.generator(
             macro_template, service_name, defs[service_name])
         actual = g.generate()
+
+        # with open('/home/alex/workspaces/krpc/krpc/' +
+        #           'tools/krpctools/krpctools/test/' +
+        #           'clientgen-'+name+'-'+self.language+'.txt', 'w') as f:
+        #     f.write(actual)
+
         expected = resource_string(
             'krpctools.test',
             'clientgen-'+name+'-'+self.language+'.txt').decode('utf-8')

@@ -11,7 +11,7 @@ the game, and comes with client libraries for many popular languages.
 
 ## Contributing
 
-Contributions to kRPC are very welcome. [Please refer to this guide.](CONTRIBUTIONS.md)
+Contributions to kRPC are very welcome. [Please refer to this guide.](CONTRIBUTING.md)
 
 ## Links for Developers
 

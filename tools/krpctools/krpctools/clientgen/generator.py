@@ -55,6 +55,7 @@ class Generator:
             if 'default_value' in parameter:
                 value = decode_default_value(parameter['default_value'], typ)
                 info['default_value'] = self.parse_default_value(value, typ)
+            info['nullable'] = parameter.get('nullable', False)
             parameters.append(info)
         return parameters
 
@@ -65,6 +66,8 @@ class Generator:
         context = {
             'service_name': self._service,
             'service_id': self._defs['id'],
+            'service_documentation': self.parse_documentation(
+                self._defs.get('documentation', '')),
             'procedures': {},
             'properties': {},
             'classes': {},

@@ -134,7 +134,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: enum_default_arg([x = 2])
+.. staticmethod:: enum_default_arg([x = TestEnum(2)])
 
 
 
@@ -572,6 +572,22 @@ Service documentation string.
 
       :param str a:
       :param str b:
+      :rtype: str
+      :Game Scenes: All
+
+   .. attribute:: string_property_private_get
+
+
+
+      :Attribute: Write-only, cannot be read
+      :rtype: str
+      :Game Scenes: All
+
+   .. attribute:: string_property_private_set
+
+
+
+      :Attribute: Read-only, cannot be set
       :rtype: str
       :Game Scenes: All
 

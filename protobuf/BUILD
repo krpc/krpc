@@ -25,6 +25,7 @@ protobuf_csharp(
 protobuf_py(
     name = 'python',
     out = 'KRPC_pb2.py',
+    out_pyi = 'KRPC_pb2.pyi',
     src = 'krpc.proto'
 )
 

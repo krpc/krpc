@@ -19,6 +19,8 @@ namespace KRPC.Service
             get { return DefaultValue != DBNull.Value; }
         }
 
+        public bool Nullable { get; private set; }
+
         [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidUnnecessarySpecializationRule")]
         public ProcedureParameter (MethodInfo method, ParameterInfo parameter)
         {
@@ -29,6 +31,7 @@ namespace KRPC.Service
             var defaultAttribute = Reflection.GetAttributes<KRPCDefaultValueAttribute> (method).FirstOrDefault (x => x.Name == Name);
             if (defaultAttribute != null)
                 DefaultValue = defaultAttribute.Value;
+            Nullable = Reflection.HasAttribute<KRPCNullableAttribute> (parameter);
         }
 
         public ProcedureParameter (Type type, string name)

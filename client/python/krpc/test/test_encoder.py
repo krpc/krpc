@@ -9,7 +9,7 @@ from krpc.platform import hexlify
 class TestEncoder(unittest.TestCase):
     types = Types()
 
-    def test_encode_message(self):
+    def test_encode_message(self) -> None:
         call = self.types.procedure_call_type.python_type()
         call.service = 'ServiceName'
         call.procedure = 'ProcedureName'
@@ -17,16 +17,16 @@ class TestEncoder(unittest.TestCase):
         expected = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
         self.assertEqual(expected, hexlify(data))
 
-    def test_encode_value(self):
+    def test_encode_value(self) -> None:
         data = Encoder.encode(300, self.types.uint32_type)
         self.assertEqual('ac02', hexlify(data))
 
-    def test_encode_unicode_string(self):
+    def test_encode_unicode_string(self) -> None:
         data = Encoder.encode(b'\xe2\x84\xa2'.decode('utf-8'),
                               self.types.string_type)
         self.assertEqual('03e284a2', hexlify(data))
 
-    def test_encode_message_with_size(self):
+    def test_encode_message_with_size(self) -> None:
         call = self.types.procedure_call_type.python_type()
         call.service = 'ServiceName'
         call.procedure = 'ProcedureName'
@@ -36,22 +36,22 @@ class TestEncoder(unittest.TestCase):
                    '0d50726f6365647572654e616d65'
         self.assertEqual(expected, hexlify(data))
 
-    def test_encode_class(self):
+    def test_encode_class(self) -> None:
         typ = self.types.class_type('ServiceName', 'ClassName')
         class_type = typ.python_type
         self.assertTrue(issubclass(class_type, ClassBase))
-        value = class_type(300)
+        value = class_type(None, 300)
         self.assertEqual(300, value._object_id)
         data = Encoder.encode(value, typ)
         self.assertEqual('ac02', hexlify(data))
 
-    def test_encode_class_none(self):
+    def test_encode_class_none(self) -> None:
         typ = self.types.class_type('ServiceName', 'ClassName')
         value = None
         data = Encoder.encode(value, typ)
         self.assertEqual('00', hexlify(data))
 
-    def test_encode_tuple_wrong_arity(self):
+    def test_encode_tuple_wrong_arity(self) -> None:
         typ = self.types.tuple_type(
             self.types.uint32_type,
             self.types.uint32_type,

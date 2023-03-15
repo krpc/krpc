@@ -140,6 +140,8 @@ namespace KRPC.Client.Test
             var obj2 = Connection.TestService ().CreateTestObject ("kermin");
             obj.ObjectProperty = obj2;
             Assert.AreEqual (obj2.id, obj.ObjectProperty.id);
+            obj.StringPropertyPrivateGet = "bob";
+            Assert.AreEqual("bob", obj.StringPropertyPrivateSet);
         }
 
         [Test]

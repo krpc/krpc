@@ -1,3 +1,10 @@
+v0.5.2
+ * Requires Python 3.7+
+ * Add type hints (#703)
+ * Pre-generated stubs now include implementation of services as well as type hints
+ * Fix various type hint bugs in generated stubs
+ * Allow importing types from a service using, for example "from krpc.services.spacecenter import Vessel"
+
 v0.5.0
  * Fix protobuf requirement to be >=3.6 (#506, #510)
  * Update to protobuf v4.22.0
