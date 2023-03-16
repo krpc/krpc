@@ -469,6 +469,31 @@ to add functionality to the kRPC server.
             ...
         }
 
+.. csharp:attribute:: KRPCNullable
+
+   This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ can be applied to a
+   kRPC procedure/class method parameter that has a class type. It indicates that the parameter
+   is permitted to be ``null``. Without this attribute, a client can assume that the parameter
+   should never be null.
+
+   Note: the server does not check if a value passed to an RPC is ``null``. This needs to be
+   explicitly checked in the RPC's code (if desired) and an appropriate exception thrown.
+   This attribute is only used as a hint to the client that the parameter is nullable.
+
+   **Example**
+
+   .. code-block:: csharp
+
+      [KRPCService]
+      public static class EVA {
+          [KRPCProcedure]
+          public static void DestroyVessel ([KRPCNullable] Vessel vessel)
+          {
+              // don't do anything if vessel is null
+              ...
+          }
+      }
+
 .. _service-api-identifiers:
 
 Identifiers
