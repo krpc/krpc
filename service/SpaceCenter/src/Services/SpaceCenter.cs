@@ -367,7 +367,10 @@ namespace KRPC.SpaceCenter.Services
         /// </remarks>
         [KRPCProcedure]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
-        public static void LaunchVessel (string craftDirectory, string name, string launchSite, bool recover = true, IList<string> crew = null, string flagUrl = null)
+        [SuppressMessage ("Gendarme.Rules.Performance", "UseStringEmptyRule")]
+        public static void LaunchVessel (
+            string craftDirectory, string name, string launchSite, bool recover = true,
+            [KRPCNullable] IList<string> crew = null, string flagUrl = "")
         {
             CloseDialogs();
             var config = new LaunchConfig(craftDirectory, name, launchSite, recover, crew, flagUrl);
@@ -411,6 +414,7 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Performance", "UseStringEmptyRule")]
         public static void LaunchVesselFromVAB (string name, bool recover = true)
         {
             LaunchVessel ("VAB", name, "LaunchPad", recover);
@@ -428,6 +432,7 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Performance", "UseStringEmptyRule")]
         public static void LaunchVesselFromSPH (string name, bool recover = true)
         {
             LaunchVessel ("SPH", name, "Runway", recover);

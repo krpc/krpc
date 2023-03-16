@@ -144,7 +144,7 @@ namespace KRPC.SpaceCenter.Services
         /// (<see cref="SurfaceReferenceFrame"/>).
         /// </param>
         [KRPCMethod (GameScene = GameScene.Flight)]
-        public Flight Flight (ReferenceFrame referenceFrame = null)
+        public Flight Flight ([KRPCNullable] ReferenceFrame referenceFrame = null)
         {
             var vessel = InternalVessel;
             if (ReferenceEquals (referenceFrame, null))

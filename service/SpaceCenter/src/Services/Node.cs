@@ -162,7 +162,7 @@ namespace KRPC.SpaceCenter.Services
         /// Does not change when executing the maneuver node. See <see cref="RemainingBurnVector"/>.
         /// </remarks>
         [KRPCMethod]
-        public Tuple3 BurnVector (ReferenceFrame referenceFrame = null)
+        public Tuple3 BurnVector ([KRPCNullable] ReferenceFrame referenceFrame = null)
         {
             if (ReferenceEquals (referenceFrame, null))
                 referenceFrame = ReferenceFrame.Orbital (InternalVessel);
@@ -181,7 +181,7 @@ namespace KRPC.SpaceCenter.Services
         /// Changes as the maneuver node is executed. See <see cref="BurnVector"/>.
         /// </remarks>
         [KRPCMethod]
-        public Tuple3 RemainingBurnVector (ReferenceFrame referenceFrame = null)
+        public Tuple3 RemainingBurnVector ([KRPCNullable] ReferenceFrame referenceFrame = null)
         {
             if (ReferenceEquals (referenceFrame, null))
                 referenceFrame = ReferenceFrame.Orbital (InternalVessel);
