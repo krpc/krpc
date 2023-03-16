@@ -48,6 +48,7 @@ namespace KRPC
         Core ()
         {
             Servers = new List<Server.Server> ();
+            Service.Services.Init();
         }
 
         /// <summary>
