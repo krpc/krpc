@@ -22,7 +22,7 @@ namespace KRPC.Service
         public bool Nullable { get; private set; }
 
         [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidUnnecessarySpecializationRule")]
-        public ProcedureParameter (MethodInfo method, ParameterInfo parameter)
+        public ProcedureParameter (ParameterInfo parameter)
         {
             Type = parameter.ParameterType;
             Name = parameter.Name;

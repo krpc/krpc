@@ -94,15 +94,6 @@ namespace KRPC.Utils
         }
 
         /// <summary>
-        /// Return attributes of type T for the given member. Does not follow inheritance.
-        /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
-        public static IEnumerable<T> GetAttributes<T> (ICustomAttributeProvider member)
-        {
-            return member.GetCustomAttributes (typeof(T), false).Cast<T> ();
-        }
-
-        /// <summary>
         /// Return true if member has the attribute of type T. Does not follow inheritance.
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
