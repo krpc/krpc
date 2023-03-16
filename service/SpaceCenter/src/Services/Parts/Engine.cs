@@ -354,7 +354,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             {
                 UpdateConnectedResources();
                 foreach (var propellant in CurrentEngine.propellants)
-                    if (propellant.actualTotalAvailable < 0.001)
+                    if (propellant.actualTotalAvailable < 0.02)
                         return false;
                 return true;
             }
