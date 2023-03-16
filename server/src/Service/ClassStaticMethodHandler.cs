@@ -18,7 +18,7 @@ namespace KRPC.Service
         public ClassStaticMethodHandler (MethodInfo methodInfo, bool returnIsNullable)
         {
             method = methodInfo;
-            parameters = method.GetParameters ().Select (x => new ProcedureParameter (methodInfo, x)).ToArray ();
+            parameters = method.GetParameters ().Select (x => new ProcedureParameter (x)).ToArray ();
             methodArguments = new object[parameters.Length];
             ReturnIsNullable = returnIsNullable;
         }
