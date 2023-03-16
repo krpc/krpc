@@ -266,7 +266,7 @@ namespace KRPC.SpaceCenter.Services
                 if (template == null)
                     throw new InvalidOperationException("Failed to load template for vessel");
                 manifest = VesselCrewManifest.FromConfigNode(template.config);
-                if (crew.Count == 0) {
+                if (crew == null || crew.Count == 0) {
                     manifest = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel(template.config, manifest, true, false);
                 }
                 else {
