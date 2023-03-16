@@ -744,6 +744,7 @@ SpaceCenter.Engine.Propellants
 SpaceCenter.Engine.HasFuel
 SpaceCenter.Engine.Throttle
 SpaceCenter.Engine.ThrottleLocked
+SpaceCenter.Engine.IndependentThrottle
 SpaceCenter.Engine.CanRestart
 SpaceCenter.Engine.CanShutdown
 SpaceCenter.Engine.HasModes
