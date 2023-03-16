@@ -1,3 +1,6 @@
+v0.5.2
+ * Fix null reference exception when SpaceCenter.LaunchVesselFromVAB is called with no crew (#599)
+
 v0.5.1
  * Fix null reference exception in autopilot for vessels without custom axis controls (#649)
 
