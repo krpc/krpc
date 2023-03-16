@@ -1,5 +1,7 @@
 v0.5.2
  * Fix null reference exception when SpaceCenter.LaunchVesselFromVAB is called with no crew (#599)
+ * Add Engine.IndependentThrottle to check whether it is enabled
+ * Allow setting the independent throttle using Engine.Throttle
 
 v0.5.1
  * Fix null reference exception in autopilot for vessels without custom axis controls (#649)
