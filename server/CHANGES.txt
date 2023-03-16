@@ -1,6 +1,7 @@
 v0.5.2
  * Update to protobuf v3.10.1
  * Fix game lagging when first client connects (#712)
+ * Change KRPCDefaultValueAttribute so that it applies to parameters directly (#677)
 
 v0.5.0
  * Support for KSP 1.8+
