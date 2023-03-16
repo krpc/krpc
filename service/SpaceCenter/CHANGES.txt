@@ -3,6 +3,11 @@ v0.5.2
  * Add Engine.IndependentThrottle to check whether it is enabled
  * Allow setting the independent throttle using Engine.Throttle
  * Fix Engine.HasFuel sometimes returning true for flamed-out SRBs (#631)
+ * Add functions to manipulate a part modules fields based on identifier
+ * Module.Fields now throws an exception if there are multiple fields with the same name
+ * Add Module.FieldsById to get a dictionary of field values keyed by their identifier
+ * Add Module.SetFieldBool and Module.SetFieldBoolById to set a field with a boolean value
+ * Module.SetField* methods now raise an exception if setting the field to the wrong value type
 
 v0.5.1
  * Fix null reference exception in autopilot for vessels without custom axis controls (#649)
