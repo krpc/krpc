@@ -76,12 +76,14 @@ namespace KRPC.UI
         /// <param name="size">Size of the message, differs per position.</param>
         /// <param name="color">The color of the message.</param>
         [KRPCProcedure]
-        [KRPCDefaultValue("duration", typeof(CreateDefaultDuration))]
-        [KRPCDefaultValue("position", typeof(CreateDefaultPosition))]
-        [KRPCDefaultValue("color", typeof(CreateDefaultColor))]
         [SuppressMessage("Gendarme.Rules.Globalization", "PreferIFormatProviderOverrideRule")]
-        public static void Message(string content, float duration, MessagePosition position,
-                                   Tuple3 color, float size = 20) {
+        public static void Message(
+            string content,
+            [KRPCDefaultValue(typeof(CreateDefaultDuration))] float duration,
+            [KRPCDefaultValue(typeof(CreateDefaultPosition))] MessagePosition position,
+            [KRPCDefaultValue(typeof(CreateDefaultColor))] Tuple3 color,
+            float size = 20)
+        {
             var htmlColor = "#" + ColorUtility.ToHtmlStringRGB(color.ToColor());
             var message = "<color=" + htmlColor + "><size=" + size.ToString() + ">" + content + "</size></color>";
             ScreenMessages.PostScreenMessage(message, duration, position.ToScreenMessageStyle());
