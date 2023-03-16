@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using Moq;
@@ -469,7 +468,7 @@ namespace KRPC.Test.Service
             BlockingProcedureNoReturnFnCount++;
             if (n == 0)
                 return;
-            throw new YieldException (new ParameterizedContinuationVoid<int> (BlockingProcedureNoReturnFn, n - 1));
+            throw new YieldException<Action> (() => BlockingProcedureNoReturnFn(n - 1));
         }
 
         int BlockingProcedureReturnsFnCount;
@@ -479,7 +478,7 @@ namespace KRPC.Test.Service
             BlockingProcedureReturnsFnCount++;
             if (n == 0)
                 return sum;
-            throw new YieldException (new ParameterizedContinuation<int,int,int> (BlockingProcedureReturnsFn, n - 1, sum + n));
+            throw new YieldException<Func<int>> (() => BlockingProcedureReturnsFn(n - 1, sum + n));
         }
 
         [Test]
@@ -493,12 +492,12 @@ namespace KRPC.Test.Service
             var call = Call ("TestService", "BlockingProcedureNoReturn", Arg (0, num));
             BlockingProcedureNoReturnFnCount = 0;
             ProcedureResult result = null;
-            Continuation<ProcedureResult> continuation = new ProcedureCallContinuation (call);
+            var continuation = new ProcedureCallContinuation (call);
             while (result == null) {
                 try {
                     result = continuation.Run ();
-                } catch (YieldException e) {
-                    continuation = (Continuation<ProcedureResult>)e.Continuation;
+                } catch (YieldException<ProcedureCallContinuation> e) {
+                    continuation = e.Value;
                 }
             }
             // Verify the procedure is called once, but the handler function is called multiple times
@@ -519,12 +518,12 @@ namespace KRPC.Test.Service
             var call = Call ("TestService", "BlockingProcedureReturns", Arg (0, num));
             BlockingProcedureReturnsFnCount = 0;
             ProcedureResult result = null;
-            Continuation<ProcedureResult> continuation = new ProcedureCallContinuation (call);
+            var continuation = new ProcedureCallContinuation (call);
             while (result == null) {
                 try {
                     result = continuation.Run ();
-                } catch (YieldException e) {
-                    continuation = (Continuation<ProcedureResult>)e.Continuation;
+                } catch (YieldException<ProcedureCallContinuation> e) {
+                    continuation = e.Value;
                 }
             }
             // Verify the KRPCProcedure is called once, but the handler function is called multiple times

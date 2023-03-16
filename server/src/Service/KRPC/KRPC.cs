@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
-using KRPC.Continuations;
 using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
 using LinqExpression = System.Linq.Expressions.Expression;
@@ -254,22 +253,8 @@ namespace KRPC.Service.KRPC
         [KRPCProcedure]
         public static Messages.Event AddEvent(Expression expression)
         {
-            return new Event(new EventContinuation(expression)).Message;
-        }
-
-        sealed class EventContinuation : Continuation<bool>
-        {
-            readonly Func<bool> func;
-
-            public EventContinuation(Expression expression)
-            {
-                func = LinqExpression.Lambda<Func<bool>>(expression).Compile();
-            }
-
-            public override bool Run()
-            {
-                return func();
-            }
+            var func = LinqExpression.Lambda<Func<bool>>(expression).Compile();
+            return new Event((evnt) => func()).Message;
         }
     }
 }

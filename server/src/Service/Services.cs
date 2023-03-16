@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using KRPC.Continuations;
 using KRPC.Service.Messages;
 using KRPC.Service.Scanner;
 using KRPC.Utils;
@@ -156,11 +155,11 @@ namespace KRPC.Service
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
-        public ProcedureResult ExecuteCall (ProcedureSignature procedure, IContinuation continuation)
+        public ProcedureResult ExecuteCall (ProcedureSignature procedure, Func<object> continuation)
         {
             object returnValue;
             try {
-                returnValue = continuation.RunUntyped ();
+                returnValue = continuation ();
             } catch (YieldException) {
                 throw;
             } catch (System.Exception e) {

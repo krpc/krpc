@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -529,7 +528,7 @@ namespace KRPC.SpaceCenter.Services
             if (StageLock)
                 throw new InvalidOperationException("Staging is locked");
             if (!StageManager.CanSeparate)
-                throw new YieldException (new ParameterizedContinuation<IList<Vessel>> (ActivateNextStage));
+                throw new YieldException<Func<IList<Vessel>>> (ActivateNextStage);
             var preVessels = FlightGlobals.Vessels.ToArray ();
             StageManager.ActivateNextStage ();
             return PostActivateStage (preVessels);
@@ -538,7 +537,7 @@ namespace KRPC.SpaceCenter.Services
         IList<Vessel> PostActivateStage (global::Vessel[] preVessels)
         {
             if (!StageManager.CanSeparate)
-                throw new YieldException (new ParameterizedContinuation<IList<Vessel>, global::Vessel[]> (PostActivateStage, preVessels));
+                throw new YieldException<Func<IList<Vessel>>> (() => PostActivateStage(preVessels));
             var postVessels = FlightGlobals.Vessels;
             return postVessels.Except (preVessels).Select (vessel => new Vessel (vessel)).ToList ();
         }

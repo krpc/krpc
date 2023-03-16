@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
-using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service.Messages;
 
@@ -10,7 +9,7 @@ namespace KRPC.Service
     /// <summary>
     /// A continuation that runs a client request.
     /// </summary>
-    sealed class RequestContinuation : Continuation<Response>
+    sealed class RequestContinuation
     {
         public IClient<Request,Response> Client { get; private set; }
 
@@ -52,7 +51,7 @@ namespace KRPC.Service
         /// If all of the procedures complete, with either a return value or an error,
         /// a response containing all of the return values and errors is returned.
         /// </summary>
-        public override Response Run ()
+        public Response Run ()
         {
             if (call != null) {
                 // Special case when the request contains a single call, as the logic is much simpler
@@ -61,9 +60,9 @@ namespace KRPC.Service
                     var response = new Response ();
                     response.Results.Add(result);
                     return response;
-                } catch (YieldException e) {
-                    call = (ProcedureCallContinuation)e.Continuation;
-                    throw new YieldException (this);
+                } catch (YieldException<ProcedureCallContinuation> e) {
+                    call = e.Value;
+                    throw new YieldException<RequestContinuation> (this);
                 }
             } else {
                 bool yielded = false;
@@ -71,14 +70,14 @@ namespace KRPC.Service
                     if (results [i] == null) {
                         try {
                             results [i] = calls [i].Run ();
-                        } catch (YieldException e) {
-                            calls [i] = (ProcedureCallContinuation)e.Continuation;
+                        } catch (YieldException<ProcedureCallContinuation> e) {
+                            calls [i] = e.Value;
                             yielded = true;
                         }
                     }
                 }
                 if (yielded)
-                    throw new YieldException (this);
+                    throw new YieldException<RequestContinuation> (this);
                 var response = new Response ();
                 for (int i = 0; i < results.Length; i++)
                     response.Results.Add (results [i]);

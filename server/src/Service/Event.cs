@@ -1,6 +1,5 @@
 using System;
 using KRPC;
-using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service;
 using KRPC.Service.Messages;
@@ -29,28 +28,13 @@ namespace KRPC.Service
             Message = new Messages.Event (new Messages.Stream (streamId));
         }
 
-        sealed class FunctionContinuation : Continuation<bool> {
-            private Event evnt_;
-            private Func<Event, bool> func_;
-
-            public FunctionContinuation(Event evnt, Func<Event, bool> func) {
-                evnt_ = evnt;
-                func_ = func;
-            }
-
-            public override bool Run() {
-                return func_(evnt_);
-            }
-        };
-
         /// <summary>
         /// Create an event stream, that calls a function when it updates to
         /// determine if the event is triggered.
         /// </summary>
         public Event (Func<Event, bool> func)
         {
-            var continuation = new FunctionContinuation(this, func);
-            stream = new EventStream (continuation);
+            stream = new EventStream (() => func(this));
             client = CallContext.Client;
             streamId = Core.Instance.AddStream (client, stream);
             Message = new Messages.Event (new Messages.Stream (streamId));
@@ -61,7 +45,7 @@ namespace KRPC.Service
         /// Create an event stream, that calls a continuation when it updates to
         /// determine if the event is triggered.
         /// </summary>
-        public Event (Continuation<bool> continuation)
+        public Event (Func<bool> continuation)
         {
             stream = new EventStream (continuation);
             client = CallContext.Client;

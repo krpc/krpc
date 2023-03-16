@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -241,7 +240,7 @@ namespace TestServer
         {
             if (n == 0)
                 return sum;
-            throw new YieldException (new ParameterizedContinuation<int,int,int> (BlockingProcedure, n - 1, sum + n));
+            throw new YieldException<Func<int>> (() => BlockingProcedure(n - 1, sum + n));
         }
 
         [KRPCProcedure]

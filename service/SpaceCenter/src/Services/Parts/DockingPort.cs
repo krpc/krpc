@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using KRPC.Continuations;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -150,7 +150,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             // FIXME: sometimes after undocking, KSP changes it's mind as to what the active vessel is, so we wait for 10 frames before getting the active vessel
             // Wait while the port is docked
             if (wait < 10 || State == DockingPortState.Docked)
-                throw new YieldException (new ParameterizedContinuation<Vessel, IList<Guid>, int> (PostUndock, preVesselIds, wait + 1));
+                throw new YieldException<Func<Vessel>> (() => PostUndock(preVesselIds, wait + 1));
             // Return the newly created vessel
             return new Vessel (FlightGlobals.Vessels.Select (v => v.id).Except (preVesselIds).Single ());
         }
