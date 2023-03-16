@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -81,7 +80,7 @@ namespace KRPC.SpaceCenter.Services
                 if (ReferenceEquals (value, null))
                     throw new ArgumentNullException ("ActiveVessel");
                 FlightGlobals.ForceSetActiveVessel (value.InternalVessel);
-                throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+                throw new YieldException<Action> (() => WaitForVesselSwitch(0));
             }
         }
 
@@ -91,9 +90,9 @@ namespace KRPC.SpaceCenter.Services
         static void WaitForVesselSwitch (int tick)
         {
             if (FlightGlobals.ActiveVessel == null || FlightGlobals.ActiveVessel.packed)
-                throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+                throw new YieldException<Action> (() => WaitForVesselSwitch(0));
             if (tick < 25)
-                throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, tick + 1));
+                throw new YieldException<Action> (() => WaitForVesselSwitch(tick + 1));
         }
 
         /// <summary>
@@ -375,7 +374,7 @@ namespace KRPC.SpaceCenter.Services
             CloseDialogs();
             var config = new LaunchConfig(craftDirectory, name, launchSite, recover, crew, flagUrl);
             config.RunPreFlightChecks();
-            throw new YieldException (new ParameterizedContinuationVoid<LaunchConfig> (WaitForVesselPreFlightChecks, config));
+            throw new YieldException<Action> (() => WaitForVesselPreFlightChecks(config));
         }
 
         /// <summary>
@@ -387,7 +386,7 @@ namespace KRPC.SpaceCenter.Services
             if (config.error != null)
                 throw new InvalidOperationException(config.error);
             if (!config.preFlightChecksComplete)
-                throw new YieldException(new ParameterizedContinuationVoid<LaunchConfig>(WaitForVesselPreFlightChecks, config));
+                throw new YieldException<Action>(() => WaitForVesselPreFlightChecks(config));
             // Check launch site clear
             var vesselsToRecover = ShipConstruction.FindVesselsLandedAt(HighLogic.CurrentGame.flightState, config.LaunchSite);
             if (vesselsToRecover.Any()) {
@@ -399,7 +398,7 @@ namespace KRPC.SpaceCenter.Services
             }
             // Do the actual launch - passed pre-flight checks, and launch site is clear.
             FlightDriver.StartWithNewLaunch(config.Path, config.FlagUrl, config.LaunchSite, config.manifest);
-            throw new YieldException(new ParameterizedContinuationVoid<int>(WaitForVesselSwitch, 0));
+            throw new YieldException<Action>(() => WaitForVesselSwitch(0));
         }
 
         /// <summary>
@@ -462,7 +461,7 @@ namespace KRPC.SpaceCenter.Services
             if (game == null || game.flightState == null || !game.compatible)
                 throw new ArgumentException ("Failed to load " + name);
             FlightDriver.StartAndFocusVessel (game, game.flightState.activeVesselIdx);
-            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+            throw new YieldException<Action> (() => WaitForVesselSwitch(0));
         }
 
         /// <summary>
@@ -738,7 +737,7 @@ namespace KRPC.SpaceCenter.Services
                 PhysicsWarpAtRate (Mathf.Min (rate, Math.Min (maxRailsRate, maxPhysicsRate)));
 
             if (Planetarium.GetUniversalTime () < ut)
-                throw new YieldException (new ParameterizedContinuationVoid<double,float,float> (WarpTo, ut, maxRailsRate, maxPhysicsRate));
+                throw new YieldException<Action> (() => WarpTo(ut, maxRailsRate, maxPhysicsRate));
             if (TimeWarp.CurrentRateIndex > 0)
                 SetWarpFactor (TimeWarp.Modes.HIGH, 0);
         }

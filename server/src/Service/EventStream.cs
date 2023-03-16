@@ -1,6 +1,6 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using KRPC;
-using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service;
 using KRPC.Service.Messages;
@@ -10,7 +10,7 @@ namespace KRPC.Service
 {
     [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     sealed class EventStream : Stream {
-        Continuation<bool> continuation;
+        Func<bool> continuation;
         bool shouldRemove;
 
         public EventStream ()
@@ -18,7 +18,7 @@ namespace KRPC.Service
             Changed = false;
         }
 
-        public EventStream (Continuation<bool> eventContinuation)
+        public EventStream (Func<bool> eventContinuation)
         {
             Changed = false;
             continuation = eventContinuation;
@@ -35,7 +35,7 @@ namespace KRPC.Service
         }
 
         public override void UpdateInternal() {
-            if (continuation != null && continuation.Run())
+            if (continuation != null && continuation())
                 Trigger();
             if (shouldRemove)
                 Core.Instance.RemoveStream (Id);

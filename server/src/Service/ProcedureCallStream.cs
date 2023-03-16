@@ -1,8 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using KRPC.Continuations;
-using KRPC.Server;
 using KRPC.Service.Messages;
 using KRPC.Service.Scanner;
 

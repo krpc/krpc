@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service.Messages;
 
@@ -9,7 +8,7 @@ namespace KRPC.Service
     /// <summary>
     /// A continuation that runs a stream.
     /// </summary>
-    sealed class StreamContinuation : Continuation<ProcedureResult>
+    sealed class StreamContinuation /*: Continuation<ProcedureResult>*/
     {
         ProcedureCallContinuation originalContinuation;
         ProcedureCallContinuation continuation;
@@ -32,7 +31,7 @@ namespace KRPC.Service
         /// If the procedure throws an exception, the continuation should not be run
         /// again (the stream should be removed from the server).
         /// </summary>
-        public override ProcedureResult Run ()
+        public ProcedureResult Run ()
         {
             if (continuation == null)
                 throw new InvalidOperationException (
@@ -41,9 +40,9 @@ namespace KRPC.Service
                 var result = continuation.Run ();
                 continuation = originalContinuation;
                 return result;
-            } catch (YieldException e) {
-                continuation = (ProcedureCallContinuation)e.Continuation;
-                throw new YieldException (this);
+            } catch (YieldException<ProcedureCallContinuation> e) {
+                continuation = e.Value;
+                throw new YieldException<StreamContinuation> (this);
             } catch (System.Exception) {
                 continuation = null;
                 throw;
