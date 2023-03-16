@@ -21,10 +21,15 @@ namespace KRPC.Service
 
         static Services instance;
 
+        public static void Init()
+        {
+            if (instance == null)
+                instance = new Services ();
+        }
+
         public static Services Instance {
             get {
-                if (instance == null)
-                    instance = new Services ();
+                Init();
                 return instance;
             }
         }
