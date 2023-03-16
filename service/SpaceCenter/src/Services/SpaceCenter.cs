@@ -266,10 +266,11 @@ namespace KRPC.SpaceCenter.Services
                 if (template == null)
                     throw new InvalidOperationException("Failed to load template for vessel");
                 manifest = VesselCrewManifest.FromConfigNode(template.config);
+                if (manifest == null)
+                    throw new InvalidOperationException("Failed to load manifest from vessel template");
                 if (crew == null || crew.Count == 0) {
                     manifest = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel(template.config, manifest, true, false);
-                }
-                else {
+                } else {
                     var crewRoster = new KerbalRoster(HighLogic.CurrentGame.Mode);
                     foreach (var crewName in crew) {
                         var kerbal = GetKerbal(crewName);
@@ -278,8 +279,9 @@ namespace KRPC.SpaceCenter.Services
                         }
                     }
                     manifest = crewRoster.DefaultCrewForVessel(template.config, manifest, true, false);
-                    if (manifest.CrewCount < crewRoster.Count)
-                    {
+                    if (manifest == null)
+                        throw new InvalidOperationException("Failed to load manifest");
+                    if (manifest.CrewCount < crewRoster.Count) {
                         foreach (var crewMember in crewRoster.Crew) {
                             if (!manifest.Contains(crewMember)) {
                                 if (!AddCrewToManifest(manifest, crewMember)) {
@@ -289,6 +291,8 @@ namespace KRPC.SpaceCenter.Services
                         }
                     }
                 }
+                if (manifest == null)
+                    throw new InvalidOperationException("Failed to load manifest");
 
                 facility = (craftDirectory == "SPH") ? SpaceCenterFacility.SpaceplaneHangar : SpaceCenterFacility.VehicleAssemblyBuilding;
                 facilityLevel = ScenarioUpgradeableFacilities.GetFacilityLevel(facility);
