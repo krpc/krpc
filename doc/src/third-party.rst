@@ -14,6 +14,9 @@ Clients
  * `Node.js client <https://github.com/eXigentCoder/krpc-node>`_
  * `Julia client <https://github.com/BenChung/kRPC.jl>`_
  * `Rust client <https://github.com/Cahu/krpc-mars>`_
+ * `Rust client  https://github.com/kladd/krpc-client`_ -- "dynamic", so doesn't require generated
+   service stubs.
+ * `Go client <https://github.com/nathan-boulestin/krpc/tree/main/client/go>`_
  * `Using the plugin in F# <http://fssnip.net/7Pi>`_
 
 Services
