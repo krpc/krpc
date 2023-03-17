@@ -19,8 +19,7 @@ You also need to `install Google.Protobuf using NuGet
 .. note::
 
    The copy of ``Google.Protobuf.dll`` in the GameData folder included with the kRPC server plugin
-   is *not* the official release of this assembly. It is a modified version built for .NET 3.5 so
-   that it works within KSP. Do not use it with the client library.
+   should not be used with the client library. It is a modified version to work within KSP.
 
 Connecting to the Server
 ------------------------
