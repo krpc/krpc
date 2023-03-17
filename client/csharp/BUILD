@@ -28,7 +28,7 @@ nuget_package(
     author = author,
     description = 'C# client for kRPC',
     project_url = 'https://github.com/krpc/krpc',
-    license_url = 'https://github.com/krpc/krpc/blob/main/LICENSE',
+    license = 'LGPL-3.0-only',
     deps = {
         'Google.Protobuf': '3.22.0'
     }
