@@ -1,7 +1,6 @@
 name: "🪲 Bug Report"
 description: Tell us about the bug so we can improve kRPC!
 labels: ['bug', 'needs-triage']
-title: ''
 body:
   - type: textarea
     id: problem

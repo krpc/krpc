@@ -1,7 +1,6 @@
 name: "📑 Documentation Issue"
 description: Found an error or omission in the kRPC documentation? Help us correct it!
 labels: ['docs', 'needs-triage']
-title: ''
 body:
   - type: markdown
     attributes:
