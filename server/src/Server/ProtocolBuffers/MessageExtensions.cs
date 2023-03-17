@@ -104,6 +104,7 @@ namespace KRPC.Server.ProtocolBuffers
             result.Type = parameter.Type.ToProtobufMessage ();
             if (parameter.HasDefaultValue)
                 result.DefaultValue = Encoder.Encode (parameter.DefaultValue);
+            result.Nullable = parameter.Nullable;
             return result;
         }
 
