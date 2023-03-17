@@ -44,9 +44,7 @@
 {% endfor %}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
-{% if x.game_scenes != None %}
    {{ game_scenes(x.game_scenes) }}
-{% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -68,9 +66,7 @@
 
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
-{% if x.game_scenes != None %}
    {{ game_scenes(x.game_scenes) }}
-{% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -90,9 +86,7 @@
 {% endfor %}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
-{% if x.game_scenes != None %}
    {{ game_scenes(x.game_scenes) }}
-{% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -112,9 +106,7 @@
 {% endfor %}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
-{% if x.game_scenes != None %}
    {{ game_scenes(x.game_scenes) }}
-{% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -167,5 +159,7 @@
 {% endmacro %}
 
 {% macro game_scenes(x) %}
+{% if x != None and x != 'All' %}
 :Game Scenes: {{ x }}
+{% endif %}
 {% endmacro %}

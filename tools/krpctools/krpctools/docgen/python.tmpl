@@ -47,9 +47,7 @@
 {% if x.return_type != None %}
    :rtype: {{ domain.type_description(x.return_type) }}
 {% endif %}
-{% if x.game_scenes != None %}
    {{ game_scenes(x.game_scenes) }}
-{% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -68,9 +66,7 @@
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
    :rtype: {{ domain.type_description(x.type) }}
-{% if x.game_scenes != None %}
    {{ game_scenes(x.game_scenes) }}
-{% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -93,9 +89,7 @@
 {% if x.return_type != None %}
    :rtype: {{ domain.type_description(x.return_type) }}
 {% endif %}
-{% if x.game_scenes != None %}
    {{ game_scenes(x.game_scenes) }}
-{% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -118,9 +112,7 @@
 {% if x.return_type != None %}
    :rtype: {{ domain.type_description(x.return_type) }}
 {% endif %}
-{% if x.game_scenes != None %}
    {{ game_scenes(x.game_scenes) }}
-{% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -179,5 +171,7 @@
 {% endmacro %}
 
 {% macro game_scenes(x) %}
+{% if x != None and x != 'All' %}
 :Game Scenes: {{ x }}
+{% endif %}
 {% endmacro %}
