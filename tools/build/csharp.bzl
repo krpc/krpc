@@ -323,17 +323,19 @@ def _nuget_package_impl(ctx):
     if ctx.attr.project_url:
         nuspec_contents.append('  <projectUrl>%s</projectUrl>' % ctx.attr.project_url)
     if ctx.attr.project_url:
-        nuspec_contents.append('  <licenseUrl>%s</licenseUrl>' % ctx.attr.license_url)
+        nuspec_contents.append('  <license type="expression">%s</license>' % ctx.attr.license)
     nuspec_contents.extend([
         '  <frameworkAssemblies>'
     ])
     nuspec_contents.extend(['    <frameworkAssembly assemblyName="%s" targetFramework="net45"/>' % x for x in ctx.attr.framework_deps])
     nuspec_contents.extend([
         '  </frameworkAssemblies>',
-        '  <dependencies>'
+        '  <dependencies>',
+        '    <group targetFramework=".NETFramework4.5">',
     ])
-    nuspec_contents.extend(['    <dependency id="%s" version="%s"/>' % x for x in ctx.attr.deps.items()])
+    nuspec_contents.extend(['      <dependency id="%s" version="%s"/>' % x for x in ctx.attr.deps.items()])
     nuspec_contents.extend([
+        '    </group>',
         '  </dependencies>',
         '</metadata>',
         '<files>'
@@ -390,7 +392,7 @@ nuget_package = rule(
         'version': attr.string(mandatory=True),
         'author': attr.string(mandatory=True),
         'project_url': attr.string(),
-        'license_url': attr.string(),
+        'license': attr.string(),
         'description': attr.string(mandatory=True),
         'framework_deps': attr.string_list(),
         'deps': attr.string_dict(),
