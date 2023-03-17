@@ -3,11 +3,6 @@ description: Suggest a new feature for kRPC!
 labels: ['enhancement', 'needs-triage']
 title: ''
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Thanks for taking the time to request a feature.
-
   - type: textarea
     id: feature
     attributes:
