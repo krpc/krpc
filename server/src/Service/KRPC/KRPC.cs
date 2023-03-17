@@ -84,7 +84,8 @@ namespace KRPC.Service.KRPC
                         procedure.ReturnIsNullable = procedureSignature.ReturnIsNullable;
                     }
                     foreach (var parameterSignature in procedureSignature.Parameters) {
-                        var parameter = new Parameter (parameterSignature.Name, parameterSignature.Type);
+                        var parameter = new Parameter (
+                            parameterSignature.Name, parameterSignature.Type, parameterSignature.Nullable);
                         if (parameterSignature.HasDefaultValue)
                             parameter.DefaultValue = parameterSignature.DefaultValue;
                         procedure.Parameters.Add (parameter);
