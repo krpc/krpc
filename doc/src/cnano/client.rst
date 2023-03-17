@@ -136,19 +136,14 @@ argument a connection object into which the connection information is written. T
 subsequent calls to interact with the server. The second argument is a name for the connection
 (displayed in game) and the third is the name of the serial port to connect over.
 
-Using the Library on from an Arduino
-------------------------------------
+Using the Library on an Arduino
+-------------------------------
 
 The following example demonstrates how to connect to the server from an Arduino, through its serial
 port interface:
 
 .. literalinclude:: /scripts/client/cnano/BasicArduino.ino
    :language: c
-
-.. note::
-
-   The main include file and include directory are named ``krpc`` instead of ``krpc_cnano`` in the
-   Arduino version of the library.
 
 Calling Remote Procedures
 -------------------------
