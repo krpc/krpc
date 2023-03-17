@@ -48,4 +48,4 @@ Fixes # (issue)
 - [ ] My changes generate no new warnings
 - [ ] My code has been tested 
 - [ ] I have included any new tests in my submission
-- [ ] Any dependent changes have been merged and downstream
+- [ ] Any dependent changes have been merged downstream
