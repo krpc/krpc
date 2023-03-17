@@ -1,20 +1,22 @@
-name: "📑 kRPC Documentation issues"
-description: Found a kRPC documentation error? Help us correct it!
-labels: ['documentation', 'request']
-title: '[Enter a docs issue title]'
+name: "📑 Documentation Issue"
+description: Found an error or omission in the kRPC documentation? Help us correct it!
+labels: ['docs', 'needs-triage']
+title: ''
 body:
   - type: markdown
     attributes:
       value: |
-        ❗ This is for all kRPC documentation hosted by this repository including....`README.md`, `Contributing,md`, and `Development-Guide.md`
+        The kRPC docs can be found here 👉 [https://krpc.github.io/krpc/](https://krpc.github.io/krpc/)
 
-        The kRPC docs are located here 👉 [kRPC Documentation](https://krpc.github.io/krpc/)
+        You can also suggest changes to documents in this repository including `README.md`,
+        `Contributing.md` and `Development-Guide.md`.
+
   - type: textarea
     id: affected
     attributes:
       label: Where is the issue located?
       description: |
-        Please provide links or provide the location of the issue.
+        Please provide links or describe the location of the issue.
     validations:
       required: false
 

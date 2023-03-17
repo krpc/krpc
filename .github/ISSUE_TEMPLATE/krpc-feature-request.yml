@@ -1,14 +1,17 @@
-name: "🚀 kRPC Feature request"
-description: Suggest a new feature/enhancement for kRPC!
-labels: ['feature', 'request']
-title: '[feat req]'
+name: "🚀 Feature Request"
+description: Suggest a new feature for kRPC!
+labels: ['enhancement', 'needs-triage']
+title: ''
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to request a feature.
+
   - type: textarea
     id: feature
     attributes:
       label: What would you like to be added?
-      description: |
-        Please check existing issues to avoid making duplicates. Any duplicate issue will be closed immediately.
     validations:
       required: true
 
