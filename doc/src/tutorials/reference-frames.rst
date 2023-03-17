@@ -128,8 +128,8 @@ prograde/normal/radial directions.
   for example when the prograde direction changes as the vessel continues on its
   orbit.
 
-Vessel Surface Reference Frame
-""""""""""""""""""""""""""""""
+Vessel Reference Frame
+""""""""""""""""""""""
 
 .. figure:: /images/reference-frames/vessel-aircraft.png
    :align: right
