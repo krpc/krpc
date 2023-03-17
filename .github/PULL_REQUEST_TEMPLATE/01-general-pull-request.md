@@ -24,22 +24,16 @@
 
 ---
 
-🚀***Add issue number below, example( `Fixes # 101`):*** 
+🚀***Add issue number below, example( `Fixes #101`):*** 
 
-Fixes # (issue)
-
-🚀***List any dependencies that are required for this change.***
-
-1) [Dependency name]
-2) [Dependency name]
-3) [...]
+Fixes #(issue)
 
 ### 🚀Type of request
 
 - [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] feature request (non-breaking change which adds functionality)
-- [ ] documentation update: [Link to Doc Page](url)
-- [ ] other
+- [ ] Feature request (non-breaking change which adds functionality)
+- [ ] Documentation update: [Link to Doc Page](url)
+- [ ] Other
 
 ### 🚀Compliance checklist:
 
