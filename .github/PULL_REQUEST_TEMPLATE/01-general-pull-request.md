@@ -35,11 +35,7 @@ Fixes #(issue)
 - [ ] Documentation update: [Link to Doc Page](url)
 - [ ] Other
 
-### 🚀Compliance checklist:
+### 🚀Compliance check:
 
 - [ ] My code follows the style guidelines of this project contained above and in `Contributing.md`
-- [ ] I have performed a self-review of my own code
-- [ ] My changes generate no new warnings
-- [ ] My code has been tested 
-- [ ] I have included any new tests in my submission
-- [ ] Any dependent changes have been merged downstream
+
