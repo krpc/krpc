@@ -1,0 +1,30 @@
+name: "🪲 kRPC Bug report"
+description: Tell us about the bug so we can improve kRPC!
+labels: ['bug', 'request']
+title: '[Enter a bug title]'
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: |
+        Please provide a clear and concise description of what the bug is. If applicable, add screenshots to help explain your problem.
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Anything else we need to know?
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: What is your environment?
+      multiple: true
+      options:
+        - linux
+        - windows
+        - other
+    validations:
+      required: true
