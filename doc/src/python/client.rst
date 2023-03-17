@@ -22,7 +22,7 @@ Or on Windows:
 
 .. code-block:: none
 
-   C:\Python27\Scripts\pip.exe install krpc
+   C:\Python310\Scripts\pip.exe install krpc
 
 Connecting to the Server
 ------------------------

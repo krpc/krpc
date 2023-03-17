@@ -161,7 +161,7 @@ The reasoning and derivation for this is as follows:
   following formula:
 
   .. math::
-     f_a(\theta) &= \frac{1}{1 + e^{-6/\theta_a(\lvert\theta\rvert - \theta_a)}}
+     f_a(\theta) = \frac{1}{1 + e^{-6/\theta_a(\lvert\theta\rvert - \theta_a)}}
 
   Note that the original function, derived from the equations of motion under
   constant acceleration, is only affected by the attenuation function close to
@@ -200,12 +200,12 @@ like a second order system and is therefore easy to tune.
 The transfer function for the controller in the :math:`s` domain is:
 
 .. math::
-   C(s) &= K_P + K_I s^{-1}
+   C(s) = K_P + K_I s^{-1}
 
 From the schematic, the transfer function for the plant :math:`H` is:
 
 .. math::
-   H(s) &= \frac{\omega_\epsilon(s)}{X(s)}
+   H(s) = \frac{\omega_\epsilon(s)}{X(s)}
 
 :math:`x` is the control input to the vessel, which is the percentage of the
 available torque :math:`\tau_{max}` that is being applied to the vessel. Call
@@ -213,7 +213,7 @@ this the current torque, denoted :math:`\tau`. This can be written
 mathematically as:
 
 .. math::
-   \tau &= x \tau_{max}
+   \tau = x \tau_{max}
 
 Combining this with the angular equation of motion gives the angular
 acceleration in terms of the control input:
@@ -251,7 +251,7 @@ The closed loop transfer function is then:
 The characteristic equation for the system is therefore:
 
 .. math::
-   \Phi &= s^2 + \frac{\tau_{max}}{I} K_P s + \frac{\tau_{max}}{I} K_I
+   \Phi = s^2 + \frac{\tau_{max}}{I} K_P s + \frac{\tau_{max}}{I} K_I
 
 The characteristic equation for a standard second order system is:
 
@@ -275,12 +275,12 @@ which will allow us to determine the values of :math:`\zeta` and
 The percentage by which a second order system overshoots is:
 
 .. math::
-   O &= e^{-\frac{\pi\zeta}{\sqrt{1-\zeta^2}}}
+   O = e^{-\frac{\pi\zeta}{\sqrt{1-\zeta^2}}}
 
 And the time it takes to reach the first peak in its output is:
 
 .. math::
-   T_P &= \frac{\pi}{\omega_0\sqrt{1-\zeta^2}}
+   T_P = \frac{\pi}{\omega_0\sqrt{1-\zeta^2}}
 
 These can be rearranged to give us :math:`\zeta` and :math:`\omega_0` in terms
 of overshoot and time to peak:

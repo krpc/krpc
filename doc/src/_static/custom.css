@@ -1,12 +1,12 @@
 .clearer {
-    clear: both;
+    clear: both !important;
 }
 
 .rst-content code.literal {
-    color: #404040;
+    color: #404040 !important;
 }
 
 .rst-content dl:not(.docutils) .property {
-    display: inline;
-    padding-right: 0;
+    display: inline !important;
+    padding-right: 0 !important;
 }

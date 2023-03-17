@@ -115,6 +115,7 @@ message Parameter {
   string name = 1;
   Type type = 2;
   bytes default_value = 3;
+  bool nullable = 4;
 }
 
 message Class {

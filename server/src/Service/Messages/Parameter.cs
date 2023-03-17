@@ -19,12 +19,15 @@ namespace KRPC.Service.Messages
             }
         }
 
+        public bool Nullable { get; private set; }
+
         object defaultValue;
 
-        public Parameter (string name, Type type)
+        public Parameter (string name, Type type, bool nullable)
         {
             Name = name;
             Type = type;
+            Nullable = nullable;
         }
     }
 }

@@ -1,3 +1,6 @@
+v0.5.2
+ * The arduino compatible version of the library now uses the same "krpc_cnano/..." include directory as the version released on GitHub.
+
 v0.5.0
  * Update to protobuf 22.0
  * Update to nanopb 0.4.7

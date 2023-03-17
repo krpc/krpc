@@ -6,12 +6,12 @@ the game.
 It comes with client libraries for many popular languages including
 :doc:`C# <csharp/client>`,
 :doc:`C++ <cpp/client>`,
+:doc:`C <cnano/client>`,
 :doc:`Java <java/client>`,
-:doc:`Lua <lua/client>` and
-:doc:`Python <python/client>`.
-Clients, made by others, are also available for
-`Ruby <https://github.com/TeWu/krpc-rb>`_ and
-`Haskell <https://github.com/Cahu/krpc-hs>`_.
+:doc:`Lua <lua/client>`,
+:doc:`Python <python/client>`
+and :doc:`others <third-party>`.
+It also supports websockets and serialio (for example on Arduino).
 
  * :doc:`Getting Started Guide <getting-started>`
  * :doc:`Tutorials and Examples <tutorials>`
