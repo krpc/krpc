@@ -1,0 +1,39 @@
+name: "🪲 Bug Report"
+description: Tell us about the bug so we can improve kRPC!
+labels: ['bug', 'needs-triage']
+title: ''
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: |
+        Please provide a clear and concise description of what the bug is.
+        If applicable, include screenshots or log output to help explain your problem.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How can someone else reproduce it?
+      description: |
+        Please describe how to reproduce the issue.
+        For example, a kRPC script that exhibits the bug or a save file.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: What is your environment?
+      description: |
+        For example, what version of the mod are you using? What version of the game are you using?
+        Do you have any other mods installed?
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Anything else we need to know?
