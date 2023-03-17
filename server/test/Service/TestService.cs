@@ -288,8 +288,8 @@ namespace KRPC.Test.Service
         }
 
         [KRPCProcedure]
-        [KRPCDefaultValue ("x", typeof(CreateTupleDefault))]
-        public static Tuple<int,bool> TupleDefault (Tuple<int,bool> x)
+        public static Tuple<int,bool> TupleDefault (
+            [KRPCDefaultValue (typeof(CreateTupleDefault))] Tuple<int,bool> x)
         {
             return Service.TupleDefault (x);
         }
@@ -304,8 +304,8 @@ namespace KRPC.Test.Service
         }
 
         [KRPCProcedure]
-        [KRPCDefaultValue ("x", typeof(CreateListDefault))]
-        public static IList<int> ListDefault (IList<int> x)
+        public static IList<int> ListDefault (
+            [KRPCDefaultValue (typeof(CreateListDefault))] IList<int> x)
         {
             return Service.ListDefault (x);
         }
@@ -320,8 +320,8 @@ namespace KRPC.Test.Service
         }
 
         [KRPCProcedure]
-        [KRPCDefaultValue ("x", typeof(CreateSetDefault))]
-        public static HashSet<int> SetDefault (HashSet<int> x)
+        public static HashSet<int> SetDefault (
+            [KRPCDefaultValue (typeof(CreateSetDefault))] HashSet<int> x)
         {
             return Service.SetDefault (x);
         }
@@ -339,8 +339,8 @@ namespace KRPC.Test.Service
         }
 
         [KRPCProcedure]
-        [KRPCDefaultValue ("x", typeof(CreateDictionaryDefault))]
-        public static IDictionary<int,bool> DictionaryDefault (IDictionary<int,bool> x)
+        public static IDictionary<int,bool> DictionaryDefault (
+            [KRPCDefaultValue (typeof(CreateDictionaryDefault))] IDictionary<int,bool> x)
         {
             return Service.DictionaryDefault (x);
         }

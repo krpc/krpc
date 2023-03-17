@@ -216,10 +216,6 @@
     <Compile Include="Addon.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationFile.cs" />
-    <Compile Include="Continuations\Continuation.cs" />
-    <Compile Include="Continuations\IContinuation.cs" />
-    <Compile Include="Continuations\ParameterizedContinuation.cs" />
-    <Compile Include="Continuations\YieldException.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Properties\AssemblyKSPVersion.cs" />
     <Compile Include="Server\ByteOutputAdapterStream.cs" />
@@ -350,6 +346,7 @@
     <Compile Include="Service\StreamContinuation.cs" />
     <Compile Include="Service\TypeUtils.cs" />
     <Compile Include="Service\ValueUtils.cs" />
+    <Compile Include="Service\YieldException.cs" />
     <Compile Include="ServicesChecker.cs" />
     <Compile Include="UI\ClientConnectingDialog.cs" />
     <Compile Include="UI\ClientDisconnectDialog.cs" />

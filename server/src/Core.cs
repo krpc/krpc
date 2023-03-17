@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service;
-using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
 using KRPC.Utils;
 
@@ -48,6 +46,7 @@ namespace KRPC
         Core ()
         {
             Servers = new List<Server.Server> ();
+            Service.Services.Init();
         }
 
         /// <summary>
@@ -461,8 +460,8 @@ namespace KRPC
                     // Execute the continuation
                     try {
                         ExecuteContinuation (continuation);
-                    } catch (YieldException e) {
-                        rpcYieldedContinuations.Add ((RequestContinuation)e.Continuation);
+                    } catch (YieldException<RequestContinuation> e) {
+                        rpcYieldedContinuations.Add (e.Value);
                     }
                     rpcsExecuted++;
                 }

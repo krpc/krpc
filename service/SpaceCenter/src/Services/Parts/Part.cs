@@ -463,8 +463,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// A <see cref="Antenna"/> if the part is an antenna, otherwise <c>null</c>.
+        /// An <see cref="Antenna"/> if the part is an antenna, otherwise <c>null</c>.
         /// </summary>
+        /// <remarks>
+        /// If RemoteTech is installed, this will always return <c>null</c>.
+        /// To interact with RemoteTech antennas, use the RemoteTech service APIs.
+        /// </remarks>
         [KRPCProperty (Nullable = true)]
         public Antenna Antenna {
             get { return Antenna.Is (this) ? new Antenna (this) : null; }

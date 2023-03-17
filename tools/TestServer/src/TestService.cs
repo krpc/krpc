@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -241,7 +240,7 @@ namespace TestServer
         {
             if (n == 0)
                 return sum;
-            throw new YieldException (new ParameterizedContinuation<int,int,int> (BlockingProcedure, n - 1, sum + n));
+            throw new YieldException<Func<int>> (() => BlockingProcedure(n - 1, sum + n));
         }
 
         [KRPCProcedure]
@@ -305,8 +304,8 @@ namespace TestServer
         }
 
         [KRPCProcedure]
-        [KRPCDefaultValue ("x", typeof(CreateTupleDefault))]
-        public static Tuple<int,bool> TupleDefault (Tuple<int,bool> x)
+        public static Tuple<int,bool> TupleDefault (
+            [KRPCDefaultValue (typeof(CreateTupleDefault))] Tuple<int,bool> x)
         {
             return x;
         }
@@ -321,8 +320,8 @@ namespace TestServer
         }
 
         [KRPCProcedure]
-        [KRPCDefaultValue ("x", typeof(CreateListDefault))]
-        public static IList<int> ListDefault (IList<int> x)
+        public static IList<int> ListDefault (
+            [KRPCDefaultValue (typeof(CreateListDefault))] IList<int> x)
         {
             return x;
         }
@@ -337,8 +336,8 @@ namespace TestServer
         }
 
         [KRPCProcedure]
-        [KRPCDefaultValue ("x", typeof(CreateSetDefault))]
-        public static HashSet<int> SetDefault (HashSet<int> x)
+        public static HashSet<int> SetDefault (
+            [KRPCDefaultValue (typeof(CreateSetDefault))] HashSet<int> x)
         {
             return x;
         }
@@ -356,8 +355,8 @@ namespace TestServer
         }
 
         [KRPCProcedure]
-        [KRPCDefaultValue ("x", typeof(CreateDictionaryDefault))]
-        public static IDictionary<int,bool> DictionaryDefault (IDictionary<int,bool> x)
+        public static IDictionary<int,bool> DictionaryDefault (
+            [KRPCDefaultValue (typeof(CreateDictionaryDefault))] IDictionary<int,bool> x)
         {
             return x;
         }

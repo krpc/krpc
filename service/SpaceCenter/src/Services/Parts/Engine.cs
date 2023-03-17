@@ -354,7 +354,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             {
                 UpdateConnectedResources();
                 foreach (var propellant in CurrentEngine.propellants)
-                    if (propellant.actualTotalAvailable < 0.001)
+                    if (propellant.actualTotalAvailable < 0.02)
                         return false;
                 return true;
             }
@@ -364,11 +364,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The current throttle setting for the engine. A value between 0 and 1.
         /// This is not necessarily the same as the vessel's main throttle
         /// setting, as some engines take time to adjust their throttle
-        /// (such as jet engines).
+        /// (such as jet engines), or independent throttle may be enabled.
+        ///
+        /// When the engine's independent throttle is enabled
+        /// (see <see cref="IndependentThrottle"/>), can be used to set the throttle percentage.
         /// </summary>
         [KRPCProperty]
         public float Throttle {
             get { return CurrentEngine.currentThrottle; }
+            set { CurrentEngine.independentThrottlePercentage = value * 100; }
         }
 
         /// <summary>
@@ -379,6 +383,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool ThrottleLocked {
             get { return CurrentEngine.throttleLocked; }
+        }
+
+        /// <summary>
+        /// Whether the independent throttle is enabled for the engine.
+        /// </summary>
+        [KRPCProperty]
+        public bool IndependentThrottle {
+            get { return CurrentEngine.independentThrottle; }
+            set { CurrentEngine.independentThrottle = value; }
         }
 
         /// <summary>

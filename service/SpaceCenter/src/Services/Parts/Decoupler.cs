@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using KRPC.Continuations;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -85,7 +85,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             // FIXME: sometimes after decoupling, KSP changes it's mind as to what the active vessel is, so we wait for 10 frames before getting the active vessel
             // Wait while the decoupler hasn't fired
             if (wait < 10 || !Decoupled)
-                throw new YieldException (new ParameterizedContinuation<Vessel, IList<Guid>, int> (PostDecouple, preVesselIds, wait + 1));
+                throw new YieldException<Func<Vessel>> (() => PostDecouple(preVesselIds, wait + 1));
             // Return the newly created vessel
             return new Vessel (FlightGlobals.Vessels.Select (v => v.id).Except (preVesselIds).Single ());
         }

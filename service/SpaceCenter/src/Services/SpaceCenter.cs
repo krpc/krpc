@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -81,7 +80,7 @@ namespace KRPC.SpaceCenter.Services
                 if (ReferenceEquals (value, null))
                     throw new ArgumentNullException ("ActiveVessel");
                 FlightGlobals.ForceSetActiveVessel (value.InternalVessel);
-                throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+                throw new YieldException<Action> (() => WaitForVesselSwitch(0));
             }
         }
 
@@ -91,9 +90,9 @@ namespace KRPC.SpaceCenter.Services
         static void WaitForVesselSwitch (int tick)
         {
             if (FlightGlobals.ActiveVessel == null || FlightGlobals.ActiveVessel.packed)
-                throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+                throw new YieldException<Action> (() => WaitForVesselSwitch(0));
             if (tick < 25)
-                throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, tick + 1));
+                throw new YieldException<Action> (() => WaitForVesselSwitch(tick + 1));
         }
 
         /// <summary>
@@ -266,10 +265,11 @@ namespace KRPC.SpaceCenter.Services
                 if (template == null)
                     throw new InvalidOperationException("Failed to load template for vessel");
                 manifest = VesselCrewManifest.FromConfigNode(template.config);
-                if (crew.Count == 0) {
+                if (manifest == null)
+                    throw new InvalidOperationException("Failed to load manifest from vessel template");
+                if (crew == null || crew.Count == 0) {
                     manifest = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel(template.config, manifest, true, false);
-                }
-                else {
+                } else {
                     var crewRoster = new KerbalRoster(HighLogic.CurrentGame.Mode);
                     foreach (var crewName in crew) {
                         var kerbal = GetKerbal(crewName);
@@ -278,8 +278,9 @@ namespace KRPC.SpaceCenter.Services
                         }
                     }
                     manifest = crewRoster.DefaultCrewForVessel(template.config, manifest, true, false);
-                    if (manifest.CrewCount < crewRoster.Count)
-                    {
+                    if (manifest == null)
+                        throw new InvalidOperationException("Failed to load manifest");
+                    if (manifest.CrewCount < crewRoster.Count) {
                         foreach (var crewMember in crewRoster.Crew) {
                             if (!manifest.Contains(crewMember)) {
                                 if (!AddCrewToManifest(manifest, crewMember)) {
@@ -289,6 +290,8 @@ namespace KRPC.SpaceCenter.Services
                         }
                     }
                 }
+                if (manifest == null)
+                    throw new InvalidOperationException("Failed to load manifest");
 
                 facility = (craftDirectory == "SPH") ? SpaceCenterFacility.SpaceplaneHangar : SpaceCenterFacility.VehicleAssemblyBuilding;
                 facilityLevel = ScenarioUpgradeableFacilities.GetFacilityLevel(facility);
@@ -363,12 +366,15 @@ namespace KRPC.SpaceCenter.Services
         /// </remarks>
         [KRPCProcedure]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
-        public static void LaunchVessel (string craftDirectory, string name, string launchSite, bool recover = true, IList<string> crew = null, string flagUrl = null)
+        [SuppressMessage ("Gendarme.Rules.Performance", "UseStringEmptyRule")]
+        public static void LaunchVessel (
+            string craftDirectory, string name, string launchSite, bool recover = true,
+            [KRPCNullable] IList<string> crew = null, string flagUrl = "")
         {
             CloseDialogs();
             var config = new LaunchConfig(craftDirectory, name, launchSite, recover, crew, flagUrl);
             config.RunPreFlightChecks();
-            throw new YieldException (new ParameterizedContinuationVoid<LaunchConfig> (WaitForVesselPreFlightChecks, config));
+            throw new YieldException<Action> (() => WaitForVesselPreFlightChecks(config));
         }
 
         /// <summary>
@@ -380,7 +386,7 @@ namespace KRPC.SpaceCenter.Services
             if (config.error != null)
                 throw new InvalidOperationException(config.error);
             if (!config.preFlightChecksComplete)
-                throw new YieldException(new ParameterizedContinuationVoid<LaunchConfig>(WaitForVesselPreFlightChecks, config));
+                throw new YieldException<Action>(() => WaitForVesselPreFlightChecks(config));
             // Check launch site clear
             var vesselsToRecover = ShipConstruction.FindVesselsLandedAt(HighLogic.CurrentGame.flightState, config.LaunchSite);
             if (vesselsToRecover.Any()) {
@@ -392,7 +398,7 @@ namespace KRPC.SpaceCenter.Services
             }
             // Do the actual launch - passed pre-flight checks, and launch site is clear.
             FlightDriver.StartWithNewLaunch(config.Path, config.FlagUrl, config.LaunchSite, config.manifest);
-            throw new YieldException(new ParameterizedContinuationVoid<int>(WaitForVesselSwitch, 0));
+            throw new YieldException<Action>(() => WaitForVesselSwitch(0));
         }
 
         /// <summary>
@@ -407,6 +413,7 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Performance", "UseStringEmptyRule")]
         public static void LaunchVesselFromVAB (string name, bool recover = true)
         {
             LaunchVessel ("VAB", name, "LaunchPad", recover);
@@ -424,6 +431,7 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Performance", "UseStringEmptyRule")]
         public static void LaunchVesselFromSPH (string name, bool recover = true)
         {
             LaunchVessel ("SPH", name, "Runway", recover);
@@ -453,7 +461,7 @@ namespace KRPC.SpaceCenter.Services
             if (game == null || game.flightState == null || !game.compatible)
                 throw new ArgumentException ("Failed to load " + name);
             FlightDriver.StartAndFocusVessel (game, game.flightState.activeVesselIdx);
-            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+            throw new YieldException<Action> (() => WaitForVesselSwitch(0));
         }
 
         /// <summary>
@@ -513,7 +521,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Tranfsers a crew member to a different part.
+        /// Transfers a crew member to a different part.
         /// </summary>
         /// <param name="crewMember">The crew member to transfer.</param>
         /// <param name="targetPart">The part to move them to.</param>
@@ -729,7 +737,7 @@ namespace KRPC.SpaceCenter.Services
                 PhysicsWarpAtRate (Mathf.Min (rate, Math.Min (maxRailsRate, maxPhysicsRate)));
 
             if (Planetarium.GetUniversalTime () < ut)
-                throw new YieldException (new ParameterizedContinuationVoid<double,float,float> (WarpTo, ut, maxRailsRate, maxPhysicsRate));
+                throw new YieldException<Action> (() => WarpTo(ut, maxRailsRate, maxPhysicsRate));
             if (TimeWarp.CurrentRateIndex > 0)
                 SetWarpFactor (TimeWarp.Modes.HIGH, 0);
         }
@@ -1002,7 +1010,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Switch to the spacecenter view.
+        /// Switch to the space center view.
         /// </summary>
         [KRPCProcedure]
         public static void LoadSpaceCenter()

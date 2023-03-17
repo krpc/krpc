@@ -55,7 +55,7 @@ namespace KRPC.Test.Service
         public void FromMethodInfo ()
         {
             var method = typeof(ProcedureParameterTest).GetMethod ("MethodWithArg");
-            var parameter = new ProcedureParameter (method, method.GetParameters () [0]);
+            var parameter = new ProcedureParameter (method.GetParameters () [0]);
             Assert.AreEqual ("x", parameter.Name);
             Assert.AreEqual (typeof(int), parameter.Type);
             Assert.IsFalse (parameter.HasDefaultValue);
@@ -65,7 +65,7 @@ namespace KRPC.Test.Service
         public void FromMethodDefaultArgument ()
         {
             var method = typeof(ProcedureParameterTest).GetMethod ("MethodWithDefaultArg");
-            var parameter = new ProcedureParameter (method, method.GetParameters () [0]);
+            var parameter = new ProcedureParameter (method.GetParameters () [0]);
             Assert.AreEqual ("x", parameter.Name);
             Assert.AreEqual (typeof(string), parameter.Type);
             Assert.IsTrue (parameter.HasDefaultValue);
@@ -76,7 +76,7 @@ namespace KRPC.Test.Service
         public void FromMethodDefaultNullArgument ()
         {
             var method = typeof(ProcedureParameterTest).GetMethod ("MethodWithDefaultNullArg");
-            var parameter = new ProcedureParameter (method, method.GetParameters () [0]);
+            var parameter = new ProcedureParameter (method.GetParameters () [0]);
             Assert.AreEqual ("x", parameter.Name);
             Assert.AreEqual (typeof(string), parameter.Type);
             Assert.IsTrue (parameter.HasDefaultValue);

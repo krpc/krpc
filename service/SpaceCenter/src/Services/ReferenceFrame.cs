@@ -362,11 +362,12 @@ namespace KRPC.SpaceCenter.Services
         /// and its magnitude is the speed of the rotation in radians per second.
         /// Defaults to <math>(0, 0, 0)</math>.</param>
         [KRPCMethod]
-        [KRPCDefaultValue ("position", typeof(VectorZero))]
-        [KRPCDefaultValue ("rotation", typeof(QuaternionIdentity))]
-        [KRPCDefaultValue ("velocity", typeof(VectorZero))]
-        [KRPCDefaultValue ("angularVelocity", typeof(VectorZero))]
-        public static ReferenceFrame CreateRelative (ReferenceFrame referenceFrame, Tuple3 position, Tuple4 rotation, Tuple3 velocity, Tuple3 angularVelocity)
+        public static ReferenceFrame CreateRelative (
+            ReferenceFrame referenceFrame,
+            [KRPCDefaultValue(typeof(VectorZero))] Tuple3 position,
+            [KRPCDefaultValue(typeof(QuaternionIdentity))] Tuple4 rotation,
+            [KRPCDefaultValue(typeof(VectorZero))] Tuple3 velocity,
+            [KRPCDefaultValue(typeof(VectorZero))] Tuple3 angularVelocity)
         {
             return new ReferenceFrame (referenceFrame, position.ToVector (), rotation.ToQuaternion (), velocity.ToVector (), angularVelocity.ToVector ());
         }

@@ -3,7 +3,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using KRPC.Continuations;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using UnityEngine;
 
@@ -38,7 +38,7 @@ namespace TestingTools
             if (game == null || game.flightState == null || !game.compatible)
                 throw new ArgumentException ("Failed to load save '" + name + "'");
             FlightDriver.StartAndFocusVessel (game, game.flightState.activeVesselIdx);
-            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+            throw new YieldException<Action> (() => WaitForVesselSwitch(0));
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace TestingTools
             var celestialBody = FlightGlobals.Bodies.First (b => b.bodyName == body);
             var semiMajorAxis = celestialBody.Radius + altitude;
             FlightGlobals.ActiveVessel.SetOrbit(OrbitTools.CreateOrbit(celestialBody, semiMajorAxis, 0, 0, 0, 0, 0, 0));
-            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+            throw new YieldException<Action> (() => WaitForVesselSwitch(0));
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace TestingTools
         {
             var celestialBody = FlightGlobals.Bodies.First (b => b.bodyName == body);
             FlightGlobals.ActiveVessel.SetOrbit(OrbitTools.CreateOrbit(celestialBody, semiMajorAxis, eccentricity, inclination, longitudeOfAscendingNode, argumentOfPeriapsis, meanAnomalyAtEpoch, epoch));
-            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+            throw new YieldException<Action> (() => WaitForVesselSwitch(0));
         }
 
         static Quaternion ZeroRotation {
@@ -121,9 +121,9 @@ namespace TestingTools
         static void WaitForVesselSwitch (int tick)
         {
             if (FlightGlobals.ActiveVessel.packed)
-                throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+                throw new YieldException<Action> (() => WaitForVesselSwitch(0));
             if (tick < 10)
-                throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, tick + 1));
+                throw new YieldException<Action> (() => WaitForVesselSwitch(tick + 1));
         }
     }
 }

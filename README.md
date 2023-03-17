@@ -11,9 +11,11 @@ the game, and comes with client libraries for many popular languages.
 
 ## Contributing
 
-Contributions to kRPC are very welcome. [Please refer to this guide.](CONTRIBUTING.md)
+Contributions to kRPC are very welcome. [Please refer to this guide.](Contributing.md)
 
 ## Links for Developers
 
+ * [Development Guide](Development-Guide.md) for information on the project structure, compiling the code and the various tools.
+ * [Release guide](Release-Guide.md) for project maintainers to do releases.
+ * See the #devchat channels on Discord for informal dev discussions
  * [Forum development thread](https://forum.kerbalspaceprogram.com/index.php?/topic/62902-14113x122-krpc-remote-procedure-call-server-v045-17th-march-2018/)
- * [Release guide](Release-Guide.md)

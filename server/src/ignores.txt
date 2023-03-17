@@ -27,7 +27,6 @@ T: KRPC.UI.MainWindow
 
 R: Gendarme.Rules.Naming.UseCorrectCasingRule
 N: KRPC
-N: KRPC.Continuations
 N: KRPC.Server
 N: KRPC.Server.HTTP
 N: KRPC.Server.Message
@@ -151,7 +150,6 @@ T: KRPC.Service.Scanner.ExceptionSignature
 T: KRPC.Service.Scanner.ParameterSignature
 T: KRPC.Service.Scanner.ProcedureSignature
 T: KRPC.Service.Scanner.ServiceSignature
-T: KRPC.Continuations.YieldException
 R: Gendarme.Rules.Serialization.ImplementISerializableCorrectlyRule
 T: KRPC.Service.Scanner.ClassSignature
 T: KRPC.Service.Scanner.EnumerationSignature
@@ -160,7 +158,6 @@ T: KRPC.Service.Scanner.ExceptionSignature
 T: KRPC.Service.Scanner.ParameterSignature
 T: KRPC.Service.Scanner.ProcedureSignature
 T: KRPC.Service.Scanner.ServiceSignature
-T: KRPC.Continuations.YieldException
 R: Gendarme.Rules.Serialization.MissingSerializationConstructorRule
 T: KRPC.Service.KRPC.ArgumentException
 T: KRPC.Service.KRPC.ArgumentNullException
@@ -173,7 +170,6 @@ T: KRPC.Service.Scanner.ExceptionSignature
 T: KRPC.Service.Scanner.ParameterSignature
 T: KRPC.Service.Scanner.ProcedureSignature
 T: KRPC.Service.Scanner.ServiceSignature
-T: KRPC.Continuations.YieldException
 R: Gendarme.Rules.Exceptions.MissingExceptionConstructorsRule
 T: KRPC.Service.Scanner.ClassSignature
 T: KRPC.Service.Scanner.EnumerationSignature
@@ -181,7 +177,6 @@ T: KRPC.Service.Scanner.EnumerationValueSignature
 T: KRPC.Service.Scanner.ParameterSignature
 T: KRPC.Service.Scanner.ProcedureSignature
 T: KRPC.Service.Scanner.ServiceSignature
-T: KRPC.Continuations.YieldException
 
 # Compatibility checker
 R: Gendarme.Rules.Concurrency.WriteStaticFieldFromInstanceMethodRule

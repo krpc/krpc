@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -91,7 +90,7 @@ namespace KRPC.SpaceCenter.Services
         public void Wait ()
         {
             if (Error > 0.75f || InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > 0.05f)
-                throw new YieldException (new ParameterizedContinuationVoid (Wait));
+                throw new YieldException<Action> (Wait);
         }
 
         /// <summary>

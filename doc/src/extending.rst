@@ -419,21 +419,20 @@ to add functionality to the kRPC server.
    * The class must either be declared inside a :csharp:attr:`KRPCService`, or have it's ``Service``
      parameter set to the name of the service it is part of.
 
-.. csharp:attribute:: KRPCDefaultValue (string Name, Type ValueConstructor)
+.. csharp:attribute:: KRPCDefaultValue (Type ValueConstructor)
 
    :parameters:
 
-    * **Name** -- Name of the parameter to set the default value for.
-    * **ValueConstructor** -- Type of a static class with a Create method that returns an instance
-      of the default value.
+    * **ValueConstructor** -- Type of a static class with a ``Create`` method that returns an
+      instance of the default value.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ can be applied to a
-   kRPC method or procedure. It provides a workaround to set the default value of a parameter to a
-   non-compile time constant.  Ordinarily, C# only allows compile time constants to be used as the
-   values of default arguments.
+   kRPC procedure/class method parameter. It provides a workaround to set the default value of a
+   parameter to a non-compile time constant. Ordinarily, C# only allows compile time constants
+   to be used as the values of default arguments.
 
-   The ValueConstructor parameter is the type of a static class that contains a static method,
-   called Create. When invoke, this method should return the default value.
+   The ``ValueConstructor`` parameter is the type of a static class that contains a static method,
+   called ``Create``. When invoked, this method should return the default value.
 
    Note: If you just want to set the default value to a compile time constant, use the C#
    syntax. kRPC will detect the default values and use them.
@@ -444,7 +443,6 @@ to add functionality to the kRPC server.
 
      .. code-block:: csharp
 
-
         public static class DefaultKerbals
         {
             public static IList<string> Create ()
@@ -454,14 +452,14 @@ to add functionality to the kRPC server.
         }
 
         [KRPCProcedure]
-        [KRPCDefaultValue ("names", typeof(DefaultKerbals))]
-        public static void HireKerbals (IList<string> names)
+        public static void HireKerbals (
+            [KRPCDefaultValue (typeof(DefaultKerbals))] IList<string> names)
         {
             ...
         }
 
-   * Set the default value to a compile time constant, which does not require the KRPCDefaultValue
-     attribute:
+   * Set the default value to a compile time constant, which does not require the
+     ``KRPCDefaultValue`` attribute:
 
      .. code-block:: csharp
 
@@ -470,6 +468,31 @@ to add functionality to the kRPC server.
         {
             ...
         }
+
+.. csharp:attribute:: KRPCNullable
+
+   This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ can be applied to a
+   kRPC procedure/class method parameter that has a class type. It indicates that the parameter
+   is permitted to be ``null``. Without this attribute, a client can assume that the parameter
+   should never be null.
+
+   Note: the server does not check if a value passed to an RPC is ``null``. This needs to be
+   explicitly checked in the RPC's code (if desired) and an appropriate exception thrown.
+   This attribute is only used as a hint to the client that the parameter is nullable.
+
+   **Example**
+
+   .. code-block:: csharp
+
+      [KRPCService]
+      public static class EVA {
+          [KRPCProcedure]
+          public static void DestroyVessel ([KRPCNullable] Vessel vessel)
+          {
+              // don't do anything if vessel is null
+              ...
+          }
+      }
 
 .. _service-api-identifiers:
 

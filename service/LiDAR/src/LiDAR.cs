@@ -8,7 +8,7 @@ using KRPC.Utils;
 namespace KRPC.LiDAR
 {
     /// <summary>
-    /// LaserDist Service
+    /// LaserDist service.
     /// </summary>
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
     [KRPCService(Id = 10, GameScene = GameScene.All)]
@@ -21,7 +21,7 @@ namespace KRPC.LiDAR
         }
 
         /// <summary>
-        /// Check if the LaserDist API is avaiable
+        /// Check if the LaserDist API is available.
         /// </summary>
         [KRPCProperty]
         public static bool Available
@@ -30,7 +30,7 @@ namespace KRPC.LiDAR
         }
 
         /// <summary>
-        /// Get a LaserDist part
+        /// Get a LaserDist part.
         /// </summary>
         [KRPCProcedure]
         public static Laser Laser(SpaceCenter.Services.Parts.Part part)

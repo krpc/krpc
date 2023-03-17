@@ -1,3 +1,4 @@
+Aeris
 Arduino
 Autotools
 Bazel
@@ -12,7 +13,9 @@ Jeb
 Kerbal
 Kerbals
 Kerbin
+Konstructs
 Kosmo
+Landers
 LaunchPad
 ModuleEngines
 MyGroup
@@ -27,6 +30,7 @@ autotune
 badass
 biome
 biomes
+bitwise
 bool
 boolean
 circularization
@@ -50,6 +54,7 @@ erm
 focussed
 framerate
 fuelled
+genfiles
 getter
 gimbal
 gimballed
@@ -90,6 +95,7 @@ normangle
 nozzel
 nozzels
 ns
+nullable
 online
 overdamped
 pdflatex
