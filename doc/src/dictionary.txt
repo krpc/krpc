@@ -117,6 +117,7 @@ rect
 rethrow
 rsvg
 runtime
+serialio
 serializable
 shader
 socat

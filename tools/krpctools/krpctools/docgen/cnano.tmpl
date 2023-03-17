@@ -41,9 +41,7 @@ Service {{ x.name }}
 {{ parameters_description(x.parameters) }}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
-{% if x.game_scenes != None %}
    {{ game_scenes(x.game_scenes) }}
-{% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -64,9 +62,7 @@ Service {{ x.name }}
 
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
-{% if x.game_scenes != None %}
    {{ game_scenes(x.game_scenes) }}
-{% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -83,9 +79,7 @@ Service {{ x.name }}
 {{ parameters_description(x.parameters[1:]) }}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
-{% if x.game_scenes != None %}
    {{ game_scenes(x.game_scenes) }}
-{% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -102,9 +96,7 @@ Service {{ x.name }}
 {{ parameters_description(x.parameters) }}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
-{% if x.game_scenes != None %}
    {{ game_scenes(x.game_scenes) }}
-{% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -169,5 +161,7 @@ krpc_connection_t connection{% if domain.return_type(return_type) != 'void' %}, 
 {% endmacro %}
 
 {% macro game_scenes(x) %}
+{% if x != None and x != 'All' %}
 :Game Scenes: {{ x }}
+{% endif %}
 {% endmacro %}

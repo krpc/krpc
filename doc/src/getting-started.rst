@@ -41,7 +41,7 @@ Configuration
 The server is configured by clicking edit on the window displayed in-game:
 
 1. **Protocol**: this is the protocol used by the server. This affects type of client can connect to
-   the server. For Python, and most other clients that communicate over TCP/IP you want to select
+   the server. For Python, and most other clients that communicate over TCP/IP, you want to select
    "Protobuf over TCP".
 2. **Address**: this is the IP address that the server will listen on. To only allow connections
    from the local machine, select 'localhost' (the default). To allow connections over a network,
@@ -63,8 +63,6 @@ The other advanced settings control the :ref:`performance of the server
 The Python Client
 -----------------
 
-.. note:: kRPC supports both Python 2.7 and Python 3.x.
-
 On Windows
 ^^^^^^^^^^
 
@@ -73,7 +71,7 @@ On Windows
    installed as well.
 
 2. Install the kRPC python module, by opening command prompt and running the following command:
-   ``C:\Python27\Scripts\pip.exe install krpc`` You might need to replace ``C:\Python27`` with the
+   ``C:\Python310\Scripts\pip.exe install krpc`` You might need to replace ``C:\Python310`` with the
    location of your python installation.
 
 3. Run Python IDLE (or your favorite editor) and start coding!
@@ -88,7 +86,7 @@ On Linux
    https://pypi.python.org/pypi/pip
 
 3. Install the kRPC python module by running the following from a terminal:
-   ``sudo pip install krpc``
+   ``pip install krpc``
 
 4. Start coding!
 
@@ -119,7 +117,8 @@ Going further...
 
  * For some more interesting examples of what you can do with kRPC, check out the
    :doc:`tutorials <tutorials>`.
- * Client libraries are available for other languages too, including :doc:`C# <csharp>`,
-   :doc:`C++ <cpp>`, :doc:`Java <java>` and :doc:`Lua <lua>`.
+ * Client libraries are available for other languages too, including :doc:`C# <csharp/client>`,
+   :doc:`C++ <cpp/client>`, :doc:`C <cnano/client>`, :doc:`Java <java/client>` and
+   :doc:`Lua <lua/client>`.
  * It is also possible to :doc:`communicate with the server manually <communication-protocols>` from
    any language you like.

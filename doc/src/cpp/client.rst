@@ -25,7 +25,7 @@ is sufficient. On Ubuntu, this can be done using apt:
 
 Alternatively it can be downloaded `from the ASIO website <http://think-async.com/Asio/Download>`_.
 
-Protobuf version 3 is also required, and can be `downloaded from GitHub
+Protobuf is also required, and can be `downloaded from GitHub
 <https://github.com/google/protobuf/releases>`_. Installation instructions `can be found here
 <https://github.com/google/protobuf/blob/master/src/README.md>`_.
 

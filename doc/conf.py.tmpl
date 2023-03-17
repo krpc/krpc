@@ -25,9 +25,7 @@ html_theme = 'sphinx_rtd_theme'
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 htmlhelp_basename = 'krpc-doc'
 html_static_path = ['crafts', 'scripts', '_static']
-
-def setup(app):
-    app.add_css_file('custom.css')
+html_css_files = ['custom.css']
 
 todo_include_todos = True
 

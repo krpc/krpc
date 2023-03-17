@@ -442,6 +442,7 @@ namespace KRPC.SpaceCenter.Services
         /// This will create a save file called <c>name.sfs</c> in the folder of the
         /// current save game.
         /// </summary>
+        /// <param name="name">Name of the save.</param>
         [KRPCProcedure]
         public static void Save (string name)
         {
@@ -453,6 +454,7 @@ namespace KRPC.SpaceCenter.Services
         /// This will create a load a save file called <c>name.sfs</c> from the folder of the
         /// current save game.
         /// </summary>
+        /// <param name="name">Name of the save.</param>
         [KRPCProcedure]
         public static void Load (string name)
         {

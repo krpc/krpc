@@ -14,8 +14,7 @@ Using the Library
 The kRPC client library depends on the `protobuf
 <https://github.com/google/protobuf/tree/master/java>`_ and `javatuples
 <http://www.javatuples.org>`_ libraries. A prebuilt jar for protobuf is available via `Maven
-<http://search.maven.org/#search|ga|1|g%3A%22com.google.protobuf%22%20a%3A%22protobuf-java%22>`_. Note
-that you need protobuf version 3. Version 2 is not compatible with kRPC.
+<http://search.maven.org/#search|ga|1|g%3A%22com.google.protobuf%22%20a%3A%22protobuf-java%22>`_.
 
 The following example program connects to the server, queries it for its version and prints it out:
 
@@ -26,9 +25,9 @@ the following:
 
 .. code-block:: bash
 
-   javac -cp krpc-java-0.4.0.jar:protobuf-java-3.4.0.jar:javatuples-1.2.jar Example.java
+   javac -cp krpc-java-0.5.2.jar:protobuf-java-3.4.0.jar:javatuples-1.2.jar Example.java
 
-You may need to change the paths to the JAR files.
+Note that you may need to change the paths to the JAR files.
 
 Connecting to the Server
 ------------------------
