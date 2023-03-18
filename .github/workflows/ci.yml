@@ -270,7 +270,7 @@ jobs:
       - name: upload-artifact
         uses: ./.github/actions/upload-artifact
         with:
-          name: client-csharp-nuget
+          name: client-csharp
           path: bazel-bin/client/csharp/KRPC.Client.*.nupkg
 
   test-client-java:
