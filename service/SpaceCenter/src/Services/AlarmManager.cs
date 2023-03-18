@@ -70,7 +70,7 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="title">Title for the alarm.</param>
         /// <param name="description">Description for the alarm.</param>
         [KRPCMethod]
-        public static Alarm AddAlarm(double time, string title="Raw Alarm", string description = "")
+        public static Alarm AddAlarm(double time, string title="Alarm", string description = "")
         {
             var alarm = AddRawAlarm(time, title, description);
             AlarmClockScenario.AddAlarm(alarm);
@@ -85,7 +85,7 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="title">Title for the alarm.</param>
         /// <param name="description">Description for the alarm.</param>
         [KRPCMethod]
-        public static Alarm AddVesselAlarm(double time, Vessel vessel, string title="Raw Alarm", string description="")
+        public static Alarm AddVesselAlarm(double time, Vessel vessel, string title="Vessel Alarm", string description="")
         {
             if (ReferenceEquals (vessel, null))
                 throw new ArgumentNullException (nameof (vessel));
@@ -104,7 +104,7 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="title">Title for the alarm.</param>
         /// <param name="description">Description for the alarm.</param>
         [KRPCMethod]
-        public static Alarm AddApoapsisAlarm(Vessel vessel, double offset = 60, string title="APA Alarm", string description="")
+        public static Alarm AddApoapsisAlarm(Vessel vessel, double offset = 60, string title="Apoapsis Alarm", string description="")
         {
             if (ReferenceEquals (vessel, null))
                 throw new ArgumentNullException (nameof (vessel));
@@ -132,7 +132,7 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="title">Title for the alarm.</param>
         /// <param name="description">Description for the alarm.</param>
         [KRPCMethod]
-        public static Alarm AddPeriapsisAlarm(Vessel vessel, double offset = 60, string title="PEA Alarm", string description = "")
+        public static Alarm AddPeriapsisAlarm(Vessel vessel, double offset = 60, string title="Periapsis Alarm", string description = "")
         {
             if (ReferenceEquals (vessel, null))
                 throw new ArgumentNullException (nameof (vessel));
@@ -163,7 +163,7 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="description">Description for the alarm.</param>
         [KRPCMethod]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
-        public static Alarm AddManeuverNodeAlarm(Vessel vessel, Node node, double offset = 60, bool addBurnTime = true, string title="Maneuver Alarm", string description="" )
+        public static Alarm AddManeuverNodeAlarm(Vessel vessel, Node node, double offset = 60, bool addBurnTime = true, string title="Maneuver Node Alarm", string description="" )
         {
             if (ReferenceEquals (vessel, null))
                 throw new ArgumentNullException (nameof (vessel));
@@ -196,7 +196,7 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="title">Title for the alarm.</param>
         /// <param name="description">Description for the alarm.</param>
         [KRPCMethod]
-        public static Alarm AddSOIAlarm(Vessel vessel, double offset = 60, string title="SOI Change", string description="" )
+        public static Alarm AddSOIAlarm(Vessel vessel, double offset = 60, string title="SOI Change Alarm", string description="" )
         {
             if (ReferenceEquals (vessel, null))
                 throw new ArgumentNullException (nameof (vessel));
@@ -221,7 +221,7 @@ namespace KRPC.SpaceCenter.Services
         // /// Create an alarm for the given vessel's next transfer window.
         // /// </summary>
         // [KRPCMethod]
-        // public Alarm AddTransferWindowAlarm(Vessel vessel, CelestialBody Target, string title="Transfer Window", string description="")
+        // public Alarm AddTransferWindowAlarm(Vessel vessel, CelestialBody Target, string title="Transfer Window Alarm", string description="")
         // {
         //     AlarmTypeTransferWindow alarm = new AlarmTypeTransferWindow
         //     {
