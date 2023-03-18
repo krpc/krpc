@@ -1,5 +1,4 @@
-Release guide for kRPC
-======================
+# Release guide for kRPC
 
 This document details the steps necessary to make a release of kRPC.
 

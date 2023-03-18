@@ -40,31 +40,21 @@ def main():
 
     if args.site == 'github':
         print(''.join(open('tools/dist/github-changes.tmpl', 'r').readlines()).replace('%VERSION%', args.version))
-        print('### Changes ###\n')
+        print('### Changes\n')
     if args.site == 'github':
         for name,items in changelist:
-            print('#### '+ name + ' ####\n')
+            print('#### '+ name + '\n')
             for item in items:
                 print('* ' + item)
             print('')
-    elif args.site == 'spacedock':
+    else: # spacedock or curse
         for name,items in changelist:
-            print('#### '+ name + ' ####\n')
+            print('#### '+ name + '\n')
             for item in items:
                 pattern = re.compile(r'#([0-9]+)')
                 item = pattern.sub(r'[#\1](https://github.com/krpc/krpc/issues/\1)', item)
                 print('* ' + item)
             print('')
-    else: # curse
-        print('<ul>')
-        for name,items in changelist:
-            print('<li>'+name+'<ul>')
-            for item in items:
-                pattern = re.compile(r'#([0-9]+)')
-                item = pattern.sub(r'<a href="https://github.com/krpc/krpc/issues/\1">#\1</a>', item)
-                print('<li>'+item+'</li>')
-            print('</ul></li>')
-        print('</ul>')
 
 def get_changes(path):
     changes = {}
