@@ -40,16 +40,16 @@ def main():
 
     if args.site == 'github':
         print(''.join(open('tools/dist/github-changes.tmpl', 'r').readlines()).replace('%VERSION%', args.version))
-        print('### Changes ###\n')
+        print('### Changes\n')
     if args.site == 'github':
         for name,items in changelist:
-            print('#### '+ name + ' ####\n')
+            print('#### '+ name + '\n')
             for item in items:
                 print('* ' + item)
             print('')
     else: # spacedock or curse
         for name,items in changelist:
-            print('#### '+ name + ' ####\n')
+            print('#### '+ name + '\n')
             for item in items:
                 pattern = re.compile(r'#([0-9]+)')
                 item = pattern.sub(r'[#\1](https://github.com/krpc/krpc/issues/\1)', item)
