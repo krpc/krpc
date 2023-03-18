@@ -30,7 +30,7 @@ pkg_zip(
     name = 'archive',
     out = 'TestServer-%s.zip' % version,
     files = [
-        ':README.txt',
+        ':README.md',
         ':TestServer',
         '//:version',
         '//tools/build/protobuf:LICENSE'
