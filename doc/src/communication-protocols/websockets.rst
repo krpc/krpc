@@ -1,7 +1,7 @@
 Protocol Buffers over WebSockets
 ================================
 
-This communication protocol allows web browsers to communicate with a kRPC over a websockets
+This communication protocol allows web browsers to communicate with kRPC over a websockets
 connection, for example from Javascript in a web browser.
 
 .. note:: If a client library is available for your language, you do not need to implement this
