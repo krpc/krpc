@@ -383,14 +383,16 @@ Details about a procedure are given by a ``Procedure`` message, with the format:
      string name = 1;
      repeated Parameter parameters = 2;
      Type return_type = 3;
-     repeated GameScene game_scenes = 5;
-     string documentation = 4;
+     bool return_is_nullable = 4;
+     repeated GameScene game_scenes = 6;
+     string documentation = 5;
    }
 
    message Parameter {
      string name = 1;
      Type type = 2;
      bytes default_value = 3;
+     bool nullable = 4;
    }
 
 The fields are:
@@ -408,8 +410,12 @@ The fields are:
    * ``default_value`` - The value of the default value of the parameter, if any, :ref:`encoded
      using Protocol Buffer format <communication-protocol-protobuf-encoding>`.
 
+   * ``nullable`` - If the parameter has a class type, indicates whether null can be passed.
+
 * ``return_type`` - The :ref:`return type <communication-protocol-type>` of the procedure. If the
   procedure does not return anything its type is set to ``NONE``.
+
+* ``return_is_nullable`` - If the return type is a class type, indicates whether null could returned.
 
 * ``game_scenes`` - The :ref:`game scenes <communication-protocol-game-scene>` that the procedure is
   available in. If this repeated field is empty, the procedure is available in all game scenes.
