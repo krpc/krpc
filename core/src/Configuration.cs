@@ -27,7 +27,7 @@ namespace KRPC
             }
         }
 
-        public Configuration ()
+        internal Configuration ()
         {
             MainWindowVisible = true;
             MainWindowPosition = new Tuple<float,float,float,float> (0, 0, 0, 0);
@@ -130,7 +130,7 @@ namespace KRPC
             }
         }
 
-        readonly List<Server> servers = new List<Server> ();
+        private readonly List<Server> servers = new List<Server> ();
 
         /// <summary>
         /// Configuration for all of the servers
