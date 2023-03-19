@@ -36,6 +36,10 @@
       <Project>{48205F2E-3CEE-4480-873A-DEAFCD291407}</Project>
       <Name>KRPC.SpaceCenter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\core\src\KRPC.Core.csproj">
+      <Project>{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}</Project>
+      <Name>KRPC.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\UI\src\KRPC.UI.csproj">
       <Project>{AB9F4881-4C8E-4E54-8412-B3FB92861CE9}</Project>
       <Name>KRPC.UI</Name>

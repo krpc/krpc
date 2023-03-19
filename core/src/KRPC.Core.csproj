@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3707639F-5EA3-461B-B939-587E51A25CCA}</ProjectGuid>
+    <ProjectGuid>{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>KRPC</RootNamespace>
-    <AssemblyName>KRPC</AssemblyName>
+    <AssemblyName>KRPC.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <NoStdLib>true</NoStdLib>
     <DebugType>full</DebugType>
@@ -93,22 +93,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\bazel-bin\server\AssemblyInfo.cs">
+    <Compile Include="..\..\bazel-bin\core\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="..\..\bazel-bin/protobuf/KRPC_unity.cs">
       <Link>KRPC.cs</Link>
     </Compile>
-    <Compile Include="Addon.cs" />
-    <Compile Include="Compatibility.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="ConfigurationFile.cs" />
-    <Compile Include="Continuations\Continuation.cs" />
-    <Compile Include="Continuations\IContinuation.cs" />
-    <Compile Include="Continuations\ParameterizedContinuation.cs" />
-    <Compile Include="Continuations\YieldException.cs" />
     <Compile Include="Core.cs" />
-    <Compile Include="Properties\AssemblyKSPVersion.cs" />
     <Compile Include="Server\ByteOutputAdapterStream.cs" />
     <Compile Include="Server\ClientActivityEventArgs.cs" />
     <Compile Include="Server\ClientConnectedEventArgs.cs" />
@@ -175,6 +167,7 @@
     <Compile Include="Service\Attributes\KRPCEnumAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCExceptionAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCMethodAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCNullableAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCProcedureAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCPropertyAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCServiceAttribute.cs" />
@@ -236,33 +229,15 @@
     <Compile Include="Service\StreamContinuation.cs" />
     <Compile Include="Service\TypeUtils.cs" />
     <Compile Include="Service\ValueUtils.cs" />
-    <Compile Include="ServicesChecker.cs" />
-    <Compile Include="UI\ClientConnectingDialog.cs" />
-    <Compile Include="UI\ClientDisconnectDialog.cs" />
-    <Compile Include="UI\EditServer.cs" />
-    <Compile Include="UI\GUILayoutExtensions.cs" />
-    <Compile Include="UI\Icons.cs" />
-    <Compile Include="UI\InfoWindow.cs" />
-    <Compile Include="UI\MainWindow.cs" />
-    <Compile Include="UI\MovedEventArgs.cs" />
-    <Compile Include="UI\OptionDialog.cs" />
-    <Compile Include="UI\Skin.cs" />
-    <Compile Include="UI\Window.cs" />
-    <Compile Include="Utils\APILoader.cs" />
-    <Compile Include="Utils\Compatibility.cs" />
-    <Compile Include="Utils\ConfigurationStorage.cs" />
-    <Compile Include="Utils\ConfigurationStorageNode.cs" />
+    <Compile Include="Service\YieldException.cs" />
     <Compile Include="Utils\DictionaryExtensions.cs" />
     <Compile Include="Utils\DocumentationExtensions.cs" />
     <Compile Include="Utils\DynamicBuffer.cs" />
     <Compile Include="Utils\Equatable.cs" />
     <Compile Include="Utils\EventHandlerExtensions.cs" />
     <Compile Include="Utils\ExponentialMovingAverage.cs" />
-    <Compile Include="Utils\GameScenesExtensions.cs" />
     <Compile Include="Utils\IScheduler.cs" />
     <Compile Include="Utils\Logger.cs" />
-    <Compile Include="Utils\RectExtensions.cs" />
-    <Compile Include="Utils\RectStorage.cs" />
     <Compile Include="Utils\Reflection.cs" />
     <Compile Include="Utils\RoundRobinScheduler.cs" />
     <Compile Include="Utils\StopwatchExtensions.cs" />

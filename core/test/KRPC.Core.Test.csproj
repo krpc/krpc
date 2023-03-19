@@ -7,7 +7,7 @@
     <ProjectGuid>{960F5B49-BB1D-476B-8B60-99BEBAA83CB2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>KRPC.Test</RootNamespace>
-    <AssemblyName>KRPC.Test</AssemblyName>
+    <AssemblyName>KRPC.Core.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <NoStdLib>true</NoStdLib>
     <DebugType>full</DebugType>
@@ -27,9 +27,9 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\src\KRPC.csproj">
-      <Project>{3707639F-5EA3-461B-B939-587E51A25CCA}</Project>
-      <Name>KRPC</Name>
+    <ProjectReference Include="..\src\KRPC.Core.csproj">
+      <Project>{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}</Project>
+      <Name>KRPC.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -109,7 +109,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\bazel-bin\server\TestAssemblyInfo.cs">
+    <Compile Include="..\..\bazel-bin\core\TestAssemblyInfo.cs">
       <Link>TestAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ConfigurationTest.cs" />
