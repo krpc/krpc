@@ -69,6 +69,42 @@ T: KRPC.Utils.Equatable`1
 R: Gendarme.Rules.Performance.UseStringEmptyRule
 M: System.Void KRPC.Utils.APILoader::Error(System.String)
 
+R: Gendarme.Rules.Correctness.CheckParametersNullityInVisibleMethodsRule
+T: KRPC.Configuration
+T: KRPC.Core
+T: KRPC.Server.HTTP.Request
+T: KRPC.Server.Message.RPCServer
+T: KRPC.Server.Message.StreamServer
+T: KRPC.Server.ProtocolBuffers.RPCServer
+T: KRPC.Server.ProtocolBuffers.StreamServer
+T: KRPC.Server.SerialIO.RPCServer
+T: KRPC.Server.TCP.NetworkInformation
+T: KRPC.Server.WebSockets.RPCServer
+T: KRPC.Server.WebSockets.StreamServer
+T: KRPC.Service.ProcedureParameter
+T: KRPC.Service.Scanner.ClassSignature
+T: KRPC.Service.Scanner.EnumerationSignature
+T: KRPC.Service.Scanner.EnumerationValueSignature
+T: KRPC.Service.Scanner.ExceptionSignature
+T: KRPC.Service.Scanner.ParameterSignature
+T: KRPC.Service.Scanner.ProcedureSignature
+T: KRPC.Service.Scanner.ServiceSignature
+
+R: Gendarme.Rules.Design.AvoidVisibleNestedTypesRule
+T: KRPC.Configuration/Server
+T: KRPC.Utils.Logger/Severity
+
+R: Gendarme.Rules.Design.DoNotDeclareSettersOnCollectionPropertiesRule
+T: KRPC.Configuration/Server
+
+R: Gendarme.Rules.Design.Generic.DoNotExposeNestedGenericSignaturesRule
+T: KRPC.Server.HTTP.Request
+T: KRPC.Server.IServer`2
+T: KRPC.Server.Message.RPCServer
+T: KRPC.Server.Message.StreamServer
+T: KRPC.Server.SerialIO.ByteServer
+T: KRPC.Server.TCP.TCPServer
+
 # Speculative generality caused by websockets server not yet implemented
 R: Gendarme.Rules.Smells.AvoidSpeculativeGeneralityRule
 T: KRPC.Server.Message.RPCClient
