@@ -18,8 +18,6 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public static Assembly CurrentAssembly { get; private set; }
 
-        public static bool CheckDocumented { get; set; }
-
         /// <summary>
         /// Find all service signatures from all loaded assemblies.
         /// Errors are added to the given error list.
