@@ -8,12 +8,22 @@ using KRPC.Utils;
 
 namespace KRPC.Service.Scanner
 {
+    /// <summary>
+    /// Scanner that finds service signatures from all loaded assemblies.
+    /// </summary>
     public static class Scanner
     {
+        /// <summary>
+        /// The current assembly being scanned, when GetServices being run.
+        /// </summary>
         public static Assembly CurrentAssembly { get; private set; }
 
         public static bool CheckDocumented { get; set; }
 
+        /// <summary>
+        /// Find all service signatures from all loaded assemblies.
+        /// Errors are added to the given error list.
+        /// </summary>
         [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
         [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
@@ -155,6 +165,9 @@ namespace KRPC.Service.Scanner
             }
         }
 
+        /// <summary>
+        /// Get mapping from exception types to kRPC exception types.
+        /// </summary>
         [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
         public static IDictionary<Type, Type> GetMappedExceptionTypes()
         {

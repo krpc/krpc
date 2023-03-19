@@ -6,9 +6,13 @@ using System.Text;
 
 namespace KRPC.Server.HTTP
 {
+    /// <summary>
+    /// An HTTP request
+    /// </summary>
     [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
     public sealed class Request
     {
+        #pragma warning disable 1591
         const string NEWLINE = "\r\n";
 
         public string Method { get; private set; }

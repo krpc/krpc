@@ -29,6 +29,9 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public string Documentation { get; private set; }
 
+        /// <summary>
+        /// Create a signature for an enumeration value.
+        /// </summary>
         public EnumerationValueSignature (string serviceName, string enumName, string valueName, int value, string documentation)
         {
             Name = valueName;
@@ -37,6 +40,9 @@ namespace KRPC.Service.Scanner
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
         }
 
+        /// <summary>
+        /// Serialize the signature.
+        /// </summary>
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("name", Name);

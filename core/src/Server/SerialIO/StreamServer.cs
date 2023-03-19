@@ -3,8 +3,14 @@ using KRPC.Service.Messages;
 
 namespace KRPC.Server.SerialIO
 {
+    /// <summary>
+    /// Stream server for receiving requests and sending responses over an underlying message server.
+    /// </summary>
     public sealed class StreamServer : Message.StreamServer
     {
+        /// <summary>
+        /// Construct a stream server from a byte server
+        /// </summary>
         public StreamServer () : base (new NullServer ("None", string.Empty))
         {
         }

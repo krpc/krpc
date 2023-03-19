@@ -44,24 +44,54 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public GameScene GameScene { get; private set; }
 
+        /// <summary>
+        /// The procedure's parameters.
+        /// </summary>
         public IList<ParameterSignature> Parameters { get; private set; }
 
+        /// <summary>
+        /// Whether the procedure returns a value.
+        /// </summary>
         public bool HasReturnType { get; private set; }
 
+        /// <summary>
+        /// Return type of the procedure.
+        /// </summary>
         public Type ReturnType { get; private set; }
 
+        /// <summary>
+        /// Whether the return type of the procedure could be null.
+        /// </summary>
         public bool ReturnIsNullable { get; private set; }
 
+        /// <summary>
+        /// Whether the procedure is a static method.
+        /// </summary>
         public bool IsStatic { get; private set; }
 
+        /// <summary>
+        /// Whether the procedure is a class method/property.
+        /// </summary>
         public bool IsClassMember { get; private set; }
 
+        /// <summary>
+        /// If the procedure is a class method/property, the name of the class it is a member of.
+        /// </summary>
         public string ClassName { get; private set; }
 
+        /// <summary>
+        /// Whether the procedure is a property getter.
+        /// </summary>
         public bool IsPropertyGetter { get; private set; }
 
+        /// <summary>
+        /// Whether the procedure is a property setter.
+        /// </summary>
         public bool IsPropertySetter { get; private set; }
 
+        /// <summary>
+        /// If the procedure is a property getter/setter, the name of the property.
+        /// </summary>
         public string PropertyName { get; private set; }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
@@ -115,6 +145,9 @@ namespace KRPC.Service.Scanner
             }
         }
 
+        /// <summary>
+        /// Serialize the signature.
+        /// </summary>
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("id", Id);

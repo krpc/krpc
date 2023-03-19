@@ -8,15 +8,40 @@ using KRPC.Utils;
 
 namespace KRPC.Server.TCP
 {
+    /// <summary>
+    /// A raw TCP server.
+    /// </summary>
     public sealed class TCPServer : IServer<byte,byte>
     {
+        /// <summary>
+        /// Event handler for when the server starts.
+        /// </summary>
         public event EventHandler OnStarted;
+
+        /// <summary>
+        /// Event handler for when the server stops.
+        /// </summary>
         public event EventHandler OnStopped;
+
+        /// <summary>
+        /// Event handler for when a new client requests a connection.
+        /// </summary>
         public event EventHandler<ClientRequestingConnectionEventArgs<byte,byte>> OnClientRequestingConnection;
+
+        /// <summary>
+        /// Event handler for when a new client has connected.
+        /// </summary>
         public event EventHandler<ClientConnectedEventArgs<byte,byte>> OnClientConnected;
+
+        /// <summary>
+        /// Event handler when client activity occurs.
+        /// </summary>
         #pragma warning disable 0067
         public event EventHandler<ClientActivityEventArgs<byte,byte>> OnClientActivity;
-        #pragma warning restore 0067
+
+        /// <summary>
+        /// Event handler when a client disconnects.
+        /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs<byte,byte>> OnClientDisconnected;
 
         /// <summary>
@@ -24,27 +49,34 @@ namespace KRPC.Server.TCP
         /// port, unless port was set to 0.
         /// </summary>
         ushort actualPort;
+
         /// <summary>
         /// Thread used to poll for new connections.
         /// </summary>
         Thread listenerThread;
+
         TcpListener tcpListener;
+
         /// <summary>
         /// Event used to wait for the TCP listener to start
         /// </summary>
         volatile AutoResetEvent startedEvent;
+
         /// <summary>
         /// True if the listenerThread is running.
         /// </summary>
         volatile bool running;
+
         /// <summary>
         /// Connected clients.
         /// </summary>
         List<TCPClient> clients = new List<TCPClient> ();
+
         /// <summary>
         /// Clients requesting a connection. Must be locked before accessing.
         /// </summary>
         List<TCPClient> pendingClients = new List<TCPClient> ();
+
         object pendingClientsLock = new object ();
         ulong closedClientsBytesRead;
         ulong closedClientsBytesWritten;
@@ -59,6 +91,9 @@ namespace KRPC.Server.TCP
             ListenPort = port;
         }
 
+        /// <summary>
+        /// Start the server.
+        /// </summary>
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void Start ()
         {
@@ -99,6 +134,9 @@ namespace KRPC.Server.TCP
             Logger.WriteLine ("TCPServer: listening on port " + actualPort, Logger.Severity.Debug);
         }
 
+        /// <summary>
+        /// Stop the server.
+        /// </summary>
         public void Stop ()
         {
             if (!running)
@@ -128,6 +166,9 @@ namespace KRPC.Server.TCP
             EventHandlerExtensions.Invoke (OnStopped, this);
         }
 
+        /// <summary>
+        /// Update the server.
+        /// </summary>
         public void Update ()
         {
             // Remove disconnected clients
@@ -172,6 +213,9 @@ namespace KRPC.Server.TCP
             }
         }
 
+        /// <summary>
+        /// Address the server is listening on. Format depends on the server protocol.
+        /// </summary>
         public string Address {
             get { return ListenAddress + ":" + (Running ? ActualPort : ListenPort); }
         }
@@ -181,6 +225,9 @@ namespace KRPC.Server.TCP
         const string subnetAllowedText = "Subnet {0}";
         const string unknownClientsAllowedText = "Unknown visibility";
 
+        /// <summary>
+        /// Information about the server.
+        /// </summary>
         public string Info {
             get {
                 if (IPAddress.IsLoopback (ListenAddress))
@@ -198,10 +245,16 @@ namespace KRPC.Server.TCP
             }
         }
 
+        /// <summary>
+        /// Whether the server is running.
+        /// </summary>
         public bool Running {
             get { return running; }
         }
 
+        /// <summary>
+        /// Clients conneted to the server.
+        /// </summary>
         public IEnumerable<IClient<byte,byte>> Clients {
             get {
                 foreach (var client in clients)
@@ -209,6 +262,9 @@ namespace KRPC.Server.TCP
             }
         }
 
+        /// <summary>
+        /// Number of bytes received from clients.
+        /// </summary>
         public ulong BytesRead {
             get {
                 ulong read = closedClientsBytesRead;
@@ -218,6 +274,9 @@ namespace KRPC.Server.TCP
             }
         }
 
+        /// <summary>
+        /// Number of bytes sent to clients.
+        /// </summary>
         public ulong BytesWritten {
             get {
                 ulong written = closedClientsBytesWritten;
@@ -227,6 +286,9 @@ namespace KRPC.Server.TCP
             }
         }
 
+        /// <summary>
+        /// Clear statistics.
+        /// </summary>
         public void ClearStats ()
         {
             closedClientsBytesRead = 0;

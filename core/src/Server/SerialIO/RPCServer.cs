@@ -8,8 +8,14 @@ using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 
 namespace KRPC.Server.SerialIO
 {
+    /// <summary>
+    /// RPC server for receiving requests and sending responses over an underlying message server.
+    /// </summary>
     public sealed class RPCServer : Message.RPCServer
     {
+        /// <summary>
+        /// Construct an RPC server from a byte server
+        /// </summary>
         public RPCServer (IServer<byte,byte> innerServer) : base(innerServer)
         {
         }

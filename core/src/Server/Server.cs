@@ -14,10 +14,19 @@ namespace KRPC.Server
     [SuppressMessage ("Gendarme.Rules.Correctness", "DeclareEventsExplicitlyRule")]
     public sealed class Server : IServer
     {
+        /// <summary>
+        /// Identifier of the server.
+        /// </summary>
         public Guid Id { get; private set; }
 
+        /// <summary>
+        /// Protocol of the server.
+        /// </summary>
         public Protocol Protocol { get; private set; }
 
+        /// <summary>
+        /// Name of the server.
+        /// </summary>
         public string Name { get; set; }
 
         internal IServer<Request,Response> RPCServer { get; private set; }
@@ -49,6 +58,9 @@ namespace KRPC.Server
         /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;
 
+        /// <summary>
+        /// Construct a server, from an RPC server and stream server instance.
+        /// </summary>
         public Server (Guid id, Protocol protocol, string name, IServer<Request,Response> rpcServer, IServer<NoMessage,StreamUpdate> streamServer)
         {
             Id = id;

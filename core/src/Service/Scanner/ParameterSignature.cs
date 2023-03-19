@@ -34,6 +34,9 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public bool Nullable { get; private set; }
 
+        /// <summary>
+        /// Create a parameter signature for a reflected parameter.
+        /// </summary>
         public ParameterSignature (string fullProcedureName, ProcedureParameter parameter)
         {
             Name = parameter.Name;
@@ -49,6 +52,9 @@ namespace KRPC.Service.Scanner
             Nullable = parameter.Nullable;
         }
 
+        /// <summary>
+        /// Serialize the signature.
+        /// </summary>
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("name", Name);

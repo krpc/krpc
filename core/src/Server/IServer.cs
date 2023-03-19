@@ -54,7 +54,14 @@ namespace KRPC.Server
         /// </summary>
         void ClearStats ();
 
+        /// <summary>
+        /// Handler to trigger when the server starts.
+        /// </summary>
         event EventHandler OnStarted;
+
+        /// <summary>
+        /// Handler to trigger when the server stops.
+        /// </summary>
         event EventHandler OnStopped;
     }
 
@@ -68,8 +75,19 @@ namespace KRPC.Server
         /// </summary>
         IEnumerable<IClient> Clients { get; }
 
+        /// <summary>
+        /// Handler to trigger when a new client requests a connection.
+        /// </summary>
         event EventHandler<ClientRequestingConnectionEventArgs> OnClientRequestingConnection;
+
+        /// <summary>
+        /// Handler to trigger when a client has connected.
+        /// </summary>
         event EventHandler<ClientConnectedEventArgs> OnClientConnected;
+
+        /// <summary>
+        /// Handler to trigger when a client has disconnected.
+        /// </summary>
         event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;
     }
 
@@ -84,8 +102,19 @@ namespace KRPC.Server
         /// </summary>
         IEnumerable<IClient<TIn,TOut>> Clients { get; }
 
+        /// <summary>
+        /// Handler to trigger when a new client requests a connection.
+        /// </summary>
         event EventHandler<ClientRequestingConnectionEventArgs<TIn,TOut>> OnClientRequestingConnection;
+
+        /// <summary>
+        /// Handler to trigger when a client has connected.
+        /// </summary>
         event EventHandler<ClientConnectedEventArgs<TIn,TOut>> OnClientConnected;
+
+        /// <summary>
+        /// Handler to trigger when a client has disconnected.
+        /// </summary>
         event EventHandler<ClientDisconnectedEventArgs<TIn,TOut>> OnClientDisconnected;
     }
 }

@@ -7,6 +7,9 @@ using System.Net.Sockets;
 
 namespace KRPC.Server.TCP
 {
+    /// <summary>
+    /// Utilities for getting information about the TCP/IP network.
+    /// </summary>
     public static class NetworkInformation
     {
         static IEnumerable<NetworkInterface> Interfaces {

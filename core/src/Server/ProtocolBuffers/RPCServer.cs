@@ -7,8 +7,14 @@ using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 
 namespace KRPC.Server.ProtocolBuffers
 {
+    /// <summary>
+    /// RPC server.
+    /// </summary>
     public sealed class RPCServer : Message.RPCServer
     {
+        /// <summary>
+        /// Construct an RPC server from a byte server.
+        /// </summary>
         public RPCServer (IServer<byte,byte> server) : base (server)
         {
         }

@@ -25,6 +25,9 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public string Documentation { get; private set; }
 
+        /// <summary>
+        /// Create an exception signature
+        /// </summary>
         public ExceptionSignature (string serviceName, string className, string documentation)
         {
             Name = className;
@@ -32,6 +35,9 @@ namespace KRPC.Service.Scanner
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
         }
 
+        /// <summary>
+        /// Serialize the signature.
+        /// </summary>
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("documentation", Documentation);

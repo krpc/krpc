@@ -6,14 +6,23 @@ using System.Linq;
 
 namespace KRPC.Server.WebSockets
 {
+    /// <summary>
+    /// Stream server for receiving requests and sending responses over an underlying message server.
+    /// </summary>
     public sealed class StreamServer : Message.StreamServer
     {
         readonly IDictionary<IClient<byte,byte>,string> clientKeys = new Dictionary<IClient<byte, byte>, string> ();
 
+        /// <summary>
+        /// Construct a stream server from a byte server
+        /// </summary>
         public StreamServer (IServer<byte,byte> server) : base (server)
         {
         }
 
+        /// <summary>
+        /// Address of the server.
+        /// </summary>
         public override string Address {
             get { return "ws://" + base.Address; }
         }

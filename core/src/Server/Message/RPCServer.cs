@@ -12,14 +12,37 @@ namespace KRPC.Server.Message
     {
         const double defaultTimeout = 0.1;
 
-        public event EventHandler OnStarted;
-        public event EventHandler OnStopped;
-        public event EventHandler<ClientRequestingConnectionEventArgs<Request,Response>> OnClientRequestingConnection;
-        public event EventHandler<ClientConnectedEventArgs<Request,Response>> OnClientConnected;
         /// <summary>
-        /// Does not trigger this event, unless the underlying server does.
+        /// Event handler for when the server starts.
         /// </summary>
+        public event EventHandler OnStarted;
+
+        /// <summary>
+        /// Event handler for when the server stops.
+        /// </summary>
+        public event EventHandler OnStopped;
+
+        /// <summary>
+        /// Event handler for when a new client requests a connection.
+        /// </summary>
+        public event EventHandler<ClientRequestingConnectionEventArgs<Request,Response>> OnClientRequestingConnection;
+
+        /// <summary>
+        /// Event handler for when a new client has connected.
+        /// </summary>
+        public event EventHandler<ClientConnectedEventArgs<Request,Response>> OnClientConnected;
+
+        /// <summary>
+        /// Event handler when client activity occurs.
+        /// </summary>
+        /// <remarks>
+        /// Does not trigger this event, unless the underlying server does.
+        /// </remarks>
         public event EventHandler<ClientActivityEventArgs<Request,Response>> OnClientActivity;
+
+        /// <summary>
+        /// Event handler when a client disconnects.
+        /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs<Request,Response>> OnClientDisconnected;
 
         internal IServer<byte,byte> Server { get; private set; }
@@ -29,6 +52,9 @@ namespace KRPC.Server.Message
         ulong closedClientsBytesRead;
         ulong closedClientsBytesWritten;
 
+        /// <summary>
+        /// Construct an RPC server from a raw byte server
+        /// </summary>
         protected RPCServer (IServer<byte,byte> innerServer)
         {
             Server = innerServer;
@@ -40,33 +66,54 @@ namespace KRPC.Server.Message
             Server.OnClientDisconnected += HandleClientDisconnected;
         }
 
+        /// <summary>
+        /// Start the server.
+        /// </summary>
         public void Start ()
         {
             Server.Start ();
         }
 
+        /// <summary>
+        /// Stop the server.
+        /// </summary>
         public void Stop ()
         {
             Server.Stop ();
         }
 
+        /// <summary>
+        /// Update the server.
+        /// </summary>
         public void Update ()
         {
             Server.Update ();
         }
 
+        /// <summary>
+        /// Address the server is listening on. Format depends on the server protocol.
+        /// </summary>
         public virtual string Address {
             get { return Server.Address; }
         }
 
+        /// <summary>
+        /// Information about the server. Depends on the server protocol.
+        /// </summary>
         public string Info {
             get { return Server.Info; }
         }
 
+        /// <summary>
+        /// Whether the server is running.
+        /// </summary>
         public bool Running {
             get { return Server.Running; }
         }
 
+        /// <summary>
+        /// Clients conneted to the server.
+        /// </summary>
         public IEnumerable<IClient<Request,Response>> Clients {
             get {
                 foreach (var client in clients.Values) {
@@ -75,6 +122,9 @@ namespace KRPC.Server.Message
             }
         }
 
+        /// <summary>
+        /// Number of bytes received from clients.
+        /// </summary>
         public ulong BytesRead {
             get {
                 ulong read = closedClientsBytesRead;
@@ -84,6 +134,9 @@ namespace KRPC.Server.Message
             }
         }
 
+        /// <summary>
+        /// Number of bytes sent to clients.
+        /// </summary>
         public ulong BytesWritten {
             get {
                 ulong written = closedClientsBytesWritten;
@@ -93,6 +146,9 @@ namespace KRPC.Server.Message
             }
         }
 
+        /// <summary>
+        /// Clear statistics.
+        /// </summary>
         public void ClearStats ()
         {
             closedClientsBytesRead = 0;
@@ -124,6 +180,9 @@ namespace KRPC.Server.Message
             EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<Request,Response> (client));
         }
 
+        /// <summary>
+        /// Create a client instance from a connection request event.
+        /// </summary>
         protected abstract IClient<Request,Response> CreateClient (object sender, ClientRequestingConnectionEventArgs<byte,byte> args);
 
         /// <summary>

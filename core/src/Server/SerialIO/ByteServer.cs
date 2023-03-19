@@ -7,17 +7,42 @@ using KRPC.Utils;
 
 namespace KRPC.Server.SerialIO
 {
+    /// <summary>
+    /// Byte server implementation over serial I/O.
+    /// </summary>
     [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public sealed class ByteServer : IServer<byte,byte>
     {
+        /// <summary>
+        /// Event handler for when the server starts.
+        /// </summary>
         public event EventHandler OnStarted;
+
+        /// <summary>
+        /// Event handler for when the server stops.
+        /// </summary>
         public event EventHandler OnStopped;
+
+        /// <summary>
+        /// Event handler for when a new client requests a connection.
+        /// </summary>
         public event EventHandler<ClientRequestingConnectionEventArgs<byte,byte>> OnClientRequestingConnection;
+
+        /// <summary>
+        /// Event handler for when a new client has connected.
+        /// </summary>
         public event EventHandler<ClientConnectedEventArgs<byte,byte>> OnClientConnected;
+
+        /// <summary>
+        /// Event handler when client activity occurs.
+        /// </summary>
         #pragma warning disable 0067
         public event EventHandler<ClientActivityEventArgs<byte,byte>> OnClientActivity;
-        #pragma warning restore 0067
+
+        /// <summary>
+        /// Event handler when a client disconnects.
+        /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs<byte,byte>> OnClientDisconnected;
 
         SerialPort port;
@@ -41,6 +66,9 @@ namespace KRPC.Server.SerialIO
             StopBits = stopBits;
         }
 
+        /// <summary>
+        /// Start the server.
+        /// </summary>
         [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
         public void Start ()
         {
@@ -70,6 +98,9 @@ namespace KRPC.Server.SerialIO
             EventHandlerExtensions.Invoke (OnStarted, this);
         }
 
+        /// <summary>
+        /// Stop the server.
+        /// </summary>
         public void Stop ()
         {
             if (!Running)
@@ -114,6 +145,9 @@ namespace KRPC.Server.SerialIO
             pendingClient = new ByteClient (port, data);
         }
 
+        /// <summary>
+        /// Update the server.
+        /// </summary>
         public void Update ()
         {
             try {
@@ -167,16 +201,34 @@ namespace KRPC.Server.SerialIO
             }
         }
 
+        /// <summary>
+        /// Address the server is listening on. The path of the serial port device.
+        /// </summary>
         public string Address { get; private set; }
 
+        /// <summary>
+        /// Baud rate.
+        /// </summary>
         public uint BaudRate { get; private set; }
 
+        /// <summary>
+        /// Number of data bits.
+        /// </summary>
         public ushort DataBits { get; private set; }
 
+        /// <summary>
+        /// Number of parity bits.
+        /// </summary>
         public Parity Parity { get; private set; }
 
+        /// <summary>
+        /// Number of stop bits.
+        /// </summary>
         public StopBits StopBits { get; private set; }
 
+        /// <summary>
+        /// Information about the server.
+        /// </summary>
         public string Info {
             get {
                 var newline = Environment.NewLine;
@@ -188,10 +240,16 @@ namespace KRPC.Server.SerialIO
             }
         }
 
+        /// <summary>
+        /// Whether the server is running.
+        /// </summary>
         public bool Running {
             get { return port != null; }
         }
 
+        /// <summary>
+        /// Clients conneted to the server.
+        /// </summary>
         public IEnumerable<IClient<byte,byte>> Clients {
             get {
                 if (client != null)
@@ -199,6 +257,9 @@ namespace KRPC.Server.SerialIO
             }
         }
 
+        /// <summary>
+        /// Number of bytes received from clients.
+        /// </summary>
         public ulong BytesRead {
             get {
                 ulong read = closedClientsBytesRead;
@@ -208,6 +269,9 @@ namespace KRPC.Server.SerialIO
             }
         }
 
+        /// <summary>
+        /// Number of bytes sent to clients.
+        /// </summary>
         public ulong BytesWritten {
             get {
                 ulong written = closedClientsBytesWritten;
@@ -217,6 +281,9 @@ namespace KRPC.Server.SerialIO
             }
         }
 
+        /// <summary>
+        /// Clear statistics.
+        /// </summary>
         public void ClearStats ()
         {
             closedClientsBytesRead = 0;

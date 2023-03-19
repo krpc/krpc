@@ -6,6 +6,9 @@ using KRPC.Utils;
 
 namespace KRPC.Server.WebSockets
 {
+    /// <summary>
+    /// RPC server for receiving requests and sending responses over an underlying message server.
+    /// </summary>
     public sealed class RPCServer : Message.RPCServer
     {
         readonly bool shouldEcho;
@@ -23,6 +26,9 @@ namespace KRPC.Server.WebSockets
                 Logger.WriteLine ("WebSockets server running in echo mode", Logger.Severity.Warning);
         }
 
+        /// <summary>
+        /// Server address.
+        /// </summary>
         public override string Address {
             get { return "ws://" + base.Address; }
         }

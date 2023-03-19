@@ -6,6 +6,9 @@ using KRPC.Utils;
 
 namespace KRPC.Service.Scanner
 {
+    /// <summary>
+    /// Signature of a kRPC service
+    /// </summary>
     [Serializable]
     public sealed class ServiceSignature : ISerializable
     {
@@ -228,6 +231,9 @@ namespace KRPC.Service.Scanner
                 TypeUtils.GetClassPropertyGameScene(classType, property, classGameScene)));
         }
 
+        /// <summary>
+        /// Serialize the signature.
+        /// </summary>
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("id", Id);
