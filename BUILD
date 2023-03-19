@@ -221,6 +221,7 @@ pkg_zip(
 test_suite(
     name = 'test',
     tests = [
+        '//core:test',
         '//server:test',
         '//service/SpaceCenter:test',
         '//service/Drawing:test',
