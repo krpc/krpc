@@ -183,21 +183,21 @@ namespace KRPC.Service.KRPC
             }
         }
 
-        // /// <summary>
-        // /// Whether the game is paused.
-        // /// </summary>
-        // [KRPCProperty]
-        // public static bool Paused {
-        //     get {
-        //         return Addon.Instance.IsPaused;
-        //     }
-        //     set {
-        //         if (value)
-        //             PauseMenu.Display ();
-        //         else
-        //             PauseMenu.Close ();
-        //     }
-        // }
+        /// <summary>
+        /// Whether the game is paused.
+        /// </summary>
+        [KRPCProperty]
+        public static bool Paused {
+            get {
+                return CallContext.IsPaused();
+            }
+            set {
+                if (value)
+                    CallContext.Pause();
+                else
+                    CallContext.Unpause();
+            }
+        }
 
         /// <summary>
         /// Add a streaming request and return its identifier.

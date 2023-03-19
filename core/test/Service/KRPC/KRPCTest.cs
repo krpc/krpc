@@ -126,5 +126,22 @@ namespace KRPC.Test.Service.KRPC
             }
             Assert.AreEqual (4, foundExceptions);
         }
+
+        [Test]
+        public void PauseUnpause ()
+        {
+            bool paused = false;
+            global::KRPC.Service.CallContext.IsPaused = () => paused;
+            global::KRPC.Service.CallContext.Pause = () => paused = true;
+            global::KRPC.Service.CallContext.Unpause = () => paused = false;
+
+            global::KRPC.Service.KRPC.KRPC.Paused = true;
+            Assert.True (paused);
+            Assert.True (global::KRPC.Service.KRPC.KRPC.Paused);
+
+            global::KRPC.Service.KRPC.KRPC.Paused = false;
+            Assert.False (paused);
+            Assert.False (global::KRPC.Service.KRPC.KRPC.Paused);
+        }
     }
 }

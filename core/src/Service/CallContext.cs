@@ -1,3 +1,4 @@
+using System;
 using KRPC.Server;
 
 namespace KRPC.Service
@@ -17,6 +18,21 @@ namespace KRPC.Service
         /// The current game scene
         /// </summary>
         public static GameScene GameScene { get; set; }
+
+        /// <summary>
+        /// Delegate used to check whether the game is paused
+        /// </summary>
+        public static Func<bool> IsPaused { get; set; }
+
+        /// <summary>
+        /// Delegate used to pause the game
+        /// </summary>
+        public static Action Pause { get; set; }
+
+        /// <summary>
+        /// Delegate used to unpause the game
+        /// </summary>
+        public static Action Unpause { get; set; }
 
         internal static void Set (IClient client)
         {

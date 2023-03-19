@@ -39,6 +39,10 @@ namespace KRPC
                 foreach (var server in config.Configuration.Servers)
                     core.Add (server.Create ());
             }
+
+            Service.CallContext.IsPaused = () => Instance.IsPaused;
+            Service.CallContext.Pause = () => PauseMenu.Display ();
+            Service.CallContext.Unpause = () => PauseMenu.Close ();
         }
 
         /// <summary>
