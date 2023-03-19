@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3707639F-5EA3-461B-B939-587E51A25CCA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>KRPC</RootNamespace>
+    <AssemblyName>KRPC</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <DocumentationFile>bin\Debug\KRPC.Core.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <DocumentationFile>bin\Release\KRPC.Core.xml</DocumentationFile>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="mscorlib">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\System.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\System.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ScreenCaptureModule">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.ScreenCaptureModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.SharedInternalsModule">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.SharedInternalsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\..\bazel-bin\tools\build\ksp\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="KRPC.IO.Ports">
+      <HintPath>..\..\bazel-bin\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\bazel-bin\server\AssemblyInfo.cs">
+      <Link>AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\bazel-bin/protobuf/KRPC_unity.cs">
+      <Link>KRPC.cs</Link>
+    </Compile>
+    <Compile Include="Addon.cs" />
+    <Compile Include="Compatibility.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="ConfigurationFile.cs" />
+    <Compile Include="Continuations\Continuation.cs" />
+    <Compile Include="Continuations\IContinuation.cs" />
+    <Compile Include="Continuations\ParameterizedContinuation.cs" />
+    <Compile Include="Continuations\YieldException.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="Properties\AssemblyKSPVersion.cs" />
+    <Compile Include="Server\ByteOutputAdapterStream.cs" />
+    <Compile Include="Server\ClientActivityEventArgs.cs" />
+    <Compile Include="Server\ClientConnectedEventArgs.cs" />
+    <Compile Include="Server\ClientConnectionRequest.cs" />
+    <Compile Include="Server\ClientDisconnectedEventArgs.cs" />
+    <Compile Include="Server\ClientDisconnectedException.cs" />
+    <Compile Include="Server\ClientEventArgs.cs" />
+    <Compile Include="Server\ClientRequestingConnectionEventArgs.cs" />
+    <Compile Include="Server\HTTP\MalformedRequestException.cs" />
+    <Compile Include="Server\HTTP\Request.cs" />
+    <Compile Include="Server\HTTP\Response.cs" />
+    <Compile Include="Server\IClient.cs" />
+    <Compile Include="Server\IServer.cs" />
+    <Compile Include="Server\IStream.cs" />
+    <Compile Include="Server\Message\MalformedRequestException.cs" />
+    <Compile Include="Server\Message\NoRequestException.cs" />
+    <Compile Include="Server\Message\RPCClient.cs" />
+    <Compile Include="Server\Message\RPCServer.cs" />
+    <Compile Include="Server\Message\RPCStream.cs" />
+    <Compile Include="Server\Message\StreamClient.cs" />
+    <Compile Include="Server\Message\StreamServer.cs" />
+    <Compile Include="Server\Message\StreamStream.cs" />
+    <Compile Include="Server\NullServer.cs" />
+    <Compile Include="Server\Protocol.cs" />
+    <Compile Include="Server\ProtocolBuffers\Encoder.cs" />
+    <Compile Include="Server\ProtocolBuffers\MessageExtensions.cs" />
+    <Compile Include="Server\ProtocolBuffers\RPCClient.cs" />
+    <Compile Include="Server\ProtocolBuffers\RPCServer.cs" />
+    <Compile Include="Server\ProtocolBuffers\RPCStream.cs" />
+    <Compile Include="Server\ProtocolBuffers\StreamClient.cs" />
+    <Compile Include="Server\ProtocolBuffers\StreamServer.cs" />
+    <Compile Include="Server\ProtocolBuffers\StreamStream.cs" />
+    <Compile Include="Server\ProtocolBuffers\Utils.cs" />
+    <Compile Include="Server\SerialIO\ByteClient.cs" />
+    <Compile Include="Server\SerialIO\ByteServer.cs" />
+    <Compile Include="Server\SerialIO\ByteStream.cs" />
+    <Compile Include="Server\SerialIO\RPCClient.cs" />
+    <Compile Include="Server\SerialIO\RPCServer.cs" />
+    <Compile Include="Server\SerialIO\RPCStream.cs" />
+    <Compile Include="Server\SerialIO\StreamServer.cs" />
+    <Compile Include="Server\Server.cs" />
+    <Compile Include="Server\ServerEventArgs.cs" />
+    <Compile Include="Server\ServerException.cs" />
+    <Compile Include="Server\ServerStartedEventArgs.cs" />
+    <Compile Include="Server\ServerStoppedEventArgs.cs" />
+    <Compile Include="Server\TCP\NetworkInformation.cs" />
+    <Compile Include="Server\TCP\TCPClient.cs" />
+    <Compile Include="Server\TCP\TCPServer.cs" />
+    <Compile Include="Server\TCP\TCPStream.cs" />
+    <Compile Include="Server\WebSockets\ConnectionRequest.cs" />
+    <Compile Include="Server\WebSockets\Frame.cs" />
+    <Compile Include="Server\WebSockets\FramingException.cs" />
+    <Compile Include="Server\WebSockets\HandshakeException.cs" />
+    <Compile Include="Server\WebSockets\Header.cs" />
+    <Compile Include="Server\WebSockets\OpCode.cs" />
+    <Compile Include="Server\WebSockets\RPCClient.cs" />
+    <Compile Include="Server\WebSockets\RPCServer.cs" />
+    <Compile Include="Server\WebSockets\RPCStream.cs" />
+    <Compile Include="Server\WebSockets\StreamClient.cs" />
+    <Compile Include="Server\WebSockets\StreamServer.cs" />
+    <Compile Include="Server\WebSockets\StreamStream.cs" />
+    <Compile Include="Service\Attributes\KRPCClassAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCDefaultValueAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCEnumAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCExceptionAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCMethodAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCProcedureAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCPropertyAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCServiceAttribute.cs" />
+    <Compile Include="Service\CallContext.cs" />
+    <Compile Include="Service\ClassMethodHandler.cs" />
+    <Compile Include="Service\ClassStaticMethodHandler.cs" />
+    <Compile Include="Service\DocumentationException.cs" />
+    <Compile Include="Service\DocumentationUtils.cs" />
+    <Compile Include="Service\Event.cs" />
+    <Compile Include="Service\EventStream.cs" />
+    <Compile Include="Service\GameScene.cs" />
+    <Compile Include="Service\IProcedureHandler.cs" />
+    <Compile Include="Service\KRPC\ArgumentException.cs" />
+    <Compile Include="Service\KRPC\ArgumentNullException.cs" />
+    <Compile Include="Service\KRPC\ArgumentOutOfRangeException.cs" />
+    <Compile Include="Service\KRPC\Expression.cs" />
+    <Compile Include="Service\KRPC\InvalidOperationException.cs" />
+    <Compile Include="Service\KRPC\KRPC.cs" />
+    <Compile Include="Service\KRPC\Type.cs" />
+    <Compile Include="Service\Messages\Argument.cs" />
+    <Compile Include="Service\Messages\Class.cs" />
+    <Compile Include="Service\Messages\Enumeration.cs" />
+    <Compile Include="Service\Messages\EnumerationValue.cs" />
+    <Compile Include="Service\Messages\Error.cs" />
+    <Compile Include="Service\Messages\Event.cs" />
+    <Compile Include="Service\Messages\Exception.cs" />
+    <Compile Include="Service\Messages\IMessage.cs" />
+    <Compile Include="Service\Messages\NoMessage.cs" />
+    <Compile Include="Service\Messages\Parameter.cs" />
+    <Compile Include="Service\Messages\Procedure.cs" />
+    <Compile Include="Service\Messages\ProcedureCall.cs" />
+    <Compile Include="Service\Messages\ProcedureResult.cs" />
+    <Compile Include="Service\Messages\Request.cs" />
+    <Compile Include="Service\Messages\Response.cs" />
+    <Compile Include="Service\Messages\Service.cs" />
+    <Compile Include="Service\Messages\Services.cs" />
+    <Compile Include="Service\Messages\Status.cs" />
+    <Compile Include="Service\Messages\Stream.cs" />
+    <Compile Include="Service\Messages\StreamResult.cs" />
+    <Compile Include="Service\Messages\StreamUpdate.cs" />
+    <Compile Include="Service\ObjectStore.cs" />
+    <Compile Include="Service\ProcedureCallContinuation.cs" />
+    <Compile Include="Service\ProcedureCallStream.cs" />
+    <Compile Include="Service\ProcedureHandler.cs" />
+    <Compile Include="Service\ProcedureParameter.cs" />
+    <Compile Include="Service\RPCException.cs" />
+    <Compile Include="Service\RequestContinuation.cs" />
+    <Compile Include="Service\Scanner\ClassSignature.cs" />
+    <Compile Include="Service\Scanner\EnumerationSignature.cs" />
+    <Compile Include="Service\Scanner\EnumerationValueSignature.cs" />
+    <Compile Include="Service\Scanner\ExceptionSignature.cs" />
+    <Compile Include="Service\Scanner\ParameterSignature.cs" />
+    <Compile Include="Service\Scanner\ProcedureSignature.cs" />
+    <Compile Include="Service\Scanner\Scanner.cs" />
+    <Compile Include="Service\Scanner\ServiceSignature.cs" />
+    <Compile Include="Service\ServiceException.cs" />
+    <Compile Include="Service\Services.cs" />
+    <Compile Include="Service\Stream.cs" />
+    <Compile Include="Service\StreamContinuation.cs" />
+    <Compile Include="Service\TypeUtils.cs" />
+    <Compile Include="Service\ValueUtils.cs" />
+    <Compile Include="ServicesChecker.cs" />
+    <Compile Include="UI\ClientConnectingDialog.cs" />
+    <Compile Include="UI\ClientDisconnectDialog.cs" />
+    <Compile Include="UI\EditServer.cs" />
+    <Compile Include="UI\GUILayoutExtensions.cs" />
+    <Compile Include="UI\Icons.cs" />
+    <Compile Include="UI\InfoWindow.cs" />
+    <Compile Include="UI\MainWindow.cs" />
+    <Compile Include="UI\MovedEventArgs.cs" />
+    <Compile Include="UI\OptionDialog.cs" />
+    <Compile Include="UI\Skin.cs" />
+    <Compile Include="UI\Window.cs" />
+    <Compile Include="Utils\APILoader.cs" />
+    <Compile Include="Utils\Compatibility.cs" />
+    <Compile Include="Utils\ConfigurationStorage.cs" />
+    <Compile Include="Utils\ConfigurationStorageNode.cs" />
+    <Compile Include="Utils\DictionaryExtensions.cs" />
+    <Compile Include="Utils\DocumentationExtensions.cs" />
+    <Compile Include="Utils\DynamicBuffer.cs" />
+    <Compile Include="Utils\Equatable.cs" />
+    <Compile Include="Utils\EventHandlerExtensions.cs" />
+    <Compile Include="Utils\ExponentialMovingAverage.cs" />
+    <Compile Include="Utils\GameScenesExtensions.cs" />
+    <Compile Include="Utils\IScheduler.cs" />
+    <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Utils\RectExtensions.cs" />
+    <Compile Include="Utils\RectStorage.cs" />
+    <Compile Include="Utils\Reflection.cs" />
+    <Compile Include="Utils\RoundRobinScheduler.cs" />
+    <Compile Include="Utils\StopwatchExtensions.cs" />
+    <Compile Include="Utils\Text.cs" />
+  </ItemGroup>
+</Project>
