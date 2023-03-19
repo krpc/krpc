@@ -54,7 +54,7 @@ namespace KRPC
             Instance = this;
 
             var gameScene = GameScenesExtensions.CurrentGameScene();
-            Service.CallContext.SetGameScene (gameScene);
+            Service.CallContext.GameScene = gameScene;
             Utils.Logger.WriteLine ("Game scene switched to " + gameScene);
 
             // If a game is not loaded, ensure the server is stopped and then exit

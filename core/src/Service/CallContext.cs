@@ -16,7 +16,7 @@ namespace KRPC.Service
         /// <summary>
         /// The current game scene
         /// </summary>
-        public static GameScene GameScene { get; private set; }
+        public static GameScene GameScene { get; set; }
 
         internal static void Set (IClient client)
         {
@@ -26,11 +26,6 @@ namespace KRPC.Service
         internal static void Clear ()
         {
             Client = null;
-        }
-
-        public static void SetGameScene (GameScene gameScene)
-        {
-            GameScene = gameScene;
         }
     }
 }

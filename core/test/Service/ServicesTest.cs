@@ -62,7 +62,7 @@ namespace KRPC.Test.Service
         [SetUp]
         public void SetUp ()
         {
-            CallContext.SetGameScene (GameScene.Flight);
+            CallContext.GameScene = GameScene.Flight;
         }
 
         [Test]
@@ -649,7 +649,7 @@ namespace KRPC.Test.Service
         [Test]
         public void ExecuteCallWrongGameMode ()
         {
-            CallContext.SetGameScene (GameScene.TrackingStation);
+            CallContext.GameScene = GameScene.TrackingStation;
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureNoArgsNoReturn ());
             TestService.Service = mock.Object;
@@ -664,14 +664,14 @@ namespace KRPC.Test.Service
         [Test]
         public void ProcedureGameModeInheritedFromService ()
         {
-            CallContext.SetGameScene (GameScene.TrackingStation);
+            CallContext.GameScene = GameScene.TrackingStation;
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureAvailableInInheritedGameScene ());
             TestService.Service = mock.Object;
             CheckError (String.Empty, "Procedure not available in game scene 'TrackingStation'",
                 Run (Call ("TestService", "ProcedureAvailableInInheritedGameScene")));
             mock.Verify (x => x.ProcedureAvailableInInheritedGameScene (), Times.Never ());
-            CallContext.SetGameScene (GameScene.Flight);
+            CallContext.GameScene = GameScene.Flight;
             Run (Call ("TestService", "ProcedureAvailableInInheritedGameScene"));
             mock.Verify (x => x.ProcedureAvailableInInheritedGameScene (), Times.Once ());
         }
@@ -682,14 +682,14 @@ namespace KRPC.Test.Service
         [Test]
         public void ProcedureGameModeSpecifiedInAttribute ()
         {
-            CallContext.SetGameScene (GameScene.Flight);
+            CallContext.GameScene = GameScene.Flight;
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureAvailableInSpecifiedGameScene ());
             TestService.Service = mock.Object;
             CheckError (String.Empty, "Procedure not available in game scene 'Flight'",
                 Run (Call ("TestService", "ProcedureAvailableInSpecifiedGameScene")));
             mock.Verify (x => x.ProcedureAvailableInSpecifiedGameScene (), Times.Never ());
-            CallContext.SetGameScene (GameScene.EditorVAB);
+            CallContext.GameScene = GameScene.EditorVAB;
             Run (Call ("TestService", "ProcedureAvailableInSpecifiedGameScene"));
             mock.Verify (x => x.ProcedureAvailableInSpecifiedGameScene (), Times.Once ());
         }
@@ -700,14 +700,14 @@ namespace KRPC.Test.Service
         [Test]
         public void PropertyGameModeInheritedFromService ()
         {
-            CallContext.SetGameScene (GameScene.TrackingStation);
+            CallContext.GameScene = GameScene.TrackingStation;
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.PropertyAvailableInInheritedGameScene).Returns("foo");
             TestService.Service = mock.Object;
             CheckError (String.Empty, "Procedure not available in game scene 'TrackingStation'",
                 Run (Call ("TestService", "get_PropertyAvailableInInheritedGameScene")));
             mock.Verify (x => x.PropertyAvailableInInheritedGameScene, Times.Never ());
-            CallContext.SetGameScene (GameScene.Flight);
+            CallContext.GameScene = GameScene.Flight;
             Run (Call ("TestService", "get_PropertyAvailableInInheritedGameScene"));
             mock.Verify (x => x.PropertyAvailableInInheritedGameScene, Times.Once ());
         }
@@ -718,14 +718,14 @@ namespace KRPC.Test.Service
         [Test]
         public void PropertyGameModeSpecifiedInAttribute ()
         {
-            CallContext.SetGameScene (GameScene.Flight);
+            CallContext.GameScene = GameScene.Flight;
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.PropertyAvailableInSpecifiedGameScene).Returns("foo");
             TestService.Service = mock.Object;
             CheckError (String.Empty, "Procedure not available in game scene 'Flight'",
                 Run (Call ("TestService", "get_PropertyAvailableInSpecifiedGameScene")));
             mock.Verify (x => x.PropertyAvailableInSpecifiedGameScene, Times.Never ());
-            CallContext.SetGameScene (GameScene.EditorVAB);
+            CallContext.GameScene = GameScene.EditorVAB;
             Run (Call ("TestService", "get_PropertyAvailableInSpecifiedGameScene"));
             mock.Verify (x => x.PropertyAvailableInSpecifiedGameScene, Times.Once ());
         }
@@ -737,10 +737,10 @@ namespace KRPC.Test.Service
         public void ClassMethodGameModeInheritedFromService ()
         {
             var instance = new TestService.TestClass ("jeb");
-            CallContext.SetGameScene (GameScene.TrackingStation);
+            CallContext.GameScene = GameScene.TrackingStation;
             CheckError (String.Empty, "Procedure not available in game scene 'TrackingStation'",
                 Run (Call ("TestService", "TestClass_MethodAvailableInInheritedGameScene", Arg(0, instance))));
-            CallContext.SetGameScene (GameScene.Flight);
+            CallContext.GameScene = GameScene.Flight;
             var result = Run (Call ("TestService", "TestClass_MethodAvailableInInheritedGameScene", Arg(0, instance)));
             CheckResultNotEmpty (result);
             Assert.AreEqual ("foo", result.Value);
@@ -753,10 +753,10 @@ namespace KRPC.Test.Service
         public void ClassMethodGameModeSpecifiedInAttribute ()
         {
             var instance = new TestService.TestClass ("jeb");
-            CallContext.SetGameScene (GameScene.Flight);
+            CallContext.GameScene = GameScene.Flight;
             CheckError (String.Empty, "Procedure not available in game scene 'Flight'",
                 Run (Call ("TestService", "TestClass_MethodAvailableInSpecifiedGameScene", Arg(0, instance))));
-            CallContext.SetGameScene (GameScene.EditorVAB);
+            CallContext.GameScene = GameScene.EditorVAB;
             var result = Run (Call ("TestService", "TestClass_MethodAvailableInSpecifiedGameScene", Arg(0, instance)));
             CheckResultNotEmpty (result);
             Assert.AreEqual ("foo", result.Value);
@@ -769,14 +769,14 @@ namespace KRPC.Test.Service
         public void ClassPropertyGameModeInheritedFromService ()
         {
             var instance = new TestService.TestClass ("jeb");
-            CallContext.SetGameScene (GameScene.TrackingStation);
+            CallContext.GameScene = GameScene.TrackingStation;
             CheckError (String.Empty, "Procedure not available in game scene 'TrackingStation'",
                 Run (Call ("TestService", "TestClass_get_ClassPropertyAvailableInInheritedGameScene", Arg(0, instance))));
-            CallContext.SetGameScene (GameScene.SpaceCenter);
+            CallContext.GameScene = GameScene.SpaceCenter;
             var result = Run (Call ("TestService", "TestClass_get_ClassPropertyAvailableInInheritedGameScene", Arg(0, instance)));
             CheckResultNotEmpty (result);
             Assert.AreEqual ("foo", result.Value);
-            CallContext.SetGameScene (GameScene.Flight);
+            CallContext.GameScene = GameScene.Flight;
             result = Run (Call ("TestService", "TestClass_get_ClassPropertyAvailableInInheritedGameScene", Arg(0, instance)));
             CheckResultNotEmpty (result);
             Assert.AreEqual ("foo", result.Value);
@@ -789,13 +789,13 @@ namespace KRPC.Test.Service
         public void ClassPropertyGameModeSpecifiedInAttribute ()
         {
             var instance = new TestService.TestClass ("jeb");
-            CallContext.SetGameScene (GameScene.Flight);
+            CallContext.GameScene = GameScene.Flight;
             CheckError (String.Empty, "Procedure not available in game scene 'Flight'",
                 Run (Call ("TestService", "TestClass_get_ClassPropertyAvailableInSpecifiedGameScene", Arg(0, instance))));
-            CallContext.SetGameScene (GameScene.SpaceCenter);
+            CallContext.GameScene = GameScene.SpaceCenter;
             CheckError (String.Empty, "Procedure not available in game scene 'SpaceCenter'",
                 Run (Call ("TestService", "TestClass_get_ClassPropertyAvailableInSpecifiedGameScene", Arg(0, instance))));
-            CallContext.SetGameScene (GameScene.EditorVAB);
+            CallContext.GameScene = GameScene.EditorVAB;
             var result = Run (Call ("TestService", "TestClass_get_ClassPropertyAvailableInSpecifiedGameScene", Arg(0, instance)));
             CheckResultNotEmpty (result);
             Assert.AreEqual ("foo", result.Value);
