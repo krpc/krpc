@@ -63,12 +63,5 @@ namespace KRPC.Service
             Name = name;
             DefaultValue = DBNull.Value;
         }
-
-        public ProcedureParameter (Type type, string name, object defaultValue)
-        {
-            Type = type;
-            Name = name;
-            DefaultValue = defaultValue;
-        }
     }
 }

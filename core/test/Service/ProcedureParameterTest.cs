@@ -32,26 +32,6 @@ namespace KRPC.Test.Service
         }
 
         [Test]
-        public void DefaultArgument ()
-        {
-            var parameter = new ProcedureParameter (typeof(int), "foo", 42);
-            Assert.AreEqual ("foo", parameter.Name);
-            Assert.AreEqual (typeof(int), parameter.Type);
-            Assert.IsTrue (parameter.HasDefaultValue);
-            Assert.AreEqual (42, parameter.DefaultValue);
-        }
-
-        [Test]
-        public void DefaultNullArgument ()
-        {
-            var parameter = new ProcedureParameter (typeof(string), "bar", null);
-            Assert.AreEqual ("bar", parameter.Name);
-            Assert.AreEqual (typeof(string), parameter.Type);
-            Assert.IsTrue (parameter.HasDefaultValue);
-            Assert.AreEqual (null, parameter.DefaultValue);
-        }
-
-        [Test]
         public void FromMethodInfo ()
         {
             var method = typeof(ProcedureParameterTest).GetMethod ("MethodWithArg");
