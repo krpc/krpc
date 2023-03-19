@@ -158,13 +158,9 @@ namespace KRPC.Service.KRPC
             /// </summary>
             TrackingStation,
             /// <summary>
-            /// The Vehicle Assembly Building.
+            /// The Vehicle Assembly Building or Space Plane Hangar.
             /// </summary>
-            EditorVAB,
-            /// <summary>
-            /// The Space Plane Hangar.
-            /// </summary>
-            EditorSPH
+            Editor
         }
 
         /// <summary>
@@ -181,30 +177,27 @@ namespace KRPC.Service.KRPC
                 if ((scene & Service.GameScene.TrackingStation) != 0)
                     return GameScene.TrackingStation;
                 if ((scene & Service.GameScene.Editor) != 0) {
-                    if (EditorDriver.editorFacility == EditorFacility.VAB)
-                        return GameScene.EditorVAB;
-                    if (EditorDriver.editorFacility == EditorFacility.SPH)
-                        return GameScene.EditorSPH;
+                    return GameScene.Editor;
                 }
                 throw new System.InvalidOperationException ("Unknown game scene");
             }
         }
 
-        /// <summary>
-        /// Whether the game is paused.
-        /// </summary>
-        [KRPCProperty]
-        public static bool Paused {
-            get {
-                return Addon.Instance.IsPaused;
-            }
-            set {
-                if (value)
-                    PauseMenu.Display ();
-                else
-                    PauseMenu.Close ();
-            }
-        }
+        // /// <summary>
+        // /// Whether the game is paused.
+        // /// </summary>
+        // [KRPCProperty]
+        // public static bool Paused {
+        //     get {
+        //         return Addon.Instance.IsPaused;
+        //     }
+        //     set {
+        //         if (value)
+        //             PauseMenu.Display ();
+        //         else
+        //             PauseMenu.Close ();
+        //     }
+        // }
 
         /// <summary>
         /// Add a streaming request and return its identifier.
