@@ -5,7 +5,6 @@ load('//tools/build/mono-4.5:build.bzl', 'mono_net_libs')
 
 srcs = glob(['**/*.cs']) + [':AssemblyInfo']
 deps = [
-    ':KRPC',
     ':KRPC.Core',
     '//tools/build/ksp:Google.Protobuf',
     '//tools/build/ksp:KRPC.IO.Ports',
@@ -28,17 +27,6 @@ csharp_assembly_info(
     visibility = [
         '//:__pkg__' # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
     ]
-)
-
-csharp_library(
-    name = 'KRPC',
-    srcs = ['//server:KRPC-src', '//server:AssemblyInfo'],
-    deps = [
-        ':KRPC.Core',
-        '//tools/build/ksp:Google.Protobuf',
-        '//tools/build/ksp:KRPC.IO.Ports'
-    ] + ksp_unity_libs + mono_net_libs,
-    visibility = ['//tools/krpctools:__pkg__', '//tools/TestServer:__pkg__']
 )
 
 csharp_library(
