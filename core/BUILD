@@ -5,7 +5,7 @@ load('//:config.bzl', 'version', 'assembly_version', 'author')
 
 filegroup(
     name = 'core',
-    srcs = [':version', 'CHANGES.txt', ':KRPC.Core', ':ServiceDefinitions'],
+    srcs = [':KRPC.Core', ':ServiceDefinitions'],
     visibility = ['//:__pkg__']
 )
 
@@ -72,7 +72,7 @@ service_definitions(
     name = 'ServiceDefinitions',
     assemblies = [':KRPC.Core'],
     service = 'KRPC',
-    out = 'KRPC.json',
+    out = 'KRPC.Core.json',
     visibility = ['//visibility:public']
 )
 

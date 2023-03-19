@@ -83,7 +83,7 @@ csharp_library(
 clientgen_csharp(
     name = 'services-krpc',
     service = 'KRPC',
-    defs = '//server:ServiceDefinitions',
+    defs = '//core:ServiceDefinitions',
     out = 'Services/KRPC.cs',
     visibility = [
         '//:__pkg__'

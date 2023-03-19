@@ -118,7 +118,7 @@ png_images(
 )
 
 defs = [
-    '//server:ServiceDefinitions',
+    '//core:ServiceDefinitions',
     '//service/SpaceCenter:ServiceDefinitions',
     '//service/Drawing:ServiceDefinitions',
     '//service/InfernalRobotics:ServiceDefinitions',
@@ -300,7 +300,7 @@ csharp_library_multiple(
     name = 'compile-scripts-csharp-libs',
     srcs = glob(['src/scripts/**/*.lib.cs']),
     deps = [
-        '//server:KRPC',
+        '//core:KRPC.Core',
         '//tools/build/ksp:Google.Protobuf',
         '//tools/build/ksp:Assembly-CSharp',
         '//tools/build/ksp:Assembly-CSharp-firstpass',
