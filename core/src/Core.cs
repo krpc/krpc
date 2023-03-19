@@ -126,7 +126,7 @@ namespace KRPC
         /// <summary>
         /// Add a server to the core.
         /// </summary>
-        internal void Add (Server.Server server)
+        public void Add (Server.Server server)
         {
             Servers.Add (server);
             Configure (server);
@@ -136,7 +136,7 @@ namespace KRPC
         /// <summary>
         /// Remove a server from the core.
         /// </summary>
-        internal void Remove (Guid id)
+        public void Remove (Guid id)
         {
             for (var i = 0; i < Servers.Count; i++) {
                 var server = Servers [i];
@@ -154,7 +154,7 @@ namespace KRPC
         /// <summary>
         /// Replace a server object. The object is matched using the id of the replacement.
         /// </summary>
-        internal void Replace (Server.Server newServer)
+        public void Replace (Server.Server newServer)
         {
             for (var i = 0; i < Servers.Count; i++) {
                 var server = Servers [i];
@@ -188,7 +188,7 @@ namespace KRPC
         /// <summary>
         /// Start all servers.
         /// </summary>
-        internal void StartAll ()
+        public void StartAll ()
         {
             foreach (var server in Servers) {
                 if (!server.Running)
@@ -199,7 +199,7 @@ namespace KRPC
         /// <summary>
         /// Stop all servers.
         /// </summary>
-        internal void StopAll ()
+        public void StopAll ()
         {
             foreach (var server in Servers) {
                 if (server.Running)
@@ -210,7 +210,7 @@ namespace KRPC
         /// <summary>
         /// Stop all servers.
         /// </summary>
-        internal bool AnyRunning { get; private set; }
+        public bool AnyRunning { get; private set; }
 
         ExponentialMovingAverage bytesReadRate = new ExponentialMovingAverage (0.25);
         ExponentialMovingAverage bytesWrittenRate = new ExponentialMovingAverage (0.25);
@@ -345,7 +345,7 @@ namespace KRPC
         /// Update the server
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
-        internal void Update ()
+        public void Update ()
         {
             ulong startRPCsExecuted = RPCsExecuted;
             ulong startStreamRPCsExecuted = StreamRPCsExecuted;

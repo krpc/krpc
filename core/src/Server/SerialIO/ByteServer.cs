@@ -9,7 +9,7 @@ namespace KRPC.Server.SerialIO
 {
     [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
-    sealed class ByteServer : IServer<byte,byte>
+    public sealed class ByteServer : IServer<byte,byte>
     {
         public event EventHandler OnStarted;
         public event EventHandler OnStopped;

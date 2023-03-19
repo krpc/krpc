@@ -3,7 +3,7 @@ using KRPC.Service.Messages;
 
 namespace KRPC.Server.SerialIO
 {
-    sealed class StreamServer : Message.StreamServer
+    public sealed class StreamServer : Message.StreamServer
     {
         public StreamServer () : base (new NullServer ("None", string.Empty))
         {

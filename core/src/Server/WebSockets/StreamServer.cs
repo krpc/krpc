@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace KRPC.Server.WebSockets
 {
-    sealed class StreamServer : Message.StreamServer
+    public sealed class StreamServer : Message.StreamServer
     {
         readonly IDictionary<IClient<byte,byte>,string> clientKeys = new Dictionary<IClient<byte, byte>, string> ();
 

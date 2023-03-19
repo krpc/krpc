@@ -9,7 +9,7 @@ using Logger = KRPC.Utils.Logger;
 
 namespace KRPC
 {
-    sealed class Configuration
+    public sealed class Configuration
     {
         static Configuration instance;
 

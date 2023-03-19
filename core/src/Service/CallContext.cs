@@ -28,7 +28,7 @@ namespace KRPC.Service
             Client = null;
         }
 
-        internal static void SetGameScene (GameScene gameScene)
+        public static void SetGameScene (GameScene gameScene)
         {
             GameScene = gameScene;
         }

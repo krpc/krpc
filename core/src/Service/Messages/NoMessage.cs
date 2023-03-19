@@ -6,7 +6,7 @@ namespace KRPC.Service.Messages
     /// Used to denote the absense of a message.
     /// </summary>
     [SuppressMessage ("Gendarme.Rules.Design", "ConsiderUsingStaticTypeRule")]
-    sealed class NoMessage
+    public sealed class NoMessage
     {
         NoMessage ()
         {

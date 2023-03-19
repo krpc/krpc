@@ -7,7 +7,7 @@ using KRPC.Utils;
 namespace KRPC.Service.Scanner
 {
     [Serializable]
-    sealed class ServiceSignature : ISerializable
+    public sealed class ServiceSignature : ISerializable
     {
         /// <summary>
         /// The name of the service

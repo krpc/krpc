@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Utils
 {
-    static class Logger
+    public static class Logger
     {
         static string format = "[kRPC] {0} - {1:G} - {2}";
         static bool enabled = true;
@@ -29,7 +29,7 @@ namespace KRPC.Utils
         [Flags]
         [Serializable]
         [SuppressMessage ("Gendarme.Rules.Naming", "UsePluralNameInEnumFlagsRule")]
-        internal enum Severity
+        public enum Severity
         {
             Debug = 1,
             Info = 2,
@@ -38,7 +38,7 @@ namespace KRPC.Utils
         }
 
         [SuppressMessage ("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
-        internal static void WriteLine (string message, Severity severity = Severity.Info)
+        public static void WriteLine (string message, Severity severity = Severity.Info)
         {
             if (ShouldLog (severity))
                 Console.WriteLine (string.Format (format, DateTime.Now, severity, message));

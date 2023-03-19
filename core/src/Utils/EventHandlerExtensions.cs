@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace KRPC.Utils
 {
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
-    static class EventHandlerExtensions
+    public static class EventHandlerExtensions
     {
         public static void Invoke (EventHandler handler, object sender)
         {

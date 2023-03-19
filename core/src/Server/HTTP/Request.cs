@@ -7,7 +7,7 @@ using System.Text;
 namespace KRPC.Server.HTTP
 {
     [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
-    sealed class Request
+    public sealed class Request
     {
         const string NEWLINE = "\r\n";
 

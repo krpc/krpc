@@ -6,7 +6,7 @@ using KRPC.Utils;
 
 namespace KRPC.Server.WebSockets
 {
-    sealed class RPCServer : Message.RPCServer
+    public sealed class RPCServer : Message.RPCServer
     {
         readonly bool shouldEcho;
         readonly IDictionary<IClient<byte,byte>,string> clientKeys = new Dictionary<IClient<byte, byte>, string> ();

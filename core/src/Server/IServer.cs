@@ -6,7 +6,7 @@ namespace KRPC.Server
     /// <summary>
     /// A non-generic server.
     /// </summary>
-    interface IBaseServer
+    public interface IBaseServer
     {
         /// <summary>
         /// Start the server.
@@ -61,7 +61,7 @@ namespace KRPC.Server
     /// <summary>
     /// A non-generic server.
     /// </summary>
-    interface IServer : IBaseServer
+    public interface IServer : IBaseServer
     {
         /// <summary>
         /// Clients that are connected to the server.
@@ -77,7 +77,7 @@ namespace KRPC.Server
     /// A generic server, that receives values of type TIn from clients and
     /// sends values of type TOut to them.
     /// </summary>
-    interface IServer<TIn,TOut> : IBaseServer
+    public interface IServer<TIn,TOut> : IBaseServer
     {
         /// <summary>
         /// Clients that are connected to the server.

@@ -13,7 +13,7 @@ namespace KRPC.Server
     /// <summary>
     /// Arguments passed to a client connected event
     /// </summary>
-    sealed class ClientConnectedEventArgs<TIn,TOut> : ClientEventArgs<TIn,TOut>
+    public sealed class ClientConnectedEventArgs<TIn,TOut> : ClientEventArgs<TIn,TOut>
     {
         internal ClientConnectedEventArgs (IClient<TIn,TOut> client) : base (client)
         {

@@ -8,7 +8,7 @@ namespace KRPC.Service.Scanner
     /// Signature information for an enumeration type, including name, values and documentation.
     /// </summary>
     [Serializable]
-    sealed class EnumerationSignature : ISerializable
+    public sealed class EnumerationSignature : ISerializable
     {
         /// <summary>
         /// Name of the enumeration, not including the service it is in.
