@@ -158,9 +158,13 @@ namespace KRPC.Service.KRPC
             /// </summary>
             TrackingStation,
             /// <summary>
-            /// The Vehicle Assembly Building or Space Plane Hangar.
+            /// The Vehicle Assembly Building.
             /// </summary>
-            Editor
+            EditorVAB,
+            /// <summary>
+            /// The Space Plane Hangar.
+            /// </summary>
+            EditorSPH
         }
 
         /// <summary>
@@ -176,9 +180,10 @@ namespace KRPC.Service.KRPC
                     return GameScene.Flight;
                 if ((scene & Service.GameScene.TrackingStation) != 0)
                     return GameScene.TrackingStation;
-                if ((scene & Service.GameScene.Editor) != 0) {
-                    return GameScene.Editor;
-                }
+                if ((scene & Service.GameScene.EditorVAB) != 0)
+                    return GameScene.EditorVAB;
+                if ((scene & Service.GameScene.EditorSPH) != 0)
+                    return GameScene.EditorSPH;
                 throw new System.InvalidOperationException ("Unknown game scene");
             }
         }

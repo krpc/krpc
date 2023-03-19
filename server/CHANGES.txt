@@ -1,6 +1,3 @@
-v0.5.3
- * Merge VAB and SPH into just "Editor" in KRPC.GameScene
-
 v0.5.2
  * Update to protobuf v3.10.1
  * Fix game lagging when first client connects (#712)
