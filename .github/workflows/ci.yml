@@ -175,6 +175,23 @@ jobs:
       - name: build
         run: bazel test //doc:test
 
+  test-core:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.0.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: ./.github/actions/bazel-fetch
+      - name: test
+        run: bazel test //core:test
+
   test-server:
     runs-on: ubuntu-latest
     container:
