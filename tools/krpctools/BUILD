@@ -95,11 +95,6 @@ test_suite(
     tests = [':krpctoolstest', ':lint']
 )
 
-test_suite(
-    name = 'ci-test',
-    tests = [':krpctoolstest']
-)
-
 py_test(
     name = 'krpctoolstest',
     src = ':krpctools',

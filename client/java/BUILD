@@ -80,11 +80,6 @@ test_suite(
     tests = [':client', ':lint']
 )
 
-test_suite(
-    name = 'ci-test',
-    tests = [':client']
-)
-
 client_test(
     name = 'client',
     test_executable = ':testexe',

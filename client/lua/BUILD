@@ -49,11 +49,6 @@ test_suite(
     tests = [':client']
 )
 
-test_suite(
-    name = 'ci-test',
-    tests = [':client']
-)
-
 client_test(
     name = 'client',
     test_executable = ':luatest',

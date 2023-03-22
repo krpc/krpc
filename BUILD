@@ -187,24 +187,6 @@ test_suite(
 )
 
 test_suite(
-    name = 'ci-test',
-    tests = [
-        '//server:ci-test',
-        '//client/csharp:ci-test',
-        '//client/cnano:ci-test',
-        '//client/cpp:ci-test',
-        '//client/java:ci-test',
-        '//client/lua:ci-test',
-        '//client/python:ci-test',
-        '//client/serialio:ci-test',
-        '//client/websockets:ci-test',
-        '//tools/krpctest:ci-test',
-        '//tools/krpctools:ci-test',
-        '//doc:ci-test'
-    ]
-)
-
-test_suite(
     name = 'lint',
     tests = [
         '//server:lint',

@@ -17,11 +17,6 @@ test_suite(
 )
 
 test_suite(
-    name = 'ci-test',
-    tests = []
-)
-
-test_suite(
     name = 'lint',
     tests = [':gendarme-KRPC']
 )

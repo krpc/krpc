@@ -160,11 +160,6 @@ test_suite(
     tests = [':client', ':check', ':lint']
 )
 
-test_suite(
-    name = 'ci-test',
-    tests = [':client']
-)
-
 client_test(
     name = 'client',
     test_executable = ':cnanotest',

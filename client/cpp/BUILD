@@ -153,11 +153,6 @@ test_suite(
 )
 
 test_suite(
-    name = 'ci-test',
-    tests = [':client']
-)
-
-test_suite(
     name = 'lint',
     tests = [':cppcheck', ':cpplint']
 )

@@ -15,11 +15,6 @@ test_suite(
 )
 
 test_suite(
-    name = 'ci-test',
-    tests = [':test-KRPC.Core']
-)
-
-test_suite(
     name = 'lint',
     tests = [':gendarme-KRPC.Core', ':gendarme-KRPC.Core.Test']
 )
