@@ -5,7 +5,7 @@ load('//tools/build/mono-4.5:build.bzl', 'mono_net_libs')
 
 srcs = glob(['**/*.cs']) + [':AssemblyInfo']
 deps = [
-    ':KRPC',
+    ':KRPC.Core',
     '//tools/build/ksp:Google.Protobuf',
     '//tools/build/ksp:KRPC.IO.Ports',
     '//tools/build/mono-4.5:Newtonsoft.Json',
@@ -30,13 +30,14 @@ csharp_assembly_info(
 )
 
 csharp_library(
-    name = 'KRPC',
-    srcs = ['//server:KRPC-src', '//server:AssemblyInfo', '//protobuf:csharp_unity'],
+    name = 'KRPC.Core',
+    srcs = ['//core:KRPC.Core-src', '//core:AssemblyInfo', '//protobuf:csharp_unity'],
     deps = [
         '//tools/build/ksp:Google.Protobuf',
         '//tools/build/ksp:KRPC.IO.Ports'
     ] + ksp_unity_libs + mono_net_libs,
-    visibility = ['//tools/krpctools:__pkg__', '//tools/TestServer:__pkg__']
+    visibility = ['//tools/krpctools:__pkg__', '//tools/TestServer:__pkg__'],
+    nowarn = ['CS1591'] #TODO: remove
 )
 
 csharp_binary(

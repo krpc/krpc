@@ -58,7 +58,7 @@ genrule(
 clientgen_cpp(
     name = 'services-krpc',
     service = 'KRPC',
-    defs = '//server:ServiceDefinitions',
+    defs = '//core:ServiceDefinitions',
     out = 'include/krpc/services/krpc.hpp'
 )
 

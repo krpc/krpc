@@ -33,7 +33,7 @@ csharp_library(
 
 service_definitions(
     name = 'ServiceDefinitions',
-    assemblies = [':KRPC.KerbalAlarmClock', '//service/SpaceCenter:KRPC.SpaceCenter'],
+    assemblies = [':KRPC.KerbalAlarmClock', '//service/SpaceCenter:KRPC.SpaceCenter', '//server:KRPC'],
     service = 'KerbalAlarmClock',
     out = 'KRPC.KerbalAlarmClock.json',
     visibility = ['//visibility:public']

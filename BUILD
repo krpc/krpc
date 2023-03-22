@@ -100,6 +100,7 @@ pkg_zip(
         'COPYING',
         'COPYING.LESSER',
         # Server
+        '//core',
         '//server',
         ':blank_settings',
         '//tools/build/ksp:Google.Protobuf',
@@ -122,6 +123,7 @@ pkg_zip(
     path_map = {
         'kRPC.version': 'GameData/kRPC/kRPC.version',
         # Server
+        'core/': 'GameData/kRPC/',
         'server/': 'GameData/kRPC/',
         'server/src/icons': 'GameData/kRPC/icons',
         'tools/build/ksp/': 'GameData/kRPC/',
@@ -219,6 +221,7 @@ pkg_zip(
 test_suite(
     name = 'test',
     tests = [
+        '//core:test',
         '//server:test',
         '//service/SpaceCenter:test',
         '//service/Drawing:test',
@@ -290,8 +293,9 @@ test_suite(
 filegroup(
     name = 'csproj',
     srcs = [
+        '//core',
+        '//core:KRPC.Core.Test',
         '//server',
-        '//server:KRPC.Test',
         '//service/SpaceCenter',
         '//service/Drawing',
         '//service/InfernalRobotics',

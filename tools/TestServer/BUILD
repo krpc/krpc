@@ -18,7 +18,7 @@ csharp_assembly_info(
 
 srcs = ['src/TestService.cs', ':AssemblyInfo']
 deps = [
-    '//tools/ServiceDefinitions:KRPC',
+    '//tools/ServiceDefinitions:KRPC.Core',
     '//tools/build/ksp:Google.Protobuf',
     '//tools/build/ksp:KRPC.IO.Ports'
 ] + mono_net_libs

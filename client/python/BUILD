@@ -67,7 +67,7 @@ py_sdist(
 clientgen_python(
     name = 'services-krpc',
     service = 'KRPC',
-    defs = '//server:ServiceDefinitions',
+    defs = '//core:ServiceDefinitions',
     out = 'krpc/services/krpc.py'
 )
 

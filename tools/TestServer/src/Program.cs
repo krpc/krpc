@@ -118,7 +118,7 @@ namespace TestServer
             KRPC.Service.Scanner.Scanner.GetServices ();
 
             var core = Core.Instance;
-            CallContext.SetGameScene (GameScene.SpaceCenter);
+            CallContext.GameScene = GameScene.SpaceCenter;
             core.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
 
             IPAddress bindAddress;

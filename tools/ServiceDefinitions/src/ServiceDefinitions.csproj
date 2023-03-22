@@ -28,9 +28,9 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\..\server\src\KRPC.csproj">
-      <Project>{3707639F-5EA3-461B-B939-587E51A25CCA}</Project>
-      <Name>KRPC</Name>
+    <ProjectReference Include="..\..\..\core\src\KRPC.Core.csproj">
+      <Project>{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}</Project>
+      <Name>KRPC.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

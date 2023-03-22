@@ -34,7 +34,7 @@ csharp_library(
 
 service_definitions(
     name = 'ServiceDefinitions',
-    assemblies = [':KRPC.UI', '//service/SpaceCenter:KRPC.SpaceCenter'],
+    assemblies = [':KRPC.UI', '//service/SpaceCenter:KRPC.SpaceCenter', '//server:KRPC'],
     service = 'UI',
     out = 'KRPC.UI.json',
     visibility = ['//visibility:public']

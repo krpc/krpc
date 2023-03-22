@@ -34,7 +34,7 @@ csharp_library(
 
 service_definitions(
     name = 'ServiceDefinitions',
-    assemblies = [':KRPC.LiDAR', '//service/SpaceCenter:KRPC.SpaceCenter'],
+    assemblies = [':KRPC.LiDAR', '//service/SpaceCenter:KRPC.SpaceCenter', '//server:KRPC'],
     service = 'LiDAR',
     out = 'KRPC.LiDAR.json',
     visibility = ['//visibility:public']

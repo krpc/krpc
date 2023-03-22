@@ -34,7 +34,7 @@ csharp_library(
 
 service_definitions(
     name = 'ServiceDefinitions',
-    assemblies = [':KRPC.DockingCamera', '//service/SpaceCenter:KRPC.SpaceCenter'],
+    assemblies = [':KRPC.DockingCamera', '//service/SpaceCenter:KRPC.SpaceCenter', '//server:KRPC'],
     service = 'DockingCamera',
     out = 'KRPC.DockingCamera.json',
     visibility = ['//visibility:public']

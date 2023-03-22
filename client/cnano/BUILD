@@ -66,7 +66,7 @@ genrule(
 clientgen_cnano(
     name = 'services-krpc',
     service = 'KRPC',
-    defs = '//server:ServiceDefinitions',
+    defs = '//core:ServiceDefinitions',
     out = 'include/krpc_cnano/services/krpc.h'
 )
 

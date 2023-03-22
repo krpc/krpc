@@ -103,7 +103,7 @@ java_checkstyle_test(
 clientgen_java(
     name = 'services-krpc',
     service = 'KRPC',
-    defs = '//server:ServiceDefinitions',
+    defs = '//core:ServiceDefinitions',
     out = 'services/KRPC.java'
 )
 

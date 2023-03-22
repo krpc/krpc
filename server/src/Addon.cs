@@ -39,6 +39,10 @@ namespace KRPC
                 foreach (var server in config.Configuration.Servers)
                     core.Add (server.Create ());
             }
+
+            Service.CallContext.IsPaused = () => Instance.IsPaused;
+            Service.CallContext.Pause = () => PauseMenu.Display ();
+            Service.CallContext.Unpause = () => PauseMenu.Close ();
         }
 
         /// <summary>
@@ -54,7 +58,7 @@ namespace KRPC
             Instance = this;
 
             var gameScene = GameScenesExtensions.CurrentGameScene();
-            Service.CallContext.SetGameScene (gameScene);
+            Service.CallContext.GameScene = gameScene;
             Utils.Logger.WriteLine ("Game scene switched to " + gameScene);
 
             // If a game is not loaded, ensure the server is stopped and then exit

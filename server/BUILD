@@ -7,23 +7,23 @@ load('//:config.bzl', 'version', 'ksp_version_max', 'ksp_version_min', 'assembly
 
 filegroup(
     name = 'server',
-    srcs = [':version', 'CHANGES.txt', ':KRPC', ':ServiceDefinitions', ':icons'],
+    srcs = [':version', 'CHANGES.txt', ':KRPC', ':icons'],
     visibility = ['//:__pkg__']
 )
 
 test_suite(
     name = 'test',
-    tests = [':test-KRPC', ':lint']
+    tests = [':lint']
 )
 
 test_suite(
     name = 'ci-test',
-    tests = [':test-KRPC']
+    tests = []
 )
 
 test_suite(
     name = 'lint',
-    tests = [':gendarme-KRPC', ':gendarme-KRPC.Test']
+    tests = [':gendarme-KRPC']
 )
 
 genrule(
@@ -41,10 +41,6 @@ csharp_assembly_info(
     custom = {'AssemblyKSPVersion': '"%s", "%s"' % (ksp_version_max, ksp_version_min)},
     internals_visible_to = [
         'KRPC.Test',
-        'TestServer',
-        'TestServer.Debug',
-        'ServiceDefinitions',
-        'ServiceDefinitions.Debug',
         'DynamicProxyGenAssembly2'
     ],
     cls_compliant = False,
@@ -61,9 +57,10 @@ filegroup(
     visibility = ['//tools/ServiceDefinitions:__pkg__']
 )
 
-srcs = [':KRPC-src', ':AssemblyInfo', '//protobuf:csharp_unity']
+srcs = [':KRPC-src', ':AssemblyInfo']
 
 deps = [
+    '//core:KRPC.Core',
     '//tools/build/ksp:Google.Protobuf',
     '//tools/build/ksp:KRPC.IO.Ports'
 ] + ksp_libs
@@ -75,58 +72,9 @@ csharp_library(
     visibility = ['//visibility:public']
 )
 
-service_definitions(
-    name = 'ServiceDefinitions',
-    assemblies = [':KRPC'],
-    service = 'KRPC',
-    out = 'KRPC.json',
-    visibility = ['//visibility:public']
-)
-
 png_images(
     name = 'icons',
     srcs = glob(['src/icons/*.svg'])
-)
-
-csharp_assembly_info(
-    name = 'TestAssemblyInfo',
-    title = 'KRPC.Test',
-    copyright = author,
-    version = assembly_version,
-    cls_compliant = False,
-    visibility = [
-        '//:__pkg__' # Make visible to krpc-genfiles so it can copy AssemblyInfo.cs to zip
-    ]
-)
-
-test_deps = [
-    '//server:KRPC',
-    '//tools/build/mono-4.5:Moq',
-    '//tools/build/ksp:Google.Protobuf',
-    '//tools/build/ksp:KRPC.IO.Ports',
-    '//tools/build/mono-4.5:Newtonsoft.Json',
-    '//tools/build/mono-4.5:System.Threading.Tasks.Extensions',
-    '//tools/build/mono-4.5:Castle.Core'
-] + ksp_unity_libs + mono_net_libs
-
-csharp_library(
-    name = 'KRPC.Test',
-    srcs = glob(['test/**/*.cs']) + [':TestAssemblyInfo'],
-    deps = test_deps,
-    nunit_test = True,
-    optimize = False,
-    define = ['CODE_ANALYSIS'],
-    nowarn = ['1591', '1685'],
-    visibility = ['//:__pkg__']
-)
-
-csharp_nunit_test(
-    name = 'test-KRPC',
-    lib = ':KRPC.Test',
-    deps = test_deps,
-    size = 'small',
-    # FIXME: need to run test outside the sandbox to work around nunit file accesses
-    tags = ['local']
 )
 
 csharp_library(
@@ -141,12 +89,5 @@ csharp_gendarme_test(
     name = 'gendarme-KRPC',
     lib = ':KRPC.Debug',
     ignores = 'src/ignores.txt',
-    size = 'small'
-)
-
-csharp_gendarme_test(
-    name = 'gendarme-KRPC.Test',
-    lib = ':KRPC.Test',
-    ignores = 'test/ignores.txt',
     size = 'small'
 )
