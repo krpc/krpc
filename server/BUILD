@@ -7,7 +7,7 @@ load('//:config.bzl', 'version', 'ksp_version_max', 'ksp_version_min', 'assembly
 
 filegroup(
     name = 'server',
-    srcs = [':version', 'CHANGES.txt', ':KRPC', ':icons'],
+    srcs = ['//:version', 'CHANGES.txt', ':KRPC', ':icons'],
     visibility = ['//:__pkg__']
 )
 
@@ -19,12 +19,6 @@ test_suite(
 test_suite(
     name = 'lint',
     tests = [':gendarme-KRPC']
-)
-
-genrule(
-    name = 'version',
-    outs = ['VERSION.txt'],
-    cmd = 'echo "%s" > "$@"' % version
 )
 
 csharp_assembly_info(
