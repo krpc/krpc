@@ -23,11 +23,6 @@ test_suite(
     tests = [':krpctesttest', ':lint']
 )
 
-test_suite(
-    name = 'ci-test',
-    tests = [':krpctesttest']
-)
-
 deps = [
     '//client/python',
     '@python_protobuf//file'

@@ -3,7 +3,6 @@ load('//tools/build:cpp.bzl', 'cpp_check_test', 'cpp_lint_test')
 load('//tools/build/protobuf:nanopb.bzl', 'protobuf_nanopb')
 load('//tools/build:client_test.bzl', 'client_test')
 load('//tools/krpctools:clientgen.bzl', 'clientgen_cnano')
-load('//tools/build:pkg.bzl', 'pkg_zip')
 load('//:config.bzl', 'version')
 
 name = 'krpc-cnano-%s' % version
@@ -158,11 +157,6 @@ cc_library(
 test_suite(
     name = 'test',
     tests = [':client', ':check', ':lint']
-)
-
-test_suite(
-    name = 'ci-test',
-    tests = [':client']
 )
 
 client_test(

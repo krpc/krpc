@@ -182,11 +182,6 @@ test_suite(
     tests = [':spelling', ':check-documented', ':lint'] # ':linkcheck'
 )
 
-test_suite(
-    name = 'ci-test',
-    tests = [':spelling', ':check-documented']
-)
-
 sphinx_spelling_test(
     name = 'spelling',
     srcs = [':srcs'],

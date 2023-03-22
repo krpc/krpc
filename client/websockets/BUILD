@@ -19,11 +19,6 @@ test_suite(
     tests = [':wstest', ':lint']
 )
 
-test_suite(
-    name = 'ci-test',
-    tests = [':wstest']
-)
-
 client_test(
     name = 'wstest',
     test_executable = ':wstestexe',
