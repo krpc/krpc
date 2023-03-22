@@ -52,9 +52,7 @@ namespace ServiceDefinitions
             }
 
             if (showVersion) {
-                var assembly = Assembly.GetEntryAssembly ();
-                var info = FileVersionInfo.GetVersionInfo (assembly.Location);
-                var version = string.Format (CultureInfo.InvariantCulture, "{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
+                var version = Assembly.GetEntryAssembly ().GetName().Version;
                 Console.Error.WriteLine ("ServiceDefinitions.exe version " + version);
                 return 0;
             }
