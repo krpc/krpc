@@ -156,68 +156,6 @@ pkg_zip(
     exclude = ['*.mdb']
 )
 
-pkg_zip(
-    name = 'krpc-curse',
-    out = 'krpc-%s-curse.zip' % version,
-    files = [
-        ':readme',
-        ':license',
-        ':version',
-        ':ksp-avc-version',
-        'COPYING',
-        'COPYING.LESSER',
-        # Server
-        '//server',
-        ':blank_settings',
-        '//tools/build/ksp:Google.Protobuf',
-        '//tools/build/protobuf:LICENSE',
-        '//tools/build/ksp:KRPC.IO.Ports',
-        '@csharp_krpc_io_ports_license//file',
-        # Services
-        '//service/SpaceCenter',
-        '//service/Drawing',
-        '//service/InfernalRobotics',
-        '//service/KerbalAlarmClock',
-        '//service/RemoteTech',
-        '//service/UI',
-        '//service/LiDAR',
-        '//service/DockingCamera'
-    ],
-    path_map = {
-        'kRPC.version': 'GameData/kRPC/kRPC.version',
-        'COPYING': 'GameData/kRPC/COPYING',
-        'COPYING.LESSER': 'GameData/kRPC/COPYING.LESSER',
-        'LICENSE': 'GameData/kRPC/LICENSE',
-        'README.txt': 'GameData/kRPC/README.txt',
-        'VERSION.txt': 'GameData/kRPC/VERSION.txt',
-        # Server
-        'server/': 'GameData/kRPC/',
-        'server/src/icons': 'GameData/kRPC/icons',
-        'tools/build/ksp/': 'GameData/kRPC/',
-        'tools/build/protobuf/LICENSE': 'GameData/kRPC/LICENSE.Google.Protobuf',
-        '../csharp_krpc_io_ports_license/file/LICENSE': 'GameData/kRPC/LICENSE.KRPC.IO.Ports',
-        # Services
-        'service/SpaceCenter/': 'GameData/kRPC/',
-        'service/SpaceCenter/CHANGES.txt': 'GameData/kRPC/CHANGES.SpaceCenter.txt',
-        'service/SpaceCenter/LICENSE': 'GameData/kRPC/LICENSE.KRPC.SpaceCenter',
-        'service/Drawing/': 'GameData/kRPC/',
-        'service/Drawing/CHANGES.txt': 'GameData/kRPC/CHANGES.Drawing.txt',
-        'service/InfernalRobotics/': 'GameData/kRPC/',
-        'service/InfernalRobotics/CHANGES.txt': 'GameData/kRPC/CHANGES.InfernalRobotics.txt',
-        'service/KerbalAlarmClock/': 'GameData/kRPC/',
-        'service/KerbalAlarmClock/CHANGES.txt': 'GameData/kRPC/CHANGES.KerbalAlarmClock.txt',
-        'service/RemoteTech/': 'GameData/kRPC/',
-        'service/RemoteTech/CHANGES.txt': 'GameData/kRPC/CHANGES.RemoteTech.txt',
-        'service/UI/': 'GameData/kRPC/',
-        'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt',
-        'service/LiDAR/': 'GameData/kRPC/',
-        'service/LiDAR/CHANGES.txt': 'GameData/kRPC/CHANGES.LiDAR.txt',
-        'service/DockingCamera/': 'GameData/kRPC/',
-        'service/DockingCamera/CHANGES.txt': 'GameData/kRPC/CHANGES.DockingCamera.txt',
-    },
-    exclude = ['*.mdb']
-)
-
 test_suite(
     name = 'test',
     tests = [
