@@ -161,13 +161,15 @@ http_archive(
 http_file(
     name = 'csharp_krpc_io_ports',
     url = 'https://github.com/krpc/krpc-io-ports/releases/download/v1.0.0/KRPC.IO.Ports.dll',
-    sha256 = '558b0c1649fbc44b518d9de8957fe30e7c9c42d73c62d63d165f6f136fab3ec5'
+    sha256 = '558b0c1649fbc44b518d9de8957fe30e7c9c42d73c62d63d165f6f136fab3ec5',
+    downloaded_file_path = "KRPC.IO.Ports.dll"
 )
 
 http_file(
     name = 'csharp_krpc_io_ports_license',
     url = 'https://raw.githubusercontent.com/krpc/krpc-io-ports/master/LICENSE',
-    sha256 = 'a6b8912947cb14e02cefb704859d12a03d3c8792344fcf5831ef27c1efcd6d20'
+    sha256 = 'a6b8912947cb14e02cefb704859d12a03d3c8792344fcf5831ef27c1efcd6d20',
+    downloaded_file_path = "LICENSE.KRPC.IO.Ports"
 )
 
 http_archive(
