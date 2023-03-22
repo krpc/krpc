@@ -115,8 +115,6 @@ namespace TestServer
                 return;
             }
 
-            KRPC.Service.Scanner.Scanner.GetServices ();
-
             var core = Core.Instance;
             CallContext.GameScene = GameScene.SpaceCenter;
             core.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
