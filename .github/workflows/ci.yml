@@ -23,7 +23,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: build
         run: |
           bazel build \
@@ -32,17 +32,17 @@ jobs:
             //tools/krpctools \
             //tools/TestServer:archive
       - name: upload-krpc-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: krpc
           path: bazel-bin/krpc-*.zip
       - name: upload-krpctools-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: krpctools
           path: bazel-bin/tools/krpctools/krpctools-*.zip
       - name: upload-testserver-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: testserver
           path: bazel-bin/tools/TestServer/TestServer-*.zip
@@ -60,11 +60,11 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: build
         run: tools/dist/genfiles.sh
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: genfiles
           path: bazel-bin/krpc-genfiles-*.zip
@@ -83,7 +83,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: download-genfiles
         uses: actions/download-artifact@v3
         with:
@@ -110,11 +110,11 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: build
         run: bazel build //doc:html
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: docs-html
           path: bazel-bin/doc/html.zip
@@ -132,11 +132,11 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: build
         run: bazel build //doc:pdf
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: docs-pdf
           path: bazel-bin/doc/krpc-*.pdf
@@ -154,7 +154,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: build
         run: bazel build //doc:compile-scripts
 
@@ -171,7 +171,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: build
         run: bazel test //doc:test
 
@@ -188,7 +188,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: test
         run: bazel test //core:test
 
@@ -205,7 +205,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: test
         run: bazel test //server:test
 
@@ -222,7 +222,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: build
         run: bazel build //client/cnano:cnano
       - name: test
@@ -230,7 +230,7 @@ jobs:
       - name: test-build
         run: client/cnano/test-build.sh
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: client-cnano
           path: bazel-bin/client/cnano/krpc-cnano-*.zip
@@ -248,7 +248,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: build
         run: bazel build //client/cpp:cpp
       - name: test
@@ -256,7 +256,7 @@ jobs:
       - name: test-build
         run: client/cpp/test-build.sh
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: client-cpp
           path: bazel-bin/client/cpp/krpc-cpp-*.zip
@@ -274,18 +274,18 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: build
         run: bazel build //client/csharp:csharp //client/csharp:nuget
       - name: test
         run: bazel test //client/csharp:test
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: client-csharp
           path: bazel-bin/client/csharp/krpc-csharp-*.zip
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: client-csharp
           path: bazel-bin/client/csharp/KRPC.Client.*.nupkg
@@ -303,13 +303,13 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: test
         run: bazel build //client/java:java
       - name: test
         run: bazel test //client/java:test
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: client-java
           path: bazel-bin/client/java/krpc-java-*.jar
@@ -327,13 +327,13 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: build
         run: bazel build //client/python:python
       - name: test
         run: bazel test //client/python:test
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: client-python
           path: bazel-bin/client/python/krpc-python-*.zip
@@ -351,13 +351,13 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: build
         run: bazel build //client/lua:lua
       - name: test
         run: bazel test //client/lua:test
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: client-lua
           path: bazel-bin/client/lua/krpc-lua-*.zip
@@ -375,7 +375,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: test
         run: bazel test //client/serialio:test
 
@@ -392,7 +392,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: test
         run: bazel test //client/websockets:test
 
@@ -409,7 +409,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: test
         run: |
           bazel test \
