@@ -10,6 +10,19 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.1.1
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: bazel
+        run: buildifier -mode check -lint warn -r .
+
   build-krpc:
     runs-on: ubuntu-latest
     container:
