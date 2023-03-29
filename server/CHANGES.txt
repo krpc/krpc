@@ -1,3 +1,6 @@
+v0.5.4
+ * Fix memory leaks when switching game scene (#779)
+
 v0.5.2
  * Update to protobuf v3.10.1
  * Fix game lagging when first client connects (#712)

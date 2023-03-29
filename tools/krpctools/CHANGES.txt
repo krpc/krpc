@@ -1,4 +1,4 @@
-v0.6.0
+v0.5.4
  * Fix incorrect protobuf DLL (#755)
  * Fix required KSP assemblies not being copied (#755)
  * Fix tmp directory not being deleted (#755)
