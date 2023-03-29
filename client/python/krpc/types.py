@@ -63,14 +63,24 @@ class Types:
     def register_class_type(self, service: str, name: str, python_type: type) -> None:
         protobuf_type = _protobuf_type(KRPC.Type.CLASS, service, name)
         key = protobuf_type.SerializeToString()
-        assert key not in self._types
-        self._types[key] = ClassType(protobuf_type, None, python_type)
+        if key in self._types:
+            # If a class type is dynamically generated for one service, and later loaded
+            # from a stub it can be registered twice. We use the last registered type
+            # as its python type.
+            self._types[key].override_python_type(python_type)
+        else:
+            self._types[key] = ClassType(protobuf_type, None, python_type)
 
     def register_enum_type(self, service: str, name: str, python_type: type) -> None:
         protobuf_type = _protobuf_type(KRPC.Type.ENUMERATION, service, name)
         key = protobuf_type.SerializeToString()
-        assert key not in self._types
-        self._types[key] = EnumerationType(protobuf_type, None, python_type)
+        if key in self._types:
+            # If an enumeration type is dynamically generated for one service, and later loaded
+            # from a stub it can be registered twice. We use the last registered type
+            # as its python type.
+            self._types[key].override_python_type(python_type)
+        else:
+            self._types[key] = EnumerationType(protobuf_type, None, python_type)
 
     def as_type(self, protobuf_type: KRPC.Type, doc: str | None = None) -> TypeBase:
         """ Return a type object given a protocol buffer type """
@@ -293,6 +303,10 @@ class TypeBase:
     def python_type(self) -> type:
         """ Get the python type """
         return self._python_type
+
+    def override_python_type(self, python_type) -> None:
+        """ Set the python type """
+        self._python_type = python_type
 
     def __str__(self) -> str:
         return '<type: ' + str(self._string) + '>'
