@@ -1,4 +1,4 @@
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_gendarme_test", "csharp_library")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
 load("//:config.bzl", "assembly_version", "author")
 
 srcs = glob(["**/*.cs"]) + [":AssemblyInfo"]
@@ -35,19 +35,4 @@ csharp_assembly_info(
     visibility = [
         "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
     ],
-)
-
-csharp_library(
-    name = "TestingTools.Debug",
-    srcs = srcs,
-    define = ["CODE_ANALYSIS"],
-    optimize = False,
-    visibility = ["//visibility:public"],
-    deps = deps,
-)
-
-csharp_gendarme_test(
-    name = "test",
-    size = "small",
-    lib = ":TestingTools.Debug",
 )

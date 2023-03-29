@@ -1,5 +1,5 @@
 load("//:config.bzl", "assembly_version", "author")
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_gendarme_test", "csharp_library")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
 load("//tools/build:python.bzl", "py_lint_test")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 load("//service:build.bzl", "service_deps")
@@ -61,7 +61,6 @@ test_suite(
 test_suite(
     name = "lint",
     tests = [
-        ":gendarme",
         ":pylint",
     ],
 )
@@ -75,19 +74,4 @@ py_lint_test(
         "//client/python",
         "//tools/krpctest",
     ],
-)
-
-csharp_library(
-    name = "KRPC.Drawing.Debug",
-    srcs = srcs,
-    define = ["CODE_ANALYSIS"],
-    optimize = False,
-    deps = deps,
-)
-
-csharp_gendarme_test(
-    name = "gendarme",
-    size = "small",
-    ignores = "src/ignores.txt",
-    lib = ":KRPC.Drawing.Debug",
 )

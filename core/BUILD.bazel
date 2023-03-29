@@ -1,4 +1,4 @@
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_gendarme_test", "csharp_library", "csharp_nunit_test")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library", "csharp_nunit_test")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 load("//tools/build/mono-4.5:build.bzl", "mono_net_libs")
 load("//:config.bzl", "assembly_version", "author", "version")
@@ -15,16 +15,7 @@ filegroup(
 test_suite(
     name = "test",
     tests = [
-        ":lint",
         ":test-KRPC.Core",
-    ],
-)
-
-test_suite(
-    name = "lint",
-    tests = [
-        ":gendarme-KRPC.Core",
-        ":gendarme-KRPC.Core.Test",
     ],
 )
 
@@ -125,26 +116,4 @@ csharp_nunit_test(
     # FIXME: need to run test outside the sandbox to work around nunit file accesses
     tags = ["local"],
     deps = test_deps,
-)
-
-csharp_library(
-    name = "KRPC.Core.Debug",
-    srcs = srcs,
-    define = ["CODE_ANALYSIS"],
-    optimize = False,
-    deps = deps,
-)
-
-csharp_gendarme_test(
-    name = "gendarme-KRPC.Core",
-    size = "small",
-    ignores = "src/ignores.txt",
-    lib = ":KRPC.Core.Debug",
-)
-
-csharp_gendarme_test(
-    name = "gendarme-KRPC.Core.Test",
-    size = "small",
-    ignores = "test/ignores.txt",
-    lib = ":KRPC.Core.Test",
 )

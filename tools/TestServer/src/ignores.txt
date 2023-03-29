@@ -1,8 +1,0 @@
-R: Gendarme.Rules.Design.AvoidSmallNamespaceRule
-N:
-
-R: Gendarme.Rules.Globalization.PreferIFormatProviderOverrideRule
-A: *
-
-R: Gendarme.Rules.Performance.AvoidConcatenatingCharsRule
-A: *

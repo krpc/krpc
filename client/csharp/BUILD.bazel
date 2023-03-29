@@ -1,5 +1,5 @@
 load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library", "nuget_package")
-load("//tools/build:csharp.bzl", "csharp_gendarme_test", "csharp_nunit_test")
+load("//tools/build:csharp.bzl", "csharp_nunit_test")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/krpctools:clientgen.bzl", "clientgen_csharp")
 load("//tools/build:pkg.bzl", "pkg_zip")
@@ -165,18 +165,9 @@ clientgen_csharp(
 test_suite(
     name = "test",
     tests = [
-        ":client",
-        ":lint",
+        ":client"
     ],
     visibility = ["//:__pkg__"],
-)
-
-test_suite(
-    name = "lint",
-    tests = [
-        ":gendarme-KRPC.Client",
-        ":gendarme-KRPC.Client.Test",
-    ],
 )
 
 client_test(
@@ -240,27 +231,4 @@ clientgen_csharp(
     visibility = [
         "//:__pkg__",
     ],
-)
-
-csharp_library(
-    name = "KRPC.Client.Debug",
-    srcs = srcs,
-    define = ["CODE_ANALYSIS"],
-    nowarn = ["1685"],
-    optimize = False,
-    deps = deps,
-)
-
-csharp_gendarme_test(
-    name = "gendarme-KRPC.Client",
-    size = "small",
-    ignores = "src/ignores.txt",
-    lib = ":KRPC.Client.Debug",
-)
-
-csharp_gendarme_test(
-    name = "gendarme-KRPC.Client.Test",
-    size = "small",
-    ignores = "test/ignores.txt",
-    lib = ":KRPC.Client.Test",
 )

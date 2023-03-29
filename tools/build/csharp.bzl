@@ -171,34 +171,6 @@ def _nunit_impl(ctx):
         runfiles = ctx.runfiles(files = runfiles),
     )
 
-def _gendarme_impl(ctx):
-    if ctx.attr.lib:
-        src = ctx.attr.lib.lib
-        mdb = ctx.attr.lib.mdb
-    else:
-        src = ctx.attr.exe.bin
-        mdb = ctx.attr.exe.mdb
-    runfiles = [src, mdb, ctx.file.config, ctx.file._gendarme_summary]
-    if ctx.attr.ignores:
-        runfiles.append(ctx.file.ignores)
-
-    args = ["--severity=all", "--confidence=all"]
-    args.append("--config=%s" % ctx.file.config.short_path)
-    args.append("--set=%s" % ctx.attr.ruleset)
-    if ctx.attr.ignores:
-        args.append("--ignore=%s" % ctx.file.ignores.short_path)
-    args.append(src.short_path)
-
-    ctx.actions.write(
-        ctx.outputs.executable,
-        'MONO_OPTIONS="--debug" /usr/bin/gendarme %s | python %s\n' % (" ".join(args), ctx.file._gendarme_summary.path),
-    )
-
-    return struct(
-        name = ctx.label.name,
-        runfiles = ctx.runfiles(files = runfiles),
-    )
-
 def _assembly_info_impl(ctx):
     content = ["using System;", "using System.Reflection;", "using System.Runtime.InteropServices;"]
     if len(ctx.attr.internals_visible_to) > 0:
@@ -289,25 +261,6 @@ csharp_nunit_test = rule(
         "_nunit_engine_api": attr.label(default = Label("@csharp_nunit_consolerunner//:tools/nunit.engine.api.dll"), allow_single_file = True),
         "_testcentric_engine_metadata": attr.label(default = Label("@csharp_nunit_consolerunner//:tools/testcentric.engine.metadata.dll"), allow_single_file = True),
         "_nunit_framework": attr.label(default = Label("@csharp_nunit//:lib/net45/nunit.framework.dll"), allow_single_file = True),
-    },
-    test = True,
-)
-
-csharp_gendarme_test = rule(
-    implementation = _gendarme_impl,
-    attrs = {
-        "lib": attr.label(allow_files = True),
-        "exe": attr.label(allow_files = True),
-        "config": attr.label(
-            default = Label("//tools/build:csharp_gendarme_rules.xml"),
-            allow_single_file = True,
-        ),
-        "ruleset": attr.string(default = "default"),
-        "ignores": attr.label(allow_single_file = True),
-        "_gendarme_summary": attr.label(
-            default = Label("//tools/build:gendarme_summary.py"),
-            allow_single_file = True,
-        ),
     },
     test = True,
 )

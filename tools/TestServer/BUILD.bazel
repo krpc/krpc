@@ -1,4 +1,4 @@
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_binary", "csharp_gendarme_test", "csharp_library")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_binary", "csharp_library")
 load("//tools/build/protobuf:csharp.bzl", "protobuf_csharp")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
@@ -85,11 +85,4 @@ csharp_binary(
     optimize = False,
     visibility = ["//visibility:public"],
     deps = exe_deps,
-)
-
-csharp_gendarme_test(
-    name = "test",
-    size = "small",
-    exe = ":TestServer.Debug",
-    ignores = "src/ignores.txt",
 )

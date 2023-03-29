@@ -1,4 +1,4 @@
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_gendarme_test", "csharp_library", "csharp_nunit_test")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library", "csharp_nunit_test")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 load("//tools/build:image.bzl", "png_images")
 load("//tools/build/ksp:build.bzl", "ksp_libs", "ksp_unity_libs")
@@ -14,16 +14,6 @@ filegroup(
         "//:version",
     ],
     visibility = ["//:__pkg__"],
-)
-
-test_suite(
-    name = "test",
-    tests = [":lint"],
-)
-
-test_suite(
-    name = "lint",
-    tests = [":gendarme-KRPC"],
 )
 
 csharp_assembly_info(
@@ -72,19 +62,4 @@ csharp_library(
 png_images(
     name = "icons",
     srcs = glob(["src/icons/*.svg"]),
-)
-
-csharp_library(
-    name = "KRPC.Debug",
-    srcs = srcs,
-    define = ["CODE_ANALYSIS"],
-    optimize = False,
-    deps = deps,
-)
-
-csharp_gendarme_test(
-    name = "gendarme-KRPC",
-    size = "small",
-    ignores = "src/ignores.txt",
-    lib = ":KRPC.Debug",
 )

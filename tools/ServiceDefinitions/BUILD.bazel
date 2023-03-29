@@ -1,4 +1,4 @@
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_binary", "csharp_gendarme_test", "csharp_library")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_binary", "csharp_library")
 load("//:config.bzl", "assembly_version", "author")
 load("//tools/build/ksp:build.bzl", "ksp_unity_libs")
 load("//tools/build/mono-4.5:build.bzl", "mono_net_libs")
@@ -46,19 +46,4 @@ csharp_library(
         "//tools/build/ksp:Google.Protobuf",
         "//tools/build/ksp:KRPC.IO.Ports",
     ] + ksp_unity_libs + mono_net_libs,
-)
-
-csharp_binary(
-    name = "ServiceDefinitions.Debug",
-    srcs = srcs,
-    define = ["CODE_ANALYSIS"],
-    optimize = False,
-    visibility = ["//visibility:public"],
-    deps = deps,
-)
-
-csharp_gendarme_test(
-    name = "test",
-    size = "small",
-    exe = ":ServiceDefinitions.Debug",
 )

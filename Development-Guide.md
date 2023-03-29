@@ -192,13 +192,12 @@ To run the tests, the following dependencies need to be installed. Without them,
 will fail.
 
  * Python 3.7+ development files
- * Gendarme
  * CppCheck
  * socat
 
 To install these dependencies via apt on Ubuntu run the following command:
 ```
-sudo apt-get install gendarme cppcheck socat
+sudo apt-get install cppcheck socat
 ```
 
 The unit tests can be run using: `bazel test //:test`
