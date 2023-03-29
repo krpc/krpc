@@ -1,9 +1,7 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace KRPC.Utils
 {
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
     static class Text
     {
         const byte CONTINUATION_MASK = 0xc0;

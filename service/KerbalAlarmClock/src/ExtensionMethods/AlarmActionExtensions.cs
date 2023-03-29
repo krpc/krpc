@@ -1,9 +1,7 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.KerbalAlarmClock.ExtensionMethods
 {
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
     static class AlarmActionExtensions
     {
         public static AlarmAction ToAlarmAction (this KACWrapper.KACAPI.AlarmActionEnum action)
@@ -26,7 +24,6 @@ namespace KRPC.KerbalAlarmClock.ExtensionMethods
             }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
         public static KACWrapper.KACAPI.AlarmActionEnum FromAlarmAction (this AlarmAction action)
         {
             switch (action) {

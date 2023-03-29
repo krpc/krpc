@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Google.Protobuf;
@@ -12,8 +11,6 @@ using NUnit.Framework;
 namespace KRPC.Test.Server.WebSockets
 {
     [TestFixture]
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class RPCStreamTest
     {
         Schema.KRPC.Request expectedRequest;
@@ -131,8 +128,6 @@ namespace KRPC.Test.Server.WebSockets
         }
 
         [Test]
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void ReadSingleRequestInParts ()
         {
             var frameBytes = Frame.Binary (requestBytes, "deadbeef".ToBytes ()).ToBytes ();
@@ -191,7 +186,6 @@ namespace KRPC.Test.Server.WebSockets
         }
 
         [Test]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void ReadSingleRequestInMultipleFrames ()
         {
             // Split the message bytes into 3 parts
@@ -242,7 +236,6 @@ namespace KRPC.Test.Server.WebSockets
         }
 
         [Test]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void ReadSingleRequestInMultipleFramesInterleavedWithPings ()
         {
             var pingFrame = new Frame (OpCode.Ping, "deadbeef".ToBytes ());

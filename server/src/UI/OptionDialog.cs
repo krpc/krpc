@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.UI
 {
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSiblingClassesRule")]
     abstract class OptionDialog : MonoBehaviour
     {
         MultiOptionDialog dialog;

@@ -1,12 +1,9 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Sockets;
 
 namespace KRPC.Server.TCP
 {
-    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInTypeNameRule")]
-    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     sealed class TCPStream : IStream<byte,byte>
     {
         readonly NetworkStream stream;
@@ -66,7 +63,6 @@ namespace KRPC.Server.TCP
             throw new NotSupportedException ();
         }
 
-        [SuppressMessage ("Gendarme.Rules.Naming", "ParameterNamesShouldMatchOverriddenMethodRule")]
         public void Write (byte[] buffer)
         {
             Write (buffer, 0, buffer.Length);

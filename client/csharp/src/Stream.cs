@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using KRPC.Schema.KRPC;
 
@@ -8,7 +7,6 @@ namespace KRPC.Client
     /// <summary>
     /// Object representing a stream.
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     public class Stream<TReturnType> : IEquatable<Stream<TReturnType>>
     {
         internal readonly StreamImpl stream;
@@ -18,7 +16,6 @@ namespace KRPC.Client
             stream = connection.StreamManager.GetStream (typeof(TReturnType), id);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
         internal Stream (Connection connection, ProcedureCall call)
         {
             stream = connection.StreamManager.AddStream (typeof(TReturnType), call);
@@ -48,7 +45,6 @@ namespace KRPC.Client
         /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotDeclareStaticMembersOnGenericTypesRule")]
         public static bool operator == (Stream<TReturnType> lhs, Stream<TReturnType> rhs)
         {
             if (ReferenceEquals (lhs, null) || ReferenceEquals (rhs, null))
@@ -61,7 +57,6 @@ namespace KRPC.Client
         /// <summary>
         /// Returns true if the objects are not equal.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotDeclareStaticMembersOnGenericTypesRule")]
         public static bool operator != (Stream<TReturnType> lhs, Stream<TReturnType> rhs)
         {
             if (ReferenceEquals (lhs, null) || ReferenceEquals (rhs, null))
@@ -107,7 +102,6 @@ namespace KRPC.Client
         /// <summary>
         /// The most recent value of the stream.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
         public TReturnType Get () {
             if (!stream.Started)
                 Start();

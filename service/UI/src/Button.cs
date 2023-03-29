@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using UnityEngine;
 
@@ -8,7 +7,6 @@ namespace KRPC.UI
     /// A text label. See <see cref="Panel.AddButton" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class Button : Object
     {
         readonly UnityEngine.UI.Button button;

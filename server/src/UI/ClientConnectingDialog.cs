@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Server;
 using KRPC.Utils;
 
@@ -41,7 +40,6 @@ namespace KRPC.UI
             args = null;
         }
 
-        [SuppressMessage("Gendarme.Rules.Performance", "AvoidUnusedParametersRule")]
         public void OnClientRequestingConnection (object sender, ClientRequestingConnectionEventArgs eventArgs)
         {
             // Not open, so open the dialog

@@ -1,12 +1,9 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class VesselSituationExtensions
     {
-        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static Services.VesselSituation ToVesselSituation (this Vessel.Situations situation)
         {
             switch (situation) {

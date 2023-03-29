@@ -1,12 +1,10 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Utils
 {
     /// <summary>
     /// Extension methods for event handlers.
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
     public static class EventHandlerExtensions
     {
         /// <summary>

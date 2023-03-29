@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Server;
 using KRPC.Service;
@@ -53,7 +52,6 @@ namespace KRPC.Drawing
         /// <summary>
         /// Wake the addon
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Awake ()
         {
         }
@@ -61,7 +59,6 @@ namespace KRPC.Drawing
         /// <summary>
         /// Update the addon
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Update ()
         {
             if (!objects.Any ())
@@ -79,7 +76,6 @@ namespace KRPC.Drawing
         /// <summary>
         /// Destroy the addon
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnDestroy ()
         {
             Clear ();

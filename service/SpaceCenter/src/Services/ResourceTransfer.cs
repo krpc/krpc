@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services
@@ -43,7 +42,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="resource">The name of the resource to transfer.</param>
         /// <param name="maxAmount">The maximum amount of resource to transfer.</param>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
         public static ResourceTransfer Start (Parts.Part fromPart, Parts.Part toPart, string resource, float maxAmount)
         {
             if (ReferenceEquals (fromPart, null))

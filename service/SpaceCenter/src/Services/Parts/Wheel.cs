@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -13,7 +12,6 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Can be used to control the motors, steering and deployment of wheels, among other things.
     /// </summary>
     [KRPCClass(Service = "SpaceCenter")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class Wheel : Equatable<Wheel>
     {
         readonly ModuleWheelBase wheel;
@@ -444,7 +442,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether the wheel is broken.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public bool Broken {
             get { return damage != null && damage.isDamaged; }
         }

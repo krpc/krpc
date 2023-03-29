@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -116,7 +115,6 @@ namespace KRPC.SpaceCenter.Services
         /// This is the mode displayed next to the speed at the top of the navball.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public SpeedMode SpeedMode {
             get { return GlobalSpeedMode; }
             set { FlightGlobals.SetSpeedMode (value.FromSpeedMode ()); }
@@ -549,7 +547,6 @@ namespace KRPC.SpaceCenter.Services
         /// This is equivalent to locking the staging using Alt+L
         /// </remarks>
         [KRPCProperty]
-        [SuppressMessage("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public bool StageLock
         {
             get { return InputLockManager.GetControlLock("manualStageLock") == ControlTypes.STAGING; }

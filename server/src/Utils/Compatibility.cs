@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using PreFlightTests;
 using UnityEngine;
@@ -14,8 +13,6 @@ namespace KRPC.Utils
         /// <summary>
         /// Calls PopupDialog.SpawnPopupDialog
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public static PopupDialog SpawnPopupDialog (
             Vector2 anchorMin, Vector2 anchorMax, string dialogName, string title, string message,
             string buttonMessage, bool persistAcrossScenes, UISkinDef skin,
@@ -46,7 +43,6 @@ namespace KRPC.Utils
         /// <summary>
         /// Constructs a MultiOptionDialog
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static MultiOptionDialog NewMultiOptionDialog (
             string name, string msg, string windowTitle, UISkinDef skin,
             params DialogGUIBase[] options) {
@@ -108,7 +104,6 @@ namespace KRPC.Utils
         /// <summary>
         /// Returns true if the given game mode is Game.Modes.Mission
         /// </summary>
-        [SuppressMessage("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public static bool GameModeIsMission(Game.Modes mode)
         {
             if (Versioning.version_major * 100 + Versioning.version_minor < 104)
@@ -121,7 +116,6 @@ namespace KRPC.Utils
         /// <summary>
         /// Returns true if the given game mode is Game.Modes.MissionBuilder
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public static bool GameModeIsMissionBuilder(Game.Modes mode)
         {
             if (Versioning.version_major * 100 + Versioning.version_minor < 104)
@@ -134,7 +128,6 @@ namespace KRPC.Utils
         /// <summary>
         /// Returns true if the given game scene is GameScenes.MissionBuilder
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public static bool GameSceneIsMissionBuilder(GameScenes scene)
         {
             if (Versioning.version_major * 100 + Versioning.version_minor < 104)
@@ -148,7 +141,6 @@ namespace KRPC.Utils
         /// Methods mimicking ModuleDecouplerBase that can be used in KSP 1.6.1 and below
         /// Uses reflection to call these methods, as the name of the base class changed in KSP 1.7
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
         public class ModuleDecoupler
         {
             private object decoupler;

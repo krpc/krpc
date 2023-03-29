@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -13,7 +12,6 @@ namespace KRPC.Drawing
     /// A polygon. Created using <see cref="Drawing.AddPolygon" />.
     /// </summary>
     [KRPCClass (Service = "Drawing")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class Polygon : Drawable<Polygon>
     {
         readonly LineRenderer renderer;
@@ -64,8 +62,6 @@ namespace KRPC.Drawing
         /// Vertices for the polygon.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Design", "DoNotDeclareSettersOnCollectionPropertiesRule")]
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public IList<Tuple3> Vertices {
             get { return vertices.Select (x => x.ToTuple ()).ToList (); }
             set { vertices = value.Select (x => x.ToVector ()).ToList (); }

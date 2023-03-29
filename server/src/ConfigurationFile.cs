@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Server;
 using KRPC.Utils;
@@ -8,7 +7,6 @@ using Logger = KRPC.Utils.Logger;
 
 namespace KRPC
 {
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     sealed class ConfigurationFile : ConfigurationStorage
     {
         static ConfigurationFile instance;
@@ -45,7 +43,6 @@ namespace KRPC
                 settings = server.Settings.Select(x => new KeyValuePair { key = x.Key, value = x.Value}).ToList();
             }
 
-            [SuppressMessage ("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
             public void AfterLoad (Configuration.Server server)
             {
                 server.Id = new Guid (id);
@@ -115,7 +112,6 @@ namespace KRPC
 
         }
 
-        [SuppressMessage ("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
         protected override void AfterLoad ()
         {
             Configuration.Servers.Clear ();

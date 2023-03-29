@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace TestingTools
@@ -12,7 +11,6 @@ namespace TestingTools
      */
     static class OrbitTools
     {
-        [SuppressMessage("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public static Orbit CreateOrbit(CelestialBody body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
         {
             if (Math.Sign(eccentricity - 1) == Math.Sign(semiMajorAxis))
@@ -65,7 +63,6 @@ namespace TestingTools
             }
         }
 
-        [SuppressMessage("Gendarme.Rules.Interoperability", "DelegatesPassedToNativeCodeMustIncludeExceptionHandlingRule")]
         private static void HardsetOrbit(OrbitDriver orbitDriver, Orbit newOrbit)
         {
             var orbit = orbitDriver.orbit;

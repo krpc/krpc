@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -25,8 +24,6 @@ namespace ServiceDefinitions
             Console.Error.WriteLine ("  assembly...                Path(s) to assembly DLL(s) to load");
         }
 
-        [SuppressMessage ("Gendarme.Rules.Portability", "ExitCodeIsLimitedOnUnixRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static int Main (string [] args)
         {
             bool showHelp = false;

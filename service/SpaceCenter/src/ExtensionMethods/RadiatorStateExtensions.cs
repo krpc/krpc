@@ -1,12 +1,10 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.Services.Parts;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class RadiatorStateExtensions
     {
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static RadiatorState ToRadiatorState (this ModuleDeployablePart.DeployState state)
         {
             switch (state) {

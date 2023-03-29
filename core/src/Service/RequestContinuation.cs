@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using KRPC.Server;
@@ -17,7 +16,6 @@ namespace KRPC.Service
         readonly ProcedureCallContinuation[] calls;
         readonly ProcedureResult[] results;
 
-        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
         public RequestContinuation (IClient<Request,Response> client, Request request)
         {
             Client = client;

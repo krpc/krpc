@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.Services;
 using UnityEngine;
 
@@ -19,7 +18,6 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// Destroy the addon
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnDestroy ()
         {
             transfers.Clear ();
@@ -36,7 +34,6 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// Update the transfers
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void FixedUpdate ()
         {
             foreach (var transfer in transfers)

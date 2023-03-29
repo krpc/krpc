@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -43,7 +42,6 @@ namespace KRPC.UI
         /// A list of all available fonts.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public IList<string> AvailableFonts {
             get { return UnityEngine.Font.GetOSInstalledFontNames ().ToList (); }
         }

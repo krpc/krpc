@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using KRPC.Service.Messages;
 using KRPC.Service.Scanner;
@@ -10,7 +9,6 @@ using KRPC.Service.Attributes;
 
 namespace KRPC.Service
 {
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     sealed class Services
     {
         internal IDictionary<string, ServiceSignature> Signatures { get; private set; }
@@ -98,7 +96,6 @@ namespace KRPC.Service
         /// Throws YieldException, containing a continuation, if the call yields.
         /// Throws RPCException if the call fails.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
 
         public ProcedureResult ExecuteCall (ProcedureSignature procedure, ProcedureCall call)
         {
@@ -118,8 +115,6 @@ namespace KRPC.Service
         /// Throws YieldException, containing a continuation, if the call yields.
         /// Throws RPCException if the call fails.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
-        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
         public ProcedureResult ExecuteCall (ProcedureSignature procedure, object[] arguments)
         {
             try {
@@ -153,8 +148,6 @@ namespace KRPC.Service
         /// Throws YieldException, containing a continuation, if the call yields.
         /// Throws RPCException if the call fails.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
-        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
         public ProcedureResult ExecuteCall (ProcedureSignature procedure, Func<object> continuation)
         {
             object returnValue;
@@ -176,8 +169,6 @@ namespace KRPC.Service
         /// <summary>
         /// Get the arguments for a procedure from a list of argument messages.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public object[] GetArguments (ProcedureSignature procedure, IList<Argument> arguments)
         {
             // Get list of supplied argument values and whether they were set

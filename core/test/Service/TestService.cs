@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 
@@ -10,15 +9,9 @@ namespace KRPC.Test.Service
     /// Test service documentation.
     /// </summary>
     [KRPCService (GameScene = GameScene.Flight)]
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
-    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidTypeInterfaceInconsistencyRule")]
     public static class TestService
     {
         [KRPCException]
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
-        [SuppressMessage ("Gendarme.Rules.Exceptions", "MissingExceptionConstructorsRule")]
-        [SuppressMessage ("Gendarme.Rules.Serialization", "MissingSerializableAttributeOnISerializableTypeRule")]
-        [SuppressMessage ("Gendarme.Rules.Serialization", "MissingSerializationConstructorRule")]
         public class MyException : Exception {
         };
 
@@ -77,7 +70,6 @@ namespace KRPC.Test.Service
         }
 
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidPropertiesWithoutGetAccessorRule")]
         public static string PropertyWithSet {
             set { Service.PropertyWithSet = value; }
         }
@@ -107,7 +99,6 @@ namespace KRPC.Test.Service
         }
 
         [KRPCClass (GameScene = GameScene.Flight | GameScene.SpaceCenter)]
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
         public class TestClass
         {
             public readonly string Value;
@@ -195,8 +186,6 @@ namespace KRPC.Test.Service
         /// </summary>
         [KRPCEnum]
         [Serializable]
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
-        [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
         public enum TestEnum
         {
             /// <summary>
@@ -208,8 +197,6 @@ namespace KRPC.Test.Service
         }
 
         [Serializable]
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
-        [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
         public enum TestEnumWithoutAttribute
         {
             Foo,
@@ -266,7 +253,6 @@ namespace KRPC.Test.Service
         }
 
         [KRPCProcedure]
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public static IDictionary<int,IList<string>> EchoNestedCollection (IDictionary<int,IList<string>> c)
         {
             return Service.EchoNestedCollection (c);
@@ -278,7 +264,6 @@ namespace KRPC.Test.Service
             return Service.EchoListOfObjects (l);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
         public static class CreateTupleDefault
         {
             public static object Create ()
@@ -294,7 +279,6 @@ namespace KRPC.Test.Service
             return Service.TupleDefault (x);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
         public static class CreateListDefault
         {
             public static object Create ()
@@ -310,7 +294,6 @@ namespace KRPC.Test.Service
             return Service.ListDefault (x);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
         public static class CreateSetDefault
         {
             public static object Create ()
@@ -326,7 +309,6 @@ namespace KRPC.Test.Service
             return Service.SetDefault (x);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
         public static class CreateDictionaryDefault
         {
             public static object Create ()

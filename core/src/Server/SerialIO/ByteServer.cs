@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using KRPC.IO.Ports;
 using KRPC.Utils;
@@ -10,8 +9,6 @@ namespace KRPC.Server.SerialIO
     /// <summary>
     /// Byte server implementation over serial I/O.
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public sealed class ByteServer : IServer<byte,byte>
     {
         /// <summary>
@@ -69,7 +66,6 @@ namespace KRPC.Server.SerialIO
         /// <summary>
         /// Start the server.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
         public void Start ()
         {
             if (OnClientRequestingConnection == null)
@@ -111,7 +107,6 @@ namespace KRPC.Server.SerialIO
             EventHandlerExtensions.Invoke (OnStopped, this);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         void Close ()
         {
             if (client != null) {

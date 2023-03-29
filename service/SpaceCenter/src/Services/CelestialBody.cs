@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -264,7 +263,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="position">Position as a vector.</param>
         /// <param name="referenceFrame">Reference frame for the position vector.</param>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public double LatitudeAtPosition (Tuple3 position, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals(referenceFrame, null))
@@ -278,7 +276,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="position">Position as a vector.</param>
         /// <param name="referenceFrame">Reference frame for the position vector.</param>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public double LongitudeAtPosition (Tuple3 position, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals(referenceFrame, null))
@@ -292,7 +289,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="position">Position as a vector.</param>
         /// <param name="referenceFrame">Reference frame for the position vector.</param>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public double AltitudeAtPosition (Tuple3 position, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals(referenceFrame, null))
@@ -351,7 +347,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="position">The position vector at which to measure the density.</param>
         /// <param name="referenceFrame">Reference frame that the position vector is in.</param>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public double AtmosphericDensityAtPosition(Tuple3 position, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals(referenceFrame, null))
@@ -427,7 +422,6 @@ namespace KRPC.SpaceCenter.Services
         /// The biomes present on this body.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public HashSet<string> Biomes {
             get {
                 var body = InternalBody;

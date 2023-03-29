@@ -1,11 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Server
 {
     /// <summary>
     /// A non-generic stream.
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     public interface IStream
     {
         /// <summary>
@@ -37,7 +35,6 @@ namespace KRPC.Server
     /// <summary>
     /// A generic stream, from which values of type In can be read and values of type Out can be written.
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     public interface IStream<TIn,TOut> : IStream
     {
         /// <summary>

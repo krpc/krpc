@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -42,8 +41,6 @@ namespace KRPC.SpaceCenter.Services
         /// The current mode of the camera.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public CameraMode Mode {
             get {
                 if (MapView.MapIsEnabled)
@@ -95,8 +92,6 @@ namespace KRPC.SpaceCenter.Services
         /// A value between <see cref="MinPitch"/> and <see cref="MaxPitch"/>
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.BadPractice", "DoNotForgetNotImplementedMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float Pitch {
             get {
                 switch (Mode) {
@@ -132,8 +127,6 @@ namespace KRPC.SpaceCenter.Services
         /// The heading of the camera, in degrees.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.BadPractice", "DoNotForgetNotImplementedMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float Heading {
             get {
                 switch (Mode) {
@@ -164,8 +157,6 @@ namespace KRPC.SpaceCenter.Services
         /// A value between <see cref="MinDistance"/> and <see cref="MaxDistance"/>.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.BadPractice", "DoNotForgetNotImplementedMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float Distance {
             get {
                 switch (Mode) {
@@ -201,7 +192,6 @@ namespace KRPC.SpaceCenter.Services
         /// The minimum pitch of the camera.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float MinPitch {
             get {
                 switch (Mode) {
@@ -219,7 +209,6 @@ namespace KRPC.SpaceCenter.Services
         /// The maximum pitch of the camera.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float MaxPitch {
             get {
                 switch (Mode) {
@@ -237,7 +226,6 @@ namespace KRPC.SpaceCenter.Services
         /// Minimum distance from the camera to the subject, in meters.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float MinDistance {
             get {
                 switch (Mode) {
@@ -255,7 +243,6 @@ namespace KRPC.SpaceCenter.Services
         /// Maximum distance from the camera to the subject, in meters.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float MaxDistance {
             get {
                 switch (Mode) {
@@ -273,7 +260,6 @@ namespace KRPC.SpaceCenter.Services
         /// Default distance from the camera to the subject, in meters.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.BadPractice", "DoNotForgetNotImplementedMethodsRule")]
         public float DefaultDistance {
             get {
                 switch (Mode) {
@@ -293,8 +279,6 @@ namespace KRPC.SpaceCenter.Services
         /// Returns an error is the camera is not in map mode.
         /// </summary>
         [KRPCProperty (Nullable = true)]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public CelestialBody FocussedBody {
             get {
                 CheckCameraFocus ();
@@ -315,7 +299,6 @@ namespace KRPC.SpaceCenter.Services
         /// Returns an error is the camera is not in map mode.
         /// </summary>
         [KRPCProperty (Nullable = true)]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public Vessel FocussedVessel {
             get {
                 CheckCameraFocus ();
@@ -336,7 +319,6 @@ namespace KRPC.SpaceCenter.Services
         /// Returns an error is the camera is not in map mode.
         /// </summary>
         [KRPCProperty (Nullable = true)]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public Node FocussedNode {
             get {
                 CheckCameraFocus ();

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using Torque = System.Tuple<Vector3d, Vector3d>;
 
@@ -8,7 +7,6 @@ namespace KRPC.SpaceCenter
     /// <summary>
     /// Extension methods for torque providers
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectPrefixRule")]
     static class ITorqueProviderExtensions
     {
         /// <summary>

@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -9,7 +8,6 @@ using NUnit.Framework;
 namespace KRPC.Test.Server.TCP
 {
     [TestFixture]
-    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInTypeNameRule")]
     public class TCPServerTest
     {
         [Test]

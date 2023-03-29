@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -65,7 +64,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The part from which the vessel is controlled.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public Part Controlling {
             get {
                 var vessel = InternalVessel;

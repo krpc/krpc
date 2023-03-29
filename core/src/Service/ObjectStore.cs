@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Service
 {
@@ -50,7 +49,6 @@ namespace KRPC.Service
         /// Remove an instance from the object store.
         /// Note: this doesn't destroy the instance, just removes the reference to it.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
         public void RemoveInstance (object obj)
         {
             if (obj == null)
@@ -77,7 +75,6 @@ namespace KRPC.Service
         /// <summary>
         /// Get the object identifier for a given instance.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
         public ulong GetObjectId (object obj)
         {
             if (obj == null)

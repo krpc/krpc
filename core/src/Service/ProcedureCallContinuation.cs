@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using KRPC.Service.Scanner;
@@ -16,7 +15,6 @@ namespace KRPC.Service
         readonly System.Exception exception;
         readonly Func<object> continuation;
 
-        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
         public ProcedureCallContinuation (ProcedureCall procedureCall)
         {
             call = procedureCall;

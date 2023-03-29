@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,9 +22,6 @@ namespace KRPC.Server.ProtocolBuffers
             return EncodeObject (value, cachedBuffer, cachedStream);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUnneededUnboxingRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         static ByteString EncodeObject (object value, MemoryStream buffer, CodedOutputStream stream)
         {
             buffer.SetLength (0);
@@ -156,7 +152,6 @@ namespace KRPC.Server.ProtocolBuffers
         /// Decode a value of the given type.
         /// Should not be called directly. This interface is used by service client stubs.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static object Decode (ByteString value, Type type)
         {
             var stream = value.CreateCodedInput ();

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -454,7 +453,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="target">Target orbit.</param>
         /// <param name="orbits">The number of future orbits to search.</param>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public IList<IList<double>> ListClosestApproaches(Orbit target, int orbits)
         {
             if (ReferenceEquals (target, null))
@@ -485,7 +483,6 @@ namespace KRPC.SpaceCenter.Services
         /// one orbital period from this time.</param>
         /// <param name="distance">The distance at the closest approach, in meters.</param>
         /// <returns>The universal time at closest approach, in seconds.</returns>
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidRefAndOutParametersRule")]
         public static double CalcClosestAproach(Orbit myOrbit, Orbit targetOrbit, double beginTime, out double distance)
         {
             if (ReferenceEquals (myOrbit, null))

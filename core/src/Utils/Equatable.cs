@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Utils
 {
@@ -35,7 +34,6 @@ namespace KRPC.Utils
         /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotDeclareStaticMembersOnGenericTypesRule")]
         public static bool operator == (Equatable<T> lhs, Equatable<T> rhs)
         {
             if (ReferenceEquals (lhs, null) || ReferenceEquals (rhs, null))
@@ -48,7 +46,6 @@ namespace KRPC.Utils
         /// <summary>
         /// Returns true if the objects are not equal.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotDeclareStaticMembersOnGenericTypesRule")]
         public static bool operator != (Equatable<T> lhs, Equatable<T> rhs)
         {
             if (ReferenceEquals (lhs, null) || ReferenceEquals (rhs, null))

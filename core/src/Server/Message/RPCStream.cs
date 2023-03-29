@@ -1,10 +1,8 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Messages;
 
 namespace KRPC.Server.Message
 {
-    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     abstract class RPCStream : IStream<Request,Response>
     {
         Request bufferedRequest;
@@ -72,7 +70,6 @@ namespace KRPC.Server.Message
         /// </summary>
         public abstract void Write (Response value);
 
-        [SuppressMessage ("Gendarme.Rules.Naming", "ParameterNamesShouldMatchOverriddenMethodRule")]
         public void Write (Response[] buffer)
         {
             throw new NotSupportedException ();
@@ -110,7 +107,6 @@ namespace KRPC.Server.Message
         /// Otherwise attempts to receive a new message.
         /// Returns false if no message could be received.
         /// Closes the stream and throws MalformedRequestException if a malformed message is received.
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         bool Poll ()
         {
             // Check if the stream is closed

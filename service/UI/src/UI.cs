@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -8,7 +7,6 @@ using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.UI
 {
-    [SuppressMessage("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
     static class CreateDefaultDuration
     {
         public static object Create()
@@ -17,7 +15,6 @@ namespace KRPC.UI
         }
     }
 
-    [SuppressMessage("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
     static class CreateDefaultPosition
     {
         public static object Create()
@@ -26,7 +23,6 @@ namespace KRPC.UI
         }
     }
 
-    [SuppressMessage("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
     static class CreateDefaultColor
     {
         public static object Create()
@@ -76,7 +72,6 @@ namespace KRPC.UI
         /// <param name="size">Size of the message, differs per position.</param>
         /// <param name="color">The color of the message.</param>
         [KRPCProcedure]
-        [SuppressMessage("Gendarme.Rules.Globalization", "PreferIFormatProviderOverrideRule")]
         public static void Message(
             string content,
             [KRPCDefaultValue(typeof(CreateDefaultDuration))] float duration,

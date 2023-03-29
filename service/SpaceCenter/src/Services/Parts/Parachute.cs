@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -11,8 +10,6 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A parachute. Obtained by calling <see cref="Part.Parachute"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
     public class Parachute : Equatable<Parachute>
     {
         readonly ModuleParachute parachute;

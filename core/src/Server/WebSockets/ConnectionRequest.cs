@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -52,7 +51,6 @@ namespace KRPC.Server.WebSockets
             return response.ToBytes ();
         }
 
-        [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
         static void CheckValid (Request request)
         {
             // Check request line

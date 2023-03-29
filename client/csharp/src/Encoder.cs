@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -20,7 +19,6 @@ namespace KRPC.Client
     /// <summary>
     /// Methods for encoding and decoding messages for kRPCs protocolo bufers over TCP/IP protocol.
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public static class Encoder
     {
         /// <summary>
@@ -35,9 +33,6 @@ namespace KRPC.Client
             }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUnneededUnboxingRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         static ByteString EncodeObject (object value, Type type, MemoryStream buffer, CodedOutputStream stream)
         {
             buffer.SetLength (0);
@@ -99,7 +94,6 @@ namespace KRPC.Client
             return ByteString.CopyFrom (buffer.GetBuffer (), 0, (int)buffer.Length);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         static void WriteTuple (object value, Type type, Stream stream)
         {
             var encodedTuple = new Schema.KRPC.Tuple ();
@@ -117,7 +111,6 @@ namespace KRPC.Client
             encodedTuple.WriteTo (stream);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         static void WriteList (object value, Type type, Stream stream)
         {
             var encodedList = new Schema.KRPC.List ();
@@ -165,8 +158,6 @@ namespace KRPC.Client
         /// Decode a value of the given type.
         /// Should not be called directly. This interface is used by service client stubs.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static object Decode (ByteString value, Type type, IConnection client)
         {
             if (ReferenceEquals (type, null))

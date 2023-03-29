@@ -1,11 +1,9 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Server;
 
 namespace KRPC.Test.Server
 {
     // TODO: This is only required due to mocking not performing equality testing. Is there a better way to do this?
-    [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
     sealed class TestClient : IClient<byte,byte>
     {
         readonly Guid guid;

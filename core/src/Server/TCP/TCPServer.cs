@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -94,7 +93,6 @@ namespace KRPC.Server.TCP
         /// <summary>
         /// Start the server.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void Start ()
         {
             if (OnClientRequestingConnection == null)
@@ -320,8 +318,6 @@ namespace KRPC.Server.TCP
             }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Correctness", "EnsureLocalDisposalRule")]
-        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
         void ListenerThread ()
         {
             try {

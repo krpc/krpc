@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -10,7 +9,6 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// An antenna. Obtained by calling <see cref="Part.Antenna"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class Antenna : Equatable<Antenna>
     {
         readonly ModuleDataTransmitter transmitter;
@@ -57,7 +55,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The current state of the antenna.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public AntennaState State {
             get {
                 if (deployment != null) {
@@ -112,7 +109,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether data can be transmitted by this antenna.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Naming", "UsePreferredTermsRule")]
         public bool CanTransmit {
             get { return transmitter.CanTransmit(); }
         }

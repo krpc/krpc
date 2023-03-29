@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Messages;
@@ -142,10 +141,6 @@ namespace KRPC.Server.ProtocolBuffers
             return result;
         }
 
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static Schema.KRPC.Type ToProtobufMessage (this Type type)
         {
             var result = new Schema.KRPC.Type ();

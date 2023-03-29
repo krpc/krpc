@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Utils;
 using UnityEngine;
 using Tuple2 = System.Tuple<double, double>;
@@ -101,7 +100,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Convert a pair of vectors to a pair of tuples
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public static TupleT3 ToTuple (this TupleV3 v)
         {
             if (v == null)
@@ -159,7 +157,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Clamp a value to the given range
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
         public static T Clamp<T> (this T value, T min, T max) where T : IComparable<T>
         {
             if (value.CompareTo (min) < 0)
@@ -227,7 +224,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// Axis ordering
         /// </summary>
         [Serializable]
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
         public enum AxisOrder
         {
             /// <summary>
@@ -318,7 +314,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Implementation of QuaternionD.OrthoNormalize, using stabilized Gram-Schmidt
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidRefAndOutParametersRule")]
         public static void OrthoNormalize2 (ref Vector3d normal, ref Vector3d tangent)
         {
             normal.Normalize ();
@@ -354,7 +349,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Add a 4x4 Matrix into another one (does not allocate)
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public static Matrix4x4 Add (this Matrix4x4 left, Matrix4x4 right)
         {
             Matrix4x4 m = Matrix4x4.zero;
@@ -396,7 +390,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Constructs diagonal matrix from a 3-vector (simulating 3x3 matrix)
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public static Matrix4x4 ToDiagonalMatrix (this Vector3 v)
         {
             Matrix4x4 m = Matrix4x4.identity;
@@ -437,7 +430,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Convert an axis-aligned bounding box to its min and max positions as tuples.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public static TupleT3 ToTuples (this Bounds bounds)
         {
             return new TupleT3 (bounds.min.ToTuple (), bounds.max.ToTuple ());

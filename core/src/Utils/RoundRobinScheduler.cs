@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Utils
 {
-    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     sealed class RoundRobinScheduler<T> : IScheduler<T>
     {
         LinkedListNode<T> next;

@@ -1,13 +1,10 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.UI.ExtensionMethods
 {
     /// <summary>
     /// Text extensions.
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
     public static class TextExtensions
     {
         /// <summary>

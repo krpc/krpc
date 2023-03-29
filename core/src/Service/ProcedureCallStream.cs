@@ -1,13 +1,10 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Messages;
 using KRPC.Service.Scanner;
 
 namespace KRPC.Service
 {
-    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
-    [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
     sealed class ProcedureCallStream : Stream
     {
         ProcedureSignature procedure;

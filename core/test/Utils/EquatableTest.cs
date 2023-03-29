@@ -1,9 +1,7 @@
-using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 
 namespace KRPC.Test.Utils
 {
-    [SuppressMessage ("Gendarme.Rules.Design", "ImplementEqualsAndGetHashCodeInPairRule")]
     sealed class MyEquatable : KRPC.Utils.Equatable<MyEquatable>
     {
         public readonly string Key;
@@ -18,7 +16,6 @@ namespace KRPC.Test.Utils
             return Key == other.Key;
         }
 
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
         public sealed override int GetHashCode ()
         {
             return Key.GetHashCode ();
@@ -26,7 +23,6 @@ namespace KRPC.Test.Utils
     }
 
     [TestFixture]
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public class EquatableTest
     {
         static readonly MyEquatable obj1 = new MyEquatable ("foo");

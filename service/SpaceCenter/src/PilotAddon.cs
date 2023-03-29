@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Server;
 using KRPC.Service;
@@ -14,10 +13,8 @@ namespace KRPC.SpaceCenter
     /// Addon to update a vessels control inputs.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public sealed class PilotAddon : MonoBehaviour
     {
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
         internal sealed class ControlInputs
         {
             readonly FlightCtrlState state;
@@ -156,7 +153,6 @@ namespace KRPC.SpaceCenter
                 state.custom_axes[3] = 0f;
             }
 
-            [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
             public void Add (ControlInputs other)
             {
                 if (other.ThrottleUpdated)
@@ -247,7 +243,6 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// Wake the addon
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Awake ()
         {
             Clear ();
@@ -256,7 +251,6 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// Destroy the addon
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnDestroy ()
         {
             Clear ();
@@ -309,7 +303,6 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// Update the pilot addon
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void FixedUpdate ()
         {
             CheckClients ();

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -80,7 +79,6 @@ namespace KRPC.SpaceCenter.Services
         /// Whether the vessel can transmit science data to KSC.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Naming", "UsePreferredTermsRule")]
         public bool CanTransmitScience {
             get { return InternalComms.CanScience; }
         }

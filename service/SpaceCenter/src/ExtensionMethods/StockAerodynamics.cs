@@ -28,7 +28,6 @@
  * in this Software without prior written authorization from the copyright holders.
  */
 using System;
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
@@ -111,9 +110,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             return SimAeroForce(body, _vessel, v_wrld_vel, altitude);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static Vector3 SimAeroForce(CelestialBody body, Vessel _vessel, Vector3 v_wrld_vel, double altitude)
         {
             var pressure = body.GetPressure(altitude);

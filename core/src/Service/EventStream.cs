@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC;
 using KRPC.Server;
 using KRPC.Service;
@@ -8,7 +7,6 @@ using KRPC.Service.Scanner;
 
 namespace KRPC.Service
 {
-    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     sealed class EventStream : Stream {
         Func<bool> continuation;
         bool shouldRemove;

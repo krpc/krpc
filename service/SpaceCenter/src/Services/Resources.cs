@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -24,7 +23,6 @@ namespace KRPC.SpaceCenter.Services
         readonly uint partId;
         // Note: 0 indicates no part
 
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
         internal Resources (global::Vessel vessel, int stage = -1, bool cumulative = true)
         {
             vesselId = vessel.id;

@@ -1,12 +1,10 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.Services.Parts;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class ParachuteStateExtensions
     {
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static ParachuteState ToParachuteState (this ModuleParachute.deploymentStates state)
         {
             switch (state) {

@@ -1,12 +1,10 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Server.HTTP;
 using NUnit.Framework;
 
 namespace KRPC.Test.Server.HTTP
 {
     [TestFixture]
-    [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
     public class ResponseTest
     {
         [Test]

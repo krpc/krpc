@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Messages;
 using KRPC.Utils;
 
@@ -9,7 +8,6 @@ namespace KRPC.Service
     /// <summary>
     /// A stream.
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     public abstract class Stream : Equatable<Stream>
     {
         internal StreamResult StreamResult { get; private set; }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -149,12 +148,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Returns zero if RCS is disable.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public TupleT3 AvailableTorque {
             get { return AvailableTorqueVectors.ToTuple (); }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         internal TupleV3 AvailableTorqueVectors {
             get {
                 if (!Active)
@@ -170,12 +167,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Returns zero if RCS is disabled.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public TupleT3 AvailableForce {
             get { return AvailableForceVectors.ToTuple (); }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         internal TupleV3 AvailableForceVectors {
             get {
                 if (!Active)
@@ -188,8 +183,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Calculates available torque vectors.
         /// We use this custom code rather than KSPs ITorqueProvider as it produces erroneous values.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
         private TupleV3 GetTorqueVectors()
         {
             var frame = Part.Vessel.ReferenceFrame;
@@ -232,8 +225,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Calculates available force vectors.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
         private TupleV3 GetForceVectors ()
         {
             var frame = Part.Vessel.ReferenceFrame;

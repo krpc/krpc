@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services.Parts;
@@ -25,9 +24,6 @@ namespace KRPC.SpaceCenter.Services
     /// used as a parameter to other functions.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public class ReferenceFrame : Equatable<ReferenceFrame>
     {
         readonly ReferenceFrameType type;
@@ -47,7 +43,6 @@ namespace KRPC.SpaceCenter.Services
         readonly ReferenceFrame hybridVelocity;
         readonly ReferenceFrame hybridAngularVelocity;
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         ReferenceFrame (
             ReferenceFrameType type, global::CelestialBody body = null, global::Vessel vessel = null,
             ManeuverNode node = null, Part part = null, ModuleDockingNode dockingPort = null,
@@ -71,7 +66,6 @@ namespace KRPC.SpaceCenter.Services
             this.hybridAngularVelocity = hybridAngularVelocity;
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         ReferenceFrame (ReferenceFrame parent, Vector3d relativePosition, QuaternionD relativeRotation, Vector3d relativeVelocity, Vector3d relativeAngularVelocity)
         {
             type = ReferenceFrameType.Relative;
@@ -210,7 +204,6 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The transform for the object that this reference frame is attached to.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public Transform Transform {
             get {
                 switch (type) {
@@ -325,7 +318,6 @@ namespace KRPC.SpaceCenter.Services
             return new ReferenceFrame (ReferenceFrameType.Thrust, part: thruster.Part.InternalPart, thruster: thruster);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
         static class VectorZero
         {
             public static object Create ()
@@ -334,7 +326,6 @@ namespace KRPC.SpaceCenter.Services
             }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
         static class QuaternionIdentity
         {
             public static object Create ()
@@ -402,8 +393,6 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Returns the position of the origin of the reference frame in world-space.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public Vector3d Position {
             get {
                 switch (type) {
@@ -493,8 +482,6 @@ namespace KRPC.SpaceCenter.Services
         /// The direction in which the y-axis points.
         /// The vector is not normalized.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         Vector3d UpNotNormalized {
             get {
                 switch (type) {
@@ -541,8 +528,6 @@ namespace KRPC.SpaceCenter.Services
         /// The direction in which the z-axis points.
         /// The vector is not normalized.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         Vector3d ForwardNotNormalized {
             get {
                 switch (type) {
@@ -607,7 +592,6 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Returns the velocity of the reference frame in world-space.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public Vector3d Velocity {
             get {
                 switch (type) {
@@ -643,7 +627,6 @@ namespace KRPC.SpaceCenter.Services
         /// Vector points in direction of axis of rotation
         /// Vector's magnitude is the speed of rotation in radians per second
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public Vector3d AngularVelocity {
             get {
                 switch (type) {
