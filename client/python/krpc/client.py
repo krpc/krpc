@@ -43,20 +43,25 @@ class Client(krpc.services.Client):
                             self._types.services_type)).services
 
         # Load services
+        dynamic_services = []
+        # Load services with pre-generated stubs first
+        # so that class/enum types are loaded if a dynamic service needs them
         for service_info in services:
             service = None
             if use_pregenerated_stubs:
                 service = self._services.get(service_info.name)
             if service is not None:
-                # Load from pre-generated .py code
                 for name, typ in service._classes.items():  # type: ignore[attr-defined]
                     self._types.register_class_type(service_info.name, name, typ)
                 for name, typ in service._enumerations.items():  # type: ignore[attr-defined]
                     self._types.register_enum_type(service_info.name, name, typ)
             else:
-                # Dynamically create
-                setattr(self, snake_case(service_info.name),
-                        create_service(self, service_info))
+                dynamic_services.append(service_info)
+        # Then dynamically load services for those without pre-generated stubs
+        for service_info in dynamic_services:
+            # Dynamically create
+            setattr(self, snake_case(service_info.name),
+                    create_service(self, service_info))
 
         # Set up stream update thread
         if stream_connection is not None:
