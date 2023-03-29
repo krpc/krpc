@@ -1,3 +1,5 @@
+" C# build tools "
+
 _MCS = "mcs"
 _MCS_FLAGS = ["-noconfig", "-nostdlib"]
 
@@ -12,6 +14,7 @@ def _ref_impl(ctx):
         command = 'cp "%s" "%s"' % (input.path, output.path),
     )
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         target_type = ctx.attr._target_type,
@@ -20,8 +23,7 @@ def _ref_impl(ctx):
     )
 
 def _csc_args(srcs, deps, exe = None, lib = None, doc = None, optimize = True, warn = 4, nowarn = [], define = [], warnaserror = True):
-    if exe:
-        target_type = "exe"
+    target_type = "exe"
     if lib:
         target_type = "library"
     args = ["-target:%s" % target_type, "-debug"]
@@ -78,6 +80,7 @@ def _lib_impl(ctx):
         command = "%s %s" % (cmd, " ".join(args)),
     )
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         target_type = ctx.attr._target_type,
@@ -130,6 +133,7 @@ def _bin_impl(ctx):
     )
     runfiles = ctx.runfiles(files = runfiles)
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         target_type = ctx.attr._target_type,
@@ -166,6 +170,7 @@ def _nunit_impl(ctx):
         " ; \\\n".join(sub_commands) + "\n",
     )
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         runfiles = ctx.runfiles(files = runfiles),

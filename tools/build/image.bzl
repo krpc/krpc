@@ -1,3 +1,5 @@
+" Image tools "
+
 def _impl(ctx):
     output = ctx.outputs.out
     input = ctx.file.src
@@ -14,6 +16,7 @@ png_image = rule(
     outputs = {"out": "%{name}.png"},
 )
 
+# buildifier: disable=function-docstring
 def png_images(name, srcs, visibility = None):
     png_srcs = []
     for src in srcs:

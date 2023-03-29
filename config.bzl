@@ -1,3 +1,5 @@
+" global configuration "
+
 author = "djungelorm"
 version = "0.5.2"
 ksp_version_max = "1.12.5.3190"

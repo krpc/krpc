@@ -1,3 +1,6 @@
+" autotools tools "
+
+# buildifier: disable=function-docstring-header
 def _apply_path_map(path_map, path):
     """ Apply the path mappings to a path.
         Replaces the longest prefix match from the mapping. """

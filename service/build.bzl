@@ -1,3 +1,5 @@
+" common server build defs "
+
 load("//tools/build/ksp:build.bzl", "ksp_libs")
 
 # Default dependencies for service assemblies

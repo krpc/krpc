@@ -1,3 +1,5 @@
+" C++ protobuf tools "
+
 def _impl(ctx):
     header = ctx.outputs.header
     source = ctx.outputs.source

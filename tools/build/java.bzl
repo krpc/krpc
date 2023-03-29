@@ -1,3 +1,5 @@
+" Java build tools "
+
 def _add_runfile(sub_commands, path, runfile_path):
     sub_commands.extend([
         "mkdir -p `dirname %s`" % runfile_path,
@@ -30,6 +32,7 @@ def _java_checkstyle_impl(ctx):
         is_executable = True,
     )
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         runfiles = ctx.runfiles(files = runfiles),
@@ -47,7 +50,7 @@ java_checkstyle_test = rule(
             default = Label("//tools/build/checkstyle:default.properties"),
             allow_single_file = True,
         ),
-        "checkstyle": attr.label(default = Label("//tools/build/checkstyle"), executable = True, cfg = "host"),
+        "checkstyle": attr.label(default = Label("//tools/build/checkstyle"), executable = True, cfg = "exec"),
     },
     test = True,
 )

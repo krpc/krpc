@@ -1,3 +1,6 @@
+" python build tools "
+
+# buildifier: disable=function-docstring-header
 def _apply_path_map(path_map, path):
     """ Apply the path mappings to a path.
         Replaces the longest prefix match from the mapping. """
@@ -39,22 +42,6 @@ def _add_runfile(sub_commands, path, runfile_path):
         "mkdir -p `dirname %s`" % runfile_path,
         'cp "%s" "%s"' % (path, runfile_path),
     ])
-
-def _get_parent_dirname(target):
-    """
-        'client/krpc/client.py' returns 'krpc'
-        'client/krpc/' returns 'client'
-    """
-    first_slash = -1
-    second_slash = -1
-    for i in range(len(target) - 2, 0 - 1, -1):
-        if target[i] == "/":
-            if first_slash == -1:
-                first_slash = i
-            else:
-                second_slash = i
-                break
-    return target[second_slash + 1:first_slash]
 
 def _sdist_impl(ctx):
     output = ctx.outputs.out
@@ -131,6 +118,7 @@ def _script_impl(ctx):
         is_executable = True,
     )
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         out = script_run,
@@ -166,6 +154,7 @@ def _test_impl(ctx):
 
     runfiles = ctx.runfiles(files = [ctx.file.src] + ctx.files.deps)
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         out = ctx.outputs.executable,
@@ -252,6 +241,7 @@ def _lint_impl(ctx):
         is_executable = True,
     )
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         runfiles = ctx.runfiles(files = runfiles),
@@ -266,8 +256,8 @@ py_lint_test = rule(
         "deps": attr.label_list(allow_files = True),
         "pycodestyle_config": attr.label(allow_single_file = True),
         "pylint_config": attr.label(allow_single_file = True),
-        "pycodestyle": attr.label(default = Label("//tools/build/pycodestyle"), executable = True, cfg = "host"),
-        "pylint": attr.label(default = Label("//tools/build/pylint"), executable = True, cfg = "host"),
+        "pycodestyle": attr.label(default = Label("//tools/build/pycodestyle"), executable = True, cfg = "exec"),
+        "pylint": attr.label(default = Label("//tools/build/pylint"), executable = True, cfg = "exec"),
     },
     test = True,
 )

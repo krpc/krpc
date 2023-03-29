@@ -1,3 +1,5 @@
+" documentation tests "
+
 def _check_documented_impl(ctx):
     expected = ctx.file.members.short_path
     actual = ctx.label.name + ".documented.actual.txt"
@@ -16,6 +18,7 @@ def _check_documented_impl(ctx):
         is_executable = True,
     )
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         out = ctx.outputs.executable,
@@ -31,7 +34,7 @@ check_documented_test = rule(
             default = Label("//doc:test.py"),
             allow_single_file = True,
             executable = True,
-            cfg = "host",
+            cfg = "exec",
         ),
     },
     test = True,

@@ -1,3 +1,5 @@
+" C++ build tools "
+
 def _add_runfile(sub_commands, path, runfile_path):
     sub_commands.extend([
         "mkdir -p `dirname %s`" % runfile_path,
@@ -19,6 +21,7 @@ def _check_impl(ctx):
         "/usr/bin/cppcheck %s\n" % " ".join(args),
     )
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         runfiles = ctx.runfiles(files = runfiles),
@@ -63,6 +66,7 @@ def _lint_impl(ctx):
         is_executable = True,
     )
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         runfiles = ctx.runfiles(files = runfiles),
@@ -76,7 +80,7 @@ cpp_lint_test = rule(
         "includes": attr.label_list(allow_files = True),
         "extra_files": attr.label_list(allow_files = True),
         "filters": attr.string_list(default = ["+build/include_alpha"]),
-        "cpplint": attr.label(default = Label("//tools/build/cpplint"), executable = True, cfg = "host"),
+        "cpplint": attr.label(default = Label("//tools/build/cpplint"), executable = True, cfg = "exec"),
     },
     test = True,
 )

@@ -1,3 +1,5 @@
+" Java protobuf tools "
+
 def _impl(ctx):
     output = ctx.outputs.out
     protoc_output = output.path + ".tmp-proto-java"

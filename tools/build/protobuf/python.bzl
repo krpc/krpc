@@ -1,3 +1,5 @@
+" python protobuf tools "
+
 def _impl(ctx):
     output = ctx.outputs.out
     output_pyi = ctx.outputs.out_pyi

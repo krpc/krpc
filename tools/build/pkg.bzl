@@ -1,3 +1,6 @@
+" packaging tools "
+
+# buildifier: disable=function-docstring-header
 def _apply_path_map(path_map, path):
     """ Apply the path mappings to a path.
         Replaces the longest prefix match from the mapping. """
@@ -49,6 +52,7 @@ def _stage_files_impl(ctx):
         )
         outs.append(out)
 
+    # buildifier: disable=rule-impl-return
     return struct(files = depset(outs))
 
 stage_files = rule(

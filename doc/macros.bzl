@@ -1,5 +1,8 @@
+" macros "
+
 load("//tools/build:csharp.bzl", "csharp_binary", "csharp_library")
 
+# buildifier: disable=function-docstring
 def csharp_binary_multiple(name, srcs, deps):
     names = []
     for src in srcs:
@@ -12,6 +15,7 @@ def csharp_binary_multiple(name, srcs, deps):
         )
     native.filegroup(name = name, srcs = names)
 
+# buildifier: disable=function-docstring
 def csharp_library_multiple(name, srcs, deps):
     names = []
     for src in srcs:
@@ -24,6 +28,7 @@ def csharp_library_multiple(name, srcs, deps):
         )
     native.filegroup(name = name, srcs = names)
 
+# buildifier: disable=function-docstring
 def cc_binary_multiple(name, srcs, deps):
     names = []
     for src in srcs:
@@ -36,6 +41,7 @@ def cc_binary_multiple(name, srcs, deps):
         )
     native.filegroup(name = name, srcs = names)
 
+# buildifier: disable=function-docstring
 def java_binary_multiple(name, srcs, deps):
     names = []
     for src in srcs:

@@ -1,3 +1,5 @@
+" client test tools "
+
 def _impl(ctx):
     server_type = ctx.attr.server_type
 
@@ -33,8 +35,6 @@ def _impl(ctx):
         test_env = "RPC_PORT=$RPC_PORT STREAM_PORT=$STREAM_PORT"
     else:
         socat_stdout = "server-executable.runfiles/krpc/socat-stdout"
-        server_port = "server-executable.runfiles/krpc/server-port"
-        client_port = "server-executable.runfiles/krpc/client-port"
         sub_commands.extend([
             "(cd server-executable.runfiles/krpc; socat -d -d PTY,raw,echo=0,link=server-port PTY,raw,echo=0,link=client-port >socat-stdout 2>&1) &",
             "SOCAT_PID=$!",
@@ -69,6 +69,7 @@ def _impl(ctx):
         is_executable = True,
     )
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         out = ctx.outputs.executable,
@@ -78,8 +79,8 @@ def _impl(ctx):
 client_test = rule(
     implementation = _impl,
     attrs = {
-        "test_executable": attr.label(executable = True, cfg = "host"),
-        "server_executable": attr.label(executable = True, cfg = "host"),
+        "test_executable": attr.label(executable = True, cfg = "exec"),
+        "server_executable": attr.label(executable = True, cfg = "exec"),
         "server_type": attr.string(default = "protobuf"),
     },
     test = True,

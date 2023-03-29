@@ -1,3 +1,5 @@
+" nanopb protobuf tools "
+
 def _create_py_env(out, install):
     tmp = out + ".tmp-create-py-env"
     cmds = [

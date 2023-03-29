@@ -1,3 +1,6 @@
+" sphinx documentation tools "
+
+# buildifier: disable=function-docstring-header
 def _get_src_dir(srcs, short_path = False):
     """ Given a list of input files, get the path of the src dir,
     based on the location of conf.py """
@@ -66,7 +69,7 @@ sphinx_build = rule(
     implementation = _build_impl,
     attrs = {
         "srcs": attr.label_list(allow_files = True),
-        "sphinx_build": attr.label(executable = True, mandatory = True, cfg = "host"),
+        "sphinx_build": attr.label(executable = True, mandatory = True, cfg = "exec"),
         "builder": attr.string(mandatory = True),
         "opts": attr.string_dict(),
         "out": attr.output(mandatory = True),
@@ -112,6 +115,7 @@ def _spelling_impl(ctx):
         is_executable = True,
     )
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         out = out,
@@ -127,7 +131,7 @@ sphinx_spelling_test = rule(
             executable = True,
             allow_single_file = True,
             mandatory = True,
-            cfg = "host",
+            cfg = "exec",
         ),
         "opts": attr.string_dict(),
     },
@@ -166,6 +170,7 @@ def _linkcheck_impl(ctx):
         is_executable = True,
     )
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         out = out,
@@ -181,7 +186,7 @@ sphinx_linkcheck_test = rule(
             executable = True,
             allow_single_file = True,
             mandatory = True,
-            cfg = "host",
+            cfg = "exec",
         ),
         "opts": attr.string_dict(),
     },

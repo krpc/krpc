@@ -1,3 +1,5 @@
+" docgen tool "
+
 def _outputs(outdir, src):
     return {
         "out": outdir + "/" + src.name.replace(".tmpl", ".rst"),
@@ -38,13 +40,14 @@ docgen = rule(
             default = Label("//tools/krpctools:docgen"),
             executable = True,
             allow_single_file = True,
-            cfg = "host",
+            cfg = "exec",
         ),
         "_order": attr.label(default = Label("//doc:order.txt"), allow_single_file = True),
     },
     outputs = _outputs,
 )
 
+# buildifier: disable=function-docstring
 def docgen_multiple(name, outdir, language, srcs, defs):
     names = []
     for src in srcs:

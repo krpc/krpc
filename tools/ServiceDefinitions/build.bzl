@@ -1,3 +1,5 @@
+" service definitions tool "
+
 def _impl(ctx):
     args = ["--output=%s" % ctx.outputs.out.path, ctx.attr.service] + [x.lib.path for x in ctx.attr.assemblies]
     ctx.actions.run(
@@ -16,7 +18,7 @@ service_definitions = rule(
         "out": attr.output(mandatory = True),
         "_service_definitions_tool": attr.label(
             executable = True,
-            cfg = "host",
+            cfg = "exec",
             default = Label("//tools/ServiceDefinitions:ServiceDefinitions"),
         ),
     },

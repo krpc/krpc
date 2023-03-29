@@ -1,3 +1,5 @@
+" lua build tools "
+
 _LUA_VERSION = "5.1"
 
 def _test_impl(ctx):
@@ -22,6 +24,7 @@ def _test_impl(ctx):
 
     runfiles = ctx.runfiles(files = [ctx.file.src, ctx.file.rockspec, ctx.file._luaunit] + ctx.files.deps)
 
+    # buildifier: disable=rule-impl-return
     return struct(
         name = ctx.label.name,
         out = ctx.outputs.executable,

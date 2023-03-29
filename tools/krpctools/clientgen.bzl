@@ -1,3 +1,5 @@
+" clientgen tool "
+
 def _impl(ctx):
     language = ctx.attr.language
     service = ctx.attr.service
@@ -23,12 +25,13 @@ clientgen = rule(
             default = Label("//tools/krpctools:clientgen"),
             executable = True,
             allow_single_file = True,
-            cfg = "host",
+            cfg = "exec",
         ),
     },
     output_to_genfiles = True,
 )
 
+# buildifier: disable=function-docstring
 def clientgen_csharp(name, service, defs, out, visibility = []):
     clientgen(
         name = name,
@@ -39,6 +42,7 @@ def clientgen_csharp(name, service, defs, out, visibility = []):
         visibility = visibility,
     )
 
+# buildifier: disable=function-docstring
 def clientgen_cpp(name, service, defs, out):
     clientgen(
         name = name,
@@ -48,6 +52,7 @@ def clientgen_cpp(name, service, defs, out):
         language = "cpp",
     )
 
+# buildifier: disable=function-docstring
 def clientgen_java(name, service, defs, out):
     clientgen(
         name = name,
@@ -57,6 +62,7 @@ def clientgen_java(name, service, defs, out):
         language = "java",
     )
 
+# buildifier: disable=function-docstring
 def clientgen_cnano(name, service, defs, out):
     clientgen(
         name = name,
@@ -66,6 +72,7 @@ def clientgen_cnano(name, service, defs, out):
         language = "cnano",
     )
 
+# buildifier: disable=function-docstring
 def clientgen_python(name, service, defs, out):
     clientgen(
         name = name,
