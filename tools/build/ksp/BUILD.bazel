@@ -1,27 +1,108 @@
-load('//tools/build:csharp.bzl', 'csharp_reference')
+load("//tools/build:csharp.bzl", "csharp_reference")
 
-package(default_visibility = ['//visibility:public'])
+package(default_visibility = ["//visibility:public"])
 
-csharp_reference(name = 'UnityEngine', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.dll')
-csharp_reference(name = 'UnityEngine.AnimationModule', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.AnimationModule.dll')
-csharp_reference(name = 'UnityEngine.AssetBundleModule', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.AssetBundleModule.dll')
-csharp_reference(name = 'UnityEngine.CoreModule', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.CoreModule.dll')
-csharp_reference(name = 'UnityEngine.IMGUIModule', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.IMGUIModule.dll')
-csharp_reference(name = 'UnityEngine.InputLegacyModule', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.InputLegacyModule.dll')
-csharp_reference(name = 'UnityEngine.PhysicsModule', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.PhysicsModule.dll')
-csharp_reference(name = 'UnityEngine.ScreenCaptureModule', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.ScreenCaptureModule.dll')
-csharp_reference(name = 'UnityEngine.SharedInternalsModule', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.SharedInternalsModule.dll')
-csharp_reference(name = 'UnityEngine.TextRenderingModule', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.TextRenderingModule.dll')
-csharp_reference(name = 'UnityEngine.UI', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.UI.dll')
-csharp_reference(name = 'UnityEngine.UIModule', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.UIModule.dll')
-csharp_reference(name = 'UnityEngine.UnityWebRequestWWWModule', file = '//lib:ksp/KSP_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll')
-csharp_reference(name = 'Assembly-CSharp', file = '//lib:ksp/KSP_Data/Managed/Assembly-CSharp.dll')
-csharp_reference(name = 'Assembly-CSharp-firstpass', file = '//lib:ksp/KSP_Data/Managed/Assembly-CSharp-firstpass.dll')
+csharp_reference(
+    name = "UnityEngine",
+    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.dll",
+)
 
-csharp_reference(name = 'mscorlib', file = '//lib:ksp/KSP_Data/Managed/mscorlib.dll')
-csharp_reference(name = 'System', file = '//lib:ksp/KSP_Data/Managed/System.dll')
-csharp_reference(name = 'System.Core', file = '//lib:ksp/KSP_Data/Managed/System.Core.dll')
-csharp_reference(name = 'System.Xml', file = '//lib:ksp/KSP_Data/Managed/System.Xml.dll')
-csharp_reference(name = 'KRPC.IO.Ports', file = '@csharp_krpc_io_ports//file')
+csharp_reference(
+    name = "UnityEngine.AnimationModule",
+    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.AnimationModule.dll",
+)
 
-csharp_reference(name = 'Google.Protobuf', file = '@csharp_protobuf_unity//:lib/net45/Google.Protobuf.dll')
+csharp_reference(
+    name = "UnityEngine.AssetBundleModule",
+    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.AssetBundleModule.dll",
+)
+
+csharp_reference(
+    name = "UnityEngine.CoreModule",
+    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.CoreModule.dll",
+)
+
+csharp_reference(
+    name = "UnityEngine.IMGUIModule",
+    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.IMGUIModule.dll",
+)
+
+csharp_reference(
+    name = "UnityEngine.InputLegacyModule",
+    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.InputLegacyModule.dll",
+)
+
+csharp_reference(
+    name = "UnityEngine.PhysicsModule",
+    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.PhysicsModule.dll",
+)
+
+csharp_reference(
+    name = "UnityEngine.ScreenCaptureModule",
+    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.ScreenCaptureModule.dll",
+)
+
+csharp_reference(
+    name = "UnityEngine.SharedInternalsModule",
+    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.SharedInternalsModule.dll",
+)
+
+csharp_reference(
+    name = "UnityEngine.TextRenderingModule",
+    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.TextRenderingModule.dll",
+)
+
+csharp_reference(
+    name = "UnityEngine.UI",
+    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.UI.dll",
+)
+
+csharp_reference(
+    name = "UnityEngine.UIModule",
+    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.UIModule.dll",
+)
+
+csharp_reference(
+    name = "UnityEngine.UnityWebRequestWWWModule",
+    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll",
+)
+
+csharp_reference(
+    name = "Assembly-CSharp",
+    file = "//lib:ksp/KSP_Data/Managed/Assembly-CSharp.dll",
+)
+
+csharp_reference(
+    name = "Assembly-CSharp-firstpass",
+    file = "//lib:ksp/KSP_Data/Managed/Assembly-CSharp-firstpass.dll",
+)
+
+csharp_reference(
+    name = "mscorlib",
+    file = "//lib:ksp/KSP_Data/Managed/mscorlib.dll",
+)
+
+csharp_reference(
+    name = "System",
+    file = "//lib:ksp/KSP_Data/Managed/System.dll",
+)
+
+csharp_reference(
+    name = "System.Core",
+    file = "//lib:ksp/KSP_Data/Managed/System.Core.dll",
+)
+
+csharp_reference(
+    name = "System.Xml",
+    file = "//lib:ksp/KSP_Data/Managed/System.Xml.dll",
+)
+
+csharp_reference(
+    name = "KRPC.IO.Ports",
+    file = "@csharp_krpc_io_ports//file",
+)
+
+csharp_reference(
+    name = "Google.Protobuf",
+    file = "@csharp_protobuf_unity//:lib/net45/Google.Protobuf.dll",
+)

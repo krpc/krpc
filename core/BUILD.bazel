@@ -1,135 +1,150 @@
-load('//tools/build:csharp.bzl', 'csharp_library', 'csharp_nunit_test', 'csharp_gendarme_test', 'csharp_assembly_info')
-load('//tools/ServiceDefinitions:build.bzl', 'service_definitions')
-load('//tools/build/mono-4.5:build.bzl', 'mono_net_libs')
-load('//:config.bzl', 'version', 'assembly_version', 'author')
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_gendarme_test", "csharp_library", "csharp_nunit_test")
+load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+load("//tools/build/mono-4.5:build.bzl", "mono_net_libs")
+load("//:config.bzl", "assembly_version", "author", "version")
 
 filegroup(
-    name = 'core',
-    srcs = [':KRPC.Core', ':ServiceDefinitions'],
-    visibility = ['//:__pkg__']
+    name = "core",
+    srcs = [
+        ":KRPC.Core",
+        ":ServiceDefinitions",
+    ],
+    visibility = ["//:__pkg__"],
 )
 
 test_suite(
-    name = 'test',
-    tests = [':test-KRPC.Core', ':lint']
+    name = "test",
+    tests = [
+        ":lint",
+        ":test-KRPC.Core",
+    ],
 )
 
 test_suite(
-    name = 'lint',
-    tests = [':gendarme-KRPC.Core', ':gendarme-KRPC.Core.Test']
+    name = "lint",
+    tests = [
+        ":gendarme-KRPC.Core",
+        ":gendarme-KRPC.Core.Test",
+    ],
 )
 
 genrule(
-    name = 'version',
-    outs = ['VERSION.txt'],
-    cmd = 'echo "%s" > "$@"' % version
+    name = "version",
+    outs = ["VERSION.txt"],
+    cmd = 'echo "%s" > "$@"' % version,
 )
 
 csharp_assembly_info(
-    name = 'AssemblyInfo',
-    title = 'KRPC.Core',
-    description = 'Core server functionality for kRPC',
-    copyright = author,
-    version = assembly_version,
-    internals_visible_to = [
-        'KRPC.Core.Test',
-        'DynamicProxyGenAssembly2'
-    ],
+    name = "AssemblyInfo",
     cls_compliant = False,
+    copyright = author,
+    description = "Core server functionality for kRPC",
+    internals_visible_to = [
+        "KRPC.Core.Test",
+        "DynamicProxyGenAssembly2",
+    ],
+    title = "KRPC.Core",
+    version = assembly_version,
     visibility = [
-        '//tools/ServiceDefinitions:__pkg__', # Make visible to ServiceDefinitions so it can build KRPC.Core.dll with .NET 4.5 references
-        '//:__pkg__' # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
-    ]
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+        "//tools/ServiceDefinitions:__pkg__",  # Make visible to ServiceDefinitions so it can build KRPC.Core.dll with .NET 4.5 references
+    ],
 )
 
 # Make sources visible to ServiceDefinitions so it can build KRPC.Core.dll with .NET 4.5 references
 filegroup(
-    name = 'KRPC.Core-src',
-    srcs = glob(['src/**/*.cs']),
-    visibility = ['//tools/ServiceDefinitions:__pkg__']
+    name = "KRPC.Core-src",
+    srcs = glob(["src/**/*.cs"]),
+    visibility = ["//tools/ServiceDefinitions:__pkg__"],
 )
 
-srcs = glob(['src/**/*.cs']) + [':AssemblyInfo', '//protobuf:csharp_unity']
+srcs = glob(["src/**/*.cs"]) + [
+    ":AssemblyInfo",
+    "//protobuf:csharp_unity",
+]
 
 deps = [
-    '//tools/build/ksp:Google.Protobuf',
-    '//tools/build/ksp:KRPC.IO.Ports'
+    "//tools/build/ksp:Google.Protobuf",
+    "//tools/build/ksp:KRPC.IO.Ports",
 ] + mono_net_libs
 
 csharp_library(
-    name = 'KRPC.Core',
+    name = "KRPC.Core",
     srcs = srcs,
+    visibility = ["//visibility:public"],
     deps = deps,
-    visibility = ['//visibility:public']
 )
 
 service_definitions(
-    name = 'ServiceDefinitions',
-    assemblies = [':KRPC.Core'],
-    service = 'KRPC',
-    out = 'KRPC.Core.json',
-    visibility = ['//visibility:public']
+    name = "ServiceDefinitions",
+    out = "KRPC.Core.json",
+    assemblies = [":KRPC.Core"],
+    service = "KRPC",
+    visibility = ["//visibility:public"],
 )
 
 csharp_assembly_info(
-    name = 'TestAssemblyInfo',
-    title = 'KRPC.Core.Test',
-    copyright = author,
-    version = assembly_version,
+    name = "TestAssemblyInfo",
     cls_compliant = False,
+    copyright = author,
+    title = "KRPC.Core.Test",
+    version = assembly_version,
     visibility = [
-        '//:__pkg__' # Make visible to krpc-genfiles so it can copy AssemblyInfo.cs to zip
-    ]
+        "//:__pkg__",  # Make visible to krpc-genfiles so it can copy AssemblyInfo.cs to zip
+    ],
 )
 
 test_deps = [
-    ':KRPC.Core',
-    '//tools/build/mono-4.5:Moq',
-    '//tools/build/ksp:Google.Protobuf',
-    '//tools/build/ksp:KRPC.IO.Ports',
-    '//tools/build/mono-4.5:Newtonsoft.Json',
-    '//tools/build/mono-4.5:System.Threading.Tasks.Extensions',
-    '//tools/build/mono-4.5:Castle.Core'
+    ":KRPC.Core",
+    "//tools/build/mono-4.5:Moq",
+    "//tools/build/ksp:Google.Protobuf",
+    "//tools/build/ksp:KRPC.IO.Ports",
+    "//tools/build/mono-4.5:Newtonsoft.Json",
+    "//tools/build/mono-4.5:System.Threading.Tasks.Extensions",
+    "//tools/build/mono-4.5:Castle.Core",
 ] + mono_net_libs
 
 csharp_library(
-    name = 'KRPC.Core.Test',
-    srcs = glob(['test/**/*.cs']) + [':TestAssemblyInfo'],
-    deps = test_deps,
+    name = "KRPC.Core.Test",
+    srcs = glob(["test/**/*.cs"]) + [":TestAssemblyInfo"],
+    define = ["CODE_ANALYSIS"],
+    nowarn = [
+        "1591",
+        "1685",
+    ],
     nunit_test = True,
     optimize = False,
-    define = ['CODE_ANALYSIS'],
-    nowarn = ['1591', '1685'],
-    visibility = ['//:__pkg__']
+    visibility = ["//:__pkg__"],
+    deps = test_deps,
 )
 
 csharp_nunit_test(
-    name = 'test-KRPC.Core',
-    lib = ':KRPC.Core.Test',
-    deps = test_deps,
-    size = 'small',
+    name = "test-KRPC.Core",
+    size = "small",
+    lib = ":KRPC.Core.Test",
     # FIXME: need to run test outside the sandbox to work around nunit file accesses
-    tags = ['local']
+    tags = ["local"],
+    deps = test_deps,
 )
 
 csharp_library(
-    name = 'KRPC.Core.Debug',
+    name = "KRPC.Core.Debug",
     srcs = srcs,
-    deps = deps,
+    define = ["CODE_ANALYSIS"],
     optimize = False,
-    define = ['CODE_ANALYSIS']
+    deps = deps,
 )
 
 csharp_gendarme_test(
-    name = 'gendarme-KRPC.Core',
-    lib = ':KRPC.Core.Debug',
-    ignores = 'src/ignores.txt',
-    size = 'small'
+    name = "gendarme-KRPC.Core",
+    size = "small",
+    ignores = "src/ignores.txt",
+    lib = ":KRPC.Core.Debug",
 )
 
 csharp_gendarme_test(
-    name = 'gendarme-KRPC.Core.Test',
-    lib = ':KRPC.Core.Test',
-    ignores = 'test/ignores.txt',
-    size = 'small'
+    name = "gendarme-KRPC.Core.Test",
+    size = "small",
+    ignores = "test/ignores.txt",
+    lib = ":KRPC.Core.Test",
 )

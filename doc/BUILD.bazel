@@ -1,344 +1,354 @@
-load('//tools/build:sphinx.bzl', 'sphinx_build', 'sphinx_spelling_test', 'sphinx_linkcheck_test')
-load('//tools/build:pkg.bzl', 'stage_files')
-load('//tools/build:python.bzl', 'py_script', 'py_lint_test')
-load('//tools/build:image.bzl', 'png_images')
-load('//tools/krpctools:docgen.bzl', 'docgen_multiple')
-load('//doc:test.bzl', 'check_documented_test')
-load('//:config.bzl', 'version')
-load('//doc:macros.bzl', 'csharp_binary_multiple', 'csharp_library_multiple', 'cc_binary_multiple', 'java_binary_multiple')
+load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
+load("//tools/build:pkg.bzl", "stage_files")
+load("//tools/build:python.bzl", "py_lint_test", "py_script")
+load("//tools/build:image.bzl", "png_images")
+load("//tools/krpctools:docgen.bzl", "docgen_multiple")
+load("//doc:test.bzl", "check_documented_test")
+load("//:config.bzl", "version")
+load("//doc:macros.bzl", "cc_binary_multiple", "csharp_binary_multiple", "csharp_library_multiple", "java_binary_multiple")
 
 filegroup(
-    name = 'doc',
+    name = "doc",
     srcs = [
-        ':html',
-        ':pdf'
-    ]
+        ":html",
+        ":pdf",
+    ],
 )
 
 stage_files(
-    name = 'srcs',
+    name = "srcs",
     srcs = glob([
-        'src/**/*.rst',
-        'src/images/**/*.png',
-        'src/crafts/*.craft',
-        'src/scripts/**/*.c',
-        'src/scripts/**/*.ino',
-        'src/scripts/**/*.cs',
-        'src/scripts/**/*.cpp',
-        'src/scripts/**/*.java',
-        'src/scripts/**/*.lua',
-        'src/scripts/**/*.py',
-        'src/scripts/**/*.js'
+        "src/**/*.rst",
+        "src/images/**/*.png",
+        "src/crafts/*.craft",
+        "src/scripts/**/*.c",
+        "src/scripts/**/*.ino",
+        "src/scripts/**/*.cs",
+        "src/scripts/**/*.cpp",
+        "src/scripts/**/*.java",
+        "src/scripts/**/*.lua",
+        "src/scripts/**/*.py",
+        "src/scripts/**/*.js",
     ]) + [
-        ':conf',
-        'src/_static/custom.css',
-        'src/_templates/layout.html',
-        'src/dictionary.txt',
-        ':images',
-        ':cnano-api',
-        ':csharp-api',
-        ':cpp-api',
-        ':java-api',
-        ':lua-api',
-        ':python-api'
+        "src/_static/custom.css",
+        "src/_templates/layout.html",
+        "src/dictionary.txt",
+        ":cnano-api",
+        ":conf",
+        ":cpp-api",
+        ":csharp-api",
+        ":images",
+        ":java-api",
+        ":lua-api",
+        ":python-api",
     ],
     path_map = {
-        'doc/src/': ''
-    }
+        "doc/src/": "",
+    },
 )
 
 py_script(
-    name = 'sphinx-build',
-    script = 'sphinx-build',
-    pkg = '@python_sphinx//file',
+    name = "sphinx-build",
+    pkg = "@python_sphinx//file",
+    script = "sphinx-build",
+    visibility = ["//visibility:public"],
     deps = [
-        '@python_alabaster//file',
-        '@python_babel//file',
-        '@python_certifi//file',
-        '@python_charset_normalizer//file',
-        '@python_docutils//file',
-        '@python_idna//file',
-        '@python_imagesize//file',
-        '@python_javalang//file',
-        '@python_javasphinx//file',
-        '@python_jinja2//file',
-        '@python_markupsafe//file',
-        '@python_packaging//file',
-        '@python_pyenchant//file',
-        '@python_pygments//file',
-        '@python_pytz//file',
-        '@python_requests//file',
-        '@python_snowballstemmer//file',
-        '@python_sphinx_csharp//file',
-        '@python_sphinx_rtd_theme//file',
-        '@python_sphinx_tabs//file',
-        '@python_sphinxcontrib_applehelp//file',
-        '@python_sphinxcontrib_devhelp//file',
-        '@python_sphinxcontrib_htmlhelp//file',
-        '@python_sphinxcontrib_jquery//file',
-        '@python_sphinxcontrib_jsmath//file',
-        '@python_sphinxcontrib_luadomain//file',
-        '@python_sphinxcontrib_qthelp//file',
-        '@python_sphinxcontrib_serializinghtml//file',
-        '@python_sphinxcontrib_spelling//file',
-        '@python_urllib3//file'
+        "@python_alabaster//file",
+        "@python_babel//file",
+        "@python_certifi//file",
+        "@python_charset_normalizer//file",
+        "@python_docutils//file",
+        "@python_idna//file",
+        "@python_imagesize//file",
+        "@python_javalang//file",
+        "@python_javasphinx//file",
+        "@python_jinja2//file",
+        "@python_markupsafe//file",
+        "@python_packaging//file",
+        "@python_pyenchant//file",
+        "@python_pygments//file",
+        "@python_pytz//file",
+        "@python_requests//file",
+        "@python_snowballstemmer//file",
+        "@python_sphinx_csharp//file",
+        "@python_sphinx_rtd_theme//file",
+        "@python_sphinx_tabs//file",
+        "@python_sphinxcontrib_applehelp//file",
+        "@python_sphinxcontrib_devhelp//file",
+        "@python_sphinxcontrib_htmlhelp//file",
+        "@python_sphinxcontrib_jquery//file",
+        "@python_sphinxcontrib_jsmath//file",
+        "@python_sphinxcontrib_luadomain//file",
+        "@python_sphinxcontrib_qthelp//file",
+        "@python_sphinxcontrib_serializinghtml//file",
+        "@python_sphinxcontrib_spelling//file",
+        "@python_urllib3//file",
     ],
-    visibility = ['//visibility:public']
 )
 
 genrule(
-    name = 'conf',
-    srcs = ['conf.py.tmpl'],
-    outs = ['src/conf.py'],
-    cmd = 'sed \'s/%VERSION%/'+version+'/g\' "$<" > "$@"'
+    name = "conf",
+    srcs = ["conf.py.tmpl"],
+    outs = ["src/conf.py"],
+    cmd = "sed 's/%VERSION%/" + version + '/g\' "$<" > "$@"',
 )
 
 sphinx_build(
-    name = 'html',
-    out = 'html.zip',
-    srcs = [':srcs'],
-    sphinx_build = ':sphinx-build',
-    builder = 'html',
-    opts = {'version': version}
+    name = "html",
+    srcs = [":srcs"],
+    out = "html.zip",
+    builder = "html",
+    opts = {"version": version},
+    sphinx_build = ":sphinx-build",
 )
 
 sphinx_build(
-    name = 'pdf',
-    out = 'krpc-%s.pdf' % version,
-    srcs = [':srcs'],
-    sphinx_build = ':sphinx-build',
-    builder = 'latex',
-    opts = {'version': version},
-    visibility = ['//:__pkg__']
+    name = "pdf",
+    srcs = [":srcs"],
+    out = "krpc-%s.pdf" % version,
+    builder = "latex",
+    opts = {"version": version},
+    sphinx_build = ":sphinx-build",
+    visibility = ["//:__pkg__"],
 )
 
 png_images(
-    name = 'images',
-    srcs = glob(['src/images/**/*.svg'])
+    name = "images",
+    srcs = glob(["src/images/**/*.svg"]),
 )
 
 defs = [
-    '//core:ServiceDefinitions',
-    '//service/SpaceCenter:ServiceDefinitions',
-    '//service/Drawing:ServiceDefinitions',
-    '//service/InfernalRobotics:ServiceDefinitions',
-    '//service/KerbalAlarmClock:ServiceDefinitions',
-    '//service/RemoteTech:ServiceDefinitions',
-    '//service/UI:ServiceDefinitions',
-    '//service/LiDAR:ServiceDefinitions',
-    '//service/DockingCamera:ServiceDefinitions'
+    "//core:ServiceDefinitions",
+    "//service/SpaceCenter:ServiceDefinitions",
+    "//service/Drawing:ServiceDefinitions",
+    "//service/InfernalRobotics:ServiceDefinitions",
+    "//service/KerbalAlarmClock:ServiceDefinitions",
+    "//service/RemoteTech:ServiceDefinitions",
+    "//service/UI:ServiceDefinitions",
+    "//service/LiDAR:ServiceDefinitions",
+    "//service/DockingCamera:ServiceDefinitions",
 ]
 
 docgen_multiple(
-    name = 'cnano-api',
-    outdir = 'src/cnano',
-    language = 'cnano',
-    srcs = glob(['api/**/*.tmpl']),
-    defs = defs
+    name = "cnano-api",
+    srcs = glob(["api/**/*.tmpl"]),
+    defs = defs,
+    language = "cnano",
+    outdir = "src/cnano",
 )
 
 docgen_multiple(
-    name = 'csharp-api',
-    outdir = 'src/csharp',
-    language = 'csharp',
-    srcs = glob(['api/**/*.tmpl']),
-    defs = defs
+    name = "csharp-api",
+    srcs = glob(["api/**/*.tmpl"]),
+    defs = defs,
+    language = "csharp",
+    outdir = "src/csharp",
 )
 
 docgen_multiple(
-    name = 'cpp-api',
-    outdir = 'src/cpp',
-    language = 'cpp',
-    srcs = glob(['api/**/*.tmpl']),
-    defs = defs
+    name = "cpp-api",
+    srcs = glob(["api/**/*.tmpl"]),
+    defs = defs,
+    language = "cpp",
+    outdir = "src/cpp",
 )
 
 docgen_multiple(
-    name = 'java-api',
-    outdir = 'src/java',
-    language = 'java',
-    srcs = glob(['api/**/*.tmpl']),
-    defs = defs
+    name = "java-api",
+    srcs = glob(["api/**/*.tmpl"]),
+    defs = defs,
+    language = "java",
+    outdir = "src/java",
 )
 
 docgen_multiple(
-    name = 'lua-api',
-    outdir = 'src/lua',
-    language = 'lua',
-    srcs = glob(['api/**/*.tmpl']),
-    defs = defs
+    name = "lua-api",
+    srcs = glob(["api/**/*.tmpl"]),
+    defs = defs,
+    language = "lua",
+    outdir = "src/lua",
 )
 
 docgen_multiple(
-    name = 'python-api',
-    outdir = 'src/python',
-    language = 'python',
-    srcs = glob(['api/**/*.tmpl']),
-    defs = defs
+    name = "python-api",
+    srcs = glob(["api/**/*.tmpl"]),
+    defs = defs,
+    language = "python",
+    outdir = "src/python",
 )
 
 test_suite(
-    name = 'test',
-    tests = [':spelling', ':check-documented', ':lint'] # ':linkcheck'
+    name = "test",
+    tests = [
+        ":check-documented",
+        ":lint",
+        ":spelling",
+    ],  # ':linkcheck'
 )
 
 sphinx_spelling_test(
-    name = 'spelling',
-    srcs = [':srcs'],
-    sphinx_build = ':sphinx-build',
-    opts = {'version': version},
-    size = 'medium'
+    name = "spelling",
+    size = "medium",
+    srcs = [":srcs"],
+    opts = {"version": version},
+    sphinx_build = ":sphinx-build",
 )
 
 sphinx_linkcheck_test(
-    name = 'linkcheck',
-    srcs = [':srcs'],
-    sphinx_build = ':sphinx-build',
-    opts = {'version': version},
-    tags = ['requires-network']
+    name = "linkcheck",
+    srcs = [":srcs"],
+    opts = {"version": version},
+    sphinx_build = ":sphinx-build",
+    tags = ["requires-network"],
 )
 
 test_suite(
-    name = 'check-documented',
+    name = "check-documented",
     tests = [
-        ':check-documented-cnano',
-        ':check-documented-csharp',
-        ':check-documented-cpp',
-        ':check-documented-java',
-        ':check-documented-lua',
-        ':check-documented-python'
-    ]
+        ":check-documented-cnano",
+        ":check-documented-cpp",
+        ":check-documented-csharp",
+        ":check-documented-java",
+        ":check-documented-lua",
+        ":check-documented-python",
+    ],
 )
 
 check_documented_test(
-    name = 'check-documented-cnano',
-    srcs = [':cnano-api'],
-    members = 'order.txt',
-    size = 'small'
+    name = "check-documented-cnano",
+    size = "small",
+    srcs = [":cnano-api"],
+    members = "order.txt",
 )
 
 check_documented_test(
-    name = 'check-documented-csharp',
-    srcs = [':csharp-api'],
-    members = 'order.txt',
-    size = 'small'
+    name = "check-documented-csharp",
+    size = "small",
+    srcs = [":csharp-api"],
+    members = "order.txt",
 )
 
 check_documented_test(
-    name = 'check-documented-cpp',
-    srcs = [':cpp-api'],
-    members = 'order.txt',
-    size = 'small'
+    name = "check-documented-cpp",
+    size = "small",
+    srcs = [":cpp-api"],
+    members = "order.txt",
 )
 
 check_documented_test(
-    name = 'check-documented-java',
-    srcs = [':java-api'],
-    members = 'order.txt',
-    size = 'small'
+    name = "check-documented-java",
+    size = "small",
+    srcs = [":java-api"],
+    members = "order.txt",
 )
 
 check_documented_test(
-    name = 'check-documented-lua',
-    srcs = [':lua-api'],
-    members = 'order.txt',
-    size = 'small'
+    name = "check-documented-lua",
+    size = "small",
+    srcs = [":lua-api"],
+    members = "order.txt",
 )
 
 check_documented_test(
-    name = 'check-documented-python',
-    srcs = [':python-api'],
-    members = 'order.txt',
-    size = 'small'
+    name = "check-documented-python",
+    size = "small",
+    srcs = [":python-api"],
+    members = "order.txt",
 )
 
 filegroup(
-    name = 'compile-scripts',
+    name = "compile-scripts",
     srcs = [
-        ':compile-scripts-cnano',
-        ':compile-scripts-csharp',
-        ':compile-scripts-cpp',
-        ':compile-scripts-java'
-    ]
+        ":compile-scripts-cnano",
+        ":compile-scripts-cpp",
+        ":compile-scripts-csharp",
+        ":compile-scripts-java",
+    ],
 )
 
 filegroup(
-    name = 'compile-scripts-csharp',
+    name = "compile-scripts-csharp",
     srcs = [
-        ':compile-scripts-csharp-exes',
-        ':compile-scripts-csharp-libs'
-    ]
+        ":compile-scripts-csharp-exes",
+        ":compile-scripts-csharp-libs",
+    ],
 )
 
 cc_binary_multiple(
-    name = 'compile-scripts-cnano',
-    srcs = glob(['src/scripts/**/*.c']),
-    deps = ['//client/cnano:krpc_cnano']
+    name = "compile-scripts-cnano",
+    srcs = glob(["src/scripts/**/*.c"]),
+    deps = ["//client/cnano:krpc_cnano"],
 )
 
 csharp_binary_multiple(
-    name = 'compile-scripts-csharp-exes',
-    srcs = glob(['src/scripts/**/*.cs'], exclude=['src/scripts/**/*.lib.cs']),
+    name = "compile-scripts-csharp-exes",
+    srcs = glob(
+        ["src/scripts/**/*.cs"],
+        exclude = ["src/scripts/**/*.lib.cs"],
+    ),
     deps = [
-        '//client/csharp:KRPC.Client',
-        '//tools/build/mono-4.5:Google.Protobuf',
-        '//tools/build/mono-4.5:mscorlib',
-        '//tools/build/mono-4.5:System',
-        '//tools/build/mono-4.5:System.Core',
-        '//tools/build/mono-4.5:System.Runtime',
-        '//tools/build/mono-4.5:System.IO',
-        '//tools/build/mono-4.5:System.Xml'
-    ]
+        "//client/csharp:KRPC.Client",
+        "//tools/build/mono-4.5:Google.Protobuf",
+        "//tools/build/mono-4.5:System",
+        "//tools/build/mono-4.5:System.Core",
+        "//tools/build/mono-4.5:System.IO",
+        "//tools/build/mono-4.5:System.Runtime",
+        "//tools/build/mono-4.5:System.Xml",
+        "//tools/build/mono-4.5:mscorlib",
+    ],
 )
 
 csharp_library_multiple(
-    name = 'compile-scripts-csharp-libs',
-    srcs = glob(['src/scripts/**/*.lib.cs']),
+    name = "compile-scripts-csharp-libs",
+    srcs = glob(["src/scripts/**/*.lib.cs"]),
     deps = [
-        '//core:KRPC.Core',
-        '//tools/build/ksp:Google.Protobuf',
-        '//tools/build/ksp:Assembly-CSharp',
-        '//tools/build/ksp:Assembly-CSharp-firstpass',
-        '//tools/build/ksp:UnityEngine',
-        '//tools/build/ksp:UnityEngine.AnimationModule',
-        '//tools/build/ksp:UnityEngine.CoreModule',
-        '//tools/build/ksp:UnityEngine.IMGUIModule',
-        '//tools/build/ksp:UnityEngine.InputLegacyModule',
-        '//tools/build/ksp:UnityEngine.UI',
-        '//tools/build/ksp:mscorlib',
-        '//tools/build/ksp:System',
-        '//tools/build/ksp:System.Core',
-        '//tools/build/ksp:System.Xml'
-    ]
+        "//core:KRPC.Core",
+        "//tools/build/ksp:Assembly-CSharp",
+        "//tools/build/ksp:Assembly-CSharp-firstpass",
+        "//tools/build/ksp:Google.Protobuf",
+        "//tools/build/ksp:System",
+        "//tools/build/ksp:System.Core",
+        "//tools/build/ksp:System.Xml",
+        "//tools/build/ksp:UnityEngine",
+        "//tools/build/ksp:UnityEngine.AnimationModule",
+        "//tools/build/ksp:UnityEngine.CoreModule",
+        "//tools/build/ksp:UnityEngine.IMGUIModule",
+        "//tools/build/ksp:UnityEngine.InputLegacyModule",
+        "//tools/build/ksp:UnityEngine.UI",
+        "//tools/build/ksp:mscorlib",
+    ],
 )
 
 cc_binary_multiple(
-    name = 'compile-scripts-cpp',
-    srcs = glob(['src/scripts/**/*.cpp']),
-    deps = ['//client/cpp:krpc']
+    name = "compile-scripts-cpp",
+    srcs = glob(["src/scripts/**/*.cpp"]),
+    deps = ["//client/cpp:krpc"],
 )
 
 java_binary_multiple(
-    name = 'compile-scripts-java',
-    srcs = glob(['src/scripts/**/*.java']),
+    name = "compile-scripts-java",
+    srcs = glob(["src/scripts/**/*.java"]),
     deps = [
-        '//client/java:krpc-jar',
-        '@java_protobuf//jar',
-        '@java_javatuples//jar'
-    ]
+        "//client/java:krpc-jar",
+        "@java_javatuples//jar",
+        "@java_protobuf//jar",
+    ],
 )
 
 test_suite(
-    name = 'lint',
+    name = "lint",
     tests = [
-        ':lint-python'
-    ]
+        ":lint-python",
+    ],
 )
 
 py_lint_test(
-    name = 'lint-python',
-    srcs = glob(['src/scripts/*.py'], exclude=['src/scripts/communication-protocol.py']),
-    pycodestyle_config = 'src/scripts/pycodestyle.ini',
-    pylint_config = 'src/scripts/pylint.rc',
-    size = 'small'
+    name = "lint-python",
+    size = "small",
+    srcs = glob(
+        ["src/scripts/*.py"],
+        exclude = ["src/scripts/communication-protocol.py"],
+    ),
+    pycodestyle_config = "src/scripts/pycodestyle.ini",
+    pylint_config = "src/scripts/pylint.rc",
 )

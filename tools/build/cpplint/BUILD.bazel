@@ -1,9 +1,9 @@
-load('//tools/build:python.bzl', 'py_script')
+load("//tools/build:python.bzl", "py_script")
 
 py_script(
-  name = 'cpplint',
-  script = 'cpplint',
-  pkg = '@python_cpplint//file',
-  deps = [],
-  visibility = ['//visibility:public']
+    name = "cpplint",
+    pkg = "@python_cpplint//file",
+    script = "cpplint",
+    visibility = ["//visibility:public"],
+    deps = [],
 )

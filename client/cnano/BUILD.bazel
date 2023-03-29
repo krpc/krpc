@@ -1,207 +1,242 @@
-load('//tools/build:autotools.bzl', 'autotools_dist')
-load('//tools/build:cpp.bzl', 'cpp_check_test', 'cpp_lint_test')
-load('//tools/build/protobuf:nanopb.bzl', 'protobuf_nanopb')
-load('//tools/build:client_test.bzl', 'client_test')
-load('//tools/krpctools:clientgen.bzl', 'clientgen_cnano')
-load('//:config.bzl', 'version')
+load("//tools/build:autotools.bzl", "autotools_dist")
+load("//tools/build:cpp.bzl", "cpp_check_test", "cpp_lint_test")
+load("//tools/build/protobuf:nanopb.bzl", "protobuf_nanopb")
+load("//tools/build:client_test.bzl", "client_test")
+load("//tools/krpctools:clientgen.bzl", "clientgen_cnano")
+load("//:config.bzl", "version")
 
-name = 'krpc-cnano-%s' % version
+name = "krpc-cnano-%s" % version
 
 autotools_dist(
-    name = 'cnano',
-    out = '%s.zip' % name,
-    source_dir = name,
-    files = glob(['include/**/*.h', 'src/*.c', '**/Makefile.am']) + [
-        '//:readme', '//:version', 'CHANGES.txt', 'INSTALL.txt',
-        'LICENSE', '//:COPYING', '//:COPYING.LESSER',
-        ':autotools',
-        ':cmake',
-        ':protobuf',
-        ':services-krpc',
-        ':services-spacecenter',
-        ':services-drawing',
-        ':services-infernalrobotics',
-        ':services-kerbalalarmclock',
-        ':services-remotetech',
-        ':services-ui',
-        ':services-lidar',
-        ':services-dockingcamera',
-        '@c_nanopb//:LICENSE.txt',
-        '@c_nanopb//:pb.h',
-        '@c_nanopb//:pb_common.h',
-        '@c_nanopb//:pb_common.c',
-        '@c_nanopb//:pb_encode.h',
-        '@c_nanopb//:pb_encode.c',
-        '@c_nanopb//:pb_decode.h',
-        '@c_nanopb//:pb_decode.c'
+    name = "cnano",
+    out = "%s.zip" % name,
+    files = glob([
+        "include/**/*.h",
+        "src/*.c",
+        "**/Makefile.am",
+    ]) + [
+        "CHANGES.txt",
+        "INSTALL.txt",
+        "LICENSE",
+        ":autotools",
+        ":cmake",
+        ":protobuf",
+        ":services-dockingcamera",
+        ":services-drawing",
+        ":services-infernalrobotics",
+        ":services-kerbalalarmclock",
+        ":services-krpc",
+        ":services-lidar",
+        ":services-remotetech",
+        ":services-spacecenter",
+        ":services-ui",
+        "//:COPYING",
+        "//:COPYING.LESSER",
+        "//:readme",
+        "//:version",
+        "@c_nanopb//:LICENSE.txt",
+        "@c_nanopb//:pb.h",
+        "@c_nanopb//:pb_common.c",
+        "@c_nanopb//:pb_common.h",
+        "@c_nanopb//:pb_decode.c",
+        "@c_nanopb//:pb_decode.h",
+        "@c_nanopb//:pb_encode.c",
+        "@c_nanopb//:pb_encode.h",
     ],
     path_map = {
-        '../c_nanopb/LICENSE.txt': '%s/LICENSE.nanopb' % name,
-        '../c_nanopb/*.h': '%s/include/krpc_cnano/' % name,
-        '../c_nanopb/*.c': '%s/src/' % name,
-        'client/cnano/': '%s/' % name,
-        'COPYING': '%s/COPYING' % name,
-        'COPYING.LESSER': '%s/COPYING.LESSER' % name,
-        'README.txt': '%s/README.txt' % name,
-        'VERSION.txt': '%s/VERSION.txt' % name
+        "../c_nanopb/LICENSE.txt": "%s/LICENSE.nanopb" % name,
+        "../c_nanopb/*.h": "%s/include/krpc_cnano/" % name,
+        "../c_nanopb/*.c": "%s/src/" % name,
+        "client/cnano/": "%s/" % name,
+        "COPYING": "%s/COPYING" % name,
+        "COPYING.LESSER": "%s/COPYING.LESSER" % name,
+        "README.txt": "%s/README.txt" % name,
+        "VERSION.txt": "%s/VERSION.txt" % name,
     },
-    visibility = ['//:__pkg__']
+    source_dir = name,
+    visibility = ["//:__pkg__"],
 )
 
 genrule(
-    name = 'autotools',
-    srcs = ['configure.ac.tmpl'],
-    outs = ['configure.ac'],
-    cmd = 'sed \'s/%VERSION%/'+version+'/g\' "$<" > "$@"'
+    name = "autotools",
+    srcs = ["configure.ac.tmpl"],
+    outs = ["configure.ac"],
+    cmd = "sed 's/%VERSION%/" + version + '/g\' "$<" > "$@"',
 )
 
 genrule(
-    name = 'cmake',
-    srcs = ['CMakeLists.txt.tmpl'],
-    outs = ['CMakeLists.txt'],
-    cmd = 'sed \'s/%VERSION%/'+version+'/g\' "$<" > "$@"'
+    name = "cmake",
+    srcs = ["CMakeLists.txt.tmpl"],
+    outs = ["CMakeLists.txt"],
+    cmd = "sed 's/%VERSION%/" + version + '/g\' "$<" > "$@"',
 )
 
 clientgen_cnano(
-    name = 'services-krpc',
-    service = 'KRPC',
-    defs = '//core:ServiceDefinitions',
-    out = 'include/krpc_cnano/services/krpc.h'
+    name = "services-krpc",
+    out = "include/krpc_cnano/services/krpc.h",
+    defs = "//core:ServiceDefinitions",
+    service = "KRPC",
 )
 
 clientgen_cnano(
-    name = 'services-spacecenter',
-    service = 'SpaceCenter',
-    defs = '//service/SpaceCenter:ServiceDefinitions',
-    out = 'include/krpc_cnano/services/space_center.h'
+    name = "services-spacecenter",
+    out = "include/krpc_cnano/services/space_center.h",
+    defs = "//service/SpaceCenter:ServiceDefinitions",
+    service = "SpaceCenter",
 )
 
 clientgen_cnano(
-    name = 'services-drawing',
-    service = 'Drawing',
-    defs = '//service/Drawing:ServiceDefinitions',
-    out = 'include/krpc_cnano/services/drawing.h'
+    name = "services-drawing",
+    out = "include/krpc_cnano/services/drawing.h",
+    defs = "//service/Drawing:ServiceDefinitions",
+    service = "Drawing",
 )
 
 clientgen_cnano(
-    name = 'services-infernalrobotics',
-    service = 'InfernalRobotics',
-    defs = '//service/InfernalRobotics:ServiceDefinitions',
-    out = 'include/krpc_cnano/services/infernal_robotics.h'
+    name = "services-infernalrobotics",
+    out = "include/krpc_cnano/services/infernal_robotics.h",
+    defs = "//service/InfernalRobotics:ServiceDefinitions",
+    service = "InfernalRobotics",
 )
 
 clientgen_cnano(
-    name = 'services-kerbalalarmclock',
-    service = 'KerbalAlarmClock',
-    defs = '//service/KerbalAlarmClock:ServiceDefinitions',
-    out = 'include/krpc_cnano/services/kerbal_alarm_clock.h'
+    name = "services-kerbalalarmclock",
+    out = "include/krpc_cnano/services/kerbal_alarm_clock.h",
+    defs = "//service/KerbalAlarmClock:ServiceDefinitions",
+    service = "KerbalAlarmClock",
 )
 
 clientgen_cnano(
-    name = 'services-remotetech',
-    service = 'RemoteTech',
-    defs = '//service/RemoteTech:ServiceDefinitions',
-    out = 'include/krpc_cnano/services/remote_tech.h'
+    name = "services-remotetech",
+    out = "include/krpc_cnano/services/remote_tech.h",
+    defs = "//service/RemoteTech:ServiceDefinitions",
+    service = "RemoteTech",
 )
 
 clientgen_cnano(
-    name = 'services-ui',
-    service = 'UI',
-    defs = '//service/UI:ServiceDefinitions',
-    out = 'include/krpc_cnano/services/ui.h'
+    name = "services-ui",
+    out = "include/krpc_cnano/services/ui.h",
+    defs = "//service/UI:ServiceDefinitions",
+    service = "UI",
 )
 
 clientgen_cnano(
-    name = 'services-lidar',
-    service = 'LiDAR',
-    defs = '//service/LiDAR:ServiceDefinitions',
-    out = 'include/krpc_cnano/services/lidar.h'
+    name = "services-lidar",
+    out = "include/krpc_cnano/services/lidar.h",
+    defs = "//service/LiDAR:ServiceDefinitions",
+    service = "LiDAR",
 )
 
 clientgen_cnano(
-    name = 'services-dockingcamera',
-    service = 'DockingCamera',
-    defs = '//service/DockingCamera:ServiceDefinitions',
-    out = 'include/krpc_cnano/services/dockingcamera.h'
+    name = "services-dockingcamera",
+    out = "include/krpc_cnano/services/dockingcamera.h",
+    defs = "//service/DockingCamera:ServiceDefinitions",
+    service = "DockingCamera",
 )
 
 clientgen_cnano(
-    name = 'services-test-service',
-    service = 'TestService',
-    defs = '//tools/TestServer:ServiceDefinitions',
-    out = 'test/services/test_service.h'
+    name = "services-test-service",
+    out = "test/services/test_service.h",
+    defs = "//tools/TestServer:ServiceDefinitions",
+    service = "TestService",
 )
 
-srcs = glob(['src/**/*.c'])
-hdrs = glob(['include/**/*.h']) + [
-    ':services-krpc',
-    ':services-spacecenter',
-    ':services-drawing',
-    ':services-infernalrobotics',
-    ':services-kerbalalarmclock',
-    ':services-remotetech',
-    ':services-ui',
-    ':services-lidar',
-    ':services-dockingcamera'
+srcs = glob(["src/**/*.c"])
+
+hdrs = glob(["include/**/*.h"]) + [
+    ":services-krpc",
+    ":services-spacecenter",
+    ":services-drawing",
+    ":services-infernalrobotics",
+    ":services-kerbalalarmclock",
+    ":services-remotetech",
+    ":services-ui",
+    ":services-lidar",
+    ":services-dockingcamera",
 ]
 
 cc_library(
-    name = 'krpc_cnano',
-    srcs = srcs + [':protobuf'],
-    hdrs = hdrs + [':protobuf'],
-    includes = ['include'],
-    deps = ['@c_nanopb//:nanopb'],
-    visibility = ['//visibility:public']
+    name = "krpc_cnano",
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    includes = ["include"],
+    visibility = ["//visibility:public"],
+    deps = ["@c_nanopb//:nanopb"],
 )
 
 test_suite(
-    name = 'test',
-    tests = [':client', ':check', ':lint']
+    name = "test",
+    tests = [
+        ":check",
+        ":client",
+        ":lint",
+    ],
 )
 
 client_test(
-    name = 'client',
-    test_executable = ':cnanotest',
-    server_executable = '//tools/TestServer',
-    server_type = 'serialio',
-    tags = ['requires-network', 'local'],
-    size = 'small'
+    name = "client",
+    size = "small",
+    server_executable = "//tools/TestServer",
+    server_type = "serialio",
+    tags = [
+        "local",
+        "requires-network",
+    ],
+    test_executable = ":cnanotest",
 )
 
-test_srcs = glob(['test/test_*.cpp', 'test/*.hpp']) + [':services-test-service']
+test_srcs = glob([
+    "test/test_*.cpp",
+    "test/*.hpp",
+]) + [":services-test-service"]
 
 cc_binary(
-    name = 'cnanotest',
+    name = "cnanotest",
     srcs = test_srcs,
-    includes = ['test'],
-    deps = [':krpc_cnano', '@cpp_googletest//:gtest', '@cpp_googletest//:gmock']
+    includes = ["test"],
+    deps = [
+        ":krpc_cnano",
+        "@cpp_googletest//:gmock",
+        "@cpp_googletest//:gtest",
+    ],
 )
 
 cpp_check_test(
-    name = 'check',
+    name = "check",
+    size = "small",
     srcs = srcs + test_srcs,
     hdrs = hdrs,
-    includes = ['include'],
-    size = 'small'
+    includes = ["include"],
 )
 
 cpp_lint_test(
-    name = 'lint',
+    name = "lint",
+    size = "small",
     srcs = srcs + test_srcs,
     hdrs = hdrs,
-    includes = ['include'],
-    filters = ['+build/include_alpha', '-legal/copyright', '-readability/todo', '-readability/casting', '-build/header_guard', '-build/include_subdir'],
-    extra_files = ['include/krpc_cnano/services/CPPLINT.cfg', 'test/services/CPPLINT.cfg'],
-    size = 'small'
+    extra_files = [
+        "include/krpc_cnano/services/CPPLINT.cfg",
+        "test/services/CPPLINT.cfg",
+    ],
+    filters = [
+        "+build/include_alpha",
+        "-legal/copyright",
+        "-readability/todo",
+        "-readability/casting",
+        "-build/header_guard",
+        "-build/include_subdir",
+    ],
+    includes = ["include"],
 )
 
 #TODO: use targets in //protobuf:... instead of the following
 protobuf_nanopb(
-    name = 'protobuf',
-    header = 'include/krpc_cnano/krpc.pb.h',
-    source = 'src/krpc.pb.c',
-    include = 'krpc_cnano',
-    src = '//protobuf:krpc.proto',
-    options = 'src/krpc.options'
+    name = "protobuf",
+    src = "//protobuf:krpc.proto",
+    include = "krpc_cnano",
+    header = "include/krpc_cnano/krpc.pb.h",
+    options = "src/krpc.options",
+    source = "src/krpc.pb.c",
 )
-exports_files(['src/krpc.options'])
+
+exports_files(["src/krpc.options"])

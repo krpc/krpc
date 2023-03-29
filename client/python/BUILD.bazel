@@ -1,170 +1,185 @@
-load('//tools/build:python.bzl', 'py_sdist', 'py_test', 'py_lint_test')
-load('//tools/build:client_test.bzl', 'client_test')
-load('//tools/krpctools:clientgen.bzl', 'clientgen_python')
-load('//:config.bzl', 'version', 'python_version')
+load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
+load("//tools/build:client_test.bzl", "client_test")
+load("//tools/krpctools:clientgen.bzl", "clientgen_python")
+load("//:config.bzl", "python_version", "version")
 
 # Needed as clientgen depends on these files
 genrule(
-    name = 'python_base',
-    srcs = [':python-without-services'],
-    outs = ['krpc-python-base-%s.zip' % version],
+    name = "python_base",
+    srcs = [":python-without-services"],
+    outs = ["krpc-python-base-%s.zip" % version],
     cmd = 'cp "$<" "$@"',
     output_to_bindir = True,
-    visibility = ['//visibility:public']
+    visibility = ["//visibility:public"],
 )
 
 py_sdist(
-    name = 'python-without-services',
-    out = 'krpc-base-%s.zip' % version,
+    name = "python-without-services",
+    out = "krpc-base-%s.zip" % version,
     files = [
-        '//:readme', '//:version', 'CHANGES.txt',
-        'LICENSE', '//:COPYING', '//:COPYING.LESSER',
-        'setup.py', 'MANIFEST.in', '//:python_version',
-        '//protobuf:python'
-    ] + glob(['krpc/**/*']),
+        "CHANGES.txt",
+        "LICENSE",
+        "MANIFEST.in",
+        "setup.py",
+        "//:COPYING",
+        "//:COPYING.LESSER",
+        "//:python_version",
+        "//:readme",
+        "//:version",
+        "//protobuf:python",
+    ] + glob(["krpc/**/*"]),
     path_map = {
-        'version.py': 'krpc/version.py',
-        'client/python/': '',
-        'protobuf/': 'krpc/schema/'
-    }
+        "version.py": "krpc/version.py",
+        "client/python/": "",
+        "protobuf/": "krpc/schema/",
+    },
 )
 
 genrule(
-    name = 'python',
-    srcs = [':python-pypi'],
-    outs = ['krpc-python-%s.zip' % version],
+    name = "python",
+    srcs = [":python-pypi"],
+    outs = ["krpc-python-%s.zip" % version],
     cmd = 'cp "$<" "$@"',
     output_to_bindir = True,
-    visibility = ['//visibility:public']
+    visibility = ["//visibility:public"],
 )
 
 py_sdist(
-    name = 'python-pypi',
-    out = 'krpc-%s.zip' % version,
+    name = "python-pypi",
+    out = "krpc-%s.zip" % version,
     files = [
-        '//:readme', '//:version', 'CHANGES.txt',
-        'LICENSE', '//:COPYING', '//:COPYING.LESSER',
-        'setup.py', 'MANIFEST.in', '//:python_version',
-        '//protobuf:python',
-        ':services-krpc',
-        ':services-testservice',
-        ':services-spacecenter',
-        ':services-drawing',
-        ':services-infernalrobotics',
-        ':services-kerbalalarmclock',
-        ':services-remotetech',
-        ':services-ui',
-        ':services-lidar',
-        ':services-dockingcamera'
-    ] + glob(['krpc/**/*']),
+        "CHANGES.txt",
+        "LICENSE",
+        "MANIFEST.in",
+        "setup.py",
+        ":services-dockingcamera",
+        ":services-drawing",
+        ":services-infernalrobotics",
+        ":services-kerbalalarmclock",
+        ":services-krpc",
+        ":services-lidar",
+        ":services-remotetech",
+        ":services-spacecenter",
+        ":services-testservice",
+        ":services-ui",
+        "//:COPYING",
+        "//:COPYING.LESSER",
+        "//:python_version",
+        "//:readme",
+        "//:version",
+        "//protobuf:python",
+    ] + glob(["krpc/**/*"]),
     path_map = {
-        'version.py': 'krpc/version.py',
-        'client/python/': '',
-        'protobuf/': 'krpc/schema/'
-    }
+        "version.py": "krpc/version.py",
+        "client/python/": "",
+        "protobuf/": "krpc/schema/",
+    },
 )
 
 clientgen_python(
-    name = 'services-krpc',
-    service = 'KRPC',
-    defs = '//core:ServiceDefinitions',
-    out = 'krpc/services/krpc.py'
+    name = "services-krpc",
+    out = "krpc/services/krpc.py",
+    defs = "//core:ServiceDefinitions",
+    service = "KRPC",
 )
 
 clientgen_python(
-    name = 'services-testservice',
-    service = 'TestService',
-    defs = '//tools/TestServer:ServiceDefinitions',
-    out = 'krpc/services/testservice.py'
+    name = "services-testservice",
+    out = "krpc/services/testservice.py",
+    defs = "//tools/TestServer:ServiceDefinitions",
+    service = "TestService",
 )
 
 clientgen_python(
-    name = 'services-spacecenter',
-    service = 'SpaceCenter',
-    defs = '//service/SpaceCenter:ServiceDefinitions',
-    out = 'krpc/services/spacecenter.py'
+    name = "services-spacecenter",
+    out = "krpc/services/spacecenter.py",
+    defs = "//service/SpaceCenter:ServiceDefinitions",
+    service = "SpaceCenter",
 )
 
 clientgen_python(
-    name = 'services-drawing',
-    service = 'Drawing',
-    defs = '//service/Drawing:ServiceDefinitions',
-    out = 'krpc/services/drawing.py'
+    name = "services-drawing",
+    out = "krpc/services/drawing.py",
+    defs = "//service/Drawing:ServiceDefinitions",
+    service = "Drawing",
 )
 
 clientgen_python(
-    name = 'services-infernalrobotics',
-    service = 'InfernalRobotics',
-    defs = '//service/InfernalRobotics:ServiceDefinitions',
-    out = 'krpc/services/infernalrobotics.py'
+    name = "services-infernalrobotics",
+    out = "krpc/services/infernalrobotics.py",
+    defs = "//service/InfernalRobotics:ServiceDefinitions",
+    service = "InfernalRobotics",
 )
 
 clientgen_python(
-    name = 'services-kerbalalarmclock',
-    service = 'KerbalAlarmClock',
-    defs = '//service/KerbalAlarmClock:ServiceDefinitions',
-    out = 'krpc/services/kerbalalarmclock.py'
+    name = "services-kerbalalarmclock",
+    out = "krpc/services/kerbalalarmclock.py",
+    defs = "//service/KerbalAlarmClock:ServiceDefinitions",
+    service = "KerbalAlarmClock",
 )
 
 clientgen_python(
-    name = 'services-remotetech',
-    service = 'RemoteTech',
-    defs = '//service/RemoteTech:ServiceDefinitions',
-    out = 'krpc/services/remotetech.py'
+    name = "services-remotetech",
+    out = "krpc/services/remotetech.py",
+    defs = "//service/RemoteTech:ServiceDefinitions",
+    service = "RemoteTech",
 )
 
 clientgen_python(
-    name = 'services-ui',
-    service = 'UI',
-    defs = '//service/UI:ServiceDefinitions',
-    out = 'krpc/services/ui.py'
+    name = "services-ui",
+    out = "krpc/services/ui.py",
+    defs = "//service/UI:ServiceDefinitions",
+    service = "UI",
 )
 
 clientgen_python(
-    name = 'services-lidar',
-    service = 'LiDAR',
-    defs = '//service/LiDAR:ServiceDefinitions',
-    out = 'krpc/services/lidar.py'
+    name = "services-lidar",
+    out = "krpc/services/lidar.py",
+    defs = "//service/LiDAR:ServiceDefinitions",
+    service = "LiDAR",
 )
 
 clientgen_python(
-    name = 'services-dockingcamera',
-    service = 'DockingCamera',
-    defs = '//service/DockingCamera:ServiceDefinitions',
-    out = 'krpc/services/dockingcamera.py'
+    name = "services-dockingcamera",
+    out = "krpc/services/dockingcamera.py",
+    defs = "//service/DockingCamera:ServiceDefinitions",
+    service = "DockingCamera",
 )
 
 test_suite(
-    name = 'test',
-    tests = [':client', ':lint']
+    name = "test",
+    tests = [
+        ":client",
+        ":lint",
+    ],
 )
 
 client_test(
-    name = 'client',
-    test_executable = ':clienttest',
-    server_executable = '//tools/TestServer',
-    tags = ['requires-network'],
-    size = 'medium'
+    name = "client",
+    size = "medium",
+    server_executable = "//tools/TestServer",
+    tags = ["requires-network"],
+    test_executable = ":clienttest",
 )
 
-deps = ['@python_protobuf//file']
+deps = ["@python_protobuf//file"]
 
 py_test(
-    name = 'clienttest',
-    src = ':python',
-    pkg = 'krpc-'+python_version,
+    name = "clienttest",
+    size = "small",
+    src = ":python",
+    pkg = "krpc-" + python_version,
+    tags = ["requires-network"],
     deps = deps,
-    tags = ['requires-network'],
-    size = 'small'
 )
 
 py_lint_test(
-    name = 'lint',
-    pkg = ':python',
-    pkg_name = 'krpc',
-    srcs = glob(['krpc/**/*']),
+    name = "lint",
+    size = "small",
+    srcs = glob(["krpc/**/*"]),
+    pkg = ":python",
+    pkg_name = "krpc",
+    pycodestyle_config = "pycodestyle.ini",
+    pylint_config = "pylint.rc",
     deps = deps,
-    pycodestyle_config = 'pycodestyle.ini',
-    pylint_config = 'pylint.rc',
-    size = 'small'
 )

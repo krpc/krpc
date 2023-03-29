@@ -1,205 +1,238 @@
-load('//tools/build:autotools.bzl', 'autotools_dist')
-load('//tools/build:cpp.bzl', 'cpp_check_test', 'cpp_lint_test')
-load('//tools/build/protobuf:cpp.bzl', 'protobuf_cpp')
-load('//tools/build:client_test.bzl', 'client_test')
-load('//tools/krpctools:clientgen.bzl', 'clientgen_cpp')
-load('//:config.bzl', 'version')
+load("//tools/build:autotools.bzl", "autotools_dist")
+load("//tools/build:cpp.bzl", "cpp_check_test", "cpp_lint_test")
+load("//tools/build/protobuf:cpp.bzl", "protobuf_cpp")
+load("//tools/build:client_test.bzl", "client_test")
+load("//tools/krpctools:clientgen.bzl", "clientgen_cpp")
+load("//:config.bzl", "version")
 
-name = 'krpc-cpp-%s' % version
+name = "krpc-cpp-%s" % version
 
 autotools_dist(
-    name = 'cpp',
-    out = '%s.zip' % name,
-    source_dir = name,
-    files = glob(['include/**/*.hpp', 'src/*.cpp', '**/Makefile.am']) + [
-        '//:readme', '//:version', 'CHANGES.txt', 'INSTALL.txt',
-        'LICENSE', '//:COPYING', '//:COPYING.LESSER',
-        ':autotools', '@m4_stdcxx//file',
-        ':cmake',
-        '//protobuf:cpp',
-        '//protobuf:krpc.proto',
-        'protobuf-include.cmake',
-        ':services-krpc',
-        ':services-spacecenter',
-        ':services-drawing',
-        ':services-infernalrobotics',
-        ':services-kerbalalarmclock',
-        ':services-remotetech',
-        ':services-ui',
-        ':services-lidar',
-        ':services-dockingcamera'
+    name = "cpp",
+    out = "%s.zip" % name,
+    files = glob([
+        "include/**/*.hpp",
+        "src/*.cpp",
+        "**/Makefile.am",
+    ]) + [
+        "CHANGES.txt",
+        "INSTALL.txt",
+        "LICENSE",
+        "protobuf-include.cmake",
+        ":autotools",
+        ":cmake",
+        ":services-dockingcamera",
+        ":services-drawing",
+        ":services-infernalrobotics",
+        ":services-kerbalalarmclock",
+        ":services-krpc",
+        ":services-lidar",
+        ":services-remotetech",
+        ":services-spacecenter",
+        ":services-ui",
+        "//:COPYING",
+        "//:COPYING.LESSER",
+        "//:readme",
+        "//:version",
+        "//protobuf:cpp",
+        "//protobuf:krpc.proto",
+        "@m4_stdcxx//file",
     ],
     path_map = {
-        'client/cpp/': '%s/' % name,
-        'COPYING': '%s/COPYING' % name,
-        'COPYING.LESSER': '%s/COPYING.LESSER' % name,
-        'README.txt': '%s/README.txt' % name,
-        'VERSION.txt': '%s/VERSION.txt' % name,
-        'protobuf/': '%s/protobuf/' % name,
-        '../m4_stdcxx/file/downloaded': '%s/m4/ax_cxx_compile_stdcxx.m4' % name
+        "client/cpp/": "%s/" % name,
+        "COPYING": "%s/COPYING" % name,
+        "COPYING.LESSER": "%s/COPYING.LESSER" % name,
+        "README.txt": "%s/README.txt" % name,
+        "VERSION.txt": "%s/VERSION.txt" % name,
+        "protobuf/": "%s/protobuf/" % name,
+        "../m4_stdcxx/file/downloaded": "%s/m4/ax_cxx_compile_stdcxx.m4" % name,
     },
-    visibility = ['//:__pkg__']
+    source_dir = name,
+    visibility = ["//:__pkg__"],
 )
 
 genrule(
-    name = 'autotools',
-    srcs = ['configure.ac.tmpl'],
-    outs = ['configure.ac'],
-    cmd = 'sed \'s/%VERSION%/'+version+'/g\' "$<" > "$@"'
+    name = "autotools",
+    srcs = ["configure.ac.tmpl"],
+    outs = ["configure.ac"],
+    cmd = "sed 's/%VERSION%/" + version + '/g\' "$<" > "$@"',
 )
 
 genrule(
-    name = 'cmake',
-    srcs = ['CMakeLists.txt.tmpl'],
-    outs = ['CMakeLists.txt'],
-    cmd = 'sed \'s/%VERSION%/'+version+'/g\' "$<" > "$@"'
+    name = "cmake",
+    srcs = ["CMakeLists.txt.tmpl"],
+    outs = ["CMakeLists.txt"],
+    cmd = "sed 's/%VERSION%/" + version + '/g\' "$<" > "$@"',
 )
 
 clientgen_cpp(
-    name = 'services-krpc',
-    service = 'KRPC',
-    defs = '//core:ServiceDefinitions',
-    out = 'include/krpc/services/krpc.hpp'
+    name = "services-krpc",
+    out = "include/krpc/services/krpc.hpp",
+    defs = "//core:ServiceDefinitions",
+    service = "KRPC",
 )
 
 clientgen_cpp(
-    name = 'services-spacecenter',
-    service = 'SpaceCenter',
-    defs = '//service/SpaceCenter:ServiceDefinitions',
-    out = 'include/krpc/services/space_center.hpp'
+    name = "services-spacecenter",
+    out = "include/krpc/services/space_center.hpp",
+    defs = "//service/SpaceCenter:ServiceDefinitions",
+    service = "SpaceCenter",
 )
 
 clientgen_cpp(
-    name = 'services-drawing',
-    service = 'Drawing',
-    defs = '//service/Drawing:ServiceDefinitions',
-    out = 'include/krpc/services/drawing.hpp'
+    name = "services-drawing",
+    out = "include/krpc/services/drawing.hpp",
+    defs = "//service/Drawing:ServiceDefinitions",
+    service = "Drawing",
 )
 
 clientgen_cpp(
-    name = 'services-infernalrobotics',
-    service = 'InfernalRobotics',
-    defs = '//service/InfernalRobotics:ServiceDefinitions',
-    out = 'include/krpc/services/infernal_robotics.hpp'
+    name = "services-infernalrobotics",
+    out = "include/krpc/services/infernal_robotics.hpp",
+    defs = "//service/InfernalRobotics:ServiceDefinitions",
+    service = "InfernalRobotics",
 )
 
 clientgen_cpp(
-    name = 'services-kerbalalarmclock',
-    service = 'KerbalAlarmClock',
-    defs = '//service/KerbalAlarmClock:ServiceDefinitions',
-    out = 'include/krpc/services/kerbal_alarm_clock.hpp'
+    name = "services-kerbalalarmclock",
+    out = "include/krpc/services/kerbal_alarm_clock.hpp",
+    defs = "//service/KerbalAlarmClock:ServiceDefinitions",
+    service = "KerbalAlarmClock",
 )
 
 clientgen_cpp(
-    name = 'services-remotetech',
-    service = 'RemoteTech',
-    defs = '//service/RemoteTech:ServiceDefinitions',
-    out = 'include/krpc/services/remote_tech.hpp'
+    name = "services-remotetech",
+    out = "include/krpc/services/remote_tech.hpp",
+    defs = "//service/RemoteTech:ServiceDefinitions",
+    service = "RemoteTech",
 )
 
 clientgen_cpp(
-    name = 'services-ui',
-    service = 'UI',
-    defs = '//service/UI:ServiceDefinitions',
-    out = 'include/krpc/services/ui.hpp'
+    name = "services-ui",
+    out = "include/krpc/services/ui.hpp",
+    defs = "//service/UI:ServiceDefinitions",
+    service = "UI",
 )
 
 clientgen_cpp(
-    name = 'services-lidar',
-    service = 'LiDAR',
-    defs = '//service/LiDAR:ServiceDefinitions',
-    out = 'include/krpc/services/lidar.hpp'
+    name = "services-lidar",
+    out = "include/krpc/services/lidar.hpp",
+    defs = "//service/LiDAR:ServiceDefinitions",
+    service = "LiDAR",
 )
 
 clientgen_cpp(
-    name = 'services-dockingcamera',
-    service = 'DockingCamera',
-    defs = '//service/DockingCamera:ServiceDefinitions',
-    out = 'include/krpc/services/docking_camera.hpp'
+    name = "services-dockingcamera",
+    out = "include/krpc/services/docking_camera.hpp",
+    defs = "//service/DockingCamera:ServiceDefinitions",
+    service = "DockingCamera",
 )
 
 clientgen_cpp(
-    name = 'services-test-service',
-    service = 'TestService',
-    defs = '//tools/TestServer:ServiceDefinitions',
-    out = 'test/services/test_service.hpp'
+    name = "services-test-service",
+    out = "test/services/test_service.hpp",
+    defs = "//tools/TestServer:ServiceDefinitions",
+    service = "TestService",
 )
 
-srcs = glob(['src/*.cpp'])
-hdrs = glob(['include/**/*.hpp']) + [
-    ':services-krpc',
-    ':services-spacecenter',
-    ':services-drawing',
-    ':services-infernalrobotics',
-    ':services-kerbalalarmclock',
-    ':services-remotetech',
-    ':services-ui',
-    ':services-lidar',
-    ':services-dockingcamera'
+srcs = glob(["src/*.cpp"])
+
+hdrs = glob(["include/**/*.hpp"]) + [
+    ":services-krpc",
+    ":services-spacecenter",
+    ":services-drawing",
+    ":services-infernalrobotics",
+    ":services-kerbalalarmclock",
+    ":services-remotetech",
+    ":services-ui",
+    ":services-lidar",
+    ":services-dockingcamera",
 ]
 
 cc_library(
-    name = 'krpc',
-    srcs = srcs + [':protobuf'],
-    hdrs = hdrs + [':protobuf'],
-    includes = ['include'],
-    deps = ['@com_google_protobuf//:protobuf_lite', '@cpp_asio//:asio'],
-    visibility = ['//visibility:public']
+    name = "krpc",
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    includes = ["include"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_google_protobuf//:protobuf_lite",
+        "@cpp_asio//:asio",
+    ],
 )
 
 test_suite(
-    name = 'test',
-    tests = [':client', ':lint']
+    name = "test",
+    tests = [
+        ":client",
+        ":lint",
+    ],
 )
 
 test_suite(
-    name = 'lint',
-    tests = [':cppcheck', ':cpplint']
+    name = "lint",
+    tests = [
+        ":cppcheck",
+        ":cpplint",
+    ],
 )
 
 client_test(
-    name = 'client',
-    test_executable = ':cpptest',
-    server_executable = '//tools/TestServer',
-    tags = ['requires-network'],
-    size = 'small'
+    name = "client",
+    size = "small",
+    server_executable = "//tools/TestServer",
+    tags = ["requires-network"],
+    test_executable = ":cpptest",
 )
 
-test_srcs = glob(['test/test_*.cpp']) + [
-    ':services-test-service',
-    'test/server_test.hpp'
+test_srcs = glob(["test/test_*.cpp"]) + [
+    ":services-test-service",
+    "test/server_test.hpp",
 ]
 
 cc_binary(
-    name = 'cpptest',
+    name = "cpptest",
     srcs = test_srcs,
-    includes = ['test'],
-    deps = [':krpc', '@cpp_googletest//:gtest', '@cpp_googletest//:gmock']
+    includes = ["test"],
+    deps = [
+        ":krpc",
+        "@cpp_googletest//:gmock",
+        "@cpp_googletest//:gtest",
+    ],
 )
 
 cpp_check_test(
-    name = 'cppcheck',
+    name = "cppcheck",
+    size = "small",
     srcs = srcs + test_srcs,
     hdrs = hdrs,
-    includes = ['include'],
-    size = 'small'
+    includes = ["include"],
 )
 
 cpp_lint_test(
-    name = 'cpplint',
+    name = "cpplint",
+    size = "small",
     srcs = srcs + test_srcs,
     hdrs = hdrs,
-    includes = ['include'],
-    filters = ['+build/include_alpha', '-legal/copyright', '-readability/todo', '-build/include_subdir', '-runtime/references'], #FIXME: dont pass non-const references
-    extra_files = ['include/krpc/services/CPPLINT.cfg', 'test/services/CPPLINT.cfg'],
-    size = 'small'
+    extra_files = [
+        "include/krpc/services/CPPLINT.cfg",
+        "test/services/CPPLINT.cfg",
+    ],
+    filters = [
+        "+build/include_alpha",
+        "-legal/copyright",
+        "-readability/todo",
+        "-build/include_subdir",
+        "-runtime/references",
+    ],  #FIXME: dont pass non-const references
+    includes = ["include"],
 )
 
 #TODO: use targets in //protobuf:... instead of the following
 protobuf_cpp(
-    name = 'protobuf',
-    header = 'include/krpc/krpc.pb.hpp',
-    source = 'src/krpc.pb.cpp',
-    include = 'krpc/krpc.pb.hpp',
-    src = '//protobuf:krpc.proto'
+    name = "protobuf",
+    src = "//protobuf:krpc.proto",
+    include = "krpc/krpc.pb.hpp",
+    header = "include/krpc/krpc.pb.hpp",
+    source = "src/krpc.pb.cpp",
 )

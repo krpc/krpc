@@ -1,82 +1,90 @@
-load('//tools/build:csharp.bzl', 'csharp_library', 'csharp_nunit_test', 'csharp_gendarme_test', 'csharp_assembly_info')
-load('//tools/ServiceDefinitions:build.bzl', 'service_definitions')
-load('//tools/build:image.bzl', 'png_images')
-load('//tools/build/ksp:build.bzl', 'ksp_libs', 'ksp_unity_libs')
-load('//tools/build/mono-4.5:build.bzl', 'mono_net_libs')
-load('//:config.bzl', 'version', 'ksp_version_max', 'ksp_version_min', 'assembly_version', 'author')
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_gendarme_test", "csharp_library", "csharp_nunit_test")
+load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+load("//tools/build:image.bzl", "png_images")
+load("//tools/build/ksp:build.bzl", "ksp_libs", "ksp_unity_libs")
+load("//tools/build/mono-4.5:build.bzl", "mono_net_libs")
+load("//:config.bzl", "assembly_version", "author", "ksp_version_max", "ksp_version_min", "version")
 
 filegroup(
-    name = 'server',
-    srcs = ['//:version', 'CHANGES.txt', ':KRPC', ':icons'],
-    visibility = ['//:__pkg__']
+    name = "server",
+    srcs = [
+        "CHANGES.txt",
+        ":KRPC",
+        ":icons",
+        "//:version",
+    ],
+    visibility = ["//:__pkg__"],
 )
 
 test_suite(
-    name = 'test',
-    tests = [':lint']
+    name = "test",
+    tests = [":lint"],
 )
 
 test_suite(
-    name = 'lint',
-    tests = [':gendarme-KRPC']
+    name = "lint",
+    tests = [":gendarme-KRPC"],
 )
 
 csharp_assembly_info(
-    name = 'AssemblyInfo',
-    title = 'KRPC',
-    description = 'RPC server for Kerbal Space Program',
-    copyright = author,
-    version = assembly_version,
-    custom = {'AssemblyKSPVersion': '"%s", "%s"' % (ksp_version_max, ksp_version_min)},
-    internals_visible_to = [
-        'KRPC.Test',
-        'DynamicProxyGenAssembly2'
-    ],
+    name = "AssemblyInfo",
     cls_compliant = False,
+    copyright = author,
+    custom = {"AssemblyKSPVersion": '"%s", "%s"' % (ksp_version_max, ksp_version_min)},
+    description = "RPC server for Kerbal Space Program",
+    internals_visible_to = [
+        "KRPC.Test",
+        "DynamicProxyGenAssembly2",
+    ],
+    title = "KRPC",
+    version = assembly_version,
     visibility = [
-        '//tools/ServiceDefinitions:__pkg__', # Make visible to ServiceDefinitions so it can build KRPC.dll with .NET 4.5 references
-        '//:__pkg__' # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
-    ]
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+        "//tools/ServiceDefinitions:__pkg__",  # Make visible to ServiceDefinitions so it can build KRPC.dll with .NET 4.5 references
+    ],
 )
 
 # Make sources visible to ServiceDefinitions so it can build KRPC.dll with .NET 4.5 references
 filegroup(
-    name = 'KRPC-src',
-    srcs = glob(['src/**/*.cs']),
-    visibility = ['//tools/ServiceDefinitions:__pkg__']
+    name = "KRPC-src",
+    srcs = glob(["src/**/*.cs"]),
+    visibility = ["//tools/ServiceDefinitions:__pkg__"],
 )
 
-srcs = [':KRPC-src', ':AssemblyInfo']
+srcs = [
+    ":KRPC-src",
+    ":AssemblyInfo",
+]
 
 deps = [
-    '//core:KRPC.Core',
-    '//tools/build/ksp:Google.Protobuf',
-    '//tools/build/ksp:KRPC.IO.Ports'
+    "//core:KRPC.Core",
+    "//tools/build/ksp:Google.Protobuf",
+    "//tools/build/ksp:KRPC.IO.Ports",
 ] + ksp_libs
 
 csharp_library(
-    name = 'KRPC',
+    name = "KRPC",
     srcs = srcs,
+    visibility = ["//visibility:public"],
     deps = deps,
-    visibility = ['//visibility:public']
 )
 
 png_images(
-    name = 'icons',
-    srcs = glob(['src/icons/*.svg'])
+    name = "icons",
+    srcs = glob(["src/icons/*.svg"]),
 )
 
 csharp_library(
-    name = 'KRPC.Debug',
+    name = "KRPC.Debug",
     srcs = srcs,
-    deps = deps,
+    define = ["CODE_ANALYSIS"],
     optimize = False,
-    define = ['CODE_ANALYSIS']
+    deps = deps,
 )
 
 csharp_gendarme_test(
-    name = 'gendarme-KRPC',
-    lib = ':KRPC.Debug',
-    ignores = 'src/ignores.txt',
-    size = 'small'
+    name = "gendarme-KRPC",
+    size = "small",
+    ignores = "src/ignores.txt",
+    lib = ":KRPC.Debug",
 )

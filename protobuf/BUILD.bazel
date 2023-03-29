@@ -1,59 +1,62 @@
-load('//tools/build/protobuf:cpp.bzl', 'protobuf_cpp')
-load('//tools/build/protobuf:csharp.bzl', 'protobuf_csharp')
-load('//tools/build/protobuf:java.bzl', 'protobuf_java')
-load('//tools/build/protobuf:lua.bzl', 'protobuf_lua')
-load('//tools/build/protobuf:nanopb.bzl', 'protobuf_nanopb')
-load('//tools/build/protobuf:python.bzl', 'protobuf_py')
+load("//tools/build/protobuf:cpp.bzl", "protobuf_cpp")
+load("//tools/build/protobuf:csharp.bzl", "protobuf_csharp")
+load("//tools/build/protobuf:java.bzl", "protobuf_java")
+load("//tools/build/protobuf:lua.bzl", "protobuf_lua")
+load("//tools/build/protobuf:nanopb.bzl", "protobuf_nanopb")
+load("//tools/build/protobuf:python.bzl", "protobuf_py")
 
-package(default_visibility = ['//visibility:public'])
+package(default_visibility = ["//visibility:public"])
 
-exports_files(['krpc.proto', 'LICENSE'])
+exports_files([
+    "krpc.proto",
+    "LICENSE",
+])
 
 protobuf_csharp(
-    name = 'csharp',
-    out = 'KRPC.cs',
-    src = 'krpc.proto'
+    name = "csharp",
+    src = "krpc.proto",
+    out = "KRPC.cs",
 )
 
 protobuf_csharp(
-    name = 'csharp_unity',
-    out = 'KRPC_unity.cs',
-    src = 'krpc.proto',
-    protoc = '//tools/build/protobuf:protoc_unity'
+    name = "csharp_unity",
+    src = "krpc.proto",
+    out = "KRPC_unity.cs",
+    protoc = "//tools/build/protobuf:protoc_unity",
 )
 
 protobuf_py(
-    name = 'python',
-    out = 'KRPC_pb2.py',
-    out_pyi = 'KRPC_pb2.pyi',
-    src = 'krpc.proto'
+    name = "python",
+    src = "krpc.proto",
+    out = "KRPC_pb2.py",
+    out_pyi = "KRPC_pb2.pyi",
 )
 
 protobuf_cpp(
-    name = 'cpp',
-    header = 'krpc.pb.hpp',
-    source = 'krpc.pb.cpp',
-    include = 'krpc/krpc.pb.hpp',
-    src = 'krpc.proto'
+    name = "cpp",
+    src = "krpc.proto",
+    include = "krpc/krpc.pb.hpp",
+    header = "krpc.pb.hpp",
+    source = "krpc.pb.cpp",
 )
 
 protobuf_lua(
-    name = 'lua',
-    out = 'KRPC.lua',
-    src = 'krpc.proto'
+    name = "lua",
+    src = "krpc.proto",
+    out = "KRPC.lua",
 )
 
 protobuf_java(
-    name = 'java',
-    out = 'KRPC.java',
-    src = 'krpc.proto'
+    name = "java",
+    src = "krpc.proto",
+    out = "KRPC.java",
 )
 
 protobuf_nanopb(
-    name = 'cnano',
-    header = 'krpc.pb.h',
-    source = 'krpc.pb.c',
-    include = 'krpc.pb.h',
-    src = 'krpc.proto',
-    options = '//client/cnano:src/krpc.options'
+    name = "cnano",
+    src = "krpc.proto",
+    include = "krpc.pb.h",
+    header = "krpc.pb.h",
+    options = "//client/cnano:src/krpc.options",
+    source = "krpc.pb.c",
 )
