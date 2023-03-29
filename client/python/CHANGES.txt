@@ -1,3 +1,6 @@
+v0.5.3
+ * Fix assertion error when connecting to a server with third party services installed (#754)
+
 v0.5.2
  * Requires Python 3.7+
  * Add type hints (#703)
