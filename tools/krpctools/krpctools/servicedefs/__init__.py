@@ -53,7 +53,6 @@ def servicedefs(ksp, service, assemblies):
     if not os.path.exists(ksp):
         raise RuntimeError('Kerbal Space Program directory does not exist.')
 
-    # TODO: delete when done
     bindir = tempfile.mkdtemp(prefix='krpc-servicedefs-')
     tmpout = bindir+'/out.json'
 
@@ -96,10 +95,13 @@ def servicedefs(ksp, service, assemblies):
              '--output=%s' % tmpout, service] + assemblies,
             stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as ex:
+        shutil.rmtree(binpath)
         raise RuntimeError(ex.output) from ex
 
     with open(tmpout, 'r') as fp:
         return fp.read()
+
+    shutil.rmtree(binpath)
 
 
 if __name__ == '__main__':
