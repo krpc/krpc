@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Server;
 using KRPC.UI;
 using KRPC.Utils;
@@ -11,7 +10,6 @@ namespace KRPC
     /// Main KRPC addon. Contains the kRPC core, config and UI.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.AllGameScenes, false)]
-    [SuppressMessage ("Gendarme.Rules.Correctness", "DeclareEventsExplicitlyRule")]
     public sealed class Addon : MonoBehaviour
     {
         // TODO: clean this up
@@ -81,7 +79,6 @@ namespace KRPC
             InitUI ();
         }
 
-        [SuppressMessage ("Gendarme.Rules.Concurrency", "WriteStaticFieldFromInstanceMethodRule")]
         void InitUI ()
         {
             // Layout extensions
@@ -241,7 +238,6 @@ namespace KRPC
         /// <summary>
         /// Stop the server if running
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnApplicationQuit ()
         {
             core.StopAll ();
@@ -250,7 +246,6 @@ namespace KRPC
         /// <summary>
         /// GUI update
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnGUI ()
         {
             GUILayoutExtensions.OnGUI ();
@@ -259,7 +254,6 @@ namespace KRPC
         /// <summary>
         /// Trigger server update
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void FixedUpdate ()
         {
             if (!ServicesChecker.OK)

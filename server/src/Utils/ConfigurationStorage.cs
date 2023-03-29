@@ -1,9 +1,7 @@
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace KRPC.Utils
 {
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
     abstract class ConfigurationStorage : ConfigurationStorageNode
     {
         readonly string path;

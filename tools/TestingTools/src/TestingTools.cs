@@ -1,7 +1,6 @@
 #pragma warning disable 0618
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -70,7 +69,6 @@ namespace TestingTools
         /// Set the orbit of the active vessel.
         /// </summary>
         [KRPCProcedure]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public static void SetOrbit (string body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
         {
             var celestialBody = FlightGlobals.Bodies.First (b => b.bodyName == body);

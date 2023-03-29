@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -16,7 +15,6 @@ namespace KRPC.Drawing
     /// Text. Created using <see cref="Drawing.AddText" />.
     /// </summary>
     [KRPCClass (Service = "Drawing")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class Text : Drawable<Text>
     {
         readonly MeshRenderer renderer;

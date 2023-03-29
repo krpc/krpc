@@ -1,0 +1,49 @@
+load("//:config.bzl", "assembly_version", "author")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
+load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+load("//service:build.bzl", "service_deps")
+
+filegroup(
+    name = "KerbalAlarmClock",
+    srcs = [
+        "CHANGES.txt",
+        ":KRPC.KerbalAlarmClock",
+        ":ServiceDefinitions",
+    ],
+    visibility = ["//:__pkg__"],
+)
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    description = "Kerbal Alarm Clock API for kRPC",
+    title = "KRPC.KerbalAlarmClock",
+    version = assembly_version,
+    visibility = [
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ],
+)
+
+srcs = [":AssemblyInfo"] + glob(["src/**/*.cs"])
+
+deps = service_deps + ["//service/SpaceCenter:KRPC.SpaceCenter"]
+
+csharp_library(
+    name = "KRPC.KerbalAlarmClock",
+    srcs = srcs,
+    visibility = ["//visibility:public"],
+    deps = deps,
+)
+
+service_definitions(
+    name = "ServiceDefinitions",
+    out = "KRPC.KerbalAlarmClock.json",
+    assemblies = [
+        ":KRPC.KerbalAlarmClock",
+        "//service/SpaceCenter:KRPC.SpaceCenter",
+        "//server:KRPC",
+    ],
+    service = "KerbalAlarmClock",
+    visibility = ["//visibility:public"],
+)

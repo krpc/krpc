@@ -1,13 +1,10 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.Services;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class KerbalTypeExtensions
     {
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
-        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
         public static CrewMemberType ToCrewMemberType (this ProtoCrewMember.KerbalType type)
         {
             switch (type) {

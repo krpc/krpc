@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Utils;
 using UnityEngine;
 
@@ -54,7 +53,6 @@ namespace KRPC.UI
             }
         }
         
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
         private void Awake()
         {
             id = UnityEngine.Random.Range(1000, 2000000);
@@ -64,7 +62,6 @@ namespace KRPC.UI
 
         protected abstract void Draw (bool needRescale);
 
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
         public void OnGUI ()
         {
             if (!hasInit) {

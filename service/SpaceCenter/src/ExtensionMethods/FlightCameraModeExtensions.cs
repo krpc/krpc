@@ -1,12 +1,10 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.Services;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class CameraModeExtensions
     {
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static CameraMode ToCameraMode (this FlightCamera.Modes mode)
         {
             switch (mode) {

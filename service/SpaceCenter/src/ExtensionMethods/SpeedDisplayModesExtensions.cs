@@ -1,10 +1,7 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
-    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
     static class SpeedDisplayModesExtensions
     {
         public static Services.SpeedMode ToSpeedMode (this FlightGlobals.SpeedDisplayModes mode)

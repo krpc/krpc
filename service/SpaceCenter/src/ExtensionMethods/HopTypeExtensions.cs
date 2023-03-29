@@ -1,12 +1,10 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.Services;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class HopTypeExtensions
     {
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static CommLinkType ToCommLinkType (this CommNet.HopType type)
         {
             switch (type) {

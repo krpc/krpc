@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Utils
 {
     /// <summary>
     /// Extension methods for dictionaries
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
     public static class DictionaryExtensions
     {
         /// <summary>

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using KRPC.Schema.KRPC;
@@ -10,8 +9,6 @@ using NUnit.Framework;
 namespace KRPC.Test.Utils
 {
     [TestFixture]
-    [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
     public class DocumentationExtentionsTest
     {
         static readonly System.Type cls = typeof(TestDocumentedClass);
@@ -225,7 +222,6 @@ namespace KRPC.Test.Utils
     }
 
     /// <summary>Class docs</summary>
-    [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
     sealed class TestDocumentedClass
     {
         /// <summary>Method docs</summary>
@@ -245,13 +241,11 @@ namespace KRPC.Test.Utils
         public static int StaticProperty { get; set; }
 
         /// <summary>Method arguments docs</summary>
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUnusedParametersRule")]
         public void MethodArguments (int one, string two, Tuple<int,float,string> three, Response four, NestedClass five)
         {
         }
 
         /// <summary>Nested class docs</summary>
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
         public sealed class NestedClass
         {
             /// <summary>Nested class method docs</summary>
@@ -273,7 +267,6 @@ namespace KRPC.Test.Utils
         /// <param name="param1">Param1.</param>
         /// <param name="param2">Param2 <paramref name="param1"/>.</param>
         /// <returns>Nothing....</returns>
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUnusedParametersRule")]
         public void MultiLineDocumentation (string param1, int param2)
         {
         }
@@ -293,7 +286,6 @@ namespace KRPC.Test.Utils
     {
     }
 
-    [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
     class TestDocumentedChildClass
     {
         /// <summary>Inherited method docs</summary>
@@ -317,7 +309,6 @@ namespace KRPC.Test.Utils
     {
     }
 
-    [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
     class TestDocumentedChildGenericClass<T>
     {
         /// <summary>Inherited generic method docs</summary>

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using KRPC.Service.Attributes;
@@ -22,9 +21,6 @@ namespace KRPC.Service.Scanner
         /// Find all service signatures from all loaded assemblies.
         /// Errors are added to the given error list.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static IDictionary<string, ServiceSignature> GetServices (IList<string> errors = null)
         {
             var serviceIds = new HashSet<uint> ();
@@ -166,7 +162,6 @@ namespace KRPC.Service.Scanner
         /// <summary>
         /// Get mapping from exception types to kRPC exception types.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
         public static IDictionary<Type, Type> GetMappedExceptionTypes()
         {
             IDictionary<Type, Type> mappedExceptionTypes = new Dictionary<Type, Type> ();

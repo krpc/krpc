@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Messages;
 using NUnit.Framework;
@@ -8,8 +7,6 @@ using NUnit.Framework;
 namespace KRPC.Test.Service
 {
     [TestFixture]
-    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInTypeNameRule")]
-    [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
     public class ScannerTest
     {
         Services services;
@@ -61,8 +58,6 @@ namespace KRPC.Test.Service
         }
 
         [Test]
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void TestServiceProcedures ()
         {
             var service = services.ServicesList.First (x => x.Name == "TestService");

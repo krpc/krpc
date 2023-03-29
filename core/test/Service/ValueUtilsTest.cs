@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using NUnit.Framework;

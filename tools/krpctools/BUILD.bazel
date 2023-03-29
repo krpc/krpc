@@ -1,0 +1,126 @@
+load("//tools/build:python.bzl", "py_lint_test", "py_script", "py_sdist", "py_test")
+load("//tools/build/mono-4.5:build.bzl", "mono_net_libs")
+load("//:config.bzl", "python_version", "version")
+
+license_text = """This license (GPL v3) applies to all parts of krpc.clientgen except for the following:
+
+  - krpctools/bin/{mscorlib.dll,System.*.dll} are from the Mono project.
+    See http://www.mono-project.com/docs/faq/licensing/
+
+  - krpctools/bin/Newtonsoft.Json.dll is under the MIT license.
+    See https://www.nuget.org/packages/Newtonsoft.Json/
+
+  - krpctools/bin/NDesk.Options.dll is under the MIT license.
+    See https://www.nuget.org/packages/NDesk.Options/
+
+  - krpctools/bin/Google.Protobuf.dll is from Google's protobuf project.
+    See https://github.com/google/protobuf
+
+Copyright 2015-2023 kRPC Org
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+genrule(
+    name = "license",
+    outs = ["LICENSE"],
+    cmd = 'echo "%s" > "$@"' % license_text,
+)
+
+py_sdist(
+    name = "krpctools",
+    out = "krpctools-%s.zip" % version,
+    files = [
+        "CHANGES.txt",
+        "MANIFEST.in",
+        "README.txt",
+        "setup.py",
+        ":license",
+        "//:COPYING",
+        "//:python_version",
+        "//:version",
+        "//tools/ServiceDefinitions",
+        "//tools/ServiceDefinitions:KRPC.Core",
+        "//tools/TestServer:ServiceDefinitions",
+        "//tools/TestServer:archive",
+        "//tools/build/mono-4.5:Google.Protobuf.dll",
+        "//tools/build/mono-4.5:NDesk.Options.dll",
+        "//tools/build/mono-4.5:Newtonsoft.Json.dll",
+    ] + mono_net_libs + glob([
+        "krpctools/**/*.py",
+        "krpctools/**/*.tmpl",
+        "krpctools/test/*.json",
+        "krpctools/test/**/*.txt",
+        "krpctools/test/**/*.rst",
+    ]),
+    path_map = {
+        "version.py": "krpctools/version.py",
+        "tools/krpctools/": "",
+        "tools/ServiceDefinitions/ServiceDefinitions.exe": "krpctools/bin/ServiceDefinitions.exe",
+        "tools/ServiceDefinitions/KRPC.Core.dll": "krpctools/bin/KRPC.Core.dll",
+        "tools/ServiceDefinitions/KRPC.Core.xml": "krpctools/bin/KRPC.Core.xml",
+        "tools/TestServer/TestService.json": "krpctools/test/TestService.json",
+        "tools/build/mono-4.5/": "krpctools/bin/",
+        "tools/TestServer/": "krpctools/bin/",
+    },
+)
+
+deps = [
+    "//client/python:python_base",
+    "@python_protobuf//file",
+    "@python_jinja2//file",
+    "@python_markupsafe//file",
+]
+
+py_script(
+    name = "clientgen",
+    pkg = ":krpctools",
+    script = "krpc-clientgen",
+    visibility = ["//visibility:public"],
+    deps = deps,
+)
+
+py_script(
+    name = "docgen",
+    pkg = ":krpctools",
+    script = "krpc-docgen",
+    visibility = ["//visibility:public"],
+    deps = deps,
+)
+
+test_suite(
+    name = "test",
+    tests = [
+        ":krpctoolstest",
+        ":lint",
+    ],
+)
+
+py_test(
+    name = "krpctoolstest",
+    size = "small",
+    src = ":krpctools",
+    pkg = "krpctools-" + python_version,
+    deps = deps,
+)
+
+py_lint_test(
+    name = "lint",
+    size = "small",
+    pkg = ":krpctools",
+    pkg_name = "krpctools",
+    pycodestyle_config = "pycodestyle.ini",
+    pylint_config = "pylint.rc",
+    deps = deps,
+)

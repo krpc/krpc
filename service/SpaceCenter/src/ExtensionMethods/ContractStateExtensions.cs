@@ -1,13 +1,10 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.Services;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class ContractStateExtensions
     {
-        [SuppressMessage("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
-        [SuppressMessage("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
         public static ContractState ToContractState(this Contracts.Contract.State state)
         {
             switch (state)

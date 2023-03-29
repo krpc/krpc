@@ -26,7 +26,6 @@
  */
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 namespace TestingTools
@@ -61,7 +60,6 @@ namespace TestingTools
                 StartCoroutine(CallbackUtil.DelayedCallback(15, SwitchVessel));
         }
 
-        [SuppressMessage("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
         static void SwitchVessel()
         {
             Console.WriteLine("[kRPC testing tools]: Switching to active vessel");

@@ -1,11 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
 using Google.Protobuf;
 using KRPC.Server.Message;
 using KRPC.Service.Messages;
 
 namespace KRPC.Server.ProtocolBuffers
 {
-    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     sealed class RPCStream : Message.RPCStream
     {
         readonly CodedOutputStream codedOutputStream;

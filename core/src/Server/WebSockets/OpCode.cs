@@ -1,10 +1,8 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Server.WebSockets
 {
     [Serializable]
-    [SuppressMessage ("Gendarme.Rules.Design", "UseFlagsAttributeRule")]
     enum OpCode
     {
         Continue = 0x0,

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace KRPC.Service
@@ -10,8 +9,6 @@ namespace KRPC.Service
     /// </summary>
     [Flags]
     [Serializable]
-    [SuppressMessage ("Gendarme.Rules.Design", "FlagsShouldNotDefineAZeroValueRule")]
-    [SuppressMessage ("Gendarme.Rules.Naming", "UsePluralNameInEnumFlagsRule")]
     public enum GameScene
     {
         /// <summary>
@@ -65,7 +62,6 @@ namespace KRPC.Service
         All = ~0
     }
 
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
     static class GameSceneUtils {
         public static string Name(GameScene scene) {
             return string.Join(", ", scene.ToString().Split(',').Where(x => x != "Inherit").Select(x => x.Trim()).ToArray());

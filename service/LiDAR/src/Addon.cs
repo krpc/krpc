@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace KRPC.LiDAR
 {
@@ -7,7 +6,6 @@ namespace KRPC.LiDAR
     /// kRPC LiDAR addon.
     /// </summary>
     [KSPAddon(KSPAddon.Startup.Flight, false)]
-    [SuppressMessage("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
     public sealed class Addon : MonoBehaviour
     {
         /// <summary>

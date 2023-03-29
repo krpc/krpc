@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NUnit.Framework;
 
 namespace KRPC.Test.Service.KRPC
 {
     [TestFixture]
-    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInTypeNameRule")]
     public class KRPCTest
     {
         [Test]
@@ -18,8 +16,6 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
-        [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void GetServices ()
         {
             var services = global::KRPC.Service.KRPC.KRPC.GetServices ();

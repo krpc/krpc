@@ -1,0 +1,185 @@
+load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
+load("//tools/build:client_test.bzl", "client_test")
+load("//tools/krpctools:clientgen.bzl", "clientgen_python")
+load("//:config.bzl", "python_version", "version")
+
+# Needed as clientgen depends on these files
+genrule(
+    name = "python_base",
+    srcs = [":python-without-services"],
+    outs = ["krpc-python-base-%s.zip" % version],
+    cmd = 'cp "$<" "$@"',
+    output_to_bindir = True,
+    visibility = ["//visibility:public"],
+)
+
+py_sdist(
+    name = "python-without-services",
+    out = "krpc-base-%s.zip" % version,
+    files = [
+        "CHANGES.txt",
+        "LICENSE",
+        "MANIFEST.in",
+        "setup.py",
+        "//:COPYING",
+        "//:COPYING.LESSER",
+        "//:python_version",
+        "//:readme",
+        "//:version",
+        "//protobuf:python",
+    ] + glob(["krpc/**/*"]),
+    path_map = {
+        "version.py": "krpc/version.py",
+        "client/python/": "",
+        "protobuf/": "krpc/schema/",
+    },
+)
+
+genrule(
+    name = "python",
+    srcs = [":python-pypi"],
+    outs = ["krpc-python-%s.zip" % version],
+    cmd = 'cp "$<" "$@"',
+    output_to_bindir = True,
+    visibility = ["//visibility:public"],
+)
+
+py_sdist(
+    name = "python-pypi",
+    out = "krpc-%s.zip" % version,
+    files = [
+        "CHANGES.txt",
+        "LICENSE",
+        "MANIFEST.in",
+        "setup.py",
+        ":services-dockingcamera",
+        ":services-drawing",
+        ":services-infernalrobotics",
+        ":services-kerbalalarmclock",
+        ":services-krpc",
+        ":services-lidar",
+        ":services-remotetech",
+        ":services-spacecenter",
+        ":services-testservice",
+        ":services-ui",
+        "//:COPYING",
+        "//:COPYING.LESSER",
+        "//:python_version",
+        "//:readme",
+        "//:version",
+        "//protobuf:python",
+    ] + glob(["krpc/**/*"]),
+    path_map = {
+        "version.py": "krpc/version.py",
+        "client/python/": "",
+        "protobuf/": "krpc/schema/",
+    },
+)
+
+clientgen_python(
+    name = "services-krpc",
+    out = "krpc/services/krpc.py",
+    defs = "//core:ServiceDefinitions",
+    service = "KRPC",
+)
+
+clientgen_python(
+    name = "services-testservice",
+    out = "krpc/services/testservice.py",
+    defs = "//tools/TestServer:ServiceDefinitions",
+    service = "TestService",
+)
+
+clientgen_python(
+    name = "services-spacecenter",
+    out = "krpc/services/spacecenter.py",
+    defs = "//service/SpaceCenter:ServiceDefinitions",
+    service = "SpaceCenter",
+)
+
+clientgen_python(
+    name = "services-drawing",
+    out = "krpc/services/drawing.py",
+    defs = "//service/Drawing:ServiceDefinitions",
+    service = "Drawing",
+)
+
+clientgen_python(
+    name = "services-infernalrobotics",
+    out = "krpc/services/infernalrobotics.py",
+    defs = "//service/InfernalRobotics:ServiceDefinitions",
+    service = "InfernalRobotics",
+)
+
+clientgen_python(
+    name = "services-kerbalalarmclock",
+    out = "krpc/services/kerbalalarmclock.py",
+    defs = "//service/KerbalAlarmClock:ServiceDefinitions",
+    service = "KerbalAlarmClock",
+)
+
+clientgen_python(
+    name = "services-remotetech",
+    out = "krpc/services/remotetech.py",
+    defs = "//service/RemoteTech:ServiceDefinitions",
+    service = "RemoteTech",
+)
+
+clientgen_python(
+    name = "services-ui",
+    out = "krpc/services/ui.py",
+    defs = "//service/UI:ServiceDefinitions",
+    service = "UI",
+)
+
+clientgen_python(
+    name = "services-lidar",
+    out = "krpc/services/lidar.py",
+    defs = "//service/LiDAR:ServiceDefinitions",
+    service = "LiDAR",
+)
+
+clientgen_python(
+    name = "services-dockingcamera",
+    out = "krpc/services/dockingcamera.py",
+    defs = "//service/DockingCamera:ServiceDefinitions",
+    service = "DockingCamera",
+)
+
+test_suite(
+    name = "test",
+    tests = [
+        ":client",
+        ":lint",
+    ],
+)
+
+client_test(
+    name = "client",
+    size = "medium",
+    server_executable = "//tools/TestServer",
+    tags = ["requires-network"],
+    test_executable = ":clienttest",
+)
+
+deps = ["@python_protobuf//file"]
+
+py_test(
+    name = "clienttest",
+    size = "small",
+    src = ":python",
+    pkg = "krpc-" + python_version,
+    tags = ["requires-network"],
+    deps = deps,
+)
+
+py_lint_test(
+    name = "lint",
+    size = "small",
+    srcs = glob(["krpc/**/*"]),
+    pkg = ":python",
+    pkg_name = "krpc",
+    pycodestyle_config = "pycodestyle.ini",
+    pylint_config = "pylint.rc",
+    deps = deps,
+)

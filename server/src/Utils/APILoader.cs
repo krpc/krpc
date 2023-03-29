@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
 
@@ -18,7 +17,6 @@ namespace KRPC.Utils
         /// <param name="assemblyName">Name of the assembly to load.</param>
         /// <param name="apiName">Name of the API to load.</param>
         /// <param name="requiredVersion">Required API version.</param>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static Type Load (Type api, string assemblyName, string apiName, Version requiredVersion = null)
         {
             if (api == null)

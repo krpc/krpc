@@ -26,7 +26,6 @@
  */
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using SaveUpgradePipeline;
 using UnityEngine;
 
@@ -71,7 +70,6 @@ namespace TestingTools
                 StartCoroutine(CallbackUtil.DelayedCallback(15, LoadGame));
         }
 
-        [SuppressMessage("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
         static void LoadGame ()
         {
             if (Loaded)
@@ -87,12 +85,10 @@ namespace TestingTools
             KSPUpgradePipeline.Process(gameObj, Game, LoadContext.SFS, OnLoadDialogPipelineFinished, OnLoadDialogPipelineError);
         }
 
-        [SuppressMessage("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
         static void OnLoadDialogPipelineError(KSPUpgradePipeline.UpgradeFailOption opt, ConfigNode node) {
             Console.WriteLine("[kRPC testing tools]: KSPUpgradePipeline failed " + opt.ToString() + " " + node);
         }
                            
-        [SuppressMessage("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
         static void OnLoadDialogPipelineFinished(ConfigNode node)
         {
             // Load game cfg

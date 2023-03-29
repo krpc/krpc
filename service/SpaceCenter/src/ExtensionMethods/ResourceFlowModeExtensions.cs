@@ -1,12 +1,9 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class ResourceFlowModeExtensions
     {
-        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static Services.ResourceFlowMode ToResourceFlowMode (this ResourceFlowMode mode)
         {
             switch (mode) {

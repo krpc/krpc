@@ -1,0 +1,178 @@
+load("//tools/krpctools:clientgen.bzl", "clientgen_java")
+load("//tools/build:client_test.bzl", "client_test")
+load("//tools/build:java.bzl", "java_checkstyle_test")
+load("//:config.bzl", "version")
+
+copts = [
+    "-Werror",
+    "-Xlint:all",
+    "-target 1.8",
+    "-source 1.8",
+]
+
+filegroup(
+    name = "java",
+    srcs = [":krpc-jar"],
+    visibility = ["//visibility:public"],
+)
+
+genrule(
+    name = "krpc-jar",
+    srcs = [":krpc"],
+    outs = ["krpc-java-%s.jar" % version],
+    cmd = 'cp "$<" "$@"',
+    output_to_bindir = True,
+    visibility = ["//visibility:public"],
+)
+
+java_library(
+    name = "krpc",
+    srcs = glob(["src/krpc/**/*.java"]) + [
+        ":services-dockingcamera",
+        ":services-drawing",
+        ":services-infernalrobotics",
+        ":services-kerbalalarmclock",
+        ":services-krpc",
+        ":services-lidar",
+        ":services-remotetech",
+        ":services-spacecenter",
+        ":services-ui",
+        "//protobuf:java",
+    ],
+    javacopts = copts,
+    resources = [
+        "CHANGES.txt",
+        "LICENSE",
+        "//:COPYING",
+        "//:COPYING.LESSER",
+        "//:readme",
+        "//:version",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@java_javatuples//jar",
+        "@java_protobuf//jar",
+    ],
+)
+
+java_library(
+    name = "testlib",
+    srcs = glob(["test/**/*.java"]) + [":services-testservice"],
+    javacopts = copts,
+    deps = [
+        ":krpc",
+        "@java_hamcrest//jar",
+        "@java_javatuples//jar",
+        "@java_junit//jar",
+        "@java_protobuf//jar",
+    ],
+)
+
+java_test(
+    name = "testexe",
+    size = "medium",
+    javacopts = copts,
+    main_class = "krpc.client.TestSuite",
+    tags = ["requires-network"],
+    runtime_deps = [
+        ":krpc",
+        ":testlib",
+        "@java_hamcrest//jar",
+        "@java_javatuples//jar",
+        "@java_junit//jar",
+        "@java_protobuf//jar",
+    ],
+)
+
+test_suite(
+    name = "test",
+    tests = [
+        ":client",
+        ":lint",
+    ],
+)
+
+client_test(
+    name = "client",
+    size = "small",
+    server_executable = "//tools/TestServer",
+    tags = ["requires-network"],
+    test_executable = ":testexe",
+    visibility = ["//:__pkg__"],
+)
+
+java_checkstyle_test(
+    name = "lint",
+    size = "small",
+    srcs = glob(["**/*.java"]),
+)
+
+clientgen_java(
+    name = "services-krpc",
+    out = "services/KRPC.java",
+    defs = "//core:ServiceDefinitions",
+    service = "KRPC",
+)
+
+clientgen_java(
+    name = "services-spacecenter",
+    out = "services/SpaceCenter.java",
+    defs = "//service/SpaceCenter:ServiceDefinitions",
+    service = "SpaceCenter",
+)
+
+clientgen_java(
+    name = "services-drawing",
+    out = "services/Drawing.java",
+    defs = "//service/Drawing:ServiceDefinitions",
+    service = "Drawing",
+)
+
+clientgen_java(
+    name = "services-infernalrobotics",
+    out = "services/InfernalRobotics.java",
+    defs = "//service/InfernalRobotics:ServiceDefinitions",
+    service = "InfernalRobotics",
+)
+
+clientgen_java(
+    name = "services-kerbalalarmclock",
+    out = "services/KerbalAlarmClock.java",
+    defs = "//service/KerbalAlarmClock:ServiceDefinitions",
+    service = "KerbalAlarmClock",
+)
+
+clientgen_java(
+    name = "services-remotetech",
+    out = "services/RemoteTech.java",
+    defs = "//service/RemoteTech:ServiceDefinitions",
+    service = "RemoteTech",
+)
+
+clientgen_java(
+    name = "services-ui",
+    out = "services/UI.java",
+    defs = "//service/UI:ServiceDefinitions",
+    service = "UI",
+)
+
+clientgen_java(
+    name = "services-lidar",
+    out = "services/LiDAR.java",
+    defs = "//service/LiDAR:ServiceDefinitions",
+    service = "LiDAR",
+)
+
+clientgen_java(
+    name = "services-dockingcamera",
+    out = "services/DockingCamera.java",
+    defs = "//service/DockingCamera:ServiceDefinitions",
+    service = "DockingCamera",
+)
+
+clientgen_java(
+    name = "services-testservice",
+    out = "services/TestService.java",
+    defs = "//tools/TestServer:ServiceDefinitions",
+    service = "TestService",
+)

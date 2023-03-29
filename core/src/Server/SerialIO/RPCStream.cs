@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using Google.Protobuf;
 using KRPC.Server.Message;
 using KRPC.Server.ProtocolBuffers;
@@ -7,7 +6,6 @@ using KRPC.Service.Messages;
 
 namespace KRPC.Server.SerialIO
 {
-    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     sealed class RPCStream : Message.RPCStream
     {
         readonly CodedOutputStream codedOutputStream;

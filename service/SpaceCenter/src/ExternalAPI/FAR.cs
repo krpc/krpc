@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using KRPC.Utils;
 using UnityEngine;
@@ -62,7 +61,6 @@ namespace KRPC.SpaceCenter.ExternalAPI
 
         static MethodInfo calculateVesselAeroForces;
 
-        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
         public static void CalculateVesselAeroForces(Vessel vessel, out Vector3 aeroForce, out Vector3 aeroTorque, Vector3 velocityWorldVector, double altitude) {
             var parameters = new object[] { vessel, Vector3.zero, Vector3.zero, velocityWorldVector, altitude };
             calculateVesselAeroForces.Invoke(null, parameters);

@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using KRPC.Client.Services.TestService;
 using KRPC.Client.Services.KRPC;
@@ -142,7 +141,6 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "CallingEqualsWithNullArgRule")]
         public void TestEquality () {
             var e0 = Connection.TestService ().OnTimer (100);
             var e1 = e0;

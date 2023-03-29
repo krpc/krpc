@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Messages;
@@ -11,7 +10,6 @@ namespace KRPC.Server
     /// <summary>
     /// A kRPC server.
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Correctness", "DeclareEventsExplicitlyRule")]
     public sealed class Server : IServer
     {
         /// <summary>

@@ -1,12 +1,10 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.Services.Parts;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class SolarPanelStateExtensions
     {
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static SolarPanelState ToSolarPanelState (this ModuleDeployablePart.DeployState state)
         {
             switch (state) {

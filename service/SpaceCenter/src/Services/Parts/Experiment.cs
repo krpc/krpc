@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using KRPC.Service.Attributes;
@@ -14,7 +13,6 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Part.Experiment"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class Experiment : Equatable<Experiment>
     {
         readonly ModuleScienceExperiment experiment;
@@ -106,7 +104,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Transmit all experimental data contained by this part.
         /// </summary>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Performance", "DoNotIgnoreMethodResultRule")]
         public void Transmit ()
         {
             var data = dataContainer.GetData ();
@@ -227,7 +224,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// conditions. Returns <c>null</c> if the experiment is unavailable.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Performance", "UseStringEmptyRule")]
         public ScienceSubject ScienceSubject {
             get {
                 if (!Available)

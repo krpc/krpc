@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using KRPC.Service;
@@ -244,11 +243,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Helper class for launching a new vessel.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
         sealed class LaunchConfig {
-            [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
             public LaunchConfig(string craftDirectory, string name, string launchSite, bool recover, IList<string> crew, string flagUrl) {
                 LaunchSite = launchSite;
                 Recover = recover;
@@ -365,8 +360,6 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
-        [SuppressMessage ("Gendarme.Rules.Performance", "UseStringEmptyRule")]
         public static void LaunchVessel (
             string craftDirectory, string name, string launchSite, bool recover = true,
             [KRPCNullable] IList<string> crew = null, string flagUrl = "")
@@ -413,7 +406,6 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
-        [SuppressMessage ("Gendarme.Rules.Performance", "UseStringEmptyRule")]
         public static void LaunchVesselFromVAB (string name, bool recover = true)
         {
             LaunchVessel ("VAB", name, "LaunchPad", recover);
@@ -431,7 +423,6 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
-        [SuppressMessage ("Gendarme.Rules.Performance", "UseStringEmptyRule")]
         public static void LaunchVesselFromSPH (string name, bool recover = true)
         {
             LaunchVessel ("SPH", name, "Runway", recover);
@@ -528,7 +519,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="crewMember">The crew member to transfer.</param>
         /// <param name="targetPart">The part to move them to.</param>
         [KRPCProcedure(GameScene = GameScene.Flight)]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
         public static void TransferCrew(CrewMember crewMember, Parts.Part targetPart)
         {
             if (crewMember == null)
@@ -774,7 +764,6 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Decrease the regular "on-rails" time warp factor.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         static void DecreaseRailsWarp ()
         {
             if (TimeWarp.WarpMode != TimeWarp.Modes.HIGH)
@@ -817,7 +806,6 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Decrease the physics time warp factor.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         static void DecreasePhysicsWarp ()
         {
             if (TimeWarp.WarpMode != TimeWarp.Modes.LOW)
@@ -932,7 +920,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="referenceFrame">The reference frame that the position and direction are in.</param>
         /// <returns>The distance to the hit, in meters, or infinity if there was no hit.</returns>
         [KRPCProcedure]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public static double RaycastDistance (Tuple3 position, Tuple3 direction, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
@@ -953,7 +940,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="referenceFrame">The reference frame that the position and direction are in.</param>
         /// <returns>The part that was hit or <c>null</c> if there was no hit.</returns>
         [KRPCProcedure (Nullable = true, GameScene = GameScene.Flight)]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public static Parts.Part RaycastPart (Tuple3 position, Tuple3 direction, ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))

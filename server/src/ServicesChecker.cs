@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Scanner;
@@ -42,7 +41,6 @@ namespace KRPC
                 CheckDocumentation (services.Values);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         void CheckDocumentation (IEnumerable<ServiceSignature> services)
         {
             foreach (var service in services)

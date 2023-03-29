@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -10,7 +9,6 @@ namespace KRPC.DockingCamera
     /// <summary>
     /// Camera service.
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
     [KRPCService(Id = 11, GameScene = GameScene.All)]
     public static class DockingCamera
     {

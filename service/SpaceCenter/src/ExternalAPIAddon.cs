@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter
@@ -12,7 +11,6 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// Load external APIs.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Start ()
         {
             ExternalAPI.AGX.Load ();

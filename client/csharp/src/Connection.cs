@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Sockets;
@@ -15,9 +14,6 @@ namespace KRPC.Client
     /// <summary>
     /// A connection to the kRPC server. All interaction with kRPC is performed via an instance of this class.
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Correctness", "DisposableFieldsShouldBeDisposedRule")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public class Connection : IConnection, IDisposable
     {
         object invokeLock = new object ();
@@ -37,7 +33,6 @@ namespace KRPC.Client
         /// streamPort is 0, does not connect to the stream server.
         /// Passes an optional name to the server to identify the client (up to 32 bytes of UTF-8 encoded text).
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "EnsureLocalDisposalRule")]
         public Connection (string name = "", IPAddress address = null, int rpcPort = 50000, int streamPort = 50001)
         {
             if (address == null)
@@ -123,7 +118,6 @@ namespace KRPC.Client
         /// Create a new stream from the given lambda expression.
         /// Returns a stream object that can be used to obtain the latest value of the stream.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
         public Stream<TResult> AddStream<TResult> (LambdaExpression expression)
         {
             CheckDisposed ();
@@ -133,8 +127,6 @@ namespace KRPC.Client
         /// <summary>
         /// See <see ref="AddStream"/>.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidUnnecessarySpecializationRule")]
         public Stream<TResult> AddStream<TResult> (Expression<Func<TResult>> expression)
         {
             CheckDisposed ();
@@ -195,8 +187,6 @@ namespace KRPC.Client
         /// <summary>
         /// Return the procedure call message for a remote procedure call.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidUnnecessarySpecializationRule")]
         public static ProcedureCall GetCall<TResult> (Expression<Func<TResult>> expression)
         {
             return GetCall ((LambdaExpression) expression);
@@ -367,7 +357,6 @@ namespace KRPC.Client
             exceptionTypes [service + "." + name] = exnType;
         }
 
-        [SuppressMessage ("Gendarme.Rules.Exceptions", "InstantiateArgumentExceptionCorrectlyRule")]
         internal System.Exception GetException (Error error)
         {
             var message = error.Description;

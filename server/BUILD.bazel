@@ -1,0 +1,63 @@
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
+load("//tools/build:image.bzl", "png_images")
+load("//tools/build/ksp:build.bzl", "ksp_libs")
+load("//:config.bzl", "assembly_version", "author", "ksp_version_max", "ksp_version_min")
+
+filegroup(
+    name = "server",
+    srcs = [
+        "CHANGES.txt",
+        ":KRPC",
+        ":icons",
+        "//:version",
+    ],
+    visibility = ["//:__pkg__"],
+)
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    custom = {"AssemblyKSPVersion": '"%s", "%s"' % (ksp_version_max, ksp_version_min)},
+    description = "RPC server for Kerbal Space Program",
+    internals_visible_to = [
+        "KRPC.Test",
+        "DynamicProxyGenAssembly2",
+    ],
+    title = "KRPC",
+    version = assembly_version,
+    visibility = [
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+        "//tools/ServiceDefinitions:__pkg__",  # Make visible to ServiceDefinitions so it can build KRPC.dll with .NET 4.5 references
+    ],
+)
+
+# Make sources visible to ServiceDefinitions so it can build KRPC.dll with .NET 4.5 references
+filegroup(
+    name = "KRPC-src",
+    srcs = glob(["src/**/*.cs"]),
+    visibility = ["//tools/ServiceDefinitions:__pkg__"],
+)
+
+srcs = [
+    ":KRPC-src",
+    ":AssemblyInfo",
+]
+
+deps = [
+    "//core:KRPC.Core",
+    "//tools/build/ksp:Google.Protobuf",
+    "//tools/build/ksp:KRPC.IO.Ports",
+] + ksp_libs
+
+csharp_library(
+    name = "KRPC",
+    srcs = srcs,
+    visibility = ["//visibility:public"],
+    deps = deps,
+)
+
+png_images(
+    name = "icons",
+    srcs = glob(["src/icons/*.svg"]),
+)

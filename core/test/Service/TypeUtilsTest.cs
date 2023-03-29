@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using NUnit.Framework;
@@ -95,7 +94,6 @@ namespace KRPC.Test.Service
         }
 
         [TestCase (typeof(TestService.TestClass))]
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidUnnecessarySpecializationRule")]
         public void IsAClassType (Type type)
         {
             Assert.IsTrue (TypeUtils.IsAClassType (type));
@@ -113,7 +111,6 @@ namespace KRPC.Test.Service
         [TestCase (typeof(Tuple<long>))]
         [TestCase (typeof(Tuple<long,int>))]
         [TestCase (typeof(Tuple<long,int,string>))]
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidUnnecessarySpecializationRule")]
         public void IsNotAClassType (Type type)
         {
             Assert.IsFalse (TypeUtils.IsAClassType (type));

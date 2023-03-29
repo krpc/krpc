@@ -1,10 +1,8 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Server.Message;
 
 namespace KRPC.Server.WebSockets
 {
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     sealed class Header
     {
         public bool FinalFragment { get; set; }
@@ -28,7 +26,6 @@ namespace KRPC.Server.WebSockets
 
         public bool Masked { get; private set; }
 
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidReturningArraysOnPropertiesRule")]
         public byte[] MaskingKey {
             get { return maskingKey; }
             set {
@@ -84,7 +81,6 @@ namespace KRPC.Server.WebSockets
         {
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public byte[] ToBytes ()
         {
             var bytes = new byte[HeaderLength];
@@ -121,7 +117,6 @@ namespace KRPC.Server.WebSockets
             return bytes;
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static Header FromBytes (byte[] data, int index, int length)
         {
             var header = new Header ();

@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 using NUnit.Framework;
@@ -13,7 +12,6 @@ namespace KRPC.Test.Server.TCP
         /// Test for checking assumptions about loopback IP addresses
         /// </summary>
         [Test]
-        [SuppressMessage ("Gendarme.Rules.BadPractice", "PreferTryParseRule")]
         public void LoopbackIPAddress ()
         {
             var localAddress = IPAddress.Parse ("127.0.0.1");

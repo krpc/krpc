@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -27,7 +26,6 @@ namespace KRPC.SpaceCenter.Services
         readonly Guid vesselId;
         readonly ReferenceFrame referenceFrame;
 
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
         internal Flight (global::Vessel vessel, ReferenceFrame referenceFrame)
         {
             vesselId = vessel.id;
@@ -627,7 +625,6 @@ namespace KRPC.SpaceCenter.Services
         /// This is the speed at which the drag forces cancel out the force of gravity.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float TerminalVelocity {
             get {
                 var vessel = InternalVessel;
@@ -648,7 +645,6 @@ namespace KRPC.SpaceCenter.Services
         /// in degrees.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float AngleOfAttack {
             get {
                 var vessel = InternalVessel;

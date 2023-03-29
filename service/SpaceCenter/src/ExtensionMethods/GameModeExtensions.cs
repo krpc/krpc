@@ -1,12 +1,10 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class GameModeExtensions
     {
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static GameMode ToGameMode(this Game.Modes mode)
         {
             switch (mode) {

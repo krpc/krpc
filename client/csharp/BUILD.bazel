@@ -1,0 +1,233 @@
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library", "csharp_nunit_test", "nuget_package")
+load("//tools/build:client_test.bzl", "client_test")
+load("//tools/krpctools:clientgen.bzl", "clientgen_csharp")
+load("//tools/build:pkg.bzl", "pkg_zip")
+load("//:config.bzl", "assembly_version", "author", "nuget_version", "version")
+
+pkg_zip(
+    name = "csharp",
+    out = "krpc-csharp-%s.zip" % version,
+    exclude = ["*.mdb"],
+    files = [
+        "CHANGES.txt",
+        "LICENSE",
+        ":KRPC.Client",
+        "//:COPYING",
+        "//:COPYING.LESSER",
+        "//:readme",
+        "//:version",
+    ],
+    path_map = {
+        "client/csharp/KRPC.Client.dll": "net45/KRPC.Client.dll",
+        "client/csharp/KRPC.Client.xml": "net45/KRPC.Client.xml",
+        "client/csharp/": "",
+    },
+    visibility = ["//visibility:public"],
+)
+
+nuget_package(
+    name = "nuget",
+    assembly = ":KRPC.Client",
+    author = author,
+    description = "C# client for kRPC",
+    id = "KRPC.Client",
+    license = "LGPL-3.0-only",
+    project_url = "https://github.com/krpc/krpc",
+    version = nuget_version,
+    deps = {
+        "Google.Protobuf": "3.22.0",
+    },
+)
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    description = "C# client for kRPC",
+    internals_visible_to = ["KRPC.Client.Test"],
+    title = "KRPC.Client",
+    version = assembly_version,
+    visibility = [
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ],
+)
+
+srcs = glob(["src/**/*.cs"]) + [
+    ":AssemblyInfo",
+    "//protobuf:csharp",
+    ":services-krpc",
+    ":services-spacecenter",
+    ":services-drawing",
+    ":services-infernalrobotics",
+    ":services-kerbalalarmclock",
+    ":services-remotetech",
+    ":services-ui",
+    ":services-lidar",
+    ":services-dockingcamera",
+]
+
+deps = [
+    "//tools/build/mono-4.5:Google.Protobuf",
+    "//tools/build/mono-4.5:mscorlib",
+    "//tools/build/mono-4.5:System",
+    "//tools/build/mono-4.5:System.Core",
+    "//tools/build/mono-4.5:System.Runtime",
+    "//tools/build/mono-4.5:System.IO",
+    "//tools/build/mono-4.5:System.Xml",
+    "//tools/build/mono-4.5:System.Memory",
+    "//tools/build/mono-4.5:System.Runtime.CompilerServices.Unsafe",
+]
+
+csharp_library(
+    name = "KRPC.Client",
+    srcs = srcs,
+    nowarn = ["1685"],
+    visibility = ["//visibility:public"],
+    deps = deps,
+)
+
+clientgen_csharp(
+    name = "services-krpc",
+    out = "Services/KRPC.cs",
+    defs = "//core:ServiceDefinitions",
+    service = "KRPC",
+    visibility = [
+        "//:__pkg__",
+    ],
+)
+
+clientgen_csharp(
+    name = "services-spacecenter",
+    out = "Services/SpaceCenter.cs",
+    defs = "//service/SpaceCenter:ServiceDefinitions",
+    service = "SpaceCenter",
+    visibility = [
+        "//:__pkg__",
+    ],
+)
+
+clientgen_csharp(
+    name = "services-drawing",
+    out = "Services/Drawing.cs",
+    defs = "//service/Drawing:ServiceDefinitions",
+    service = "Drawing",
+)
+
+clientgen_csharp(
+    name = "services-infernalrobotics",
+    out = "Services/InfernalRobotics.cs",
+    defs = "//service/InfernalRobotics:ServiceDefinitions",
+    service = "InfernalRobotics",
+    visibility = [
+        "//:__pkg__",
+    ],
+)
+
+clientgen_csharp(
+    name = "services-kerbalalarmclock",
+    out = "Services/KerbalAlarmClock.cs",
+    defs = "//service/KerbalAlarmClock:ServiceDefinitions",
+    service = "KerbalAlarmClock",
+    visibility = [
+        "//:__pkg__",
+    ],
+)
+
+clientgen_csharp(
+    name = "services-remotetech",
+    out = "Services/RemoteTech.cs",
+    defs = "//service/RemoteTech:ServiceDefinitions",
+    service = "RemoteTech",
+)
+
+clientgen_csharp(
+    name = "services-ui",
+    out = "Services/UI.cs",
+    defs = "//service/UI:ServiceDefinitions",
+    service = "UI",
+)
+
+clientgen_csharp(
+    name = "services-lidar",
+    out = "Services/LiDAR.cs",
+    defs = "//service/LiDAR:ServiceDefinitions",
+    service = "LiDAR",
+)
+
+clientgen_csharp(
+    name = "services-dockingcamera",
+    out = "Services/DockingCamera.cs",
+    defs = "//service/DockingCamera:ServiceDefinitions",
+    service = "DockingCamera",
+)
+
+test_suite(
+    name = "test",
+    tests = [
+        ":client",
+    ],
+    visibility = ["//:__pkg__"],
+)
+
+client_test(
+    name = "client",
+    size = "small",
+    server_executable = "//tools/TestServer",
+    tags = [
+        "local",
+        "requires-network",
+    ],
+    test_executable = ":test-KRPC.Client",
+)
+
+csharp_assembly_info(
+    name = "TestAssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    title = "KRPC.Client.Test",
+    version = assembly_version,
+)
+
+test_deps = [
+    ":KRPC.Client",
+    "//tools/build/mono-4.5:Moq",
+    "//tools/build/mono-4.5:System.Threading.Tasks.Extensions",
+    "//tools/build/mono-4.5:Castle.Core",
+] + deps
+
+csharp_library(
+    name = "KRPC.Client.Test",
+    srcs = glob(["test/**/*.cs"]) + [":TestAssemblyInfo"] + [":services-testservice"],
+    define = ["CODE_ANALYSIS"],
+    nowarn = [
+        "1591",
+        "1573",
+        "1685",
+    ],
+    nunit_test = True,
+    optimize = False,
+    visibility = ["//:__pkg__"],
+    deps = test_deps,
+)
+
+csharp_nunit_test(
+    name = "test-KRPC.Client",
+    size = "small",
+    lib = ":KRPC.Client.Test",
+    # FIXME: need to run test outside the sandbox to work around nunit file accesses
+    tags = [
+        "local",
+        "requires-network",
+    ],
+    deps = test_deps,
+)
+
+clientgen_csharp(
+    name = "services-testservice",
+    out = "Services/TestService.cs",
+    defs = "//tools/TestServer:ServiceDefinitions",
+    service = "TestService",
+    visibility = [
+        "//:__pkg__",
+    ],
+)

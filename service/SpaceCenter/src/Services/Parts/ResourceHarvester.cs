@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -11,7 +10,6 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A resource harvester (drill). Obtained by calling <see cref="Part.ResourceHarvester"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class ResourceHarvester : Equatable<ResourceHarvester>
     {
         readonly ModuleResourceHarvester harvester;

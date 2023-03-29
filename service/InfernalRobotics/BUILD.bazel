@@ -1,0 +1,73 @@
+load("//:config.bzl", "assembly_version", "author")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
+load("//tools/build:python.bzl", "py_lint_test")
+load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+load("//service:build.bzl", "service_deps")
+
+filegroup(
+    name = "InfernalRobotics",
+    srcs = [
+        "CHANGES.txt",
+        ":KRPC.InfernalRobotics",
+        ":ServiceDefinitions",
+    ],
+    visibility = ["//:__pkg__"],
+)
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    description = "Infernal Robotics API for kRPC",
+    title = "KRPC.InfernalRobotics",
+    version = assembly_version,
+    visibility = [
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ],
+)
+
+srcs = [":AssemblyInfo"] + glob(["src/**/*.cs"])
+
+deps = service_deps + ["//service/SpaceCenter:KRPC.SpaceCenter"]
+
+csharp_library(
+    name = "KRPC.InfernalRobotics",
+    srcs = srcs,
+    visibility = ["//visibility:public"],
+    deps = deps,
+)
+
+service_definitions(
+    name = "ServiceDefinitions",
+    out = "KRPC.InfernalRobotics.json",
+    assemblies = [
+        ":KRPC.InfernalRobotics",
+        "//service/SpaceCenter:KRPC.SpaceCenter",
+        "//server:KRPC",
+    ],
+    service = "InfernalRobotics",
+    visibility = ["//visibility:public"],
+)
+
+test_suite(
+    name = "test",
+    tests = [":lint"],
+)
+
+test_suite(
+    name = "lint",
+    tests = [
+        ":pylint",
+    ],
+)
+
+py_lint_test(
+    name = "pylint",
+    size = "small",
+    srcs = glob(["test/*.py"]),
+    pylint_config = "test/pylint.rc",
+    deps = [
+        "//client/python",
+        "//tools/krpctest",
+    ],
+)

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.KRPC;
 using NUnit.Framework;
 using LinqExpression = System.Linq.Expressions.Expression;
@@ -7,10 +6,8 @@ using LinqExpression = System.Linq.Expressions.Expression;
 namespace KRPC.Test.Service.KRPC
 {
     [TestFixture]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class ExpressionTest
     {
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
         static T Eval<T> (Expression expression)
         {
             return LinqExpression.Lambda<System.Func<T>> (expression).Compile () ();

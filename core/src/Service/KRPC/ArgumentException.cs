@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 
 namespace KRPC.Service.KRPC
@@ -7,7 +6,6 @@ namespace KRPC.Service.KRPC
     /// A method was invoked where at least one of the passed arguments does not
     /// meet the parameter specification of the method.
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
     [KRPCException (Service = "KRPC", MappedException = typeof (System.ArgumentException))]
     public sealed class ArgumentException : System.Exception
     {

@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using KRPC.Client.Services.TestService;
 using NUnit.Framework;
@@ -100,7 +99,6 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void Interleaved ()
         {
             var s0 = Connection.AddStream (() => Connection.TestService ().Int32ToString (0));
@@ -381,7 +379,6 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "CallingEqualsWithNullArgRule")]
         public void TestEquality () {
             var s0 = Connection.AddStream (
                 () => Connection.TestService ().Counter ("StreamTest.TestEquality0", 1));

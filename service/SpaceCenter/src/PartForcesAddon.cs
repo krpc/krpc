@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.Services.Parts;
 using UnityEngine;
 
@@ -20,7 +19,6 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// Destroy the addon
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnDestroy ()
         {
             forces.Clear ();
@@ -53,7 +51,6 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// Apply the forces to the parts
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void FixedUpdate ()
         {
             foreach (var force in instantaneousForces)

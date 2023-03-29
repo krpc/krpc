@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,11 +10,9 @@ using NUnit.Framework;
 namespace KRPC.Test.Server.WebSockets
 {
     [TestFixture]
-    [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
     public class StreamServerTest
     {
         [Test]
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         public void ValidConnectionRequest ()
         {
             var clientGuid = new Guid ("1234567890abcdef1234567890abcdef".ToBytes ());

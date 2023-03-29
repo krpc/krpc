@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Test.Service;
@@ -63,7 +62,6 @@ namespace KRPC.Test.Utils
         {
         }
 
-        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderUsingStaticTypeRule")]
         sealed class TestNonStaticClass
         {
         }

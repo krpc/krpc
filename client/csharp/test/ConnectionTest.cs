@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
 using System.Threading;
 using KRPC.Client.Services.KRPC;
@@ -121,7 +120,6 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        [SuppressMessage ("Gendarme.Rules.Performance", "UseStringEmptyRule")]
         public void ClassStaticMethods ()
         {
             Assert.AreEqual ("jeb", TestClass.StaticMethod (Connection));
@@ -129,7 +127,6 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         public void ClassProperties ()
         {
             var obj = Connection.TestService ().CreateTestObject ("jeb");
@@ -234,7 +231,6 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         public void CollectionsOfObjects ()
         {
             var l = Connection.TestService ().AddToObjectList (new List<TestClass> (), "jeb");
@@ -270,7 +266,6 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
         public void ArgumentNullException ()
         {
             var exn = Assert.Throws<System.ArgumentNullException> (() => Connection.TestService ().ThrowArgumentNullException (string.Empty));
@@ -278,7 +273,6 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
         public void ArgumentOutOfRangeException ()
         {
             var exn = Assert.Throws<System.ArgumentOutOfRangeException> (() => Connection.TestService ().ThrowArgumentOutOfRangeException (0));

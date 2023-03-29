@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using KRPC.Server;
@@ -79,7 +78,6 @@ namespace KRPC.UI
         const string invalidRecvTimeoutText = "Receive timeout must be an integer";
         const string showInfoWindowText = "Show info";
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         protected override void Init ()
         {
             core = Core.Instance;
@@ -151,7 +149,6 @@ namespace KRPC.UI
                 expandServers.Add (core.Servers [0].Id);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         protected override void Draw (bool needRescale)
         {
             if (needRescale) {
@@ -228,9 +225,6 @@ namespace KRPC.UI
             GUI.enabled = true;
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        [SuppressMessage("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
         void DrawServer (Server.Server server, bool forceExpanded = false)
         {
             var running = server.Running;

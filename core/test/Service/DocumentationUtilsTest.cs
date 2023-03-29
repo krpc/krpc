@@ -1,11 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
 using NUnit.Framework;
 
 namespace KRPC.Test.Service
 {
     [TestFixture]
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
     public class DocumentationUtilsTest
     {
         [TestCase ("<see cref=\"T:KRPC.Test.Service.TestService\" />", "<see cref=\"T:TestService\" />")]
