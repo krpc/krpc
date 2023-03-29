@@ -1,3 +1,8 @@
+v0.5.3
+ * Fix incorrect protobuf DLL
+ * Fix required KSP assemblies not being copied
+ * Fix tmp directory not being deleted
+
 v0.4.9
  * Fix issue finding KSP_x64_Data directory (#523)
  * Add TestServer archive to bin directory (#532)
