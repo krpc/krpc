@@ -27,8 +27,8 @@ class {{enum_name}}(DocEnum):
 {% if enumeration.documentation %}{{ enumeration.documentation | indent(width=4) }}
 {% endif %}
     {% for enum_value in enumeration['values'] %}
-    {{enum_value['name']}} = {{enum_value['value']}}{% if enum_value.documentation %}, {{ enum_value.documentation }}
-{% endif %}
+    {{enum_value['name']}} = {{enum_value['value']}}{% if enum_value.documentation %}, {{ enum_value.documentation }}{% endif %}
+
     {% endfor %}
 
 
