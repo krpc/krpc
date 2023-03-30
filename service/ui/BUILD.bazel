@@ -1,54 +1,96 @@
-load("//:config.bzl", "assembly_version", "author")
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
+load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
 load("//tools/build:python.bzl", "py_lint_test")
-load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
-load("//service:build.bzl", "service_deps")
-
-filegroup(
-    name = "UI",
-    srcs = [
-        "CHANGES.txt",
-        "KRPC.UI.ksp",
-        ":KRPC.UI",
-        ":ServiceDefinitions",
-    ],
-    visibility = ["//:__pkg__"],
-)
-
-csharp_assembly_info(
-    name = "AssemblyInfo",
-    cls_compliant = False,
-    copyright = author,
-    description = "User Interface API for kRPC",
-    title = "KRPC.UI",
-    version = assembly_version,
-    visibility = [
-        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
-    ],
-)
-
-srcs = [":AssemblyInfo"] + glob(["src/**/*.cs"])
-
-deps = service_deps + ["//service/SpaceCenter:KRPC.SpaceCenter"]
+load("@krpc_core//tools/service_definitions:defs.bzl", "service_definitions")
+load("//lib:ksp.bzl", "ksp_deps")
+load("//:config.bzl", "version")
 
 csharp_library(
-    name = "KRPC.UI",
-    srcs = srcs,
+    name = "ui",
+    srcs = [":assembly_info"] + glob(["src/**/*.cs"]),
+    out = "KRPC.UI",
+    private_deps = ksp_deps,
+    target_frameworks = ["netstandard2.1"],
+    treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
-    deps = deps,
+    warning_level = 4,
+    deps = [
+        "//server",
+        "//server:core",
+        "//service/space_center",
+    ],
+)
+
+expand_template(
+    name = "assembly_info",
+    out = "src/AssemblyInfo.cs",
+    substitutions = {"{VERSION}": version},
+    template = "src/AssemblyInfo.cs.tmpl",
+    visibility = ["//visibility:public"],
 )
 
 service_definitions(
-    name = "ServiceDefinitions",
+    name = "service_definitions",
+    srcs = [
+        ":ui",
+        "//service/space_center",
+    ] + ksp_deps,
     out = "KRPC.UI.json",
-    assemblies = [
-        ":KRPC.UI",
-        "//service/SpaceCenter:KRPC.SpaceCenter",
-        "//server:KRPC",
-    ],
     service = "UI",
     visibility = ["//visibility:public"],
 )
+
+# load("//:config.bzl", "assembly_version", "author")
+# load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
+# load("//tools/build:python.bzl", "py_lint_test")
+# load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+# load("//service:build.bzl", "service_deps")
+#
+# filegroup(
+#     name = "UI",
+#     srcs = [
+#         "CHANGES.txt",
+#         "KRPC.UI.ksp",
+#         ":KRPC.UI",
+#         ":ServiceDefinitions",
+#     ],
+#     visibility = ["//:__pkg__"],
+# )
+#
+# csharp_assembly_info(
+#     name = "AssemblyInfo",
+#     cls_compliant = False,
+#     copyright = author,
+#     description = "User Interface API for kRPC",
+#     title = "KRPC.UI",
+#     version = assembly_version,
+#     visibility = [
+#         "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+#     ],
+# )
+#
+# srcs = [":AssemblyInfo"] + glob(["src/**/*.cs"])
+#
+# deps = service_deps + ["//service/SpaceCenter:KRPC.SpaceCenter"]
+#
+# csharp_library(
+#     name = "KRPC.UI",
+#     srcs = srcs,
+#     visibility = ["//visibility:public"],
+#     deps = deps,
+# )
+#
+# service_definitions(
+#     name = "ServiceDefinitions",
+#     out = "KRPC.UI.json",
+#     assemblies = [
+#         ":KRPC.UI",
+#         "//service/SpaceCenter:KRPC.SpaceCenter",
+#         "//server:KRPC",
+#     ],
+#     service = "UI",
+#     visibility = ["//visibility:public"],
+# )
 
 test_suite(
     name = "test",

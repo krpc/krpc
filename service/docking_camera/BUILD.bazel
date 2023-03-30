@@ -1,49 +1,50 @@
-load("//:config.bzl", "assembly_version", "author")
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
-load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
-load("//service:build.bzl", "service_deps")
+load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
+load("@krpc_core//tools/service_definitions:defs.bzl", "service_definitions")
+load("//lib:ksp.bzl", "ksp_deps")
+load("//:config.bzl", "version")
 
-filegroup(
-    name = "DockingCamera",
-    srcs = [
-        "CHANGES.txt",
-        ":KRPC.DockingCamera",
-        ":ServiceDefinitions",
-    ],
-    visibility = ["//:__pkg__"],
-)
-
-csharp_assembly_info(
-    name = "AssemblyInfo",
-    cls_compliant = False,
-    copyright = author,
-    description = "DockingCamera API for kRPC",
-    title = "KRPC.DockingCamera",
-    version = assembly_version,
-    visibility = [
-        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
-    ],
-)
-
-srcs = [":AssemblyInfo"] + glob(["src/**/*.cs"])
-
-deps = service_deps + ["//service/SpaceCenter:KRPC.SpaceCenter"]
+# filegroup(
+#     name = "DockingCamera",
+#     srcs = [
+#         "CHANGES.txt",
+#         ":KRPC.DockingCamera",
+#         ":ServiceDefinitions",
+#     ],
+#     visibility = ["//:__pkg__"],
+# )
 
 csharp_library(
-    name = "KRPC.DockingCamera",
-    srcs = srcs,
+    name = "docking_camera",
+    srcs = [":assembly_info"] + glob(["src/**/*.cs"]),
+    out = "KRPC.DockingCamera",
+    private_deps = ksp_deps,
+    target_frameworks = ["netstandard2.1"],
+    treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
-    deps = deps,
+    warning_level = 4,
+    deps = [
+        "//server",
+        "//server:core",
+        "//service/space_center",
+    ],
+)
+
+expand_template(
+    name = "assembly_info",
+    out = "src/AssemblyInfo.cs",
+    substitutions = {"{VERSION}": version},
+    template = "src/AssemblyInfo.cs.tmpl",
+    visibility = ["//visibility:public"],
 )
 
 service_definitions(
-    name = "ServiceDefinitions",
+    name = "service_definitions",
+    srcs = [
+        ":docking_camera",
+        "//service/space_center",
+    ] + ksp_deps,
     out = "KRPC.DockingCamera.json",
-    assemblies = [
-        ":KRPC.DockingCamera",
-        "//service/SpaceCenter:KRPC.SpaceCenter",
-        "//server:KRPC",
-    ],
     service = "DockingCamera",
     visibility = ["//visibility:public"],
 )

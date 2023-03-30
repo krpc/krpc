@@ -1,57 +1,95 @@
-load("//:config.bzl", "assembly_version", "author")
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
+load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
 load("//tools/build:python.bzl", "py_lint_test")
-load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
-load("//service:build.bzl", "service_deps")
-
-filegroup(
-    name = "Drawing",
-    srcs = [
-        "CHANGES.txt",
-        ":KRPC.Drawing",
-        ":ServiceDefinitions",
-    ],
-    visibility = ["//:__pkg__"],
-)
-
-csharp_assembly_info(
-    name = "AssemblyInfo",
-    cls_compliant = False,
-    copyright = author,
-    description = "Drawing API for kRPC",
-    title = "KRPC.Drawing",
-    version = assembly_version,
-    visibility = [
-        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
-    ],
-)
-
-srcs = [":AssemblyInfo"] + glob(["src/**/*.cs"])
-
-deps = service_deps + [
-    "//service/SpaceCenter:KRPC.SpaceCenter",
-    "//service/UI:KRPC.UI",
-]
+load("@krpc_core//tools/service_definitions:defs.bzl", "service_definitions")
+load("//lib:ksp.bzl", "ksp_deps")
+load("//:config.bzl", "version")
 
 csharp_library(
-    name = "KRPC.Drawing",
-    srcs = srcs,
+    name = "drawing",
+    srcs = [":assembly_info"] + glob(["src/**/*.cs"]),
+    out = "KRPC.Drawing",
+    private_deps = ksp_deps,
+    target_frameworks = ["netstandard2.1"],
+    treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
-    deps = deps,
+    warning_level = 4,
+    deps = [
+        "//server",
+        "//server:core",
+        "//service/space_center",
+        "//service/ui",
+    ],
+)
+
+expand_template(
+    name = "assembly_info",
+    out = "src/AssemblyInfo.cs",
+    substitutions = {"{VERSION}": version},
+    template = "src/AssemblyInfo.cs.tmpl",
+    visibility = ["//visibility:public"],
 )
 
 service_definitions(
-    name = "ServiceDefinitions",
+    name = "service_definitions",
+    srcs = [
+        ":drawing",
+        "//service/space_center",
+        "//service/ui",
+    ] + ksp_deps,
     out = "KRPC.Drawing.json",
-    assemblies = [
-        ":KRPC.Drawing",
-        "//service/UI:KRPC.UI",
-        "//service/SpaceCenter:KRPC.SpaceCenter",
-        "//server:KRPC",
-    ],
     service = "Drawing",
     visibility = ["//visibility:public"],
 )
+
+# filegroup(
+#     name = "Drawing",
+#     srcs = [
+#         "CHANGES.txt",
+#         ":KRPC.Drawing",
+#         ":ServiceDefinitions",
+#     ],
+#     visibility = ["//:__pkg__"],
+# )
+#
+# csharp_assembly_info(
+#     name = "AssemblyInfo",
+#     cls_compliant = False,
+#     copyright = author,
+#     description = "Drawing API for kRPC",
+#     title = "KRPC.Drawing",
+#     version = assembly_version,
+#     visibility = [
+#         "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+#     ],
+# )
+#
+# srcs = [":AssemblyInfo"] + glob(["src/**/*.cs"])
+#
+# deps = service_deps + [
+#     "//service/SpaceCenter:KRPC.SpaceCenter",
+#     "//service/UI:KRPC.UI",
+# ]
+#
+# csharp_library(
+#     name = "KRPC.Drawing",
+#     srcs = srcs,
+#     visibility = ["//visibility:public"],
+#     deps = deps,
+# )
+#
+# service_definitions(
+#     name = "ServiceDefinitions",
+#     out = "KRPC.Drawing.json",
+#     assemblies = [
+#         ":KRPC.Drawing",
+#         "//service/UI:KRPC.UI",
+#         "//service/SpaceCenter:KRPC.SpaceCenter",
+#         "//server:KRPC",
+#     ],
+#     service = "Drawing",
+#     visibility = ["//visibility:public"],
+# )
 
 test_suite(
     name = "test",
