@@ -1,6 +1,7 @@
 workspace(name = "krpc")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:maven_rules.bzl", "maven_jar")
 
 http_archive(
@@ -8,6 +9,63 @@ http_archive(
     sha256 = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7",
     url = "https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz",
 )
+
+load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
+
+bazel_skylib_workspace()
+
+git_repository(
+    name = "rules_dotnet",
+    commit = "3307f446df6e299891d524c9a2c2118c59f3919f",
+    remote = "https://github.com/djungelorm/rules_dotnet.git",
+)
+
+load(
+    "@rules_dotnet//dotnet:repositories.bzl",
+    "dotnet_register_toolchains",
+    "rules_dotnet_dependencies",
+)
+
+rules_dotnet_dependencies()
+
+dotnet_register_toolchains("dotnet", "7.0.101")
+
+load("@rules_dotnet//dotnet:rules_dotnet_nuget_packages.bzl", "rules_dotnet_nuget_packages")
+
+rules_dotnet_nuget_packages()
+
+load("@rules_dotnet//dotnet:paket2bazel_dependencies.bzl", "paket2bazel_dependencies")
+
+paket2bazel_dependencies()
+
+http_archive(
+    name = "build_stack_rules_proto",
+    sha256 = "ac7e2966a78660e83e1ba84a06db6eda9a7659a841b6a7fd93028cd8757afbfb",
+    strip_prefix = "rules_proto-2.0.1",
+    urls = ["https://github.com/stackb/rules_proto/archive/v2.0.1.tar.gz"],
+)
+
+register_toolchains("@build_stack_rules_proto//toolchain:prebuilt")
+
+load("@build_stack_rules_proto//deps:protobuf_core_deps.bzl", "protobuf_core_deps")
+
+protobuf_core_deps()
+
+git_repository(
+    name = "krpc_core",
+    commit = "0679f00caa46bd56ab94a4ec4362fa5ef3cf6821",
+    remote = "https://github.com/krpc/krpc-core",
+)
+
+load("@krpc_core//:workspace.bzl", "krpc_core_prebuilt_protoc", "krpc_core_workspace")
+
+krpc_core_workspace()
+
+krpc_core_prebuilt_protoc()
+
+load("@krpc_core//deps:paket.bzl", "paket")
+
+paket()
 
 http_archive(
     name = "rules_python",

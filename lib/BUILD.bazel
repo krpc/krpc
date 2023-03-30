@@ -1,3 +1,534 @@
+load("@rules_dotnet//dotnet:defs.bzl", "import_dll")
+
+import_dll(
+    name = "I18N.West",
+    dll = ":ksp/KSP_Data/Managed/I18N.West.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.UnityWebRequestWWWModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.UI",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.UI.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "Mono.Security",
+    dll = ":ksp/KSP_Data/Managed/Mono.Security.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.SpriteMaskModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.SpriteMaskModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.UnityWebRequestModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.UnityWebRequestModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "Ionic.Zip",
+    dll = ":ksp/KSP_Data/Managed/Ionic.Zip.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.TerrainPhysicsModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.TerrainPhysicsModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.PerformanceReportingModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.PerformanceReportingModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.Physics2DModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.Physics2DModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.TextCoreModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.TextCoreModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.UnityTestProtocolModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.UnityTestProtocolModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.GameCenterModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.GameCenterModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "I18N.Rare",
+    dll = ":ksp/KSP_Data/Managed/I18N.Rare.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.GridModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.GridModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "I18N",
+    dll = ":ksp/KSP_Data/Managed/I18N.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "System.Security",
+    dll = ":ksp/KSP_Data/Managed/System.Security.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.VehiclesModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.VehiclesModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "I18N.MidEast",
+    dll = ":ksp/KSP_Data/Managed/I18N.MidEast.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "KSPAssets",
+    dll = ":ksp/KSP_Data/Managed/KSPAssets.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.AssetBundleModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.AssetBundleModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "Unity.Timeline",
+    dll = ":ksp/KSP_Data/Managed/Unity.Timeline.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.JSONSerializeModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.JSONSerializeModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.TextRenderingModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.TextRenderingModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.StreamingModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.StreamingModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.AIModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.AIModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "KSPAssets.XmlSerializers",
+    dll = ":ksp/KSP_Data/Managed/KSPAssets.XmlSerializers.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "Unity.Analytics.StandardEvents",
+    dll = ":ksp/KSP_Data/Managed/Unity.Analytics.StandardEvents.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "System.Configuration",
+    dll = ":ksp/KSP_Data/Managed/System.Configuration.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.ScreenCaptureModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.ScreenCaptureModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.TLSModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.TLSModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.AccessibilityModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.AccessibilityModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.UNETModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.UNETModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.DirectorModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.DirectorModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.HotReloadModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.HotReloadModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.ImageConversionModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.ImageConversionModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.UnityConnectModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.UnityConnectModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.UnityWebRequestAudioModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.UnityWebRequestAudioModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.UIElementsModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.UIElementsModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.ClothModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.ClothModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.ClusterRendererModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.ClusterRendererModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.AudioModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.AudioModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary",
+    dll = ":ksp/KSP_Data/Managed/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.VRModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.VRModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.ParticleSystemModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.ParticleSystemModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.InputLegacyModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.InputLegacyModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "mscorlib",
+    dll = ":ksp/KSP_Data/Managed/mscorlib.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "I18N.CJK",
+    dll = ":ksp/KSP_Data/Managed/I18N.CJK.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "KSPTrackIR",
+    dll = ":ksp/KSP_Data/Managed/KSPTrackIR.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.UmbraModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.UmbraModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "Unity.Analytics.Tracker",
+    dll = ":ksp/KSP_Data/Managed/Unity.Analytics.Tracker.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "Unity.Analytics.DataPrivacy",
+    dll = ":ksp/KSP_Data/Managed/Unity.Analytics.DataPrivacy.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.WindModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.WindModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "Unity.RenderPipelines.Core.Runtime",
+    dll = ":ksp/KSP_Data/Managed/Unity.RenderPipelines.Core.Runtime.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.TerrainModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.TerrainModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.LocalizationModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.LocalizationModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.UnityWebRequestAssetBundleModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.UnityWebRequestAssetBundleModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.ClusterInputModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.ClusterInputModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.UnityWebRequestTextureModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.UnityWebRequestTextureModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.UIModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.UIModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.TilemapModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.TilemapModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.CoreModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.CoreModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.ProfilerModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.ProfilerModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.XRModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.XRModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "System.Core",
+    dll = ":ksp/KSP_Data/Managed/System.Core.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.SubsystemsModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.SubsystemsModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "Assembly-CSharp-firstpass",
+    dll = ":ksp/KSP_Data/Managed/Assembly-CSharp-firstpass.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.SharedInternalsModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.SharedInternalsModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "System",
+    dll = ":ksp/KSP_Data/Managed/System.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "Assembly-CSharp",
+    dll = ":ksp/KSP_Data/Managed/Assembly-CSharp.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.AndroidJNIModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.AndroidJNIModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "I18N.Other",
+    dll = ":ksp/KSP_Data/Managed/I18N.Other.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "Mono.Cecil",
+    dll = ":ksp/KSP_Data/Managed/Mono.Cecil.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.InputModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.InputModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "Mono.Posix",
+    dll = ":ksp/KSP_Data/Managed/Mono.Posix.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.PhysicsModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.PhysicsModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.VFXModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.VFXModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "System.Xml",
+    dll = ":ksp/KSP_Data/Managed/System.Xml.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "Unity.RenderPipelines.Core.ShaderLibrary",
+    dll = ":ksp/KSP_Data/Managed/Unity.RenderPipelines.Core.ShaderLibrary.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.SpriteShapeModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.SpriteShapeModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.DSPGraphModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.DSPGraphModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.CrashReportingModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.CrashReportingModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.AnimationModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.AnimationModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.SubstanceModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.SubstanceModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.UnityAnalyticsModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.UnityAnalyticsModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.IMGUIModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.IMGUIModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+import_dll(
+    name = "UnityEngine.VideoModule",
+    dll = ":ksp/KSP_Data/Managed/UnityEngine.VideoModule.dll",
+    visibility = ["//visibility:public"],
+)
+
+# For old build scripts:
 exports_files([
     "mono-4.5/mscorlib.dll",
     "mono-4.5/System.dll",

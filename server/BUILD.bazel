@@ -1,61 +1,75 @@
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
+load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
+load("//lib:ksp.bzl", "ksp_deps")
 load("//tools/build:image.bzl", "png_images")
-load("//tools/build/ksp:build.bzl", "ksp_libs")
-load("//:config.bzl", "assembly_version", "author", "ksp_version_max", "ksp_version_min")
+load("//:config.bzl", "assembly_version", "ksp_version_max", "ksp_version_min", "version")
 
-filegroup(
-    name = "server",
-    srcs = [
-        "CHANGES.txt",
-        ":KRPC",
-        ":icons",
-        "//:version",
-    ],
-    visibility = ["//:__pkg__"],
-)
-
-csharp_assembly_info(
-    name = "AssemblyInfo",
-    cls_compliant = False,
-    copyright = author,
-    custom = {"AssemblyKSPVersion": '"%s", "%s"' % (ksp_version_max, ksp_version_min)},
-    description = "RPC server for Kerbal Space Program",
-    internals_visible_to = [
-        "KRPC.Test",
-        "DynamicProxyGenAssembly2",
-    ],
-    title = "KRPC",
-    version = assembly_version,
-    visibility = [
-        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
-        "//tools/ServiceDefinitions:__pkg__",  # Make visible to ServiceDefinitions so it can build KRPC.dll with .NET 4.5 references
+# FIXME: using KRPC.Core.dll built for netstandard2.1, compilation fails with
+# errors that Enum is defined in an assembly that is not referenced.
+# A workaround is to build KRPC.Core.dll using KSP assemblies.
+# Does Unity 2019.4.18f1 not support Enum correctly?
+# See issue <insert github issue here>
+csharp_library(
+    name = "core",
+    srcs = ["@krpc_core//core:srcs"],
+    out = "KRPC.Core",
+    private_deps = ksp_deps,
+    target_frameworks = ["netstandard2.1"],
+    treat_warnings_as_errors = True,
+    visibility = ["//visibility:public"],
+    warning_level = 4,
+    deps = [
+        "@krpc_core//:google_protobuf",
+        "@krpc_core//:krpc_io_ports",
     ],
 )
-
-# Make sources visible to ServiceDefinitions so it can build KRPC.dll with .NET 4.5 references
-filegroup(
-    name = "KRPC-src",
-    srcs = glob(["src/**/*.cs"]),
-    visibility = ["//tools/ServiceDefinitions:__pkg__"],
-)
-
-srcs = [
-    ":KRPC-src",
-    ":AssemblyInfo",
-]
-
-deps = [
-    "//core:KRPC.Core",
-    "//tools/build/ksp:Google.Protobuf",
-    "//tools/build/ksp:KRPC.IO.Ports",
-] + ksp_libs
 
 csharp_library(
-    name = "KRPC",
-    srcs = srcs,
+    name = "server",
+    srcs = [":assembly_info"] + glob(["src/**/*.cs"]),
+    out = "KRPC",
+    private_deps = ksp_deps,
+    target_frameworks = ["netstandard2.1"],
+    treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
-    deps = deps,
+    warning_level = 4,
+    deps = [
+        ":core",
+        # "@krpc_core//core:core",
+        "@krpc_core//:google_protobuf",
+        "@krpc_core//:krpc_io_ports",
+    ],
 )
+
+expand_template(
+    name = "assembly_info",
+    out = "src/AssemblyInfo.cs",
+    substitutions = {
+        "{VERSION}": assembly_version,
+        "{KSP_VERSION_MAX}": ksp_version_max,
+        "{KSP_VERSION_MIN}": ksp_version_min,
+    },
+    template = "src/AssemblyInfo.cs.tmpl",
+    visibility = ["//visibility:public"],
+)
+
+# load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library", "csharp_nunit_test")
+# load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+# load("//tools/build:image.bzl", "png_images")
+# load("//tools/build/ksp:build.bzl", "ksp_libs", "ksp_unity_libs")
+# load("//tools/build/mono-4.5:build.bzl", "mono_net_libs")
+# load("//:config.bzl", "assembly_version", "author", "ksp_version_max", "ksp_version_min", "version")
+
+# filegroup(
+#     name = "server",
+#     srcs = [
+#         "CHANGES.txt",
+#         ":KRPC",
+#         ":icons",
+#         "//:version",
+#     ],
+#     visibility = ["//:__pkg__"],
+# )
 
 png_images(
     name = "icons",

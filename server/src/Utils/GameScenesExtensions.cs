@@ -1,3 +1,5 @@
+using System;
+using System.Runtime;
 using KRPC.Service;
 
 namespace KRPC.Utils
