@@ -1,2 +1,10 @@
+# Windows support
+startup --windows_enable_symlinks
+build --enable_runfiles
+
+# pre-built protoc
+build --proto_compiler="@build_stack_rules_proto//toolchain:protoc.exe"
+
+# Old settings (remove?)
 build --cxxopt=-std=c++14 --host_cxxopt=-std=c++14
 test --legacy_bazel_java_test
