@@ -28,7 +28,7 @@ load(
 
 rules_dotnet_dependencies()
 
-dotnet_register_toolchains("dotnet", "7.0.101")
+dotnet_register_toolchains("dotnet", "6.0.113")
 
 load("@rules_dotnet//dotnet:rules_dotnet_nuget_packages.bzl", "rules_dotnet_nuget_packages")
 
