@@ -50,15 +50,9 @@ py_sdist(
         "//:COPYING",
         "//:python_version",
         "//:version",
-        "//tools/ServiceDefinitions",
-        "//tools/ServiceDefinitions:KRPC.Core",
-        "//tools/TestServer:ServiceDefinitions",
-        "//tools/TestServer:archive",
-        "//tools/build/ksp:Google.Protobuf.dll",
-        "//tools/build/ksp:KRPC.IO.Ports.dll",
-        "//tools/build/mono-4.5:NDesk.Options.dll",
-        "//tools/build/mono-4.5:Newtonsoft.Json.dll",
-    ] + mono_net_libs + glob([
+        "@krpc_core//tools/service_definitions:archive",
+        "@krpc_core//tools/test_server:archive",
+    ] + glob([
         "krpctools/**/*.py",
         "krpctools/**/*.tmpl",
         "krpctools/test/*.json",
@@ -68,13 +62,8 @@ py_sdist(
     path_map = {
         "version.py": "krpctools/version.py",
         "tools/krpctools/": "",
-        "tools/ServiceDefinitions/ServiceDefinitions.exe": "krpctools/bin/ServiceDefinitions.exe",
-        "tools/ServiceDefinitions/KRPC.Core.dll": "krpctools/bin/KRPC.Core.dll",
-        "tools/ServiceDefinitions/KRPC.Core.xml": "krpctools/bin/KRPC.Core.xml",
-        "tools/TestServer/TestService.json": "krpctools/test/TestService.json",
-        "tools/build/mono-4.5/": "krpctools/bin/",
-        "tools/build/ksp/": "krpctools/bin/",
-        "tools/TestServer/": "krpctools/bin/",
+        "../krpc_core/tools/service_definitions/": "krpctools/bin/",
+        "../krpc_core/tools/test_server/": "krpctools/bin/",
     },
 )
 

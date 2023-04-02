@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import shutil
+import stat
 import subprocess
 import sys
 import tempfile
@@ -49,11 +50,17 @@ def main():
 def servicedefs(ksp, service, assemblies):
     """ Generate service definitions from assembly DLLs
         using ServiceDefinitions.exe """
+    bindir = tempfile.mkdtemp(prefix='krpc-servicedefs-')
+    try:
+        return _servicedefs(ksp, service, assemblies, bindir)
+    finally:
+        shutil.rmtree(bindir)
 
+
+def _servicedefs(ksp, service, assemblies, bindir):
     if not os.path.exists(ksp):
         raise RuntimeError('Kerbal Space Program directory does not exist.')
 
-    bindir = tempfile.mkdtemp(prefix='krpc-servicedefs-')
     tmpout = bindir+'/out.json'
 
     # Copy binaries to the tmp dir
@@ -61,47 +68,56 @@ def servicedefs(ksp, service, assemblies):
         Requirement.parse('krpctools'), 'krpctools/bin')
     files = os.listdir(binpath)
     for filename in files:
-        filename = os.path.join(binpath, filename)
-        if os.path.isfile(filename):
-            shutil.copy(filename, bindir)
+        if filename.startswith('ServiceDefinitions'):
+            filepath = os.path.join(binpath, filename)
+            shutil.unpack_archive(filepath, bindir)
 
-    # Copy KSP DLLs to the tmp dir
-    ksp_dlls = [
-        'Assembly-CSharp.dll',
-        'Assembly-CSharp-firstpass.dll',
-        'UnityEngine.dll',
-        'UnityEngine.AnimationModule.dll',
-        'UnityEngine.AssetBundleModule.dll',
-        'UnityEngine.CoreModule.dll',
-        'UnityEngine.IMGUIModule.dll',
-        'UnityEngine.InputLegacyModule.dll',
-        'UnityEngine.ScreenCaptureModule.dll',
-        'UnityEngine.SharedInternalsModule.dll',
-        'UnityEngine.TextRenderingModule.dll',
-        'UnityEngine.UI.dll',
-        'UnityEngine.UIModule.dll',
-        'UnityEngine.UnityWebRequestWWWModule.dll',
+            path = os.path.join(bindir, "ServiceDefinitions")
+            st = os.stat(path)
+            os.chmod(path, st.st_mode | stat.S_IEXEC)
+
+            os.rename(
+                os.path.join(bindir, "service_definitions.runtimeconfig.json"),
+                os.path.join(bindir, "ServiceDefinitions.runtimeconfig.json")
+            )
+            os.rename(
+                os.path.join(bindir, "service_definitions.deps.json"),
+                os.path.join(bindir, "ServiceDefinitions.deps.json")
+            )
+
+    # Find KSP assemblies
+    ksp_managed_candidates = [
+        'KSP_Data/Managed',
+        'KSP_x64_Data/Managed',
+        'KSP2_x64_Data/Managed'
     ]
-    ksp_data = 'KSP_Data/Managed'
-    if not os.path.exists(os.path.join(ksp, ksp_data)):
-        ksp_data = 'KSP_x64_Data/Managed'
-    for dll in ksp_dlls:
-        shutil.copy(os.path.join(ksp, ksp_data, dll), bindir)
+    ksp_managed_path = None
+    for ksp_managed in ksp_managed_candidates:
+        path = os.path.join(ksp, ksp_managed)
+        if os.path.exists(path):
+            ksp_managed_path = path
+            break
+    if ksp_managed_path is None:
+        raise RuntimeError("Failed to find DLLs in Kerbal Space Program directory")
+
+    # Copy KSP assemblies to the bin dir, and add to command line call
+    for dll in os.listdir(ksp_managed_path):
+        if not dll.startswith('System') and dll != 'mscorlib.dll':
+            shutil.copy(os.path.join(ksp_managed_path, dll), bindir)
+            assemblies.append(dll)
 
     # Generate the service definitions
     try:
         subprocess.check_output(
-            [bindir+'/ServiceDefinitions.exe',
-             '--output=%s' % tmpout, service] + assemblies,
-            stderr=subprocess.STDOUT)
+            ['./ServiceDefinitions', '--output=%s' % tmpout, service] + assemblies,
+            stderr=subprocess.STDOUT,
+            cwd=bindir)
     except subprocess.CalledProcessError as ex:
         shutil.rmtree(binpath)
         raise RuntimeError(ex.output) from ex
 
     with open(tmpout, 'r') as fp:
         return fp.read()
-
-    shutil.rmtree(binpath)
 
 
 if __name__ == '__main__':
