@@ -16,7 +16,7 @@ bazel_skylib_workspace()
 
 git_repository(
     name = "rules_dotnet",
-    commit = "3307f446df6e299891d524c9a2c2118c59f3919f",
+    commit = "718a812a94dcd6ffea23c75eb0ac232a9fa04fa4",
     remote = "https://github.com/djungelorm/rules_dotnet.git",
 )
 
