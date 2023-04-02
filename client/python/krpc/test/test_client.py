@@ -307,15 +307,15 @@ class TestClient(ServerTestCase, unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             self.conn.test_service.throw_argument_null_exception("")
         self.assertTrue(
-            str(cm.exception).startswith('Value cannot be null.\n' +
-                                         'Parameter name: foo'))
+            str(cm.exception).startswith(
+                "Value cannot be null. (Parameter 'foo')"))
 
     def test_argument_out_of_range_exception(self) -> None:
         with self.assertRaises(ValueError) as cm:
             self.conn.test_service.throw_argument_out_of_range_exception(0)
         self.assertTrue(str(cm.exception).startswith(
-            'Specified argument was out of the range of valid values.\n' +
-            'Parameter name: foo'))
+            'Specified argument was out of the range of valid values. ' +
+            "(Parameter 'foo')"))
 
     def test_custom_exception(self) -> None:
         with self.assertRaises(self.conn.test_service.CustomException) as cm:
