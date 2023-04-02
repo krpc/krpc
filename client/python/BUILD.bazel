@@ -1,3 +1,4 @@
+load("@build_stack_rules_proto//rules:proto_compile.bzl", "proto_compile")
 load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/krpctools:clientgen.bzl", "clientgen_python")
@@ -13,6 +14,14 @@ genrule(
     visibility = ["//visibility:public"],
 )
 
+proto_compile(
+    name = "protobuf",
+    output_mappings = ["KRPC_pb2.py=protobuf/krpc_pb2.py"],
+    outputs = ["KRPC_pb2.py"],
+    plugins = ["@build_stack_rules_proto//plugin/builtin:python"],
+    proto = "@krpc_core//protobuf:krpc_proto",
+)
+
 py_sdist(
     name = "python-without-services",
     out = "krpc-base-%s.zip" % version,
@@ -21,17 +30,17 @@ py_sdist(
         "LICENSE",
         "MANIFEST.in",
         "setup.py",
+        ":protobuf",
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",
         "//:readme",
         "//:version",
-        "//protobuf:python",
     ] + glob(["krpc/**/*"]),
     path_map = {
         "version.py": "krpc/version.py",
         "client/python/": "",
-        "protobuf/": "krpc/schema/",
+        "client/python/KRPC_pb2.py": "krpc/schema/KRPC_pb2.py",
     },
 )
 
@@ -52,97 +61,97 @@ py_sdist(
         "LICENSE",
         "MANIFEST.in",
         "setup.py",
-        ":services-dockingcamera",
-        ":services-drawing",
-        ":services-infernalrobotics",
-        ":services-kerbalalarmclock",
-        ":services-krpc",
-        ":services-lidar",
-        ":services-remotetech",
-        ":services-spacecenter",
-        ":services-testservice",
-        ":services-ui",
+        ":protobuf",
+        ":service_docking_camera",
+        ":service_drawing",
+        ":service_infernal_robotics",
+        ":service_kerbal_alarm_clock",
+        ":service_krpc",
+        ":service_lidar",
+        ":service_remote_tech",
+        ":service_space_center",
+        ":service_test_service",
+        ":service_ui",
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",
         "//:readme",
         "//:version",
-        "//protobuf:python",
     ] + glob(["krpc/**/*"]),
     path_map = {
         "version.py": "krpc/version.py",
         "client/python/": "",
-        "protobuf/": "krpc/schema/",
+        "client/python/KRPC_pb2.py": "krpc/schema/KRPC_pb2.py",
     },
 )
 
 clientgen_python(
-    name = "services-krpc",
+    name = "service_krpc",
     out = "krpc/services/krpc.py",
-    defs = "//core:ServiceDefinitions",
+    defs = "@krpc_core//core:service_definitions",
     service = "KRPC",
 )
 
 clientgen_python(
-    name = "services-testservice",
+    name = "service_test_service",
     out = "krpc/services/testservice.py",
-    defs = "//tools/TestServer:ServiceDefinitions",
+    defs = "@krpc_core//tools/test_server:service_definitions",
     service = "TestService",
 )
 
 clientgen_python(
-    name = "services-spacecenter",
+    name = "service_space_center",
     out = "krpc/services/spacecenter.py",
-    defs = "//service/SpaceCenter:ServiceDefinitions",
+    defs = "//service/space_center:service_definitions",
     service = "SpaceCenter",
 )
 
 clientgen_python(
-    name = "services-drawing",
+    name = "service_drawing",
     out = "krpc/services/drawing.py",
-    defs = "//service/Drawing:ServiceDefinitions",
+    defs = "//service/drawing:service_definitions",
     service = "Drawing",
 )
 
 clientgen_python(
-    name = "services-infernalrobotics",
+    name = "service_infernal_robotics",
     out = "krpc/services/infernalrobotics.py",
-    defs = "//service/InfernalRobotics:ServiceDefinitions",
+    defs = "//service/infernal_robotics:service_definitions",
     service = "InfernalRobotics",
 )
 
 clientgen_python(
-    name = "services-kerbalalarmclock",
+    name = "service_kerbal_alarm_clock",
     out = "krpc/services/kerbalalarmclock.py",
-    defs = "//service/KerbalAlarmClock:ServiceDefinitions",
+    defs = "//service/kerbal_alarm_clock:service_definitions",
     service = "KerbalAlarmClock",
 )
 
 clientgen_python(
-    name = "services-remotetech",
+    name = "service_remote_tech",
     out = "krpc/services/remotetech.py",
-    defs = "//service/RemoteTech:ServiceDefinitions",
+    defs = "//service/remote_tech:service_definitions",
     service = "RemoteTech",
 )
 
 clientgen_python(
-    name = "services-ui",
+    name = "service_ui",
     out = "krpc/services/ui.py",
-    defs = "//service/UI:ServiceDefinitions",
+    defs = "//service/ui:service_definitions",
     service = "UI",
 )
 
 clientgen_python(
-    name = "services-lidar",
+    name = "service_lidar",
     out = "krpc/services/lidar.py",
-    defs = "//service/LiDAR:ServiceDefinitions",
+    defs = "//service/lidar:service_definitions",
     service = "LiDAR",
 )
 
 clientgen_python(
-    name = "services-dockingcamera",
+    name = "service_docking_camera",
     out = "krpc/services/dockingcamera.py",
-    defs = "//service/DockingCamera:ServiceDefinitions",
+    defs = "//service/docking_camera:service_definitions",
     service = "DockingCamera",
 )
 
@@ -157,7 +166,7 @@ test_suite(
 client_test(
     name = "client",
     size = "medium",
-    server_executable = "//tools/TestServer",
+    server_executable = "@krpc_core//tools/test_server",
     tags = ["requires-network"],
     test_executable = ":clienttest",
 )
