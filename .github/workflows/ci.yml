@@ -333,12 +333,12 @@ jobs:
       - name: upload-artifact
         uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
-          name: client-csharp
+          name: client-csharp-zip
           path: bazel-bin/client/csharp/krpc-csharp-*.zip
       - name: upload-artifact
         uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
-          name: client-csharp
+          name: client-csharp-nupkg
           path: bazel-bin/client/csharp/KRPC.Client.*.nupkg
 
   test-client-java:
