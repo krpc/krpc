@@ -21,7 +21,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: build
         run: |
           rm -f lib/mono-4.5

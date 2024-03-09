@@ -113,7 +113,7 @@ jobs:
           game: ksp
           version: 1.12.5
       - name: download-genfiles
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: genfiles
       - name: extract-genfiles
