@@ -132,8 +132,8 @@ Before it can be used, some generated C# source files need to be built using the
 scripts. This can be done by running `bazel build //:csproj`
 
 Alternatively, if you are unable to run Bazel to build these files (for example on Windows), you can
-get a copy of these files from the "genfiles" archive on the (GitHub releases
-page)[https://github.com/krpc/krpc/releases]. Download the latest `krpc-genfiles-<version>.zip` and
+get a copy of these files from the "genfiles" archive on the [GitHub releases
+page](https://github.com/krpc/krpc/releases). Download the latest `krpc-genfiles-<version>.zip` and
 extract the archive over your copy of the source. This should give you a `bazel-bin` and
 `bazel-krpc` directory containing all the necessary files.
 
