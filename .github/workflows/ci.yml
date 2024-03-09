@@ -19,7 +19,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: bazel
         run: buildifier -mode check -lint warn -r .
 
@@ -32,7 +32,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -74,7 +74,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -102,7 +102,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -134,7 +134,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -161,7 +161,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -188,7 +188,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -210,7 +210,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -232,7 +232,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -254,7 +254,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -285,7 +285,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -316,7 +316,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -350,7 +350,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -379,7 +379,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -408,7 +408,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -437,7 +437,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -459,7 +459,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
@@ -481,7 +481,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
