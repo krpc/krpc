@@ -1,5 +1,6 @@
 v0.6.0
  * Fix assertion error when connecting to a server with third party services installed (#754)
+ * Fix streams (#774)
 
 v0.5.2
  * Requires Python 3.7+
