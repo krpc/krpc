@@ -144,13 +144,17 @@ class Client(krpc.services.Client):
                 builder = attr._build_call
             else:
                 builder = getattr(args[0], '_build_call_' + attr.__name__)
-            args = tuple()
+            args = (args[0],)
             kwargs = {}
         elif func == setattr:
             raise StreamError('Cannot create a call for a property setter')
         else:
             if hasattr(func, '_build_call'):
                 builder = func._build_call
+                if hasattr(func, '__self__'):
+                    new_args = [func.__self__]
+                    new_args.extend(args)
+                    args = tuple(new_args)
             else:
                 builder = getattr(
                     func.__self__,  # type: ignore[attr-defined]
@@ -181,6 +185,11 @@ class Client(krpc.services.Client):
                     '_return_type_' + func.__name__
                 )
 
+        if isinstance(return_type_fn, TypeBase):
+            # FIXME: this is a workaround for dynamically created services setting
+            # _return_type to a value, rather than a zero-argument function that returns
+            # a value. This should be cleaned up.
+            return return_type_fn
         return cast(TypeBase, return_type_fn())
 
     def _invoke(self, service: str, procedure: str, args: Iterable[object],
