@@ -13,7 +13,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -26,7 +26,7 @@ jobs:
   build-krpc:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -68,7 +68,7 @@ jobs:
   build-genfiles:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -96,7 +96,7 @@ jobs:
     needs: build-genfiles
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -128,7 +128,7 @@ jobs:
   build-docs-html:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -155,7 +155,7 @@ jobs:
   build-docs-pdf:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -182,7 +182,7 @@ jobs:
   build-docs-examples:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -204,7 +204,7 @@ jobs:
   test-docs:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -226,7 +226,7 @@ jobs:
   test-core:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -248,7 +248,7 @@ jobs:
   test-client-cnano:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -279,7 +279,7 @@ jobs:
   test-client-cpp:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -310,7 +310,7 @@ jobs:
   test-client-csharp:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -344,7 +344,7 @@ jobs:
   test-client-java:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -373,7 +373,7 @@ jobs:
   test-client-python:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -402,7 +402,7 @@ jobs:
   test-client-lua:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -431,7 +431,7 @@ jobs:
   test-client-serialio:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -453,7 +453,7 @@ jobs:
   test-client-websockets:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -475,7 +475,7 @@ jobs:
   test-tools:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.2.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}

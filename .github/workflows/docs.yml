@@ -15,19 +15,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:2.6.0
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
         uses: actions/checkout@v4
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: build
         run: |
-          rm -f lib/mono-4.5
-          ln -s /usr/lib/mono/4.5 lib/mono-4.5
-          rm -f lib/ksp
-          ln -s /usr/local/lib/ksp lib/ksp
           bazel build //doc:html
           mkdir gh-pages
           echo "" > gh-pages/.nojekyll
