@@ -18,7 +18,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public CrewMember (ProtoCrewMember crewMember)
         {
-            InternalCrewMember = crewMember;
+            m_protoCrewMemberName = crewMember.name;
         }
 
         /// <summary>
@@ -34,13 +34,20 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return InternalCrewMember.GetHashCode ();
+            return m_protoCrewMemberName.GetHashCode ();
         }
 
         /// <summary>
         /// The KSP crew member.
         /// </summary>
-        public ProtoCrewMember InternalCrewMember { get; private set; }
+        public ProtoCrewMember InternalCrewMember
+        {
+            get
+            {
+                return HighLogic.CurrentGame?.CrewRoster?[m_protoCrewMemberName];
+            }
+        }
+        private string m_protoCrewMemberName;
 
         /// <summary>
         /// The crew members name.
