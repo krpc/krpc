@@ -152,21 +152,32 @@ Then run a container using:
 docker run -it ghcr.io/krpc/buildenv:latest
 ```
 
-This will drop you into a command line where you can then clone the repository, set up the library
-symlinks, build everything and run the tests, using the following commands:
+This will drop you into a command line. Next you need to get the KSP DLLs using the following
+commands:
+
+```
+mkdir ksp
+pushd ksp
+wget https://github.com/krpc/ksp-lib/raw/main/ksp/ksp-1.12.5.zip
+unzip ksp-1.12.5.zip
+popd
+```
+
+Note: these KSP DLLs are downloaded from the ksp-lib repository. These DLLs have had their
+implementation stripped out. This is sufficient to build the code, without needing to publicly
+distribute the original KSP DLLs.
+
+You can then clone the repository, set up some symlinks to the libraries, build everything and run
+the tests, using the following commands:
 
 ```
 git clone https://github.com/krpc/krpc.git
 cd krpc
-ln -s /usr/local/lib/ksp lib/ksp
+ln -s `pwd`/../ksp lib/ksp
 ln -s /usr/lib/mono/4.5 lib/mono-4.5
 bazel build //...
 bazel test //:test
 ```
-
-Note: copies of the KSP libraries are included in the docker image in `/usr/local/lib/ksp`. These
-DLLs have had their implementation stripped out. This is sufficient to build the code, without
-needing to publicly distribute the original KSP DLLs.
 
 ## Tools
 
