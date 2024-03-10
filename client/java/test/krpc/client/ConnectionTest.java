@@ -182,19 +182,15 @@ public class ConnectionTest {
   public void testCollectionsDictionary() throws RPCException {
     assertEquals(new HashMap<String, Integer>(),
                  testService.incrementDictionary(new HashMap<String, Integer>()));
-    assertEquals(new HashMap<String, Integer>() {
-        {
-          put("a", 1);
-          put("b", 2);
-          put("c", 3);
-        }
-      }, testService.incrementDictionary(new HashMap<String, Integer>() {
-          {
-            put("a", 0);
-            put("b", 1);
-            put("c", 2);
-          }
-        }));
+    HashMap<String, Integer> m1 = new HashMap<>();
+    m1.put("a", 0);
+    m1.put("b", 1);
+    m1.put("c", 2);
+    HashMap<String, Integer> m2 = new HashMap<>();
+    m2.put("a", 1);
+    m2.put("b", 2);
+    m2.put("c", 3);
+    assertEquals(m2, testService.incrementDictionary(m1));
   }
 
   @Test
@@ -216,20 +212,15 @@ public class ConnectionTest {
   public void testCollectionsNested() throws RPCException {
     assertEquals(new HashMap<String, List<Integer>>(),
                  testService.incrementNestedCollection(new HashMap<String, List<Integer>>()));
-    assertEquals(new HashMap<String, List<Integer>>() {
-          {
-            put("a", Arrays.asList(new Integer[] { 1, 2 }));
-            put("b", new ArrayList<Integer>());
-            put("c", Arrays.asList(new Integer[] { 3 }));
-          }
-        },
-        testService.incrementNestedCollection(new HashMap<String, List<Integer>>() {
-          {
-            put("a", Arrays.asList(new Integer[] { 0, 1 }));
-            put("b", new ArrayList<Integer>());
-            put("c", Arrays.asList(new Integer[] { 2 }));
-          }
-        }));
+    HashMap<String, List<Integer>> m1 = new HashMap<>();
+    m1.put("a", Arrays.asList(new Integer[] { 0, 1 }));
+    m1.put("b", new ArrayList<Integer>());
+    m1.put("c", Arrays.asList(new Integer[] { 2 }));
+    HashMap<String, List<Integer>> m2 = new HashMap<>();
+    m2.put("a", Arrays.asList(new Integer[] { 1, 2 }));
+    m2.put("b", new ArrayList<Integer>());
+    m2.put("c", Arrays.asList(new Integer[] { 3 }));
+    assertEquals(m2, testService.incrementNestedCollection(m1));
   }
 
   @Test
