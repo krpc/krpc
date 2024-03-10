@@ -302,28 +302,28 @@ class ServiceBase(DynamicType):
             param_default, return_type
 
     @classmethod
-    def _add_service_procedure(cls, procedure: KRPC.Procedure) -> object:
+    def _add_service_procedure(cls, procedure: KRPC.Procedure) -> None:
         """ Add a procedure """
         param_names, param_types, param_required, \
             param_default, return_type = cls._parse_procedure(procedure)
         func = _construct_func(
-            cls._client._invoke, cls._name, procedure.name, [],
+            cls._client._invoke, cls._name, procedure.name, ['cls'],
             param_names, param_types,
             param_required, param_default, return_type)
         build_call = _construct_func(
-            cls._client._build_call, cls._name, procedure.name, [],
+            cls._client._build_call, cls._name, procedure.name, ['cls'],
             param_names, param_types,
             param_required, param_default, return_type)
-        setattr(func, '_build_call', build_call)
-        setattr(func, '_return_type', return_type)
         name = _member_name(procedure.name)
-        return cls._add_static_method(
+        cls._add_class_method(
             name, func, doc=_parse_documentation(procedure.documentation))
+        cls._add_class_method('_build_call_' + name, build_call)
+        cls._add_class_method('_return_type_' + name, lambda cls: return_type)
 
     @classmethod
     def _add_service_property(cls, name: str,
                               getter: Optional[KRPC.Procedure] = None,
-                              setter: Optional[KRPC.Procedure] = None) -> object:
+                              setter: Optional[KRPC.Procedure] = None) -> None:
         """ Add a property """
         doc = None
         if getter:
@@ -341,8 +341,7 @@ class ServiceBase(DynamicType):
             build_call = _construct_func(
                 cls._client._build_call, cls._name, getter_name, ['self'],
                 [], [], [], [], return_type)
-            setattr(getter_fn, '_build_call', build_call)
-            setattr(getter_fn, '_return_type', return_type)
+            getter_return_type = return_type
         if setter:
             param_names, param_types, _, _, _ = cls._parse_procedure(setter)
             setter_fn = _construct_func(cls._client._invoke, cls._name,
@@ -350,7 +349,10 @@ class ServiceBase(DynamicType):
                                         param_names, param_types,
                                         [True], [None], None)
         name = _member_name(name)
-        return cls._add_property(name, getter_fn, setter_fn, doc=doc)
+        cls._add_property(name, getter_fn, setter_fn, doc=doc)
+        if getter:
+            cls._add_method('_build_call_' + name, build_call)
+            cls._add_method('_return_type_' + name, lambda self: getter_return_type)
 
     @classmethod
     def _add_service_class_method(cls, class_name: str, method_name: str,
@@ -371,11 +373,11 @@ class ServiceBase(DynamicType):
             cls._client._build_call, cls._name, procedure.name, [],
             param_names, param_types,
             param_required, param_default, return_type)
-        setattr(func, '_build_call', build_call)
-        setattr(func, '_return_type', return_type)
         name = _member_name(method_name)
         class_cls._add_method(
             name, func, doc=_parse_documentation(procedure.documentation))
+        class_cls._add_method('_build_call_' + name, build_call)
+        class_cls._add_method('_return_type_' + name, lambda self: return_type)
 
     @classmethod
     def _add_service_class_static_method(cls, class_name: str, method_name: str,
@@ -386,18 +388,18 @@ class ServiceBase(DynamicType):
         param_names, param_types, param_required, \
             param_default, return_type = cls._parse_procedure(procedure)
         func = _construct_func(
-            cls._client._invoke, cls._name, procedure.name, [],
+            cls._client._invoke, cls._name, procedure.name, ['cls'],
             param_names, param_types,
             param_required, param_default, return_type)
         build_call = _construct_func(
-            cls._client._build_call, cls._name, procedure.name, [],
+            cls._client._build_call, cls._name, procedure.name, ['cls'],
             param_names, param_types,
             param_required, param_default, return_type)
-        setattr(func, '_build_call', build_call)
-        setattr(func, '_return_type', return_type)
         name = _member_name(method_name)
-        class_cls._add_static_method(
+        class_cls._add_class_method(
             name, func, doc=_parse_documentation(procedure.documentation))
+        class_cls._add_class_method('_build_call_' + name, build_call)
+        class_cls._add_class_method('_return_type_' + name, lambda cls: return_type)
 
     @classmethod
     def _add_service_class_property(cls, class_name: str, property_name: str,
@@ -426,8 +428,7 @@ class ServiceBase(DynamicType):
             build_call = _construct_func(
                 cls._client._build_call, cls._name, getter_name, [],
                 param_names, param_types, [True], [None], return_type)
-            setattr(getter_fn, '_build_call', build_call)
-            setattr(getter_fn, '_return_type', return_type)
+            getter_return_type = return_type
         if setter:
             param_names, param_types, _, _, \
                 return_type = cls._parse_procedure(setter)
@@ -436,3 +437,6 @@ class ServiceBase(DynamicType):
                 param_names, param_types, [True, True], [None, None], None)
         property_name = _member_name(property_name)
         class_cls._add_property(property_name, getter_fn, setter_fn, doc=doc)
+        if getter:
+            class_cls._add_method('_build_call_' + property_name, build_call)
+            class_cls._add_method('_return_type_' + property_name, lambda self: getter_return_type)
