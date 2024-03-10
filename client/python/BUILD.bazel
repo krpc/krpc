@@ -150,6 +150,7 @@ test_suite(
     name = "test",
     tests = [
         ":client",
+        ":client_base",
         ":lint",
     ],
 )
@@ -162,12 +163,29 @@ client_test(
     test_executable = ":clienttest",
 )
 
+client_test(
+    name = "client_base",
+    size = "medium",
+    server_executable = "//tools/TestServer",
+    tags = ["requires-network"],
+    test_executable = ":clienttest_base",
+)
+
 deps = ["@python_protobuf//file"]
 
 py_test(
     name = "clienttest",
     size = "small",
     src = ":python",
+    pkg = "krpc-" + python_version,
+    tags = ["requires-network"],
+    deps = deps,
+)
+
+py_test(
+    name = "clienttest_base",
+    size = "small",
+    src = ":python_base",
     pkg = "krpc-" + python_version,
     tags = ["requires-network"],
     deps = deps,

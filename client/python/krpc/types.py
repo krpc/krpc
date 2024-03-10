@@ -430,14 +430,14 @@ class DynamicType:
         return getattr(cls, name)
 
     @classmethod
-    def _add_static_method(cls,
-                           name: str,
-                           func: Callable,  # type: ignore[type-arg]
-                           doc: Optional[str] = None) -> object:
+    def _add_class_method(cls,
+                          name: str,
+                          func: Callable,  # type: ignore[type-arg]
+                          doc: Optional[str] = None) -> object:
         """ Add a static method """
         func.__name__ = name
         func.__doc__ = doc
-        static_func = staticmethod(func)
+        static_func = classmethod(func)
         setattr(cls, name, static_func)
         return getattr(cls, name)
 

@@ -139,24 +139,17 @@ class Client(krpc.services.Client):
                  *args: object, **kwargs: object) -> KRPC.ProcedureCall:
         """ Convert a remote procedure call to a KRPC.ProcedureCall message """
         if func == getattr:
-            attr = func(args[0].__class__, args[1]).fget
-            if hasattr(attr, '_build_call'):
-                builder = attr._build_call
-            else:
-                builder = getattr(args[0], '_build_call_' + attr.__name__)
+            name = args[1]
+            builder = getattr(args[0], '_build_call_' + name)
             args = tuple()
             kwargs = {}
         elif func == setattr:
             raise StreamError('Cannot create a call for a property setter')
         else:
-            if hasattr(func, '_build_call'):
-                builder = func._build_call
-            else:
-                builder = getattr(
-                    func.__self__,  # type: ignore[attr-defined]
-                    '_build_call_' + func.__name__
-                )
-
+            builder = getattr(
+                func.__self__,  # type: ignore[attr-defined]
+                '_build_call_' + func.__name__
+            )
         return cast(KRPC.ProcedureCall, builder(*args, **kwargs))
 
     @staticmethod
@@ -165,22 +158,15 @@ class Client(krpc.services.Client):
                          **kwargs: object) -> TypeBase:
         """ Get the return type for a remote procedure call """
         if func == getattr:
-            attr = func(args[0].__class__, args[1]).fget
-            if hasattr(attr, '_return_type'):
-                return_type_fn = getattr(attr, '_return_type')
-            else:
-                return_type_fn = getattr(args[0], '_return_type_' + attr.__name__)
+            name = args[1]
+            return_type_fn = getattr(args[0], '_return_type_' + name)
         elif func == setattr:
             raise StreamError('Cannot get return type for a property setter')
         else:
-            if hasattr(func, '_return_type'):
-                return_type_fn = getattr(func, '_return_type')
-            else:
-                return_type_fn = getattr(
-                    func.__self__,  # type: ignore[attr-defined]
-                    '_return_type_' + func.__name__
-                )
-
+            return_type_fn = getattr(
+                func.__self__,  # type: ignore[attr-defined]
+                '_return_type_' + func.__name__
+            )
         return cast(TypeBase, return_type_fn())
 
     def _invoke(self, service: str, procedure: str, args: Iterable[object],
