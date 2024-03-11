@@ -30,6 +30,7 @@
     <DocumentationFile>bin\Release\TestServer.xml</DocumentationFile>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)tools\msbuild\bazeldirs.props" />
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -42,7 +43,7 @@
       <HintPath>$(bazel-bin)\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
     </Reference>
     <Reference Include="NDesk.Options">
-      <HintPath>$(bazel-krpc)\external\csharp_options\lib\NDesk.Options.dll</HintPath>
+      <HintPath>$(bazel-external)\csharp_options\lib\NDesk.Options.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

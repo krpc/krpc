@@ -4,6 +4,6 @@
   <PropertyGroup>
     <!-- this should be set up as a symlink in windows pointing at the bazel-bin directory in WSL according to the WINDOWS_BUILDING.md doc-->
     <bazel-bin>$(SolutionDir)build-out</bazel-bin>
-    <bazel-krpc>$(bazel-bin)\..\..\..</bazel-krpc>
+    <bazel-external>$(SolutionDir)build-external</bazel-external>
   </PropertyGroup>
 </Project>

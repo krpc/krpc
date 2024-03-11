@@ -24,6 +24,7 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)tools\msbuild\bazeldirs.props" />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -38,15 +39,15 @@
       <HintPath>$(bazel-bin)\tools\build\mono-4.5\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>$(bazel-krpc)\external\csharp_nunit\lib\net45\nunit.framework.dll</HintPath>
+      <HintPath>$(bazel-external)\csharp_nunit\lib\net45\nunit.framework.dll</HintPath>
       <Package>nunit</Package>
     </Reference>
     <Reference Include="Moq">
-      <HintPath>$(bazel-krpc)\external\csharp_moq\lib\net45\Moq.dll</HintPath>
+      <HintPath>$(bazel-external)\csharp_moq\lib\net45\Moq.dll</HintPath>
       <Package>Moq</Package>
     </Reference>
     <Reference Include="Castle.Core">
-      <HintPath>$(bazel-krpc)\external\csharp_castle_core\lib\net45\Castle.Core.dll</HintPath>
+      <HintPath>$(bazel-external)\csharp_castle_core\lib\net45\Castle.Core.dll</HintPath>
       <Package>Castle.Core</Package>
     </Reference>
   </ItemGroup>
