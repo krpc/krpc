@@ -13,3 +13,4 @@ lib/mono-4.5
 *.pyc
 packages
 build-out
+build-external

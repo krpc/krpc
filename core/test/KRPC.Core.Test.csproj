@@ -41,15 +41,15 @@
       <HintPath>$(bazel-bin)\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\bazel-krpc\external\csharp_nunit\lib\net45\nunit.framework.dll</HintPath>
+      <HintPath>$(bazel-external)\csharp_nunit\lib\net45\nunit.framework.dll</HintPath>
       <Package>nunit</Package>
     </Reference>
     <Reference Include="Moq">
-      <HintPath>..\..\bazel-krpc\external\csharp_moq\lib\net45\Moq.dll</HintPath>
+      <HintPath>$(bazel-external)\csharp_moq\lib\net45\Moq.dll</HintPath>
       <Package>Moq</Package>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\bazel-krpc\external\csharp_json\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(bazel-external)\csharp_json\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
