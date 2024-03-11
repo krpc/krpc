@@ -35,6 +35,7 @@ pkg_zip(
     out = "TestServer-%s.zip" % version,
     exclude = [
         "*.mdb",
+        "*.pdb",
         "tools/TestServer/TestServer",
     ],
     files = [

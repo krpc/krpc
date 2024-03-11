@@ -7,7 +7,7 @@ load("//:config.bzl", "assembly_version", "author", "nuget_version", "version")
 pkg_zip(
     name = "csharp",
     out = "krpc-csharp-%s.zip" % version,
-    exclude = ["*.mdb"],
+    exclude = ["*.mdb", "*.pdb"],
     files = [
         "CHANGES.txt",
         "LICENSE",

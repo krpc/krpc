@@ -95,7 +95,7 @@ genrule(
 pkg_zip(
     name = "krpc",
     out = "krpc-%s.zip" % version,
-    exclude = ["*.mdb"],
+    exclude = ["*.mdb", "*.pdb"],
     files = [
         ":readme",
         ":license",

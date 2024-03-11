@@ -8,10 +8,10 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <RootNamespace>ServiceDefinitions</RootNamespace>
     <AssemblyName>ServiceDefinitions</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <NoStdLib>true</NoStdLib>
     <Externalconsole>true</Externalconsole>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
