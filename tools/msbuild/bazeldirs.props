@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <!-- this should be set up as a symlink in windows pointing at the bazel-bin directory in WSL according to the WINDOWS_BUILDING.md doc-->
+    <bazel-bin>$(SolutionDir)build-out</bazel-bin>
+    <bazel-krpc>$(bazel-bin)\..\..\..</bazel-krpc>
+  </PropertyGroup>
+</Project>
