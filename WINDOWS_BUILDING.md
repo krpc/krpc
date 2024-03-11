@@ -2,7 +2,7 @@
 
 Note: Tested with Windows 10 2004 using WSL 2
 
-1) git clone https://github.com/kylewill0725/krpc to a folder in Windows. This folder from now on will be called `/krpc`
+1) git clone https://github.com/krpc/krpc (or your own fork) to a folder in Windows. This folder from now on will be called `/krpc`
 2) Install Ubuntu from Microsoft Store
 3) Open Ubuntu
 4) run the following to prevent conflicts with Windows
@@ -12,15 +12,15 @@ appendWindowsPath = false" | sudo tee -a /etc/wsl.conf
 ```
 5) run `exit` and in a command prompt run `wsl --shutdown`.
 6) Open Ubuntu
-7) Install bazelisk by following this [link](https://docs.bazel.build/versions/3.6.0/install-bazelisk.html).
+7) Install bazelisk by following this [link](https://bazel.build/install/bazelisk).
 8) Add the mono repository from [here](https://www.mono-project.com/download/stable/#download-lin-ubuntu). Note: Windows Store Ubuntu is Ubuntu 20.04LTS unless other version is in name.
 9) Run command (note: This is about 1.5GB download)
 ```
-sudo apt-get install mono-complete python-setuptools python-virtualenv \
-python-dev autoconf libtool luarocks texlive-latex-base \
+sudo apt-get install mono-complete python-setuptools  \
+python-dev-is-python3 autoconf libtool luarocks texlive-latex-base \
 texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra \
 libxml2-dev libxslt1-dev librsvg2-bin python3-dev python3-setuptools \
-python3-virtualenv enchant latexmk openjdk-8-jdk
+python3-virtualenv latexmk openjdk-8-jdk
 ```
 10) cd to `/krpc` in Ubuntu (ex. `/mnt/d/source/repos/krpc` but yours is probably different)
 11) Using Windows command prompt, cd `/krpc/lib`
