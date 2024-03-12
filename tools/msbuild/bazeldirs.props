@@ -2,8 +2,13 @@
 
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <!-- this should be set up as a symlink in windows pointing at the bazel-bin directory in WSL according to the WINDOWS_BUILDING.md doc-->
-    <bazel-bin>$(SolutionDir)build-out</bazel-bin>
-    <bazel-external>$(SolutionDir)build-external</bazel-external>
+    <bazel-bin>$(SolutionDir)bazel-bin</bazel-bin>
+    <!-- ideally we would define the location of bazel-krpc here and then csproj files would reference things via $(bazel-krpc)\external\...
+    But that doesn't work because bazel-krpc/external on linux just contains symlinks to other directories - which all happen to be in the same external directory.
+    So instead, we just provide the direct path to the external directory here. -->
+    <bazel-external>$(SolutionDir)bazel-krpc\external</bazel-external>
   </PropertyGroup>
+  <!-- import a .user file if it exists -->
+  <!-- TODO: could we have bazel generate this file, automatically pointing at the bazel build outputs? -->
+  <Import Condition="Exists('bazeldirs.props.user')" Project="bazeldirs.props.user" />
 </Project>
