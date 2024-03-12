@@ -9,7 +9,7 @@
     <Externalconsole>true</Externalconsole>
     <RootNamespace>TestServer</RootNamespace>
     <AssemblyName>TestServer</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <NoStdLib>true</NoStdLib>
     <DebugType>portable</DebugType>
     <ErrorReport>prompt</ErrorReport>

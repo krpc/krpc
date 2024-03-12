@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>KRPC.Client</RootNamespace>
     <AssemblyName>KRPC.Client</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <DebugType>portable</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
