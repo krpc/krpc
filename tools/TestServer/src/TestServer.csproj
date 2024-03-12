@@ -11,7 +11,7 @@
     <AssemblyName>TestServer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <NoStdLib>true</NoStdLib>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
