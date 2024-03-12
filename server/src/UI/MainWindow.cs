@@ -86,7 +86,7 @@ namespace KRPC.UI
             var version = FileVersionInfo.GetVersionInfo (Assembly.GetExecutingAssembly ().Location);
             Title = "kRPC v" + version.FileMajorPart + "." + version.FileMinorPart + "." + version.FileBuildPart;
 
-            core.OnClientActivity += (s, e) => SawClientActivity (e.Client);
+            core.OnClientActivity += SawClientActivity;
 
             Style.fixedWidth = windowWidth;
 
@@ -144,9 +144,13 @@ namespace KRPC.UI
             maxTimePerUpdate = config.Configuration.MaxTimePerUpdate.ToString ();
             recvTimeout = config.Configuration.RecvTimeout.ToString ();
 
-            core.OnClientActivity += (s, e) => SawClientActivity (e.Client);
             if (core.Servers.Count == 1)
                 expandServers.Add (core.Servers [0].Id);
+        }
+
+        void OnDestroy()
+        {
+            core.OnClientActivity -= SawClientActivity;
         }
 
         protected override void Draw (bool needRescale)
@@ -524,9 +528,9 @@ namespace KRPC.UI
                 InfoWindow.Visible = value;
         }
 
-        void SawClientActivity (IClient client)
+        void SawClientActivity (object sender, ClientActivityEventArgs e)
         {
-            lastClientActivity [client] = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            lastClientActivity [e.Client] = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
 
         bool IsClientActive (IClient client)
