@@ -72,7 +72,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The currently active vessel.
         /// </summary>
-        [KRPCProperty (GameScene = GameScene.Flight)]
+        [KRPCProperty]
         public static Vessel ActiveVessel {
             get { return new Vessel (FlightGlobals.ActiveVessel); }
             set {
