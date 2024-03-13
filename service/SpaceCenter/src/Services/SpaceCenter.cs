@@ -72,13 +72,22 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The currently active vessel.
         /// </summary>
-        [KRPCProperty (GameScene = GameScene.Flight)]
+        [KRPCProperty]
         public static Vessel ActiveVessel {
             get { return new Vessel (FlightGlobals.ActiveVessel); }
             set {
                 if (ReferenceEquals (value, null))
                     throw new ArgumentNullException ("ActiveVessel");
-                FlightGlobals.ForceSetActiveVessel (value.InternalVessel);
+                if (HighLogic.LoadedSceneIsFlight)
+                    FlightGlobals.ForceSetActiveVessel(value.InternalVessel);
+                else
+                {
+                    int vesselIndex = HighLogic.CurrentGame.flightState.protoVessels.FindIndex((ProtoVessel pv) => pv.vesselID == value.InternalVessel.id);
+                    if (vesselIndex == -1)
+                        throw new InvalidOperationException("No vessel found");
+                    FlightDriver.StartAndFocusVessel(HighLogic.CurrentGame, vesselIndex);
+                }
+                
                 throw new YieldException<Action> (() => WaitForVesselSwitch(0));
             }
         }
