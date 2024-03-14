@@ -1,3 +1,8 @@
+v0.5.4
+ * Fix vessel recovery (#782)
+ * Allow vessel switch from any scene (#781)
+ * Fix memory leaks on each scene switch (#779)
+
 v0.5.2
  * Fix null reference exception when SpaceCenter.LaunchVesselFromVAB is called with no crew (#599)
  * Add Engine.IndependentThrottle to check whether it is enabled
