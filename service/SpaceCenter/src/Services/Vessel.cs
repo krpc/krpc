@@ -10,6 +10,7 @@ using Tuple3 = System.Tuple<double, double, double>;
 using Tuple4 = System.Tuple<double, double, double, double>;
 using TupleV3 = System.Tuple<Vector3d, Vector3d>;
 using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
+using System.Collections;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -107,9 +108,18 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Recover ()
         {
-            if (!Recoverable)
+            var vessel = InternalVessel;
+            if (!vessel.IsRecoverable)
                 throw new InvalidOperationException ("Vessel is not recoverable");
-            GameEvents.OnVesselRecoveryRequested.Fire (InternalVessel);
+            vessel.StartCoroutine(RecoverVesselCoroutine(vessel));
+        }
+
+        static IEnumerator RecoverVesselCoroutine(global::Vessel vessel)
+        {
+			// calling OnVesselRecoveryRequested.Fire from Update will cause issues.  Using WaitUntil makes it execute after Update and before LateUpdate:
+			// https://docs.unity3d.com/ScriptReference/WaitUntil.html
+			yield return new WaitUntil(() => true);
+            GameEvents.OnVesselRecoveryRequested.Fire(vessel);
         }
 
         /// <summary>
