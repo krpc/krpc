@@ -173,7 +173,7 @@ namespace KRPC.SpaceCenter.Services
                 case CameraMode.Map:
                     {
                         var camera = PlanetariumCamera.fetch;
-                        camera.SetDistance (value.Clamp (camera.minDistance, camera.maxDistance) / ScaledSpace.ScaleFactor);
+                        camera.SetDistance ((value / ScaledSpace.ScaleFactor).Clamp (camera.minDistance, camera.maxDistance));
                         break;
                     }
                 case CameraMode.IVA:
