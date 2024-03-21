@@ -9,9 +9,9 @@
     <Externalconsole>true</Externalconsole>
     <RootNamespace>TestServer</RootNamespace>
     <AssemblyName>TestServer</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <NoStdLib>true</NoStdLib>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -30,19 +30,20 @@
     <DocumentationFile>bin\Release\TestServer.xml</DocumentationFile>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)tools\msbuild\bazeldirs.props" />
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\..\bazel-bin\tools\build\mono-4.5\Google.Protobuf.dll</HintPath>
+      <HintPath>$(bazel-bin)\tools\build\mono-4.5\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="KRPC.IO.Ports">
-      <HintPath>..\..\..\bazel-bin\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
+      <HintPath>$(bazel-bin)\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
     </Reference>
     <Reference Include="NDesk.Options">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_options\lib\NDesk.Options.dll</HintPath>
+      <HintPath>$(bazel-external)\csharp_options\lib\NDesk.Options.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -52,7 +53,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\bazel-bin\tools\TestServer\AssemblyInfo.cs">
+    <Compile Include="$(bazel-bin)\tools\TestServer\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />
