@@ -77,8 +77,8 @@ namespace KRPC.SpaceCenter.Services
         /// The mass of the body, in kilograms.
         /// </summary>
         [KRPCProperty]
-        public float Mass {
-            get { return (float)InternalBody.Mass; }
+        public double Mass {
+            get { return InternalBody.Mass; }
         }
 
         /// <summary>
@@ -86,8 +86,8 @@ namespace KRPC.SpaceCenter.Services
         /// gravitational parameter</a> of the body in <math>m^3s^{-2}</math>.
         /// </summary>
         [KRPCProperty]
-        public float GravitationalParameter {
-            get { return (float)InternalBody.gravParameter; }
+        public double GravitationalParameter {
+            get { return InternalBody.gravParameter; }
         }
 
         /// <summary>
@@ -95,24 +95,24 @@ namespace KRPC.SpaceCenter.Services
         /// in <math>m/s^2</math>.
         /// </summary>
         [KRPCProperty]
-        public float SurfaceGravity {
-            get { return (float)InternalBody.GeeASL * 9.81f; }
+        public double SurfaceGravity {
+            get { return InternalBody.GeeASL * 9.81f; }
         }
 
         /// <summary>
         /// The sidereal rotational period of the body, in seconds.
         /// </summary>
         [KRPCProperty]
-        public float RotationalPeriod {
-            get { return (float)InternalBody.rotationPeriod; }
+        public double RotationalPeriod {
+            get { return InternalBody.rotationPeriod; }
         }
 
         /// <summary>
         /// The rotational speed of the body, in radians per second.
         /// </summary>
         [KRPCProperty]
-        public float RotationalSpeed {
-            get { return (float)(2f * Math.PI) / RotationalPeriod; }
+        public double RotationalSpeed {
+            get { return (2f * Math.PI) / RotationalPeriod; }
         }
 
         /// <summary>
@@ -137,8 +137,8 @@ namespace KRPC.SpaceCenter.Services
         /// The equatorial radius of the body, in meters.
         /// </summary>
         [KRPCProperty]
-        public float EquatorialRadius {
-            get { return (float)InternalBody.Radius; }
+        public double EquatorialRadius {
+            get { return InternalBody.Radius; }
         }
 
         /// <summary>
@@ -300,8 +300,8 @@ namespace KRPC.SpaceCenter.Services
         /// The radius of the sphere of influence of the body, in meters.
         /// </summary>
         [KRPCProperty]
-        public float SphereOfInfluence {
-            get { return (float)InternalBody.sphereOfInfluence; }
+        public double SphereOfInfluence {
+            get { return InternalBody.sphereOfInfluence; }
         }
 
         /// <summary>
@@ -336,8 +336,8 @@ namespace KRPC.SpaceCenter.Services
         /// The depth of the atmosphere, in meters.
         /// </summary>
         [KRPCProperty]
-        public float AtmosphereDepth {
-            get { return (float)InternalBody.atmosphereDepth; }
+        public double AtmosphereDepth {
+            get { return InternalBody.atmosphereDepth; }
         }
 
         /// <summary>
