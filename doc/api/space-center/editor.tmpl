@@ -1,0 +1,11 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('SpaceCenter') }}
+{% import domain.macros as macros with context %}
+
+Editor
+======
+
+{{ macros.class(services['SpaceCenter'].classes['Editor']) }}
+{{ macros.class(services['SpaceCenter'].classes['EditorParts']) }}
+{{ macros.class(services['SpaceCenter'].classes['EditorShip']) }}
