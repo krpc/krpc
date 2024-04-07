@@ -1035,5 +1035,14 @@ namespace KRPC.SpaceCenter.Services
         {
             ScreenCapture.CaptureScreenshot(filePath, scale);
         }
+
+        /// <summary>
+        /// A class for interacting with the editor (VAB/SPH).
+        /// </summary>
+        [KRPCProperty]
+        public static Editor Editor
+        {
+            get { return new Editor(); }
+        }
     }
 }
