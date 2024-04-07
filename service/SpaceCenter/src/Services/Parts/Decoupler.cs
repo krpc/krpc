@@ -115,5 +115,27 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float Impulse {
             get { return decoupler.EjectionForce * 10f; }
         }
+
+        /// <summary>
+        /// Whether the decoupler is an omni-decoupler (e.g. stack separator)
+        /// </summary>
+        [KRPCProperty]
+        public bool IsOmniDecoupler
+        {
+            get { return decoupler.IsOmniDecoupler; }
+        }
+
+        /// <summary>
+        /// The part attached to this decoupler's explosive node.
+        /// </summary>
+        [KRPCProperty]
+        public Part AttachedPart
+        {
+            get
+            {
+                var attach = decoupler.ExplosiveNode;
+                return new Part(attach.attachedPart);
+            }
+        }
     }
 }
