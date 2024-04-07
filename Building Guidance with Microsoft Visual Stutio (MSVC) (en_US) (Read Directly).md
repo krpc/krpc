@@ -1,6 +1,8 @@
-# Start Building (en-US version)
+# Start Building
+(en-US)
 
-NOTE: The file is built under Windows 10 22H2 (19045.3930) in zh-CN and Visual Studio 2022 17.5.5 in zh-CN. If there's something in Chinese, please refer to zh-CN version or use Google Translation.
+NOTE: The file is built under Windows 10 22H2 (19045.3930) in zh-CN and Visual Studio 2022 17.5.5 in zh-CN.<br />
+In the event of an inconsistency between documents, the **zh_CN (Read via VSCode)** version takes precedence.
 
 ### Installing vcpkg
 
