@@ -96,7 +96,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double SurfaceGravity {
-            get { return InternalBody.GeeASL * 9.81f; }
+            get { return InternalBody.GeeASL * 9.81d; }
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double RotationalSpeed {
-            get { return (2f * Math.PI) / RotationalPeriod; }
+            get { return (2d * Math.PI) / RotationalPeriod; }
         }
 
         /// <summary>
