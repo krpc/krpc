@@ -128,12 +128,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part attached to this decoupler's explosive node.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty(Nullable = true)]
         public Part AttachedPart
         {
             get
             {
                 var attach = decoupler.ExplosiveNode;
+                if (attach == null)
+                {
+                    return null;
+                }
                 return new Part(attach.attachedPart);
             }
         }
