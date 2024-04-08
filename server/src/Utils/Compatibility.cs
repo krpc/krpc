@@ -224,7 +224,7 @@ namespace KRPC.Utils
             public bool IsOmniDecoupler
             {
                 get {
-                    if (type.Name == "ModuleDecoupler")
+                    if (type.Name == "ModuleDecouple")
                         return (bool)type.GetField("isOmniDecoupler").GetValue(decoupler);
                     return false;
                 }
