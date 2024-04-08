@@ -714,6 +714,8 @@ SpaceCenter.Decoupler.Decouple
 SpaceCenter.Decoupler.Decoupled
 SpaceCenter.Decoupler.Staged
 SpaceCenter.Decoupler.Impulse
+SpaceCenter.Decoupler.IsOmniDecoupler
+SpaceCenter.Decoupler.AttachedPart
 SpaceCenter.DockingPort
 SpaceCenter.DockingPort.Part
 SpaceCenter.DockingPort.State
