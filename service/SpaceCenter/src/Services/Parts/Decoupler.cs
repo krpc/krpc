@@ -87,7 +87,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (wait < 10 || !Decoupled)
                 throw new YieldException<Func<Vessel>> (() => PostDecouple(preVesselIds, wait + 1));
             // Return the newly created vessel
-            return new Vessel (FlightGlobals.Vessels.Select (v => v.id).Except (preVesselIds).Single ());
+            return new Vessel (FlightGlobals.Vessels.Select (v => v.id).Except (preVesselIds).First ());
         }
 
         /// <summary>
