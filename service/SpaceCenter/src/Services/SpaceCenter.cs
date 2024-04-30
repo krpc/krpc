@@ -652,7 +652,11 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty (GameScene = GameScene.Flight)]
         public static int RailsWarpFactor {
             get { return WarpMode == WarpMode.Rails ? TimeWarp.CurrentRateIndex : 0; }
-            set { SetWarpFactor (TimeWarp.Modes.HIGH, value.Clamp (0, MaximumRailsWarpFactor)); }
+            set {
+                // Set throttle to 0 when attempting to warp; can't warp when throttled up
+                FlightInputHandler.state.mainThrottle = 0;
+                SetWarpFactor (TimeWarp.Modes.HIGH, value.Clamp (0, MaximumRailsWarpFactor));
+            }
         }
 
         /// <summary>
