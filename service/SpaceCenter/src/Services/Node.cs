@@ -25,7 +25,7 @@ namespace KRPC.SpaceCenter.Services
         {
             vesselId = vessel.id;
             if (InternalVessel.patchedConicSolver == null)
-                throw new InvalidOperationException ("Cannot add maneuver node");
+                throw new InvalidOperationException ("Cannot add maneuver node; patched conic solver not found");
             var node = vessel.patchedConicSolver.AddManeuverNode (ut);
             node.DeltaV = new Vector3d (radial, normal, prograde);
             Update ();
@@ -219,7 +219,7 @@ namespace KRPC.SpaceCenter.Services
         void Update () {
             var vessel = InternalVessel;
             if (vessel.patchedConicSolver == null)
-                throw new InvalidOperationException ("Cannot update maneuver node");
+                throw new InvalidOperationException ("Cannot update maneuver node; patched conic solver not found");
             vessel.patchedConicSolver.UpdateFlightPlan ();
         }
 
@@ -232,7 +232,7 @@ namespace KRPC.SpaceCenter.Services
             if (InternalNode == null)
                 throw new InvalidOperationException ("Node does not exist");
             if (InternalVessel.patchedConicSolver == null)
-                throw new InvalidOperationException ("Cannot remove maneuver node");
+                throw new InvalidOperationException ("Cannot remove maneuver node; patched conic solver not found");
             InternalNode.RemoveSelf ();
             InternalNode = null;
             // TODO: delete this Node object

@@ -522,7 +522,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public IList<Vessel> ActivateNextStage ()
         {
-            CheckActiveVessel ();
+            if (vesselId != FlightGlobals.ActiveVessel.id)
+                throw new InvalidOperationException ("Not the active vessel");
             if (StageLock)
                 throw new InvalidOperationException("Staging is locked");
             if (!StageManager.CanSeparate)
@@ -638,7 +639,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Node AddNode (double ut, float prograde = 0, float normal = 0, float radial = 0)
         {
-            CheckManeuverNodes ();
             return new Node (InternalVessel, ut, prograde, normal, radial);
         }
 
@@ -648,8 +648,9 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public IList<Node> Nodes {
             get {
-                CheckManeuverNodes ();
-                return FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes.Select (x => new Node (FlightGlobals.ActiveVessel, x)).OrderBy (x => x.UT).ToList ();
+                if (InternalVessel.patchedConicSolver == null)
+                    throw new InvalidOperationException ("Cannot get maneuver nodes; patched conic solver not found");
+                return InternalVessel.patchedConicSolver.maneuverNodes.Select (x => new Node (InternalVessel, x)).OrderBy (x => x.UT).ToList ();
             }
         }
 
@@ -659,23 +660,11 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void RemoveNodes ()
         {
-            CheckManeuverNodes ();
+            if (InternalVessel.patchedConicSolver == null)
+                throw new InvalidOperationException ("Cannot remove maneuver nodes; patched conic solver not found");
             foreach (var node in InternalVessel.patchedConicSolver.maneuverNodes.ToArray ())
                 node.RemoveSelf ();
             // TODO: delete the Node objects
-        }
-
-        void CheckActiveVessel ()
-        {
-            if (vesselId != FlightGlobals.ActiveVessel.id)
-                throw new InvalidOperationException ("Not the active vessel");
-        }
-
-        void CheckManeuverNodes ()
-        {
-            CheckActiveVessel ();
-            if (FlightGlobals.ActiveVessel.patchedConicSolver == null)
-                throw new InvalidOperationException ("Maneuver node editing is not available. Either the vessel is in a situation where maneuver nodes cannot be used, or the tracking station has not been upgraded to support them.");
         }
     }
 }
