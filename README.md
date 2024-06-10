@@ -15,7 +15,9 @@ Contributions to kRPC are very welcome. [Please refer to this guide.](Contributi
 
 ## KSP2
 
-kRPC is coming to KSP2! You can find it in the new kRPC2 repository here: https://github.com/krpc/krpc2
+~kRPC is coming to KSP2!~ Notice: I am not actively developing this, due to lack of time. If you would like to contribute PRs or take over the project please get in touch on Discord.
+
+You can find it in the new kRPC2 repository here: https://github.com/krpc/krpc2
 
 ## Links for Developers
 
