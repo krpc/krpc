@@ -1,8 +1,14 @@
+inputs:
+  long-version:
+    required: false
+    default: true
 runs:
   using: composite
   steps:
+    - run: tools/github-actions/set-version.py
+      if: ${{ inputs.long-version }}
+      shell: bash
     - run: |
-        tools/github-actions/set-version.py
         rm -f lib/mono-4.5
         ln -s /usr/lib/mono/4.5 lib/mono-4.5
       shell: bash
