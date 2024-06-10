@@ -44,7 +44,7 @@ if [ "$1" == "push" ]; then
   echo 'Pushing changes...'
   git add .
   git diff-index --quiet HEAD || git commit -m "Updated from https://github.com/krpc/krpc commit $COMMIT"
-  git push origin master
+  git push origin main
 else
   echo "Skipping pushing changes (enable by passing 'push' as argument)"
 fi
