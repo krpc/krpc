@@ -95,13 +95,13 @@ def servicedefs(ksp, service, assemblies):
              '--output=%s' % tmpout, service] + assemblies,
             stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as ex:
-        shutil.rmtree(binpath)
+        shutil.rmtree(bindir)
         raise RuntimeError(ex.output) from ex
 
     with open(tmpout, 'r') as fp:
         return fp.read()
 
-    shutil.rmtree(binpath)
+    shutil.rmtree(bindir)
 
 
 if __name__ == '__main__':
