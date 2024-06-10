@@ -25,7 +25,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
         with:
-          long-version: false
+          long-version: 'false'
       - name: fetch
         uses: krpc/krpc-core/.github/actions/bazel-fetch@main
       - name: ksp-lib

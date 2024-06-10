@@ -1,12 +1,12 @@
 inputs:
   long-version:
     required: false
-    default: true
+    default: 'true'
 runs:
   using: composite
   steps:
     - run: tools/github-actions/set-version.py
-      if: ${{ inputs.long-version == true }}
+      if: ${{ inputs.long-version == 'true' }}
       shell: bash
     - run: |
         rm -f lib/mono-4.5
