@@ -34,12 +34,12 @@ jobs:
       - name: build
         run: |
           bazel build //doc:html
-          mkdir gh-pages
-          echo "" > gh-pages/.nojekyll
-          (cd gh-pages; unzip -q ../bazel-bin/doc/html.zip)
+          mkdir github-pages
+          echo "" > github-pages/.nojekyll
+          (cd github-pages; unzip -q ../bazel-bin/doc/html.zip)
       - name: upload-artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: gh-pages
+          path: github-pages
       - name: deploy
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
