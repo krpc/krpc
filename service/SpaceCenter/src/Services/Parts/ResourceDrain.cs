@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,7 +59,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// List of available resources.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeGenericListsRule")]
         public List<Resource> AvailableResources
         {
             get { return drain.resourcesAvailable.Select(x => new Resource(x)).ToList(); }
@@ -81,7 +79,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether the provided resource is enabled for draining.
         /// </summary>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
         public bool CheckResource(Resource resource)
         {
             if (ReferenceEquals (resource, null))

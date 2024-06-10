@@ -1,8 +1,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Core", "core\src\KRPC.Core.csproj", "{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC", "server\src\KRPC.csproj", "{3707639F-5EA3-461B-B939-587E51A25CCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Test", "server\test\KRPC.Test.csproj", "{960F5B49-BB1D-476B-8B60-99BEBAA83CB2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Core.Test", "core\test\KRPC.Core.Test.csproj", "{960F5B49-BB1D-476B-8B60-99BEBAA83CB2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.SpaceCenter", "service\SpaceCenter\src\KRPC.SpaceCenter.csproj", "{48205F2E-3CEE-4480-873A-DEAFCD291407}"
 EndProject
@@ -36,6 +38,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E186057-56B2-499B-BFE8-C414FF24E55F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2E186057-56B2-499B-BFE8-C414FF24E55F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E186057-56B2-499B-BFE8-C414FF24E55F}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -7,6 +7,7 @@ VERSION=`tools/krpc-version.sh`
 
 bazel build \
     //:ksp-avc-version \
+    //core \
     //server \
     //service/SpaceCenter \
     //service/Drawing \
@@ -23,6 +24,8 @@ rm -rf $GAMEDATA
 mkdir -p $GAMEDATA
 cp -R -L \
     bazel-bin/kRPC.version \
+    bazel-bin/core/KRPC.Core.dll \
+    bazel-bin/core/KRPC.Core.xml \
     bazel-bin/server/KRPC.dll \
     bazel-bin/server/KRPC.xml \
     bazel-bin/server/src/icons \

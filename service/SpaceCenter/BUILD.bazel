@@ -1,0 +1,76 @@
+load("//:config.bzl", "assembly_version", "author")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
+load("//tools/build:python.bzl", "py_lint_test")
+load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+load("//service:build.bzl", "service_deps")
+
+filegroup(
+    name = "SpaceCenter",
+    srcs = [
+        "CHANGES.txt",
+        "LICENSE",
+        "src/module-manager.cfg",
+        ":KRPC.SpaceCenter",
+        ":ServiceDefinitions",
+        "@module_manager//file",
+    ],
+    visibility = ["//:__pkg__"],
+)
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    description = "Basic service for kRPC",
+    internals_visible_to = ["TestingTools"],
+    title = "KRPC.SpaceCenter",
+    version = assembly_version,
+    visibility = [
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ],
+)
+
+srcs = [":AssemblyInfo"] + glob(["src/**/*.cs"])
+
+deps = service_deps
+
+csharp_library(
+    name = "KRPC.SpaceCenter",
+    srcs = srcs,
+    visibility = ["//visibility:public"],
+    deps = deps,
+)
+
+service_definitions(
+    name = "ServiceDefinitions",
+    out = "KRPC.SpaceCenter.json",
+    assemblies = [
+        ":KRPC.SpaceCenter",
+        "//server:KRPC",
+    ],
+    service = "SpaceCenter",
+    visibility = ["//visibility:public"],
+)
+
+test_suite(
+    name = "test",
+    tests = [":lint"],
+)
+
+test_suite(
+    name = "lint",
+    tests = [
+        ":pylint",
+    ],
+)
+
+py_lint_test(
+    name = "pylint",
+    size = "medium",
+    srcs = glob(["test/*.py"]),
+    pylint_config = "test/pylint.rc",
+    deps = [
+        "//client/python",
+        "//tools/krpctest",
+    ],
+)

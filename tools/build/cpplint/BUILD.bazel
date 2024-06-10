@@ -1,0 +1,9 @@
+load("//tools/build:python.bzl", "py_script")
+
+py_script(
+    name = "cpplint",
+    pkg = "@python_cpplint//file",
+    script = "cpplint",
+    visibility = ["//visibility:public"],
+    deps = [],
+)

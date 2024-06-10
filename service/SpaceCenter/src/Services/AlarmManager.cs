@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -38,7 +37,6 @@ namespace KRPC.SpaceCenter.Services
         /// A list of all alarms.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public IList<Alarm> Alarms
         {
             get
@@ -162,7 +160,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="title">Title for the alarm.</param>
         /// <param name="description">Description for the alarm.</param>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public static Alarm AddManeuverNodeAlarm(Vessel vessel, Node node, double offset = 60, bool addBurnTime = true, string title="Maneuver Node Alarm", string description="" )
         {
             if (ReferenceEquals (vessel, null))

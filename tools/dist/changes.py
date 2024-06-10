@@ -4,12 +4,15 @@ import argparse
 import re
 
 def main():
-    config = ''.join(open('config.bzl', 'r').readlines())
-    m = re.search('^version\s*=\s*\'(.+)\'$', config, re.MULTILINE)
-    if not m:
+    config = open('config.bzl', 'r').readlines()
+    current_version = None
+    for line in config:
+        m = re.search('^version\s*=\s*\"(.+)\"$', line)
+        if m:
+            current_version = m.group(1)
+    if current_version is None:
         print('Failed to get version from config.bzl')
         return 1
-    current_version = m.group(1)
 
     parser = argparse.ArgumentParser()
     parser.add_argument('site', choices=('github', 'spacedock', 'curse'))

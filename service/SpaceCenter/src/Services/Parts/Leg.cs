@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -11,7 +10,6 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A landing leg. Obtained by calling <see cref="Part.Leg"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class Leg : Equatable<Leg>
     {
         readonly ModuleWheelBase wheel;

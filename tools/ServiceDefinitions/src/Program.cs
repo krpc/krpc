@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -25,8 +24,6 @@ namespace ServiceDefinitions
             Console.Error.WriteLine ("  assembly...                Path(s) to assembly DLL(s) to load");
         }
 
-        [SuppressMessage ("Gendarme.Rules.Portability", "ExitCodeIsLimitedOnUnixRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static int Main (string [] args)
         {
             bool showHelp = false;
@@ -52,9 +49,7 @@ namespace ServiceDefinitions
             }
 
             if (showVersion) {
-                var assembly = Assembly.GetEntryAssembly ();
-                var info = FileVersionInfo.GetVersionInfo (assembly.Location);
-                var version = string.Format (CultureInfo.InvariantCulture, "{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
+                var version = Assembly.GetEntryAssembly ().GetName().Version;
                 Console.Error.WriteLine ("ServiceDefinitions.exe version " + version);
                 return 0;
             }

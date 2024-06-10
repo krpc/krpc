@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 namespace KRPC.RemoteTech
@@ -7,7 +6,6 @@ namespace KRPC.RemoteTech
     /// kRPC RemoteTech addon.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
     public sealed class Addon : MonoBehaviour
     {
         /// <summary>

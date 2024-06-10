@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -18,7 +17,6 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// four thrusters.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class Thruster : Equatable<Thruster>
     {
         readonly Part part;

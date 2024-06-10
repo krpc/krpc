@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -12,7 +11,6 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A robotic controller. Obtained by calling <see cref="Part.RoboticController"/>.
     /// </summary>
     [KRPCClass(Service = "SpaceCenter")]
-    [SuppressMessage("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class RoboticController : Equatable<RoboticController>
     {
         readonly Expansions.Serenity.ModuleRoboticController controller;
@@ -57,7 +55,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether the controller has a part.
         /// </summary>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
         public bool HasPart(Part part)
         {
             if (ReferenceEquals (part, null))
@@ -69,7 +66,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The axes for the controller.
         /// </summary>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public IList<IList<string>> Axes()
         {
             var output = new List<IList<string>>();
@@ -85,7 +81,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <returns>Returns <c>true</c> if the axis is added successfully.</returns>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
         public bool AddAxis(Module module, string fieldName)
         {
             if (module == null)
@@ -113,7 +108,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <returns>Returns <c>true</c> if the key frame is added successfully.</returns>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
         public bool AddKeyFrame(Module module, string fieldName, float time, float value)
         {
             if (module == null)
@@ -143,7 +137,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <returns>Returns <c>true</c> if the axis is cleared successfully.</returns>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
         public bool ClearAxis(Module module, string fieldName)
         {
             if (module == null)

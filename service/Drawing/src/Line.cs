@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
@@ -11,7 +10,6 @@ namespace KRPC.Drawing
     /// A line. Created using <see cref="Drawing.AddLine" />.
     /// </summary>
     [KRPCClass (Service = "Drawing")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class Line : Drawable<Line>
     {
         readonly LineRenderer renderer;

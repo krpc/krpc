@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Server;
 using KRPC.Utils;
@@ -8,7 +7,6 @@ using Logger = KRPC.Utils.Logger;
 
 namespace KRPC
 {
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     sealed class ConfigurationFile : ConfigurationStorage
     {
         static ConfigurationFile instance;
@@ -45,7 +43,6 @@ namespace KRPC
                 settings = server.Settings.Select(x => new KeyValuePair { key = x.Key, value = x.Value}).ToList();
             }
 
-            [SuppressMessage ("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
             public void AfterLoad (Configuration.Server server)
             {
                 server.Id = new Guid (id);
@@ -76,7 +73,6 @@ namespace KRPC
         [Persistent] bool pauseServerWithGame;
         [Persistent] string logLevel = Logger.Severity.Info.ToString ();
         [Persistent] bool verboseErrors;
-        [Persistent] bool checkDocumented;
         [Persistent] bool oneRPCPerUpdate;
         [Persistent] uint maxTimePerUpdate;
         [Persistent] bool adaptiveRateControl;
@@ -108,7 +104,6 @@ namespace KRPC
             pauseServerWithGame = Configuration.PauseServerWithGame;
             logLevel = Logger.Level.ToString ();
             verboseErrors = Configuration.VerboseErrors;
-            checkDocumented = ServicesChecker.CheckDocumented;
             oneRPCPerUpdate = Configuration.OneRPCPerUpdate;
             maxTimePerUpdate = Configuration.MaxTimePerUpdate;
             adaptiveRateControl = Configuration.AdaptiveRateControl;
@@ -117,7 +112,6 @@ namespace KRPC
 
         }
 
-        [SuppressMessage ("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
         protected override void AfterLoad ()
         {
             Configuration.Servers.Clear ();
@@ -143,7 +137,6 @@ namespace KRPC
                 Logger.Level = Logger.Severity.Info;
             }
             Configuration.VerboseErrors = verboseErrors;
-            ServicesChecker.CheckDocumented = checkDocumented;
             Configuration.OneRPCPerUpdate = oneRPCPerUpdate;
             Configuration.MaxTimePerUpdate = maxTimePerUpdate;
             Configuration.AdaptiveRateControl = adaptiveRateControl;

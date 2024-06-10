@@ -9,8 +9,9 @@ FILE=bazel-bin/krpc-genfiles-$VERSION.zip
 
 rm -f $FILE
 zip -r $FILE \
+    bazel-bin/core/AssemblyInfo.cs \
+    bazel-bin/core/TestAssemblyInfo.cs \
     bazel-bin/server/AssemblyInfo.cs \
-    bazel-bin/server/TestAssemblyInfo.cs \
     bazel-bin/protobuf/KRPC_unity.cs \
     bazel-bin/client/csharp/AssemblyInfo.cs \
     bazel-bin/protobuf/KRPC.cs \

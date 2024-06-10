@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -85,7 +84,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Returns zero if the reaction wheel is inactive or broken.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public TupleT3 AvailableTorque {
             get { return AvailableTorqueVectors.ToTuple (); }
         }
@@ -96,12 +94,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public TupleT3 MaxTorque {
             get { return MaxTorqueVectors.ToTuple (); }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         internal TupleV3 AvailableTorqueVectors {
             get {
                 if (!Active || Broken)
@@ -112,7 +108,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         internal TupleV3 MaxTorqueVectors {
             get {
                 var torque = new Vector3d (reactionWheel.PitchTorque, reactionWheel.RollTorque, reactionWheel.YawTorque) * 1000.0d;

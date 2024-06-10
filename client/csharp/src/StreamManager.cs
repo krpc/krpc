@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
@@ -10,7 +9,6 @@ using KRPC.Schema.KRPC;
 
 namespace KRPC.Client
 {
-    [SuppressMessage ("Gendarme.Rules.Correctness", "DisposableFieldsShouldBeDisposedRule")]
     sealed class StreamManager : IDisposable
     {
         readonly Connection connection;
@@ -68,7 +66,6 @@ namespace KRPC.Client
             }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public StreamImpl GetStream (System.Type returnType, ulong id)
         {
             CheckDisposed ();
@@ -79,7 +76,6 @@ namespace KRPC.Client
             }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public void RemoveStream (ulong id)
         {
             CheckDisposed ();
@@ -91,7 +87,6 @@ namespace KRPC.Client
             }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         void Update (ulong id, ProcedureResult result)
         {
             lock (updateLock) {
@@ -113,7 +108,6 @@ namespace KRPC.Client
             }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Correctness", "TypesWithDisposableFieldsShouldBeDisposableRule")]
         sealed class UpdateThread
         {
             readonly StreamManager manager;

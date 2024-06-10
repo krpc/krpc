@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -42,7 +41,6 @@ namespace KRPC.SpaceCenter.Services
         /// A list of all existing waypoints.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public IList<Waypoint> Waypoints {
             get {
                 var wpm = FinePrint.WaypointManager.Instance ();
@@ -62,8 +60,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="name">Name of the waypoint.</param>
         /// <returns></returns>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
-        [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
         public Waypoint AddWaypoint (double latitude, double longitude, CelestialBody body, string name)
         {
             if (body == null)
@@ -82,7 +78,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="name">Name of the waypoint.</param>
         /// <returns></returns>
         [KRPCMethod]
-        [SuppressMessage("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public Waypoint AddWaypointAtAltitude (double latitude, double longitude, double altitude, CelestialBody body, string name)
         {
             if (body == null)

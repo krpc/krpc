@@ -1,11 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.Services;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class VesselControlStateExtensions
     {
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static ControlSource ToControlSource (this CommNet.VesselControlState state)
         {
             if ((state & CommNet.VesselControlState.Kerbal) != 0)
@@ -15,7 +13,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             return ControlSource.None;
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static ControlState ToControlState (this CommNet.VesselControlState state)
         {
             if ((state & CommNet.VesselControlState.Full) != 0)

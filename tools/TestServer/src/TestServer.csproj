@@ -46,9 +46,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\server\src\KRPC.csproj">
-      <Project>{3707639f-5ea3-461b-b939-587e51a25cca}</Project>
-      <Name>KRPC</Name>
+    <ProjectReference Include="..\..\..\core\src\KRPC.Core.csproj">
+      <Project>{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}</Project>
+      <Name>KRPC.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

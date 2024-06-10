@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -16,7 +15,6 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A docking port. Obtained by calling <see cref="Part.DockingPort"/>
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class DockingPort : Equatable<DockingPort>
     {
         readonly ModuleDockingNode port;
@@ -106,7 +104,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// docking port is not docked to anything.
         /// </summary>
         [KRPCProperty (Nullable = true)]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public Part DockedPart {
             get {
                 var dockedPart = GetDockedPart;

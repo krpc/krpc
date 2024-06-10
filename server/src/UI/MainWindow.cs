@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using KRPC.Server;
@@ -79,7 +78,6 @@ namespace KRPC.UI
         const string invalidRecvTimeoutText = "Receive timeout must be an integer";
         const string showInfoWindowText = "Show info";
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         protected override void Init ()
         {
             core = Core.Instance;
@@ -88,7 +86,7 @@ namespace KRPC.UI
             var version = FileVersionInfo.GetVersionInfo (Assembly.GetExecutingAssembly ().Location);
             Title = "kRPC v" + version.FileMajorPart + "." + version.FileMinorPart + "." + version.FileBuildPart;
 
-            core.OnClientActivity += (s, e) => SawClientActivity (e.Client);
+            core.OnClientActivity += SawClientActivity;
 
             Style.fixedWidth = windowWidth;
 
@@ -146,12 +144,15 @@ namespace KRPC.UI
             maxTimePerUpdate = config.Configuration.MaxTimePerUpdate.ToString ();
             recvTimeout = config.Configuration.RecvTimeout.ToString ();
 
-            core.OnClientActivity += (s, e) => SawClientActivity (e.Client);
             if (core.Servers.Count == 1)
                 expandServers.Add (core.Servers [0].Id);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
+        void OnDestroy()
+        {
+            core.OnClientActivity -= SawClientActivity;
+        }
+
         protected override void Draw (bool needRescale)
         {
             if (needRescale) {
@@ -228,9 +229,6 @@ namespace KRPC.UI
             GUI.enabled = true;
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        [SuppressMessage("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
         void DrawServer (Server.Server server, bool forceExpanded = false)
         {
             var running = server.Running;
@@ -530,9 +528,9 @@ namespace KRPC.UI
                 InfoWindow.Visible = value;
         }
 
-        void SawClientActivity (IClient client)
+        void SawClientActivity (object sender, ClientActivityEventArgs e)
         {
-            lastClientActivity [client] = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            lastClientActivity [e.Client] = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
 
         bool IsClientActive (IClient client)

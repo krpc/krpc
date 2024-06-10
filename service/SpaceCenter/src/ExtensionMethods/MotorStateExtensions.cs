@@ -1,13 +1,10 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.Services.Parts;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class MotorStateExtensions
     {
-        [SuppressMessage("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
-        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
         public static MotorState ToMotorState(this ModuleWheels.ModuleWheelMotor.MotorState state)
         {
             switch (state) {

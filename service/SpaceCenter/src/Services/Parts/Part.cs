@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CompoundParts;
 using KRPC.Service.Attributes;
@@ -174,7 +173,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// or bottom of its parent. If the part has no parent, returns <c>false</c>.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public bool AxiallyAttached {
             get { return HasParent && InternalPart.attachMode == AttachModes.STACK; }
         }
@@ -770,7 +768,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// the <see cref="Position"/> of the part.
         /// </remarks>
         [KRPCMethod]
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public TupleT3 BoundingBox (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))
@@ -941,7 +938,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether the part is glowing.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidPropertiesWithoutGetAccessorRule")]
         public bool Glow
         {
             set

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using KRPC.Server;
@@ -9,8 +8,6 @@ using UnityEngine;
 
 namespace KRPC.UI
 {
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
     sealed class EditServer
     {
         readonly MainWindow window;
@@ -82,7 +79,6 @@ namespace KRPC.UI
             name = GUILayout.TextField (name, nameMaxLength, window.longTextFieldStyle);
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void Draw ()
         {
             GUILayout.BeginHorizontal ();
@@ -190,7 +186,6 @@ namespace KRPC.UI
             }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public Configuration.Server Save ()
         {
             window.Errors.Clear();

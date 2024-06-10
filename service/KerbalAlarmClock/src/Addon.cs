@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 namespace KRPC.KerbalAlarmClock
@@ -12,7 +11,6 @@ namespace KRPC.KerbalAlarmClock
         /// <summary>
         /// Load the KerbalAlarmClock API.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Start ()
         {
             KACWrapper.InitKACWrapper ();

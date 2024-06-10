@@ -15,10 +15,7 @@ This document details the steps necessary to make a release of kRPC.
 1. Run `tools/dist/genfiles.sh` to build the genfiles archive to include in the release.
 1. Do the release on Github:
    1. Use `tools/dist/changes.py github` to get changelog to include with the release
-   1. Upload the release archive, krpctools, genfiles and all clients (9 files in total)
-   1. Upload TestServer release archive
-   1. Get the C++ client Windows builds (both win32 and win64) from the Travis build outputs and
-      upload to the github release.
+   1. Upload the release archive, krpctools, genfiles, TestServer and all clients (10 files in total)
 1. Update the documentation website by merging the vx.x.x commit into the docs branch.
    Push it to GitHub. The docs GitHub workflow should automatically build and deploy the new website.
 1. Do a release on Curse

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
@@ -11,8 +10,6 @@ using KRPC.Schema.KRPC;
 
 namespace KRPC.Client
 {
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
-    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     sealed class StreamImpl
     {
         readonly Connection connection;
@@ -23,7 +20,6 @@ namespace KRPC.Client
         int nextCallbackKey;
         float rate = 0;
 
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
         public StreamImpl (Connection connection, ulong id,
                            System.Type returnType, object updateLock)
         {
@@ -54,7 +50,6 @@ namespace KRPC.Client
 
         public bool Started { get; private set; }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public object Value {
             get {
                 if (!Updated)
@@ -75,12 +70,10 @@ namespace KRPC.Client
             get { return condition; }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public IDictionary<int, Action<object>> Callbacks {
             get { return callbacks; }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public int AddCallback (Action<object> callback) {
             lock (updateLock) {
                 int key = nextCallbackKey;
@@ -90,14 +83,12 @@ namespace KRPC.Client
             }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public void RemoveCallback (int key) {
             lock (updateLock) {
                 callbacks.Remove (key);
             }
         }
 
-        [SuppressMessage ("Gendarme.Rules.BadPractice", "CheckNewExceptionWithoutThrowingRule")]
         public void Remove () {
             connection.StreamManager.RemoveStream (Id);
             lock (updateLock) {

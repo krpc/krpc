@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -86,7 +85,6 @@ namespace KRPC.UI
             GUILayout.EndHorizontal ();
         }
 
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         protected override void Draw (bool needRescale)
         {
             if (needRescale) {

@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services
@@ -9,7 +8,6 @@ namespace KRPC.SpaceCenter.Services
     /// See <see cref="CrewMember.RosterStatus"/>.
     /// </summary>
     [Serializable]
-    [SuppressMessage ("Gendarme.Rules.Naming", "UseSingularNameInEnumsUnlessAreFlagsRule")]
     [KRPCEnum (Service = "SpaceCenter")]
     public enum RosterStatus
     {

@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -57,7 +56,6 @@ namespace KRPC.InfernalRobotics
         /// Whether the servo should be highlighted in-game.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Design", "AvoidPropertiesWithoutGetAccessorRule")]
         public bool Highlight {
             set { servo.Highlight = value; }
         }

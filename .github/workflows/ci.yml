@@ -10,20 +10,38 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-krpc:
+  lint:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: bazel
+        run: buildifier -mode check -lint warn -r .
+
+  build-krpc:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.3.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: build
         run: |
           bazel build \
@@ -32,17 +50,17 @@ jobs:
             //tools/krpctools \
             //tools/TestServer:archive
       - name: upload-krpc-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: krpc
           path: bazel-bin/krpc-*.zip
       - name: upload-krpctools-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: krpctools
           path: bazel-bin/tools/krpctools/krpctools-*.zip
       - name: upload-testserver-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: testserver
           path: bazel-bin/tools/TestServer/TestServer-*.zip
@@ -50,21 +68,26 @@ jobs:
   build-genfiles:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: build
         run: tools/dist/genfiles.sh
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: genfiles
           path: bazel-bin/krpc-genfiles-*.zip
@@ -73,19 +96,24 @@ jobs:
     needs: build-genfiles
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: download-genfiles
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: genfiles
       - name: extract-genfiles
@@ -100,21 +128,26 @@ jobs:
   build-docs-html:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: build
         run: bazel build //doc:html
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: docs-html
           path: bazel-bin/doc/html.zip
@@ -122,21 +155,26 @@ jobs:
   build-docs-pdf:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: build
         run: bazel build //doc:pdf
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: docs-pdf
           path: bazel-bin/doc/krpc-*.pdf
@@ -144,68 +182,88 @@ jobs:
   build-docs-examples:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: build
         run: bazel build //doc:compile-scripts
 
   test-docs:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: build
         run: bazel test //doc:test
 
-  test-server:
+  test-core:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: test
-        run: bazel test //server:test
+        run: bazel test //core:test
 
   test-client-cnano:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: build
         run: bazel build //client/cnano:cnano
       - name: test
@@ -213,7 +271,7 @@ jobs:
       - name: test-build
         run: client/cnano/test-build.sh
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: client-cnano
           path: bazel-bin/client/cnano/krpc-cnano-*.zip
@@ -221,17 +279,22 @@ jobs:
   test-client-cpp:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: build
         run: bazel build //client/cpp:cpp
       - name: test
@@ -239,7 +302,7 @@ jobs:
       - name: test-build
         run: client/cpp/test-build.sh
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: client-cpp
           path: bazel-bin/client/cpp/krpc-cpp-*.zip
@@ -247,52 +310,62 @@ jobs:
   test-client-csharp:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: build
         run: bazel build //client/csharp:csharp //client/csharp:nuget
       - name: test
         run: bazel test //client/csharp:test
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
-          name: client-csharp
+          name: client-csharp-zip
           path: bazel-bin/client/csharp/krpc-csharp-*.zip
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
-          name: client-csharp
+          name: client-csharp-nupkg
           path: bazel-bin/client/csharp/KRPC.Client.*.nupkg
 
   test-client-java:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: test
         run: bazel build //client/java:java
       - name: test
         run: bazel test //client/java:test
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: client-java
           path: bazel-bin/client/java/krpc-java-*.jar
@@ -300,23 +373,28 @@ jobs:
   test-client-python:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: build
         run: bazel build //client/python:python
       - name: test
         run: bazel test //client/python:test
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: client-python
           path: bazel-bin/client/python/krpc-python-*.zip
@@ -324,23 +402,28 @@ jobs:
   test-client-lua:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: build
         run: bazel build //client/lua:lua
       - name: test
         run: bazel test //client/lua:test
       - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
+        uses: krpc/krpc-core/.github/actions/upload-artifact@main
         with:
           name: client-lua
           path: bazel-bin/client/lua/krpc-lua-*.zip
@@ -348,51 +431,66 @@ jobs:
   test-client-serialio:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: test
         run: bazel test //client/serialio:test
 
   test-client-websockets:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: test
         run: bazel test //client/websockets:test
 
   test-tools:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.0.1
+      image: ghcr.io/krpc/buildenv:3.3.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: ./.github/actions/bazel-fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@main
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@main
+        with:
+          game: ksp
+          version: 1.12.5
       - name: test
         run: |
           bazel test \

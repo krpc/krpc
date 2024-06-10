@@ -1,0 +1,38 @@
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
+load("//:config.bzl", "assembly_version", "author")
+
+srcs = glob(["**/*.cs"]) + [":AssemblyInfo"]
+
+deps = [
+    "//core:KRPC.Core",
+    "//server:KRPC",
+    "//service/SpaceCenter:KRPC.SpaceCenter",
+    "//tools/build/ksp:Google.Protobuf",
+    "//tools/build/ksp:Assembly-CSharp",
+    "//tools/build/ksp:Assembly-CSharp-firstpass",
+    "//tools/build/ksp:UnityEngine",
+    "//tools/build/ksp:UnityEngine.CoreModule",
+    "//tools/build/ksp:UnityEngine.UI",
+    "//tools/build/ksp:mscorlib",
+    "//tools/build/ksp:System",
+    "//tools/build/ksp:System.Core",
+    "//tools/build/ksp:System.Xml",
+]
+
+csharp_library(
+    name = "TestingTools",
+    srcs = srcs,
+    visibility = ["//visibility:public"],
+    deps = deps,
+)
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    title = "TestingTools",
+    version = assembly_version,
+    visibility = [
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ],
+)

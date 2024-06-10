@@ -1,3 +1,9 @@
+v0.5.4
+ * Fix incorrect protobuf DLL (#755)
+ * Fix required KSP assemblies not being copied (#755)
+ * Fix tmp directory not being deleted (#755)
+ * Fix clientgen generating invalid python code for undocumented enumeration values (#757)
+
 v0.4.9
  * Fix issue finding KSP_x64_Data directory (#523)
  * Add TestServer archive to bin directory (#532)

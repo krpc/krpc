@@ -1,0 +1,49 @@
+load("//:config.bzl", "assembly_version", "author")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
+load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+load("//service:build.bzl", "service_deps")
+
+filegroup(
+    name = "LiDAR",
+    srcs = [
+        "CHANGES.txt",
+        ":KRPC.LiDAR",
+        ":ServiceDefinitions",
+    ],
+    visibility = ["//:__pkg__"],
+)
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    description = "LiDAR API for kRPC",
+    title = "KRPC.LiDAR",
+    version = assembly_version,
+    visibility = [
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ],
+)
+
+srcs = [":AssemblyInfo"] + glob(["src/**/*.cs"])
+
+deps = service_deps + ["//service/SpaceCenter:KRPC.SpaceCenter"]
+
+csharp_library(
+    name = "KRPC.LiDAR",
+    srcs = srcs,
+    visibility = ["//visibility:public"],
+    deps = deps,
+)
+
+service_definitions(
+    name = "ServiceDefinitions",
+    out = "KRPC.LiDAR.json",
+    assemblies = [
+        ":KRPC.LiDAR",
+        "//service/SpaceCenter:KRPC.SpaceCenter",
+        "//server:KRPC",
+    ],
+    service = "LiDAR",
+    visibility = ["//visibility:public"],
+)

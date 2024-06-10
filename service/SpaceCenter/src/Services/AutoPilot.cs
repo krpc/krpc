@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Server;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -22,7 +21,6 @@ namespace KRPC.SpaceCenter.Services
     /// reset to default.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class AutoPilot : Equatable<AutoPilot>
     {
         static readonly IDictionary<Guid, AutoPilot> engaged = new Dictionary<Guid, AutoPilot> ();
@@ -99,7 +97,6 @@ namespace KRPC.SpaceCenter.Services
         /// has not been engaged and SAS is not enabled or is in stability assist mode.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         public float Error {
             get {
                 if (engaged [vesselId] == this) {
@@ -127,7 +124,6 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if the auto-pilot has not been engaged.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float PitchError {
             get {
                 if (engaged [vesselId] != this)
@@ -142,7 +138,6 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if the auto-pilot has not been engaged.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float HeadingError {
             get {
                 if (engaged [vesselId] != this)
@@ -157,7 +152,6 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if the auto-pilot has not been engaged or no target roll is set.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float RollError {
             get {
                 if (engaged [vesselId] != this)
@@ -417,9 +411,6 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The direction vector that the SAS autopilot is trying to hold in world space.
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         Vector3d SASTargetDirection ()
         {
             var vessel = InternalVessel;

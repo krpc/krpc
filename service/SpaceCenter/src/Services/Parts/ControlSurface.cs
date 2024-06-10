@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -126,12 +125,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public TupleT3 AvailableTorque {
             get { return AvailableTorqueVectors.ToTuple (); }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         internal TupleV3 AvailableTorqueVectors {
             get { return controlSurface.GetPotentialTorque (); }
         }

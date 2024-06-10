@@ -1,3 +1,6 @@
+v0.5.4
+ * Fix streams for services without pre-generated stubs (#774)
+
 v0.5.3
  * Fix assertion error when connecting to a server with third party services installed (#754)
 

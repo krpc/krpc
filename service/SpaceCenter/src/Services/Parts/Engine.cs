@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -20,7 +19,6 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// For RCS thrusters <see cref="Part.RCS"/>.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class Engine : Equatable<Engine>
     {
         readonly IList<ModuleEngines> engines;
@@ -564,12 +562,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Returns zero if the engine is inactive, or not gimballed.
         /// </summary>
         [KRPCProperty]
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public TupleT3 AvailableTorque {
             get { return AvailableTorqueVectors.ToTuple (); }
         }
 
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         internal TupleV3 AvailableTorqueVectors {
             get {
                 if (!Active || !Gimballed)

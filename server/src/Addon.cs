@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Server;
 using KRPC.UI;
 using KRPC.Utils;
@@ -11,7 +10,6 @@ namespace KRPC
     /// Main KRPC addon. Contains the kRPC core, config and UI.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.AllGameScenes, false)]
-    [SuppressMessage ("Gendarme.Rules.Correctness", "DeclareEventsExplicitlyRule")]
     public sealed class Addon : MonoBehaviour
     {
         // TODO: clean this up
@@ -39,6 +37,10 @@ namespace KRPC
                 foreach (var server in config.Configuration.Servers)
                     core.Add (server.Create ());
             }
+
+            Service.CallContext.IsPaused = () => IsPaused;
+            Service.CallContext.Pause = () => PauseMenu.Display ();
+            Service.CallContext.Unpause = () => PauseMenu.Close ();
         }
 
         /// <summary>
@@ -54,7 +56,7 @@ namespace KRPC
             Instance = this;
 
             var gameScene = GameScenesExtensions.CurrentGameScene();
-            Service.CallContext.SetGameScene (gameScene);
+            Service.CallContext.GameScene = gameScene;
             Utils.Logger.WriteLine ("Game scene switched to " + gameScene);
 
             // If a game is not loaded, ensure the server is stopped and then exit
@@ -77,7 +79,6 @@ namespace KRPC
             InitUI ();
         }
 
-        [SuppressMessage ("Gendarme.Rules.Concurrency", "WriteStaticFieldFromInstanceMethodRule")]
         void InitUI ()
         {
             // Layout extensions
@@ -111,14 +112,8 @@ namespace KRPC
             textureOffline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-offline", false);
             GameEvents.onGUIApplicationLauncherReady.Add (OnGUIApplicationLauncherReady);
             GameEvents.onGUIApplicationLauncherDestroyed.Add (OnGUIApplicationLauncherDestroyed);
-            core.OnServerStarted += (s, e) => {
-                if (applauncherButton != null)
-                    applauncherButton.SetTexture (core.AnyRunning ? textureOnline : textureOffline);
-            };
-            core.OnServerStopped += (s, e) => {
-                if (applauncherButton != null)
-                    applauncherButton.SetTexture (core.AnyRunning ? textureOnline : textureOffline);
-            };
+            core.OnServerStarted += OnServerStarted;
+            core.OnServerStopped += OnServerStopped;
         }
 
         void InitEvents ()
@@ -180,24 +175,48 @@ namespace KRPC
             };
 
             // Server events
-            core.OnClientRequestingConnection += (s, e) => {
-                if (config.Configuration.AutoAcceptConnections) {
-                    Utils.Logger.WriteLine ("Auto-accepting client connection (" + e.Client.Address + ")");
-                    e.Request.Allow ();
-                } else {
-                    Utils.Logger.WriteLine ("Asking player to accept client connection (" + e.Client.Address + ")");
-                    clientConnectingDialog.OnClientRequestingConnection (s, e);
-                }
-            };
+            core.OnClientRequestingConnection += OnClientRequestingConnection;
 
             // KSP events
             IsPaused = false;
-            GameEvents.onGamePause.Add (() => {
-                IsPaused = true;
-            });
-            GameEvents.onGameUnpause.Add (() => {
-                IsPaused = false;
-            });
+            GameEvents.onGamePause.Add(OnGamePause);
+            GameEvents.onGameUnpause.Add(OnGameUnpause);
+        }
+
+        void OnServerStarted(object s, ServerStartedEventArgs e)
+        {
+            if (applauncherButton != null)
+                applauncherButton.SetTexture(core.AnyRunning ? textureOnline : textureOffline);
+        }
+
+        void OnServerStopped(object s, ServerStoppedEventArgs e)
+        {
+            if (applauncherButton != null)
+                applauncherButton.SetTexture(core.AnyRunning ? textureOnline : textureOffline);
+        }
+
+        private void OnClientRequestingConnection(object sender, ClientRequestingConnectionEventArgs e)
+        {
+            if (config.Configuration.AutoAcceptConnections)
+            {
+                Utils.Logger.WriteLine("Auto-accepting client connection (" + e.Client.Address + ")");
+                e.Request.Allow();
+            }
+            else
+            {
+                Utils.Logger.WriteLine("Asking player to accept client connection (" + e.Client.Address + ")");
+                clientConnectingDialog.OnClientRequestingConnection(sender, e);
+            }
+        }
+
+        void OnGamePause()
+        {
+            IsPaused = true;
+        }
+
+        void OnGameUnpause()
+        {
+            IsPaused = false;
         }
 
         void OnGUIApplicationLauncherReady ()
@@ -221,6 +240,12 @@ namespace KRPC
         /// </summary>
         public void OnDestroy ()
         {
+            GameEvents.onGamePause.Remove(OnGamePause);
+            GameEvents.onGameUnpause.Remove(OnGameUnpause);
+            core.OnServerStarted -= OnServerStarted;
+            core.OnServerStopped -= OnServerStopped;
+            core.OnClientRequestingConnection -= OnClientRequestingConnection;
+
             if (!ServicesChecker.OK)
                 return;
 
@@ -232,12 +257,13 @@ namespace KRPC
             Destroy (mainWindow);
             Destroy (clientConnectingDialog);
             GUILayoutExtensions.Destroy ();
+
+            Instance = null;
         }
 
         /// <summary>
         /// Stop the server if running
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnApplicationQuit ()
         {
             core.StopAll ();
@@ -246,7 +272,6 @@ namespace KRPC
         /// <summary>
         /// GUI update
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnGUI ()
         {
             GUILayoutExtensions.OnGUI ();
@@ -255,7 +280,6 @@ namespace KRPC
         /// <summary>
         /// Trigger server update
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void FixedUpdate ()
         {
             if (!ServicesChecker.OK)
@@ -267,7 +291,7 @@ namespace KRPC
         /// <summary>
         /// Whether the game is paused
         /// </summary>
-        public bool IsPaused { get; private set; }
+        public static bool IsPaused { get; private set; }
 
         /// <summary>
         /// Trigger server update, when the game is paused

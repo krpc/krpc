@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -11,6 +10,7 @@ using Tuple3 = System.Tuple<double, double, double>;
 using Tuple4 = System.Tuple<double, double, double, double>;
 using TupleV3 = System.Tuple<Vector3d, Vector3d>;
 using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
+using System.Collections;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -20,8 +20,6 @@ namespace KRPC.SpaceCenter.Services
     /// Created using <see cref="SpaceCenter.ActiveVessel"/> or <see cref="SpaceCenter.Vessels"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
-    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
     public class Vessel : Equatable<Vessel>
     {
         /// <summary>
@@ -110,9 +108,18 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Recover ()
         {
-            if (!Recoverable)
+            var vessel = InternalVessel;
+            if (!vessel.IsRecoverable)
                 throw new InvalidOperationException ("Vessel is not recoverable");
-            GameEvents.OnVesselRecoveryRequested.Fire (InternalVessel);
+            vessel.StartCoroutine(RecoverVesselCoroutine(vessel));
+        }
+
+        static IEnumerator RecoverVesselCoroutine(global::Vessel vessel)
+        {
+			// calling OnVesselRecoveryRequested.Fire from Update will cause issues.  Using WaitUntil makes it execute after Update and before LateUpdate:
+			// https://docs.unity3d.com/ScriptReference/WaitUntil.html
+			yield return new WaitUntil(() => true);
+            GameEvents.OnVesselRecoveryRequested.Fire(vessel);
         }
 
         /// <summary>
@@ -689,7 +696,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="referenceFrame">The reference frame that the returned
         /// position vectors are in.</param>
         [KRPCMethod (GameScene = GameScene.Flight)]
-        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public TupleT3 BoundingBox (ReferenceFrame referenceFrame)
         {
             if (ReferenceEquals (referenceFrame, null))

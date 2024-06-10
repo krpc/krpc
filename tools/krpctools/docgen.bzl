@@ -1,7 +1,9 @@
+" docgen tool "
+
 def _outputs(outdir, src):
     return {
-        'out': outdir + '/' + src.name.replace('.tmpl','.rst'),
-        'documented': outdir + '/' + src.name.replace('.tmpl','.documented.txt')
+        "out": outdir + "/" + src.name.replace(".tmpl", ".rst"),
+        "documented": outdir + "/" + src.name.replace(".tmpl", ".documented.txt"),
     }
 
 def _impl(ctx):
@@ -11,36 +13,41 @@ def _impl(ctx):
     documented = ctx.outputs.documented
 
     args = [
-        '--documented=%s' % documented.path,
+        "--documented=%s" % documented.path,
         language,
         src.path,
         ctx.file._order.path,
-        out.path
+        out.path,
     ]
     args.extend([f.path for f in ctx.files.defs])
 
     ctx.actions.run(
         inputs = ctx.files.defs + [src, ctx.file._order],
         outputs = [out, documented],
-        progress_message = 'Generating %s documentation %s' % (language, out.path),
+        progress_message = "Generating %s documentation %s" % (language, out.path),
         executable = ctx.file._docgen,
-        arguments = args
+        arguments = args,
     )
 
 docgen = rule(
     implementation = _impl,
     attrs = {
-        'outdir': attr.string(mandatory=True),
-        'language': attr.string(mandatory=True),
-        'src': attr.label(allow_single_file=True),
-        'defs': attr.label_list(allow_files=True, mandatory=True, allow_empty=True),
-        '_docgen': attr.label(default=Label('//tools/krpctools:docgen'),
-                              executable=True, allow_single_file=True, cfg='host'),
-        '_order': attr.label(default=Label('//doc:order.txt'), allow_single_file=True)
+        "outdir": attr.string(mandatory = True),
+        "language": attr.string(mandatory = True),
+        "src": attr.label(allow_single_file = True),
+        "defs": attr.label_list(allow_files = True, mandatory = True, allow_empty = True),
+        "_docgen": attr.label(
+            default = Label("//tools/krpctools:docgen"),
+            executable = True,
+            allow_single_file = True,
+            cfg = "exec",
+        ),
+        "_order": attr.label(default = Label("//doc:order.txt"), allow_single_file = True),
     },
-    outputs = _outputs
+    outputs = _outputs,
 )
 
+# buildifier: disable=function-docstring
 def docgen_multiple(name, outdir, language, srcs, defs):
     names = []
     for src in srcs:
@@ -51,6 +58,6 @@ def docgen_multiple(name, outdir, language, srcs, defs):
             outdir = outdir,
             language = language,
             src = src,
-            defs = defs
+            defs = defs,
         )
-    native.filegroup(name=name, srcs=names)
+    native.filegroup(name = name, srcs = names)

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.Server;
 using KRPC.Service;
 using UnityEngine;
@@ -10,7 +9,6 @@ namespace KRPC.SpaceCenter
     /// Addon to highlight parts.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    [SuppressMessage ("Gendarme.Rules.Correctness", "DeclareEventsExplicitlyRule")]
     public class PartHighlightAddon : MonoBehaviour
     {
         static readonly IDictionary<IClient, IList<Part>> highlight = new Dictionary<IClient, IList<Part>> ();
@@ -18,7 +16,6 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// Set up the addon
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Awake ()
         {
             Core.Instance.OnClientDisconnected += (s, e) => Remove (e.Client);
@@ -27,7 +24,6 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// Destroy the addon
         /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnDestroy ()
         {
             highlight.Clear ();

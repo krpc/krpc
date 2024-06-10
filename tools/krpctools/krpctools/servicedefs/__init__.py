@@ -53,7 +53,6 @@ def servicedefs(ksp, service, assemblies):
     if not os.path.exists(ksp):
         raise RuntimeError('Kerbal Space Program directory does not exist.')
 
-    # TODO: delete when done
     bindir = tempfile.mkdtemp(prefix='krpc-servicedefs-')
     tmpout = bindir+'/out.json'
 
@@ -70,7 +69,18 @@ def servicedefs(ksp, service, assemblies):
     ksp_dlls = [
         'Assembly-CSharp.dll',
         'Assembly-CSharp-firstpass.dll',
-        'UnityEngine.dll'
+        'UnityEngine.dll',
+        'UnityEngine.AnimationModule.dll',
+        'UnityEngine.AssetBundleModule.dll',
+        'UnityEngine.CoreModule.dll',
+        'UnityEngine.IMGUIModule.dll',
+        'UnityEngine.InputLegacyModule.dll',
+        'UnityEngine.ScreenCaptureModule.dll',
+        'UnityEngine.SharedInternalsModule.dll',
+        'UnityEngine.TextRenderingModule.dll',
+        'UnityEngine.UI.dll',
+        'UnityEngine.UIModule.dll',
+        'UnityEngine.UnityWebRequestWWWModule.dll',
     ]
     ksp_data = 'KSP_Data/Managed'
     if not os.path.exists(os.path.join(ksp, ksp_data)):
@@ -85,10 +95,13 @@ def servicedefs(ksp, service, assemblies):
              '--output=%s' % tmpout, service] + assemblies,
             stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as ex:
+        shutil.rmtree(bindir)
         raise RuntimeError(ex.output) from ex
 
     with open(tmpout, 'r') as fp:
         return fp.read()
+
+    shutil.rmtree(bindir)
 
 
 if __name__ == '__main__':

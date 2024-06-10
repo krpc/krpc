@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
 using UnityEngine;
@@ -9,8 +8,6 @@ namespace KRPC.SpaceCenter.AutoPilot
     /// <summary>
     /// Controller to hold a vessels attitude in a chosen orientation.
     /// </summary>
-    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
-    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     sealed class AttitudeController
     {
         readonly Services.Vessel vessel;
@@ -35,7 +32,6 @@ namespace KRPC.SpaceCenter.AutoPilot
         Vector3d twiceZetaOmega = Vector3d.zero;
         Vector3d omegaSquared = Vector3d.zero;
 
-        [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
         public AttitudeController (Vessel vessel)
         {
             this.vessel = new Services.Vessel (vessel);
