@@ -16,7 +16,7 @@ with open("config.bzl", "r") as f:
             sha = os.getenv("GITHUB_SHA")[:7]
             sha_int = int(sha, 16) % 65536
             version += "-" + str(sha_int) + "-" + sha
-            lines[i] = "version = '%s'\n" % version
+            lines[i] = "version = \"%s\"\n" % version
             break
 
 with open("config.bzl", "w") as f:
