@@ -8,8 +8,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>KRPC.Client.Test</RootNamespace>
     <AssemblyName>KRPC.Client.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <DebugType>full</DebugType>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <DebugType>portable</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -24,6 +24,7 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)tools\msbuild\bazeldirs.props" />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -35,18 +36,18 @@
       <HintPath>..\..\..\lib\mono-4.5\System.Memory.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\..\bazel-bin\tools\build\mono-4.5\Google.Protobuf.dll</HintPath>
+      <HintPath>$(bazel-bin)\tools\build\mono-4.5\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_nunit\lib\net45\nunit.framework.dll</HintPath>
+      <HintPath>$(bazel-external)\csharp_nunit\lib\net45\nunit.framework.dll</HintPath>
       <Package>nunit</Package>
     </Reference>
     <Reference Include="Moq">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_moq\lib\net45\Moq.dll</HintPath>
+      <HintPath>$(bazel-external)\csharp_moq\lib\net45\Moq.dll</HintPath>
       <Package>Moq</Package>
     </Reference>
     <Reference Include="Castle.Core">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_castle_core\lib\net45\Castle.Core.dll</HintPath>
+      <HintPath>$(bazel-external)\csharp_castle_core\lib\net45\Castle.Core.dll</HintPath>
       <Package>Castle.Core</Package>
     </Reference>
   </ItemGroup>
@@ -66,7 +67,7 @@
     <Compile Include="ServerTestCase.cs" />
     <Compile Include="StreamTest.cs" />
     <Compile Include="TestingTools.cs" />
-    <Compile Include="..\..\..\bazel-bin\client\csharp\Services\TestService.cs">
+    <Compile Include="$(bazel-bin)\client\csharp\Services\TestService.cs">
       <Link>Services\TestService.cs</Link>
     </Compile>
   </ItemGroup>
