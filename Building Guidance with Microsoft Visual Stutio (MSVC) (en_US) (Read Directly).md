@@ -30,7 +30,7 @@ In the event of an inconsistency between documents, the **zh_CN (Read via VSCode
 > <br />
 > D:\vcpkg>
 
-&emsp;&emsp;&emsp;Or see an newly-creates `vcpkg.exe` under root directory。
+&emsp;&emsp;&emsp;Or see an newly-created `vcpkg.exe` under root directory。
 
 4. Open Powershell `vcpkg` directory in Powershell and input `vcpkg integrate install` to integrate vcpkg into Visual Studio. The output will be:
 
@@ -119,7 +119,7 @@ In the event of an inconsistency between documents, the **zh_CN (Read via VSCode
 
 ### Compile kRPC
 
-8. Download neweat kRPC client library from [https://github.com/krpc/krpc/releases](https://github.com/krpc/krpc/releases "Github Repository") and unzip to a proper directory.
+8. Download newest kRPC client library from [https://github.com/krpc/krpc/releases](https://github.com/krpc/krpc/releases "Github Repository") and unzip to a proper directory.
 9. Open `./CMakeLists.txt`, then add the directory for asio and protobuf into the previous or next line of `project(kRPC)`. The file could be:
 ```
 ...
@@ -130,7 +130,7 @@ project(kRPC)
 
 ...
 ```
-10. _(Optional)_ Change build typr from Debug to Release. To make it, simply change `set(CMAKE_BUILD_TYPE "Debug")` to `set(CMAKE_BUILD_TYPE "Release")` in `./CMakeLists.txt`.
+10. _(Optional)_ Change build type from Debug to Release. To make it, simply change `set(CMAKE_BUILD_TYPE "Debug")` to `set(CMAKE_BUILD_TYPE "Release")` in `./CMakeLists.txt`.
 
 11. Open Powershell under the directory of krpc and run `cmake .`. The output will be this below, and you'll see `kRPC.sln` file.
 > PS D:\Projects\krpc-cpp-0.5.2>  cmake .<br />
