@@ -1,3 +1,6 @@
+v0.5.5
+ * Fix waypoint mean altitude not including bedrock height (#801)
+
 v0.5.4
  * Fix vessel recovery (#782)
  * Allow vessel switch from any scene (#781)

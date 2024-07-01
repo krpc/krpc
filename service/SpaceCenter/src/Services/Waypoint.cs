@@ -135,7 +135,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double MeanAltitude {
-            get { return InternalWaypoint.altitude; }
+            get {
+                return Body.BedrockHeight(Latitude, Longitude) + InternalWaypoint.altitude;
+            }
             set {
                 if (HasContract)
                     throw new InvalidOperationException ("Cannot set altitude for waypoint attached to a contract.");
