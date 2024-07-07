@@ -346,7 +346,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The maximum field of view the camera in degrees.
+        /// The minimum field of view the camera in degrees.
         /// </summary>
         [KRPCProperty]
         public float MinFoV {
@@ -364,7 +364,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The maximum field of view the camera in degrees.
+        /// The default field of view the camera in degrees.
         /// </summary>
         [KRPCProperty]
         public float DefaultFoV {
