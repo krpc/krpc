@@ -118,6 +118,7 @@
     <Compile Include="ExtensionMethods\GameModeExtensions.cs" />
     <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
     <Compile Include="ExtensionMethods\HopTypeExtensions.cs" />
+    <Compile Include="ExtensionMethods\InternalCameraExtensions.cs" />
     <Compile Include="ExtensionMethods\ITorqueProviderExtensions.cs" />
     <Compile Include="ExtensionMethods\KerbalTypeExtensions.cs" />
     <Compile Include="ExtensionMethods\MotorStateExtensions.cs" />
