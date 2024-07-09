@@ -1140,14 +1140,19 @@ SpaceCenter.Camera.Mode
 SpaceCenter.Camera.Pitch
 SpaceCenter.Camera.Heading
 SpaceCenter.Camera.Distance
+SpaceCenter.Camera.FoV
 SpaceCenter.Camera.MinPitch
 SpaceCenter.Camera.MaxPitch
 SpaceCenter.Camera.MinDistance
 SpaceCenter.Camera.MaxDistance
+SpaceCenter.Camera.MinFoV
+SpaceCenter.Camera.MaxFoV
 SpaceCenter.Camera.DefaultDistance
+SpaceCenter.Camera.DefaultFoV
 SpaceCenter.Camera.FocussedBody
 SpaceCenter.Camera.FocussedVessel
 SpaceCenter.Camera.FocussedNode
+SpaceCenter.Camera.FocussedCrewMember
 SpaceCenter.CameraMode
 SpaceCenter.CameraMode.Automatic
 SpaceCenter.CameraMode.Free
@@ -1156,6 +1161,7 @@ SpaceCenter.CameraMode.Locked
 SpaceCenter.CameraMode.Orbital
 SpaceCenter.CameraMode.IVA
 SpaceCenter.CameraMode.Map
+SpaceCenter.Camera.NextCamera
 SpaceCenter.WaypointManager
 SpaceCenter.WaypointManager.Waypoints
 SpaceCenter.WaypointManager.AddWaypoint
