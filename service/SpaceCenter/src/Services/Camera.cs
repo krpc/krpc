@@ -80,20 +80,20 @@ namespace KRPC.SpaceCenter.Services
                         FlightCamera.SetMode (FlightCamera.Modes.ORBITAL);
                         break;
                     case CameraMode.IVA:
-                        {
-                            var camera = CameraManager.Instance;
-
-                            if (camera.currentCameraMode == CameraManager.CameraMode.IVA)
-                            {
-                                camera.NextCameraIVA();
-                                break;
-                            }
-                            camera.SetCameraIVA();
-                            break;
-                        }
+                        CameraManager.Instance.SetCameraIVA();
+                        break;
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Switch to the next available camera
+        /// </summary>
+        [KRPCMethod]
+        public void NextCamera()
+        {
+            CameraManager.Instance.NextCamera();
         }
 
         /// <summary>
@@ -438,6 +438,32 @@ namespace KRPC.SpaceCenter.Services
                 CheckCameraFocus ();
                 var mapObject = PlanetariumCamera.fetch.targets.Single (x => x.maneuverNode == value.InternalNode);
                 PlanetariumCamera.fetch.SetTarget (mapObject);
+            }
+        }
+
+        /// <summary>
+        /// When the internal camera is active the kerbal that is in focus
+        /// Returns an error if the camera is not in IVA mode.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public CrewMember FocussedCrewMember
+        {
+            get
+            {
+                var camera = CameraManager.Instance;
+
+                if (camera.currentCameraMode == CameraManager.CameraMode.IVA)
+                {
+                    return new CrewMember(camera.IVACameraActiveKerbal.protoCrewMember);
+                }
+                throw new InvalidOperationException ("There is no focussed kerbal when the camera is not in IVA mode.");
+            }
+            set
+            {
+                if (FlightGlobals.ActiveVessel.GetVesselCrew().Contains(value.InternalCrewMember))
+                {
+                    CameraManager.Instance.SetCameraIVA(value.InternalCrewMember.KerbalRef, true);
+                }
             }
         }
 
