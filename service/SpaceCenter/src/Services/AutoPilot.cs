@@ -177,11 +177,23 @@ namespace KRPC.SpaceCenter.Services
             set {
                 if (ReferenceEquals (value, null))
                     throw new ArgumentNullException ("ReferenceFrame");
-                if ((value.Type == ReferenceFrameType.Vessel && value.Vessel.Id == vesselId) ||
-                    ((value.Type == ReferenceFrameType.Part || value.Type == ReferenceFrameType.PartCenterOfMass ||
-                    value.Type == ReferenceFrameType.DockingPort || value.Type == ReferenceFrameType.Thrust) &&
-                    value.Part.InternalPart.vessel.id == vesselId))
+                var rotatesWithVessel = false;
+                switch (value.Type) {
+                case ReferenceFrameType.Vessel:
+                    rotatesWithVessel = value.Vessel.Id == vesselId;
+                    break;
+                case ReferenceFrameType.Part:
+                case ReferenceFrameType.PartCenterOfMass:
+                case ReferenceFrameType.Thrust:
+                    rotatesWithVessel = value.Part.InternalPart.vessel.id == vesselId;
+                    break;
+                case ReferenceFrameType.DockingPort:
+                    rotatesWithVessel = value.DockingPort.Part.InternalPart.vessel.id == vesselId;
+                    break;
+                }
+                if (rotatesWithVessel) {
                     throw new ArgumentException ("Invalid reference frame; must not rotate with the vessel");
+                }
                 attitudeController.ReferenceFrame = value;
             }
         }
