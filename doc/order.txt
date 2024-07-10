@@ -104,6 +104,10 @@ SpaceCenter.TransferCrew
 SpaceCenter.Camera
 SpaceCenter.UIVisible
 SpaceCenter.Navball
+SpaceCenter.AltimeterMode
+SpaceCenter.AltimeterMode.DEFAULT
+SpaceCenter.AltimeterMode.ASL
+SpaceCenter.AltimeterMode.AGL
 SpaceCenter.UT
 SpaceCenter.G
 SpaceCenter.WarpMode

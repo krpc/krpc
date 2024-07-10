@@ -582,6 +582,16 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The current mode of the altimeter.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public static AltimeterMode AltimeterMode
+        {
+            get { return (AltimeterMode) AltitudeTumbler.Instance.CurrentMode; }
+            set { AltitudeTumbler.Instance.SetModeTumbler((AltimeterDisplayState) value); }
+        }
+
+        /// <summary>
         /// The current universal time in seconds.
         /// </summary>
         [KRPCProperty]
