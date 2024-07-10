@@ -149,6 +149,7 @@
     <Compile Include="Services\AlarmManager.cs" />
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\Camera.cs" />
+    <Compile Include="Services\AltimeterMode.cs" />
     <Compile Include="Services\CameraMode.cs" />
     <Compile Include="Services\CelestialBody.cs" />
     <Compile Include="Services\LaunchSite.cs" />
