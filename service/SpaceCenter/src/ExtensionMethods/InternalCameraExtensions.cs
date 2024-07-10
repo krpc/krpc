@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -65,7 +67,19 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static Func<InternalCamera, object> GetDefaultFoV => _getDefaultFoV.Value;
 
-        private static Action<T, object> CreateFieldSetter<T>(string fieldName)
+        /// <summary>
+        /// Gets the index of the previous kerbal for the IVA camera
+        /// </summary>
+        /// <param name="ptc">List of ProtoCrewmembers</param>
+        /// <param name="cameraManager">Instance of the current CameraManager to get the active index.</param>
+        /// <returns></returns>
+        public static int GetPreviousIVA(List<ProtoCrewMember> ptc, CameraManager cameraManager)
+        {
+            int num = cameraManager.IVACameraActiveKerbalIndex;
+            return (num + ptc.Count() - 1) % ptc.Count;
+        }
+
+    	private static Action<T, object> CreateFieldSetter<T>(string fieldName)
         {
             var parameterExpression = Expression.Parameter(typeof(T), "target");
             var valueExpression = Expression.Parameter(typeof(object), "value");
