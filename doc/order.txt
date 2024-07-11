@@ -1166,6 +1166,7 @@ SpaceCenter.CameraMode.Orbital
 SpaceCenter.CameraMode.IVA
 SpaceCenter.CameraMode.Map
 SpaceCenter.Camera.NextCamera
+SpaceCenter.Camera.PreviousCamera
 SpaceCenter.WaypointManager
 SpaceCenter.WaypointManager.Waypoints
 SpaceCenter.WaypointManager.AddWaypoint

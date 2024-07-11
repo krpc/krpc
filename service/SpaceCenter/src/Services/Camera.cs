@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -94,6 +95,45 @@ namespace KRPC.SpaceCenter.Services
         public void NextCamera()
         {
             CameraManager.Instance.NextCamera();
+        }
+
+        /// <summary>
+        /// Switch to the previous available camera
+        /// </summary>
+        [KRPCMethod]
+        public void PreviousCamera()
+        {
+            var cameraManager = CameraManager.Instance;
+            switch(cameraManager.currentCameraMode)
+            {
+                case CameraManager.CameraMode.Flight :
+                    if (InputLockManager.IsUnlocked(ControlTypes.CAMERAMODES))
+                    {
+                        var camera = FlightCamera.fetch;
+                        if (camera.targetMode != FlightCamera.TargetMode.Vessel || camera.vesselTarget != FlightGlobals.ActiveVessel)
+                        {
+                            camera.SetTargetVessel(FlightGlobals.ActiveVessel);
+                        }
+                        // There is 5 camera modes in the enum.
+                        // As KSP1's development has ceased its cheaper to hardcode it than compute it each time. - Sofie 10-07-2024
+                        camera.setMode((FlightCamera.Modes)((int)(camera.mode + 4) % 5));
+                    }
+                    break;
+                case CameraManager.CameraMode.IVA :
+                    List<ProtoCrewMember> vesselCrew = FlightGlobals.fetch.activeVessel.GetVesselCrew();
+                    if (vesselCrew.Count != 0)
+                    {
+                        if (cameraManager.IVACameraActiveKerbal == null || cameraManager.IVACameraActiveKerbalIndex == -1)
+                        {
+                            cameraManager.SetCameraIVA(vesselCrew[0].KerbalRef, true);
+                        }
+                        var newIndex = InternalCameraExtensions.GetPreviousIVA(vesselCrew, cameraManager);
+
+                        cameraManager.SetCameraIVA(vesselCrew[newIndex].KerbalRef, true);
+                        GameEvents.OnIVACameraKerbalChange.Fire(vesselCrew[newIndex].KerbalRef);
+                    }
+                    break;
+            }
         }
 
         /// <summary>
@@ -463,6 +503,7 @@ namespace KRPC.SpaceCenter.Services
                 if (FlightGlobals.ActiveVessel.GetVesselCrew().Contains(value.InternalCrewMember))
                 {
                     CameraManager.Instance.SetCameraIVA(value.InternalCrewMember.KerbalRef, true);
+                    GameEvents.OnIVACameraKerbalChange.Fire(value.InternalCrewMember.KerbalRef);
                 }
             }
         }
