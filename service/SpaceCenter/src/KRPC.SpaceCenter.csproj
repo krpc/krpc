@@ -62,6 +62,7 @@
     <Compile Include="ExtensionMethods\GameModeExtensions.cs" />
     <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
     <Compile Include="ExtensionMethods\HopTypeExtensions.cs" />
+    <Compile Include="ExtensionMethods\InternalCameraExtensions.cs" />
     <Compile Include="ExtensionMethods\ITorqueProviderExtensions.cs" />
     <Compile Include="ExtensionMethods\KerbalTypeExtensions.cs" />
     <Compile Include="ExtensionMethods\MotorStateExtensions.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Services\AlarmManager.cs" />
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\Camera.cs" />
+    <Compile Include="Services\AltimeterMode.cs" />
     <Compile Include="Services\CameraMode.cs" />
     <Compile Include="Services\CelestialBody.cs" />
     <Compile Include="Services\LaunchSite.cs" />

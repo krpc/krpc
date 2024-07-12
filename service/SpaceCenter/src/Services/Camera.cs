@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -80,10 +81,58 @@ namespace KRPC.SpaceCenter.Services
                         FlightCamera.SetMode (FlightCamera.Modes.ORBITAL);
                         break;
                     case CameraMode.IVA:
-                        CameraManager.Instance.SetCameraIVA ();
+                        CameraManager.Instance.SetCameraIVA();
                         break;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Switch to the next available camera
+        /// </summary>
+        [KRPCMethod]
+        public void NextCamera()
+        {
+            CameraManager.Instance.NextCamera();
+        }
+
+        /// <summary>
+        /// Switch to the previous available camera
+        /// </summary>
+        [KRPCMethod]
+        public void PreviousCamera()
+        {
+            var cameraManager = CameraManager.Instance;
+            switch(cameraManager.currentCameraMode)
+            {
+                case CameraManager.CameraMode.Flight :
+                    if (InputLockManager.IsUnlocked(ControlTypes.CAMERAMODES))
+                    {
+                        var camera = FlightCamera.fetch;
+                        if (camera.targetMode != FlightCamera.TargetMode.Vessel || camera.vesselTarget != FlightGlobals.ActiveVessel)
+                        {
+                            camera.SetTargetVessel(FlightGlobals.ActiveVessel);
+                        }
+                        // There is 5 camera modes in the enum.
+                        // As KSP1's development has ceased its cheaper to hardcode it than compute it each time. - Sofie 10-07-2024
+                        camera.setMode((FlightCamera.Modes)((int)(camera.mode + 4) % 5));
+                    }
+                    break;
+                case CameraManager.CameraMode.IVA :
+                    List<ProtoCrewMember> vesselCrew = FlightGlobals.fetch.activeVessel.GetVesselCrew();
+                    if (vesselCrew.Count != 0)
+                    {
+                        if (cameraManager.IVACameraActiveKerbal == null || cameraManager.IVACameraActiveKerbalIndex == -1)
+                        {
+                            cameraManager.SetCameraIVA(vesselCrew[0].KerbalRef, true);
+                        }
+                        var newIndex = InternalCameraExtensions.GetPreviousIVA(vesselCrew, cameraManager);
+
+                        cameraManager.SetCameraIVA(vesselCrew[newIndex].KerbalRef, true);
+                        GameEvents.OnIVACameraKerbalChange.Fire(vesselCrew[newIndex].KerbalRef);
+                    }
+                    break;
             }
         }
 
@@ -98,7 +147,8 @@ namespace KRPC.SpaceCenter.Services
                 case CameraMode.Map:
                     return PlanetariumCamera.fetch.getPitch ();
                 case CameraMode.IVA:
-                    throw new NotImplementedException ();
+                    var camera = InternalCamera.Instance;
+                    return (float) InternalCameraExtensions.GetPitch(camera);
                 default:
                     return FlightCamera.fetch.getPitch ();
                 }
@@ -112,7 +162,11 @@ namespace KRPC.SpaceCenter.Services
                         break;
                     }
                 case CameraMode.IVA:
-                    throw new NotImplementedException ();
+                    {
+                        var camera = InternalCamera.Instance;
+                        InternalCameraExtensions.SetPitch(camera, value.Clamp(camera.minPitch, camera.maxPitch));
+                        break;
+                    }
                 default:
                     {
                         var camera = FlightCamera.fetch;
@@ -133,7 +187,8 @@ namespace KRPC.SpaceCenter.Services
                 case CameraMode.Map:
                     return PlanetariumCamera.fetch.getYaw ();
                 case CameraMode.IVA:
-                    throw new NotImplementedException ();
+                    var camera = InternalCamera.Instance;
+                    return (float) InternalCameraExtensions.GetRot(camera);
                 default:
                     return FlightCamera.fetch.getYaw ();
                 }
@@ -144,7 +199,9 @@ namespace KRPC.SpaceCenter.Services
                     PlanetariumCamera.fetch.camHdg = GeometryExtensions.ToRadians (value);
                     break;
                 case CameraMode.IVA:
-                    throw new NotImplementedException ();
+                    var camera = InternalCamera.Instance;
+                    InternalCameraExtensions.SetRot(camera, value.Clamp(-camera.maxRot, camera.maxRot));
+                    break;
                 default:
                     FlightCamera.fetch.camHdg = GeometryExtensions.ToRadians (value);
                     break;
@@ -182,6 +239,43 @@ namespace KRPC.SpaceCenter.Services
                     {
                         var camera = FlightCamera.fetch;
                         camera.SetDistance (value.Clamp (camera.minDistance, camera.maxDistance));
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// The Field of View of the camera, in degrees.
+        /// A value between <see cref="MinFoV"/> and <see cref="MaxFoV"/>.
+        /// </summary>
+        [KRPCProperty]
+        public float FoV {
+            get {
+                switch (Mode) {
+                case CameraMode.Map:
+                    throw new NotImplementedException ();
+                case CameraMode.IVA:
+                    var camera = InternalCamera.Instance;
+                    return (float) InternalCameraExtensions.GetFoV(camera);
+                default:
+                    return FlightCamera.fetch.FieldOfView;
+                }
+            }
+            set {
+                switch (Mode) {
+                case CameraMode.Map:
+                    throw new NotImplementedException ();
+                case CameraMode.IVA:
+                    {
+                        var camera = InternalCamera.Instance;
+                        InternalCameraExtensions.SetZoom(camera, (value / (float) InternalCameraExtensions.GetDefaultFoV(camera)).Clamp(camera.maxZoom, camera.minZoom));
+                        break;
+                    }
+                default:
+                    {
+                        var camera = FlightCamera.fetch;
+                        camera.SetFoV(value.Clamp (camera.fovMin, camera.fovMax));
                         break;
                     }
                 }
@@ -274,6 +368,60 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The maximum field of view the camera in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxFoV {
+            get {
+                switch (Mode) {
+                    case CameraMode.Map:
+                        throw new NotImplementedException();
+                    case CameraMode.IVA:
+                        var camera = InternalCamera.Instance;
+                        return (float) InternalCameraExtensions.GetDefaultFoV(camera) * camera.minZoom;
+                    default:
+                        return FlightCamera.fetch.fovMax;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The minimum field of view the camera in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public float MinFoV {
+            get {
+                switch (Mode) {
+                    case CameraMode.Map:
+                        throw new NotImplementedException();
+                    case CameraMode.IVA:
+                        var camera = InternalCamera.Instance;
+                        return (float) InternalCameraExtensions.GetDefaultFoV(camera) * camera.maxZoom;
+                    default:
+                        return FlightCamera.fetch.fovMin;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The default field of view the camera in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public float DefaultFoV {
+            get {
+                switch (Mode) {
+                    case CameraMode.Map:
+                        throw new NotImplementedException();
+                    case CameraMode.IVA:
+                        var camera = InternalCamera.Instance;
+                        return (float) InternalCameraExtensions.GetDefaultFoV(camera);
+                    default:
+                        return FlightCamera.fetch.fovDefault;
+                }
+            }
+        }
+
+        /// <summary>
         /// In map mode, the celestial body that the camera is focussed on.
         /// Returns <c>null</c> if the camera is not focussed on a celestial body.
         /// Returns an error is the camera is not in map mode.
@@ -330,6 +478,33 @@ namespace KRPC.SpaceCenter.Services
                 CheckCameraFocus ();
                 var mapObject = PlanetariumCamera.fetch.targets.Single (x => x.maneuverNode == value.InternalNode);
                 PlanetariumCamera.fetch.SetTarget (mapObject);
+            }
+        }
+
+        /// <summary>
+        /// When the internal camera is active the kerbal that is in focus
+        /// Returns an error if the camera is not in IVA mode.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public CrewMember FocussedCrewMember
+        {
+            get
+            {
+                var camera = CameraManager.Instance;
+
+                if (camera.currentCameraMode == CameraManager.CameraMode.IVA)
+                {
+                    return new CrewMember(camera.IVACameraActiveKerbal.protoCrewMember);
+                }
+                throw new InvalidOperationException ("There is no focussed kerbal when the camera is not in IVA mode.");
+            }
+            set
+            {
+                if (FlightGlobals.ActiveVessel.GetVesselCrew().Contains(value.InternalCrewMember))
+                {
+                    CameraManager.Instance.SetCameraIVA(value.InternalCrewMember.KerbalRef, true);
+                    GameEvents.OnIVACameraKerbalChange.Fire(value.InternalCrewMember.KerbalRef);
+                }
             }
         }
 

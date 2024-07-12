@@ -5,7 +5,8 @@
 kRPC allows you to control Kerbal Space Program from scripts running outside of
 the game, and comes with client libraries for many popular languages.
 
- * [Documentation](https://krpc.github.io/krpc)
+ * [Web Documentation](https://krpc.github.io/krpc)
+ * [PDF Documentation](https://github.com/krpc/krpc/releases)
  * [Forum release thread](http://forum.kerbalspaceprogram.com/index.php?/topic/130742-105-krpc-remote-control-your-ships-using-python-c-c-lua-v021-10th-feb-2016/)
  * [Discord](https://discord.gg/bXuaTrj)
 
@@ -15,7 +16,9 @@ Contributions to kRPC are very welcome. [Please refer to this guide.](Contributi
 
 ## KSP2
 
-kRPC is coming to KSP2! You can find it in the new kRPC2 repository here: https://github.com/krpc/krpc2
+~kRPC is coming to KSP2!~ Notice: I am not actively developing this, due to lack of time. If you would like to contribute PRs or take over the project please get in touch on Discord.
+
+You can find it in the new kRPC2 repository here: https://github.com/krpc/krpc2
 
 ## Links for Developers
 

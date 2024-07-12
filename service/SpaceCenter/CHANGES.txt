@@ -1,7 +1,16 @@
+v0.5.5
+ * Fix waypoint mean altitude not including bedrock height (#801)
+
 v0.5.4
  * Fix vessel recovery (#782)
  * Allow vessel switch from any scene (#781)
  * Fix memory leaks on each scene switch (#779)
+ * Force throttle to zero when timewarping (#792)
+ * Add SpaceCenter.Decoupler.AttachedPart (#789, #791)
+ * Add SpaceCenter.Decoupler.IsOmniDecoupler (#789)
+ * Fix decoupler crashes with stack separators (#790)
+ * Make CelestialBody parameters doulbe precision (#786)
+ * Fix scaled camera distance clamp (#785)
 
 v0.5.2
  * Fix null reference exception when SpaceCenter.LaunchVesselFromVAB is called with no crew (#599)

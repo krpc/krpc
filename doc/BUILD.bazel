@@ -105,7 +105,7 @@ sphinx_build(
 sphinx_build(
     name = "pdf",
     srcs = [":srcs"],
-    out = "krpc-%s.pdf" % version,
+    out = "krpc-doc-%s.pdf" % version,
     builder = "latex",
     opts = {"version": version},
     sphinx_build = ":sphinx-build",

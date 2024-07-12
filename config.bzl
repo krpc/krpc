@@ -1,9 +1,9 @@
 " global configuration "
 
 author = "djungelorm"
-version = "0.5.2"
+version = "0.5.4"
 ksp_version_max = "1.12.5.3190"
-ksp_version_min = "1.8.0.2686"
+ksp_version_min = "1.12.3.3173"
 ksp_version_max_parts = ksp_version_max.split(".")
 ksp_version_min_parts = ksp_version_min.split(".")
 
