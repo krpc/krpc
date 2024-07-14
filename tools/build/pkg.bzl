@@ -48,6 +48,7 @@ def _stage_files_impl(ctx):
             mnemonic = "StageFile",
             inputs = [src],
             outputs = [out],
+            use_default_shell_env = True,
             command = " && ".join(sub_commands),
         )
         outs.append(out)
@@ -93,6 +94,7 @@ def _pkg_zip_impl(ctx):
         inputs = inputs,
         outputs = [output],
         progress_message = "Packaging files into %s" % output.short_path,
+        use_default_shell_env = True,
         command = "\n".join(sub_commands),
     )
 

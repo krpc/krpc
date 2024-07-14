@@ -60,6 +60,7 @@ def _impl(ctx):
         inputs = inputs + macros,
         outputs = [output],
         progress_message = "Running autotools and creating package %s" % output.short_path,
+        use_default_shell_env = True,
         command = " &&\\\n".join(sub_commands),
     )
 
