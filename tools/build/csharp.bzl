@@ -11,6 +11,7 @@ def _ref_impl(ctx):
         mnemonic = "CSharpReference",
         inputs = [input],
         outputs = [output],
+        use_default_shell_env = True,
         command = 'cp "%s" "%s"' % (input.path, output.path),
     )
 
@@ -77,6 +78,7 @@ def _lib_impl(ctx):
         mnemonic = "CSharpCompile",
         inputs = inputs,
         outputs = outputs,
+        use_default_shell_env = True,
         command = "%s %s" % (cmd, " ".join(args)),
     )
 
@@ -116,6 +118,7 @@ def _bin_impl(ctx):
         mnemonic = "CSharpCompile",
         inputs = inputs,
         outputs = outputs,
+        use_default_shell_env = True,
         command = "%s %s" % (cmd, " ".join(args)),
     )
 
@@ -367,6 +370,7 @@ def _nuget_package_impl(ctx):
         mnemonic = "NuGetPackage",
         inputs = inputs,
         outputs = [ctx.outputs.out],
+        use_default_shell_env = True,
         command = " && ".join(sub_commands),
         execution_requirements = {"local": "1"},  # FIXME: nuget.exe does not work with the sandbox
     )
