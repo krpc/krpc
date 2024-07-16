@@ -3,7 +3,7 @@
 Note: Tested with Windows 10 2004 using WSL 2
 
 1) git clone https://github.com/krpc/krpc (or your own fork) to a folder in Windows. This folder from now on will be called `/krpc`
-2) Install Ubuntu from Microsoft Store
+2) Install Ubuntu 22.04 from Microsoft Store
 3) Open Ubuntu
 4) run the following to prevent conflicts with Windows
 ```
@@ -13,17 +13,17 @@ appendWindowsPath = false" | sudo tee -a /etc/wsl.conf
 5) run `exit` and in a command prompt run `wsl --shutdown`.
 6) Open Ubuntu
 7) Install bazelisk by following this [link](https://bazel.build/install/bazelisk).
-8) Add the mono repository from [here](https://www.mono-project.com/download/stable/#download-lin-ubuntu). Note: Windows Store Ubuntu is Ubuntu 20.04LTS unless other version is in name.
+8) Add the mono repository from [here](https://www.mono-project.com/download/stable/#download-lin-ubuntu).
 9) Run command (note: This is about 1.5GB download)
 ```
 sudo apt-get install mono-complete python-setuptools  \
-python-dev-is-python3 autoconf libtool luarocks texlive-latex-base \
+python-dev-is-python3 autoconf libtool luarocks maven texlive-latex-base \
 texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra \
 libxml2-dev libxslt1-dev librsvg2-bin python3-dev python3-setuptools \
-python3-virtualenv latexmk openjdk-8-jdk
+python3-virtualenv latexmk openjdk-8-jdk libenchant-2-2
 ```
 10) cd to `/krpc` in Ubuntu (ex. `/mnt/d/source/repos/krpc` but yours is probably different)
-11) Using Windows command prompt, cd `/krpc/lib`
+11) Using Windows administrator command prompt, cd `/krpc/lib`
 12) Run `mklink /D ksp {Kerbal_Space_Program_Directory}`
 13) cd to `/krpc/lib/ksp`
 14) Run `mklink /D KSP_Data .\KSP_x64_Data`
@@ -32,7 +32,7 @@ python3-virtualenv latexmk openjdk-8-jdk
 17) cd to `/krpc`
 18) Build using `bazel build //:krpc`
 
-To get build output in Windows:
+To get build output in Windows, and enable Visual Studio to find all the libraries:
 1) Run `wsl -l` in command prompt. Find the entry that doesn't have docker in its name. This will be refered to as `Distro`
 2) cd to `/krpc/bazel-bin` in Ubuntu
 3) Run `pwd -P` and copy the result to clipboard. This will be refered to as `OutputPath`
