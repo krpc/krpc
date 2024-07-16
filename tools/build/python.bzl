@@ -60,6 +60,7 @@ def _sdist_impl(ctx):
             mnemonic = "PackageFile",
             inputs = [input],
             outputs = [staging_file],
+            use_default_shell_env = True,
             command = 'cp "%s" "%s"' % (input.path, staging_file.path),
         )
         staging_inputs.append(staging_file)
@@ -77,6 +78,7 @@ def _sdist_impl(ctx):
         inputs = staging_inputs,
         outputs = [output],
         progress_message = "Packaging files into %s" % output.short_path,
+        use_default_shell_env = True,
         command = " && ".join(sub_commands),
     )
 
