@@ -2,25 +2,36 @@ from __future__ import annotations
 from typing import cast, Optional, Type, TYPE_CHECKING
 import struct
 import google.protobuf
+
 # pylint: disable=import-error,no-name-in-module
 from google.protobuf.internal import decoder as protobuf_decoder
+
 # pylint: disable=import-error,no-name-in-module
 from google.protobuf.internal import wire_format as protobuf_wire_format
 from krpc.error import EncodingError
 import krpc.platform
 from krpc.platform import hexlify
 from krpc.types import (
-    Types, TypeBase, ValueType, ClassType, EnumerationType, MessageType, TupleType,
-    ListType, SetType, DictionaryType
+    Types,
+    TypeBase,
+    ValueType,
+    ClassType,
+    EnumerationType,
+    MessageType,
+    TupleType,
+    ListType,
+    SetType,
+    DictionaryType,
 )
 import krpc.schema.KRPC_pb2 as KRPC
+
 if TYPE_CHECKING:
     from krpc.client import Client
 
 
 class Decoder:
-    """ Routines for decoding messages and values from
-        the protocol buffer serialization format """
+    """Routines for decoding messages and values from
+    the protocol buffer serialization format"""
 
     GUID_LENGTH = 16
 
@@ -28,14 +39,20 @@ class Decoder:
 
     @classmethod
     def guid(cls, data: bytes) -> str:
-        """ Decode a 16-byte GUID into a string """
-        return '-'.join((
-            hexlify(data[3::-1]), hexlify(data[5:3:-1]), hexlify(data[7:5:-1]),
-            hexlify(data[8:10]), hexlify(data[10:16])))
+        """Decode a 16-byte GUID into a string"""
+        return "-".join(
+            (
+                hexlify(data[3::-1]),
+                hexlify(data[5:3:-1]),
+                hexlify(data[7:5:-1]),
+                hexlify(data[8:10]),
+                hexlify(data[10:16]),
+            )
+        )
 
     @classmethod
     def decode(cls, client: Optional[Client], data: bytes, typ: TypeBase) -> object:
-        """ Given a python type, and serialized data, decode the value """
+        """Given a python type, and serialized data, decode the value"""
         if isinstance(typ, MessageType):
             return cls.decode_message(data, typ.python_type)
         if isinstance(typ, EnumerationType):
@@ -46,38 +63,38 @@ class Decoder:
         if isinstance(typ, ClassType):
             object_id_typ = cls._types.uint64_type
             object_id = cls._decode_value(data, object_id_typ)
-            return typ.python_type(client, object_id) \
-                if object_id != 0 else None
+            return typ.python_type(client, object_id) if object_id != 0 else None
         msg: object
         if isinstance(typ, ListType):
-            if data == b'\x00':
+            if data == b"\x00":
                 return None
             msg = cast(KRPC.List, cls.decode_message(data, KRPC.List))
-            return [
-                cls.decode(client, item, typ.value_type) for item in msg.items
-            ]
+            return [cls.decode(client, item, typ.value_type) for item in msg.items]
         if isinstance(typ, DictionaryType):
-            if data == b'\x00':
+            if data == b"\x00":
                 return None
             msg = cast(KRPC.Dictionary, cls.decode_message(data, KRPC.Dictionary))
-            return dict((cls.decode(client, entry.key, typ.key_type),
-                         cls.decode(client, entry.value, typ.value_type))
-                        for entry in msg.entries)
+            return dict(
+                (
+                    cls.decode(client, entry.key, typ.key_type),
+                    cls.decode(client, entry.value, typ.value_type),
+                )
+                for entry in msg.entries
+            )
         if isinstance(typ, SetType):
-            if data == b'\x00':
+            if data == b"\x00":
                 return None
             msg = cast(KRPC.Set, cls.decode_message(data, KRPC.Set))
-            return set(
-                cls.decode(client, item, typ.value_type) for item in msg.items
-            )
+            return set(cls.decode(client, item, typ.value_type) for item in msg.items)
         if isinstance(typ, TupleType):
-            if data == b'\x00':
+            if data == b"\x00":
                 return None
             msg = cast(KRPC.Tuple, cls.decode_message(data, KRPC.Tuple))
-            return tuple(cls.decode(client, item, value_type)
-                         for item, value_type
-                         in zip(msg.items, typ.value_types))
-        raise EncodingError('Cannot decode type %s' % str(typ))
+            return tuple(
+                cls.decode(client, item, value_type)
+                for item, value_type in zip(msg.items, typ.value_types)
+            )
+        raise EncodingError("Cannot decode type %s" % str(typ))
 
     @classmethod
     def decode_message_size(cls, data: bytes) -> int:
@@ -85,8 +102,8 @@ class Decoder:
 
     @classmethod
     def decode_message(
-            cls, data: bytes,
-            typ: Type[google.protobuf.message.Message]) -> google.protobuf.message.Message:
+        cls, data: bytes, typ: Type[google.protobuf.message.Message]
+    ) -> google.protobuf.message.Message:
         message = typ()
         message.ParseFromString(data)
         return message
@@ -111,12 +128,12 @@ class Decoder:
             return _ValueDecoder.decode_string(data)
         if typ.protobuf_type.code == KRPC.Type.BYTES:
             return _ValueDecoder.decode_bytes(data)
-        raise EncodingError('Invalid type')
+        raise EncodingError("Invalid type")
 
 
 class _ValueDecoder:
-    """ Routines for encoding values from
-        the protocol buffer serialization format """
+    """Routines for encoding values from
+    the protocol buffer serialization format"""
 
     @classmethod
     def _decode_signed_varint(cls, data: bytes) -> int:
@@ -160,15 +177,17 @@ class _ValueDecoder:
         # If this value has all its exponent bits set and at least one
         # significand bit set, it's not a number.  In Python 2.4, struct.unpack
         # will treat it as inf or -inf.  To avoid that, we treat it specially.
-        if (double_bytes[7:8] in b'\x7F\xFF') and \
-           (double_bytes[6:7] >= b'\xF0') and \
-           (double_bytes[0:7] != b'\x00\x00\x00\x00\x00\x00\xF0'):
+        if (
+            (double_bytes[7:8] in b"\x7F\xFF")
+            and (double_bytes[6:7] >= b"\xF0")
+            and (double_bytes[0:7] != b"\x00\x00\x00\x00\x00\x00\xF0")
+        ):
             return krpc.platform.NAN
 
         # Note that we expect someone up-stack to catch struct.error and
         # convert it to _DecodeError -- this way we don't have to set up
         # exception-handling blocks every time we parse one value.
-        return cast(float, local_unpack('<d', double_bytes)[0])
+        return cast(float, local_unpack("<d", double_bytes)[0])
 
     @classmethod
     def decode_float(cls, data: bytes) -> float:
@@ -182,19 +201,19 @@ class _ValueDecoder:
         # If this value has all its exponent bits set, then it's non-finite.
         # In Python 2.4, struct.unpack will convert it to a finite 64-bit
         # value. To avoid that, we parse it specially.
-        if float_bytes[3:4] in b'\x7F\xFF' and float_bytes[2:3] >= b'\x80':
+        if float_bytes[3:4] in b"\x7F\xFF" and float_bytes[2:3] >= b"\x80":
             # If at least one significand bit is set...
-            if float_bytes[0:3] != b'\x00\x00\x80':
+            if float_bytes[0:3] != b"\x00\x00\x80":
                 return krpc.platform.NAN
             # If sign bit is set...
-            if float_bytes[3:4] == b'\xFF':
+            if float_bytes[3:4] == b"\xFF":
                 return krpc.platform.NEG_INF
             return krpc.platform.POS_INF
 
         # Note that we expect someone up-stack to catch struct.error and
         # convert it to _DecodeError -- this way we don't have to set up
         # exception-handling blocks every time we parse one value.
-        return cast(float, local_unpack('<f', float_bytes)[0])
+        return cast(float, local_unpack("<f", float_bytes)[0])
 
     # End of code taken from google.protobuf.internal.decoder._FloatDecoder
     # and google.protobuf.internal.decoder._DoubleDecoder
@@ -206,9 +225,9 @@ class _ValueDecoder:
     @classmethod
     def decode_string(cls, data: bytes) -> str:
         (size, position) = protobuf_decoder._DecodeVarint(data, 0)  # type: ignore[attr-defined]
-        return data[position:position + size].decode('utf-8')
+        return data[position : position + size].decode("utf-8")
 
     @classmethod
     def decode_bytes(cls, data: bytes) -> bytes:
         (size, position) = protobuf_decoder._DecodeVarint(data, 0)  # type: ignore[attr-defined]
-        return data[position:position + size]
+        return data[position : position + size]

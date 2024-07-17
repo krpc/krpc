@@ -45,5 +45,5 @@ class Client:
             "KerbalAlarmClock": self.kerbal_alarm_clock,
             "RemoteTech": self.remote_tech,
             "LiDAR": self.lidar,
-            "DockingCamera": self.docking_camera
+            "DockingCamera": self.docking_camera,
         }

@@ -4,9 +4,9 @@ from krpctools.docgen.cpp import CppDomain
 
 
 class TestDocGenCpp(DocGenTestCase, unittest.TestCase):
-    language = 'cpp'
+    language = "cpp"
     domain = CppDomain
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

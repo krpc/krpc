@@ -177,32 +177,35 @@ def _lint_impl(ctx):
     out = ctx.outputs.executable
     files = []
     deps = list(ctx.files.deps)
-    pycodestyle_args = []
+    black_args = [
+        "--check",
+    ]
+    if ctx.attr.black_exclude:
+        black_args.extend([
+            "--extend-exclude",
+            ctx.attr.black_exclude,
+        ])
     pylint_args = []
-    if ctx.attr.pycodestyle_config:
-        pycodestyle_args.append("--config=%s" % ctx.file.pycodestyle_config.short_path)
     if ctx.attr.pylint_config:
         pylint_args.append("--rcfile=%s" % ctx.file.pylint_config.short_path)
     if ctx.attr.pkg:
         # Run on a python package
-        pycodestyle_args.append("env/lib/python*/site-packages/%s" % ctx.attr.pkg_name)
+        black_args.append("env/lib/python*/site-packages/%s" % ctx.attr.pkg_name)
         pylint_args.append(ctx.attr.pkg_name)
         deps.append(ctx.file.pkg)
     else:
         # Run on a list of file paths
         for x in ctx.files.srcs:
-            pycodestyle_args.append(x.short_path)
+            black_args.append(x.short_path)
             pylint_args.append(x.short_path)
         files.extend(ctx.files.srcs)
 
-    pycodestyle = ctx.executable.pycodestyle
+    black = ctx.executable.black
     pylint = ctx.executable.pylint
-    pycodestyle_runfiles = ctx.attr.pycodestyle.default_runfiles.files.to_list()
+    black_runfiles = ctx.attr.black.default_runfiles.files.to_list()
     pylint_runfiles = ctx.attr.pylint.default_runfiles.files.to_list()
 
-    runfiles = [pycodestyle, pylint] + pycodestyle_runfiles + pylint_runfiles + files + deps
-    if ctx.attr.pycodestyle_config:
-        runfiles.append(ctx.file.pycodestyle_config)
+    runfiles = [black, pylint] + black_runfiles + pylint_runfiles + files + deps
     if ctx.attr.pylint_config:
         runfiles.append(ctx.file.pylint_config)
 
@@ -216,13 +219,13 @@ def _lint_impl(ctx):
             dep.short_path,
         )
 
-    # Run pycodestyle
+    # Run black
     runfiles_dir = out.path + ".runfiles/krpc"
     sub_commands.append("rm -rf %s" % runfiles_dir)
-    _add_runfile(sub_commands, pycodestyle.short_path, runfiles_dir + "/" + pycodestyle.basename)
-    for f in pycodestyle_runfiles:
-        _add_runfile(sub_commands, f.short_path, runfiles_dir + "/" + pycodestyle.basename + ".runfiles/krpc/" + f.short_path)
-    sub_commands.append("%s/%s %s" % (runfiles_dir, pycodestyle.basename, " ".join(pycodestyle_args)))
+    _add_runfile(sub_commands, black.short_path, runfiles_dir + "/" + black.basename)
+    for f in black_runfiles:
+        _add_runfile(sub_commands, f.short_path, runfiles_dir + "/" + black.basename + ".runfiles/krpc/" + f.short_path)
+    sub_commands.append("%s/%s %s" % (runfiles_dir, black.basename, " ".join(black_args)))
     sub_commands.append("rm -rf %s" % runfiles_dir)
 
     # Run pylint
@@ -256,9 +259,9 @@ py_lint_test = rule(
         "pkg_name": attr.string(),
         "srcs": attr.label_list(allow_files = True),
         "deps": attr.label_list(allow_files = True),
-        "pycodestyle_config": attr.label(allow_single_file = True),
+        "black_exclude": attr.string(),
         "pylint_config": attr.label(allow_single_file = True),
-        "pycodestyle": attr.label(default = Label("//tools/build/pycodestyle"), executable = True, cfg = "exec"),
+        "black": attr.label(default = Label("//tools/build/black"), executable = True, cfg = "exec"),
         "pylint": attr.label(default = Label("//tools/build/pylint"), executable = True, cfg = "exec"),
     },
     test = True,

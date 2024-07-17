@@ -6,7 +6,7 @@ class TestPartsParachute(krpctest.TestCase):
 
     def setUp(self):
         self.new_save()
-        self.launch_vessel_from_vab('PartsParachute')
+        self.launch_vessel_from_vab("PartsParachute")
         self.remove_other_vessels()
         self.vessel = self.connect().space_center.active_vessel
         self.control = self.vessel.control
@@ -61,7 +61,7 @@ class TestPartsParachute(krpctest.TestCase):
             self.assertTrue(parachute.deployed)
             self.assertEqual(self.state.semi_deployed, parachute.state)
 
-        while flight.surface_altitude > 0.9*deploy_altitude:
+        while flight.surface_altitude > 0.9 * deploy_altitude:
             pass
 
         for parachute in self.parachutes:
@@ -107,5 +107,5 @@ class TestPartsParachute(krpctest.TestCase):
             self.assertEqual(self.state.cut, parachute.state)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

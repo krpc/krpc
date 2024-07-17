@@ -4,9 +4,9 @@ from krpctools.docgen.python import PythonDomain
 
 
 class TestDocGenPython(DocGenTestCase, unittest.TestCase):
-    language = 'python'
+    language = "python"
     domain = PythonDomain
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

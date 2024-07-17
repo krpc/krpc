@@ -7,16 +7,17 @@ class TestPartsResourceHarvester(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != 'PartsHarvester':
-            cls.launch_vessel_from_vab('PartsHarvester')
+        if cls.connect().space_center.active_vessel.name != "PartsHarvester":
+            cls.launch_vessel_from_vab("PartsHarvester")
             cls.remove_other_vessels()
         cls.state = cls.connect().space_center.ResourceHarvesterState
         vessel = cls.connect().space_center.active_vessel
         parts = vessel.parts
         cls.control = vessel.control
         cls.drills = parts.resource_harvesters
-        cls.drill = parts.with_title(
-            '\'Drill-O-Matic\' Mining Excavator')[0].resource_harvester
+        cls.drill = parts.with_title("'Drill-O-Matic' Mining Excavator")[
+            0
+        ].resource_harvester
 
     def check_inactive_properties(self):
         self.assertEqual(0, self.drill.extraction_rate)
@@ -157,5 +158,5 @@ class TestPartsResourceHarvester(krpctest.TestCase):
             self.assertFalse(drill.active)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -48,5 +48,5 @@ class TestLine(krpctest.TestCase):
         line.remove()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

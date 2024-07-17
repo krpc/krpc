@@ -15,30 +15,32 @@ class Appendable:
 
     @property
     def appended(self):
-        return '\n\n'.join(self._appended)
+        return "\n\n".join(self._appended)
 
 
 class Service(Appendable):
-    def __init__(self, name, procedures, classes, enumerations,
-                 exceptions, documentation, sort):
+    def __init__(
+        self, name, procedures, classes, enumerations, exceptions, documentation, sort
+    ):
         super().__init__()
         self.name = name
         self.fullname = name
         self.documentation = documentation
-        self.cref = 'T:%s' % name
+        self.cref = "T:%s" % name
 
         members = []
         cprocedures = defaultdict(dict)
         properties = defaultdict(dict)
 
         for pname, info in procedures.items():
-            del info['id']
+            del info["id"]
 
-            if 'game_scenes' in info:
-                info['game_scenes'] = ', '.join(x.replace('_', ' ').title()
-                                                for x in info['game_scenes'])
+            if "game_scenes" in info:
+                info["game_scenes"] = ", ".join(
+                    x.replace("_", " ").title() for x in info["game_scenes"]
+                )
             else:
-                info['game_scenes'] = 'All'
+                info["game_scenes"] = "All"
 
             if Attributes.is_a_procedure(pname):
                 members.append(Procedure(name, pname, **info))
@@ -46,11 +48,9 @@ class Service(Appendable):
             elif Attributes.is_a_property_accessor(pname):
                 propname = Attributes.get_property_name(pname)
                 if Attributes.is_a_property_getter(pname):
-                    properties[propname]['getter'] = Procedure(
-                        name, pname, **info)
+                    properties[propname]["getter"] = Procedure(name, pname, **info)
                 else:
-                    properties[propname]['setter'] = Procedure(
-                        name, pname, **info)
+                    properties[propname]["setter"] = Procedure(name, pname, **info)
 
             elif Attributes.is_a_class_member(pname):
                 cname = Attributes.get_class_name(pname)
@@ -61,16 +61,20 @@ class Service(Appendable):
 
         self.classes = {
             cname: Class(name, cname, cprocedures[cname], sort=sort, **cinfo)
-            for (cname, cinfo) in classes.items()}
+            for (cname, cinfo) in classes.items()
+        }
         self.enumerations = {
             ename: Enumeration(name, ename, sort=sort, **einfo)
-            for (ename, einfo) in enumerations.items()}
+            for (ename, einfo) in enumerations.items()
+        }
         self.exceptions = {
             ename: ExceptionNode(name, ename, **einfo)
-            for (ename, einfo) in exceptions.items()}
+            for (ename, einfo) in exceptions.items()
+        }
 
         self.members = OrderedDict(
-            (member.name, member) for member in sorted(members, key=sort))
+            (member.name, member) for member in sorted(members, key=sort)
+        )
 
     def remove(self, member_name):
         if member_name in self.classes:
@@ -87,43 +91,42 @@ class Class(Appendable):
         super().__init__()
         self.service_name = service_name
         self.name = name
-        self.fullname = service_name+'.'+name
+        self.fullname = service_name + "." + name
         self.documentation = documentation
-        self.cref = 'T:%s.%s' % (service_name, name)
+        self.cref = "T:%s.%s" % (service_name, name)
 
         members = []
         properties = defaultdict(dict)
 
         for pname, pinfo in procedures.items():
-            if 'id' in pinfo:
-                del pinfo['id']
+            if "id" in pinfo:
+                del pinfo["id"]
 
             if Attributes.is_a_class_method(pname):
                 members.append(ClassMethod(service_name, name, pname, **pinfo))
 
             elif Attributes.is_a_class_static_method(pname):
-                members.append(ClassStaticMethod(
-                    service_name, name, pname, **pinfo))
+                members.append(ClassStaticMethod(service_name, name, pname, **pinfo))
 
             elif Attributes.is_a_class_property_accessor(pname):
                 propname = Attributes.get_class_member_name(pname)
                 proc = Procedure(service_name, pname, **pinfo)
                 if Attributes.is_a_class_property_getter(pname):
-                    properties[propname]['getter'] = proc
+                    properties[propname]["getter"] = proc
                 else:
-                    properties[propname]['setter'] = proc
+                    properties[propname]["setter"] = proc
 
         for propname, prop in properties.items():
             members.append(ClassProperty(service_name, name, propname, **prop))
 
-        self.members = OrderedDict((member.name, member)
-                                   for member in sorted(members, key=sort))
+        self.members = OrderedDict(
+            (member.name, member) for member in sorted(members, key=sort)
+        )
 
 
 class Parameter(Appendable):
     # pylint: disable=redefined-builtin
-    def __init__(self, name, type, documentation,
-                 default_value=None, nullable=False):
+    def __init__(self, name, type, documentation, default_value=None, nullable=False):
         super().__init__()
         self.name = name
         self.type = as_type(self.types, type)
@@ -136,35 +139,43 @@ class Parameter(Appendable):
 
 
 class Procedure(Appendable):
-    member_type = 'procedure'
+    member_type = "procedure"
 
-    def __init__(self, service_name, name, parameters,
-                 documentation, return_type=None,
-                 return_is_nullable=False, game_scenes=None):
+    def __init__(
+        self,
+        service_name,
+        name,
+        parameters,
+        documentation,
+        return_type=None,
+        return_is_nullable=False,
+        game_scenes=None,
+    ):
         super().__init__()
         self.service_name = service_name
         self.name = name
-        self.fullname = service_name+'.'+name
+        self.fullname = service_name + "." + name
         if return_type is not None:
             self.return_type = as_type(self.types, return_type)
         else:
             self.return_type = None
         self.return_is_nullable = return_is_nullable
-        self.parameters = [Parameter(documentation=documentation, **info)
-                           for info in parameters]
+        self.parameters = [
+            Parameter(documentation=documentation, **info) for info in parameters
+        ]
         self.game_scenes = game_scenes
         self.documentation = documentation
-        self.cref = 'M:%s.%s' % (service_name, name)
+        self.cref = "M:%s.%s" % (service_name, name)
 
 
 class Property(Appendable):
-    member_type = 'property'
+    member_type = "property"
 
     def __init__(self, service_name, name, getter=None, setter=None):
         super().__init__()
         self.service_name = service_name
         self.name = name
-        self.fullname = service_name+'.'+name
+        self.fullname = service_name + "." + name
         if getter is not None:
             self.type = getter.return_type
             self.game_scenes = getter.game_scenes
@@ -175,62 +186,79 @@ class Property(Appendable):
             self.documentation = setter.documentation
         self.getter = getter
         self.setter = setter
-        self.cref = 'M:%s.%s' % (service_name, name)
+        self.cref = "M:%s.%s" % (service_name, name)
 
 
 class ClassMethod(Appendable):
-    member_type = 'class_method'
+    member_type = "class_method"
 
-    def __init__(self, service_name, class_name, name, parameters,
-                 documentation, return_type=None,
-                 return_is_nullable=False, game_scenes=None):
+    def __init__(
+        self,
+        service_name,
+        class_name,
+        name,
+        parameters,
+        documentation,
+        return_type=None,
+        return_is_nullable=False,
+        game_scenes=None,
+    ):
         super().__init__()
         name = Attributes.get_class_member_name(name)
         self.service_name = service_name
         self.class_name = class_name
         self.name = name
-        self.fullname = service_name+'.'+class_name+'.'+name
+        self.fullname = service_name + "." + class_name + "." + name
         if return_type is not None:
             self.return_type = as_type(self.types, return_type)
         else:
             self.return_type = None
         self.return_is_nullable = return_is_nullable
-        self.parameters = [Parameter(documentation=documentation, **info)
-                           for info in parameters]
+        self.parameters = [
+            Parameter(documentation=documentation, **info) for info in parameters
+        ]
         self.game_scenes = game_scenes
         self.documentation = documentation
-        self.cref = 'M:%s.%s.%s' % (service_name, class_name, name)
+        self.cref = "M:%s.%s.%s" % (service_name, class_name, name)
 
 
 class ClassStaticMethod(Appendable):
-    member_type = 'class_static_method'
+    member_type = "class_static_method"
 
-    def __init__(self, service_name, class_name, name, parameters,
-                 documentation, return_type=None,
-                 return_is_nullable=False, game_scenes=None):
+    def __init__(
+        self,
+        service_name,
+        class_name,
+        name,
+        parameters,
+        documentation,
+        return_type=None,
+        return_is_nullable=False,
+        game_scenes=None,
+    ):
         super().__init__()
         name = Attributes.get_class_member_name(name)
         self.service_name = service_name
         self.class_name = class_name
         self.name = name
-        self.fullname = service_name+'.'+class_name+'.'+name
+        self.fullname = service_name + "." + class_name + "." + name
         if return_type is not None:
             self.return_type = as_type(self.types, return_type)
         else:
             self.return_type = None
         self.return_is_nullable = return_is_nullable
-        self.parameters = [Parameter(documentation=documentation, **info)
-                           for info in parameters]
+        self.parameters = [
+            Parameter(documentation=documentation, **info) for info in parameters
+        ]
         self.game_scenes = game_scenes
         self.documentation = documentation
-        self.cref = 'M:%s.%s.%s' % (service_name, class_name, name)
+        self.cref = "M:%s.%s.%s" % (service_name, class_name, name)
 
 
 class ClassProperty(Appendable):
-    member_type = 'class_property'
+    member_type = "class_property"
 
-    def __init__(self, service_name, class_name, name,
-                 getter=None, setter=None):
+    def __init__(self, service_name, class_name, name, getter=None, setter=None):
         super().__init__()
         self.service_name = service_name
         self.class_name = class_name
@@ -243,10 +271,10 @@ class ClassProperty(Appendable):
             self.game_scenes = setter.game_scenes
             self.documentation = setter.documentation
         self.name = name
-        self.fullname = service_name+'.'+class_name+'.'+name
+        self.fullname = service_name + "." + class_name + "." + name
         self.getter = getter
         self.setter = setter
-        self.cref = 'M:%s.%s.%s' % (service_name, class_name, name)
+        self.cref = "M:%s.%s.%s" % (service_name, class_name, name)
 
 
 class Enumeration(Appendable):
@@ -254,13 +282,11 @@ class Enumeration(Appendable):
         super().__init__()
         self.service_name = service_name
         self.name = name
-        self.fullname = service_name+'.'+name
-        values = (EnumerationValue(service_name, name, **value)
-                  for value in values)
-        self.values = OrderedDict(
-            (v.name, v) for v in sorted(values, key=sort))
+        self.fullname = service_name + "." + name
+        values = (EnumerationValue(service_name, name, **value) for value in values)
+        self.values = OrderedDict((v.name, v) for v in sorted(values, key=sort))
         self.documentation = documentation
-        self.cref = 'T:%s.%s' % (service_name, name)
+        self.cref = "T:%s.%s" % (service_name, name)
 
 
 class EnumerationValue(Appendable):
@@ -269,10 +295,10 @@ class EnumerationValue(Appendable):
         self.service_name = service_name
         self.enum_name = enum_name
         self.name = name
-        self.fullname = service_name+'.'+enum_name+'.'+name
+        self.fullname = service_name + "." + enum_name + "." + name
         self.value = value
         self.documentation = documentation
-        self.cref = 'M:%s.%s.%s' % (service_name, enum_name, name)
+        self.cref = "M:%s.%s.%s" % (service_name, enum_name, name)
 
 
 class ExceptionNode(Appendable):
@@ -280,6 +306,6 @@ class ExceptionNode(Appendable):
         super().__init__()
         self.service_name = service_name
         self.name = name
-        self.fullname = service_name+'.'+name
+        self.fullname = service_name + "." + name
         self.documentation = documentation
-        self.cref = 'T:%s.%s' % (service_name, name)
+        self.cref = "T:%s.%s" % (service_name, name)

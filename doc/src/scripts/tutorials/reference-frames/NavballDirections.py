@@ -1,5 +1,6 @@
 import krpc
-conn = krpc.connect(name='Navball directions')
+
+conn = krpc.connect(name="Navball directions")
 vessel = conn.space_center.active_vessel
 ap = vessel.auto_pilot
 ap.reference_frame = vessel.surface_reference_frame

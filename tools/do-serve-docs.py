@@ -16,12 +16,12 @@ out = sys.argv[4]
 
 
 def targets_to_paths(targets):
-    """ Converts a list of bazel targets to a list of file paths """
+    """Converts a list of bazel targets to a list of file paths"""
     result = []
     for target in targets:
-        if target.startswith('//'):
-            path = target[2:].replace(':', '/')
-            if path[0] == '/':
+        if target.startswith("//"):
+            path = target[2:].replace(":", "/")
+            if path[0] == "/":
                 path = path[1:]
             if os.path.exists(path):
                 result.append(path)
@@ -29,10 +29,15 @@ def targets_to_paths(targets):
 
 
 # Get paths to source files
-targets = [line.strip() for line in
-           subprocess.check_output([
-               'bazel', 'query', 'kind(file, deps(//doc:srcs))']).decode().split('\n')
-           if len(line) > 0]
+targets = [
+    line.strip()
+    for line in subprocess.check_output(
+        ["bazel", "query", "kind(file, deps(//doc:srcs))"]
+    )
+    .decode()
+    .split("\n")
+    if len(line) > 0
+]
 dependencies = set(targets_to_paths(targets))
 
 
@@ -40,7 +45,7 @@ dependencies = set(targets_to_paths(targets))
 class UpdateStagedFiles(pyinotify.ProcessEvent):
     def process_default(self, event):
         # Rebuild the docs
-        subprocess.check_call(['bazel', 'build', '//doc:srcs'])
+        subprocess.check_call(["bazel", "build", "//doc:srcs"])
         if not os.path.exists(stage):
             os.makedirs(stage)
 
@@ -49,7 +54,7 @@ class UpdateStagedFiles(pyinotify.ProcessEvent):
             for filename in filenames:
                 path = os.path.relpath(os.path.join(basepath, filename), stage)
                 if not os.path.exists(os.path.join(src, path)):
-                    print('Removing', path)
+                    print("Removing", path)
                     os.unlink(os.path.join(stage, path))
 
         # Update stale files in stage directory
@@ -60,12 +65,12 @@ class UpdateStagedFiles(pyinotify.ProcessEvent):
                 srcpath = os.path.join(src, path)
                 stagepath = os.path.join(stage, path)
                 if not os.path.exists(stagepath):
-                    print('Staging new file', path)
+                    print("Staging new file", path)
                     if not os.path.exists(os.path.dirname(stagepath)):
                         os.makedirs(os.path.dirname(stagepath))
                     shutil.copy(srcpath, stagepath)
                 elif not filecmp.cmp(srcpath, stagepath):
-                    print('Updating file', path)
+                    print("Updating file", path)
                     os.unlink(stagepath)
                     shutil.copy(srcpath, stagepath)
 
@@ -74,13 +79,24 @@ class UpdateStagedFiles(pyinotify.ProcessEvent):
 UpdateStagedFiles().process_default(None)
 
 # Auto-serve the docs
-p = subprocess.Popen(['sphinx-autobuild', '-W', '-n', '-T',
-                      '--host', '0.0.0.0', '--port', port, stage, out])
+p = subprocess.Popen(
+    [
+        "sphinx-autobuild",
+        "-W",
+        "-n",
+        "-T",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        port,
+        stage,
+        out,
+    ]
+)
 
 # Auto-update the stage directory when a dependency changes
 watch_manager = pyinotify.WatchManager()
-notifier = pyinotify.Notifier(
-    watch_manager, default_proc_fun=UpdateStagedFiles())
+notifier = pyinotify.Notifier(watch_manager, default_proc_fun=UpdateStagedFiles())
 for path in dependencies:
     watch_manager.add_watch(path, pyinotify.IN_MODIFY)
 notifier.loop()

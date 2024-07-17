@@ -7,17 +7,17 @@ class TestPartsSolarPanel(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('PartsSolarPanel')
+        cls.launch_vessel_from_vab("PartsSolarPanel")
         cls.remove_other_vessels()
         vessel = cls.connect().space_center.active_vessel
         parts = vessel.parts
         cls.control = vessel.control
         cls.state = cls.connect().space_center.SolarPanelState
         cls.panels = parts.solar_panels
-        cls.deployable_panel = parts.with_title(
-            'Gigantor XL Solar Array')[0].solar_panel
-        cls.fixed_panel = parts.with_title(
-            'OX-STAT Photovoltaic Panels')[0].solar_panel
+        cls.deployable_panel = parts.with_title("Gigantor XL Solar Array")[
+            0
+        ].solar_panel
+        cls.fixed_panel = parts.with_title("OX-STAT Photovoltaic Panels")[0].solar_panel
 
     def test_fixed_panel(self):
         self.assertFalse(self.fixed_panel.deployable)
@@ -93,14 +93,13 @@ class TestPartsSolarPanelBreak(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('PartsSolarPanel')
+        cls.launch_vessel_from_vab("PartsSolarPanel")
         cls.remove_other_vessels()
         vessel = cls.connect().space_center.active_vessel
         parts = vessel.parts
         cls.control = vessel.control
         cls.state = cls.connect().space_center.SolarPanelState
-        cls.panel = parts.with_title(
-            'SP-L 1x6 Photovoltaic Panels')[0].solar_panel
+        cls.panel = parts.with_title("SP-L 1x6 Photovoltaic Panels")[0].solar_panel
 
     def test_break_panel(self):
         self.assertEqual(self.state.retracted, self.panel.state)
@@ -112,5 +111,5 @@ class TestPartsSolarPanelBreak(krpctest.TestCase):
         self.assertEqual(self.state.broken, self.panel.state)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

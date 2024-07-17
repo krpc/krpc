@@ -6,13 +6,11 @@ from krpctest.geometry import normalize
 class TestControlMixin:
 
     def test_state(self):
-        self.assertEqual(self.space_center.ControlState.full,
-                         self.control.state)
-        self.assertEqual(self.space_center.ControlSource.kerbal,
-                         self.control.source)
+        self.assertEqual(self.space_center.ControlState.full, self.control.state)
+        self.assertEqual(self.space_center.ControlSource.kerbal, self.control.source)
 
     def test_special_action_groups(self):
-        for name in ['rcs', 'gear', 'lights', 'brakes', 'abort']:
+        for name in ["rcs", "gear", "lights", "brakes", "abort"]:
             setattr(self.control, name, True)
             self.assertTrue(getattr(self.control, name))
             setattr(self.control, name, False)
@@ -26,12 +24,9 @@ class TestControlMixin:
             self.assertTrue(self.control.get_action_group(i))
             self.control.toggle_action_group(i)
             self.assertFalse(self.control.get_action_group(i))
-        self.assertRaises(ValueError,
-                          self.control.set_action_group, 11, False)
-        self.assertRaises(ValueError,
-                          self.control.get_action_group, 11)
-        self.assertRaises(ValueError,
-                          self.control.toggle_action_group, 11)
+        self.assertRaises(ValueError, self.control.set_action_group, 11, False)
+        self.assertRaises(ValueError, self.control.get_action_group, 11)
+        self.assertRaises(ValueError, self.control.toggle_action_group, 11)
 
     def test_pitch_control(self):
         self.connect().testing_tools.clear_rotation(self.vessel)
@@ -73,8 +68,7 @@ class TestControlMixin:
         self.control.roll = 0.0
 
         self.assertAlmostEqual(pitch, self.orbital_flight.pitch, delta=1)
-        self.assertDegreesAlmostEqual(
-            heading, self.orbital_flight.heading, delta=1)
+        self.assertDegreesAlmostEqual(heading, self.orbital_flight.heading, delta=1)
 
         # Check flight is rolling in correct direction
         roll = self.orbital_flight.roll
@@ -146,16 +140,15 @@ class TestControlActiveVessel(krpctest.TestCase, TestControlMixin):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != 'Basic':
-            cls.launch_vessel_from_vab('Basic')
+        if cls.connect().space_center.active_vessel.name != "Basic":
+            cls.launch_vessel_from_vab("Basic")
         cls.remove_other_vessels()
-        cls.set_circular_orbit('Kerbin', 100000)
+        cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel
         cls.control = cls.vessel.control
         cls.auto_pilot = cls.vessel.auto_pilot
-        cls.orbital_flight = cls.vessel.flight(
-            cls.vessel.orbital_reference_frame)
+        cls.orbital_flight = cls.vessel.flight(cls.vessel.orbital_reference_frame)
 
     def test_equality(self):
         self.assertEqual(self.space_center.active_vessel.control, self.control)
@@ -184,22 +177,22 @@ class TestControlNonActiveVessel(krpctest.TestCase, TestControlMixin):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('Multi')
+        cls.launch_vessel_from_vab("Multi")
         cls.remove_other_vessels()
-        cls.set_circular_orbit('Kerbin', 100000)
+        cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
         # Decouple the two vessels
         next(iter(cls.space_center.active_vessel.parts.docking_ports)).undock()
-        cls.vessel = next(v for v in cls.space_center.vessels
-                          if v != cls.space_center.active_vessel)
+        cls.vessel = next(
+            v for v in cls.space_center.vessels if v != cls.space_center.active_vessel
+        )
         # Switch vessels so the one with a kerbal is non-active
         tmp = cls.space_center.active_vessel
         cls.space_center.active_vessel = cls.vessel
         cls.vessel = tmp
         cls.control = cls.vessel.control
         cls.auto_pilot = cls.vessel.auto_pilot
-        cls.orbital_flight = cls.vessel.flight(
-            cls.vessel.orbital_reference_frame)
+        cls.orbital_flight = cls.vessel.flight(cls.vessel.orbital_reference_frame)
 
         # Move the vessels apart
         cls.control.rcs = True
@@ -210,29 +203,26 @@ class TestControlNonActiveVessel(krpctest.TestCase, TestControlMixin):
         cls.wait(1)
 
     def test_equality(self):
-        self.assertNotEqual(
-            self.space_center.active_vessel.control, self.control)
+        self.assertNotEqual(self.space_center.active_vessel.control, self.control)
 
     def test_maneuver_node_editing(self):
         self.assertRaises(
-            RuntimeError,
-            self.control.add_node, self.space_center.ut + 60, 100, 0, 0)
+            RuntimeError, self.control.add_node, self.space_center.ut + 60, 100, 0, 0
+        )
 
 
 class TestControlStaging(krpctest.TestCase):
 
     def setUp(self):
-        self.launch_vessel_from_vab('Staging')
+        self.launch_vessel_from_vab("Staging")
         self.remove_other_vessels()
-        self.set_circular_orbit('Kerbin', 100000)
+        self.set_circular_orbit("Kerbin", 100000)
         self.space_center = self.connect().space_center
         self.control = self.space_center.active_vessel.control
 
     def test_state(self):
-        self.assertEqual(self.space_center.ControlState.full,
-                         self.control.state)
-        self.assertEqual(self.space_center.ControlSource.kerbal,
-                         self.control.source)
+        self.assertEqual(self.space_center.ControlState.full, self.control.state)
+        self.assertEqual(self.space_center.ControlSource.kerbal, self.control.source)
 
     def test_stage_lock(self):
         self.control.stage_lock = False
@@ -264,7 +254,7 @@ class TestControlRover(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('Rover')
+        cls.launch_vessel_from_vab("Rover")
         cls.remove_other_vessels()
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel
@@ -272,10 +262,8 @@ class TestControlRover(krpctest.TestCase):
         cls.flight = cls.vessel.flight(cls.vessel.orbit.body.reference_frame)
 
     def test_state(self):
-        self.assertEqual(self.space_center.ControlState.full,
-                         self.control.state)
-        self.assertEqual(self.space_center.ControlSource.kerbal,
-                         self.control.source)
+        self.assertEqual(self.space_center.ControlState.full, self.control.state)
+        self.assertEqual(self.space_center.ControlSource.kerbal, self.control.source)
 
     def test_move_forward(self):
         self.control = self.space_center.active_vessel.control
@@ -403,17 +391,15 @@ class TestControlProbe(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('Probe')
+        cls.launch_vessel_from_vab("Probe")
         cls.remove_other_vessels()
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel
         cls.control = cls.vessel.control
 
     def test_state(self):
-        self.assertEqual(self.space_center.ControlState.full,
-                         self.control.state)
-        self.assertEqual(self.space_center.ControlSource.probe,
-                         self.control.source)
+        self.assertEqual(self.space_center.ControlState.full, self.control.state)
+        self.assertEqual(self.space_center.ControlSource.probe, self.control.source)
 
 
 class TestControlProbePartialControl(krpctest.TestCase):
@@ -421,19 +407,17 @@ class TestControlProbePartialControl(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('Probe')
+        cls.launch_vessel_from_vab("Probe")
         cls.remove_other_vessels()
-        cls.set_circular_orbit('Jool', 20000000)
+        cls.set_circular_orbit("Jool", 20000000)
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel
         cls.control = cls.vessel.control
 
     def test_state(self):
-        self.assertEqual(self.space_center.ControlState.partial,
-                         self.control.state)
-        self.assertEqual(self.space_center.ControlSource.probe,
-                         self.control.source)
+        self.assertEqual(self.space_center.ControlState.partial, self.control.state)
+        self.assertEqual(self.space_center.ControlSource.probe, self.control.source)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

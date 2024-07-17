@@ -10,25 +10,30 @@ from ..version import __version__
 
 
 def main():
-    prog = 'krpc-servicedefs'
+    prog = "krpc-servicedefs"
     parser = argparse.ArgumentParser(
-        prog=prog,
-        description='Generate a service definition file for a kRPC service.')
+        prog=prog, description="Generate a service definition file for a kRPC service."
+    )
     parser.add_argument(
-        '-v', '--version', action='version',
-        version='%s version %s' % (prog, __version__))
+        "-v",
+        "--version",
+        action="version",
+        version="%s version %s" % (prog, __version__),
+    )
+    parser.add_argument("ksp", help="Path to Kerbal Space Program directory")
+    parser.add_argument("service", help="Name of service")
     parser.add_argument(
-        'ksp', help='Path to Kerbal Space Program directory')
+        "assemblies",
+        nargs="+",
+        help="Paths to assemblies containing the service and "
+        + "any dependencies required to load it",
+    )
     parser.add_argument(
-        'service', help='Name of service')
-    parser.add_argument(
-        'assemblies', nargs='+',
-        help='Paths to assemblies containing the service and ' +
-        'any dependencies required to load it')
-    parser.add_argument(
-        '-o', '--output',
-        help='Path to write output to. If not specified, ' +
-        'output is written to standard output.')
+        "-o",
+        "--output",
+        help="Path to write output to. If not specified, "
+        + "output is written to standard output.",
+    )
     args = parser.parse_args()
 
     try:
@@ -38,7 +43,7 @@ def main():
         return 1
 
     if args.output:
-        with open(args.output, 'w') as fp:
+        with open(args.output, "w") as fp:
             fp.write(defs)
     else:
         print(defs)
@@ -47,18 +52,17 @@ def main():
 
 
 def servicedefs(ksp, service, assemblies):
-    """ Generate service definitions from assembly DLLs
-        using ServiceDefinitions.exe """
+    """Generate service definitions from assembly DLLs
+    using ServiceDefinitions.exe"""
 
     if not os.path.exists(ksp):
-        raise RuntimeError('Kerbal Space Program directory does not exist.')
+        raise RuntimeError("Kerbal Space Program directory does not exist.")
 
-    bindir = tempfile.mkdtemp(prefix='krpc-servicedefs-')
-    tmpout = bindir+'/out.json'
+    bindir = tempfile.mkdtemp(prefix="krpc-servicedefs-")
+    tmpout = bindir + "/out.json"
 
     # Copy binaries to the tmp dir
-    binpath = resource_filename(
-        Requirement.parse('krpctools'), 'krpctools/bin')
+    binpath = resource_filename(Requirement.parse("krpctools"), "krpctools/bin")
     files = os.listdir(binpath)
     for filename in files:
         filename = os.path.join(binpath, filename)
@@ -67,42 +71,43 @@ def servicedefs(ksp, service, assemblies):
 
     # Copy KSP DLLs to the tmp dir
     ksp_dlls = [
-        'Assembly-CSharp.dll',
-        'Assembly-CSharp-firstpass.dll',
-        'UnityEngine.dll',
-        'UnityEngine.AnimationModule.dll',
-        'UnityEngine.AssetBundleModule.dll',
-        'UnityEngine.CoreModule.dll',
-        'UnityEngine.IMGUIModule.dll',
-        'UnityEngine.InputLegacyModule.dll',
-        'UnityEngine.ScreenCaptureModule.dll',
-        'UnityEngine.SharedInternalsModule.dll',
-        'UnityEngine.TextRenderingModule.dll',
-        'UnityEngine.UI.dll',
-        'UnityEngine.UIModule.dll',
-        'UnityEngine.UnityWebRequestWWWModule.dll',
+        "Assembly-CSharp.dll",
+        "Assembly-CSharp-firstpass.dll",
+        "UnityEngine.dll",
+        "UnityEngine.AnimationModule.dll",
+        "UnityEngine.AssetBundleModule.dll",
+        "UnityEngine.CoreModule.dll",
+        "UnityEngine.IMGUIModule.dll",
+        "UnityEngine.InputLegacyModule.dll",
+        "UnityEngine.ScreenCaptureModule.dll",
+        "UnityEngine.SharedInternalsModule.dll",
+        "UnityEngine.TextRenderingModule.dll",
+        "UnityEngine.UI.dll",
+        "UnityEngine.UIModule.dll",
+        "UnityEngine.UnityWebRequestWWWModule.dll",
     ]
-    ksp_data = 'KSP_Data/Managed'
+    ksp_data = "KSP_Data/Managed"
     if not os.path.exists(os.path.join(ksp, ksp_data)):
-        ksp_data = 'KSP_x64_Data/Managed'
+        ksp_data = "KSP_x64_Data/Managed"
     for dll in ksp_dlls:
         shutil.copy(os.path.join(ksp, ksp_data, dll), bindir)
 
     # Generate the service definitions
     try:
         subprocess.check_output(
-            [bindir+'/ServiceDefinitions.exe',
-             '--output=%s' % tmpout, service] + assemblies,
-            stderr=subprocess.STDOUT)
+            [bindir + "/ServiceDefinitions.exe", "--output=%s" % tmpout, service]
+            + assemblies,
+            stderr=subprocess.STDOUT,
+        )
     except subprocess.CalledProcessError as ex:
         shutil.rmtree(bindir)
         raise RuntimeError(ex.output) from ex
 
-    with open(tmpout, 'r') as fp:
+    with open(tmpout, "r") as fp:
         return fp.read()
 
     shutil.rmtree(bindir)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

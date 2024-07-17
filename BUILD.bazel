@@ -72,7 +72,7 @@ genrule(
 genrule(
     name = "python_version",
     outs = ["version.py"],
-    cmd = 'echo "__version__ = \'%s\'" > "$@"' % python_version,
+    cmd = 'echo "__version__ = \\"%s\\"" > "$@"' % python_version,
     visibility = ["//visibility:public"],
 )
 

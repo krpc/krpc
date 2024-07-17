@@ -1,5 +1,6 @@
 import krpc
-conn = krpc.connect(name='Orbital directions')
+
+conn = krpc.connect(name="Orbital directions")
 vessel = conn.space_center.active_vessel
 ap = vessel.auto_pilot
 ap.reference_frame = vessel.orbital_reference_frame

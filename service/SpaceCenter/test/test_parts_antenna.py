@@ -8,15 +8,13 @@ class TestPartsAntenna(krpctest.TestCase):
     def setUpClass(cls):
         cls.new_save()
         cls.remove_other_vessels()
-        cls.launch_vessel_from_vab('PartsAntenna')
+        cls.launch_vessel_from_vab("PartsAntenna")
         vessel = cls.connect().space_center.active_vessel
         parts = vessel.parts
         cls.control = vessel.control
         cls.antennas = parts.antennas
-        cls.fixed_antenna = parts.with_title(
-            'RA-2 Relay Antenna')[0].antenna
-        cls.deployable_antenna = parts.with_title(
-            'HG-5 High Gain Antenna')[0].antenna
+        cls.fixed_antenna = parts.with_title("RA-2 Relay Antenna")[0].antenna
+        cls.deployable_antenna = parts.with_title("HG-5 High Gain Antenna")[0].antenna
         cls.state = cls.connect().space_center.AntennaState
 
     def test_fixed_antenna(self):
@@ -25,8 +23,7 @@ class TestPartsAntenna(krpctest.TestCase):
         self.assertFalse(antenna.deployable)
         self.assertTrue(antenna.deployed)
         self.assertTrue(antenna.can_transmit)
-        self.assertRaises(RuntimeError, setattr,
-                          antenna, 'deployed', True)
+        self.assertRaises(RuntimeError, setattr, antenna, "deployed", True)
         self.assertEqual(2e9, antenna.power)
         self.assertTrue(antenna.combinable)
         self.assertEqual(0.75, antenna.combinable_exponent)
@@ -115,12 +112,12 @@ class TestPartsAntennaBreak(krpctest.TestCase):
     def setUpClass(cls):
         cls.new_save()
         cls.remove_other_vessels()
-        cls.launch_vessel_from_vab('PartsAntenna')
+        cls.launch_vessel_from_vab("PartsAntenna")
         vessel = cls.connect().space_center.active_vessel
         parts = vessel.parts
         cls.control = vessel.control
         cls.state = cls.connect().space_center.AntennaState
-        cls.antenna = parts.with_title('Communotron 16')[0].antenna
+        cls.antenna = parts.with_title("Communotron 16")[0].antenna
 
     def test_break(self):
         self.antenna.deployed = True
@@ -136,5 +133,5 @@ class TestPartsAntennaBreak(krpctest.TestCase):
         self.assertFalse(self.antenna.can_transmit)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

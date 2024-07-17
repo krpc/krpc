@@ -1,5 +1,6 @@
 import krpc
-conn = krpc.connect(name='Surface prograde')
+
+conn = krpc.connect(name="Surface prograde")
 vessel = conn.space_center.active_vessel
 ap = vessel.auto_pilot
 

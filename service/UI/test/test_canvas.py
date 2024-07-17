@@ -23,8 +23,8 @@ class TestCanvas(krpctest.TestCase):
         self.assertEqual((0, 0), rect.position)
         self.assertEqual((0, 0, 625), rect.local_position)
         self.assertEqual((width, height), rect.size)
-        self.assertEqual((width/2, height/2), rect.upper_right)
-        self.assertEqual((-width/2, -height/2), rect.lower_left)
+        self.assertEqual((width / 2, height / 2), rect.upper_right)
+        self.assertEqual((-width / 2, -height / 2), rect.lower_left)
         self.assertEqual((0, 0), rect.anchor_max)
         self.assertEqual((0, 0), rect.anchor_min)
         self.assertEqual((0.5, 0.5), rect.pivot)
@@ -32,5 +32,5 @@ class TestCanvas(krpctest.TestCase):
         self.assertEqual((1.0, 1.0, 1.0), rect.scale)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

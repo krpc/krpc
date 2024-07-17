@@ -7,30 +7,28 @@ class DocumentationGenerator:
     def __init__(self, domain, services, xml):
         self.domain = domain
         self.services = services
-        if xml.strip() == '':
+        if xml.strip() == "":
             self.root = None
         else:
-            parser = ElementTree.XMLParser(encoding='UTF-8')
-            self.root = ElementTree.XML(xml.encode('UTF-8'), parser=parser)
+            parser = ElementTree.XMLParser(encoding="UTF-8")
+            self.root = ElementTree.XML(xml.encode("UTF-8"), parser=parser)
 
-    def generate(self, path='./summary'):
+    def generate(self, path="./summary"):
         if self.root is None:
-            return ''
+            return ""
         node = self.root.find(path)
         if node is None:
-            return ''
+            return ""
         return self._generate(node)
 
-    def has(self, path='./summary'):
+    def has(self, path="./summary"):
         if self.root is None:
             return False
         node = self.root.find(path)
-        return node is not None \
-            and node.text is not None \
-            and node.text.strip() != ''
+        return node is not None and node.text is not None and node.text.strip() != ""
 
     def _generate(self, node):
-        content = node.text or ''
+        content = node.text or ""
         for child in node:
             content += self._generate_node(child)
             if child.tail:
@@ -38,21 +36,23 @@ class DocumentationGenerator:
         return content.strip()
 
     def _generate_node(self, node):
-        if node.tag == 'see':
-            return self.domain.see(
-                lookup_cref(node.attrib['cref'], self.services))
-        if node.tag == 'paramref':
-            return self.domain.paramref(node.attrib['name'])
-        if node.tag == 'a':
-            return '`%s <%s>`_' % \
-                (node.text.replace('\n', ' ').strip(), node.attrib['href'])
-        if node.tag == 'c':
+        if node.tag == "see":
+            return self.domain.see(lookup_cref(node.attrib["cref"], self.services))
+        if node.tag == "paramref":
+            return self.domain.paramref(node.attrib["name"])
+        if node.tag == "a":
+            return "`%s <%s>`_" % (
+                node.text.replace("\n", " ").strip(),
+                node.attrib["href"],
+            )
+        if node.tag == "c":
             return self.domain.code(node.text)
-        if node.tag == 'math':
+        if node.tag == "math":
             return self.domain.math(node.text)
-        if node.tag == 'list':
-            content = ['* %s\n' %
-                       indent(self._generate(item[0]), width=2)[2:].rstrip()
-                       for item in node]
-            return '\n'+''.join(content)
-        raise RuntimeError('Unknown node \'%s\'' % node.tag)
+        if node.tag == "list":
+            content = [
+                "* %s\n" % indent(self._generate(item[0]), width=2)[2:].rstrip()
+                for item in node
+            ]
+            return "\n" + "".join(content)
+        raise RuntimeError("Unknown node '%s'" % node.tag)

@@ -7,7 +7,7 @@ class TestCamera(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.set_circular_orbit('Kerbin', 1000000)
+        cls.set_circular_orbit("Kerbin", 1000000)
         cls.camera = cls.connect().space_center.camera
         cls.mode = cls.connect().space_center.CameraMode
 
@@ -17,7 +17,7 @@ class TestCamera(krpctest.TestCase):
             self.mode.chase,
             self.mode.locked,
             self.mode.orbital,
-            self.mode.automatic
+            self.mode.automatic,
         ]
         self.assertEqual(self.mode.automatic, self.camera.mode)
         for mode in modes:
@@ -50,10 +50,8 @@ class CameraTestBase:
         # TODO: not supported in IVA mode
         if self.camera.mode == self.mode.iva:
             return
-        self.assertGreater(
-            self.camera.default_distance, self.camera.min_distance)
-        self.assertLess(
-            self.camera.default_distance, self.camera.max_distance)
+        self.assertGreater(self.camera.default_distance, self.camera.min_distance)
+        self.assertLess(self.camera.default_distance, self.camera.max_distance)
         for distance in self.distances:
             self.assertGreater(distance, self.camera.min_distance)
             self.assertLess(distance, self.camera.max_distance)
@@ -91,7 +89,7 @@ class TestCameraFlight(krpctest.TestCase, CameraTestBase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.set_circular_orbit('Kerbin', 1000000)
+        cls.set_circular_orbit("Kerbin", 1000000)
         space_center = cls.connect().space_center
         cls.camera = space_center.camera
         cls.mode = space_center.CameraMode
@@ -128,7 +126,7 @@ class TestCameraMap(krpctest.TestCase, CameraTestBase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.set_circular_orbit('Kerbin', 1000000)
+        cls.set_circular_orbit("Kerbin", 1000000)
         space_center = cls.connect().space_center
         cls.camera = space_center.camera
         cls.mode = space_center.CameraMode
@@ -145,5 +143,5 @@ class TestCameraMap(krpctest.TestCase, CameraTestBase):
         cls.wait(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -6,97 +6,97 @@ class EngineTestBase:
 
     engine_data = {
         'LV-T30 "Reliant" Liquid Fuel Engine': {
-            'propellants': {'LiquidFuel': 9./11., 'Oxidizer': 1.},
-            'gimballed': False,
-            'throttle_locked': False,
-            'can_restart': True,
-            'can_shutdown': True,
-            'max_vac_thrust': 240000,
-            'msl_isp': 265,
-            'vac_isp': 310,
-            'modes': None
+            "propellants": {"LiquidFuel": 9.0 / 11.0, "Oxidizer": 1.0},
+            "gimballed": False,
+            "throttle_locked": False,
+            "can_restart": True,
+            "can_shutdown": True,
+            "max_vac_thrust": 240000,
+            "msl_isp": 265,
+            "vac_isp": 310,
+            "modes": None,
         },
         'LV-T45 "Swivel" Liquid Fuel Engine': {
-            'propellants': {'LiquidFuel': 9./11., 'Oxidizer': 1.},
-            'gimballed': True,
-            'gimbal_range': 3,
-            'throttle_locked': False,
-            'can_restart': True,
-            'can_shutdown': True,
-            'max_vac_thrust': 215000,
-            'msl_isp': 250,
-            'vac_isp': 320,
-            'modes': None
+            "propellants": {"LiquidFuel": 9.0 / 11.0, "Oxidizer": 1.0},
+            "gimballed": True,
+            "gimbal_range": 3,
+            "throttle_locked": False,
+            "can_restart": True,
+            "can_shutdown": True,
+            "max_vac_thrust": 215000,
+            "msl_isp": 250,
+            "vac_isp": 320,
+            "modes": None,
         },
         'LV-N "Nerv" Atomic Rocket Motor': {
-            'propellants': {'LiquidFuel': 1.},
-            'gimballed': False,
-            'throttle_locked': False,
-            'can_restart': True,
-            'can_shutdown': True,
-            'max_vac_thrust': 60000,
-            'msl_isp': 185,
-            'vac_isp': 800,
-            'modes': None
+            "propellants": {"LiquidFuel": 1.0},
+            "gimballed": False,
+            "throttle_locked": False,
+            "can_restart": True,
+            "can_shutdown": True,
+            "max_vac_thrust": 60000,
+            "msl_isp": 185,
+            "vac_isp": 800,
+            "modes": None,
         },
         'IX-6315 "Dawn" Electric Propulsion System': {
-            'propellants': {'XenonGas': 0.1/1.8, 'ElectricCharge': 1.},
-            'gimballed': False,
-            'throttle_locked': False,
-            'can_restart': True,
-            'can_shutdown': True,
-            'max_vac_thrust': 2000,
-            'msl_isp': 100,
-            'vac_isp': 4200,
-            'modes': None
+            "propellants": {"XenonGas": 0.1 / 1.8, "ElectricCharge": 1.0},
+            "gimballed": False,
+            "throttle_locked": False,
+            "can_restart": True,
+            "can_shutdown": True,
+            "max_vac_thrust": 2000,
+            "msl_isp": 100,
+            "vac_isp": 4200,
+            "modes": None,
         },
         'O-10 "Puff" MonoPropellant Fuel Engine': {
-            'propellants': {'MonoPropellant': 1.},
-            'gimballed': True,
-            'gimbal_range': 6,
-            'throttle_locked': False,
-            'can_restart': True,
-            'can_shutdown': True,
-            'max_vac_thrust': 20000,
-            'msl_isp': 120,
-            'vac_isp': 250,
-            'modes': None
+            "propellants": {"MonoPropellant": 1.0},
+            "gimballed": True,
+            "gimbal_range": 6,
+            "throttle_locked": False,
+            "can_restart": True,
+            "can_shutdown": True,
+            "max_vac_thrust": 20000,
+            "msl_isp": 120,
+            "vac_isp": 250,
+            "modes": None,
         },
         'RT-10 "Hammer" Solid Fuel Booster': {
-            'propellants': {'SolidFuel': 1.},
-            'gimballed': False,
-            'throttle_locked': True,
-            'can_restart': False,
-            'can_shutdown': False,
-            'max_vac_thrust': 227000,
-            'msl_isp': 170,
-            'vac_isp': 195,
-            'modes': None
+            "propellants": {"SolidFuel": 1.0},
+            "gimballed": False,
+            "throttle_locked": True,
+            "can_restart": False,
+            "can_shutdown": False,
+            "max_vac_thrust": 227000,
+            "msl_isp": 170,
+            "vac_isp": 195,
+            "modes": None,
         },
         'J-33 "Wheesley" Basic Jet Engine': {
-            'propellants': {'IntakeAir': 1., 'LiquidFuel': 0.09090909},
-            'gimballed': True,
-            'gimbal_range': 1,
-            'throttle_locked': False,
-            'can_restart': True,
-            'can_shutdown': True,
-            'max_vac_thrust': 80000,
-            'msl_isp': 9600,
-            'vac_isp': 9600,
-            'modes': None
+            "propellants": {"IntakeAir": 1.0, "LiquidFuel": 0.09090909},
+            "gimballed": True,
+            "gimbal_range": 1,
+            "throttle_locked": False,
+            "can_restart": True,
+            "can_shutdown": True,
+            "max_vac_thrust": 80000,
+            "msl_isp": 9600,
+            "vac_isp": 9600,
+            "modes": None,
         },
-        'CR-7 R.A.P.I.E.R. Engine': {
-            'propellants': {'IntakeAir': 1., 'LiquidFuel': 0.166666},
-            'gimballed': True,
-            'gimbal_range': 3,
-            'throttle_locked': False,
-            'can_restart': True,
-            'can_shutdown': True,
-            'max_vac_thrust': 105000,
-            'msl_isp': 3200,
-            'vac_isp': 3200,
-            'modes': ['AirBreathing', 'ClosedCycle']
-        }
+        "CR-7 R.A.P.I.E.R. Engine": {
+            "propellants": {"IntakeAir": 1.0, "LiquidFuel": 0.166666},
+            "gimballed": True,
+            "gimbal_range": 3,
+            "throttle_locked": False,
+            "can_restart": True,
+            "can_shutdown": True,
+            "max_vac_thrust": 105000,
+            "msl_isp": 3200,
+            "vac_isp": 3200,
+            "modes": ["AirBreathing", "ClosedCycle"],
+        },
     }
 
     @classmethod
@@ -112,7 +112,7 @@ class EngineTestBase:
         self.vessel.control.throttle = 0
         engine.active = False
         self.wait(1)
-        if not data['throttle_locked']:
+        if not data["throttle_locked"]:
             self.assertAlmostEqual(0, engine.throttle)
 
     def set_throttle(self, engine, value):
@@ -120,69 +120,62 @@ class EngineTestBase:
         self.vessel.control.throttle = value
         engine.active = True
         self.wait(1)
-        if not data['throttle_locked']:
+        if not data["throttle_locked"]:
             self.assertAlmostEqual(value, engine.throttle)
 
 
 class EngineTest(EngineTestBase):
 
     def check_engine_properties(self, engine):
-        """ Check engine properties independent of activity/throttle """
+        """Check engine properties independent of activity/throttle"""
         data = self.engine_data[engine.part.title]
-        self.assertAlmostEqual(
-            data['max_vac_thrust'], engine.max_vacuum_thrust)
-        self.assertCountEqual(
-            data['propellants'].keys(), engine.propellant_names)
-        self.assertAlmostEqual(
-            data['propellants'], engine.propellant_ratios, places=3)
+        self.assertAlmostEqual(data["max_vac_thrust"], engine.max_vacuum_thrust)
+        self.assertCountEqual(data["propellants"].keys(), engine.propellant_names)
+        self.assertAlmostEqual(data["propellants"], engine.propellant_ratios, places=3)
         self.assertTrue(engine.has_fuel)
-        self.assertEqual(data['throttle_locked'], engine.throttle_locked)
+        self.assertEqual(data["throttle_locked"], engine.throttle_locked)
         self.assertAlmostEqual(
-            data['msl_isp'], engine.kerbin_sea_level_specific_impulse)
-        self.assertAlmostEqual(data['vac_isp'], engine.vacuum_specific_impulse)
-        self.assertEqual(data['can_restart'], engine.can_restart)
-        self.assertEqual(data['can_shutdown'], engine.can_shutdown)
-        self.assertEqual(data['modes'] is not None, engine.has_modes)
-        if data['modes'] is not None:
-            self.assertCountEqual(data['modes'], engine.modes.keys())
-            self.assertTrue(engine.mode in data['modes'])
-        self.assertEqual(data['gimballed'], engine.gimballed)
-        if not data['gimballed']:
+            data["msl_isp"], engine.kerbin_sea_level_specific_impulse
+        )
+        self.assertAlmostEqual(data["vac_isp"], engine.vacuum_specific_impulse)
+        self.assertEqual(data["can_restart"], engine.can_restart)
+        self.assertEqual(data["can_shutdown"], engine.can_shutdown)
+        self.assertEqual(data["modes"] is not None, engine.has_modes)
+        if data["modes"] is not None:
+            self.assertCountEqual(data["modes"], engine.modes.keys())
+            self.assertTrue(engine.mode in data["modes"])
+        self.assertEqual(data["gimballed"], engine.gimballed)
+        if not data["gimballed"]:
             self.assertAlmostEqual(0, engine.gimbal_range)
         else:
             self.assertFalse(engine.gimbal_locked)
-            self.assertAlmostEqual(data['gimbal_range'], engine.gimbal_range)
+            self.assertAlmostEqual(data["gimbal_range"], engine.gimbal_range)
 
     def check_engine_idle(self, engine):
-        """ Check engine properties when engine is deactivated """
+        """Check engine properties when engine is deactivated"""
         data = self.engine_data[engine.part.title]
         self.assertFalse(engine.active)
         self.assertAlmostEqual(1, engine.thrust_limit)
         self.assertEqual(0, engine.thrust)
-        self.assertAlmostEqual(
-            data['max_thrust'], engine.available_thrust, delta=500)
-        self.assertAlmostEqual(
-            data['max_thrust'], engine.max_thrust, delta=500)
+        self.assertAlmostEqual(data["max_thrust"], engine.available_thrust, delta=500)
+        self.assertAlmostEqual(data["max_thrust"], engine.max_thrust, delta=500)
         self.assertAlmostEqual(0, engine.specific_impulse, delta=5)
         self.assertTrue(engine.has_fuel)
         self.assertAlmostEqual((0, 0, 0), engine.available_torque[0])
         self.assertAlmostEqual((0, 0, 0), engine.available_torque[1])
 
     def check_engine_active(self, engine, throttle):
-        """ Check engine properties when engine is activated """
+        """Check engine properties when engine is activated"""
         data = self.engine_data[engine.part.title]
         self.assertTrue(engine.active)
         self.assertAlmostEqual(throttle, engine.throttle, places=2)
         self.assertAlmostEqual(1, engine.thrust_limit, delta=1)
-        self.assertAlmostEqual(
-            data['max_thrust'] * throttle, engine.thrust, delta=500)
-        self.assertAlmostEqual(
-            data['max_thrust'], engine.available_thrust, delta=500)
-        self.assertAlmostEqual(
-            data['max_thrust'], engine.max_thrust, delta=500)
-        self.assertAlmostEqual(data['isp'], engine.specific_impulse, delta=5)
+        self.assertAlmostEqual(data["max_thrust"] * throttle, engine.thrust, delta=500)
+        self.assertAlmostEqual(data["max_thrust"], engine.available_thrust, delta=500)
+        self.assertAlmostEqual(data["max_thrust"], engine.max_thrust, delta=500)
+        self.assertAlmostEqual(data["isp"], engine.specific_impulse, delta=5)
         self.assertTrue(engine.has_fuel)
-        if data['gimballed'] and throttle > 0:
+        if data["gimballed"] and throttle > 0:
             self.assertGreater(engine.available_torque[0], (100, 100, 100))
             self.assertLess(engine.available_torque[1], (-100, -100, -100))
         else:
@@ -241,7 +234,7 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('PartsEngine')
+        cls.launch_vessel_from_vab("PartsEngine")
         cls.remove_other_vessels()
         cls.vessel = cls.connect().space_center.active_vessel
         cls.parts = cls.vessel.parts
@@ -279,9 +272,11 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
                 self.assertAlmostEqual(thrust_limit, engine.thrust_limit)
                 self.wait(0.5)
                 self.assertAlmostEqual(
-                    throttle * thrust_limit * thrust, engine.thrust, delta=500)
+                    throttle * thrust_limit * thrust, engine.thrust, delta=500
+                )
                 self.assertAlmostEqual(
-                    thrust_limit * thrust, engine.available_thrust, delta=500)
+                    thrust_limit * thrust, engine.available_thrust, delta=500
+                )
                 self.assertAlmostEqual(thrust, engine.max_thrust, delta=500)
 
         engine.active = False
@@ -289,14 +284,14 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         self.assertAlmostEqual(1, engine.thrust_limit)
 
     def test_set_mode(self):
-        engine = self.get_engine('CR-7 R.A.P.I.E.R. Engine')
-        engine.mode = 'ClosedCycle'
+        engine = self.get_engine("CR-7 R.A.P.I.E.R. Engine")
+        engine.mode = "ClosedCycle"
         self.wait()
-        self.assertEqual('ClosedCycle', engine.mode)
-        engine.mode = 'AirBreathing'
+        self.assertEqual("ClosedCycle", engine.mode)
+        engine.mode = "AirBreathing"
 
     def test_auto_mode_switch(self):
-        engine = self.get_engine('CR-7 R.A.P.I.E.R. Engine')
+        engine = self.get_engine("CR-7 R.A.P.I.E.R. Engine")
         engine.auto_mode_switch = True
         self.wait()
         self.assertTrue(engine.auto_mode_switch)
@@ -337,34 +332,35 @@ class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('PartsEngine')
+        cls.launch_vessel_from_vab("PartsEngine")
         cls.remove_other_vessels()
         cls.vessel = cls.connect().space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.add_engine_data(
-            'LV-T30 "Reliant" Liquid Fuel Engine',
-            {'max_thrust': 205161, 'isp': 265})
+            'LV-T30 "Reliant" Liquid Fuel Engine', {"max_thrust": 205161, "isp": 265}
+        )
         cls.add_engine_data(
-            'LV-T45 "Swivel" Liquid Fuel Engine',
-            {'max_thrust': 167969, 'isp': 250})
+            'LV-T45 "Swivel" Liquid Fuel Engine', {"max_thrust": 167969, "isp": 250}
+        )
         cls.add_engine_data(
-            'LV-N "Nerv" Atomic Rocket Motor',
-            {'max_thrust': 14300, 'isp': 190.6})
+            'LV-N "Nerv" Atomic Rocket Motor', {"max_thrust": 14300, "isp": 190.6}
+        )
         cls.add_engine_data(
             'IX-6315 "Dawn" Electric Propulsion System',
-            {'max_thrust': 63, 'isp': 128.0})
+            {"max_thrust": 63, "isp": 128.0},
+        )
         cls.add_engine_data(
-            'O-10 "Puff" MonoPropellant Fuel Engine',
-            {'max_thrust': 9700, 'isp': 121.2})
+            'O-10 "Puff" MonoPropellant Fuel Engine', {"max_thrust": 9700, "isp": 121.2}
+        )
         cls.add_engine_data(
-            'RT-10 "Hammer" Solid Fuel Booster',
-            {'max_thrust': 197897, 'isp': 170.4})
+            'RT-10 "Hammer" Solid Fuel Booster', {"max_thrust": 197897, "isp": 170.4}
+        )
         cls.add_engine_data(
-            'J-33 "Wheesley" Basic Jet Engine',
-            {'max_thrust': 74884, 'isp': 9600})
+            'J-33 "Wheesley" Basic Jet Engine', {"max_thrust": 74884, "isp": 9600}
+        )
         cls.add_engine_data(
-            'CR-7 R.A.P.I.E.R. Engine',
-            {'max_thrust': 96895, 'isp': 3200})
+            "CR-7 R.A.P.I.E.R. Engine", {"max_thrust": 96895, "isp": 3200}
+        )
 
     def test_jet_engine(self):
         engine = self.get_engine('J-33 "Wheesley" Basic Jet Engine')
@@ -381,8 +377,8 @@ class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
         engine.active = False
 
     def test_multi_mode_engine(self):
-        engine = self.get_engine('CR-7 R.A.P.I.E.R. Engine')
-        engine.mode = 'AirBreathing'
+        engine = self.get_engine("CR-7 R.A.P.I.E.R. Engine")
+        engine.mode = "AirBreathing"
         self.set_idle(engine)
         self.check_engine_properties(engine)
         self.check_engine_idle(engine)
@@ -401,49 +397,53 @@ class TestPartsEngineVacuum(krpctest.TestCase, EngineTest):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('PartsEngine')
+        cls.launch_vessel_from_vab("PartsEngine")
         cls.remove_other_vessels()
-        cls.set_circular_orbit('Kerbin', 250000)
+        cls.set_circular_orbit("Kerbin", 250000)
         cls.vessel = cls.connect().space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.add_engine_data(
-            'LV-T30 "Reliant" Liquid Fuel Engine',
-            {'max_thrust': 240000, 'isp': 310})
+            'LV-T30 "Reliant" Liquid Fuel Engine', {"max_thrust": 240000, "isp": 310}
+        )
         cls.add_engine_data(
-            'LV-T45 "Swivel" Liquid Fuel Engine',
-            {'max_thrust': 215000, 'isp': 320})
+            'LV-T45 "Swivel" Liquid Fuel Engine', {"max_thrust": 215000, "isp": 320}
+        )
         cls.add_engine_data(
-            'LV-N "Nerv" Atomic Rocket Motor',
-            {'max_thrust': 60000, 'isp': 800})
+            'LV-N "Nerv" Atomic Rocket Motor', {"max_thrust": 60000, "isp": 800}
+        )
         cls.add_engine_data(
             'IX-6315 "Dawn" Electric Propulsion System',
-            {'max_thrust': 2000, 'isp': 4200})
+            {"max_thrust": 2000, "isp": 4200},
+        )
         cls.add_engine_data(
-            'O-10 "Puff" MonoPropellant Fuel Engine',
-            {'max_thrust': 20000, 'isp': 250})
+            'O-10 "Puff" MonoPropellant Fuel Engine', {"max_thrust": 20000, "isp": 250}
+        )
         cls.add_engine_data(
-            'RT-10 "Hammer" Solid Fuel Booster',
-            {'max_thrust': 227000, 'isp': 195})
+            'RT-10 "Hammer" Solid Fuel Booster', {"max_thrust": 227000, "isp": 195}
+        )
         cls.add_engine_data(
-            'CR-7 R.A.P.I.E.R. Engine',
-            {'propellants': {'Oxidizer': 1., 'LiquidFuel': 0.818181},
-             'gimballed': True,
-             'gimbal_range': 3,
-             'throttle_locked': False,
-             'can_restart': True,
-             'can_shutdown': True,
-             'max_vac_thrust': 180000,
-             'msl_isp': 275,
-             'vac_isp': 305,
-             'modes': ['AirBreathing', 'ClosedCycle'],
-             'max_thrust': 180000,
-             'isp': 305})
+            "CR-7 R.A.P.I.E.R. Engine",
+            {
+                "propellants": {"Oxidizer": 1.0, "LiquidFuel": 0.818181},
+                "gimballed": True,
+                "gimbal_range": 3,
+                "throttle_locked": False,
+                "can_restart": True,
+                "can_shutdown": True,
+                "max_vac_thrust": 180000,
+                "msl_isp": 275,
+                "vac_isp": 305,
+                "modes": ["AirBreathing", "ClosedCycle"],
+                "max_thrust": 180000,
+                "isp": 305,
+            },
+        )
 
     def test_multi_mode_engine(self):
-        engine = self.get_engine('CR-7 R.A.P.I.E.R. Engine')
-        engine.mode = 'ClosedCycle'
+        engine = self.get_engine("CR-7 R.A.P.I.E.R. Engine")
+        engine.mode = "ClosedCycle"
         self.check_engine(engine)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

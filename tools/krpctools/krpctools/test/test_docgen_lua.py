@@ -4,10 +4,10 @@ from krpctools.docgen.lua import LuaDomain
 
 
 class TestDocGenLua(DocGenTestCase, unittest.TestCase):
-    language = 'lua'
+    language = "lua"
     domain = LuaDomain
     maxDiff = None
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

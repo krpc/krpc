@@ -28,8 +28,12 @@ class Client(krpc.services.Client):
     client.ServiceName.ProcedureName(parameter)
     """
 
-    def __init__(self, rpc_connection: Connection, stream_connection: Connection,
-                 use_pregenerated_stubs: bool = True) -> None:
+    def __init__(
+        self,
+        rpc_connection: Connection,
+        stream_connection: Connection,
+        use_pregenerated_stubs: bool = True,
+    ) -> None:
         super().__init__()
         self._types = Types()
         self._rpc_connection = rpc_connection
@@ -37,10 +41,10 @@ class Client(krpc.services.Client):
         self._stream_connection = stream_connection
         self._stream_manager = StreamManager(self)
 
-        services = cast(KRPC.Services,
-                        self._invoke(
-                            'KRPC', 'GetServices', [], [], [],
-                            self._types.services_type)).services
+        services = cast(
+            KRPC.Services,
+            self._invoke("KRPC", "GetServices", [], [], [], self._types.services_type),
+        ).services
 
         # Load services
         dynamic_services = []
@@ -60,16 +64,21 @@ class Client(krpc.services.Client):
         # Then dynamically load services for those without pre-generated stubs
         for service_info in dynamic_services:
             # Dynamically create
-            setattr(self, snake_case(service_info.name),
-                    create_service(self, service_info))
+            setattr(
+                self, snake_case(service_info.name), create_service(self, service_info)
+            )
 
         # Set up stream update thread
         if stream_connection is not None:
             self._stream_thread_stop = threading.Event()
             self._stream_thread = threading.Thread(
                 target=krpc.streammanager.update_thread,
-                args=(self._stream_manager, stream_connection,
-                      self._stream_thread_stop))
+                args=(
+                    self._stream_manager,
+                    stream_connection,
+                    self._stream_thread_stop,
+                ),
+            )
             self._stream_thread.daemon = True
             self._stream_thread.start()
         else:
@@ -84,27 +93,31 @@ class Client(krpc.services.Client):
     def __enter__(self) -> Client:
         return self
 
-    def __exit__(self,
-                 exc_type: Optional[Type[BaseException]],
-                 exc_value: Optional[BaseException],
-                 exc_tb: Optional[TracebackType]) -> None:
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_value: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> None:
         self.close()
 
-    def add_stream(self, func: Callable,  # type: ignore[type-arg]
-                   *args: object, **kwargs: object) -> Stream:
-        """ Add a stream to the server """
+    def add_stream(
+        self, func: Callable, *args: object, **kwargs: object  # type: ignore[type-arg]
+    ) -> Stream:
+        """Add a stream to the server"""
         if self._stream_connection is None:
-            raise StreamError('Not connected to stream server')
+            raise StreamError("Not connected to stream server")
         if func == setattr:
-            raise StreamError('Cannot stream a property setter')
+            raise StreamError("Cannot stream a property setter")
         return_type = self._get_return_type(func, *args, **kwargs)
         call = self.get_call(func, *args, **kwargs)
         return krpc.stream.Stream.from_call(self, return_type, call)
 
     @contextmanager
-    def stream(self, func: Callable,  # type: ignore[type-arg]
-               *args: object, **kwargs: object) -> Iterator[Stream]:
-        """ 'with' support for add_stream """
+    def stream(
+        self, func: Callable, *args: object, **kwargs: object  # type: ignore[type-arg]
+    ) -> Iterator[Stream]:
+        """'with' support for add_stream"""
         stream = self.add_stream(func, *args, **kwargs)
         try:
             yield stream
@@ -113,106 +126,116 @@ class Client(krpc.services.Client):
 
     @property
     def stream_update_condition(self) -> threading.Condition:
-        """ Condition variable that is notified when
-            a stream update message has finished being processed. """
+        """Condition variable that is notified when
+        a stream update message has finished being processed."""
         return self._stream_manager.update_condition
 
     def wait_for_stream_update(self, timeout: Optional[float] = None) -> None:
-        """ Wait until the next stream update message or a timeout occurs.
-            The condition variable must be locked before calling this method.
+        """Wait until the next stream update message or a timeout occurs.
+        The condition variable must be locked before calling this method.
 
-            When timeout is not None, it should be a floating point number
-            specifying the timeout in seconds for the operation. """
+        When timeout is not None, it should be a floating point number
+        specifying the timeout in seconds for the operation."""
         self._stream_manager.wait_for_update(timeout)
 
     def add_stream_update_callback(self, callback: Callable[[], None]) -> None:
-        """ Add a callback that is invoked whenever
-            a stream update message has finished being processed. """
+        """Add a callback that is invoked whenever
+        a stream update message has finished being processed."""
         self._stream_manager.add_update_callback(callback)
 
     def remove_stream_update_callback(self, callback: Callable[[], None]) -> None:
-        """ Remove a stream update callback. """
+        """Remove a stream update callback."""
         self._stream_manager.remove_update_callback(callback)
 
     @staticmethod
-    def get_call(func: Callable,  # type: ignore[type-arg]
-                 *args: object, **kwargs: object) -> KRPC.ProcedureCall:
-        """ Convert a remote procedure call to a KRPC.ProcedureCall message """
+    def get_call(
+        func: Callable, *args: object, **kwargs: object  # type: ignore[type-arg]
+    ) -> KRPC.ProcedureCall:
+        """Convert a remote procedure call to a KRPC.ProcedureCall message"""
         if func == getattr:
             name = args[1]
-            builder = getattr(args[0], '_build_call_' + name)
+            builder = getattr(args[0], "_build_call_" + name)
             args = tuple()
             kwargs = {}
         elif func == setattr:
-            raise StreamError('Cannot create a call for a property setter')
+            raise StreamError("Cannot create a call for a property setter")
         else:
             builder = getattr(
                 func.__self__,  # type: ignore[attr-defined]
-                '_build_call_' + func.__name__
+                "_build_call_" + func.__name__,
             )
         return cast(KRPC.ProcedureCall, builder(*args, **kwargs))
 
     @staticmethod
-    def _get_return_type(func: Callable,  # type: ignore[type-arg] # pylint: disable=unused-argument
-                         *args: object,
-                         **kwargs: object) -> TypeBase:
-        """ Get the return type for a remote procedure call """
+    def _get_return_type(
+        func: Callable,  # type: ignore[type-arg] # pylint: disable=unused-argument
+        *args: object,
+        **kwargs: object,
+    ) -> TypeBase:
+        """Get the return type for a remote procedure call"""
         if func == getattr:
             name = args[1]
-            return_type_fn = getattr(args[0], '_return_type_' + name)
+            return_type_fn = getattr(args[0], "_return_type_" + name)
         elif func == setattr:
-            raise StreamError('Cannot get return type for a property setter')
+            raise StreamError("Cannot get return type for a property setter")
         else:
             return_type_fn = getattr(
                 func.__self__,  # type: ignore[attr-defined]
-                '_return_type_' + func.__name__
+                "_return_type_" + func.__name__,
             )
         return cast(TypeBase, return_type_fn())
 
-    def _invoke(self, service: str, procedure: str, args: Iterable[object],
-                param_names: Iterable[str], param_types: Iterable[TypeBase],
-                return_type: Optional[TypeBase]) -> object:
-        """ Execute an RPC """
+    def _invoke(
+        self,
+        service: str,
+        procedure: str,
+        args: Iterable[object],
+        param_names: Iterable[str],
+        param_types: Iterable[TypeBase],
+        return_type: Optional[TypeBase],
+    ) -> object:
+        """Execute an RPC"""
 
         # Build the request
-        call = self._build_call(service, procedure, args,
-                                param_names, param_types, return_type)
+        call = self._build_call(
+            service, procedure, args, param_names, param_types, return_type
+        )
         request = KRPC.Request()
         request.calls.extend([call])
 
         # Send the request
         with self._rpc_connection_lock:
             self._rpc_connection.send_message(request)
-            response = cast(KRPC.Response, self._rpc_connection.receive_message(KRPC.Response))
+            response = cast(
+                KRPC.Response, self._rpc_connection.receive_message(KRPC.Response)
+            )
 
         # Check for an error response
-        if response.HasField('error'):
+        if response.HasField("error"):
             raise self._build_error(response.error)
 
         # Check for an error in the procedure results
-        if response.results[0].HasField('error'):
+        if response.results[0].HasField("error"):
             raise self._build_error(response.results[0].error)
 
         # Decode the response and return the (optional) result
         result = None
         if return_type is not None:
-            result = Decoder.decode(
-                self, response.results[0].value, return_type
-            )
+            result = Decoder.decode(self, response.results[0].value, return_type)
             if isinstance(result, KRPC.Event):
                 result = Event(self, result)
         return result
 
     def _build_call(
-            self,
-            service: str,
-            procedure: str,
-            args: Iterable[object],
-            param_names: Iterable[str],  # pylint: disable=unused-argument
-            param_types: Iterable[TypeBase],
-            return_type: Optional[TypeBase]  # pylint: disable=unused-argument
+        self,
+        service: str,
+        procedure: str,
+        args: Iterable[object],
+        param_names: Iterable[str],  # pylint: disable=unused-argument
+        param_types: Iterable[TypeBase],
+        return_type: Optional[TypeBase],  # pylint: disable=unused-argument
     ) -> KRPC.ProcedureCall:
-        """ Build a KRPC.ProcedureCall object """
+        """Build a KRPC.ProcedureCall object"""
 
         call = KRPC.ProcedureCall()
         call.service = service
@@ -226,16 +249,16 @@ class Client(krpc.services.Client):
                     value = self._types.coerce_to(value, typ)
                 except ValueError as exc:
                     raise TypeError(
-                        '%s.%s() argument %d must be a %s, got a %s' %
-                        (service, procedure, i, typ.python_type, type(value))
+                        "%s.%s() argument %d must be a %s, got a %s"
+                        % (service, procedure, i, typ.python_type, type(value))
                     ) from exc
             call.arguments.add(position=i, value=Encoder.encode(value, typ))
 
         return call
 
     def _build_error(self, error: KRPC.Error) -> Exception:
-        """ Build an exception from an error message that
-            can be thrown to the calling code """
+        """Build an exception from an error message that
+        can be thrown to the calling code"""
         # TODO: modify the stack trace of the thrown exception so it looks like
         #       it came from the local call
         if error.service and error.name:
@@ -243,14 +266,15 @@ class Client(krpc.services.Client):
             type_name = error.name
             if not hasattr(self, service_name):
                 raise RuntimeError(
-                    'Error building exception; service \'%s\' not found' %
-                    service_name)
+                    "Error building exception; service '%s' not found" % service_name
+                )
             service = getattr(self, service_name)
             if not hasattr(service, type_name):
                 raise RuntimeError(
-                    'Error building exception; type \'%s.%s\' not found' %
-                    (service_name, type_name))
-            if error.service == 'KRPC' and error.name in EXCEPTION_TYPES:
+                    "Error building exception; type '%s.%s' not found"
+                    % (service_name, type_name)
+                )
+            if error.service == "KRPC" and error.name in EXCEPTION_TYPES:
                 # Use a built-in exception type if it's in the mapping
                 cls = EXCEPTION_TYPES[type_name]
             else:
@@ -262,5 +286,5 @@ class Client(krpc.services.Client):
     def _error_message(error: KRPC.Error) -> str:
         msg = error.description
         if error.stack_trace:
-            msg += '\nServer stack trace:\n' + error.stack_trace
+            msg += "\nServer stack trace:\n" + error.stack_trace
         return msg

@@ -1,0 +1,17 @@
+load("//tools/build:python.bzl", "py_script")
+
+py_script(
+    name = "black",
+    pkg = "@python_black//file",
+    script = "black",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@python_click//file",
+        "@python_mypy_extensions//file",
+        "@python_packaging//file",
+        "@python_pathspec//file",
+        "@python_platformdirs//file",
+        "@python_tomli//file",
+        "@python_typing_extensions//file",
+    ],
+)

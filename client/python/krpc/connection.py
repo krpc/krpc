@@ -25,14 +25,14 @@ class Connection:
         self.close()
 
     def send_message(self, message: google.protobuf.message.Message) -> None:
-        """ Send a protobuf message """
+        """Send a protobuf message"""
         self.send(Encoder.encode_message_with_size(message))
 
     def receive_message(self, typ: type) -> google.protobuf.message.Message:
-        """ Receive a protobuf message and decode it """
+        """Receive a protobuf message and decode it"""
 
         # Read the size and position of the response message
-        data = b''
+        data = b""
         while True:
             try:
                 data += self.partial_receive(1)
@@ -46,8 +46,8 @@ class Connection:
         return Decoder.decode_message(data, typ)
 
     def send(self, data: bytes) -> None:
-        """ Send data to the connection.
-            Blocks until all data has been sent. """
+        """Send data to the connection.
+        Blocks until all data has been sent."""
         assert data
         while data:
             sent = self._socket.send(data)
@@ -56,12 +56,12 @@ class Connection:
             data = data[sent:]
 
     def receive(self, length: int) -> bytes:
-        """ Receive data from the connection.
-            Blocks until length bytes have been received. """
+        """Receive data from the connection.
+        Blocks until length bytes have been received."""
         if length == 0:
-            return b''
+            return b""
         assert length > 0
-        data = b''
+        data = b""
         while len(data) < length:
             remaining = length - len(data)
             result = self._socket.recv(min(4096, remaining))
@@ -71,7 +71,7 @@ class Connection:
         return data
 
     def partial_receive(self, length: int, timeout: float = 0.01) -> bytes:
-        """ Receive up to length bytes of data from the connection. """
+        """Receive up to length bytes of data from the connection."""
         assert length > 0
         try:
             ready = select.select([self._socket], [], [], timeout)
@@ -79,4 +79,4 @@ class Connection:
             raise socket.error("Connection closed") from exn
         if ready[0]:
             return self._socket.recv(length)
-        return b''
+        return b""

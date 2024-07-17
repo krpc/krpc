@@ -7,19 +7,18 @@ class TestPartsRadiator(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('PartsRadiator')
+        cls.launch_vessel_from_vab("PartsRadiator")
         cls.remove_other_vessels()
         vessel = cls.connect().space_center.active_vessel
         parts = vessel.parts
         cls.control = vessel.control
         cls.state = cls.connect().space_center.RadiatorState
         cls.radiators = parts.radiators
-        cls.radiator = parts.with_title(
-            'Thermal Control System (medium)')[0].radiator
-        cls.radiator_break = parts.with_title(
-            'Thermal Control System (small)')[0].radiator
-        cls.fixed_radiator = parts.with_title(
-            'Radiator Panel (small)')[0].radiator
+        cls.radiator = parts.with_title("Thermal Control System (medium)")[0].radiator
+        cls.radiator_break = parts.with_title("Thermal Control System (small)")[
+            0
+        ].radiator
+        cls.fixed_radiator = parts.with_title("Radiator Panel (small)")[0].radiator
 
     def test_fixed_radiator(self):
         self.assertFalse(self.fixed_radiator.deployable)
@@ -72,14 +71,13 @@ class TestPartsRadiatorBreak(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('PartsRadiator')
+        cls.launch_vessel_from_vab("PartsRadiator")
         cls.remove_other_vessels()
         vessel = cls.connect().space_center.active_vessel
         parts = vessel.parts
         cls.control = vessel.control
         cls.state = cls.connect().space_center.RadiatorState
-        cls.radiator = parts.with_title(
-            'Thermal Control System (small)')[0].radiator
+        cls.radiator = parts.with_title("Thermal Control System (small)")[0].radiator
 
     def test_break_radiator(self):
         self.assertEqual(self.state.retracted, self.radiator.state)
@@ -92,5 +90,5 @@ class TestPartsRadiatorBreak(krpctest.TestCase):
         self.assertEqual(self.state.broken, self.radiator.state)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

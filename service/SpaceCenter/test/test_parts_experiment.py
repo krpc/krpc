@@ -5,29 +5,30 @@ import krpctest
 class TestPartsExperiment(krpctest.TestCase):
 
     def setUp(self):
-        self.new_save('krpctest_career', always_load=True)
-        self.launch_vessel_from_vab('PartsExperiment')
+        self.new_save("krpctest_career", always_load=True)
+        self.launch_vessel_from_vab("PartsExperiment")
         self.remove_other_vessels()
         self.sc = self.connect().space_center
         self.parts = self.sc.active_vessel.parts
-        self.pod = self.parts.with_name('mk1pod')[0].experiment
-        self.goo = self.parts.with_name('GooExperiment')[0].experiment
+        self.pod = self.parts.with_name("mk1pod")[0].experiment
+        self.goo = self.parts.with_name("GooExperiment")[0].experiment
 
     def test_experiments(self):
         self.assertCountEqual(
-            ['crewReport', 'crewReport', 'mysteryGoo'],
-            [x.name for x in self.parts.experiments])
+            ["crewReport", "crewReport", "mysteryGoo"],
+            [x.name for x in self.parts.experiments],
+        )
 
     def test_pod(self):
-        self.assertEqual('crewReport', self.pod.name)
-        self.assertEqual('Crew Report', self.pod.title)
+        self.assertEqual("crewReport", self.pod.name)
+        self.assertEqual("Crew Report", self.pod.title)
         self.assertFalse(self.pod.deployed)
         self.assertTrue(self.pod.rerunnable)
         self.assertFalse(self.pod.inoperable)
         self.assertFalse(self.pod.has_data)
         self.assertCountEqual([], self.pod.data)
         self.assertEqual(True, self.pod.available)
-        self.assertEqual('LaunchPad', self.pod.biome)
+        self.assertEqual("LaunchPad", self.pod.biome)
         subject = self.pod.science_subject
         self.assertAlmostEqual(0, subject.science)
         self.assertAlmostEqual(1.5, subject.science_cap)
@@ -35,11 +36,11 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertAlmostEqual(1.0, subject.data_scale)
         self.assertAlmostEqual(1.0, subject.scientific_value)
         self.assertAlmostEqual(0.3, subject.subject_value)
-        self.assertEqual('Crew Report from LaunchPad', subject.title)
+        self.assertEqual("Crew Report from LaunchPad", subject.title)
 
     def test_goo_container(self):
-        self.assertEqual('mysteryGoo', self.goo.name)
-        self.assertEqual('Mystery Goo\u2122 Observation', self.goo.title)
+        self.assertEqual("mysteryGoo", self.goo.name)
+        self.assertEqual("Mystery Goo\u2122 Observation", self.goo.title)
         self.assertFalse(self.goo.deployed)
         self.assertFalse(self.goo.rerunnable)
         self.assertFalse(self.goo.inoperable)
@@ -52,9 +53,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertAlmostEqual(1.0, subject.data_scale)
         self.assertAlmostEqual(1.0, subject.scientific_value)
         self.assertAlmostEqual(0.3, subject.subject_value)
-        self.assertEqual(
-            'Mystery Goo\u2122 Observation from LaunchPad',
-            subject.title)
+        self.assertEqual("Mystery Goo\u2122 Observation from LaunchPad", subject.title)
 
     def test_run_and_dump_data(self):
         self.assertFalse(self.pod.deployed)
@@ -179,5 +178,5 @@ class TestPartsExperiment(krpctest.TestCase):
             self.assertCountEqual([], self.pod.data)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

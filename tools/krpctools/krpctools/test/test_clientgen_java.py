@@ -4,9 +4,9 @@ from krpctools.clientgen.java import JavaGenerator
 
 
 class TestClientGenJava(ClientGenTestCase, unittest.TestCase):
-    language = 'java'
+    language = "java"
     generator = JavaGenerator
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

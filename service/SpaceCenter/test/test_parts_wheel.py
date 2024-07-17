@@ -7,21 +7,18 @@ class TestPartsWheel(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('PartsWheel')
+        cls.launch_vessel_from_vab("PartsWheel")
         cls.remove_other_vessels()
         vessel = cls.connect().space_center.active_vessel
         cls.parts = vessel.parts
         cls.wheels = cls.parts.wheels
-        cls.deployable_wheel = cls.parts.with_title(
-            'LY-60 Large Landing Gear')[0].wheel
-        cls.fixed_wheel = cls.parts.with_title(
-            'LY-01 Fixed Landing Gear')[0].wheel
-        cls.free_wheel = cls.parts.with_title(
-            'LY-05 Steerable Landing Gear')[0].wheel
-        cls.powered_wheel = cls.parts.with_title(
-            'RoveMax Model M1')[0].wheel
-        cls.suspension_wheel = cls.parts.with_title(
-            'TR-2L Ruggedized Vehicular Wheel')[0].wheel
+        cls.deployable_wheel = cls.parts.with_title("LY-60 Large Landing Gear")[0].wheel
+        cls.fixed_wheel = cls.parts.with_title("LY-01 Fixed Landing Gear")[0].wheel
+        cls.free_wheel = cls.parts.with_title("LY-05 Steerable Landing Gear")[0].wheel
+        cls.powered_wheel = cls.parts.with_title("RoveMax Model M1")[0].wheel
+        cls.suspension_wheel = cls.parts.with_title("TR-2L Ruggedized Vehicular Wheel")[
+            0
+        ].wheel
         cls.state = cls.connect().space_center.WheelState
         cls.motor_state = cls.connect().space_center.MotorState
         cls.control = vessel.control
@@ -39,7 +36,7 @@ class TestPartsWheel(krpctest.TestCase):
     def test_no_brakes(self):
         wheel = self.free_wheel
         self.assertFalse(wheel.has_brakes)
-        self.assertRaises(RuntimeError, getattr, wheel, 'brakes')
+        self.assertRaises(RuntimeError, getattr, wheel, "brakes")
 
     def test_friction_control(self):
         wheel = self.fixed_wheel
@@ -124,9 +121,9 @@ class TestPartsWheel(krpctest.TestCase):
     def test_unpowered(self):
         wheel = self.free_wheel
         self.assertFalse(wheel.powered)
-        self.assertRaises(RuntimeError, getattr, wheel, 'motor_inverted')
-        self.assertRaises(RuntimeError, getattr, wheel, 'motor_state')
-        self.assertRaises(RuntimeError, getattr, wheel, 'motor_output')
+        self.assertRaises(RuntimeError, getattr, wheel, "motor_inverted")
+        self.assertRaises(RuntimeError, getattr, wheel, "motor_state")
+        self.assertRaises(RuntimeError, getattr, wheel, "motor_output")
 
     def test_traction_control(self):
         wheel = self.powered_wheel
@@ -167,16 +164,14 @@ class TestPartsWheel(krpctest.TestCase):
     def test_unsteerable(self):
         wheel = self.fixed_wheel
         self.assertFalse(wheel.steerable)
-        self.assertRaises(RuntimeError, getattr, wheel, 'steering_enabled')
-        self.assertRaises(RuntimeError, getattr, wheel, 'steering_inverted')
+        self.assertRaises(RuntimeError, getattr, wheel, "steering_enabled")
+        self.assertRaises(RuntimeError, getattr, wheel, "steering_inverted")
 
     def test_suspension(self):
         wheel = self.suspension_wheel
         self.assertTrue(wheel.has_suspension)
-        self.assertAlmostEqual(
-            1.00, wheel.suspension_spring_strength, places=2)
-        self.assertAlmostEqual(
-            1.00, wheel.suspension_damper_strength, places=2)
+        self.assertAlmostEqual(1.00, wheel.suspension_spring_strength, places=2)
+        self.assertAlmostEqual(1.00, wheel.suspension_damper_strength, places=2)
 
     def test_no_suspension(self):
         # TODO: there are no wheel with no suspension to test!
@@ -210,11 +205,11 @@ class TestPartsWheelGrounded(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('PartsWheel')
+        cls.launch_vessel_from_vab("PartsWheel")
         cls.remove_other_vessels()
         vessel = cls.connect().space_center.active_vessel
         cls.parts = vessel.parts
-        cls.wheel = cls.parts.with_title('LY-60 Large Landing Gear')[0].wheel
+        cls.wheel = cls.parts.with_title("LY-60 Large Landing Gear")[0].wheel
 
     def test_grounded(self):
         self.assertTrue(self.wheel.deployed)
@@ -224,5 +219,5 @@ class TestPartsWheelGrounded(krpctest.TestCase):
         self.assertTrue(self.wheel.grounded)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

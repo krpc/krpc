@@ -2,8 +2,9 @@ import unittest
 import krpctest
 
 
-@unittest.skipIf(not krpctest.TestCase.connect().remote_tech.available,
-                 "RemoteTech not installed")
+@unittest.skipIf(
+    not krpctest.TestCase.connect().remote_tech.available, "RemoteTech not installed"
+)
 class TestRemoteTech(krpctest.TestCase):
 
     @classmethod
@@ -12,8 +13,8 @@ class TestRemoteTech(krpctest.TestCase):
         cls.rt = cls.connect().remote_tech
 
     def test_ground_stations(self):
-        self.assertCountEqual(self.rt.ground_stations, ['Mission Control'])
+        self.assertCountEqual(self.rt.ground_stations, ["Mission Control"])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

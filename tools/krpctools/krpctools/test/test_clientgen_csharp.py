@@ -4,9 +4,9 @@ from krpctools.clientgen.csharp import CsharpGenerator
 
 
 class TestClientGenCsharp(ClientGenTestCase, unittest.TestCase):
-    language = 'csharp'
+    language = "csharp"
     generator = CsharpGenerator
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

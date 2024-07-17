@@ -13,11 +13,11 @@ class TestText(krpctest.TestCase):
         cls.anchor = ui.TextAnchor
 
     def test_text(self):
-        text = self.canvas.add_text('Jebediah Kerman')
+        text = self.canvas.add_text("Jebediah Kerman")
         self.assertIsNotNone(text.rect_transform)
         self.assertTrue(text.visible)
-        self.assertEqual('Jebediah Kerman', text.content)
-        self.assertEqual('Arial', text.font)
+        self.assertEqual("Jebediah Kerman", text.content)
+        self.assertEqual("Arial", text.font)
         self.assertGreater(len(text.available_fonts), 0)
         self.assertEqual(14, text.size)
         self.assertEqual(self.style.normal, text.style)
@@ -29,7 +29,7 @@ class TestText(krpctest.TestCase):
         self.assertRaises(ValueError, text.remove)
 
     def test_properties(self):
-        text = self.canvas.add_text('Jebediah Kerman')
+        text = self.canvas.add_text("Jebediah Kerman")
         font = text.available_fonts[-1:][0]
         text.font = font
         text.size = 20
@@ -48,5 +48,5 @@ class TestText(krpctest.TestCase):
         self.assertRaises(ValueError, text.remove)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

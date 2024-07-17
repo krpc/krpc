@@ -7,13 +7,19 @@ from krpc.decoder import Decoder
 from krpc.error import StreamError
 from krpc.connection import Connection
 import krpc.schema.KRPC_pb2 as KRPC
+
 if TYPE_CHECKING:
     from krpc.client import Client
 
 
 class StreamImpl:
-    def __init__(self, client: Client, stream_id: int, return_type: TypeBase,
-                 update_lock: threading.RLock):
+    def __init__(
+        self,
+        client: Client,
+        stream_id: int,
+        return_type: TypeBase,
+        update_lock: threading.RLock,
+    ):
         self._client = client
         self._stream_id = stream_id
         self._return_type = return_type
@@ -72,13 +78,17 @@ class StreamImpl:
         with self._update_lock:
             return self._callbacks
 
-    def add_callback(self, callback: Callable[[object], None]) -> List[Callable[[object], None]]:
+    def add_callback(
+        self, callback: Callable[[object], None]
+    ) -> List[Callable[[object], None]]:
         with self._update_lock:
             self._callbacks = self._callbacks[:]
             self._callbacks.append(callback)
             return self._callbacks
 
-    def remove_callback(self, callback: Callable[[object], None]) -> List[Callable[[object], None]]:
+    def remove_callback(
+        self, callback: Callable[[object], None]
+    ) -> List[Callable[[object], None]]:
         with self._update_lock:
             self._callbacks = [x for x in self._callbacks if x != callback]
             return self._callbacks
@@ -102,14 +112,16 @@ class StreamManager:
         with self._update_lock:
             if stream_id not in self._streams:
                 self._streams[stream_id] = StreamImpl(
-                    self._client, stream_id, return_type, self._update_lock)
+                    self._client, stream_id, return_type, self._update_lock
+                )
             return self._streams[stream_id]
 
     def get_stream(self, return_type: TypeBase, stream_id: int) -> StreamImpl:
         with self._update_lock:
             if stream_id not in self._streams:
                 self._streams[stream_id] = StreamImpl(
-                    self._client, stream_id, return_type, self._update_lock)
+                    self._client, stream_id, return_type, self._update_lock
+                )
             return self._streams[stream_id]
 
     def remove_stream(self, stream_id: int) -> None:
@@ -130,13 +142,17 @@ class StreamManager:
         with self._update_lock:
             return self._callbacks
 
-    def add_update_callback(self, callback: Callable[[], None]) -> List[Callable[[], None]]:
+    def add_update_callback(
+        self, callback: Callable[[], None]
+    ) -> List[Callable[[], None]]:
         with self._update_lock:
             self._callbacks = self._callbacks[:]
             self._callbacks.append(callback)
             return self._callbacks
 
-    def remove_update_callback(self, callback: Callable[[], None]) -> List[Callable[[], None]]:
+    def remove_update_callback(
+        self, callback: Callable[[], None]
+    ) -> List[Callable[[], None]]:
         with self._update_lock:
             self._callbacks = [x for x in self._callbacks if x != callback]
             return self._callbacks
@@ -148,10 +164,10 @@ class StreamManager:
                     continue
 
                 # Check for an error response
-                if result.result.HasField('error'):
+                if result.result.HasField("error"):
                     self._update_stream(
-                        result.id,
-                        self._client._build_error(result.result.error))
+                        result.id, self._client._build_error(result.result.error)
+                    )
                     continue
 
                 # Decode the return value and store it in the cache
@@ -172,11 +188,13 @@ class StreamManager:
             fn(value)
 
 
-def update_thread(manager: StreamManager, connection: Connection, stop: threading.Event) -> None:
+def update_thread(
+    manager: StreamManager, connection: Connection, stop: threading.Event
+) -> None:
     while True:
 
         # Read the size and position of the update message
-        data = b''
+        data = b""
         while True:
             try:
                 data += connection.partial_receive(1)
@@ -194,7 +212,9 @@ def update_thread(manager: StreamManager, connection: Connection, stop: threadin
 
         # Read and decode the update message
         data = connection.receive(size)
-        update = cast(KRPC.StreamUpdate, Decoder.decode_message(data, KRPC.StreamUpdate))
+        update = cast(
+            KRPC.StreamUpdate, Decoder.decode_message(data, KRPC.StreamUpdate)
+        )
 
         # Add the data to the cache
         manager.update(update.results)
