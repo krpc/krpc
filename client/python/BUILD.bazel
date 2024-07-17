@@ -1,7 +1,7 @@
-load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
-load("//tools/build:client_test.bzl", "client_test")
-load("//tools/krpctools:clientgen.bzl", "clientgen_python")
 load("//:config.bzl", "python_version", "version")
+load("//tools/build:client_test.bzl", "client_test")
+load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
+load("//tools/krpctools:clientgen.bzl", "clientgen_python")
 
 # Needed as clientgen depends on these files
 genrule(
@@ -195,9 +195,9 @@ py_lint_test(
     name = "lint",
     size = "small",
     srcs = glob(["krpc/**/*"]),
+    black_exclude = "\".*(schema|services)/.+\"",
     pkg = ":python",
     pkg_name = "krpc",
-    black_exclude = "\".*(schema|services)/.+\"",
     pylint_config = "pylint.rc",
     deps = deps,
 )

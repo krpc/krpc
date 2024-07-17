@@ -178,7 +178,7 @@ def _lint_impl(ctx):
     files = []
     deps = list(ctx.files.deps)
     black_args = [
-        "--check"
+        "--check",
     ]
     if ctx.attr.black_exclude:
         black_args.extend([
