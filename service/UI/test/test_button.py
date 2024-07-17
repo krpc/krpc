@@ -10,16 +10,16 @@ class TestButton(krpctest.TestCase):
         cls.canvas = cls.connect().ui.stock_canvas
 
     def test_button(self):
-        button = self.canvas.add_button('Foo')
+        button = self.canvas.add_button("Foo")
         self.assertIsNotNone(button.rect_transform)
         self.assertTrue(button.visible)
         self.assertIsNotNone(button.text)
-        self.assertEqual('Foo', button.text.content)
+        self.assertEqual("Foo", button.text.content)
         self.assertFalse(button.clicked)
         self.wait()
         button.remove()
         self.assertRaises(ValueError, button.remove)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -7,8 +7,8 @@ NAN = POS_INF * 0
 
 
 def bytelength(string: str) -> int:
-    """ Get the number of bytes in a string """
-    return len(string.encode('utf-8'))
+    """Get the number of bytes in a string"""
+    return len(string.encode("utf-8"))
 
 
 def hexlify(value: bytes) -> str:
@@ -18,6 +18,6 @@ def hexlify(value: bytes) -> str:
 def unhexlify(data: str) -> bytes:
     value = []
     for i in range(0, len(data), 2):
-        x = data[i:i + 2]
+        x = data[i : i + 2]
         value.append(int(x, 16))
-    return struct.pack('%dB' % len(value), *value)
+    return struct.pack("%dB" % len(value), *value)

@@ -1,18 +1,21 @@
 import math
 import time
 import krpc
-conn = krpc.connect(name='Pitch/Heading/Roll')
+
+conn = krpc.connect(name="Pitch/Heading/Roll")
 vessel = conn.space_center.active_vessel
 
 
 def cross_product(u, v):
-    return (u[1]*v[2] - u[2]*v[1],
-            u[2]*v[0] - u[0]*v[2],
-            u[0]*v[1] - u[1]*v[0])
+    return (
+        u[1] * v[2] - u[2] * v[1],
+        u[2] * v[0] - u[0] * v[2],
+        u[0] * v[1] - u[1] * v[0],
+    )
 
 
 def dot_product(u, v):
-    return u[0]*v[0] + u[1]*v[1] + u[2]*v[2]
+    return u[0] * v[0] + u[1] * v[1] + u[2] * v[2]
 
 
 def magnitude(v):
@@ -20,13 +23,13 @@ def magnitude(v):
 
 
 def angle_between_vectors(u, v):
-    """ Compute the angle between vector u and v """
+    """Compute the angle between vector u and v"""
     dp = dot_product(u, v)
     if dp == 0:
         return 0
     um = magnitude(u)
     vm = magnitude(v)
-    return math.acos(dp / (um*vm)) * (180. / math.pi)
+    return math.acos(dp / (um * vm)) * (180.0 / math.pi)
 
 
 while True:
@@ -56,7 +59,8 @@ while True:
     plane_normal = cross_product(vessel_direction, up)
     # Compute the upwards direction of the vessel
     vessel_up = conn.space_center.transform_direction(
-        (0, 0, -1), vessel.reference_frame, vessel.surface_reference_frame)
+        (0, 0, -1), vessel.reference_frame, vessel.surface_reference_frame
+    )
     # Compute the angle between the upwards direction of
     # the vessel and the plane normal
     roll = angle_between_vectors(vessel_up, plane_normal)
@@ -69,7 +73,6 @@ while True:
     else:
         roll -= 180
 
-    print('pitch = % 5.1f, heading = % 5.1f, roll = % 5.1f' %
-          (pitch, heading, roll))
+    print("pitch = % 5.1f, heading = % 5.1f, roll = % 5.1f" % (pitch, heading, roll))
 
     time.sleep(1)

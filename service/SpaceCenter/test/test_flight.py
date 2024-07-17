@@ -10,7 +10,7 @@ class TestFlight(krpctest.TestCase):
     def setUpClass(cls):
         cls.new_save()
         cls.remove_other_vessels()
-        cls.set_circular_orbit('Kerbin', 100000)
+        cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel
         cls.connect().testing_tools.clear_rotation()
@@ -21,20 +21,21 @@ class TestFlight(krpctest.TestCase):
 
     def test_equality(self):
         flight = self.vessel.flight(self.vessel.reference_frame)
-        self.assertEqual(
-            flight, self.vessel.flight(self.vessel.reference_frame))
+        self.assertEqual(flight, self.vessel.flight(self.vessel.reference_frame))
 
     def check_properties_not_affected_by_reference_frame(self, flight):
-        """ Verify flight properties that aren't
-            affected by reference frames """
+        """Verify flight properties that aren't
+        affected by reference frames"""
         self.assertAlmostEqual(100000, flight.mean_altitude, delta=10)
-        self.assertAlmostEqual(100000 - max(0, flight.elevation),
-                               flight.surface_altitude, delta=10)
-        self.assertAlmostEqual(100000 - flight.elevation,
-                               flight.bedrock_altitude, delta=10)
+        self.assertAlmostEqual(
+            100000 - max(0, flight.elevation), flight.surface_altitude, delta=10
+        )
+        self.assertAlmostEqual(
+            100000 - flight.elevation, flight.bedrock_altitude, delta=10
+        )
 
     def check_directions(self, flight):
-        """ Check flight.direction against flight.heading and flight.pitch """
+        """Check flight.direction against flight.heading and flight.pitch"""
         direction = vector(flight.direction)
         up_direction = (1, 0, 0)
         north_direction = (0, 1, 0)
@@ -49,22 +50,22 @@ class TestFlight(krpctest.TestCase):
         north_component = normalize(vector(direction) - up_component)
         self.assertDegreesAlmostEqual(
             rad2deg(math.acos(dot(north_component, north_direction))),
-            flight.heading, delta=1)
+            flight.heading,
+            delta=1,
+        )
 
     def check_speeds(self, flight):
-        """ Check flight.velocity agrees with flight.*_speed """
+        """Check flight.velocity agrees with flight.*_speed"""
         up_direction = (0, 1, 0)
         velocity = vector(flight.velocity)
         vertical_speed = dot(velocity, up_direction)
         horizontal_speed = norm(velocity) - vertical_speed
         self.assertAlmostEqual(norm(velocity), flight.speed, delta=1)
-        self.assertAlmostEqual(horizontal_speed,
-                               flight.horizontal_speed, delta=1)
-        self.assertAlmostEqual(vertical_speed,
-                               flight.vertical_speed, delta=1)
+        self.assertAlmostEqual(horizontal_speed, flight.horizontal_speed, delta=1)
+        self.assertAlmostEqual(vertical_speed, flight.vertical_speed, delta=1)
 
     def check_orbital_vectors(self, flight):
-        """ Check orbital direction vectors """
+        """Check orbital direction vectors"""
         prograde = vector(flight.prograde)
         retrograde = vector(flight.retrograde)
         normal = vector(flight.normal)
@@ -77,12 +78,9 @@ class TestFlight(krpctest.TestCase):
         self.assertAlmostEqual(1, norm(anti_normal))
         self.assertAlmostEqual(1, norm(radial))
         self.assertAlmostEqual(1, norm(anti_radial))
-        self.assertAlmostEqual(
-            tuple(prograde), [-x for x in retrograde], places=2)
-        self.assertAlmostEqual(
-            tuple(radial), [-x for x in anti_radial], places=2)
-        self.assertAlmostEqual(
-            tuple(normal), [-x for x in anti_normal], places=2)
+        self.assertAlmostEqual(tuple(prograde), [-x for x in retrograde], places=2)
+        self.assertAlmostEqual(tuple(radial), [-x for x in anti_radial], places=2)
+        self.assertAlmostEqual(tuple(normal), [-x for x in anti_normal], places=2)
         self.assertAlmostEqual(0, dot(prograde, radial), places=2)
         self.assertAlmostEqual(0, dot(prograde, normal), places=2)
         self.assertAlmostEqual(0, dot(radial, normal), places=2)
@@ -193,37 +191,36 @@ class TestFlightVerticalSpeed(krpctest.TestCase):
         cls.vessel = cls.connect().space_center.active_vessel
 
     def check_speed(self, flight, ref):
-        up = normalize(vector(self.vessel.position(ref)) -
-                       vector(self.vessel.orbit.body.position(ref)))
+        up = normalize(
+            vector(self.vessel.position(ref))
+            - vector(self.vessel.orbit.body.position(ref))
+        )
         v = self.vessel.velocity(ref)
 
         speed = norm(v)
         vertical_speed = dot(v, up)
-        horizontal_speed = math.sqrt(
-            speed*speed - vertical_speed*vertical_speed)
+        horizontal_speed = math.sqrt(speed * speed - vertical_speed * vertical_speed)
 
         self.assertAlmostEqual(speed, flight.speed, delta=0.5)
-        self.assertAlmostEqual(vertical_speed,
-                               flight.vertical_speed, delta=0.5)
-        self.assertAlmostEqual(horizontal_speed,
-                               flight.horizontal_speed, delta=0.5)
+        self.assertAlmostEqual(vertical_speed, flight.vertical_speed, delta=0.5)
+        self.assertAlmostEqual(horizontal_speed, flight.horizontal_speed, delta=0.5)
 
     def test_vertical_speed_positive(self):
-        self.set_orbit('Kerbin', 2000000, 0.2, 0, 0, 0, 1, 0)
+        self.set_orbit("Kerbin", 2000000, 0.2, 0, 0, 0, 1, 0)
         ref = self.vessel.orbit.body.reference_frame
         flight = self.vessel.flight(ref)
         self.assertGreater(flight.vertical_speed, 0)
         self.check_speed(flight, ref)
 
     def test_vertical_speed_negative(self):
-        self.set_orbit('Kerbin', 2000000, 0.2, 0, 0, 0, -2, 0)
+        self.set_orbit("Kerbin", 2000000, 0.2, 0, 0, 0, -2, 0)
         ref = self.vessel.orbit.body.reference_frame
         flight = self.vessel.flight(ref)
         self.assertGreater(0, flight.vertical_speed)
         self.check_speed(flight, ref)
 
     def test_surface_speed(self):
-        self.set_circular_orbit('Kerbin', 100000)
+        self.set_circular_orbit("Kerbin", 100000)
         ref = self.vessel.orbit.body.reference_frame
         flight = self.vessel.flight(ref)
         self.check_speed(flight, ref)
@@ -232,7 +229,7 @@ class TestFlightVerticalSpeed(krpctest.TestCase):
         self.assertAlmostEqual(0, flight.vertical_speed, delta=0.5)
 
     def test_orbital_speed(self):
-        self.set_circular_orbit('Kerbin', 100000)
+        self.set_circular_orbit("Kerbin", 100000)
         ref = self.vessel.orbit.body.non_rotating_reference_frame
         flight = self.vessel.flight(ref)
         self.check_speed(flight, ref)
@@ -246,7 +243,7 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('Basic')
+        cls.launch_vessel_from_vab("Basic")
         cls.remove_other_vessels()
         cls.vessel = cls.connect().space_center.active_vessel
         cls.far = cls.connect().space_center.far_available
@@ -274,13 +271,11 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
 
             self.assertAlmostEqual(0.103, flight.drag_coefficient, places=3)
             self.assertAlmostEqual(0, flight.lift_coefficient, places=3)
-            self.assertAlmostEqual(
-                0, flight.pitching_moment_coefficient, places=3)
-            self.assertAlmostEqual(
-                2246.8, flight.ballistic_coefficient, delta=50)
+            self.assertAlmostEqual(0, flight.pitching_moment_coefficient, places=3)
+            self.assertAlmostEqual(2246.8, flight.ballistic_coefficient, delta=50)
             self.assertAlmostEqual(0, flight.thrust_specific_fuel_consumption)
 
-            self.assertEqual('Nominal', flight.far_status)
+            self.assertEqual("Nominal", flight.far_status)
 
     # def test_drag_coefficient(self):
     #     if not self.far:
@@ -300,5 +295,5 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
     #             drag_coefficient, self.vessel.flight().drag_coefficient)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

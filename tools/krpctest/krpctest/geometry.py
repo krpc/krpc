@@ -7,32 +7,32 @@ def rad2deg(rad):
 
 
 def norm(v):
-    return math.sqrt(sum(x*x for x in v))
+    return math.sqrt(sum(x * x for x in v))
 
 
 def normalize(v):
     mag = norm(v)
-    return tuple(x/mag for x in v)
+    return tuple(x / mag for x in v)
 
 
 def dot(u, v):
-    return sum(x*y for x, y in zip(u, v))
+    return sum(x * y for x, y in zip(u, v))
 
 
 def cross(u, v):
     return (
-        u[1]*v[2] - u[2]*v[1],
-        u[2]*v[0] - u[0]*v[2],
-        u[0]*v[1] - u[1]*v[0]
+        u[1] * v[2] - u[2] * v[1],
+        u[2] * v[0] - u[0] * v[2],
+        u[0] * v[1] - u[1] * v[0],
     )
 
 
 def quaternion_axis_angle(axis, angle):
     return (
-        axis[0] * math.sin(angle/2),
-        axis[1] * math.sin(angle/2),
-        axis[2] * math.sin(angle/2),
-        math.cos(angle/2)
+        axis[0] * math.sin(angle / 2),
+        axis[1] * math.sin(angle / 2),
+        axis[2] * math.sin(angle / 2),
+        math.cos(angle / 2),
     )
 
 
@@ -48,10 +48,10 @@ def quaternion_conjugate(q):
 def quaternion_mult(q, r):
     q0, q1, q2, q3 = q
     r0, r1, r2, r3 = r
-    t0 = + r0*q3 - r1*q2 + r2*q1 + r3*q0
-    t1 = + r0*q2 + r1*q3 - r2*q0 + r3*q1
-    t2 = - r0*q1 + r1*q0 + r2*q3 + r3*q2
-    t3 = - r0*q0 - r1*q1 - r2*q2 + r3*q3
+    t0 = +r0 * q3 - r1 * q2 + r2 * q1 + r3 * q0
+    t1 = +r0 * q2 + r1 * q3 - r2 * q0 + r3 * q1
+    t2 = -r0 * q1 + r1 * q0 + r2 * q3 + r3 * q2
+    t3 = -r0 * q0 - r1 * q1 - r2 * q2 + r3 * q3
     return (t0, t1, t2, t3)
 
 
@@ -77,25 +77,25 @@ class Vector:
         self.v[key] = value
 
     def __mul__(self, u):
-        return Vector([x*u for x in self])
+        return Vector([x * u for x in self])
 
     def __rmul__(self, u):
-        return Vector([x*u for x in self])
+        return Vector([x * u for x in self])
 
     def __add__(self, u):
         try:
-            return Vector([x+y for x, y in zip(self.v, u)])
+            return Vector([x + y for x, y in zip(self.v, u)])
         except TypeError:
-            return Vector([x+u for x in self.v])
+            return Vector([x + u for x in self.v])
 
     def __sub__(self, u):
         try:
-            return Vector([x-y for x, y in zip(self.v, u)])
+            return Vector([x - y for x, y in zip(self.v, u)])
         except TypeError:
-            return Vector([x-u for x in self.v])
+            return Vector([x - u for x in self.v])
 
     def __div__(self, u):
-        return Vector([x/u for x in self.v])
+        return Vector([x / u for x in self.v])
 
     def __neg__(self):
         return Vector([-x for x in self.v])
@@ -114,8 +114,8 @@ class Vector:
 
 
 def compute_position(obj, ref):
-    """ Compute the objects position in the given
-        reference frame (in Mm) from its orbital elements """
+    """Compute the objects position in the given
+    reference frame (in Mm) from its orbital elements"""
     orbit = obj.orbit
     major_axis = orbit.semi_major_axis / 1000000
     minor_axis = orbit.semi_minor_axis / 1000000

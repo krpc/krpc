@@ -7,11 +7,11 @@ class TestPartsLight(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != 'Parts':
-            cls.launch_vessel_from_vab('Parts')
+        if cls.connect().space_center.active_vessel.name != "Parts":
+            cls.launch_vessel_from_vab("Parts")
             cls.remove_other_vessels()
         parts = cls.connect().space_center.active_vessel.parts
-        cls.light = parts.with_title('Illuminator Mk1')[0].light
+        cls.light = parts.with_title("Illuminator Mk1")[0].light
 
     def test_light(self):
         self.assertFalse(self.light.active)
@@ -49,5 +49,5 @@ class TestPartsLight(krpctest.TestCase):
             self.wait()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

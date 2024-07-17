@@ -13,7 +13,7 @@ import krpc.schema.KRPC_pb2 as KRPC
 # pylint: disable=invalid-name,protected-access
 _pb_VarintEncoder = protobuf_encoder._VarintEncoder()
 _pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()
-_pb_version = google.protobuf.__version__.split('.')
+_pb_version = google.protobuf.__version__.split(".")
 if int(_pb_version[0]) >= 3 and int(_pb_version[1]) >= 4:
     # protobuf v3.4.0 and above
     def _VarintEncoder(write, value):
@@ -21,6 +21,7 @@ if int(_pb_version[0]) >= 3 and int(_pb_version[1]) >= 4:
 
     def _SignedVarintEncoder(write, value):
         return _pb_SignedVarintEncoder(write, value, True)
+
 else:
     # protobuf v3.3.0 and below
     _VarintEncoder = _pb_VarintEncoder
@@ -29,28 +30,28 @@ else:
 
 
 def encode_varint(value):
-    """ Encode an int as a protobuf varint """
+    """Encode an int as a protobuf varint"""
     data = []
     _VarintEncoder(data.append, value)
-    return b''.join(data)
+    return b"".join(data)
 
 
 def decode_varint(data):
-    """ Decode a protobuf varint to an int """
+    """Decode a protobuf varint to an int"""
     return _DecodeVarint(data, 0)[0]
 
 
 class SerialIOTest(unittest.TestCase):
     @staticmethod
     def port_name():
-        return os.getenv('PORT', None)
+        return os.getenv("PORT", None)
 
     @classmethod
     def connect(cls, port_name):
         cls.rpc_conn = serial.Serial(port_name)
         request = KRPC.MultiplexedRequest()
         request.connection_request.type = KRPC.ConnectionRequest.RPC
-        request.connection_request.client_name = 'krpcserialio'
+        request.connection_request.client_name = "krpcserialio"
         cls.send(cls.rpc_conn, request)
         response = cls.recv(cls.rpc_conn, KRPC.ConnectionResponse)
         assert response.status == KRPC.ConnectionResponse.OK
@@ -64,10 +65,10 @@ class SerialIOTest(unittest.TestCase):
 
     @staticmethod
     def recv(conn, msg_type):
-        """ Receive a message, prefixed with its size,
-            from a Serial IO port """
+        """Receive a message, prefixed with its size,
+        from a Serial IO port"""
         # Receive the size of the message data
-        data = b''
+        data = b""
         while True:
             try:
                 data += conn.read(1)
@@ -86,7 +87,7 @@ class SerialIOTest(unittest.TestCase):
     def encode_int32(value):
         data = []
         _SignedVarintEncoder(data.append, ZigZagEncode(value))
-        return b''.join(data)
+        return b"".join(data)
 
     @staticmethod
     def decode_int32(data):
@@ -94,11 +95,11 @@ class SerialIOTest(unittest.TestCase):
 
     @staticmethod
     def decode_bytes(data):
-        return data[_DecodeVarint(data, 0)[1]:]
+        return data[_DecodeVarint(data, 0)[1] :]
 
     @classmethod
     def decode_string(cls, data):
-        return cls.decode_bytes(data).decode('utf-8')
+        return cls.decode_bytes(data).decode("utf-8")
 
     def rpc_send(self, msg):
         return self.send(self.rpc_conn, msg)
@@ -115,31 +116,30 @@ class TestRPCServer(SerialIOTest):
 
     def test_get_client_name(self):
         call = KRPC.ProcedureCall()
-        call.service = 'KRPC'
-        call.procedure = 'GetClientName'
+        call.service = "KRPC"
+        call.procedure = "GetClientName"
         request = KRPC.MultiplexedRequest()
         request.request.calls.extend([call])
         self.rpc_send(request)
         response = self.rpc_recv(KRPC.MultiplexedResponse).response
-        self.assertEqual(
-            'krpcserialio', self.decode_string(response.results[0].value))
+        self.assertEqual("krpcserialio", self.decode_string(response.results[0].value))
 
     def test_procedure_call(self):
         call = KRPC.ProcedureCall()
-        call.service = 'KRPC'
-        call.procedure = 'GetStatus'
+        call.service = "KRPC"
+        call.procedure = "GetStatus"
         request = KRPC.MultiplexedRequest()
         request.request.calls.extend([call])
         self.rpc_send(request)
         response = self.rpc_recv(KRPC.MultiplexedResponse).response
         msg = KRPC.Status()
         msg.ParseFromString(response.results[0].value)
-        self.assertNotEqual('', msg.version)
+        self.assertNotEqual("", msg.version)
 
     def test_procedure_call_with_arg(self):
         call = KRPC.ProcedureCall()
-        call.service = 'TestService'
-        call.procedure = 'Int32ToString'
+        call.service = "TestService"
+        call.procedure = "Int32ToString"
         arg = KRPC.Argument()
         arg.position = 0
         arg.value = self.encode_int32(42)
@@ -149,7 +149,7 @@ class TestRPCServer(SerialIOTest):
         self.rpc_send(request)
         response = self.rpc_recv(KRPC.MultiplexedResponse).response
         self.assertEqual(1, len(response.results))
-        self.assertEqual('42', self.decode_string(response.results[0].value))
+        self.assertEqual("42", self.decode_string(response.results[0].value))
 
     def test_reconnect(self):
         self.test_procedure_call()
@@ -157,5 +157,5 @@ class TestRPCServer(SerialIOTest):
         self.test_procedure_call()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

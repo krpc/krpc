@@ -10,8 +10,8 @@ class TestAutoPilot(krpctest.TestCase):
     def setUpClass(cls):
         cls.new_save()
         cls.remove_other_vessels()
-        cls.launch_vessel_from_vab('Basic')
-        cls.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
+        cls.launch_vessel_from_vab("Basic")
+        cls.set_orbit("Eve", 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
         cls.vessel = cls.connect().space_center.active_vessel
         cls.ap = cls.vessel.auto_pilot
         cls.ap.sas = False
@@ -28,7 +28,7 @@ class TestAutoPilot(krpctest.TestCase):
         self.ap.wait()
         self.ap.disengage()
 
-    def set_rotation(self, pitch, heading, roll=float('nan')):
+    def set_rotation(self, pitch, heading, roll=float("nan")):
         self.ap.reference_frame = self.vessel.surface_reference_frame
         self.ap.target_pitch = pitch
         self.ap.target_heading = heading
@@ -42,7 +42,7 @@ class TestAutoPilot(krpctest.TestCase):
         if roll:
             self.assertAlmostEqual(roll, flight.roll, delta=1)
 
-    def set_direction(self, direction, roll=float('nan')):
+    def set_direction(self, direction, roll=float("nan")):
         self.ap.reference_frame = self.vessel.surface_reference_frame
         self.ap.target_direction = direction
         self.ap.target_roll = roll
@@ -84,7 +84,7 @@ class TestAutoPilot(krpctest.TestCase):
             (0, 20, 90),
             (0, 300, 90),
             (0, 90, 160),
-            (0, 90, -160)
+            (0, 90, -160),
         ]
 
         for phr in cases:
@@ -101,7 +101,7 @@ class TestAutoPilot(krpctest.TestCase):
             (-1, 0, 0),
             (0, -1, 0),
             (0, 0, -1),
-            (1, 2, 3)
+            (1, 2, 3),
         ]
 
         for direction in cases:
@@ -118,7 +118,7 @@ class TestAutoPilot(krpctest.TestCase):
             ((-1, 0, 1), -83),
             ((0, -1, 1), -11),
             ((1, 0, -1), 2),
-            ((1, 2, 3), 42)
+            ((1, 2, 3), 42),
         ]
 
         for direction, roll in cases:
@@ -135,7 +135,7 @@ class TestAutoPilot(krpctest.TestCase):
             flight.normal,
             flight.anti_normal,
             flight.radial,
-            flight.anti_radial
+            flight.anti_radial,
         ]
         for direction in directions:
             self.set_direction(direction)
@@ -154,7 +154,7 @@ class TestAutoPilot(krpctest.TestCase):
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = False
 
-        self.ap.target_roll = float('nan')
+        self.ap.target_roll = float("nan")
         self.ap.engage()
 
         self.ap.target_direction = flight.prograde
@@ -202,8 +202,7 @@ class TestAutoPilot(krpctest.TestCase):
         self.ap.engage()
         for roll in (0, -54, -90, 27, 45, 90):
             self.ap.target_roll = roll
-            self.assertAlmostEqual(
-                abs(set_roll - roll), self.ap.roll_error, delta=1)
+            self.assertAlmostEqual(abs(set_roll - roll), self.ap.roll_error, delta=1)
         self.ap.disengage()
 
         for wheel in self.vessel.parts.reaction_wheels:
@@ -215,11 +214,12 @@ class TestAutoPilot(krpctest.TestCase):
             self.vessel.parts.all[0].reference_frame,
             self.vessel.parts.all[0].center_of_mass_reference_frame,
             self.vessel.parts.docking_ports[0].reference_frame,
-            self.vessel.parts.engines[0].thrusters[0].thrust_reference_frame
+            self.vessel.parts.engines[0].thrusters[0].thrust_reference_frame,
         ]
         for frame in frames:
-            self.assertRaises(krpc.client.RPCError, setattr,
-                              self.ap, 'reference_frame', frame)
+            self.assertRaises(
+                krpc.client.RPCError, setattr, self.ap, "reference_frame", frame
+            )
 
     def test_reset_on_disconnect(self):
         conn = self.connect(use_cached=False)
@@ -271,8 +271,8 @@ class TestAutoPilotSAS(krpctest.TestCase):
     def setUpClass(cls):
         cls.new_save()
         cls.remove_other_vessels()
-        cls.launch_vessel_from_vab('Basic')
-        cls.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
+        cls.launch_vessel_from_vab("Basic")
+        cls.set_orbit("Eve", 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
         cls.vessel = cls.connect().space_center.active_vessel
         cls.ap = cls.vessel.auto_pilot
         cls.sas_mode = cls.connect().space_center.SASMode
@@ -286,7 +286,7 @@ class TestAutoPilotSAS(krpctest.TestCase):
         self.ap.wait()
         self.ap.disengage()
 
-    def set_direction(self, direction, roll=float('nan')):
+    def set_direction(self, direction, roll=float("nan")):
         self.ap.reference_frame = self.vessel.surface_reference_frame
         self.ap.target_direction = direction
         self.ap.target_roll = roll
@@ -337,14 +337,13 @@ class TestAutoPilotOtherVessel(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('Multi')
+        cls.launch_vessel_from_vab("Multi")
         cls.remove_other_vessels()
-        cls.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
+        cls.set_orbit("Eve", 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
         space_center = cls.connect().space_center
         next(iter(space_center.active_vessel.parts.docking_ports)).undock()
         cls.vessel = space_center.active_vessel
-        cls.other_vessel = next(
-            v for v in space_center.vessels if v != cls.vessel)
+        cls.other_vessel = next(v for v in space_center.vessels if v != cls.vessel)
 
     def test_autopilot(self):
         ap = self.other_vessel.auto_pilot
@@ -355,5 +354,5 @@ class TestAutoPilotOtherVessel(krpctest.TestCase):
         ap.disengage()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

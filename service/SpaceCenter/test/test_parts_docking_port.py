@@ -9,21 +9,22 @@ class TestPartsDockingPort(krpctest.TestCase):
     def setUpClass(cls):
         cls.new_save()
         cls.remove_other_vessels()
-        cls.launch_vessel_from_vab('PartsDockingPort')
+        cls.launch_vessel_from_vab("PartsDockingPort")
         cls.sc = cls.connect().space_center
         cls.vessel = cls.sc.active_vessel
         cls.parts = cls.vessel.parts
         cls.State = cls.sc.DockingPortState
-        cls.port1 = cls.parts.with_title(
-            'Clamp-O-Tron Docking Port Jr.')[0].docking_port
-        cls.port2 = cls.parts.with_title(
-            'Clamp-O-Tron Shielded Docking Port')[0].docking_port
-        cls.port3 = cls.parts.with_title(
-            'Mk2 Clamp-O-Tron')[0].docking_port
-        cls.port4 = cls.parts.with_title(
-            'Inline Clamp-O-Tron')[0].docking_port
-        cls.port5 = cls.parts.with_title(
-            'Clamp-O-Tron Docking Port Sr.')[0].docking_port
+        cls.port1 = cls.parts.with_title("Clamp-O-Tron Docking Port Jr.")[
+            0
+        ].docking_port
+        cls.port2 = cls.parts.with_title("Clamp-O-Tron Shielded Docking Port")[
+            0
+        ].docking_port
+        cls.port3 = cls.parts.with_title("Mk2 Clamp-O-Tron")[0].docking_port
+        cls.port4 = cls.parts.with_title("Inline Clamp-O-Tron")[0].docking_port
+        cls.port5 = cls.parts.with_title("Clamp-O-Tron Docking Port Sr.")[
+            0
+        ].docking_port
 
     def test_docking_port(self):
         self.assertEqual(self.State.ready, self.port1.state)
@@ -65,10 +66,12 @@ class TestPartsDockingPort(krpctest.TestCase):
         self.open_and_close_shield(self.port4)
 
     def test_pre_attached_ports(self):
-        """ Test ports that were pre-attached in the VAB """
+        """Test ports that were pre-attached in the VAB"""
         bottom_port = next(
-            p for p in self.parts.docking_ports
-            if p.part.parent.title == 'Clamp-O-Tron Docking Port')
+            p
+            for p in self.parts.docking_ports
+            if p.part.parent.title == "Clamp-O-Tron Docking Port"
+        )
         top_port = bottom_port.part.parent.docking_port
         launch_clamp = bottom_port.part.children[0].launch_clamp
 
@@ -88,8 +91,7 @@ class TestPartsDockingPort(krpctest.TestCase):
         # Undocking
         self.assertNotEqual(self.vessel, undocked)
         self.assertLess(mass_after, mass_before)
-        self.assertAlmostEqual(
-            mass_after, mass_before - undocked.mass, places=2)
+        self.assertAlmostEqual(mass_after, mass_before - undocked.mass, places=2)
         self.assertEqual(self.State.undocking, top_port.state)
         self.assertEqual(self.State.undocking, bottom_port.state)
         self.assertIsNone(bottom_port.docked_part)
@@ -107,10 +109,10 @@ class TestPartsDockingPort(krpctest.TestCase):
         self.assertIsNone(top_port.docked_part)
         distance = norm(top_port.position(bottom_port.reference_frame))
         self.assertGreater(distance, top_port.reengage_distance)
-        self.assertLess(distance, top_port.reengage_distance+1)
+        self.assertLess(distance, top_port.reengage_distance + 1)
 
     def test_pre_attached_port_and_part(self):
-        """ Test a port and part that were pre-attached in the VAB """
+        """Test a port and part that were pre-attached in the VAB"""
         port = self.port5
         part = port.part.children[0]
 
@@ -127,42 +129,45 @@ class TestPartsDockingPort(krpctest.TestCase):
         # Undocked (there is no undocking state when undocking from a part)
         self.assertNotEqual(self.vessel, undocked)
         self.assertLess(mass_after, mass_before)
-        self.assertAlmostEqual(
-            mass_after, mass_before - undocked.mass, places=2)
+        self.assertAlmostEqual(mass_after, mass_before - undocked.mass, places=2)
         self.assertEqual(self.State.ready, port.state)
         self.assertIsNone(port.docked_part)
 
     def test_direction(self):
         self.assertAlmostEqual(
-            (0, 0, -1),
-            self.port1.direction(self.vessel.reference_frame), places=3)
+            (0, 0, -1), self.port1.direction(self.vessel.reference_frame), places=3
+        )
         self.assertAlmostEqual(
-            (0, 1, 0),
-            self.port2.direction(self.vessel.reference_frame), places=3)
+            (0, 1, 0), self.port2.direction(self.vessel.reference_frame), places=3
+        )
         self.assertAlmostEqual(
-            (1, 0, 0),
-            self.port3.direction(self.vessel.reference_frame), places=3)
+            (1, 0, 0), self.port3.direction(self.vessel.reference_frame), places=3
+        )
 
     def test_rotation(self):
         port = self.port1
-        for target_frame in [port.reference_frame,
-                             self.vessel.reference_frame,
-                             self.vessel.orbit.body.reference_frame]:
+        for target_frame in [
+            port.reference_frame,
+            self.vessel.reference_frame,
+            self.vessel.orbit.body.reference_frame,
+        ]:
             expected = self.sc.transform_rotation(
-                (0, 0, 0, 1), port.reference_frame, target_frame)
+                (0, 0, 0, 1), port.reference_frame, target_frame
+            )
             self.assertQuaternionsAlmostEqual(
-                expected, port.rotation(target_frame), places=5)
+                expected, port.rotation(target_frame), places=5
+            )
 
 
 class TestPartsDockingPortInFlight(krpctest.TestCase):
-    """ Test docking and undocking of ports that have been docked
-        in flight (as opposed to pre-attached in the VAB)"""
+    """Test docking and undocking of ports that have been docked
+    in flight (as opposed to pre-attached in the VAB)"""
 
     def setUp(self):
         self.new_save()
-        self.launch_vessel_from_vab('PartsDockingPortInFlight')
+        self.launch_vessel_from_vab("PartsDockingPortInFlight")
         self.remove_other_vessels()
-        self.set_circular_orbit('Kerbin', 100000)
+        self.set_circular_orbit("Kerbin", 100000)
         self.sc = self.connect().space_center
         self.state = self.sc.DockingPortState
 
@@ -202,8 +207,7 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
             self.assertIsNone(port1.docked_part)
             mass_after = vessel.mass
             self.assertLess(mass_after, mass_before)
-            self.assertAlmostEqual(
-                mass_after, mass_before - undocked.mass, places=2)
+            self.assertAlmostEqual(mass_after, mass_before - undocked.mass, places=2)
 
             # Move backwards to reengage distance
             vessel.control.rcs = True
@@ -218,18 +222,16 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
             self.assertIsNone(port1.docked_part)
             distance = norm(port1.position(port2.reference_frame))
             self.assertGreater(distance, port1.reengage_distance)
-            self.assertLess(distance, port1.reengage_distance+1)
+            self.assertLess(distance, port1.reengage_distance + 1)
             self.wait(0.5)
 
             # Check undocking when not docked
             with self.assertRaises(RuntimeError) as cm:
                 port1.undock()
-            self.assertTrue(
-                'The docking port is not docked' in str(cm.exception))
+            self.assertTrue("The docking port is not docked" in str(cm.exception))
             with self.assertRaises(RuntimeError) as cm:
                 port2.undock()
-            self.assertTrue(
-                'The docking port is not docked' in str(cm.exception))
+            self.assertTrue("The docking port is not docked" in str(cm.exception))
 
             # Move forward
             vessel.control.forward = 0.5
@@ -256,13 +258,13 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
 
 
 class TestPartsDockingPortPreAttachedTo(krpctest.TestCase):
-    """ Test ports that are pre-attached (connected in VAB) """
+    """Test ports that are pre-attached (connected in VAB)"""
 
     @classmethod
     def setUpClass(cls):
         cls.new_save()
         cls.remove_other_vessels()
-        cls.launch_vessel_from_vab('PartsDockingPortPreAttachedTo')
+        cls.launch_vessel_from_vab("PartsDockingPortPreAttachedTo")
         cls.vessel = cls.connect().space_center.active_vessel
         cls.state = cls.connect().space_center.DockingPortState
 
@@ -277,8 +279,9 @@ class TestPartsDockingPortPreAttachedTo(krpctest.TestCase):
         # parts[7] - Tank
 
         cls.parts = [cls.vessel.parts.root]
-        cls.parts.append(next(p for p in cls.parts[0].children
-                              if p.docking_port is not None))
+        cls.parts.append(
+            next(p for p in cls.parts[0].children if p.docking_port is not None)
+        )
         part = cls.parts[-1]
         while len(part.children) == 1:
             part = part.children[0]
@@ -306,5 +309,5 @@ class TestPartsDockingPortPreAttachedTo(krpctest.TestCase):
         self.assertEqual(self.state.docked, self.port6.state)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

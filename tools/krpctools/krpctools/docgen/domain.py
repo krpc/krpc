@@ -10,7 +10,7 @@ class Domain:
     def currentmodule(self, name):
         self.module = name
         self.language.module = name
-        return ''
+        return ""
 
     def type(self, typ):
         return self.language.parse_type(typ)
@@ -25,7 +25,7 @@ class Domain:
         return self.type(typ)
 
     def value(self, value):
-        if not hasattr(self.language, 'value_map'):
+        if not hasattr(self.language, "value_map"):
             return value
         return self.language.value_map.get(value, value)
 
@@ -36,21 +36,21 @@ class Domain:
         return self.shorten_ref(obj.fullname, obj)
 
     def shorten_ref(self, name, obj=None):  # pylint: disable=unused-argument
-        name = name.split('.')
+        name = name.split(".")
         if name[0] == self.module:
             del name[0]
-        return '.'.join(name)
+        return ".".join(name)
 
     def see(self, obj):
         raise NotImplementedError
 
     @staticmethod
     def paramref(name):
-        return '*%s*' % name
+        return "*%s*" % name
 
     def code(self, value):
-        return '``%s``' % self.value(value)
+        return "``%s``" % self.value(value)
 
     @staticmethod
     def math(value):
-        return ':math:`%s`' % value
+        return ":math:`%s`" % value

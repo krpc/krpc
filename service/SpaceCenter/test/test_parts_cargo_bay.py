@@ -7,8 +7,8 @@ class TestPartsCargoBay(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != 'PartsCargoBay':
-            cls.launch_vessel_from_vab('PartsCargoBay')
+        if cls.connect().space_center.active_vessel.name != "PartsCargoBay":
+            cls.launch_vessel_from_vab("PartsCargoBay")
             cls.remove_other_vessels()
         sc = cls.connect().space_center
         vessel = sc.active_vessel
@@ -48,15 +48,15 @@ class TestPartsCargoBay(krpctest.TestCase):
         self.assertFalse(self.control.cargo_bays)
 
     def test_cargo_bay(self):
-        part = self.parts.with_title('Mk3 Cargo Bay CRG-25')[0]
+        part = self.parts.with_title("Mk3 Cargo Bay CRG-25")[0]
         self.check_open_close(part.cargo_bay)
 
     def test_cargo_ramp(self):
-        part = self.parts.with_title('Mk3 Cargo Ramp')[0]
+        part = self.parts.with_title("Mk3 Cargo Ramp")[0]
         self.check_open_close(part.cargo_bay)
 
     def test_service_bay(self):
-        part = self.parts.with_title('Service Bay (2.5m)')[0]
+        part = self.parts.with_title("Service Bay (2.5m)")[0]
         self.check_open_close(part.cargo_bay)
 
     def test_control(self):
@@ -79,5 +79,5 @@ class TestPartsCargoBay(krpctest.TestCase):
             self.assertFalse(bay.open)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

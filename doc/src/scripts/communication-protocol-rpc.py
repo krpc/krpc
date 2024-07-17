@@ -5,28 +5,28 @@ from krpc.schema import KRPC_pb2 as KRPC
 
 
 def encode_varint(value):
-    """ Encode an int as a protobuf varint """
+    """Encode an int as a protobuf varint"""
     data = []
     _VarintEncoder()(data.append, value, False)
-    return b''.join(data)
+    return b"".join(data)
 
 
 def decode_varint(data):
-    """ Decode a protobuf varint to an int """
+    """Decode a protobuf varint to an int"""
     return _DecodeVarint(data, 0)[0]
 
 
 def send_message(conn, msg):
-    """ Send a message, prefixed with its size, to a TPC/IP socket """
+    """Send a message, prefixed with its size, to a TPC/IP socket"""
     data = msg.SerializeToString()
     size = encode_varint(len(data))
     conn.sendall(size + data)
 
 
 def recv_message(conn, msg_type):
-    """ Receive a message, prefixed with its size, from a TCP/IP socket """
+    """Receive a message, prefixed with its size, from a TCP/IP socket"""
     # Receive the size of the message data
-    data = b''
+    data = b""
     while True:
         try:
             data += conn.recv(1)
@@ -44,12 +44,12 @@ def recv_message(conn, msg_type):
 
 # Open a TCP/IP socket to the RPC server
 rpc_conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-rpc_conn.connect(('127.0.0.1', 50000))
+rpc_conn.connect(("127.0.0.1", 50000))
 
 # Send an RPC connection request
 request = KRPC.ConnectionRequest()
 request.type = KRPC.ConnectionRequest.RPC
-request.client_name = 'Jeb'
+request.client_name = "Jeb"
 send_message(rpc_conn, request)
 
 # Receive the connection response
@@ -57,13 +57,13 @@ response = recv_message(rpc_conn, KRPC.ConnectionResponse)
 
 # Check the connection was successful
 if response.status != KRPC.ConnectionResponse.OK:
-    raise RuntimeError('Connection failed: ' + response.message)
-print('Connected to RPC server')
+    raise RuntimeError("Connection failed: " + response.message)
+print("Connected to RPC server")
 
 # Invoke the KRPC.GetStatus RPC
 call = KRPC.ProcedureCall()
-call.service = 'KRPC'
-call.procedure = 'GetStatus'
+call.service = "KRPC"
+call.procedure = "GetStatus"
 request = KRPC.Request()
 request.calls.extend([call])
 send_message(rpc_conn, request)
@@ -72,13 +72,13 @@ send_message(rpc_conn, request)
 response = recv_message(rpc_conn, KRPC.Response)
 
 # Check for an error in the response
-if response.HasField('error'):
-    raise RuntimeError('ERROR: ' + str(response.error))
+if response.HasField("error"):
+    raise RuntimeError("ERROR: " + str(response.error))
 
 # Check for an error in the results
 assert len(response.results) == 1
-if response.results[0].HasField('error'):
-    raise RuntimeError('ERROR: ' + str(response.results[0].error))
+if response.results[0].HasField("error"):
+    raise RuntimeError("ERROR: " + str(response.results[0].error))
 
 # Decode the return value as a Status message
 status = KRPC.Status()

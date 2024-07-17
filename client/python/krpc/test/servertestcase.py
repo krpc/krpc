@@ -13,14 +13,17 @@ class ServerTestCase:
 
     @staticmethod
     def connect() -> Client:
-        return krpc.connect(name='python_client_test', address='localhost',
-                            rpc_port=ServerTestCase.rpc_port(),
-                            stream_port=ServerTestCase.stream_port())
+        return krpc.connect(
+            name="python_client_test",
+            address="localhost",
+            rpc_port=ServerTestCase.rpc_port(),
+            stream_port=ServerTestCase.stream_port(),
+        )
 
     @staticmethod
     def rpc_port() -> int:
-        return int(os.getenv('RPC_PORT', '50000'))
+        return int(os.getenv("RPC_PORT", "50000"))
 
     @staticmethod
     def stream_port() -> int:
-        return int(os.getenv('STREAM_PORT', '50001'))
+        return int(os.getenv("STREAM_PORT", "50001"))

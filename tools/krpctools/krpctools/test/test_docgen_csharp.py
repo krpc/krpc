@@ -4,9 +4,9 @@ from krpctools.docgen.csharp import CsharpDomain
 
 
 class TestDocGenCsharp(DocGenTestCase, unittest.TestCase):
-    language = 'csharp'
+    language = "csharp"
     domain = CsharpDomain
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

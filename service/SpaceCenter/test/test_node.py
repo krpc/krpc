@@ -9,7 +9,7 @@ class TestNode(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.set_circular_orbit('Kerbin', 100000)
+        cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel
         cls.control = cls.vessel.control
@@ -20,8 +20,7 @@ class TestNode(krpctest.TestCase):
         self.assertAlmostEqual(delta_v[1], node.normal, places=3)
         self.assertAlmostEqual(delta_v[2], node.radial, places=3)
         self.assertAlmostEqual(norm(delta_v), node.delta_v, places=3)
-        self.assertAlmostEqual(norm(delta_v),
-                               node.remaining_delta_v, delta=0.2)
+        self.assertAlmostEqual(norm(delta_v), node.remaining_delta_v, delta=0.2)
 
         bv = node.burn_vector(node.reference_frame)
         self.assertAlmostEqual(norm(delta_v), norm(bv), places=3)
@@ -30,14 +29,17 @@ class TestNode(krpctest.TestCase):
         orbital_bv = node.burn_vector(node.orbital_reference_frame)
         self.assertAlmostEqual(norm(delta_v), norm(orbital_bv), places=3)
         self.assertAlmostEqual(
-            (-delta_v[2], delta_v[0], delta_v[1]), orbital_bv, places=3)
+            (-delta_v[2], delta_v[0], delta_v[1]), orbital_bv, places=3
+        )
 
         direction = node.direction(node.reference_frame)
         self.assertAlmostEqual((0, 1, 0), direction, places=3)
         orbital_direction = node.direction(node.orbital_reference_frame)
         self.assertAlmostEqual(
             normalize((-delta_v[2], delta_v[0], delta_v[1])),
-            orbital_direction, places=3)
+            orbital_direction,
+            places=3,
+        )
 
     def test_add_node(self):
         start_ut = self.space_center.ut
@@ -56,9 +58,9 @@ class TestNode(krpctest.TestCase):
             node.prograde = 0
 
     def test_remove_nodes(self):
-        self.control.add_node(self.space_center.ut+15, 4, -2, 1)
-        self.control.add_node(self.space_center.ut+40, 1, 3, 2)
-        self.control.add_node(self.space_center.ut+60, 0, 4, 0)
+        self.control.add_node(self.space_center.ut + 15, 4, -2, 1)
+        self.control.add_node(self.space_center.ut + 40, 1, 3, 2)
+        self.control.add_node(self.space_center.ut + 60, 0, 4, 0)
         self.control.remove_nodes()
         # TODO: don't skip the following
         # with self.assertRaises (krpc.client.RPCError):
@@ -66,11 +68,11 @@ class TestNode(krpctest.TestCase):
 
     def test_get_nodes(self):
         self.assertEqual([], self.control.nodes)
-        node0 = self.control.add_node(self.space_center.ut+35, 4, -2, 1)
+        node0 = self.control.add_node(self.space_center.ut + 35, 4, -2, 1)
         self.assertEqual([node0], self.control.nodes)
-        node1 = self.control.add_node(self.space_center.ut+15, 1, 3, 2)
+        node1 = self.control.add_node(self.space_center.ut + 15, 1, 3, 2)
         self.assertEqual([node1, node0], self.control.nodes)
-        node2 = self.control.add_node(self.space_center.ut+60, 0, 4, 0)
+        node2 = self.control.add_node(self.space_center.ut + 60, 0, 4, 0)
         self.assertEqual([node1, node0, node2], self.control.nodes)
         self.control.remove_nodes()
         self.assertEqual([], self.control.nodes)
@@ -109,11 +111,12 @@ class TestNode(krpctest.TestCase):
         orbit1 = node.orbit
 
         # Check semi-major axis using vis-viva equation
-        gm = self.space_center.bodies['Kerbin'].gravitational_parameter
-        vsq = (orbit0.speed + delta_v[0])**2
+        gm = self.space_center.bodies["Kerbin"].gravitational_parameter
+        vsq = (orbit0.speed + delta_v[0]) ** 2
         radius = orbit0.radius
         self.assertAlmostEqual(
-            gm / ((2*gm/radius) - vsq), orbit1.semi_major_axis, delta=1)
+            gm / ((2 * gm / radius) - vsq), orbit1.semi_major_axis, delta=1
+        )
 
         # Check there is no inclination change
         self.assertAlmostEqual(orbit0.inclination, orbit1.inclination)
@@ -130,10 +133,10 @@ class TestNode(krpctest.TestCase):
         node = self.control.add_node(ut + 60, 100, 200, 300)
         self.wait(0.5)
         node.remove()
-        node = self.control.add_node(ut+35, 4, -2, 1)
+        node = self.control.add_node(ut + 35, 4, -2, 1)
         self.wait(0.5)
         self.control.remove_nodes()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

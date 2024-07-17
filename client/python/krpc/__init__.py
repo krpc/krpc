@@ -9,15 +9,18 @@ from krpc.schema.KRPC_pb2 import ConnectionRequest, ConnectionResponse
 
 from krpc.version import __version__
 
-DEFAULT_ADDRESS = '127.0.0.1'
+DEFAULT_ADDRESS = "127.0.0.1"
 DEFAULT_RPC_PORT = 50000
 DEFAULT_STREAM_PORT = 50001
 
 
-def connect(name: Optional[str] = None, address: str = DEFAULT_ADDRESS,
-            rpc_port: int = DEFAULT_RPC_PORT,
-            stream_port: int = DEFAULT_STREAM_PORT,
-            use_pregenerated_stubs: bool = True) -> Client:
+def connect(
+    name: Optional[str] = None,
+    address: str = DEFAULT_ADDRESS,
+    rpc_port: int = DEFAULT_RPC_PORT,
+    stream_port: int = DEFAULT_STREAM_PORT,
+    use_pregenerated_stubs: bool = True,
+) -> Client:
     """
     Connect to a kRPC server on the specified IP address and port numbers.
     If stream_port is None, does not connect to the stream server.
@@ -32,7 +35,9 @@ def connect(name: Optional[str] = None, address: str = DEFAULT_ADDRESS,
     if name is not None:
         request.client_name = name
     rpc_connection.send_message(request)
-    response = cast(ConnectionResponse, rpc_connection.receive_message(ConnectionResponse))
+    response = cast(
+        ConnectionResponse, rpc_connection.receive_message(ConnectionResponse)
+    )
     if response.status != ConnectionResponse.OK:
         raise ConnectionError(response.message)
     client_identifier = response.client_identifier
@@ -45,7 +50,9 @@ def connect(name: Optional[str] = None, address: str = DEFAULT_ADDRESS,
         request.type = ConnectionRequest.STREAM
         request.client_identifier = client_identifier
         stream_connection.send_message(request)
-        response = cast(ConnectionResponse, stream_connection.receive_message(ConnectionResponse))
+        response = cast(
+            ConnectionResponse, stream_connection.receive_message(ConnectionResponse)
+        )
         if response.status != ConnectionResponse.OK:
             raise ConnectionError(response.message)
     else:

@@ -3,7 +3,11 @@ import krpctest
 
 # TODO: expand the KAC tests
 
-@unittest.skipIf(not krpctest.TestCase.connect().kerbal_alarm_clock.available, "KerbalAlarmClock is not installed")
+
+@unittest.skipIf(
+    not krpctest.TestCase.connect().kerbal_alarm_clock.available,
+    "KerbalAlarmClock is not installed",
+)
 class TestKerbalAlarmClock(krpctest.TestCase):
 
     @classmethod
@@ -15,10 +19,11 @@ class TestKerbalAlarmClock(krpctest.TestCase):
         self.assertCountEqual([], self.kac.alarms)
 
     def test_alarm_with_name(self):
-        self.assertEqual(None, self.kac.alarm_with_name('foo'))
+        self.assertEqual(None, self.kac.alarm_with_name("foo"))
 
     def test_alarms_with_type(self):
         self.assertCountEqual([], self.kac.alarms_with_type(self.kac.AlarmType.raw))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

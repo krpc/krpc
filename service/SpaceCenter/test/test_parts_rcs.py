@@ -5,27 +5,27 @@ import krpctest
 class RCSTestBase:
 
     rcs_data = {
-        'Place-Anywhere 7 Linear RCS Port': {
-            'propellants': {'MonoPropellant': 1},
-            'max_vac_thrust': 2000,
-            'msl_isp': 100,
-            'vac_isp': 240,
-            'thrusters': 1
+        "Place-Anywhere 7 Linear RCS Port": {
+            "propellants": {"MonoPropellant": 1},
+            "max_vac_thrust": 2000,
+            "msl_isp": 100,
+            "vac_isp": 240,
+            "thrusters": 1,
         },
-        'RV-105 RCS Thruster Block': {
-            'propellants': {'MonoPropellant': 1},
-            'max_vac_thrust': 1000,
-            'msl_isp': 100,
-            'vac_isp': 240,
-            'thrusters': 4
+        "RV-105 RCS Thruster Block": {
+            "propellants": {"MonoPropellant": 1},
+            "max_vac_thrust": 1000,
+            "msl_isp": 100,
+            "vac_isp": 240,
+            "thrusters": 4,
         },
-        'Vernor Engine': {
-            'propellants': {'LiquidFuel': 9./11., 'Oxidizer': 1},
-            'max_vac_thrust': 12000,
-            'msl_isp': 140,
-            'vac_isp': 260,
-            'thrusters': 1
-        }
+        "Vernor Engine": {
+            "propellants": {"LiquidFuel": 9.0 / 11.0, "Oxidizer": 1},
+            "max_vac_thrust": 12000,
+            "msl_isp": 140,
+            "vac_isp": 260,
+            "thrusters": 1,
+        },
     }
 
     @classmethod
@@ -55,50 +55,43 @@ class RCSTest(RCSTestBase):
         self.assertTrue(rcs.forward_enabled)
         self.assertTrue(rcs.up_enabled)
         self.assertTrue(rcs.right_enabled)
-        self.assertAlmostEqual(
-            data['pos_torque'], rcs.available_torque[0], delta=10)
-        self.assertAlmostEqual(
-            data['neg_torque'], rcs.available_torque[1], delta=10)
+        self.assertAlmostEqual(data["pos_torque"], rcs.available_torque[0], delta=10)
+        self.assertAlmostEqual(data["neg_torque"], rcs.available_torque[1], delta=10)
 
         rcs.thrust_limit = 1
-        self.assertAlmostEqual(data['max_thrust'], rcs.available_thrust,
-                               delta=1)
-        self.assertAlmostEqual(data['max_thrust'], rcs.max_thrust, delta=1)
-        self.assertEqual(data['max_vac_thrust'], rcs.max_vacuum_thrust)
+        self.assertAlmostEqual(data["max_thrust"], rcs.available_thrust, delta=1)
+        self.assertAlmostEqual(data["max_thrust"], rcs.max_thrust, delta=1)
+        self.assertEqual(data["max_vac_thrust"], rcs.max_vacuum_thrust)
         self.assertAlmostEqual(1.0, rcs.thrust_limit)
 
         rcs.thrust_limit = 0.25
-        self.assertAlmostEqual(data['max_thrust'] * 0.25, rcs.available_thrust,
-                               delta=1)
-        self.assertAlmostEqual(data['max_thrust'], rcs.max_thrust, delta=1)
-        self.assertEqual(data['max_vac_thrust'], rcs.max_vacuum_thrust)
+        self.assertAlmostEqual(data["max_thrust"] * 0.25, rcs.available_thrust, delta=1)
+        self.assertAlmostEqual(data["max_thrust"], rcs.max_thrust, delta=1)
+        self.assertEqual(data["max_vac_thrust"], rcs.max_vacuum_thrust)
         self.assertAlmostEqual(0.25, rcs.thrust_limit)
 
         rcs.thrust_limit = 1
 
-        self.assertEqual(data['thrusters'], len(rcs.thrusters))
-        self.assertAlmostEqual(data['isp'], rcs.specific_impulse, places=1)
-        self.assertEqual(
-            data['vac_isp'], rcs.vacuum_specific_impulse)
-        self.assertEqual(
-            data['msl_isp'], rcs.kerbin_sea_level_specific_impulse)
-        self.assertCountEqual(data['propellants'].keys(), rcs.propellants)
-        self.assertAlmostEqual(
-            data['propellants'], rcs.propellant_ratios, places=3)
+        self.assertEqual(data["thrusters"], len(rcs.thrusters))
+        self.assertAlmostEqual(data["isp"], rcs.specific_impulse, places=1)
+        self.assertEqual(data["vac_isp"], rcs.vacuum_specific_impulse)
+        self.assertEqual(data["msl_isp"], rcs.kerbin_sea_level_specific_impulse)
+        self.assertCountEqual(data["propellants"].keys(), rcs.propellants)
+        self.assertAlmostEqual(data["propellants"], rcs.propellant_ratios, places=3)
         self.assertTrue(rcs.has_fuel)
         self.control.rcs = False
         self.wait()
 
     def test_rcs_single(self):
-        rcs = self.get_rcs('Place-Anywhere 7 Linear RCS Port')
+        rcs = self.get_rcs("Place-Anywhere 7 Linear RCS Port")
         self.check_properties(rcs)
 
     def test_rcs_block(self):
-        rcs = self.get_rcs('RV-105 RCS Thruster Block')
+        rcs = self.get_rcs("RV-105 RCS Thruster Block")
         self.check_properties(rcs)
 
     def test_vernor_engine(self):
-        rcs = self.get_rcs('Vernor Engine')
+        rcs = self.get_rcs("Vernor Engine")
         self.check_properties(rcs)
 
 
@@ -107,15 +100,15 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != 'PartsRCS':
-            cls.launch_vessel_from_vab('PartsRCS')
+        if cls.connect().space_center.active_vessel.name != "PartsRCS":
+            cls.launch_vessel_from_vab("PartsRCS")
             cls.remove_other_vessels()
         cls.vessel = cls.connect().space_center.active_vessel
         cls.control = cls.vessel.control
         cls.parts = cls.vessel.parts
 
     def test_active_and_enabled(self):
-        rcs = self.get_rcs('RV-105 RCS Thruster Block')
+        rcs = self.get_rcs("RV-105 RCS Thruster Block")
         self.control.rcs = True
         rcs.enabled = True
         self.wait()
@@ -136,10 +129,15 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
         self.assertFalse(rcs.active)
 
     def test_enabled_properties(self):
-        rcs = self.get_rcs('RV-105 RCS Thruster Block')
+        rcs = self.get_rcs("RV-105 RCS Thruster Block")
         props = (
-            'enabled', 'pitch_enabled', 'yaw_enabled', 'roll_enabled',
-            'forward_enabled', 'up_enabled', 'right_enabled'
+            "enabled",
+            "pitch_enabled",
+            "yaw_enabled",
+            "roll_enabled",
+            "forward_enabled",
+            "up_enabled",
+            "right_enabled",
         )
         for prop in props:
             for prop2 in props:
@@ -157,11 +155,11 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
                 self.assertTrue(getattr(rcs, prop2))
 
     def test_has_fuel(self):
-        rcs = self.get_rcs('RV-105 RCS Thruster Block')
+        rcs = self.get_rcs("RV-105 RCS Thruster Block")
         self.assertTrue(rcs.has_fuel)
 
     def test_has_no_fuel(self):
-        rcs = self.get_rcs('RV-105 RCS Thruster Block')
+        rcs = self.get_rcs("RV-105 RCS Thruster Block")
         self.set_fuel_enabled(False)
         self.assertFalse(rcs.has_fuel)
         self.set_fuel_enabled(True)
@@ -172,29 +170,38 @@ class TestPartsRCSMSL(krpctest.TestCase, RCSTest):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('PartsRCS')
+        cls.launch_vessel_from_vab("PartsRCS")
         cls.remove_other_vessels()
         cls.vessel = cls.connect().space_center.active_vessel
         cls.control = cls.vessel.control
         cls.parts = cls.vessel.parts
         cls.add_rcs_data(
-            'Place-Anywhere 7 Linear RCS Port',
-            {'max_thrust': 842,
-             'isp': 101,
-             'pos_torque': (0, 153, 0),
-             'neg_torque': (-534, 0, -1040)})
+            "Place-Anywhere 7 Linear RCS Port",
+            {
+                "max_thrust": 842,
+                "isp": 101,
+                "pos_torque": (0, 153, 0),
+                "neg_torque": (-534, 0, -1040),
+            },
+        )
         cls.add_rcs_data(
-            'RV-105 RCS Thruster Block',
-            {'max_thrust': 420,
-             'isp': 101,
-             'pos_torque': (432, 198, 339),
-             'neg_torque': (-432, -198, -339)})
+            "RV-105 RCS Thruster Block",
+            {
+                "max_thrust": 420,
+                "isp": 101,
+                "pos_torque": (432, 198, 339),
+                "neg_torque": (-432, -198, -339),
+            },
+        )
         cls.add_rcs_data(
-            'Vernor Engine',
-            {'max_thrust': 6503,
-             'isp': 140.9,
-             'pos_torque': (4032, 0, 0),
-             'neg_torque': (0, -178, -4129)})
+            "Vernor Engine",
+            {
+                "max_thrust": 6503,
+                "isp": 140.9,
+                "pos_torque": (4032, 0, 0),
+                "neg_torque": (0, -178, -4129),
+            },
+        )
 
 
 class TestPartsRCSVacuum(krpctest.TestCase, RCSTest):
@@ -202,31 +209,40 @@ class TestPartsRCSVacuum(krpctest.TestCase, RCSTest):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('PartsRCS')
+        cls.launch_vessel_from_vab("PartsRCS")
         cls.remove_other_vessels()
-        cls.set_circular_orbit('Kerbin', 250000)
+        cls.set_circular_orbit("Kerbin", 250000)
         cls.vessel = cls.connect().space_center.active_vessel
         cls.control = cls.vessel.control
         cls.parts = cls.vessel.parts
         cls.add_rcs_data(
-            'Place-Anywhere 7 Linear RCS Port',
-            {'max_thrust': 2000,
-             'isp': 240,
-             'pos_torque': (0, 326, 0),
-             'neg_torque': (-1212, 0, -2367)})
+            "Place-Anywhere 7 Linear RCS Port",
+            {
+                "max_thrust": 2000,
+                "isp": 240,
+                "pos_torque": (0, 326, 0),
+                "neg_torque": (-1212, 0, -2367),
+            },
+        )
         cls.add_rcs_data(
-            'RV-105 RCS Thruster Block',
-            {'max_thrust': 1000,
-             'isp': 240,
-             'pos_torque': (960, 510, 820),
-             'neg_torque': (-960, -510, -820)})
+            "RV-105 RCS Thruster Block",
+            {
+                "max_thrust": 1000,
+                "isp": 240,
+                "pos_torque": (960, 510, 820),
+                "neg_torque": (-960, -510, -820),
+            },
+        )
         cls.add_rcs_data(
-            'Vernor Engine',
-            {'max_thrust': 12000,
-             'isp': 260,
-             'pos_torque': (6931, 0, 0),
-             'neg_torque': (0, 0, -6931)})
+            "Vernor Engine",
+            {
+                "max_thrust": 12000,
+                "isp": 260,
+                "pos_torque": (6931, 0, 0),
+                "neg_torque": (0, 0, -6931),
+            },
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

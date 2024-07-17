@@ -17,7 +17,8 @@ class TestText(krpctest.TestCase):
 
     def add_text(self):
         return self.drawing.add_text(
-            "Jebediah Kerman", self.ref, (0, 0, 0), (0, 0, 0, 1))
+            "Jebediah Kerman", self.ref, (0, 0, 0), (0, 0, 0, 1)
+        )
 
     def test_text(self):
         text = self.add_text()
@@ -63,5 +64,5 @@ class TestText(krpctest.TestCase):
         self.assertRaises(ValueError, text.remove)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

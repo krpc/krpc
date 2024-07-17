@@ -1,30 +1,44 @@
-from krpc.types import \
-    ValueType, ClassType, EnumerationType, MessageType, \
-    TupleType, ListType, SetType, DictionaryType
+from krpc.types import (
+    ValueType,
+    ClassType,
+    EnumerationType,
+    MessageType,
+    TupleType,
+    ListType,
+    SetType,
+    DictionaryType,
+)
 from krpc.utils import snake_case
 from .domain import Domain
-from .nodes import \
-    Procedure, Property, Class, ClassMethod, ClassStaticMethod, \
-    ClassProperty, Enumeration, EnumerationValue
+from .nodes import (
+    Procedure,
+    Property,
+    Class,
+    ClassMethod,
+    ClassStaticMethod,
+    ClassProperty,
+    Enumeration,
+    EnumerationValue,
+)
 from ..utils import lower_camel_case
 from ..lang.java import JavaLanguage
 
 
 class JavaDomain(Domain):
-    name = 'java'
-    prettyname = 'Java'
-    sphinxname = 'java'
-    highlight = 'java'
-    codeext = 'java'
+    name = "java"
+    prettyname = "Java"
+    sphinxname = "java"
+    highlight = "java"
+    codeext = "java"
     language = JavaLanguage()
 
     def currentmodule(self, name):
         super().currentmodule(name)
-        return '.. package:: krpc.client.services.%s' % name
+        return ".. package:: krpc.client.services.%s" % name
 
     def method_name(self, name):
         if lower_camel_case(name) in self.language.keywords:
-            return '%s_' % name
+            return "%s_" % name
         return name
 
     def type(self, typ):
@@ -32,56 +46,59 @@ class JavaDomain(Domain):
 
     def _type(self, typ, generic=False):
         if typ is None:
-            return 'void'
+            return "void"
         if not generic and isinstance(typ, ValueType):
             return self.language.type_map[typ.protobuf_type.code]
         if generic and isinstance(typ, ValueType):
             return self.language.type_map_classes[typ.protobuf_type.code]
         if isinstance(typ, MessageType):
-            return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
+            return "krpc.schema.KRPC.%s" % typ.python_type.__name__
         if isinstance(typ, (ClassType, EnumerationType)):
             return self.shorten_ref(
-                '%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
+                "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
+            )
         if isinstance(typ, ListType):
-            return 'java.util.List<%s>' % self._type(typ.value_type, True)
+            return "java.util.List<%s>" % self._type(typ.value_type, True)
         if isinstance(typ, DictionaryType):
-            return 'java.util.Map<%s,%s>' % \
-                (self._type(typ.key_type, True),
-                 self._type(typ.value_type, True))
+            return "java.util.Map<%s,%s>" % (
+                self._type(typ.key_type, True),
+                self._type(typ.value_type, True),
+            )
         if isinstance(typ, SetType):
-            return 'java.util.Set<%s>' % self._type(typ.value_type, True)
+            return "java.util.Set<%s>" % self._type(typ.value_type, True)
         if isinstance(typ, TupleType):
-            name = self.language.tuple_types[len(typ.value_types)-1]
-            return 'org.javatuples.%s<%s>' % \
-                (name, ','.join(self._type(typ, True)
-                                for typ in typ.value_types))
-        raise RuntimeError('Unknown type \'%s\'' % str(typ))
+            name = self.language.tuple_types[len(typ.value_types) - 1]
+            return "org.javatuples.%s<%s>" % (
+                name,
+                ",".join(self._type(typ, True) for typ in typ.value_types),
+            )
+        raise RuntimeError("Unknown type '%s'" % str(typ))
 
     def type_description(self, typ):
         if isinstance(typ, ValueType):
             return self._type(typ)
         if isinstance(typ, MessageType):
-            return ':type:`%s`' % self._type(typ)
+            return ":type:`%s`" % self._type(typ)
         if isinstance(typ, ClassType):
-            return ':type:`%s`' % self.type(typ)
+            return ":type:`%s`" % self.type(typ)
         if isinstance(typ, EnumerationType):
-            return ':class:`%s`' % self.type(typ)
+            return ":class:`%s`" % self.type(typ)
         if isinstance(typ, ListType):
-            return ':class:`java.util.List<%s>`' % \
-                self._type(typ.value_type, True)
+            return ":class:`java.util.List<%s>`" % self._type(typ.value_type, True)
         if isinstance(typ, DictionaryType):
-            return ':class:`java.util.Map<%s,%s>`' % \
-                (self._type(typ.key_type, True),
-                 self._type(typ.value_type, True))
+            return ":class:`java.util.Map<%s,%s>`" % (
+                self._type(typ.key_type, True),
+                self._type(typ.value_type, True),
+            )
         if isinstance(typ, SetType):
-            return ':class:`java.util.Set<%s>`' % \
-                self._type(typ.value_type, True)
+            return ":class:`java.util.Set<%s>`" % self._type(typ.value_type, True)
         if isinstance(typ, TupleType):
-            name = self.tuple_types[len(typ.value_types)-1]
-            return ':class:`org.javatuples.%s<%s>`' % \
-                (name, ','.join(self._type(typ, True)
-                                for typ in typ.value_types))
-        raise RuntimeError('Unknown type \'%s\'' % str(typ))
+            name = self.tuple_types[len(typ.value_types) - 1]
+            return ":class:`org.javatuples.%s<%s>`" % (
+                name,
+                ",".join(self._type(typ, True) for typ in typ.value_types),
+            )
+        raise RuntimeError("Unknown type '%s'" % str(typ))
 
     def ref(self, obj):
         name = obj.fullname
@@ -89,26 +106,34 @@ class JavaDomain(Domain):
             parameters = [self.type(p.type) for p in obj.parameters]
             if isinstance(obj, ClassMethod):
                 parameters = parameters[1:]
-            name = name.split('.')
-            name[-1] = lower_camel_case(name[-1])+'('+', '.join(parameters)+')'
-            name = '.'.join(name)
+            name = name.split(".")
+            name[-1] = lower_camel_case(name[-1]) + "(" + ", ".join(parameters) + ")"
+            name = ".".join(name)
         elif isinstance(obj, (Property, ClassProperty)):
-            name = name.split('.')
-            name[-1] = 'get'+name[-1]+'()'
-            name = '.'.join(name)
+            name = name.split(".")
+            name[-1] = "get" + name[-1] + "()"
+            name = ".".join(name)
         elif isinstance(obj, EnumerationValue):
-            name = name.split('.')
+            name = name.split(".")
             name[-1] = snake_case(name[-1]).upper()
-            name = '.'.join(name)
+            name = ".".join(name)
         return self.shorten_ref(name)
 
     def see(self, obj):
-        if any(isinstance(obj, cls) for cls in
-               (Procedure, ClassMethod, ClassStaticMethod, Property,
-                ClassProperty, EnumerationValue)):
-            prefix = 'meth'
+        if any(
+            isinstance(obj, cls)
+            for cls in (
+                Procedure,
+                ClassMethod,
+                ClassStaticMethod,
+                Property,
+                ClassProperty,
+                EnumerationValue,
+            )
+        ):
+            prefix = "meth"
         elif any(isinstance(obj, cls) for cls in (Class, Enumeration)):
-            prefix = 'type'
+            prefix = "type"
         else:
             raise RuntimeError(str(obj))
-        return ':%s:`%s`' % (prefix, self.ref(obj))
+        return ":%s:`%s`" % (prefix, self.ref(obj))

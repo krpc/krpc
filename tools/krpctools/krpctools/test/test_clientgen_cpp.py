@@ -4,9 +4,9 @@ from krpctools.clientgen.cpp import CppGenerator
 
 
 class TestClientGenCpp(ClientGenTestCase, unittest.TestCase):
-    language = 'cpp'
+    language = "cpp"
     generator = CppGenerator
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

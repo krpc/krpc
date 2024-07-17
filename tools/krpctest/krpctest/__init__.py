@@ -12,10 +12,10 @@ import krpc
 def _connect(use_cached=True):
     if _connect.connection is not None and use_cached:
         return _connect.connection
-    address = '127.0.0.1'
-    if 'KRPC_ADDRESS' in os.environ:
-        address = os.environ['KRPC_ADDRESS']
-    connection = krpc.connect(name='krpctest', address=address)
+    address = "127.0.0.1"
+    if "KRPC_ADDRESS" in os.environ:
+        address = os.environ["KRPC_ADDRESS"]
+    connection = krpc.connect(name="krpctest", address=address)
     if use_cached:
         _connect.connection = connection
     return connection
@@ -25,11 +25,11 @@ _connect.connection = None
 
 
 def _get_ksp_dir():
-    path = os.path.join(os.getcwd(), 'lib/ksp')
-    if 'KSP_DIR' in os.environ:
-        path = os.environ['KSP_DIR']
+    path = os.path.join(os.getcwd(), "lib/ksp")
+    if "KSP_DIR" in os.environ:
+        path = os.environ["KSP_DIR"]
     if not os.path.exists(path):
-        raise RuntimeError('KSP dir not found at %s' % path)
+        raise RuntimeError("KSP dir not found at %s" % path)
     return path
 
 
@@ -40,20 +40,20 @@ class TestCase(unittest.TestCase):
         return _connect(use_cached)
 
     @classmethod
-    def new_save(cls, name='krpctest', always_load=False):
+    def new_save(cls, name="krpctest", always_load=False):
         # Return if the save is already loaded
-        if not always_load and \
-           cls.connect().testing_tools.current_save == name:
+        if not always_load and cls.connect().testing_tools.current_save == name:
             return
 
         # Load a blank save with the given name
         blank_save = resource_filename(
-            Requirement.parse('krpctest'), 'krpctest/' + name + '.sfs')
-        save_path = os.path.join(_get_ksp_dir(), 'saves', name)
+            Requirement.parse("krpctest"), "krpctest/" + name + ".sfs"
+        )
+        save_path = os.path.join(_get_ksp_dir(), "saves", name)
         if not os.path.exists(save_path):
             os.makedirs(save_path)
-        shutil.copy(blank_save, os.path.join(save_path, 'persistent.sfs'))
-        cls.connect().testing_tools.load_save(name, 'persistent')
+        shutil.copy(blank_save, os.path.join(save_path, "persistent.sfs"))
+        cls.connect().testing_tools.load_save(name, "persistent")
 
     @classmethod
     def remove_other_vessels(cls):
@@ -63,31 +63,49 @@ class TestCase(unittest.TestCase):
     def launch_vessel_from_vab(cls, name, directory=None):
         # Copy craft file to save directory
         if directory is None:
-            directory = os.path.join(
-                os.getcwd(), os.path.dirname(sys.argv[0]), 'craft')
+            directory = os.path.join(os.getcwd(), os.path.dirname(sys.argv[0]), "craft")
         fixtures_path = os.path.abspath(directory)
         save_path = os.path.join(
-            _get_ksp_dir(), 'saves', cls.connect().testing_tools.current_save)
+            _get_ksp_dir(), "saves", cls.connect().testing_tools.current_save
+        )
         if not os.path.exists(save_path):
             os.makedirs(save_path)
-        ships_path = os.path.join(save_path, 'Ships', 'VAB')
+        ships_path = os.path.join(save_path, "Ships", "VAB")
         if not os.path.exists(ships_path):
             os.makedirs(ships_path)
-        shutil.copy(os.path.join(fixtures_path, name + '.craft'),
-                    os.path.join(ships_path, name + '.craft'))
-        shutil.copy(os.path.join(fixtures_path, name + '.loadmeta'),
-                    os.path.join(ships_path, name + '.loadmeta'))
+        shutil.copy(
+            os.path.join(fixtures_path, name + ".craft"),
+            os.path.join(ships_path, name + ".craft"),
+        )
+        shutil.copy(
+            os.path.join(fixtures_path, name + ".loadmeta"),
+            os.path.join(ships_path, name + ".loadmeta"),
+        )
         # Launch the craft
         cls.connect().space_center.launch_vessel_from_vab(name)
 
     @classmethod
-    def set_orbit(cls, body, semi_major_axis, eccentricity, inclination,
-                  longitude_of_ascending_node, argument_of_periapsis,
-                  mean_anomaly_at_epoch, epoch):
+    def set_orbit(
+        cls,
+        body,
+        semi_major_axis,
+        eccentricity,
+        inclination,
+        longitude_of_ascending_node,
+        argument_of_periapsis,
+        mean_anomaly_at_epoch,
+        epoch,
+    ):
         cls.connect().testing_tools.set_orbit(
-            body, semi_major_axis, eccentricity, inclination,
-            longitude_of_ascending_node, argument_of_periapsis,
-            mean_anomaly_at_epoch, epoch)
+            body,
+            semi_major_axis,
+            eccentricity,
+            inclination,
+            longitude_of_ascending_node,
+            argument_of_periapsis,
+            mean_anomaly_at_epoch,
+            epoch,
+        )
 
     @classmethod
     def set_circular_orbit(cls, body, altitude):
@@ -97,32 +115,27 @@ class TestCase(unittest.TestCase):
     def wait(cls, timeout=0.1):
         time.sleep(timeout)
 
-    def assertAlmostEqual(self, first, second,
-                          places=7, msg=None, delta=None):
-        """ Check that first is equal to second, within the given error """
+    def assertAlmostEqual(self, first, second, places=7, msg=None, delta=None):
+        """Check that first is equal to second, within the given error"""
         if not self._is_almost_equal(first, second, places, delta):
             if msg is None:
-                msg = self._almost_equal_summary(
-                    first, second, 'not almost equal')
+                msg = self._almost_equal_summary(first, second, "not almost equal")
                 msg = self._almost_equal_error_msg(msg, places, delta)
             self.fail(msg)
 
-    def assertNotAlmostEqual(self, first, second,
-                             places=7, msg=None, delta=None):
-        """ Check that first is not equal to second,
-            within the given error """
+    def assertNotAlmostEqual(self, first, second, places=7, msg=None, delta=None):
+        """Check that first is not equal to second,
+        within the given error"""
         if self._is_almost_equal(first, second, places, delta):
             if msg is None:
-                msg = self._almost_equal_summary(
-                    first, second, 'almost equal')
+                msg = self._almost_equal_summary(first, second, "almost equal")
                 msg = self._almost_equal_error_msg(msg, places, delta)
             self.fail(msg)
 
-    def assertDegreesAlmostEqual(self, first, second,
-                                 places=7, msg=None, delta=None):
-        """ Check that angle first is equal to angle second,
-            within the given error.
-            Uses clock arithmetic to compare angles, in range (0,360] """
+    def assertDegreesAlmostEqual(self, first, second, places=7, msg=None, delta=None):
+        """Check that angle first is equal to angle second,
+        within the given error.
+        Uses clock arithmetic to compare angles, in range (0,360]"""
 
         def clamp_degrees(angle):
             angle = angle % 360
@@ -135,8 +148,8 @@ class TestCase(unittest.TestCase):
 
         if msg is None:
             msg = self._almost_equal_error_msg(
-                'Angle %f is not close to %f' %
-                (first, second), places, delta)
+                "Angle %f is not close to %f" % (first, second), places, delta
+            )
 
         if delta is not None:
             min_degrees = clamp_degrees(first - delta)
@@ -150,20 +163,22 @@ class TestCase(unittest.TestCase):
             self.fail(msg)
 
         else:
-            self.assertAlmostEqual(first_clamped, second_clamped,
-                                   msg=msg, places=places)
+            self.assertAlmostEqual(
+                first_clamped, second_clamped, msg=msg, places=places
+            )
 
-    def assertQuaternionsAlmostEqual(self, second, first,
-                                     places=7, msg=None, delta=None):
-        """ Check that a pair of quaternions represent the same orientation,
-            within the given error. """
+    def assertQuaternionsAlmostEqual(
+        self, second, first, places=7, msg=None, delta=None
+    ):
+        """Check that a pair of quaternions represent the same orientation,
+        within the given error."""
         for mult in [1, -1]:
-            if self._is_almost_equal(
-                    [x * mult for x in second], first, places, delta):
+            if self._is_almost_equal([x * mult for x in second], first, places, delta):
                 return
         if msg is None:
             msg = self._almost_equal_summary(
-                first, second, 'not almost equivalent orientations')
+                first, second, "not almost equivalent orientations"
+            )
             msg = self._almost_equal_error_msg(msg, places, delta)
             self.fail(msg)
 
@@ -193,28 +208,27 @@ class TestCase(unittest.TestCase):
         if set(first.keys()) != set(second.keys()):
             return False
         for k in first.keys():
-            if not self._is_almost_equal(
-                    first[k], second[k], places, delta):
+            if not self._is_almost_equal(first[k], second[k], places, delta):
                 return False
         return True
 
     @staticmethod
     def _almost_equal_summary(first, second, comparison):
         if isinstance(second, (list, tuple)):
-            return '%s is %s to %s' % (str(first), comparison, str(second))
+            return "%s is %s to %s" % (str(first), comparison, str(second))
         if isinstance(second, dict):
-            return '%s is %s to %s' % (str(first), comparison, str(second))
-        return '%f is %s to %f' % (first, comparison, second)
+            return "%s is %s to %s" % (str(first), comparison, str(second))
+        return "%f is %s to %f" % (first, comparison, second)
 
     @staticmethod
     def _almost_equal_error_msg(msg, places, delta):
         if delta is not None:
-            return '%s, within a delta of %f' % (msg, delta)
-        return '%s, to %d places' % (msg, places)
+            return "%s, within a delta of %f" % (msg, delta)
+        return "%s, to %d places" % (msg, places)
 
     def assertIsNaN(self, value):
-        """ Check that the value is nan """
-        msg = '%s is not nan' % str(value)
+        """Check that the value is nan"""
+        msg = "%s is not nan" % str(value)
         try:
             if not math.isnan(value):
                 self.fail(msg)
@@ -222,8 +236,8 @@ class TestCase(unittest.TestCase):
             self.fail(msg)
 
     def assertIsNotNaN(self, value):
-        """ Check that the value is nan """
-        msg = '%s is nan' % str(value)
+        """Check that the value is nan"""
+        msg = "%s is nan" % str(value)
         try:
             if math.isnan(value):
                 self.fail(msg)
