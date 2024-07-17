@@ -68,7 +68,7 @@ class TestContracts(krpctest.TestCase):
     def test_child_parameters(self):
         contract = self.cm.all_contracts[13]
         self.assertEqual(
-            'Test RT-10 "Hammer" Solid Fuel Booster ' "at the Launch Site.",
+            'Test RT-10 "Hammer" Solid Fuel Booster at the Launch Site.',
             contract.title,
         )
         self.assertEqual(1, len(contract.parameters))
