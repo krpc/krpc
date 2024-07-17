@@ -1,5 +1,5 @@
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
 load("//:config.bzl", "assembly_version", "author")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
 
 srcs = glob(["**/*.cs"]) + [":AssemblyInfo"]
 

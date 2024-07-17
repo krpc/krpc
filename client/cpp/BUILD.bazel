@@ -1,9 +1,9 @@
+load("//:config.bzl", "version")
 load("//tools/build:autotools.bzl", "autotools_dist")
+load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:cpp.bzl", "cpp_check_test", "cpp_lint_test")
 load("//tools/build/protobuf:cpp.bzl", "protobuf_cpp")
-load("//tools/build:client_test.bzl", "client_test")
 load("//tools/krpctools:clientgen.bzl", "clientgen_cpp")
-load("//:config.bzl", "version")
 
 name = "krpc-cpp-%s" % version
 

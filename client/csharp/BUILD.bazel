@@ -1,8 +1,8 @@
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library", "csharp_nunit_test", "nuget_package")
-load("//tools/build:client_test.bzl", "client_test")
-load("//tools/krpctools:clientgen.bzl", "clientgen_csharp")
-load("//tools/build:pkg.bzl", "pkg_zip")
 load("//:config.bzl", "assembly_version", "author", "nuget_version", "version")
+load("//tools/build:client_test.bzl", "client_test")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library", "csharp_nunit_test", "nuget_package")
+load("//tools/build:pkg.bzl", "pkg_zip")
+load("//tools/krpctools:clientgen.bzl", "clientgen_csharp")
 
 pkg_zip(
     name = "csharp",

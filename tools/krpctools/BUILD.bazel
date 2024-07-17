@@ -1,6 +1,6 @@
+load("//:config.bzl", "python_version", "version")
 load("//tools/build:python.bzl", "py_lint_test", "py_script", "py_sdist", "py_test")
 load("//tools/build/mono-4.5:build.bzl", "mono_net_libs")
-load("//:config.bzl", "python_version", "version")
 
 license_text = """This license (GPL v3) applies to all parts of krpc.clientgen except for the following:
 

@@ -1,7 +1,7 @@
-load("//tools/krpctools:clientgen.bzl", "clientgen_java")
+load("//:config.bzl", "version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:java.bzl", "java_checkstyle_test")
-load("//:config.bzl", "version")
+load("//tools/krpctools:clientgen.bzl", "clientgen_java")
 
 copts = [
     "-Werror",

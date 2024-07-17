@@ -1,5 +1,5 @@
-load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
 load("//:config.bzl", "python_version", "version")
+load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
 
 py_sdist(
     name = "krpctest",
