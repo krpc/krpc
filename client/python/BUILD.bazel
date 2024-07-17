@@ -197,6 +197,7 @@ py_lint_test(
     srcs = glob(["krpc/**/*"]),
     pkg = ":python",
     pkg_name = "krpc",
+    black_exclude = "\".*(schema|services)/.+\"",
     pylint_config = "pylint.rc",
     deps = deps,
 )

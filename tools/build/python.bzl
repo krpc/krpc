@@ -177,7 +177,14 @@ def _lint_impl(ctx):
     out = ctx.outputs.executable
     files = []
     deps = list(ctx.files.deps)
-    black_args = []
+    black_args = [
+        "--check"
+    ]
+    if ctx.attr.black_exclude:
+        black_args.extend([
+            "--extend-exclude",
+            ctx.attr.black_exclude,
+        ])
     pylint_args = []
     if ctx.attr.pylint_config:
         pylint_args.append("--rcfile=%s" % ctx.file.pylint_config.short_path)
@@ -252,6 +259,7 @@ py_lint_test = rule(
         "pkg_name": attr.string(),
         "srcs": attr.label_list(allow_files = True),
         "deps": attr.label_list(allow_files = True),
+        "black_exclude": attr.string(),
         "pylint_config": attr.label(allow_single_file = True),
         "black": attr.label(default = Label("//tools/build/black"), executable = True, cfg = "exec"),
         "pylint": attr.label(default = Label("//tools/build/pylint"), executable = True, cfg = "exec"),
