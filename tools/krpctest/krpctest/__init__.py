@@ -25,10 +25,10 @@ _connect.connection = None
 
 
 def _get_ksp_dir():
-    path = None
+    path = os.path.join(os.getcwd(), 'lib/ksp')
     if 'KSP_DIR' in os.environ:
         path = os.environ['KSP_DIR']
-    if not path or not os.path.exists(path):
+    if not os.path.exists(path):
         raise RuntimeError('KSP dir not found at %s' % path)
     return path
 
