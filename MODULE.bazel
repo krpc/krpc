@@ -1,26 +1,17 @@
-workspace(name = "krpc")
+module(name = "krpc")
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
-load("@bazel_tools//tools/build_defs/repo:maven_rules.bzl", "maven_jar")
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-http_archive(
-    name = "bazel_skylib",
-    sha256 = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7",
-    url = "https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz",
-)
+http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
-http_archive(
-    name = "rules_python",
-    sha256 = "29a801171f7ca190c543406f9894abf2d483c206e14d6acbd695623662320097",
-    strip_prefix = "rules_python-0.18.1",
-    url = "https://github.com/bazelbuild/rules_python/releases/download/0.18.1/rules_python-0.18.1.tar.gz",
-)
+maven_jar = use_repo_rule("@bazel_tools//tools/build_defs/repo:maven_rules.bzl", "maven_jar")
 
-http_archive(
-    name = "rules_pkg",
-    sha256 = "8c20f74bca25d2d442b327ae26768c02cf3c99e93fad0381f32be9aab1967675",
-    url = "https://github.com/bazelbuild/rules_pkg/releases/download/0.8.1/rules_pkg-0.8.1.tar.gz",
-)
+bazel_dep(name = "bazel_skylib", version = "1.6.1")
+bazel_dep(name = "rules_cc", version = "0.0.9")
+bazel_dep(name = "rules_pkg", version = "1.0.1")
+bazel_dep(name = "rules_proto", version = "6.0.2")
+bazel_dep(name = "rules_python", version = "0.34.0")
+bazel_dep(name = "rules_java", version = "7.7.2")
 
 http_archive(
     name = "com_google_protobuf",
@@ -43,6 +34,8 @@ http_archive(
     strip_prefix = "zlib-1.2.13",
     url = "https://zlib.net/zlib-1.2.13.tar.gz",
 )
+
+# ----------------------- Protobuf Compiler ----------------------------------------------
 
 http_archive(
     name = "protoc_linux_x86_32",
@@ -109,31 +102,21 @@ http_archive(
 )
 
 http_archive(
-    name = "c_nanopb",
+    name = "protoc_lua",
     build_file_content = """
-exports_files([
-    'LICENSE.txt', 'pb.h', 'pb_common.h', 'pb_common.c', 'pb_encode.h', 'pb_encode.c', 'pb_decode.h', 'pb_decode.c'
-])
-
-cc_library(
-    name = 'nanopb',
-    srcs = ['pb.h', 'pb_common.h', 'pb_common.c', 'pb_encode.h', 'pb_encode.c', 'pb_decode.h', 'pb_decode.c'],
-    hdrs = ['pb.h', 'pb_common.h', 'pb_encode.h', 'pb_decode.h'],
-    includes = ['./'],
-    include_prefix = 'krpc_cnano', # FIXME: don't do this here
-    visibility = ['//visibility:public']
-)
-
 filegroup(
-    name = 'srcs',
-    srcs = glob(['*.h', '*.c']),
+    name = 'plugin',
+    srcs = [
+        'protoc-plugin/protoc-gen-lua'
+    ],
     visibility = ['//visibility:public']
+)""",
+    sha256 = "28f4daa026effb81cebfdf580b0fc5732e520c0f4ade53e940052d89cddf4264",
+    strip_prefix = "protobuf-lua-1.1.2",
+    url = "https://github.com/djungelorm/protobuf-lua/archive/v1.1.2.tar.gz",
 )
-""",
-    sha256 = "e8a154d3b6631696cb42e3acba338ab738509af56571ebc9c35d7a754d6e5b48",
-    strip_prefix = "nanopb-0.4.7-linux-x86",
-    url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.7-linux-x86.tar.gz",
-)
+
+# ----------------------- C# dependencies ------------------------------------------------
 
 http_file(
     name = "csharp_nuget",
@@ -219,6 +202,8 @@ http_archive(
     url = "https://www.nuget.org/api/v2/package/NDesk.Options/0.2.1",
 )
 
+# ----------------------- C++ dependencies -----------------------------------------------
+
 http_archive(
     name = "cpp_asio",
     build_file_content = """
@@ -276,6 +261,37 @@ http_file(
     sha256 = "a6f7cdef49579d995976baece6e605aca1f2c8b0cb771bbae4d7b816710dcb4c",
     url = "http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx.m4;hb=34104ea9e635fae5551fd1d6495a80f8041c4adc",
 )
+
+# ----------------------- C-nano dependencies --------------------------------------------
+
+http_archive(
+    name = "c_nanopb",
+    build_file_content = """
+exports_files([
+    'LICENSE.txt', 'pb.h', 'pb_common.h', 'pb_common.c', 'pb_encode.h', 'pb_encode.c', 'pb_decode.h', 'pb_decode.c'
+])
+
+cc_library(
+    name = 'nanopb',
+    srcs = ['pb.h', 'pb_common.h', 'pb_common.c', 'pb_encode.h', 'pb_encode.c', 'pb_decode.h', 'pb_decode.c'],
+    hdrs = ['pb.h', 'pb_common.h', 'pb_encode.h', 'pb_decode.h'],
+    includes = ['./'],
+    include_prefix = 'krpc_cnano', # FIXME: don't do this here
+    visibility = ['//visibility:public']
+)
+
+filegroup(
+    name = 'srcs',
+    srcs = glob(['*.h', '*.c']),
+    visibility = ['//visibility:public']
+)
+""",
+    sha256 = "e8a154d3b6631696cb42e3acba338ab738509af56571ebc9c35d7a754d6e5b48",
+    strip_prefix = "nanopb-0.4.7-linux-x86",
+    url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.7-linux-x86.tar.gz",
+)
+
+# ----------------------- Java dependencies ----------------------------------------------
 
 maven_jar(
     name = "java_protobuf",
@@ -349,20 +365,7 @@ maven_jar(
     sha1 = "507312ac4b601204a72a83380badbca82683dd36",
 )
 
-http_archive(
-    name = "protoc_lua",
-    build_file_content = """
-filegroup(
-    name = 'plugin',
-    srcs = [
-        'protoc-plugin/protoc-gen-lua'
-    ],
-    visibility = ['//visibility:public']
-)""",
-    sha256 = "28f4daa026effb81cebfdf580b0fc5732e520c0f4ade53e940052d89cddf4264",
-    strip_prefix = "protobuf-lua-1.1.2",
-    url = "https://github.com/djungelorm/protobuf-lua/archive/v1.1.2.tar.gz",
-)
+# ----------------------- Lua packages ---------------------------------------------------
 
 http_file(
     name = "lua_protobuf",
@@ -398,6 +401,8 @@ http_file(
     sha256 = "7ae20f3b68e77e3be52fc95c147eccfaef33206a7985320061fb9352d8565741",
     url = "https://luarocks.org/manifests/bluebird75/luaunit-3.2.1-1.src.rock",
 )
+
+# ----------------------- Python packages ------------------------------------------------
 
 http_file(
     name = "python_alabaster",
@@ -750,6 +755,8 @@ http_file(
     sha256 = "3f09e6d8230892547132177f575a4e3e73cfdf06526e20cc02aa1c3b47184d40",
     url = "https://files.pythonhosted.org/packages/8b/94/696484b0c13234c91b316bc3d82d432f9b589a9ef09d016875a31c670b76/websocket-client-1.5.1.tar.gz",
 )
+
+# ----------------------- Module Manager -------------------------------------------------
 
 http_file(
     name = "module_manager",

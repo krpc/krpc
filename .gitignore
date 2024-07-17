@@ -1,3 +1,4 @@
+MODULE.bazel.lock
 /bazel-*
 .vs/
 .idea/
