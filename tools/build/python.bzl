@@ -111,7 +111,7 @@ def _script_impl(ctx):
     )
 
     env = ctx.attr.script + ".py_script-env-$$"
-    sub_commands = _extract_py_env("$0.runfiles/krpc/%s" % script_env.short_path, env)
+    sub_commands = _extract_py_env("$0.runfiles/_main/%s" % script_env.short_path, env)
     sub_commands.append('%s/bin/python %s/bin/%s "$@"' % (env, env, ctx.attr.script))
     sub_commands.append("rm -rf %s" % env)
     ctx.actions.write(
@@ -209,8 +209,6 @@ def _lint_impl(ctx):
     if ctx.attr.pylint_config:
         runfiles.append(ctx.file.pylint_config)
 
-    sub_commands = []
-
     # Install dependences in a new virtual env
     sub_commands = ["virtualenv env --python python3 --quiet --never-download"]
     for dep in deps:
@@ -220,24 +218,25 @@ def _lint_impl(ctx):
         )
 
     # Run black
-    runfiles_dir = out.path + ".runfiles/krpc"
+    runfiles_dir = out.path + ".runfiles/_main"
     sub_commands.append("rm -rf %s" % runfiles_dir)
     _add_runfile(sub_commands, black.short_path, runfiles_dir + "/" + black.basename)
     for f in black_runfiles:
-        _add_runfile(sub_commands, f.short_path, runfiles_dir + "/" + black.basename + ".runfiles/krpc/" + f.short_path)
+        _add_runfile(sub_commands, f.short_path, runfiles_dir + "/" + black.basename + ".runfiles/_main/" + f.short_path)
     sub_commands.append("%s/%s %s" % (runfiles_dir, black.basename, " ".join(black_args)))
     sub_commands.append("rm -rf %s" % runfiles_dir)
 
     # Run pylint
-    runfiles_dir = out.path + ".runfiles/krpc"
+    runfiles_dir = out.path + ".runfiles/_main"
     sub_commands.append("rm -rf %s" % runfiles_dir)
     _add_runfile(sub_commands, pylint.short_path, runfiles_dir + "/" + pylint.basename)
     for f in pylint_runfiles:
-        _add_runfile(sub_commands, f.short_path, runfiles_dir + "/" + pylint.basename + ".runfiles/krpc/" + f.short_path)
+        _add_runfile(sub_commands, f.short_path, runfiles_dir + "/" + pylint.basename + ".runfiles/_main/" + f.short_path)
 
     # Set pythonpath so that pylint finds the dependent packages from the virtual environment
     sub_commands.append('pylibdir=`find env/lib -maxdepth 1 -name "python*"`')
     sub_commands.append("PYTHONPATH=${pylibdir}/site-packages PYLINTHOME=%s %s/%s %s" % (runfiles_dir, runfiles_dir, pylint.basename, " ".join(pylint_args)))
+
     sub_commands.append("rm -rf %s" % runfiles_dir)
 
     ctx.actions.write(

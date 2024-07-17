@@ -7,14 +7,14 @@ def _impl(ctx):
     server_executable_runfiles = ctx.attr.server_executable.default_runfiles.files.to_list()
 
     sub_commands = [
-        "mkdir -p `dirname test-executable.runfiles/krpc/%s`" % ctx.executable.test_executable.short_path,
-        'ln -f -s "`pwd`/%s" "`pwd`/test-executable.runfiles/krpc/%s"' % (ctx.executable.test_executable.short_path, ctx.executable.test_executable.short_path),
-        "mkdir -p `dirname server-executable.runfiles/krpc/%s`" % ctx.executable.server_executable.short_path,
-        'ln -f -s "`pwd`/%s" "`pwd`/server-executable.runfiles/krpc/%s"' % (ctx.executable.server_executable.short_path, ctx.executable.server_executable.short_path),
+        "mkdir -p `dirname test-executable.runfiles/_main/%s`" % ctx.executable.test_executable.short_path,
+        'ln -f -s "`pwd`/%s" "`pwd`/test-executable.runfiles/_main/%s"' % (ctx.executable.test_executable.short_path, ctx.executable.test_executable.short_path),
+        "mkdir -p `dirname server-executable.runfiles/_main/%s`" % ctx.executable.server_executable.short_path,
+        'ln -f -s "`pwd`/%s" "`pwd`/server-executable.runfiles/_main/%s"' % (ctx.executable.server_executable.short_path, ctx.executable.server_executable.short_path),
     ]
 
-    test_runfiles_dir = "test-executable.runfiles/krpc/" + ctx.executable.test_executable.short_path + ".runfiles/krpc"
-    server_runfiles_dir = "server-executable.runfiles/krpc/" + ctx.executable.server_executable.short_path + ".runfiles/krpc"
+    test_runfiles_dir = "test-executable.runfiles/_main/" + ctx.executable.test_executable.short_path + ".runfiles/_main"
+    server_runfiles_dir = "server-executable.runfiles/_main/" + ctx.executable.server_executable.short_path + ".runfiles/_main"
 
     for f in test_executable_runfiles:
         sub_commands.append("mkdir -p `dirname %s`" % (test_runfiles_dir + "/" + f.short_path))
@@ -24,7 +24,7 @@ def _impl(ctx):
         sub_commands.append("mkdir -p `dirname %s`" % (server_runfiles_dir + "/" + f.short_path))
         sub_commands.append('ln -f -s "`pwd`/%s" "`pwd`/%s"' % (f.short_path, server_runfiles_dir + "/" + f.short_path))
 
-    stdout = "server-executable.runfiles/krpc/stdout"
+    stdout = "server-executable.runfiles/_main/stdout"
     if server_type != "serialio":
         server_args = "--type=%s" % server_type
         get_server_settings = [
@@ -34,14 +34,14 @@ def _impl(ctx):
         ]
         test_env = "RPC_PORT=$RPC_PORT STREAM_PORT=$STREAM_PORT"
     else:
-        socat_stdout = "server-executable.runfiles/krpc/socat-stdout"
+        socat_stdout = "server-executable.runfiles/_main/socat-stdout"
         sub_commands.extend([
-            "(cd server-executable.runfiles/krpc; socat -d -d PTY,raw,echo=0,link=server-port PTY,raw,echo=0,link=client-port >socat-stdout 2>&1) &",
+            "(cd server-executable.runfiles/_main; socat -d -d PTY,raw,echo=0,link=server-port PTY,raw,echo=0,link=client-port >socat-stdout 2>&1) &",
             "SOCAT_PID=$!",
             'while ! grep "starting data transfer loop" %s >/dev/null 2>&1; do sleep 0.1 ; done' % socat_stdout,
             'echo "Virtual ports established using socat"',
-            "SERVER_PORT=`pwd`/server-executable.runfiles/krpc/server-port",
-            "CLIENT_PORT=`pwd`/server-executable.runfiles/krpc/client-port",
+            "SERVER_PORT=`pwd`/server-executable.runfiles/_main/server-port",
+            "CLIENT_PORT=`pwd`/server-executable.runfiles/_main/client-port",
             'echo "Server port = $SERVER_PORT"',
             'echo "Client port = $CLIENT_PORT"',
         ])
@@ -54,11 +54,11 @@ def _impl(ctx):
 
     sub_commands.extend([
         'echo "" > %s' % stdout,
-        "(cd server-executable.runfiles/krpc; %s %s >> stdout) &" % (ctx.executable.server_executable.short_path, server_args),
+        "(cd server-executable.runfiles/_main; %s %s >> stdout) &" % (ctx.executable.server_executable.short_path, server_args),
         "SERVER_PID=$!",
         'tail -n0 -f %s | sed "/Server started successfully/ q"' % stdout,
     ] + get_server_settings + [
-        "(cd test-executable.runfiles/krpc/%s.runfiles/krpc; %s ../../%s)" % (ctx.executable.test_executable.short_path, test_env, ctx.executable.test_executable.basename),
+        "(cd test-executable.runfiles/_main/%s.runfiles/_main; %s ../../%s)" % (ctx.executable.test_executable.short_path, test_env, ctx.executable.test_executable.basename),
         "RESULT=$?",
         "kill $SERVER_PID",
         "exit $RESULT",

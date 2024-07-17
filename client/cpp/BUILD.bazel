@@ -45,7 +45,7 @@ autotools_dist(
         "README.txt": "%s/README.txt" % name,
         "VERSION.txt": "%s/VERSION.txt" % name,
         "protobuf/": "%s/protobuf/" % name,
-        "../m4_stdcxx/file/downloaded": "%s/m4/ax_cxx_compile_stdcxx.m4" % name,
+        "../_main~_repo_rules~m4_stdcxx/file/downloaded": "%s/m4/ax_cxx_compile_stdcxx.m4" % name,
     },
     source_dir = name,
     visibility = ["//:__pkg__"],

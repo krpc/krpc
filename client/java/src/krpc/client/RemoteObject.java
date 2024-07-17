@@ -9,7 +9,7 @@ import java.io.Serializable;
 public abstract class RemoteObject implements Serializable, Comparable<RemoteObject> {
   private static final long serialVersionUID = 3164247842142774386L;
 
-  protected final Connection connection;
+  protected final transient Connection connection;
   final long id;
 
   protected RemoteObject(Connection connection, long id) {

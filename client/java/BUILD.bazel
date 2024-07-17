@@ -6,8 +6,8 @@ load("//tools/krpctools:clientgen.bzl", "clientgen_java")
 copts = [
     "-Werror",
     "-Xlint:all",
-    "-target 1.8",
-    "-source 1.8",
+    "-target 1.9",
+    "-source 1.9",
 ]
 
 filegroup(

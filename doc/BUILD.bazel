@@ -328,6 +328,12 @@ cc_binary_multiple(
 java_binary_multiple(
     name = "compile-scripts-java",
     srcs = glob(["src/scripts/**/*.java"]),
+    copts = [
+        "-Werror",
+        "-Xlint:all",
+        "-target 1.9",
+        "-source 1.9",
+    ],
     deps = [
         "//client/java:krpc-jar",
         "@java_javatuples//jar",

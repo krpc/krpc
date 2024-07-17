@@ -42,7 +42,7 @@ def cc_binary_multiple(name, srcs, deps):
     native.filegroup(name = name, srcs = names)
 
 # buildifier: disable=function-docstring
-def java_binary_multiple(name, srcs, deps):
+def java_binary_multiple(name, srcs, deps, copts):
     names = []
     for src in srcs:
         subname = name + "/" + src
@@ -52,5 +52,6 @@ def java_binary_multiple(name, srcs, deps):
             main_class = src.rpartition("/")[2].rpartition(".")[0],
             srcs = [src],
             deps = deps,
+            javacopts = copts,
         )
     native.filegroup(name = name, srcs = names)

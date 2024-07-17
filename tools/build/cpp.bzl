@@ -48,11 +48,11 @@ def _lint_impl(ctx):
     runfiles = [cpplint] + cpplint_runfiles + srcs + hdrs + extra_files
     sub_commands = []
 
-    runfiles_dir = out.path + ".runfiles/krpc"
+    runfiles_dir = out.path + ".runfiles/_main"
     sub_commands.append("rm -rf %s" % runfiles_dir)
     _add_runfile(sub_commands, cpplint.short_path, runfiles_dir + "/" + cpplint.basename)
     for f in cpplint_runfiles:
-        _add_runfile(sub_commands, f.short_path, runfiles_dir + "/" + cpplint.basename + ".runfiles/krpc/" + f.short_path)
+        _add_runfile(sub_commands, f.short_path, runfiles_dir + "/" + cpplint.basename + ".runfiles/_main/" + f.short_path)
 
     args = ["--linelength=100"]
     if filters != None:
