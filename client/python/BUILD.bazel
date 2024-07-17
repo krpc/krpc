@@ -197,7 +197,6 @@ py_lint_test(
     srcs = glob(["krpc/**/*"]),
     pkg = ":python",
     pkg_name = "krpc",
-    pycodestyle_config = "pycodestyle.ini",
     pylint_config = "pylint.rc",
     deps = deps,
 )

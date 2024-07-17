@@ -122,7 +122,6 @@ py_lint_test(
     size = "small",
     pkg = ":krpctools",
     pkg_name = "krpctools",
-    pycodestyle_config = "pycodestyle.ini",
     pylint_config = "pylint.rc",
     deps = deps,
 )

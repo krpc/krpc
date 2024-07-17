@@ -349,6 +349,5 @@ py_lint_test(
         ["src/scripts/*.py"],
         exclude = ["src/scripts/communication-protocol.py"],
     ),
-    pycodestyle_config = "src/scripts/pycodestyle.ini",
     pylint_config = "src/scripts/pylint.rc",
 )

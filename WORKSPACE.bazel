@@ -421,6 +421,13 @@ http_file(
 )
 
 http_file(
+    name = "python_black",
+    downloaded_file_path = "black-24.4.2.tar.gz",
+    sha256 = "c872b53057f000085da66a19c55d68f6f8ddcac2642392ad3a355878406fbd4d",
+    url = "https://files.pythonhosted.org/packages/a2/47/c9997eb470a7f48f7aaddd3d9a828244a2e4199569e38128715c48059ac1/black-24.4.2.tar.gz",
+)
+
+http_file(
     name = "python_certifi",
     downloaded_file_path = "certifi-2022.12.7.tar.gz",
     sha256 = "35824b4c3a97115964b408844d64aa14db1cc518f6562e8d7261699d1350a9e3",
@@ -432,6 +439,13 @@ http_file(
     downloaded_file_path = "charset-normalizer-3.0.1.tar.gz",
     sha256 = "ebea339af930f8ca5d7a699b921106c6e29c617fe9606fa7baa043c1cdae326f",
     url = "https://files.pythonhosted.org/packages/96/d7/1675d9089a1f4677df5eb29c3f8b064aa1e70c1251a0a8a127803158942d/charset-normalizer-3.0.1.tar.gz",
+)
+
+http_file(
+    name = "python_click",
+    downloaded_file_path = "click-8.1.7.tar.gz",
+    sha256 = "ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de",
+    url = "https://files.pythonhosted.org/packages/96/d3/f04c7bfcf5c1862a2a5b845c6b2b360488cf47af55dfa79c98f6a6bf98b5/click-8.1.7.tar.gz",
 )
 
 http_file(
@@ -521,10 +535,24 @@ http_file(
 )
 
 http_file(
+    name = "python_mypy_extensions",
+    downloaded_file_path = "mypy-extensions-1.0.0.tar.gz",
+    sha256 = "75dbf8955dc00442a438fc4d0666508a9a97b6bd41aa2f0ffe9d2f2725af0782",
+    url = "https://files.pythonhosted.org/packages/98/a4/1ab47638b92648243faf97a5aeb6ea83059cc3624972ab6b8d2316078d3f/mypy_extensions-1.0.0.tar.gz",
+)
+
+http_file(
     name = "python_packaging",
     downloaded_file_path = "packaging-23.0.tar.gz",
     sha256 = "b6ad297f8907de0fa2fe1ccbd26fdaf387f5f47c7275fedf8cce89f99446cf97",
     url = "https://files.pythonhosted.org/packages/47/d5/aca8ff6f49aa5565df1c826e7bf5e85a6df852ee063600c1efa5b932968c/packaging-23.0.tar.gz",
+)
+
+http_file(
+    name = "python_pathspec",
+    downloaded_file_path = "pathspec-0.12.1.tar.gz",
+    sha256 = "a482d51503a1ab33b1c67a6c3813a26953dbdc71c31dacaef9a838c4e29f5712",
+    url = "https://files.pythonhosted.org/packages/ca/bc/f35b8446f4531a7cb215605d100cd88b7ac6f44ab3fc94870c120ab3adbf/pathspec-0.12.1.tar.gz",
 )
 
 http_file(
