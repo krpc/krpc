@@ -20,7 +20,7 @@ install_requires = ["krpc>=0.4", "jinja2"]
 setup(
     name="krpctools",
     version=re.search(
-        r"\'(.+)\'", open(os.path.join(dirpath, "krpctools/version.py")).read()
+        r'"(.+)"', open(os.path.join(dirpath, "krpctools/version.py")).read()
     ).group(1),
     author="djungelorm",
     author_email="djungelorm@users.noreply.github.com",
