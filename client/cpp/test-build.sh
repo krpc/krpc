@@ -17,10 +17,10 @@ bazel build \
   @protoc_linux_x86_64//:bin/protoc \
   @com_google_protobuf//:protobuf_lite \
   @cpp_asio//:asio
-protobuf_include=$root/bazel-krpc/external/com_google_protobuf/src
-protobuf_library=$root/bazel-bin/external/com_google_protobuf
-asio_include=$root/bazel-krpc/external/cpp_asio/include
-protoc_dir=$root/bazel-krpc/external/protoc_linux_x86_64/bin
+protobuf_include=$root/bazel-krpc/external/_main~_repo_rules~com_google_protobuf/src
+protobuf_library=$root/bazel-bin/external/_main~_repo_rules~com_google_protobuf
+asio_include=$root/bazel-krpc/external/_main~_repo_rules~cpp_asio/include
+protoc_dir=$root/bazel-krpc/external/_main~_repo_rules~protoc_linux_x86_64/bin
 
 # Extract source
 rm -rf $out
