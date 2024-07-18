@@ -42,10 +42,10 @@
       <HintPath>$(bazel-bin)\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>$(bazel-external)\csharp_json\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(bazel-external)\_main~_repo_rules~csharp_json\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NDesk.Options">
-      <HintPath>$(bazel-external)\csharp_options\lib\NDesk.Options.dll</HintPath>
+      <HintPath>$(bazel-external)\_main~_repo_rules~csharp_options\lib\NDesk.Options.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
