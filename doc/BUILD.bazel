@@ -1,11 +1,11 @@
-load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
-load("//tools/build:pkg.bzl", "stage_files")
-load("//tools/build:python.bzl", "py_lint_test", "py_script")
-load("//tools/build:image.bzl", "png_images")
-load("//tools/krpctools:docgen.bzl", "docgen_multiple")
-load("//doc:test.bzl", "check_documented_test")
 load("//:config.bzl", "version")
 load("//doc:macros.bzl", "cc_binary_multiple", "csharp_binary_multiple", "csharp_library_multiple", "java_binary_multiple")
+load("//doc:test.bzl", "check_documented_test")
+load("//tools/build:image.bzl", "png_images")
+load("//tools/build:pkg.bzl", "stage_files")
+load("//tools/build:python.bzl", "py_lint_test", "py_script")
+load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
+load("//tools/krpctools:docgen.bzl", "docgen_multiple")
 
 filegroup(
     name = "doc",
@@ -328,6 +328,12 @@ cc_binary_multiple(
 java_binary_multiple(
     name = "compile-scripts-java",
     srcs = glob(["src/scripts/**/*.java"]),
+    copts = [
+        "-Werror",
+        "-Xlint:all",
+        "-target 1.9",
+        "-source 1.9",
+    ],
     deps = [
         "//client/java:krpc-jar",
         "@java_javatuples//jar",

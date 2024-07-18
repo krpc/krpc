@@ -1,8 +1,8 @@
+load("//:config.bzl", "assembly_version", "author", "version")
 load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_binary", "csharp_library")
 load("//tools/build:pkg.bzl", "pkg_zip")
-load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 load("//tools/build/mono-4.5:build.bzl", "mono_net_libs")
-load("//:config.bzl", "assembly_version", "author", "version")
+load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 
 csharp_assembly_info(
     name = "AssemblyInfo",

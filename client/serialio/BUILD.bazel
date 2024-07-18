@@ -1,6 +1,6 @@
-load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
-load("//tools/build:client_test.bzl", "client_test")
 load("//:config.bzl", "python_version", "version")
+load("//tools/build:client_test.bzl", "client_test")
+load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
 
 py_sdist(
     name = "krpcserialio",

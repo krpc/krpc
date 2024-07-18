@@ -1,5 +1,5 @@
-load("//tools/build:pkg.bzl", "pkg_zip")
 load("//:config.bzl", "avc_version", "ksp_avc_version_max", "ksp_avc_version_min", "python_version", "version")
+load("//tools/build:pkg.bzl", "pkg_zip")
 
 exports_files([
     "COPYING",
@@ -132,7 +132,7 @@ pkg_zip(
         "server/src/icons": "GameData/kRPC/icons",
         "tools/build/ksp/": "GameData/kRPC/",
         "tools/build/protobuf/LICENSE": "LICENSE.Google.Protobuf",
-        "../csharp_krpc_io_ports_license/file/LICENSE": "LICENSE.KRPC.IO.Ports",
+        "../_main~_repo_rules~csharp_krpc_io_ports_license/file/LICENSE.KRPC.IO.Ports": "LICENSE.KRPC.IO.Ports",
         # Services
         "service/SpaceCenter/": "GameData/kRPC/",
         "service/SpaceCenter/CHANGES.txt": "GameData/kRPC/CHANGES.SpaceCenter.txt",
@@ -153,7 +153,7 @@ pkg_zip(
         "service/DockingCamera/": "GameData/kRPC/",
         "service/DockingCamera/CHANGES.txt": "GameData/kRPC/CHANGES.DockingCamera.txt",
         # Module Manager
-        "../module_manager/file/ModuleManager.4.2.2.dll": "GameData/ModuleManager.4.2.2.dll",
+        "../_main~_repo_rules~module_manager/file/ModuleManager.4.2.2.dll": "GameData/ModuleManager.4.2.2.dll",
         # Schema
         "protobuf/": "schema/",
     },

@@ -1,13 +1,13 @@
-load("//tools/krpctools:clientgen.bzl", "clientgen_java")
+load("//:config.bzl", "version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:java.bzl", "java_checkstyle_test")
-load("//:config.bzl", "version")
+load("//tools/krpctools:clientgen.bzl", "clientgen_java")
 
 copts = [
     "-Werror",
     "-Xlint:all",
-    "-target 1.8",
-    "-source 1.8",
+    "-target 1.9",
+    "-source 1.9",
 ]
 
 filegroup(

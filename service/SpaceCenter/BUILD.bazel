@@ -1,8 +1,8 @@
 load("//:config.bzl", "assembly_version", "author")
+load("//service:build.bzl", "service_deps")
 load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
 load("//tools/build:python.bzl", "py_lint_test")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
-load("//service:build.bzl", "service_deps")
 
 filegroup(
     name = "SpaceCenter",

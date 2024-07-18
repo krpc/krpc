@@ -1,9 +1,9 @@
+load("//:config.bzl", "version")
 load("//tools/build:autotools.bzl", "autotools_dist")
+load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:cpp.bzl", "cpp_check_test", "cpp_lint_test")
 load("//tools/build/protobuf:nanopb.bzl", "protobuf_nanopb")
-load("//tools/build:client_test.bzl", "client_test")
 load("//tools/krpctools:clientgen.bzl", "clientgen_cnano")
-load("//:config.bzl", "version")
 
 name = "krpc-cnano-%s" % version
 
@@ -44,9 +44,9 @@ autotools_dist(
         "@c_nanopb//:pb_encode.h",
     ],
     path_map = {
-        "../c_nanopb/LICENSE.txt": "%s/LICENSE.nanopb" % name,
-        "../c_nanopb/*.h": "%s/include/krpc_cnano/" % name,
-        "../c_nanopb/*.c": "%s/src/" % name,
+        "../_main~_repo_rules~c_nanopb/LICENSE.txt": "%s/LICENSE.nanopb" % name,
+        "../_main~_repo_rules~c_nanopb/*.h": "%s/include/krpc_cnano/" % name,
+        "../_main~_repo_rules~c_nanopb/*.c": "%s/src/" % name,
         "client/cnano/": "%s/" % name,
         "COPYING": "%s/COPYING" % name,
         "COPYING.LESSER": "%s/COPYING.LESSER" % name,

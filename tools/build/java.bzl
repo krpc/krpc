@@ -16,11 +16,11 @@ def _java_checkstyle_impl(ctx):
     runfiles = [checkstyle] + checkstyle_runfiles + [config, properties] + srcs
     sub_commands = []
 
-    runfiles_dir = out.path + ".runfiles/krpc"
+    runfiles_dir = out.path + ".runfiles/_main"
     sub_commands.append("rm -rf %s" % runfiles_dir)
     _add_runfile(sub_commands, checkstyle.short_path, runfiles_dir + "/" + checkstyle.basename)
     for f in checkstyle_runfiles:
-        _add_runfile(sub_commands, f.short_path, runfiles_dir + "/" + checkstyle.basename + ".runfiles/krpc/" + f.short_path)
+        _add_runfile(sub_commands, f.short_path, runfiles_dir + "/" + checkstyle.basename + ".runfiles/_main/" + f.short_path)
 
     args = ["-c", config.short_path, "-p", properties.short_path]
     args.extend([x.short_path for x in srcs])

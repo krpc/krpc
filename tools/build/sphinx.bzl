@@ -89,7 +89,7 @@ def _spelling_impl(ctx):
         _add_runfile(
             sub_commands,
             f.short_path,
-            sphinx_build.short_path + ".runfiles/krpc/" + f.short_path,
+            sphinx_build.short_path + ".runfiles/_main/" + f.short_path,
         )
 
     sphinx_commands = [
@@ -151,7 +151,7 @@ def _linkcheck_impl(ctx):
         _add_runfile(
             sub_commands,
             f.short_path,
-            sphinx_build.short_path + ".runfiles/krpc/" + f.short_path,
+            sphinx_build.short_path + ".runfiles/_main/" + f.short_path,
         )
 
     sphinx_commands = [

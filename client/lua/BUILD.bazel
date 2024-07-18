@@ -1,7 +1,7 @@
-load("//tools/build:pkg.bzl", "pkg_zip")
-load("//tools/build:lua.bzl", "lua_test")
-load("//tools/build:client_test.bzl", "client_test")
 load("//:config.bzl", "lua_version", "version")
+load("//tools/build:client_test.bzl", "client_test")
+load("//tools/build:lua.bzl", "lua_test")
+load("//tools/build:pkg.bzl", "pkg_zip")
 
 pkg_zip(
     name = "lua",

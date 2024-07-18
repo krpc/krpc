@@ -1,9 +1,9 @@
+load("//:config.bzl", "version")
 load("//tools/build:autotools.bzl", "autotools_dist")
+load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:cpp.bzl", "cpp_check_test", "cpp_lint_test")
 load("//tools/build/protobuf:cpp.bzl", "protobuf_cpp")
-load("//tools/build:client_test.bzl", "client_test")
 load("//tools/krpctools:clientgen.bzl", "clientgen_cpp")
-load("//:config.bzl", "version")
 
 name = "krpc-cpp-%s" % version
 
@@ -45,7 +45,7 @@ autotools_dist(
         "README.txt": "%s/README.txt" % name,
         "VERSION.txt": "%s/VERSION.txt" % name,
         "protobuf/": "%s/protobuf/" % name,
-        "../m4_stdcxx/file/downloaded": "%s/m4/ax_cxx_compile_stdcxx.m4" % name,
+        "../_main~_repo_rules~m4_stdcxx/file/downloaded": "%s/m4/ax_cxx_compile_stdcxx.m4" % name,
     },
     source_dir = name,
     visibility = ["//:__pkg__"],
