@@ -72,9 +72,14 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The currently active vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty(Nullable = true)]
         public static Vessel ActiveVessel {
-            get { return new Vessel (FlightGlobals.ActiveVessel); }
+            get {
+		if (ReferenceEquals (FlightGlobals.ActiveVessel, null)) {
+                    return null;
+		}
+		return new Vessel (FlightGlobals.ActiveVessel);
+	    }
             set {
                 if (ReferenceEquals (value, null))
                     throw new ArgumentNullException ("ActiveVessel");
