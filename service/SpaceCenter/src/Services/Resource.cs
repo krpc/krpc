@@ -10,12 +10,12 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public class Resource : Equatable<Resource>
     {
-        readonly uint partId;
+        readonly Part part;
         readonly int resourceId;
 
         internal Resource (PartResource resource)
         {
-            partId = resource.part.flightID;
+            part = resource.part;
             resourceId = resource.info.id;
         }
 
@@ -24,7 +24,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (Resource other)
         {
-            return !ReferenceEquals (other, null) && partId == other.partId && resourceId == other.resourceId;
+            return !ReferenceEquals (other, null) && part == other.part && resourceId == other.resourceId;
         }
 
         /// <summary>
@@ -32,14 +32,14 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return partId.GetHashCode () ^ resourceId.GetHashCode ();
+            return part.GetHashCode () ^ resourceId.GetHashCode ();
         }
 
         /// <summary>
         /// The KSP part.
         /// </summary>
         public Part InternalPart {
-            get { return FlightGlobals.FindPartByID (partId); }
+            get { return part; }
         }
 
         /// <summary>
