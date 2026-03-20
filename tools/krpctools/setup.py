@@ -25,7 +25,6 @@ setup(
     author="djungelorm",
     author_email="djungelorm@users.noreply.github.com",
     url="https://krpc.github.io/krpc",
-    license="GNU GPL v3",
     description="Development tools and scripts for kRPC.",
     long_description=open(os.path.join(dirpath, "README.txt")).read(),
     packages=[
@@ -57,11 +56,10 @@ setup(
     },
     python_requires=">=3.4",
     install_requires=install_requires,
-    test_suite="krpctools.test",
+    license_expression="GPL-3.0-only",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: End Users/Desktop",
-        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
         "Operating System :: Microsoft :: Windows",
