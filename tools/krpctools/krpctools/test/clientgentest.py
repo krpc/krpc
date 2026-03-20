@@ -1,14 +1,18 @@
 import json
-from pkg_resources import resource_string
+from importlib.resources import files
 
 
 class ClientGenTestCase:
     def run_test(self, service_name, name):
-        macro_template = resource_string(
-            "krpctools.clientgen", self.language + ".tmpl"
-        ).decode("utf-8")
+        macro_template = (
+            files("krpctools.clientgen")
+            .joinpath(self.language + ".tmpl")
+            .read_text(encoding="utf-8")
+        )
         defs = json.loads(
-            resource_string("krpctools.test", name + ".json").decode("utf-8")
+            files("krpctools.test")
+            .joinpath(name + ".json")
+            .read_text(encoding="utf-8")
         )
         g = self.generator(macro_template, service_name, defs[service_name])
         actual = g.generate()
@@ -18,9 +22,11 @@ class ClientGenTestCase:
         #           'clientgen-'+name+'-'+self.language+'.txt', 'w') as f:
         #     f.write(actual)
 
-        expected = resource_string(
-            "krpctools.test", "clientgen-" + name + "-" + self.language + ".txt"
-        ).decode("utf-8")
+        expected = (
+            files("krpctools.test")
+            .joinpath("clientgen-" + name + "-" + self.language + ".txt")
+            .read_text(encoding="utf-8")
+        )
         self.assertEqual(expected, actual)
 
     def test_empty(self):

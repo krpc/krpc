@@ -5,7 +5,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from pkg_resources import Requirement, resource_filename
+from importlib.resources import files
 from ..version import __version__
 
 
@@ -62,7 +62,7 @@ def servicedefs(ksp, service, assemblies):
     tmpout = bindir + "/out.json"
 
     # Copy binaries to the tmp dir
-    binpath = resource_filename(Requirement.parse("krpctools"), "krpctools/bin")
+    binpath = str(files("krpctools").joinpath("bin"))
     files = os.listdir(binpath)
     for filename in files:
         filename = os.path.join(binpath, filename)

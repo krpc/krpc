@@ -96,9 +96,9 @@ http_archive(
 http_archive(
     name = "protoc_nanopb",
     build_file_content = "filegroup(name = 'plugin', srcs = ['generator'], visibility = ['//visibility:public'])",
-    sha256 = "e8a154d3b6631696cb42e3acba338ab738509af56571ebc9c35d7a754d6e5b48",
-    strip_prefix = "nanopb-0.4.7-linux-x86",
-    url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.7-linux-x86.tar.gz",
+    sha256 = "951a9ab2385424a4cdf245d0c84f4c88c6ccbc65a0dade4b246d50c068f24128",
+    strip_prefix = "nanopb-0.4.9.1-linux-x86",
+    url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.9.1-linux-x86.tar.gz",
 )
 
 http_archive(
@@ -310,9 +310,9 @@ filegroup(
     visibility = ['//visibility:public']
 )
 """,
-    sha256 = "e8a154d3b6631696cb42e3acba338ab738509af56571ebc9c35d7a754d6e5b48",
-    strip_prefix = "nanopb-0.4.7-linux-x86",
-    url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.7-linux-x86.tar.gz",
+    sha256 = "951a9ab2385424a4cdf245d0c84f4c88c6ccbc65a0dade4b246d50c068f24128",
+    strip_prefix = "nanopb-0.4.9.1-linux-x86",
+    url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.9.1-linux-x86.tar.gz",
 )
 
 # ----------------------- Java dependencies ----------------------------------------------
@@ -437,9 +437,9 @@ http_file(
 
 http_file(
     name = "python_astroid",
-    downloaded_file_path = "astroid-2.14.2.tar.gz",
-    sha256 = "a3cf9f02c53dd259144a7e8f3ccd75d67c9a8c716ef183e0c1f291bc5d7bb3cf",
-    url = "https://files.pythonhosted.org/packages/15/e5/7dea50225cd8b44f1488ae83a243467fe6d2a3c4f611d865085b4bba67e5/astroid-2.14.2.tar.gz",
+    downloaded_file_path = "astroid-4.1.1.tar.gz",
+    sha256 = "445d831fe785df8c670bbb46b900b8424b82f85b4af187103f71a63a63ebed43",
+    url = "https://files.pythonhosted.org/packages/a2/4c/569eefb533ce71bc9f4f12a4a0d7f0ba27e500681dec1312d4657e849d20/astroid-4.1.1.tar.gz",
 )
 
 http_file(
@@ -486,9 +486,9 @@ http_file(
 
 http_file(
     name = "python_dill",
-    downloaded_file_path = "dill-0.3.6.tar.gz",
-    sha256 = "e5db55f3687856d8fbdab002ed78544e1c4559a130302693d839dfe8f93f2373",
-    url = "https://files.pythonhosted.org/packages/7c/e7/364a09134e1062d4d5ff69b853a56cf61c223e0afcc6906b6832bcd51ea8/dill-0.3.6.tar.gz",
+    downloaded_file_path = "dill-0.4.1.tar.gz",
+    sha256 = "423092df4182177d4d8ba8290c8a5b640c66ab35ec7da59ccfa00f6fa3eea5fa",
+    url = "https://files.pythonhosted.org/packages/81/e1/56027a71e31b02ddc53c7d65b01e68edf64dea2932122fe7746a516f75d5/dill-0.4.1.tar.gz",
 )
 
 http_file(
@@ -514,9 +514,9 @@ http_file(
 
 http_file(
     name = "python_isort",
-    downloaded_file_path = "isort-5.12.0.tar.gz",
-    sha256 = "8bef7dde241278824a6d83f44a544709b065191b95b6e50894bdc722fcba0504",
-    url = "https://files.pythonhosted.org/packages/a9/c4/dc00e42c158fc4dda2afebe57d2e948805c06d5169007f1724f0683010a9/isort-5.12.0.tar.gz",
+    downloaded_file_path = "isort-8.0.1.tar.gz",
+    sha256 = "171ac4ff559cdc060bcfff550bc8404a486fee0caab245679c2abe7cb253c78d",
+    url = "https://files.pythonhosted.org/packages/ef/7c/ec4ab396d31b3b395e2e999c8f46dec78c5e29209fac49d1f4dace04041d/isort-8.0.1.tar.gz",
 )
 
 http_file(
@@ -544,9 +544,9 @@ http_file(
 
 http_file(
     name = "python_lazy_object_proxy",
-    downloaded_file_path = "lazy-object-proxy-1.9.0.tar.gz",
-    sha256 = "659fb5809fa4629b8a1ac5106f669cfc7bef26fbb389dda53b3e010d1ac4ebae",
-    url = "https://files.pythonhosted.org/packages/20/c0/8bab72a73607d186edad50d0168ca85bd2743cfc55560c9d721a94654b20/lazy-object-proxy-1.9.0.tar.gz",
+    downloaded_file_path = "lazy_object_proxy-1.12.0.tar.gz",
+    sha256 = "1f5a462d92fd0cfb82f1fab28b51bfb209fabbe6aabf7f0d51472c0c124c0c61",
+    url = "https://files.pythonhosted.org/packages/08/a2/69df9c6ba6d316cfd81fe2381e464db3e6de5db45f8c43c6a23504abf8cb/lazy_object_proxy-1.12.0.tar.gz",
 )
 
 http_file(
@@ -586,16 +586,16 @@ http_file(
 
 http_file(
     name = "python_platformdirs",
-    downloaded_file_path = "platformdirs-3.0.0.tar.gz",
-    sha256 = "8a1228abb1ef82d788f74139988b137e78692984ec7b08eaa6c65f1723af28f9",
-    url = "https://files.pythonhosted.org/packages/11/39/702094fc1434a4408783b071665d9f5d8a1d0ba4dddf9dadf3d50e6eb762/platformdirs-3.0.0.tar.gz",
+    downloaded_file_path = "platformdirs-4.9.4.tar.gz",
+    sha256 = "1ec356301b7dc906d83f371c8f487070e99d3ccf9e501686456394622a01a934",
+    url = "https://files.pythonhosted.org/packages/19/56/8d4c30c8a1d07013911a8fdbd8f89440ef9f08d07a1b50ab8ca8be5a20f9/platformdirs-4.9.4.tar.gz",
 )
 
 http_file(
     name = "python_protobuf",
-    downloaded_file_path = "protobuf-4.22.0.tar.gz",
-    sha256 = "652d8dfece122a24d98eebfef30e31e455d300efa41999d1182e015984ac5930",
-    url = "https://files.pythonhosted.org/packages/f6/95/797a257a5db4a91dc2bc864c487ead56440014d741933a28c86d966b949e/protobuf-4.22.0.tar.gz",
+    downloaded_file_path = "protobuf-5.28.1.tar.gz",
+    sha256 = "42597e938f83bb7f3e4b35f03aa45208d49ae8d5bcb4bc10b9fc825e0ab5e423",
+    url = "https://files.pythonhosted.org/packages/3c/0b/7a997c8939f698d72bdea14d57116e43d3051fffb3b2964c30938c4a08e6/protobuf-5.28.1.tar.gz",
 )
 
 http_file(
@@ -621,9 +621,9 @@ http_file(
 
 http_file(
     name = "python_pylint",
-    downloaded_file_path = "pylint-2.16.2.tar.gz",
-    sha256 = "13b2c805a404a9bf57d002cd5f054ca4d40b0b87542bdaba5e05321ae8262c84",
-    url = "https://files.pythonhosted.org/packages/96/d2/192ac213f4a61118eacc79efbc7441460b5d5be39e821e2ee282ef6c68a5/pylint-2.16.2.tar.gz",
+    downloaded_file_path = "pylint-4.0.5.tar.gz",
+    sha256 = "8cd6a618df75deb013bd7eb98327a95f02a6fb839205a6bbf5456ef96afb317c",
+    url = "https://files.pythonhosted.org/packages/e4/b6/74d9a8a68b8067efce8d07707fe6a236324ee1e7808d2eb3646ec8517c7d/pylint-4.0.5.tar.gz",
 )
 
 http_file(
@@ -670,9 +670,9 @@ http_file(
 
 http_file(
     name = "python_sphinx_tabs",
-    downloaded_file_path = "sphinx-tabs-3.4.1.tar.gz",
-    sha256 = "d2a09f9e8316e400d57503f6df1c78005fdde220e5af589cc79d493159e1b832",
-    url = "https://files.pythonhosted.org/packages/aa/9b/a54949728ff067e4d0997c934e97569dbf3bb4e9c0d63ff3377be4cc3831/sphinx-tabs-3.4.1.tar.gz",
+    downloaded_file_path = "sphinx-tabs-3.4.7.tar.gz",
+    sha256 = "991ad4a424ff54119799ba1491701aa8130dd43509474aef45a81c42d889784d",
+    url = "https://files.pythonhosted.org/packages/6a/53/a9a91995cb365e589f413b77fc75f1c0e9b4ac61bfa8da52a779ad855cc0/sphinx-tabs-3.4.7.tar.gz",
 )
 
 http_file(
@@ -740,23 +740,23 @@ http_file(
 
 http_file(
     name = "python_tomli",
-    downloaded_file_path = "tomli-2.0.1.tar.gz",
-    sha256 = "de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f",
-    url = "https://files.pythonhosted.org/packages/c0/3f/d7af728f075fb08564c5949a9c95e44352e23dee646869fa104a3b2060a3/tomli-2.0.1.tar.gz",
+    downloaded_file_path = "tomli-2.4.0.tar.gz",
+    sha256 = "aa89c3f6c277dd275d8e243ad24f3b5e701491a860d5121f2cdd399fbb31fc9c",
+    url = "https://files.pythonhosted.org/packages/82/30/31573e9457673ab10aa432461bee537ce6cef177667deca369efb79df071/tomli-2.4.0.tar.gz",
 )
 
 http_file(
     name = "python_tomlkit",
-    downloaded_file_path = "tomlkit-0.11.6.tar.gz",
-    sha256 = "71b952e5721688937fb02cf9d354dbcf0785066149d2855e44531ebdd2b65d73",
-    url = "https://files.pythonhosted.org/packages/ff/04/58b4c11430ed4b7b8f1723a5e4f20929d59361e9b17f0872d69681fd8ffd/tomlkit-0.11.6.tar.gz",
+    downloaded_file_path = "tomlkit-0.14.0.tar.gz",
+    sha256 = "cf00efca415dbd57575befb1f6634c4f42d2d87dbba376128adb42c121b87064",
+    url = "https://files.pythonhosted.org/packages/c3/af/14b24e41977adb296d6bd1fb59402cf7d60ce364f90c890bd2ec65c43b5a/tomlkit-0.14.0.tar.gz",
 )
 
 http_file(
     name = "python_typing_extensions",
-    downloaded_file_path = "typing_extensions-4.5.0.tar.gz",
-    sha256 = "5cb5f4a79139d699607b3ef622a1dedafa84e115ab0024e0d9c044a9479ca7cb",
-    url = "https://files.pythonhosted.org/packages/d3/20/06270dac7316220643c32ae61694e451c98f8caf4c8eab3aa80a2bedf0df/typing_extensions-4.5.0.tar.gz",
+    downloaded_file_path = "typing_extensions-4.15.0.tar.gz",
+    sha256 = "0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466",
+    url = "https://files.pythonhosted.org/packages/72/94/1a15dd82efb362ac84269196e94cf00f187f7ed21c242792a923cdb1c61f/typing_extensions-4.15.0.tar.gz",
 )
 
 http_file(
@@ -768,9 +768,9 @@ http_file(
 
 http_file(
     name = "python_wrapt",
-    downloaded_file_path = "wrapt-1.15.0.tar.gz",
-    sha256 = "d06730c6aed78cee4126234cf2d071e01b44b915e725a6cb439a879ec9754a3a",
-    url = "https://files.pythonhosted.org/packages/f8/7d/73e4e3cdb2c780e13f9d87dc10488d7566d8fd77f8d68f0e416bfbd144c7/wrapt-1.15.0.tar.gz",
+    downloaded_file_path = "wrapt-2.1.2.tar.gz",
+    sha256 = "3996a67eecc2c68fd47b4e3c564405a5777367adfd9b8abb58387b63ee83b21e",
+    url = "https://files.pythonhosted.org/packages/2e/64/925f213fdcbb9baeb1530449ac71a4d57fc361c053d06bf78d0c5c7cd80c/wrapt-2.1.2.tar.gz",
 )
 
 http_file(

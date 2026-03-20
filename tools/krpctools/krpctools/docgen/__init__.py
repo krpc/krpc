@@ -6,7 +6,7 @@ import json
 from io import open
 import sys
 import jinja2
-from pkg_resources import resource_filename
+from importlib.resources import files
 from krpc.types import Types
 from krpc.utils import snake_case
 from ..utils import lower_camel_case, indent, single_line
@@ -65,7 +65,7 @@ def main():
     )
     args = parser.parse_args()
 
-    macros = resource_filename(__name__, "%s.tmpl" % args.language)
+    macros = str(files(__name__).joinpath("%s.tmpl" % args.language))
 
     if args.language == "cnano":
         domain = CnanoDomain(macros)
