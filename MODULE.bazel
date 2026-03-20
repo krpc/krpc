@@ -140,6 +140,30 @@ http_archive(
     url = "https://www.nuget.org/api/v2/package/Google.Protobuf/3.10.1",
 )
 
+http_archive(
+    name = "csharp_system_memory",
+    build_file_content = "exports_files(['lib/net461/System.Memory.dll'])",
+    sha256 = "10f43da352a29fb2b3188e4edd4dcf5100194c8b526e4f61fe2e2b5623775a22",
+    type = "zip",
+    url = "https://www.nuget.org/api/v2/package/System.Memory/4.5.5",
+)
+
+http_archive(
+    name = "csharp_system_threading_extensions",
+    build_file_content = "exports_files(['lib/net461/System.Threading.Tasks.Extensions.dll'])",
+    sha256 = "a304a963cc0796c5179f9c6b7d8022bbce3b2fa7c029eb6196f631f7b462d678",
+    type = "zip",
+    url = "https://www.nuget.org/api/v2/package/System.Threading.Tasks.Extensions/4.5.4",
+)
+
+http_archive(
+    name = "csharp_system_runtime_compilerservices_unsafe",
+    build_file_content = "exports_files(['lib/net461/System.Runtime.CompilerServices.Unsafe.dll'])",
+    sha256 = "6c41b53e70e9eee298cff3a02ce5acdd15b04125589be0273f0566026720a762",
+    type = "zip",
+    url = "https://www.nuget.org/api/v2/package/System.Runtime.CompilerServices.Unsafe/6.0.0",
+)
+
 http_file(
     name = "csharp_krpc_io_ports",
     downloaded_file_path = "KRPC.IO.Ports.dll",
