@@ -22,7 +22,7 @@ def _create_py_env(out, install):
     ]
     for lib in install:
         cmds.append(
-            'CFLAGS="-O0" %s/bin/python %s/bin/pip install --quiet --no-deps --no-cache-dir file:$PWD/%s' %
+            'CFLAGS="-O0" %s/bin/python %s/bin/pip install --quiet --no-build-isolation --no-deps --no-cache-dir file:$PWD/%s' %
             (tmp, tmp, lib.path),
         )
     cmds.extend([
@@ -141,7 +141,7 @@ def _test_impl(ctx):
     sub_commands = ["virtualenv env --python python3 --quiet --never-download"]
     for dep in ctx.files.deps:
         sub_commands.append(
-            "env/bin/python env/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s" %
+            "env/bin/python env/bin/pip install --quiet --no-build-isolation --no-deps --no-cache-dir file:`pwd`/%s" %
             dep.short_path,
         )
     sub_commands.extend([
@@ -213,7 +213,7 @@ def _lint_impl(ctx):
     sub_commands = ["virtualenv env --python python3 --quiet --never-download"]
     for dep in deps:
         sub_commands.append(
-            "env/bin/python env/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s" %
+            "env/bin/python env/bin/pip install --quiet --no-build-isolation --no-deps --no-cache-dir file:`pwd`/%s" %
             dep.short_path,
         )
 

@@ -406,93 +406,93 @@ http_file(
 
 http_file(
     name = "python_alabaster",
-    downloaded_file_path = "alabaster-0.7.13.tar.gz",
-    sha256 = "a27a4a084d5e690e16e01e03ad2b2e552c61a65469419b907243193de1a84ae2",
-    url = "https://files.pythonhosted.org/packages/94/71/a8ee96d1fd95ca04a0d2e2d9c4081dac4c2d2b12f7ddb899c8cb9bfd1532/alabaster-0.7.13.tar.gz",
+    downloaded_file_path = "alabaster-0.7.13-py3-none-any.whl",
+    sha256 = "1ee19aca801bbabb5ba3f5f258e4422dfa86f82f3e9cefb0859b283cdd7f62a3",
+    url = "https://files.pythonhosted.org/packages/64/88/c7083fc61120ab661c5d0b82cb77079fc1429d3f913a456c1c82cf4658f7/alabaster-0.7.13-py3-none-any.whl",
 )
 
 http_file(
     name = "python_astroid",
-    downloaded_file_path = "astroid-2.14.2.tar.gz",
-    sha256 = "a3cf9f02c53dd259144a7e8f3ccd75d67c9a8c716ef183e0c1f291bc5d7bb3cf",
-    url = "https://files.pythonhosted.org/packages/15/e5/7dea50225cd8b44f1488ae83a243467fe6d2a3c4f611d865085b4bba67e5/astroid-2.14.2.tar.gz",
+    downloaded_file_path = "astroid-2.14.2-py3-none-any.whl",
+    sha256 = "0e0e3709d64fbffd3037e4ff403580550f14471fd3eaae9fa11cc9a5c7901153",
+    url = "https://files.pythonhosted.org/packages/ae/40/d6fbafb01a3da14289c7cc8ff82a0513ccd82a49219ffa84c67a46b1b712/astroid-2.14.2-py3-none-any.whl",
 )
 
 http_file(
     name = "python_babel",
-    downloaded_file_path = "Babel-2.12.0.tar.gz",
-    sha256 = "468e6cd1e2b571a1663110fc737e3a7d9069d038e0c9c4a7f158caeeafe4089c",
-    url = "https://files.pythonhosted.org/packages/61/7b/a57e328fb3001da93b523454314e5eca32bfb0ef25682409420b1884bb47/Babel-2.12.0.tar.gz",
+    downloaded_file_path = "Babel-2.12.0-py3-none-any.whl",
+    sha256 = "8f8b752c803e9f9e03ff219b644aceb0dbcf081c55a88ea11f86291e60a7bb68",
+    url = "https://files.pythonhosted.org/packages/28/d8/74b2d68dea0eb112af778093a25f0e87f0a549deced0293cb782837cb99e/Babel-2.12.0-py3-none-any.whl",
 )
 
 http_file(
     name = "python_black",
-    downloaded_file_path = "black-24.4.2.tar.gz",
-    sha256 = "c872b53057f000085da66a19c55d68f6f8ddcac2642392ad3a355878406fbd4d",
-    url = "https://files.pythonhosted.org/packages/a2/47/c9997eb470a7f48f7aaddd3d9a828244a2e4199569e38128715c48059ac1/black-24.4.2.tar.gz",
+    downloaded_file_path = "black-24.4.2-py3-none-any.whl",
+    sha256 = "d36ed1124bb81b32f8614555b34cc4259c3fbc7eec17870e8ff8ded335b58d8c",
+    url = "https://files.pythonhosted.org/packages/0f/89/294c9a6b6c75a08da55e9d05321d0707e9418735e3062b12ef0f54c33474/black-24.4.2-py3-none-any.whl",
 )
 
 http_file(
     name = "python_certifi",
-    downloaded_file_path = "certifi-2022.12.7.tar.gz",
-    sha256 = "35824b4c3a97115964b408844d64aa14db1cc518f6562e8d7261699d1350a9e3",
-    url = "https://files.pythonhosted.org/packages/37/f7/2b1b0ec44fdc30a3d31dfebe52226be9ddc40cd6c0f34ffc8923ba423b69/certifi-2022.12.7.tar.gz",
+    downloaded_file_path = "certifi-2022.12.7-py3-none-any.whl",
+    sha256 = "4ad3232f5e926d6718ec31cfc1fcadfde020920e278684144551c91769c7bc18",
+    url = "https://files.pythonhosted.org/packages/71/4c/3db2b8021bd6f2f0ceb0e088d6b2d49147671f25832fb17970e9b583d742/certifi-2022.12.7-py3-none-any.whl",
 )
 
 http_file(
     name = "python_charset_normalizer",
-    downloaded_file_path = "charset-normalizer-3.0.1.tar.gz",
-    sha256 = "ebea339af930f8ca5d7a699b921106c6e29c617fe9606fa7baa043c1cdae326f",
-    url = "https://files.pythonhosted.org/packages/96/d7/1675d9089a1f4677df5eb29c3f8b064aa1e70c1251a0a8a127803158942d/charset-normalizer-3.0.1.tar.gz",
+    downloaded_file_path = "charset_normalizer-3.0.1-py3-none-any.whl",
+    sha256 = "7e189e2e1d3ed2f4aebabd2d5b0f931e883676e51c7624826e0a4e5fe8a0bf24",
+    url = "https://files.pythonhosted.org/packages/68/2b/02e9d6a98ddb73fa238d559a9edcc30b247b8dc4ee848b6184c936e99dc0/charset_normalizer-3.0.1-py3-none-any.whl",
 )
 
 http_file(
     name = "python_click",
-    downloaded_file_path = "click-8.1.7.tar.gz",
-    sha256 = "ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de",
-    url = "https://files.pythonhosted.org/packages/96/d3/f04c7bfcf5c1862a2a5b845c6b2b360488cf47af55dfa79c98f6a6bf98b5/click-8.1.7.tar.gz",
+    downloaded_file_path = "click-8.1.7-py3-none-any.whl",
+    sha256 = "ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28",
+    url = "https://files.pythonhosted.org/packages/00/2e/d53fa4befbf2cfa713304affc7ca780ce4fc1fd8710527771b58311a3229/click-8.1.7-py3-none-any.whl",
 )
 
 http_file(
     name = "python_cpplint",
-    downloaded_file_path = "cpplint-1.6.1.tar.gz",
-    sha256 = "d430ce8f67afc1839340e60daa89e90de08b874bc27149833077bba726dfc13a",
-    url = "https://files.pythonhosted.org/packages/18/72/ea0f4035bcf35d8f8df053657d7f3370d56ff4d4e6617021b6544b9958d4/cpplint-1.6.1.tar.gz",
+    downloaded_file_path = "cpplint-1.6.1-py3-none-any.whl",
+    sha256 = "00ddc86d6e4de2a9dcfa272402dcbe21593363a93b7c475bc391e335062f34b1",
+    url = "https://files.pythonhosted.org/packages/6c/68/31f71f3946e1b445cc5ffa2bc7143488b1f3a556dce344c5b6ae498bbe2a/cpplint-1.6.1-py3-none-any.whl",
 )
 
 http_file(
     name = "python_dill",
-    downloaded_file_path = "dill-0.3.6.tar.gz",
-    sha256 = "e5db55f3687856d8fbdab002ed78544e1c4559a130302693d839dfe8f93f2373",
-    url = "https://files.pythonhosted.org/packages/7c/e7/364a09134e1062d4d5ff69b853a56cf61c223e0afcc6906b6832bcd51ea8/dill-0.3.6.tar.gz",
+    downloaded_file_path = "dill-0.3.6-py3-none-any.whl",
+    sha256 = "a07ffd2351b8c678dfc4a856a3005f8067aea51d6ba6c700796a4d9e280f39f0",
+    url = "https://files.pythonhosted.org/packages/be/e3/a84bf2e561beed15813080d693b4b27573262433fced9c1d1fea59e60553/dill-0.3.6-py3-none-any.whl",
 )
 
 http_file(
     name = "python_docutils",
-    downloaded_file_path = "docutils-0.19.tar.gz",
-    sha256 = "33995a6753c30b7f577febfc2c50411fec6aac7f7ffeb7c4cfe5991072dcf9e6",
-    url = "https://files.pythonhosted.org/packages/6b/5c/330ea8d383eb2ce973df34d1239b3b21e91cd8c865d21ff82902d952f91f/docutils-0.19.tar.gz",
+    downloaded_file_path = "docutils-0.19-py3-none-any.whl",
+    sha256 = "5e1de4d849fee02c63b040a4a3fd567f4ab104defd8a5511fbbc24a8a017efbc",
+    url = "https://files.pythonhosted.org/packages/93/69/e391bd51bc08ed9141ecd899a0ddb61ab6465309f1eb470905c0c8868081/docutils-0.19-py3-none-any.whl",
 )
 
 http_file(
     name = "python_idna",
-    downloaded_file_path = "idna-3.4.tar.gz",
-    sha256 = "814f528e8dead7d329833b91c5faa87d60bf71824cd12a7530b5526063d02cb4",
-    url = "https://files.pythonhosted.org/packages/8b/e1/43beb3d38dba6cb420cefa297822eac205a277ab43e5ba5d5c46faf96438/idna-3.4.tar.gz",
+    downloaded_file_path = "idna-3.4-py3-none-any.whl",
+    sha256 = "90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2",
+    url = "https://files.pythonhosted.org/packages/fc/34/3030de6f1370931b9dbb4dad48f6ab1015ab1d32447850b9fc94e60097be/idna-3.4-py3-none-any.whl",
 )
 
 http_file(
     name = "python_imagesize",
-    downloaded_file_path = "imagesize-1.4.1.tar.gz",
-    sha256 = "69150444affb9cb0d5cc5a92b3676f0b2fb7cd9ae39e947a5e11a36b4497cd4a",
-    url = "https://files.pythonhosted.org/packages/a7/84/62473fb57d61e31fef6e36d64a179c8781605429fd927b5dd608c997be31/imagesize-1.4.1.tar.gz",
+    downloaded_file_path = "imagesize-1.4.1-py2.py3-none-any.whl",
+    sha256 = "0d8d18d08f840c19d0ee7ca1fd82490fdc3729b7ac93f49870406ddde8ef8d8b",
+    url = "https://files.pythonhosted.org/packages/ff/62/85c4c919272577931d407be5ba5d71c20f0b616d31a0befe0ae45bb79abd/imagesize-1.4.1-py2.py3-none-any.whl",
 )
 
 http_file(
     name = "python_isort",
-    downloaded_file_path = "isort-5.12.0.tar.gz",
-    sha256 = "8bef7dde241278824a6d83f44a544709b065191b95b6e50894bdc722fcba0504",
-    url = "https://files.pythonhosted.org/packages/a9/c4/dc00e42c158fc4dda2afebe57d2e948805c06d5169007f1724f0683010a9/isort-5.12.0.tar.gz",
+    downloaded_file_path = "isort-5.12.0-py3-none-any.whl",
+    sha256 = "f84c2818376e66cf843d497486ea8fed8700b340f308f076c6fb1229dff318b6",
+    url = "https://files.pythonhosted.org/packages/0a/63/4036ae70eea279c63e2304b91ee0ac182f467f24f86394ecfe726092340b/isort-5.12.0-py3-none-any.whl",
 )
 
 http_file(
@@ -513,9 +513,9 @@ http_file(
 
 http_file(
     name = "python_jinja2",
-    downloaded_file_path = "Jinja2-3.1.2.tar.gz",
-    sha256 = "31351a702a408a9e7595a8fc6150fc3f43bb6bf7e319770cbc0db9df9437e852",
-    url = "https://files.pythonhosted.org/packages/7a/ff/75c28576a1d900e87eb6335b063fab47a8ef3c8b4d88524c4bf78f670cce/Jinja2-3.1.2.tar.gz",
+    downloaded_file_path = "Jinja2-3.1.2-py3-none-any.whl",
+    sha256 = "6088930bfe239f0e6710546ab9c19c9ef35e29792895fed6e6e31a023a182a61",
+    url = "https://files.pythonhosted.org/packages/bc/c3/f068337a370801f372f2f8f6bad74a5c140f6fda3d9de154052708dd3c65/Jinja2-3.1.2-py3-none-any.whl",
 )
 
 http_file(
@@ -534,100 +534,100 @@ http_file(
 
 http_file(
     name = "python_mccabe",
-    downloaded_file_path = "mccabe-0.7.0.tar.gz",
-    sha256 = "348e0240c33b60bbdf4e523192ef919f28cb2c3d7d5c7794f74009290f236325",
-    url = "https://files.pythonhosted.org/packages/e7/ff/0ffefdcac38932a54d2b5eed4e0ba8a408f215002cd178ad1df0f2806ff8/mccabe-0.7.0.tar.gz",
+    downloaded_file_path = "mccabe-0.7.0-py2.py3-none-any.whl",
+    sha256 = "6c2d30ab6be0e4a46919781807b4f0d834ebdd6c6e3dca0bda5a15f863427b6e",
+    url = "https://files.pythonhosted.org/packages/27/1a/1f68f9ba0c207934b35b86a8ca3aad8395a3d6dd7921c0686e23853ff5a9/mccabe-0.7.0-py2.py3-none-any.whl",
 )
 
 http_file(
     name = "python_mypy_extensions",
-    downloaded_file_path = "mypy-extensions-1.0.0.tar.gz",
-    sha256 = "75dbf8955dc00442a438fc4d0666508a9a97b6bd41aa2f0ffe9d2f2725af0782",
-    url = "https://files.pythonhosted.org/packages/98/a4/1ab47638b92648243faf97a5aeb6ea83059cc3624972ab6b8d2316078d3f/mypy_extensions-1.0.0.tar.gz",
+    downloaded_file_path = "mypy_extensions-1.0.0-py3-none-any.whl",
+    sha256 = "4392f6c0eb8a5668a69e23d168ffa70f0be9ccfd32b5cc2d26a34ae5b844552d",
+    url = "https://files.pythonhosted.org/packages/2a/e2/5d3f6ada4297caebe1a2add3b126fe800c96f56dbe5d1988a2cbe0b267aa/mypy_extensions-1.0.0-py3-none-any.whl",
 )
 
 http_file(
     name = "python_packaging",
-    downloaded_file_path = "packaging-23.0.tar.gz",
-    sha256 = "b6ad297f8907de0fa2fe1ccbd26fdaf387f5f47c7275fedf8cce89f99446cf97",
-    url = "https://files.pythonhosted.org/packages/47/d5/aca8ff6f49aa5565df1c826e7bf5e85a6df852ee063600c1efa5b932968c/packaging-23.0.tar.gz",
+    downloaded_file_path = "packaging-23.0-py3-none-any.whl",
+    sha256 = "714ac14496c3e68c99c29b00845f7a2b85f3bb6f1078fd9f72fd20f0570002b2",
+    url = "https://files.pythonhosted.org/packages/ed/35/a31aed2993e398f6b09a790a181a7927eb14610ee8bbf02dc14d31677f1c/packaging-23.0-py3-none-any.whl",
 )
 
 http_file(
     name = "python_pathspec",
-    downloaded_file_path = "pathspec-0.12.1.tar.gz",
-    sha256 = "a482d51503a1ab33b1c67a6c3813a26953dbdc71c31dacaef9a838c4e29f5712",
-    url = "https://files.pythonhosted.org/packages/ca/bc/f35b8446f4531a7cb215605d100cd88b7ac6f44ab3fc94870c120ab3adbf/pathspec-0.12.1.tar.gz",
+    downloaded_file_path = "pathspec-0.12.1-py3-none-any.whl",
+    sha256 = "a0d503e138a4c123b27490a4f7beda6a01c6f288df0e4a8b79c7eb0dc7b4cc08",
+    url = "https://files.pythonhosted.org/packages/cc/20/ff623b09d963f88bfde16306a54e12ee5ea43e9b597108672ff3a408aad6/pathspec-0.12.1-py3-none-any.whl",
 )
 
 http_file(
     name = "python_platformdirs",
-    downloaded_file_path = "platformdirs-3.0.0.tar.gz",
-    sha256 = "8a1228abb1ef82d788f74139988b137e78692984ec7b08eaa6c65f1723af28f9",
-    url = "https://files.pythonhosted.org/packages/11/39/702094fc1434a4408783b071665d9f5d8a1d0ba4dddf9dadf3d50e6eb762/platformdirs-3.0.0.tar.gz",
+    downloaded_file_path = "platformdirs-3.0.0-py3-none-any.whl",
+    sha256 = "b1d5eb14f221506f50d6604a561f4c5786d9e80355219694a1b244bcd96f4567",
+    url = "https://files.pythonhosted.org/packages/ba/24/a83a900a90105f8ad3f20df5bb5a2cde886df7125c7827e196e4ed4fa8a7/platformdirs-3.0.0-py3-none-any.whl",
 )
 
 http_file(
     name = "python_protobuf",
-    downloaded_file_path = "protobuf-4.22.0.tar.gz",
-    sha256 = "652d8dfece122a24d98eebfef30e31e455d300efa41999d1182e015984ac5930",
-    url = "https://files.pythonhosted.org/packages/f6/95/797a257a5db4a91dc2bc864c487ead56440014d741933a28c86d966b949e/protobuf-4.22.0.tar.gz",
+    downloaded_file_path = "protobuf-4.22.0-py3-none-any.whl",
+    sha256 = "c3325803095fb4c2a48649c321d2fbde59f8fbfcb9bfc7a86df27d112831c571",
+    url = "https://files.pythonhosted.org/packages/2b/ed/8f2113e3446bc98555cce3a17403180f86c70a51b9e61ef973e9c8df7179/protobuf-4.22.0-py3-none-any.whl",
 )
 
 http_file(
     name = "python_pycodestyle",
-    downloaded_file_path = "pycodestyle-2.10.0.tar.gz",
-    sha256 = "347187bdb476329d98f695c213d7295a846d1152ff4fe9bacb8a9590b8ee7053",
-    url = "https://files.pythonhosted.org/packages/06/6b/5ca0d12ef7dcf7d20dfa35287d02297f3e0f9e515da5183654c03a9636ce/pycodestyle-2.10.0.tar.gz",
+    downloaded_file_path = "pycodestyle-2.10.0-py2.py3-none-any.whl",
+    sha256 = "8a4eaf0d0495c7395bdab3589ac2db602797d76207242c17d470186815706610",
+    url = "https://files.pythonhosted.org/packages/a2/54/001fdc0d69e8d0bb86c3423a6fa6dfada8cc26317c2635ab543e9ac411bd/pycodestyle-2.10.0-py2.py3-none-any.whl",
 )
 
 http_file(
     name = "python_pyenchant",
-    downloaded_file_path = "pyenchant-3.2.2.tar.gz",
-    sha256 = "1cf830c6614362a78aab78d50eaf7c6c93831369c52e1bb64ffae1df0341e637",
-    url = "https://files.pythonhosted.org/packages/b1/a3/86763b6350727ca81c8fcc5bb5bccee416e902e0085dc7a902c81233717e/pyenchant-3.2.2.tar.gz",
+    downloaded_file_path = "pyenchant-3.2.2-py3-none-any.whl",
+    sha256 = "5facc821ece957208a81423af7d6ec7810dad29697cb0d77aae81e4e11c8e5a6",
+    url = "https://files.pythonhosted.org/packages/54/4c/a741dddab6ad96f257d90cb4d23067ffadac526c9cab3a99ca6ce3c05477/pyenchant-3.2.2-py3-none-any.whl",
 )
 
 http_file(
     name = "python_pygments",
-    downloaded_file_path = "Pygments-2.14.0.tar.gz",
-    sha256 = "b3ed06a9e8ac9a9aae5a6f5dbe78a8a58655d17b43b93c078f094ddc476ae297",
-    url = "https://files.pythonhosted.org/packages/da/6a/c427c06913204e24de28de5300d3f0e809933f376e0b7df95194b2bb3f71/Pygments-2.14.0.tar.gz",
+    downloaded_file_path = "Pygments-2.14.0-py3-none-any.whl",
+    sha256 = "fa7bd7bd2771287c0de303af8bfdfc731f51bd2c6a47ab69d117138893b82717",
+    url = "https://files.pythonhosted.org/packages/0b/42/d9d95cc461f098f204cd20c85642ae40fbff81f74c300341b8d0e0df14e0/Pygments-2.14.0-py3-none-any.whl",
 )
 
 http_file(
     name = "python_pylint",
-    downloaded_file_path = "pylint-2.16.2.tar.gz",
-    sha256 = "13b2c805a404a9bf57d002cd5f054ca4d40b0b87542bdaba5e05321ae8262c84",
-    url = "https://files.pythonhosted.org/packages/96/d2/192ac213f4a61118eacc79efbc7441460b5d5be39e821e2ee282ef6c68a5/pylint-2.16.2.tar.gz",
+    downloaded_file_path = "pylint-2.16.2-py3-none-any.whl",
+    sha256 = "ff22dde9c2128cd257c145cfd51adeff0be7df4d80d669055f24a962b351bbe4",
+    url = "https://files.pythonhosted.org/packages/e1/1b/b34a9c3485151db12402ab701f9cb836359cb95668870d071d5b2e327f67/pylint-2.16.2-py3-none-any.whl",
 )
 
 http_file(
     name = "python_pytz",
-    downloaded_file_path = "pytz-2022.7.1.tar.gz",
-    sha256 = "01a0681c4b9684a28304615eba55d1ab31ae00bf68ec157ec3708a8182dbbcd0",
-    url = "https://files.pythonhosted.org/packages/03/3e/dc5c793b62c60d0ca0b7e58f1fdd84d5aaa9f8df23e7589b39cc9ce20a03/pytz-2022.7.1.tar.gz",
+    downloaded_file_path = "pytz-2022.7.1-py2.py3-none-any.whl",
+    sha256 = "78f4f37d8198e0627c5f1143240bb0206b8691d8d7ac6d78fee88b78733f8c4a",
+    url = "https://files.pythonhosted.org/packages/2e/09/fbd3c46dce130958ee8e0090f910f1fe39e502cc5ba0aadca1e8a2b932e5/pytz-2022.7.1-py2.py3-none-any.whl",
 )
 
 http_file(
     name = "python_requests",
-    downloaded_file_path = "requests-2.28.2.tar.gz",
-    sha256 = "98b1b2782e3c6c4904938b84c0eb932721069dfdb9134313beff7c83c2df24bf",
-    url = "https://files.pythonhosted.org/packages/9d/ee/391076f5937f0a8cdf5e53b701ffc91753e87b07d66bae4a09aa671897bf/requests-2.28.2.tar.gz",
+    downloaded_file_path = "requests-2.28.2-py3-none-any.whl",
+    sha256 = "64299f4909223da747622c030b781c0d7811e359c37124b4bd368fb8c6518baa",
+    url = "https://files.pythonhosted.org/packages/d2/f4/274d1dbe96b41cf4e0efb70cbced278ffd61b5c7bb70338b62af94ccb25b/requests-2.28.2-py3-none-any.whl",
 )
 
 http_file(
     name = "python_snowballstemmer",
-    downloaded_file_path = "snowballstemmer-2.2.0.tar.gz",
-    sha256 = "09b16deb8547d3412ad7b590689584cd0fe25ec8db3be37788be3810cbf19cb1",
-    url = "https://files.pythonhosted.org/packages/44/7b/af302bebf22c749c56c9c3e8ae13190b5b5db37a33d9068652e8f73b7089/snowballstemmer-2.2.0.tar.gz",
+    downloaded_file_path = "snowballstemmer-2.2.0-py2.py3-none-any.whl",
+    sha256 = "c8e1716e83cc398ae16824e5572ae04e0d9fc2c6b985fb0f900f5f0c96ecba1a",
+    url = "https://files.pythonhosted.org/packages/ed/dc/c02e01294f7265e63a7315fe086dd1df7dacb9f840a804da846b96d01b96/snowballstemmer-2.2.0-py2.py3-none-any.whl",
 )
 
 http_file(
     name = "python_sphinx",
-    downloaded_file_path = "Sphinx-6.1.3.tar.gz",
-    sha256 = "0dac3b698538ffef41716cf97ba26c1c7788dba73ce6f150c1ff5b4720786dd2",
-    url = "https://files.pythonhosted.org/packages/db/0b/a0f60c4abd8a69bd5b0d20edde8a8d8d9d4ca825bbd920d328d248fd0290/Sphinx-6.1.3.tar.gz",
+    downloaded_file_path = "sphinx-6.1.3-py3-none-any.whl",
+    sha256 = "807d1cb3d6be87eb78a381c3e70ebd8d346b9a25f3753e9947e866b2786865fc",
+    url = "https://files.pythonhosted.org/packages/2e/2c/22a20486cad91a66f4f70bd88c20c8bb306ae719cbba93d7debae7efa80d/sphinx-6.1.3-py3-none-any.whl",
 )
 
 http_file(
@@ -639,51 +639,51 @@ http_file(
 
 http_file(
     name = "python_sphinx_rtd_theme",
-    downloaded_file_path = "sphinx_rtd_theme-1.2.0.tar.gz",
-    sha256 = "a0d8bd1a2ed52e0b338cbe19c4b2eef3c5e7a048769753dac6a9f059c7b641b8",
-    url = "https://files.pythonhosted.org/packages/35/b4/40faec6790d4b08a6ef878feddc6ad11c3872b75f52273f1418c39f67cd6/sphinx_rtd_theme-1.2.0.tar.gz",
+    downloaded_file_path = "sphinx_rtd_theme-1.2.0-py2.py3-none-any.whl",
+    sha256 = "f823f7e71890abe0ac6aaa6013361ea2696fc8d3e1fa798f463e82bdb77eeff2",
+    url = "https://files.pythonhosted.org/packages/b3/46/c167351699e5dc126798385cf37c26ba9df7a26c6f8855661d9f966d6ced/sphinx_rtd_theme-1.2.0-py2.py3-none-any.whl",
 )
 
 http_file(
     name = "python_sphinx_tabs",
-    downloaded_file_path = "sphinx-tabs-3.4.1.tar.gz",
-    sha256 = "d2a09f9e8316e400d57503f6df1c78005fdde220e5af589cc79d493159e1b832",
-    url = "https://files.pythonhosted.org/packages/aa/9b/a54949728ff067e4d0997c934e97569dbf3bb4e9c0d63ff3377be4cc3831/sphinx-tabs-3.4.1.tar.gz",
+    downloaded_file_path = "sphinx_tabs-3.4.1-py3-none-any.whl",
+    sha256 = "7cea8942aeccc5d01a995789c01804b787334b55927f29b36ba16ed1e7cb27c6",
+    url = "https://files.pythonhosted.org/packages/4f/2d/80293fbb2aa82d457f9df0de85800b11e3bfd5008b118bddb303a797e5c5/sphinx_tabs-3.4.1-py3-none-any.whl",
 )
 
 http_file(
     name = "python_sphinxcontrib_applehelp",
-    downloaded_file_path = "sphinxcontrib-applehelp-1.0.4.tar.gz",
-    sha256 = "828f867945bbe39817c210a1abfd1bc4895c8b73fcaade56d45357a348a07d7e",
-    url = "https://files.pythonhosted.org/packages/32/df/45e827f4d7e7fcc84e853bcef1d836effd762d63ccb86f43ede4e98b478c/sphinxcontrib-applehelp-1.0.4.tar.gz",
+    downloaded_file_path = "sphinxcontrib_applehelp-1.0.4-py3-none-any.whl",
+    sha256 = "29d341f67fb0f6f586b23ad80e072c8e6ad0b48417db2bde114a4c9746feb228",
+    url = "https://files.pythonhosted.org/packages/06/c1/5e2cafbd03105ce50d8500f9b4e8a6e8d02e22d0475b574c3b3e9451a15f/sphinxcontrib_applehelp-1.0.4-py3-none-any.whl",
 )
 
 http_file(
     name = "python_sphinxcontrib_devhelp",
-    downloaded_file_path = "sphinxcontrib-devhelp-1.0.2.tar.gz",
-    sha256 = "ff7f1afa7b9642e7060379360a67e9c41e8f3121f2ce9164266f61b9f4b338e4",
-    url = "https://files.pythonhosted.org/packages/98/33/dc28393f16385f722c893cb55539c641c9aaec8d1bc1c15b69ce0ac2dbb3/sphinxcontrib-devhelp-1.0.2.tar.gz",
+    downloaded_file_path = "sphinxcontrib_devhelp-1.0.2-py2.py3-none-any.whl",
+    sha256 = "8165223f9a335cc1af7ffe1ed31d2871f325254c0423bc0c4c7cd1c1e4734a2e",
+    url = "https://files.pythonhosted.org/packages/c5/09/5de5ed43a521387f18bdf5f5af31d099605c992fd25372b2b9b825ce48ee/sphinxcontrib_devhelp-1.0.2-py2.py3-none-any.whl",
 )
 
 http_file(
     name = "python_sphinxcontrib_htmlhelp",
-    downloaded_file_path = "sphinxcontrib-htmlhelp-2.0.1.tar.gz",
-    sha256 = "0cbdd302815330058422b98a113195c9249825d681e18f11e8b1f78a2f11efff",
-    url = "https://files.pythonhosted.org/packages/b3/47/64cff68ea3aa450c373301e5bebfbb9fce0a3e70aca245fcadd4af06cd75/sphinxcontrib-htmlhelp-2.0.1.tar.gz",
+    downloaded_file_path = "sphinxcontrib_htmlhelp-2.0.1-py3-none-any.whl",
+    sha256 = "c38cb46dccf316c79de6e5515e1770414b797162b23cd3d06e67020e1d2a6903",
+    url = "https://files.pythonhosted.org/packages/6e/ee/a1f5e39046cbb5f8bc8fba87d1ddf1c6643fbc9194e58d26e606de4b9074/sphinxcontrib_htmlhelp-2.0.1-py3-none-any.whl",
 )
 
 http_file(
     name = "python_sphinxcontrib_jquery",
-    downloaded_file_path = "sphinxcontrib-jquery-2.0.0.tar.gz",
-    sha256 = "8fb65f6dba84bf7bcd1aea1f02ab3955ac34611d838bcc95d4983b805b234daa",
-    url = "https://files.pythonhosted.org/packages/38/e8/8ba91a585a8d0b6a1952eeeb8ea392e025e4efc7c860f4679794a776b116/sphinxcontrib-jquery-2.0.0.tar.gz",
+    downloaded_file_path = "sphinxcontrib_jquery-2.0.0-py3-none-any.whl",
+    sha256 = "ed47fa425c338ffebe3c37e1cdb56e30eb806116b85f01055b158c7057fdb995",
+    url = "https://files.pythonhosted.org/packages/42/e0/c492f21bf39616ea34a83994c3add2132134f9803e3516d918ef0b6a2a45/sphinxcontrib_jquery-2.0.0-py3-none-any.whl",
 )
 
 http_file(
     name = "python_sphinxcontrib_jsmath",
-    downloaded_file_path = "sphinxcontrib-jsmath-1.0.1.tar.gz",
-    sha256 = "a9925e4a4587247ed2191a22df5f6970656cb8ca2bd6284309578f2153e0c4b8",
-    url = "https://files.pythonhosted.org/packages/b2/e8/9ed3830aeed71f17c026a07a5097edcf44b692850ef215b161b8ad875729/sphinxcontrib-jsmath-1.0.1.tar.gz",
+    downloaded_file_path = "sphinxcontrib_jsmath-1.0.1-py2.py3-none-any.whl",
+    sha256 = "2ec2eaebfb78f3f2078e73666b1415417a116cc848b72e5172e596c871103178",
+    url = "https://files.pythonhosted.org/packages/c2/42/4c8646762ee83602e3fb3fbe774c2fac12f317deb0b5dbeeedd2d3ba4b77/sphinxcontrib_jsmath-1.0.1-py2.py3-none-any.whl",
 )
 
 http_file(
@@ -695,65 +695,65 @@ http_file(
 
 http_file(
     name = "python_sphinxcontrib_qthelp",
-    downloaded_file_path = "sphinxcontrib-qthelp-1.0.3.tar.gz",
-    sha256 = "4c33767ee058b70dba89a6fc5c1892c0d57a54be67ddd3e7875a18d14cba5a72",
-    url = "https://files.pythonhosted.org/packages/b1/8e/c4846e59f38a5f2b4a0e3b27af38f2fcf904d4bfd82095bf92de0b114ebd/sphinxcontrib-qthelp-1.0.3.tar.gz",
+    downloaded_file_path = "sphinxcontrib_qthelp-1.0.3-py2.py3-none-any.whl",
+    sha256 = "bd9fc24bcb748a8d51fd4ecaade681350aa63009a347a8c14e637895444dfab6",
+    url = "https://files.pythonhosted.org/packages/2b/14/05f9206cf4e9cfca1afb5fd224c7cd434dcc3a433d6d9e4e0264d29c6cdb/sphinxcontrib_qthelp-1.0.3-py2.py3-none-any.whl",
 )
 
 http_file(
     name = "python_sphinxcontrib_serializinghtml",
-    downloaded_file_path = "sphinxcontrib-serializinghtml-1.1.5.tar.gz",
-    sha256 = "aa5f6de5dfdf809ef505c4895e51ef5c9eac17d0f287933eb49ec495280b6952",
-    url = "https://files.pythonhosted.org/packages/b5/72/835d6fadb9e5d02304cf39b18f93d227cd93abd3c41ebf58e6853eeb1455/sphinxcontrib-serializinghtml-1.1.5.tar.gz",
+    downloaded_file_path = "sphinxcontrib_serializinghtml-1.1.5-py2.py3-none-any.whl",
+    sha256 = "352a9a00ae864471d3a7ead8d7d79f5fc0b57e8b3f95e9867eb9eb28999b92fd",
+    url = "https://files.pythonhosted.org/packages/c6/77/5464ec50dd0f1c1037e3c93249b040c8fc8078fdda97530eeb02424b6eea/sphinxcontrib_serializinghtml-1.1.5-py2.py3-none-any.whl",
 )
 
 http_file(
     name = "python_sphinxcontrib_spelling",
-    downloaded_file_path = "sphinxcontrib-spelling-8.0.0.tar.gz",
-    sha256 = "199d0a16902ad80c387c2966dc9eb10f565b1fb15ccce17210402db7c2443e5c",
-    url = "https://files.pythonhosted.org/packages/38/88/d8d0e4ff3087199db984bd03d1d17c413bcdcdde0f5120d3cc0b4c8806b3/sphinxcontrib-spelling-8.0.0.tar.gz",
+    downloaded_file_path = "sphinxcontrib_spelling-8.0.0-py3-none-any.whl",
+    sha256 = "b27e0a16aef00bcfc888a6490dc3f16651f901dc475446c6882834278c8dc7b3",
+    url = "https://files.pythonhosted.org/packages/87/f9/ec57149c1ab20efed1305aa89fbcd7a9e4a8edf9ef5fe9b75bdb13e1964e/sphinxcontrib_spelling-8.0.0-py3-none-any.whl",
 )
 
 http_file(
     name = "python_tomli",
-    downloaded_file_path = "tomli-2.0.1.tar.gz",
-    sha256 = "de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f",
-    url = "https://files.pythonhosted.org/packages/c0/3f/d7af728f075fb08564c5949a9c95e44352e23dee646869fa104a3b2060a3/tomli-2.0.1.tar.gz",
+    downloaded_file_path = "tomli-2.0.1-py3-none-any.whl",
+    sha256 = "939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
+    url = "https://files.pythonhosted.org/packages/97/75/10a9ebee3fd790d20926a90a2547f0bf78f371b2f13aa822c759680ca7b9/tomli-2.0.1-py3-none-any.whl",
 )
 
 http_file(
     name = "python_tomlkit",
-    downloaded_file_path = "tomlkit-0.11.6.tar.gz",
-    sha256 = "71b952e5721688937fb02cf9d354dbcf0785066149d2855e44531ebdd2b65d73",
-    url = "https://files.pythonhosted.org/packages/ff/04/58b4c11430ed4b7b8f1723a5e4f20929d59361e9b17f0872d69681fd8ffd/tomlkit-0.11.6.tar.gz",
+    downloaded_file_path = "tomlkit-0.11.6-py3-none-any.whl",
+    sha256 = "07de26b0d8cfc18f871aec595fda24d95b08fef89d147caa861939f37230bf4b",
+    url = "https://files.pythonhosted.org/packages/2b/df/971fa5db3250bb022105d17f340339370f73d502e65e687a94ca1a4c4b1f/tomlkit-0.11.6-py3-none-any.whl",
 )
 
 http_file(
     name = "python_typing_extensions",
-    downloaded_file_path = "typing_extensions-4.5.0.tar.gz",
-    sha256 = "5cb5f4a79139d699607b3ef622a1dedafa84e115ab0024e0d9c044a9479ca7cb",
-    url = "https://files.pythonhosted.org/packages/d3/20/06270dac7316220643c32ae61694e451c98f8caf4c8eab3aa80a2bedf0df/typing_extensions-4.5.0.tar.gz",
+    downloaded_file_path = "typing_extensions-4.5.0-py3-none-any.whl",
+    sha256 = "fb33085c39dd998ac16d1431ebc293a8b3eedd00fd4a32de0ff79002c19511b4",
+    url = "https://files.pythonhosted.org/packages/31/25/5abcd82372d3d4a3932e1fa8c3dbf9efac10cc7c0d16e78467460571b404/typing_extensions-4.5.0-py3-none-any.whl",
 )
 
 http_file(
     name = "python_urllib3",
-    downloaded_file_path = "urllib3-1.26.14.tar.gz",
-    sha256 = "076907bf8fd355cde77728471316625a4d2f7e713c125f51953bb5b3eecf4f72",
-    url = "https://files.pythonhosted.org/packages/c5/52/fe421fb7364aa738b3506a2d99e4f3a56e079c0a798e9f4fa5e14c60922f/urllib3-1.26.14.tar.gz",
+    downloaded_file_path = "urllib3-1.26.14-py2.py3-none-any.whl",
+    sha256 = "75edcdc2f7d85b137124a6c3c9fc3933cdeaa12ecb9a6a959f22797a0feca7e1",
+    url = "https://files.pythonhosted.org/packages/fe/ca/466766e20b767ddb9b951202542310cba37ea5f2d792dae7589f1741af58/urllib3-1.26.14-py2.py3-none-any.whl",
 )
 
 http_file(
     name = "python_wrapt",
-    downloaded_file_path = "wrapt-1.15.0.tar.gz",
-    sha256 = "d06730c6aed78cee4126234cf2d071e01b44b915e725a6cb439a879ec9754a3a",
-    url = "https://files.pythonhosted.org/packages/f8/7d/73e4e3cdb2c780e13f9d87dc10488d7566d8fd77f8d68f0e416bfbd144c7/wrapt-1.15.0.tar.gz",
+    downloaded_file_path = "wrapt-1.15.0-py3-none-any.whl",
+    sha256 = "64b1df0f83706b4ef4cfb4fb0e4c2669100fd7ecacfb59e091fad300d4e04640",
+    url = "https://files.pythonhosted.org/packages/f8/f8/e068dafbb844c1447c55b23c921f3d338cddaba4ea53187a7dd0058452d9/wrapt-1.15.0-py3-none-any.whl",
 )
 
 http_file(
     name = "python_websocket_client",
-    downloaded_file_path = "websocket-client-1.5.1.tar.gz",
-    sha256 = "3f09e6d8230892547132177f575a4e3e73cfdf06526e20cc02aa1c3b47184d40",
-    url = "https://files.pythonhosted.org/packages/8b/94/696484b0c13234c91b316bc3d82d432f9b589a9ef09d016875a31c670b76/websocket-client-1.5.1.tar.gz",
+    downloaded_file_path = "websocket_client-1.5.1-py3-none-any.whl",
+    sha256 = "cdf5877568b7e83aa7cf2244ab56a3213de587bbe0ce9d8b9600fc77b455d89e",
+    url = "https://files.pythonhosted.org/packages/6d/9a/6c793729c9d48fcca155ce55e4dfafacffb7fb52a62e3ae2198846c31af6/websocket_client-1.5.1-py3-none-any.whl",
 )
 
 # ----------------------- Module Manager -------------------------------------------------
