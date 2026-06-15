@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Tuple, Set, Dict, List, Optional, TYPE_CHECKING
 import krpc.schema
 from krpc.schema import KRPC_pb2
-from krpc.types import TypeBase, ClassBase, WrappedClass, DocEnum
+from krpc.types import TypeBase, ClassBase, WrappedClass, DocEnum, StaticMethod
 from krpc.event import Event
 if TYPE_CHECKING:
     from krpc.services import Client
@@ -123,7 +123,7 @@ class {{class_name}}(ClassBase):
 
     {% endfor %}
     {% for proc_name, procedure in class['static_methods'].items() %}
-    @classmethod
+    @StaticMethod
     def {{proc_name}}(cls, {{ static_arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
 {% endif %}
@@ -137,12 +137,12 @@ class {{class_name}}(ClassBase):
             {{ procedure.return_type.python_type }}
         )
 
-    @classmethod
+    @StaticMethod
     def _return_type_{{proc_name}}(cls) -> TypeBase:
         self = cls
         return {{ procedure.return_type.python_type }}
 
-    @classmethod
+    @StaticMethod
     def _build_call_{{proc_name}}(cls, {{ static_arg_list(procedure.parameters) }}) -> KRPC_pb2.ProcedureCall:
         self = cls
         return self._client._build_call(
