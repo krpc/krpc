@@ -11,7 +11,7 @@ authors = [
 description = "Utilities for running service tests for kRPC."
 readme = "README.txt"
 license = "GPL-3.0-only"
-requires-python = ">=3.7"
+requires-python = ">=3.10"
 dependencies = ["krpc >= 0.4"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
