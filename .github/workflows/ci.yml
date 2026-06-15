@@ -60,7 +60,7 @@ jobs:
         uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: krpctools
-          path: bazel-bin/tools/krpctools/krpctools-*.zip
+          path: bazel-bin/tools/krpctools/krpctools-*.tar.gz
       - name: upload-testserver-artifact
         uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
