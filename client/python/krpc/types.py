@@ -1,17 +1,20 @@
 from __future__ import annotations
+
+import collections
+import functools
+from enum import Enum
 from typing import (
-    cast,
+    TYPE_CHECKING,
     Any,
     Callable,
     Iterable,
     List,
     Mapping,
-    Type,
     Optional,
-    TYPE_CHECKING,
+    Type,
+    cast,
 )
-import collections
-from enum import Enum
+
 import krpc.schema.KRPC_pb2 as KRPC
 
 if TYPE_CHECKING:
@@ -625,6 +628,33 @@ class WrappedClass:
 
     def __dir__(self) -> List[str]:
         return dir(self._class_type)
+
+
+class StaticMethod:
+    """Descriptor for static methods.
+
+    Like @classmethod, but also works when called on an instance: if the class
+    does not yet have _client set (i.e. it was not accessed through WrappedClass),
+    the instance's _client is injected onto the class first — matching what
+    WrappedClass.__getattr__ does when the class is accessed via the service."""
+
+    def __init__(self, func: Callable) -> None:  # type: ignore[type-arg]
+        self._func = func
+
+    def __get__(  # type: ignore[type-arg]
+        self, obj: object, objtype: Optional[type] = None
+    ) -> Callable:
+        if objtype is None:
+            objtype = type(obj)
+        if obj is not None and not hasattr(objtype, "_client"):
+            objtype._client = obj._client  # type: ignore[attr-defined]
+
+        @functools.wraps(self._func)
+        def bound(*args: object, **kwargs: object) -> object:
+            return self._func(objtype, *args, **kwargs)
+
+        bound.__self__ = objtype  # type: ignore[attr-defined]
+        return bound
 
 
 class DocEnum(Enum):

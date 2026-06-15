@@ -140,6 +140,11 @@ class TestClient(ServerTestCase, unittest.TestCase):
             "jebbobbill", self.conn.test_service.TestClass.static_method("bob", "bill")
         )
 
+    def test_class_static_methods_via_instance(self) -> None:
+        obj = self.conn.test_service.create_test_object("jeb")
+        self.assertEqual("jeb", obj.static_method())
+        self.assertEqual("jebbobbill", obj.static_method("bob", "bill"))
+
     def test_class_properties(self) -> None:
         obj = self.conn.test_service.create_test_object("jeb")
         obj.int_property = 0
