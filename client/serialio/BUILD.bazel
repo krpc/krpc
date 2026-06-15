@@ -39,6 +39,7 @@ client_test(
 
 deps = [
     "@python_protobuf//file",
+    "@python_pyserial//file",
     "//client/python",
 ]
 

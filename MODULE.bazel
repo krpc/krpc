@@ -599,6 +599,13 @@ http_file(
 )
 
 http_file(
+    name = "python_pyserial",
+    downloaded_file_path = "pyserial-3.5-py2.py3-none-any.whl",
+    sha256 = "c4451db6ba391ca6ca299fb3ec7bae67a5c55dde170964c7a14ceefec02f2cf0",
+    url = "https://files.pythonhosted.org/packages/07/bc/587a445451b253b285629263eb51c2d8e9bcea4fc97826266d186f96f558/pyserial-3.5-py2.py3-none-any.whl",
+)
+
+http_file(
     name = "python_pycodestyle",
     downloaded_file_path = "pycodestyle-2.10.0.tar.gz",
     sha256 = "347187bdb476329d98f695c213d7295a846d1152ff4fe9bacb8a9590b8ee7053",
