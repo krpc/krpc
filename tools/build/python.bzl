@@ -1,9 +1,9 @@
-" python build tools "
+"python build tools"
 
 # buildifier: disable=function-docstring-header
 def _apply_path_map(path_map, path):
-    """ Apply the path mappings to a path.
-        Replaces the longest prefix match from the mapping. """
+    """Apply the path mappings to a path.
+    Replaces the longest prefix match from the mapping."""
     matchlen = 0
     match = path
     for x, y in path_map.items():
@@ -25,9 +25,11 @@ def _create_py_env(out, install):
             'CFLAGS="-O0" %s/bin/python %s/bin/pip install --quiet --no-deps --no-cache-dir file:$PWD/%s' %
             (tmp, tmp, lib.path),
         )
-    cmds.extend([
-        "(CWD=`pwd`; cd %s; tar -c -f $CWD/%s *)" % (tmp, out),
-    ])
+    cmds.extend(
+        [
+            "(CWD=`pwd`; cd %s; tar -c -f $CWD/%s *)" % (tmp, out),
+        ],
+    )
     return cmds
 
 def _extract_py_env(env, path):
@@ -38,10 +40,12 @@ def _extract_py_env(env, path):
     ]
 
 def _add_runfile(sub_commands, path, runfile_path):
-    sub_commands.extend([
-        "mkdir -p `dirname %s`" % runfile_path,
-        'cp "%s" "%s"' % (path, runfile_path),
-    ])
+    sub_commands.extend(
+        [
+            "mkdir -p `dirname %s`" % runfile_path,
+            'cp "%s" "%s"' % (path, runfile_path),
+        ],
+    )
 
 def _sdist_impl(ctx):
     output = ctx.outputs.out
@@ -68,18 +72,24 @@ def _sdist_impl(ctx):
     # Build sdist from the staging directory
     # Note: staging dir can contain symlinks, so copy deference them first
     # by copying to a build directory
-    staging_dir_path = output.path.replace(
-        ctx.configuration.bin_dir.path,
-        ctx.configuration.genfiles_dir.path,
-    ) + ".py-sdist-tmp"
+    staging_dir_path = (
+        output.path.replace(
+            ctx.configuration.bin_dir.path,
+            ctx.configuration.genfiles_dir.path,
+        ) +
+        ".py-sdist-tmp"
+    )
     build_dir_path = staging_dir_path + ".deref"
     build_log_path = build_dir_path + ".log"
+
     # Note: we invoke hatchling directly (rather than via "python -m build") to
     # avoid unnecessarily setting up an isolated environment
-    build_cmd = ("rm -rf {deref} && cp -rL {stage} {deref} && " +
-                 "( cd {deref} ; pip install --quiet --disable-pip-version-check hatchling && " +
-                 "python -m hatchling build -t sdist ) > {log} 2>&1 || " +
-                 "( cat {log} >&2 2>/dev/null ; exit 1 )").format(
+    build_cmd = (
+        "rm -rf {deref} && cp -rL {stage} {deref} && " +
+        "( cd {deref} ; pip install --quiet --disable-pip-version-check hatchling && " +
+        "python -m hatchling build -t sdist ) > {log} 2>&1 || " +
+        "( cat {log} >&2 2>/dev/null ; exit 1 )"
+    ).format(
         deref = build_dir_path,
         stage = staging_dir_path,
         log = build_log_path,
@@ -112,7 +122,10 @@ def _script_impl(ctx):
 
     ctx.actions.write(
         output = script_setup,
-        content = " && \\\n".join(_create_py_env(script_env.path, install = ctx.files.deps + [ctx.file.pkg])) + "\n",
+        content = " && \\\n".join(
+                      _create_py_env(script_env.path, install = ctx.files.deps + [ctx.file.pkg]),
+                  ) +
+                  "\n",
         is_executable = True,
     )
 
@@ -158,12 +171,15 @@ def _test_impl(ctx):
             "env/bin/python env/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s" %
             dep.short_path,
         )
-    sub_commands.extend([
-        "tar -xzf %s" % (ctx.file.src.short_path),
-        "env/bin/pip install --quiet --disable-pip-version-check hatchling pytest" +
-        " && env/bin/pip install --quiet --no-deps --no-cache-dir %s/" % ctx.attr.pkg +
-        " && env/bin/python -m pytest %s/" % ctx.attr.pkg,
-    ])
+    sub_commands.extend(
+        [
+            "tar -xzf %s" % (ctx.file.src.short_path),
+            "env/bin/pip install --quiet --disable-pip-version-check hatchling pytest" +
+            " && env/bin/pip install --quiet --no-deps --no-cache-dir %s/" %
+            ctx.attr.pkg +
+            " && env/bin/python -m pytest %s/" % ctx.attr.pkg,
+        ],
+    )
     ctx.actions.write(
         output = ctx.outputs.executable,
         content = " && \\\n".join(sub_commands) + "\n",
@@ -197,10 +213,12 @@ def _lint_impl(ctx):
         "--check",
     ]
     if ctx.attr.black_exclude:
-        black_args.extend([
-            "--extend-exclude",
-            ctx.attr.black_exclude,
-        ])
+        black_args.extend(
+            [
+                "--extend-exclude",
+                ctx.attr.black_exclude,
+            ],
+        )
     pylint_args = []
     if ctx.attr.pylint_config:
         pylint_args.append("--rcfile=%s" % ctx.file.pylint_config.short_path)
@@ -238,8 +256,14 @@ def _lint_impl(ctx):
     sub_commands.append("rm -rf %s" % runfiles_dir)
     _add_runfile(sub_commands, black.short_path, runfiles_dir + "/" + black.basename)
     for f in black_runfiles:
-        _add_runfile(sub_commands, f.short_path, runfiles_dir + "/" + black.basename + ".runfiles/_main/" + f.short_path)
-    sub_commands.append("%s/%s %s" % (runfiles_dir, black.basename, " ".join(black_args)))
+        _add_runfile(
+            sub_commands,
+            f.short_path,
+            runfiles_dir + "/" + black.basename + ".runfiles/_main/" + f.short_path,
+        )
+    sub_commands.append(
+        "%s/%s %s" % (runfiles_dir, black.basename, " ".join(black_args)),
+    )
     sub_commands.append("rm -rf %s" % runfiles_dir)
 
     # Run pylint
@@ -247,11 +271,18 @@ def _lint_impl(ctx):
     sub_commands.append("rm -rf %s" % runfiles_dir)
     _add_runfile(sub_commands, pylint.short_path, runfiles_dir + "/" + pylint.basename)
     for f in pylint_runfiles:
-        _add_runfile(sub_commands, f.short_path, runfiles_dir + "/" + pylint.basename + ".runfiles/_main/" + f.short_path)
+        _add_runfile(
+            sub_commands,
+            f.short_path,
+            runfiles_dir + "/" + pylint.basename + ".runfiles/_main/" + f.short_path,
+        )
 
     # Set pythonpath so that pylint finds the dependent packages from the virtual environment
     sub_commands.append('pylibdir=`find env/lib -maxdepth 1 -name "python*"`')
-    sub_commands.append("PYTHONPATH=${pylibdir}/site-packages PYLINTHOME=%s %s/%s %s" % (runfiles_dir, runfiles_dir, pylint.basename, " ".join(pylint_args)))
+    sub_commands.append(
+        "PYTHONPATH=${pylibdir}/site-packages PYLINTHOME=%s %s/%s %s" %
+        (runfiles_dir, runfiles_dir, pylint.basename, " ".join(pylint_args)),
+    )
 
     sub_commands.append("rm -rf %s" % runfiles_dir)
 
@@ -276,8 +307,16 @@ py_lint_test = rule(
         "deps": attr.label_list(allow_files = True),
         "black_exclude": attr.string(),
         "pylint_config": attr.label(allow_single_file = True),
-        "black": attr.label(default = Label("//tools/build/black"), executable = True, cfg = "exec"),
-        "pylint": attr.label(default = Label("//tools/build/pylint"), executable = True, cfg = "exec"),
+        "black": attr.label(
+            default = Label("//tools/build/black"),
+            executable = True,
+            cfg = "exec",
+        ),
+        "pylint": attr.label(
+            default = Label("//tools/build/pylint"),
+            executable = True,
+            cfg = "exec",
+        ),
     },
     test = True,
 )
