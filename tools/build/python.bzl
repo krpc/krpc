@@ -18,12 +18,12 @@ def _create_py_env(out, install):
     cmds = [
         "PWD=`pwd`",
         "rm -rf %s" % tmp,
-        "virtualenv %s --python python3 --quiet --never-download" % tmp,
+        "python3 -m venv %s" % tmp,
     ]
     for lib in install:
         cmds.append(
-            'CFLAGS="-O0" %s/bin/python %s/bin/pip install --quiet --no-deps --no-cache-dir file:$PWD/%s' %
-            (tmp, tmp, lib.path),
+            'CFLAGS="-O0" %s/bin/python3 -m pip install --quiet --disable-pip-version-check --no-deps --no-cache-dir file:$PWD/%s' %
+            (tmp, lib.path),
         )
     cmds.extend(
         [
@@ -83,14 +83,19 @@ def _sdist_impl(ctx):
     build_log_path = build_dir_path + ".log"
 
     # Note: we invoke hatchling directly (rather than via "python -m build") to
-    # avoid unnecessarily setting up an isolated environment
+    # avoid unnecessarily setting up an isolated environment.
+    # We create a venv to avoid PEP 668 "externally-managed-environment" errors
+    # on Debian/Ubuntu systems that block system-wide pip installs.
+    venv_path = build_dir_path + ".venv"
     build_cmd = (
-        "rm -rf {deref} && cp -rL {stage} {deref} && " +
-        "( cd {deref} ; pip install --quiet --disable-pip-version-check hatchling && " +
-        "python -m hatchling build -t sdist ) > {log} 2>&1 || " +
+        "rm -rf {deref} {venv} && cp -rL {stage} {deref} && " +
+        "( BASEDIR=$(pwd) && python3 -m venv {venv} && " +
+        "cd {deref} && $BASEDIR/{venv}/bin/python3 -m pip install --quiet --disable-pip-version-check hatchling && " +
+        "$BASEDIR/{venv}/bin/python -m hatchling build -t sdist ) > {log} 2>&1 || " +
         "( cat {log} >&2 2>/dev/null ; exit 1 )"
     ).format(
         deref = build_dir_path,
+        venv = venv_path,
         stage = staging_dir_path,
         log = build_log_path,
     )
@@ -165,17 +170,17 @@ py_script = rule(
 )
 
 def _test_impl(ctx):
-    sub_commands = ["virtualenv env --python python3 --quiet --never-download"]
+    sub_commands = ["python3 -m venv env"]
     for dep in ctx.files.deps:
         sub_commands.append(
-            "env/bin/python env/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s" %
+            "env/bin/python3 -m pip install --quiet --disable-pip-version-check --no-deps --no-cache-dir file:`pwd`/%s" %
             dep.short_path,
         )
     sub_commands.extend(
         [
             "tar -xzf %s" % (ctx.file.src.short_path),
-            "env/bin/pip install --quiet --disable-pip-version-check hatchling pytest" +
-            " && env/bin/pip install --quiet --no-deps --no-cache-dir %s/" %
+            "env/bin/python3 -m pip install --quiet --disable-pip-version-check hatchling pytest" +
+            " && env/bin/python3 -m pip install --quiet --disable-pip-version-check --no-deps --no-cache-dir %s/" %
             ctx.attr.pkg +
             " && env/bin/python -m pytest %s/" % ctx.attr.pkg,
         ],
@@ -244,10 +249,10 @@ def _lint_impl(ctx):
         runfiles.append(ctx.file.pylint_config)
 
     # Install dependences in a new virtual env
-    sub_commands = ["virtualenv env --python python3 --quiet --never-download"]
+    sub_commands = ["python3 -m venv env"]
     for dep in deps:
         sub_commands.append(
-            "env/bin/python env/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s" %
+            "env/bin/python3 -m pip install --quiet --disable-pip-version-check --no-deps --no-cache-dir file:`pwd`/%s" %
             dep.short_path,
         )
 
