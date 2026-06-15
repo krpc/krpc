@@ -42,7 +42,6 @@ The codebase is structured as follows:
    be used for automatic testing. For example, adds an RPC that allows you to teleport a vessel into
    orbit. This is used by `krpctest`.
  * `tools/build/...` - scripts for the Bazel build system
- * `tools/docker/...` - scripts to create the `buildenv` docker image
 
 ## Compiling
 
@@ -80,10 +79,10 @@ their apt repository.
 
 Then install packages:
 ```
-sudo apt-get install bazel-bootstrap mono-complete python-is-python3 python3-dev python3-pip \
-  python3-virtualenv autoconf libtool luarocks maven latexmk texlive-latex-base \
-  texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra \
-  tex-gyre libxml2-dev libxslt1-dev librsvg2-bin libenchant-2-2 build-essential make
+sudo apt-get install mono-complete python-is-python3 python3-dev python3-pip \
+  python3-venv gcc g++ cmake autoconf libtool luarocks maven openjdk-11-jdk \
+  latexmk texlive-latex-base texlive-latex-recommended texlive-fonts-recommended \
+  texlive-latex-extra texlive-fonts-extra tex-gyre librsvg2-bin libenchant-2-2
 ```
 
 You also need to set up the necessary libraries in the `lib` diretory.
@@ -94,7 +93,7 @@ default Steam location:
 ```ln -s "$HOME/.local/share/Steam/steamapps/common/Kerbal Space Program" ksp lib/ksp```
 
 You may also need to modify the symlink at `lib/mono-4.5` to point to the correct location of your
-Mono installation. On Ubuntu 22.04 with the latest version of Mono, `lib/mono-4.5` should be a
+Mono installation. On Ubuntu 24.04 with the latest version of Mono, `lib/mono-4.5` should be a
 symlink pointing to `/usr/lib/mono/4.5`
 
 ### Building using Bazel
@@ -108,6 +107,7 @@ by running `bazel build <target>` These targets are available:
 
  * `//server` - builds the server plugin and associated files
  * Client libraries:
+   * `//client/cnano`
    * `//client/csharp`
    * `//client/cpp`
    * `//client/java`
@@ -211,7 +211,7 @@ the project.
 To run the tests, the following dependencies need to be installed. Without them, some of the tests
 will fail.
 
- * Python 3.10+ development files
+ * Python 3.12+ development files
  * CppCheck
  * socat
 
