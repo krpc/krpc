@@ -4,10 +4,10 @@ load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
 
 py_sdist(
     name = "krpcserialio",
-    out = "krpcserialio-%s.zip" % version,
+    out = "krpcserialio-%s.tar.gz" % version,
     files = [
         "README.txt",
-        "setup.py",
+        "pyproject.toml",
         "//:python_version",
         "//:version",
     ] + glob(["krpcserialio/**/*"]),

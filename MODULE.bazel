@@ -775,9 +775,9 @@ http_file(
 
 http_file(
     name = "python_websocket_client",
-    downloaded_file_path = "websocket-client-1.5.1.tar.gz",
-    sha256 = "3f09e6d8230892547132177f575a4e3e73cfdf06526e20cc02aa1c3b47184d40",
-    url = "https://files.pythonhosted.org/packages/8b/94/696484b0c13234c91b316bc3d82d432f9b589a9ef09d016875a31c670b76/websocket-client-1.5.1.tar.gz",
+    downloaded_file_path = "websocket_client-1.9.0.tar.gz",
+    sha256 = "9e813624b6eb619999a97dc7958469217c3176312b3a16a4bd1bc7e08a46ec98",
+    url = "https://files.pythonhosted.org/packages/2c/41/aa4bf9664e4cda14c3b39865b12251e8e7d239f4cd0e3cc1b6c2ccde25c1/websocket_client-1.9.0.tar.gz",
 )
 
 # ----------------------- Module Manager -------------------------------------------------

@@ -65,14 +65,28 @@ def _sdist_impl(ctx):
         )
         staging_inputs.append(staging_file)
 
-    # Run setup.py sdist from the staging directory
+    # Build sdist from the staging directory
+    # Note: staging dir can contain symlinks, so copy deference them first
+    # by copying to a build directory
     staging_dir_path = output.path.replace(
         ctx.configuration.bin_dir.path,
         ctx.configuration.genfiles_dir.path,
     ) + ".py-sdist-tmp"
+    build_dir_path = staging_dir_path + ".deref"
+    build_log_path = build_dir_path + ".log"
+    # Note: we invoke hatchling directly (rather than via "python -m build") to
+    # avoid unnecessarily setting up an isolated environment
+    build_cmd = ("rm -rf {deref} && cp -rL {stage} {deref} && " +
+                 "( cd {deref} ; pip install --quiet --disable-pip-version-check hatchling && " +
+                 "python -m hatchling build -t sdist ) > {log} 2>&1 || " +
+                 "( cat {log} >&2 2>/dev/null ; exit 1 )").format(
+        deref = build_dir_path,
+        stage = staging_dir_path,
+        log = build_log_path,
+    )
     sub_commands = [
-        "(cd %s ; BAZEL_BUILD=1 python setup.py --quiet sdist --formats=zip)" % staging_dir_path,
-        "cp %s/dist/*.zip %s" % (staging_dir_path, output.path),
+        build_cmd,
+        "cp %s/dist/*.tar.gz %s" % (build_dir_path, output.path),
     ]
     ctx.actions.run_shell(
         inputs = staging_inputs,
@@ -145,8 +159,10 @@ def _test_impl(ctx):
             dep.short_path,
         )
     sub_commands.extend([
-        "unzip -o %s" % (ctx.file.src.short_path),  #TODO: install the package then run the tests??
-        "(cd %s ; ../env/bin/python setup.py test)" % ctx.attr.pkg,
+        "tar -xzf %s" % (ctx.file.src.short_path),
+        "env/bin/pip install --quiet --disable-pip-version-check hatchling pytest" +
+        " && env/bin/pip install --quiet --no-deps --no-cache-dir %s/" % ctx.attr.pkg +
+        " && env/bin/python -m pytest %s/" % ctx.attr.pkg,
     ])
     ctx.actions.write(
         output = ctx.outputs.executable,

@@ -7,7 +7,7 @@ load("//tools/krpctools:clientgen.bzl", "clientgen_python")
 genrule(
     name = "python_base",
     srcs = [":python-without-services"],
-    outs = ["krpc-python-base-%s.zip" % version],
+    outs = ["krpc-python-base-%s.tar.gz" % version],
     cmd = 'cp "$<" "$@"',
     output_to_bindir = True,
     visibility = ["//visibility:public"],
@@ -15,12 +15,11 @@ genrule(
 
 py_sdist(
     name = "python-without-services",
-    out = "krpc-base-%s.zip" % version,
+    out = "krpc-base-%s.tar.gz" % version,
     files = [
         "CHANGES.txt",
         "LICENSE",
-        "MANIFEST.in",
-        "setup.py",
+        "pyproject.toml",
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",
@@ -38,7 +37,7 @@ py_sdist(
 genrule(
     name = "python",
     srcs = [":python-pypi"],
-    outs = ["krpc-python-%s.zip" % version],
+    outs = ["krpc-python-%s.tar.gz" % version],
     cmd = 'cp "$<" "$@"',
     output_to_bindir = True,
     visibility = ["//visibility:public"],
@@ -46,12 +45,11 @@ genrule(
 
 py_sdist(
     name = "python-pypi",
-    out = "krpc-%s.zip" % version,
+    out = "krpc-%s.tar.gz" % version,
     files = [
         "CHANGES.txt",
         "LICENSE",
-        "MANIFEST.in",
-        "setup.py",
+        "pyproject.toml",
         ":services-dockingcamera",
         ":services-drawing",
         ":services-infernalrobotics",
