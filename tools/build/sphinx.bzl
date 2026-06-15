@@ -29,18 +29,14 @@ def _build_impl(ctx):
     exec_reqs = {}
     sub_commands = []
 
-    srcs_paths = [f.path for f in srcs]
-    srcs_paths = [x for x in srcs_paths if x.endswith(".rst")]
-
     sub_commands.append(
-        "%s -b %s -E -d /tmp/bazel-sphinx-build-%s -W -n -N -T -q %s %s %s %s" %
+        "%s -b %s -E -d /tmp/bazel-sphinx-build-%s -W -n -N -T -q %s %s %s" %
         (
             sphinx_build.path,
             builder,
             builder,
             src_dir,
             out_dir,
-            " ".join(srcs_paths),
             opts,
         ),
     )

@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
-""" Auto-build and auto-serve the docs """
+"""Auto-build and auto-serve the docs"""
 
 import filecmp
 import os
 import shutil
 import subprocess
 import sys
-from watchdog.observers import Observer
+
 from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
 
 port = sys.argv[1]
 src = sys.argv[2]
@@ -96,9 +97,20 @@ p = subprocess.Popen(
 )
 
 # Auto-update the stage directory when a dependency changes
+watch_dirs = sorted({os.path.dirname(p) for p in dependencies if os.path.dirname(p)})
+roots = []
+for directory in watch_dirs:
+    if not any(directory == r or directory.startswith(r + os.sep) for r in roots):
+        roots.append(directory)
+
 handler = UpdateStagedFiles()
 observer = Observer()
-for path in dependencies:
-    observer.schedule(handler, path, recursive=False)
+for path in roots:
+    if not os.path.isdir(path):
+        continue
+    try:
+        observer.schedule(handler, path, recursive=True)
+    except OSError as exc:
+        print("Skipping watch on", path, "-", exc)
 observer.start()
 observer.join()

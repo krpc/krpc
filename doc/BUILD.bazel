@@ -69,6 +69,7 @@ py_script(
         "@python_pygments//file",
         "@python_pytz//file",
         "@python_requests//file",
+        "@python_roman_numerals//file",
         "@python_snowballstemmer//file",
         "@python_sphinx_csharp//file",
         "@python_sphinx_rtd_theme//file",
