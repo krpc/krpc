@@ -1,12 +1,11 @@
 import argparse
 import glob
 import os
-import codecs
 import json
 from io import open
 import sys
-import jinja2
 from importlib.resources import files
+import jinja2
 from krpc.types import Types
 from krpc.utils import snake_case
 from ..utils import lower_camel_case, indent, single_line
@@ -121,7 +120,7 @@ def main():
     output = os.path.abspath(os.path.expanduser(os.path.expandvars(args.output)))
     if not os.path.exists(os.path.dirname(output)):
         os.makedirs(os.path.dirname(output))
-    with codecs.open(output, "w", encoding="utf8") as fp:
+    with open(output, "w", encoding="utf8") as fp:
         fp.write(content)
 
     if args.documented:

@@ -116,8 +116,10 @@ def main():
         if args.language in GENERATORS:
             # Built-in generator and template
             generator = GENERATORS[args.language]
-            macro_template = files(__name__).joinpath(args.language + ".tmpl").read_text(
-                encoding="utf-8"
+            macro_template = (
+                files(__name__)
+                .joinpath(args.language + ".tmpl")
+                .read_text(encoding="utf-8")
             )
         else:
             # Generator defined in a python module

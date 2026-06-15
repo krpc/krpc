@@ -63,8 +63,7 @@ def servicedefs(ksp, service, assemblies):
 
     # Copy binaries to the tmp dir
     binpath = str(files("krpctools").joinpath("bin"))
-    files = os.listdir(binpath)
-    for filename in files:
+    for filename in os.listdir(binpath):
         filename = os.path.join(binpath, filename)
         if os.path.isfile(filename):
             shutil.copy(filename, bindir)

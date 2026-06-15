@@ -10,9 +10,7 @@ class ClientGenTestCase:
             .read_text(encoding="utf-8")
         )
         defs = json.loads(
-            files("krpctools.test")
-            .joinpath(name + ".json")
-            .read_text(encoding="utf-8")
+            files("krpctools.test").joinpath(name + ".json").read_text(encoding="utf-8")
         )
         g = self.generator(macro_template, service_name, defs[service_name])
         actual = g.generate()
