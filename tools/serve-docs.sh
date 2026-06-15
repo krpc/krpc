@@ -19,9 +19,8 @@ mkdir -p `dirname $env`
 
 # Set up python environment
 if [ ! -d "$env" ]; then
-  virtualenv $env --python python3
-  source $env/bin/activate
-  pip install --upgrade \
+  python3 -m venv $env
+  $env/bin/pip install --upgrade \
       "jinja2==3.1.6" \
       "markupsafe==3.0.3" \
       "Sphinx==9.1.0" \
@@ -35,9 +34,8 @@ if [ ! -d "$env" ]; then
       "https://krpc.s3.amazonaws.com/lib/javasphinx/javasphinx-0.9.16.tar.gz" \
       "sphinx-autobuild==2024.10.3" \
       "watchdog"
-else
-  source $env/bin/activate
 fi
 
 # Auto-serve and auto-build the docs
+source $env/bin/activate
 python tools/do-serve-docs.py $port $src $stage $out
