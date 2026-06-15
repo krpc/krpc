@@ -14,20 +14,20 @@ namespace KRPC.SpaceCenter.Services
     /// <see cref="Vessel.ResourcesInDecoupleStage"/> or
     /// <see cref="Parts.Part.Resources"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight | GameScene.Editor)]
     public class Resources : Equatable<Resources>
     {
         readonly Guid vesselId;
         readonly int stage;
         readonly bool cumulative;
-        readonly uint partId;
-        // Note: 0 indicates no part
+        readonly Part part;
 
         internal Resources (global::Vessel vessel, int stage = -1, bool cumulative = true)
         {
             vesselId = vessel.id;
             this.stage = stage;
             this.cumulative = cumulative;
+	    part = null;
         }
 
         internal Resources (Part part)
@@ -35,7 +35,7 @@ namespace KRPC.SpaceCenter.Services
             vesselId = Guid.Empty;
             stage = -1;
             cumulative = true;
-            partId = part.flightID;
+            this.part = part;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace KRPC.SpaceCenter.Services
             vesselId == other.vesselId &&
             stage == other.stage &&
             cumulative == other.cumulative &&
-            partId == other.partId;
+            part == other.part;
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return vesselId.GetHashCode () ^ stage.GetHashCode () ^ cumulative.GetHashCode () ^ partId.GetHashCode ();
+            return vesselId.GetHashCode () ^ stage.GetHashCode () ^ cumulative.GetHashCode () ^ part.GetHashCode ();
         }
 
         /// <summary>
@@ -75,9 +75,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public Part InternalPart {
             get {
-                if (partId == 0)
+                if (ReferenceEquals(part, null))
                     throw new InvalidOperationException ("Resources object has no part");
-                return FlightGlobals.FindPartByID (partId);
+                return part;
             }
         }
 
@@ -92,7 +92,7 @@ namespace KRPC.SpaceCenter.Services
                         }
                     }
                 }
-                if (partId != 0) {
+                if (!ReferenceEquals(part, null)) {
                     foreach (PartResource resource in InternalPart.Resources)
                         resources.Add (resource);
                 }

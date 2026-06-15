@@ -183,5 +183,9 @@
     <Compile Include="Services\WarpMode.cs" />
     <Compile Include="Services\Waypoint.cs" />
     <Compile Include="Services\WaypointManager.cs" />
+    <Compile Include="Services\Editor.cs" />
+    <Compile Include="Services\EditorShip.cs" />
+    <Compile Include="Services\EditorFacility.cs" />
+    <Compile Include="Services\Parts\EditorParts.cs" />
   </ItemGroup>
 </Project>

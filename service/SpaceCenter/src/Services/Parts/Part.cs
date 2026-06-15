@@ -20,7 +20,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Part : Equatable<Part>
     {
-        readonly uint partFlightId;
+        readonly global::Part part;
 
         /// <summary>
         /// Create a part object for the given KSP part
@@ -29,15 +29,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             if (ReferenceEquals (part, null))
                 throw new ArgumentNullException (nameof (part));
-            partFlightId = part.flightID;
+            this.part = part;
         }
+
 
         /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
         public override bool Equals (Part other)
         {
-            return !ReferenceEquals (other, null) && partFlightId == other.partFlightId;
+            return !ReferenceEquals (other, null) && part.Equals(other.part);
         }
 
         /// <summary>
@@ -45,14 +46,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return partFlightId.GetHashCode ();
+            return part.GetHashCode ();
         }
 
         /// <summary>
         /// The KSP part.
         /// </summary>
         public global::Part InternalPart {
-            get { return FlightGlobals.FindPartByID (partFlightId); }
+            get { return part; }
         }
 
         /// <summary>
@@ -111,7 +112,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Highlighted {
             get { return InternalPart.HighlightActive; }
             set {
-                var part = InternalPart;
                 if (value)
                     PartHighlightAddon.Add (part);
                 else
@@ -193,7 +193,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public int Stage {
             get {
-                var part = InternalPart;
                 return part.hasStagingIcon ? part.inverseStage : -1;
             }
         }
@@ -439,7 +438,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var result = new List<global::Part> ();
                 foreach (var otherPart in InternalPart.vessel.parts) {
                     foreach (var target in otherPart.fuelLookupTargets.Select (x => x.parent)) {
-                        if (target.flightID == partFlightId)
+                        if (ReferenceEquals(target, part))
                             result.Add (otherPart);
                     }
                 }
@@ -801,7 +800,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException (nameof (referenceFrame));
-            var part = InternalPart;
             return referenceFrame.VelocityFromWorldSpace (part.transform.position, part.orbit.GetVel ()).ToTuple ();
         }
 
@@ -843,7 +841,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         Matrix4x4 ComputeInertiaTensor ()
         {
-            var part = InternalPart;
             if (part.rb == null)
                 return Matrix4x4.zero;
 
