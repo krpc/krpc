@@ -411,7 +411,7 @@ jobs:
         uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: client-python
-          path: bazel-bin/client/python/krpc-python-*.zip
+          path: bazel-bin/client/python/krpc-python-*.tar.gz
 
   test-client-lua:
     runs-on: ubuntu-latest
