@@ -61,7 +61,7 @@ project, but the following needs to be installed on your system:
 
  * Bazel
  * C# compiler, runtime and tools (for example [Mono](https://www.mono-project.com/))
- * Python 3.10+
+ * Python 3.12+
  * Autotools
  * LuaRocks
  * Maven
@@ -80,7 +80,7 @@ their apt repository.
 
 Then install packages:
 ```
-sudo apt-get install bazel-bootstrap mono-complete python-is-python3 python3-dev python3-setuptools \
+sudo apt-get install bazel-bootstrap mono-complete python-is-python3 python3-dev python3-pip \
   python3-virtualenv autoconf libtool luarocks maven latexmk texlive-latex-base \
   texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra \
   tex-gyre libxml2-dev libxslt1-dev librsvg2-bin libenchant-2-2 build-essential make
@@ -157,8 +157,9 @@ docker pull ghcr.io/krpc/buildenv:latest
 
 Then run a container using:
 ```
-docker run -it ghcr.io/krpc/buildenv:latest
+docker run --user 1001:121 -it ghcr.io/krpc/buildenv:latest
 ```
+Note: the user id and group id are set to match what is used on GitHub Actions, which is what the image expects.
 
 This will drop you into a command line. Next you need to get the KSP DLLs using the following
 commands:
