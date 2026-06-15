@@ -4,7 +4,7 @@ import json
 import os
 import sys
 from io import open
-from pkg_resources import Requirement, resource_filename, resource_string
+from importlib.resources import files
 from .csharp import CsharpGenerator
 from .cpp import CppGenerator
 from .java import JavaGenerator
@@ -116,8 +116,10 @@ def main():
         if args.language in GENERATORS:
             # Built-in generator and template
             generator = GENERATORS[args.language]
-            macro_template = resource_string(__name__, args.language + ".tmpl").decode(
-                "utf-8"
+            macro_template = (
+                files(__name__)
+                .joinpath(args.language + ".tmpl")
+                .read_text(encoding="utf-8")
             )
         else:
             # Generator defined in a python module

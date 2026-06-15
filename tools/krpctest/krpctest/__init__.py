@@ -5,7 +5,7 @@ import os
 import shutil
 import sys
 import time
-from pkg_resources import Requirement, resource_filename
+from importlib.resources import files
 import krpc
 
 
@@ -46,9 +46,7 @@ class TestCase(unittest.TestCase):
             return
 
         # Load a blank save with the given name
-        blank_save = resource_filename(
-            Requirement.parse("krpctest"), "krpctest/" + name + ".sfs"
-        )
+        blank_save = str(files("krpctest").joinpath(name + ".sfs"))
         save_path = os.path.join(_get_ksp_dir(), "saves", name)
         if not os.path.exists(save_path):
             os.makedirs(save_path)

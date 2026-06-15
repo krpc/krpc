@@ -1,6 +1,6 @@
 import json
 import tempfile
-from pkg_resources import resource_string, resource_filename
+from importlib.resources import files
 from ..docgen.nodes import Service
 from ..docgen import process_file
 
@@ -8,7 +8,7 @@ from ..docgen import process_file
 class DocGenTestCase:
     def run_test(self, service_name, name):
         defs = json.loads(
-            resource_string("krpctools.test", name + ".json").decode("utf-8")
+            files("krpctools.test").joinpath(name + ".json").read_text(encoding="utf-8")
         )
 
         def sort(member):
@@ -65,7 +65,7 @@ class DocGenTestCase:
         with open(path, "w") as fp:
             fp.write("\n".join(rst_content))
 
-        macros = resource_filename("krpctools.docgen", "%s.tmpl" % self.language)
+        macros = str(files("krpctools.docgen").joinpath("%s.tmpl" % self.language))
         domain = self.domain(macros)
 
         actual, _ = process_file(domain, services, path)
@@ -75,9 +75,11 @@ class DocGenTestCase:
         #           'docgen-'+name+'-'+self.language+'.rst', 'w') as f:
         #     f.write(actual)
 
-        expected = resource_string(
-            "krpctools.test", "docgen-" + name + "-" + self.language + ".rst"
-        ).decode("utf-8")
+        expected = (
+            files("krpctools.test")
+            .joinpath("docgen-" + name + "-" + self.language + ".rst")
+            .read_text(encoding="utf-8")
+        )
         self.assertEqual(expected, actual)
 
     def test_empty(self):

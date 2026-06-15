@@ -8,6 +8,6 @@ set -e
 TWINE=twine
 VERSION=`tools/krpc-version.sh`
 
-bazel build //tools/krpc-tools:krpctools
+bazel build //tools/krpctools:krpctools
 
 $TWINE upload bazel-bin/tools/krpctools/krpctools-$VERSION.zip

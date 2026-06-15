@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "krpctest"
+dynamic = ["version"]
+authors = [
+    {name = "djungelorm", email = "djungelorm@users.noreply.github.com"},
+]
+description = "Utilities for running service tests for kRPC."
+readme = "README.txt"
+license = "GPL-3.0-only"
+requires-python = ">=3.10"
+dependencies = ["krpc >= 0.4"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: End Users/Desktop",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: Unix",
+]
+
+[project.urls]
+Homepage = "https://krpc.github.io/krpc"
+
+[tool.hatch.version]
+path = "krpctest/version.py"
+pattern = '__version__ = "(?P<version>[^"]+)"'
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "krpctest/",
+    "README.txt",
+    "CHANGES.txt",
+    "LICENSE",
+    "COPYING",
+    "VERSION.txt",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["krpctest"]

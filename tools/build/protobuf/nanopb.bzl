@@ -4,7 +4,8 @@ def _create_py_env(out, install):
     tmp = out + ".tmp-create-py-env"
     cmds = [
         "rm -rf %s" % tmp,
-        "virtualenv %s --python python3 --quiet --never-download" % tmp,
+        "python3 -m venv %s" % tmp,
+        "%s/bin/python3 -m ensurepip" % tmp,
     ]
     for lib in install:
         cmds.append(
@@ -34,7 +35,7 @@ def _impl(ctx):
     protoc = ctx.file._protoc
     protoc_nanopb_env = ctx.file._protoc_nanopb_env
     protoc_nanopb = ctx.files._protoc_nanopb
-    protoc_nanopb_dir = protoc_nanopb[0].dirname + "/generator"
+    protoc_nanopb_dir = [f for f in protoc_nanopb if f.basename == "nanopb_generator.py"][0].dirname
     protoc_nanopb_opts = '-Q \\"#include \\\\\\"' + include + '/%s\\\\\\"\\" ' + \
                          '-L \\"#include <' + include + '/%s>\\"'
 

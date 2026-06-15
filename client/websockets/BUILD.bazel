@@ -4,10 +4,10 @@ load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
 
 py_sdist(
     name = "krpcwebsockets",
-    out = "krpcwebsockets-%s.zip" % version,
+    out = "krpcwebsockets-%s.tar.gz" % version,
     files = [
         "README.txt",
-        "setup.py",
+        "pyproject.toml",
         "//:python_version",
         "//:version",
     ] + glob(["krpcwebsockets/**/*"]),

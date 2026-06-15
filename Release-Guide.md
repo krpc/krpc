@@ -12,10 +12,10 @@ This document details the steps necessary to make a release of kRPC.
    `bazel build //... && bazel test //:test`
 1. Push the vx.x.x commit and tag to the main branch on GitHub using `git push && git push --tags`
 1. Wait for the CI workflow to pass.
-1. Run `tools/dist/genfiles.sh` to build the genfiles archive to include in the release.
+1. Run `tools/dist/assets.sh` to build all files and place them in `assets/...`
 1. Do the release on Github:
    1. Use `tools/dist/changes.py github` to get changelog to include with the release
-   1. Upload the release archive, krpctools, genfiles, TestServer, documentation and all clients (11 files in total)
+   1. Upload the assets from the `assets` directory (11 files in total)
 1. Update the documentation website by merging the vx.x.x commit into the docs branch.
    Push it to GitHub. The docs GitHub workflow should automatically build and deploy the new website.
 1. Do a release on Curse
