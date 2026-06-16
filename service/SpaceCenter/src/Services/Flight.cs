@@ -544,6 +544,32 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Simulate and return the total aerodynamic torques acting on the vessel,
+        /// if it where to be traveling with the given velocity at the given position in the
+        /// atmosphere of the given celestial body.
+        /// </summary>
+        /// <returns>A vector pointing in the direction that the torque acts,
+        /// with its magnitude equal to the strength of the force in kilonewton-meters.</returns>
+        /// <remarks>
+        /// Requires <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple3 SimulateAerodynamicTorqueAt(CelestialBody body, Tuple3 position, Tuple3 velocity)
+        {
+          if (ReferenceEquals(body, null))
+              throw new ArgumentNullException(nameof(body));
+          CheckFAR();
+          var vessel = InternalVessel;
+          var worldVelocity = referenceFrame.VelocityToWorldSpace(position.ToVector(), velocity.ToVector());
+          var worldPosition = referenceFrame.PositionToWorldSpace(position.ToVector());
+          Vector3 worldForce;
+          Vector3 torque;
+          var altitude = (worldPosition - body.InternalBody.position).magnitude - body.InternalBody.Radius;
+          FAR.CalculateVesselAeroForces(vessel, out worldForce, out torque, worldVelocity - body.InternalBody.getRFrmVel(worldPosition), altitude);
+          return referenceFrame.DirectionFromWorldSpace(torque).ToTuple();
+        }
+
+        /// <summary>
         /// The <a href="https://en.wikipedia.org/wiki/Aerodynamic_force">aerodynamic lift</a>
         /// currently acting on the vessel.
         /// </summary>

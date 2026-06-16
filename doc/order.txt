@@ -319,6 +319,7 @@ SpaceCenter.Flight.StaticPressure
 SpaceCenter.Flight.StaticPressureAtMSL
 SpaceCenter.Flight.AerodynamicForce
 SpaceCenter.Flight.SimulateAerodynamicForceAt
+SpaceCenter.Flight.SimulateAerodynamicTorqueAt
 SpaceCenter.Flight.Lift
 SpaceCenter.Flight.Drag
 SpaceCenter.Flight.SpeedOfSound
