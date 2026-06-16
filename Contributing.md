@@ -128,9 +128,8 @@ Some general guidelines on using git and the structure of the repository:
    need to be able to understand it!
  * The coding style for the particular language/component you are working on should be
    followed. This helps make the code readable and more maintainable. The automated tests include
-   some automated style checking.
-    * TODO: need to specify the code style / formatting tools for each language/component. For now,
-      just try and following the precedent set by existing code.
+   some automated style checking. Where coding style is not enforced, you should follow the
+   precedent set by existing code.
  * Each component has an associated CHANGES.txt file containing a list of changes and in which
    version they were made. When adding a feature/fixing a bug, you should add entries to the
    relevant CHANGES.txt file(s) indicating what was changed. This change log is intended for end
