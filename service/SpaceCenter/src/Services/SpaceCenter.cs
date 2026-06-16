@@ -218,7 +218,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The contract manager.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.SpaceCenter | GameScene.TrackingStation | GameScene.Editor)]
         public static ContractManager ContractManager {
             get { return new ContractManager(); }
         }

@@ -122,6 +122,7 @@ serialio
 serializable
 shader
 socat
+sph
 stderr
 str
 streamPort
@@ -140,6 +141,7 @@ undocks
 unowned
 unpaused
 unserialize
+vab
 varint
 ve
 vertices
