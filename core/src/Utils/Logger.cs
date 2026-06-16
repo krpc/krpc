@@ -61,12 +61,19 @@ namespace KRPC.Utils
         }
 
         /// <summary>
+        /// Delegate that performs the actual log output. Defaults to Console.WriteLine.
+        /// Replace this in the KSP plugin entry point to route through UnityEngine.Debug.
+        /// </summary>
+        public static Action<string, Severity> Writer { get; set; } =
+            (msg, _) => Console.WriteLine (msg);
+
+        /// <summary>
         /// Write a message to the log.
         /// </summary>
         public static void WriteLine (string message, Severity severity = Severity.Info)
         {
             if (ShouldLog (severity))
-                Console.WriteLine (string.Format (format, DateTime.Now, severity, message));
+                Writer (string.Format (format, DateTime.Now, severity, message), severity);
         }
 
         internal static bool ShouldLog (Severity severity)
