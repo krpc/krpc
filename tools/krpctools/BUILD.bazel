@@ -40,12 +40,11 @@ genrule(
 
 py_sdist(
     name = "krpctools",
-    out = "krpctools-%s.zip" % version,
+    out = "krpctools-%s.tar.gz" % version,
     files = [
         "CHANGES.txt",
-        "MANIFEST.in",
         "README.txt",
-        "setup.py",
+        "pyproject.toml",
         ":license",
         "//:COPYING",
         "//:python_version",

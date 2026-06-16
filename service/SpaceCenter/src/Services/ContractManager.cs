@@ -37,7 +37,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public HashSet<string> Types {
-            get { return new HashSet<string> (Contracts.ContractSystem.ContractTypes.Select (x => x.ToString ())); }
+            get {
+                if (Contracts.ContractSystem.ContractTypes == null)
+                    return new HashSet<string> ();
+                return new HashSet<string> (Contracts.ContractSystem.ContractTypes.Select (x => x.ToString ()));
+            }
         }
 
         /// <summary>
@@ -45,9 +49,12 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public IList<Contract> AllContracts {
-            get { return Enumerable.Concat(
-                      Contracts.ContractSystem.Instance.Contracts.Select (x => new Contract (x)),
-                      Contracts.ContractSystem.Instance.ContractsFinished.Select(x => new Contract(x))).ToList();
+            get {
+                if (Contracts.ContractSystem.Instance == null)
+                    return new List<Contract> ();
+                return Enumerable.Concat(
+                    Contracts.ContractSystem.Instance.Contracts.Select (x => new Contract (x)),
+                    Contracts.ContractSystem.Instance.ContractsFinished.Select(x => new Contract(x))).ToList();
             }
         }
 
@@ -56,7 +63,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public IList<Contract> ActiveContracts {
-            get { return Contracts.ContractSystem.Instance.GetCurrentActiveContracts<Contracts.Contract> ().Select (x => new Contract (x)).ToList (); }
+            get {
+                if (Contracts.ContractSystem.Instance == null)
+                    return new List<Contract> ();
+                return Contracts.ContractSystem.Instance.GetCurrentActiveContracts<Contracts.Contract> ().Select (x => new Contract (x)).ToList ();
+            }
         }
 
         /// <summary>
@@ -65,6 +76,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public IList<Contract> OfferedContracts {
             get {
+                if (Contracts.ContractSystem.Instance == null)
+                    return new List<Contract> ();
                 return Contracts.ContractSystem.Instance.GetCurrentContracts<Contracts.Contract> (x => x.ContractState == Contracts.Contract.State.Offered)
                     .Select (x => new Contract (x)).ToList ();
             }
@@ -76,6 +89,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public IList<Contract> CompletedContracts {
             get {
+                if (Contracts.ContractSystem.Instance == null)
+                    return new List<Contract> ();
                 return Contracts.ContractSystem.Instance.GetCompletedContracts<Contracts.Contract> ()
                     .Select (x => new Contract (x)).ToList ();
             }
@@ -87,6 +102,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public IList<Contract> FailedContracts {
             get {
+                if (Contracts.ContractSystem.Instance == null)
+                    return new List<Contract> ();
                 return Contracts.ContractSystem.Instance.GetCompletedContracts<Contracts.Contract>(x => x.ContractState == Contracts.Contract.State.Failed)
                     .Select(x => new Contract(x)).ToList();
             }

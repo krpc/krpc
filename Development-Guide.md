@@ -42,16 +42,15 @@ The codebase is structured as follows:
    be used for automatic testing. For example, adds an RPC that allows you to teleport a vessel into
    orbit. This is used by `krpctest`.
  * `tools/build/...` - scripts for the Bazel build system
- * `tools/docker/...` - scripts to create the `buildenv` docker image
 
 ## Compiling
 
-kRPC uses the [Bazel build system](https://bazel.io>). This provides us with fast, repeatable
+kRPC uses the [Bazel build system](https://bazel.build). This provides us with fast, repeatable
 builds, and support for many languages. (See below for a Bazel cheat sheet.)
 
-Note: we don't currently support building on Windows, although this is something we are working
-on. However, you can build the C# projects on Windows. See the section below named "Building the C#
-projects using an IDE". You can also build the project using a docker container running on
+Note: we don't support building using Bazel on Windows. However, you can build the C# projects
+on Windows. See the section below named "Building the C# projects using an IDE".
+You can also build the project using a docker container running on
 Windows. See the section below named "Building using Docker".
 
 ### Setting up your Environment
@@ -61,32 +60,40 @@ project, but the following needs to be installed on your system:
 
  * Bazel
  * C# compiler, runtime and tools (for example [Mono](https://www.mono-project.com/))
- * Python 3.7+
+ * Python 3.12+
  * Autotools
  * LuaRocks
  * Maven
  * pdflatex and svg tools (for building the documentation)
 
-On Ubuntu, these can be installed via apt as follows:
- * First follow the instructions on [Mono's website](http://www.mono-project.com/download) to add
-   their apt repository.
- * Then run the following command:
-   ```
-   sudo apt-get install mono-complete python-is-python3 python3-dev python3-setuptools \
-     python3-virtualenv autoconf libtool luarocks maven latexmk texlive-latex-base \
-     texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra \
-     tex-gyre libxml2-dev libxslt1-dev librsvg2-bin libenchant-2-2 build-essential make
-   ```
+On Ubuntu, these can be installed via apt as follows. Install bazel (via bazelisk) using:
 
-You also need to set up the necessary libraries in the `lib` diretory:
- * `lib/ksp` should contain a copy of the game. You can either create this directory, and copy the
-   game files into it, or create a symlink to point to an existing copy of the game. For example,
-   run the following command from the root of the krpc source to point to KSP installed in the
-   default Steam location:
-   ```ln -s "$HOME/.local/share/Steam/steamapps/common/Kerbal Space Program" ksp lib/ksp```
+```
+wget https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64
+chmod +x bazelisk-linux-amd64
+sudo mv bazelisk-linux-amd64 /usr/local/bin/bazel
+```
+
+Then follow the instructions on [Mono's website](http://www.mono-project.com/download) to add
+their apt repository.
+
+Then install packages:
+```
+sudo apt-get install mono-complete python-is-python3 python3-dev python3-pip \
+  python3-venv gcc g++ cmake autoconf libtool luarocks maven openjdk-11-jdk \
+  latexmk texlive-latex-base texlive-latex-recommended texlive-fonts-recommended \
+  texlive-latex-extra texlive-fonts-extra tex-gyre librsvg2-bin libenchant-2-2
+```
+
+You also need to set up the necessary libraries in the `lib` diretory.
+`lib/ksp` should contain a copy of the game. You can either create this directory, and copy the
+game files into it, or create a symlink to point to an existing copy of the game. For example,
+run the following command from the root of the krpc source to point to KSP installed in the
+default Steam location:
+```ln -s "$HOME/.local/share/Steam/steamapps/common/Kerbal Space Program" ksp lib/ksp```
 
 You may also need to modify the symlink at `lib/mono-4.5` to point to the correct location of your
-Mono installation. On Ubuntu 22.04 with the latest version of Mono, `lib/mono-4.5` should be a
+Mono installation. On Ubuntu 24.04 with the latest version of Mono, `lib/mono-4.5` should be a
 symlink pointing to `/usr/lib/mono/4.5`
 
 ### Building using Bazel
@@ -100,12 +107,13 @@ by running `bazel build <target>` These targets are available:
 
  * `//server` - builds the server plugin and associated files
  * Client libraries:
+   * `//client/cnano`
    * `//client/csharp`
    * `//client/cpp`
    * `//client/java`
    * `//client/lua`
    * `//client/python`
-   * `//client/python:python-base` - builds the python client, without pre-generated stubs
+   * `//client/python:python_base` - builds the python client, without pre-generated stubs
  * Services
    * `//service/SpaceCenter`
    * `//service/Drawing`
@@ -149,8 +157,9 @@ docker pull ghcr.io/krpc/buildenv:latest
 
 Then run a container using:
 ```
-docker run -it ghcr.io/krpc/buildenv:latest
+docker run --user 1001:121 -it ghcr.io/krpc/buildenv:latest
 ```
+Note: the user id and group id are set to match what is used on GitHub Actions, which is what the image expects.
 
 This will drop you into a command line. Next you need to get the KSP DLLs using the following
 commands:
@@ -202,7 +211,7 @@ the project.
 To run the tests, the following dependencies need to be installed. Without them, some of the tests
 will fail.
 
- * Python 3.7+ development files
+ * Python 3.12+ development files
  * CppCheck
  * socat
 
@@ -228,14 +237,14 @@ running. To run these tests:
  * Install the python client package, the krpctest package. This can be done using:
    ```
    bazel build //client/python //tools/krpctest
-   pip install --upgrade bazel-bin/client/python/krpc.<version>.zip
-   pip install --upgrade bazel-bin/tools/krpctools/krpc-tools.<version>.zip
+   pip install --upgrade bazel-bin/client/python/krpc-<version>.tar.gz
+   pip install --upgrade bazel-bin/tools/krpctest/krpctest-<version>.tar.gz
    ```
    These python packages are also available from the GitHub releases page.
  * Now you are ready to run the tests.
 
 For example, there are python scripts in `service/SpaceCenter/test/...` that can be used to test the
-space center service. These tests use the `krpctools` package to automatically load a save game
+space center service. These tests use the `krpctest` package to automatically load a save game
 called `krpctest` and launch a vessel. They then use the python client to communicate with the game,
 and test the various RPCs.
 

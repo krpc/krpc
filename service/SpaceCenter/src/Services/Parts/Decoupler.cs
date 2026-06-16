@@ -134,7 +134,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get
             {
                 var attach = decoupler.ExplosiveNode;
-                if (attach == null)
+                if (attach == null || attach.attachedPart == null)
                 {
                     return null;
                 }

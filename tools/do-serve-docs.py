@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
-""" Auto-build and auto-serve the docs """
+"""Auto-build and auto-serve the docs"""
 
 import filecmp
 import os
-import pyinotify
 import shutil
 import subprocess
 import sys
+
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
 
 port = sys.argv[1]
 src = sys.argv[2]
@@ -42,8 +44,8 @@ dependencies = set(targets_to_paths(targets))
 
 
 # Change handler that builds using bazel then updates the stage directory
-class UpdateStagedFiles(pyinotify.ProcessEvent):
-    def process_default(self, event):
+class UpdateStagedFiles(FileSystemEventHandler):
+    def on_modified(self, event):
         # Rebuild the docs
         subprocess.check_call(["bazel", "build", "//doc:srcs"])
         if not os.path.exists(stage):
@@ -76,7 +78,7 @@ class UpdateStagedFiles(pyinotify.ProcessEvent):
 
 
 # Do an initial update of the stage directory
-UpdateStagedFiles().process_default(None)
+UpdateStagedFiles().on_modified(None)
 
 # Auto-serve the docs
 p = subprocess.Popen(
@@ -95,8 +97,20 @@ p = subprocess.Popen(
 )
 
 # Auto-update the stage directory when a dependency changes
-watch_manager = pyinotify.WatchManager()
-notifier = pyinotify.Notifier(watch_manager, default_proc_fun=UpdateStagedFiles())
-for path in dependencies:
-    watch_manager.add_watch(path, pyinotify.IN_MODIFY)
-notifier.loop()
+watch_dirs = sorted({os.path.dirname(p) for p in dependencies if os.path.dirname(p)})
+roots = []
+for directory in watch_dirs:
+    if not any(directory == r or directory.startswith(r + os.sep) for r in roots):
+        roots.append(directory)
+
+handler = UpdateStagedFiles()
+observer = Observer()
+for path in roots:
+    if not os.path.isdir(path):
+        continue
+    try:
+        observer.schedule(handler, path, recursive=True)
+    except OSError as exc:
+        print("Skipping watch on", path, "-", exc)
+observer.start()
+observer.join()

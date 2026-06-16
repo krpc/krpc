@@ -27,8 +27,8 @@ from krpc.types import (
 
 # The following unpacks the internal protobuf decoders, whose signature
 # depends on the version of protobuf installed
-_pb_VarintEncoder = protobuf_encoder._VarintEncoder()  # type: ignore[attr-defined]
-_pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()  # type: ignore[attr-defined]
+_pb_VarintEncoder = protobuf_encoder._VarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
+_pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
 _pb_DoubleEncoder = protobuf_encoder.DoubleEncoder(1, False, False)  # type: ignore[arg-type]
 _pb_FloatEncoder = protobuf_encoder.FloatEncoder(1, False, False)  # type: ignore[arg-type]
 

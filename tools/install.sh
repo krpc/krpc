@@ -2,7 +2,7 @@
 
 set -e
 
-GAMEDATA=${KSP_DIR:-lib/ksp}/GameData/kRPC
+GAMEDATA="${KSP_DIR:-lib/ksp}/GameData/kRPC"
 VERSION=`tools/krpc-version.sh`
 
 bazel build \
@@ -17,11 +17,12 @@ bazel build \
     //service/UI \
     //service/LiDAR \
     //service/DockingCamera \
-    //tools/TestingTools
+    //tools/TestingTools \
+    @module_manager//file
 
-rm -f $GAMEDATA/KRPC.dll
-rm -rf $GAMEDATA
-mkdir -p $GAMEDATA
+rm -f "$GAMEDATA/KRPC.dll"
+rm -rf "$GAMEDATA"
+mkdir -p "$GAMEDATA"
 cp -R -L \
     bazel-bin/kRPC.version \
     bazel-bin/core/KRPC.Core.dll \
@@ -51,14 +52,14 @@ cp -R -L \
     bazel-bin/tools/TestingTools/TestingTools.dll \
     bazel-bin/tools/TestingTools/TestingTools.xml \
     service/SpaceCenter/src/module-manager.cfg \
-    $GAMEDATA/
-cp -L bazel-krpc/external/module_manager/file/ModuleManager.4.2.2.dll $GAMEDATA/../
+    "$GAMEDATA/"
+cp -L bazel-krpc/external/_main~_repo_rules~module_manager/file/ModuleManager.4.2.2.dll "$GAMEDATA/../"
 
-mkdir -p $GAMEDATA/PluginData
-cp tools/settings.cfg $GAMEDATA/PluginData/
+mkdir -p "$GAMEDATA/PluginData"
+cp tools/settings.cfg "$GAMEDATA/PluginData/"
 
-find $GAMEDATA -type f -exec chmod 644 {} \;
-find $GAMEDATA -type d -exec chmod 755 {} \;
-chmod 644 $GAMEDATA/../ModuleManager.4.2.2.dll
+find "$GAMEDATA" -type f -exec chmod 644 {} \;
+find "$GAMEDATA" -type d -exec chmod 755 {} \;
+chmod 644 "$GAMEDATA/../ModuleManager.4.2.2.dll"
 
-ls -lR $GAMEDATA
+ls -lR "$GAMEDATA"

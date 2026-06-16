@@ -24,6 +24,7 @@ namespace KRPC
         /// </summary>
         public void Start ()
         {
+            Addon.InitLogger ();
             OK = true;
             var errors = new List<string>();
             var services = Scanner.GetServices (errors);

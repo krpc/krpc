@@ -34,17 +34,17 @@ csharp_reference(
 
 csharp_reference(
     name = "System.Memory",
-    file = "//lib:mono-4.5/System.Memory.dll",
+    file = "@csharp_system_memory//:lib/net461/System.Memory.dll",
 )
 
 csharp_reference(
     name = "System.Runtime.CompilerServices.Unsafe",
-    file = "//lib:mono-4.5/System.Runtime.CompilerServices.Unsafe.dll",
+    file = "@csharp_system_runtime_compilerservices_unsafe//:lib/net461/System.Runtime.CompilerServices.Unsafe.dll",
 )
 
 csharp_reference(
     name = "System.Threading.Tasks.Extensions",
-    file = "//lib:mono-4.5/System.Threading.Tasks.Extensions.dll",
+    file = "@csharp_system_threading_extensions//:lib/net461/System.Threading.Tasks.Extensions.dll",
 )
 
 csharp_reference(

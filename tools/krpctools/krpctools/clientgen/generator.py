@@ -1,4 +1,3 @@
-import codecs
 import collections
 import jinja2
 from krpc.attributes import Attributes
@@ -22,7 +21,7 @@ class Generator:
 
     def generate_file(self, path):
         content = self.generate()
-        with codecs.open(path, "w", encoding="utf8") as fp:
+        with open(path, "w", encoding="utf8") as fp:
             fp.write(content)
 
     def generate(self):

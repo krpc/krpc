@@ -11,6 +11,7 @@ from krpc.types import (
     ListType,
     SetType,
     DictionaryType,
+    StaticMethod,
 )
 from krpc.schema.KRPC_pb2 import Type, ProcedureCall, Stream, Status, Services
 
@@ -249,6 +250,51 @@ class TestTypes(unittest.TestCase):
         self.assertRaises(
             ValueError, types.coerce_to, [1], types.tuple_type(types.string_type)
         )
+
+
+class _MyClass(ClassBase):
+    @StaticMethod
+    def my_static(cls, x: int) -> int:  # type: ignore[misc]  # pylint: disable=no-self-argument
+        return cls._client(x)  # type: ignore[attr-defined]
+
+
+class TestStaticMethod(unittest.TestCase):
+    def setUp(self) -> None:
+        if hasattr(_MyClass, "_client"):
+            del _MyClass._client  # type: ignore[attr-defined]
+
+    def _make_instance(self, client_fn: object) -> ClassBase:
+        instance = object.__new__(_MyClass)
+        instance._client = client_fn  # type: ignore[attr-defined]
+        instance._object_id = 1
+        return instance
+
+    def test_call_via_class_with_client_set(self) -> None:
+        _MyClass._client = lambda x: x * 2  # type: ignore[attr-defined]
+        self.assertEqual(6, _MyClass.my_static(3))  # type: ignore[call-arg]  # pylint: disable=no-value-for-parameter
+
+    def test_call_via_instance_without_class_client(self) -> None:
+        instance = self._make_instance(lambda x: x + 10)
+        self.assertEqual(15, instance.my_static(5))  # type: ignore[call-arg]
+
+    def test_instance_client_injected_onto_class(self) -> None:
+        def identity(x):  # type: ignore[no-untyped-def]
+            return x
+
+        instance = self._make_instance(identity)
+        instance.my_static(0)  # type: ignore[call-arg]
+        self.assertIs(identity, _MyClass._client)  # type: ignore[attr-defined]
+
+    def test_bound_has_dunder_self_and_name(self) -> None:
+        _MyClass._client = lambda x: x  # type: ignore[attr-defined]
+        bound = _MyClass.my_static
+        self.assertIs(_MyClass, bound.__self__)
+        self.assertEqual("my_static", bound.__name__)
+
+    def test_bound_via_instance_has_dunder_self(self) -> None:
+        instance = self._make_instance(lambda x: x)
+        bound = instance.my_static
+        self.assertIs(_MyClass, bound.__self__)
 
 
 if __name__ == "__main__":

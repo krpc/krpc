@@ -1,4 +1,7 @@
-v0.5.5
+v0.6.0
+ * Make LaunchVessel crew parameter non-optional to work around protocol issue (#824)
+ * Fix Part.DecoupledAt not considering if a decoupler is enabled (#818)
+ * Guard ContractManager against null ContractSystem in non-career game modes (#819)
  * Fix waypoint mean altitude not including bedrock height (#801)
 
 v0.5.4
