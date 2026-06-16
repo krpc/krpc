@@ -3,6 +3,7 @@ v0.6.0
  * Fix Part.DecoupledAt not considering if a decoupler is enabled (#818)
  * Guard ContractManager against null ContractSystem in non-career game modes (#819)
  * Fix waypoint mean altitude not including bedrock height (#801)
+ * Add Flight.SimulateAerodynamicTorqueAt (#825)
 
 v0.5.4
  * Fix vessel recovery (#782)
