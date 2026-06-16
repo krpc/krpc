@@ -48,10 +48,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public global::Propellant InternalPropellant {
             get {
-                var engineModule = InternalPart.GetComponent<ModuleEngines> ();
-                if (engineModule == null)
-                    throw new InvalidOperationException ("Propellant has no engine");
-                return engineModule.propellants.Find (p => p.id == resourceId);
+                foreach (var engineModule in InternalPart.GetComponents<ModuleEngines> ()) {
+                    var propellant = engineModule.propellants.Find (p => p.id == resourceId);
+                    if (propellant != null)
+                        return propellant;
+                }
+                throw new InvalidOperationException ("Propellant not found in any engine module");
             }
         }
 
