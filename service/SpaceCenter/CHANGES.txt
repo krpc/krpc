@@ -1,4 +1,5 @@
-v0.5.5
+v0.6.0
+ * Fix Part.DecoupledAt not considering if a decoupler is enabled (#818)
  * Fix waypoint mean altitude not including bedrock height (#801)
 
 v0.5.4
