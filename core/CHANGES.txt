@@ -1,2 +1,5 @@
+v1.0.1
+ * Make logger configurable in where it writes to (#780)
+
 v1.0.0
  * Initial version, split off from KRPC.dll

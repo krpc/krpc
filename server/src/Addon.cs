@@ -29,8 +29,27 @@ namespace KRPC
         /// </summary>
         public static Addon Instance { get; private set; }
 
+        internal static void InitLogger ()
+        {
+            KRPC.Utils.Logger.Writer = (msg, severity) => {
+                switch (severity) {
+                    case KRPC.Utils.Logger.Severity.Warning:
+                        UnityEngine.Debug.LogWarning (msg);
+                        break;
+                    case KRPC.Utils.Logger.Severity.Error:
+                        UnityEngine.Debug.LogError (msg);
+                        break;
+                    default:
+                        UnityEngine.Debug.Log (msg);
+                        break;
+                }
+            };
+        }
+
         static void Init ()
         {
+            InitLogger ();
+
             if (core == null) {
                 core = Core.Instance;
                 config = ConfigurationFile.Instance;

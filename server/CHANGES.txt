@@ -1,3 +1,6 @@
+v0.6.0
+ * Fix Logger to write to both KSP.log and Player.log (#780)
+
 v0.5.4
  * Fix memory leaks when switching game scene (#779)
 
