@@ -94,8 +94,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 // If the part will be decoupled by its parent, use the parents activation stage
                 if (candidate == -1 && parent != null) {
                     decoupler = new Compatibility.ModuleDecoupler(parent);
-                    if (decoupler.Instance != null) {
-                        if (decoupler.IsOmniDecoupler && decoupler.IsEnabled)
+                    if (decoupler.Instance != null && decoupler.IsEnabled) {
+                        if (decoupler.IsOmniDecoupler)
                             candidate = parent.inverseStage;
                         else if (decoupler.ExplosiveNode != null && decoupler.ExplosiveNode.attachedPart == part)
                             candidate = parent.inverseStage;
