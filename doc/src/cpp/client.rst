@@ -12,64 +12,54 @@ Installing the Library
 Dependencies
 ^^^^^^^^^^^^
 
-First you need to install kRPC's dependencies: `ASIO <http://think-async.com/>`_ which is used for
-network communication and `protobuf <https://github.com/google/protobuf>`_ which is used to
-serialize messages.
+The kRPC C++ client requires `ASIO <http://think-async.com/>`_ (for network communication) and
+`protobuf <https://github.com/google/protobuf>`_ (for message serialization). CMake will
+automatically fetch both via FetchContent if they are not found on the system, so no manual
+installation is required.
 
-ASIO is a headers-only library. The boost version is not required, installing the non-Boost variant
-is sufficient. On Ubuntu, this can be done using apt:
-
-.. code-block:: bash
-
-   sudo apt-get install libasio-dev
-
-Alternatively it can be downloaded `from the ASIO website <http://think-async.com/Asio/Download>`_.
-
-Protobuf is also required, and can be `downloaded from GitHub
-<https://github.com/google/protobuf/releases>`_. Installation instructions `can be found here
-<https://github.com/google/protobuf/blob/master/src/README.md>`_.
-
-Using the configure script
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Once the dependencies have been installed, you can install the kRPC client library and headers using
-the configure script provided with the source.
-`Download the source archive <https://github.com/krpc/krpc/releases>`_,
-extract it and then execute the following:
+To use system-installed packages instead, on Ubuntu:
 
 .. code-block:: bash
 
-   ./configure
-   make
-   sudo make install
-   sudo ldconfig
+   sudo apt-get install libasio-dev libprotobuf-dev protobuf-compiler
 
 Using CMake
 ^^^^^^^^^^^
 
-Alternatively, you can install the client library and headers using CMake.
-`Download the source archive <https://github.com/krpc/krpc/releases>`_, extract it and execute the
-following:
+CMake 3.15 or later is required.
+`Download the source archive <https://github.com/krpc/krpc/releases>`_, extract it and run:
 
 .. code-block:: bash
 
-   cmake .
-   make
-   sudo make install
+   cmake -B build
+   cmake --build build
+   sudo cmake --install build
    sudo ldconfig
 
-Manual installation
-^^^^^^^^^^^^^^^^^^^
+To install to a custom prefix:
 
-The library is fairly simple to build manually if you can't use the configure script or CMake. The
-headers are in the ``include`` directory and the source files are in ``src``.
+.. code-block:: bash
+
+   cmake -B build -DCMAKE_INSTALL_PREFIX=/install/path
+   cmake --build build
+   cmake --install build
+
+To force CMake to fetch protobuf or ASIO even when a system version is present, pass
+``-DKRPC_FETCH_PROTOBUF=ON`` or ``-DKRPC_FETCH_ASIO=ON`` to the configure step.
+
+After installation, downstream CMake projects can link the library with:
+
+.. code-block:: cmake
+
+   find_package(krpc CONFIG REQUIRED)
+   target_link_libraries(my_app PRIVATE krpc::krpc)
 
 Using the Library
 -----------------
 
-A kRPC program needs to be compiled with C++11 support enabled, and linked against ``libkrpc`` and
-``libprotobuf``. The following example program connects to the server, queries it for its version
-and prints it out:
+A kRPC program needs to be compiled with C++17 support enabled, and linked against
+``libkrpc``, ``libprotobuf-lite`` and ``libz``. The following example program connects
+to the server, queries it for its version and prints it out:
 
 .. literalinclude:: /scripts/client/cpp/Basic.cpp
 
@@ -77,18 +67,7 @@ To compile this program using GCC, save the source as ``main.cpp`` and run the f
 
 .. code-block:: bash
 
-   g++ main.cpp -std=c++11 -lkrpc -lprotobuf -lz
-
-.. note::
-
-   If you get linker errors claiming that there are undefined references to
-   ``google::protobuf::...`` you probably have an older version of protobuf installed on your
-   system. In this case, replace ``-lprotobuf`` with ``-l:libprotobuf.so.10`` in the above command
-   so that GCC uses the correct version of the library.
-
-.. note::
-
-   Protobuf requires libz to be linked, hence the ``-lz`` flag
+   g++ main.cpp -std=c++17 -lkrpc -lprotobuf-lite -lz
 
 Connecting to the Server
 ------------------------
