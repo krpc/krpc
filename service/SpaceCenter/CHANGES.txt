@@ -5,6 +5,8 @@ v0.6.0
  * Guard ContractManager against null ContractSystem in non-career game modes (#819)
  * Fix waypoint mean altitude not including bedrock height (#801)
  * Add Flight.SimulateAerodynamicTorqueAt (#825)
+ * Add Control.AeroSurfaces to enable/disable pitch, yaw and roll on all control surfaces (#827)
+ * Add Control.EngineGimbals to enable/disable gimbal on all gimballed engines (#827)
 
 v0.5.4
  * Fix vessel recovery (#782)
