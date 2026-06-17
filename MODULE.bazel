@@ -118,6 +118,8 @@ http_archive(
     url = "https://www.nuget.org/api/v2/package/Google.Protobuf/3.35.1",
 )
 
+# Note: KSP's version of Unity does not include ReadOnlySpan and others, which are required
+# by Google.Protobuf after v3.10.1, so we pin it to this version
 http_archive(
     name = "csharp_protobuf_unity",
     build_file_content = "exports_files(['lib/net45/Google.Protobuf.dll'])",
