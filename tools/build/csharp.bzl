@@ -4,6 +4,7 @@ _MCS = "mcs"
 _MCS_FLAGS = ["-noconfig", "-nostdlib"]
 
 CSharpInfo = provider(
+    "Provides information about a compiled C# target.",
     fields = ["target_type", "lib", "out", "doc", "mdb"],
 )
 

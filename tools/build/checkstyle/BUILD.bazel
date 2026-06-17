@@ -17,8 +17,8 @@ java_binary(
         "@java_picocli//jar",
         "@java_reflections//jar",
         "@java_saxon_he//jar",
-        "@java_xmlresolver//jar",
         "@java_slf4j_api//jar",
+        "@java_xmlresolver//jar",
     ],
 )
 

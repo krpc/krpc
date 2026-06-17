@@ -157,8 +157,8 @@ cc_library(
     includes = ["include"],
     visibility = ["//visibility:public"],
     deps = [
-        "@protobuf//:protobuf_lite",
         "@cpp_asio//:asio",
+        "@protobuf//:protobuf_lite",
     ],
 )
 
