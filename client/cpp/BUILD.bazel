@@ -1,5 +1,5 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
-load("//:config.bzl", "version")
+load("//:config.bzl", "cmake_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:cpp.bzl", "cpp_check_test", "cpp_lint_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
@@ -51,7 +51,7 @@ genrule(
     name = "cmake",
     srcs = ["CMakeLists.txt.tmpl"],
     outs = ["CMakeLists.txt"],
-    cmd = "sed 's/%VERSION%/" + version + '/g\' "$<" > "$@"',
+    cmd = "sed 's/%VERSION%/" + cmake_version + '/g\' "$<" > "$@"',
 )
 
 clientgen_cpp(

@@ -29,6 +29,9 @@ nuget_version = \
 # Lua rock version: x.y.z[.w]
 lua_version = ".".join(version_parts[:4])
 
+# CMake version: x.y.z[.build] — purely numeric; sha suffix dropped
+cmake_version = ".".join(version_parts[:4]) if len(version_parts) > 3 else version
+
 # KSP-AVC versions
 avc_version = \
     '"MAJOR": %s, "MINOR": %s, "PATCH": %s' % (version_parts[0], version_parts[1], version_parts[2]) if len(version_parts) == 3 else '"MAJOR": %s, "MINOR": %s, "PATCH": %s, "BUILD": %s' % (version_parts[0], version_parts[1], version_parts[2], version_parts[3])
