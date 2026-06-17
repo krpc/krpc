@@ -52,6 +52,8 @@ namespace KRPC
 
             if (core == null) {
                 core = Core.Instance;
+                var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                core.Version = version.Major + "." + version.Minor + "." + version.Build;
                 config = ConfigurationFile.Instance;
                 foreach (var server in config.Configuration.Servers)
                     core.Add (server.Create ());

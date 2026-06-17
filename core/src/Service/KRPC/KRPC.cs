@@ -39,8 +39,7 @@ namespace KRPC.Service.KRPC
         {
             var core = Core.Instance;
             var config = Configuration.Instance;
-            var version = System.Reflection.Assembly.GetExecutingAssembly ().GetName ().Version;
-            var status = new Status (version.Major + "." + version.Minor + "." + version.Build);
+            var status = new Status (core.Version ?? "");
             status.BytesRead = core.BytesRead;
             status.BytesWritten = core.BytesWritten;
             status.BytesReadRate = core.BytesReadRate;
