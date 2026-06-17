@@ -1,5 +1,6 @@
-v1.0.1
+v0.6.0
+ * Add Version property to Core, set by the server plugin on startup
  * Make logger configurable in where it writes to (#780)
 
-v1.0.0
+v0.5.4
  * Initial version, split off from KRPC.dll

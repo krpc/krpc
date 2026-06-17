@@ -11,8 +11,15 @@ namespace KRPC.Test.Service.KRPC
         [Test]
         public void GetVersion ()
         {
+            Core.Instance.Version = null;
             var status = global::KRPC.Service.KRPC.KRPC.GetStatus ();
-            Assert.AreNotEqual (string.Empty, status.Version);
+            Assert.AreEqual ("unknown", status.Version);
+
+            Core.Instance.Version = "1.2.3";
+            status = global::KRPC.Service.KRPC.KRPC.GetStatus ();
+            Assert.AreEqual ("1.2.3", status.Version);
+
+            Core.Instance.Version = null;
         }
 
         [Test]
