@@ -8,6 +8,7 @@ include(FetchContent)
 
 option(KRPC_FETCH_PROTOBUF "Fetch protobuf via FetchContent, ignoring any system install" OFF)
 option(KRPC_FETCH_ASIO     "Fetch ASIO via FetchContent, ignoring any system install"     OFF)
+option(KRPC_FETCH_ABSL     "Fetch abseil via FetchContent, ignoring any system install"   OFF)
 
 # ---- Protobuf ----
 if(NOT KRPC_FETCH_PROTOBUF)
@@ -17,7 +18,15 @@ if(protobuf_FOUND)
   message(STATUS "Found protobuf ${protobuf_VERSION}")
 else()
   message(STATUS "Fetching protobuf via FetchContent (builds abseil too)...")
-  set(protobuf_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+  set(protobuf_BUILD_TESTS       OFF CACHE BOOL "" FORCE)
+  set(protobuf_BUILD_CONFORMANCE OFF CACHE BOOL "" FORCE)
+  set(protobuf_BUILD_EXAMPLES    OFF CACHE BOOL "" FORCE)
+  if(NOT KRPC_FETCH_ABSL)
+    find_package(absl QUIET)
+  endif()
+  if(absl_FOUND)
+    set(protobuf_ABSL_PROVIDER "package" CACHE STRING "" FORCE)
+  endif()
   set(protobuf_INSTALL ON CACHE BOOL "" FORCE)
   FetchContent_Declare(protobuf
     GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
