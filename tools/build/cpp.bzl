@@ -21,9 +21,8 @@ def _check_impl(ctx):
         "/usr/bin/cppcheck %s\n" % " ".join(args),
     )
 
-    # buildifier: disable=rule-impl-return
-    return struct(
-        name = ctx.label.name,
+    return DefaultInfo(
+        executable = ctx.outputs.executable,
         runfiles = ctx.runfiles(files = runfiles),
     )
 
@@ -66,9 +65,8 @@ def _lint_impl(ctx):
         is_executable = True,
     )
 
-    # buildifier: disable=rule-impl-return
-    return struct(
-        name = ctx.label.name,
+    return DefaultInfo(
+        executable = ctx.outputs.executable,
         runfiles = ctx.runfiles(files = runfiles),
     )
 

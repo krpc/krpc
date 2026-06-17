@@ -11,6 +11,7 @@ py_script(
         "@python_packaging//file",
         "@python_pathspec//file",
         "@python_platformdirs//file",
+        "@python_pytokens//file",
         "@python_tomli//file",
         "@python_typing_extensions//file",
     ],

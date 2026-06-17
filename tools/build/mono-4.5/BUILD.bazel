@@ -34,17 +34,17 @@ csharp_reference(
 
 csharp_reference(
     name = "System.Memory",
-    file = "@csharp_system_memory//:lib/net461/System.Memory.dll",
+    file = "@csharp_system_memory//:lib/net462/System.Memory.dll",
 )
 
 csharp_reference(
     name = "System.Runtime.CompilerServices.Unsafe",
-    file = "@csharp_system_runtime_compilerservices_unsafe//:lib/net461/System.Runtime.CompilerServices.Unsafe.dll",
+    file = "@csharp_system_runtime_compilerservices_unsafe//:lib/net462/System.Runtime.CompilerServices.Unsafe.dll",
 )
 
 csharp_reference(
     name = "System.Threading.Tasks.Extensions",
-    file = "@csharp_system_threading_extensions//:lib/net461/System.Threading.Tasks.Extensions.dll",
+    file = "@csharp_system_threading_tasks_extensions//:lib/net462/System.Threading.Tasks.Extensions.dll",
 )
 
 csharp_reference(
@@ -64,10 +64,10 @@ csharp_reference(
 
 csharp_reference(
     name = "Moq",
-    file = "@csharp_moq//:lib/net45/Moq.dll",
+    file = "@csharp_moq//:lib/net462/Moq.dll",
 )
 
 csharp_reference(
     name = "Castle.Core",
-    file = "@csharp_castle_core//:lib/net45/Castle.Core.dll",
+    file = "@csharp_castle_core//:lib/net462/Castle.Core.dll",
 )

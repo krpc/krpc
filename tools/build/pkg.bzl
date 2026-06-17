@@ -53,8 +53,7 @@ def _stage_files_impl(ctx):
         )
         outs.append(out)
 
-    # buildifier: disable=rule-impl-return
-    return struct(files = depset(outs))
+    return DefaultInfo(files = depset(outs))
 
 stage_files = rule(
     implementation = _stage_files_impl,

@@ -5,11 +5,10 @@ def _create_py_env(out, install):
     cmds = [
         "rm -rf %s" % tmp,
         "python3 -m venv %s" % tmp,
-        "%s/bin/python3 -m ensurepip" % tmp,
     ]
     for lib in install:
         cmds.append(
-            "%s/bin/python %s/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s" %
+            "%s/bin/python %s/bin/pip install --quiet --disable-pip-version-check --no-deps --no-cache-dir file:`pwd`/%s" %
             (tmp, tmp, lib.path),
         )
     cmds.extend([
@@ -39,7 +38,7 @@ def _impl(ctx):
     sub_commands.extend([
         "rm -rf %s" % protoc_output,
         "mkdir -p %s" % protoc_output,
-        "PATH=%s/bin:%s:$PATH %s --lua_out=%s %s" % (pyenv, protoc_lua_dir, protoc.path, protoc_output, input.path),
+        "PYTHONWARNINGS=ignore::RuntimeWarning PATH=%s/bin:%s:$PATH %s --lua_out=%s %s" % (pyenv, protoc_lua_dir, protoc.path, protoc_output, input.path),
         "cp %s/protobuf/*.lua %s" % (protoc_output, output.path),
     ])
 
@@ -59,7 +58,6 @@ protobuf_lua = rule(
         "_protoc_lua": attr.label(default = Label("@protoc_lua//:plugin"), allow_files = True),
         "_protoc_lua_env": attr.label(default = Label("//tools/build/protobuf:protoc-lua-env"), allow_single_file = True),
     },
-    output_to_genfiles = True,
 )
 
 def _env_impl(ctx):
@@ -84,5 +82,4 @@ protoc_lua_env = rule(
         "_protobuf": attr.label(default = Label("@python_protobuf//file"), allow_single_file = True),
     },
     outputs = {"out": "%{name}.tar"},
-    output_to_genfiles = True,
 )

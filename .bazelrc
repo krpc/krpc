@@ -1,3 +1,2 @@
-build --cxxopt=-std=c++14 --host_cxxopt=-std=c++14
+build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
 build --java_runtime_version=remotejdk_11
-test --legacy_bazel_java_test

@@ -1,3 +1,4 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 load("//:config.bzl", "version")
 load("//tools/build:autotools.bzl", "autotools_dist")
 load("//tools/build:client_test.bzl", "client_test")
@@ -45,7 +46,7 @@ autotools_dist(
         "README.txt": "%s/README.txt" % name,
         "VERSION.txt": "%s/VERSION.txt" % name,
         "protobuf/": "%s/protobuf/" % name,
-        "../_main~_repo_rules~m4_stdcxx/file/downloaded": "%s/m4/ax_cxx_compile_stdcxx.m4" % name,
+        "../+http_file+m4_stdcxx/file/downloaded": "%s/m4/ax_cxx_compile_stdcxx.m4" % name,
     },
     source_dir = name,
     visibility = ["//:__pkg__"],
@@ -156,7 +157,7 @@ cc_library(
     includes = ["include"],
     visibility = ["//visibility:public"],
     deps = [
-        "@com_google_protobuf//:protobuf_lite",
+        "@protobuf//:protobuf_lite",
         "@cpp_asio//:asio",
     ],
 )
@@ -224,6 +225,7 @@ cpp_lint_test(
         "-readability/todo",
         "-build/include_subdir",
         "-runtime/references",
+        "-whitespace/indent_namespace",
     ],  #FIXME: dont pass non-const references
     includes = ["include"],
 )

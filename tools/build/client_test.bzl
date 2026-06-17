@@ -69,10 +69,8 @@ def _impl(ctx):
         is_executable = True,
     )
 
-    # buildifier: disable=rule-impl-return
-    return struct(
-        name = ctx.label.name,
-        out = ctx.outputs.executable,
+    return DefaultInfo(
+        executable = ctx.outputs.executable,
         runfiles = ctx.runfiles(files = [ctx.executable.test_executable, ctx.executable.server_executable] + test_executable_runfiles + server_executable_runfiles),
     )
 
