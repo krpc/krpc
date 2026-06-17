@@ -149,6 +149,39 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Returns whether all gimballed engines on the vessel have gimbal enabled,
+        /// and sets the gimbal enabled state of all gimballed engines.
+        /// See <see cref="Parts.Engine.GimbalLocked"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool EngineGimbals {
+            get { return parts.Engines.Where (e => e.Gimballed).All (e => !e.GimbalLocked); }
+            set {
+                foreach (var e in parts.Engines.Where (e => e.Gimballed))
+                    e.GimbalLocked = !value;
+            }
+        }
+
+        /// <summary>
+        /// Returns whether all control surfaces on the vessel have pitch, yaw and roll enabled,
+        /// and sets the pitch, yaw and roll enabled state of all control surfaces.
+        /// See <see cref="Parts.ControlSurface.PitchEnabled"/>,
+        /// <see cref="Parts.ControlSurface.YawEnabled"/> and
+        /// <see cref="Parts.ControlSurface.RollEnabled"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool AeroSurfaces {
+            get { return parts.ControlSurfaces.All (s => s.PitchEnabled && s.YawEnabled && s.RollEnabled); }
+            set {
+                foreach (var s in parts.ControlSurfaces) {
+                    s.PitchEnabled = value;
+                    s.YawEnabled = value;
+                    s.RollEnabled = value;
+                }
+            }
+        }
+
+        /// <summary>
         /// The state of the landing gear/legs.
         /// </summary>
         [KRPCProperty]
