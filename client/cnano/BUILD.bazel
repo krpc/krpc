@@ -45,9 +45,9 @@ autotools_dist(
         "@c_nanopb//:pb_encode.h",
     ],
     path_map = {
-        "../_main~_repo_rules~c_nanopb/LICENSE.txt": "%s/LICENSE.nanopb" % name,
-        "../_main~_repo_rules~c_nanopb/*.h": "%s/include/krpc_cnano/" % name,
-        "../_main~_repo_rules~c_nanopb/*.c": "%s/src/" % name,
+        "../+http_archive+c_nanopb/LICENSE.txt": "%s/LICENSE.nanopb" % name,
+        "../+http_archive+c_nanopb/*.h": "%s/include/krpc_cnano/" % name,
+        "../+http_archive+c_nanopb/*.c": "%s/src/" % name,
         "client/cnano/": "%s/" % name,
         "COPYING": "%s/COPYING" % name,
         "COPYING.LESSER": "%s/COPYING.LESSER" % name,
