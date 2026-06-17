@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.5.0
+      image: ghcr.io/krpc/buildenv:3.6.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -26,7 +26,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
         with:
-          long-version: 'false'
+          long-version: "false"
       - name: fetch
         uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
