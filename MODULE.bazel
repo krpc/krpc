@@ -272,15 +272,6 @@ cc_library(
     url = "https://github.com/google/googletest/archive/refs/tags/v1.17.0.tar.gz",
 )
 
-http_file(
-    name = "m4_stdcxx",
-    sha256 = "a6f7cdef49579d995976baece6e605aca1f2c8b0cb771bbae4d7b816710dcb4c",
-    urls = [
-        "https://raw.githubusercontent.com/autoconf-archive/autoconf-archive/34104ea9e635fae5551fd1d6495a80f8041c4adc/m4/ax_cxx_compile_stdcxx.m4",
-        "http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx.m4;hb=34104ea9e635fae5551fd1d6495a80f8041c4adc",
-    ],
-)
-
 # ----------------------- C-nano dependencies --------------------------------------------
 
 http_archive(
