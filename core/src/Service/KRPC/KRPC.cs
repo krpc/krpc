@@ -39,7 +39,7 @@ namespace KRPC.Service.KRPC
         {
             var core = Core.Instance;
             var config = Configuration.Instance;
-            var status = new Status (core.Version ?? "");
+            var status = new Status (core.Version ?? "unknown");
             status.BytesRead = core.BytesRead;
             status.BytesWritten = core.BytesWritten;
             status.BytesReadRate = core.BytesReadRate;
