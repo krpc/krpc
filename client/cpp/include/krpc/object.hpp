@@ -1,7 +1,6 @@
 #pragma once
 
-#include <google/protobuf/stubs/common.h>
-
+#include <cstdint>
 #include <ostream>
 #include <string>
 
@@ -12,7 +11,7 @@ namespace krpc {
 template <typename T>
 class Object {
  public:
-  Object(Client * client, const std::string& name, google::protobuf::uint64 id = 0);
+  Object(Client * client, const std::string& name, uint64_t id = 0);
   template <typename U> friend std::ostream& operator<<(std::ostream&, const Object<U>&);
   template <typename U> friend bool operator==(const Object<U>&, const Object<U>&);
   template <typename U> friend bool operator<(const Object<U>&, const Object<U>&);
@@ -20,7 +19,7 @@ class Object {
   // encoder and decoder. They can't be a 'friend' due to the circular dependency
   // that would introduce.
   Client * _client;
-  google::protobuf::uint64 _id;
+  uint64_t _id;
  private:
   std::string _name;
 };
@@ -29,7 +28,7 @@ template <typename T> bool operator==(const Object<T>&, const Object<T>&);
 template <typename T> std::ostream& operator<<(std::ostream& stream, const Object<T>& object);
 
 template <typename T> inline Object<T>::Object(
-  Client* client, const std::string& name, google::protobuf::uint64 id):
+  Client* client, const std::string& name, uint64_t id):
   _client(client), _id(id), _name(name) {}
 
 template <typename T> inline std::ostream& operator<<(std::ostream& stream,

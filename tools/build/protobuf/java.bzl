@@ -26,5 +26,4 @@ protobuf_java = rule(
         "_protoc": attr.label(default = Label("//tools/build/protobuf:protoc"), allow_single_file = True),
         "out": attr.output(mandatory = True),
     },
-    output_to_genfiles = True,
 )

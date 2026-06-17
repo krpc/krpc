@@ -1,8 +1,7 @@
 #pragma once
 
-#include <google/protobuf/stubs/port.h>
-
 #include <condition_variable>  // NOLINT(build/c++11)
+#include <cstdint>
 #include <functional>
 #include <map>
 #include <memory>
@@ -46,8 +45,8 @@ class Client {
 
  public:
   std::shared_ptr<StreamImpl> add_stream(const schema::ProcedureCall& call);
-  std::shared_ptr<StreamImpl> get_stream(google::protobuf::uint64 id);
-  void remove_stream(google::protobuf::uint64 id);
+  std::shared_ptr<StreamImpl> get_stream(uint64_t id);
+  void remove_stream(uint64_t id);
   void freeze_streams();
   void thaw_streams();
 

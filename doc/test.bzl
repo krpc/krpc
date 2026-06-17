@@ -18,10 +18,8 @@ def _check_documented_impl(ctx):
         is_executable = True,
     )
 
-    # buildifier: disable=rule-impl-return
-    return struct(
-        name = ctx.label.name,
-        out = ctx.outputs.executable,
+    return DefaultInfo(
+        executable = ctx.outputs.executable,
         runfiles = ctx.runfiles(files = [ctx.file._tool] + [ctx.file.members] + ctx.files.srcs),
     )
 

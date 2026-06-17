@@ -5,5 +5,6 @@ package krpc.client;
  * calls.
  */
 public interface RemoteEnum {
+  /** Returns the integer value of this enumeration member. */
   public int getValue();
 }

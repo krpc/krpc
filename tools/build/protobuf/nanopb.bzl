@@ -5,11 +5,10 @@ def _create_py_env(out, install):
     cmds = [
         "rm -rf %s" % tmp,
         "python3 -m venv %s" % tmp,
-        "%s/bin/python3 -m ensurepip" % tmp,
     ]
     for lib in install:
         cmds.append(
-            "%s/bin/python %s/bin/pip install --quiet --no-deps --no-cache-dir file:`pwd`/%s" %
+            "%s/bin/python %s/bin/pip install --quiet --disable-pip-version-check --no-deps --no-cache-dir file:`pwd`/%s" %
             (tmp, tmp, lib.path),
         )
     cmds.extend([
@@ -52,7 +51,7 @@ def _impl(ctx):
         "mkdir -p %s" % protoc_output,
         "cp %s %s" % (input.path, protoc_input),
         "cp %s %s" % (options.path, protoc_input),
-        'PATH=%s/bin:%s:$PATH %s "--nanopb_out=%s:%s" %s/%s' % (pyenv, protoc_nanopb_dir, protoc.path, protoc_nanopb_opts, protoc_output, protoc_input, input.basename),
+        'PYTHONWARNINGS=ignore::RuntimeWarning PATH=%s/bin:%s:$PATH %s "--nanopb_out=%s:%s" %s/%s' % (pyenv, protoc_nanopb_dir, protoc.path, protoc_nanopb_opts, protoc_output, protoc_input, input.basename),
         "cp %s/%s/*.pb.h %s" % (protoc_output, protoc_input, header.path),
         "cp %s/%s/*.pb.c %s" % (protoc_output, protoc_input, source.path),
         'sed -i \'s/#include ".\\+"/#include "%s"/g\' %s' % (include.replace("/", "\\/"), source.path),
@@ -77,7 +76,6 @@ protobuf_nanopb = rule(
         "_protoc_nanopb": attr.label(default = Label("@protoc_nanopb//:plugin"), allow_files = True),
         "_protoc_nanopb_env": attr.label(default = Label("//tools/build/protobuf:protoc-nanopb-env"), allow_single_file = True),
     },
-    output_to_genfiles = True,
 )
 
 def _env_impl(ctx):
@@ -102,5 +100,4 @@ protoc_nanopb_env = rule(
         "_protobuf": attr.label(default = Label("@python_protobuf//file"), allow_single_file = True),
     },
     outputs = {"out": "%{name}.tar"},
-    output_to_genfiles = True,
 )

@@ -3,9 +3,6 @@ package krpc.client;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.CodedOutputStream;
-
-import krpc.schema.KRPC;
-
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -16,7 +13,9 @@ import java.net.Socket;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import krpc.schema.KRPC;
 
+/** A connection to a kRPC server. */
 public class Connection implements AutoCloseable {
   private final Object connectionLock = new Object();
 
@@ -110,7 +109,7 @@ public class Connection implements AutoCloseable {
   public static Connection newInstance(String name, String address)
       throws IOException {
     return new Connection(
-      name, InetAddress.getByName(address), DEFAULT_RPC_PORT, DEFAULT_STREAM_PORT);
+        name, InetAddress.getByName(address), DEFAULT_RPC_PORT, DEFAULT_STREAM_PORT);
   }
 
   /**
@@ -299,7 +298,7 @@ public class Connection implements AutoCloseable {
       }
       try {
         ctor.setAccessible(true);
-        RPCException exn = (RPCException)ctor.newInstance(message);
+        RPCException exn = (RPCException) ctor.newInstance(message);
         throw exn;
       } catch (IllegalAccessException exn) {
         throw new RPCException("Failed to throw server exception");

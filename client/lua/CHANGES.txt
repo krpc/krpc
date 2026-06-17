@@ -1,3 +1,6 @@
+v0.6.0
+ * Fix attributes module to always return boolean for is_a_class_member and is_a_class_property_accessor
+
 v0.5.0
  * Update to protobuf v3.22.0
 

@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <exception>
 #include <functional>
+#include <memory>
 #include <string>
 #include <utility>
 
@@ -47,7 +48,7 @@ std::shared_ptr<StreamImpl> StreamManager::add_stream(const schema::ProcedureCal
   return stream_impl;
 }
 
-std::shared_ptr<StreamImpl> StreamManager::get_stream(google::protobuf::uint64 id) {
+std::shared_ptr<StreamImpl> StreamManager::get_stream(uint64_t id) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
   auto it = streams.find(id);
   if (it != streams.end())
@@ -58,7 +59,7 @@ std::shared_ptr<StreamImpl> StreamManager::get_stream(google::protobuf::uint64 i
   return stream_impl;
 }
 
-void StreamManager::remove_stream(google::protobuf::uint64 id) {
+void StreamManager::remove_stream(uint64_t id) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
   if (streams.find(id) == streams.end())
     return;
@@ -66,7 +67,7 @@ void StreamManager::remove_stream(google::protobuf::uint64 id) {
   streams.erase(id);
 }
 
-void StreamManager::update(google::protobuf::uint64 id, const schema::ProcedureResult& result) {
+void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
   auto it = streams.find(id);
   if (it == streams.end())

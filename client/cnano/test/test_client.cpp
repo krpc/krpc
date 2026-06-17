@@ -6,6 +6,9 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <map>
+#include <string>
+#include <vector>
 
 #include "server_test.hpp"
 #include "services/test_service.h"
@@ -192,7 +195,7 @@ TEST_F(test_client, test_collections) {
     krpc_list_int32_t list = KRPC_NULL_LIST;
     krpc_list_int32_t result = KRPC_NULL_LIST;
     ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementList(conn, &result, &list));
-    ASSERT_EQ(result.size, 0);
+    ASSERT_EQ(result.size, 0u);
     // ASSERT_EQ(result.items, NULL);
     KRPC_FREE_LIST(result);
   }
@@ -206,7 +209,7 @@ TEST_F(test_client, test_collections) {
 
     krpc_list_int32_t result = KRPC_NULL_LIST;
     ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementList(conn, &result, &list));
-    ASSERT_EQ(result.size, 3);
+    ASSERT_EQ(result.size, 3u);
     for (size_t i = 0; i < result.size; i++)
       ASSERT_EQ(result.items[i], list.items[i]+1);
     delete[] list.items;
@@ -216,7 +219,7 @@ TEST_F(test_client, test_collections) {
     krpc_dictionary_string_int32_t dictionary = KRPC_NULL_DICTIONARY;
     krpc_dictionary_string_int32_t result = KRPC_NULL_DICTIONARY;
     ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementDictionary(conn, &result, &dictionary));
-    ASSERT_EQ(result.size, 0);
+    ASSERT_EQ(result.size, 0u);
     // ASSERT_EQ(result.items, NULL);
     KRPC_FREE_DICTIONARY(result);
   }
@@ -232,7 +235,7 @@ TEST_F(test_client, test_collections) {
     dictionary.entries[2].value = 2;
     krpc_dictionary_string_int32_t result = KRPC_NULL_DICTIONARY;
     ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementDictionary(conn, &result, &dictionary));
-    ASSERT_EQ(result.size, 3);
+    ASSERT_EQ(result.size, 3u);
     for (size_t i = 0; i < result.size; i++) {
       auto& entry = result.entries[i];
       if (!strcmp("a", entry.key))
@@ -253,7 +256,7 @@ TEST_F(test_client, test_collections) {
     krpc_set_int32_t set = KRPC_NULL_SET;
     krpc_set_int32_t result = KRPC_NULL_SET;
     ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementSet(conn, &result, &set));
-    ASSERT_EQ(result.size, 0);
+    ASSERT_EQ(result.size, 0u);
     // ASSERT_EQ(result.items, NULL);
     KRPC_FREE_SET(result);
   }
@@ -266,7 +269,7 @@ TEST_F(test_client, test_collections) {
     set.items[2] = 2;
     krpc_set_int32_t result = KRPC_NULL_SET;
     ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementSet(conn, &result, &set));
-    ASSERT_EQ(result.size, 3);
+    ASSERT_EQ(result.size, 3u);
     uint8_t found = 0;
     for (size_t i = 0; i < result.size; i++) {
       auto& item = result.items[i];
@@ -302,7 +305,7 @@ TEST_F(test_client, test_nested_collections) {
     krpc_dictionary_string_list_int32_t dictionary = KRPC_NULL_DICTIONARY;
     krpc_dictionary_string_list_int32_t result = KRPC_NULL_DICTIONARY;
     ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementNestedCollection(conn, &result, &dictionary));
-    ASSERT_EQ(result.size, 0);
+    ASSERT_EQ(result.size, 0u);
     // ASSERT_EQ(NULL, result.entries);
     KRPC_FREE_DICTIONARY(result);
   }
@@ -328,7 +331,7 @@ TEST_F(test_client, test_nested_collections) {
     ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementNestedCollection(conn, &result, &dictionary));
 
     std::map<std::string, std::vector<int32_t>> actual;
-    ASSERT_EQ(result.size, 3);
+    ASSERT_EQ(result.size, 3u);
     for (size_t i = 0; i < result.size; i++) {
       std::string key(result.entries[i].key);
       actual[key] = std::vector<int32_t>();
@@ -359,7 +362,7 @@ TEST_F(test_client, test_collections_of_objects) {
   krpc_list_object_t l1 = KRPC_NULL_LIST;
   krpc_list_object_t l2 = KRPC_NULL_LIST;
   ASSERT_EQ(KRPC_OK, krpc_TestService_AddToObjectList(conn, &l2, &l1, "jeb"));
-  ASSERT_EQ(1, l2.size);
+  ASSERT_EQ(1u, l2.size);
   {
     auto value = new char[32];
     krpc_object_t obj = l2.items[0];
@@ -369,7 +372,7 @@ TEST_F(test_client, test_collections_of_objects) {
   }
   krpc_list_object_t l3 = KRPC_NULL_LIST;
   ASSERT_EQ(KRPC_OK, krpc_TestService_AddToObjectList(conn, &l3, &l2, "bob"));
-  ASSERT_EQ(2, l3.size);
+  ASSERT_EQ(2u, l3.size);
   {
     auto value = new char[32];
     krpc_object_t obj = l3.items[0];

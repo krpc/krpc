@@ -207,7 +207,7 @@ void test_bytes(std::string decoded, std::string encoded) {
     ASSERT_EQ(KRPC_OK, krpc_decode_bytes(&stream, &value));
     ASSERT_EQ(decoded.size(), value.size);
     if (decoded.size() == 0) {
-      ASSERT_EQ(NULL, value.size);
+      ASSERT_EQ(0u, value.size);
     } else {
       for (size_t i = 0; i < decoded.size(); i++)
         ASSERT_EQ((uint8_t)(decoded[i]), value.data[i]);

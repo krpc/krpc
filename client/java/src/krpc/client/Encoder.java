@@ -4,10 +4,18 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.CodedOutputStream;
 import com.google.protobuf.Message;
-
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import krpc.client.EncodingException;
 import krpc.schema.KRPC;
-
 import org.javatuples.Decade;
 import org.javatuples.Ennead;
 import org.javatuples.Octet;
@@ -20,19 +28,9 @@ import org.javatuples.Triplet;
 import org.javatuples.Tuple;
 import org.javatuples.Unit;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 // TODO: remove all the ByteString.copyFrom calls
 
+/** Encodes and decodes values for kRPC procedure calls. */
 public class Encoder {
   static String guidToString(byte[] guid) {
     StringBuilder builder = new StringBuilder();
@@ -63,26 +61,26 @@ public class Encoder {
     try {
       switch (type.getCode()) {
         case DOUBLE:
-          return encodeDouble((double)value);
+          return encodeDouble((double) value);
         case FLOAT:
-          return encodeFloat((float)value);
+          return encodeFloat((float) value);
         case SINT32:
-          return encodeSInt32((int)value);
+          return encodeSint32((int) value);
         case SINT64:
-          return encodeSInt64((long)value);
+          return encodeSint64((long) value);
         case UINT32:
-          return encodeUInt32((int)value);
+          return encodeUint32((int) value);
         case UINT64:
-          return encodeUInt64((long)value);
+          return encodeUint64((long) value);
         case BOOL:
-          return encodeBoolean((boolean)value);
+          return encodeBoolean((boolean) value);
         case STRING:
-          return encodeString((String)value);
+          return encodeString((String) value);
         case BYTES:
-          return encodeBytes((byte[])value);
+          return encodeBytes((byte[]) value);
         case CLASS:
           if (value == null) {
-            return encodeUInt64(0);
+            return encodeUint64(0);
           } else {
             return encodeObject((RemoteObject) value);
           }
@@ -118,13 +116,13 @@ public class Encoder {
         case FLOAT:
           return decodeFloat(data);
         case SINT32:
-          return decodeSInt32(data);
+          return decodeSint32(data);
         case SINT64:
-          return decodeSInt64(data);
+          return decodeSint64(data);
         case UINT32:
-          return decodeUInt32(data);
+          return decodeUint32(data);
         case UINT64:
-          return decodeUInt64(data);
+          return decodeUint64(data);
         case BOOL:
           return decodeBoolean(data);
         case STRING:
@@ -179,7 +177,7 @@ public class Encoder {
     return ByteString.copyFrom(data);
   }
 
-  static ByteString encodeSInt32(int value) throws IOException {
+  static ByteString encodeSint32(int value) throws IOException {
     byte[] data = new byte[CodedOutputStream.computeSInt32SizeNoTag(value)];
     CodedOutputStream stream = CodedOutputStream.newInstance(data);
     stream.writeSInt32NoTag(value);
@@ -188,7 +186,7 @@ public class Encoder {
     return ByteString.copyFrom(data);
   }
 
-  static ByteString encodeSInt64(long value) throws IOException {
+  static ByteString encodeSint64(long value) throws IOException {
     byte[] data = new byte[CodedOutputStream.computeSInt64SizeNoTag(value)];
     CodedOutputStream stream = CodedOutputStream.newInstance(data);
     stream.writeSInt64NoTag(value);
@@ -197,7 +195,7 @@ public class Encoder {
     return ByteString.copyFrom(data);
   }
 
-  static ByteString encodeUInt32(int value) throws IOException {
+  static ByteString encodeUint32(int value) throws IOException {
     byte[] data = new byte[CodedOutputStream.computeUInt32SizeNoTag(value)];
     CodedOutputStream stream = CodedOutputStream.newInstance(data);
     stream.writeUInt32NoTag(value);
@@ -206,7 +204,7 @@ public class Encoder {
     return ByteString.copyFrom(data);
   }
 
-  static ByteString encodeUInt64(long value) throws IOException {
+  static ByteString encodeUint64(long value) throws IOException {
     byte[] data = new byte[CodedOutputStream.computeUInt64SizeNoTag(value)];
     CodedOutputStream stream = CodedOutputStream.newInstance(data);
     stream.writeUInt64NoTag(value);
@@ -243,11 +241,11 @@ public class Encoder {
   }
 
   static ByteString encodeObject(RemoteObject value) throws IOException {
-    return encodeUInt64(value.id);
+    return encodeUint64(value.id);
   }
 
   static ByteString encodeEnum(RemoteEnum value) throws IOException {
-    return encodeSInt32(value.getValue());
+    return encodeSint32(value.getValue());
   }
 
   static ByteString encodeTuple(Tuple value, List<KRPC.Type> valueTypes) throws IOException {
@@ -303,22 +301,22 @@ public class Encoder {
     return stream.readFloat();
   }
 
-  static int decodeSInt32(ByteString data) throws IOException {
+  static int decodeSint32(ByteString data) throws IOException {
     CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
     return stream.readSInt32();
   }
 
-  static long decodeSInt64(ByteString data) throws IOException {
+  static long decodeSint64(ByteString data) throws IOException {
     CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
     return stream.readSInt64();
   }
 
-  static int decodeUInt32(ByteString data) throws IOException {
+  static int decodeUint32(ByteString data) throws IOException {
     CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
     return stream.readUInt32();
   }
 
-  static long decodeUInt64(ByteString data) throws IOException {
+  static long decodeUint64(ByteString data) throws IOException {
     CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
     return stream.readUInt64();
   }
@@ -342,7 +340,7 @@ public class Encoder {
   static <T> T decodeObject(ByteString data, KRPC.Type type, Connection connection)
       throws IOException {
     try {
-      long id = decodeUInt64(data);
+      long id = decodeUint64(data);
       Class<?> classType = Class.forName(
           "krpc.client.services." + type.getService() + "$" + type.getName());
       Constructor<?> ctor = classType.getConstructor(Connection.class, long.class);
@@ -363,7 +361,7 @@ public class Encoder {
   @SuppressWarnings("unchecked")
   static <T> T decodeEnum(ByteString data, KRPC.Type type) {
     try {
-      int value = decodeSInt32(data);
+      int value = decodeSint32(data);
       Class<?> enumType = Class.forName(
           "krpc.client.services." + type.getService() + "$" + type.getName());
       return (T) enumType.getMethod("fromValue", int.class).invoke(null, value);

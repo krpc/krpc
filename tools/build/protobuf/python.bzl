@@ -37,5 +37,4 @@ protobuf_py = rule(
         "out": attr.output(mandatory = True),
         "out_pyi": attr.output(mandatory = True),
     },
-    output_to_genfiles = True,
 )

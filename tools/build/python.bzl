@@ -72,13 +72,7 @@ def _sdist_impl(ctx):
     # Build sdist from the staging directory
     # Note: staging dir can contain symlinks, so copy deference them first
     # by copying to a build directory
-    staging_dir_path = (
-        output.path.replace(
-            ctx.configuration.bin_dir.path,
-            ctx.configuration.genfiles_dir.path,
-        ) +
-        ".py-sdist-tmp"
-    )
+    staging_dir_path = output.path + ".py-sdist-tmp"
     build_dir_path = staging_dir_path + ".deref"
     build_log_path = build_dir_path + ".log"
 
@@ -152,10 +146,8 @@ def _script_impl(ctx):
         is_executable = True,
     )
 
-    # buildifier: disable=rule-impl-return
-    return struct(
-        name = ctx.label.name,
-        out = script_run,
+    return DefaultInfo(
+        executable = script_run,
         runfiles = ctx.runfiles(files = [script_env]),
     )
 
@@ -193,10 +185,8 @@ def _test_impl(ctx):
 
     runfiles = ctx.runfiles(files = [ctx.file.src] + ctx.files.deps)
 
-    # buildifier: disable=rule-impl-return
-    return struct(
-        name = ctx.label.name,
-        out = ctx.outputs.executable,
+    return DefaultInfo(
+        executable = ctx.outputs.executable,
         runfiles = runfiles,
     )
 
@@ -297,9 +287,8 @@ def _lint_impl(ctx):
         is_executable = True,
     )
 
-    # buildifier: disable=rule-impl-return
-    return struct(
-        name = ctx.label.name,
+    return DefaultInfo(
+        executable = ctx.outputs.executable,
         runfiles = ctx.runfiles(files = runfiles),
     )
 

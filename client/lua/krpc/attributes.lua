@@ -26,7 +26,7 @@ end
 
 function Attributes.is_a_class_member(name)
   -- Return true if the name is for a class member.
-  return name:find('_') and not (stringx.startswith(name, 'get_') or stringx.startswith(name, 'set_'))
+  return name:find('_') ~= nil and not (stringx.startswith(name, 'get_') or stringx.startswith(name, 'set_'))
 end
 
 function Attributes.is_a_class_method(name)
@@ -45,7 +45,7 @@ end
 
 function Attributes.is_a_class_property_accessor(name)
   -- Return true if the name is for a class property getter or setter.
-  return name:find('_get_') or name:find('_set_')
+  return name:find('_get_') ~= nil or name:find('_set_') ~= nil
 end
 
 function Attributes.is_a_class_property_getter(name)

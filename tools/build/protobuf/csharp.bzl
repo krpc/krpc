@@ -26,5 +26,4 @@ protobuf_csharp = rule(
         "out": attr.output(mandatory = True),
         "protoc": attr.label(default = Label("//tools/build/protobuf:protoc"), allow_single_file = True),
     },
-    output_to_genfiles = True,
 )

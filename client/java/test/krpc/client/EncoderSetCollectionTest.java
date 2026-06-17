@@ -5,26 +5,24 @@ import static krpc.client.TestUtils.unhexlify;
 import static org.junit.Assert.assertEquals;
 
 import com.google.protobuf.ByteString;
-
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import krpc.client.Types;
 import krpc.schema.KRPC.Type;
 import krpc.schema.KRPC.Type.TypeCode;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
+/** Tests for EncoderSetCollection. */
 @RunWith(Parameterized.class)
 public class EncoderSetCollectionTest {
   @Parameters
-  @SuppressWarnings("checkstyle:javadocmethod")
+  @SuppressWarnings("checkstyle:missingjavadocmethod")
   public static Collection<Object[]> data() {
     return Arrays.asList(new Object[][] {
       { new HashSet<Integer>(), "" },

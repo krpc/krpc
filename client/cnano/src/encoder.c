@@ -18,8 +18,8 @@ bool krpc_encode_callback_cstring(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for c string");
-  const char * string = (const char*)(*arg);
-  if (!pb_encode_string(stream, (const pb_byte_t*)string, strlen(string)))
+  const char * str = (const char*)(*arg);
+  if (!pb_encode_string(stream, (const pb_byte_t*)str, strlen(str)))
     KRPC_CALLBACK_RETURN_ERROR("encoding c string");
   return true;
 }
@@ -372,8 +372,8 @@ bool krpc_encode_callback_enum(
 }
 // [[[end]]]
 
-krpc_error_t krpc_encode_string(pb_ostream_t * stream, const char * string) {
-  if (!pb_encode_string(stream, (const pb_byte_t*)string, strlen(string)))
+krpc_error_t krpc_encode_string(pb_ostream_t * stream, const char * str) {
+  if (!pb_encode_string(stream, (const pb_byte_t*)str, strlen(str)))
     KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode string", stream);
   return KRPC_OK;
 }
@@ -386,9 +386,9 @@ krpc_error_t krpc_encode_bytes(pb_ostream_t * stream, krpc_bytes_t bytes) {
   return KRPC_OK;
 }
 
-krpc_error_t krpc_encode_size_string(size_t * size, const char * string) {
+krpc_error_t krpc_encode_size_string(size_t * size, const char * str) {
   pb_ostream_t stream = PB_OSTREAM_SIZING;
-  KRPC_RETURN_ON_ERROR(krpc_encode_string(&stream, string));
+  KRPC_RETURN_ON_ERROR(krpc_encode_string(&stream, str));
   *size = stream.bytes_written;
   return KRPC_OK;
 }

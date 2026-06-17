@@ -1,12 +1,14 @@
 #include "krpc/stream_impl.hpp"
 
+#include <string>
+
 #include "krpc/client.hpp"
 #include "krpc/error.hpp"
 #include "krpc/services/krpc.hpp"
 
 namespace krpc {
 
-StreamImpl::StreamImpl(Client * client, google::protobuf::uint64 id,
+StreamImpl::StreamImpl(Client * client, uint64_t id,
                        std::recursive_mutex * update_lock) :
   client(client),
   id(id),
@@ -22,7 +24,7 @@ Client * StreamImpl::get_client() const {
   return client;
 }
 
-google::protobuf::uint64 StreamImpl::get_id() const {
+uint64_t StreamImpl::get_id() const {
   return id;
 }
 

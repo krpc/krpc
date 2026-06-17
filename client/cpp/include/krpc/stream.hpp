@@ -18,7 +18,7 @@ class Stream {
  public:
   Stream();
   Stream(Client* client, const schema::ProcedureCall& call);
-  Stream(Client* client, google::protobuf::uint64 id);
+  Stream(Client* client, uint64_t id);
   /** Start the stream. */
   void start(bool wait = true);
   /** The rate of the stream, in Hertz. Zero if the rate is unlimited. */
@@ -67,7 +67,7 @@ template <typename T> inline Stream<T>::Stream(Client* client, const schema::Pro
   impl(client->add_stream(call)), acquired(false) {
 }
 
-template <typename T> inline Stream<T>::Stream(Client* client, google::protobuf::uint64 id) :
+template <typename T> inline Stream<T>::Stream(Client* client, uint64_t id) :
   impl(client->get_stream(id)), acquired(false) {
 }
 

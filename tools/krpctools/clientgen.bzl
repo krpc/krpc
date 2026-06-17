@@ -28,7 +28,6 @@ clientgen = rule(
             cfg = "exec",
         ),
     },
-    output_to_genfiles = True,
 )
 
 # buildifier: disable=function-docstring

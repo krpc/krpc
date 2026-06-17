@@ -5,21 +5,21 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import krpc.client.services.TestService;
 import krpc.client.services.TestService.CustomException;
 import krpc.client.services.TestService.TestClass;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-
+/** Tests for Stream. */
 public class StreamTest {
 
   private Connection connection;
   private TestService testService;
 
   @Before
+  @SuppressWarnings("checkstyle:missingjavadocmethod")
   public void setup() throws IOException {
     connection = TestUtils.connect();
     testService = TestService.newInstance(connection);
@@ -298,7 +298,7 @@ public class StreamTest {
     testService.resetInvalidOperationExceptionLater();
     Stream<Integer> stream = connection.addStream(
         TestService.class, "throwInvalidOperationExceptionLater");
-    assertEquals((Integer)0, stream.get());
+    assertEquals((Integer) 0, stream.get());
     try {
       while (true) {
         pause();
@@ -325,7 +325,7 @@ public class StreamTest {
       throws RPCException, StreamException {
     testService.resetCustomExceptionLater();
     Stream<Integer> stream = connection.addStream(TestService.class, "throwCustomExceptionLater");
-    assertEquals(0, (int)stream.get());
+    assertEquals(0, (int) stream.get());
     try {
       while (true) {
         pause();
@@ -341,7 +341,7 @@ public class StreamTest {
       throws RPCException, StreamException {
     Stream<Integer> stream = connection.addStream(TestService.class, "blockingProcedure", 10, 0);
     for (int i = 0; i < 100; i++) {
-      assertEquals(55, (int)stream.get());
+      assertEquals(55, (int) stream.get());
       pause();
     }
   }
@@ -357,7 +357,7 @@ public class StreamTest {
       while (count < 10) {
         stream.waitForUpdate();
         count++;
-        assertEquals(count, (int)stream.get());
+        assertEquals(count, (int) stream.get());
       }
     }
   }
@@ -370,7 +370,7 @@ public class StreamTest {
     synchronized (stream.getCondition()) {
       int count = stream.get();
       stream.waitForUpdateWithTimeout(0);
-      assertEquals(count, (int)stream.get());
+      assertEquals(count, (int) stream.get());
     }
   }
 
@@ -385,7 +385,7 @@ public class StreamTest {
       while (count < 10) {
         stream.waitForUpdateWithTimeout(10);
         count++;
-        assertEquals(count, (int)stream.get());
+        assertEquals(count, (int) stream.get());
       }
     }
   }

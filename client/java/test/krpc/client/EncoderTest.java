@@ -7,19 +7,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.google.protobuf.ByteString;
-
 import krpc.client.Types;
 import krpc.client.services.TestService;
 import krpc.schema.KRPC;
 import krpc.schema.KRPC.Type;
 import krpc.schema.KRPC.Type.TypeCode;
-
 import org.javatuples.Triplet;
 import org.javatuples.Unit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+/** Tests for Encoder. */
 public class EncoderTest {
   @Test
   public void testEncodeMessage() {

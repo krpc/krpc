@@ -111,11 +111,8 @@ def _spelling_impl(ctx):
         is_executable = True,
     )
 
-    # buildifier: disable=rule-impl-return
-    return struct(
-        name = ctx.label.name,
-        out = out,
-        tools = [sphinx_build],
+    return DefaultInfo(
+        executable = out,
         runfiles = ctx.runfiles(files = [sphinx_build] + sphinx_build_runfiles + srcs),
     )
 
@@ -166,11 +163,8 @@ def _linkcheck_impl(ctx):
         is_executable = True,
     )
 
-    # buildifier: disable=rule-impl-return
-    return struct(
-        name = ctx.label.name,
-        out = out,
-        tools = [sphinx_build],
+    return DefaultInfo(
+        executable = out,
         runfiles = ctx.runfiles(files = [sphinx_build] + sphinx_build_runfiles + srcs),
     )
 

@@ -2,7 +2,11 @@ package krpc.client;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;
-
+import java.io.IOException;
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 import krpc.client.services.KRPC;
 import krpc.schema.KRPC.Error;
 import krpc.schema.KRPC.ProcedureCall;
@@ -11,12 +15,6 @@ import krpc.schema.KRPC.Response;
 import krpc.schema.KRPC.StreamResult;
 import krpc.schema.KRPC.StreamUpdate;
 import krpc.schema.KRPC.Type;
-
-import java.io.IOException;
-import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
 
 class StreamManager {
   private Connection connection;

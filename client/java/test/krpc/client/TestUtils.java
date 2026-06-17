@@ -1,7 +1,6 @@
 package krpc.client;
 
 import com.google.protobuf.ByteString;
-
 import java.io.IOException;
 
 class TestUtils {

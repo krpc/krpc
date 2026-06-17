@@ -1,12 +1,12 @@
 package krpc.client;
 
+import java.io.IOException;
+import java.util.function.Consumer;
 import krpc.schema.KRPC.Error;
 import krpc.schema.KRPC.ProcedureCall;
 import krpc.schema.KRPC.Type;
 
-import java.io.IOException;
-import java.util.function.Consumer;
-
+/** A stream that receives live updates from the server. */
 public class Stream<T> implements Comparable<Stream<T>> {
   private Connection connection;
   StreamImpl stream;
@@ -99,7 +99,7 @@ public class Stream<T> implements Comparable<Stream<T>> {
     }
     Object value = stream.getValue();
     if (value instanceof Error) {
-      connection.throwException((Error)value);
+      connection.throwException((Error) value);
     } else if (value instanceof RPCException) {
       throw (RPCException) value;
     } else if (value instanceof StreamException) {
@@ -140,7 +140,7 @@ public class Stream<T> implements Comparable<Stream<T>> {
       return;
     }
     try {
-      stream.getCondition().wait((long)(timeout * 1000));
+      stream.getCondition().wait((long) (timeout * 1000));
     } catch (InterruptedException exn) {
       throw new StreamException("wait was interrupted", exn);
     }
@@ -153,7 +153,7 @@ public class Stream<T> implements Comparable<Stream<T>> {
    */
   @SuppressWarnings("unchecked")
   public int addCallback(Consumer<T> callback) {
-    return stream.addCallback((Object value) -> callback.accept((T)value));
+    return stream.addCallback((Object value) -> callback.accept((T) value));
   }
 
   /**

@@ -2,18 +2,9 @@ package krpc.client;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
-import krpc.client.services.KRPC;
-import krpc.client.services.TestService;
-import krpc.schema.KRPC.Status;
-
-import org.javatuples.Pair;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,18 +15,22 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import krpc.client.services.KRPC;
+import krpc.client.services.TestService;
+import krpc.schema.KRPC.Status;
+import org.javatuples.Pair;
+import org.junit.Before;
+import org.junit.Test;
 
+/** Tests for Connection. */
 public class ConnectionTest {
 
   private Connection connection;
   private KRPC krpc;
   private TestService testService;
 
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
-
   @Before
-  @SuppressWarnings("checkstyle:javadocmethod")
+  @SuppressWarnings("checkstyle:missingjavadocmethod")
   public void setup() throws IOException {
     connection = TestUtils.connect();
     krpc = KRPC.newInstance(connection);
@@ -62,23 +57,23 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testWrongRpcServer() throws IOException {
-    expectedException.expect(ConnectionException.class);
-    expectedException.expectMessage(
+  public void testWrongRpcServer() {
+    ConnectionException e = assertThrows(ConnectionException.class, () ->
+        Connection.newInstance("JavaClientTestWrongRpcServer", "localhost",
+            TestUtils.getStreamPort(), TestUtils.getStreamPort()));
+    assertTrue(e.getMessage().contains(
         "Connection request was for the rpc server, but this is the stream server. "
-        + "Did you connect to the wrong port number?");
-    Connection.newInstance("JavaClientTestWrongRpcServer", "localhost",
-        TestUtils.getStreamPort(), TestUtils.getStreamPort());
+        + "Did you connect to the wrong port number?"));
   }
 
   @Test
-  public void testWrongStreamServer() throws IOException {
-    expectedException.expect(ConnectionException.class);
-    expectedException.expectMessage(
+  public void testWrongStreamServer() {
+    ConnectionException e = assertThrows(ConnectionException.class, () ->
+        Connection.newInstance("JavaClientTestWrongStreamServer", "localhost",
+            TestUtils.getRpcPort(), TestUtils.getRpcPort()));
+    assertTrue(e.getMessage().contains(
         "Connection request was for the stream server, but this is the rpc server. "
-        + "Did you connect to the wrong port number?");
-    Connection.newInstance("JavaClientTestWrongStreamServer", "localhost",
-        TestUtils.getRpcPort(), TestUtils.getRpcPort());
+        + "Did you connect to the wrong port number?"));
   }
 
   @Test
@@ -236,39 +231,39 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testInvalidOperationException() throws RPCException {
-    expectedException.expect(UnsupportedOperationException.class);
-    expectedException.expectMessage("Invalid operation");
-    TestService.newInstance(connection).throwInvalidOperationException();
+  public void testInvalidOperationException() {
+    UnsupportedOperationException e = assertThrows(UnsupportedOperationException.class,
+        () -> TestService.newInstance(connection).throwInvalidOperationException());
+    assertTrue(e.getMessage().contains("Invalid operation"));
   }
 
   @Test
-  public void testArgumentException() throws RPCException {
-    expectedException.expect(IllegalArgumentException.class);
-    expectedException.expectMessage("Invalid argument");
-    TestService.newInstance(connection).throwArgumentException();
+  public void testArgumentException() {
+    IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+        () -> TestService.newInstance(connection).throwArgumentException());
+    assertTrue(e.getMessage().contains("Invalid argument"));
   }
 
   @Test
-  public void testArgumentNullException() throws RPCException {
-    expectedException.expect(IllegalArgumentException.class);
-    expectedException.expectMessage("Value cannot be null.\nParameter name: foo");
-    TestService.newInstance(connection).throwArgumentNullException("");
+  public void testArgumentNullException() {
+    IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+        () -> TestService.newInstance(connection).throwArgumentNullException(""));
+    assertTrue(e.getMessage().contains("Value cannot be null.\nParameter name: foo"));
   }
 
   @Test
-  public void testArgumentOutOfBoundsException() throws RPCException {
-    expectedException.expect(IndexOutOfBoundsException.class);
-    expectedException.expectMessage(
-        "Specified argument was out of the range of valid values.\nParameter name: foo");
-    TestService.newInstance(connection).throwArgumentOutOfRangeException(0);
+  public void testArgumentOutOfBoundsException() {
+    IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class,
+        () -> TestService.newInstance(connection).throwArgumentOutOfRangeException(0));
+    assertTrue(e.getMessage().contains(
+        "Specified argument was out of the range of valid values.\nParameter name: foo"));
   }
 
   @Test
-  public void testCustomException() throws RPCException {
-    expectedException.expect(TestService.CustomException.class);
-    expectedException.expectMessage("A custom kRPC exception");
-    TestService.newInstance(connection).throwCustomException();
+  public void testCustomException() {
+    TestService.CustomException e = assertThrows(TestService.CustomException.class,
+        () -> TestService.newInstance(connection).throwCustomException());
+    assertTrue(e.getMessage().contains("A custom kRPC exception"));
   }
 
   @Test

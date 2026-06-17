@@ -24,7 +24,6 @@ from krpc.types import (
     DictionaryType,
 )
 
-
 # The following unpacks the internal protobuf decoders, whose signature
 # depends on the version of protobuf installed
 _pb_VarintEncoder = protobuf_encoder._VarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
