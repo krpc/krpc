@@ -32,6 +32,11 @@ namespace KRPC
         static Core instance;
 
         /// <summary>
+        /// The server version string, set by the server plugin on startup.
+        /// </summary>
+        public string Version { get; set; }
+
+        /// <summary>
         /// Get the core instance
         /// </summary>
         public static Core Instance {

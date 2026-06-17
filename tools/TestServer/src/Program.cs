@@ -113,6 +113,8 @@ namespace TestServer
             }
 
             var core = Core.Instance;
+            var serverVersion = Assembly.GetEntryAssembly ().GetName ().Version;
+            core.Version = serverVersion.Major + "." + serverVersion.Minor + "." + serverVersion.Build;
             CallContext.GameScene = GameScene.SpaceCenter;
             core.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
 
