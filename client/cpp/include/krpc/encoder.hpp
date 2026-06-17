@@ -1,7 +1,6 @@
 #pragma once
 
-#include <google/protobuf/stubs/port.h>
-
+#include <cstdint>
 #include <map>
 #include <set>
 #include <string>
@@ -24,10 +23,10 @@ namespace encoder {
 
 std::string encode(float value);
 std::string encode(double value);
-std::string encode(google::protobuf::int32 value);
-std::string encode(google::protobuf::int64 value);
-std::string encode(google::protobuf::uint32 value);
-std::string encode(google::protobuf::uint64 value);
+std::string encode(int32_t value);
+std::string encode(int64_t value);
+std::string encode(uint32_t value);
+std::string encode(uint64_t value);
 std::string encode(bool value);
 std::string encode(const char* value);
 std::string encode(const std::string& value);

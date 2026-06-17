@@ -12,6 +12,7 @@ public abstract class RemoteObject implements Serializable, Comparable<RemoteObj
   protected final transient Connection connection;
   final long id;
 
+  /** Creates a new RemoteObject wrapping the given id. */
   protected RemoteObject(Connection connection, long id) {
     this.connection = connection;
     this.id = id;

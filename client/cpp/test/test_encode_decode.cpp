@@ -1,14 +1,14 @@
-#include <google/protobuf/stubs/port.h>
-
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 #include <limits>
 #include <map>
 #include <set>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "gtest/gtest.h"
@@ -18,8 +18,6 @@
 #include "krpc/platform.hpp"
 
 #include "services/test_service.hpp"
-
-namespace pb = google::protobuf;
 
 template<typename T> void test_value(T decoded, std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
@@ -122,38 +120,38 @@ TEST(test_encode_decode, test_float) {
 }
 
 TEST(test_encode_decode, test_sint32) {
-  test_value<pb::int32>(0, "00");
-  test_value<pb::int32>(1, "02");
-  test_value<pb::int32>(42, "54");
-  test_value<pb::int32>(300, "d804");
-  test_value<pb::int32>(-33, "41");
-  test_value<pb::int32>(2147483647, "feffffff0f");
-  test_value<pb::int32>(-2147483648, "ffffffff0f");
+  test_value<int32_t>(0, "00");
+  test_value<int32_t>(1, "02");
+  test_value<int32_t>(42, "54");
+  test_value<int32_t>(300, "d804");
+  test_value<int32_t>(-33, "41");
+  test_value<int32_t>(2147483647, "feffffff0f");
+  test_value<int32_t>(-2147483648, "ffffffff0f");
 }
 
 TEST(test_encode_decode, test_sint64) {
-  test_value<pb::int64>(0, "00");
-  test_value<pb::int64>(1, "02");
-  test_value<pb::int64>(42, "54");
-  test_value<pb::int64>(300, "d804");
-  test_value<pb::int64>(1234567890000L, "a091d89fee47");
-  test_value<pb::int64>(-33, "41");
+  test_value<int64_t>(0, "00");
+  test_value<int64_t>(1, "02");
+  test_value<int64_t>(42, "54");
+  test_value<int64_t>(300, "d804");
+  test_value<int64_t>(1234567890000L, "a091d89fee47");
+  test_value<int64_t>(-33, "41");
 }
 
 TEST(test_encode_decode, test_uint32) {
-  test_value<pb::uint32>(0, "00");
-  test_value<pb::uint32>(1, "01");
-  test_value<pb::uint32>(42, "2a");
-  test_value<pb::uint32>(300, "ac02");
-  test_value<pb::uint32>(std::numeric_limits<pb::uint32>::max(), "ffffffff0f");
+  test_value<uint32_t>(0, "00");
+  test_value<uint32_t>(1, "01");
+  test_value<uint32_t>(42, "2a");
+  test_value<uint32_t>(300, "ac02");
+  test_value<uint32_t>(std::numeric_limits<uint32_t>::max(), "ffffffff0f");
 }
 
 TEST(test_encode_decode, test_uint64) {
-  test_value<pb::uint64>(0, "00");
-  test_value<pb::uint64>(1, "01");
-  test_value<pb::uint64>(42, "2a");
-  test_value<pb::uint64>(300, "ac02");
-  test_value<pb::uint64>(1234567890000L, "d088ec8ff723");
+  test_value<uint64_t>(0, "00");
+  test_value<uint64_t>(1, "01");
+  test_value<uint64_t>(42, "2a");
+  test_value<uint64_t>(300, "ac02");
+  test_value<uint64_t>(1234567890000L, "d088ec8ff723");
 }
 
 TEST(test_encode_decode, test_bool) {
@@ -179,14 +177,14 @@ TEST(test_encode_decode, test_bytes) {
 }
 
 TEST(test_encode_decode, test_list) {
-  test_list(std::vector<pb::uint32>(), "");
+  test_list(std::vector<uint32_t>(), "");
   {
-    std::vector<pb::uint32> l;
+    std::vector<uint32_t> l;
     l.push_back(1);
     test_list(l, "0a0101");
   }
   {
-    std::vector<pb::uint32> l;
+    std::vector<uint32_t> l;
     l.push_back(1);
     l.push_back(2);
     l.push_back(3);
@@ -196,14 +194,14 @@ TEST(test_encode_decode, test_list) {
 }
 
 TEST(test_encode_decode, test_dictionary) {
-  test_dictionary(std::map<std::string, pb::uint32>(), "");
+  test_dictionary(std::map<std::string, uint32_t>(), "");
   {
-    std::map<std::string, pb::uint32> d;
+    std::map<std::string, uint32_t> d;
     d[""] = 0;
     test_dictionary(d, "0a060a0100120100");
   }
   {
-    std::map<std::string, pb::uint32> d;
+    std::map<std::string, uint32_t> d;
     d["foo"] = 42;
     d["bar"] = 365;
     d["baz"] = 3;
@@ -212,14 +210,14 @@ TEST(test_encode_decode, test_dictionary) {
 }
 
 TEST(test_encode_decode, test_set) {
-  test_set(std::set<pb::uint32>(), "");
+  test_set(std::set<uint32_t>(), "");
   {
-    std::set<pb::uint32> s;
+    std::set<uint32_t> s;
     s.insert(1);
     test_set(s, "0a0101");
   }
   {
-    std::set<pb::uint32> s;
+    std::set<uint32_t> s;
     s.insert(1);
     s.insert(2);
     s.insert(3);
@@ -229,8 +227,8 @@ TEST(test_encode_decode, test_set) {
 }
 
 TEST(test_encode_decode, test_tuple) {
-  test_tuple1(std::tuple<pb::uint32>(1), "0a0101");
-  test_tuple3(std::tuple<pb::uint32, std::string, bool>(1, "jeb", false),
+  test_tuple1(std::tuple<uint32_t>(1), "0a0101");
+  test_tuple3(std::tuple<uint32_t, std::string, bool>(1, "jeb", false),
               "0a01010a04036a65620a0100");
 }
 

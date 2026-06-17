@@ -178,9 +178,9 @@ class _ValueDecoder:
         # significand bit set, it's not a number.  In Python 2.4, struct.unpack
         # will treat it as inf or -inf.  To avoid that, we treat it specially.
         if (
-            (double_bytes[7:8] in b"\x7F\xFF")
-            and (double_bytes[6:7] >= b"\xF0")
-            and (double_bytes[0:7] != b"\x00\x00\x00\x00\x00\x00\xF0")
+            (double_bytes[7:8] in b"\x7f\xff")
+            and (double_bytes[6:7] >= b"\xf0")
+            and (double_bytes[0:7] != b"\x00\x00\x00\x00\x00\x00\xf0")
         ):
             return krpc.platform.NAN
 
@@ -201,12 +201,12 @@ class _ValueDecoder:
         # If this value has all its exponent bits set, then it's non-finite.
         # In Python 2.4, struct.unpack will convert it to a finite 64-bit
         # value. To avoid that, we parse it specially.
-        if float_bytes[3:4] in b"\x7F\xFF" and float_bytes[2:3] >= b"\x80":
+        if float_bytes[3:4] in b"\x7f\xff" and float_bytes[2:3] >= b"\x80":
             # If at least one significand bit is set...
             if float_bytes[0:3] != b"\x00\x00\x80":
                 return krpc.platform.NAN
             # If sign bit is set...
-            if float_bytes[3:4] == b"\xFF":
+            if float_bytes[3:4] == b"\xff":
                 return krpc.platform.NEG_INF
             return krpc.platform.POS_INF
 
@@ -224,10 +224,10 @@ class _ValueDecoder:
 
     @classmethod
     def decode_string(cls, data: bytes) -> str:
-        (size, position) = protobuf_decoder._DecodeVarint(data, 0)  # type: ignore[attr-defined]
+        size, position = protobuf_decoder._DecodeVarint(data, 0)  # type: ignore[attr-defined]
         return data[position : position + size].decode("utf-8")
 
     @classmethod
     def decode_bytes(cls, data: bytes) -> bytes:
-        (size, position) = protobuf_decoder._DecodeVarint(data, 0)  # type: ignore[attr-defined]
+        size, position = protobuf_decoder._DecodeVarint(data, 0)  # type: ignore[attr-defined]
         return data[position : position + size]

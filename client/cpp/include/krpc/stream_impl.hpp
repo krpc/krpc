@@ -1,8 +1,7 @@
 #pragma once
 
-#include <google/protobuf/stubs/port.h>
-
 #include <condition_variable>  // NOLINT(build/c++11)
+#include <cstdint>
 #include <exception>
 #include <functional>
 #include <map>
@@ -15,9 +14,9 @@ class Client;
 
 class StreamImpl {
  public:
-  StreamImpl(Client * client, google::protobuf::uint64 id, std::recursive_mutex * update_lock);
+  StreamImpl(Client * client, uint64_t id, std::recursive_mutex * update_lock);
   Client * get_client() const;
-  google::protobuf::uint64 get_id() const;
+  uint64_t get_id() const;
   void start();
   bool has_started() const;
   float rate() const;
@@ -36,7 +35,7 @@ class StreamImpl {
 
  private:
   Client * client;
-  google::protobuf::uint64 id;
+  uint64_t id;
   std::recursive_mutex * update_lock;
   bool started;
   bool updated;

@@ -5,33 +5,28 @@ import static krpc.client.TestUtils.unhexlify;
 import static org.junit.Assert.assertEquals;
 
 import com.google.protobuf.ByteString;
-
+import java.util.Arrays;
+import java.util.Collection;
 import krpc.client.Types;
 import krpc.schema.KRPC.Type;
 import krpc.schema.KRPC.Type.TypeCode;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
-import java.util.Arrays;
-import java.util.Collection;
-
+/** Tests for EncoderUint32Value. */
 @RunWith(Parameterized.class)
-public class EncoderSInt32ValueTest {
+public class EncoderUint32ValueTest {
   @Parameters
-  @SuppressWarnings("checkstyle:javadocmethod")
+  @SuppressWarnings("checkstyle:missingjavadocmethod")
   public static Collection<Object[]> data() {
     return Arrays.asList(new Object[][] {
       { 0, "00" },
-      { 1, "02" },
-      { 42, "54" },
-      { 300, "d804" },
-      { -33, "41" },
-      { 2147483647, "feffffff0f" },
-      { -2147483648, "ffffffff0f" }
+      { 1, "01" },
+      { 42, "2a" },
+      { 300, "ac02" }
     });
   }
 
@@ -40,7 +35,7 @@ public class EncoderSInt32ValueTest {
   @Parameter(value = 1)
   public String data;
 
-  Type type = Types.createValue(TypeCode.SINT32);
+  Type type = Types.createValue(TypeCode.UINT32);
 
   @Test
   public void testEncode() {

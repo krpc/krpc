@@ -22,7 +22,7 @@ TEST(test_decoder, test_decode_value) {
   pb_istream_t stream = create_stream(data, "ac02");
   unsigned int value = 0;
   ASSERT_EQ(KRPC_OK, krpc_decode_uint32(&stream, &value));
-  ASSERT_EQ(300, value);
+  ASSERT_EQ(300u, value);
 }
 
 TEST(test_decoder, test_decode_unicode_string) {
@@ -39,7 +39,7 @@ TEST(test_decoder, test_decode_object) {
   pb_istream_t stream = create_stream(data, "ac02");
   krpc_TestService_TestClass_t object = 0;
   ASSERT_EQ(KRPC_OK, krpc_decode_object(&stream, &object));
-  ASSERT_EQ(300, object);
+  ASSERT_EQ(300ULL, object);
 }
 
 TEST(test_decoder, test_decode_object_none) {
@@ -47,5 +47,5 @@ TEST(test_decoder, test_decode_object_none) {
   pb_istream_t stream = create_stream(data, "00");
   krpc_TestService_TestClass_t object = 42;
   ASSERT_EQ(KRPC_OK, krpc_decode_object(&stream, &object));
-  ASSERT_EQ(0, object);
+  ASSERT_EQ(0ULL, object);
 }

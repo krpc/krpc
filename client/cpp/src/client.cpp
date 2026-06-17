@@ -1,9 +1,10 @@
 #include "krpc/client.hpp"
 
+#include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
-// IWYU pragma: no_include <asio/impl/io_service.ipp>
 
 #include "krpc/connection.hpp"
 #include "krpc/decoder.hpp"
@@ -137,11 +138,11 @@ std::shared_ptr<StreamImpl> Client::add_stream(const schema::ProcedureCall& call
   return stream_manager->add_stream(call);
 }
 
-std::shared_ptr<StreamImpl> Client::get_stream(google::protobuf::uint64 id) {
+std::shared_ptr<StreamImpl> Client::get_stream(uint64_t id) {
   return stream_manager->get_stream(id);
 }
 
-void Client::remove_stream(google::protobuf::uint64 id) {
+void Client::remove_stream(uint64_t id) {
   stream_manager->remove_stream(id);
 }
 

@@ -5,17 +5,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import krpc.client.services.KRPC;
 import krpc.client.services.KRPC.Expression;
 import krpc.client.services.TestService;
 import krpc.client.services.TestService.CustomException;
 import krpc.client.services.TestService.TestClass;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-
+/** Tests for Event. */
 public class EventTest {
 
   private Connection connection;
@@ -24,6 +23,7 @@ public class EventTest {
 
   /** Set up test. */
   @Before
+  @SuppressWarnings("checkstyle:missingjavadocmethod")
   public void setup() throws IOException {
     connection = TestUtils.connect();
     krpc = KRPC.newInstance(connection);

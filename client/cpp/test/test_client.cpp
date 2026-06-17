@@ -1,10 +1,9 @@
-#include <google/protobuf/stubs/port.h>
-
 #include <gmock/gmock-matchers.h>
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
 
 #include <atomic>
+#include <cstdint>
 #include <exception>
 #include <iosfwd>
 #include <map>
@@ -13,6 +12,7 @@
 #include <stdexcept>
 #include <string>
 #include <thread>  // NOLINT(build/c++11)
+#include <tuple>
 #include <vector>
 
 #include "gtest/gtest.h"
@@ -253,18 +253,18 @@ TEST_F(test_client, test_collections) {
 
 TEST_F(test_client, test_nested_collections) {
   {
-    std::map<std::string, std::vector<google::protobuf::int32>> m;
+    std::map<std::string, std::vector<int32_t>> m;
     ASSERT_EQ(m, test_service.increment_nested_collection(m));
   }
   {
-    std::map<std::string, std::vector<google::protobuf::int32>> m1;
+    std::map<std::string, std::vector<int32_t>> m1;
     m1["a"] = std::vector<int>();
     m1["a"].push_back(0);
     m1["a"].push_back(1);
     m1["b"] = std::vector<int>();
     m1["c"] = std::vector<int>();
     m1["c"].push_back(2);
-    std::map<std::string, std::vector<google::protobuf::int32>> m2;
+    std::map<std::string, std::vector<int32_t>> m2;
     m2["a"] = std::vector<int>();
     m2["a"].push_back(1);
     m2["a"].push_back(2);
@@ -279,10 +279,10 @@ TEST_F(test_client, test_collections_of_objects) {
   typedef std::vector<krpc::services::TestService::TestClass> ListType;
   ListType l1;
   ListType l2 = test_service.add_to_object_list(l1, "jeb");
-  ASSERT_EQ(1, l2.size());
+  ASSERT_EQ(1u, l2.size());
   ASSERT_EQ("value=jeb", l2[0].get_value());
   ListType l3 = test_service.add_to_object_list(l2, "bob");
-  ASSERT_EQ(2, l3.size());
+  ASSERT_EQ(2u, l3.size());
   ASSERT_EQ("value=jeb", l3[0].get_value());
   ASSERT_EQ("value=bob", l3[1].get_value());
 }

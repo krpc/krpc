@@ -1,5 +1,7 @@
 package krpc.client;
 
+import java.io.IOException;
+import java.lang.Runnable;
 import krpc.client.Stream;
 import krpc.schema.KRPC;
 import krpc.schema.KRPC.Error;
@@ -7,9 +9,7 @@ import krpc.schema.KRPC.ProcedureCall;
 import krpc.schema.KRPC.Type;
 import krpc.schema.KRPC.Type.TypeCode;
 
-import java.io.IOException;
-import java.lang.Runnable;
-
+/** Represents a server-side event that can be waited on. */
 public class Event implements Comparable<Event> {
   private Connection connection;
   private Stream<Boolean> stream;

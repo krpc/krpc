@@ -23,6 +23,5 @@ java_binary(
 )
 
 exports_files([
-    "google_checks.xml",
     "default.properties",
 ])

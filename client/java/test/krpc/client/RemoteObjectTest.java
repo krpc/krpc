@@ -5,19 +5,19 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import krpc.client.services.TestService;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-
+/** Tests for RemoteObject. */
 public class RemoteObjectTest {
 
   private Connection connection;
   private TestService testService;
 
   @Before
+  @SuppressWarnings("checkstyle:missingjavadocmethod")
   public void setup() throws IOException {
     connection = TestUtils.connect();
     testService = TestService.newInstance(connection);

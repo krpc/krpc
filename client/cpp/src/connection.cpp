@@ -8,7 +8,6 @@
 #include <asio/buffer.hpp>
 #include <asio/connect.hpp>  // IWYU pragma: keep
 #include <asio/error_code.hpp>
-#include <asio/ip/basic_resolver_iterator.hpp>
 #include <asio/read.hpp>  // IWYU pragma: keep
 #include <asio/steady_timer.hpp>
 #include <asio/write.hpp>  // IWYU pragma: keep
@@ -24,14 +23,13 @@
 namespace krpc {
 
 Connection::Connection(const std::string& address, unsigned int port):
-  socket(io_service), address(address), port(port), resolver(io_service) {}
+  socket(io_context), address(address), port(port), resolver(io_context) {}
 
 void Connection::connect() {
   std::ostringstream port_str;
   port_str << port;
-  asio::ip::tcp::resolver::query query(asio::ip::tcp::v4(), address, port_str.str());
-  asio::ip::tcp::resolver::iterator iterator = resolver.resolve(query);
-  asio::connect(socket, iterator);
+  auto endpoints = resolver.resolve(asio::ip::tcp::v4(), address, port_str.str());
+  asio::connect(socket, endpoints);
 }
 
 void Connection::send(const char* data, size_t length) {
@@ -70,7 +68,7 @@ std::string Connection::partial_receive(size_t length, std::chrono::milliseconds
 
   bool timer_complete = false;
   asio::steady_timer timer(socket.get_executor());
-  timer.expires_from_now(timeout);
+  timer.expires_after(timeout);
   timer.async_wait(
     [&timer_complete] (const asio::error_code& error) {
       timer_complete = true;
@@ -84,8 +82,8 @@ std::string Connection::partial_receive(size_t length, std::chrono::milliseconds
       read_complete = true;
     });
 
-  io_service.reset();
-  while (io_service.run_one()) {
+  io_context.restart();
+  while (io_context.run_one()) {
     if (read_complete)
       timer.cancel();
     else if (timer_complete)

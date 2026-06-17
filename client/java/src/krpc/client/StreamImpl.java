@@ -1,12 +1,11 @@
 package krpc.client;
 
-import krpc.client.StreamException;
-import krpc.client.services.KRPC;
-import krpc.schema.KRPC.Type;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import krpc.client.StreamException;
+import krpc.client.services.KRPC;
+import krpc.schema.KRPC.Type;
 
 class StreamImpl {
   private Connection connection;

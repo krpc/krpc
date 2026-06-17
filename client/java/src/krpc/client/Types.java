@@ -3,12 +3,15 @@ package krpc.client;
 import krpc.schema.KRPC.Type;
 import krpc.schema.KRPC.Type.TypeCode;
 
+/** Factory methods for kRPC type descriptors. */
 public class Types {
 
+  /** Create a value type with the given type code. */
   public static Type createValue(TypeCode code) {
     return Type.newBuilder().setCode(code).build();
   }
 
+  /** Create a message type with the given type code. */
   public static Type createMessage(TypeCode code) {
     return Type.newBuilder().setCode(code).build();
   }

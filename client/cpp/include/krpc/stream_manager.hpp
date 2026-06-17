@@ -1,9 +1,8 @@
 #pragma once
 
-#include <google/protobuf/stubs/port.h>
-
 #include <atomic>
 #include <condition_variable>  // NOLINT(build/c++11)
+#include <cstdint>
 #include <functional>
 #include <map>
 #include <memory>
@@ -25,9 +24,9 @@ class StreamManager {
   StreamManager(Client* client, const std::shared_ptr<Connection>& connection);
   ~StreamManager();
   std::shared_ptr<StreamImpl> add_stream(const schema::ProcedureCall& call);
-  std::shared_ptr<StreamImpl> get_stream(google::protobuf::uint64 id);
-  void remove_stream(google::protobuf::uint64 id);
-  void update(google::protobuf::uint64 id, const schema::ProcedureResult& result);
+  std::shared_ptr<StreamImpl> get_stream(uint64_t id);
+  void remove_stream(uint64_t id);
+  void update(uint64_t id, const schema::ProcedureResult& result);
   void freeze();
   void thaw();
   std::condition_variable& get_update_condition();
@@ -45,7 +44,7 @@ class StreamManager {
                                  const std::shared_ptr<std::atomic_bool>& frozen);
   Client* client;
   std::shared_ptr<Connection> connection;
-  std::map<google::protobuf::uint64, std::weak_ptr<StreamImpl>> streams;
+  std::map<uint64_t, std::weak_ptr<StreamImpl>> streams;
   std::shared_ptr<std::recursive_mutex> update_lock;
   std::shared_ptr<std::atomic_bool> stop;
   std::shared_ptr<std::atomic_bool> should_freeze;

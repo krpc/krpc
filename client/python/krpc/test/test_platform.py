@@ -12,12 +12,12 @@ class TestPlatform(unittest.TestCase):
     def test_hexlify(self) -> None:
         self.assertEqual(hexlify(b""), "")
         self.assertEqual(hexlify(b"\x00\x01\x02"), "000102")
-        self.assertEqual(hexlify(b"\xFF"), "ff")
+        self.assertEqual(hexlify(b"\xff"), "ff")
 
     def test_unhexlify(self) -> None:
         self.assertEqual(unhexlify(""), b"")
         self.assertEqual(unhexlify("000102"), b"\x00\x01\x02")
-        self.assertEqual(unhexlify("ff"), b"\xFF")
+        self.assertEqual(unhexlify("ff"), b"\xff")
 
 
 if __name__ == "__main__":

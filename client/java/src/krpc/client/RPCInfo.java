@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/** Annotation marking a method as a kRPC remote procedure call. */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD })
 @SuppressWarnings("checkstyle:abbreviationaswordinname")

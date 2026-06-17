@@ -3,6 +3,8 @@
 
 #include <krpc_cnano/utils.h>
 
+#include <iostream>
+
 #include "gtest/gtest.h"
 
 static void test_float32_to_float64(uint32_t float32, uint64_t float64) {

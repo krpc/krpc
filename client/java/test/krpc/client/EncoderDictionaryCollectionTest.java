@@ -5,27 +5,25 @@ import static krpc.client.TestUtils.unhexlify;
 import static org.junit.Assert.assertEquals;
 
 import com.google.protobuf.ByteString;
-
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import krpc.client.Types;
 import krpc.schema.KRPC.Type;
 import krpc.schema.KRPC.Type.TypeCode;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
+/** Tests for EncoderDictionaryCollection. */
 @RunWith(Parameterized.class)
 public class EncoderDictionaryCollectionTest {
   @Parameters
-  @SuppressWarnings({"serial", "checkstyle:javadocmethod"})
+  @SuppressWarnings({"serial", "checkstyle:missingjavadocmethod"})
   public static Collection<Object[]> data() {
     HashMap<String, Integer> m2 = new HashMap<>();
     m2.put("", 0);

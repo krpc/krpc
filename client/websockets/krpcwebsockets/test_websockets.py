@@ -8,7 +8,6 @@ from google.protobuf.internal import encoder as protobuf_encoder
 from google.protobuf.internal.wire_format import ZigZagEncode, ZigZagDecode
 import krpc.schema.KRPC_pb2 as KRPC
 
-
 # The following unpacks the internal protobuf decoders, whose signature
 # depends on the version of protobuf installed
 # pylint: disable=invalid-name,protected-access

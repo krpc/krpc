@@ -1,8 +1,7 @@
-#include <google/protobuf/stubs/port.h>
-
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
 
+#include <cstdint>
 #include <string>
 
 #include "gtest/gtest.h"
@@ -12,8 +11,6 @@
 #include "krpc/platform.hpp"
 
 #include "services/test_service.hpp"
-
-namespace pb = google::protobuf;
 
 TEST(test_decoder, test_decode_message) {
   std::string message = "0a0b536572766963654e616d65120d50726f6365647572654e616d65";
@@ -26,7 +23,7 @@ TEST(test_decoder, test_decode_message) {
 TEST(test_decoder, test_decode_value) {
   unsigned int value;
   krpc::decoder::decode(value, krpc::platform::unhexlify("ac02"));
-  ASSERT_EQ(300, value);
+  ASSERT_EQ(300u, value);
 }
 
 TEST(test_decoder, test_decode_unicode_string) {
@@ -37,8 +34,8 @@ TEST(test_decoder, test_decode_unicode_string) {
 
 TEST(test_decoder, test_decode_size) {
   std::string message = "1c";
-  pb::uint32 size = krpc::decoder::decode_size(krpc::platform::unhexlify(message));
-  ASSERT_EQ(28, size);
+  uint32_t size = krpc::decoder::decode_size(krpc::platform::unhexlify(message));
+  ASSERT_EQ(28u, size);
 }
 
 TEST(test_decoder, test_decode_class) {
