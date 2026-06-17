@@ -129,6 +129,75 @@ jobs:
           msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
           msbuild KRPC.sln /t:Clean,Build -p:Configuration=Release /warnaserror
 
+  build-client-cnano:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.7.0
+      options: --user runner:runner
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        with:
+          game: ksp
+          version: 1.12.5
+      - name: build
+        run: client/cnano/test-build.sh
+
+  build-client-cpp-system:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.7.0
+      options: --user runner:runner
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        with:
+          game: ksp
+          version: 1.12.5
+      - name: build
+        run: client/cpp/test-build.sh system
+
+  build-client-cpp-fetch:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.7.0
+      options: --user runner:runner
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        with:
+          game: ksp
+          version: 1.12.5
+      - name: build
+        run: client/cpp/test-build.sh fetch
+
   build-docs-html:
     runs-on: ubuntu-latest
     container:
@@ -278,8 +347,6 @@ jobs:
         run: bazel build //client/cnano:cnano
       - name: test
         run: bazel test //client/cnano:test
-      - name: test-build
-        run: client/cnano/test-build.sh
       - name: upload-artifact
         uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
         with:
@@ -310,8 +377,6 @@ jobs:
         run: bazel build //client/cpp:cpp
       - name: test
         run: bazel test //client/cpp:test
-      - name: test-build
-        run: client/cpp/test-build.sh
       - name: upload-artifact
         uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
         with:
@@ -523,6 +588,9 @@ jobs:
       - build-krpc
       - build-genfiles
       - build-csharp-sln
+      - build-client-cnano
+      - build-client-cpp-system
+      - build-client-cpp-fetch
       - build-docs-html
       - build-docs-pdf
       - build-docs-examples

@@ -1,13 +1,16 @@
 #!/bin/bash
 # Test building the C++ client using CMake.
-# Builds the release archive with Bazel, then runs two CMake build scenarios:
-#   1) system-installed protobuf + ASIO
-#   2) protobuf + ASIO fetched via FetchContent (KRPC_FETCH_PROTOBUF/ASIO=ON)
+# Builds the release archive with Bazel, then runs CMake build scenario(s):
+#   system) system-installed protobuf + ASIO
+#   fetch)  protobuf + ASIO fetched via FetchContent (KRPC_FETCH_PROTOBUF/ASIO=ON)
 # Each is followed by a consumer test using find_package(krpc CONFIG REQUIRED).
+# Usage: test-build.sh [system|fetch]  (default: run both)
 set -e
 set -o pipefail
 set -x
 set -o functrace
+
+mode="${1:-all}"
 
 scriptroot="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $scriptroot/../..
@@ -107,17 +110,21 @@ EOF
 }
 
 # 1) System-installed protobuf + ASIO
-build_install "$out/system/build" "$out/system/install" "$out/system/configure.log"
-check_present "$out/system/configure.log" "Found protobuf"
-check_absent  "$out/system/configure.log" "Fetching protobuf via FetchContent"
-check_absent  "$out/system/configure.log" "Fetching ASIO via FetchContent"
-consumer_test "$out/system/install" "$out/system/consumer"
+if [[ "$mode" == "system" || "$mode" == "all" ]]; then
+  build_install "$out/system/build" "$out/system/install" "$out/system/configure.log"
+  check_present "$out/system/configure.log" "Found protobuf"
+  check_absent  "$out/system/configure.log" "Fetching protobuf via FetchContent"
+  check_absent  "$out/system/configure.log" "Fetching ASIO via FetchContent"
+  consumer_test "$out/system/install" "$out/system/consumer"
+fi
 
 # 2) FetchContent protobuf + ASIO
-build_install "$out/fetch/build" "$out/fetch/install" "$out/fetch/configure.log" \
-  -DKRPC_FETCH_PROTOBUF=ON \
-  -DKRPC_FETCH_ASIO=ON
-check_present "$out/fetch/configure.log" "Fetching protobuf via FetchContent"
-check_present "$out/fetch/configure.log" "Fetching ASIO via FetchContent"
-check_absent  "$out/fetch/configure.log" "Found protobuf"
-consumer_test "$out/fetch/install" "$out/fetch/consumer"
+if [[ "$mode" == "fetch" || "$mode" == "all" ]]; then
+  build_install "$out/fetch/build" "$out/fetch/install" "$out/fetch/configure.log" \
+    -DKRPC_FETCH_PROTOBUF=ON \
+    -DKRPC_FETCH_ASIO=ON
+  check_present "$out/fetch/configure.log" "Fetching protobuf via FetchContent"
+  check_present "$out/fetch/configure.log" "Fetching ASIO via FetchContent"
+  check_absent  "$out/fetch/configure.log" "Found protobuf"
+  consumer_test "$out/fetch/install" "$out/fetch/consumer"
+fi
