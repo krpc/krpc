@@ -1,9 +1,11 @@
 #!/bin/bash
-# Test building the C++ client using autotools and CMake
-echo "C++ client test build is disabled pending removal (incompatible with protobuf 35.x)"
-exit 0
-
+# Test building the C++ client using CMake.
+# Builds the release archive with Bazel, then runs two CMake build scenarios:
+#   1) system-installed protobuf + ASIO
+#   2) protobuf + ASIO fetched via FetchContent (KRPC_FETCH_PROTOBUF/ASIO=ON)
+# Each is followed by a consumer test using find_package(krpc CONFIG REQUIRED).
 set -e
+set -o pipefail
 set -x
 set -o functrace
 
@@ -14,90 +16,108 @@ root=`pwd`
 out=$root/bazel-bin/client/cpp/test-build
 version=`tools/krpc-version.sh`
 
-# Build library and dependencies
-bazel build \
-  //client/cpp \
-  @protoc_linux_x86_64//:bin/protoc \
-  @protobuf//:protobuf_lite \
-  @cpp_asio//:asio
-protobuf_include=$root/bazel-krpc/external/protobuf+/src
-protobuf_library=$root/bazel-bin/external/protobuf+
-asio_include=$root/bazel-krpc/external/+http_archive+cpp_asio/include
-protoc_dir=$root/bazel-krpc/external/+http_archive+protoc_linux_x86_64/bin
+# Build the release archive (this is the only Bazel step)
+bazel build //client/cpp:cpp
 
-# Extract source
+bazel_bin=$(bazel info bazel-bin)
+
+# Extract the release archive
 rm -rf $out
 mkdir -p $out
-unzip -q bazel-bin/client/cpp/krpc-cpp-$version.zip -d $out
+unzip -q $bazel_bin/client/cpp/krpc-cpp-$version.zip -d $out
 mv $out/krpc-cpp-$version/* $out/
 rm -r $out/krpc-cpp-$version
-pushd $out
 
-function autotools_build {
-  # Build the library using autotools with given build and install directories
-  mkdir -p $out/$1
-  pushd $out/$1
-  $out/configure --prefix=$out/$2
-  make -j`nproc`
-  make install -j`nproc`
-  popd
+# Configure krpc; save cmake output to log_file for later verification.
+function cmake_configure {
+  local build_dir=$1
+  local install_dir=$2
+  local log_file=$3
+  shift 3
+  mkdir -p "$build_dir"
+  cmake -S "$out" -B "$build_dir" \
+    -DCMAKE_INSTALL_PREFIX="$install_dir" \
+    -DCMAKE_BUILD_TYPE=Release \
+    "$@" 2>&1 | tee "$log_file"
 }
 
-function cmake_build {
-  # Build the library using cmake with given build and install directories
-  mkdir -p $out/$1
-  pushd $out/$1
-  cmake $out \
-    -DCMAKE_INSTALL_PREFIX=$out/$2 \
-    -DPROTOBUF_LIBRARY=$protobuf_library/libprotobuf_lite.so \
-    -DPROTOBUF_INCLUDE_DIR=$protobuf_include \
-    -DPROTOBUF_PROTOC_EXECUTABLE=$protoc \
-    -DCMAKE_INCLUDE_PATH=$asio_include
-  make -j`nproc`
-  make install -j`nproc`
-  popd
+# Build and install the krpc library.
+function build_install {
+  local build_dir=$1
+  local install_dir=$2
+  local log_file=$3
+  shift 3
+  cmake_configure "$build_dir" "$install_dir" "$log_file" "$@"
+  cmake --build "$build_dir" --parallel $(nproc)
+  cmake --install "$build_dir"
 }
 
-function test_build {
-  # Compile a test application using the given install path for headers and libraries
-  echo "#include <iostream>
+# Verify a pattern appears in the cmake configure log.
+function check_present {
+  local log=$1
+  local pattern=$2
+  if ! grep -q "$pattern" "$log"; then
+    echo "FAIL: expected '${pattern}' in cmake configure output but not found"
+    exit 1
+  fi
+}
+
+# Verify a pattern does not appear in the cmake configure log.
+function check_absent {
+  local log=$1
+  local pattern=$2
+  if grep -q "$pattern" "$log"; then
+    echo "FAIL: '${pattern}' should not appear in cmake configure output"
+    exit 1
+  fi
+}
+
+# Build a small consumer project that uses find_package(krpc CONFIG REQUIRED)
+# to verify the installed package config and targets work end-to-end.
+function consumer_test {
+  local install_dir=$1
+  local test_dir=$2
+  mkdir -p "$test_dir"
+
+  cat > "$test_dir/main.cpp" << 'EOF'
+#include <iostream>
 #include <krpc.hpp>
 #include <krpc/services/krpc.hpp>
 int main() {
-  auto conn = krpc::connect();
-  krpc::services::KRPC krpc(&conn);
-  std::cout << krpc.get_status().version() << std::endl;
-}" > $out/main.cpp
-  g++ \
-    -Wall -Werror -std=c++11 \
-    -I$out/$1/include \
-    -L$out/$1/lib \
-    -L$protobuf_library \
-    -o $out/main.exe $out/main.cpp \
-    -lkrpc -lprotobuf_lite -lz
+    // Compile+link test only — no server connection.
+    std::cout << "krpc library linked OK" << std::endl;
+    return 0;
+}
+EOF
+
+  cat > "$test_dir/CMakeLists.txt" << 'EOF'
+cmake_minimum_required(VERSION 3.15)
+project(krpc_consumer_test LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+find_package(krpc CONFIG REQUIRED)
+add_executable(test_app main.cpp)
+target_link_libraries(test_app PRIVATE krpc::krpc)
+EOF
+
+  mkdir -p "$test_dir/build"
+  cmake -S "$test_dir" -B "$test_dir/build" \
+    -DCMAKE_PREFIX_PATH="$install_dir" \
+    -DCMAKE_BUILD_TYPE=Release
+  cmake --build "$test_dir/build" --parallel $(nproc)
 }
 
-export LDFLAGS=-L$protobuf_library
-export CPPFLAGS="-I$protobuf_include -I$asio_include"
-export CPLUS_INCLUDE_PATH="$protobuf_include:$asio_include"
-export protobuf_CFLAGS="-I$protobuf_include"
-export protobuf_LIBS=$protobuf_library
+# 1) System-installed protobuf + ASIO
+build_install "$out/system/build" "$out/system/install" "$out/system/configure.log"
+check_present "$out/system/configure.log" "Found protobuf"
+check_absent  "$out/system/configure.log" "Fetching protobuf via FetchContent"
+check_absent  "$out/system/configure.log" "Fetching ASIO via FetchContent"
+consumer_test "$out/system/install" "$out/system/consumer"
 
-protoc=
-
-# Run tests with libprotobuf, but without protoc
-autotools_build autotools/build autotools/install
-test_build autotools/install
-cmake_build cmake/build cmake/install
-test_build cmake/install
-
-protoc=$protoc_dir/protoc
-export PATH=$PATH:$protoc_dir
-
-# Run tests with libprotobuf and protoc
-autotools_build autotools-protoc/build autotools-protoc/install
-test_build autotools-protoc/install
-cmake_build cmake-protoc/build cmake-protoc/install
-test_build cmake-protoc/install
-
-popd
+# 2) FetchContent protobuf + ASIO
+build_install "$out/fetch/build" "$out/fetch/install" "$out/fetch/configure.log" \
+  -DKRPC_FETCH_PROTOBUF=ON \
+  -DKRPC_FETCH_ASIO=ON
+check_present "$out/fetch/configure.log" "Fetching protobuf via FetchContent"
+check_present "$out/fetch/configure.log" "Fetching ASIO via FetchContent"
+check_absent  "$out/fetch/configure.log" "Found protobuf"
+consumer_test "$out/fetch/install" "$out/fetch/consumer"

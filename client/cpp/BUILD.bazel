@@ -1,26 +1,25 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 load("//:config.bzl", "version")
-load("//tools/build:autotools.bzl", "autotools_dist")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:cpp.bzl", "cpp_check_test", "cpp_lint_test")
+load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/protobuf:cpp.bzl", "protobuf_cpp")
 load("//tools/krpctools:clientgen.bzl", "clientgen_cpp")
 
 name = "krpc-cpp-%s" % version
 
-autotools_dist(
+pkg_zip(
     name = "cpp",
     out = "%s.zip" % name,
     files = glob([
         "include/**/*.hpp",
         "src/*.cpp",
-        "**/Makefile.am",
+        "cmake/*.cmake",
+        "cmake/*.cmake.in",
     ]) + [
         "CHANGES.txt",
         "INSTALL.txt",
         "LICENSE",
-        "protobuf-include.cmake",
-        ":autotools",
         ":cmake",
         ":services-dockingcamera",
         ":services-drawing",
@@ -35,9 +34,7 @@ autotools_dist(
         "//:COPYING.LESSER",
         "//:readme",
         "//:version",
-        "//protobuf:cpp",
         "//protobuf:krpc.proto",
-        "@m4_stdcxx//file",
     ],
     path_map = {
         "client/cpp/": "%s/" % name,
@@ -46,17 +43,8 @@ autotools_dist(
         "README.txt": "%s/README.txt" % name,
         "VERSION.txt": "%s/VERSION.txt" % name,
         "protobuf/": "%s/protobuf/" % name,
-        "../+http_file+m4_stdcxx/file/downloaded": "%s/m4/ax_cxx_compile_stdcxx.m4" % name,
     },
-    source_dir = name,
     visibility = ["//:__pkg__"],
-)
-
-genrule(
-    name = "autotools",
-    srcs = ["configure.ac.tmpl"],
-    outs = ["configure.ac"],
-    cmd = "sed 's/%VERSION%/" + version + '/g\' "$<" > "$@"',
 )
 
 genrule(

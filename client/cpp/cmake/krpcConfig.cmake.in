@@ -1,0 +1,39 @@
+@PACKAGE_INIT@
+include(CMakeFindDependencyMacro)
+
+# Bring in protobuf (installed alongside krpc or available on the system)
+find_dependency(protobuf CONFIG)
+
+# Set up asio::asio target for consumers.
+# FindAsio.cmake (installed in this directory) handles system ASIO; fall back to
+# headers installed alongside krpc when ASIO was fetched at build time.
+if(NOT TARGET asio::asio)
+  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
+  find_package(Asio QUIET)
+endif()
+if(NOT TARGET asio::asio)
+  find_path(_krpc_asio_inc asio.hpp
+    HINTS "${PACKAGE_PREFIX_DIR}/include"
+    NO_DEFAULT_PATH)
+  if(_krpc_asio_inc)
+    add_library(asio::asio INTERFACE IMPORTED)
+    set_target_properties(asio::asio PROPERTIES
+      INTERFACE_INCLUDE_DIRECTORIES "${_krpc_asio_inc}")
+  else()
+    message(WARNING "krpc: could not locate ASIO headers; "
+      "set ASIO_ROOT or install libasio-dev")
+  endif()
+  unset(_krpc_asio_inc)
+endif()
+
+include("${CMAKE_CURRENT_LIST_DIR}/krpcTargets.cmake")
+
+# protobuf was linked PRIVATE at build time to avoid FetchContent export issues.
+# Re-expose it via set_property — the correct API for modifying IMPORTED targets —
+# so consumers whose code includes krpc/krpc.pb.hpp get the link requirement.
+if(TARGET protobuf::libprotobuf-lite)
+  set_property(TARGET krpc::krpc APPEND PROPERTY INTERFACE_LINK_LIBRARIES
+    "protobuf::libprotobuf-lite")
+endif()
+
+check_required_components(krpc)
