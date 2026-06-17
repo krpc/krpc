@@ -592,6 +592,75 @@ altitude. The event is removed the first time it triggers.
        return evnt.Message;
    }
 
+.. _service-api-multi-tick:
+
+Multi-Tick RPCs
+^^^^^^^^^^^^^^^
+
+By default kRPC executes each RPC call within a single physics tick. Some operations need to wait
+for KSP to process one or more physics updates before their result is available — for example,
+staging only takes effect after KSP runs its next ``FixedUpdate``. For these cases a procedure can
+yield, by throwing a ``KRPC.Service.YieldException`` to hand a *continuation* back to
+kRPC. kRPC suspends the call, allows the next physics tick to run, then invokes the continuation.
+The continuation can itself throw another ``YieldException`` to yield again, forming a chain. The
+client blocks throughout and receives the final return value (or exception) once the chain
+completes.
+
+.. csharp:class:: KRPC.Service.YieldException<T>
+
+   Thrown by a procedure or method to suspend execution until the next physics tick. ``T`` must be
+   a delegate type. kRPC invokes the delegate on the following ``FixedUpdate`` and uses its return
+   value as the result of the RPC call. If the delegate itself throws a ``YieldException``, kRPC
+   will yield again.
+
+   The return type of the delegate must match the return type of the RPC procedure or method:
+
+   * ``Action`` for a ``void`` procedure.
+   * ``Func<T>`` for a procedure that returns type ``T``.
+
+Examples
+""""""""
+
+**Simple retry** — re-invoke the same method on each tick until a condition is met:
+
+.. code-block:: csharp
+
+   [KRPCMethod]
+   public void Wait()
+   {
+       if (!IsReady)
+           throw new YieldException<Action>(Wait);
+       // proceed once the condition is satisfied
+   }
+
+Each physics tick kRPC calls ``Wait`` again. As long as the condition is not met, the method
+yields again by passing itself as the next continuation. Once the condition is satisfied the method
+returns normally and the client receives its response.
+
+**Two-phase with closure** — trigger an action, then poll a helper until the result is available:
+
+.. code-block:: csharp
+
+   [KRPCMethod]
+   public Vessel Decouple()
+   {
+       var preVesselIds = FlightGlobals.Vessels.Select(v => v.id).ToList();
+       decoupler.Decouple();
+       return PostDecouple(preVesselIds);
+   }
+
+   Vessel PostDecouple(IList<Guid> preVesselIds, int wait = 0)
+   {
+       if (wait < 10 || !Decoupled)
+           throw new YieldException<Func<Vessel>>(() => PostDecouple(preVesselIds, wait + 1));
+       return new Vessel(FlightGlobals.Vessels.Select(v => v.id).Except(preVesselIds).First());
+   }
+
+``Decouple`` fires the decoupler and immediately calls ``PostDecouple``. ``PostDecouple`` yields
+for at least 10 ticks (to let KSP settle the new vessel list) and until the ``Decoupled`` flag
+becomes true. The closure captures ``preVesselIds`` and increments ``wait`` on each tick so the
+helper has the right context every time it runs.
+
 .. _service-api-game-scenes:
 
 Game Scenes
