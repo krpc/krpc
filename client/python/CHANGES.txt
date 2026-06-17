@@ -1,5 +1,6 @@
 v0.6.0
  * Allow calling static class methods from a class instance (#832)
+ * Update to protobuf v7.35.1
 
 v0.5.4
  * Fix streams for services without pre-generated stubs (#774)

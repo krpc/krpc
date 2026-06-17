@@ -1,3 +1,9 @@
+v0.6.0
+ * Update to protobuf v4.35.1
+ * Update dependencies: junit 4.13.2, hamcrest-core 3.0, guava 33.4.8-jre, antlr4-runtime 4.13.2
+ * Update checkstyle to 10.26.1, using bundled google_checks.xml
+ * Fix all checkstyle violations: import ordering, typecast spacing, Javadoc, method naming (Sint32/Sint64/Uint32/Uint64)
+
 v0.5.0
  * Update to protobuf v3.22.0
 
