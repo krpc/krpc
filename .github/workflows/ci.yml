@@ -117,7 +117,7 @@ jobs:
           game: ksp
           version: 1.12.5
       - name: download-genfiles
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: genfiles
       - name: extract-genfiles
@@ -514,3 +514,32 @@ jobs:
           bazel test \
             //tools/krpctest:test \
             //tools/krpctools:test
+
+  all-checks-passed:
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - lint
+      - build-krpc
+      - build-genfiles
+      - build-csharp-sln
+      - build-docs-html
+      - build-docs-pdf
+      - build-docs-examples
+      - test-docs
+      - test-core
+      - test-client-cnano
+      - test-client-cpp
+      - test-client-csharp
+      - test-client-java
+      - test-client-python
+      - test-client-lua
+      - test-client-serialio
+      - test-client-websockets
+      - test-tools
+    steps:
+      - name: check
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            exit 1
+          fi
