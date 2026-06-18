@@ -357,8 +357,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Remove()
         {
-            if (InternalAlarm == null)
-                throw new InvalidOperationException("Alarm does not exist");
             UpdateAlarm();
             AlarmClockScenario.DeleteAlarm(id);
             InternalAlarm = null;
@@ -366,6 +364,8 @@ namespace KRPC.SpaceCenter.Services
 
         private void UpdateAlarm()
         {
+            if (InternalAlarm == null)
+                throw new InvalidOperationException("Alarm does not exist");
             AlarmTypeBase alarm;
             AlarmClockScenario.TryGetAlarm(id, out alarm);
             if (alarm != null)
