@@ -1,3 +1,13 @@
+v0.6.0
+ * Drop autotools build; CMake is now the only supported build system
+ * Modernise CMake build: require CMake 3.15+, target-based usage requirements (#834)
+ * nanopb is now an external dependency (fetched via FetchContent or found on the system) rather than being bundled in the release archive
+ * krpc.proto is bundled in the release archive; CMake generates the protocol buffer code at build time using the nanopb generator
+ * Add CMake package config so consumers can use find_package(krpc_cnano CONFIG REQUIRED)
+ * CMake dependency options (KRPC_FETCH_PROTOBUF, KRPC_FETCH_NANOPB): when OFF
+   (default) the system install is required; when ON FetchContent is used.
+ * Add KRPC_FETCH_DEPS option to enable FetchContent for all dependencies at once
+
 v0.5.2
  * The arduino compatible version of the library now uses the same "krpc_cnano/..." include directory as the version released on GitHub.
 

@@ -29,33 +29,37 @@ by searching for and installing "kRPC".
    that they are built using the C++ compiler. This allows the library to use the C++ only
    ``HardwareSerial`` class for communication.
 
-Using the configure script
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You can build and install the client library and headers using the configure script provided with
-the source. `Download the source archive <https://github.com/krpc/krpc/releases>_`, extract it
-and then execute the following:
-
-.. code-block:: bash
-
-   ./configure
-   make
-   sudo make install
-   sudo ldconfig
-
 Using CMake
 ^^^^^^^^^^^
 
-Alternatively, you can install the client library and headers using CMake.
-`Download the source archive <https://github.com/krpc/krpc/releases>_`, extract it and execute the
-following:
+CMake 3.15 or later is required.
+`Download the source archive <https://github.com/krpc/krpc/releases>`_, extract it and run:
 
 .. code-block:: bash
 
-   cmake .
-   make
-   sudo make install
+   cmake -B build
+   cmake --build build
+   sudo cmake --install build
    sudo ldconfig
+
+By default, CMake looks for a system-installed nanopb. To download nanopb automatically at build
+time instead, pass ``-DKRPC_FETCH_DEPS=ON`` (or ``-DKRPC_FETCH_NANOPB=ON``) to the configure
+step. When OFF (the default), the system package is required.
+
+To install to a custom prefix:
+
+.. code-block:: bash
+
+   cmake -B build -DCMAKE_INSTALL_PREFIX=/install/path
+   cmake --build build
+   cmake --install build
+
+After installation, downstream CMake projects can link the library with:
+
+.. code-block:: cmake
+
+   find_package(krpc_cnano CONFIG REQUIRED)
+   target_link_libraries(my_app PRIVATE krpc_cnano::krpc_cnano)
 
 Compilation Options
 ^^^^^^^^^^^^^^^^^^^
