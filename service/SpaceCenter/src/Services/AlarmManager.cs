@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
+using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services
@@ -43,6 +44,33 @@ namespace KRPC.SpaceCenter.Services
             {
                 return AlarmClockScenario.Instance.alarms.Values.Select(alarm => new Alarm(alarm)).ToList();
             }
+        }
+
+        /// <summary>
+        /// A list of all alarms of the given type.
+        /// </summary>
+        /// <param name="type">The type of alarm to return.</param>
+        [KRPCMethod]
+        public IList<Alarm> AlarmsWithType(AlarmType type)
+        {
+            return AlarmClockScenario.Instance.alarms.Values
+                .Where(alarm => alarm.ToAlarmType() == type)
+                .Select(alarm => new Alarm(alarm))
+                .ToList();
+        }
+
+        /// <summary>
+        /// Returns the first alarm with the given title, or <c>null</c> if no such
+        /// alarm exists. Alarm titles are not guaranteed to be unique; if more than
+        /// one alarm shares the given title, the first one found is returned.
+        /// </summary>
+        /// <param name="name">The title of the alarm to return.</param>
+        [KRPCMethod(Nullable = true)]
+        public Alarm AlarmWithName(string name)
+        {
+            var alarm = AlarmClockScenario.Instance.alarms.Values
+                .FirstOrDefault(a => a.title == name);
+            return alarm != null ? new Alarm(alarm) : null;
         }
 
         private static AlarmTypeRaw AddRawAlarm(double time, string title, string description)
@@ -213,28 +241,42 @@ namespace KRPC.SpaceCenter.Services
             return new Alarm(alarm);
         }
 
-        // FIXME: Not working
-        // /// <summary>
-        // /// Create an alarm for the given vessel's next transfer window.
-        // /// </summary>
-        // [KRPCMethod]
-        // public Alarm AddTransferWindowAlarm(Vessel vessel, CelestialBody Target, string title="Transfer Window Alarm", string description="")
-        // {
-        //     AlarmTypeTransferWindow alarm = new AlarmTypeTransferWindow
-        //     {
-        //         title = title,
-        //         description = description,
-        //         actions =
-        //         {
-        //             warp = AlarmActions.WarpEnum.KillWarp,
-        //             message = AlarmActions.MessageEnum.Yes
-        //         },
-        //         vesselId = vessel.InternalVessel.persistentId,
-        //         dest = Target.InternalBody,
-        //         source = vessel.InternalVessel.orbit.referenceBody
-        //     };
-        //     AlarmClockScenario.AddAlarm(alarm);
-        //     return new Alarm(alarm);
-        // }
+        /// <summary>
+        /// Create an alarm for the next planetary transfer window from the vessel's
+        /// current parent body to the target body.
+        /// </summary>
+        /// <param name="vessel">The vessel.</param>
+        /// <param name="target">The target body.</param>
+        /// <param name="title">Title for the alarm.</param>
+        /// <param name="description">Description for the alarm.</param>
+        /// <remarks>
+        /// This relies on KSP's stock transfer-window alarm logic. If KSP cannot
+        /// compute a transfer from the vessel's current parent body to the target,
+        /// the resulting alarm may not fire at a useful time; in that case the
+        /// properties on the returned alarm can still be used to inspect or adjust it.
+        /// </remarks>
+        [KRPCMethod]
+        public static Alarm AddTransferWindowAlarm(Vessel vessel, CelestialBody target, string title="Transfer Window Alarm", string description="")
+        {
+            if (ReferenceEquals(vessel, null))
+                throw new ArgumentNullException(nameof(vessel));
+            if (ReferenceEquals(target, null))
+                throw new ArgumentNullException(nameof(target));
+            AlarmTypeTransferWindow alarm = new AlarmTypeTransferWindow
+            {
+                title = title,
+                description = description,
+                actions =
+                {
+                    warp = AlarmActions.WarpEnum.KillWarp,
+                    message = AlarmActions.MessageEnum.Yes
+                },
+                vesselId = vessel.InternalVessel.persistentId,
+                source = vessel.InternalVessel.orbit.referenceBody,
+                dest = target.InternalBody
+            };
+            AlarmClockScenario.AddAlarm(alarm);
+            return new Alarm(alarm);
+        }
     }
 }
