@@ -50,7 +50,7 @@ namespace KRPC.SpaceCenter.Services
         /// KSP destroys and recreates an alarm when it is edited.
         /// This id will remain constant between the old and new alarms.
         /// </summary>
-        [KRPCProperty(Nullable = true)]
+        [KRPCProperty]
         public uint ID
         {
             get
