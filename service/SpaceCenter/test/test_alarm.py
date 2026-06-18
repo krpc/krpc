@@ -62,6 +62,15 @@ class TestAlarm(krpctest.TestCase):
         self.assertFalse(alarm.triggered)
         self.assertFalse(alarm.actioned)
 
+    def test_typed_property_on_wrong_alarm_raises(self):
+        alarm = self.alarm_manager.add_alarm(3600, "test_wrong_type", "")
+        with self.assertRaises(RuntimeError):
+            _ = alarm.node
+        with self.assertRaises(RuntimeError):
+            _ = alarm.origin_body
+        with self.assertRaises(RuntimeError):
+            _ = alarm.destination_body
+
 
 if __name__ == "__main__":
     unittest.main()

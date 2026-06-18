@@ -174,7 +174,7 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if the alarm is not of
         /// type <see cref="AlarmType.Maneuver"/>.
         /// </remarks>
-        [KRPCProperty(Nullable = true)]
+        [KRPCProperty]
         public Node Node
         {
             get
@@ -187,7 +187,8 @@ namespace KRPC.SpaceCenter.Services
                 var vessel = InternalAlarm.Vessel;
                 var node = maneuverAlarm.Maneuver;
                 if (vessel == null || node == null)
-                    return null;
+                    throw new InvalidOperationException(
+                        "Alarm has no associated maneuver node.");
                 return new Node(vessel, node);
             }
             set
@@ -212,7 +213,7 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if the alarm is not of
         /// type <see cref="AlarmType.TransferWindow"/>.
         /// </remarks>
-        [KRPCProperty(Nullable = true)]
+        [KRPCProperty]
         public CelestialBody OriginBody
         {
             get
@@ -223,7 +224,10 @@ namespace KRPC.SpaceCenter.Services
                     throw new InvalidOperationException(
                         "Alarm is not a TransferWindow alarm, it has no associated origin body.");
                 var body = transferAlarm.source;
-                return body != null ? new CelestialBody(body) : null;
+                if (body == null)
+                    throw new InvalidOperationException(
+                        "Alarm has no associated origin body.");
+                return new CelestialBody(body);
             }
             set
             {
@@ -247,7 +251,7 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if the alarm is not of
         /// type <see cref="AlarmType.TransferWindow"/>.
         /// </remarks>
-        [KRPCProperty(Nullable = true)]
+        [KRPCProperty]
         public CelestialBody DestinationBody
         {
             get
@@ -258,7 +262,10 @@ namespace KRPC.SpaceCenter.Services
                     throw new InvalidOperationException(
                         "Alarm is not a TransferWindow alarm, it has no associated destination body.");
                 var body = transferAlarm.dest;
-                return body != null ? new CelestialBody(body) : null;
+                if (body == null)
+                    throw new InvalidOperationException(
+                        "Alarm has no associated destination body.");
+                return new CelestialBody(body);
             }
             set
             {
