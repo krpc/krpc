@@ -1,6 +1,5 @@
 import unittest
 import krpctest
-import krpc
 
 
 class TestAlarm(krpctest.TestCase):
@@ -26,13 +25,13 @@ class TestAlarm(krpctest.TestCase):
     def test_access_after_remove_raises(self):
         alarm = self.alarm_manager.add_alarm(3600, "test_access_after_remove", "")
         alarm.remove()
-        with self.assertRaises(krpc.client.RPCError):
+        with self.assertRaises(RuntimeError):
             _ = alarm.title
 
     def test_remove_twice_raises(self):
         alarm = self.alarm_manager.add_alarm(3600, "test_remove_twice", "")
         alarm.remove()
-        with self.assertRaises(krpc.client.RPCError):
+        with self.assertRaises(RuntimeError):
             alarm.remove()
 
     def test_alarm_with_name_after_remove(self):
@@ -57,6 +56,11 @@ class TestAlarm(krpctest.TestCase):
             names = [a.title for a in self.alarm_manager.alarms]
             self.assertIn("regression_a2", names)
         a2.remove()
+
+    def test_trigger_state_initially_false(self):
+        alarm = self.alarm_manager.add_alarm(3600, "test_trigger_state", "")
+        self.assertFalse(alarm.triggered)
+        self.assertFalse(alarm.actioned)
 
 
 if __name__ == "__main__":
