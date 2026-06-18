@@ -1275,6 +1275,8 @@ SpaceCenter.Alarm.WarpAction
 SpaceCenter.Alarm.MessageAction
 SpaceCenter.Alarm.PlaySound
 SpaceCenter.Alarm.DeleteOnDismiss
+SpaceCenter.Alarm.Triggered
+SpaceCenter.Alarm.Actioned
 SpaceCenter.Alarm.Remove
 SpaceCenter.AlarmType
 SpaceCenter.AlarmType.Raw
