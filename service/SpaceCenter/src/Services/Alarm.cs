@@ -352,6 +352,32 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether the time of the alarm has passed and its actions have been triggered.
+        /// </summary>
+        [KRPCProperty]
+        public bool Triggered
+        {
+            get
+            {
+                UpdateAlarm();
+                return InternalAlarm.Triggered;
+            }
+        }
+
+        /// <summary>
+        /// Whether the alarm's actions were triggered and then completed or closed.
+        /// </summary>
+        [KRPCProperty]
+        public bool Actioned
+        {
+            get
+            {
+                UpdateAlarm();
+                return InternalAlarm.Actioned;
+            }
+        }
+
+        /// <summary>
         /// Removes the alarm.
         /// </summary>
         [KRPCMethod]
