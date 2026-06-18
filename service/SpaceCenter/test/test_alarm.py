@@ -18,17 +18,13 @@ class TestAlarm(krpctest.TestCase):
             alarm.remove()
 
     def test_remove_alarm(self):
-        alarm = self.alarm_manager.add_alarm(
-            3600, "test_remove_alarm", "to be removed"
-        )
+        alarm = self.alarm_manager.add_alarm(3600, "test_remove_alarm", "to be removed")
         self.assertIn(alarm, self.alarm_manager.alarms)
         alarm.remove()
         self.assertNotIn(alarm, self.alarm_manager.alarms)
 
     def test_access_after_remove_raises(self):
-        alarm = self.alarm_manager.add_alarm(
-            3600, "test_access_after_remove", ""
-        )
+        alarm = self.alarm_manager.add_alarm(3600, "test_access_after_remove", "")
         alarm.remove()
         with self.assertRaises(krpc.client.RPCError):
             _ = alarm.title
@@ -44,15 +40,11 @@ class TestAlarm(krpctest.TestCase):
             3600, "test_alarm_with_name_after_remove", ""
         )
         self.assertIsNotNone(
-            self.alarm_manager.alarm_with_name(
-                "test_alarm_with_name_after_remove"
-            )
+            self.alarm_manager.alarm_with_name("test_alarm_with_name_after_remove")
         )
         alarm.remove()
         self.assertIsNone(
-            self.alarm_manager.alarm_with_name(
-                "test_alarm_with_name_after_remove"
-            )
+            self.alarm_manager.alarm_with_name("test_alarm_with_name_after_remove")
         )
 
     def test_alarms_list_stable_after_add_and_remove(self):

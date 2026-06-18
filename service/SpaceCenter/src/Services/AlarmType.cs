@@ -36,7 +36,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         TransferWindow,
         /// <summary>
-        /// The alarm is of a type not recognised by kRPC. Typically this is a type
+        /// The alarm is of a type not recognized by kRPC. Typically this is a type
         /// introduced by a mod.
         /// </summary>
         Unknown

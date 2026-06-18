@@ -294,7 +294,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The on-screen message behaviour when the alarm fires.
+        /// The on-screen message behavior when the alarm fires.
         /// </summary>
         [KRPCProperty]
         public AlarmMessageAction MessageAction
