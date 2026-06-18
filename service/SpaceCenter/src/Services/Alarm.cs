@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+using System;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -12,12 +11,17 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass(Service = "SpaceCenter")]
     public class Alarm : Equatable<Alarm>
     {
+        readonly uint id;
+
         /// <summary>
         /// Create a alarm object from a KSP AlarmTypeBase
         /// </summary>
         public Alarm(AlarmTypeBase alarm)
         {
+            if (alarm == null)
+                throw new ArgumentNullException(nameof(alarm));
             InternalAlarm = alarm;
+            id = alarm.Id;
         }
 
         /// <summary>
@@ -30,7 +34,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals(Alarm other)
         {
-            return !ReferenceEquals(other, null) && InternalAlarm.Id == other.InternalAlarm.Id;
+            return !ReferenceEquals(other, null) && id == other.id;
         }
 
         /// <summary>
@@ -38,7 +42,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode()
         {
-            return InternalAlarm.GetHashCode();
+            return id.GetHashCode();
         }
 
         /// <summary>
@@ -52,24 +56,24 @@ namespace KRPC.SpaceCenter.Services
             get
             {
                 UpdateAlarm();
-                return InternalAlarm.Id;
+                return id;
             }
         }
 
         /// <summary>
-        /// Type of alarm
+        /// Type of alarm.
         /// </summary>
         [KRPCProperty]
-        public string Type
+        public AlarmType Type
         {
             get {
                 UpdateAlarm();
-                return InternalAlarm.TypeName;
+                return InternalAlarm.ToAlarmType();
             }
         }
 
         /// <summary>
-        /// Title of the alarm
+        /// Title of the alarm.
         /// </summary>
         [KRPCProperty]
         public string Title
@@ -77,6 +81,11 @@ namespace KRPC.SpaceCenter.Services
             get {
                 UpdateAlarm();
                 return InternalAlarm.title;
+            }
+            set {
+                UpdateAlarm();
+                InternalAlarm.title = value;
+                UpdateAlarm();
             }
         }
 
@@ -90,10 +99,15 @@ namespace KRPC.SpaceCenter.Services
                 UpdateAlarm();
                 return InternalAlarm.description;
             }
+            set {
+                UpdateAlarm();
+                InternalAlarm.description = value;
+                UpdateAlarm();
+            }
         }
 
         /// <summary>
-        /// Time the alarm will trigger.
+        /// Time the alarm will trigger, in seconds since epoch.
         /// </summary>
         [KRPCProperty]
         public double Time
@@ -102,10 +116,15 @@ namespace KRPC.SpaceCenter.Services
                 UpdateAlarm();
                 return InternalAlarm.ut;
             }
+            set {
+                UpdateAlarm();
+                InternalAlarm.ut = value;
+                UpdateAlarm();
+            }
         }
 
         /// <summary>
-        /// Time until the alarm triggers.
+        /// Time until the alarm triggers, in seconds.
         /// </summary>
         [KRPCProperty]
         public double TimeUntil
@@ -126,6 +145,11 @@ namespace KRPC.SpaceCenter.Services
                 UpdateAlarm();
                 return InternalAlarm.eventOffset;
             }
+            set {
+                UpdateAlarm();
+                InternalAlarm.eventOffset = value;
+                UpdateAlarm();
+            }
         }
 
         /// <summary>
@@ -142,11 +166,210 @@ namespace KRPC.SpaceCenter.Services
             }
         }
 
+        /// <summary>
+        /// Maneuver node the alarm references. Only valid for alarms of type
+        /// <see cref="AlarmType.Maneuver"/>.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if the alarm is not of
+        /// type <see cref="AlarmType.Maneuver"/>.
+        /// </remarks>
+        [KRPCProperty(Nullable = true)]
+        public Node Node
+        {
+            get
+            {
+                UpdateAlarm();
+                var maneuverAlarm = InternalAlarm as AlarmTypeManeuver;
+                if (maneuverAlarm == null)
+                    throw new InvalidOperationException(
+                        "Alarm is not a Maneuver alarm, it has no associated maneuver node.");
+                var vessel = InternalAlarm.Vessel;
+                var node = maneuverAlarm.Maneuver;
+                if (vessel == null || node == null)
+                    return null;
+                return new Node(vessel, node);
+            }
+            set
+            {
+                UpdateAlarm();
+                var maneuverAlarm = InternalAlarm as AlarmTypeManeuver;
+                if (maneuverAlarm == null)
+                    throw new InvalidOperationException(
+                        "Alarm is not a Maneuver alarm, it has no associated maneuver node.");
+                if (ReferenceEquals(value, null))
+                    throw new ArgumentNullException(nameof(value));
+                maneuverAlarm.Maneuver = value.InternalNode;
+                UpdateAlarm();
+            }
+        }
+
+        /// <summary>
+        /// Origin body for the transfer window. Only valid for alarms of type
+        /// <see cref="AlarmType.TransferWindow"/>.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if the alarm is not of
+        /// type <see cref="AlarmType.TransferWindow"/>.
+        /// </remarks>
+        [KRPCProperty(Nullable = true)]
+        public CelestialBody OriginBody
+        {
+            get
+            {
+                UpdateAlarm();
+                var transferAlarm = InternalAlarm as AlarmTypeTransferWindow;
+                if (transferAlarm == null)
+                    throw new InvalidOperationException(
+                        "Alarm is not a TransferWindow alarm, it has no associated origin body.");
+                var body = transferAlarm.source;
+                return body != null ? new CelestialBody(body) : null;
+            }
+            set
+            {
+                UpdateAlarm();
+                var transferAlarm = InternalAlarm as AlarmTypeTransferWindow;
+                if (transferAlarm == null)
+                    throw new InvalidOperationException(
+                        "Alarm is not a TransferWindow alarm, it has no associated origin body.");
+                if (ReferenceEquals(value, null))
+                    throw new ArgumentNullException(nameof(value));
+                transferAlarm.source = value.InternalBody;
+                UpdateAlarm();
+            }
+        }
+
+        /// <summary>
+        /// Destination body for the transfer window. Only valid for alarms of type
+        /// <see cref="AlarmType.TransferWindow"/>.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if the alarm is not of
+        /// type <see cref="AlarmType.TransferWindow"/>.
+        /// </remarks>
+        [KRPCProperty(Nullable = true)]
+        public CelestialBody DestinationBody
+        {
+            get
+            {
+                UpdateAlarm();
+                var transferAlarm = InternalAlarm as AlarmTypeTransferWindow;
+                if (transferAlarm == null)
+                    throw new InvalidOperationException(
+                        "Alarm is not a TransferWindow alarm, it has no associated destination body.");
+                var body = transferAlarm.dest;
+                return body != null ? new CelestialBody(body) : null;
+            }
+            set
+            {
+                UpdateAlarm();
+                var transferAlarm = InternalAlarm as AlarmTypeTransferWindow;
+                if (transferAlarm == null)
+                    throw new InvalidOperationException(
+                        "Alarm is not a TransferWindow alarm, it has no associated destination body.");
+                if (ReferenceEquals(value, null))
+                    throw new ArgumentNullException(nameof(value));
+                transferAlarm.dest = value.InternalBody;
+                UpdateAlarm();
+            }
+        }
+
+        /// <summary>
+        /// The action taken on time warp when the alarm fires.
+        /// </summary>
+        [KRPCProperty]
+        public AlarmWarpAction WarpAction
+        {
+            get
+            {
+                UpdateAlarm();
+                return InternalAlarm.actions.warp.ToAlarmWarpAction();
+            }
+            set
+            {
+                UpdateAlarm();
+                InternalAlarm.actions.warp = value.FromAlarmWarpAction();
+                UpdateAlarm();
+            }
+        }
+
+        /// <summary>
+        /// The on-screen message behaviour when the alarm fires.
+        /// </summary>
+        [KRPCProperty]
+        public AlarmMessageAction MessageAction
+        {
+            get
+            {
+                UpdateAlarm();
+                return InternalAlarm.actions.message.ToAlarmMessageAction();
+            }
+            set
+            {
+                UpdateAlarm();
+                InternalAlarm.actions.message = value.FromAlarmMessageAction();
+                UpdateAlarm();
+            }
+        }
+
+        /// <summary>
+        /// Whether the alarm plays a sound when it fires.
+        /// </summary>
+        [KRPCProperty]
+        public bool PlaySound
+        {
+            get
+            {
+                UpdateAlarm();
+                return InternalAlarm.actions.playSound;
+            }
+            set
+            {
+                UpdateAlarm();
+                InternalAlarm.actions.playSound = value;
+                UpdateAlarm();
+            }
+        }
+
+        /// <summary>
+        /// Whether the alarm is deleted automatically once the player has dismissed
+        /// the triggered message.
+        /// </summary>
+        [KRPCProperty]
+        public bool DeleteOnDismiss
+        {
+            get
+            {
+                UpdateAlarm();
+                return InternalAlarm.actions.deleteWhenDone;
+            }
+            set
+            {
+                UpdateAlarm();
+                InternalAlarm.actions.deleteWhenDone = value;
+                UpdateAlarm();
+            }
+        }
+
+        /// <summary>
+        /// Removes the alarm.
+        /// </summary>
+        [KRPCMethod]
+        public void Remove()
+        {
+            if (InternalAlarm == null)
+                throw new InvalidOperationException("Alarm does not exist");
+            UpdateAlarm();
+            AlarmClockScenario.DeleteAlarm(id);
+            InternalAlarm = null;
+        }
+
         private void UpdateAlarm()
         {
             AlarmTypeBase alarm;
-            AlarmClockScenario.TryGetAlarm(InternalAlarm.Id, out alarm);
-            InternalAlarm = alarm;
+            AlarmClockScenario.TryGetAlarm(id, out alarm);
+            if (alarm != null)
+                InternalAlarm = alarm;
         }
     }
 }

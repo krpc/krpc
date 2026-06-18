@@ -1,3 +1,8 @@
+(unreleased)
+ * (to be validated) Added missing AlarmClock properties
+ * Add Alarm.Remove method to delete an alarm
+ * Fix NullReferenceException raised every frame after creating or removing an alarm
+
 v0.5.5
  * Fix waypoint mean altitude not including bedrock height (#801)
 
