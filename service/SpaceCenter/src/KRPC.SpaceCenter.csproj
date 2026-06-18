@@ -53,6 +53,9 @@
     <Compile Include="AutoPilot\AttitudeController.cs" />
     <Compile Include="AutoPilot\PIDController.cs" />
     <Compile Include="ExtensionMethods\ActionGroupExtensions.cs" />
+    <Compile Include="ExtensionMethods\AlarmMessageActionExtensions.cs" />
+    <Compile Include="ExtensionMethods\AlarmTypeExtensions.cs" />
+    <Compile Include="ExtensionMethods\AlarmWarpActionExtensions.cs" />
     <Compile Include="ExtensionMethods\AutoPilotModeExtensions.cs" />
     <Compile Include="ExtensionMethods\CelestialBodyExtensions.cs" />
     <Compile Include="ExtensionMethods\ColorExtensions.cs" />
@@ -91,6 +94,9 @@
     <Compile Include="ResourceTransferAddon.cs" />
     <Compile Include="Services\Alarm.cs" />
     <Compile Include="Services\AlarmManager.cs" />
+    <Compile Include="Services\AlarmMessageAction.cs" />
+    <Compile Include="Services\AlarmType.cs" />
+    <Compile Include="Services\AlarmWarpAction.cs" />
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\Camera.cs" />
     <Compile Include="Services\AltimeterMode.cs" />
