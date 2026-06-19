@@ -61,7 +61,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The static configuration of the module, as found in the part's
         /// <a href="https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES">cfg file</a>.
         /// This provides access to data that is not exposed as a field, such as the
-        /// resources produced by a generator. Returns <c>null</c> if the modules
+        /// resources produced by a generator. Returns <c>null</c> if the module's
         /// configuration node cannot be found.
         /// </summary>
         [KRPCProperty]
