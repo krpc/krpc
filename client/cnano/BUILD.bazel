@@ -19,6 +19,7 @@ pkg_zip(
         "CHANGES.txt",
         "INSTALL.txt",
         "LICENSE",
+        "src/krpc.options",
         ":cmake",
         ":services-dockingcamera",
         ":services-drawing",
@@ -34,7 +35,6 @@ pkg_zip(
         "//:readme",
         "//:version",
         "//protobuf:krpc.proto",
-        "src/krpc.options",
     ],
     path_map = {
         "client/cnano/": "%s/" % name,
