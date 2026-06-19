@@ -579,8 +579,7 @@ jobs:
       - build-genfiles
       - build-csharp-sln
       - build-client-cnano
-      - build-client-cpp-system
-      - build-client-cpp-fetch
+      - build-client-cpp
       - build-docs-html
       - build-docs-pdf
       - build-docs-examples
