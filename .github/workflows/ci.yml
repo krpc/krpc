@@ -393,7 +393,7 @@ jobs:
           name: client-cpp
 
       - name: cache-vcpkg
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: C:\vcpkg-binary-cache
           key: vcpkg-x64-windows-protobuf-asio-1
