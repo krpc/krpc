@@ -152,30 +152,7 @@ jobs:
       - name: build
         run: client/cnano/test-build.sh
 
-  build-client-cpp-system:
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/krpc/buildenv:3.7.1
-      options: --user runner:runner
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.github_token }}
-    steps:
-      - name: checkout
-        uses: actions/checkout@v6
-      - name: setup
-        uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
-      - name: build
-        run: client/cpp/test-build.sh system
-
-  build-client-cpp-fetch:
+  build-client-cpp:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.7.1
@@ -206,7 +183,9 @@ jobs:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-cpp-fetch-${{ runner.os }}-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
           restore-keys: ccache-cpp-fetch-${{ runner.os }}-
-      - name: build
+      - name: build-system
+        run: client/cpp/test-build.sh system
+      - name: build-fetch
         run: client/cpp/test-build.sh fetch
 
   build-docs-html:
