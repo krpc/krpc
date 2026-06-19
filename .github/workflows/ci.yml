@@ -184,7 +184,7 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     env:
-      CCACHE_DIR: ${{ runner.temp }}/.ccache
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
       CCACHE_MAXSIZE: 500M
       CMAKE_C_COMPILER_LAUNCHER: ccache
       CMAKE_CXX_COMPILER_LAUNCHER: ccache
