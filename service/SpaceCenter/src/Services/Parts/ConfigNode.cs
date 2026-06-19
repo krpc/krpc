@@ -28,7 +28,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (ConfigNode other)
         {
-            return !ReferenceEquals (other, null) && node == other.node;
+            return !ReferenceEquals (other, null) && ReferenceEquals (node, other.node);
         }
 
         /// <summary>
