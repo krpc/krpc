@@ -4,8 +4,9 @@ v0.6.0
  * Drop autotools build; CMake is now the only supported build system
  * Modernise CMake build: require CMake 3.15+, C++17, target-based usage requirements (#834)
  * Add CMake package config so consumers can use find_package(krpc CONFIG REQUIRED)
- * Protobuf and ASIO are fetched automatically via CMake FetchContent if not found on
- the system. Can be forced by passing options to CMake
+ * CMake dependency options (KRPC_FETCH_PROTOBUF, KRPC_FETCH_ASIO, KRPC_FETCH_ABSL): when OFF
+   (default) the system install is required; when ON FetchContent is used.
+ * Add KRPC_FETCH_DEPS option to enable FetchContent for all dependencies at once
 
 v0.5.2
  * Use protobuf-lite

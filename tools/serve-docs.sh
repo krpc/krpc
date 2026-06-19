@@ -32,7 +32,7 @@ if [ ! -d "$env" ]; then
       "sphinxcontrib-luadomain==1.1.2" \
       "https://krpc.s3.amazonaws.com/lib/javasphinx/javalang-0.13.1.tar.gz" \
       "https://krpc.s3.amazonaws.com/lib/javasphinx/javasphinx-0.9.16.tar.gz" \
-      "sphinx-autobuild==2024.10.3" \
+      "sphinx-autobuild==2025.08.25" \
       "watchdog"
 fi
 

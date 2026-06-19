@@ -8,6 +8,11 @@ throttle to maximum.
 
 .. tabs::
 
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.c
+         :language: c
+
    .. tab:: C#
 
       .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.cs

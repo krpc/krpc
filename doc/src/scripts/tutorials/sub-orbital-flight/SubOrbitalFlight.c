@@ -14,7 +14,7 @@ int main() {
   krpc_SpaceCenter_AutoPilot_t auto_pilot;
   krpc_SpaceCenter_Vessel_AutoPilot(conn, &auto_pilot, vessel);
 
-  krpc_SpaceCenter_AutoPilot_t control;
+  krpc_SpaceCenter_Control_t control;
   krpc_SpaceCenter_Vessel_Control(conn, &control, vessel);
 
   krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90, 90);

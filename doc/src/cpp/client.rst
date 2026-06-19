@@ -13,15 +13,15 @@ Dependencies
 ^^^^^^^^^^^^
 
 The kRPC C++ client requires `ASIO <http://think-async.com/>`_ (for network communication) and
-`protobuf <https://github.com/google/protobuf>`_ (for message serialization). CMake will
-automatically fetch both via FetchContent if they are not found on the system, so no manual
-installation is required.
-
-To use system-installed packages instead, on Ubuntu:
+`protobuf <https://github.com/google/protobuf>`_ (for message serialization). By default, CMake
+looks for system-installed packages. On Ubuntu:
 
 .. code-block:: bash
 
    sudo apt-get install libasio-dev libprotobuf-dev protobuf-compiler
+
+Alternatively, CMake can download dependencies automatically via FetchContent — pass
+``-DKRPC_FETCH_DEPS=ON`` to the configure step (see below).
 
 Using CMake
 ^^^^^^^^^^^
@@ -44,8 +44,10 @@ To install to a custom prefix:
    cmake --build build
    cmake --install build
 
-To force CMake to fetch protobuf or ASIO even when a system version is present, pass
-``-DKRPC_FETCH_PROTOBUF=ON`` or ``-DKRPC_FETCH_ASIO=ON`` to the configure step.
+To download all dependencies automatically via FetchContent instead of using system packages,
+pass ``-DKRPC_FETCH_DEPS=ON`` to the configure step. Fine-grained options
+``-DKRPC_FETCH_PROTOBUF=ON``, ``-DKRPC_FETCH_ASIO=ON``, and ``-DKRPC_FETCH_ABSL=ON`` are also
+available. When an option is OFF (the default), the system package is required.
 
 After installation, downstream CMake projects can link the library with:
 

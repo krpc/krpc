@@ -6,25 +6,29 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
 
-option(KRPC_FETCH_PROTOBUF "Fetch protobuf via FetchContent, ignoring any system install" OFF)
-option(KRPC_FETCH_ASIO     "Fetch ASIO via FetchContent, ignoring any system install"     OFF)
-option(KRPC_FETCH_ABSL     "Fetch abseil via FetchContent, ignoring any system install"   OFF)
+option(KRPC_FETCH_DEPS     "Use FetchContent for all dependencies (protobuf, ASIO, abseil)" OFF)
+option(KRPC_FETCH_PROTOBUF "Use FetchContent for protobuf"                                  OFF)
+option(KRPC_FETCH_ASIO     "Use FetchContent for ASIO"                                      OFF)
+option(KRPC_FETCH_ABSL     "Use FetchContent for abseil (only relevant when KRPC_FETCH_PROTOBUF=ON)" OFF)
+
+if(KRPC_FETCH_DEPS)
+  set(KRPC_FETCH_PROTOBUF ON)
+  set(KRPC_FETCH_ASIO ON)
+  set(KRPC_FETCH_ABSL ON)
+endif()
 
 # ---- Protobuf ----
-if(NOT KRPC_FETCH_PROTOBUF)
-  find_package(protobuf CONFIG)
-endif()
-if(protobuf_FOUND)
-  message(STATUS "Found protobuf ${protobuf_VERSION}")
-else()
-  message(STATUS "Fetching protobuf via FetchContent (builds abseil too)...")
+if(KRPC_FETCH_PROTOBUF)
+  message(STATUS "Fetching protobuf via FetchContent...")
   set(protobuf_BUILD_TESTS       OFF CACHE BOOL "" FORCE)
   set(protobuf_BUILD_CONFORMANCE OFF CACHE BOOL "" FORCE)
   set(protobuf_BUILD_EXAMPLES    OFF CACHE BOOL "" FORCE)
   if(NOT KRPC_FETCH_ABSL)
     find_package(absl QUIET)
-  endif()
-  if(absl_FOUND)
+    if(NOT absl_FOUND)
+      message(FATAL_ERROR "abseil not found. Install abseil or set KRPC_FETCH_ABSL=ON "
+              "(or KRPC_FETCH_DEPS=ON) to download it automatically via FetchContent.")
+    endif()
     set(protobuf_ABSL_PROVIDER "package" CACHE STRING "" FORCE)
   endif()
   set(protobuf_INSTALL ON CACHE BOOL "" FORCE)
@@ -35,14 +39,18 @@ else()
   FetchContent_MakeAvailable(protobuf)
   include("${protobuf_SOURCE_DIR}/cmake/protobuf-generate.cmake")
   set(KRPC_PROTO_EXTRA_INCLUDE "${protobuf_SOURCE_DIR}/third_party/utf8_range")
+else()
+  find_package(protobuf CONFIG)
+  if(NOT protobuf_FOUND)
+    message(FATAL_ERROR "protobuf not found. Install protobuf or set KRPC_FETCH_PROTOBUF=ON "
+            "(or KRPC_FETCH_DEPS=ON) to download it automatically via FetchContent.")
+  endif()
+  message(STATUS "Found protobuf ${protobuf_VERSION}")
 endif()
 
 # ---- ASIO (standalone, header-only) ----
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-if(NOT KRPC_FETCH_ASIO)
-  find_package(Asio)
-endif()
-if(NOT Asio_FOUND)
+if(KRPC_FETCH_ASIO)
   message(STATUS "Fetching ASIO via FetchContent...")
   FetchContent_Declare(asio
     URL      https://github.com/chriskohlhoff/asio/archive/refs/tags/asio-1-38-0.tar.gz
@@ -56,6 +64,12 @@ if(NOT Asio_FOUND)
   set_target_properties(asio::asio PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${asio_SOURCE_DIR}/asio/include")
   set(asio_FETCHED TRUE)
+else()
+  find_package(Asio)
+  if(NOT Asio_FOUND)
+    message(FATAL_ERROR "ASIO not found. Install ASIO, set ASIO_ROOT to its location, "
+            "or set KRPC_FETCH_ASIO=ON (or KRPC_FETCH_DEPS=ON) to download it automatically via FetchContent.")
+  endif()
 endif()
 
 # ---- Generate proto at build time ----
