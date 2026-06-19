@@ -164,6 +164,8 @@ class TestPartsModule(krpctest.TestCase):
         self.assertTrue(config.has_value("name"))
         self.assertFalse(config.has_value("DoesntExist"))
         self.assertRaises(RuntimeError, config.get_value, "DoesntExist")
+        self.assertEqual("ModuleCommand", config.values["name"])
+        self.assertEqual(["ModuleCommand"], config.get_values("name"))
 
         # Part.config returns the whole part cfg, including module and resource nodes.
         part_config = part.config
@@ -171,6 +173,7 @@ class TestPartsModule(krpctest.TestCase):
         self.assertTrue(part_config.has_node("MODULE"))
         module_names = [n.get_value("name") for n in part_config.get_nodes("MODULE")]
         self.assertIn("ModuleCommand", module_names)
+        self.assertIn("MODULE", [n.name for n in part_config.nodes])
         self.assertFalse(part_config.has_node("DoesntExist"))
         self.assertRaises(RuntimeError, part_config.get_node, "DoesntExist")
 
@@ -185,15 +188,27 @@ class TestPartsModule(krpctest.TestCase):
         # The static rate of a generator (issue #831): the electric charge it
         # produces is in an OUTPUT_RESOURCE node of its config, not in a field.
         generator = next(
-            m for p in self.parts.all for m in p.modules if m.name == "ModuleGenerator"
+            (
+                m
+                for p in self.parts.all
+                for m in p.modules
+                if m.name == "ModuleGenerator"
+            ),
+            None,
         )
+        self.assertIsNotNone(generator)
         gen_config = generator.config
+        self.assertIsNotNone(gen_config)
         self.assertEqual("ModuleGenerator", gen_config.get_value("name"))
         output = next(
-            n
-            for n in gen_config.get_nodes("OUTPUT_RESOURCE")
-            if n.get_value("name") == "ElectricCharge"
+            (
+                n
+                for n in gen_config.get_nodes("OUTPUT_RESOURCE")
+                if n.get_value("name") == "ElectricCharge"
+            ),
+            None,
         )
+        self.assertIsNotNone(output)
         self.assertGreater(float(output.get_value("rate")), 0)
 
 
