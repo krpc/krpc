@@ -12,6 +12,11 @@ v0.6.0
  * Allow Module.HasFieldWithId, GetFieldById, SetFieldIntById, SetFieldFloatById,
    SetFieldStringById, SetFieldBoolById and ResetFieldById to also access fields not
    visible in the UI (#858)
+ * Add to Alarm: Node, OriginBody, DestinationBody, WarpAction, MessageAction,
+   PlaySound, DeleteOnDismiss, Triggered and Actioned (#853)
+ * Add AlarmType, AlarmWarpAction and AlarmMessageAction enumerations (#853)
+ * Add Alarm.Remove to delete an alarm (#853)
+ * Fix NullReferenceException raised every frame after creating or removing an alarm (#853)
 
 v0.5.4
  * Fix vessel recovery (#782)
