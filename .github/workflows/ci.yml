@@ -392,8 +392,19 @@ jobs:
         with:
           name: client-cpp
 
+      - name: cache-vcpkg
+        uses: actions/cache@v4
+        with:
+          path: C:\vcpkg-binary-cache
+          key: vcpkg-x64-windows-protobuf-asio-1
+
       - name: install-deps
-        run: vcpkg install protobuf:x64-windows asio:x64-windows
+        shell: pwsh
+        env:
+          VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
+        run: |
+          New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
+          vcpkg install protobuf:x64-windows asio:x64-windows
 
       - name: extract-archive
         shell: pwsh
