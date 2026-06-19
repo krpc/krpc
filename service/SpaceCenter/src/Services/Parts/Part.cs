@@ -74,6 +74,23 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The static configuration of the part, as found in its
+        /// <a href="https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation">part cfg file</a>.
+        /// This provides access to data that is not exposed elsewhere, such as the
+        /// configuration of the parts modules. Returns <c>null</c> if the part has no
+        /// associated configuration node.
+        /// </summary>
+        [KRPCProperty]
+        public ConfigNode Config {
+            get {
+                var info = InternalPart.partInfo;
+                if (info == null || info.partConfig == null)
+                    return null;
+                return new ConfigNode (info.partConfig);
+            }
+        }
+
+        /// <summary>
         /// The name tag for the part. Can be set to a custom string using the
         /// in-game user interface.
         /// </summary>

@@ -57,6 +57,47 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public Part Part { get; private set; }
 
+        /// <summary>
+        /// The static configuration of the module, as found in the part's
+        /// <a href="https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES">cfg file</a>.
+        /// This provides access to data that is not exposed as a field, such as the
+        /// resources produced by a generator. Returns <c>null</c> if the modules
+        /// configuration node cannot be found.
+        /// </summary>
+        [KRPCProperty]
+        public ConfigNode Config {
+            get {
+                var node = FindConfigNode ();
+                return node == null ? null : new ConfigNode (node);
+            }
+        }
+
+        global::ConfigNode FindConfigNode ()
+        {
+            var info = Part.InternalPart.partInfo;
+            if (info == null || info.partConfig == null)
+                return null;
+            // Find the position of this module among the modules on the part that share
+            // its name, then return the config node for the same occurrence.
+            int occurrence = 0;
+            var modules = Part.InternalPart.Modules;
+            for (int i = 0; i < modules.Count; i++) {
+                if (ReferenceEquals (modules [i], module))
+                    break;
+                if (modules [i].moduleName == module.moduleName)
+                    occurrence++;
+            }
+            int seen = 0;
+            foreach (var moduleNode in info.partConfig.GetNodes ("MODULE")) {
+                if (moduleNode.GetValue ("name") == module.moduleName) {
+                    if (seen == occurrence)
+                        return moduleNode;
+                    seen++;
+                }
+            }
+            return null;
+        }
+
         IEnumerable<BaseField> VisibleFields {
             get { return module.Fields.Cast<BaseField> ().Where (f => f != null && (HighLogic.LoadedSceneIsEditor ? f.guiActiveEditor : f.guiActive)); }
         }
