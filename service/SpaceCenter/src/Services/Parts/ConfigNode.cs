@@ -6,7 +6,7 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Represents a configuration node, as found in a part's config file. A node has a
+    /// Represents a configuration node, as found in a part's configuration file. A node has a
     /// name, a set of named values and a set of child nodes. This is used to access the
     /// static configuration of a part or part module, for example via
     /// <see cref="Part.Config"/> and <see cref="Module.Config"/>.
