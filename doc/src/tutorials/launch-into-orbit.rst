@@ -9,6 +9,7 @@ program assumes you are using :download:`this craft file
 
 The program is available in a variety of languages:
 
+:download:`C</scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c>`,
 :download:`C#</scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs>`,
 :download:`C++</scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp>`,
 :download:`Java</scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java>`,
@@ -19,6 +20,13 @@ The following code connects to the server, gets the active vessel, sets up a
 bunch of streams to get flight telemetry then prepares the rocket for launch.
 
 .. tabs::
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
+         :language: c
+         :lines: 1-44
+         :linenos:
 
    .. group-tab:: C#
 
@@ -62,6 +70,14 @@ separating them when they run dry. The loop exits when the rockets apoapsis is
 close to the target apoapsis.
 
 .. tabs::
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
+         :language: c
+         :lines: 46-77
+         :lineno-start: 46
+         :linenos:
 
    .. group-tab:: C#
 
@@ -107,6 +123,14 @@ Next, the program fine tunes the apoapsis, using 10% thrust, then waits until
 the rocket has left Kerbin's atmosphere.
 
 .. tabs::
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
+         :language: c
+         :lines: 79-95
+         :lineno-start: 79
+         :linenos:
 
    .. group-tab:: C#
 
@@ -156,6 +180,14 @@ time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
 
 .. tabs::
 
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
+         :language: c
+         :lines: 97-126
+         :lineno-start: 97
+         :linenos:
+
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
@@ -201,6 +233,14 @@ orientate the ship along the y-axis of the maneuver node's reference frame
 (i.e. in the direction of the burn) then time warp to 5 seconds before the burn.
 
 .. tabs::
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
+         :language: c
+         :lines: 128-141
+         :lineno-start: 128
+         :linenos:
 
    .. group-tab:: C#
 
@@ -248,6 +288,14 @@ monitors the remaining delta-v until it flips around to point retrograde (at
 which point the node has been executed).
 
 .. tabs::
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
+         :language: c
+         :lines: 143-
+         :lineno-start: 143
+         :linenos:
 
    .. group-tab:: C#
 

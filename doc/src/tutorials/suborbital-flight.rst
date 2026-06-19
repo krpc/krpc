@@ -21,6 +21,7 @@ This tutorial uses the two stage rocket pictured below. The craft file for this 
 This tutorial includes source code examples for the main client languages that kRPC supports. The
 entire program, for your chosen language can be downloaded from here:
 
+:download:`C</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c>`,
 :download:`C#</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs>`,
 :download:`C++</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp>`,
 :download:`Java</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java>`,
@@ -37,6 +38,14 @@ The first thing we need to do is open a connection to the server. We can also pa
 name for our script that will appear in the server window in game:
 
 .. tabs::
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+         :language: c
+         :lines: 7-9
+         :lineno-start: 7
+         :linenos:
 
    .. group-tab:: C#
 
@@ -81,6 +90,14 @@ Next we need to get an object representing the active vessel. It's via this obje
 instructions to the rocket:
 
 .. tabs::
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+         :language: c
+         :lines: 11-18
+         :lineno-start: 11
+         :linenos:
 
    .. group-tab:: C#
 
@@ -127,6 +144,14 @@ instructs the auto-pilot to hold a pitch and heading of 90° (vertically upwards
 1 second for these settings to take effect.
 
 .. tabs::
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+         :language: c
+         :lines: 20-23
+         :lineno-start: 20
+         :linenos:
 
    .. group-tab:: C#
 
@@ -175,6 +200,14 @@ We're now ready to launch by activating the first stage (equivalent to pressing 
 
 .. tabs::
 
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+         :language: c
+         :lines: 25-26
+         :lineno-start: 25
+         :linenos:
+
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
@@ -221,6 +254,14 @@ little solid fuel left in the rocket. When the event is triggered, we can activa
 jettison the boosters:
 
 .. tabs::
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+         :language: c
+         :lines: 28-38
+         :lineno-start: 28
+         :linenos:
 
    .. group-tab:: C#
 
@@ -275,6 +316,14 @@ following uses an event to wait until the altitude of the rocket reaches 10km:
 
 .. tabs::
 
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+         :language: c
+         :lines: 40-47
+         :lineno-start: 40
+         :linenos:
+
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
@@ -324,6 +373,14 @@ this, we simply reconfigure the auto-pilot:
 
 .. tabs::
 
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+         :language: c
+         :lines: 49-50
+         :lineno-start: 49
+         :linenos:
+
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
@@ -368,6 +425,14 @@ Now we wait until the apoapsis reaches 100km (again, using an event), then reduc
 zero, jettison the launch stage and turn off the auto-pilot:
 
 .. tabs::
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+         :language: c
+         :lines: 52-65
+         :lineno-start: 52
+         :linenos:
 
    .. group-tab:: C#
 
@@ -422,6 +487,14 @@ happens - the script will continue to work.
 
 .. tabs::
 
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+         :language: c
+         :lines: 67-74
+         :lineno-start: 67
+         :linenos:
+
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
@@ -466,6 +539,14 @@ The parachutes should have now been deployed. The next bit of code will repeated
 altitude of the capsule until its speed reaches zero -- which will happen when it lands:
 
 .. tabs::
+
+   .. group-tab:: C
+
+      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+         :language: c
+         :lines: 76-93
+         :lineno-start: 76
+         :linenos:
 
    .. group-tab:: C#
 
