@@ -7,6 +7,11 @@ v0.6.0
  * Add Flight.SimulateAerodynamicTorqueAt (#825)
  * Add Control.AeroSurfaces to enable/disable pitch, yaw and roll on all control surfaces (#827)
  * Add Control.EngineGimbals to enable/disable gimbal on all gimballed engines (#827)
+ * Add Module.AllFieldsById to expose all part module field values, including those not
+   visible in the UI (#858)
+ * Allow Module.HasFieldWithId, GetFieldById, SetFieldIntById, SetFieldFloatById,
+   SetFieldStringById, SetFieldBoolById and ResetFieldById to also access fields not
+   visible in the UI (#858)
 
 v0.5.4
  * Fix vessel recovery (#782)
