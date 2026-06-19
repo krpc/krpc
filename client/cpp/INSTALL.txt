@@ -1,9 +1,13 @@
 Installing the kRPC C++ client library
 ======================================
 
-CMake 3.15 or later is required. ASIO and protobuf are fetched automatically
-via CMake FetchContent if not found on the system, so no manual dependency
-installation is required.
+CMake 3.15 or later is required. By default, CMake looks for system-installed
+protobuf and ASIO. On Ubuntu:
+
+    sudo apt-get install libasio-dev libprotobuf-dev protobuf-compiler
+
+Alternatively, CMake can download them automatically via FetchContent — see
+"Using FetchContent for dependencies" below.
 
 To compile and install the library:
 
@@ -23,16 +27,20 @@ Pass CMAKE_INSTALL_PREFIX to the configure step:
     cmake --install build
 
 
-Forcing dependency fetching
-----------------------------
+Using FetchContent for dependencies
+------------------------------------
 
-By default CMake searches for system-installed protobuf and ASIO before
-falling back to FetchContent. To force a fetch regardless, pass one or both
-options:
+To download all dependencies (protobuf, ASIO, abseil) automatically at build
+time instead of using system packages, pass KRPC_FETCH_DEPS=ON:
 
-    cmake -B build -DKRPC_FETCH_PROTOBUF=ON -DKRPC_FETCH_ASIO=ON
+    cmake -B build -DKRPC_FETCH_DEPS=ON
     cmake --build build
     sudo cmake --install build
+
+To enable FetchContent for individual dependencies only, use the fine-grained
+options (KRPC_FETCH_PROTOBUF, KRPC_FETCH_ASIO, KRPC_FETCH_ABSL). When an
+option is OFF (the default), the system package is required and CMake will
+error if it cannot be found.
 
 
 Using the installed library from another CMake project

@@ -118,12 +118,10 @@ if [[ "$mode" == "system" || "$mode" == "all" ]]; then
   consumer_test "$out/system/install" "$out/system/consumer"
 fi
 
-# 2) FetchContent protobuf + ASIO + abseil
+# 2) FetchContent protobuf + ASIO + abseil via global option
 if [[ "$mode" == "fetch" || "$mode" == "all" ]]; then
   build_install "$out/fetch/build" "$out/fetch/install" "$out/fetch/configure.log" \
-    -DKRPC_FETCH_PROTOBUF=ON \
-    -DKRPC_FETCH_ASIO=ON \
-    -DKRPC_FETCH_ABSL=ON
+    -DKRPC_FETCH_DEPS=ON
   check_present "$out/fetch/configure.log" "Fetching protobuf via FetchContent"
   check_present "$out/fetch/configure.log" "Fetching ASIO via FetchContent"
   check_absent  "$out/fetch/configure.log" "Found protobuf"
