@@ -137,6 +137,11 @@ jobs:
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_MAXSIZE: 500M
+      CMAKE_C_COMPILER_LAUNCHER: ccache
+      CMAKE_CXX_COMPILER_LAUNCHER: ccache
     steps:
       - name: checkout
         uses: actions/checkout@v6
@@ -149,8 +154,16 @@ jobs:
         with:
           game: ksp
           version: 1.12.5
-      - name: build
-        run: client/cnano/test-build.sh
+      - name: ccache-restore
+        uses: actions/cache@v5
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-cnano-${{ runner.os }}-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
+          restore-keys: ccache-cpp-fetch-${{ runner.os }}-
+      - name: build-system
+        run: client/cnano/test-build.sh system
+      - name: build-fetch
+        run: client/cnano/test-build.sh fetch
 
   build-client-cpp:
     runs-on: ubuntu-latest
@@ -181,7 +194,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-cpp-fetch-${{ runner.os }}-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
+          key: ccache-cpp-${{ runner.os }}-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
           restore-keys: ccache-cpp-fetch-${{ runner.os }}-
       - name: build-system
         run: client/cpp/test-build.sh system
