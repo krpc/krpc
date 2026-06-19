@@ -649,6 +649,7 @@ SpaceCenter.Module.Name
 SpaceCenter.Module.Part
 SpaceCenter.Module.Fields
 SpaceCenter.Module.FieldsById
+SpaceCenter.Module.AllFieldsById
 SpaceCenter.Module.HasField
 SpaceCenter.Module.HasFieldWithId
 SpaceCenter.Module.GetField

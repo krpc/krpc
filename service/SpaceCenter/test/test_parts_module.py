@@ -78,6 +78,52 @@ class TestPartsModule(krpctest.TestCase):
         module.set_field_int("Brakes", 100)
         self.assertEqual({"Brakes": "100"}, module.fields)
 
+    def test_all_fields_by_id(self):
+        part = self.parts.with_title("Mk1-3 Command Pod")[0]
+        module = next(m for m in part.modules if m.name == "ModuleCommand")
+        all_fields = module.all_fields_by_id
+        # Hidden fields, not shown in the right-click menu, are included.
+        self.assertEqual("1", all_fields["minimumCrew"])
+        self.assertNotIn("minimumCrew", module.fields_by_id)
+        # The visible fields are a subset of all fields, with matching values.
+        for identifier, value in module.fields_by_id.items():
+            self.assertEqual(value, all_fields[identifier])
+
+    def test_get_field_by_id_fallback(self):
+        part = self.parts.with_title("Mk1-3 Command Pod")[0]
+        module = next(m for m in part.modules if m.name == "ModuleCommand")
+        # minimumCrew is hidden (not in the right-click menu), so the by-id
+        # lookups reach it only via the fallback to all fields.
+        self.assertNotIn("minimumCrew", module.fields_by_id)
+        self.assertTrue(module.has_field_with_id("minimumCrew"))
+        self.assertEqual("1", module.get_field_by_id("minimumCrew"))
+        # Visible fields are still reachable by id; the fallback only applies
+        # when there is no visible match, so existing behavior is unchanged.
+        for identifier, value in module.fields_by_id.items():
+            self.assertEqual(value, module.get_field_by_id(identifier))
+
+    def test_set_and_reset_field_by_id_fallback(self):
+        part = self.parts.with_title("Mk1-3 Command Pod")[0]
+        module = next(m for m in part.modules if m.name == "ModuleCommand")
+        # minimumCrew is hidden, so set/reset-by-id reach it via the fallback.
+        self.assertNotIn("minimumCrew", module.fields_by_id)
+        # reset_field_by_id cannot restore a hidden field (see below), so restore
+        # the original value on cleanup with an explicit set instead.
+        self.addCleanup(module.set_field_int_by_id, "minimumCrew", 1)
+        self.assertEqual("1", module.get_field_by_id("minimumCrew"))
+        module.set_field_int_by_id("minimumCrew", 2)
+        self.wait(1)
+        self.assertEqual("2", module.get_field_by_id("minimumCrew"))
+        # reset_field_by_id reaches the field via the same fallback (it raised
+        # before this change), but KSP only snapshots a field's original value
+        # when its GUI control is created, so reset is a no-op for hidden fields
+        # and we don't assert the resulting value.
+        module.reset_field_by_id("minimumCrew")
+        # Restore the original value with an explicit set.
+        module.set_field_int_by_id("minimumCrew", 1)
+        self.wait(1)
+        self.assertEqual("1", module.get_field_by_id("minimumCrew"))
+
     def test_events(self):
         part = self.parts.with_title("Illuminator Mk1")[0]
         module = next(m for m in part.modules if m.name == "ModuleLight")
