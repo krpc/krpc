@@ -121,25 +121,6 @@ if(KRPC_PROTO_EXTRA_INCLUDE)
 endif()
 target_link_libraries(krpc PUBLIC asio::asio)
 
-if(WIN32 OR CYGWIN)
-  target_compile_definitions(krpc PUBLIC
-    _SCL_SECURE_NO_WARNINGS
-    _WIN32_WINNT=0x0501
-    __USE_W32_SOCKETS)
-  target_link_libraries(krpc PUBLIC ws2_32 mswsock)
-endif()
-
-if(MSVC)
-  set_target_properties(krpc PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
-  foreach(flag_var
-      CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
-      CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
-    if(${flag_var} MATCHES "/MD")
-      string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
-    endif()
-  endforeach()
-endif()
-
 set_target_properties(krpc PROPERTIES
   VERSION   ${PROJECT_VERSION}
   SOVERSION ${PROJECT_VERSION_MAJOR})
