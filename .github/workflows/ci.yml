@@ -183,6 +183,11 @@ jobs:
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
+    env:
+      CCACHE_DIR: ${{ runner.temp }}/.ccache
+      CCACHE_MAXSIZE: 500M
+      CMAKE_C_COMPILER_LAUNCHER: ccache
+      CMAKE_CXX_COMPILER_LAUNCHER: ccache
     steps:
       - name: checkout
         uses: actions/checkout@v6
@@ -195,6 +200,14 @@ jobs:
         with:
           game: ksp
           version: 1.12.5
+      - name: ccache-install
+        run: sudo apt-get install -y --no-install-recommends ccache
+      - name: ccache-restore
+        uses: actions/cache@v5
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-cpp-fetch-${{ runner.os }}-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
+          restore-keys: ccache-cpp-fetch-${{ runner.os }}-
       - name: build
         run: client/cpp/test-build.sh fetch
 
