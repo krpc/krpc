@@ -57,8 +57,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public Part Part { get; private set; }
 
-        IEnumerable<BaseField> AllFields {
+        IEnumerable<BaseField> VisibleFields {
             get { return module.Fields.Cast<BaseField> ().Where (f => f != null && (HighLogic.LoadedSceneIsEditor ? f.guiActiveEditor : f.guiActive)); }
+        }
+
+        IEnumerable<BaseField> AllBaseFields {
+            get { return module.Fields.Cast<BaseField> ().Where (f => f != null); }
         }
 
         IEnumerable<BaseEvent> AllEvents {
@@ -81,7 +85,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IDictionary<string,string> Fields {
             get {
                 var result = new Dictionary<string,string> ();
-                foreach (var field in AllFields)
+                foreach (var field in VisibleFields)
                     result.Add (field.guiName, field.GetValue (module).ToString ());
                 return result;
             }
@@ -95,7 +99,25 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IDictionary<string,string> FieldsById {
             get {
                 var result = new Dictionary<string,string> ();
-                foreach (var field in AllFields)
+                foreach (var field in VisibleFields)
+                    result.Add (field.name, field.GetValue (module).ToString ());
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// The modules field identifiers and their associated values, as a dictionary.
+        /// This is the same as <see cref="FieldsById"/>, except that it also includes
+        /// fields that are not visible in the right-click menu of the part.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if there is more than one field with the same identifier.
+        /// </remarks>
+        [KRPCProperty]
+        public IDictionary<string,string> AllFieldsById {
+            get {
+                var result = new Dictionary<string,string> ();
+                foreach (var field in AllBaseFields)
                     result.Add (field.name, field.GetValue (module).ToString ());
                 return result;
             }
@@ -108,7 +130,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public bool HasField (string name)
         {
-            return AllFields.Any (x => x.guiName == name);
+            return VisibleFields.Any (x => x.guiName == name);
         }
 
         /// <summary>
@@ -118,17 +140,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public bool HasFieldWithId (string id)
         {
-            return AllFields.Any (x => x.name == id);
+            return AllBaseFields.Any (x => x.name == id);
         }
 
         BaseField GetBaseFieldByName (string name)
         {
-            return AllFields.First (x => x.guiName == name);
+            return VisibleFields.First (x => x.guiName == name);
         }
 
         BaseField GetBaseFieldById (string id)
         {
-            return AllFields.First (x => x.name == id);
+            return VisibleFields.FirstOrDefault (x => x.name == id) ?? AllBaseFields.First (x => x.name == id);
         }
 
         /// <summary>
@@ -275,6 +297,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Set the value of a field to its original value.
         /// </summary>
         /// <param name="id">Identifier of the field.</param>
+        /// <remarks>
+        /// Has no effect on fields that are not visible in the right-click menu of the part.
+        /// </remarks>
         [KRPCMethod]
         public void ResetFieldById (string id)
         {
