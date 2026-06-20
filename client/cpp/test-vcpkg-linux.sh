@@ -36,16 +36,18 @@ fi
 version_semver=$(echo "$version" | grep -oE '^[0-9]+\.[0-9]+\.[0-9]+')
 
 # Create a temporary overlay port that points to the local archive
+sha512=$(sha512sum "$archive" | awk '{print $1}')
 tmpport=$(mktemp -d)
 trap 'rm -rf "$tmpport"' EXIT
 cp "$scriptroot/vcpkg-port/"* "$tmpport/"
 sed -i \
   -e "s|URLS \"https://[^\"]*\"|URLS \"file://${archive}\"|" \
   -e "s|FILENAME \"krpc-cpp-[^\"]*\"|FILENAME \"krpc-cpp-$version.zip\"|" \
+  -e "s|SHA512 0|SHA512 $sha512|" \
   "$tmpport/portfile.cmake"
 sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$version_semver\"/" "$tmpport/vcpkg.json"
 
-# Install via the overlay port (SHA512 0 skips hash verification)
+# Install via the overlay port
 "$vcpkg_bin" install krpc --overlay-ports="$tmpport"
 
 # Consumer test: a small project that uses find_package(krpc CONFIG REQUIRED)

@@ -18,6 +18,7 @@ version=$(echo "$archive" | sed 's/krpc-cpp-\(.*\)\.zip/\1/')
 version_semver=$(echo "$version" | grep -oE '^[0-9]+\.[0-9]+\.[0-9]+')
 
 # Create a temporary overlay port that points to the local archive
+sha512=$(sha512sum "$archive" | awk '{print $1}')
 tmpport=$(mktemp -d)
 trap 'rm -rf "$tmpport"' EXIT
 cp "$scriptroot/vcpkg-port/"* "$tmpport/"
@@ -25,10 +26,11 @@ cp "$scriptroot/vcpkg-port/"* "$tmpport/"
 sed -i \
   -e "s|URLS \"https://[^\"]*\"|URLS \"file://$(pwd)/$archive\"|" \
   -e "s|FILENAME \"krpc-cpp-[^\"]*\"|FILENAME \"$archive\"|" \
+  -e "s|SHA512 0|SHA512 $sha512|" \
   "$tmpport/portfile.cmake"
 sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$version_semver\"/" "$tmpport/vcpkg.json"
 
-# Install via the overlay port (SHA512 0 skips hash verification)
+# Install via the overlay port
 "$vcpkg_bin" install krpc:x64-windows --overlay-ports="$tmpport"
 
 # Consumer test
