@@ -16,12 +16,12 @@ pkg_zip(
         "src/*.c",
         "cmake/*.cmake.in",
     ]) + [
-        ":protobuf",
         "CHANGES.txt",
         "INSTALL.txt",
         "LICENSE",
         "src/krpc.options",
         ":cmake",
+        ":protobuf",
         ":services-dockingcamera",
         ":services-drawing",
         ":services-infernalrobotics",
