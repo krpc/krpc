@@ -54,7 +54,8 @@ krpc_error_t krpc_write(krpc_connection_t connection, const uint8_t * buf, size_
 
 krpc_error_t krpc_open(krpc_connection_t * connection, const krpc_connection_config_t * arg) {
   const char * port = arg;
-  HANDLE handle = CreateFileA(port, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+  HANDLE handle = CreateFileA(
+    port, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
   if (handle == INVALID_HANDLE_VALUE)
     KRPC_RETURN_ERROR(IO, "failed to open serial port");
   *connection = handle;
@@ -81,7 +82,8 @@ krpc_error_t krpc_read(krpc_connection_t connection, uint8_t * buf, size_t count
 
 krpc_error_t krpc_write(krpc_connection_t connection, const uint8_t * buf, size_t count) {
   DWORD bytes_written = 0;
-  if (!WriteFile((HANDLE)connection, buf, (DWORD)count, &bytes_written, NULL) || bytes_written != (DWORD)count)
+  if (!WriteFile((HANDLE)connection, buf, (DWORD)count, &bytes_written, NULL) ||
+      bytes_written != (DWORD)count)
     KRPC_RETURN_ERROR(IO, "write failed");
   return KRPC_OK;
 }
