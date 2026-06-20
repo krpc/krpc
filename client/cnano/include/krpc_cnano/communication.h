@@ -12,7 +12,9 @@
     #error "Require a C++ compiler to build kRPC for Arduino"
     #endif
     #include <HardwareSerial.h>
-  #elif !defined(KRPC_COMMUNICATION_CUSTOM)
+  #elif defined(_WIN32)
+    #define KRPC_COMMUNICATION_WINDOWS
+  #else
     #define KRPC_COMMUNICATION_POSIX
   #endif
 #endif
@@ -23,6 +25,11 @@ extern "C" {
 
 #ifdef KRPC_COMMUNICATION_POSIX
 typedef int krpc_connection_t;
+typedef char krpc_connection_config_t;
+#endif
+
+#ifdef KRPC_COMMUNICATION_WINDOWS
+typedef void * krpc_connection_t;
 typedef char krpc_connection_config_t;
 #endif
 
