@@ -9,8 +9,12 @@
 #include <krpc_cnano/types.h>
 {% macro call(service_id, procedure_id, parameters) %}
 krpc_call_t _call;
+{% if parameters | length > 0 %}
 krpc_argument_t _arguments[{{ parameters | length }}];
 KRPC_CHECK(krpc_call(&_call, {{ service_id }}, {{ procedure_id }}, {{ parameters | length }}, _arguments));
+{% else %}
+KRPC_CHECK(krpc_call(&_call, {{ service_id }}, {{ procedure_id }}, 0, NULL));
+{% endif %}
 {% for x in parameters %}
 KRPC_CHECK(krpc_add_argument(&_call, {{ loop.index0 }}, &krpc_encode_callback_{{ x.type.name }}, {{ x.type.getptr }}{{ x.name }}));
 {% endfor %}
