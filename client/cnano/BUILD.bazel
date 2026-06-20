@@ -1,27 +1,26 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
-load("//:config.bzl", "version")
-load("//tools/build:autotools.bzl", "autotools_dist")
+load("//:config.bzl", "cmake_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:cpp.bzl", "cpp_check_test", "cpp_lint_test")
+load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/protobuf:nanopb.bzl", "protobuf_nanopb")
 load("//tools/krpctools:clientgen.bzl", "clientgen_cnano")
 
 name = "krpc-cnano-%s" % version
 
-autotools_dist(
+pkg_zip(
     name = "cnano",
     out = "%s.zip" % name,
     files = glob([
         "include/**/*.h",
         "src/*.c",
-        "**/Makefile.am",
+        "cmake/*.cmake.in",
     ]) + [
         "CHANGES.txt",
         "INSTALL.txt",
         "LICENSE",
-        ":autotools",
+        "src/krpc.options",
         ":cmake",
-        ":protobuf",
         ":services-dockingcamera",
         ":services-drawing",
         ":services-infernalrobotics",
@@ -35,41 +34,25 @@ autotools_dist(
         "//:COPYING.LESSER",
         "//:readme",
         "//:version",
-        "@c_nanopb//:LICENSE.txt",
-        "@c_nanopb//:pb.h",
-        "@c_nanopb//:pb_common.c",
-        "@c_nanopb//:pb_common.h",
-        "@c_nanopb//:pb_decode.c",
-        "@c_nanopb//:pb_decode.h",
-        "@c_nanopb//:pb_encode.c",
-        "@c_nanopb//:pb_encode.h",
+        "//protobuf:krpc.proto",
     ],
     path_map = {
-        "../+http_archive+c_nanopb/LICENSE.txt": "%s/LICENSE.nanopb" % name,
-        "../+http_archive+c_nanopb/*.h": "%s/include/krpc_cnano/" % name,
-        "../+http_archive+c_nanopb/*.c": "%s/src/" % name,
         "client/cnano/": "%s/" % name,
+        "client/cnano/src/krpc.options": "%s/protobuf/krpc.options" % name,
         "COPYING": "%s/COPYING" % name,
         "COPYING.LESSER": "%s/COPYING.LESSER" % name,
         "README.txt": "%s/README.txt" % name,
         "VERSION.txt": "%s/VERSION.txt" % name,
+        "protobuf/": "%s/protobuf/" % name,
     },
-    source_dir = name,
     visibility = ["//:__pkg__"],
-)
-
-genrule(
-    name = "autotools",
-    srcs = ["configure.ac.tmpl"],
-    outs = ["configure.ac"],
-    cmd = "sed 's/%VERSION%/" + version + '/g\' "$<" > "$@"',
 )
 
 genrule(
     name = "cmake",
     srcs = ["CMakeLists.txt.tmpl"],
     outs = ["CMakeLists.txt"],
-    cmd = "sed 's/%VERSION%/" + version + '/g\' "$<" > "$@"',
+    cmd = "sed 's/%VERSION%/" + cmake_version + '/g\' "$<" > "$@"',
 )
 
 clientgen_cnano(

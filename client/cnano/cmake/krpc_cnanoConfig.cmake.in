@@ -1,0 +1,8 @@
+@PACKAGE_INIT@
+include(CMakeFindDependencyMacro)
+
+find_dependency(nanopb CONFIG)
+
+include("${CMAKE_CURRENT_LIST_DIR}/krpc_cnanoTargets.cmake")
+
+check_required_components(krpc_cnano)

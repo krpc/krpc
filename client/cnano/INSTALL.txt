@@ -1,44 +1,53 @@
 Installing the kRPC C-nano client library
 =========================================
 
-To compile and install the library using the configure script execute the
-following:
+Requirements
+------------
 
-    ./configure
-    make
-    sudo make install
+ * CMake 3.15 or later
+ * A C99-compatible compiler
+ * protoc (the protobuf compiler)
+ * Python 3 (used by the nanopb generator at build time)
 
-To compile and install using CMake:
-
-    cmake .
-    make
-    sudo make install
-
-
-Installing to a custom location
--------------------------------
-
-To install to a different location, pass the --prefix argument to the configure
-script. For example:
-
-    ./configure --prefix=/install/path
-    make
-    make install
-
-Or set CMAKE_INSTALL_PREFIX when using CMake:
-
-    cmake . -DCMAKE_INSTALL_PREFIX=/install/path
-    make
-    make install
+By default, CMake looks for a system-installed nanopb with CMake config support.
+Alternatively, CMake can download nanopb automatically via FetchContent — see
+"Using FetchContent for dependencies" below.
 
 
-Rebuilding the autotools scripts
---------------------------------
+Building and installing
+-----------------------
 
-If you have a need to change configure.ac or Makefile.am files, and you have a
-reasonably up-to-date set of tools, run the following:
+    cmake -B build
+    cmake --build build
+    sudo cmake --install build
+    sudo ldconfig
 
-    autoreconf --force --install
-    ./configure
-    make
-    make install
+To install to a custom location, pass CMAKE_INSTALL_PREFIX:
+
+    cmake -B build -DCMAKE_INSTALL_PREFIX=/install/path
+    cmake --build build
+    cmake --install build
+
+
+Using FetchContent for dependencies
+------------------------------------
+
+To download nanopb automatically at build time instead of using a system
+package, pass KRPC_FETCH_DEPS=ON:
+
+    cmake -B build -DKRPC_FETCH_DEPS=ON
+    cmake --build build
+    sudo cmake --install build
+
+The fine-grained option KRPC_FETCH_NANOPB=ON is also accepted. When an option
+is OFF (the default), the system package is required and CMake will error if it
+cannot be found.
+
+
+Using the installed library
+---------------------------
+
+After installation, downstream CMake projects can locate the library with:
+
+    find_package(krpc_cnano CONFIG REQUIRED)
+    target_link_libraries(my_target PRIVATE krpc_cnano::krpc_cnano)
