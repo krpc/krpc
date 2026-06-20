@@ -360,6 +360,9 @@ jobs:
     needs: test-client-cnano
     runs-on: windows-latest
     steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
@@ -379,59 +382,9 @@ jobs:
           New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
           vcpkg install nanopb:x64-windows protobuf:x64-windows
 
-      - name: extract-archive
-        shell: pwsh
-        run: Expand-Archive -Path (Get-Item krpc-cnano-*.zip).FullName -DestinationPath .
-
-      - name: configure
+      - name: test-build
         shell: bash
-        run: |
-          set -eo pipefail
-          src=$(ls -d krpc-cnano-*/)
-          cmake -S "$src" -B build \
-            -DCMAKE_INSTALL_PREFIX=install \
-            -DCMAKE_BUILD_TYPE=Release \
-            "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" \
-            -DVCPKG_TARGET_TRIPLET=x64-windows \
-            2>&1 | tee configure.log
-          grep -q "Found nanopb" configure.log
-          ! grep -q "Fetching nanopb via FetchContent" configure.log
-          grep -q "Found protobuf" configure.log
-          ! grep -q "Fetching protobuf via FetchContent" configure.log
-
-      - name: build
-        run: cmake --build build --config Release --parallel
-
-      - name: install
-        run: cmake --install build --config Release
-
-      - name: consumer-test
-        shell: bash
-        run: |
-          mkdir -p consumer
-          cat > consumer/main.c << 'EOF'
-          #include <stdio.h>
-          #include <krpc_cnano.h>
-          #include <krpc_cnano/services/krpc.h>
-          int main(void) {
-              printf("krpc_cnano library linked OK\n");
-              return 0;
-          }
-          EOF
-          cat > consumer/CMakeLists.txt << 'EOF'
-          cmake_minimum_required(VERSION 3.15)
-          project(krpc_cnano_consumer_test LANGUAGES C)
-          set(CMAKE_C_STANDARD 99)
-          find_package(krpc_cnano CONFIG REQUIRED)
-          add_executable(test_app main.c)
-          target_link_libraries(test_app PRIVATE krpc_cnano::krpc_cnano)
-          EOF
-          cmake -S consumer -B consumer/build \
-            "-DCMAKE_PREFIX_PATH=$(pwd)/install" \
-            -DCMAKE_BUILD_TYPE=Release \
-            "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" \
-            -DVCPKG_TARGET_TRIPLET=x64-windows
-          cmake --build consumer/build --config Release --parallel
+        run: client/cnano/test-build-windows.sh
 
   test-client-cpp:
     runs-on: ubuntu-latest
@@ -467,6 +420,9 @@ jobs:
     needs: test-client-cpp
     runs-on: windows-latest
     steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
@@ -486,58 +442,9 @@ jobs:
           New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
           vcpkg install protobuf:x64-windows asio:x64-windows
 
-      - name: extract-archive
-        shell: pwsh
-        run: Expand-Archive -Path (Get-Item krpc-cpp-*.zip).FullName -DestinationPath .
-
-      - name: configure
+      - name: test-build
         shell: bash
-        run: |
-          set -eo pipefail
-          src=$(ls -d krpc-cpp-*/)
-          cmake -S "$src" -B build \
-            -DCMAKE_INSTALL_PREFIX=install \
-            -DCMAKE_BUILD_TYPE=Release \
-            "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" \
-            -DVCPKG_TARGET_TRIPLET=x64-windows \
-            2>&1 | tee configure.log
-          grep -q "Found protobuf" configure.log
-          ! grep -q "Fetching protobuf via FetchContent" configure.log
-          ! grep -q "Fetching ASIO via FetchContent" configure.log
-
-      - name: build
-        run: cmake --build build --config Release --parallel
-
-      - name: install
-        run: cmake --install build --config Release
-
-      - name: consumer-test
-        shell: bash
-        run: |
-          mkdir -p consumer
-          cat > consumer/main.cpp << 'EOF'
-          #include <iostream>
-          #include <krpc.hpp>
-          #include <krpc/services/krpc.hpp>
-          int main() {
-              std::cout << "krpc library linked OK" << std::endl;
-              return 0;
-          }
-          EOF
-          cat > consumer/CMakeLists.txt << 'EOF'
-          cmake_minimum_required(VERSION 3.15)
-          project(krpc_consumer_test LANGUAGES CXX)
-          set(CMAKE_CXX_STANDARD 17)
-          find_package(krpc CONFIG REQUIRED)
-          add_executable(test_app main.cpp)
-          target_link_libraries(test_app PRIVATE krpc::krpc)
-          EOF
-          cmake -S consumer -B consumer/build \
-            "-DCMAKE_PREFIX_PATH=$(pwd)/install" \
-            -DCMAKE_BUILD_TYPE=Release \
-            "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" \
-            -DVCPKG_TARGET_TRIPLET=x64-windows
-          cmake --build consumer/build --config Release --parallel
+        run: client/cpp/test-build-windows.sh
 
   test-client-csharp:
     runs-on: ubuntu-latest
