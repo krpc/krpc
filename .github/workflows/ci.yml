@@ -158,7 +158,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-build-client-cnano-${{ runner.os }}-${{ hashFiles('client/cnano/CMakeLists.txt.tmpl') }}
+          key: build-client-cnano-ccache-${{ runner.os }}-${{ hashFiles('client/cnano/CMakeLists.txt.tmpl') }}
           restore-keys: ccache-build-client-cnano-${{ runner.os }}-
       - name: build-system
         run: client/cnano/test-build.sh system
@@ -194,8 +194,8 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-build-client-cpp-${{ runner.os }}-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
-          restore-keys: ccache-build-client-cpp-${{ runner.os }}-
+          key: build-client-cpp-ccache-${{ runner.os }}-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
+          restore-keys: build-client-cpp-ccache-${{ runner.os }}-
       - name: build-system
         run: client/cpp/test-build.sh system
       - name: build-fetch
@@ -356,6 +356,36 @@ jobs:
           name: client-cnano
           path: bazel-bin/client/cnano/krpc-cnano-*.zip
 
+  test-client-cnano-windows:
+    needs: test-client-cnano
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: download-artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: client-cnano
+
+      - name: cache-vcpkg
+        uses: actions/cache@v5
+        with:
+          path: C:\vcpkg-binary-cache
+          key: test-client-cnano-windows-vcpkg-1
+
+      - name: install-deps
+        shell: pwsh
+        env:
+          VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
+        run: |
+          New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
+          vcpkg install nanopb:x64-windows
+
+      - name: test-build
+        shell: bash
+        run: client/cnano/test-build-windows.sh
+
   test-client-cpp:
     runs-on: ubuntu-latest
     container:
@@ -385,6 +415,36 @@ jobs:
         with:
           name: client-cpp
           path: bazel-bin/client/cpp/krpc-cpp-*.zip
+
+  test-client-cpp-windows:
+    needs: test-client-cpp
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: download-artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: client-cpp
+
+      - name: cache-vcpkg
+        uses: actions/cache@v5
+        with:
+          path: C:\vcpkg-binary-cache
+          key: test-client-cpp-windows-vcpkg-1
+
+      - name: install-deps
+        shell: pwsh
+        env:
+          VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
+        run: |
+          New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
+          vcpkg install protobuf:x64-windows asio:x64-windows
+
+      - name: test-build
+        shell: bash
+        run: client/cpp/test-build-windows.sh
 
   test-client-csharp:
     runs-on: ubuntu-latest
@@ -599,7 +659,9 @@ jobs:
       - test-docs
       - test-core
       - test-client-cnano
+      - test-client-cnano-windows
       - test-client-cpp
+      - test-client-cpp-windows
       - test-client-csharp
       - test-client-java
       - test-client-python
