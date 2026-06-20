@@ -356,7 +356,7 @@ jobs:
           name: client-cnano
           path: bazel-bin/client/cnano/krpc-cnano-*.zip
 
-  test-client-cnano-windows-system:
+  test-client-cnano-windows:
     needs: test-client-cnano
     runs-on: windows-latest
     steps:
@@ -463,7 +463,7 @@ jobs:
           name: client-cpp
           path: bazel-bin/client/cpp/krpc-cpp-*.zip
 
-  test-client-cpp-windows-system:
+  test-client-cpp-windows:
     needs: test-client-cpp
     runs-on: windows-latest
     steps:
@@ -752,9 +752,9 @@ jobs:
       - test-docs
       - test-core
       - test-client-cnano
-      - test-client-cnano-windows-system
+      - test-client-cnano-windows
       - test-client-cpp
-      - test-client-cpp-windows-system
+      - test-client-cpp-windows
       - test-client-csharp
       - test-client-java
       - test-client-python
