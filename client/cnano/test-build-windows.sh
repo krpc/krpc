@@ -18,8 +18,6 @@ cmake -S "$src" -B build \
   2>&1 | tee configure.log
 grep -q "Found nanopb" configure.log
 ! grep -q "Fetching nanopb via FetchContent" configure.log
-grep -q "Found protobuf" configure.log
-! grep -q "Fetching protobuf via FetchContent" configure.log
 
 # Build and install
 cmake --build build --config Release --parallel

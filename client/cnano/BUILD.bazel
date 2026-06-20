@@ -16,6 +16,7 @@ pkg_zip(
         "src/*.c",
         "cmake/*.cmake.in",
     ]) + [
+        ":protobuf",
         "CHANGES.txt",
         "INSTALL.txt",
         "LICENSE",
