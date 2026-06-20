@@ -501,7 +501,7 @@ jobs:
         with:
           game: ksp
           version: 1.12.5
-      - name: test
+      - name: build
         run: bazel build //client/java:java
       - name: test
         run: bazel test //client/java:test
