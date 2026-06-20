@@ -66,7 +66,11 @@ else()
   endif()
   message(STATUS "Found nanopb ${nanopb_VERSION}")
   get_target_property(NANOPB_INCLUDE_DIRS nanopb::protobuf-nanopb-static INTERFACE_INCLUDE_DIRECTORIES)
-  find_program(NANOPB_GENERATOR_PLUGIN protoc-gen-nanopb REQUIRED)
+  get_filename_component(_nanopb_prefix "${nanopb_DIR}/../../.." ABSOLUTE)
+  find_program(NANOPB_GENERATOR_PLUGIN
+    NAMES protoc-gen-nanopb protoc-gen-nanopb.bat
+    HINTS "${_nanopb_prefix}/tools/nanopb"
+    REQUIRED)
 endif()
 
 # Copy nanopb headers into krpc_cnano/ so <krpc_cnano/pb.h> etc. resolve.

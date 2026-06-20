@@ -380,7 +380,7 @@ jobs:
           VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
         run: |
           New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
-          vcpkg install nanopb:x64-windows protobuf:x64-windows
+          vcpkg install nanopb[generator]:x64-windows protobuf:x64-windows
 
       - name: test-build
         shell: bash
