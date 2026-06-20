@@ -129,78 +129,6 @@ jobs:
           msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
           msbuild KRPC.sln /t:Clean,Build -p:Configuration=Release /warnaserror
 
-  build-client-cnano:
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/krpc/buildenv:3.8.0
-      options: --user runner:runner
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.github_token }}
-    env:
-      CCACHE_DIR: ${{ github.workspace }}/.ccache
-      CCACHE_MAXSIZE: 500M
-      CMAKE_C_COMPILER_LAUNCHER: ccache
-      CMAKE_CXX_COMPILER_LAUNCHER: ccache
-    steps:
-      - name: checkout
-        uses: actions/checkout@v6
-      - name: setup
-        uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
-      - name: ccache-restore
-        uses: actions/cache@v5
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: build-client-cnano-ccache-${{ runner.os }}-${{ hashFiles('client/cnano/CMakeLists.txt.tmpl') }}
-          restore-keys: ccache-build-client-cnano-${{ runner.os }}-
-      - name: build-system
-        run: client/cnano/test-build.sh system
-      - name: build-fetch
-        run: client/cnano/test-build.sh fetch
-
-  build-client-cpp:
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/krpc/buildenv:3.8.0
-      options: --user runner:runner
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.github_token }}
-    env:
-      CCACHE_DIR: ${{ github.workspace }}/.ccache
-      CCACHE_MAXSIZE: 500M
-      CMAKE_C_COMPILER_LAUNCHER: ccache
-      CMAKE_CXX_COMPILER_LAUNCHER: ccache
-    steps:
-      - name: checkout
-        uses: actions/checkout@v6
-      - name: setup
-        uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
-      - name: ccache-restore
-        uses: actions/cache@v5
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: build-client-cpp-ccache-${{ runner.os }}-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
-          restore-keys: build-client-cpp-ccache-${{ runner.os }}-
-      - name: build-system
-        run: client/cpp/test-build.sh system
-      - name: build-fetch
-        run: client/cpp/test-build.sh fetch
-
   build-docs-html:
     runs-on: ubuntu-latest
     container:
@@ -356,7 +284,43 @@ jobs:
           name: client-cnano
           path: bazel-bin/client/cnano/krpc-cnano-*.zip
 
-  test-client-cnano-windows:
+  build-client-cnano-cmake-linux:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.8.0
+      options: --user runner:runner
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_MAXSIZE: 500M
+      CMAKE_C_COMPILER_LAUNCHER: ccache
+      CMAKE_CXX_COMPILER_LAUNCHER: ccache
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        with:
+          game: ksp
+          version: 1.12.5
+      - name: ccache-restore
+        uses: actions/cache@v5
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: build-client-cnano-ccache-${{ runner.os }}-${{ hashFiles('client/cnano/CMakeLists.txt.tmpl') }}
+          restore-keys: ccache-build-client-cnano-${{ runner.os }}-
+      - name: build-system
+        run: client/cnano/test-cmake-linux.sh system
+      - name: build-fetch
+        run: client/cnano/test-cmake-linux.sh fetch
+
+  build-client-cnano-cmake-windows:
     needs: test-client-cnano
     runs-on: windows-latest
     steps:
@@ -384,7 +348,60 @@ jobs:
 
       - name: test-build
         shell: bash
-        run: client/cnano/test-build-windows.sh
+        run: client/cnano/test-cmake-windows.sh
+
+  build-client-cnano-vcpkg-linux:
+    needs: test-client-cnano
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: download-artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: client-cnano
+
+      - name: cache-vcpkg
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/vcpkg
+          key: build-client-cnano-vcpkg-linux-1
+
+      - name: test-vcpkg
+        env:
+          VCPKG_ROOT: /usr/local/share/vcpkg
+        run: client/cnano/test-vcpkg-linux.sh krpc-cnano-*.zip
+
+  build-client-cnano-vcpkg-windows:
+    needs: test-client-cnano
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: download-artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: client-cnano
+
+      - name: cache-vcpkg
+        uses: actions/cache@v5
+        with:
+          path: C:\vcpkg-binary-cache
+          key: test-vcpkg-cnano-windows-vcpkg-1
+
+      - name: install-deps
+        shell: pwsh
+        env:
+          VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
+        run: |
+          New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
+          vcpkg install nanopb:x64-windows
+
+      - name: test-vcpkg
+        shell: bash
+        run: client/cnano/test-vcpkg-windows.sh
 
   test-client-cpp:
     runs-on: ubuntu-latest
@@ -416,7 +433,43 @@ jobs:
           name: client-cpp
           path: bazel-bin/client/cpp/krpc-cpp-*.zip
 
-  test-client-cpp-windows:
+  build-client-cpp-cmake-linux:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.8.0
+      options: --user runner:runner
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_MAXSIZE: 500M
+      CMAKE_C_COMPILER_LAUNCHER: ccache
+      CMAKE_CXX_COMPILER_LAUNCHER: ccache
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: fetch
+        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
+      - name: ksp-lib
+        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        with:
+          game: ksp
+          version: 1.12.5
+      - name: ccache-restore
+        uses: actions/cache@v5
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: build-client-cpp-ccache-${{ runner.os }}-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
+          restore-keys: build-client-cpp-ccache-${{ runner.os }}-
+      - name: build-system
+        run: client/cpp/test-cmake-linux.sh system
+      - name: build-fetch
+        run: client/cpp/test-cmake-linux.sh fetch
+
+  build-client-cpp-cmake-windows:
     needs: test-client-cpp
     runs-on: windows-latest
     steps:
@@ -444,7 +497,60 @@ jobs:
 
       - name: test-build
         shell: bash
-        run: client/cpp/test-build-windows.sh
+        run: client/cpp/test-cmake-windows.sh
+
+  build-client-cpp-vcpkg-linux:
+    needs: test-client-cpp
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: download-artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: client-cpp
+
+      - name: cache-vcpkg
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/vcpkg
+          key: build-client-cpp-vcpkg-linux-1
+
+      - name: test-vcpkg
+        env:
+          VCPKG_ROOT: /usr/local/share/vcpkg
+        run: client/cpp/test-vcpkg-linux.sh krpc-cpp-*.zip
+
+  build-client-cpp-vcpkg-windows:
+    needs: test-client-cpp
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: download-artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: client-cpp
+
+      - name: cache-vcpkg
+        uses: actions/cache@v5
+        with:
+          path: C:\vcpkg-binary-cache
+          key: test-vcpkg-cpp-windows-vcpkg-1
+
+      - name: install-deps
+        shell: pwsh
+        env:
+          VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
+        run: |
+          New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
+          vcpkg install protobuf:x64-windows asio:x64-windows
+
+      - name: test-vcpkg
+        shell: bash
+        run: client/cpp/test-vcpkg-windows.sh
 
   test-client-csharp:
     runs-on: ubuntu-latest
@@ -651,17 +757,21 @@ jobs:
       - build-krpc
       - build-genfiles
       - build-csharp-sln
-      - build-client-cnano
-      - build-client-cpp
+      - build-client-cnano-cmake-linux
+      - build-client-cnano-cmake-windows
+      - build-client-cnano-vcpkg-linux
+      - build-client-cnano-vcpkg-windows
+      - build-client-cpp-cmake-linux
+      - build-client-cpp-cmake-windows
+      - build-client-cpp-vcpkg-linux
+      - build-client-cpp-vcpkg-windows
       - build-docs-html
       - build-docs-pdf
       - build-docs-examples
       - test-docs
       - test-core
       - test-client-cnano
-      - test-client-cnano-windows
       - test-client-cpp
-      - test-client-cpp-windows
       - test-client-csharp
       - test-client-java
       - test-client-python
