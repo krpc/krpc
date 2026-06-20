@@ -17,7 +17,7 @@ appendWindowsPath = false" | sudo tee -a /etc/wsl.conf
 9) Run command (note: This is about 1.5GB download)
 ```
 sudo apt-get install mono-complete python-setuptools  \
-python-dev-is-python3 autoconf libtool luarocks maven texlive-latex-base \
+python-dev-is-python3 luarocks maven texlive-latex-base \
 texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra \
 libxml2-dev libxslt1-dev librsvg2-bin python3-dev python3-setuptools \
 python3-virtualenv latexmk openjdk-8-jdk libenchant-2-2

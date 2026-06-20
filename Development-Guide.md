@@ -80,7 +80,7 @@ their apt repository.
 Then install packages:
 ```
 sudo apt-get install mono-complete python-is-python3 python3-dev python3-pip \
-  python3-venv gcc g++ cmake autoconf libtool luarocks maven openjdk-11-jdk \
+  python3-venv gcc g++ cmake luarocks maven openjdk-11-jdk \
   latexmk texlive-latex-base texlive-latex-recommended texlive-fonts-recommended \
   texlive-latex-extra texlive-fonts-extra tex-gyre librsvg2-bin libenchant-2-2
 ```
