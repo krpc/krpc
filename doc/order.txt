@@ -408,6 +408,9 @@ SpaceCenter.Control.InputMode
 SpaceCenter.Control.Pitch
 SpaceCenter.Control.Yaw
 SpaceCenter.Control.Roll
+SpaceCenter.Control.PitchTrim
+SpaceCenter.Control.YawTrim
+SpaceCenter.Control.RollTrim
 SpaceCenter.Control.Forward
 SpaceCenter.Control.Up
 SpaceCenter.Control.Right
