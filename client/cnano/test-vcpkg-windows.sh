@@ -22,9 +22,10 @@ sha512=$(sha512sum "$archive" | awk '{print $1}')
 tmpport=$(mktemp -d)
 trap 'rm -rf "$tmpport"' EXIT
 cp "$scriptroot/vcpkg-port/"* "$tmpport/"
-# On Windows in Git Bash, $(pwd) returns /c/... — file:// + /c/... = file:///c/...
+# cygpath -m converts /d/a/... to D:/a/... so the file:// URL has the drive letter colon.
+archive_url="file:///$(cygpath -m "$(pwd)/$archive")"
 sed -i \
-  -e "s|URLS \"https://[^\"]*\"|URLS \"file://$(pwd)/$archive\"|" \
+  -e "s|URLS \"https://[^\"]*\"|URLS \"$archive_url\"|" \
   -e "s|FILENAME \"krpc-cnano-[^\"]*\"|FILENAME \"$archive\"|" \
   -e "s|SHA512 0|SHA512 $sha512|" \
   "$tmpport/portfile.cmake"
