@@ -378,8 +378,8 @@ jobs:
           version: 1.12.5
       - name: build
         run: bazel build //client/cpp:cpp
-      # - name: test
-      #   run: bazel test //client/cpp:test
+      - name: test
+        run: bazel test //client/cpp:test
       - name: upload-artifact
         uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
         with:
