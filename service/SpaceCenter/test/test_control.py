@@ -76,6 +76,33 @@ class TestControlMixin:
         diff = self.orbital_flight.roll - roll
         self.assertGreater(diff, 0)
 
+    def check_trim(self, axis):
+        name = axis + "_trim"
+        # Trim is only available for the active vessel
+        if self.vessel != self.space_center.active_vessel:
+            self.assertRaises(RuntimeError, getattr, self.control, name)
+            self.assertRaises(RuntimeError, setattr, self.control, name, 0.5)
+            return
+        self.auto_pilot.sas = False
+        try:
+            setattr(self.control, name, 0.5)
+            self.assertAlmostEqual(0.5, getattr(self.control, name), places=3)
+            setattr(self.control, name, 2)  # clamped to 1
+            self.assertAlmostEqual(1, getattr(self.control, name), places=3)
+            setattr(self.control, name, 0)  # explicitly clears the axis
+            self.assertEqual(0, getattr(self.control, name))
+        finally:
+            setattr(self.control, name, 0)
+
+    def test_pitch_trim(self):
+        self.check_trim("pitch")
+
+    def test_yaw_trim(self):
+        self.check_trim("yaw")
+
+    def test_roll_trim(self):
+        self.check_trim("roll")
+
     def test_sas_mode(self):
         sas_mode = self.space_center.SASMode
         self.control.sas = True
