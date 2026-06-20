@@ -30,8 +30,8 @@ sed -i \
   "$tmpport/portfile.cmake"
 sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$version_semver\"/" "$tmpport/vcpkg.json"
 
-# Install via the overlay port
-"$vcpkg_bin" install krpc-cnano:x64-windows --overlay-ports="$tmpport"
+# Install via the overlay port into a local directory
+"$vcpkg_bin" install krpc-cnano:x64-windows --overlay-ports="$tmpport" --x-install-root=vcpkg_installed
 
 # Consumer test
 mkdir -p consumer
@@ -55,6 +55,7 @@ target_link_libraries(test_app PRIVATE krpc_cnano::krpc_cnano)
 EOF
 cmake -S consumer -B consumer/build \
   "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
+  "-DVCPKG_INSTALLED_DIR=$(pwd)/vcpkg_installed" \
   -DVCPKG_TARGET_TRIPLET=x64-windows \
   -DCMAKE_BUILD_TYPE=Release
 cmake --build consumer/build --config Release --parallel

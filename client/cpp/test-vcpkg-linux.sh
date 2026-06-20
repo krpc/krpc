@@ -47,12 +47,13 @@ sed -i \
   "$tmpport/portfile.cmake"
 sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$version_semver\"/" "$tmpport/vcpkg.json"
 
-# Install via the overlay port
-"$vcpkg_bin" install krpc --overlay-ports="$tmpport"
-
-# Consumer test: a small project that uses find_package(krpc CONFIG REQUIRED)
+# Install via the overlay port into a local directory
 out=$(pwd)/bazel-bin/client/cpp/test-vcpkg
 rm -rf "$out"
+mkdir -p "$out"
+"$vcpkg_bin" install krpc --overlay-ports="$tmpport" --x-install-root="$out/vcpkg_installed"
+
+# Consumer test: a small project that uses find_package(krpc CONFIG REQUIRED)
 mkdir -p "$out/consumer"
 
 cat > "$out/consumer/main.cpp" << 'EOF'
@@ -78,5 +79,6 @@ EOF
 mkdir -p "$out/consumer/build"
 cmake -S "$out/consumer" -B "$out/consumer/build" \
   "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
+  "-DVCPKG_INSTALLED_DIR=$out/vcpkg_installed" \
   -DCMAKE_BUILD_TYPE=Release
 cmake --build "$out/consumer/build" --parallel "$(nproc)"
