@@ -21,6 +21,7 @@ pkg_zip(
         "LICENSE",
         "src/krpc.options",
         ":cmake",
+        ":protobuf",
         ":services-dockingcamera",
         ":services-drawing",
         ":services-infernalrobotics",
