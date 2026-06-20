@@ -5,6 +5,7 @@ Bazel
 Bitwise
 CMake
 Cnano
+Config
 Ferram
 GameData
 IDisposable

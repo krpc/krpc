@@ -19,6 +19,8 @@ v0.6.0
  * Fix NullReferenceException raised every frame after creating or removing an alarm (#853)
  * Add Control.PitchTrim, Control.YawTrim and Control.RollTrim to get/set the persistent
    pitch, yaw and roll trim of the active vessel (#863)
+ * Add Part.Config, Module.Config and ConfigNode for accessing part and module static
+   configuration (#831)
 
 v0.5.4
  * Fix vessel recovery (#782)
