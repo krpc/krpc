@@ -1,7 +1,6 @@
 import unittest
 import krpctest
 from krpctest.geometry import normalize
-import krpc
 
 
 class TestAutoPilot(krpctest.TestCase):
@@ -146,7 +145,7 @@ class TestAutoPilot(krpctest.TestCase):
         flight = self.vessel.flight()
 
         self.ap.disengage()
-        self.assertDegreesAlmostEqual(0, self.ap.error)
+        self.assertRaises(RuntimeError, getattr, self.ap, "error")
 
         self.set_direction(flight.prograde, roll=0)
         self.wait_for_autopilot()
@@ -189,7 +188,7 @@ class TestAutoPilot(krpctest.TestCase):
 
     def test_roll_error(self):
         self.ap.disengage()
-        self.assertAlmostEqual(0, self.ap.roll_error)
+        self.assertRaises(RuntimeError, getattr, self.ap, "roll_error")
 
         set_roll = -57
         direction = self.vessel.direction(self.vessel.surface_reference_frame)
@@ -218,7 +217,7 @@ class TestAutoPilot(krpctest.TestCase):
         ]
         for frame in frames:
             self.assertRaises(
-                krpc.client.RPCError, setattr, self.ap, "reference_frame", frame
+                ValueError, setattr, self.ap, "reference_frame", frame
             )
 
     def test_reset_on_disconnect(self):
