@@ -326,6 +326,13 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         engine.gimbal_locked = False
         self.assertEqual(1, engine.gimbal_limit)
 
+    def test_no_thrust_reverser(self):
+        engine = self.get_engine('LV-T30 "Reliant" Liquid Fuel Engine')
+        self.assertFalse(engine.can_reverse_thrust)
+        self.assertRaises(RuntimeError, getattr, engine, "thrust_reversed")
+        self.assertRaises(RuntimeError, setattr, engine, "thrust_reversed", True)
+        self.assertRaises(RuntimeError, engine.toggle_thrust_reversal)
+
 
 class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
 
@@ -443,6 +450,52 @@ class TestPartsEngineVacuum(krpctest.TestCase, EngineTest):
         engine = self.get_engine("CR-7 R.A.P.I.E.R. Engine")
         engine.mode = "ClosedCycle"
         self.check_engine(engine)
+
+
+class TestPartsEngineReverser(krpctest.TestCase, EngineTestBase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("PartsEngineReverser")
+        cls.remove_other_vessels()
+        cls.vessel = cls.connect().space_center.active_vessel
+        cls.parts = cls.vessel.parts
+
+    def check_thrust_reverser(self, title):
+        engine = self.get_engine(title)
+        self.assertTrue(engine.can_reverse_thrust)
+        self.assertFalse(engine.thrust_reversed)
+
+        # Engage the reverser
+        engine.thrust_reversed = True
+        self.wait(2)  # the reverser animation takes time
+        self.assertTrue(engine.thrust_reversed)
+
+        # Setting to the same state is a no-op
+        engine.thrust_reversed = True
+        self.assertTrue(engine.thrust_reversed)
+
+        # Toggle back off
+        engine.toggle_thrust_reversal()
+        self.wait(2)
+        self.assertFalse(engine.thrust_reversed)
+
+    def test_goliath_thrust_reverser(self):
+        self.check_thrust_reverser('J-90 "Goliath" Turbofan Engine')
+
+    def test_wheesley_thrust_reverser(self):
+        self.check_thrust_reverser('J-33 "Wheesley" Turbofan Engine')
+
+    def test_thrust_reversers_aggregate(self):
+        control = self.vessel.control
+        self.assertFalse(control.thrust_reversers)
+        control.thrust_reversers = True
+        self.wait(2)
+        self.assertTrue(control.thrust_reversers)
+        control.thrust_reversers = False
+        self.wait(2)
+        self.assertFalse(control.thrust_reversers)
 
 
 if __name__ == "__main__":

@@ -7,6 +7,7 @@ CMake
 Cnano
 Ferram
 GameData
+Goliath
 IDisposable
 Javascript
 Jeb
@@ -22,6 +23,7 @@ MyGroup
 NUnit
 Olex
 Tron
+Wheesley
 amongst
 apoapsis
 arg
@@ -117,6 +119,8 @@ quicksave
 radians
 rect
 rethrow
+reverser
+reversers
 rsvg
 runtime
 serialio
@@ -135,6 +139,7 @@ thrusters
 tradeoff
 translational
 tuple
+turbofan
 uint
 undocked
 undocking

@@ -170,6 +170,7 @@
     <Compile Include="Services\Parts\SolarPanel.cs" />
     <Compile Include="Services\Parts\SolarPanelState.cs" />
     <Compile Include="Services\Parts\Thruster.cs" />
+    <Compile Include="Services\Parts\ThrustReverser.cs" />
     <Compile Include="Services\Parts\Wheel.cs" />
     <Compile Include="Services\Parts\WheelState.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />
