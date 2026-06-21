@@ -315,7 +315,6 @@ jobs:
           path: ${{ env.CCACHE_DIR }}
           key: build-client-cnano-cmake-linux-${{ hashFiles('client/cnano/CMakeLists.txt.tmpl') }}
           restore-keys: build-client-cnano-cmake-linux-${{ runner.os }}-
-          save-always: true
       - name: build-system
         run: client/cnano/test-cmake-linux.sh system
       - name: build-fetch
@@ -338,7 +337,6 @@ jobs:
         with:
           path: C:\vcpkg-binary-cache
           key: build-client-cnano-cmake-windows-1
-          save-always: true
 
       - name: install-deps
         shell: pwsh
@@ -369,7 +367,6 @@ jobs:
         with:
           path: ~/.cache/vcpkg
           key: build-client-cnano-vcpkg-linux-1
-          save-always: true
 
       - name: test-vcpkg
         env:
@@ -393,7 +390,6 @@ jobs:
         with:
           path: C:\vcpkg-binary-cache
           key: build-client-cnano-vcpkg-windows-1
-          save-always: true
 
       - name: install-deps
         shell: pwsh
@@ -470,7 +466,6 @@ jobs:
           path: ${{ env.CCACHE_DIR }}
           key: build-client-cpp-cmake-linux-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
           restore-keys: build-client-cpp-cmake-linux-
-          save-always: true
       - name: build-system
         run: client/cpp/test-cmake-linux.sh system
       - name: build-fetch
@@ -493,7 +488,6 @@ jobs:
         with:
           path: C:\vcpkg-binary-cache
           key: build-client-cpp-cmake-windows-1
-          save-always: true
 
       - name: install-deps
         shell: pwsh
@@ -524,7 +518,6 @@ jobs:
         with:
           path: ~/.cache/vcpkg
           key: build-client-cpp-vcpkg-linux-1
-          save-always: true
 
       - name: test-vcpkg
         env:
@@ -548,7 +541,6 @@ jobs:
         with:
           path: C:\vcpkg-binary-cache
           key: build-client-cpp-vcpkg-windows-1
-          save-always: true
 
       - name: install-deps
         shell: pwsh
