@@ -326,18 +326,15 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
-
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
           name: client-cnano
-
       - name: cache-vcpkg
         uses: actions/cache@v5
         with:
           path: C:\vcpkg-binary-cache
           key: build-client-cnano-cmake-windows-1
-
       - name: install-deps
         shell: pwsh
         env:
@@ -345,7 +342,6 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
           vcpkg install nanopb:x64-windows
-
       - name: test-build
         shell: bash
         run: client/cnano/test-cmake-windows.sh
@@ -356,18 +352,15 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
-
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
           name: client-cnano
-
       - name: cache-vcpkg
         uses: actions/cache@v5
         with:
           path: ~/.cache/vcpkg
           key: build-client-cnano-vcpkg-linux-1
-
       - name: test-vcpkg
         env:
           VCPKG_ROOT: /usr/local/share/vcpkg
@@ -379,18 +372,15 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
-
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
           name: client-cnano
-
       - name: cache-vcpkg
         uses: actions/cache@v5
         with:
           path: C:\vcpkg-binary-cache
           key: build-client-cnano-vcpkg-windows-1
-
       - name: install-deps
         shell: pwsh
         env:
@@ -398,7 +388,6 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
           vcpkg install nanopb:x64-windows
-
       - name: test-vcpkg
         shell: bash
         env:
@@ -477,18 +466,15 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
-
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
           name: client-cpp
-
       - name: cache-vcpkg
         uses: actions/cache@v5
         with:
           path: C:\vcpkg-binary-cache
           key: build-client-cpp-cmake-windows-1
-
       - name: install-deps
         shell: pwsh
         env:
@@ -496,7 +482,6 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
           vcpkg install protobuf:x64-windows asio:x64-windows
-
       - name: test-build
         shell: bash
         run: client/cpp/test-cmake-windows.sh
@@ -507,18 +492,15 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
-
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
           name: client-cpp
-
       - name: cache-vcpkg
         uses: actions/cache@v5
         with:
           path: ~/.cache/vcpkg
           key: build-client-cpp-vcpkg-linux-1
-
       - name: test-vcpkg
         env:
           VCPKG_ROOT: /usr/local/share/vcpkg
@@ -530,18 +512,15 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
-
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
           name: client-cpp
-
       - name: cache-vcpkg
         uses: actions/cache@v5
         with:
           path: C:\vcpkg-binary-cache
           key: build-client-cpp-vcpkg-windows-1
-
       - name: install-deps
         shell: pwsh
         env:
@@ -549,7 +528,6 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
           vcpkg install protobuf:x64-windows asio:x64-windows
-
       - name: test-vcpkg
         shell: bash
         env:
