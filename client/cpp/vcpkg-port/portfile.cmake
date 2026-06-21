@@ -1,3 +1,5 @@
+set(VCPKG_LIBRARY_LINKAGE static)
+
 vcpkg_download_distfile(ARCHIVE
     URLS "https://github.com/djungelorm/krpc/releases/download/v${VERSION}/krpc-cpp-${VERSION}.zip"
     FILENAME "krpc-cpp-${VERSION}.zip"
