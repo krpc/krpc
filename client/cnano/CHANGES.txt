@@ -1,4 +1,5 @@
 v0.6.0
+ * Distribute via vcpkg
  * Drop autotools build; CMake is now the only supported build system
  * Modernise CMake build: require CMake 3.15+, target-based usage requirements (#834)
  * nanopb is now an external dependency (fetched via FetchContent or found on the system) rather than being bundled in the release archive
