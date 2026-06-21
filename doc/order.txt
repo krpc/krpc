@@ -386,6 +386,7 @@ SpaceCenter.Control.SAS
 SpaceCenter.Control.SASMode
 SpaceCenter.Control.SpeedMode
 SpaceCenter.Control.EngineGimbals
+SpaceCenter.Control.ThrustReversers
 SpaceCenter.Control.AeroSurfaces
 SpaceCenter.Control.RCS
 SpaceCenter.Control.ReactionWheels
@@ -797,6 +798,9 @@ SpaceCenter.Engine.GimbalRange
 SpaceCenter.Engine.GimbalLocked
 SpaceCenter.Engine.GimbalLimit
 SpaceCenter.Engine.AvailableTorque
+SpaceCenter.Engine.CanReverseThrust
+SpaceCenter.Engine.ThrustReversed
+SpaceCenter.Engine.ToggleThrustReversal
 SpaceCenter.Propellant
 SpaceCenter.Propellant.Name
 SpaceCenter.Propellant.CurrentAmount
