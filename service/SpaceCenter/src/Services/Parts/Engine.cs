@@ -24,6 +24,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly IList<ModuleEngines> engines;
         readonly MultiModeEngine multiModeEngine;
         readonly ModuleGimbal gimbal;
+        readonly IThrustReverser thrustReverser;
 
         internal static bool Is (Part part)
         {
@@ -42,6 +43,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             engines = internalPart.Modules.OfType<ModuleEngines> ().ToList ();
             multiModeEngine = internalPart.Module<MultiModeEngine> ();
             gimbal = internalPart.Module<ModuleGimbal> ();
+            thrustReverser = ThrustReverser.Create (internalPart);
             if (engines.Count == 0)
                 throw new ArgumentException ("Part is not an engine");
         }
@@ -54,6 +56,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 engine
             };
             gimbal = Part.InternalPart.Module<ModuleGimbal> ();
+            thrustReverser = ThrustReverser.Create (Part.InternalPart);
             if (engine == null)
                 throw new ArgumentException ("Part does not have a ModuleEngines PartModule");
         }
@@ -502,6 +505,12 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new InvalidOperationException ("Engine is not gimballed");
         }
 
+        void CheckReverser ()
+        {
+            if (thrustReverser == null)
+                throw new InvalidOperationException ("Engine does not have a thrust reverser");
+        }
+
         /// <summary>
         /// Whether the engine is gimballed.
         /// </summary>
@@ -574,6 +583,46 @@ namespace KRPC.SpaceCenter.Services.Parts
                 // Note: GetPotentialTorque returns negative torques with incorrect sign
                 return new TupleV3 (torque.Item1, -torque.Item2);
             }
+        }
+
+        /// <summary>
+        /// Whether the engine has a recognized thrust reverser. This is <c>true</c> for
+        /// stock engines with a thrust reverser (such as the J-33 "Wheesley" and
+        /// J-90 "Goliath" turbofan engines) and for selected mod engines. It is
+        /// <c>false</c> for engines whose reverser is not recognized, as KSP provides no
+        /// standard way to detect one.
+        /// </summary>
+        [KRPCProperty]
+        public bool CanReverseThrust {
+            get { return thrustReverser != null; }
+        }
+
+        /// <summary>
+        /// Whether the engine's thrust reverser is engaged, reversing the
+        /// direction of thrust. Raises an exception if the engine does not have a
+        /// thrust reverser (see <see cref="CanReverseThrust"/>).
+        /// </summary>
+        [KRPCProperty]
+        public bool ThrustReversed {
+            get {
+                CheckReverser ();
+                return thrustReverser.Reversed;
+            }
+            set {
+                CheckReverser ();
+                thrustReverser.Reversed = value;
+            }
+        }
+
+        /// <summary>
+        /// Toggle the engine's thrust reverser. Raises an exception if the engine
+        /// does not have a thrust reverser (see <see cref="CanReverseThrust"/>).
+        /// </summary>
+        [KRPCMethod]
+        public void ToggleThrustReversal ()
+        {
+            CheckReverser ();
+            thrustReverser.Toggle ();
         }
     }
 }

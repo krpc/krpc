@@ -163,6 +163,21 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Returns whether all engines with a thrust reverser on the vessel have
+        /// their thrust reverser engaged, and sets the thrust reverser state of all
+        /// such engines.
+        /// See <see cref="Parts.Engine.ThrustReversed"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool ThrustReversers {
+            get { return parts.Engines.Where (e => e.CanReverseThrust).All (e => e.ThrustReversed); }
+            set {
+                foreach (var e in parts.Engines.Where (e => e.CanReverseThrust))
+                    e.ThrustReversed = value;
+            }
+        }
+
+        /// <summary>
         /// Returns whether all control surfaces on the vessel have pitch, yaw and roll enabled,
         /// and sets the pitch, yaw and roll enabled state of all control surfaces.
         /// See <see cref="Parts.ControlSurface.PitchEnabled"/>,

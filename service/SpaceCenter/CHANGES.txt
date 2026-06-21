@@ -21,6 +21,8 @@ v0.6.0
    pitch, yaw and roll trim of the active vessel (#863)
  * Add Part.Config, Module.Config and ConfigNode for accessing part and module static
    configuration (#831)
+ * Add Engine.CanReverseThrust, Engine.ThrustReversed and Engine.ToggleThrustReversal to control thrust reversal on stock and recognized mod engines (#865)
+ * Add Control.ThrustReversers to engage/disengage thrust reversers on all engines (#865)
 
 v0.5.4
  * Fix vessel recovery (#782)
