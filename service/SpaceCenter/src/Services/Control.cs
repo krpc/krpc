@@ -453,6 +453,51 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The state of the pitch trim.
+        /// A value between -1 and 1.
+        /// Equivalent to the Alt+W and Alt+S keys.
+        /// This is a persistent trim that remains latched until changed or reset,
+        /// and can only be accessed for the active vessel.
+        /// Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+        /// when clients disconnect.
+        /// </summary>
+        [KRPCProperty]
+        public float PitchTrim {
+            get { CheckActiveVessel (); return FlightInputHandler.state.pitchTrim; }
+            set { CheckActiveVessel (); FlightInputHandler.state.pitchTrim = value.Clamp (-1f, 1f); }
+        }
+
+        /// <summary>
+        /// The state of the yaw trim.
+        /// A value between -1 and 1.
+        /// Equivalent to the Alt+A and Alt+D keys.
+        /// This is a persistent trim that remains latched until changed or reset,
+        /// and can only be accessed for the active vessel.
+        /// Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+        /// when clients disconnect.
+        /// </summary>
+        [KRPCProperty]
+        public float YawTrim {
+            get { CheckActiveVessel (); return FlightInputHandler.state.yawTrim; }
+            set { CheckActiveVessel (); FlightInputHandler.state.yawTrim = value.Clamp (-1f, 1f); }
+        }
+
+        /// <summary>
+        /// The state of the roll trim.
+        /// A value between -1 and 1.
+        /// Equivalent to the Alt+Q and Alt+E keys.
+        /// This is a persistent trim that remains latched until changed or reset,
+        /// and can only be accessed for the active vessel.
+        /// Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+        /// when clients disconnect.
+        /// </summary>
+        [KRPCProperty]
+        public float RollTrim {
+            get { CheckActiveVessel (); return FlightInputHandler.state.rollTrim; }
+            set { CheckActiveVessel (); FlightInputHandler.state.rollTrim = value.Clamp (-1f, 1f); }
+        }
+
+        /// <summary>
         /// The state of the forward translational control.
         /// A value between -1 and 1.
         /// Equivalent to the h and n keys.

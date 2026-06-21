@@ -7,6 +7,7 @@ v0.6.0
  * CMake dependency options (KRPC_FETCH_PROTOBUF, KRPC_FETCH_NANOPB): when OFF
    (default) the system install is required; when ON FetchContent is used.
  * Add KRPC_FETCH_DEPS option to enable FetchContent for all dependencies at once
+ * Add support for socket communication on Windows
 
 v0.5.2
  * The arduino compatible version of the library now uses the same "krpc_cnano/..." include directory as the version released on GitHub.

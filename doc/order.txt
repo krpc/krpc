@@ -409,6 +409,9 @@ SpaceCenter.Control.InputMode
 SpaceCenter.Control.Pitch
 SpaceCenter.Control.Yaw
 SpaceCenter.Control.Roll
+SpaceCenter.Control.PitchTrim
+SpaceCenter.Control.YawTrim
+SpaceCenter.Control.RollTrim
 SpaceCenter.Control.Forward
 SpaceCenter.Control.Up
 SpaceCenter.Control.Right
@@ -549,6 +552,7 @@ SpaceCenter.Parts.Wheels
 SpaceCenter.Part
 SpaceCenter.Part.Name
 SpaceCenter.Part.Title
+SpaceCenter.Part.Config
 SpaceCenter.Part.Tag
 SpaceCenter.Part.FlagURL
 SpaceCenter.Part.Highlighted
@@ -648,6 +652,7 @@ SpaceCenter.Force.Remove
 SpaceCenter.Module
 SpaceCenter.Module.Name
 SpaceCenter.Module.Part
+SpaceCenter.Module.Config
 SpaceCenter.Module.Fields
 SpaceCenter.Module.FieldsById
 SpaceCenter.Module.AllFieldsById
@@ -677,6 +682,16 @@ SpaceCenter.Module.HasAction
 SpaceCenter.Module.HasActionWithId
 SpaceCenter.Module.SetAction
 SpaceCenter.Module.SetActionById
+SpaceCenter.ConfigNode
+SpaceCenter.ConfigNode.Name
+SpaceCenter.ConfigNode.Values
+SpaceCenter.ConfigNode.HasValue
+SpaceCenter.ConfigNode.GetValue
+SpaceCenter.ConfigNode.GetValues
+SpaceCenter.ConfigNode.Nodes
+SpaceCenter.ConfigNode.HasNode
+SpaceCenter.ConfigNode.GetNode
+SpaceCenter.ConfigNode.GetNodes
 SpaceCenter.Antenna
 SpaceCenter.Antenna.Part
 SpaceCenter.Antenna.State

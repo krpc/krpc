@@ -129,6 +129,7 @@
     <Compile Include="Services\Parts\AutoStrutMode.cs" />
     <Compile Include="Services\Parts\CargoBay.cs" />
     <Compile Include="Services\Parts\CargoBayState.cs" />
+    <Compile Include="Services\Parts\ConfigNode.cs" />
     <Compile Include="Services\Parts\ControlSurface.cs" />
     <Compile Include="Services\Parts\Decoupler.cs" />
     <Compile Include="Services\Parts\DockingPort.cs" />

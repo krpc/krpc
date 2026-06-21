@@ -1371,8 +1371,7 @@ inline krpc_error_t krpc_TestService_EnumEcho(krpc_connection_t connection, krpc
 
 inline krpc_error_t krpc_TestService_EnumReturn(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue) {
   krpc_call_t _call;
-  krpc_argument_t _arguments[0];
-  KRPC_CHECK(krpc_call(&_call, 9999, 13, 0, _arguments));
+  KRPC_CHECK(krpc_call(&_call, 9999, 13, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -1595,8 +1594,7 @@ inline krpc_error_t krpc_TestService_OptionalArguments(krpc_connection_t connect
 
 inline krpc_error_t krpc_TestService_ResetCustomExceptionLater(krpc_connection_t connection) {
   krpc_call_t _call;
-  krpc_argument_t _arguments[0];
-  KRPC_CHECK(krpc_call(&_call, 9999, 35, 0, _arguments));
+  KRPC_CHECK(krpc_call(&_call, 9999, 35, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -1606,8 +1604,7 @@ inline krpc_error_t krpc_TestService_ResetCustomExceptionLater(krpc_connection_t
 
 inline krpc_error_t krpc_TestService_ResetInvalidOperationExceptionLater(krpc_connection_t connection) {
   krpc_call_t _call;
-  krpc_argument_t _arguments[0];
-  KRPC_CHECK(krpc_call(&_call, 9999, 29, 0, _arguments));
+  KRPC_CHECK(krpc_call(&_call, 9999, 29, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -1617,8 +1614,7 @@ inline krpc_error_t krpc_TestService_ResetInvalidOperationExceptionLater(krpc_co
 
 inline krpc_error_t krpc_TestService_ReturnNullWhenNotAllowed(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue) {
   krpc_call_t _call;
-  krpc_argument_t _arguments[0];
-  KRPC_CHECK(krpc_call(&_call, 9999, 11, 0, _arguments));
+  KRPC_CHECK(krpc_call(&_call, 9999, 11, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -1667,8 +1663,7 @@ inline krpc_error_t krpc_TestService_StringToInt32(krpc_connection_t connection,
 
 inline krpc_error_t krpc_TestService_ThrowArgumentException(krpc_connection_t connection, int32_t * returnValue) {
   krpc_call_t _call;
-  krpc_argument_t _arguments[0];
-  KRPC_CHECK(krpc_call(&_call, 9999, 31, 0, _arguments));
+  KRPC_CHECK(krpc_call(&_call, 9999, 31, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -1717,8 +1712,7 @@ inline krpc_error_t krpc_TestService_ThrowArgumentOutOfRangeException(krpc_conne
 
 inline krpc_error_t krpc_TestService_ThrowCustomException(krpc_connection_t connection, int32_t * returnValue) {
   krpc_call_t _call;
-  krpc_argument_t _arguments[0];
-  KRPC_CHECK(krpc_call(&_call, 9999, 34, 0, _arguments));
+  KRPC_CHECK(krpc_call(&_call, 9999, 34, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -1733,8 +1727,7 @@ inline krpc_error_t krpc_TestService_ThrowCustomException(krpc_connection_t conn
 
 inline krpc_error_t krpc_TestService_ThrowCustomExceptionLater(krpc_connection_t connection, int32_t * returnValue) {
   krpc_call_t _call;
-  krpc_argument_t _arguments[0];
-  KRPC_CHECK(krpc_call(&_call, 9999, 36, 0, _arguments));
+  KRPC_CHECK(krpc_call(&_call, 9999, 36, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -1749,8 +1742,7 @@ inline krpc_error_t krpc_TestService_ThrowCustomExceptionLater(krpc_connection_t
 
 inline krpc_error_t krpc_TestService_ThrowInvalidOperationException(krpc_connection_t connection, int32_t * returnValue) {
   krpc_call_t _call;
-  krpc_argument_t _arguments[0];
-  KRPC_CHECK(krpc_call(&_call, 9999, 28, 0, _arguments));
+  KRPC_CHECK(krpc_call(&_call, 9999, 28, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -1765,8 +1757,7 @@ inline krpc_error_t krpc_TestService_ThrowInvalidOperationException(krpc_connect
 
 inline krpc_error_t krpc_TestService_ThrowInvalidOperationExceptionLater(krpc_connection_t connection, int32_t * returnValue) {
   krpc_call_t _call;
-  krpc_argument_t _arguments[0];
-  KRPC_CHECK(krpc_call(&_call, 9999, 30, 0, _arguments));
+  KRPC_CHECK(krpc_call(&_call, 9999, 30, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -1798,8 +1789,7 @@ inline krpc_error_t krpc_TestService_TupleDefault(krpc_connection_t connection, 
 
 inline krpc_error_t krpc_TestService_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue) {
   krpc_call_t _call;
-  krpc_argument_t _arguments[0];
-  KRPC_CHECK(krpc_call(&_call, 9999, 43, 0, _arguments));
+  KRPC_CHECK(krpc_call(&_call, 9999, 43, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -1826,8 +1816,7 @@ inline krpc_error_t krpc_TestService_set_ObjectProperty(krpc_connection_t connec
 
 inline krpc_error_t krpc_TestService_StringProperty(krpc_connection_t connection, char * * returnValue) {
   krpc_call_t _call;
-  krpc_argument_t _arguments[0];
-  KRPC_CHECK(krpc_call(&_call, 9999, 39, 0, _arguments));
+  KRPC_CHECK(krpc_call(&_call, 9999, 39, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -1866,8 +1855,7 @@ inline krpc_error_t krpc_TestService_set_StringPropertyPrivateGet(krpc_connectio
 
 inline krpc_error_t krpc_TestService_StringPropertyPrivateSet(krpc_connection_t connection, char * * returnValue) {
   krpc_call_t _call;
-  krpc_argument_t _arguments[0];
-  KRPC_CHECK(krpc_call(&_call, 9999, 42, 0, _arguments));
+  KRPC_CHECK(krpc_call(&_call, 9999, 42, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
