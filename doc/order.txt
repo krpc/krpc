@@ -426,9 +426,15 @@ SpaceCenter.Control.StageLock
 SpaceCenter.Control.GetActionGroup
 SpaceCenter.Control.SetActionGroup
 SpaceCenter.Control.ToggleActionGroup
+SpaceCenter.Control.GetActionGroupActions
 SpaceCenter.Control.AddNode
 SpaceCenter.Control.Nodes
 SpaceCenter.Control.RemoveNodes
+SpaceCenter.ActionGroupAction
+SpaceCenter.ActionGroupAction.Part
+SpaceCenter.ActionGroupAction.Module
+SpaceCenter.ActionGroupAction.Name
+SpaceCenter.ActionGroupAction.Id
 SpaceCenter.ControlState
 SpaceCenter.ControlState.Full
 SpaceCenter.ControlState.Partial
