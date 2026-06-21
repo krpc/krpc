@@ -14,15 +14,13 @@ the game, and comes with client libraries for many popular languages.
 
 Contributions to kRPC are very welcome. [Please refer to this guide.](Contributing.md)
 
-## KSP2
-
-~kRPC is coming to KSP2!~ Notice: I am not actively developing this, due to lack of time. If you would like to contribute PRs or take over the project please get in touch on Discord.
-
-You can find it in the new kRPC2 repository here: https://github.com/krpc/krpc2
-
 ## Links for Developers
 
  * [Development Guide](Development-Guide.md) for information on the project structure, compiling the code and the various tools.
  * [Release guide](Release-Guide.md) for project maintainers to do releases.
  * See the #devchat channels on Discord for informal dev discussions
  * [Forum development thread](https://forum.kerbalspaceprogram.com/index.php?/topic/62902-14113x122-krpc-remote-procedure-call-server-v045-17th-march-2018/)
+
+## KSP2
+
+kRPC was briefly planned for KSP2, but has now been abandoned. See https://github.com/krpc/krpc2
