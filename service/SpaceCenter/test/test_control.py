@@ -446,5 +446,44 @@ class TestControlProbePartialControl(krpctest.TestCase):
         self.assertEqual(self.space_center.ControlSource.probe, self.control.source)
 
 
+class TestActionGroupActions(krpctest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        if cls.connect().space_center.active_vessel.name != "ActionGroups":
+            cls.launch_vessel_from_vab("ActionGroups")
+        cls.remove_other_vessels()
+        cls.set_circular_orbit("Kerbin", 100000)
+        cls.space_center = cls.connect().space_center
+        cls.control = cls.space_center.active_vessel.control
+
+    def test_group_with_multiple_actions(self):
+        # Group 1 has the Extend action of all three solar panels assigned to it
+        actions = self.control.get_action_group_actions(1)
+        self.assertEqual(3, len(actions))
+        for action in actions:
+            self.assertEqual("ModuleDeployableSolarPanel", action.module.name)
+            self.assertEqual("ExtendAction", action.id)
+            self.assertNotEqual("", action.name)
+            self.assertEqual(action.part, action.module.part)
+            self.assertNotEqual("", action.part.title)
+
+    def test_group_with_single_action(self):
+        # Group 2 has the light Toggle action assigned to it
+        actions = self.control.get_action_group_actions(2)
+        self.assertEqual(1, len(actions))
+        action = actions[0]
+        self.assertEqual("ModuleColorChanger", action.module.name)
+        self.assertEqual("ToggleAction", action.id)
+        self.assertNotEqual("", action.name)
+
+    def test_empty_group(self):
+        self.assertEqual([], self.control.get_action_group_actions(3))
+
+    def test_invalid_group(self):
+        self.assertRaises(ValueError, self.control.get_action_group_actions, 11)
+
+
 if __name__ == "__main__":
     unittest.main()
