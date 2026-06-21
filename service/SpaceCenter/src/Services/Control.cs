@@ -705,7 +705,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Returns a list of all the part actions that are assigned to the given action group.
-        /// Each entry identifies the part, the part module, and the actions name and identifier.
+        /// Each entry identifies the part, the part module, and the action's name and identifier.
         /// Returns an empty list if no actions are assigned to the group.
         /// </summary>
         /// <param name="group">
@@ -725,8 +725,13 @@ namespace KRPC.SpaceCenter.Services
             if (AGX.IsAvailable) {
                 if (group > 250)
                     throw new ArgumentException ("Action group must be between 0 and 250 inclusive");
+                var parts = new Dictionary<global::Part, Parts.Part> ();
                 foreach (var entry in AGX.GroupActions (vessel.rootPart.flightID, (int)group)) {
-                    var part = new Parts.Part (entry.Item1);
+                    Parts.Part part;
+                    if (!parts.TryGetValue (entry.Item1, out part)) {
+                        part = new Parts.Part (entry.Item1);
+                        parts [entry.Item1] = part;
+                    }
                     var module = FindModule (part, entry.Item1, entry.Item2);
                     result.Add (new Parts.ActionGroupAction (part, module, entry.Item2.guiName, entry.Item2.name));
                 }
