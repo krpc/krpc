@@ -285,6 +285,7 @@ jobs:
           path: bazel-bin/client/cnano/krpc-cnano-*.zip
 
   build-client-cnano-cmake-linux:
+    needs: test-client-cnano
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.8.0
@@ -300,15 +301,10 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
-      - name: setup
-        uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+      - name: download-artifact
+        uses: actions/download-artifact@v8
         with:
-          game: ksp
-          version: 1.12.5
+          name: client-cnano
       - name: ccache-restore
         uses: actions/cache@v5
         with:
@@ -316,9 +312,9 @@ jobs:
           key: build-client-cnano-cmake-linux-${{ hashFiles('client/cnano/CMakeLists.txt.tmpl') }}
           restore-keys: build-client-cnano-cmake-linux-${{ runner.os }}-
       - name: build-system
-        run: client/cnano/test-cmake-linux.sh system
+        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system
       - name: build-fetch
-        run: client/cnano/test-cmake-linux.sh fetch
+        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch
 
   build-client-cnano-cmake-windows:
     needs: test-client-cnano
@@ -425,6 +421,7 @@ jobs:
           path: bazel-bin/client/cpp/krpc-cpp-*.zip
 
   build-client-cpp-cmake-linux:
+    needs: test-client-cpp
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.8.0
@@ -440,15 +437,10 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
-      - name: setup
-        uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+      - name: download-artifact
+        uses: actions/download-artifact@v8
         with:
-          game: ksp
-          version: 1.12.5
+          name: client-cpp
       - name: ccache-restore
         uses: actions/cache@v5
         with:
@@ -456,9 +448,9 @@ jobs:
           key: build-client-cpp-cmake-linux-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
           restore-keys: build-client-cpp-cmake-linux-
       - name: build-system
-        run: client/cpp/test-cmake-linux.sh system
+        run: client/cpp/test-cmake-linux.sh krpc-cpp-*.zip system
       - name: build-fetch
-        run: client/cpp/test-cmake-linux.sh fetch
+        run: client/cpp/test-cmake-linux.sh krpc-cpp-*.zip fetch
 
   build-client-cpp-cmake-windows:
     needs: test-client-cpp

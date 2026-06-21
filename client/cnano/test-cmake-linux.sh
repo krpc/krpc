@@ -1,35 +1,32 @@
 #!/bin/bash
 # Test building the C-nano client using CMake.
-# Builds the release archive with Bazel, then runs CMake build scenario(s):
+# Accepts the release archive as the first argument.
+# Runs CMake build scenario(s):
 #   system) system-installed nanopb
-#   fetch)  nanopb fetched via FetchContent (KRPC_FETCH_NANOPB=ON)
+#   fetch)  nanopb fetched via FetchContent (KRPC_FETCH_DEPS=ON)
 # Each is followed by a consumer test using find_package(krpc_cnano CONFIG REQUIRED).
-# Usage: test-build.sh [system|fetch]  (default: run both)
+# Usage: test-cmake-linux.sh ARCHIVE [system|fetch]  (default: run both)
 set -e
 set -o pipefail
 set -x
 set -o functrace
 
-mode="${1:-all}"
+archive="$(realpath "${1:?Usage: test-cmake-linux.sh ARCHIVE [system|fetch]}")"
+mode="${2:-all}"
 
 scriptroot="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $scriptroot/../..
+cd "$scriptroot/../.."
 
-root=`pwd`
+root=$(pwd)
 out=$root/bazel-bin/client/cnano/test-build
-version=`tools/krpc-version.sh`
-
-# Build the release archive (this is the only Bazel step)
-bazel build //client/cnano:cnano
-
-bazel_bin=$(bazel info bazel-bin)
+version=$(basename "$archive" .zip | sed 's/krpc-cnano-//')
 
 # Extract the release archive
-rm -rf $out
-mkdir -p $out
-unzip -q $bazel_bin/client/cnano/krpc-cnano-$version.zip -d $out
-mv $out/krpc-cnano-$version/* $out/
-rm -r $out/krpc-cnano-$version
+rm -rf "$out"
+mkdir -p "$out"
+unzip -q "$archive" -d "$out"
+mv "$out/krpc-cnano-$version"/* "$out/"
+rm -r "$out/krpc-cnano-$version"
 
 # Configure krpc_cnano; save cmake output to log_file for later verification.
 function cmake_configure {
