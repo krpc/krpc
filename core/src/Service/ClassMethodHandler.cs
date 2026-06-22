@@ -16,7 +16,6 @@ namespace KRPC.Service
     {
         readonly MethodInfo method;
         readonly ProcedureParameter[] parameters;
-        readonly object[] methodArguments;
 
         public ClassMethodHandler (Type classType, MethodInfo methodInfo, bool returnIsNullable)
         {
@@ -24,21 +23,18 @@ namespace KRPC.Service
             var parameterList = method.GetParameters ().Select (x => new ProcedureParameter (x)).ToList ();
             parameterList.Insert (0, new ProcedureParameter (classType, "this"));
             parameters = parameterList.ToArray ();
-            methodArguments = new object[parameters.Length - 1];
             ReturnIsNullable = returnIsNullable;
         }
+
+        public bool HasInstance { get => true;}
 
         /// <summary>
         /// Invokes a method on an object. The first parameter must be an the objects GUID, which is
         /// used to fetch the instance, and the remaining parameters are passed to the method.
         /// </summary>
-        public object Invoke (params object[] arguments)
+        public object Invoke (object instance, object[] arguments)
         {
-            object instance = arguments [0];
-            // TODO: should be able to invoke default arguments using Type.Missing, but get "System.ArgumentException : failed to convert parameters"
-            for (int i = 1; i < arguments.Length; i++)
-                methodArguments [i - 1] = (arguments [i] == Type.Missing) ? parameters [i].DefaultValue : arguments [i];
-            return method.Invoke (instance, methodArguments);
+            return method.Invoke (instance, arguments);
         }
 
         public IEnumerable<ProcedureParameter> Parameters {

@@ -13,25 +13,22 @@ namespace KRPC.Service
     {
         readonly MethodInfo method;
         readonly ProcedureParameter[] parameters;
-        readonly object[] methodArguments;
 
         public ClassStaticMethodHandler (MethodInfo methodInfo, bool returnIsNullable)
         {
             method = methodInfo;
             parameters = method.GetParameters ().Select (x => new ProcedureParameter (x)).ToArray ();
-            methodArguments = new object[parameters.Length];
             ReturnIsNullable = returnIsNullable;
         }
+
+        public bool HasInstance { get => false; }
 
         /// <summary>
         /// Invokes the static method.
         /// </summary>
-        public object Invoke (params object[] arguments)
+        public object Invoke (object instance, object [] arguments)
         {
-            // TODO: should be able to invoke default arguments using Type.Missing, but get "System.ArgumentException : failed to convert parameters"
-            for (int i = 0; i < arguments.Length; i++)
-                methodArguments [i] = (arguments [i] == Type.Missing) ? parameters [i].DefaultValue : arguments [i];
-            return method.Invoke (null, methodArguments);
+            return method.Invoke (instance, arguments);
         }
 
         public IEnumerable<ProcedureParameter> Parameters {

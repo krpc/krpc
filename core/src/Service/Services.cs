@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Reflection;
 using KRPC.Service.Messages;
 using KRPC.Service.Scanner;
@@ -97,10 +98,17 @@ namespace KRPC.Service
         /// Throws RPCException if the call fails.
         /// </summary>
 
+        static object instanceBuffer;
+        static object[] argumentBuffer;
+        const int argumentBufferCacheSize = 16;
+        readonly static object[][] argumentBuffers = Enumerable.Range(0, argumentBufferCacheSize).Select(i => new object[i]).ToArray();
+
         public ProcedureResult ExecuteCall (ProcedureSignature procedure, ProcedureCall call)
         {
-            try {
-                return ExecuteCall (procedure, GetArguments (procedure, call.Arguments));
+            try
+            {
+                SetArguments(procedure, call.Arguments);
+                return ExecuteCall (procedure, instanceBuffer, argumentBuffer);
             } catch (YieldException) {
                 throw;
             } catch (RPCException e) {
@@ -115,14 +123,14 @@ namespace KRPC.Service
         /// Throws YieldException, containing a continuation, if the call yields.
         /// Throws RPCException if the call fails.
         /// </summary>
-        public ProcedureResult ExecuteCall (ProcedureSignature procedure, object[] arguments)
+        public ProcedureResult ExecuteCall (ProcedureSignature procedure, object instance, object[] arguments)
         {
             try {
                 if ((CallContext.GameScene & procedure.GameScene) == 0)
                     throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name(CallContext.GameScene) + "'");
                 object returnValue;
                 try {
-                    returnValue = procedure.Handler.Invoke (arguments);
+                    returnValue = procedure.Handler.Invoke (instance, arguments);
                 } catch (TargetInvocationException e) {
                     if (e.InnerException is YieldException)
                         throw e.InnerException;
@@ -167,9 +175,69 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Get the arguments for a procedure from a list of argument messages.
+        /// Set the arguments for a procedure handler from a list of argument messages.
         /// </summary>
-        public object[] GetArguments (ProcedureSignature procedure, IList<Argument> arguments)
+        public void SetArguments(ProcedureSignature procedure, IList<Argument> arguments)
+        {
+            instanceBuffer = null;
+            argumentBuffer = null;
+
+            var numParameters = procedure.Parameters.Count;
+            if (numParameters == 0)
+                return;
+
+            var hasInstance = procedure.Handler.HasInstance;
+            var numArguments = hasInstance ? numParameters - 1 : numParameters;
+
+            if (numArguments > 0)
+            {
+                if (numArguments < argumentBufferCacheSize)
+                    argumentBuffer = argumentBuffers[numArguments];
+                else
+                    argumentBuffer = new object[numArguments];
+            }
+
+            int filledMask = 0;
+            foreach (var argument in arguments)
+            {
+                var position = argument.Position;
+                var value = argument.Value;
+                var parameter = procedure.Parameters[(int)position];
+                var type = parameter.Type;
+                if (value != null && !type.IsInstanceOfType (value))
+                    throw new RPCException (
+                        "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
+                        "Expected an argument of type " + type + ", got " + value.GetType ());
+                if (value == null && !TypeUtils.IsAClassType (type))
+                    throw new RPCException (
+                        "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
+                        "Expected an argument of type " + type + ", got null");
+                if (hasInstance && position == 0)
+                    instanceBuffer = value;
+                else
+                {
+                    int bufferIndex = hasInstance ? (int)position - 1 : (int)position;
+                    argumentBuffer[bufferIndex] = value;
+                    filledMask |= (1 << bufferIndex);
+                }
+            }
+            // Fill unset slots with default values. Type.Missing does not work on Mono.
+            for (int i = 0; i < numArguments; i++)
+            {
+                if ((filledMask & (1 << i)) == 0)
+                {
+                    var parameter = procedure.Parameters[hasInstance ? i + 1 : i];
+                    if (!parameter.HasDefaultValue)
+                        throw new RPCException ("Argument not specified for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName);
+                    argumentBuffer[i] = parameter.DefaultValue;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the arguments for a procedure handler from a list of argument messages.
+        /// </summary>
+        public object[] GetArguments(ProcedureSignature procedure, IList<Argument> arguments)
         {
             // Get list of supplied argument values and whether they were set
             var numParameters = procedure.Parameters.Count;
