@@ -80,25 +80,27 @@ class TestContracts(krpctest.TestCase):
         )
 
     def test_types(self):
-        self.assertCountEqual(
-            [
-                "FinePrint.Contracts.ISRUContract",
-                "FinePrint.Contracts.ExplorationContract",
-                "Contracts.Templates.PlantFlag",
-                "FinePrint.Contracts.BaseContract",
-                "Contracts.Templates.RecoverAsset",
-                "Contracts.Templates.GrandTour",
-                "FinePrint.Contracts.ARMContract",
-                "FinePrint.Contracts.SatelliteContract",
-                "FinePrint.Contracts.StationContract",
-                "Contracts.Templates.CollectScience",
-                "FinePrint.Contracts.SurveyContract",
-                "FinePrint.Contracts.TourismContract",
-                "Contracts.Templates.PartTest",
-                "SentinelMission.SentinelContract",
-            ],
-            self.cm.types,
-        )
+        # Check that the core stock contract types are present. Use a subset
+        # check rather than an exact match so the test tolerates additional
+        # contract types contributed by DLCs (e.g. Breaking Ground) and newer
+        # KSP versions, which vary by install and are not a kRPC concern.
+        expected_types = {
+            "FinePrint.Contracts.ISRUContract",
+            "FinePrint.Contracts.ExplorationContract",
+            "Contracts.Templates.PlantFlag",
+            "FinePrint.Contracts.BaseContract",
+            "Contracts.Templates.RecoverAsset",
+            "Contracts.Templates.GrandTour",
+            "FinePrint.Contracts.ARMContract",
+            "FinePrint.Contracts.SatelliteContract",
+            "FinePrint.Contracts.StationContract",
+            "Contracts.Templates.CollectScience",
+            "FinePrint.Contracts.SurveyContract",
+            "FinePrint.Contracts.TourismContract",
+            "Contracts.Templates.PartTest",
+            "SentinelMission.SentinelContract",
+        }
+        self.assertLessEqual(expected_types, set(self.cm.types))
 
     def test_all_contracts(self):
         self.assertCountEqual(
