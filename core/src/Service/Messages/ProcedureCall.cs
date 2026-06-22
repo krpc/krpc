@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using KRPC.Service.Scanner;
 
 namespace KRPC.Service.Messages
 {
@@ -14,6 +15,8 @@ namespace KRPC.Service.Messages
         public uint ProcedureId { get; private set; }
 
         public IList<Argument> Arguments { get; private set; }
+
+        internal ProcedureSignature CachedSignature { get; set; }
 
         public ProcedureCall (string service, string procedure)
         {

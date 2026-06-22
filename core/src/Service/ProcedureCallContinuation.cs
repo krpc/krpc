@@ -18,7 +18,7 @@ namespace KRPC.Service
         {
             call = procedureCall;
             try {
-                Procedure = Services.Instance.GetProcedureSignature (call);
+                Procedure = procedureCall.CachedSignature ?? Services.Instance.GetProcedureSignature (call);
             } catch (RPCException e) {
                 exception = e;
             } catch (System.Exception e) {

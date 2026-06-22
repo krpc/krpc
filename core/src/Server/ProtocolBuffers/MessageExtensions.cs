@@ -267,6 +267,7 @@ namespace KRPC.Server.ProtocolBuffers
             var result = new ProcedureCall (call.Service, call.ServiceId, call.Procedure, call.ProcedureId);
             try {
                 var procedureSignature = Service.Services.Instance.GetProcedureSignature (result);
+                result.CachedSignature = procedureSignature;
                 foreach (var argument in call.Arguments) {
                     var position = (int)argument.Position;
                     // Ignore the argument if its position is not valid
