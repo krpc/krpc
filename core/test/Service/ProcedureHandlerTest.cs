@@ -29,7 +29,7 @@ namespace KRPC.Test.Service
         public void DefaultArguments ()
         {
             var handler = new ProcedureHandler (typeof(ProcedureHandlerTest).GetMethod ("TestProcedureWithDefaultArg"), false);
-            Assert.AreEqual ("42foo", handler.Invoke (null, new object[] { 42, Type.Missing }));
+            Assert.AreEqual ("42foo", handler.Invoke (null, new object[] { 42, "foo" }));
         }
 
         [Test]

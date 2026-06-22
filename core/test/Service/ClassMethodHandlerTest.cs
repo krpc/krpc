@@ -24,7 +24,7 @@ namespace KRPC.Test.Service
             var instance = new TestService.TestClass ("foo");
             var classType = typeof(TestService.TestClass);
             var handler = new ClassMethodHandler (classType, classType.GetMethod ("IntToString"), false);
-            Assert.AreEqual ("foo42", handler.Invoke (instance, new object [] { Type.Missing }));
+            Assert.AreEqual ("foo42", handler.Invoke (instance, new object [] { 42 }));
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace KRPC.Test.Service
         {
             var classType = typeof(TestService.TestClass);
             var handler = new ClassMethodHandler (classType, classType.GetMethod ("FloatToString"), false);
-            Assert.Throws<TargetException> (() => handler.Invoke (null, new object[] { Type.Missing }));
+            Assert.Throws<NullReferenceException> (() => handler.Invoke (null, new object[] { 3.14159f }));
         }
 
         [Test]

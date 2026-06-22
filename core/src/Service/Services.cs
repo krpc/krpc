@@ -135,14 +135,7 @@ namespace KRPC.Service
             try {
                 if ((CallContext.GameScene & procedure.GameScene) == 0)
                     throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name(CallContext.GameScene) + "'");
-                object returnValue;
-                try {
-                    returnValue = procedure.Handler.Invoke (instance, arguments);
-                } catch (TargetInvocationException e) {
-                    if (e.InnerException is YieldException)
-                        throw e.InnerException;
-                    throw new RPCException (e.InnerException);
-                }
+                object returnValue = procedure.Handler.Invoke (instance, arguments);
                 var result = new ProcedureResult ();
                 if (procedure.HasReturnType) {
                     CheckReturnValue (procedure, returnValue);
