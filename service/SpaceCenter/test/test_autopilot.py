@@ -245,9 +245,7 @@ class TestAutoPilot(krpctest.TestCase):
             self.vessel.parts.engines[0].thrusters[0].thrust_reference_frame,
         ]
         for frame in frames:
-            self.assertRaises(
-                ValueError, setattr, self.ap, "reference_frame", frame
-            )
+            self.assertRaises(ValueError, setattr, self.ap, "reference_frame", frame)
 
     def test_reset_on_disconnect(self):
         conn = self.connect(use_cached=False)
