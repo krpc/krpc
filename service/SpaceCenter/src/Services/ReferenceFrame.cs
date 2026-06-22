@@ -441,6 +441,22 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public QuaternionD Rotation {
             get {
+                // For transform-backed frames use the Unity quaternion directly.
+                // Unity derives transform.up/forward from the quaternion, so
+                // q.Inverse * up == (0,1,0) to near double precision, avoiding
+                // the ~1e-7 error that LookRotation2 introduces when reconstructing
+                // from float Vector3 up/forward values.
+                switch (type) {
+                case ReferenceFrameType.Vessel:
+                    return ((QuaternionD)InternalVessel.ReferenceTransform.rotation).Normalize ();
+                case ReferenceFrameType.Part:
+                case ReferenceFrameType.PartCenterOfMass:
+                    return ((QuaternionD)InternalPart.transform.rotation).Normalize ();
+                case ReferenceFrameType.Hybrid:
+                    return hybridRotation.Rotation;
+                default:
+                    break;
+                }
                 // Note: up is along the y-axis, forward is along the z-axis
                 Vector3d up = UpNotNormalized;
                 Vector3d forward = ForwardNotNormalized;

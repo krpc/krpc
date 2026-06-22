@@ -304,6 +304,15 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Normalize a quaternion to unit length.
+        /// </summary>
+        public static QuaternionD Normalize (this QuaternionD q)
+        {
+            var mag = Math.Sqrt (q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
+            return new QuaternionD (q.x / mag, q.y / mag, q.z / mag, q.w / mag);
+        }
+
+        /// <summary>
         /// Compute the inverse quaternion. Assumes the input is a unit quaternion.
         /// </summary>
         public static QuaternionD Inverse (this QuaternionD q)
