@@ -30,6 +30,7 @@ v0.6.0
  * Add Control.GetActionGroupActions to list the part actions assigned to an action group (#864)
  * Add Node.Rotation
  * Fix Vessel/Part/Hybrid reference frame rotation precision
+ * Fix VesselOrbital reference frame angular velocity (missing Coriolis correction) (#823)
 
 v0.5.4
  * Fix vessel recovery (#782)

@@ -642,18 +642,27 @@ class TestReferenceFrame(krpctest.TestCase):
     def test_vessel_angular_velocity_magnitude_same_across_zero_omega_frames(self):
         """Vessel angular speed is the same in all frames with zero frame angular velocity.
 
-        VesselOrbital, VesselSurface, and CelestialBodyNonRotating all currently
-        report zero frame angular velocity, so each measures the same world-space
-        spin rate for the vessel.
+        VesselSurface and CelestialBodyNonRotating both have zero frame angular velocity,
+        so each measures the same world-space spin rate for the vessel.
+        (VesselOrbital is excluded — it now has a non-zero frame angular velocity.)
         """
         frames = [
-            self.vessel.orbital_reference_frame,
             self.vessel.surface_reference_frame,
             self.kerbin.non_rotating_reference_frame,
         ]
         speeds = [norm(self.vessel.angular_velocity(ref)) for ref in frames]
         for speed in speeds[1:]:
             self.assertAlmostEqual(speeds[0], speed, delta=0.01)
+
+    def test_vessel_velocity_zero_in_own_orbital_frame(self):
+        """A vessel's velocity in its own orbital reference frame is zero.
+
+        The orbital frame rotates with the vessel's orbit, so the vessel's own
+        velocity vector is always the y-axis of that frame — the residual should
+        be zero (just the Coriolis correction for CoM, which has zero offset).
+        """
+        vel = self.vessel.velocity(self.vessel.orbital_reference_frame)
+        self.assertAlmostEqual((0, 0, 0), vel, delta=0.5)
 
     def test_relative_frame_angular_velocity_offset(self):
         """An angular velocity offset on a relative frame shifts the measured angular velocity.

@@ -655,7 +655,11 @@ namespace KRPC.SpaceCenter.Services
                     return Vector3d.zero; // TODO: check this
                 case ReferenceFrameType.Vessel:
                     return InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
-                case ReferenceFrameType.VesselOrbital:
+                case ReferenceFrameType.VesselOrbital: {
+                    var r = InternalVessel.CoM - InternalVessel.mainBody.position;
+                    var v = InternalVessel.GetOrbit ().GetVel ();
+                    return Vector3d.Cross (r, v) / r.sqrMagnitude;
+                }
                 case ReferenceFrameType.VesselSurface:
                 case ReferenceFrameType.VesselSurfaceVelocity:
                 case ReferenceFrameType.Maneuver:
