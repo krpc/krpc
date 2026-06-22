@@ -454,6 +454,11 @@ namespace KRPC.SpaceCenter.Services
                     return ((QuaternionD)InternalPart.transform.rotation).Normalize ();
                 case ReferenceFrameType.Hybrid:
                     return hybridRotation.Rotation;
+                case ReferenceFrameType.VesselSurfaceVelocity:
+                    if (InternalVessel.srf_velocity.sqrMagnitude < 0.01d)
+                        throw new InvalidOperationException (
+                            "VesselSurfaceVelocity reference frame is singular when surface velocity is near zero");
+                    break;
                 default:
                     break;
                 }
