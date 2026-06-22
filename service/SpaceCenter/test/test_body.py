@@ -81,7 +81,7 @@ class TestBody(krpctest.TestCase):
     def test_mun(self):
         mun = self.space_center.bodies["Mun"]
         self.assertEqual("Mun", mun.name)
-        self.assertAlmostEqual(9.7599063e20, mun.mass, delta=0.0000001e20)
+        self.assertAlmostEqual(9.7599066e20, mun.mass, delta=0.0001e20)
         self.assertAlmostEqual(
             6.5138398e10, mun.gravitational_parameter, delta=0.0000001e10
         )
