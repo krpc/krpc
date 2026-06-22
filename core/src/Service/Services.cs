@@ -55,9 +55,10 @@ namespace KRPC.Service
             string service = call.Service;
             if (call.ServiceId > 0)
                 service = GetServiceNameById (call.ServiceId);
-            if (!Signatures.ContainsKey (service))
+            ServiceSignature serviceSignature;
+            if (!Signatures.TryGetValue (service, out serviceSignature))
                 throw new RPCException ("Service \"" + service + "\" not found");
-            return Signatures [service];
+            return serviceSignature;
         }
 
         public ProcedureSignature GetProcedureSignature (ProcedureCall call)
@@ -67,29 +68,35 @@ namespace KRPC.Service
             string procedure = call.Procedure;
             if (call.ProcedureId > 0)
                 procedure = GetProcedureNameById (service, call.ProcedureId);
-            if (!serviceSignature.Procedures.ContainsKey (procedure))
+            ProcedureSignature procedureSignature;
+            if (!serviceSignature.Procedures.TryGetValue (procedure, out procedureSignature))
                 throw new RPCException ("Procedure \"" + procedure + "\" not found, in service \"" + service + "\"");
-            return serviceSignature.Procedures [procedure];
+            return procedureSignature;
         }
 
-        string GetServiceNameById (uint id) {
-            if (!ServicesById.ContainsKey (id))
+        string GetServiceNameById (uint id)
+        {
+            ServiceSignature sig;
+            if (!ServicesById.TryGetValue (id, out sig))
                 throw new RPCException ("Service with id " + id + " not found");
-            return ServicesById [id].Name;
+            return sig.Name;
         }
 
         string GetProcedureNameById (string service, uint procedureId)
         {
-            if (!ProceduresById.ContainsKey (service))
+            IDictionary<uint, ProcedureSignature> procedures;
+            if (!ProceduresById.TryGetValue (service, out procedures))
                 throw new RPCException ("Service \"" + service + "\" not found");
-            if (!ProceduresById [service].ContainsKey (procedureId))
+            ProcedureSignature sig;
+            if (!procedures.TryGetValue (procedureId, out sig))
                 throw new RPCException ("Procedure with id " + procedureId + " not found");
-            return ProceduresById [service] [procedureId].Name;
+            return sig.Name;
         }
 
         public Type GetMappedExceptionType (Type exnType)
         {
-            return MappedExceptionTypes.ContainsKey(exnType) ? MappedExceptionTypes [exnType] : exnType;
+            Type mappedType;
+            return MappedExceptionTypes.TryGetValue (exnType, out mappedType) ? mappedType : exnType;
         }
 
         /// <summary>
