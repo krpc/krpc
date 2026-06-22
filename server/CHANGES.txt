@@ -1,7 +1,8 @@
 v0.6.0
  * Fix server version reported to clients (read from KRPC.dll not KRPC.Core.dll)
  * Fix Logger to write to both KSP.log and Player.log (#780)
- * Fix Stream RPCs Executed and Stream RPC Rate always showing 0 in the info window
+ * Improve RPC and stream update performance (#879)
+ * Fix Stream RPCs Executed and Stream RPC Rate always showing 0 in the info window (#879)
 
 v0.5.4
  * Fix memory leaks when switching game scene (#779)
