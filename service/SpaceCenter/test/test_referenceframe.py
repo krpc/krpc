@@ -1,7 +1,14 @@
 import unittest
 
 import krpctest
-from krpctest.geometry import compute_position, dot, norm
+from krpctest.geometry import (
+    compute_position,
+    dot,
+    norm,
+    quaternion_conjugate,
+    quaternion_mult,
+    quaternion_vector_mult,
+)
 
 
 class TestReferenceFrame(krpctest.TestCase):
@@ -91,6 +98,24 @@ class TestReferenceFrame(krpctest.TestCase):
         for d in dots[1:]:
             self.assertAlmostEqual(dots[0], d, delta=delta)
 
+    def check_unit_quaternion(self, rot_fn, frames):
+        """Verify rot_fn(frame) returns a unit quaternion in every frame."""
+        for ref in frames:
+            self.assertAlmostEqual(1.0, norm(rot_fn(ref)), delta=0.01)
+
+    def check_relative_rotation_invariant(self, rot_a_fn, rot_b_fn, frames, delta=0.01):
+        """conj(rot_A(frame)) * rot_B(frame) is the same for every frame.
+
+        Changing the frame multiplies both rotations by the same left factor,
+        which cancels in the product and leaves the fixed relative orientation.
+        """
+        rel_rots = [
+            quaternion_mult(quaternion_conjugate(rot_a_fn(ref)), rot_b_fn(ref))
+            for ref in frames
+        ]
+        for r in rel_rots[1:]:
+            self.assertQuaternionsAlmostEqual(rel_rots[0], r, delta=delta)
+
     # -------------------------------------------------------------------------
     # Celestial body tests
     # -------------------------------------------------------------------------
@@ -142,6 +167,30 @@ class TestReferenceFrame(krpctest.TestCase):
         )
 
     # -------------------------------------------------------------------------
+    # Vessel rotation tests
+    # -------------------------------------------------------------------------
+
+    def test_vessel_rotation_in_own_frame(self):
+        """Vessel rotation is the identity quaternion in the vessel's own frame."""
+        self.assertQuaternionsAlmostEqual(
+            (0, 0, 0, 1), self.vessel.rotation(self.vessel.reference_frame), places=3
+        )
+
+    def test_vessel_rotation_is_unit_quaternion(self):
+        """Vessel rotation is a unit quaternion in every frame."""
+        self.check_unit_quaternion(
+            self.vessel.rotation, self._vessel_frames() + self._kerbin_frames()
+        )
+
+    def test_vessel_rotation_consistent_with_direction(self):
+        """Rotating (0,1,0) by the vessel quaternion recovers the vessel direction."""
+        for ref in self._vessel_frames():
+            rot = self.vessel.rotation(ref)
+            self.assertAlmostEqual(
+                self.vessel.direction(ref), quaternion_vector_mult(rot, (0, 1, 0)), delta=0.01
+            )
+
+    # -------------------------------------------------------------------------
     # Root part position tests
     # -------------------------------------------------------------------------
 
@@ -190,6 +239,30 @@ class TestReferenceFrame(krpctest.TestCase):
         self.check_unit_direction(self.root_part.direction, self._vessel_frames())
 
     # -------------------------------------------------------------------------
+    # Root part rotation tests
+    # -------------------------------------------------------------------------
+
+    def test_part_rotation_in_own_frame(self):
+        """Part rotation is the identity quaternion in the part's own frame."""
+        self.assertQuaternionsAlmostEqual(
+            (0, 0, 0, 1),
+            self.root_part.rotation(self.root_part.reference_frame),
+            places=3,
+        )
+
+    def test_part_rotation_is_unit_quaternion(self):
+        """Part rotation is a unit quaternion in every vessel-centered frame."""
+        self.check_unit_quaternion(self.root_part.rotation, self._vessel_frames())
+
+    def test_part_rotation_consistent_with_direction(self):
+        """Rotating (0,1,0) by the part quaternion recovers the part direction."""
+        for ref in self._vessel_frames():
+            rot = self.root_part.rotation(ref)
+            self.assertAlmostEqual(
+                self.root_part.direction(ref), quaternion_vector_mult(rot, (0, 1, 0)), delta=0.01
+            )
+
+    # -------------------------------------------------------------------------
     # Docking port position tests
     # -------------------------------------------------------------------------
 
@@ -226,6 +299,32 @@ class TestReferenceFrame(krpctest.TestCase):
     def test_docking_port_direction_is_unit_vector(self):
         """Docking port direction has magnitude 1 in every vessel-centered frame."""
         self.check_unit_direction(self.docking_port.direction, self._vessel_frames())
+
+    # -------------------------------------------------------------------------
+    # Docking port rotation tests
+    # -------------------------------------------------------------------------
+
+    def test_docking_port_rotation_in_own_frame(self):
+        """Docking port rotation is the identity quaternion in the port's own frame."""
+        self.assertQuaternionsAlmostEqual(
+            (0, 0, 0, 1),
+            self.docking_port.rotation(self.docking_port.reference_frame),
+            places=3,
+        )
+
+    def test_docking_port_rotation_is_unit_quaternion(self):
+        """Docking port rotation is a unit quaternion in every vessel-centered frame."""
+        self.check_unit_quaternion(self.docking_port.rotation, self._vessel_frames())
+
+    def test_docking_port_rotation_consistent_with_direction(self):
+        """Rotating (0,1,0) by the port quaternion recovers the port direction."""
+        for ref in self._vessel_frames():
+            rot = self.docking_port.rotation(ref)
+            self.assertAlmostEqual(
+                self.docking_port.direction(ref),
+                quaternion_vector_mult(rot, (0, 1, 0)),
+                delta=0.01,
+            )
 
     # -------------------------------------------------------------------------
     # Thruster position tests
@@ -322,6 +421,37 @@ class TestReferenceFrame(krpctest.TestCase):
             self.check_dot_product_invariant(dir_a, dir_b, self._vessel_frames())
 
     # -------------------------------------------------------------------------
+    # Cross-object rotation consistency
+    # -------------------------------------------------------------------------
+
+    def test_rotation_relative_orientation_frame_invariant(self):
+        """The relative orientation between two on-vessel objects is the same
+        regardless of which frame they are expressed in.
+
+        conj(rot_A(frame)) * rot_B(frame) cancels the shared frame factor and
+        leaves the fixed rigid-body relative orientation between A and B.
+        """
+        pairs = [
+            (self.vessel.rotation, self.root_part.rotation),
+            (self.vessel.rotation, self.docking_port.rotation),
+            (self.root_part.rotation, self.docking_port.rotation),
+        ]
+        for rot_a, rot_b in pairs:
+            self.check_relative_rotation_invariant(rot_a, rot_b, self._vessel_frames())
+
+    def test_transform_rotation_round_trip(self):
+        """transform_rotation A→B→A returns the original quaternion."""
+        rot = self.vessel.rotation(self.vessel.reference_frame)
+        for ref in self._kerbin_frames():
+            via = self.space_center.transform_rotation(
+                rot, self.vessel.reference_frame, ref
+            )
+            roundtrip = self.space_center.transform_rotation(
+                via, ref, self.vessel.reference_frame
+            )
+            self.assertQuaternionsAlmostEqual(rot, roundtrip, delta=0.01)
+
+    # -------------------------------------------------------------------------
     # Maneuver node tests
     # -------------------------------------------------------------------------
 
@@ -355,6 +485,36 @@ class TestReferenceFrame(krpctest.TestCase):
             1.0, norm(node.direction(node.orbital_reference_frame)), delta=0.01
         )
 
+    def test_node_rotation_in_own_frame(self):
+        """Node rotation is the identity quaternion in the node's own frame."""
+        for node in self.vessel.control.nodes:
+            node.remove()
+        node = self.vessel.control.add_node(self.space_center.ut, 100, 0, 0)
+        self.assertQuaternionsAlmostEqual(
+            (0, 0, 0, 1), node.rotation(node.reference_frame), places=3
+        )
+
+    def test_node_rotation_is_unit_quaternion(self):
+        """Node rotation is a unit quaternion in both node frames."""
+        for node in self.vessel.control.nodes:
+            node.remove()
+        node = self.vessel.control.add_node(self.space_center.ut, 100, 0, 0)
+        self.assertAlmostEqual(1.0, norm(node.rotation(node.reference_frame)), delta=0.01)
+        self.assertAlmostEqual(
+            1.0, norm(node.rotation(node.orbital_reference_frame)), delta=0.01
+        )
+
+    def test_node_rotation_consistent_with_direction(self):
+        """Rotating (0,1,0) by the node quaternion recovers the node burn direction."""
+        for node in self.vessel.control.nodes:
+            node.remove()
+        node = self.vessel.control.add_node(self.space_center.ut, 100, 0, 0)
+        for ref in [node.reference_frame, node.orbital_reference_frame]:
+            rot = node.rotation(ref)
+            self.assertAlmostEqual(
+                node.direction(ref), quaternion_vector_mult(rot, (0, 1, 0)), delta=0.01
+            )
+
     # -------------------------------------------------------------------------
     # Relative and hybrid reference frame tests
     # -------------------------------------------------------------------------
@@ -375,6 +535,15 @@ class TestReferenceFrame(krpctest.TestCase):
             (0, 1, 0), self.vessel.direction(ref), places=3
         )
 
+    def test_relative_rotation(self):
+        """Rotation is unaffected by a position-only offset in a relative frame."""
+        ref = self.space_center.ReferenceFrame.create_relative(
+            self.vessel.reference_frame, position=(1, 2, 3)
+        )
+        self.assertQuaternionsAlmostEqual(
+            (0, 0, 0, 1), self.vessel.rotation(ref), places=3
+        )
+
     def test_hybrid_position(self):
         ref = self.space_center.ReferenceFrame.create_hybrid(
             position=self.vessel.reference_frame
@@ -387,6 +556,13 @@ class TestReferenceFrame(krpctest.TestCase):
             position=self.vessel.reference_frame
         )
         self.assertAlmostEqual((0, 1, 0), self.vessel.direction(ref))
+
+    def test_hybrid_rotation(self):
+        """Vessel rotation is identity in a hybrid frame using vessel rotation."""
+        ref = self.space_center.ReferenceFrame.create_hybrid(
+            position=self.vessel.reference_frame
+        )
+        self.assertQuaternionsAlmostEqual((0, 0, 0, 1), self.vessel.rotation(ref))
 
 
 if __name__ == "__main__":

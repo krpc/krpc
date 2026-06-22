@@ -28,6 +28,7 @@ v0.6.0
  * Add Engine.CanReverseThrust, Engine.ThrustReversed and Engine.ToggleThrustReversal to control thrust reversal on stock and recognized mod engines (#865)
  * Add Control.ThrustReversers to engage/disengage thrust reversers on all engines (#865)
  * Add Control.GetActionGroupActions to list the part actions assigned to an action group (#864)
+ * Add Node.Rotation
 
 v0.5.4
  * Fix vessel recovery (#782)

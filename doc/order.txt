@@ -1138,6 +1138,7 @@ SpaceCenter.Node.Remove
 SpaceCenter.Node.ReferenceFrame
 SpaceCenter.Node.OrbitalReferenceFrame
 SpaceCenter.Node.Position
+SpaceCenter.Node.Rotation
 SpaceCenter.Node.Direction
 SpaceCenter.ReferenceFrame
 SpaceCenter.ReferenceFrame.CreateRelative
