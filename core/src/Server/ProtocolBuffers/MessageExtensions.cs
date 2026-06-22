@@ -53,7 +53,8 @@ namespace KRPC.Server.ProtocolBuffers
         public static Schema.KRPC.StreamUpdate ToProtobufMessage (this StreamUpdate streamUpdate)
         {
             var result = new Schema.KRPC.StreamUpdate ();
-            result.Results.Add (streamUpdate.Results.Select (ToProtobufMessage));
+            foreach (var r in streamUpdate.Results)
+                result.Results.Add (r.ToProtobufMessage ());
             return result;
         }
 
@@ -267,6 +268,7 @@ namespace KRPC.Server.ProtocolBuffers
             var result = new ProcedureCall (call.Service, call.ServiceId, call.Procedure, call.ProcedureId);
             try {
                 var procedureSignature = Service.Services.Instance.GetProcedureSignature (result);
+                result.CachedSignature = procedureSignature;
                 foreach (var argument in call.Arguments) {
                     var position = (int)argument.Position;
                     // Ignore the argument if its position is not valid

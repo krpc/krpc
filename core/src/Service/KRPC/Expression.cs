@@ -112,17 +112,26 @@ namespace KRPC.Service.KRPC
             if (!procedure.HasReturnType)
                 throw new InvalidOperationException(
                     "Cannot use a procedure that does not return a value.");
-            var arguments = services.GetArguments(procedure, call.Arguments);
+            var allArguments = services.GetArguments(procedure, call.Arguments);
+            object instance = null;
+            object[] arguments;
+            if (procedure.Handler.HasInstance) {
+                instance = allArguments[0];
+                arguments = allArguments.Skip(1).ToArray();
+            } else {
+                arguments = allArguments;
+            }
 
             var servicesExpr = LinqExpression.Constant(services);
             var executeCallMethod = typeof(Services).GetMethod(
-                "ExecuteCall", new[] { typeof(Scanner.ProcedureSignature), typeof(object[]) });
+                "ExecuteCall", new[] { typeof(Scanner.ProcedureSignature), typeof(object), typeof(object[]) });
             var procedureExpr = LinqExpression.Constant(procedure);
+            var instanceExpr = LinqExpression.Constant(instance, typeof(object));
             var argumentsExpr = LinqExpression.Constant(arguments);
 
             var result = LinqExpression.Call(
                 servicesExpr, executeCallMethod,
-                new[] { procedureExpr, argumentsExpr });
+                new[] { procedureExpr, instanceExpr, argumentsExpr });
             var value = LinqExpression.Convert(
                 LinqExpression.Property(result, "Value"), procedure.ReturnType);
             return new Expression(value);

@@ -9,11 +9,17 @@ namespace KRPC.Service
     public interface IProcedureHandler
     {
         /// <summary>
-        /// Invoke the RPC with the given arguments.
-        /// If the RPC is a class method, the first argument should
-        /// be an instance of the class.
+        /// Whether the RPC is a class instance method or a
+        /// static/standalone procedure
         /// </summary>
-        object Invoke (params object[] arguments);
+        bool HasInstance { get; }
+
+        /// <summary>
+        /// Invoke the RPC with the given arguments.
+        /// Pass the class instance in <paramref name="instance"/>
+        /// for class methods, or null for static procedures.
+        /// </summary>
+        object Invoke (object instance, object[] arguments);
 
         /// <summary>
         /// Information about the parameters of the method
