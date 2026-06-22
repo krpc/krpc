@@ -532,6 +532,7 @@ namespace KRPC
                     foreach (var stream in clientStreams) {
                         if (stream.Started) {
                             stream.Update();
+                            rpcsExecuted++;
                             changed |= stream.Changed;
                         }
                     }
