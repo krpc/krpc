@@ -10,15 +10,15 @@ class TestPartsDecoupler(krpctest.TestCase):
         cls.launch_vessel_from_vab("PartsDecoupler")
         cls.remove_other_vessels()
         cls.vessel = cls.connect().space_center.active_vessel
-        cls.stack_decoupler = cls.vessel.parts.with_title("TR-18A Stack Decoupler")[
+        # Look parts up by language-independent internal name (part.name), not the
+        # localized title. Decoupler.1 = "TD-12 Decoupler" (was "TR-18A Stack
+        # Decoupler"), Separator.1 = "TS-12 Stack Separator" (was "TR-18D Stack
+        # Separator"); both were renamed by KSP's parts revamp.
+        cls.stack_decoupler = cls.vessel.parts.with_name("Decoupler.1")[0].decoupler
+        cls.radial_decoupler = cls.vessel.parts.with_name("radialDecoupler2")[
             0
         ].decoupler
-        cls.radial_decoupler = cls.vessel.parts.with_title("TT-70 Radial Decoupler")[
-            0
-        ].decoupler
-        cls.disabled_decoupler = cls.vessel.parts.with_title("TR-18D Stack Separator")[
-            0
-        ].decoupler
+        cls.disabled_decoupler = cls.vessel.parts.with_name("Separator.1")[0].decoupler
 
     def test_stack_decoupler(self):
         self.assertEqual(2500, self.stack_decoupler.impulse)
@@ -30,8 +30,8 @@ class TestPartsDecoupler(krpctest.TestCase):
         self.assertNotEqual(self.vessel, self.stack_decoupler.part.vessel)
         self.assertNotEqual(self.vessel, new_vessel)
         self.assertCountEqual(
-            ["FL-T400 Fuel Tank", "TR-18A Stack Decoupler"],
-            [part.title for part in new_vessel.parts.all],
+            ["fuelTank", "Decoupler.1"],
+            [part.name for part in new_vessel.parts.all],
         )
 
     def test_radial_decoupler(self):
@@ -44,8 +44,8 @@ class TestPartsDecoupler(krpctest.TestCase):
         self.assertNotEqual(self.vessel, self.radial_decoupler.part.vessel)
         self.assertNotEqual(self.vessel, new_vessel)
         self.assertCountEqual(
-            ["FL-T400 Fuel Tank", "FL-T400 Fuel Tank", "TT-70 Radial Decoupler"],
-            [part.title for part in new_vessel.parts.all],
+            ["fuelTank", "fuelTank", "radialDecoupler2"],
+            [part.name for part in new_vessel.parts.all],
         )
 
     def test_disabled_decoupler(self):

@@ -189,9 +189,7 @@ class TestResources(krpctest.TestCase, ResourcesTest):
 
     def test_part_resources(self):
         mode = self.connect().space_center.ResourceFlowMode
-        resources = next(
-            iter(self.vessel.parts.with_title('BACC "Thumper" Solid Fuel Booster'))
-        ).resources
+        resources = next(iter(self.vessel.parts.with_name("solidBooster1-1"))).resources
         self.assertEqual(set(["SolidFuel"]), set(resources.names))
         self.assertTrue(resources.has_resource("SolidFuel"))
         self.assertFalse(resources.has_resource("LiquidFuel"))
@@ -210,9 +208,7 @@ class TestResources(krpctest.TestCase, ResourcesTest):
         self.assertEqual(mode.none, r.flow_mode)
         self.assertTrue(r.enabled)
 
-        resources = next(
-            iter(self.vessel.parts.with_title("Rockomax X200-16 Fuel Tank"))
-        ).resources
+        resources = next(iter(self.vessel.parts.with_name("Rockomax16.BW"))).resources
         self.assertEqual(set(["LiquidFuel", "Oxidizer"]), set(resources.names))
         self.assertTrue(resources.has_resource("LiquidFuel"))
         self.assertTrue(resources.has_resource("Oxidizer"))

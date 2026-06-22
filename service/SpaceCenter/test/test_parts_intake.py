@@ -14,7 +14,7 @@ class TestPartsIntake(krpctest.TestCase):
         parts = vessel.parts
         cls.control = vessel.control
         cls.intakes = parts.intakes
-        cls.intake = parts.with_title("XM-G50 Radial Air Intake")[0].intake
+        cls.intake = parts.with_name("airScoop")[0].intake
 
     def test_properties(self):
         self.assertEqual(15, self.intake.speed)

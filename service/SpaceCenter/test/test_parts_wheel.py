@@ -12,13 +12,11 @@ class TestPartsWheel(krpctest.TestCase):
         vessel = cls.connect().space_center.active_vessel
         cls.parts = vessel.parts
         cls.wheels = cls.parts.wheels
-        cls.deployable_wheel = cls.parts.with_title("LY-60 Large Landing Gear")[0].wheel
-        cls.fixed_wheel = cls.parts.with_title("LY-01 Fixed Landing Gear")[0].wheel
-        cls.free_wheel = cls.parts.with_title("LY-05 Steerable Landing Gear")[0].wheel
-        cls.powered_wheel = cls.parts.with_title("RoveMax Model M1")[0].wheel
-        cls.suspension_wheel = cls.parts.with_title("TR-2L Ruggedized Vehicular Wheel")[
-            0
-        ].wheel
+        cls.deployable_wheel = cls.parts.with_name("GearMedium")[0].wheel
+        cls.fixed_wheel = cls.parts.with_name("GearFixed")[0].wheel
+        cls.free_wheel = cls.parts.with_name("GearFree")[0].wheel
+        cls.powered_wheel = cls.parts.with_name("roverWheel1")[0].wheel
+        cls.suspension_wheel = cls.parts.with_name("wheelMed")[0].wheel
         cls.state = cls.connect().space_center.WheelState
         cls.motor_state = cls.connect().space_center.MotorState
         cls.control = vessel.control
@@ -209,7 +207,7 @@ class TestPartsWheelGrounded(krpctest.TestCase):
         cls.remove_other_vessels()
         vessel = cls.connect().space_center.active_vessel
         cls.parts = vessel.parts
-        cls.wheel = cls.parts.with_title("LY-60 Large Landing Gear")[0].wheel
+        cls.wheel = cls.parts.with_name("GearMedium")[0].wheel
 
     def test_grounded(self):
         self.assertTrue(self.wheel.deployed)

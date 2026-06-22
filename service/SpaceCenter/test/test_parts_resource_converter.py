@@ -14,10 +14,8 @@ class TestPartsResourceConverter(krpctest.TestCase):
         cls.converter_state = space_center.ResourceConverterState
         cls.harvester_state = space_center.ResourceHarvesterState
         parts = space_center.active_vessel.parts
-        cls.drill = parts.with_title("'Drill-O-Matic' Mining Excavator")[
-            0
-        ].resource_harvester
-        cls.converter = parts.with_title("Convert-O-Tron 250")[0].resource_converter
+        cls.drill = parts.with_name("RadialDrill")[0].resource_harvester
+        cls.converter = parts.with_name("ISRU")[0].resource_converter
         cls.infos = [
             {
                 "name": "Lf+Ox",

@@ -11,7 +11,7 @@ class TestPartsLight(krpctest.TestCase):
             cls.launch_vessel_from_vab("Parts")
             cls.remove_other_vessels()
         parts = cls.connect().space_center.active_vessel.parts
-        cls.light = parts.with_title("Illuminator Mk1")[0].light
+        cls.light = parts.with_name("spotLight1")[0].light
 
     def test_light(self):
         self.assertFalse(self.light.active)

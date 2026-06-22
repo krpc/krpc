@@ -14,17 +14,11 @@ class TestPartsDockingPort(krpctest.TestCase):
         cls.vessel = cls.sc.active_vessel
         cls.parts = cls.vessel.parts
         cls.State = cls.sc.DockingPortState
-        cls.port1 = cls.parts.with_title("Clamp-O-Tron Docking Port Jr.")[
-            0
-        ].docking_port
-        cls.port2 = cls.parts.with_title("Clamp-O-Tron Shielded Docking Port")[
-            0
-        ].docking_port
-        cls.port3 = cls.parts.with_title("Mk2 Clamp-O-Tron")[0].docking_port
-        cls.port4 = cls.parts.with_title("Inline Clamp-O-Tron")[0].docking_port
-        cls.port5 = cls.parts.with_title("Clamp-O-Tron Docking Port Sr.")[
-            0
-        ].docking_port
+        cls.port1 = cls.parts.with_name("dockingPort3")[0].docking_port
+        cls.port2 = cls.parts.with_name("dockingPort1")[0].docking_port
+        cls.port3 = cls.parts.with_name("mk2DockingPort")[0].docking_port
+        cls.port4 = cls.parts.with_name("dockingPortLateral")[0].docking_port
+        cls.port5 = cls.parts.with_name("dockingPortLarge")[0].docking_port
 
     def test_docking_port(self):
         self.assertEqual(self.State.ready, self.port1.state)
@@ -68,9 +62,7 @@ class TestPartsDockingPort(krpctest.TestCase):
     def test_pre_attached_ports(self):
         """Test ports that were pre-attached in the VAB"""
         bottom_port = next(
-            p
-            for p in self.parts.docking_ports
-            if p.part.parent.title == "Clamp-O-Tron Docking Port"
+            p for p in self.parts.docking_ports if p.part.parent.name == "dockingPort2"
         )
         top_port = bottom_port.part.parent.docking_port
         launch_clamp = bottom_port.part.children[0].launch_clamp

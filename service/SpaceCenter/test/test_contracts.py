@@ -4,6 +4,12 @@ import krpctest
 
 class TestContracts(krpctest.TestCase):
 
+    # NOTE: contract titles, descriptions, and parameter titles below are
+    # localized by KSP and there is no language-independent identifier for them
+    # (unlike parts, which expose part.name). These assertions therefore assume
+    # KSP is running in English; running against a non-English install will fail
+    # here. Left as-is intentionally (out of scope for the parts name/title work).
+
     @classmethod
     def setUpClass(cls):
         cls.new_save("krpctest_career", always_load=True)

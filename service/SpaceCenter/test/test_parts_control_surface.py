@@ -13,12 +13,8 @@ class TestPartsControlSurface(krpctest.TestCase):
             # TODO: wait needed to let available torque calculations settle
             cls.wait(3)
         parts = cls.connect().space_center.active_vessel.parts
-        cls.ctrlsrf = parts.with_title("FAT-455 Aeroplane Control Surface")[
-            0
-        ].control_surface
-        cls.winglets = [
-            x.control_surface for x in parts.with_title("Delta-Deluxe Winglet")
-        ]
+        cls.ctrlsrf = parts.with_name("airlinerCtrlSrf")[0].control_surface
+        cls.winglets = [x.control_surface for x in parts.with_name("winglet3")]
         cls.winglet = cls.winglets[0]
 
     def test_get_pyr_enabled(self):

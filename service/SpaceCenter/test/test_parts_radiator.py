@@ -14,11 +14,9 @@ class TestPartsRadiator(krpctest.TestCase):
         cls.control = vessel.control
         cls.state = cls.connect().space_center.RadiatorState
         cls.radiators = parts.radiators
-        cls.radiator = parts.with_title("Thermal Control System (medium)")[0].radiator
-        cls.radiator_break = parts.with_title("Thermal Control System (small)")[
-            0
-        ].radiator
-        cls.fixed_radiator = parts.with_title("Radiator Panel (small)")[0].radiator
+        cls.radiator = parts.with_name("foldingRadMed")[0].radiator
+        cls.radiator_break = parts.with_name("foldingRadSmall")[0].radiator
+        cls.fixed_radiator = parts.with_name("radPanelSm")[0].radiator
 
     def test_fixed_radiator(self):
         self.assertFalse(self.fixed_radiator.deployable)
@@ -77,7 +75,7 @@ class TestPartsRadiatorBreak(krpctest.TestCase):
         parts = vessel.parts
         cls.control = vessel.control
         cls.state = cls.connect().space_center.RadiatorState
-        cls.radiator = parts.with_title("Thermal Control System (small)")[0].radiator
+        cls.radiator = parts.with_name("foldingRadSmall")[0].radiator
 
     def test_break_radiator(self):
         self.assertEqual(self.state.retracted, self.radiator.state)

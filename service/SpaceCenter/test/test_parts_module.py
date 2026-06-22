@@ -14,7 +14,7 @@ class TestPartsModule(krpctest.TestCase):
         cls.parts = cls.vessel.parts
 
     def test_command_module(self):
-        part = self.parts.with_title("Mk1-3 Command Pod")[0]
+        part = self.parts.with_name("mk1-3pod")[0]
         module = next(m for m in part.modules if m.name == "ModuleCommand")
         self.assertEqual("ModuleCommand", module.name)
         self.assertEqual(part, module.part)
@@ -44,7 +44,7 @@ class TestPartsModule(krpctest.TestCase):
         self.assertRaises(RuntimeError, module.set_action, "DoesntExist", False)
 
     def test_solar_panel(self):
-        part = self.parts.with_title("SP-L 1x6 Photovoltaic Panels")[0]
+        part = self.parts.with_name("solarPanels2")[0]
         module = next(m for m in part.modules if m.name == "ModuleDeployableSolarPanel")
         self.assertEqual("ModuleDeployableSolarPanel", module.name)
         self.assertEqual(part, module.part)
@@ -69,7 +69,7 @@ class TestPartsModule(krpctest.TestCase):
         self.assertRaises(RuntimeError, module.set_action, "DoesntExist", False)
 
     def test_set_field_int(self):
-        part = self.parts.with_title("LY-10 Small Landing Gear")[0]
+        part = self.parts.with_name("SmallGearBay")[0]
         module = next(m for m in part.modules if m.name == "ModuleWheelBrakes")
         self.assertEqual({"Brakes": "100"}, module.fields)
         module.set_field_int("Brakes", 50)
@@ -79,7 +79,7 @@ class TestPartsModule(krpctest.TestCase):
         self.assertEqual({"Brakes": "100"}, module.fields)
 
     def test_all_fields_by_id(self):
-        part = self.parts.with_title("Mk1-3 Command Pod")[0]
+        part = self.parts.with_name("mk1-3pod")[0]
         module = next(m for m in part.modules if m.name == "ModuleCommand")
         all_fields = module.all_fields_by_id
         # Hidden fields, not shown in the right-click menu, are included.
@@ -90,7 +90,7 @@ class TestPartsModule(krpctest.TestCase):
             self.assertEqual(value, all_fields[identifier])
 
     def test_get_field_by_id_fallback(self):
-        part = self.parts.with_title("Mk1-3 Command Pod")[0]
+        part = self.parts.with_name("mk1-3pod")[0]
         module = next(m for m in part.modules if m.name == "ModuleCommand")
         # minimumCrew is hidden (not in the right-click menu), so the by-id
         # lookups reach it only via the fallback to all fields.
@@ -103,7 +103,7 @@ class TestPartsModule(krpctest.TestCase):
             self.assertEqual(value, module.get_field_by_id(identifier))
 
     def test_set_and_reset_field_by_id_fallback(self):
-        part = self.parts.with_title("Mk1-3 Command Pod")[0]
+        part = self.parts.with_name("mk1-3pod")[0]
         module = next(m for m in part.modules if m.name == "ModuleCommand")
         # minimumCrew is hidden, so set/reset-by-id reach it via the fallback.
         self.assertNotIn("minimumCrew", module.fields_by_id)
@@ -125,7 +125,7 @@ class TestPartsModule(krpctest.TestCase):
         self.assertEqual("1", module.get_field_by_id("minimumCrew"))
 
     def test_events(self):
-        part = self.parts.with_title("Illuminator Mk1")[0]
+        part = self.parts.with_name("spotLight1")[0]
         module = next(m for m in part.modules if m.name == "ModuleLight")
         self.assertTrue(module.has_event("Lights On"))
         self.assertFalse(module.has_event("Lights Off"))
@@ -139,7 +139,7 @@ class TestPartsModule(krpctest.TestCase):
         self.assertFalse(module.has_event("Lights Off"))
 
     def test_actions(self):
-        part = self.parts.with_title("Illuminator Mk1")[0]
+        part = self.parts.with_name("spotLight1")[0]
         module = next(m for m in part.modules if m.name == "ModuleLight")
         self.assertTrue(module.has_event("Lights On"))
         self.assertFalse(module.has_event("Lights Off"))
@@ -153,7 +153,7 @@ class TestPartsModule(krpctest.TestCase):
         self.assertFalse(module.has_event("Lights Off"))
 
     def test_config_node(self):
-        part = self.parts.with_title("Mk1-3 Command Pod")[0]
+        part = self.parts.with_name("mk1-3pod")[0]
         module = next(m for m in part.modules if m.name == "ModuleCommand")
 
         # Module.config returns the module's MODULE node from the part's cfg file.

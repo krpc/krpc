@@ -48,15 +48,15 @@ class TestPartsCargoBay(krpctest.TestCase):
         self.assertFalse(self.control.cargo_bays)
 
     def test_cargo_bay(self):
-        part = self.parts.with_title("Mk3 Cargo Bay CRG-25")[0]
+        part = self.parts.with_name("mk3CargoBayS")[0]
         self.check_open_close(part.cargo_bay)
 
     def test_cargo_ramp(self):
-        part = self.parts.with_title("Mk3 Cargo Ramp")[0]
+        part = self.parts.with_name("mk3CargoRamp")[0]
         self.check_open_close(part.cargo_bay)
 
     def test_service_bay(self):
-        part = self.parts.with_title("Service Bay (2.5m)")[0]
+        part = self.parts.with_name("ServiceBay.250.v2")[0]
         self.check_open_close(part.cargo_bay)
 
     def test_control(self):

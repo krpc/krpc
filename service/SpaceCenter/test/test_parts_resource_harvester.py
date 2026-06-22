@@ -15,9 +15,7 @@ class TestPartsResourceHarvester(krpctest.TestCase):
         parts = vessel.parts
         cls.control = vessel.control
         cls.drills = parts.resource_harvesters
-        cls.drill = parts.with_title("'Drill-O-Matic' Mining Excavator")[
-            0
-        ].resource_harvester
+        cls.drill = parts.with_name("RadialDrill")[0].resource_harvester
 
     def check_inactive_properties(self):
         self.assertEqual(0, self.drill.extraction_rate)
