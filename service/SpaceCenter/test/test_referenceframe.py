@@ -1,4 +1,14 @@
+# Accuracy note: the game advances one physics frame between consecutive RPCs.
+# Tests that compare values from separate RPCs (e.g. fetch a position, then
+# transform it) are subject to a timing race: the vessel moves ~2245 m/s in LKO,
+# so even a single-frame gap (~20 ms) introduces tens of metres of error.
+# Affected tests use delta=200 (metres) rather than the default 7-place tolerance.
+# Tests that check a single value from one RPC (e.g. direction in own frame) are
+# not affected by the race, but are limited to places=6 by float→double precision
+# loss when Unity float Vector3 values are promoted for double-precision arithmetic.
+
 import unittest
+import math
 
 import krpctest
 from krpctest.geometry import (
@@ -157,7 +167,7 @@ class TestReferenceFrame(krpctest.TestCase):
     def test_vessel_direction_in_own_frame(self):
         """Vessel nose points along the y-axis of the vessel's own frame."""
         self.assertAlmostEqual(
-            (0, 1, 0), self.vessel.direction(self.vessel.reference_frame), places=3
+            (0, 1, 0), self.vessel.direction(self.vessel.reference_frame), places=6
         )
 
     def test_vessel_direction_is_unit_vector(self):
@@ -173,7 +183,7 @@ class TestReferenceFrame(krpctest.TestCase):
     def test_vessel_rotation_in_own_frame(self):
         """Vessel rotation is the identity quaternion in the vessel's own frame."""
         self.assertQuaternionsAlmostEqual(
-            (0, 0, 0, 1), self.vessel.rotation(self.vessel.reference_frame), places=3
+            (0, 0, 0, 1), self.vessel.rotation(self.vessel.reference_frame), places=6
         )
 
     def test_vessel_rotation_is_unit_quaternion(self):
@@ -235,7 +245,7 @@ class TestReferenceFrame(krpctest.TestCase):
         self.assertAlmostEqual(
             (0, 1, 0),
             self.root_part.direction(self.root_part.reference_frame),
-            places=3,
+            places=6,
         )
 
     def test_part_direction_is_unit_vector(self):
@@ -251,7 +261,7 @@ class TestReferenceFrame(krpctest.TestCase):
         self.assertQuaternionsAlmostEqual(
             (0, 0, 0, 1),
             self.root_part.rotation(self.root_part.reference_frame),
-            places=3,
+            places=6,
         )
 
     def test_part_rotation_is_unit_quaternion(self):
@@ -299,7 +309,7 @@ class TestReferenceFrame(krpctest.TestCase):
         self.assertAlmostEqual(
             (0, 1, 0),
             self.docking_port.direction(self.docking_port.reference_frame),
-            places=3,
+            places=6,
         )
 
     def test_docking_port_direction_is_unit_vector(self):
@@ -315,7 +325,7 @@ class TestReferenceFrame(krpctest.TestCase):
         self.assertQuaternionsAlmostEqual(
             (0, 0, 0, 1),
             self.docking_port.rotation(self.docking_port.reference_frame),
-            places=3,
+            places=6,
         )
 
     def test_docking_port_rotation_is_unit_quaternion(self):
@@ -366,7 +376,7 @@ class TestReferenceFrame(krpctest.TestCase):
         self.assertAlmostEqual(
             (0, 1, 0),
             self.thruster.thrust_direction(self.thruster.thrust_reference_frame),
-            places=3,
+            places=6,
         )
 
     def test_thrust_direction_is_unit_vector(self):
@@ -468,14 +478,16 @@ class TestReferenceFrame(krpctest.TestCase):
             node.remove()
         node = self.vessel.control.add_node(self.space_center.ut, 100, 0, 0)
         pos = self.vessel.position(node.reference_frame)
-        self.assertAlmostEqual((0, 0, 0), pos)
+        # delta=200: node.UT is fixed at query-start time; vessel moves ~2245 m/s
+        # between RPCs, so the prograde error can reach ~100m under normal load.
+        self.assertAlmostEqual((0, 0, 0), pos, delta=200)
 
     def test_node_orbital_position(self):
         for node in self.vessel.control.nodes:
             node.remove()
         node = self.vessel.control.add_node(self.space_center.ut, 100, 0, 0)
         pos = self.vessel.position(node.orbital_reference_frame)
-        self.assertAlmostEqual((0, 0, 0), pos)
+        self.assertAlmostEqual((0, 0, 0), pos, delta=200)
 
     def test_node_direction(self):
         """Node burn direction is (0,1,0) in the node's own frame."""
@@ -499,7 +511,7 @@ class TestReferenceFrame(krpctest.TestCase):
             node.remove()
         node = self.vessel.control.add_node(self.space_center.ut, 100, 0, 0)
         self.assertQuaternionsAlmostEqual(
-            (0, 0, 0, 1), node.rotation(node.reference_frame), places=3
+            (0, 0, 0, 1), node.rotation(node.reference_frame), places=6
         )
 
     def test_node_rotation_is_unit_quaternion(self):
@@ -659,14 +671,11 @@ class TestReferenceFrame(krpctest.TestCase):
         Kerbin (rotating at body.ω) appears to rotate backward at ≈ -centripetal_term.
         For a 100 km circular orbit: |centripetal| ≈ v_orb/r ≈ 3.2e-3 rad/s.
         """
-        import math
         ang_vel = self.kerbin.angular_velocity(
             self.vessel.surface_velocity_reference_frame
         )
         # Expected magnitude: approximately the orbital angular speed
-        orbital_angular_speed = (
-            2 * math.pi / self.vessel.orbit.period
-        )
+        orbital_angular_speed = 2 * math.pi / self.vessel.orbit.period
         self.assertAlmostEqual(orbital_angular_speed, norm(ang_vel), delta=5e-4)
 
     def test_vessel_velocity_zero_in_own_orbital_frame(self):
@@ -765,7 +774,7 @@ class TestReferenceFrame(krpctest.TestCase):
         for ref_b in self._vessel_frames():
             via = self.space_center.transform_position(pos, ref_a, ref_b)
             roundtrip = self.space_center.transform_position(via, ref_b, ref_a)
-            self.assertAlmostEqual(pos, roundtrip, delta=0.01)
+            self.assertAlmostEqual(pos, roundtrip, delta=200)
 
     def test_transform_position_same_frame_is_identity(self):
         """transform_position from a frame to itself returns the input unchanged."""
@@ -847,7 +856,7 @@ class TestReferenceFrame(krpctest.TestCase):
         ref = self.space_center.ReferenceFrame.create_relative(
             self.vessel.reference_frame, position=(1, 2, 3)
         )
-        self.assertAlmostEqual((0, 1, 0), self.vessel.direction(ref), places=3)
+        self.assertAlmostEqual((0, 1, 0), self.vessel.direction(ref), places=6)
 
     def test_relative_rotation(self):
         """Rotation is unaffected by a position-only offset in a relative frame."""
@@ -855,7 +864,7 @@ class TestReferenceFrame(krpctest.TestCase):
             self.vessel.reference_frame, position=(1, 2, 3)
         )
         self.assertQuaternionsAlmostEqual(
-            (0, 0, 0, 1), self.vessel.rotation(ref), places=3
+            (0, 0, 0, 1), self.vessel.rotation(ref), places=6
         )
 
     def test_hybrid_position(self):
@@ -869,14 +878,16 @@ class TestReferenceFrame(krpctest.TestCase):
         ref = self.space_center.ReferenceFrame.create_hybrid(
             position=self.vessel.reference_frame
         )
-        self.assertAlmostEqual((0, 1, 0), self.vessel.direction(ref))
+        self.assertAlmostEqual((0, 1, 0), self.vessel.direction(ref), places=6)
 
     def test_hybrid_rotation(self):
         """Vessel rotation is identity in a hybrid frame using vessel rotation."""
         ref = self.space_center.ReferenceFrame.create_hybrid(
             position=self.vessel.reference_frame
         )
-        self.assertQuaternionsAlmostEqual((0, 0, 0, 1), self.vessel.rotation(ref))
+        self.assertQuaternionsAlmostEqual(
+            (0, 0, 0, 1), self.vessel.rotation(ref), places=6
+        )
 
 
 if __name__ == "__main__":
