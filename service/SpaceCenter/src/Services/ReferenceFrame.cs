@@ -564,7 +564,7 @@ namespace KRPC.SpaceCenter.Services
                         var up = UpNotNormalized;
                         // Pick an arbitrary vector that is not close to the burn vector
                         var forward = Planetarium.forward;
-                        if (Vector3d.Dot (up, forward) < 0.1)
+                        if (Math.Abs (Vector3d.Dot (up.normalized, forward)) > 0.9)
                             forward = Planetarium.up;
                         // Make the arbitrary vector orthogonal to the burn vector
                         GeometryExtensions.OrthoNormalize2 (ref up, ref forward);
