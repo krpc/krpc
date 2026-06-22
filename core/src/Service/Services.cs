@@ -175,6 +175,69 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Like ExecuteCall(procedure, call) but writes the result into an existing
+        /// ProcedureResult instead of allocating a new one.
+        /// Throws YieldException if the procedure yields (result is unchanged).
+        /// </summary>
+        internal void ExecuteCallInto (ProcedureSignature procedure, ProcedureCall call, ProcedureResult result)
+        {
+            SetArguments (procedure, call.Arguments);
+            ExecuteCallInto (procedure, instanceBuffer, argumentBuffer, result);
+        }
+
+        void ExecuteCallInto (ProcedureSignature procedure, object instance, object[] arguments, ProcedureResult result)
+        {
+            object returnValue;
+            try {
+                if ((CallContext.GameScene & procedure.GameScene) == 0)
+                    throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name (CallContext.GameScene) + "'");
+                returnValue = procedure.Handler.Invoke (instance, arguments);
+            } catch (YieldException) {
+                throw;
+            } catch (RPCException e) {
+                result.Reset ();
+                result.Error = HandleException (e);
+                return;
+            } catch (System.Exception e) {
+                result.Reset ();
+                result.Error = HandleException (e);
+                return;
+            }
+            result.Reset ();
+            if (procedure.HasReturnType) {
+                try {
+                    CheckReturnValue (procedure, returnValue);
+                } catch (RPCException e) {
+                    result.Error = HandleException (e);
+                    return;
+                }
+                result.Value = returnValue;
+            }
+        }
+
+        /// <summary>
+        /// Like ExecuteCall(procedure, continuation) but writes into an existing ProcedureResult.
+        /// Throws YieldException if the continuation yields (result is unchanged).
+        /// Throws RPCException on error (result is unchanged; caller must handle).
+        /// </summary>
+        internal void ExecuteCallInto (ProcedureSignature procedure, Func<object> continuation, ProcedureResult result)
+        {
+            object returnValue;
+            try {
+                returnValue = continuation ();
+            } catch (YieldException) {
+                throw;
+            } catch (System.Exception e) {
+                throw new RPCException (e);
+            }
+            result.Reset ();
+            if (procedure.HasReturnType) {
+                CheckReturnValue (procedure, returnValue);
+                result.Value = returnValue;
+            }
+        }
+
+        /// <summary>
         /// Set the arguments for a procedure handler from a list of argument messages.
         /// </summary>
         public void SetArguments(ProcedureSignature procedure, IList<Argument> arguments)

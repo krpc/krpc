@@ -48,6 +48,28 @@ namespace KRPC.Service
             }
         }
 
+        /// <summary>
+        /// Like Run() but writes the result into an existing ProcedureResult instead of
+        /// allocating a new one. Throws YieldException if the call yields (result is unchanged).
+        /// </summary>
+        public void RunInto (ProcedureResult result)
+        {
+            var services = Services.Instance;
+            if (exception != null) {
+                result.Reset ();
+                result.Error = services.HandleException (exception);
+                return;
+            }
+            try {
+                if (continuation == null)
+                    services.ExecuteCallInto (Procedure, call, result);
+                else
+                    services.ExecuteCallInto (Procedure, continuation, result);
+            } catch (YieldException e) {
+                throw new YieldException<ProcedureCallContinuation> (new ProcedureCallContinuation (Procedure, () => e.CallUntyped ()));
+            }
+        }
+
         public ProcedureSignature Procedure {
             get; private set;
         }
