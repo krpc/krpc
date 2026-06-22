@@ -1,3 +1,4 @@
+import time
 import unittest
 import krpctest
 from krpctest.geometry import normalize
@@ -22,9 +23,23 @@ class TestAutoPilot(krpctest.TestCase):
     def test_equality(self):
         self.assertEqual(self.ap, self.vessel.auto_pilot)
 
-    def wait_for_autopilot(self):
+    def wait_for_autopilot(self, timeout=30):
         self.ap.engage()
-        self.ap.wait()
+        # Match the server-side Wait() criteria (pointed at the target and no
+        # longer rotating), but with a timeout so a vessel that never settles
+        # fails the test instead of blocking the whole suite forever.
+        ref = self.vessel.orbit.body.non_rotating_reference_frame
+        deadline = time.time() + timeout
+        while True:
+            error = self.ap.error
+            speed = sum(x * x for x in self.vessel.angular_velocity(ref)) ** 0.5
+            if error <= 0.75 and speed <= 0.05:
+                break
+            if time.time() > deadline:
+                self.ap.disengage()
+                msg = "Auto-pilot did not settle within %gs (error=%.2f, speed=%.3f)"
+                self.fail(msg % (timeout, error, speed))
+            self.wait()
         self.ap.disengage()
 
     def set_rotation(self, pitch, heading, roll=float("nan")):
@@ -280,9 +295,23 @@ class TestAutoPilotSAS(krpctest.TestCase):
     def setUp(self):
         self.connect().testing_tools.clear_rotation()
 
-    def wait_for_autopilot(self):
+    def wait_for_autopilot(self, timeout=30):
         self.ap.engage()
-        self.ap.wait()
+        # Match the server-side Wait() criteria (pointed at the target and no
+        # longer rotating), but with a timeout so a vessel that never settles
+        # fails the test instead of blocking the whole suite forever.
+        ref = self.vessel.orbit.body.non_rotating_reference_frame
+        deadline = time.time() + timeout
+        while True:
+            error = self.ap.error
+            speed = sum(x * x for x in self.vessel.angular_velocity(ref)) ** 0.5
+            if error <= 0.75 and speed <= 0.05:
+                break
+            if time.time() > deadline:
+                self.ap.disengage()
+                msg = "Auto-pilot did not settle within %gs (error=%.2f, speed=%.3f)"
+                self.fail(msg % (timeout, error, speed))
+            self.wait()
         self.ap.disengage()
 
     def set_direction(self, direction, roll=float("nan")):
