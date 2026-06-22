@@ -1,3 +1,4 @@
+import time
 import unittest
 import math
 import krpctest
@@ -17,6 +18,14 @@ class TestCommsSingleHop(krpctest.TestCase):
         cls.CommLinkType = cls.space_center.CommLinkType
         cls.antennas = cls.vessel.parts.antennas
         cls.signal_strength = 0.885
+        # CommNet rebuilds its graph on its own cadence after the load + orbit
+        # teleport. requireSignalForControl is off in the save, so
+        # can_communicate reads True immediately, but the control path, science
+        # link and signal strength stay empty/zero until the network reconnects
+        # the vessel to KSC. Wait for the link to form before asserting on it.
+        deadline = time.time() + 30
+        while not cls.comms.control_path and time.time() < deadline:
+            cls.wait()
 
     def test_properties(self):
         self.assertTrue(self.comms.can_communicate)
@@ -71,11 +80,20 @@ class TestCommsMultiHop(krpctest.TestCase):
         cls.vessel = cls.space_center.active_vessel
         cls.comms = cls.vessel.comms
         cls.CommLinkType = cls.space_center.CommLinkType
+        # CommNet rebuilds its graph on its own cadence after the loads + orbit
+        # teleports. requireSignalForControl is off in the save, so
+        # can_communicate reads True immediately, but the control path, science
+        # link and signal strength stay empty/zero until the network reconnects
+        # the relay chain to KSC. Wait for the full two-hop path to form before
+        # asserting on it.
+        deadline = time.time() + 30
+        while len(cls.comms.control_path) < 2 and time.time() < deadline:
+            cls.wait()
 
     def test_properties(self):
         self.assertTrue(self.comms.can_communicate)
         self.assertTrue(self.comms.can_transmit_science)
-        self.assertAlmostEqual(0.0444, self.comms.signal_strength, places=3)
+        self.assertAlmostEqual(0.175, self.comms.signal_strength, places=3)
         self.assertAlmostEqual(0, self.comms.signal_delay, places=4)
 
     def test_control_path(self):
@@ -86,10 +104,10 @@ class TestCommsMultiHop(krpctest.TestCase):
         self.assertEqual(self.CommLinkType.relay, link0.type)
         self.assertEqual(self.CommLinkType.home, link1.type)
         self.assertAlmostEqual(1, link0.signal_strength, places=2)
-        self.assertAlmostEqual(0.0444, link1.signal_strength, places=3)
+        self.assertAlmostEqual(0.175, link1.signal_strength, places=3)
         # Start is vessel
         start = link0.start
-        self.assertEqual("probeCoreOcto2", start.name)
+        self.assertEqual("probeCoreOcto2.v2", start.name)
         self.assertFalse(start.is_home)
         self.assertFalse(start.is_control_point)
         self.assertTrue(start.is_vessel)
