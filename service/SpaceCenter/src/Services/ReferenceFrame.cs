@@ -650,7 +650,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Relative:
                     return parent.AngularVelocityToWorldSpace (relativeAngularVelocity);
                 case ReferenceFrameType.Hybrid:
-                    return hybridVelocity.AngularVelocity;
+                    return hybridAngularVelocity.AngularVelocity;
                 default:
                     throw new InvalidOperationException ();
                 }
