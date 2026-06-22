@@ -57,7 +57,7 @@ namespace KRPC.SpaceCenter.ExternalAPI
                     actionField = actionType.GetField ("ba");
                 }
                 if (partField == null || actionField == null)
-                    break;
+                    continue;
                 var part = partField.GetValue (action) as global::Part;
                 var baseAction = actionField.GetValue (action) as BaseAction;
                 if (part != null && baseAction != null)
