@@ -11,7 +11,6 @@ namespace KRPC.Service
     sealed class ProcedureCallContinuation /*: Continuation<ProcedureResult>*/
     {
         readonly ProcedureCall call;
-        readonly ProcedureSignature procedure;
         readonly System.Exception exception;
         readonly Func<object> continuation;
 
@@ -19,7 +18,7 @@ namespace KRPC.Service
         {
             call = procedureCall;
             try {
-                procedure = Services.Instance.GetProcedureSignature (call);
+                Procedure = Services.Instance.GetProcedureSignature (call);
             } catch (RPCException e) {
                 exception = e;
             } catch (System.Exception e) {
@@ -29,7 +28,7 @@ namespace KRPC.Service
 
         ProcedureCallContinuation (ProcedureSignature invokedProcedure, Func<object> currentContinuation)
         {
-            procedure = invokedProcedure;
+            Procedure = invokedProcedure;
             continuation = currentContinuation;
         }
 
@@ -40,17 +39,17 @@ namespace KRPC.Service
               return new ProcedureResult { Error = services.HandleException (exception) };
             try {
                 if (continuation == null)
-                    return services.ExecuteCall(procedure, call);
-                return services.ExecuteCall(procedure, continuation);
+                    return services.ExecuteCall(Procedure, call);
+                return services.ExecuteCall(Procedure, continuation);
             }
             catch (YieldException e)
             {
-                throw new YieldException<ProcedureCallContinuation>(new ProcedureCallContinuation(procedure, () => e.CallUntyped()));
+                throw new YieldException<ProcedureCallContinuation>(new ProcedureCallContinuation(Procedure, () => e.CallUntyped()));
             }
         }
 
         public ProcedureSignature Procedure {
-            get { return procedure; }
+            get; private set;
         }
     };
 }
