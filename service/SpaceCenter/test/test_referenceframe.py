@@ -516,6 +516,97 @@ class TestReferenceFrame(krpctest.TestCase):
             )
 
     # -------------------------------------------------------------------------
+    # Linear velocity tests
+    # -------------------------------------------------------------------------
+
+    def test_vessel_velocity_zero_in_vessel_frames(self):
+        """Vessel velocity is zero in all of its own frames.
+
+        All vessel frames move at the vessel's orbital velocity and have the
+        vessel at their origin, so the ω×r correction vanishes and the
+        relative velocity is (0, 0, 0).
+        """
+        for ref in self._vessel_frames():
+            self.assertAlmostEqual((0, 0, 0), self.vessel.velocity(ref), delta=0.5)
+
+    def test_body_velocity_zero_in_own_frames(self):
+        """A body's velocity is zero in its own rotating and non-rotating frames.
+
+        Both frames move at the body's orbital velocity; the body is at the
+        origin, so the ω×r correction vanishes and the relative velocity is
+        (0, 0, 0).
+        """
+        for ref in [
+            self.kerbin.reference_frame,
+            self.kerbin.non_rotating_reference_frame,
+        ]:
+            self.assertAlmostEqual((0, 0, 0), self.kerbin.velocity(ref), delta=0.5)
+
+    def test_vessel_speed_consistent_in_kerbin_non_rotating_and_orbital_frames(self):
+        """Vessel speed is the same in Kerbin's non-rotating and orbital frames.
+
+        Both frames move at Kerbin's orbital velocity and have zero angular
+        velocity, so they produce the same speed — only the direction of the
+        reported velocity vector differs.
+        """
+        speed_nr = norm(self.vessel.velocity(self.kerbin.non_rotating_reference_frame))
+        speed_orb = norm(self.vessel.velocity(self.kerbin.orbital_reference_frame))
+        self.assertAlmostEqual(speed_nr, speed_orb, delta=1)
+
+    def test_vessel_orbital_speed_in_kerbin_non_rotating_frame(self):
+        """In Kerbin's non-rotating frame the vessel's speed equals its orbital speed.
+
+        The non-rotating frame is inertial relative to Kerbin (ω=0, frame
+        velocity = Kerbin world velocity), so the measured speed is the
+        vessel's velocity relative to Kerbin — i.e., orbit.speed.
+        """
+        speed = norm(self.vessel.velocity(self.kerbin.non_rotating_reference_frame))
+        self.assertAlmostEqual(self.vessel.orbit.speed, speed, delta=1)
+
+    def test_relative_frame_velocity_offset(self):
+        """A velocity offset on a relative frame shifts the measured velocity by its negation.
+
+        Adding (10, 0, 0) m/s to the parent vessel frame makes that frame
+        move 10 m/s faster along the vessel y-axis.  The vessel sits at the
+        frame origin (ω×r = 0) and therefore appears to move at (−10, 0, 0).
+        """
+        ref = self.space_center.ReferenceFrame.create_relative(
+            self.vessel.reference_frame, velocity=(10, 0, 0)
+        )
+        self.assertAlmostEqual((-10, 0, 0), self.vessel.velocity(ref), delta=0.5)
+
+    def test_hybrid_velocity_source_respected(self):
+        """create_hybrid respects the velocity= sub-frame argument.
+
+        A hybrid that omits velocity= inherits it from the position frame
+        (vessel orbital velocity → vessel at rest), giving speed zero.
+        A hybrid with velocity=kerbin_non_rotating uses Kerbin's velocity
+        as the frame velocity, so the measured speed equals orbit.speed.
+        """
+        hybrid_default = self.space_center.ReferenceFrame.create_hybrid(
+            position=self.vessel.reference_frame
+        )
+        hybrid_kerbin_vel = self.space_center.ReferenceFrame.create_hybrid(
+            position=self.vessel.reference_frame,
+            velocity=self.kerbin.non_rotating_reference_frame,
+        )
+        self.assertAlmostEqual((0, 0, 0), self.vessel.velocity(hybrid_default), delta=0.5)
+        speed = norm(self.vessel.velocity(hybrid_kerbin_vel))
+        self.assertAlmostEqual(self.vessel.orbit.speed, speed, delta=1)
+
+    def test_transform_velocity_round_trip(self):
+        """transform_velocity A→B→A returns the original velocity."""
+        ref_a = self.kerbin.non_rotating_reference_frame
+        pos = self.vessel.position(ref_a)
+        vel = self.vessel.velocity(ref_a)
+        for ref_b in self._vessel_frames():
+            via = self.space_center.transform_velocity(pos, vel, ref_a, ref_b)
+            roundtrip = self.space_center.transform_velocity(
+                self.vessel.position(ref_b), via, ref_b, ref_a
+            )
+            self.assertAlmostEqual(vel, roundtrip, delta=0.5)
+
+    # -------------------------------------------------------------------------
     # Relative and hybrid reference frame tests
     # -------------------------------------------------------------------------
 
