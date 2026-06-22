@@ -608,6 +608,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.ManeuverOrbital:
                     return Vector3d.zero; // TODO: check this
                 case ReferenceFrameType.Part:
+                case ReferenceFrameType.PartCenterOfMass:
                 case ReferenceFrameType.Thrust:
                     return InternalPart.vessel.GetOrbit ().GetVel ();
                 case ReferenceFrameType.DockingPort:
@@ -644,6 +645,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Maneuver:
                 case ReferenceFrameType.ManeuverOrbital:
                 case ReferenceFrameType.Part:
+                case ReferenceFrameType.PartCenterOfMass:
                 case ReferenceFrameType.DockingPort:
                 case ReferenceFrameType.Thrust:
                     return Vector3d.zero; // TODO: check this
