@@ -1,4 +1,3 @@
-import math
 import unittest
 
 import krpctest
@@ -69,8 +68,8 @@ class TestReferenceFrame(krpctest.TestCase):
         never changes the distance from the origin to any point.
         """
         norms = [norm(pos_fn(ref)) for ref in frames]
-        for n in norms[1:]:
-            self.assertAlmostEqual(norms[0], n, delta=delta)
+        for nm in norms[1:]:
+            self.assertAlmostEqual(norms[0], nm, delta=delta)
 
     def check_cross_distance_symmetry(self, pos_a, frame_a, pos_b, frame_b, delta=0.01):
         """Verify that the distance from A to B equals the distance from B to A.
@@ -96,8 +95,8 @@ class TestReferenceFrame(krpctest.TestCase):
         Rotating the basis doesn't change the angle between directions.
         """
         dots = [dot(dir_a_fn(ref), dir_b_fn(ref)) for ref in frames]
-        for d in dots[1:]:
-            self.assertAlmostEqual(dots[0], d, delta=delta)
+        for dp in dots[1:]:
+            self.assertAlmostEqual(dots[0], dp, delta=delta)
 
     def check_unit_quaternion(self, rot_fn, frames):
         """Verify rot_fn(frame) returns a unit quaternion in every frame."""
@@ -188,7 +187,9 @@ class TestReferenceFrame(krpctest.TestCase):
         for ref in self._vessel_frames():
             rot = self.vessel.rotation(ref)
             self.assertAlmostEqual(
-                self.vessel.direction(ref), quaternion_vector_mult(rot, (0, 1, 0)), delta=0.01
+                self.vessel.direction(ref),
+                quaternion_vector_mult(rot, (0, 1, 0)),
+                delta=0.01,
             )
 
     # -------------------------------------------------------------------------
@@ -205,7 +206,9 @@ class TestReferenceFrame(krpctest.TestCase):
         """Part CoM is at the origin of the part CoM reference frame."""
         self.assertAlmostEqual(
             (0, 0, 0),
-            self.root_part.center_of_mass(self.root_part.center_of_mass_reference_frame),
+            self.root_part.center_of_mass(
+                self.root_part.center_of_mass_reference_frame
+            ),
         )
 
     def test_part_position_in_vessel_frames(self):
@@ -260,7 +263,9 @@ class TestReferenceFrame(krpctest.TestCase):
         for ref in self._vessel_frames():
             rot = self.root_part.rotation(ref)
             self.assertAlmostEqual(
-                self.root_part.direction(ref), quaternion_vector_mult(rot, (0, 1, 0)), delta=0.01
+                self.root_part.direction(ref),
+                quaternion_vector_mult(rot, (0, 1, 0)),
+                delta=0.01,
             )
 
     # -------------------------------------------------------------------------
@@ -280,7 +285,7 @@ class TestReferenceFrame(krpctest.TestCase):
         )
 
     def test_docking_port_position_in_body_frames(self):
-        """Docking port's distance from Kerbin center equals orbital radius in every Kerbin frame."""
+        """Docking port distance from Kerbin center equals orbital radius in all Kerbin frames."""
         r = self.vessel.orbit.radius
         for ref in self._kerbin_frames():
             self.assertAlmostEqual(r, norm(self.docking_port.position(ref)), delta=20)
@@ -348,7 +353,9 @@ class TestReferenceFrame(krpctest.TestCase):
         """Thruster's distance from Kerbin center equals orbital radius in every Kerbin frame."""
         r = self.vessel.orbit.radius
         for ref in self._kerbin_frames():
-            self.assertAlmostEqual(r, norm(self.thruster.thrust_position(ref)), delta=20)
+            self.assertAlmostEqual(
+                r, norm(self.thruster.thrust_position(ref)), delta=20
+            )
 
     # -------------------------------------------------------------------------
     # Thruster direction tests
@@ -500,7 +507,9 @@ class TestReferenceFrame(krpctest.TestCase):
         for node in self.vessel.control.nodes:
             node.remove()
         node = self.vessel.control.add_node(self.space_center.ut, 100, 0, 0)
-        self.assertAlmostEqual(1.0, norm(node.rotation(node.reference_frame)), delta=0.01)
+        self.assertAlmostEqual(
+            1.0, norm(node.rotation(node.reference_frame)), delta=0.01
+        )
         self.assertAlmostEqual(
             1.0, norm(node.rotation(node.orbital_reference_frame)), delta=0.01
         )
@@ -543,7 +552,7 @@ class TestReferenceFrame(krpctest.TestCase):
         ]:
             self.assertAlmostEqual((0, 0, 0), self.kerbin.velocity(ref), delta=0.5)
 
-    def test_vessel_speed_consistent_in_kerbin_non_rotating_and_orbital_frames(self):
+    def test_vessel_speed_same_in_kerbin_non_rotating_and_orbital(self):
         """Vessel speed is the same in Kerbin's non-rotating and orbital frames.
 
         Both frames move at Kerbin's orbital velocity and have zero angular
@@ -591,7 +600,9 @@ class TestReferenceFrame(krpctest.TestCase):
             position=self.vessel.reference_frame,
             velocity=self.kerbin.non_rotating_reference_frame,
         )
-        self.assertAlmostEqual((0, 0, 0), self.vessel.velocity(hybrid_default), delta=0.5)
+        self.assertAlmostEqual(
+            (0, 0, 0), self.vessel.velocity(hybrid_default), delta=0.5
+        )
         speed = norm(self.vessel.velocity(hybrid_kerbin_vel))
         self.assertAlmostEqual(self.vessel.orbit.speed, speed, delta=1)
 
@@ -614,13 +625,17 @@ class TestReferenceFrame(krpctest.TestCase):
     def test_vessel_angular_velocity_zero_in_vessel_frame(self):
         """Vessel co-rotates with its own body frame, so its angular velocity is zero there."""
         self.assertAlmostEqual(
-            (0, 0, 0), self.vessel.angular_velocity(self.vessel.reference_frame), delta=0.01
+            (0, 0, 0),
+            self.vessel.angular_velocity(self.vessel.reference_frame),
+            delta=0.01,
         )
 
     def test_kerbin_angular_velocity_zero_in_rotating_frame(self):
         """Kerbin co-rotates with its rotating frame, so it appears stationary in that frame."""
         self.assertAlmostEqual(
-            (0, 0, 0), self.kerbin.angular_velocity(self.kerbin.reference_frame), delta=1e-4
+            (0, 0, 0),
+            self.kerbin.angular_velocity(self.kerbin.reference_frame),
+            delta=1e-4,
         )
 
     def test_kerbin_angular_velocity_magnitude_in_non_rotating_frame(self):
@@ -628,18 +643,22 @@ class TestReferenceFrame(krpctest.TestCase):
         ang_vel = self.kerbin.angular_velocity(self.kerbin.non_rotating_reference_frame)
         self.assertAlmostEqual(self.kerbin.rotational_speed, norm(ang_vel), delta=1e-5)
 
-    def test_kerbin_angular_velocity_magnitude_same_across_zero_omega_frames(self):
+    def test_kerbin_angular_speed_same_in_zero_omega_frames(self):
         """Kerbin's angular speed is the same in all frames with zero frame angular velocity.
 
         Both CelestialBodyNonRotating and CelestialBodyOrbital have zero frame
         angular velocity, so each measures the same world-space spin rate for
         Kerbin; only the orientation of the reported vector differs.
         """
-        speed_nr = norm(self.kerbin.angular_velocity(self.kerbin.non_rotating_reference_frame))
-        speed_orb = norm(self.kerbin.angular_velocity(self.kerbin.orbital_reference_frame))
+        speed_nr = norm(
+            self.kerbin.angular_velocity(self.kerbin.non_rotating_reference_frame)
+        )
+        speed_orb = norm(
+            self.kerbin.angular_velocity(self.kerbin.orbital_reference_frame)
+        )
         self.assertAlmostEqual(speed_nr, speed_orb, delta=1e-5)
 
-    def test_vessel_angular_velocity_magnitude_same_across_zero_omega_frames(self):
+    def test_vessel_angular_speed_same_in_zero_omega_frames(self):
         """Vessel angular speed is the same in all frames with zero frame angular velocity.
 
         VesselSurface and CelestialBodyNonRotating both have zero frame angular velocity,
@@ -697,7 +716,9 @@ class TestReferenceFrame(krpctest.TestCase):
         # Default hybrid uses vessel angular velocity (~0 for a non-spinning vessel);
         # Kerbin's spin is visible with magnitude equal to its rotational speed.
         ang_speed_default = norm(self.kerbin.angular_velocity(hybrid_default))
-        self.assertAlmostEqual(self.kerbin.rotational_speed, ang_speed_default, delta=1e-3)
+        self.assertAlmostEqual(
+            self.kerbin.rotational_speed, ang_speed_default, delta=1e-3
+        )
         # Hybrid with Kerbin's rotating frame subtracts Kerbin's angular velocity,
         # making Kerbin appear stationary.
         self.assertAlmostEqual(
@@ -733,7 +754,9 @@ class TestReferenceFrame(krpctest.TestCase):
         """
         origin = self.vessel.position(self.vessel.reference_frame)  # (0, 0, 0)
         pos_in_kerbin = self.space_center.transform_position(
-            origin, self.vessel.reference_frame, self.kerbin.non_rotating_reference_frame
+            origin,
+            self.vessel.reference_frame,
+            self.kerbin.non_rotating_reference_frame,
         )
         self.assertAlmostEqual(self.vessel.orbit.radius, norm(pos_in_kerbin), delta=20)
 
@@ -795,9 +818,7 @@ class TestReferenceFrame(krpctest.TestCase):
         ref = self.space_center.ReferenceFrame.create_relative(
             self.vessel.reference_frame, position=(1, 2, 3)
         )
-        self.assertAlmostEqual(
-            (0, 1, 0), self.vessel.direction(ref), places=3
-        )
+        self.assertAlmostEqual((0, 1, 0), self.vessel.direction(ref), places=3)
 
     def test_relative_rotation(self):
         """Rotation is unaffected by a position-only offset in a relative frame."""
