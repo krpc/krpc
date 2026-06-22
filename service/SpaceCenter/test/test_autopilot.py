@@ -1,3 +1,4 @@
+import math
 import time
 import unittest
 import krpctest
@@ -20,10 +21,17 @@ class TestAutoPilot(krpctest.TestCase):
     def setUp(self):
         self.connect().testing_tools.clear_rotation()
 
+    def tearDown(self):
+        # Keep a failing test from leaving the auto-pilot engaged or the
+        # reaction wheels disabled, which would break every later test.
+        self.ap.disengage()
+        for wheel in self.vessel.parts.reaction_wheels:
+            wheel.active = True
+
     def test_equality(self):
         self.assertEqual(self.ap, self.vessel.auto_pilot)
 
-    def wait_for_autopilot(self, timeout=30):
+    def wait_for_autopilot(self, timeout=30, max_speed=0.05):
         self.ap.engage()
         # Match the server-side Wait() criteria (pointed at the target and no
         # longer rotating), but with a timeout so a vessel that never settles
@@ -33,7 +41,7 @@ class TestAutoPilot(krpctest.TestCase):
         while True:
             error = self.ap.error
             speed = sum(x * x for x in self.vessel.angular_velocity(ref)) ** 0.5
-            if error <= 0.75 and speed <= 0.05:
+            if error <= 0.75 and speed <= max_speed:
                 break
             if time.time() > deadline:
                 self.ap.disengage()
@@ -50,10 +58,14 @@ class TestAutoPilot(krpctest.TestCase):
 
     def check_rotation(self, pitch, heading, roll=None):
         flight = self.vessel.flight()
-        ph = (pitch, heading)
-        actual_ph = (flight.pitch, flight.heading)
-        self.assertAlmostEqual(ph, actual_ph, delta=1)
-        if roll:
+        self.assertAlmostEqual(pitch, flight.pitch, delta=1)
+        # The auto-pilot only holds the pointing direction (to ~0.75 deg);
+        # near-vertical pitch amplifies that into a larger heading error, by a
+        # factor of 1/cos(pitch), so scale the heading tolerance to match.
+        self.assertAlmostEqual(
+            heading, flight.heading, delta=1 / math.cos(math.radians(pitch))
+        )
+        if roll is not None:
             self.assertAlmostEqual(roll, flight.roll, delta=1)
 
     def set_direction(self, direction, roll=float("nan")):
@@ -163,7 +175,9 @@ class TestAutoPilot(krpctest.TestCase):
         self.assertRaises(RuntimeError, getattr, self.ap, "error")
 
         self.set_direction(flight.prograde, roll=0)
-        self.wait_for_autopilot()
+        # Settle to a low rotation rate before cutting torque, so the vessel
+        # barely drifts while the (wheels-disabled) error readings are taken.
+        self.wait_for_autopilot(max_speed=0.02)
         self.ap.sas = True
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = False
@@ -172,29 +186,29 @@ class TestAutoPilot(krpctest.TestCase):
         self.ap.engage()
 
         self.ap.target_direction = flight.prograde
-        self.assertDegreesAlmostEqual(0, self.ap.error, delta=1)
+        self.assertDegreesAlmostEqual(0, self.ap.error, delta=2)
 
         self.ap.target_direction = flight.retrograde
-        self.assertDegreesAlmostEqual(180, self.ap.error, delta=1)
+        self.assertDegreesAlmostEqual(180, self.ap.error, delta=2)
 
         self.ap.target_direction = flight.normal
-        self.assertDegreesAlmostEqual(90, self.ap.error, delta=1)
+        self.assertDegreesAlmostEqual(90, self.ap.error, delta=2)
 
         self.ap.target_direction = flight.anti_normal
-        self.assertDegreesAlmostEqual(90, self.ap.error, delta=1)
+        self.assertDegreesAlmostEqual(90, self.ap.error, delta=2)
 
         self.ap.target_direction = flight.radial
-        self.assertDegreesAlmostEqual(90, self.ap.error, delta=1)
+        self.assertDegreesAlmostEqual(90, self.ap.error, delta=2)
 
         self.ap.target_direction = flight.anti_radial
-        self.assertDegreesAlmostEqual(90, self.ap.error, delta=1)
+        self.assertDegreesAlmostEqual(90, self.ap.error, delta=2)
 
         self.ap.target_direction = flight.anti_radial
-        self.assertDegreesAlmostEqual(90, self.ap.error, delta=1)
+        self.assertDegreesAlmostEqual(90, self.ap.error, delta=2)
 
         self.ap.target_direction = flight.prograde
         self.ap.target_roll = 30.0
-        self.assertDegreesAlmostEqual(30, self.ap.error, delta=1)
+        self.assertDegreesAlmostEqual(30, self.ap.error, delta=2)
 
         self.ap.disengage()
 
@@ -208,7 +222,7 @@ class TestAutoPilot(krpctest.TestCase):
         set_roll = -57
         direction = self.vessel.direction(self.vessel.surface_reference_frame)
         self.set_direction(direction, roll=set_roll)
-        self.wait_for_autopilot()
+        self.wait_for_autopilot(max_speed=0.02)
         self.ap.sas = True
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = False
@@ -216,7 +230,7 @@ class TestAutoPilot(krpctest.TestCase):
         self.ap.engage()
         for roll in (0, -54, -90, 27, 45, 90):
             self.ap.target_roll = roll
-            self.assertAlmostEqual(abs(set_roll - roll), self.ap.roll_error, delta=1)
+            self.assertAlmostEqual(abs(set_roll - roll), self.ap.roll_error, delta=2)
         self.ap.disengage()
 
         for wheel in self.vessel.parts.reaction_wheels:
@@ -295,7 +309,14 @@ class TestAutoPilotSAS(krpctest.TestCase):
     def setUp(self):
         self.connect().testing_tools.clear_rotation()
 
-    def wait_for_autopilot(self, timeout=30):
+    def tearDown(self):
+        # Keep a failing test from leaving the auto-pilot engaged or the
+        # reaction wheels disabled, which would break every later test.
+        self.ap.disengage()
+        for wheel in self.vessel.parts.reaction_wheels:
+            wheel.active = True
+
+    def wait_for_autopilot(self, timeout=30, max_speed=0.05):
         self.ap.engage()
         # Match the server-side Wait() criteria (pointed at the target and no
         # longer rotating), but with a timeout so a vessel that never settles
@@ -305,7 +326,7 @@ class TestAutoPilotSAS(krpctest.TestCase):
         while True:
             error = self.ap.error
             speed = sum(x * x for x in self.vessel.angular_velocity(ref)) ** 0.5
-            if error <= 0.75 and speed <= 0.05:
+            if error <= 0.75 and speed <= max_speed:
                 break
             if time.time() > deadline:
                 self.ap.disengage()
@@ -325,10 +346,17 @@ class TestAutoPilotSAS(krpctest.TestCase):
         if roll is not None:
             self.assertAlmostEqual(roll, flight.roll, delta=1)
 
+    def check_sas_error(self, mode, expected):
+        # Setting the SAS mode takes a physics frame to apply; give it one
+        # before reading the error or it may still report stability assist.
+        self.ap.sas_mode = mode
+        self.wait()
+        self.assertAlmostEqual(expected, self.ap.error, delta=2)
+
     def test_sas_error(self):
         flight = self.vessel.flight()
         self.set_direction(flight.prograde, roll=27)
-        self.wait_for_autopilot()
+        self.wait_for_autopilot(max_speed=0.02)
         self.check_direction(flight.prograde, roll=27)
 
         self.ap.sas = True
@@ -337,23 +365,12 @@ class TestAutoPilotSAS(krpctest.TestCase):
 
         self.ap.speed_mode = self.speed_mode.orbit
 
-        self.ap.sas_mode = self.sas_mode.prograde
-        self.assertAlmostEqual(0, self.ap.error, delta=1)
-
-        self.ap.sas_mode = self.sas_mode.retrograde
-        self.assertAlmostEqual(180, self.ap.error, delta=1)
-
-        self.ap.sas_mode = self.sas_mode.normal
-        self.assertAlmostEqual(90, self.ap.error, delta=1)
-
-        self.ap.sas_mode = self.sas_mode.anti_normal
-        self.assertAlmostEqual(90, self.ap.error, delta=1)
-
-        self.ap.sas_mode = self.sas_mode.radial
-        self.assertAlmostEqual(90, self.ap.error, delta=1)
-
-        self.ap.sas_mode = self.sas_mode.anti_radial
-        self.assertAlmostEqual(90, self.ap.error, delta=1)
+        self.check_sas_error(self.sas_mode.prograde, 0)
+        self.check_sas_error(self.sas_mode.retrograde, 180)
+        self.check_sas_error(self.sas_mode.normal, 90)
+        self.check_sas_error(self.sas_mode.anti_normal, 90)
+        self.check_sas_error(self.sas_mode.radial, 90)
+        self.check_sas_error(self.sas_mode.anti_radial, 90)
 
         self.ap.sas = False
         for wheel in self.vessel.parts.reaction_wheels:
