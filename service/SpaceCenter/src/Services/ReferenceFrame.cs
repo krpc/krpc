@@ -656,8 +656,12 @@ namespace KRPC.SpaceCenter.Services
                     return body.angularVelocity;
                 case ReferenceFrameType.CelestialBodyNonRotating:
                     return Vector3d.zero;
-                case ReferenceFrameType.CelestialBodyOrbital:
-                    return Vector3d.zero; // TODO: check this
+                case ReferenceFrameType.CelestialBodyOrbital: {
+                    var refBody = body.referenceBody;
+                    var r = body.position - refBody.position;
+                    var v = body.GetWorldVelocity () - refBody.GetWorldVelocity ();
+                    return Vector3d.Cross (r, v) / r.sqrMagnitude;
+                }
                 case ReferenceFrameType.Vessel:
                     return InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
                 case ReferenceFrameType.VesselOrbital: {
@@ -666,14 +670,32 @@ namespace KRPC.SpaceCenter.Services
                     return Vector3d.Cross (r, v) / r.sqrMagnitude;
                 }
                 case ReferenceFrameType.VesselSurface:
-                case ReferenceFrameType.VesselSurfaceVelocity:
+                    return InternalVessel.mainBody.angularVelocity;
+                case ReferenceFrameType.VesselSurfaceVelocity: {
+                    var vessel = InternalVessel;
+                    var srf_vel = vessel.srf_velocity;
+                    if (srf_vel.sqrMagnitude < 0.01d)
+                        return vessel.mainBody.angularVelocity;
+                    // d(srf_vel)/dt ≈ grav − body.ω × v_orbital
+                    var grav = (Vector3d)FlightGlobals.getGeeForceAtPosition (vessel.CoM);
+                    var v_orb = vessel.GetOrbit ().GetVel ();
+                    var a_srf = grav - Vector3d.Cross (vessel.mainBody.angularVelocity, v_orb);
+                    return vessel.mainBody.angularVelocity + Vector3d.Cross (srf_vel, a_srf) / srf_vel.sqrMagnitude;
+                }
                 case ReferenceFrameType.Maneuver:
-                case ReferenceFrameType.ManeuverOrbital:
+                    return Vector3d.zero;
+                case ReferenceFrameType.ManeuverOrbital: {
+                    var r = node.patch.getRelativePositionAtUT (node.UT).SwapYZ ();
+                    var v = node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
+                    return Vector3d.Cross (r, v) / r.sqrMagnitude;
+                }
                 case ReferenceFrameType.Part:
                 case ReferenceFrameType.PartCenterOfMass:
+                    return InternalPart.vessel.GetComponent<Rigidbody> ().angularVelocity;
                 case ReferenceFrameType.DockingPort:
+                    return dockingPort.vessel.GetComponent<Rigidbody> ().angularVelocity;
                 case ReferenceFrameType.Thrust:
-                    return Vector3d.zero; // TODO: check this
+                    return InternalPart.vessel.GetComponent<Rigidbody> ().angularVelocity;
                 case ReferenceFrameType.Relative:
                     return parent.AngularVelocityToWorldSpace (relativeAngularVelocity);
                 case ReferenceFrameType.Hybrid:

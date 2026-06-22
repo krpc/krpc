@@ -643,35 +643,31 @@ class TestReferenceFrame(krpctest.TestCase):
         ang_vel = self.kerbin.angular_velocity(self.kerbin.non_rotating_reference_frame)
         self.assertAlmostEqual(self.kerbin.rotational_speed, norm(ang_vel), delta=1e-5)
 
-    def test_kerbin_angular_speed_same_in_zero_omega_frames(self):
-        """Kerbin's angular speed is the same in all frames with zero frame angular velocity.
-
-        Both CelestialBodyNonRotating and CelestialBodyOrbital have zero frame
-        angular velocity, so each measures the same world-space spin rate for
-        Kerbin; only the orientation of the reported vector differs.
-        """
-        speed_nr = norm(
-            self.kerbin.angular_velocity(self.kerbin.non_rotating_reference_frame)
+    def test_kerbin_angular_velocity_zero_in_vessel_surface_frame(self):
+        """Kerbin co-rotates with the vessel surface frame, so it appears stationary there."""
+        self.assertAlmostEqual(
+            (0, 0, 0),
+            self.kerbin.angular_velocity(self.vessel.surface_reference_frame),
+            delta=1e-4,
         )
-        speed_orb = norm(
-            self.kerbin.angular_velocity(self.kerbin.orbital_reference_frame)
-        )
-        self.assertAlmostEqual(speed_nr, speed_orb, delta=1e-5)
 
-    def test_vessel_angular_speed_same_in_zero_omega_frames(self):
-        """Vessel angular speed is the same in all frames with zero frame angular velocity.
+    def test_kerbin_angular_velocity_in_surface_velocity_frame(self):
+        """Kerbin's angular velocity in the surface velocity frame is dominated by the
+        centripetal term (orbital angular speed ≈ v/r), not body rotation.
 
-        VesselSurface and CelestialBodyNonRotating both have zero frame angular velocity,
-        so each measures the same world-space spin rate for the vessel.
-        (VesselOrbital is excluded — it now has a non-zero frame angular velocity.)
+        The surface velocity frame rotates at body.ω + centripetal_term, so
+        Kerbin (rotating at body.ω) appears to rotate backward at ≈ -centripetal_term.
+        For a 100 km circular orbit: |centripetal| ≈ v_orb/r ≈ 3.2e-3 rad/s.
         """
-        frames = [
-            self.vessel.surface_reference_frame,
-            self.kerbin.non_rotating_reference_frame,
-        ]
-        speeds = [norm(self.vessel.angular_velocity(ref)) for ref in frames]
-        for speed in speeds[1:]:
-            self.assertAlmostEqual(speeds[0], speed, delta=0.01)
+        import math
+        ang_vel = self.kerbin.angular_velocity(
+            self.vessel.surface_velocity_reference_frame
+        )
+        # Expected magnitude: approximately the orbital angular speed
+        orbital_angular_speed = (
+            2 * math.pi / self.vessel.orbit.period
+        )
+        self.assertAlmostEqual(orbital_angular_speed, norm(ang_vel), delta=5e-4)
 
     def test_vessel_velocity_zero_in_own_orbital_frame(self):
         """A vessel's velocity in its own orbital reference frame is zero.
@@ -682,6 +678,39 @@ class TestReferenceFrame(krpctest.TestCase):
         """
         vel = self.vessel.velocity(self.vessel.orbital_reference_frame)
         self.assertAlmostEqual((0, 0, 0), vel, delta=0.5)
+
+    def test_celestial_body_orbital_angular_velocity_nonzero(self):
+        """CelestialBodyOrbital frame has a non-zero angular velocity (Kerbin's orbital ω
+        around Kerbol ≈ 6.8e-7 rad/s).
+
+        angular_velocity() subtracts the frame's ω from Kerbin's world spin, so the measured
+        speed ≈ kerbin.rotational_speed (dominant at 2.9e-4 rad/s) to within 1e-3.
+        """
+        kerbin = self.space_center.bodies["Kerbin"]
+        ang_vel = kerbin.angular_velocity(kerbin.orbital_reference_frame)
+        self.assertAlmostEqual(kerbin.rotational_speed, norm(ang_vel), delta=1e-3)
+
+    def test_part_angular_velocity_zero_in_vessel_frame(self):
+        """A part co-rotates with the vessel, so the vessel appears stationary in the
+        part frame — same angular velocity as the vessel body frame."""
+        self.assertAlmostEqual(
+            (0, 0, 0),
+            self.vessel.angular_velocity(self.root_part.reference_frame),
+            delta=0.01,
+        )
+
+    def test_docking_port_angular_velocity_matches_vessel(self):
+        """DockingPort frame angular velocity equals the vessel's angular velocity.
+
+        The vessel's angular velocity as seen from its own body frame is zero, so
+        the vessel's angular velocity in the docking port frame (which shares the
+        same ω) should also be zero.
+        """
+        self.assertAlmostEqual(
+            (0, 0, 0),
+            self.vessel.angular_velocity(self.docking_port.reference_frame),
+            delta=0.01,
+        )
 
     def test_relative_frame_angular_velocity_offset(self):
         """An angular velocity offset on a relative frame shifts the measured angular velocity.
