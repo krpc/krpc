@@ -339,11 +339,40 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         {
             OrthoNormalize2 (ref forward, ref up);
             Vector3d right = Vector3d.Cross (up, forward);
-            var w = Math.Sqrt (1.0d + right.x + up.y + forward.z) * 0.5d;
-            var r = 0.25d / w;
-            var x = (up.z - forward.y) * r;
-            var y = (forward.x - right.z) * r;
-            var z = (right.y - up.x) * r;
+            // Shepperd's method: pick the component with the largest magnitude first
+            // so we never take sqrt of a negative or divide by near-zero.
+            // The four squared-magnitude candidates sum to 4, so at least one is >= 1.
+            double m00 = right.x, m11 = up.y, m22 = forward.z;
+            double tw = 1.0d + m00 + m11 + m22;
+            double tx = 1.0d + m00 - m11 - m22;
+            double ty = 1.0d - m00 + m11 - m22;
+            double tz = 1.0d - m00 - m11 + m22;
+            double x, y, z, w;
+            if (tw >= tx && tw >= ty && tw >= tz) {
+                w = Math.Sqrt (tw) * 0.5d;
+                var r = 0.25d / w;
+                x = (up.z - forward.y) * r;
+                y = (forward.x - right.z) * r;
+                z = (right.y - up.x) * r;
+            } else if (tx >= ty && tx >= tz) {
+                x = Math.Sqrt (tx) * 0.5d;
+                var r = 0.25d / x;
+                y = (right.y + up.x) * r;
+                z = (right.z + forward.x) * r;
+                w = (up.z - forward.y) * r;
+            } else if (ty >= tz) {
+                y = Math.Sqrt (ty) * 0.5d;
+                var r = 0.25d / y;
+                x = (right.y + up.x) * r;
+                z = (up.z + forward.y) * r;
+                w = (forward.x - right.z) * r;
+            } else {
+                z = Math.Sqrt (tz) * 0.5d;
+                var r = 0.25d / z;
+                x = (right.z + forward.x) * r;
+                y = (up.z + forward.y) * r;
+                w = (right.y - up.x) * r;
+            }
             return new QuaternionD (x, y, z, w);
         }
 

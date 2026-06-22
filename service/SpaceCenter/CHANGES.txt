@@ -1,4 +1,5 @@
 v0.6.0
+ * Fix LookRotation2 producing NaN for rotations near 180° by using Shepperd's method
  * Fix ReferenceFrame.CreateHybrid using velocity frame's angular velocity instead of the angularVelocity frame
  * Fix PartCenterOfMass reference frame throwing InvalidOperationException on velocity transforms
  * Fix Maneuver reference frame forward-vector fallback using unnormalized burn vector in collinearity check
