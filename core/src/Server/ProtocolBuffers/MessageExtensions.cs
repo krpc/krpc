@@ -53,7 +53,8 @@ namespace KRPC.Server.ProtocolBuffers
         public static Schema.KRPC.StreamUpdate ToProtobufMessage (this StreamUpdate streamUpdate)
         {
             var result = new Schema.KRPC.StreamUpdate ();
-            result.Results.Add (streamUpdate.Results.Select (ToProtobufMessage));
+            foreach (var r in streamUpdate.Results)
+                result.Results.Add (r.ToProtobufMessage ());
             return result;
         }
 

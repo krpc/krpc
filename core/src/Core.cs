@@ -25,8 +25,8 @@ namespace KRPC
         IDictionary<Guid, IClient<NoMessage, StreamUpdate>> streamClients = new Dictionary<Guid, IClient<NoMessage, StreamUpdate>> ();
         RoundRobinScheduler<IClient<Request,Response>> clientScheduler = new RoundRobinScheduler<IClient<Request, Response>> ();
         List<RequestContinuation> rpcContinuations = new List<RequestContinuation> ();
-        IDictionary<IClient<NoMessage,StreamUpdate>, IDictionary<ulong, Service.Stream>> streams = new Dictionary<IClient<NoMessage,StreamUpdate>,IDictionary<ulong, Service.Stream>> ();
-        IDictionary<ulong, IClient<NoMessage, StreamUpdate>> removeStreams = new Dictionary<ulong, IClient<NoMessage, StreamUpdate>> ();
+        Dictionary<IClient<NoMessage,StreamUpdate>, Dictionary<ulong, Service.Stream>> streams = new Dictionary<IClient<NoMessage,StreamUpdate>, Dictionary<ulong, Service.Stream>> ();
+        Dictionary<ulong, IClient<NoMessage, StreamUpdate>> removeStreams = new Dictionary<ulong, IClient<NoMessage, StreamUpdate>> ();
         ulong nextStreamId = 0;
 
         static Core instance;
@@ -95,7 +95,7 @@ namespace KRPC
         internal void StreamClientConnected (IClient<NoMessage,StreamUpdate> client)
         {
             streamClients [client.Guid] = client;
-            streams [client] = new Dictionary<ulong, Service.Stream> ();
+            streams [client] = new Dictionary<ulong, Service.Stream>();
         }
 
         internal void StreamClientDisconnected (IClient<NoMessage,StreamUpdate> client)
@@ -507,7 +507,7 @@ namespace KRPC
             for (int i = 0; i < Servers.Count; i++)
                 Servers [i].StreamServer.Update ();
 
-            if (removeStreams.Any()) {
+            if (removeStreams.Count > 0) {
                 foreach (var entry in removeStreams) {
                     Logger.WriteLine("Removing stream " + entry.Key, Logger.Severity.Debug);
                     RemoveStreamInternal(entry.Value, entry.Key);
@@ -559,7 +559,7 @@ namespace KRPC
                     }
                 }
                 CallContext.Clear ();
-                if (removeStreams.Any()) {
+                if (removeStreams.Count > 0) {
                     foreach (var entry in removeStreams) {
                         Logger.WriteLine("Removing stream as it returned an error", Logger.Severity.Debug);
                         RemoveStreamInternal(entry.Value, entry.Key);
