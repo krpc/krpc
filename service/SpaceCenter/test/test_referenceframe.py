@@ -696,6 +696,81 @@ class TestReferenceFrame(krpctest.TestCase):
         )
 
     # -------------------------------------------------------------------------
+    # SpaceCenter.transform_position tests
+    # -------------------------------------------------------------------------
+
+    def test_transform_position_round_trip(self):
+        """transform_position A→B→A returns the original position."""
+        ref_a = self.kerbin.non_rotating_reference_frame
+        pos = self.vessel.position(ref_a)
+        for ref_b in self._vessel_frames():
+            via = self.space_center.transform_position(pos, ref_a, ref_b)
+            roundtrip = self.space_center.transform_position(via, ref_b, ref_a)
+            self.assertAlmostEqual(pos, roundtrip, delta=0.01)
+
+    def test_transform_position_same_frame_is_identity(self):
+        """transform_position from a frame to itself returns the input unchanged."""
+        ref = self.kerbin.non_rotating_reference_frame
+        pos = self.vessel.position(ref)
+        result = self.space_center.transform_position(pos, ref, ref)
+        self.assertAlmostEqual(pos, result, delta=0.01)
+
+    def test_transform_position_vessel_origin_gives_orbital_radius(self):
+        """Transforming the vessel origin (0,0,0) to the Kerbin frame gives the orbital radius.
+
+        The vessel is always at (0,0,0) in its own frame.  Transforming that to
+        a Kerbin-centered frame expresses the vessel's world position relative to
+        Kerbin, whose magnitude must equal the orbital radius.
+        """
+        origin = self.vessel.position(self.vessel.reference_frame)  # (0, 0, 0)
+        pos_in_kerbin = self.space_center.transform_position(
+            origin, self.vessel.reference_frame, self.kerbin.non_rotating_reference_frame
+        )
+        self.assertAlmostEqual(self.vessel.orbit.radius, norm(pos_in_kerbin), delta=20)
+
+    # -------------------------------------------------------------------------
+    # SpaceCenter.transform_direction tests
+    # -------------------------------------------------------------------------
+
+    def test_transform_direction_round_trip(self):
+        """transform_direction A→B→A returns the original direction."""
+        ref_a = self.vessel.reference_frame
+        direction = self.vessel.direction(ref_a)  # (0, 1, 0)
+        for ref_b in self._kerbin_frames():
+            via = self.space_center.transform_direction(direction, ref_a, ref_b)
+            roundtrip = self.space_center.transform_direction(via, ref_b, ref_a)
+            self.assertAlmostEqual(direction, roundtrip, delta=0.01)
+
+    def test_transform_direction_same_frame_is_identity(self):
+        """transform_direction from a frame to itself returns the input unchanged."""
+        ref = self.vessel.reference_frame
+        result = self.space_center.transform_direction((0, 1, 0), ref, ref)
+        self.assertAlmostEqual((0, 1, 0), result, delta=0.01)
+
+    def test_transform_direction_preserves_magnitude(self):
+        """transform_direction does not change the vector magnitude."""
+        ref_a = self.vessel.reference_frame
+        direction = self.vessel.direction(ref_a)  # unit vector
+        for ref_b in self._kerbin_frames():
+            transformed = self.space_center.transform_direction(direction, ref_a, ref_b)
+            self.assertAlmostEqual(norm(direction), norm(transformed), delta=0.001)
+
+    def test_transform_direction_consistent_with_vessel_direction(self):
+        """transform_direction matches querying vessel direction directly in the target frame.
+
+        The vessel nose is always (0,1,0) in the vessel frame.  Transforming
+        that to any other frame must equal vessel.direction(that frame).  Vessel
+        orientation changes slowly enough that back-to-back RPC calls agree
+        within 0.01.
+        """
+        ref_a = self.vessel.reference_frame
+        direction = self.vessel.direction(ref_a)  # (0, 1, 0)
+        for ref_b in self._vessel_frames() + self._kerbin_frames():
+            transformed = self.space_center.transform_direction(direction, ref_a, ref_b)
+            direct = self.vessel.direction(ref_b)
+            self.assertAlmostEqual(transformed, direct, delta=0.01)
+
+    # -------------------------------------------------------------------------
     # Relative and hybrid reference frame tests
     # -------------------------------------------------------------------------
 
