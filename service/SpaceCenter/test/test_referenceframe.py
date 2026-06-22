@@ -1,3 +1,4 @@
+import math
 import unittest
 
 import krpctest
@@ -605,6 +606,94 @@ class TestReferenceFrame(krpctest.TestCase):
                 self.vessel.position(ref_b), via, ref_b, ref_a
             )
             self.assertAlmostEqual(vel, roundtrip, delta=0.5)
+
+    # -------------------------------------------------------------------------
+    # Angular velocity tests
+    # -------------------------------------------------------------------------
+
+    def test_vessel_angular_velocity_zero_in_vessel_frame(self):
+        """Vessel co-rotates with its own body frame, so its angular velocity is zero there."""
+        self.assertAlmostEqual(
+            (0, 0, 0), self.vessel.angular_velocity(self.vessel.reference_frame), delta=0.01
+        )
+
+    def test_kerbin_angular_velocity_zero_in_rotating_frame(self):
+        """Kerbin co-rotates with its rotating frame, so it appears stationary in that frame."""
+        self.assertAlmostEqual(
+            (0, 0, 0), self.kerbin.angular_velocity(self.kerbin.reference_frame), delta=1e-4
+        )
+
+    def test_kerbin_angular_velocity_magnitude_in_non_rotating_frame(self):
+        """In the inertial (non-rotating) frame, Kerbin spins at its rotational speed."""
+        ang_vel = self.kerbin.angular_velocity(self.kerbin.non_rotating_reference_frame)
+        self.assertAlmostEqual(self.kerbin.rotational_speed, norm(ang_vel), delta=1e-5)
+
+    def test_kerbin_angular_velocity_magnitude_same_across_zero_omega_frames(self):
+        """Kerbin's angular speed is the same in all frames with zero frame angular velocity.
+
+        Both CelestialBodyNonRotating and CelestialBodyOrbital have zero frame
+        angular velocity, so each measures the same world-space spin rate for
+        Kerbin; only the orientation of the reported vector differs.
+        """
+        speed_nr = norm(self.kerbin.angular_velocity(self.kerbin.non_rotating_reference_frame))
+        speed_orb = norm(self.kerbin.angular_velocity(self.kerbin.orbital_reference_frame))
+        self.assertAlmostEqual(speed_nr, speed_orb, delta=1e-5)
+
+    def test_vessel_angular_velocity_magnitude_same_across_zero_omega_frames(self):
+        """Vessel angular speed is the same in all frames with zero frame angular velocity.
+
+        VesselOrbital, VesselSurface, and CelestialBodyNonRotating all currently
+        report zero frame angular velocity, so each measures the same world-space
+        spin rate for the vessel.
+        """
+        frames = [
+            self.vessel.orbital_reference_frame,
+            self.vessel.surface_reference_frame,
+            self.kerbin.non_rotating_reference_frame,
+        ]
+        speeds = [norm(self.vessel.angular_velocity(ref)) for ref in frames]
+        for speed in speeds[1:]:
+            self.assertAlmostEqual(speeds[0], speed, delta=0.01)
+
+    def test_relative_frame_angular_velocity_offset(self):
+        """An angular velocity offset on a relative frame shifts the measured angular velocity.
+
+        Adding (0, 1, 0) rad/s (about the vessel y-axis) to the vessel body frame
+        makes that frame spin faster than the vessel.  The vessel therefore appears
+        to rotate at (0, -1, 0) in the new frame — opposite sign because the frame
+        rotates rather than the vessel.
+        """
+        ref = self.space_center.ReferenceFrame.create_relative(
+            self.vessel.reference_frame, angular_velocity=(0, 1, 0)
+        )
+        self.assertAlmostEqual(
+            (0, -1, 0), self.vessel.angular_velocity(ref), delta=0.01
+        )
+
+    def test_hybrid_angular_velocity_source_respected(self):
+        """create_hybrid respects the angular_velocity= sub-frame argument.
+
+        A default hybrid (no angular_velocity override) inherits angular velocity
+        from the vessel frame, so Kerbin's spin is visible.  A hybrid that takes
+        its angular velocity from Kerbin's rotating frame subtracts Kerbin's own
+        spin, making Kerbin appear stationary.
+        """
+        hybrid_default = self.space_center.ReferenceFrame.create_hybrid(
+            position=self.vessel.reference_frame
+        )
+        hybrid_kerbin_rot = self.space_center.ReferenceFrame.create_hybrid(
+            position=self.vessel.reference_frame,
+            angular_velocity=self.kerbin.reference_frame,
+        )
+        # Default hybrid uses vessel angular velocity (~0 for a non-spinning vessel);
+        # Kerbin's spin is visible with magnitude equal to its rotational speed.
+        ang_speed_default = norm(self.kerbin.angular_velocity(hybrid_default))
+        self.assertAlmostEqual(self.kerbin.rotational_speed, ang_speed_default, delta=1e-3)
+        # Hybrid with Kerbin's rotating frame subtracts Kerbin's angular velocity,
+        # making Kerbin appear stationary.
+        self.assertAlmostEqual(
+            (0, 0, 0), self.kerbin.angular_velocity(hybrid_kerbin_rot), delta=1e-4
+        )
 
     # -------------------------------------------------------------------------
     # Relative and hybrid reference frame tests
