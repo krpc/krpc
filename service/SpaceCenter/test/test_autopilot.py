@@ -347,11 +347,23 @@ class TestAutoPilotSAS(krpctest.TestCase):
             self.assertAlmostEqual(roll, flight.roll, delta=1)
 
     def check_sas_error(self, mode, expected):
-        # Setting the SAS mode takes a physics frame to apply; give it one
-        # before reading the error or it may still report stability assist.
-        self.ap.sas_mode = mode
-        self.wait()
-        self.assertAlmostEqual(expected, self.ap.error, delta=2)
+        # KSP can briefly drop SAS back to stability assist (e.g. just after the
+        # mode is set, or with no torque authority), which makes reading the
+        # error throw. Re-apply the mode and read promptly, retrying on the
+        # transient failure rather than waiting through it (a wait lets it
+        # revert before the reading is taken).
+        deadline = time.time() + 5
+        while True:
+            try:
+                self.ap.sas = True
+                self.ap.sas_mode = mode
+                error = self.ap.error
+                break
+            except RuntimeError:
+                if time.time() > deadline:
+                    raise
+                self.wait()
+        self.assertAlmostEqual(expected, error, delta=2)
 
     def test_sas_error(self):
         flight = self.vessel.flight()
