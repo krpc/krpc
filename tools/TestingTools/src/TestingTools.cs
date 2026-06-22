@@ -100,6 +100,32 @@ namespace TestingTools
         {
             Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
             internalVessel.SetRotation (ZeroRotation);
+            // SetRotation only reorients the part transforms; it leaves each
+            // rigidbody's angular velocity untouched, so without SAS the vessel
+            // keeps tumbling from the new attitude. Explicitly remove the
+            // rotational motion: make every part move with the common center of
+            // mass velocity and zero spin, so the assembly translates rigidly.
+            if (!internalVessel.loaded)
+                return;
+            var momentum = Vector3.zero;
+            var totalMass = 0f;
+            foreach (var part in internalVessel.parts) {
+                var rb = part.rb;
+                if (rb == null)
+                    continue;
+                momentum += rb.velocity * rb.mass;
+                totalMass += rb.mass;
+            }
+            if (totalMass <= 0f)
+                return;
+            var comVelocity = momentum / totalMass;
+            foreach (var part in internalVessel.parts) {
+                var rb = part.rb;
+                if (rb == null)
+                    continue;
+                rb.velocity = comVelocity;
+                rb.angularVelocity = Vector3.zero;
+            }
         }
 
         /// <summary>
