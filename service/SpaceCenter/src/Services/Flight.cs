@@ -677,7 +677,7 @@ namespace KRPC.SpaceCenter.Services
                 if (FAR.IsAvailable) {
                     return (float)FAR.VesselAoA (vessel);
                 } else {
-                    return (float)GeometryExtensions.ToDegrees (Vector3d.Dot (vessel.transform.forward, vessel.srf_velocity.normalized));
+                    return (float)GeometryExtensions.ToDegrees (Math.Asin (GeometryExtensions.Clamp (Vector3d.Dot (vessel.transform.forward, vessel.srf_velocity.normalized), -1d, 1d)));
                 }
             }
         }
@@ -692,7 +692,7 @@ namespace KRPC.SpaceCenter.Services
                 if (FAR.IsAvailable) {
                     return (float)FAR.VesselSideslip (vessel);
                 } else {
-                    return (float)GeometryExtensions.ToDegrees (Vector3d.Dot (vessel.transform.right, vessel.srf_velocity.normalized));
+                    return (float)GeometryExtensions.ToDegrees (Math.Asin (GeometryExtensions.Clamp (Vector3d.Dot (vessel.transform.right, vessel.srf_velocity.normalized), -1d, 1d)));
                 }
             }
         }
