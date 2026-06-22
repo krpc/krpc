@@ -57,9 +57,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The part module that the action belongs to.
+        /// The part module that the action belongs to. Returns <c>null</c> for a
+        /// part-level action that is not associated with a module. This only occurs when
+        /// the Extended Action Groups mod is installed, as it can assign actions defined
+        /// directly on a part, rather than on one of its modules, to an action group.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (Nullable = true)]
         public Module Module {
             get { return module; }
         }
