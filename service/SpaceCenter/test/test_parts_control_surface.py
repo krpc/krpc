@@ -18,6 +18,23 @@ class TestPartsControlSurface(krpctest.TestCase):
         cls.winglets = [x.control_surface for x in parts.with_name("winglet3")]
         cls.winglet = cls.winglets[0]
 
+        # KSP re-derives a control surface's pitch/yaw/roll authority from its
+        # geometry at launch, overriding the ignorePitch/ignoreYaw/ignoreRoll
+        # values persisted in the craft file (unlike deploy/inverted, which are
+        # not geometry-derived and do survive). The tail airlinerCtrlSrf, saved
+        # as yaw-only, comes back pitch-enabled. So establish the expected axis
+        # baseline here via the API rather than trusting the craft to survive
+        # the launch; the get/toggle tests then exercise the getter/setter
+        # round-trip against a known starting state.
+        cls.ctrlsrf.pitch_enabled = False
+        cls.ctrlsrf.yaw_enabled = True
+        cls.ctrlsrf.roll_enabled = False
+        for winglet in cls.winglets:
+            winglet.pitch_enabled = True
+            winglet.yaw_enabled = False
+            winglet.roll_enabled = True
+        cls.wait()
+
     def test_get_pyr_enabled(self):
         self.assertFalse(self.ctrlsrf.pitch_enabled)
         self.assertTrue(self.ctrlsrf.yaw_enabled)
