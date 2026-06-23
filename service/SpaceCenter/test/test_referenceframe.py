@@ -618,6 +618,35 @@ class TestReferenceFrame(krpctest.TestCase):
         speed = norm(self.vessel.velocity(hybrid_kerbin_vel))
         self.assertAlmostEqual(self.vessel.orbit.speed, speed, delta=1)
 
+    def test_node_velocity_zero_at_current_ut(self):
+        """Vessel velocity is near zero in the node frame when node.UT equals current time.
+
+        The node frame moves at the orbital velocity at node.UT.  When the node
+        is placed at the current UT, that equals the vessel's current orbital
+        velocity, so the relative velocity is (0, 0, 0).
+        Before the fix this returned ~2245 m/s (the raw orbital speed).
+        """
+        for node in self.vessel.control.nodes:
+            node.remove()
+        node = self.vessel.control.add_node(self.space_center.ut, 100, 0, 0)
+        self.assertAlmostEqual(
+            (0, 0, 0), self.vessel.velocity(node.reference_frame), delta=1
+        )
+
+    def test_node_orbital_velocity_zero_at_current_ut(self):
+        """Vessel velocity is near zero in the node's orbital frame when node.UT equals
+        current time.
+
+        Same reasoning as test_node_velocity_zero_at_current_ut — both node frames
+        use the orbital velocity at node.UT as their own frame velocity.
+        """
+        for node in self.vessel.control.nodes:
+            node.remove()
+        node = self.vessel.control.add_node(self.space_center.ut, 100, 0, 0)
+        self.assertAlmostEqual(
+            (0, 0, 0), self.vessel.velocity(node.orbital_reference_frame), delta=1
+        )
+
     def test_transform_velocity_round_trip(self):
         """transform_velocity A→B→A returns the original velocity."""
         ref_a = self.kerbin.non_rotating_reference_frame

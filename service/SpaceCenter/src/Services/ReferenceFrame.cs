@@ -54,7 +54,6 @@ namespace KRPC.SpaceCenter.Services
             this.body = body;
             vesselId = vessel != null ? vessel.id : Guid.Empty;
             this.node = node;
-            // TODO: is it safe to use a part id of 0 to mean no part?
             if (part != null)
                 partId = part.flightID;
             this.dockingPort = dockingPort;
@@ -627,7 +626,7 @@ namespace KRPC.SpaceCenter.Services
                     return InternalVessel.GetOrbit ().GetVel ();
                 case ReferenceFrameType.Maneuver:
                 case ReferenceFrameType.ManeuverOrbital:
-                    return Vector3d.zero; // TODO: check this
+                    return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ () + node.patch.referenceBody.GetWorldVelocity ();
                 case ReferenceFrameType.Part:
                 case ReferenceFrameType.PartCenterOfMass:
                 case ReferenceFrameType.Thrust:
