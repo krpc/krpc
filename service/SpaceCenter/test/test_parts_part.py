@@ -848,7 +848,7 @@ class TestPartsPartDecoupleStage(krpctest.TestCase):
             "      launchClamp1 5 5",
             "      launchClamp1 5 5",
             "      Decoupler.1 2 1",
-            "        fuelTank.long -1 1",
+            "        fuelTank.long -1 2",
             "          radialDecoupler2 3 3",
             "            fuelTankSmall -1 3",
             "              Decoupler.1 4 4",
