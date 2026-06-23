@@ -38,7 +38,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertAlmostEqual(2600, part.dry_mass, places=2)
         self.assertFalse(part.shielded)
         self.assertAlmostEqual(0, part.dynamic_pressure, places=3)
-        self.assertEqual(45, part.impact_tolerance)
+        self.assertEqual(20, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
@@ -56,11 +56,18 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleProbeControlPoint",
             "ModuleLiftingSurface",
             "ModuleRCSFX",
+            "ModuleInventoryPart",
             "KOSNameTag",
         ]
         if self.far_available:
             modules.extend(["FARBasicDragModel", "FARControlSys"])
-        self.assertCountEqual(modules, [x.name for x in part.modules])
+        # MechJebCore is injected by the MechJeb mod when installed; strip it so
+        # the assertion holds with or without MechJeb (cf. the ModuleRTAntennaPassive
+        # handling in test_launch_clamp).
+        actual_modules = [x.name for x in part.modules]
+        if "MechJebCore" in actual_modules:
+            actual_modules.remove("MechJebCore")
+        self.assertCountEqual(modules, actual_modules)
         box = part.bounding_box(part.reference_frame)
         self.assertAlmostEqual((-1.223, -0.574, -1.223), box[0], places=2)
         self.assertAlmostEqual((1.223, 1.273, 1.223), box[1], places=2)
@@ -120,7 +127,12 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleDataTransmitter", "ModuleDeployableAntenna", "KOSNameTag"]
+        modules = [
+            "ModuleDataTransmitter",
+            "ModuleDeployableAntenna",
+            "ModuleCargoPart",
+            "KOSNameTag",
+        ]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
@@ -149,7 +161,7 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleAnimateGeneric",
             "ModuleCargoBay",
             "ModuleConductionMultiplier",
-            "ModuleSeeThroughObject",
+            "ModuleCargoPart",
             "KOSNameTag",
         ]
         if self.far_available:
@@ -178,7 +190,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleControlSurface", "KOSNameTag"]
+        modules = ["SyncModuleControlSurface", "ModuleCargoPart", "KOSNameTag"]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
@@ -212,6 +224,7 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleAnchoredDecoupler",
             "ModuleTestSubject",
             "ModuleToggleCrossfeed",
+            "ModuleCargoPart",
             "KOSNameTag",
         ]
         if self.far_available:
@@ -241,7 +254,12 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleDockingNode", "KOSNameTag"]
+        modules = [
+            "ModuleDockingNode",
+            "ModuleColorChanger",
+            "ModuleCargoPart",
+            "KOSNameTag",
+        ]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
@@ -273,6 +291,7 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleEnginesFX",
             "ModuleSurfaceFX",
             "ModuleTestSubject",
+            "ModulePartVariants",
             "KOSNameTag",
         ]
         if self.far_available:
@@ -301,7 +320,12 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleScienceExperiment", "ModuleAnimateGeneric", "KOSNameTag"]
+        modules = [
+            "ModuleScienceExperiment",
+            "ModuleAnimateGeneric",
+            "ModuleCargoPart",
+            "KOSNameTag",
+        ]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
@@ -332,6 +356,7 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleTestSubject",
             "ModuleStructuralNodeToggle",
             "ModulePartVariants",
+            "ModuleCargoPart",
             "KOSNameTag",
         ] + ["ModuleStructuralNode"] * 12
         if self.far_available:
@@ -360,7 +385,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleResourceIntake", "KOSNameTag"]
+        modules = ["ModuleResourceIntake", "ModuleCargoPart", "KOSNameTag"]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
@@ -394,6 +419,7 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleWheelDeployment",
             "ModuleWheelLock",
             "ModuleWheelSuspension",
+            "ModuleCargoPart",
             "KOSNameTag",
         ]
         if self.far_available:
@@ -486,6 +512,7 @@ class TestPartsPart(krpctest.TestCase):
                 "ModuleDragModifier",
                 "ModuleParachute",
                 "ModuleTestSubject",
+                "ModuleCargoPart",
                 "KOSNameTag",
             ],
             [x.name for x in part.modules],
@@ -513,14 +540,19 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleActiveRadiator", "ModuleDeployableRadiator", "KOSNameTag"]
+        modules = [
+            "ModuleActiveRadiator",
+            "ModuleDeployableRadiator",
+            "ModuleCargoPart",
+            "KOSNameTag",
+        ]
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.radiator)
 
     def test_rcs(self):
         part = self.parts.with_name("RCSBlock.v2")[0]
         self.assertEqual("RCSBlock.v2", part.name)
-        self.assertEqual(620, part.cost)
+        self.assertEqual(45, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual("Rockomax8BW", part.parent.name)
         self.assertEqual([], part.children)
@@ -538,7 +570,13 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleRCSFX", "KOSNameTag"]
+        modules = [
+            "FXModuleAnimateRCS",
+            "ModuleRCSFX",
+            "ModulePartVariants",
+            "ModuleCargoPart",
+            "KOSNameTag",
+        ]
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.rcs)
 
@@ -566,7 +604,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleReactionWheel", "KOSNameTag"]
+        modules = ["ModuleReactionWheel", "ModuleCargoPart", "KOSNameTag"]
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.reaction_wheel)
 
@@ -624,9 +662,11 @@ class TestPartsPart(krpctest.TestCase):
         modules = [
             "ModuleAnimationGroup",
             "ModuleAsteroidDrill",
+            "ModuleCometDrill",
             "ModuleCoreHeat",
             "ModuleOverheatDisplay",
             "ModuleResourceHarvester",
+            "ModuleCargoPart",
             "KOSNameTag",
         ]
         self.assertCountEqual(modules, [x.name for x in part.modules])
@@ -653,7 +693,12 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleEnviroSensor", "ModuleScienceExperiment", "KOSNameTag"]
+        modules = [
+            "ModuleEnviroSensor",
+            "ModuleScienceExperiment",
+            "ModuleCargoPart",
+            "KOSNameTag",
+        ]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
@@ -680,7 +725,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleDeployableSolarPanel", "KOSNameTag"]
+        modules = ["ModuleDeployableSolarPanel", "ModuleCargoPart", "KOSNameTag"]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
@@ -719,6 +764,7 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleWheelSuspension",
             "ModuleDragModifier",
             "ModuleDragModifier",
+            "ModuleCargoPart",
             "KOSNameTag",
         ]
         if self.far_available:

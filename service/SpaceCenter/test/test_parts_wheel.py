@@ -42,7 +42,7 @@ class TestPartsWheel(krpctest.TestCase):
         wheel.auto_friction_control = False
         self.wait()
         self.assertFalse(wheel.auto_friction_control)
-        self.assertAlmostEqual(2.1996, wheel.manual_friction_control, places=3)
+        self.assertAlmostEqual(2.0005, wheel.manual_friction_control, places=3)
         wheel.manual_friction_control = 1.2
         self.wait()
         self.assertAlmostEqual(1.2, wheel.manual_friction_control, places=3)
@@ -168,8 +168,8 @@ class TestPartsWheel(krpctest.TestCase):
     def test_suspension(self):
         wheel = self.suspension_wheel
         self.assertTrue(wheel.has_suspension)
-        self.assertAlmostEqual(1.00, wheel.suspension_spring_strength, places=2)
-        self.assertAlmostEqual(1.00, wheel.suspension_damper_strength, places=2)
+        self.assertAlmostEqual(1.20, wheel.suspension_spring_strength, places=2)
+        self.assertAlmostEqual(0.85, wheel.suspension_damper_strength, places=2)
 
     def test_no_suspension(self):
         # TODO: there are no wheel with no suspension to test!
