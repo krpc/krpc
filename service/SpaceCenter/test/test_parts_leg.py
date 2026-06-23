@@ -7,7 +7,8 @@ class TestPartsLeg(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "PartsLegs":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "PartsLegs":
             cls.launch_vessel_from_vab("PartsLegs")
             cls.remove_other_vessels()
         cls.State = cls.connect().space_center.LegState

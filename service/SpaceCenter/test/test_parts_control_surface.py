@@ -6,7 +6,8 @@ class TestPartsControlSurface(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if cls.connect().space_center.active_vessel.name != "PartsControlSurface":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "PartsControlSurface":
             cls.new_save()
             cls.launch_vessel_from_vab("PartsControlSurface")
             cls.remove_other_vessels()

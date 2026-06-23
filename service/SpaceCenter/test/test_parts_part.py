@@ -7,7 +7,8 @@ class TestPartsPart(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "Parts":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "Parts":
             cls.launch_vessel_from_vab("Parts")
             cls.remove_other_vessels()
             # TODO: wait needed to allow dynamic
@@ -762,7 +763,8 @@ class TestPartsPartDecoupleStage(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "PartsDecoupleStage":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "PartsDecoupleStage":
             cls.launch_vessel_from_vab("PartsDecoupleStage")
             cls.remove_other_vessels()
         cls.vessel = cls.connect().space_center.active_vessel

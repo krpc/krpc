@@ -7,7 +7,8 @@ class TestPartsFuelLines(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "PartsFuelLines":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "PartsFuelLines":
             cls.launch_vessel_from_vab("PartsFuelLines")
             cls.remove_other_vessels()
         cls.parts = cls.connect().space_center.active_vessel.parts

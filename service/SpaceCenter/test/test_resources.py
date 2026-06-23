@@ -12,7 +12,8 @@ class TestResources(krpctest.TestCase, ResourcesTest):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "Resources":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "Resources":
             cls.launch_vessel_from_vab("Resources")
         cls.vessel = cls.connect().space_center.active_vessel
         cls.num_stages = len(cls.expected.keys()) - 1

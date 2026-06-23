@@ -7,7 +7,8 @@ class TestPartsIntake(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "PartsIntake":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "PartsIntake":
             cls.launch_vessel_from_vab("PartsIntake")
             cls.remove_other_vessels()
         vessel = cls.connect().space_center.active_vessel

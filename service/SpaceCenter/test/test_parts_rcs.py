@@ -102,7 +102,8 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "PartsRCS":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "PartsRCS":
             cls.launch_vessel_from_vab("PartsRCS")
             cls.remove_other_vessels()
         cls.vessel = cls.connect().space_center.active_vessel
