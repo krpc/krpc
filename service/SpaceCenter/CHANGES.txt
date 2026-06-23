@@ -36,6 +36,7 @@ v0.6.0
  * Add Node.Rotation
  * Fix Vessel/Part/Hybrid reference frame rotation precision
  * Fix VesselOrbital reference frame angular velocity (missing Coriolis correction) (#823)
+ * Fix Vessel.AvailableTorque due to sign inconsistency in KSP's ITorqueProvider implementations (#525)
 
 v0.5.4
  * Fix vessel recovery (#782)
