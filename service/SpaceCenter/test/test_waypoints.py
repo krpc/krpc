@@ -6,18 +6,27 @@ class TestWaypoints(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # Force a fresh save so the waypoint list starts empty; new_save()
-        # otherwise short-circuits when the krpctest save is already loaded,
-        # leaking waypoints from prior runs into test_manager.
-        cls.new_save(always_load=True)
+        cls.new_save()
         cls.space_center = cls.connect().space_center
         cls.wpm = cls.space_center.waypoint_manager
         cls.body = cls.space_center.bodies["Kerbin"]
 
     def test_manager(self):
-        self.assertCountEqual([], self.wpm.waypoints)
+        # On a fresh save KSP creates a waypoint for each launch site. The two
+        # Making History launch sites are only present when that DLC is
+        # installed, so they are optional; the base-game sites are always there.
+        base_game_sites = {"Dessert Airfield", "Island Airfield", "KSC"}
+        dlc_sites = {"Dessert Launch Site", "Woomerang Launch Site"}
+        waypoint_names = {wp.name for wp in self.wpm.waypoints}
+        # All base-game launch site waypoints are present
+        self.assertEqual(set(), base_game_sites - waypoint_names)
+        # The only other waypoints allowed are the optional DLC launch sites
+        self.assertEqual(set(), waypoint_names - base_game_sites - dlc_sites)
         self.assertCountEqual(
             [
+                "ksc",
+                "launchsite",
+                "runway",
                 "balloon",
                 "default",
                 "dish",
