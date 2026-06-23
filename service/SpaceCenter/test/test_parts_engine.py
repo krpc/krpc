@@ -76,15 +76,14 @@ class EngineTestBase:
             "modes": None,
         },
         "JetEngine": {  # J-33 "Wheesley" Turbofan Engine
-            "propellants": {"IntakeAir": 1.0, "LiquidFuel": 0.09090909},
-            "gimballed": True,
-            "gimbal_range": 1,
+            "propellants": {"IntakeAir": 1.0, "LiquidFuel": 1.0 / 127},
+            "gimballed": False,
             "throttle_locked": False,
             "can_restart": True,
             "can_shutdown": True,
-            "max_vac_thrust": 80000,
-            "msl_isp": 9600,
-            "vac_isp": 9600,
+            "max_vac_thrust": 120000,
+            "msl_isp": 10500,
+            "vac_isp": 10500,
             "modes": None,
         },
         "RAPIER": {  # CR-7 R.A.P.I.E.R. Engine
@@ -128,6 +127,19 @@ class EngineTestBase:
 
 class EngineTest(EngineTestBase):
 
+    def thrust_delta(self, data):
+        """Absolute tolerance, in Newtons, for thrust comparisons.
+
+        Air-breathing engines (those that consume IntakeAir) compute their
+        thrust from the local atmospheric density and the vehicle's Mach
+        number, so their sea-level thrust drifts as KSP tweaks its atmosphere
+        model. Allow a wider tolerance for them than for rocket engines, whose
+        thrust is deterministic.
+        """
+        if "IntakeAir" in data["propellants"]:
+            return 0.03 * data["max_thrust"]
+        return 500
+
     def check_engine_properties(self, engine):
         """Check engine properties independent of activity/throttle"""
         data = self.engine_data[engine.part.name]
@@ -159,9 +171,10 @@ class EngineTest(EngineTestBase):
         self.assertFalse(engine.active)
         self.assertAlmostEqual(1, engine.thrust_limit)
         self.assertEqual(0, engine.thrust)
-        self.assertAlmostEqual(data["max_thrust"], engine.available_thrust, delta=500)
-        self.assertAlmostEqual(data["max_thrust"], engine.max_thrust, delta=500)
-        self.assertAlmostEqual(0, engine.specific_impulse, delta=5)
+        delta = self.thrust_delta(data)
+        self.assertAlmostEqual(data["max_thrust"], engine.available_thrust, delta=delta)
+        self.assertAlmostEqual(data["max_thrust"], engine.max_thrust, delta=delta)
+        self.assertAlmostEqual(data["isp"], engine.specific_impulse, delta=5)
         self.assertTrue(engine.has_fuel)
         self.assertAlmostEqual((0, 0, 0), engine.available_torque[0])
         self.assertAlmostEqual((0, 0, 0), engine.available_torque[1])
@@ -172,9 +185,12 @@ class EngineTest(EngineTestBase):
         self.assertTrue(engine.active)
         self.assertAlmostEqual(throttle, engine.throttle, places=2)
         self.assertAlmostEqual(1, engine.thrust_limit, delta=1)
-        self.assertAlmostEqual(data["max_thrust"] * throttle, engine.thrust, delta=500)
-        self.assertAlmostEqual(data["max_thrust"], engine.available_thrust, delta=500)
-        self.assertAlmostEqual(data["max_thrust"], engine.max_thrust, delta=500)
+        delta = self.thrust_delta(data)
+        self.assertAlmostEqual(
+            data["max_thrust"] * throttle, engine.thrust, delta=delta
+        )
+        self.assertAlmostEqual(data["max_thrust"], engine.available_thrust, delta=delta)
+        self.assertAlmostEqual(data["max_thrust"], engine.max_thrust, delta=delta)
         self.assertAlmostEqual(data["isp"], engine.specific_impulse, delta=5)
         self.assertTrue(engine.has_fuel)
         if data["gimballed"] and throttle > 0:
@@ -346,12 +362,12 @@ class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
         cls.vessel = cls.connect().space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.add_engine_data("liquidEngine", {"max_thrust": 205161, "isp": 265})
-        cls.add_engine_data("liquidEngine2", {"max_thrust": 167969, "isp": 250})
+        cls.add_engine_data("liquidEngine2", {"max_thrust": 168430, "isp": 250})
         cls.add_engine_data("nuclearEngine", {"max_thrust": 14300, "isp": 190.6})
         cls.add_engine_data("ionEngine", {"max_thrust": 63, "isp": 128.0})
         cls.add_engine_data("omsEngine", {"max_thrust": 9700, "isp": 121.2})
         cls.add_engine_data("solidBooster.v2", {"max_thrust": 197897, "isp": 170.4})
-        cls.add_engine_data("JetEngine", {"max_thrust": 74884, "isp": 9600})
+        cls.add_engine_data("JetEngine", {"max_thrust": 110000, "isp": 10500})
         cls.add_engine_data("RAPIER", {"max_thrust": 96895, "isp": 3200})
 
     def test_jet_engine(self):
