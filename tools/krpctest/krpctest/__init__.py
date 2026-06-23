@@ -113,6 +113,38 @@ class TestCase(unittest.TestCase):
     def wait(cls, timeout=0.1):
         time.sleep(timeout)
 
+    def wait_until(self, predicate, timeout=30, message=None, interval=0.1):
+        """Repeatedly call wait() until predicate() returns a truthy value, and
+        return that value. Fail the test if timeout seconds elapse first.
+        interval is the poll period, in seconds, passed to wait().
+
+        Use this instead of an unbounded ``while not predicate(): self.wait()``
+        loop so a condition that never holds fails the test with a clear
+        message rather than hanging the suite forever."""
+        deadline = time.time() + timeout
+        while True:
+            value = predicate()
+            if value:
+                return value
+            if time.time() > deadline:
+                self.fail(
+                    "Timed out after %gs waiting for %s"
+                    % (timeout, message or "condition")
+                )
+            self.wait(interval)
+
+    def wait_while(self, predicate, timeout=30, message=None, interval=0.1):
+        """Repeatedly call wait() while predicate() returns a truthy value. Fail
+        the test if timeout seconds elapse first. interval is the poll period,
+        in seconds, passed to wait(). message should describe the state being
+        waited for (i.e. the condition that ends the wait)."""
+        return self.wait_until(
+            lambda: not predicate(),
+            timeout=timeout,
+            message=message,
+            interval=interval,
+        )
+
     def assertAlmostEqual(self, first, second, places=7, msg=None, delta=None):
         """Check that first is equal to second, within the given error"""
         if not self._is_almost_equal(first, second, places, delta):
