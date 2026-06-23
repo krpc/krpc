@@ -30,9 +30,12 @@ class TestControlMixin:
         self.assertRaises(ValueError, self.control.toggle_action_group, 11)
 
     def test_pitch_control(self):
-        self.connect().testing_tools.clear_rotation(self.vessel)
-
         self.auto_pilot.sas = False
+        self.connect().testing_tools.clear_rotation(self.vessel)
+        self.wait_until(
+            lambda: max(abs(v) for v in self.vessel.angular_velocity(self.vessel.orbital_reference_frame)) < 0.01
+        )
+
         self.control.pitch = 1
         self.wait(1)
         self.control.pitch = 0
@@ -44,9 +47,12 @@ class TestControlMixin:
         self.assertGreater(diff, 0)
 
     def test_yaw_control(self):
-        self.connect().testing_tools.clear_rotation(self.vessel)
-
         self.auto_pilot.sas = False
+        self.connect().testing_tools.clear_rotation(self.vessel)
+        self.wait_until(
+            lambda: max(abs(v) for v in self.vessel.angular_velocity(self.vessel.orbital_reference_frame)) < 0.01
+        )
+
         self.control.yaw = 1
         self.wait(1)
         self.control.yaw = 0
@@ -60,12 +66,15 @@ class TestControlMixin:
         self.assertGreater(diff, 0)
 
     def test_roll_control(self):
+        self.auto_pilot.sas = False
         self.connect().testing_tools.clear_rotation(self.vessel)
+        self.wait_until(
+            lambda: max(abs(v) for v in self.vessel.angular_velocity(self.vessel.orbital_reference_frame)) < 0.01
+        )
 
         pitch = self.orbital_flight.pitch
         heading = self.orbital_flight.heading
 
-        self.auto_pilot.sas = False
         self.control.roll = 0.1
         self.wait(1)
         self.control.roll = 0.0
