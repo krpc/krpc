@@ -6,7 +6,10 @@ class TestWaypoints(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
+        # Force a fresh save so the waypoint list starts empty; new_save()
+        # otherwise short-circuits when the krpctest save is already loaded,
+        # leaking waypoints from prior runs into test_manager.
+        cls.new_save(always_load=True)
         cls.space_center = cls.connect().space_center
         cls.wpm = cls.space_center.waypoint_manager
         cls.body = cls.space_center.bodies["Kerbin"]
