@@ -21,7 +21,9 @@ class TestPartsDecoupler(krpctest.TestCase):
         cls.disabled_decoupler = cls.vessel.parts.with_name("Separator.1")[0].decoupler
 
     def test_stack_decoupler(self):
-        self.assertEqual(2500, self.stack_decoupler.impulse)
+        # impulse = ejectionForce (kN) * 10. TD-12 Decoupler has ejectionForce
+        # = 100 in its part cfg (was 250 for the pre-revamp TR-18A, impulse 2500).
+        self.assertEqual(1000, self.stack_decoupler.impulse)
         self.assertFalse(self.stack_decoupler.decoupled)
         self.assertTrue(self.stack_decoupler.staged)
         self.assertEqual(self.vessel, self.stack_decoupler.part.vessel)
