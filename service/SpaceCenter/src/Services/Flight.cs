@@ -414,6 +414,34 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The direction of the vessels surface velocity,
+        /// in the reference frame <see cref="ReferenceFrame"/>.
+        /// This is the prograde direction as shown on the navball when in surface mode.
+        /// </summary>
+        /// <remarks>
+        /// Singular when surface speed is approximately zero.
+        /// </remarks>
+        /// <returns>The direction as a unit vector.</returns>
+        [KRPCProperty]
+        public Tuple3 SurfacePrograde {
+            get { return referenceFrame.DirectionFromWorldSpace (InternalVessel.srf_velocity.normalized).ToTuple (); }
+        }
+
+        /// <summary>
+        /// The direction opposite to the vessels surface velocity,
+        /// in the reference frame <see cref="ReferenceFrame"/>.
+        /// This is the retrograde direction as shown on the navball when in surface mode.
+        /// </summary>
+        /// <remarks>
+        /// Singular when surface speed is approximately zero.
+        /// </remarks>
+        /// <returns>The direction as a unit vector.</returns>
+        [KRPCProperty]
+        public Tuple3 SurfaceRetrograde {
+            get { return referenceFrame.DirectionFromWorldSpace (-InternalVessel.srf_velocity.normalized).ToTuple (); }
+        }
+
+        /// <summary>
         /// The direction normal to the vessels orbit,
         /// in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
