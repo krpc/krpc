@@ -309,6 +309,8 @@ SpaceCenter.Flight.Heading
 SpaceCenter.Flight.Roll
 SpaceCenter.Flight.Prograde
 SpaceCenter.Flight.Retrograde
+SpaceCenter.Flight.SurfacePrograde
+SpaceCenter.Flight.SurfaceRetrograde
 SpaceCenter.Flight.Normal
 SpaceCenter.Flight.AntiNormal
 SpaceCenter.Flight.Radial
