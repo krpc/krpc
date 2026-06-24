@@ -56,6 +56,8 @@ class TestPartsResourceConverter(krpctest.TestCase):
     def test_operate(self):
         # Relies on the Ore preloaded in the craft's tank; the drill is exercised
         # by test_parts_resource_harvester.py, not here.
+        vessel = self.connect().space_center.active_vessel
+        self.assertGreaterEqual(vessel.resources.amount("Ore"), 5)
         index = 1
         self.assertFalse(self.converter.active(index))
         self.assertEqual(self.converter_state.idle, self.converter.state(index))
