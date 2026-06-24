@@ -1368,7 +1368,7 @@ PART
 	RESOURCE
 	{
 		name = Ore
-		amount = 0
+		amount = 30
 		maxAmount = 75
 		flowState = True
 		isTweakable = True
