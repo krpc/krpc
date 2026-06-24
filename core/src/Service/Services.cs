@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Reflection;
 using KRPC.Service.Messages;
 using KRPC.Service.Scanner;
@@ -54,9 +55,10 @@ namespace KRPC.Service
             string service = call.Service;
             if (call.ServiceId > 0)
                 service = GetServiceNameById (call.ServiceId);
-            if (!Signatures.ContainsKey (service))
+            ServiceSignature serviceSignature;
+            if (!Signatures.TryGetValue (service, out serviceSignature))
                 throw new RPCException ("Service \"" + service + "\" not found");
-            return Signatures [service];
+            return serviceSignature;
         }
 
         public ProcedureSignature GetProcedureSignature (ProcedureCall call)
@@ -66,29 +68,35 @@ namespace KRPC.Service
             string procedure = call.Procedure;
             if (call.ProcedureId > 0)
                 procedure = GetProcedureNameById (service, call.ProcedureId);
-            if (!serviceSignature.Procedures.ContainsKey (procedure))
+            ProcedureSignature procedureSignature;
+            if (!serviceSignature.Procedures.TryGetValue (procedure, out procedureSignature))
                 throw new RPCException ("Procedure \"" + procedure + "\" not found, in service \"" + service + "\"");
-            return serviceSignature.Procedures [procedure];
+            return procedureSignature;
         }
 
-        string GetServiceNameById (uint id) {
-            if (!ServicesById.ContainsKey (id))
+        string GetServiceNameById (uint id)
+        {
+            ServiceSignature sig;
+            if (!ServicesById.TryGetValue (id, out sig))
                 throw new RPCException ("Service with id " + id + " not found");
-            return ServicesById [id].Name;
+            return sig.Name;
         }
 
         string GetProcedureNameById (string service, uint procedureId)
         {
-            if (!ProceduresById.ContainsKey (service))
+            IDictionary<uint, ProcedureSignature> procedures;
+            if (!ProceduresById.TryGetValue (service, out procedures))
                 throw new RPCException ("Service \"" + service + "\" not found");
-            if (!ProceduresById [service].ContainsKey (procedureId))
+            ProcedureSignature sig;
+            if (!procedures.TryGetValue (procedureId, out sig))
                 throw new RPCException ("Procedure with id " + procedureId + " not found");
-            return ProceduresById [service] [procedureId].Name;
+            return sig.Name;
         }
 
         public Type GetMappedExceptionType (Type exnType)
         {
-            return MappedExceptionTypes.ContainsKey(exnType) ? MappedExceptionTypes [exnType] : exnType;
+            Type mappedType;
+            return MappedExceptionTypes.TryGetValue (exnType, out mappedType) ? mappedType : exnType;
         }
 
         /// <summary>
@@ -97,10 +105,17 @@ namespace KRPC.Service
         /// Throws RPCException if the call fails.
         /// </summary>
 
+        static object instanceBuffer;
+        static object[] argumentBuffer;
+        const int argumentBufferCacheSize = 16;
+        readonly static object[][] argumentBuffers = Enumerable.Range(0, argumentBufferCacheSize).Select(i => new object[i]).ToArray();
+
         public ProcedureResult ExecuteCall (ProcedureSignature procedure, ProcedureCall call)
         {
-            try {
-                return ExecuteCall (procedure, GetArguments (procedure, call.Arguments));
+            try
+            {
+                SetArguments(procedure, call.Arguments);
+                return ExecuteCall (procedure, instanceBuffer, argumentBuffer);
             } catch (YieldException) {
                 throw;
             } catch (RPCException e) {
@@ -115,19 +130,12 @@ namespace KRPC.Service
         /// Throws YieldException, containing a continuation, if the call yields.
         /// Throws RPCException if the call fails.
         /// </summary>
-        public ProcedureResult ExecuteCall (ProcedureSignature procedure, object[] arguments)
+        public ProcedureResult ExecuteCall (ProcedureSignature procedure, object instance, object[] arguments)
         {
             try {
                 if ((CallContext.GameScene & procedure.GameScene) == 0)
                     throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name(CallContext.GameScene) + "'");
-                object returnValue;
-                try {
-                    returnValue = procedure.Handler.Invoke (arguments);
-                } catch (TargetInvocationException e) {
-                    if (e.InnerException is YieldException)
-                        throw e.InnerException;
-                    throw new RPCException (e.InnerException);
-                }
+                object returnValue = procedure.Handler.Invoke (instance, arguments);
                 var result = new ProcedureResult ();
                 if (procedure.HasReturnType) {
                     CheckReturnValue (procedure, returnValue);
@@ -167,9 +175,132 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Get the arguments for a procedure from a list of argument messages.
+        /// Like ExecuteCall(procedure, call) but writes the result into an existing
+        /// ProcedureResult instead of allocating a new one.
+        /// Throws YieldException if the procedure yields (result is unchanged).
         /// </summary>
-        public object[] GetArguments (ProcedureSignature procedure, IList<Argument> arguments)
+        internal void ExecuteCallInto (ProcedureSignature procedure, ProcedureCall call, ProcedureResult result)
+        {
+            SetArguments (procedure, call.Arguments);
+            ExecuteCallInto (procedure, instanceBuffer, argumentBuffer, result);
+        }
+
+        void ExecuteCallInto (ProcedureSignature procedure, object instance, object[] arguments, ProcedureResult result)
+        {
+            object returnValue;
+            try {
+                if ((CallContext.GameScene & procedure.GameScene) == 0)
+                    throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name (CallContext.GameScene) + "'");
+                returnValue = procedure.Handler.Invoke (instance, arguments);
+            } catch (YieldException) {
+                throw;
+            } catch (RPCException e) {
+                result.Reset ();
+                result.Error = HandleException (e);
+                return;
+            } catch (System.Exception e) {
+                result.Reset ();
+                result.Error = HandleException (e);
+                return;
+            }
+            result.Reset ();
+            if (procedure.HasReturnType) {
+                try {
+                    CheckReturnValue (procedure, returnValue);
+                } catch (RPCException e) {
+                    result.Error = HandleException (e);
+                    return;
+                }
+                result.Value = returnValue;
+            }
+        }
+
+        /// <summary>
+        /// Like ExecuteCall(procedure, continuation) but writes into an existing ProcedureResult.
+        /// Throws YieldException if the continuation yields (result is unchanged).
+        /// Throws RPCException on error (result is unchanged; caller must handle).
+        /// </summary>
+        internal void ExecuteCallInto (ProcedureSignature procedure, Func<object> continuation, ProcedureResult result)
+        {
+            object returnValue;
+            try {
+                returnValue = continuation ();
+            } catch (YieldException) {
+                throw;
+            } catch (System.Exception e) {
+                throw new RPCException (e);
+            }
+            result.Reset ();
+            if (procedure.HasReturnType) {
+                CheckReturnValue (procedure, returnValue);
+                result.Value = returnValue;
+            }
+        }
+
+        /// <summary>
+        /// Set the arguments for a procedure handler from a list of argument messages.
+        /// </summary>
+        public void SetArguments(ProcedureSignature procedure, IList<Argument> arguments)
+        {
+            instanceBuffer = null;
+            argumentBuffer = null;
+
+            var numParameters = procedure.Parameters.Count;
+            if (numParameters == 0)
+                return;
+
+            var hasInstance = procedure.Handler.HasInstance;
+            var numArguments = hasInstance ? numParameters - 1 : numParameters;
+
+            if (numArguments > 0)
+            {
+                if (numArguments < argumentBufferCacheSize)
+                    argumentBuffer = argumentBuffers[numArguments];
+                else
+                    argumentBuffer = new object[numArguments];
+            }
+
+            int filledMask = 0;
+            foreach (var argument in arguments)
+            {
+                var position = argument.Position;
+                var value = argument.Value;
+                var parameter = procedure.Parameters[(int)position];
+                var type = parameter.Type;
+                if (value != null && !type.IsInstanceOfType (value))
+                    throw new RPCException (
+                        "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
+                        "Expected an argument of type " + type + ", got " + value.GetType ());
+                if (value == null && !TypeUtils.IsAClassType (type))
+                    throw new RPCException (
+                        "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
+                        "Expected an argument of type " + type + ", got null");
+                if (hasInstance && position == 0)
+                    instanceBuffer = value;
+                else
+                {
+                    int bufferIndex = hasInstance ? (int)position - 1 : (int)position;
+                    argumentBuffer[bufferIndex] = value;
+                    filledMask |= (1 << bufferIndex);
+                }
+            }
+            // Fill unset slots with default values. Type.Missing does not work on Mono.
+            for (int i = 0; i < numArguments; i++)
+            {
+                if ((filledMask & (1 << i)) == 0)
+                {
+                    var parameter = procedure.Parameters[hasInstance ? i + 1 : i];
+                    if (!parameter.HasDefaultValue)
+                        throw new RPCException ("Argument not specified for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName);
+                    argumentBuffer[i] = parameter.DefaultValue;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the arguments for a procedure handler from a list of argument messages.
+        /// </summary>
+        public object[] GetArguments(ProcedureSignature procedure, IList<Argument> arguments)
         {
             // Get list of supplied argument values and whether they were set
             var numParameters = procedure.Parameters.Count;

@@ -327,6 +327,7 @@ namespace KRPC.Server.TCP
                     while (true) {
                         // Block until a client connects to the server
                         var client = tcpListener.AcceptTcpClient ();
+                        client.NoDelay = true;
                         Logger.WriteLine ("TCPServer.Listener: client requesting connection (" + client.Client.RemoteEndPoint + ")", Logger.Severity.Debug);
                         // Add to pending clients
                         lock (pendingClientsLock) {

@@ -38,14 +38,30 @@ namespace KRPC.Service
         }
 
         public override void UpdateInternal() {
-            try  {
-                Result = continuation.Run ();
+            var result = StreamResult.Result;
+            bool wasSet = result.HasValue;
+            object oldValue = result.Value;
+
+            try {
+                continuation.RunInto (result);
             } catch (YieldException) {
                 return;
             } catch (System.Exception e) {
-                Result = new ProcedureResult {
-                    Error = Service.Services.Instance.HandleException (e)
-                };
+                result.Reset ();
+                result.Error = Service.Services.Instance.HandleException (e);
+                Changed = true;
+                return;
+            }
+
+            if (result.HasValue) {
+                if (!wasSet)
+                    Changed = true;
+                else if (!ReferenceEquals (result.Value, null))
+                    Changed |= !ValueUtils.Equal (result.Value, oldValue);
+                else
+                    Changed |= !ReferenceEquals (oldValue, null);
+            } else {
+                Changed |= result.HasError;
             }
         }
     }
