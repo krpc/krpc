@@ -33,7 +33,13 @@ class TestControlMixin:
         self.auto_pilot.sas = False
         self.connect().testing_tools.clear_rotation(self.vessel)
         self.wait_until(
-            lambda: max(abs(v) for v in self.vessel.angular_velocity(self.vessel.orbital_reference_frame)) < 0.01
+            lambda: max(
+                abs(v)
+                for v in self.vessel.angular_velocity(
+                    self.vessel.orbital_reference_frame
+                )
+            )
+            < 0.01
         )
 
         self.control.pitch = 1
@@ -50,7 +56,13 @@ class TestControlMixin:
         self.auto_pilot.sas = False
         self.connect().testing_tools.clear_rotation(self.vessel)
         self.wait_until(
-            lambda: max(abs(v) for v in self.vessel.angular_velocity(self.vessel.orbital_reference_frame)) < 0.01
+            lambda: max(
+                abs(v)
+                for v in self.vessel.angular_velocity(
+                    self.vessel.orbital_reference_frame
+                )
+            )
+            < 0.01
         )
 
         self.control.yaw = 1
@@ -69,7 +81,13 @@ class TestControlMixin:
         self.auto_pilot.sas = False
         self.connect().testing_tools.clear_rotation(self.vessel)
         self.wait_until(
-            lambda: max(abs(v) for v in self.vessel.angular_velocity(self.vessel.orbital_reference_frame)) < 0.01
+            lambda: max(
+                abs(v)
+                for v in self.vessel.angular_velocity(
+                    self.vessel.orbital_reference_frame
+                )
+            )
+            < 0.01
         )
 
         pitch = self.orbital_flight.pitch
