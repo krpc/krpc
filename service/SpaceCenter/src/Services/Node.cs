@@ -4,6 +4,7 @@ using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using Tuple3 = System.Tuple<double, double, double>;
+using Tuple4 = System.Tuple<double, double, double, double>;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -282,6 +283,20 @@ namespace KRPC.SpaceCenter.Services
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.PositionFromWorldSpace (InternalNode.patch.getPositionAtUT (InternalNode.UT)).ToTuple ();
+        }
+
+        /// <summary>
+        /// The rotation of the maneuver nodes burn.
+        /// </summary>
+        /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// rotation is in.</param>
+        [KRPCMethod]
+        public Tuple4 Rotation (ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException (nameof (referenceFrame));
+            return referenceFrame.RotationFromWorldSpace (this.ReferenceFrame.Rotation).ToTuple ();
         }
 
         /// <summary>

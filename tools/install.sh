@@ -53,7 +53,7 @@ cp -R -L \
     bazel-bin/tools/TestingTools/TestingTools.xml \
     service/SpaceCenter/src/module-manager.cfg \
     "$GAMEDATA/"
-cp -L bazel-krpc/external/_main~_repo_rules~module_manager/file/ModuleManager.4.2.3.dll "$GAMEDATA/../"
+cp -L bazel-krpc/external/+http_file+module_manager/file/ModuleManager.4.2.3.dll "$GAMEDATA/../"
 
 mkdir -p "$GAMEDATA/PluginData"
 cp tools/settings.cfg "$GAMEDATA/PluginData/"

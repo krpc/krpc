@@ -36,8 +36,9 @@ namespace KRPC.Service
         {
             if (obj == null)
                 return 0;
-            if (instances.ContainsKey (obj))
-                return instances [obj];
+            ulong existingId;
+            if (instances.TryGetValue (obj, out existingId))
+                return existingId;
             var objectId = nextObjectId;
             nextObjectId++;
             instances [obj] = objectId;
@@ -53,8 +54,8 @@ namespace KRPC.Service
         {
             if (obj == null)
                 return;
-            if (instances.ContainsKey (obj)) {
-                var objectId = instances [obj];
+            ulong objectId;
+            if (instances.TryGetValue (obj, out objectId)) {
                 instances.Remove (obj);
                 objectIds.Remove (objectId);
             }
@@ -67,9 +68,10 @@ namespace KRPC.Service
         {
             if (id == 0ul)
                 return null;
-            if (!objectIds.ContainsKey (id))
+            object result;
+            if (!objectIds.TryGetValue (id, out result))
                 throw new ArgumentException ("Instance not found");
-            return objectIds [id];
+            return result;
         }
 
         /// <summary>
@@ -79,9 +81,10 @@ namespace KRPC.Service
         {
             if (obj == null)
                 return 0;
-            if (!instances.ContainsKey (obj))
+            ulong id;
+            if (!instances.TryGetValue (obj, out id))
                 throw new ArgumentException ("Instance not found");
-            return instances [obj];
+            return id;
         }
     }
 }

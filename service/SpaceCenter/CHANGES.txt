@@ -1,9 +1,18 @@
 v0.6.0
+ * Fix Maneuver and ManeuverOrbital reference frame velocity (previously returned zero; now returns the orbital velocity at the node UT)
+ * Fix angular velocity for VesselSurface, VesselSurfaceVelocity, CelestialBodyOrbital, ManeuverOrbital, Part, PartCenterOfMass, DockingPort and Thrust reference frames (previously returned zero)
+ * Fix LookRotation2 producing NaN for rotations near 180° by using Shepperd's method
+ * Fix VesselSurfaceVelocity reference frame producing NaN when surface velocity is near zero; now throws InvalidOperationException
+ * Fix ReferenceFrame.CreateHybrid using velocity frame's angular velocity instead of the angularVelocity frame
+ * Fix PartCenterOfMass reference frame throwing InvalidOperationException on velocity transforms
+ * Fix Maneuver reference frame forward-vector fallback using unnormalized burn vector in collinearity check
+ * Fix Flight.AngleOfAttack and Flight.SideslipAngle treating dot product as radians instead of using asin
  * Fix Engine.Propellants failing for non-active mode on multi-mode engines with different propellants (#833)
  * Make LaunchVessel crew parameter non-optional to work around protocol issue (#824)
  * Fix Part.DecoupledAt not considering if a decoupler is enabled (#818)
  * Guard ContractManager against null ContractSystem in non-career game modes (#819)
  * Fix waypoint mean altitude not including bedrock height (#801)
+ * Add Flight.SurfacePrograde and Flight.SurfaceRetrograde direction vectors (surface-relative velocity direction, matching navball surface mode) (#582)
  * Add Flight.SimulateAerodynamicTorqueAt (#825)
  * Add Control.AeroSurfaces to enable/disable pitch, yaw and roll on all control surfaces (#827)
  * Add Control.EngineGimbals to enable/disable gimbal on all gimballed engines (#827)
@@ -23,6 +32,11 @@ v0.6.0
    configuration (#831)
  * Add Engine.CanReverseThrust, Engine.ThrustReversed and Engine.ToggleThrustReversal to control thrust reversal on stock and recognized mod engines (#865)
  * Add Control.ThrustReversers to engage/disengage thrust reversers on all engines (#865)
+ * Add Control.GetActionGroupActions to list the part actions assigned to an action group (#864)
+ * Add Node.Rotation
+ * Fix Vessel/Part/Hybrid reference frame rotation precision
+ * Fix VesselOrbital reference frame angular velocity (missing Coriolis correction) (#823)
+ * Fix Vessel.AvailableTorque due to sign inconsistency in KSP's ITorqueProvider implementations (#525)
 
 v0.5.4
  * Fix vessel recovery (#782)

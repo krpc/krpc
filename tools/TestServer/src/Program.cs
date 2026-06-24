@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Net;
+using System.Threading;
 using System.Reflection;
 using KRPC;
 using KRPC.Server;
@@ -193,7 +194,14 @@ namespace TestServer
                         Console.WriteLine ("Fast by " + diffTime + " ms (" + diffTicks + " ticks)");
                 }
 
-                // Wait, to force 60 FPS
+                // Wait, to force 60 FPS — sleep most of the remaining time rather than
+                // spinning, so the process doesn't burn a core during profiling/benchmarks.
+                var remainingTicks = ticksPerUpdate - timer.ElapsedTicks;
+                if (remainingTicks > Stopwatch.Frequency / 1000) {
+                    var sleepMs = (int)(remainingTicks * 1000L / Stopwatch.Frequency) - 1;
+                    if (sleepMs > 0)
+                        Thread.Sleep (sleepMs);
+                }
                 while (timer.ElapsedTicks < ticksPerUpdate) {
                 }
                 update++;
