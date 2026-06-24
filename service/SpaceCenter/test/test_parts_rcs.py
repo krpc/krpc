@@ -57,11 +57,11 @@ class RCSTest(RCSTestBase):
         # a 2% relative tolerance plus a small absolute floor, so large kN*m
         # torques (e.g. the Vernor engine, ~4-7 kN*m) are not failed by sub-
         # percent drift while near-zero axes keep the original tight check.
-        for axis, (e, a) in enumerate(zip(expected, actual)):
+        for axis, (exp, act) in enumerate(zip(expected, actual)):
             self.assertAlmostEqual(
-                e,
-                a,
-                delta=max(10, abs(e) * 0.02),
+                exp,
+                act,
+                delta=max(10, abs(exp) * 0.02),
                 msg="torque %s not almost equal to %s (axis %d)"
                 % (expected, actual, axis),
             )
