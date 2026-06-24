@@ -72,11 +72,11 @@ class TestPartsModule(krpctest.TestCase):
     def test_set_field_int(self):
         part = self.parts.with_name("SmallGearBay")[0]
         module = next(m for m in part.modules if m.name == "ModuleWheelBrakes")
-        self.assertEqual({"Brakes": "100"}, module.fields)
-        module.set_field_int("Brakes", 50)
-        self.wait(1)
         self.assertEqual({"Brakes": "50"}, module.fields)
-        module.set_field_int("Brakes", 100)
+        module.set_field_float("Brakes", 25)
+        self.wait(1)
+        self.assertEqual({"Brakes": "25"}, module.fields)
+        module.set_field_float("Brakes", 100)
         self.assertEqual({"Brakes": "100"}, module.fields)
 
     def test_all_fields_by_id(self):
