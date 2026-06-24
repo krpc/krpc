@@ -58,7 +58,7 @@ class TestCase(unittest.TestCase):
         cls.connect().testing_tools.remove_other_vessels()
 
     @classmethod
-    def launch_vessel_from_vab(cls, name, directory=None):
+    def launch_vessel_from_vab(cls, name, directory=None, launch_site=None):
         # Copy craft file to save directory
         if directory is None:
             directory = os.path.join(os.getcwd(), os.path.dirname(sys.argv[0]), "craft")
@@ -80,7 +80,11 @@ class TestCase(unittest.TestCase):
             os.path.join(ships_path, name + ".loadmeta"),
         )
         # Launch the craft
-        cls.connect().space_center.launch_vessel_from_vab(name)
+        space_center = cls.connect().space_center
+        if launch_site is None:
+            space_center.launch_vessel_from_vab(name)
+        else:
+            space_center.launch_vessel("VAB", name, launch_site, [])
 
     @classmethod
     def set_orbit(
@@ -108,6 +112,10 @@ class TestCase(unittest.TestCase):
     @classmethod
     def set_circular_orbit(cls, body, altitude):
         cls.connect().testing_tools.set_circular_orbit(body, altitude)
+
+    @classmethod
+    def set_landed(cls, body, latitude, longitude, altitude=0):
+        cls.connect().testing_tools.set_landed(body, latitude, longitude, altitude)
 
     @classmethod
     def wait(cls, timeout=0.1):
