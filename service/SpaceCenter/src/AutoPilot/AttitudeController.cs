@@ -35,6 +35,13 @@ namespace KRPC.SpaceCenter.AutoPilot
         readonly StringBuilder diagnosticLog = new StringBuilder ();
         readonly object diagnosticLogLock = new object ();
 
+        // Time constant for the one-sided torque smoothing (see UpdateSmoothedTorque).
+        const double TorqueSmoothTimeConstant = 0.5;
+        // Slope factor of the sigmoid that attenuates the velocity setpoint near the target.
+        const double AttenuationSigmoidSlope = 6.0;
+        // Below this 2D error magnitude (radians) the joint pitch/yaw profile is skipped.
+        const double MinThetaForJointProfile = 1e-10;
+
         public AttitudeController (Vessel vessel)
         {
             this.vessel = new Services.Vessel (vessel);
@@ -189,60 +196,29 @@ namespace KRPC.SpaceCenter.AutoPilot
             var internalVessel = vessel.InternalVessel;
             var torque = vessel.AvailableTorqueVectors.Item1;
             var moi = vessel.MomentOfInertiaVector;
+            var dt = Time.fixedDeltaTime;
 
-            // Compute phi: roll angle of the vessel body frame relative to the roll-invariant
-            // frame. The roll-invariant frame shares the vessel's nose direction but has zero
-            // roll relative to the AP reference frame. Both the target and current angular
-            // velocities are expressed in this frame so that roll corrections do not disturb
-            // the path taken to point the vessel.
-            //
-            // The body x-axis expressed in the roll-invariant frame is R_y(phi)*(1,0,0) =
-            // (cos(phi), 0, -sin(phi)), so phi = atan2(-bodyX_ri.z, bodyX_ri.x).
-            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (internalVessel.ReferenceTransform.up);
-            var Q_vessel_ap = ReferenceFrame.RotationFromWorldSpace (internalVessel.ReferenceTransform.rotation);
-            var Q_point_ap = GeometryExtensions.FromToRotation (Vector3d.up, currentDirection);
-            var bodyXInRI = (Q_point_ap.Inverse () * Q_vessel_ap) * new Vector3d (1, 0, 0);
-            double phi = Math.Atan2 (-bodyXInRI.z, bodyXInRI.x);
-            double cosPhi = Math.Cos (phi);
-            double sinPhi = Math.Sin (phi);
+            // Compute the roll-invariant frame: a frame sharing the vessel's nose direction but
+            // with zero roll relative to the AP reference frame. Expressing both the target and
+            // current angular velocities in this frame means roll corrections do not disturb the
+            // path taken to point the vessel.
+            Vector3d currentDirection;
+            double phi, cosPhi, sinPhi;
+            ComputeRollInvariantFrame (internalVessel, out currentDirection, out phi, out cosPhi, out sinPhi);
 
-            // Compute current angular velocity (body frame) and convert to roll-invariant frame.
+            // Current and target angular velocities, both expressed in the roll-invariant frame.
             var current = ComputeCurrentAngularVelocity ();
-            var currentRi = new Vector3d (
-                current.x * cosPhi + current.z * sinPhi,
-                current.y,
-                -current.x * sinPhi + current.z * cosPhi);
+            var currentRi = ToRollInvariant (current, cosPhi, sinPhi);
+            var target = ComputeTargetAngularVelocity (torque, moi, current, currentDirection, cosPhi, sinPhi);
 
-            // Compute target angular velocity directly in roll-invariant frame. Passing cosPhi/sinPhi
-            // lets ComputeTargetAngularVelocity apply AnglesToAngularVelocity in roll-invariant space,
-            // ensuring the bang-bang profile is phi-independent.
-            var target = ComputeTargetAngularVelocity (torque, moi, current, cosPhi, sinPhi);
-
-            // Blend roll control in smoothly as the direction error decreases below RollStartAngle.
-            // Outside the blend zone the roll PID integral is cleared to prevent windup from
-            // causing a kick when roll control re-engages.
-            if (!rollControlled) {
+            // Roll setpoint is already weighted to zero inside ComputeTargetAngularVelocity when the
+            // vessel is far from the direction target; clear the integral there to prevent windup.
+            if (!rollControlled)
                 target.y = 0;
-            } else {
-                // rollWeight is already applied to the roll residual inside ComputeTargetAngularVelocity,
-                // so target.y is naturally zero when the vessel is far from the direction target.
-                // Clear the integral here to prevent windup while roll is suppressed.
-                var dirError = Vector3.Angle (currentDirection, TargetDirection);
-                var rollWeight = Math.Min (1.0, Math.Max (0.0, (RollStartAngle - dirError) / (RollStartAngle - RollEngageAngle)));
-                if (rollWeight == 0.0)
-                    RollPID.ClearIntegralTerm ();
-            }
+            else
+                ClearRollWindupIfDisengaged (currentDirection);
 
-            // Update one-sided torque smoothing: track increases immediately (gains going down is
-            // safe) but decay decreases at τ≈0.5s so a sudden torque drop (e.g. engine shutdown
-            // while a small reaction wheel keeps torque > 0) does not cause a single-tick gain
-            // spike. The velocity profile in AnglesToAngularVelocity still uses the actual torque
-            // so the setpoint immediately reflects the reduced authority.
-            var torqueSmoothDecay = Math.Exp (-Time.fixedDeltaTime / 0.5);
-            smoothedTorque = new Vector3d (
-                Math.Max (torque.x, smoothedTorque.x * torqueSmoothDecay),
-                Math.Max (torque.y, smoothedTorque.y * torqueSmoothDecay),
-                Math.Max (torque.z, smoothedTorque.z * torqueSmoothDecay));
+            UpdateSmoothedTorque (torque);
 
             // Autotune the controllers if enabled (uses smoothed torque to avoid gain spikes)
             if (AutoTune)
@@ -255,63 +231,148 @@ namespace KRPC.SpaceCenter.AutoPilot
                 YawPID.ClearIntegralTerm ();
             }
 
-            // Run pitch/yaw PIDs in the roll-invariant frame; roll PID on the y-axis (unchanged
-            // by the frame rotation). When an axis has no available torque, zero its output and
-            // clear the integral so accumulated history does not cause a transient when authority
-            // returns (e.g. engine restart after shutdown).
-            var dt = Time.fixedDeltaTime;
-            double virtualPitch = 0;
-            if (torque [0] > 0)
-                virtualPitch = PitchPID.Update (target.x, currentRi.x, dt);
-            else
-                PitchPID.ClearIntegralTerm ();
+            // Run pitch/yaw PIDs in the roll-invariant frame; roll PID on the y-axis (unchanged by
+            // the frame rotation). Then convert the pitch/yaw outputs back to the body frame.
+            var virtualPitch = RunAxis (PitchPID, target.x, currentRi.x, torque [0], dt);
+            state.Roll = (float)RunAxis (RollPID, target.y, currentRi.y, torque [1], dt);
+            var virtualYaw = RunAxis (YawPID, target.z, currentRi.z, torque [2], dt);
+            var bodyControl = FromRollInvariant (new Vector3d (virtualPitch, 0, virtualYaw), cosPhi, sinPhi);
+            state.Pitch = (float)bodyControl.x;
+            state.Yaw = (float)bodyControl.z;
 
-            if (torque [1] > 0)
-                state.Roll = (float)RollPID.Update (target.y, currentRi.y, dt);
-            else {
+            if (diagnosticLogging)
+                LogDiagnostics (torque, moi, phi, currentRi, target, currentDirection, state);
+        }
+
+        /// <summary>
+        /// Compute the roll-invariant frame for the current tick. phi is the roll angle of the
+        /// vessel body frame relative to the roll-invariant frame.
+        /// </summary>
+        /// <remarks>
+        /// The body x-axis expressed in the roll-invariant frame is R_y(phi)*(1,0,0) =
+        /// (cos(phi), 0, -sin(phi)), so phi = atan2(-bodyX_ri.z, bodyX_ri.x).
+        /// </remarks>
+        void ComputeRollInvariantFrame (Vessel internalVessel, out Vector3d currentDirection,
+            out double phi, out double cosPhi, out double sinPhi)
+        {
+            currentDirection = ReferenceFrame.DirectionFromWorldSpace (internalVessel.ReferenceTransform.up);
+            var Q_vessel_ap = ReferenceFrame.RotationFromWorldSpace (internalVessel.ReferenceTransform.rotation);
+            var Q_point_ap = GeometryExtensions.FromToRotation (Vector3d.up, currentDirection);
+            var bodyXInRI = (Q_point_ap.Inverse () * Q_vessel_ap) * new Vector3d (1, 0, 0);
+            phi = Math.Atan2 (-bodyXInRI.z, bodyXInRI.x);
+            cosPhi = Math.Cos (phi);
+            sinPhi = Math.Sin (phi);
+        }
+
+        /// <summary>
+        /// Rotate a vector from the vessel body frame into the roll-invariant frame, i.e. strip
+        /// vessel roll phi (R_y(phi)). The y-axis (nose/roll axis) is unchanged by the rotation.
+        /// </summary>
+        static Vector3d ToRollInvariant (Vector3d v, double cosPhi, double sinPhi)
+        {
+            return new Vector3d (
+                v.x * cosPhi + v.z * sinPhi,
+                v.y,
+                -v.x * sinPhi + v.z * cosPhi);
+        }
+
+        /// <summary>
+        /// Rotate a vector from the roll-invariant frame back into the vessel body frame (R_y(-phi)).
+        /// </summary>
+        static Vector3d FromRollInvariant (Vector3d v, double cosPhi, double sinPhi)
+        {
+            return new Vector3d (
+                v.x * cosPhi - v.z * sinPhi,
+                v.y,
+                v.x * sinPhi + v.z * cosPhi);
+        }
+
+        /// <summary>
+        /// Convert a direction vector from the autopilot reference frame to the vessel body frame.
+        /// </summary>
+        Vector3d ApToBody (Vector3d v)
+        {
+            return vessel.ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.DirectionToWorldSpace (v));
+        }
+
+        /// <summary>
+        /// Weight in [0,1] that blends roll control in as the direction error decreases from
+        /// RollStartAngle to RollEngageAngle.
+        /// </summary>
+        double RollWeight (double dirError)
+        {
+            return Math.Min (1.0, Math.Max (0.0, (RollStartAngle - dirError) / (RollStartAngle - RollEngageAngle)));
+        }
+
+        /// <summary>
+        /// Clear the roll PID integral while roll control is suppressed (vessel far from the
+        /// direction target) to prevent windup that would kick when roll control re-engages.
+        /// </summary>
+        void ClearRollWindupIfDisengaged (Vector3d currentDirection)
+        {
+            var dirError = Vector3.Angle (currentDirection, TargetDirection);
+            if (RollWeight (dirError) == 0.0)
                 RollPID.ClearIntegralTerm ();
-                state.Roll = 0;
-            }
+        }
 
-            double virtualYaw = 0;
-            if (torque [2] > 0)
-                virtualYaw = YawPID.Update (target.z, currentRi.z, dt);
-            else
-                YawPID.ClearIntegralTerm ();
+        /// <summary>
+        /// Update the one-sided torque smoothing: track increases immediately (gains going down is
+        /// safe) but decay decreases at τ≈0.5s so a sudden torque drop (e.g. engine shutdown while a
+        /// small reaction wheel keeps torque > 0) does not cause a single-tick gain spike. The
+        /// velocity profile still uses the actual torque so the setpoint immediately reflects the
+        /// reduced authority.
+        /// </summary>
+        void UpdateSmoothedTorque (Vector3d torque)
+        {
+            var decay = Math.Exp (-Time.fixedDeltaTime / TorqueSmoothTimeConstant);
+            smoothedTorque = new Vector3d (
+                Math.Max (torque.x, smoothedTorque.x * decay),
+                Math.Max (torque.y, smoothedTorque.y * decay),
+                Math.Max (torque.z, smoothedTorque.z * decay));
+        }
 
-            // Convert virtual pitch/yaw (roll-invariant frame) to actual pitch/yaw (body frame).
-            // R_y(-phi): body.x = ri.x*c - ri.z*s, body.z = ri.x*s + ri.z*c
-            state.Pitch = (float)(virtualPitch * cosPhi - virtualYaw * sinPhi);
-            state.Yaw = (float)(virtualPitch * sinPhi + virtualYaw * cosPhi);
+        /// <summary>
+        /// Run a single PID axis. When the axis has no available torque, zero its output and clear
+        /// the integral so accumulated history does not cause a transient when authority returns
+        /// (e.g. engine restart after shutdown).
+        /// </summary>
+        static double RunAxis (PIDController pid, double target, double current, double torque, double dt)
+        {
+            if (torque > 0)
+                return pid.Update (target, current, dt);
+            pid.ClearIntegralTerm ();
+            return 0;
+        }
 
-            if (diagnosticLogging) {
-                var dirErr = Vector3.Angle (currentDirection, TargetDirection);
-                var line = string.Format (
-                    "[KRPC.AP] t={0:F3} err={1:F2}deg" +
-                    " torque=({2:F4},{3:F4},{4:F4})" +
-                    " moi=({5:F6},{6:F6},{7:F6})" +
-                    " alpha=({8:F3},{9:F3},{10:F3})" +
-                    " ang_err=({11:F2},{12:F2},{13:F2})deg" +
-                    " phi={14:F2}deg" +
-                    " omega_ri=({15:F4},{16:F4},{17:F4})" +
-                    " tgt_omega_ri=({18:F4},{19:F4},{20:F4})" +
-                    " Kp=({21:F4},{22:F4},{23:F4}) Ki=({24:F4},{25:F4},{26:F4})" +
-                    " ctrl=(p={27:F3},r={28:F3},y={29:F3})",
-                    Time.fixedTime, dirErr,
-                    torque.x, torque.y, torque.z,
-                    moi.x, moi.y, moi.z,
-                    moi.x > 0 ? torque.x / moi.x : 0, moi.y > 0 ? torque.y / moi.y : 0, moi.z > 0 ? torque.z / moi.z : 0,
-                    logAngles.x, logAngles.y, logAngles.z,
-                    phi * 180.0 / Math.PI,
-                    currentRi.x, currentRi.y, currentRi.z,
-                    target.x, target.y, target.z,
-                    PitchPID.Kp, RollPID.Kp, YawPID.Kp,
-                    PitchPID.Ki, RollPID.Ki, YawPID.Ki,
-                    state.Pitch, state.Roll, state.Yaw);
-                UnityEngine.Debug.Log (line);
-                lock (diagnosticLogLock) {
-                    diagnosticLog.AppendLine (line);
-                }
+        void LogDiagnostics (Vector3d torque, Vector3d moi, double phi, Vector3d currentRi,
+            Vector3d target, Vector3d currentDirection, PilotAddon.ControlInputs state)
+        {
+            var dirErr = Vector3.Angle (currentDirection, TargetDirection);
+            var line = string.Format (
+                "[KRPC.AP] t={0:F3} err={1:F2}deg" +
+                " torque=({2:F4},{3:F4},{4:F4})" +
+                " moi=({5:F6},{6:F6},{7:F6})" +
+                " alpha=({8:F3},{9:F3},{10:F3})" +
+                " ang_err=({11:F2},{12:F2},{13:F2})deg" +
+                " phi={14:F2}deg" +
+                " omega_ri=({15:F4},{16:F4},{17:F4})" +
+                " tgt_omega_ri=({18:F4},{19:F4},{20:F4})" +
+                " Kp=({21:F4},{22:F4},{23:F4}) Ki=({24:F4},{25:F4},{26:F4})" +
+                " ctrl=(p={27:F3},r={28:F3},y={29:F3})",
+                Time.fixedTime, dirErr,
+                torque.x, torque.y, torque.z,
+                moi.x, moi.y, moi.z,
+                moi.x > 0 ? torque.x / moi.x : 0, moi.y > 0 ? torque.y / moi.y : 0, moi.z > 0 ? torque.z / moi.z : 0,
+                logAngles.x, logAngles.y, logAngles.z,
+                phi * 180.0 / Math.PI,
+                currentRi.x, currentRi.y, currentRi.z,
+                target.x, target.y, target.z,
+                PitchPID.Kp, RollPID.Kp, YawPID.Kp,
+                PitchPID.Ki, RollPID.Ki, YawPID.Ki,
+                state.Pitch, state.Roll, state.Yaw);
+            UnityEngine.Debug.Log (line);
+            lock (diagnosticLogLock) {
+                diagnosticLog.AppendLine (line);
             }
         }
 
@@ -327,17 +388,17 @@ namespace KRPC.SpaceCenter.AutoPilot
             // and the vessel-body axes after the two DirectionFromWorldSpace/DirectionToWorldSpace
             // transforms. The sign is empirically correct: reversing it causes the autopilot to
             // diverge. It must stay consistent with the -sign(angle) convention in AnglesToAngularVelocity.
-            return -vessel.ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.DirectionToWorldSpace (localAngularVelocity));
+            return -ApToBody (localAngularVelocity);
         }
 
         /// <summary>
         /// Compute target angular velocity in the roll-invariant frame (pitch,roll,yaw axes with
         /// vessel roll stripped out). cosPhi/sinPhi are cos/sin of the current vessel roll angle.
         /// </summary>
-        Vector3d ComputeTargetAngularVelocity (Vector3d torque, Vector3d moi, Vector3d currentOmega, double cosPhi, double sinPhi)
+        Vector3d ComputeTargetAngularVelocity (Vector3d torque, Vector3d moi, Vector3d currentOmega,
+            Vector3d currentDirection, double cosPhi, double sinPhi)
         {
             var internalVessel = vessel.InternalVessel;
-            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (internalVessel.ReferenceTransform.up);
             var targetDirection = TargetDirection;
 
             // Direction error: FromToRotation gives a minimum-arc rotation whose axis is
@@ -352,12 +413,11 @@ namespace KRPC.SpaceCenter.AutoPilot
             angle = GeometryExtensions.ClampAngle180 (angle);
 
             // Transform direction error from AP frame to body frame, then to roll-invariant frame.
-            // The y-component is ~0 by construction (direction error ⊥ nose), so only x and z matter.
-            var dirAnglesBody = vessel.ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.DirectionToWorldSpace (axis * angle));
-            var anglesRI = new Vector3d (
-                dirAnglesBody.x * cosPhi + dirAnglesBody.z * sinPhi,
-                0,
-                -dirAnglesBody.x * sinPhi + dirAnglesBody.z * cosPhi);
+            // The y-component is ~0 by construction (direction error ⊥ nose) and is forced to zero
+            // so only x and z carry pitch/yaw.
+            var dirAnglesBody = ApToBody (axis * angle);
+            var anglesRI = ToRollInvariant (dirAnglesBody, cosPhi, sinPhi);
+            anglesRI.y = 0;
 
             // Roll error: computed separately from the roll residual after direction alignment,
             // projected onto the body y-axis (nose = roll axis). Mixing roll residual into the
@@ -366,7 +426,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // roll oscillations. Projecting onto the y-axis extracts the pure roll component.
             if (rollControlled) {
                 var dirError = Vector3d.Angle (currentDirection, targetDirection);
-                var rollWeight = Math.Min (1.0, Math.Max (0.0, (RollStartAngle - dirError) / (RollStartAngle - RollEngageAngle)));
+                var rollWeight = RollWeight (dirError);
                 if (rollWeight > 0) {
                     var currentRotation = ReferenceFrame.RotationFromWorldSpace (internalVessel.ReferenceTransform.rotation);
                     QuaternionD rollResidual = targetRotation * currentRotation.Inverse () * dirRotation.Inverse ();
@@ -377,7 +437,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                         rollResAngle = GeometryExtensions.ClampAngle180 (rollResAngle);
                         // Project the residual axis onto body y (nose). The y-axis is unchanged
                         // by R_y(phi), so this projection is the same in body and RI frames.
-                        var rollResAxisBody = vessel.ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.DirectionToWorldSpace (rollResAxis));
+                        var rollResAxisBody = ApToBody (rollResAxis);
                         anglesRI.y = rollResAngle * rollResAxisBody.y * rollWeight;
                     }
                 }
@@ -386,10 +446,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             logAngles = anglesRI;
 
             // Rotate currentOmega into roll-invariant frame for stopping-distance feedforward.
-            var currentOmegaRi = new Vector3d (
-                currentOmega.x * cosPhi + currentOmega.z * sinPhi,
-                currentOmega.y,
-                -currentOmega.x * sinPhi + currentOmega.z * cosPhi);
+            var currentOmegaRi = ToRollInvariant (currentOmega, cosPhi, sinPhi);
 
             var result = Vector3d.zero;
 
@@ -398,70 +455,87 @@ namespace KRPC.SpaceCenter.AutoPilot
             result.y = ComputeAxisVelocity (anglesRI.y, torque [1], moi [1], currentOmegaRi.y,
                 MaxAngularVelocity [1], AttenuationAngle [1], rollBandwidth);
 
-            // Pitch/yaw: handled jointly in the 2D roll-invariant xz-plane so the nose follows
-            // a straight great-circle arc to the target. Per-axis bang-bang gives ω ∝ sqrt(|θ|)
-            // per component, so the velocity direction differs from the error direction and the
-            // path curves. Treating pitch/yaw jointly applies the profile once to the total 2D
-            // error magnitude, then scales the result back along the unit error direction, giving
-            // ω ∝ |θ|_total in the error direction and a straight path.
+            // Pitch/yaw handled jointly so the nose follows a straight great-circle arc.
+            double pitchVelocity, yawVelocity;
+            ComputePitchYawVelocity (anglesRI, currentOmegaRi, torque, moi, out pitchVelocity, out yawVelocity);
+            result.x = pitchVelocity;
+            result.z = yawVelocity;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Compute the joint pitch/yaw target angular velocity in the 2D roll-invariant xz-plane.
+        /// </summary>
+        /// <remarks>
+        /// Per-axis bang-bang gives ω ∝ sqrt(|θ|) per component, so the velocity direction differs
+        /// from the error direction and the path curves. Treating pitch/yaw jointly applies the
+        /// profile once to the total 2D error magnitude, then scales the result back along the unit
+        /// error direction, giving ω ∝ |θ|_total in the error direction and a straight path.
+        /// </remarks>
+        void ComputePitchYawVelocity (Vector3d anglesRI, Vector3d currentOmegaRi, Vector3d torque,
+            Vector3d moi, out double pitchVelocity, out double yawVelocity)
+        {
+            pitchVelocity = 0;
+            yawVelocity = 0;
+
             var thetaPitch = GeometryExtensions.ToRadians (anglesRI.x);
             var thetaYaw = GeometryExtensions.ToRadians (anglesRI.z);
             var theta2d = Math.Sqrt (thetaPitch * thetaPitch + thetaYaw * thetaYaw);
-            if (theta2d > 1e-10) {
-                var dirPitch = thetaPitch / theta2d;
-                var dirYaw = thetaYaw / theta2d;
+            if (theta2d <= MinThetaForJointProfile)
+                return;
 
-                // Acceleration projected along the path direction
-                var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
-                var alphaYaw = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
-                var alpha2d = dirPitch * dirPitch * alphaPitch + dirYaw * dirYaw * alphaYaw;
+            var dirPitch = thetaPitch / theta2d;
+            var dirYaw = thetaYaw / theta2d;
 
-                // Current omega projected along path for stopping-distance feedforward.
-                // corrQuad (ω²/2α) is the bang-bang stopping distance: always used.
-                // corrLinear (ω/bandwidth) is the PID-lag stopping distance: valid when the PID is
-                // unsaturated and decelerating more slowly than full torque. It is the larger
-                // correction in that regime and prevents overshoot on rigid craft. However, it
-                // amplifies structural bending-mode noise on flexible rockets — set DecelLagCorrection
-                // to false to suppress it and use corrQuad only.
-                var omega2d = currentOmegaRi.x * dirPitch + currentOmegaRi.z * dirYaw;
+            // Acceleration projected along the path direction
+            var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
+            var alphaYaw = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
+            var alpha2d = dirPitch * dirPitch * alphaPitch + dirYaw * dirYaw * alphaYaw;
 
-                var theta2dFf = theta2d;
-                if (alpha2d > 0) {
-                    var corrQuad = 0.5 * omega2d * Math.Abs (omega2d) / alpha2d;
-                    var corr = corrQuad;
-                    if (DecelLagCorrection) {
-                        var bw0 = moi [0] > 0 ? PitchPID.Kp * torque [0] / moi [0] : 0.0;
-                        var bw2 = moi [2] > 0 ? YawPID.Kp * torque [2] / moi [2] : 0.0;
-                        var bandwidth2d = dirPitch * dirPitch * bw0 + dirYaw * dirYaw * bw2;
-                        if (bandwidth2d > 0) {
-                            var corrLinear = omega2d / bandwidth2d;
-                            corr = Math.Abs (corrQuad) >= Math.Abs (corrLinear) ? corrQuad : corrLinear;
-                        }
+            // Current omega projected along path for stopping-distance feedforward.
+            // corrQuad (ω²/2α) is the bang-bang stopping distance: always used.
+            // corrLinear (ω/bandwidth) is the PID-lag stopping distance: valid when the PID is
+            // unsaturated and decelerating more slowly than full torque. It is the larger
+            // correction in that regime and prevents overshoot on rigid craft. However, it
+            // amplifies structural bending-mode noise on flexible rockets — set DecelLagCorrection
+            // to false to suppress it and use corrQuad only.
+            var omega2d = currentOmegaRi.x * dirPitch + currentOmegaRi.z * dirYaw;
+
+            var theta2dFf = theta2d;
+            if (alpha2d > 0) {
+                var corrQuad = 0.5 * omega2d * Math.Abs (omega2d) / alpha2d;
+                var corr = corrQuad;
+                if (DecelLagCorrection) {
+                    var bw0 = moi [0] > 0 ? PitchPID.Kp * torque [0] / moi [0] : 0.0;
+                    var bw2 = moi [2] > 0 ? YawPID.Kp * torque [2] / moi [2] : 0.0;
+                    var bandwidth2d = dirPitch * dirPitch * bw0 + dirYaw * dirYaw * bw2;
+                    if (bandwidth2d > 0) {
+                        var corrLinear = omega2d / bandwidth2d;
+                        corr = Math.Abs (corrQuad) >= Math.Abs (corrLinear) ? corrQuad : corrLinear;
                     }
-                    theta2dFf += corr;
                 }
-
-                // Maximum 2D velocity: constraint ellipse radius in the direction (dirPitch, dirYaw)
-                var maxVPitch = MaxAngularVelocity [0];
-                var maxVYaw = MaxAngularVelocity [2];
-                var maxV2d = (maxVPitch > 0 && maxVYaw > 0)
-                    ? Math.Sqrt (1.0 / (dirPitch * dirPitch / (maxVPitch * maxVPitch) + dirYaw * dirYaw / (maxVYaw * maxVYaw)))
-                    : Math.Min (maxVPitch, maxVYaw);
-
-                double velocity2d = 0;
-                if (alpha2d > 0)
-                    velocity2d = -Math.Sign (theta2dFf) * Math.Min (maxV2d, Math.Sqrt (2.0 * Math.Abs (theta2dFf) * alpha2d));
-
-                var attAngle2d = GeometryExtensions.ToRadians (Math.Min (AttenuationAngle [0], AttenuationAngle [2]));
-                var attenuation2d = 1.0 / (1.0 + Math.Exp (-((Math.Abs (theta2dFf) - attAngle2d) * (6.0 / attAngle2d))));
-                if (double.IsNaN (attenuation2d))
-                    attenuation2d = 0;
-
-                result.x = velocity2d * attenuation2d * dirPitch;
-                result.z = velocity2d * attenuation2d * dirYaw;
+                theta2dFf += corr;
             }
 
-            return result;
+            // Maximum 2D velocity: constraint ellipse radius in the direction (dirPitch, dirYaw)
+            var maxVPitch = MaxAngularVelocity [0];
+            var maxVYaw = MaxAngularVelocity [2];
+            var maxV2d = (maxVPitch > 0 && maxVYaw > 0)
+                ? Math.Sqrt (1.0 / (dirPitch * dirPitch / (maxVPitch * maxVPitch) + dirYaw * dirYaw / (maxVYaw * maxVYaw)))
+                : Math.Min (maxVPitch, maxVYaw);
+
+            double velocity2d = 0;
+            if (alpha2d > 0)
+                velocity2d = -Math.Sign (theta2dFf) * Math.Min (maxV2d, Math.Sqrt (2.0 * Math.Abs (theta2dFf) * alpha2d));
+
+            var attAngle2d = GeometryExtensions.ToRadians (Math.Min (AttenuationAngle [0], AttenuationAngle [2]));
+            var attenuation2d = 1.0 / (1.0 + Math.Exp (-((Math.Abs (theta2dFf) - attAngle2d) * (AttenuationSigmoidSlope / attAngle2d))));
+            if (double.IsNaN (attenuation2d))
+                attenuation2d = 0;
+
+            pitchVelocity = velocity2d * attenuation2d * dirPitch;
+            yawVelocity = velocity2d * attenuation2d * dirYaw;
         }
 
         /// <summary>
@@ -484,7 +558,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var velocity = -Math.Sign (theta) * Math.Min (maxVelocity,
                 maxAcceleration > 0 ? Math.Sqrt (2.0 * Math.Abs (theta) * maxAcceleration) : 0.0);
             var attAngle = GeometryExtensions.ToRadians (attenuationAngleDeg);
-            var attenuation = 1.0 / (1.0 + Math.Exp (-((Math.Abs (theta) - attAngle) * (6.0 / attAngle))));
+            var attenuation = 1.0 / (1.0 + Math.Exp (-((Math.Abs (theta) - attAngle) * (AttenuationSigmoidSlope / attAngle))));
             if (double.IsNaN (attenuation))
                 attenuation = 0;
             return velocity * attenuation;
