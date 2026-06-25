@@ -156,7 +156,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double SurfaceAltitude {
-            get { return MeanAltitude - Math.Max (0d, Body.BedrockHeight (Latitude, Longitude)); }
+            get { return InternalWaypoint.altitude + Math.Min (0d, Body.BedrockHeight (Latitude, Longitude)); }
             set { MeanAltitude = value + Math.Max (0d, Body.BedrockHeight (Latitude, Longitude)); }
         }
 
@@ -166,7 +166,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double BedrockAltitude {
-            get { return MeanAltitude - Body.BedrockHeight (Latitude, Longitude); }
+            get { return InternalWaypoint.altitude; }
             set { MeanAltitude = value + Body.BedrockHeight (Latitude, Longitude); }
         }
 
