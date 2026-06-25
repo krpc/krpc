@@ -130,7 +130,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             var status = converter.status;
             if (status == null)
                 return ResourceConverterState.Unknown;
-            else if (status.Contains ("missing") || status.Contains ("nsufficient"))
+            else if (status.Contains ("missing") || status.IndexOf("insufficient", StringComparison.OrdinalIgnoreCase) >= 0)
                 return ResourceConverterState.MissingResource;
             else if (status.Contains ("full"))
                 return ResourceConverterState.StorageFull;
