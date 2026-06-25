@@ -37,6 +37,7 @@ v0.6.0
  * Fix Vessel/Part/Hybrid reference frame rotation precision
  * Fix VesselOrbital reference frame angular velocity (missing Coriolis correction) (#823)
  * Fix Vessel.AvailableTorque due to sign inconsistency in KSP's ITorqueProvider implementations (#525)
+ * Fix AutoPilot.Error to return the absolute value of the normalized angle (#893)
 
 v0.5.4
  * Fix vessel recovery (#782)

@@ -329,10 +329,10 @@ class TestSpaceCenter(krpctest.TestCase):
         self.assertEqual(None, self.sc.raycast_part((0, 10, 0), (0, 1, 0), ref_frame))
         part = self.sc.raycast_part((-10, 0, 0), (1, 0, 0), ref_frame)
         self.assertIsNotNone(part)
-        self.assertEqual("FL-T400 Fuel Tank", part.title)
+        self.assertEqual("fuelTank", part.name)  # FL-T400 Fuel Tank
         part = self.sc.raycast_part((0, -10, 0), (0, 1, 0), ref_frame)
         self.assertIsNotNone(part)
-        self.assertEqual('LV-T45 "Swivel" Liquid Fuel Engine', part.title)
+        self.assertEqual("liquidEngine2", part.name)  # LV-T45 "Swivel"
 
 
 class WarpTestBase:

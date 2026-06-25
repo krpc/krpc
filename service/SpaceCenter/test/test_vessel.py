@@ -156,64 +156,66 @@ class TestVesselEngines(krpctest.TestCase):
             if "IntakeAir" not in engine.propellant_names and engine.can_shutdown:
                 cls.engines.append(engine)
 
+        # Keyed by language-independent internal part name (part.name); the
+        # inline comment is the English title (part.title) for readability.
         cls.engine_info = {
-            'IX-6315 "Dawn" Electric Propulsion System': {
+            "ionEngine": {  # IX-6315 "Dawn" Electric Propulsion System
                 "max_thrust": 2000,
                 "available_thrust": 2000,
                 "isp": 4200,
                 "vac_isp": 4200,
                 "msl_isp": 100,
             },
-            'LV-T45 "Swivel" Liquid Fuel Engine': {
+            "liquidEngine2": {  # LV-T45 "Swivel" Liquid Fuel Engine
                 "max_thrust": 215000,
                 "available_thrust": 215000,
                 "isp": 320,
                 "vac_isp": 320,
                 "msl_isp": 250,
             },
-            'LV-T30 "Reliant" Liquid Fuel Engine': {
+            "liquidEngine": {  # LV-T30 "Reliant" Liquid Fuel Engine
                 "max_thrust": 240000,
                 "available_thrust": 240000,
                 "isp": 310,
                 "vac_isp": 310,
                 "msl_isp": 265,
             },
-            'LV-N "Nerv" Atomic Rocket Motor': {
+            "nuclearEngine": {  # LV-N "Nerv" Atomic Rocket Motor
                 "max_thrust": 60000,
                 "available_thrust": 60000,
                 "isp": 800,
                 "vac_isp": 800,
                 "msl_isp": 185,
             },
-            'O-10 "Puff" MonoPropellant Fuel Engine': {
+            "omsEngine": {  # O-10 "Puff" MonoPropellant Fuel Engine
                 "max_thrust": 20000,
                 "available_thrust": 20000,
                 "isp": 250,
                 "vac_isp": 250,
                 "msl_isp": 120,
             },
-            'RT-10 "Hammer" Solid Fuel Booster': {
+            "solidBooster.v2": {  # RT-10 "Hammer" Solid Fuel Booster
                 "max_thrust": 0,
                 "available_thrust": 0,
                 "isp": 195,
                 "vac_isp": 195,
                 "msl_isp": 170,
             },
-            'LV-909 "Terrier" Liquid Fuel Engine': {
+            "liquidEngine3.v2": {  # LV-909 "Terrier" Liquid Fuel Engine
                 "max_thrust": 60000,
                 "available_thrust": 0,
                 "isp": 345,
                 "vac_isp": 345,
                 "msl_isp": 85,
             },
-            'J-33 "Wheesley" Basic Jet Engine': {
+            "JetEngine": {  # J-33 "Wheesley" Turbofan Engine
                 "max_thrust": 0,
                 "available_thrust": 0,
                 "isp": 0,
                 "vac_isp": 0,
                 "msl_isp": 0,
             },
-            "CR-7 R.A.P.I.E.R. Engine": {
+            "RAPIER": {  # CR-7 R.A.P.I.E.R. Engine
                 "max_thrust": 0,
                 "available_thrust": 0,
                 "isp": 0,
@@ -255,8 +257,8 @@ class TestVesselEngines(krpctest.TestCase):
 
     def test_one_idle(self):
         self.control.throttle = 0.0
-        title = 'LV-N "Nerv" Atomic Rocket Motor'
-        engine = self.vessel.parts.with_title(title)[0].engine
+        name = "nuclearEngine"  # LV-N "Nerv" Atomic Rocket Motor
+        engine = self.vessel.parts.with_name(name)[0].engine
         engine.active = True
         self.wait(0.5)
 
@@ -266,7 +268,7 @@ class TestVesselEngines(krpctest.TestCase):
         self.control.throttle = 0.0
         self.wait(0.5)
 
-        info = self.engine_info[title]
+        info = self.engine_info[name]
         self.assertAlmostEqual(0, self.vessel.thrust, places=3)
         self.assertAlmostEqual(
             info["available_thrust"], self.vessel.available_thrust, places=3

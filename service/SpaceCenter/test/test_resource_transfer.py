@@ -16,10 +16,8 @@ class TestResourceTransfer(krpctest.TestCase):
         cls.other_parts = other_vessel.parts
 
     def test_transfer(self):
-        from_part = self.parts.with_title("Stratus-V Cylindrified Monopropellant Tank")[
-            0
-        ]
-        to_part = self.parts.with_title("Stratus-V Roundified Monopropellant Tank")[0]
+        from_part = self.parts.with_name("rcsTankRadialLong")[0]
+        to_part = self.parts.with_name("radialRCSTank")[0]
         from_part_amount = from_part.resources.amount("MonoPropellant")
         to_part_amount = to_part.resources.amount("MonoPropellant")
         transfer = self.sc.ResourceTransfer.start(
@@ -38,8 +36,8 @@ class TestResourceTransfer(krpctest.TestCase):
         )
 
     def test_transfer_all(self):
-        from_part = self.parts.with_title("PB-X50R Xenon Container")[0]
-        to_part = self.parts.with_title("PB-X750 Xenon Container")[0]
+        from_part = self.parts.with_name("xenonTankRadial")[0]
+        to_part = self.parts.with_name("xenonTankLarge")[0]
         transfer = self.sc.ResourceTransfer.start(
             from_part, to_part, "XenonGas", float("inf")
         )
@@ -50,8 +48,8 @@ class TestResourceTransfer(krpctest.TestCase):
         self.assertAlmostEqual(5250, to_part.resources.amount("XenonGas"))
 
     def test_transfer_with_limited_source(self):
-        from_part = self.parts.with_title("FL-T400 Fuel Tank")[0]
-        to_part = self.parts.with_title("FL-T100 Fuel Tank")[0]
+        from_part = self.parts.with_name("fuelTank")[0]
+        to_part = self.parts.with_name("fuelTankSmallFlat")[0]
         to_part_amount = to_part.resources.amount("LiquidFuel")
         transfer = self.sc.ResourceTransfer.start(from_part, to_part, "LiquidFuel", 10)
         while not transfer.complete:
@@ -63,8 +61,8 @@ class TestResourceTransfer(krpctest.TestCase):
         )
 
     def test_transfer_with_limited_destination(self):
-        from_part = self.parts.with_title("FL-T400 Fuel Tank")[0]
-        to_part = self.parts.with_title("FL-T100 Fuel Tank")[0]
+        from_part = self.parts.with_name("fuelTank")[0]
+        to_part = self.parts.with_name("fuelTankSmallFlat")[0]
         from_part_amount = from_part.resources.amount("Oxidizer")
         transfer = self.sc.ResourceTransfer.start(from_part, to_part, "Oxidizer", 40)
         while not transfer.complete:
@@ -83,7 +81,7 @@ class TestResourceTransfer(krpctest.TestCase):
         self.assertTrue("Parts are not on the same vessel" in str(cm.exception))
 
     def test_transfer_between_same_parts(self):
-        part = self.parts.with_title("FL-T400 Fuel Tank")[0]
+        part = self.parts.with_name("fuelTank")[0]
         with self.assertRaises(ValueError) as cm:
             self.sc.ResourceTransfer.start(part, part, "Oxidizer", 100)
         self.assertTrue(
@@ -91,22 +89,22 @@ class TestResourceTransfer(krpctest.TestCase):
         )
 
     def test_transfer_unknown_resource(self):
-        from_part = self.parts.with_title("FL-T400 Fuel Tank")[0]
-        to_part = self.parts.with_title("FL-T100 Fuel Tank")[0]
+        from_part = self.parts.with_name("fuelTank")[0]
+        to_part = self.parts.with_name("fuelTankSmallFlat")[0]
         with self.assertRaises(ValueError) as cm:
             self.sc.ResourceTransfer.start(from_part, to_part, "DoesntExist", 100)
         self.assertTrue("Resource 'DoesntExist' does not exist" in str(cm.exception))
 
     def test_transfer_from_part_without_resource(self):
-        from_part = self.parts.with_title("Stratus-V Roundified Monopropellant Tank")[0]
-        to_part = self.parts.with_title("FL-T100 Fuel Tank")[0]
+        from_part = self.parts.with_name("radialRCSTank")[0]
+        to_part = self.parts.with_name("fuelTankSmallFlat")[0]
         with self.assertRaises(ValueError) as cm:
             self.sc.ResourceTransfer.start(from_part, to_part, "Oxidizer", 100)
         self.assertTrue("Source part does not contain" in str(cm.exception))
 
     def test_transfer_to_part_without_resource(self):
-        from_part = self.parts.with_title("FL-T100 Fuel Tank")[0]
-        to_part = self.parts.with_title("Stratus-V Roundified Monopropellant Tank")[0]
+        from_part = self.parts.with_name("fuelTankSmallFlat")[0]
+        to_part = self.parts.with_name("radialRCSTank")[0]
         with self.assertRaises(ValueError) as cm:
             self.sc.ResourceTransfer.start(from_part, to_part, "Oxidizer", 100)
         self.assertTrue("Destination part cannot store" in str(cm.exception))

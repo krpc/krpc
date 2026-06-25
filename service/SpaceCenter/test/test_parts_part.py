@@ -7,7 +7,8 @@ class TestPartsPart(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "Parts":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "Parts":
             cls.launch_vessel_from_vab("Parts")
             cls.remove_other_vessels()
             # TODO: wait needed to allow dynamic
@@ -21,15 +22,12 @@ class TestPartsPart(krpctest.TestCase):
     def test_root_part(self):
         part = self.parts.root
         self.assertEqual("mk1-3pod", part.name)
-        self.assertEqual("Mk1-3 Command Pod", part.title)
         self.assertEqual(3800, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertIsNone(part.parent)
         self.assertCountEqual(
-            ["AE-FF1 Airstream Protective Shell (1.25m)"]
-            + ["LT-1 Landing Struts"] * 3
-            + ["LY-10 Small Landing Gear", "TS-25 Stack Separator"],
-            [x.title for x in part.children],
+            ["fairingSize1"] + ["landingLeg1"] * 3 + ["SmallGearBay", "Separator.2"],
+            [x.name for x in part.children],
         )
         self.assertFalse(part.axially_attached)
         self.assertFalse(part.radially_attached)
@@ -40,7 +38,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertAlmostEqual(2600, part.dry_mass, places=2)
         self.assertFalse(part.shielded)
         self.assertAlmostEqual(0, part.dynamic_pressure, places=3)
-        self.assertEqual(45, part.impact_tolerance)
+        self.assertEqual(20, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
@@ -58,11 +56,18 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleProbeControlPoint",
             "ModuleLiftingSurface",
             "ModuleRCSFX",
+            "ModuleInventoryPart",
             "KOSNameTag",
         ]
         if self.far_available:
             modules.extend(["FARBasicDragModel", "FARControlSys"])
-        self.assertCountEqual(modules, [x.name for x in part.modules])
+        # MechJebCore is injected by the MechJeb mod when installed; strip it so
+        # the assertion holds with or without MechJeb (cf. the ModuleRTAntennaPassive
+        # handling in test_launch_clamp).
+        actual_modules = [x.name for x in part.modules]
+        if "MechJebCore" in actual_modules:
+            actual_modules.remove("MechJebCore")
+        self.assertCountEqual(modules, actual_modules)
         box = part.bounding_box(part.reference_frame)
         self.assertAlmostEqual((-1.223, -0.574, -1.223), box[0], places=2)
         self.assertAlmostEqual((1.223, 1.273, 1.223), box[1], places=2)
@@ -104,13 +109,12 @@ class TestPartsPart(krpctest.TestCase):
         self.assertAlmostEqual(0, part.thermal_skin_to_internal_flux, places=2)
 
     def test_antenna(self):
-        part = self.parts.with_title("Communotron 16")[0]
+        part = self.parts.with_name("longAntenna")[0]
         self.assertEqual("longAntenna", part.name)
-        self.assertEqual("Communotron 16", part.title)
         self.assertEqual(300, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Rockomax X200-8 Fuel Tank", part.parent.title)
-        self.assertCountEqual([], [p.title for p in part.children])
+        self.assertEqual("Rockomax8BW", part.parent.name)
+        self.assertCountEqual([], [p.name for p in part.children])
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
         self.assertEqual(-1, part.stage)
@@ -123,22 +127,24 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleDataTransmitter", "ModuleDeployableAntenna", "KOSNameTag"]
+        modules = [
+            "ModuleDataTransmitter",
+            "ModuleDeployableAntenna",
+            "ModuleCargoPart",
+            "KOSNameTag",
+        ]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.antenna)
 
     def test_cargo_bay(self):
-        part = self.parts.with_title("Service Bay (2.5m)")[0]
-        self.assertEqual("ServiceBay.250", part.name)
-        self.assertEqual("Service Bay (2.5m)", part.title)
+        part = self.parts.with_name("ServiceBay.250.v2")[0]
+        self.assertEqual("ServiceBay.250.v2", part.name)
         self.assertEqual(500, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Rockomax X200-8 Fuel Tank", part.parent.title)
-        self.assertCountEqual(
-            ['RE-L10 "Poodle" Liquid Fuel Engine'], [p.title for p in part.children]
-        )
+        self.assertEqual("Rockomax8BW", part.parent.name)
+        self.assertCountEqual(["liquidEngine2-2.v2"], [p.name for p in part.children])
         self.assertTrue(part.axially_attached)
         self.assertFalse(part.radially_attached)
         self.assertEqual(-1, part.stage)
@@ -155,7 +161,7 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleAnimateGeneric",
             "ModuleCargoBay",
             "ModuleConductionMultiplier",
-            "ModuleSeeThroughObject",
+            "ModuleCargoPart",
             "KOSNameTag",
         ]
         if self.far_available:
@@ -164,12 +170,11 @@ class TestPartsPart(krpctest.TestCase):
         self.assertIsNotNone(part.cargo_bay)
 
     def test_control_surface(self):
-        part = self.parts.with_title("Delta-Deluxe Winglet")[0]
+        part = self.parts.with_name("winglet3")[0]
         self.assertEqual("winglet3", part.name)
-        self.assertEqual("Delta-Deluxe Winglet", part.title)
         self.assertEqual(600, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Rockomax X200-32 Fuel Tank", part.parent.title)
+        self.assertEqual("Rockomax32.BW", part.parent.name)
         self.assertEqual([], part.children)
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
@@ -185,22 +190,21 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleControlSurface", "KOSNameTag"]
+        modules = ["SyncModuleControlSurface", "ModuleCargoPart", "KOSNameTag"]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.control_surface)
 
     def test_decoupler(self):
-        part = self.parts.with_title("TT-70 Radial Decoupler")[0]
+        part = self.parts.with_name("radialDecoupler2")[0]
         self.assertEqual("radialDecoupler2", part.name)
-        self.assertEqual("TT-70 Radial Decoupler", part.title)
         self.assertEqual(700, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Rockomax Jumbo-64 Fuel Tank", part.parent.title)
+        self.assertEqual("Rockomax64.BW", part.parent.name)
         self.assertCountEqual(
-            ['S1 SRB-KD25k "Kickback" Solid Fuel Booster'],
-            [p.title for p in part.children],
+            ["MassiveBooster"],
+            [p.name for p in part.children],
         )
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
@@ -220,6 +224,7 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleAnchoredDecoupler",
             "ModuleTestSubject",
             "ModuleToggleCrossfeed",
+            "ModuleCargoPart",
             "KOSNameTag",
         ]
         if self.far_available:
@@ -228,12 +233,11 @@ class TestPartsPart(krpctest.TestCase):
         self.assertIsNotNone(part.decoupler)
 
     def test_docking_port(self):
-        part = self.parts.with_title("Clamp-O-Tron Docking Port")[0]
+        part = self.parts.with_name("dockingPort2")[0]
         self.assertEqual("dockingPort2", part.name)
-        self.assertEqual("Clamp-O-Tron Docking Port", part.title)
         self.assertEqual(280, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Rockomax X200-32 Fuel Tank", part.parent.title)
+        self.assertEqual("Rockomax32.BW", part.parent.name)
         self.assertEqual([], part.children)
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
@@ -250,22 +254,24 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleDockingNode", "KOSNameTag"]
+        modules = [
+            "ModuleDockingNode",
+            "ModuleColorChanger",
+            "ModuleCargoPart",
+            "KOSNameTag",
+        ]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.docking_port)
 
     def test_engine(self):
-        part = self.parts.with_title('S1 SRB-KD25k "Kickback" Solid Fuel Booster')[0]
+        part = self.parts.with_name("MassiveBooster")[0]
         self.assertEqual("MassiveBooster", part.name)
-        self.assertEqual('S1 SRB-KD25k "Kickback" Solid Fuel Booster', part.title)
         self.assertEqual(2700, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("TT-70 Radial Decoupler", part.parent.title)
-        self.assertCountEqual(
-            ["Aerodynamic Nose Cone"], [p.title for p in part.children]
-        )
+        self.assertEqual("radialDecoupler2", part.parent.name)
+        self.assertCountEqual(["noseCone"], [p.name for p in part.children])
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
         self.assertEqual(6, part.stage)
@@ -285,6 +291,7 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleEnginesFX",
             "ModuleSurfaceFX",
             "ModuleTestSubject",
+            "ModulePartVariants",
             "KOSNameTag",
         ]
         if self.far_available:
@@ -293,13 +300,12 @@ class TestPartsPart(krpctest.TestCase):
         self.assertIsNotNone(part.engine)
 
     def test_experiment(self):
-        part = self.parts.with_title("Mystery Goo\u2122 Containment Unit")[0]
+        part = self.parts.with_name("GooExperiment")[0]
         self.assertEqual("GooExperiment", part.name)
-        self.assertEqual("Mystery Goo\u2122 Containment Unit", part.title)
         self.assertEqual(800, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Rockomax X200-32 Fuel Tank", part.parent.title)
-        self.assertCountEqual([], [p.title for p in part.children])
+        self.assertEqual("Rockomax32.BW", part.parent.name)
+        self.assertCountEqual([], [p.name for p in part.children])
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
         self.assertEqual(-1, part.stage)
@@ -314,19 +320,23 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleScienceExperiment", "ModuleAnimateGeneric", "KOSNameTag"]
+        modules = [
+            "ModuleScienceExperiment",
+            "ModuleAnimateGeneric",
+            "ModuleCargoPart",
+            "KOSNameTag",
+        ]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.experiment)
 
     def test_fairing(self):
-        part = self.parts.with_title("AE-FF1 Airstream Protective Shell (1.25m)")[0]
+        part = self.parts.with_name("fairingSize1")[0]
         self.assertEqual("fairingSize1", part.name)
-        self.assertEqual("AE-FF1 Airstream Protective Shell (1.25m)", part.title)
         self.assertEqual(300, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Mk1-3 Command Pod", part.parent.title)
+        self.assertEqual("mk1-3pod", part.parent.name)
         self.assertEqual([], part.children)
         self.assertTrue(part.axially_attached)
         self.assertFalse(part.radially_attached)
@@ -346,6 +356,7 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleTestSubject",
             "ModuleStructuralNodeToggle",
             "ModulePartVariants",
+            "ModuleCargoPart",
             "KOSNameTag",
         ] + ["ModuleStructuralNode"] * 12
         if self.far_available:
@@ -354,12 +365,11 @@ class TestPartsPart(krpctest.TestCase):
         self.assertIsNotNone(part.fairing)
 
     def test_intake(self):
-        part = self.parts.with_title("XM-G50 Radial Air Intake")[0]
+        part = self.parts.with_name("airScoop")[0]
         self.assertEqual("airScoop", part.name)
-        self.assertEqual("XM-G50 Radial Air Intake", part.title)
         self.assertEqual(250, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Rockomax X200-8 Fuel Tank", part.parent.title)
+        self.assertEqual("Rockomax8BW", part.parent.name)
         self.assertEqual([], part.children)
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
@@ -375,19 +385,18 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleResourceIntake", "KOSNameTag"]
+        modules = ["ModuleResourceIntake", "ModuleCargoPart", "KOSNameTag"]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.intake)
 
     def test_leg(self):
-        part = self.parts.with_title("LT-1 Landing Struts")[0]
+        part = self.parts.with_name("landingLeg1")[0]
         self.assertEqual("landingLeg1", part.name)
-        self.assertEqual("LT-1 Landing Struts", part.title)
         self.assertEqual(440, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Mk1-3 Command Pod", part.parent.title)
+        self.assertEqual("mk1-3pod", part.parent.name)
         self.assertEqual([], part.children)
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
@@ -410,6 +419,7 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleWheelDeployment",
             "ModuleWheelLock",
             "ModuleWheelSuspension",
+            "ModuleCargoPart",
             "KOSNameTag",
         ]
         if self.far_available:
@@ -421,12 +431,11 @@ class TestPartsPart(krpctest.TestCase):
         self.assertAlmostEqual((0.150, 0.239, 0.377), box[1], places=2)
 
     def test_launch_clamp(self):
-        part = self.parts.with_title("TT18-A Launch Stability Enhancer")[0]
+        part = self.parts.with_name("launchClamp1")[0]
         self.assertEqual("launchClamp1", part.name)
-        self.assertEqual("TT18-A Launch Stability Enhancer", part.title)
         self.assertEqual(200, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Rockomax Jumbo-64 Fuel Tank", part.parent.title)
+        self.assertEqual("Rockomax64.BW", part.parent.name)
         self.assertEqual([], part.children)
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
@@ -450,12 +459,11 @@ class TestPartsPart(krpctest.TestCase):
         self.assertIsNotNone(part.launch_clamp)
 
     def test_light(self):
-        part = self.parts.with_title("Illuminator Mk1")[0]
+        part = self.parts.with_name("spotLight1")[0]
         self.assertEqual("spotLight1", part.name)
-        self.assertEqual("Illuminator Mk1", part.title)
         self.assertEqual(100, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Aerodynamic Nose Cone", part.parent.title)
+        self.assertEqual("noseCone", part.parent.name)
         self.assertEqual([], part.children)
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
@@ -478,12 +486,11 @@ class TestPartsPart(krpctest.TestCase):
         self.assertIsNotNone(part.light)
 
     def test_parachute(self):
-        part = self.parts.with_title("Mk2-R Radial-Mount Parachute")[0]
+        part = self.parts.with_name("parachuteRadial")[0]
         self.assertEqual("parachuteRadial", part.name)
-        self.assertEqual("Mk2-R Radial-Mount Parachute", part.title)
         self.assertEqual(400, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Rockomax X200-8 Fuel Tank", part.parent.title)
+        self.assertEqual("Rockomax8BW", part.parent.name)
         self.assertEqual([], part.children)
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
@@ -505,6 +512,7 @@ class TestPartsPart(krpctest.TestCase):
                 "ModuleDragModifier",
                 "ModuleParachute",
                 "ModuleTestSubject",
+                "ModuleCargoPart",
                 "KOSNameTag",
             ],
             [x.name for x in part.modules],
@@ -512,12 +520,11 @@ class TestPartsPart(krpctest.TestCase):
         self.assertIsNotNone(part.parachute)
 
     def test_radiator(self):
-        part = self.parts.with_title("Thermal Control System (small)")[0]
+        part = self.parts.with_name("foldingRadSmall")[0]
         self.assertEqual("foldingRadSmall", part.name)
-        self.assertEqual("Thermal Control System (small)", part.title)
         self.assertEqual(450, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Advanced Reaction Wheel Module, Large", part.parent.title)
+        self.assertEqual("asasmodule1-2", part.parent.name)
         self.assertEqual([], part.children)
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
@@ -533,17 +540,21 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleActiveRadiator", "ModuleDeployableRadiator", "KOSNameTag"]
+        modules = [
+            "ModuleActiveRadiator",
+            "ModuleDeployableRadiator",
+            "ModuleCargoPart",
+            "KOSNameTag",
+        ]
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.radiator)
 
     def test_rcs(self):
-        part = self.parts.with_title("RV-105 RCS Thruster Block")[0]
-        self.assertEqual("RCSBlock", part.name)
-        self.assertEqual("RV-105 RCS Thruster Block", part.title)
-        self.assertEqual(620, part.cost)
+        part = self.parts.with_name("RCSBlock.v2")[0]
+        self.assertEqual("RCSBlock.v2", part.name)
+        self.assertEqual(45, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Rockomax X200-8 Fuel Tank", part.parent.title)
+        self.assertEqual("Rockomax8BW", part.parent.name)
         self.assertEqual([], part.children)
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
@@ -559,20 +570,25 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleRCSFX", "KOSNameTag"]
+        modules = [
+            "FXModuleAnimateRCS",
+            "ModuleRCSFX",
+            "ModulePartVariants",
+            "ModuleCargoPart",
+            "KOSNameTag",
+        ]
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.rcs)
 
     def test_reaction_wheel(self):
-        part = self.parts.with_title("Advanced Reaction Wheel Module, Large")[0]
+        part = self.parts.with_name("asasmodule1-2")[0]
         self.assertEqual("asasmodule1-2", part.name)
-        self.assertEqual("Advanced Reaction Wheel Module, Large", part.title)
         self.assertEqual(2100, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("FL-R1 RCS Fuel Tank", part.parent.title)
+        self.assertEqual("RCSTank1-2", part.parent.name)
         self.assertCountEqual(
-            ["Thermal Control System (small)", "Convert-O-Tron 250"],
-            [p.title for p in part.children],
+            ["foldingRadSmall", "ISRU"],
+            [p.name for p in part.children],
         )
         self.assertTrue(part.axially_attached)
         self.assertFalse(part.radially_attached)
@@ -588,20 +604,17 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleReactionWheel", "KOSNameTag"]
+        modules = ["ModuleReactionWheel", "ModuleCargoPart", "KOSNameTag"]
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.reaction_wheel)
 
     def test_resource_converter(self):
-        part = self.parts.with_title("Convert-O-Tron 250")[0]
+        part = self.parts.with_name("ISRU")[0]
         self.assertEqual("ISRU", part.name)
-        self.assertEqual("Convert-O-Tron 250", part.title)
         self.assertEqual(8000, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Advanced Reaction Wheel Module, Large", part.parent.title)
-        self.assertCountEqual(
-            ["Rockomax X200-32 Fuel Tank"], [p.title for p in part.children]
-        )
+        self.assertEqual("asasmodule1-2", part.parent.name)
+        self.assertCountEqual(["Rockomax32.BW"], [p.name for p in part.children])
         self.assertTrue(part.axially_attached)
         self.assertFalse(part.radially_attached)
         self.assertEqual(-1, part.stage)
@@ -626,12 +639,11 @@ class TestPartsPart(krpctest.TestCase):
         self.assertIsNotNone(part.resource_converter)
 
     def test_resource_harvester(self):
-        part = self.parts.with_title("'Drill-O-Matic Junior' Mining Excavator")[0]
+        part = self.parts.with_name("MiniDrill")[0]
         self.assertEqual("MiniDrill", part.name)
-        self.assertEqual("'Drill-O-Matic Junior' Mining Excavator", part.title)
         self.assertEqual(1000, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Rockomax X200-32 Fuel Tank", part.parent.title)
+        self.assertEqual("Rockomax32.BW", part.parent.name)
         self.assertEqual([], part.children)
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
@@ -650,21 +662,22 @@ class TestPartsPart(krpctest.TestCase):
         modules = [
             "ModuleAnimationGroup",
             "ModuleAsteroidDrill",
+            "ModuleCometDrill",
             "ModuleCoreHeat",
             "ModuleOverheatDisplay",
             "ModuleResourceHarvester",
+            "ModuleCargoPart",
             "KOSNameTag",
         ]
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.resource_harvester)
 
     def test_sensor(self):
-        part = self.parts.with_title("PresMat Barometer")[0]
+        part = self.parts.with_name("sensorBarometer")[0]
         self.assertEqual("sensorBarometer", part.name)
-        self.assertEqual("PresMat Barometer", part.title)
         self.assertEqual(880, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Rockomax X200-8 Fuel Tank", part.parent.title)
+        self.assertEqual("Rockomax8BW", part.parent.name)
         self.assertEqual([], part.children)
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
@@ -680,19 +693,23 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleEnviroSensor", "ModuleScienceExperiment", "KOSNameTag"]
+        modules = [
+            "ModuleEnviroSensor",
+            "ModuleScienceExperiment",
+            "ModuleCargoPart",
+            "KOSNameTag",
+        ]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.sensor)
 
     def test_solar_panel(self):
-        part = self.parts.with_title("Gigantor XL Solar Array")[0]
+        part = self.parts.with_name("largeSolarPanel")[0]
         self.assertEqual("largeSolarPanel", part.name)
-        self.assertEqual("Gigantor XL Solar Array", part.title)
         self.assertEqual(3000, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("FL-R1 RCS Fuel Tank", part.parent.title)
+        self.assertEqual("RCSTank1-2", part.parent.name)
         self.assertEqual([], part.children)
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
@@ -708,20 +725,19 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleDeployableSolarPanel", "KOSNameTag"]
+        modules = ["ModuleDeployableSolarPanel", "ModuleCargoPart", "KOSNameTag"]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.solar_panel)
 
     def test_wheel(self):
-        part = self.parts.with_title("LY-10 Small Landing Gear")[0]
+        part = self.parts.with_name("SmallGearBay")[0]
         self.assertEqual("SmallGearBay", part.name)
-        self.assertEqual("LY-10 Small Landing Gear", part.title)
         self.assertEqual(600, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual("Mk1-3 Command Pod", part.parent.title)
-        self.assertEqual([], [p.title for p in part.children])
+        self.assertEqual("mk1-3pod", part.parent.name)
+        self.assertEqual([], [p.name for p in part.children])
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
         self.assertEqual(-1, part.stage)
@@ -748,6 +764,7 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleWheelSuspension",
             "ModuleDragModifier",
             "ModuleDragModifier",
+            "ModuleCargoPart",
             "KOSNameTag",
         ]
         if self.far_available:
@@ -759,7 +776,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertAlmostEqual((0.495, 0.232, 0.679), box[1], places=2)
 
     def test_highlighting(self):
-        part = self.parts.with_title("Rockomax Jumbo-64 Fuel Tank")[0]
+        part = self.parts.with_name("Rockomax64.BW")[0]
         init_color = part.highlight_color
         self.assertEqual((0, 1, 0), init_color)
         self.assertFalse(part.highlighted)
@@ -792,14 +809,15 @@ class TestPartsPartDecoupleStage(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "PartsDecoupleStage":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "PartsDecoupleStage":
             cls.launch_vessel_from_vab("PartsDecoupleStage")
             cls.remove_other_vessels()
         cls.vessel = cls.connect().space_center.active_vessel
         cls.parts = cls.vessel.parts
 
-    def check(self, part, title, stage, decouple_stage):
-        self.assertEqual(title, part.title)
+    def check(self, part, name, stage, decouple_stage):
+        self.assertEqual(name, part.name)
         self.assertEqual(stage, part.stage)
         self.assertEqual(decouple_stage, part.decouple_stage)
 
@@ -810,40 +828,43 @@ class TestPartsPartDecoupleStage(krpctest.TestCase):
             level, part = stack.pop()
             stage_numbering.append(
                 " " * (level * 2)
-                + "%s %d %d" % (part.title, part.stage, part.decouple_stage)
+                + "%s %d %d" % (part.name, part.stage, part.decouple_stage)
             )
             stack.extend(
                 (level + 1, part)
-                for part in sorted(part.children, key=lambda part: part.title)
+                for part in sorted(part.children, key=lambda part: part.name)
             )
+        # Internal part names (part.name), sorted by name for stable, locale-
+        # independent ordering. rcsTankMini = "FL-R10 RCS Fuel Tank",
+        # RCSFuelTank = "FL-R25 RCS Fuel Tank".
         expected_stage_numbering = [
-            "Mk1 Command Pod -1 -1",
-            "  TS-12 Stack Separator 1 1",
-            "    FL-T400 Fuel Tank -1 1",
-            "      TT18-A Launch Stability Enhancer 5 5",
-            "      TT18-A Launch Stability Enhancer 5 5",
-            "      TT-70 Radial Decoupler 0 1",
-            "        FL-R10 RCS Fuel Tank -1 1",
-            "      TT-70 Radial Decoupler 0 1",
-            "        FL-R10 RCS Fuel Tank -1 1",
-            "      TD-12 Decoupler 2 1",
-            "        FL-T800 Fuel Tank -1 1",
-            "          TT-70 Radial Decoupler 3 3",
-            "            FL-T200 Fuel Tank -1 3",
-            "              TD-12 Decoupler 4 4",
-            "                FL-R25 RCS Fuel Tank -1 4",
-            "          TT-70 Radial Decoupler 3 3",
-            "            FL-T200 Fuel Tank -1 3",
-            "              TD-12 Decoupler 4 4",
-            "                FL-R25 RCS Fuel Tank -1 4",
-            "          TT-70 Radial Decoupler 3 3",
-            "            FL-T200 Fuel Tank -1 3",
-            "              TD-12 Decoupler 4 4",
-            "                FL-R25 RCS Fuel Tank -1 4",
-            "          TT-70 Radial Decoupler 3 3",
-            "            FL-T200 Fuel Tank -1 3",
-            "              TD-12 Decoupler 4 4",
-            "                FL-R25 RCS Fuel Tank -1 4",
+            "mk1pod.v2 -1 -1",
+            "  Separator.1 1 1",
+            "    fuelTank -1 1",
+            "      radialDecoupler2 0 1",
+            "        rcsTankMini -1 1",
+            "      radialDecoupler2 0 1",
+            "        rcsTankMini -1 1",
+            "      launchClamp1 5 5",
+            "      launchClamp1 5 5",
+            "      Decoupler.1 2 1",
+            "        fuelTank.long -1 2",
+            "          radialDecoupler2 3 3",
+            "            fuelTankSmall -1 3",
+            "              Decoupler.1 4 4",
+            "                RCSFuelTank -1 4",
+            "          radialDecoupler2 3 3",
+            "            fuelTankSmall -1 3",
+            "              Decoupler.1 4 4",
+            "                RCSFuelTank -1 4",
+            "          radialDecoupler2 3 3",
+            "            fuelTankSmall -1 3",
+            "              Decoupler.1 4 4",
+            "                RCSFuelTank -1 4",
+            "          radialDecoupler2 3 3",
+            "            fuelTankSmall -1 3",
+            "              Decoupler.1 4 4",
+            "                RCSFuelTank -1 4",
         ]
         self.assertEqual(expected_stage_numbering, stage_numbering)
 
@@ -860,7 +881,7 @@ class TestPartsPartForce(krpctest.TestCase):
 
     def test_add_force(self):
         force = self.part.add_force((1, 2, 3), (4, 5, 6), self.part.reference_frame)
-        self.assertEqual(force.part.title, self.part.title)
+        self.assertEqual(force.part.name, self.part.name)
         self.assertEqual((1, 2, 3), force.force_vector)
         self.assertEqual((4, 5, 6), force.position)
         self.assertEqual(self.part.reference_frame, force.reference_frame)

@@ -12,7 +12,8 @@ class TestResources(krpctest.TestCase, ResourcesTest):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "Resources":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "Resources":
             cls.launch_vessel_from_vab("Resources")
         cls.vessel = cls.connect().space_center.active_vessel
         cls.num_stages = len(cls.expected.keys()) - 1
@@ -165,7 +166,7 @@ class TestResources(krpctest.TestCase, ResourcesTest):
 
     def test_vessel_mass(self):
         mass = self.vessel.dry_mass
-        self.assertAlmostEqual(28795, mass, places=2)
+        self.assertAlmostEqual(26905, mass, places=2)
         resources = self.vessel.resources
         self.assertEqual(
             set(
@@ -189,9 +190,7 @@ class TestResources(krpctest.TestCase, ResourcesTest):
 
     def test_part_resources(self):
         mode = self.connect().space_center.ResourceFlowMode
-        resources = next(
-            iter(self.vessel.parts.with_title('BACC "Thumper" Solid Fuel Booster'))
-        ).resources
+        resources = next(iter(self.vessel.parts.with_name("solidBooster1-1"))).resources
         self.assertEqual(set(["SolidFuel"]), set(resources.names))
         self.assertTrue(resources.has_resource("SolidFuel"))
         self.assertFalse(resources.has_resource("LiquidFuel"))
@@ -210,9 +209,7 @@ class TestResources(krpctest.TestCase, ResourcesTest):
         self.assertEqual(mode.none, r.flow_mode)
         self.assertTrue(r.enabled)
 
-        resources = next(
-            iter(self.vessel.parts.with_title("Rockomax X200-16 Fuel Tank"))
-        ).resources
+        resources = next(iter(self.vessel.parts.with_name("Rockomax16.BW"))).resources
         self.assertEqual(set(["LiquidFuel", "Oxidizer"]), set(resources.names))
         self.assertTrue(resources.has_resource("LiquidFuel"))
         self.assertTrue(resources.has_resource("Oxidizer"))
