@@ -566,12 +566,7 @@ namespace KRPC.SpaceCenter.Services
         {
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException (nameof (referenceFrame));
-            var up = Vector3.up;
-            var right = InternalBody.GetRelSurfacePosition (0, 0, 1).normalized;
-            var forward = Vector3.Cross (right, up);
-            Vector3.OrthoNormalize (ref forward, ref up);
-            var rotation = Quaternion.LookRotation (forward, up);
-            return referenceFrame.RotationFromWorldSpace (rotation).ToTuple ();
+            return referenceFrame.RotationFromWorldSpace (ReferenceFrame.Object (InternalBody).Rotation).ToTuple ();
         }
 
         /// <summary>

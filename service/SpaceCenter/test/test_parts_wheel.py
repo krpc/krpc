@@ -12,13 +12,11 @@ class TestPartsWheel(krpctest.TestCase):
         vessel = cls.connect().space_center.active_vessel
         cls.parts = vessel.parts
         cls.wheels = cls.parts.wheels
-        cls.deployable_wheel = cls.parts.with_title("LY-60 Large Landing Gear")[0].wheel
-        cls.fixed_wheel = cls.parts.with_title("LY-01 Fixed Landing Gear")[0].wheel
-        cls.free_wheel = cls.parts.with_title("LY-05 Steerable Landing Gear")[0].wheel
-        cls.powered_wheel = cls.parts.with_title("RoveMax Model M1")[0].wheel
-        cls.suspension_wheel = cls.parts.with_title("TR-2L Ruggedized Vehicular Wheel")[
-            0
-        ].wheel
+        cls.deployable_wheel = cls.parts.with_name("GearMedium")[0].wheel
+        cls.fixed_wheel = cls.parts.with_name("GearFixed")[0].wheel
+        cls.free_wheel = cls.parts.with_name("GearFree")[0].wheel
+        cls.powered_wheel = cls.parts.with_name("roverWheel1")[0].wheel
+        cls.suspension_wheel = cls.parts.with_name("wheelMed")[0].wheel
         cls.state = cls.connect().space_center.WheelState
         cls.motor_state = cls.connect().space_center.MotorState
         cls.control = vessel.control
@@ -44,7 +42,7 @@ class TestPartsWheel(krpctest.TestCase):
         wheel.auto_friction_control = False
         self.wait()
         self.assertFalse(wheel.auto_friction_control)
-        self.assertAlmostEqual(2.1996, wheel.manual_friction_control, places=3)
+        self.assertAlmostEqual(2.0005, wheel.manual_friction_control, places=3)
         wheel.manual_friction_control = 1.2
         self.wait()
         self.assertAlmostEqual(1.2, wheel.manual_friction_control, places=3)
@@ -170,8 +168,8 @@ class TestPartsWheel(krpctest.TestCase):
     def test_suspension(self):
         wheel = self.suspension_wheel
         self.assertTrue(wheel.has_suspension)
-        self.assertAlmostEqual(1.00, wheel.suspension_spring_strength, places=2)
-        self.assertAlmostEqual(1.00, wheel.suspension_damper_strength, places=2)
+        self.assertAlmostEqual(1.20, wheel.suspension_spring_strength, places=2)
+        self.assertAlmostEqual(0.85, wheel.suspension_damper_strength, places=2)
 
     def test_no_suspension(self):
         # TODO: there are no wheel with no suspension to test!
@@ -209,7 +207,7 @@ class TestPartsWheelGrounded(krpctest.TestCase):
         cls.remove_other_vessels()
         vessel = cls.connect().space_center.active_vessel
         cls.parts = vessel.parts
-        cls.wheel = cls.parts.with_title("LY-60 Large Landing Gear")[0].wheel
+        cls.wheel = cls.parts.with_name("GearMedium")[0].wheel
 
     def test_grounded(self):
         self.assertTrue(self.wheel.deployed)

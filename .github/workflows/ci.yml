@@ -159,7 +159,6 @@ jobs:
         with:
           path: ${{ env.CCACHE_DIR }}
           key: build-client-cnano-ccache-${{ runner.os }}-${{ hashFiles('client/cnano/CMakeLists.txt.tmpl') }}
-          restore-keys: ccache-build-client-cnano-${{ runner.os }}-
       - name: build-system
         run: client/cnano/test-build.sh system
       - name: build-fetch
@@ -195,7 +194,6 @@ jobs:
         with:
           path: ${{ env.CCACHE_DIR }}
           key: build-client-cpp-ccache-${{ runner.os }}-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
-          restore-keys: build-client-cpp-ccache-${{ runner.os }}-
       - name: build-system
         run: client/cpp/test-build.sh system
       - name: build-fetch
@@ -368,11 +366,18 @@ jobs:
         with:
           name: client-cnano
 
+      - name: get-vcpkg-hash
+        id: vcpkg-hash
+        shell: pwsh
+        run: |
+          $commitHash = ((vcpkg version)[0] -split ' ')[-1]
+          echo "value=$commitHash" >> $env:GITHUB_OUTPUT
+
       - name: cache-vcpkg
         uses: actions/cache@v5
         with:
           path: C:\vcpkg-binary-cache
-          key: test-client-cnano-windows-vcpkg-1
+          key: test-client-cnano-windows-vcpkg-${{ steps.vcpkg-hash.outputs.value }}
 
       - name: install-deps
         shell: pwsh
@@ -428,11 +433,18 @@ jobs:
         with:
           name: client-cpp
 
+      - name: get-vcpkg-hash
+        id: vcpkg-hash
+        shell: pwsh
+        run: |
+          $commitHash = ((vcpkg version)[0] -split ' ')[-1]
+          echo "value=$commitHash" >> $env:GITHUB_OUTPUT
+
       - name: cache-vcpkg
         uses: actions/cache@v5
         with:
           path: C:\vcpkg-binary-cache
-          key: test-client-cpp-windows-vcpkg-1
+          key: test-client-cpp-windows-vcpkg-${{ steps.vcpkg-hash.outputs.value }}
 
       - name: install-deps
         shell: pwsh

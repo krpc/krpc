@@ -6,20 +6,34 @@ class TestPartsControlSurface(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if cls.connect().space_center.active_vessel.name != "PartsControlSurface":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "PartsControlSurface":
             cls.new_save()
             cls.launch_vessel_from_vab("PartsControlSurface")
             cls.remove_other_vessels()
             # TODO: wait needed to let available torque calculations settle
             cls.wait(3)
         parts = cls.connect().space_center.active_vessel.parts
-        cls.ctrlsrf = parts.with_title("FAT-455 Aeroplane Control Surface")[
-            0
-        ].control_surface
-        cls.winglets = [
-            x.control_surface for x in parts.with_title("Delta-Deluxe Winglet")
-        ]
+        cls.ctrlsrf = parts.with_name("airlinerCtrlSrf")[0].control_surface
+        cls.winglets = [x.control_surface for x in parts.with_name("winglet3")]
         cls.winglet = cls.winglets[0]
+
+        # KSP re-derives a control surface's pitch/yaw/roll authority from its
+        # geometry at launch, overriding the ignorePitch/ignoreYaw/ignoreRoll
+        # values persisted in the craft file (unlike deploy/inverted, which are
+        # not geometry-derived and do survive). The tail airlinerCtrlSrf, saved
+        # as yaw-only, comes back pitch-enabled. So establish the expected axis
+        # baseline here via the API rather than trusting the craft to survive
+        # the launch; the get/toggle tests then exercise the getter/setter
+        # round-trip against a known starting state.
+        cls.ctrlsrf.pitch_enabled = False
+        cls.ctrlsrf.yaw_enabled = True
+        cls.ctrlsrf.roll_enabled = False
+        for winglet in cls.winglets:
+            winglet.pitch_enabled = True
+            winglet.yaw_enabled = False
+            winglet.roll_enabled = True
+        cls.wait()
 
     def test_get_pyr_enabled(self):
         self.assertFalse(self.ctrlsrf.pitch_enabled)
