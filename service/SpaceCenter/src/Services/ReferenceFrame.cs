@@ -24,7 +24,7 @@ namespace KRPC.SpaceCenter.Services
     /// used as a parameter to other functions.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public class ReferenceFrame : Equatable<ReferenceFrame>
+    public class ReferenceFrame : Equatable<ReferenceFrame>, IValidatable
     {
         readonly ReferenceFrameType type;
         readonly global::CelestialBody body;
@@ -133,6 +133,69 @@ namespace KRPC.SpaceCenter.Services
                 hash ^= hybridAngularVelocity.GetHashCode ();
             }
             return hash;
+        }
+
+        /// <summary>
+        /// Whether the objects this reference frame is defined relative to still exist.
+        /// Used by the object store to discard the frame when, for example, its vessel or
+        /// part is destroyed or the game state is reloaded. Frames defined relative to a
+        /// celestial body, or by fixed offsets, are always valid.
+        /// </summary>
+        public bool IsValid {
+            get {
+                switch (type) {
+                case ReferenceFrameType.CelestialBody:
+                case ReferenceFrameType.CelestialBodyNonRotating:
+                case ReferenceFrameType.CelestialBodyOrbital:
+                    return true;
+                case ReferenceFrameType.Vessel:
+                case ReferenceFrameType.VesselOrbital:
+                case ReferenceFrameType.VesselSurface:
+                case ReferenceFrameType.VesselSurfaceVelocity:
+                    return VesselExists (vesselId);
+                case ReferenceFrameType.Maneuver:
+                case ReferenceFrameType.ManeuverOrbital:
+                    return NodeExists (vesselId, node);
+                case ReferenceFrameType.Part:
+                case ReferenceFrameType.PartCenterOfMass:
+                    return Parts.Part.Exists (partId);
+                case ReferenceFrameType.DockingPort:
+                    // The captured docking node compares == null once its part is destroyed.
+                    return dockingPort != null;
+                case ReferenceFrameType.Thrust:
+                    return thruster != null && thruster.Part.IsValid;
+                case ReferenceFrameType.Relative:
+                    return parent == null || parent.IsValid;
+                case ReferenceFrameType.Hybrid:
+                    return (hybridPosition == null || hybridPosition.IsValid) &&
+                           (hybridRotation == null || hybridRotation.IsValid) &&
+                           (hybridVelocity == null || hybridVelocity.IsValid) &&
+                           (hybridAngularVelocity == null || hybridAngularVelocity.IsValid);
+                default:
+                    return true;
+                }
+            }
+        }
+
+        static bool VesselExists (Guid id)
+        {
+            foreach (var vessel in FlightGlobals.Vessels)
+                if (vessel != null && vessel.id == id)
+                    return true;
+            return false;
+        }
+
+        static bool NodeExists (Guid id, ManeuverNode node)
+        {
+            if (node == null)
+                return false;
+            foreach (var vessel in FlightGlobals.Vessels) {
+                if (vessel != null && vessel.id == id) {
+                    var solver = vessel.patchedConicSolver;
+                    return solver != null && solver.maneuverNodes.Contains (node);
+                }
+            }
+            return false;
         }
 
         /// <summary>

@@ -69,24 +69,33 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// unloaded vessels that a client still holds are not discarded.
         /// </summary>
         public bool IsValid {
-            get {
-                if (FlightGlobals.FindPartByID (partFlightId) != null)
-                    return true;
-                var vessels = FlightGlobals.Vessels;
-                if (vessels == null)
-                    return true;
-                foreach (var vessel in vessels) {
-                    if (vessel == null || vessel.loaded)
-                        continue;
-                    var protoVessel = vessel.protoVessel;
-                    if (protoVessel == null)
-                        continue;
-                    foreach (var protoPart in protoVessel.protoPartSnapshots)
-                        if (protoPart.flightID == partFlightId)
-                            return true;
-                }
-                return false;
+            get { return Exists (partFlightId); }
+        }
+
+        /// <summary>
+        /// Whether a part with the given flight id exists anywhere in the game, including
+        /// on unloaded (on-rails) vessels. Deliberately conservative: returns <c>true</c>
+        /// while the part exists on any vessel, so that parts on unloaded vessels are not
+        /// treated as destroyed.
+        /// </summary>
+        internal static bool Exists (uint flightId)
+        {
+            if (FlightGlobals.FindPartByID (flightId) != null)
+                return true;
+            var vessels = FlightGlobals.Vessels;
+            if (vessels == null)
+                return true;
+            foreach (var vessel in vessels) {
+                if (vessel == null || vessel.loaded)
+                    continue;
+                var protoVessel = vessel.protoVessel;
+                if (protoVessel == null)
+                    continue;
+                foreach (var protoPart in protoVessel.protoPartSnapshots)
+                    if (protoPart.flightID == flightId)
+                        return true;
             }
+            return false;
         }
 
         /// <summary>
