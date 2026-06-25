@@ -19,10 +19,12 @@ Konstructs
 Kosmo
 Landers
 LaunchPad
+MoI
 ModuleEngines
 MyGroup
 NUnit
 Olex
+PID
 Tron
 Wheesley
 amongst
@@ -54,6 +56,7 @@ dll
 doesn
 enum
 erm
+feedforward
 focussed
 framerate
 fuelled
@@ -126,6 +129,7 @@ rsvg
 runtime
 serialio
 serializable
+setpoint
 shader
 socat
 sph
