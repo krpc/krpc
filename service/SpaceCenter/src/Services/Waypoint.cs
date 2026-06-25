@@ -136,12 +136,15 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public double MeanAltitude {
             get {
-                return Body.BedrockHeight(Latitude, Longitude) + InternalWaypoint.altitude;
+                return Body.BedrockHeight (Latitude, Longitude) + InternalWaypoint.altitude;
             }
             set {
                 if (HasContract)
                     throw new InvalidOperationException ("Cannot set altitude for waypoint attached to a contract.");
-                InternalWaypoint.altitude = value;
+                // KSP/FinePrint stores the waypoint altitude relative to the bedrock
+                // (terrain) height. Convert from the mean (sea level) altitude so the
+                // getter recovers it correctly and kRPC waypoints match KSP's convention.
+                InternalWaypoint.altitude = value - Body.BedrockHeight (Latitude, Longitude);
                 var surfaceAltitude = Body.SurfaceHeight (InternalWaypoint.latitude, InternalWaypoint.longitude);
                 InternalWaypoint.isOnSurface = (Math.Abs (surfaceAltitude - value) < 10);
             }
@@ -153,7 +156,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double SurfaceAltitude {
-            get { return InternalWaypoint.altitude - Math.Max (0d, Body.BedrockHeight (Latitude, Longitude)); }
+            get { return MeanAltitude - Math.Max (0d, Body.BedrockHeight (Latitude, Longitude)); }
             set { MeanAltitude = value + Math.Max (0d, Body.BedrockHeight (Latitude, Longitude)); }
         }
 
@@ -163,7 +166,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double BedrockAltitude {
-            get { return InternalWaypoint.altitude - Body.BedrockHeight (Latitude, Longitude); }
+            get { return MeanAltitude - Body.BedrockHeight (Latitude, Longitude); }
             set { MeanAltitude = value + Body.BedrockHeight (Latitude, Longitude); }
         }
 
