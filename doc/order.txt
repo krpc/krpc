@@ -1175,6 +1175,8 @@ SpaceCenter.AutoPilot.Overshoot
 SpaceCenter.AutoPilot.PitchPIDGains
 SpaceCenter.AutoPilot.RollPIDGains
 SpaceCenter.AutoPilot.YawPIDGains
+SpaceCenter.AutoPilot.StoppingAngleThreshold
+SpaceCenter.AutoPilot.StoppingVelocityThreshold
 SpaceCenter.Camera
 SpaceCenter.Camera.Mode
 SpaceCenter.Camera.Pitch
