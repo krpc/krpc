@@ -368,11 +368,19 @@ jobs:
         with:
           name: client-cnano
 
+      - name: get-vcpkg-hash
+        id: vcpkg-hash
+        shell: pwsh
+        run: |
+          $commitHash = ((vcpkg version)[0] -split ' ')[-1]
+          echo "value=$commitHash" >> $env:GITHUB_OUTPUT
+
       - name: cache-vcpkg
         uses: actions/cache@v5
         with:
           path: C:\vcpkg-binary-cache
-          key: test-client-cnano-windows-vcpkg-1
+          key: test-client-cnano-windows-vcpkg-${{ steps.vcpkg-hash.outputs.value }}
+          restore-keys: test-client-cnano-windows-vcpkg-
 
       - name: install-deps
         shell: pwsh
@@ -428,11 +436,19 @@ jobs:
         with:
           name: client-cpp
 
+      - name: get-vcpkg-hash
+        id: vcpkg-hash
+        shell: pwsh
+        run: |
+          $commitHash = ((vcpkg version)[0] -split ' ')[-1]
+          echo "value=$commitHash" >> $env:GITHUB_OUTPUT
+
       - name: cache-vcpkg
         uses: actions/cache@v5
         with:
           path: C:\vcpkg-binary-cache
-          key: test-client-cpp-windows-vcpkg-1
+          key: test-client-cpp-windows-vcpkg-${{ steps.vcpkg-hash.outputs.value }}
+          restore-keys: test-client-cpp-windows-vcpkg-
 
       - name: install-deps
         shell: pwsh
