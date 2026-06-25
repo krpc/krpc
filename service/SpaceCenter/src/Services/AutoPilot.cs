@@ -85,11 +85,21 @@ namespace KRPC.SpaceCenter.Services
         /// Blocks until the vessel is pointing in the target direction and has
         /// the target roll (if set). Throws an exception if the auto-pilot has not been engaged.
         /// </summary>
+        /// <param name="timeout">Maximum time to wait in seconds. If not specified, waits indefinitely.</param>
         [KRPCMethod]
-        public void Wait ()
+        public void Wait (double timeout = -1)
         {
-            if (Error > stoppingAngleThreshold || InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > stoppingVelocityThreshold)
-                throw new YieldException<Action> (Wait);
+            var deadline = timeout >= 0 ? DateTime.UtcNow + TimeSpan.FromSeconds (timeout) : DateTime.MaxValue;
+            WaitWithDeadline (deadline);
+        }
+
+        void WaitWithDeadline (DateTime deadline)
+        {
+            if (Error > stoppingAngleThreshold || InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > stoppingVelocityThreshold) {
+                if (DateTime.UtcNow > deadline)
+                    throw new TimeoutException ("AutoPilot timed out waiting to reach target direction");
+                throw new YieldException<Action> (() => WaitWithDeadline (deadline));
+            }
         }
 
         /// <summary>
