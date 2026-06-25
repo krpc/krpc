@@ -27,8 +27,8 @@ class TestComms(krpctest.TestCase):
         self.assertGreater(self.comms.signal_delay_to_ground_station, 0)
         self.assertGreater(self.comms.signal_delay_to_vessel(self.other_vessel), 0)
         self.assertCountEqual(
-            ["Reflectron DP-10", "Reflectron KR-7"],
-            [x.part.title for x in self.comms.antennas],
+            ["RTShortAntenna1", "RTShortDish2"],  # Reflectron DP-10, Reflectron KR-7
+            [x.part.name for x in self.comms.antennas],
         )
 
 

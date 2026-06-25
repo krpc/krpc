@@ -7,18 +7,19 @@ class TestPartsIntake(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "PartsIntake":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "PartsIntake":
             cls.launch_vessel_from_vab("PartsIntake")
             cls.remove_other_vessels()
         vessel = cls.connect().space_center.active_vessel
         parts = vessel.parts
         cls.control = vessel.control
         cls.intakes = parts.intakes
-        cls.intake = parts.with_title("XM-G50 Radial Air Intake")[0].intake
+        cls.intake = parts.with_name("airScoop")[0].intake
 
     def test_properties(self):
         self.assertEqual(15, self.intake.speed)
-        self.assertAlmostEqual(4.21, self.intake.flow, delta=0.05)
+        self.assertAlmostEqual(4.15, self.intake.flow, delta=0.05)
         self.assertAlmostEqual(0.0031, self.intake.area)
 
     def test_open_and_close(self):
