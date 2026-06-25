@@ -4,13 +4,19 @@ import krpctest
 
 class TestPartsExperiment(krpctest.TestCase):
 
+    # NOTE: part lookups here use the language-independent with_name/part.name.
+    # The Experiment.title and ScienceSubject.title assertions below are KSP's
+    # localized science strings (a separate domain from parts, with no neutral
+    # identifier exposed), so they assume KSP is running in English. Left as-is,
+    # consistent with the contract-title case in test_contracts.py.
+
     def setUp(self):
         self.new_save("krpctest_career", always_load=True)
         self.launch_vessel_from_vab("PartsExperiment")
         self.remove_other_vessels()
         self.sc = self.connect().space_center
         self.parts = self.sc.active_vessel.parts
-        self.pod = self.parts.with_name("mk1pod")[0].experiment
+        self.pod = self.parts.with_name("mk1pod.v2")[0].experiment
         self.goo = self.parts.with_name("GooExperiment")[0].experiment
 
     def test_experiments(self):

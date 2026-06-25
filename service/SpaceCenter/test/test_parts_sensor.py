@@ -7,13 +7,14 @@ class TestPartsSensor(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "Parts":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "Parts":
             cls.launch_vessel_from_vab("Parts")
             cls.remove_other_vessels()
         cls.parts = cls.connect().space_center.active_vessel.parts
 
     def test_barometer(self):
-        sensor = self.parts.with_title("PresMat Barometer")[0].sensor
+        sensor = self.parts.with_name("sensorBarometer")[0].sensor
         sensor.active = False
         self.wait()
         self.assertFalse(sensor.active)
@@ -28,7 +29,7 @@ class TestPartsSensor(krpctest.TestCase):
         self.assertEqual("Off", sensor.value)
 
     def test_gravity(self):
-        sensor = self.parts.with_title("GRAVMAX Negative Gravioli Detector")[0].sensor
+        sensor = self.parts.with_name("sensorGravimeter")[0].sensor
         sensor.active = False
         self.wait()
         self.assertFalse(sensor.active)

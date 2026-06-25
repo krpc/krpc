@@ -14,10 +14,8 @@ class TestPartsSolarPanel(krpctest.TestCase):
         cls.control = vessel.control
         cls.state = cls.connect().space_center.SolarPanelState
         cls.panels = parts.solar_panels
-        cls.deployable_panel = parts.with_title("Gigantor XL Solar Array")[
-            0
-        ].solar_panel
-        cls.fixed_panel = parts.with_title("OX-STAT Photovoltaic Panels")[0].solar_panel
+        cls.deployable_panel = parts.with_name("largeSolarPanel")[0].solar_panel
+        cls.fixed_panel = parts.with_name("solarPanels5")[0].solar_panel
 
     def test_fixed_panel(self):
         self.assertFalse(self.fixed_panel.deployable)
@@ -99,7 +97,7 @@ class TestPartsSolarPanelBreak(krpctest.TestCase):
         parts = vessel.parts
         cls.control = vessel.control
         cls.state = cls.connect().space_center.SolarPanelState
-        cls.panel = parts.with_title("SP-L 1x6 Photovoltaic Panels")[0].solar_panel
+        cls.panel = parts.with_name("solarPanels2")[0].solar_panel
 
     def test_break_panel(self):
         self.assertEqual(self.state.retracted, self.panel.state)
