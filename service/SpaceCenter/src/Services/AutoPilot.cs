@@ -353,16 +353,16 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Whether to apply a linear PID-lag correction to the stopping-distance feedforward.
         /// Defaults to <c>true</c>.
-        /// When <c>true</c>, the outer-loop velocity profile uses <c>max(ω²/2α, ω/bandwidth)</c>
-        /// as the predicted stopping distance. The linear term (<c>ω/bandwidth</c>) is larger
+        /// When <c>true</c>, the outer-loop velocity profile uses <c>max(omega^2/(2*alpha), omega/bandwidth)</c>
+        /// as the predicted stopping distance. The linear term (<c>omega/bandwidth</c>) is larger
         /// when the PID is unsaturated and decelerating more slowly than full torque; including it
         /// prevents overshoot on small rigid vessels.
         /// Set to <c>false</c> for large, structurally flexible rockets (e.g. heavy launchers with
         /// flexible joints). On such vessels the measured angular velocity contains structural
         /// bending-mode oscillation that the linear term amplifies, flipping the outer-loop target
         /// velocity sign on every bending cycle and driving the structure into limit-cycle wobble.
-        /// The quadratic term alone (<c>ω²/2α</c>) is immune to this: for typical structural
-        /// oscillation (ω ≈ 0.05 rad/s) it adds less than 0.1° of correction regardless of gain.
+        /// The quadratic term alone (<c>omega^2/(2*alpha)</c>) is immune to this: for typical structural
+        /// oscillation (omega ~= 0.05 rad/s) it adds less than 0.1 degrees of correction regardless of gain.
         /// </summary>
         [KRPCProperty]
         public bool DecelLagCorrection {
