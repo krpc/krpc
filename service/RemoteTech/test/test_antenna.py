@@ -17,11 +17,11 @@ class TestAntenna(krpctest.TestCase):
         cls.vessel = cls.space_center.active_vessel
         cls.other_vessel = next(iter(cls.vessel.parts.decouplers)).decouple()
         cls.antenna = cls.rt.antenna(
-            next(iter(cls.vessel.parts.with_title("Reflectron KR-7")))
+            next(iter(cls.vessel.parts.with_name("RTShortDish2")))
         )
 
     def test_antenna(self):
-        self.assertEqual("Reflectron KR-7", self.antenna.part.title)
+        self.assertEqual("RTShortDish2", self.antenna.part.name)
         self.assertFalse(self.antenna.has_connection)
         self.assertEqual(self.rt.Target.none, self.antenna.target)
 

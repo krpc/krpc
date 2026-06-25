@@ -76,6 +76,24 @@ namespace TestingTools
             throw new YieldException<Action> (() => WaitForVesselSwitch(0));
         }
 
+        /// <summary>
+        /// Place the active vessel on the surface of a body at the given latitude and longitude,
+        /// and wait for it to come to rest. Use this to set up landed scenarios away from a launch
+        /// site, for example testing surface harvesters on an ore-rich biome.
+        /// </summary>
+        /// <param name="body">Name of the body to land on.</param>
+        /// <param name="latitude">Latitude in degrees.</param>
+        /// <param name="longitude">Longitude in degrees.</param>
+        /// <param name="altitude">Height above the terrain to settle at, in meters.
+        /// Defaults to 0, resting on the surface.</param>
+        [KRPCProcedure]
+        public static void SetLanded (string body, double latitude, double longitude, double altitude = 0)
+        {
+            var celestialBody = FlightGlobals.Bodies.First (b => b.bodyName == body);
+            FlightGlobals.ActiveVessel.SetLanded(celestialBody, latitude, longitude, altitude);
+            throw new YieldException<Action> (() => WaitForLanded(0));
+        }
+
         static Quaternion ZeroRotation {
             get {
                 var vessel = FlightGlobals.ActiveVessel;
@@ -100,6 +118,32 @@ namespace TestingTools
         {
             Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
             internalVessel.SetRotation (ZeroRotation);
+            // SetRotation only reorients the part transforms; it leaves each
+            // rigidbody's angular velocity untouched, so without SAS the vessel
+            // keeps tumbling from the new attitude. Explicitly remove the
+            // rotational motion: make every part move with the common center of
+            // mass velocity and zero spin, so the assembly translates rigidly.
+            if (!internalVessel.loaded)
+                return;
+            var momentum = Vector3.zero;
+            var totalMass = 0f;
+            foreach (var part in internalVessel.parts) {
+                var rb = part.rb;
+                if (rb == null)
+                    continue;
+                momentum += rb.velocity * rb.mass;
+                totalMass += rb.mass;
+            }
+            if (totalMass <= 0f)
+                return;
+            var comVelocity = momentum / totalMass;
+            foreach (var part in internalVessel.parts) {
+                var rb = part.rb;
+                if (rb == null)
+                    continue;
+                rb.velocity = comVelocity;
+                rb.angularVelocity = Vector3.zero;
+            }
         }
 
         /// <summary>
@@ -122,6 +166,22 @@ namespace TestingTools
                 throw new YieldException<Action> (() => WaitForVesselSwitch(0));
             if (tick < 10)
                 throw new YieldException<Action> (() => WaitForVesselSwitch(tick + 1));
+        }
+
+        static void WaitForLanded (int tick)
+        {
+            var vessel = FlightGlobals.ActiveVessel;
+            // While packed (on rails) the vessel cannot make ground contact, so just wait.
+            if (!vessel.packed) {
+                if (vessel.LandedOrSplashed)
+                    return;
+                // Soft-land: bleed off velocity and ease the vessel down until it touches the
+                // terrain, the same damping the HyperEdit lander uses.
+                vessel.ChangeWorldVelocity ((vessel.srf_velocity + vessel.upAxis) * -0.5);
+            }
+            // Give up rather than hang the suite if the vessel never settles.
+            if (tick < 1000)
+                throw new YieldException<Action> (() => WaitForLanded(tick + 1));
         }
     }
 }

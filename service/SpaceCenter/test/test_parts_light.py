@@ -7,11 +7,12 @@ class TestPartsLight(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "Parts":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "Parts":
             cls.launch_vessel_from_vab("Parts")
             cls.remove_other_vessels()
         parts = cls.connect().space_center.active_vessel.parts
-        cls.light = parts.with_title("Illuminator Mk1")[0].light
+        cls.light = parts.with_name("spotLight1")[0].light
 
     def test_light(self):
         self.assertFalse(self.light.active)

@@ -7,13 +7,14 @@ class TestPartsLeg(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "PartsLegs":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "PartsLegs":
             cls.launch_vessel_from_vab("PartsLegs")
             cls.remove_other_vessels()
         cls.State = cls.connect().space_center.LegState
         vessel = cls.connect().space_center.active_vessel
         cls.legs = vessel.parts.legs
-        cls.leg = vessel.parts.with_title("LT-05 Micro Landing Strut")[0].leg
+        cls.leg = vessel.parts.with_name("miniLandingLeg")[0].leg
         cls.control = vessel.control
 
     def test_deploy_and_retract(self):
