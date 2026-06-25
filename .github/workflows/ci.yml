@@ -159,7 +159,6 @@ jobs:
         with:
           path: ${{ env.CCACHE_DIR }}
           key: build-client-cnano-ccache-${{ runner.os }}-${{ hashFiles('client/cnano/CMakeLists.txt.tmpl') }}
-          restore-keys: ccache-build-client-cnano-${{ runner.os }}-
       - name: build-system
         run: client/cnano/test-build.sh system
       - name: build-fetch
@@ -195,7 +194,6 @@ jobs:
         with:
           path: ${{ env.CCACHE_DIR }}
           key: build-client-cpp-ccache-${{ runner.os }}-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
-          restore-keys: build-client-cpp-ccache-${{ runner.os }}-
       - name: build-system
         run: client/cpp/test-build.sh system
       - name: build-fetch
@@ -380,7 +378,6 @@ jobs:
         with:
           path: C:\vcpkg-binary-cache
           key: test-client-cnano-windows-vcpkg-${{ steps.vcpkg-hash.outputs.value }}
-          restore-keys: test-client-cnano-windows-vcpkg-
 
       - name: install-deps
         shell: pwsh
@@ -448,7 +445,6 @@ jobs:
         with:
           path: C:\vcpkg-binary-cache
           key: test-client-cpp-windows-vcpkg-${{ steps.vcpkg-hash.outputs.value }}
-          restore-keys: test-client-cpp-windows-vcpkg-
 
       - name: install-deps
         shell: pwsh
