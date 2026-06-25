@@ -46,7 +46,9 @@ namespace KRPC.SpaceCenter.AutoPilot
         public double Update (double setpoint, double input, double deltaTime)
         {
             var error = setpoint - input;
-            integralTerm += Ki * error * deltaTime;
+            var deltaIntegral = Ki * error * deltaTime;
+            if (!((integralTerm >= OutputMax && deltaIntegral > 0) || (integralTerm <= OutputMin && deltaIntegral < 0)))
+                integralTerm += deltaIntegral;
             integralTerm = integralTerm.Clamp (OutputMin, OutputMax);
             var derivativeInput = (input - lastInput) / deltaTime;
             var output = Kp * error + integralTerm - Kd * derivativeInput;

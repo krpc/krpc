@@ -208,11 +208,11 @@ namespace KRPC.SpaceCenter.Services.Parts
                 torque = rcs.enablePitch ? posY * forceZ - posZ * forceY : 0d;
                 if (torque > 0) torqueX += torque;
                 else torqueXn += -torque;
-                // Torque around Y axis (yaw)
+                // Torque around Y axis (roll)
                 torque = rcs.enableRoll ? posZ * forceX - posX * forceZ : 0d;
                 if (torque > 0) torqueY += torque;
                 else torqueYn += -torque;
-                // Torque around Z axis (roll)
+                // Torque around Z axis (yaw)
                 torque = rcs.enableYaw ? posX * forceY - posY * forceX : 0d;
                 if (torque > 0) torqueZ += torque;
                 else torqueZn += -torque;
