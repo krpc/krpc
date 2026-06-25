@@ -3,9 +3,7 @@ import krpc
 conn = krpc.connect(name="RemoteTech Example")
 vessel = conn.space_center.active_vessel
 
-# Set a dish target. with_title matches the localized display name; for
-# language-independent code use the internal name, e.g.
-# parts.with_name("RTShortDish2").
+# Set a dish target
 part = vessel.parts.with_title("Reflectron KR-7")[0]
 antenna = conn.remote_tech.antenna(part)
 antenna.target_body = conn.space_center.bodies["Jool"]
