@@ -28,6 +28,8 @@ namespace KRPC.SpaceCenter.Services
         readonly Guid vesselId;
         readonly AttitudeController attitudeController;
         IClient requestingClient;
+        float stoppingAngleThreshold = 1f;
+        float stoppingVelocityThreshold = 0.05f;
 
         internal AutoPilot (global::Vessel vessel)
         {
@@ -86,7 +88,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Wait ()
         {
-            if (Error > 1f || InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > 0.05f)
+            if (Error > stoppingAngleThreshold || InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > stoppingVelocityThreshold)
                 throw new YieldException<Action> (Wait);
         }
 
@@ -245,6 +247,8 @@ namespace KRPC.SpaceCenter.Services
         {
             Engaged = false;
             attitudeController.Reset ();
+            stoppingAngleThreshold = 1f;
+            stoppingVelocityThreshold = 0.05f;
         }
 
         /// <summary>
@@ -265,6 +269,27 @@ namespace KRPC.SpaceCenter.Services
         public Tuple4 TargetRotation {
             get { return attitudeController.TargetRotation.ToTuple (); }
             set { attitudeController.SetTargetRotation (value.ToQuaternion ()); }
+        }
+
+        /// <summary>
+        /// The threshold, in degrees, below which the pointing error must fall for
+        /// <see cref="Wait"/> to return. Defaults to 1 degree.
+        /// </summary>
+        [KRPCProperty]
+        public float StoppingAngleThreshold {
+            get { return stoppingAngleThreshold; }
+            set { stoppingAngleThreshold = value; }
+        }
+
+        /// <summary>
+        /// The threshold angular velocity, in rad/s, below which the vessel's angular
+        /// velocity magnitude must fall for <see cref="Wait"/> to return.
+        /// Defaults to 0.05 rad/s.
+        /// </summary>
+        [KRPCProperty]
+        public float StoppingVelocityThreshold {
+            get { return stoppingVelocityThreshold; }
+            set { stoppingVelocityThreshold = value; }
         }
 
         /// <summary>
