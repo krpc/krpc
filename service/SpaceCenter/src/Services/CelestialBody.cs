@@ -566,11 +566,12 @@ namespace KRPC.SpaceCenter.Services
         {
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException (nameof (referenceFrame));
-            var up = Vector3.up;
-            var right = InternalBody.GetRelSurfacePosition (0, 0, 1).normalized;
-            var forward = Vector3.Cross (right, up);
-            Vector3.OrthoNormalize (ref forward, ref up);
-            var rotation = Quaternion.LookRotation (forward, up);
+            // Use the body's own (body-fixed) reference frame as the canonical source of the body's
+            // world-space orientation. This guarantees Rotation(body.ReferenceFrame) is the identity
+            // quaternion regardless of scene/physics state. The previous hand-rolled basis
+            // (Vector3.up + GetRelSurfacePosition) could desync from bodyTransform in the azimuth,
+            // producing a large spurious rotation about the pole.
+            var rotation = ReferenceFrame.Object (InternalBody).Rotation;
             return referenceFrame.RotationFromWorldSpace (rotation).ToTuple ();
         }
 
