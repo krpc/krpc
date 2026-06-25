@@ -21,12 +21,12 @@ class TestServoGroup(krpctest.TestCase):
             [x.name for x in group1.servos],
         )
         self.assertCountEqual(
-            ["Joint Pivotron - Basic", "Rotatron - Basic", "Rotatron - Basic"],
-            [x.title for x in group1.parts],
+            ["IR.Pivotron.Basic.v3", "IR.Rotatron.Basic.v3", "IR.Rotatron.Basic.v3"],
+            [x.name for x in group1.parts],
         )
         self.assertEqual("Group2", group2.name)
         self.assertCountEqual(["Rail Gantry - Short"], [x.name for x in group2.servos])
-        self.assertCountEqual(["Rail Gantry - Short"], [x.title for x in group2.parts])
+        self.assertCountEqual(["IR.RailGantry.Short"], [x.name for x in group2.parts])
 
     def test_servo_with_name(self):
         group = self.ir.servo_group_with_name(self.vessel, "Group1")

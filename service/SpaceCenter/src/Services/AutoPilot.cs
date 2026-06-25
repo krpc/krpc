@@ -107,7 +107,7 @@ namespace KRPC.SpaceCenter.Services
                         float angle;
                         Vector3 axis;
                         ((Quaternion)rotation).ToAngleAxis (out angle, out axis);
-                        return GeometryExtensions.NormAngle (angle);
+                        return Math.Abs (GeometryExtensions.NormAngle (angle));
                     } else {
                         return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (attitudeController.TargetDirection)));
                     }
