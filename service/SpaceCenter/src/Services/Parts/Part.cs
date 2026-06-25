@@ -82,10 +82,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             if (FlightGlobals.FindPartByID (flightId) != null)
                 return true;
-            var vessels = FlightGlobals.Vessels;
-            if (vessels == null)
-                return true;
-            foreach (var vessel in vessels) {
+            foreach (var vessel in FlightGlobals.Vessels) {
                 if (vessel == null || vessel.loaded)
                     continue;
                 var protoVessel = vessel.protoVessel;

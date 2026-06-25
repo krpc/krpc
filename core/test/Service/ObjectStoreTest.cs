@@ -17,6 +17,13 @@ namespace KRPC.Test.Service
             public bool IsValid { get; set; }
         }
 
+        sealed class ThrowingValidatable : IValidatable
+        {
+            public bool IsValid {
+                get { throw new InvalidOperationException ("boom"); }
+            }
+        }
+
         [Test]
         public void BasicUsage ()
         {
@@ -88,6 +95,27 @@ namespace KRPC.Test.Service
             // The valid object and the non-validatable object are left untouched.
             Assert.AreSame (valid, store.GetInstance (validId));
             Assert.AreSame (plain, store.GetInstance (plainId));
+        }
+
+        [Test]
+        public void RemoveInvalidIsolatesThrowingValidatable ()
+        {
+            var store = new ObjectStore ();
+            var valid = new FakeValidatable { IsValid = true };
+            var invalid = new FakeValidatable { IsValid = false };
+            var throwing = new ThrowingValidatable ();
+            var validId = store.AddInstance (valid);
+            var invalidId = store.AddInstance (invalid);
+            var throwingId = store.AddInstance (throwing);
+
+            // A throwing IsValid must not abort the sweep or propagate out of it.
+            Assert.DoesNotThrow (() => store.RemoveInvalid ());
+
+            // The invalid object is still removed; the throwing one is conservatively
+            // kept (treated as valid), as is the valid one.
+            Assert.Throws<ArgumentException> (() => store.GetInstance (invalidId));
+            Assert.AreSame (valid, store.GetInstance (validId));
+            Assert.AreSame (throwing, store.GetInstance (throwingId));
         }
     }
 }

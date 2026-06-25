@@ -74,7 +74,21 @@ namespace KRPC.Service
             var invalid = new List<object> ();
             foreach (var obj in instances.Keys) {
                 var validatable = obj as IValidatable;
-                if (validatable != null && !validatable.IsValid)
+                if (validatable == null)
+                    continue;
+                bool valid;
+                try {
+                    valid = validatable.IsValid;
+                } catch (Exception e) {
+                    // A validity check must never abort the sweep or escape into the
+                    // game's load-event dispatch. Treat a throwing check conservatively
+                    // as still-valid (keep the object) and log it.
+                    Logger.WriteLine (
+                        "IValidatable.IsValid threw during object store sweep for " +
+                        obj.GetType ().Name + "; keeping it. " + e, Logger.Severity.Error);
+                    continue;
+                }
+                if (!valid)
                     invalid.Add (obj);
             }
             foreach (var obj in invalid)

@@ -75,11 +75,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public bool IsValid {
             get {
-                var vessels = FlightGlobals.Vessels;
-                if (vessels == null)
-                    return true;
-                for (int i = 0; i < vessels.Count; i++)
-                    if (vessels [i] != null && vessels [i].id == Id)
+                foreach (var vessel in FlightGlobals.Vessels)
+                    if (vessel != null && vessel.id == Id)
                         return true;
                 return false;
             }
