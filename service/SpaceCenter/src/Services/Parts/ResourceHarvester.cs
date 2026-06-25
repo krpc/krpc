@@ -66,7 +66,10 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (harvester.IsActivated)
                     return ResourceHarvesterState.Active;
-                else if (animator.ActiveAnimation.isPlaying)
+                // ActiveAnimation can be null/destroyed (e.g. while the vessel is
+                // packed); guard it so the state can still be reported.
+                var animation = animator.ActiveAnimation;
+                if (animation != null && animation.isPlaying)
                     return animator.isDeployed ? ResourceHarvesterState.Deploying : ResourceHarvesterState.Retracting;
                 else if (animator.isDeployed)
                     return ResourceHarvesterState.Deployed;
@@ -128,10 +131,13 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Active)
                     return 0;
-                var status = harvester.status;
-                if (!status.Contains ("load"))
-                    return 0;
-                return GetFloatValue (status);
+                // Evaluate the thermal efficiency curve at the current core
+                // temperature, matching ResourceConverter.ThermalEfficiency. The
+                // harvester's "status" string is not used: a drill never reports a
+                // "<x>% load" status, and its "Ore rate" readout is only populated
+                // while the part's right-click window is open.
+                var temp = Convert.ToSingle (harvester.GetCoreTemperature ());
+                return harvester.ThermalEfficiency.Evaluate (temp);
             }
         }
 

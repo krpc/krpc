@@ -119,21 +119,25 @@ namespace KRPC.SpaceCenter.Services.Parts
         public ResourceConverterState State (int index)
         {
             CheckConverterExists (index);
-            var status = converters [index].status;
+            var converter = converters [index];
+            // Use IsActivated for the active/idle distinction rather than matching
+            // the localized "Inactive" status string. A running converter reports
+            // either "<x>% load" (while thermally throttled) or "Operational" (at
+            // full capacity), so anything active that isn't reporting a problem is
+            // treated as running.
+            if (!converter.IsActivated)
+                return ResourceConverterState.Idle;
+            var status = converter.status;
             if (status == null)
                 return ResourceConverterState.Unknown;
-            else if (status.Contains ("load"))
-                return ResourceConverterState.Running;
-            else if (status.Contains ("Inactive"))
-                return ResourceConverterState.Idle;
-            else if (status.Contains ("missing"))
+            else if (status.Contains ("missing") || status.Contains ("nsufficient"))
                 return ResourceConverterState.MissingResource;
             else if (status.Contains ("full"))
                 return ResourceConverterState.StorageFull;
             else if (status.Contains ("cap"))
                 return ResourceConverterState.Capacity;
             else
-                return ResourceConverterState.Unknown;
+                return ResourceConverterState.Running;
         }
 
         /// <summary>
