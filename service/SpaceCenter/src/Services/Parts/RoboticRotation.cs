@@ -13,7 +13,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass(Service = "SpaceCenter")]
     public class RoboticRotation : Equatable<RoboticRotation>
     {
-        readonly ModuleRoboticRotationServo servo;
+        ModuleRoboticRotationServo servo
+        {
+            get { return Part.InternalPart.Module<ModuleRoboticRotationServo>(); }
+        }
 
         internal static bool Is(Part part)
         {
@@ -25,8 +28,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!Is(part))
                 throw new ArgumentException("Part is not a robotic rotation servo");
             Part = part;
-            var internalPart = part.InternalPart;
-            servo = internalPart.Module<ModuleRoboticRotationServo>();
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals(RoboticRotation other)
         {
-            return !ReferenceEquals(other, null) && Part == other.Part && servo.Equals(other.servo);
+            return !ReferenceEquals(other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode()
         {
-            return Part.GetHashCode() ^ servo.GetHashCode();
+            return Part.GetHashCode();
         }
 
         /// <summary>

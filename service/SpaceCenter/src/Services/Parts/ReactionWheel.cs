@@ -14,7 +14,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class ReactionWheel : Equatable<ReactionWheel>
     {
-        readonly ModuleReactionWheel reactionWheel;
+        ModuleReactionWheel reactionWheel {
+            get { return Part.InternalPart.Module<ModuleReactionWheel> (); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -29,8 +31,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal ReactionWheel (Part part)
         {
             Part = part;
-            reactionWheel = part.InternalPart.Module<ModuleReactionWheel> ();
-            if (reactionWheel == null)
+            if (part.InternalPart.Module<ModuleReactionWheel> () == null)
                 throw new ArgumentException ("Part is not a reaction wheel");
         }
 
@@ -39,7 +40,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (ReactionWheel other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && reactionWheel == other.reactionWheel;
+            return !ReferenceEquals (other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ reactionWheel.GetHashCode ();
+            return Part.GetHashCode ();
         }
 
         /// <summary>

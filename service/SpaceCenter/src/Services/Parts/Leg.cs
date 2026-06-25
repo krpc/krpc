@@ -12,9 +12,15 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Leg : Equatable<Leg>
     {
-        readonly ModuleWheelBase wheel;
-        readonly ModuleWheels.ModuleWheelDeployment deployment;
-        readonly ModuleWheels.ModuleWheelDamage damage;
+        ModuleWheelBase wheel {
+            get { return Part.InternalPart.Module<ModuleWheelBase> (); }
+        }
+        ModuleWheels.ModuleWheelDeployment deployment {
+            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelDeployment> (); }
+        }
+        ModuleWheels.ModuleWheelDamage damage {
+            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelDamage> (); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -28,10 +34,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!Is (part))
                 throw new ArgumentException ("Part is not a landing leg");
             Part = part;
-            var internalPart = part.InternalPart;
-            wheel = internalPart.Module<ModuleWheelBase> ();
-            deployment = internalPart.Module<ModuleWheels.ModuleWheelDeployment> ();
-            damage = internalPart.Module<ModuleWheels.ModuleWheelDamage> ();
         }
 
         /// <summary>
@@ -39,7 +41,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Leg other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && wheel == other.wheel;
+            return !ReferenceEquals (other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -47,7 +49,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ wheel.GetHashCode ();
+            return Part.GetHashCode ();
         }
 
         /// <summary>

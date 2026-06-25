@@ -19,12 +19,48 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Module : Equatable<Module>
     {
-        readonly PartModule module;
+        readonly string moduleName;
+        readonly int moduleIndex;
 
         internal Module (Part part, PartModule partModule)
         {
             Part = part;
-            module = partModule;
+            moduleName = partModule.moduleName;
+            moduleIndex = ModuleIndex (part.InternalPart, partModule);
+        }
+
+        // The occurrence index of the given module among the modules on the part that
+        // share its name. Together with the name this uniquely identifies the module,
+        // allowing it to be re-derived from the live part rather than captured.
+        static int ModuleIndex (global::Part internalPart, PartModule partModule)
+        {
+            int occurrence = 0;
+            var modules = internalPart.Modules;
+            for (int i = 0; i < modules.Count; i++) {
+                if (ReferenceEquals (modules [i], partModule))
+                    break;
+                if (modules [i].moduleName == partModule.moduleName)
+                    occurrence++;
+            }
+            return occurrence;
+        }
+
+        // Re-derive the KSP part module from the live part. Throws if the part, or the
+        // module, no longer exists.
+        PartModule module {
+            get {
+                var modules = Part.InternalPart.Modules;
+                int occurrence = 0;
+                for (int i = 0; i < modules.Count; i++) {
+                    if (modules [i].moduleName == moduleName) {
+                        if (occurrence == moduleIndex)
+                            return modules [i];
+                        occurrence++;
+                    }
+                }
+                throw new PartDestroyedException (
+                    "The part module no longer exists. The part may have been destroyed.");
+            }
         }
 
         /// <summary>
@@ -32,7 +68,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Module other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && module.Equals (other.module);
+            return !ReferenceEquals (other, null) && Part == other.Part &&
+                   moduleName == other.moduleName && moduleIndex == other.moduleIndex;
         }
 
         /// <summary>
@@ -40,7 +77,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ module.GetHashCode ();
+            return Part.GetHashCode () ^ moduleName.GetHashCode () ^ moduleIndex.GetHashCode ();
         }
 
         /// <summary>
@@ -77,20 +114,12 @@ namespace KRPC.SpaceCenter.Services.Parts
             var info = Part.InternalPart.partInfo;
             if (info == null || info.partConfig == null)
                 return null;
-            // Find the position of this module among the modules on the part that share
-            // its name, then return the config node for the same occurrence.
-            int occurrence = 0;
-            var modules = Part.InternalPart.Modules;
-            for (int i = 0; i < modules.Count; i++) {
-                if (ReferenceEquals (modules [i], module))
-                    break;
-                if (modules [i].moduleName == module.moduleName)
-                    occurrence++;
-            }
+            // Return the config node for the same occurrence of this module among the
+            // modules on the part that share its name.
             int seen = 0;
             foreach (var moduleNode in info.partConfig.GetNodes ("MODULE")) {
-                if (moduleNode.GetValue ("name") == module.moduleName) {
-                    if (seen == occurrence)
+                if (moduleNode.GetValue ("name") == moduleName) {
+                    if (seen == moduleIndex)
                         return moduleNode;
                     seen++;
                 }

@@ -11,8 +11,13 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Radiator : Equatable<Radiator>
     {
-        readonly ModuleActiveRadiator activeRadiator;
-        readonly ModuleDeployableRadiator deployableRadiator;
+        ModuleActiveRadiator activeRadiator {
+            get { return Part.InternalPart.Module<ModuleActiveRadiator> (); }
+        }
+
+        ModuleDeployableRadiator deployableRadiator {
+            get { return Part.InternalPart.Module<ModuleDeployableRadiator> (); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -26,9 +31,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             Part = part;
             var internalPart = part.InternalPart;
-            activeRadiator = internalPart.Module<ModuleActiveRadiator> ();
-            deployableRadiator = internalPart.Module<ModuleDeployableRadiator> ();
-            if (activeRadiator == null && deployableRadiator == null)
+            if (internalPart.Module<ModuleActiveRadiator> () == null && internalPart.Module<ModuleDeployableRadiator> () == null)
                 throw new ArgumentException ("Part is not a radiator");
         }
 
@@ -39,9 +42,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             return
             !ReferenceEquals (other, null) &&
-            Part == other.Part &&
-            activeRadiator == other.activeRadiator &&
-            deployableRadiator == other.deployableRadiator;
+            Part == other.Part;
         }
 
         /// <summary>
@@ -49,12 +50,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = Part.GetHashCode ();
-            if (activeRadiator != null)
-                hash ^= activeRadiator.GetHashCode ();
-            if (deployableRadiator != null)
-                hash ^= deployableRadiator.GetHashCode ();
-            return hash;
+            return Part.GetHashCode ();
         }
 
         /// <summary>

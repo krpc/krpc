@@ -18,7 +18,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Instances of this class can be obtained by several methods in <see cref="Parts"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class Part : Equatable<Part>
+    public class Part : Equatable<Part>, IValidatable
     {
         readonly uint partFlightId;
 
@@ -52,7 +52,41 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The KSP part.
         /// </summary>
         public global::Part InternalPart {
-            get { return FlightGlobals.FindPartByID (partFlightId); }
+            get {
+                var part = FlightGlobals.FindPartByID (partFlightId);
+                if (part == null)
+                    throw new PartDestroyedException (
+                        "Part does not exist. It may have been destroyed.");
+                return part;
+            }
+        }
+
+        /// <summary>
+        /// Whether the part still exists anywhere in the game, including on unloaded
+        /// (on-rails) vessels. Used by the object store to decide whether to discard
+        /// this object when the game state is reloaded. Deliberately conservative:
+        /// returns <c>true</c> while the part exists on any vessel, so that parts on
+        /// unloaded vessels that a client still holds are not discarded.
+        /// </summary>
+        public bool IsValid {
+            get {
+                if (FlightGlobals.FindPartByID (partFlightId) != null)
+                    return true;
+                var vessels = FlightGlobals.Vessels;
+                if (vessels == null)
+                    return true;
+                foreach (var vessel in vessels) {
+                    if (vessel == null || vessel.loaded)
+                        continue;
+                    var protoVessel = vessel.protoVessel;
+                    if (protoVessel == null)
+                        continue;
+                    foreach (var protoPart in protoVessel.protoPartSnapshots)
+                        if (protoPart.flightID == partFlightId)
+                            return true;
+                }
+                return false;
+            }
         }
 
         /// <summary>

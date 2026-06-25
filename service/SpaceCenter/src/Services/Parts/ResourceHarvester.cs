@@ -12,8 +12,13 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class ResourceHarvester : Equatable<ResourceHarvester>
     {
-        readonly ModuleResourceHarvester harvester;
-        readonly ModuleAnimationGroup animator;
+        ModuleResourceHarvester harvester {
+            get { return Part.InternalPart.Module<ModuleResourceHarvester> (); }
+        }
+
+        ModuleAnimationGroup animator {
+            get { return Part.InternalPart.Module<ModuleAnimationGroup> (); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -27,9 +32,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             Part = part;
             var internalPart = part.InternalPart;
-            harvester = internalPart.Module<ModuleResourceHarvester> ();
-            animator = internalPart.Module<ModuleAnimationGroup> ();
-            if (harvester == null || animator == null)
+            if (internalPart.Module<ModuleResourceHarvester> () == null || internalPart.Module<ModuleAnimationGroup> () == null)
                 throw new ArgumentException ("Part is not a resource harvester");
         }
 
@@ -40,8 +43,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             return
             !ReferenceEquals (other, null) &&
-            Part == other.Part &&
-            (harvester == other.harvester || harvester.Equals (other.harvester));
+            Part == other.Part;
         }
 
         /// <summary>
@@ -49,7 +51,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ harvester.GetHashCode ();
+            return Part.GetHashCode ();
         }
 
         /// <summary>

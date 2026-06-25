@@ -21,10 +21,34 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Engine : Equatable<Engine>
     {
-        readonly IList<ModuleEngines> engines;
-        readonly MultiModeEngine multiModeEngine;
-        readonly ModuleGimbal gimbal;
-        readonly IThrustReverser thrustReverser;
+        // null for an engine representing the whole part (all modes); set to the index
+        // of a single ModuleEngines for a per-mode sub-engine created by Modes.
+        readonly int? singleEngineIndex;
+
+        // The engine's ModuleEngines, re-derived from the live part on each access.
+        IList<ModuleEngines> engines {
+            get {
+                var all = Part.InternalPart.Modules.OfType<ModuleEngines> ().ToList ();
+                if (!singleEngineIndex.HasValue)
+                    return all;
+                if (singleEngineIndex.Value >= all.Count)
+                    throw new PartDestroyedException ("The engine no longer exists.");
+                return new List<ModuleEngines> { all [singleEngineIndex.Value] };
+            }
+        }
+
+        // A per-mode sub-engine behaves as single-mode, so reports no multi-mode module.
+        MultiModeEngine multiModeEngine {
+            get { return singleEngineIndex.HasValue ? null : Part.InternalPart.Module<MultiModeEngine> (); }
+        }
+
+        ModuleGimbal gimbal {
+            get { return Part.InternalPart.Module<ModuleGimbal> (); }
+        }
+
+        IThrustReverser thrustReverser {
+            get { return ThrustReverser.Create (Part.InternalPart); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -39,26 +63,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Engine (Part part)
         {
             Part = part;
-            var internalPart = part.InternalPart;
-            engines = internalPart.Modules.OfType<ModuleEngines> ().ToList ();
-            multiModeEngine = internalPart.Module<MultiModeEngine> ();
-            gimbal = internalPart.Module<ModuleGimbal> ();
-            thrustReverser = ThrustReverser.Create (internalPart);
-            if (engines.Count == 0)
+            if (!part.InternalPart.HasModule<ModuleEngines> ())
                 throw new ArgumentException ("Part is not an engine");
         }
 
         Engine (ModuleEngines engine)
         {
-            Part = new Part (engine.part);
-            engines = new List<ModuleEngines>
-            {
-                engine
-            };
-            gimbal = Part.InternalPart.Module<ModuleGimbal> ();
-            thrustReverser = ThrustReverser.Create (Part.InternalPart);
             if (engine == null)
                 throw new ArgumentException ("Part does not have a ModuleEngines PartModule");
+            Part = new Part (engine.part);
+            singleEngineIndex = engine.part.Modules.OfType<ModuleEngines> ().ToList ().IndexOf (engine);
         }
 
         /// <summary>
@@ -69,9 +83,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             return
             !ReferenceEquals (other, null) &&
             Part == other.Part &&
-            engines.SequenceEqual (other.engines) &&
-            (multiModeEngine == other.multiModeEngine || multiModeEngine.Equals (other.multiModeEngine)) &&
-            (gimbal == other.gimbal || gimbal.Equals (other.gimbal));
+            singleEngineIndex == other.singleEngineIndex;
         }
 
         /// <summary>
@@ -79,15 +91,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = Part.GetHashCode ();
-            hash ^= engines.GetHashCode ();
-            foreach (var engine in engines)
-                hash ^= engine.GetHashCode ();
-            if (multiModeEngine != null)
-                hash ^= multiModeEngine.GetHashCode ();
-            if (gimbal != null)
-                hash ^= gimbal.GetHashCode ();
-            return hash;
+            return Part.GetHashCode () ^ (singleEngineIndex ?? -1);
         }
 
         /// <summary>

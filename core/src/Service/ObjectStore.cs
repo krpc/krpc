@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using KRPC.Utils;
 
 namespace KRPC.Service
 {
@@ -59,6 +60,25 @@ namespace KRPC.Service
                 instances.Remove (obj);
                 objectIds.Remove (objectId);
             }
+        }
+
+        /// <summary>
+        /// Remove all registered instances that implement <see cref="IValidatable"/>
+        /// and whose underlying game object no longer exists. Instances that do not
+        /// implement <see cref="IValidatable"/> are left untouched.
+        /// Intended to be called when the game state is (re)loaded, to discard objects
+        /// that have become dangling (see issue #771).
+        /// </summary>
+        public void RemoveInvalid ()
+        {
+            var invalid = new List<object> ();
+            foreach (var obj in instances.Keys) {
+                var validatable = obj as IValidatable;
+                if (validatable != null && !validatable.IsValid)
+                    invalid.Add (obj);
+            }
+            foreach (var obj in invalid)
+                RemoveInstance (obj);
         }
 
         /// <summary>

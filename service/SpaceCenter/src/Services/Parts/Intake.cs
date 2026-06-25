@@ -11,7 +11,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Intake : Equatable<Intake>
     {
-        readonly ModuleResourceIntake intake;
+        ModuleResourceIntake intake {
+            get { return Part.InternalPart.Module<ModuleResourceIntake> (); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -21,8 +23,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Intake (Part part)
         {
             Part = part;
-            intake = part.InternalPart.Module<ModuleResourceIntake> ();
-            if (intake == null)
+            if (part.InternalPart.Module<ModuleResourceIntake> () == null)
                 throw new ArgumentException ("Part is not an intake");
         }
 
@@ -31,7 +32,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Intake other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && intake.Equals (other.intake);
+            return !ReferenceEquals (other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ intake.GetHashCode ();
+            return Part.GetHashCode ();
         }
 
         /// <summary>

@@ -13,7 +13,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class ResourceConverter: Equatable<ResourceConverter>
     {
-        readonly IList<ModuleResourceConverter> converters;
+        IList<ModuleResourceConverter> converters {
+            get { return Part.InternalPart.Modules.OfType<ModuleResourceConverter> ().ToList (); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -23,8 +25,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal ResourceConverter (Part part)
         {
             Part = part;
-            converters = part.InternalPart.Modules.OfType<ModuleResourceConverter> ().ToList ();
-            if (converters.Count == 0)
+            if (!part.InternalPart.Modules.OfType<ModuleResourceConverter> ().Any ())
                 throw new ArgumentException ("Part is does not contain any resource converters");
         }
 
@@ -33,7 +34,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (ResourceConverter other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && converters.SequenceEqual (other.converters);
+            return !ReferenceEquals (other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -41,10 +42,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = Part.GetHashCode ();
-            foreach (var converter in converters)
-                hash ^= converter.GetHashCode ();
-            return hash;
+            return Part.GetHashCode ();
         }
 
         /// <summary>

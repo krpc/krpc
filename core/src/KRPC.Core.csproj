@@ -181,6 +181,7 @@
     <Compile Include="Utils\EventHandlerExtensions.cs" />
     <Compile Include="Utils\ExponentialMovingAverage.cs" />
     <Compile Include="Utils\IScheduler.cs" />
+    <Compile Include="Utils\IValidatable.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\Reflection.cs" />
     <Compile Include="Utils\RoundRobinScheduler.cs" />

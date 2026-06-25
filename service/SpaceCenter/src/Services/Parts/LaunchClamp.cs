@@ -11,7 +11,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class LaunchClamp : Equatable<LaunchClamp>
     {
-        readonly global::LaunchClamp launchClamp;
+        global::LaunchClamp launchClamp {
+            get { return Part.InternalPart.Module<global::LaunchClamp> (); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -21,8 +23,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal LaunchClamp (Part part)
         {
             Part = part;
-            launchClamp = part.InternalPart.Module<global::LaunchClamp> ();
-            if (launchClamp == null)
+            if (part.InternalPart.Module<global::LaunchClamp> () == null)
                 throw new ArgumentException ("Part is not a launch clamp");
         }
 
@@ -31,7 +32,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (LaunchClamp other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && launchClamp.Equals (other.launchClamp);
+            return !ReferenceEquals (other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ launchClamp.GetHashCode ();
+            return Part.GetHashCode ();
         }
 
         /// <summary>

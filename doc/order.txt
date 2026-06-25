@@ -657,6 +657,7 @@ SpaceCenter.Force.ForceVector
 SpaceCenter.Force.Position
 SpaceCenter.Force.ReferenceFrame
 SpaceCenter.Force.Remove
+SpaceCenter.PartDestroyedException
 SpaceCenter.Module
 SpaceCenter.Module.Name
 SpaceCenter.Module.Part

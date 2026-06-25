@@ -52,6 +52,9 @@ namespace KRPC
         {
             Servers = new List<Server.Server> ();
             Service.Services.Init();
+            // Discard objects that reference a replaced game state when it is reloaded
+            // (for example after a quickload), to avoid leaking them (see issue #771).
+            CallContext.GameStateLoaded += () => ObjectStore.Instance.RemoveInvalid ();
         }
 
         /// <summary>

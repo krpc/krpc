@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service;
+using KRPC.Utils;
 using NUnit.Framework;
 
 namespace KRPC.Test.Service
@@ -10,6 +11,11 @@ namespace KRPC.Test.Service
         static object a = new object ();
         static object b = new object ();
         static object c = new object ();
+
+        sealed class FakeValidatable : IValidatable
+        {
+            public bool IsValid { get; set; }
+        }
 
         [Test]
         public void BasicUsage ()
@@ -61,6 +67,27 @@ namespace KRPC.Test.Service
             Assert.DoesNotThrow (() => store.RemoveInstance (null));
             Assert.AreEqual (null, store.GetInstance (0));
             Assert.AreEqual (0, store.GetObjectId (null));
+        }
+
+        [Test]
+        public void RemoveInvalid ()
+        {
+            var store = new ObjectStore ();
+            var valid = new FakeValidatable { IsValid = true };
+            var invalid = new FakeValidatable { IsValid = false };
+            var plain = new object ();
+            var validId = store.AddInstance (valid);
+            var invalidId = store.AddInstance (invalid);
+            var plainId = store.AddInstance (plain);
+
+            store.RemoveInvalid ();
+
+            // The invalid object is removed from the store.
+            Assert.Throws<ArgumentException> (() => store.GetInstance (invalidId));
+            Assert.Throws<ArgumentException> (() => store.GetObjectId (invalid));
+            // The valid object and the non-validatable object are left untouched.
+            Assert.AreSame (valid, store.GetInstance (validId));
+            Assert.AreSame (plain, store.GetInstance (plainId));
         }
     }
 }

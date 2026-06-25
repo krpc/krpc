@@ -11,7 +11,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class SolarPanel : Equatable<SolarPanel>
     {
-        readonly ModuleDeployableSolarPanel panel;
+        ModuleDeployableSolarPanel panel {
+            get { return Part.InternalPart.Module<ModuleDeployableSolarPanel> (); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -21,8 +23,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal SolarPanel (Part part)
         {
             Part = part;
-            panel = part.InternalPart.Module<ModuleDeployableSolarPanel> ();
-            if (panel == null)
+            if (part.InternalPart.Module<ModuleDeployableSolarPanel> () == null)
                 throw new ArgumentException ("Part is not a solar panel");
         }
 
@@ -31,7 +32,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (SolarPanel other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && panel == other.panel;
+            return !ReferenceEquals (other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ panel.GetHashCode ();
+            return Part.GetHashCode ();
         }
 
         /// <summary>

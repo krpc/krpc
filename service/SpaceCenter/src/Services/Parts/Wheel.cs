@@ -14,13 +14,27 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass(Service = "SpaceCenter")]
     public class Wheel : Equatable<Wheel>
     {
-        readonly ModuleWheelBase wheel;
-        readonly ModuleWheels.ModuleWheelBrakes brakes;
-        readonly ModuleWheels.ModuleWheelDamage damage;
-        readonly ModuleWheels.ModuleWheelDeployment deployment;
-        readonly ModuleWheels.ModuleWheelMotor motor;
-        readonly ModuleWheels.ModuleWheelSteering steering;
-        readonly ModuleWheels.ModuleWheelSuspension suspension;
+        ModuleWheelBase wheel {
+            get { return Part.InternalPart.Module<ModuleWheelBase> (); }
+        }
+        ModuleWheels.ModuleWheelBrakes brakes {
+            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelBrakes> (); }
+        }
+        ModuleWheels.ModuleWheelDamage damage {
+            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelDamage> (); }
+        }
+        ModuleWheels.ModuleWheelDeployment deployment {
+            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelDeployment> (); }
+        }
+        ModuleWheels.ModuleWheelMotor motor {
+            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelMotor> (); }
+        }
+        ModuleWheels.ModuleWheelSteering steering {
+            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelSteering> (); }
+        }
+        ModuleWheels.ModuleWheelSuspension suspension {
+            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelSuspension> (); }
+        }
 
         internal static bool Is(Part part)
         {
@@ -34,15 +48,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!Is(part))
                 throw new ArgumentException("Part is not a wheel");
             Part = part;
-            var internalPart = part.InternalPart;
-            wheel = internalPart.Module<ModuleWheelBase>();
-            brakes = internalPart.Module<ModuleWheels.ModuleWheelBrakes>();
-            damage = internalPart.Module<ModuleWheels.ModuleWheelDamage>();
-            deployment = internalPart.Module<ModuleWheels.ModuleWheelDeployment>();
-            motor = internalPart.Module<ModuleWheels.ModuleWheelMotor> ();
-            steering = internalPart.Module<ModuleWheels.ModuleWheelSteering>();
-            suspension = internalPart.Module<ModuleWheels.ModuleWheelSuspension>();
-
         }
 
         /// <summary>
@@ -50,7 +55,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals(Wheel other)
         {
-            return !ReferenceEquals(other, null) && Part == other.Part && wheel == other.wheel;
+            return !ReferenceEquals(other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -58,7 +63,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode()
         {
-            return Part.GetHashCode() ^ wheel.GetHashCode();
+            return Part.GetHashCode();
         }
 
         void CheckBrakes()

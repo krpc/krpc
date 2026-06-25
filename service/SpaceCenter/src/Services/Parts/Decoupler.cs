@@ -14,7 +14,11 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Decoupler : Equatable<Decoupler>
     {
-        readonly Compatibility.ModuleDecoupler decoupler;
+        // Re-create the compatibility wrapper from the live part on each access, so no
+        // reference to the destroyed module is retained.
+        Compatibility.ModuleDecoupler decoupler {
+            get { return new Compatibility.ModuleDecoupler (Part.InternalPart); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -27,8 +31,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Decoupler (Part part)
         {
             Part = part;
-            decoupler = new Compatibility.ModuleDecoupler(part.InternalPart);
-            if (decoupler.Instance == null)
+            if (new Compatibility.ModuleDecoupler (part.InternalPart).Instance == null)
                 throw new ArgumentException("Part is not a decoupler");
         }
 
@@ -37,10 +40,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Decoupler other)
         {
-            return
-            !ReferenceEquals(other, null) &&
-            Part != other.Part &&
-            (decoupler.Instance == other.decoupler.Instance || decoupler.Instance.Equals(other.decoupler.Instance));
+            return !ReferenceEquals (other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ decoupler.Instance.GetHashCode();
+            return Part.GetHashCode ();
         }
 
         /// <summary>
