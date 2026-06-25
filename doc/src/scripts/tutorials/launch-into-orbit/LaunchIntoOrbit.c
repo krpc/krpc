@@ -40,7 +40,7 @@ int main() {
   printf("Launch!\n");
 
   krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
-  krpc_SpaceCenter_AutoPilot_Engage(conn, auto_pilot);
+  krpc_SpaceCenter_AutoPilot_set_Engaged(conn, auto_pilot, true);
   krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90, 90);
 
   bool srbs_separated = false;

@@ -37,7 +37,7 @@ int main() {
 
   // Activate the first stage
   vessel.control().activate_next_stage();
-  vessel.auto_pilot().engage();
+  vessel.auto_pilot().set_engaged(true);
   vessel.auto_pilot().target_pitch_and_heading(90, 90);
 
   // Main ascent loop

@@ -17,9 +17,9 @@ public class SurfacePrograde {
 
         ap.setReferenceFrame(vessel.getSurfaceVelocityReferenceFrame());
         ap.setTargetDirection(new Triplet<Double,Double,Double>(0.0, 1.0, 0.0));
-        ap.engage();
+        ap.setEngaged(true);
         ap.wait_();
-        ap.disengage();
+        ap.setEngaged(false);
         connection.close();
     }
 }

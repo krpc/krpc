@@ -7,7 +7,7 @@ int main() {
   auto vessel = space_center.active_vessel();
   auto ap = vessel.auto_pilot();
   ap.set_reference_frame(vessel.surface_reference_frame());
-  ap.engage();
+  ap.set_engaged(true);
 
   // Point the vessel north on the navball, with a pitch of 0 degrees
   ap.set_target_direction(std::make_tuple(0, 1, 0));
@@ -21,5 +21,5 @@ int main() {
   ap.set_target_direction(std::make_tuple(0, 0, -1));
   ap.wait();
 
-  ap.disengage();
+  ap.set_engaged(false);
 }

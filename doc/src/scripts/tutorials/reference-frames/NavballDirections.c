@@ -18,7 +18,7 @@ int main() {
   krpc_SpaceCenter_AutoPilot_t ap;
   krpc_SpaceCenter_Vessel_AutoPilot(conn, &ap, vessel);
   krpc_SpaceCenter_AutoPilot_set_ReferenceFrame(conn, ap, vessel_srf_ref);
-  krpc_SpaceCenter_AutoPilot_Engage(conn, ap);
+  krpc_SpaceCenter_AutoPilot_set_Engaged(conn, ap, true);
 
   // Point the vessel north on the navball, with a pitch of 0 degrees
   {
@@ -41,5 +41,5 @@ int main() {
     krpc_SpaceCenter_AutoPilot_Wait(conn, ap);
   }
 
-  krpc_SpaceCenter_AutoPilot_Disengage(conn, ap);
+  krpc_SpaceCenter_AutoPilot_set_Engaged(conn, ap, false);
 }

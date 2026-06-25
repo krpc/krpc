@@ -6,6 +6,6 @@ local ap = vessel.auto_pilot
 
 ap.reference_frame = vessel.surface_velocity_reference_frame
 ap.target_direction = List{0, 1, 0}
-ap:engage()
+ap.engaged = true
 ap:wait()
-ap:disengage()
+ap.engaged = false

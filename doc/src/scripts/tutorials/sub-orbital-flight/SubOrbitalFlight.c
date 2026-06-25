@@ -18,7 +18,7 @@ int main() {
   krpc_SpaceCenter_Vessel_Control(conn, &control, vessel);
 
   krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90, 90);
-  krpc_SpaceCenter_AutoPilot_Engage(conn, auto_pilot);
+  krpc_SpaceCenter_AutoPilot_set_Engaged(conn, auto_pilot, true);
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 1);
   sleep(1);
 
@@ -62,7 +62,7 @@ int main() {
   krpc_SpaceCenter_Control_set_Throttle(conn, control, 0);
   sleep(1);
   krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
-  krpc_SpaceCenter_AutoPilot_Disengage(conn, auto_pilot);
+  krpc_SpaceCenter_AutoPilot_set_Engaged(conn, auto_pilot, false);
 
   while (true) {
     double srf_altitude;

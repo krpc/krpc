@@ -15,7 +15,7 @@ public class NavballDirections {
         Vessel vessel = spaceCenter.getActiveVessel();
         AutoPilot ap = vessel.getAutoPilot();
         ap.setReferenceFrame(vessel.getSurfaceReferenceFrame());
-        ap.engage();
+        ap.setEngaged(true);
 
         // Point the vessel north on the navball, with a pitch of 0 degrees
         ap.setTargetDirection(new Triplet<Double,Double,Double> (0.0, 1.0, 0.0));
@@ -29,7 +29,7 @@ public class NavballDirections {
         ap.setTargetDirection(new Triplet<Double,Double,Double> (0.0, 0.0, -1.0));
         ap.wait_();
 
-        ap.disengage();
+        ap.setEngaged(false);
         connection.close();
     }
 }

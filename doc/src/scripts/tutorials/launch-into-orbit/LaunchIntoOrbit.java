@@ -52,7 +52,7 @@ public class LaunchIntoOrbit {
 
         // Activate the first stage
         vessel.getControl().activateNextStage();
-        vessel.getAutoPilot().engage();
+        vessel.getAutoPilot().setEngaged(true);
         vessel.getAutoPilot().targetPitchAndHeading(90, 90);
 
         // Main ascent loop

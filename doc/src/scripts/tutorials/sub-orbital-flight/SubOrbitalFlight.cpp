@@ -13,7 +13,7 @@ int main() {
   auto vessel = space_center.active_vessel();
 
   vessel.auto_pilot().target_pitch_and_heading(90, 90);
-  vessel.auto_pilot().engage();
+  vessel.auto_pilot().set_engaged(true);
   vessel.control().set_throttle(1);
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
@@ -62,7 +62,7 @@ int main() {
   vessel.control().set_throttle(0);
   std::this_thread::sleep_for(std::chrono::seconds(1));
   vessel.control().activate_next_stage();
-  vessel.auto_pilot().disengage();
+  vessel.auto_pilot().set_engaged(false);
 
   {
     auto srf_altitude = vessel.flight().surface_altitude_call();

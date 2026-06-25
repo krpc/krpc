@@ -40,7 +40,7 @@ class LaunchIntoOrbit
 
         // Activate the first stage
         vessel.Control.ActivateNextStage ();
-        vessel.AutoPilot.Engage ();
+        vessel.AutoPilot.Engaged = true;
         vessel.AutoPilot.TargetPitchAndHeading (90, 90);
 
         // Main ascent loop

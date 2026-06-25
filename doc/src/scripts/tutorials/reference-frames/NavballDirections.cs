@@ -12,7 +12,7 @@ class NavballDirections
             var vessel = conn.SpaceCenter ().ActiveVessel;
             var ap = vessel.AutoPilot;
             ap.ReferenceFrame = vessel.SurfaceReferenceFrame;
-            ap.Engage();
+            ap.Engaged = true;
 
             // Point the vessel north on the navball, with a pitch of 0 degrees
             ap.TargetDirection = Tuple.Create (0.0, 1.0, 0.0);
@@ -26,7 +26,7 @@ class NavballDirections
             ap.TargetDirection = Tuple.Create (0.0, 0.0, -1.0);
             ap.Wait();
 
-            ap.Disengage();
+            ap.Engaged = false;
         }
     }
 }
