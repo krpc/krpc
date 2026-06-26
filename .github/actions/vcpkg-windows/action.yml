@@ -1,0 +1,24 @@
+inputs:
+  packages:
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: get-vcpkg-hash
+      id: vcpkg-hash
+      shell: pwsh
+      run: |
+        $commitHash = ((vcpkg version)[0] -split ' ')[-1]
+        echo "value=$commitHash" >> $env:GITHUB_OUTPUT
+    - name: cache-vcpkg
+      uses: actions/cache@v5
+      with:
+        path: C:\vcpkg-binary-cache
+        key: ${{ github.job }}-vcpkg-${{ steps.vcpkg-hash.outputs.value }}
+    - name: install-deps
+      shell: pwsh
+      env:
+        VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
+      run: |
+        New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
+        vcpkg install ${{ inputs.packages }}

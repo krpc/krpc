@@ -2,6 +2,12 @@ inputs:
   long-version:
     required: false
     default: 'true'
+  ksp-game:
+    required: false
+    default: 'ksp'
+  ksp-version:
+    required: false
+    default: '1.12.5'
 runs:
   using: composite
   steps:
@@ -12,3 +18,8 @@ runs:
         rm -f lib/mono-4.5
         ln -s /usr/lib/mono/4.5 lib/mono-4.5
       shell: bash
+    - uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
+    - uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+      with:
+        game: ${{ inputs.ksp-game }}
+        version: ${{ inputs.ksp-version }}

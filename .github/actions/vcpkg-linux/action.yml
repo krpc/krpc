@@ -1,0 +1,12 @@
+runs:
+  using: composite
+  steps:
+    - name: get-vcpkg-hash
+      id: vcpkg-hash
+      shell: bash
+      run: echo "value=$(vcpkg version | head -n1 | awk '{print $NF}')" >> "$GITHUB_OUTPUT"
+    - name: cache-vcpkg
+      uses: actions/cache@v5
+      with:
+        path: ~/.cache/vcpkg
+        key: ${{ github.job }}-vcpkg-${{ steps.vcpkg-hash.outputs.value }}
