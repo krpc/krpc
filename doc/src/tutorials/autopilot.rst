@@ -297,6 +297,31 @@ pitch and yaw axes in proportion to the error in each. The acceleration
 the error direction. This makes the nose follow the shortest, great-circle path
 to the target.
 
+Tangential damping
+^^^^^^^^^^^^^^^^^^
+
+The setpoint computed above is directed purely along the error direction :math:`\hat{d}` — it
+is a *radial* setpoint. When the vessel has an angular velocity component
+*perpendicular* to that direction — for example after a keyboard nudge — the radial setpoint
+provides centripetal force (it keeps pulling the nose toward the target) but no braking of the
+tangential motion. The nose can therefore enter a self-sustaining circular orbit around the
+target direction: the radial correction keeps it on the circle while the tangential velocity is
+never cancelled.
+
+To break this orbit, the perpendicular (tangential) component of the current angular velocity
+is subtracted from the setpoint:
+
+.. math::
+   \boldsymbol{\omega}_{perp} &= \boldsymbol{\omega}_{2d} -
+       (\boldsymbol{\omega}_{2d} \cdot \hat{d})\,\hat{d} \\
+   (\omega_{pitch},\,\omega_{yaw}) &= \omega_{2d} \cdot f_a \cdot \hat{d}
+       - \boldsymbol{\omega}_{perp}
+
+where :math:`\boldsymbol{\omega}_{2d}` is the pitch–yaw part of the vessel's current angular
+velocity in the roll-invariant frame. The inner PID controller then applies torque to cancel
+the tangential motion directly. During a normal approach :math:`\boldsymbol{\omega}_{perp}
+\approx 0`, so the term is dormant and does not affect settling behaviour.
+
 Roll
 ^^^^
 

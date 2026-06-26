@@ -536,6 +536,18 @@ namespace KRPC.SpaceCenter.AutoPilot
 
             pitchVelocity = velocity2d * attenuation2d * dirPitch;
             yawVelocity = velocity2d * attenuation2d * dirYaw;
+
+            // Damp the perpendicular (tangential) component of the current angular velocity.
+            // The outer-loop setpoint above is purely radial (toward the target direction).
+            // When the vessel has tangential angular velocity — e.g. after a nudge that puts it
+            // into a circular orbit around the target — the radial setpoint provides centripetal
+            // force but no tangential braking.  That allows a self-sustaining limit cycle: the
+            // controller pulls the nose toward the target while the nose circles around it at
+            // constant radius.  Subtracting the perpendicular component of the current omega from
+            // the setpoint makes the inner PID cancel the tangential motion directly, breaking the
+            // orbit.  During a normal radial approach omega_perp ≈ 0, so this term is dormant.
+            pitchVelocity -= currentOmegaRi.x - omega2d * dirPitch;
+            yawVelocity -= currentOmegaRi.z - omega2d * dirYaw;
         }
 
         /// <summary>
