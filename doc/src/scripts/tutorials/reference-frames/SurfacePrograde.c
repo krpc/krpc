@@ -22,6 +22,6 @@ int main() {
   krpc_tuple_double_double_double_t direction = { 0, 1, 0 };
   krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, ap, &direction);
   krpc_SpaceCenter_AutoPilot_set_Engaged(conn, ap, true);
-  krpc_SpaceCenter_AutoPilot_Wait(conn, ap);
+  krpc_SpaceCenter_AutoPilot_Wait(conn, ap, -1);
   krpc_SpaceCenter_AutoPilot_set_Engaged(conn, ap, false);
 }

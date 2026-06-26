@@ -126,7 +126,7 @@ public class LaunchIntoOrbit {
         vessel.getAutoPilot().setReferenceFrame(node.getReferenceFrame());
         vessel.getAutoPilot().setTargetDirection(
           new Triplet<Double,Double,Double>(0.0, 1.0, 0.0));
-        vessel.getAutoPilot().wait_();
+        vessel.getAutoPilot().wait_(-1);
 
         // Wait until burn
         System.out.println("Waiting until circularization burn");
