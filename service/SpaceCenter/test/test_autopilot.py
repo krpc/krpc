@@ -2,11 +2,11 @@ import math
 import time
 import unittest
 
-import krpc
 import krpctest
 from krpctest.geometry import normalize
 
 
+# pylint: disable=too-many-statements
 def _make_autopilot_test_class(vessel_name, angle_error, direction_error):
     class TestAutoPilot(krpctest.TestCase):
         @classmethod
@@ -20,7 +20,7 @@ def _make_autopilot_test_class(vessel_name, angle_error, direction_error):
             cls.ap.reset()
             if vessel_name == "AutoPilotWobbly":
                 cls.ap.decel_lagCorrection = False
-                cls.ap.time_to_peak = (25, 25, 25)
+                cls.ap.time_to_peak = (100, 100, 100)
             cls.ap.sas = False
             cls.vessel.control.rcs = True
             cls.sas_mode = cls.connect().space_center.SASMode
