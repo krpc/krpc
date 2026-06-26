@@ -19,7 +19,7 @@ def _make_autopilot_test_class(vessel_name, angle_error, direction_error):
             cls.ap = cls.vessel.auto_pilot
             cls.ap.reset()
             if vessel_name == "AutoPilotWobbly":
-                cls.ap.decel_lagCorrection = False
+                cls.ap.decel_lag_correction = False
                 cls.ap.time_to_peak = (100, 100, 100)
             cls.ap.sas = False
             cls.vessel.control.rcs = True
