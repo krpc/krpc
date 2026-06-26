@@ -85,6 +85,12 @@ values should suffice in most cases, but they can be adjusted to fit your needs.
   included. It should be disabled for large, structurally flexible rockets — see
   :ref:`Corner Cases <corner-cases>`.
 
+* The **gyroscopic compensation** (default ``True``) controls whether the autopilot
+  cancels the gyroscopic cross-coupling term :math:`\boldsymbol{\omega}\times(I\boldsymbol{\omega})`
+  with a feedforward, as described in :ref:`Gyroscopic feedforward
+  <gyroscopic-feedforward>`. It is negligible during normal attitude holding and only
+  matters for fast rotations or vessels with strongly asymmetric moments of inertia.
+
 * **Auto-tuning** (default ``True``) controls whether the PID controller gains are
   automatically tuned from the vessel's available torque and moment of inertia, as
   described in :ref:`Tuning the Controllers <tuning-the-controllers>`. When disabled,
@@ -359,6 +365,39 @@ two concerns so they can be tuned independently.
 On the first physics tick after the autopilot starts,
 :math:`\omega_{ref}(t - \Delta t)` is undefined, so the feedforward is skipped for
 that tick to avoid a transient spike.
+
+.. _gyroscopic-feedforward:
+
+Gyroscopic feedforward
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The :ref:`controller tuning <tuning-the-controllers>` models each axis as an independent
+plant :math:`\tau = I\dot\omega`. The true rigid-body equation of motion, however,
+couples the axes through a gyroscopic term:
+
+.. math::
+   \boldsymbol{\tau} = I\dot{\boldsymbol{\omega}} +
+       \boldsymbol{\omega} \times (I\boldsymbol{\omega})
+
+The cross term :math:`\boldsymbol{\omega}\times(I\boldsymbol{\omega})` is a torque that
+the per-axis model ignores; left uncorrected the PI controllers would have to reject it
+as a disturbance. The autopilot instead cancels it directly, adding a feedforward control
+fraction equal to the negative of that torque normalised by the available torque on each
+axis:
+
+.. math::
+   x_{gyro} = -\frac{\boldsymbol{\omega} \times (I\boldsymbol{\omega})}{\tau_{max}}
+
+This is computed in the body frame, where the moment of inertia and available torque are
+defined per axis, and summed with the other control terms before clamping to
+:math:`[-1, 1]`. A diagonal moment of inertia is assumed, matching the rest of the
+controller.
+
+Because the term is quadratic in :math:`\boldsymbol{\omega}`, it is negligible at the low
+angular rates of normal attitude holding — including the structural bending oscillation
+that affects flexible craft — and only becomes significant for fast slews or vessels with
+strongly asymmetric inertia. It can be disabled with the gyroscopic compensation
+parameter.
 
 Roll
 ^^^^

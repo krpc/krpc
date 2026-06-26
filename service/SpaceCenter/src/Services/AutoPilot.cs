@@ -406,6 +406,22 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether to apply gyroscopic feedforward compensation. Defaults to <c>true</c>.
+        /// The per-axis plant model used to tune the controllers assumes <c>tau = I*omega_dot</c>
+        /// on each axis independently, but the rigid-body equation of motion includes a cross-
+        /// coupling term <c>omega x (I*omega)</c>. When <c>true</c>, the autopilot adds a feedforward
+        /// control fraction that cancels this term so the assumed plant holds even when the coupling
+        /// is significant. The term is quadratic in the angular velocity, so it is negligible during
+        /// normal attitude holding and only becomes significant for fast rotations or vessels with
+        /// strongly asymmetric moments of inertia. It can be set to <c>false</c> to disable it.
+        /// </summary>
+        [KRPCProperty]
+        public bool GyroscopicCompensation {
+            get { return attitudeController.GyroscopicCompensation; }
+            set { attitudeController.GyroscopicCompensation = value; }
+        }
+
+        /// <summary>
         /// When <c>true</c>, logs one diagnostic line per physics tick to Player.log and to an
         /// in-memory buffer (see <see cref="DiagnosticLog"/>). Each line is prefixed with
         /// <c>[KRPC.AP]</c> and contains torque, MoI, angle errors, current/target angular

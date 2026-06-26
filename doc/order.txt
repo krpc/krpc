@@ -1168,6 +1168,7 @@ SpaceCenter.AutoPilot.MaxAngularVelocity
 SpaceCenter.AutoPilot.AttenuationAngle
 SpaceCenter.AutoPilot.AutoTune
 SpaceCenter.AutoPilot.DecelLagCorrection
+SpaceCenter.AutoPilot.GyroscopicCompensation
 SpaceCenter.AutoPilot.DiagnosticLogging
 SpaceCenter.AutoPilot.DiagnosticLog
 SpaceCenter.AutoPilot.TimeToPeak

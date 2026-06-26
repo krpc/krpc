@@ -118,6 +118,8 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public bool DecelLagCorrection { get; set; }
 
+        public bool GyroscopicCompensation { get; set; }
+
         public bool DiagnosticLogging {
             get { return diagnosticLogging; }
             set {
@@ -182,6 +184,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // DecelLagCorrection=false.
             TimeToPeak = new Vector3d (1, 1, 1);
             DecelLagCorrection = true;
+            GyroscopicCompensation = true;
             DiagnosticLogging = false;
             SetTarget (0, 0, double.NaN);
             Start ();
@@ -257,14 +260,21 @@ namespace KRPC.SpaceCenter.AutoPilot
             // the frame rotation). Add the acceleration feedforward to each PID output, then clamp
             // before converting pitch/yaw back to the body frame.
             var virtualPitch = (RunAxis (PitchPID, target.x, currentRi.x, torque [0], dt) + ffRi.x).Clamp (-1, 1);
-            state.Roll = (float)((RunAxis (RollPID, target.y, currentRi.y, torque [1], dt) + ffRi.y).Clamp (-1, 1));
+            var virtualRoll = (RunAxis (RollPID, target.y, currentRi.y, torque [1], dt) + ffRi.y).Clamp (-1, 1);
             var virtualYaw = (RunAxis (YawPID, target.z, currentRi.z, torque [2], dt) + ffRi.z).Clamp (-1, 1);
             var bodyControl = FromRollInvariant (new Vector3d (virtualPitch, 0, virtualYaw), cosPhi, sinPhi);
-            state.Pitch = (float)bodyControl.x;
-            state.Yaw = (float)bodyControl.z;
+
+            // Gyroscopic feedforward: the per-axis plant model (τ = I·ω̇) ignores the ω×(Iω) term in
+            // Euler's rigid-body equation. Add a control fraction that cancels it, in the body frame
+            // where the inertia and available torque are per-axis, then sum with the control and
+            // clamp to [-1, 1].
+            var gyro = GyroscopicFeedforward (current, moi, torque);
+            state.Pitch = (float)(bodyControl.x + gyro.x).Clamp (-1, 1);
+            state.Roll = (float)(virtualRoll + gyro.y).Clamp (-1, 1);
+            state.Yaw = (float)(bodyControl.z + gyro.z).Clamp (-1, 1);
 
             if (diagnosticLogging)
-                LogDiagnostics (torque, moi, phi, currentRi, target, ffRi, currentDirection, state);
+                LogDiagnostics (torque, moi, phi, currentRi, target, ffRi, gyro, currentDirection, state);
         }
 
         /// <summary>
@@ -368,7 +378,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         void LogDiagnostics (Vector3d torque, Vector3d moi, double phi, Vector3d currentRi,
-            Vector3d target, Vector3d ffRi, Vector3d currentDirection, PilotAddon.ControlInputs state)
+            Vector3d target, Vector3d ffRi, Vector3d gyro, Vector3d currentDirection, PilotAddon.ControlInputs state)
         {
             var dirErr = Vector3.Angle (currentDirection, TargetDirection);
             var line = string.Format (
@@ -381,8 +391,9 @@ namespace KRPC.SpaceCenter.AutoPilot
                 " omega_ri=({15:F4},{16:F4},{17:F4})" +
                 " tgt_omega_ri=({18:F4},{19:F4},{20:F4})" +
                 " ff_ri=({21:F3},{22:F3},{23:F3})" +
-                " Kp=({24:F4},{25:F4},{26:F4}) Ki=({27:F4},{28:F4},{29:F4})" +
-                " ctrl=(p={30:F3},r={31:F3},y={32:F3})",
+                " gyro=({24:F3},{25:F3},{26:F3})" +
+                " Kp=({27:F4},{28:F4},{29:F4}) Ki=({30:F4},{31:F4},{32:F4})" +
+                " ctrl=(p={33:F3},r={34:F3},y={35:F3})",
                 Time.fixedTime, dirErr,
                 torque.x, torque.y, torque.z,
                 moi.x, moi.y, moi.z,
@@ -392,6 +403,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 currentRi.x, currentRi.y, currentRi.z,
                 target.x, target.y, target.z,
                 ffRi.x, ffRi.y, ffRi.z,
+                gyro.x, gyro.y, gyro.z,
                 PitchPID.Kp, RollPID.Kp, YawPID.Kp,
                 PitchPID.Ki, RollPID.Ki, YawPID.Ki,
                 state.Pitch, state.Roll, state.Yaw);
@@ -424,6 +436,35 @@ namespace KRPC.SpaceCenter.AutoPilot
             // measurement, so both must use the same sign. Removing this negation alone makes them
             // disagree and the loop diverges; removing both negations together would be equivalent.
             return -ApToBody (localAngularVelocity);
+        }
+
+        /// <summary>
+        /// Gyroscopic feedforward in the body frame, returned as a per-axis control fraction.
+        /// </summary>
+        /// <remarks>
+        /// The PID controllers and the autotuner model the plant as τ = I·ω̇ independently per axis,
+        /// but the rigid-body equation of motion is τ = I·ω̇ + ω×(Iω). The cross term ω×(Iω) is a
+        /// torque the controller would otherwise have to reject as a disturbance. This returns the
+        /// control fraction that cancels it: -(ω×(Iω))ᵢ / τ_max,ᵢ per axis (a diagonal inertia is
+        /// assumed, matching the rest of the controller). The term is quadratic in ω, so it is
+        /// negligible at the low rates of normal attitude holding — including structural bending
+        /// oscillation — and only matters for fast slews or strongly asymmetric inertia. It can be
+        /// disabled via <see cref="GyroscopicCompensation"/>.
+        ///
+        /// ω is passed in the controller's negated sign convention (see ComputeCurrentAngularVelocity),
+        /// but ω×(Iω) is quadratic in ω and so is invariant under that negation — it gives the correct
+        /// body-frame gyroscopic torque either way.
+        /// </remarks>
+        Vector3d GyroscopicFeedforward (Vector3d omega, Vector3d moi, Vector3d torque)
+        {
+            if (!GyroscopicCompensation)
+                return Vector3d.zero;
+            var angularMomentum = new Vector3d (moi.x * omega.x, moi.y * omega.y, moi.z * omega.z);
+            var gyroTorque = Vector3d.Cross (omega, angularMomentum);
+            return new Vector3d (
+                torque.x > 0 ? -gyroTorque.x / torque.x : 0.0,
+                torque.y > 0 ? -gyroTorque.y / torque.y : 0.0,
+                torque.z > 0 ? -gyroTorque.z / torque.z : 0.0);
         }
 
         /// <summary>
