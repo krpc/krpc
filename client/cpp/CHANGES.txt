@@ -1,4 +1,5 @@
 v0.6.0
+ * Distribute via vcpkg
  * Update to protobuf v35.1
  * Update to ASIO 1.38.0
  * Drop autotools build; CMake is now the only supported build system
