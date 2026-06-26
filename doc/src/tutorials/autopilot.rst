@@ -306,7 +306,7 @@ is a *radial* setpoint. When the vessel has an angular velocity component
 provides centripetal force (it keeps pulling the nose toward the target) but no braking of the
 tangential motion. The nose can therefore enter a self-sustaining circular orbit around the
 target direction: the radial correction keeps it on the circle while the tangential velocity is
-never cancelled.
+never canceled.
 
 To break this orbit, the perpendicular (tangential) component of the current angular velocity
 is subtracted from the setpoint:
@@ -320,7 +320,7 @@ is subtracted from the setpoint:
 where :math:`\boldsymbol{\omega}_{2d}` is the pitch–yaw part of the vessel's current angular
 velocity in the roll-invariant frame. The inner PID controller then applies torque to cancel
 the tangential motion directly. During a normal approach :math:`\boldsymbol{\omega}_{perp}
-\approx 0`, so the term is dormant and does not affect settling behaviour.
+\approx 0`, so the term is dormant and does not affect settling behavior.
 
 Roll
 ^^^^
