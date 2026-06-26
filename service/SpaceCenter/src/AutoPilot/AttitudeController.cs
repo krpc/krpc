@@ -12,9 +12,9 @@ namespace KRPC.SpaceCenter.AutoPilot
     sealed class AttitudeController
     {
         readonly Services.Vessel vessel;
-        public readonly PIDController PitchPID = new PIDController (0);
-        public readonly PIDController RollPID = new PIDController (0);
-        public readonly PIDController YawPID = new PIDController (0);
+        public readonly PIDController PitchPID = new PIDController ();
+        public readonly PIDController RollPID = new PIDController ();
+        public readonly PIDController YawPID = new PIDController ();
 
         // Target orientation — quaternion is the single source of truth.
         // rollControlled=false means "suppress roll rotation" (don't hold a specific angle).
@@ -198,9 +198,9 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public void Start ()
         {
-            PitchPID.Reset (0);
-            RollPID.Reset (0);
-            YawPID.Reset (0);
+            PitchPID.ResetState ();
+            RollPID.ResetState ();
+            YawPID.ResetState ();
             prevTargetRiValid = false;
             smoothedFfRi = Vector3d.zero;
             if (AutoTune)
