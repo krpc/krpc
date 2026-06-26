@@ -1,0 +1,43 @@
+runs:
+  using: composite
+  steps:
+    - name: get-bazel-info
+      run: |
+        import os, subprocess, platform, shutil
+
+        version = subprocess.check_output(["bazel", "--version"]).decode().strip().partition(" ")[2]
+        print(f"version = {version}")
+
+        if platform.system().lower() == 'linux':
+            cache_path = "~/.cache/bazel"
+        elif platform.system().lower() == 'windows':
+            username = os.getenv("USERNAME")
+            cache_path = f"c:/users/{username}/_bazel_{username}"
+        else:
+            raise RuntimeError("Unsupported platform")
+        print(f"cache_path = {cache_path}")
+
+        env_file = os.getenv("GITHUB_ENV")
+        with open(env_file, "a") as fp:
+            fp.write("BAZEL_VERSION=" + version + "\n")
+            fp.write("BAZEL_CACHE_PATH=" + cache_path + "\n")
+
+      shell: python
+    - name: restore-bazel-cache
+      id: bazel-cache
+      uses: actions/cache/restore@v5
+      with:
+        path: ${{ env.BAZEL_CACHE_PATH }}
+        key: bazel-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel') }}
+    - name: bazel-fetch
+      if: steps.bazel-cache.outputs.cache-hit != 'true'
+      run: |
+        import subprocess
+        subprocess.check_call(['bazel', 'fetch', '//...'])
+      shell: python
+    - name: save-bazel-cache
+      if: steps.bazel-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v5
+      with:
+        path: ${{ env.BAZEL_CACHE_PATH }}
+        key: bazel-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel') }}
