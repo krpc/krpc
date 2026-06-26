@@ -23,6 +23,38 @@ looks for system-installed packages. On Ubuntu:
 Alternatively, CMake can download dependencies automatically via FetchContent — pass
 ``-DKRPC_FETCH_DEPS=ON`` to the configure step (see below).
 
+Using vcpkg
+^^^^^^^^^^^
+
+The C++ client can be installed via `vcpkg <https://vcpkg.io>`_. The port files are included in the
+source archive — `download it from the releases page <https://github.com/krpc/krpc/releases>`_,
+extract it, and install using the bundled overlay port:
+
+On Linux:
+
+.. code-block:: bash
+
+   vcpkg install krpc --overlay-ports=/path/to/krpc-cpp-VERSION/vcpkg-port
+
+On Windows:
+
+.. code-block:: bash
+
+   vcpkg install krpc:x64-windows --overlay-ports=C:\path\to\krpc-cpp-VERSION\vcpkg-port
+
+Then integrate with your CMake project by passing the vcpkg toolchain file at configure time:
+
+.. code-block:: bash
+
+   cmake -B build -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
+
+And link the library in your ``CMakeLists.txt``:
+
+.. code-block:: cmake
+
+   find_package(krpc CONFIG REQUIRED)
+   target_link_libraries(my_app PRIVATE krpc::krpc)
+
 Using CMake
 ^^^^^^^^^^^
 
