@@ -156,3 +156,5 @@ virtualenv
 waypoint
 waypoints
 websockets
+toolchain
+vcpkg
