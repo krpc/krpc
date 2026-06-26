@@ -35,6 +35,8 @@ namespace KRPC.SpaceCenter.AutoPilot
         // tick after Start() so the derivative is not taken across a discontinuity.
         Vector3d prevTargetRi;
         bool prevTargetRiValid;
+        // Low-pass-filtered acceleration feedforward (see the feedforward filter in Update).
+        Vector3d smoothedFfRi;
         Vector3d logAngles;
         bool diagnosticLogging;
         readonly StringBuilder diagnosticLog = new StringBuilder ();
@@ -42,6 +44,10 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         // Time constant for the one-sided torque smoothing (see UpdateSmoothedTorque).
         const double TorqueSmoothTimeConstant = 0.5;
+        // Time constant for the acceleration-feedforward low-pass filter (a few physics ticks).
+        // Long enough to attenuate the single-tick steps the bang-bang profile's slope
+        // discontinuities produce, short enough that the feedforward lag stays negligible.
+        const double FeedforwardSmoothTimeConstant = 0.05;
         // Slope factor of the sigmoid that attenuates the velocity setpoint near the target.
         const double AttenuationSigmoidSlope = 6.0;
         // Below this 2D error magnitude (radians) the joint pitch/yaw profile is skipped.
@@ -196,6 +202,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             RollPID.Reset (0);
             YawPID.Reset (0);
             prevTargetRiValid = false;
+            smoothedFfRi = Vector3d.zero;
             if (AutoTune)
                 DoAutoTune (vessel.AvailableTorqueVectors.Item1, vessel.MomentOfInertiaVector);
         }
@@ -231,17 +238,30 @@ namespace KRPC.SpaceCenter.AutoPilot
             // angular acceleration needed to stay on the bang-bang trajectory, then normalise by
             // α_max = torque/moi so the feedforward is a control fraction in [-1, 1].
             // Skipped on the first tick (prevTargetRiValid == false) to avoid a spike.
-            var ffRi = Vector3d.zero;
+            var rawFfRi = Vector3d.zero;
             if (prevTargetRiValid) {
                 var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
                 var alphaRoll  = moi [1] > 0 ? torque [1] / moi [1] : 0.0;
                 var alphaYaw   = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
-                if (alphaPitch > 0) ffRi.x = (target.x - prevTargetRi.x) / (dt * alphaPitch);
-                if (alphaRoll  > 0) ffRi.y = (target.y - prevTargetRi.y) / (dt * alphaRoll);
-                if (alphaYaw   > 0) ffRi.z = (target.z - prevTargetRi.z) / (dt * alphaYaw);
+                if (alphaPitch > 0) rawFfRi.x = (target.x - prevTargetRi.x) / (dt * alphaPitch);
+                if (alphaRoll  > 0) rawFfRi.y = (target.y - prevTargetRi.y) / (dt * alphaRoll);
+                if (alphaYaw   > 0) rawFfRi.z = (target.z - prevTargetRi.z) / (dt * alphaYaw);
             }
             prevTargetRi = target;
             prevTargetRiValid = true;
+
+            // Low-pass filter the feedforward. The velocity setpoint has slope discontinuities — the
+            // min()/max() switches in the bang-bang profile (the velocity cap and the quad/linear
+            // stopping term) and the sign flip through the target — and differentiating those
+            // produces single-tick steps in the raw feedforward that, once summed with the PID
+            // output and clamped, briefly saturate the actuators. A short first-order filter removes
+            // these transients; the resulting lag is a few physics ticks and the PI loop absorbs it.
+            var ffBeta = 1.0 - Math.Exp (-dt / FeedforwardSmoothTimeConstant);
+            smoothedFfRi = new Vector3d (
+                smoothedFfRi.x + ffBeta * (rawFfRi.x - smoothedFfRi.x),
+                smoothedFfRi.y + ffBeta * (rawFfRi.y - smoothedFfRi.y),
+                smoothedFfRi.z + ffBeta * (rawFfRi.z - smoothedFfRi.z));
+            var ffRi = smoothedFfRi;
 
             UpdateSmoothedTorque (torque);
 

@@ -366,6 +366,15 @@ On the first physics tick after the autopilot starts,
 :math:`\omega_{ref}(t - \Delta t)` is undefined, so the feedforward is skipped for
 that tick to avoid a transient spike.
 
+The velocity setpoint :math:`\omega_{ref}` is continuous but not smooth: it has slope
+discontinuities where the bang-bang profile switches (the velocity cap engaging, the
+quadratic and linear stopping terms swapping, and the sign change through the target).
+Differentiating across one of these kinks produces a single-tick step in :math:`x_{ff}`
+that, once clamped, momentarily saturates the actuators. To suppress these transients the
+feedforward is passed through a short first-order low-pass filter, with a time constant of
+a few physics ticks. The lag this introduces is small and is absorbed by the PI
+controller, which sees the unfiltered velocity error.
+
 .. _gyroscopic-feedforward:
 
 Gyroscopic feedforward
