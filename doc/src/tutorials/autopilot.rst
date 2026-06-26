@@ -24,9 +24,12 @@ Each physics tick the autopilot does the following:
    :ref:`target angular velocity <target-angular-velocity>` needed to rotate
    the vessel towards the target.
 
-#. It passes the pitch, yaw and roll components of this angular velocity to three
-   PID controllers, one per control axis. The outputs of these controllers are
-   used as the pitch, yaw and roll control inputs for the vessel.
+#. It differentiates the target angular velocity setpoint to obtain a target angular
+   acceleration, normalises it by the maximum angular acceleration
+   :math:`\alpha = \tau_{max} / I` to produce a feedforward control fraction, and
+   passes the target angular velocity to three PI controllers (one per axis). Each
+   controller's output is summed with the feedforward and clamped to
+   :math:`[-1, 1]` to give the pitch, yaw and roll control inputs for the vessel.
 
 Pitch and yaw are not controlled independently of each other. They are computed
 together, in a frame from which the vessel's current roll has been removed (the
@@ -322,6 +325,41 @@ velocity in the roll-invariant frame. The inner PID controller then applies torq
 the tangential motion directly. During a normal approach :math:`\boldsymbol{\omega}_{perp}
 \approx 0`, so the term is dormant and does not affect settling behavior.
 
+.. _acceleration-feedforward:
+
+Acceleration feedforward
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+The velocity setpoint :math:`\omega_{ref}` changes from tick to tick as the vessel
+rotates and the bang-bang profile is re-evaluated. Its time derivative is the angular
+acceleration the vessel must produce to stay on the trajectory:
+
+.. math::
+   \alpha_{ref} = \frac{d\omega_{ref}}{dt}
+
+The autopilot approximates this numerically from the change in setpoint between the
+current and previous physics tick, then normalises by the maximum angular acceleration:
+
+.. math::
+   x_{ff} = \frac{\alpha_{ref}}{\alpha} =
+       \frac{\omega_{ref}(t) - \omega_{ref}(t - \Delta t)}{\Delta t \cdot \alpha}
+
+This feedforward term :math:`x_{ff}` is added to the PI controller's output before
+clamping to :math:`[-1, 1]`:
+
+.. math::
+   x = \operatorname{clamp}(x_{ff} + x_{PI},\ -1,\ 1)
+
+When the vessel is following the trajectory perfectly, the PI error
+:math:`\omega_{ref} - \omega` is near zero and the feedforward alone drives the
+actuators. The PI controller then only needs to correct for disturbances (atmospheric
+drag, centre-of-mass offsets) rather than the trajectory itself, cleanly separating the
+two concerns so they can be tuned independently.
+
+On the first physics tick after the autopilot starts,
+:math:`\omega_{ref}(t - \Delta t)` is undefined, so the feedforward is skipped for
+that tick to avoid a transient spike.
+
 Roll
 ^^^^
 
@@ -441,3 +479,10 @@ burned, stages are dropped, or engines are throttled. The available torque is
 smoothed slightly before being used, so that a sudden drop (such as an engine
 shutting down while a reaction wheel keeps a small amount of torque available)
 does not cause a momentary spike in the gains.
+
+Because the :ref:`acceleration feedforward <acceleration-feedforward>` carries the
+nominal trajectory demand, the PI controller only needs to reject disturbances — the
+small, slowly-varying corrections from atmospheric drag, off-axis thrust, or mass
+changes. The gains :math:`K_P` and :math:`K_I` derived from the overshoot and
+time-to-peak parameters remain valid for this purpose, and the same settings produce a
+less loaded controller that relies more on the feedforward for large manoeuvres.

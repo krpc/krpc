@@ -30,6 +30,11 @@ namespace KRPC.SpaceCenter.AutoPilot
         // Passed to DoAutoTune so a sudden drop (e.g. engine shutdown while a reaction wheel
         // remains) does not cause a one-tick gain spike that jerks the gimbal.
         Vector3d smoothedTorque;
+        // Previous tick's target angular velocity in the roll-invariant frame, used to
+        // compute the acceleration feedforward. prevTargetRiValid is false on the first
+        // tick after Start() so the derivative is not taken across a discontinuity.
+        Vector3d prevTargetRi;
+        bool prevTargetRiValid;
         Vector3d logAngles;
         bool diagnosticLogging;
         readonly StringBuilder diagnosticLog = new StringBuilder ();
@@ -187,6 +192,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             PitchPID.Reset (0);
             RollPID.Reset (0);
             YawPID.Reset (0);
+            prevTargetRiValid = false;
             if (AutoTune)
                 DoAutoTune (vessel.AvailableTorqueVectors.Item1, vessel.MomentOfInertiaVector);
         }
@@ -218,6 +224,22 @@ namespace KRPC.SpaceCenter.AutoPilot
             else
                 ClearRollWindupIfDisengaged (currentDirection);
 
+            // Acceleration feedforward: differentiate the velocity setpoint numerically to get the
+            // angular acceleration needed to stay on the bang-bang trajectory, then normalise by
+            // α_max = torque/moi so the feedforward is a control fraction in [-1, 1].
+            // Skipped on the first tick (prevTargetRiValid == false) to avoid a spike.
+            var ffRi = Vector3d.zero;
+            if (prevTargetRiValid) {
+                var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
+                var alphaRoll  = moi [1] > 0 ? torque [1] / moi [1] : 0.0;
+                var alphaYaw   = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
+                if (alphaPitch > 0) ffRi.x = (target.x - prevTargetRi.x) / (dt * alphaPitch);
+                if (alphaRoll  > 0) ffRi.y = (target.y - prevTargetRi.y) / (dt * alphaRoll);
+                if (alphaYaw   > 0) ffRi.z = (target.z - prevTargetRi.z) / (dt * alphaYaw);
+            }
+            prevTargetRi = target;
+            prevTargetRiValid = true;
+
             UpdateSmoothedTorque (torque);
 
             // Autotune the controllers if enabled (uses smoothed torque to avoid gain spikes)
@@ -232,16 +254,17 @@ namespace KRPC.SpaceCenter.AutoPilot
             }
 
             // Run pitch/yaw PIDs in the roll-invariant frame; roll PID on the y-axis (unchanged by
-            // the frame rotation). Then convert the pitch/yaw outputs back to the body frame.
-            var virtualPitch = RunAxis (PitchPID, target.x, currentRi.x, torque [0], dt);
-            state.Roll = (float)RunAxis (RollPID, target.y, currentRi.y, torque [1], dt);
-            var virtualYaw = RunAxis (YawPID, target.z, currentRi.z, torque [2], dt);
+            // the frame rotation). Add the acceleration feedforward to each PID output, then clamp
+            // before converting pitch/yaw back to the body frame.
+            var virtualPitch = (RunAxis (PitchPID, target.x, currentRi.x, torque [0], dt) + ffRi.x).Clamp (-1, 1);
+            state.Roll = (float)((RunAxis (RollPID, target.y, currentRi.y, torque [1], dt) + ffRi.y).Clamp (-1, 1));
+            var virtualYaw = (RunAxis (YawPID, target.z, currentRi.z, torque [2], dt) + ffRi.z).Clamp (-1, 1);
             var bodyControl = FromRollInvariant (new Vector3d (virtualPitch, 0, virtualYaw), cosPhi, sinPhi);
             state.Pitch = (float)bodyControl.x;
             state.Yaw = (float)bodyControl.z;
 
             if (diagnosticLogging)
-                LogDiagnostics (torque, moi, phi, currentRi, target, currentDirection, state);
+                LogDiagnostics (torque, moi, phi, currentRi, target, ffRi, currentDirection, state);
         }
 
         /// <summary>
@@ -345,7 +368,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         void LogDiagnostics (Vector3d torque, Vector3d moi, double phi, Vector3d currentRi,
-            Vector3d target, Vector3d currentDirection, PilotAddon.ControlInputs state)
+            Vector3d target, Vector3d ffRi, Vector3d currentDirection, PilotAddon.ControlInputs state)
         {
             var dirErr = Vector3.Angle (currentDirection, TargetDirection);
             var line = string.Format (
@@ -357,8 +380,9 @@ namespace KRPC.SpaceCenter.AutoPilot
                 " phi={14:F2}deg" +
                 " omega_ri=({15:F4},{16:F4},{17:F4})" +
                 " tgt_omega_ri=({18:F4},{19:F4},{20:F4})" +
-                " Kp=({21:F4},{22:F4},{23:F4}) Ki=({24:F4},{25:F4},{26:F4})" +
-                " ctrl=(p={27:F3},r={28:F3},y={29:F3})",
+                " ff_ri=({21:F3},{22:F3},{23:F3})" +
+                " Kp=({24:F4},{25:F4},{26:F4}) Ki=({27:F4},{28:F4},{29:F4})" +
+                " ctrl=(p={30:F3},r={31:F3},y={32:F3})",
                 Time.fixedTime, dirErr,
                 torque.x, torque.y, torque.z,
                 moi.x, moi.y, moi.z,
@@ -367,6 +391,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 phi * 180.0 / Math.PI,
                 currentRi.x, currentRi.y, currentRi.z,
                 target.x, target.y, target.z,
+                ffRi.x, ffRi.y, ffRi.z,
                 PitchPID.Kp, RollPID.Kp, YawPID.Kp,
                 PitchPID.Ki, RollPID.Ki, YawPID.Ki,
                 state.Pitch, state.Roll, state.Yaw);
