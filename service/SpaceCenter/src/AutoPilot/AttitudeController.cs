@@ -408,11 +408,21 @@ namespace KRPC.SpaceCenter.AutoPilot
         {
             var worldAngularVelocity = vessel.InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
             var localAngularVelocity = ReferenceFrame.AngularVelocityFromWorldSpace (worldAngularVelocity);
-            // The negation compensates for a sign inversion that arises from the coordinate-system
-            // handedness difference between Unity world space (where Rigidbody.angularVelocity lives)
-            // and the vessel-body axes after the two DirectionFromWorldSpace/DirectionToWorldSpace
-            // transforms. The sign is empirically correct: reversing it causes the autopilot to
-            // diverge. It must stay consistent with the -sign(angle) convention in AnglesToAngularVelocity.
+            // Express the measured angular velocity in the controller's sign convention.
+            //
+            // The direction error is built by FromToRotation(current, target), whose axis is the
+            // right-handed cross product current x target (see GeometryExtensions.FromToRotation).
+            // A positive error component therefore corresponds to a right-handed rotation that
+            // carries the nose toward the target. The velocity profile then commands
+            // omega_target = -sign(theta) * speed (the -Math.Sign(...) terms in ComputeAxisVelocity
+            // and ComputePitchYawVelocity), i.e. it defines the controller's positive angular-
+            // velocity direction as the *left-handed* sense about each axis.
+            //
+            // Rigidbody.angularVelocity is in the geometric (Unity) sense, so it is negated here to
+            // put the measurement into that same left-handed controller convention. The negation and
+            // the -sign(theta) command are a matched pair: the PI loop compares target against
+            // measurement, so both must use the same sign. Removing this negation alone makes them
+            // disagree and the loop diverges; removing both negations together would be equivalent.
             return -ApToBody (localAngularVelocity);
         }
 
@@ -592,6 +602,9 @@ namespace KRPC.SpaceCenter.AutoPilot
                 }
                 theta += corr;
             }
+            // The leading -Math.Sign defines the controller's positive angular-velocity direction as
+            // the left-handed sense about the axis; it is the matched partner of the negation in
+            // ComputeCurrentAngularVelocity. Flip one without the other and the PI loop diverges.
             var velocity = -Math.Sign (theta) * Math.Min (maxVelocity,
                 maxAcceleration > 0 ? Math.Sqrt (2.0 * Math.Abs (theta) * maxAcceleration) : 0.0);
             var attAngle = GeometryExtensions.ToRadians (attenuationAngleDeg);
