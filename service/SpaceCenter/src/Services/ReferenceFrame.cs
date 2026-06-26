@@ -54,7 +54,6 @@ namespace KRPC.SpaceCenter.Services
             this.body = body;
             vesselId = vessel != null ? vessel.id : Guid.Empty;
             this.node = node;
-            // TODO: is it safe to use a part id of 0 to mean no part?
             if (part != null)
                 partId = part.flightID;
             this.dockingPort = dockingPort;
@@ -441,6 +440,27 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public QuaternionD Rotation {
             get {
+                // For transform-backed frames use the Unity quaternion directly.
+                // Unity derives transform.up/forward from the quaternion, so
+                // q.Inverse * up == (0,1,0) to near double precision, avoiding
+                // the ~1e-7 error that LookRotation2 introduces when reconstructing
+                // from float Vector3 up/forward values.
+                switch (type) {
+                case ReferenceFrameType.Vessel:
+                    return ((QuaternionD)InternalVessel.ReferenceTransform.rotation).Normalize ();
+                case ReferenceFrameType.Part:
+                case ReferenceFrameType.PartCenterOfMass:
+                    return ((QuaternionD)InternalPart.transform.rotation).Normalize ();
+                case ReferenceFrameType.Hybrid:
+                    return hybridRotation.Rotation;
+                case ReferenceFrameType.VesselSurfaceVelocity:
+                    if (InternalVessel.srf_velocity.sqrMagnitude < 0.01d)
+                        throw new InvalidOperationException (
+                            "VesselSurfaceVelocity reference frame is singular when surface velocity is near zero");
+                    break;
+                default:
+                    break;
+                }
                 // Note: up is along the y-axis, forward is along the z-axis
                 Vector3d up = UpNotNormalized;
                 Vector3d forward = ForwardNotNormalized;
@@ -564,7 +584,7 @@ namespace KRPC.SpaceCenter.Services
                         var up = UpNotNormalized;
                         // Pick an arbitrary vector that is not close to the burn vector
                         var forward = Planetarium.forward;
-                        if (Vector3d.Dot (up, forward) < 0.1)
+                        if (Math.Abs (Vector3d.Dot (up.normalized, forward)) > 0.9)
                             forward = Planetarium.up;
                         // Make the arbitrary vector orthogonal to the burn vector
                         GeometryExtensions.OrthoNormalize2 (ref up, ref forward);
@@ -606,8 +626,9 @@ namespace KRPC.SpaceCenter.Services
                     return InternalVessel.GetOrbit ().GetVel ();
                 case ReferenceFrameType.Maneuver:
                 case ReferenceFrameType.ManeuverOrbital:
-                    return Vector3d.zero; // TODO: check this
+                    return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ () + node.patch.referenceBody.GetWorldVelocity ();
                 case ReferenceFrameType.Part:
+                case ReferenceFrameType.PartCenterOfMass:
                 case ReferenceFrameType.Thrust:
                     return InternalPart.vessel.GetOrbit ().GetVel ();
                 case ReferenceFrameType.DockingPort:
@@ -634,23 +655,50 @@ namespace KRPC.SpaceCenter.Services
                     return body.angularVelocity;
                 case ReferenceFrameType.CelestialBodyNonRotating:
                     return Vector3d.zero;
-                case ReferenceFrameType.CelestialBodyOrbital:
-                    return Vector3d.zero; // TODO: check this
+                case ReferenceFrameType.CelestialBodyOrbital: {
+                    var refBody = body.referenceBody;
+                    var r = body.position - refBody.position;
+                    var v = body.GetWorldVelocity () - refBody.GetWorldVelocity ();
+                    return Vector3d.Cross (r, v) / r.sqrMagnitude;
+                }
                 case ReferenceFrameType.Vessel:
                     return InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
-                case ReferenceFrameType.VesselOrbital:
+                case ReferenceFrameType.VesselOrbital: {
+                    var r = InternalVessel.CoM - InternalVessel.mainBody.position;
+                    var v = InternalVessel.GetOrbit ().GetVel ();
+                    return Vector3d.Cross (r, v) / r.sqrMagnitude;
+                }
                 case ReferenceFrameType.VesselSurface:
-                case ReferenceFrameType.VesselSurfaceVelocity:
+                    return InternalVessel.mainBody.angularVelocity;
+                case ReferenceFrameType.VesselSurfaceVelocity: {
+                    var vessel = InternalVessel;
+                    var srf_vel = vessel.srf_velocity;
+                    if (srf_vel.sqrMagnitude < 0.01d)
+                        return vessel.mainBody.angularVelocity;
+                    // d(srf_vel)/dt ≈ grav − body.ω × v_orbital
+                    var grav = (Vector3d)FlightGlobals.getGeeForceAtPosition (vessel.CoM);
+                    var v_orb = vessel.GetOrbit ().GetVel ();
+                    var a_srf = grav - Vector3d.Cross (vessel.mainBody.angularVelocity, v_orb);
+                    return vessel.mainBody.angularVelocity + Vector3d.Cross (srf_vel, a_srf) / srf_vel.sqrMagnitude;
+                }
                 case ReferenceFrameType.Maneuver:
-                case ReferenceFrameType.ManeuverOrbital:
+                    return Vector3d.zero;
+                case ReferenceFrameType.ManeuverOrbital: {
+                    var r = node.patch.getRelativePositionAtUT (node.UT).SwapYZ ();
+                    var v = node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
+                    return Vector3d.Cross (r, v) / r.sqrMagnitude;
+                }
                 case ReferenceFrameType.Part:
+                case ReferenceFrameType.PartCenterOfMass:
+                    return InternalPart.vessel.GetComponent<Rigidbody> ().angularVelocity;
                 case ReferenceFrameType.DockingPort:
+                    return dockingPort.vessel.GetComponent<Rigidbody> ().angularVelocity;
                 case ReferenceFrameType.Thrust:
-                    return Vector3d.zero; // TODO: check this
+                    return InternalPart.vessel.GetComponent<Rigidbody> ().angularVelocity;
                 case ReferenceFrameType.Relative:
                     return parent.AngularVelocityToWorldSpace (relativeAngularVelocity);
                 case ReferenceFrameType.Hybrid:
-                    return hybridVelocity.AngularVelocity;
+                    return hybridAngularVelocity.AngularVelocity;
                 default:
                     throw new InvalidOperationException ();
                 }

@@ -26,5 +26,13 @@ namespace KRPC.Service.Messages
         object value_;
 
         Error error;
+
+        public void Reset ()
+        {
+            value_ = null;
+            HasValue = false;
+            error = null;
+            HasError = false;
+        }
     }
 }

@@ -309,6 +309,8 @@ SpaceCenter.Flight.Heading
 SpaceCenter.Flight.Roll
 SpaceCenter.Flight.Prograde
 SpaceCenter.Flight.Retrograde
+SpaceCenter.Flight.SurfacePrograde
+SpaceCenter.Flight.SurfaceRetrograde
 SpaceCenter.Flight.Normal
 SpaceCenter.Flight.AntiNormal
 SpaceCenter.Flight.Radial
@@ -427,9 +429,15 @@ SpaceCenter.Control.StageLock
 SpaceCenter.Control.GetActionGroup
 SpaceCenter.Control.SetActionGroup
 SpaceCenter.Control.ToggleActionGroup
+SpaceCenter.Control.GetActionGroupActions
 SpaceCenter.Control.AddNode
 SpaceCenter.Control.Nodes
 SpaceCenter.Control.RemoveNodes
+SpaceCenter.ActionGroupAction
+SpaceCenter.ActionGroupAction.Part
+SpaceCenter.ActionGroupAction.Module
+SpaceCenter.ActionGroupAction.Name
+SpaceCenter.ActionGroupAction.Id
 SpaceCenter.ControlState
 SpaceCenter.ControlState.Full
 SpaceCenter.ControlState.Partial
@@ -1132,6 +1140,7 @@ SpaceCenter.Node.Remove
 SpaceCenter.Node.ReferenceFrame
 SpaceCenter.Node.OrbitalReferenceFrame
 SpaceCenter.Node.Position
+SpaceCenter.Node.Rotation
 SpaceCenter.Node.Direction
 SpaceCenter.ReferenceFrame
 SpaceCenter.ReferenceFrame.CreateRelative

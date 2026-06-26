@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Torque = System.Tuple<Vector3d, Vector3d>;
@@ -36,8 +37,16 @@ namespace KRPC.SpaceCenter
             var pos = Vector3d.zero;
             var neg = Vector3d.zero;
             foreach (var torque in torques) {
-                pos += torque.Item1;
-                neg += torque.Item2;
+                // Use abs() to normalise sign conventions: KSP's ITorqueProvider implementations
+                // are inconsistent (e.g. ModuleControlSurface negates the roll axis, while
+                // ModuleReactionWheel returns the same positive value in both pos and neg).
+                // This matches how KSP's own VesselSAS.GetTotalVesselTorque uses Max(pos,neg).
+                pos.x += Math.Abs (torque.Item1.x);
+                pos.y += Math.Abs (torque.Item1.y);
+                pos.z += Math.Abs (torque.Item1.z);
+                neg.x -= Math.Abs (torque.Item2.x);
+                neg.y -= Math.Abs (torque.Item2.y);
+                neg.z -= Math.Abs (torque.Item2.z);
             }
             return new Torque (pos, neg);
         }

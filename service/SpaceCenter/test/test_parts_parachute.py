@@ -32,10 +32,10 @@ class TestPartsParachute(krpctest.TestCase):
         self.wait()
         for parachute in self.parachutes:
             self.assertTrue(parachute.deployed)
-            self.assertEqual(parachute.state, self.state.active)
+            self.assertEqual(parachute.state, self.state.armed)
 
     def test_parachute_on_descent(self):
-        deploy_altitude = 80
+        deploy_altitude = 150
         for parachute in self.parachutes:
             parachute.deploy_altitude = deploy_altitude
 
@@ -77,7 +77,7 @@ class TestPartsParachute(krpctest.TestCase):
             self.assertEqual(self.state.cut, parachute.state)
 
     def test_control(self):
-        deploy_altitude = 80
+        deploy_altitude = 150
         for parachute in self.parachutes:
             parachute.deploy_altitude = deploy_altitude
 

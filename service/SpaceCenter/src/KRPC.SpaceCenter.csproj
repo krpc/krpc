@@ -124,6 +124,7 @@
     <Compile Include="Services\MapFilterType.cs" />
     <Compile Include="Services\Node.cs" />
     <Compile Include="Services\Orbit.cs" />
+    <Compile Include="Services\Parts\ActionGroupAction.cs" />
     <Compile Include="Services\Parts\Antenna.cs" />
     <Compile Include="Services\Parts\AntennaState.cs" />
     <Compile Include="Services\Parts\AutoStrutMode.cs" />

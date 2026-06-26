@@ -15,9 +15,7 @@ class TestPartsReactionWheel(krpctest.TestCase):
         parts = vessel.parts
         cls.control = vessel.control
         cls.wheels = parts.wheels
-        cls.wheel = parts.with_title("Advanced Reaction Wheel Module, Large")[
-            0
-        ].reaction_wheel
+        cls.wheel = parts.with_name("asasmodule1-2")[0].reaction_wheel
 
     def test_reaction_wheel(self):
         pos_torque = (30000, 30000, 30000)

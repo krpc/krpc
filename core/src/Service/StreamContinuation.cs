@@ -47,5 +47,26 @@ namespace KRPC.Service
                 throw;
             }
         }
+
+        /// <summary>
+        /// Like Run() but writes the result into an existing ProcedureResult instead of
+        /// allocating a new one. Throws YieldException if the call yields (result is unchanged).
+        /// </summary>
+        public void RunInto (ProcedureResult result)
+        {
+            if (continuation == null)
+                throw new InvalidOperationException (
+                    "The stream continuation threw an exception previously and cannot be re-run");
+            try {
+                continuation.RunInto (result);
+                continuation = originalContinuation;
+            } catch (YieldException<ProcedureCallContinuation> e) {
+                continuation = e.Value;
+                throw new YieldException<StreamContinuation> (this);
+            } catch (System.Exception) {
+                continuation = null;
+                throw;
+            }
+        }
     }
 }

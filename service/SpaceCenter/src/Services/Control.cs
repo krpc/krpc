@@ -719,6 +719,69 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Returns a list of all the part actions that are assigned to the given action group.
+        /// Each entry identifies the part, the part module, and the action's name and identifier.
+        /// Returns an empty list if no actions are assigned to the group.
+        /// </summary>
+        /// <param name="group">
+        /// A number between 0 and 9 inclusive,
+        /// or between 0 and 250 inclusive when the <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.
+        /// </param>
+        /// <remarks>
+        /// For stock action groups, the assignments are read from each part action directly.
+        /// When the Extended Action Groups mod is installed, the assignments are queried from
+        /// the mod instead, so that actions assigned to its additional groups are included.
+        /// </remarks>
+        [KRPCMethod]
+        public IList<Parts.ActionGroupAction> GetActionGroupActions (uint group)
+        {
+            var vessel = InternalVessel;
+            var result = new List<Parts.ActionGroupAction> ();
+            if (AGX.IsAvailable) {
+                if (group > 250)
+                    throw new ArgumentException ("Action group must be between 0 and 250 inclusive");
+                var parts = new Dictionary<global::Part, Parts.Part> ();
+                foreach (var entry in AGX.GroupActions (vessel.rootPart.flightID, (int)group)) {
+                    Parts.Part part;
+                    if (!parts.TryGetValue (entry.Item1, out part)) {
+                        part = new Parts.Part (entry.Item1);
+                        parts [entry.Item1] = part;
+                    }
+                    var module = FindModule (part, entry.Item1, entry.Item2);
+                    result.Add (new Parts.ActionGroupAction (part, module, entry.Item2.guiName, entry.Item2.name));
+                }
+            } else {
+                if (group > 9)
+                    throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
+                var target = ActionGroupExtensions.GetActionGroup (group);
+                foreach (var kspPart in vessel.parts) {
+                    Parts.Part part = null;
+                    foreach (PartModule partModule in kspPart.Modules) {
+                        Parts.Module module = null;
+                        foreach (BaseAction action in partModule.Actions) {
+                            if ((action.actionGroup & target) == target) {
+                                if (part == null)
+                                    part = new Parts.Part (kspPart);
+                                if (module == null)
+                                    module = new Parts.Module (part, partModule);
+                                result.Add (new Parts.ActionGroupAction (part, module, action.guiName, action.name));
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        static Parts.Module FindModule (Parts.Part part, global::Part kspPart, BaseAction action)
+        {
+            foreach (PartModule partModule in kspPart.Modules)
+                if (partModule.Actions.Any (a => ReferenceEquals (a, action)))
+                    return new Parts.Module (part, partModule);
+            return null;
+        }
+
+        /// <summary>
         /// Creates a maneuver node at the given universal time, and returns a
         /// <see cref="Node"/> object that can be used to modify it.
         /// Optionally sets the magnitude of the delta-v for the maneuver node
