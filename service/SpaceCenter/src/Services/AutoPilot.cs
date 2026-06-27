@@ -392,12 +392,15 @@ namespace KRPC.SpaceCenter.Services
         /// as the predicted stopping distance. The linear term (<c>omega/bandwidth</c>) is larger
         /// when the PID is unsaturated and decelerating more slowly than full torque; including it
         /// prevents overshoot on small rigid vessels.
-        /// Set to <c>false</c> for large, structurally flexible rockets (e.g. heavy launchers with
-        /// flexible joints). On such vessels the measured angular velocity contains structural
-        /// bending-mode oscillation that the linear term amplifies, flipping the outer-loop target
-        /// velocity sign on every bending cycle and driving the structure into limit-cycle wobble.
-        /// The quadratic term alone (<c>omega^2/(2*alpha)</c>) is immune to this: for typical structural
-        /// oscillation (omega ~= 0.05 rad/s) it adds less than 0.1 degrees of correction regardless of gain.
+        /// Structurally flexible rockets are handled automatically: the autopilot detects a
+        /// bending-mode limit cycle at runtime and adaptively engages rate filtering, a decoupled
+        /// feedforward and a reduced inner-loop bandwidth on the affected axes, so this no longer
+        /// needs to be disabled for them in normal use. It remains available as a fine-tuning
+        /// override: setting it to <c>false</c> additionally drops the linear stopping-distance term,
+        /// which on a very flexible vessel could otherwise amplify any residual bending-mode content
+        /// in the measured rate. The quadratic term alone (<c>omega^2/(2*alpha)</c>) is immune to this:
+        /// for typical structural oscillation (omega ~= 0.05 rad/s) it adds less than 0.1 degrees of
+        /// correction regardless of gain.
         /// </summary>
         [KRPCProperty]
         public bool DecelLagCorrection {

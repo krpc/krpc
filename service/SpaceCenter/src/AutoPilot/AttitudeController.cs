@@ -37,7 +37,22 @@ namespace KRPC.SpaceCenter.AutoPilot
         bool prevTargetRiValid;
         // Low-pass-filtered acceleration feedforward (see the feedforward filter in Update).
         Vector3d smoothedFfRi;
+        // State of the two cascaded first-order sections of the angular-velocity filter
+        // (see FilterAngularVelocity). rateFilterValid is false on the first tick after Start()
+        // so the state is seeded with the raw measurement rather than ramping up from zero.
+        Vector3d rateFilterStage1;
+        Vector3d rateFilterStage2;
+        bool rateFilterValid;
+        // Chatter-detector state for adaptive bandwidth reduction (see UpdateChatterDetector).
+        // chatterLevel is a per-axis [0,1] measure of how strongly an axis is in a structural limit
+        // cycle. It persists across re-engages so a craft known to be flexible stays suppressed.
+        Vector3d prevDetectorOmega;
+        bool prevDetectorOmegaValid;
+        Vector3d chatterLevel = Vector3d.zero;
         Vector3d logAngles;
+        // Raw (unfiltered) angular velocity in the roll-invariant frame, recorded for diagnostics
+        // so the filter's effect on a flexible craft is visible against what the loop acts on.
+        Vector3d logRawOmegaRi;
         bool diagnosticLogging;
         readonly StringBuilder diagnosticLog = new StringBuilder ();
         readonly object diagnosticLogLock = new object ();
@@ -50,6 +65,35 @@ namespace KRPC.SpaceCenter.AutoPilot
         const double FeedforwardSmoothTimeConstant = 0.05;
         // Slope factor of the sigmoid that attenuates the velocity setpoint near the target.
         const double AttenuationSigmoidSlope = 6.0;
+        // Time constant of each stage of the second-order structural / anti-alias filter applied
+        // to the measured angular velocity (see FilterAngularVelocity). 0.08 s puts the -3 dB
+        // corner near 2 Hz: well above the closed-loop bandwidth (sub-Hz, so the filter is
+        // transparent in band on rigid craft) and below the structural bending modes typical
+        // of flexible KSP craft (3–8 Hz for long rockets with end-mounted actuators). At 3 Hz
+        // this gives ~9× two-stage attenuation; at 5 Hz ~30×, vs 1.5× and 2.7× at τ = 0.025 s.
+        // The filter is blended in only when chatterLevel > 0, so rigid craft are unaffected.
+        const double RateFilterTimeConstant = 0.08;
+        // Adaptive bandwidth reduction for structurally flexible craft (test plan §11.9).
+        // A single static bandwidth cap cannot work: flexible craft need a low inner-loop bandwidth
+        // to stop a bending-mode limit cycle, but high-authority craft need a high one to arrest a
+        // nudge. So the reduction is applied only to a craft that is actually chattering, detected at
+        // runtime (UpdateChatterDetector) and applied per axis in DoAutoTuneAxis. Rigid and high-
+        // authority craft never trip the detector and keep their full autotuned bandwidth.
+        //
+        // Inner-loop bandwidth (rad/s) an axis is driven toward when it is fully in a limit cycle.
+        // At 1.0 rad/s the PID gain is half what it was at 2.0, which halves the control amplitude
+        // driven by residual filtered bending content. Combined with the slower filter above, the
+        // open-loop gain at the bending frequency falls well below 1 even for slow craft.
+        const double AdaptiveBandwidthFloor = 1.0;
+        // A tick-to-tick change in the raw measured rate larger than this many times the
+        // physically-achievable change (α·dt at full authority) is structural excitation, not
+        // rigid-body response — the latter cannot change the rate faster than the torque allows.
+        const double ChatterDetectThreshold = 4.0;
+        // One-sided smoothing time constants for the detector: engage quickly when excitation
+        // appears, release slowly so the loop does not hunt (the reduced-bandwidth state is quiet,
+        // which would otherwise immediately clear the detector and let the bandwidth climb back up).
+        const double ChatterRiseTimeConstant = 0.3;
+        const double ChatterDecayTimeConstant = 30.0;
         // Below this 2D error magnitude (radians) the joint pitch/yaw profile is skipped.
         const double MinThetaForJointProfile = 1e-10;
 
@@ -203,6 +247,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             YawPID.ResetState ();
             prevTargetRiValid = false;
             smoothedFfRi = Vector3d.zero;
+            rateFilterValid = false;
+            prevDetectorOmegaValid = false;
             if (AutoTune)
                 DoAutoTune (vessel.AvailableTorqueVectors.Item1, vessel.MomentOfInertiaVector);
         }
@@ -222,10 +268,45 @@ namespace KRPC.SpaceCenter.AutoPilot
             double phi, cosPhi, sinPhi;
             ComputeRollInvariantFrame (internalVessel, out currentDirection, out phi, out cosPhi, out sinPhi);
 
+            // Measure the angular velocity and pass it through the structural / anti-alias filter
+            // before anything consumes it. The measurement comes from the root-part rigidbody; on a
+            // structurally flexible craft it carries the bending mode (typically 3–8 Hz for long
+            // craft) on top of the rigid-body rate. Filtering here means the outer-loop
+            // stopping-distance prediction, the inner rate loop and the gyroscopic feedforward all
+            // act on a clean rate, so the controller cannot lock onto the bending mode and drive it.
+            // The corner sits well above the control bandwidth, so rigid craft are unaffected.
+            var currentRaw = (Vector3d)ComputeCurrentAngularVelocity ();
+
+            // Update the structural-chatter detector from the raw rate (independent of the filter).
+            // Its per-axis chatterLevel ∈ [0,1] gates every flexible-craft adaptation below — the
+            // rate filter here, the feedforward decoupling, and the bandwidth reduction in
+            // DoAutoTuneAxis — so a rigid/high-authority craft (chatterLevel ≈ 0) runs the original,
+            // calibrated controller untouched, while a flexible craft (chatterLevel → 1) gets all
+            // three. This is essential: the filter's phase lag, applied unconditionally, would erode
+            // the phase margin of a high-authority craft's fast, integral-dominated loop and drive a
+            // limit cycle at its rate-loop crossover.
+            UpdateChatterDetector (currentRaw, torque, moi, dt);
+
+            // Blend the structural filter in by chatterLevel. The filter state is advanced every tick
+            // so it is ready the moment the detector engages.
+            var filtered = FilterAngularVelocity (currentRaw, dt);
+            var current = new Vector3d (
+                currentRaw.x + chatterLevel.x * (filtered.x - currentRaw.x),
+                currentRaw.y + chatterLevel.y * (filtered.y - currentRaw.y),
+                currentRaw.z + chatterLevel.z * (filtered.z - currentRaw.z));
+
             // Current and target angular velocities, both expressed in the roll-invariant frame.
-            var current = ComputeCurrentAngularVelocity ();
             var currentRi = ToRollInvariant (current, cosPhi, sinPhi);
+            logRawOmegaRi = ToRollInvariant (currentRaw, cosPhi, sinPhi);
             var target = ComputeTargetAngularVelocity (torque, moi, current, currentDirection, cosPhi, sinPhi);
+
+            // Nominal target: the same velocity profile evaluated with the measured rate set to
+            // zero, so it depends only on the attitude error, not on the measured angular velocity.
+            // This is the open-loop trajectory the feedforward differentiates (see below); keeping
+            // measured ω out of it is what stops the feedforward from amplifying structural
+            // bending oscillation. The measured-ω-dependent stopping-distance correction stays in
+            // `target`, where it belongs — it is feedback, and is handled by the PI loop.
+            var targetNominal = ComputeTargetAngularVelocity (torque, moi, Vector3d.zero, currentDirection, cosPhi, sinPhi);
 
             // Roll setpoint is already weighted to zero inside ComputeTargetAngularVelocity when the
             // vessel is far from the direction target; clear the integral there to prevent windup.
@@ -238,16 +319,30 @@ namespace KRPC.SpaceCenter.AutoPilot
             // angular acceleration needed to stay on the bang-bang trajectory, then normalise by
             // α_max = torque/moi so the feedforward is a control fraction in [-1, 1].
             // Skipped on the first tick (prevTargetRiValid == false) to avoid a spike.
+            //
+            // The differentiated source is blended by chatterLevel from `target` (rigid) to
+            // `targetNominal` (flexible). On a flexible craft `target` carries the measured angular
+            // velocity through its stopping-distance correction, and that rate contains a bending-mode
+            // oscillation; numerical differentiation has gain proportional to frequency, so
+            // differentiating `target` turned a small residual oscillation into a full-scale,
+            // sign-flipping feedforward that drove the structure (test plan §11.9). `targetNominal`
+            // depends only on the attitude error (whose bending content is the much smaller integral
+            // of the rate oscillation), so its derivative stays smooth. A rigid craft keeps the
+            // original `target`-derivative feedforward unchanged.
+            var ffSource = new Vector3d (
+                target.x + chatterLevel.x * (targetNominal.x - target.x),
+                target.y + chatterLevel.y * (targetNominal.y - target.y),
+                target.z + chatterLevel.z * (targetNominal.z - target.z));
             var rawFfRi = Vector3d.zero;
             if (prevTargetRiValid) {
                 var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
                 var alphaRoll  = moi [1] > 0 ? torque [1] / moi [1] : 0.0;
                 var alphaYaw   = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
-                if (alphaPitch > 0) rawFfRi.x = (target.x - prevTargetRi.x) / (dt * alphaPitch);
-                if (alphaRoll  > 0) rawFfRi.y = (target.y - prevTargetRi.y) / (dt * alphaRoll);
-                if (alphaYaw   > 0) rawFfRi.z = (target.z - prevTargetRi.z) / (dt * alphaYaw);
+                if (alphaPitch > 0) rawFfRi.x = (ffSource.x - prevTargetRi.x) / (dt * alphaPitch);
+                if (alphaRoll  > 0) rawFfRi.y = (ffSource.y - prevTargetRi.y) / (dt * alphaRoll);
+                if (alphaYaw   > 0) rawFfRi.z = (ffSource.z - prevTargetRi.z) / (dt * alphaYaw);
             }
-            prevTargetRi = target;
+            prevTargetRi = ffSource;
             prevTargetRiValid = true;
 
             // Low-pass filter the feedforward. The velocity setpoint has slope discontinuities — the
@@ -276,9 +371,15 @@ namespace KRPC.SpaceCenter.AutoPilot
                 YawPID.ClearIntegralTerm ();
             }
 
-            // Run pitch/yaw PIDs in the roll-invariant frame; roll PID on the y-axis (unchanged by
-            // the frame rotation). Add the acceleration feedforward to each PID output, then clamp
-            // before converting pitch/yaw back to the body frame.
+            // Inner rate loop (the inner stage of the cascade). The outer loop above turned the
+            // attitude error into a target angular velocity; this stage drives the *filtered*
+            // measured rate (currentRi) onto that target. Each PI is physics-normalised — its
+            // autotuned gains carry the moi/torque factor, so the closed rate-loop bandwidth is set
+            // by TimeToPeak/Overshoot and is independent of the craft's authority. Because it tracks
+            // the filtered rate, the loop has no gain at the bending frequency and cannot excite a
+            // flexible structure. Pitch/yaw run in the roll-invariant frame; roll on the y-axis
+            // (unchanged by the frame rotation). Add the acceleration feedforward to each output,
+            // then clamp before converting pitch/yaw back to the body frame.
             var virtualPitch = (RunAxis (PitchPID, target.x, currentRi.x, torque [0], dt) + ffRi.x).Clamp (-1, 1);
             var virtualRoll = (RunAxis (RollPID, target.y, currentRi.y, torque [1], dt) + ffRi.y).Clamp (-1, 1);
             var virtualYaw = (RunAxis (YawPID, target.z, currentRi.z, torque [2], dt) + ffRi.z).Clamp (-1, 1);
@@ -413,7 +514,9 @@ namespace KRPC.SpaceCenter.AutoPilot
                 " ff_ri=({21:F3},{22:F3},{23:F3})" +
                 " gyro=({24:F3},{25:F3},{26:F3})" +
                 " Kp=({27:F4},{28:F4},{29:F4}) Ki=({30:F4},{31:F4},{32:F4})" +
-                " ctrl=(p={33:F3},r={34:F3},y={35:F3})",
+                " ctrl=(p={33:F3},r={34:F3},y={35:F3})" +
+                " omega_raw=({36:F4},{37:F4},{38:F4})" +
+                " chatter=({39:F3},{40:F3},{41:F3})",
                 Time.fixedTime, dirErr,
                 torque.x, torque.y, torque.z,
                 moi.x, moi.y, moi.z,
@@ -426,7 +529,9 @@ namespace KRPC.SpaceCenter.AutoPilot
                 gyro.x, gyro.y, gyro.z,
                 PitchPID.Kp, RollPID.Kp, YawPID.Kp,
                 PitchPID.Ki, RollPID.Ki, YawPID.Ki,
-                state.Pitch, state.Roll, state.Yaw);
+                state.Pitch, state.Roll, state.Yaw,
+                logRawOmegaRi.x, logRawOmegaRi.y, logRawOmegaRi.z,
+                chatterLevel.x, chatterLevel.y, chatterLevel.z);
             UnityEngine.Debug.Log (line);
             lock (diagnosticLogLock) {
                 diagnosticLog.AppendLine (line);
@@ -456,6 +561,75 @@ namespace KRPC.SpaceCenter.AutoPilot
             // measurement, so both must use the same sign. Removing this negation alone makes them
             // disagree and the loop diverges; removing both negations together would be equivalent.
             return -ApToBody (localAngularVelocity);
+        }
+
+        /// <summary>
+        /// Second-order low-pass (structural / anti-alias) filter on the measured angular velocity,
+        /// implemented as two cascaded first-order sections for a critically-damped roll-off.
+        /// </summary>
+        /// <remarks>
+        /// KSP samples <c>Rigidbody.angularVelocity</c> at the root part. A rigid craft's measurement
+        /// is the true rigid-body rate, but a structurally flexible craft superimposes its bending
+        /// modes — which on a long vehicle with end-mounted reaction wheels sit at 3–8 Hz, above the
+        /// controller's sub-Hz bandwidth. The single-section roll-off of the feedforward filter is too
+        /// shallow to reject that; a numerically-differentiated feedforward then flips the command on
+        /// the noise and resonantly drives the structure (test plan §11.9). The two sections give a
+        /// ~12 dB/octave roll-off, attenuating the bending content ~20× while adding only a few degrees
+        /// of phase lag in the sub-Hz control band, so the inner rate loop and the feedforward see a
+        /// clean rate. The state is seeded with the first raw sample so engaging on an already-rotating
+        /// vessel does not produce a startup transient.
+        /// </remarks>
+        Vector3d FilterAngularVelocity (Vector3d omega, double dt)
+        {
+            if (!rateFilterValid) {
+                rateFilterStage1 = omega;
+                rateFilterStage2 = omega;
+                rateFilterValid = true;
+                return omega;
+            }
+            var beta = 1.0 - Math.Exp (-dt / RateFilterTimeConstant);
+            rateFilterStage1 = new Vector3d (
+                rateFilterStage1.x + beta * (omega.x - rateFilterStage1.x),
+                rateFilterStage1.y + beta * (omega.y - rateFilterStage1.y),
+                rateFilterStage1.z + beta * (omega.z - rateFilterStage1.z));
+            rateFilterStage2 = new Vector3d (
+                rateFilterStage2.x + beta * (rateFilterStage1.x - rateFilterStage2.x),
+                rateFilterStage2.y + beta * (rateFilterStage1.y - rateFilterStage2.y),
+                rateFilterStage2.z + beta * (rateFilterStage1.z - rateFilterStage2.z));
+            return rateFilterStage2;
+        }
+
+        /// <summary>
+        /// Detect a per-axis structural limit cycle and drive <c>chatterLevel</c> in [0,1].
+        /// </summary>
+        /// <remarks>
+        /// The signature of a bending-mode limit cycle is the measured rate (sampled at the root
+        /// part) changing tick-to-tick by more than the available torque could physically produce:
+        /// rigid-body motion is bounded by <c>α·dt = (τ/I)·dt</c> at full authority, so a jump several
+        /// times larger is structural oscillation, not a response to the controller. This is
+        /// gain-independent and maneuver-independent — a legitimate full-authority slew (or a
+        /// bang-bang sign reversal, where the rate is continuous) stays within <c>α·dt</c>, so it does
+        /// not trip. The level rises quickly (<c>ChatterRiseTimeConstant</c>) when excitation appears
+        /// and decays slowly (<c>ChatterDecayTimeConstant</c>); the slow release is essential because
+        /// the reduced-bandwidth state is quiet and would otherwise immediately clear the detector and
+        /// let the bandwidth climb back into the limit cycle.
+        /// </remarks>
+        void UpdateChatterDetector (Vector3d rawOmega, Vector3d torque, Vector3d moi, double dt)
+        {
+            if (!prevDetectorOmegaValid) {
+                prevDetectorOmega = rawOmega;
+                prevDetectorOmegaValid = true;
+                return;
+            }
+            for (int i = 0; i < 3; i++) {
+                var alpha = moi [i] > 0 ? torque [i] / moi [i] : 0.0;
+                var deltaOmega = Math.Abs (rawOmega [i] - prevDetectorOmega [i]);
+                var excited = alpha > 0 && deltaOmega > ChatterDetectThreshold * alpha * dt ? 1.0 : 0.0;
+                var timeConstant = excited > chatterLevel [i] ? ChatterRiseTimeConstant : ChatterDecayTimeConstant;
+                var beta = 1.0 - Math.Exp (-dt / timeConstant);
+                chatterLevel [i] += beta * (excited - chatterLevel [i]);
+            }
+            prevDetectorOmega = rawOmega;
         }
 
         /// <summary>
@@ -710,8 +884,23 @@ namespace KRPC.SpaceCenter.AutoPilot
             if (torque [index] <= 0)
                 return;
             var accelerationInv = moi [index] / torque [index];
-            var kp = twiceZetaOmega [index] * accelerationInv;
-            var ki = omegaSquared [index] * accelerationInv;
+
+            // Adaptive bandwidth reduction: ramp this axis's bandwidth (= twiceZetaOmega, since
+            // Kp·α = 2ζω₀) toward AdaptiveBandwidthFloor in proportion to the detected chatter, so a
+            // flexible craft's bending mode is gain-stabilised. ω₀ scales with the bandwidth, so Kp
+            // scales linearly and Ki quadratically and the damping ratio ζ (the overshoot target) is
+            // preserved. Rigid/high-authority axes have chatterLevel ≈ 0 and keep their full gains.
+            var bandwidth = twiceZetaOmega [index];
+            var bandwidthSquared = omegaSquared [index];
+            if (chatterLevel [index] > 0 && bandwidth > AdaptiveBandwidthFloor) {
+                var reduced = bandwidth + chatterLevel [index] * (AdaptiveBandwidthFloor - bandwidth);
+                var f = reduced / bandwidth;
+                bandwidth = reduced;
+                bandwidthSquared *= f * f;
+            }
+
+            var kp = bandwidth * accelerationInv;
+            var ki = bandwidthSquared * accelerationInv;
             pid.SetParameters (kp, ki, 0, -1, 1);
         }
     }
