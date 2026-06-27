@@ -63,13 +63,14 @@ values should suffice in most cases, but they can be adjusted to fit your needs.
   moderate control authority rarely reach this cap; it mainly prevents very high-torque
   craft from spinning faster than desired.
 
-* The **attenuation angle** (default to 1 degree per axis) sets the region in which the
-  autopilot considers the vessel to be 'close' to the target direction. In this region
-  the target velocity is smoothly attenuated towards zero, based on how close the vessel
-  is to the target. It is an angle, in degrees, for each of the pitch, roll and yaw
-  axes. This prevents the controls from oscillating when the vessel is pointing in the
-  correct direction. If you find that the vessel still oscillates, try increasing this
-  value.
+* The **pitch/yaw attenuation angle** and the **roll attenuation angle** (both default to
+  1 degree) set the region in which the autopilot considers the vessel to be 'close' to the
+  target. In this region the target velocity is smoothly attenuated towards zero, based on
+  how close the vessel is to the target, which prevents the controls from oscillating when
+  the vessel is pointing in the correct direction. Pitch and yaw are controlled jointly, so
+  a single pitch/yaw attenuation angle applies to both; roll is controlled separately and
+  has its own. Both are angles in degrees. If you find that the vessel still oscillates, try
+  increasing them.
 
 * The **time to peak** (default is 1 second per axis) is the time, in seconds, that the
   PID controllers take to adjust the vessel's angular velocity to the target angular
@@ -88,18 +89,6 @@ values should suffice in most cases, but they can be adjusted to fit your needs.
   start angle the vessel's roll is ignored, so that all of the available control
   authority is used to point the nose. Below the roll engage angle roll is fully
   controlled. Between the two, roll is blended in linearly.
-
-* The **deceleration lag correction** (default ``True``) controls whether the linear
-  term of the :ref:`stopping-distance feedforward <target-angular-velocity>` is
-  included. Structurally flexible rockets are handled automatically and do not normally
-  need this changed; it remains available as an override — see
-  :ref:`Corner Cases <corner-cases>`.
-
-* The **gyroscopic compensation** (default ``True``) controls whether the autopilot
-  cancels the gyroscopic cross-coupling term :math:`\boldsymbol{\omega}\times(I\boldsymbol{\omega})`
-  with a feedforward, as described in :ref:`Gyroscopic feedforward
-  <gyroscopic-feedforward>`. It is negligible during normal attitude holding and only
-  matters for fast rotations or vessels with strongly asymmetric moments of inertia.
 
 * **Auto-tuning** (default ``True``) controls whether the PID controller gains are
   automatically tuned from the vessel's available torque and moment of inertia, as
@@ -167,15 +156,11 @@ and re-engaged, so a craft known to be flexible stays damped. The three adaptati
 blended in proportion to this level rather than switched abruptly on and off, so the
 transition between the rigid and flexible regimes is smooth.
 
-The older manual levers remain available as overrides for unusual cases. Disabling the
-:ref:`deceleration lag correction <stopping-distance-feedforward>` drops the linear
-stopping-distance term (whose division of the measured rate by the controller bandwidth
-amplifies bending content), and increasing the time to peak on the pitch and yaw axes
-lowers the closed-loop bandwidth :math:`2\zeta\omega_0`, keeping it below the structural
-resonance::
+The time to peak remains available as a manual override for unusual cases: increasing it on
+the pitch and yaw axes lowers the closed-loop bandwidth :math:`2\zeta\omega_0`, keeping it
+below the structural resonance::
 
    ap = vessel.auto_pilot
-   ap.decel_lag_correction = False
    ap.time_to_peak = (20, 1, 20)  # slower pitch and yaw; roll can stay fast
 
 Roll is typically far less affected, as it is driven by reaction wheels
@@ -354,11 +339,9 @@ true stopping distance is larger. It is approximated by:
    \text{bw} = K_P \frac{\tau_{max}}{I} = 2\zeta\omega_0
 
 where :math:`\text{bw}` is the closed-loop bandwidth (see :ref:`Tuning the Controllers
-<tuning-the-controllers>` for :math:`K_P`, :math:`\zeta` and :math:`\omega_0`). The
-linear term is only included when deceleration lag correction is enabled. It improves
-the approach on small, rigid craft; on large flexible rockets the autopilot suppresses
-the bending mode automatically (the correction can also be disabled manually) —
-see :ref:`Corner Cases <corner-cases>`.
+<tuning-the-controllers>` for :math:`K_P`, :math:`\zeta` and :math:`\omega_0`). This term
+improves the approach on small, rigid craft; on large flexible rockets the autopilot
+suppresses the bending mode automatically — see :ref:`Corner Cases <corner-cases>`.
 
 Pitch and yaw together
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -486,8 +469,7 @@ controller.
 Because the term is quadratic in :math:`\boldsymbol{\omega}`, it is negligible at the low
 angular rates of normal attitude holding — including the structural bending oscillation
 that affects flexible craft — and only becomes significant for fast slews or vessels with
-strongly asymmetric inertia. It can be disabled with the gyroscopic compensation
-parameter.
+strongly asymmetric inertia.
 
 .. _roll-control:
 

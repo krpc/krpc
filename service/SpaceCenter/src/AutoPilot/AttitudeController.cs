@@ -158,17 +158,15 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public Vector3d MaxAngularVelocity { get; set; }
 
-        public Vector3d AttenuationAngle { get; set; }
+        public double RollAttenuationAngle { get; set; }
+
+        public double PitchYawAttenuationAngle { get; set; }
 
         public double RollStartAngle { get; set; }
 
         public double RollEngageAngle { get; set; }
 
         public bool AutoTune { get; set; }
-
-        public bool DecelLagCorrection { get; set; }
-
-        public bool GyroscopicCompensation { get; set; }
 
         public bool DiagnosticLogging {
             get { return diagnosticLogging; }
@@ -221,7 +219,8 @@ namespace KRPC.SpaceCenter.AutoPilot
         {
             ReferenceFrame = vessel.SurfaceReferenceFrame;
             MaxAngularVelocity = new Vector3d (1, 1, 1);
-            AttenuationAngle = new Vector3d (1, 1, 1);
+            RollAttenuationAngle = 1.0;
+            PitchYawAttenuationAngle = 1.0;
             RollStartAngle = 20.0;
             RollEngageAngle = 15.0;
             AutoTune = true;
@@ -230,11 +229,10 @@ namespace KRPC.SpaceCenter.AutoPilot
             // Increasing it lowers the bandwidth, which is the lever for large, structurally flexible
             // vehicles: when the bandwidth approaches the structural resonance frequency (e.g. the
             // Ariane rocket, ~10 rad/s) the PID saturates in response to structural angular velocity
-            // oscillations and drives the bending mode. Such craft need a larger TimeToPeak and/or
-            // DecelLagCorrection=false.
+            // oscillations and drives the bending mode. Such craft need a larger TimeToPeak. (The
+            // adaptive flexible-craft handling normally suppresses this automatically; see
+            // UpdateChatterDetector.)
             TimeToPeak = new Vector3d (1, 1, 1);
-            DecelLagCorrection = true;
-            GyroscopicCompensation = true;
             DiagnosticLogging = false;
             SetTarget (0, 0, double.NaN);
             Start ();
@@ -642,8 +640,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// control fraction that cancels it: -(ω×(Iω))ᵢ / τ_max,ᵢ per axis (a diagonal inertia is
         /// assumed, matching the rest of the controller). The term is quadratic in ω, so it is
         /// negligible at the low rates of normal attitude holding — including structural bending
-        /// oscillation — and only matters for fast slews or strongly asymmetric inertia. It can be
-        /// disabled via <see cref="GyroscopicCompensation"/>.
+        /// oscillation — and only matters for fast slews or strongly asymmetric inertia.
         ///
         /// ω is passed in the controller's negated sign convention (see ComputeCurrentAngularVelocity),
         /// but ω×(Iω) is quadratic in ω and so is invariant under that negation — it gives the correct
@@ -651,8 +648,6 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// </remarks>
         Vector3d GyroscopicFeedforward (Vector3d omega, Vector3d moi, Vector3d torque)
         {
-            if (!GyroscopicCompensation)
-                return Vector3d.zero;
             var angularMomentum = new Vector3d (moi.x * omega.x, moi.y * omega.y, moi.z * omega.z);
             var gyroTorque = Vector3d.Cross (omega, angularMomentum);
             return new Vector3d (
@@ -721,9 +716,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             var result = Vector3d.zero;
 
             // Roll: 1D per-axis (y-axis is unchanged by the roll-invariant rotation).
-            var rollBandwidth = DecelLagCorrection && moi [1] > 0 ? RollPID.Kp * torque [1] / moi [1] : 0.0;
+            var rollBandwidth = moi [1] > 0 ? RollPID.Kp * torque [1] / moi [1] : 0.0;
             result.y = ComputeAxisVelocity (anglesRI.y, torque [1], moi [1], currentOmegaRi.y,
-                MaxAngularVelocity [1], AttenuationAngle [1], rollBandwidth);
+                MaxAngularVelocity [1], RollAttenuationAngle, rollBandwidth);
 
             // Pitch/yaw handled jointly so the nose follows a straight great-circle arc.
             double pitchVelocity, yawVelocity;
@@ -781,7 +776,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // collinear with ω, so taking the larger collapses to a scalar max of their coefficients.
             // α and the bandwidth are projected along ω̂ (the brake path is along ω); this coincides
             // with the error-direction projection when ω is radial, preserving the legacy reduction,
-            // and stays defined as θ → 0. DecelLagCorrection gates the linear term exactly as before.
+            // and stays defined as θ → 0.
             var omegaPitch = currentOmegaRi.x;
             var omegaYaw = currentOmegaRi.z;
             var omegaMag = Math.Sqrt (omegaPitch * omegaPitch + omegaYaw * omegaYaw);
@@ -794,13 +789,11 @@ namespace KRPC.SpaceCenter.AutoPilot
                 if (alphaOmega > 0) {
                     var coeffQuad = omegaMag / (2.0 * alphaOmega);
                     coeff = coeffQuad;
-                    if (DecelLagCorrection) {
-                        var bw0 = moi [0] > 0 ? PitchPID.Kp * torque [0] / moi [0] : 0.0;
-                        var bw2 = moi [2] > 0 ? YawPID.Kp * torque [2] / moi [2] : 0.0;
-                        var bandwidthOmega = oPitch * oPitch * bw0 + oYaw * oYaw * bw2;
-                        if (bandwidthOmega > 0)
-                            coeff = Math.Max (coeffQuad, 1.0 / bandwidthOmega);
-                    }
+                    var bw0 = moi [0] > 0 ? PitchPID.Kp * torque [0] / moi [0] : 0.0;
+                    var bw2 = moi [2] > 0 ? YawPID.Kp * torque [2] / moi [2] : 0.0;
+                    var bandwidthOmega = oPitch * oPitch * bw0 + oYaw * oYaw * bw2;
+                    if (bandwidthOmega > 0)
+                        coeff = Math.Max (coeffQuad, 1.0 / bandwidthOmega);
                 }
             }
 
@@ -831,7 +824,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             if (alpha2d > 0)
                 speed = Math.Min (maxV2d, Math.Sqrt (2.0 * eStopMag * alpha2d));
 
-            var attAngle2d = GeometryExtensions.ToRadians (Math.Min (AttenuationAngle [0], AttenuationAngle [2]));
+            var attAngle2d = GeometryExtensions.ToRadians (PitchYawAttenuationAngle);
             var attenuation2d = 1.0 / (1.0 + Math.Exp (-((eStopMag - attAngle2d) * (AttenuationSigmoidSlope / attAngle2d))));
             if (double.IsNaN (attenuation2d))
                 attenuation2d = 0;

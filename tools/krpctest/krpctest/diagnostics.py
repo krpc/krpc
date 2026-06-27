@@ -226,30 +226,6 @@ def control_reversal_rate(samples, floor=0.3):
     return worst
 
 
-def cross_axis_excursion(samples):
-    # Max perpendicular distance, in degrees, of the (pitch_error, yaw_error) trajectory from the
-    # straight line between its start and the origin. The unnormalised counterpart of
-    # path_deviation. Gauge-independent: it measures excursion off the commanded slew direction
-    # rather than off a fixed roll-invariant axis (which, for a large slew, the controller may put
-    # the *primary* motion on). Used as an on/off comparison for gyroscopic compensation -- the
-    # roll-invariant frame rotating under the per-tick error vector contributes a baseline common
-    # to both runs, so the on-minus-off difference isolates the gyroscopic coupling.
-    if not samples:
-        return 0.0
-    start_x = samples[0].pitch_error
-    start_y = samples[0].yaw_error
-    radius0 = math.hypot(start_x, start_y)
-    if radius0 == 0:
-        return 0.0
-    unit_x = start_x / radius0
-    unit_y = start_y / radius0
-    worst = 0.0
-    for sample in samples:
-        perpendicular = abs(sample.pitch_error * unit_y - sample.yaw_error * unit_x)
-        worst = max(worst, perpendicular)
-    return worst
-
-
 def saturation_time(samples, dt=None):
     # Total time any control axis is at full deflection. dt defaults to the mean tick spacing.
     if not samples:

@@ -18,7 +18,6 @@ def _make_autopilot_test_class(
     nudge_rate=0.3,
     recover_timeout=30,
     rebound_limit=5.0,
-    cross_axis_slack=8.0,
     roll_isolation_limit=4.0,
     control_spike_limit=3,
     saturation_limit=6.0,
@@ -49,7 +48,6 @@ def _make_autopilot_test_class(
             cls.nudge_rate = nudge_rate
             cls.recover_timeout = recover_timeout
             cls.rebound_limit = rebound_limit
-            cls.cross_axis_slack = cross_axis_slack
             cls.roll_isolation_limit = roll_isolation_limit
             cls.control_spike_limit = control_spike_limit
             cls.saturation_limit = saturation_limit
@@ -62,16 +60,6 @@ def _make_autopilot_test_class(
 
         def setUp(self):
             self.connect().testing_tools.clear_rotation()
-            self.apply_craft_tuning()
-
-        def apply_craft_tuning(self):
-            # Re-apply the per-craft tuning. reset() (called in tearDown and by some tests)
-            # restores controller defaults, so this must run before every test -- otherwise the
-            # Wobbly fixture keeps its soft tuning only for the first test and then runs the rest
-            # with the stiff defaults that excite the bending mode it is meant to test against.
-            if vessel_name == "AutoPilotWobbly":
-                self.ap.decel_lag_correction = False
-                self.ap.time_to_peak = (100, 100, 100)
 
         def tearDown(self):
             self.ap.reset()
@@ -488,37 +476,6 @@ def _make_autopilot_test_class(
             )
             self.check_rotation(60, 90)
 
-        def test_gyroscopic_cross_axis(self):
-            # During a fast single-axis slew the omega x I*omega term induces cross-axis coupling.
-            # Measure the cross-axis excursion -- the deviation perpendicular to the commanded slew
-            # direction in the roll-invariant error plane -- with gyroscopic compensation off and
-            # then on. A fixed-axis measure is not valid here: the roll-invariant decomposition can
-            # put the *primary* motion of the slew on either the pitch or the yaw axis (it depends
-            # on the FromToRotation gauge for the pointing direction), so "max yaw_error" can be the
-            # slew itself rather than the coupling. The roll-invariant frame also rotates under the
-            # per-tick error vector during a large slew, adding a baseline excursion; that baseline
-            # is common to the off and on runs, so comparing on against off cancels it and isolates
-            # the gyroscopic effect. Compensation must not make the coupling worse (and reduces it
-            # on asymmetric-inertia craft). On the near-symmetric stock craft both runs are similar,
-            # so this is a "not worse" guard there -- it bites on an asymmetric-MoI fixture.
-            def excursion(gyro):
-                self.ap.gyroscopic_compensation = gyro
-                self.set_rotation(0, 90)
-                self.wait_for_autopilot()
-                self.set_rotation(70, 90)
-                samples = self.capture_recovery(self.recover_timeout)
-                self.assertGreater(len(samples), 0)
-                self.check_rotation(70, 90)
-                return diagnostics.cross_axis_excursion(samples)
-
-            off = excursion(False)
-            on = excursion(True)
-            self.assertLessEqual(
-                on,
-                off + self.cross_axis_slack,
-                "gyroscopic compensation increased cross-axis coupling",
-            )
-
         def test_roll_nudge_isolation(self):
             # A pure roll (nose-axis) spin must bleed off without contaminating the pitch/yaw
             # path: the roll-invariant frame should keep roll isolated from pointing.
@@ -716,10 +673,9 @@ def _make_autopilot_test_class(
         def test_roll_blending(self):
             # Roll is suppressed while the pointing error exceeds roll_start_angle and blends in
             # below roll_engage_angle (RollWeight), so a large slew produces no roll kick.
-            # Exercises the roll_start_angle/roll_engage_angle setters. Gyroscopic compensation
-            # is disabled so the roll control output reflects only the roll law, not the gyro
-            # feedforward. NOTE: roll_control_limit is an initial estimate; calibrate in-game.
-            self.ap.gyroscopic_compensation = False
+            # Exercises the roll_start_angle/roll_engage_angle setters. The roll control output
+            # includes the (small, quadratic-in-omega) gyroscopic feedforward, so roll_control_limit
+            # allows for it. NOTE: roll_control_limit is an initial estimate; calibrate in-game.
             self.ap.roll_start_angle = 25
             self.ap.roll_engage_angle = 10
             roll_start = 25
@@ -781,7 +737,6 @@ def _make_autopilot_test_class(
             rotation = self.ap.target_rotation
 
             self.ap.reset()
-            self.apply_craft_tuning()
             self.ap.reference_frame = self.vessel.surface_reference_frame
             self.ap.target_rotation = rotation
             # Quaternions q and -q denote the same rotation, so compare via |dot| ~= 1.
@@ -866,7 +821,6 @@ TestAutoPilotNormal = _make_autopilot_test_class(
     gain_jump_limit=0.12,
     saturation_limit=0.6,
     roll_control_limit=0.1,
-    cross_axis_slack=4.0,
 )
 TestAutoPilotSlow = _make_autopilot_test_class(
     "AutoPilotSlow",
@@ -887,7 +841,6 @@ TestAutoPilotSlow = _make_autopilot_test_class(
     nudge_rate=0.2,
     recover_timeout=90,
     rebound_limit=2.0,
-    cross_axis_slack=4.0,
     roll_isolation_limit=2.5,
     control_spike_limit=3,
     saturation_limit=1.0,
@@ -907,7 +860,6 @@ TestAutoPilotNimble = _make_autopilot_test_class(
     winding_limit=1.25,
     overshoot_limit=0.1,
     rebound_limit=9.0,
-    cross_axis_slack=10.0,
     roll_isolation_limit=2.5,
     control_spike_limit=10,
     saturation_limit=0.6,
@@ -925,7 +877,6 @@ TestAutoPilotWobbly = _make_autopilot_test_class(
     recover_timeout=60,
     rebound_limit=12.0,
     roll_isolation_limit=8.0,
-    cross_axis_slack=12.0,
     control_spike_limit=6,
     saturation_limit=15.0,
     overshoot_limit=0.6,
@@ -950,8 +901,7 @@ TestAutoPilotVibrating = _make_autopilot_test_class(
     # roll-control 0.14, and a clean settled hold (control_reversal_rate 0.0).
     # control_spike_limit stays loose: a mid-slew target step re-triggers the detector and the
     # approach-phase transient produces ~225 control jumps before a clean hold (the documented
-    # residual a bending-mode notch would remove). cross_axis_slack is left generous (a single run
-    # cannot tighten the gyro on/off comparison).
+    # residual a bending-mode notch would remove).
     # hold_chatter_floor=0.15 catches the ±0.2-range residual bending oscillation that the default
     # floor=0.3 misses (pairs where neither side exceeds 0.3 are not counted). Needs recalibration
     # after the filter/bandwidth changes; initial limit kept at 0.1 pending in-game data.
@@ -960,7 +910,6 @@ TestAutoPilotVibrating = _make_autopilot_test_class(
     nudge_rate=0.15,
     recover_timeout=90,
     rebound_limit=3.0,
-    cross_axis_slack=12.0,
     roll_isolation_limit=8.0,
     control_spike_limit=400,
     saturation_limit=5.0,

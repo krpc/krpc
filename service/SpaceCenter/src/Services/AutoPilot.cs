@@ -362,16 +362,26 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The angle at which the autopilot considers the vessel to be pointing
-        /// close to the target.
-        /// This determines the midpoint of the target velocity attenuation function.
-        /// A vector of three angles, in degrees, one for each of the pitch, roll and yaw axes.
-        /// Defaults to 1° for each axis.
+        /// The angle, in degrees, at which the autopilot considers the vessel to be pointing close
+        /// to the target roll. This determines the midpoint of the roll-axis target velocity
+        /// attenuation function. Defaults to 1°.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 AttenuationAngle {
-            get { return attitudeController.AttenuationAngle.ToTuple (); }
-            set { attitudeController.AttenuationAngle = value.ToVector (); }
+        public double RollAttenuationAngle {
+            get { return attitudeController.RollAttenuationAngle; }
+            set { attitudeController.RollAttenuationAngle = value; }
+        }
+
+        /// <summary>
+        /// The angle, in degrees, at which the autopilot considers the vessel to be pointing close
+        /// to the target direction. This determines the midpoint of the pitch/yaw target velocity
+        /// attenuation function. Pitch and yaw are controlled jointly, so a single angle applies to
+        /// both. Defaults to 1°.
+        /// </summary>
+        [KRPCProperty]
+        public double PitchYawAttenuationAngle {
+            get { return attitudeController.PitchYawAttenuationAngle; }
+            set { attitudeController.PitchYawAttenuationAngle = value; }
         }
 
         /// <summary>
@@ -383,45 +393,6 @@ namespace KRPC.SpaceCenter.Services
         public bool AutoTune {
             get { return attitudeController.AutoTune; }
             set { attitudeController.AutoTune = value; }
-        }
-
-        /// <summary>
-        /// Whether to apply a linear PID-lag correction to the stopping-distance feedforward.
-        /// Defaults to <c>true</c>.
-        /// When <c>true</c>, the outer-loop velocity profile uses <c>max(omega^2/(2*alpha), omega/bandwidth)</c>
-        /// as the predicted stopping distance. The linear term (<c>omega/bandwidth</c>) is larger
-        /// when the PID is unsaturated and decelerating more slowly than full torque; including it
-        /// prevents overshoot on small rigid vessels.
-        /// Structurally flexible rockets are handled automatically: the autopilot detects a
-        /// bending-mode limit cycle at runtime and adaptively engages rate filtering, a decoupled
-        /// feedforward and a reduced inner-loop bandwidth on the affected axes, so this no longer
-        /// needs to be disabled for them in normal use. It remains available as a fine-tuning
-        /// override: setting it to <c>false</c> additionally drops the linear stopping-distance term,
-        /// which on a very flexible vessel could otherwise amplify any residual bending-mode content
-        /// in the measured rate. The quadratic term alone (<c>omega^2/(2*alpha)</c>) is immune to this:
-        /// for typical structural oscillation (omega ~= 0.05 rad/s) it adds less than 0.1 degrees of
-        /// correction regardless of gain.
-        /// </summary>
-        [KRPCProperty]
-        public bool DecelLagCorrection {
-            get { return attitudeController.DecelLagCorrection; }
-            set { attitudeController.DecelLagCorrection = value; }
-        }
-
-        /// <summary>
-        /// Whether to apply gyroscopic feedforward compensation. Defaults to <c>true</c>.
-        /// The per-axis plant model used to tune the controllers assumes <c>tau = I*omega_dot</c>
-        /// on each axis independently, but the rigid-body equation of motion includes a cross-
-        /// coupling term <c>omega x (I*omega)</c>. When <c>true</c>, the autopilot adds a feedforward
-        /// control fraction that cancels this term so the assumed plant holds even when the coupling
-        /// is significant. The term is quadratic in the angular velocity, so it is negligible during
-        /// normal attitude holding and only becomes significant for fast rotations or vessels with
-        /// strongly asymmetric moments of inertia. It can be set to <c>false</c> to disable it.
-        /// </summary>
-        [KRPCProperty]
-        public bool GyroscopicCompensation {
-            get { return attitudeController.GyroscopicCompensation; }
-            set { attitudeController.GyroscopicCompensation = value; }
         }
 
         /// <summary>
