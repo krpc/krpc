@@ -63,6 +63,32 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The state of SAS.
+        /// </summary>
+        /// <remarks>Equivalent to <see cref="Control.SAS"/></remarks>
+        [KRPCProperty]
+        public bool SAS {
+            get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
+            set {
+                if (value && Engaged)
+                    throw new InvalidOperationException ("SAS cannot be enabled when the auto-pilot is engaged");
+                InternalVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value);
+            }
+        }
+
+        /// <summary>
+        /// The current <see cref="SASMode"/>.
+        /// These modes are equivalent to the mode buttons to the left of the navball that appear
+        /// when SAS is enabled.
+        /// </summary>
+        /// <remarks>Equivalent to <see cref="Control.SASMode"/></remarks>
+        [KRPCProperty]
+        public SASMode SASMode {
+            get { return Control.GetSASMode (InternalVessel); }
+            set { Control.SetSASMode (InternalVessel, value); }
+        }
+
+        /// <summary>
         /// Whether the auto-pilot is engaged.
         /// Setting to <c>true</c> engages the auto-pilot; setting to <c>false</c> disengages it.
         /// </summary>
@@ -82,96 +108,16 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Blocks until the vessel is pointing in the target direction and has
-        /// the target roll (if set). Throws an exception if the auto-pilot has not been engaged.
+        /// Disengages the auto-pilot and resets all configuration parameters to their defaults.
+        /// Also resets the target pitch, heading and roll.
         /// </summary>
-        /// <param name="timeout">Maximum time to wait in seconds. If not specified, waits indefinitely.</param>
         [KRPCMethod]
-        public void Wait (double timeout = -1)
+        public void Reset ()
         {
-            var deadline = timeout >= 0 ? DateTime.UtcNow + TimeSpan.FromSeconds (timeout) : DateTime.MaxValue;
-            WaitWithDeadline (deadline);
-        }
-
-        void WaitWithDeadline (DateTime deadline)
-        {
-            if (Error > stoppingAngleThreshold || InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > stoppingVelocityThreshold) {
-                if (DateTime.UtcNow > deadline)
-                    throw new TimeoutException ("AutoPilot timed out waiting to reach target direction");
-                throw new YieldException<Action> (() => WaitWithDeadline (deadline));
-            }
-        }
-
-        /// <summary>
-        /// The error, in degrees, between the direction the ship has been asked
-        /// to point in and the direction it is pointing in. Throws an exception if the auto-pilot
-        /// has not been engaged and SAS is not enabled or is in stability assist mode.
-        /// </summary>
-        [KRPCProperty]
-        public float Error {
-            get {
-                if (Engaged) {
-                    if (!double.IsNaN (attitudeController.TargetRoll)) {
-                        var currentRotation = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation);
-                        var targetRotation = attitudeController.TargetRotation;
-                        var rotation = targetRotation * currentRotation.Inverse ();
-                        double angle;
-                        Vector3d axis;
-                        GeometryExtensions.ToAngleAxis (rotation, out angle, out axis);
-                        return Math.Abs (GeometryExtensions.NormAngle ((float)angle));
-                    } else {
-                        return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (attitudeController.TargetDirection)));
-                    }
-                } else if (!Engaged && SAS && SASMode != SASMode.StabilityAssist) {
-                    return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, SASTargetDirection ()));
-                } else {
-                    throw new InvalidOperationException ("The auto-pilot is not engaged");
-                }
-            }
-        }
-
-        /// <summary>
-        /// The error, in degrees, between the vessels current and target pitch.
-        /// Throws an exception if the auto-pilot has not been engaged.
-        /// </summary>
-        [KRPCProperty]
-        public float PitchError {
-            get {
-                if (!Engaged)
-                    throw new InvalidOperationException ("The auto-pilot is not engaged");
-                var currentPitch = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().x;
-                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetPitch - currentPitch));
-            }
-        }
-
-        /// <summary>
-        /// The error, in degrees, between the vessels current and target heading.
-        /// Throws an exception if the auto-pilot has not been engaged.
-        /// </summary>
-        [KRPCProperty]
-        public float HeadingError {
-            get {
-                if (!Engaged)
-                    throw new InvalidOperationException ("The auto-pilot is not engaged");
-                var currentHeading = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().y;
-                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetHeading - currentHeading));
-            }
-        }
-
-        /// <summary>
-        /// The error, in degrees, between the vessels current and target roll.
-        /// Throws an exception if the auto-pilot has not been engaged or no target roll is set.
-        /// </summary>
-        [KRPCProperty]
-        public float RollError {
-            get {
-                if (!Engaged)
-                    throw new InvalidOperationException ("The auto-pilot is not engaged");
-                if (double.IsNaN (attitudeController.TargetRoll))
-                    throw new InvalidOperationException ("No target roll has been set");
-                var currentRoll = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
-                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetRoll - currentRoll));
-            }
+            Engaged = false;
+            attitudeController.Reset ();
+            stoppingAngleThreshold = 1f;
+            stoppingVelocityThreshold = 0.05f;
         }
 
         /// <summary>
@@ -249,19 +195,6 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Disengages the auto-pilot and resets all configuration parameters to their defaults.
-        /// Also resets the target pitch, heading and roll.
-        /// </summary>
-        [KRPCMethod]
-        public void Reset ()
-        {
-            Engaged = false;
-            attitudeController.Reset ();
-            stoppingAngleThreshold = 1f;
-            stoppingVelocityThreshold = 0.05f;
-        }
-
-        /// <summary>
         /// Direction vector corresponding to the target pitch and heading.
         /// This is in the reference frame specified by <see cref="ReferenceFrame"/>.
         /// </summary>
@@ -279,6 +212,27 @@ namespace KRPC.SpaceCenter.Services
         public Tuple4 TargetRotation {
             get { return attitudeController.TargetRotation.ToTuple (); }
             set { attitudeController.SetTargetRotation (value.ToQuaternion ()); }
+        }
+
+        /// <summary>
+        /// Blocks until the vessel is pointing in the target direction and has
+        /// the target roll (if set). Throws an exception if the auto-pilot has not been engaged.
+        /// </summary>
+        /// <param name="timeout">Maximum time to wait in seconds. If not specified, waits indefinitely.</param>
+        [KRPCMethod]
+        public void Wait (double timeout = -1)
+        {
+            var deadline = timeout >= 0 ? DateTime.UtcNow + TimeSpan.FromSeconds (timeout) : DateTime.MaxValue;
+            WaitWithDeadline (deadline);
+        }
+
+        void WaitWithDeadline (DateTime deadline)
+        {
+            if (Error > stoppingAngleThreshold || InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > stoppingVelocityThreshold) {
+                if (DateTime.UtcNow > deadline)
+                    throw new TimeoutException ("AutoPilot timed out waiting to reach target direction");
+                throw new YieldException<Action> (() => WaitWithDeadline (deadline));
+            }
         }
 
         /// <summary>
@@ -303,29 +257,75 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The state of SAS.
+        /// The error, in degrees, between the direction the ship has been asked
+        /// to point in and the direction it is pointing in. Throws an exception if the auto-pilot
+        /// has not been engaged and SAS is not enabled or is in stability assist mode.
         /// </summary>
-        /// <remarks>Equivalent to <see cref="Control.SAS"/></remarks>
         [KRPCProperty]
-        public bool SAS {
-            get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
-            set {
-                if (value && Engaged)
-                    throw new InvalidOperationException ("SAS cannot be enabled when the auto-pilot is engaged");
-                InternalVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value);
+        public float Error {
+            get {
+                if (Engaged) {
+                    if (!double.IsNaN (attitudeController.TargetRoll)) {
+                        var currentRotation = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation);
+                        var targetRotation = attitudeController.TargetRotation;
+                        var rotation = targetRotation * currentRotation.Inverse ();
+                        double angle;
+                        Vector3d axis;
+                        GeometryExtensions.ToAngleAxis (rotation, out angle, out axis);
+                        return Math.Abs (GeometryExtensions.NormAngle ((float)angle));
+                    } else {
+                        return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (attitudeController.TargetDirection)));
+                    }
+                } else if (!Engaged && SAS && SASMode != SASMode.StabilityAssist) {
+                    return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, SASTargetDirection ()));
+                } else {
+                    throw new InvalidOperationException ("The auto-pilot is not engaged");
+                }
             }
         }
 
         /// <summary>
-        /// The current <see cref="SASMode"/>.
-        /// These modes are equivalent to the mode buttons to the left of the navball that appear
-        /// when SAS is enabled.
+        /// The error, in degrees, between the vessels current and target pitch.
+        /// Throws an exception if the auto-pilot has not been engaged.
         /// </summary>
-        /// <remarks>Equivalent to <see cref="Control.SASMode"/></remarks>
         [KRPCProperty]
-        public SASMode SASMode {
-            get { return Control.GetSASMode (InternalVessel); }
-            set { Control.SetSASMode (InternalVessel, value); }
+        public float PitchError {
+            get {
+                if (!Engaged)
+                    throw new InvalidOperationException ("The auto-pilot is not engaged");
+                var currentPitch = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().x;
+                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetPitch - currentPitch));
+            }
+        }
+
+        /// <summary>
+        /// The error, in degrees, between the vessels current and target heading.
+        /// Throws an exception if the auto-pilot has not been engaged.
+        /// </summary>
+        [KRPCProperty]
+        public float HeadingError {
+            get {
+                if (!Engaged)
+                    throw new InvalidOperationException ("The auto-pilot is not engaged");
+                var currentHeading = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().y;
+                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetHeading - currentHeading));
+            }
+        }
+
+        /// <summary>
+        /// The error, in degrees, between the vessels current and target roll.
+        /// Throws an exception if the auto-pilot has not been engaged or no target roll is set.
+        /// </summary>
+        [KRPCProperty]
+        public float RollError {
+            get {
+                if (!Engaged)
+                    throw new InvalidOperationException ("The auto-pilot is not engaged");
+                if (double.IsNaN (attitudeController.TargetRoll))
+                    throw new InvalidOperationException ("No target roll has been set");
+                var currentRoll = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
+                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetRoll - currentRoll));
+            }
         }
 
         /// <summary>
@@ -363,17 +363,6 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The angle, in degrees, at which the autopilot considers the vessel to be pointing close
-        /// to the target roll. This determines the midpoint of the roll-axis target velocity
-        /// attenuation function. Defaults to 1°.
-        /// </summary>
-        [KRPCProperty]
-        public double RollAttenuationAngle {
-            get { return attitudeController.RollAttenuationAngle; }
-            set { attitudeController.RollAttenuationAngle = value; }
-        }
-
-        /// <summary>
-        /// The angle, in degrees, at which the autopilot considers the vessel to be pointing close
         /// to the target direction. This determines the midpoint of the pitch/yaw target velocity
         /// attenuation function. Pitch and yaw are controlled jointly, so a single angle applies to
         /// both. Defaults to 1°.
@@ -385,6 +374,17 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The angle, in degrees, at which the autopilot considers the vessel to be pointing close
+        /// to the target roll. This determines the midpoint of the roll-axis target velocity
+        /// attenuation function. Defaults to 1°.
+        /// </summary>
+        [KRPCProperty]
+        public double RollAttenuationAngle {
+            get { return attitudeController.RollAttenuationAngle; }
+            set { attitudeController.RollAttenuationAngle = value; }
+        }
+
+        /// <summary>
         /// Whether the rotation rate controllers PID parameters should be automatically tuned
         /// using the vessels moment of inertia and available torque. Defaults to <c>true</c>.
         /// See <see cref="TimeToPeak"/> and <see cref="Overshoot"/>.
@@ -393,29 +393,6 @@ namespace KRPC.SpaceCenter.Services
         public bool AutoTune {
             get { return attitudeController.AutoTune; }
             set { attitudeController.AutoTune = value; }
-        }
-
-        /// <summary>
-        /// When <c>true</c>, logs one diagnostic line per physics tick to Player.log and to an
-        /// in-memory buffer (see <see cref="DiagnosticLog"/>). Each line is prefixed with
-        /// <c>[KRPC.AP]</c> and contains torque, MoI, angle errors, current/target angular
-        /// velocity, PID gains, and control outputs. Setting to <c>true</c> also clears the
-        /// buffer. Defaults to <c>false</c>.
-        /// </summary>
-        [KRPCProperty]
-        public bool DiagnosticLogging {
-            get { return attitudeController.DiagnosticLogging; }
-            set { attitudeController.DiagnosticLogging = value; }
-        }
-
-        /// <summary>
-        /// The diagnostic log collected since <see cref="DiagnosticLogging"/> was last set to
-        /// <c>true</c>. Each line corresponds to one physics tick. Returns an empty string if
-        /// diagnostic logging has not been enabled or no ticks have occurred.
-        /// </summary>
-        [KRPCProperty]
-        public string DiagnosticLog {
-            get { return attitudeController.GetDiagnosticLog (); }
         }
 
         /// <summary>
@@ -498,6 +475,29 @@ namespace KRPC.SpaceCenter.Services
                     throw new ArgumentNullException (nameof (YawPIDGains));
                 attitudeController.YawPID.SetParameters (value.Item1, value.Item2, value.Item3);
             }
+        }
+
+        /// <summary>
+        /// When <c>true</c>, logs one diagnostic line per physics tick to Player.log and to an
+        /// in-memory buffer (see <see cref="DiagnosticLog"/>). Each line is prefixed with
+        /// <c>[KRPC.AP]</c> and contains torque, MoI, angle errors, current/target angular
+        /// velocity, PID gains, and control outputs. Setting to <c>true</c> also clears the
+        /// buffer. Defaults to <c>false</c>.
+        /// </summary>
+        [KRPCProperty]
+        public bool DiagnosticLogging {
+            get { return attitudeController.DiagnosticLogging; }
+            set { attitudeController.DiagnosticLogging = value; }
+        }
+
+        /// <summary>
+        /// The diagnostic log collected since <see cref="DiagnosticLogging"/> was last set to
+        /// <c>true</c>. Each line corresponds to one physics tick. Returns an empty string if
+        /// diagnostic logging has not been enabled or no ticks have occurred.
+        /// </summary>
+        [KRPCProperty]
+        public string DiagnosticLog {
+            get { return attitudeController.GetDiagnosticLog (); }
         }
 
         /// <summary>

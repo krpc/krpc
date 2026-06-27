@@ -57,6 +57,12 @@ Configuring the AutoPilot
 The following parameters affect the behavior of the autopilot. The default
 values should suffice in most cases, but they can be adjusted to fit your needs.
 
+* The **roll start angle** (default 20°) and **roll engage angle** (default 15°) define
+  the band of direction error over which roll control is blended in. Above the roll
+  start angle the vessel's roll is ignored, so that all of the available control
+  authority is used to point the nose. Below the roll engage angle roll is fully
+  controlled. Between the two, roll is blended in linearly.
+
 * The **maximum angular velocity** (default 1 rad/s along each axis) caps the target
   angular velocity used when slewing the vessel towards the target. It is a vector of
   three values, one for each of the pitch, roll and yaw axes. Vessels with low or
@@ -72,6 +78,11 @@ values should suffice in most cases, but they can be adjusted to fit your needs.
   has its own. Both are angles in degrees. If you find that the vessel still oscillates, try
   increasing them.
 
+* **Auto-tuning** (default ``True``) controls whether the PID controller gains are
+  automatically tuned from the vessel's available torque and moment of inertia, as
+  described in :ref:`Tuning the Controllers <tuning-the-controllers>`. When disabled,
+  the gains can be set manually.
+
 * The **time to peak** (default is 1 second per axis) is the time, in seconds, that the
   PID controllers take to adjust the vessel's angular velocity to the target angular
   velocity. Decreasing it makes the controllers match the target velocity more
@@ -83,17 +94,6 @@ values should suffice in most cases, but they can be adjusted to fit your needs.
   the controllers match the target velocity more aggressively, but causes more
   overshoot. It is a vector of three values, between 0 and 1, for each of the pitch,
   roll and yaw axes.
-
-* The **roll start angle** (default 20°) and **roll engage angle** (default 15°) define
-  the band of direction error over which roll control is blended in. Above the roll
-  start angle the vessel's roll is ignored, so that all of the available control
-  authority is used to point the nose. Below the roll engage angle roll is fully
-  controlled. Between the two, roll is blended in linearly.
-
-* **Auto-tuning** (default ``True``) controls whether the PID controller gains are
-  automatically tuned from the vessel's available torque and moment of inertia, as
-  described in :ref:`Tuning the Controllers <tuning-the-controllers>`. When disabled,
-  the gains can be set manually.
 
 .. _corner-cases:
 

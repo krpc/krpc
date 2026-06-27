@@ -1154,9 +1154,9 @@ SpaceCenter.AutoPilot.ReferenceFrame
 SpaceCenter.AutoPilot.TargetPitch
 SpaceCenter.AutoPilot.TargetHeading
 SpaceCenter.AutoPilot.TargetRoll
+SpaceCenter.AutoPilot.TargetPitchAndHeading
 SpaceCenter.AutoPilot.TargetDirection
 SpaceCenter.AutoPilot.TargetRotation
-SpaceCenter.AutoPilot.TargetPitchAndHeading
 SpaceCenter.AutoPilot.Wait
 SpaceCenter.AutoPilot.StoppingAngleThreshold
 SpaceCenter.AutoPilot.StoppingVelocityThreshold
@@ -1167,8 +1167,8 @@ SpaceCenter.AutoPilot.RollError
 SpaceCenter.AutoPilot.RollStartAngle
 SpaceCenter.AutoPilot.RollEngageAngle
 SpaceCenter.AutoPilot.MaxAngularVelocity
-SpaceCenter.AutoPilot.RollAttenuationAngle
 SpaceCenter.AutoPilot.PitchYawAttenuationAngle
+SpaceCenter.AutoPilot.RollAttenuationAngle
 SpaceCenter.AutoPilot.AutoTune
 SpaceCenter.AutoPilot.TimeToPeak
 SpaceCenter.AutoPilot.Overshoot
