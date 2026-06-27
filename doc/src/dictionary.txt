@@ -27,6 +27,7 @@ Olex
 PID
 Tron
 Wheesley
+adaptively
 amongst
 apoapsis
 arg
@@ -42,6 +43,7 @@ circularization
 clickable
 clientgen
 collidable
+collinear
 combusting
 comms
 constructible

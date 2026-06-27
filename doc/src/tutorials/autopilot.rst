@@ -25,22 +25,31 @@ Each physics tick the autopilot does the following:
    the vessel towards the target.
 
 #. It differentiates the target angular velocity setpoint to obtain a target angular
-   acceleration, normalises it by the maximum angular acceleration
+   acceleration, normalizes it by the maximum angular acceleration
    :math:`\alpha = \tau_{max} / I` to produce a feedforward control fraction, and
    passes the target angular velocity to three PI controllers (one per axis). Each
    controller's output is summed with the feedforward and clamped to
    :math:`[-1, 1]` to give the pitch, yaw and roll control inputs for the vessel.
 
+Together these two steps form a *cascade*: an outer loop converts the attitude error
+into a target angular velocity, and an inner loop of three PI controllers drives the
+vessel's measured angular velocity onto that target. The outer loop is the velocity
+profile described in :ref:`Computing the Target Angular Velocity
+<target-angular-velocity>`; the inner loop is the set of PI controllers described in
+:ref:`Tuning the Controllers <tuning-the-controllers>`. The autopilot also continuously
+watches for structurally flexible craft and adapts itself when it detects bending
+oscillation, as described under :ref:`Corner Cases <corner-cases>`.
+
+While the autopilot is engaged it keeps the stock SAS system switched off, so that the
+two do not fight each other for control of the vessel.
+
 Pitch and yaw are not controlled independently of each other. They are computed
 together, in a frame from which the vessel's current roll has been removed (the
-*roll-invariant frame*), so that the nose follows the shortest, great-circle path
+:ref:`roll-invariant frame <roll-invariant-frame>`), so that the nose follows the shortest, great-circle path
 to the target direction and so that rolling the vessel does not disturb that
 path. Roll is controlled separately, and is only blended in once the vessel is
 already pointing close to the target (see :ref:`below
 <target-angular-velocity>`).
-
-The behavior of the autopilot is governed by several parameters, covered in the
-next section. The default values should suffice in most cases.
 
 Configuring the AutoPilot
 -------------------------
@@ -82,7 +91,8 @@ values should suffice in most cases, but they can be adjusted to fit your needs.
 
 * The **deceleration lag correction** (default ``True``) controls whether the linear
   term of the :ref:`stopping-distance feedforward <target-angular-velocity>` is
-  included. It should be disabled for large, structurally flexible rockets — see
+  included. Structurally flexible rockets are handled automatically and do not normally
+  need this changed; it remains available as an override — see
   :ref:`Corner Cases <corner-cases>`.
 
 * The **gyroscopic compensation** (default ``True``) controls whether the autopilot
@@ -135,34 +145,99 @@ flexible beam: KSP joins parts with springy joints, so the vessel bends. The
 autopilot measures angular velocity at the vessel's root part, so this measured
 value contains an oscillating component from the structural bending modes —
 typically of the order of 0.01 to 0.1 rad/s — even when the vessel as a whole is
-barely rotating. If the autopilot reacts to this oscillation it can pump energy
-into the bending mode and drive a growing wobble. Two adjustments help.
+barely rotating. If the autopilot reacted to this oscillation it would pump energy
+into the bending mode and drive a growing wobble.
 
-First, **disable the deceleration lag correction** by setting deceleration lag
-correction to ``False``. The linear term of the :ref:`stopping-distance feedforward
-<stopping-distance-feedforward>` divides the measured angular velocity by the controller
-bandwidth. At a bandwidth of a few rad/s, a 0.05 rad/s bending oscillation adds of the
-order of a degree of spurious correction — enough to flip the sign of
-:math:`\theta_{ff}` on each bending cycle, so that the autopilot commands braking torque
-every cycle and excites the bending mode. The quadratic term, which is always used, adds
-well under 0.1° at the same amplitude and cannot flip the sign, so the quadratic term
-alone is well behaved.
+**This is handled automatically — no tuning is required.** The autopilot watches for
+the tell-tale signature of a bending-mode limit cycle (the measured rate changing from
+one tick to the next by more than the available torque could physically cause) and, on
+the affected axes only, adapts itself: it low-pass filters the measured rate, computes
+its feedforward from the commanded trajectory rather than the noisy measurement, and
+lowers the inner-loop bandwidth so the loop no longer responds to — and drives — the
+bending oscillation. A rigid or high-authority craft never triggers this and is left
+completely unchanged, so the adaptation is safe to leave always on. A flexible craft
+will therefore settle and hold steadily on the default parameters.
 
-Second, **increase the time to peak** on the pitch and yaw axes. This lowers the natural
-frequency :math:`\omega_0 = \pi / (T_P\sqrt{1-\zeta^2})`, and hence the closed-loop
-bandwidth :math:`2\zeta\omega_0`, keeping it well below the structural resonance
-frequency so that the PI controller no longer responds to, and drives, the bending
-oscillations.
+In more detail, the detector tracks each axis independently and produces a level between
+0 and 1 measuring how strongly that axis is oscillating. This level rises quickly when
+excitation appears but decays slowly once it subsides, so the quiet, well-behaved state
+that the adaptation produces does not immediately switch the adaptation back off and let
+the oscillation return. The level also persists if the autopilot is briefly disengaged
+and re-engaged, so a craft known to be flexible stays damped. The three adaptations are
+blended in proportion to this level rather than switched abruptly on and off, so the
+transition between the rigid and flexible regimes is smooth.
 
-For example, for a large, flexible launcher::
+The older manual levers remain available as overrides for unusual cases. Disabling the
+:ref:`deceleration lag correction <stopping-distance-feedforward>` drops the linear
+stopping-distance term (whose division of the measured rate by the controller bandwidth
+amplifies bending content), and increasing the time to peak on the pitch and yaw axes
+lowers the closed-loop bandwidth :math:`2\zeta\omega_0`, keeping it below the structural
+resonance::
 
    ap = vessel.auto_pilot
    ap.decel_lag_correction = False
    ap.time_to_peak = (20, 1, 20)  # slower pitch and yaw; roll can stay fast
 
 Roll is typically far less affected, as it is driven by reaction wheels
-distributed throughout the vessel rather than by the engine gimbal at the base,
-so its time to peak can usually be left short.
+distributed throughout the vessel rather than by the engine gimbal at the base.
+
+When the controlling client disconnects
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The autopilot is engaged by a client over the network. If that client disconnects
+while the autopilot is still engaged, the autopilot resets its target to zero pitch
+and heading in the vessel's surface reference frame, with roll left uncontrolled, and
+disengages. This ensures that a dropped connection does not leave the vessel locked to
+a stale target with no way to release it.
+
+.. _roll-invariant-frame:
+
+The roll-invariant frame
+------------------------
+
+Pitch and yaw are computed in a *roll-invariant frame*: the vessel body frame with the
+vessel's current roll removed. It shares the vessel's nose direction, but its pitch and
+yaw axes are held fixed relative to the autopilot reference frame for the current
+pointing direction, rather than turning with the vessel as it rolls.
+
+The reason for this is decoupling. If the pitch and yaw controllers ran directly in the
+body frame, then as the vessel rolled its body pitch and yaw axes would rotate around
+the nose. A roll correction would then change which axis a given direction error
+projects onto, disturbing the path the nose takes towards the target. Removing the roll
+means that roll corrections and pitch/yaw corrections do not interfere with one another.
+
+The roll angle :math:`\varphi` is recovered each tick from the vessel's body x-axis
+expressed in the roll-invariant frame. Pitch/yaw quantities are rotated from the body
+frame into the roll-invariant frame by a rotation of :math:`\varphi` about the nose:
+
+.. math::
+   \begin{pmatrix} p \\ y \end{pmatrix}_{\!ri} =
+   \begin{pmatrix} \cos\varphi & \sin\varphi \\ -\sin\varphi & \cos\varphi \end{pmatrix}
+   \begin{pmatrix} p \\ y \end{pmatrix}_{\!body}
+
+The pitch and yaw controllers run in this frame, and their outputs are rotated back into
+the body frame (by :math:`-\varphi`) to become the actual pitch and yaw control inputs.
+Roll is measured about the nose itself, which the rotation leaves unchanged, so the roll
+controller needs no transformation.
+
+Separating the direction and roll errors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The attitude error has two parts — a *direction* error (where the nose points) and a
+*roll* error (the rotation about the nose) — and the autopilot computes them separately
+rather than from a single combined error rotation.
+
+The direction error is the shortest rotation that brings the nose from its current
+direction onto the target direction. The axis of this rotation is perpendicular to the
+nose, so it represents pure pitch and yaw with no roll component. This is what the
+pitch/yaw velocity profile acts on.
+
+The roll error is whatever rotation remains once the direction has been aligned. Its
+axis is *not* generally aligned with the nose while the direction error is large, so
+folding it into the direction error would contaminate the pitch and yaw errors and curve
+the nose's path. Instead the residual rotation is projected onto the nose axis,
+extracting only the part that is a genuine roll, and that component is scaled by the roll
+blend weight (see :ref:`Roll <roll-control>` below) before being used.
 
 .. _target-angular-velocity:
 
@@ -281,7 +356,8 @@ true stopping distance is larger. It is approximated by:
 where :math:`\text{bw}` is the closed-loop bandwidth (see :ref:`Tuning the Controllers
 <tuning-the-controllers>` for :math:`K_P`, :math:`\zeta` and :math:`\omega_0`). The
 linear term is only included when deceleration lag correction is enabled. It improves
-the approach on small, rigid craft, but must be disabled for large flexible rockets —
+the approach on small, rigid craft; on large flexible rockets the autopilot suppresses
+the bending mode automatically (the correction can also be disabled manually) —
 see :ref:`Corner Cases <corner-cases>`.
 
 Pitch and yaw together
@@ -294,42 +370,47 @@ rotation would then differ from the direction of the error, and the nose would
 trace a curved path to the target.
 
 To avoid this, pitch and yaw are treated as a single two-dimensional problem in
-the roll-invariant frame. The autopilot computes the total direction error:
+the roll-invariant frame. Rather than building a setpoint along the current error
+direction, the autopilot predicts the **stopping point as a vector** — where the nose
+would coast to if the current angular velocity :math:`\boldsymbol{\omega}` were braked
+at full authority — and aims the velocity profile straight at it:
 
 .. math::
-   \theta_{2d} = \sqrt{\theta_{pitch}^2 + \theta_{yaw}^2}
+   \boldsymbol{e}_{stop} &= \boldsymbol{\theta} + c\,\boldsymbol{\omega} \\
+   \hat{s} &= \frac{\boldsymbol{e}_{stop}}{\lvert\boldsymbol{e}_{stop}\rvert} \\
+   (\omega_{pitch},\,\omega_{yaw}) &= -\hat{s}\;
+       \min\big(\omega_{max},\ \sqrt{2\alpha\lvert\boldsymbol{e}_{stop}\rvert}\big)\,
+       f_a(\lvert\boldsymbol{e}_{stop}\rvert)
 
-applies the profile (including the feedforward and attenuation) once to
-:math:`\theta_{2d}`, and then distributes the resulting speed back across the
-pitch and yaw axes in proportion to the error in each. The acceleration
-:math:`\alpha` and the cap :math:`\omega_{max}` used are likewise projected along
-the error direction. This makes the nose follow the shortest, great-circle path
-to the target.
+where :math:`\boldsymbol{\theta} = (\theta_{pitch}, \theta_{yaw})` is the direction
+error and :math:`c\,\boldsymbol{\omega}` is the predicted coasting displacement. The
+coefficient :math:`c` is the same stopping distance as in the one-dimensional case —
+the larger in magnitude of the quadratic (bang-bang) and linear (PID-lag) terms, which
+are both collinear with :math:`\boldsymbol{\omega}` and so collapse to a single scalar.
+The acceleration :math:`\alpha` and the cap :math:`\omega_{max}` are projected along
+:math:`\hat{\boldsymbol{\omega}}` for the prediction and along :math:`\hat{s}` for the
+speed profile. This makes the nose follow the shortest, great-circle path to the target.
 
 Tangential damping
 ^^^^^^^^^^^^^^^^^^
 
-The setpoint computed above is directed purely along the error direction :math:`\hat{d}` — it
-is a *radial* setpoint. When the vessel has an angular velocity component
-*perpendicular* to that direction — for example after a keyboard nudge — the radial setpoint
-provides centripetal force (it keeps pulling the nose toward the target) but no braking of the
-tangential motion. The nose can therefore enter a self-sustaining circular orbit around the
-target direction: the radial correction keeps it on the circle while the tangential velocity is
-never canceled.
+Aiming at the predicted stopping point gives tangential damping for free, with no
+separate term. When the vessel has an angular velocity component *perpendicular* to the
+error direction — for example after a keyboard nudge — the coasting displacement
+:math:`c\,\boldsymbol{\omega}` tilts :math:`\boldsymbol{e}_{stop}` off-axis, rotating
+:math:`\hat{s}` so that the command :math:`-\hat{s}\,(\dots)` acquires a component
+opposing the sideways drift. The autopilot therefore leads the turn to place the
+predicted stopping point on the target, rather than letting the nose enter a
+self-sustaining circular orbit around the target direction and correcting it after the
+fact.
 
-To break this orbit, the perpendicular (tangential) component of the current angular velocity
-is subtracted from the setpoint:
-
-.. math::
-   \boldsymbol{\omega}_{perp} &= \boldsymbol{\omega}_{2d} -
-       (\boldsymbol{\omega}_{2d} \cdot \hat{d})\,\hat{d} \\
-   (\omega_{pitch},\,\omega_{yaw}) &= \omega_{2d} \cdot f_a \cdot \hat{d}
-       - \boldsymbol{\omega}_{perp}
-
-where :math:`\boldsymbol{\omega}_{2d}` is the pitch–yaw part of the vessel's current angular
-velocity in the roll-invariant frame. The inner PID controller then applies torque to cancel
-the tangential motion directly. During a normal approach :math:`\boldsymbol{\omega}_{perp}
-\approx 0`, so the term is dormant and does not affect settling behavior.
+When the angular velocity is purely along the error direction
+(:math:`\boldsymbol{\omega}_{\perp} = 0`) the law reduces exactly to the
+one-dimensional profile applied along that direction, so great-circle slews and ordinary
+settling are unchanged; the off-axis behavior appears only in the nudge/orbit regime.
+The singularity guard is on :math:`\lvert\boldsymbol{e}_{stop}\rvert` rather than
+:math:`\theta`: only when both the error and the predicted drift vanish is there nothing
+to command.
 
 .. _acceleration-feedforward:
 
@@ -344,7 +425,7 @@ acceleration the vessel must produce to stay on the trajectory:
    \alpha_{ref} = \frac{d\omega_{ref}}{dt}
 
 The autopilot approximates this numerically from the change in setpoint between the
-current and previous physics tick, then normalises by the maximum angular acceleration:
+current and previous physics tick, then normalizes by the maximum angular acceleration:
 
 .. math::
    x_{ff} = \frac{\alpha_{ref}}{\alpha} =
@@ -359,7 +440,7 @@ clamping to :math:`[-1, 1]`:
 When the vessel is following the trajectory perfectly, the PI error
 :math:`\omega_{ref} - \omega` is near zero and the feedforward alone drives the
 actuators. The PI controller then only needs to correct for disturbances (atmospheric
-drag, centre-of-mass offsets) rather than the trajectory itself, cleanly separating the
+drag, center-of-mass offsets) rather than the trajectory itself, cleanly separating the
 two concerns so they can be tuned independently.
 
 On the first physics tick after the autopilot starts,
@@ -391,7 +472,7 @@ couples the axes through a gyroscopic term:
 The cross term :math:`\boldsymbol{\omega}\times(I\boldsymbol{\omega})` is a torque that
 the per-axis model ignores; left uncorrected the PI controllers would have to reject it
 as a disturbance. The autopilot instead cancels it directly, adding a feedforward control
-fraction equal to the negative of that torque normalised by the available torque on each
+fraction equal to the negative of that torque normalized by the available torque on each
 axis:
 
 .. math::
@@ -407,6 +488,8 @@ angular rates of normal attitude holding — including the structural bending os
 that affects flexible craft — and only becomes significant for fast slews or vessels with
 strongly asymmetric inertia. It can be disabled with the gyroscopic compensation
 parameter.
+
+.. _roll-control:
 
 Roll
 ^^^^
@@ -533,4 +616,56 @@ nominal trajectory demand, the PI controller only needs to reject disturbances �
 small, slowly-varying corrections from atmospheric drag, off-axis thrust, or mass
 changes. The gains :math:`K_P` and :math:`K_I` derived from the overshoot and
 time-to-peak parameters remain valid for this purpose, and the same settings produce a
-less loaded controller that relies more on the feedforward for large manoeuvres.
+less loaded controller that relies more on the feedforward for large maneuvers.
+
+Integral anti-windup
+^^^^^^^^^^^^^^^^^^^^^
+
+The integral term of a PI controller can *wind up* — accumulate a large value — whenever
+the controller is unable to reduce the error for a sustained period, for example during a
+long slew while the output is already saturated. A wound-up integral then overshoots
+badly once the error finally clears, because it takes time to unwind. To prevent this,
+the controllers use *conditional integration*: the integral stops accumulating whenever
+it is already at the :math:`[-1, 1]` output limit and the new contribution would only
+push it further into saturation. The integral term is also reset outright in the special
+cases described under :ref:`Corner Cases <corner-cases>` — on the launchpad, and on any
+axis that currently has no available torque.
+
+Limitations
+-----------
+
+Some limitations remain, and are worth being aware of when relying on the autopilot.
+
+The torque model assumes a constant maximum torque on each axis. This is accurate for
+reaction wheels, but only approximate for RCS thrusters (which are discrete and often
+asymmetric) and for engine gimbals and control surfaces (whose authority varies with
+throttle and with dynamic pressure). The fine-control mode (Caps Lock), which halves RCS
+and reaction-wheel authority, is also not modeled. The auto-tuner recomputes the gains
+every tick from the currently available torque, so it adapts as these change, but only as
+fast as the inner loop can respond.
+
+While the autopilot detects and damps structural flexibility automatically, it does so by
+reducing the affected craft's control bandwidth rather than by notching out the specific
+bending frequency, so a very flexible craft is held a little more gently than a rigid one.
+This also produces a brief transient during a large slew: as the craft accelerates quietly
+the bandwidth drifts back up, then re-tightens when full-torque braking begins, giving a
+few seconds of mild oscillation mid-slew before a clean hold. Estimating the bending
+frequency and applying a notch filter at it — which would damp the mode without reducing
+the bandwidth at all — is the preferred long-term improvement.
+
+The flexibility detector's thresholds are fixed constants, tuned against the craft tested
+so far. A craft with an unusually high or low bending frequency, or whose dominant bending
+mode is on the roll axis, has not been exercised and may not be handled as well.
+
+Finally, the autopilot is designed for, and tested in, vacuum. It is a closed-loop
+attitude tracker: aerodynamic torques appear to it as disturbances that the inner loop
+only rejects once an error has built up. In a thick atmosphere — during ascent through
+maximum dynamic pressure, or re-entry at a high angle of attack — the aerodynamic torque
+can be large and fast-changing, and may even exceed the vessel's control authority. The
+autopilot will still drive towards the target, but a low-authority craft can lag the
+target by many degrees, or fail to hold attitude at all. It also does **not** manage angle
+of attack: keeping the vessel within safe structural and thermal limits in atmosphere is
+the responsibility of your script, not the autopilot. A planned improvement is an
+aerodynamic disturbance feedforward, which would estimate the current aerodynamic torque
+and cancel it before it becomes a tracking error, collapsing the lag even under heavy
+aerodynamic loading.
