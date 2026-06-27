@@ -561,13 +561,34 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
-        /// Compute the joint pitch/yaw target angular velocity in the 2D roll-invariant xz-plane.
+        /// Compute the joint pitch/yaw target angular velocity in the 2D roll-invariant xz-plane:
+        /// aim the velocity profile at the predicted stopping point.
         /// </summary>
         /// <remarks>
-        /// Per-axis bang-bang gives ω ∝ sqrt(|θ|) per component, so the velocity direction differs
-        /// from the error direction and the path curves. Treating pitch/yaw jointly applies the
-        /// profile once to the total 2D error magnitude, then scales the result back along the unit
-        /// error direction, giving ω ∝ |θ|_total in the error direction and a straight path.
+        /// Predict where the nose coasts to if the current angular velocity is braked at full
+        /// authority — the stopping point as a *vector* — and command the profile straight at it:
+        /// <code>
+        ///   e_stop = θ + coeff·ω          (coeff·ω is the full-authority stopping displacement)
+        ///   ŝ      = e_stop / |e_stop|
+        ///   ω_ref  = -ŝ · speed(|e_stop|) · attenuation(|e_stop|)
+        /// </code>
+        /// Tangential damping emerges from the geometry: a sideways drift gives <c>coeff·ω</c> an
+        /// off-axis component, tilting <c>e_stop</c> and rotating <c>ŝ</c> so the command acquires a
+        /// component opposing the drift. No separate <c>-ω⊥</c> term is needed — the controller leads
+        /// the turn to place the predicted stopping point on the target instead of correcting the
+        /// orbit after the fact.
+        ///
+        /// When ω is purely radial (ω⊥ = 0) the command reduces to a pure 1D bang-bang profile along
+        /// the error direction: with ω = ω∥·ê, <c>coeff·ω = ½ω∥|ω∥|/α · ê</c>, so
+        /// <c>e_stop = θ_ff·ê</c>, <c>ŝ = sign(θ_ff)·ê</c> and great-circle slews and radial settling
+        /// are a straight-line speed profile. The off-axis behaviour appears only when ω⊥ ≠ 0 — the
+        /// nudge/orbit regime. The stopping displacement is C1 in ω (no radial/tangential seam, no
+        /// <c>-ω⊥</c> step), so the acceleration feedforward does not step.
+        ///
+        /// Anisotropy (design §6, option b): project α (and the PID bandwidth) along ω̂ for the
+        /// prediction and along ŝ for the speed profile. Projecting the prediction along ω̂ rather
+        /// than ê is what makes <c>e_stop</c> well-defined even at θ = 0, and it coincides with ê
+        /// when ω is radial, so the radial reduction above is preserved.
         /// </remarks>
         void ComputePitchYawVelocity (Vector3d anglesRI, Vector3d currentOmegaRi, Vector3d torque,
             Vector3d moi, out double pitchVelocity, out double yawVelocity)
@@ -577,73 +598,75 @@ namespace KRPC.SpaceCenter.AutoPilot
 
             var thetaPitch = GeometryExtensions.ToRadians (anglesRI.x);
             var thetaYaw = GeometryExtensions.ToRadians (anglesRI.z);
-            var theta2d = Math.Sqrt (thetaPitch * thetaPitch + thetaYaw * thetaYaw);
-            if (theta2d <= MinThetaForJointProfile)
-                return;
 
-            var dirPitch = thetaPitch / theta2d;
-            var dirYaw = thetaYaw / theta2d;
-
-            // Acceleration projected along the path direction
             var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
             var alphaYaw = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
-            var alpha2d = dirPitch * dirPitch * alphaPitch + dirYaw * dirYaw * alphaYaw;
 
-            // Current omega projected along path for stopping-distance feedforward.
-            // corrQuad (ω²/2α) is the bang-bang stopping distance: always used.
-            // corrLinear (ω/bandwidth) is the PID-lag stopping distance: valid when the PID is
-            // unsaturated and decelerating more slowly than full torque. It is the larger
-            // correction in that regime and prevents overshoot on rigid craft. However, it
-            // amplifies structural bending-mode noise on flexible rockets — set DecelLagCorrection
-            // to false to suppress it and use corrQuad only.
-            var omega2d = currentOmegaRi.x * dirPitch + currentOmegaRi.z * dirYaw;
+            // Stopping-displacement coefficient (>= 0): e_stop = θ + coeff·ω. The quadratic
+            // (bang-bang, ω²/2α) and linear (PID-lag, ω/bandwidth) stopping displacements are both
+            // collinear with ω, so taking the larger collapses to a scalar max of their coefficients.
+            // α and the bandwidth are projected along ω̂ (the brake path is along ω); this coincides
+            // with the error-direction projection when ω is radial, preserving the legacy reduction,
+            // and stays defined as θ → 0. DecelLagCorrection gates the linear term exactly as before.
+            var omegaPitch = currentOmegaRi.x;
+            var omegaYaw = currentOmegaRi.z;
+            var omegaMag = Math.Sqrt (omegaPitch * omegaPitch + omegaYaw * omegaYaw);
 
-            var theta2dFf = theta2d;
-            if (alpha2d > 0) {
-                var corrQuad = 0.5 * omega2d * Math.Abs (omega2d) / alpha2d;
-                var corr = corrQuad;
-                if (DecelLagCorrection) {
-                    var bw0 = moi [0] > 0 ? PitchPID.Kp * torque [0] / moi [0] : 0.0;
-                    var bw2 = moi [2] > 0 ? YawPID.Kp * torque [2] / moi [2] : 0.0;
-                    var bandwidth2d = dirPitch * dirPitch * bw0 + dirYaw * dirYaw * bw2;
-                    if (bandwidth2d > 0) {
-                        var corrLinear = omega2d / bandwidth2d;
-                        corr = Math.Abs (corrQuad) >= Math.Abs (corrLinear) ? corrQuad : corrLinear;
+            double coeff = 0;
+            if (omegaMag > 0) {
+                var oPitch = omegaPitch / omegaMag;
+                var oYaw = omegaYaw / omegaMag;
+                var alphaOmega = oPitch * oPitch * alphaPitch + oYaw * oYaw * alphaYaw;
+                if (alphaOmega > 0) {
+                    var coeffQuad = omegaMag / (2.0 * alphaOmega);
+                    coeff = coeffQuad;
+                    if (DecelLagCorrection) {
+                        var bw0 = moi [0] > 0 ? PitchPID.Kp * torque [0] / moi [0] : 0.0;
+                        var bw2 = moi [2] > 0 ? YawPID.Kp * torque [2] / moi [2] : 0.0;
+                        var bandwidthOmega = oPitch * oPitch * bw0 + oYaw * oYaw * bw2;
+                        if (bandwidthOmega > 0)
+                            coeff = Math.Max (coeffQuad, 1.0 / bandwidthOmega);
                     }
                 }
-                theta2dFf += corr;
             }
 
-            // Maximum 2D velocity: constraint ellipse radius in the direction (dirPitch, dirYaw)
+            var eStopPitch = thetaPitch + coeff * omegaPitch;
+            var eStopYaw = thetaYaw + coeff * omegaYaw;
+            var eStopMag = Math.Sqrt (eStopPitch * eStopPitch + eStopYaw * eStopYaw);
+
+            // Singularity guard on |e_stop| (not θ): both the error and the predicted drift must
+            // vanish before there is nothing to command. If e_stop ≈ 0 the nose is predicted to
+            // coast exactly to the target, so commanding zero is correct.
+            if (eStopMag <= MinThetaForJointProfile)
+                return;
+
+            var sPitch = eStopPitch / eStopMag;
+            var sYaw = eStopYaw / eStopMag;
+
+            // Speed profile along the stopping-point direction ŝ: project α and the max-velocity
+            // constraint ellipse along ŝ.
+            var alpha2d = sPitch * sPitch * alphaPitch + sYaw * sYaw * alphaYaw;
+
             var maxVPitch = MaxAngularVelocity [0];
             var maxVYaw = MaxAngularVelocity [2];
             var maxV2d = (maxVPitch > 0 && maxVYaw > 0)
-                ? Math.Sqrt (1.0 / (dirPitch * dirPitch / (maxVPitch * maxVPitch) + dirYaw * dirYaw / (maxVYaw * maxVYaw)))
+                ? Math.Sqrt (1.0 / (sPitch * sPitch / (maxVPitch * maxVPitch) + sYaw * sYaw / (maxVYaw * maxVYaw)))
                 : Math.Min (maxVPitch, maxVYaw);
 
-            double velocity2d = 0;
+            double speed = 0;
             if (alpha2d > 0)
-                velocity2d = -Math.Sign (theta2dFf) * Math.Min (maxV2d, Math.Sqrt (2.0 * Math.Abs (theta2dFf) * alpha2d));
+                speed = Math.Min (maxV2d, Math.Sqrt (2.0 * eStopMag * alpha2d));
 
             var attAngle2d = GeometryExtensions.ToRadians (Math.Min (AttenuationAngle [0], AttenuationAngle [2]));
-            var attenuation2d = 1.0 / (1.0 + Math.Exp (-((Math.Abs (theta2dFf) - attAngle2d) * (AttenuationSigmoidSlope / attAngle2d))));
+            var attenuation2d = 1.0 / (1.0 + Math.Exp (-((eStopMag - attAngle2d) * (AttenuationSigmoidSlope / attAngle2d))));
             if (double.IsNaN (attenuation2d))
                 attenuation2d = 0;
 
-            pitchVelocity = velocity2d * attenuation2d * dirPitch;
-            yawVelocity = velocity2d * attenuation2d * dirYaw;
-
-            // Damp the perpendicular (tangential) component of the current angular velocity.
-            // The outer-loop setpoint above is purely radial (toward the target direction).
-            // When the vessel has tangential angular velocity — e.g. after a nudge that puts it
-            // into a circular orbit around the target — the radial setpoint provides centripetal
-            // force but no tangential braking.  That allows a self-sustaining limit cycle: the
-            // controller pulls the nose toward the target while the nose circles around it at
-            // constant radius.  Subtracting the perpendicular component of the current omega from
-            // the setpoint makes the inner PID cancel the tangential motion directly, breaking the
-            // orbit.  During a normal radial approach omega_perp ≈ 0, so this term is dormant.
-            pitchVelocity -= currentOmegaRi.x - omega2d * dirPitch;
-            yawVelocity -= currentOmegaRi.z - omega2d * dirYaw;
+            // Command toward the stopping point. The leading minus defines the controller's positive
+            // angular-velocity direction (left-handed sense; matched to the negation in
+            // ComputeCurrentAngularVelocity), exactly as the legacy -Math.Sign(θ_ff) did.
+            pitchVelocity = -sPitch * speed * attenuation2d;
+            yawVelocity = -sYaw * speed * attenuation2d;
         }
 
         /// <summary>
