@@ -186,7 +186,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         private TupleV3 GetTorqueVectors()
         {
             var frame = Part.Vessel.ReferenceFrame;
-            var thrust = MaxThrust;
+            var thrust = AvailableThrust;
             double torqueX = 0;
             double torqueXn = 0;
             double torqueY = 0;
@@ -228,7 +228,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         private TupleV3 GetForceVectors ()
         {
             var frame = Part.Vessel.ReferenceFrame;
-            var thrust = MaxThrust;
+            // Thrust-limited (and fuel-gated) thrust, so available force reflects the thrust limiter
+            // (consistent with GetTorqueVectors).
+            var thrust = AvailableThrust;
             var force = Vector3d.zero;
             var forceN = Vector3d.zero;
             foreach (var thruster in Thrusters) {
