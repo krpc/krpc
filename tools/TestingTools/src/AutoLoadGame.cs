@@ -26,6 +26,7 @@
  */
 
 using System;
+using System.IO;
 using SaveUpgradePipeline;
 using UnityEngine;
 
@@ -34,27 +35,31 @@ namespace TestingTools
     /// <summary>
     /// Addon that automatically loads a save when the game starts
     /// </summary>
-    [KSPAddon (KSPAddon.Startup.MainMenu, false)]
+    [KSPAddon(KSPAddon.Startup.MainMenu, false)]
     public sealed class AutoLoadGame : MonoBehaviour
     {
         /// <summary>
         /// Name of the game to load.
         /// </summary>
         public static string Game {
-            get { return "default"; }
+            get { return Options.Game; }
         }
 
         /// <summary>
         /// Name of the save file to load.
         /// </summary>
         public static string Save {
-            get { return "persistent"; }
+            get { return Options.Save; }
         }
 
         /// <summary>
         /// Whether the game has been loaded.
         /// </summary>
         public static bool Loaded { get; private set; }
+
+        static TestingToolsOptions Options {
+            get { return TestingToolsOptions.Instance; }
+        }
 
         /// <summary>
         /// Initialize the addon.
@@ -64,19 +69,27 @@ namespace TestingTools
             GameEvents.onLevelWasLoadedGUIReady.Add(OnLevelWasLoaded);
         }
 
+        /// <summary>
+        /// Destroy the addon.
+        /// </summary>
+        public void OnDestroy()
+        {
+            GameEvents.onLevelWasLoadedGUIReady.Remove(OnLevelWasLoaded);
+        }
+
         void OnLevelWasLoaded(GameScenes scene)
         {
             if (scene == GameScenes.MAINMENU)
                 StartCoroutine(CallbackUtil.DelayedCallback(15, LoadGame));
         }
 
-        static void LoadGame ()
+        static void LoadGame()
         {
             if (Loaded)
                 return;
             Loaded = true;
 
-            Console.WriteLine("[kRPC testing tools]: Loading game \"" + Game + "\"");
+            Console.WriteLine("[kRPC testing tools]: Loading game \"" + Game + "\" save \"" + Save + "\"");
             var gameObj = GamePersistence.LoadSFSFile(Save, Game);
             if (gameObj == null) {
                 Console.WriteLine("[kRPC testing tools]: Failed to load game, got null when loading sfs file");
@@ -102,25 +115,130 @@ namespace TestingTools
                 return;
             }
 
-            // Find the vessel to switch to
-            bool foundVessel = false;
-            int vesselIdx = 0;
-            foreach (var vessel in HighLogic.CurrentGame.flightState.protoVessels) {
-               if (vessel.vesselType != VesselType.SpaceObject) {
-                   foundVessel = true;
-                   break;
-                }
-                vesselIdx++;}
-            if (!foundVessel) {
-                Console.WriteLine("[kRPC testing tools]: Failed to find vessel to switch to");
-                return;
-            }
-            AutoSwitchVessel.Vessel = vesselIdx;
-
             // Load the game
             HighLogic.CurrentGame.startScene = GameScenes.SPACECENTER;
             HighLogic.SaveFolder = Game;
+
+            if (Options.HasCraft) {
+                if (!PrepareCraftLaunch(Options))
+                    return;
+                AutoSwitchVessel.SetCraftLaunch(
+                    Options.Craft, Options.CraftDirectory, Options.LaunchSite);
+            } else {
+                var vesselIdx = FindVesselToSwitchTo(Options);
+                if (vesselIdx < 0) {
+                    Console.WriteLine("[kRPC testing tools]: Failed to find vessel to switch to");
+                    return;
+                }
+                AutoSwitchVessel.Vessel = vesselIdx;
+            }
+
             HighLogic.CurrentGame.Start();
+        }
+
+        static int FindVesselToSwitchTo(TestingToolsOptions options)
+        {
+            var vessels = HighLogic.CurrentGame.flightState.protoVessels;
+            if (options.Vessel.HasValue) {
+                var vesselIdx = options.Vessel.Value;
+                if (vesselIdx >= 0 && vesselIdx < vessels.Count) {
+                    Console.WriteLine("[kRPC testing tools]: Switching to vessel index " + vesselIdx);
+                    return vesselIdx;
+                }
+                Console.WriteLine(
+                    "[kRPC testing tools]: Vessel index " + vesselIdx +
+                    " is out of range; falling back to the first non-space-object vessel");
+            }
+
+            for (int i = 0; i < vessels.Count; i++) {
+                if (vessels [i].vesselType != VesselType.SpaceObject)
+                    return i;
+            }
+            return -1;
+        }
+
+        static bool PrepareCraftLaunch(TestingToolsOptions options)
+        {
+            var craftName = options.Craft;
+            var targetDirectory = Path.Combine(
+                KSPUtil.ApplicationRootPath, "saves", Game, "Ships", options.CraftDirectory);
+            var targetCraft = Path.Combine(targetDirectory, craftName + ".craft");
+            var sourceCraft = FindCraftSource(options);
+
+            if (sourceCraft == null) {
+                if (File.Exists(targetCraft)) {
+                    Console.WriteLine(
+                        "[kRPC testing tools]: Launching already-staged " +
+                        options.CraftDirectory + " craft \"" + craftName + "\"");
+                    return true;
+                }
+                Console.WriteLine(
+                    "[kRPC testing tools]: Failed to find craft \"" + craftName +
+                    "\" in save Ships/" + options.CraftDirectory +
+                    " (pass --krpc-auto-load-craft-fixture-dir to stage one from elsewhere)");
+                return false;
+            }
+
+            try {
+                Directory.CreateDirectory(targetDirectory);
+                CopyFileIfDifferent(sourceCraft, targetCraft);
+
+                var sourceLoadMeta = Path.ChangeExtension(sourceCraft, ".loadmeta");
+                if (File.Exists(sourceLoadMeta)) {
+                    var targetLoadMeta = Path.Combine(targetDirectory, craftName + ".loadmeta");
+                    CopyFileIfDifferent(sourceLoadMeta, targetLoadMeta);
+                }
+
+                Console.WriteLine(
+                    "[kRPC testing tools]: Staged " + options.CraftDirectory +
+                    " craft \"" + craftName + "\" from " + sourceCraft);
+                return true;
+            } catch (Exception e) {
+                Console.WriteLine(
+                    "[kRPC testing tools]: Failed to stage craft \"" + craftName + "\": " + e);
+                return false;
+            }
+        }
+
+        static string FindCraftSource(TestingToolsOptions options)
+        {
+            // Without an explicit fixture directory, the craft is expected to be
+            // already staged in the save's Ships directory; PrepareCraftLaunch
+            // handles that case when this returns null.
+            if (string.IsNullOrEmpty(options.CraftFixtureDirectory))
+                return null;
+
+            var source = FindCraftInDirectory(options.CraftFixtureDirectory, options.Craft);
+            if (source == null)
+                Console.WriteLine(
+                    "[kRPC testing tools]: Craft \"" + options.Craft +
+                    "\" was not found in fixture directory " + options.CraftFixtureDirectory);
+            return source;
+        }
+
+        static string FindCraftInDirectory(string directory, string craftName)
+        {
+            try {
+                var path = Path.Combine(directory, craftName + ".craft");
+                return File.Exists(path) ? path : null;
+            } catch (Exception) {
+                return null;
+            }
+        }
+
+        static void CopyFileIfDifferent(string source, string target)
+        {
+            if (PathsEqual(source, target))
+                return;
+            File.Copy(source, target, true);
+        }
+
+        static bool PathsEqual(string first, string second)
+        {
+            return string.Equals(
+                Path.GetFullPath(first).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
+                Path.GetFullPath(second).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
+                StringComparison.OrdinalIgnoreCase);
         }
     }
 }

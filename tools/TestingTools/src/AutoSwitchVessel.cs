@@ -26,6 +26,8 @@
  */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TestingTools
@@ -45,6 +47,20 @@ namespace TestingTools
         }
 
         static int vessel = -1;
+        static string craft;
+        static string craftDirectory = "VAB";
+        static string launchSite = "LaunchPad";
+
+        /// <summary>
+        /// Set the craft to launch after the save has loaded.
+        /// </summary>
+        public static void SetCraftLaunch(string name, string directory, string site)
+        {
+            craft = name;
+            craftDirectory = string.IsNullOrEmpty(directory) ? "VAB" : directory;
+            launchSite = string.IsNullOrEmpty(site) ? "LaunchPad" : site;
+            vessel = -1;
+        }
 
         /// <summary>
         /// Initialize the addon.
@@ -54,10 +70,50 @@ namespace TestingTools
             GameEvents.onLevelWasLoadedGUIReady.Add(OnLevelWasLoaded);
         }
 
+        /// <summary>
+        /// Destroy the addon.
+        /// </summary>
+        public void OnDestroy()
+        {
+            GameEvents.onLevelWasLoadedGUIReady.Remove(OnLevelWasLoaded);
+        }
+
         void OnLevelWasLoaded(GameScenes scene)
         {
-            if (scene == GameScenes.SPACECENTER && Vessel >= 0)
+            if (scene != GameScenes.SPACECENTER)
+                return;
+            if (!string.IsNullOrEmpty(craft))
+                StartCoroutine(CallbackUtil.DelayedCallback(15, LaunchCraft));
+            else if (Vessel >= 0)
                 StartCoroutine(CallbackUtil.DelayedCallback(15, SwitchVessel));
+        }
+
+        void LaunchCraft()
+        {
+            // Snapshot and clear the request up front so a repeated scene load
+            // cannot launch the same craft twice.
+            var name = craft;
+            var directory = craftDirectory;
+            var site = launchSite;
+            craft = null;
+            craftDirectory = "VAB";
+            launchSite = "LaunchPad";
+            if (string.IsNullOrEmpty(name))
+                return;
+            Console.WriteLine(
+                "[kRPC testing tools]: Launching " + directory +
+                " craft \"" + name + "\" at " + site);
+            StartCoroutine(LaunchCraftCoroutine(name, directory, site));
+        }
+
+        static IEnumerator LaunchCraftCoroutine(string name, string directory, string site)
+        {
+            var result = new KRPC.SpaceCenter.Services.SpaceCenter.LaunchResult();
+            yield return KRPC.SpaceCenter.Services.SpaceCenter.LaunchVesselCoroutine(
+                directory, name, site, new List<string>(), result);
+            if (!string.IsNullOrEmpty(result.Error))
+                Console.WriteLine(
+                    "[kRPC testing tools]: Failed to launch craft \"" + name + "\": " + result.Error);
         }
 
         static void SwitchVessel()

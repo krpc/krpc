@@ -385,6 +385,45 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Outcome of <see cref="LaunchVesselCoroutine"/>. Carries the failure reason, if any,
+        /// so the caller decides how to report it. The coroutine itself does not log.
+        /// </summary>
+        internal sealed class LaunchResult
+        {
+            public string Error { get; set; }
+        }
+
+        internal static System.Collections.IEnumerator LaunchVesselCoroutine (
+            string craftDirectory, string name, string launchSite, IList<string> crew,
+            LaunchResult result, bool recover = true, string flagUrl = "")
+        {
+            LaunchConfig config = null;
+            try {
+                CloseDialogs();
+                config = new LaunchConfig(craftDirectory, name, launchSite, recover, crew, flagUrl);
+                config.RunPreFlightChecks();
+            } catch (Exception e) {
+                result.Error = "pre-flight preparation failed: " + e.Message;
+            }
+            if (result.Error != null)
+                yield break;
+
+            while (!config.preFlightChecksComplete && config.error == null)
+                yield return null;
+
+            if (config.error != null) {
+                result.Error = config.error;
+                yield break;
+            }
+
+            try {
+                LaunchConfiguredVessel(config);
+            } catch (Exception e) {
+                result.Error = "launch failed: " + e.Message;
+            }
+        }
+
+        /// <summary>
         /// Wait until pre-flight checks for new vessel are complete.
         /// </summary>
         /// <param name="config">Config.</param>
@@ -394,6 +433,12 @@ namespace KRPC.SpaceCenter.Services
                 throw new InvalidOperationException(config.error);
             if (!config.preFlightChecksComplete)
                 throw new YieldException<Action>(() => WaitForVesselPreFlightChecks(config));
+            LaunchConfiguredVessel(config);
+            throw new YieldException<Action>(() => WaitForVesselSwitch(0));
+        }
+
+        static void LaunchConfiguredVessel(LaunchConfig config)
+        {
             // Check launch site clear
             var vesselsToRecover = ShipConstruction.FindVesselsLandedAt(HighLogic.CurrentGame.flightState, config.LaunchSite);
             if (vesselsToRecover.Any()) {
@@ -405,7 +450,6 @@ namespace KRPC.SpaceCenter.Services
             }
             // Do the actual launch - passed pre-flight checks, and launch site is clear.
             FlightDriver.StartWithNewLaunch(config.Path, config.FlagUrl, config.LaunchSite, config.manifest);
-            throw new YieldException<Action>(() => WaitForVesselSwitch(0));
         }
 
         /// <summary>
