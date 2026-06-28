@@ -1,7 +1,10 @@
 inputs:
   long-version:
     required: false
-    default: 'true'
+    default: "true"
+  ksp-version:
+    required: false
+    default: "1.12.5"
 runs:
   using: composite
   steps:
@@ -12,3 +15,7 @@ runs:
         rm -f lib/mono-4.5
         ln -s /usr/lib/mono/4.5 lib/mono-4.5
       shell: bash
+    - uses: ./.github/actions/bazel-fetch
+    - uses: ./.github/actions/ksp-lib
+      with:
+        version: ${{ inputs.ksp-version }}

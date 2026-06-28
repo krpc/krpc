@@ -27,13 +27,6 @@ jobs:
         uses: ./.github/actions/build-setup
         with:
           long-version: "false"
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: build
         run: |
           bazel build //doc:html

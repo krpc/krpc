@@ -1,35 +1,32 @@
 #!/bin/bash
 # Test building the C++ client using CMake.
-# Builds the release archive with Bazel, then runs CMake build scenario(s):
+# Accepts the release archive as the first argument.
+# Runs CMake build scenario(s):
 #   system) system-installed protobuf + ASIO
-#   fetch)  protobuf + ASIO + abseil fetched via FetchContent (KRPC_FETCH_PROTOBUF/ASIO/ABSL=ON)
+#   fetch)  protobuf + ASIO + abseil fetched via FetchContent (KRPC_FETCH_DEPS=ON)
 # Each is followed by a consumer test using find_package(krpc CONFIG REQUIRED).
-# Usage: test-build.sh [system|fetch]  (default: run both)
+# Usage: test-cmake-linux.sh ARCHIVE [system|fetch]  (default: run both)
 set -e
 set -o pipefail
 set -x
 set -o functrace
 
-mode="${1:-all}"
+archive="$(realpath "${1:?Usage: test-cmake-linux.sh ARCHIVE [system|fetch]}")"
+mode="${2:-all}"
 
 scriptroot="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $scriptroot/../..
+cd "$scriptroot/../.."
 
-root=`pwd`
+root=$(pwd)
 out=$root/bazel-bin/client/cpp/test-build
-version=`tools/krpc-version.sh`
-
-# Build the release archive (this is the only Bazel step)
-bazel build //client/cpp:cpp
-
-bazel_bin=$(bazel info bazel-bin)
+version=$(basename "$archive" .zip | sed 's/krpc-cpp-//')
 
 # Extract the release archive
-rm -rf $out
-mkdir -p $out
-unzip -q $bazel_bin/client/cpp/krpc-cpp-$version.zip -d $out
-mv $out/krpc-cpp-$version/* $out/
-rm -r $out/krpc-cpp-$version
+rm -rf "$out"
+mkdir -p "$out"
+unzip -q "$archive" -d "$out"
+mv "$out/krpc-cpp-$version"/* "$out/"
+rm -r "$out/krpc-cpp-$version"
 
 # Configure krpc; save cmake output to log_file for later verification.
 function cmake_configure {

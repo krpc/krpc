@@ -29,6 +29,38 @@ by searching for and installing "kRPC".
    that they are built using the C++ compiler. This allows the library to use the C++ only
    ``HardwareSerial`` class for communication.
 
+Using vcpkg
+^^^^^^^^^^^
+
+The C-nano client can be installed via `vcpkg <https://vcpkg.io>`_. The port files are included in
+the source archive — `download it from the releases page <https://github.com/krpc/krpc/releases>`_,
+extract it, and install using the bundled overlay port:
+
+On Linux:
+
+.. code-block:: bash
+
+   vcpkg install krpc-cnano --overlay-ports=/path/to/krpc-cnano-VERSION/vcpkg-port
+
+On Windows:
+
+.. code-block:: bash
+
+   vcpkg install krpc-cnano:x64-windows --overlay-ports=C:\path\to\krpc-cnano-VERSION\vcpkg-port
+
+Then integrate with your CMake project by passing the vcpkg toolchain file at configure time:
+
+.. code-block:: bash
+
+   cmake -B build -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
+
+And link the library in your ``CMakeLists.txt``:
+
+.. code-block:: cmake
+
+   find_package(krpc_cnano CONFIG REQUIRED)
+   target_link_libraries(my_app PRIVATE krpc_cnano::krpc_cnano)
+
 Using CMake
 ^^^^^^^^^^^
 

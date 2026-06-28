@@ -37,13 +37,6 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: build
         run: |
           bazel build \
@@ -52,17 +45,17 @@ jobs:
             //tools/krpctools \
             //tools/TestServer:archive
       - name: upload-krpc-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
+        uses: ./.github/actions/upload-artifact
         with:
           name: krpc
           path: bazel-bin/krpc-*.zip
       - name: upload-krpctools-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
+        uses: ./.github/actions/upload-artifact
         with:
           name: krpctools
           path: bazel-bin/tools/krpctools/krpctools-*.tar.gz
       - name: upload-testserver-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
+        uses: ./.github/actions/upload-artifact
         with:
           name: testserver
           path: bazel-bin/tools/TestServer/TestServer-*.zip
@@ -80,17 +73,10 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: build
         run: tools/dist/genfiles.sh
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
+        uses: ./.github/actions/upload-artifact
         with:
           name: genfiles
           path: bazel-bin/krpc-genfiles-*.zip
@@ -109,13 +95,6 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: download-genfiles
         uses: actions/download-artifact@v8
         with:
@@ -129,7 +108,8 @@ jobs:
           msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
           msbuild KRPC.sln /t:Clean,Build -p:Configuration=Release /warnaserror
 
-  build-client-cnano:
+  build-client-cnano-cmake-linux:
+    needs: test-client-cnano
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.8.0
@@ -145,26 +125,77 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
-      - name: setup
-        uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+      - name: download-artifact
+        uses: actions/download-artifact@v8
         with:
-          game: ksp
-          version: 1.12.5
+          name: client-cnano
       - name: ccache-restore
         uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: build-client-cnano-ccache-${{ runner.os }}-${{ hashFiles('client/cnano/CMakeLists.txt.tmpl') }}
+          key: build-client-cnano-cmake-linux-${{ hashFiles('client/cnano/CMakeLists.txt.tmpl') }}
       - name: build-system
-        run: client/cnano/test-build.sh system
+        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system
       - name: build-fetch
-        run: client/cnano/test-build.sh fetch
+        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch
 
-  build-client-cpp:
+  build-client-cnano-cmake-windows:
+    needs: test-client-cnano
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: download-artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: client-cnano
+      - name: vcpkg
+        uses: ./.github/actions/vcpkg-windows
+        with:
+          packages: nanopb:x64-windows
+      - name: test-build
+        shell: bash
+        run: client/cnano/test-cmake-windows.sh
+
+  build-client-cnano-vcpkg-linux:
+    needs: test-client-cnano
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: download-artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: client-cnano
+      - name: vcpkg
+        uses: ./.github/actions/vcpkg-linux
+      - name: test-vcpkg
+        env:
+          VCPKG_ROOT: /usr/local/share/vcpkg
+        run: client/cnano/test-vcpkg-linux.sh krpc-cnano-*.zip
+
+  build-client-cnano-vcpkg-windows:
+    needs: test-client-cnano
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: download-artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: client-cnano
+      - name: vcpkg
+        uses: ./.github/actions/vcpkg-windows
+        with:
+          packages: nanopb:x64-windows
+      - name: test-vcpkg
+        shell: bash
+        env:
+          VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
+        run: client/cnano/test-vcpkg-windows.sh
+
+  build-client-cpp-cmake-linux:
+    needs: test-client-cpp
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.8.0
@@ -180,24 +211,74 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
-      - name: setup
-        uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+      - name: download-artifact
+        uses: actions/download-artifact@v8
         with:
-          game: ksp
-          version: 1.12.5
+          name: client-cpp
       - name: ccache-restore
         uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: build-client-cpp-ccache-${{ runner.os }}-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
+          key: build-client-cpp-cmake-linux-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
       - name: build-system
-        run: client/cpp/test-build.sh system
+        run: client/cpp/test-cmake-linux.sh krpc-cpp-*.zip system
       - name: build-fetch
-        run: client/cpp/test-build.sh fetch
+        run: client/cpp/test-cmake-linux.sh krpc-cpp-*.zip fetch
+
+  build-client-cpp-cmake-windows:
+    needs: test-client-cpp
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: download-artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: client-cpp
+      - name: vcpkg
+        uses: ./.github/actions/vcpkg-windows
+        with:
+          packages: protobuf:x64-windows asio:x64-windows
+      - name: test-build
+        shell: bash
+        run: client/cpp/test-cmake-windows.sh
+
+  build-client-cpp-vcpkg-linux:
+    needs: test-client-cpp
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: download-artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: client-cpp
+      - name: vcpkg
+        uses: ./.github/actions/vcpkg-linux
+      - name: test-vcpkg
+        env:
+          VCPKG_ROOT: /usr/local/share/vcpkg
+        run: client/cpp/test-vcpkg-linux.sh krpc-cpp-*.zip
+
+  build-client-cpp-vcpkg-windows:
+    needs: test-client-cpp
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: download-artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: client-cpp
+      - name: vcpkg
+        uses: ./.github/actions/vcpkg-windows
+        with:
+          packages: protobuf:x64-windows asio:x64-windows
+      - name: test-vcpkg
+        shell: bash
+        env:
+          VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
+        run: client/cpp/test-vcpkg-windows.sh
 
   build-docs-html:
     runs-on: ubuntu-latest
@@ -212,17 +293,10 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: build
         run: bazel build //doc:html
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
+        uses: ./.github/actions/upload-artifact
         with:
           name: docs-html
           path: bazel-bin/doc/html.zip
@@ -240,17 +314,10 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: build
         run: bazel build //doc:pdf
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
+        uses: ./.github/actions/upload-artifact
         with:
           name: docs-pdf
           path: bazel-bin/doc/krpc-*.pdf
@@ -268,13 +335,6 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: build
         run: bazel build //doc:compile-scripts
 
@@ -291,13 +351,6 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: build
         run: bazel test //doc:test
 
@@ -314,13 +367,6 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: test
         run: bazel test //core:test
 
@@ -337,59 +383,15 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: build
         run: bazel build //client/cnano:cnano
       - name: test
         run: bazel test //client/cnano:test
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
+        uses: ./.github/actions/upload-artifact
         with:
           name: client-cnano
           path: bazel-bin/client/cnano/krpc-cnano-*.zip
-
-  test-client-cnano-windows:
-    needs: test-client-cnano
-    runs-on: windows-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v6
-
-      - name: download-artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: client-cnano
-
-      - name: get-vcpkg-hash
-        id: vcpkg-hash
-        shell: pwsh
-        run: |
-          $commitHash = ((vcpkg version)[0] -split ' ')[-1]
-          echo "value=$commitHash" >> $env:GITHUB_OUTPUT
-
-      - name: cache-vcpkg
-        uses: actions/cache@v5
-        with:
-          path: C:\vcpkg-binary-cache
-          key: test-client-cnano-windows-vcpkg-${{ steps.vcpkg-hash.outputs.value }}
-
-      - name: install-deps
-        shell: pwsh
-        env:
-          VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
-        run: |
-          New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
-          vcpkg install nanopb:x64-windows
-
-      - name: test-build
-        shell: bash
-        run: client/cnano/test-build-windows.sh
 
   test-client-cpp:
     runs-on: ubuntu-latest
@@ -404,59 +406,15 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: build
         run: bazel build //client/cpp:cpp
       - name: test
         run: bazel test //client/cpp:test
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
+        uses: ./.github/actions/upload-artifact
         with:
           name: client-cpp
           path: bazel-bin/client/cpp/krpc-cpp-*.zip
-
-  test-client-cpp-windows:
-    needs: test-client-cpp
-    runs-on: windows-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v6
-
-      - name: download-artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: client-cpp
-
-      - name: get-vcpkg-hash
-        id: vcpkg-hash
-        shell: pwsh
-        run: |
-          $commitHash = ((vcpkg version)[0] -split ' ')[-1]
-          echo "value=$commitHash" >> $env:GITHUB_OUTPUT
-
-      - name: cache-vcpkg
-        uses: actions/cache@v5
-        with:
-          path: C:\vcpkg-binary-cache
-          key: test-client-cpp-windows-vcpkg-${{ steps.vcpkg-hash.outputs.value }}
-
-      - name: install-deps
-        shell: pwsh
-        env:
-          VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
-        run: |
-          New-Item -ItemType Directory -Force -Path C:\vcpkg-binary-cache | Out-Null
-          vcpkg install protobuf:x64-windows asio:x64-windows
-
-      - name: test-build
-        shell: bash
-        run: client/cpp/test-build-windows.sh
 
   test-client-csharp:
     runs-on: ubuntu-latest
@@ -471,24 +429,17 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: build
         run: bazel build //client/csharp:csharp //client/csharp:nuget
       - name: test
         run: bazel test //client/csharp:test
-      - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
+      - name: upload-artifact-zip
+        uses: ./.github/actions/upload-artifact
         with:
           name: client-csharp-zip
           path: bazel-bin/client/csharp/krpc-csharp-*.zip
-      - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
+      - name: upload-artifact-nupkg
+        uses: ./.github/actions/upload-artifact
         with:
           name: client-csharp-nupkg
           path: bazel-bin/client/csharp/KRPC.Client.*.nupkg
@@ -506,19 +457,12 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: build
         run: bazel build //client/java:java
       - name: test
         run: bazel test //client/java:test
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
+        uses: ./.github/actions/upload-artifact
         with:
           name: client-java
           path: bazel-bin/client/java/krpc-java-*.jar
@@ -536,19 +480,12 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: build
         run: bazel build //client/python:python
       - name: test
         run: bazel test //client/python:test
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
+        uses: ./.github/actions/upload-artifact
         with:
           name: client-python
           path: bazel-bin/client/python/krpc-python-*.tar.gz
@@ -566,19 +503,12 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: build
         run: bazel build //client/lua:lua
       - name: test
         run: bazel test //client/lua:test
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v2
+        uses: ./.github/actions/upload-artifact
         with:
           name: client-lua
           path: bazel-bin/client/lua/krpc-lua-*.zip
@@ -596,13 +526,6 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: test
         run: bazel test //client/serialio:test
 
@@ -619,13 +542,6 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: test
         run: bazel test //client/websockets:test
 
@@ -642,13 +558,6 @@ jobs:
         uses: actions/checkout@v6
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v3
-      - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
-        with:
-          game: ksp
-          version: 1.12.5
       - name: test
         run: |
           bazel test \
@@ -663,17 +572,21 @@ jobs:
       - build-krpc
       - build-genfiles
       - build-csharp-sln
-      - build-client-cnano
-      - build-client-cpp
+      - build-client-cnano-cmake-linux
+      - build-client-cnano-cmake-windows
+      - build-client-cnano-vcpkg-linux
+      - build-client-cnano-vcpkg-windows
+      - build-client-cpp-cmake-linux
+      - build-client-cpp-cmake-windows
+      - build-client-cpp-vcpkg-linux
+      - build-client-cpp-vcpkg-windows
       - build-docs-html
       - build-docs-pdf
       - build-docs-examples
       - test-docs
       - test-core
       - test-client-cnano
-      - test-client-cnano-windows
       - test-client-cpp
-      - test-client-cpp-windows
       - test-client-csharp
       - test-client-java
       - test-client-python
