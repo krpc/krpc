@@ -27,6 +27,17 @@ namespace TestingTools
         }
 
         /// <summary>
+        /// Quit the game, closing Kerbal Space Program and returning to the desktop.
+        /// Works from any scene, including in-flight, and skips the confirmation dialog
+        /// that the main-menu quit button normally shows.
+        /// </summary>
+        [KRPCProcedure]
+        public static void Quit ()
+        {
+            Application.Quit ();
+        }
+
+        /// <summary>
         /// Load an existing save game.
         /// </summary>
         [KRPCProcedure]
