@@ -60,6 +60,11 @@ Craft launch resolves the craft in one of two ways:
 Launch uses kRPC's internal SpaceCenter launch helper, after the same pre-flight
 checks as the `LaunchVessel` RPC.
 
+If the craft cannot be staged or found, TestingTools logs a warning and still
+loads the save into the Space Center without launching a craft. This keeps KSP
+out of the main menu so a test client can connect and fail with a real assertion
+rather than a connection timeout.
+
 `--krpc-auto-load-craft-fixture-dir` is the source directory for fixture craft
 files. It is not the KSP craft directory. Use
 `--krpc-auto-load-craft-directory=VAB` or `SPH` to choose where the craft is

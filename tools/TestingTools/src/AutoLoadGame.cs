@@ -127,10 +127,17 @@ namespace TestingTools
             HighLogic.SaveFolder = Game;
 
             if (Options.HasCraft) {
-                if (!PrepareCraftLaunch(Options))
-                    return;
-                AutoSwitchVessel.SetCraftLaunch(
-                    Options.Craft, Options.CraftDirectory, Options.LaunchSite);
+                // Still start into the Space Center if staging fails, rather than
+                // leaving KSP stuck at the main menu. PrepareCraftLaunch has already
+                // logged why; loading the save anyway lets a test client connect and
+                // fail with a real assertion instead of a connection timeout.
+                if (PrepareCraftLaunch(Options))
+                    AutoSwitchVessel.SetCraftLaunch(
+                        Options.Craft, Options.CraftDirectory, Options.LaunchSite);
+                else
+                    Debug.LogWarning(
+                        "[kRPC testing tools]: Loading into the Space Center without " +
+                        "launching a craft");
             } else {
                 var vesselIdx = FindVesselToSwitchTo(Options);
                 if (vesselIdx < 0) {
