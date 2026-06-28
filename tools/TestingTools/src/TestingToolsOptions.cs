@@ -111,7 +111,6 @@ namespace TestingTools
 
         static string NormalizeCraftName(string value)
         {
-            value = TrimQuotes(value.Trim());
             if (value.EndsWith(".craft", StringComparison.OrdinalIgnoreCase))
                 value = value.Substring(0, value.Length - ".craft".Length);
             return Path.GetFileName(value);
