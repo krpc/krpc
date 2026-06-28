@@ -66,7 +66,7 @@ namespace TestingTools
         /// </summary>
         public void Awake()
         {
-            GameEvents.onLevelWasLoadedGUIReady.Add(OnLevelWasLoaded);
+            GameEvents.onLevelWasLoadedGUIReady.Add(OnGUIReady);
         }
 
         /// <summary>
@@ -74,10 +74,15 @@ namespace TestingTools
         /// </summary>
         public void OnDestroy()
         {
-            GameEvents.onLevelWasLoadedGUIReady.Remove(OnLevelWasLoaded);
+            GameEvents.onLevelWasLoadedGUIReady.Remove(OnGUIReady);
         }
 
-        void OnLevelWasLoaded(GameScenes scene)
+        // Named OnGUIReady rather than OnLevelWasLoaded to avoid colliding with
+        // Unity's deprecated OnLevelWasLoaded(int) magic message. The collision is
+        // harmless (the handler is invoked via the GameEvents delegate, not Unity's
+        // message dispatch) but logs a spurious "message parameter has to be of
+        // type: int" error on every run.
+        void OnGUIReady(GameScenes scene)
         {
             if (scene == GameScenes.MAINMENU)
                 StartCoroutine(CallbackUtil.DelayedCallback(15, LoadGame));
@@ -89,31 +94,33 @@ namespace TestingTools
                 return;
             Loaded = true;
 
-            Console.WriteLine("[kRPC testing tools]: Loading game \"" + Game + "\" save \"" + Save + "\"");
+            Debug.Log("[kRPC testing tools]: Loading game \"" + Game + "\" save \"" + Save + "\"");
             var gameObj = GamePersistence.LoadSFSFile(Save, Game);
             if (gameObj == null) {
-                Console.WriteLine("[kRPC testing tools]: Failed to load game, got null when loading sfs file");
+                Debug.LogWarning("[kRPC testing tools]: Failed to load game, got null when loading sfs file");
                 return;
             }
             KSPUpgradePipeline.Process(gameObj, Game, LoadContext.SFS, OnLoadDialogPipelineFinished, OnLoadDialogPipelineError);
         }
 
         static void OnLoadDialogPipelineError(KSPUpgradePipeline.UpgradeFailOption opt, ConfigNode node) {
-            Console.WriteLine("[kRPC testing tools]: KSPUpgradePipeline failed " + opt.ToString() + " " + node);
+            Debug.LogError("[kRPC testing tools]: KSPUpgradePipeline failed " + opt.ToString() + " " + node);
         }
-                           
+
         static void OnLoadDialogPipelineFinished(ConfigNode node)
         {
             // Load game cfg
             HighLogic.CurrentGame = GamePersistence.LoadGameCfg(node, Game, true, false);
             if (HighLogic.CurrentGame == null) {
-                Console.WriteLine("[kRPC testing tools]: Failed to load game, got null when loading game cfg");
+                Debug.LogWarning("[kRPC testing tools]: Failed to load game, got null when loading game cfg");
                 return;
             }
-            if (GamePersistence.UpdateScenarioModules(HighLogic.CurrentGame)) {
-                Console.WriteLine("[kRPC testing tools]: Failed to load game, scenario update required");
-                return;
-            }
+            // Ensure the loaded save has every scenario module the current install
+            // expects. Loading a clean save into a modded install commonly adds
+            // modules and makes this return true; that is normal, not a failure, so
+            // the return value is ignored, matching KSP's own MainMenu load flow.
+            // (Treating true as an error here left the game stuck at the main menu.)
+            GamePersistence.UpdateScenarioModules(HighLogic.CurrentGame);
 
             // Load the game
             HighLogic.CurrentGame.startScene = GameScenes.SPACECENTER;
@@ -127,7 +134,7 @@ namespace TestingTools
             } else {
                 var vesselIdx = FindVesselToSwitchTo(Options);
                 if (vesselIdx < 0) {
-                    Console.WriteLine("[kRPC testing tools]: Failed to find vessel to switch to");
+                    Debug.LogWarning("[kRPC testing tools]: Failed to find vessel to switch to");
                     return;
                 }
                 AutoSwitchVessel.Vessel = vesselIdx;
@@ -142,10 +149,10 @@ namespace TestingTools
             if (options.Vessel.HasValue) {
                 var vesselIdx = options.Vessel.Value;
                 if (vesselIdx >= 0 && vesselIdx < vessels.Count) {
-                    Console.WriteLine("[kRPC testing tools]: Switching to vessel index " + vesselIdx);
+                    Debug.Log("[kRPC testing tools]: Switching to vessel index " + vesselIdx);
                     return vesselIdx;
                 }
-                Console.WriteLine(
+                Debug.LogWarning(
                     "[kRPC testing tools]: Vessel index " + vesselIdx +
                     " is out of range; falling back to the first non-space-object vessel");
             }
@@ -167,12 +174,12 @@ namespace TestingTools
 
             if (sourceCraft == null) {
                 if (File.Exists(targetCraft)) {
-                    Console.WriteLine(
+                    Debug.Log(
                         "[kRPC testing tools]: Launching already-staged " +
                         options.CraftDirectory + " craft \"" + craftName + "\"");
                     return true;
                 }
-                Console.WriteLine(
+                Debug.LogWarning(
                     "[kRPC testing tools]: Failed to find craft \"" + craftName +
                     "\" in save Ships/" + options.CraftDirectory +
                     " (pass --krpc-auto-load-craft-fixture-dir to stage one from elsewhere)");
@@ -189,12 +196,12 @@ namespace TestingTools
                     CopyFileIfDifferent(sourceLoadMeta, targetLoadMeta);
                 }
 
-                Console.WriteLine(
+                Debug.Log(
                     "[kRPC testing tools]: Staged " + options.CraftDirectory +
                     " craft \"" + craftName + "\" from " + sourceCraft);
                 return true;
             } catch (Exception e) {
-                Console.WriteLine(
+                Debug.LogError(
                     "[kRPC testing tools]: Failed to stage craft \"" + craftName + "\": " + e);
                 return false;
             }
@@ -210,7 +217,7 @@ namespace TestingTools
 
             var source = FindCraftInDirectory(options.CraftFixtureDirectory, options.Craft);
             if (source == null)
-                Console.WriteLine(
+                Debug.LogWarning(
                     "[kRPC testing tools]: Craft \"" + options.Craft +
                     "\" was not found in fixture directory " + options.CraftFixtureDirectory);
             return source;

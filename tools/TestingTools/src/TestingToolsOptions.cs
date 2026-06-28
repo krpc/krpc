@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using UnityEngine;
 
 namespace TestingTools
 {
@@ -77,7 +78,7 @@ namespace TestingTools
                 Vessel = vessel;
                 return;
             }
-            Console.WriteLine("[kRPC testing tools]: Ignoring invalid vessel index '" + value + "'");
+            Debug.LogWarning("[kRPC testing tools]: Ignoring invalid vessel index '" + value + "'");
         }
 
         void ParseCraftDirectory(string value)
@@ -88,7 +89,7 @@ namespace TestingTools
                 craftDirectorySpecified = true;
                 return;
             }
-            Console.WriteLine("[kRPC testing tools]: Ignoring invalid craft directory '" + value + "'");
+            Debug.LogWarning("[kRPC testing tools]: Ignoring invalid craft directory '" + value + "'");
         }
 
         void ResolveCraftDefaults()

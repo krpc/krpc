@@ -25,7 +25,6 @@
  * SOFTWARE.
  */
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -67,7 +66,7 @@ namespace TestingTools
         /// </summary>
         public void Awake()
         {
-            GameEvents.onLevelWasLoadedGUIReady.Add(OnLevelWasLoaded);
+            GameEvents.onLevelWasLoadedGUIReady.Add(OnGUIReady);
         }
 
         /// <summary>
@@ -75,10 +74,13 @@ namespace TestingTools
         /// </summary>
         public void OnDestroy()
         {
-            GameEvents.onLevelWasLoadedGUIReady.Remove(OnLevelWasLoaded);
+            GameEvents.onLevelWasLoadedGUIReady.Remove(OnGUIReady);
         }
 
-        void OnLevelWasLoaded(GameScenes scene)
+        // Named OnGUIReady rather than OnLevelWasLoaded to avoid colliding with
+        // Unity's deprecated OnLevelWasLoaded(int) magic message, which would
+        // otherwise log a spurious type error on every run.
+        void OnGUIReady(GameScenes scene)
         {
             if (scene != GameScenes.SPACECENTER)
                 return;
@@ -100,7 +102,7 @@ namespace TestingTools
             launchSite = "LaunchPad";
             if (string.IsNullOrEmpty(name))
                 return;
-            Console.WriteLine(
+            Debug.Log(
                 "[kRPC testing tools]: Launching " + directory +
                 " craft \"" + name + "\" at " + site);
             StartCoroutine(LaunchCraftCoroutine(name, directory, site));
@@ -112,13 +114,13 @@ namespace TestingTools
             yield return KRPC.SpaceCenter.Services.SpaceCenter.LaunchVesselCoroutine(
                 directory, name, site, new List<string>(), result);
             if (!string.IsNullOrEmpty(result.Error))
-                Console.WriteLine(
+                Debug.LogError(
                     "[kRPC testing tools]: Failed to launch craft \"" + name + "\": " + result.Error);
         }
 
         static void SwitchVessel()
         {
-            Console.WriteLine("[kRPC testing tools]: Switching to active vessel");
+            Debug.Log("[kRPC testing tools]: Switching to active vessel");
             FlightDriver.StartAndFocusVessel(AutoLoadGame.Save, Vessel);
             Vessel = -1;
         }
