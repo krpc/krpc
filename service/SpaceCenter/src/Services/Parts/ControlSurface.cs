@@ -130,7 +130,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         internal TupleV3 AvailableTorqueVectors {
-            get { return controlSurface.GetPotentialTorque (); }
+            get {
+                // GetPotentialTorque already applies the authority limiter (via
+                // ModuleControlSurface.GetPotentialLift, which scales the deflection by
+                // authorityLimiter * 0.01), so no further scaling is needed here.
+                return controlSurface.GetPotentialTorque ();
+            }
         }
     }
 }

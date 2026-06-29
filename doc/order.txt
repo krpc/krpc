@@ -947,6 +947,7 @@ SpaceCenter.ReactionWheel.Active
 SpaceCenter.ReactionWheel.Broken
 SpaceCenter.ReactionWheel.AvailableTorque
 SpaceCenter.ReactionWheel.MaxTorque
+SpaceCenter.ReactionWheel.AuthorityLimiter
 SpaceCenter.ResourceConverter
 SpaceCenter.ResourceConverter.Part
 SpaceCenter.ResourceConverter.Count
