@@ -41,6 +41,10 @@ v0.6.0
  * Fix CelestialBody.Rotation returning incorrect values before a flight scene loads (#890)
  * Fix ResourceConverter.State and ResourceHarvester.ThermalEfficiency misreading the KSP status string (#892)
  * Fix Waypoint.MeanAltitude, SurfaceAltitude, BedrockAltitude (#891)
+ * Add ReactionWheel.AuthorityLimiter (#909)
+ * Fix RCS force and torque vector calculations using max thrust rather than available thrust (#909)
+ * Fix RCS.MaxTorque documentation error - it considers thrust limit set to 100% (#909)
+ * Fix ReactionWheel.AvailableTorque not considering authority limiter setting (#909)
 
 v0.5.4
  * Fix vessel recovery (#782)
