@@ -130,14 +130,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         internal TupleV3 AvailableTorqueVectors {
-            get {
-                // Note: GetPotentialTorque does not apply the authority limiter (it is
-                // only applied when the surface actually deflects). Scale by it here so
-                // the available torque matches what the surface will deliver.
-                var torque = controlSurface.GetPotentialTorque ();
-                var scale = controlSurface.authorityLimiter * 0.01d;
-                return new TupleV3 (torque.Item1 * scale, torque.Item2 * scale);
-            }
+            get { return controlSurface.GetPotentialTorque (); }
         }
     }
 }
