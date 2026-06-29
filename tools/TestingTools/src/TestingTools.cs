@@ -105,6 +105,39 @@ namespace TestingTools
             throw new YieldException<Action> (() => WaitForLanded(0));
         }
 
+        /// <summary>
+        /// Fill all resource tanks on the active vessel (or a given vessel) to their maximum
+        /// capacity. Useful in tests that fire engines and need to restore propellant between runs.
+        /// </summary>
+        /// <param name="vessel">Vessel to operate on. Defaults to the active vessel.</param>
+        [KRPCProcedure]
+        public static void FillAllResources (KRPC.SpaceCenter.Services.Vessel vessel = null)
+        {
+            var internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
+            foreach (var part in internalVessel.parts) {
+                foreach (PartResource resource in part.Resources)
+                    resource.amount = resource.maxAmount;
+            }
+        }
+
+        /// <summary>
+        /// Fill tanks of a specific resource on the active vessel (or a given vessel) to their
+        /// maximum capacity.
+        /// </summary>
+        /// <param name="resourceName">Name of the resource to fill, e.g. "LiquidFuel".</param>
+        /// <param name="vessel">Vessel to operate on. Defaults to the active vessel.</param>
+        [KRPCProcedure]
+        public static void FillResources (string resourceName, KRPC.SpaceCenter.Services.Vessel vessel = null)
+        {
+            var internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
+            foreach (var part in internalVessel.parts) {
+                foreach (PartResource resource in part.Resources) {
+                    if (resource.resourceName == resourceName)
+                        resource.amount = resource.maxAmount;
+                }
+            }
+        }
+
         static Quaternion ZeroRotation {
             get {
                 var vessel = FlightGlobals.ActiveVessel;
@@ -129,11 +162,15 @@ namespace TestingTools
         {
             Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
             internalVessel.SetRotation (ZeroRotation);
-            // SetRotation only reorients the part transforms; it leaves each
-            // rigidbody's angular velocity untouched, so without SAS the vessel
-            // keeps tumbling from the new attitude. Explicitly remove the
-            // rotational motion: make every part move with the common center of
-            // mass velocity and zero spin, so the assembly translates rigidly.
+            ZeroAngularVelocity (internalVessel);
+        }
+
+        // Remove the rotational motion of a vessel without changing its attitude. SetRotation only
+        // reorients the part transforms; it leaves each rigidbody's angular velocity untouched, so
+        // without SAS the vessel keeps tumbling from the new attitude. Make every part move with the
+        // common centre-of-mass velocity and zero spin, so the assembly translates rigidly.
+        static void ZeroAngularVelocity (Vessel internalVessel)
+        {
             if (!internalVessel.loaded)
                 return;
             var momentum = Vector3.zero;
@@ -158,6 +195,27 @@ namespace TestingTools
         }
 
         /// <summary>
+        /// Reassign every crew member of the given vessel (default: the active vessel) to the Pilot
+        /// profession at full experience level. The save's auto-crew fills the pod with whichever
+        /// kerbal is next in the roster (often an engineer/scientist), which leaves the vessel on
+        /// "partial control" — no in-game SAS and, after a rails warp, an unreliable control source.
+        /// Overwriting the trait to Pilot gives deterministic full control for every test run without
+        /// changing the craft (a kerbal's mass is the same for any profession, so the calibrated MOI
+        /// and torque are unaffected).
+        /// </summary>
+        /// <param name="vessel">Vessel.</param>
+        [KRPCProcedure]
+        public static void SetCrewToPilot (KRPC.SpaceCenter.Services.Vessel vessel = null)
+        {
+            Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
+            foreach (var crew in internalVessel.GetVesselCrew ()) {
+                KerbalRoster.SetExperienceTrait (crew, KerbalRoster.pilotTrait);
+                KerbalRoster.SetExperienceLevel (crew, 5);
+            }
+            internalVessel.CrewListSetDirty ();
+        }
+
+        /// <summary>
         /// Apply a rotation to the given vessel.
         /// </summary>
         [KRPCProcedure]
@@ -169,6 +227,63 @@ namespace TestingTools
             var axisVector = new Vector3 (axis.Item1, axis.Item2, axis.Item3).normalized;
             var rotation = internalVessel.transform.rotation * Quaternion.AngleAxis (angle, axisVector);
             internalVessel.SetRotation (rotation);
+        }
+
+        /// <summary>
+        /// Set the absolute attitude of the given vessel (default: the active vessel) to the given
+        /// pitch, heading and roll (degrees) in the given reference frame (default: the vessel's
+        /// surface reference frame), and zero its rotational velocity. Lets a test start from a fixed,
+        /// still pose without first flying the autopilot there. The angles match those reported by
+        /// the vessel's Flight pitch/heading/roll.
+        /// </summary>
+        [KRPCProcedure]
+        public static void SetPitchHeadingRoll (
+            double pitch, double heading, double roll,
+            KRPC.SpaceCenter.Services.ReferenceFrame referenceFrame = null,
+            KRPC.SpaceCenter.Services.Vessel vessel = null)
+        {
+            var serviceVessel = vessel ?? new KRPC.SpaceCenter.Services.Vessel (FlightGlobals.ActiveVessel);
+            var internalVessel = serviceVessel.InternalVessel;
+            var frame = referenceFrame ?? serviceVessel.SurfaceReferenceFrame;
+            var inFrame = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.QuaternionFromPitchHeadingRoll (
+                new Vector3d (pitch, heading, roll));
+            internalVessel.SetRotation ((Quaternion)frame.RotationToWorldSpace (inFrame));
+            ZeroAngularVelocity (internalVessel);
+        }
+
+        /// <summary>
+        /// Point the given vessel (default: the active vessel) along the given direction in the
+        /// given reference frame (default: the vessel's surface reference frame), and zero its
+        /// rotational velocity. The direction sets where the nose points; pass a real
+        /// <paramref name="roll"/> (degrees) to also fix the roll, or NaN to leave it uncontrolled.
+        /// This mirrors <see cref="SetPitchHeadingRoll"/> but takes a pointing vector instead of
+        /// pitch/heading, matching the attitude the autopilot holds for the same target direction
+        /// and roll.
+        /// </summary>
+        [KRPCProcedure]
+        public static void SetDirectionAndRoll (
+            Tuple<double,double,double> direction, double roll,
+            KRPC.SpaceCenter.Services.ReferenceFrame referenceFrame = null,
+            KRPC.SpaceCenter.Services.Vessel vessel = null)
+        {
+            if (direction == null)
+                throw new ArgumentNullException (nameof (direction));
+            var serviceVessel = vessel ?? new KRPC.SpaceCenter.Services.Vessel (FlightGlobals.ActiveVessel);
+            var internalVessel = serviceVessel.InternalVessel;
+            var frame = referenceFrame ?? serviceVessel.SurfaceReferenceFrame;
+            var dir = new Vector3d (direction.Item1, direction.Item2, direction.Item3).normalized;
+            // Point the vessel's forward (local up) along the target direction. When a roll is
+            // requested, rebuild the rotation from the equivalent pitch/heading plus that roll, the
+            // same chain the autopilot uses when a roll is set on top of a target direction.
+            var inFrame = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.FromToRotation (
+                Vector3d.up, dir);
+            if (!double.IsNaN (roll)) {
+                var phr = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.PitchHeadingRoll (inFrame);
+                inFrame = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.QuaternionFromPitchHeadingRoll (
+                    new Vector3d (phr.x, phr.y, roll));
+            }
+            internalVessel.SetRotation ((Quaternion)frame.RotationToWorldSpace (inFrame));
+            ZeroAngularVelocity (internalVessel);
         }
 
         /// <summary>

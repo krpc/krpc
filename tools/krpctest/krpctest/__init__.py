@@ -1,11 +1,12 @@
-import unittest
 import inspect
 import math
 import os
 import shutil
 import sys
 import time
+import unittest
 from importlib.resources import files
+
 import krpc
 
 
@@ -34,7 +35,6 @@ def _get_ksp_dir():
 
 
 class TestCase(unittest.TestCase):
-
     @classmethod
     def connect(cls, use_cached=True):
         return _connect(use_cached)
@@ -62,7 +62,10 @@ class TestCase(unittest.TestCase):
         # Copy craft file to save directory
         if directory is None:
             directory = os.path.join(os.getcwd(), os.path.dirname(sys.argv[0]), "craft")
-        fixtures_path = os.path.abspath(directory)
+        fixtures_paths = [
+            os.path.abspath(directory),
+            os.path.join(_get_ksp_dir(), "Ships", "VAB"),
+        ]
         save_path = os.path.join(
             _get_ksp_dir(), "saves", cls.connect().testing_tools.current_save
         )
@@ -71,20 +74,32 @@ class TestCase(unittest.TestCase):
         ships_path = os.path.join(save_path, "Ships", "VAB")
         if not os.path.exists(ships_path):
             os.makedirs(ships_path)
-        shutil.copy(
-            os.path.join(fixtures_path, name + ".craft"),
-            os.path.join(ships_path, name + ".craft"),
-        )
-        shutil.copy(
-            os.path.join(fixtures_path, name + ".loadmeta"),
-            os.path.join(ships_path, name + ".loadmeta"),
-        )
+        copied = False
+        for fixtures_path in fixtures_paths:
+            if os.path.exists(os.path.join(fixtures_path, name + ".craft")):
+                shutil.copy(
+                    os.path.join(fixtures_path, name + ".craft"),
+                    os.path.join(ships_path, name + ".craft"),
+                )
+                shutil.copy(
+                    os.path.join(fixtures_path, name + ".loadmeta"),
+                    os.path.join(ships_path, name + ".loadmeta"),
+                )
+                copied = True
+                break
+        if not copied:
+            raise RuntimeError(
+                "Failed to find craft in:\n"
+                + "".join(f"  {x}\n" for x in fixtures_paths)
+            )
         # Launch the craft
         space_center = cls.connect().space_center
         if launch_site is None:
             space_center.launch_vessel_from_vab(name)
         else:
             space_center.launch_vessel("VAB", name, launch_site, [])
+        # Ensure the crew are all pilots, for full control
+        cls.set_crew_to_pilot()
 
     @classmethod
     def set_orbit(
@@ -116,6 +131,18 @@ class TestCase(unittest.TestCase):
     @classmethod
     def set_landed(cls, body, latitude, longitude, altitude=0):
         cls.connect().testing_tools.set_landed(body, latitude, longitude, altitude)
+
+    @classmethod
+    def set_crew_to_pilot(cls):
+        cls.connect().testing_tools.set_crew_to_pilot()
+
+    @classmethod
+    def fill_all_resources(cls):
+        cls.connect().testing_tools.fill_all_resources()
+
+    @classmethod
+    def fill_resources(cls, resource_name):
+        cls.connect().testing_tools.fill_resources(resource_name)
 
     @classmethod
     def wait(cls, timeout=0.1):

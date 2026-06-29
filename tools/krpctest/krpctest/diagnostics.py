@@ -20,7 +20,18 @@ _LINE_PREFIX = "[KRPC.AP]"
 class Sample:  # pylint: disable=too-many-instance-attributes
     # One physics tick parsed from a diagnostic-log line: one field per logged channel.
     def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
-        self, time, err, ang_err, omega_ri, tgt_omega_ri, ff_ri, gyro, ctrl, kp, ki
+        self,
+        time,
+        err,
+        ang_err,
+        omega_ri,
+        tgt_omega_ri,
+        ff_ri,
+        gyro,
+        ctrl,
+        kp,
+        ki,
+        tgt_smooth=None,
     ):
         self.time = time
         self.err = err
@@ -32,6 +43,9 @@ class Sample:  # pylint: disable=too-many-instance-attributes
         self.ctrl = ctrl
         self.kp = kp
         self.ki = ki
+        # Effective (slewed) target as (pitch, heading) in degrees -- the control target after
+        # target smoothing is applied. Equals the commanded target when smoothing is disabled.
+        self.tgt_smooth = tgt_smooth
 
     @property
     def pitch_error(self):
@@ -72,6 +86,7 @@ def parse_line(line):
         ctrl=_triple(line, "ctrl"),
         kp=_triple(line, "Kp"),
         ki=_triple(line, "Ki"),
+        tgt_smooth=_triple(line, "tgt_smooth"),
     )
 
 
@@ -223,6 +238,24 @@ def control_reversal_rate(samples, floor=0.3):
         if pairs:
             flips = sum(1 for lhs, rhs in pairs if lhs * rhs < 0)
             worst = max(worst, flips / len(pairs))
+    return worst
+
+
+def control_oscillation_amplitude(samples):
+    # RMS of the pitch/yaw control about its mean over the sample window, worst axis. This catches a
+    # *low-frequency* limit cycle (e.g. the ~1.4 Hz bending mode of a large launch vehicle) that
+    # control_reversal_rate misses: at ~1 Hz the control reverses sign only every ~25 ticks, not
+    # tick-to-tick, so the reversal-rate reads ~0 while the actuators still swing hard. A settled
+    # hold sits near zero here (only slow trim, removed by subtracting the mean); a limit cycle
+    # drives it up to order 1. Use over a steady hold (constant target) so the mean is the trim.
+    worst = 0.0
+    for axis in (0, 2):
+        series = [sample.ctrl[axis] for sample in samples if sample.ctrl is not None]
+        if not series:
+            continue
+        mean = sum(series) / len(series)
+        rms = math.sqrt(sum((value - mean) ** 2 for value in series) / len(series))
+        worst = max(worst, rms)
     return worst
 
 

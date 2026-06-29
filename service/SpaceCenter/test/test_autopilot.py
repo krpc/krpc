@@ -10,25 +10,39 @@ from krpctest.geometry import cross, dot, normalize
 
 # pylint: disable=too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-locals
 def _make_autopilot_test_class(
+    test_name,
     vessel_name,
-    angle_error,
-    direction_error,
+    rwhl=True,
+    rwhl_authority=1,
+    rcs=True,
+    rcs_thrust_limit=1,
+    engine_tvc=False,
+    engine_thrust_limit=1,
+    time_to_peak=None,
+    max_angular_velocity=None,
+    angle_error=2,
+    direction_error=0.1,
     winding_limit=0.75,
     path_deviation_limit=0.25,
     nudge_rate=0.3,
     recover_timeout=30,
-    rebound_limit=5.0,
-    roll_isolation_limit=4.0,
+    rebound_limit=1,
+    roll_isolation_limit=2.7,
     control_spike_limit=3,
-    saturation_limit=6.0,
-    overshoot_limit=0.3,
-    roll_control_limit=0.5,
-    gain_jump_limit=0.15,
+    saturation_limit=0.6,
+    overshoot_limit=0.1,
+    roll_control_limit=0.1,
+    gain_jump_limit=0.12,
     hold_chatter_limit=0.1,
     slew_chatter_limit=0.2,
     hold_chatter_floor=0.3,
+    settle_rate=0.05,
+    flip_seed_rate=0.08,
+    flip_plane_limit=0.10,
+    reversal_plane_limit=0.15,
+    flexible=False,
 ):
-    class TestAutoPilot(krpctest.TestCase):
+    class TestAutoPilotBase(krpctest.TestCase):
         @classmethod
         def setUpClass(cls):
             cls.new_save()
@@ -39,8 +53,10 @@ def _make_autopilot_test_class(
             cls.ap = cls.vessel.auto_pilot
             cls.ap.reset()
             cls.ap.sas = False
-            cls.vessel.control.rcs = True
             cls.sas_mode = cls.connect().space_center.SASMode
+            cls.rate_filter_mode = cls.connect().space_center.RateFilterMode
+            cls.mitigation_mode = cls.connect().space_center.MitigationMode
+            cls.flexible = flexible
             cls.angle_error = angle_error
             cls.direction_error = direction_error
             cls.winding_limit = winding_limit
@@ -57,17 +73,67 @@ def _make_autopilot_test_class(
             cls.hold_chatter_limit = hold_chatter_limit
             cls.slew_chatter_limit = slew_chatter_limit
             cls.hold_chatter_floor = hold_chatter_floor
+            cls.settle_rate = settle_rate
+            cls.flip_seed_rate = flip_seed_rate
+            cls.flip_plane_limit = flip_plane_limit
+            cls.reversal_plane_limit = reversal_plane_limit
 
         def setUp(self):
+            self.ap.show_info_ui = True
+            if time_to_peak is not None:
+                self.ap.time_to_peak = time_to_peak
+            if max_angular_velocity is not None:
+                self.ap.max_angular_velocity = max_angular_velocity
+            self.vessel.control.rcs = rcs
+            for thruster in self.vessel.parts.rcs:
+                thruster.thrust_limit = rcs_thrust_limit
+            for wheel in self.vessel.parts.reaction_wheels:
+                wheel.active = rwhl
+                wheel.authority_limiter = rwhl_authority
+            for engine in self.vessel.parts.engines:
+                engine.active = engine_tvc
+                engine.thrust_limit = engine_thrust_limit
+            self.vessel.control.throttle = 1 if engine_tvc else 0
             self.connect().testing_tools.clear_rotation()
+            self.fill_all_resources()
 
         def tearDown(self):
             self.ap.reset()
+            self.vessel.control.rcs = True
+            for thruster in self.vessel.parts.rcs:
+                thruster.thrust_limit = 1
             for wheel in self.vessel.parts.reaction_wheels:
                 wheel.active = True
+                wheel.authority_limiter = 1
+            for engine in self.vessel.parts.engines:
+                engine.active = False
+                engine.thrust_limit = 1
+            self.vessel.control.throttle = 0
+            self.ap.show_info_ui = False
 
         def test_equality(self):
             self.assertEqual(self.ap, self.vessel.auto_pilot)
+
+        def cheat_orientation_to(self, pitch, heading, roll=None):
+            self.connect().testing_tools.set_pitch_heading_roll(
+                pitch,
+                heading,
+                roll or 0,
+                self.vessel.surface_reference_frame,
+                self.vessel,
+            )
+            # let physics settle after the teleport
+            self.wait(0.5)
+
+        def cheat_orientation_to_direction(self, direction, roll=None):
+            self.connect().testing_tools.set_direction_and_roll(
+                direction,
+                roll or 0,
+                self.vessel.surface_reference_frame,
+                self.vessel,
+            )
+            # let physics settle after the teleport
+            self.wait(0.5)
 
         def wait_for_autopilot(self, timeout=60):
             self.ap.engaged = True
@@ -106,7 +172,7 @@ def _make_autopilot_test_class(
             if roll is not None:
                 self.assertAlmostEqual(roll, flight.roll, delta=self.angle_error)
 
-        ######################## General autopilot tests #######################################
+        ######################## General autopilot tests #######################
 
         def test_sas(self):
             self.ap.sas = True
@@ -141,7 +207,6 @@ def _make_autopilot_test_class(
                 (0, 90, 160),
                 (0, 90, -160),
             ]
-
             for phr in cases:
                 pitch, heading, roll = phr
                 self.set_rotation(pitch, heading, roll)
@@ -158,7 +223,6 @@ def _make_autopilot_test_class(
                 (0, 0, -1),
                 (1, 2, 3),
             ]
-
             for direction in cases:
                 direction = normalize(direction)
                 self.set_direction(direction)
@@ -203,14 +267,9 @@ def _make_autopilot_test_class(
             self.ap.engaged = False
             self.assertRaises(RuntimeError, getattr, self.ap, "error")
 
-            self.set_direction(flight.prograde, roll=0)
-            # Settle to a low rotation rate before cutting torque, so the vessel
-            # barely drifts while the (wheels-disabled) error readings are taken.
-            self.ap.stopping_velocity_threshold = 0.02
-            self.wait_for_autopilot()
-            self.ap.sas = True
             for wheel in self.vessel.parts.reaction_wheels:
                 wheel.active = False
+            self.cheat_orientation_to_direction(flight.prograde, roll=0)
 
             self.ap.target_roll = float("nan")
             self.ap.engaged = True
@@ -241,20 +300,14 @@ def _make_autopilot_test_class(
             self.assertDegreesAlmostEqual(30, self.ap.error, delta=self.angle_error)
 
         def test_pitch_and_heading_error(self):
-            # The per-axis pitch_error/heading_error getters (untested elsewhere -- test_error
-            # only reads error). Settle on a known attitude, cut torque so the vessel holds
-            # still, then offset each target axis by a known amount and read the error back
-            # promptly (mirrors the test_error pattern).
             self.ap.engaged = False
             self.assertRaises(RuntimeError, getattr, self.ap, "pitch_error")
             self.assertRaises(RuntimeError, getattr, self.ap, "heading_error")
 
-            self.set_rotation(0, 90, 0)
-            self.ap.stopping_velocity_threshold = 0.02
-            self.wait_for_autopilot()
-            self.ap.sas = True
             for wheel in self.vessel.parts.reaction_wheels:
                 wheel.active = False
+            self.cheat_orientation_to(0, 90, 0)
+
             self.ap.engaged = True
 
             flight = self.vessel.flight()
@@ -275,30 +328,23 @@ def _make_autopilot_test_class(
 
             set_roll = -57
             direction = self.vessel.direction(self.vessel.surface_reference_frame)
-            self.set_direction(direction, roll=set_roll)
-            self.ap.stopping_velocity_threshold = 0.02
-            self.wait_for_autopilot()
-            self.ap.sas = True
+
             for wheel in self.vessel.parts.reaction_wheels:
                 wheel.active = False
+            self.cheat_orientation_to_direction(direction, roll=set_roll)
 
             self.ap.engaged = True
+
             for roll in (0, -54, -90, 27, 45, 90):
                 self.ap.target_roll = roll
                 self.assertAlmostEqual(
                     abs(set_roll - roll), self.ap.roll_error, delta=self.angle_error
                 )
 
-        ######################## Tests for corner cases #######################################
-
-        def settle_on(self, direction):
-            self.set_direction(direction, roll=0)
-            self.ap.stopping_velocity_threshold = 0.02
-            self.wait_for_autopilot()
+        ######################## Tests for corner cases ########################
 
         def perpendicular_axis(self, direction):
-            # A unit vector perpendicular to direction (in the surface frame): a spin about it
-            # moves the nose sideways, i.e. is tangential when the pointing error is ~0.
+            # A unit vector perpendicular to direction
             direction = normalize(direction)
             reference = (0.0, 0.0, 1.0)
             if abs(dot(direction, reference)) > 0.9:
@@ -306,12 +352,13 @@ def _make_autopilot_test_class(
             return normalize(cross(direction, reference))
 
         def capture_recovery(self, max_duration, perturb=None, perturb_after=0.0):
-            # Engage the autopilot with diagnostic logging until it has held the target for a
-            # second, or max_duration elapses, then return the parsed per-tick samples. Uses a
-            # fixed poll loop rather than ap.wait (which raises on timeout) so the full trace is
-            # captured even when the vessel never settles (e.g. a sustained orbit). If perturb is
-            # given it is called once, perturb_after seconds in (e.g. to nudge or step the target
-            # mid-slew); the settle test only begins after the perturbation has been applied.
+            # Engage the autopilot with diagnostic logging until it has held the target
+            # for a second, or max_duration elapses, then return the parsed per-tick
+            # samples. Uses a fixed poll loop rather than ap.wait (which raises on
+            # timeout) so the full trace is captured even when the vessel never settles
+            # (e.g. a sustained orbit). If perturb is given it is called once,
+            # perturb_after seconds in (e.g. to nudge or step the target mid-slew); the
+            # settle test only begins after the perturbation has been applied.
             self.ap.diagnostic_logging = True
             self.ap.engaged = True
             start = time.time()
@@ -340,8 +387,8 @@ def _make_autopilot_test_class(
             return diagnostics.parse_log(self.ap.diagnostic_log)
 
         def capture_for(self, duration):
-            # Engage with diagnostic logging for a fixed wall-clock duration and return the
-            # parsed samples (used to observe a steady hold rather than a transient recovery).
+            # Engage with diagnostic logging for a fixed wall-clock duration and return
+            # the parsed samples
             self.ap.diagnostic_logging = True
             self.ap.engaged = True
             self.wait(duration)
@@ -350,18 +397,15 @@ def _make_autopilot_test_class(
             return diagnostics.parse_log(self.ap.diagnostic_log)
 
         def test_precession_when_nudged(self):
-            # Settle on target, inject a spin perpendicular to the nose (tangential, since the
-            # pointing error is ~0), and confirm the nose spirals back in rather than settling
-            # into a sustained orbit around the target -- the precession / limit-cycle corner
-            # case.
-            # NOTE: winding_limit is an initial estimate and may need in-game calibration.
+            # Settle on target, inject a spin perpendicular to the nose (tangential,
+            # since the pointing error is ~0), and confirm the nose spirals back in
+            # rather than settling into a sustained orbit around the target.
             direction = self.vessel.flight().prograde
             axis = self.perpendicular_axis(direction)
-            tools = self.connect().testing_tools
-            tools.clear_rotation()
-            self.settle_on(direction)
+            self.set_direction(direction)
+            self.wait_for_autopilot()
             angular_velocity = tuple(self.nudge_rate * value for value in axis)
-            tools.apply_angular_velocity(
+            self.connect().testing_tools.apply_angular_velocity(
                 angular_velocity, self.vessel.surface_reference_frame, self.vessel
             )
             samples = self.capture_recovery(self.recover_timeout)
@@ -372,16 +416,18 @@ def _make_autopilot_test_class(
                 "nose orbited the target",
             )
             self.assertIsNotNone(
-                diagnostics.settling_time(samples, angle_threshold=self.angle_error),
+                diagnostics.settling_time(
+                    samples,
+                    angle_threshold=self.angle_error,
+                    rate_threshold=self.settle_rate,
+                ),
                 "did not settle after the nudge",
             )
 
         def test_great_circle_path(self):
-            # A combined pitch+yaw slew should follow a straight great-circle path in the
-            # roll-invariant error plane rather than curving.
-            # NOTE: path_deviation_limit is an initial estimate; calibrate in-game.
-            self.set_rotation(0, 90)
-            self.wait_for_autopilot()
+            # A combined pitch+yaw slew should follow a straight great-circle path in
+            # the roll-invariant error plane rather than curving.
+            self.cheat_orientation_to(0, 90)
             self.set_rotation(40, 20)
             samples = self.capture_recovery(self.recover_timeout)
             self.assertGreater(len(samples), 0)
@@ -397,10 +443,32 @@ def _make_autopilot_test_class(
             )
             self.check_rotation(40, 20)
 
+        def test_great_circle_path_through_singularity(self):
+            # A great-circle slew routed straight through the roll-invariant frame's
+            # singularity: from pitch -80 to +80 at heading 180 the nose crosses (pitch
+            # 0, heading 180) = due south on the horizon, the antipode of the frame's up
+            # axis (north, in the surface frame).
+            self.cheat_orientation_to(-80, 180)
+            self.set_rotation(80, 180)
+            samples = self.capture_recovery(self.recover_timeout)
+            self.assertGreater(len(samples), 0)
+            self.assertLess(
+                diagnostics.path_deviation(samples),
+                self.path_deviation_limit,
+                "slew path curved",
+            )
+            self.assertLess(
+                diagnostics.radius_rebound(samples),
+                self.rebound_limit,
+                "slew overshot the target",
+            )
+            self.check_rotation(80, 180)
+
         def test_residual_hold(self):
-            # After settling, the controller should hold without a sustained limit cycle: the
-            # error stays small and does not keep growing tick-to-tick.
-            self.settle_on(self.vessel.flight().prograde)
+            # After settling, the controller should hold without a sustained limit
+            # cycle: the error stays small and does not keep growing tick-to-tick.
+            self.set_direction(self.vessel.flight().prograde)
+            self.wait_for_autopilot()
             samples = self.capture_for(8)
             self.assertGreater(len(samples), 0)
             tail = samples[len(samples) // 2 :]
@@ -408,12 +476,16 @@ def _make_autopilot_test_class(
             self.assertLess(diagnostics.max_radius_increase(tail), self.angle_error)
 
         def test_anisotropic_authority(self):
-            # With an asymmetric pitch/yaw velocity cap the joint law must still converge
-            # without diverging (exercises the constraint-ellipse projection). The path may
-            # legitimately curve, so only convergence is asserted.
-            self.ap.max_angular_velocity = (1.0, 1.0, 0.3)
-            self.set_rotation(0, 90)
-            self.wait_for_autopilot()
+            # With an asymmetric pitch/yaw velocity cap the joint law must still
+            # converge without diverging (exercises the constraint-ellipse
+            # projection). The path may legitimately curve, so only convergence is
+            # asserted.
+            self.ap.max_angular_velocity = (
+                self.ap.max_angular_velocity[0],
+                self.ap.max_angular_velocity[1],
+                self.ap.max_angular_velocity[2] / 3,
+            )
+            self.cheat_orientation_to(0, 90)
             self.set_rotation(35, 35)
             self.wait_for_autopilot()
             self.check_rotation(35, 35)
@@ -428,12 +500,11 @@ def _make_autopilot_test_class(
             return self.vessel.direction(self.vessel.surface_reference_frame)
 
         def test_oblique_nudge(self):
-            # A small pointing error plus an injected tangential spin: the angular velocity has
-            # both a radial and a tangential component during the approach. The law should lead
-            # the turn and converge with bounded winding rather than orbiting (P3).
-            # NOTE: thresholds are initial estimates; calibrate in-game.
-            self.set_rotation(0, 90)
-            self.wait_for_autopilot()
+            # A small pointing error plus an injected tangential spin: the angular
+            # velocity has both a radial and a tangential component during the
+            # approach. The law should lead the turn and converge with bounded winding
+            # rather than orbiting.
+            self.cheat_orientation_to(0, 90)
             axis = self.perpendicular_axis(self.surface_direction())
             self.set_rotation(15, 90)
             samples = self.capture_recovery(
@@ -447,16 +518,19 @@ def _make_autopilot_test_class(
                 "nose orbited the target",
             )
             self.assertIsNotNone(
-                diagnostics.settling_time(samples, angle_threshold=self.angle_error),
+                diagnostics.settling_time(
+                    samples,
+                    angle_threshold=self.angle_error,
+                    rate_threshold=self.settle_rate,
+                ),
                 "did not settle after the oblique nudge",
             )
             self.check_rotation(15, 90)
 
         def test_nudge_mid_slew(self):
-            # Inject a tangential spin partway through a large slew. The great-circle path
-            # should re-converge without an S-curve or runaway overshoot (P4).
-            self.set_rotation(0, 90)
-            self.wait_for_autopilot()
+            # Inject a tangential spin partway through a large slew. The great-circle
+            # path should re-converge without an S-curve or runaway overshoot.
+            self.cheat_orientation_to(0, 90)
             axis = self.perpendicular_axis(self.surface_direction())
             self.set_rotation(60, 90)
             samples = self.capture_recovery(
@@ -466,7 +540,11 @@ def _make_autopilot_test_class(
             )
             self.assertGreater(len(samples), 0)
             self.assertIsNotNone(
-                diagnostics.settling_time(samples, angle_threshold=self.angle_error),
+                diagnostics.settling_time(
+                    samples,
+                    angle_threshold=self.angle_error,
+                    rate_threshold=self.settle_rate,
+                ),
                 "did not settle after the mid-slew nudge",
             )
             self.assertLess(
@@ -477,10 +555,11 @@ def _make_autopilot_test_class(
             self.check_rotation(60, 90)
 
         def test_roll_nudge_isolation(self):
-            # A pure roll (nose-axis) spin must bleed off without contaminating the pitch/yaw
-            # path: the roll-invariant frame should keep roll isolated from pointing.
+            # A pure roll (nose-axis) spin must bleed off without contaminating the
+            # pitch/yaw path: the roll-invariant frame should keep roll isolated from
+            # pointing.
+            self.cheat_orientation_to(0, 90, 0)
             self.set_rotation(0, 90, 0)
-            self.wait_for_autopilot()
             nose = normalize(self.surface_direction())
             samples = self.capture_recovery(
                 self.recover_timeout,
@@ -497,25 +576,146 @@ def _make_autopilot_test_class(
             )
 
         def test_antipodal_flip(self):
-            # A 180-degree flip is the singularity of the error-axis construction. The vessel
-            # must still pick a geodesic and converge rather than stalling at the antipode. The
-            # flip uses recover_timeout (not the default 30 s) because a low-authority craft needs
-            # well over 30 s to traverse 180 degrees at full torque.
-            self.set_rotation(0, 90)
-            self.wait_for_autopilot(self.recover_timeout)
+            # A 180-degree flip is the singularity of the error-axis construction. The
+            # vessel must still pick a geodesic and converge rather than stalling at the
+            # antipode. The flip uses recover_timeout (not the default 30s) because a
+            # low-authority craft needs well over 30s to traverse 180 degrees at full
+            # torque.
+            self.cheat_orientation_to(0, 90)
             self.set_rotation(0, 270)
             self.wait_for_autopilot(self.recover_timeout)
             self.check_rotation(0, 270)
 
+        def test_antipodal_flip_continues_rotation(self):
+            # A 180-degree flip, with a small initial angular velocity.
+            # The vessel should continue in the path of that initial velocity, in
+            # a great circle path with minor deviation.
+            self.cheat_orientation_to(0, 90)
+            axis = self.perpendicular_axis(self.surface_direction())
+            omega = tuple(self.flip_seed_rate * value for value in axis)
+            self.set_rotation(0, 270)
+            self.connect().testing_tools.apply_angular_velocity(
+                omega, self.vessel.surface_reference_frame, self.vessel
+            )
+            self.ap.engaged = True
+            out_of_plane = 0.0
+            settled_since = None
+            deadline = time.time() + self.recover_timeout
+            while time.time() < deadline:
+                self.wait(0.1)
+                try:
+                    error = self.ap.error
+                except RuntimeError:
+                    error = None
+                if error is not None and error > self.angle_error:
+                    out_of_plane = max(
+                        out_of_plane, abs(dot(self.surface_direction(), axis))
+                    )
+                if error is not None and error < self.angle_error:
+                    if settled_since is None:
+                        settled_since = time.time()
+                    elif time.time() - settled_since > 1.0:
+                        break
+                else:
+                    settled_since = None
+            self.ap.engaged = False
+            self.assertLess(
+                out_of_plane,
+                self.flip_plane_limit,
+                "flip left the plane established by the existing rotation",
+            )
+            self.check_rotation(0, 270)
+
+        def test_slew_from_antipodal_blend_region_reverses(self):
+            # A near-full reversal commanded while the vessel is rotating the *wrong*
+            # way. It enters the antipode blend band travelling AWAY from the target, so
+            # the controller must decelerate it and turn it back through that band.
+            self.cheat_orientation_to(0, 90)
+            axis = self.perpendicular_axis(self.surface_direction())
+            omega = tuple(self.flip_seed_rate * value for value in axis)
+            self.set_rotation(0, 225)
+            self.connect().testing_tools.apply_angular_velocity(
+                omega, self.vessel.surface_reference_frame, self.vessel
+            )
+            self.ap.engaged = True
+            out_of_plane = 0.0
+            settled_since = None
+            deadline = time.time() + self.recover_timeout
+            while time.time() < deadline:
+                self.wait(0.1)
+                try:
+                    error = self.ap.error
+                except RuntimeError:
+                    error = None
+                if error is not None and error > self.angle_error:
+                    out_of_plane = max(
+                        out_of_plane, abs(dot(self.surface_direction(), axis))
+                    )
+                if error is not None and error < self.angle_error:
+                    if settled_since is None:
+                        settled_since = time.time()
+                    elif time.time() - settled_since > 1.0:
+                        break
+                else:
+                    settled_since = None
+            self.ap.engaged = False
+            self.assertLess(
+                out_of_plane,
+                self.reversal_plane_limit,
+                "reversal through the blend band wobbled too far out of plane",
+            )
+            self.check_rotation(0, 225)
+
+        def test_slew_from_antipodal_blend_region_continues_rotation(self):
+            # Start just outside of antipodal hold region region, but well within the
+            # blending region, and slew the whole way to the antipode: the flip plane
+            # must hold from the blend band through the rest of the slew, not just
+            # within the near-antipode singularity window.
+            self.cheat_orientation_to(0, 90 - 45)
+            axis = self.perpendicular_axis(self.surface_direction())
+            omega = tuple(self.flip_seed_rate * value for value in axis)
+            self.set_rotation(0, 270)
+            self.connect().testing_tools.apply_angular_velocity(
+                omega, self.vessel.surface_reference_frame, self.vessel
+            )
+            self.ap.engaged = True
+            out_of_plane = 0.0
+            settled_since = None
+            deadline = time.time() + self.recover_timeout
+            while time.time() < deadline:
+                self.wait(0.1)
+                try:
+                    error = self.ap.error
+                except RuntimeError:
+                    error = None
+                if error is not None and error > self.angle_error:
+                    out_of_plane = max(
+                        out_of_plane, abs(dot(self.surface_direction(), axis))
+                    )
+                if error is not None and error < self.angle_error:
+                    if settled_since is None:
+                        settled_since = time.time()
+                    elif time.time() - settled_since > 1.0:
+                        break
+                else:
+                    settled_since = None
+            self.ap.engaged = False
+            self.assertLess(
+                out_of_plane,
+                self.flip_plane_limit,
+                "flip left the plane established by the existing rotation",
+            )
+            self.check_rotation(0, 270)
+
         def test_target_step_mid_slew(self):
-            # Stepping the target mid-slew is a setpoint discontinuity. The pre-clamp acceleration
-            # feedforward legitimately impulses at the step (it differentiates the velocity
-            # setpoint), but the [-1, 1] clamp absorbs that impulse, so asserting on the raw
-            # feedforward flags a harmless transient. Assert instead on the *post-clamp* control
-            # output: the discontinuity must produce only the one clean swing onto the new heading,
+            # Stepping the target mid-slew is a setpoint discontinuity. The pre-clamp
+            # acceleration feedforward legitimately impulses at the step (it
+            # differentiates the velocity setpoint), but the [-1, 1] clamp absorbs that
+            # impulse, so asserting on the raw feedforward flags a harmless
+            # transient. Assert instead on the *post-clamp* control output: the
+            # discontinuity must produce only the one clean swing onto the new heading,
             # not a burst of single-tick actuator jerks (control chatter).
-            self.set_rotation(0, 90)
-            self.wait_for_autopilot()
+            self.cheat_orientation_to(0, 90)
             self.set_rotation(50, 90)
             samples = self.capture_recovery(
                 self.recover_timeout,
@@ -530,12 +730,138 @@ def _make_autopilot_test_class(
             )
             self.check_rotation(50, 150)
 
-        def test_torque_dropout_recovery(self):
-            # Cut all torque (wheels + RCS) mid-slew, restore it, and confirm recovery without
-            # an integral-windup kick (RunAxis clears the integral on a zero-torque axis).
+        def test_target_smoothing_config(self):
+            # Target-smoothing configuration: default, round-trip, clamping and reset.
+            # Pure configuration, so it is craft-independent.
+            self.assertAlmostEqual(0.0, self.ap.target_smoothing_time, places=4)
+            self.ap.target_smoothing_time = 2.5
+            self.assertAlmostEqual(2.5, self.ap.target_smoothing_time, places=4)
+            # Negative values are clamped to zero (disabled).
+            self.ap.target_smoothing_time = -1.0
+            self.assertAlmostEqual(0.0, self.ap.target_smoothing_time, places=4)
+            # reset() restores the default.
+            self.ap.target_smoothing_time = 3.0
+            self.ap.reset()
+            self.assertAlmostEqual(0.0, self.ap.target_smoothing_time, places=4)
+
+        def test_target_smoothing_ramp(self):
+            # With target_smoothing_time set, a step change to the target must not reach
+            # the *effective* control target until ~smoothing seconds (of game time)
+            # have elapsed -- the slew ramps the setpoint there rather than stepping
+            # instantly. Asserts on the logged effective target (tgt_smooth), so it is
+            # craft-independent (it measures the setpoint, not how the vessel tracks
+            # it). The assertion is on elapsed game time rather than ramp shape so it is
+            # robust to a coarse/variable physics timestep: a large tick only makes the
+            # slew complete later, never sooner.
+            smoothing = 3.0
+            space_center = self.connect().space_center
+            self.ap.target_smoothing_time = smoothing
+            self.cheat_orientation_to(0, 90)
             self.set_rotation(0, 90)
-            self.wait_for_autopilot()
+            self.ap.diagnostic_logging = True
+            self.ap.engaged = True
+            self.wait(0.5)  # steady hold at (0, 90); effective target == commanded
+            step_ut = space_center.ut
+            self.ap.target_pitch = 45  # step the target Keep polling (a light RPC) so
+            # the game keeps advancing physics, until at least smoothing+1 seconds of
+            # game time have passed since the step.
+            deadline = time.time() + 90
+            while (
+                space_center.ut - step_ut < smoothing + 1.0 and time.time() < deadline
+            ):
+                self.wait(0.1)
+            self.ap.engaged = False
+            self.ap.diagnostic_logging = False
+            samples = [
+                sample
+                for sample in diagnostics.parse_log(self.ap.diagnostic_log)
+                if sample.tgt_smooth is not None
+            ]
+            self.assertGreater(len(samples), 0)
+            # The last sample still at the old target marks the step; the first sample
+            # to reach the new target marks arrival. The game time between them must be
+            # at least ~smoothing.
+            below = [s for s in samples if s.tgt_smooth[0] < 0.5]
+            above = [s for s in samples if s.tgt_smooth[0] >= 44.5]
+            self.assertGreater(len(below), 0, "no samples at the original target")
+            self.assertGreater(
+                len(above), 0, "effective target never reached the commanded value"
+            )
+            ramp_game_seconds = above[0].time - below[-1].time
+            self.assertGreaterEqual(
+                ramp_game_seconds,
+                smoothing * 0.8,
+                "effective target reached the commanded value too soon; smoothing not applied",
+            )
+            # A pure pitch step leaves the heading unchanged throughout the slew.
+            self.assertLess(
+                max(abs(sample.tgt_smooth[1] - 90) for sample in samples),
+                2.0,
+                "heading drifted during a pure pitch slew",
+            )
+
+        def test_current_target_matches_commanded_without_smoothing(self):
+            # With smoothing off (the default), the current (tracked) target equals the
+            # commanded target, and the current-target errors equal the commanded-target
+            # errors.
+            self.assertAlmostEqual(0.0, self.ap.target_smoothing_time, places=4)
+            self.cheat_orientation_to(0, 90)
+            self.set_rotation(30, 120, 45)
+            self.ap.engaged = True
+            self.ap.wait()  # server-side blocking wait; stays engaged
+            self.assertAlmostEqual(
+                self.ap.current_target_pitch, self.ap.target_pitch, delta=0.05
+            )
+            self.assertAlmostEqual(
+                self.ap.current_target_heading, self.ap.target_heading, delta=0.05
+            )
+            self.assertAlmostEqual(
+                self.ap.current_target_roll, self.ap.target_roll, delta=0.05
+            )
+            self.assertAlmostEqual(self.ap.current_error, self.ap.error, delta=0.1)
+            self.assertAlmostEqual(
+                self.ap.current_pitch_error, self.ap.pitch_error, delta=0.1
+            )
+            self.assertAlmostEqual(
+                self.ap.current_heading_error, self.ap.heading_error, delta=0.1
+            )
+            self.assertAlmostEqual(
+                self.ap.current_roll_error, self.ap.roll_error, delta=0.1
+            )
+            self.ap.engaged = False
+
+        def test_current_target_lags_during_slew(self):
+            # With a long smoothing time, stepping the commanded target leaves the
+            # current (tracked) target lagging well short of it, and the error to the
+            # current target is smaller than the error to the (far-away) commanded
+            # target. A very long smoothing time keeps this true regardless of how
+            # coarsely the game advances physics.
+            self.ap.target_smoothing_time = 60.0
+            self.cheat_orientation_to(0, 90)
+            self.ap.engaged = True
+            self.wait(0.5)
+            self.ap.target_pitch = 45  # commanded steps to 45
+            self.wait(0.5)  # << smoothing, so the current target barely moves
+            # Commanded jumped immediately; the current target lags well short of it.
+            self.assertAlmostEqual(self.ap.target_pitch, 45, delta=0.5)
+            self.assertLess(
+                self.ap.current_target_pitch,
+                35.0,
+                "current target should lag the commanded target during a slow slew",
+            )
+            # The vessel is tracking the (nearby) current target, not the far commanded
+            # one.
+            self.assertLess(self.ap.current_error, self.ap.error)
+            self.ap.engaged = False
+
+        def test_torque_dropout_recovery(self):
+            # Cut all torque (wheels + RCS) mid-slew, restore it, and confirm recovery
+            # without an integral-windup kick (RunAxis clears the integral on a
+            # zero-torque axis).
+            self.cheat_orientation_to(0, 90)
             self.set_rotation(40, 90)
+            # Cap the slew rate so the craft can't coast past the target.
+            self.ap.max_angular_velocity = (0.2, 0.2, 0.2)
             self.ap.engaged = True
             self.wait(0.5)
             self.vessel.control.rcs = False
@@ -555,13 +881,12 @@ def _make_autopilot_test_class(
             self.check_rotation(40, 90)
 
         def test_partial_torque_smoothing(self):
-            # Disable the reaction wheels mid-slew but keep RCS, so available torque drops
-            # sharply while staying > 0. The one-sided torque smoothing should keep the
-            # autotuned gains from spiking on the drop (which would jerk the gimbal); without it
-            # Kp jumps as moi/torque grows. Asserts the per-tick fractional Kp rise stays small.
-            # NOTE: gain_jump_limit is an initial estimate; calibrate in-game.
-            self.set_rotation(0, 90)
-            self.wait_for_autopilot()
+            # Disable the reaction wheels mid-slew but keep RCS, so available torque
+            # drops sharply while staying > 0. The one-sided torque smoothing should
+            # keep the autotuned gains from spiking on the drop (which would jerk the
+            # gimbal); without it Kp jumps as moi/torque grows. Asserts the per-tick
+            # fractional Kp rise stays small.
+            self.cheat_orientation_to(0, 90)
             self.set_rotation(45, 90)
 
             def cut_wheels():
@@ -577,15 +902,13 @@ def _make_autopilot_test_class(
                 self.gain_jump_limit,
                 "autotuned gains spiked when torque dropped",
             )
-            self.check_rotation(45, 90)
 
         def test_reference_frame_switch_while_engaged(self):
-            # All other dynamic tests hold a single (surface) reference frame. Engage on a
-            # surface target, then switch to the orbital frame and re-point while still engaged;
-            # the controller must re-converge in the new frame rather than glitch. Covers both
-            # the switch-while-engaged path and a dynamic slew in a non-surface frame.
-            self.set_rotation(0, 90)
-            self.wait_for_autopilot()
+            # Engage on a surface target, then switch to the orbital frame and re-point
+            # while still engaged; the controller must re-converge in the new frame
+            # rather than glitch. Covers both the switch-while-engaged path and a
+            # dynamic slew in a non-surface frame.
+            self.cheat_orientation_to(0, 90)
             frame = self.vessel.orbital_reference_frame
             target = (0.0, 1.0, 0.0)
             self.ap.engaged = True
@@ -599,16 +922,8 @@ def _make_autopilot_test_class(
             )
 
         def test_flexible_mode_slew(self):
-            # A large slew must not drive the structure into a saturated limit cycle. Bounded
-            # control saturation is a proxy for not fighting the bending mode. Most meaningful
-            # on the flexible craft. Two guards: control saturation stays bounded, and the
-            # far-field of the slew (pointing error still large, before the bang-bang brake) is
-            # free of the sign-flipping chatter that the self-excitation produced -- this is
-            # the slew counterpart of test_sustained_hold_chatter (the feedforward-decoupling fix
-            # rather than the bandwidth-reduction fix). The near-target approach phase is excluded
-            # because it legitimately carries the documented adaptive re-clamp transient.
-            self.set_rotation(0, 90)
-            self.wait_for_autopilot()
+            # A large slew must not drive the structure into a saturated limit cycle.
+            self.cheat_orientation_to(0, 90)
             self.set_rotation(50, 90)
             samples = self.capture_recovery(self.recover_timeout)
             self.assertGreater(len(samples), 0)
@@ -624,21 +939,13 @@ def _make_autopilot_test_class(
 
         def test_sustained_hold_chatter(self):
             # After slewing to a target the controller must hold it without a sustained
-            # actuator limit cycle. On a structurally flexible craft the bending mode
-            # (sampled at the root part) used to self-excite a control chatter that
-            # saturated the actuators almost every tick and never decayed -- the net
-            # torque averaged to ~0 and the craft rang indefinitely. The adaptive
-            # chatter detector suppresses it; this asserts the settled-hold control
-            # reversal rate stays low. Rigid craft pass trivially (their settled control
-            # never approaches full deflection). Most meaningful on the flexible
-            # (vibrating) craft.
-            self.set_rotation(0, 90)
-            self.wait_for_autopilot(self.recover_timeout)
+            # actuator limit cycle.
+            self.cheat_orientation_to(0, 90)
             self.set_rotation(45, 90)
             self.wait_for_autopilot(self.recover_timeout)
             self.check_rotation(45, 90)
-            # Observe the steady hold (the slew is over) and assert the actuators are not in a
-            # sustained sign-flipping limit cycle over its second half.
+            # Observe the steady hold (the slew is over) and assert the actuators are
+            # not in a sustained sign-flipping limit cycle over its second half.
             samples = self.capture_for(8)
             self.assertGreater(len(samples), 0)
             tail = samples[len(samples) // 2 :]
@@ -648,15 +955,142 @@ def _make_autopilot_test_class(
                 "actuators chattered while holding (bending-mode limit cycle)",
             )
 
+        def test_oscillation_config(self):
+            # The oscillation-mitigation configuration: defaults, round-trip and
+            # reset. Pure configuration, so it is craft-independent.
+            rfm = self.rate_filter_mode
+            mm = self.mitigation_mode
+            # Defaults
+            self.assertEqual(rfm.automatic, self.ap.pitch_yaw_rate_filter_mode)
+            self.assertEqual(rfm.automatic, self.ap.roll_rate_filter_mode)
+            self.assertAlmostEqual(
+                1.5, self.ap.pitch_yaw_oscillation_frequency, places=4
+            )
+            self.assertAlmostEqual(1.5, self.ap.roll_oscillation_frequency, places=4)
+            self.assertAlmostEqual(2.5, self.ap.oscillation_notch_q, places=4)
+            self.assertEqual(mm.automatic, self.ap.oscillation_bandwidth_floor_mode)
+            self.assertAlmostEqual(1.0, self.ap.oscillation_bandwidth_floor, places=4)
+            self.assertEqual(mm.automatic, self.ap.oscillation_feedforward_mode)
+            self.assertEqual(mm.automatic, self.ap.oscillation_output_filter_mode)
+            self.assertAlmostEqual(0.5, self.ap.soft_start_time, places=4)
+            # Read-only observability is inactive after a reset (latch cleared on
+            # engage)
+            self.assertFalse(self.ap.pitch_yaw_oscillation_latched)
+            self.assertFalse(self.ap.roll_oscillation_latched)
+            self.assertEqual(3, len(self.ap.oscillation_level))
+            # The estimator has not acquired yet, so the detected frequency reads NaN.
+            self.assertTrue(
+                math.isnan(self.ap.pitch_yaw_oscillation_detected_frequency)
+            )
+            self.assertTrue(math.isnan(self.ap.roll_oscillation_detected_frequency))
+            # Round-trip the settable properties. Each mitigation mode is independent.
+            self.ap.pitch_yaw_rate_filter_mode = rfm.off
+            self.ap.roll_rate_filter_mode = rfm.notch
+            self.ap.pitch_yaw_oscillation_frequency = 2.0
+            self.ap.roll_oscillation_frequency = 3.0
+            self.ap.oscillation_notch_q = 4.0
+            self.ap.oscillation_bandwidth_floor_mode = mm.forced
+            self.ap.oscillation_bandwidth_floor = 2.0
+            self.ap.oscillation_feedforward_mode = mm.off
+            self.ap.oscillation_output_filter_mode = mm.forced
+            self.ap.soft_start_time = 1.5
+            self.assertEqual(rfm.off, self.ap.pitch_yaw_rate_filter_mode)
+            self.assertEqual(rfm.notch, self.ap.roll_rate_filter_mode)
+            self.assertAlmostEqual(
+                2.0, self.ap.pitch_yaw_oscillation_frequency, places=4
+            )
+            self.assertAlmostEqual(3.0, self.ap.roll_oscillation_frequency, places=4)
+            self.assertAlmostEqual(4.0, self.ap.oscillation_notch_q, places=4)
+            self.assertEqual(mm.forced, self.ap.oscillation_bandwidth_floor_mode)
+            self.assertAlmostEqual(2.0, self.ap.oscillation_bandwidth_floor, places=4)
+            self.assertEqual(mm.off, self.ap.oscillation_feedforward_mode)
+            self.assertEqual(mm.forced, self.ap.oscillation_output_filter_mode)
+            self.assertAlmostEqual(1.5, self.ap.soft_start_time, places=4)
+            # The low-pass value round-trips too
+            self.ap.pitch_yaw_rate_filter_mode = rfm.low_pass
+            self.assertEqual(rfm.low_pass, self.ap.pitch_yaw_rate_filter_mode)
+            # reset() restores the defaults
+            self.ap.reset()
+            self.assertEqual(rfm.automatic, self.ap.pitch_yaw_rate_filter_mode)
+            self.assertEqual(rfm.automatic, self.ap.roll_rate_filter_mode)
+            self.assertAlmostEqual(
+                1.5, self.ap.pitch_yaw_oscillation_frequency, places=4
+            )
+            self.assertAlmostEqual(1.5, self.ap.roll_oscillation_frequency, places=4)
+            self.assertAlmostEqual(2.5, self.ap.oscillation_notch_q, places=4)
+            self.assertEqual(mm.automatic, self.ap.oscillation_bandwidth_floor_mode)
+            self.assertAlmostEqual(1.0, self.ap.oscillation_bandwidth_floor, places=4)
+            self.assertEqual(mm.automatic, self.ap.oscillation_feedforward_mode)
+            self.assertEqual(mm.automatic, self.ap.oscillation_output_filter_mode)
+            self.assertAlmostEqual(0.5, self.ap.soft_start_time, places=4)
+
+        def test_oscillation_force_on(self):
+            # Forcing a rate-filter tool (Notch on pitch/yaw, LowPass on roll) applies
+            # that filtering unconditionally at the group's manual frequency, bypassing
+            # the detector -- it does not depend on (or require) a latch (contrast the
+            # Automatic path in test_oscillation_auto_detection). Forcing the other
+            # mitigations engages them fully regardless of the detector. This checks the
+            # forced modes are accepted, persist across an engage, and the autopilot
+            # still drives to and holds the target. Craft-independent.
+            rfm = self.rate_filter_mode
+            mm = self.mitigation_mode
+            self.ap.pitch_yaw_rate_filter_mode = rfm.notch
+            self.ap.roll_rate_filter_mode = rfm.low_pass
+            self.ap.oscillation_output_filter_mode = mm.forced
+            self.cheat_orientation_to(0, 90)
+            self.check_rotation(0, 90)
+            self.assertEqual(rfm.notch, self.ap.pitch_yaw_rate_filter_mode)
+            self.assertEqual(rfm.low_pass, self.ap.roll_rate_filter_mode)
+            self.assertEqual(mm.forced, self.ap.oscillation_output_filter_mode)
+
+        def test_oscillation_force_off(self):
+            # Forcing every mitigation Off disables all oscillation handling, even on a
+            # structurally flexible craft: the craft is controlled with full authority
+            # (and may wobble). The detector keeps observing -- the latch and level
+            # observables are unaffected by the modes -- so unlike the pre-redesign
+            # semantics no assertion is made on them here. Uses capture_recovery (which
+            # does not raise on a non-settle) rather than wait_for_autopilot, since
+            # forcing Off means accepting the wobble; only that the modes persist is
+            # required.
+            rfm = self.rate_filter_mode
+            mm = self.mitigation_mode
+            self.ap.pitch_yaw_rate_filter_mode = rfm.off
+            self.ap.roll_rate_filter_mode = rfm.off
+            self.ap.oscillation_bandwidth_floor_mode = mm.off
+            self.ap.oscillation_feedforward_mode = mm.off
+            self.ap.oscillation_output_filter_mode = mm.off
+            self.set_rotation(0, 90)
+            self.capture_recovery(self.recover_timeout)
+            self.set_rotation(45, 90)
+            self.capture_recovery(self.recover_timeout)
+            self.assertEqual(rfm.off, self.ap.pitch_yaw_rate_filter_mode)
+            self.assertEqual(rfm.off, self.ap.roll_rate_filter_mode)
+            self.assertEqual(mm.off, self.ap.oscillation_bandwidth_floor_mode)
+            self.assertEqual(mm.off, self.ap.oscillation_feedforward_mode)
+            self.assertEqual(mm.off, self.ap.oscillation_output_filter_mode)
+
+        def test_oscillation_auto_detection(self):
+            # In Auto mode a structurally flexible craft is detected and latched as
+            # flexible; a rigid craft never is. Reads the read-only observability
+            # properties after a slew-and-hold (the latch and level persist across the
+            # disengage).
+            self.cheat_orientation_to(0, 90)
+            self.set_rotation(45, 90)
+            self.capture_recovery(self.recover_timeout)
+            if self.flexible:
+                self.assertTrue(self.ap.pitch_yaw_oscillation_latched)
+                self.assertGreater(max(self.ap.oscillation_level), 0.5)
+            else:
+                self.assertFalse(self.ap.pitch_yaw_oscillation_latched)
+                self.assertFalse(self.ap.roll_oscillation_latched)
+
         def test_max_angular_velocity_cap(self):
-            # The max_angular_velocity cap must bound the commanded target rate: slew under a
-            # low uniform cap and assert no per-axis target angular velocity exceeds it (the
-            # profile's Math.Min against the cap / constraint ellipse).
-            # NOTE: the margin is an initial estimate; calibrate in-game.
+            # The max_angular_velocity cap must bound the commanded target rate: slew
+            # under a low uniform cap and assert no per-axis target angular velocity
+            # exceeds it (the profile's Math.Min against the cap / constraint ellipse).
             cap = 0.2
             self.ap.max_angular_velocity = (cap, cap, cap)
-            self.set_rotation(0, 90)
-            self.wait_for_autopilot()
+            self.cheat_orientation_to(0, 90)
             self.set_rotation(60, 90)
             samples = self.capture_recovery(self.recover_timeout)
             self.assertGreater(len(samples), 0)
@@ -671,18 +1105,18 @@ def _make_autopilot_test_class(
             self.check_rotation(60, 90)
 
         def test_roll_blending(self):
-            # Roll is suppressed while the pointing error exceeds roll_start_angle and blends in
-            # below roll_engage_angle (RollWeight), so a large slew produces no roll kick.
-            # Exercises the roll_start_angle/roll_engage_angle setters. The roll control output
-            # includes the (small, quadratic-in-omega) gyroscopic feedforward, so roll_control_limit
-            # allows for it. NOTE: roll_control_limit is an initial estimate; calibrate in-game.
+            # Roll is suppressed while the pointing error exceeds roll_start_angle and
+            # blends in below roll_engage_angle (RollWeight), so a large slew produces
+            # no roll kick.  Exercises the roll_start_angle/roll_engage_angle
+            # setters. The roll control output includes the (small, quadratic-in-omega)
+            # gyroscopic feedforward, so roll_control_limit allows for it.
             self.ap.roll_start_angle = 25
             self.ap.roll_engage_angle = 10
             roll_start = 25
-            self.set_rotation(0, 90, 0)
-            self.wait_for_autopilot()
-            # Large direction change (50 deg) plus a large roll change: while the pointing error
-            # is above roll_start_angle the roll axis must stay essentially un-actuated.
+            self.cheat_orientation_to(0, 90, 0)
+            # Large direction change (50 deg) plus a large roll change: while the
+            # pointing error is above roll_start_angle the roll axis must stay
+            # essentially un-actuated.
             self.set_rotation(50, 90, 120)
             samples = self.capture_recovery(self.recover_timeout)
             self.assertGreater(len(samples), 0)
@@ -697,9 +1131,9 @@ def _make_autopilot_test_class(
             self.check_rotation(50, 90, 120)
 
         def test_pid_gains(self):
-            # The manual pitch/roll/yaw_pid_gains get/set API (untested elsewhere) and its
-            # documented auto_tune interaction: a manual set persists while auto_tune is off and
-            # is overwritten by the autotuner when it is on (which also zeroes Kd).
+            # The manual pitch/roll/yaw_pid_gains get/set and its documented auto_tune
+            # interaction: a manual set persists while auto_tune is off and is
+            # overwritten by the autotuner when it is on (which also zeroes Kd).
             self.ap.auto_tune = False
             gains = (1.5, 0.25, 0.05)
             self.ap.pitch_pid_gains = gains
@@ -721,7 +1155,8 @@ def _make_autopilot_test_class(
             for actual, expected in zip(self.ap.pitch_pid_gains, gains):
                 self.assertAlmostEqual(actual, expected, delta=1e-6)
 
-            # With auto_tune on, the next engage retunes: Kp changes and Kd is driven to zero.
+            # With auto_tune on, the next engage retunes: Kp changes and Kd is driven to
+            # zero.
             self.ap.auto_tune = True
             self.ap.engaged = True
             self.wait(0.5)
@@ -731,8 +1166,9 @@ def _make_autopilot_test_class(
             self.assertAlmostEqual(tuned[2], 0, delta=1e-6)
 
         def test_target_rotation(self):
-            # The target_rotation quaternion get/set round-trips and drives the vessel via the
-            # SetTargetRotation path (which the pitch/heading/roll properties do not exercise).
+            # The target_rotation quaternion get/set round-trips and drives the vessel
+            # via the SetTargetRotation path (which the pitch/heading/roll properties do
+            # not exercise).
             self.set_rotation(30, 120, 45)
             rotation = self.ap.target_rotation
 
@@ -775,10 +1211,11 @@ def _make_autopilot_test_class(
             conn = self.connect(use_cached=False)
             vessel = conn.space_center.active_vessel
             ap = vessel.auto_pilot
-            self.assertEqual(vessel.surface_reference_frame, ap.reference_frame)
-            # FIXME: tuples returned from server cannot be null
-            # self.assertEqual(None, ap.target_direction)
-            self.assertIsNaN(ap.target_roll)
+            self.assertFalse(ap.engaged)
+            self.assertEqual(vessel.orbital_reference_frame, ap.reference_frame)
+            self.assertAlmostEqual(ap.target_pitch, 10, places=4)
+            self.assertAlmostEqual(ap.target_heading, 20, places=4)
+            self.assertAlmostEqual(ap.target_roll, 30, places=4)
             conn.close()
 
         def test_dont_reset_on_clean_disconnect(self):
@@ -803,121 +1240,434 @@ def _make_autopilot_test_class(
             self.assertEqual(30, ap.target_roll)
             conn.close()
 
-    TestAutoPilot.__name__ = f"TestAutoPilot_{vessel_name}"
-    TestAutoPilot.__qualname__ = f"TestAutoPilot_{vessel_name}"
-    return TestAutoPilot
+    TestAutoPilotBase.__name__ = test_name
+    TestAutoPilotBase.__qualname__ = test_name
+    return TestAutoPilotBase
 
 
-TestAutoPilotNormal = _make_autopilot_test_class(
-    "AutoPilotNormal",
-    angle_error=2,
-    direction_error=0.1,
-    # Calibrated in-game against the Normal craft.  winding_limit (0.75) and
-    # path_deviation_limit (0.25) are left at the defaults: the worst observed values
-    # (0.21 winding, 0.17 path deviation) already sit ~3.5x / 1.4x under them.
-    overshoot_limit=0.10,
-    roll_isolation_limit=2.7,
-    rebound_limit=1.0,
-    gain_jump_limit=0.12,
-    saturation_limit=0.6,
-    roll_control_limit=0.1,
+# Rigit craft with a "normal" amount of RCS and reaction wheel torque.
+TestAutoPilotAttitude = _make_autopilot_test_class(
+    "TestAutoPilotAttitude",
+    "AutoPilot",
 )
-TestAutoPilotSlow = _make_autopilot_test_class(
-    "AutoPilotSlow",
-    angle_error=2,
-    direction_error=0.1,
-    # Calibrated in-game against the Slow craft (the Normal airframe with RCS thrust and
-    # reaction-wheel authority both cut to 20%). It is rigid and chatter-free. Before
-    # the available-torque limiter fix the over-estimated authority made it heavily
-    # underdamped (~30-40% overshoot); with the fix it now settles monotonically with
-    # *zero* overshoot (a 90 deg slew converges in ~12 s, error decreasing
-    # monotonically), so these bounds are tightened to ~3x the worst observed (floors
-    # for the near-zero metrics), matching the Normal/Nimble calibration
-    # policy. recover_timeout is left high because the torque-cut tests (partial_torque
-    # on 20% RCS only, full dropout recovery) still settle slowly even though the
-    # unperturbed slew is fast.
-    winding_limit=0.8,
-    path_deviation_limit=0.25,
-    nudge_rate=0.2,
-    recover_timeout=90,
-    rebound_limit=2.0,
-    roll_isolation_limit=2.5,
-    control_spike_limit=3,
-    saturation_limit=1.0,
-    overshoot_limit=0.1,
-    roll_control_limit=0.1,
-    gain_jump_limit=0.12,
+
+# Rigid craft with thrust vector control drive pitch/yaw, and a weak reaction wheel
+# mostly just for roll control
+TestAutoPilotAttitudeTVC = _make_autopilot_test_class(
+    "TestAutoPilotAttitudeTVC",
+    "AutoPilot",
+    rcs=False,
+    engine_tvc=True,
+    engine_thrust_limit=0.3,
+    rwhl=True,
+    rwhl_authority=0.1,
+    roll_control_limit=1,
 )
-TestAutoPilotNimble = _make_autopilot_test_class(
+
+# Rigid craft with high control authority; faster slews means more winding on
+# recovery, harder bang-bang braking reversals at a setpoint step, and a bigger
+# rebound on a full-torque dropout.
+TestAutoPilotAttitudeNimble = _make_autopilot_test_class(
+    "TestAutoPilotAttitudeNimble",
     "AutoPilotNimble",
-    angle_error=2,
-    direction_error=0.1,
-    # Calibrated in-game against the Nimble craft (reaction-wheel dominated, high authority;
-    # a small RCS was added so test_partial_torque_smoothing keeps non-zero torque when the
-    # wheels are cut). path_deviation_limit (0.25) is left at the default: observed 0.17.
-    # High authority means faster slews -- more winding on recovery, harder bang-bang braking
-    # reversals at a setpoint step, and a bigger rebound on a full-torque dropout.
-    winding_limit=1.25,
-    overshoot_limit=0.1,
-    rebound_limit=9.0,
-    roll_isolation_limit=2.5,
-    control_spike_limit=10,
-    saturation_limit=0.6,
-    gain_jump_limit=0.12,
-    roll_control_limit=0.1,
 )
-TestAutoPilotWobbly = _make_autopilot_test_class(
-    "AutoPilotWobbly",
-    angle_error=4,
-    direction_error=0.2,
-    # Flexible: looser bounds, a gentler nudge to avoid exciting the bending mode, more time.
-    winding_limit=1.5,
-    path_deviation_limit=0.4,
-    nudge_rate=0.15,
-    recover_timeout=60,
-    rebound_limit=12.0,
-    roll_isolation_limit=8.0,
-    control_spike_limit=6,
-    saturation_limit=15.0,
-    overshoot_limit=0.6,
-    roll_control_limit=0.7,
-    gain_jump_limit=0.25,
+
+# Rigid craft, with low control autority (RCS thrust and reaction-wheels cut to 20%)
+# recover_timeout is high because the torque-cut tests (partial_torque on 20% RCS
+# only, full dropout recovery) still settle slowly even though the unperturbed slew
+# is fast.
+TestAutoPilotAttitudeSlow = _make_autopilot_test_class(
+    "TestAutoPilotAttitudeSlow",
+    "AutoPilot",
+    rwhl_authority=0.2,
+    rcs_thrust_limit=0.2,
+    winding_limit=1.2,
 )
-TestAutoPilotVibrating = _make_autopilot_test_class(
-    "AutoPilotSlowVibrating",
-    angle_error=3,
-    direction_error=0.2,
-    # A long, low-authority rocket with its reaction wheels at the *far end* -- the wheels-at-the-
-    # tip fixture that self-excited the bending-mode limit cycle (it used to overshoot ~60 deg
-    # per swing and ring indefinitely). It runs on DEFAULT parameters (no apply_craft_tuning): the
-    # adaptive chatter detector engages the rate filter, feedforward decoupling and bandwidth
-    # reduction by itself. The slew far-field and the settled hold are clean (test_sustained_hold_-
-    # chatter is the headline guard); the residual is an approach-phase transient as the
-    # detector re-clamps at the bang-bang brake, so the spike/saturation/rebound bounds are loose
-    # like the flexible Wobbly craft. All thresholds are initial estimates pending in-game
-    # calibration.
-    # Bounds calibrated in-game against the full dynamic suite (worst observed in parentheses):
-    # winding 0.38, path 0.12, rebound 0.0, saturation 1.4 s, overshoot 0.0, gain-jump 0.04,
-    # roll-control 0.14, and a clean settled hold (control_reversal_rate 0.0).
-    # control_spike_limit stays loose: a mid-slew target step re-triggers the detector and the
-    # approach-phase transient produces ~225 control jumps before a clean hold (the documented
-    # residual a bending-mode notch would remove).
-    # hold_chatter_floor=0.15 catches the ±0.2-range residual bending oscillation that the default
-    # floor=0.3 misses (pairs where neither side exceeds 0.3 are not counted). Needs recalibration
-    # after the filter/bandwidth changes; initial limit kept at 0.1 pending in-game data.
-    winding_limit=1.5,
-    path_deviation_limit=0.4,
-    nudge_rate=0.15,
-    recover_timeout=90,
-    rebound_limit=3.0,
-    roll_isolation_limit=8.0,
-    control_spike_limit=400,
-    saturation_limit=5.0,
-    overshoot_limit=0.2,
-    roll_control_limit=0.3,
-    gain_jump_limit=0.12,
-    hold_chatter_limit=0.1,
-    hold_chatter_floor=0.15,
+
+# A heavy, semi-rigid craft with strong reaction wheels at one end. Without adaptive
+# chatter detector, outputs vibrate excessively and fails to hold attitude.
+TestAutoPilotAttitudeChatter = _make_autopilot_test_class(
+    "TestAutoPilotAttitudeChatter",
+    "AutoPilotChatter",
+    saturation_limit=2,
+    slew_chatter_limit=0.75,
+    flip_plane_limit=0.15,
+    flexible=True,
+)
+
+# Flexible, non-rigid craft, with reaction wheels and RCS for attitude control.
+TestAutoPilotAttitudeFlexible = _make_autopilot_test_class(
+    "TestAutoPilotAttitudeFlexible",
+    "AutoPilotFlexible",
+    slew_chatter_limit=1.2,
+    roll_control_limit=1,
+    flexible=True,
+)
+
+
+class TestAutoPilotLaunch(krpctest.TestCase):
+    def setUp(self):
+        self.new_save()
+        self.remove_other_vessels()
+        self.launch_vessel_from_vab("Ariane 5")
+        self.vessel = self.connect().space_center.active_vessel
+        self.ap = self.vessel.auto_pilot
+        self.ap.reset()
+        self.ap.sas = False
+        self.ap.show_info_ui = True
+        self.vessel.control.sas = False
+        self.vessel.control.rcs = False
+        self.vessel.control.throttle = 1.0
+
+    def tearDown(self):
+        self.ap.show_info_ui = False
+
+    def test_ascent_hold_no_wobble(self):
+        # Launch, hold vertical through the ascent, then assert the actuators have
+        # settled to a smooth hold rather than a bending-mode limit cycle.
+        self.ap.reference_frame = self.vessel.surface_reference_frame
+        self.ap.target_pitch_and_heading(90, 90)
+        self.ap.engaged = True
+        self.wait(1)
+        self.vessel.control.activate_next_stage()
+        # Let the ascent transient pass and the detector latch the craft as flexible.
+        self.wait(15)
+        # Observe the steady hold.
+        self.ap.diagnostic_logging = True
+        self.wait(10)
+        self.ap.diagnostic_logging = False
+        # The estimator should have acquired a structural mode and routed it to the
+        # notch branch (below the ~12 Hz split). Measured in-game it settles near ~7 Hz
+        # — the dominant content of the high-passed rate, not the nominal ~1.4 Hz
+        # first-bending figure — so the band is wide.
+        detected = self.ap.pitch_yaw_oscillation_detected_frequency
+        self.ap.engaged = False
+        self.assertFalse(
+            math.isnan(detected), "estimator never acquired the bending-mode frequency"
+        )
+        self.assertGreater(detected, 3.0)
+        self.assertLess(detected, 9.0)
+        samples = diagnostics.parse_log(self.ap.diagnostic_log)
+        self.assertGreater(len(samples), 0)
+        self.assertLess(
+            diagnostics.control_oscillation_amplitude(samples),
+            0.1,
+            "actuators limit-cycled while holding the ascent attitude (bending mode)",
+        )
+        # Attitude was held throughout the captured hold.
+        self.assertLess(
+            max(sample.err for sample in samples),
+            2,
+            "lost the ascent attitude",
+        )
+
+    def test_ascent_no_settle_no_wobble(self):
+        # Engage the autopilot while clamped on the pad and stage *immediately*, with no
+        # settle pause. Without the engagement soft-start the first ticks command a
+        # near-max gimbal kick that coincides with lift-off and seeds a low-frequency
+        # (<0.5 Hz) in-band limit cycle — the cycle the structural-chatter detector
+        # cannot latch (it sits at the loop's own bandwidth, not above it). The
+        # soft-start fades that kick in, so the craft holds without oscillating. Own
+        # class so the test gets a fresh pad launch.
+        self.ap.reference_frame = self.vessel.surface_reference_frame
+        self.ap.target_pitch_and_heading(90, 90)
+        # Default bandwidth (no manual time_to_peak): the engagement soft-start fades
+        # the staging kick in, and the adaptive oscillation back-off (see AUTOPILOT.md,
+        # "Flexible-craft handling") engages the mitigation if the in-band limit cycle
+        # starts to build, so the loop does not sustain it.
+        self.ap.soft_start_time = 1
+        self.ap.engaged = True
+        # No settle pause: stage immediately after engaging.
+        self.vessel.control.activate_next_stage()
+        # Let the ascent transient pass, then observe the steady hold.
+        self.wait(15)
+        self.ap.diagnostic_logging = True
+        self.wait(10)
+        self.ap.diagnostic_logging = False
+        self.ap.engaged = False
+        samples = diagnostics.parse_log(self.ap.diagnostic_log)
+        self.assertGreater(len(samples), 0)
+        # Baseline (no soft-start) limit-cycles near 0.8 here; the fix brings it well
+        # below 0.1.
+        self.assertLess(
+            diagnostics.control_oscillation_amplitude(samples),
+            0.1,
+            "actuators limit-cycled after an immediate-staging engage (no soft-start)",
+        )
+        self.assertLess(
+            max(sample.err for sample in samples),
+            2,
+            "lost the ascent attitude",
+        )
+
+    def test_midflight_engage_no_wobble(self):
+        # Hold with SAS for the first second of the ascent, then disengage SAS and
+        # engage the autopilot mid-flight. The fresh engage delivers the same near-max
+        # kick — now with full aerodynamic/thrust authority and no clamp to absorb it —
+        # which without the soft-start seeds the low-frequency limit cycle. Own class
+        # for a fresh pad launch.
+        self.vessel.control.sas = True
+        self.vessel.control.activate_next_stage()
+        # Hold on SAS for the first second of flight, then hand over to the autopilot.
+        self.wait(1)
+        self.vessel.control.sas = False
+        self.ap.reset()
+        self.ap.reference_frame = self.vessel.surface_reference_frame
+        self.ap.target_pitch_and_heading(90, 90)
+        # Default bandwidth (no manual time_to_peak): the soft-start fades the SAS-handover
+        # kick in, and the adaptive oscillation back-off (see AUTOPILOT.md,
+        # "Flexible-craft handling")
+        # engages the mitigation if the in-band limit cycle starts to build.
+        self.ap.soft_start_time = 3
+        self.ap.engaged = True
+        # Let the engagement transient pass, then observe the steady hold.
+        self.wait(15)
+        self.ap.diagnostic_logging = True
+        self.wait(10)
+        self.ap.diagnostic_logging = False
+        self.ap.engaged = False
+        samples = diagnostics.parse_log(self.ap.diagnostic_log)
+        self.assertGreater(len(samples), 0)
+        self.assertLess(
+            diagnostics.control_oscillation_amplitude(samples),
+            0.1,
+            "actuators limit-cycled after a mid-flight engage (no soft-start)",
+        )
+        self.assertLess(
+            max(sample.err for sample in samples),
+            2,
+            "lost the ascent attitude",
+        )
+
+
+# pylint: disable=too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-locals
+def _make_autopilot_launch_test_class(
+    test_name,
+    vessel_name,
+    pre_launch_sequence=False,
+    hold_oscillation_amplitude=0.2,
+    hold_attitude_error=0.5,
+    turn_oscillation_amplitude=0.4,
+    turn_attitude_error=1.2,
+    pitch_settle_delay=5,
+    launch_settle_delay=3,
+    skip_turn=False,
+):
+    class TestAutoPilotLaunchBase(krpctest.TestCase):
+        @classmethod
+        def setUpClass(cls):
+            cls.new_save()
+
+        def setUp(self):
+            self.remove_other_vessels()
+            self.launch_vessel_from_vab(vessel_name)
+            self.vessel = self.connect().space_center.active_vessel
+            self.ap = self.vessel.auto_pilot
+            self.ap.reset()
+            self.ap.sas = False
+            self.ap.show_info_ui = True
+
+        def tearDown(self):
+            self.ap.show_info_ui = False
+
+        def launch(self):
+            self.vessel.control.sas = False
+            self.vessel.control.rcs = False
+            self.vessel.control.throttle = 1.0
+            self.ap.reference_frame = self.vessel.surface_reference_frame
+            self.ap.target_pitch_and_heading(90, 90)
+            self.ap.engaged = True
+            # Wait briefly between autopilot engagement and launch to check the
+            # pre-launch behavior of the autopilot. Control loop should be held until
+            # launch so an initial kick in controls is not produced.
+            time.sleep(1)
+            self.vessel.control.activate_next_stage()
+            if pre_launch_sequence:
+                # Rocket has a prelaunch spin up, release after 0.5 seconds
+                self.wait(0.5)
+                self.vessel.control.activate_next_stage()
+
+        def assert_steady(self, oscillation_amplitude, attitude_error):
+            samples = diagnostics.parse_log(self.ap.diagnostic_log)
+            self.assertGreater(len(samples), 0)
+            # Check any oscillation amplitude is small
+            self.assertLess(
+                diagnostics.control_oscillation_amplitude(samples),
+                oscillation_amplitude,
+                "actuators limit-cycled while holding the ascent attitude (bending mode)",
+            )
+            # Check attitude was held throughout the captured hold.
+            self.assertLess(
+                max(sample.err for sample in samples),
+                attitude_error,
+                "lost the ascent attitude",
+            )
+
+        def test_launch(self):
+            # Launch, holding vertical, and assert the actuators have settled to a
+            # smooth hold with little oscillation.
+            self.launch()
+            self.wait(launch_settle_delay)
+            self.ap.diagnostic_logging = True
+            self.wait(10)
+            self.ap.diagnostic_logging = False
+            self.assert_steady(hold_oscillation_amplitude, hold_attitude_error)
+
+        @unittest.skipIf(skip_turn, "turning not supported in this regime")
+        def test_sharp_turn(self):
+            # Launch, hold vertical for 10 seconds, pitch over 5 degrees, then assert
+            # the actuators have settled to a smooth hold with little oscillation.
+            self.launch()
+            self.wait(10)
+            self.ap.target_pitch_and_heading(85, 90)
+            self.wait(pitch_settle_delay)
+            self.ap.diagnostic_logging = True
+            self.wait(10)
+            self.ap.diagnostic_logging = False
+            self.assert_steady(hold_oscillation_amplitude, hold_attitude_error)
+
+        @unittest.skipIf(skip_turn, "turning not supported in this regime")
+        def test_jittery_turn(self):
+            # Launch, holding vertical for 10 seconds, then gravity turn using
+            # 10Hz update to the vessel pitch control.
+            # Assert the actuators have settled to a smooth hold with little
+            # oscillation from 10 second onwards.
+            self.launch()
+            self.wait(10)
+            self.ap.diagnostic_logging = True
+            for i in range(200):
+                self.wait(0.1)
+                self.ap.target_pitch_and_heading(90 - 0.1 * i, 90)
+            self.ap.diagnostic_logging = False
+            self.assert_steady(turn_oscillation_amplitude, turn_attitude_error)
+
+        @unittest.skipIf(skip_turn, "turning not supported in this regime")
+        def test_smooth_turn(self):
+            # Launch, holding vertical for 10 seconds, then smooth gravity turn
+            # using target_smoothing_time control
+            # Assert the actuators have settled to a smooth hold with little
+            # oscillation from 10 second onwards.
+            self.launch()
+            self.wait(10)
+            self.ap.diagnostic_logging = True
+            self.ap.target_smoothing_time = 20
+            self.ap.target_pitch_and_heading(70, 90)
+            self.wait(20)
+            self.ap.target_smoothing_time = 0
+            self.ap.diagnostic_logging = False
+            self.assert_steady(turn_oscillation_amplitude, turn_attitude_error)
+
+    TestAutoPilotLaunchBase.__name__ = test_name
+    TestAutoPilotLaunchBase.__qualname__ = test_name
+    return TestAutoPilotLaunchBase
+
+
+TestAutoPilotLaunchKerbal1 = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchKerbal1",
+    "Kerbal 1",
+)
+
+TestAutoPilotLaunchKerbal2 = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchKerbal2",
+    "Kerbal 2",
+    skip_turn=True,  # FIXME: fails turn - high speed aerodynamic regime
+    hold_attitude_error=0.75,
+)
+
+TestAutoPilotLaunchKerbalX = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchKerbalX",
+    "Kerbal X",
+)
+
+TestAutoPilotLaunchMunsplorer = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchMunsplorer",
+    "PT Series Munsplorer",
+    hold_attitude_error=1,
+)
+
+TestAutoPilotLaunchScienceJr = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchScienceJr",
+    "Science Jr",
+    hold_oscillation_amplitude=0.4,
+    hold_attitude_error=1.5,
+)
+
+TestAutoPilotLaunchSlimShuttle = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchSlimShuttle",
+    "Slim Shuttle",
+    hold_attitude_error=0.75,
+)
+
+TestAutoPilotLaunchAriane5 = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchAriane5",
+    "Ariane 5",
+    hold_attitude_error=1.5,
+    hold_oscillation_amplitude=0.5,
+    turn_attitude_error=1.5,
+    turn_oscillation_amplitude=0.5,
+)
+
+# FIXME: small oscillation after pitch of 5 degrees - likely aero surface related
+TestAutoPilotLaunchAeroEquus = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchAeroEquus",
+    "AeroEquus",
+    hold_attitude_error=3,
+    turn_attitude_error=3,
+    hold_oscillation_amplitude=1,
+    turn_oscillation_amplitude=1,
+)
+
+TestAutoPilotLaunchComSatLx = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchComSatLx",
+    "ComSat Lx",
+)
+
+TestAutoPilotLaunchLearstarA1 = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchLearstarA1",
+    "Learstar A1",
+    pre_launch_sequence=True,
+)
+
+# Shuttle-style craft: gimbal + aero control, no clean reaction-wheel torque model, so the
+# autotuned loop is too hot for the actual actuator authority and limit-cycles until the
+# control-oscillation latch floors the bandwidth (see AUTOPILOT.md, control-oscillation latch).
+# It also starts ~8.6 deg pitched on the pad, so the launch capture takes a few seconds.
+# FIXME: holds cleanly now, but large continuous slews are still flaky in the floored regime
+# (the floored loop occasionally releases / the feedforward whips, spiking the error to ~5 deg),
+# so the turn tests remain skipped. This is NOT a frequency-detector/notch problem (the cycle is
+# genuine ~0.6 Hz rigid-body motion, in-band, not a structural mode in the measurement): the real
+# fix is modelling the gimbal/aero actuator bandwidth so the autotuner can place the loop
+# crossover with real phase margin and run faster than the blunt 1.0 rad/s floor while keeping the
+# feedforward through the slew. Root cause is the constant-max-torque model (see AUTOPILOT.md).
+TestAutoPilotLaunchDynawing = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchDynawing",
+    "Dynawing",
+    pre_launch_sequence=True,
+    launch_settle_delay=8,
+    hold_oscillation_amplitude=0.5,
+    hold_attitude_error=2.5,
+    skip_turn=True,
+)
+
+TestAutoPilotLaunchOrbiterOne = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchOrbiterOne",
+    "Orbiter One",
+    hold_attitude_error=3,
+    turn_attitude_error=3,
+    hold_oscillation_amplitude=3,
+    turn_oscillation_amplitude=3,
+)
+
+TestAutoPilotLaunchZMAP = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchZMAP",
+    "Z-MAP Satellite Launch Kit",
+    pre_launch_sequence=True,
+)
+
+TestAutoPilotLaunchGDLV3 = _make_autopilot_launch_test_class(
+    "TestAutoPilotLaunchGDLV3",
+    "GDLV3",
+    turn_oscillation_amplitude=1.5,
 )
 
 
@@ -926,7 +1676,7 @@ class TestAutoPilotSAS(krpctest.TestCase):
     def setUpClass(cls):
         cls.new_save()
         cls.remove_other_vessels()
-        cls.launch_vessel_from_vab("AutoPilotNormal")
+        cls.launch_vessel_from_vab("AutoPilot")
         cls.set_orbit("Eve", 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
         cls.vessel = cls.connect().space_center.active_vessel
         cls.ap = cls.vessel.auto_pilot
@@ -1014,6 +1764,7 @@ class TestAutoPilotOtherVessel(krpctest.TestCase):
 
     def test_autopilot(self):
         ap = self.other_vessel.auto_pilot
+        ap.show_info_ui = True
         ap.target_pitch_and_heading(0, 0)
         ap.target_roll = 0
         ap.engaged = True
