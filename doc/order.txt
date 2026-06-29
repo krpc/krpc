@@ -1150,6 +1150,7 @@ SpaceCenter.AutoPilot
 SpaceCenter.AutoPilot.SAS
 SpaceCenter.AutoPilot.SASMode
 SpaceCenter.AutoPilot.Engaged
+SpaceCenter.AutoPilot.ShowInfoUI
 SpaceCenter.AutoPilot.Reset
 SpaceCenter.AutoPilot.ReferenceFrame
 SpaceCenter.AutoPilot.TargetPitch

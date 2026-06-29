@@ -185,6 +185,9 @@ namespace KRPC.SpaceCenter.AutoPilot
         // Raw (unfiltered) angular velocity in the roll-invariant frame, recorded for diagnostics
         // so the filter's effect on a flexible craft is visible against what the loop acts on.
         Vector3d logRawOmegaRi;
+        // Target angular velocity (roll-invariant frame) the inner loop is tracking this tick,
+        // recorded for the info UI alongside the measured rate.
+        Vector3d logTargetRi;
         bool diagnosticLogging;
         readonly StringBuilder diagnosticLog = new StringBuilder ();
         readonly object diagnosticLogLock = new object ();
@@ -495,6 +498,40 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public double RollOscillationDetectedFrequency {
             get { return rollHeldHz; }
+        }
+
+        // Measured angular velocity (raw, roll-invariant frame, rad/s) in the controller's internal
+        // sign convention. Recorded each tick for the in-game info window.
+        public Vector3d MeasuredAngularVelocity {
+            get { return logRawOmegaRi; }
+        }
+
+        // Target angular velocity (roll-invariant frame, rad/s) the inner loop is tracking this tick.
+        public Vector3d TargetAngularVelocity {
+            get { return logTargetRi; }
+        }
+
+        // Per-axis hold-gated mitigation weight in [0,1] (suppressionRamp · holdFactor): how fully
+        // the latched flexible-craft hold mitigation (bandwidth floor + feedforward cut) is engaged.
+        public Vector3d MitigationLevel {
+            get { return new Vector3d (mitigationLevel [0], mitigationLevel [1], mitigationLevel [2]); }
+        }
+
+        // Active suppression tool on an axis: 0 none, 1 notch, 2 low-pass (mirrors the diagnostic
+        // tool glyph). Pitch (0) and yaw (2) share the pitch/yaw group's tool.
+        public int ActiveSuppressionTool (int axis)
+        {
+            if (notchActiveAxis [axis])
+                return 1;
+            if (rateFilterValid [axis])
+                return 2;
+            return 0;
+        }
+
+        // The chatterLevel at which an axis latches as flexible (see UpdateChatterDetector). Exposed
+        // so the info UI can colour the OscillationLevel readout against the same threshold.
+        public double OscillationLatchThreshold {
+            get { return ChatterLatchThreshold; }
         }
 
         public bool DiagnosticLogging {
@@ -841,6 +878,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 target.x + gate.x * (targetNominal.x - target.x),
                 target.y + gate.y * (targetNominal.y - target.y),
                 target.z + gate.z * (targetNominal.z - target.z));
+            logTargetRi = pidTarget;
 
             // Acceleration feedforward: differentiate the velocity setpoint numerically to get the
             // angular acceleration needed to stay on the bang-bang trajectory, then normalise by

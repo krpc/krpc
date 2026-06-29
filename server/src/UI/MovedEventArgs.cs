@@ -1,9 +1,11 @@
+#pragma warning disable 1591
+
 using System;
 using UnityEngine;
 
 namespace KRPC.UI
 {
-    sealed class MovedEventArgs : EventArgs
+    public sealed class MovedEventArgs : EventArgs
     {
         public Rect Position { get; private set; }
 

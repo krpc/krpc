@@ -25,6 +25,7 @@ namespace KRPC.SpaceCenter.Services
     public class AutoPilot : Equatable<AutoPilot>
     {
         static readonly IDictionary<Guid, AutoPilot> engaged = new Dictionary<Guid, AutoPilot> ();
+        static readonly HashSet<Guid> showInfoUI = new HashSet<Guid> ();
         readonly Guid vesselId;
         readonly AttitudeController attitudeController;
         IClient requestingClient;
@@ -105,6 +106,52 @@ namespace KRPC.SpaceCenter.Services
                     engaged [vesselId] = null;
                 }
             }
+        }
+
+        /// <summary>
+        /// Whether an in-game window showing the auto-pilot's state (engagement, attitude error,
+        /// target, angular rate, inner-loop PID gains and oscillation suppression) is displayed for
+        /// this vessel. Defaults to <c>false</c>. This is a debugging aid; the window is reset to
+        /// hidden when the game is restarted.
+        /// </summary>
+        [KRPCProperty]
+        public bool ShowInfoUI {
+            get { return showInfoUI.Contains (vesselId); }
+            set {
+                if (value)
+                    showInfoUI.Add (vesselId);
+                else
+                    showInfoUI.Remove (vesselId);
+            }
+        }
+
+        /// <summary>
+        /// Whether the info window is currently enabled for the given vessel. Used by
+        /// the in-game info window addon to decide which windows to draw.
+        /// </summary>
+        internal static bool IsInfoUIEnabled (Guid id)
+        {
+            return showInfoUI.Contains (id);
+        }
+
+        /// <summary>
+        /// Disables the info window for the given vessel. Called when the user closes the window
+        /// in-game, so closing the window also clears <see cref="ShowInfoUI"/>.
+        /// </summary>
+        internal static void DisableInfoUI (Guid id)
+        {
+            showInfoUI.Remove (id);
+        }
+
+        /// <summary>
+        /// The live, engaged auto-pilot for the given vessel, or <c>null</c> if the auto-pilot is not
+        /// engaged. Unlike <see cref="Vessel.AutoPilot"/>, this returns the instance that is actually
+        /// being updated each physics tick, so its state (errors, oscillation) is live.
+        /// </summary>
+        internal static AutoPilot GetEngaged (Guid id)
+        {
+            AutoPilot autoPilot;
+            return engaged.TryGetValue (id, out autoPilot) ? autoPilot : null;
         }
 
         /// <summary>
@@ -841,6 +888,44 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public string DiagnosticLog {
             get { return attitudeController.GetDiagnosticLog (); }
+        }
+
+        /// <summary>
+        /// Measured angular velocity (raw, roll-invariant frame, rad/s) for the in-game info window.
+        /// </summary>
+        internal Tuple3 MeasuredAngularVelocity {
+            get { return attitudeController.MeasuredAngularVelocity.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Target angular velocity the inner loop is tracking (roll-invariant frame, rad/s) for the
+        /// in-game info window.
+        /// </summary>
+        internal Tuple3 TargetAngularVelocity {
+            get { return attitudeController.TargetAngularVelocity.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Per-axis hold-gated mitigation weight in [0,1] for the in-game info window.
+        /// </summary>
+        internal Tuple3 MitigationLevel {
+            get { return attitudeController.MitigationLevel.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Active suppression tool on an axis (0 none, 1 notch, 2 low-pass) for the in-game info
+        /// window.
+        /// </summary>
+        internal int ActiveSuppressionTool (int axis)
+        {
+            return attitudeController.ActiveSuppressionTool (axis);
+        }
+
+        /// <summary>
+        /// The oscillation level at which an axis latches as flexible, for the in-game info window.
+        /// </summary>
+        internal double OscillationLatchThreshold {
+            get { return attitudeController.OscillationLatchThreshold; }
         }
 
         /// <summary>
