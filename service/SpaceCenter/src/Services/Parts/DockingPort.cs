@@ -17,12 +17,15 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class DockingPort : Equatable<DockingPort>
     {
+        readonly ModuleRef<ModuleDockingNode>? portRef;
+        readonly ModuleRef<ModuleAnimateGeneric>? shieldRef;
+
         ModuleDockingNode port {
-            get { return Part.InternalPart.Module<ModuleDockingNode> (); }
+            get { return ModuleRef<ModuleDockingNode>.ResolveOrNull (portRef, Part.InternalPart); }
         }
 
         ModuleAnimateGeneric shield {
-            get { return Part.InternalPart.Module<ModuleAnimateGeneric> (); }
+            get { return ModuleRef<ModuleAnimateGeneric>.ResolveOrNull (shieldRef, Part.InternalPart); }
         }
 
         internal static bool Is (Part part)
@@ -33,7 +36,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal DockingPort (Part part)
         {
             Part = part;
-            if (part.InternalPart.Module<ModuleDockingNode> () == null)
+            var internalPart = part.InternalPart;
+            portRef = ModuleRef<ModuleDockingNode>.For (internalPart);
+            shieldRef = ModuleRef<ModuleAnimateGeneric>.For (internalPart);
+            if (!portRef.HasValue)
                 throw new ArgumentException ("Part is not a docking port");
         }
 

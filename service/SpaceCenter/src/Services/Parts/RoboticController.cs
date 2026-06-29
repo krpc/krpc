@@ -13,8 +13,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass(Service = "SpaceCenter")]
     public class RoboticController : Equatable<RoboticController>
     {
+        readonly ModuleRef<Expansions.Serenity.ModuleRoboticController>? controllerRef;
+
         Expansions.Serenity.ModuleRoboticController controller {
-            get { return Part.InternalPart.Module<Expansions.Serenity.ModuleRoboticController> (); }
+            get { return ModuleRef<Expansions.Serenity.ModuleRoboticController>.ResolveOrNull (controllerRef, Part.InternalPart); }
         }
 
         internal static bool Is(Part part)
@@ -27,6 +29,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!Is(part))
                 throw new ArgumentException("Part is not a robotics controller");
             Part = part;
+            controllerRef = ModuleRef<Expansions.Serenity.ModuleRoboticController>.For (part.InternalPart);
         }
 
         /// <summary>

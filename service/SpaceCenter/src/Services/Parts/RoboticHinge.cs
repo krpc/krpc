@@ -14,8 +14,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass(Service = "SpaceCenter")]
     public class RoboticHinge : Equatable<RoboticHinge>
     {
+        readonly ModuleRef<ModuleRoboticServoHinge>? servoRef;
+
         ModuleRoboticServoHinge servo {
-            get { return Part.InternalPart.Module<ModuleRoboticServoHinge>(); }
+            get { return ModuleRef<ModuleRoboticServoHinge>.ResolveOrNull (servoRef, Part.InternalPart); }
         }
 
         internal static bool Is(Part part)
@@ -28,6 +30,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!Is(part))
                 throw new ArgumentException("Part is not a robotic hinge");
             Part = part;
+            servoRef = ModuleRef<ModuleRoboticServoHinge>.For (part.InternalPart);
         }
 
         /// <summary>

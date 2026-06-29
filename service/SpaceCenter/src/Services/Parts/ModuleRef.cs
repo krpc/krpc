@@ -9,8 +9,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// than capturing the module, so the module is looked up from the live part on each
     /// access and never pins a destroyed part. This mirrors the re-derivation used by
     /// <see cref="Module"/>, but keyed by module type rather than name, and is shared by
-    /// the concrete part-module proxies (such as <see cref="Engine"/>) so each avoids an
-    /// allocating <c>OfType&lt;T&gt;().ToList()</c> scan on every access.
+    /// the part-module proxies (such as <see cref="Engine"/> or <see cref="Sensor"/>) so
+    /// each avoids a module-list scan (or an allocating <c>OfType&lt;T&gt;().ToList()</c>)
+    /// on every access.
     /// </summary>
     struct ModuleRef<T> where T : PartModule
     {
@@ -32,6 +33,13 @@ namespace KRPC.SpaceCenter.Services.Parts
                 if (modules [i] is T)
                     seen++;
             }
+        }
+
+        // Construct directly from a known index and occurrence (used by For).
+        ModuleRef (int rawIndex, int occurrence)
+        {
+            this.rawIndex = rawIndex;
+            this.occurrence = occurrence;
         }
 
         /// <summary>
@@ -76,6 +84,25 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
             throw new ObjectDestroyedException (
                 "The part module no longer exists. The part may have been destroyed.");
+        }
+
+        // A reference to the first module of type T on the part, or null if the part has no
+        // such module. Used by the proxies that wrap a single module of a given type, in
+        // place of a Module&lt;T&gt;() scan on every access.
+        public static ModuleRef<T>? For (global::Part part)
+        {
+            var modules = part.Modules;
+            for (int i = 0; i < modules.Count; i++)
+                if (modules [i] is T)
+                    return new ModuleRef<T> (i, 0);
+            return null;
+        }
+
+        // Resolve a possibly-absent reference: the module, re-derived from the live part, or
+        // null if the reference is absent (the part had no such module at construction).
+        public static T ResolveOrNull (ModuleRef<T>? reference, global::Part part)
+        {
+            return reference.HasValue ? reference.Value.Resolve (part) : null;
         }
     }
 }

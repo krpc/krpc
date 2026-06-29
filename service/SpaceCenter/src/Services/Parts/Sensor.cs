@@ -11,8 +11,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Sensor : Equatable<Sensor>
     {
+        readonly ModuleRef<ModuleEnviroSensor>? sensorRef;
+
         ModuleEnviroSensor sensor {
-            get { return Part.InternalPart.Module<ModuleEnviroSensor> (); }
+            get { return ModuleRef<ModuleEnviroSensor>.ResolveOrNull (sensorRef, Part.InternalPart); }
         }
 
         internal static bool Is (Part part)
@@ -23,7 +25,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Sensor (Part part)
         {
             Part = part;
-            if (part.InternalPart.Module<ModuleEnviroSensor> () == null)
+            sensorRef = ModuleRef<ModuleEnviroSensor>.For (part.InternalPart);
+            if (!sensorRef.HasValue)
                 throw new ArgumentException ("Part is not a sensor");
         }
 

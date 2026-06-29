@@ -12,12 +12,15 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class CargoBay : Equatable<CargoBay>
     {
+        readonly ModuleRef<ModuleCargoBay>? bayRef;
+        readonly ModuleRef<ModuleAnimateGeneric>? animationRef;
+
         ModuleCargoBay bay {
-            get { return Part.InternalPart.Module<ModuleCargoBay> (); }
+            get { return ModuleRef<ModuleCargoBay>.ResolveOrNull (bayRef, Part.InternalPart); }
         }
 
         ModuleAnimateGeneric animation {
-            get { return Part.InternalPart.Module<ModuleAnimateGeneric> (); }
+            get { return ModuleRef<ModuleAnimateGeneric>.ResolveOrNull (animationRef, Part.InternalPart); }
         }
 
         internal static bool Is (Part part)
@@ -34,6 +37,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!Is (part))
                 throw new ArgumentException ("Part is not a cargo bay");
             Part = part;
+            bayRef = ModuleRef<ModuleCargoBay>.For (part.InternalPart);
+            animationRef = ModuleRef<ModuleAnimateGeneric>.For (part.InternalPart);
         }
 
         /// <summary>

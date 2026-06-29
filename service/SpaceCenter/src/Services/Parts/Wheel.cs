@@ -14,26 +14,34 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass(Service = "SpaceCenter")]
     public class Wheel : Equatable<Wheel>
     {
+        readonly ModuleRef<ModuleWheelBase>? wheelRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelBrakes>? brakesRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelDamage>? damageRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelDeployment>? deploymentRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelMotor>? motorRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelSteering>? steeringRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelSuspension>? suspensionRef;
+
         ModuleWheelBase wheel {
-            get { return Part.InternalPart.Module<ModuleWheelBase> (); }
+            get { return ModuleRef<ModuleWheelBase>.ResolveOrNull (wheelRef, Part.InternalPart); }
         }
         ModuleWheels.ModuleWheelBrakes brakes {
-            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelBrakes> (); }
+            get { return ModuleRef<ModuleWheels.ModuleWheelBrakes>.ResolveOrNull (brakesRef, Part.InternalPart); }
         }
         ModuleWheels.ModuleWheelDamage damage {
-            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelDamage> (); }
+            get { return ModuleRef<ModuleWheels.ModuleWheelDamage>.ResolveOrNull (damageRef, Part.InternalPart); }
         }
         ModuleWheels.ModuleWheelDeployment deployment {
-            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelDeployment> (); }
+            get { return ModuleRef<ModuleWheels.ModuleWheelDeployment>.ResolveOrNull (deploymentRef, Part.InternalPart); }
         }
         ModuleWheels.ModuleWheelMotor motor {
-            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelMotor> (); }
+            get { return ModuleRef<ModuleWheels.ModuleWheelMotor>.ResolveOrNull (motorRef, Part.InternalPart); }
         }
         ModuleWheels.ModuleWheelSteering steering {
-            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelSteering> (); }
+            get { return ModuleRef<ModuleWheels.ModuleWheelSteering>.ResolveOrNull (steeringRef, Part.InternalPart); }
         }
         ModuleWheels.ModuleWheelSuspension suspension {
-            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelSuspension> (); }
+            get { return ModuleRef<ModuleWheels.ModuleWheelSuspension>.ResolveOrNull (suspensionRef, Part.InternalPart); }
         }
 
         internal static bool Is(Part part)
@@ -48,6 +56,14 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!Is(part))
                 throw new ArgumentException("Part is not a wheel");
             Part = part;
+            var internalPart = part.InternalPart;
+            wheelRef = ModuleRef<ModuleWheelBase>.For (internalPart);
+            brakesRef = ModuleRef<ModuleWheels.ModuleWheelBrakes>.For (internalPart);
+            damageRef = ModuleRef<ModuleWheels.ModuleWheelDamage>.For (internalPart);
+            deploymentRef = ModuleRef<ModuleWheels.ModuleWheelDeployment>.For (internalPart);
+            motorRef = ModuleRef<ModuleWheels.ModuleWheelMotor>.For (internalPart);
+            steeringRef = ModuleRef<ModuleWheels.ModuleWheelSteering>.For (internalPart);
+            suspensionRef = ModuleRef<ModuleWheels.ModuleWheelSuspension>.For (internalPart);
         }
 
         /// <summary>

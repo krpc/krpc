@@ -14,8 +14,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass(Service = "SpaceCenter")]
     public class RoboticRotor : Equatable<RoboticRotor>
     {
+        readonly ModuleRef<ModuleRoboticServoRotor>? servoRef;
+
         ModuleRoboticServoRotor servo {
-            get { return Part.InternalPart.Module<ModuleRoboticServoRotor> (); }
+            get { return ModuleRef<ModuleRoboticServoRotor>.ResolveOrNull (servoRef, Part.InternalPart); }
         }
 
         internal static bool Is(Part part)
@@ -28,6 +30,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!Is(part))
                 throw new ArgumentException("Part is not a robotic rotor");
             Part = part;
+            servoRef = ModuleRef<ModuleRoboticServoRotor>.For (part.InternalPart);
         }
 
         /// <summary>

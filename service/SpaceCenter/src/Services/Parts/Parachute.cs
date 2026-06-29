@@ -12,10 +12,12 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Parachute : Equatable<Parachute>
     {
-        // The stock parachute module, re-derived from the live part on each access
-        // (null if this is a RealChutes parachute).
+        // The stock parachute module, re-derived from the live part on each access by stored
+        // index (null if this is a RealChutes parachute).
+        readonly ModuleRef<ModuleParachute>? parachuteRef;
+
         ModuleParachute parachute {
-            get { return Part.InternalPart.Module<ModuleParachute> (); }
+            get { return ModuleRef<ModuleParachute>.ResolveOrNull (parachuteRef, Part.InternalPart); }
         }
 
         // The RealChutes module wrapper (null for stock parachutes). This is a
@@ -34,10 +36,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             Part = part;
             var internalPart = part.InternalPart;
+            parachuteRef = ModuleRef<ModuleParachute>.For (internalPart);
             var realChuteModule = internalPart.Module ("RealChuteModule");
             if (realChuteModule != null)
                 realChute = new Module(part, realChuteModule);
-            if (internalPart.Module<ModuleParachute> () == null && realChute == null)
+            if (!parachuteRef.HasValue && realChute == null)
                 throw new ArgumentException ("Part is not a parachute");
         }
 

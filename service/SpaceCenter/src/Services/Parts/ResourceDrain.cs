@@ -17,8 +17,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass(Service = "SpaceCenter")]
     public class ResourceDrain : Equatable<ResourceDrain>
     {
+        readonly ModuleRef<ModuleResourceDrain>? drainRef;
+
         ModuleResourceDrain drain {
-            get { return Part.InternalPart.Module<ModuleResourceDrain> (); }
+            get { return ModuleRef<ModuleResourceDrain>.ResolveOrNull (drainRef, Part.InternalPart); }
         }
 
         internal static bool Is(Part part)
@@ -31,6 +33,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!Is (part))
                 throw new ArgumentException ("Part is not a resource drain");
             Part = part;
+            drainRef = ModuleRef<ModuleResourceDrain>.For (part.InternalPart);
         }
 
         /// <summary>

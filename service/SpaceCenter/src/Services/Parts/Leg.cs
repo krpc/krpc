@@ -12,14 +12,18 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Leg : Equatable<Leg>
     {
+        readonly ModuleRef<ModuleWheelBase>? wheelRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelDeployment>? deploymentRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelDamage>? damageRef;
+
         ModuleWheelBase wheel {
-            get { return Part.InternalPart.Module<ModuleWheelBase> (); }
+            get { return ModuleRef<ModuleWheelBase>.ResolveOrNull (wheelRef, Part.InternalPart); }
         }
         ModuleWheels.ModuleWheelDeployment deployment {
-            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelDeployment> (); }
+            get { return ModuleRef<ModuleWheels.ModuleWheelDeployment>.ResolveOrNull (deploymentRef, Part.InternalPart); }
         }
         ModuleWheels.ModuleWheelDamage damage {
-            get { return Part.InternalPart.Module<ModuleWheels.ModuleWheelDamage> (); }
+            get { return ModuleRef<ModuleWheels.ModuleWheelDamage>.ResolveOrNull (damageRef, Part.InternalPart); }
         }
 
         internal static bool Is (Part part)
@@ -34,6 +38,10 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!Is (part))
                 throw new ArgumentException ("Part is not a landing leg");
             Part = part;
+            var internalPart = part.InternalPart;
+            wheelRef = ModuleRef<ModuleWheelBase>.For (internalPart);
+            deploymentRef = ModuleRef<ModuleWheels.ModuleWheelDeployment>.For (internalPart);
+            damageRef = ModuleRef<ModuleWheels.ModuleWheelDamage>.For (internalPart);
         }
 
         /// <summary>

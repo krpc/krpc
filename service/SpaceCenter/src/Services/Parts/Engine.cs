@@ -32,13 +32,18 @@ namespace KRPC.SpaceCenter.Services.Parts
         // secondary mode); for a per-mode sub-engine it is the single covered ModuleEngines.
         readonly ModuleRef<ModuleEngines>[] engineRefs;
 
+        // The engine's gimbal and (for whole-part engines) multi-mode module, re-derived
+        // from the live part by stored index on each access rather than scanned.
+        readonly ModuleRef<ModuleGimbal>? gimbalRef;
+        readonly ModuleRef<MultiModeEngine>? multiModeEngineRef;
+
         // A per-mode sub-engine behaves as single-mode, so reports no multi-mode module.
         MultiModeEngine multiModeEngine {
-            get { return singleEngineIndex.HasValue ? null : Part.InternalPart.Module<MultiModeEngine> (); }
+            get { return singleEngineIndex.HasValue ? null : ModuleRef<MultiModeEngine>.ResolveOrNull (multiModeEngineRef, Part.InternalPart); }
         }
 
         ModuleGimbal gimbal {
-            get { return Part.InternalPart.Module<ModuleGimbal> (); }
+            get { return ModuleRef<ModuleGimbal>.ResolveOrNull (gimbalRef, Part.InternalPart); }
         }
 
         IThrustReverser thrustReverser {
@@ -65,6 +70,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             engineRefs = new ModuleRef<ModuleEngines> [allEngines.Count];
             for (int i = 0; i < allEngines.Count; i++)
                 engineRefs [i] = new ModuleRef<ModuleEngines> (internalPart, allEngines [i]);
+            gimbalRef = ModuleRef<ModuleGimbal>.For (internalPart);
+            multiModeEngineRef = ModuleRef<MultiModeEngine>.For (internalPart);
         }
 
         Engine (ModuleEngines engine)
@@ -75,6 +82,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             var engineRef = new ModuleRef<ModuleEngines> (engine.part, engine);
             engineRefs = new [] { engineRef };
             singleEngineIndex = engineRef.Occurrence;
+            gimbalRef = ModuleRef<ModuleGimbal>.For (engine.part);
+            multiModeEngineRef = ModuleRef<MultiModeEngine>.For (engine.part);
         }
 
         /// <summary>

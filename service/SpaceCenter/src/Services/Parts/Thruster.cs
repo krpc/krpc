@@ -23,18 +23,24 @@ namespace KRPC.SpaceCenter.Services.Parts
         // null for an RCS thruster; otherwise a re-derivable reference to the
         // ModuleEngines that generates this thruster's thrust.
         readonly ModuleRef<ModuleEngines>? engineRef;
+        // The RCS module (for RCS thrusters) and the gimbal (for engine thrusters),
+        // re-derived from the live part by stored index on each access.
+        readonly ModuleRef<ModuleRCS>? rcsRef;
+        readonly ModuleRef<ModuleGimbal>? gimbalRef;
         readonly int transformIndex;
 
         internal Thruster (Part thrusterPart, ModuleEngines thrusterEngine, ModuleGimbal thrusterGimbal, int thrusterTransformIndex)
         {
             part = thrusterPart;
             engineRef = new ModuleRef<ModuleEngines> (thrusterPart.InternalPart, thrusterEngine);
+            gimbalRef = ModuleRef<ModuleGimbal>.For (thrusterPart.InternalPart);
             transformIndex = thrusterTransformIndex;
         }
 
         internal Thruster (Part thrusterPart, ModuleRCS thrusterRCS, int thrusterTransformIndex)
         {
             part = thrusterPart;
+            rcsRef = ModuleRef<ModuleRCS>.For (thrusterPart.InternalPart);
             transformIndex = thrusterTransformIndex;
         }
 
@@ -46,12 +52,12 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         // The RCS module that generates thrust (null for engine thrusters).
         ModuleRCS rcs {
-            get { return engineRef.HasValue ? null : part.InternalPart.Module<ModuleRCS> (); }
+            get { return engineRef.HasValue ? null : ModuleRef<ModuleRCS>.ResolveOrNull (rcsRef, part.InternalPart); }
         }
 
         // The gimbal of the engine (null for RCS thrusters or non-gimballed engines).
         ModuleGimbal gimbal {
-            get { return engineRef.HasValue ? part.InternalPart.Module<ModuleGimbal> () : null; }
+            get { return engineRef.HasValue ? ModuleRef<ModuleGimbal>.ResolveOrNull (gimbalRef, part.InternalPart) : null; }
         }
 
         /// <summary>

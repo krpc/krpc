@@ -11,8 +11,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class SolarPanel : Equatable<SolarPanel>
     {
+        readonly ModuleRef<ModuleDeployableSolarPanel>? panelRef;
+
         ModuleDeployableSolarPanel panel {
-            get { return Part.InternalPart.Module<ModuleDeployableSolarPanel> (); }
+            get { return ModuleRef<ModuleDeployableSolarPanel>.ResolveOrNull (panelRef, Part.InternalPart); }
         }
 
         internal static bool Is (Part part)
@@ -23,7 +25,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal SolarPanel (Part part)
         {
             Part = part;
-            if (part.InternalPart.Module<ModuleDeployableSolarPanel> () == null)
+            panelRef = ModuleRef<ModuleDeployableSolarPanel>.For (part.InternalPart);
+            if (!panelRef.HasValue)
                 throw new ArgumentException ("Part is not a solar panel");
         }
 

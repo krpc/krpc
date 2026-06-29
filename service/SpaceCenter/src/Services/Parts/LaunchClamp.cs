@@ -11,8 +11,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class LaunchClamp : Equatable<LaunchClamp>
     {
+        readonly ModuleRef<global::LaunchClamp>? launchClampRef;
+
         global::LaunchClamp launchClamp {
-            get { return Part.InternalPart.Module<global::LaunchClamp> (); }
+            get { return ModuleRef<global::LaunchClamp>.ResolveOrNull (launchClampRef, Part.InternalPart); }
         }
 
         internal static bool Is (Part part)
@@ -23,7 +25,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal LaunchClamp (Part part)
         {
             Part = part;
-            if (part.InternalPart.Module<global::LaunchClamp> () == null)
+            launchClampRef = ModuleRef<global::LaunchClamp>.For (part.InternalPart);
+            if (!launchClampRef.HasValue)
                 throw new ArgumentException ("Part is not a launch clamp");
         }
 

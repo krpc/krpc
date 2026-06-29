@@ -11,12 +11,15 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Radiator : Equatable<Radiator>
     {
+        readonly ModuleRef<ModuleActiveRadiator>? activeRadiatorRef;
+        readonly ModuleRef<ModuleDeployableRadiator>? deployableRadiatorRef;
+
         ModuleActiveRadiator activeRadiator {
-            get { return Part.InternalPart.Module<ModuleActiveRadiator> (); }
+            get { return ModuleRef<ModuleActiveRadiator>.ResolveOrNull (activeRadiatorRef, Part.InternalPart); }
         }
 
         ModuleDeployableRadiator deployableRadiator {
-            get { return Part.InternalPart.Module<ModuleDeployableRadiator> (); }
+            get { return ModuleRef<ModuleDeployableRadiator>.ResolveOrNull (deployableRadiatorRef, Part.InternalPart); }
         }
 
         internal static bool Is (Part part)
@@ -31,7 +34,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             Part = part;
             var internalPart = part.InternalPart;
-            if (internalPart.Module<ModuleActiveRadiator> () == null && internalPart.Module<ModuleDeployableRadiator> () == null)
+            activeRadiatorRef = ModuleRef<ModuleActiveRadiator>.For (internalPart);
+            deployableRadiatorRef = ModuleRef<ModuleDeployableRadiator>.For (internalPart);
+            if (!activeRadiatorRef.HasValue && !deployableRadiatorRef.HasValue)
                 throw new ArgumentException ("Part is not a radiator");
         }
 

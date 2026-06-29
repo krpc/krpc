@@ -11,12 +11,15 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Antenna : Equatable<Antenna>
     {
+        readonly ModuleRef<ModuleDataTransmitter>? transmitterRef;
+        readonly ModuleRef<ModuleDeployableAntenna>? deploymentRef;
+
         ModuleDataTransmitter transmitter {
-            get { return Part.InternalPart.Module<ModuleDataTransmitter> (); }
+            get { return ModuleRef<ModuleDataTransmitter>.ResolveOrNull (transmitterRef, Part.InternalPart); }
         }
 
         ModuleDeployableAntenna deployment {
-            get { return Part.InternalPart.Module<ModuleDeployableAntenna> (); }
+            get { return ModuleRef<ModuleDeployableAntenna>.ResolveOrNull (deploymentRef, Part.InternalPart); }
         }
 
         internal static bool Is (Part part)
@@ -29,6 +32,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!Is (part))
                 throw new ArgumentException ("Part is not an antenna");
             Part = part;
+            transmitterRef = ModuleRef<ModuleDataTransmitter>.For (part.InternalPart);
+            deploymentRef = ModuleRef<ModuleDeployableAntenna>.For (part.InternalPart);
         }
 
         /// <summary>

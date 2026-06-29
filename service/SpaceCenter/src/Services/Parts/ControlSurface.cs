@@ -14,8 +14,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class ControlSurface : Equatable<ControlSurface>
     {
+        readonly ModuleRef<ModuleControlSurface>? controlSurfaceRef;
+
         ModuleControlSurface controlSurface {
-            get { return Part.InternalPart.Module<ModuleControlSurface> (); }
+            get { return ModuleRef<ModuleControlSurface>.ResolveOrNull (controlSurfaceRef, Part.InternalPart); }
         }
 
         internal static bool Is (Part part)
@@ -31,7 +33,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal ControlSurface (Part part)
         {
             Part = part;
-            if (part.InternalPart.Module<ModuleControlSurface> () == null)
+            controlSurfaceRef = ModuleRef<ModuleControlSurface>.For (part.InternalPart);
+            if (!controlSurfaceRef.HasValue)
                 throw new ArgumentException ("Part does not have a ModuleControlSurface PartModule");
         }
 

@@ -13,8 +13,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Light : Equatable<Light>
     {
+        readonly ModuleRef<ModuleLight>? lightRef;
+
         ModuleLight light {
-            get { return Part.InternalPart.Module<ModuleLight> (); }
+            get { return ModuleRef<ModuleLight>.ResolveOrNull (lightRef, Part.InternalPart); }
         }
 
         internal static bool Is (Part part)
@@ -25,7 +27,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Light (Part part)
         {
             Part = part;
-            if (part.InternalPart.Module<ModuleLight> () == null)
+            lightRef = ModuleRef<ModuleLight>.For (part.InternalPart);
+            if (!lightRef.HasValue)
                 throw new ArgumentException ("Part is not a light");
         }
 
