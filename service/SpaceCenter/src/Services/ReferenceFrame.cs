@@ -24,7 +24,7 @@ namespace KRPC.SpaceCenter.Services
     /// used as a parameter to other functions.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public class ReferenceFrame : Equatable<ReferenceFrame>, IValidatable
+    public class ReferenceFrame : Equatable<ReferenceFrame>, ITrackedObject
     {
         readonly ReferenceFrameType type;
         readonly global::CelestialBody body;
@@ -141,7 +141,7 @@ namespace KRPC.SpaceCenter.Services
         /// part is destroyed or the game state is reloaded. Frames defined relative to a
         /// celestial body, or by fixed offsets, are always valid.
         /// </summary>
-        public bool IsValid {
+        public bool IsAlive {
             get {
                 switch (type) {
                 case ReferenceFrameType.CelestialBody:
@@ -163,14 +163,14 @@ namespace KRPC.SpaceCenter.Services
                     // The captured docking node compares == null once its part is destroyed.
                     return dockingPort != null;
                 case ReferenceFrameType.Thrust:
-                    return thruster != null && thruster.Part.IsValid;
+                    return thruster != null && thruster.Part.IsAlive;
                 case ReferenceFrameType.Relative:
-                    return parent == null || parent.IsValid;
+                    return parent == null || parent.IsAlive;
                 case ReferenceFrameType.Hybrid:
-                    return (hybridPosition == null || hybridPosition.IsValid) &&
-                           (hybridRotation == null || hybridRotation.IsValid) &&
-                           (hybridVelocity == null || hybridVelocity.IsValid) &&
-                           (hybridAngularVelocity == null || hybridAngularVelocity.IsValid);
+                    return (hybridPosition == null || hybridPosition.IsAlive) &&
+                           (hybridRotation == null || hybridRotation.IsAlive) &&
+                           (hybridVelocity == null || hybridVelocity.IsAlive) &&
+                           (hybridAngularVelocity == null || hybridAngularVelocity.IsAlive);
                 default:
                     return true;
                 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -21,12 +22,18 @@ namespace KRPC.SpaceCenter.Services.Parts
     {
         readonly string moduleName;
         readonly int moduleIndex;
+        // Index of the module in the part's module list. The list keeps its order for the
+        // part's lifetime, so this gives an O(1) re-derivation, validated by name, rather
+        // than scanning the list on every access (see the module property).
+        readonly int rawIndex;
 
         internal Module (Part part, PartModule partModule)
         {
             Part = part;
             moduleName = partModule.moduleName;
-            moduleIndex = ModuleIndex (part.InternalPart, partModule);
+            var internalPart = part.InternalPart;
+            rawIndex = RawIndex (internalPart, partModule);
+            moduleIndex = ModuleIndex (internalPart, partModule);
         }
 
         // The occurrence index of the given module among the modules on the part that
@@ -45,11 +52,29 @@ namespace KRPC.SpaceCenter.Services.Parts
             return occurrence;
         }
 
+        // The index of the module in the part's module list.
+        static int RawIndex (global::Part internalPart, PartModule partModule)
+        {
+            var modules = internalPart.Modules;
+            for (int i = 0; i < modules.Count; i++)
+                if (ReferenceEquals (modules [i], partModule))
+                    return i;
+            return -1;
+        }
+
         // Re-derive the KSP part module from the live part. Throws if the part, or the
         // module, no longer exists.
         PartModule module {
             get {
                 var modules = Part.InternalPart.Modules;
+                // Fast path: the module keeps its position for the part's lifetime, so
+                // index directly and validate by name rather than scanning the list.
+                if (rawIndex >= 0 && rawIndex < modules.Count) {
+                    var candidate = modules [rawIndex];
+                    if (candidate != null && candidate.moduleName == moduleName)
+                        return candidate;
+                }
+                // Slow path: the list changed; re-derive by name and occurrence index.
                 int occurrence = 0;
                 for (int i = 0; i < modules.Count; i++) {
                     if (modules [i].moduleName == moduleName) {
@@ -58,7 +83,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                         occurrence++;
                     }
                 }
-                throw new PartDestroyedException (
+                throw new ObjectDestroyedException (
                     "The part module no longer exists. The part may have been destroyed.");
             }
         }

@@ -63,35 +63,35 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Remove all registered instances that implement <see cref="IValidatable"/>
+        /// Remove all registered instances that implement <see cref="ITrackedObject"/>
         /// and whose underlying game object no longer exists. Instances that do not
-        /// implement <see cref="IValidatable"/> are left untouched.
+        /// implement <see cref="ITrackedObject"/> are left untouched.
         /// Intended to be called when the game state is (re)loaded, to discard objects
         /// that have become dangling (see issue #771).
         /// </summary>
-        public void RemoveInvalid ()
+        public void RemoveDead ()
         {
-            var invalid = new List<object> ();
+            var dead = new List<object> ();
             foreach (var obj in instances.Keys) {
-                var validatable = obj as IValidatable;
-                if (validatable == null)
+                var tracked = obj as ITrackedObject;
+                if (tracked == null)
                     continue;
-                bool valid;
+                bool alive;
                 try {
-                    valid = validatable.IsValid;
+                    alive = tracked.IsAlive;
                 } catch (Exception e) {
-                    // A validity check must never abort the sweep or escape into the
+                    // A liveness check must never abort the sweep or escape into the
                     // game's load-event dispatch. Treat a throwing check conservatively
-                    // as still-valid (keep the object) and log it.
+                    // as still-alive (keep the object) and log it.
                     Logger.WriteLine (
-                        "IValidatable.IsValid threw during object store sweep for " +
+                        "ITrackedObject.IsAlive threw during object store sweep for " +
                         obj.GetType ().Name + "; keeping it. " + e, Logger.Severity.Error);
                     continue;
                 }
-                if (!valid)
-                    invalid.Add (obj);
+                if (!alive)
+                    dead.Add (obj);
             }
-            foreach (var obj in invalid)
+            foreach (var obj in dead)
                 RemoveInstance (obj);
         }
 

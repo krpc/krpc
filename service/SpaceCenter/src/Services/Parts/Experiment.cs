@@ -15,18 +15,13 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Experiment : Equatable<Experiment>
     {
-        // The index of the experiment among the ModuleScienceExperiment modules on the
-        // part. Used to re-derive the module from the live part rather than capturing it.
-        readonly int experimentIndex;
+        // A re-derivable reference to the experiment module, looked up from the live part
+        // by stored index on each access rather than captured.
+        readonly ModuleRef<ModuleScienceExperiment> experimentRef;
 
         // The science experiment module, re-derived from the live part on each access.
         ModuleScienceExperiment experiment {
-            get {
-                var experiments = Part.InternalPart.Modules.OfType<ModuleScienceExperiment> ().ToList ();
-                if (experimentIndex >= experiments.Count)
-                    throw new PartDestroyedException ("The experiment no longer exists.");
-                return experiments [experimentIndex];
-            }
+            get { return experimentRef.Resolve (Part.InternalPart); }
         }
 
         // Note: IScienceDataContainer needs to be used for some methods, rather than
@@ -41,7 +36,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             Part = part;
             if (experiment_ == null)
                 throw new ArgumentException ("Part is not a science experiment");
-            experimentIndex = part.InternalPart.Modules.OfType<ModuleScienceExperiment> ().ToList ().IndexOf (experiment_);
+            experimentRef = new ModuleRef<ModuleScienceExperiment> (part.InternalPart, experiment_);
         }
 
         /// <summary>
@@ -49,7 +44,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Experiment other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && experimentIndex == other.experimentIndex;
+            return !ReferenceEquals (other, null) && Part == other.Part && experimentRef.Occurrence == other.experimentRef.Occurrence;
         }
 
         /// <summary>
@@ -57,7 +52,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ experimentIndex;
+            return Part.GetHashCode () ^ experimentRef.Occurrence;
         }
 
         /// <summary>

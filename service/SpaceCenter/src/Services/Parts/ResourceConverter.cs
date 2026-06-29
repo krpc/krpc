@@ -13,8 +13,19 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class ResourceConverter: Equatable<ResourceConverter>
     {
+        // Re-derivable references to the part's converter modules, looked up from the live
+        // part by stored index on each access rather than captured. The set of converters is
+        // fixed for the part's lifetime, so it is captured once at construction.
+        readonly ModuleRef<ModuleResourceConverter>[] converterRefs;
+
         IList<ModuleResourceConverter> converters {
-            get { return Part.InternalPart.Modules.OfType<ModuleResourceConverter> ().ToList (); }
+            get {
+                var internalPart = Part.InternalPart;
+                var result = new ModuleResourceConverter [converterRefs.Length];
+                for (int i = 0; i < converterRefs.Length; i++)
+                    result [i] = converterRefs [i].Resolve (internalPart);
+                return result;
+            }
         }
 
         internal static bool Is (Part part)
@@ -25,8 +36,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal ResourceConverter (Part part)
         {
             Part = part;
-            if (!part.InternalPart.Modules.OfType<ModuleResourceConverter> ().Any ())
+            var internalPart = part.InternalPart;
+            var modules = internalPart.Modules.OfType<ModuleResourceConverter> ().ToList ();
+            if (modules.Count == 0)
                 throw new ArgumentException ("Part is does not contain any resource converters");
+            converterRefs = new ModuleRef<ModuleResourceConverter> [modules.Count];
+            for (int i = 0; i < modules.Count; i++)
+                converterRefs [i] = new ModuleRef<ModuleResourceConverter> (internalPart, modules [i]);
         }
 
         /// <summary>

@@ -3,13 +3,14 @@ import krpctest
 
 class TestPartsDestroyed(krpctest.TestCase):
     """Accessing a part, or one of its part modules, after the underlying part has been
-    destroyed raises PartDestroyedException, rather than a server-side
+    destroyed raises ObjectDestroyedException, rather than a server-side
     NullReferenceException or returning stale data (issue #885)."""
 
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.sc = cls.connect().space_center
+        cls.conn = cls.connect()
+        cls.sc = cls.conn.space_center
 
     def test_destroyed_part(self):
         # Launch a vessel and take proxies to a part and one of its part modules.
@@ -35,23 +36,23 @@ class TestPartsDestroyed(krpctest.TestCase):
         self.launch_vessel_from_vab("PartsParachute")
         self.remove_other_vessels()
 
-        # Accessing the now-destroyed part raises PartDestroyedException, for a property...
-        with self.assertRaises(self.sc.PartDestroyedException):
+        # Accessing the now-destroyed part raises ObjectDestroyedException, for a property...
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
             _ = part.name
-        with self.assertRaises(self.sc.PartDestroyedException):
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
             _ = part.title
         # ...for a method...
-        with self.assertRaises(self.sc.PartDestroyedException):
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
             _ = part.position(body_frame)
         # ...and for a part module property (the case reported in issue #885).
-        with self.assertRaises(self.sc.PartDestroyedException):
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
             _ = parachute.state
-        with self.assertRaises(self.sc.PartDestroyedException):
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
             _ = parachute.deployed
 
 
 class TestPartsDestroyedByCrash(krpctest.TestCase):
-    """Parts and part modules raise PartDestroyedException once the underlying part is
+    """Parts and part modules raise ObjectDestroyedException once the underlying part is
     destroyed by a crash -- the realistic scenario from issue #885 where a vessel impacts
     the ground without its parachutes deployed. The PartsParachute craft is destroyed on
     landing unless its parachutes are opened."""
@@ -60,7 +61,8 @@ class TestPartsDestroyedByCrash(krpctest.TestCase):
         self.new_save()
         self.launch_vessel_from_vab("PartsParachute")
         self.remove_other_vessels()
-        self.sc = self.connect().space_center
+        self.conn = self.connect()
+        self.sc = self.conn.space_center
         self.vessel = self.sc.active_vessel
 
     def test_crash_destroys_parts(self):
@@ -87,28 +89,28 @@ class TestPartsDestroyedByCrash(krpctest.TestCase):
 
         self.wait_until_destroyed(part)
 
-        # Accessing the destroyed part / parachute raises PartDestroyedException, for a
+        # Accessing the destroyed part / parachute raises ObjectDestroyedException, for a
         # property, a method, and the parachute module (the case reported in issue #885).
-        with self.assertRaises(self.sc.PartDestroyedException):
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
             _ = part.name
-        with self.assertRaises(self.sc.PartDestroyedException):
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
             _ = part.position(body_frame)
-        with self.assertRaises(self.sc.PartDestroyedException):
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
             _ = parachute.state
-        with self.assertRaises(self.sc.PartDestroyedException):
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
             _ = parachute.deployed
 
     def wait_until_destroyed(self, part, timeout=120, confirmations=5):
         # Poll until the part has been destroyed and stays destroyed. During the violent
         # impact a part can briefly become unresolvable and then resolve again, so require
-        # several consecutive PartDestroyedException results before concluding it is gone.
+        # several consecutive ObjectDestroyedException results before concluding it is gone.
         # Fails (rather than hanging) if the vessel never crashes.
         streak = 0
         for _ in range(int(timeout / 0.1)):
             try:
                 _ = part.name
                 streak = 0
-            except self.sc.PartDestroyedException:
+            except self.conn.krpc.ObjectDestroyedException:
                 streak += 1
                 if streak >= confirmations:
                     return

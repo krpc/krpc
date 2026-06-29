@@ -12,14 +12,14 @@ namespace KRPC.Test.Service
         static object b = new object ();
         static object c = new object ();
 
-        sealed class FakeValidatable : IValidatable
+        sealed class FakeTrackedObject : ITrackedObject
         {
-            public bool IsValid { get; set; }
+            public bool IsAlive { get; set; }
         }
 
-        sealed class ThrowingValidatable : IValidatable
+        sealed class ThrowingTrackedObject : ITrackedObject
         {
-            public bool IsValid {
+            public bool IsAlive {
                 get { throw new InvalidOperationException ("boom"); }
             }
         }
@@ -77,44 +77,44 @@ namespace KRPC.Test.Service
         }
 
         [Test]
-        public void RemoveInvalid ()
+        public void RemoveDead ()
         {
             var store = new ObjectStore ();
-            var valid = new FakeValidatable { IsValid = true };
-            var invalid = new FakeValidatable { IsValid = false };
+            var alive = new FakeTrackedObject { IsAlive = true };
+            var dead = new FakeTrackedObject { IsAlive = false };
             var plain = new object ();
-            var validId = store.AddInstance (valid);
-            var invalidId = store.AddInstance (invalid);
+            var aliveId = store.AddInstance (alive);
+            var deadId = store.AddInstance (dead);
             var plainId = store.AddInstance (plain);
 
-            store.RemoveInvalid ();
+            store.RemoveDead ();
 
-            // The invalid object is removed from the store.
-            Assert.Throws<ArgumentException> (() => store.GetInstance (invalidId));
-            Assert.Throws<ArgumentException> (() => store.GetObjectId (invalid));
-            // The valid object and the non-validatable object are left untouched.
-            Assert.AreSame (valid, store.GetInstance (validId));
+            // The dead object is removed from the store.
+            Assert.Throws<ArgumentException> (() => store.GetInstance (deadId));
+            Assert.Throws<ArgumentException> (() => store.GetObjectId (dead));
+            // The alive object and the non-tracked object are left untouched.
+            Assert.AreSame (alive, store.GetInstance (aliveId));
             Assert.AreSame (plain, store.GetInstance (plainId));
         }
 
         [Test]
-        public void RemoveInvalidIsolatesThrowingValidatable ()
+        public void RemoveDeadIsolatesThrowingTrackedObject ()
         {
             var store = new ObjectStore ();
-            var valid = new FakeValidatable { IsValid = true };
-            var invalid = new FakeValidatable { IsValid = false };
-            var throwing = new ThrowingValidatable ();
-            var validId = store.AddInstance (valid);
-            var invalidId = store.AddInstance (invalid);
+            var alive = new FakeTrackedObject { IsAlive = true };
+            var dead = new FakeTrackedObject { IsAlive = false };
+            var throwing = new ThrowingTrackedObject ();
+            var aliveId = store.AddInstance (alive);
+            var deadId = store.AddInstance (dead);
             var throwingId = store.AddInstance (throwing);
 
-            // A throwing IsValid must not abort the sweep or propagate out of it.
-            Assert.DoesNotThrow (() => store.RemoveInvalid ());
+            // A throwing IsAlive must not abort the sweep or propagate out of it.
+            Assert.DoesNotThrow (() => store.RemoveDead ());
 
-            // The invalid object is still removed; the throwing one is conservatively
-            // kept (treated as valid), as is the valid one.
-            Assert.Throws<ArgumentException> (() => store.GetInstance (invalidId));
-            Assert.AreSame (valid, store.GetInstance (validId));
+            // The dead object is still removed; the throwing one is conservatively
+            // kept (treated as alive), as is the alive one.
+            Assert.Throws<ArgumentException> (() => store.GetInstance (deadId));
+            Assert.AreSame (alive, store.GetInstance (aliveId));
             Assert.AreSame (throwing, store.GetInstance (throwingId));
         }
     }

@@ -8,7 +8,7 @@ namespace KRPC.SpaceCenter.Services
     /// Represents a communication node in the network. For example, a vessel or the KSC.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class CommNode : Equatable<CommNode>, IValidatable
+    public class CommNode : Equatable<CommNode>, ITrackedObject
     {
         /// <summary>
         /// Construct from a KSP CommNode object.
@@ -30,7 +30,7 @@ namespace KRPC.SpaceCenter.Services
         /// the object when its vessel is destroyed or the game state is reloaded. Home
         /// (ground station) nodes are persistent and always considered valid.
         /// </summary>
-        public bool IsValid {
+        public bool IsAlive {
             get {
                 var node = InternalNode;
                 if (node == null)

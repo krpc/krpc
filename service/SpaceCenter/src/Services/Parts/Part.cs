@@ -10,6 +10,7 @@ using Tuple3 = System.Tuple<double, double, double>;
 using Tuple4 = System.Tuple<double, double, double, double>;
 using TupleV3 = System.Tuple<Vector3d, Vector3d>;
 using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -18,9 +19,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Instances of this class can be obtained by several methods in <see cref="Parts"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class Part : Equatable<Part>, IValidatable
+    public class Part : Equatable<Part>, ITrackedObject
     {
         readonly uint partFlightId;
+        readonly CachedReference<global::Part> cachedPart;
 
         /// <summary>
         /// Create a part object for the given KSP part
@@ -30,6 +32,10 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (ReferenceEquals (part, null))
                 throw new ArgumentNullException (nameof (part));
             partFlightId = part.flightID;
+            cachedPart = new CachedReference<global::Part> (
+                () => FlightGlobals.FindPartByID (partFlightId),
+                p => p != null,
+                part);
         }
 
         /// <summary>
@@ -53,9 +59,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public global::Part InternalPart {
             get {
-                var part = FlightGlobals.FindPartByID (partFlightId);
+                var part = cachedPart.Get ();
                 if (part == null)
-                    throw new PartDestroyedException (
+                    throw new ObjectDestroyedException (
                         "Part does not exist. It may have been destroyed.");
                 return part;
             }
@@ -68,7 +74,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// returns <c>true</c> while the part exists on any vessel, so that parts on
         /// unloaded vessels that a client still holds are not discarded.
         /// </summary>
-        public bool IsValid {
+        public bool IsAlive {
             get { return Exists (partFlightId); }
         }
 

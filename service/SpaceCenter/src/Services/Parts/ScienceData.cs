@@ -1,4 +1,3 @@
-using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -11,25 +10,20 @@ namespace KRPC.SpaceCenter.Services.Parts
     public class ScienceData : Equatable<ScienceData>
     {
         readonly Part part;
-        readonly int experimentIndex;
+        readonly ModuleRef<ModuleScienceExperiment> experimentRef;
         readonly global::ScienceData data;
 
         internal ScienceData (ModuleScienceExperiment experimentModule, global::ScienceData scienceData)
         {
             part = new Part (experimentModule.part);
-            experimentIndex = experimentModule.part.Modules.OfType<ModuleScienceExperiment> ().ToList ().IndexOf (experimentModule);
+            experimentRef = new ModuleRef<ModuleScienceExperiment> (experimentModule.part, experimentModule);
             data = scienceData;
         }
 
         // The experiment module, re-derived from the live part on each access, so no
         // reference to the destroyed module (and its vessel graph) is retained.
         ModuleScienceExperiment experiment {
-            get {
-                var experiments = part.InternalPart.Modules.OfType<ModuleScienceExperiment> ().ToList ();
-                if (experimentIndex >= experiments.Count)
-                    throw new PartDestroyedException ("The experiment no longer exists.");
-                return experiments [experimentIndex];
-            }
+            get { return experimentRef.Resolve (part.InternalPart); }
         }
 
         /// <summary>
@@ -38,7 +32,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public override bool Equals (ScienceData other)
         {
             return !ReferenceEquals (other, null) && part == other.part &&
-                   experimentIndex == other.experimentIndex && data == other.data;
+                   experimentRef.Occurrence == other.experimentRef.Occurrence && data == other.data;
         }
 
         /// <summary>
@@ -46,7 +40,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ experimentIndex ^ (data == null ? 0 : data.GetHashCode ());
+            return part.GetHashCode () ^ experimentRef.Occurrence ^ (data == null ? 0 : data.GetHashCode ());
         }
 
         /// <summary>

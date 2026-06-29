@@ -21,21 +21,16 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Engine : Equatable<Engine>
     {
-        // null for an engine representing the whole part (all modes); set to the index
-        // of a single ModuleEngines for a per-mode sub-engine created by Modes.
+        // null for an engine representing the whole part (all modes); set to the occurrence
+        // of a single ModuleEngines for a per-mode sub-engine created by Modes. Used for
+        // proxy equality.
         readonly int? singleEngineIndex;
 
-        // The engine's ModuleEngines, re-derived from the live part on each access.
-        IList<ModuleEngines> engines {
-            get {
-                var all = Part.InternalPart.Modules.OfType<ModuleEngines> ().ToList ();
-                if (!singleEngineIndex.HasValue)
-                    return all;
-                if (singleEngineIndex.Value >= all.Count)
-                    throw new PartDestroyedException ("The engine no longer exists.");
-                return new List<ModuleEngines> { all [singleEngineIndex.Value] };
-            }
-        }
+        // Re-derivable references to the ModuleEngines this proxy covers, looked up from the
+        // live part by stored index on each access rather than captured. For an engine
+        // representing the whole part this is all of its ModuleEngines (primary, then any
+        // secondary mode); for a per-mode sub-engine it is the single covered ModuleEngines.
+        readonly ModuleRef<ModuleEngines>[] engineRefs;
 
         // A per-mode sub-engine behaves as single-mode, so reports no multi-mode module.
         MultiModeEngine multiModeEngine {
@@ -63,8 +58,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Engine (Part part)
         {
             Part = part;
-            if (!part.InternalPart.HasModule<ModuleEngines> ())
+            var internalPart = part.InternalPart;
+            var allEngines = internalPart.Modules.OfType<ModuleEngines> ().ToList ();
+            if (allEngines.Count == 0)
                 throw new ArgumentException ("Part is not an engine");
+            engineRefs = new ModuleRef<ModuleEngines> [allEngines.Count];
+            for (int i = 0; i < allEngines.Count; i++)
+                engineRefs [i] = new ModuleRef<ModuleEngines> (internalPart, allEngines [i]);
         }
 
         Engine (ModuleEngines engine)
@@ -72,7 +72,9 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (engine == null)
                 throw new ArgumentException ("Part does not have a ModuleEngines PartModule");
             Part = new Part (engine.part);
-            singleEngineIndex = engine.part.Modules.OfType<ModuleEngines> ().ToList ().IndexOf (engine);
+            var engineRef = new ModuleRef<ModuleEngines> (engine.part, engine);
+            engineRefs = new [] { engineRef };
+            singleEngineIndex = engineRef.Occurrence;
         }
 
         /// <summary>
@@ -100,7 +102,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// the ModulesEngine for the current mode.
         /// </summary>
         ModuleEngines CurrentEngine {
-            get { return engines [(multiModeEngine == null || multiModeEngine.runningPrimary) ? 0 : 1]; }
+            get {
+                int index = (multiModeEngine == null || multiModeEngine.runningPrimary) ? 0 : 1;
+                return engineRefs [index].Resolve (Part.InternalPart);
+            }
         }
 
         /// <summary>
@@ -466,8 +471,8 @@ namespace KRPC.SpaceCenter.Services.Parts
                 CheckMultiMode ();
                 var result = new Dictionary<string, Engine>
                 {
-                    [multiModeEngine.primaryEngineID] = new Engine(engines[0]),
-                    [multiModeEngine.secondaryEngineID] = new Engine(engines[1])
+                    [multiModeEngine.primaryEngineID] = new Engine(engineRefs[0].Resolve(Part.InternalPart)),
+                    [multiModeEngine.secondaryEngineID] = new Engine(engineRefs[1].Resolve(Part.InternalPart))
                 };
                 return result;
             }

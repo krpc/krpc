@@ -6,7 +6,7 @@ namespace KRPC.Utils
     /// store to discard objects whose underlying game object no longer exists, for
     /// example after a quickload or scene change.
     /// </summary>
-    public interface IValidatable
+    public interface ITrackedObject
     {
         /// <summary>
         /// Whether the underlying game object still exists. Must return
@@ -14,6 +14,6 @@ namespace KRPC.Utils
         /// unloaded, so that objects a client legitimately still holds are not
         /// discarded.
         /// </summary>
-        bool IsValid { get; }
+        bool IsAlive { get; }
     }
 }

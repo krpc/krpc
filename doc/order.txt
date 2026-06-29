@@ -77,6 +77,7 @@ KRPC.InvalidOperationException
 KRPC.ArgumentException
 KRPC.ArgumentNullException
 KRPC.ArgumentOutOfRangeException
+KRPC.ObjectDestroyedException
 SpaceCenter
 SpaceCenter.GameMode
 SpaceCenter.Science
@@ -657,7 +658,6 @@ SpaceCenter.Force.ForceVector
 SpaceCenter.Force.Position
 SpaceCenter.Force.ReferenceFrame
 SpaceCenter.Force.Remove
-SpaceCenter.PartDestroyedException
 SpaceCenter.Module
 SpaceCenter.Module.Name
 SpaceCenter.Module.Part

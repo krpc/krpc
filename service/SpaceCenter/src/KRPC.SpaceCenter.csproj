@@ -146,11 +146,11 @@
     <Compile Include="Services\Parts\LegState.cs" />
     <Compile Include="Services\Parts\Light.cs" />
     <Compile Include="Services\Parts\Module.cs" />
+    <Compile Include="Services\Parts\ModuleRef.cs" />
     <Compile Include="Services\Parts\MotorState.cs" />
     <Compile Include="Services\Parts\Parachute.cs" />
     <Compile Include="Services\Parts\ParachuteState.cs" />
     <Compile Include="Services\Parts\Part.cs" />
-    <Compile Include="Services\Parts\PartDestroyedException.cs" />
     <Compile Include="Services\Parts\Parts.cs" />
     <Compile Include="Services\Parts\Propellant.cs" />
     <Compile Include="Services\Parts\RCS.cs" />

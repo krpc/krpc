@@ -13,7 +13,7 @@ namespace KRPC.SpaceCenter.Services
     /// </summary>
     // FIXME: need to perform memory management for node objects
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Node : Equatable<Node>, IValidatable
+    public class Node : Equatable<Node>, ITrackedObject
     {
         /// Note: Maneuver node delta-v vectors use a special coordinate system.
         /// The z-component is the prograde component.
@@ -83,7 +83,7 @@ namespace KRPC.SpaceCenter.Services
         /// object when the node is removed, or when the game state is reloaded (which
         /// rebuilds the vessel's nodes, orphaning the captured one).
         /// </summary>
-        public bool IsValid {
+        public bool IsAlive {
             get {
                 var node = InternalNode;
                 if (node == null)

@@ -20,7 +20,7 @@ namespace KRPC.SpaceCenter.Services
     /// Created using <see cref="SpaceCenter.ActiveVessel"/> or <see cref="SpaceCenter.Vessels"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class Vessel : Equatable<Vessel>, IValidatable
+    public class Vessel : Equatable<Vessel>, ITrackedObject
     {
         /// <summary>
         /// Construct from a KSP vessel object.
@@ -73,7 +73,7 @@ namespace KRPC.SpaceCenter.Services
         /// been destroyed or recovered. Includes unloaded (on-rails) vessels, so that
         /// background vessels a client still holds are not discarded by the object store.
         /// </summary>
-        public bool IsValid {
+        public bool IsAlive {
             get {
                 foreach (var vessel in FlightGlobals.Vessels)
                     if (vessel != null && vessel.id == Id)
