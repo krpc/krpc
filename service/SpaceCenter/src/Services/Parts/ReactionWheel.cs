@@ -78,6 +78,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The authority limiter for the reaction wheel, as a percentage of maximum torque.
+        /// A value between 0 and 1.
+        /// </summary>
+        [KRPCProperty]
+        public float AuthorityLimiter {
+            get { return reactionWheel.authorityLimiter / 100f; }
+            set { reactionWheel.authorityLimiter = (value * 100f).Clamp (0f, 100f); }
+        }
+
+        /// <summary>
         /// The available torque, in Newton meters, that can be produced by this reaction wheel,
         /// in the positive and negative pitch, roll and yaw axes of the vessel. These axes
         /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
