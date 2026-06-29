@@ -579,6 +579,9 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Active || !Gimballed)
                     return ITorqueProviderExtensions.zero;
+                // GetPotentialTorque already applies the gimbal limiter (via
+                // ModuleGimbal.GimbalRotation, which scales the deflection by
+                // gimbalLimiter * 0.01), so no further scaling is needed here.
                 var torque = gimbal.GetPotentialTorque ();
                 // Note: GetPotentialTorque returns negative torques with incorrect sign
                 return new TupleV3 (torque.Item1, -torque.Item2);

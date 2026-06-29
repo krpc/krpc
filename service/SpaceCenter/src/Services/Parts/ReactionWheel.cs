@@ -112,9 +112,12 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Active || Broken)
                     return ITorqueProviderExtensions.zero;
+                // Note: GetPotentialTorque returns the base torque without applying the
+                // wheel's authority limiter
                 var torque = reactionWheel.GetPotentialTorque ();
+                var scale = reactionWheel.authorityLimiter / 100.0;
                 // Note: GetPotentialTorque returns negative torques with incorrect sign
-                return new TupleV3 (torque.Item1, -torque.Item2);
+                return new TupleV3 (torque.Item1 * scale, -torque.Item2 * scale);
             }
         }
 
