@@ -1,9 +1,9 @@
 import unittest
+
 import krpctest
 
 
 class EngineTestBase:
-
     # Keyed by language-independent internal part name (part.name); the inline
     # comment is the English title (part.title) for readability.
     engine_data = {
@@ -126,7 +126,6 @@ class EngineTestBase:
 
 
 class EngineTest(EngineTestBase):
-
     def thrust_delta(self, data):
         """Absolute tolerance, in Newtons, for thrust comparisons.
 
@@ -248,7 +247,6 @@ class EngineTest(EngineTestBase):
 
 
 class TestPartsEngine(krpctest.TestCase, EngineTestBase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -344,6 +342,25 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         engine.gimbal_locked = False
         self.assertEqual(1, engine.gimbal_limit)
 
+        self.set_throttle(engine, 1)
+        engine.gimbal_limit = 1
+        torque_full = engine.available_torque
+        engine.gimbal_limit = 0.5
+        torque_half = engine.available_torque
+        for axis in range(3):
+            self.assertAlmostEqual(
+                torque_full[0][axis] * 0.5,
+                torque_half[0][axis],
+                delta=max(1, abs(torque_full[0][axis]) * 0.01),
+            )
+            self.assertAlmostEqual(
+                torque_full[1][axis] * 0.5,
+                torque_half[1][axis],
+                delta=max(1, abs(torque_full[1][axis]) * 0.01),
+            )
+        self.set_idle(engine)
+        engine.gimbal_limit = 1
+
     def test_no_thrust_reverser(self):
         engine = self.get_engine("liquidEngine")  # LV-T30 "Reliant"
         self.assertFalse(engine.can_reverse_thrust)
@@ -353,7 +370,6 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
 
 
 class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -401,7 +417,6 @@ class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
 
 
 class TestPartsEngineVacuum(krpctest.TestCase, EngineTest):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -441,7 +456,6 @@ class TestPartsEngineVacuum(krpctest.TestCase, EngineTest):
 
 
 class TestPartsEngineReverser(krpctest.TestCase, EngineTestBase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
