@@ -113,6 +113,13 @@ namespace KRPC.SpaceCenter.AutoPilot
         double oscillationNotchQ;
         double oscillationBandwidthFloor;
         double oscillationDetectionThreshold;
+        // Engagement soft-start: the actuator command is faded in over SoftStartTime seconds from
+        // each Start() so engagement does not deliver a near-max "kick" (large proportional +
+        // acceleration feedforward) that can impulsively excite a structural or in-band limit cycle
+        // — the transient the manual "settle before liftoff" pause avoids. engageFixedTime is the
+        // Time.fixedTime at the last Start(); the ramp is a function of elapsed time from it.
+        double softStartTime;
+        double engageFixedTime;
         Vector3d logAngles;
         // Raw (unfiltered) angular velocity in the roll-invariant frame, recorded for diagnostics
         // so the filter's effect on a flexible craft is visible against what the loop acts on.
@@ -192,6 +199,11 @@ namespace KRPC.SpaceCenter.AutoPilot
         const double ChatterLatchThreshold = 0.6;
         // Below this 2D error magnitude (radians) the joint pitch/yaw profile is skipped.
         const double MinThetaForJointProfile = 1e-10;
+        // Default engagement soft-start duration (seconds): the actuator command is faded in over
+        // this window from each engage so the engagement transient cannot kick a fresh, full-authority
+        // gimbal into a limit cycle. ~0.5 s is short enough to be imperceptible on a settled craft yet
+        // long enough to spread the engagement step over many physics ticks. Set to 0 to disable.
+        const double DefaultSoftStartTime = 0.5;
 
         public AttitudeController (Vessel vessel)
         {
@@ -361,6 +373,11 @@ namespace KRPC.SpaceCenter.AutoPilot
             }
         }
 
+        public double SoftStartTime {
+            get { return softStartTime; }
+            set { softStartTime = value; }
+        }
+
         void UpdatePIDParameters ()
         {
             for (int i = 0; i < 3; i++) {
@@ -398,6 +415,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // adaptive flexible-craft handling normally suppresses this automatically; see
             // UpdateChatterDetector.)
             TimeToPeak = new Vector3d (1, 1, 1);
+            SoftStartTime = DefaultSoftStartTime;
             DiagnosticLogging = false;
             SetTarget (0, 0, double.NaN);
             Start ();
@@ -405,6 +423,7 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public void Start ()
         {
+            engageFixedTime = Time.fixedTime;
             PitchPID.ResetState ();
             RollPID.ResetState ();
             YawPID.ResetState ();
@@ -439,6 +458,15 @@ namespace KRPC.SpaceCenter.AutoPilot
             var torque = vessel.AvailableTorqueVectors.Item1;
             var moi = vessel.MomentOfInertiaVector;
             var dt = Time.fixedDeltaTime;
+
+            // Engagement soft-start: a smoothstep 0→1 over SoftStartTime seconds from the last
+            // Start(). The final actuator command is scaled by this so engagement fades the control
+            // in rather than stepping to a near-max kick. Smoothstep (not a one-pole) has zero slope
+            // at t=0, so the onset is gentlest exactly when the loop is furthest from steady state.
+            var softStartLinear = softStartTime > 0
+                ? Math.Min (1.0, Math.Max (0.0, (Time.fixedTime - engageFixedTime) / softStartTime))
+                : 1.0;
+            var softStart = softStartLinear * softStartLinear * (3.0 - 2.0 * softStartLinear);
 
             // Compute the roll-invariant frame: a frame sharing the vessel's nose direction but
             // with zero roll relative to the AP reference frame. Expressing both the target and
@@ -612,8 +640,12 @@ namespace KRPC.SpaceCenter.AutoPilot
             if (AutoTune)
                 DoAutoTune (smoothedTorque, moi);
 
-            // If vessel is sat on the pad, zero out the integral terms
-            if (internalVessel.situation == Vessel.Situations.PRELAUNCH) {
+            // Zero the integral terms while sat on the pad, and throughout the engagement soft-start.
+            // During the fade the scaled-down command under-drives the plant, so the error persists
+            // and the integrator would wind up — then deliver the very kick the soft-start removes the
+            // moment the ramp completes. Holding it cleared means integration starts from zero exactly
+            // at softStart == 1, with no step (the proportional/feedforward output is faded too).
+            if (internalVessel.situation == Vessel.Situations.PRELAUNCH || softStart < 1.0) {
                 PitchPID.ClearIntegralTerm ();
                 RollPID.ClearIntegralTerm ();
                 YawPID.ClearIntegralTerm ();
@@ -640,9 +672,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             var gyro = GyroscopicFeedforward (current, moi, torque);
             // Output smoothing: on a latched axis blend in a low-passed copy of the final command
             // (ramped by suppressionRamp) to cap residual control chatter; rigid axes pass through.
-            state.Pitch = (float)SmoothOutput (0, (bodyControl.x + gyro.x).Clamp (-1, 1), dt);
-            state.Roll = (float)SmoothOutput (1, (virtualRoll + gyro.y).Clamp (-1, 1), dt);
-            state.Yaw = (float)SmoothOutput (2, (bodyControl.z + gyro.z).Clamp (-1, 1), dt);
+            state.Pitch = (float)(softStart * SmoothOutput (0, (bodyControl.x + gyro.x).Clamp (-1, 1), dt));
+            state.Roll = (float)(softStart * SmoothOutput (1, (virtualRoll + gyro.y).Clamp (-1, 1), dt));
+            state.Yaw = (float)(softStart * SmoothOutput (2, (bodyControl.z + gyro.z).Clamp (-1, 1), dt));
 
             if (diagnosticLogging)
                 LogDiagnostics (torque, moi, phi, currentRi, target, ffRi, gyro, currentDirection, state);

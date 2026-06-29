@@ -1172,6 +1172,7 @@ SpaceCenter.AutoPilot.PitchYawAttenuationAngle
 SpaceCenter.AutoPilot.RollAttenuationAngle
 SpaceCenter.AutoPilot.AutoTune
 SpaceCenter.AutoPilot.TimeToPeak
+SpaceCenter.AutoPilot.SoftStartTime
 SpaceCenter.AutoPilot.Overshoot
 SpaceCenter.AutoPilot.PitchPIDGains
 SpaceCenter.AutoPilot.RollPIDGains

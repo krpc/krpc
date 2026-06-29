@@ -407,6 +407,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The duration, in seconds, over which the control output is faded in when the
+        /// autopilot is engaged. This soft-start spreads the engagement transient over many
+        /// physics ticks so engaging (on the pad or mid-flight) does not command a near-maximum
+        /// control deflection that can excite an oscillation. Defaults to 0.5 seconds.
+        /// Set to 0 to disable the fade-in.
+        /// </summary>
+        [KRPCProperty]
+        public double SoftStartTime {
+            get { return attitudeController.SoftStartTime; }
+            set { attitudeController.SoftStartTime = value; }
+        }
+
+        /// <summary>
         /// The target overshoot percentage used to autotune the PID controllers.
         /// A vector of three values, between 0 and 1, for each of the pitch, roll and yaw axes.
         /// Defaults to 0.01 for each axis.
