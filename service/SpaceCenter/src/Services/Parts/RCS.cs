@@ -280,9 +280,8 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The maximum amount of thrust that can be produced by the RCS thrusters when active,
-        /// in Newtons.
-        /// Takes the thrusters current <see cref="ThrustLimit"/> and atmospheric conditions
-        /// into account.
+        /// in Newtons, with the <see cref="ThrustLimit"/> set to 100%.
+        /// Takes atmospheric conditions into account.
         /// </summary>
         [KRPCProperty]
         public float MaxThrust {
