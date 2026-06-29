@@ -91,6 +91,12 @@ class RCSTest(RCSTestBase):
         self.assertAlmostEqual(data["max_thrust"], rcs.max_thrust, delta=1)
         self.assertEqual(data["max_vac_thrust"], rcs.max_vacuum_thrust)
         self.assertAlmostEqual(0.25, rcs.thrust_limit)
+        self.assert_torque_almost_equal(
+            tuple(x * 0.25 for x in data["pos_torque"]), rcs.available_torque[0]
+        )
+        self.assert_torque_almost_equal(
+            tuple(x * 0.25 for x in data["neg_torque"]), rcs.available_torque[1]
+        )
 
         rcs.thrust_limit = 1
 

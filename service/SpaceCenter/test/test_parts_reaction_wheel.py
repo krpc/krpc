@@ -1,9 +1,9 @@
 import unittest
+
 import krpctest
 
 
 class TestPartsReactionWheel(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -37,6 +37,27 @@ class TestPartsReactionWheel(krpctest.TestCase):
         self.assertEqual(pos_torque, self.wheel.max_torque[0])
         self.assertEqual(pos_torque, self.wheel.available_torque[0])
         self.assertEqual(neg_torque, self.wheel.max_torque[1])
+        self.assertEqual(neg_torque, self.wheel.available_torque[1])
+
+    def test_authority_limiter(self):
+        pos_torque = (30000, 30000, 30000)
+        neg_torque = tuple(-x for x in pos_torque)
+        self.assertAlmostEqual(1.0, self.wheel.authority_limiter, places=4)
+        self.assertEqual(pos_torque, self.wheel.available_torque[0])
+        self.assertEqual(neg_torque, self.wheel.available_torque[1])
+        self.wheel.authority_limiter = 0.5
+        self.assertAlmostEqual(0.5, self.wheel.authority_limiter, places=4)
+        self.assertEqual(pos_torque, self.wheel.max_torque[0])
+        self.assertEqual(neg_torque, self.wheel.max_torque[1])
+        self.assertAlmostEqual(15000, self.wheel.available_torque[0][0], places=0)
+        self.assertAlmostEqual(15000, self.wheel.available_torque[0][1], places=0)
+        self.assertAlmostEqual(15000, self.wheel.available_torque[0][2], places=0)
+        self.assertAlmostEqual(-15000, self.wheel.available_torque[1][0], places=0)
+        self.assertAlmostEqual(-15000, self.wheel.available_torque[1][1], places=0)
+        self.assertAlmostEqual(-15000, self.wheel.available_torque[1][2], places=0)
+        self.wheel.authority_limiter = 1.0
+        self.assertAlmostEqual(1.0, self.wheel.authority_limiter, places=4)
+        self.assertEqual(pos_torque, self.wheel.available_torque[0])
         self.assertEqual(neg_torque, self.wheel.available_torque[1])
 
     def test_control(self):
