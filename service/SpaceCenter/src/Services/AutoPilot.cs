@@ -326,7 +326,7 @@ namespace KRPC.SpaceCenter.Services
                 GeometryExtensions.ToAngleAxis (rotation, out angle, out axis);
                 return Math.Abs (GeometryExtensions.NormAngle ((float)angle));
             }
-            return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (targetDirection)));
+            return Math.Abs (GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (targetDirection))));
         }
 
         // Single-axis error (degrees) between a target angle and the vessel's current angle.
@@ -351,7 +351,7 @@ namespace KRPC.SpaceCenter.Services
                 if (Engaged)
                     return TotalError (attitudeController.TargetRotation, attitudeController.TargetDirection, !double.IsNaN (attitudeController.TargetRoll));
                 if (SAS && SASMode != SASMode.StabilityAssist)
-                    return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, SASTargetDirection ()));
+                    return Math.Abs (GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, SASTargetDirection ())));
                 throw new InvalidOperationException ("The auto-pilot is not engaged");
             }
         }
