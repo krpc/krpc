@@ -89,6 +89,16 @@ namespace KRPC.SpaceCenter.AutoPilot
         // read by DoAutoTuneAxis: the bandwidth floor follows this, not suppressionRamp, so a latched
         // axis runs at full bandwidth while slewing (responsive) and is floored only while holding.
         readonly double[] mitigationLevel = new double[3];
+        // Per-axis [0,1] oscillation-control back-off OR'd into the hold gate (gate = suppressionRamp ·
+        // max(holdFactor, oscControlBackoff)), so the latched flexible-craft mitigation (bandwidth floor
+        // + feedforward cut + nominal target) can be engaged regardless of pointing error — decoupling
+        // it from the hold gate, which otherwise releases the mitigation during a maneuver and lets a
+        // limit cycle build. Recomputed each tick from oscillationControlLevel; reset in Start.
+        readonly double[] oscControlBackoff = new double[3];
+        // Manual per-axis (pitch, roll, yaw) override level for oscControlBackoff, set from the public
+        // API (OscillationControlLevel). 0 by default (no override, behaviour byte-identical to before).
+        // Config, so it persists across re-engage (set in Reset, not cleared in Start).
+        Vector3d oscillationControlLevel = Vector3d.zero;
         // Chatter-detector state for the latch (see UpdateChatterDetector). chatterLevel is a
         // per-axis [0,1] measure of how strongly an axis is in a structural limit cycle.
         Vector3d prevDetectorOmega;
@@ -311,6 +321,13 @@ namespace KRPC.SpaceCenter.AutoPilot
             set { oscillationDetectionThreshold = value; }
         }
 
+        // Manual per-axis (pitch, roll, yaw) override in [0,1] forcing the latched flexible-craft hold
+        // mitigation on regardless of pointing error (OR'd into the hold gate). 0 = no override.
+        public Vector3d OscillationControlLevel {
+            get { return oscillationControlLevel; }
+            set { oscillationControlLevel = value; }
+        }
+
         // Read-only observability into the (otherwise hidden) flexible-craft detector state, so a
         // user can see whether a craft has been deemed wobbly.
         public Vector3d OscillationLevel {
@@ -406,6 +423,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             oscillationNotchQ = DefaultNotchQ;
             oscillationBandwidthFloor = DefaultBandwidthFloor;
             oscillationDetectionThreshold = DefaultChatterDetectThreshold;
+            oscillationControlLevel = Vector3d.zero;
             Overshoot = new Vector3d (0.01, 0.01, 0.01);
             // TimeToPeak sets the inner-loop bandwidth via omega0 = pi / (TimeToPeak * sqrt(1 - zeta^2)).
             // Increasing it lowers the bandwidth, which is the lever for large, structurally flexible
@@ -446,6 +464,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 suppressionActiveAxis [i] = false;
                 suppressionRamp [i] = 0;
                 mitigationLevel [i] = 0;
+                oscControlBackoff [i] = 0;
                 chatterLatched [i] = false;
             }
             if (AutoTune)
@@ -584,10 +603,16 @@ namespace KRPC.SpaceCenter.AutoPilot
             var pointingError = Vector3.Angle (currentDirection, TargetDirection);
             var holdFactor = Math.Min (1.0, Math.Max (0.0,
                 (HoldErrorNone - pointingError) / (HoldErrorNone - HoldErrorFull)));
+            // Oscillation-control back-off, OR'd into the hold gate via max(): lets the latched
+            // mitigation be engaged independent of pointing error (the hold gate's blind spot during a
+            // maneuver). Currently driven only by the manual OscillationControlLevel override.
+            oscControlBackoff [0] = oscillationControlLevel.x;
+            oscControlBackoff [1] = oscillationControlLevel.y;
+            oscControlBackoff [2] = oscillationControlLevel.z;
             var gate = new Vector3d (
-                suppressionRamp [0] * holdFactor,
-                suppressionRamp [1] * holdFactor,
-                suppressionRamp [2] * holdFactor);
+                suppressionRamp [0] * Math.Max (holdFactor, oscControlBackoff [0]),
+                suppressionRamp [1] * Math.Max (holdFactor, oscControlBackoff [1]),
+                suppressionRamp [2] * Math.Max (holdFactor, oscControlBackoff [2]));
             mitigationLevel [0] = gate.x;
             mitigationLevel [1] = gate.y;
             mitigationLevel [2] = gate.z;

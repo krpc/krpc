@@ -1184,6 +1184,7 @@ SpaceCenter.AutoPilot.RollOscillationFrequency
 SpaceCenter.AutoPilot.OscillationNotchQ
 SpaceCenter.AutoPilot.OscillationBandwidthFloor
 SpaceCenter.AutoPilot.OscillationDetectionThreshold
+SpaceCenter.AutoPilot.OscillationControlLevel
 SpaceCenter.AutoPilot.OscillationLevel
 SpaceCenter.AutoPilot.PitchYawOscillationLatched
 SpaceCenter.AutoPilot.RollOscillationLatched

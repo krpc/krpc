@@ -579,6 +579,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// A manual override, between 0 and 1 for each of the pitch, roll and yaw axes, that forces the
+        /// flexible-craft oscillation mitigation (reduced control loop bandwidth, feedforward cut and
+        /// rate-independent target) on for a structurally flexible (latched) axis, regardless of how
+        /// far the vessel is pointing from the target. 0 (the default) applies no override, leaving the
+        /// mitigation to engage automatically only while holding. This is an advanced tuning parameter.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 OscillationControlLevel {
+            get { return attitudeController.OscillationControlLevel.ToTuple (); }
+            set { attitudeController.OscillationControlLevel = value.ToVector (); }
+        }
+
+        /// <summary>
         /// A measure, between 0 and 1 for each of the pitch, roll and yaw axes, of how strongly the
         /// auto-pilot currently detects structural oscillation (wobble) on that axis. 0 means none
         /// detected; values approaching 1 mean a sustained structural oscillation. Read-only.
