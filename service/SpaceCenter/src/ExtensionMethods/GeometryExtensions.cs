@@ -344,6 +344,57 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Spherical linear interpolation between two unit quaternions, along the shortest geodesic
+        /// (constant angular velocity). t is clamped to [0,1]. Reimplemented here (rather than using
+        /// the stubbed KSP QuaternionD.Slerp) using the half-angle of the delta rotation, so it works
+        /// against the stripped stub DLLs as well as the real in-game QuaternionD.
+        /// </summary>
+        public static QuaternionD Slerp (QuaternionD from, QuaternionD to, double t)
+        {
+            if (t <= 0)
+                return from;
+            if (t >= 1)
+                return to;
+            var delta = to * from.Inverse ();
+            double angle;
+            Vector3d axis;
+            ToAngleAxis (delta, out angle, out axis);
+            angle = ClampAngle180 (angle);
+            // ToAngleAxis collapses a near-zero rotation to angle=0 (unit axis), so no need to guard
+            // against an infinite/degenerate axis here.
+            if (Math.Abs (angle) < 1e-9)
+                return to;
+            var half = ToRadians (angle * t) * 0.5;
+            var s = Math.Sin (half);
+            var partial = new QuaternionD (axis.x * s, axis.y * s, axis.z * s, Math.Cos (half)).Normalize ();
+            return (partial * from).Normalize ();
+        }
+
+        /// <summary>
+        /// The angle, in degrees, of the shortest rotation between two unit quaternions.
+        /// </summary>
+        public static double Angle (QuaternionD a, QuaternionD b)
+        {
+            var delta = b * a.Inverse ();
+            double angle;
+            Vector3d axis;
+            ToAngleAxis (delta, out angle, out axis);
+            return Math.Abs (ClampAngle180 (angle));
+        }
+
+        /// <summary>
+        /// Rotate from one orientation toward another by at most maxDegrees (along the shortest
+        /// geodesic). Reaches and clamps at <paramref name="to"/> once within maxDegrees.
+        /// </summary>
+        public static QuaternionD RotateTowards (QuaternionD from, QuaternionD to, double maxDegrees)
+        {
+            var angle = Angle (from, to);
+            if (angle <= maxDegrees || angle < 1e-9)
+                return to;
+            return Slerp (from, to, maxDegrees / angle);
+        }
+
+        /// <summary>
         /// Normalize a quaternion to unit length.
         /// </summary>
         public static QuaternionD Normalize (this QuaternionD q)

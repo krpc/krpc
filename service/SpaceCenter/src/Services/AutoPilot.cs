@@ -215,6 +215,58 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The current target pitch the auto-pilot is tracking, in degrees. When
+        /// <see cref="TargetSmoothingTime"/> is non-zero this lags the commanded
+        /// <see cref="TargetPitch"/> while a change is slewed in; otherwise the two are equal.
+        /// </summary>
+        [KRPCProperty]
+        public float CurrentTargetPitch {
+            get { return (float)attitudeController.EffectiveTargetPitch; }
+        }
+
+        /// <summary>
+        /// The current target heading the auto-pilot is tracking, in degrees. When
+        /// <see cref="TargetSmoothingTime"/> is non-zero this lags the commanded
+        /// <see cref="TargetHeading"/> while a change is slewed in; otherwise the two are equal.
+        /// </summary>
+        [KRPCProperty]
+        public float CurrentTargetHeading {
+            get { return (float)attitudeController.EffectiveTargetHeading; }
+        }
+
+        /// <summary>
+        /// The current target roll the auto-pilot is tracking, in degrees. When
+        /// <see cref="TargetSmoothingTime"/> is non-zero this lags the commanded
+        /// <see cref="TargetRoll"/> while a change is slewed in; otherwise the two are equal.
+        /// <c>NaN</c> if no target roll is set.
+        /// </summary>
+        [KRPCProperty]
+        public float CurrentTargetRoll {
+            get { return (float)attitudeController.EffectiveTargetRoll; }
+        }
+
+        /// <summary>
+        /// Direction vector corresponding to the current target pitch and heading
+        /// (see <see cref="CurrentTargetPitch"/>), in the reference frame specified by
+        /// <see cref="ReferenceFrame"/>. Lags <see cref="TargetDirection"/> while a change is
+        /// slewed in when <see cref="TargetSmoothingTime"/> is non-zero.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 CurrentTargetDirection {
+            get { return attitudeController.EffectiveTargetDirection.ToTuple (); }
+        }
+
+        /// <summary>
+        /// The current target rotation quaternion the auto-pilot is tracking, in the reference frame
+        /// specified by <see cref="ReferenceFrame"/>. Lags <see cref="TargetRotation"/> while a
+        /// change is slewed in when <see cref="TargetSmoothingTime"/> is non-zero.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple4 CurrentTargetRotation {
+            get { return attitudeController.EffectiveTargetRotation.ToTuple (); }
+        }
+
+        /// <summary>
         /// Blocks until the vessel is pointing in the target direction and has
         /// the target roll (if set). Throws an exception if the auto-pilot has not been engaged.
         /// </summary>
@@ -256,31 +308,51 @@ namespace KRPC.SpaceCenter.Services
             set { stoppingVelocityThreshold = value; }
         }
 
+        // The vessel's current attitude, decomposed into pitch/heading/roll in the AP reference frame.
+        Vector3d CurrentPitchHeadingRoll ()
+        {
+            return ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ();
+        }
+
+        // Total pointing error (degrees) between the vessel and a target. rollControlled selects the
+        // full-rotation error (honouring roll) versus the direction-only error.
+        float TotalError (QuaternionD targetRotation, Vector3d targetDirection, bool rollControlled)
+        {
+            if (rollControlled) {
+                var currentRotation = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation);
+                var rotation = targetRotation * currentRotation.Inverse ();
+                double angle;
+                Vector3d axis;
+                GeometryExtensions.ToAngleAxis (rotation, out angle, out axis);
+                return Math.Abs (GeometryExtensions.NormAngle ((float)angle));
+            }
+            return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (targetDirection)));
+        }
+
+        // Single-axis error (degrees) between a target angle and the vessel's current angle.
+        static float AxisError (double targetAngle, double currentAngle)
+        {
+            return (float)Math.Abs (GeometryExtensions.ClampAngle180 (targetAngle - currentAngle));
+        }
+
         /// <summary>
         /// The error, in degrees, between the direction the ship has been asked
         /// to point in and the direction it is pointing in. Throws an exception if the auto-pilot
         /// has not been engaged and SAS is not enabled or is in stability assist mode.
         /// </summary>
+        /// <remarks>
+        /// This is the error relative to the commanded target. While a change is being slewed in
+        /// (see <see cref="TargetSmoothingTime"/>) it differs from <see cref="CurrentError"/>, the
+        /// error relative to the target the auto-pilot is currently tracking.
+        /// </remarks>
         [KRPCProperty]
         public float Error {
             get {
-                if (Engaged) {
-                    if (!double.IsNaN (attitudeController.TargetRoll)) {
-                        var currentRotation = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation);
-                        var targetRotation = attitudeController.TargetRotation;
-                        var rotation = targetRotation * currentRotation.Inverse ();
-                        double angle;
-                        Vector3d axis;
-                        GeometryExtensions.ToAngleAxis (rotation, out angle, out axis);
-                        return Math.Abs (GeometryExtensions.NormAngle ((float)angle));
-                    } else {
-                        return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (attitudeController.TargetDirection)));
-                    }
-                } else if (!Engaged && SAS && SASMode != SASMode.StabilityAssist) {
+                if (Engaged)
+                    return TotalError (attitudeController.TargetRotation, attitudeController.TargetDirection, !double.IsNaN (attitudeController.TargetRoll));
+                if (SAS && SASMode != SASMode.StabilityAssist)
                     return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, SASTargetDirection ()));
-                } else {
-                    throw new InvalidOperationException ("The auto-pilot is not engaged");
-                }
+                throw new InvalidOperationException ("The auto-pilot is not engaged");
             }
         }
 
@@ -293,8 +365,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 if (!Engaged)
                     throw new InvalidOperationException ("The auto-pilot is not engaged");
-                var currentPitch = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().x;
-                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetPitch - currentPitch));
+                return AxisError (attitudeController.TargetPitch, CurrentPitchHeadingRoll ().x);
             }
         }
 
@@ -307,8 +378,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 if (!Engaged)
                     throw new InvalidOperationException ("The auto-pilot is not engaged");
-                var currentHeading = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().y;
-                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetHeading - currentHeading));
+                return AxisError (attitudeController.TargetHeading, CurrentPitchHeadingRoll ().y);
             }
         }
 
@@ -323,8 +393,68 @@ namespace KRPC.SpaceCenter.Services
                     throw new InvalidOperationException ("The auto-pilot is not engaged");
                 if (double.IsNaN (attitudeController.TargetRoll))
                     throw new InvalidOperationException ("No target roll has been set");
-                var currentRoll = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
-                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetRoll - currentRoll));
+                return AxisError (attitudeController.TargetRoll, CurrentPitchHeadingRoll ().z);
+            }
+        }
+
+        /// <summary>
+        /// The error, in degrees, between the direction the auto-pilot is currently tracking and the
+        /// direction the ship is pointing in. Unlike <see cref="Error"/> (which is relative to the
+        /// commanded target), this is relative to the slewed target the auto-pilot is currently
+        /// holding, so it stays small while a smoothed change (see <see cref="TargetSmoothingTime"/>)
+        /// is fed in. Equal to <see cref="Error"/> when smoothing is off. Throws an exception if the
+        /// auto-pilot has not been engaged.
+        /// </summary>
+        [KRPCProperty]
+        public float CurrentError {
+            get {
+                if (!Engaged)
+                    throw new InvalidOperationException ("The auto-pilot is not engaged");
+                return TotalError (attitudeController.EffectiveTargetRotation, attitudeController.EffectiveTargetDirection, !double.IsNaN (attitudeController.EffectiveTargetRoll));
+            }
+        }
+
+        /// <summary>
+        /// The error, in degrees, between the vessels current pitch and the pitch the auto-pilot is
+        /// currently tracking (see <see cref="CurrentTargetPitch"/>). Throws an exception if the
+        /// auto-pilot has not been engaged.
+        /// </summary>
+        [KRPCProperty]
+        public float CurrentPitchError {
+            get {
+                if (!Engaged)
+                    throw new InvalidOperationException ("The auto-pilot is not engaged");
+                return AxisError (attitudeController.EffectiveTargetPitch, CurrentPitchHeadingRoll ().x);
+            }
+        }
+
+        /// <summary>
+        /// The error, in degrees, between the vessels current heading and the heading the auto-pilot
+        /// is currently tracking (see <see cref="CurrentTargetHeading"/>). Throws an exception if the
+        /// auto-pilot has not been engaged.
+        /// </summary>
+        [KRPCProperty]
+        public float CurrentHeadingError {
+            get {
+                if (!Engaged)
+                    throw new InvalidOperationException ("The auto-pilot is not engaged");
+                return AxisError (attitudeController.EffectiveTargetHeading, CurrentPitchHeadingRoll ().y);
+            }
+        }
+
+        /// <summary>
+        /// The error, in degrees, between the vessels current roll and the roll the auto-pilot is
+        /// currently tracking (see <see cref="CurrentTargetRoll"/>). Throws an exception if the
+        /// auto-pilot has not been engaged or no target roll is set.
+        /// </summary>
+        [KRPCProperty]
+        public float CurrentRollError {
+            get {
+                if (!Engaged)
+                    throw new InvalidOperationException ("The auto-pilot is not engaged");
+                if (double.IsNaN (attitudeController.EffectiveTargetRoll))
+                    throw new InvalidOperationException ("No target roll has been set");
+                return AxisError (attitudeController.EffectiveTargetRoll, CurrentPitchHeadingRoll ().z);
             }
         }
 
@@ -417,6 +547,21 @@ namespace KRPC.SpaceCenter.Services
         public double SoftStartTime {
             get { return attitudeController.SoftStartTime; }
             set { attitudeController.SoftStartTime = value; }
+        }
+
+        /// <summary>
+        /// The duration, in seconds, over which a change to the target attitude is applied to the
+        /// control target. When set above zero, changing the target pitch, heading, roll, direction
+        /// or rotation makes the effective control target ramp smoothly (a constant-rate rotation)
+        /// from its current value to the new value over this many seconds, rather than jumping
+        /// instantly. This lets a slow control loop drive a smooth maneuver (for example a gravity
+        /// turn) without inducing oscillation from stepwise target changes. Defaults to 0
+        /// (instantaneous).
+        /// </summary>
+        [KRPCProperty]
+        public double TargetSmoothingTime {
+            get { return attitudeController.TargetSmoothingTime; }
+            set { attitudeController.TargetSmoothingTime = value; }
         }
 
         /// <summary>

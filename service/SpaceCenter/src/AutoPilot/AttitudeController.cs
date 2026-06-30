@@ -18,8 +18,24 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         // Target orientation — quaternion is the single source of truth.
         // rollControlled=false means "suppress roll rotation" (don't hold a specific angle).
+        // targetRotation is the COMMANDED target (what the user set); the public getters and
+        // AutoPilot.Error read it. The control loop instead consumes effectiveRotation, which is
+        // slewed toward the commanded target over TargetSmoothingTime seconds (see Update). When
+        // smoothing is disabled (the default), effectiveRotation == targetRotation every tick.
         QuaternionD targetRotation;
         bool rollControlled;
+        // Target smoothing (slew): effectiveRotation is the slewed target the control loop tracks.
+        // Each tick it RotateTowards the commanded targetRotation at slewSpeed (deg/s). slewSpeed is
+        // latched whenever the target changes to (angle between effective and commanded) /
+        // targetSmoothingTime, so an isolated change arrives in exactly targetSmoothingTime seconds
+        // (constant angular rate), while a continuous stream of changes re-latches each tick and
+        // settles into a smooth, bounded lag (~targetSmoothingTime x change-rate) with no freeze at
+        // any update cadence. 0 = instant (no slew). slewPending is set by the (RPC-thread) setters
+        // and consumed in Update, on the physics thread.
+        QuaternionD effectiveRotation;
+        double targetSmoothingTime;
+        double slewSpeed;
+        bool slewPending;
 
         // PID autotuning variables
         Vector3d overshoot;
@@ -141,7 +157,9 @@ namespace KRPC.SpaceCenter.AutoPilot
         // each Start() so engagement does not deliver a near-max "kick" (large proportional +
         // acceleration feedforward) that can impulsively excite a structural or in-band limit cycle
         // — the transient the manual "settle before liftoff" pause avoids. engageFixedTime is the
-        // Time.fixedTime at the last Start(); the ramp is a function of elapsed time from it.
+        // Time.fixedTime at the last Start(); the ramp is a function of elapsed time from it. While
+        // the craft is held on the launch clamps (PRELAUNCH) Update re-pins it each tick, so the fade
+        // begins at clamp release rather than at engagement.
         double softStartTime;
         double engageFixedTime;
         Vector3d logAngles;
@@ -281,23 +299,62 @@ namespace KRPC.SpaceCenter.AutoPilot
             get { return targetRotation; }
         }
 
+        // The effective (slewed) target — what the control loop is currently tracking. Equal to the
+        // commanded target above when smoothing is off; lags it during a slew. rollControlled is
+        // shared with the commanded target (a single mode flag), so the roll readouts match.
+        public double EffectiveTargetPitch {
+            get { return effectiveRotation.PitchHeadingRoll ().x; }
+        }
+
+        public double EffectiveTargetHeading {
+            get { return effectiveRotation.PitchHeadingRoll ().y; }
+        }
+
+        public double EffectiveTargetRoll {
+            get { return rollControlled ? effectiveRotation.PitchHeadingRoll ().z : double.NaN; }
+        }
+
+        public Vector3d EffectiveTargetDirection {
+            get { return effectiveRotation * Vector3d.up; }
+        }
+
+        public QuaternionD EffectiveTargetRotation {
+            get { return effectiveRotation; }
+        }
+
+        public double TargetSmoothingTime {
+            get { return targetSmoothingTime; }
+            set { targetSmoothingTime = Math.Max (0, value); }
+        }
+
+        // Request the slew speed be (re)latched from the current effective-to-commanded gap. Called
+        // after every target change. The latch happens in Update (the physics thread); the setters
+        // may run on the RPC thread.
+        void BeginSlew ()
+        {
+            slewPending = true;
+        }
+
         void SetTarget (double pitch, double heading, double roll)
         {
             rollControlled = !double.IsNaN (roll);
             var phr = new Vector3d (pitch, heading, rollControlled ? roll : 0);
             targetRotation = GeometryExtensions.QuaternionFromPitchHeadingRoll (phr);
+            BeginSlew ();
         }
 
         public void SetTargetDirection (Vector3d direction)
         {
             targetRotation = GeometryExtensions.FromToRotation (Vector3d.up, direction.normalized);
             rollControlled = false;
+            BeginSlew ();
         }
 
         public void SetTargetRotation (QuaternionD rotation)
         {
             targetRotation = rotation;
             rollControlled = true;
+            BeginSlew ();
         }
 
         public Vector3d MaxAngularVelocity { get; set; }
@@ -477,6 +534,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // UpdateChatterDetector.)
             TimeToPeak = new Vector3d (1, 1, 1);
             SoftStartTime = DefaultSoftStartTime;
+            targetSmoothingTime = 0;
             DiagnosticLogging = false;
             SetTarget (0, 0, double.NaN);
             Start ();
@@ -485,6 +543,11 @@ namespace KRPC.SpaceCenter.AutoPilot
         public void Start ()
         {
             engageFixedTime = Time.fixedTime;
+            // Hold the current commanded target on engage — no phantom slew (engagement transients
+            // are handled separately by the soft-start). Smoothing only applies to later changes.
+            effectiveRotation = targetRotation;
+            slewSpeed = 0;
+            slewPending = false;
             PitchPID.ResetState ();
             RollPID.ResetState ();
             YawPID.ResetState ();
@@ -524,6 +587,45 @@ namespace KRPC.SpaceCenter.AutoPilot
             var torque = vessel.AvailableTorqueVectors.Item1;
             var moi = vessel.MomentOfInertiaVector;
             var dt = Time.fixedDeltaTime;
+
+            // While the vessel sits on the launch clamps (PRELAUNCH) the autopilot is engaged but
+            // must not act. The craft is physically held and the engines are unlit, so available
+            // torque is near-zero; running the loop would autotune enormous gains against that tiny
+            // torque (Kp ∝ moi/torque) and saturate the actuators against sensor jitter or a sub-
+            // degree pointing error — a full-deflection command that is then delivered as a kick the
+            // instant the clamps release and the gains collapse onto the now-large engine torque.
+            // Instead hold the controls at zero and keep the whole control loop in its freshly-
+            // engaged default state (Start re-pins the soft-start clock and clears all loop state),
+            // re-running it each tick so the engagement soft-start fade-in begins at clamp release
+            // rather than at engagement. Holding on the pad is thus equivalent to engaging the moment
+            // the clamps drop.
+            if (internalVessel.situation == Vessel.Situations.PRELAUNCH) {
+                Start ();
+                state.Pitch = 0;
+                state.Roll = 0;
+                state.Yaw = 0;
+                logRawOmegaRi = Vector3d.zero;
+                logTargetRi = Vector3d.zero;
+                return;
+            }
+
+            // Target smoothing: advance the effective target (what the control loop tracks) toward
+            // the commanded target. With smoothing enabled, a change to the target ramps the
+            // effective target linearly (constant-rate slerp) over TargetSmoothingTime seconds,
+            // rather than stepping instantly — letting a slow control loop drive a smooth maneuver
+            // (e.g. a gravity turn) without exciting oscillation from stepwise target changes.
+            if (slewPending) {
+                slewSpeed = targetSmoothingTime > 0
+                    ? GeometryExtensions.Angle (effectiveRotation, targetRotation) / targetSmoothingTime
+                    : 0;
+                slewPending = false;
+            }
+            if (targetSmoothingTime > 0) {
+                effectiveRotation = GeometryExtensions.RotateTowards (
+                    effectiveRotation, targetRotation, slewSpeed * dt);
+            } else {
+                effectiveRotation = targetRotation;
+            }
 
             // Engagement soft-start: a smoothstep 0→1 over SoftStartTime seconds from the last
             // Start(). The final actuator command is scaled by this so engagement fades the control
@@ -647,7 +749,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // (≥ HoldErrorNone), linear between. Combined with suppressionRamp it gives the per-axis
             // mitigation weight — only a latched axis that is also holding fully tracks the nominal
             // target and cuts the feedforward.
-            var pointingError = Vector3.Angle (currentDirection, TargetDirection);
+            var pointingError = Vector3.Angle (currentDirection, EffectiveTargetDirection);
             var holdFactor = Math.Min (1.0, Math.Max (0.0,
                 (HoldErrorNone - pointingError) / (HoldErrorNone - HoldErrorFull)));
             // Oscillation-control back-off, OR'd into the hold gate via max() below: lets the latched
@@ -737,12 +839,13 @@ namespace KRPC.SpaceCenter.AutoPilot
             if (AutoTune)
                 DoAutoTune (smoothedTorque, moi);
 
-            // Zero the integral terms while sat on the pad, and throughout the engagement soft-start.
-            // During the fade the scaled-down command under-drives the plant, so the error persists
-            // and the integrator would wind up — then deliver the very kick the soft-start removes the
-            // moment the ramp completes. Holding it cleared means integration starts from zero exactly
-            // at softStart == 1, with no step (the proportional/feedforward output is faded too).
-            if (internalVessel.situation == Vessel.Situations.PRELAUNCH || softStart < 1.0) {
+            // Zero the integral terms throughout the engagement soft-start (the on-pad PRELAUNCH
+            // case is handled by the early return above). During the fade the scaled-down command
+            // under-drives the plant, so the error persists and the integrator would wind up — then
+            // deliver the very kick the soft-start removes the moment the ramp completes. Holding it
+            // cleared means integration starts from zero exactly at softStart == 1, with no step (the
+            // proportional/feedforward output is faded too).
+            if (softStart < 1.0) {
                 PitchPID.ClearIntegralTerm ();
                 RollPID.ClearIntegralTerm ();
                 YawPID.ClearIntegralTerm ();
@@ -847,7 +950,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// </summary>
         void ClearRollWindupIfDisengaged (Vector3d currentDirection)
         {
-            var dirError = Vector3.Angle (currentDirection, TargetDirection);
+            var dirError = Vector3.Angle (currentDirection, EffectiveTargetDirection);
             if (RollWeight (dirError) == 0.0)
                 RollPID.ClearIntegralTerm ();
         }
@@ -884,7 +987,10 @@ namespace KRPC.SpaceCenter.AutoPilot
         void LogDiagnostics (Vector3d torque, Vector3d moi, double phi, Vector3d currentRi,
             Vector3d target, Vector3d ffRi, Vector3d gyro, Vector3d currentDirection, PilotAddon.ControlInputs state)
         {
-            var dirErr = Vector3.Angle (currentDirection, TargetDirection);
+            // Tracking error to the target the loop is actually following (the slewed/effective
+            // target, not the commanded one), so it stays small while a smoothed change is fed in.
+            var dirErr = Vector3.Angle (currentDirection, EffectiveTargetDirection);
+            var effectivePhr = effectiveRotation.PitchHeadingRoll ();
             var line = string.Format (
                 "[KRPC.AP] t={0:F3} err={1:F2}deg" +
                 " torque=({2:F4},{3:F4},{4:F4})" +
@@ -903,7 +1009,8 @@ namespace KRPC.SpaceCenter.AutoPilot
                 " tool=({42},{43},{44})" +
                 " fdet=({45:F3},{46:F3})" +
                 " bwtgt=({47:F3},{48:F3},{49:F3})" +
-                " oscctl=({50:F3},{51:F3}) bko=({52:F2},{53:F2},{54:F2})",
+                " oscctl=({50:F3},{51:F3}) bko=({52:F2},{53:F2},{54:F2})" +
+                " tgt_smooth=({55:F2},{56:F2})deg",
                 Time.fixedTime, dirErr,
                 torque.x, torque.y, torque.z,
                 moi.x, moi.y, moi.z,
@@ -927,7 +1034,8 @@ namespace KRPC.SpaceCenter.AutoPilot
                 suppressionRamp [1] * oscillationBandwidthFloor,
                 suppressionRamp [2] * oscillationBandwidthFloor,
                 Math.Max (controlOscEnvelope.x, controlOscEnvelope.z), controlOscEnvelope.y,
-                oscControlBackoff [0], oscControlBackoff [1], oscControlBackoff [2]);
+                oscControlBackoff [0], oscControlBackoff [1], oscControlBackoff [2],
+                effectivePhr.x, effectivePhr.y);
             UnityEngine.Debug.Log (line);
             lock (diagnosticLogLock) {
                 diagnosticLog.AppendLine (line);
@@ -1173,7 +1281,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             Vector3d currentDirection, double cosPhi, double sinPhi)
         {
             var internalVessel = vessel.InternalVessel;
-            var targetDirection = TargetDirection;
+            var targetDirection = EffectiveTargetDirection;
 
             // Direction error: FromToRotation gives a minimum-arc rotation whose axis is
             // perpendicular to both currentDirection and targetDirection. Because the vessel's
@@ -1203,7 +1311,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 var rollWeight = RollWeight (dirError);
                 if (rollWeight > 0) {
                     var currentRotation = ReferenceFrame.RotationFromWorldSpace (internalVessel.ReferenceTransform.rotation);
-                    QuaternionD rollResidual = targetRotation * currentRotation.Inverse () * dirRotation.Inverse ();
+                    QuaternionD rollResidual = effectiveRotation * currentRotation.Inverse () * dirRotation.Inverse ();
                     double rollResAngle;
                     Vector3d rollResAxis;
                     GeometryExtensions.ToAngleAxis (rollResidual, out rollResAngle, out rollResAxis);
