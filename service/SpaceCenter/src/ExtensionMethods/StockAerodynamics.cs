@@ -129,6 +129,13 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             if (mach > 25.0)
                 mach = 25.0;
 
+            // KSP's FlightIntegrator scales cube drag by a pseudo-Reynolds factor
+            // (density times speed). See CalculateConstantsAtmosphere setting
+            // pseudoReDragMult, applied per part in CalculateDragValue. Omitting it
+            // overestimates drag at low altitude and subsonic speed (see #911).
+            var pseudoReDragMult = PhysicsGlobals.DragCurvePseudoReynolds.Evaluate(
+                (float)(rho * v_wrld_vel.magnitude));
+
             // Loop through all parts, accumulating drag and lift.
             for (int i = 0; i < _vessel.Parts.Count; ++i) {
                 // need checks on shielded components
@@ -175,7 +182,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                             liftForce = p_drag_data.liftForce;
                         }
 
-                        var sim_dragScalar = dyn_pressure * drag * PhysicsGlobals.DragMultiplier;
+                        var sim_dragScalar = dyn_pressure * drag * PhysicsGlobals.DragMultiplier * pseudoReDragMult;
                         dragForce = -(Vector3d)sim_dragVectorDir * sim_dragScalar;
                         break;
 
