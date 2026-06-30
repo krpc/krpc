@@ -592,6 +592,41 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The amplitude of control-output oscillation, measured about its slowly-varying trim, above
+        /// which a structurally flexible (latched) axis is treated as still limit-cycling and the
+        /// oscillation mitigation is engaged automatically regardless of pointing error. Lowering it
+        /// makes the automatic engagement more sensitive. Defaults to 0.2. Compare against
+        /// <see cref="PitchYawControlOscillation"/> / <see cref="RollControlOscillation"/>. This is an
+        /// advanced tuning parameter.
+        /// </summary>
+        [KRPCProperty]
+        public double OscillationControlThreshold {
+            get { return attitudeController.OscillationControlThreshold; }
+            set { attitudeController.OscillationControlThreshold = value; }
+        }
+
+        /// <summary>
+        /// The current amplitude of control-output oscillation on the pitch/yaw axis group, measured as
+        /// the deviation of the delivered control about its slowly-varying trim. A settled hold sits
+        /// near zero; a sustained limit cycle drives it toward 1. Read-only. See
+        /// <see cref="OscillationControlThreshold"/>.
+        /// </summary>
+        [KRPCProperty]
+        public double PitchYawControlOscillation {
+            get { return attitudeController.PitchYawControlOscillation; }
+        }
+
+        /// <summary>
+        /// The current amplitude of control-output oscillation on the roll axis, measured as the
+        /// deviation of the delivered control about its slowly-varying trim. Read-only. See
+        /// <see cref="PitchYawControlOscillation"/>.
+        /// </summary>
+        [KRPCProperty]
+        public double RollControlOscillation {
+            get { return attitudeController.RollControlOscillation; }
+        }
+
+        /// <summary>
         /// A measure, between 0 and 1 for each of the pitch, roll and yaw axes, of how strongly the
         /// auto-pilot currently detects structural oscillation (wobble) on that axis. 0 means none
         /// detected; values approaching 1 mean a sustained structural oscillation. Read-only.

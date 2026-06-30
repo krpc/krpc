@@ -99,6 +99,20 @@ namespace KRPC.SpaceCenter.AutoPilot
         // API (OscillationControlLevel). 0 by default (no override, behaviour byte-identical to before).
         // Config, so it persists across re-engage (set in Reset, not cleared in Start).
         Vector3d oscillationControlLevel = Vector3d.zero;
+        // Automatic (envelope-driven) component of oscControlBackoff before the manual floor is applied:
+        // the per-axis ramp that rises while a latched axis limit-cycles and decays slowly when quiet.
+        readonly double[] oscControlAuto = new double[3];
+        // Previous tick's delivered command (state.Pitch/Roll/Yaw), and the slow trim mean plus the
+        // about-mean envelope built from it one tick late (the gate that consumes the back-off is
+        // computed before this tick's command exists). controlOscEnvelope is the runtime analogue of
+        // the test's control_oscillation_amplitude.
+        Vector3d prevControl;
+        bool prevControlValid;
+        Vector3d controlMean;
+        bool controlMeanValid;
+        Vector3d controlOscEnvelope = Vector3d.zero;
+        // Envelope threshold (exposed) above which a latched axis is treated as still limit-cycling.
+        double oscControlThreshold;
         // Chatter-detector state for the latch (see UpdateChatterDetector). chatterLevel is a
         // per-axis [0,1] measure of how strongly an axis is in a structural limit cycle.
         Vector3d prevDetectorOmega;
@@ -207,6 +221,18 @@ namespace KRPC.SpaceCenter.AutoPilot
         // limit cycle (which saturates toward 1) but well above any transient a rigid craft produces,
         // so a rigid craft — whose chatterLevel never leaves ~0 — is never latched.
         const double ChatterLatchThreshold = 0.6;
+        // Control-output oscillation envelope (the runtime analogue of the test's
+        // control_oscillation_amplitude): a latched axis whose about-mean delivered-command envelope
+        // exceeds this is treated as still limit-cycling, so the hold mitigation engages regardless of
+        // pointing error. A settled hold sits near 0.008 and a limit cycle saturates toward ~1, so the
+        // 0.2 default has wide margin. Exposed (OscillationControlThreshold).
+        const double DefaultOscControlThreshold = 0.2;
+        // Time constant of the slow "trim" mean subtracted from the delivered command to form the
+        // about-mean envelope: long enough to track a steady slew (so a one-sign ramp is not counted as
+        // oscillation) yet shorter than the limit-cycle period (~0.7 s), which is left as deviation.
+        const double OscControlMeanTimeConstant = 0.5;
+        // Time constant smoothing the |command - trim| envelope (a few cycles).
+        const double OscControlEnvelopeTimeConstant = 0.3;
         // Below this 2D error magnitude (radians) the joint pitch/yaw profile is skipped.
         const double MinThetaForJointProfile = 1e-10;
         // Default engagement soft-start duration (seconds): the actuator command is faded in over
@@ -328,6 +354,22 @@ namespace KRPC.SpaceCenter.AutoPilot
             set { oscillationControlLevel = value; }
         }
 
+        // About-mean envelope of the delivered command above which a latched axis is treated as still
+        // limit-cycling and the hold mitigation is engaged regardless of pointing error.
+        public double OscillationControlThreshold {
+            get { return oscControlThreshold; }
+            set { oscControlThreshold = value; }
+        }
+
+        // Read-only per-group about-mean control-output oscillation envelope (pitch/yaw coupled, roll).
+        public double PitchYawControlOscillation {
+            get { return Math.Max (controlOscEnvelope.x, controlOscEnvelope.z); }
+        }
+
+        public double RollControlOscillation {
+            get { return controlOscEnvelope.y; }
+        }
+
         // Read-only observability into the (otherwise hidden) flexible-craft detector state, so a
         // user can see whether a craft has been deemed wobbly.
         public Vector3d OscillationLevel {
@@ -424,6 +466,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             oscillationBandwidthFloor = DefaultBandwidthFloor;
             oscillationDetectionThreshold = DefaultChatterDetectThreshold;
             oscillationControlLevel = Vector3d.zero;
+            oscControlThreshold = DefaultOscControlThreshold;
             Overshoot = new Vector3d (0.01, 0.01, 0.01);
             // TimeToPeak sets the inner-loop bandwidth via omega0 = pi / (TimeToPeak * sqrt(1 - zeta^2)).
             // Increasing it lowers the bandwidth, which is the lever for large, structurally flexible
@@ -450,6 +493,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             prevDetectorOmegaValid = false;
             emaOmegaValid = false;
             emaAbsHp = Vector3d.zero;
+            prevControlValid = false;
+            controlMeanValid = false;
+            controlOscEnvelope = Vector3d.zero;
             pitchYawFreqTracker.Reset ();
             rollFreqTracker.Reset ();
             pitchYawHeldHz = double.NaN;
@@ -465,6 +511,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 suppressionRamp [i] = 0;
                 mitigationLevel [i] = 0;
                 oscControlBackoff [i] = 0;
+                oscControlAuto [i] = 0;
                 chatterLatched [i] = false;
             }
             if (AutoTune)
@@ -603,12 +650,37 @@ namespace KRPC.SpaceCenter.AutoPilot
             var pointingError = Vector3.Angle (currentDirection, TargetDirection);
             var holdFactor = Math.Min (1.0, Math.Max (0.0,
                 (HoldErrorNone - pointingError) / (HoldErrorNone - HoldErrorFull)));
-            // Oscillation-control back-off, OR'd into the hold gate via max(): lets the latched
-            // mitigation be engaged independent of pointing error (the hold gate's blind spot during a
-            // maneuver). Currently driven only by the manual OscillationControlLevel override.
-            oscControlBackoff [0] = oscillationControlLevel.x;
-            oscControlBackoff [1] = oscillationControlLevel.y;
-            oscControlBackoff [2] = oscillationControlLevel.z;
+            // Oscillation-control back-off, OR'd into the hold gate via max() below: lets the latched
+            // mitigation engage independent of pointing error — the hold gate's blind spot during a
+            // maneuver, where a released gate restores the feedforward that re-drives the bending mode.
+            // The trigger is the about-mean envelope of the delivered command (built from the previous
+            // tick, since this tick's command does not exist yet): a sustained limit cycle has a large
+            // envelope while a steady slew (one-sign ramp, tracked by the trim mean) does not. It rises
+            // fast / decays slow so a one-shot transient does not pin it, only a latched axis can
+            // trigger, and the manual OscillationControlLevel is a floor under the automatic level.
+            if (prevControlValid) {
+                if (!controlMeanValid) {
+                    controlMean = prevControl;
+                    controlMeanValid = true;
+                }
+                var meanBeta = 1.0 - Math.Exp (-dt / OscControlMeanTimeConstant);
+                controlMean += meanBeta * (prevControl - controlMean);
+                var envBeta = 1.0 - Math.Exp (-dt / OscControlEnvelopeTimeConstant);
+                controlOscEnvelope = new Vector3d (
+                    controlOscEnvelope.x + envBeta * (Math.Abs (prevControl.x - controlMean.x) - controlOscEnvelope.x),
+                    controlOscEnvelope.y + envBeta * (Math.Abs (prevControl.y - controlMean.y) - controlOscEnvelope.y),
+                    controlOscEnvelope.z + envBeta * (Math.Abs (prevControl.z - controlMean.z) - controlOscEnvelope.z));
+            }
+            // Pitch (x) and yaw (z) are coupled (mirror the chatter detector); roll (y) on its own.
+            var pyEnv = Math.Max (controlOscEnvelope.x, controlOscEnvelope.z);
+            var groupEnv = new Vector3d (pyEnv, controlOscEnvelope.y, pyEnv);
+            for (int i = 0; i < 3; i++) {
+                var oscTarget = chatterLatched [i] && groupEnv [i] > oscControlThreshold ? 1.0 : 0.0;
+                var tc = oscTarget > oscControlAuto [i] ? ChatterRiseTimeConstant : ChatterDecayTimeConstant;
+                var beta = 1.0 - Math.Exp (-dt / tc);
+                oscControlAuto [i] += beta * (oscTarget - oscControlAuto [i]);
+                oscControlBackoff [i] = Math.Max (oscControlAuto [i], oscillationControlLevel [i]);
+            }
             var gate = new Vector3d (
                 suppressionRamp [0] * Math.Max (holdFactor, oscControlBackoff [0]),
                 suppressionRamp [1] * Math.Max (holdFactor, oscControlBackoff [1]),
@@ -700,6 +772,10 @@ namespace KRPC.SpaceCenter.AutoPilot
             state.Pitch = (float)(softStart * SmoothOutput (0, (bodyControl.x + gyro.x).Clamp (-1, 1), dt));
             state.Roll = (float)(softStart * SmoothOutput (1, (virtualRoll + gyro.y).Clamp (-1, 1), dt));
             state.Yaw = (float)(softStart * SmoothOutput (2, (bodyControl.z + gyro.z).Clamp (-1, 1), dt));
+
+            // Store the delivered command for next tick's control-output oscillation envelope.
+            prevControl = new Vector3d (state.Pitch, state.Roll, state.Yaw);
+            prevControlValid = true;
 
             if (diagnosticLogging)
                 LogDiagnostics (torque, moi, phi, currentRi, target, ffRi, gyro, currentDirection, state);
@@ -826,7 +902,8 @@ namespace KRPC.SpaceCenter.AutoPilot
                 " chatter=({39:F3},{40:F3},{41:F3})" +
                 " tool=({42},{43},{44})" +
                 " fdet=({45:F3},{46:F3})" +
-                " bwtgt=({47:F3},{48:F3},{49:F3})",
+                " bwtgt=({47:F3},{48:F3},{49:F3})" +
+                " oscctl=({50:F3},{51:F3}) bko=({52:F2},{53:F2},{54:F2})",
                 Time.fixedTime, dirErr,
                 torque.x, torque.y, torque.z,
                 moi.x, moi.y, moi.z,
@@ -848,7 +925,9 @@ namespace KRPC.SpaceCenter.AutoPilot
                 pitchYawHeldHz, rollHeldHz,
                 suppressionRamp [0] * oscillationBandwidthFloor,
                 suppressionRamp [1] * oscillationBandwidthFloor,
-                suppressionRamp [2] * oscillationBandwidthFloor);
+                suppressionRamp [2] * oscillationBandwidthFloor,
+                Math.Max (controlOscEnvelope.x, controlOscEnvelope.z), controlOscEnvelope.y,
+                oscControlBackoff [0], oscControlBackoff [1], oscControlBackoff [2]);
             UnityEngine.Debug.Log (line);
             lock (diagnosticLogLock) {
                 diagnosticLog.AppendLine (line);
