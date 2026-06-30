@@ -6,13 +6,17 @@ namespace TestingTools
 {
     sealed class TestingToolsOptions
     {
-        const string GameArgument = "--krpc-auto-load-game=";
-        const string SaveArgument = "--krpc-auto-load-save=";
-        const string VesselArgument = "--krpc-auto-load-vessel=";
-        const string CraftArgument = "--krpc-auto-load-craft=";
-        const string CraftDirectoryArgument = "--krpc-auto-load-craft-directory=";
-        const string CraftFixtureDirectoryArgument = "--krpc-auto-load-craft-fixture-dir=";
-        const string LaunchSiteArgument = "--krpc-auto-load-launch-site=";
+        // All auto-load arguments share this prefix. Auto-load is enabled by the
+        // presence of any argument with this prefix, so future TestingTools
+        // arguments that use a different prefix will not trigger a load.
+        const string AutoLoadPrefix = "--krpc-auto-load-";
+        const string GameArgument = AutoLoadPrefix + "game=";
+        const string SaveArgument = AutoLoadPrefix + "save=";
+        const string VesselArgument = AutoLoadPrefix + "vessel=";
+        const string CraftArgument = AutoLoadPrefix + "craft=";
+        const string CraftDirectoryArgument = AutoLoadPrefix + "craft-directory=";
+        const string CraftFixtureDirectoryArgument = AutoLoadPrefix + "craft-fixture-dir=";
+        const string LaunchSiteArgument = AutoLoadPrefix + "launch-site=";
 
         static TestingToolsOptions instance;
 
@@ -38,6 +42,12 @@ namespace TestingTools
         public string CraftFixtureDirectory { get; private set; }
         public string LaunchSite { get; private set; }
 
+        /// <summary>
+        /// Whether any auto-load argument was supplied. When false, no save is
+        /// loaded and KSP is left at the main menu.
+        /// </summary>
+        public bool AutoLoadRequested { get; private set; }
+
         bool craftDirectorySpecified;
         bool launchSiteSpecified;
 
@@ -49,6 +59,12 @@ namespace TestingTools
         {
             var options = new TestingToolsOptions();
             foreach (var arg in args) {
+                // Any auto-load argument requests a load. Keyed off the shared
+                // prefix, not the individual arguments, so unrelated TestingTools
+                // arguments added later cannot trigger a load by accident.
+                if (arg.StartsWith(AutoLoadPrefix, StringComparison.Ordinal))
+                    options.AutoLoadRequested = true;
+
                 string value;
                 if (TryGetArgumentValue(arg, GameArgument, out value))
                     options.Game = value;
