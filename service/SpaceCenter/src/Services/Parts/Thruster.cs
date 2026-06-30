@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -7,6 +8,83 @@ using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
+    /// <summary>
+    /// Controls a thruster's gimbal actuation.
+    /// </summary>
+    [KRPCClass(Service = "SpaceCenter")]
+    public class ThrusterGimbalControl : Equatable<ThrusterGimbalControl>
+    {
+        private static List<ThrusterGimbalControl> _activeControls = new List<ThrusterGimbalControl>();
+        private class GimbalControlAdjuster : Expansions.Missions.Adjusters.AdjusterGimbalBase
+        {
+            
+            public GimbalControlAdjuster() { }
+
+            public GimbalControlAdjuster(Expansions.Missions.MENode node) : base(node)
+            {
+            }
+            public Vector3 Setting = Vector3.zero;
+            public override Vector3 ApplyControlAdjustment(Vector3 control) 
+            {
+                return Setting;
+            }
+        }
+        private readonly ModuleGimbal gimbal;
+        private readonly GimbalControlAdjuster adjuster;
+
+        internal ThrusterGimbalControl(ModuleGimbal thrusterGimbal)
+        {
+            gimbal = thrusterGimbal;
+            adjuster = new GimbalControlAdjuster();
+            gimbal.AddPartModuleAdjuster(adjuster);
+            _activeControls.Add(this);
+        }
+
+        /// <summary>
+        /// Changes the control setting applied to the engine TVC. Reference frame TBD.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 Control {
+            get => adjuster.Setting.ToTuple();
+            set => adjuster.Setting = value.ToVector();
+        }
+
+        /// <summary>
+        /// Permanently disables the adjuster and removes its affect.
+        /// </summary>
+        [KRPCMethod]
+        public void Disable()
+        {
+            gimbal.RemovePartModuleAdjuster(adjuster);
+            _activeControls.Remove(this);
+        }
+
+        /// <summary>
+        /// Permanently disables all adjusters and removes their affects.
+        /// </summary>
+        [KRPCProcedure]
+        public static void DisableAllGimbalControls()
+        {
+            foreach (var control in _activeControls) control.Disable();
+            _activeControls.Clear();
+        }
+
+        /// <summary>
+        /// Returns true if the objects are equal.
+        /// </summary>
+        public override bool Equals (ThrusterGimbalControl other)
+        {
+            return !ReferenceEquals (other, null) && gimbal == other.gimbal;
+        }
+
+        /// <summary>
+        /// Hash code for the object.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            return gimbal.GetHashCode();
+        }
+    }
     /// <summary>
     /// The component of an <see cref="Engine"/> or <see cref="RCS"/> part that generates thrust.
     /// Can obtained by calling <see cref="Engine.Thrusters"/> or <see cref="RCS.Thrusters"/>.
@@ -185,6 +263,16 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentNullException (nameof (referenceFrame));
             CheckGimballed ();
             return referenceFrame.PositionFromWorldSpace (gimbal.gimbalTransforms [transformIndex].position).ToTuple ();
+        }
+
+        /// <summary>
+        /// Take control over the thruster's gimbal angle.
+        /// </summary>
+        /// <returns>The gimbal control handle.</returns>
+        [KRPCMethod]
+        public ThrusterGimbalControl GimbalControl() 
+        {
+            return new ThrusterGimbalControl(gimbal);
         }
 
         /// <summary>
