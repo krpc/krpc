@@ -162,6 +162,18 @@ namespace KRPC.SpaceCenter.AutoPilot
         // begins at clamp release rather than at engagement.
         double softStartTime;
         double engageFixedTime;
+        // Continuity state for the roll-invariant frame. The pointing-only rotation (AP-frame up ->
+        // nose) used to be re-derived each tick as FromToRotation(up, nose), but that is singular when
+        // the nose passes through -up (e.g. due south on the horizon in the surface frame, where the
+        // y-axis is north): the minimal-arc rotation's axis is hypersensitive to transverse motion
+        // there, so a tiny control jitter whips the RI frame ~180 deg over a vanishing arc and the
+        // stateful feedforward/integral turn that into a full-deflection kick. Instead the rotation is
+        // carried forward by the well-conditioned minimal rotation between consecutive nose directions
+        // (the nose cannot reverse in one physics tick), so the frame never sees the antipode
+        // singularity. Seeded once per engage from the fixed reference; reset in Start.
+        Vector3d prevPointDirection;
+        QuaternionD pointRotation;
+        bool pointRotationValid;
         Vector3d logAngles;
         // Raw (unfiltered) angular velocity in the roll-invariant frame, recorded for diagnostics
         // so the filter's effect on a flexible craft is visible against what the loop acts on.
@@ -551,6 +563,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             PitchPID.ResetState ();
             RollPID.ResetState ();
             YawPID.ResetState ();
+            pointRotationValid = false;
             prevTargetRiValid = false;
             smoothedFfRi = Vector3d.zero;
             prevDetectorOmegaValid = false;
@@ -897,7 +910,21 @@ namespace KRPC.SpaceCenter.AutoPilot
         {
             currentDirection = ReferenceFrame.DirectionFromWorldSpace (internalVessel.ReferenceTransform.up);
             var Q_vessel_ap = ReferenceFrame.RotationFromWorldSpace (internalVessel.ReferenceTransform.rotation);
-            var Q_point_ap = GeometryExtensions.FromToRotation (Vector3d.up, currentDirection);
+            // Pointing-only rotation (up -> nose), carried forward continuously through the antipode
+            // singularity. FromToRotation(up, nose) is hypersensitive to transverse motion when nose
+            // is near -up and would whip the frame ~180 deg in a tick; instead propagate by the
+            // minimal rotation between consecutive nose directions, which is always a small,
+            // well-conditioned angle. Seeded from the fixed reference on the first tick after Start.
+            QuaternionD Q_point_ap;
+            if (pointRotationValid) {
+                var delta = GeometryExtensions.FromToRotation (prevPointDirection, currentDirection);
+                Q_point_ap = (delta * pointRotation).Normalize ();
+            } else {
+                Q_point_ap = GeometryExtensions.FromToRotation (Vector3d.up, currentDirection);
+            }
+            pointRotation = Q_point_ap;
+            prevPointDirection = currentDirection;
+            pointRotationValid = true;
             var bodyXInRI = (Q_point_ap.Inverse () * Q_vessel_ap) * new Vector3d (1, 0, 0);
             phi = Math.Atan2 (-bodyXInRI.z, bodyXInRI.x);
             cosPhi = Math.Cos (phi);
