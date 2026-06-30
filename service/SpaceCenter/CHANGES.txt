@@ -1,5 +1,4 @@
 v0.6.0
- * Fix Flight.SimulateAerodynamicForceAt overestimating drag at low altitude and subsonic speed by applying KSP's pseudo-Reynolds drag multiplier to cube drag (#911)
  * Fix Maneuver and ManeuverOrbital reference frame velocity (previously returned zero; now returns the orbital velocity at the node UT)
  * Fix angular velocity for VesselSurface, VesselSurfaceVelocity, CelestialBodyOrbital, ManeuverOrbital, Part, PartCenterOfMass, DockingPort and Thrust reference frames (previously returned zero)
  * Fix LookRotation2 producing NaN for rotations near 180° by using Shepperd's method
