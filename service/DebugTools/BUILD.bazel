@@ -1,0 +1,73 @@
+load("//:config.bzl", "assembly_version", "author")
+load("//service:build.bzl", "service_deps")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
+load("//tools/build:python.bzl", "py_lint_test")
+load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+
+filegroup(
+    name = "DebugTools",
+    srcs = [
+        "CHANGES.txt",
+        ":KRPC.DebugTools",
+        ":ServiceDefinitions",
+    ],
+    visibility = ["//:__pkg__"],
+)
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    description = "DebugTools API for kRPC",
+    title = "KRPC.DebugTools",
+    version = assembly_version,
+    visibility = [
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ],
+)
+
+srcs = [":AssemblyInfo"] + glob(["src/**/*.cs"])
+
+deps = service_deps + ["//service/SpaceCenter:KRPC.SpaceCenter"]
+
+csharp_library(
+    name = "KRPC.DebugTools",
+    srcs = srcs,
+    visibility = ["//visibility:public"],
+    deps = deps,
+)
+
+service_definitions(
+    name = "ServiceDefinitions",
+    out = "KRPC.DebugTools.json",
+    assemblies = [
+        ":KRPC.DebugTools",
+        "//service/SpaceCenter:KRPC.SpaceCenter",
+        "//server:KRPC",
+    ],
+    service = "DebugTools",
+    visibility = ["//visibility:public"],
+)
+
+test_suite(
+    name = "test",
+    tests = [":lint"],
+)
+
+test_suite(
+    name = "lint",
+    tests = [
+        ":pylint",
+    ],
+)
+
+py_lint_test(
+    name = "pylint",
+    size = "small",
+    srcs = glob(["test/*.py"]),
+    pylint_config = "test/pylint.rc",
+    deps = [
+        "//client/python",
+        "//tools/krpctest",
+    ],
+)
