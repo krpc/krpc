@@ -6,15 +6,26 @@ zip.
 
 ## Auto-load CLI arguments
 
-The add-on auto-loads a save when KSP reaches the main menu. With no command-line
-arguments, it preserves the historical behavior:
+The add-on auto-loads a save when KSP reaches the main menu, but only when at
+least one `--krpc-auto-load-*` argument is supplied. With no such arguments it
+does nothing and KSP stays at the main menu:
 
 ```sh
+# No auto-load arguments: KSP stays at the main menu.
 tools/run-ksp.sh
 ```
 
-This loads `saves/default/persistent.sfs` and switches to the first vessel that is
-not a `SpaceObject`.
+To load `saves/default/persistent.sfs` into the Space Center, request it
+explicitly:
+
+```sh
+tools/run-ksp.sh --krpc-auto-load-game=default
+```
+
+Loading a save does not focus a vessel on its own: add `--krpc-auto-load-vessel`
+to switch to an existing vessel, or `--krpc-auto-load-craft` to launch a craft.
+When a load is requested, any argument left out uses its default from the table
+below.
 
 The standard runners forward all arguments to KSP, so the auto-load behavior can
 be configured through `tools/run-ksp.sh` or `tools/run-ksp-remote.sh`:
@@ -34,7 +45,7 @@ Supported arguments:
 | --- | --- | --- |
 | `--krpc-auto-load-game=<folder>` | `default` | Save folder under `saves/`. |
 | `--krpc-auto-load-save=<name>` | `persistent` | Save file name without `.sfs`. |
-| `--krpc-auto-load-vessel=<index>` | first non-`SpaceObject` | Vessel index to focus after loading the save. Ignored when craft launch is requested. |
+| `--krpc-auto-load-vessel=<index>` | none | Vessel index to focus after loading the save. When omitted, no vessel is focused and the save loads into the Space Center. An out-of-range index falls back to the first non-`SpaceObject` vessel. Ignored when craft launch is requested. |
 | `--krpc-auto-load-craft=<name>` | none | Craft to launch after loading the save. Accepts `Parts` or `Parts.craft`. |
 | `--krpc-auto-load-craft-directory=VAB\|SPH` | inferred | KSP craft directory and launch facility. `VAB` uses `Ships/VAB`; `SPH` uses `Ships/SPH`. |
 | `--krpc-auto-load-craft-fixture-dir=<path>` | none | Source directory of fixture `.craft` files to stage into the save. When omitted, the craft is loaded from the save's own `Ships` directory. |
