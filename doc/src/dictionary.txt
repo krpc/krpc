@@ -29,10 +29,12 @@ Tron
 Wheesley
 adaptively
 amongst
+antipode
 apoapsis
 arg
 atm
 autotune
+autotuned
 badass
 biome
 biomes
@@ -74,6 +76,7 @@ integration
 internet
 intra
 javac
+jitter
 kOS
 kRPC
 kRPCs
@@ -92,6 +95,7 @@ mach
 massless
 maths
 microcontrollers
+mitigations
 mits
 mutex
 namespace
@@ -123,6 +127,7 @@ quaternions
 quickload
 quicksave
 radians
+reactively
 rect
 rethrow
 reverser
@@ -135,7 +140,9 @@ setpoint
 shader
 socat
 sph
+stateful
 stderr
+stepwise
 str
 streamPort
 sudo
@@ -143,6 +150,7 @@ symlink
 targetting
 thruster
 thrusters
+toolchain
 tradeoff
 translational
 tuple
@@ -156,11 +164,10 @@ unpaused
 unserialize
 vab
 varint
+vcpkg
 ve
 vertices
 virtualenv
 waypoint
 waypoints
 websockets
-toolchain
-vcpkg
