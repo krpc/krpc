@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
 using UnityEngine;
@@ -11,91 +12,180 @@ namespace KRPC.SpaceCenter.AutoPilot
     sealed class AttitudeController
     {
         readonly Services.Vessel vessel;
-        public readonly PIDController PitchPID = new PIDController (0);
-        public readonly PIDController RollPID = new PIDController (0);
-        public readonly PIDController YawPID = new PIDController (0);
+        public readonly PIDController PitchPID = new PIDController ();
+        public readonly PIDController RollPID = new PIDController ();
+        public readonly PIDController YawPID = new PIDController ();
 
-        // Target direction
-        double targetPitch;
-        double targetHeading;
-        double targetRoll;
-        Vector3d targetDirection;
+        // Target orientation — quaternion is the single source of truth.
+        // rollControlled=false means "suppress roll rotation" (don't hold a specific angle).
         QuaternionD targetRotation;
-
-        // Perform control adjustments 10 times per second
-        const float timePerUpdate = 0.1f;
-        float deltaTime;
+        bool rollControlled;
 
         // PID autotuning variables
         Vector3d overshoot;
         Vector3d timeToPeak;
         Vector3d twiceZetaOmega = Vector3d.zero;
         Vector3d omegaSquared = Vector3d.zero;
+        // One-sided smoothed torque: tracks increases immediately, decays decreases at τ≈0.5s.
+        // Passed to DoAutoTune so a sudden drop (e.g. engine shutdown while a reaction wheel
+        // remains) does not cause a one-tick gain spike that jerks the gimbal.
+        Vector3d smoothedTorque;
+        // Previous tick's target angular velocity in the roll-invariant frame, used to
+        // compute the acceleration feedforward. prevTargetRiValid is false on the first
+        // tick after Start() so the derivative is not taken across a discontinuity.
+        Vector3d prevTargetRi;
+        bool prevTargetRiValid;
+        // Low-pass-filtered acceleration feedforward (see the feedforward filter in Update).
+        Vector3d smoothedFfRi;
+        // State of the two cascaded first-order sections of the angular-velocity filter
+        // (see FilterAngularVelocity). rateFilterValid is false on the first tick after Start()
+        // so the state is seeded with the raw measurement rather than ramping up from zero.
+        Vector3d rateFilterStage1;
+        Vector3d rateFilterStage2;
+        bool rateFilterValid;
+        // Chatter-detector state for adaptive bandwidth reduction (see UpdateChatterDetector).
+        // chatterLevel is a per-axis [0,1] measure of how strongly an axis is in a structural limit
+        // cycle. It persists across re-engages so a craft known to be flexible stays suppressed.
+        Vector3d prevDetectorOmega;
+        bool prevDetectorOmegaValid;
+        Vector3d chatterLevel = Vector3d.zero;
+        Vector3d logAngles;
+        // Raw (unfiltered) angular velocity in the roll-invariant frame, recorded for diagnostics
+        // so the filter's effect on a flexible craft is visible against what the loop acts on.
+        Vector3d logRawOmegaRi;
+        bool diagnosticLogging;
+        readonly StringBuilder diagnosticLog = new StringBuilder ();
+        readonly object diagnosticLogLock = new object ();
+
+        // Time constant for the one-sided torque smoothing (see UpdateSmoothedTorque).
+        const double TorqueSmoothTimeConstant = 0.5;
+        // Time constant for the acceleration-feedforward low-pass filter (a few physics ticks).
+        // Long enough to attenuate the single-tick steps the bang-bang profile's slope
+        // discontinuities produce, short enough that the feedforward lag stays negligible.
+        const double FeedforwardSmoothTimeConstant = 0.05;
+        // Slope factor of the sigmoid that attenuates the velocity setpoint near the target.
+        const double AttenuationSigmoidSlope = 6.0;
+        // Time constant of each stage of the second-order structural / anti-alias filter applied
+        // to the measured angular velocity (see FilterAngularVelocity). 0.08 s puts the -3 dB
+        // corner near 2 Hz: well above the closed-loop bandwidth (sub-Hz, so the filter is
+        // transparent in band on rigid craft) and below the structural bending modes typical
+        // of flexible KSP craft (3–8 Hz for long rockets with end-mounted actuators). At 3 Hz
+        // this gives ~9× two-stage attenuation; at 5 Hz ~30×, vs 1.5× and 2.7× at τ = 0.025 s.
+        // The filter is blended in only when chatterLevel > 0, so rigid craft are unaffected.
+        const double RateFilterTimeConstant = 0.08;
+        // Adaptive bandwidth reduction for structurally flexible craft (test plan §11.9).
+        // A single static bandwidth cap cannot work: flexible craft need a low inner-loop bandwidth
+        // to stop a bending-mode limit cycle, but high-authority craft need a high one to arrest a
+        // nudge. So the reduction is applied only to a craft that is actually chattering, detected at
+        // runtime (UpdateChatterDetector) and applied per axis in DoAutoTuneAxis. Rigid and high-
+        // authority craft never trip the detector and keep their full autotuned bandwidth.
+        //
+        // Inner-loop bandwidth (rad/s) an axis is driven toward when it is fully in a limit cycle.
+        // At 1.0 rad/s the PID gain is half what it was at 2.0, which halves the control amplitude
+        // driven by residual filtered bending content. Combined with the slower filter above, the
+        // open-loop gain at the bending frequency falls well below 1 even for slow craft.
+        const double AdaptiveBandwidthFloor = 1.0;
+        // A tick-to-tick change in the raw measured rate larger than this many times the
+        // physically-achievable change (α·dt at full authority) is structural excitation, not
+        // rigid-body response — the latter cannot change the rate faster than the torque allows.
+        const double ChatterDetectThreshold = 4.0;
+        // One-sided smoothing time constants for the detector: engage quickly when excitation
+        // appears, release slowly so the loop does not hunt (the reduced-bandwidth state is quiet,
+        // which would otherwise immediately clear the detector and let the bandwidth climb back up).
+        const double ChatterRiseTimeConstant = 0.3;
+        const double ChatterDecayTimeConstant = 30.0;
+        // Below this 2D error magnitude (radians) the joint pitch/yaw profile is skipped.
+        const double MinThetaForJointProfile = 1e-10;
 
         public AttitudeController (Vessel vessel)
         {
             this.vessel = new Services.Vessel (vessel);
-            ReferenceFrame = this.vessel.SurfaceReferenceFrame;
-            StoppingTime = new Vector3d (0.5, 0.5, 0.5);
-            DecelerationTime = new Vector3d (5, 5, 5);
-            AttenuationAngle = new Vector3d (1, 1, 1);
-            RollThreshold = 5;
-            AutoTune = true;
-            Overshoot = new Vector3d (0.01, 0.01, 0.01);
-            TimeToPeak = new Vector3d (3, 3, 3);
-            Start ();
+            Reset ();
         }
 
         public ReferenceFrame ReferenceFrame { get; set; }
 
         public double TargetPitch {
-            get { return targetPitch; }
+            get { return targetRotation.PitchHeadingRoll ().x; }
             set {
-                targetPitch = value;
-                UpdateTarget ();
+                var p = targetRotation.PitchHeadingRoll ();
+                SetTarget (value, p.y, rollControlled ? p.z : double.NaN);
             }
         }
 
         public double TargetHeading {
-            get { return targetHeading; }
+            get { return targetRotation.PitchHeadingRoll ().y; }
             set {
-                targetHeading = value;
-                UpdateTarget ();
+                var p = targetRotation.PitchHeadingRoll ();
+                SetTarget (p.x, value, rollControlled ? p.z : double.NaN);
             }
         }
 
         public double TargetRoll {
-            get { return targetRoll; }
+            get { return rollControlled ? targetRotation.PitchHeadingRoll ().z : double.NaN; }
             set {
-                targetRoll = value;
-                UpdateTarget ();
+                var p = targetRotation.PitchHeadingRoll ();
+                SetTarget (p.x, p.y, value);
             }
         }
 
         public Vector3d TargetDirection {
-            get { return targetDirection; }
+            get { return targetRotation * Vector3d.up; }
         }
 
         public QuaternionD TargetRotation {
             get { return targetRotation; }
         }
 
-        void UpdateTarget ()
+        void SetTarget (double pitch, double heading, double roll)
         {
-            var phr = new Vector3d (targetPitch, targetHeading, double.IsNaN (targetRoll) ? 0 : targetRoll);
+            rollControlled = !double.IsNaN (roll);
+            var phr = new Vector3d (pitch, heading, rollControlled ? roll : 0);
             targetRotation = GeometryExtensions.QuaternionFromPitchHeadingRoll (phr);
-            targetDirection = targetRotation * Vector3.up;
         }
 
-        public Vector3d StoppingTime { get; set; }
+        public void SetTargetDirection (Vector3d direction)
+        {
+            targetRotation = GeometryExtensions.FromToRotation (Vector3d.up, direction.normalized);
+            rollControlled = false;
+        }
 
-        public Vector3d DecelerationTime { get; set; }
+        public void SetTargetRotation (QuaternionD rotation)
+        {
+            targetRotation = rotation;
+            rollControlled = true;
+        }
 
-        public Vector3d AttenuationAngle { get; set; }
+        public Vector3d MaxAngularVelocity { get; set; }
 
-        public double RollThreshold { get; set; }
+        public double RollAttenuationAngle { get; set; }
+
+        public double PitchYawAttenuationAngle { get; set; }
+
+        public double RollStartAngle { get; set; }
+
+        public double RollEngageAngle { get; set; }
 
         public bool AutoTune { get; set; }
+
+        public bool DiagnosticLogging {
+            get { return diagnosticLogging; }
+            set {
+                if (value) {
+                    lock (diagnosticLogLock) {
+                        diagnosticLog.Clear ();
+                    }
+                }
+                diagnosticLogging = value;
+            }
+        }
+
+        public string GetDiagnosticLog ()
+        {
+            lock (diagnosticLogLock) {
+                return diagnosticLog.ToString ();
+            }
+        }
 
         public Vector3d Overshoot {
             get { return overshoot; }
@@ -125,36 +215,152 @@ namespace KRPC.SpaceCenter.AutoPilot
             }
         }
 
+        public void Reset ()
+        {
+            ReferenceFrame = vessel.SurfaceReferenceFrame;
+            MaxAngularVelocity = new Vector3d (1, 1, 1);
+            RollAttenuationAngle = 1.0;
+            PitchYawAttenuationAngle = 1.0;
+            RollStartAngle = 20.0;
+            RollEngageAngle = 15.0;
+            AutoTune = true;
+            Overshoot = new Vector3d (0.01, 0.01, 0.01);
+            // TimeToPeak sets the inner-loop bandwidth via omega0 = pi / (TimeToPeak * sqrt(1 - zeta^2)).
+            // Increasing it lowers the bandwidth, which is the lever for large, structurally flexible
+            // vehicles: when the bandwidth approaches the structural resonance frequency (e.g. the
+            // Ariane rocket, ~10 rad/s) the PID saturates in response to structural angular velocity
+            // oscillations and drives the bending mode. Such craft need a larger TimeToPeak. (The
+            // adaptive flexible-craft handling normally suppresses this automatically; see
+            // UpdateChatterDetector.)
+            TimeToPeak = new Vector3d (1, 1, 1);
+            DiagnosticLogging = false;
+            SetTarget (0, 0, double.NaN);
+            Start ();
+        }
+
         public void Start ()
         {
-            PitchPID.Reset (0);
-            RollPID.Reset (0);
-            YawPID.Reset (0);
+            PitchPID.ResetState ();
+            RollPID.ResetState ();
+            YawPID.ResetState ();
+            prevTargetRiValid = false;
+            smoothedFfRi = Vector3d.zero;
+            rateFilterValid = false;
+            prevDetectorOmegaValid = false;
+            if (AutoTune)
+                DoAutoTune (vessel.AvailableTorqueVectors.Item1, vessel.MomentOfInertiaVector);
         }
 
         public void Update (PilotAddon.ControlInputs state)
         {
-            // Run the controller once every timePerUpdate seconds
-            deltaTime += Time.fixedDeltaTime;
-            if (deltaTime < timePerUpdate)
-                return;
-
             var internalVessel = vessel.InternalVessel;
             var torque = vessel.AvailableTorqueVectors.Item1;
             var moi = vessel.MomentOfInertiaVector;
+            var dt = Time.fixedDeltaTime;
 
-            // Compute the input and error for the controllers
-            var target = ComputeTargetAngularVelocity (torque, moi);
-            var current = ComputeCurrentAngularVelocity ();
+            // Compute the roll-invariant frame: a frame sharing the vessel's nose direction but
+            // with zero roll relative to the AP reference frame. Expressing both the target and
+            // current angular velocities in this frame means roll corrections do not disturb the
+            // path taken to point the vessel.
+            Vector3d currentDirection;
+            double phi, cosPhi, sinPhi;
+            ComputeRollInvariantFrame (internalVessel, out currentDirection, out phi, out cosPhi, out sinPhi);
 
-            // If roll not set, or not close to target direction, set roll target velocity to 0
-            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (internalVessel.ReferenceTransform.up);
-            if (double.IsNaN (TargetRoll) || Vector3.Angle (currentDirection, targetDirection) > RollThreshold)
+            // Measure the angular velocity and pass it through the structural / anti-alias filter
+            // before anything consumes it. The measurement comes from the root-part rigidbody; on a
+            // structurally flexible craft it carries the bending mode (typically 3–8 Hz for long
+            // craft) on top of the rigid-body rate. Filtering here means the outer-loop
+            // stopping-distance prediction, the inner rate loop and the gyroscopic feedforward all
+            // act on a clean rate, so the controller cannot lock onto the bending mode and drive it.
+            // The corner sits well above the control bandwidth, so rigid craft are unaffected.
+            var currentRaw = (Vector3d)ComputeCurrentAngularVelocity ();
+
+            // Update the structural-chatter detector from the raw rate (independent of the filter).
+            // Its per-axis chatterLevel ∈ [0,1] gates every flexible-craft adaptation below — the
+            // rate filter here, the feedforward decoupling, and the bandwidth reduction in
+            // DoAutoTuneAxis — so a rigid/high-authority craft (chatterLevel ≈ 0) runs the original,
+            // calibrated controller untouched, while a flexible craft (chatterLevel → 1) gets all
+            // three. This is essential: the filter's phase lag, applied unconditionally, would erode
+            // the phase margin of a high-authority craft's fast, integral-dominated loop and drive a
+            // limit cycle at its rate-loop crossover.
+            UpdateChatterDetector (currentRaw, torque, moi, dt);
+
+            // Blend the structural filter in by chatterLevel. The filter state is advanced every tick
+            // so it is ready the moment the detector engages.
+            var filtered = FilterAngularVelocity (currentRaw, dt);
+            var current = new Vector3d (
+                currentRaw.x + chatterLevel.x * (filtered.x - currentRaw.x),
+                currentRaw.y + chatterLevel.y * (filtered.y - currentRaw.y),
+                currentRaw.z + chatterLevel.z * (filtered.z - currentRaw.z));
+
+            // Current and target angular velocities, both expressed in the roll-invariant frame.
+            var currentRi = ToRollInvariant (current, cosPhi, sinPhi);
+            logRawOmegaRi = ToRollInvariant (currentRaw, cosPhi, sinPhi);
+            var target = ComputeTargetAngularVelocity (torque, moi, current, currentDirection, cosPhi, sinPhi);
+
+            // Nominal target: the same velocity profile evaluated with the measured rate set to
+            // zero, so it depends only on the attitude error, not on the measured angular velocity.
+            // This is the open-loop trajectory the feedforward differentiates (see below); keeping
+            // measured ω out of it is what stops the feedforward from amplifying structural
+            // bending oscillation. The measured-ω-dependent stopping-distance correction stays in
+            // `target`, where it belongs — it is feedback, and is handled by the PI loop.
+            var targetNominal = ComputeTargetAngularVelocity (torque, moi, Vector3d.zero, currentDirection, cosPhi, sinPhi);
+
+            // Roll setpoint is already weighted to zero inside ComputeTargetAngularVelocity when the
+            // vessel is far from the direction target; clear the integral there to prevent windup.
+            if (!rollControlled)
                 target.y = 0;
+            else
+                ClearRollWindupIfDisengaged (currentDirection);
 
-            // Autotune the controllers if enabled
+            // Acceleration feedforward: differentiate the velocity setpoint numerically to get the
+            // angular acceleration needed to stay on the bang-bang trajectory, then normalise by
+            // α_max = torque/moi so the feedforward is a control fraction in [-1, 1].
+            // Skipped on the first tick (prevTargetRiValid == false) to avoid a spike.
+            //
+            // The differentiated source is blended by chatterLevel from `target` (rigid) to
+            // `targetNominal` (flexible). On a flexible craft `target` carries the measured angular
+            // velocity through its stopping-distance correction, and that rate contains a bending-mode
+            // oscillation; numerical differentiation has gain proportional to frequency, so
+            // differentiating `target` turned a small residual oscillation into a full-scale,
+            // sign-flipping feedforward that drove the structure (test plan §11.9). `targetNominal`
+            // depends only on the attitude error (whose bending content is the much smaller integral
+            // of the rate oscillation), so its derivative stays smooth. A rigid craft keeps the
+            // original `target`-derivative feedforward unchanged.
+            var ffSource = new Vector3d (
+                target.x + chatterLevel.x * (targetNominal.x - target.x),
+                target.y + chatterLevel.y * (targetNominal.y - target.y),
+                target.z + chatterLevel.z * (targetNominal.z - target.z));
+            var rawFfRi = Vector3d.zero;
+            if (prevTargetRiValid) {
+                var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
+                var alphaRoll  = moi [1] > 0 ? torque [1] / moi [1] : 0.0;
+                var alphaYaw   = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
+                if (alphaPitch > 0) rawFfRi.x = (ffSource.x - prevTargetRi.x) / (dt * alphaPitch);
+                if (alphaRoll  > 0) rawFfRi.y = (ffSource.y - prevTargetRi.y) / (dt * alphaRoll);
+                if (alphaYaw   > 0) rawFfRi.z = (ffSource.z - prevTargetRi.z) / (dt * alphaYaw);
+            }
+            prevTargetRi = ffSource;
+            prevTargetRiValid = true;
+
+            // Low-pass filter the feedforward. The velocity setpoint has slope discontinuities — the
+            // min()/max() switches in the bang-bang profile (the velocity cap and the quad/linear
+            // stopping term) and the sign flip through the target — and differentiating those
+            // produces single-tick steps in the raw feedforward that, once summed with the PID
+            // output and clamped, briefly saturate the actuators. A short first-order filter removes
+            // these transients; the resulting lag is a few physics ticks and the PI loop absorbs it.
+            var ffBeta = 1.0 - Math.Exp (-dt / FeedforwardSmoothTimeConstant);
+            smoothedFfRi = new Vector3d (
+                smoothedFfRi.x + ffBeta * (rawFfRi.x - smoothedFfRi.x),
+                smoothedFfRi.y + ffBeta * (rawFfRi.y - smoothedFfRi.y),
+                smoothedFfRi.z + ffBeta * (rawFfRi.z - smoothedFfRi.z));
+            var ffRi = smoothedFfRi;
+
+            UpdateSmoothedTorque (torque);
+
+            // Autotune the controllers if enabled (uses smoothed torque to avoid gain spikes)
             if (AutoTune)
-                DoAutoTune (torque, moi);
+                DoAutoTune (smoothedTorque, moi);
 
             // If vessel is sat on the pad, zero out the integral terms
             if (internalVessel.situation == Vessel.Situations.PRELAUNCH) {
@@ -163,16 +369,171 @@ namespace KRPC.SpaceCenter.AutoPilot
                 YawPID.ClearIntegralTerm ();
             }
 
-            // Run per-axis PID controllers
-            var output = new Vector3d (
-                             PitchPID.Update (target.x, current.x, deltaTime),
-                             RollPID.Update (target.y, current.y, deltaTime),
-                             YawPID.Update (target.z, current.z, deltaTime));
-            state.Pitch = (float)output.x;
-            state.Roll = (float)output.y;
-            state.Yaw = (float)output.z;
+            // Inner rate loop (the inner stage of the cascade). The outer loop above turned the
+            // attitude error into a target angular velocity; this stage drives the *filtered*
+            // measured rate (currentRi) onto that target. Each PI is physics-normalised — its
+            // autotuned gains carry the moi/torque factor, so the closed rate-loop bandwidth is set
+            // by TimeToPeak/Overshoot and is independent of the craft's authority. Because it tracks
+            // the filtered rate, the loop has no gain at the bending frequency and cannot excite a
+            // flexible structure. Pitch/yaw run in the roll-invariant frame; roll on the y-axis
+            // (unchanged by the frame rotation). Add the acceleration feedforward to each output,
+            // then clamp before converting pitch/yaw back to the body frame.
+            var virtualPitch = (RunAxis (PitchPID, target.x, currentRi.x, torque [0], dt) + ffRi.x).Clamp (-1, 1);
+            var virtualRoll = (RunAxis (RollPID, target.y, currentRi.y, torque [1], dt) + ffRi.y).Clamp (-1, 1);
+            var virtualYaw = (RunAxis (YawPID, target.z, currentRi.z, torque [2], dt) + ffRi.z).Clamp (-1, 1);
+            var bodyControl = FromRollInvariant (new Vector3d (virtualPitch, 0, virtualYaw), cosPhi, sinPhi);
 
-            deltaTime = 0;
+            // Gyroscopic feedforward: the per-axis plant model (τ = I·ω̇) ignores the ω×(Iω) term in
+            // Euler's rigid-body equation. Add a control fraction that cancels it, in the body frame
+            // where the inertia and available torque are per-axis, then sum with the control and
+            // clamp to [-1, 1].
+            var gyro = GyroscopicFeedforward (current, moi, torque);
+            state.Pitch = (float)(bodyControl.x + gyro.x).Clamp (-1, 1);
+            state.Roll = (float)(virtualRoll + gyro.y).Clamp (-1, 1);
+            state.Yaw = (float)(bodyControl.z + gyro.z).Clamp (-1, 1);
+
+            if (diagnosticLogging)
+                LogDiagnostics (torque, moi, phi, currentRi, target, ffRi, gyro, currentDirection, state);
+        }
+
+        /// <summary>
+        /// Compute the roll-invariant frame for the current tick. phi is the roll angle of the
+        /// vessel body frame relative to the roll-invariant frame.
+        /// </summary>
+        /// <remarks>
+        /// The body x-axis expressed in the roll-invariant frame is R_y(phi)*(1,0,0) =
+        /// (cos(phi), 0, -sin(phi)), so phi = atan2(-bodyX_ri.z, bodyX_ri.x).
+        /// </remarks>
+        void ComputeRollInvariantFrame (Vessel internalVessel, out Vector3d currentDirection,
+            out double phi, out double cosPhi, out double sinPhi)
+        {
+            currentDirection = ReferenceFrame.DirectionFromWorldSpace (internalVessel.ReferenceTransform.up);
+            var Q_vessel_ap = ReferenceFrame.RotationFromWorldSpace (internalVessel.ReferenceTransform.rotation);
+            var Q_point_ap = GeometryExtensions.FromToRotation (Vector3d.up, currentDirection);
+            var bodyXInRI = (Q_point_ap.Inverse () * Q_vessel_ap) * new Vector3d (1, 0, 0);
+            phi = Math.Atan2 (-bodyXInRI.z, bodyXInRI.x);
+            cosPhi = Math.Cos (phi);
+            sinPhi = Math.Sin (phi);
+        }
+
+        /// <summary>
+        /// Rotate a vector from the vessel body frame into the roll-invariant frame, i.e. strip
+        /// vessel roll phi (R_y(phi)). The y-axis (nose/roll axis) is unchanged by the rotation.
+        /// </summary>
+        static Vector3d ToRollInvariant (Vector3d v, double cosPhi, double sinPhi)
+        {
+            return new Vector3d (
+                v.x * cosPhi + v.z * sinPhi,
+                v.y,
+                -v.x * sinPhi + v.z * cosPhi);
+        }
+
+        /// <summary>
+        /// Rotate a vector from the roll-invariant frame back into the vessel body frame (R_y(-phi)).
+        /// </summary>
+        static Vector3d FromRollInvariant (Vector3d v, double cosPhi, double sinPhi)
+        {
+            return new Vector3d (
+                v.x * cosPhi - v.z * sinPhi,
+                v.y,
+                v.x * sinPhi + v.z * cosPhi);
+        }
+
+        /// <summary>
+        /// Convert a direction vector from the autopilot reference frame to the vessel body frame.
+        /// </summary>
+        Vector3d ApToBody (Vector3d v)
+        {
+            return vessel.ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.DirectionToWorldSpace (v));
+        }
+
+        /// <summary>
+        /// Weight in [0,1] that blends roll control in as the direction error decreases from
+        /// RollStartAngle to RollEngageAngle.
+        /// </summary>
+        double RollWeight (double dirError)
+        {
+            return Math.Min (1.0, Math.Max (0.0, (RollStartAngle - dirError) / (RollStartAngle - RollEngageAngle)));
+        }
+
+        /// <summary>
+        /// Clear the roll PID integral while roll control is suppressed (vessel far from the
+        /// direction target) to prevent windup that would kick when roll control re-engages.
+        /// </summary>
+        void ClearRollWindupIfDisengaged (Vector3d currentDirection)
+        {
+            var dirError = Vector3.Angle (currentDirection, TargetDirection);
+            if (RollWeight (dirError) == 0.0)
+                RollPID.ClearIntegralTerm ();
+        }
+
+        /// <summary>
+        /// Update the one-sided torque smoothing: track increases immediately (gains going down is
+        /// safe) but decay decreases at τ≈0.5s so a sudden torque drop (e.g. engine shutdown while a
+        /// small reaction wheel keeps torque > 0) does not cause a single-tick gain spike. The
+        /// velocity profile still uses the actual torque so the setpoint immediately reflects the
+        /// reduced authority.
+        /// </summary>
+        void UpdateSmoothedTorque (Vector3d torque)
+        {
+            var decay = Math.Exp (-Time.fixedDeltaTime / TorqueSmoothTimeConstant);
+            smoothedTorque = new Vector3d (
+                Math.Max (torque.x, smoothedTorque.x * decay),
+                Math.Max (torque.y, smoothedTorque.y * decay),
+                Math.Max (torque.z, smoothedTorque.z * decay));
+        }
+
+        /// <summary>
+        /// Run a single PID axis. When the axis has no available torque, zero its output and clear
+        /// the integral so accumulated history does not cause a transient when authority returns
+        /// (e.g. engine restart after shutdown).
+        /// </summary>
+        static double RunAxis (PIDController pid, double target, double current, double torque, double dt)
+        {
+            if (torque > 0)
+                return pid.Update (target, current, dt);
+            pid.ClearIntegralTerm ();
+            return 0;
+        }
+
+        void LogDiagnostics (Vector3d torque, Vector3d moi, double phi, Vector3d currentRi,
+            Vector3d target, Vector3d ffRi, Vector3d gyro, Vector3d currentDirection, PilotAddon.ControlInputs state)
+        {
+            var dirErr = Vector3.Angle (currentDirection, TargetDirection);
+            var line = string.Format (
+                "[KRPC.AP] t={0:F3} err={1:F2}deg" +
+                " torque=({2:F4},{3:F4},{4:F4})" +
+                " moi=({5:F6},{6:F6},{7:F6})" +
+                " alpha=({8:F3},{9:F3},{10:F3})" +
+                " ang_err=({11:F2},{12:F2},{13:F2})deg" +
+                " phi={14:F2}deg" +
+                " omega_ri=({15:F4},{16:F4},{17:F4})" +
+                " tgt_omega_ri=({18:F4},{19:F4},{20:F4})" +
+                " ff_ri=({21:F3},{22:F3},{23:F3})" +
+                " gyro=({24:F3},{25:F3},{26:F3})" +
+                " Kp=({27:F4},{28:F4},{29:F4}) Ki=({30:F4},{31:F4},{32:F4})" +
+                " ctrl=(p={33:F3},r={34:F3},y={35:F3})" +
+                " omega_raw=({36:F4},{37:F4},{38:F4})" +
+                " chatter=({39:F3},{40:F3},{41:F3})",
+                Time.fixedTime, dirErr,
+                torque.x, torque.y, torque.z,
+                moi.x, moi.y, moi.z,
+                moi.x > 0 ? torque.x / moi.x : 0, moi.y > 0 ? torque.y / moi.y : 0, moi.z > 0 ? torque.z / moi.z : 0,
+                logAngles.x, logAngles.y, logAngles.z,
+                phi * 180.0 / Math.PI,
+                currentRi.x, currentRi.y, currentRi.z,
+                target.x, target.y, target.z,
+                ffRi.x, ffRi.y, ffRi.z,
+                gyro.x, gyro.y, gyro.z,
+                PitchPID.Kp, RollPID.Kp, YawPID.Kp,
+                PitchPID.Ki, RollPID.Ki, YawPID.Ki,
+                state.Pitch, state.Roll, state.Yaw,
+                logRawOmegaRi.x, logRawOmegaRi.y, logRawOmegaRi.z,
+                chatterLevel.x, chatterLevel.y, chatterLevel.z);
+            UnityEngine.Debug.Log (line);
+            lock (diagnosticLogLock) {
+                diagnosticLog.AppendLine (line);
+            }
         }
 
         /// <summary>
@@ -182,60 +543,326 @@ namespace KRPC.SpaceCenter.AutoPilot
         {
             var worldAngularVelocity = vessel.InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
             var localAngularVelocity = ReferenceFrame.AngularVelocityFromWorldSpace (worldAngularVelocity);
-            // TODO: why does this need to be negative?
-            return -vessel.ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.DirectionToWorldSpace (localAngularVelocity));
+            // Express the measured angular velocity in the controller's sign convention.
+            //
+            // The direction error is built by FromToRotation(current, target), whose axis is the
+            // right-handed cross product current x target (see GeometryExtensions.FromToRotation).
+            // A positive error component therefore corresponds to a right-handed rotation that
+            // carries the nose toward the target. The velocity profile then commands
+            // omega_target = -sign(theta) * speed (the -Math.Sign(...) terms in ComputeAxisVelocity
+            // and ComputePitchYawVelocity), i.e. it defines the controller's positive angular-
+            // velocity direction as the *left-handed* sense about each axis.
+            //
+            // Rigidbody.angularVelocity is in the geometric (Unity) sense, so it is negated here to
+            // put the measurement into that same left-handed controller convention. The negation and
+            // the -sign(theta) command are a matched pair: the PI loop compares target against
+            // measurement, so both must use the same sign. Removing this negation alone makes them
+            // disagree and the loop diverges; removing both negations together would be equivalent.
+            return -ApToBody (localAngularVelocity);
         }
 
         /// <summary>
-        /// Compute target angular velocity in pitch,roll,yaw axes
+        /// Second-order low-pass (structural / anti-alias) filter on the measured angular velocity,
+        /// implemented as two cascaded first-order sections for a critically-damped roll-off.
         /// </summary>
-        Vector3 ComputeTargetAngularVelocity (Vector3d torque, Vector3d moi)
+        /// <remarks>
+        /// KSP samples <c>Rigidbody.angularVelocity</c> at the root part. A rigid craft's measurement
+        /// is the true rigid-body rate, but a structurally flexible craft superimposes its bending
+        /// modes — which on a long vehicle with end-mounted reaction wheels sit at 3–8 Hz, above the
+        /// controller's sub-Hz bandwidth. The single-section roll-off of the feedforward filter is too
+        /// shallow to reject that; a numerically-differentiated feedforward then flips the command on
+        /// the noise and resonantly drives the structure (test plan §11.9). The two sections give a
+        /// ~12 dB/octave roll-off, attenuating the bending content ~20× while adding only a few degrees
+        /// of phase lag in the sub-Hz control band, so the inner rate loop and the feedforward see a
+        /// clean rate. The state is seeded with the first raw sample so engaging on an already-rotating
+        /// vessel does not produce a startup transient.
+        /// </remarks>
+        Vector3d FilterAngularVelocity (Vector3d omega, double dt)
+        {
+            if (!rateFilterValid) {
+                rateFilterStage1 = omega;
+                rateFilterStage2 = omega;
+                rateFilterValid = true;
+                return omega;
+            }
+            var beta = 1.0 - Math.Exp (-dt / RateFilterTimeConstant);
+            rateFilterStage1 = new Vector3d (
+                rateFilterStage1.x + beta * (omega.x - rateFilterStage1.x),
+                rateFilterStage1.y + beta * (omega.y - rateFilterStage1.y),
+                rateFilterStage1.z + beta * (omega.z - rateFilterStage1.z));
+            rateFilterStage2 = new Vector3d (
+                rateFilterStage2.x + beta * (rateFilterStage1.x - rateFilterStage2.x),
+                rateFilterStage2.y + beta * (rateFilterStage1.y - rateFilterStage2.y),
+                rateFilterStage2.z + beta * (rateFilterStage1.z - rateFilterStage2.z));
+            return rateFilterStage2;
+        }
+
+        /// <summary>
+        /// Detect a per-axis structural limit cycle and drive <c>chatterLevel</c> in [0,1].
+        /// </summary>
+        /// <remarks>
+        /// The signature of a bending-mode limit cycle is the measured rate (sampled at the root
+        /// part) changing tick-to-tick by more than the available torque could physically produce:
+        /// rigid-body motion is bounded by <c>α·dt = (τ/I)·dt</c> at full authority, so a jump several
+        /// times larger is structural oscillation, not a response to the controller. This is
+        /// gain-independent and maneuver-independent — a legitimate full-authority slew (or a
+        /// bang-bang sign reversal, where the rate is continuous) stays within <c>α·dt</c>, so it does
+        /// not trip. The level rises quickly (<c>ChatterRiseTimeConstant</c>) when excitation appears
+        /// and decays slowly (<c>ChatterDecayTimeConstant</c>); the slow release is essential because
+        /// the reduced-bandwidth state is quiet and would otherwise immediately clear the detector and
+        /// let the bandwidth climb back into the limit cycle.
+        /// </remarks>
+        void UpdateChatterDetector (Vector3d rawOmega, Vector3d torque, Vector3d moi, double dt)
+        {
+            if (!prevDetectorOmegaValid) {
+                prevDetectorOmega = rawOmega;
+                prevDetectorOmegaValid = true;
+                return;
+            }
+            for (int i = 0; i < 3; i++) {
+                var alpha = moi [i] > 0 ? torque [i] / moi [i] : 0.0;
+                var deltaOmega = Math.Abs (rawOmega [i] - prevDetectorOmega [i]);
+                var excited = alpha > 0 && deltaOmega > ChatterDetectThreshold * alpha * dt ? 1.0 : 0.0;
+                var timeConstant = excited > chatterLevel [i] ? ChatterRiseTimeConstant : ChatterDecayTimeConstant;
+                var beta = 1.0 - Math.Exp (-dt / timeConstant);
+                chatterLevel [i] += beta * (excited - chatterLevel [i]);
+            }
+            prevDetectorOmega = rawOmega;
+        }
+
+        /// <summary>
+        /// Gyroscopic feedforward in the body frame, returned as a per-axis control fraction.
+        /// </summary>
+        /// <remarks>
+        /// The PID controllers and the autotuner model the plant as τ = I·ω̇ independently per axis,
+        /// but the rigid-body equation of motion is τ = I·ω̇ + ω×(Iω). The cross term ω×(Iω) is a
+        /// torque the controller would otherwise have to reject as a disturbance. This returns the
+        /// control fraction that cancels it: -(ω×(Iω))ᵢ / τ_max,ᵢ per axis (a diagonal inertia is
+        /// assumed, matching the rest of the controller). The term is quadratic in ω, so it is
+        /// negligible at the low rates of normal attitude holding — including structural bending
+        /// oscillation — and only matters for fast slews or strongly asymmetric inertia.
+        ///
+        /// ω is passed in the controller's negated sign convention (see ComputeCurrentAngularVelocity),
+        /// but ω×(Iω) is quadratic in ω and so is invariant under that negation — it gives the correct
+        /// body-frame gyroscopic torque either way.
+        /// </remarks>
+        Vector3d GyroscopicFeedforward (Vector3d omega, Vector3d moi, Vector3d torque)
+        {
+            var angularMomentum = new Vector3d (moi.x * omega.x, moi.y * omega.y, moi.z * omega.z);
+            var gyroTorque = Vector3d.Cross (omega, angularMomentum);
+            return new Vector3d (
+                torque.x > 0 ? -gyroTorque.x / torque.x : 0.0,
+                torque.y > 0 ? -gyroTorque.y / torque.y : 0.0,
+                torque.z > 0 ? -gyroTorque.z / torque.z : 0.0);
+        }
+
+        /// <summary>
+        /// Compute target angular velocity in the roll-invariant frame (pitch,roll,yaw axes with
+        /// vessel roll stripped out). cosPhi/sinPhi are cos/sin of the current vessel roll angle.
+        /// </summary>
+        Vector3d ComputeTargetAngularVelocity (Vector3d torque, Vector3d moi, Vector3d currentOmega,
+            Vector3d currentDirection, double cosPhi, double sinPhi)
         {
             var internalVessel = vessel.InternalVessel;
-            var currentRotation = ReferenceFrame.RotationFromWorldSpace (internalVessel.ReferenceTransform.rotation);
-            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (internalVessel.ReferenceTransform.up);
+            var targetDirection = TargetDirection;
 
-            QuaternionD rotation;
-            if (!double.IsNaN (TargetRoll))
-                // Roll angle set => use rotation from currentRotation -> targetRotation
-                rotation = targetRotation * currentRotation.Inverse ();
-            else
-                // Roll angle not set => use rotation from currentDirection -> targetDirection
-                // FIXME: QuaternionD.FromToRotation method not available at runtime
-                rotation = Quaternion.FromToRotation (currentDirection, targetDirection);
+            // Direction error: FromToRotation gives a minimum-arc rotation whose axis is
+            // perpendicular to both currentDirection and targetDirection. Because the vessel's
+            // nose IS currentDirection (body y-axis), this rotation axis has no y-component in
+            // body frame — it carries pure pitch/yaw, no roll.
+            QuaternionD dirRotation = GeometryExtensions.FromToRotation (currentDirection, targetDirection);
 
-            // Compute angles for the rotation in pitch (x), roll (y), yaw (z) axes
-            float angleFloat;
-            Vector3 axisFloat;
-            // FIXME: QuaternionD.ToAngleAxis method not available at runtime
-            ((Quaternion)rotation).ToAngleAxis (out angleFloat, out axisFloat);
-            double angle = GeometryExtensions.ClampAngle180 (angleFloat);
-            Vector3d axis = axisFloat;
-            var angles = axis * angle;
-            angles = vessel.ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.DirectionToWorldSpace (angles));
-            return AnglesToAngularVelocity (angles, torque, moi);
+            double angle;
+            Vector3d axis;
+            GeometryExtensions.ToAngleAxis (dirRotation, out angle, out axis);
+            angle = GeometryExtensions.ClampAngle180 (angle);
+
+            // Transform direction error from AP frame to body frame, then to roll-invariant frame.
+            // The y-component is ~0 by construction (direction error ⊥ nose) and is forced to zero
+            // so only x and z carry pitch/yaw.
+            var dirAnglesBody = ApToBody (axis * angle);
+            var anglesRI = ToRollInvariant (dirAnglesBody, cosPhi, sinPhi);
+            anglesRI.y = 0;
+
+            // Roll error: computed separately from the roll residual after direction alignment,
+            // projected onto the body y-axis (nose = roll axis). Mixing roll residual into the
+            // direction-error vector contaminates pitch/yaw because the residual axis is not
+            // aligned with the nose when direction error is large — causing a curved path and
+            // roll oscillations. Projecting onto the y-axis extracts the pure roll component.
+            if (rollControlled) {
+                var dirError = Vector3d.Angle (currentDirection, targetDirection);
+                var rollWeight = RollWeight (dirError);
+                if (rollWeight > 0) {
+                    var currentRotation = ReferenceFrame.RotationFromWorldSpace (internalVessel.ReferenceTransform.rotation);
+                    QuaternionD rollResidual = targetRotation * currentRotation.Inverse () * dirRotation.Inverse ();
+                    double rollResAngle;
+                    Vector3d rollResAxis;
+                    GeometryExtensions.ToAngleAxis (rollResidual, out rollResAngle, out rollResAxis);
+                    if (!double.IsInfinity (rollResAxis.magnitude)) {
+                        rollResAngle = GeometryExtensions.ClampAngle180 (rollResAngle);
+                        // Project the residual axis onto body y (nose). The y-axis is unchanged
+                        // by R_y(phi), so this projection is the same in body and RI frames.
+                        var rollResAxisBody = ApToBody (rollResAxis);
+                        anglesRI.y = rollResAngle * rollResAxisBody.y * rollWeight;
+                    }
+                }
+            }
+
+            logAngles = anglesRI;
+
+            // Rotate currentOmega into roll-invariant frame for stopping-distance feedforward.
+            var currentOmegaRi = ToRollInvariant (currentOmega, cosPhi, sinPhi);
+
+            var result = Vector3d.zero;
+
+            // Roll: 1D per-axis (y-axis is unchanged by the roll-invariant rotation).
+            var rollBandwidth = moi [1] > 0 ? RollPID.Kp * torque [1] / moi [1] : 0.0;
+            result.y = ComputeAxisVelocity (anglesRI.y, torque [1], moi [1], currentOmegaRi.y,
+                MaxAngularVelocity [1], RollAttenuationAngle, rollBandwidth);
+
+            // Pitch/yaw handled jointly so the nose follows a straight great-circle arc.
+            double pitchVelocity, yawVelocity;
+            ComputePitchYawVelocity (anglesRI, currentOmegaRi, torque, moi, out pitchVelocity, out yawVelocity);
+            result.x = pitchVelocity;
+            result.z = yawVelocity;
+
+            return result;
         }
 
         /// <summary>
-        /// Convert a vector of angles to a vector of angular velocities. This
-        /// implements the function f(x) from the documentation.
+        /// Compute the joint pitch/yaw target angular velocity in the 2D roll-invariant xz-plane:
+        /// aim the velocity profile at the predicted stopping point.
         /// </summary>
-        Vector3d AnglesToAngularVelocity (Vector3d angles, Vector3d torque, Vector3d moi)
+        /// <remarks>
+        /// Predict where the nose coasts to if the current angular velocity is braked at full
+        /// authority — the stopping point as a *vector* — and command the profile straight at it:
+        /// <code>
+        ///   e_stop = θ + coeff·ω          (coeff·ω is the full-authority stopping displacement)
+        ///   ŝ      = e_stop / |e_stop|
+        ///   ω_ref  = -ŝ · speed(|e_stop|) · attenuation(|e_stop|)
+        /// </code>
+        /// Tangential damping emerges from the geometry: a sideways drift gives <c>coeff·ω</c> an
+        /// off-axis component, tilting <c>e_stop</c> and rotating <c>ŝ</c> so the command acquires a
+        /// component opposing the drift. No separate <c>-ω⊥</c> term is needed — the controller leads
+        /// the turn to place the predicted stopping point on the target instead of correcting the
+        /// orbit after the fact.
+        ///
+        /// When ω is purely radial (ω⊥ = 0) the command reduces to a pure 1D bang-bang profile along
+        /// the error direction: with ω = ω∥·ê, <c>coeff·ω = ½ω∥|ω∥|/α · ê</c>, so
+        /// <c>e_stop = θ_ff·ê</c>, <c>ŝ = sign(θ_ff)·ê</c> and great-circle slews and radial settling
+        /// are a straight-line speed profile. The off-axis behaviour appears only when ω⊥ ≠ 0 — the
+        /// nudge/orbit regime. The stopping displacement is C1 in ω (no radial/tangential seam, no
+        /// <c>-ω⊥</c> step), so the acceleration feedforward does not step.
+        ///
+        /// Anisotropy (design §6, option b): project α (and the PID bandwidth) along ω̂ for the
+        /// prediction and along ŝ for the speed profile. Projecting the prediction along ω̂ rather
+        /// than ê is what makes <c>e_stop</c> well-defined even at θ = 0, and it coincides with ê
+        /// when ω is radial, so the radial reduction above is preserved.
+        /// </remarks>
+        void ComputePitchYawVelocity (Vector3d anglesRI, Vector3d currentOmegaRi, Vector3d torque,
+            Vector3d moi, out double pitchVelocity, out double yawVelocity)
         {
-            var result = Vector3d.zero;
-            for (int i = 0; i < 3; i++) {
-                var theta = GeometryExtensions.ToRadians (angles [i]);
-                var maxAcceleration = torque [i] / moi [i];
-                var maxVelocity = maxAcceleration * StoppingTime [i];
-                var acceleration = Math.Min (maxAcceleration, maxVelocity / DecelerationTime [i]);
-                var velocity = -Math.Sign (angles [i]) * Math.Min (maxVelocity, Math.Sqrt (2.0 * Math.Abs (theta) * acceleration));
-                var attenuationAngle = GeometryExtensions.ToRadians (AttenuationAngle [i]);
-                var attenuation = 1.0 / (1.0 + Math.Exp (-((Math.Abs (theta) - attenuationAngle) * (6.0 / attenuationAngle))));
-                if (double.IsNaN (attenuation))
-                    attenuation = 0;
-                result [i] = velocity * attenuation;
+            pitchVelocity = 0;
+            yawVelocity = 0;
+
+            var thetaPitch = GeometryExtensions.ToRadians (anglesRI.x);
+            var thetaYaw = GeometryExtensions.ToRadians (anglesRI.z);
+
+            var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
+            var alphaYaw = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
+
+            // Stopping-displacement coefficient (>= 0): e_stop = θ + coeff·ω. The quadratic
+            // (bang-bang, ω²/2α) and linear (PID-lag, ω/bandwidth) stopping displacements are both
+            // collinear with ω, so taking the larger collapses to a scalar max of their coefficients.
+            // α and the bandwidth are projected along ω̂ (the brake path is along ω); this coincides
+            // with the error-direction projection when ω is radial, preserving the legacy reduction,
+            // and stays defined as θ → 0.
+            var omegaPitch = currentOmegaRi.x;
+            var omegaYaw = currentOmegaRi.z;
+            var omegaMag = Math.Sqrt (omegaPitch * omegaPitch + omegaYaw * omegaYaw);
+
+            double coeff = 0;
+            if (omegaMag > 0) {
+                var oPitch = omegaPitch / omegaMag;
+                var oYaw = omegaYaw / omegaMag;
+                var alphaOmega = oPitch * oPitch * alphaPitch + oYaw * oYaw * alphaYaw;
+                if (alphaOmega > 0) {
+                    var coeffQuad = omegaMag / (2.0 * alphaOmega);
+                    coeff = coeffQuad;
+                    var bw0 = moi [0] > 0 ? PitchPID.Kp * torque [0] / moi [0] : 0.0;
+                    var bw2 = moi [2] > 0 ? YawPID.Kp * torque [2] / moi [2] : 0.0;
+                    var bandwidthOmega = oPitch * oPitch * bw0 + oYaw * oYaw * bw2;
+                    if (bandwidthOmega > 0)
+                        coeff = Math.Max (coeffQuad, 1.0 / bandwidthOmega);
+                }
             }
-            return result;
+
+            var eStopPitch = thetaPitch + coeff * omegaPitch;
+            var eStopYaw = thetaYaw + coeff * omegaYaw;
+            var eStopMag = Math.Sqrt (eStopPitch * eStopPitch + eStopYaw * eStopYaw);
+
+            // Singularity guard on |e_stop| (not θ): both the error and the predicted drift must
+            // vanish before there is nothing to command. If e_stop ≈ 0 the nose is predicted to
+            // coast exactly to the target, so commanding zero is correct.
+            if (eStopMag <= MinThetaForJointProfile)
+                return;
+
+            var sPitch = eStopPitch / eStopMag;
+            var sYaw = eStopYaw / eStopMag;
+
+            // Speed profile along the stopping-point direction ŝ: project α and the max-velocity
+            // constraint ellipse along ŝ.
+            var alpha2d = sPitch * sPitch * alphaPitch + sYaw * sYaw * alphaYaw;
+
+            var maxVPitch = MaxAngularVelocity [0];
+            var maxVYaw = MaxAngularVelocity [2];
+            var maxV2d = (maxVPitch > 0 && maxVYaw > 0)
+                ? Math.Sqrt (1.0 / (sPitch * sPitch / (maxVPitch * maxVPitch) + sYaw * sYaw / (maxVYaw * maxVYaw)))
+                : Math.Min (maxVPitch, maxVYaw);
+
+            double speed = 0;
+            if (alpha2d > 0)
+                speed = Math.Min (maxV2d, Math.Sqrt (2.0 * eStopMag * alpha2d));
+
+            var attAngle2d = GeometryExtensions.ToRadians (PitchYawAttenuationAngle);
+            var attenuation2d = 1.0 / (1.0 + Math.Exp (-((eStopMag - attAngle2d) * (AttenuationSigmoidSlope / attAngle2d))));
+            if (double.IsNaN (attenuation2d))
+                attenuation2d = 0;
+
+            // Command toward the stopping point. The leading minus defines the controller's positive
+            // angular-velocity direction (left-handed sense; matched to the negation in
+            // ComputeCurrentAngularVelocity), exactly as the legacy -Math.Sign(θ_ff) did.
+            pitchVelocity = -sPitch * speed * attenuation2d;
+            yawVelocity = -sYaw * speed * attenuation2d;
+        }
+
+        /// <summary>
+        /// Compute target angular velocity for a single axis using the bang-bang profile.
+        /// </summary>
+        double ComputeAxisVelocity (double angleDeg, double torque, double moi, double currentOmega,
+            double maxVelocity, double attenuationAngleDeg, double pidBandwidth = 0.0)
+        {
+            var theta = GeometryExtensions.ToRadians (angleDeg);
+            var maxAcceleration = moi > 0 ? torque / moi : 0.0;
+            if (maxAcceleration > 0) {
+                var corrQuad = 0.5 * currentOmega * Math.Abs (currentOmega) / maxAcceleration;
+                var corr = corrQuad;
+                if (pidBandwidth > 0) {
+                    var corrLinear = currentOmega / pidBandwidth;
+                    corr = Math.Abs (corrQuad) >= Math.Abs (corrLinear) ? corrQuad : corrLinear;
+                }
+                theta += corr;
+            }
+            // The leading -Math.Sign defines the controller's positive angular-velocity direction as
+            // the left-handed sense about the axis; it is the matched partner of the negation in
+            // ComputeCurrentAngularVelocity. Flip one without the other and the PI loop diverges.
+            var velocity = -Math.Sign (theta) * Math.Min (maxVelocity,
+                maxAcceleration > 0 ? Math.Sqrt (2.0 * Math.Abs (theta) * maxAcceleration) : 0.0);
+            var attAngle = GeometryExtensions.ToRadians (attenuationAngleDeg);
+            var attenuation = 1.0 / (1.0 + Math.Exp (-((Math.Abs (theta) - attAngle) * (AttenuationSigmoidSlope / attAngle))));
+            if (double.IsNaN (attenuation))
+                attenuation = 0;
+            return velocity * attenuation;
         }
 
         void DoAutoTune (Vector3d torque, Vector3d moi)
@@ -247,12 +874,26 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         void DoAutoTuneAxis (PIDController pid, int index, Vector3d torque, Vector3d moi)
         {
-            var accelerationInv = moi [index] / torque [index];
-            // Don't tune when the available acceleration is less than 0.001 radian.s^-2
-            if (accelerationInv > 1000)
+            if (torque [index] <= 0)
                 return;
-            var kp = twiceZetaOmega [index] * accelerationInv;
-            var ki = omegaSquared [index] * accelerationInv;
+            var accelerationInv = moi [index] / torque [index];
+
+            // Adaptive bandwidth reduction: ramp this axis's bandwidth (= twiceZetaOmega, since
+            // Kp·α = 2ζω₀) toward AdaptiveBandwidthFloor in proportion to the detected chatter, so a
+            // flexible craft's bending mode is gain-stabilised. ω₀ scales with the bandwidth, so Kp
+            // scales linearly and Ki quadratically and the damping ratio ζ (the overshoot target) is
+            // preserved. Rigid/high-authority axes have chatterLevel ≈ 0 and keep their full gains.
+            var bandwidth = twiceZetaOmega [index];
+            var bandwidthSquared = omegaSquared [index];
+            if (chatterLevel [index] > 0 && bandwidth > AdaptiveBandwidthFloor) {
+                var reduced = bandwidth + chatterLevel [index] * (AdaptiveBandwidthFloor - bandwidth);
+                var f = reduced / bandwidth;
+                bandwidth = reduced;
+                bandwidthSquared *= f * f;
+            }
+
+            var kp = bandwidth * accelerationInv;
+            var ki = bandwidthSquared * accelerationInv;
             pid.SetParameters (kp, ki, 0, -1, 1);
         }
     }

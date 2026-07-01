@@ -12,7 +12,7 @@ class NavballDirections
             var vessel = conn.SpaceCenter ().ActiveVessel;
             var ap = vessel.AutoPilot;
             ap.ReferenceFrame = vessel.OrbitalReferenceFrame;
-            ap.Engage();
+            ap.Engaged = true;
 
             // Point the vessel in the prograde direction
             ap.TargetDirection = Tuple.Create (0.0, 1.0, 0.0);
@@ -26,7 +26,7 @@ class NavballDirections
             ap.TargetDirection = Tuple.Create (-1.0, 0.0, 0.0);
             ap.Wait();
 
-            ap.Disengage();
+            ap.Engaged = false;
         }
     }
 }

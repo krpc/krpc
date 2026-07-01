@@ -304,6 +304,46 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Double-precision rotation from one vector to another.
+        /// Uses the half-angle trick: q = (cross, 1 + dot), normalized.
+        /// Handles near-antiparallel vectors by picking an arbitrary perpendicular axis.
+        /// </summary>
+        public static QuaternionD FromToRotation (Vector3d from, Vector3d to)
+        {
+            from = from.normalized;
+            to = to.normalized;
+            var dot = Vector3d.Dot (from, to);
+            if (dot >= 1.0 - 1e-10)
+                return QuaternionD.identity;
+            if (dot <= -1.0 + 1e-10) {
+                // 180° rotation — pick an arbitrary perpendicular axis
+                var perp = Math.Abs (from.x) < 0.9 ? Vector3d.Cross (from, Vector3d.right) : Vector3d.Cross (from, Vector3d.up);
+                perp.Normalize ();
+                return new QuaternionD (perp.x, perp.y, perp.z, 0);
+            }
+            var axis = Vector3d.Cross (from, to);
+            return new QuaternionD (axis.x, axis.y, axis.z, 1.0 + dot).Normalize ();
+        }
+
+        /// <summary>
+        /// Double-precision quaternion to angle-axis decomposition.
+        /// Angle is returned in degrees (matching Unity convention).
+        /// </summary>
+        public static void ToAngleAxis (this QuaternionD q, out double angle, out Vector3d axis)
+        {
+            q = q.Normalize ();
+            var w = q.w.Clamp (-1.0, 1.0);
+            var sinHalfAngle = Math.Sqrt (1.0 - w * w);
+            angle = ToDegrees (2.0 * Math.Acos (w));
+            if (sinHalfAngle < 1e-10) {
+                axis = Vector3d.up;
+                angle = 0;
+            } else {
+                axis = new Vector3d (q.x / sinHalfAngle, q.y / sinHalfAngle, q.z / sinHalfAngle);
+            }
+        }
+
+        /// <summary>
         /// Normalize a quaternion to unit length.
         /// </summary>
         public static QuaternionD Normalize (this QuaternionD q)

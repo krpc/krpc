@@ -19,12 +19,15 @@ Konstructs
 Kosmo
 Landers
 LaunchPad
+MoI
 ModuleEngines
 MyGroup
 NUnit
 Olex
+PID
 Tron
 Wheesley
+adaptively
 amongst
 apoapsis
 arg
@@ -40,6 +43,7 @@ circularization
 clickable
 clientgen
 collidable
+collinear
 combusting
 comms
 constructible
@@ -54,6 +58,7 @@ dll
 doesn
 enum
 erm
+feedforward
 focussed
 framerate
 fuelled
@@ -126,6 +131,7 @@ rsvg
 runtime
 serialio
 serializable
+setpoint
 shader
 socat
 sph

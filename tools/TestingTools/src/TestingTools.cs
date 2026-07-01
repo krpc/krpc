@@ -171,6 +171,60 @@ namespace TestingTools
             internalVessel.SetRotation (rotation);
         }
 
+        /// <summary>
+        /// Set the angular velocity of the given vessel (default: the active vessel), expressed in
+        /// the given reference frame (default: the vessel's surface reference frame). The whole
+        /// assembly is put into a rigid rotation about its centre of mass — every part rigidbody
+        /// gets the commanded spin and the linear velocity it would have under that rotation — so
+        /// the craft spins in place rather than shearing apart or translating. Intended for tests
+        /// that need a deterministic, repeatable "nudge", e.g. injecting a tangential spin to probe
+        /// the autopilot's precession / limit-cycle behaviour.
+        /// </summary>
+        [KRPCProcedure]
+        public static void ApplyAngularVelocity (
+            Tuple<double,double,double> angularVelocity,
+            KRPC.SpaceCenter.Services.ReferenceFrame referenceFrame = null,
+            KRPC.SpaceCenter.Services.Vessel vessel = null)
+        {
+            if (angularVelocity == null)
+                throw new ArgumentNullException (nameof (angularVelocity));
+            var serviceVessel = vessel ?? new KRPC.SpaceCenter.Services.Vessel (FlightGlobals.ActiveVessel);
+            var internalVessel = serviceVessel.InternalVessel;
+            if (!internalVessel.loaded)
+                return;
+            var frame = referenceFrame ?? serviceVessel.SurfaceReferenceFrame;
+            var commanded = new Vector3d (angularVelocity.Item1, angularVelocity.Item2, angularVelocity.Item3);
+            var worldAngularVelocity = (Vector3)frame.AngularVelocityToWorldSpace (commanded);
+
+            // Centre of mass position and velocity of the loaded assembly.
+            var momentum = Vector3.zero;
+            var comPosition = Vector3.zero;
+            var totalMass = 0f;
+            foreach (var part in internalVessel.parts) {
+                var rb = part.rb;
+                if (rb == null)
+                    continue;
+                momentum += rb.velocity * rb.mass;
+                comPosition += rb.worldCenterOfMass * rb.mass;
+                totalMass += rb.mass;
+            }
+            if (totalMass <= 0f)
+                return;
+            var comVelocity = momentum / totalMass;
+            comPosition /= totalMass;
+
+            // Rigid-body kinematics: v_part = v_com + omega x (r_part - r_com). Setting the per-part
+            // velocities consistently avoids injecting spurious internal stress that would excite
+            // structural modes (important for the flexible test craft).
+            foreach (var part in internalVessel.parts) {
+                var rb = part.rb;
+                if (rb == null)
+                    continue;
+                rb.angularVelocity = worldAngularVelocity;
+                rb.velocity = comVelocity + Vector3.Cross (worldAngularVelocity, rb.worldCenterOfMass - comPosition);
+            }
+        }
+
         static void WaitForVesselSwitch (int tick)
         {
             if (FlightGlobals.ActiveVessel.packed)

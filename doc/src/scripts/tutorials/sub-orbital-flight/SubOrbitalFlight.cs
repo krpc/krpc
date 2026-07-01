@@ -12,7 +12,7 @@ class SubOrbitalFlight
         var vessel = conn.SpaceCenter ().ActiveVessel;
 
         vessel.AutoPilot.TargetPitchAndHeading (90, 90);
-        vessel.AutoPilot.Engage ();
+        vessel.AutoPilot.Engaged = true;
         vessel.Control.Throttle = 1;
         System.Threading.Thread.Sleep (1000);
 
@@ -59,7 +59,7 @@ class SubOrbitalFlight
         vessel.Control.Throttle = 0;
         System.Threading.Thread.Sleep (1000);
         vessel.Control.ActivateNextStage ();
-        vessel.AutoPilot.Disengage ();
+        vessel.AutoPilot.Engaged = false;
 
         {
             var srfAltitude = Connection.GetCall(() => vessel.Flight(null).SurfaceAltitude);
