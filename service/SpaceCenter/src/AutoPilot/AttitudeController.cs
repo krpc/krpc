@@ -37,18 +37,82 @@ namespace KRPC.SpaceCenter.AutoPilot
         bool prevTargetRiValid;
         // Low-pass-filtered acceleration feedforward (see the feedforward filter in Update).
         Vector3d smoothedFfRi;
-        // State of the two cascaded first-order sections of the angular-velocity filter
-        // (see FilterAngularVelocity). rateFilterValid is false on the first tick after Start()
-        // so the state is seeded with the raw measurement rather than ramping up from zero.
-        Vector3d rateFilterStage1;
-        Vector3d rateFilterStage2;
-        bool rateFilterValid;
-        // Chatter-detector state for adaptive bandwidth reduction (see UpdateChatterDetector).
-        // chatterLevel is a per-axis [0,1] measure of how strongly an axis is in a structural limit
-        // cycle. It persists across re-engages so a craft known to be flexible stays suppressed.
+        // Per-axis state of the two cascaded first-order sections of the angular-velocity low-pass
+        // (see LowPassAxis), used as the high-frequency suppression tool. rateFilterValid is false
+        // until the section is first used (or after it is reset when the axis is not low-passed), so
+        // the state is seeded with the raw measurement rather than ramping up from zero.
+        readonly double[] rateFilterStage1 = new double[3];
+        readonly double[] rateFilterStage2 = new double[3];
+        readonly bool[] rateFilterValid = new bool[3];
+        // Per-axis state of the output low-pass: a first-order filter on the final actuator command,
+        // blended in by suppressionRamp on a latched axis (MechJeb-style output smoothing). It caps
+        // residual control chatter directly — gain-independent and needing no frequency estimate —
+        // backstopping the notch/low-pass, which clean the feedback but not whatever the loop's own
+        // gain still produces at the mode. Negligible phase cost at the floored crossover.
+        readonly double[] outputFilterState = new double[3];
+        readonly bool[] outputFilterValid = new bool[3];
+        // Three notch filters (the low-frequency suppression tool), one per axis: pitch (0) and
+        // yaw (2) configured from the pitch/yaw tracker, roll (1) from the roll tracker.
+        readonly BiquadNotchFilter pitchNotch = new BiquadNotchFilter ();
+        readonly BiquadNotchFilter rollNotch = new BiquadNotchFilter ();
+        readonly BiquadNotchFilter yawNotch = new BiquadNotchFilter ();
+        // Online frequency estimators, fed the high-passed rate every tick: one for the coupled
+        // pitch/yaw group (fed whichever transverse axis currently carries more oscillation) and one
+        // for roll.
+        readonly FrequencyTracker pitchYawFreqTracker = new FrequencyTracker ();
+        readonly FrequencyTracker rollFreqTracker = new FrequencyTracker ();
+        // Sticky held estimate per group: latched to the last value the tracker acquired and held
+        // across brief losses (NaN only until the first acquisition, reset in Start). Suppression and
+        // the bandwidth reduction *quiet* the very mode the tracker measures, so the live estimate
+        // would otherwise blip to NaN once it works and revert routing to the seed — a notch/low-pass
+        // hunt. Routing and the *OscillationDetectedFrequency observable both use this held value.
+        double pitchYawHeldHz = double.NaN;
+        double rollHeldHz = double.NaN;
+        // High-pass bookkeeping for the trackers. The trackers are fed the oscillation in the raw
+        // rate — ω minus its slow mean (emaOmega) — rather than Δω: Δω is a derivative, so it weights
+        // high frequencies (a small high-frequency component can dominate the Δω sign changes and pull
+        // the estimate above the mode that actually dominates the rate). High-passed ω instead tracks
+        // the dominant-amplitude oscillation. emaAbsHp is a slow per-axis envelope of |high-passed ω|
+        // used to pick the stronger transverse axis for the pitch/yaw group estimate.
+        Vector3d emaOmega;
+        bool emaOmegaValid;
+        Vector3d emaAbsHp = Vector3d.zero;
+        // Per-axis records written during suppression selection: whether the notch is the active tool
+        // (diagnostics) and whether any suppression tool is active (read by DoAutoTuneAxis to gate the
+        // latched bandwidth reduction).
+        readonly bool[] notchActiveAxis = new bool[3];
+        readonly bool[] suppressionActiveAxis = new bool[3];
+        // Per-axis one-pole ramp [0,1] easing the latched output smoothing in/out so the control does
+        // not step when suppression engages/releases (reset in Start).
+        readonly double[] suppressionRamp = new double[3];
+        // Per-axis hold-gated mitigation weight (suppressionRamp · holdFactor) written each tick and
+        // read by DoAutoTuneAxis: the bandwidth floor follows this, not suppressionRamp, so a latched
+        // axis runs at full bandwidth while slewing (responsive) and is floored only while holding.
+        readonly double[] mitigationLevel = new double[3];
+        // Chatter-detector state for the latch (see UpdateChatterDetector). chatterLevel is a
+        // per-axis [0,1] measure of how strongly an axis is in a structural limit cycle.
         Vector3d prevDetectorOmega;
         bool prevDetectorOmegaValid;
         Vector3d chatterLevel = Vector3d.zero;
+        // Per-axis latch: set once an axis's chatterLevel crosses ChatterLatchThreshold, i.e. the
+        // detector has confirmed a structural limit cycle. It is the controller's persistent memory
+        // that "this craft is flexible", reset only on re-engage (Start). In Automatic mode it gates
+        // whether suppression is applied at all (the estimator, which selects the tool, runs ungated).
+        readonly bool[] chatterLatched = new bool[3];
+        // Per-group suppression selector (pitch/yaw coupled, roll on its own). Automatic detects and
+        // latches then routes by estimated frequency; Off disables suppression; Notch/LowPass force
+        // that tool unconditionally at the group's manual frequency. Default Automatic.
+        Services.OscillationControl pitchYawOscillationControl;
+        Services.OscillationControl rollOscillationControl;
+        // Per-group mode frequency (Hz): used directly in Notch/LowPass mode and as the Automatic
+        // estimator seed before acquisition.
+        double pitchYawOscillationFrequency;
+        double rollOscillationFrequency;
+        // Notch quality factor and the notch-branch bandwidth separation ratio N (bw_target =
+        // 2π·f/N). Exposed so an advanced user can trade phase margin against drift tolerance.
+        double oscillationNotchQ;
+        double oscillationBandwidthFloor;
+        double oscillationDetectionThreshold;
         Vector3d logAngles;
         // Raw (unfiltered) angular velocity in the roll-invariant frame, recorded for diagnostics
         // so the filter's effect on a flexible craft is visible against what the loop acts on.
@@ -65,35 +129,67 @@ namespace KRPC.SpaceCenter.AutoPilot
         const double FeedforwardSmoothTimeConstant = 0.05;
         // Slope factor of the sigmoid that attenuates the velocity setpoint near the target.
         const double AttenuationSigmoidSlope = 6.0;
-        // Time constant of each stage of the second-order structural / anti-alias filter applied
-        // to the measured angular velocity (see FilterAngularVelocity). 0.08 s puts the -3 dB
-        // corner near 2 Hz: well above the closed-loop bandwidth (sub-Hz, so the filter is
-        // transparent in band on rigid craft) and below the structural bending modes typical
-        // of flexible KSP craft (3–8 Hz for long rockets with end-mounted actuators). At 3 Hz
-        // this gives ~9× two-stage attenuation; at 5 Hz ~30×, vs 1.5× and 2.7× at τ = 0.025 s.
-        // The filter is blended in only when chatterLevel > 0, so rigid craft are unaffected.
-        const double RateFilterTimeConstant = 0.08;
-        // Adaptive bandwidth reduction for structurally flexible craft (test plan §11.9).
-        // A single static bandwidth cap cannot work: flexible craft need a low inner-loop bandwidth
-        // to stop a bending-mode limit cycle, but high-authority craft need a high one to arrest a
-        // nudge. So the reduction is applied only to a craft that is actually chattering, detected at
-        // runtime (UpdateChatterDetector) and applied per axis in DoAutoTuneAxis. Rigid and high-
-        // authority craft never trip the detector and keep their full autotuned bandwidth.
-        //
-        // Inner-loop bandwidth (rad/s) an axis is driven toward when it is fully in a limit cycle.
-        // At 1.0 rad/s the PID gain is half what it was at 2.0, which halves the control amplitude
-        // driven by residual filtered bending content. Combined with the slower filter above, the
-        // open-loop gain at the bending frequency falls well below 1 even for slow craft.
-        const double AdaptiveBandwidthFloor = 1.0;
+        // Default per-group mode frequency (Hz): the manual notch/low-pass frequency and the
+        // Automatic-mode estimator seed before acquisition. 1.5 Hz is near the only in-game-measured
+        // low-frequency mode (the Ariane 5's ~1.4 Hz first lateral bending mode), so a freshly
+        // latched low-frequency axis routes to the notch branch and is never momentarily un-suppressed.
+        const double DefaultOscillationFrequency = 1.5;
+        // Default notch quality factor: a higher Q is a narrower notch (less in-band phase lag but
+        // less tolerance to frequency drift); a lower Q is wider.
+        const double DefaultNotchQ = 2.5;
+        // Default inner-loop bandwidth floor (rad/s) a latched axis is reduced toward. This is the
+        // primary, frequency-independent gain-stabiliser: dropping the rate-loop crossover well below
+        // every structural mode (the stock flexible craft sit at ~1.4–25 Hz) stops the loop driving
+        // any of them, robustly and without needing an accurate mode-frequency estimate. The notch /
+        // low-pass clean the rate feedback on top; output smoothing caps any residual. Only ever
+        // lowers bandwidth (min against the autotuned value), so rigid craft — which never latch —
+        // are untouched. ~1.0 rad/s matches the value validated on the earlier adaptive design.
+        const double DefaultBandwidthFloor = 1.0;
+        // Time constant of the latched output low-pass (~2 Hz corner): attenuates residual control
+        // chatter while adding negligible phase at the floored crossover (~0.16 Hz).
+        const double DefaultOutputFilterTimeConstant = 0.08;
+        // Pointing-error band (degrees) for the continuous hold gate on a latched axis: at/below
+        // HoldErrorFull the craft is holding and the loop fully tracks the rate-independent nominal
+        // target with the feedforward cut (so a residual mode is not amplified at the floored gain);
+        // at/above HoldErrorNone it is slewing and uses the full target + feedforward (so it brakes
+        // and tracks the manoeuvre); it blends linearly between. A smooth function of error — no
+        // hysteresis state machine. The band sits just above the stopping threshold (1°) so the
+        // mitigation engages only once the craft is essentially settled: a slew or a nudge that
+        // leaves the error above ~2.5° keeps full bandwidth (responsive), and the final approach is
+        // not slowed by the floor — only the settled hold is quieted.
+        const double HoldErrorFull = 1.0;
+        const double HoldErrorNone = 2.5;
+        // Routing threshold (Hz): a detected mode below this is well-conditioned for a notch (K =
+        // tan(π·f·dt) < 1 up to 12.5 Hz at 50 Hz physics) and close enough to the band that a
+        // low-pass would add too much crossover phase lag; above it the notch degrades toward the
+        // Nyquist singularity and the low-pass is the right tool. Set to 12 Hz on measured data: the
+        // stock flexible test craft sit at ~2.5–8.5 Hz (notch) with only near-Nyquist roll modes
+        // (~21–25 Hz) on the low-pass.
+        const double DefaultSplitFrequency = 12.0;
+        // Low-pass corner separation: the high-frequency-branch corner is f_detected / L_lp, clamped
+        // to LowPassCornerMin (Hz) so it never drifts down into the sub-Hz control band.
+        const double DefaultLowPassSeparation = 3.0;
+        const double LowPassCornerMin = 2.0;
+        // Time constant of the one-pole ramp easing the notch-branch bandwidth reduction in/out.
+        const double BandwidthRampTimeConstant = 0.5;
+        // Time constant of the slow mean subtracted from the raw rate to high-pass it for the
+        // frequency trackers (~0.5 Hz corner): well below the structural modes (≥1 Hz) so they pass,
+        // but high enough to remove DC and slew trends so they do not manufacture false crossings.
+        const double FrequencyHighpassTimeConstant = 0.3;
         // A tick-to-tick change in the raw measured rate larger than this many times the
         // physically-achievable change (α·dt at full authority) is structural excitation, not
         // rigid-body response — the latter cannot change the rate faster than the torque allows.
-        const double ChatterDetectThreshold = 4.0;
+        const double DefaultChatterDetectThreshold = 4.0;
         // One-sided smoothing time constants for the detector: engage quickly when excitation
         // appears, release slowly so the loop does not hunt (the reduced-bandwidth state is quiet,
         // which would otherwise immediately clear the detector and let the bandwidth climb back up).
         const double ChatterRiseTimeConstant = 0.3;
         const double ChatterDecayTimeConstant = 30.0;
+        // chatterLevel above which an axis is latched into full mitigation for the rest of the
+        // engagement (see chatterLatched). Set below the level the detector reaches on a confirmed
+        // limit cycle (which saturates toward 1) but well above any transient a rigid craft produces,
+        // so a rigid craft — whose chatterLevel never leaves ~0 — is never latched.
+        const double ChatterLatchThreshold = 0.6;
         // Below this 2D error magnitude (radians) the joint pitch/yaw profile is skipped.
         const double MinThetaForJointProfile = 1e-10;
 
@@ -168,6 +264,68 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public bool AutoTune { get; set; }
 
+        public Services.OscillationControl PitchYawOscillationControl {
+            get { return pitchYawOscillationControl; }
+            set { pitchYawOscillationControl = value; }
+        }
+
+        public Services.OscillationControl RollOscillationControl {
+            get { return rollOscillationControl; }
+            set { rollOscillationControl = value; }
+        }
+
+        public double PitchYawOscillationFrequency {
+            get { return pitchYawOscillationFrequency; }
+            set { pitchYawOscillationFrequency = value; }
+        }
+
+        public double RollOscillationFrequency {
+            get { return rollOscillationFrequency; }
+            set { rollOscillationFrequency = value; }
+        }
+
+        public double OscillationNotchQ {
+            get { return oscillationNotchQ; }
+            set { oscillationNotchQ = value; }
+        }
+
+        public double OscillationBandwidthFloor {
+            get { return oscillationBandwidthFloor; }
+            set { oscillationBandwidthFloor = value; }
+        }
+
+        public double OscillationDetectionThreshold {
+            get { return oscillationDetectionThreshold; }
+            set { oscillationDetectionThreshold = value; }
+        }
+
+        // Read-only observability into the (otherwise hidden) flexible-craft detector state, so a
+        // user can see whether a craft has been deemed wobbly.
+        public Vector3d OscillationLevel {
+            get { return chatterLevel; }
+        }
+
+        // Pitch (0) and yaw (2) latch together (see UpdateChatterDetector), so either reports the
+        // pitch/yaw group.
+        public bool PitchYawOscillationLatched {
+            get { return chatterLatched [0] || chatterLatched [2]; }
+        }
+
+        public bool RollOscillationLatched {
+            get { return chatterLatched [1]; }
+        }
+
+        // Estimated mode frequency (Hz) per axis group; the estimator runs in all modes, so this is
+        // observable even under Off/Notch/LowPass, and is NaN only until the estimator first
+        // acquires (the held value persists thereafter, see pitchYawHeldHz).
+        public double PitchYawOscillationDetectedFrequency {
+            get { return pitchYawHeldHz; }
+        }
+
+        public double RollOscillationDetectedFrequency {
+            get { return rollHeldHz; }
+        }
+
         public bool DiagnosticLogging {
             get { return diagnosticLogging; }
             set {
@@ -224,6 +382,13 @@ namespace KRPC.SpaceCenter.AutoPilot
             RollStartAngle = 20.0;
             RollEngageAngle = 15.0;
             AutoTune = true;
+            pitchYawOscillationControl = Services.OscillationControl.Automatic;
+            rollOscillationControl = Services.OscillationControl.Automatic;
+            pitchYawOscillationFrequency = DefaultOscillationFrequency;
+            rollOscillationFrequency = DefaultOscillationFrequency;
+            oscillationNotchQ = DefaultNotchQ;
+            oscillationBandwidthFloor = DefaultBandwidthFloor;
+            oscillationDetectionThreshold = DefaultChatterDetectThreshold;
             Overshoot = new Vector3d (0.01, 0.01, 0.01);
             // TimeToPeak sets the inner-loop bandwidth via omega0 = pi / (TimeToPeak * sqrt(1 - zeta^2)).
             // Increasing it lowers the bandwidth, which is the lever for large, structurally flexible
@@ -245,8 +410,25 @@ namespace KRPC.SpaceCenter.AutoPilot
             YawPID.ResetState ();
             prevTargetRiValid = false;
             smoothedFfRi = Vector3d.zero;
-            rateFilterValid = false;
             prevDetectorOmegaValid = false;
+            emaOmegaValid = false;
+            emaAbsHp = Vector3d.zero;
+            pitchYawFreqTracker.Reset ();
+            rollFreqTracker.Reset ();
+            pitchYawHeldHz = double.NaN;
+            rollHeldHz = double.NaN;
+            pitchNotch.Reset ();
+            rollNotch.Reset ();
+            yawNotch.Reset ();
+            for (int i = 0; i < 3; i++) {
+                rateFilterValid [i] = false;
+                outputFilterValid [i] = false;
+                notchActiveAxis [i] = false;
+                suppressionActiveAxis [i] = false;
+                suppressionRamp [i] = 0;
+                mitigationLevel [i] = 0;
+                chatterLatched [i] = false;
+            }
             if (AutoTune)
                 DoAutoTune (vessel.AvailableTorqueVectors.Item1, vessel.MomentOfInertiaVector);
         }
@@ -266,81 +448,142 @@ namespace KRPC.SpaceCenter.AutoPilot
             double phi, cosPhi, sinPhi;
             ComputeRollInvariantFrame (internalVessel, out currentDirection, out phi, out cosPhi, out sinPhi);
 
-            // Measure the angular velocity and pass it through the structural / anti-alias filter
-            // before anything consumes it. The measurement comes from the root-part rigidbody; on a
-            // structurally flexible craft it carries the bending mode (typically 3–8 Hz for long
-            // craft) on top of the rigid-body rate. Filtering here means the outer-loop
-            // stopping-distance prediction, the inner rate loop and the gyroscopic feedforward all
-            // act on a clean rate, so the controller cannot lock onto the bending mode and drive it.
-            // The corner sits well above the control bandwidth, so rigid craft are unaffected.
+            // Measure the raw angular velocity (root-part rigidbody). On a structurally flexible
+            // craft it carries the bending mode on top of the rigid-body rate. The chatter detector
+            // and the frequency trackers always see this raw rate; only the control loops see the
+            // suppressed rate computed below (see the signal-routing note in the design doc).
             var currentRaw = (Vector3d)ComputeCurrentAngularVelocity ();
 
-            // Update the structural-chatter detector from the raw rate (independent of the filter).
-            // Its per-axis chatterLevel ∈ [0,1] gates every flexible-craft adaptation below — the
-            // rate filter here, the feedforward decoupling, and the bandwidth reduction in
-            // DoAutoTuneAxis — so a rigid/high-authority craft (chatterLevel ≈ 0) runs the original,
-            // calibrated controller untouched, while a flexible craft (chatterLevel → 1) gets all
-            // three. This is essential: the filter's phase lag, applied unconditionally, would erode
-            // the phase margin of a high-authority craft's fast, integral-dominated loop and drive a
-            // limit cycle at its rate-loop crossover.
+            // Update the structural-chatter detector from the raw rate. In Automatic mode the latch
+            // it produces decides *whether* suppression is applied; the frequency estimator below
+            // decides *which* tool (notch vs low-pass). A rigid craft never latches.
             UpdateChatterDetector (currentRaw, torque, moi, dt);
 
-            // Blend the structural filter in by chatterLevel. The filter state is advanced every tick
-            // so it is ready the moment the detector engages.
-            var filtered = FilterAngularVelocity (currentRaw, dt);
+            // Apply the per-group selector's detector side: Off forces the group rigid for control
+            // (latch/level cleared, no suppression) while leaving the estimator running; Automatic
+            // leaves the detector's verdict; Notch/LowPass bypass the detector (the tool is forced in
+            // the suppression selection below). Pitch (0) and yaw (2) share pitchYawOscillationControl.
+            ApplyOscillationOverride (0, pitchYawOscillationControl);
+            ApplyOscillationOverride (2, pitchYawOscillationControl);
+            ApplyOscillationOverride (1, rollOscillationControl);
+
+            // Feed the frequency trackers the oscillation in the raw rate every tick, unconditionally
+            // — they cost only a handful of adds, so an estimate is always warm the moment an axis
+            // latches. High-pass the rate (subtract a slow mean) so the trackers see the structural
+            // oscillation without DC or slew trends, and without the high-frequency bias a raw Δω
+            // (derivative) would impose. The pitch/yaw tracker is fed whichever transverse axis
+            // currently carries more oscillation (larger envelope, the lateral mode being
+            // ~axisymmetric); roll is fed directly.
+            if (!emaOmegaValid) {
+                emaOmega = currentRaw;
+                emaOmegaValid = true;
+            }
+            var emaOmegaBeta = 1.0 - Math.Exp (-dt / FrequencyHighpassTimeConstant);
+            emaOmega = new Vector3d (
+                emaOmega.x + emaOmegaBeta * (currentRaw.x - emaOmega.x),
+                emaOmega.y + emaOmegaBeta * (currentRaw.y - emaOmega.y),
+                emaOmega.z + emaOmegaBeta * (currentRaw.z - emaOmega.z));
+            var hp = currentRaw - emaOmega;
+            var betaAbsHp = 1.0 - Math.Exp (-dt / BandwidthRampTimeConstant);
+            emaAbsHp = new Vector3d (
+                emaAbsHp.x + betaAbsHp * (Math.Abs (hp.x) - emaAbsHp.x),
+                emaAbsHp.y + betaAbsHp * (Math.Abs (hp.y) - emaAbsHp.y),
+                emaAbsHp.z + betaAbsHp * (Math.Abs (hp.z) - emaAbsHp.z));
+            // Feed the pitch/yaw tracker whichever transverse axis currently carries more oscillation
+            // (the lateral mode is ~axisymmetric, so either reads it); roll is fed directly.
+            var pyHp = emaAbsHp.x >= emaAbsHp.z ? hp.x : hp.z;
+            pitchYawFreqTracker.Update (pyHp, dt);
+            rollFreqTracker.Update (hp.y, dt);
+            // Latch the last acquired estimate so suppression quieting the mode does not lose it.
+            if (!double.IsNaN (pitchYawFreqTracker.EstimatedHz))
+                pitchYawHeldHz = pitchYawFreqTracker.EstimatedHz;
+            if (!double.IsNaN (rollFreqTracker.EstimatedHz))
+                rollHeldHz = rollFreqTracker.EstimatedHz;
+
+            // Select and apply the suppression tool per axis group, producing the rate the control
+            // loops consume. Each axis is notched, low-passed, or passed through — never both — with
+            // the inactive filter's state held reset so a regime change injects no transient. The
+            // per-axis suppressionActiveAxis record written here is read by DoAutoTuneAxis.
+            int pitchYawTool;
+            double pitchYawFreq;
+            SelectSuppressionTool (pitchYawOscillationControl, PitchYawOscillationLatched,
+                pitchYawHeldHz, pitchYawOscillationFrequency,
+                out pitchYawTool, out pitchYawFreq);
+            int rollTool;
+            double rollFreq;
+            SelectSuppressionTool (rollOscillationControl, RollOscillationLatched,
+                rollHeldHz, rollOscillationFrequency, out rollTool, out rollFreq);
             var current = new Vector3d (
-                currentRaw.x + chatterLevel.x * (filtered.x - currentRaw.x),
-                currentRaw.y + chatterLevel.y * (filtered.y - currentRaw.y),
-                currentRaw.z + chatterLevel.z * (filtered.z - currentRaw.z));
+                ApplySuppression (0, currentRaw.x, pitchYawTool, pitchYawFreq, dt, pitchNotch),
+                ApplySuppression (1, currentRaw.y, rollTool, rollFreq, dt, rollNotch),
+                ApplySuppression (2, currentRaw.z, pitchYawTool, pitchYawFreq, dt, yawNotch));
+
+            // Ramp the latched bandwidth reduction and output smoothing in/out per axis (gated on
+            // suppression being active — the persistent latch, not the decaying chatterLevel — so
+            // they hold for as long as the craft is treated as flexible and do not step at engage).
+            var rampBeta = 1.0 - Math.Exp (-dt / BandwidthRampTimeConstant);
+            for (int i = 0; i < 3; i++)
+                suppressionRamp [i] +=
+                    rampBeta * ((suppressionActiveAxis [i] ? 1.0 : 0.0) - suppressionRamp [i]);
 
             // Current and target angular velocities, both expressed in the roll-invariant frame.
             var currentRi = ToRollInvariant (current, cosPhi, sinPhi);
             logRawOmegaRi = ToRollInvariant (currentRaw, cosPhi, sinPhi);
             var target = ComputeTargetAngularVelocity (torque, moi, current, currentDirection, cosPhi, sinPhi);
 
-            // Nominal target: the same velocity profile evaluated with the measured rate set to
-            // zero, so it depends only on the attitude error, not on the measured angular velocity.
-            // This is the open-loop trajectory the feedforward differentiates (see below); keeping
-            // measured ω out of it is what stops the feedforward from amplifying structural
-            // bending oscillation. The measured-ω-dependent stopping-distance correction stays in
-            // `target`, where it belongs — it is feedback, and is handled by the PI loop.
+            // Nominal target: the velocity profile with the measured rate set to zero, so it depends
+            // only on the attitude error. A latched, holding axis tracks this instead of `target`
+            // (blended by the hold gate below) — at the floored bandwidth the stopping-distance term
+            // ω/bandwidth would re-inject the residual rate into the setpoint and the large floored
+            // gain would amplify it into a limit cycle; the rate-independent nominal target removes
+            // that. While slewing the axis tracks the full `target` (with its stopping term) so it
+            // brakes cleanly.
             var targetNominal = ComputeTargetAngularVelocity (torque, moi, Vector3d.zero, currentDirection, cosPhi, sinPhi);
 
             // Roll setpoint is already weighted to zero inside ComputeTargetAngularVelocity when the
             // vessel is far from the direction target; clear the integral there to prevent windup.
-            if (!rollControlled)
+            if (!rollControlled) {
                 target.y = 0;
-            else
+                targetNominal.y = 0;
+            } else {
                 ClearRollWindupIfDisengaged (currentDirection);
+            }
+
+            // Continuous hold gate: 1 while holding (pointing error ≤ HoldErrorFull), 0 while slewing
+            // (≥ HoldErrorNone), linear between. Combined with suppressionRamp it gives the per-axis
+            // mitigation weight — only a latched axis that is also holding fully tracks the nominal
+            // target and cuts the feedforward.
+            var pointingError = Vector3.Angle (currentDirection, TargetDirection);
+            var holdFactor = Math.Min (1.0, Math.Max (0.0,
+                (HoldErrorNone - pointingError) / (HoldErrorNone - HoldErrorFull)));
+            var gate = new Vector3d (
+                suppressionRamp [0] * holdFactor,
+                suppressionRamp [1] * holdFactor,
+                suppressionRamp [2] * holdFactor);
+            mitigationLevel [0] = gate.x;
+            mitigationLevel [1] = gate.y;
+            mitigationLevel [2] = gate.z;
+
+            // Per-axis setpoint the loop tracks: full target eased toward the nominal target by the gate.
+            var pidTarget = new Vector3d (
+                target.x + gate.x * (targetNominal.x - target.x),
+                target.y + gate.y * (targetNominal.y - target.y),
+                target.z + gate.z * (targetNominal.z - target.z));
 
             // Acceleration feedforward: differentiate the velocity setpoint numerically to get the
             // angular acceleration needed to stay on the bang-bang trajectory, then normalise by
-            // α_max = torque/moi so the feedforward is a control fraction in [-1, 1].
-            // Skipped on the first tick (prevTargetRiValid == false) to avoid a spike.
-            //
-            // The differentiated source is blended by chatterLevel from `target` (rigid) to
-            // `targetNominal` (flexible). On a flexible craft `target` carries the measured angular
-            // velocity through its stopping-distance correction, and that rate contains a bending-mode
-            // oscillation; numerical differentiation has gain proportional to frequency, so
-            // differentiating `target` turned a small residual oscillation into a full-scale,
-            // sign-flipping feedforward that drove the structure (test plan §11.9). `targetNominal`
-            // depends only on the attitude error (whose bending content is the much smaller integral
-            // of the rate oscillation), so its derivative stays smooth. A rigid craft keeps the
-            // original `target`-derivative feedforward unchanged.
-            var ffSource = new Vector3d (
-                target.x + chatterLevel.x * (targetNominal.x - target.x),
-                target.y + chatterLevel.y * (targetNominal.y - target.y),
-                target.z + chatterLevel.z * (targetNominal.z - target.z));
+            // α_max = torque/moi so the feedforward is a control fraction in [-1, 1]. Skipped on the
+            // first tick (prevTargetRiValid == false) to avoid a spike.
             var rawFfRi = Vector3d.zero;
             if (prevTargetRiValid) {
                 var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
                 var alphaRoll  = moi [1] > 0 ? torque [1] / moi [1] : 0.0;
                 var alphaYaw   = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
-                if (alphaPitch > 0) rawFfRi.x = (ffSource.x - prevTargetRi.x) / (dt * alphaPitch);
-                if (alphaRoll  > 0) rawFfRi.y = (ffSource.y - prevTargetRi.y) / (dt * alphaRoll);
-                if (alphaYaw   > 0) rawFfRi.z = (ffSource.z - prevTargetRi.z) / (dt * alphaYaw);
+                if (alphaPitch > 0) rawFfRi.x = (pidTarget.x - prevTargetRi.x) / (dt * alphaPitch);
+                if (alphaRoll  > 0) rawFfRi.y = (pidTarget.y - prevTargetRi.y) / (dt * alphaRoll);
+                if (alphaYaw   > 0) rawFfRi.z = (pidTarget.z - prevTargetRi.z) / (dt * alphaYaw);
             }
-            prevTargetRi = ffSource;
+            prevTargetRi = pidTarget;
             prevTargetRiValid = true;
 
             // Low-pass filter the feedforward. The velocity setpoint has slope discontinuities — the
@@ -354,7 +597,14 @@ namespace KRPC.SpaceCenter.AutoPilot
                 smoothedFfRi.x + ffBeta * (rawFfRi.x - smoothedFfRi.x),
                 smoothedFfRi.y + ffBeta * (rawFfRi.y - smoothedFfRi.y),
                 smoothedFfRi.z + ffBeta * (rawFfRi.z - smoothedFfRi.z));
-            var ffRi = smoothedFfRi;
+            // Cut the feedforward by the hold gate: it is an open-loop plant inversion (gain ∝
+            // frequency) and is the loop path most able to drive a flexible mode once the bandwidth is
+            // floored, but only a holding flexible axis needs it gone — while slewing the axis keeps
+            // its feedforward to track the manoeuvre, and a rigid axis keeps it throughout.
+            var ffRi = new Vector3d (
+                smoothedFfRi.x * (1.0 - gate.x),
+                smoothedFfRi.y * (1.0 - gate.y),
+                smoothedFfRi.z * (1.0 - gate.z));
 
             UpdateSmoothedTorque (torque);
 
@@ -370,17 +620,17 @@ namespace KRPC.SpaceCenter.AutoPilot
             }
 
             // Inner rate loop (the inner stage of the cascade). The outer loop above turned the
-            // attitude error into a target angular velocity; this stage drives the *filtered*
+            // attitude error into a target angular velocity; this stage drives the *suppressed*
             // measured rate (currentRi) onto that target. Each PI is physics-normalised — its
             // autotuned gains carry the moi/torque factor, so the closed rate-loop bandwidth is set
             // by TimeToPeak/Overshoot and is independent of the craft's authority. Because it tracks
-            // the filtered rate, the loop has no gain at the bending frequency and cannot excite a
+            // the suppressed rate, the loop has no gain at the bending frequency and cannot excite a
             // flexible structure. Pitch/yaw run in the roll-invariant frame; roll on the y-axis
             // (unchanged by the frame rotation). Add the acceleration feedforward to each output,
             // then clamp before converting pitch/yaw back to the body frame.
-            var virtualPitch = (RunAxis (PitchPID, target.x, currentRi.x, torque [0], dt) + ffRi.x).Clamp (-1, 1);
-            var virtualRoll = (RunAxis (RollPID, target.y, currentRi.y, torque [1], dt) + ffRi.y).Clamp (-1, 1);
-            var virtualYaw = (RunAxis (YawPID, target.z, currentRi.z, torque [2], dt) + ffRi.z).Clamp (-1, 1);
+            var virtualPitch = (RunAxis (PitchPID, pidTarget.x, currentRi.x, torque [0], dt) + ffRi.x).Clamp (-1, 1);
+            var virtualRoll = (RunAxis (RollPID, pidTarget.y, currentRi.y, torque [1], dt) + ffRi.y).Clamp (-1, 1);
+            var virtualYaw = (RunAxis (YawPID, pidTarget.z, currentRi.z, torque [2], dt) + ffRi.z).Clamp (-1, 1);
             var bodyControl = FromRollInvariant (new Vector3d (virtualPitch, 0, virtualYaw), cosPhi, sinPhi);
 
             // Gyroscopic feedforward: the per-axis plant model (τ = I·ω̇) ignores the ω×(Iω) term in
@@ -388,9 +638,11 @@ namespace KRPC.SpaceCenter.AutoPilot
             // where the inertia and available torque are per-axis, then sum with the control and
             // clamp to [-1, 1].
             var gyro = GyroscopicFeedforward (current, moi, torque);
-            state.Pitch = (float)(bodyControl.x + gyro.x).Clamp (-1, 1);
-            state.Roll = (float)(virtualRoll + gyro.y).Clamp (-1, 1);
-            state.Yaw = (float)(bodyControl.z + gyro.z).Clamp (-1, 1);
+            // Output smoothing: on a latched axis blend in a low-passed copy of the final command
+            // (ramped by suppressionRamp) to cap residual control chatter; rigid axes pass through.
+            state.Pitch = (float)SmoothOutput (0, (bodyControl.x + gyro.x).Clamp (-1, 1), dt);
+            state.Roll = (float)SmoothOutput (1, (virtualRoll + gyro.y).Clamp (-1, 1), dt);
+            state.Yaw = (float)SmoothOutput (2, (bodyControl.z + gyro.z).Clamp (-1, 1), dt);
 
             if (diagnosticLogging)
                 LogDiagnostics (torque, moi, phi, currentRi, target, ffRi, gyro, currentDirection, state);
@@ -514,7 +766,10 @@ namespace KRPC.SpaceCenter.AutoPilot
                 " Kp=({27:F4},{28:F4},{29:F4}) Ki=({30:F4},{31:F4},{32:F4})" +
                 " ctrl=(p={33:F3},r={34:F3},y={35:F3})" +
                 " omega_raw=({36:F4},{37:F4},{38:F4})" +
-                " chatter=({39:F3},{40:F3},{41:F3})",
+                " chatter=({39:F3},{40:F3},{41:F3})" +
+                " tool=({42},{43},{44})" +
+                " fdet=({45:F3},{46:F3})" +
+                " bwtgt=({47:F3},{48:F3},{49:F3})",
                 Time.fixedTime, dirErr,
                 torque.x, torque.y, torque.z,
                 moi.x, moi.y, moi.z,
@@ -529,7 +784,14 @@ namespace KRPC.SpaceCenter.AutoPilot
                 PitchPID.Ki, RollPID.Ki, YawPID.Ki,
                 state.Pitch, state.Roll, state.Yaw,
                 logRawOmegaRi.x, logRawOmegaRi.y, logRawOmegaRi.z,
-                chatterLevel.x, chatterLevel.y, chatterLevel.z);
+                chatterLevel.x, chatterLevel.y, chatterLevel.z,
+                notchActiveAxis [0] ? "n" : rateFilterValid [0] ? "l" : "-",
+                notchActiveAxis [1] ? "n" : rateFilterValid [1] ? "l" : "-",
+                notchActiveAxis [2] ? "n" : rateFilterValid [2] ? "l" : "-",
+                pitchYawHeldHz, rollHeldHz,
+                suppressionRamp [0] * oscillationBandwidthFloor,
+                suppressionRamp [1] * oscillationBandwidthFloor,
+                suppressionRamp [2] * oscillationBandwidthFloor);
             UnityEngine.Debug.Log (line);
             lock (diagnosticLogLock) {
                 diagnosticLog.AppendLine (line);
@@ -562,39 +824,119 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
-        /// Second-order low-pass (structural / anti-alias) filter on the measured angular velocity,
-        /// implemented as two cascaded first-order sections for a critically-damped roll-off.
+        /// Second-order low-pass on one axis of the measured angular velocity, two cascaded
+        /// first-order sections (each with time constant <paramref name="tau"/>) for a
+        /// critically-damped ~12 dB/octave roll-off. This is the high-frequency suppression tool: a
+        /// notch cannot reject a near-Nyquist mode, but such a mode is far above the sub-Hz control
+        /// band, so a corner well below it (derived from the estimated frequency) kills it while
+        /// adding negligible in-band lag. The state is seeded with the first sample so engaging on an
+        /// already-rotating vessel produces no startup transient.
         /// </summary>
-        /// <remarks>
-        /// KSP samples <c>Rigidbody.angularVelocity</c> at the root part. A rigid craft's measurement
-        /// is the true rigid-body rate, but a structurally flexible craft superimposes its bending
-        /// modes — which on a long vehicle with end-mounted reaction wheels sit at 3–8 Hz, above the
-        /// controller's sub-Hz bandwidth. The single-section roll-off of the feedforward filter is too
-        /// shallow to reject that; a numerically-differentiated feedforward then flips the command on
-        /// the noise and resonantly drives the structure (test plan §11.9). The two sections give a
-        /// ~12 dB/octave roll-off, attenuating the bending content ~20× while adding only a few degrees
-        /// of phase lag in the sub-Hz control band, so the inner rate loop and the feedforward see a
-        /// clean rate. The state is seeded with the first raw sample so engaging on an already-rotating
-        /// vessel does not produce a startup transient.
-        /// </remarks>
-        Vector3d FilterAngularVelocity (Vector3d omega, double dt)
+        double LowPassAxis (int index, double x, double tau, double dt)
         {
-            if (!rateFilterValid) {
-                rateFilterStage1 = omega;
-                rateFilterStage2 = omega;
-                rateFilterValid = true;
-                return omega;
+            if (!rateFilterValid [index]) {
+                rateFilterStage1 [index] = x;
+                rateFilterStage2 [index] = x;
+                rateFilterValid [index] = true;
+                return x;
             }
-            var beta = 1.0 - Math.Exp (-dt / RateFilterTimeConstant);
-            rateFilterStage1 = new Vector3d (
-                rateFilterStage1.x + beta * (omega.x - rateFilterStage1.x),
-                rateFilterStage1.y + beta * (omega.y - rateFilterStage1.y),
-                rateFilterStage1.z + beta * (omega.z - rateFilterStage1.z));
-            rateFilterStage2 = new Vector3d (
-                rateFilterStage2.x + beta * (rateFilterStage1.x - rateFilterStage2.x),
-                rateFilterStage2.y + beta * (rateFilterStage1.y - rateFilterStage2.y),
-                rateFilterStage2.z + beta * (rateFilterStage1.z - rateFilterStage2.z));
-            return rateFilterStage2;
+            var beta = 1.0 - Math.Exp (-dt / tau);
+            rateFilterStage1 [index] += beta * (x - rateFilterStage1 [index]);
+            rateFilterStage2 [index] += beta * (rateFilterStage1 [index] - rateFilterStage2 [index]);
+            return rateFilterStage2 [index];
+        }
+
+        /// <summary>
+        /// Select the suppression tool and its frequency for an axis group. <c>tool</c> is 0 (none),
+        /// 1 (notch) or 2 (low-pass). In <c>Automatic</c> mode suppression is active only while the
+        /// group is latched, and is routed by the estimated frequency (notch below
+        /// <see cref="DefaultSplitFrequency"/>, low-pass above), seeded at the group's manual
+        /// frequency until the estimator acquires. <c>Notch</c>/<c>LowPass</c> force that tool at the
+        /// manual frequency; <c>Off</c> applies nothing.
+        /// </summary>
+        void SelectSuppressionTool (Services.OscillationControl mode, bool latched, double detectedHz,
+            double manualHz, out int tool, out double freq)
+        {
+            switch (mode) {
+            case Services.OscillationControl.Notch:
+                tool = 1;
+                freq = manualHz;
+                break;
+            case Services.OscillationControl.LowPass:
+                tool = 2;
+                freq = manualHz;
+                break;
+            case Services.OscillationControl.Off:
+                tool = 0;
+                freq = 0;
+                break;
+            default:  // Automatic
+                if (!latched) {
+                    tool = 0;
+                    freq = 0;
+                } else if (double.IsNaN (detectedHz)) {
+                    // Latched but the estimator has not locked: clean the rate with a frequency-
+                    // independent broadband low-pass (~LowPassCornerMin) rather than a notch at the
+                    // seed, which would be placed wrong if the true mode is elsewhere. The estimator
+                    // is unreliable on some craft, so this fallback (plus the gain-stabilising
+                    // bandwidth floor) is what makes suppression robust without a confident estimate.
+                    tool = 2;
+                    freq = LowPassCornerMin * DefaultLowPassSeparation;
+                } else {
+                    freq = detectedHz;
+                    tool = freq < DefaultSplitFrequency ? 1 : 2;
+                }
+                break;
+            }
+        }
+
+        /// <summary>
+        /// Apply the selected suppression tool to one axis, holding the inactive filter's state reset
+        /// so a regime change injects no transient, and recording whether the notch is active (and at
+        /// what frequency) for the bandwidth reduction in <see cref="DoAutoTuneAxis"/>.
+        /// </summary>
+        double ApplySuppression (int index, double x, int tool, double freq, double dt, BiquadNotchFilter notch)
+        {
+            if (tool == 1 && freq > 0) {
+                rateFilterValid [index] = false;
+                notchActiveAxis [index] = true;
+                suppressionActiveAxis [index] = true;
+                // Reconfigure only when the frequency has moved materially (>2%), Q changed, or the
+                // sampling period changed, so a slowly drifting mode is tracked without thrashing.
+                if (Math.Abs (freq - notch.ConfiguredFrequency) > 0.02 * notch.ConfiguredFrequency ||
+                    notch.ConfiguredQ != oscillationNotchQ || notch.ConfiguredDt != dt)
+                    notch.SetFrequency (freq, oscillationNotchQ, dt);
+                return notch.Process (x);
+            }
+            if (tool == 2 && freq > 0) {
+                notch.Reset ();
+                notchActiveAxis [index] = false;
+                suppressionActiveAxis [index] = true;
+                var fc = Math.Max (LowPassCornerMin, freq / DefaultLowPassSeparation);
+                var tau = 1.0 / (2.0 * Math.PI * fc);
+                return LowPassAxis (index, x, tau, dt);
+            }
+            // Pass-through (no suppression): hold both filters reset.
+            notch.Reset ();
+            rateFilterValid [index] = false;
+            notchActiveAxis [index] = false;
+            suppressionActiveAxis [index] = false;
+            return x;
+        }
+
+        /// <summary>
+        /// Blend a low-passed copy of the final actuator command in by <c>suppressionRamp</c> on a
+        /// latched axis, to cap residual control chatter. A rigid axis (ramp 0) passes through.
+        /// </summary>
+        double SmoothOutput (int index, double u, double dt)
+        {
+            if (!outputFilterValid [index]) {
+                outputFilterState [index] = u;
+                outputFilterValid [index] = true;
+            }
+            var beta = 1.0 - Math.Exp (-dt / DefaultOutputFilterTimeConstant);
+            outputFilterState [index] += beta * (u - outputFilterState [index]);
+            return u + suppressionRamp [index] * (outputFilterState [index] - u);
         }
 
         /// <summary>
@@ -622,12 +964,43 @@ namespace KRPC.SpaceCenter.AutoPilot
             for (int i = 0; i < 3; i++) {
                 var alpha = moi [i] > 0 ? torque [i] / moi [i] : 0.0;
                 var deltaOmega = Math.Abs (rawOmega [i] - prevDetectorOmega [i]);
-                var excited = alpha > 0 && deltaOmega > ChatterDetectThreshold * alpha * dt ? 1.0 : 0.0;
+                var excited = alpha > 0 && deltaOmega > oscillationDetectionThreshold * alpha * dt ? 1.0 : 0.0;
                 var timeConstant = excited > chatterLevel [i] ? ChatterRiseTimeConstant : ChatterDecayTimeConstant;
                 var beta = 1.0 - Math.Exp (-dt / timeConstant);
                 chatterLevel [i] += beta * (excited - chatterLevel [i]);
+                // Latch the axis as flexible once the level confirms a limit cycle. The latch is the
+                // controller's persistent memory that the craft is flexible; in Automatic mode it
+                // gates whether suppression is applied (the estimator, which selects the tool, runs
+                // ungated). A rigid craft never reaches the threshold (its rate never jumps beyond
+                // rigid-body dynamics) so is never latched.
+                if (chatterLevel [i] >= ChatterLatchThreshold)
+                    chatterLatched [i] = true;
             }
+            // Couple the two transverse axes (pitch x, yaw z). A long vehicle's first lateral bending
+            // mode is essentially axisymmetric, so it limit-cycles in both planes; whichever plane
+            // currently carries less of it can sit just under the Δω threshold and never latch on its
+            // own, leaving its feedforward live to drive the structure (and, when the vehicle is
+            // rolled, bleed into the other body axis). Once either transverse axis confirms flexible
+            // the craft is flexible, so latch both. Roll (y) is longitudinal and handled on its own.
+            if (chatterLatched [0] || chatterLatched [2])
+                chatterLatched [0] = chatterLatched [2] = true;
             prevDetectorOmega = rawOmega;
+        }
+
+        /// <summary>
+        /// Apply the detector side of a manual <see cref="Services.OscillationControl"/> override to
+        /// a single axis. <c>Off</c> forces the axis rigid for control purposes (clears the latch and
+        /// level so no suppression is applied), while the frequency estimator keeps running so the
+        /// detected-frequency observable stays live. <c>Automatic</c> leaves the detector's verdict
+        /// untouched; <c>Notch</c>/<c>LowPass</c> bypass the detector entirely (the tool is forced in
+        /// <see cref="SelectSuppressionTool"/>), so they leave the latch alone here.
+        /// </summary>
+        void ApplyOscillationOverride (int index, Services.OscillationControl mode)
+        {
+            if (mode == Services.OscillationControl.Off) {
+                chatterLevel [index] = 0;
+                chatterLatched [index] = false;
+            }
         }
 
         /// <summary>
@@ -878,15 +1251,20 @@ namespace KRPC.SpaceCenter.AutoPilot
                 return;
             var accelerationInv = moi [index] / torque [index];
 
-            // Adaptive bandwidth reduction: ramp this axis's bandwidth (= twiceZetaOmega, since
-            // Kp·α = 2ζω₀) toward AdaptiveBandwidthFloor in proportion to the detected chatter, so a
-            // flexible craft's bending mode is gain-stabilised. ω₀ scales with the bandwidth, so Kp
-            // scales linearly and Ki quadratically and the damping ratio ζ (the overshoot target) is
-            // preserved. Rigid/high-authority axes have chatterLevel ≈ 0 and keep their full gains.
+            // Latched bandwidth reduction: a latched (flexible) axis has its rate-loop bandwidth
+            // (2ζω₀ = twiceZetaOmega, since Kp·α = 2ζω₀) pulled down toward oscillationBandwidthFloor,
+            // the primary gain-stabiliser — dropping the crossover well below every structural mode so
+            // the loop cannot drive any of them. It only ever lowers bandwidth (min against the
+            // autotuned value). It is gated on the hold-gated mitigationLevel (latch · holdFactor), so
+            // the axis is floored only while *holding* and runs at full bandwidth while *slewing* —
+            // the notch/low-pass keeps the slew responsive, while the floor quiets the hold. ω₀ scales
+            // with the bandwidth, so Kp scales linearly and Ki quadratically and the damping ratio ζ
+            // (the overshoot target) is preserved. A rigid craft never latches, so keeps full bandwidth.
+            var level = mitigationLevel [index];
             var bandwidth = twiceZetaOmega [index];
             var bandwidthSquared = omegaSquared [index];
-            if (chatterLevel [index] > 0 && bandwidth > AdaptiveBandwidthFloor) {
-                var reduced = bandwidth + chatterLevel [index] * (AdaptiveBandwidthFloor - bandwidth);
+            if (level > 0 && oscillationBandwidthFloor < bandwidth) {
+                var reduced = bandwidth + level * (oscillationBandwidthFloor - bandwidth);
                 var f = reduced / bandwidth;
                 bandwidth = reduced;
                 bandwidthSquared *= f * f;

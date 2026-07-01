@@ -478,6 +478,143 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Controls how the auto-pilot suppresses structural oscillation (wobble) on the pitch and
+        /// yaw axes of a structurally flexible vessel. When <see cref="OscillationControl.Automatic"/>
+        /// (the default) the auto-pilot detects the oscillation at runtime, estimates its frequency
+        /// and routes it to the appropriate tool (a notch filter for a low-frequency mode near the
+        /// control band, a low-pass for a high-frequency mode). <see cref="OscillationControl.Off"/>
+        /// disables suppression, giving full control authority at the cost of allowing the vessel to
+        /// wobble. <see cref="OscillationControl.Notch"/> and <see cref="OscillationControl.LowPass"/>
+        /// force the respective tool unconditionally at <see cref="PitchYawOscillationFrequency"/>,
+        /// for a vessel known in advance to be flexible.
+        /// </summary>
+        [KRPCProperty]
+        public OscillationControl PitchYawOscillationControl {
+            get { return attitudeController.PitchYawOscillationControl; }
+            set { attitudeController.PitchYawOscillationControl = value; }
+        }
+
+        /// <summary>
+        /// Controls how the auto-pilot suppresses structural oscillation (wobble) on the roll axis.
+        /// Behaves as <see cref="PitchYawOscillationControl"/> but for roll, using
+        /// <see cref="RollOscillationFrequency"/>. Defaults to
+        /// <see cref="OscillationControl.Automatic"/>.
+        /// </summary>
+        [KRPCProperty]
+        public OscillationControl RollOscillationControl {
+            get { return attitudeController.RollOscillationControl; }
+            set { attitudeController.RollOscillationControl = value; }
+        }
+
+        /// <summary>
+        /// The structural mode frequency, in Hz, for the pitch/yaw axis group. Used directly as the
+        /// filter frequency in <see cref="OscillationControl.Notch"/> / <see cref="OscillationControl.LowPass"/>
+        /// mode, and as the seed for the automatic frequency estimator before it acquires. Defaults
+        /// to 1.5 Hz.
+        /// </summary>
+        [KRPCProperty]
+        public double PitchYawOscillationFrequency {
+            get { return attitudeController.PitchYawOscillationFrequency; }
+            set { attitudeController.PitchYawOscillationFrequency = value; }
+        }
+
+        /// <summary>
+        /// The structural mode frequency, in Hz, for the roll axis. Behaves as
+        /// <see cref="PitchYawOscillationFrequency"/> but for roll. Defaults to 1.5 Hz.
+        /// </summary>
+        [KRPCProperty]
+        public double RollOscillationFrequency {
+            get { return attitudeController.RollOscillationFrequency; }
+            set { attitudeController.RollOscillationFrequency = value; }
+        }
+
+        /// <summary>
+        /// The quality factor of the notch filter used to suppress a low-frequency structural mode.
+        /// A higher value gives a narrower notch (less in-band control lag but less tolerance to the
+        /// mode frequency drifting); a lower value gives a wider notch. Defaults to 2.5. This is an
+        /// advanced tuning parameter.
+        /// </summary>
+        [KRPCProperty]
+        public double OscillationNotchQ {
+            get { return attitudeController.OscillationNotchQ; }
+            set { attitudeController.OscillationNotchQ = value; }
+        }
+
+        /// <summary>
+        /// The inner control loop bandwidth, in rad/s, that an axis is reduced towards while
+        /// suppression is engaged on it (a structurally flexible axis). Lowering it suppresses
+        /// oscillation more strongly; raising it keeps more control authority at the cost of allowing
+        /// more wobble. Defaults to 1 rad/s. This is an advanced tuning parameter.
+        /// </summary>
+        [KRPCProperty]
+        public double OscillationBandwidthFloor {
+            get { return attitudeController.OscillationBandwidthFloor; }
+            set { attitudeController.OscillationBandwidthFloor = value; }
+        }
+
+        /// <summary>
+        /// The sensitivity of the automatic oscillation detector, as a multiple of the
+        /// physically-achievable change in angular velocity per physics tick. A tick-to-tick change
+        /// in the measured rate larger than this is treated as structural oscillation rather than a
+        /// control response. Lowering it makes detection more sensitive. Defaults to 4. This is an
+        /// advanced tuning parameter.
+        /// </summary>
+        [KRPCProperty]
+        public double OscillationDetectionThreshold {
+            get { return attitudeController.OscillationDetectionThreshold; }
+            set { attitudeController.OscillationDetectionThreshold = value; }
+        }
+
+        /// <summary>
+        /// A measure, between 0 and 1 for each of the pitch, roll and yaw axes, of how strongly the
+        /// auto-pilot currently detects structural oscillation (wobble) on that axis. 0 means none
+        /// detected; values approaching 1 mean a sustained structural oscillation. Read-only.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 OscillationLevel {
+            get { return attitudeController.OscillationLevel.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Whether the auto-pilot has confirmed the pitch/yaw axes to be structurally flexible and
+        /// latched oscillation suppression on for them. Read-only. See
+        /// <see cref="PitchYawOscillationControl"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool PitchYawOscillationLatched {
+            get { return attitudeController.PitchYawOscillationLatched; }
+        }
+
+        /// <summary>
+        /// Whether the auto-pilot has confirmed the roll axis to be structurally flexible and latched
+        /// oscillation suppression on for it. Read-only. See <see cref="RollOscillationControl"/>.
+        /// </summary>
+        [KRPCProperty]
+        public bool RollOscillationLatched {
+            get { return attitudeController.RollOscillationLatched; }
+        }
+
+        /// <summary>
+        /// The structural oscillation frequency, in Hz, estimated by the automatic detector for the
+        /// pitch/yaw axis group, or <c>NaN</c> until the estimator acquires. The estimator runs in
+        /// all modes, so this is observable even when suppression is off or forced. Read-only.
+        /// </summary>
+        [KRPCProperty]
+        public double PitchYawOscillationDetectedFrequency {
+            get { return attitudeController.PitchYawOscillationDetectedFrequency; }
+        }
+
+        /// <summary>
+        /// The structural oscillation frequency, in Hz, estimated by the automatic detector for the
+        /// roll axis, or <c>NaN</c> until the estimator acquires. Read-only. See
+        /// <see cref="PitchYawOscillationDetectedFrequency"/>.
+        /// </summary>
+        [KRPCProperty]
+        public double RollOscillationDetectedFrequency {
+            get { return attitudeController.RollOscillationDetectedFrequency; }
+        }
+
+        /// <summary>
         /// When <c>true</c>, logs one diagnostic line per physics tick to Player.log and to an
         /// in-memory buffer (see <see cref="DiagnosticLog"/>). Each line is prefixed with
         /// <c>[KRPC.AP]</c> and contains torque, MoI, angle errors, current/target angular
