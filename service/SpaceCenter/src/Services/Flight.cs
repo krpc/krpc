@@ -546,20 +546,29 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Simulate and return the total aerodynamic forces acting on the vessel,
-        /// if it where to be traveling with the given velocity at the given position in the
-        /// atmosphere of the given celestial body.
+        /// if it were traveling with the given velocity, at the given position and
+        /// orientation, in the atmosphere of the given celestial body.
         /// </summary>
         /// <param name="body">The celestial body whose atmosphere the forces are simulated in.</param>
         /// <param name="position">The position of the vessel, in reference frame
         /// <see cref="ReferenceFrame"/>.</param>
         /// <param name="velocity">The velocity of the vessel, in reference frame
         /// <see cref="ReferenceFrame"/>.</param>
-        /// <param name="rotation">The rotation of the vessel, in reference frame
+        /// <param name="rotation">The orientation of the vessel, in reference frame
         /// <see cref="ReferenceFrame"/>, in the same form as <see cref="Vessel.Rotation"/>.
-        /// This sets the angle of attack and sideslip independently of the velocity. Pass the
-        /// vessel's current rotation to use its current orientation.</param>
-        /// <returns>A vector pointing in the direction that the force acts,
-        /// with its magnitude equal to the strength of the force in Newtons.</returns>
+        /// The angle of attack and sideslip follow from this orientation relative to the
+        /// velocity; the roll component sets the direction of any aerodynamic lift. Pass
+        /// the vessel's current rotation to evaluate the force at its current orientation.</param>
+        /// <returns>A vector pointing in the direction that the force acts, with its
+        /// magnitude equal to the strength of the force in Newtons, in reference frame
+        /// <see cref="ReferenceFrame"/>.</returns>
+        /// <remarks>
+        /// The position, velocity and rotation arguments, and the returned force, are all
+        /// expressed in reference frame <see cref="ReferenceFrame"/>. The result is the
+        /// force the vessel would experience if it were placed at that position and
+        /// orientation with the air flowing past it at that velocity; it is the force at
+        /// the requested orientation, not the force in the vessel's current orientation.
+        /// </remarks>
         [KRPCMethod]
         public Tuple3 SimulateAerodynamicForceAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation)
         {
