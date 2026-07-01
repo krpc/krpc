@@ -12,8 +12,16 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class CargoBay : Equatable<CargoBay>
     {
-        readonly ModuleCargoBay bay;
-        readonly ModuleAnimateGeneric animation;
+        readonly ModuleRef<ModuleCargoBay>? bayRef;
+        readonly ModuleRef<ModuleAnimateGeneric>? animationRef;
+
+        ModuleCargoBay bay {
+            get { return ModuleRef<ModuleCargoBay>.ResolveOrNull (bayRef, Part.InternalPart); }
+        }
+
+        ModuleAnimateGeneric animation {
+            get { return ModuleRef<ModuleAnimateGeneric>.ResolveOrNull (animationRef, Part.InternalPart); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -29,9 +37,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!Is (part))
                 throw new ArgumentException ("Part is not a cargo bay");
             Part = part;
-            var internalPart = part.InternalPart;
-            bay = internalPart.Module<ModuleCargoBay> ();
-            animation = internalPart.Module<ModuleAnimateGeneric> ();
+            bayRef = ModuleRef<ModuleCargoBay>.For (part.InternalPart);
+            animationRef = ModuleRef<ModuleAnimateGeneric>.For (part.InternalPart);
         }
 
         /// <summary>
@@ -39,7 +46,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (CargoBay other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && bay.Equals (other.bay);
+            return !ReferenceEquals (other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -47,7 +54,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ bay.GetHashCode ();
+            return Part.GetHashCode ();
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service;
+using KRPC.Utils;
 using NUnit.Framework;
 
 namespace KRPC.Test.Service
@@ -10,6 +11,18 @@ namespace KRPC.Test.Service
         static object a = new object ();
         static object b = new object ();
         static object c = new object ();
+
+        sealed class FakeTrackedObject : ITrackedObject
+        {
+            public bool IsAlive { get; set; }
+        }
+
+        sealed class ThrowingTrackedObject : ITrackedObject
+        {
+            public bool IsAlive {
+                get { throw new InvalidOperationException ("boom"); }
+            }
+        }
 
         [Test]
         public void BasicUsage ()
@@ -61,6 +74,48 @@ namespace KRPC.Test.Service
             Assert.DoesNotThrow (() => store.RemoveInstance (null));
             Assert.AreEqual (null, store.GetInstance (0));
             Assert.AreEqual (0, store.GetObjectId (null));
+        }
+
+        [Test]
+        public void RemoveDead ()
+        {
+            var store = new ObjectStore ();
+            var alive = new FakeTrackedObject { IsAlive = true };
+            var dead = new FakeTrackedObject { IsAlive = false };
+            var plain = new object ();
+            var aliveId = store.AddInstance (alive);
+            var deadId = store.AddInstance (dead);
+            var plainId = store.AddInstance (plain);
+
+            store.RemoveDead ();
+
+            // The dead object is removed from the store.
+            Assert.Throws<ArgumentException> (() => store.GetInstance (deadId));
+            Assert.Throws<ArgumentException> (() => store.GetObjectId (dead));
+            // The alive object and the non-tracked object are left untouched.
+            Assert.AreSame (alive, store.GetInstance (aliveId));
+            Assert.AreSame (plain, store.GetInstance (plainId));
+        }
+
+        [Test]
+        public void RemoveDeadIsolatesThrowingTrackedObject ()
+        {
+            var store = new ObjectStore ();
+            var alive = new FakeTrackedObject { IsAlive = true };
+            var dead = new FakeTrackedObject { IsAlive = false };
+            var throwing = new ThrowingTrackedObject ();
+            var aliveId = store.AddInstance (alive);
+            var deadId = store.AddInstance (dead);
+            var throwingId = store.AddInstance (throwing);
+
+            // A throwing IsAlive must not abort the sweep or propagate out of it.
+            Assert.DoesNotThrow (() => store.RemoveDead ());
+
+            // The dead object is still removed; the throwing one is conservatively
+            // kept (treated as alive), as is the alive one.
+            Assert.Throws<ArgumentException> (() => store.GetInstance (deadId));
+            Assert.AreSame (alive, store.GetInstance (aliveId));
+            Assert.AreSame (throwing, store.GetInstance (throwingId));
         }
     }
 }

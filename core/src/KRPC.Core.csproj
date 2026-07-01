@@ -130,6 +130,7 @@
     <Compile Include="Service\KRPC\Expression.cs" />
     <Compile Include="Service\KRPC\InvalidOperationException.cs" />
     <Compile Include="Service\KRPC\KRPC.cs" />
+    <Compile Include="Service\KRPC\ObjectDestroyedException.cs" />
     <Compile Include="Service\KRPC\Type.cs" />
     <Compile Include="Service\Messages\Argument.cs" />
     <Compile Include="Service\Messages\Class.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Service\TypeUtils.cs" />
     <Compile Include="Service\ValueUtils.cs" />
     <Compile Include="Service\YieldException.cs" />
+    <Compile Include="Utils\CachedReference.cs" />
     <Compile Include="Utils\DictionaryExtensions.cs" />
     <Compile Include="Utils\DocumentationExtensions.cs" />
     <Compile Include="Utils\DynamicBuffer.cs" />
@@ -181,6 +183,7 @@
     <Compile Include="Utils\EventHandlerExtensions.cs" />
     <Compile Include="Utils\ExponentialMovingAverage.cs" />
     <Compile Include="Utils\IScheduler.cs" />
+    <Compile Include="Utils\ITrackedObject.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\Reflection.cs" />
     <Compile Include="Utils\RoundRobinScheduler.cs" />

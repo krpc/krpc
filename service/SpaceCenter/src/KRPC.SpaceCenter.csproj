@@ -146,6 +146,7 @@
     <Compile Include="Services\Parts\LegState.cs" />
     <Compile Include="Services\Parts\Light.cs" />
     <Compile Include="Services\Parts\Module.cs" />
+    <Compile Include="Services\Parts\ModuleRef.cs" />
     <Compile Include="Services\Parts\MotorState.cs" />
     <Compile Include="Services\Parts\Parachute.cs" />
     <Compile Include="Services\Parts\ParachuteState.cs" />

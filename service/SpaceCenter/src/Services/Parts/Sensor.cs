@@ -11,7 +11,11 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Sensor : Equatable<Sensor>
     {
-        readonly ModuleEnviroSensor sensor;
+        readonly ModuleRef<ModuleEnviroSensor>? sensorRef;
+
+        ModuleEnviroSensor sensor {
+            get { return ModuleRef<ModuleEnviroSensor>.ResolveOrNull (sensorRef, Part.InternalPart); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -21,8 +25,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Sensor (Part part)
         {
             Part = part;
-            sensor = part.InternalPart.Module<ModuleEnviroSensor> ();
-            if (sensor == null)
+            sensorRef = ModuleRef<ModuleEnviroSensor>.For (part.InternalPart);
+            if (!sensorRef.HasValue)
                 throw new ArgumentException ("Part is not a sensor");
         }
 
@@ -31,7 +35,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Sensor other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && sensor == other.sensor;
+            return !ReferenceEquals (other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -39,7 +43,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ sensor.GetHashCode ();
+            return Part.GetHashCode ();
         }
 
         /// <summary>
