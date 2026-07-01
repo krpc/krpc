@@ -45,6 +45,8 @@ v0.6.0
  * Fix RCS force and torque vector calculations using max thrust rather than available thrust (#909)
  * Fix RCS.MaxTorque documentation error - it considers thrust limit set to 100% (#909)
  * Fix ReactionWheel.AvailableTorque not considering authority limiter setting (#909)
+ * Fix Flight.SimulateAerodynamicForceAt overestimating drag at low altitude and
+   subsonic speed by applying KSP's pseudo-Reynolds drag multiplier to cube drag (#912)
 
 v0.5.4
  * Fix vessel recovery (#782)
