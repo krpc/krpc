@@ -174,6 +174,13 @@ namespace KRPC.SpaceCenter.AutoPilot
         Vector3d prevPointDirection;
         QuaternionD pointRotation;
         bool pointRotationValid;
+        // Antipodal-flip plane latch (see ResolveAntipodalAxis). When the error enters the antipode
+        // band with enough rotation to define a flip plane, the plane normal is captured once here
+        // and held for the rest of the pass; letting it track the live angular velocity instead
+        // feeds any out-of-plane drift back on itself and the flip tumbles. Cleared on leaving the
+        // band and on re-engage (Start).
+        Vector3d antipodeLatchedNormal;
+        bool antipodeLatched;
         Vector3d logAngles;
         // Raw (unfiltered) angular velocity in the roll-invariant frame, recorded for diagnostics
         // so the filter's effect on a flexible craft is visible against what the loop acts on.
@@ -265,6 +272,22 @@ namespace KRPC.SpaceCenter.AutoPilot
         const double OscControlEnvelopeTimeConstant = 0.3;
         // Below this 2D error magnitude (radians) the joint pitch/yaw profile is skipped.
         const double MinThetaForJointProfile = 1e-10;
+        // Antipodal-flip tie-break (ResolveAntipodalAxis): within this many degrees of a 180° flip
+        // the direction-error axis FromToRotation(current, target) is ill-conditioned — the geodesic
+        // plane is arbitrary — so it is blended toward the plane of the vessel's existing rotation,
+        // letting the flip ride the current momentum instead of tumbling out of plane. The blend
+        // reduces exactly to the FromToRotation axis at the edge of the band, so ordinary slews are
+        // untouched.
+        const double AntipodeBlendAngle = 15.0;
+        // Minimum perpendicular rate (rad/s) for the antipodal-flip plane latch to engage
+        // (ResolveAntipodalAxis): above it there is a committed rotation whose plane is worth latching
+        // and holding; below it there is no motion to continue, so the arbitrary-but-consistent
+        // FromToRotation axis is kept (a from-rest flip is unchanged). This gates *whether* to latch,
+        // not how strongly, so it must sit well below the rate of a real flip — the latch fires on the
+        // first in-band tick, where the rate is still small and the plane is cleanest, and a threshold
+        // set near the flip rate would delay the latch until the inner loop has already tilted the
+        // rotation out of plane. Only a craft's residual sensor/physics noise must fall below it.
+        const double AntipodeLeadRate = 0.015;
         // Default engagement soft-start duration (seconds): the actuator command is faded in over
         // this window from each engage so the engagement transient cannot kick a fresh, full-authority
         // gimbal into a limit cycle. ~0.5 s is short enough to be imperceptible on a settled craft yet
@@ -564,6 +587,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             RollPID.ResetState ();
             YawPID.ResetState ();
             pointRotationValid = false;
+            antipodeLatched = false;
             prevTargetRiValid = false;
             smoothedFfRi = Vector3d.zero;
             prevDetectorOmegaValid = false;
@@ -1301,6 +1325,67 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
+        /// Resolve the direction-error rotation axis through the 180° (antipodal) singularity.
+        /// </summary>
+        /// <remarks>
+        /// <c>FromToRotation(current, target)</c> returns an arbitrary axis when the target is
+        /// directly behind the nose (the minimum-arc rotation's plane is undefined), so a flip there
+        /// would tumble in a random plane. When the vessel enters the antipode band already rotating,
+        /// <em>latch</em> the flip-plane normal once — from the angular velocity perpendicular to the
+        /// nose at that moment — and hold it for the rest of the pass. The commanded axis is then
+        /// rebuilt each tick from that fixed plane, not from the live angular velocity: tracking the
+        /// live rate instead lets any out-of-plane drift the inner loop introduces feed back on
+        /// itself (the axis follows the drifting rate, which drives more drift), and the flip tumbles.
+        /// With the plane held fixed the direction-error setpoint stays in-plane, so the rate loop
+        /// actively damps out-of-plane motion instead of chasing it.
+        ///
+        /// Active only within <see cref="AntipodeBlendAngle"/> of antipodal, and only once the
+        /// perpendicular rate exceeds <see cref="AntipodeLeadRate"/> (below that there is no committed
+        /// rotation to continue — a from-rest flip keeps the arbitrary-but-consistent
+        /// <paramref name="fromToAxis"/>). The axis is rebuilt as nose × tangent from a smoothstep
+        /// blend of the geodesic tangent (toward the target) and the latched-plane tangent; at the
+        /// band edge the blend is pure geodesic, reproducing <paramref name="fromToAxis"/> exactly so
+        /// ordinary slews are untouched and the hand-back is continuous.
+        /// </remarks>
+        Vector3d ResolveAntipodalAxis (Vector3d fromToAxis, double angleDeg,
+            Vector3d currentDirection, Vector3d targetDirection)
+        {
+            var fromAntipode = 180.0 - angleDeg;
+            if (fromAntipode >= AntipodeBlendAngle) {
+                antipodeLatched = false;                 // left the band: drop the latch
+                return fromToAxis;
+            }
+
+            // Latch the flip-plane normal the first time we enter the band with enough rotation to
+            // define a plane. Once latched it is held (never re-read from the live rate) until the
+            // error leaves the band.
+            if (!antipodeLatched) {
+                var worldOmega = vessel.InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
+                Vector3d omegaAp = ReferenceFrame.AngularVelocityFromWorldSpace (worldOmega);
+                var omegaPerp = omegaAp - Vector3d.Dot (omegaAp, currentDirection) * currentDirection;
+                if (omegaPerp.magnitude < AntipodeLeadRate)
+                    return fromToAxis;                   // no committed rotation (e.g. from-rest flip)
+                antipodeLatchedNormal = omegaPerp.normalized;
+                antipodeLatched = true;
+            }
+
+            var wAngle = (AntipodeBlendAngle - fromAntipode) / AntipodeBlendAngle;
+            wAngle = wAngle * wAngle * (3.0 - 2.0 * wAngle);                  // smoothstep, 1 at antipode
+
+            // Tangents perpendicular to the nose: toward the target (the geodesic) and forward in the
+            // latched plane. nose × tangent rebuilds the rotation axis; at wAngle = 0 (band edge) this
+            // is exactly fromToAxis, at wAngle = 1 (antipode) it is the fixed latched plane.
+            var tTarget = targetDirection - Vector3d.Dot (targetDirection, currentDirection) * currentDirection;
+            var tLatched = Vector3d.Cross (antipodeLatchedNormal, currentDirection);
+            var tTargetDir = tTarget.magnitude > 1e-7 ? tTarget.normalized : Vector3d.zero;
+            var tLatchedDir = tLatched.magnitude > 1e-7 ? tLatched.normalized : Vector3d.zero;
+            var tBlend = (1.0 - wAngle) * tTargetDir + wAngle * tLatchedDir;
+            if (tBlend.magnitude <= 1e-7)
+                return fromToAxis;
+            return Vector3d.Cross (currentDirection, tBlend).normalized;
+        }
+
+        /// <summary>
         /// Compute target angular velocity in the roll-invariant frame (pitch,roll,yaw axes with
         /// vessel roll stripped out). cosPhi/sinPhi are cos/sin of the current vessel roll angle.
         /// </summary>
@@ -1320,6 +1405,10 @@ namespace KRPC.SpaceCenter.AutoPilot
             Vector3d axis;
             GeometryExtensions.ToAngleAxis (dirRotation, out angle, out axis);
             angle = GeometryExtensions.ClampAngle180 (angle);
+
+            // Resolve the error axis through the 180° (antipodal) singularity, where FromToRotation's
+            // axis is arbitrary: if the vessel is already rotating, continue in that plane.
+            axis = ResolveAntipodalAxis (axis, angle, currentDirection, targetDirection);
 
             // Transform direction error from AP frame to body frame, then to roll-invariant frame.
             // The y-component is ~0 by construction (direction error ⊥ nose) and is forced to zero
