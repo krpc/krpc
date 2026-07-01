@@ -272,22 +272,30 @@ namespace KRPC.SpaceCenter.AutoPilot
         const double OscControlEnvelopeTimeConstant = 0.3;
         // Below this 2D error magnitude (radians) the joint pitch/yaw profile is skipped.
         const double MinThetaForJointProfile = 1e-10;
-        // Antipodal-flip tie-break (ResolveAntipodalAxis): within this many degrees of a 180° flip
-        // the direction-error axis FromToRotation(current, target) is ill-conditioned — the geodesic
-        // plane is arbitrary — so it is blended toward the plane of the vessel's existing rotation,
-        // letting the flip ride the current momentum instead of tumbling out of plane. The blend
-        // reduces exactly to the FromToRotation axis at the edge of the band, so ordinary slews are
-        // untouched.
-        const double AntipodeBlendAngle = 15.0;
-        // Minimum perpendicular rate (rad/s) for the antipodal-flip plane latch to engage
-        // (ResolveAntipodalAxis): above it there is a committed rotation whose plane is worth latching
-        // and holding; below it there is no motion to continue, so the arbitrary-but-consistent
-        // FromToRotation axis is kept (a from-rest flip is unchanged). This gates *whether* to latch,
-        // not how strongly, so it must sit well below the rate of a real flip — the latch fires on the
-        // first in-band tick, where the rate is still small and the plane is cleanest, and a threshold
-        // set near the flip rate would delay the latch until the inner loop has already tilted the
-        // rotation out of plane. Only a craft's residual sensor/physics noise must fall below it.
-        const double AntipodeLeadRate = 0.015;
+        // Antipodal-flip plane hold (ResolveAntipodalAxis). A large slew toward ~180° (an "antipodal
+        // flip") must ride a single committed plane, but the live geodesic axis
+        // FromToRotation(current, target) precesses fastest exactly when current and target are
+        // near-antipodal — and the vessel unavoidably crawls through that region while the rate loop
+        // ramps the angular velocity up against inertia. Chasing the precessing axis there pumps the
+        // nose out of plane; the slower the traverse the worse it is, so a from-rest or lightly-seeded
+        // flip (which crawls longest) bows the most, while a fast 90° slew — never near-antipodal — is
+        // untouched. So within AntipodeBlendAngle of antipodal the commanded axis is held to a plane
+        // *latched once* on entering the band, rather than tracking the precessing live axis: fully
+        // (weight 1) within AntipodeHoldAngle of antipodal — covering the crawl/pump region — then
+        // smoothstep-blended back to the live geodesic axis between AntipodeHoldAngle and
+        // AntipodeBlendAngle so the hand-back is continuous and ordinary (< AntipodeBlendAngle) slews
+        // are untouched. The latched plane is a great circle through the current nose and its
+        // antipode = the target, so holding it still carries the nose to the target.
+        const double AntipodeBlendAngle = 50.0;
+        const double AntipodeHoldAngle = 35.0;
+        // Perpendicular-rate threshold (rad/s) selecting where the latched plane comes from
+        // (ResolveAntipodalAxis): above it the vessel is already committed to a rotation, so latch its
+        // plane (the cleanest definition of where the flip is going); below it — a from-rest flip —
+        // latch the arbitrary-but-consistent geodesic axis instead. Either way a plane is latched and
+        // held, so even a from-rest flip rides a fixed plane rather than the precessing live axis. Set
+        // well below a real flip's rate but above a settled craft's residual sensor/physics noise
+        // (~1e-4), so a light deliberate seed (~1e-2) still latches its own plane.
+        const double AntipodeLeadRate = 0.004;
         // Default engagement soft-start duration (seconds): the actuator command is faded in over
         // this window from each engage so the engagement transient cannot kick a fresh, full-authority
         // gimbal into a limit cycle. ~0.5 s is short enough to be imperceptible on a settled craft yet
@@ -1339,13 +1347,14 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// With the plane held fixed the direction-error setpoint stays in-plane, so the rate loop
         /// actively damps out-of-plane motion instead of chasing it.
         ///
-        /// Active only within <see cref="AntipodeBlendAngle"/> of antipodal, and only once the
-        /// perpendicular rate exceeds <see cref="AntipodeLeadRate"/> (below that there is no committed
-        /// rotation to continue — a from-rest flip keeps the arbitrary-but-consistent
-        /// <paramref name="fromToAxis"/>). The axis is rebuilt as nose × tangent from a smoothstep
-        /// blend of the geodesic tangent (toward the target) and the latched-plane tangent; at the
-        /// band edge the blend is pure geodesic, reproducing <paramref name="fromToAxis"/> exactly so
-        /// ordinary slews are untouched and the hand-back is continuous.
+        /// Active only within <see cref="AntipodeBlendAngle"/> of antipodal. The plane is latched from
+        /// the perpendicular rate when the vessel is already turning, else from
+        /// <paramref name="fromToAxis"/> for a from-rest flip; either way a plane is held rather than
+        /// tracking the precessing live axis. The commanded axis is rebuilt as nose × tangent from a
+        /// blend of the geodesic tangent (toward the target) and the latched-plane tangent, weighted
+        /// fully to the latched plane within <see cref="AntipodeHoldAngle"/> (the crawl/pump region)
+        /// and smoothstep-blended to pure geodesic by <see cref="AntipodeBlendAngle"/>, so the
+        /// hand-back is continuous and ordinary slews are untouched.
         /// </remarks>
         Vector3d ResolveAntipodalAxis (Vector3d fromToAxis, double angleDeg,
             Vector3d currentDirection, Vector3d targetDirection)
@@ -1356,25 +1365,35 @@ namespace KRPC.SpaceCenter.AutoPilot
                 return fromToAxis;
             }
 
-            // Latch the flip-plane normal the first time we enter the band with enough rotation to
-            // define a plane. Once latched it is held (never re-read from the live rate) until the
-            // error leaves the band.
+            // Latch the flip-plane normal the first time we enter the band. Once latched it is held
+            // (never re-read from the live rate) until the error leaves the band. If the vessel is
+            // already committed to a rotation, latch its plane (from the perpendicular rate); a
+            // from-rest flip has no committed plane, so latch the arbitrary-but-consistent geodesic
+            // axis instead — either way the flip then rides a fixed plane, not the precessing live axis.
             if (!antipodeLatched) {
                 var worldOmega = vessel.InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
                 Vector3d omegaAp = ReferenceFrame.AngularVelocityFromWorldSpace (worldOmega);
                 var omegaPerp = omegaAp - Vector3d.Dot (omegaAp, currentDirection) * currentDirection;
-                if (omegaPerp.magnitude < AntipodeLeadRate)
-                    return fromToAxis;                   // no committed rotation (e.g. from-rest flip)
-                antipodeLatchedNormal = omegaPerp.normalized;
+                antipodeLatchedNormal = omegaPerp.magnitude >= AntipodeLeadRate
+                    ? omegaPerp.normalized
+                    : fromToAxis;
                 antipodeLatched = true;
             }
 
-            var wAngle = (AntipodeBlendAngle - fromAntipode) / AntipodeBlendAngle;
-            wAngle = wAngle * wAngle * (3.0 - 2.0 * wAngle);                  // smoothstep, 1 at antipode
+            // Latched-plane weight: fully held (1) within AntipodeHoldAngle of antipodal — spanning
+            // the crawl/pump region — then smoothstep down to 0 (pure live geodesic) by
+            // AntipodeBlendAngle, so the hand-back to normal tracking is continuous.
+            double wAngle;
+            if (fromAntipode <= AntipodeHoldAngle) {
+                wAngle = 1.0;
+            } else {
+                var t = (AntipodeBlendAngle - fromAntipode) / (AntipodeBlendAngle - AntipodeHoldAngle);
+                wAngle = t * t * (3.0 - 2.0 * t);
+            }
 
             // Tangents perpendicular to the nose: toward the target (the geodesic) and forward in the
             // latched plane. nose × tangent rebuilds the rotation axis; at wAngle = 0 (band edge) this
-            // is exactly fromToAxis, at wAngle = 1 (antipode) it is the fixed latched plane.
+            // is exactly fromToAxis, at wAngle = 1 (the held region) it is the fixed latched plane.
             var tTarget = targetDirection - Vector3d.Dot (targetDirection, currentDirection) * currentDirection;
             var tLatched = Vector3d.Cross (antipodeLatchedNormal, currentDirection);
             var tTargetDir = tTarget.magnitude > 1e-7 ? tTarget.normalized : Vector3d.zero;
