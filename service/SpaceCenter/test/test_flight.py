@@ -1,7 +1,16 @@
 import unittest
 import math
 import krpctest
-from krpctest.geometry import rad2deg, norm, normalize, dot, cross, vector
+from krpctest.geometry import (
+    rad2deg,
+    norm,
+    normalize,
+    dot,
+    cross,
+    vector,
+    quaternion_axis_angle,
+    quaternion_mult,
+)
 
 
 class TestFlight(krpctest.TestCase):
@@ -292,6 +301,36 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
             self.assertAlmostEqual(0, flight.thrust_specific_fuel_consumption)
 
             self.assertEqual("Nominal", flight.far_status)
+
+    def test_simulate_aerodynamic_force_rotation(self):
+        # The rotation argument sets the vessel attitude the force is computed
+        # for (issue #913). A 300 m/s head-on wind (angle of attack 0 at the
+        # current attitude) gives a real force; pitching 90 degrees turns it into
+        # a broadside wind and changes the force. Works for stock and FAR (both
+        # return the force in newtons).
+        body = self.vessel.orbit.body
+        ref = body.reference_frame
+        flight = self.vessel.flight(ref)
+        position = self.vessel.position(ref)
+        nose = vector(self.vessel.direction(ref))
+        velocity = tuple(300 * nose)  # angle of attack 0 at the current attitude
+        head_on = vector(
+            flight.simulate_aerodynamic_force_at(
+                body, position, velocity, self.vessel.rotation(ref)
+            )
+        )
+        self.assertGreater(norm(head_on), 1000)  # a real force
+        axis = cross(nose, (0, 1, 0))
+        if norm(axis) < 0.1:
+            axis = cross(nose, (1, 0, 0))
+        pitched = quaternion_mult(
+            quaternion_axis_angle(normalize(axis), math.radians(90)),
+            self.vessel.rotation(ref),
+        )
+        broadside = vector(
+            flight.simulate_aerodynamic_force_at(body, position, velocity, pitched)
+        )
+        self.assertGreater(norm(broadside - head_on), 0.1 * norm(head_on))
 
     # def test_drag_coefficient(self):
     #     if not self.far:
