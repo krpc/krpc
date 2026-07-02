@@ -28,7 +28,9 @@ PID
 Tron
 Wheesley
 adaptively
+aero
 amongst
+annunciator
 antipode
 apoapsis
 arg
@@ -52,10 +54,12 @@ constructible
 convecting
 cppcheck
 crossfeed
+deadband
 decoupler
 decouplers
 deployable
 dict
+differencing
 dll
 doesn
 enum
@@ -67,6 +71,7 @@ fuelled
 genfiles
 getter
 gimbal
+gimbaled
 gimballed
 gimballing
 greek
@@ -150,6 +155,7 @@ symlink
 targetting
 thruster
 thrusters
+toggleable
 toolchain
 tradeoff
 translational

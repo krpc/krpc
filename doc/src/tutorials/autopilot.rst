@@ -32,8 +32,15 @@ A minimal use case looks like this:
    ap.reference_frame = vessel.surface_reference_frame
    ap.target_pitch_and_heading(90, 90)   # point straight up, facing east
    ap.engaged = True
-   ap.wait()                             # blocks until the vessel is pointing at the target
+   ap.wait()                             # blocks until the vessel has settled on the target
    ap.engaged = False
+
+``wait()`` returns once the vessel has *settled* on the target: both the pointing error
+and the vessel's angular velocity must fall below a threshold, so it does not return while
+the nose is still swinging through the target. The two thresholds are the **stopping angle
+threshold** (default 1°) and the **stopping velocity threshold** (default 0.05 rad/s), and
+both can be adjusted. ``wait()`` also takes an optional ``timeout`` (in seconds), after
+which it raises rather than blocking indefinitely.
 
 While the autopilot is engaged it keeps SAS switched off, so that the two do not fight
 each other for control of the vessel.
@@ -176,8 +183,11 @@ The autopilot detects two kinds of oscillation. *Attitude oscillation* is the cr
 physically wobbling — the structural bending, visible in the measured angular
 velocity. This is the primary signal: detecting it is what marks a craft as flexible and
 switches the damping on. *Control oscillation* is the autopilot's own control output
-swinging back and forth; it is a secondary signal, watched only on a craft already found
-to be flexible, and used to keep the damping engaged through a maneuver.
+swinging back and forth. On a craft already marked flexible it keeps the damping engaged
+through a maneuver; and on its own, a sustained control oscillation also switches on the
+bandwidth reduction directly, catching a craft that limit-cycles for a non-structural
+reason — typically an aggressively-tuned loop driving slow gimbal or aerodynamic actuators
+(see :ref:`Limitations <autopilot-limitations>`).
 
 As soon as the autopilot sees a craft begin to wobble, it *latches* that craft as
 flexible and switches on up to four independent mitigations. The first — a :ref:`rate
@@ -236,7 +246,7 @@ Bandwidth floor
 
 The bandwidth floor reduces the inner control loop's bandwidth on a flexible axis while
 it holds attitude, dropping the loop's crossover well below the bending frequency so it
-has little authority left with which to excite the mode. This is the *primary* stabiliser
+has little authority left with which to excite the mode. This is the *primary* stabilizer
 — it needs no accurate frequency estimate — so a flexible craft is held more gently than a
 rigid one. It is controlled by the **oscillation bandwidth floor mode** property, taking
 ``AUTOMATIC`` (the default; engage on a latched axis while holding), ``OFF`` (never reduce
@@ -310,13 +320,21 @@ mode (so they remain observable even when a mitigation is forced or off):
 * **oscillation level** — a value between 0 and 1 per axis measuring how strongly
   structural oscillation is currently detected.
 * **pitch/yaw oscillation latched** and **roll oscillation latched** — whether the axis
-  group has been confirmed flexible.
+  group has been confirmed *structurally* flexible from the measured rate (the attitude
+  oscillation), which is what switches the damping on.
 * **pitch/yaw oscillation detected frequency** and **roll oscillation detected
   frequency** — the estimated mode frequency in Hz, or not-a-number until the estimator
   has acquired it.
 * **pitch/yaw control oscillation** and **roll control oscillation** — the amplitude of
   oscillation in the control output about its slowly-varying trim; near zero for a settled
   hold, approaching 1 for a sustained limit cycle.
+* **pitch/yaw control oscillation latched** and **roll control oscillation latched** —
+  whether the axis group has been latched from a sustained *control* oscillation with no
+  structural signature: a rigid-body limit cycle, typically an aggressively-tuned loop
+  driving slow gimbal or aerodynamic actuators (see :ref:`Limitations
+  <autopilot-limitations>`). This latch engages the bandwidth floor and output filter but
+  not the rate filter or feedforward cut, and is distinct from the structural
+  *oscillation latched* flag above.
 
 .. _first-engaging:
 
@@ -383,6 +401,8 @@ connection does not leave the vessel locked under control with no way to release
 Its configuration and target are left unchanged, so re-engaging resumes from where it
 left off.
 
+.. _autopilot-limitations:
+
 Limitations
 ^^^^^^^^^^^
 
@@ -396,6 +416,24 @@ for reaction wheels but only approximate for a vessel whose authority is asymmet
 (different in the two directions of an axis). Because the torque is read reactively
 rather than predicted, the auto-tuner adapts to a change in authority only as fast as
 the inner loop can respond.
+
+The same single-figure model can also affect *stability*, not just accuracy. It treats
+the commanded torque as taking effect instantly, but a vessel steered by gimbaled engines
+or aerodynamic control surfaces responds with a lag — the gimbal takes time to slew, a
+control surface to deflect and its aerodynamic force to build. Working only from the
+instantaneous torque figure, the auto-tuner can then tune the loop more aggressively than
+the delayed response can support, and the controller limit-cycles: the nose orbits the
+target and the controls swing hard, even though the craft is perfectly rigid. This is
+distinct from structural flexibility — there is no bending, and the oscillation is genuine
+rigid-body motion rather than a bending mode showing up in the measured angular velocity,
+so the flexibility detector does not see it. Instead, the autopilot treats a sustained
+*control* oscillation (its own output swinging) as the trigger and applies the same
+:ref:`bandwidth floor <bandwidth-floor>` it uses for a flexible craft — but keeping the
+feedforward, which the slower loop needs to hold attitude — which lets it hold cleanly. As
+with a flexible craft, the reduced bandwidth makes it track a large, continuous slew less
+precisely. Modeling the actuator's *response*, not just its peak torque, would let the
+loop keep a higher bandwidth here; until then such a craft is held gently rather than
+tracked tightly.
 
 While the autopilot detects and damps structural flexibility automatically, it leans
 most heavily on **reducing the affected craft's control bandwidth** while it holds
@@ -604,7 +642,8 @@ target angular speed :math:`\omega` for that axis:
    \omega &= -\frac{\theta}{\lvert\theta\rvert}
              \min \big(
                  \omega_{max},
-                 \sqrt{2 \alpha \lvert\theta\rvert}
+                 \sqrt{2 \alpha \lvert\theta\rvert},
+                 \kappa\,\text{bw}\,\lvert\theta\rvert
              \big) \cdot D(\theta) \\
    \text{where} & \\
    \alpha &= \frac{\tau_{max}}{I} \\
@@ -649,6 +688,25 @@ accelerates up to this speed and then decelerates at full torque, coming to rest
 on the target.
 
 The target speed is capped at the maximum angular velocity :math:`\omega_{max}`.
+
+Speed cone
+""""""""""
+
+The square-root profile has infinite gradient at the origin, so near the target
+it can command speeds that fall towards zero faster than the inner rate loop
+(bandwidth :math:`\text{bw}`, described :ref:`below <tuning-the-controllers>`)
+can follow. On a vessel with very high control authority this produces a
+sustained oscillation just outside the pointing deadband: the profile commands a
+large speed at a degree or so of error, the vessel cannot shed that speed inside
+the band, coasts through the target, and is symmetrically re-accelerated on the
+far side. The target speed is therefore also capped by a linear *speed cone*
+:math:`\kappa\,\text{bw}\,\lvert\theta\rvert` (:math:`\kappa = 1/2`, with
+:math:`\text{bw}` the rate loop's closed-loop bandwidth — see
+:ref:`Tuning the controllers <tuning-the-controllers>`) — the steepest
+straight-line decay the inner loop can actually track down to zero.
+Far from the target the cone is above the other terms and has no effect; its
+reach scales with the vessel's authority, covering the whole final approach on a
+very agile vessel and only the last few degrees on a sluggish one.
 
 Pointing deadband
 """""""""""""""""
@@ -738,7 +796,8 @@ at full authority — and aims the velocity profile straight at it:
    \boldsymbol{e}_{stop} &= \boldsymbol{\theta} + c\,\boldsymbol{\omega} \\
    \hat{s} &= \frac{\boldsymbol{e}_{stop}}{\lvert\boldsymbol{e}_{stop}\rvert} \\
    (\omega_{pitch},\,\omega_{yaw}) &= -\hat{s}\;
-       \min\big(\omega_{max},\ \sqrt{2\alpha\lvert\boldsymbol{e}_{stop}\rvert}\big)\,
+       \min\big(\omega_{max},\ \sqrt{2\alpha\lvert\boldsymbol{e}_{stop}\rvert},\
+       \kappa\,\text{bw}\,\lvert\boldsymbol{e}_{stop}\rvert\big)\,
        D(\lvert\boldsymbol{\theta}\rvert)
 
 where :math:`\boldsymbol{\theta} = (\theta_{pitch}, \theta_{yaw})` is the direction
@@ -746,9 +805,10 @@ error and :math:`c\,\boldsymbol{\omega}` is the predicted coasting displacement.
 coefficient :math:`c` is the same stopping distance as in the one-dimensional case —
 the larger in magnitude of the quadratic (bang-bang) and linear (PI-lag) terms, which
 are both collinear with :math:`\boldsymbol{\omega}` and so collapse to a single scalar.
-The acceleration :math:`\alpha` and the cap :math:`\omega_{max}` are projected along
-:math:`\hat{\boldsymbol{\omega}}` for the prediction and along :math:`\hat{s}` for the
-speed profile. This makes the nose follow the shortest, great-circle path to the target.
+The acceleration :math:`\alpha`, the cap :math:`\omega_{max}` and the speed-cone
+bandwidth :math:`\text{bw}` are projected along :math:`\hat{\boldsymbol{\omega}}` for
+the prediction and along :math:`\hat{s}` for the speed profile. This makes the nose
+follow the shortest, great-circle path to the target.
 
 Tangential damping
 """"""""""""""""""
@@ -913,13 +973,25 @@ closed form on each branch of the profile:
        -\tfrac{1}{2}\,\alpha\,D & \text{quadratic (bang-bang) braking} \\[4pt]
        -\dfrac{\alpha\,\text{bw}\,\text{speed}}{\text{bw}\,\text{speed} + \alpha}\,D
            & \text{linear (PI-lag) braking} \\[4pt]
-       0 & \text{velocity cap}
+       0 & \text{velocity cap} \\[4pt]
+       -\dfrac{c_{\kappa}\,\text{bw}\,\text{speed}}{\text{bw} + c_{\kappa}}\,D
+           & \text{speed cone, linear stopping} \\[4pt]
+       -\dfrac{c_{\kappa}\,\alpha\,\text{speed}}{\alpha + c_{\kappa}\,\text{speed}}\,D
+           & \text{speed cone, quadratic stopping}
    \end{cases}
    \;+\; \text{speed}\,D'\,\dot\theta
 
+where :math:`c_{\kappa} = \kappa\,\text{bw}` is the speed cone's slope: on the cone the
+profile's gradient is the constant :math:`c_{\kappa}` rather than the square root's
+:math:`\alpha/\text{speed}`, and the same self-consistent on-profile error rate gives the
+two sub-cases above.
+
 The final term is the deadband's own contribution while it is on its ramp
 (:math:`D' = 2/\theta_a` is constant there, and :math:`\dot\theta` is the rate of change
-of the pointing error). Every term is an algebraic product of the current state with
+of the pointing error); like the braking terms it is scaled by the *tracking fraction*
+described below, since it too is an on-profile value — the acceleration needed for the
+measured rate to follow the collapsing command through the band, meaningful only while
+the vessel is actually tracking the command. Every term is an algebraic product of the current state with
 bounded coefficients — there is no :math:`1/\Delta t`, so jitter is never amplified. The
 result is normalized by the maximum angular acceleration and aimed along the commanded
 direction :math:`-\hat{s}` to give the feedforward control fraction:
@@ -946,6 +1018,29 @@ scaled by the *tracking fraction* — the attained fraction of the commanded spe
 command direction, clamped to :math:`[0, 1]` — which is near zero at spin-up (leaving the
 saturated PI to provide the acceleration phase) and rises to one as the vessel settles
 onto the profile.
+
+The tracking fraction guards only the *slow* side of the profile — the vessel moving below
+the commanded speed. The opposite case also needs handling. A vessel with very high control
+authority can reach the target region still rotating far *faster* than the profile plans,
+and cross the target before it can stop. As it nears the crossing the commanded speed
+collapses towards zero, but the predicted stopping point :math:`\boldsymbol{e}_{stop}` swings
+past the target and flips the command direction :math:`\hat{s}` to the far side; the
+feedforward — dominated near the target by the deadband term
+:math:`\text{speed}\,D'\,\dot\theta`, which is large when the vessel sweeps quickly through
+the band — then drives *towards* the overshoot instead of braking it, and can pump a
+sustained oscillation about the target. To prevent this the whole feedforward is scaled by an
+*overshoot gate*, the complementary factor
+
+.. math::
+   \min\!\left(1,\ \frac{\text{speed}}{\omega_{\parallel}}\right)
+
+where :math:`\omega_{\parallel}` is the measured angular rate along the command direction
+:math:`-\hat{s}`. It is one while the vessel is on the profile
+(:math:`\omega_{\parallel} \approx \text{speed}`) or rotating away from the command
+(:math:`\omega_{\parallel} \le 0`), so ordinary slews, holds and the feedforward's normal role
+are untouched, and it falls below one only once the vessel is crossing faster than the profile
+commands — handing the braking there back to the PI controller, which is well damped on its
+own.
 
 The setpoint is continuous but not smooth: :math:`\dot g` steps by a bounded amount at the
 seams where the profile switches branch (the velocity cap engaging, the quadratic and

@@ -755,7 +755,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Controls the bandwidth-floor mitigation: the reduction of the inner control loop
-        /// bandwidth on a structurally flexible axis — the primary oscillation stabiliser. When
+        /// bandwidth on a structurally flexible axis — the primary oscillation stabilizer. When
         /// <see cref="MitigationMode.Automatic"/> (the default) it engages on a latched axis
         /// while holding (and during a detected limit cycle). <see cref="MitigationMode.Off"/>
         /// never reduces the bandwidth; <see cref="MitigationMode.Forced"/> keeps it fully
