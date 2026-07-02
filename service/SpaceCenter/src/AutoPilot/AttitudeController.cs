@@ -61,6 +61,10 @@ namespace KRPC.SpaceCenter.AutoPilot
         // The gating layer: tool routing, latch ramps, and the hold-gated mitigation level
         // (with the oscillation-control back-off). See MitigationPolicy.
         readonly MitigationPolicy policy = new MitigationPolicy ();
+        // Unfloored autotuned proportional gain per axis (2ζω₀·moi/smoothedTorque, recorded by
+        // DoAutoTuneAxis before the bandwidth-floor mitigation is applied). Consumed by
+        // ProfileKp so the velocity profile's linear stopping coefficient never sees the floor.
+        readonly double[] unflooredKp = new double[3];
         // Per-group rate-filter mode (pitch/yaw coupled, roll on its own). Automatic routes by
         // the detector latch and the estimated frequency; Off disables rate filtering only (the
         // other mitigations are unaffected); Notch/LowPass force that tool unconditionally at
@@ -666,36 +670,19 @@ namespace KRPC.SpaceCenter.AutoPilot
             var target = ComputeTargetAngularVelocity (torque, moi, current, currentDirection,
                 cosPhi, sinPhi, out pySampleFull, out rollSampleFull);
 
-            // Nominal target: the velocity profile with only the quadratic (bang-bang, ω²/2α)
-            // stopping term — the linear PID-lag term ω/bandwidth is dropped. A latched, holding axis
-            // tracks this instead of `target` (blended by the hold gate below). The linear term's
-            // coefficient is 1/bandwidth regardless of how small ω is, and at the floored bandwidth it
-            // balloons ~5× (1/1 rad/s = 1 s), so it re-injects the residual measured-rate jitter into
-            // the setpoint at large gain and drives a limit cycle — that is what must go. The
-            // quadratic term is kept because its coefficient |ω|/2α is *self-scaling*: for mrad/s
-            // jitter it injects sub-mrad nothing, but for real motion it is genuine full-authority
-            // braking anticipation. An earlier version zeroed the rate entirely (targetNominal(ω=0)),
-            // which removed all braking from the held loop — a latched low-authority craft carrying
-            // residual rate then systematically overshot the deadband and the hold gate + oscillation
-            // back-off turned that into a self-sustaining ~0.28 Hz limit cycle. While slewing the axis
-            // tracks the full `target` (with both stopping terms) so it brakes cleanly.
-            ProfileSample pySampleNominal, rollSampleNominal;
-            var targetNominal = ComputeTargetAngularVelocity (torque, moi, current, currentDirection,
-                cosPhi, sinPhi, out pySampleNominal, out rollSampleNominal, false);
-
             // Roll setpoint is already weighted to zero inside ComputeTargetAngularVelocity when the
             // vessel is far from the direction target; clear the integral there to prevent windup.
             if (!rollControlled) {
                 target.y = 0;
-                targetNominal.y = 0;
             } else {
                 ClearRollWindupIfDisengaged (currentDirection);
             }
 
             // Continuous hold gate: 1 while holding (pointing error ≤ HoldErrorFull), 0 while slewing
             // (≥ HoldErrorNone), linear between. Combined with suppressionRamp it gives the per-axis
-            // mitigation weight — only a latched axis that is also holding fully tracks the nominal
-            // target and cuts the feedforward.
+            // mitigation weight — only a latched axis that is also holding is floored and has its
+            // feedforward cut. (The linear stopping coefficient is computed from the unfloored gain
+            // — see ProfileKp — so the setpoint needs no separate hold-time profile.)
             var pointingError = Vector3.Angle (currentDirection, EffectiveTargetDirection);
             var holdFactor = OscillationDetectors.HoldFactor (pointingError);
             // Oscillation-control back-off, OR'd into the hold gate via max() below: lets the latched
@@ -711,25 +698,19 @@ namespace KRPC.SpaceCenter.AutoPilot
             var gate = policy.UpdateGate (detectors, dt, holdFactor);
 
 
-            // Per-axis setpoint the loop tracks: full target eased toward the nominal target by the gate.
-            var pidTarget = new Vector3d (
-                target.x + gate.x * (targetNominal.x - target.x),
-                target.y + gate.y * (targetNominal.y - target.y),
-                target.z + gate.z * (targetNominal.z - target.z));
-            logTargetRi = pidTarget;
+            logTargetRi = target;
 
             // Analytic acceleration feedforward: the profile's planned acceleration computed
             // algebraically from the ProfileSamples — no finite differencing, so none of the
             // 1/(dt·α)-amplified measured-rate jitter or setpoint-direction whip spikes the
             // numeric form carries (measured in-game: the numeric form spikes to ~92× full scale
             // in the transverse-nudge regime during the transition comparison; the analytic form
-            // stays bounded ~1.5). Computed for both the full and nominal profiles and blended
-            // by the hold gate, mirroring the pidTarget blend.
+            // stays bounded ~1.5).
             var slewActive = targetSmoothingTime > 0
                 && GeometryExtensions.Angle (effectiveRotation, targetRotation) > 1e-9;
             var slewRateRad = slewActive ? GeometryExtensions.ToRadians (slewSpeed) : 0.0;
             var ffAnalyticRi = AnalyticFeedforwardRi (pySampleFull, rollSampleFull,
-                pySampleNominal, rollSampleNominal, gate, currentRi, torque, moi, slewRateRad);
+                currentRi, torque, moi, slewRateRad);
             if (!rollControlled)
                 ffAnalyticRi.y = 0;
 
@@ -780,9 +761,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             // flexible structure. Pitch/yaw run in the roll-invariant frame; roll on the y-axis
             // (unchanged by the frame rotation). Add the acceleration feedforward to each output,
             // then clamp before converting pitch/yaw back to the body frame.
-            var virtualPitch = (RunAxis (PitchPID, pidTarget.x, currentRi.x, torque [0], dt) + ffRi.x).Clamp (-1, 1);
-            var virtualRoll = (RunAxis (RollPID, pidTarget.y, currentRi.y, torque [1], dt) + ffRi.y).Clamp (-1, 1);
-            var virtualYaw = (RunAxis (YawPID, pidTarget.z, currentRi.z, torque [2], dt) + ffRi.z).Clamp (-1, 1);
+            var virtualPitch = (RunAxis (PitchPID, target.x, currentRi.x, torque [0], dt) + ffRi.x).Clamp (-1, 1);
+            var virtualRoll = (RunAxis (RollPID, target.y, currentRi.y, torque [1], dt) + ffRi.y).Clamp (-1, 1);
+            var virtualYaw = (RunAxis (YawPID, target.z, currentRi.z, torque [2], dt) + ffRi.z).Clamp (-1, 1);
             var bodyControl = FromRollInvariant (new Vector3d (virtualPitch, 0, virtualYaw), cosPhi, sinPhi);
 
             // Gyroscopic feedforward: the per-axis plant model (τ = I·ω̇) ignores the ω×(Iω) term in
@@ -1188,14 +1169,12 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// <summary>
         /// Compute target angular velocity in the roll-invariant frame (pitch,roll,yaw axes with
         /// vessel roll stripped out). cosPhi/sinPhi are cos/sin of the current vessel roll angle.
-        /// With <paramref name="linearStopping"/> false the linear (PID-lag, ω/bandwidth) stopping
-        /// term is omitted and only the quadratic (bang-bang, ω²/2α) term is kept — the latched-hold
-        /// nominal profile (see the targetNominal note in Update). The two out samples record the
-        /// profile's branch decisions for the pitch/yaw group and the roll axis (see ProfileSample).
+        /// The two out samples record the profile's branch decisions for the pitch/yaw group and
+        /// the roll axis (see ProfileSample).
         /// </summary>
         Vector3d ComputeTargetAngularVelocity (Vector3d torque, Vector3d moi, Vector3d currentOmega,
             Vector3d currentDirection, double cosPhi, double sinPhi,
-            out ProfileSample pitchYawSample, out ProfileSample rollSample, bool linearStopping = true)
+            out ProfileSample pitchYawSample, out ProfileSample rollSample)
         {
             var internalVessel = vessel.InternalVessel;
             var targetDirection = EffectiveTargetDirection;
@@ -1253,15 +1232,15 @@ namespace KRPC.SpaceCenter.AutoPilot
 
             var result = Vector3d.zero;
 
-            // Roll: 1D per-axis (y-axis is unchanged by the roll-invariant rotation). Passing a zero
-            // bandwidth drops the linear stopping term (quad-only nominal profile).
-            var rollBandwidth = moi [1] > 0 && linearStopping ? RollPID.Kp * torque [1] / moi [1] : 0.0;
+            // Roll: 1D per-axis (y-axis is unchanged by the roll-invariant rotation). The linear
+            // stopping coefficient uses the unfloored gain — see the note in ComputePitchYawVelocity.
+            var rollBandwidth = moi [1] > 0 ? ProfileKp (1, RollPID) * torque [1] / moi [1] : 0.0;
             result.y = ComputeAxisVelocity (anglesRI.y, torque [1], moi [1], currentOmegaRi.y,
                 MaxAngularVelocity [1], RollAttenuationAngle, rollBandwidth, out rollSample);
 
             // Pitch/yaw handled jointly so the nose follows a straight great-circle arc.
             double pitchVelocity, yawVelocity;
-            ComputePitchYawVelocity (anglesRI, currentOmegaRi, torque, moi, linearStopping,
+            ComputePitchYawVelocity (anglesRI, currentOmegaRi, torque, moi,
                 out pitchVelocity, out yawVelocity, out pitchYawSample);
             result.x = pitchVelocity;
             result.z = yawVelocity;
@@ -1300,7 +1279,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// when ω is radial, so the radial reduction above is preserved.
         /// </remarks>
         void ComputePitchYawVelocity (Vector3d anglesRI, Vector3d currentOmegaRi, Vector3d torque,
-            Vector3d moi, bool linearStopping, out double pitchVelocity, out double yawVelocity,
+            Vector3d moi, out double pitchVelocity, out double yawVelocity,
             out ProfileSample sample)
         {
             pitchVelocity = 0;
@@ -1333,15 +1312,18 @@ namespace KRPC.SpaceCenter.AutoPilot
                 if (alphaOmega > 0) {
                     var coeffQuad = omegaMag / (2.0 * alphaOmega);
                     coeff = coeffQuad;
-                    if (linearStopping) {
-                        var bw0 = moi [0] > 0 ? PitchPID.Kp * torque [0] / moi [0] : 0.0;
-                        var bw2 = moi [2] > 0 ? YawPID.Kp * torque [2] / moi [2] : 0.0;
-                        var bandwidthOmega = oPitch * oPitch * bw0 + oYaw * oYaw * bw2;
-                        if (bandwidthOmega > 0) {
-                            coeff = Math.Max (coeffQuad, 1.0 / bandwidthOmega);
-                            linearActive = 1.0 / bandwidthOmega > coeffQuad;
-                            linearBandwidth = bandwidthOmega;
-                        }
+                    // The linear coefficient uses the UNFLOORED gain (ProfileKp): the bandwidth
+                    // floor lowers the loop gain but must never inflate 1/bw here — at the
+                    // floored bandwidth the coefficient would balloon ~5× and re-inject the
+                    // residual measured-rate jitter into the setpoint at large gain (the limit
+                    // cycle the old dual "nominal target" machinery existed to avoid).
+                    var bw0 = moi [0] > 0 ? ProfileKp (0, PitchPID) * torque [0] / moi [0] : 0.0;
+                    var bw2 = moi [2] > 0 ? ProfileKp (2, YawPID) * torque [2] / moi [2] : 0.0;
+                    var bandwidthOmega = oPitch * oPitch * bw0 + oYaw * oYaw * bw2;
+                    if (bandwidthOmega > 0) {
+                        coeff = Math.Max (coeffQuad, 1.0 / bandwidthOmega);
+                        linearActive = 1.0 / bandwidthOmega > coeffQuad;
+                        linearBandwidth = bandwidthOmega;
                     }
                 }
             }
@@ -1561,28 +1543,19 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         /// <summary>
         /// Assemble the analytic acceleration feedforward (RI frame, per-axis control
-        /// fractions): per-group values from the full and nominal profile samples, blended by
-        /// the hold gate to mirror the pidTarget blend that the numeric feedforward
-        /// differentiates.
+        /// fractions) from the profile samples.
         /// </summary>
-        Vector3d AnalyticFeedforwardRi (ProfileSample pyFull, ProfileSample rollFull,
-            ProfileSample pyNominal, ProfileSample rollNominal, Vector3d gate, Vector3d omegaRi,
-            Vector3d torque, Vector3d moi, double slewRateRad)
+        Vector3d AnalyticFeedforwardRi (ProfileSample pySample, ProfileSample rollSample,
+            Vector3d omegaRi, Vector3d torque, Vector3d moi, double slewRateRad)
         {
             var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
             var alphaRoll = moi [1] > 0 ? torque [1] / moi [1] : 0.0;
             var alphaYaw = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
-            double fullPitch, fullYaw, nomPitch, nomYaw;
-            PitchYawAnalyticFf (pyFull, omegaRi, slewRateRad, alphaPitch, alphaYaw,
-                out fullPitch, out fullYaw);
-            PitchYawAnalyticFf (pyNominal, omegaRi, slewRateRad, alphaPitch, alphaYaw,
-                out nomPitch, out nomYaw);
-            var fullRoll = RollAnalyticFf (rollFull, omegaRi.y, slewRateRad, alphaRoll);
-            var nomRoll = RollAnalyticFf (rollNominal, omegaRi.y, slewRateRad, alphaRoll);
-            return new Vector3d (
-                fullPitch + gate.x * (nomPitch - fullPitch),
-                fullRoll + gate.y * (nomRoll - fullRoll),
-                fullYaw + gate.z * (nomYaw - fullYaw));
+            double ffPitch, ffYaw;
+            PitchYawAnalyticFf (pySample, omegaRi, slewRateRad, alphaPitch, alphaYaw,
+                out ffPitch, out ffYaw);
+            var ffRoll = RollAnalyticFf (rollSample, omegaRi.y, slewRateRad, alphaRoll);
+            return new Vector3d (ffPitch, ffRoll, ffYaw);
         }
 
         void DoAutoTune (Vector3d torque, Vector3d moi)
@@ -1592,11 +1565,27 @@ namespace KRPC.SpaceCenter.AutoPilot
             DoAutoTuneAxis (YawPID, 2, torque, moi);
         }
 
+        /// <summary>
+        /// The proportional gain the velocity profile's linear stopping coefficient is computed
+        /// from: the UNFLOORED autotuned gain (recorded by DoAutoTuneAxis before the
+        /// bandwidth-floor mitigation), so flooring the loop can never inflate the 1/bw
+        /// coefficient. With auto-tuning off the live pid gain is used — it is never floored
+        /// (the floor only applies inside DoAutoTuneAxis).
+        /// </summary>
+        double ProfileKp (int index, PIDController pid)
+        {
+            return AutoTune ? unflooredKp [index] : pid.Kp;
+        }
+
         void DoAutoTuneAxis (PIDController pid, int index, Vector3d torque, Vector3d moi)
         {
             if (torque [index] <= 0)
                 return;
             var accelerationInv = moi [index] / torque [index];
+
+            // Record the unfloored gain for the velocity profile's linear stopping coefficient
+            // (see ProfileKp) before any bandwidth reduction below.
+            unflooredKp [index] = twiceZetaOmega [index] * accelerationInv;
 
             // Latched bandwidth reduction: a latched (flexible) axis has its rate-loop bandwidth
             // (2ζω₀ = twiceZetaOmega, since Kp·α = 2ζω₀) pulled down toward oscillationBandwidthFloor,
