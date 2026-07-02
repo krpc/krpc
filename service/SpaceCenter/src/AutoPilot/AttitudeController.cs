@@ -167,6 +167,20 @@ namespace KRPC.SpaceCenter.AutoPilot
         // deadband rather than a residual tail. The high angle is the public PitchYawAttenuationAngle /
         // RollAttenuationAngle (formerly the logistic half-width); the low edge is this fraction of it.
         const double DeadbandLowFraction = 0.5;
+        // Linear speed cone near the target: the commanded profile speed is capped at
+        // ProfileConeFraction·bw·|e_stop| (bw = the unfloored ProfileKp bandwidth, the same source
+        // as the linear stopping coefficient). The √(2α·e) profile has infinite slope at the origin
+        // and on a high-α craft commands speeds at small angles that the inner PI loop cannot
+        // decelerate inside the pointing deadband — the craft coasts through the band and is
+        // symmetrically re-accelerated on the far side, a sustained lossless limit cycle pinned
+        // just outside the band (measured: ±1.3°, ±0.35 rad/s on a α≈39 rad/s² craft). The cone
+        // pins the outer-loop pole at κ·bw, below the inner loop's crossover (cascade separation),
+        // so the command is always trackable down to zero. Sizing: with the stopping coefficient
+        // left at 1/bw the converged cone decay rate is κ·bw/(1+κ); the band-edge arrival speed
+        // r·θ_band must coast-stop within the half-band under PI damping (stop distance ≈ ω/bw),
+        // requiring κ/(1+κ) ≤ 1/2, i.e. κ ≤ 1. κ = 0.5 gives 2–3× margin. Like
+        // DeadbandLowFraction this is a stability-margin constant, not a per-craft tuning knob.
+        const double ProfileConeFraction = 0.5;
         // A tick-to-tick change in the raw measured rate larger than this many times the
         // physically-achievable change (α·dt at full authority) is structural excitation, not
         // rigid-body response — the latter cannot change the rate faster than the torque allows.
@@ -855,7 +869,8 @@ namespace KRPC.SpaceCenter.AutoPilot
 
 
             if (diagnosticLogging)
-                LogDiagnostics (torque, moi, phi, currentRi, target, ffRi, gyro, currentDirection, state);
+                LogDiagnostics (torque, moi, phi, currentRi, target, ffRi, gyro, currentDirection,
+                    state, pySampleFull, rollSampleFull);
         }
 
         /// <summary>
@@ -972,8 +987,24 @@ namespace KRPC.SpaceCenter.AutoPilot
             return 0;
         }
 
+        /// <summary>
+        /// One-character tag for the speed-profile branch a sample took: cone / cap /
+        /// linear-stopping sqrt / quadratic sqrt / idle (no command).
+        /// </summary>
+        static string ProfileBranchTag (ProfileSample s)
+        {
+            if (!s.Valid)
+                return "-";
+            if (s.ConeActive)
+                return "c";
+            if (s.CapActive)
+                return "K";
+            return s.LinearActive ? "l" : "q";
+        }
+
         void LogDiagnostics (Vector3d torque, Vector3d moi, double phi, Vector3d currentRi,
-            Vector3d target, Vector3d ffRi, Vector3d gyro, Vector3d currentDirection, PilotAddon.ControlInputs state)
+            Vector3d target, Vector3d ffRi, Vector3d gyro, Vector3d currentDirection,
+            PilotAddon.ControlInputs state, ProfileSample pySample, ProfileSample rollSample)
         {
             // Tracking error to the target the loop is actually following (the slewed/effective
             // target, not the commanded one), so it stays small while a smoothed change is fed in.
@@ -998,7 +1029,8 @@ namespace KRPC.SpaceCenter.AutoPilot
                 " fdet=({45:F3},{46:F3})" +
                 " bwtgt=({47:F3},{48:F3},{49:F3})" +
                 " oscctl=({50:F3},{51:F3}) bko=({52:F2},{53:F2},{54:F2})" +
-                " tgt_smooth=({55:F2},{56:F2})deg",
+                " tgt_smooth=({55:F2},{56:F2})deg" +
+                " prof=({57},{58})",
                 Time.fixedTime, dirErr,
                 torque.x, torque.y, torque.z,
                 moi.x, moi.y, moi.z,
@@ -1023,7 +1055,8 @@ namespace KRPC.SpaceCenter.AutoPilot
                 policy.SuppressionRamp (2) * oscillationBandwidthFloor,
                 PitchYawControlOscillation, RollControlOscillation,
                 policy.Backoff (0), policy.Backoff (1), policy.Backoff (2),
-                effectivePhr.x, effectivePhr.y);
+                effectivePhr.x, effectivePhr.y,
+                ProfileBranchTag (pySample), ProfileBranchTag (rollSample));
             UnityEngine.Debug.Log (line);
             lock (diagnosticLogLock) {
                 diagnosticLog.AppendLine (line);
@@ -1223,6 +1256,15 @@ namespace KRPC.SpaceCenter.AutoPilot
             public double Bandwidth;
             // The velocity cap (MaxAngularVelocity), not the sqrt profile, set the speed.
             public bool CapActive;
+            // The linear speed cone (ProfileConeFraction·bw·|e_stop|) set the speed. Mutually
+            // exclusive with CapActive — exactly one of {cone, cap, sqrt} owns the branch, so the
+            // feedforward closed forms never double count.
+            public bool ConeActive;
+            // Cone slope c = ProfileConeFraction·bw (1/s), recorded whenever a bandwidth is
+            // available (0 otherwise). Uses the ŝ-projected bandwidth — the speed map lives along
+            // ŝ — while Bandwidth below stays ω̂-projected (the brake path lives along ω̂),
+            // mirroring how α is projected for each use. Deliberate, not an inconsistency.
+            public double ConeSlope;
             // The linear (1/bandwidth) stopping coefficient beat the quadratic (ω/2α) one.
             public bool LinearActive;
             // Pointing-deadband scale D(θ) in [0,1] applied to the setpoint.
@@ -1369,6 +1411,15 @@ namespace KRPC.SpaceCenter.AutoPilot
             var omegaYaw = currentOmegaRi.z;
             var omegaMag = Math.Sqrt (omegaPitch * omegaPitch + omegaYaw * omegaYaw);
 
+            // Per-axis UNFLOORED bandwidths (ProfileKp): used by both the linear stopping
+            // coefficient (projected along ω̂ below) and the speed cone (projected along ŝ). The
+            // bandwidth floor lowers the loop gain but must never inflate 1/bw or deflate the cone
+            // here — at the floored bandwidth the stopping coefficient would balloon ~5× and
+            // re-inject the residual measured-rate jitter into the setpoint at large gain (the
+            // limit cycle the old dual "nominal target" machinery existed to avoid).
+            var bw0 = moi [0] > 0 ? ProfileKp (0, PitchPID) * torque [0] / moi [0] : 0.0;
+            var bw2 = moi [2] > 0 ? ProfileKp (2, YawPID) * torque [2] / moi [2] : 0.0;
+
             double coeff = 0;
             var linearActive = false;
             double linearBandwidth = 0;
@@ -1379,13 +1430,6 @@ namespace KRPC.SpaceCenter.AutoPilot
                 if (alphaOmega > 0) {
                     var coeffQuad = omegaMag / (2.0 * alphaOmega);
                     coeff = coeffQuad;
-                    // The linear coefficient uses the UNFLOORED gain (ProfileKp): the bandwidth
-                    // floor lowers the loop gain but must never inflate 1/bw here — at the
-                    // floored bandwidth the coefficient would balloon ~5× and re-inject the
-                    // residual measured-rate jitter into the setpoint at large gain (the limit
-                    // cycle the old dual "nominal target" machinery existed to avoid).
-                    var bw0 = moi [0] > 0 ? ProfileKp (0, PitchPID) * torque [0] / moi [0] : 0.0;
-                    var bw2 = moi [2] > 0 ? ProfileKp (2, YawPID) * torque [2] / moi [2] : 0.0;
                     var bandwidthOmega = oPitch * oPitch * bw0 + oYaw * oYaw * bw2;
                     if (bandwidthOmega > 0) {
                         coeff = Math.Max (coeffQuad, 1.0 / bandwidthOmega);
@@ -1418,11 +1462,25 @@ namespace KRPC.SpaceCenter.AutoPilot
                 ? Math.Sqrt (1.0 / (sPitch * sPitch / (maxVPitch * maxVPitch) + sYaw * sYaw / (maxVYaw * maxVYaw)))
                 : Math.Min (maxVPitch, maxVYaw);
 
+            // Linear speed cone (see ProfileConeFraction): cap the command at what the inner PI
+            // loop can track down to zero. Bandwidth projected along ŝ, like α and the velocity
+            // cap — the speed map lives along ŝ (the stopping coefficient above stays ω̂-projected;
+            // the brake path lives along ω̂). Computed unconditionally (not inside the ω-dependent
+            // stopping block): the cone must be live at ω = 0, where a limit cycle's turnaround
+            // re-acceleration happens.
+            var bwS = sPitch * sPitch * bw0 + sYaw * sYaw * bw2;
+            var coneSlope = ProfileConeFraction * bwS;
+
             double speed = 0;
             var speedUnclamped = 0.0;
+            var coneActive = false;
             if (alpha2d > 0) {
                 speedUnclamped = Math.Sqrt (2.0 * eStopMag * alpha2d);
                 speed = Math.Min (maxV2d, speedUnclamped);
+                if (coneSlope > 0 && coneSlope * eStopMag < speed) {
+                    speed = coneSlope * eStopMag;
+                    coneActive = true;
+                }
             }
 
             // Command toward the stopping point, scaled by the linear pointing deadband (see
@@ -1445,7 +1503,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             sample.Speed = speed;
             sample.Alpha = alpha2d;
             sample.Bandwidth = linearActive ? linearBandwidth : 0.0;
-            sample.CapActive = alpha2d > 0 && maxV2d < speedUnclamped;
+            sample.CapActive = alpha2d > 0 && maxV2d < speedUnclamped && !coneActive;
+            sample.ConeActive = coneActive;
+            sample.ConeSlope = coneSlope;
             sample.LinearActive = linearActive;
             sample.Deadband = deadband;
             sample.Theta = thetaMag;
@@ -1505,6 +1565,14 @@ namespace KRPC.SpaceCenter.AutoPilot
             var speedUnclamped = maxAcceleration > 0
                 ? Math.Sqrt (2.0 * Math.Abs (theta) * maxAcceleration) : 0.0;
             var speed = Math.Min (maxVelocity, speedUnclamped);
+            // Linear speed cone (see ProfileConeFraction), keyed on the ω-corrected error — the
+            // 1D analogue of |e_stop| in ComputePitchYawVelocity.
+            var coneSlope = ProfileConeFraction * pidBandwidth;
+            var coneActive = false;
+            if (maxAcceleration > 0 && coneSlope > 0 && coneSlope * Math.Abs (theta) < speed) {
+                speed = coneSlope * Math.Abs (theta);
+                coneActive = true;
+            }
             var deadband = DeadbandScale (Math.Abs (thetaPure), deadbandHighDeg);
             sample.SPitch = Math.Sign (theta);
             sample.SYaw = 0.0;
@@ -1513,7 +1581,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             sample.Speed = speed;
             sample.Alpha = maxAcceleration;
             sample.Bandwidth = linearActive ? pidBandwidth : 0.0;
-            sample.CapActive = maxAcceleration > 0 && maxVelocity < speedUnclamped;
+            sample.CapActive = maxAcceleration > 0 && maxVelocity < speedUnclamped && !coneActive;
+            sample.ConeActive = coneActive;
+            sample.ConeSlope = coneSlope;
             sample.LinearActive = linearActive;
             sample.Deadband = deadband;
             sample.Theta = Math.Abs (thetaPure);
@@ -1540,6 +1610,10 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// d(speed)/dt → −bw·speed as speed → 0 — the PID-lag exponential the linear term
         /// models.</item>
         /// <item>velocity cap: d(speed)/dt = 0.</item>
+        /// <item>speed cone (c·|e_stop| won the min): d(speed)/dt = c·ė with the constant cone
+        /// slope c, and ė = −speed·bw/(bw+c) (linear stopping) or −speed·α/(α+c·speed)
+        /// (quadratic) — the same self-consistent on-profile forms with d(speed)/de = c
+        /// substituted for α/speed.</item>
         /// </list>
         /// A slewing target (TargetSmoothingTime) grows e at ≈ the slew rate, added to ė. The
         /// deadband factor contributes speed·D′·θ̇ on the ramp (D′ = 1/(high−low), constant);
@@ -1551,7 +1625,20 @@ namespace KRPC.SpaceCenter.AutoPilot
             double trackingFraction, double deadbandHighDeg)
         {
             double speedRate = 0.0;
-            if (!s.CapActive && s.Speed > 1e-9) {
+            if (s.ConeActive && s.Speed > 1e-9) {
+                // Cone branch: the profile slope is the constant c = ConeSlope (not α/speed), so
+                // d(speed)/dt = c·ė. On-profile ė with the stopping correction folded in once
+                // (same self-consistency convention as the sqrt branches below):
+                //   linear stopping (e = θ − ω/bw):   ė = −speed·bw/(bw + c)
+                //   quadratic stopping (e = θ − ω²/2α): ė = −speed·α/(α + c·speed)
+                // Both bounded, ≤ 0, → −speed in the infinite-authority limit. The sqrt↔cone seam
+                // at e* = 2α/c² steps ġ by ≲ 0.17 of authority — smaller than the cap↔brake seam
+                // below — and is smeared over ~3 ticks by the feedforward low-pass, same treatment.
+                var eDotTrack = s.LinearActive
+                    ? -s.Speed * s.Bandwidth / (s.Bandwidth + s.ConeSlope)
+                    : -s.Speed * s.Alpha / (s.Alpha + s.ConeSlope * s.Speed);
+                speedRate = s.ConeSlope * (eDotTrack * trackingFraction + slewRateRad);
+            } else if (!s.CapActive && s.Speed > 1e-9) {
                 // The closed forms below are the ON-PROFILE accelerations — valid only while the
                 // craft is actually tracking the profile down toward the target. Off-profile
                 // (maneuver start: ω ≈ 0, far below the commanded speed) the planned braking is
