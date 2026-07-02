@@ -360,6 +360,12 @@ namespace KRPC.SpaceCenter.Services
             return ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ();
         }
 
+        // The vessel's current pitch (degrees) in the AP reference frame. Used by the info window to
+        // scale the heading-error tolerance near the vertical singularity; not part of the RPC surface.
+        internal float CurrentPitch {
+            get { return (float)CurrentPitchHeadingRoll ().x; }
+        }
+
         // Total pointing error (degrees) between the vessel and a target. rollControlled selects the
         // full-rotation error (honouring roll) versus the direction-only error.
         float TotalError (QuaternionD targetRotation, Vector3d targetDirection, bool rollControlled)

@@ -228,7 +228,7 @@ namespace KRPC.SpaceCenter
             GUILayout.BeginHorizontal ();
             ErrorLamp (engaged, engaged ? ap.CurrentError : 0f, errorThreshold);
             ErrorLamp (engaged, engaged ? ap.CurrentPitchError : 0f, errorThreshold);
-            ErrorLamp (engaged, engaged ? ap.CurrentHeadingError : 0f, errorThreshold);
+            HeadingErrorLamp (engaged, engaged ? ap.CurrentHeadingError : 0f, errorThreshold, engaged ? ap.CurrentPitch : 0f);
             ErrorLamp (rollShown, rollShown ? ap.CurrentRollError : 0f, errorThreshold);
             GUILayout.EndHorizontal ();
 
@@ -419,6 +419,19 @@ namespace KRPC.SpaceCenter
         void ErrorLamp (bool show, float error, float threshold)
         {
             DataLamp (show ? Deg (error) : Blank, show && Math.Abs (error) > threshold, amber);
+        }
+
+        // Heading-error lamp. Heading is a coordinate singularity at the poles: near vertical
+        // (pitch → ±90°) swinging the heading barely moves where the craft actually points, so a
+        // negligible pointing error shows up as a huge heading-angle error and would pin the lamp
+        // permanently lit. Gate on the heading error's true contribution to the pointing error,
+        // error·cos(pitch), rather than the raw error — this widens the allowed heading error as
+        // the craft nears vertical and drops it to zero exactly at the pole. The displayed value
+        // is still the raw heading error.
+        void HeadingErrorLamp (bool show, float error, float threshold, float pitch)
+        {
+            double effective = Math.Abs (error) * Math.Abs (Math.Cos (pitch * Math.PI / 180.0));
+            DataLamp (show ? Deg (error) : Blank, show && effective > threshold, amber);
         }
 
         // Frequency lamp: green showing the detected structural frequency once the tracker has a
