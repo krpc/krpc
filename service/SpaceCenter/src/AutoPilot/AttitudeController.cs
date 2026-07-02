@@ -1604,10 +1604,22 @@ namespace KRPC.SpaceCenter.AutoPilot
                 ? Math.Min (1.0, Math.Max (0.0, omegaAlongCommand / s.Speed)) : 0.0;
             var gDot = ProfileMagnitudeRate (s, thetaDot, slewRateRad, tracking,
                 PitchYawAttenuationAngle);
+            // Overshoot gate — the on-trajectory-gating lesson of c3522a052 applied to the OTHER
+            // side. trackingFraction attenuates the FF when the craft is slower than the profile
+            // (spin-up); this attenuates it when the craft is FASTER (overshoot). When the profile
+            // speed collapses near the target but the craft is still crossing fast, e_stop flips ŝ
+            // toward the overshoot side and the whole analytic FF (dominated by the deadband slope
+            // speed·D′·θ̇) then feeds the overshoot forward at near-full authority, pumping a limit
+            // cycle on a high-authority craft. Scaling by speed/ω∥ lets the (stable) PI + setpoint
+            // do the braking instead. ≈1 on-profile (ω∥ ≈ speed) and when moving away (ω∥ ≤ 0), so
+            // normal slews, holds and the floored-hold FF authority are untouched; continuous and
+            // stateless like trackingFraction.
+            var overshootScale = s.Speed > 1e-9
+                ? Math.Min (1.0, s.Speed / Math.Max (s.Speed, omegaAlongCommand)) : 1.0;
             if (alphaPitch > 0)
-                ffPitch = -s.SPitch * gDot / alphaPitch;
+                ffPitch = -s.SPitch * gDot / alphaPitch * overshootScale;
             if (alphaYaw > 0)
-                ffYaw = -s.SYaw * gDot / alphaYaw;
+                ffYaw = -s.SYaw * gDot / alphaYaw * overshootScale;
         }
 
         /// <summary>
@@ -1628,7 +1640,12 @@ namespace KRPC.SpaceCenter.AutoPilot
                 ? Math.Min (1.0, Math.Max (0.0, omegaAlongCommand / s.Speed)) : 0.0;
             var gDot = ProfileMagnitudeRate (s, thetaDot, slewRateRad, tracking,
                 RollAttenuationAngle);
-            return -s.SPitch * gDot / alphaRoll;
+            // Overshoot gate (see PitchYawAnalyticFf): attenuate the FF when the roll rate along
+            // the command exceeds the commanded profile speed, so a fast crossing is not fed
+            // forward into an overshoot. ≈1 on-profile and when moving away.
+            var overshootScale = s.Speed > 1e-9
+                ? Math.Min (1.0, s.Speed / Math.Max (s.Speed, omegaAlongCommand)) : 1.0;
+            return -s.SPitch * gDot / alphaRoll * overshootScale;
         }
 
         /// <summary>
