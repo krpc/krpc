@@ -46,11 +46,6 @@ namespace KRPC.SpaceCenter.AutoPilot
         // Passed to DoAutoTune so a sudden drop (e.g. engine shutdown while a reaction wheel
         // remains) does not cause a one-tick gain spike that jerks the gimbal.
         Vector3d smoothedTorque;
-        // Previous tick's target angular velocity in the roll-invariant frame, used to
-        // compute the acceleration feedforward. prevTargetRiValid is false on the first
-        // tick after Start() so the derivative is not taken across a discontinuity.
-        Vector3d prevTargetRi;
-        bool prevTargetRiValid;
         // Low-pass-filtered acceleration feedforward (see the feedforward filter in Update).
         Vector3d smoothedFfRi;
         // Per-axis state of the two cascaded first-order sections of the angular-velocity low-pass
@@ -194,12 +189,6 @@ namespace KRPC.SpaceCenter.AutoPilot
         // Target angular velocity (roll-invariant frame) the inner loop is tracking this tick,
         // recorded for the info UI alongside the measured rate.
         Vector3d logTargetRi;
-        // Numeric and analytic acceleration feedforward (raw, pre-filter, RI frame), recorded
-        // each tick during the analytic-feedforward transition for side-by-side comparison in
-        // the diagnostic log (the loop consumes the numeric one until the analytic form is
-        // validated — see doc/design/autopilot-control-loop-redesign.md).
-        Vector3d logFfNumericRi;
-        Vector3d logFfAnalyticRi;
         bool diagnosticLogging;
         readonly StringBuilder diagnosticLog = new StringBuilder ();
         readonly object diagnosticLogLock = new object ();
@@ -682,7 +671,6 @@ namespace KRPC.SpaceCenter.AutoPilot
             YawPID.ResetState ();
             pointRotationValid = false;
             antipodeLatched = false;
-            prevTargetRiValid = false;
             smoothedFfRi = Vector3d.zero;
             prevDetectorOmegaValid = false;
             emaOmegaValid = false;
@@ -958,29 +946,13 @@ namespace KRPC.SpaceCenter.AutoPilot
                 target.z + gate.z * (targetNominal.z - target.z));
             logTargetRi = pidTarget;
 
-            // Numeric acceleration feedforward (TRANSITION LOGGING ONLY — the loop consumes the
-            // analytic form below): differentiate the velocity setpoint numerically and normalise
-            // by α_max = torque/moi. Kept during the transition so the diagnostic log carries both
-            // for comparison; removed once the analytic form is fully validated.
-            var rawFfRi = Vector3d.zero;
-            if (prevTargetRiValid) {
-                var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
-                var alphaRoll  = moi [1] > 0 ? torque [1] / moi [1] : 0.0;
-                var alphaYaw   = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
-                if (alphaPitch > 0) rawFfRi.x = (pidTarget.x - prevTargetRi.x) / (dt * alphaPitch);
-                if (alphaRoll  > 0) rawFfRi.y = (pidTarget.y - prevTargetRi.y) / (dt * alphaRoll);
-                if (alphaYaw   > 0) rawFfRi.z = (pidTarget.z - prevTargetRi.z) / (dt * alphaYaw);
-            }
-            prevTargetRi = pidTarget;
-            prevTargetRiValid = true;
-
             // Analytic acceleration feedforward: the profile's planned acceleration computed
             // algebraically from the ProfileSamples — no finite differencing, so none of the
             // 1/(dt·α)-amplified measured-rate jitter or setpoint-direction whip spikes the
             // numeric form carries (measured in-game: the numeric form spikes to ~92× full scale
-            // in the transverse-nudge regime; the analytic form stays bounded ~1.5). Computed
-            // for both the full and nominal profiles and blended by the hold gate, mirroring the
-            // pidTarget blend. This is what the loop consumes (via the low-pass below).
+            // in the transverse-nudge regime during the transition comparison; the analytic form
+            // stays bounded ~1.5). Computed for both the full and nominal profiles and blended
+            // by the hold gate, mirroring the pidTarget blend.
             var slewActive = targetSmoothingTime > 0
                 && GeometryExtensions.Angle (effectiveRotation, targetRotation) > 1e-9;
             var slewRateRad = slewActive ? GeometryExtensions.ToRadians (slewSpeed) : 0.0;
@@ -988,8 +960,6 @@ namespace KRPC.SpaceCenter.AutoPilot
                 pySampleNominal, rollSampleNominal, gate, currentRi, torque, moi, slewRateRad);
             if (!rollControlled)
                 ffAnalyticRi.y = 0;
-            logFfNumericRi = rawFfRi;
-            logFfAnalyticRi = ffAnalyticRi;
 
             // Low-pass filter the feedforward. The analytic value steps by a bounded amount at
             // the profile's branch seams — the min()/max() switches (velocity cap, quad/linear
@@ -1202,8 +1172,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 " fdet=({45:F3},{46:F3})" +
                 " bwtgt=({47:F3},{48:F3},{49:F3})" +
                 " oscctl=({50:F3},{51:F3}) bko=({52:F2},{53:F2},{54:F2})" +
-                " tgt_smooth=({55:F2},{56:F2})deg" +
-                " ffnum=({57:F3},{58:F3},{59:F3}) ffan=({60:F3},{61:F3},{62:F3})",
+                " tgt_smooth=({55:F2},{56:F2})deg",
                 Time.fixedTime, dirErr,
                 torque.x, torque.y, torque.z,
                 moi.x, moi.y, moi.z,
@@ -1228,9 +1197,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 suppressionRamp [2] * oscillationBandwidthFloor,
                 Math.Max (controlOscEnvelope.x, controlOscEnvelope.z), controlOscEnvelope.y,
                 oscControlBackoff [0], oscControlBackoff [1], oscControlBackoff [2],
-                effectivePhr.x, effectivePhr.y,
-                logFfNumericRi.x, logFfNumericRi.y, logFfNumericRi.z,
-                logFfAnalyticRi.x, logFfAnalyticRi.y, logFfAnalyticRi.z);
+                effectivePhr.x, effectivePhr.y);
             UnityEngine.Debug.Log (line);
             lock (diagnosticLogLock) {
                 diagnosticLog.AppendLine (line);
