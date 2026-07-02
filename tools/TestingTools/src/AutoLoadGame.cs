@@ -84,7 +84,9 @@ namespace TestingTools
         // type: int" error on every run.
         void OnGUIReady(GameScenes scene)
         {
-            if (scene == GameScenes.MAINMENU)
+            // Only auto-load when an auto-load argument was actually supplied.
+            // With no arguments, leave KSP at the main menu.
+            if (scene == GameScenes.MAINMENU && Options.AutoLoadRequested)
                 StartCoroutine(CallbackUtil.DelayedCallback(15, LoadGame));
         }
 
@@ -138,13 +140,17 @@ namespace TestingTools
                     Debug.LogWarning(
                         "[kRPC testing tools]: Loading into the Space Center without " +
                         "launching a craft");
-            } else {
+            } else if (Options.Vessel.HasValue) {
+                // Only switch to a vessel when one was explicitly requested with
+                // --krpc-auto-load-vessel. Without it (and without a craft) the save
+                // is loaded into the Space Center and no vessel is focused.
                 var vesselIdx = FindVesselToSwitchTo(Options);
-                if (vesselIdx < 0) {
-                    Debug.LogWarning("[kRPC testing tools]: Failed to find vessel to switch to");
-                    return;
-                }
-                AutoSwitchVessel.Vessel = vesselIdx;
+                if (vesselIdx >= 0)
+                    AutoSwitchVessel.Vessel = vesselIdx;
+                else
+                    Debug.LogWarning(
+                        "[kRPC testing tools]: No vessel to switch to; loading into " +
+                        "the Space Center");
             }
 
             HighLogic.CurrentGame.Start();
