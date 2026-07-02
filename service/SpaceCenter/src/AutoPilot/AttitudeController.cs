@@ -244,7 +244,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         // craft are untouched, and skipped on a latched axis (the heavier suppression runs there).
         const double DetectorRateFilterTimeConstant = 0.03;
         // Pointing-error band (degrees) for the continuous hold gate on a latched axis: at/below
-        // HoldErrorFull the craft is holding and the loop fully tracks the rate-independent nominal
+        // HoldErrorFull the craft is holding and the loop fully tracks the quad-only-stopping nominal
         // target with the feedforward cut (so a residual mode is not amplified at the floored gain);
         // at/above HoldErrorNone it is slewing and uses the full target + feedforward (so it brakes
         // and tracks the manoeuvre); it blends linearly between. A smooth function of error — no
@@ -871,14 +871,20 @@ namespace KRPC.SpaceCenter.AutoPilot
             logRawOmegaRi = ToRollInvariant (currentRaw, cosPhi, sinPhi);
             var target = ComputeTargetAngularVelocity (torque, moi, current, currentDirection, cosPhi, sinPhi);
 
-            // Nominal target: the velocity profile with the measured rate set to zero, so it depends
-            // only on the attitude error. A latched, holding axis tracks this instead of `target`
-            // (blended by the hold gate below) — at the floored bandwidth the stopping-distance term
-            // ω/bandwidth would re-inject the residual rate into the setpoint and the large floored
-            // gain would amplify it into a limit cycle; the rate-independent nominal target removes
-            // that. While slewing the axis tracks the full `target` (with its stopping term) so it
-            // brakes cleanly.
-            var targetNominal = ComputeTargetAngularVelocity (torque, moi, Vector3d.zero, currentDirection, cosPhi, sinPhi);
+            // Nominal target: the velocity profile with only the quadratic (bang-bang, ω²/2α)
+            // stopping term — the linear PID-lag term ω/bandwidth is dropped. A latched, holding axis
+            // tracks this instead of `target` (blended by the hold gate below). The linear term's
+            // coefficient is 1/bandwidth regardless of how small ω is, and at the floored bandwidth it
+            // balloons ~5× (1/1 rad/s = 1 s), so it re-injects the residual measured-rate jitter into
+            // the setpoint at large gain and drives a limit cycle — that is what must go. The
+            // quadratic term is kept because its coefficient |ω|/2α is *self-scaling*: for mrad/s
+            // jitter it injects sub-mrad nothing, but for real motion it is genuine full-authority
+            // braking anticipation. An earlier version zeroed the rate entirely (targetNominal(ω=0)),
+            // which removed all braking from the held loop — a latched low-authority craft carrying
+            // residual rate then systematically overshot the deadband and the hold gate + oscillation
+            // back-off turned that into a self-sustaining ~0.28 Hz limit cycle. While slewing the axis
+            // tracks the full `target` (with both stopping terms) so it brakes cleanly.
+            var targetNominal = ComputeTargetAngularVelocity (torque, moi, current, currentDirection, cosPhi, sinPhi, false);
 
             // Roll setpoint is already weighted to zero inside ComputeTargetAngularVelocity when the
             // vessel is far from the direction target; clear the integral there to prevent windup.
@@ -1382,8 +1388,12 @@ namespace KRPC.SpaceCenter.AutoPilot
                 // Latch the axis as flexible once the level confirms a limit cycle. The latch is the
                 // controller's persistent memory that the craft is flexible; in Automatic mode it
                 // gates whether suppression is applied (the estimator, which selects the tool, runs
-                // ungated). A rigid craft never reaches the threshold (its rate never jumps beyond
-                // rigid-body dynamics) so is never latched.
+                // ungated). A rigid craft never reaches the level threshold (its rate never jumps
+                // beyond rigid-body dynamics). A heavy, low-authority craft *can* reach it on benign
+                // measurement jitter (the bound k·α·dt is authority-relative), and no measured signal
+                // separates that from a genuine bending mode (see the latch-discrimination design
+                // doc), so the latch is deliberately permissive and the latched mitigation itself is
+                // required to be benign on a craft that did not need it.
                 if (chatterLevel [i] >= ChatterLatchThreshold)
                     chatterLatched [i] = true;
             }
@@ -1515,9 +1525,12 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// <summary>
         /// Compute target angular velocity in the roll-invariant frame (pitch,roll,yaw axes with
         /// vessel roll stripped out). cosPhi/sinPhi are cos/sin of the current vessel roll angle.
+        /// With <paramref name="linearStopping"/> false the linear (PID-lag, ω/bandwidth) stopping
+        /// term is omitted and only the quadratic (bang-bang, ω²/2α) term is kept — the latched-hold
+        /// nominal profile (see the targetNominal note in Update).
         /// </summary>
         Vector3d ComputeTargetAngularVelocity (Vector3d torque, Vector3d moi, Vector3d currentOmega,
-            Vector3d currentDirection, double cosPhi, double sinPhi)
+            Vector3d currentDirection, double cosPhi, double sinPhi, bool linearStopping = true)
         {
             var internalVessel = vessel.InternalVessel;
             var targetDirection = EffectiveTargetDirection;
@@ -1575,14 +1588,16 @@ namespace KRPC.SpaceCenter.AutoPilot
 
             var result = Vector3d.zero;
 
-            // Roll: 1D per-axis (y-axis is unchanged by the roll-invariant rotation).
-            var rollBandwidth = moi [1] > 0 ? RollPID.Kp * torque [1] / moi [1] : 0.0;
+            // Roll: 1D per-axis (y-axis is unchanged by the roll-invariant rotation). Passing a zero
+            // bandwidth drops the linear stopping term (quad-only nominal profile).
+            var rollBandwidth = moi [1] > 0 && linearStopping ? RollPID.Kp * torque [1] / moi [1] : 0.0;
             result.y = ComputeAxisVelocity (anglesRI.y, torque [1], moi [1], currentOmegaRi.y,
                 MaxAngularVelocity [1], RollAttenuationAngle, rollBandwidth);
 
             // Pitch/yaw handled jointly so the nose follows a straight great-circle arc.
             double pitchVelocity, yawVelocity;
-            ComputePitchYawVelocity (anglesRI, currentOmegaRi, torque, moi, out pitchVelocity, out yawVelocity);
+            ComputePitchYawVelocity (anglesRI, currentOmegaRi, torque, moi, linearStopping,
+                out pitchVelocity, out yawVelocity);
             result.x = pitchVelocity;
             result.z = yawVelocity;
 
@@ -1620,7 +1635,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// when ω is radial, so the radial reduction above is preserved.
         /// </remarks>
         void ComputePitchYawVelocity (Vector3d anglesRI, Vector3d currentOmegaRi, Vector3d torque,
-            Vector3d moi, out double pitchVelocity, out double yawVelocity)
+            Vector3d moi, bool linearStopping, out double pitchVelocity, out double yawVelocity)
         {
             pitchVelocity = 0;
             yawVelocity = 0;
@@ -1649,11 +1664,13 @@ namespace KRPC.SpaceCenter.AutoPilot
                 if (alphaOmega > 0) {
                     var coeffQuad = omegaMag / (2.0 * alphaOmega);
                     coeff = coeffQuad;
-                    var bw0 = moi [0] > 0 ? PitchPID.Kp * torque [0] / moi [0] : 0.0;
-                    var bw2 = moi [2] > 0 ? YawPID.Kp * torque [2] / moi [2] : 0.0;
-                    var bandwidthOmega = oPitch * oPitch * bw0 + oYaw * oYaw * bw2;
-                    if (bandwidthOmega > 0)
-                        coeff = Math.Max (coeffQuad, 1.0 / bandwidthOmega);
+                    if (linearStopping) {
+                        var bw0 = moi [0] > 0 ? PitchPID.Kp * torque [0] / moi [0] : 0.0;
+                        var bw2 = moi [2] > 0 ? YawPID.Kp * torque [2] / moi [2] : 0.0;
+                        var bandwidthOmega = oPitch * oPitch * bw0 + oYaw * oYaw * bw2;
+                        if (bandwidthOmega > 0)
+                            coeff = Math.Max (coeffQuad, 1.0 / bandwidthOmega);
+                    }
                 }
             }
 
