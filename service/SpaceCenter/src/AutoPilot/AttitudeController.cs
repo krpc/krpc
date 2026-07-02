@@ -194,6 +194,12 @@ namespace KRPC.SpaceCenter.AutoPilot
         // Target angular velocity (roll-invariant frame) the inner loop is tracking this tick,
         // recorded for the info UI alongside the measured rate.
         Vector3d logTargetRi;
+        // Numeric and analytic acceleration feedforward (raw, pre-filter, RI frame), recorded
+        // each tick during the analytic-feedforward transition for side-by-side comparison in
+        // the diagnostic log (the loop consumes the numeric one until the analytic form is
+        // validated — see doc/design/autopilot-control-loop-redesign.md).
+        Vector3d logFfNumericRi;
+        Vector3d logFfAnalyticRi;
         bool diagnosticLogging;
         readonly StringBuilder diagnosticLog = new StringBuilder ();
         readonly object diagnosticLogLock = new object ();
@@ -968,6 +974,23 @@ namespace KRPC.SpaceCenter.AutoPilot
             prevTargetRi = pidTarget;
             prevTargetRiValid = true;
 
+            // Analytic feedforward (transition): the profile's planned acceleration computed
+            // algebraically from the ProfileSamples — no finite differencing, so none of the
+            // 1/(dt·α)-amplified measured-rate jitter the numeric form above carries. Computed
+            // for both the full and nominal profiles and blended by the hold gate, mirroring the
+            // pidTarget blend the numeric form differentiates. Logged side by side with the
+            // numeric value; the loop consumes the numeric one until the comparison validates
+            // the analytic form.
+            var slewActive = targetSmoothingTime > 0
+                && GeometryExtensions.Angle (effectiveRotation, targetRotation) > 1e-9;
+            var slewRateRad = slewActive ? GeometryExtensions.ToRadians (slewSpeed) : 0.0;
+            var ffAnalyticRi = AnalyticFeedforwardRi (pySampleFull, rollSampleFull,
+                pySampleNominal, rollSampleNominal, gate, currentRi, torque, moi, slewRateRad);
+            if (!rollControlled)
+                ffAnalyticRi.y = 0;
+            logFfNumericRi = rawFfRi;
+            logFfAnalyticRi = ffAnalyticRi;
+
             // Low-pass filter the feedforward. The velocity setpoint has slope discontinuities — the
             // min()/max() switches in the bang-bang profile (the velocity cap and the quad/linear
             // stopping term) and the sign flip through the target — and differentiating those
@@ -1179,7 +1202,8 @@ namespace KRPC.SpaceCenter.AutoPilot
                 " fdet=({45:F3},{46:F3})" +
                 " bwtgt=({47:F3},{48:F3},{49:F3})" +
                 " oscctl=({50:F3},{51:F3}) bko=({52:F2},{53:F2},{54:F2})" +
-                " tgt_smooth=({55:F2},{56:F2})deg",
+                " tgt_smooth=({55:F2},{56:F2})deg" +
+                " ffnum=({57:F3},{58:F3},{59:F3}) ffan=({60:F3},{61:F3},{62:F3})",
                 Time.fixedTime, dirErr,
                 torque.x, torque.y, torque.z,
                 moi.x, moi.y, moi.z,
@@ -1204,7 +1228,9 @@ namespace KRPC.SpaceCenter.AutoPilot
                 suppressionRamp [2] * oscillationBandwidthFloor,
                 Math.Max (controlOscEnvelope.x, controlOscEnvelope.z), controlOscEnvelope.y,
                 oscControlBackoff [0], oscControlBackoff [1], oscControlBackoff [2],
-                effectivePhr.x, effectivePhr.y);
+                effectivePhr.x, effectivePhr.y,
+                logFfNumericRi.x, logFfNumericRi.y, logFfNumericRi.z,
+                logFfAnalyticRi.x, logFfAnalyticRi.y, logFfAnalyticRi.z);
             UnityEngine.Debug.Log (line);
             lock (diagnosticLogLock) {
                 diagnosticLog.AppendLine (line);
@@ -1850,6 +1876,119 @@ namespace KRPC.SpaceCenter.AutoPilot
             sample.Theta = Math.Abs (thetaPure);
             sample.Valid = maxAcceleration > 0;
             return -Math.Sign (theta) * speed * deadband;
+        }
+
+        /// <summary>
+        /// Rate of change ġ (rad/s²) of one profile sample's commanded magnitude
+        /// g = Speed·Deadband, from the profile's own branch decisions — the planned
+        /// acceleration magnitude of the analytic feedforward. No finite differencing: every
+        /// term is an algebraic product of current state with bounded coefficients, so the
+        /// measured-rate jitter is never amplified by 1/dt.
+        /// </summary>
+        /// <remarks>
+        /// d(speed)/dt = (α/speed)·ė with speed = √(2eα), and ė per branch:
+        /// <list type="bullet">
+        /// <item>quadratic stopping (bang-bang): on-profile ė = −speed/2, giving the
+        /// self-consistent d(speed)/dt = −α/2. The stopping term sits <em>inside</em> e_stop,
+        /// so the converged trajectory is the half-authority curve ω = √(αθ), not the
+        /// full-authority one — this matches what numerically differentiating the setpoint
+        /// measures during a steady brake (~0.5, not 1.0).</item>
+        /// <item>linear stopping (1/bw won the max): ė = −bw·speed²/(bw·speed + α), giving
+        /// d(speed)/dt → −bw·speed as speed → 0 — the PID-lag exponential the linear term
+        /// models.</item>
+        /// <item>velocity cap: d(speed)/dt = 0.</item>
+        /// </list>
+        /// A slewing target (TargetSmoothingTime) grows e at ≈ the slew rate, added to ė. The
+        /// deadband factor contributes speed·D′·θ̇ on the ramp (D′ = 1/(high−low), constant);
+        /// the pure-error rate θ̇ is passed in by the caller, which knows the direction of θ.
+        /// The branch seams (cap↔brake, quad↔linear) step the value by a bounded amount; the
+        /// feedforward low-pass in Update smears those few genuine transitions over ~3 ticks.
+        /// </remarks>
+        double ProfileMagnitudeRate (ProfileSample s, double thetaDotPure, double slewRateRad,
+            double deadbandHighDeg)
+        {
+            double speedRate = 0.0;
+            if (!s.CapActive && s.Speed > 1e-9) {
+                var eDotTrack = s.LinearActive
+                    ? -(s.Bandwidth * s.Speed * s.Speed) / (s.Bandwidth * s.Speed + s.Alpha)
+                    : -0.5 * s.Speed;
+                speedRate = (s.Alpha / s.Speed) * (eDotTrack + slewRateRad);
+            }
+            double deadbandRate = 0.0;
+            if (s.Deadband > 0.0 && s.Deadband < 1.0) {
+                var high = GeometryExtensions.ToRadians (deadbandHighDeg);
+                var low = DeadbandLowFraction * high;
+                if (high > low)
+                    deadbandRate = s.Speed * (1.0 / (high - low)) * thetaDotPure;
+            }
+            return speedRate * s.Deadband + deadbandRate;
+        }
+
+        /// <summary>
+        /// Per-axis analytic feedforward control fractions for the pitch/yaw group from one
+        /// profile sample: FF_i = −ŝ_i·ġ/α_i. The rotation of ŝ itself (ŝ̇·speed) is neglected
+        /// — it matters only in the nudge/orbit regime and near an antipodal flip, and the
+        /// deadband caps it near the hold point (validated against the numeric feedforward in
+        /// the transition logs; see the redesign design doc).
+        /// </summary>
+        void PitchYawAnalyticFf (ProfileSample s, Vector3d omegaRi, double slewRateRad,
+            double alphaPitch, double alphaYaw, out double ffPitch, out double ffYaw)
+        {
+            ffPitch = 0.0;
+            ffYaw = 0.0;
+            if (!s.Valid)
+                return;
+            // d|θ|/dt = θ̂·ω in the controller's sign convention (the negated measurement makes
+            // the error shrink along +ω; see ComputeCurrentAngularVelocity), plus slew growth.
+            var thetaDot = slewRateRad;
+            if (s.Theta > 1e-12)
+                thetaDot += (s.ThetaPitch * omegaRi.x + s.ThetaYaw * omegaRi.z) / s.Theta;
+            var gDot = ProfileMagnitudeRate (s, thetaDot, slewRateRad, PitchYawAttenuationAngle);
+            if (alphaPitch > 0)
+                ffPitch = -s.SPitch * gDot / alphaPitch;
+            if (alphaYaw > 0)
+                ffYaw = -s.SYaw * gDot / alphaYaw;
+        }
+
+        /// <summary>
+        /// 1D (roll) analytic feedforward control fraction from one profile sample.
+        /// </summary>
+        double RollAnalyticFf (ProfileSample s, double omegaRollRi, double slewRateRad,
+            double alphaRoll)
+        {
+            if (!s.Valid || alphaRoll <= 0)
+                return 0.0;
+            var thetaDot = slewRateRad;
+            if (s.Theta > 1e-12)
+                thetaDot += Math.Sign (s.ThetaPitch) * omegaRollRi;
+            var gDot = ProfileMagnitudeRate (s, thetaDot, slewRateRad, RollAttenuationAngle);
+            return -s.SPitch * gDot / alphaRoll;
+        }
+
+        /// <summary>
+        /// Assemble the analytic acceleration feedforward (RI frame, per-axis control
+        /// fractions): per-group values from the full and nominal profile samples, blended by
+        /// the hold gate to mirror the pidTarget blend that the numeric feedforward
+        /// differentiates.
+        /// </summary>
+        Vector3d AnalyticFeedforwardRi (ProfileSample pyFull, ProfileSample rollFull,
+            ProfileSample pyNominal, ProfileSample rollNominal, Vector3d gate, Vector3d omegaRi,
+            Vector3d torque, Vector3d moi, double slewRateRad)
+        {
+            var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
+            var alphaRoll = moi [1] > 0 ? torque [1] / moi [1] : 0.0;
+            var alphaYaw = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
+            double fullPitch, fullYaw, nomPitch, nomYaw;
+            PitchYawAnalyticFf (pyFull, omegaRi, slewRateRad, alphaPitch, alphaYaw,
+                out fullPitch, out fullYaw);
+            PitchYawAnalyticFf (pyNominal, omegaRi, slewRateRad, alphaPitch, alphaYaw,
+                out nomPitch, out nomYaw);
+            var fullRoll = RollAnalyticFf (rollFull, omegaRi.y, slewRateRad, alphaRoll);
+            var nomRoll = RollAnalyticFf (rollNominal, omegaRi.y, slewRateRad, alphaRoll);
+            return new Vector3d (
+                fullPitch + gate.x * (nomPitch - fullPitch),
+                fullRoll + gate.y * (nomRoll - fullRoll),
+                fullYaw + gate.z * (nomYaw - fullYaw));
         }
 
         void DoAutoTune (Vector3d torque, Vector3d moi)
