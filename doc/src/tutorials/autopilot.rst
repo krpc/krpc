@@ -38,11 +38,12 @@ A minimal use case looks like this:
 While the autopilot is engaged it keeps SAS switched off, so that the two do not fight
 each other for control of the vessel.
 
-The autopilot handles structurally flexible craft automatically (see :ref:`Flexible
-craft <flexible-craft>`) and can ease target changes in over time for smooth maneuvers
-(see :ref:`Smoothing target changes <target-smoothing>`). Internally it is a two-loop
-cascade controller; if you want to know how it turns an attitude error into control
-inputs, see :ref:`How it works <how-it-works>`.
+The autopilot handles structurally flexible craft automatically, detecting and
+suppressing any structural oscillation (wobble) with no tuning required (see
+:ref:`Flexible craft <flexible-craft>`), and can ease target changes in over time for
+smooth maneuvers (see :ref:`Smoothing target changes <target-smoothing>`). Internally it
+is a two-loop cascade controller; if you want to know how it turns an attitude error into
+control inputs, see :ref:`How it works <how-it-works>`.
 
 Tuning the AutoPilot
 ^^^^^^^^^^^^^^^^^^^^
@@ -64,9 +65,10 @@ suffice in most cases, but they can be adjusted to fit your needs.
 
 * The **pitch/yaw attenuation angle** and the **roll attenuation angle** (both default
   to 1 degree) set the region in which the autopilot considers the vessel to be 'close'
-  to the target. In this region the target velocity is smoothly attenuated towards zero,
-  which helps prevent the controls from oscillating when the vessel is pointing in the
-  correct direction.
+  to the target. The target velocity is at full above this angle and ramps linearly to
+  zero at half of it — a *pointing deadband* — so the vessel coasts to a stop rather than
+  the controls chasing sub-degree jitter when the vessel is pointing in the correct
+  direction.
 
 * **PI auto-tuning** (default ``True``) controls whether the PI controller gains are
   automatically tuned from the vessel's available torque and moment of inertia, as
@@ -90,10 +92,10 @@ suffice in most cases, but they can be adjusted to fit your needs.
   overshoot. It is a vector of three values, between 0 and 1, for each of the pitch,
   roll and yaw axes.
 
-* **Oscillation control** parameters configure how the autopilot suppresses any
-  oscillation or wobble in a structurally flexible vessel. By default this is fully
-  automatic. It can be forced on or off, or tuned, as described in :ref:`Flexible craft
-  <flexible-craft>`.
+* **Oscillation mitigations** suppress any oscillation or wobble in a structurally
+  flexible vessel. By default they are fully automatic, and a rigid craft is left
+  untouched. Each individual mitigation can be inspected, forced on or off, or tuned
+  separately, as described in :ref:`Flexible craft <flexible-craft>`.
 
 * The **soft-start time** (default 0.5 seconds) is the time over which the control
   output is faded in when the autopilot is engaged, so that engaging does not deliver a
@@ -104,93 +106,6 @@ suffice in most cases, but they can be adjusted to fit your needs.
   new target over the given time, at a constant angular rate, rather than acting on the
   change immediately. Zero (the default) means changes take effect at once. See
   :ref:`Smoothing target changes <target-smoothing>`.
-
-.. _flexible-craft:
-
-Flexible craft
-^^^^^^^^^^^^^^
-
-Large rockets built from many parts are not perfectly rigid: KSP joins parts with
-springy joints, so a tall or heavy vehicle flexes, and the autopilot can pick up the
-structural wobble and feed it back into the controls. The autopilot tries to
-automatically detect this and damps it, with no tuning required, so a flexible craft
-will normally settle and hold steadily with the default settings. The full mechanism is
-described under :ref:`Oscillation detection and mitigation <oscillation>`.
-
-The autopilot detects two kinds of oscillation. *Attitude oscillation* is the craft
-physically wobbling — the structural bending, visible in the measured angular
-velocity. This is the primary signal: detecting it is what marks a craft as flexible and
-switches the damping on. *Control oscillation* is the autopilot's own control output
-swinging back and forth; it is a secondary signal, watched only on a craft already found
-to be flexible, and used to keep the damping engaged through a maneuver.
-
-As soon as the autopilot sees a craft begin to wobble, it marks that craft as
-flexible. From then on it filters the attitude oscillation out of its rate measurements,
-so the control loop does not chase it. Additionally, while the craft is holding
-attitude, it applies further mitigations (chiefly easing back the control bandwidth) so
-that it stops feeding energy into the structure. To keep the craft responsive to new
-targets, these additional mitigations are relaxed during a maneuver.  If the maneuver
-sets the wobble going again, the autopilot detects the resulting control oscillation and
-re-applies them until the craft settles.
-
-Overriding the automatic behavior
-"""""""""""""""""""""""""""""""""
-
-The **pitch/yaw oscillation control** and **roll oscillation control** properties select
-how *attitude oscillation* is suppressed. You can override the automatic behavior when
-you know your craft in advance; each property takes one of the following values:
-
-* ``AUTOMATIC`` (the default) — detect, latch and suppress oscillation automatically,
-  choosing the notch or low-pass filter at the estimated frequency.
-* ``OFF`` — never suppress. The vessel is controlled with full authority, which is the
-  most responsive but allows a flexible craft to wobble. Use this if you would rather
-  accept the wobble than give up control authority.
-* ``NOTCH`` — always apply the notch filter. Use this when you already know the craft
-  has a low-frequency structural mode near the control band.
-* ``LOW_PASS`` — always apply the low-pass filter. Use this when you already know the
-  craft has a high-frequency structural mode.
-
-When forcing a tool, set the mode frequency for that axis group with the **pitch/yaw
-oscillation frequency** or **roll oscillation frequency** property (in Hz); the same
-properties seed the automatic estimator before it acquires:
-
-.. code-block:: python
-
-   ap = vessel.auto_pilot
-   # treat the craft as flexible from the start, notching a 1.4 Hz bending mode
-   ap.pitch_yaw_oscillation_control = conn.space_center.OscillationControl.notch
-   ap.pitch_yaw_oscillation_frequency = 1.4
-
-The **oscillation control level** lets you force the holding-attitude damping on ahead
-of time. Normally the autopilot eases that damping off during a maneuver so the craft
-stays responsive, and re-applies it by itself — from the control oscillation — only once
-a maneuver has set the wobble going again; this override holds it fully on throughout
-instead. It is a manual per-axis value from 0 (no override; leave it to the automatic
-detection) to 1 (damping forced fully on), and takes effect once the craft has been
-detected as flexible. Use it when you already know a maneuver will excite the craft.
-
-Monitoring and tuning
-"""""""""""""""""""""
-
-The two signals are observed and tuned through separate sets of properties.
-
-*Attitude oscillation* — the craft wobbling — is reported by the read-only **oscillation
-level** (a value between 0 and 1 per axis measuring how strongly structural oscillation
-is detected), the **pitch/yaw oscillation latched** and **roll oscillation latched**
-flags (whether the craft has been confirmed flexible), and the **pitch/yaw oscillation
-detected frequency** and **roll oscillation detected frequency** (the estimated mode
-frequency in Hz, or not-a-number until the estimator has acquired it). Its handling is
-tuned with the **oscillation detection threshold** (a higher threshold is less
-sensitive), the **oscillation notch Q** (how narrow the notch is), the **oscillation
-bandwidth floor** (the inner-loop bandwidth, in rad/s, a flexible axis is reduced
-towards while holding attitude), and — as a manual override for unusual cases — the time
-to peak (see below).
-
-*Control oscillation* — the autopilot's own command swinging — is reported by the read-only
-**pitch/yaw control oscillation** and **roll control oscillation** (the amplitude of
-oscillation in the control output). It is tuned with the **oscillation control threshold** (the
-control-output amplitude above which the maneuver damping is re-engaged) and the **oscillation
-control level** described above.
 
 .. _target-smoothing:
 
@@ -213,6 +128,21 @@ towards the commanded one at a constant angular rate, reaching it in exactly the
 smoothing time. A single change to the target therefore produces a smooth reorientation
 spread over that time, with no per-tick scripting on your part.
 
+For example, to pitch the nose over by 10° across 20 seconds:
+
+.. code-block:: python
+
+   ap = vessel.auto_pilot
+   ap.reference_frame = vessel.surface_reference_frame
+   ap.target_pitch_and_heading(90, 90)   # start pointing straight up
+   ap.engaged = True
+   ap.wait()
+
+   # ease a 10° pitch-over (90° → 80°) in over 20 seconds
+   ap.target_smoothing_time = 20
+   ap.target_pitch_and_heading(80, 90)
+   ap.wait()                             # returns once the 80° target is reached
+
 Properties related to the commanded and effective targets are accessible via the API:
 
 * The target properties (**target pitch**, **target heading**, **target roll**,
@@ -230,10 +160,163 @@ Properties related to the commanded and effective targets are accessible via the
 When the target smoothing time is zero (the default), the effective target always equals
 the commanded target and both sets of properties read the same.
 
-.. _corner-cases:
+.. _flexible-craft:
 
-Corner cases
-^^^^^^^^^^^^
+Flexible craft
+^^^^^^^^^^^^^^
+
+Large rockets built from many parts are not perfectly rigid: KSP joins parts with
+springy joints, so a tall or heavy vehicle flexes, and the autopilot can pick up the
+structural wobble and feed it back into the controls. The autopilot tries to
+automatically detect this and damps it, with no tuning required, so a flexible craft
+will normally settle and hold steadily with the default settings. The full mechanism is
+described under :ref:`Oscillation detection and mitigation <oscillation>`.
+
+The autopilot detects two kinds of oscillation. *Attitude oscillation* is the craft
+physically wobbling — the structural bending, visible in the measured angular
+velocity. This is the primary signal: detecting it is what marks a craft as flexible and
+switches the damping on. *Control oscillation* is the autopilot's own control output
+swinging back and forth; it is a secondary signal, watched only on a craft already found
+to be flexible, and used to keep the damping engaged through a maneuver.
+
+As soon as the autopilot sees a craft begin to wobble, it *latches* that craft as
+flexible and switches on up to four independent mitigations. The first — a :ref:`rate
+filter <rate-filter>` — removes the attitude oscillation from its rate measurements so the
+control loop does not chase it, and stays on whether the craft is holding or slewing. The
+other three — a :ref:`bandwidth floor <bandwidth-floor>`, a :ref:`feedforward cut
+<feedforward-cut>` and an :ref:`output filter <output-filter>` — stop the loop feeding
+energy back into the structure, and apply only while the craft is *holding* attitude, so
+that a
+commanded maneuver stays responsive. If a maneuver sets the wobble going again, the
+autopilot detects the resulting control oscillation and re-applies the holding
+mitigations until the craft settles.
+
+Each mitigation is exposed separately, so you can inspect, force, disable or tune any one
+of them without disturbing the others (they are *orthogonal*). The remainder of this
+section covers each in turn; the mechanism behind them is described under
+:ref:`Oscillation detection and mitigation <oscillation>`.
+
+.. _rate-filter:
+
+Rate filter
+"""""""""""
+
+The rate filter removes the structural oscillation from the *measured* angular velocity
+before the control loops act on it, so the loop has no gain at the bending frequency. It
+is selected per axis group by the **pitch/yaw rate filter mode** and **roll rate filter
+mode** properties, each taking one of:
+
+* ``AUTOMATIC`` (the default) — detect and latch the oscillation, estimate its frequency,
+  and route it to the right filter automatically: a notch for a low-frequency mode near
+  the control band, a low-pass for a high-frequency mode, or a broadband low-pass while
+  the frequency is not yet known. A rigid craft is left untouched.
+* ``OFF`` — no rate filtering. The other mitigations are unaffected.
+* ``NOTCH`` — always apply a notch filter at the manually set frequency. Use this when you
+  already know the craft has a low-frequency structural mode near the control band.
+* ``LOW_PASS`` — always apply a low-pass filter derived from the manually set frequency.
+  Use this when you already know the craft has a high-frequency structural mode.
+
+When forcing a tool, set the mode frequency for that axis group with the **pitch/yaw
+oscillation frequency** or **roll oscillation frequency** property (in Hz, default 1.5);
+the same properties also seed the automatic estimator before it acquires. The **oscillation
+notch Q** (default 2.5) sets how narrow the notch is — higher is narrower, with less
+in-band lag but less tolerance to the mode frequency drifting.
+
+.. code-block:: python
+
+   ap = vessel.auto_pilot
+   # treat the craft as flexible from the start, notching a 1.4 Hz bending mode
+   ap.pitch_yaw_rate_filter_mode = conn.space_center.RateFilterMode.notch
+   ap.pitch_yaw_oscillation_frequency = 1.4
+
+.. _bandwidth-floor:
+
+Bandwidth floor
+"""""""""""""""
+
+The bandwidth floor reduces the inner control loop's bandwidth on a flexible axis while
+it holds attitude, dropping the loop's crossover well below the bending frequency so it
+has little authority left with which to excite the mode. This is the *primary* stabiliser
+— it needs no accurate frequency estimate — so a flexible craft is held more gently than a
+rigid one. It is controlled by the **oscillation bandwidth floor mode** property, taking
+``AUTOMATIC`` (the default; engage on a latched axis while holding), ``OFF`` (never reduce
+the bandwidth) or ``FORCED`` (keep it fully reduced at all times). The **oscillation
+bandwidth floor** property (in rad/s, default 1) sets the bandwidth an axis is reduced
+towards: lower suppresses oscillation more strongly, higher keeps more control authority
+at the cost of allowing more wobble.
+
+.. _feedforward-cut:
+
+Feedforward cut
+"""""""""""""""
+
+The feedforward cut removes the :ref:`acceleration feedforward <acceleration-feedforward>`
+on a flexible axis while it holds attitude. Being an open-loop plant inversion whose gain
+rises with frequency, the feedforward is the path most able to re-excite the mode once the
+bandwidth has been floored. It is controlled by the **oscillation feedforward mode**
+property, taking ``AUTOMATIC`` (the default; follow the hold gate on a latched axis),
+``OFF`` (never cut the feedforward) or ``FORCED`` (always cut it fully).
+
+.. _output-filter:
+
+Output filter
+"""""""""""""
+
+The output filter is a light low-pass on the delivered actuator command — a
+frequency-independent backstop that caps any residual control chatter left by the other
+mitigations.
+
+The other three mitigations are each *targeted*: the rate filter depends on a good
+frequency estimate, and the bandwidth floor and feedforward cut each close off one
+particular path by which the wobble reaches the actuators. Between them they can still
+leave a little high-frequency buzz on the command. The output filter is a catch-all for
+that remainder — applied directly to the command the game actuates, it needs neither a
+frequency estimate nor any particular gain, so it removes residual chatter whatever its
+source. Because a flexible craft is already held at a reduced bandwidth, the small phase
+lag it adds costs almost nothing.
+
+It is controlled by the **oscillation output filter mode** property, taking
+``AUTOMATIC`` (the default; engage on a latched axis, and lightly while the detector is
+firing on an unlatched one), ``OFF`` (never smooth) or ``FORCED`` (smooth fully at all
+times).
+
+Holding versus slewing
+""""""""""""""""""""""
+
+The bandwidth floor, feedforward cut and output filter engage only while a latched axis is
+*holding* attitude, and are released while it is *slewing*, so that a commanded maneuver
+runs at full responsiveness. The autopilot decides holding versus slewing from the
+pointing error, keyed per axis group: pitch/yaw on the pointing error, and roll on the
+larger of the pointing error and the roll error (so a pure roll maneuver releases the roll
+axis). This is the *hold gate*.
+
+The gate has a blind spot: a maneuver on a very flexible craft can excite a limit cycle
+that parks the pointing error just large enough to keep the gate released, so the craft
+never settles. To close it, the autopilot watches its own control output for a sustained
+oscillation and, on a latched axis, re-engages the holding mitigations regardless of the
+pointing error until the oscillation dies away. This recovery runs at the floored
+bandwidth and can take a few seconds.
+
+Setting a mitigation's mode to ``FORCED`` engages it at all times regardless of the hold
+gate — use this when you know in advance that a maneuver will excite the craft and want
+the holding mitigations held on throughout.
+
+Monitoring
+""""""""""
+
+Several read-only properties expose the detector and estimator state, and run in every
+mode (so they remain observable even when a mitigation is forced or off):
+
+* **oscillation level** — a value between 0 and 1 per axis measuring how strongly
+  structural oscillation is currently detected.
+* **pitch/yaw oscillation latched** and **roll oscillation latched** — whether the axis
+  group has been confirmed flexible.
+* **pitch/yaw oscillation detected frequency** and **roll oscillation detected
+  frequency** — the estimated mode frequency in Hz, or not-a-number until the estimator
+  has acquired it.
+* **pitch/yaw control oscillation** and **roll control oscillation** — the amplitude of
+  oscillation in the control output about its slowly-varying trim; near zero for a settled
+  hold, approaching 1 for a sustained limit cycle.
 
 .. _first-engaging:
 
@@ -251,6 +334,11 @@ gentlest exactly when the loop is furthest from steady state. The integral terms
 held at zero throughout the fade, so they only begin to accumulate once the ramp is
 complete — and the controls are therefore not kicked when it finishes. Setting the
 soft-start time to zero disables the fade-in.
+
+.. _corner-cases:
+
+Corner cases
+^^^^^^^^^^^^
 
 When sitting on the launchpad
 """""""""""""""""""""""""""""
@@ -290,10 +378,10 @@ When the controlling client disconnects
 """"""""""""""""""""""""""""""""""""""""
 
 The autopilot is engaged by a client over the network. If that client disconnects
-while the autopilot is still engaged, the autopilot resets its target to zero pitch
-and heading in the vessel's surface reference frame, with roll left uncontrolled, and
-disengages. This ensures that a dropped connection does not leave the vessel locked to
-a stale target with no way to release it.
+while the autopilot is still engaged, the autopilot disengages, so that a dropped
+connection does not leave the vessel locked under control with no way to release it.
+Its configuration and target are left unchanged, so re-engaging resumes from where it
+left off.
 
 Limitations
 ^^^^^^^^^^^
@@ -332,6 +420,49 @@ autopilot will still drive towards the target, but a low-authority craft can lag
 target by many degrees, or fail to hold attitude at all. It also does **not** manage
 angle of attack: keeping the vessel within safe structural and thermal limits in
 atmosphere is the responsibility of your script, not the autopilot.
+
+.. _info-window:
+
+The info window
+^^^^^^^^^^^^^^^
+
+For debugging, the autopilot can display an in-game window showing its live internal
+state. It is enabled per vessel, and hidden again when the game restarts:
+
+.. code-block:: python
+
+   vessel.auto_pilot.show_info_ui = True
+
+.. Screenshot: capture the window in-game (ideally on a flexible craft that is engaged and
+   holding, so the OSCILLATION section is populated) and save it to
+   doc/src/images/tutorials/autopilot-info-window.png. Then delete this comment and
+   uncomment the figure directive below.
+
+   .. figure:: /images/tutorials/autopilot-info-window.png
+      :align: center
+      :alt: The AutoPilot info window
+
+      The AutoPilot info window, showing a flexible craft holding attitude with the
+      oscillation mitigations engaged.
+
+The window is laid out like a control panel of annunciator lamps and digital registers.
+Lamps are dim when nominal and light amber to flag something worth attention; the
+**ENGAGED** lamp reads green (amber **HELD** while the craft is held on the launch
+clamps). From top to bottom it shows:
+
+* **TARGET** — the attitude being tracked, in pitch, heading and roll (``CUR``, the target
+  the loop is currently tracking, and ``CMD``, the commanded target, shown only while a
+  change is being :ref:`smoothed <target-smoothing>` in).
+* **ATTITUDE ERROR** — the total and per-axis pointing error to that target.
+* **PID GAIN** — the autotuned inner-loop gains (:math:`K_P` and :math:`K_I`) per axis.
+* **OSCILLATION** — the flexible-craft handling, mirroring the :ref:`detector, gates and
+  mitigations <oscillation>` structure: the detector readouts (structural level,
+  inner-loop bandwidth, control-output envelope and estimated mode frequency), the gate
+  weights (hold factor, latch, ramp, back-off and the net gate), and a lamp per mitigation
+  showing its mode and how strongly it is engaged.
+
+It is purely a diagnostic aid, most useful on a flexible craft where it shows the
+oscillation detector, gates and mitigations working in real time.
 
 .. _how-it-works:
 
@@ -474,10 +605,11 @@ target angular speed :math:`\omega` for that axis:
              \min \big(
                  \omega_{max},
                  \sqrt{2 \alpha \lvert\theta\rvert}
-             \big) \cdot f_a(\theta) \\
+             \big) \cdot D(\theta) \\
    \text{where} & \\
    \alpha &= \frac{\tau_{max}}{I} \\
-   f_a(\theta) &= \frac{1}{1 + e^{-6/\theta_a(\lvert\theta\rvert - \theta_a)}}
+   D(\theta) &= \operatorname{clamp}\!\left(
+       \frac{\lvert\theta\rvert - \theta_a/2}{\theta_a/2},\ 0,\ 1\right)
 
 The reasoning and derivation for this is as follows.
 
@@ -518,22 +650,27 @@ on the target.
 
 The target speed is capped at the maximum angular velocity :math:`\omega_{max}`.
 
-Attenuation near the target
-"""""""""""""""""""""""""""
+Pointing deadband
+"""""""""""""""""
 
 To prevent the vessel from oscillating when it is pointing at the target, the
-target speed curve must have zero gradient at :math:`\theta = 0` and rise
-smoothly with increasing :math:`\lvert\theta\rvert`. The square-root profile does
-not have this property near the origin, so it is multiplied by an attenuation
-function — a logistic function with the required shape:
+target speed must fall to zero as the error vanishes, rather than following the
+square root all the way to the origin — where its infinite gradient would chase
+sub-degree jitter into the actuators. The square-root profile is therefore
+multiplied by a linear *pointing deadband* :math:`D(\theta)`:
 
 .. math::
-   f_a(\theta) = \frac{1}{1 + e^{-6/\theta_a(\lvert\theta\rvert - \theta_a)}}
+   D(\theta) = \operatorname{clamp}\!\left(
+       \frac{\lvert\theta\rvert - \theta_a/2}{\theta_a/2},\ 0,\ 1\right)
 
-where :math:`\theta_a` is the attenuation angle. The attenuation function is
-close to 1 except within a few multiples of :math:`\theta_a` of the target, so
-the autopilot uses the full bang-bang profile until the vessel is close to the
-target direction, then eases the target speed down to zero.
+where :math:`\theta_a` is the attenuation angle. The deadband is 1 at and above
+:math:`\theta_a`, ramps linearly to 0 at :math:`\theta_a/2`, and is 0 below that.
+The autopilot therefore uses the full bang-bang profile until the vessel is close
+to the target direction, then eases the target speed cleanly to zero and lets the
+vessel coast to a stop inside the band. The deadband is keyed on the pure pointing
+error :math:`\theta`, not the stopping-point prediction :ref:`below
+<stopping-distance-feedforward>`, so measured-rate jitter is not fed through its
+ramp.
 
 .. _stopping-distance-feedforward:
 
@@ -574,10 +711,13 @@ true stopping distance is larger. It is approximated by:
    \text{bw} = K_P \frac{\tau_{max}}{I} = 2\zeta\omega_0
 
 where :math:`\text{bw}` is the closed-loop bandwidth (see :ref:`Controller gain tuning
-<tuning-the-controllers>` for :math:`K_P`, :math:`\zeta` and :math:`\omega_0`). This term
-improves the approach on small, rigid craft; on large flexible rockets the autopilot
-suppresses the bending mode automatically — see :ref:`Oscillation detection and mitigation
-<oscillation>`.
+<tuning-the-controllers>` for :math:`K_P`, :math:`\zeta` and :math:`\omega_0`). The
+*unfloored* proportional gain is used here: on a flexible craft the :ref:`bandwidth floor
+<oscillation>` deliberately lowers :math:`K_P` while holding, but the stopping-distance
+term uses the gain *before* that reduction, so flooring the bandwidth does not inflate the
+predicted :math:`1/\text{bw}` stopping distance. This term improves the approach on small,
+rigid craft; on large flexible rockets the autopilot suppresses the bending mode
+automatically — see :ref:`Oscillation detection and mitigation <oscillation>`.
 
 Pitch and yaw together
 """"""""""""""""""""""
@@ -599,7 +739,7 @@ at full authority — and aims the velocity profile straight at it:
    \hat{s} &= \frac{\boldsymbol{e}_{stop}}{\lvert\boldsymbol{e}_{stop}\rvert} \\
    (\omega_{pitch},\,\omega_{yaw}) &= -\hat{s}\;
        \min\big(\omega_{max},\ \sqrt{2\alpha\lvert\boldsymbol{e}_{stop}\rvert}\big)\,
-       f_a(\lvert\boldsymbol{e}_{stop}\rvert)
+       D(\lvert\boldsymbol{\theta}\rvert)
 
 where :math:`\boldsymbol{\theta} = (\theta_{pitch}, \theta_{yaw})` is the direction
 error and :math:`c\,\boldsymbol{\omega}` is the predicted coasting displacement. The
@@ -761,15 +901,33 @@ acceleration the vessel must produce to stay on the trajectory:
 .. math::
    \alpha_{ref} = \frac{d\omega_{ref}}{dt}
 
-The autopilot approximates this numerically from the change in setpoint between the
-current and previous physics tick, then normalizes by the maximum angular acceleration:
+Rather than estimate this by differencing the setpoint between ticks — which would amplify
+the measured-rate jitter by :math:`1/\Delta t` — the autopilot computes it *analytically*
+from the profile's own branch decisions. The commanded speed is the product
+:math:`g = \text{speed}\cdot D` of the square-root (or capped) speed and the
+:ref:`pointing deadband <target-angular-velocity>`, and its rate :math:`\dot g` has a
+closed form on each branch of the profile:
 
 .. math::
-   x_{ff} = \frac{\alpha_{ref}}{\alpha} =
-       \frac{\omega_{ref}(t) - \omega_{ref}(t - \Delta t)}{\Delta t \cdot \alpha}
+   \dot g = \begin{cases}
+       -\tfrac{1}{2}\,\alpha\,D & \text{quadratic (bang-bang) braking} \\[4pt]
+       -\dfrac{\alpha\,\text{bw}\,\text{speed}}{\text{bw}\,\text{speed} + \alpha}\,D
+           & \text{linear (PI-lag) braking} \\[4pt]
+       0 & \text{velocity cap}
+   \end{cases}
+   \;+\; \text{speed}\,D'\,\dot\theta
 
-This feedforward term :math:`x_{ff}` is added to the PI controller's output before
-clamping to :math:`[-1, 1]`:
+The final term is the deadband's own contribution while it is on its ramp
+(:math:`D' = 2/\theta_a` is constant there, and :math:`\dot\theta` is the rate of change
+of the pointing error). Every term is an algebraic product of the current state with
+bounded coefficients — there is no :math:`1/\Delta t`, so jitter is never amplified. The
+result is normalized by the maximum angular acceleration and aimed along the commanded
+direction :math:`-\hat{s}` to give the feedforward control fraction:
+
+.. math::
+   x_{ff} = -\hat{s}\,\frac{\dot g}{\alpha}
+
+which is added to the PI controller's output before clamping to :math:`[-1, 1]`:
 
 .. math::
    x = \operatorname{clamp}(x_{ff} + x_{PI},\ -1,\ 1)
@@ -780,25 +938,28 @@ actuators. The PI controller then only needs to correct for disturbances (atmosp
 drag, center-of-mass offsets) rather than the trajectory itself, cleanly separating the
 two concerns so they can be tuned independently.
 
-On the first physics tick after the autopilot starts,
-:math:`\omega_{ref}(t - \Delta t)` is undefined, so the feedforward is skipped for
-that tick to avoid a transient spike.
+The closed forms above are the *on-profile* accelerations — exact only while the vessel is
+actually tracking the profile down towards the target. At the start of a maneuver the
+vessel is nearly at rest, far below the commanded speed, and the planned braking is
+fiction; applying it there would fight the saturated PI. The braking terms are therefore
+scaled by the *tracking fraction* — the attained fraction of the commanded speed along the
+command direction, clamped to :math:`[0, 1]` — which is near zero at spin-up (leaving the
+saturated PI to provide the acceleration phase) and rises to one as the vessel settles
+onto the profile.
 
-The velocity setpoint :math:`\omega_{ref}` is continuous but not smooth: it has slope
-discontinuities where the bang-bang profile switches (the velocity cap engaging, the
-quadratic and linear stopping terms swapping, and the sign change through the target).
-Differentiating across one of these kinks produces a single-tick step in :math:`x_{ff}`
-that, once clamped, momentarily saturates the actuators. To suppress these transients the
-feedforward is passed through a short first-order low-pass filter, with a time constant of
-a few physics ticks. The lag this introduces is small and is absorbed by the PI
-controller, which sees the unfiltered velocity error.
+The setpoint is continuous but not smooth: :math:`\dot g` steps by a bounded amount at the
+seams where the profile switches branch (the velocity cap engaging, the quadratic and
+linear stopping terms swapping). To smear these few genuine transitions the feedforward is
+passed through a short first-order low-pass filter, with a time constant of a few physics
+ticks. The lag this introduces is small and is absorbed by the PI controller, which sees
+the unfiltered velocity error.
 
-On a craft the autopilot has detected as structurally flexible, this feedforward is faded
-out while the craft is holding attitude. Because it is a numerical derivative its gain is
-largest at high frequency, making it the control path most able to re-excite the bending
-mode once the inner-loop bandwidth has been reduced (see :ref:`Oscillation detection and
-mitigation <oscillation>`). It is restored in full while the craft is slewing, and
-is always present on a rigid craft.
+On a craft the autopilot has detected as structurally flexible, this feedforward is cut
+while the craft is holding attitude. As an open-loop plant inversion its gain is largest
+at high frequency, making it the control path most able to re-excite the bending mode once
+the inner-loop bandwidth has been floored (see :ref:`Oscillation detection and mitigation
+<oscillation>`). It is restored in full while the craft is slewing, and is always present
+on a rigid craft.
 
 .. _gyroscopic-feedforward:
 
@@ -971,85 +1132,189 @@ flexible craft (see :ref:`Flexible craft <flexible-craft>`) this measured value 
 an oscillating component from the structural bending modes — typically of the order of
 0.01 to 0.1 rad/s — even when the vessel as a whole is barely rotating. If the autopilot
 reacted to this oscillation it would pump energy into the bending mode and drive a growing
-wobble.
+wobble. A single always-on broadband filter would remove it, but at the cost of phase lag
+that destabilizes a responsive, high-authority craft, so the suppression must be applied
+only when, and only as strongly as, it is actually needed.
 
-To handle this the autopilot watches two signals: the *measured angular velocity* — the
-craft's attitude oscillation, the primary signal that detects flexibility — and its own
-*control output* — the control oscillation, a secondary signal used only for maneuver
-recovery. They are covered in turn.
+The machinery is organized in three layers. An *observation* layer watches the craft and
+decides whether it is flexible and, if so, at what frequency it is oscillating. A *gating*
+layer turns those observations into a per-tick, per-axis decision about which mitigations
+to apply and how strongly. Four independent *mitigation* primitives — the rate filter,
+bandwidth floor, feedforward cut and output filter — carry out the suppression. Because
+each primitive only consumes the gating layer's output, any one can be forced or disabled
+on its own without disturbing the others (see :ref:`Flexible craft <flexible-craft>` for
+the manual controls).
 
-Attitude oscillation
-""""""""""""""""""""
+In outline, the signals flow from the two measured inputs, through the observation and
+gating layers, to the four mitigations that tap into the control loop:
 
-The autopilot watches for the tell-tale signature of a bending-mode limit cycle: the
-measured rate changing from one tick to the next by more than the available torque could
-physically cause. The detector tracks each axis independently and produces a level between
-0 and 1 measuring how strongly that axis is oscillating; this level rises quickly when
-excitation appears but decays slowly once it subsides. Once it is high enough the axis is
-*latched* as flexible, and the latch persists if the autopilot is briefly disengaged and
-re-engaged, so a craft known to be flexible stays damped. Pitch and yaw are treated together
-— a long vehicle's bending mode appears in both, so if one is found to be flexible the other
-is too.
+.. graphviz::
+   :align: center
+   :caption: Oscillation observation, gating and mitigation pipeline.
 
-On a latched axis the autopilot takes two measures so that the control loops no longer drive
-the mode.
+   digraph oscillation {
+       rankdir=TB;
+       bgcolor="transparent";
+       node [shape=box, style=rounded, fontname="Helvetica,Arial,sans-serif", fontsize=11];
+       edge [fontname="Helvetica,Arial,sans-serif", fontsize=9, color="#555555"];
 
-First, it removes the oscillation from the *measured* angular velocity before the control
-loops act on it. It continuously estimates the oscillation frequency and uses it to pick
-the right filter: a **notch** filter for a low-frequency mode near the control band (such
-as the roughly 1 Hz bending mode of a tall launch vehicle held vertical on ascent), or a
-**low-pass** filter for a high-frequency mode well above the band. A notch is transparent
-everywhere except at the mode frequency, so it can stay on permanently without slowing the
-craft's response.
+       // Inputs
+       omega [label="measured rate ω\n(root part, carries wobble)", shape=box, style=filled, fillcolor="#eeeeee"];
+       uout  [label="delivered control output", shape=box, style=filled, fillcolor="#eeeeee"];
+       theta [label="pointing error θ", shape=box, style=filled, fillcolor="#eeeeee"];
 
-The notch is always placed at the estimated frequency, and the low-pass corner is likewise
-derived from it (at roughly a third of the estimated frequency). Until the estimator has
-actually acquired a frequency, though, the autopilot does not guess: rather than risk a notch
-at the wrong frequency, it falls back to a fixed, broadband low-pass with a corner of about
-2 Hz. This fixed fallback — together with the bandwidth reduction below — is what keeps the
-suppression robust when the frequency estimate is poor.
+       // Observation layer
+       subgraph cluster_obs {
+           label="OBSERVATION"; labeljust="l"; fontsize=10; fontname="Helvetica,Arial,sans-serif";
+           style="dashed,rounded"; color="#999999";
+           chatter [label="chatter\ndetector"];
+           freq    [label="frequency\nestimator"];
+           envel   [label="control-osc.\nenvelope"];
+       }
 
-Second, while the craft is *holding* attitude, the affected axes are switched into a quieter
-control regime. Its centerpiece is a reduction of the inner-loop bandwidth towards the
-oscillation bandwidth floor, dropping the loop's crossover well below the bending frequency so
-the loop has little authority left with which to excite the mode — the primary stabilizer.
-Lowering the bandwidth alone is not enough, though, because the residual wobble can still leak
-back into the actuators through other paths, so three things happen alongside it:
+       // Gating layer
+       subgraph cluster_gate {
+           label="GATING"; labeljust="l"; fontsize=10; fontname="Helvetica,Arial,sans-serif";
+           style="dashed,rounded"; color="#999999";
+           node [shape=box, style="filled,rounded", fillcolor="#dce8f5", color="#4a6f9c"];
+           hold    [label="hold factor\n= f(θ)"];
+           backoff [label="back-off = f(envelope)\n[latched axes only]"];
+           level   [label="level = ramp ·\nmax(hold factor, back-off)"];
+           tool    [label="tool = notch /\nlow-pass / broadband"];
+           hold    -> level;
+           backoff -> level;
+       }
 
-* The :ref:`acceleration feedforward <acceleration-feedforward>` is cut. Being a numerical
-  derivative it has the most gain at high frequency, which makes it the part of the controller
-  most able to re-drive the bending mode once the bandwidth has been lowered.
-* The loop tracks a *rate-independent* target — the velocity profile evaluated as if the
-  measured rate were zero — so the residual wobble in the measured rate is not fed back into
-  the velocity setpoint (which, at the floored bandwidth, the large autotuned gain would
-  otherwise amplify).
-* A light low-pass is applied to the final control output, as a frequency-independent backstop
-  on any residual chatter.
+       // Mitigation layer
+       subgraph cluster_mit {
+           label="MITIGATION"; labeljust="l"; fontsize=10; fontname="Helvetica,Arial,sans-serif";
+           style="dashed,rounded"; color="#999999";
+           rate  [label="rate filter\n→ measured rate"];
+           bw    [label="bandwidth floor\n→ inner-loop gain"];
+           ffcut [label="feedforward cut\n→ accel. feedforward"];
+           outf  [label="output filter\n→ delivered command"];
+       }
 
-This whole regime is released whenever the vessel is commanded to slew — so that maneuvers stay
-fully responsive — and re-applied once the craft has settled.
+       loop [label="control loop  —  actuates in [−1, 1]", shape=box, style=filled, fillcolor="#eeeeee"];
 
-A rigid or high-authority craft never triggers any of this and is left completely
-unchanged, so the adaptation is safe to leave always on. On a craft that has latched, the
-filtering of the measured rate is kept up whether it is slewing or holding, while the
-bandwidth reduction and its companions apply only while holding.
+       omega -> chatter;
+       omega -> freq;
+       uout  -> envel;
 
-Control oscillation
+       chatter -> level   [label="latch → ramp"];
+       freq    -> tool    [label="f"];
+       envel   -> backoff [label="envelope"];
+       theta   -> hold;
+
+       tool  -> rate  [label="tool, f, latch"];
+       level -> bw    [label="level"];
+       level -> ffcut [label="level (hold gate)"];
+       level -> outf  [label="latch, level"];
+
+       rate  -> loop;
+       bw    -> loop;
+       ffcut -> loop;
+       outf  -> loop;
+   }
+
+The observation layer never acts on the craft; it only sets the latch, frequency and
+envelope. The gating layer combines those with the pointing error into the per-axis
+weights and the tool choice. Each of the four mitigations then reads only what it needs
+from the gating layer, which is why any one can be overridden without disturbing the rest.
+
+Observation: detection and frequency estimation
+"""""""""""""""""""""""""""""""""""""""""""""""
+
+The primary signal is the *measured angular velocity*. The autopilot watches for the
+tell-tale signature of a bending-mode limit cycle: the measured rate changing from one tick
+to the next by more than the available torque could physically cause. This test is
+independent of the loop gains and of any commanded maneuver. It produces a level between 0
+and 1 per axis — rising quickly when excitation appears, decaying slowly once it subsides —
+and once that level is high enough the axis is *latched* as flexible. The latch persists if
+the autopilot is briefly disengaged and re-engaged, so a craft known to be flexible stays
+damped. Pitch and yaw are treated together: a long vehicle's bending mode appears in both,
+so if one is found flexible the other is too.
+
+In parallel, a frequency estimator tracks the oscillation frequency from the intervals
+between sign changes of the high-passed rate. It is used only to route and tune the rate
+filter, not to carry the suppression, and stays not-a-number until several half-periods
+agree. It is the weak link — noisy and sometimes multi-modal — which is why the bandwidth
+floor, not the notch, does the heavy lifting.
+
+The secondary signal is the autopilot's *own control output*. On an axis already latched as
+flexible, the autopilot measures the amplitude of its delivered command about the command's
+slowly-varying mean: a genuine slew is a steady, one-sided push, whereas a limit cycle shows
+up as a large oscillating command. This is used only for maneuver recovery, described under
+:ref:`the hold gate <hold-gate>` below.
+
+The rate filter
+"""""""""""""""
+
+The rate filter removes the oscillation from the *measured* angular velocity before any
+control loop consumes it, so the loop has no gain at the bending frequency. It uses the
+frequency estimate to pick the right tool: a **notch** for a low-frequency mode near the
+control band (such as the roughly 1 Hz bending mode of a tall launch vehicle held vertical
+on ascent), or a **low-pass** for a high-frequency mode well above the band, with its corner
+derived from the estimate (at roughly a third of it). A notch is transparent everywhere
+except at the mode frequency, so it can stay on permanently without slowing the craft's
+response. Until the estimator has acquired a frequency the autopilot does not guess: rather
+than risk a notch at the wrong place it falls back to a fixed, broadband low-pass with a
+corner of about 2 Hz. This fallback — together with the bandwidth floor — is what keeps the
+suppression robust when the frequency estimate is poor. The rate filter is kept up on a
+latched axis whether the craft is holding or slewing.
+
+The bandwidth floor
 """""""""""""""""""
 
-The second signal the autopilot watches is its *own control output*, and it exists to cover a
-blind spot in the attitude-oscillation handling above. The holding regime — the bandwidth floor
-and the feedforward cut, rate-independent target and output low-pass that accompany it — is
-released during a slew so that maneuvers stay responsive. On a very flexible craft, though, a
-large maneuver can itself excite the bending mode into a sustained oscillation that holds the
-pointing error just large enough to keep that regime released — so the craft never settles. The
-autopilot guards against this by watching the amplitude of its control output about its
-slowly-varying mean: a genuine slew is a steady, one-sided push, whereas a limit cycle shows up
-as a large oscillating command. When an axis shows such a control oscillation, the full holding
-regime is re-engaged regardless of the pointing error, until the oscillation dies away. This
-recovery runs at the reduced bandwidth and so takes a few seconds.
+The bandwidth floor is the *primary* stabilizer. On a latched axis it reduces the
+inner-loop bandwidth (see :ref:`Controller gain tuning <tuning-the-controllers>`) towards
+the oscillation bandwidth floor, dropping the loop's crossover well below the bending
+frequency so the loop has little authority left with which to excite the mode. It only ever
+*lowers* the bandwidth, so a rigid craft — which is never latched — is untouched. Crucially
+it needs no frequency estimate, which is why it, rather than the surgical notch, carries the
+suppression. Because the floored gain would otherwise distort the outer loop's
+stopping-distance prediction, that prediction uses the *unfloored* gain instead (see
+:ref:`Stopping-distance feedforward <stopping-distance-feedforward>`).
 
-This is strictly a secondary signal: it acts only on an axis that the attitude-oscillation
-detector has *already* latched as flexible, so a rigid craft never invokes it. The
-control-output oscillation, the threshold above which it triggers, and the manual override that
-forces the damping on are all exposed; see :ref:`Flexible craft <flexible-craft>`.
+The feedforward cut
+"""""""""""""""""""
+
+Lowering the bandwidth alone is not enough, because the residual wobble can still leak into
+the actuators through the feedforward. The :ref:`acceleration feedforward
+<acceleration-feedforward>` is an open-loop plant inversion whose gain rises with frequency,
+so once the bandwidth has been floored it becomes the path most able to re-drive the mode.
+The feedforward cut removes it on a flexible axis while holding.
+
+The output filter
+"""""""""""""""""
+
+Finally, a light first-order low-pass is applied to the delivered actuator command, as a
+frequency-independent backstop on any residual chatter that leaks through the other paths. A
+lighter version of the same filter is blended in — in proportion to the detector level — on
+an axis that is *firing but not yet latched*, a noisy-but-controllable craft, to take the
+buzz off the controls without committing to the full latched regime.
+
+.. _hold-gate:
+
+The hold gate
+"""""""""""""
+
+The rate filter stays on whenever an axis is latched, but the bandwidth floor, feedforward
+cut and output filter are gated on whether the axis is *holding* attitude or *slewing*. The
+gating layer computes a continuous hold factor from the pointing error — 1 while holding, 0
+while slewing — and applies these three mitigations only while holding, so that a commanded
+maneuver runs at full authority and responsiveness. The factor is per axis group: pitch and
+yaw key on the pointing error, while roll keys on the larger of the pointing and roll
+errors, so a pure roll maneuver releases the roll axis.
+
+This gate has a blind spot. A large maneuver on a very flexible craft can itself excite the
+bending mode into a sustained oscillation that holds the pointing error just large enough to
+keep the gate released — so the craft never settles. This is where the control-output signal
+comes in: when a latched axis shows a sustained control oscillation, the holding mitigations
+are re-engaged regardless of the pointing error, until the oscillation dies away. This
+recovery runs at the floored bandwidth and so takes a few seconds. Because it is OR-ed into
+the hold gate, it only matters while the axis would otherwise be slewing, and cannot cause
+hunting once the craft has settled.
+
+A rigid or high-authority craft never latches and so triggers none of this; the adaptation
+is safe to leave always on.
