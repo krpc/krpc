@@ -958,10 +958,10 @@ namespace KRPC.SpaceCenter.AutoPilot
                 target.z + gate.z * (targetNominal.z - target.z));
             logTargetRi = pidTarget;
 
-            // Acceleration feedforward: differentiate the velocity setpoint numerically to get the
-            // angular acceleration needed to stay on the bang-bang trajectory, then normalise by
-            // α_max = torque/moi so the feedforward is a control fraction in [-1, 1]. Skipped on the
-            // first tick (prevTargetRiValid == false) to avoid a spike.
+            // Numeric acceleration feedforward (TRANSITION LOGGING ONLY — the loop consumes the
+            // analytic form below): differentiate the velocity setpoint numerically and normalise
+            // by α_max = torque/moi. Kept during the transition so the diagnostic log carries both
+            // for comparison; removed once the analytic form is fully validated.
             var rawFfRi = Vector3d.zero;
             if (prevTargetRiValid) {
                 var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
@@ -974,13 +974,13 @@ namespace KRPC.SpaceCenter.AutoPilot
             prevTargetRi = pidTarget;
             prevTargetRiValid = true;
 
-            // Analytic feedforward (transition): the profile's planned acceleration computed
+            // Analytic acceleration feedforward: the profile's planned acceleration computed
             // algebraically from the ProfileSamples — no finite differencing, so none of the
-            // 1/(dt·α)-amplified measured-rate jitter the numeric form above carries. Computed
+            // 1/(dt·α)-amplified measured-rate jitter or setpoint-direction whip spikes the
+            // numeric form carries (measured in-game: the numeric form spikes to ~92× full scale
+            // in the transverse-nudge regime; the analytic form stays bounded ~1.5). Computed
             // for both the full and nominal profiles and blended by the hold gate, mirroring the
-            // pidTarget blend the numeric form differentiates. Logged side by side with the
-            // numeric value; the loop consumes the numeric one until the comparison validates
-            // the analytic form.
+            // pidTarget blend. This is what the loop consumes (via the low-pass below).
             var slewActive = targetSmoothingTime > 0
                 && GeometryExtensions.Angle (effectiveRotation, targetRotation) > 1e-9;
             var slewRateRad = slewActive ? GeometryExtensions.ToRadians (slewSpeed) : 0.0;
@@ -991,17 +991,17 @@ namespace KRPC.SpaceCenter.AutoPilot
             logFfNumericRi = rawFfRi;
             logFfAnalyticRi = ffAnalyticRi;
 
-            // Low-pass filter the feedforward. The velocity setpoint has slope discontinuities — the
-            // min()/max() switches in the bang-bang profile (the velocity cap and the quad/linear
-            // stopping term) and the sign flip through the target — and differentiating those
-            // produces single-tick steps in the raw feedforward that, once summed with the PID
-            // output and clamped, briefly saturate the actuators. A short first-order filter removes
-            // these transients; the resulting lag is a few physics ticks and the PI loop absorbs it.
+            // Low-pass filter the feedforward. The analytic value steps by a bounded amount at
+            // the profile's branch seams — the min()/max() switches (velocity cap, quad/linear
+            // stopping term) and the sign flip through the target — and, summed with the PID
+            // output and clamped, a step would briefly saturate the actuators. A short
+            // first-order filter smears these few genuine transitions over ~3 physics ticks; the
+            // resulting lag is small and the PI loop absorbs it.
             var ffBeta = 1.0 - Math.Exp (-dt / FeedforwardSmoothTimeConstant);
             smoothedFfRi = new Vector3d (
-                smoothedFfRi.x + ffBeta * (rawFfRi.x - smoothedFfRi.x),
-                smoothedFfRi.y + ffBeta * (rawFfRi.y - smoothedFfRi.y),
-                smoothedFfRi.z + ffBeta * (rawFfRi.z - smoothedFfRi.z));
+                smoothedFfRi.x + ffBeta * (ffAnalyticRi.x - smoothedFfRi.x),
+                smoothedFfRi.y + ffBeta * (ffAnalyticRi.y - smoothedFfRi.y),
+                smoothedFfRi.z + ffBeta * (ffAnalyticRi.z - smoothedFfRi.z));
             // Cut the feedforward by the hold gate: it is an open-loop plant inversion (gain ∝
             // frequency) and is the loop path most able to drive a flexible mode once the bandwidth is
             // floored, but only a holding flexible axis needs it gone — while slewing the axis keeps
