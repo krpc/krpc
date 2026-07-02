@@ -18,8 +18,7 @@ namespace KRPC.SpaceCenter.Services
     /// </summary>
     /// <remarks>
     /// If a client engages the auto-pilot and then closes its connection to the server,
-    /// the auto-pilot will be disengaged and its target reference frame, direction and roll
-    /// reset to default.
+    /// the auto-pilot will be disengaged. Its configuration and target are left unchanged.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class AutoPilot : Equatable<AutoPilot>
@@ -1096,12 +1095,8 @@ namespace KRPC.SpaceCenter.Services
             var autoPilot = engaged [vessel.id];
             if (autoPilot == null)
                 return false;
-            // If the client that engaged the auto-pilot has disconnected, disengage and reset the auto-pilot
+            // If the client that engaged the auto-pilot has disconnected, disengage the auto-pilot
             if (autoPilot.requestingClient != null && !autoPilot.requestingClient.Connected) {
-                autoPilot.attitudeController.ReferenceFrame = ReferenceFrame.Surface (vessel);
-                autoPilot.attitudeController.TargetPitch = 0;
-                autoPilot.attitudeController.TargetHeading = 0;
-                autoPilot.attitudeController.TargetRoll = double.NaN;
                 autoPilot.Engaged = false;
                 return false;
             }
