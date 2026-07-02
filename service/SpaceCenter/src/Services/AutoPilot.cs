@@ -922,6 +922,50 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The pointing-error hold factor in [0,1] for the in-game info window (1 = holding,
+        /// 0 = slewing).
+        /// </summary>
+        internal double HoldFactor {
+            get { return attitudeController.HoldFactor; }
+        }
+
+        /// <summary>
+        /// Per-axis latch (suppression) ramp in [0,1] for the in-game info window.
+        /// </summary>
+        internal Tuple3 SuppressionRamp {
+            get { return attitudeController.SuppressionRamp.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Per-axis oscillation-control back-off in [0,1] for the in-game info window.
+        /// </summary>
+        internal Tuple3 OscillationBackoff {
+            get { return attitudeController.OscillationBackoff.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Per-axis applied feedforward-cut fraction in [0,1] for the in-game info window.
+        /// </summary>
+        internal Tuple3 FeedforwardCut {
+            get { return attitudeController.FeedforwardCut.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Per-axis output-filter blend weight in [0,1] for the in-game info window.
+        /// </summary>
+        internal Tuple3 OutputFilterWeight {
+            get { return attitudeController.OutputFilterWeight.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Per-axis post-floor inner-loop bandwidth (rad/s) for the in-game info window. Stale
+        /// when <see cref="AutoTune"/> is off.
+        /// </summary>
+        internal Tuple3 AppliedBandwidth {
+            get { return attitudeController.AppliedBandwidth.ToTuple (); }
+        }
+
+        /// <summary>
         /// Active suppression tool on an axis (0 none, 1 notch, 2 low-pass) for the in-game info
         /// window.
         /// </summary>

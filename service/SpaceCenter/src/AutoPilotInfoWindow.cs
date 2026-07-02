@@ -18,7 +18,6 @@ namespace KRPC.SpaceCenter
         // Apollo caution-and-warning panel colours.
         static readonly Color green = new Color (0.30f, 1.00f, 0.45f);
         static readonly Color amber = new Color (1.00f, 0.72f, 0.10f);
-        static readonly Color red = new Color (1.00f, 0.32f, 0.22f);
         // Background of the digital registers, and the unlit lamp colour, so an off lamp matches a
         // register cell (near-black with dim grey text).
         static readonly Color registerBackground = new Color (0.04f, 0.05f, 0.04f);
@@ -268,15 +267,19 @@ namespace KRPC.SpaceCenter
             Register (gainR == null ? Blank : Gain (gainR.Item2));
             GUILayout.EndHorizontal ();
 
-            // Oscillation suppression. Two distinct oscillation measurements head the section: STRC
-            // is the structural-wobble level the detector reads off the measured angular rate
-            // (per-axis: PCH/YAW/RLL column header), CTRL is the limit-cycle amplitude measured on the
-            // control output (per axis-group: PCH/YAW and RLL column header, like the rows below it).
+            // Oscillation handling, mirroring the controller's detector → gates → mitigations
+            // structure. DETECTOR: what the runtime observes (per-axis structural level, the
+            // post-floor loop bandwidth, the estimated mode frequency and the control-output
+            // envelope). GATES: the [0,1] weights that decide how strongly the mitigations
+            // engage. MITIGATIONS: one combined mode+engagement lamp per individually
+            // controllable mitigation — dim whenever the mitigation is not acting (manually Off
+            // or automatically idle), amber when engaged.
             Header ("OSCILLATION", null);
             var level = engaged ? ap.OscillationLevel : null;
             // Beyond reach of a level of 0 when disengaged, so the lamp stays green while not engaged.
             double latchThreshold = engaged ? ap.OscillationLatchThreshold : double.PositiveInfinity;
             AxisColumnHeader ("PCH", "YAW", "RLL");
+            // Structural-wobble level the detector reads off the measured angular rate, per axis.
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("STRC", registerLabelStyle);
             LevelLamp (engaged, level == null ? 0 : level.Item1, engaged && ap.PitchYawOscillationLatched, latchThreshold);
@@ -284,11 +287,28 @@ namespace KRPC.SpaceCenter
             LevelLamp (engaged, level == null ? 0 : level.Item2, engaged && ap.RollOscillationLatched, latchThreshold);
             GUILayout.EndHorizontal ();
 
+            // Live inner-loop bandwidth per axis (rad/s, after any floor reduction). Blank when
+            // auto-tuning is off — the recorded value is only written by the autotuner.
+            var showBw = engaged && ap.AutoTune;
+            var appliedBw = showBw ? ap.AppliedBandwidth : null;
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("BW", registerLabelStyle);
+            RegisterCentered (appliedBw == null ? Blank : Stable (appliedBw.Item1, 2).ToString ("0.00"));
+            RegisterCentered (appliedBw == null ? Blank : Stable (appliedBw.Item3, 2).ToString ("0.00"));
+            RegisterCentered (appliedBw == null ? Blank : Stable (appliedBw.Item2, 2).ToString ("0.00"));
+            GUILayout.EndHorizontal ();
+
             TwoColumnHeader ("PCH/YAW", "RLL");
 
+            // Estimated structural mode frequency per group (held estimator value).
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("FREQ", registerLabelStyle);
+            FreqLamp (engaged, engaged ? ap.PitchYawOscillationDetectedFrequency : double.NaN);
+            FreqLamp (engaged, engaged ? ap.RollOscillationDetectedFrequency : double.NaN);
+            GUILayout.EndHorizontal ();
+
             // Control-output oscillation envelope per group: the about-mean amplitude of the delivered
-            // command that drives the automatic mitigation, drawn as a lamp matching STRC and lit amber
-            // at/above the engage threshold.
+            // command that drives the back-off gate, lit amber at/above the engage threshold.
             var oscThreshold = engaged ? ap.OscillationControlThreshold : double.PositiveInfinity;
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("CTRL", registerLabelStyle);
@@ -296,42 +316,72 @@ namespace KRPC.SpaceCenter
             OscCell (engaged, engaged ? ap.RollControlOscillation : 0.0, oscThreshold);
             GUILayout.EndHorizontal ();
 
-            // Hold-gate level: how fully the latched flexible-craft hold mitigation (bandwidth floor
-            // + feedforward cut) is engaged on the pitch/yaw group, 0 while slewing to 1 once settled.
-            // Only the pitch/yaw group is shown; the RLL cell is intentionally left blank.
+            // The gates: LATCH (the detector's persistent flexible-craft verdict), HOLD (the
+            // pointing-error hold factor, global), RAMP (the eased latch weight), BKO (the
+            // limit-cycle back-off) and GATE (the net hold-gated mitigation level,
+            // ramp · max(hold, bko), which drives the floor and the feedforward cut).
+            Header ("GATES", null);
+            var ramp = engaged ? ap.SuppressionRamp : null;
+            var backoff = engaged ? ap.OscillationBackoff : null;
             var mitigation = engaged ? ap.MitigationLevel : null;
+            TwoColumnHeader ("PCH/YAW", "RLL");
             GUILayout.BeginHorizontal ();
-            GUILayout.Label ("HOLD", registerLabelStyle);
-            RegisterCentered (mitigation == null ? Blank : Percent (mitigation.Item1));
-            RegisterCentered (Blank);
-            GUILayout.EndHorizontal ();
-
-            GUILayout.BeginHorizontal ();
-            GUILayout.Label ("FREQ", registerLabelStyle);
-            FreqLamp (engaged, engaged ? ap.PitchYawOscillationDetectedFrequency : double.NaN);
-            FreqLamp (engaged, engaged ? ap.RollOscillationDetectedFrequency : double.NaN);
-            GUILayout.EndHorizontal ();
-
-            // Oscillation-detected annunciators (whether each group has latched as confirmed
-            // structurally flexible): a "LATCH" lamp, lit amber once latched and dim otherwise.
-            GUILayout.BeginHorizontal ();
-            GUILayout.Label ("OSC", registerLabelStyle);
+            GUILayout.Label ("LATCH", registerLabelStyle);
             Lamp ("LATCH", engaged && ap.PitchYawOscillationLatched, amber);
             Lamp ("LATCH", engaged && ap.RollOscillationLatched, amber);
             GUILayout.EndHorizontal ();
-
             GUILayout.BeginHorizontal ();
-            GUILayout.Label ("MODE", registerLabelStyle);
-            ModeLamp (engaged, engaged ? ap.PitchYawRateFilterMode : default (Services.RateFilterMode));
-            ModeLamp (engaged, engaged ? ap.RollRateFilterMode : default (Services.RateFilterMode));
+            GUILayout.Label ("HOLD", registerLabelStyle);
+            GateLamp (engaged, engaged ? ap.HoldFactor : 0.0);
+            GUILayout.EndHorizontal ();
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("RAMP", registerLabelStyle);
+            GateLamp (engaged, GroupMax (ramp));
+            GateLamp (engaged, ramp == null ? 0.0 : ramp.Item2);
+            GUILayout.EndHorizontal ();
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("BKO", registerLabelStyle);
+            GateLamp (engaged, GroupMax (backoff));
+            GateLamp (engaged, backoff == null ? 0.0 : backoff.Item2);
+            GUILayout.EndHorizontal ();
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("GATE", registerLabelStyle);
+            GateLamp (engaged, GroupMax (mitigation));
+            GateLamp (engaged, mitigation == null ? 0.0 : mitigation.Item2);
             GUILayout.EndHorizontal ();
 
-            // Resolved suppression tool: what Automatic actually selected (the MODE lamp above shows
-            // the commanded mode, not the tool it routed to). Pitch (0) and yaw (2) share the group.
+            // The mitigations, one combined mode+engagement lamp each. FILT is the rate filter
+            // (per group, showing the tool Automatic routed to, or the forced tool); FLOOR the
+            // bandwidth-floor engagement; FFCUT the applied feedforward-cut fraction; SMTH the
+            // output-smoothing blend weight.
+            Header ("MITIGATIONS", null);
+            var ffCut = engaged ? ap.FeedforwardCut : null;
+            var outWeight = engaged ? ap.OutputFilterWeight : null;
+            TwoColumnHeader ("PCH/YAW", "RLL");
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("FILT", registerLabelStyle);
-            RegisterCentered (engaged ? ToolName (ap.ActiveSuppressionTool (0)) : Blank);
-            RegisterCentered (engaged ? ToolName (ap.ActiveSuppressionTool (1)) : Blank);
+            RateFilterLamp (engaged, engaged ? ap.PitchYawRateFilterMode : default (Services.RateFilterMode),
+                engaged ? ap.ActiveSuppressionTool (0) : 0);
+            RateFilterLamp (engaged, engaged ? ap.RollRateFilterMode : default (Services.RateFilterMode),
+                engaged ? ap.ActiveSuppressionTool (1) : 0);
+            GUILayout.EndHorizontal ();
+            var floorMode = engaged ? ap.OscillationBandwidthFloorMode : default (Services.MitigationMode);
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("FLOOR", registerLabelStyle);
+            MitigationLamp (engaged, floorMode, GroupMax (mitigation));
+            MitigationLamp (engaged, floorMode, mitigation == null ? 0.0 : mitigation.Item2);
+            GUILayout.EndHorizontal ();
+            var ffMode = engaged ? ap.OscillationFeedforwardMode : default (Services.MitigationMode);
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("FFCUT", registerLabelStyle);
+            MitigationLamp (engaged, ffMode, GroupMax (ffCut));
+            MitigationLamp (engaged, ffMode, ffCut == null ? 0.0 : ffCut.Item2);
+            GUILayout.EndHorizontal ();
+            var outMode = engaged ? ap.OscillationOutputFilterMode : default (Services.MitigationMode);
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("SMTH", registerLabelStyle);
+            MitigationLamp (engaged, outMode, GroupMax (outWeight));
+            MitigationLamp (engaged, outMode, outWeight == null ? 0.0 : outWeight.Item2);
             GUILayout.EndHorizontal ();
 
             GUILayout.EndVertical ();
@@ -391,30 +441,48 @@ namespace KRPC.SpaceCenter
             Lamp (Percent (level), engaged, colour);
         }
 
-        // Mode lamp. The axis group is identified by the PCH/YAW and RLL column header, so the lamp
-        // shows only the mode name.
-        void ModeLamp (bool engaged, Services.RateFilterMode mode)
+        // Gate readout lamp: green while the gate is at zero, amber once it is engaged.
+        void GateLamp (bool engaged, double level)
         {
-            Color colour = mode == Services.RateFilterMode.Off ? red
-                : mode == Services.RateFilterMode.Automatic ? green
-                : amber;
-            Lamp (ModeName (mode), engaged, colour);
+            Lamp (Percent (level), engaged, level > 0.01 ? amber : green);
         }
 
-        static string ModeName (Services.RateFilterMode mode)
+        // Combined mode + engagement lamp for one mitigation cell: dim whenever the mitigation
+        // is not acting (manually Off, or automatically idle at ~0), amber when engaged. The
+        // label carries the mode (OFF) or the engagement level. Forced pins the mitigation fully
+        // on, so its lamp reads 100% regardless of the gate.
+        void MitigationLamp (bool engaged, Services.MitigationMode mode, double level)
         {
-            switch (mode) {
-            case Services.RateFilterMode.Automatic:
-                return "AUTO";
-            case Services.RateFilterMode.Off:
-                return "OFF";
-            case Services.RateFilterMode.Notch:
-                return "NOTCH";
-            case Services.RateFilterMode.LowPass:
-                return "LOWPASS";
-            default:
-                return mode.ToString ().ToUpperInvariant ();
+            if (engaged && mode == Services.MitigationMode.Off) {
+                Lamp ("OFF", false, amber);
+                return;
             }
+            if (engaged && mode == Services.MitigationMode.Forced)
+                level = 1.0;
+            Lamp (Percent (level), engaged && level > 0.01, amber);
+        }
+
+        // Combined mode + engagement lamp for the rate filter on one axis group: dim when Off or
+        // while Automatic has no tool engaged, amber with the tool name whenever a filter is
+        // actually running (automatic-routed or forced).
+        void RateFilterLamp (bool engaged, Services.RateFilterMode mode, int tool)
+        {
+            if (engaged && mode == Services.RateFilterMode.Off) {
+                Lamp ("OFF", false, amber);
+                return;
+            }
+            if (tool != 0) {
+                Lamp (ToolName (tool), engaged, amber);
+                return;
+            }
+            Lamp ("AUTO", false, amber);
+        }
+
+        // The pitch/yaw group cell for a per-axis (pitch, roll, yaw) tuple: the two transverse
+        // axes latch together, so the group shows the larger of the two.
+        static double GroupMax (Tuple<double, double, double> t)
+        {
+            return t == null ? 0.0 : Math.Max (t.Item1, t.Item3);
         }
 
         void Header (string text, string unit)

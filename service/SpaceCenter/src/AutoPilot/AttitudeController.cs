@@ -120,6 +120,14 @@ namespace KRPC.SpaceCenter.AutoPilot
         // Target angular velocity (roll-invariant frame) the inner loop is tracking this tick,
         // recorded for the info UI alongside the measured rate.
         Vector3d logTargetRi;
+        // Per-tick gate/mitigation state recorded for the in-game info window: the pointing-error
+        // hold factor, the applied feedforward-cut fraction, the output-filter blend weight
+        // actually chosen, and the post-floor inner-loop bandwidth (rad/s; only written while
+        // auto-tuning runs).
+        double logHoldFactor;
+        Vector3d logFfCut;
+        Vector3d logOutputFilterWeight;
+        Vector3d logAppliedBandwidth;
         bool diagnosticLogging;
         readonly StringBuilder diagnosticLog = new StringBuilder ();
         readonly object diagnosticLogLock = new object ();
@@ -415,6 +423,37 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         // Per-axis hold-gated mitigation weight in [0,1] (suppressionRamp · holdFactor): how fully
         // the latched flexible-craft hold mitigation (bandwidth floor + feedforward cut) is engaged.
+        // Per-tick gate/mitigation state for the in-game info window: the pointing-error hold
+        // factor, the latch ramps, the back-off levels, the applied feedforward-cut fraction,
+        // the output-filter blend weight and the post-floor inner-loop bandwidth (rad/s; stale
+        // when AutoTune is off — the window blanks it there).
+        public double HoldFactor {
+            get { return logHoldFactor; }
+        }
+
+        public Vector3d SuppressionRamp {
+            get {
+                return new Vector3d (
+                    policy.SuppressionRamp (0), policy.SuppressionRamp (1), policy.SuppressionRamp (2));
+            }
+        }
+
+        public Vector3d OscillationBackoff {
+            get { return new Vector3d (policy.Backoff (0), policy.Backoff (1), policy.Backoff (2)); }
+        }
+
+        public Vector3d FeedforwardCut {
+            get { return logFfCut; }
+        }
+
+        public Vector3d OutputFilterWeight {
+            get { return logOutputFilterWeight; }
+        }
+
+        public Vector3d AppliedBandwidth {
+            get { return logAppliedBandwidth; }
+        }
+
         public Vector3d MitigationLevel {
             get { return new Vector3d (policy.MitigationLevel (0), policy.MitigationLevel (1), policy.MitigationLevel (2)); }
         }
@@ -540,6 +579,10 @@ namespace KRPC.SpaceCenter.AutoPilot
             rateFilter.Reset ();
             outputFilter.Reset ();
             policy.Reset ();
+            logHoldFactor = 0;
+            logFfCut = Vector3d.zero;
+            logOutputFilterWeight = Vector3d.zero;
+            logAppliedBandwidth = Vector3d.zero;
             if (AutoTune)
                 DoAutoTune (vessel.AvailableTorqueVectors.Item1, vessel.MomentOfInertiaVector);
         }
@@ -685,6 +728,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // — see ProfileKp — so the setpoint needs no separate hold-time profile.)
             var pointingError = Vector3.Angle (currentDirection, EffectiveTargetDirection);
             var holdFactor = OscillationDetectors.HoldFactor (pointingError);
+            logHoldFactor = holdFactor;
             // Oscillation-control back-off, OR'd into the hold gate via max() below: lets the latched
             // mitigation engage independent of pointing error — the hold gate's blind spot during a
             // maneuver, where a released gate restores the feedforward that re-drives the bending mode.
@@ -729,10 +773,13 @@ namespace KRPC.SpaceCenter.AutoPilot
             // frequency) and is the loop path most able to drive a flexible mode once the bandwidth is
             // floored, but only a holding flexible axis needs it gone — while slewing the axis keeps
             // its feedforward to track the manoeuvre, and a rigid axis keeps it throughout.
+            var ffScale = new Vector3d (
+                FeedforwardScale (gate.x), FeedforwardScale (gate.y), FeedforwardScale (gate.z));
+            logFfCut = new Vector3d (1.0 - ffScale.x, 1.0 - ffScale.y, 1.0 - ffScale.z);
             var ffRi = new Vector3d (
-                smoothedFfRi.x * FeedforwardScale (gate.x),
-                smoothedFfRi.y * FeedforwardScale (gate.y),
-                smoothedFfRi.z * FeedforwardScale (gate.z));
+                smoothedFfRi.x * ffScale.x,
+                smoothedFfRi.y * ffScale.y,
+                smoothedFfRi.z * ffScale.z);
 
             UpdateSmoothedTorque (torque);
 
@@ -1012,6 +1059,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             } else {
                 policy.ChooseOutputFilter (detectors, index, out tau, out weight);
             }
+            logOutputFilterWeight [index] = weight;
             return outputFilter.Process (index, u, tau, weight, dt);
         }
 
@@ -1609,6 +1657,8 @@ namespace KRPC.SpaceCenter.AutoPilot
                 bandwidth = reduced;
                 bandwidthSquared *= f * f;
             }
+
+            logAppliedBandwidth [index] = bandwidth;
 
             var kp = bandwidth * accelerationInv;
             var ki = bandwidthSquared * accelerationInv;
