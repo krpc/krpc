@@ -545,9 +545,10 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The angle, in degrees, at which the autopilot considers the vessel to be pointing close
-        /// to the target direction. This determines the midpoint of the pitch/yaw target velocity
-        /// attenuation function. Pitch and yaw are controlled jointly, so a single angle applies to
-        /// both. Defaults to 1°.
+        /// to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
+        /// or above this error the target velocity is at full, and below it the target velocity
+        /// ramps linearly to zero at half this angle, so the vessel coasts to a stop. Pitch and yaw
+        /// are controlled jointly, so a single angle applies to both. Defaults to 1°.
         /// </summary>
         [KRPCProperty]
         public double PitchYawAttenuationAngle {
@@ -557,8 +558,9 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The angle, in degrees, at which the autopilot considers the vessel to be pointing close
-        /// to the target roll. This determines the midpoint of the roll-axis target velocity
-        /// attenuation function. Defaults to 1°.
+        /// to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
+        /// above this error the target velocity is at full, and below it the target velocity ramps
+        /// linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°.
         /// </summary>
         [KRPCProperty]
         public double RollAttenuationAngle {
