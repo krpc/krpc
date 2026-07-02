@@ -73,27 +73,10 @@ namespace KRPC.SpaceCenter.AutoPilot
         readonly BiquadNotchFilter pitchNotch = new BiquadNotchFilter ();
         readonly BiquadNotchFilter rollNotch = new BiquadNotchFilter ();
         readonly BiquadNotchFilter yawNotch = new BiquadNotchFilter ();
-        // Online frequency estimators, fed the high-passed rate every tick: one for the coupled
-        // pitch/yaw group (fed whichever transverse axis currently carries more oscillation) and one
-        // for roll.
-        readonly FrequencyTracker pitchYawFreqTracker = new FrequencyTracker ();
-        readonly FrequencyTracker rollFreqTracker = new FrequencyTracker ();
-        // Sticky held estimate per group: latched to the last value the tracker acquired and held
-        // across brief losses (NaN only until the first acquisition, reset in Start). Suppression and
-        // the bandwidth reduction *quiet* the very mode the tracker measures, so the live estimate
-        // would otherwise blip to NaN once it works and revert routing to the seed — a notch/low-pass
-        // hunt. Routing and the *OscillationDetectedFrequency observable both use this held value.
-        double pitchYawHeldHz = double.NaN;
-        double rollHeldHz = double.NaN;
-        // High-pass bookkeeping for the trackers. The trackers are fed the oscillation in the raw
-        // rate — ω minus its slow mean (emaOmega) — rather than Δω: Δω is a derivative, so it weights
-        // high frequencies (a small high-frequency component can dominate the Δω sign changes and pull
-        // the estimate above the mode that actually dominates the rate). High-passed ω instead tracks
-        // the dominant-amplitude oscillation. emaAbsHp is a slow per-axis envelope of |high-passed ω|
-        // used to pick the stronger transverse axis for the pitch/yaw group estimate.
-        Vector3d emaOmega;
-        bool emaOmegaValid;
-        Vector3d emaAbsHp = Vector3d.zero;
+        // The observation layer: chatter detector (level + latch), frequency trackers with their
+        // held estimates and high-pass bookkeeping, control-output oscillation envelope, hold
+        // factor. See OscillationDetectors.
+        readonly OscillationDetectors detectors = new OscillationDetectors ();
         // Per-axis records written during suppression selection: whether the notch is the active tool
         // (diagnostics) and whether any suppression tool is active (read by DoAutoTuneAxis to gate the
         // latched bandwidth reduction).
@@ -119,27 +102,8 @@ namespace KRPC.SpaceCenter.AutoPilot
         // Automatic (envelope-driven) component of oscControlBackoff before the manual floor is applied:
         // the per-axis ramp that rises while a latched axis limit-cycles and decays slowly when quiet.
         readonly double[] oscControlAuto = new double[3];
-        // Previous tick's delivered command (state.Pitch/Roll/Yaw), and the slow trim mean plus the
-        // about-mean envelope built from it one tick late (the gate that consumes the back-off is
-        // computed before this tick's command exists). controlOscEnvelope is the runtime analogue of
-        // the test's control_oscillation_amplitude.
-        Vector3d prevControl;
-        bool prevControlValid;
-        Vector3d controlMean;
-        bool controlMeanValid;
-        Vector3d controlOscEnvelope = Vector3d.zero;
         // Envelope threshold (exposed) above which a latched axis is treated as still limit-cycling.
         double oscControlThreshold;
-        // Chatter-detector state for the latch (see UpdateChatterDetector). chatterLevel is a
-        // per-axis [0,1] measure of how strongly an axis is in a structural limit cycle.
-        Vector3d prevDetectorOmega;
-        bool prevDetectorOmegaValid;
-        Vector3d chatterLevel = Vector3d.zero;
-        // Per-axis latch: set once an axis's chatterLevel crosses ChatterLatchThreshold, i.e. the
-        // detector has confirmed a structural limit cycle. It is the controller's persistent memory
-        // that "this craft is flexible", reset only on re-engage (Start). In Automatic mode it gates
-        // whether suppression is applied at all (the estimator, which selects the tool, runs ungated).
-        readonly bool[] chatterLatched = new bool[3];
         // Per-group suppression selector (pitch/yaw coupled, roll on its own). Automatic detects and
         // latches then routes by estimated frequency; Off disables suppression; Notch/LowPass force
         // that tool unconditionally at the group's manual frequency. Default Automatic.
@@ -248,17 +212,6 @@ namespace KRPC.SpaceCenter.AutoPilot
         // corner), so the higher corner is kept for the extra margin. Blended by chatterLevel so rigid
         // craft are untouched, and skipped on a latched axis (the heavier suppression runs there).
         const double DetectorRateFilterTimeConstant = 0.03;
-        // Pointing-error band (degrees) for the continuous hold gate on a latched axis: at/below
-        // HoldErrorFull the craft is holding and the loop fully tracks the quad-only-stopping nominal
-        // target with the feedforward cut (so a residual mode is not amplified at the floored gain);
-        // at/above HoldErrorNone it is slewing and uses the full target + feedforward (so it brakes
-        // and tracks the manoeuvre); it blends linearly between. A smooth function of error — no
-        // hysteresis state machine. The band sits just above the stopping threshold (1°) so the
-        // mitigation engages only once the craft is essentially settled: a slew or a nudge that
-        // leaves the error above ~2.5° keeps full bandwidth (responsive), and the final approach is
-        // not slowed by the floor — only the settled hold is quieted.
-        const double HoldErrorFull = 1.0;
-        const double HoldErrorNone = 2.5;
         // Pointing deadband on the target angular velocity (see DeadbandScale, applied in
         // ComputePitchYawVelocity / ComputeAxisVelocity). As the error vanishes the commanded velocity
         // setpoint is scaled linearly to zero — from full at the deadband high angle to zero below this
@@ -284,36 +237,16 @@ namespace KRPC.SpaceCenter.AutoPilot
         const double LowPassCornerMin = 2.0;
         // Time constant of the one-pole ramp easing the notch-branch bandwidth reduction in/out.
         const double BandwidthRampTimeConstant = 0.5;
-        // Time constant of the slow mean subtracted from the raw rate to high-pass it for the
-        // frequency trackers (~0.5 Hz corner): well below the structural modes (≥1 Hz) so they pass,
-        // but high enough to remove DC and slew trends so they do not manufacture false crossings.
-        const double FrequencyHighpassTimeConstant = 0.3;
         // A tick-to-tick change in the raw measured rate larger than this many times the
         // physically-achievable change (α·dt at full authority) is structural excitation, not
         // rigid-body response — the latter cannot change the rate faster than the torque allows.
         const double DefaultChatterDetectThreshold = 4.0;
-        // One-sided smoothing time constants for the detector: engage quickly when excitation
-        // appears, release slowly so the loop does not hunt (the reduced-bandwidth state is quiet,
-        // which would otherwise immediately clear the detector and let the bandwidth climb back up).
-        const double ChatterRiseTimeConstant = 0.3;
-        const double ChatterDecayTimeConstant = 30.0;
-        // chatterLevel above which an axis is latched into full mitigation for the rest of the
-        // engagement (see chatterLatched). Set below the level the detector reaches on a confirmed
-        // limit cycle (which saturates toward 1) but well above any transient a rigid craft produces,
-        // so a rigid craft — whose chatterLevel never leaves ~0 — is never latched.
-        const double ChatterLatchThreshold = 0.6;
         // Control-output oscillation envelope (the runtime analogue of the test's
         // control_oscillation_amplitude): a latched axis whose about-mean delivered-command envelope
         // exceeds this is treated as still limit-cycling, so the hold mitigation engages regardless of
         // pointing error. A settled hold sits near 0.008 and a limit cycle saturates toward ~1, so the
         // 0.2 default has wide margin. Exposed (OscillationControlThreshold).
         const double DefaultOscControlThreshold = 0.2;
-        // Time constant of the slow "trim" mean subtracted from the delivered command to form the
-        // about-mean envelope: long enough to track a steady slew (so a one-sign ramp is not counted as
-        // oscillation) yet shorter than the limit-cycle period (~0.7 s), which is left as deviation.
-        const double OscControlMeanTimeConstant = 0.5;
-        // Time constant smoothing the |command - trim| envelope (a few cycles).
-        const double OscControlEnvelopeTimeConstant = 0.3;
         // Below this 2D error magnitude (radians) the joint pitch/yaw profile is skipped.
         const double MinThetaForJointProfile = 1e-10;
         // Antipodal-flip plane hold (ResolveAntipodalAxis). A large slew toward ~180° (an "antipodal
@@ -514,38 +447,41 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         // Read-only per-group about-mean control-output oscillation envelope (pitch/yaw coupled, roll).
         public double PitchYawControlOscillation {
-            get { return Math.Max (controlOscEnvelope.x, controlOscEnvelope.z); }
+            get {
+                var env = detectors.ControlOscEnvelope;
+                return Math.Max (env.x, env.z);
+            }
         }
 
         public double RollControlOscillation {
-            get { return controlOscEnvelope.y; }
+            get { return detectors.ControlOscEnvelope.y; }
         }
 
         // Read-only observability into the (otherwise hidden) flexible-craft detector state, so a
         // user can see whether a craft has been deemed wobbly.
         public Vector3d OscillationLevel {
-            get { return chatterLevel; }
+            get { return detectors.ChatterLevel; }
         }
 
         // Pitch (0) and yaw (2) latch together (see UpdateChatterDetector), so either reports the
         // pitch/yaw group.
         public bool PitchYawOscillationLatched {
-            get { return chatterLatched [0] || chatterLatched [2]; }
+            get { return detectors.PitchYawLatched; }
         }
 
         public bool RollOscillationLatched {
-            get { return chatterLatched [1]; }
+            get { return detectors.RollLatched; }
         }
 
         // Estimated mode frequency (Hz) per axis group; the estimator runs in all modes, so this is
         // observable even under Off/Notch/LowPass, and is NaN only until the estimator first
         // acquires (the held value persists thereafter, see pitchYawHeldHz).
         public double PitchYawOscillationDetectedFrequency {
-            get { return pitchYawHeldHz; }
+            get { return detectors.PitchYawHeldHz; }
         }
 
         public double RollOscillationDetectedFrequency {
-            get { return rollHeldHz; }
+            get { return detectors.RollHeldHz; }
         }
 
         // Measured angular velocity (raw, roll-invariant frame, rad/s) in the controller's internal
@@ -579,7 +515,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         // The chatterLevel at which an axis latches as flexible (see UpdateChatterDetector). Exposed
         // so the info UI can colour the OscillationLevel readout against the same threshold.
         public double OscillationLatchThreshold {
-            get { return ChatterLatchThreshold; }
+            get { return OscillationDetectors.ChatterLatchThreshold; }
         }
 
         public bool DiagnosticLogging {
@@ -682,16 +618,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             pointRotationValid = false;
             antipodeLatched = false;
             smoothedFfRi = Vector3d.zero;
-            prevDetectorOmegaValid = false;
-            emaOmegaValid = false;
-            emaAbsHp = Vector3d.zero;
-            prevControlValid = false;
-            controlMeanValid = false;
-            controlOscEnvelope = Vector3d.zero;
-            pitchYawFreqTracker.Reset ();
-            rollFreqTracker.Reset ();
-            pitchYawHeldHz = double.NaN;
-            rollHeldHz = double.NaN;
+            detectors.Reset ();
             pitchNotch.Reset ();
             rollNotch.Reset ();
             yawNotch.Reset ();
@@ -705,7 +632,6 @@ namespace KRPC.SpaceCenter.AutoPilot
                 mitigationLevel [i] = 0;
                 oscControlBackoff [i] = 0;
                 oscControlAuto [i] = 0;
-                chatterLatched [i] = false;
             }
             if (ShadowVerify) {
                 shadow.Start ();
@@ -811,7 +737,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // Update the structural-chatter detector from the raw rate. In Automatic mode the latch
             // it produces decides *whether* suppression is applied; the frequency estimator below
             // decides *which* tool (notch vs low-pass). A rigid craft never latches.
-            UpdateChatterDetector (currentRaw, torque, moi, dt);
+            detectors.UpdateChatter (currentRaw, torque, moi, dt, oscillationDetectionThreshold);
 
             // Apply the per-group selector's detector side: Off forces the group rigid for control
             // (latch/level cleared, no suppression) while leaving the estimator running; Automatic
@@ -821,38 +747,10 @@ namespace KRPC.SpaceCenter.AutoPilot
             ApplyOscillationOverride (2, pitchYawOscillationControl);
             ApplyOscillationOverride (1, rollOscillationControl);
 
-            // Feed the frequency trackers the oscillation in the raw rate every tick, unconditionally
-            // — they cost only a handful of adds, so an estimate is always warm the moment an axis
-            // latches. High-pass the rate (subtract a slow mean) so the trackers see the structural
-            // oscillation without DC or slew trends, and without the high-frequency bias a raw Δω
-            // (derivative) would impose. The pitch/yaw tracker is fed whichever transverse axis
-            // currently carries more oscillation (larger envelope, the lateral mode being
-            // ~axisymmetric); roll is fed directly.
-            if (!emaOmegaValid) {
-                emaOmega = currentRaw;
-                emaOmegaValid = true;
-            }
-            var emaOmegaBeta = 1.0 - Math.Exp (-dt / FrequencyHighpassTimeConstant);
-            emaOmega = new Vector3d (
-                emaOmega.x + emaOmegaBeta * (currentRaw.x - emaOmega.x),
-                emaOmega.y + emaOmegaBeta * (currentRaw.y - emaOmega.y),
-                emaOmega.z + emaOmegaBeta * (currentRaw.z - emaOmega.z));
-            var hp = currentRaw - emaOmega;
-            var betaAbsHp = 1.0 - Math.Exp (-dt / BandwidthRampTimeConstant);
-            emaAbsHp = new Vector3d (
-                emaAbsHp.x + betaAbsHp * (Math.Abs (hp.x) - emaAbsHp.x),
-                emaAbsHp.y + betaAbsHp * (Math.Abs (hp.y) - emaAbsHp.y),
-                emaAbsHp.z + betaAbsHp * (Math.Abs (hp.z) - emaAbsHp.z));
-            // Feed the pitch/yaw tracker whichever transverse axis currently carries more oscillation
-            // (the lateral mode is ~axisymmetric, so either reads it); roll is fed directly.
-            var pyHp = emaAbsHp.x >= emaAbsHp.z ? hp.x : hp.z;
-            pitchYawFreqTracker.Update (pyHp, dt);
-            rollFreqTracker.Update (hp.y, dt);
-            // Latch the last acquired estimate so suppression quieting the mode does not lose it.
-            if (!double.IsNaN (pitchYawFreqTracker.EstimatedHz))
-                pitchYawHeldHz = pitchYawFreqTracker.EstimatedHz;
-            if (!double.IsNaN (rollFreqTracker.EstimatedHz))
-                rollHeldHz = rollFreqTracker.EstimatedHz;
+            // Feed the frequency trackers the oscillation in the raw rate every tick,
+            // unconditionally, so an estimate is always warm the moment an axis latches (see
+            // OscillationDetectors.UpdateTrackers for the high-pass and held-estimate details).
+            detectors.UpdateTrackers (currentRaw, dt);
 
             // Select and apply the suppression tool per axis group, producing the rate the control
             // loops consume. Each axis is notched, low-passed, or passed through — never both — with
@@ -860,13 +758,13 @@ namespace KRPC.SpaceCenter.AutoPilot
             // per-axis suppressionActiveAxis record written here is read by DoAutoTuneAxis.
             int pitchYawTool;
             double pitchYawFreq;
-            SelectSuppressionTool (pitchYawOscillationControl, PitchYawOscillationLatched,
-                pitchYawHeldHz, pitchYawOscillationFrequency,
+            SelectSuppressionTool (pitchYawOscillationControl, detectors.PitchYawLatched,
+                detectors.PitchYawHeldHz, pitchYawOscillationFrequency,
                 out pitchYawTool, out pitchYawFreq);
             int rollTool;
             double rollFreq;
-            SelectSuppressionTool (rollOscillationControl, RollOscillationLatched,
-                rollHeldHz, rollOscillationFrequency, out rollTool, out rollFreq);
+            SelectSuppressionTool (rollOscillationControl, detectors.RollLatched,
+                detectors.RollHeldHz, rollOscillationFrequency, out rollTool, out rollFreq);
             var current = new Vector3d (
                 ApplySuppression (0, currentRaw.x, pitchYawTool, pitchYawFreq, dt, pitchNotch),
                 ApplySuppression (1, currentRaw.y, rollTool, rollFreq, dt, rollNotch),
@@ -886,7 +784,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                     rateInputFilterValid [i] = true;
                 }
                 rateInputFilterState [i] += rateInputBeta * (current [i] - rateInputFilterState [i]);
-                var w = chatterLatched [i] ? 0.0 : chatterLevel [i];
+                var w = detectors.ChatterLatched (i) ? 0.0 : detectors.ChatterLevel [i];
                 current [i] = current [i] + w * (rateInputFilterState [i] - current [i]);
             }
 
@@ -908,13 +806,13 @@ namespace KRPC.SpaceCenter.AutoPilot
                     oscillationNotchQ, oscillationDetectionThreshold);
                 for (int i = 0; i < 3; i++) {
                     ShadowCompare ("rate", shadowRate [i] - current [i]);
-                    ShadowCompare ("detect", shadow.ChatterLevel [i] - chatterLevel [i]);
+                    ShadowCompare ("detect", shadow.ChatterLevel [i] - detectors.ChatterLevel [i]);
                     ShadowCompare ("latch",
-                        (shadow.ChatterLatched (i) ? 1.0 : 0.0) - (chatterLatched [i] ? 1.0 : 0.0));
+                        (shadow.ChatterLatched (i) ? 1.0 : 0.0) - (detectors.ChatterLatched (i) ? 1.0 : 0.0));
                     ShadowCompare ("ramp", shadow.SuppressionRamp (i) - suppressionRamp [i]);
                 }
-                ShadowCompare ("freq", ShadowDiffHz (shadow.PitchYawHeldHz, pitchYawHeldHz));
-                ShadowCompare ("freq", ShadowDiffHz (shadow.RollHeldHz, rollHeldHz));
+                ShadowCompare ("freq", ShadowDiffHz (shadow.PitchYawHeldHz, detectors.PitchYawHeldHz));
+                ShadowCompare ("freq", ShadowDiffHz (shadow.RollHeldHz, detectors.RollHeldHz));
             }
 
             // Current and target angular velocities, both expressed in the roll-invariant frame.
@@ -955,35 +853,26 @@ namespace KRPC.SpaceCenter.AutoPilot
             // mitigation weight — only a latched axis that is also holding fully tracks the nominal
             // target and cuts the feedforward.
             var pointingError = Vector3.Angle (currentDirection, EffectiveTargetDirection);
-            var holdFactor = Math.Min (1.0, Math.Max (0.0,
-                (HoldErrorNone - pointingError) / (HoldErrorNone - HoldErrorFull)));
+            var holdFactor = OscillationDetectors.HoldFactor (pointingError);
             // Oscillation-control back-off, OR'd into the hold gate via max() below: lets the latched
             // mitigation engage independent of pointing error — the hold gate's blind spot during a
             // maneuver, where a released gate restores the feedforward that re-drives the bending mode.
-            // The trigger is the about-mean envelope of the delivered command (built from the previous
-            // tick, since this tick's command does not exist yet): a sustained limit cycle has a large
-            // envelope while a steady slew (one-sign ramp, tracked by the trim mean) does not. It rises
-            // fast / decays slow so a one-shot transient does not pin it, only a latched axis can
-            // trigger, and the manual OscillationControlLevel is a floor under the automatic level.
-            if (prevControlValid) {
-                if (!controlMeanValid) {
-                    controlMean = prevControl;
-                    controlMeanValid = true;
-                }
-                var meanBeta = 1.0 - Math.Exp (-dt / OscControlMeanTimeConstant);
-                controlMean += meanBeta * (prevControl - controlMean);
-                var envBeta = 1.0 - Math.Exp (-dt / OscControlEnvelopeTimeConstant);
-                controlOscEnvelope = new Vector3d (
-                    controlOscEnvelope.x + envBeta * (Math.Abs (prevControl.x - controlMean.x) - controlOscEnvelope.x),
-                    controlOscEnvelope.y + envBeta * (Math.Abs (prevControl.y - controlMean.y) - controlOscEnvelope.y),
-                    controlOscEnvelope.z + envBeta * (Math.Abs (prevControl.z - controlMean.z) - controlOscEnvelope.z));
-            }
+            // The trigger is the about-mean envelope of the delivered command (built by the detectors
+            // from the previous tick, since this tick's command does not exist yet): a sustained limit
+            // cycle has a large envelope while a steady slew (one-sign ramp, tracked by the trim mean)
+            // does not. It rises fast / decays slow so a one-shot transient does not pin it, only a
+            // latched axis can trigger, and the manual OscillationControlLevel is a floor under the
+            // automatic level.
+            detectors.UpdateControlEnvelope (dt);
             // Pitch (x) and yaw (z) are coupled (mirror the chatter detector); roll (y) on its own.
-            var pyEnv = Math.Max (controlOscEnvelope.x, controlOscEnvelope.z);
-            var groupEnv = new Vector3d (pyEnv, controlOscEnvelope.y, pyEnv);
+            var controlEnv = detectors.ControlOscEnvelope;
+            var pyEnv = Math.Max (controlEnv.x, controlEnv.z);
+            var groupEnv = new Vector3d (pyEnv, controlEnv.y, pyEnv);
             for (int i = 0; i < 3; i++) {
-                var oscTarget = chatterLatched [i] && groupEnv [i] > oscControlThreshold ? 1.0 : 0.0;
-                var tc = oscTarget > oscControlAuto [i] ? ChatterRiseTimeConstant : ChatterDecayTimeConstant;
+                var oscTarget = detectors.ChatterLatched (i) && groupEnv [i] > oscControlThreshold ? 1.0 : 0.0;
+                var tc = oscTarget > oscControlAuto [i]
+                    ? OscillationDetectors.ChatterRiseTimeConstant
+                    : OscillationDetectors.ChatterDecayTimeConstant;
                 var beta = 1.0 - Math.Exp (-dt / tc);
                 oscControlAuto [i] += beta * (oscTarget - oscControlAuto [i]);
                 oscControlBackoff [i] = Math.Max (oscControlAuto [i], oscillationControlLevel [i]);
@@ -1002,7 +891,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                     oscillationControlLevel, oscControlThreshold);
                 for (int i = 0; i < 3; i++) {
                     ShadowCompare ("gate", shadowGate [i] - gate [i]);
-                    ShadowCompare ("env", shadow.ControlOscEnvelope [i] - controlOscEnvelope [i]);
+                    ShadowCompare ("env", shadow.ControlOscEnvelope [i] - detectors.ControlOscEnvelope [i]);
                 }
             }
 
@@ -1098,8 +987,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             state.Yaw = (float)(softStart * smoothedYaw);
 
             // Store the delivered command for next tick's control-output oscillation envelope.
-            prevControl = new Vector3d (state.Pitch, state.Roll, state.Yaw);
-            prevControlValid = true;
+            var delivered = new Vector3d (state.Pitch, state.Roll, state.Yaw);
+            detectors.RecordControl (delivered);
 
             // TEMPORARY Phase-2 shadow verification: output smoothing on the same inputs, and
             // feed the shadow the same delivered command for its envelope copy.
@@ -1107,7 +996,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 ShadowCompare ("out", shadow.SmoothOutput (0, uPitch, dt) - smoothedPitch);
                 ShadowCompare ("out", shadow.SmoothOutput (1, uRoll, dt) - smoothedRoll);
                 ShadowCompare ("out", shadow.SmoothOutput (2, uYaw, dt) - smoothedYaw);
-                shadow.RecordControl (prevControl);
+                shadow.RecordControl (delivered);
             }
 
             if (diagnosticLogging)
@@ -1270,15 +1159,15 @@ namespace KRPC.SpaceCenter.AutoPilot
                 PitchPID.Ki, RollPID.Ki, YawPID.Ki,
                 state.Pitch, state.Roll, state.Yaw,
                 logRawOmegaRi.x, logRawOmegaRi.y, logRawOmegaRi.z,
-                chatterLevel.x, chatterLevel.y, chatterLevel.z,
+                detectors.ChatterLevel.x, detectors.ChatterLevel.y, detectors.ChatterLevel.z,
                 notchActiveAxis [0] ? "n" : rateFilterValid [0] ? "l" : "-",
                 notchActiveAxis [1] ? "n" : rateFilterValid [1] ? "l" : "-",
                 notchActiveAxis [2] ? "n" : rateFilterValid [2] ? "l" : "-",
-                pitchYawHeldHz, rollHeldHz,
+                detectors.PitchYawHeldHz, detectors.RollHeldHz,
                 suppressionRamp [0] * oscillationBandwidthFloor,
                 suppressionRamp [1] * oscillationBandwidthFloor,
                 suppressionRamp [2] * oscillationBandwidthFloor,
-                Math.Max (controlOscEnvelope.x, controlOscEnvelope.z), controlOscEnvelope.y,
+                PitchYawControlOscillation, RollControlOscillation,
                 oscControlBackoff [0], oscControlBackoff [1], oscControlBackoff [2],
                 effectivePhr.x, effectivePhr.y,
                 shadowRunMax, shadowFirstStage ?? "-");
@@ -1426,8 +1315,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             // chatterLevel at the lighter DetectorOutputFilterTimeConstant corner, smoothing the delivered
             // command without the phase cost of the 2 Hz filter destabilising the full-bandwidth loop. A
             // rigid axis (chatterLevel ~0, never latched) gets weight 0 and passes through.
-            var weight = chatterLatched [index] ? suppressionRamp [index] : chatterLevel [index];
-            var tau = chatterLatched [index] ? DefaultOutputFilterTimeConstant : DetectorOutputFilterTimeConstant;
+            var weight = detectors.ChatterLatched (index) ? suppressionRamp [index] : detectors.ChatterLevel [index];
+            var tau = detectors.ChatterLatched (index) ? DefaultOutputFilterTimeConstant : DetectorOutputFilterTimeConstant;
             if (!outputFilterValid [index]) {
                 outputFilterState [index] = u;
                 outputFilterValid [index] = true;
@@ -1435,58 +1324,6 @@ namespace KRPC.SpaceCenter.AutoPilot
             var beta = 1.0 - Math.Exp (-dt / tau);
             outputFilterState [index] += beta * (u - outputFilterState [index]);
             return u + weight * (outputFilterState [index] - u);
-        }
-
-        /// <summary>
-        /// Detect a per-axis structural limit cycle and drive <c>chatterLevel</c> in [0,1].
-        /// </summary>
-        /// <remarks>
-        /// The signature of a bending-mode limit cycle is the measured rate (sampled at the root
-        /// part) changing tick-to-tick by more than the available torque could physically produce:
-        /// rigid-body motion is bounded by <c>α·dt = (τ/I)·dt</c> at full authority, so a jump several
-        /// times larger is structural oscillation, not a response to the controller. This is
-        /// gain-independent and maneuver-independent — a legitimate full-authority slew (or a
-        /// bang-bang sign reversal, where the rate is continuous) stays within <c>α·dt</c>, so it does
-        /// not trip. The level rises quickly (<c>ChatterRiseTimeConstant</c>) when excitation appears
-        /// and decays slowly (<c>ChatterDecayTimeConstant</c>); the slow release is essential because
-        /// the reduced-bandwidth state is quiet and would otherwise immediately clear the detector and
-        /// let the bandwidth climb back into the limit cycle.
-        /// </remarks>
-        void UpdateChatterDetector (Vector3d rawOmega, Vector3d torque, Vector3d moi, double dt)
-        {
-            if (!prevDetectorOmegaValid) {
-                prevDetectorOmega = rawOmega;
-                prevDetectorOmegaValid = true;
-                return;
-            }
-            for (int i = 0; i < 3; i++) {
-                var alpha = moi [i] > 0 ? torque [i] / moi [i] : 0.0;
-                var deltaOmega = Math.Abs (rawOmega [i] - prevDetectorOmega [i]);
-                var excited = alpha > 0 && deltaOmega > oscillationDetectionThreshold * alpha * dt ? 1.0 : 0.0;
-                var timeConstant = excited > chatterLevel [i] ? ChatterRiseTimeConstant : ChatterDecayTimeConstant;
-                var beta = 1.0 - Math.Exp (-dt / timeConstant);
-                chatterLevel [i] += beta * (excited - chatterLevel [i]);
-                // Latch the axis as flexible once the level confirms a limit cycle. The latch is the
-                // controller's persistent memory that the craft is flexible; in Automatic mode it
-                // gates whether suppression is applied (the estimator, which selects the tool, runs
-                // ungated). A rigid craft never reaches the level threshold (its rate never jumps
-                // beyond rigid-body dynamics). A heavy, low-authority craft *can* reach it on benign
-                // measurement jitter (the bound k·α·dt is authority-relative), and no measured signal
-                // separates that from a genuine bending mode (see the latch-discrimination design
-                // doc), so the latch is deliberately permissive and the latched mitigation itself is
-                // required to be benign on a craft that did not need it.
-                if (chatterLevel [i] >= ChatterLatchThreshold)
-                    chatterLatched [i] = true;
-            }
-            // Couple the two transverse axes (pitch x, yaw z). A long vehicle's first lateral bending
-            // mode is essentially axisymmetric, so it limit-cycles in both planes; whichever plane
-            // currently carries less of it can sit just under the Δω threshold and never latch on its
-            // own, leaving its feedforward live to drive the structure (and, when the vehicle is
-            // rolled, bleed into the other body axis). Once either transverse axis confirms flexible
-            // the craft is flexible, so latch both. Roll (y) is longitudinal and handled on its own.
-            if (chatterLatched [0] || chatterLatched [2])
-                chatterLatched [0] = chatterLatched [2] = true;
-            prevDetectorOmega = rawOmega;
         }
 
         /// <summary>
@@ -1499,10 +1336,8 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// </summary>
         void ApplyOscillationOverride (int index, Services.OscillationControl mode)
         {
-            if (mode == Services.OscillationControl.Off) {
-                chatterLevel [index] = 0;
-                chatterLatched [index] = false;
-            }
+            if (mode == Services.OscillationControl.Off)
+                detectors.ForceRigid (index);
         }
 
         /// <summary>
