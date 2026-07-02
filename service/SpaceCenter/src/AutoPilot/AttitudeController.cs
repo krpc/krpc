@@ -182,6 +182,16 @@ namespace KRPC.SpaceCenter.AutoPilot
         // band and on re-engage (Start).
         Vector3d antipodeLatchedNormal;
         bool antipodeLatched;
+        // TEMPORARY Phase-2 shadow verification (see LegacyOscillationPath): the pre-refactor
+        // oscillation path runs each tick on the same inputs as the live one and every stage
+        // output is compared exactly. shadowTickMax/shadowRunMax hold the largest absolute
+        // divergence (this tick / since Start); shadowFirstStage names the first diverging stage.
+        // Deleted with the scaffold once the refactor is verified.
+        const bool ShadowVerify = true;
+        readonly LegacyOscillationPath shadow = new LegacyOscillationPath ();
+        double shadowTickMax;
+        double shadowRunMax;
+        string shadowFirstStage;
         Vector3d logAngles;
         // Raw (unfiltered) angular velocity in the roll-invariant frame, recorded for diagnostics
         // so the filter's effect on a flexible craft is visible against what the loop acts on.
@@ -697,8 +707,36 @@ namespace KRPC.SpaceCenter.AutoPilot
                 oscControlAuto [i] = 0;
                 chatterLatched [i] = false;
             }
+            if (ShadowVerify) {
+                shadow.Start ();
+                shadowRunMax = 0;
+                shadowFirstStage = null;
+            }
             if (AutoTune)
                 DoAutoTune (vessel.AvailableTorqueVectors.Item1, vessel.MomentOfInertiaVector);
+        }
+
+        /// <summary>Record one shadow-comparison difference (TEMPORARY, Phase-2 scaffold).</summary>
+        void ShadowCompare (string stage, double diff)
+        {
+            var d = Math.Abs (diff);
+            if (d > shadowTickMax)
+                shadowTickMax = d;
+            if (d > shadowRunMax)
+                shadowRunMax = d;
+            if (d > 0.0 && shadowFirstStage == null)
+                shadowFirstStage = stage;
+        }
+
+        /// <summary>NaN-aware difference for the held frequency estimates (NaN==NaN is equal;
+        /// NaN vs number is a full-scale divergence).</summary>
+        static double ShadowDiffHz (double a, double b)
+        {
+            if (double.IsNaN (a) && double.IsNaN (b))
+                return 0.0;
+            if (double.IsNaN (a) || double.IsNaN (b))
+                return 1.0;
+            return a - b;
         }
 
         public void Update (PilotAddon.ControlInputs state)
@@ -860,6 +898,25 @@ namespace KRPC.SpaceCenter.AutoPilot
                 suppressionRamp [i] +=
                     rampBeta * ((suppressionActiveAxis [i] ? 1.0 : 0.0) - suppressionRamp [i]);
 
+            // TEMPORARY Phase-2 shadow verification: run the legacy pre-target stages on the same
+            // inputs and compare (see LegacyOscillationPath).
+            if (ShadowVerify) {
+                shadowTickMax = 0;
+                var shadowRate = shadow.RunPreTarget (currentRaw, torque, moi, dt,
+                    pitchYawOscillationControl, rollOscillationControl,
+                    pitchYawOscillationFrequency, rollOscillationFrequency,
+                    oscillationNotchQ, oscillationDetectionThreshold);
+                for (int i = 0; i < 3; i++) {
+                    ShadowCompare ("rate", shadowRate [i] - current [i]);
+                    ShadowCompare ("detect", shadow.ChatterLevel [i] - chatterLevel [i]);
+                    ShadowCompare ("latch",
+                        (shadow.ChatterLatched (i) ? 1.0 : 0.0) - (chatterLatched [i] ? 1.0 : 0.0));
+                    ShadowCompare ("ramp", shadow.SuppressionRamp (i) - suppressionRamp [i]);
+                }
+                ShadowCompare ("freq", ShadowDiffHz (shadow.PitchYawHeldHz, pitchYawHeldHz));
+                ShadowCompare ("freq", ShadowDiffHz (shadow.RollHeldHz, rollHeldHz));
+            }
+
             // Current and target angular velocities, both expressed in the roll-invariant frame.
             var currentRi = ToRollInvariant (current, cosPhi, sinPhi);
             logRawOmegaRi = ToRollInvariant (currentRaw, cosPhi, sinPhi);
@@ -938,6 +995,16 @@ namespace KRPC.SpaceCenter.AutoPilot
             mitigationLevel [0] = gate.x;
             mitigationLevel [1] = gate.y;
             mitigationLevel [2] = gate.z;
+
+            // TEMPORARY Phase-2 shadow verification: envelope/back-off/gate stage.
+            if (ShadowVerify) {
+                var shadowGate = shadow.RunGate (dt, pointingError,
+                    oscillationControlLevel, oscControlThreshold);
+                for (int i = 0; i < 3; i++) {
+                    ShadowCompare ("gate", shadowGate [i] - gate [i]);
+                    ShadowCompare ("env", shadow.ControlOscEnvelope [i] - controlOscEnvelope [i]);
+                }
+            }
 
             // Per-axis setpoint the loop tracks: full target eased toward the nominal target by the gate.
             var pidTarget = new Vector3d (
@@ -1020,13 +1087,28 @@ namespace KRPC.SpaceCenter.AutoPilot
             var gyro = GyroscopicFeedforward (current, moi, torque);
             // Output smoothing: on a latched axis blend in a low-passed copy of the final command
             // (ramped by suppressionRamp) to cap residual control chatter; rigid axes pass through.
-            state.Pitch = (float)(softStart * SmoothOutput (0, (bodyControl.x + gyro.x).Clamp (-1, 1), dt));
-            state.Roll = (float)(softStart * SmoothOutput (1, (virtualRoll + gyro.y).Clamp (-1, 1), dt));
-            state.Yaw = (float)(softStart * SmoothOutput (2, (bodyControl.z + gyro.z).Clamp (-1, 1), dt));
+            var uPitch = (bodyControl.x + gyro.x).Clamp (-1, 1);
+            var uRoll = (virtualRoll + gyro.y).Clamp (-1, 1);
+            var uYaw = (bodyControl.z + gyro.z).Clamp (-1, 1);
+            var smoothedPitch = SmoothOutput (0, uPitch, dt);
+            var smoothedRoll = SmoothOutput (1, uRoll, dt);
+            var smoothedYaw = SmoothOutput (2, uYaw, dt);
+            state.Pitch = (float)(softStart * smoothedPitch);
+            state.Roll = (float)(softStart * smoothedRoll);
+            state.Yaw = (float)(softStart * smoothedYaw);
 
             // Store the delivered command for next tick's control-output oscillation envelope.
             prevControl = new Vector3d (state.Pitch, state.Roll, state.Yaw);
             prevControlValid = true;
+
+            // TEMPORARY Phase-2 shadow verification: output smoothing on the same inputs, and
+            // feed the shadow the same delivered command for its envelope copy.
+            if (ShadowVerify) {
+                ShadowCompare ("out", shadow.SmoothOutput (0, uPitch, dt) - smoothedPitch);
+                ShadowCompare ("out", shadow.SmoothOutput (1, uRoll, dt) - smoothedRoll);
+                ShadowCompare ("out", shadow.SmoothOutput (2, uYaw, dt) - smoothedYaw);
+                shadow.RecordControl (prevControl);
+            }
 
             if (diagnosticLogging)
                 LogDiagnostics (torque, moi, phi, currentRi, target, ffRi, gyro, currentDirection, state);
@@ -1172,7 +1254,8 @@ namespace KRPC.SpaceCenter.AutoPilot
                 " fdet=({45:F3},{46:F3})" +
                 " bwtgt=({47:F3},{48:F3},{49:F3})" +
                 " oscctl=({50:F3},{51:F3}) bko=({52:F2},{53:F2},{54:F2})" +
-                " tgt_smooth=({55:F2},{56:F2})deg",
+                " tgt_smooth=({55:F2},{56:F2})deg" +
+                " shadow=({57:E1},{58})",
                 Time.fixedTime, dirErr,
                 torque.x, torque.y, torque.z,
                 moi.x, moi.y, moi.z,
@@ -1197,7 +1280,8 @@ namespace KRPC.SpaceCenter.AutoPilot
                 suppressionRamp [2] * oscillationBandwidthFloor,
                 Math.Max (controlOscEnvelope.x, controlOscEnvelope.z), controlOscEnvelope.y,
                 oscControlBackoff [0], oscControlBackoff [1], oscControlBackoff [2],
-                effectivePhr.x, effectivePhr.y);
+                effectivePhr.x, effectivePhr.y,
+                shadowRunMax, shadowFirstStage ?? "-");
             UnityEngine.Debug.Log (line);
             lock (diagnosticLogLock) {
                 diagnosticLog.AppendLine (line);
