@@ -8,19 +8,20 @@ namespace KRPC.SpaceCenter
 {
     /// <summary>
     /// An Apollo-era control-panel style window showing the live state of a vessel's auto-pilot:
-    /// backlit annunciator lamps for status, and green digital register readouts for the numeric
-    /// attitude error, target, angular rate (measured vs target), inner-loop PID gains and
-    /// oscillation suppression values. One instance per vessel, managed by
+    /// backlit annunciator lamps for status (dim when nominal, amber to flag a problem), and
+    /// digital register readouts for the numeric target, attitude error, inner-loop PID gains and
+    /// oscillation detector/gate/mitigation values. One instance per vessel, managed by
     /// <see cref="AutoPilotInfoAddon"/>.
     /// </summary>
     public class AutoPilotInfoWindow : Window
     {
-        // Apollo caution-and-warning panel colours.
-        static readonly Color green = new Color (0.30f, 1.00f, 0.45f);
+        // Panel colours, matched to the stock navball's speed display: the register text and the
+        // ENGAGED lamp use the navball's readout green, amber is the caution colour.
+        static readonly Color green = new Color (0.00f, 1.00f, 0.00f);
         static readonly Color amber = new Color (1.00f, 0.72f, 0.10f);
         // Background of the digital registers, and the unlit lamp colour, so an off lamp matches a
-        // register cell (near-black with dim grey text).
-        static readonly Color registerBackground = new Color (0.04f, 0.05f, 0.04f);
+        // register cell — the dark grey behind the navball's speed text (#3A3A3F).
+        static readonly Color registerBackground = new Color (0.227f, 0.227f, 0.247f);
 
         const float baseWidth = 250f;
 
@@ -82,7 +83,9 @@ namespace KRPC.SpaceCenter
                 stretchWidth = true
             };
             registerStyle.normal.background = registerTexture;
-            registerStyle.normal.textColor = green;
+            // Registers carry data, not status, so they read in plain white — status is the
+            // lamps' job.
+            registerStyle.normal.textColor = Color.white;
 
             // Centre-aligned register, for cells whose content reads better centred than
             // right-aligned (the resolved tool name, the percentage readouts).
@@ -179,9 +182,11 @@ namespace KRPC.SpaceCenter
 
             GUILayout.BeginVertical ();
 
-            // Engagement annunciator lamp.
+            // Engagement annunciator lamp: green when engaged and controlling, amber HELD while
+            // the engaged auto-pilot is held inert on the launch clamps (PRELAUNCH).
+            var held = engaged && ap.Held;
             GUILayout.BeginHorizontal ();
-            Lamp ("ENGAGED", engaged, green);
+            Lamp (held ? "HELD" : "ENGAGED", engaged, held ? amber : green);
             GUILayout.EndHorizontal ();
 
             // Target: axis column headers, then the current target (CUR, what the auto-pilot is
@@ -205,28 +210,8 @@ namespace KRPC.SpaceCenter
             Register (showCmd ? DegOrBlank (ap.TargetRoll) : Blank);
             GUILayout.EndHorizontal ();
 
-            // Target angular rate: axis column headers, then the current (measured) and target rate
-            // rows. CUR is the raw (roll-invariant frame) rate; both are rad/s in the controller's
-            // internal sign convention, so a settled axis shows the CUR row tracking the TGT row.
-            var rateMea = engaged ? ap.MeasuredAngularVelocity : null;
-            var rateTgt = engaged ? ap.TargetAngularVelocity : null;
-            Header ("TARGET RATE", "RAD/S");
-            AxisColumnHeader ("PCH", "YAW", "RLL");
-            GUILayout.BeginHorizontal ();
-            GUILayout.Label ("CUR", registerLabelStyle);
-            Register (rateMea == null ? Blank : Rate (rateMea.Item1));
-            Register (rateMea == null ? Blank : Rate (rateMea.Item3));
-            Register (rateMea == null ? Blank : Rate (rateMea.Item2));
-            GUILayout.EndHorizontal ();
-            GUILayout.BeginHorizontal ();
-            GUILayout.Label ("TGT", registerLabelStyle);
-            Register (rateTgt == null ? Blank : Rate (rateTgt.Item1));
-            Register (rateTgt == null ? Blank : Rate (rateTgt.Item3));
-            Register (rateTgt == null ? Blank : Rate (rateTgt.Item2));
-            GUILayout.EndHorizontal ();
-
             // Attitude error: the four axis column headers on one row, error lamps on the next, each
-            // green within the AutoPilot.Wait() stopping angle threshold and amber outside it. These
+            // dim within the AutoPilot.Wait() stopping angle threshold and amber outside it. These
             // are errors to the CURRENT (tracked) target, not the commanded one, so they stay small
             // while a smoothed change is being slewed in (the craft is tracking CUR, not CMD).
             Header ("ATTITUDE ERROR", null);
@@ -300,13 +285,6 @@ namespace KRPC.SpaceCenter
 
             TwoColumnHeader ("PCH/YAW", "RLL");
 
-            // Estimated structural mode frequency per group (held estimator value).
-            GUILayout.BeginHorizontal ();
-            GUILayout.Label ("FREQ", registerLabelStyle);
-            FreqLamp (engaged, engaged ? ap.PitchYawOscillationDetectedFrequency : double.NaN);
-            FreqLamp (engaged, engaged ? ap.RollOscillationDetectedFrequency : double.NaN);
-            GUILayout.EndHorizontal ();
-
             // Control-output oscillation envelope per group: the about-mean amplitude of the delivered
             // command that drives the back-off gate, lit amber at/above the engage threshold.
             var oscThreshold = engaged ? ap.OscillationControlThreshold : double.PositiveInfinity;
@@ -316,8 +294,15 @@ namespace KRPC.SpaceCenter
             OscCell (engaged, engaged ? ap.RollControlOscillation : 0.0, oscThreshold);
             GUILayout.EndHorizontal ();
 
-            // The gates: LATCH (the detector's persistent flexible-craft verdict), HOLD (the
-            // pointing-error hold factor, global), RAMP (the eased latch weight), BKO (the
+            // Estimated structural mode frequency per group (held estimator value).
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("FREQ", registerLabelStyle);
+            RegisterCentered (engaged ? FreqText (ap.PitchYawOscillationDetectedFrequency) : Blank);
+            RegisterCentered (engaged ? FreqText (ap.RollOscillationDetectedFrequency) : Blank);
+            GUILayout.EndHorizontal ();
+
+            // The gates: HOLD (the pointing-error hold factor, global), LATCH (the detector's
+            // persistent flexible-craft verdict), RAMP (the eased latch weight), BKO (the
             // limit-cycle back-off) and GATE (the net hold-gated mitigation level,
             // ramp · max(hold, bko), which drives the floor and the feedforward cut).
             Header ("GATES", null);
@@ -326,13 +311,13 @@ namespace KRPC.SpaceCenter
             var mitigation = engaged ? ap.MitigationLevel : null;
             TwoColumnHeader ("PCH/YAW", "RLL");
             GUILayout.BeginHorizontal ();
+            GUILayout.Label ("HOLD", registerLabelStyle);
+            RegisterCentered (engaged ? Percent (ap.HoldFactor) : Blank);
+            GUILayout.EndHorizontal ();
+            GUILayout.BeginHorizontal ();
             GUILayout.Label ("LATCH", registerLabelStyle);
             Lamp ("LATCH", engaged && ap.PitchYawOscillationLatched, amber);
             Lamp ("LATCH", engaged && ap.RollOscillationLatched, amber);
-            GUILayout.EndHorizontal ();
-            GUILayout.BeginHorizontal ();
-            GUILayout.Label ("HOLD", registerLabelStyle);
-            GateLamp (engaged, engaged ? ap.HoldFactor : 0.0);
             GUILayout.EndHorizontal ();
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("RAMP", registerLabelStyle);
@@ -389,14 +374,27 @@ namespace KRPC.SpaceCenter
             GUI.DragWindow ();
         }
 
-        // Draws one square backlit annunciator lamp. When unlit, the lamp shows the near-black
-        // register background with faint grey "engraved" text; when lit, the full colour with black
+        // Draws one square backlit annunciator lamp. When unlit, the lamp shows the register
+        // background with faint grey "engraved" text; when lit, the full colour with black
         // text. The lamp is purely informational (drawn as a box, never interactive).
         void Lamp (string label, bool lit, Color colour)
         {
+            Lamp (label, lit, colour, new Color (0.55f, 0.55f, 0.55f));
+        }
+
+        // Lamp variant for cells that carry a data readout as well as a status colour (attitude
+        // error, STRC, CTRL): the unlit text stays plain white — the value must remain readable
+        // when the status is nominal — rather than the engraved grey of a pure status lamp.
+        void DataLamp (string label, bool lit, Color colour)
+        {
+            Lamp (label, lit, colour, Color.white);
+        }
+
+        void Lamp (string label, bool lit, Color colour, Color unlitText)
+        {
             var prevBg = GUI.backgroundColor;
             GUI.backgroundColor = lit ? colour : registerBackground;
-            lampStyle.normal.textColor = lit ? Color.black : new Color (0.55f, 0.55f, 0.55f);
+            lampStyle.normal.textColor = lit ? Color.black : unlitText;
             // A box with no measurable content does not stretch to fill its column and picks up a
             // slightly different line height, so a blank lamp (e.g. RLL when no roll is held) would
             // render narrower and taller than its lit neighbours. A plain space does not fix this:
@@ -411,8 +409,7 @@ namespace KRPC.SpaceCenter
         // at/above the engage threshold, green below, dim when disengaged.
         void OscCell (bool engaged, double level, double threshold)
         {
-            Color colour = engaged && level >= threshold ? amber : green;
-            Lamp (Percent (level), engaged, colour);
+            DataLamp (Percent (level), engaged && level >= threshold, amber);
         }
 
         // Attitude-error lamp: green when the axis error is within the AutoPilot.Wait() stopping
@@ -420,31 +417,28 @@ namespace KRPC.SpaceCenter
         // axis whose roll is not held).
         void ErrorLamp (bool show, float error, float threshold)
         {
-            Lamp (show ? Deg (error) : Blank, show, Math.Abs (error) <= threshold ? green : amber);
+            DataLamp (show ? Deg (error) : Blank, show && Math.Abs (error) > threshold, amber);
         }
 
         // Frequency lamp: green showing the detected structural frequency once the tracker has a
         // lock, amber "NO LOCK" until then (and dim when disengaged).
-        void FreqLamp (bool engaged, double freq)
+        static string FreqText (double freq)
         {
-            bool locked = !double.IsNaN (freq);
-            Lamp (locked ? string.Format ("{0:F2} Hz", freq) : "NO LOCK", engaged, locked ? green : amber);
+            return double.IsNaN (freq) ? "NO LOCK" : string.Format ("{0:F2} Hz", freq);
         }
 
         // The axis is identified by the PCH/YAW/RLL column header, so the lamp shows only the level value.
         void LevelLamp (bool engaged, double level, bool latched, double latchThreshold)
         {
             // Amber once the level reaches the controller's latch threshold (so it is in the range
-            // that triggers the latch), or the axis has already latched; green below. Lamps stay lit
-            // (status colour) whenever engaged and dim when disengaged.
-            Color colour = latched || level >= latchThreshold ? amber : green;
-            Lamp (Percent (level), engaged, colour);
+            // that triggers the latch), or the axis has already latched; dim below.
+            DataLamp (Percent (level), engaged && (latched || level >= latchThreshold), amber);
         }
 
-        // Gate readout lamp: green while the gate is at zero, amber once it is engaged.
+        // Gate readout lamp: dim while the gate is inactive (at zero), amber once it is engaged.
         void GateLamp (bool engaged, double level)
         {
-            Lamp (Percent (level), engaged, level > 0.01 ? amber : green);
+            Lamp (Percent (level), engaged && level > 0.01, amber);
         }
 
         // Combined mode + engagement lamp for one mitigation cell: dim whenever the mitigation

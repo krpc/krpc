@@ -922,6 +922,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether the engaged auto-pilot is being held inert on the launch clamps (PRELAUNCH),
+        /// for the in-game info window's ENGAGED/HELD lamp.
+        /// </summary>
+        internal bool Held {
+            get { return InternalVessel.situation == global::Vessel.Situations.PRELAUNCH; }
+        }
+
+        /// <summary>
         /// The pointing-error hold factor in [0,1] for the in-game info window (1 = holding,
         /// 0 = slewing).
         /// </summary>
