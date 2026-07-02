@@ -546,28 +546,53 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Simulate and return the total aerodynamic forces acting on the vessel,
-        /// if it where to be traveling with the given velocity at the given position in the
-        /// atmosphere of the given celestial body.
+        /// if it were traveling with the given velocity, at the given position and
+        /// orientation, in the atmosphere of the given celestial body.
         /// </summary>
-        /// <returns>A vector pointing in the direction that the force acts,
-        /// with its magnitude equal to the strength of the force in Newtons.</returns>
+        /// <param name="body">The celestial body whose atmosphere the forces are simulated in.</param>
+        /// <param name="position">The position of the vessel, in reference frame
+        /// <see cref="ReferenceFrame"/>.</param>
+        /// <param name="velocity">The velocity of the vessel, in reference frame
+        /// <see cref="ReferenceFrame"/>.</param>
+        /// <param name="rotation">The orientation of the vessel, in reference frame
+        /// <see cref="ReferenceFrame"/>, in the same form as <see cref="Vessel.Rotation"/>.
+        /// The angle of attack and sideslip follow from this orientation relative to the
+        /// velocity; the roll component sets the direction of any aerodynamic lift. Pass
+        /// the vessel's current rotation to evaluate the force at its current orientation.</param>
+        /// <returns>A vector pointing in the direction that the force acts, with its
+        /// magnitude equal to the strength of the force in Newtons, in reference frame
+        /// <see cref="ReferenceFrame"/>.</returns>
+        /// <remarks>
+        /// The position, velocity and rotation arguments, and the returned force, are all
+        /// expressed in reference frame <see cref="ReferenceFrame"/>. The result is the
+        /// force the vessel would experience if it were placed at that position and
+        /// orientation with the air flowing past it at that velocity; it is the force at
+        /// the requested orientation, not the force in the vessel's current orientation.
+        /// </remarks>
         [KRPCMethod]
-        public Tuple3 SimulateAerodynamicForceAt(CelestialBody body, Tuple3 position, Tuple3 velocity)
+        public Tuple3 SimulateAerodynamicForceAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation)
         {
             if (ReferenceEquals (body, null))
                 throw new ArgumentNullException (nameof (body));
             var vessel = InternalVessel;
             var worldVelocity = referenceFrame.VelocityToWorldSpace(position.ToVector(), velocity.ToVector());
             var worldPosition = referenceFrame.PositionToWorldSpace(position.ToVector());
-            Vector3 worldForce;
+            QuaternionD desiredWorld = referenceFrame.RotationToWorldSpace (rotation.ToQuaternion ());
+            QuaternionD currentWorld = vessel.ReferenceTransform.rotation;
+            var delta = desiredWorld * currentWorld.Inverse ();
+            var adjustedVelocity = delta.Inverse () * (worldVelocity - body.InternalBody.getRFrmVel(worldPosition));
+            Vector3 force;
             if (!FAR.IsAvailable) {
-                var relativeWorldVelocity = worldVelocity - body.InternalBody.getRFrmVel(worldPosition);
-                worldForce = StockAerodynamics.SimAeroForce(body.InternalBody, vessel, relativeWorldVelocity, worldPosition);
+                force = StockAerodynamics.SimAeroForce(body.InternalBody, vessel, adjustedVelocity, worldPosition);
             } else {
                 Vector3 torque;
                 var altitude = (worldPosition - body.InternalBody.position).magnitude - body.InternalBody.Radius;
-                FAR.CalculateVesselAeroForces(vessel, out worldForce, out torque, worldVelocity - body.InternalBody.getRFrmVel(worldPosition), altitude);
+                FAR.CalculateVesselAeroForces(vessel, out force, out torque, adjustedVelocity, altitude);
+                // CalculateVesselAeroForces returns kilonewtons; convert to newtons to
+                // match the stock path and this method's documented units.
+                force = force * 1000f;
             }
+            var worldForce = (Vector3)(delta * (Vector3d)force);
             return referenceFrame.DirectionFromWorldSpace(worldForce).ToTuple();
         }
 
