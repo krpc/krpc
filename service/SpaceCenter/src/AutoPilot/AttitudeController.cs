@@ -1529,14 +1529,25 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// feedforward low-pass in Update smears those few genuine transitions over ~3 ticks.
         /// </remarks>
         double ProfileMagnitudeRate (ProfileSample s, double thetaDotPure, double slewRateRad,
-            double deadbandHighDeg)
+            double trackingFraction, double deadbandHighDeg)
         {
             double speedRate = 0.0;
             if (!s.CapActive && s.Speed > 1e-9) {
+                // The closed forms below are the ON-PROFILE accelerations — valid only while the
+                // craft is actually tracking the profile down toward the target. Off-profile
+                // (maneuver start: ω ≈ 0, far below the commanded speed) the planned braking is
+                // fiction, and on the linear branch it evaluates to −bw·s/(bw·s+α) ≈ −0.95 of
+                // full authority on a low-α axis — measured in-game fighting the saturated PI to
+                // a ~5%-authority crawl through most of a 20° roll maneuver. Scale the braking
+                // terms by the caller's trackingFraction (attained fraction of the commanded
+                // speed along the command direction, clamped to [0,1]): ~0 at spin-up (the
+                // saturated PI provides the bang-bang acceleration phase; the feedforward stays
+                // a braking-anticipation device), → 1 when tracking, where the closed forms are
+                // exact. Continuous and stateless, so no seam is introduced.
                 var eDotTrack = s.LinearActive
                     ? -(s.Bandwidth * s.Speed * s.Speed) / (s.Bandwidth * s.Speed + s.Alpha)
                     : -0.5 * s.Speed;
-                speedRate = (s.Alpha / s.Speed) * (eDotTrack + slewRateRad);
+                speedRate = (s.Alpha / s.Speed) * (eDotTrack * trackingFraction + slewRateRad);
             }
             double deadbandRate = 0.0;
             if (s.Deadband > 0.0 && s.Deadband < 1.0) {
@@ -1567,7 +1578,13 @@ namespace KRPC.SpaceCenter.AutoPilot
             var thetaDot = slewRateRad;
             if (s.Theta > 1e-12)
                 thetaDot += (s.ThetaPitch * omegaRi.x + s.ThetaYaw * omegaRi.z) / s.Theta;
-            var gDot = ProfileMagnitudeRate (s, thetaDot, slewRateRad, PitchYawAttenuationAngle);
+            // Attained fraction of the commanded speed along the command direction −ŝ
+            // (see the off-profile note in ProfileMagnitudeRate).
+            var omegaAlongCommand = -(s.SPitch * omegaRi.x + s.SYaw * omegaRi.z);
+            var tracking = s.Speed > 1e-9
+                ? Math.Min (1.0, Math.Max (0.0, omegaAlongCommand / s.Speed)) : 0.0;
+            var gDot = ProfileMagnitudeRate (s, thetaDot, slewRateRad, tracking,
+                PitchYawAttenuationAngle);
             if (alphaPitch > 0)
                 ffPitch = -s.SPitch * gDot / alphaPitch;
             if (alphaYaw > 0)
@@ -1585,7 +1602,13 @@ namespace KRPC.SpaceCenter.AutoPilot
             var thetaDot = slewRateRad;
             if (s.Theta > 1e-12)
                 thetaDot += Math.Sign (s.ThetaPitch) * omegaRollRi;
-            var gDot = ProfileMagnitudeRate (s, thetaDot, slewRateRad, RollAttenuationAngle);
+            // Attained fraction of the commanded speed along the command direction −ŝ
+            // (see the off-profile note in ProfileMagnitudeRate).
+            var omegaAlongCommand = -(s.SPitch * omegaRollRi);
+            var tracking = s.Speed > 1e-9
+                ? Math.Min (1.0, Math.Max (0.0, omegaAlongCommand / s.Speed)) : 0.0;
+            var gDot = ProfileMagnitudeRate (s, thetaDot, slewRateRad, tracking,
+                RollAttenuationAngle);
             return -s.SPitch * gDot / alphaRoll;
         }
 
