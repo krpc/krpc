@@ -869,7 +869,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             // Current and target angular velocities, both expressed in the roll-invariant frame.
             var currentRi = ToRollInvariant (current, cosPhi, sinPhi);
             logRawOmegaRi = ToRollInvariant (currentRaw, cosPhi, sinPhi);
-            var target = ComputeTargetAngularVelocity (torque, moi, current, currentDirection, cosPhi, sinPhi);
+            ProfileSample pySampleFull, rollSampleFull;
+            var target = ComputeTargetAngularVelocity (torque, moi, current, currentDirection,
+                cosPhi, sinPhi, out pySampleFull, out rollSampleFull);
 
             // Nominal target: the velocity profile with only the quadratic (bang-bang, ω²/2α)
             // stopping term — the linear PID-lag term ω/bandwidth is dropped. A latched, holding axis
@@ -884,7 +886,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             // residual rate then systematically overshot the deadband and the hold gate + oscillation
             // back-off turned that into a self-sustaining ~0.28 Hz limit cycle. While slewing the axis
             // tracks the full `target` (with both stopping terms) so it brakes cleanly.
-            var targetNominal = ComputeTargetAngularVelocity (torque, moi, current, currentDirection, cosPhi, sinPhi, false);
+            ProfileSample pySampleNominal, rollSampleNominal;
+            var targetNominal = ComputeTargetAngularVelocity (torque, moi, current, currentDirection,
+                cosPhi, sinPhi, out pySampleNominal, out rollSampleNominal, false);
 
             // Roll setpoint is already weighted to zero inside ComputeTargetAngularVelocity when the
             // vessel is far from the direction target; clear the integral there to prevent windup.
@@ -1523,14 +1527,55 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
+        /// One velocity-profile evaluation for an axis group (pitch/yaw jointly, or roll alone),
+        /// recording which branches the profile arithmetic took together with the quantities the
+        /// acceleration feedforward needs — so the feedforward can be derived from the profile's
+        /// own decisions rather than re-derived from thresholds (which would disagree at the
+        /// seams) or numerically differenced (which amplifies measured-rate jitter by 1/dt).
+        /// </summary>
+        struct ProfileSample
+        {
+            // Unit stopping-point direction ŝ = e_stop/|e_stop| in the roll-invariant xz-plane;
+            // the command is ω_ref = −ŝ·Speed·Deadband. For roll (1D) SPitch carries sign(θ_ff)
+            // — the same convention — and SYaw is 0.
+            public double SPitch;
+            public double SYaw;
+            // Signed pure pointing error (rad, before the ω-dependent stopping correction):
+            // the vector (ThetaPitch, ThetaYaw) for pitch/yaw, the scalar in ThetaPitch for roll.
+            // Theta below is its magnitude. Used for the deadband-slope term of the feedforward
+            // (d|θ|/dt needs the direction of θ, which |θ| alone does not carry).
+            public double ThetaPitch;
+            public double ThetaYaw;
+            // Commanded speed before the deadband scale (rad/s, >= 0).
+            public double Speed;
+            // Full-authority acceleration α the profile used, projected along ŝ (rad/s²).
+            public double Alpha;
+            // PID bandwidth (projected along ω̂) when the linear stopping coefficient won the
+            // max() against the quadratic one; 0 otherwise.
+            public double Bandwidth;
+            // The velocity cap (MaxAngularVelocity), not the sqrt profile, set the speed.
+            public bool CapActive;
+            // The linear (1/bandwidth) stopping coefficient beat the quadratic (ω/2α) one.
+            public bool LinearActive;
+            // Pointing-deadband scale D(θ) in [0,1] applied to the setpoint.
+            public double Deadband;
+            // |θ| (pure pointing error, rad) the deadband was keyed on.
+            public double Theta;
+            // False when the profile commanded nothing (no authority, or the e_stop guard).
+            public bool Valid;
+        }
+
+        /// <summary>
         /// Compute target angular velocity in the roll-invariant frame (pitch,roll,yaw axes with
         /// vessel roll stripped out). cosPhi/sinPhi are cos/sin of the current vessel roll angle.
         /// With <paramref name="linearStopping"/> false the linear (PID-lag, ω/bandwidth) stopping
         /// term is omitted and only the quadratic (bang-bang, ω²/2α) term is kept — the latched-hold
-        /// nominal profile (see the targetNominal note in Update).
+        /// nominal profile (see the targetNominal note in Update). The two out samples record the
+        /// profile's branch decisions for the pitch/yaw group and the roll axis (see ProfileSample).
         /// </summary>
         Vector3d ComputeTargetAngularVelocity (Vector3d torque, Vector3d moi, Vector3d currentOmega,
-            Vector3d currentDirection, double cosPhi, double sinPhi, bool linearStopping = true)
+            Vector3d currentDirection, double cosPhi, double sinPhi,
+            out ProfileSample pitchYawSample, out ProfileSample rollSample, bool linearStopping = true)
         {
             var internalVessel = vessel.InternalVessel;
             var targetDirection = EffectiveTargetDirection;
@@ -1592,12 +1637,12 @@ namespace KRPC.SpaceCenter.AutoPilot
             // bandwidth drops the linear stopping term (quad-only nominal profile).
             var rollBandwidth = moi [1] > 0 && linearStopping ? RollPID.Kp * torque [1] / moi [1] : 0.0;
             result.y = ComputeAxisVelocity (anglesRI.y, torque [1], moi [1], currentOmegaRi.y,
-                MaxAngularVelocity [1], RollAttenuationAngle, rollBandwidth);
+                MaxAngularVelocity [1], RollAttenuationAngle, rollBandwidth, out rollSample);
 
             // Pitch/yaw handled jointly so the nose follows a straight great-circle arc.
             double pitchVelocity, yawVelocity;
             ComputePitchYawVelocity (anglesRI, currentOmegaRi, torque, moi, linearStopping,
-                out pitchVelocity, out yawVelocity);
+                out pitchVelocity, out yawVelocity, out pitchYawSample);
             result.x = pitchVelocity;
             result.z = yawVelocity;
 
@@ -1635,10 +1680,12 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// when ω is radial, so the radial reduction above is preserved.
         /// </remarks>
         void ComputePitchYawVelocity (Vector3d anglesRI, Vector3d currentOmegaRi, Vector3d torque,
-            Vector3d moi, bool linearStopping, out double pitchVelocity, out double yawVelocity)
+            Vector3d moi, bool linearStopping, out double pitchVelocity, out double yawVelocity,
+            out ProfileSample sample)
         {
             pitchVelocity = 0;
             yawVelocity = 0;
+            sample = default (ProfileSample);   // Valid == false until the profile commands
 
             var thetaPitch = GeometryExtensions.ToRadians (anglesRI.x);
             var thetaYaw = GeometryExtensions.ToRadians (anglesRI.z);
@@ -1657,6 +1704,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             var omegaMag = Math.Sqrt (omegaPitch * omegaPitch + omegaYaw * omegaYaw);
 
             double coeff = 0;
+            var linearActive = false;
+            double linearBandwidth = 0;
             if (omegaMag > 0) {
                 var oPitch = omegaPitch / omegaMag;
                 var oYaw = omegaYaw / omegaMag;
@@ -1668,8 +1717,11 @@ namespace KRPC.SpaceCenter.AutoPilot
                         var bw0 = moi [0] > 0 ? PitchPID.Kp * torque [0] / moi [0] : 0.0;
                         var bw2 = moi [2] > 0 ? YawPID.Kp * torque [2] / moi [2] : 0.0;
                         var bandwidthOmega = oPitch * oPitch * bw0 + oYaw * oYaw * bw2;
-                        if (bandwidthOmega > 0)
+                        if (bandwidthOmega > 0) {
                             coeff = Math.Max (coeffQuad, 1.0 / bandwidthOmega);
+                            linearActive = 1.0 / bandwidthOmega > coeffQuad;
+                            linearBandwidth = bandwidthOmega;
+                        }
                     }
                 }
             }
@@ -1698,8 +1750,11 @@ namespace KRPC.SpaceCenter.AutoPilot
                 : Math.Min (maxVPitch, maxVYaw);
 
             double speed = 0;
-            if (alpha2d > 0)
-                speed = Math.Min (maxV2d, Math.Sqrt (2.0 * eStopMag * alpha2d));
+            var speedUnclamped = 0.0;
+            if (alpha2d > 0) {
+                speedUnclamped = Math.Sqrt (2.0 * eStopMag * alpha2d);
+                speed = Math.Min (maxV2d, speedUnclamped);
+            }
 
             // Command toward the stopping point, scaled by the linear pointing deadband (see
             // DeadbandScale): the commanded speed fades to zero as the predicted stopping point
@@ -1714,6 +1769,18 @@ namespace KRPC.SpaceCenter.AutoPilot
             // slope into the setpoint and feedforward. θ is jitter-free, so the deadband edge is quiet.
             var thetaMag = Math.Sqrt (thetaPitch * thetaPitch + thetaYaw * thetaYaw);
             var deadband = DeadbandScale (thetaMag, PitchYawAttenuationAngle);
+            sample.SPitch = sPitch;
+            sample.SYaw = sYaw;
+            sample.ThetaPitch = thetaPitch;
+            sample.ThetaYaw = thetaYaw;
+            sample.Speed = speed;
+            sample.Alpha = alpha2d;
+            sample.Bandwidth = linearActive ? linearBandwidth : 0.0;
+            sample.CapActive = alpha2d > 0 && maxV2d < speedUnclamped;
+            sample.LinearActive = linearActive;
+            sample.Deadband = deadband;
+            sample.Theta = thetaMag;
+            sample.Valid = alpha2d > 0;
             pitchVelocity = -sPitch * speed * deadband;
             yawVelocity = -sYaw * speed * deadband;
         }
@@ -1740,16 +1807,20 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// Compute target angular velocity for a single axis using the bang-bang profile.
         /// </summary>
         double ComputeAxisVelocity (double angleDeg, double torque, double moi, double currentOmega,
-            double maxVelocity, double deadbandHighDeg, double pidBandwidth = 0.0)
+            double maxVelocity, double deadbandHighDeg, double pidBandwidth,
+            out ProfileSample sample)
         {
+            sample = default (ProfileSample);
             var theta = GeometryExtensions.ToRadians (angleDeg);
             var thetaPure = theta;   // pure error, before the ω-dependent stopping correction below
             var maxAcceleration = moi > 0 ? torque / moi : 0.0;
+            var linearActive = false;
             if (maxAcceleration > 0) {
                 var corrQuad = 0.5 * currentOmega * Math.Abs (currentOmega) / maxAcceleration;
                 var corr = corrQuad;
                 if (pidBandwidth > 0) {
                     var corrLinear = currentOmega / pidBandwidth;
+                    linearActive = Math.Abs (corrLinear) > Math.Abs (corrQuad);
                     corr = Math.Abs (corrQuad) >= Math.Abs (corrLinear) ? corrQuad : corrLinear;
                 }
                 theta += corr;
@@ -1762,9 +1833,23 @@ namespace KRPC.SpaceCenter.AutoPilot
             // ramp slope: the commanded speed fades to zero as the error approaches the target, so the
             // craft coasts to a stop inside the band. Applied to the setpoint, so the inner rate loop keeps
             // full damping.
-            return -Math.Sign (theta) * Math.Min (maxVelocity,
-                maxAcceleration > 0 ? Math.Sqrt (2.0 * Math.Abs (theta) * maxAcceleration) : 0.0)
-                * DeadbandScale (Math.Abs (thetaPure), deadbandHighDeg);
+            var speedUnclamped = maxAcceleration > 0
+                ? Math.Sqrt (2.0 * Math.Abs (theta) * maxAcceleration) : 0.0;
+            var speed = Math.Min (maxVelocity, speedUnclamped);
+            var deadband = DeadbandScale (Math.Abs (thetaPure), deadbandHighDeg);
+            sample.SPitch = Math.Sign (theta);
+            sample.SYaw = 0.0;
+            sample.ThetaPitch = thetaPure;
+            sample.ThetaYaw = 0.0;
+            sample.Speed = speed;
+            sample.Alpha = maxAcceleration;
+            sample.Bandwidth = linearActive ? pidBandwidth : 0.0;
+            sample.CapActive = maxAcceleration > 0 && maxVelocity < speedUnclamped;
+            sample.LinearActive = linearActive;
+            sample.Deadband = deadband;
+            sample.Theta = Math.Abs (thetaPure);
+            sample.Valid = maxAcceleration > 0;
+            return -Math.Sign (theta) * speed * deadband;
         }
 
         void DoAutoTune (Vector3d torque, Vector3d moi)
