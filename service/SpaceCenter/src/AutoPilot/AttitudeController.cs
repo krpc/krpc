@@ -1572,8 +1572,20 @@ namespace KRPC.SpaceCenter.AutoPilot
             if (s.Deadband > 0.0 && s.Deadband < 1.0) {
                 var high = GeometryExtensions.ToRadians (deadbandHighDeg);
                 var low = DeadbandLowFraction * high;
+                // The ramp slope is an on-profile value too: it is the acceleration needed for ω
+                // to follow the collapsing command g = speed·D through the band, meaningful only
+                // while ω is actually tracking the command. Off-profile it is worse than the
+                // braking terms — when a fast crossing flips ŝ (e_stop past the target) the
+                // measured θ̇ is large and ω is ANTI-parallel to the command, so −ŝ·ġ points
+                // along ω, across the target: a full-authority kick per crossing that pumps a
+                // limit cycle on a high-α craft (the residual test_nudge_mid_slew failure after
+                // the overshoot gate, which is 1 for ω∥ ≤ 0 by design and so exempts exactly
+                // this regime). Scale by the tracking fraction like the braking terms: 1 on a
+                // steady in-band brake or slew-track (θ̇ ≈ −ω∥), 0 once ω opposes the command,
+                // handing the recovery to the (well-damped, saturating) PI.
                 if (high > low)
-                    deadbandRate = s.Speed * (1.0 / (high - low)) * thetaDotPure;
+                    deadbandRate = s.Speed * (1.0 / (high - low)) * thetaDotPure
+                        * trackingFraction;
             }
             return speedRate * s.Deadband + deadbandRate;
         }
