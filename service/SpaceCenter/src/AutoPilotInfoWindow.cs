@@ -312,7 +312,8 @@ namespace KRPC.SpaceCenter
             TwoColumnHeader ("PCH/YAW", "RLL");
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("HOLD", registerLabelStyle);
-            RegisterCentered (engaged ? Percent (ap.HoldFactor) : Blank);
+            RegisterCentered (engaged ? Percent (ap.PitchYawHoldFactor) : Blank);
+            RegisterCentered (engaged ? Percent (ap.RollHoldFactor) : Blank);
             GUILayout.EndHorizontal ();
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("LATCH", registerLabelStyle);

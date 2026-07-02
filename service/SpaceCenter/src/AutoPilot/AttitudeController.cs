@@ -124,7 +124,8 @@ namespace KRPC.SpaceCenter.AutoPilot
         // hold factor, the applied feedforward-cut fraction, the output-filter blend weight
         // actually chosen, and the post-floor inner-loop bandwidth (rad/s; only written while
         // auto-tuning runs).
-        double logHoldFactor;
+        double logHoldFactorPitchYaw;
+        double logHoldFactorRoll;
         Vector3d logFfCut;
         Vector3d logOutputFilterWeight;
         Vector3d logAppliedBandwidth;
@@ -427,8 +428,12 @@ namespace KRPC.SpaceCenter.AutoPilot
         // factor, the latch ramps, the back-off levels, the applied feedforward-cut fraction,
         // the output-filter blend weight and the post-floor inner-loop bandwidth (rad/s; stale
         // when AutoTune is off — the window blanks it there).
-        public double HoldFactor {
-            get { return logHoldFactor; }
+        public double PitchYawHoldFactor {
+            get { return logHoldFactorPitchYaw; }
+        }
+
+        public double RollHoldFactor {
+            get { return logHoldFactorRoll; }
         }
 
         public Vector3d SuppressionRamp {
@@ -579,7 +584,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             rateFilter.Reset ();
             outputFilter.Reset ();
             policy.Reset ();
-            logHoldFactor = 0;
+            logHoldFactorPitchYaw = 0;
+            logHoldFactorRoll = 0;
             logFfCut = Vector3d.zero;
             logOutputFilterWeight = Vector3d.zero;
             logAppliedBandwidth = Vector3d.zero;
@@ -721,25 +727,38 @@ namespace KRPC.SpaceCenter.AutoPilot
                 ClearRollWindupIfDisengaged (currentDirection);
             }
 
-            // Continuous hold gate: 1 while holding (pointing error ≤ HoldErrorFull), 0 while slewing
+            // Continuous hold gate: 1 while holding (error ≤ HoldErrorFull), 0 while slewing
             // (≥ HoldErrorNone), linear between. Combined with suppressionRamp it gives the per-axis
             // mitigation weight — only a latched axis that is also holding is floored and has its
             // feedforward cut. (The linear stopping coefficient is computed from the unfloored gain
             // — see ProfileKp — so the setpoint needs no separate hold-time profile.)
+            // The hold factor is per axis group: pitch/yaw key on the pointing error; roll keys on
+            // the LARGER of the pointing error and the roll error. Keying roll on the pointing
+            // error alone left a latched roll axis floored (with its feedforward cut) through a
+            // pure roll maneuver — the pointing error stays ~0 there, so the mitigation never
+            // released and the floored integrator crawled through the turn (measured in-game: a
+            // 20° roll's tail creeping once roll latched mid-slew). Taking the max means roll also
+            // releases during a pointing slew, exactly as before. logAngles.y is the roll residual
+            // the profile acts on (degrees; ≡ 0 when roll is not controlled, so behaviour there is
+            // unchanged). A pure roll maneuver does NOT release latched pitch/yaw — they really
+            // are holding.
             var pointingError = Vector3.Angle (currentDirection, EffectiveTargetDirection);
-            var holdFactor = OscillationDetectors.HoldFactor (pointingError);
-            logHoldFactor = holdFactor;
+            var holdFactorPitchYaw = OscillationDetectors.HoldFactor (pointingError);
+            var rollErrorDeg = Math.Abs (logAngles.y);
+            var holdFactorRoll =
+                OscillationDetectors.HoldFactor (Math.Max (pointingError, rollErrorDeg));
+            logHoldFactorPitchYaw = holdFactorPitchYaw;
+            logHoldFactorRoll = holdFactorRoll;
             // Oscillation-control back-off, OR'd into the hold gate via max() below: lets the latched
             // mitigation engage independent of pointing error — the hold gate's blind spot during a
             // maneuver, where a released gate restores the feedforward that re-drives the bending mode.
             // The trigger is the about-mean envelope of the delivered command (built by the detectors
             // from the previous tick, since this tick's command does not exist yet): a sustained limit
             // cycle has a large envelope while a steady slew (one-sign ramp, tracked by the trim mean)
-            // does not. It rises fast / decays slow so a one-shot transient does not pin it, only a
-            // latched axis can trigger, and the manual OscillationControlLevel is a floor under the
-            // automatic level.
+            // does not. It rises fast / decays slow so a one-shot transient does not pin it, and only
+            // a latched axis can trigger.
             detectors.UpdateControlEnvelope (dt);
-            var gate = policy.UpdateGate (detectors, dt, holdFactor);
+            var gate = policy.UpdateGate (detectors, dt, holdFactorPitchYaw, holdFactorRoll);
 
 
             logTargetRi = target;

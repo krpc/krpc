@@ -138,10 +138,13 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// mode into a limit cycle that parks the error across the band. The trigger is the
         /// detectors' about-mean delivered-command envelope — a sustained limit cycle has a
         /// large envelope while a steady slew does not — rising fast / decaying slow, only on a
-        /// latched axis. Pitch (x) and yaw (z) are coupled (mirroring the chatter detector);
-        /// roll (y) on its own.
+        /// latched axis. Pitch (x) and yaw (z) are coupled (mirroring the chatter detector) and
+        /// use <paramref name="pitchYawHold"/>; roll (y) is on its own and uses
+        /// <paramref name="rollHold"/>, which its caller keys on the roll error as well as the
+        /// pointing error so a pure roll maneuver releases the roll mitigation.
         /// </summary>
-        public Vector3d UpdateGate (OscillationDetectors detectors, double dt, double holdFactor)
+        public Vector3d UpdateGate (OscillationDetectors detectors, double dt,
+            double pitchYawHold, double rollHold)
         {
             var controlEnv = detectors.ControlOscEnvelope;
             var pyEnv = Math.Max (controlEnv.x, controlEnv.z);
@@ -156,9 +159,9 @@ namespace KRPC.SpaceCenter.AutoPilot
                 oscControlBackoff [i] = oscControlAuto [i];
             }
             var gate = new Vector3d (
-                suppressionRamp [0] * Math.Max (holdFactor, oscControlBackoff [0]),
-                suppressionRamp [1] * Math.Max (holdFactor, oscControlBackoff [1]),
-                suppressionRamp [2] * Math.Max (holdFactor, oscControlBackoff [2]));
+                suppressionRamp [0] * Math.Max (pitchYawHold, oscControlBackoff [0]),
+                suppressionRamp [1] * Math.Max (rollHold, oscControlBackoff [1]),
+                suppressionRamp [2] * Math.Max (pitchYawHold, oscControlBackoff [2]));
             mitigationLevel [0] = gate.x;
             mitigationLevel [1] = gate.y;
             mitigationLevel [2] = gate.z;

@@ -930,11 +930,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The pointing-error hold factor in [0,1] for the in-game info window (1 = holding,
-        /// 0 = slewing).
+        /// The pitch/yaw hold factor in [0,1] (keyed on the pointing error) for the in-game
+        /// info window (1 = holding, 0 = slewing).
         /// </summary>
-        internal double HoldFactor {
-            get { return attitudeController.HoldFactor; }
+        internal double PitchYawHoldFactor {
+            get { return attitudeController.PitchYawHoldFactor; }
+        }
+
+        /// <summary>
+        /// The roll hold factor in [0,1] (keyed on the larger of the pointing and roll errors)
+        /// for the in-game info window.
+        /// </summary>
+        internal double RollHoldFactor {
+            get { return attitudeController.RollHoldFactor; }
         }
 
         /// <summary>
