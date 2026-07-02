@@ -198,8 +198,6 @@ namespace KRPC.SpaceCenter.AutoPilot
         // Long enough to attenuate the single-tick steps the bang-bang profile's slope
         // discontinuities produce, short enough that the feedforward lag stays negligible.
         const double FeedforwardSmoothTimeConstant = 0.05;
-        // Slope factor of the sigmoid that attenuates the velocity setpoint near the target.
-        const double AttenuationSigmoidSlope = 6.0;
         // Default per-group mode frequency (Hz): the manual notch/low-pass frequency and the
         // Automatic-mode estimator seed before acquisition. 1.5 Hz is near the only in-game-measured
         // low-frequency mode (the Ariane 5's ~1.4 Hz first lateral bending mode), so a freshly
@@ -230,6 +228,18 @@ namespace KRPC.SpaceCenter.AutoPilot
         // not slowed by the floor — only the settled hold is quieted.
         const double HoldErrorFull = 1.0;
         const double HoldErrorNone = 2.5;
+        // Pointing deadband on the target angular velocity (see DeadbandScale, applied in
+        // ComputePitchYawVelocity / ComputeAxisVelocity). As the error vanishes the commanded velocity
+        // setpoint is scaled linearly to zero — from full at the deadband high angle to zero below this
+        // fraction of it — so the craft coasts to a stop inside the band and the inner rate loop is no
+        // longer commanded to chase sub-band motion, which on a craft with a noisy root-part rate would
+        // dither the actuators. It is applied to the *setpoint* (outer loop), not the inner-loop gains, so
+        // the inner rate loop keeps its full proportional damping and stays well-damped at the hold point
+        // (scaling the inner proportional term instead removes that damping and the hold oscillates). This
+        // replaces the former logistic attenuation with a linear ramp that reaches exactly zero — a clean
+        // deadband rather than a residual tail. The high angle is the public PitchYawAttenuationAngle /
+        // RollAttenuationAngle (formerly the logistic half-width); the low edge is this fraction of it.
+        const double DeadbandLowFraction = 0.5;
         // Routing threshold (Hz): a detected mode below this is well-conditioned for a notch (K =
         // tan(π·f·dt) < 1 up to 12.5 Hz at 50 Hz physics) and close enough to the band that a
         // low-pass would add too much crossover phase lag; above it the notch degrades toward the
@@ -405,8 +415,15 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public Vector3d MaxAngularVelocity { get; set; }
 
+        // Pointing deadband high angle (degrees) for the roll axis: at/above this error the target roll
+        // velocity is commanded in full; below it the commanded velocity ramps linearly to zero by
+        // DeadbandLowFraction of it, so the craft coasts to a stop and the actuator stops dithering
+        // against measured-rate jitter once pointed. Formerly the logistic attenuation half-width; see the
+        // deadband note by DeadbandLowFraction.
         public double RollAttenuationAngle { get; set; }
 
+        // Pointing deadband high angle (degrees) for the coupled pitch/yaw group. As RollAttenuationAngle,
+        // but keyed on the 2D pitch/yaw predicted stopping-point magnitude.
         public double PitchYawAttenuationAngle { get; set; }
 
         public double RollStartAngle { get; set; }
@@ -1529,7 +1546,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// <code>
         ///   e_stop = θ + coeff·ω          (coeff·ω is the full-authority stopping displacement)
         ///   ŝ      = e_stop / |e_stop|
-        ///   ω_ref  = -ŝ · speed(|e_stop|) · attenuation(|e_stop|)
+        ///   ω_ref  = -ŝ · speed(|e_stop|)
         /// </code>
         /// Tangential damping emerges from the geometry: a sideways drift gives <c>coeff·ω</c> an
         /// off-axis component, tilting <c>e_stop</c> and rotating <c>ŝ</c> so the command acquires a
@@ -1614,25 +1631,49 @@ namespace KRPC.SpaceCenter.AutoPilot
             if (alpha2d > 0)
                 speed = Math.Min (maxV2d, Math.Sqrt (2.0 * eStopMag * alpha2d));
 
-            var attAngle2d = GeometryExtensions.ToRadians (PitchYawAttenuationAngle);
-            var attenuation2d = 1.0 / (1.0 + Math.Exp (-((eStopMag - attAngle2d) * (AttenuationSigmoidSlope / attAngle2d))));
-            if (double.IsNaN (attenuation2d))
-                attenuation2d = 0;
+            // Command toward the stopping point, scaled by the linear pointing deadband (see
+            // DeadbandScale): the commanded speed fades to zero as the predicted stopping point
+            // approaches the target, so the craft coasts to a stop inside the band rather than the inner
+            // loop chasing sub-band jitter into the actuators. Applied to the *setpoint* (outer loop), so
+            // the inner rate loop keeps its full proportional rate damping and stays well-damped at the
+            // hold point. The leading minus defines the controller's positive angular-velocity direction
+            // (left-handed sense; matched to the negation in ComputeCurrentAngularVelocity), exactly as
+            // the legacy -Math.Sign(θ_ff) did.
+            // Key the deadband on the pure pointing error θ, not e_stop: e_stop = θ + coeff·ω carries the
+            // measured rate ω, so scaling by it would feed the ±mrad/s rate jitter through the ramp's
+            // slope into the setpoint and feedforward. θ is jitter-free, so the deadband edge is quiet.
+            var thetaMag = Math.Sqrt (thetaPitch * thetaPitch + thetaYaw * thetaYaw);
+            var deadband = DeadbandScale (thetaMag, PitchYawAttenuationAngle);
+            pitchVelocity = -sPitch * speed * deadband;
+            yawVelocity = -sYaw * speed * deadband;
+        }
 
-            // Command toward the stopping point. The leading minus defines the controller's positive
-            // angular-velocity direction (left-handed sense; matched to the negation in
-            // ComputeCurrentAngularVelocity), exactly as the legacy -Math.Sign(θ_ff) did.
-            pitchVelocity = -sPitch * speed * attenuation2d;
-            yawVelocity = -sYaw * speed * attenuation2d;
+        /// <summary>
+        /// Linear pointing-deadband scale in [0,1] applied to the target angular velocity: 1 at and above
+        /// the high angle, ramping linearly to 0 at <see cref="DeadbandLowFraction"/> of it, and 0 below.
+        /// Replaces the former logistic attenuation — same role (drive the velocity setpoint to zero as
+        /// the error vanishes so the craft coasts to a stop without the inner loop chasing sub-band jitter
+        /// into the actuators) but with a linear ramp that reaches exactly zero, giving a clean deadband
+        /// rather than a residual tail. <paramref name="errorRad"/> and the returned band are in radians /
+        /// degrees respectively.
+        /// </summary>
+        static double DeadbandScale (double errorRad, double highAngleDeg)
+        {
+            var high = GeometryExtensions.ToRadians (highAngleDeg);
+            var low = DeadbandLowFraction * high;
+            if (high <= low)
+                return errorRad > low ? 1.0 : 0.0;
+            return Math.Min (1.0, Math.Max (0.0, (errorRad - low) / (high - low)));
         }
 
         /// <summary>
         /// Compute target angular velocity for a single axis using the bang-bang profile.
         /// </summary>
         double ComputeAxisVelocity (double angleDeg, double torque, double moi, double currentOmega,
-            double maxVelocity, double attenuationAngleDeg, double pidBandwidth = 0.0)
+            double maxVelocity, double deadbandHighDeg, double pidBandwidth = 0.0)
         {
             var theta = GeometryExtensions.ToRadians (angleDeg);
+            var thetaPure = theta;   // pure error, before the ω-dependent stopping correction below
             var maxAcceleration = moi > 0 ? torque / moi : 0.0;
             if (maxAcceleration > 0) {
                 var corrQuad = 0.5 * currentOmega * Math.Abs (currentOmega) / maxAcceleration;
@@ -1646,13 +1687,14 @@ namespace KRPC.SpaceCenter.AutoPilot
             // The leading -Math.Sign defines the controller's positive angular-velocity direction as
             // the left-handed sense about the axis; it is the matched partner of the negation in
             // ComputeCurrentAngularVelocity. Flip one without the other and the PI loop diverges.
-            var velocity = -Math.Sign (theta) * Math.Min (maxVelocity,
-                maxAcceleration > 0 ? Math.Sqrt (2.0 * Math.Abs (theta) * maxAcceleration) : 0.0);
-            var attAngle = GeometryExtensions.ToRadians (attenuationAngleDeg);
-            var attenuation = 1.0 / (1.0 + Math.Exp (-((Math.Abs (theta) - attAngle) * (AttenuationSigmoidSlope / attAngle))));
-            if (double.IsNaN (attenuation))
-                attenuation = 0;
-            return velocity * attenuation;
+            // Linear pointing deadband on the target velocity (see DeadbandScale), keyed on the pure error
+            // thetaPure (not the ω-corrected theta) so the measured-rate jitter is not fed through the
+            // ramp slope: the commanded speed fades to zero as the error approaches the target, so the
+            // craft coasts to a stop inside the band. Applied to the setpoint, so the inner rate loop keeps
+            // full damping.
+            return -Math.Sign (theta) * Math.Min (maxVelocity,
+                maxAcceleration > 0 ? Math.Sqrt (2.0 * Math.Abs (theta) * maxAcceleration) : 0.0)
+                * DeadbandScale (Math.Abs (thetaPure), deadbandHighDeg);
         }
 
         void DoAutoTune (Vector3d torque, Vector3d moi)
