@@ -28,6 +28,11 @@ namespace KRPC.SpaceCenter.AutoPilot
         internal const double LowPassCornerMin = 2.0;
         // Time constant of the one-pole ramp easing the latched mitigations in/out.
         const double RampTimeConstant = 0.5;
+        // Control-output oscillation envelope (the runtime analogue of the test suite's
+        // control_oscillation_amplitude) above which a latched axis is treated as still
+        // limit-cycling, so the hold mitigation engages regardless of pointing error. A settled
+        // hold sits near 0.008 and a limit cycle saturates toward ~1, so 0.2 has wide margin.
+        internal const double EnvelopeThreshold = 0.2;
 
         // Per-axis one-pole ramp [0,1] easing the latched mitigations in/out so the control does
         // not step when suppression engages/releases.
@@ -80,19 +85,19 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// <c>Notch</c>/<c>LowPass</c> force that tool at the manual frequency; <c>Off</c>
         /// applies nothing.
         /// </summary>
-        public static void SelectTool (Services.OscillationControl mode, bool latched,
+        public static void SelectTool (Services.RateFilterMode mode, bool latched,
             double detectedHz, double manualHz, out int tool, out double freq)
         {
             switch (mode) {
-            case Services.OscillationControl.Notch:
+            case Services.RateFilterMode.Notch:
                 tool = 1;
                 freq = manualHz;
                 break;
-            case Services.OscillationControl.LowPass:
+            case Services.RateFilterMode.LowPass:
                 tool = 2;
                 freq = manualHz;
                 break;
-            case Services.OscillationControl.Off:
+            case Services.RateFilterMode.Off:
                 tool = 0;
                 freq = 0;
                 break;
@@ -133,23 +138,22 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// mode into a limit cycle that parks the error across the band. The trigger is the
         /// detectors' about-mean delivered-command envelope — a sustained limit cycle has a
         /// large envelope while a steady slew does not — rising fast / decaying slow, only on a
-        /// latched axis, with the manual per-axis level as a floor. Pitch (x) and yaw (z) are
-        /// coupled (mirroring the chatter detector); roll (y) on its own.
+        /// latched axis. Pitch (x) and yaw (z) are coupled (mirroring the chatter detector);
+        /// roll (y) on its own.
         /// </summary>
-        public Vector3d UpdateGate (OscillationDetectors detectors, double dt, double holdFactor,
-            Vector3d manualLevel, double envelopeThreshold)
+        public Vector3d UpdateGate (OscillationDetectors detectors, double dt, double holdFactor)
         {
             var controlEnv = detectors.ControlOscEnvelope;
             var pyEnv = Math.Max (controlEnv.x, controlEnv.z);
             var groupEnv = new Vector3d (pyEnv, controlEnv.y, pyEnv);
             for (int i = 0; i < 3; i++) {
-                var oscTarget = detectors.ChatterLatched (i) && groupEnv [i] > envelopeThreshold ? 1.0 : 0.0;
+                var oscTarget = detectors.ChatterLatched (i) && groupEnv [i] > EnvelopeThreshold ? 1.0 : 0.0;
                 var tc = oscTarget > oscControlAuto [i]
                     ? OscillationDetectors.ChatterRiseTimeConstant
                     : OscillationDetectors.ChatterDecayTimeConstant;
                 var beta = 1.0 - Math.Exp (-dt / tc);
                 oscControlAuto [i] += beta * (oscTarget - oscControlAuto [i]);
-                oscControlBackoff [i] = Math.Max (oscControlAuto [i], manualLevel [i]);
+                oscControlBackoff [i] = oscControlAuto [i];
             }
             var gate = new Vector3d (
                 suppressionRamp [0] * Math.Max (holdFactor, oscControlBackoff [0]),

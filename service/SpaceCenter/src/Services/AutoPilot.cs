@@ -683,37 +683,38 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Controls how the auto-pilot suppresses structural oscillation (wobble) on the pitch and
-        /// yaw axes of a structurally flexible vessel. When <see cref="OscillationControl.Automatic"/>
-        /// (the default) the auto-pilot detects the oscillation at runtime, estimates its frequency
-        /// and routes it to the appropriate tool (a notch filter for a low-frequency mode near the
-        /// control band, a low-pass for a high-frequency mode). <see cref="OscillationControl.Off"/>
-        /// disables suppression, giving full control authority at the cost of allowing the vessel to
-        /// wobble. <see cref="OscillationControl.Notch"/> and <see cref="OscillationControl.LowPass"/>
-        /// force the respective tool unconditionally at <see cref="PitchYawOscillationFrequency"/>,
-        /// for a vessel known in advance to be flexible.
+        /// Controls the rate-feedback filtering (the wobble-suppression filter on the measured
+        /// angular velocity) for the pitch and yaw axes of a structurally flexible vessel. When
+        /// <see cref="RateFilterMode.Automatic"/> (the default) the auto-pilot detects the
+        /// oscillation at runtime, estimates its frequency and routes it to the appropriate tool
+        /// (a notch filter for a low-frequency mode near the control band, a low-pass for a
+        /// high-frequency mode). <see cref="RateFilterMode.Off"/> disables rate filtering only —
+        /// the other oscillation mitigations are unaffected. <see cref="RateFilterMode.Notch"/>
+        /// and <see cref="RateFilterMode.LowPass"/> force the respective tool unconditionally at
+        /// <see cref="PitchYawOscillationFrequency"/>, for a vessel known in advance to be
+        /// flexible.
         /// </summary>
         [KRPCProperty]
-        public OscillationControl PitchYawOscillationControl {
-            get { return attitudeController.PitchYawOscillationControl; }
-            set { attitudeController.PitchYawOscillationControl = value; }
+        public RateFilterMode PitchYawRateFilterMode {
+            get { return attitudeController.PitchYawRateFilterMode; }
+            set { attitudeController.PitchYawRateFilterMode = value; }
         }
 
         /// <summary>
-        /// Controls how the auto-pilot suppresses structural oscillation (wobble) on the roll axis.
-        /// Behaves as <see cref="PitchYawOscillationControl"/> but for roll, using
+        /// Controls the rate-feedback filtering for the roll axis. Behaves as
+        /// <see cref="PitchYawRateFilterMode"/> but for roll, using
         /// <see cref="RollOscillationFrequency"/>. Defaults to
-        /// <see cref="OscillationControl.Automatic"/>.
+        /// <see cref="RateFilterMode.Automatic"/>.
         /// </summary>
         [KRPCProperty]
-        public OscillationControl RollOscillationControl {
-            get { return attitudeController.RollOscillationControl; }
-            set { attitudeController.RollOscillationControl = value; }
+        public RateFilterMode RollRateFilterMode {
+            get { return attitudeController.RollRateFilterMode; }
+            set { attitudeController.RollRateFilterMode = value; }
         }
 
         /// <summary>
         /// The structural mode frequency, in Hz, for the pitch/yaw axis group. Used directly as the
-        /// filter frequency in <see cref="OscillationControl.Notch"/> / <see cref="OscillationControl.LowPass"/>
+        /// filter frequency in <see cref="RateFilterMode.Notch"/> / <see cref="RateFilterMode.LowPass"/>
         /// mode, and as the seed for the automatic frequency estimator before it acquires. Defaults
         /// to 1.5 Hz.
         /// </summary>
@@ -746,10 +747,24 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The inner control loop bandwidth, in rad/s, that an axis is reduced towards while
-        /// suppression is engaged on it (a structurally flexible axis). Lowering it suppresses
-        /// oscillation more strongly; raising it keeps more control authority at the cost of allowing
-        /// more wobble. Defaults to 1 rad/s. This is an advanced tuning parameter.
+        /// Controls the bandwidth-floor mitigation: the reduction of the inner control loop
+        /// bandwidth on a structurally flexible axis — the primary oscillation stabiliser. When
+        /// <see cref="MitigationMode.Automatic"/> (the default) it engages on a latched axis
+        /// while holding (and during a detected limit cycle). <see cref="MitigationMode.Off"/>
+        /// never reduces the bandwidth; <see cref="MitigationMode.Forced"/> keeps it fully
+        /// reduced at all times.
+        /// </summary>
+        [KRPCProperty]
+        public MitigationMode OscillationBandwidthFloorMode {
+            get { return attitudeController.BandwidthFloorMode; }
+            set { attitudeController.BandwidthFloorMode = value; }
+        }
+
+        /// <summary>
+        /// The inner control loop bandwidth, in rad/s, that an axis is reduced towards while the
+        /// bandwidth-floor mitigation is engaged on it. Lowering it suppresses oscillation more
+        /// strongly; raising it keeps more control authority at the cost of allowing more wobble.
+        /// Defaults to 1 rad/s. This is an advanced tuning parameter.
         /// </summary>
         [KRPCProperty]
         public double OscillationBandwidthFloor {
@@ -758,50 +773,36 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The sensitivity of the automatic oscillation detector, as a multiple of the
-        /// physically-achievable change in angular velocity per physics tick. A tick-to-tick change
-        /// in the measured rate larger than this is treated as structural oscillation rather than a
-        /// control response. Lowering it makes detection more sensitive. Defaults to 4. This is an
-        /// advanced tuning parameter.
+        /// Controls the feedforward-cut mitigation: removal of the acceleration feedforward on a
+        /// structurally flexible axis while holding, so it cannot re-excite a residual mode at
+        /// the reduced bandwidth. When <see cref="MitigationMode.Automatic"/> (the default) it
+        /// follows the hold gate on a latched axis. <see cref="MitigationMode.Off"/> never cuts
+        /// the feedforward; <see cref="MitigationMode.Forced"/> always cuts it fully.
         /// </summary>
         [KRPCProperty]
-        public double OscillationDetectionThreshold {
-            get { return attitudeController.OscillationDetectionThreshold; }
-            set { attitudeController.OscillationDetectionThreshold = value; }
+        public MitigationMode OscillationFeedforwardMode {
+            get { return attitudeController.FeedforwardMode; }
+            set { attitudeController.FeedforwardMode = value; }
         }
 
         /// <summary>
-        /// A manual override, between 0 and 1 for each of the pitch, roll and yaw axes, that forces the
-        /// flexible-craft oscillation mitigation (reduced control loop bandwidth, feedforward cut and
-        /// rate-independent target) on for a structurally flexible (latched) axis, regardless of how
-        /// far the vessel is pointing from the target. 0 (the default) applies no override, leaving the
-        /// mitigation to engage automatically only while holding. This is an advanced tuning parameter.
+        /// Controls the output-smoothing mitigation: a low-pass on the delivered actuator
+        /// command that caps residual control chatter. When
+        /// <see cref="MitigationMode.Automatic"/> (the default) it engages on a latched axis
+        /// (and, lightly, while the oscillation detector is firing on an unlatched one).
+        /// <see cref="MitigationMode.Off"/> never smooths; <see cref="MitigationMode.Forced"/>
+        /// smooths fully at all times.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 OscillationControlLevel {
-            get { return attitudeController.OscillationControlLevel.ToTuple (); }
-            set { attitudeController.OscillationControlLevel = value.ToVector (); }
-        }
-
-        /// <summary>
-        /// The amplitude of control-output oscillation, measured about its slowly-varying trim, above
-        /// which a structurally flexible (latched) axis is treated as still limit-cycling and the
-        /// oscillation mitigation is engaged automatically regardless of pointing error. Lowering it
-        /// makes the automatic engagement more sensitive. Defaults to 0.2. Compare against
-        /// <see cref="PitchYawControlOscillation"/> / <see cref="RollControlOscillation"/>. This is an
-        /// advanced tuning parameter.
-        /// </summary>
-        [KRPCProperty]
-        public double OscillationControlThreshold {
-            get { return attitudeController.OscillationControlThreshold; }
-            set { attitudeController.OscillationControlThreshold = value; }
+        public MitigationMode OscillationOutputFilterMode {
+            get { return attitudeController.OutputFilterMode; }
+            set { attitudeController.OutputFilterMode = value; }
         }
 
         /// <summary>
         /// The current amplitude of control-output oscillation on the pitch/yaw axis group, measured as
         /// the deviation of the delivered control about its slowly-varying trim. A settled hold sits
-        /// near zero; a sustained limit cycle drives it toward 1. Read-only. See
-        /// <see cref="OscillationControlThreshold"/>.
+        /// near zero; a sustained limit cycle drives it toward 1. Read-only.
         /// </summary>
         [KRPCProperty]
         public double PitchYawControlOscillation {
@@ -831,7 +832,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Whether the auto-pilot has confirmed the pitch/yaw axes to be structurally flexible and
         /// latched oscillation suppression on for them. Read-only. See
-        /// <see cref="PitchYawOscillationControl"/>.
+        /// <see cref="PitchYawRateFilterMode"/>.
         /// </summary>
         [KRPCProperty]
         public bool PitchYawOscillationLatched {
@@ -840,7 +841,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Whether the auto-pilot has confirmed the roll axis to be structurally flexible and latched
-        /// oscillation suppression on for it. Read-only. See <see cref="RollOscillationControl"/>.
+        /// oscillation suppression on for it. Read-only. See <see cref="RollRateFilterMode"/>.
         /// </summary>
         [KRPCProperty]
         public bool RollOscillationLatched {
@@ -910,6 +911,14 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         internal Tuple3 MitigationLevel {
             get { return attitudeController.MitigationLevel.ToTuple (); }
+        }
+
+        /// <summary>
+        /// The control-output oscillation envelope above which the hold mitigation engages
+        /// automatically, for the in-game info window's envelope-readout colouring.
+        /// </summary>
+        internal double OscillationControlThreshold {
+            get { return attitudeController.OscillationControlThreshold; }
         }
 
         /// <summary>

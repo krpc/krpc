@@ -61,26 +61,26 @@ namespace KRPC.SpaceCenter.AutoPilot
         // The gating layer: tool routing, latch ramps, and the hold-gated mitigation level
         // (with the oscillation-control back-off). See MitigationPolicy.
         readonly MitigationPolicy policy = new MitigationPolicy ();
-        // Manual per-axis (pitch, roll, yaw) override level for the policy's back-off, set from
-        // the public API (OscillationControlLevel). 0 by default (no override). Config, so it
-        // persists across re-engage (set in Reset, not cleared in Start).
-        Vector3d oscillationControlLevel = Vector3d.zero;
-        // Envelope threshold (exposed) above which a latched axis is treated as still limit-cycling.
-        double oscControlThreshold;
-        // Per-group suppression selector (pitch/yaw coupled, roll on its own). Automatic detects and
-        // latches then routes by estimated frequency; Off disables suppression; Notch/LowPass force
-        // that tool unconditionally at the group's manual frequency. Default Automatic.
-        Services.OscillationControl pitchYawOscillationControl;
-        Services.OscillationControl rollOscillationControl;
+        // Per-group rate-filter mode (pitch/yaw coupled, roll on its own). Automatic routes by
+        // the detector latch and the estimated frequency; Off disables rate filtering only (the
+        // other mitigations are unaffected); Notch/LowPass force that tool unconditionally at
+        // the group's manual frequency. Default Automatic.
+        Services.RateFilterMode pitchYawRateFilterMode;
+        Services.RateFilterMode rollRateFilterMode;
         // Per-group mode frequency (Hz): used directly in Notch/LowPass mode and as the Automatic
         // estimator seed before acquisition.
         double pitchYawOscillationFrequency;
         double rollOscillationFrequency;
-        // Notch quality factor and the notch-branch bandwidth separation ratio N (bw_target =
-        // 2π·f/N). Exposed so an advanced user can trade phase margin against drift tolerance.
+        // Notch quality factor: higher is narrower (less in-band phase lag, less drift
+        // tolerance). Exposed so an advanced user can trade phase margin against drift tolerance.
         double oscillationNotchQ;
         double oscillationBandwidthFloor;
-        double oscillationDetectionThreshold;
+        // Per-mitigation manual modes: each mitigation can be individually left Automatic
+        // (detector + hold-gate driven), forced Off (never engages) or Forced (fully engaged
+        // regardless of the detector). Independent of each other and of the rate-filter mode.
+        Services.MitigationMode bandwidthFloorMode;
+        Services.MitigationMode feedforwardMode;
+        Services.MitigationMode outputFilterMode;
         // Engagement soft-start: the actuator command is faded in over SoftStartTime seconds from
         // each Start() so engagement does not deliver a near-max "kick" (large proportional +
         // acceleration feedforward) that can impulsively excite a structural or in-band limit cycle
@@ -158,12 +158,6 @@ namespace KRPC.SpaceCenter.AutoPilot
         // physically-achievable change (α·dt at full authority) is structural excitation, not
         // rigid-body response — the latter cannot change the rate faster than the torque allows.
         const double DefaultChatterDetectThreshold = 4.0;
-        // Control-output oscillation envelope (the runtime analogue of the test's
-        // control_oscillation_amplitude): a latched axis whose about-mean delivered-command envelope
-        // exceeds this is treated as still limit-cycling, so the hold mitigation engages regardless of
-        // pointing error. A settled hold sits near 0.008 and a limit cycle saturates toward ~1, so the
-        // 0.2 default has wide margin. Exposed (OscillationControlThreshold).
-        const double DefaultOscControlThreshold = 0.2;
         // Below this 2D error magnitude (radians) the joint pitch/yaw profile is skipped.
         const double MinThetaForJointProfile = 1e-10;
         // Antipodal-flip plane hold (ResolveAntipodalAxis). A large slew toward ~180° (an "antipodal
@@ -313,14 +307,14 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public bool AutoTune { get; set; }
 
-        public Services.OscillationControl PitchYawOscillationControl {
-            get { return pitchYawOscillationControl; }
-            set { pitchYawOscillationControl = value; }
+        public Services.RateFilterMode PitchYawRateFilterMode {
+            get { return pitchYawRateFilterMode; }
+            set { pitchYawRateFilterMode = value; }
         }
 
-        public Services.OscillationControl RollOscillationControl {
-            get { return rollOscillationControl; }
-            set { rollOscillationControl = value; }
+        public Services.RateFilterMode RollRateFilterMode {
+            get { return rollRateFilterMode; }
+            set { rollRateFilterMode = value; }
         }
 
         public double PitchYawOscillationFrequency {
@@ -343,23 +337,26 @@ namespace KRPC.SpaceCenter.AutoPilot
             set { oscillationBandwidthFloor = value; }
         }
 
-        public double OscillationDetectionThreshold {
-            get { return oscillationDetectionThreshold; }
-            set { oscillationDetectionThreshold = value; }
+        public Services.MitigationMode BandwidthFloorMode {
+            get { return bandwidthFloorMode; }
+            set { bandwidthFloorMode = value; }
         }
 
-        // Manual per-axis (pitch, roll, yaw) override in [0,1] forcing the latched flexible-craft hold
-        // mitigation on regardless of pointing error (OR'd into the hold gate). 0 = no override.
-        public Vector3d OscillationControlLevel {
-            get { return oscillationControlLevel; }
-            set { oscillationControlLevel = value; }
+        public Services.MitigationMode FeedforwardMode {
+            get { return feedforwardMode; }
+            set { feedforwardMode = value; }
         }
 
-        // About-mean envelope of the delivered command above which a latched axis is treated as still
-        // limit-cycling and the hold mitigation is engaged regardless of pointing error.
+        public Services.MitigationMode OutputFilterMode {
+            get { return outputFilterMode; }
+            set { outputFilterMode = value; }
+        }
+
+        // About-mean envelope of the delivered command above which a latched axis is treated as
+        // still limit-cycling (drives the policy back-off; exposed for the info window so it can
+        // colour the envelope readout against the engage threshold).
         public double OscillationControlThreshold {
-            get { return oscControlThreshold; }
-            set { oscControlThreshold = value; }
+            get { return MitigationPolicy.EnvelopeThreshold; }
         }
 
         // Read-only per-group about-mean control-output oscillation envelope (pitch/yaw coupled, roll).
@@ -496,15 +493,15 @@ namespace KRPC.SpaceCenter.AutoPilot
             RollStartAngle = 20.0;
             RollEngageAngle = 15.0;
             AutoTune = true;
-            pitchYawOscillationControl = Services.OscillationControl.Automatic;
-            rollOscillationControl = Services.OscillationControl.Automatic;
+            pitchYawRateFilterMode = Services.RateFilterMode.Automatic;
+            rollRateFilterMode = Services.RateFilterMode.Automatic;
             pitchYawOscillationFrequency = DefaultOscillationFrequency;
             rollOscillationFrequency = DefaultOscillationFrequency;
             oscillationNotchQ = DefaultNotchQ;
             oscillationBandwidthFloor = DefaultBandwidthFloor;
-            oscillationDetectionThreshold = DefaultChatterDetectThreshold;
-            oscillationControlLevel = Vector3d.zero;
-            oscControlThreshold = DefaultOscControlThreshold;
+            bandwidthFloorMode = Services.MitigationMode.Automatic;
+            feedforwardMode = Services.MitigationMode.Automatic;
+            outputFilterMode = Services.MitigationMode.Automatic;
             Overshoot = new Vector3d (0.01, 0.01, 0.01);
             // TimeToPeak sets the inner-loop bandwidth via omega0 = pi / (TimeToPeak * sqrt(1 - zeta^2)).
             // Increasing it lowers the bandwidth, which is the lever for large, structurally flexible
@@ -616,15 +613,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // Update the structural-chatter detector from the raw rate. In Automatic mode the latch
             // it produces decides *whether* suppression is applied; the frequency estimator below
             // decides *which* tool (notch vs low-pass). A rigid craft never latches.
-            detectors.UpdateChatter (currentRaw, torque, moi, dt, oscillationDetectionThreshold);
-
-            // Apply the per-group selector's detector side: Off forces the group rigid for control
-            // (latch/level cleared, no suppression) while leaving the estimator running; Automatic
-            // leaves the detector's verdict; Notch/LowPass bypass the detector (the tool is forced in
-            // the suppression selection below). Pitch (0) and yaw (2) share pitchYawOscillationControl.
-            ApplyOscillationOverride (0, pitchYawOscillationControl);
-            ApplyOscillationOverride (2, pitchYawOscillationControl);
-            ApplyOscillationOverride (1, rollOscillationControl);
+            detectors.UpdateChatter (currentRaw, torque, moi, dt, DefaultChatterDetectThreshold);
 
             // Feed the frequency trackers the oscillation in the raw rate every tick,
             // unconditionally, so an estimate is always warm the moment an axis latches (see
@@ -637,12 +626,12 @@ namespace KRPC.SpaceCenter.AutoPilot
             // per-axis suppressionActiveAxis record written here is read by DoAutoTuneAxis.
             int pitchYawTool;
             double pitchYawFreq;
-            MitigationPolicy.SelectTool (pitchYawOscillationControl, detectors.PitchYawLatched,
+            MitigationPolicy.SelectTool (pitchYawRateFilterMode, detectors.PitchYawLatched,
                 detectors.PitchYawHeldHz, pitchYawOscillationFrequency,
                 out pitchYawTool, out pitchYawFreq);
             int rollTool;
             double rollFreq;
-            MitigationPolicy.SelectTool (rollOscillationControl, detectors.RollLatched,
+            MitigationPolicy.SelectTool (rollRateFilterMode, detectors.RollLatched,
                 detectors.RollHeldHz, rollOscillationFrequency, out rollTool, out rollFreq);
             var current = new Vector3d (
                 rateFilter.Apply (0, currentRaw.x, pitchYawTool, pitchYawFreq, oscillationNotchQ,
@@ -719,8 +708,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // latched axis can trigger, and the manual OscillationControlLevel is a floor under the
             // automatic level.
             detectors.UpdateControlEnvelope (dt);
-            var gate = policy.UpdateGate (detectors, dt, holdFactor,
-                oscillationControlLevel, oscControlThreshold);
+            var gate = policy.UpdateGate (detectors, dt, holdFactor);
 
 
             // Per-axis setpoint the loop tracks: full target eased toward the nominal target by the gate.
@@ -761,9 +749,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             // floored, but only a holding flexible axis needs it gone — while slewing the axis keeps
             // its feedforward to track the manoeuvre, and a rigid axis keeps it throughout.
             var ffRi = new Vector3d (
-                smoothedFfRi.x * (1.0 - gate.x),
-                smoothedFfRi.y * (1.0 - gate.y),
-                smoothedFfRi.z * (1.0 - gate.z));
+                smoothedFfRi.x * FeedforwardScale (gate.x),
+                smoothedFfRi.y * FeedforwardScale (gate.y),
+                smoothedFfRi.z * FeedforwardScale (gate.z));
 
             UpdateSmoothedTorque (torque);
 
@@ -1032,22 +1020,32 @@ namespace KRPC.SpaceCenter.AutoPilot
         double SmoothOutput (int index, double u, double dt)
         {
             double tau, weight;
-            policy.ChooseOutputFilter (detectors, index, out tau, out weight);
+            if (outputFilterMode == Services.MitigationMode.Off) {
+                // Keep the filter state tracking (weight 0 passes the command through) so a later
+                // switch back to Automatic/Forced starts from live state, not a stale sample.
+                tau = OutputFilter.LatchedTimeConstant;
+                weight = 0.0;
+            } else if (outputFilterMode == Services.MitigationMode.Forced) {
+                tau = OutputFilter.LatchedTimeConstant;
+                weight = 1.0;
+            } else {
+                policy.ChooseOutputFilter (detectors, index, out tau, out weight);
+            }
             return outputFilter.Process (index, u, tau, weight, dt);
         }
 
         /// <summary>
-        /// Apply the detector side of a manual <see cref="Services.OscillationControl"/> override to
-        /// a single axis. <c>Off</c> forces the axis rigid for control purposes (clears the latch and
-        /// level so no suppression is applied), while the frequency estimator keeps running so the
-        /// detected-frequency observable stays live. <c>Automatic</c> leaves the detector's verdict
-        /// untouched; <c>Notch</c>/<c>LowPass</c> bypass the detector entirely (the tool is forced in
-        /// <see cref="MitigationPolicy.SelectTool"/>), so they leave the latch alone here.
+        /// The feedforward-cut mitigation: the scale applied to the acceleration feedforward on
+        /// one axis. Automatic follows the hold gate (1−gate: cut only on a latched, holding
+        /// axis); Off never cuts; Forced always cuts fully.
         /// </summary>
-        void ApplyOscillationOverride (int index, Services.OscillationControl mode)
+        double FeedforwardScale (double gateComponent)
         {
-            if (mode == Services.OscillationControl.Off)
-                detectors.ForceRigid (index);
+            if (feedforwardMode == Services.MitigationMode.Off)
+                return 1.0;
+            if (feedforwardMode == Services.MitigationMode.Forced)
+                return 0.0;
+            return 1.0 - gateComponent;
         }
 
         /// <summary>
@@ -1609,7 +1607,11 @@ namespace KRPC.SpaceCenter.AutoPilot
             // the notch/low-pass keeps the slew responsive, while the floor quiets the hold. ω₀ scales
             // with the bandwidth, so Kp scales linearly and Ki quadratically and the damping ratio ζ
             // (the overshoot target) is preserved. A rigid craft never latches, so keeps full bandwidth.
-            var level = policy.MitigationLevel (index);
+            // The bandwidth-floor mitigation mode: Automatic follows the hold-gated mitigation
+            // level; Off never floors; Forced floors fully regardless of the detector.
+            var level = bandwidthFloorMode == Services.MitigationMode.Off ? 0.0
+                : bandwidthFloorMode == Services.MitigationMode.Forced ? 1.0
+                : policy.MitigationLevel (index);
             var bandwidth = twiceZetaOmega [index];
             var bandwidthSquared = omegaSquared [index];
             if (level > 0 && oscillationBandwidthFloor < bandwidth) {

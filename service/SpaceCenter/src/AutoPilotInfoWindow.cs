@@ -322,8 +322,8 @@ namespace KRPC.SpaceCenter
 
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("MODE", registerLabelStyle);
-            ModeLamp (engaged, engaged ? ap.PitchYawOscillationControl : default (Services.OscillationControl));
-            ModeLamp (engaged, engaged ? ap.RollOscillationControl : default (Services.OscillationControl));
+            ModeLamp (engaged, engaged ? ap.PitchYawRateFilterMode : default (Services.RateFilterMode));
+            ModeLamp (engaged, engaged ? ap.RollRateFilterMode : default (Services.RateFilterMode));
             GUILayout.EndHorizontal ();
 
             // Resolved suppression tool: what Automatic actually selected (the MODE lamp above shows
@@ -393,24 +393,24 @@ namespace KRPC.SpaceCenter
 
         // Mode lamp. The axis group is identified by the PCH/YAW and RLL column header, so the lamp
         // shows only the mode name.
-        void ModeLamp (bool engaged, Services.OscillationControl mode)
+        void ModeLamp (bool engaged, Services.RateFilterMode mode)
         {
-            Color colour = mode == Services.OscillationControl.Off ? red
-                : mode == Services.OscillationControl.Automatic ? green
+            Color colour = mode == Services.RateFilterMode.Off ? red
+                : mode == Services.RateFilterMode.Automatic ? green
                 : amber;
             Lamp (ModeName (mode), engaged, colour);
         }
 
-        static string ModeName (Services.OscillationControl mode)
+        static string ModeName (Services.RateFilterMode mode)
         {
             switch (mode) {
-            case Services.OscillationControl.Automatic:
+            case Services.RateFilterMode.Automatic:
                 return "AUTO";
-            case Services.OscillationControl.Off:
+            case Services.RateFilterMode.Off:
                 return "OFF";
-            case Services.OscillationControl.Notch:
+            case Services.RateFilterMode.Notch:
                 return "NOTCH";
-            case Services.OscillationControl.LowPass:
+            case Services.RateFilterMode.LowPass:
                 return "LOWPASS";
             default:
                 return mode.ToString ().ToUpperInvariant ();
