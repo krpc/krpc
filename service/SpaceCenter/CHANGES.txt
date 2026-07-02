@@ -47,6 +47,11 @@ v0.6.0
  * Fix ReactionWheel.AvailableTorque not considering authority limiter setting (#909)
  * Fix Flight.SimulateAerodynamicForceAt overestimating drag at low altitude and
    subsonic speed by applying KSP's pseudo-Reynolds drag multiplier to cube drag (#912)
+ * Add a rotation parameter to Flight.SimulateAerodynamicForceAt to set the vessel
+   attitude (angle of attack and sideslip) independently of velocity. Pass the current
+   rotation for the previous behavior (#915)
+ * Fix Flight.SimulateAerodynamicForceAt returning force in kilonewtons instead of
+   newtons when FAR is installed (#915)
 
 v0.5.4
  * Fix vessel recovery (#782)
