@@ -48,40 +48,16 @@ namespace KRPC.SpaceCenter.AutoPilot
         Vector3d smoothedTorque;
         // Low-pass-filtered acceleration feedforward (see the feedforward filter in Update).
         Vector3d smoothedFfRi;
-        // Per-axis state of the two cascaded first-order sections of the angular-velocity low-pass
-        // (see LowPassAxis), used as the high-frequency suppression tool. rateFilterValid is false
-        // until the section is first used (or after it is reset when the axis is not low-passed), so
-        // the state is seeded with the raw measurement rather than ramping up from zero.
-        readonly double[] rateFilterStage1 = new double[3];
-        readonly double[] rateFilterStage2 = new double[3];
-        readonly bool[] rateFilterValid = new bool[3];
-        // Per-axis state of the output low-pass: a first-order filter on the final actuator command,
-        // blended in by suppressionRamp on a latched axis (MechJeb-style output smoothing). It caps
-        // residual control chatter directly — gain-independent and needing no frequency estimate —
-        // backstopping the notch/low-pass, which clean the feedback but not whatever the loop's own
-        // gain still produces at the mode. Negligible phase cost at the floored crossover.
-        readonly double[] outputFilterState = new double[3];
-        readonly bool[] outputFilterValid = new bool[3];
-        // Per-axis state of the measured-rate low-pass applied to a detector-firing but *unlatched* axis
-        // (the noisy-but-controllable craft). Distinct from the suppression filters above, which only run
-        // on a latched axis; this light filter blended by chatterLevel stops the full-bandwidth inner loop
-        // (and the ω/bandwidth stopping term) chasing the root-part rate jitter on an unlatched craft.
-        readonly double[] rateInputFilterState = new double[3];
-        readonly bool[] rateInputFilterValid = new bool[3];
-        // Three notch filters (the low-frequency suppression tool), one per axis: pitch (0) and
-        // yaw (2) configured from the pitch/yaw tracker, roll (1) from the roll tracker.
-        readonly BiquadNotchFilter pitchNotch = new BiquadNotchFilter ();
-        readonly BiquadNotchFilter rollNotch = new BiquadNotchFilter ();
-        readonly BiquadNotchFilter yawNotch = new BiquadNotchFilter ();
         // The observation layer: chatter detector (level + latch), frequency trackers with their
         // held estimates and high-pass bookkeeping, control-output oscillation envelope, hold
         // factor. See OscillationDetectors.
         readonly OscillationDetectors detectors = new OscillationDetectors ();
-        // Per-axis records written during suppression selection: whether the notch is the active tool
-        // (diagnostics) and whether any suppression tool is active (read by DoAutoTuneAxis to gate the
-        // latched bandwidth reduction).
-        readonly bool[] notchActiveAxis = new bool[3];
-        readonly bool[] suppressionActiveAxis = new bool[3];
+        // The mitigation primitives (state + arithmetic only; every per-tick configuration and
+        // weight decision stays with the policy code in Update). RateFilter owns the notch /
+        // 2-stage low-pass suppression and the light detector-gated input low-pass; OutputFilter
+        // owns the final-command smoothing. See OscillationMitigations.
+        readonly RateFilter rateFilter = new RateFilter ();
+        readonly OutputFilter outputFilter = new OutputFilter ();
         // Per-axis one-pole ramp [0,1] easing the latched output smoothing in/out so the control does
         // not step when suppression engages/releases (reset in Start).
         readonly double[] suppressionRamp = new double[3];
@@ -189,29 +165,6 @@ namespace KRPC.SpaceCenter.AutoPilot
         // lowers bandwidth (min against the autotuned value), so rigid craft — which never latch —
         // are untouched. ~1.0 rad/s matches the value validated on the earlier adaptive design.
         const double DefaultBandwidthFloor = 1.0;
-        // Time constant of the latched output low-pass (~2 Hz corner): attenuates residual control
-        // chatter while adding negligible phase at the floored crossover (~0.16 Hz).
-        const double DefaultOutputFilterTimeConstant = 0.08;
-        // Time constant of the output low-pass for a detector-firing but *unlatched* axis (~4.5 Hz
-        // corner). This is the noisy-but-controllable craft: the Δω detector fires on root-part rate
-        // jitter but the level has not (yet) crossed the latch threshold, so the full mitigation never
-        // engages and the rate loop runs at full bandwidth (~1.4 Hz crossover). At full bandwidth the
-        // aggressive autotuned gain turns
-        // that jitter into near-full-scale tick-to-tick actuator reversals; smoothing the delivered
-        // command tames it. The corner is lighter than the latched 2 Hz (which would cost ~36° of phase
-        // margin here and risk oscillation) — ~4.5 Hz costs only ~16° while still attenuating the
-        // near-Nyquist buzz ~5×. Blended by chatterLevel, so rigid craft (level ~0) are untouched.
-        const double DetectorOutputFilterTimeConstant = 0.035;
-        // Time constant of the *measured-rate* low-pass for a detector-firing but unlatched axis (~5 Hz
-        // corner). The companion to the output smoothing above, on the loop input: it stops the inner rate
-        // loop (and the stopping-distance term ω/bandwidth that feeds the acceleration feedforward) chasing
-        // the root-part rate jitter in the first place — the actual source of the buzz, which shaping the
-        // setpoint or the output alone cannot remove. It sits inside the loop, so its phase counts against
-        // stability; ~5 Hz costs ~16° at the ~1.4 Hz crossover. Lowering it to ~3.5 Hz was tried and made
-        // no measurable difference to the residual (which is lower-frequency content that passes either
-        // corner), so the higher corner is kept for the extra margin. Blended by chatterLevel so rigid
-        // craft are untouched, and skipped on a latched axis (the heavier suppression runs there).
-        const double DetectorRateFilterTimeConstant = 0.03;
         // Pointing deadband on the target angular velocity (see DeadbandScale, applied in
         // ComputePitchYawVelocity / ComputeAxisVelocity). As the error vanishes the commanded velocity
         // setpoint is scaled linearly to zero — from full at the deadband high angle to zero below this
@@ -505,9 +458,9 @@ namespace KRPC.SpaceCenter.AutoPilot
         // tool glyph). Pitch (0) and yaw (2) share the pitch/yaw group's tool.
         public int ActiveSuppressionTool (int axis)
         {
-            if (notchActiveAxis [axis])
+            if (rateFilter.NotchActive (axis))
                 return 1;
-            if (rateFilterValid [axis])
+            if (rateFilter.LowPassActive (axis))
                 return 2;
             return 0;
         }
@@ -619,15 +572,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             antipodeLatched = false;
             smoothedFfRi = Vector3d.zero;
             detectors.Reset ();
-            pitchNotch.Reset ();
-            rollNotch.Reset ();
-            yawNotch.Reset ();
+            rateFilter.Reset ();
+            outputFilter.Reset ();
             for (int i = 0; i < 3; i++) {
-                rateFilterValid [i] = false;
-                outputFilterValid [i] = false;
-                rateInputFilterValid [i] = false;
-                notchActiveAxis [i] = false;
-                suppressionActiveAxis [i] = false;
                 suppressionRamp [i] = 0;
                 mitigationLevel [i] = 0;
                 oscControlBackoff [i] = 0;
@@ -766,9 +713,12 @@ namespace KRPC.SpaceCenter.AutoPilot
             SelectSuppressionTool (rollOscillationControl, detectors.RollLatched,
                 detectors.RollHeldHz, rollOscillationFrequency, out rollTool, out rollFreq);
             var current = new Vector3d (
-                ApplySuppression (0, currentRaw.x, pitchYawTool, pitchYawFreq, dt, pitchNotch),
-                ApplySuppression (1, currentRaw.y, rollTool, rollFreq, dt, rollNotch),
-                ApplySuppression (2, currentRaw.z, pitchYawTool, pitchYawFreq, dt, yawNotch));
+                rateFilter.Apply (0, currentRaw.x, pitchYawTool, pitchYawFreq, oscillationNotchQ,
+                    DefaultLowPassSeparation, LowPassCornerMin, dt),
+                rateFilter.Apply (1, currentRaw.y, rollTool, rollFreq, oscillationNotchQ,
+                    DefaultLowPassSeparation, LowPassCornerMin, dt),
+                rateFilter.Apply (2, currentRaw.z, pitchYawTool, pitchYawFreq, oscillationNotchQ,
+                    DefaultLowPassSeparation, LowPassCornerMin, dt));
 
             // Light measured-rate low-pass on a detector-firing but *unlatched* axis (see
             // DetectorRateFilterTimeConstant). The suppression above only runs on a latched axis; here the
@@ -777,15 +727,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             // the feedforward. Blend a lightly low-passed copy in by chatterLevel — rigid axes (level ~0)
             // untouched, latched axes skipped (the heavier suppression handles them) — so both the inner
             // loop and the outer stopping term below act on a quieter rate.
-            var rateInputBeta = 1.0 - Math.Exp (-dt / DetectorRateFilterTimeConstant);
             for (int i = 0; i < 3; i++) {
-                if (!rateInputFilterValid [i]) {
-                    rateInputFilterState [i] = current [i];
-                    rateInputFilterValid [i] = true;
-                }
-                rateInputFilterState [i] += rateInputBeta * (current [i] - rateInputFilterState [i]);
                 var w = detectors.ChatterLatched (i) ? 0.0 : detectors.ChatterLevel [i];
-                current [i] = current [i] + w * (rateInputFilterState [i] - current [i]);
+                current [i] = rateFilter.BlendInput (i, current [i], w, dt);
             }
 
             // Ramp the latched bandwidth reduction and output smoothing in/out per axis (gated on
@@ -794,7 +738,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var rampBeta = 1.0 - Math.Exp (-dt / BandwidthRampTimeConstant);
             for (int i = 0; i < 3; i++)
                 suppressionRamp [i] +=
-                    rampBeta * ((suppressionActiveAxis [i] ? 1.0 : 0.0) - suppressionRamp [i]);
+                    rampBeta * ((rateFilter.SuppressionActive (i) ? 1.0 : 0.0) - suppressionRamp [i]);
 
             // TEMPORARY Phase-2 shadow verification: run the legacy pre-target stages on the same
             // inputs and compare (see LegacyOscillationPath).
@@ -1160,9 +1104,9 @@ namespace KRPC.SpaceCenter.AutoPilot
                 state.Pitch, state.Roll, state.Yaw,
                 logRawOmegaRi.x, logRawOmegaRi.y, logRawOmegaRi.z,
                 detectors.ChatterLevel.x, detectors.ChatterLevel.y, detectors.ChatterLevel.z,
-                notchActiveAxis [0] ? "n" : rateFilterValid [0] ? "l" : "-",
-                notchActiveAxis [1] ? "n" : rateFilterValid [1] ? "l" : "-",
-                notchActiveAxis [2] ? "n" : rateFilterValid [2] ? "l" : "-",
+                rateFilter.NotchActive (0) ? "n" : rateFilter.LowPassActive (0) ? "l" : "-",
+                rateFilter.NotchActive (1) ? "n" : rateFilter.LowPassActive (1) ? "l" : "-",
+                rateFilter.NotchActive (2) ? "n" : rateFilter.LowPassActive (2) ? "l" : "-",
                 detectors.PitchYawHeldHz, detectors.RollHeldHz,
                 suppressionRamp [0] * oscillationBandwidthFloor,
                 suppressionRamp [1] * oscillationBandwidthFloor,
@@ -1200,29 +1144,6 @@ namespace KRPC.SpaceCenter.AutoPilot
             // measurement, so both must use the same sign. Removing this negation alone makes them
             // disagree and the loop diverges; removing both negations together would be equivalent.
             return -ApToBody (localAngularVelocity);
-        }
-
-        /// <summary>
-        /// Second-order low-pass on one axis of the measured angular velocity, two cascaded
-        /// first-order sections (each with time constant <paramref name="tau"/>) for a
-        /// critically-damped ~12 dB/octave roll-off. This is the high-frequency suppression tool: a
-        /// notch cannot reject a near-Nyquist mode, but such a mode is far above the sub-Hz control
-        /// band, so a corner well below it (derived from the estimated frequency) kills it while
-        /// adding negligible in-band lag. The state is seeded with the first sample so engaging on an
-        /// already-rotating vessel produces no startup transient.
-        /// </summary>
-        double LowPassAxis (int index, double x, double tau, double dt)
-        {
-            if (!rateFilterValid [index]) {
-                rateFilterStage1 [index] = x;
-                rateFilterStage2 [index] = x;
-                rateFilterValid [index] = true;
-                return x;
-            }
-            var beta = 1.0 - Math.Exp (-dt / tau);
-            rateFilterStage1 [index] += beta * (x - rateFilterStage1 [index]);
-            rateFilterStage2 [index] += beta * (rateFilterStage1 [index] - rateFilterStage2 [index]);
-            return rateFilterStage2 [index];
         }
 
         /// <summary>
@@ -1270,60 +1191,21 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
-        /// Apply the selected suppression tool to one axis, holding the inactive filter's state reset
-        /// so a regime change injects no transient, and recording whether the notch is active (and at
-        /// what frequency) for the bandwidth reduction in <see cref="DoAutoTuneAxis"/>.
-        /// </summary>
-        double ApplySuppression (int index, double x, int tool, double freq, double dt, BiquadNotchFilter notch)
-        {
-            if (tool == 1 && freq > 0) {
-                rateFilterValid [index] = false;
-                notchActiveAxis [index] = true;
-                suppressionActiveAxis [index] = true;
-                // Reconfigure only when the frequency has moved materially (>2%), Q changed, or the
-                // sampling period changed, so a slowly drifting mode is tracked without thrashing.
-                if (Math.Abs (freq - notch.ConfiguredFrequency) > 0.02 * notch.ConfiguredFrequency ||
-                    notch.ConfiguredQ != oscillationNotchQ || notch.ConfiguredDt != dt)
-                    notch.SetFrequency (freq, oscillationNotchQ, dt);
-                return notch.Process (x);
-            }
-            if (tool == 2 && freq > 0) {
-                notch.Reset ();
-                notchActiveAxis [index] = false;
-                suppressionActiveAxis [index] = true;
-                var fc = Math.Max (LowPassCornerMin, freq / DefaultLowPassSeparation);
-                var tau = 1.0 / (2.0 * Math.PI * fc);
-                return LowPassAxis (index, x, tau, dt);
-            }
-            // Pass-through (no suppression): hold both filters reset.
-            notch.Reset ();
-            rateFilterValid [index] = false;
-            notchActiveAxis [index] = false;
-            suppressionActiveAxis [index] = false;
-            return x;
-        }
-
-        /// <summary>
-        /// Blend a low-passed copy of the final actuator command in by <c>suppressionRamp</c> on a
-        /// latched axis, to cap residual control chatter. A rigid axis (ramp 0) passes through.
+        /// Output smoothing (see OutputFilter): the policy decision of blend weight and corner. A
+        /// latched axis uses the ramped suppression weight and the heavier (2 Hz) corner — the
+        /// flexible-craft path. An unlatched axis whose detector is firing (the noisy-but-
+        /// controllable craft) blends by chatterLevel at the lighter corner, smoothing the
+        /// delivered command without the phase cost of the 2 Hz filter destabilising the
+        /// full-bandwidth loop. A rigid axis (chatterLevel ~0, never latched) gets weight 0 and
+        /// passes through.
         /// </summary>
         double SmoothOutput (int index, double u, double dt)
         {
-            // Blend weight and filter corner depend on the regime. A latched axis uses the ramped
-            // suppression weight and the standard (2 Hz) corner — the flexible-craft path, unchanged. An
-            // unlatched axis whose detector is firing (the noisy-but-controllable craft) blends by
-            // chatterLevel at the lighter DetectorOutputFilterTimeConstant corner, smoothing the delivered
-            // command without the phase cost of the 2 Hz filter destabilising the full-bandwidth loop. A
-            // rigid axis (chatterLevel ~0, never latched) gets weight 0 and passes through.
             var weight = detectors.ChatterLatched (index) ? suppressionRamp [index] : detectors.ChatterLevel [index];
-            var tau = detectors.ChatterLatched (index) ? DefaultOutputFilterTimeConstant : DetectorOutputFilterTimeConstant;
-            if (!outputFilterValid [index]) {
-                outputFilterState [index] = u;
-                outputFilterValid [index] = true;
-            }
-            var beta = 1.0 - Math.Exp (-dt / tau);
-            outputFilterState [index] += beta * (u - outputFilterState [index]);
-            return u + weight * (outputFilterState [index] - u);
+            var tau = detectors.ChatterLatched (index)
+                ? OutputFilter.LatchedTimeConstant
+                : OutputFilter.DetectorTimeConstant;
+            return outputFilter.Process (index, u, tau, weight, dt);
         }
 
         /// <summary>
