@@ -202,6 +202,10 @@ namespace KRPC.SpaceCenter.Services
         /// The <a href="https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node">longitude of
         /// the ascending node</a>, in radians.
         /// </summary>
+        /// <remarks>
+        /// For a near-equatorial orbit, the ascending node is ill-defined and
+        /// this value may vary erratically over time.
+        /// </remarks>
         [KRPCProperty]
         public double LongitudeOfAscendingNode {
             get { return GeometryExtensions.ToRadians (InternalOrbit.LAN); }
@@ -211,6 +215,10 @@ namespace KRPC.SpaceCenter.Services
         /// The <a href="https://en.wikipedia.org/wiki/Argument_of_periapsis">argument of
         /// periapsis</a>, in radians.
         /// </summary>
+        /// <remarks>
+        /// For a near-circular orbit, the periapsis is ill-defined and
+        /// this value may vary erratically over time.
+        /// </remarks>
         [KRPCProperty]
         public double ArgumentOfPeriapsis {
             get { return GeometryExtensions.ToRadians (InternalOrbit.argumentOfPeriapsis); }
