@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using KRPC.Server;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
 using UnityEngine;
@@ -8,10 +9,20 @@ namespace KRPC.SpaceCenter.AutoPilot
 {
     /// <summary>
     /// Controller to hold a vessels attitude in a chosen orientation.
+    /// One per vessel, owned by <see cref="PilotAddon"/> and driven by it every physics tick via
+    /// <see cref="Fly"/>; the <see cref="Services.AutoPilot"/> API objects are transient views
+    /// onto it. Engagement is controller state: which client (if any) currently has the
+    /// auto-pilot flying the vessel.
     /// </summary>
     sealed class AttitudeController
     {
         readonly Services.Vessel vessel;
+
+        // Engagement state. engaged is whether the auto-pilot is flying the vessel;
+        // engagedClient is the client that engaged it (null if it was engaged from within the
+        // game), used to auto-disengage when that client disconnects.
+        bool engaged;
+        IClient engagedClient;
         public readonly PIDController PitchPID = new PIDController ();
         public readonly PIDController RollPID = new PIDController ();
         public readonly PIDController YawPID = new PIDController ();
@@ -540,8 +551,41 @@ namespace KRPC.SpaceCenter.AutoPilot
             }
         }
 
+        public bool Engaged {
+            get { return engaged; }
+        }
+
+        /// <summary>
+        /// Engage the auto-pilot on behalf of the given client (null when engaged from within
+        /// the game). Re-engaging while already engaged restarts the per-engagement state, as
+        /// engaging always has.
+        /// </summary>
+        public void Engage (IClient client)
+        {
+            engagedClient = client;
+            engaged = true;
+            Start ();
+        }
+
+        public void Disengage ()
+        {
+            engaged = false;
+            engagedClient = null;
+        }
+
+        /// <summary>
+        /// Thresholds for Services.AutoPilot.Wait (pointing error in degrees, angular velocity
+        /// in rad/s). Held here rather than on the API objects so they persist with the vessel.
+        /// </summary>
+        public float StoppingAngleThreshold { get; set; }
+
+        public float StoppingVelocityThreshold { get; set; }
+
         public void Reset ()
         {
+            Disengage ();
+            StoppingAngleThreshold = 1f;
+            StoppingVelocityThreshold = 0.05f;
             ReferenceFrame = vessel.SurfaceReferenceFrame;
             MaxAngularVelocity = new Vector3d (1, 1, 1);
             RollAttenuationAngle = 1.0;
@@ -607,7 +651,27 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
 
-        public void Update (PilotAddon.ControlInputs state)
+        /// <summary>
+        /// Run one tick of the auto-pilot, writing the control outputs to
+        /// <paramref name="state"/>. Called by <see cref="PilotAddon"/> for every vessel every
+        /// physics tick; does nothing and returns false while not engaged. If the client that
+        /// engaged the auto-pilot has disconnected, disengages instead.
+        /// </summary>
+        public bool Fly (PilotAddon.ControlInputs state)
+        {
+            if (!engaged)
+                return false;
+            if (engagedClient != null && !engagedClient.Connected) {
+                Disengage ();
+                return false;
+            }
+            // The auto-pilot fights stock SAS, so hold it off while engaged.
+            vessel.InternalVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, false);
+            Update (state);
+            return true;
+        }
+
+        void Update (PilotAddon.ControlInputs state)
         {
             var internalVessel = vessel.InternalVessel;
             var torque = vessel.AvailableTorqueVectors.Item1;

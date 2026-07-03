@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using KRPC.Server;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.AutoPilot;
@@ -23,20 +22,14 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class AutoPilot : Equatable<AutoPilot>
     {
-        static readonly IDictionary<Guid, AutoPilot> engaged = new Dictionary<Guid, AutoPilot> ();
         static readonly HashSet<Guid> showInfoUI = new HashSet<Guid> ();
         readonly Guid vesselId;
         readonly AttitudeController attitudeController;
-        IClient requestingClient;
-        float stoppingAngleThreshold = 1f;
-        float stoppingVelocityThreshold = 0.05f;
 
         internal AutoPilot (global::Vessel vessel)
         {
-            if (!engaged.ContainsKey (vessel.id))
-                engaged [vessel.id] = null;
             vesselId = vessel.id;
-            attitudeController = new AttitudeController (vessel);
+            attitudeController = PilotAddon.GetAttitudeController (vessel);
         }
 
         /// <summary>
@@ -94,16 +87,12 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool Engaged {
-            get { return engaged [vesselId] == this; }
+            get { return attitudeController.Engaged; }
             set {
-                if (value) {
-                    requestingClient = CallContext.Client;
-                    engaged [vesselId] = this;
-                    attitudeController.Start ();
-                } else {
-                    requestingClient = null;
-                    engaged [vesselId] = null;
-                }
+                if (value)
+                    attitudeController.Engage (CallContext.Client);
+                else
+                    attitudeController.Disengage ();
             }
         }
 
@@ -143,14 +132,20 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The live, engaged auto-pilot for the given vessel, or <c>null</c> if the auto-pilot is not
-        /// engaged. Unlike <see cref="Vessel.AutoPilot"/>, this returns the instance that is actually
-        /// being updated each physics tick, so its state (errors, oscillation) is live.
+        /// An auto-pilot object for the given vessel, or <c>null</c> if the vessel's auto-pilot
+        /// is not engaged (or the vessel no longer exists). Used by the in-game info window;
+        /// the returned object is a view onto the vessel's live attitude controller.
         /// </summary>
         internal static AutoPilot GetEngaged (Guid id)
         {
-            AutoPilot autoPilot;
-            return engaged.TryGetValue (id, out autoPilot) ? autoPilot : null;
+            var controller = PilotAddon.FindAttitudeController (id);
+            if (controller == null || !controller.Engaged)
+                return null;
+            try {
+                return new AutoPilot (FlightGlobalsExtensions.GetVesselById (id));
+            } catch (ArgumentException) {
+                return null;
+            }
         }
 
         /// <summary>
@@ -162,10 +157,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Reset ()
         {
-            Engaged = false;
             attitudeController.Reset ();
-            stoppingAngleThreshold = 1f;
-            stoppingVelocityThreshold = 0.05f;
         }
 
         /// <summary>
@@ -328,7 +320,8 @@ namespace KRPC.SpaceCenter.Services
 
         void WaitWithDeadline (DateTime deadline)
         {
-            if (Error > stoppingAngleThreshold || InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > stoppingVelocityThreshold) {
+            if (Error > attitudeController.StoppingAngleThreshold ||
+                InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > attitudeController.StoppingVelocityThreshold) {
                 if (DateTime.UtcNow > deadline)
                     throw new TimeoutException ("AutoPilot timed out waiting to reach target direction");
                 throw new YieldException<Action> (() => WaitWithDeadline (deadline));
@@ -341,8 +334,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float StoppingAngleThreshold {
-            get { return stoppingAngleThreshold; }
-            set { stoppingAngleThreshold = value; }
+            get { return attitudeController.StoppingAngleThreshold; }
+            set { attitudeController.StoppingAngleThreshold = value; }
         }
 
         /// <summary>
@@ -352,8 +345,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float StoppingVelocityThreshold {
-            get { return stoppingVelocityThreshold; }
-            set { stoppingVelocityThreshold = value; }
+            get { return attitudeController.StoppingVelocityThreshold; }
+            set { attitudeController.StoppingVelocityThreshold = value; }
         }
 
         // The vessel's current attitude, decomposed into pitch/heading/roll in the AP reference frame.
@@ -1089,23 +1082,5 @@ namespace KRPC.SpaceCenter.Services
             throw new InvalidOperationException ("Unknown SAS mode");
         }
 
-        internal static bool Fly (global::Vessel vessel, PilotAddon.ControlInputs state)
-        {
-            // Get the auto-pilot object. Do nothing if there is no auto-pilot engaged for this vessel.
-            if (!engaged.ContainsKey (vessel.id))
-                return false;
-            var autoPilot = engaged [vessel.id];
-            if (autoPilot == null)
-                return false;
-            // If the client that engaged the auto-pilot has disconnected, disengage the auto-pilot
-            if (autoPilot.requestingClient != null && !autoPilot.requestingClient.Connected) {
-                autoPilot.Engaged = false;
-                return false;
-            }
-            // Run the auto-pilot
-            autoPilot.SAS = false;
-            autoPilot.attitudeController.Update (state);
-            return true;
-        }
     }
 }

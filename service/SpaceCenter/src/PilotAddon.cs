@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Server;
 using KRPC.Service;
+using KRPC.SpaceCenter.AutoPilot;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
 using UnityEngine;
@@ -239,6 +240,14 @@ namespace KRPC.SpaceCenter
         /// Set of FlyByWire callbacks that have been registered with RemoteTech.
         /// </summary>
         static HashSet<Vessel> remoteTechSanctionedDelegates = new HashSet<Vessel> ();
+        /// <summary>
+        /// The attitude controller for each vessel. Owned here rather than by the AutoPilot
+        /// service objects — those are transient API surface objects, so controller state (the
+        /// autotuner, the oscillation detector's persistent structural level, ...) must not be
+        /// tied to their lifetime. Held per vessel for the duration of the flight session,
+        /// however many AutoPilot objects come and go.
+        /// </summary>
+        static IDictionary<Guid, AttitudeController> attitudeControllers = new Dictionary<Guid, AttitudeController> ();
 
         /// <summary>
         /// Wake the addon
@@ -264,6 +273,31 @@ namespace KRPC.SpaceCenter
             autoPilotInputs.Clear ();
             controlDelegates.Clear ();
             remoteTechSanctionedDelegates.Clear ();
+            attitudeControllers.Clear ();
+        }
+
+        /// <summary>
+        /// The vessel's attitude controller, created on first use.
+        /// </summary>
+        internal static AttitudeController GetAttitudeController (Vessel vessel)
+        {
+            AttitudeController controller;
+            if (!attitudeControllers.TryGetValue (vessel.id, out controller)) {
+                controller = new AttitudeController (vessel);
+                attitudeControllers [vessel.id] = controller;
+            }
+            return controller;
+        }
+
+        /// <summary>
+        /// The vessel's attitude controller, or null if none has been created. A lookup that
+        /// never creates, for the per-tick fly-by-wire path (which runs for every vessel) and
+        /// the info window.
+        /// </summary>
+        internal static AttitudeController FindAttitudeController (Guid vesselId)
+        {
+            AttitudeController controller;
+            return attitudeControllers.TryGetValue (vesselId, out controller) ? controller : null;
         }
 
         internal static ControlInputs Get (Vessel vessel)
@@ -339,7 +373,8 @@ namespace KRPC.SpaceCenter
             // Auto-pilot inputs
             if (!autoPilotInputs.ContainsKey (vessel))
                 autoPilotInputs [vessel] = new ControlInputs ();
-            if (Services.AutoPilot.Fly (vessel, autoPilotInputs [vessel]))
+            var attitudeController = FindAttitudeController (vessel.id);
+            if (attitudeController != null && attitudeController.Fly (autoPilotInputs [vessel]))
                 inputs.Add (autoPilotInputs [vessel]);
 
             // Update current inputs
@@ -349,7 +384,15 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// Handle throttle quirky operation...
+        /// Apply a pending throttle input. Throttle is not a per-tick input like pitch/yaw/roll:
+        /// KSP holds the active vessel's throttle persistently in FlightInputHandler.state — the
+        /// same state the player's throttle keys act on — so a client's throttle change is
+        /// written there once and the pending input cleared. It then sticks without kRPC
+        /// re-asserting it every tick, and the player can still adjust the throttle afterwards.
+        /// A non-active vessel has no such persistent input state, so its pending throttle is
+        /// kept and re-applied to the vessel's control state every tick by
+        /// <see cref="ControlInputs.Add"/>. With RemoteTech, a vessel with neither local control
+        /// nor a connection cannot take throttle input, so the input is left pending until it can.
         /// </summary>
         static void HandleThrottle (Vessel vessel, ControlInputs inputs)
         {
