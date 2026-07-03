@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpctest.geometry import angle_between, dot, norm
 
 
 class EngineTestBase:
@@ -361,6 +362,57 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         self.set_idle(engine)
         engine.gimbal_limit = 1
 
+    def test_gimbal_override(self):
+        engine = self.get_engine("liquidEngine2")  # LV-T45 "Swivel"
+        thruster = engine.thrusters[0]
+        ref = self.vessel.reference_frame
+        self.assertTrue(engine.gimballed)
+        self.assertFalse(engine.gimbal_override)
+
+        engine.gimbal_override = True
+        self.wait()
+        self.assertTrue(engine.gimbal_override)
+
+        # The actuation command round-trips and clamps to [-1, 1]
+        for actuation in ((1, 0, 0), (0, -1, 0), (0.5, 0.25, -0.75), (0, 0, 0)):
+            engine.gimbal_actuation = actuation
+            self.assertAlmostEqual(actuation, engine.gimbal_actuation)
+        engine.gimbal_actuation = (5, -5, 0)
+        self.assertAlmostEqual((1, -1, 0), engine.gimbal_actuation)
+
+        # The override physically vectors the thrust. A zero command leaves the
+        # thrust along the un-gimballed direction; a full pitch command deflects
+        # it by about the gimbal range, and opposite commands deflect to
+        # opposite sides. initial_thrust_direction gives the un-gimballed
+        # reference regardless of the current override.
+        neutral = thruster.initial_thrust_direction(ref)
+        engine.gimbal_actuation = (0, 0, 0)
+        self.wait(0.5)
+        self.assertLess(angle_between(thruster.thrust_direction(ref), neutral), 0.5)
+        engine.gimbal_actuation = (1, 0, 0)
+        self.wait(0.5)
+        pitch_pos = thruster.thrust_direction(ref)
+        engine.gimbal_actuation = (-1, 0, 0)
+        self.wait(0.5)
+        pitch_neg = thruster.thrust_direction(ref)
+        self.assertGreater(angle_between(pitch_pos, neutral), 2)
+        self.assertGreater(angle_between(pitch_neg, neutral), 2)
+        self.assertGreater(angle_between(pitch_pos, pitch_neg), 4)
+
+        # Disabling releases the override
+        engine.gimbal_actuation = (0, 0, 0)
+        engine.gimbal_override = False
+        self.wait()
+        self.assertFalse(engine.gimbal_override)
+
+    def test_gimbal_override_not_gimballed(self):
+        engine = self.get_engine("liquidEngine")  # LV-T30 "Reliant"
+        self.assertFalse(engine.gimballed)
+        self.assertRaises(RuntimeError, getattr, engine, "gimbal_override")
+        self.assertRaises(RuntimeError, setattr, engine, "gimbal_override", True)
+        self.assertRaises(RuntimeError, getattr, engine, "gimbal_actuation")
+        self.assertRaises(RuntimeError, setattr, engine, "gimbal_actuation", (0, 0, 0))
+
     def test_no_thrust_reverser(self):
         engine = self.get_engine("liquidEngine")  # LV-T30 "Reliant"
         self.assertFalse(engine.can_reverse_thrust)
@@ -498,6 +550,64 @@ class TestPartsEngineReverser(krpctest.TestCase, EngineTestBase):
         control.thrust_reversers = False
         self.wait(2)
         self.assertFalse(control.thrust_reversers)
+
+
+class TestGimbalOverrideAttitude(krpctest.TestCase):
+    """The gimbal override actually flies the vessel. Uses the "Vessel" craft,
+    whose single gimballed engine thrusts through the centre of mass, so a
+    gimbal deflection produces a clean torque about the centre of mass."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("Vessel")
+        cls.remove_other_vessels()
+        cls.set_circular_orbit("Kerbin", 250000)
+        cls.vessel = cls.connect().space_center.active_vessel
+
+    def get_gimballed_engine(self):
+        for part in self.vessel.parts.all:
+            if part.engine is not None and part.engine.gimballed:
+                return part.engine
+        self.fail("the vessel has no gimballed engine")
+
+    def test_gimbal_override_attitude(self):
+        engine = self.get_gimballed_engine()
+        vessel = self.vessel
+        body_frame = vessel.orbit.body.non_rotating_reference_frame
+
+        def angular_speed():
+            return norm(vessel.angular_velocity(body_frame))
+
+        # Fire the engine with the given pitch gimbal command from rest, and
+        # return the angular velocity it induces. Start from the same still pose
+        # each time, so the induced spins are directly comparable.
+        def spin_from(pitch):
+            self.set_pitch_heading_roll(0, 90, 0)
+            engine.gimbal_actuation = (pitch, 0, 0)
+            vessel.control.throttle = 1
+            engine.active = True
+            self.wait_until(
+                lambda: angular_speed() > 0.05,
+                timeout=20,
+                message="the gimbal override to rotate the vessel",
+            )
+            spin = vessel.angular_velocity(body_frame)
+            engine.active = False
+            vessel.control.throttle = 0
+            engine.gimbal_actuation = (0, 0, 0)
+            return spin
+
+        vessel.control.sas = False
+        engine.gimbal_override = True
+
+        spin_positive = spin_from(1)
+        spin_negative = spin_from(-1)
+
+        engine.gimbal_override = False
+
+        # Opposite gimbal deflections rotate the vessel in opposite directions.
+        self.assertLess(dot(spin_positive, spin_negative), 0)
 
 
 if __name__ == "__main__":

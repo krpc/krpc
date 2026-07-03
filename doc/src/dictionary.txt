@@ -127,6 +127,7 @@ runtime
 serialio
 serializable
 shader
+sideslip
 socat
 sph
 stderr
@@ -137,6 +138,7 @@ symlink
 targetting
 thruster
 thrusters
+toolchain
 tradeoff
 translational
 tuple
@@ -150,11 +152,10 @@ unpaused
 unserialize
 vab
 varint
+vcpkg
 ve
 vertices
 virtualenv
 waypoint
 waypoints
 websockets
-toolchain
-vcpkg

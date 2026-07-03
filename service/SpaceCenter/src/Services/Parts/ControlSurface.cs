@@ -112,6 +112,29 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Whether the control surface deflection is being set directly, bypassing the vessel's
+        /// normal flight control. When enabled, the surface holds the deflection set by
+        /// <see cref="Deflection"/> instead of responding to pitch, yaw and roll control inputs.
+        /// The prior state is restored when the override is released, when the
+        /// controlling client disconnects, or when the vessel changes.
+        /// </summary>
+        [KRPCProperty]
+        public bool DeflectionOverride {
+            get { return ActuatorControlAddon.GetControlSurfaceOverride (controlSurface); }
+            set { ActuatorControlAddon.SetControlSurfaceOverride (controlSurface, value); }
+        }
+
+        /// <summary>
+        /// The deflection command applied when <see cref="DeflectionOverride"/> is enabled, as a
+        /// value between -1 and 1, mapped onto the surface's deploy angle range.
+        /// </summary>
+        [KRPCProperty]
+        public float Deflection {
+            get { return ActuatorControlAddon.GetControlSurfaceDeflection (controlSurface); }
+            set { ActuatorControlAddon.SetControlSurfaceDeflection (controlSurface, value); }
+        }
+
+        /// <summary>
         /// Surface area of the control surface in <math>m^2</math>.
         /// </summary>
         [KRPCProperty]
