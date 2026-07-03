@@ -571,6 +571,12 @@ namespace KRPC.SpaceCenter.AutoPilot
             targetSmoothingTime = 0;
             DiagnosticLogging = false;
             SetTarget (0, 0, double.NaN);
+            // Reset is the user-facing return to initial conditions, so also clear the state
+            // that deliberately survives Start's per-engagement reset: the persistent chatter
+            // level (kept across engagements so a known-flexible craft re-latches quickly) and
+            // the one-sided smoothed torque (which otherwise decays a stale maximum at τ≈0.5s).
+            detectors.ResetChatterLevel ();
+            smoothedTorque = Vector3d.zero;
             Start ();
         }
 

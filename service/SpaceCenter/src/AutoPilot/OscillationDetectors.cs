@@ -101,7 +101,8 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// <summary>
         /// Reset per-engagement state. chatterLevel is deliberately NOT reset — the level
         /// persists across re-engagements (decaying at τ = 30 s); only the latch is
-        /// per-engagement.
+        /// per-engagement. A full reset clears the level too, via
+        /// <see cref="ResetChatterLevel"/>.
         /// </summary>
         public void Reset ()
         {
@@ -158,6 +159,17 @@ namespace KRPC.SpaceCenter.AutoPilot
             if (chatterLatched [0] || chatterLatched [2])
                 chatterLatched [0] = chatterLatched [2] = true;
             prevDetectorOmega = rawOmega;
+        }
+
+        /// <summary>
+        /// Clear the persistent chatter level, on top of what <see cref="Reset"/> clears. Kept
+        /// out of Reset so the level survives re-engagements (a craft known to be flexible
+        /// re-latches quickly); called only by the full controller reset — the user-facing
+        /// return to initial conditions.
+        /// </summary>
+        public void ResetChatterLevel ()
+        {
+            chatterLevel = Vector3d.zero;
         }
 
         /// <summary>

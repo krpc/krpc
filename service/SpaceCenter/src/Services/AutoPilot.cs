@@ -155,7 +155,9 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Disengages the auto-pilot and resets all configuration parameters to their defaults.
-        /// Also resets the target pitch, heading and roll.
+        /// Also resets the target pitch, heading and roll, and clears all internal controller
+        /// state, including the oscillation detector's structural level — which otherwise
+        /// persists across engagements so that a craft known to be flexible re-latches quickly.
         /// </summary>
         [KRPCMethod]
         public void Reset ()
