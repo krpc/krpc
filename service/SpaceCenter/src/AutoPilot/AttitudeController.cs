@@ -121,14 +121,12 @@ namespace KRPC.SpaceCenter.AutoPilot
         // recorded for the info UI alongside the measured rate.
         Vector3d logTargetRi;
         // Per-tick gate/mitigation state recorded for the in-game info window: the pointing-error
-        // hold factor, the applied feedforward-cut fraction, the output-filter blend weight
-        // actually chosen, and the post-floor inner-loop bandwidth (rad/s; only written while
-        // auto-tuning runs).
+        // hold factor, the applied feedforward-cut fraction and the output-filter blend weight
+        // actually chosen.
         double logHoldFactorPitchYaw;
         double logHoldFactorRoll;
         Vector3d logFfCut;
         Vector3d logOutputFilterWeight;
-        Vector3d logAppliedBandwidth;
         bool diagnosticLogging;
         readonly StringBuilder diagnosticLog = new StringBuilder ();
         readonly object diagnosticLogLock = new object ();
@@ -469,10 +467,6 @@ namespace KRPC.SpaceCenter.AutoPilot
             get { return logOutputFilterWeight; }
         }
 
-        public Vector3d AppliedBandwidth {
-            get { return logAppliedBandwidth; }
-        }
-
         public Vector3d MitigationLevel {
             get { return new Vector3d (policy.MitigationLevel (0), policy.MitigationLevel (1), policy.MitigationLevel (2)); }
         }
@@ -602,7 +596,6 @@ namespace KRPC.SpaceCenter.AutoPilot
             logHoldFactorRoll = 0;
             logFfCut = Vector3d.zero;
             logOutputFilterWeight = Vector3d.zero;
-            logAppliedBandwidth = Vector3d.zero;
             if (AutoTune)
                 DoAutoTune (vessel.AvailableTorqueVectors.Item1, vessel.MomentOfInertiaVector);
         }
@@ -1815,8 +1808,6 @@ namespace KRPC.SpaceCenter.AutoPilot
                 bandwidth = reduced;
                 bandwidthSquared *= f * f;
             }
-
-            logAppliedBandwidth [index] = bandwidth;
 
             var kp = bandwidth * accelerationInv;
             var ki = bandwidthSquared * accelerationInv;

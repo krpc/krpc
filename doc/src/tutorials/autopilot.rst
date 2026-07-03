@@ -486,18 +486,19 @@ state. It is enabled per vessel, and hidden again when the game restarts:
 The window is laid out like a control panel of annunciator lamps and digital registers.
 Lamps are dim when nominal and light amber to flag something worth attention; the
 **ENGAGED** lamp reads green (amber **HELD** while the craft is held on the launch
-clamps). From top to bottom it shows:
+clamps). Hovering the mouse over a row shows a tooltip with a short description of it.
+From top to bottom it shows:
 
-* **TARGET** — the attitude being tracked, in pitch, heading and roll (``CUR``, the target
-  the loop is currently tracking, and ``CMD``, the commanded target, shown only while a
-  change is being :ref:`smoothed <target-smoothing>` in).
+* **TARGET** — the attitude being tracked, in pitch, heading and roll (``CURRENT``, the
+  target the loop is currently tracking, and ``COMMAND``, the commanded target, shown only
+  while a change is being :ref:`smoothed <target-smoothing>` in).
 * **ATTITUDE ERROR** — the total and per-axis pointing error to that target.
 * **PID GAIN** — the autotuned inner-loop gains (:math:`K_P` and :math:`K_I`) per axis.
 * **OSCILLATION** — the flexible-craft handling, mirroring the :ref:`detector, gates and
   mitigations <oscillation>` structure: the detector readouts (structural level,
-  inner-loop bandwidth, control-output envelope and estimated mode frequency), the gate
-  weights (hold factor, latch, ramp, back-off and the net gate), and a lamp per mitigation
-  showing its mode and how strongly it is engaged.
+  control-output envelope and estimated mode frequency), the gate weights (hold factor,
+  latch, ramp, back-off and the net gate), and a lamp per mitigation showing its mode and
+  how strongly it is engaged.
 
 It is purely a diagnostic aid, most useful on a flexible craft where it shows the
 oscillation detector, gates and mitigations working in real time.

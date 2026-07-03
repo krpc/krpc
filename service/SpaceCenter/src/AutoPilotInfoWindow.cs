@@ -22,6 +22,9 @@ namespace KRPC.SpaceCenter
         // Background of the digital registers, and the unlit lamp colour, so an off lamp matches a
         // register cell — the dark grey behind the navball's speed text (#3A3A3F).
         static readonly Color registerBackground = new Color (0.227f, 0.227f, 0.247f);
+        // Text colour of an unlit status lamp (and of a data lamp that is not live): faint grey
+        // "engraved" text on the dark lamp background.
+        static readonly Color engravedGrey = new Color (0.55f, 0.55f, 0.55f);
 
         const float baseWidth = 250f;
 
@@ -32,26 +35,51 @@ namespace KRPC.SpaceCenter
 
         public Guid VesselId { get; set; }
 
-        Texture2D lampTexture, registerTexture;
-        GUIStyle lampStyle, registerStyle, registerCenterStyle, registerLabelStyle, headerStyle, unitStyle, columnHeadStyle, separatorStyle;
+        Texture2D lampTexture, registerTexture, tooltipTexture;
+        GUIStyle lampStyle, registerStyle, registerCenterStyle, registerLabelStyle, headerStyle, unitStyle, columnHeadStyle, separatorStyle, tooltipStyle;
         Font monoFont;
 
-        // Layout options applied to every stretch column (value registers, lamps and column
-        // headers) to make the row split into equal columns regardless of the text in each cell.
-        // Two options are needed because IMGUI distributes a row's surplus width to each cell in
-        // proportion to its (maxWidth - minWidth): pinning only the minimum to a tiny constant is
-        // not enough, because the content-derived *maximum* still differs cell to cell, so a cell
-        // with wider text (a populated "0.0°" next to a blank one, a "–" sign appearing on a rate,
-        // "LPASS", "HOLD", an extra digit) absorbs a larger share of the surplus and ends up wider.
-        // Pinning both the minimum to a tiny constant and the maximum to a large equal constant
-        // removes the content's influence entirely, so the cells always divide the row evenly while
-        // still stretching to fill the fixed-width window.
-        GUILayoutOption[] equalColumn;
+        // Description of the row currently under the mouse (or null), and that row's rect, which
+        // the tooltip is anchored to — a row's tooltip always appears in the same place, rather
+        // than following the mouse around. Captured by RowTooltip as the rows are drawn each
+        // Repaint pass and rendered by DrawTooltip at the end of the pass, so the tooltip box
+        // draws on top of the panel.
+        string activeTooltip;
+        Rect activeTooltipRow;
+
+        // The panel body is a grid of 4 equal-width columns filling the window: every cell is
+        // fixed to a whole number of columns (spanOptions [n] sizes an n-column cell), so cells
+        // line up vertically across rows regardless of how many cells each row has — a per-axis
+        // row is label + 3 values, a PCH/YAW+RLL group row is label + a 2-column cell + 1, the
+        // engagement lamp spans all 4. Fixed widths (rather than stretch weights) are needed
+        // because IMGUI distributes surplus width in proportion to each cell's content-derived
+        // size, which would let wider text steal width and break the vertical alignment.
+        // Rebuilt by ComputeGrid on rescale.
+        GUILayoutOption[][] spanOptions;
+
+        // The horizontal gap IMGUI leaves between adjacent cells and at the row edges: the cells'
+        // 2px side margins, adjacent margins collapsing to the larger of the two. Unscaled, like
+        // the style margins it mirrors.
+        const float cellSpacing = 2f;
 
         static Texture2D FlatTexture (Color color)
         {
             var texture = new Texture2D (1, 1);
             texture.SetPixel (0, 0, color);
+            texture.Apply ();
+            return texture;
+        }
+
+        // A 3×3 texture with a 1px border colour around a fill colour. Drawn with a style whose
+        // border is 1px, the edge pixels become a crisp 1px outline at any box size (point
+        // filtering stops the border bleeding into the fill when stretched).
+        static Texture2D BorderedTexture (Color border, Color fill)
+        {
+            var texture = new Texture2D (3, 3);
+            for (int x = 0; x < 3; x++)
+                for (int y = 0; y < 3; y++)
+                    texture.SetPixel (x, y, x == 1 && y == 1 ? fill : border);
+            texture.filterMode = FilterMode.Point;
             texture.Apply ();
             return texture;
         }
@@ -65,6 +93,9 @@ namespace KRPC.SpaceCenter
 
             lampTexture = FlatTexture (Color.white);
             registerTexture = FlatTexture (registerBackground);
+            // Darker than the registers so the floating tooltip reads as a layer above them, with
+            // a grey outline to separate it from whatever it happens to overlap.
+            tooltipTexture = BorderedTexture (new Color (0.55f, 0.55f, 0.55f), new Color (0.10f, 0.10f, 0.12f));
 
             lampStyle = new GUIStyle (skin.box) {
                 alignment = TextAnchor.MiddleCenter,
@@ -97,7 +128,7 @@ namespace KRPC.SpaceCenter
                 alignment = TextAnchor.MiddleLeft,
                 margin = new RectOffset (2, 0, 1, 1),
                 padding = new RectOffset (2, 2, 2, 2),
-                fixedWidth = 46f,
+                // fixedWidth (one grid column) is set by ComputeGrid.
                 wordWrap = false
             };
 
@@ -125,9 +156,18 @@ namespace KRPC.SpaceCenter
             separatorStyle.stretchWidth = true;
             separatorStyle.margin = new RectOffset (2, 2, 3, 3);
 
-            // The max is any large constant well above any realistic column width; only its being
-            // equal across cells matters, so the surplus splits evenly (see equalColumn comment).
-            equalColumn = new[] { GUILayout.MinWidth (1f), GUILayout.MaxWidth (10000f) };
+            // The tooltip keeps the skin's default (proportional) font: it is prose, not a
+            // register readout, and the proportional face also visually separates it from the
+            // panel it floats over.
+            tooltipStyle = new GUIStyle (skin.label) {
+                wordWrap = true,
+                border = new RectOffset (1, 1, 1, 1),
+                padding = new RectOffset (6, 6, 4, 4)
+            };
+            tooltipStyle.normal.background = tooltipTexture;
+            tooltipStyle.normal.textColor = Color.white;
+
+            ComputeGrid ();
 
             // Use a fixed-width (monospace) font across the whole panel so the digital readouts and
             // columns line up. Several common OS monospace fonts are listed so it resolves on both
@@ -143,6 +183,20 @@ namespace KRPC.SpaceCenter
             ApplyFontSizes (GameSettings.UI_SCALE);
         }
 
+        // Recomputes the 4-column grid from the window's current fixed width: the column width is
+        // what makes 4 columns, the 3 gaps between them and the 2 edge gaps exactly fill the
+        // window's content area. The row-label style is pinned to one column so plain
+        // registerLabelStyle labels land on the grid too.
+        void ComputeGrid ()
+        {
+            float contentWidth = Style.fixedWidth - Style.padding.left - Style.padding.right;
+            float column = (contentWidth - 5f * cellSpacing) / 4f;
+            spanOptions = new GUILayoutOption[5][];
+            for (int n = 1; n <= 4; n++)
+                spanOptions [n] = new[] { GUILayout.Width (column * n + cellSpacing * (n - 1)) };
+            registerLabelStyle.fixedWidth = column;
+        }
+
         // Applies the scaled monospace point sizes to the panel's text styles.
         void ApplyFontSizes (float scale)
         {
@@ -155,6 +209,7 @@ namespace KRPC.SpaceCenter
             headerStyle.fontSize = body;
             unitStyle.fontSize = small;
             columnHeadStyle.fontSize = small;
+            tooltipStyle.fontSize = body;
         }
 
         string DisplayName ()
@@ -171,7 +226,7 @@ namespace KRPC.SpaceCenter
             if (needRescale) {
                 float scale = GameSettings.UI_SCALE;
                 Style.fixedWidth = baseWidth * scale;
-                registerLabelStyle.fixedWidth = 46f * scale;
+                ComputeGrid ();
                 ApplyFontSizes (scale);
                 // Force the window to shrink back to its content height.
                 Position = new Rect (Position.x, Position.y, Position.width, 0f);
@@ -180,40 +235,45 @@ namespace KRPC.SpaceCenter
             var ap = Services.AutoPilot.GetEngaged (VesselId);
             bool engaged = ap != null;
 
+            activeTooltip = null;
             GUILayout.BeginVertical ();
 
             // Engagement annunciator lamp: green when engaged and controlling, amber HELD while
             // the engaged auto-pilot is held inert on the launch clamps (PRELAUNCH).
             var held = engaged && ap.Held;
             GUILayout.BeginHorizontal ();
-            Lamp (held ? "HELD" : "ENGAGED", engaged, held ? amber : green);
+            Lamp (held ? "HELD" : "ENGAGED", engaged, held ? amber : green, 4);
             GUILayout.EndHorizontal ();
+            RowTooltip ("Auto-pilot engagement. HELD: engaged but held inert on the launch clamps.");
 
-            // Target: axis column headers, then the current target (CUR, what the auto-pilot is
-            // tracking right now) and below it the commanded target (CMD, what was requested). CMD is
-            // shown only while smoothing is active (TargetSmoothingTime > 0); without smoothing CUR
-            // always equals the command, so the whole CMD row is blanked. RLL is blank when no
+            // Target: axis column headers, then the current target (CURRENT, what the auto-pilot
+            // is tracking right now) and below it the commanded target (COMMAND, what was
+            // requested). COMMAND is shown only while smoothing is active (TargetSmoothingTime
+            // > 0); without smoothing CURRENT always equals the command, so the whole COMMAND
+            // row is blanked. RLL is blank when no
             // specific roll is held. Values carry a degree symbol, so the section needs no unit label.
             bool showCmd = engaged && ap.TargetSmoothingTime > 0;
             Header ("TARGET", null);
             AxisColumnHeader ("PCH", "HDG", "RLL");
             GUILayout.BeginHorizontal ();
-            GUILayout.Label ("CUR", registerLabelStyle);
+            GUILayout.Label ("CURRENT", registerLabelStyle);
             Register (engaged ? Deg (ap.CurrentTargetPitch) : Blank);
             Register (engaged ? Deg (ap.CurrentTargetHeading) : Blank);
             Register (engaged ? DegOrBlank (ap.CurrentTargetRoll) : Blank);
             GUILayout.EndHorizontal ();
+            RowTooltip ("Target the auto-pilot is tracking right now (slewed toward COMMAND when target smoothing is on).");
             GUILayout.BeginHorizontal ();
-            GUILayout.Label ("CMD", registerLabelStyle);
+            GUILayout.Label ("COMMAND", registerLabelStyle);
             Register (showCmd ? Deg (ap.TargetPitch) : Blank);
             Register (showCmd ? Deg (ap.TargetHeading) : Blank);
             Register (showCmd ? DegOrBlank (ap.TargetRoll) : Blank);
             GUILayout.EndHorizontal ();
+            RowTooltip ("Commanded (requested) target; shown while target smoothing is still slewing CURRENT toward it.");
 
             // Attitude error: the four axis column headers on one row, error lamps on the next, each
             // dim within the AutoPilot.Wait() stopping angle threshold and amber outside it. These
             // are errors to the CURRENT (tracked) target, not the commanded one, so they stay small
-            // while a smoothed change is being slewed in (the craft is tracking CUR, not CMD).
+            // while a smoothed change is being slewed in (the craft is tracking CURRENT, not COMMAND).
             Header ("ATTITUDE ERROR", null);
             GUILayout.BeginHorizontal ();
             ColumnHead ("TOT");
@@ -231,6 +291,7 @@ namespace KRPC.SpaceCenter
             HeadingErrorLamp (engaged, engaged ? ap.CurrentHeadingError : 0f, errorThreshold, engaged ? ap.CurrentPitch : 0f);
             ErrorLamp (rollShown, rollShown ? ap.CurrentRollError : 0f, errorThreshold);
             GUILayout.EndHorizontal ();
+            RowTooltip ("Attitude error to the current target, total and per axis. Amber when outside the stopping angle threshold.");
 
             // Inner-loop PID gains (autotuned each tick when AutoTune is on): axis column headers,
             // then a Kp and a Ki row.
@@ -240,17 +301,19 @@ namespace KRPC.SpaceCenter
             Header ("PID GAIN", null);
             AxisColumnHeader ("PCH", "YAW", "RLL");
             GUILayout.BeginHorizontal ();
-            GUILayout.Label ("Kp", registerLabelStyle);
+            GUILayout.Label ("KP", registerLabelStyle);
             Register (gainP == null ? Blank : Gain (gainP.Item1));
             Register (gainY == null ? Blank : Gain (gainY.Item1));
             Register (gainR == null ? Blank : Gain (gainR.Item1));
             GUILayout.EndHorizontal ();
+            RowTooltip ("Inner rate-loop proportional gain (set by the autotuner each tick when auto-tune is on).");
             GUILayout.BeginHorizontal ();
-            GUILayout.Label ("Ki", registerLabelStyle);
+            GUILayout.Label ("KI", registerLabelStyle);
             Register (gainP == null ? Blank : Gain (gainP.Item2));
             Register (gainY == null ? Blank : Gain (gainY.Item2));
             Register (gainR == null ? Blank : Gain (gainR.Item2));
             GUILayout.EndHorizontal ();
+            RowTooltip ("Inner rate-loop integral gain (set by the autotuner each tick when auto-tune is on).");
 
             // Oscillation handling, mirroring the controller's detector → gates → mitigations
             // structure. DETECTOR: what the runtime observes (per-axis structural level, the
@@ -266,22 +329,12 @@ namespace KRPC.SpaceCenter
             AxisColumnHeader ("PCH", "YAW", "RLL");
             // Structural-wobble level the detector reads off the measured angular rate, per axis.
             GUILayout.BeginHorizontal ();
-            GUILayout.Label ("STRC", registerLabelStyle);
+            GUILayout.Label ("STRUC", registerLabelStyle);
             LevelLamp (engaged, level == null ? 0 : level.Item1, engaged && ap.PitchYawOscillationLatched, latchThreshold);
             LevelLamp (engaged, level == null ? 0 : level.Item3, engaged && ap.PitchYawOscillationLatched, latchThreshold);
             LevelLamp (engaged, level == null ? 0 : level.Item2, engaged && ap.RollOscillationLatched, latchThreshold);
             GUILayout.EndHorizontal ();
-
-            // Live inner-loop bandwidth per axis (rad/s, after any floor reduction). Blank when
-            // auto-tuning is off — the recorded value is only written by the autotuner.
-            var showBw = engaged && ap.AutoTune;
-            var appliedBw = showBw ? ap.AppliedBandwidth : null;
-            GUILayout.BeginHorizontal ();
-            GUILayout.Label ("BW", registerLabelStyle);
-            RegisterCentered (appliedBw == null ? Blank : Stable (appliedBw.Item1, 2).ToString ("0.00"));
-            RegisterCentered (appliedBw == null ? Blank : Stable (appliedBw.Item3, 2).ToString ("0.00"));
-            RegisterCentered (appliedBw == null ? Blank : Stable (appliedBw.Item2, 2).ToString ("0.00"));
-            GUILayout.EndHorizontal ();
+            RowTooltip ("Structural oscillation measurement: bending-mode chatter detected in the measured rate, per axis. Amber: at the latch threshold, or latched.");
 
             TwoColumnHeader ("PCH/YAW", "RLL");
 
@@ -290,19 +343,21 @@ namespace KRPC.SpaceCenter
             var oscThreshold = engaged ? ap.OscillationControlThreshold : double.PositiveInfinity;
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("CTRL", registerLabelStyle);
-            OscCell (engaged, engaged ? ap.PitchYawControlOscillation : 0.0, oscThreshold);
+            OscCell (engaged, engaged ? ap.PitchYawControlOscillation : 0.0, oscThreshold, 2);
             OscCell (engaged, engaged ? ap.RollControlOscillation : 0.0, oscThreshold);
             GUILayout.EndHorizontal ();
+            RowTooltip ("Oscillation envelope of the delivered control output. Amber at the level that engages BACKOFF.");
 
             // Estimated structural mode frequency per group (held estimator value).
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("FREQ", registerLabelStyle);
-            RegisterCentered (engaged ? FreqText (ap.PitchYawOscillationDetectedFrequency) : Blank);
+            RegisterCentered (engaged ? FreqText (ap.PitchYawOscillationDetectedFrequency) : Blank, 2);
             RegisterCentered (engaged ? FreqText (ap.RollOscillationDetectedFrequency) : Blank);
             GUILayout.EndHorizontal ();
+            RowTooltip ("Estimated structural mode frequency; holds the last acquired lock. Routes the rate filter (FILTER).");
 
             // The gates: HOLD (the pointing-error hold factor, global), LATCH (the detector's
-            // persistent flexible-craft verdict), RAMP (the eased latch weight), BKO (the
+            // persistent flexible-craft verdict), RAMP (the eased latch weight), BACKOFF (the
             // limit-cycle back-off) and GATE (the net hold-gated mitigation level,
             // ramp · max(hold, bko), which drives the floor and the feedforward cut).
             Header ("GATES", null);
@@ -312,105 +367,160 @@ namespace KRPC.SpaceCenter
             TwoColumnHeader ("PCH/YAW", "RLL");
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("HOLD", registerLabelStyle);
-            RegisterCentered (engaged ? Percent (ap.PitchYawHoldFactor) : Blank);
+            RegisterCentered (engaged ? Percent (ap.PitchYawHoldFactor) : Blank, 2);
             RegisterCentered (engaged ? Percent (ap.RollHoldFactor) : Blank);
             GUILayout.EndHorizontal ();
+            RowTooltip ("Hold factor: 100% holding attitude, 0% slewing. Gates the latched mitigations via GATE.");
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("LATCH", registerLabelStyle);
-            Lamp ("LATCH", engaged && ap.PitchYawOscillationLatched, amber);
-            Lamp ("LATCH", engaged && ap.RollOscillationLatched, amber);
+            LatchLamp (engaged && ap.PitchYawOscillationLatched, 2);
+            LatchLamp (engaged && ap.RollOscillationLatched, 1);
             GUILayout.EndHorizontal ();
+            RowTooltip ("The detector's persistent verdict that the craft is flexible; lasts for the rest of the engagement.");
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("RAMP", registerLabelStyle);
-            GateLamp (engaged, GroupMax (ramp));
+            GateLamp (engaged, GroupMax (ramp), 2);
             GateLamp (engaged, ramp == null ? 0.0 : ramp.Item2);
             GUILayout.EndHorizontal ();
+            RowTooltip ("Eased weight of the latched mitigations, ramped in/out so the control does not step.");
             GUILayout.BeginHorizontal ();
-            GUILayout.Label ("BKO", registerLabelStyle);
-            GateLamp (engaged, GroupMax (backoff));
+            GUILayout.Label ("BACKOFF", registerLabelStyle);
+            GateLamp (engaged, GroupMax (backoff), 2);
             GateLamp (engaged, backoff == null ? 0.0 : backoff.Item2);
             GUILayout.EndHorizontal ();
+            RowTooltip ("Limit-cycle back-off: keeps the mitigations engaged while CTRL shows a sustained oscillation during a slew.");
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("GATE", registerLabelStyle);
-            GateLamp (engaged, GroupMax (mitigation));
+            GateLamp (engaged, GroupMax (mitigation), 2);
             GateLamp (engaged, mitigation == null ? 0.0 : mitigation.Item2);
             GUILayout.EndHorizontal ();
+            RowTooltip ("Net mitigation level, RAMP × max(HOLD, BACKOFF); drives FLOOR and FFCUT.");
 
-            // The mitigations, one combined mode+engagement lamp each. FILT is the rate filter
+            // The mitigations, one combined mode+engagement lamp each. FILTER is the rate filter
             // (per group, showing the tool Automatic routed to, or the forced tool); FLOOR the
-            // bandwidth-floor engagement; FFCUT the applied feedforward-cut fraction; SMTH the
+            // bandwidth-floor engagement; FFCUT the applied feedforward-cut fraction; SMOOTH the
             // output-smoothing blend weight.
             Header ("MITIGATIONS", null);
             var ffCut = engaged ? ap.FeedforwardCut : null;
             var outWeight = engaged ? ap.OutputFilterWeight : null;
             TwoColumnHeader ("PCH/YAW", "RLL");
             GUILayout.BeginHorizontal ();
-            GUILayout.Label ("FILT", registerLabelStyle);
+            GUILayout.Label ("FILTER", registerLabelStyle);
             RateFilterLamp (engaged, engaged ? ap.PitchYawRateFilterMode : default (Services.RateFilterMode),
-                engaged ? ap.ActiveSuppressionTool (0) : 0);
+                engaged ? ap.ActiveSuppressionTool (0) : 0, 2);
             RateFilterLamp (engaged, engaged ? ap.RollRateFilterMode : default (Services.RateFilterMode),
                 engaged ? ap.ActiveSuppressionTool (1) : 0);
             GUILayout.EndHorizontal ();
+            RowTooltip ("Rate filter suppressing the structural mode in the measured rate: a notch or low-pass, routed by FREQ.");
             var floorMode = engaged ? ap.OscillationBandwidthFloorMode : default (Services.MitigationMode);
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("FLOOR", registerLabelStyle);
-            MitigationLamp (engaged, floorMode, GroupMax (mitigation));
+            MitigationLamp (engaged, floorMode, GroupMax (mitigation), 2);
             MitigationLamp (engaged, floorMode, mitigation == null ? 0.0 : mitigation.Item2);
             GUILayout.EndHorizontal ();
+            RowTooltip ("Bandwidth floor: pulls the inner-loop bandwidth down on a latched axis while holding.");
             var ffMode = engaged ? ap.OscillationFeedforwardMode : default (Services.MitigationMode);
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("FFCUT", registerLabelStyle);
-            MitigationLamp (engaged, ffMode, GroupMax (ffCut));
+            MitigationLamp (engaged, ffMode, GroupMax (ffCut), 2);
             MitigationLamp (engaged, ffMode, ffCut == null ? 0.0 : ffCut.Item2);
             GUILayout.EndHorizontal ();
+            RowTooltip ("Feedforward cut: fraction of the feedforward removed on a latched axis while holding.");
             var outMode = engaged ? ap.OscillationOutputFilterMode : default (Services.MitigationMode);
             GUILayout.BeginHorizontal ();
-            GUILayout.Label ("SMTH", registerLabelStyle);
-            MitigationLamp (engaged, outMode, GroupMax (outWeight));
+            GUILayout.Label ("SMOOTH", registerLabelStyle);
+            MitigationLamp (engaged, outMode, GroupMax (outWeight), 2);
             MitigationLamp (engaged, outMode, outWeight == null ? 0.0 : outWeight.Item2);
             GUILayout.EndHorizontal ();
+            RowTooltip ("Output smoothing: low-pass blend applied to the delivered control output.");
 
             GUILayout.EndVertical ();
 
+            DrawTooltip ();
             GUI.DragWindow ();
         }
 
-        // Draws one square backlit annunciator lamp. When unlit, the lamp shows the register
-        // background with faint grey "engraved" text; when lit, the full colour with black
-        // text. The lamp is purely informational (drawn as a box, never interactive).
-        void Lamp (string label, bool lit, Color colour)
+        // Marks the row group just closed by GUILayout.EndHorizontal as a tooltip hover target:
+        // when the mouse is over it, the description and the row's rect are captured and drawn as
+        // a floating tooltip box by DrawTooltip at the end of the pass. GetLastRect returns the
+        // closed group's rect only during Repaint, which is also the only pass that draws, so the
+        // capture is gated on it.
+        void RowTooltip (string text)
         {
-            Lamp (label, lit, colour, new Color (0.55f, 0.55f, 0.55f));
+            if (Event.current.type != EventType.Repaint)
+                return;
+            var row = GUILayoutUtility.GetLastRect ();
+            // Grow the hit area past the 1px margins between rows, so a slow vertical sweep of
+            // the mouse does not drop the tooltip on the seam where neither row is hit. Adjacent
+            // grown rects overlap slightly; the later (lower) row wins, since it overwrites.
+            row.yMin -= 2f;
+            row.yMax += 2f;
+            if (row.Contains (Event.current.mousePosition)) {
+                activeTooltip = text;
+                activeTooltipRow = row;
+            }
+        }
+
+        // Draws the captured tooltip anchored to the hovered row: just below it, or just above it
+        // when too close to the window's bottom edge. Anchoring to the row (never the mouse)
+        // keeps the tooltip still while the mouse moves around within the row. The tooltip is
+        // drawn with GUI (not GUILayout) so it overlays the panel without affecting the window's
+        // auto-layout height, and stays inside the window rect because GUI.Window clips its
+        // contents.
+        void DrawTooltip ()
+        {
+            if (activeTooltip == null || Event.current.type != EventType.Repaint)
+                return;
+            float scale = GameSettings.UI_SCALE;
+            var content = new GUIContent (activeTooltip);
+            float width = Position.width - 16f * scale;
+            float height = tooltipStyle.CalcHeight (content, width);
+            float x = (Position.width - width) / 2f;
+            float y = activeTooltipRow.yMax + 2f;
+            if (y + height > Position.height - 4f * scale)
+                y = activeTooltipRow.yMin - height - 2f;
+            GUI.Label (new Rect (x, y, width, height), content, tooltipStyle);
+        }
+
+        // Draws one square backlit annunciator lamp spanning the given number of grid columns.
+        // When unlit, the lamp shows the register background with faint grey "engraved" text;
+        // when lit, the full colour with black text. The lamp is purely informational (drawn as
+        // a box, never interactive).
+        void Lamp (string label, bool lit, Color colour, int span = 1)
+        {
+            Lamp (label, lit, colour, engravedGrey, span);
         }
 
         // Lamp variant for cells that carry a data readout as well as a status colour (attitude
-        // error, STRC, CTRL): the unlit text stays plain white — the value must remain readable
+        // error, STRUC, CTRL): the unlit text stays plain white — the value must remain readable
         // when the status is nominal — rather than the engraved grey of a pure status lamp.
-        void DataLamp (string label, bool lit, Color colour)
+        // Callers blank the label when there is no live value (auto-pilot disengaged), so white
+        // never shows a stale or placeholder reading.
+        void DataLamp (string label, bool lit, Color colour, int span = 1)
         {
-            Lamp (label, lit, colour, Color.white);
+            Lamp (label, lit, colour, Color.white, span);
         }
 
-        void Lamp (string label, bool lit, Color colour, Color unlitText)
+        void Lamp (string label, bool lit, Color colour, Color unlitText, int span)
         {
             var prevBg = GUI.backgroundColor;
             GUI.backgroundColor = lit ? colour : registerBackground;
             lampStyle.normal.textColor = lit ? Color.black : unlitText;
-            // A box with no measurable content does not stretch to fill its column and picks up a
-            // slightly different line height, so a blank lamp (e.g. RLL when no roll is held) would
-            // render narrower and taller than its lit neighbours. A plain space does not fix this:
-            // IMGUI ignores trailing whitespace when measuring width, so it still measures as empty.
-            // A non-breaking space is measured as a real glyph, keeping the box geometry identical to
-            // a populated cell while still reading as blank.
-            GUILayout.Box (string.IsNullOrEmpty (label) ? NonBreakingSpace : label, lampStyle, equalColumn);
+            // A box with no measurable content picks up a slightly different line height, so a
+            // blank lamp (e.g. RLL when no roll is held) would render taller than its lit
+            // neighbours. A plain space does not fix this: IMGUI trims trailing whitespace when
+            // measuring, so it still measures as empty. A non-breaking space is measured as a
+            // real glyph, keeping the box geometry identical to a populated cell while still
+            // reading as blank.
+            GUILayout.Box (string.IsNullOrEmpty (label) ? NonBreakingSpace : label, lampStyle, spanOptions [span]);
             GUI.backgroundColor = prevBg;
         }
 
         // One control-oscillation envelope lamp (matching the structural LevelLamp): lit amber
         // at/above the engage threshold, green below, dim when disengaged.
-        void OscCell (bool engaged, double level, double threshold)
+        void OscCell (bool engaged, double level, double threshold, int span = 1)
         {
-            DataLamp (Percent (level), engaged && level >= threshold, amber);
+            DataLamp (engaged ? Percent (level) : Blank, engaged && level >= threshold, amber, span);
         }
 
         // Attitude-error lamp: green when the axis error is within the AutoPilot.Wait() stopping
@@ -438,7 +548,7 @@ namespace KRPC.SpaceCenter
         // lock, amber "NO LOCK" until then (and dim when disengaged).
         static string FreqText (double freq)
         {
-            return double.IsNaN (freq) ? "NO LOCK" : string.Format ("{0:F2} Hz", freq);
+            return double.IsNaN (freq) ? "NO LOCK" : string.Format ("{0:F1} Hz", freq);
         }
 
         // The axis is identified by the PCH/YAW/RLL column header, so the lamp shows only the level value.
@@ -446,44 +556,51 @@ namespace KRPC.SpaceCenter
         {
             // Amber once the level reaches the controller's latch threshold (so it is in the range
             // that triggers the latch), or the axis has already latched; dim below.
-            DataLamp (Percent (level), engaged && (latched || level >= latchThreshold), amber);
+            DataLamp (engaged ? Percent (level) : Blank, engaged && (latched || level >= latchThreshold), amber);
+        }
+
+        // Latch lamp: amber ENGAGED once the axis group has latched as flexible; blank (not
+        // engraved) when unlatched or disengaged, so the word only ever appears lit.
+        void LatchLamp (bool latched, int span)
+        {
+            Lamp (latched ? "ENGAGED" : Blank, latched, amber, span);
         }
 
         // Gate readout lamp: dim while the gate is inactive (at zero), amber once it is engaged.
-        void GateLamp (bool engaged, double level)
+        void GateLamp (bool engaged, double level, int span = 1)
         {
-            Lamp (Percent (level), engaged && level > 0.01, amber);
+            Lamp (engaged ? Percent (level) : Blank, engaged && level > 0.01, amber, span);
         }
 
         // Combined mode + engagement lamp for one mitigation cell: dim whenever the mitigation
         // is not acting (manually Off, or automatically idle at ~0), amber when engaged. The
         // label carries the mode (OFF) or the engagement level. Forced pins the mitigation fully
         // on, so its lamp reads 100% regardless of the gate.
-        void MitigationLamp (bool engaged, Services.MitigationMode mode, double level)
+        void MitigationLamp (bool engaged, Services.MitigationMode mode, double level, int span = 1)
         {
             if (engaged && mode == Services.MitigationMode.Off) {
-                Lamp ("OFF", false, amber);
+                Lamp ("OFF", false, amber, span);
                 return;
             }
             if (engaged && mode == Services.MitigationMode.Forced)
                 level = 1.0;
-            Lamp (Percent (level), engaged && level > 0.01, amber);
+            Lamp (engaged ? Percent (level) : Blank, engaged && level > 0.01, amber, span);
         }
 
         // Combined mode + engagement lamp for the rate filter on one axis group: dim when Off or
         // while Automatic has no tool engaged, amber with the tool name whenever a filter is
         // actually running (automatic-routed or forced).
-        void RateFilterLamp (bool engaged, Services.RateFilterMode mode, int tool)
+        void RateFilterLamp (bool engaged, Services.RateFilterMode mode, int tool, int span = 1)
         {
             if (engaged && mode == Services.RateFilterMode.Off) {
-                Lamp ("OFF", false, amber);
+                Lamp ("OFF", false, amber, span);
                 return;
             }
             if (tool != 0) {
-                Lamp (ToolName (tool), engaged, amber);
+                Lamp (ToolName (tool), engaged, amber, span);
                 return;
             }
-            Lamp ("AUTO", false, amber);
+            Lamp (engaged ? "AUTO" : Blank, false, amber, span);
         }
 
         // The pitch/yaw group cell for a per-axis (pitch, roll, yaw) tuple: the two transverse
@@ -514,23 +631,23 @@ namespace KRPC.SpaceCenter
             GUILayout.EndHorizontal ();
         }
 
-        // Draws one green digital-register value cell as an equal-width stretch column.
-        void Register (string value)
+        // Draws one digital-register value cell spanning the given number of grid columns.
+        void Register (string value, int span = 1)
         {
-            GUILayout.Label (value, registerStyle, equalColumn);
+            GUILayout.Label (value, registerStyle, spanOptions [span]);
         }
 
         // As Register, but the content is centred rather than right-aligned.
-        void RegisterCentered (string value)
+        void RegisterCentered (string value, int span = 1)
         {
-            GUILayout.Label (value, registerCenterStyle, equalColumn);
+            GUILayout.Label (value, registerCenterStyle, spanOptions [span]);
         }
 
-        // Draws one centered column-header cell as an equal-width stretch column, matching the
-        // value/lamp columns drawn below it.
-        void ColumnHead (string text)
+        // Draws one centered column-header cell on the grid, matching the value/lamp cells drawn
+        // below it.
+        void ColumnHead (string text, int span = 1)
         {
-            GUILayout.Label (text, columnHeadStyle, equalColumn);
+            GUILayout.Label (text, columnHeadStyle, spanOptions [span]);
         }
 
         // Empty spacer matching the row-label column width, but drawn with the small column-header
@@ -542,12 +659,13 @@ namespace KRPC.SpaceCenter
             GUILayout.Label (string.Empty, columnHeadStyle, GUILayout.Width (registerLabelStyle.fixedWidth));
         }
 
-        // A sub-header labelling two stretch columns (e.g. Kp/Ki, or the PCH/YAW and RLL axis groups).
+        // A sub-header labelling the PCH/YAW group (two grid columns) and RLL (one) over a
+        // leading row-label column.
         void TwoColumnHeader (string left, string right)
         {
             GUILayout.BeginHorizontal ();
             ColumnSpacer ();
-            ColumnHead (left);
+            ColumnHead (left, 2);
             ColumnHead (right);
             GUILayout.EndHorizontal ();
         }
@@ -631,6 +749,8 @@ namespace KRPC.SpaceCenter
                 Destroy (lampTexture);
             if (registerTexture != null)
                 Destroy (registerTexture);
+            if (tooltipTexture != null)
+                Destroy (tooltipTexture);
             if (monoFont != null)
                 Destroy (monoFont);
         }

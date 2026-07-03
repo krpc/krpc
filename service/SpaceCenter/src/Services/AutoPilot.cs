@@ -981,14 +981,6 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Per-axis post-floor inner-loop bandwidth (rad/s) for the in-game info window. Stale
-        /// when <see cref="AutoTune"/> is off.
-        /// </summary>
-        internal Tuple3 AppliedBandwidth {
-            get { return attitudeController.AppliedBandwidth.ToTuple (); }
-        }
-
-        /// <summary>
         /// Active suppression tool on an axis (0 none, 1 notch, 2 low-pass) for the in-game info
         /// window.
         /// </summary>
