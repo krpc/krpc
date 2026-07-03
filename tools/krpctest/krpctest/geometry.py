@@ -19,6 +19,15 @@ def dot(u, v):
     return sum(x * y for x, y in zip(u, v))
 
 
+def distance(u, v):
+    return norm(tuple(a - b for a, b in zip(u, v)))
+
+
+def angle_between(u, v):
+    """Angle in degrees between two vectors."""
+    return rad2deg(math.acos(max(-1.0, min(1.0, dot(normalize(u), normalize(v))))))
+
+
 def cross(u, v):
     return (
         u[1] * v[2] - u[2] * v[1],
