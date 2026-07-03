@@ -1,12 +1,11 @@
-import unittest
 import math
+import unittest
+
 import krpctest
-from krpctest.geometry import norm, compute_position
+from krpctest.geometry import compute_position, norm
 
 
-# TODO: fix commented out test cases
 class TestOrbit(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -25,6 +24,11 @@ class TestOrbit(krpctest.TestCase):
         )
         self.assertAlmostEqual(speed, orbit.speed, delta=1)
 
+    def check_angles_close(self, angle, other_angle, places=2):
+        # Compare two angles, in radians, ignoring multiples of 2*pi
+        diff = (angle - other_angle + math.pi) % (2 * math.pi) - math.pi
+        self.assertAlmostEqual(0, diff, places=places)
+
     def check_anomalies(self, obj, orbit):
         g = self.space_center.g
         ut = self.space_center.ut
@@ -32,19 +36,18 @@ class TestOrbit(krpctest.TestCase):
         epoch = orbit.epoch
 
         # Compute mean anomaly using Kepler's equation
-        mean_anomaly = (
-            orbit.eccentric_anomaly
-            - (orbit.eccentricity * math.sin(orbit.eccentric_anomaly))
-        ) % (2 * math.pi)
-        self.assertAlmostEqual(mean_anomaly, orbit.mean_anomaly, places=2)
+        mean_anomaly = orbit.eccentric_anomaly - (
+            orbit.eccentricity * math.sin(orbit.eccentric_anomaly)
+        )
+        self.check_angles_close(mean_anomaly, orbit.mean_anomaly)
 
         # Compute mean anomaly using mean motion and time since epoch
         mean_motion = math.sqrt(
             (g * (orbit.body.mass + obj.mass)) / (orbit.semi_major_axis**3)
         )
         delta_t = ut - epoch
-        mean_anomaly = (mean_anomaly_at_epoch + (mean_motion * delta_t)) % (2 * math.pi)
-        self.assertAlmostEqual(mean_anomaly, orbit.mean_anomaly, places=2)
+        mean_anomaly = mean_anomaly_at_epoch + (mean_motion * delta_t)
+        self.check_angles_close(mean_anomaly, orbit.mean_anomaly)
 
     def check_time_to_apoapsis_and_periapsis(self, obj, orbit):
         # Compute the time to apoapsis and periapsis using mean motion
@@ -60,18 +63,6 @@ class TestOrbit(krpctest.TestCase):
 
         self.assertAlmostEqual(time_to_apoapsis, orbit.time_to_apoapsis, delta=2)
         self.assertAlmostEqual(time_to_periapsis, orbit.time_to_periapsis, delta=2)
-
-    def test_fix(self):
-        self.set_circular_orbit("Kerbin", 100000)
-        vessel = self.space_center.active_vessel
-        orbit = vessel.orbit
-        self.assertAlmostEqual(0, orbit.eccentricity, places=1)
-        self.assertAlmostEqual(0, orbit.inclination, places=1)
-        # self.assertAlmostEqual(2,
-        #                        orbit.longitude_of_ascending_node, places=1)
-        # self.assertAlmostEqual(0, orbit.argument_of_periapsis, places=1)
-        # self.assertAlmostEqual(0, orbit.mean_anomaly_at_epoch, places=1)
-        # self.assertAlmostEqual(0, orbit.epoch, places=1)
 
     def test_vessel_orbiting_kerbin(self):
         self.set_circular_orbit("Kerbin", 100000)
@@ -91,11 +82,8 @@ class TestOrbit(krpctest.TestCase):
         self.assertIsNaN(orbit.time_to_soi_change)
         self.assertAlmostEqual(0, orbit.eccentricity, places=1)
         self.assertAlmostEqual(0, orbit.inclination, places=1)
-        # self.assertAlmostEqual(0,
-        #                        orbit.longitude_of_ascending_node, places=1)
-        # self.assertAlmostEqual(0, orbit.argument_of_periapsis, places=1)
-        # self.assertAlmostEqual(0, orbit.mean_anomaly_at_epoch, places=1)
-        # self.assertAlmostEqual(0, orbit.epoch, places=1)
+        # longitude_of_ascending_node and argument_of_periapsis are
+        # degenerate for a circular equatorial orbit, so cannot be checked
         # self.check_anomalies(vessel, orbit)
         self.assertIsNone(orbit.next_orbit)
 
@@ -119,12 +107,15 @@ class TestOrbit(krpctest.TestCase):
         # self.assertIsNaN(orbit.time_to_soi_change)
         self.assertAlmostEqual(ecc, orbit.eccentricity, places=1)
         self.assertAlmostEqual(27 * (math.pi / 180), orbit.inclination, places=1)
-        # self.assertAlmostEqual(38 * (math.pi/180),
-        #                        orbit.longitude_of_ascending_node, places=1)
-        # self.assertAlmostEqual(241 * (math.pi/180),
-        #                        orbit.argument_of_periapsis, places=1)
-        # self.assertAlmostEqual(2.3, orbit.mean_anomaly_at_epoch, places=1)
-        # self.assertAlmostEqual(0, orbit.epoch, places=1)
+        self.assertAlmostEqual(
+            38 * (math.pi / 180), orbit.longitude_of_ascending_node, places=1
+        )
+        self.assertAlmostEqual(
+            241 * (math.pi / 180), orbit.argument_of_periapsis, places=1
+        )
+        # mean_anomaly_at_epoch and epoch cannot be checked against the values
+        # passed to set_orbit, as KSP re-epochs the orbit every frame while the
+        # vessel is under physics; check_anomalies verifies their consistency
         self.check_anomalies(vessel, orbit)
         # self.assertNone(orbit.next_orbit)
 
@@ -148,12 +139,8 @@ class TestOrbit(krpctest.TestCase):
         # self.assertAlmostEqual(17414, orbit.time_to_soi_change,delta=5)
         self.assertAlmostEqual(ecc, orbit.eccentricity, places=1)
         self.assertAlmostEqual(0, orbit.inclination, places=1)
-        # self.assertAlmostEqual(13 * (math.pi/180),
-        #                        orbit.longitude_of_ascending_node, places=1)
-        # self.assertAlmostEqual(67 * (math.pi/180),
-        #                        orbit.argument_of_periapsis, places=1)
-        # self.assertAlmostEqual(6.25, orbit.mean_anomaly_at_epoch, places=1)
-        # self.assertAlmostEqual(0, orbit.epoch, places=1)
+        # longitude_of_ascending_node and argument_of_periapsis are
+        # degenerate for an equatorial orbit, so cannot be checked
         # self.check_anomalies(vessel, orbit)
         self.assertIsNotNone(orbit.next_orbit)
 
@@ -178,11 +165,8 @@ class TestOrbit(krpctest.TestCase):
         # self.assertAlmostEqual(12884, orbit.time_to_soi_change, delta=5)
         self.assertAlmostEqual(ecc, orbit.eccentricity, places=1)
         self.assertAlmostEqual(0, orbit.inclination, places=1)
-        # self.assertAlmostEqual(0,
-        #                        orbit.longitude_of_ascending_node, places=1)
-        # self.assertAlmostEqual(0, orbit.argument_of_periapsis, places=1)
-        # self.assertAlmostEqual(0, orbit.mean_anomaly_at_epoch, places=1)
-        # self.assertAlmostEqual(0, orbit.epoch, places=1)
+        # longitude_of_ascending_node and argument_of_periapsis are
+        # degenerate for an equatorial orbit, so cannot be checked
         # self.check_anomalies(vessel, orbit)
         self.assertIsNotNone(orbit.next_orbit)
 
