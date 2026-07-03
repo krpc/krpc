@@ -748,7 +748,7 @@ def _make_autopilot_test_class(
             # With target_smoothing_time set, a step change to the target must not reach
             # the *effective* control target until ~smoothing seconds (of game time)
             # have elapsed -- the slew ramps the setpoint there rather than stepping
-            # instantly. Asserts on the logged effective target (tgt_smooth), so it is
+            # instantly. Asserts on the logged effective target (eff_tgt), so it is
             # craft-independent (it measures the setpoint, not how the vessel tracks
             # it). The assertion is on elapsed game time rather than ramp shape so it is
             # robust to a coarse/variable physics timestep: a large tick only makes the
@@ -775,19 +775,19 @@ def _make_autopilot_test_class(
             samples = [
                 sample
                 for sample in diagnostics.parse_log(self.ap.diagnostic_log)
-                if sample.tgt_smooth is not None
+                if sample.eff_tgt is not None
             ]
             self.assertGreater(len(samples), 0)
             # The last sample still at the old target marks the step; the first sample
             # to reach the new target marks arrival. The game time between them must be
             # at least ~smoothing.
-            below = [s for s in samples if s.tgt_smooth[0] < 0.5]
-            above = [s for s in samples if s.tgt_smooth[0] >= 44.5]
+            below = [s for s in samples if s.eff_tgt[0] < 0.5]
+            above = [s for s in samples if s.eff_tgt[0] >= 44.5]
             self.assertGreater(len(below), 0, "no samples at the original target")
             self.assertGreater(
                 len(above), 0, "effective target never reached the commanded value"
             )
-            ramp_game_seconds = above[0].time - below[-1].time
+            ramp_game_seconds = above[0].t - below[-1].t
             self.assertGreaterEqual(
                 ramp_game_seconds,
                 smoothing * 0.8,
@@ -795,7 +795,7 @@ def _make_autopilot_test_class(
             )
             # A pure pitch step leaves the heading unchanged throughout the slew.
             self.assertLess(
-                max(abs(sample.tgt_smooth[1] - 90) for sample in samples),
+                max(abs(sample.eff_tgt[1] - 90) for sample in samples),
                 2.0,
                 "heading drifted during a pure pitch slew",
             )

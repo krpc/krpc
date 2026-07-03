@@ -21,6 +21,15 @@ namespace KRPC.SpaceCenter.AutoPilot
         double lastInput;
         double integralTerm;
 
+        /// <summary>
+        /// The accumulated integral term (already scaled by Ki, clamped to the output range).
+        /// Read-only observability for the diagnostic log — windup and integral creep are
+        /// otherwise invisible from outside.
+        /// </summary>
+        public double IntegralTerm {
+            get { return integralTerm; }
+        }
+
         public PIDController (double kp = 1, double ki = 0, double kd = 0, double outputMin = -1, double outputMax = 1)
         {
             Reset (kp, ki, kd, outputMin, outputMax);

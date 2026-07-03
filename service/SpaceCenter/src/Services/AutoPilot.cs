@@ -871,11 +871,16 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// When <c>true</c>, logs one diagnostic line per physics tick to Player.log and to an
-        /// in-memory buffer (see <see cref="DiagnosticLog"/>). Each line is prefixed with
-        /// <c>[KRPC.AP]</c> and contains torque, MoI, angle errors, current/target angular
-        /// velocity, PID gains, and control outputs. Setting to <c>true</c> also clears the
-        /// buffer. Defaults to <c>false</c>.
+        /// When <c>true</c>, records one row of diagnostic data per physics tick to an
+        /// in-memory buffer (see <see cref="DiagnosticLog"/>), and echoes each row to
+        /// Player.log prefixed with <c>[KRPC.AP]</c>. The data is CSV: the first row is a
+        /// header naming every column, and each subsequent row records the auto-pilot's full
+        /// control-loop state for one tick (setpoints, errors, measured rates, gains,
+        /// velocity-profile and feedforward internals, control outputs, and the oscillation
+        /// detector/gate/mitigation state). The buffer is capped at 3000 data rows (one minute
+        /// at the 50 Hz physics rate); when full, this property switches itself back to
+        /// <c>false</c> and the buffer holds the minute following the enable. Setting to
+        /// <c>true</c> clears the buffer. Defaults to <c>false</c>.
         /// </summary>
         [KRPCProperty]
         public bool DiagnosticLogging {
@@ -885,8 +890,11 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The diagnostic log collected since <see cref="DiagnosticLogging"/> was last set to
-        /// <c>true</c>. Each line corresponds to one physics tick. Returns an empty string if
-        /// diagnostic logging has not been enabled or no ticks have occurred.
+        /// <c>true</c>: CSV text whose first line is the column header and each subsequent
+        /// line records one physics tick. Vector-valued channels use one column per component
+        /// (suffixed <c>.p/.r/.y</c> for pitch, roll, yaw); pitch-yaw-group/roll channel pairs
+        /// are suffixed <c>.py/.roll</c>. Returns an empty string if diagnostic logging has
+        /// not been enabled or no ticks have occurred.
         /// </summary>
         [KRPCProperty]
         public string DiagnosticLog {

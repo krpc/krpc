@@ -49,6 +49,10 @@ namespace KRPC.SpaceCenter.AutoPilot
         bool prevDetectorOmegaValid;
         Vector3d chatterLevel = Vector3d.zero;
         readonly bool[] chatterLatched = new bool[3];
+        // Per-axis trigger margin of the last chatter sample: |Δω| / (threshold·α·dt), the
+        // ratio the detector fires on (≥ 1 counts as excitation). Recorded for the diagnostic
+        // log so how close each tick came to firing is visible, not just the smoothed level.
+        Vector3d chatterMargin = Vector3d.zero;
         // Online frequency estimators, fed the high-passed rate every tick, and the sticky held
         // estimate per group (latched to the last acquired value so suppression quieting the
         // mode does not lose it; NaN only until first acquisition).
@@ -73,6 +77,10 @@ namespace KRPC.SpaceCenter.AutoPilot
             get { return chatterLevel; }
         }
 
+        public Vector3d ChatterMargin {
+            get { return chatterMargin; }
+        }
+
         public bool ChatterLatched (int index)
         {
             return chatterLatched [index];
@@ -94,6 +102,25 @@ namespace KRPC.SpaceCenter.AutoPilot
             get { return rollHeldHz; }
         }
 
+        // The trackers' live estimates (NaN whenever the mode is not currently acquired) and
+        // acquisition progress, alongside the sticky held values above — for the diagnostic
+        // log, so acquisition/loss dynamics are visible.
+        public double PitchYawLiveHz {
+            get { return pitchYawFreqTracker.EstimatedHz; }
+        }
+
+        public double RollLiveHz {
+            get { return rollFreqTracker.EstimatedHz; }
+        }
+
+        public int PitchYawAgreeCount {
+            get { return pitchYawFreqTracker.AgreeCount; }
+        }
+
+        public int RollAgreeCount {
+            get { return rollFreqTracker.AgreeCount; }
+        }
+
         public Vector3d ControlOscEnvelope {
             get { return controlOscEnvelope; }
         }
@@ -107,6 +134,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         public void Reset ()
         {
             prevDetectorOmegaValid = false;
+            chatterMargin = Vector3d.zero;
             emaOmegaValid = false;
             emaAbsHp = Vector3d.zero;
             prevControlValid = false;
@@ -149,6 +177,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             for (int i = 0; i < 3; i++) {
                 var alpha = moi [i] > 0 ? torque [i] / moi [i] : 0.0;
                 var deltaOmega = Math.Abs (rawOmega [i] - prevDetectorOmega [i]);
+                chatterMargin [i] = alpha > 0 && dt > 0
+                    ? deltaOmega / (detectionThreshold * alpha * dt) : 0.0;
                 var excited = alpha > 0 && deltaOmega > detectionThreshold * alpha * dt ? 1.0 : 0.0;
                 var timeConstant = excited > chatterLevel [i] ? ChatterRiseTimeConstant : ChatterDecayTimeConstant;
                 var beta = 1.0 - Math.Exp (-dt / timeConstant);

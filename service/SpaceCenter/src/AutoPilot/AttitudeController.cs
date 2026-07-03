@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using KRPC.Server;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
@@ -124,6 +123,9 @@ namespace KRPC.SpaceCenter.AutoPilot
         // band and on re-engage (Start).
         Vector3d antipodeLatchedNormal;
         bool antipodeLatched;
+        // Latched-plane blend weight [0,1] applied this tick (see ResolveAntipodalAxis),
+        // recorded for the diagnostic log; 0 outside the antipode band.
+        double logAntipodeWeight;
         Vector3d logAngles;
         // Raw (unfiltered) angular velocity in the roll-invariant frame, recorded for diagnostics
         // so the filter's effect on a flexible craft is visible against what the loop acts on.
@@ -139,8 +141,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         Vector3d logFfCut;
         Vector3d logOutputFilterWeight;
         bool diagnosticLogging;
-        readonly StringBuilder diagnosticLog = new StringBuilder ();
-        readonly object diagnosticLogLock = new object ();
+        readonly DiagnosticLogBuffer diagnosticLog = new DiagnosticLogBuffer ();
 
         // Time constant for the one-sided torque smoothing (see UpdateSmoothedTorque).
         const double TorqueSmoothTimeConstant = 0.5;
@@ -502,20 +503,15 @@ namespace KRPC.SpaceCenter.AutoPilot
         public bool DiagnosticLogging {
             get { return diagnosticLogging; }
             set {
-                if (value) {
-                    lock (diagnosticLogLock) {
-                        diagnosticLog.Clear ();
-                    }
-                }
+                if (value)
+                    diagnosticLog.Clear ();
                 diagnosticLogging = value;
             }
         }
 
         public string GetDiagnosticLog ()
         {
-            lock (diagnosticLogLock) {
-                return diagnosticLog.ToString ();
-            }
+            return diagnosticLog.GetText ();
         }
 
         public Vector3d Overshoot {
@@ -637,6 +633,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             YawPID.ResetState ();
             pointRotationValid = false;
             antipodeLatched = false;
+            logAntipodeWeight = 0;
             smoothedFfRi = Vector3d.zero;
             detectors.Reset ();
             rateFilter.Reset ();
@@ -778,8 +775,10 @@ namespace KRPC.SpaceCenter.AutoPilot
             // the feedforward. Blend a lightly low-passed copy in by chatterLevel — rigid axes (level ~0)
             // untouched, latched axes skipped (the heavier suppression handles them) — so both the inner
             // loop and the outer stopping term below act on a quieter rate.
+            var inputBlend = Vector3d.zero;
             for (int i = 0; i < 3; i++) {
                 var w = detectors.ChatterLatched (i) ? 0.0 : detectors.ChatterLevel [i];
+                inputBlend [i] = w;
                 current [i] = rateFilter.BlendInput (i, current [i], w, dt);
             }
 
@@ -849,8 +848,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             var slewActive = targetSmoothingTime > 0
                 && GeometryExtensions.Angle (effectiveRotation, targetRotation) > 1e-9;
             var slewRateRad = slewActive ? GeometryExtensions.ToRadians (slewSpeed) : 0.0;
+            FeedforwardDiagnostics ffDiag;
             var ffAnalyticRi = AnalyticFeedforwardRi (pySampleFull, rollSampleFull,
-                currentRi, torque, moi, slewRateRad);
+                currentRi, torque, moi, slewRateRad, out ffDiag);
             if (!rollControlled)
                 ffAnalyticRi.y = 0;
 
@@ -904,9 +904,13 @@ namespace KRPC.SpaceCenter.AutoPilot
             // flexible structure. Pitch/yaw run in the roll-invariant frame; roll on the y-axis
             // (unchanged by the frame rotation). Add the acceleration feedforward to each output,
             // then clamp before converting pitch/yaw back to the body frame.
-            var virtualPitch = (RunAxis (PitchPID, target.x, currentRi.x, torque [0], dt) + ffRi.x).Clamp (-1, 1);
-            var virtualRoll = (RunAxis (RollPID, target.y, currentRi.y, torque [1], dt) + ffRi.y).Clamp (-1, 1);
-            var virtualYaw = (RunAxis (YawPID, target.z, currentRi.z, torque [2], dt) + ffRi.z).Clamp (-1, 1);
+            var pidOut = new Vector3d (
+                RunAxis (PitchPID, target.x, currentRi.x, torque [0], dt),
+                RunAxis (RollPID, target.y, currentRi.y, torque [1], dt),
+                RunAxis (YawPID, target.z, currentRi.z, torque [2], dt));
+            var virtualPitch = (pidOut.x + ffRi.x).Clamp (-1, 1);
+            var virtualRoll = (pidOut.y + ffRi.y).Clamp (-1, 1);
+            var virtualYaw = (pidOut.z + ffRi.z).Clamp (-1, 1);
             var bodyControl = FromRollInvariant (new Vector3d (virtualPitch, 0, virtualYaw), cosPhi, sinPhi);
 
             // Gyroscopic feedforward: the per-axis plant model (τ = I·ω̇) ignores the ω×(Iω) term in
@@ -931,9 +935,16 @@ namespace KRPC.SpaceCenter.AutoPilot
             detectors.RecordControl (delivered);
 
 
-            if (diagnosticLogging)
-                LogDiagnostics (torque, moi, phi, currentRi, target, ffRi, gyro, currentDirection,
-                    state, pySampleFull, rollSampleFull);
+            if (diagnosticLogging) {
+                LogDiagnostics (torque, moi, phi, currentRi, currentDirection, state,
+                    pySampleFull, rollSampleFull, ffAnalyticRi, ffRi, ffDiag, gyro, pidOut,
+                    new Vector3d (uPitch, uRoll, uYaw), softStart,
+                    slewActive ? slewSpeed : 0.0, pitchYawFreq, rollFreq, inputBlend);
+                // The log is capped (one minute at 50 Hz); when full, logging switches itself
+                // off — the buffer holds the window following the enable, and memory is bounded.
+                if (diagnosticLog.Full)
+                    diagnosticLogging = false;
+            }
         }
 
         /// <summary>
@@ -1065,65 +1076,144 @@ namespace KRPC.SpaceCenter.AutoPilot
             return s.LinearActive ? "l" : "q";
         }
 
+        /// <summary>
+        /// Append one CSV row (see <see cref="DiagnosticLogBuffer"/>) recording the tick's full
+        /// control-loop state. Columns are ordered like the pipeline and the in-game info
+        /// window: setpoints, errors, measured state, inner loop, outer loop / velocity
+        /// profile, feedforward, output assembly, then the oscillation detectors, gates and
+        /// mitigations. Triples are suffixed <c>.p/.r/.y</c> (pitch, roll, yaw);
+        /// <c>.py/.roll</c> pairs are the coupled pitch/yaw group and the roll axis.
+        /// </summary>
         void LogDiagnostics (Vector3d torque, Vector3d moi, double phi, Vector3d currentRi,
-            Vector3d target, Vector3d ffRi, Vector3d gyro, Vector3d currentDirection,
-            PilotAddon.ControlInputs state, ProfileSample pySample, ProfileSample rollSample)
+            Vector3d currentDirection, PilotAddon.ControlInputs state,
+            ProfileSample pySample, ProfileSample rollSample,
+            Vector3d ffAnalyticRi, Vector3d ffRi, FeedforwardDiagnostics ffDiag, Vector3d gyro,
+            Vector3d pidOut, Vector3d controlPreFilter, double softStart, double slewRate,
+            double pitchYawFilterFreq, double rollFilterFreq, Vector3d inputBlend)
         {
+            var log = diagnosticLog;
+            var commandedPhr = targetRotation.PitchHeadingRoll ();
+            var effectivePhr = effectiveRotation.PitchHeadingRoll ();
             // Tracking error to the target the loop is actually following (the slewed/effective
             // target, not the commanded one), so it stays small while a smoothed change is fed in.
             var dirErr = Vector3.Angle (currentDirection, EffectiveTargetDirection);
-            var effectivePhr = effectiveRotation.PitchHeadingRoll ();
-            var line = string.Format (
-                "[KRPC.AP] t={0:F3} err={1:F2}deg" +
-                " torque=({2:F4},{3:F4},{4:F4})" +
-                " moi=({5:F6},{6:F6},{7:F6})" +
-                " alpha=({8:F3},{9:F3},{10:F3})" +
-                " ang_err=({11:F2},{12:F2},{13:F2})deg" +
-                " phi={14:F2}deg" +
-                " omega_ri=({15:F4},{16:F4},{17:F4})" +
-                " tgt_omega_ri=({18:F4},{19:F4},{20:F4})" +
-                " ff_ri=({21:F3},{22:F3},{23:F3})" +
-                " gyro=({24:F3},{25:F3},{26:F3})" +
-                " Kp=({27:F4},{28:F4},{29:F4}) Ki=({30:F4},{31:F4},{32:F4})" +
-                " ctrl=(p={33:F3},r={34:F3},y={35:F3})" +
-                " omega_raw=({36:F4},{37:F4},{38:F4})" +
-                " chatter=({39:F3},{40:F3},{41:F3})" +
-                " tool=({42},{43},{44})" +
-                " fdet=({45:F3},{46:F3})" +
-                " bwtgt=({47:F3},{48:F3},{49:F3})" +
-                " oscctl=({50:F3},{51:F3}) bko=({52:F2},{53:F2},{54:F2})" +
-                " tgt_smooth=({55:F2},{56:F2})deg" +
-                " prof=({57},{58})",
-                Time.fixedTime, dirErr,
-                torque.x, torque.y, torque.z,
-                moi.x, moi.y, moi.z,
-                moi.x > 0 ? torque.x / moi.x : 0, moi.y > 0 ? torque.y / moi.y : 0, moi.z > 0 ? torque.z / moi.z : 0,
-                logAngles.x, logAngles.y, logAngles.z,
-                phi * 180.0 / Math.PI,
-                currentRi.x, currentRi.y, currentRi.z,
-                target.x, target.y, target.z,
-                ffRi.x, ffRi.y, ffRi.z,
-                gyro.x, gyro.y, gyro.z,
-                PitchPID.Kp, RollPID.Kp, YawPID.Kp,
-                PitchPID.Ki, RollPID.Ki, YawPID.Ki,
-                state.Pitch, state.Roll, state.Yaw,
-                logRawOmegaRi.x, logRawOmegaRi.y, logRawOmegaRi.z,
-                detectors.ChatterLevel.x, detectors.ChatterLevel.y, detectors.ChatterLevel.z,
-                rateFilter.NotchActive (0) ? "n" : rateFilter.LowPassActive (0) ? "l" : "-",
-                rateFilter.NotchActive (1) ? "n" : rateFilter.LowPassActive (1) ? "l" : "-",
-                rateFilter.NotchActive (2) ? "n" : rateFilter.LowPassActive (2) ? "l" : "-",
-                detectors.PitchYawHeldHz, detectors.RollHeldHz,
-                policy.SuppressionRamp (0) * oscillationBandwidthFloor,
-                policy.SuppressionRamp (1) * oscillationBandwidthFloor,
-                policy.SuppressionRamp (2) * oscillationBandwidthFloor,
-                PitchYawControlOscillation, RollControlOscillation,
-                policy.Backoff (0), policy.Backoff (1), policy.Backoff (2),
-                effectivePhr.x, effectivePhr.y,
-                ProfileBranchTag (pySample), ProfileBranchTag (rollSample));
-            UnityEngine.Debug.Log (line);
-            lock (diagnosticLogLock) {
-                diagnosticLog.AppendLine (line);
-            }
+
+            // Setpoints: the commanded target, the effective (slewed) target the loop tracks,
+            // and the current slew rate (deg/s; 0 when no slew is in progress).
+            log.Add ("t", Time.fixedTime, "F3");
+            log.Add ("tgt.pitch", commandedPhr.x, "F2");
+            log.Add ("tgt.heading", commandedPhr.y, "F2");
+            log.Add ("tgt.roll", rollControlled ? commandedPhr.z : double.NaN, "F2");
+            log.Add ("eff_tgt.pitch", effectivePhr.x, "F2");
+            log.Add ("eff_tgt.heading", effectivePhr.y, "F2");
+            log.Add ("eff_tgt.roll", rollControlled ? effectivePhr.z : double.NaN, "F2");
+            log.Add ("slew_rate", slewRate, "F3");
+
+            // Errors (to the effective target, deg) and the antipodal-flip plane hold state.
+            log.Add ("err", dirErr, "F3");
+            log.AddVector ("ang_err", logAngles, "F3");
+            log.Add ("antipode_latched", antipodeLatched);
+            log.Add ("antipode_weight", logAntipodeWeight, "F2");
+            log.AddVector ("antipode_normal",
+                antipodeLatched ? antipodeLatchedNormal : Vector3d.zero, "F3");
+
+            // Measured state: vessel roll relative to the RI frame, the raw and suppressed
+            // rates (RI frame, rad/s), and the plant model (raw and smoothed torque, MoI, α).
+            log.Add ("phi", phi * 180.0 / Math.PI, "F2");
+            log.AddVector ("omega_raw", logRawOmegaRi, "F4");
+            log.AddVector ("omega_ri", currentRi, "F4");
+            log.AddVector ("torque", torque, "G6");
+            log.AddVector ("smoothed_torque", smoothedTorque, "G6");
+            log.AddVector ("moi", moi, "G6");
+            log.AddVector ("alpha", new Vector3d (
+                moi.x > 0 ? torque.x / moi.x : 0,
+                moi.y > 0 ? torque.y / moi.y : 0,
+                moi.z > 0 ? torque.z / moi.z : 0), "G6");
+
+            // Inner rate loop: live (post-floor) gains, the unfloored autotuned Kp the profile
+            // uses, and the per-axis PI output and integral term.
+            log.AddVector ("kp", new Vector3d (PitchPID.Kp, RollPID.Kp, YawPID.Kp), "F4");
+            log.AddVector ("ki", new Vector3d (PitchPID.Ki, RollPID.Ki, YawPID.Ki), "F4");
+            log.AddVector ("kp_unfloored",
+                new Vector3d (unflooredKp [0], unflooredKp [1], unflooredKp [2]), "F4");
+            log.AddVector ("pid_out", pidOut, "F4");
+            log.AddVector ("pid_i", new Vector3d (
+                PitchPID.IntegralTerm, RollPID.IntegralTerm, YawPID.IntegralTerm), "F4");
+
+            // Outer loop: the target angular velocity and the velocity profile's decisions per
+            // axis group — branch (cone/cap/linear/quad/idle), speed, deadband scale, pure and
+            // ω-corrected error magnitudes (rad), cone slope, linear-branch bandwidth and the
+            // stopping-point direction ŝ.
+            log.AddVector ("tgt_omega_ri", logTargetRi, "F4");
+            log.Add ("roll_weight", rollControlled ? RollWeight (dirErr) : 0.0, "F2");
+            log.Add ("prof.py", ProfileBranchTag (pySample));
+            log.Add ("prof.roll", ProfileBranchTag (rollSample));
+            log.AddGroup ("prof_speed", pySample.Speed, rollSample.Speed, "F4");
+            log.AddGroup ("prof_deadband", pySample.Deadband, rollSample.Deadband, "F3");
+            log.AddGroup ("prof_theta", pySample.Theta, rollSample.Theta, "F4");
+            log.AddGroup ("prof_estop", pySample.EStop, rollSample.EStop, "F4");
+            log.AddGroup ("prof_cone", pySample.ConeSlope, rollSample.ConeSlope, "F3");
+            log.AddGroup ("prof_bw", pySample.Bandwidth, rollSample.Bandwidth, "F3");
+            log.Add ("prof_s.p", pySample.SPitch, "F3");
+            log.Add ("prof_s.r", rollSample.SPitch, "F3");
+            log.Add ("prof_s.y", pySample.SYaw, "F3");
+
+            // Feedforward pipeline: the gates and planned rate ġ, then the raw analytic value,
+            // the low-passed copy, the applied (post hold-gate cut) value and the gyroscopic
+            // term.
+            log.AddGroup ("ff_track", ffDiag.PitchYawTracking, ffDiag.RollTracking, "F3");
+            log.AddGroup ("ff_overshoot", ffDiag.PitchYawOvershoot, ffDiag.RollOvershoot, "F3");
+            log.AddGroup ("ff_gdot", ffDiag.PitchYawGDot, ffDiag.RollGDot, "F4");
+            log.AddVector ("ff_analytic", ffAnalyticRi, "F3");
+            log.AddVector ("ff_smoothed", smoothedFfRi, "F3");
+            log.AddVector ("ff_ri", ffRi, "F3");
+            log.AddVector ("gyro", gyro, "F3");
+
+            // Output assembly: the summed command before output smoothing (body frame), the
+            // engagement soft-start scale, and the delivered command.
+            log.AddVector ("u_pre", controlPreFilter, "F3");
+            log.Add ("soft_start", softStart, "F3");
+            log.AddVector ("ctrl", new Vector3d (state.Pitch, state.Roll, state.Yaw), "F3");
+
+            // Oscillation detectors (info window: STRUC / CTRL / FREQ): chatter level and the
+            // raw per-tick trigger margin (≥1 fires), the control-output envelope, and the
+            // held/live frequency estimates with acquisition progress.
+            log.AddVector ("chatter", detectors.ChatterLevel, "F3");
+            log.AddVector ("chatter_margin", detectors.ChatterMargin, "F2");
+            log.AddVector ("oscctl", detectors.ControlOscEnvelope, "F3");
+            log.AddGroup ("fdet", detectors.PitchYawHeldHz, detectors.RollHeldHz, "F3");
+            log.AddGroup ("fdet_live", detectors.PitchYawLiveHz, detectors.RollLiveHz, "F3");
+            log.Add ("ftrack_agree.py", detectors.PitchYawAgreeCount);
+            log.Add ("ftrack_agree.roll", detectors.RollAgreeCount);
+
+            // Gates (info window: HOLD / LATCH / RAMP / BACKOFF / GATE).
+            log.AddGroup ("hold", logHoldFactorPitchYaw, logHoldFactorRoll, "F3");
+            log.Add ("latched.p", detectors.ChatterLatched (0));
+            log.Add ("latched.r", detectors.ChatterLatched (1));
+            log.Add ("latched.y", detectors.ChatterLatched (2));
+            log.AddVector ("ramp", new Vector3d (
+                policy.SuppressionRamp (0), policy.SuppressionRamp (1), policy.SuppressionRamp (2)), "F3");
+            log.AddVector ("backoff", new Vector3d (
+                policy.Backoff (0), policy.Backoff (1), policy.Backoff (2)), "F3");
+            log.AddVector ("gate", new Vector3d (
+                policy.MitigationLevel (0), policy.MitigationLevel (1), policy.MitigationLevel (2)), "F3");
+
+            // Mitigations (info window: FILTER / FFCUT / SMOOTH; FLOOR is driven by gate): the
+            // active rate-filter tool and its configured frequency, the light input-blend
+            // weight, the feedforward-cut fraction and the output-smoothing blend weight.
+            log.Add ("tool.p", rateFilter.NotchActive (0) ? "n" : rateFilter.LowPassActive (0) ? "l" : "-");
+            log.Add ("tool.r", rateFilter.NotchActive (1) ? "n" : rateFilter.LowPassActive (1) ? "l" : "-");
+            log.Add ("tool.y", rateFilter.NotchActive (2) ? "n" : rateFilter.LowPassActive (2) ? "l" : "-");
+            log.AddGroup ("filter_freq", pitchYawFilterFreq, rollFilterFreq, "F3");
+            log.AddVector ("input_blend", inputBlend, "F3");
+            log.AddVector ("ff_cut", logFfCut, "F3");
+            log.AddVector ("out_weight", logOutputFilterWeight, "F3");
+
+            string headerLine;
+            var line = log.CommitRow (out headerLine);
+            if (headerLine != null)
+                UnityEngine.Debug.Log ("[KRPC.AP] " + headerLine);
+            UnityEngine.Debug.Log ("[KRPC.AP] " + line);
         }
 
         /// <summary>
@@ -1248,6 +1338,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var fromAntipode = 180.0 - angleDeg;
             if (fromAntipode >= AntipodeBlendAngle) {
                 antipodeLatched = false;                 // left the band: drop the latch
+                logAntipodeWeight = 0;
                 return fromToAxis;
             }
 
@@ -1276,6 +1367,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 var t = (AntipodeBlendAngle - fromAntipode) / (AntipodeBlendAngle - AntipodeHoldAngle);
                 wAngle = t * t * (3.0 - 2.0 * t);
             }
+            logAntipodeWeight = wAngle;
 
             // Tangents perpendicular to the nose: toward the target (the geodesic) and forward in the
             // latched plane. nose × tangent rebuilds the rotation axis; at wAngle = 0 (band edge) this
@@ -1334,8 +1426,26 @@ namespace KRPC.SpaceCenter.AutoPilot
             public double Deadband;
             // |θ| (pure pointing error, rad) the deadband was keyed on.
             public double Theta;
+            // |e_stop| (rad): the ω-corrected error magnitude the speed profile was keyed on.
+            public double EStop;
             // False when the profile commanded nothing (no authority, or the e_stop guard).
             public bool Valid;
+        }
+
+        /// <summary>
+        /// Per-tick internals of the analytic feedforward, per axis group — the tracking
+        /// fraction and overshoot gate that scale it and the planned command-magnitude rate ġ
+        /// they scale. Computed inside <see cref="PitchYawAnalyticFf"/> /
+        /// <see cref="RollAnalyticFf"/> and surfaced only for the diagnostic log.
+        /// </summary>
+        struct FeedforwardDiagnostics
+        {
+            public double PitchYawTracking;
+            public double PitchYawOvershoot;
+            public double PitchYawGDot;
+            public double RollTracking;
+            public double RollOvershoot;
+            public double RollGDot;
         }
 
         /// <summary>
@@ -1572,6 +1682,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             sample.LinearActive = linearActive;
             sample.Deadband = deadband;
             sample.Theta = thetaMag;
+            sample.EStop = eStopMag;
             sample.Valid = alpha2d > 0;
             pitchVelocity = -sPitch * speed * deadband;
             yawVelocity = -sYaw * speed * deadband;
@@ -1650,6 +1761,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             sample.LinearActive = linearActive;
             sample.Deadband = deadband;
             sample.Theta = Math.Abs (thetaPure);
+            sample.EStop = Math.Abs (theta);
             sample.Valid = maxAcceleration > 0;
             return -Math.Sign (theta) * speed * deadband;
         }
@@ -1748,10 +1860,14 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// the transition logs; see the redesign design doc).
         /// </summary>
         void PitchYawAnalyticFf (ProfileSample s, Vector3d omegaRi, double slewRateRad,
-            double alphaPitch, double alphaYaw, out double ffPitch, out double ffYaw)
+            double alphaPitch, double alphaYaw, out double ffPitch, out double ffYaw,
+            out double trackingOut, out double overshootOut, out double gDotOut)
         {
             ffPitch = 0.0;
             ffYaw = 0.0;
+            trackingOut = 0.0;
+            overshootOut = 1.0;
+            gDotOut = 0.0;
             if (!s.Valid)
                 return;
             // d|θ|/dt = θ̂·ω in the controller's sign convention (the negated measurement makes
@@ -1782,14 +1898,20 @@ namespace KRPC.SpaceCenter.AutoPilot
                 ffPitch = -s.SPitch * gDot / alphaPitch * overshootScale;
             if (alphaYaw > 0)
                 ffYaw = -s.SYaw * gDot / alphaYaw * overshootScale;
+            trackingOut = tracking;
+            overshootOut = overshootScale;
+            gDotOut = gDot;
         }
 
         /// <summary>
         /// 1D (roll) analytic feedforward control fraction from one profile sample.
         /// </summary>
         double RollAnalyticFf (ProfileSample s, double omegaRollRi, double slewRateRad,
-            double alphaRoll)
+            double alphaRoll, out double trackingOut, out double overshootOut, out double gDotOut)
         {
+            trackingOut = 0.0;
+            overshootOut = 1.0;
+            gDotOut = 0.0;
             if (!s.Valid || alphaRoll <= 0)
                 return 0.0;
             var thetaDot = slewRateRad;
@@ -1807,6 +1929,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             // forward into an overshoot. ≈1 on-profile and when moving away.
             var overshootScale = s.Speed > 1e-9
                 ? Math.Min (1.0, s.Speed / Math.Max (s.Speed, omegaAlongCommand)) : 1.0;
+            trackingOut = tracking;
+            overshootOut = overshootScale;
+            gDotOut = gDot;
             return -s.SPitch * gDot / alphaRoll * overshootScale;
         }
 
@@ -1815,15 +1940,20 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// fractions) from the profile samples.
         /// </summary>
         Vector3d AnalyticFeedforwardRi (ProfileSample pySample, ProfileSample rollSample,
-            Vector3d omegaRi, Vector3d torque, Vector3d moi, double slewRateRad)
+            Vector3d omegaRi, Vector3d torque, Vector3d moi, double slewRateRad,
+            out FeedforwardDiagnostics diagnostics)
         {
             var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
             var alphaRoll = moi [1] > 0 ? torque [1] / moi [1] : 0.0;
             var alphaYaw = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
             double ffPitch, ffYaw;
+            diagnostics = default (FeedforwardDiagnostics);
             PitchYawAnalyticFf (pySample, omegaRi, slewRateRad, alphaPitch, alphaYaw,
-                out ffPitch, out ffYaw);
-            var ffRoll = RollAnalyticFf (rollSample, omegaRi.y, slewRateRad, alphaRoll);
+                out ffPitch, out ffYaw, out diagnostics.PitchYawTracking,
+                out diagnostics.PitchYawOvershoot, out diagnostics.PitchYawGDot);
+            var ffRoll = RollAnalyticFf (rollSample, omegaRi.y, slewRateRad, alphaRoll,
+                out diagnostics.RollTracking, out diagnostics.RollOvershoot,
+                out diagnostics.RollGDot);
             return new Vector3d (ffPitch, ffRoll, ffYaw);
         }
 

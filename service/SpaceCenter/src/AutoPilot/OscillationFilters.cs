@@ -138,6 +138,15 @@ namespace KRPC.SpaceCenter.AutoPilot
             get { return estimatedHz; }
         }
 
+        /// <summary>
+        /// Number of consecutive accepted half-periods that agree so far (resets on
+        /// disagreement or loss). The estimate publishes at <c>AcquireCount</c>; exposed for
+        /// the diagnostic log so acquisition progress is visible.
+        /// </summary>
+        public int AgreeCount {
+            get { return agreeCount; }
+        }
+
         public void Reset ()
         {
             emaAbsDelta = 0;

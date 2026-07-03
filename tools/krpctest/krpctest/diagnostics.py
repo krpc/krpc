@@ -1,51 +1,44 @@
 """Parsing and metrics for the autopilot diagnostic log.
 
-The attitude controller, when ``auto_pilot.diagnostic_logging`` is enabled, emits one
-``[KRPC.AP]`` line per physics tick (see ``AttitudeController.LogDiagnostics``). This module
-turns ``auto_pilot.diagnostic_log`` into a list of :class:`Sample` and provides the dynamic
-metrics the autopilot test plan asserts on (settling time, overshoot, path straightness,
-orbit/precession winding, feedforward spikes, control saturation).
+The attitude controller, when ``auto_pilot.diagnostic_logging`` is enabled, records one CSV
+row per physics tick (see ``AttitudeController.LogDiagnostics``): the first line of
+``auto_pilot.diagnostic_log`` is a header naming every column, each subsequent line is one
+tick. Vector-valued channels occupy one column per component, named with a suffix after a
+dot (``ang_err.p``/``.r``/``.y`` for pitch, roll, yaw; ``fdet.py``/``.roll`` for the
+pitch-yaw-group/roll pairs). This module turns that text into
+a list of :class:`Sample` -- grouping suffixed columns back into tuples -- and provides the
+dynamic metrics the autopilot test plan asserts on (settling time, overshoot, path
+straightness, orbit/precession winding, feedforward spikes, control saturation).
 
 Angle and rate triples are ``(pitch, roll, yaw)`` in the roll-invariant frame, matching the
 controller's convention.
 """
 
+import csv
 import math
-import re
 
-_FLOAT = r"[-+]?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?"
+# Rows echoed to the KSP game log carry this prefix; the RPC log text does not. Strip it so
+# both sources parse.
 _LINE_PREFIX = "[KRPC.AP]"
 
 
-class Sample:  # pylint: disable=too-many-instance-attributes
-    # One physics tick parsed from a diagnostic-log line: one field per logged channel.
-    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
-        self,
-        time,
-        err,
-        ang_err,
-        omega_ri,
-        tgt_omega_ri,
-        ff_ri,
-        gyro,
-        ctrl,
-        kp,
-        ki,
-        tgt_smooth=None,
-    ):
-        self.time = time
-        self.err = err
-        self.ang_err = ang_err
-        self.omega_ri = omega_ri
-        self.tgt_omega_ri = tgt_omega_ri
-        self.ff_ri = ff_ri
-        self.gyro = gyro
-        self.ctrl = ctrl
-        self.kp = kp
-        self.ki = ki
-        # Effective (slewed) target as (pitch, heading) in degrees -- the control target after
-        # target smoothing is applied. Equals the commanded target when smoothing is disabled.
-        self.tgt_smooth = tgt_smooth
+class Sample:
+    """One physics tick parsed from a diagnostic-log row.
+
+    Every column group in the log is available as an attribute named after the column's base
+    name: scalar columns (``t``, ``err``, ``soft_start``, ...) as floats, suffixed groups
+    (``ang_err.p/.r/.y``, ``hold.py/.roll``, ...) as tuples in file order, non-numeric cells
+    (the ``prof``/``tool`` branch tags) as strings. Unknown names return None, so metrics can
+    probe for channels that a log predating them lacks.
+    """
+
+    def __init__(self, values):
+        self._values = values
+
+    def __getattr__(self, name):
+        if name.startswith("_"):
+            raise AttributeError(name)
+        return self.__dict__["_values"].get(name)
 
     @property
     def pitch_error(self):
@@ -60,41 +53,46 @@ class Sample:  # pylint: disable=too-many-instance-attributes
         return math.sqrt(sum(value * value for value in self.omega_ri))
 
 
-def _triple(line, label):
-    matched = re.search(r"(?:^|\s)" + re.escape(label) + r"=\(([^)]*)\)", line)
-    if matched is None:
-        return None
-    return tuple(float(value) for value in re.findall(_FLOAT, matched.group(1)))
+def _convert(cell):
+    try:
+        return float(cell)
+    except ValueError:
+        return cell
 
 
-def _scalar(line, label):
-    matched = re.search(r"(?:^|\s)" + re.escape(label) + r"=(" + _FLOAT + r")", line)
-    return float(matched.group(1)) if matched else None
-
-
-def parse_line(line):
-    if _LINE_PREFIX not in line:
-        return None
-    return Sample(
-        time=_scalar(line, "t"),
-        err=_scalar(line, "err"),
-        ang_err=_triple(line, "ang_err"),
-        omega_ri=_triple(line, "omega_ri"),
-        tgt_omega_ri=_triple(line, "tgt_omega_ri"),
-        ff_ri=_triple(line, "ff_ri"),
-        gyro=_triple(line, "gyro"),
-        ctrl=_triple(line, "ctrl"),
-        kp=_triple(line, "Kp"),
-        ki=_triple(line, "Ki"),
-        tgt_smooth=_triple(line, "tgt_smooth"),
-    )
+def _strip_prefix(line):
+    index = line.find(_LINE_PREFIX)
+    if index >= 0:
+        return line[index + len(_LINE_PREFIX) :].strip()
+    return line.strip()
 
 
 def parse_log(text):
+    lines = [
+        stripped
+        for stripped in (_strip_prefix(line) for line in text.splitlines())
+        if stripped
+    ]
+    reader = csv.reader(lines)
+    header = next(reader, None)
+    if header is None:
+        return []
     samples = []
-    for line in text.splitlines():
-        sample = parse_line(line)
-        if sample is not None and sample.time is not None:
+    for cells in reader:
+        if len(cells) != len(header):
+            continue
+        values = {}
+        for name, cell in zip(header, cells):
+            base, sep, _ = name.rpartition(".")
+            if sep:
+                values.setdefault(base, []).append(_convert(cell))
+            else:
+                values[name] = _convert(cell)
+        for key, value in values.items():
+            if isinstance(value, list):
+                values[key] = tuple(value)
+        sample = Sample(values)
+        if sample.t is not None:
             samples.append(sample)
     return samples
 
@@ -114,7 +112,7 @@ def settling_time(samples, angle_threshold=1.0, rate_threshold=0.05):
         )
         if within:
             if entered is None:
-                entered = sample.time
+                entered = sample.t
         else:
             entered = None
     return entered
@@ -265,7 +263,7 @@ def saturation_time(samples, dt=None):
         return 0.0
     if dt is None:
         dt = (
-            (samples[-1].time - samples[0].time) / (len(samples) - 1)
+            (samples[-1].t - samples[0].t) / (len(samples) - 1)
             if len(samples) > 1
             else 0.0
         )
