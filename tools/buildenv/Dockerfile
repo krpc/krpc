@@ -42,7 +42,7 @@ RUN apt-get update && \
 # Install other build tools
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    gcc g++ ccache librsvg2-bin cmake luarocks maven cppcheck socat openjdk-11-jdk && \
+    gcc g++ ccache librsvg2-bin cmake luarocks maven cppcheck socat openjdk-11-jdk graphviz && \
     apt-get clean
 
 # Install buildifier
