@@ -471,18 +471,6 @@ state. It is enabled per vessel, and hidden again when the game restarts:
 
    vessel.auto_pilot.show_info_ui = True
 
-.. Screenshot: capture the window in-game (ideally on a flexible craft that is engaged and
-   holding, so the OSCILLATION section is populated) and save it to
-   doc/src/images/tutorials/autopilot-info-window.png. Then delete this comment and
-   uncomment the figure directive below.
-
-   .. figure:: /images/tutorials/autopilot-info-window.png
-      :align: center
-      :alt: The AutoPilot info window
-
-      The AutoPilot info window, showing a flexible craft holding attitude with the
-      oscillation mitigations engaged.
-
 The window is laid out like a control panel of annunciator lamps and digital registers.
 Lamps are dim when nominal and light amber to flag something worth attention; the
 **ENGAGED** lamp reads green (amber **HELD** while the craft is held on the launch
