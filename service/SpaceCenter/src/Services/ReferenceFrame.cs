@@ -711,13 +711,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public Vector3d AngularVelocityAt (Vector3d position)
         {
-            var angularVelocity = AngularVelocity;
-            var axis = angularVelocity.normalized;
-            var plane_position = Vector3d.Exclude (axis, position);
-            var radius = plane_position.magnitude;
-            var plane_direction = plane_position.normalized;
-            var direction = Vector3d.Cross (axis, plane_direction);
-            return direction * angularVelocity.magnitude * radius;
+            var angularVelocity = Rotation.Inverse () * AngularVelocity;
+            return Vector3d.Cross (angularVelocity, position);
         }
 
         /// <summary>
