@@ -142,7 +142,9 @@ runtime
 serialio
 serializable
 setpoint
+setpoints
 shader
+sideslip
 socat
 sph
 stateful
@@ -157,6 +159,7 @@ thruster
 thrusters
 toggleable
 toolchain
+tooltip
 tradeoff
 translational
 tuple
