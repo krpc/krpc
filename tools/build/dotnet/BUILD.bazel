@@ -1,0 +1,40 @@
+load("@rules_dotnet//dotnet:defs.bzl", "import_dll", "import_library")
+
+package(default_visibility = ["//visibility:public"])
+
+# NuGet library DLLs for targets built for modern .NET (net8.0), pinned as
+# http_archives in MODULE.bazel. The net472 builds use the assets in
+# //tools/build/mono-4.5 and //tools/build/ksp instead.
+
+import_dll(
+    name = "Google.Protobuf",
+    dll = "@csharp_protobuf//:lib/net5.0/Google.Protobuf.dll",
+)
+
+import_dll(
+    name = "Newtonsoft.Json",
+    dll = "@csharp_json//:lib/net6.0/Newtonsoft.Json.dll",
+)
+
+import_dll(
+    name = "Moq",
+    dll = "@csharp_moq//:lib/net6.0/Moq.dll",
+)
+
+import_dll(
+    name = "Castle.Core",
+    dll = "@csharp_castle_core//:lib/net6.0/Castle.Core.dll",
+)
+
+# System.IO.Ports needs the unix runtime assembly and native shim at runtime;
+# the lib/ assembly is only used at compile time.
+# TODO: select() the win runtime assembly and drop the native lib when
+# building for Windows (phase 7 of the build system migration).
+import_library(
+    name = "System.IO.Ports",
+    library_name = "System.IO.Ports",
+    libs = ["@csharp_system_io_ports//:runtimes/unix/lib/net8.0/System.IO.Ports.dll"],
+    native = ["@csharp_system_io_ports_native_linux_x64//:runtimes/linux-x64/native/libSystem.IO.Ports.Native.so"],
+    refs = ["@csharp_system_io_ports//:lib/net8.0/System.IO.Ports.dll"],
+    version = "8.0.0",
+)

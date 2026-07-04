@@ -119,7 +119,7 @@ http_file(
 
 http_archive(
     name = "csharp_protobuf",
-    build_file_content = "exports_files(['lib/net45/Google.Protobuf.dll'])",
+    build_file_content = "exports_files(['lib/net45/Google.Protobuf.dll', 'lib/net5.0/Google.Protobuf.dll'])",
     sha256 = "6ba51589915e3640e1ffdd384863dd0d73f0ca6a8aac591ec81c42c6a3ee55ce",
     type = "zip",
     url = "https://www.nuget.org/api/v2/package/Google.Protobuf/3.35.1",
@@ -174,24 +174,8 @@ http_file(
 )
 
 http_archive(
-    name = "csharp_nunit",
-    build_file_content = "exports_files(['lib/net45/nunit.framework.dll'])",
-    sha256 = "0ae3ffab91e8bcf59f016dc2b72fd0c518bb5698f2909dd30cbab94c4348e8a6",
-    type = "zip",
-    url = "https://www.nuget.org/api/v2/package/NUnit/3.14.0",
-)
-
-http_archive(
-    name = "csharp_nunit_consolerunner",
-    build_file_content = "exports_files(['tools/nunit3-console.exe', 'tools/nunit.engine.dll', 'tools/nunit.engine.core.dll', 'tools/nunit.engine.api.dll', 'tools/testcentric.engine.metadata.dll'])",
-    sha256 = "65188ab35fc4276cba2d38ec1399b088b48f7a4827d575d4d0aaa9428e9c08ab",
-    type = "zip",
-    url = "https://www.nuget.org/api/v2/package/NUnit.ConsoleRunner/3.22.0",
-)
-
-http_archive(
     name = "csharp_moq",
-    build_file_content = "exports_files(['lib/net462/Moq.dll'])",
+    build_file_content = "exports_files(['lib/net462/Moq.dll', 'lib/net6.0/Moq.dll'])",
     sha256 = "fae01cffac6dce28fd627999ae167073ee2f520c7a729a59b164258b708643ca",
     type = "zip",
     url = "https://www.nuget.org/api/v2/package/Moq/4.20.72",
@@ -199,7 +183,7 @@ http_archive(
 
 http_archive(
     name = "csharp_castle_core",
-    build_file_content = "exports_files(['lib/net462/Castle.Core.dll'])",
+    build_file_content = "exports_files(['lib/net462/Castle.Core.dll', 'lib/net6.0/Castle.Core.dll'])",
     sha256 = "b8d7bffcf0a76062e1c714292c3c9342ea081f9bbb7460e5ca3736c2a010e03e",
     type = "zip",
     url = "https://www.nuget.org/api/v2/package/Castle.Core/5.2.1",
@@ -207,10 +191,29 @@ http_archive(
 
 http_archive(
     name = "csharp_json",
-    build_file_content = "exports_files(['lib/net45/Newtonsoft.Json.dll'])",
+    build_file_content = "exports_files(['lib/net45/Newtonsoft.Json.dll', 'lib/net6.0/Newtonsoft.Json.dll'])",
     sha256 = "f09081d457405baf35a973fa0c50d6bf272ed683f2568c5a620a49da952f6529",
     type = "zip",
     url = "https://www.nuget.org/api/v2/package/Newtonsoft.Json/13.0.4",
+)
+
+# System.IO.Ports is the serial port implementation used on modern .NET
+# (net8.0 builds of the server core and TestServer). The mod's net472 build
+# uses KRPC.IO.Ports, as mono inside KSP has no System.IO.Ports support.
+http_archive(
+    name = "csharp_system_io_ports",
+    build_file_content = "exports_files(['lib/net8.0/System.IO.Ports.dll', 'runtimes/unix/lib/net8.0/System.IO.Ports.dll', 'runtimes/win/lib/net8.0/System.IO.Ports.dll'])",
+    sha256 = "1bc8fd7347ab07365f2405655b4f17a04e7c80f862356244efcb056815767b84",
+    type = "zip",
+    url = "https://www.nuget.org/api/v2/package/System.IO.Ports/8.0.0",
+)
+
+http_archive(
+    name = "csharp_system_io_ports_native_linux_x64",
+    build_file_content = "exports_files(['runtimes/linux-x64/native/libSystem.IO.Ports.Native.so'])",
+    sha256 = "e38a2e8d21e1734365d960af2d891272b032a8d0256c67ce9e5ccfc02a1fc250",
+    type = "zip",
+    url = "https://www.nuget.org/api/v2/package/runtime.linux-x64.runtime.native.System.IO.Ports/8.0.0",
 )
 
 http_archive(

@@ -1,5 +1,9 @@
 using KRPC.Server.SerialIO;
+#if NET
+using System.IO.Ports;
+#else
 using KRPC.IO.Ports;
+#endif
 using NUnit.Framework;
 
 namespace KRPC.Test.Server.SerialIO

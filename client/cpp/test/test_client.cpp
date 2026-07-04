@@ -99,7 +99,9 @@ TEST_F(test_client, test_wrong_stream_server) {
 
 TEST_F(test_client, test_value_parameters) {
   ASSERT_EQ("3.14159", test_service.float_to_string(3.14159f));
-  ASSERT_EQ("3.1415901184082", test_service.double_to_string(3.14159f));
+  // Modern .NET formats doubles with the shortest round-trippable
+  // representation, unlike .NET Framework/mono
+  ASSERT_EQ("3.141590118408203", test_service.double_to_string(3.14159f));
   ASSERT_EQ("42", test_service.int32_to_string(42));
   ASSERT_EQ("123456789000", test_service.int64_to_string(123456789000));
   ASSERT_EQ("True", test_service.bool_to_string(true));
@@ -333,7 +335,10 @@ TEST_F(test_client, test_argument_null_exception) {
   try {
     test_service.throw_argument_null_exception("");
   } catch(krpc::services::KRPC::ArgumentNullException& e) {
-    EXPECT_THAT(e.what(), testing::HasSubstr("Value cannot be null.\nParameter name: foo"));
+    // The parameter name formatting differs between .NET Framework/mono
+    // ("Parameter name: foo") and modern .NET ("(Parameter 'foo')")
+    EXPECT_THAT(e.what(), testing::HasSubstr("Value cannot be null."));
+    EXPECT_THAT(e.what(), testing::HasSubstr("foo"));
   }
 }
 
@@ -345,7 +350,8 @@ TEST_F(test_client, test_argument_out_of_range_exception) {
     test_service.throw_argument_out_of_range_exception(0);
   } catch(krpc::services::KRPC::ArgumentOutOfRangeException& e) {
     EXPECT_THAT(e.what(), testing::HasSubstr(
-      "Specified argument was out of the range of valid values.\nParameter name: foo"));
+      "Specified argument was out of the range of valid values."));
+    EXPECT_THAT(e.what(), testing::HasSubstr("foo"));
   }
 }
 

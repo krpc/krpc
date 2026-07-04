@@ -118,7 +118,10 @@ namespace KRPC.Server.TCP
             startedEvent.WaitOne (500);
             if (!running) {
                 Logger.WriteLine ("TCPServer: failed to start server, timed out waiting for TcpListener to start", Logger.Severity.Error);
-                listenerThread.Abort ();
+                // Stopping the listener causes the listener thread's blocking accept to
+                // throw SocketError.Interrupted and exit (Thread.Abort is unsupported on
+                // modern .NET)
+                tcpListener.Stop ();
                 listenerThread.Join ();
                 tcpListener = null;
                 throw new ServerException ("Failed to start server, timed out waiting for TcpListener to start");

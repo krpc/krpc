@@ -1,6 +1,6 @@
-load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library", "csharp_nunit_test")
 load("//:config.bzl", "assembly_version", "author", "version")
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_nunit_test")
+load("//tools/build:csharp.bzl", "csharp_assembly_info")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 
 filegroup(
@@ -69,6 +69,34 @@ csharp_library(
     deps = deps,
 )
 
+# net8.0 build of KRPC.Core, for TestServer and the unit tests. This is a
+# separate target rather than a multi-targeted KRPC.Core so that the default
+# build flavor staged into the mod release archive stays net472.
+csharp_library(
+    name = "KRPC.Core.net8",
+    srcs = glob(["src/**/*.cs"]) + [
+        ":AssemblyInfo",
+        "//protobuf:csharp",
+    ],
+    internals_visible_to = [
+        "KRPC.Core.Test",
+        "DynamicProxyGenAssembly2",
+    ],
+    # CS1701: Google.Protobuf's net5.0 build references net5-era framework
+    # assemblies; unification handles this at runtime (MSBuild suppresses
+    # this warning by default)
+    nowarn = ["CS1701"],
+    out = "KRPC.Core",
+    target_frameworks = ["net8.0"],
+    treat_warnings_as_errors = True,
+    visibility = ["//visibility:public"],
+    warning_level = 4,
+    deps = [
+        "//tools/build/dotnet:Google.Protobuf",
+        "//tools/build/dotnet:System.IO.Ports",
+    ],
+)
+
 service_definitions(
     name = "ServiceDefinitions",
     out = "KRPC.Core.json",
@@ -88,34 +116,24 @@ csharp_assembly_info(
     ],
 )
 
-test_deps = [
-    ":KRPC.Core",
-    "//tools/build/mono-4.5:Moq",
-    "//tools/build/ksp:Google.Protobuf",
-    "//tools/build/ksp:KRPC.IO.Ports",
-    "//tools/build/mono-4.5:Newtonsoft.Json",
-    "//tools/build/mono-4.5:System.Threading.Tasks.Extensions",
-    "//tools/build/mono-4.5:Castle.Core",
-]
-
-csharp_library(
-    name = "KRPC.Core.Test",
+csharp_nunit_test(
+    name = "test-KRPC.Core",
+    size = "small",
     srcs = glob(["test/**/*.cs"]) + [":TestAssemblyInfo"],
     defines = ["CODE_ANALYSIS"],
     nowarn = [
         "CS1591",
         "CS1685",
     ],
-    target_frameworks = ["net472"],
+    out = "KRPC.Core.Test",
+    target_frameworks = ["net8.0"],
     visibility = ["//:__pkg__"],
-    deps = test_deps + ["//tools/build/mono-4.5:nunit.framework"],
-)
-
-csharp_nunit_test(
-    name = "test-KRPC.Core",
-    size = "small",
-    lib = ":KRPC.Core.Test",
-    # FIXME: need to run test outside the sandbox to work around nunit file accesses
-    tags = ["local"],
-    deps = test_deps,
+    deps = [
+        ":KRPC.Core.net8",
+        "//tools/build/dotnet:Castle.Core",
+        "//tools/build/dotnet:Google.Protobuf",
+        "//tools/build/dotnet:Moq",
+        "//tools/build/dotnet:Newtonsoft.Json",
+        "//tools/build/dotnet:System.IO.Ports",
+    ],
 )

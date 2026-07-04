@@ -11,7 +11,7 @@ namespace KRPC.Server.WebSockets
     {
         const string WEB_SOCKETS_KEY = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
         const int BUFFER_SIZE = 4096;
-        static readonly SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider ();
+        static readonly SHA1 sha1 = SHA1.Create ();
 
         /// <summary>
         /// Read a websockets connection request. If the request is invalid,

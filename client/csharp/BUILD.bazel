@@ -1,7 +1,7 @@
-load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library", "csharp_nunit_test")
 load("//:config.bzl", "assembly_version", "author", "nuget_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_nunit_test", "nuget_package")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "nuget_package")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/krpctools:clientgen.bzl", "clientgen_csharp")
 
@@ -89,6 +89,28 @@ csharp_library(
     visibility = ["//visibility:public"],
     warning_level = 4,
     deps = deps,
+)
+
+# net8.0 build of the client, for the unit tests. A separate target rather
+# than a multi-targeted KRPC.Client so that the default build flavor staged
+# into the client zip and nupkg stays net472.
+csharp_library(
+    name = "KRPC.Client.net8",
+    srcs = srcs,
+    internals_visible_to = ["KRPC.Client.Test"],
+    # CS1701: Google.Protobuf's net5.0 build references net5-era framework
+    # assemblies; unification handles this at runtime (MSBuild suppresses
+    # this warning by default)
+    nowarn = [
+        "CS1685",
+        "CS1701",
+    ],
+    out = "KRPC.Client",
+    target_frameworks = ["net8.0"],
+    treat_warnings_as_errors = True,
+    visibility = ["//visibility:public"],
+    warning_level = 4,
+    deps = ["//tools/build/dotnet:Google.Protobuf"],
 )
 
 clientgen_csharp(
@@ -193,38 +215,26 @@ csharp_assembly_info(
     version = assembly_version,
 )
 
-test_deps = [
-    ":KRPC.Client",
-    "//tools/build/mono-4.5:Moq",
-    "//tools/build/mono-4.5:System.Threading.Tasks.Extensions",
-    "//tools/build/mono-4.5:Castle.Core",
-] + deps
-
-csharp_library(
-    name = "KRPC.Client.Test",
+csharp_nunit_test(
+    name = "test-KRPC.Client",
+    size = "small",
     srcs = glob(["test/**/*.cs"]) + [":TestAssemblyInfo"] + [":services-testservice"],
     defines = ["CODE_ANALYSIS"],
     nowarn = [
         "CS1591",
         "CS1573",
         "CS1685",
-        "CS1702",
     ],
-    target_frameworks = ["net472"],
+    out = "KRPC.Client.Test",
+    tags = ["requires-network"],
+    target_frameworks = ["net8.0"],
     visibility = ["//:__pkg__"],
-    deps = test_deps + ["//tools/build/mono-4.5:nunit.framework"],
-)
-
-csharp_nunit_test(
-    name = "test-KRPC.Client",
-    size = "small",
-    lib = ":KRPC.Client.Test",
-    # FIXME: need to run test outside the sandbox to work around nunit file accesses
-    tags = [
-        "local",
-        "requires-network",
+    deps = [
+        ":KRPC.Client.net8",
+        "//tools/build/dotnet:Castle.Core",
+        "//tools/build/dotnet:Google.Protobuf",
+        "//tools/build/dotnet:Moq",
     ],
-    deps = test_deps,
 )
 
 clientgen_csharp(

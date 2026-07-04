@@ -82,11 +82,6 @@ import_dll(
     dll = "@csharp_castle_core//:lib/net462/Castle.Core.dll",
 )
 
-import_dll(
-    name = "nunit.framework",
-    dll = "@csharp_nunit//:lib/net45/nunit.framework.dll",
-)
-
 # Copies of DLLs that are shipped in release archives or staged into other
 # packages. These reproduce the output paths of the old csharp_reference
 # targets (tools/build/mono-4.5/<name>.dll) so packaging path maps are

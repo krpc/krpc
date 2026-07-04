@@ -121,37 +121,6 @@ def _bin_impl(ctx):
         ),
     ]
 
-def _nunit_impl(ctx):
-    lib = dep_libs(ctx.attr.lib)[0]
-    nunit_files = [
-        ctx.file._nunit_console_runner,
-        ctx.file._nunit_engine,
-        ctx.file._nunit_engine_core,
-        ctx.file._nunit_engine_api,
-        ctx.file._testcentric_engine_metadata,
-        ctx.file._nunit_framework,
-    ]
-    runfiles = nunit_files + [lib] + [l for dep in ctx.attr.deps for l in dep_libs(dep)]
-    sub_commands = []
-    for dep in runfiles:
-        sub_commands.append("ln -f -s %s %s" % (dep.short_path, dep.basename))
-    sub_commands.extend([
-        '/usr/bin/mono --debug %s %s "$@" 2>stderr.txt' % (ctx.file._nunit_console_runner.basename, lib.basename),
-        "RESULT=$?",
-        "cat stderr.txt",
-        '(if grep "FATAL UNHANDLED EXCEPTION" stderr.txt; then exit 1; fi)',
-        "exit $RESULT",
-    ])
-    ctx.actions.write(
-        ctx.outputs.executable,
-        " ; \\\n".join(sub_commands) + "\n",
-    )
-
-    return DefaultInfo(
-        executable = ctx.outputs.executable,
-        runfiles = ctx.runfiles(files = runfiles),
-    )
-
 def _assembly_info_impl(ctx):
     content = ["using System;", "using System.Reflection;", "using System.Runtime.InteropServices;"]
     if len(ctx.attr.internals_visible_to) > 0:
@@ -215,21 +184,6 @@ csharp_binary = rule(
     attrs = csharp_binary_attrs,
     outputs = {"bin": "%{name}.exe", "doc": "%{name}.xml", "mdb": "%{name}.exe.mdb"},
     executable = True,
-)
-
-csharp_nunit_test = rule(
-    implementation = _nunit_impl,
-    attrs = {
-        "lib": attr.label(mandatory = True, providers = _DEP_PROVIDERS),
-        "deps": attr.label_list(providers = _DEP_PROVIDERS),
-        "_nunit_console_runner": attr.label(default = Label("@csharp_nunit_consolerunner//:tools/nunit3-console.exe"), allow_single_file = True),
-        "_nunit_engine": attr.label(default = Label("@csharp_nunit_consolerunner//:tools/nunit.engine.dll"), allow_single_file = True),
-        "_nunit_engine_core": attr.label(default = Label("@csharp_nunit_consolerunner//:tools/nunit.engine.core.dll"), allow_single_file = True),
-        "_nunit_engine_api": attr.label(default = Label("@csharp_nunit_consolerunner//:tools/nunit.engine.api.dll"), allow_single_file = True),
-        "_testcentric_engine_metadata": attr.label(default = Label("@csharp_nunit_consolerunner//:tools/testcentric.engine.metadata.dll"), allow_single_file = True),
-        "_nunit_framework": attr.label(default = Label("@csharp_nunit//:lib/net45/nunit.framework.dll"), allow_single_file = True),
-    },
-    test = True,
 )
 
 csharp_assembly_info = rule(
