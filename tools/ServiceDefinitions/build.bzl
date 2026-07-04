@@ -1,9 +1,9 @@
 " service definitions tool "
 
-load("//tools/build:csharp.bzl", "CSharpInfo")
+load("//tools/build:csharp.bzl", "dep_libs")
 
 def _impl(ctx):
-    args = ["--output=%s" % ctx.outputs.out.path, ctx.attr.service] + [x[CSharpInfo].lib.path for x in ctx.attr.assemblies]
+    args = ["--output=%s" % ctx.outputs.out.path, ctx.attr.service] + [lib.path for x in ctx.attr.assemblies for lib in dep_libs(x)]
     ctx.actions.run(
         inputs = ctx.files.assemblies,
         outputs = [ctx.outputs.out],

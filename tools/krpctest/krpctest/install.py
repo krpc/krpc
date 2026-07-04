@@ -55,6 +55,18 @@ def _release_zip(root):
     return os.path.join(root, files[-1])
 
 
+def _testingtools_files(root):
+    """Paths to the TestingTools add-on outputs. rules_dotnet writes these to a
+    configuration-specific output directory rather than under the ``bazel-bin``
+    convenience symlink, so resolve them with cquery rather than hardcoding paths."""
+    output = subprocess.check_output(
+        ["bazel", "cquery", "--output=files", "//tools/TestingTools"],
+        cwd=root,
+        text=True,
+    )
+    return [os.path.join(root, line) for line in output.splitlines() if line.strip()]
+
+
 def _normalize_permissions(path):
     """Set files to 0o644 and directories to 0o755 under path (inclusive)"""
     os.chmod(path, 0o755)
@@ -101,13 +113,8 @@ def install(mods=(), ksp_dir=None):
 
     # Add the test-only pieces the public release omits: the TestingTools add-on, and a
     # settings.cfg that starts the server automatically (the release ships a blank one).
-    for ext in ("dll", "xml"):
-        shutil.copy(
-            os.path.join(
-                root, "bazel-bin", "tools", "TestingTools", "TestingTools." + ext
-            ),
-            gamedata,
-        )
+    for src in _testingtools_files(root):
+        shutil.copy(src, gamedata)
     shutil.copy(
         os.path.join(root, "tools", "settings.cfg"),
         os.path.join(gamedata, "PluginData", "settings.cfg"),

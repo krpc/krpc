@@ -1,8 +1,9 @@
 " macros "
 
 load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
 load("@rules_java//java:java_binary.bzl", "java_binary")
-load("//tools/build:csharp.bzl", "csharp_binary", "csharp_library")
+load("//tools/build:csharp.bzl", "csharp_binary")
 
 # buildifier: disable=function-docstring
 def csharp_binary_multiple(name, srcs, deps):
@@ -26,6 +27,7 @@ def csharp_library_multiple(name, srcs, deps):
         csharp_library(
             name = subname,
             srcs = [src],
+            target_frameworks = ["net472"],
             deps = deps,
         )
     native.filegroup(name = name, srcs = names)

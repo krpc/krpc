@@ -1,5 +1,7 @@
 " C# build tools "
 
+load("@rules_dotnet//dotnet/private:providers.bzl", "DotnetAssemblyRuntimeInfo")
+
 _MCS = "mcs"
 _MCS_FLAGS = ["-noconfig", "-nostdlib"]
 
@@ -7,6 +9,16 @@ CSharpInfo = provider(
     "Provides information about a compiled C# target.",
     fields = ["target_type", "lib", "out", "doc", "mdb"],
 )
+
+def dep_libs(dep):
+    """DLLs provided by a dependency, which may be a custom CSharpInfo target
+    or a rules_dotnet target. Allows targets to migrate to rules_dotnet
+    individually while their consumers remain on these rules."""
+    if CSharpInfo in dep:
+        return [dep[CSharpInfo].lib]
+    return dep[DotnetAssemblyRuntimeInfo].libs
+
+_DEP_PROVIDERS = [[CSharpInfo], [DotnetAssemblyRuntimeInfo]]
 
 def _ref_impl(ctx):
     input = ctx.file.file
@@ -52,55 +64,13 @@ def _csc_args(srcs, deps, exe = None, lib = None, doc = None, optimize = True, w
     args.extend(["-reference:%s" % x.path for x in deps])
     return args
 
-def _lib_impl(ctx):
-    lib_output = ctx.outputs.lib
-    doc_output = ctx.outputs.doc
-    mdb_output = ctx.outputs.mdb
-    outputs = [lib_output, doc_output, mdb_output]
-    srcs = ctx.files.srcs
-    deps = [dep[CSharpInfo].lib for dep in ctx.attr.deps]
-    if ctx.attr.nunit_test:
-        deps += ctx.files._nunit_framework
-
-    cmd = ctx.attr.csc
-    args = _csc_args(
-        srcs,
-        deps,
-        lib = lib_output,
-        doc = doc_output,
-        optimize = ctx.attr.optimize,
-        warn = ctx.attr.warn,
-        nowarn = ctx.attr.nowarn,
-        warnaserror = ctx.attr.warnaserror,
-        define = ctx.attr.define,
-    )
-
-    ctx.actions.run_shell(
-        mnemonic = "CSharpCompile",
-        inputs = srcs + deps,
-        outputs = outputs,
-        use_default_shell_env = True,
-        command = "%s %s" % (cmd, " ".join(args)),
-    )
-
-    return [
-        DefaultInfo(files = depset(outputs)),
-        CSharpInfo(
-            target_type = ctx.attr._target_type,
-            lib = lib_output,
-            doc = doc_output,
-            mdb = mdb_output,
-            out = outputs,
-        ),
-    ]
-
 def _bin_impl(ctx):
     bin_output = ctx.outputs.bin
     doc_output = ctx.outputs.doc
     mdb_output = ctx.outputs.mdb
     outputs = [bin_output, doc_output, mdb_output]
     srcs = ctx.files.srcs
-    deps = [dep[CSharpInfo].lib for dep in ctx.attr.deps]
+    deps = [lib for dep in ctx.attr.deps for lib in dep_libs(dep)]
 
     cmd = ctx.attr.csc
     args = _csc_args(
@@ -123,7 +93,7 @@ def _bin_impl(ctx):
         command = "%s %s" % (cmd, " ".join(args)),
     )
 
-    runfiles = outputs + ctx.files.deps
+    runfiles = outputs + [lib for dep in ctx.attr.deps for lib in dep_libs(dep)]
     runfile_dir = "$0.runfiles/_main"
     tmp_dir = "$$.run"
     sub_commands = ["mkdir -p %s/%s" % (runfile_dir, tmp_dir)]
@@ -152,7 +122,7 @@ def _bin_impl(ctx):
     ]
 
 def _nunit_impl(ctx):
-    lib = ctx.attr.lib[CSharpInfo].lib
+    lib = dep_libs(ctx.attr.lib)[0]
     nunit_files = [
         ctx.file._nunit_console_runner,
         ctx.file._nunit_engine,
@@ -161,7 +131,7 @@ def _nunit_impl(ctx):
         ctx.file._testcentric_engine_metadata,
         ctx.file._nunit_framework,
     ]
-    runfiles = nunit_files + [lib] + ctx.files.deps
+    runfiles = nunit_files + [lib] + [l for dep in ctx.attr.deps for l in dep_libs(dep)]
     sub_commands = []
     for dep in runfiles:
         sub_commands.append("ln -f -s %s %s" % (dep.short_path, dep.basename))
@@ -218,7 +188,7 @@ def _assembly_info_impl(ctx):
 
 _COMMON_ATTRS = {
     "csc": attr.string(default = _MCS),
-    "deps": attr.label_list(providers = [CSharpInfo]),
+    "deps": attr.label_list(providers = _DEP_PROVIDERS),
     "srcs": attr.label_list(allow_files = [".cs"]),
     "optimize": attr.bool(default = True),
     "warn": attr.int(default = 4),
@@ -236,20 +206,6 @@ csharp_reference = rule(
     outputs = {"lib": "%{name}.dll"},
 )
 
-csharp_library_attrs = {}
-csharp_library_attrs.update(_COMMON_ATTRS)
-csharp_library_attrs.update({
-    "_target_type": attr.string(default = "lib"),
-    "nunit_test": attr.bool(default = False),
-    "_nunit_framework": attr.label(default = Label("@csharp_nunit//:lib/net45/nunit.framework.dll"), allow_single_file = True),
-})
-
-csharp_library = rule(
-    implementation = _lib_impl,
-    attrs = csharp_library_attrs,
-    outputs = {"lib": "%{name}.dll", "doc": "%{name}.xml", "mdb": "%{name}.dll.mdb"},
-)
-
 csharp_binary_attrs = {}
 csharp_binary_attrs.update(_COMMON_ATTRS)
 csharp_binary_attrs.update({"runargs": attr.string_list(), "_target_type": attr.string(default = "bin")})
@@ -264,8 +220,8 @@ csharp_binary = rule(
 csharp_nunit_test = rule(
     implementation = _nunit_impl,
     attrs = {
-        "lib": attr.label(mandatory = True, providers = [CSharpInfo]),
-        "deps": attr.label_list(providers = [CSharpInfo]),
+        "lib": attr.label(mandatory = True, providers = _DEP_PROVIDERS),
+        "deps": attr.label_list(providers = _DEP_PROVIDERS),
         "_nunit_console_runner": attr.label(default = Label("@csharp_nunit_consolerunner//:tools/nunit3-console.exe"), allow_single_file = True),
         "_nunit_engine": attr.label(default = Label("@csharp_nunit_consolerunner//:tools/nunit.engine.dll"), allow_single_file = True),
         "_nunit_engine_core": attr.label(default = Label("@csharp_nunit_consolerunner//:tools/nunit.engine.core.dll"), allow_single_file = True),
@@ -292,17 +248,27 @@ csharp_assembly_info = rule(
     outputs = {"out": "%{name}.cs"},
 )
 
+_NUGET_FRAMEWORK_NAMES = {
+    "net45": ".NETFramework4.5",
+    "net472": ".NETFramework4.7.2",
+}
+
 def _nuget_package_out(id, version):
     return {"out": "%s.%s.nupkg" % (id, version)}
 
+def _assembly_lib_doc(dep):
+    "Assembly DLL and XML doc file from a custom or rules_dotnet target"
+    if CSharpInfo in dep:
+        info = dep[CSharpInfo]
+        return struct(lib = info.lib, doc = info.doc)
+    info = dep[DotnetAssemblyRuntimeInfo]
+    return struct(lib = info.libs[0], doc = info.xml_docs[0])
+
 def _nuget_package_impl(ctx):
-    assembly_info = ctx.attr.assembly[CSharpInfo]
-    nuspec = ctx.actions.declare_file(
-        assembly_info.lib.basename.replace(".dll", ".nuspec"),
-        sibling = assembly_info.lib,
-    )
+    assembly_info = _assembly_lib_doc(ctx.attr.assembly)
+    nuspec = ctx.actions.declare_file(ctx.attr.id + ".nuspec")
     assemblies = {
-        "net45": assembly_info,
+        ctx.attr.framework: assembly_info,
     }
 
     nuspec_contents = [
@@ -321,11 +287,11 @@ def _nuget_package_impl(ctx):
     nuspec_contents.extend([
         "  <frameworkAssemblies>",
     ])
-    nuspec_contents.extend(['    <frameworkAssembly assemblyName="%s" targetFramework="net45"/>' % x for x in ctx.attr.framework_deps])
+    nuspec_contents.extend(['    <frameworkAssembly assemblyName="%s" targetFramework="%s"/>' % (x, ctx.attr.framework) for x in ctx.attr.framework_deps])
     nuspec_contents.extend([
         "  </frameworkAssemblies>",
         "  <dependencies>",
-        '    <group targetFramework=".NETFramework4.5">',
+        '    <group targetFramework="%s">' % _NUGET_FRAMEWORK_NAMES[ctx.attr.framework],
     ])
     nuspec_contents.extend(['      <dependency id="%s" version="%s"/>' % x for x in ctx.attr.deps.items()])
     nuspec_contents.extend([
@@ -383,7 +349,8 @@ nuget_package = rule(
     implementation = _nuget_package_impl,
     attrs = {
         "id": attr.string(mandatory = True),
-        "assembly": attr.label(providers = [CSharpInfo]),
+        "assembly": attr.label(providers = _DEP_PROVIDERS),
+        "framework": attr.string(default = "net45", values = _NUGET_FRAMEWORK_NAMES.keys()),
         "version": attr.string(mandatory = True),
         "author": attr.string(mandatory = True),
         "project_url": attr.string(),

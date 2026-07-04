@@ -1,6 +1,14 @@
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
+load("@rules_dotnet//dotnet:defs.bzl", "import_dll")
 load("//tools/build:csharp.bzl", "csharp_reference")
 
 package(default_visibility = ["//visibility:public"])
+
+# Mono 4.5 framework reference assemblies. These are only used to compile the
+# remaining mcs-built binaries (ServiceDefinitions, TestServer, doc example
+# scripts). Libraries built with rules_dotnet get the framework from the
+# net472 targeting pack instead. These go away when the binaries move to
+# rules_dotnet.
 
 csharp_reference(
     name = "mscorlib",
@@ -32,42 +40,66 @@ csharp_reference(
     file = "//lib:mono-4.5/System.Xml.dll",
 )
 
-csharp_reference(
+# NuGet library DLLs, pinned as http_archives in MODULE.bazel.
+
+import_dll(
     name = "System.Memory",
-    file = "@csharp_system_memory//:lib/net462/System.Memory.dll",
+    dll = "@csharp_system_memory//:lib/net462/System.Memory.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "System.Runtime.CompilerServices.Unsafe",
-    file = "@csharp_system_runtime_compilerservices_unsafe//:lib/net462/System.Runtime.CompilerServices.Unsafe.dll",
+    dll = "@csharp_system_runtime_compilerservices_unsafe//:lib/net462/System.Runtime.CompilerServices.Unsafe.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "System.Threading.Tasks.Extensions",
-    file = "@csharp_system_threading_tasks_extensions//:lib/net462/System.Threading.Tasks.Extensions.dll",
+    dll = "@csharp_system_threading_tasks_extensions//:lib/net462/System.Threading.Tasks.Extensions.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "Google.Protobuf",
-    file = "@csharp_protobuf//:lib/net45/Google.Protobuf.dll",
+    dll = "@csharp_protobuf//:lib/net45/Google.Protobuf.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "Newtonsoft.Json",
-    file = "@csharp_json//:lib/net45/Newtonsoft.Json.dll",
+    dll = "@csharp_json//:lib/net45/Newtonsoft.Json.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "NDesk.Options",
-    file = "@csharp_options//:lib/NDesk.Options.dll",
+    dll = "@csharp_options//:lib/NDesk.Options.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "Moq",
-    file = "@csharp_moq//:lib/net462/Moq.dll",
+    dll = "@csharp_moq//:lib/net462/Moq.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "Castle.Core",
-    file = "@csharp_castle_core//:lib/net462/Castle.Core.dll",
+    dll = "@csharp_castle_core//:lib/net462/Castle.Core.dll",
+)
+
+import_dll(
+    name = "nunit.framework",
+    dll = "@csharp_nunit//:lib/net45/nunit.framework.dll",
+)
+
+# Copies of DLLs that are shipped in release archives or staged into other
+# packages. These reproduce the output paths of the old csharp_reference
+# targets (tools/build/mono-4.5/<name>.dll) so packaging path maps are
+# unchanged.
+
+copy_file(
+    name = "NDesk.Options-file",
+    src = "@csharp_options//:lib/NDesk.Options.dll",
+    out = "NDesk.Options.dll",
+)
+
+copy_file(
+    name = "Newtonsoft.Json-file",
+    src = "@csharp_json//:lib/net45/Newtonsoft.Json.dll",
+    out = "Newtonsoft.Json.dll",
 )

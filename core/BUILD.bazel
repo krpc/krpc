@@ -1,6 +1,6 @@
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
 load("//:config.bzl", "assembly_version", "author", "version")
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library", "csharp_nunit_test")
-load("//tools/build/mono-4.5:build.bzl", "mono_net_libs")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_nunit_test")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 
 filegroup(
@@ -30,10 +30,6 @@ csharp_assembly_info(
     cls_compliant = False,
     copyright = author,
     description = "Core server functionality for kRPC",
-    internals_visible_to = [
-        "KRPC.Core.Test",
-        "DynamicProxyGenAssembly2",
-    ],
     title = "KRPC.Core",
     version = assembly_version,
     visibility = [
@@ -57,12 +53,19 @@ srcs = glob(["src/**/*.cs"]) + [
 deps = [
     "//tools/build/ksp:Google.Protobuf",
     "//tools/build/ksp:KRPC.IO.Ports",
-] + mono_net_libs
+]
 
 csharp_library(
     name = "KRPC.Core",
     srcs = srcs,
+    internals_visible_to = [
+        "KRPC.Core.Test",
+        "DynamicProxyGenAssembly2",
+    ],
+    target_frameworks = ["net472"],
+    treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
+    warning_level = 4,
     deps = deps,
 )
 
@@ -93,20 +96,19 @@ test_deps = [
     "//tools/build/mono-4.5:Newtonsoft.Json",
     "//tools/build/mono-4.5:System.Threading.Tasks.Extensions",
     "//tools/build/mono-4.5:Castle.Core",
-] + mono_net_libs
+]
 
 csharp_library(
     name = "KRPC.Core.Test",
     srcs = glob(["test/**/*.cs"]) + [":TestAssemblyInfo"],
-    define = ["CODE_ANALYSIS"],
+    defines = ["CODE_ANALYSIS"],
     nowarn = [
-        "1591",
-        "1685",
+        "CS1591",
+        "CS1685",
     ],
-    nunit_test = True,
-    optimize = False,
+    target_frameworks = ["net472"],
     visibility = ["//:__pkg__"],
-    deps = test_deps,
+    deps = test_deps + ["//tools/build/mono-4.5:nunit.framework"],
 )
 
 csharp_nunit_test(

@@ -1,5 +1,6 @@
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
 load("//:config.bzl", "assembly_version", "author", "version")
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_binary", "csharp_library")
+load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_binary")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/mono-4.5:build.bzl", "mono_net_libs")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
@@ -20,15 +21,15 @@ srcs = [
     ":AssemblyInfo",
 ]
 
-deps = [
+lib_deps = [
     "//tools/ServiceDefinitions:KRPC.Core",
     "//tools/build/ksp:Google.Protobuf",
     "//tools/build/ksp:KRPC.IO.Ports",
-] + mono_net_libs
+]
 
 exe_srcs = srcs + ["src/Program.cs"]
 
-exe_deps = deps + ["//tools/build/mono-4.5:NDesk.Options"]
+exe_deps = lib_deps + mono_net_libs + ["//tools/build/mono-4.5:NDesk.Options"]
 
 pkg_zip(
     name = "archive",
@@ -42,12 +43,17 @@ pkg_zip(
         ":TestServer",
         "//:version",
         "//tools/build/protobuf:LICENSE",
-    ] + exe_deps,
+        "//tools/ServiceDefinitions:KRPC.Core",
+        "//tools/build/ksp:Google.Protobuf.dll",
+        "//tools/build/ksp:KRPC.IO.Ports.dll",
+        "//tools/build/mono-4.5:NDesk.Options.dll",
+    ] + mono_net_libs,
     path_map = {
         "tools/TestServer/": "",
         "tools/build/protobuf/LICENSE": "LICENSE.protobuf",
         "tools/build/mono-4.5/": "",
         "tools/build/ksp/": "",
+        "tools/ServiceDefinitions/KRPC.Core/net472/": "",
         "tools/ServiceDefinitions/": "",
     },
     visibility = ["//visibility:public"],
@@ -64,8 +70,11 @@ csharp_binary(
 csharp_library(
     name = "TestService",
     srcs = srcs,
-    nowarn = ["1591"],
-    deps = deps,
+    nowarn = ["CS1591"],
+    target_frameworks = ["net472"],
+    treat_warnings_as_errors = True,
+    warning_level = 4,
+    deps = lib_deps,
 )
 
 service_definitions(
