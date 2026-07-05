@@ -5,6 +5,7 @@ using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using UnityEngine;
+using Tuple3 = System.Tuple<double, double, double>;
 using TupleV3 = System.Tuple<Vector3d, Vector3d>;
 using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
 
@@ -561,6 +562,44 @@ namespace KRPC.SpaceCenter.Services.Parts
             set {
                 CheckGimballed ();
                 gimbal.gimbalLimiter = (value * 100f).Clamp (0f, 100f);
+            }
+        }
+
+        /// <summary>
+        /// Whether the gimbal is being controlled directly, bypassing the vessel's normal
+        /// flight controls. When enabled, the gimbal deflection is set by
+        /// <see cref="GimbalActuation"/> instead of the normal control inputs.
+        /// The override is automatically released if the controlling client disconnects or the
+        /// vessel changes. Has no effect if the engine is not gimballed.
+        /// </summary>
+        [KRPCProperty]
+        public bool GimbalOverride {
+            get {
+                CheckGimballed ();
+                return ActuatorControlAddon.GetGimbalOverride (gimbal);
+            }
+            set {
+                CheckGimballed ();
+                ActuatorControlAddon.SetGimbalOverride (gimbal, value);
+            }
+        }
+
+        /// <summary>
+        /// The gimbal actuation command applied when <see cref="GimbalOverride"/> is enabled, in
+        /// the pitch, roll and yaw axes. Each component is a normalized control input between -1
+        /// and 1. The physical deflection is scaled by <see cref="GimbalRange"/>
+        /// and <see cref="GimbalLimit"/>. When the gimbal is not being overridden,
+        /// returns the current actuation.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 GimbalActuation {
+            get {
+                CheckGimballed ();
+                return ActuatorControlAddon.GetGimbalActuation (gimbal).ToTuple ();
+            }
+            set {
+                CheckGimballed ();
+                ActuatorControlAddon.SetGimbalActuation (gimbal, value.ToVector ());
             }
         }
 

@@ -738,6 +738,8 @@ SpaceCenter.ControlSurface.RollEnabled
 SpaceCenter.ControlSurface.AuthorityLimiter
 SpaceCenter.ControlSurface.Inverted
 SpaceCenter.ControlSurface.Deployed
+SpaceCenter.ControlSurface.DeflectionOverride
+SpaceCenter.ControlSurface.Deflection
 SpaceCenter.ControlSurface.SurfaceArea
 SpaceCenter.ControlSurface.AvailableTorque
 SpaceCenter.Decoupler
@@ -805,6 +807,8 @@ SpaceCenter.Engine.Gimballed
 SpaceCenter.Engine.GimbalRange
 SpaceCenter.Engine.GimbalLocked
 SpaceCenter.Engine.GimbalLimit
+SpaceCenter.Engine.GimbalOverride
+SpaceCenter.Engine.GimbalActuation
 SpaceCenter.Engine.AvailableTorque
 SpaceCenter.Engine.CanReverseThrust
 SpaceCenter.Engine.ThrustReversed
@@ -928,6 +932,9 @@ SpaceCenter.RCS.RollEnabled
 SpaceCenter.RCS.ForwardEnabled
 SpaceCenter.RCS.UpEnabled
 SpaceCenter.RCS.RightEnabled
+SpaceCenter.RCS.InputOverride
+SpaceCenter.RCS.RotationOverride
+SpaceCenter.RCS.TranslationOverride
 SpaceCenter.RCS.AvailableTorque
 SpaceCenter.RCS.AvailableForce
 SpaceCenter.RCS.AvailableThrust
