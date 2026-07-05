@@ -111,12 +111,6 @@ filegroup(
 
 # ----------------------- C# dependencies ------------------------------------------------
 
-http_file(
-    name = "csharp_nuget",
-    sha256 = "751ee5e79481626a428c1241dc7f94bca2739b32588e669715bc5fb54d8fb8a2",
-    url = "https://dist.nuget.org/win-x86-commandline/v7.6.0/nuget.exe",
-)
-
 http_archive(
     name = "csharp_protobuf",
     build_file_content = "exports_files(['lib/net45/Google.Protobuf.dll', 'lib/net5.0/Google.Protobuf.dll'])",

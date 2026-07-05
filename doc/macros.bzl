@@ -3,20 +3,6 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
 load("@rules_java//java:java_binary.bzl", "java_binary")
-load("//tools/build:csharp.bzl", "csharp_binary")
-
-# buildifier: disable=function-docstring
-def csharp_binary_multiple(name, srcs, deps):
-    names = []
-    for src in srcs:
-        subname = name + "/" + src
-        names.append(subname)
-        csharp_binary(
-            name = subname,
-            srcs = [src],
-            deps = deps,
-        )
-    native.filegroup(name = name, srcs = names)
 
 # buildifier: disable=function-docstring
 def csharp_library_multiple(name, srcs, deps):
