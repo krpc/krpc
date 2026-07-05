@@ -15,7 +15,6 @@ websocket-client==1.9.0
 
 # Build and test tooling
 black==26.5.1
-cpplint==2.0.2
 hatchling
 pylint==4.0.6
 pytest

@@ -10,11 +10,9 @@
 // IWYU pragma: no_include <ext/alloc_traits.h>
 
 #include "gtest/gtest.h"
-
 #include "krpc/client.hpp"
 #include "krpc/services/krpc.hpp"
 #include "krpc/stream.hpp"
-
 #include "server_test.hpp"
 #include "services/test_service.hpp"
 
@@ -22,12 +20,9 @@ namespace krpc {
 class StreamError;
 }
 
-class test_stream: public server_test {
-};
+class test_stream : public server_test {};
 
-static void wait() {
-  std::this_thread::sleep_for(std::chrono::milliseconds(50));
-}
+static void wait() { std::this_thread::sleep_for(std::chrono::milliseconds(50)); }
 
 TEST_F(test_stream, test_method) {
   krpc::Stream<std::string> x = test_service.float_to_string_stream(3.14159);
@@ -195,13 +190,14 @@ TEST_F(test_stream, test_invalid_operation_exception_later) {
   test_service.reset_invalid_operation_exception_later();
   auto s = test_service.throw_invalid_operation_exception_later_stream();
   ASSERT_EQ(0, s());
-  ASSERT_THROW({
-      while (true) {
-        wait();
-        s();
-      }
-    },
-    krpc::services::KRPC::InvalidOperationException);
+  ASSERT_THROW(
+      {
+        while (true) {
+          wait();
+          s();
+        }
+      },
+      krpc::services::KRPC::InvalidOperationException);
 }
 
 TEST_F(test_stream, test_custom_exception_immediately) {
@@ -209,9 +205,8 @@ TEST_F(test_stream, test_custom_exception_immediately) {
   ASSERT_THROW(s(), krpc::services::TestService::CustomException);
   try {
     s();
-  } catch(krpc::services::TestService::CustomException& e) {
-    ASSERT_STREQ(e.what(),
-      "A custom kRPC exception");
+  } catch (krpc::services::TestService::CustomException& e) {
+    ASSERT_STREQ(e.what(), "A custom kRPC exception");
   }
 }
 
@@ -219,18 +214,18 @@ TEST_F(test_stream, test_custom_exception_later) {
   test_service.reset_custom_exception_later();
   auto s = test_service.throw_custom_exception_later_stream();
   ASSERT_EQ(0, s());
-  ASSERT_THROW({
-      while (true) {
-        wait();
-        s();
-      }
-    },
-    krpc::services::TestService::CustomException);
+  ASSERT_THROW(
+      {
+        while (true) {
+          wait();
+          s();
+        }
+      },
+      krpc::services::TestService::CustomException);
   try {
     s();
-  } catch(krpc::services::TestService::CustomException& e) {
-    ASSERT_STREQ(e.what(),
-      "A custom kRPC exception");
+  } catch (krpc::services::TestService::CustomException& e) {
+    ASSERT_STREQ(e.what(), "A custom kRPC exception");
   }
 }
 
@@ -320,10 +315,10 @@ TEST_F(test_stream, test_callback) {
   std::atomic_flag stop;
   stop.test_and_set();
 
-  auto callback = [&test_callback_value, &error, &stop] (int x) {
+  auto callback = [&test_callback_value, &error, &stop](int x) {
     if (x > 5) {
       stop.clear();
-    } else if (test_callback_value+1 != x) {
+    } else if (test_callback_value + 1 != x) {
       error.clear();
       stop.clear();
     } else {
@@ -347,13 +342,9 @@ TEST_F(test_stream, test_remove_callback) {
   std::atomic_flag called2;
   called2.test_and_set();
 
-  auto callback1 = [&called1] (int x) {
-    called1.clear();
-  };
+  auto callback1 = [&called1](int x) { called1.clear(); };
 
-  auto callback2 = [&called2] (int x) {
-    called2.clear();
-  };
+  auto callback2 = [&called2](int x) { called2.clear(); };
 
   auto x = test_service.counter_stream("test_stream.test_remove_callback", 10);
   x.add_callback(callback1);
@@ -370,9 +361,7 @@ TEST_F(test_stream, test_update_callback) {
   std::atomic_flag stop;
   stop.test_and_set();
 
-  auto callback = [&stop] () {
-    stop.clear();
-  };
+  auto callback = [&stop]() { stop.clear(); };
 
   auto x = test_service.counter_stream("test_stream.test_update_callback", 10);
   conn.add_stream_update_callback(callback);
@@ -388,13 +377,9 @@ TEST_F(test_stream, test_remove_update_callback) {
   std::atomic_flag called2;
   called2.test_and_set();
 
-  auto callback1 = [&called1] () {
-    called1.clear();
-  };
+  auto callback1 = [&called1]() { called1.clear(); };
 
-  auto callback2 = [&called2] () {
-    called2.clear();
-  };
+  auto callback2 = [&called2]() { called2.clear(); };
 
   auto x = test_service.counter_stream("test_stream.test_remove_update_callback", 10);
   conn.add_stream_update_callback(callback1);
@@ -414,10 +399,10 @@ TEST_F(test_stream, test_rate) {
   std::atomic_flag stop;
   stop.test_and_set();
 
-  auto callback = [&test_rate_value, &error, &stop] (int x) {
+  auto callback = [&test_rate_value, &error, &stop](int x) {
     if (x > 5) {
       stop.clear();
-    } else if (test_rate_value+1 != x) {
+    } else if (test_rate_value + 1 != x) {
       error.clear();
       stop.clear();
     } else {
@@ -468,24 +453,18 @@ TEST_F(test_stream, test_stream_freeze_many) {
   std::vector<krpc::Stream<int>> streams;
   for (size_t i = 0; i < 100; i++)
     streams.push_back(
-      test_service.counter_stream(
-        "test_stream.test_stream_freeze_many."+std::to_string(i)));
+        test_service.counter_stream("test_stream.test_stream_freeze_many." + std::to_string(i)));
   std::vector<int> values;
-  for (auto stream : streams)
-    values.push_back(stream());
+  for (auto stream : streams) values.push_back(stream());
   wait();
-  for (size_t i = 0; i < streams.size(); i++)
-    ASSERT_NE(values[i], streams[i]());
+  for (size_t i = 0; i < streams.size(); i++) ASSERT_NE(values[i], streams[i]());
   conn.freeze_streams();
-  for (size_t i = 0; i < streams.size(); i++)
-    values[i] = streams[i]();
+  for (size_t i = 0; i < streams.size(); i++) values[i] = streams[i]();
   wait();
-  for (size_t i = 0; i < streams.size(); i++)
-    ASSERT_EQ(values[i], streams[i]());
+  for (size_t i = 0; i < streams.size(); i++) ASSERT_EQ(values[i], streams[i]());
   conn.thaw_streams();
   wait();
-  for (size_t i = 0; i < streams.size(); i++)
-    ASSERT_NE(values[i], streams[i]());
+  for (size_t i = 0; i < streams.size(); i++) ASSERT_NE(values[i], streams[i]());
 }
 
 // FIXME: reenable test

@@ -5,11 +5,9 @@
 #include <string>
 
 #include "gtest/gtest.h"
-
 #include "krpc/decoder.hpp"
 #include "krpc/krpc.pb.hpp"
 #include "krpc/platform.hpp"
-
 #include "services/test_service.hpp"
 
 TEST(test_decoder, test_decode_message) {
@@ -51,7 +49,6 @@ TEST(test_decoder, test_decode_class_none) {
 }
 
 TEST(test_decoder, test_guid) {
-  ASSERT_EQ(
-    "6f271b39-00dd-4de4-9732-f0d3a68838df",
-    krpc::decoder::guid(krpc::platform::unhexlify("391b276fdd00e44d9732f0d3a68838df")));
+  ASSERT_EQ("6f271b39-00dd-4de4-9732-f0d3a68838df",
+            krpc::decoder::guid(krpc::platform::unhexlify("391b276fdd00e44d9732f0d3a68838df")));
 }

@@ -1,6 +1,5 @@
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
-
 #include <krpc_cnano.h>
 #include <krpc_cnano/encoder.h>
 #include <krpc_cnano/services/krpc.h>
@@ -8,7 +7,6 @@
 #include <string>
 
 #include "gtest/gtest.h"
-
 #include "services/test_service.h"
 #include "testing_tools.hpp"
 

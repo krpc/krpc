@@ -12,14 +12,13 @@
 #include <vector>
 
 #include "gtest/gtest.h"
-
 #include "krpc/decoder.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/platform.hpp"
-
 #include "services/test_service.hpp"
 
-template<typename T> void test_value(T decoded, std::string encoded) {
+template <typename T>
+void test_value(T decoded, std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   T value = 0;
   krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
@@ -53,11 +52,10 @@ void test_string(std::string decoded, std::string encoded) {
   ASSERT_EQ(decoded, value);
 }
 
-void test_bytes(std::string decoded, std::string encoded) {
-  test_string(decoded, encoded);
-}
+void test_bytes(std::string decoded, std::string encoded) { test_string(decoded, encoded); }
 
-template <typename T> void test_list(const std::vector<T>& decoded, std::string encoded) {
+template <typename T>
+void test_list(const std::vector<T>& decoded, std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   std::vector<T> value;
   krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
@@ -65,8 +63,8 @@ template <typename T> void test_list(const std::vector<T>& decoded, std::string 
   ASSERT_TRUE(std::equal(decoded.begin(), decoded.end(), value.begin()));
 }
 
-template <typename K, typename V> void test_dictionary(const std::map<K, V>& decoded,
-                                                       std::string encoded) {
+template <typename K, typename V>
+void test_dictionary(const std::map<K, V>& decoded, std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   std::map<K, V> value;
   krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
@@ -74,7 +72,8 @@ template <typename K, typename V> void test_dictionary(const std::map<K, V>& dec
   ASSERT_TRUE(std::equal(decoded.begin(), decoded.end(), value.begin()));
 }
 
-template <typename T> void test_set(const std::set<T>& decoded, std::string encoded) {
+template <typename T>
+void test_set(const std::set<T>& decoded, std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   std::set<T> value;
   krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
@@ -82,7 +81,8 @@ template <typename T> void test_set(const std::set<T>& decoded, std::string enco
   ASSERT_TRUE(std::equal(decoded.begin(), decoded.end(), value.begin()));
 }
 
-template <typename T1> void test_tuple1(const std::tuple<T1>& decoded, std::string encoded) {
+template <typename T1>
+void test_tuple1(const std::tuple<T1>& decoded, std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   std::tuple<T1> value;
   krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
@@ -155,7 +155,7 @@ TEST(test_encode_decode, test_uint64) {
 }
 
 TEST(test_encode_decode, test_bool) {
-  test_value<bool>(true,  "01");
+  test_value<bool>(true, "01");
   test_value<bool>(false, "00");
 }
 
@@ -228,8 +228,7 @@ TEST(test_encode_decode, test_set) {
 
 TEST(test_encode_decode, test_tuple) {
   test_tuple1(std::tuple<uint32_t>(1), "0a0101");
-  test_tuple3(std::tuple<uint32_t, std::string, bool>(1, "jeb", false),
-              "0a01010a04036a65620a0100");
+  test_tuple3(std::tuple<uint32_t, std::string, bool>(1, "jeb", false), "0a01010a04036a65620a0100");
 }
 
 TEST(test_encode_decode, test_list_of_objects) {

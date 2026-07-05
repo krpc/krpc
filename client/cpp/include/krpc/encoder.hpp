@@ -13,11 +13,12 @@ namespace google {
 namespace protobuf {
 class MessageLite;
 }
-}
+}  // namespace google
 
 namespace krpc {
 
-template <typename T> class Object;
+template <typename T>
+class Object;
 
 namespace encoder {
 
@@ -31,11 +32,15 @@ std::string encode(bool value);
 std::string encode(const char* value);
 std::string encode(const std::string& value);
 std::string encode(const google::protobuf::MessageLite& message);
-template <typename T> std::string encode(const Object<T>& object);
+template <typename T>
+std::string encode(const Object<T>& object);
 
-template <typename T> std::string encode(const std::vector<T>& list);
-template <typename K, typename V> std::string encode(const std::map<K, V>& dictionary);
-template <typename T> std::string encode(const std::set<T>& set);
+template <typename T>
+std::string encode(const std::vector<T>& list);
+template <typename K, typename V>
+std::string encode(const std::map<K, V>& dictionary);
+template <typename T>
+std::string encode(const std::set<T>& set);
 
 /*[[[cog
 import cog
@@ -43,7 +48,8 @@ import itertools
 for n in range(1,int(nargs)+1):
     cog.out("""
     template <""" + ', '.join('typename T%d' % i for i in range(n)) + """>
-    std::string encode(const std::tuple<""" + ', '.join('T%d' % i for i in range(n)) + """>& tuple);""")
+    std::string encode(const std::tuple<""" + ', '.join('T%d' % i for i in range(n)) + """>&
+tuple);""")
 ]]]*/
 
 template <typename T0>
@@ -98,8 +104,8 @@ import itertools
 for n in range(1,int(nargs)+1):
     cog.out("""
 template <""" + ', '.join('typename T%d' % i for i in range(n)) + """>
-inline std::string encode(const std::tuple<""" + ', '.join('T%d' % i for i in range(n)) + """>& tuple) {
-  krpc::schema::Tuple tupleMessage;
+inline std::string encode(const std::tuple<""" + ', '.join('T%d' % i for i in range(n)) + """>&
+tuple) { krpc::schema::Tuple tupleMessage;
 """)
     for i in range(n):
         cog.outl('  tupleMessage.add_items(encode(std::get<%d>(tuple)));' % i)

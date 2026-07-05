@@ -5,7 +5,7 @@
 
 #include "services/test_service.hpp"
 
-class server_test: public ::testing::Test {
+class server_test : public ::testing::Test {
  public:
   server_test();
   krpc::Client connect();
@@ -16,10 +16,7 @@ class server_test: public ::testing::Test {
   krpc::services::TestService test_service;
 };
 
-inline server_test::server_test():
-  conn(connect()),
-  krpc(&conn),
-  test_service(&conn) {}
+inline server_test::server_test() : conn(connect()), krpc(&conn), test_service(&conn) {}
 
 inline krpc::Client server_test::connect() {
   return krpc::connect("C++ClientTest", "localhost", get_rpc_port(), get_stream_port());

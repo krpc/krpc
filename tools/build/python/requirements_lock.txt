@@ -188,10 +188,6 @@ click==8.4.2 \
     --hash=sha256:9a6cea6e60b17ebe0a44c5cc636d94f09bd66142c1cd7d8b4cd731c4917a15f6 \
     --hash=sha256:e6f9f66136c816745b9d65817da91d61d957fb16e02e4dcd0552553c5a197b76
     # via black
-cpplint==2.0.2 \
-    --hash=sha256:7ec188b5a08e604294ae7e7f88ec3ece2699de857f0533b305620c8cf237cad5 \
-    --hash=sha256:8a5971e4b5490133e425284f0c566c7ade0b959e61018d2c9af3ff7f357ddc57
-    # via -r tools/build/python/requirements.in
 dill==0.4.1 \
     --hash=sha256:1e1ce33e978ae97fcfcff5638477032b801c46c7c65cf717f95fbc2248f79a9d \
     --hash=sha256:423092df4182177d4d8ba8290c8a5b640c66ab35ec7da59ccfa00f6fa3eea5fa

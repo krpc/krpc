@@ -4,11 +4,9 @@
 #include <string>
 
 #include "gtest/gtest.h"
-
 #include "krpc/encoder.hpp"
 #include "krpc/krpc.pb.hpp"
 #include "krpc/platform.hpp"
-
 #include "services/test_service.hpp"
 
 TEST(test_encoder, test_encode_message) {

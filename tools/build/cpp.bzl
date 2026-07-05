@@ -2,31 +2,6 @@
 
 load("@rules_cc//cc/common:cc_common.bzl", "cc_common")
 load("@rules_cc//cc/common:cc_info.bzl", "CcInfo")
-load("@rules_python//python:defs.bzl", _native_py_test = "py_test")
-
-# buildifier: disable=function-docstring
-def cpp_lint_test(
-        name,
-        srcs = [],
-        hdrs = [],
-        includes = [],
-        extra_files = [],
-        filters = ["+build/include_alpha"],
-        **kwargs):
-    args = ["--linelength=100"]
-    if filters:
-        args.append("--filter=%s" % ",".join(filters))
-    args.extend(["$(rootpath %s)" % x for x in srcs + hdrs])
-
-    _native_py_test(
-        name = name,
-        srcs = [Label("//tools/build/python:run_cpplint.py")],
-        main = Label("//tools/build/python:run_cpplint.py"),
-        args = args,
-        data = srcs + hdrs + extra_files,
-        deps = ["@pypi//cpplint"],
-        **kwargs
-    )
 
 def _clang_tidy_test_impl(ctx):
     cc = cc_common.merge_cc_infos(
@@ -98,6 +73,57 @@ clang_tidy_test = rule(
         ),
         "_llvm_includes": attr.label(
             default = Label("@llvm_toolchain_llvm//:include"),
+            allow_files = True,
+        ),
+    },
+)
+
+def _clang_format_test_impl(ctx):
+    fmt = ctx.files._clang_format[0]
+    config = ctx.file.config
+    srcs = ctx.files.srcs
+    stamp = ctx.actions.declare_file(ctx.label.name + ".stamp")
+
+    # clang-format only needs the file content, but running it as an action (like
+    # clang_tidy_test) keeps the stamp/test wiring identical. --dry-run --Werror
+    # exits non-zero (and prints the diff) if any file is not already formatted.
+    cmd = " ".join(
+        [
+            fmt.path,
+            "--dry-run",
+            "--Werror",
+            "--style=file:" + config.path,
+        ] + [s.path for s in srcs],
+    ) + " && touch " + stamp.path
+
+    ctx.actions.run_shell(
+        inputs = depset(direct = srcs + [config, fmt]),
+        outputs = [stamp],
+        command = cmd,
+        mnemonic = "ClangFormat",
+        progress_message = "Checking clang-format on %s" % ctx.label,
+    )
+
+    launcher = ctx.actions.declare_file(ctx.label.name + ".sh")
+    ctx.actions.write(launcher, "#!/bin/sh\nexit 0\n", is_executable = True)
+    return [DefaultInfo(
+        executable = launcher,
+        runfiles = ctx.runfiles(files = [stamp]),
+    )]
+
+clang_format_test = rule(
+    doc = "Checks that srcs are formatted according to the hermetic " +
+          "clang-format and the checked-in .clang-format.",
+    implementation = _clang_format_test_impl,
+    test = True,
+    attrs = {
+        "srcs": attr.label_list(allow_files = [".c", ".cc", ".cpp", ".h", ".hpp"]),
+        "config": attr.label(
+            allow_single_file = True,
+            default = Label("//:.clang-format"),
+        ),
+        "_clang_format": attr.label(
+            default = Label("@llvm_toolchain_llvm//:clang-format"),
             allow_files = True,
         ),
     },

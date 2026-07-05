@@ -1,6 +1,5 @@
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
-
 #include <krpc_cnano/utils.h>
 
 #include <iostream>
@@ -16,8 +15,7 @@ static void test_float32_to_float64(uint32_t float32, uint64_t float64) {
 static void test_float64_to_float32(uint64_t float64, uint32_t float32) {
   uint32_t result;
   krpc_float64_to_float32(&float64, &result);
-  if (result != float32)
-    std::cout << std::hex << result << std::endl;
+  if (result != float32) std::cout << std::hex << result << std::endl;
   ASSERT_EQ(result, float32);
 }
 
