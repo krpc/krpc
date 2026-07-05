@@ -136,7 +136,7 @@ pkg_zip(
         "server/src/icons": "GameData/kRPC/icons",
         "tools/build/ksp/": "GameData/kRPC/",
         "tools/build/protobuf/LICENSE": "LICENSE.Google.Protobuf",
-        "../_main~_repo_rules~csharp_krpc_io_ports_license/file/LICENSE.KRPC.IO.Ports": "LICENSE.KRPC.IO.Ports",
+        "../+http_file+csharp_krpc_io_ports_license/file/LICENSE.KRPC.IO.Ports": "LICENSE.KRPC.IO.Ports",
         # Services
         "service/SpaceCenter/KRPC.SpaceCenter/net472/": "GameData/kRPC/",
         "service/SpaceCenter/": "GameData/kRPC/",

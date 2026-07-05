@@ -308,8 +308,8 @@ java_binary_multiple(
     ],
     deps = [
         "//client/java:krpc-jar",
-        "@java_javatuples//jar",
-        "@java_protobuf//jar",
+        "@maven//:org_javatuples_javatuples",
+        "@maven//:com_google_protobuf_protobuf_java",
     ],
 )
 
