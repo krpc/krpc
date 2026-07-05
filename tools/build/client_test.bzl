@@ -81,7 +81,7 @@ def _impl(ctx):
         runfiles = ctx.runfiles(files = [ctx.executable.test_executable, ctx.executable.server_executable] + test_executable_runfiles + server_executable_runfiles).merge(ctx.attr._bash_runfiles[DefaultInfo].default_runfiles),
     )
 
-client_test = rule(
+_client_test = rule(
     implementation = _impl,
     attrs = {
         "test_executable": attr.label(executable = True, cfg = "exec"),
@@ -91,3 +91,14 @@ client_test = rule(
     },
     test = True,
 )
+
+# buildifier: disable=function-docstring
+def client_test(**kwargs):
+    # The integration harness is a generated bash script that drives TestServer
+    # (and socat for the serial transport), so it is Linux-only by design.
+    # Making the harness cross-platform is out of scope (see the build-system
+    # migration design doc, Phase 8).
+    _client_test(
+        target_compatible_with = ["@platforms//os:linux"],
+        **kwargs
+    )
