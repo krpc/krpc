@@ -2,6 +2,7 @@ load("//:config.bzl", "avc_version", "ksp_avc_version_max", "ksp_avc_version_min
 load("//tools/build:pkg.bzl", "pkg_zip")
 
 exports_files([
+    ".clang-tidy",
     "COPYING",
     "COPYING.LESSER",
 ])

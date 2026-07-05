@@ -48,7 +48,7 @@ std::string Connection::receive_message() {
       data += this->receive(1);
       size = decoder::decode_size(data);
       break;
-    } catch (EncodingError&) {
+    } catch (EncodingError&) {  // NOLINT(bugprone-empty-catch): need more bytes
     }
   }
   return this->receive(size);

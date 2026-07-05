@@ -28,7 +28,7 @@ static unsigned char hex2uint(unsigned char x) {
 std::string unhexlify(const std::string& data) {
   std::string result(data.size() / 2, '0');
   for (unsigned int i = 0, j = 0; i < data.size(); i += 2, j++)
-    result[j] = (hex2uint(data[i]) << 4) | hex2uint(data[i+1]);
+    result[j] = static_cast<char>((hex2uint(data[i]) << 4) | hex2uint(data[i+1]));
   return result;
 }
 

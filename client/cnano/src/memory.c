@@ -17,7 +17,9 @@ void * krpc_calloc(size_t num, size_t size) {
 
 void * krpc_recalloc(void * ptr, size_t num, size_t inc, size_t size) {
   assert(inc > 0);
-  ptr = realloc(ptr, (num+inc) * size);
+  // The nano client does not handle allocation failure anywhere (see
+  // krpc_calloc); handling OOM here is out of scope.
+  ptr = realloc(ptr, (num+inc) * size);  // NOLINT(bugprone-suspicious-realloc-usage)
   memset(((uint8_t*)ptr) + (num*size), 0, (inc*size));
   return ptr;
 }

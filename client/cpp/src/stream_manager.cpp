@@ -85,7 +85,7 @@ void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
     }
   }
   stream->get_condition().notify_all();
-  for (auto callback : stream->get_callbacks())
+  for (const auto& callback : stream->get_callbacks())
     callback.second(stream->get_data());
 }
 
@@ -132,10 +132,10 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
   auto apply_update = [stream_manager, client] (const std::string& data) {
     schema::StreamUpdate update;
     decoder::decode(update, data, client);
-    for (auto result : update.results())
+    for (const auto& result : update.results())
       stream_manager->update(result.id(), result.result());
     stream_manager->condition.notify_all();
-    for (auto callback : stream_manager->callbacks)
+    for (const auto& callback : stream_manager->callbacks)
       callback.second();
   };
 
@@ -148,7 +148,7 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
         data += connection->partial_receive(1);
         size = decoder::decode_size(data);
         break;
-      } catch (EncodingError&) {
+      } catch (EncodingError&) {  // NOLINT(bugprone-empty-catch): need more bytes
       }
     }
     if (stop->load())
@@ -171,7 +171,7 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
             data += connection->partial_receive(1);
             size = decoder::decode_size(data);
             break;
-          } catch (EncodingError&) {
+          } catch (EncodingError&) {  // NOLINT(bugprone-empty-catch): need more bytes
           }
           // Stop if requested
           if (stop->load())

@@ -76,7 +76,7 @@ std::string Client::invoke(const schema::ProcedureCall& call) {
   schema::ProcedureCall* call2 = request.add_calls();
   call2->set_service(call.service());
   call2->set_procedure(call.procedure());
-  for (auto arg : call.arguments()) {
+  for (const auto& arg : call.arguments()) {
     schema::Argument* arg2 = call2->add_arguments();
     arg2->set_position(arg.position());
     arg2->set_value(arg.value());
