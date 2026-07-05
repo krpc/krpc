@@ -468,19 +468,6 @@ http_file(
     url = "https://luarocks.org/manifests/bluebird75/luaunit-3.3-1.src.rock",
 )
 
-# ----------------------- Python packages ------------------------------------------------
-#
-# Python dependencies come from the pip hub (see the pip.parse above and
-# tools/build/python/requirements.in). The pin below is only used by the
-# protoc lua and nanopb plugin environments (see tools/build/protobuf).
-
-http_file(
-    name = "python_protobuf",
-    downloaded_file_path = "protobuf-7.35.1.tar.gz",
-    sha256 = "ce115a26fe0c39a2c29973d914d327e516a6455464489fe3cd1e51a1b354f81a",
-    url = "https://files.pythonhosted.org/packages/da/01/9ef0afd7999eb9badb3a768b4aedd78c86d4c65cfaf1958ab276199e76b4/protobuf-7.35.1.tar.gz",
-)
-
 # ----------------------- Module Manager -------------------------------------------------
 
 http_file(

@@ -1,13 +1,33 @@
-load("//tools/build/protobuf:lua.bzl", "protoc_lua_env")
-load("//tools/build/protobuf:nanopb.bzl", "protoc_nanopb_env")
+load("@rules_python//python:defs.bzl", "py_binary")
 
 package(default_visibility = ["//visibility:public"])
 
 exports_files(["LICENSE"])
 
-protoc_lua_env(name = "protoc-lua-env")
+# protoc plugins for languages without built-in protoc support, run on the
+# hermetic python toolchain with the protobuf package from the pip hub
 
-protoc_nanopb_env(name = "protoc-nanopb-env")
+py_binary(
+    name = "protoc-gen-lua",
+    srcs = ["protoc_gen_lua.py"],
+    data = ["@protoc_lua//:plugin"],
+    main = "protoc_gen_lua.py",
+    deps = [
+        "@pypi//protobuf",
+        "@rules_python//python/runfiles",
+    ],
+)
+
+py_binary(
+    name = "protoc-gen-nanopb",
+    srcs = ["protoc_gen_nanopb.py"],
+    data = ["@protoc_nanopb//:plugin"],
+    main = "protoc_gen_nanopb.py",
+    deps = [
+        "@pypi//protobuf",
+        "@rules_python//python/runfiles",
+    ],
+)
 
 filegroup(
     name = "protoc",
