@@ -1,9 +1,15 @@
 " C++ build tools "
 
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@rules_cc//cc/common:cc_common.bzl", "cc_common")
 load("@rules_cc//cc/common:cc_info.bzl", "CcInfo")
 
-def _clang_tidy_test_impl(ctx):
+# The lint rules below run a hermetic LLVM tool (clang-tidy/clang-format) as a
+# build action and emit a stamp file on success; a build_test wrapper turns
+# "the stamp builds" into a test. The tool is invoked through the run_and_stamp
+# python helper (not a shell `&& touch`) so the rules work on any host OS.
+
+def _clang_tidy_impl(ctx):
     cc = cc_common.merge_cc_infos(
         cc_infos = [d[CcInfo] for d in ctx.attr.deps],
     ).compilation_context
@@ -22,43 +28,32 @@ def _clang_tidy_test_impl(ctx):
 
     # clang-tidy resolves the CcInfo include dirs (exec-root relative) and the
     # source paths from the exec root, so this must run as a build action rather
-    # than from the test's runfiles. The stamp ties the action into the test:
-    # `bazel test` stages the stamp into the runfiles, which forces the action to
-    # run, and a non-zero clang-tidy exit fails the build (hence the test).
-    cmd = " ".join(
-        [
-            tidy.path,
-            "--config-file=" + config.path,
-            "--quiet",
-            "--warnings-as-errors=*",
-        ] +
-        [s.path for s in srcs] +
-        ["--"] + flags,
-    ) + " && touch " + stamp.path
+    # than from a test's runfiles.
+    args = ctx.actions.args()
+    args.add(stamp.path)
+    args.add(tidy.path)
+    args.add("--config-file=" + config.path)
+    args.add("--quiet")
+    args.add("--warnings-as-errors=*")
+    args.add_all([s.path for s in srcs])
+    args.add("--")
+    args.add_all(flags)
 
-    ctx.actions.run_shell(
+    ctx.actions.run(
+        executable = ctx.executable._runner,
+        arguments = [args],
         inputs = depset(
-            direct = srcs + [config, tidy],
-            transitive = [cc.headers, depset(ctx.files._llvm_includes)],
+            direct = srcs + [config],
+            transitive = [cc.headers, depset(ctx.files._clang_tidy + ctx.files._llvm_includes)],
         ),
         outputs = [stamp],
-        command = cmd,
         mnemonic = "ClangTidy",
         progress_message = "Running clang-tidy on %s" % ctx.label,
     )
+    return [DefaultInfo(files = depset([stamp]))]
 
-    launcher = ctx.actions.declare_file(ctx.label.name + ".sh")
-    ctx.actions.write(launcher, "#!/bin/sh\nexit 0\n", is_executable = True)
-    return [DefaultInfo(
-        executable = launcher,
-        runfiles = ctx.runfiles(files = [stamp]),
-    )]
-
-clang_tidy_test = rule(
-    doc = "Runs the hermetic clang-tidy over srcs, using the compilation " +
-          "context of deps to resolve includes/defines.",
-    implementation = _clang_tidy_test_impl,
-    test = True,
+_clang_tidy = rule(
+    implementation = _clang_tidy_impl,
     attrs = {
         "srcs": attr.label_list(allow_files = [".c", ".cc", ".cpp"]),
         "deps": attr.label_list(providers = [CcInfo]),
@@ -66,6 +61,11 @@ clang_tidy_test = rule(
         "config": attr.label(
             allow_single_file = True,
             default = Label("//:.clang-tidy"),
+        ),
+        "_runner": attr.label(
+            default = Label("//tools/build:run_and_stamp"),
+            executable = True,
+            cfg = "exec",
         ),
         "_clang_tidy": attr.label(
             default = Label("@llvm_toolchain_llvm//:clang-tidy"),
@@ -78,49 +78,58 @@ clang_tidy_test = rule(
     },
 )
 
-def _clang_format_test_impl(ctx):
+# buildifier: disable=function-docstring
+def clang_tidy_test(name, srcs, deps, copts = [], config = None, **kwargs):
+    check = name + ".check"
+    _clang_tidy(
+        name = check,
+        srcs = srcs,
+        deps = deps,
+        copts = copts,
+        config = config or Label("//:.clang-tidy"),
+        tags = ["manual"],
+        testonly = True,
+    )
+    build_test(name = name, targets = [":" + check], **kwargs)
+
+def _clang_format_impl(ctx):
     fmt = ctx.files._clang_format[0]
     config = ctx.file.config
     srcs = ctx.files.srcs
     stamp = ctx.actions.declare_file(ctx.label.name + ".stamp")
 
-    # clang-format only needs the file content, but running it as an action (like
-    # clang_tidy_test) keeps the stamp/test wiring identical. --dry-run --Werror
-    # exits non-zero (and prints the diff) if any file is not already formatted.
-    cmd = " ".join(
-        [
-            fmt.path,
-            "--dry-run",
-            "--Werror",
-            "--style=file:" + config.path,
-        ] + [s.path for s in srcs],
-    ) + " && touch " + stamp.path
+    # --dry-run --Werror exits non-zero (and prints the diff) if any file is not
+    # already formatted.
+    args = ctx.actions.args()
+    args.add(stamp.path)
+    args.add(fmt.path)
+    args.add("--dry-run")
+    args.add("--Werror")
+    args.add("--style=file:" + config.path)
+    args.add_all([s.path for s in srcs])
 
-    ctx.actions.run_shell(
-        inputs = depset(direct = srcs + [config, fmt]),
+    ctx.actions.run(
+        executable = ctx.executable._runner,
+        arguments = [args],
+        inputs = depset(direct = srcs + [config] + ctx.files._clang_format),
         outputs = [stamp],
-        command = cmd,
         mnemonic = "ClangFormat",
         progress_message = "Checking clang-format on %s" % ctx.label,
     )
+    return [DefaultInfo(files = depset([stamp]))]
 
-    launcher = ctx.actions.declare_file(ctx.label.name + ".sh")
-    ctx.actions.write(launcher, "#!/bin/sh\nexit 0\n", is_executable = True)
-    return [DefaultInfo(
-        executable = launcher,
-        runfiles = ctx.runfiles(files = [stamp]),
-    )]
-
-clang_format_test = rule(
-    doc = "Checks that srcs are formatted according to the hermetic " +
-          "clang-format and the checked-in .clang-format.",
-    implementation = _clang_format_test_impl,
-    test = True,
+_clang_format = rule(
+    implementation = _clang_format_impl,
     attrs = {
         "srcs": attr.label_list(allow_files = [".c", ".cc", ".cpp", ".h", ".hpp"]),
         "config": attr.label(
             allow_single_file = True,
             default = Label("//:.clang-format"),
+        ),
+        "_runner": attr.label(
+            default = Label("//tools/build:run_and_stamp"),
+            executable = True,
+            cfg = "exec",
         ),
         "_clang_format": attr.label(
             default = Label("@llvm_toolchain_llvm//:clang-format"),
@@ -128,3 +137,15 @@ clang_format_test = rule(
         ),
     },
 )
+
+# buildifier: disable=function-docstring
+def clang_format_test(name, srcs, config = None, **kwargs):
+    check = name + ".check"
+    _clang_format(
+        name = check,
+        srcs = srcs,
+        config = config or Label("//:.clang-format"),
+        tags = ["manual"],
+        testonly = True,
+    )
+    build_test(name = name, targets = [":" + check], **kwargs)
