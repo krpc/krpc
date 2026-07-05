@@ -4,6 +4,13 @@ package(default_visibility = ["//visibility:public"])
 
 exports_files(["LICENSE"])
 
+# Cross-platform driver for the codegen rules: runs protoc and copies/rewrites
+# its output (replaces the rules' mkdir/cp/sed shell orchestration).
+py_binary(
+    name = "run_protoc",
+    srcs = ["run_protoc.py"],
+)
+
 # protoc plugins for languages without built-in protoc support, run on the
 # hermetic python toolchain with the protobuf package from the pip hub
 

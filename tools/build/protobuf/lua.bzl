@@ -8,19 +8,22 @@ def _impl(ctx):
 
     protoc_output = output.path + ".tmp-proto-lua"
 
-    sub_commands = [
-        "rm -rf %s" % protoc_output,
-        "mkdir -p %s" % protoc_output,
-        '%s "--plugin=protoc-gen-lua=$PWD/%s" --lua_out=%s %s' % (protoc.path, plugin.path, protoc_output, input.path),
-        "cp %s/protobuf/*.lua %s" % (protoc_output, output.path),
-    ]
+    args = ctx.actions.args()
+    args.add("--protoc", protoc.path)
+    args.add("--mkdir", protoc_output)
+    args.add("--copy", protoc_output + "/protobuf/*.lua=" + output.path)
+    args.add("--")
+    args.add("--plugin=protoc-gen-lua=" + plugin.path)
+    args.add("--lua_out=" + protoc_output)
+    args.add(input.path)
 
-    ctx.actions.run_shell(
+    ctx.actions.run(
+        executable = ctx.executable._runner,
+        arguments = [args],
         inputs = [input, protoc],
         outputs = [output],
-        tools = [plugin, ctx.attr._plugin[DefaultInfo].files_to_run],
+        tools = [ctx.attr._plugin[DefaultInfo].files_to_run],
         mnemonic = "ProtobufLua",
-        command = " && \\\n".join(sub_commands) + "\n",
     )
 
 protobuf_lua = rule(
@@ -31,6 +34,11 @@ protobuf_lua = rule(
         "_protoc": attr.label(default = Label("//tools/build/protobuf:protoc"), allow_single_file = True),
         "_plugin": attr.label(
             default = Label("//tools/build/protobuf:protoc-gen-lua"),
+            executable = True,
+            cfg = "exec",
+        ),
+        "_runner": attr.label(
+            default = Label("//tools/build/protobuf:run_protoc"),
             executable = True,
             cfg = "exec",
         ),
