@@ -19,21 +19,13 @@ RUN chmod 0644 /etc/bazel.bazelrc
 ENV BAZELISK_HOME=/usr/local/share/bazelisk
 RUN USE_BAZEL_VERSION=9.1.1 bazel version && chmod -R a+rwX /usr/local/share/bazelisk
 
-# rules_dotnet downloads its own hermetic .NET SDK and runtime (resolved through
-# the test runfiles), so no system dotnet is installed.
-
-# Install mono. Still required by the build-csharp-sln CI job, which builds the
-# generated Visual Studio solution (KRPC.sln) with mono's msbuild -- a
-# consumer-experience check independent of the Bazel build (which is off mono).
-RUN gpg --keyserver hkp://keyserver.ubuntu.com:80 \
-        --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
-      gpg --export 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
-        > /etc/apt/keyrings/mono.gpg && \
-      echo "deb [signed-by=/etc/apt/keyrings/mono.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | \
-        tee /etc/apt/sources.list.d/mono-official-stable.list && \
-      apt-get update && \
-      apt-get install -y mono-complete && \
-      apt-get clean
+# Install the .NET SDK for the build-csharp-sln CI job, which builds the
+# generated Visual Studio solution (KRPC.sln) with `dotnet build`. The Bazel
+# build uses rules_dotnet's own hermetic SDK/runtime, resolved through the test
+# runfiles, not this one. The migration is now fully off mono.
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends dotnet-sdk-8.0 && \
+    apt-get clean
 
 # Install latex
 RUN apt-get update && \

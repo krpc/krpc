@@ -105,8 +105,8 @@ jobs:
           rm krpc-genfiles-*.zip
       - name: build
         run: |
-          msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
-          msbuild KRPC.sln /t:Clean,Build -p:Configuration=Release /warnaserror
+          dotnet build KRPC.sln -c Debug -warnaserror
+          dotnet build KRPC.sln -c Release -warnaserror
 
   build-client-cnano-cmake-linux:
     needs: test-client-cnano

@@ -11,10 +11,6 @@ runs:
     - run: tools/github-actions/set-version.py
       if: ${{ inputs.long-version == 'true' }}
       shell: bash
-    - run: |
-        rm -f lib/mono-4.5
-        ln -s /usr/lib/mono/4.5 lib/mono-4.5
-      shell: bash
     - uses: ./.github/actions/bazel-fetch
     - uses: ./.github/actions/ksp-lib
       with:
