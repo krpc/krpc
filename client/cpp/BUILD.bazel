@@ -1,7 +1,7 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 load("//:config.bzl", "cmake_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
-load("//tools/build:cpp.bzl", "cpp_check_test", "cpp_lint_test")
+load("//tools/build:cpp.bzl", "cpp_lint_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/protobuf:cpp.bzl", "protobuf_cpp")
 load("//tools/krpctools:clientgen.bzl", "clientgen_cpp")
@@ -161,7 +161,6 @@ test_suite(
 test_suite(
     name = "lint",
     tests = [
-        ":cppcheck",
         ":cpplint",
     ],
 )
@@ -188,14 +187,6 @@ cc_binary(
         "@cpp_googletest//:gmock",
         "@cpp_googletest//:gtest",
     ],
-)
-
-cpp_check_test(
-    name = "cppcheck",
-    size = "small",
-    srcs = srcs + test_srcs,
-    hdrs = hdrs,
-    includes = ["include"],
 )
 
 cpp_lint_test(

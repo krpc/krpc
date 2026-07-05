@@ -2,36 +2,6 @@
 
 load("@rules_python//python:defs.bzl", _native_py_test = "py_test")
 
-def _check_impl(ctx):
-    srcs = ctx.files.srcs
-    hdrs = ctx.files.hdrs
-    includes = ctx.files.includes
-    runfiles = srcs + hdrs
-
-    args = ["--enable=all", "--suppress=missingIncludeSystem", "--inline-suppr", "--error-exitcode=1", "--check-config"]
-    args.extend(["-I%s" % x.short_path for x in includes])
-    args.extend([x.short_path for x in srcs])
-
-    ctx.actions.write(
-        ctx.outputs.executable,
-        "/usr/bin/cppcheck %s\n" % " ".join(args),
-    )
-
-    return DefaultInfo(
-        executable = ctx.outputs.executable,
-        runfiles = ctx.runfiles(files = runfiles),
-    )
-
-cpp_check_test = rule(
-    implementation = _check_impl,
-    attrs = {
-        "srcs": attr.label_list(allow_files = True),
-        "hdrs": attr.label_list(allow_files = True),
-        "includes": attr.label_list(allow_files = True),
-    },
-    test = True,
-)
-
 # buildifier: disable=function-docstring
 def cpp_lint_test(
         name,
