@@ -488,7 +488,7 @@ static bool krpc_decode_callback_value_dictionary_int32_bool(
 
 static bool krpc_decode_callback_entry_dictionary_int32_bool(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; krpc_dictionary_int32_bool_t * value; } State;
+  typedef struct State { size_t capacity; krpc_dictionary_int32_bool_t * value; } State;
   State * state = (State*)(*arg);
   krpc_dictionary_int32_bool_t * value = state->value;
   size_t i = value->size;
@@ -508,7 +508,7 @@ static bool krpc_decode_callback_entry_dictionary_int32_bool(
 
 inline krpc_error_t krpc_decode_dictionary_int32_bool(
   pb_istream_t * stream, krpc_dictionary_int32_bool_t * value) {
-  typedef struct { size_t capacity; krpc_dictionary_int32_bool_t * value; } State;
+  typedef struct State { size_t capacity; krpc_dictionary_int32_bool_t * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->entries == NULL) {
@@ -620,7 +620,7 @@ static bool krpc_decode_callback_value_dictionary_string_int32(
 
 static bool krpc_decode_callback_entry_dictionary_string_int32(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; krpc_dictionary_string_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_dictionary_string_int32_t * value; } State;
   State * state = (State*)(*arg);
   krpc_dictionary_string_int32_t * value = state->value;
   size_t i = value->size;
@@ -640,7 +640,7 @@ static bool krpc_decode_callback_entry_dictionary_string_int32(
 
 inline krpc_error_t krpc_decode_dictionary_string_int32(
   pb_istream_t * stream, krpc_dictionary_string_int32_t * value) {
-  typedef struct { size_t capacity; krpc_dictionary_string_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_dictionary_string_int32_t * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->entries == NULL) {
@@ -707,7 +707,7 @@ inline bool krpc_encode_callback_list_int32(
 
 static bool krpc_decode_callback_item_list_int32(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; krpc_list_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_list_int32_t * value; } State;
   State * state = (State*)(*arg);
   size_t i = state->value->size;
   state->value->size++;
@@ -721,7 +721,7 @@ static bool krpc_decode_callback_item_list_int32(
 
 inline krpc_error_t krpc_decode_list_int32(
   pb_istream_t * stream, krpc_list_int32_t * value) {
-  typedef struct { size_t capacity; krpc_list_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_list_int32_t * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->items == NULL) {
@@ -833,7 +833,7 @@ static bool krpc_decode_callback_value_dictionary_string_list_int32(
 
 static bool krpc_decode_callback_entry_dictionary_string_list_int32(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; krpc_dictionary_string_list_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_dictionary_string_list_int32_t * value; } State;
   State * state = (State*)(*arg);
   krpc_dictionary_string_list_int32_t * value = state->value;
   size_t i = value->size;
@@ -853,7 +853,7 @@ static bool krpc_decode_callback_entry_dictionary_string_list_int32(
 
 inline krpc_error_t krpc_decode_dictionary_string_list_int32(
   pb_istream_t * stream, krpc_dictionary_string_list_int32_t * value) {
-  typedef struct { size_t capacity; krpc_dictionary_string_list_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_dictionary_string_list_int32_t * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->entries == NULL) {
@@ -920,7 +920,7 @@ inline bool krpc_encode_callback_list_object(
 
 static bool krpc_decode_callback_item_list_object(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; krpc_list_object_t * value; } State;
+  typedef struct State { size_t capacity; krpc_list_object_t * value; } State;
   State * state = (State*)(*arg);
   size_t i = state->value->size;
   state->value->size++;
@@ -934,7 +934,7 @@ static bool krpc_decode_callback_item_list_object(
 
 inline krpc_error_t krpc_decode_list_object(
   pb_istream_t * stream, krpc_list_object_t * value) {
-  typedef struct { size_t capacity; krpc_list_object_t * value; } State;
+  typedef struct State { size_t capacity; krpc_list_object_t * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->items == NULL) {
@@ -1001,7 +1001,7 @@ inline bool krpc_encode_callback_set_int32(
 
 static bool krpc_decode_callback_item_set_int32(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; krpc_set_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_set_int32_t * value; } State;
   State * state = (State*)(*arg);
   size_t i = state->value->size;
   state->value->size++;
@@ -1015,7 +1015,7 @@ static bool krpc_decode_callback_item_set_int32(
 
 inline krpc_error_t krpc_decode_set_int32(
   pb_istream_t * stream, krpc_set_int32_t * value) {
-  typedef struct { size_t capacity; krpc_set_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_set_int32_t * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->items == NULL) {
@@ -1090,7 +1090,7 @@ inline bool krpc_encode_callback_tuple_int32_bool(
 
 static bool krpc_decode_callback_item_tuple_int32_bool(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct {size_t pos; krpc_tuple_int32_bool_t * value;} State;
+  typedef struct State {size_t pos; krpc_tuple_int32_bool_t * value;} State;
   State * state = (State*)(*arg);
   krpc_tuple_int32_bool_t * value = state->value;
   switch (state->pos) {
@@ -1111,7 +1111,7 @@ inline krpc_error_t krpc_decode_tuple_int32_bool(
   pb_istream_t * stream, krpc_tuple_int32_bool_t * value) {
   krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
   message.items.funcs.decode = &krpc_decode_callback_item_tuple_int32_bool;
-  typedef struct { size_t pos; krpc_tuple_int32_bool_t * value; } State;
+  typedef struct State { size_t pos; krpc_tuple_int32_bool_t * value; } State;
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
@@ -1179,7 +1179,7 @@ inline bool krpc_encode_callback_tuple_int32_int64(
 
 static bool krpc_decode_callback_item_tuple_int32_int64(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct {size_t pos; krpc_tuple_int32_int64_t * value;} State;
+  typedef struct State {size_t pos; krpc_tuple_int32_int64_t * value;} State;
   State * state = (State*)(*arg);
   krpc_tuple_int32_int64_t * value = state->value;
   switch (state->pos) {
@@ -1200,7 +1200,7 @@ inline krpc_error_t krpc_decode_tuple_int32_int64(
   pb_istream_t * stream, krpc_tuple_int32_int64_t * value) {
   krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
   message.items.funcs.decode = &krpc_decode_callback_item_tuple_int32_int64;
-  typedef struct { size_t pos; krpc_tuple_int32_int64_t * value; } State;
+  typedef struct State { size_t pos; krpc_tuple_int32_int64_t * value; } State;
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));

@@ -312,7 +312,7 @@ inline bool krpc_encode_callback_{{ typ.name }}(
 {% if typ.name.startswith('tuple_') %}
 static bool krpc_decode_callback_item_{{ typ.name }}(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct {size_t pos; {{ typ.ctype }} * value;} State;
+  typedef struct State {size_t pos; {{ typ.ctype }} * value;} State;
   State * state = (State*)(*arg);
   {{ typ.ctype }} * value = state->value;
   switch (state->pos) {
@@ -330,7 +330,7 @@ static bool krpc_decode_callback_item_{{ typ.name }}(
 {% elif typ.name.startswith('list_') or typ.name.startswith('set_') %}
 static bool krpc_decode_callback_item_{{ typ.name }}(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; {{ typ.ctype }} * value; } State;
+  typedef struct State { size_t capacity; {{ typ.ctype }} * value; } State;
   State * state = (State*)(*arg);
   size_t i = state->value->size;
   state->value->size++;
@@ -358,7 +358,7 @@ static bool krpc_decode_callback_value_{{ typ.name }}(
 
 static bool krpc_decode_callback_entry_{{ typ.name }}(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; {{ typ.ctype }} * value; } State;
+  typedef struct State { size_t capacity; {{ typ.ctype }} * value; } State;
   State * state = (State*)(*arg);
   {{ typ.ctype }} * value = state->value;
   size_t i = value->size;
@@ -382,12 +382,12 @@ inline krpc_error_t krpc_decode_{{ typ.name }}(
 {% if typ.name.startswith('tuple_') %}
   krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
   message.items.funcs.decode = &krpc_decode_callback_item_{{ typ.name }};
-  typedef struct { size_t pos; {{ typ.ctype }} * value; } State;
+  typedef struct State { size_t pos; {{ typ.ctype }} * value; } State;
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
 {% elif typ.name.startswith('list_') or typ.name.startswith('set_') %}
-  typedef struct { size_t capacity; {{ typ.ctype }} * value; } State;
+  typedef struct State { size_t capacity; {{ typ.ctype }} * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->items == NULL) {
@@ -406,7 +406,7 @@ inline krpc_error_t krpc_decode_{{ typ.name }}(
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Set(stream, &message));
   {% endif %}
 {% elif typ.name.startswith('dictionary_') %}
-  typedef struct { size_t capacity; {{ typ.ctype }} * value; } State;
+  typedef struct State { size_t capacity; {{ typ.ctype }} * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->entries == NULL) {
