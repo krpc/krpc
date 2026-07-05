@@ -1,11 +1,14 @@
 FROM ubuntu:24.04
 LABEL maintainer="djungelorm <djungelorm@users.noreply.github.com>"
 
-# Install essential packages
+# Install essential packages. python3 + pip remain only for the system nanopb
+# generator used by the C-nano CMake consumer-experience jobs (the Bazel build
+# uses the hermetic rules_python toolchain); the -dev/-venv/is-python3 packages
+# are no longer needed.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     curl ca-certificates gnupg git wget gosu \
-    python3 python-is-python3 python3-dev python3-pip python3-venv && \
+    python3 python3-pip && \
     apt-get clean
 
 # Install Bazel
@@ -16,12 +19,12 @@ RUN chmod 0644 /etc/bazel.bazelrc
 ENV BAZELISK_HOME=/usr/local/share/bazelisk
 RUN USE_BAZEL_VERSION=9.1.1 bazel version && chmod -R a+rwX /usr/local/share/bazelisk
 
-# Install dotnet
-RUN apt-get update && \
-    apt-get install -y dotnet-sdk-10.0 && \
-    apt-get install -y dotnet-runtime-10.0
+# rules_dotnet downloads its own hermetic .NET SDK and runtime (resolved through
+# the test runfiles), so no system dotnet is installed.
 
-# Install mono
+# Install mono. Still required by the build-csharp-sln CI job, which builds the
+# generated Visual Studio solution (KRPC.sln) with mono's msbuild -- a
+# consumer-experience check independent of the Bazel build (which is off mono).
 RUN gpg --keyserver hkp://keyserver.ubuntu.com:80 \
         --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
       gpg --export 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
@@ -39,10 +42,14 @@ RUN apt-get update && \
     texlive-latex-extra tex-gyre libenchant-2-2 && \
     apt-get clean
 
-# Install other build tools
+# Install other build tools. Dropped vs earlier images: cppcheck (replaced by
+# the hermetic clang-tidy), maven and openjdk-11-jdk (rules_jvm_external
+# downloads jars and Bazel uses remotejdk_11 + its own embedded JDK). gcc/g++/
+# ccache/cmake/librsvg2-bin/luarocks/socat stay for the CMake consumer jobs and
+# the Linux-only lua/image/serialio rules.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    gcc g++ ccache librsvg2-bin cmake luarocks maven cppcheck socat openjdk-11-jdk graphviz && \
+    gcc g++ ccache librsvg2-bin cmake luarocks socat graphviz && \
     apt-get clean
 
 # Install buildifier
@@ -75,7 +82,9 @@ RUN mkdir /protobuf && \
     cd / && \
     rm -rf /protobuf*
 
-# Install python-protobuf via pip; nanopb generator needs runtime_version (protobuf >= 4.25)
+# Install python-protobuf via pip, for the system nanopb generator used by the
+# C-nano CMake consumer jobs (needs runtime_version, protobuf >= 4.25). The
+# Bazel build's nanopb generator runs on the hermetic pip hub instead.
 RUN pip3 install --break-system-packages protobuf
 
 # Install Nanopb
