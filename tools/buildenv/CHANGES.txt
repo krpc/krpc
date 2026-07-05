@@ -1,3 +1,11 @@
+v3.9.0
+ * Replace mono with a system .NET SDK (the KRPC.sln consumer build now uses
+   `dotnet build`)
+ * Remove dotnet SDK/runtime (rules_dotnet is hermetic)
+ * Remove cppcheck (replaced by clang-tidy), maven and openjdk-11-jdk
+   (rules_jvm_external + remotejdk_11)
+ * Remove python3 dev/venv and python-is-python3 (hermetic rules_python)
+
 v3.8.1
  * Add graphviz for dot graph generation in documentation
 
