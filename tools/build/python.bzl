@@ -27,43 +27,30 @@ def _sdist_impl(ctx):
     for input in inputs:
         staging_path = staging_dir + "/" + _apply_path_map(path_map, input.short_path)
         staging_file = ctx.actions.declare_file(staging_path)
-
-        ctx.actions.run_shell(
-            mnemonic = "PackageFile",
-            inputs = [input],
-            outputs = [staging_file],
-            command = 'cp "%s" "%s"' % (input.path, staging_file.path),
-        )
+        ctx.actions.symlink(output = staging_file, target_file = input)
         staging_inputs.append(staging_file)
 
-    # Build sdist from the staging directory
-    # Note: staging dir can contain symlinks, so copy dereference them first
-    # by copying to a build directory
+    # Build the sdist from the staging directory. build_sdist dereferences the
+    # staged symlinks into the build dir, runs hatchling there and copies out the
+    # tarball -- cross-platform, no shell.
     staging_dir_path = output.path + ".py-sdist-tmp"
     build_dir_path = staging_dir_path + ".deref"
-    build_log_path = build_dir_path + ".log"
 
     hatchling = ctx.executable._hatchling
-    build_cmd = (
-        "rm -rf {deref} && cp -rL {stage} {deref} && " +
-        "( BASEDIR=$(pwd) && cd {deref} && $BASEDIR/{hatchling} build -t sdist ) > {log} 2>&1 || " +
-        "( cat {log} >&2 2>/dev/null ; exit 1 )"
-    ).format(
-        deref = build_dir_path,
-        stage = staging_dir_path,
-        hatchling = hatchling.path,
-        log = build_log_path,
-    )
-    sub_commands = [
-        build_cmd,
-        "cp %s/dist/*.tar.gz %s" % (build_dir_path, output.path),
-    ]
-    ctx.actions.run_shell(
+    args = ctx.actions.args()
+    args.add("--staging", staging_dir_path)
+    args.add("--build", build_dir_path)
+    args.add("--hatchling", hatchling.path)
+    args.add("--out", output.path)
+
+    ctx.actions.run(
+        executable = ctx.executable._sdist_builder,
+        arguments = [args],
         inputs = staging_inputs,
         outputs = [output],
-        tools = [hatchling, ctx.attr._hatchling[DefaultInfo].files_to_run],
+        tools = [ctx.attr._hatchling[DefaultInfo].files_to_run],
         progress_message = "Packaging files into %s" % output.short_path,
-        command = " && ".join(sub_commands),
+        mnemonic = "PySdist",
     )
 
 py_sdist = rule(
@@ -74,6 +61,11 @@ py_sdist = rule(
         "out": attr.output(mandatory = True),
         "_hatchling": attr.label(
             default = Label("//tools/build/python:hatchling"),
+            executable = True,
+            cfg = "exec",
+        ),
+        "_sdist_builder": attr.label(
+            default = Label("//tools/build:build_sdist"),
             executable = True,
             cfg = "exec",
         ),

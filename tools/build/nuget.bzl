@@ -87,36 +87,35 @@ def _nuget_package_impl(ctx):
         "</coreProperties>",
     ])
 
-    staging = "%s.staging" % ctx.outputs.out.basename
-    sub_commands = [
-        "set -e",
-        "mkdir -p %s/_rels %s/package/services/metadata/core-properties" % (staging, staging),
-        "cp %s %s/%s.nuspec" % (nuspec.path, staging, ctx.attr.id),
-        "cat > '%s/[Content_Types].xml' <<'NUPKG_EOF'\n%s\nNUPKG_EOF" % (staging, content_types),
-        "cat > %s/_rels/.rels <<'NUPKG_EOF'\n%s\nNUPKG_EOF" % (staging, rels),
-        "cat > %s/%s <<'NUPKG_EOF'\n%s\nNUPKG_EOF" % (staging, psmdcp_path, psmdcp),
-    ]
-    for framework, info in assemblies.items():
-        sub_commands.extend([
-            "mkdir -p %s/lib/%s" % (staging, framework),
-            "cp %s %s/lib/%s/%s.dll" % (info.lib.path, staging, framework, ctx.attr.id),
-            "cp %s %s/lib/%s/%s.xml" % (info.doc.path, staging, framework, ctx.attr.id),
-        ])
-    sub_commands.extend([
-        'OUT="$PWD/%s"' % ctx.outputs.out.path,
-        '(cd %s && zip -q -r -X "$OUT" .)' % staging,
-    ])
+    # A .nupkg is an OPC zip. Write the generated XML parts to files and archive
+    # them (with the pinned assemblies) via the cross-platform write_zip helper,
+    # so no shell mkdir/cp/cat/zip is needed.
+    content_types_file = ctx.actions.declare_file(ctx.attr.id + ".Content_Types.xml")
+    ctx.actions.write(output = content_types_file, content = content_types)
+    rels_file = ctx.actions.declare_file(ctx.attr.id + ".rels")
+    ctx.actions.write(output = rels_file, content = rels)
+    psmdcp_file = ctx.actions.declare_file(ctx.attr.id + ".psmdcp")
+    ctx.actions.write(output = psmdcp_file, content = psmdcp)
 
-    inputs = [nuspec]
-    for _, info in assemblies.items():
+    args = ctx.actions.args()
+    args.add("--out", ctx.outputs.out.path)
+    args.add("--entry", "%s=%s.nuspec" % (nuspec.path, ctx.attr.id))
+    args.add("--entry", "%s=[Content_Types].xml" % content_types_file.path)
+    args.add("--entry", "%s=_rels/.rels" % rels_file.path)
+    args.add("--entry", "%s=%s" % (psmdcp_file.path, psmdcp_path))
+
+    inputs = [nuspec, content_types_file, rels_file, psmdcp_file]
+    for framework, info in assemblies.items():
+        args.add("--entry", "%s=lib/%s/%s.dll" % (info.lib.path, framework, ctx.attr.id))
+        args.add("--entry", "%s=lib/%s/%s.xml" % (info.doc.path, framework, ctx.attr.id))
         inputs.extend([info.lib, info.doc])
 
-    ctx.actions.run_shell(
+    ctx.actions.run(
         mnemonic = "NuGetPackage",
+        executable = ctx.executable._write_zip,
+        arguments = [args],
         inputs = inputs,
         outputs = [ctx.outputs.out],
-        use_default_shell_env = True,
-        command = "\n".join(sub_commands),
     )
 
 nuget_package = rule(
@@ -132,6 +131,11 @@ nuget_package = rule(
         "description": attr.string(mandatory = True),
         "framework_deps": attr.string_list(),
         "deps": attr.string_dict(),
+        "_write_zip": attr.label(
+            default = Label("//tools/build:write_zip"),
+            executable = True,
+            cfg = "exec",
+        ),
     },
     outputs = _nuget_package_out,
 )

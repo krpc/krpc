@@ -6,3 +6,13 @@ py_binary(
     name = "run_and_stamp",
     srcs = ["run_and_stamp.py"],
 )
+
+py_binary(
+    name = "write_zip",
+    srcs = ["write_zip.py"],
+)
+
+py_binary(
+    name = "build_sdist",
+    srcs = ["build_sdist.py"],
+)
