@@ -75,7 +75,7 @@ py_lint_test(
     srcs = glob(["test/*.py"]),
     pylint_config = "test/pylint.rc",
     deps = [
-        "//client/python",
-        "//tools/krpctest",
+        "//client/python:krpc_lib",
+        "//tools/krpctest:krpctest_lib",
     ],
 )

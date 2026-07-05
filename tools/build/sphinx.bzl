@@ -12,12 +12,6 @@ def _get_src_dir(srcs, short_path = False):
                 return src.dirname
     return None
 
-def _add_runfile(sub_commands, path, runfile_path):
-    sub_commands.extend([
-        "mkdir -p `dirname %s`" % runfile_path,
-        'ln -f -s "`pwd`/%s" "`pwd`/%s"' % (path, runfile_path),
-    ])
-
 def _build_impl(ctx):
     srcs = ctx.files.srcs
     src_dir = _get_src_dir(srcs)
@@ -77,16 +71,8 @@ def _spelling_impl(ctx):
     src_dir = _get_src_dir(srcs, short_path = True)
     out = ctx.outputs.executable
     sphinx_build = ctx.executable.sphinx_build
-    sphinx_build_runfiles = ctx.attr.sphinx_build.default_runfiles.files.to_list()
     opts = " ".join(["-D%s=%s" % x for x in ctx.attr.opts.items()])
     sub_commands = []
-
-    for f in sphinx_build_runfiles:
-        _add_runfile(
-            sub_commands,
-            f.short_path,
-            sphinx_build.short_path + ".runfiles/_main/" + f.short_path,
-        )
 
     sphinx_commands = [
         # FIXME: following copy is a hack to fix sphinx not being able to read the
@@ -113,7 +99,7 @@ def _spelling_impl(ctx):
 
     return DefaultInfo(
         executable = out,
-        runfiles = ctx.runfiles(files = [sphinx_build] + sphinx_build_runfiles + srcs),
+        runfiles = ctx.runfiles(files = [sphinx_build] + srcs).merge(ctx.attr.sphinx_build[DefaultInfo].default_runfiles),
     )
 
 sphinx_spelling_test = rule(
@@ -122,7 +108,6 @@ sphinx_spelling_test = rule(
         "srcs": attr.label_list(allow_files = True),
         "sphinx_build": attr.label(
             executable = True,
-            allow_single_file = True,
             mandatory = True,
             cfg = "exec",
         ),
@@ -136,16 +121,8 @@ def _linkcheck_impl(ctx):
     src_dir = _get_src_dir(srcs, short_path = True)
     out = ctx.outputs.executable
     sphinx_build = ctx.executable.sphinx_build
-    sphinx_build_runfiles = ctx.attr.sphinx_build.default_runfiles.files.to_list()
     opts = " ".join(["-D%s=%s" % x for x in ctx.attr.opts.items()])
     sub_commands = []
-
-    for f in sphinx_build_runfiles:
-        _add_runfile(
-            sub_commands,
-            f.short_path,
-            sphinx_build.short_path + ".runfiles/_main/" + f.short_path,
-        )
 
     sphinx_commands = [
         "%s -b linkcheck -E -N -T %s ./out %s" % (sphinx_build.short_path, src_dir, opts),
@@ -165,7 +142,7 @@ def _linkcheck_impl(ctx):
 
     return DefaultInfo(
         executable = out,
-        runfiles = ctx.runfiles(files = [sphinx_build] + sphinx_build_runfiles + srcs),
+        runfiles = ctx.runfiles(files = [sphinx_build] + srcs).merge(ctx.attr.sphinx_build[DefaultInfo].default_runfiles),
     )
 
 sphinx_linkcheck_test = rule(
@@ -174,7 +151,6 @@ sphinx_linkcheck_test = rule(
         "srcs": attr.label_list(allow_files = True),
         "sphinx_build": attr.label(
             executable = True,
-            allow_single_file = True,
             mandatory = True,
             cfg = "exec",
         ),

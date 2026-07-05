@@ -1,10 +1,6 @@
 " C++ build tools "
 
-def _add_runfile(sub_commands, path, runfile_path):
-    sub_commands.extend([
-        "mkdir -p `dirname %s`" % runfile_path,
-        'ln -f -s "`pwd`/%s" "`pwd`/%s"' % (path, runfile_path),
-    ])
+load("@rules_python//python:defs.bzl", _native_py_test = "py_test")
 
 def _check_impl(ctx):
     srcs = ctx.files.srcs
@@ -36,49 +32,26 @@ cpp_check_test = rule(
     test = True,
 )
 
-def _lint_impl(ctx):
-    out = ctx.outputs.executable
-    srcs = ctx.files.srcs
-    hdrs = ctx.files.hdrs
-    extra_files = ctx.files.extra_files
-    filters = ctx.attr.filters
-    cpplint = ctx.executable.cpplint
-    cpplint_runfiles = ctx.attr.cpplint.default_runfiles.files.to_list()
-    runfiles = [cpplint] + cpplint_runfiles + srcs + hdrs + extra_files
-    sub_commands = []
-
-    runfiles_dir = out.path + ".runfiles/_main"
-    sub_commands.append("rm -rf %s" % runfiles_dir)
-    _add_runfile(sub_commands, cpplint.short_path, runfiles_dir + "/" + cpplint.basename)
-    for f in cpplint_runfiles:
-        _add_runfile(sub_commands, f.short_path, runfiles_dir + "/" + cpplint.basename + ".runfiles/_main/" + f.short_path)
-
+# buildifier: disable=function-docstring
+def cpp_lint_test(
+        name,
+        srcs = [],
+        hdrs = [],
+        includes = [],
+        extra_files = [],
+        filters = ["+build/include_alpha"],
+        **kwargs):
     args = ["--linelength=100"]
-    if filters != None:
+    if filters:
         args.append("--filter=%s" % ",".join(filters))
-    args.extend([x.short_path for x in srcs + hdrs])
-    sub_commands.append("%s/%s %s" % (runfiles_dir, cpplint.basename, " ".join(args)))
+    args.extend(["$(rootpath %s)" % x for x in srcs + hdrs])
 
-    ctx.actions.write(
-        ctx.outputs.executable,
-        content = " &&\n".join(sub_commands) + "\n",
-        is_executable = True,
+    _native_py_test(
+        name = name,
+        srcs = [Label("//tools/build/python:run_cpplint.py")],
+        main = Label("//tools/build/python:run_cpplint.py"),
+        args = args,
+        data = srcs + hdrs + extra_files,
+        deps = ["@pypi//cpplint"],
+        **kwargs
     )
-
-    return DefaultInfo(
-        executable = ctx.outputs.executable,
-        runfiles = ctx.runfiles(files = runfiles),
-    )
-
-cpp_lint_test = rule(
-    implementation = _lint_impl,
-    attrs = {
-        "srcs": attr.label_list(allow_files = True),
-        "hdrs": attr.label_list(allow_files = True),
-        "includes": attr.label_list(allow_files = True),
-        "extra_files": attr.label_list(allow_files = True),
-        "filters": attr.string_list(default = ["+build/include_alpha"]),
-        "cpplint": attr.label(default = Label("//tools/build/cpplint"), executable = True, cfg = "exec"),
-    },
-    test = True,
-)

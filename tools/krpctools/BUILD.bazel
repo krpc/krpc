@@ -1,5 +1,6 @@
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load("//:config.bzl", "python_version", "version")
-load("//tools/build:python.bzl", "py_lint_test", "py_script", "py_sdist", "py_test")
+load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
 
 license_text = """This license (GPL v3) applies to all parts of krpc.clientgen except for the following:
 
@@ -67,27 +68,40 @@ py_sdist(
     },
 )
 
-deps = [
-    "//client/python:python_base",
-    "@python_protobuf//file",
-    "@python_jinja2//file",
-    "@python_markupsafe//file",
-]
-
-py_script(
-    name = "clientgen",
-    pkg = ":krpctools",
-    script = "krpc-clientgen",
-    visibility = ["//visibility:public"],
-    deps = deps,
+# The krpctools package as an importable python library
+py_library(
+    name = "krpctools_lib",
+    srcs = glob(["krpctools/**/*.py"]) + [":version-py"],
+    data = glob(["krpctools/**/*.tmpl"]),
+    imports = ["."],
+    deps = [
+        "//client/python:krpc_base_lib",
+        "@pypi//jinja2",
+        "@pypi//protobuf",
+    ],
 )
 
-py_script(
-    name = "docgen",
-    pkg = ":krpctools",
-    script = "krpc-docgen",
+genrule(
+    name = "version-py",
+    srcs = ["//:python_version"],
+    outs = ["krpctools/version.py"],
+    cmd = 'cp "$<" "$@"',
+)
+
+py_binary(
+    name = "clientgen",
+    srcs = ["clientgen_main.py"],
+    main = "clientgen_main.py",
     visibility = ["//visibility:public"],
-    deps = deps,
+    deps = [":krpctools_lib"],
+)
+
+py_binary(
+    name = "docgen",
+    srcs = ["docgen_main.py"],
+    main = "docgen_main.py",
+    visibility = ["//visibility:public"],
+    deps = [":krpctools_lib"],
 )
 
 test_suite(
@@ -97,6 +111,12 @@ test_suite(
         ":lint",
     ],
 )
+
+deps = [
+    "//client/python:krpc_lib",
+    "@pypi//jinja2",
+    "@pypi//protobuf",
+]
 
 py_test(
     name = "krpctoolstest",

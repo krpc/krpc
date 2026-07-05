@@ -1,5 +1,27 @@
+load("@rules_python//python:defs.bzl", "py_library")
 load("//:config.bzl", "python_version", "version")
 load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
+
+# The krpctest package as an importable python library, for use by other
+# python targets in this workspace (the sdist below is what is released)
+py_library(
+    name = "krpctest_lib",
+    srcs = glob(["krpctest/**/*.py"]) + [":version-py"],
+    data = [
+        "krpctest/krpctest.sfs",
+        "krpctest/krpctest_career.sfs",
+    ],
+    imports = ["."],
+    visibility = ["//visibility:public"],
+    deps = ["//client/python:krpc_lib"],
+)
+
+genrule(
+    name = "version-py",
+    srcs = ["//:python_version"],
+    outs = ["krpctest/version.py"],
+    cmd = 'cp "$<" "$@"',
+)
 
 py_sdist(
     name = "krpctest",
@@ -31,8 +53,8 @@ test_suite(
 )
 
 deps = [
-    "//client/python",
-    "@python_protobuf//file",
+    "//client/python:krpc_lib",
+    "@pypi//protobuf",
 ]
 
 py_test(

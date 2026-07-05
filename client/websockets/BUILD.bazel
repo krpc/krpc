@@ -35,9 +35,9 @@ client_test(
 )
 
 deps = [
-    "@python_protobuf//file",
-    "@python_websocket_client//file",
-    "//client/python",
+    "//client/python:krpc_lib",
+    "@pypi//protobuf",
+    "@pypi//websocket_client",
 ]
 
 py_test(

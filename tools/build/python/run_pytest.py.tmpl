@@ -1,0 +1,32 @@
+"""Extracts a python sdist and runs pytest on the package directory within it.
+
+Template instantiated by the py_test macro in //tools/build:python.bzl, which
+substitutes the sdist path and package directory name. The parameters are
+baked in rather than passed as arguments, as the test may be invoked via the
+client_test harness which does not forward arguments.
+
+Dependencies of the package under test must be provided as deps of the
+py_test target so they are already importable.
+"""
+
+import os
+import sys
+import tarfile
+
+import pytest
+
+
+def main() -> int:
+    sdist = "@SDIST@"
+    pkg = "@PKG@"
+    extract_dir = os.path.join(os.environ.get("TEST_TMPDIR", "."), "sdist")
+    with tarfile.open(sdist) as tar:
+        tar.extractall(extract_dir)
+    pkg_dir = os.path.join(extract_dir, pkg)
+    # Make the package under test importable
+    sys.path.insert(0, pkg_dir)
+    return pytest.main(["--import-mode=importlib", pkg_dir])
+
+
+if __name__ == "__main__":
+    sys.exit(main())
