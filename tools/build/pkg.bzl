@@ -47,11 +47,13 @@ def _stage_files_impl(ctx):
         path = ctx.label.name + "/" + mapped
         out = ctx.actions.declare_file(path)
 
-        ctx.actions.run_shell(
-            mnemonic = "StageFile",
-            inputs = [src],
-            outputs = [out],
-            command = 'cp "%s" "%s"' % (src.path, out.path),
+        # A symlink rather than a copy keeps staging cheap and OS-independent
+        # (no shell `cp`); rules_pkg follows it when archiving. The archive mode
+        # is set by pkg_files below, not by the staged file, so the executable /
+        # regular split is preserved via the output groups.
+        ctx.actions.symlink(
+            output = out,
+            target_file = src,
         )
         if _is_executable(ctx.attr.mode_map, mapped):
             executable_outs.append(out)
