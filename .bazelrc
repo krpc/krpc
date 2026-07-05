@@ -1,2 +1,8 @@
 build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
 build --java_runtime_version=remotejdk_11
+
+# Windows: rules_dotnet (and the symlink-based staging rules) need real symlinks
+# and runfiles trees. The startup flag is a no-op off Windows; pass
+# `--config=windows` on Windows builds for the rest.
+startup --windows_enable_symlinks
+common:windows --enable_runfiles

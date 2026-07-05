@@ -606,6 +606,27 @@ jobs:
             //tools/krpctest:test \
             //tools/krpctools:test
 
+  # Windows / Bazel scaffold (build-system migration, Phase 8). The custom rules
+  # are all OS-independent now and the known blockers have been cleared (e.g. the
+  # protoc select in tools/build/protobuf now keys on the target OS rather than
+  # the C++ `compiler` value), but Windows support is still being validated on a
+  # real runner. Kept non-blocking (continue-on-error, and out of the
+  # all-checks-passed gate) until it goes reliably green.
+  build-windows:
+    runs-on: windows-latest
+    continue-on-error: true
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: bazelisk
+        run: npm install -g @bazel/bazelisk
+      - name: build
+        shell: bash
+        run: bazelisk build //... --config=windows
+      - name: test
+        shell: bash
+        run: bazelisk test //core:test //client/csharp:test --config=windows
+
   all-checks-passed:
     runs-on: ubuntu-latest
     if: always()
