@@ -64,6 +64,7 @@ namespace KRPC.UI
         internal const string protobufOverSerialIOText = "Protobuf over SerialIO";
         const string unknownClientNameText = "<unknown>";
         const string noClientsConnectedText = "No clients connected";
+        const string serverNotRunningText = "Server not running";
         const string advancedServerOptionsText = "Show advanced settings";
         const string autoStartServerText = "Auto-start server";
         const string autoAcceptConnectionsText = "Auto-accept new clients";
@@ -377,7 +378,7 @@ namespace KRPC.UI
                 }
             } else {
                 GUILayout.BeginHorizontal ();
-                GUILayout.Label (noClientsConnectedText, labelStyle);
+                GUILayout.Label (server.Running ? noClientsConnectedText : serverNotRunningText, labelStyle);
                 GUILayout.EndHorizontal ();
             }
         }
