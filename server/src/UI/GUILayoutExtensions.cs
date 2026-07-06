@@ -156,8 +156,14 @@ namespace KRPC.UI
         public static int ComboBox (object caller, int selectedItem, IList<string> entries, GUIStyle buttonStyle, GUIStyle optionsStyle, GUIStyle optionStyle)
         {
             // Main button. Expand to fill the row so combo boxes line up with the
-            // (stretchy) text fields in the edit-server form.
-            if (GUILayout.Button (entries [selectedItem], buttonStyle, GUILayout.ExpandWidth (true))) {
+            // (stretchy) text fields in the edit-server form, and left-align the label
+            // to match the left-aligned drop-down items. buttonStyle is shared with the
+            // action buttons, so its alignment is restored immediately after.
+            var oldAlignment = buttonStyle.alignment;
+            buttonStyle.alignment = TextAnchor.MiddleLeft;
+            var clicked = GUILayout.Button (entries [selectedItem], buttonStyle, GUILayout.ExpandWidth (true));
+            buttonStyle.alignment = oldAlignment;
+            if (clicked) {
                 if (ComboBoxWindow.Instance.Caller != caller || !ComboBoxWindow.Instance.Visible) {
                     ComboBoxWindow.Instance.Show (caller, entries, optionsStyle, optionStyle);
                 } else if (ComboBoxWindow.Instance.Caller == caller && ComboBoxWindow.Instance.Visible) {
