@@ -84,7 +84,7 @@ namespace KRPC.UI
 
         public void DrawName ()
         {
-            name = GUILayout.TextField (name, nameMaxLength, window.longTextFieldStyle);
+            name = GUILayout.TextField (name, nameMaxLength, window.stretchyTextFieldStyle);
         }
 
         public void Draw ()
