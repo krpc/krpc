@@ -19,6 +19,7 @@ namespace KRPC.UI
         const int portNameMaxLength = 255;
         const int baudRateMaxLength = 16;
         const int dataBitsMaxLength = 1;
+        const float labelWidth = 90f;
         const string protocolLabelText = "Protocol:";
         const string addressLabelText = "Address:";
         const string rpcPortLabelText = "RPC port:";
@@ -87,17 +88,24 @@ namespace KRPC.UI
             name = GUILayout.TextField (name, nameMaxLength, window.stretchyTextFieldStyle);
         }
 
+        // A fixed-width field label, so every field in the form starts at the same
+        // column and the (stretchy) fields all end up the same width.
+        void DrawFieldLabel (string text)
+        {
+            GUILayout.Label (text, window.labelStyle, GUILayout.Width (labelWidth * GameSettings.UI_SCALE));
+        }
+
         public void Draw ()
         {
             GUILayout.BeginHorizontal ();
-            GUILayout.Label (protocolLabelText, window.labelStyle);
+            DrawFieldLabel (protocolLabelText);
             protocol = (Protocol)GUILayoutExtensions.ComboBox (protocolComboId, (int)protocol, availableProtocols, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
             GUILayout.EndHorizontal ();
 
             if (protocol == Protocol.ProtocolBuffersOverTCP ||
                 protocol == Protocol.ProtocolBuffersOverWebsockets) {
                 GUILayout.BeginHorizontal();
-                GUILayout.Label(addressLabelText, window.labelStyle);
+                DrawFieldLabel (addressLabelText);
                 if (!settings.ContainsKey("address"))
                     settings["address"] = IPAddress.Loopback.ToString();
                 var address = settings["address"];
@@ -134,20 +142,20 @@ namespace KRPC.UI
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
-                GUILayout.Label(rpcPortLabelText, window.labelStyle);
+                DrawFieldLabel (rpcPortLabelText);
                 if (!settings.ContainsKey("rpc_port"))
                     settings["rpc_port"] = "50000";
                 settings["rpc_port"] = GUILayoutExtensions.FilterDigits (
-                    GUILayoutExtensions.ValidatedTextField (settings["rpc_port"], portMaxLength, window.longTextFieldStyle,
+                    GUILayoutExtensions.ValidatedTextField (settings["rpc_port"], portMaxLength, window.stretchyTextFieldStyle,
                         ValidPort (settings["rpc_port"]), window.errorColor));
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
-                GUILayout.Label(streamPortLabelText, window.labelStyle);
+                DrawFieldLabel (streamPortLabelText);
                 if (!settings.ContainsKey("stream_port"))
                     settings["stream_port"] = "50000";
                 settings["stream_port"] = GUILayoutExtensions.FilterDigits (
-                    GUILayoutExtensions.ValidatedTextField (settings["stream_port"], portMaxLength, window.longTextFieldStyle,
+                    GUILayoutExtensions.ValidatedTextField (settings["stream_port"], portMaxLength, window.stretchyTextFieldStyle,
                         ValidPort (settings["stream_port"]), window.errorColor));
                 GUILayout.EndHorizontal();
             } else {
@@ -157,34 +165,34 @@ namespace KRPC.UI
                     settings["data_bits"] = "8";
 
                 GUILayout.BeginHorizontal();
-                GUILayout.Label(portLabelText, window.labelStyle);
+                DrawFieldLabel (portLabelText);
                 if (!settings.ContainsKey("port"))
                     settings["port"] = new KRPC.IO.Ports.SerialPort ().PortName;
                 settings["port"] = GUILayoutExtensions.ValidatedTextField (
-                    settings["port"], portNameMaxLength, window.longTextFieldStyle,
+                    settings["port"], portNameMaxLength, window.stretchyTextFieldStyle,
                     settings["port"].Length > 0, window.errorColor);
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
-                GUILayout.Label(baudRateLabelText, window.labelStyle);
+                DrawFieldLabel (baudRateLabelText);
                 if (!settings.ContainsKey("baud_rate"))
                     settings["baud_rate"] = "9600";
                 settings["baud_rate"] = GUILayoutExtensions.FilterDigits (
-                    GUILayoutExtensions.ValidatedTextField (settings["baud_rate"], baudRateMaxLength, window.longTextFieldStyle,
+                    GUILayoutExtensions.ValidatedTextField (settings["baud_rate"], baudRateMaxLength, window.stretchyTextFieldStyle,
                         ValidBaudRate (settings["baud_rate"]), window.errorColor));
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
-                GUILayout.Label(dataBitsLabelText, window.labelStyle);
+                DrawFieldLabel (dataBitsLabelText);
                 if (!settings.ContainsKey("data_bits"))
                     settings["data_bits"] = "8";
                 settings["data_bits"] = GUILayoutExtensions.FilterDigits (
-                    GUILayoutExtensions.ValidatedTextField (settings["data_bits"], dataBitsMaxLength, window.longTextFieldStyle,
+                    GUILayoutExtensions.ValidatedTextField (settings["data_bits"], dataBitsMaxLength, window.stretchyTextFieldStyle,
                         ValidDataBits (settings["data_bits"]), window.errorColor));
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
-                GUILayout.Label(parityLabelText, window.labelStyle);
+                DrawFieldLabel (parityLabelText);
                 if (!settings.ContainsKey("parity"))
                     settings["parity"] = "None";
                 settings["parity"] = parityOptions [GUILayoutExtensions.ComboBox (
@@ -193,7 +201,7 @@ namespace KRPC.UI
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
-                GUILayout.Label(stopBitsLabelText, window.labelStyle);
+                DrawFieldLabel (stopBitsLabelText);
                 if (!settings.ContainsKey("stop_bits"))
                     settings["stop_bits"] = "One";
                 settings["stop_bits"] = stopBitsOptions [GUILayoutExtensions.ComboBox (
