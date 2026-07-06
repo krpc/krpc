@@ -238,8 +238,16 @@ namespace KRPC.UI
 
             GUILayout.BeginHorizontal ();
             var icons = Icons.Instance;
+            // Vertically centre the expand/collapse arrow in the row; it is shorter
+            // than the activity light and name and would otherwise sit at the top.
+            // A fixed top space (rather than ExpandHeight + FlexibleSpace) is used so
+            // the column cannot grab the window's spare height and push the arrow onto
+            // its own line.
+            GUILayout.BeginVertical (GUILayout.Width (20));
+            GUILayout.Space (Mathf.Max (0f, (Style.lineHeight - 16f) / 2f));
             GUILayout.Label (new GUIContent (expanded ? icons.ButtonCollapse : icons.ButtonExpand, expanded ? "Collapse" : "Expand"),
                 expandStyle, GUILayout.MaxWidth (20), GUILayout.MaxHeight (20));
+            GUILayout.EndVertical ();
             GUILayoutExtensions.Light (running, lightStyle);
             if (!editingServer)
                 GUILayout.Label (server.Name, labelStyle);
