@@ -328,7 +328,11 @@ def _make_autopilot_test_class(
             self.assertRaises(RuntimeError, getattr, self.ap, "roll_error")
 
             set_roll = -57
-            direction = self.vessel.direction(self.vessel.surface_reference_frame)
+            # roll_error is measured about the nose axis, so align the target direction with the
+            # vessel; roll_error then reports the pure roll difference. A well-conditioned (well away
+            # from vertical) direction keeps the roll angle unambiguous. Reaction wheels are off, so
+            # the vessel holds still throughout.
+            direction = normalize((1, 1, 0))
 
             for wheel in self.vessel.parts.reaction_wheels:
                 wheel.active = False
@@ -337,10 +341,35 @@ def _make_autopilot_test_class(
             self.ap.engaged = True
 
             for roll in (0, -54, -90, 27, 45, 90):
-                self.ap.target_roll = roll
+                self.set_direction(direction, roll)
                 self.assertAlmostEqual(
                     abs(set_roll - roll), self.ap.roll_error, delta=self.angle_error
                 )
+
+        def test_roll_error_near_vertical(self):
+            # Regression for #564: near vertical the surface-frame pitch/heading/roll decomposition
+            # is singular, so a roll_error computed by subtracting Euler roll angles reports spurious
+            # large values. roll_error is measured about the nose axis instead, which stays
+            # well-defined as long as the vessel and target share a nose direction. The direction is
+            # ~1 degree off straight up (surface +x is the zenith) with a fixed heading, so the
+            # vertical plane — and hence the roll angle — is still defined (exactly vertical is
+            # inherently degenerate between heading and roll; see AutoPilot.TargetRoll).
+            set_roll = 40
+            offset = math.radians(1)
+            direction = normalize((math.cos(offset), math.sin(offset), 0))
+
+            for wheel in self.vessel.parts.reaction_wheels:
+                wheel.active = False
+            self.cheat_orientation_to_direction(direction, roll=set_roll)
+
+            self.ap.engaged = True
+
+            for roll in (0, 40, -30, 90):
+                self.set_direction(direction, roll)
+                self.assertAlmostEqual(
+                    abs(set_roll - roll), self.ap.roll_error, delta=self.angle_error
+                )
+            self.ap.engaged = False
 
         ######################## Tests for corner cases ########################
 

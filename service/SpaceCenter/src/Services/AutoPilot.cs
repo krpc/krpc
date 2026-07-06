@@ -216,6 +216,13 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The target roll, in degrees. <c>NaN</c> if no target roll is set.
         /// </summary>
+        /// <remarks>
+        /// When left unset (<c>NaN</c>) the auto-pilot suppresses roll rotation — it drives the roll
+        /// rate to zero rather than holding a specific roll angle. Note that a roll angle is defined
+        /// relative to the vertical plane, so it is ill-defined when the target direction points close
+        /// to straight up or down (the surface-frame singularity); prefer setting roll only once the
+        /// vessel has pitched away from the vertical.
+        /// </remarks>
         [KRPCProperty]
         public float TargetRoll {
             get { return (float)attitudeController.TargetRoll; }
@@ -433,6 +440,11 @@ namespace KRPC.SpaceCenter.Services
         /// The error, in degrees, between the vessels current and target roll.
         /// Throws an exception if the auto-pilot has not been engaged or no target roll is set.
         /// </summary>
+        /// <remarks>
+        /// Measured about the vessel's nose axis, so it stays well-defined near the vertical
+        /// singularity — unlike a subtraction of pitch/heading/roll angles, whose roll term is
+        /// ill-conditioned when the vessel points close to straight up or down.
+        /// </remarks>
         [KRPCProperty]
         public float RollError {
             get {
@@ -440,7 +452,8 @@ namespace KRPC.SpaceCenter.Services
                     throw new InvalidOperationException ("The auto-pilot is not engaged");
                 if (double.IsNaN (attitudeController.TargetRoll))
                     throw new InvalidOperationException ("No target roll has been set");
-                return AxisError (attitudeController.TargetRoll, CurrentPitchHeadingRoll ().z);
+                return (float)attitudeController.RollErrorTo (
+                    attitudeController.TargetRotation, attitudeController.TargetDirection);
             }
         }
 
@@ -494,6 +507,10 @@ namespace KRPC.SpaceCenter.Services
         /// currently tracking (see <see cref="CurrentTargetRoll"/>). Throws an exception if the
         /// auto-pilot has not been engaged or no target roll is set.
         /// </summary>
+        /// <remarks>
+        /// Measured about the vessel's nose axis, so it stays well-defined near the vertical
+        /// singularity — see <see cref="RollError"/>.
+        /// </remarks>
         [KRPCProperty]
         public float CurrentRollError {
             get {
@@ -501,7 +518,8 @@ namespace KRPC.SpaceCenter.Services
                     throw new InvalidOperationException ("The auto-pilot is not engaged");
                 if (double.IsNaN (attitudeController.EffectiveTargetRoll))
                     throw new InvalidOperationException ("No target roll has been set");
-                return AxisError (attitudeController.EffectiveTargetRoll, CurrentPitchHeadingRoll ().z);
+                return (float)attitudeController.RollErrorTo (
+                    attitudeController.EffectiveTargetRotation, attitudeController.EffectiveTargetDirection);
             }
         }
 

@@ -1033,6 +1033,33 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
+        /// Roll error (degrees, unsigned) between the vessel's current attitude and the given target,
+        /// measured about the nose axis. Well-defined near the vertical singularity, unlike a
+        /// pitch/heading/roll Euler subtraction: it is the roll component of the rotation left after
+        /// the pointing error is removed, projected onto the nose axis — the same quantity the control
+        /// loop acts on in <see cref="ComputeTargetAngularVelocity"/>, but ungated by the roll blend
+        /// weight so it is a valid readout regardless of pointing error.
+        /// </summary>
+        public double RollErrorTo (QuaternionD targetRotation, Vector3d targetDirection)
+        {
+            var internalVessel = vessel.InternalVessel;
+            var currentRotation = ReferenceFrame.RotationFromWorldSpace (internalVessel.ReferenceTransform.rotation);
+            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (internalVessel.ReferenceTransform.up);
+            var dirRotation = GeometryExtensions.FromToRotation (currentDirection, targetDirection);
+            QuaternionD rollResidual = targetRotation * currentRotation.Inverse () * dirRotation.Inverse ();
+            double angle;
+            Vector3d axis;
+            GeometryExtensions.ToAngleAxis (rollResidual, out angle, out axis);
+            if (double.IsInfinity (axis.magnitude))
+                return 0.0;
+            angle = GeometryExtensions.ClampAngle180 (angle);
+            // Project the residual axis onto body y (nose); the y-axis is unchanged by the roll-
+            // invariant rotation, so this extracts the pure roll component (see the note at the
+            // in-loop computation in ComputeTargetAngularVelocity).
+            return Math.Abs (angle * ApToBody (axis).y);
+        }
+
+        /// <summary>
         /// Update the one-sided torque smoothing: track increases immediately (gains going down is
         /// safe) but decay decreases at τ≈0.5s so a sudden torque drop (e.g. engine shutdown while a
         /// small reaction wheel keeps torque > 0) does not cause a single-tick gain spike. The
