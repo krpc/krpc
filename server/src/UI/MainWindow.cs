@@ -193,7 +193,7 @@ namespace KRPC.UI
 
             var servers = core.Servers.ToList();
             foreach (var server in servers) {
-                DrawServer(server, servers.Count == 1);
+                DrawServer(server);
                 GUILayoutExtensions.Separator(separatorStyle);
             }
 
@@ -228,24 +228,22 @@ namespace KRPC.UI
             GUI.enabled = true;
         }
 
-        void DrawServer (Server.Server server, bool forceExpanded = false)
+        void DrawServer (Server.Server server)
         {
             var running = server.Running;
             var editingServer = editServers.ContainsKey (server.Id);
-            var expanded = forceExpanded || expandServers.Contains (server.Id);
+            var expanded = expandServers.Contains (server.Id);
 
             GUILayout.BeginHorizontal ();
-            if (!forceExpanded) {
-                var icons = Icons.Instance;
-                if (GUILayout.Button(new GUIContent(expanded ? icons.ButtonCollapse : icons.ButtonExpand, expanded ? "Collapse" : "Expand"),
-                        expandStyle, GUILayout.MaxWidth(20), GUILayout.MaxHeight(20))) {
-                    if (expanded)
-                        expandServers.Remove(server.Id);
-                    else
-                        expandServers.Add(server.Id);
-                    expanded = !expanded;
-                    Resized = true;
-                }
+            var icons = Icons.Instance;
+            if (GUILayout.Button(new GUIContent(expanded ? icons.ButtonCollapse : icons.ButtonExpand, expanded ? "Collapse" : "Expand"),
+                    expandStyle, GUILayout.MaxWidth(20), GUILayout.MaxHeight(20))) {
+                if (expanded)
+                    expandServers.Remove(server.Id);
+                else
+                    expandServers.Add(server.Id);
+                expanded = !expanded;
+                Resized = true;
             }
             GUILayoutExtensions.Light (running, lightStyle);
             if (!editingServer)
