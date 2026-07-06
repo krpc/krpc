@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -9,6 +10,48 @@ namespace KRPC.UI
         public static void Init (GameObject gameObject)
         {
             ComboBoxWindow.MainInit (gameObject);
+        }
+
+        /// <summary>
+        /// A text field that is tinted with the given colour when its current value is not valid.
+        /// </summary>
+        public static string ValidatedTextField (string value, int maxLength, GUIStyle style, bool valid, Color invalidColor)
+        {
+            var oldBackgroundColor = GUI.backgroundColor;
+            var oldContentColor = GUI.contentColor;
+            if (!valid) {
+                GUI.backgroundColor = invalidColor;
+                GUI.contentColor = invalidColor;
+            }
+            var result = GUILayout.TextField (value, maxLength, style);
+            GUI.backgroundColor = oldBackgroundColor;
+            GUI.contentColor = oldContentColor;
+            return result;
+        }
+
+        /// <summary>
+        /// Strip any character that is not a digit.
+        /// </summary>
+        public static string FilterDigits (string value)
+        {
+            return Filter (value, false);
+        }
+
+        /// <summary>
+        /// Strip any character that is not a digit or a period.
+        /// </summary>
+        public static string FilterDigitsAndPeriods (string value)
+        {
+            return Filter (value, true);
+        }
+
+        static string Filter (string value, bool allowPeriod)
+        {
+            var result = new StringBuilder (value.Length);
+            foreach (char c in value)
+                if ((c >= '0' && c <= '9') || (allowPeriod && c == '.'))
+                    result.Append (c);
+            return result.ToString ();
         }
 
         public static void Destroy ()
@@ -89,11 +132,19 @@ namespace KRPC.UI
         public static GUIStyle ComboOptionStyle ()
         {
             var style = new GUIStyle (Skin.DefaultSkin.label);
-            style.hover.textColor = Color.yellow;
+            // Highlighting of the hovered option is handled manually in
+            // ComboBoxWindow.Draw via GUI.contentColor. Neutralise the built-in
+            // interactive states so they never recolour (or, in the case of the skin's
+            // default hover colour, hide) the text based on the stale hover position.
+            style.hover.textColor = style.normal.textColor;
+            style.active.textColor = style.normal.textColor;
+            style.onHover.textColor = style.normal.textColor;
+            style.onActive.textColor = style.normal.textColor;
             var texture = new Texture2D (1, 1);
             texture.SetPixel (0, 0, new Color (0, 0, 0, 0));
             texture.Apply ();
             style.hover.background = texture;
+            style.active.background = texture;
             return style;
         }
 
@@ -151,6 +202,10 @@ namespace KRPC.UI
 
             bool stalePosition;
 
+            // Screen positions of the drawn options, used to highlight the one under
+            // the mouse (see Draw).
+            readonly List<Rect> optionRects = new List<Rect> ();
+
             public static void MainInit (GameObject gameObject)
             {
                 Instance = gameObject.AddComponent<ComboBoxWindow> ();
@@ -180,12 +235,34 @@ namespace KRPC.UI
 
             protected override void Draw (bool needRescale)
             {
-                if (Options != null) {
-                    int selectedOption = GUILayout.SelectionGrid (-1, Options.ToArray (), 1, OptionStyle);
-                    if (selectedOption >= 0) {
-                        SelectedOption = selectedOption;
-                    }
+                if (Options == null)
+                    return;
+
+                // Highlight the option under the mouse using the live pointer position
+                // (Input.mousePosition) rather than the built-in hover state, which is
+                // driven by Event.current.mousePosition. In the KSP runtime the latter is
+                // only refreshed when an input event is processed, so the built-in
+                // highlight freezes between mouse movements (the classic "wiggle the mouse
+                // to update it" behaviour). The options do not move once the window is
+                // shown, so hit-testing against the rects captured on the last repaint is
+                // exact. Position is the window's top-left in screen space; Input.mousePosition
+                // is bottom-left origin, hence the y flip.
+                var mouse = new Vector2 (
+                    Input.mousePosition.x - Position.x,
+                    Screen.height - Input.mousePosition.y - Position.y);
+
+                while (optionRects.Count < Options.Count)
+                    optionRects.Add (new Rect ());
+
+                var contentColor = GUI.contentColor;
+                for (int i = 0; i < Options.Count; i++) {
+                    GUI.contentColor = optionRects [i].Contains (mouse) ? Color.yellow : contentColor;
+                    if (GUILayout.Button (Options [i], OptionStyle))
+                        SelectedOption = i;
+                    if (Event.current.type == EventType.Repaint)
+                        optionRects [i] = GUILayoutUtility.GetLastRect ();
                 }
+                GUI.contentColor = contentColor;
             }
 
             public void Show (object caller, IList<string> options, GUIStyle windowStyle, GUIStyle optionStyle)
@@ -196,6 +273,7 @@ namespace KRPC.UI
                 SelectedOption = -1;
                 Options = options;
                 OptionStyle = optionStyle;
+                optionRects.Clear ();
                 stalePosition = true;
                 GUI.BringWindowToFront (Id);
             }

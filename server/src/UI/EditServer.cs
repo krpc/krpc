@@ -56,6 +56,14 @@ namespace KRPC.UI
         bool manualAddress;
         List<string> availableAddresses;
 
+        // Unique identifiers for the combo boxes, so that they do not collide with
+        // the combo boxes of other servers being edited at the same time. These must
+        // be stable across frames, so they cannot be constructed inline in Draw ().
+        readonly object protocolComboId = new object ();
+        readonly object addressComboId = new object ();
+        readonly object parityComboId = new object ();
+        readonly object stopBitsComboId = new object ();
+
         public EditServer (MainWindow mainWindow, Configuration.Server server)
         {
             window = mainWindow;
@@ -83,7 +91,7 @@ namespace KRPC.UI
         {
             GUILayout.BeginHorizontal ();
             GUILayout.Label (protocolLabelText, window.labelStyle);
-            protocol = (Protocol)GUILayoutExtensions.ComboBox ("protocol", (int)protocol, availableProtocols, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
+            protocol = (Protocol)GUILayoutExtensions.ComboBox (protocolComboId, (int)protocol, availableProtocols, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
             GUILayout.EndHorizontal ();
 
             if (protocol == Protocol.ProtocolBuffersOverTCP ||
@@ -104,7 +112,7 @@ namespace KRPC.UI
                 else
                     addressSelected = availableAddresses.Count - 1;
                 // Display the combo box
-                addressSelected = GUILayoutExtensions.ComboBox("address", addressSelected, availableAddresses, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
+                addressSelected = GUILayoutExtensions.ComboBox(addressComboId, addressSelected, availableAddresses, window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle);
                 // Get the address from the combo box selection
                 if (addressSelected == 0) {
                     address = IPAddress.Loopback.ToString();
@@ -117,7 +125,9 @@ namespace KRPC.UI
                     manualAddress = false;
                 } else {
                     // Display a text field when "Manual" is selected
-                    address = GUILayout.TextField(address, addressMaxLength, window.stretchyTextFieldStyle);
+                    address = GUILayoutExtensions.FilterDigitsAndPeriods (
+                        GUILayoutExtensions.ValidatedTextField (address, addressMaxLength, window.stretchyTextFieldStyle,
+                            ValidAddress (address), window.errorColor));
                     manualAddress = true;
                 }
                 settings["address"] = address;
@@ -127,14 +137,18 @@ namespace KRPC.UI
                 GUILayout.Label(rpcPortLabelText, window.labelStyle);
                 if (!settings.ContainsKey("rpc_port"))
                     settings["rpc_port"] = "50000";
-                settings["rpc_port"] = GUILayout.TextField(settings["rpc_port"], portMaxLength, window.longTextFieldStyle);
+                settings["rpc_port"] = GUILayoutExtensions.FilterDigits (
+                    GUILayoutExtensions.ValidatedTextField (settings["rpc_port"], portMaxLength, window.longTextFieldStyle,
+                        ValidPort (settings["rpc_port"]), window.errorColor));
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label(streamPortLabelText, window.labelStyle);
                 if (!settings.ContainsKey("stream_port"))
                     settings["stream_port"] = "50000";
-                settings["stream_port"] = GUILayout.TextField(settings["stream_port"], portMaxLength, window.longTextFieldStyle);
+                settings["stream_port"] = GUILayoutExtensions.FilterDigits (
+                    GUILayoutExtensions.ValidatedTextField (settings["stream_port"], portMaxLength, window.longTextFieldStyle,
+                        ValidPort (settings["stream_port"]), window.errorColor));
                 GUILayout.EndHorizontal();
             } else {
                 if (!settings.ContainsKey("baud_rate"))
@@ -146,24 +160,27 @@ namespace KRPC.UI
                 GUILayout.Label(portLabelText, window.labelStyle);
                 if (!settings.ContainsKey("port"))
                     settings["port"] = new KRPC.IO.Ports.SerialPort ().PortName;
-                settings["port"] = GUILayout.TextField(
-                    settings["port"], portNameMaxLength, window.longTextFieldStyle);
+                settings["port"] = GUILayoutExtensions.ValidatedTextField (
+                    settings["port"], portNameMaxLength, window.longTextFieldStyle,
+                    settings["port"].Length > 0, window.errorColor);
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label(baudRateLabelText, window.labelStyle);
                 if (!settings.ContainsKey("baud_rate"))
                     settings["baud_rate"] = "9600";
-                settings["baud_rate"] = GUILayout.TextField(
-                    settings["baud_rate"], baudRateMaxLength, window.longTextFieldStyle);
+                settings["baud_rate"] = GUILayoutExtensions.FilterDigits (
+                    GUILayoutExtensions.ValidatedTextField (settings["baud_rate"], baudRateMaxLength, window.longTextFieldStyle,
+                        ValidBaudRate (settings["baud_rate"]), window.errorColor));
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label(dataBitsLabelText, window.labelStyle);
                 if (!settings.ContainsKey("data_bits"))
                     settings["data_bits"] = "8";
-                settings["data_bits"] = GUILayout.TextField(
-                    settings["data_bits"], dataBitsMaxLength, window.longTextFieldStyle);
+                settings["data_bits"] = GUILayoutExtensions.FilterDigits (
+                    GUILayoutExtensions.ValidatedTextField (settings["data_bits"], dataBitsMaxLength, window.longTextFieldStyle,
+                        ValidDataBits (settings["data_bits"]), window.errorColor));
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
@@ -171,7 +188,7 @@ namespace KRPC.UI
                 if (!settings.ContainsKey("parity"))
                     settings["parity"] = "None";
                 settings["parity"] = parityOptions [GUILayoutExtensions.ComboBox (
-                        "parity", parityOptions.IndexOf(settings["parity"]), parityOptions,
+                        parityComboId, parityOptions.IndexOf(settings["parity"]), parityOptions,
                         window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle)];
                 GUILayout.EndHorizontal();
 
@@ -180,10 +197,34 @@ namespace KRPC.UI
                 if (!settings.ContainsKey("stop_bits"))
                     settings["stop_bits"] = "One";
                 settings["stop_bits"] = stopBitsOptions [GUILayoutExtensions.ComboBox (
-                        "stop_bits", stopBitsOptions.IndexOf(settings["stop_bits"]), stopBitsOptions,
+                        stopBitsComboId, stopBitsOptions.IndexOf(settings["stop_bits"]), stopBitsOptions,
                         window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle)];
                 GUILayout.EndHorizontal();
             }
+        }
+
+        static bool ValidAddress (string value)
+        {
+            IPAddress address;
+            return IPAddress.TryParse (value, out address);
+        }
+
+        static bool ValidPort (string value)
+        {
+            ushort port;
+            return ushort.TryParse (value, out port);
+        }
+
+        static bool ValidBaudRate (string value)
+        {
+            uint baudRate;
+            return uint.TryParse (value, out baudRate);
+        }
+
+        static bool ValidDataBits (string value)
+        {
+            ushort dataBits;
+            return ushort.TryParse (value, out dataBits) && dataBits >= 5 && dataBits <= 8;
         }
 
         public Configuration.Server Save ()
@@ -193,30 +234,19 @@ namespace KRPC.UI
             if (protocol == Protocol.ProtocolBuffersOverTCP ||
                 protocol == Protocol.ProtocolBuffersOverWebsockets)
             {
-                IPAddress ipAddress;
-                ushort rpcPortInt;
-                ushort streamPortInt;
-                bool validAddress = IPAddress.TryParse(settings["address"], out ipAddress);
-                bool validRPCPort = ushort.TryParse(settings["rpc_port"], out rpcPortInt);
-                bool validStreamPort = ushort.TryParse(settings["stream_port"], out streamPortInt);
-                if (!validAddress)
+                if (!ValidAddress (settings["address"]))
                     window.Errors.Add(invalidAddressText);
-                if (!validRPCPort)
+                if (!ValidPort (settings["rpc_port"]))
                     window.Errors.Add(invalidRPCPortText);
-                if (!validStreamPort)
+                if (!ValidPort (settings["stream_port"]))
                     window.Errors.Add(invalidStreamPortText);
                 allowedKeys = new List<string> { "address", "rpc_port", "stream_port" };
             } else {
-                uint baudRateInt;
-                ushort dataBitsInt;
-                bool validPort = (settings["port"].Length > 0);
-                bool validBaudRate = uint.TryParse(settings["baud_rate"], out baudRateInt);
-                bool validDataBits = ushort.TryParse(settings["data_bits"], out dataBitsInt);
-                if (!validPort)
+                if (settings["port"].Length == 0)
                     window.Errors.Add(invalidPortNameText);
-                if (!validBaudRate)
+                if (!ValidBaudRate (settings["baud_rate"]))
                     window.Errors.Add(invalidBaudRateText);
-                if (!validDataBits)
+                if (!ValidDataBits (settings["data_bits"]))
                     window.Errors.Add(invalidDataBitsText);
                 allowedKeys = new List<string> {
                     "port", "baud_rate", "data_bits", "parity", "stop_bits" };

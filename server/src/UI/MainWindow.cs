@@ -34,7 +34,7 @@ namespace KRPC.UI
         string maxTimePerUpdate;
         string recvTimeout;
         // Style settings
-        readonly Color errorColor = Color.yellow;
+        internal readonly Color errorColor = Color.yellow;
         internal GUIStyle labelStyle, stretchyLabelStyle, fixedLabelStyle, textFieldStyle, longTextFieldStyle, stretchyTextFieldStyle,
             buttonStyle, toggleStyle, expandStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
         const float windowWidth = 288f;
@@ -43,8 +43,8 @@ namespace KRPC.UI
         const float fixedLabelWidth = 160f;
         const float indentWidth = 15f;
         float scaledIndentWidth;
-        const int maxTimePerUpdateMaxLength = 5;
-        const int recvTimeoutMaxLength = 5;
+        const int maxTimePerUpdateMaxLength = 20;
+        const int recvTimeoutMaxLength = 20;
         // Text strings
         const string advancedModeText = "Show advanced settings";
         const string startAllServersText = "Start server";
@@ -73,9 +73,8 @@ namespace KRPC.UI
         const string adaptiveRateControlText = "Adaptive rate control";
         const string blockingRecvText = "Blocking receives";
         const string recvTimeoutText = "Receive timeout";
+        const string microsecondsUnitText = "us";
         const string debugLoggingText = "Debug logging";
-        const string invalidMaxTimePerUpdateText = "Max. time per update must be an integer";
-        const string invalidRecvTimeoutText = "Receive timeout must be an integer";
         const string showInfoWindowText = "Show info";
 
         protected override void Init ()
@@ -473,12 +472,17 @@ namespace KRPC.UI
         void DrawMaxTimePerUpdate ()
         {
             GUILayout.Label (maxTimePerUpdateText, fixedLabelStyle);
-            var newMaxTimePerUpdate = GUILayout.TextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, longTextFieldStyle);
+            uint value;
+            bool valid = uint.TryParse (maxTimePerUpdate, out value);
+            var newMaxTimePerUpdate = GUILayoutExtensions.FilterDigits (
+                GUILayoutExtensions.ValidatedTextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, longTextFieldStyle, valid, errorColor));
+            GUILayout.Label (microsecondsUnitText, labelStyle);
             if (newMaxTimePerUpdate != maxTimePerUpdate) {
-                uint value = config.Configuration.MaxTimePerUpdate;
-                uint.TryParse (newMaxTimePerUpdate, out value);
-                config.Configuration.MaxTimePerUpdate = value;
-                config.Save ();
+                maxTimePerUpdate = newMaxTimePerUpdate;
+                if (uint.TryParse (maxTimePerUpdate, out value)) {
+                    config.Configuration.MaxTimePerUpdate = value;
+                    config.Save ();
+                }
             }
         }
 
@@ -503,12 +507,17 @@ namespace KRPC.UI
         void DrawRecvTimeout ()
         {
             GUILayout.Label (recvTimeoutText, fixedLabelStyle);
-            var newRecvTimeout = GUILayout.TextField (recvTimeout, recvTimeoutMaxLength, longTextFieldStyle);
+            uint value;
+            bool valid = uint.TryParse (recvTimeout, out value);
+            var newRecvTimeout = GUILayoutExtensions.FilterDigits (
+                GUILayoutExtensions.ValidatedTextField (recvTimeout, recvTimeoutMaxLength, longTextFieldStyle, valid, errorColor));
+            GUILayout.Label (microsecondsUnitText, labelStyle);
             if (newRecvTimeout != recvTimeout) {
-                uint value = config.Configuration.RecvTimeout;
-                uint.TryParse (newRecvTimeout, out value);
-                config.Configuration.RecvTimeout = value;
-                config.Save ();
+                recvTimeout = newRecvTimeout;
+                if (uint.TryParse (recvTimeout, out value)) {
+                    config.Configuration.RecvTimeout = value;
+                    config.Save ();
+                }
             }
         }
 
