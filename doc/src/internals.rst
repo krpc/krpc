@@ -28,10 +28,10 @@ resulting tradeoff between RPC throughput and game FPS:
    high RPC throughput, this is a good option to use.
 
 2. **Maximum time per update**. When one RPC per update is not enabled, this
-   setting controls the maximum amount of time (in nanoseconds) that kRPC will
+   setting controls the maximum amount of time (in microseconds) that kRPC will
    spend executing RPCs per FixedUpdate.  Setting this to a high value, for
-   example 20000 ns, will allow the server to process many RPCs at the expense
-   of the game's framerate. A low value, for example 1000 ns, won't allow the
+   example 20000 us, will allow the server to process many RPCs at the expense
+   of the game's framerate. A low value, for example 1000 us, won't allow the
    server to execute many RPCs per update, but will allow the game to run at a
    much higher framerate.
 

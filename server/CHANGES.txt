@@ -3,6 +3,8 @@ v0.6.0
  * Fix Logger to write to both KSP.log and Player.log (#780)
  * Improve RPC and stream update performance (#879)
  * Fix Stream RPCs Executed and Stream RPC Rate always showing 0 in the info window (#879)
+ * Improve the server window UI
+ * Fix incorrect unit shown for "max. time per update" and "receive timeout" - they are microseconds, not nanoseconds
 
 v0.5.4
  * Fix memory leaks when switching game scene (#779)

@@ -121,9 +121,9 @@ namespace KRPC.UI
             DrawInfo (rpcsExecutedText, core.RPCsExecuted.ToString ());
             DrawInfo (rpcRateText, Math.Round (core.RPCRate) + " RPC/s");
             DrawInfo (rpcExecutionMode, config.OneRPCPerUpdate ? singleRPCModeText : (config.AdaptiveRateControl ? adaptiveModeText : staticModeText));
-            DrawInfo (maxTimePerUpdateText, config.OneRPCPerUpdate ? notApplicableText : config.MaxTimePerUpdate + " ns");
+            DrawInfo (maxTimePerUpdateText, config.OneRPCPerUpdate ? notApplicableText : config.MaxTimePerUpdate + " us");
             DrawInfo (rpcReceiveModeText, config.BlockingRecv ? blockingModeText : nonBlockingModeText);
-            DrawInfo (recvTimeoutText, config.BlockingRecv ? config.RecvTimeout + " ns" : notApplicableText);
+            DrawInfo (recvTimeoutText, config.BlockingRecv ? config.RecvTimeout + " us" : notApplicableText);
             DrawInfo (timePerRPCUpdateText, string.Format ("{0:F5} s", core.TimePerRPCUpdate));
             DrawInfo (pollTimePerRPCUpdateText, string.Format ("{0:F5} s", core.PollTimePerRPCUpdate));
             DrawInfo (execTimePerRPCUpdateText, string.Format ("{0:F5} s", core.ExecTimePerRPCUpdate));
@@ -152,10 +152,10 @@ namespace KRPC.UI
         {
             string[] suffix = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
             if (bytes == 0)
-                return "0" + suffix [0];
+                return "0 " + suffix [0];
             int place = Convert.ToInt32 (Math.Floor (Math.Log (bytes, 1024)));
             double num = Math.Round (bytes / Math.Pow (1024, place), 1);
-            return num + suffix [place];
+            return num + " " + suffix [place];
         }
     }
 }
