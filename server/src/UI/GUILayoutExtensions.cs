@@ -132,10 +132,13 @@ namespace KRPC.UI
         public static GUIStyle ComboOptionStyle ()
         {
             var style = new GUIStyle (Skin.DefaultSkin.label);
-            // Highlighting of the hovered option is handled manually in
-            // ComboBoxWindow.Draw via GUI.contentColor. Neutralise the built-in
-            // interactive states so they never recolour (or, in the case of the skin's
-            // default hover colour, hide) the text based on the stale hover position.
+            // Highlighting of the hovered option (a grey background and lighter text)
+            // is handled manually in ComboBoxWindow.Draw. Give the text a known base
+            // colour so the manual GUI.contentColor tint is predictable, and neutralise
+            // the built-in interactive states so they never recolour (or, in the case
+            // of the skin's default hover colour, hide) the text based on the stale
+            // hover position.
+            style.normal.textColor = Color.white;
             style.hover.textColor = style.normal.textColor;
             style.active.textColor = style.normal.textColor;
             style.onHover.textColor = style.normal.textColor;
@@ -206,6 +209,11 @@ namespace KRPC.UI
             // the mouse (see Draw).
             readonly List<Rect> optionRects = new List<Rect> ();
 
+            // Grey background drawn behind the hovered option.
+            Texture2D hoverBackground;
+            static readonly Color hoverTextColor = Color.white;
+            static readonly Color normalTextColor = new Color (0.8f, 0.8f, 0.8f);
+
             public static void MainInit (GameObject gameObject)
             {
                 Instance = gameObject.AddComponent<ComboBoxWindow> ();
@@ -231,6 +239,9 @@ namespace KRPC.UI
                 Style.border.top = Style.border.bottom;
                 Style.padding.top = Style.padding.bottom;
                 stalePosition = true;
+                hoverBackground = new Texture2D (1, 1);
+                hoverBackground.SetPixel (0, 0, new Color (0.5f, 0.5f, 0.5f, 0.4f));
+                hoverBackground.Apply ();
             }
 
             protected override void Draw (bool needRescale)
@@ -256,7 +267,12 @@ namespace KRPC.UI
 
                 var contentColor = GUI.contentColor;
                 for (int i = 0; i < Options.Count; i++) {
-                    GUI.contentColor = optionRects [i].Contains (mouse) ? Color.yellow : contentColor;
+                    bool hover = optionRects [i].Contains (mouse);
+                    // Draw the grey highlight behind the hovered option, using the rect
+                    // captured on the previous repaint (the options do not move).
+                    if (hover && Event.current.type == EventType.Repaint)
+                        GUI.DrawTexture (optionRects [i], hoverBackground);
+                    GUI.contentColor = hover ? hoverTextColor : normalTextColor;
                     if (GUILayout.Button (Options [i], OptionStyle))
                         SelectedOption = i;
                     if (Event.current.type == EventType.Repaint)
