@@ -41,6 +41,7 @@ namespace KRPC.UI
         const float textFieldWidth = 45f;
         const float longTextFieldWidth = 80f;
         const float fixedLabelWidth = 160f;
+        const float serverInfoLabelWidth = 110f;
         const float indentWidth = 15f;
         float scaledIndentWidth;
         const int maxTimePerUpdateMaxLength = 20;
@@ -57,7 +58,7 @@ namespace KRPC.UI
         const string saveServerText = "Save";
         const string serverOnlineText = "Server online";
         const string serverOfflineText = "Server offline";
-        const string protocolText = "Protocol:";
+        const string protocolText = "Protocol";
         internal const string protobufOverTcpText = "Protobuf over TCP";
         internal const string protobufOverWebSocketsText = "Protobuf over WebSockets";
         internal const string protobufOverSerialIOText = "Protobuf over SerialIO";
@@ -268,10 +269,9 @@ namespace KRPC.UI
                     protocol = protobufOverWebSocketsText;
                 else
                     protocol = protobufOverSerialIOText;
-                GUILayout.Label (protocolText + protocol, labelStyle);
-                foreach (var line in server.Address.Split ('\n'))
-                    GUILayout.Label (line, labelStyle);
-                GUILayout.Label (server.Info, labelStyle);
+                DrawServerInfoRow (protocolText, protocol);
+                DrawServerInfoLines (server.Address);
+                DrawServerInfoLines (server.Info);
                 DrawClients (server);
             }
 
@@ -311,6 +311,38 @@ namespace KRPC.UI
             }
             GUI.enabled = true;
             GUILayout.EndHorizontal ();
+        }
+
+        // Draw a name/value row with an aligned name column, for the server details
+        // "table". Matches the style of the info window.
+        void DrawServerInfoRow (string name, string value)
+        {
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label (name, labelStyle, GUILayout.Width (serverInfoLabelWidth * GameSettings.UI_SCALE));
+            GUILayout.Label (value, stretchyLabelStyle);
+            GUILayout.EndHorizontal ();
+        }
+
+        // Split a multi-line server detail string (e.g. Address or Info) into name/value
+        // rows, splitting each line on its "name = value" or "name: value" separator.
+        // Lines with no separator are shown in the value column.
+        void DrawServerInfoLines (string text)
+        {
+            foreach (var line in text.Split ('\n')) {
+                var trimmed = line.Trim ();
+                if (trimmed.Length == 0)
+                    continue;
+                var separator = trimmed.IndexOf (" = ", StringComparison.Ordinal);
+                var separatorLength = 3;
+                if (separator < 0) {
+                    separator = trimmed.IndexOf (": ", StringComparison.Ordinal);
+                    separatorLength = 2;
+                }
+                if (separator >= 0)
+                    DrawServerInfoRow (trimmed.Substring (0, separator), trimmed.Substring (separator + separatorLength));
+                else
+                    DrawServerInfoRow (string.Empty, trimmed);
+            }
         }
 
         void DrawClients (IServer server)
