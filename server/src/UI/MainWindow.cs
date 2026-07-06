@@ -236,21 +236,27 @@ namespace KRPC.UI
 
             GUILayout.BeginHorizontal ();
             var icons = Icons.Instance;
-            if (GUILayout.Button(new GUIContent(expanded ? icons.ButtonCollapse : icons.ButtonExpand, expanded ? "Collapse" : "Expand"),
-                    expandStyle, GUILayout.MaxWidth(20), GUILayout.MaxHeight(20))) {
-                if (expanded)
-                    expandServers.Remove(server.Id);
-                else
-                    expandServers.Add(server.Id);
-                expanded = !expanded;
-                Resized = true;
-            }
+            GUILayout.Label (new GUIContent (expanded ? icons.ButtonCollapse : icons.ButtonExpand, expanded ? "Collapse" : "Expand"),
+                expandStyle, GUILayout.MaxWidth (20), GUILayout.MaxHeight (20));
             GUILayoutExtensions.Light (running, lightStyle);
             if (!editingServer)
                 GUILayout.Label (server.Name, labelStyle);
             else
                 editServers [server.Id].DrawName ();
             GUILayout.EndHorizontal ();
+
+            // Expand/collapse when the header row (icon, activity light and name) is
+            // clicked. Skipped while editing, where the row holds the name text field.
+            if (!editingServer && Event.current.type == EventType.MouseDown &&
+                GUILayoutUtility.GetLastRect ().Contains (Event.current.mousePosition)) {
+                if (expanded)
+                    expandServers.Remove (server.Id);
+                else
+                    expandServers.Add (server.Id);
+                expanded = !expanded;
+                Resized = true;
+                Event.current.Use ();
+            }
 
             if (editingServer) {
                 editServers [server.Id].Draw ();
