@@ -144,6 +144,7 @@ class TestCase(unittest.TestCase):
     def fill_resources(cls, resource_name):
         cls.connect().testing_tools.fill_resources(resource_name)
 
+    @classmethod
     def set_pitch_heading_roll(cls, pitch, heading, roll):
         """Point the active vessel at the given pitch, heading and roll (degrees)
         in its surface reference frame, and zero its rotational velocity."""
