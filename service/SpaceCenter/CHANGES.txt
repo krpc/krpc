@@ -53,6 +53,7 @@ v0.6.0
  * Fix Flight.SimulateAerodynamicForceAt returning force in kilonewtons instead of
    newtons when FAR is installed (#915)
  * Add direct control of engine gimbals, RCS and control surfaces (#917)
+ * Fix reference frame velocity being incorrect at non-equatorial latitudes (#454)
 
 v0.5.4
  * Fix vessel recovery (#782)
