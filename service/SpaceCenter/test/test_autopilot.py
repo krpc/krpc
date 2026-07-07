@@ -328,10 +328,11 @@ def _make_autopilot_test_class(
             self.assertRaises(RuntimeError, getattr, self.ap, "roll_error")
 
             set_roll = -57
-            # roll_error is measured about the nose axis, so align the target direction with the
-            # vessel; roll_error then reports the pure roll difference. A well-conditioned (well away
-            # from vertical) direction keeps the roll angle unambiguous. Reaction wheels are off, so
-            # the vessel holds still throughout.
+            # roll_error is measured about the nose axis, so align the target direction
+            # with the vessel; roll_error then reports the pure roll difference. A
+            # well-conditioned (well away from vertical) direction keeps the roll angle
+            # unambiguous. Reaction wheels are off, so the vessel holds still
+            # throughout.
             direction = normalize((1, 1, 0))
 
             for wheel in self.vessel.parts.reaction_wheels:
@@ -347,12 +348,13 @@ def _make_autopilot_test_class(
                 )
 
         def test_roll_error_near_vertical(self):
-            # Regression for #564: near vertical the surface-frame pitch/heading/roll decomposition
-            # is singular, so a roll_error computed by subtracting Euler roll angles reports spurious
-            # large values. roll_error is measured about the nose axis instead, which stays
-            # well-defined as long as the vessel and target share a nose direction. The direction is
-            # ~1 degree off straight up (surface +x is the zenith) with a fixed heading, so the
-            # vertical plane — and hence the roll angle — is still defined (exactly vertical is
+            # Regression for #564: near vertical the surface-frame pitch/heading/roll
+            # decomposition is singular, so a roll_error computed by subtracting Euler
+            # roll angles reports spurious large values. roll_error is measured about
+            # the nose axis instead, which stays well-defined as long as the vessel and
+            # target share a nose direction. The direction is ~1 degree off straight up
+            # (surface +x is the zenith) with a fixed heading, so the vertical plane —
+            # and hence the roll angle — is still defined (exactly vertical is
             # inherently degenerate between heading and roll; see AutoPilot.TargetRoll).
             set_roll = 40
             offset = math.radians(1)
@@ -477,8 +479,9 @@ def _make_autopilot_test_class(
             self.ap.reference_frame = self.vessel.surface_reference_frame
             north = (0, 1, 0)  # perpendicular to the zenith-east sweep plane
             for i in range(41):
-                a = math.radians(2.0 - 0.1 * i)  # +2 deg (east) .. -2 deg (west)
-                direction = (math.cos(a), 0, math.sin(a))  # crosses zenith at a = 0
+                angle = math.radians(2.0 - 0.1 * i)  # +2 deg (east) .. -2 deg (west)
+                # crosses zenith at angle = 0
+                direction = (math.cos(angle), 0, math.sin(angle))
                 self.ap.set_direction_and_up(direction, north, 0)
                 roll = self.ap.target_roll
                 self.assertFalse(math.isnan(roll))
@@ -561,8 +564,9 @@ def _make_autopilot_test_class(
 
             max_roll_error = 0.0
             for i in range(41):
-                a = math.radians(2.0 - 0.1 * i)  # sweep the target through the vertical
-                self.ap.set_direction_and_up(direction_at(a), north, 0)
+                # sweep the target through the vertical
+                angle = math.radians(2.0 - 0.1 * i)
+                self.ap.set_direction_and_up(direction_at(angle), north, 0)
                 self.wait(0.1)
                 error = self.ap.roll_error
                 self.assertFalse(math.isnan(error))
