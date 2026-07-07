@@ -72,6 +72,7 @@
     <Compile Include="Utils\ConfigurationStorageNode.cs" />
     <Compile Include="Utils\GameSceneSwitcher.cs" />
     <Compile Include="Utils\GameScenesExtensions.cs" />
+    <Compile Include="Utils\LoadOnceAddon.cs" />
     <Compile Include="Utils\RectExtensions.cs" />
     <Compile Include="Utils\RectStorage.cs" />
   </ItemGroup>
