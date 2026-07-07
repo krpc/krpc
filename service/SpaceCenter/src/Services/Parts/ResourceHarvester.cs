@@ -1,5 +1,5 @@
 using System;
-using System.Text.RegularExpressions;
+using System.Reflection;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -111,6 +111,9 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
         }
 
+        static readonly FieldInfo resFlowField =
+            typeof (ModuleResourceHarvester).GetField ("_resFlow", BindingFlags.NonPublic | BindingFlags.Instance);
+
         /// <summary>
         /// The rate at which the drill is extracting ore, in units per second.
         /// </summary>
@@ -119,7 +122,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Active)
                     return 0;
-                return GetFloatValue (harvester.ResourceStatus);
+                return Convert.ToSingle (resFlowField.GetValue (harvester));
             }
         }
 
@@ -155,19 +158,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float OptimumCoreTemperature {
             get { return (float)harvester.GetGoalTemperature (); }
-        }
-
-        static readonly Regex numberRegex = new Regex (@"(\d+(\.\d+)?)");
-
-        static float GetFloatValue (string value)
-        {
-            Match match = numberRegex.Match (value);
-            if (!match.Success)
-                return 0;
-            float result;
-            if (!float.TryParse (match.Groups [1].Value, out result))
-                return 0;
-            return result;
         }
     }
 }
