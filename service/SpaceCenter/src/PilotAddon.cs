@@ -18,26 +18,42 @@ namespace KRPC.SpaceCenter
     {
         internal sealed class ControlInputs
         {
+            readonly Vessel vessel;
             readonly FlightCtrlState state;
+            readonly bool[] customAxisUpdated = new bool[4];
             AxisGroupsModule axisModule;
 
-            public ControlInputs ()
+            public ControlInputs (Vessel vessel)
             {
+                this.vessel = vessel;
                 state = new FlightCtrlState ();
                 InputMode = Services.ControlInputMode.Additive;
                 ThrottleUpdated = false;
                 WheelThrottleUpdated = false;
                 WheelSteerUpdated = false;
-                axisModule = FlightGlobals.ActiveVessel.FindVesselModuleImplementing<AxisGroupsModule>();
             }
 
-            public ControlInputs (FlightCtrlState ctrlState)
+            public ControlInputs (Vessel vessel, FlightCtrlState ctrlState)
             {
+                this.vessel = vessel;
                 state = ctrlState;
                 InputMode = Services.ControlInputMode.Additive;
                 ThrottleUpdated = false;
                 WheelThrottleUpdated = false;
                 WheelSteerUpdated = false;
+            }
+
+            /// <summary>
+            /// The axis groups module of the vessel these inputs are for. Resolved
+            /// lazily so that the custom axes are applied to that vessel, rather than
+            /// to whichever vessel happens to be active.
+            /// </summary>
+            AxisGroupsModule AxisModule {
+                get {
+                    if (axisModule == null && vessel != null)
+                        axisModule = vessel.FindVesselModuleImplementing<AxisGroupsModule> ();
+                    return axisModule;
+                }
             }
 
             public Services.ControlInputMode InputMode { get; set; }
@@ -105,37 +121,56 @@ namespace KRPC.SpaceCenter
             public float CustomAxis01 {
                 get { return state.custom_axes[0]; }
                 set {
-                    if (axisModule != null) {
-                        axisModule.SetAxisGroup(KSPAxisGroup.Custom01, value.Clamp (-1f, 1f));
-                    }
+                    state.custom_axes[0] = value.Clamp (-1f, 1f);
+                    customAxisUpdated[0] = true;
                 }
             }
 
             public float CustomAxis02 {
                 get { return state.custom_axes[1]; }
                 set {
-                    if (axisModule != null) {
-                        axisModule.SetAxisGroup(KSPAxisGroup.Custom02, value.Clamp (-1f, 1f));
-                    }
+                    state.custom_axes[1] = value.Clamp (-1f, 1f);
+                    customAxisUpdated[1] = true;
                 }
             }
 
             public float CustomAxis03 {
                 get { return state.custom_axes[2]; }
                 set {
-                    if (axisModule != null) {
-                        axisModule.SetAxisGroup(KSPAxisGroup.Custom03, value.Clamp (-1f, 1f));
-                    }
+                    state.custom_axes[2] = value.Clamp (-1f, 1f);
+                    customAxisUpdated[2] = true;
                 }
             }
 
             public float CustomAxis04 {
                 get { return state.custom_axes[3]; }
                 set {
-                    if (axisModule != null) {
-                        axisModule.SetAxisGroup(KSPAxisGroup.Custom04, value.Clamp (-1f, 1f));
-                    }
+                    state.custom_axes[3] = value.Clamp (-1f, 1f);
+                    customAxisUpdated[3] = true;
                 }
+            }
+
+            /// <summary>
+            /// Apply the custom axes to the vessel's axis groups. Only the axes that
+            /// have been set are applied, so vessels that never use custom axes do
+            /// not trigger an axis groups module lookup.
+            /// </summary>
+            public void ApplyCustomAxes ()
+            {
+                if (!customAxisUpdated[0] && !customAxisUpdated[1] &&
+                    !customAxisUpdated[2] && !customAxisUpdated[3])
+                    return;
+                var module = AxisModule;
+                if (module == null)
+                    return;
+                if (customAxisUpdated[0])
+                    module.SetAxisGroup (KSPAxisGroup.Custom01, state.custom_axes[0]);
+                if (customAxisUpdated[1])
+                    module.SetAxisGroup (KSPAxisGroup.Custom02, state.custom_axes[1]);
+                if (customAxisUpdated[2])
+                    module.SetAxisGroup (KSPAxisGroup.Custom03, state.custom_axes[2]);
+                if (customAxisUpdated[3])
+                    module.SetAxisGroup (KSPAxisGroup.Custom04, state.custom_axes[3]);
             }
 
             public void ClearExceptThrottle ()
@@ -159,6 +194,15 @@ namespace KRPC.SpaceCenter
                 if (other.ThrottleUpdated)
                     state.mainThrottle = other.state.mainThrottle;
                 ThrottleUpdated |= other.ThrottleUpdated;
+                // Custom axes are absolute axis positions, so they override (like the
+                // throttle) rather than accumulate. The flight control state is not
+                // reset each frame for non-active vessels, so accumulating them across
+                // frames would run away.
+                for (int i = 0; i < 4; i++) {
+                    if (other.customAxisUpdated[i])
+                        state.custom_axes[i] = other.state.custom_axes[i];
+                    customAxisUpdated[i] |= other.customAxisUpdated[i];
+                }
                 if (other.InputMode == Services.ControlInputMode.Additive) {
                     state.pitch += other.state.pitch;
                     state.yaw += other.state.yaw;
@@ -166,12 +210,6 @@ namespace KRPC.SpaceCenter
                     state.X += other.state.X;
                     state.Y += other.state.Y;
                     state.Z += other.state.Z;
-                    if (axisModule != null) {
-                        axisModule.SetAxisGroup(KSPAxisGroup.Custom01, state.custom_axes[0] + other.state.custom_axes[0]);
-                        axisModule.SetAxisGroup(KSPAxisGroup.Custom02, state.custom_axes[1] + other.state.custom_axes[1]);
-                        axisModule.SetAxisGroup(KSPAxisGroup.Custom03, state.custom_axes[2] + other.state.custom_axes[2]);
-                        axisModule.SetAxisGroup(KSPAxisGroup.Custom04, state.custom_axes[3] + other.state.custom_axes[3]);
-                    }
                 } else {
                     if (Math.Abs(other.state.pitch) > 0.001)
                         state.pitch = other.state.pitch;
@@ -185,16 +223,6 @@ namespace KRPC.SpaceCenter
                         state.Y = other.state.Y;
                     if (Math.Abs(other.state.Z) > 0.001)
                         state.Z = other.state.Z;
-                    if (axisModule != null) {
-                        if (Math.Abs(other.state.custom_axes[0]) > 0.001)
-                            axisModule.SetAxisGroup(KSPAxisGroup.Custom01, other.state.custom_axes[0]);
-                        if (Math.Abs(other.state.custom_axes[1]) > 0.001)
-                            axisModule.SetAxisGroup(KSPAxisGroup.Custom02, other.state.custom_axes[1]);
-                        if (Math.Abs(other.state.custom_axes[2]) > 0.001)
-                            axisModule.SetAxisGroup(KSPAxisGroup.Custom03, other.state.custom_axes[2]);
-                        if (Math.Abs(other.state.custom_axes[3]) > 0.001)
-                            axisModule.SetAxisGroup(KSPAxisGroup.Custom04, other.state.custom_axes[3]);
-                    }
                 }
                 if (other.WheelThrottleUpdated)
                     state.wheelThrottle = other.state.wheelThrottle;
@@ -208,6 +236,8 @@ namespace KRPC.SpaceCenter
                 ThrottleUpdated = other.ThrottleUpdated;
                 WheelThrottleUpdated = other.WheelThrottleUpdated;
                 WheelSteerUpdated = other.WheelSteerUpdated;
+                for (int i = 0; i < 4; i++)
+                    customAxisUpdated[i] = other.customAxisUpdated[i];
             }
         }
 
@@ -270,7 +300,7 @@ namespace KRPC.SpaceCenter
         internal static ControlInputs Get (Vessel vessel)
         {
             if (!currentInputs.ContainsKey (vessel))
-                currentInputs [vessel] = new ControlInputs ();
+                currentInputs [vessel] = new ControlInputs (vessel);
             return currentInputs [vessel];
         }
 
@@ -278,7 +308,7 @@ namespace KRPC.SpaceCenter
         {
             manualInputClients.Add (CallContext.Client);
             if (!manualInputs.ContainsKey (vessel))
-                manualInputs [vessel] = new ControlInputs ();
+                manualInputs [vessel] = new ControlInputs (vessel);
             return manualInputs [vessel];
         }
 
@@ -329,23 +359,26 @@ namespace KRPC.SpaceCenter
 
         static void OnFlyByWire (Vessel vessel, FlightCtrlState state)
         {
-            var inputs = new ControlInputs (state);
+            var inputs = new ControlInputs (vessel, state);
 
             // Manual inputs
             if (!manualInputs.ContainsKey (vessel))
-                manualInputs [vessel] = new ControlInputs ();
+                manualInputs [vessel] = new ControlInputs (vessel);
             HandleThrottle (vessel, manualInputs [vessel]);
             inputs.Add (manualInputs [vessel]);
 
             // Auto-pilot inputs
             if (!autoPilotInputs.ContainsKey (vessel))
-                autoPilotInputs [vessel] = new ControlInputs ();
+                autoPilotInputs [vessel] = new ControlInputs (vessel);
             if (Services.AutoPilot.Fly (vessel, autoPilotInputs [vessel]))
                 inputs.Add (autoPilotInputs [vessel]);
 
+            // Apply the merged custom axes to the vessel's axis groups
+            inputs.ApplyCustomAxes ();
+
             // Update current inputs
             if (!currentInputs.ContainsKey (vessel))
-                currentInputs [vessel] = new ControlInputs ();
+                currentInputs [vessel] = new ControlInputs (vessel);
             currentInputs [vessel].CopyFrom (inputs);
         }
 
