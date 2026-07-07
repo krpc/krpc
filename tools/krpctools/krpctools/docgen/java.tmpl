@@ -13,7 +13,7 @@
 {% endfor %}
 {% endmacro %}
 
-{% macro class(x, qualified_members=false) %}{{ mark_documented(x) }}
+{% macro class(x) %}{{ mark_documented(x) }}
 .. type:: public class {{ x.name }}
 
 {{ gendoc(x.documentation) | indent }}
@@ -96,7 +96,7 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. method:: static {{ domain.return_type(x.return_type) }} {{ domain.method_name(x.name) | lower_camelcase }}(Connection connection{% if x.parameters | length > 0 %}, {{ parameters(x.parameters) }}{% endif %})
+.. method:: static {{ domain.return_type(x.return_type) }} {{ domain.method_name(x.name) | lower_camelcase }}(Connection connection{% if x.parameters | length > 0 %}, {% endif %}{{ parameters(x.parameters) }})
 
 {{ gendoc(x.documentation) | indent }}
 

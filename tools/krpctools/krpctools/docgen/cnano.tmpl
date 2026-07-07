@@ -13,7 +13,7 @@ Service {{ x.name }}
 {% endfor %}
 {% endmacro %}
 
-{% macro class(x, qualified_members=false) %}{{ mark_documented(x) }}
+{% macro class(x) %}{{ mark_documented(x) }}
 .. type:: krpc_{{ x.service_name }}_{{ x.name }}_t
 
 {{ gendoc(x.documentation) | indent }}

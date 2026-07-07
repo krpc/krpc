@@ -13,7 +13,7 @@
 {% endfor %}
 {% endmacro %}
 
-{% macro class(x, qualified_members=false) %}{{ mark_documented(x) }}
+{% macro class(x) %}{{ mark_documented(x) }}
 .. class:: {{ x.name }}
 
 {{ gendoc(x.documentation) | indent }}
@@ -70,7 +70,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro class_method(x, class_name=none) %}{{ mark_documented(x) }}
+{% macro class_method(x) %}{{ mark_documented(x) }}
 .. method:: {{ domain.return_type(x.return_type) }} {{ x.name }}({{ parameters(x.parameters[1:]) }})
 
 {{ gendoc(x.documentation) | indent }}
@@ -89,7 +89,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro class_static_method(x, class_name=none) %}{{ mark_documented(x) }}
+{% macro class_static_method(x) %}{{ mark_documented(x) }}
 .. method:: static {{ domain.return_type(x.return_type) }} {{ x.name }}(IConnection connection, {{ parameters(x.parameters) }})
 
 {{ gendoc(x.documentation) | indent }}
@@ -108,7 +108,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro class_property(x, class_name=none) %}{{ mark_documented(x) }}
+{% macro class_property(x) %}{{ mark_documented(x) }}
 {{ property(x) }}
 {% endmacro %}
 
