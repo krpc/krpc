@@ -25,6 +25,7 @@ class TestPartsResourceHarvester(krpctest.TestCase):
 
     def check_inactive_properties(self):
         self.assertEqual(0, self.drill.thermal_efficiency)
+        self.assertEqual(0, self.drill.extraction_rate)
         self.assertGreater(self.drill.core_temperature, 0)
         self.assertEqual(500, self.drill.optimum_core_temperature)
 
@@ -57,9 +58,8 @@ class TestPartsResourceHarvester(krpctest.TestCase):
         self.assertEqual(self.state.active, self.drill.state)
         self.assertTrue(self.drill.deployed)
         self.assertTrue(self.drill.active)
-        # extraction_rate reads a PAW-gated KSP field ("n/a" headless), so verify
-        # the drill is mining by checking the Ore amount increases instead.
         self.assertGreater(self.vessel.resources.amount("Ore"), ore_before)
+        self.assertGreater(self.drill.extraction_rate, 0)
         self.assertGreater(self.drill.thermal_efficiency, 0)
         self.assertLess(self.drill.thermal_efficiency, 1)
         self.assertGreater(self.drill.core_temperature, 0)
@@ -126,13 +126,12 @@ class TestPartsResourceHarvester(krpctest.TestCase):
         self.wait(3)
 
         self.assertTrue(self.control.resource_harvesters_active)
-        # extraction_rate reads a PAW-gated KSP field ("n/a" headless), so verify
-        # the drills are mining by checking the Ore amount increases instead.
         self.assertGreater(self.vessel.resources.amount("Ore"), ore_before)
         for drill in self.drills:
             self.assertEqual(self.state.active, drill.state)
             self.assertTrue(drill.deployed)
             self.assertTrue(drill.active)
+            self.assertGreater(drill.extraction_rate, 0)
             self.assertGreater(drill.thermal_efficiency, 0)
             self.assertLess(drill.thermal_efficiency, 1)
             self.assertGreater(drill.core_temperature, 0)
