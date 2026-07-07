@@ -62,6 +62,7 @@ namespace KRPC
             Service.CallContext.IsPaused = () => IsPaused;
             Service.CallContext.Pause = () => PauseMenu.Display ();
             Service.CallContext.Unpause = () => PauseMenu.Close ();
+            Service.CallContext.LoadScene = GameSceneSwitcher.LoadScene;
         }
 
         /// <summary>
@@ -202,6 +203,14 @@ namespace KRPC
             IsPaused = false;
             GameEvents.onGamePause.Add(OnGamePause);
             GameEvents.onGameUnpause.Add(OnGameUnpause);
+            GameEvents.onGUIAstronautComplexSpawn.Add(OnAstronautComplexSpawn);
+            GameEvents.onGUIAstronautComplexDespawn.Add(OnAstronautComplexDespawn);
+            GameEvents.onGUIMissionControlSpawn.Add(OnMissionControlSpawn);
+            GameEvents.onGUIMissionControlDespawn.Add(OnMissionControlDespawn);
+            GameEvents.onGUIRnDComplexSpawn.Add(OnRnDComplexSpawn);
+            GameEvents.onGUIRnDComplexDespawn.Add(OnRnDComplexDespawn);
+            GameEvents.onGUIAdministrationFacilitySpawn.Add(OnAdministrationFacilitySpawn);
+            GameEvents.onGUIAdministrationFacilityDespawn.Add(OnAdministrationFacilityDespawn);
         }
 
         void OnServerStarted(object s, ServerStartedEventArgs e)
@@ -240,6 +249,46 @@ namespace KRPC
             IsPaused = false;
         }
 
+        void OnAstronautComplexSpawn()
+        {
+            GameSceneSwitcher.SetFacility(Service.GameScene.AstronautComplex);
+        }
+
+        void OnAstronautComplexDespawn()
+        {
+            GameSceneSwitcher.ClearFacility(Service.GameScene.AstronautComplex);
+        }
+
+        void OnMissionControlSpawn()
+        {
+            GameSceneSwitcher.SetFacility(Service.GameScene.MissionControl);
+        }
+
+        void OnMissionControlDespawn()
+        {
+            GameSceneSwitcher.ClearFacility(Service.GameScene.MissionControl);
+        }
+
+        void OnRnDComplexSpawn()
+        {
+            GameSceneSwitcher.SetFacility(Service.GameScene.ResearchAndDevelopment);
+        }
+
+        void OnRnDComplexDespawn()
+        {
+            GameSceneSwitcher.ClearFacility(Service.GameScene.ResearchAndDevelopment);
+        }
+
+        void OnAdministrationFacilitySpawn()
+        {
+            GameSceneSwitcher.SetFacility(Service.GameScene.Administration);
+        }
+
+        void OnAdministrationFacilityDespawn()
+        {
+            GameSceneSwitcher.ClearFacility(Service.GameScene.Administration);
+        }
+
         void OnGUIApplicationLauncherReady ()
         {
             applauncherButton = ApplicationLauncher.Instance.AddModApplication (
@@ -263,6 +312,14 @@ namespace KRPC
         {
             GameEvents.onGamePause.Remove(OnGamePause);
             GameEvents.onGameUnpause.Remove(OnGameUnpause);
+            GameEvents.onGUIAstronautComplexSpawn.Remove(OnAstronautComplexSpawn);
+            GameEvents.onGUIAstronautComplexDespawn.Remove(OnAstronautComplexDespawn);
+            GameEvents.onGUIMissionControlSpawn.Remove(OnMissionControlSpawn);
+            GameEvents.onGUIMissionControlDespawn.Remove(OnMissionControlDespawn);
+            GameEvents.onGUIRnDComplexSpawn.Remove(OnRnDComplexSpawn);
+            GameEvents.onGUIRnDComplexDespawn.Remove(OnRnDComplexDespawn);
+            GameEvents.onGUIAdministrationFacilitySpawn.Remove(OnAdministrationFacilitySpawn);
+            GameEvents.onGUIAdministrationFacilityDespawn.Remove(OnAdministrationFacilityDespawn);
             core.OnServerStarted -= OnServerStarted;
             core.OnServerStopped -= OnServerStopped;
             core.OnClientRequestingConnection -= OnClientRequestingConnection;
