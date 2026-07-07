@@ -15,14 +15,10 @@ Using the AutoPilot
 -------------------
 
 The autopilot holds a vessel pointing in a chosen orientation, automatically tuning
-itself to the vessel's size and control authority. You give it:
-
-* a reference frame defining where zero rotation is,
-* target pitch and heading angles,
-* an optional target roll angle.
-
-When a roll angle is not specified, the autopilot zeroes out any rotation around the
-roll axis but does not hold a specific roll angle.
+itself to the vessel's size and control authority. You give it a **reference frame**
+defining where zero rotation is, and a **target attitude** in that frame — set as a full
+rotation, as a direction for the nose, or as a direction together with an up vector (see
+:ref:`Setting the target attitude <setting-target-attitude>` below for the full menu).
 
 A minimal use case looks like this:
 
@@ -51,6 +47,117 @@ suppressing any structural oscillation (wobble) with no tuning required (see
 smooth maneuvers (see :ref:`Smoothing target changes <target-smoothing>`). Internally it
 is a two-loop cascade controller; if you want to know how it turns an attitude error into
 control inputs, see :ref:`How it works <how-it-works>`.
+
+.. _setting-target-attitude:
+
+Setting the target attitude
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+An orientation has two parts: where the nose points, and how the vessel is rolled about
+that nose. The three primary ways to set the target differ in how much of the roll you
+want to pin.
+
+The three primary ways
+""""""""""""""""""""""
+
+* **target rotation** — a full rotation (quaternion). Pins the complete attitude, nose
+  and roll together. Always well-defined, and the canonical form; best when you already
+  have a rotation to hand — copied from another vessel, or a saved orientation.
+
+* **target direction** — a vector for the nose to point along. **Roll is held**: the
+  autopilot drives the roll rate to zero but does not hold any particular roll angle. This
+  is the "point here, don't care which way is up" knob.
+
+* **set_direction_and_up(direction, up, roll=0)** — point the nose along ``direction`` and
+  roll so the vessel's roof aligns with the ``up`` vector (its component perpendicular to
+  the nose), plus an optional ``roll`` offset in degrees. This is the way to **hold an
+  orientation through a maneuver**. The ``up`` vector need not be perpendicular to
+  ``direction`` or normalized; it is only singular when ``up`` is parallel to ``direction``
+  (asking the roof to point where the nose already does), which — because you choose
+  ``up`` — you can keep off the flight path.
+
+The **roll sign** follows standard aircraft bank: positive roll rolls the vessel to the
+right (right wing down) — clockwise seen from behind, looking along the nose. So
+``set_direction_and_up(horizon_dir, up, 30)`` banks 30° to the right of wings-level.
+
+``set_direction_and_up`` also stores ``up`` as a persistent **up reference**
+(``up_reference``, default the frame's up / zenith). The reference is what
+:ref:`target roll <convenience-setters>` is measured against, and it persists across
+direction changes: set it once and every later roll is measured against the same vector.
+Setting the target rotation, the target direction, or the scalar pitch/heading leaves it
+unchanged.
+
+This is what makes holding an orientation through the vertical trivial. During a gravity
+turn the nose sweeps from straight up to downrange — straight through the point where a
+roll measured against the vertical plane is undefined. Anchoring the roll to a fixed
+horizontal ``up`` (say north) keeps it defined the whole way:
+
+.. code-block:: python
+
+   ap = vessel.auto_pilot
+   ap.reference_frame = vessel.surface_reference_frame
+   up = (0, 1, 0)   # north, in the surface frame — off the flight path
+
+   # straight up at the pad, wings aligned to north
+   ap.set_direction_and_up((1, 0, 0), up, 0)
+   ap.engaged = True
+   ap.wait()
+
+   # ease over towards the eastern horizon; roll stays defined through the vertical
+   import math
+   for i in range(1, 91):
+       pitch = math.radians(90 - i)            # 90° down to 0°
+       direction = (math.sin(pitch), 0, math.cos(pitch))
+       ap.set_direction_and_up(direction, up, 0)
+       ap.wait()
+
+The old approach — ``target_pitch_and_heading(90, 90)`` with a ``target_roll`` — cannot do
+this: the roll reference (the vertical plane through the nose) vanishes exactly at the
+vertical, where the rocket starts.
+
+.. _convenience-setters:
+
+The convenience ways
+""""""""""""""""""""
+
+Two more ways aim the nose by angle. They are ergonomic but heading-singular near the
+vertical, so prefer the primary setters there.
+
+* **target pitch**, **target heading**, and **target_pitch_and_heading(pitch, heading)** —
+  aim the nose by pitch and heading angle.
+
+  .. warning::
+
+     Heading (and hence roll) is ill-defined when the nose is near vertical (pitch → ±90°),
+     so near the vertical prefer **target direction** or **set_direction_and_up**. Setting
+     pitch or heading preserves the current roll relative to the up reference, so a
+     pitch/heading change no longer perturbs roll near the vertical.
+
+* **target roll** — the roll angle about the nose, measured relative to the up reference
+  (roll 0 aligns the roof with the reference; positive banks right). ``NaN`` (the default,
+  unset) holds roll without fixing an angle. With the default reference this reproduces the
+  familiar roll away from the vertical, and is ill-defined only when the nose points along
+  the reference (near straight up or down) — set the reference off the flight path (via
+  ``set_direction_and_up`` or ``up_reference``) to keep it defined through the vertical.
+
+Reading the state back
+""""""""""""""""""""""
+
+* **Attitude and target** — **rotation** / **target rotation** and **direction** /
+  **target direction** are always well-defined; prefer these for reading orientation back.
+
+* **Errors** — **error** is the total pointing error, and **pitch error**, **heading
+  error** and **roll error** are the per-axis errors. All are singularity-free (they come
+  from one residual decomposition, exposed together as **attitude_error**), so they stay
+  meaningful near the vertical — including the roll error, which is measured about the
+  nose. These are the robust way to see how far off the vessel is.
+
+  .. warning::
+
+     The scalar **pitch** / **heading** / **roll** readouts (on both the target and the
+     vessel's :ref:`flight <tutorial-reference-frames>` telemetry) are absolute Euler
+     angles and are ill-defined near the vertical. Use **rotation** / **direction** or the
+     error readouts above instead.
 
 Tuning the AutoPilot
 ^^^^^^^^^^^^^^^^^^^^

@@ -1163,9 +1163,11 @@ SpaceCenter.AutoPilot.ReferenceFrame
 SpaceCenter.AutoPilot.TargetPitch
 SpaceCenter.AutoPilot.TargetHeading
 SpaceCenter.AutoPilot.TargetRoll
+SpaceCenter.AutoPilot.UpReference
 SpaceCenter.AutoPilot.TargetPitchAndHeading
 SpaceCenter.AutoPilot.TargetDirection
 SpaceCenter.AutoPilot.TargetRotation
+SpaceCenter.AutoPilot.SetDirectionAndUp
 SpaceCenter.AutoPilot.CurrentTargetPitch
 SpaceCenter.AutoPilot.CurrentTargetHeading
 SpaceCenter.AutoPilot.CurrentTargetRoll
@@ -1175,10 +1177,12 @@ SpaceCenter.AutoPilot.Wait
 SpaceCenter.AutoPilot.StoppingAngleThreshold
 SpaceCenter.AutoPilot.StoppingVelocityThreshold
 SpaceCenter.AutoPilot.Error
+SpaceCenter.AutoPilot.AttitudeError
 SpaceCenter.AutoPilot.PitchError
 SpaceCenter.AutoPilot.HeadingError
 SpaceCenter.AutoPilot.RollError
 SpaceCenter.AutoPilot.CurrentError
+SpaceCenter.AutoPilot.CurrentAttitudeError
 SpaceCenter.AutoPilot.CurrentPitchError
 SpaceCenter.AutoPilot.CurrentHeadingError
 SpaceCenter.AutoPilot.CurrentRollError
