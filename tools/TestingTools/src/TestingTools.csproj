@@ -52,5 +52,6 @@
     <Compile Include="AutoSwitchVessel.cs" />
     <Compile Include="OrbitTools.cs" />
     <Compile Include="TestingTools.cs" />
+    <Compile Include="TestingToolsOptions.cs" />
   </ItemGroup>
 </Project>

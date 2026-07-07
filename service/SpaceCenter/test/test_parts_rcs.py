@@ -1,5 +1,6 @@
 import unittest
 import krpctest
+from krpctest.geometry import distance, norm
 
 
 class RCSTestBase:
@@ -91,6 +92,12 @@ class RCSTest(RCSTestBase):
         self.assertAlmostEqual(data["max_thrust"], rcs.max_thrust, delta=1)
         self.assertEqual(data["max_vac_thrust"], rcs.max_vacuum_thrust)
         self.assertAlmostEqual(0.25, rcs.thrust_limit)
+        self.assert_torque_almost_equal(
+            tuple(x * 0.25 for x in data["pos_torque"]), rcs.available_torque[0]
+        )
+        self.assert_torque_almost_equal(
+            tuple(x * 0.25 for x in data["neg_torque"]), rcs.available_torque[1]
+        )
 
         rcs.thrust_limit = 1
 
@@ -176,6 +183,35 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
             self.wait()
             for prop2 in props:
                 self.assertTrue(getattr(rcs, prop2))
+
+    def test_input_override(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        self.assertFalse(rcs.input_override)
+        # The getters return zero when the override is not active
+        self.assertAlmostEqual((0, 0, 0), rcs.rotation_override)
+        self.assertAlmostEqual((0, 0, 0), rcs.translation_override)
+
+        rcs.input_override = True
+        self.wait()
+        self.assertTrue(rcs.input_override)
+
+        # The rotation and translation demands round-trip
+        for rotation in ((1, 0, 0), (0, -0.5, 0.5), (0, 0, 0)):
+            rcs.rotation_override = rotation
+            self.assertAlmostEqual(rotation, rcs.rotation_override)
+        for translation in ((0, 1, 0), (-0.5, 0, 0.25), (0, 0, 0)):
+            rcs.translation_override = translation
+            self.assertAlmostEqual(translation, rcs.translation_override)
+        # Commands are clamped to [-1, 1]
+        rcs.rotation_override = (2, -2, 0)
+        self.assertAlmostEqual((1, -1, 0), rcs.rotation_override)
+
+        # Disabling releases the override
+        rcs.input_override = False
+        self.wait()
+        self.assertFalse(rcs.input_override)
+        self.assertAlmostEqual((0, 0, 0), rcs.rotation_override)
+        self.assertAlmostEqual((0, 0, 0), rcs.translation_override)
 
     def test_has_fuel(self):
         rcs = self.get_rcs("RCSBlock.v2")
@@ -270,6 +306,48 @@ class TestPartsRCSVacuum(krpctest.TestCase, RCSTest):
                 "neg_torque": (0, 0, -6931),
             },
         )
+
+    def test_input_override_attitude(self):
+        """The override actually flies the vessel: a rotation demand spins it and
+        a translation demand accelerates it, both burning monopropellant."""
+        rcs = self.get_rcs("RCSBlock.v2")
+        vessel = self.vessel
+        body_frame = vessel.orbit.body.non_rotating_reference_frame
+
+        def angular_speed():
+            return norm(vessel.angular_velocity(body_frame))
+
+        vessel.control.sas = False
+        vessel.control.rcs = True
+        rcs.enabled = True
+
+        # A rotation demand spins the vessel up and consumes monopropellant.
+        self.set_pitch_heading_roll(0, 90, 0)  # start still
+        mono_before = vessel.resources.amount("MonoPropellant")
+        rcs.input_override = True
+        rcs.rotation_override = (0, 0, 1)  # yaw
+        self.wait_until(
+            lambda: angular_speed() > 0.1,
+            timeout=20,
+            message="the RCS override to rotate the vessel",
+        )
+        self.assertLess(vessel.resources.amount("MonoPropellant"), mono_before)
+        rcs.rotation_override = (0, 0, 0)
+        rcs.input_override = False
+
+        # A translation demand changes the orbital velocity.
+        self.set_pitch_heading_roll(0, 90, 0)  # start still
+        velocity_before = vessel.velocity(body_frame)
+        rcs.input_override = True
+        rcs.translation_override = (0, 0, 1)  # forward
+        self.wait_until(
+            lambda: distance(vessel.velocity(body_frame), velocity_before) > 1,
+            timeout=20,
+            message="the RCS override to accelerate the vessel",
+        )
+        rcs.translation_override = (0, 0, 0)
+        rcs.input_override = False
+        self.set_pitch_heading_roll(0, 90, 0)  # leave the vessel at rest
 
 
 if __name__ == "__main__":

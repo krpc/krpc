@@ -231,9 +231,10 @@ running. To run these tests:
  * First run `tools/install.sh`
    This script builds kRPC and the `TestingTools` DLL, and installs them into the GameData directory
    of the copy of KSP found at `lib/ksp`.
- * Then run KSP (in `lib/ksp`), or run `tools/run-ksp.sh` to load up the game automatically.
- * When the game loads, `TestingTools` will automatically load up a save game and place you in the
-   flight scene.
+ * Then run KSP (in `lib/ksp`). Pass an auto-load argument so `TestingTools` loads a save and puts
+   you in-game at the Space Center, for example `tools/run-ksp.sh --krpc-auto-load-game=default`.
+   With no auto-load arguments KSP stays at the main menu. See `tools/TestingTools/README.md` for
+   the full set of arguments.
  * Install the python client package, the krpctest package. This can be done using:
    ```
    bazel build //client/python //tools/krpctest

@@ -96,11 +96,46 @@ class TestPartsControlSurface(krpctest.TestCase):
         self.wait()
         self.assertFalse(self.ctrlsrf.deployed)
 
+    def test_deflection_override(self):
+        cs = self.ctrlsrf
+        self.assertFalse(cs.deflection_override)
+        self.assertAlmostEqual(0, cs.deflection)
+        # Enabling the override removes cooked control and deploys the surface
+        cs.deflection_override = True
+        self.wait()
+        self.assertTrue(cs.deflection_override)
+        self.assertFalse(cs.pitch_enabled)
+        self.assertFalse(cs.yaw_enabled)
+        self.assertFalse(cs.roll_enabled)
+        self.assertTrue(cs.deployed)
+        # The deflection command round-trips and clamps to [-1, 1]
+        for deflection in (1, -1, 0.5, 0):
+            cs.deflection = deflection
+            self.assertAlmostEqual(deflection, cs.deflection)
+        cs.deflection = 5
+        self.assertAlmostEqual(1, cs.deflection)
+        cs.deflection = -5
+        self.assertAlmostEqual(-1, cs.deflection)
+        # Disabling restores the prior control-surface state (the axis baseline
+        # and deploy state set up in setUpClass)
+        cs.deflection_override = False
+        self.wait()
+        self.assertFalse(cs.deflection_override)
+        self.assertAlmostEqual(0, cs.deflection)
+        self.assertFalse(cs.pitch_enabled)
+        self.assertTrue(cs.yaw_enabled)
+        self.assertFalse(cs.roll_enabled)
+        self.assertFalse(cs.deployed)
+
     def test_surface_area(self):
         self.assertAlmostEqual(1, self.ctrlsrf.surface_area)
         self.assertAlmostEqual(0.2, self.winglet.surface_area)
 
     def test_available_torque(self):
+        # TODO: verify that authority_limiter scales available_torque proportionally
+        # (mirrors test_authority_limiter in test_parts_reaction_wheel.py). This
+        # requires the vessel to be in motion — GetPotentialTorque() returns zero
+        # at rest with no airspeed, so the scaling cannot be exercised here.
         self.assertAlmostEqual((0, 0, 0), self.ctrlsrf.available_torque[0], places=3)
         self.assertAlmostEqual((0, 0, 0), self.winglet.available_torque[1], places=3)
 

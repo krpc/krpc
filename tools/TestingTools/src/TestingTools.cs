@@ -27,6 +27,17 @@ namespace TestingTools
         }
 
         /// <summary>
+        /// Quit the game, closing Kerbal Space Program and returning to the desktop.
+        /// Works from any scene, including in-flight, and skips the confirmation dialog
+        /// that the main-menu quit button normally shows.
+        /// </summary>
+        [KRPCProcedure]
+        public static void Quit ()
+        {
+            Application.Quit ();
+        }
+
+        /// <summary>
         /// Load an existing save game.
         /// </summary>
         [KRPCProcedure]
@@ -118,11 +129,15 @@ namespace TestingTools
         {
             Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
             internalVessel.SetRotation (ZeroRotation);
-            // SetRotation only reorients the part transforms; it leaves each
-            // rigidbody's angular velocity untouched, so without SAS the vessel
-            // keeps tumbling from the new attitude. Explicitly remove the
-            // rotational motion: make every part move with the common center of
-            // mass velocity and zero spin, so the assembly translates rigidly.
+            ZeroAngularVelocity (internalVessel);
+        }
+
+        // Remove the rotational motion of a vessel without changing its attitude. SetRotation only
+        // reorients the part transforms; it leaves each rigidbody's angular velocity untouched, so
+        // without SAS the vessel keeps tumbling from the new attitude. Make every part move with the
+        // common centre-of-mass velocity and zero spin, so the assembly translates rigidly.
+        static void ZeroAngularVelocity (Vessel internalVessel)
+        {
             if (!internalVessel.loaded)
                 return;
             var momentum = Vector3.zero;
@@ -144,6 +159,28 @@ namespace TestingTools
                 rb.velocity = comVelocity;
                 rb.angularVelocity = Vector3.zero;
             }
+        }
+
+        /// <summary>
+        /// Set the absolute attitude of the given vessel (default: the active vessel) to the given
+        /// pitch, heading and roll (degrees) in the given reference frame (default: the vessel's
+        /// surface reference frame), and zero its rotational velocity. Lets a test start from a
+        /// fixed, still pose without first flying the autopilot there. The angles match those
+        /// reported by the vessel's Flight pitch/heading/roll.
+        /// </summary>
+        [KRPCProcedure]
+        public static void SetPitchHeadingRoll (
+            double pitch, double heading, double roll,
+            KRPC.SpaceCenter.Services.ReferenceFrame referenceFrame = null,
+            KRPC.SpaceCenter.Services.Vessel vessel = null)
+        {
+            var serviceVessel = vessel ?? new KRPC.SpaceCenter.Services.Vessel (FlightGlobals.ActiveVessel);
+            var internalVessel = serviceVessel.InternalVessel;
+            var frame = referenceFrame ?? serviceVessel.SurfaceReferenceFrame;
+            var inFrame = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.QuaternionFromPitchHeadingRoll (
+                new Vector3d (pitch, heading, roll));
+            internalVessel.SetRotation ((Quaternion)frame.RotationToWorldSpace (inFrame));
+            ZeroAngularVelocity (internalVessel);
         }
 
         /// <summary>

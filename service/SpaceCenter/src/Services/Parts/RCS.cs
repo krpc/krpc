@@ -142,6 +142,40 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Whether the RCS control is being set directly, bypassing the vessel's
+        /// normal flight controls. When enabled, the rotation and translation demand is set by
+        /// <see cref="RotationOverride"/> and <see cref="TranslationOverride"/> instead of the
+        /// normal control inputs. The override is automatically released if the
+        /// controlling client disconnects or the vessel changes.
+        /// </summary>
+        [KRPCProperty]
+        public bool InputOverride {
+            get { return ActuatorControlAddon.GetRCSOverride (rcs); }
+            set { ActuatorControlAddon.SetRCSOverride (rcs, value); }
+        }
+
+        /// <summary>
+        /// The rotation demand applied when <see cref="InputOverride"/> is enabled, in the pitch,
+        /// roll and yaw axes. Each component is a normalized control input between -1 and 1.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 RotationOverride {
+            get { return ActuatorControlAddon.GetRCSRotation (rcs).ToTuple (); }
+            set { ActuatorControlAddon.SetRCSRotation (rcs, value.ToVector ()); }
+        }
+
+        /// <summary>
+        /// The translation demand applied when <see cref="InputOverride"/> is enabled, in the
+        /// right, up and forward axes. Each component is a normalized control input between -1
+        /// and 1.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 TranslationOverride {
+            get { return ActuatorControlAddon.GetRCSTranslation (rcs).ToTuple (); }
+            set { ActuatorControlAddon.SetRCSTranslation (rcs, value.ToVector ()); }
+        }
+
+        /// <summary>
         /// The available torque, in Newton meters, that can be produced by this RCS,
         /// in the positive and negative pitch, roll and yaw axes of the vessel. These axes
         /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
@@ -186,7 +220,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         private TupleV3 GetTorqueVectors()
         {
             var frame = Part.Vessel.ReferenceFrame;
-            var thrust = MaxThrust;
+            var thrust = AvailableThrust;
             double torqueX = 0;
             double torqueXn = 0;
             double torqueY = 0;
@@ -228,7 +262,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         private TupleV3 GetForceVectors ()
         {
             var frame = Part.Vessel.ReferenceFrame;
-            var thrust = MaxThrust;
+            // Thrust-limited (and fuel-gated) thrust, so available force reflects the thrust limiter
+            // (consistent with GetTorqueVectors).
+            var thrust = AvailableThrust;
             var force = Vector3d.zero;
             var forceN = Vector3d.zero;
             foreach (var thruster in Thrusters) {
@@ -278,9 +314,8 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The maximum amount of thrust that can be produced by the RCS thrusters when active,
-        /// in Newtons.
-        /// Takes the thrusters current <see cref="ThrustLimit"/> and atmospheric conditions
-        /// into account.
+        /// in Newtons, with the <see cref="ThrustLimit"/> set to 100%.
+        /// Takes atmospheric conditions into account.
         /// </summary>
         [KRPCProperty]
         public float MaxThrust {
