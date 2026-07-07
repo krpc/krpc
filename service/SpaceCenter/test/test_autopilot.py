@@ -1498,6 +1498,7 @@ TestAutoPilotAttitudeTVC = _make_autopilot_test_class(
     rwhl=True,
     rwhl_authority=0.1,
     roll_control_limit=1,
+    no_force_oscillation=True,
 )
 
 # Rigid craft with high control authority; faster slews means more winding on
