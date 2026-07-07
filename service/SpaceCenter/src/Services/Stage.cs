@@ -9,9 +9,8 @@ namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
     /// A single stage of a vessel. Obtain activation (burn) stages from
-    /// <see cref="Vessel.Stages"/> or <see cref="Vessel.StageAt"/>, and decouple
-    /// stages from <see cref="Vessel.DecoupleStages"/> or
-    /// <see cref="Vessel.DecoupleStageAt"/>.
+    /// <c>Vessel.Stages</c> / <c>Vessel.StageAt</c>, and decouple stages from
+    /// <c>Vessel.DecoupleStages</c> / <c>Vessel.DecoupleStageAt</c>.
     /// </summary>
     /// <remarks>
     /// Delta-v, thrust, TWR, specific impulse, burn time and mass members are only
@@ -79,7 +78,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Returns a <see cref="Resources"/> object for this stage.
         /// </summary>
-        /// <param name="cumulative">When <c>false</c>, only resources assigned to this stage. When <c>true</c>, resources for this stage and all later stage numbers returned by <see cref="Vessel.Stages"/> or <see cref="Vessel.DecoupleStages"/> are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached, so the stage reflects what can be consumed while it burns. Defaults to <c>true</c> so decouple-stage calls match <see cref="Vessel.ResourcesInDecoupleStage"/>.</param>
+        /// <param name="cumulative">When <c>false</c>, only resources assigned to this stage. When <c>true</c>, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached. Defaults to <c>true</c> so decouple-stage calls match the legacy <c>Vessel.ResourcesInDecoupleStage</c> RPC.</param>
         [KRPCMethod]
         public Resources Resources (bool cumulative = true)
         {

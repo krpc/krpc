@@ -13,7 +13,7 @@
 {% endfor %}
 {% endmacro %}
 
-{% macro class(x) %}{{ mark_documented(x) }}
+{% macro class(x, qualified_members=false) %}{{ mark_documented(x) }}
 .. class:: {{ x.name }}
 
 {{ gendoc(x.documentation) | indent }}

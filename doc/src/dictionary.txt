@@ -70,6 +70,7 @@ internet
 intra
 javac
 kOS
+kN
 kRPC
 kRPCs
 kerbal

@@ -17,6 +17,7 @@ Contributions to kRPC are very welcome. [Please refer to this guide.](Contributi
 ## Links for Developers
 
  * [Development Guide](Development-Guide.md) for information on the project structure, compiling the code and the various tools.
+ * [Staging API migration notes](doc/STAGING_MIGRATION.md) for client authors updating scripts to the Stage API.
  * [Release guide](Release-Guide.md) for project maintainers to do releases.
  * See the #devchat channels on Discord for informal dev discussions
  * [Forum development thread](https://forum.kerbalspaceprogram.com/index.php?/topic/62902-14113x122-krpc-remote-procedure-call-server-v045-17th-march-2018/)

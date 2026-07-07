@@ -236,9 +236,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="cumulative">When <c>false</c>, returns the resources for parts
         /// decoupled in just the given stage. When <c>true</c> returns the resources decoupled in
         /// the given stage and all subsequent stages combined.</param>
-        /// <remarks>
-        /// Deprecated: use <see cref="DecoupleStageAt"/> and <see cref="Stage.Resources"/>.
-        /// </remarks>
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Resources ResourcesInDecoupleStage (int stage, bool cumulative = true)
         {
