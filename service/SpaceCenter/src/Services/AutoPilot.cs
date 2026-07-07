@@ -292,7 +292,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <param name="direction">The direction to point the nose in.</param>
         /// <param name="up">The reference direction the roof is rolled towards. Need not be
-        /// normalised or perpendicular to <paramref name="direction"/> — its component perpendicular
+        /// normalized or perpendicular to <paramref name="direction"/> — its component perpendicular
         /// to the nose is used. Stored as the <see cref="UpReference"/>.</param>
         /// <param name="roll">An additional roll about the nose, in degrees (positive banks right).
         /// Defaults to 0.</param>
