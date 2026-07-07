@@ -38,9 +38,7 @@ class TestReferenceFrame(krpctest.TestCase):
         cls.root_part = cls.vessel.parts.root
         cls.docking_port = cls.vessel.parts.docking_ports[0]
         cls.thruster = cls.vessel.parts.engines[0].thrusters[0]
-
-    def setup(self):
-        self.set_circular_orbit("Kerbin", 100000)
+        cls.set_circular_orbit("Kerbin", 100000)
 
     # -------------------------------------------------------------------------
     # Helpers
@@ -647,6 +645,7 @@ class TestReferenceFrame(krpctest.TestCase):
         """
         # Inclination 45°, observed a quarter orbit past the ascending node
         # (mean anomaly π/2) so the vessel sits near its peak latitude.
+        self.addCleanup(self.set_circular_orbit, "Kerbin", 100000)
         self.set_orbit("Kerbin", 700000, 0, 45, 0, 0, math.pi / 2, 0)
         expected = self._expected_surface_speed()
         hybrid = self.space_center.ReferenceFrame.create_hybrid(
@@ -671,6 +670,7 @@ class TestReferenceFrame(krpctest.TestCase):
         """
         # Inclination 45°, observed a quarter orbit past the ascending node
         # (mean anomaly π/2) so the vessel sits near its peak latitude.
+        self.addCleanup(self.set_circular_orbit, "Kerbin", 100000)
         self.set_orbit("Kerbin", 700000, 0, 45, 0, 0, math.pi / 2, 0)
         hybrid = self.space_center.ReferenceFrame.create_hybrid(
             position=self.kerbin.reference_frame,
