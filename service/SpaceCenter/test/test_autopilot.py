@@ -5,7 +5,7 @@ import unittest
 
 import krpctest
 from krpctest import diagnostics
-from krpctest.geometry import cross, dot, normalize
+from krpctest.geometry import cross, dot, normalize, quaternion_vector_mult
 
 
 # pylint: disable=too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-locals
@@ -370,6 +370,207 @@ def _make_autopilot_test_class(
                     abs(set_roll - roll), self.ap.roll_error, delta=self.angle_error
                 )
             self.ap.engaged = False
+
+        ################# Orientation API (direction + up + roll) ##############
+
+        def assert_quaternions_almost_equal(self, a, b, places=4):
+            # Quaternions q and -q are the same rotation, so compare via |dot| -> 1.
+            self.assertAlmostEqual(
+                abs(sum(x * y for x, y in zip(a, b))), 1.0, places=places
+            )
+
+        def test_up_reference_default_and_persistence(self):
+            # The default up reference is the frame's up (+x = zenith in the surface
+            # frame). Setting the reference, or setting the target rotation / direction /
+            # scalar pitch/heading, must not move the current target; only
+            # set_direction_and_up (and the reference setter) touch the reference.
+            self.ap.reset()
+            self.ap.reference_frame = self.vessel.surface_reference_frame
+            self.assertAlmostEqual(self.ap.up_reference, (1, 0, 0), delta=1e-6)
+
+            self.set_rotation(20, 90, 10)
+            target = self.ap.target_rotation
+            self.ap.up_reference = normalize((0, 1, 0))
+            # Re-anchoring the reference leaves the commanded target untouched.
+            self.assert_quaternions_almost_equal(self.ap.target_rotation, target)
+            self.assertAlmostEqual(
+                self.ap.up_reference, normalize((0, 1, 0)), delta=1e-6
+            )
+
+            # Setting the target direction leaves the reference untouched.
+            self.ap.up_reference = normalize((0, 0, 1))
+            self.ap.target_direction = normalize((0, 1, 0))
+            self.assertAlmostEqual(
+                self.ap.up_reference, normalize((0, 0, 1)), delta=1e-6
+            )
+
+        def test_set_direction_and_up_continuity(self):
+            # set_direction_and_up(dir, zenith, roll) reproduces the pitch/heading/roll
+            # Euler target away from the vertical, so the new API is grounded in the
+            # existing convention (and target_roll with the default reference matches the
+            # old values). The roll offset also composes as a plain roll about the nose.
+            self.ap.reset()
+            self.ap.reference_frame = self.vessel.surface_reference_frame
+            zenith = (1, 0, 0)
+            for pitch, heading, roll in [(30, 90, 25), (-20, 210, -40), (45, 300, 0)]:
+                self.set_rotation(pitch, heading, roll)
+                euler_target = self.ap.target_rotation
+                direction = self.ap.target_direction
+                self.ap.set_direction_and_up(direction, zenith, roll)
+                self.assert_quaternions_almost_equal(
+                    self.ap.target_rotation, euler_target
+                )
+
+        def test_set_direction_and_up_roll_sign(self):
+            # Positive roll banks right (right wing down), matching aircraft convention.
+            # Nose east, roof toward zenith at roll 0; a +30 roll tips the right wing
+            # (body +x) below the horizon, so its zenith (surface +x) component < 0.
+            self.ap.reset()
+            self.ap.reference_frame = self.vessel.surface_reference_frame
+            east, zenith = (0, 0, 1), (1, 0, 0)
+
+            self.ap.set_direction_and_up(east, zenith, 0)
+            right_wing = quaternion_vector_mult(self.ap.target_rotation, (1, 0, 0))
+            self.assertAlmostEqual(right_wing[0], 0, delta=1e-3)  # wings level
+
+            self.ap.set_direction_and_up(east, zenith, 30)
+            right_wing = quaternion_vector_mult(self.ap.target_rotation, (1, 0, 0))
+            self.assertLess(right_wing[0], -0.1, "positive roll did not bank right")
+
+        def test_target_roll_relative_to_up_reference(self):
+            # target_roll is measured about the nose relative to the up reference. After
+            # set_direction_and_up(dir, up, r) it reads back r, and a subsequent pitch or
+            # heading change preserves it (roll is re-anchored to the same reference, not
+            # perturbed near the vertical as the old scalar roll was).
+            self.ap.reset()
+            self.ap.reference_frame = self.vessel.surface_reference_frame
+            north = (0, 1, 0)
+            east = (0, 0, 1)
+            for roll in (0, 35, -60, 120):
+                self.ap.set_direction_and_up(east, north, roll)
+                self.assertAlmostEqual(self.ap.target_roll, roll, delta=1e-2)
+                # Re-aim the nose by pitch/heading; roll relative to the reference holds.
+                self.ap.target_pitch = 30
+                self.assertAlmostEqual(self.ap.target_roll, roll, delta=1e-2)
+                self.ap.target_heading = 200
+                self.assertAlmostEqual(self.ap.target_roll, roll, delta=1e-2)
+
+        def test_up_parallel_direction_suppresses_roll(self):
+            # up parallel to the direction has no roll anchor (the roof cannot point where
+            # the nose already does); it falls back to direction-only rather than
+            # producing NaN or a garbage roll.
+            self.ap.reset()
+            self.ap.reference_frame = self.vessel.surface_reference_frame
+            direction = normalize((1, 2, 3))
+            self.ap.set_direction_and_up(direction, direction, 0)
+            roll = self.ap.target_roll
+            self.assertFalse(math.isnan(roll))
+            self.assertAlmostEqual(roll, 0, delta=1e-3)
+            self.assertAlmostEqual(self.ap.target_direction, direction, delta=1e-3)
+
+        def test_roll_defined_through_vertical(self):
+            # The #564 fix at the API level: with an up reference off the flight path,
+            # roll stays well-defined as the nose sweeps through the exact vertical —
+            # where the default (zenith) reference is singular. Command roll 0 at each
+            # step and confirm it reads back 0 continuously, including at the pole.
+            self.ap.reset()
+            self.ap.reference_frame = self.vessel.surface_reference_frame
+            north = (0, 1, 0)  # perpendicular to the zenith-east sweep plane
+            for i in range(41):
+                a = math.radians(2.0 - 0.1 * i)  # +2 deg (east) .. -2 deg (west)
+                direction = (math.cos(a), 0, math.sin(a))  # crosses zenith at a = 0
+                self.ap.set_direction_and_up(direction, north, 0)
+                roll = self.ap.target_roll
+                self.assertFalse(math.isnan(roll))
+                self.assertAlmostEqual(roll, 0, delta=1e-2)
+
+        def test_set_direction_and_up_flight(self):
+            # End-to-end: point the nose with an up vector and hold. With up = zenith
+            # (the default reference) the held roll equals the commanded roll.
+            cases = [
+                ((0, 0, 1), 20),
+                ((0, 1, 1), -45),
+                ((1, 0, 1), 30),
+                ((1, 2, 3), 15),
+            ]
+            for direction, roll in cases:
+                direction = normalize(direction)
+                self.ap.reference_frame = self.vessel.surface_reference_frame
+                self.ap.set_direction_and_up(direction, (1, 0, 0), roll)
+                self.wait_for_autopilot()
+                self.check_direction(direction, roll)
+
+        def test_attitude_error(self):
+            # The unified attitude error is a singularity-free (pitch, yaw, roll)
+            # decomposition; the scalar pitch/heading/roll errors are its magnitudes. For
+            # a pure single-axis offset the corresponding component equals the total error
+            # and the others are ~0.
+            self.ap.engaged = False
+            self.assertRaises(RuntimeError, getattr, self.ap, "attitude_error")
+
+            # Freeze the craft (no torque) so the error readout reflects the target
+            # offset rather than the autopilot slewing towards it.
+            for wheel in self.vessel.parts.reaction_wheels:
+                wheel.active = False
+            self.vessel.control.rcs = False
+            self.cheat_orientation_to(0, 90, 0)
+            self.ap.reference_frame = self.vessel.surface_reference_frame
+            self.ap.engaged = True
+
+            # Pure pitch offset.
+            self.ap.target_pitch = 10
+            self.ap.target_heading = 90
+            self.ap.target_roll = 0
+            pitch_err, yaw_err, roll_err = self.ap.attitude_error
+            self.assertAlmostEqual(abs(pitch_err), 10, delta=self.angle_error)
+            self.assertLess(abs(yaw_err), self.angle_error)
+            self.assertLess(abs(roll_err), self.angle_error)
+            self.assertAlmostEqual(self.ap.pitch_error, 10, delta=self.angle_error)
+            self.assertAlmostEqual(
+                self.ap.error, abs(pitch_err), delta=self.angle_error
+            )
+
+            # Pure heading offset shows up on the yaw axis, well-defined away from the pole.
+            self.ap.target_pitch = 0
+            self.ap.target_heading = 102
+            self.ap.target_roll = 0
+            pitch_err, yaw_err, roll_err = self.ap.attitude_error
+            self.assertAlmostEqual(abs(yaw_err), 12, delta=self.angle_error)
+            self.assertLess(abs(pitch_err), self.angle_error)
+            self.assertAlmostEqual(self.ap.heading_error, 12, delta=self.angle_error)
+
+            self.ap.engaged = False
+
+        def test_hold_through_vertical_with_fixed_up(self):
+            # Physics companion to test_roll_defined_through_vertical: hold an orientation
+            # whose nose sits at the vertical using an up reference off the path, and
+            # confirm the tracked roll error stays bounded — where the old vertical-plane
+            # roll returned spurious values up to ~180 deg (#564).
+            self.cheat_orientation_to(88, 90, 0)
+            self.ap.reference_frame = self.vessel.surface_reference_frame
+            north = (0, 1, 0)  # perpendicular to the zenith-east sweep plane
+
+            # Settle on the initial near-vertical target (roof to north) first, so the
+            # sweep starts already aligned in roll rather than from the cheat's roll.
+            def direction_at(a):
+                return (math.cos(a), 0, math.sin(a))
+
+            self.ap.set_direction_and_up(direction_at(math.radians(2.0)), north, 0)
+            self.ap.engaged = True
+            self.ap.wait(60)
+
+            max_roll_error = 0.0
+            for i in range(41):
+                a = math.radians(2.0 - 0.1 * i)  # sweep the target through the vertical
+                self.ap.set_direction_and_up(direction_at(a), north, 0)
+                self.wait(0.1)
+                error = self.ap.roll_error
+                self.assertFalse(math.isnan(error))
+                max_roll_error = max(max_roll_error, abs(error))
+            self.ap.engaged = False
+            # Roll stays bounded and defined through the exact vertical, where the old
+            # vertical-plane roll returned spurious values up to ~180 degrees (#564).
+            self.assertLess(max_roll_error, 10, "roll error grew near the vertical")
 
         ######################## Tests for corner cases ########################
 
