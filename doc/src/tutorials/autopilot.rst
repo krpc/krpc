@@ -111,10 +111,6 @@ horizontal ``up`` (say north) keeps it defined the whole way:
        ap.set_direction_and_up(direction, up, 0)
        ap.wait()
 
-The old approach — ``target_pitch_and_heading(90, 90)`` with a ``target_roll`` — cannot do
-this: the roll reference (the vertical plane through the nose) vanishes exactly at the
-vertical, where the rocket starts.
-
 .. _convenience-setters:
 
 The convenience ways
