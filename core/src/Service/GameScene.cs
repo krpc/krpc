@@ -57,6 +57,26 @@ namespace KRPC.Service
         MissionBuilder = 1 << 5,
 
         /// <summary>
+        /// The astronaut complex facility, open within the space center scene
+        /// </summary>
+        AstronautComplex = 1 << 6,
+
+        /// <summary>
+        /// The mission control facility, open within the space center scene
+        /// </summary>
+        MissionControl = 1 << 7,
+
+        /// <summary>
+        /// The research and development facility, open within the space center scene
+        /// </summary>
+        ResearchAndDevelopment = 1 << 8,
+
+        /// <summary>
+        /// The administration facility, open within the space center scene
+        /// </summary>
+        Administration = 1 << 9,
+
+        /// <summary>
         /// All game scenes
         /// </summary>
         All = ~0
@@ -81,6 +101,14 @@ namespace KRPC.Service
                 result.Add("EDITOR_SPH");
             if ((scene & GameScene.MissionBuilder) != 0)
                 result.Add("MISSION_BUILDER");
+            if ((scene & GameScene.AstronautComplex) != 0)
+                result.Add("ASTRONAUT_COMPLEX");
+            if ((scene & GameScene.MissionControl) != 0)
+                result.Add("MISSION_CONTROL");
+            if ((scene & GameScene.ResearchAndDevelopment) != 0)
+                result.Add("RESEARCH_AND_DEVELOPMENT");
+            if ((scene & GameScene.Administration) != 0)
+                result.Add("ADMINISTRATION");
             return result;
         }
     };

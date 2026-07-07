@@ -142,41 +142,25 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// The game scene. See <see cref="CurrentGameScene"/>.
-        /// </summary>
-        [KRPCEnum]
-        [Serializable]
-        public enum GameScene
-        {
-            /// <summary>
-            /// The game scene showing the Kerbal Space Center buildings.
-            /// </summary>
-            SpaceCenter,
-            /// <summary>
-            /// The game scene showing a vessel in flight (or on the launchpad/runway).
-            /// </summary>
-            Flight,
-            /// <summary>
-            /// The tracking station.
-            /// </summary>
-            TrackingStation,
-            /// <summary>
-            /// The Vehicle Assembly Building.
-            /// </summary>
-            EditorVAB,
-            /// <summary>
-            /// The Space Plane Hangar.
-            /// </summary>
-            EditorSPH
-        }
-
-        /// <summary>
-        /// Get the current game scene.
+        /// The current game scene. Setting this switches the game to the given
+        /// scene, or opens/closes the corresponding facility for the pseudo-scenes.
+        /// Scene changes happen asynchronously: setting this property returns
+        /// immediately, and clients should poll it until it reports the requested
+        /// scene. Setting it to <see cref="GameScene.Flight"/> resumes the save's
+        /// active vessel, and fails if there is none.
         /// </summary>
         [KRPCProperty]
-        public static GameScene CurrentGameScene {
+        public static GameScene GameScene {
             get {
                 var scene = CallContext.GameScene;
+                if ((scene & Service.GameScene.AstronautComplex) != 0)
+                    return GameScene.AstronautComplex;
+                if ((scene & Service.GameScene.MissionControl) != 0)
+                    return GameScene.MissionControl;
+                if ((scene & Service.GameScene.ResearchAndDevelopment) != 0)
+                    return GameScene.ResearchAndDevelopment;
+                if ((scene & Service.GameScene.Administration) != 0)
+                    return GameScene.Administration;
                 if ((scene & Service.GameScene.SpaceCenter) != 0)
                     return GameScene.SpaceCenter;
                 if ((scene & Service.GameScene.Flight) != 0)
@@ -187,8 +171,26 @@ namespace KRPC.Service.KRPC
                     return GameScene.EditorVAB;
                 if ((scene & Service.GameScene.EditorSPH) != 0)
                     return GameScene.EditorSPH;
+                if ((scene & Service.GameScene.MissionBuilder) != 0)
+                    return GameScene.MissionBuilder;
                 throw new System.InvalidOperationException ("Unknown game scene");
             }
+            set {
+                var loadScene = CallContext.LoadScene;
+                if (loadScene == null)
+                    throw new System.InvalidOperationException (
+                        "Changing the game scene is not supported by this server");
+                loadScene (value);
+            }
+        }
+
+        /// <summary>
+        /// Get the current game scene.
+        /// </summary>
+        [KRPCProperty]
+        [Obsolete ("Use <see cref='GameScene'/> instead.")]
+        public static GameScene CurrentGameScene {
+            get { return GameScene; }
         }
 
         /// <summary>
