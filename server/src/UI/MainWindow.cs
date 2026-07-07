@@ -34,17 +34,18 @@ namespace KRPC.UI
         string maxTimePerUpdate;
         string recvTimeout;
         // Style settings
-        readonly Color errorColor = Color.yellow;
+        internal readonly Color errorColor = Color.yellow;
         internal GUIStyle labelStyle, stretchyLabelStyle, fixedLabelStyle, textFieldStyle, longTextFieldStyle, stretchyTextFieldStyle,
             buttonStyle, toggleStyle, expandStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
         const float windowWidth = 288f;
         const float textFieldWidth = 45f;
         const float longTextFieldWidth = 80f;
         const float fixedLabelWidth = 160f;
+        const float serverInfoLabelWidth = 110f;
         const float indentWidth = 15f;
         float scaledIndentWidth;
-        const int maxTimePerUpdateMaxLength = 5;
-        const int recvTimeoutMaxLength = 5;
+        const int maxTimePerUpdateMaxLength = 20;
+        const int recvTimeoutMaxLength = 20;
         // Text strings
         const string advancedModeText = "Show advanced settings";
         const string startAllServersText = "Start server";
@@ -57,12 +58,13 @@ namespace KRPC.UI
         const string saveServerText = "Save";
         const string serverOnlineText = "Server online";
         const string serverOfflineText = "Server offline";
-        const string protocolText = "Protocol:";
+        const string protocolText = "Protocol";
         internal const string protobufOverTcpText = "Protobuf over TCP";
         internal const string protobufOverWebSocketsText = "Protobuf over WebSockets";
         internal const string protobufOverSerialIOText = "Protobuf over SerialIO";
         const string unknownClientNameText = "<unknown>";
         const string noClientsConnectedText = "No clients connected";
+        const string serverNotRunningText = "Server not running";
         const string advancedServerOptionsText = "Show advanced settings";
         const string autoStartServerText = "Auto-start server";
         const string autoAcceptConnectionsText = "Auto-accept new clients";
@@ -73,9 +75,8 @@ namespace KRPC.UI
         const string adaptiveRateControlText = "Adaptive rate control";
         const string blockingRecvText = "Blocking receives";
         const string recvTimeoutText = "Receive timeout";
+        const string microsecondsUnitText = "us";
         const string debugLoggingText = "Debug logging";
-        const string invalidMaxTimePerUpdateText = "Max. time per update must be an integer";
-        const string invalidRecvTimeoutText = "Receive timeout must be an integer";
         const string showInfoWindowText = "Show info";
 
         protected override void Init ()
@@ -194,7 +195,7 @@ namespace KRPC.UI
 
             var servers = core.Servers.ToList();
             foreach (var server in servers) {
-                DrawServer(server, servers.Count == 1);
+                DrawServer(server);
                 GUILayoutExtensions.Separator(separatorStyle);
             }
 
@@ -229,31 +230,43 @@ namespace KRPC.UI
             GUI.enabled = true;
         }
 
-        void DrawServer (Server.Server server, bool forceExpanded = false)
+        void DrawServer (Server.Server server)
         {
             var running = server.Running;
             var editingServer = editServers.ContainsKey (server.Id);
-            var expanded = forceExpanded || expandServers.Contains (server.Id);
+            var expanded = expandServers.Contains (server.Id);
 
             GUILayout.BeginHorizontal ();
-            if (!forceExpanded) {
-                var icons = Icons.Instance;
-                if (GUILayout.Button(new GUIContent(expanded ? icons.ButtonCollapse : icons.ButtonExpand, expanded ? "Collapse" : "Expand"),
-                        expandStyle, GUILayout.MaxWidth(20), GUILayout.MaxHeight(20))) {
-                    if (expanded)
-                        expandServers.Remove(server.Id);
-                    else
-                        expandServers.Add(server.Id);
-                    expanded = !expanded;
-                    Resized = true;
-                }
-            }
+            var icons = Icons.Instance;
+            // Vertically centre the expand/collapse arrow in the row; it is shorter
+            // than the activity light and name and would otherwise sit at the top.
+            // A fixed top space (rather than ExpandHeight + FlexibleSpace) is used so
+            // the column cannot grab the window's spare height and push the arrow onto
+            // its own line.
+            GUILayout.BeginVertical (GUILayout.Width (20));
+            GUILayout.Space (Mathf.Max (0f, (Style.lineHeight - 16f) / 2f));
+            GUILayout.Label (new GUIContent (expanded ? icons.ButtonCollapse : icons.ButtonExpand, expanded ? "Collapse" : "Expand"),
+                expandStyle, GUILayout.MaxWidth (20), GUILayout.MaxHeight (20));
+            GUILayout.EndVertical ();
             GUILayoutExtensions.Light (running, lightStyle);
             if (!editingServer)
                 GUILayout.Label (server.Name, labelStyle);
             else
                 editServers [server.Id].DrawName ();
             GUILayout.EndHorizontal ();
+
+            // Expand/collapse when the header row (icon, activity light and name) is
+            // clicked. Skipped while editing, where the row holds the name text field.
+            if (!editingServer && Event.current.type == EventType.MouseDown &&
+                GUILayoutUtility.GetLastRect ().Contains (Event.current.mousePosition)) {
+                if (expanded)
+                    expandServers.Remove (server.Id);
+                else
+                    expandServers.Add (server.Id);
+                expanded = !expanded;
+                Resized = true;
+                Event.current.Use ();
+            }
 
             if (editingServer) {
                 editServers [server.Id].Draw ();
@@ -265,10 +278,9 @@ namespace KRPC.UI
                     protocol = protobufOverWebSocketsText;
                 else
                     protocol = protobufOverSerialIOText;
-                GUILayout.Label (protocolText + protocol, labelStyle);
-                foreach (var line in server.Address.Split ('\n'))
-                    GUILayout.Label (line, labelStyle);
-                GUILayout.Label (server.Info, labelStyle);
+                DrawServerInfoRow (protocolText, protocol);
+                DrawServerInfoLines (server.Address);
+                DrawServerInfoLines (server.Info);
                 DrawClients (server);
             }
 
@@ -310,6 +322,38 @@ namespace KRPC.UI
             GUILayout.EndHorizontal ();
         }
 
+        // Draw a name/value row with an aligned name column, for the server details
+        // "table". Matches the style of the info window.
+        void DrawServerInfoRow (string name, string value)
+        {
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label (name, labelStyle, GUILayout.Width (serverInfoLabelWidth * GameSettings.UI_SCALE));
+            GUILayout.Label (value, stretchyLabelStyle);
+            GUILayout.EndHorizontal ();
+        }
+
+        // Split a multi-line server detail string (e.g. Address or Info) into name/value
+        // rows, splitting each line on its "name = value" or "name: value" separator.
+        // Lines with no separator are shown in the value column.
+        void DrawServerInfoLines (string text)
+        {
+            foreach (var line in text.Split ('\n')) {
+                var trimmed = line.Trim ();
+                if (trimmed.Length == 0)
+                    continue;
+                var separator = trimmed.IndexOf (" = ", StringComparison.Ordinal);
+                var separatorLength = 3;
+                if (separator < 0) {
+                    separator = trimmed.IndexOf (": ", StringComparison.Ordinal);
+                    separatorLength = 2;
+                }
+                if (separator >= 0)
+                    DrawServerInfoRow (trimmed.Substring (0, separator), trimmed.Substring (separator + separatorLength));
+                else
+                    DrawServerInfoRow (string.Empty, trimmed);
+            }
+        }
+
         void DrawClients (IServer server)
         {
             var clients = server.Clients.ToList ();
@@ -342,7 +386,7 @@ namespace KRPC.UI
                 }
             } else {
                 GUILayout.BeginHorizontal ();
-                GUILayout.Label (noClientsConnectedText, labelStyle);
+                GUILayout.Label (server.Running ? noClientsConnectedText : serverNotRunningText, labelStyle);
                 GUILayout.EndHorizontal ();
             }
         }
@@ -473,12 +517,17 @@ namespace KRPC.UI
         void DrawMaxTimePerUpdate ()
         {
             GUILayout.Label (maxTimePerUpdateText, fixedLabelStyle);
-            var newMaxTimePerUpdate = GUILayout.TextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, longTextFieldStyle);
+            uint value;
+            bool valid = uint.TryParse (maxTimePerUpdate, out value);
+            var newMaxTimePerUpdate = GUILayoutExtensions.FilterDigits (
+                GUILayoutExtensions.ValidatedTextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, longTextFieldStyle, valid, errorColor));
+            GUILayout.Label (microsecondsUnitText, labelStyle);
             if (newMaxTimePerUpdate != maxTimePerUpdate) {
-                uint value = config.Configuration.MaxTimePerUpdate;
-                uint.TryParse (newMaxTimePerUpdate, out value);
-                config.Configuration.MaxTimePerUpdate = value;
-                config.Save ();
+                maxTimePerUpdate = newMaxTimePerUpdate;
+                if (uint.TryParse (maxTimePerUpdate, out value)) {
+                    config.Configuration.MaxTimePerUpdate = value;
+                    config.Save ();
+                }
             }
         }
 
@@ -503,12 +552,17 @@ namespace KRPC.UI
         void DrawRecvTimeout ()
         {
             GUILayout.Label (recvTimeoutText, fixedLabelStyle);
-            var newRecvTimeout = GUILayout.TextField (recvTimeout, recvTimeoutMaxLength, longTextFieldStyle);
+            uint value;
+            bool valid = uint.TryParse (recvTimeout, out value);
+            var newRecvTimeout = GUILayoutExtensions.FilterDigits (
+                GUILayoutExtensions.ValidatedTextField (recvTimeout, recvTimeoutMaxLength, longTextFieldStyle, valid, errorColor));
+            GUILayout.Label (microsecondsUnitText, labelStyle);
             if (newRecvTimeout != recvTimeout) {
-                uint value = config.Configuration.RecvTimeout;
-                uint.TryParse (newRecvTimeout, out value);
-                config.Configuration.RecvTimeout = value;
-                config.Save ();
+                recvTimeout = newRecvTimeout;
+                if (uint.TryParse (recvTimeout, out value)) {
+                    config.Configuration.RecvTimeout = value;
+                    config.Save ();
+                }
             }
         }
 

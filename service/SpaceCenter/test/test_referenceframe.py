@@ -7,17 +7,19 @@
 # not affected by the race, but are limited to places=6 by float→double precision
 # loss when Unity float Vector3 values are promoted for double-precision arithmetic.
 
-import unittest
 import math
+import unittest
 
 import krpctest
 from krpctest.geometry import (
     compute_position,
+    cross,
     dot,
     norm,
     quaternion_conjugate,
     quaternion_mult,
     quaternion_vector_mult,
+    vector,
 )
 
 
@@ -25,10 +27,10 @@ class TestReferenceFrame(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "Vessel":
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "Vessel":
             cls.launch_vessel_from_vab("Vessel")
             cls.remove_other_vessels()
-        cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel
         cls.bodies = cls.space_center.bodies
@@ -36,6 +38,7 @@ class TestReferenceFrame(krpctest.TestCase):
         cls.root_part = cls.vessel.parts.root
         cls.docking_port = cls.vessel.parts.docking_ports[0]
         cls.thruster = cls.vessel.parts.engines[0].thrusters[0]
+        cls.set_circular_orbit("Kerbin", 100000)
 
     # -------------------------------------------------------------------------
     # Helpers
@@ -617,6 +620,65 @@ class TestReferenceFrame(krpctest.TestCase):
         )
         speed = norm(self.vessel.velocity(hybrid_kerbin_vel))
         self.assertAlmostEqual(self.vessel.orbit.speed, speed, delta=1)
+
+    def _expected_surface_speed(self):
+        """Surface speed computed independently of ReferenceFrame's velocity
+        machinery: orbital velocity minus the co-rotation velocity ω×r, all in
+        Kerbin's inertial (non-rotating) frame.  This is the ground truth the
+        rotating-frame surface velocity must reproduce."""
+        nonrot = self.kerbin.non_rotating_reference_frame
+        v = vector(self.vessel.velocity(nonrot))  # orbital velocity rel. Kerbin
+        r = vector(self.vessel.position(nonrot))  # position rel. Kerbin centre
+        w = vector(self.kerbin.angular_velocity(nonrot))  # Kerbin spin vector
+        return norm(v - cross(w, r))
+
+    def test_surface_speed_matches_manual_off_equator(self):
+        """Surface speed in the body-rotating frame and in the body-position +
+        surface-rotation hybrid (the frame the reference-frames tutorial builds)
+        both equal the independently computed orbital − ω×r speed, at ~45°
+        latitude in an inclined orbit.
+
+        Regression test for #454: the ω×r correction in AngularVelocityAt used
+        to combine a world-space angular velocity with a frame-space position,
+        which is only valid at the equator.  Off the equator it produced a
+        surface velocity error of ~52 m/s.
+        """
+        # Inclination 45°, observed a quarter orbit past the ascending node
+        # (mean anomaly π/2) so the vessel sits near its peak latitude.
+        self.addCleanup(self.set_circular_orbit, "Kerbin", 100000)
+        self.set_orbit("Kerbin", 700000, 0, 45, 0, 0, math.pi / 2, 0)
+        expected = self._expected_surface_speed()
+        hybrid = self.space_center.ReferenceFrame.create_hybrid(
+            position=self.kerbin.reference_frame,
+            rotation=self.vessel.surface_reference_frame,
+        )
+        self.assertAlmostEqual(
+            expected, norm(self.vessel.velocity(self.kerbin.reference_frame)), delta=1
+        )
+        self.assertAlmostEqual(expected, norm(self.vessel.velocity(hybrid)), delta=1)
+
+    def test_hybrid_rotation_preserves_speed_off_equator(self):
+        """The rotation sub-frame only changes the basis the velocity is
+        expressed in, never its magnitude.  In an inclined orbit, observed at
+        ~45° latitude, the vessel's surface speed must therefore be identical
+        whether measured in Kerbin's rotating frame or in a hybrid that swaps in
+        the vessel surface rotation (same position/velocity/angular-velocity
+        sub-frames — only the rotation differs).
+
+        Before the #454 fix the buggy ω×r correction was rotation-frame
+        dependent, so the two speeds diverged away from the equator.
+        """
+        # Inclination 45°, observed a quarter orbit past the ascending node
+        # (mean anomaly π/2) so the vessel sits near its peak latitude.
+        self.addCleanup(self.set_circular_orbit, "Kerbin", 100000)
+        self.set_orbit("Kerbin", 700000, 0, 45, 0, 0, math.pi / 2, 0)
+        hybrid = self.space_center.ReferenceFrame.create_hybrid(
+            position=self.kerbin.reference_frame,
+            rotation=self.vessel.surface_reference_frame,
+        )
+        speed_body = norm(self.vessel.velocity(self.kerbin.reference_frame))
+        speed_hybrid = norm(self.vessel.velocity(hybrid))
+        self.assertAlmostEqual(speed_body, speed_hybrid, delta=1)
 
     def test_node_velocity_zero_at_current_ut(self):
         """Vessel velocity is near zero in the node frame when node.UT equals current time.
