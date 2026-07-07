@@ -350,7 +350,27 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// Handle throttle quirky operation...
+        /// Whether kRPC is permitted to send control inputs to the vessel.
+        /// When RemoteTech is installed this requires the vessel to be controllable via
+        /// RemoteTech: either local (crewed) control, or a connection to a command station
+        /// (a ground station or a crewed command station).
+        /// </summary>
+        static bool HasControlConnection (Vessel vessel)
+        {
+            if (!RemoteTech.IsAvailable)
+                return true;
+            return RemoteTech.HasLocalControl (vessel.id) || RemoteTech.HasAnyConnection (vessel.id);
+        }
+
+        /// <summary>
+        /// Apply the manually set throttle to the vessel.
+        ///
+        /// Throttle is handled differently to the other control axes. Rather than being
+        /// an additive per-frame input on the FlightCtrlState, the active vessel's throttle
+        /// is a persistent value latched onto FlightInputHandler, so that it survives across
+        /// frames and stays in sync with the throttle gauge. The input is consumed once
+        /// handled so that it is not also re-applied via the per-frame FlightCtrlState in
+        /// ControlInputs.Add.
         /// </summary>
         static void HandleThrottle (Vessel vessel, ControlInputs inputs)
         {
@@ -358,8 +378,15 @@ namespace KRPC.SpaceCenter
                 return;
             if (FlightGlobals.ActiveVessel != vessel)
                 return;
-            if (RemoteTech.IsAvailable && !(RemoteTech.HasLocalControl (vessel.id) || RemoteTech.HasAnyConnection (vessel.id)))
+            // If RemoteTech is controlling the vessel and there is no control connection,
+            // drop the input rather than applying it. Note this must consume the input
+            // (rather than just returning) so that it is not subsequently re-applied via
+            // the per-frame FlightCtrlState in ControlInputs.Add.
+            if (!HasControlConnection (vessel)) {
+                inputs.Throttle = 0f;
+                inputs.ThrottleUpdated = false;
                 return;
+            }
             FlightInputHandler.state.mainThrottle = inputs.Throttle;
             inputs.Throttle = 0f;
             inputs.ThrottleUpdated = false;
