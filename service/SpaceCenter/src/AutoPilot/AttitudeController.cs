@@ -34,6 +34,14 @@ namespace KRPC.SpaceCenter.AutoPilot
         // smoothing is disabled (the default), effectiveRotation == targetRotation every tick.
         QuaternionD targetRotation;
         bool rollControlled;
+        // Persistent roll reference (a direction in the AP reference frame): TargetRoll is measured
+        // as the roll about the nose that aligns the vessel's dorsal ("roof") axis to this vector.
+        // Defaults to the frame's "up" (+x = zenith / radial-out in the surface frame), which
+        // reproduces the historical vertical-plane roll convention away from the vertical. Only
+        // SetTargetDirectionAndUp and the UpReference setter write it; TargetRotation,
+        // TargetDirection and the scalar pitch/heading setters leave it untouched. See the
+        // orientation-API design doc.
+        Vector3d upReference;
         // Target smoothing (slew): effectiveRotation is the slewed target the control loop tracks.
         // Each tick it RotateTowards the commanded targetRotation at slewSpeed (deg/s). slewSpeed is
         // latched whenever the target changes to (angle between effective and commanded) /
@@ -235,28 +243,45 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public ReferenceFrame ReferenceFrame { get; set; }
 
+        // Demoted convenience scalars (heading-singular near the vertical). The getters read the
+        // surface-frame Euler decomposition; the setters re-aim the nose by (pitch, heading) while
+        // preserving the current roll relative to the up reference (so a pitch/heading change no
+        // longer perturbs roll near the vertical). See AimNose.
         public double TargetPitch {
             get { return targetRotation.PitchHeadingRoll ().x; }
-            set {
-                var p = targetRotation.PitchHeadingRoll ();
-                SetTarget (value, p.y, rollControlled ? p.z : double.NaN);
-            }
+            set { AimNose (DirectionFromPitchHeading (value, targetRotation.PitchHeadingRoll ().y)); }
         }
 
         public double TargetHeading {
             get { return targetRotation.PitchHeadingRoll ().y; }
+            set { AimNose (DirectionFromPitchHeading (targetRotation.PitchHeadingRoll ().x, value)); }
+        }
+
+        // Roll about the nose measured relative to the up reference (roof aligned to the reference =
+        // roll 0), replacing the old pole-singular "roll from the vertical plane". NaN means roll is
+        // suppressed. Setting re-rolls the current target to the given angle (keeping the nose
+        // direction); NaN suppresses roll.
+        public double TargetRoll {
+            get { return rollControlled ? RollRelativeTo (targetRotation, upReference) : double.NaN; }
             set {
-                var p = targetRotation.PitchHeadingRoll ();
-                SetTarget (p.x, value, rollControlled ? p.z : double.NaN);
+                if (double.IsNaN (value)) {
+                    rollControlled = false;
+                    BeginSlew ();
+                    return;
+                }
+                targetRotation = RotationFromDirectionUpRoll (TargetDirection, upReference, value);
+                rollControlled = true;
+                BeginSlew ();
             }
         }
 
-        public double TargetRoll {
-            get { return rollControlled ? targetRotation.PitchHeadingRoll ().z : double.NaN; }
-            set {
-                var p = targetRotation.PitchHeadingRoll ();
-                SetTarget (p.x, p.y, value);
-            }
+        // The persistent roll reference (a direction in the AP reference frame). The setter
+        // re-anchors how TargetRoll is measured without moving the current target, so the reference
+        // can be set once and then rolls commanded against it while the nose direction changes
+        // freely. Default is the frame's up (+x).
+        public Vector3d UpReference {
+            get { return upReference; }
+            set { upReference = value; }
         }
 
         public Vector3d TargetDirection {
@@ -279,7 +304,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         public double EffectiveTargetRoll {
-            get { return rollControlled ? effectiveRotation.PitchHeadingRoll ().z : double.NaN; }
+            get { return rollControlled ? RollRelativeTo (effectiveRotation, upReference) : double.NaN; }
         }
 
         public Vector3d EffectiveTargetDirection {
@@ -323,6 +348,88 @@ namespace KRPC.SpaceCenter.AutoPilot
             targetRotation = rotation;
             rollControlled = true;
             BeginSlew ();
+        }
+
+        /// <summary>
+        /// Point the nose along <paramref name="direction"/> and roll so the vessel's dorsal
+        /// ("roof") axis aligns with <paramref name="up"/> (its component perpendicular to the
+        /// nose), then apply an optional <paramref name="roll"/> offset (degrees) about the nose.
+        /// Stores <paramref name="up"/> as the persistent roll reference. Well-defined for every
+        /// nose direction except <c>up ∥ direction</c>, where it falls back to direction-only
+        /// (roll suppressed).
+        /// </summary>
+        public void SetTargetDirectionAndUp (Vector3d direction, Vector3d up, double roll)
+        {
+            upReference = up;
+            targetRotation = RotationFromDirectionUpRoll (direction, up, roll);
+            rollControlled = true;
+            BeginSlew ();
+        }
+
+        // Re-aim the nose to a new direction through the shared primitive, preserving roll relative
+        // to the up reference. When roll is controlled the current roll is kept; when it is suppressed
+        // the target is built wings-level (roll 0 vs the reference) — matching the historical
+        // pitch/heading target and, crucially, giving consecutive pitch/heading targets a consistent
+        // roll so a smoothed slew between them stays a clean pure-pitch/heading path (FromToRotation's
+        // minimal-arc roll varies with direction and wanders the heading through the slerp). The
+        // rollControlled flag is left unchanged. Backs the demoted TargetPitch/TargetHeading setters.
+        void AimNose (Vector3d direction)
+        {
+            var roll = rollControlled ? RollRelativeTo (targetRotation, upReference) : 0.0;
+            targetRotation = RotationFromDirectionUpRoll (direction, upReference, roll);
+            BeginSlew ();
+        }
+
+        // The nose direction (AP frame) corresponding to a pitch/heading pair, via the surface-frame
+        // Euler convention. Heading-singular near the vertical, like the scalars it serves.
+        static Vector3d DirectionFromPitchHeading (double pitch, double heading)
+        {
+            return GeometryExtensions.QuaternionFromPitchHeadingRoll (
+                new Vector3d (pitch, heading, 0)) * Vector3d.up;
+        }
+
+        /// <summary>
+        /// Build a target rotation that points the nose (body +y) along <paramref name="direction"/>
+        /// and rolls so the dorsal axis (body −z) aligns with <paramref name="up"/> projected
+        /// perpendicular to the nose, plus a <paramref name="roll"/> offset (degrees, positive =
+        /// right-wing-down, matching aircraft bank). Falls back to direction-only (roll unanchored)
+        /// when <paramref name="up"/> is parallel to <paramref name="direction"/>. The roll offset is
+        /// applied as <c>align − roll</c> about the nose so its sign matches the kRPC roll convention
+        /// (positive roll relative to the reference banks right).
+        /// </summary>
+        static QuaternionD RotationFromDirectionUpRoll (Vector3d direction, Vector3d up, double roll)
+        {
+            direction = direction.normalized;
+            var roof = up - Vector3d.Dot (up, direction) * direction;   // up component ⊥ nose
+            var q0 = GeometryExtensions.FromToRotation (Vector3d.up, direction); // nose→dir, any roll
+            if (roof.magnitude < 1e-6)
+                return q0;                                              // up ∥ dir → no roll anchor
+            var roof0 = q0 * new Vector3d (0, 0, -1);                   // dorsal axis at q0's roll
+            var align = GeometryExtensions.SignedAngle (roof0, roof.normalized, direction);
+            return (GeometryExtensions.AngleAxis (align - roll, direction) * q0).Normalize ();
+        }
+
+        /// <summary>
+        /// The signed roll (degrees) of <paramref name="rotation"/> about its nose, measured relative
+        /// to <paramref name="up"/> — the inverse of the roll argument to
+        /// <see cref="RotationFromDirectionUpRoll"/>. 0 when the roof aligns with the reference;
+        /// positive banks right. Singular only when <paramref name="up"/> is parallel to the nose.
+        /// </summary>
+        static double RollRelativeTo (QuaternionD rotation, Vector3d up)
+        {
+            var nose = (rotation * Vector3d.up).normalized;
+            var reference = RotationFromDirectionUpRoll (nose, up, 0);
+            // reference shares the nose, so the residual is a pure rotation about it; its angle,
+            // projected onto the nose, is the roll. Negated to invert RotationFromDirectionUpRoll's
+            // align − roll (positive roll banks right).
+            var residual = rotation * reference.Inverse ();
+            double angle;
+            Vector3d axis;
+            GeometryExtensions.ToAngleAxis (residual, out angle, out axis);
+            if (double.IsInfinity (axis.magnitude))
+                return 0.0;
+            angle = GeometryExtensions.ClampAngle180 (angle);
+            return -angle * Vector3d.Dot (axis, nose);
         }
 
         public Vector3d MaxAngularVelocity { get; set; }
@@ -610,6 +717,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             SoftStartTime = DefaultSoftStartTime;
             targetSmoothingTime = 0;
             DiagnosticLogging = false;
+            // Default roll reference: the frame's up (+x = zenith in the surface frame), which
+            // makes TargetRoll reproduce the historical vertical-plane roll away from the vertical.
+            upReference = new Vector3d (1, 0, 0);
             SetTarget (0, 0, double.NaN);
             // Reset is the user-facing return to initial conditions, so also clear the state
             // that deliberately survives Start's per-engagement reset: the persistent chatter
@@ -1057,6 +1167,50 @@ namespace KRPC.SpaceCenter.AutoPilot
             // invariant rotation, so this extracts the pure roll component (see the note at the
             // in-loop computation in ComputeTargetAngularVelocity).
             return Math.Abs (angle * ApToBody (axis).y);
+        }
+
+        /// <summary>
+        /// The per-axis attitude error (pitch, yaw, roll) in degrees between the vessel's current
+        /// attitude and the given target, from one residual decomposition — the same singularity-free
+        /// machinery as <see cref="RollErrorTo"/>. All three components stay well-defined near the
+        /// vertical, unlike a pitch/heading/roll Euler subtraction. Pitch and yaw are the direction
+        /// error resolved onto the vessel's body pitch axis (x) and yaw axis (z); roll is the
+        /// nose-axis residual (body y) after the pointing error is removed (ungated by the roll blend
+        /// weight). Signed; the scalar <c>PitchError</c>/<c>HeadingError</c>/<c>RollError</c> readouts
+        /// are the magnitudes of these components.
+        /// </summary>
+        public Vector3d AttitudeErrorTo (QuaternionD target, Vector3d targetDirection)
+        {
+            var internalVessel = vessel.InternalVessel;
+            var currentRotation = ReferenceFrame.RotationFromWorldSpace (internalVessel.ReferenceTransform.rotation);
+            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (internalVessel.ReferenceTransform.up);
+
+            // Pitch/yaw: the direction error's minimum-arc axis (⊥ the nose, so no roll component),
+            // expressed in the vessel body frame — body x is the pitch axis, body z the yaw axis
+            // (matching the control-input mapping). Body frame, not the roll-invariant frame: this is
+            // a readout about the vessel's actual pitch/yaw control axes, whereas the roll-invariant
+            // frame's axes carry the pointing rotation's own twist and would swap pitch↔yaw depending
+            // on where the nose points.
+            var dirRotation = GeometryExtensions.FromToRotation (currentDirection, targetDirection);
+            double dirAngle;
+            Vector3d dirAxis;
+            GeometryExtensions.ToAngleAxis (dirRotation, out dirAngle, out dirAxis);
+            dirAngle = GeometryExtensions.ClampAngle180 (dirAngle);
+            var anglesBody = ApToBody (dirAxis * dirAngle);
+
+            // Roll: the nose-axis residual left after direction alignment (mirrors RollErrorTo, but
+            // signed).
+            double roll = 0;
+            QuaternionD rollResidual = target * currentRotation.Inverse () * dirRotation.Inverse ();
+            double rollAngle;
+            Vector3d rollAxis;
+            GeometryExtensions.ToAngleAxis (rollResidual, out rollAngle, out rollAxis);
+            if (!double.IsInfinity (rollAxis.magnitude)) {
+                rollAngle = GeometryExtensions.ClampAngle180 (rollAngle);
+                roll = rollAngle * ApToBody (rollAxis).y;
+            }
+
+            return new Vector3d (anglesBody.x, anglesBody.z, roll);
         }
 
         /// <summary>

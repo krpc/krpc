@@ -370,6 +370,11 @@ namespace KRPC.SpaceCenter.Services
         /// The pitch of the vessel relative to the horizon, in degrees.
         /// A value between -90° and +90°.
         /// </summary>
+        /// <remarks>
+        /// An absolute Euler angle, ill-conditioned when the vessel points near vertical (pitch →
+        /// ±90°), where heading and roll become ambiguous. For an always-defined attitude use
+        /// <see cref="Rotation"/> or <see cref="Direction"/>.
+        /// </remarks>
         [KRPCProperty]
         public float Pitch {
             get { return (float)VesselRotation.PitchHeadingRoll ().x; }
@@ -379,6 +384,10 @@ namespace KRPC.SpaceCenter.Services
         /// The heading of the vessel (its angle relative to north), in degrees.
         /// A value between 0° and 360°.
         /// </summary>
+        /// <remarks>
+        /// An absolute Euler angle, undefined when the vessel points near vertical (pitch → ±90°).
+        /// For an always-defined attitude use <see cref="Rotation"/> or <see cref="Direction"/>.
+        /// </remarks>
         [KRPCProperty]
         public float Heading {
             get { return (float)VesselRotation.PitchHeadingRoll ().y; }
@@ -388,6 +397,12 @@ namespace KRPC.SpaceCenter.Services
         /// The roll of the vessel relative to the horizon, in degrees.
         /// A value between -180° and +180°.
         /// </summary>
+        /// <remarks>
+        /// An absolute Euler angle, ill-conditioned when the vessel points near vertical (pitch →
+        /// ±90°), where the vertical-plane reference vanishes. For an always-defined attitude use
+        /// <see cref="Rotation"/>; for a well-defined roll use the auto-pilot's
+        /// <c>TargetRoll</c> / <c>RollError</c> against a chosen up reference.
+        /// </remarks>
         [KRPCProperty]
         public float Roll {
             get { return (float)VesselRotation.PitchHeadingRoll ().z; }

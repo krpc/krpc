@@ -198,6 +198,12 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The target pitch, in degrees, between -90° and +90°.
         /// </summary>
+        /// <remarks>
+        /// A convenience for aiming the nose by angle. Heading (and hence roll) is ill-defined when
+        /// the nose is near vertical (pitch → ±90°); near the vertical prefer
+        /// <see cref="TargetDirection"/> or <see cref="SetDirectionAndUp"/>. The setter preserves the
+        /// current roll relative to <see cref="UpReference"/>.
+        /// </remarks>
         [KRPCProperty]
         public float TargetPitch {
             get { return (float)attitudeController.TargetPitch; }
@@ -207,6 +213,11 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The target heading, in degrees, between 0° and 360°.
         /// </summary>
+        /// <remarks>
+        /// A convenience for aiming the nose by angle, ill-defined when the nose is near vertical
+        /// (pitch → ±90°) — see <see cref="TargetPitch"/>. The setter preserves the current roll
+        /// relative to <see cref="UpReference"/>.
+        /// </remarks>
         [KRPCProperty]
         public float TargetHeading {
             get { return (float)attitudeController.TargetHeading; }
@@ -214,14 +225,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The target roll, in degrees. <c>NaN</c> if no target roll is set.
+        /// The target roll, in degrees, measured about the vessel's nose relative to the
+        /// <see cref="UpReference"/> (roll 0 aligns the vessel's dorsal/roof axis with the reference;
+        /// positive roll banks right). <c>NaN</c> if no target roll is set.
         /// </summary>
         /// <remarks>
         /// When left unset (<c>NaN</c>) the auto-pilot suppresses roll rotation — it drives the roll
-        /// rate to zero rather than holding a specific roll angle. Note that a roll angle is defined
-        /// relative to the vertical plane, so it is ill-defined when the target direction points close
-        /// to straight up or down (the surface-frame singularity); prefer setting roll only once the
-        /// vessel has pitched away from the vertical.
+        /// rate to zero rather than holding a specific roll angle. Setting a value re-rolls the
+        /// current target to that angle relative to the up reference while keeping the nose direction.
+        /// With the default reference (the frame's up) this reproduces the historical roll away from
+        /// the vertical, and is ill-defined only when the nose points along the reference (near
+        /// straight up or down). To hold a well-defined roll through the vertical — for example a
+        /// gravity turn — set the up reference off the flight path (see
+        /// <see cref="SetDirectionAndUp"/> / <see cref="UpReference"/>).
         /// </remarks>
         [KRPCProperty]
         public float TargetRoll {
@@ -230,15 +246,70 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The reference direction, in the reference frame specified by <see cref="ReferenceFrame"/>,
+        /// that <see cref="TargetRoll"/> is measured against: at roll 0 the vessel's dorsal (roof)
+        /// axis is aligned with this vector's component perpendicular to the nose. Defaults to the
+        /// frame's up (the zenith / radial-out direction).
+        /// </summary>
+        /// <remarks>
+        /// Setting this re-anchors how roll is measured without moving the current target, so
+        /// the reference can be set once and then rolls commanded against it with
+        /// <see cref="TargetRoll"/> while the nose direction changes freely. It is also set as a side
+        /// effect of <see cref="SetDirectionAndUp"/>. Setting the target rotation, target direction,
+        /// or the scalar pitch/heading leaves it unchanged. Choosing a reference off the flight path
+        /// keeps roll well-defined through the vertical.
+        /// </remarks>
+        [KRPCProperty]
+        public Tuple3 UpReference {
+            get { return attitudeController.UpReference.ToTuple (); }
+            set { attitudeController.UpReference = value.ToVector (); }
+        }
+
+        /// <summary>
         /// Set target pitch and heading angles.
         /// </summary>
         /// <param name="pitch">Target pitch angle, in degrees between -90° and +90°.</param>
         /// <param name="heading">Target heading angle, in degrees between 0° and 360°.</param>
+        /// <remarks>
+        /// A convenience for aiming the nose by angle; heading is ill-defined when the nose is near
+        /// vertical (pitch → ±90°), so near the vertical prefer <see cref="TargetDirection"/> or
+        /// <see cref="SetDirectionAndUp"/>. Preserves the current roll relative to
+        /// <see cref="UpReference"/>.
+        /// </remarks>
         [KRPCMethod]
         public void TargetPitchAndHeading (float pitch, float heading)
         {
             attitudeController.TargetPitch = pitch;
             attitudeController.TargetHeading = heading;
+        }
+
+        /// <summary>
+        /// Set the target attitude from a nose direction and an up vector: point the nose along
+        /// <paramref name="direction"/> and roll so the vessel's dorsal (roof) axis aligns with
+        /// <paramref name="up"/> (its component perpendicular to the nose), then apply an optional
+        /// <paramref name="roll"/> offset about the nose. Both vectors are in the reference frame
+        /// specified by <see cref="ReferenceFrame"/>.
+        /// </summary>
+        /// <param name="direction">The direction to point the nose in.</param>
+        /// <param name="up">The reference direction the roof is rolled towards. Need not be
+        /// normalised or perpendicular to <paramref name="direction"/> — its component perpendicular
+        /// to the nose is used. Stored as the <see cref="UpReference"/>.</param>
+        /// <param name="roll">An additional roll about the nose, in degrees (positive banks right).
+        /// Defaults to 0.</param>
+        /// <remarks>
+        /// This is the way to hold a well-defined orientation through a maneuver — for example a
+        /// gravity turn: pass a fixed <paramref name="up"/> (say north) and the roll stays defined the
+        /// whole way, with no singularity at the vertical. It is well-defined for every nose direction
+        /// except <paramref name="up"/> parallel to <paramref name="direction"/> (asking the roof to
+        /// point where the nose already points), where it falls back to pointing the nose only.
+        /// Equivalent to setting <see cref="UpReference"/> to <paramref name="up"/>, aiming at
+        /// <paramref name="direction"/> and setting <see cref="TargetRoll"/> to
+        /// <paramref name="roll"/>.
+        /// </remarks>
+        [KRPCMethod]
+        public void SetDirectionAndUp (Tuple3 direction, Tuple3 up, float roll = 0)
+        {
+            attitudeController.SetTargetDirectionAndUp (direction.ToVector (), up.ToVector (), roll);
         }
 
         /// <summary>
@@ -265,6 +336,7 @@ namespace KRPC.SpaceCenter.Services
         /// The current target pitch the auto-pilot is tracking, in degrees. When
         /// <see cref="TargetSmoothingTime"/> is non-zero this lags the commanded
         /// <see cref="TargetPitch"/> while a change is slewed in; otherwise the two are equal.
+        /// A convenience scalar, ill-defined near the vertical — see <see cref="TargetPitch"/>.
         /// </summary>
         [KRPCProperty]
         public float CurrentTargetPitch {
@@ -275,6 +347,7 @@ namespace KRPC.SpaceCenter.Services
         /// The current target heading the auto-pilot is tracking, in degrees. When
         /// <see cref="TargetSmoothingTime"/> is non-zero this lags the commanded
         /// <see cref="TargetHeading"/> while a change is slewed in; otherwise the two are equal.
+        /// A convenience scalar, ill-defined near the vertical — see <see cref="TargetHeading"/>.
         /// </summary>
         [KRPCProperty]
         public float CurrentTargetHeading {
@@ -383,12 +456,6 @@ namespace KRPC.SpaceCenter.Services
             return Math.Abs (GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (targetDirection))));
         }
 
-        // Single-axis error (degrees) between a target angle and the vessel's current angle.
-        static float AxisError (double targetAngle, double currentAngle)
-        {
-            return (float)Math.Abs (GeometryExtensions.ClampAngle180 (targetAngle - currentAngle));
-        }
-
         /// <summary>
         /// The error, in degrees, between the direction the ship has been asked
         /// to point in and the direction it is pointing in. Throws an exception if the auto-pilot
@@ -411,29 +478,49 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The error, in degrees, between the vessels current and target pitch.
-        /// Throws an exception if the auto-pilot has not been engaged.
+        /// The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+        /// attitude and the commanded target. All three components come from one singularity-free
+        /// residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
+        /// of pitch/heading/roll angles). The scalar <see cref="PitchError"/>,
+        /// <see cref="HeadingError"/> and <see cref="RollError"/> are the magnitudes of the pitch, yaw
+        /// and roll components respectively. Throws an exception if the auto-pilot has not been
+        /// engaged.
         /// </summary>
         [KRPCProperty]
-        public float PitchError {
+        public Tuple3 AttitudeError {
             get {
                 if (!Engaged)
                     throw new InvalidOperationException ("The auto-pilot is not engaged");
-                return AxisError (attitudeController.TargetPitch, CurrentPitchHeadingRoll ().x);
+                return attitudeController.AttitudeErrorTo (
+                    attitudeController.TargetRotation, attitudeController.TargetDirection).ToTuple ();
             }
+        }
+
+        /// <summary>
+        /// The error, in degrees, between the vessels current and target pitch.
+        /// Throws an exception if the auto-pilot has not been engaged.
+        /// </summary>
+        /// <remarks>
+        /// The pitch component of <see cref="AttitudeError"/> — the pitch part of the direction error
+        /// resolved in the roll-invariant frame, well-defined near the vertical.
+        /// </remarks>
+        [KRPCProperty]
+        public float PitchError {
+            get { return (float)Math.Abs (AttitudeError.Item1); }
         }
 
         /// <summary>
         /// The error, in degrees, between the vessels current and target heading.
         /// Throws an exception if the auto-pilot has not been engaged.
         /// </summary>
+        /// <remarks>
+        /// The yaw component of <see cref="AttitudeError"/> — the yaw part of the direction error
+        /// resolved in the roll-invariant frame, well-defined near the vertical (unlike the absolute
+        /// heading, which is undefined at the pole).
+        /// </remarks>
         [KRPCProperty]
         public float HeadingError {
-            get {
-                if (!Engaged)
-                    throw new InvalidOperationException ("The auto-pilot is not engaged");
-                return AxisError (attitudeController.TargetHeading, CurrentPitchHeadingRoll ().y);
-            }
+            get { return (float)Math.Abs (AttitudeError.Item2); }
         }
 
         /// <summary>
@@ -475,17 +562,35 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+        /// attitude and the target the auto-pilot is currently tracking (the slewed target — see
+        /// <see cref="CurrentTargetRotation"/>). Like <see cref="AttitudeError"/> but relative to the
+        /// current target, so it stays small while a smoothed change (see
+        /// <see cref="TargetSmoothingTime"/>) is fed in; equal to <see cref="AttitudeError"/> when
+        /// smoothing is off. Throws an exception if the auto-pilot has not been engaged.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 CurrentAttitudeError {
+            get {
+                if (!Engaged)
+                    throw new InvalidOperationException ("The auto-pilot is not engaged");
+                return attitudeController.AttitudeErrorTo (
+                    attitudeController.EffectiveTargetRotation,
+                    attitudeController.EffectiveTargetDirection).ToTuple ();
+            }
+        }
+
+        /// <summary>
         /// The error, in degrees, between the vessels current pitch and the pitch the auto-pilot is
         /// currently tracking (see <see cref="CurrentTargetPitch"/>). Throws an exception if the
         /// auto-pilot has not been engaged.
         /// </summary>
+        /// <remarks>
+        /// The pitch component of <see cref="CurrentAttitudeError"/>, well-defined near the vertical.
+        /// </remarks>
         [KRPCProperty]
         public float CurrentPitchError {
-            get {
-                if (!Engaged)
-                    throw new InvalidOperationException ("The auto-pilot is not engaged");
-                return AxisError (attitudeController.EffectiveTargetPitch, CurrentPitchHeadingRoll ().x);
-            }
+            get { return (float)Math.Abs (CurrentAttitudeError.Item1); }
         }
 
         /// <summary>
@@ -493,13 +598,12 @@ namespace KRPC.SpaceCenter.Services
         /// is currently tracking (see <see cref="CurrentTargetHeading"/>). Throws an exception if the
         /// auto-pilot has not been engaged.
         /// </summary>
+        /// <remarks>
+        /// The yaw component of <see cref="CurrentAttitudeError"/>, well-defined near the vertical.
+        /// </remarks>
         [KRPCProperty]
         public float CurrentHeadingError {
-            get {
-                if (!Engaged)
-                    throw new InvalidOperationException ("The auto-pilot is not engaged");
-                return AxisError (attitudeController.EffectiveTargetHeading, CurrentPitchHeadingRoll ().y);
-            }
+            get { return (float)Math.Abs (CurrentAttitudeError.Item2); }
         }
 
         /// <summary>

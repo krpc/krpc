@@ -326,6 +326,37 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Double-precision rotation of <paramref name="angle"/> degrees about <paramref name="axis"/>
+        /// (right-handed). Mirrors Unity's <c>Quaternion.AngleAxis</c> (angle first).
+        /// </summary>
+        public static QuaternionD AngleAxis (double angle, Vector3d axis)
+        {
+            axis = axis.normalized;
+            var half = ToRadians (angle) * 0.5;
+            var s = Math.Sin (half);
+            return new QuaternionD (axis.x * s, axis.y * s, axis.z * s, Math.Cos (half));
+        }
+
+        /// <summary>
+        /// The signed angle, in degrees, to rotate <paramref name="from"/> onto <paramref name="to"/>
+        /// about <paramref name="axis"/> (right-handed: positive when <c>from × to</c> points along
+        /// <paramref name="axis"/>). Both vectors are projected onto the plane perpendicular to the
+        /// axis first; returns 0 if either projection vanishes.
+        /// </summary>
+        public static double SignedAngle (Vector3d from, Vector3d to, Vector3d axis)
+        {
+            axis = axis.normalized;
+            var f = from - Vector3d.Dot (from, axis) * axis;
+            var t = to - Vector3d.Dot (to, axis) * axis;
+            if (f.magnitude < 1e-10 || t.magnitude < 1e-10)
+                return 0.0;
+            f.Normalize ();
+            t.Normalize ();
+            var unsigned = ToDegrees (Math.Acos (Vector3d.Dot (f, t).Clamp (-1.0, 1.0)));
+            return Vector3d.Dot (axis, Vector3d.Cross (f, t)) < 0 ? -unsigned : unsigned;
+        }
+
+        /// <summary>
         /// Double-precision quaternion to angle-axis decomposition.
         /// Angle is returned in degrees (matching Unity convention).
         /// </summary>
