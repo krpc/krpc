@@ -1,5 +1,40 @@
 import unittest
 import krpctest
+from krpctest import assert_resources_equivalent
+
+
+class FakeResources:
+
+    def __init__(self, resources):
+        self._resources = resources
+        self.names = list(resources.keys())
+
+    def amount(self, name):
+        return self._resources[name][0]
+
+    def max(self, name):
+        return self._resources[name][1]
+
+
+class TestResourcesEquivalence(unittest.TestCase):
+
+    def test_detects_name_discrepancies(self):
+        expected = FakeResources({"LiquidFuel": (100, 200)})
+        actual = FakeResources({"Oxidizer": (100, 200)})
+        with self.assertRaises(AssertionError):
+            assert_resources_equivalent(self, expected, actual)
+
+    def test_detects_amount_discrepancies(self):
+        expected = FakeResources({"LiquidFuel": (100, 200)})
+        actual = FakeResources({"LiquidFuel": (99, 200)})
+        with self.assertRaises(AssertionError):
+            assert_resources_equivalent(self, expected, actual, delta=0)
+
+    def test_detects_max_discrepancies(self):
+        expected = FakeResources({"LiquidFuel": (100, 200)})
+        actual = FakeResources({"LiquidFuel": (100, 199)})
+        with self.assertRaises(AssertionError):
+            assert_resources_equivalent(self, expected, actual, delta=0)
 
 
 class ResourcesTest:
@@ -123,6 +158,26 @@ class TestResources(krpctest.TestCase, ResourcesTest):
                 self.assertAlmostEqual(
                     self.expected[stage][name][1], resources.max(name), delta=1
                 )
+
+    def test_decouple_stage_resources_migration_default(self):
+        for stage in range(self.num_stages):
+            legacy = self.vessel.resources_in_decouple_stage(stage=stage)
+            migrated = self.vessel.decouple_stage_at(stage).resources()
+            assert_resources_equivalent(self, legacy, migrated)
+
+    def test_decouple_stage_at_zero_value_stage_iteration(self):
+        """Raw stage 0 may have no decoupling parts; DecoupleStageAt must not throw."""
+        stage_obj = self.vessel.decouple_stage_at(0)
+        self.assertEqual(0, stage_obj.number)
+        self.assertIsInstance(stage_obj.parts, list)
+        legacy = self.vessel.resources_in_decouple_stage(stage=0, cumulative=False)
+        migrated = stage_obj.resources(cumulative=False)
+        assert_resources_equivalent(self, legacy, migrated)
+
+    def test_decouple_stage_at_iterates_all_raw_stage_numbers(self):
+        for stage in range(self.num_stages):
+            stage_obj = self.vessel.decouple_stage_at(stage)
+            self.assertEqual(stage, stage_obj.number)
 
     def test_per_stage_amounts_cumulative(self):
         for stage in range(self.num_stages):

@@ -186,6 +186,7 @@
     <Compile Include="Services\SpaceCenter.cs" />
     <Compile Include="Services\SpeedMode.cs" />
     <Compile Include="Services\SuitType.cs" />
+    <Compile Include="Services\Stage.cs" />
     <Compile Include="Services\Vessel.cs" />
     <Compile Include="Services\VesselSituation.cs" />
     <Compile Include="Services\VesselType.cs" />

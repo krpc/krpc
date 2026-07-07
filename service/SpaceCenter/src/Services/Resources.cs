@@ -20,14 +20,16 @@ namespace KRPC.SpaceCenter.Services
         readonly Guid vesselId;
         readonly int stage;
         readonly bool cumulative;
+        readonly bool decoupleStage;
         readonly uint partId;
         // Note: 0 indicates no part
 
-        internal Resources (global::Vessel vessel, int stage = -1, bool cumulative = true)
+        internal Resources (global::Vessel vessel, int stage = -1, bool cumulative = true, bool decoupleStage = true)
         {
             vesselId = vessel.id;
             this.stage = stage;
             this.cumulative = cumulative;
+            this.decoupleStage = decoupleStage;
         }
 
         internal Resources (Part part)
@@ -35,6 +37,7 @@ namespace KRPC.SpaceCenter.Services
             vesselId = Guid.Empty;
             stage = -1;
             cumulative = true;
+            decoupleStage = true;
             partId = part.flightID;
         }
 
@@ -48,6 +51,7 @@ namespace KRPC.SpaceCenter.Services
             vesselId == other.vesselId &&
             stage == other.stage &&
             cumulative == other.cumulative &&
+            decoupleStage == other.decoupleStage &&
             partId == other.partId;
         }
 
@@ -56,7 +60,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return vesselId.GetHashCode () ^ stage.GetHashCode () ^ cumulative.GetHashCode () ^ partId.GetHashCode ();
+            return vesselId.GetHashCode () ^ stage.GetHashCode () ^ cumulative.GetHashCode () ^ decoupleStage.GetHashCode () ^ partId.GetHashCode ();
         }
 
         /// <summary>
@@ -81,12 +85,43 @@ namespace KRPC.SpaceCenter.Services
             }
         }
 
+        IList<int> ActivationStageNumbers ()
+        {
+            return InternalVessel.Parts
+                .Where (part => part.hasStagingIcon)
+                .Select (part => part.inverseStage)
+                .Distinct ()
+                .OrderBy (number => number)
+                .ToList ();
+        }
+
+        int ActivationStageForPart (global::Part vesselPart, IList<int> activationStages)
+        {
+            if (vesselPart.hasStagingIcon)
+                return vesselPart.inverseStage;
+
+            var decoupleStage = vesselPart.DecoupledAt ();
+            return activationStages
+                .Where (stageNumber => stageNumber > decoupleStage)
+                .DefaultIfEmpty (-1)
+                .First ();
+        }
+
         List<PartResource> PartResources {
             get {
                 var resources = new List<PartResource> ();
                 if (vesselId != Guid.Empty) {
+                    var activationStages = decoupleStage ? null : ActivationStageNumbers ();
                     foreach (var vesselPart in InternalVessel.Parts) {
-                        if (vesselPart.DecoupledAt () == stage || (cumulative && vesselPart.DecoupledAt () >= stage)) {
+                        bool include;
+                        if (decoupleStage) {
+                            int d = vesselPart.DecoupledAt ();
+                            include = (d == stage || (cumulative && d >= stage));
+                        } else {
+                            int s = ActivationStageForPart (vesselPart, activationStages);
+                            include = (s == stage || (cumulative && s >= stage));
+                        }
+                        if (include) {
                             foreach (PartResource resource in vesselPart.Resources)
                                 resources.Add (resource);
                         }

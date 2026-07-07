@@ -127,8 +127,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A list of all parts that are activated in the given <paramref name="stage"/>.
         /// </summary>
+        /// <remarks>
+        /// Deprecated. Use <see cref="Vessel.StageAt"/> and <see cref="Stage.Parts"/> instead.
+        /// </remarks>
         /// <param name="stage"></param>
         [KRPCMethod]
+        [Obsolete ("Use Vessel.StageAt(stage).Parts instead.")]
         public IList<Part> InStage (int stage)
         {
             return All.Where (part => part.Stage == stage).ToList ();
@@ -137,8 +141,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A list of all parts that are decoupled in the given <paramref name="stage"/>.
         /// </summary>
+        /// <remarks>
+        /// Deprecated. Use <see cref="Vessel.DecoupleStageAt"/> and <see cref="Stage.Parts"/> instead.
+        /// </remarks>
         /// <param name="stage"></param>
         [KRPCMethod]
+        [Obsolete ("Use Vessel.DecoupleStageAt(stage).Parts instead.")]
         public IList<Part> InDecoupleStage (int stage)
         {
             return All.Where (part => part.DecoupleStage == stage).ToList ();
