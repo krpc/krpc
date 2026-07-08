@@ -153,6 +153,119 @@ class TestPartsModule(krpctest.TestCase):
         self.assertTrue(module.has_event("Lights On"))
         self.assertFalse(module.has_event("Lights Off"))
 
+    def test_field_list(self):
+        field_type = self.connect().space_center.FieldType
+        part = self.parts.with_name("mk1-3pod")[0]
+        module = next(m for m in part.modules if m.name == "ModuleCommand")
+
+        field_list = module.field_list
+        self.assertGreater(len(field_list), 0)
+
+        # Every field refers back to its module (exercises Equals), and fetching
+        # the list twice yields equal field objects.
+        for field in field_list:
+            self.assertEqual(module, field.module)
+        self.assertEqual(module.field_list[0], module.field_list[0])
+
+        # A visible field carries the right metadata and value.
+        command_state = next(f for f in field_list if f.gui_name == "Command State")
+        self.assertEqual("Command State", command_state.gui_name)
+        self.assertTrue(command_state.visible)
+        self.assertEqual("Operational", command_state.value)
+
+        # A hidden integer field (not shown in the right-click menu) is included,
+        # with its type and typed value.
+        minimum_crew = next(f for f in field_list if f.name == "minimumCrew")
+        self.assertFalse(minimum_crew.visible)
+        self.assertEqual(field_type.integer, minimum_crew.type)
+        self.assertEqual(1, minimum_crew.int_value)
+        self.assertEqual("1", minimum_crew.value)
+        # A typed getter of the wrong type raises.
+        self.assertRaises(RuntimeError, lambda: minimum_crew.bool_value)
+
+        # Equivalence with the deprecated views.
+        self.assertEqual(
+            module.fields,
+            {f.gui_name: f.value for f in field_list if f.visible},
+        )
+        self.assertEqual(
+            module.all_fields_by_id,
+            {f.name: f.value for f in field_list},
+        )
+
+    def test_field_list_set_and_reset(self):
+        field_type = self.connect().space_center.FieldType
+        part = self.parts.with_name("SmallGearBay")[0]
+        module = next(m for m in part.modules if m.name == "ModuleWheelBrakes")
+        brakes = next(f for f in module.field_list if f.gui_name == "Brakes")
+        self.addCleanup(setattr, brakes, "float_value", 100)
+
+        self.assertEqual(field_type.float, brakes.type)
+        self.assertEqual(100, brakes.float_value)
+
+        brakes.float_value = 50
+        self.wait(1)
+        self.assertEqual(50, brakes.float_value)
+        self.assertEqual("50", brakes.value)
+
+        # reset() restores the original value (a visible field, so KSP snapshots it).
+        brakes.reset()
+        self.wait(1)
+        self.assertEqual(100, brakes.float_value)
+
+    def test_event_list(self):
+        part = self.parts.with_name("spotLight1")[0]
+        module = next(m for m in part.modules if m.name == "ModuleLight")
+
+        event_list = module.event_list
+        self.assertGreater(len(event_list), 0)
+        for event in event_list:
+            self.assertEqual(module, event.module)
+
+        # The visible+active events match the deprecated events view.
+        self.assertCountEqual(
+            module.events,
+            [e.gui_name for e in event_list if e.visible and e.active],
+        )
+
+        lights_on = next(e for e in event_list if e.gui_name == "Lights On")
+        self.assertTrue(lights_on.visible)
+        self.assertTrue(lights_on.active)
+
+        lights_on.trigger()
+        self.wait()
+        # Triggering flips which events are shown in the menu.
+        self.assertCountEqual(
+            module.events,
+            [e.gui_name for e in module.event_list if e.visible and e.active],
+        )
+        self.assertIn("Lights Off", module.events)
+
+        next(e for e in module.event_list if e.gui_name == "Lights Off").trigger()
+        self.wait()
+        self.assertIn("Lights On", module.events)
+
+    def test_action_list(self):
+        part = self.parts.with_name("spotLight1")[0]
+        module = next(m for m in part.modules if m.name == "ModuleLight")
+
+        action_list = module.action_list
+        self.assertGreater(len(action_list), 0)
+        for action in action_list:
+            self.assertEqual(module, action.module)
+
+        # The action gui names match the deprecated actions view.
+        self.assertCountEqual(module.actions, [a.gui_name for a in action_list])
+
+        toggle = next(a for a in action_list if a.gui_name == "Toggle Light")
+        self.assertTrue(module.has_event("Lights On"))
+        toggle.set(True)
+        self.wait()
+        self.assertTrue(module.has_event("Lights Off"))
+        toggle.set(False)
+        self.wait()
+        self.assertTrue(module.has_event("Lights On"))
+
     def test_config_node(self):
         part = self.parts.with_name("mk1-3pod")[0]
         module = next(m for m in part.modules if m.name == "ModuleCommand")
