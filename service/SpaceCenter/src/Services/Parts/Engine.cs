@@ -141,23 +141,35 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             var engine = CurrentEngine;
 
-            // Compute fuel flow multiplier
+            // Compute the fuel flow multiplier, mirroring ModuleEngines.MaxThrustOutputAtm.
+            // For air-breathing engines this scales with atmospheric density and, via the
+            // velocity curve, with Mach number.
             float flowMultiplier = 1;
-            if (engine.atmChangeFlow)
+            if (engine.atmChangeFlow) {
                 flowMultiplier = (float)(engine.part.atmDensity / 1.225d);
-            if (engine.useAtmCurve && engine.atmCurve != null)
-                flowMultiplier = engine.atmCurve.Evaluate (flowMultiplier);
-
-            // Compute velocity multiplier
-            float velocityMultiplier = 1;
+                if (engine.useAtmCurve && engine.atmCurve != null)
+                    flowMultiplier = engine.atmCurve.Evaluate (flowMultiplier);
+            }
             if (engine.useVelCurve && engine.velCurve != null)
-                velocityMultiplier = velocityMultiplier * engine.velCurve.Evaluate ((float)engine.vessel.mach);
+                flowMultiplier *= engine.velCurve.Evaluate ((float)engine.vessel.mach);
+
+            // Apply KSP's soft cap on the flow multiplier. Above flowMultCap the excess is
+            // compressed (so extra ram flow gives diminishing returns rather than growing
+            // without bound), then a lower bound is enforced. Without this the reported
+            // thrust of air-breathing engines is overstated at high Mach.
+            if (flowMultiplier > engine.flowMultCap) {
+                float excess = flowMultiplier - engine.flowMultCap;
+                flowMultiplier = engine.flowMultCap +
+                    excess / (engine.flowMultCapSharpness + excess / engine.flowMultCap);
+            }
+            if (flowMultiplier < engine.CLAMP)
+                flowMultiplier = engine.CLAMP;
 
             // Get specific impulse at the given pressure
             var specificImpulse = engine.atmosphereCurve.Evaluate ((float)pressure);
 
             // Compute thrust
-            return 1000f * Mathf.Lerp (engine.minFuelFlow, engine.maxFuelFlow, throttle) * flowMultiplier * specificImpulse * engine.g * velocityMultiplier;
+            return 1000f * Mathf.Lerp (engine.minFuelFlow, engine.maxFuelFlow, throttle) * flowMultiplier * specificImpulse * engine.g;
         }
 
         /// <summary>

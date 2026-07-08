@@ -610,5 +610,73 @@ class TestGimbalOverrideAttitude(krpctest.TestCase):
         self.assertLess(dot(spin_positive, spin_negative), 0)
 
 
+class TestPartsEngineSupersonic(krpctest.TestCase, EngineTestBase):
+    """The reported thrust of an air-breathing engine must apply KSP's fuel-flow
+    multiplier cap (``flowMultCap``).
+
+    KSP soft-clamps the fuel-flow multiplier so that, above the engine's
+    ``flowMultCap``, extra ram flow yields diminishing returns rather than growing
+    without bound. The multiplier only climbs above the cap at supersonic speed, where
+    the engine's velocity curve boosts the flow -- so the ground-static engine tests
+    never exercise it. ``AvailableThrust``/``MaxThrust`` recompute the thrust
+    themselves and must apply the same clamp, otherwise they over-report thrust for a
+    fast-moving jet.
+
+    Flown with the stock Aeris 4A SSTO, whose two J-X4 "Whiplash" turbojets
+    (``turboFanEngine``, ``flowMultCap = 2``) have a velocity curve that pushes the raw
+    flow multiplier well past the cap once supersonic.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_sph("Aeris 4A")
+        cls.remove_other_vessels()
+        cls.vessel = cls.connect().space_center.active_vessel
+        cls.parts = cls.vessel.parts
+
+    def test_thrust_flow_multiplier_capped_supersonic(self):
+        vessel = self.vessel
+        self.fill_all_resources()
+
+        # Place the SSTO in fast, level flight high in the atmosphere, where the
+        # Whiplash velocity curve drives the raw fuel-flow multiplier above the cap. The
+        # altitude is well within the engine's operating envelope so it sustains the
+        # supersonic cruise, and SAS holds the nose on the velocity vector.
+        vessel.control.sas = False
+        vessel.control.rcs = False
+        self.set_flight(altitude=12000, speed=700, heading=90)
+        vessel.control.throttle = 1
+        vessel.control.sas = True
+        # Stock jets must be staged before they spool up.
+        if not any(engine.active for engine in vessel.parts.engines):
+            vessel.control.activate_next_stage()
+
+        engine = self.get_engine("turboFanEngine")  # J-X4 "Whiplash"
+        flight = vessel.flight()
+
+        # Wait for the jet to reach full throttle while comfortably supersonic, so the
+        # flow multiplier is firmly above the cap.
+        self.wait_until(
+            lambda: engine.throttle > 0.98 and flight.mach > 1.8,
+            timeout=30,
+            message="the jet to spool up to full throttle while supersonic",
+        )
+        self.assertTrue(engine.has_fuel)
+
+        # KSP's actual thrust (reported via Engine.thrust as finalThrust) already
+        # applies the flowMultCap soft clamp. AvailableThrust and MaxThrust recompute
+        # the thrust and must land on the same value; before the fix they omitted the
+        # clamp and over-reported the supersonic thrust by tens of percent.
+        thrust = engine.thrust
+        self.assertGreater(thrust, 0)
+        delta = 0.05 * thrust
+        self.assertAlmostEqual(thrust, engine.available_thrust, delta=delta)
+        self.assertAlmostEqual(thrust, engine.max_thrust, delta=delta)
+
+        vessel.control.throttle = 0
+        engine.active = False
+
+
 if __name__ == "__main__":
     unittest.main()
