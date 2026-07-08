@@ -1792,6 +1792,151 @@ TestAutoPilotLaunchGDLV3 = _make_autopilot_launch_test_class(
 )
 
 
+# Straight-and-level flight-hold tests for stock aircraft: place the craft in level
+# atmospheric flight and confirm the autopilot holds (or recovers to) a smooth, steady
+# wings-level attitude. Each craft is flown near a speed at which level flight is
+# sustainable; too slow and it mushes (the commanded pitch is not an equilibrium), which
+# is a craft limitation rather than an autopilot one. A roll upset is deliberately not
+# tested here: on aircraft the autopilot's roll control excites a sustained roll
+# limit-cycle (a known limitation of the constant-torque model on aero-controlled craft),
+# so these focus on the pitch/heading hold that does converge cleanly.
+# pylint: disable=too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-locals
+def _make_autopilot_flight_test_class(
+    test_name,
+    vessel_name,
+    speed,
+    altitude=5000,
+    heading=90,
+    throttle=1,
+    settle_delay=8,
+    # A loose guard against a divergent actuator limit-cycle: on aero-controlled craft the
+    # autopilot chatters mildly while holding (a settled hold measures < 0.1) and can
+    # occasionally spike, so this only catches gross, sustained oscillation. The tight,
+    # meaningful checks are the pointing error and the final wings-level attitude below.
+    hold_oscillation_amplitude=1,
+    hold_attitude_error=2,
+    attitude_tolerance=2,
+):
+    class TestAutoPilotFlightBase(krpctest.TestCase):
+        @classmethod
+        def setUpClass(cls):
+            cls.new_save()
+
+        def setUp(self):
+            self.remove_other_vessels()
+            self.launch_vessel_from_sph(vessel_name)
+            self.vessel = self.connect().space_center.active_vessel
+            self.ap = self.vessel.auto_pilot
+            self.ap.reset()
+            self.ap.sas = False
+            self.ap.show_info_ui = True
+
+        def tearDown(self):
+            self.ap.engaged = False
+            self.ap.show_info_ui = False
+
+        def place(self, pitch=0, roll=0):
+            # Put the aircraft in flight at the given attitude with the engine running.
+            self.vessel.control.sas = False
+            self.vessel.control.rcs = False
+            self.set_flight(
+                altitude=altitude,
+                speed=speed,
+                heading=heading,
+                pitch=pitch,
+                roll=roll,
+            )
+            self.vessel.control.throttle = throttle
+            # Stock jets need their engine staged before they will spool up.
+            if not any(engine.active for engine in self.vessel.parts.engines):
+                self.vessel.control.activate_next_stage()
+            self.vessel.control.gear = False
+
+        def hold(self, pitch=0, roll=0):
+            # Command the autopilot to hold a level (or given) attitude on the heading.
+            self.ap.reference_frame = self.vessel.surface_reference_frame
+            self.ap.target_pitch_and_heading(pitch, heading)
+            self.ap.target_roll = roll
+            self.ap.engaged = True
+
+        def capture_hold(self):
+            # Let the hold settle, then capture ten seconds of the steady state.
+            self.wait(settle_delay)
+            self.ap.diagnostic_logging = True
+            self.wait(10)
+            self.ap.diagnostic_logging = False
+            return diagnostics.parse_log(self.ap.diagnostic_log)
+
+        def assert_steady(self, samples):
+            self.assertGreater(len(samples), 0)
+            # Actuators should not limit-cycle while holding the attitude.
+            self.assertLess(
+                diagnostics.control_oscillation_amplitude(samples),
+                hold_oscillation_amplitude,
+                "actuators limit-cycled while holding the flight attitude",
+            )
+            # The pointing error should stay small throughout the captured hold.
+            self.assertLess(
+                max(sample.err for sample in samples),
+                hold_attitude_error,
+                "lost the flight attitude",
+            )
+
+        def assert_level(self):
+            # The pointing error checked in assert_steady excludes roll, so the wings-level
+            # attitude is confirmed explicitly here (pitch and heading too).
+            flight = self.vessel.flight(self.vessel.surface_reference_frame)
+            self.assertAlmostEqual(0, flight.pitch, delta=attitude_tolerance)
+            self.assertDegreesAlmostEqual(
+                heading, flight.heading, delta=attitude_tolerance
+            )
+            self.assertAlmostEqual(0, flight.roll, delta=attitude_tolerance)
+
+        def test_hold_straight_and_level(self):
+            # Place the aircraft in level flight and confirm the autopilot holds a smooth,
+            # steady wings-level attitude in the atmosphere.
+            self.place(0, 0)
+            self.hold(0, 0)
+            samples = self.capture_hold()
+            self.assert_steady(samples)
+            self.assert_level()
+
+        def test_recover_from_pitch_upset(self):
+            # Place the aircraft pitched up, command level flight, and confirm the
+            # autopilot pushes the nose back down to level and then holds it steadily.
+            self.place(10, 0)
+            self.hold(0, 0)
+            samples = self.capture_hold()
+            self.assert_steady(samples)
+            self.assert_level()
+
+    TestAutoPilotFlightBase.__name__ = test_name
+    TestAutoPilotFlightBase.__qualname__ = test_name
+    return TestAutoPilotFlightBase
+
+
+# A small, easy-to-fly stock jet.
+TestAutoPilotFlightAeris3A = _make_autopilot_flight_test_class(
+    "TestAutoPilotFlightAeris3A",
+    "Aeris 3A",
+    speed=75,
+)
+
+# A stock SSTO spaceplane.
+TestAutoPilotFlightAeris4A = _make_autopilot_flight_test_class(
+    "TestAutoPilotFlightAeris4A",
+    "Aeris 4A",
+    speed=100,
+)
+
+# A small, slow stock light aircraft.
+TestAutoPilotFlightGull = _make_autopilot_flight_test_class(
+    "TestAutoPilotFlightGull",
+    "Gull",
+    speed=35,
+)
+
+
 class TestAutoPilotSAS(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):

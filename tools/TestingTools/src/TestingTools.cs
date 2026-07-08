@@ -88,6 +88,64 @@ namespace TestingTools
         }
 
         /// <summary>
+        /// Place the active vessel in level atmospheric flight over the given point: at the given
+        /// altitude and airspeed, pointing along the given heading at the given pitch and roll, and
+        /// let physics resume so it is flying. Use this to set up in-air scenarios (e.g. testing the
+        /// autopilot's attitude hold on a stock aircraft) without flying the craft up from the runway.
+        /// The pitch/heading/roll match those reported by the vessel's Flight, and the airspeed is set
+        /// along the nose so the craft starts at zero angle of attack when level.
+        /// </summary>
+        /// <param name="body">Name of the body to fly over.</param>
+        /// <param name="latitude">Latitude in degrees.</param>
+        /// <param name="longitude">Longitude in degrees.</param>
+        /// <param name="altitude">Altitude in meters above MSL.</param>
+        /// <param name="speed">Airspeed in meters per second (surface-relative).</param>
+        /// <param name="heading">Compass heading to point along, in degrees (90 = east).</param>
+        /// <param name="pitch">Pitch above the horizon, in degrees. Defaults to 0 (level).</param>
+        /// <param name="roll">Roll, in degrees. Defaults to 0 (wings level).</param>
+        [KRPCProcedure]
+        public static void SetFlight (
+            string body, double latitude, double longitude, double altitude,
+            double speed, double heading, double pitch = 0, double roll = 0)
+        {
+            var celestialBody = FlightGlobals.Bodies.First (b => b.bodyName == body);
+            var vessel = FlightGlobals.ActiveVessel;
+
+            // Build the world-space attitude for the requested pitch/heading/roll using the same
+            // surface-frame convention (x = zenith, y = north, z = east) as the flight telemetry,
+            // evaluated at the target location rather than the vessel's current one.
+            var worldPosition = celestialBody.GetWorldSurfacePosition (latitude, longitude, altitude);
+            var positionFromBody = worldPosition - celestialBody.position;
+            var toNorthPole = (celestialBody.position + (Vector3d)celestialBody.transform.up * celestialBody.Radius) - worldPosition;
+            var northPole = toNorthPole.normalized;
+            var frameUp = Vector3d.Exclude (positionFromBody, northPole);
+            var frameForward = Vector3d.Cross (positionFromBody, northPole);
+            KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.OrthoNormalize2 (ref frameForward, ref frameUp);
+            var frameRotation = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.LookRotation2 (frameForward, frameUp);
+            var inFrame = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.QuaternionFromPitchHeadingRoll (
+                new Vector3d (pitch, heading, roll));
+            var worldRotation = frameRotation * inFrame;
+            // The vessel's nose is its local up axis; the airspeed is set along it.
+            var nose = worldRotation * Vector3d.up;
+
+            // Orbital velocity giving the requested airspeed: the co-rotating surface velocity at
+            // this point plus the airspeed along the nose.
+            var surfaceVelocity = Vector3d.Cross (celestialBody.angularVelocity, positionFromBody);
+            var worldVelocity = surfaceVelocity + speed * nose;
+
+            // Teleport via a state-vector orbit (SetOrbit clears the landed/clamp state and packs the
+            // vessel on rails), then set the attitude; physics resumes when it unpacks.
+            var ut = Planetarium.GetUniversalTime ();
+            var current = vessel.orbitDriver.orbit;
+            var orbit = new Orbit (current.inclination, current.eccentricity, current.semiMajorAxis, current.LAN, current.argumentOfPeriapsis, current.meanAnomalyAtEpoch, current.epoch, current.referenceBody);
+            orbit.UpdateFromStateVectors (positionFromBody.xzy, worldVelocity.xzy, celestialBody, ut);
+            vessel.SetOrbit (orbit);
+            vessel.SetRotation ((Quaternion)worldRotation);
+
+            throw new YieldException<Action> (() => WaitForVesselSwitch (0));
+        }
+
+        /// <summary>
         /// Place the active vessel on the surface of a body at the given latitude and longitude,
         /// and wait for it to come to rest. Use this to set up landed scenarios away from a launch
         /// site, for example testing surface harvesters on an ore-rich biome.

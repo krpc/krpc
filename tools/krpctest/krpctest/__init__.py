@@ -58,46 +58,59 @@ class TestCase(unittest.TestCase):
         cls.connect().testing_tools.remove_other_vessels()
 
     @classmethod
-    def launch_vessel_from_vab(cls, name, directory=None, launch_site=None):
-        # Copy craft file to save directory
+    def _stage_craft(cls, name, editor, directory):
+        # Copy the named craft file (from the given directory, else the test craft
+        # directory, else KSP's stock craft for that editor) into the current save's
+        # Ships/<editor> directory so it can be launched. Returns nothing; raises if the
+        # craft cannot be found.
         if directory is None:
             directory = os.path.join(os.getcwd(), os.path.dirname(sys.argv[0]), "craft")
         fixtures_paths = [
             os.path.abspath(directory),
-            os.path.join(_get_ksp_dir(), "Ships", "VAB"),
+            os.path.join(_get_ksp_dir(), "Ships", editor),
         ]
         save_path = os.path.join(
             _get_ksp_dir(), "saves", cls.connect().testing_tools.current_save
         )
         if not os.path.exists(save_path):
             os.makedirs(save_path)
-        ships_path = os.path.join(save_path, "Ships", "VAB")
+        ships_path = os.path.join(save_path, "Ships", editor)
         if not os.path.exists(ships_path):
             os.makedirs(ships_path)
-        copied = False
         for fixtures_path in fixtures_paths:
-            if os.path.exists(os.path.join(fixtures_path, name + ".craft")):
-                shutil.copy(
-                    os.path.join(fixtures_path, name + ".craft"),
-                    os.path.join(ships_path, name + ".craft"),
-                )
-                shutil.copy(
-                    os.path.join(fixtures_path, name + ".loadmeta"),
-                    os.path.join(ships_path, name + ".loadmeta"),
-                )
-                copied = True
-                break
-        if not copied:
-            raise RuntimeError(
-                "Failed to find craft in:\n"
-                + "".join(f"  {x}\n" for x in fixtures_paths)
-            )
-        # Launch the craft
+            craft = os.path.join(fixtures_path, name + ".craft")
+            if os.path.exists(craft):
+                shutil.copy(craft, os.path.join(ships_path, name + ".craft"))
+                # Not every craft ships a loadmeta; copy it only when present.
+                loadmeta = os.path.join(fixtures_path, name + ".loadmeta")
+                if os.path.exists(loadmeta):
+                    shutil.copy(loadmeta, os.path.join(ships_path, name + ".loadmeta"))
+                return
+        raise RuntimeError(
+            "Failed to find craft in:\n" + "".join(f"  {x}\n" for x in fixtures_paths)
+        )
+
+    @classmethod
+    def launch_vessel_from_vab(cls, name, directory=None, launch_site=None):
+        cls._stage_craft(name, "VAB", directory)
         space_center = cls.connect().space_center
         if launch_site is None:
             space_center.launch_vessel_from_vab(name)
         else:
             space_center.launch_vessel("VAB", name, launch_site, [])
+        # Ensure the crew are all pilots, for full control
+        cls.set_crew_to_pilot()
+
+    @classmethod
+    def launch_vessel_from_sph(cls, name, directory=None, launch_site=None):
+        # Launch an aircraft from the SPH (onto the runway by default). Stock aircraft
+        # (e.g. "Aeris 3A", "Stearwing A300") live in KSP's Ships/SPH directory.
+        cls._stage_craft(name, "SPH", directory)
+        space_center = cls.connect().space_center
+        if launch_site is None:
+            space_center.launch_vessel_from_sph(name)
+        else:
+            space_center.launch_vessel("SPH", name, launch_site, [])
         # Ensure the crew are all pilots, for full control
         cls.set_crew_to_pilot()
 
@@ -131,6 +144,35 @@ class TestCase(unittest.TestCase):
     @classmethod
     def set_landed(cls, body, latitude, longitude, altitude=0):
         cls.connect().testing_tools.set_landed(body, latitude, longitude, altitude)
+
+    # Kerbin latitude/longitude of the KSC.
+    KSC_LATITUDE = -0.0972
+    KSC_LONGITUDE = -74.5577
+
+    @classmethod
+    def set_flight(
+        cls,
+        altitude=5000,
+        speed=75,
+        heading=90,
+        pitch=0,
+        roll=0,
+        body="Kerbin",
+        latitude=None,
+        longitude=None,
+    ):
+        """Place the active vessel in level atmospheric flight over the given point (the
+        KSC by default): at altitude (m above MSL) and airspeed (m/s), pointing along
+        heading (degrees, 90 = east) at the given pitch and roll (degrees), then let
+        physics resume so it is flying. The airspeed is set along the nose, so a level
+        placement starts at zero angle of attack."""
+        if latitude is None:
+            latitude = cls.KSC_LATITUDE
+        if longitude is None:
+            longitude = cls.KSC_LONGITUDE
+        cls.connect().testing_tools.set_flight(
+            body, latitude, longitude, altitude, speed, heading, pitch, roll
+        )
 
     @classmethod
     def set_crew_to_pilot(cls):
