@@ -27,6 +27,7 @@ Olex
 PID
 Tron
 Wheesley
+accelerometers
 adaptively
 aero
 amongst
