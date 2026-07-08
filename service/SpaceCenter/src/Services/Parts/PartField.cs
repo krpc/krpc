@@ -198,12 +198,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Set the value of the field to its original value.
         /// </summary>
         /// <remarks>
-        /// Has no effect on fields that are not visible in the right-click menu of the part.
+        /// The original value is the value the field had when the part was loaded.
+        /// Works for any field, including those not visible in the right-click menu.
         /// </remarks>
         [KRPCMethod]
         public void Reset ()
         {
-            field.SetOriginalValue ();
+            Module.RestoreOriginalFieldValue (field);
         }
     }
 }

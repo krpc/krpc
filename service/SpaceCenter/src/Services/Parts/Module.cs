@@ -290,6 +290,19 @@ namespace KRPC.SpaceCenter.Services.Parts
             field.SetValue (value, module);
         }
 
+        /// <summary>
+        /// Restore a field to its original value: the value KSP recorded when the part was
+        /// loaded. Note that BaseField.SetOriginalValue does not do this -- despite its name,
+        /// it re-snapshots the current value as the new original -- so instead this writes
+        /// originalValue back through BaseField.SetValue (which also fires OnValueModified).
+        /// </summary>
+        internal void RestoreOriginalFieldValue(BaseField<KSPField> field) {
+            var original = field.originalValue;
+            if (original == null && field.FieldInfo.FieldType.IsValueType)
+                return;
+            field.SetValue (original, module);
+        }
+
         private void AssignFieldByName(string name, object value) {
             AssignField(GetBaseFieldByName (name), value);
         }
@@ -402,7 +415,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void ResetField (string name)
         {
-            GetBaseFieldByName (name).SetOriginalValue ();
+            RestoreOriginalFieldValue (GetBaseFieldByName (name));
         }
 
         /// <summary>
@@ -410,13 +423,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="id">Identifier of the field.</param>
         /// <remarks>
-        /// Has no effect on fields that are not visible in the right-click menu of the part.
+        /// The original value is the value the field had when the part was loaded.
         /// </remarks>
         [Obsolete("Use <see cref='PartField.Reset'/> instead.")]
         [KRPCMethod]
         public void ResetFieldById (string id)
         {
-            GetBaseFieldById (id).SetOriginalValue ();
+            RestoreOriginalFieldValue (GetBaseFieldById (id));
         }
 
         /// <summary>

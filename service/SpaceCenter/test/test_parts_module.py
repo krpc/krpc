@@ -108,20 +108,15 @@ class TestPartsModule(krpctest.TestCase):
         module = next(m for m in part.modules if m.name == "ModuleCommand")
         # minimumCrew is hidden, so set/reset-by-id reach it via the fallback.
         self.assertNotIn("minimumCrew", module.fields_by_id)
-        # reset_field_by_id cannot restore a hidden field (see below), so restore
-        # the original value on cleanup with an explicit set instead.
         self.addCleanup(module.set_field_int_by_id, "minimumCrew", 1)
         self.assertEqual("1", module.get_field_by_id("minimumCrew"))
         module.set_field_int_by_id("minimumCrew", 2)
         self.wait(1)
         self.assertEqual("2", module.get_field_by_id("minimumCrew"))
         # reset_field_by_id reaches the field via the same fallback (it raised
-        # before this change), but KSP only snapshots a field's original value
-        # when its GUI control is created, so reset is a no-op for hidden fields
-        # and we don't assert the resulting value.
+        # before this change). KSP snapshots original values for all fields,
+        # hidden included, when the part is loaded, so reset restores it.
         module.reset_field_by_id("minimumCrew")
-        # Restore the original value with an explicit set.
-        module.set_field_int_by_id("minimumCrew", 1)
         self.wait(1)
         self.assertEqual("1", module.get_field_by_id("minimumCrew"))
 
@@ -208,7 +203,7 @@ class TestPartsModule(krpctest.TestCase):
         self.assertEqual(50, brakes.float_value)
         self.assertEqual("50", brakes.value)
 
-        # reset() restores the original value (a visible field, so KSP snapshots it).
+        # reset() restores the value the field had when the part was loaded.
         brakes.reset()
         self.wait(1)
         self.assertEqual(100, brakes.float_value)
