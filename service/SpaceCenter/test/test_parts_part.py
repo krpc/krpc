@@ -26,7 +26,14 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual(self.vessel, part.vessel)
         self.assertIsNone(part.parent)
         self.assertCountEqual(
-            ["fairingSize1"] + ["landingLeg1"] * 3 + ["SmallGearBay", "Separator.2"],
+            ["fairingSize1"]
+            + ["landingLeg1"] * 3
+            + [
+                "SmallGearBay",
+                "Separator.2",
+                "sensorThermometer",
+                "sensorAccelerometer",
+            ],
             [x.name for x in part.children],
         )
         self.assertFalse(part.axially_attached)
@@ -34,8 +41,8 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual(-1, part.stage)
         self.assertEqual(-1, part.decouple_stage)
         self.assertFalse(part.massless)
-        self.assertAlmostEqual(2720, part.mass, places=2)
-        self.assertAlmostEqual(2600, part.dry_mass, places=2)
+        self.assertAlmostEqual(2730, part.mass, places=2)
+        self.assertAlmostEqual(2610, part.dry_mass, places=2)
         self.assertFalse(part.shielded)
         self.assertAlmostEqual(0, part.dynamic_pressure, places=3)
         self.assertEqual(20, part.impact_tolerance)

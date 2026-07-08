@@ -54,6 +54,9 @@ v0.6.0
  * Fix Flight.SimulateAerodynamicForceAt returning force in kilonewtons instead of
    newtons when FAR is installed (#915)
  * Add direct control of engine gimbals, RCS and control surfaces (#917)
+ * Fix reference frame velocity being incorrect at non-equatorial latitudes (#454)
+ * Fix ResourceHarvester.ExtractionRate returning 0 when part action window is not open (#889)
+ * Fix Sensor.Value returning zero when the part action window is not open (#883)
 
 v0.5.4
  * Fix vessel recovery (#782)

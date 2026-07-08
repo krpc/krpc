@@ -20,6 +20,7 @@ class TestParts(krpctest.TestCase):
         # localized titles, so this passes regardless of KSP's language.
         self.assertCountEqual(
             [
+                "sensorThermometer",  # 2HOT Thermometer
                 "MiniDrill",  # 'Drill-O-Matic Junior' Mining Excavator
                 "fairingSize1",  # AE-FF1 Airstream Protective Shell (1.25m)
                 "IntakeRadialLong",  # Adjustable Ramp Intake (Radial)
@@ -31,6 +32,7 @@ class TestParts(krpctest.TestCase):
                 "dockingPort3",  # Clamp-O-Tron Docking Port Jr.
                 "longAntenna",  # Communotron 16
                 "ISRU",  # Convert-O-Tron 250
+                "sensorAccelerometer",  # Double-C Seismic Accelerometer
                 "winglet3",  # Delta-Deluxe Winglet
                 "strutConnector",  # EAS-4 Strut Connector
                 "strutConnector",
@@ -167,6 +169,7 @@ class TestParts(krpctest.TestCase):
 
         self.assertCountEqual(
             [
+                "sensorThermometer",  # 2HOT Thermometer
                 "MiniDrill",  # 'Drill-O-Matic Junior' Mining Excavator
                 "IntakeRadialLong",  # Adjustable Ramp Intake (Radial)
                 "asasmodule1-2",  # Advanced Reaction Wheel Module, Large
@@ -175,6 +178,7 @@ class TestParts(krpctest.TestCase):
                 "noseCone",
                 "longAntenna",  # Communotron 16
                 "ISRU",  # Convert-O-Tron 250
+                "sensorAccelerometer",  # Double-C Seismic Accelerometer
                 "winglet3",  # Delta-Deluxe Winglet
                 "strutConnector",  # EAS-4 Strut Connector
                 "strutConnector",
@@ -241,7 +245,8 @@ class TestParts(krpctest.TestCase):
         self.assertCountEqual(
             ["fairingSize1"]  # AE-FF1 Airstream Protective Shell (1.25m)
             + ["landingLeg1"] * 3  # LT-1 Landing Struts
-            + ["SmallGearBay", "mk1-3pod"],  # LY-10 Small Landing Gear, Mk1-3 pod
+            + ["SmallGearBay", "mk1-3pod"]  # LY-10 Small Landing Gear, Mk1-3 pod
+            + ["sensorThermometer", "sensorAccelerometer"],  # 2HOT, Double-C
             part_names_in_decouple_stage(-1),
         )
         self.assertCountEqual([], part_names_in_decouple_stage(0))
@@ -331,6 +336,8 @@ class TestParts(krpctest.TestCase):
                 "mk1-3pod",  # Mk1-3 Command Pod
                 "sensorGravimeter",  # GRAVMAX Negative Gravioli Detector
                 "sensorBarometer",  # PresMat Barometer
+                "sensorThermometer",  # 2HOT Thermometer
+                "sensorAccelerometer",  # Double-C Seismic Accelerometer
             ]
             + ["GooExperiment"] * 3,  # Mystery Goo\u2122 Containment Unit
             [p.part.name for p in self.parts.experiments],
@@ -403,7 +410,12 @@ class TestParts(krpctest.TestCase):
 
     def test_sensors(self):
         self.assertCountEqual(
-            ["sensorGravimeter", "sensorBarometer"],
+            [
+                "sensorGravimeter",
+                "sensorBarometer",
+                "sensorThermometer",
+                "sensorAccelerometer",
+            ],
             [p.part.name for p in self.parts.sensors],
         )
 
