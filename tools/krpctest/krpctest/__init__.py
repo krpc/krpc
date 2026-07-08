@@ -157,21 +157,32 @@ class TestCase(unittest.TestCase):
         heading=90,
         pitch=0,
         roll=0,
+        angle_of_attack=0,
         body="Kerbin",
         latitude=None,
         longitude=None,
     ):
-        """Place the active vessel in level atmospheric flight over the given point (the
-        KSC by default): at altitude (m above MSL) and airspeed (m/s), pointing along
-        heading (degrees, 90 = east) at the given pitch and roll (degrees), then let
-        physics resume so it is flying. The airspeed is set along the nose, so a level
-        placement starts at zero angle of attack."""
+        """Place the active vessel in atmospheric flight over the given point (the KSC by
+        default): at altitude (m above MSL) and airspeed (m/s), pointing along heading
+        (degrees, 90 = east) at the given pitch and roll (degrees), then let physics
+        resume so it is flying. angle_of_attack (degrees) puts the airspeed that far below
+        the nose in the pitch plane; 0 (the default) is a nose-aligned airspeed (level
+        flight), a positive value a nose-up attitude relative to the flight path (e.g. a
+        re-entry hold), so the flight-path angle is pitch minus angle_of_attack."""
         if latitude is None:
             latitude = cls.KSC_LATITUDE
         if longitude is None:
             longitude = cls.KSC_LONGITUDE
         cls.connect().testing_tools.set_flight(
-            body, latitude, longitude, altitude, speed, heading, pitch, roll
+            body,
+            latitude,
+            longitude,
+            altitude,
+            speed,
+            heading,
+            pitch,
+            roll,
+            angle_of_attack,
         )
 
     @classmethod

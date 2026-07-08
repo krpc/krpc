@@ -103,10 +103,14 @@ namespace TestingTools
         /// <param name="heading">Compass heading to point along, in degrees (90 = east).</param>
         /// <param name="pitch">Pitch above the horizon, in degrees. Defaults to 0 (level).</param>
         /// <param name="roll">Roll, in degrees. Defaults to 0 (wings level).</param>
+        /// <param name="angleOfAttack">Angle of attack in degrees: how far the airspeed vector sits
+        /// below the nose, in the pitch plane. 0 (the default) puts the airspeed along the nose;
+        /// a positive value gives a nose-up attitude relative to the flight path (e.g. a re-entry
+        /// hold), so the flight-path angle is <paramref name="pitch"/> minus this.</param>
         [KRPCProcedure]
         public static void SetFlight (
             string body, double latitude, double longitude, double altitude,
-            double speed, double heading, double pitch = 0, double roll = 0)
+            double speed, double heading, double pitch = 0, double roll = 0, double angleOfAttack = 0)
         {
             var celestialBody = FlightGlobals.Bodies.First (b => b.bodyName == body);
             var vessel = FlightGlobals.ActiveVessel;
@@ -125,13 +129,18 @@ namespace TestingTools
             var inFrame = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.QuaternionFromPitchHeadingRoll (
                 new Vector3d (pitch, heading, roll));
             var worldRotation = frameRotation * inFrame;
-            // The vessel's nose is its local up axis; the airspeed is set along it.
-            var nose = worldRotation * Vector3d.up;
+
+            // The airspeed points along the flight path, which sits angleOfAttack degrees below the
+            // nose in the pitch plane (so a positive angle of attack is a nose-up attitude). Build it
+            // the same way as the attitude, from the flight-path pitch.
+            var flightPathInFrame = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.QuaternionFromPitchHeadingRoll (
+                new Vector3d (pitch - angleOfAttack, heading, roll));
+            var flightPath = frameRotation * (flightPathInFrame * Vector3d.up);
 
             // Orbital velocity giving the requested airspeed: the co-rotating surface velocity at
-            // this point plus the airspeed along the nose.
+            // this point plus the airspeed along the flight path.
             var surfaceVelocity = Vector3d.Cross (celestialBody.angularVelocity, positionFromBody);
-            var worldVelocity = surfaceVelocity + speed * nose;
+            var worldVelocity = surfaceVelocity + speed * flightPath;
 
             // Teleport via a state-vector orbit (SetOrbit clears the landed/clamp state and packs the
             // vessel on rails), then set the attitude; physics resumes when it unpacks.

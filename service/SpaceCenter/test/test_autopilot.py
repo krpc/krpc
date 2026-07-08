@@ -1937,6 +1937,122 @@ TestAutoPilotFlightGull = _make_autopilot_flight_test_class(
 )
 
 
+# Re-entry attitude-hold tests for stock spaceplanes: place the craft descending through the
+# upper atmosphere at supersonic speed, nose held slightly above the flight path (a small
+# positive angle of attack), and confirm the autopilot holds that attitude steadily against the
+# high dynamic-pressure aero moments -- keeping the angle of attack small and positive -- without
+# tumbling or breaking up. Unpowered (engines flame out in the thin air anyway); RCS is enabled as
+# a re-entry vehicle would use it, though the aero surfaces carry most of the authority.
+# pylint: disable=too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-locals
+def _make_autopilot_reentry_test_class(
+    test_name,
+    vessel_name,
+    altitude,
+    speed,
+    pitch=5,
+    angle_of_attack=10,
+    heading=90,
+    settle_delay=8,
+    hold_oscillation_amplitude=1,
+    hold_attitude_error=2,
+    attitude_tolerance=2,
+    min_angle_of_attack=2,
+    max_angle_of_attack=25,
+):
+    class TestAutoPilotReentryBase(krpctest.TestCase):
+        @classmethod
+        def setUpClass(cls):
+            cls.new_save()
+
+        def setUp(self):
+            self.remove_other_vessels()
+            self.launch_vessel_from_sph(vessel_name)
+            self.vessel = self.connect().space_center.active_vessel
+            self.ap = self.vessel.auto_pilot
+            self.ap.reset()
+            self.ap.sas = False
+            self.ap.show_info_ui = True
+
+        def tearDown(self):
+            self.ap.engaged = False
+            self.ap.show_info_ui = False
+
+        def test_hold_reentry_attitude(self):
+            self.vessel.control.sas = False
+            self.vessel.control.rcs = True
+            part_count = len(self.vessel.parts.all)
+            self.set_flight(
+                altitude=altitude,
+                speed=speed,
+                heading=heading,
+                pitch=pitch,
+                roll=0,
+                angle_of_attack=angle_of_attack,
+            )
+            self.vessel.control.throttle = 0
+            self.ap.reference_frame = self.vessel.surface_reference_frame
+            self.ap.target_pitch_and_heading(pitch, heading)
+            self.ap.target_roll = 0
+            self.ap.engaged = True
+            self.wait(settle_delay)
+
+            # Capture the steady hold, sampling the angle of attack alongside the log.
+            self.assertGreater(self.vessel.flight().mach, 1, "not supersonic")
+            self.ap.diagnostic_logging = True
+            angles_of_attack = []
+            for _ in range(20):
+                self.wait(0.5)
+                angles_of_attack.append(self.vessel.flight().angle_of_attack)
+            self.ap.diagnostic_logging = False
+            samples = diagnostics.parse_log(self.ap.diagnostic_log)
+
+            # The autopilot holds the commanded attitude smoothly...
+            self.assertGreater(len(samples), 0)
+            self.assertLess(
+                diagnostics.control_oscillation_amplitude(samples),
+                hold_oscillation_amplitude,
+                "actuators limit-cycled while holding the re-entry attitude",
+            )
+            self.assertLess(
+                max(sample.err for sample in samples),
+                hold_attitude_error,
+                "lost the re-entry attitude",
+            )
+            flight = self.vessel.flight(self.vessel.surface_reference_frame)
+            self.assertAlmostEqual(pitch, flight.pitch, delta=attitude_tolerance)
+            self.assertDegreesAlmostEqual(
+                heading, flight.heading, delta=attitude_tolerance
+            )
+            self.assertAlmostEqual(0, flight.roll, delta=attitude_tolerance)
+            # ...holding a small, positive angle of attack throughout (nose above the flight
+            # path, but not flipped to a large angle)...
+            self.assertGreater(min(angles_of_attack), min_angle_of_attack)
+            self.assertLess(max(angles_of_attack), max_angle_of_attack)
+            # ...and the craft stays under control through the heating, losing no parts.
+            self.assertEqual(part_count, len(self.vessel.parts.all))
+
+    TestAutoPilotReentryBase.__name__ = test_name
+    TestAutoPilotReentryBase.__qualname__ = test_name
+    return TestAutoPilotReentryBase
+
+
+# A stock SSTO spaceplane, re-entering fast and high.
+TestAutoPilotReentryAeris4A = _make_autopilot_reentry_test_class(
+    "TestAutoPilotReentryAeris4A",
+    "Aeris 4A",
+    altitude=34000,
+    speed=1300,
+)
+
+# A small stock jet, re-entering lower and slower.
+TestAutoPilotReentryAeris3A = _make_autopilot_reentry_test_class(
+    "TestAutoPilotReentryAeris3A",
+    "Aeris 3A",
+    altitude=30000,
+    speed=900,
+)
+
+
 class TestAutoPilotSAS(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
