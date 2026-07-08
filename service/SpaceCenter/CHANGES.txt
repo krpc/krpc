@@ -67,6 +67,7 @@ v0.6.0
    a canceled transfer is marked as complete
  * Fix part highlighting leaking a client-disconnect event handler each time the flight
    scene is loaded
+ * **Deprecated:** SpaceCenter.LoadSpaceCenter, superseded by setting KRPC.GameScene (#897)
 
 v0.5.4
  * Fix vessel recovery (#782)
