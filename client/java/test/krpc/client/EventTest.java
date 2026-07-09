@@ -38,10 +38,11 @@ public class EventTest {
       long startTime = System.currentTimeMillis();
       event.waitFor();
       long time = System.currentTimeMillis() - startTime;
-      System.out.println("#### time = " + time);
-      // FIXME: skipped for now, as this test is flaky
-      // assertTrue(150 < time && time < 250);
-      // assertTrue(event.getStream().get());
+      // Lower bound is a correctness check (the event must not fire before its
+      // timer); the upper bound is a generous hang detector, kept loose so the
+      // test does not flake under parallel load. See issue #540.
+      assertTrue(150 < time && time < 2000);
+      assertTrue(event.getStream().get());
     }
   }
 
@@ -53,7 +54,8 @@ public class EventTest {
       long startTime = System.currentTimeMillis();
       event.waitForWithTimeout(0.1);
       long time = System.currentTimeMillis() - startTime;
-      assertTrue(50 < time && time < 150);
+      // waitFor must return on its timeout, before the 200ms event fires.
+      assertTrue(50 < time && time < 200);
       event.waitFor();
       assertTrue(event.getStream().get());
     }
@@ -67,7 +69,7 @@ public class EventTest {
       long startTime = System.currentTimeMillis();
       event.waitForWithTimeout(1);
       long time = System.currentTimeMillis() - startTime;
-      assertTrue(150 < time && time < 250);
+      assertTrue(150 < time && time < 2000);
       assertTrue(event.getStream().get());
     }
   }
@@ -87,7 +89,7 @@ public class EventTest {
     while (!testEventCallbackCalled) {
     }
     long time = System.currentTimeMillis() - startTime;
-    assertTrue(150 < time && time < 250);
+    assertTrue(150 < time && time < 2000);
   }
 
   private volatile boolean testEventCallbackTimeoutCalled = false;
@@ -108,7 +110,8 @@ public class EventTest {
       }
     }
     long time = System.currentTimeMillis() - startTime;
-    assertTrue(50 < time && time < 150);
+    // Loop breaks on its own 100ms timeout, before the 1000ms event fires.
+    assertTrue(50 < time && time < 1000);
   }
 
   private volatile int testEventCallbackLoopCount = 0;
@@ -126,7 +129,7 @@ public class EventTest {
     while (testEventCallbackLoopCount < 5) {
     }
     long time = System.currentTimeMillis() - startTime;
-    assertTrue(950 < time && time < 1050);
+    assertTrue(950 < time && time < 3000);
     assertEquals(testEventCallbackLoopCount, 5);
   }
 
@@ -151,7 +154,7 @@ public class EventTest {
     while (!testEventRemoveCallbackCalled1) {
     }
     long time = System.currentTimeMillis() - startTime;
-    assertTrue(150 < time && time < 250);
+    assertTrue(150 < time && time < 2000);
     assertFalse(testEventRemoveCallbackCalled2);
   }
 

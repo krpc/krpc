@@ -14,7 +14,11 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         with event.condition:
             start_time = time.time()
             event.wait()
-            self.assertAlmostEqual(time.time() - start_time, 0.2, delta=0.05)
+            # Lower bound is a correctness check (event must not fire before its
+            # timer); the upper bound is a generous hang detector, kept loose so
+            # the test does not flake under parallel load. See issue #540.
+            self.assertGreater(time.time() - start_time, 0.15)
+            self.assertLess(time.time() - start_time, 2)
             self.assertTrue(event.stream())
 
     def test_event_using_lambda(self) -> None:
@@ -22,7 +26,8 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         with event.condition:
             start_time = time.time()
             event.wait()
-            self.assertAlmostEqual(time.time() - start_time, 0.2, delta=0.05)
+            self.assertGreater(time.time() - start_time, 0.15)
+            self.assertLess(time.time() - start_time, 2)
             self.assertTrue(event.stream())
 
     def test_event_timeout_short(self) -> None:
@@ -30,8 +35,9 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         with event.condition:
             start_time = time.time()
             event.wait(0.1)
+            # wait() must return on its timeout, before the 200ms event fires.
+            self.assertGreater(time.time() - start_time, 0.05)
             self.assertLess(time.time() - start_time, 0.2)
-            self.assertAlmostEqual(time.time() - start_time, 0.1, delta=0.05)
             self.assertFalse(event.stream())
             event.wait()
             self.assertTrue(event.stream())
@@ -41,7 +47,8 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         with event.condition:
             start_time = time.time()
             event.wait(1)
-            self.assertAlmostEqual(time.time() - start_time, 0.2, delta=0.05)
+            self.assertGreater(time.time() - start_time, 0.15)
+            self.assertLess(time.time() - start_time, 2)
             self.assertTrue(event.stream())
 
     def test_event_loop(self) -> None:
@@ -53,9 +60,8 @@ class TestEvent(ServerTestCase, unittest.TestCase):
                 event.wait()
                 self.assertTrue(event.stream())
                 repeat += 1
-                self.assertAlmostEqual(
-                    time.time() - start_time, 0.2 * repeat, delta=0.05
-                )
+                self.assertGreater(time.time() - start_time, 0.2 * repeat - 0.05)
+                self.assertLess(time.time() - start_time, 0.2 * repeat + 2)
                 if repeat == 5:
                     break
 
@@ -66,7 +72,8 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         start_time = time.time()
         event.start()
         called.wait(1)
-        self.assertAlmostEqual(time.time() - start_time, 0.2, delta=0.05)
+        self.assertGreater(time.time() - start_time, 0.15)
+        self.assertLess(time.time() - start_time, 2)
         self.assertTrue(called.is_set())
 
     def test_event_callback_timeout(self) -> None:
@@ -76,7 +83,9 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         start_time = time.time()
         event.start()
         called.wait(0.1)
-        self.assertAlmostEqual(time.time() - start_time, 0.1, delta=0.05)
+        # wait() must return on its timeout, before the 1000ms event fires.
+        self.assertGreater(time.time() - start_time, 0.05)
+        self.assertLess(time.time() - start_time, 1)
         self.assertFalse(called.is_set())
 
     test_event_callback_loop_count = 0
@@ -105,7 +114,8 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         start_time = time.time()
         event.start()
         called1.wait(1)
-        self.assertAlmostEqual(time.time() - start_time, 0.2, delta=0.05)
+        self.assertGreater(time.time() - start_time, 0.15)
+        self.assertLess(time.time() - start_time, 2)
         self.assertTrue(called1.is_set())
         self.assertFalse(called2.is_set())
 

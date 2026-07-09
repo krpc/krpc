@@ -19,8 +19,12 @@ namespace KRPC.Client.Test
                 timer.Start ();
                 e.Wait ();
                 var time = timer.ElapsedMilliseconds;
-                Assert.Less (time, 250);
+                // Lower bound is a correctness check (the event must not fire
+                // before its timer); the upper bound is a generous hang
+                // detector, kept loose so the test does not flake under
+                // parallel load. See issue #540.
                 Assert.Greater (time, 150);
+                Assert.Less (time, 2000);
                 Assert.True (e.Stream.Get ());
             }
         }
@@ -33,8 +37,9 @@ namespace KRPC.Client.Test
                 timer.Start ();
                 e.Wait (0.1);
                 var time = timer.ElapsedMilliseconds;
-                Assert.Less (time, 150);
+                // Wait must return on its timeout, before the 200ms event fires.
                 Assert.Greater (time, 50);
+                Assert.Less (time, 200);
                 e.Wait ();
                 Assert.True (e.Stream.Get ());
             }
@@ -49,7 +54,7 @@ namespace KRPC.Client.Test
                 e.Wait (1);
                 var time = timer.ElapsedMilliseconds;
                 Assert.Greater (time, 150);
-                Assert.Less (time, 250);
+                Assert.Less (time, 2000);
                 Assert.True (e.Stream.Get ());
             }
         }
@@ -65,7 +70,7 @@ namespace KRPC.Client.Test
             called.WaitOne (1000);
             var time = timer.ElapsedMilliseconds;
             Assert.Greater (time, 150);
-            Assert.Less (time, 250);
+            Assert.Less (time, 2000);
         }
 
         [Test]
@@ -78,8 +83,9 @@ namespace KRPC.Client.Test
             e.Start ();
             called.WaitOne (100);
             var time = timer.ElapsedMilliseconds;
+            // WaitOne returns on its 100ms timeout, before the 1000ms event fires.
             Assert.Greater (time, 50);
-            Assert.Less (time, 150);
+            Assert.Less (time, 1000);
         }
 
         [Test]
@@ -94,7 +100,7 @@ namespace KRPC.Client.Test
             }
             var time = timer.ElapsedMilliseconds;
             Assert.Greater (time, 950);
-            Assert.Less (time, 1050);
+            Assert.Less (time, 3000);
             Assert.AreEqual (count, 5);
         }
 
@@ -118,7 +124,7 @@ namespace KRPC.Client.Test
             stop.WaitOne ();
             var time = timer.ElapsedMilliseconds;
             Assert.Greater (time, 150);
-            Assert.Less (time, 250);
+            Assert.Less (time, 2000);
             Assert.IsTrue (called1);
             Assert.IsFalse (called2);
         }
