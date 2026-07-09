@@ -137,7 +137,13 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         event = self.conn.krpc.add_event(expr)
         with event.condition:
             event.wait()
-            self.assertEqual(
+            # The event fires when the server-side counter reaches 20. The
+            # counter increments on every expression evaluation, so the value
+            # read back here is >= 21 (20 at the trigger, plus this read); the
+            # exact figure depends on how many more times the server evaluated
+            # the expression before this read, so assert the lower bound rather
+            # than an exact value to avoid flaking under load. See issue #540.
+            self.assertGreaterEqual(
                 self.conn.test_service.counter("TestEvent.test_custom_event"), 21
             )
 

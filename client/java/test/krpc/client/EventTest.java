@@ -172,7 +172,12 @@ public class EventTest {
     Event event = krpc.addEvent(expr);
     synchronized (event.getCondition()) {
       event.waitFor();
-      assertEquals(testService.counter("TestEvent.TestCustomEvent", 1), 21);
+      // The event fires when the server-side counter reaches 20. The counter
+      // increments on every expression evaluation, so the value read back is
+      // >= 21 (20 at the trigger, plus this read); the exact figure depends on
+      // how many more times the server evaluated the expression first, so
+      // assert the lower bound to avoid flaking under load. See issue #540.
+      assertTrue(testService.counter("TestEvent.TestCustomEvent", 1) >= 21);
     }
   }
 

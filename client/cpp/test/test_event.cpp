@@ -162,7 +162,12 @@ TEST_F(test_event, test_custom_event) {
   auto event = krpc.add_event(expr);
   event.acquire();
   event.wait();
-  ASSERT_EQ(test_service.counter("test_event.test_custom_event"), 21);
+  // The event fires when the server-side counter reaches 20. The counter
+  // increments on every expression evaluation, so the value read back is >= 21
+  // (20 at the trigger, plus this read); the exact figure depends on how many
+  // more times the server evaluated the expression first, so assert the lower
+  // bound to avoid flaking under load. See issue #540.
+  ASSERT_GE(test_service.counter("test_event.test_custom_event"), 21);
   event.release();
 }
 
