@@ -171,7 +171,8 @@ test_suite(
 
 client_test(
     name = "client",
-    size = "small",
+    # medium (300s) not small (60s): ~28s worst case under parallel load (#540)
+    size = "medium",
     server_executable = "//tools/TestServer",
     tags = [
         "local",

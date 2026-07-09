@@ -64,7 +64,8 @@ test_suite(
 
 py_lint_test(
     name = "pylint",
-    size = "small",
+    # medium (300s) not small (60s): ~29s worst case under parallel load (#540)
+    size = "medium",
     srcs = glob(["test/*.py"]),
     pylint_config = "test/pylint.rc",
     deps = [

@@ -27,7 +27,8 @@ test_suite(
 
 client_test(
     name = "iotest",
-    size = "small",
+    # medium (300s) not small (60s): ~33s worst case under parallel load (#540)
+    size = "medium",
     server_executable = "//tools/TestServer",
     server_type = "serialio",
     tags = [
@@ -54,7 +55,8 @@ py_test(
 
 py_lint_test(
     name = "lint",
-    size = "small",
+    # medium (300s) not small (60s): ~37s worst case under parallel load (#540)
+    size = "medium",
     srcs = glob(["krpcserialio/**/*"]),
     pkg = ":krpcserialio",
     pkg_name = "krpcserialio",
