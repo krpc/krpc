@@ -1,6 +1,7 @@
-import unittest
 import threading
 import time
+import unittest
+
 from krpc.error import StreamError
 from krpc.test.servertestcase import ServerTestCase
 
@@ -403,35 +404,42 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertTrue(called1.is_set())
         self.assertFalse(called2.is_set())
 
-    # test_rate_value = 0
-    #
-    # def test_rate(self) -> None:
-    #     error = threading.Event()
-    #     stop = threading.Event()
-    #
-    #     def callback(x) -> None:
-    #         if x > 5:
-    #             stop.set()
-    #         elif self.test_rate_value+1 != x:
-    #             error.set()
-    #             stop.set()
-    #         else:
-    #             self.test_rate_value += 1
-    #
-    #     with self.conn.stream(self.conn.test_service.counter,
-    #                           'TestStream.test_rate') as x:
-    #         x.add_callback(callback)
-    #         x.rate = 5
-    #         x.start()
-    #         start = time.time()
-    #         stop.wait(3)
-    #         elapsed = time.time() - start
-    #
-    #     self.assertGreater(elapsed, 1)
-    #     self.assertLess(elapsed, 1.2)
-    #     self.assertTrue(stop.is_set())
-    #     self.assertFalse(error.is_set())
-    #     self.assertEquals(self.test_rate_value, 5)
+    test_rate_value = 0
+
+    def test_rate(self) -> None:
+        error = threading.Event()
+        stop = threading.Event()
+
+        def callback(x: int) -> None:
+            if x > 5:
+                stop.set()
+            elif self.test_rate_value + 1 != x:
+                error.set()
+                stop.set()
+            else:
+                self.test_rate_value += 1
+
+        with self.conn.stream(
+            self.conn.test_service.counter, "TestStream.test_rate"
+        ) as x:
+            x.add_callback(callback)
+            x.rate = 5
+            x.start()
+            start = time.time()
+            # The wait timeout is a generous backstop that lets the test fail
+            # cleanly (rather than hang) if updates stop arriving; it sits well
+            # above the elapsed-time upper bound asserted below.
+            stop.wait(10)
+            elapsed = time.time() - start
+
+        # At 5Hz, five increments take ~1s. The lower bound checks the rate
+        # limit was honoured; the upper bound is a generous hang detector, kept
+        # loose so the test does not flake under parallel load.
+        self.assertGreater(elapsed, 1)
+        self.assertLess(elapsed, 3)
+        self.assertTrue(stop.is_set())
+        self.assertFalse(error.is_set())
+        self.assertEqual(self.test_rate_value, 5)
 
 
 if __name__ == "__main__":

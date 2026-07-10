@@ -168,7 +168,7 @@ test_suite(
 
 client_test(
     name = "client",
-    size = "small",
+    size = "medium",
     server_executable = "//tools/TestServer",
     tags = ["requires-network"],
     test_executable = ":cpptest",

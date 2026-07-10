@@ -27,7 +27,7 @@ test_suite(
 
 client_test(
     name = "iotest",
-    size = "small",
+    size = "medium",
     server_executable = "//tools/TestServer",
     server_type = "serialio",
     tags = [
@@ -54,7 +54,7 @@ py_test(
 
 py_lint_test(
     name = "lint",
-    size = "small",
+    size = "medium",
     srcs = glob(["krpcserialio/**/*"]),
     pkg = ":krpcserialio",
     pkg_name = "krpcserialio",

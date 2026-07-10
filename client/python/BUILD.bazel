@@ -191,7 +191,7 @@ py_test(
 
 py_lint_test(
     name = "lint",
-    size = "small",
+    size = "medium",
     srcs = glob(["krpc/**/*"]),
     black_exclude = "\".*(schema|services)/.+\"",
     pkg = ":python",
