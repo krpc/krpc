@@ -28,6 +28,10 @@ using systemAlias = global::System;
 using genericCollectionsAlias = global::System.Collections.Generic;
 #endif
 
+// Generated code references its own deprecated members (e.g. when registering
+// exception types), so suppress the deprecation warnings within this file.
+#pragma warning disable 612, 618
+
 namespace KRPC.Client.Services.{{ service_name }}
 {
     /// <summary>

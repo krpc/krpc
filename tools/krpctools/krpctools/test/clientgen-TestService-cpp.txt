@@ -35,8 +35,7 @@ class TestService : public Service {
    *
    * \deprecated Use CustomException instead.
    */
-  [[deprecated("Use CustomException instead.")]]
-  class DeprecatedException : public ::krpc::RPCError {
+  class [[deprecated("Use CustomException instead.")]] DeprecatedException : public ::krpc::RPCError {
    public:
     inline explicit DeprecatedException(const std::string& msg) : ::krpc::RPCError(msg) {}
   };
@@ -46,8 +45,7 @@ class TestService : public Service {
    *
    * \deprecated Use TestEnum instead.
    */
-  [[deprecated("Use TestEnum instead.")]]
-  enum struct DeprecatedEnum {
+  enum struct [[deprecated("Use TestEnum instead.")]] DeprecatedEnum {
     /**
      * Deprecated enum ValueA documentation string.
      */
@@ -57,8 +55,7 @@ class TestService : public Service {
      *
      * \deprecated Use ValueA instead.
      */
-    [[deprecated("Use ValueA instead.")]]
-    value_b = 1
+    value_b [[deprecated("Use ValueA instead.")]] = 1
   };
 
   /**
@@ -391,8 +388,7 @@ class TestService : public Service {
    *
    * \deprecated Use TestClass instead.
    */
-  [[deprecated("Use TestClass instead.")]]
-  class DeprecatedClass : public krpc::Object<DeprecatedClass> {
+  class [[deprecated("Use TestClass instead.")]] DeprecatedClass : public krpc::Object<DeprecatedClass> {
    public:
     explicit DeprecatedClass(Client* client = nullptr, uint64_t id = 0);
 

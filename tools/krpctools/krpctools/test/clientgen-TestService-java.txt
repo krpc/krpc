@@ -10,6 +10,9 @@ import krpc.client.RPCInfo;
 import krpc.client.RPCException;
 import krpc.client.Types;
 
+// Generated code references its own deprecated members (e.g. when registering
+// exception types), so suppress the deprecation warnings within this class.
+@SuppressWarnings("deprecation")
 public class TestService {
 
     public static TestService newInstance(Connection connection) {

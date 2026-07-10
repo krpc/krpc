@@ -58,9 +58,7 @@ class {{ service_name }} : public Service {
 
 {% if exception.documentation %}{{ exception.documentation | indent(width=2) }}
 {% endif %}
-{% if exception.deprecated %}  [[deprecated{% if exception.deprecated_reason %}("{{ exception.deprecated_reason }}"){% endif %}]]
-{% endif %}
-  class {{ exception_name }} : public ::krpc::RPCError {
+  class {% if exception.deprecated %}[[deprecated{% if exception.deprecated_reason %}("{{ exception.deprecated_reason }}"){% endif %}]] {% endif %}{{ exception_name }} : public ::krpc::RPCError {
    public:
     inline explicit {{ exception_name }}(const std::string& msg) : ::krpc::RPCError(msg) {}
   };
@@ -70,15 +68,11 @@ class {{ service_name }} : public Service {
 
 {% if enm.documentation %}{{ enm.documentation | indent(width=2) }}
 {% endif %}
-{% if enm.deprecated %}  [[deprecated{% if enm.deprecated_reason %}("{{ enm.deprecated_reason }}"){% endif %}]]
-{% endif %}
-  enum struct {{ enum_name }} {
+  enum struct {% if enm.deprecated %}[[deprecated{% if enm.deprecated_reason %}("{{ enm.deprecated_reason }}"){% endif %}]] {% endif %}{{ enum_name }} {
     {% for value in enm['values'] %}
 {% if value.documentation %}{{ value.documentation | indent(width=4) }}
 {% endif %}
-{% if value.deprecated %}    [[deprecated{% if value.deprecated_reason %}("{{ value.deprecated_reason }}"){% endif %}]]
-{% endif %}
-    {{ value.name }} = {{ value.value }}{% if not loop.last %},{% endif %}
+    {{ value.name }}{% if value.deprecated %} [[deprecated{% if value.deprecated_reason %}("{{ value.deprecated_reason }}"){% endif %}]]{% endif %} = {{ value.value }}{% if not loop.last %},{% endif %}
 
     {% endfor %}
   };
@@ -123,9 +117,7 @@ class {{ service_name }} : public Service {
 
 {% if cls.documentation %}{{ cls.documentation | indent(width=2) }}
 {% endif %}
-{% if cls.deprecated %}  [[deprecated{% if cls.deprecated_reason %}("{{ cls.deprecated_reason }}"){% endif %}]]
-{% endif %}
-  class {{ class_name }} : public krpc::Object<{{ class_name }}> {
+  class {% if cls.deprecated %}[[deprecated{% if cls.deprecated_reason %}("{{ cls.deprecated_reason }}"){% endif %}]] {% endif %}{{ class_name }} : public krpc::Object<{{ class_name }}> {
    public:
     explicit {{ class_name }}(Client* client = nullptr, uint64_t id = 0);
     {% for method_name,method in cls.methods.items() %}
