@@ -91,6 +91,45 @@ Service documentation string.
 
 
 
+.. staticmethod:: deprecated_procedure(value)
+
+   .. warning:: Deprecated. Use FloatToString instead.
+
+   Deprecated procedure documentation string.
+
+   :param float value:
+   :rtype: str
+   
+
+
+
+
+.. staticmethod:: deprecated_procedure_no_message(value)
+
+   .. warning:: Deprecated.
+
+   Deprecated procedure with no reason documentation string.
+
+   :param float value:
+   :rtype: str
+   
+
+
+
+
+.. attribute:: deprecated_property
+
+   .. warning:: Deprecated. Use StringProperty instead.
+
+   Deprecated property documentation string.
+
+   :Attribute: Can be read or written
+   :rtype: str
+   
+
+
+
+
 .. staticmethod:: dictionary_default([x = {1: False, 2: True}])
 
 
@@ -551,6 +590,23 @@ Service documentation string.
 
 
 
+.. class:: DeprecatedClass
+
+   .. warning:: Deprecated. Use TestClass instead.
+
+   Deprecated class documentation string.
+
+   .. method:: deprecated_method()
+
+      .. warning:: Deprecated. Use TestClass.GetValue instead.
+
+      Deprecated method documentation string.
+
+      :rtype: str
+   
+
+
+
 .. class:: TestEnum
 
    Enum documentation string.
@@ -572,4 +628,34 @@ Service documentation string.
 
 
 
+.. class:: DeprecatedEnum
+
+   .. warning:: Deprecated. Use TestEnum instead.
+
+   Deprecated enum documentation string.
+
+
+   .. data:: value_a
+
+      Deprecated enum ValueA documentation string.
+
+
+   .. data:: value_b
+
+      .. warning:: Deprecated. Use ValueA instead.
+
+      Deprecated enum ValueB documentation string.
+
+
+
 .. class:: CustomException
+
+
+
+
+
+.. class:: DeprecatedException
+
+   .. warning:: Deprecated. Use CustomException instead.
+
+   Deprecated exception documentation string.

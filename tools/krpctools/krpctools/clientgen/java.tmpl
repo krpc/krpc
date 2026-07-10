@@ -45,6 +45,8 @@ public class {{ service_name }} {
 
 {% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
 {% endif %}
+{% if exception.deprecated %}    @Deprecated
+{% endif %}
     public static class {{ exception_name }} extends krpc.client.RPCException {
         private static final long serialVersionUID = {{ exception.serial_version_uid }}L;
 
@@ -67,6 +69,8 @@ public class {{ service_name }} {
 
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=4) }}
 {% endif %}
+{% if procedure.deprecated %}    @Deprecated
+{% endif %}
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "{{ service_name }}", procedure = "{{ procedure.remote_name }}", types = _Types.class)
     public {{ procedure.return_type.name }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }}) throws RPCException {
@@ -81,9 +85,13 @@ public class {{ service_name }} {
 
 {% if enm.documentation %}{{ enm.documentation | indent(width=4) }}
 {% endif %}
+{% if enm.deprecated %}    @Deprecated
+{% endif %}
     public enum {{ enum_name }} implements RemoteEnum {
         {% for value in enm['values'] %}
 {% if value.documentation %}{{ value.documentation | indent(width=8) }}
+{% endif %}
+{% if value.deprecated %}        @Deprecated
 {% endif %}
         {{ value.name }}({{ value.value }}){% if not loop.last %},{% else %};{% endif %}
 
@@ -115,6 +123,8 @@ public class {{ service_name }} {
 
 {% if cls.documentation %}{{ cls.documentation | indent(width=4) }}
 {% endif %}
+{% if cls.deprecated %}    @Deprecated
+{% endif %}
     public static class {{ class_name }} extends RemoteObject {
 
         private static final long serialVersionUID = {{ cls.serial_version_uid }}L;
@@ -125,6 +135,8 @@ public class {{ service_name }} {
         {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
 
 {% if method.documentation %}{{ method.documentation | indent(width=8) }}
+{% endif %}
+{% if method.deprecated %}        @Deprecated
 {% endif %}
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
@@ -139,6 +151,8 @@ public class {{ service_name }} {
         {% for method_name,method in cls.static_methods.items() %}
 
 {% if method.documentation %}{{ method.documentation | indent(width=8) }}
+{% endif %}
+{% if method.deprecated %}        @Deprecated
 {% endif %}
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)

@@ -22,11 +22,43 @@ class TestService : public Service {
   explicit TestService(Client* client);
 
   // Class forward declarations
+  class DeprecatedClass;
   class TestClass;
 
   class CustomException : public ::krpc::RPCError {
    public:
     inline explicit CustomException(const std::string& msg) : ::krpc::RPCError(msg) {}
+  };
+
+  /**
+   * Deprecated exception documentation string.
+   *
+   * \deprecated Use CustomException instead.
+   */
+  [[deprecated("Use CustomException instead.")]]
+  class DeprecatedException : public ::krpc::RPCError {
+   public:
+    inline explicit DeprecatedException(const std::string& msg) : ::krpc::RPCError(msg) {}
+  };
+
+  /**
+   * Deprecated enum documentation string.
+   *
+   * \deprecated Use TestEnum instead.
+   */
+  [[deprecated("Use TestEnum instead.")]]
+  enum struct DeprecatedEnum {
+    /**
+     * Deprecated enum ValueA documentation string.
+     */
+    value_a = 0,
+    /**
+     * Deprecated enum ValueB documentation string.
+     *
+     * \deprecated Use ValueA instead.
+     */
+    [[deprecated("Use ValueA instead.")]]
+    value_b = 1
   };
 
   /**
@@ -60,6 +92,20 @@ class TestService : public Service {
   int32_t counter(std::string id, int32_t divisor);
 
   TestService::TestClass create_test_object(std::string value);
+
+  /**
+   * Deprecated procedure documentation string.
+   *
+   * \deprecated Use FloatToString instead.
+   */
+  [[deprecated("Use FloatToString instead.")]]
+  std::string deprecated_procedure(float value);
+
+  /**
+   * Deprecated procedure with no reason documentation string.
+   */
+  [[deprecated]]
+  std::string deprecated_procedure_no_message(float value);
 
   std::map<int32_t, bool> dictionary_default(std::map<int32_t, bool> x);
 
@@ -126,6 +172,22 @@ class TestService : public Service {
 
   std::tuple<int32_t, bool> tuple_default(std::tuple<int32_t, bool> x);
 
+  /**
+   * Deprecated property documentation string.
+   *
+   * \deprecated Use StringProperty instead.
+   */
+  [[deprecated("Use StringProperty instead.")]]
+  std::string deprecated_property();
+
+  /**
+   * Deprecated property documentation string.
+   *
+   * \deprecated Use StringProperty instead.
+   */
+  [[deprecated("Use StringProperty instead.")]]
+  void set_deprecated_property(std::string value);
+
   TestService::TestClass object_property();
 
   void set_object_property(TestService::TestClass value);
@@ -157,6 +219,10 @@ class TestService : public Service {
   ::krpc::Stream<int32_t> counter_stream(std::string id, int32_t divisor);
 
   ::krpc::Stream<TestService::TestClass> create_test_object_stream(std::string value);
+
+  ::krpc::Stream<std::string> deprecated_procedure_stream(float value);
+
+  ::krpc::Stream<std::string> deprecated_procedure_no_message_stream(float value);
 
   ::krpc::Stream<std::map<int32_t, bool>> dictionary_default_stream(std::map<int32_t, bool> x);
 
@@ -216,6 +282,8 @@ class TestService : public Service {
 
   ::krpc::Stream<std::tuple<int32_t, bool>> tuple_default_stream(std::tuple<int32_t, bool> x);
 
+  ::krpc::Stream<std::string> deprecated_property_stream();
+
   ::krpc::Stream<TestService::TestClass> object_property_stream();
 
   ::krpc::Stream<std::string> string_property_stream();
@@ -235,6 +303,10 @@ class TestService : public Service {
   ::krpc::schema::ProcedureCall counter_call(std::string id, int32_t divisor);
 
   ::krpc::schema::ProcedureCall create_test_object_call(std::string value);
+
+  ::krpc::schema::ProcedureCall deprecated_procedure_call(float value);
+
+  ::krpc::schema::ProcedureCall deprecated_procedure_no_message_call(float value);
 
   ::krpc::schema::ProcedureCall dictionary_default_call(std::map<int32_t, bool> x);
 
@@ -298,6 +370,10 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall tuple_default_call(std::tuple<int32_t, bool> x);
 
+  ::krpc::schema::ProcedureCall deprecated_property_call();
+
+  ::krpc::schema::ProcedureCall set_deprecated_property_call(std::string value);
+
   ::krpc::schema::ProcedureCall object_property_call();
 
   ::krpc::schema::ProcedureCall set_object_property_call(TestService::TestClass value);
@@ -309,6 +385,29 @@ class TestService : public Service {
   ::krpc::schema::ProcedureCall set_string_property_private_get_call(std::string value);
 
   ::krpc::schema::ProcedureCall string_property_private_set_call();
+
+  /**
+   * Deprecated class documentation string.
+   *
+   * \deprecated Use TestClass instead.
+   */
+  [[deprecated("Use TestClass instead.")]]
+  class DeprecatedClass : public krpc::Object<DeprecatedClass> {
+   public:
+    explicit DeprecatedClass(Client* client = nullptr, uint64_t id = 0);
+
+    /**
+     * Deprecated method documentation string.
+     *
+     * \deprecated Use TestClass.GetValue instead.
+     */
+    [[deprecated("Use TestClass.GetValue instead.")]]
+    std::string deprecated_method();
+
+    ::krpc::Stream<std::string> deprecated_method_stream();
+
+    ::krpc::schema::ProcedureCall deprecated_method_call();
+  };
 
   /**
    * Class documentation string.
@@ -392,6 +491,10 @@ class TestService : public Service {
 
 namespace encoder {
 
+  inline std::string encode(const services::TestService::DeprecatedEnum& value) {
+    return krpc::encoder::encode(static_cast<int32_t>(value));
+  }
+
   inline std::string encode(const services::TestService::TestEnum& value) {
     return krpc::encoder::encode(static_cast<int32_t>(value));
   }
@@ -399,6 +502,12 @@ namespace encoder {
 }  // namespace encoder
 
 namespace decoder {
+
+  inline void decode(services::TestService::DeprecatedEnum& value, const std::string& data, Client* client) {
+    int32_t x;
+    decode(x, data, client);
+    value = static_cast<services::TestService::DeprecatedEnum>(x);
+  }
 
   inline void decode(services::TestService::TestEnum& value, const std::string& data, Client* client) {
     int32_t x;
@@ -415,6 +524,9 @@ inline TestService::TestService(Client* client):
   client->add_exception_thrower(
     "TestService", "CustomException",
     [] (const std::string& msg) { throw CustomException(msg); });
+  client->add_exception_thrower(
+    "TestService", "DeprecatedException",
+    [] (const std::string& msg) { throw DeprecatedException(msg); });
 }
 
 inline std::string TestService::add_multiple_values(float x, int32_t y, int64_t z) {
@@ -481,6 +593,24 @@ inline TestService::TestClass TestService::create_test_object(std::string value)
   _args.push_back(encoder::encode(value));
   std::string _data = this->_client->invoke("TestService", "CreateTestObject", _args);
   TestService::TestClass _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::string TestService::deprecated_procedure(float value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "DeprecatedProcedure", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::string TestService::deprecated_procedure_no_message(float value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "DeprecatedProcedureNoMessage", _args);
+  std::string _result;
   decoder::decode(_result, _data, this->_client);
   return _result;
 }
@@ -744,6 +874,19 @@ inline std::tuple<int32_t, bool> TestService::tuple_default(std::tuple<int32_t, 
   return _result;
 }
 
+inline std::string TestService::deprecated_property() {
+  std::string _data = this->_client->invoke("TestService", "get_DeprecatedProperty");
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline void TestService::set_deprecated_property(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  this->_client->invoke("TestService", "set_DeprecatedProperty", _args);
+}
+
 inline TestService::TestClass TestService::object_property() {
   std::string _data = this->_client->invoke("TestService", "get_ObjectProperty");
   TestService::TestClass _result;
@@ -828,6 +971,18 @@ inline ::krpc::Stream<TestService::TestClass> TestService::create_test_object_st
   std::vector<std::string> _args;
   _args.push_back(encoder::encode(value));
   return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "CreateTestObject", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::deprecated_procedure_stream(float value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "DeprecatedProcedure", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::deprecated_procedure_no_message_stream(float value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "DeprecatedProcedureNoMessage", _args));
 }
 
 inline ::krpc::Stream<std::map<int32_t, bool>> TestService::dictionary_default_stream(std::map<int32_t, bool> x = std::map<int32_t, bool>{{1, false}, {2, true}}) {
@@ -994,6 +1149,10 @@ inline ::krpc::Stream<std::tuple<int32_t, bool>> TestService::tuple_default_stre
   return ::krpc::Stream<std::tuple<int32_t, bool>>(this->_client, this->_client->build_call("TestService", "TupleDefault", _args));
 }
 
+inline ::krpc::Stream<std::string> TestService::deprecated_property_stream() {
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "get_DeprecatedProperty"));
+}
+
 inline ::krpc::Stream<TestService::TestClass> TestService::object_property_stream() {
   return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "get_ObjectProperty"));
 }
@@ -1051,6 +1210,18 @@ inline ::krpc::schema::ProcedureCall TestService::create_test_object_call(std::s
   std::vector<std::string> _args;
   _args.push_back(encoder::encode(value));
   return this->_client->build_call("TestService", "CreateTestObject", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::deprecated_procedure_call(float value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "DeprecatedProcedure", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::deprecated_procedure_no_message_call(float value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "DeprecatedProcedureNoMessage", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::dictionary_default_call(std::map<int32_t, bool> x = std::map<int32_t, bool>{{1, false}, {2, true}}) {
@@ -1225,6 +1396,16 @@ inline ::krpc::schema::ProcedureCall TestService::tuple_default_call(std::tuple<
   return this->_client->build_call("TestService", "TupleDefault", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::deprecated_property_call() {
+  return this->_client->build_call("TestService", "get_DeprecatedProperty");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::set_deprecated_property_call(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "set_DeprecatedProperty", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::object_property_call() {
   return this->_client->build_call("TestService", "get_ObjectProperty");
 }
@@ -1253,6 +1434,30 @@ inline ::krpc::schema::ProcedureCall TestService::set_string_property_private_ge
 
 inline ::krpc::schema::ProcedureCall TestService::string_property_private_set_call() {
   return this->_client->build_call("TestService", "get_StringPropertyPrivateSet");
+}
+
+inline TestService::DeprecatedClass::DeprecatedClass(Client* client, uint64_t id):
+  Object(client, "TestService::DeprecatedClass", id) {}
+
+inline std::string TestService::DeprecatedClass::deprecated_method() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  std::string _data = this->_client->invoke("TestService", "DeprecatedClass_DeprecatedMethod", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline ::krpc::Stream<std::string> TestService::DeprecatedClass::deprecated_method_stream() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "DeprecatedClass_DeprecatedMethod", _args));
+}
+
+inline ::krpc::schema::ProcedureCall TestService::DeprecatedClass::deprecated_method_call() {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  return this->_client->build_call("TestService", "DeprecatedClass_DeprecatedMethod", _args);
 }
 
 inline TestService::TestClass::TestClass(Client* client, uint64_t id):

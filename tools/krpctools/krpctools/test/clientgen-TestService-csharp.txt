@@ -43,6 +43,7 @@ namespace KRPC.Client.Services.TestService
         internal static void AddExceptionTypes (global::KRPC.Client.IConnection serverConnection)
         {
             serverConnection.AddExceptionType ("TestService", "CustomException", typeof (CustomException));
+            serverConnection.AddExceptionType ("TestService", "DeprecatedException", typeof (DeprecatedException));
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "AddMultipleValues")]
@@ -118,6 +119,34 @@ namespace KRPC.Client.Services.TestService
             };
             ByteString _data = connection.Invoke ("TestService", "CreateTestObject", _args);
             return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+        }
+
+        /// <summary>
+        /// Deprecated procedure documentation string.
+        /// </summary>
+        [global::System.Obsolete ("Use FloatToString instead.")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedProcedure")]
+        public string DeprecatedProcedure (float value)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (value, typeof(float))
+            };
+            ByteString _data = connection.Invoke ("TestService", "DeprecatedProcedure", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+        }
+
+        /// <summary>
+        /// Deprecated procedure with no reason documentation string.
+        /// </summary>
+        [global::System.Obsolete]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedProcedureNoMessage")]
+        public string DeprecatedProcedureNoMessage (float value)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (value, typeof(float))
+            };
+            ByteString _data = connection.Invoke ("TestService", "DeprecatedProcedureNoMessage", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DictionaryDefault")]
@@ -408,6 +437,24 @@ namespace KRPC.Client.Services.TestService
             return (systemAlias::Tuple<int,bool>)global::KRPC.Client.Encoder.Decode (_data, typeof(systemAlias::Tuple<int,bool>), connection);
         }
 
+        /// <summary>
+        /// Deprecated property documentation string.
+        /// </summary>
+        [global::System.Obsolete ("Use StringProperty instead.")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_DeprecatedProperty")]
+        public string DeprecatedProperty {
+            get {
+                ByteString _data = connection.Invoke ("TestService", "get_DeprecatedProperty");
+                return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            }
+            set {
+                var _args = new ByteString[] {
+                    global::KRPC.Client.Encoder.Encode (value, typeof(string))
+                };
+                connection.Invoke ("TestService", "set_DeprecatedProperty", _args);
+            }
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_ObjectProperty")]
         public global::KRPC.Client.Services.TestService.TestClass ObjectProperty {
             get {
@@ -455,6 +502,24 @@ namespace KRPC.Client.Services.TestService
                 return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
             }
         }
+    }
+
+    /// <summary>
+    /// Deprecated enum documentation string.
+    /// </summary>
+    [Serializable]
+    [global::System.Obsolete ("Use TestEnum instead.")]
+    public enum DeprecatedEnum
+    {
+        /// <summary>
+        /// Deprecated enum ValueA documentation string.
+        /// </summary>
+        ValueA = 0,
+        /// <summary>
+        /// Deprecated enum ValueB documentation string.
+        /// </summary>
+        [global::System.Obsolete ("Use ValueA instead.")]
+        ValueB = 1
     }
 
     /// <summary>
@@ -506,6 +571,70 @@ namespace KRPC.Client.Services.TestService
         /// </summary>
         protected CustomException (SerializationInfo info, StreamingContext context) : base (info, context)
         {
+        }
+    }
+
+    /// <summary>
+    /// Deprecated exception documentation string.
+    /// </summary>
+    [Serializable]
+    [global::System.Obsolete ("Use CustomException instead.")]
+    public class DeprecatedException : global::KRPC.Client.RPCException
+    {
+        /// <summary>
+        /// Construct an DeprecatedException with no message.
+        /// </summary>
+        public DeprecatedException ()
+        {
+        }
+
+        /// <summary>
+        /// Construct an DeprecatedException with the given message.
+        /// </summary>
+        public DeprecatedException (string message) : base (message)
+        {
+        }
+
+        /// <summary>
+        /// Construct an DeprecatedException with the given message and inner exception.
+        /// </summary>
+        public DeprecatedException (string message, Exception inner) : base (message, inner)
+        {
+        }
+
+        /// <summary>
+        /// Construct an DeprecatedException with the given serialization info and streaming context.
+        /// </summary>
+        protected DeprecatedException (SerializationInfo info, StreamingContext context) : base (info, context)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Deprecated class documentation string.
+    /// </summary>
+    [global::System.Obsolete ("Use TestClass instead.")]
+    public class DeprecatedClass : global::KRPC.Client.RemoteObject
+    {
+        /// <summary>
+        /// Construct an instance of this remote object. Should not be called directly. This interface is intended for internal decoding.
+        /// </summary>
+        public DeprecatedClass (global::KRPC.Client.IConnection connection, UInt64 id) : base (connection, id)
+        {
+        }
+
+        /// <summary>
+        /// Deprecated method documentation string.
+        /// </summary>
+        [global::System.Obsolete ("Use TestClass.GetValue instead.")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedClass_DeprecatedMethod")]
+        public string DeprecatedMethod ()
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (this, typeof(TestService.DeprecatedClass))
+            };
+            ByteString _data = connection.Invoke ("TestService", "DeprecatedClass_DeprecatedMethod", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
         }
     }
 

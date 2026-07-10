@@ -5,7 +5,7 @@ variable-rgx=[a-z_][a-z0-9_]{1,30}$
 [DESIGN]
 max-args=10
 max-locals=20
-max-attributes=10
+max-attributes=12
 max-returns=25
 max-branches=25
 
