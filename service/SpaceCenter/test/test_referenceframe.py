@@ -746,13 +746,17 @@ class TestReferenceFrame(krpctest.TestCase):
         ang_vel = self.kerbin.angular_velocity(self.kerbin.non_rotating_reference_frame)
         self.assertAlmostEqual(self.kerbin.rotational_speed, norm(ang_vel), delta=1e-5)
 
-    def test_kerbin_angular_velocity_zero_in_vessel_surface_frame(self):
-        """Kerbin co-rotates with the vessel surface frame, so it appears stationary there."""
-        self.assertAlmostEqual(
-            (0, 0, 0),
-            self.kerbin.angular_velocity(self.vessel.surface_reference_frame),
-            delta=1e-4,
-        )
+    def test_kerbin_angular_velocity_in_vessel_surface_frame(self):
+        """The vessel surface frame does NOT co-rotate with Kerbin: its zenith axis
+        sweeps with the vessel's orbit, so its angular velocity is the orbital rate,
+        not the planetary rotation rate. Kerbin (spinning at its rotational speed)
+        therefore appears to rotate at the difference of the two (both along the spin
+        axis for an equatorial orbit).
+        """
+        ang_vel = self.kerbin.angular_velocity(self.vessel.surface_reference_frame)
+        orbital_angular_speed = 2 * math.pi / self.vessel.orbit.period
+        expected = orbital_angular_speed - self.kerbin.rotational_speed
+        self.assertAlmostEqual(expected, norm(ang_vel), delta=1e-4)
 
     def test_kerbin_angular_velocity_in_surface_velocity_frame(self):
         """Kerbin's angular velocity in the surface velocity frame is dominated by the
@@ -768,6 +772,47 @@ class TestReferenceFrame(krpctest.TestCase):
         # Expected magnitude: approximately the orbital angular speed
         orbital_angular_speed = 2 * math.pi / self.vessel.orbit.period
         self.assertAlmostEqual(orbital_angular_speed, norm(ang_vel), delta=5e-4)
+
+    def test_vessel_angular_velocity_surface_frame_equatorial(self):
+        """The surface frame's zenith axis sweeps with the vessel's orbit, so a
+        torque-free (inertially-fixed) vessel's angular velocity in that frame equals
+        the orbital angular speed -- NOT the body's rotation rate, which is ~11x
+        smaller (the frame previously returned body.angularVelocity). On an equatorial
+        orbit there is no twist about the zenith, so the up (x) component is ~zero.
+        """
+        self.set_circular_orbit("Kerbin", 100000)
+        self.vessel.control.sas = False
+        self.vessel.control.rcs = False
+        self.set_pitch_heading_roll(0, 90, 0)  # de-spin (inertially fixed)
+        self.wait(1)
+        ang_vel = self.vessel.angular_velocity(self.vessel.surface_reference_frame)
+        orbital_angular_speed = 2 * math.pi / self.vessel.orbit.period
+        self.assertAlmostEqual(orbital_angular_speed, norm(ang_vel), delta=1e-4)
+        # Locks out the old body.angularVelocity behaviour (~1x rotational speed).
+        self.assertGreater(norm(ang_vel), 5 * self.kerbin.rotational_speed)
+        # No twist about the zenith (x-axis) on an equatorial orbit.
+        self.assertAlmostEqual(0.0, ang_vel[0], delta=5e-5)
+
+    def test_vessel_angular_velocity_surface_frame_inclined_twist(self):
+        """On an inclined orbit at high latitude the surface frame also twists about
+        its zenith axis as the vessel's latitude changes, so an inertially-fixed
+        vessel's angular velocity has a large zenith (x-axis) component. A sweep-only
+        model (Cross(r, v) / r^2) would miss this term and report ~zero there.
+        """
+        # 60 deg inclination, argument of periapsis 90 deg, and epoch = now so the
+        # vessel is teleported to periapsis -- its highest latitude (= inclination),
+        # independent of orbital phase.
+        self.addCleanup(self.set_circular_orbit, "Kerbin", 100000)
+        self.set_orbit("Kerbin", 700000, 0.0, 60.0, 0.0, 90.0, 0.0, self.space_center.ut)
+        self.vessel.control.sas = False
+        self.vessel.control.rcs = False
+        self.set_pitch_heading_roll(0, 90, 0)  # de-spin (inertially fixed)
+        self.wait(1)
+        # The twist term is large only away from the equator; confirm we are there.
+        self.assertGreater(abs(self.vessel.flight().latitude), 30)
+        ang_vel = self.vessel.angular_velocity(self.vessel.surface_reference_frame)
+        # Large twist about the zenith (x-axis); a sweep-only model gives ~zero here.
+        self.assertGreater(abs(ang_vel[0]), 1e-3)
 
     def test_vessel_velocity_zero_in_own_orbital_frame(self):
         """A vessel's velocity in its own orbital reference frame is zero.
