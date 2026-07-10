@@ -1,6 +1,7 @@
 v0.6.0
  * Add Version property to Core, set by the server plugin on startup
  * Make logger configurable in where it writes to (#780)
+ * Surface deprecated members (annotated with [Obsolete]) in the service definition and over the wire (#904)
 
 v0.5.4
  * Initial version, split off from KRPC.dll
