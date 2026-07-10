@@ -204,6 +204,32 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Get whether the given member is deprecated, i.e. annotated with the standard
+        /// [Obsolete] attribute. If it is, <paramref name="reason"/> is set to the
+        /// attribute's message (empty when none was given).
+        /// </summary>
+        public static bool GetDeprecated (ICustomAttributeProvider member, out string reason)
+        {
+            if (Reflection.HasAttribute<ObsoleteAttribute> (member)) {
+                reason = Reflection.GetAttribute<ObsoleteAttribute> (member).Message ?? string.Empty;
+                return true;
+            }
+            reason = string.Empty;
+            return false;
+        }
+
+        /// <summary>
+        /// Get whether the given property is deprecated. The [Obsolete] attribute is read
+        /// from the property itself, falling back to the given accessor method.
+        /// </summary>
+        public static bool GetPropertyDeprecated (PropertyInfo property, MethodInfo accessor, out string reason)
+        {
+            if (Reflection.HasAttribute<ObsoleteAttribute> (property))
+                return GetDeprecated (property, out reason);
+            return GetDeprecated (accessor, out reason);
+        }
+
+        /// <summary>
         /// Get the name of the service for the given KRPCClass annotated type
         /// </summary>
         public static string GetClassServiceName (Type type)

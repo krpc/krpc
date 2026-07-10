@@ -82,6 +82,8 @@ namespace KRPC.Server.ProtocolBuffers
             result.Enumerations.Add (service.Enumerations.Select (ToProtobufMessage));
             result.Exceptions.Add (service.Exceptions.Select (ToProtobufMessage));
             result.Documentation = service.Documentation;
+            result.Deprecated = service.Deprecated;
+            result.DeprecatedReason = service.DeprecatedReason;
             return result;
         }
 
@@ -94,6 +96,8 @@ namespace KRPC.Server.ProtocolBuffers
                 result.ReturnType = procedure.ReturnType.ToProtobufMessage ();
             result.ReturnIsNullable = procedure.ReturnIsNullable;
             result.Documentation = procedure.Documentation;
+            result.Deprecated = procedure.Deprecated;
+            result.DeprecatedReason = procedure.DeprecatedReason;
             return result;
         }
 
@@ -113,6 +117,8 @@ namespace KRPC.Server.ProtocolBuffers
             var result = new Schema.KRPC.Class ();
             result.Name = cls.Name;
             result.Documentation = cls.Documentation;
+            result.Deprecated = cls.Deprecated;
+            result.DeprecatedReason = cls.DeprecatedReason;
             return result;
         }
 
@@ -122,6 +128,8 @@ namespace KRPC.Server.ProtocolBuffers
             result.Name = enumeration.Name;
             result.Values.Add (enumeration.Values.Select (ToProtobufMessage));
             result.Documentation = enumeration.Documentation;
+            result.Deprecated = enumeration.Deprecated;
+            result.DeprecatedReason = enumeration.DeprecatedReason;
             return result;
         }
 
@@ -131,6 +139,8 @@ namespace KRPC.Server.ProtocolBuffers
             result.Name = enumerationValue.Name;
             result.Value = enumerationValue.Value;
             result.Documentation = enumerationValue.Documentation;
+            result.Deprecated = enumerationValue.Deprecated;
+            result.DeprecatedReason = enumerationValue.DeprecatedReason;
             return result;
         }
 
@@ -139,6 +149,8 @@ namespace KRPC.Server.ProtocolBuffers
             var result = new Schema.KRPC.Exception ();
             result.Name = exception.Name;
             result.Documentation = exception.Documentation;
+            result.Deprecated = exception.Deprecated;
+            result.DeprecatedReason = exception.DeprecatedReason;
             return result;
         }
 

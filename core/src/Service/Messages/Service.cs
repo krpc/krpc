@@ -17,6 +17,10 @@ namespace KRPC.Service.Messages
 
         public string Documentation { get; set; }
 
+        public bool Deprecated { get; set; }
+
+        public string DeprecatedReason { get; set; }
+
         public Service (string name)
         {
             Name = name;
@@ -25,6 +29,7 @@ namespace KRPC.Service.Messages
             Enumerations = new List<Enumeration> ();
             Exceptions = new List<Exception> ();
             Documentation = string.Empty;
+            DeprecatedReason = string.Empty;
         }
     }
 }
