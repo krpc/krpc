@@ -1,6 +1,7 @@
-import unittest
 import threading
 import time
+import unittest
+
 from krpc.error import StreamError
 from krpc.test.servertestcase import ServerTestCase
 
@@ -433,7 +434,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
         # At 5Hz, five increments take ~1s. The lower bound checks the rate
         # limit was honoured; the upper bound is a generous hang detector, kept
-        # loose so the test does not flake under parallel load. See issue #540.
+        # loose so the test does not flake under parallel load.
         self.assertGreater(elapsed, 1)
         self.assertLess(elapsed, 3)
         self.assertTrue(stop.is_set())

@@ -40,7 +40,7 @@ public class EventTest {
       long time = System.currentTimeMillis() - startTime;
       // Lower bound is a correctness check (the event must not fire before its
       // timer); the upper bound is a generous hang detector, kept loose so the
-      // test does not flake under parallel load. See issue #540.
+      // test does not flake under parallel load.
       assertTrue(150 < time && time < 2000);
       assertTrue(event.getStream().get());
     }

@@ -26,7 +26,7 @@ TEST_F(test_event, test_event) {
   std::chrono::duration<double> duration = end_time - start_time;
   // Lower bound is a correctness check (the event must not fire before its
   // timer); the upper bound is a generous hang detector, kept loose so the
-  // test does not flake under parallel load. See issue #540.
+  // test does not flake under parallel load.
   ASSERT_GT(duration.count(), 0.15);
   ASSERT_LT(duration.count(), 2);
   ASSERT_TRUE(event.stream()());
@@ -166,7 +166,7 @@ TEST_F(test_event, test_custom_event) {
   // increments on every expression evaluation, so the value read back is >= 21
   // (20 at the trigger, plus this read); the exact figure depends on how many
   // more times the server evaluated the expression first, so assert the lower
-  // bound to avoid flaking under load. See issue #540.
+  // bound to avoid flaking under load.
   ASSERT_GE(test_service.counter("test_event.test_custom_event"), 21);
   event.release();
 }

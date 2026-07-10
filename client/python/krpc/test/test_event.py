@@ -1,6 +1,7 @@
-import time
 import threading
+import time
 import unittest
+
 from krpc.test.servertestcase import ServerTestCase
 
 
@@ -16,7 +17,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
             event.wait()
             # Lower bound is a correctness check (event must not fire before its
             # timer); the upper bound is a generous hang detector, kept loose so
-            # the test does not flake under parallel load. See issue #540.
+            # the test does not flake under parallel load.
             self.assertGreater(time.time() - start_time, 0.15)
             self.assertLess(time.time() - start_time, 2)
             self.assertTrue(event.stream())
@@ -142,7 +143,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
             # read back here is >= 21 (20 at the trigger, plus this read); the
             # exact figure depends on how many more times the server evaluated
             # the expression before this read, so assert the lower bound rather
-            # than an exact value to avoid flaking under load. See issue #540.
+            # than an exact value to avoid flaking under load.
             self.assertGreaterEqual(
                 self.conn.test_service.counter("TestEvent.test_custom_event"), 21
             )

@@ -374,7 +374,7 @@ namespace KRPC.Client.Test
             var elapsed = timer.ElapsedMilliseconds;
             // Lower bound checks the rate limit was honoured; the upper bound is
             // a generous hang detector, kept loose so the test does not flake
-            // under parallel load. See issue #540.
+            // under parallel load.
             Assert.Greater(elapsed, 1000);
             Assert.Less(elapsed, 3000);
             Assert.False(error);

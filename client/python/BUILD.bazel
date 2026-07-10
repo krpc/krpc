@@ -191,7 +191,6 @@ py_test(
 
 py_lint_test(
     name = "lint",
-    # medium (300s) not small (60s): ~36s worst case under parallel load (#540)
     size = "medium",
     srcs = glob(["krpc/**/*"]),
     black_exclude = "\".*(schema|services)/.+\"",

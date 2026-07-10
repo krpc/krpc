@@ -436,7 +436,7 @@ TEST_F(test_stream, test_rate) {
   std::chrono::duration<double> elapsed = end - start;
   // Lower bound checks the rate limit was honoured; the upper bound is a
   // generous hang detector, kept loose so the test does not flake under
-  // parallel load. See issue #540.
+  // parallel load.
   ASSERT_GT(elapsed.count(), 1.0);
   ASSERT_LT(elapsed.count(), 3.0);
   x.remove();

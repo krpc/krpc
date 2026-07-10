@@ -110,7 +110,6 @@ test_suite(
 
 py_test(
     name = "krpctoolstest",
-    # medium (300s) not small (60s): ~42s worst case under parallel load (#540)
     size = "medium",
     src = ":krpctools",
     pkg = "krpctools-" + python_version,
@@ -119,7 +118,6 @@ py_test(
 
 py_lint_test(
     name = "lint",
-    # medium (300s) not small (60s): ~46s worst case under parallel load (#540)
     size = "medium",
     pkg = ":krpctools",
     pkg_name = "krpctools",

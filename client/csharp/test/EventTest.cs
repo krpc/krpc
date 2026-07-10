@@ -22,7 +22,7 @@ namespace KRPC.Client.Test
                 // Lower bound is a correctness check (the event must not fire
                 // before its timer); the upper bound is a generous hang
                 // detector, kept loose so the test does not flake under
-                // parallel load. See issue #540.
+                // parallel load.
                 Assert.Greater (time, 150);
                 Assert.Less (time, 2000);
                 Assert.True (e.Stream.Get ());
@@ -147,7 +147,7 @@ namespace KRPC.Client.Test
                 // value read back is >= 21 (20 at the trigger, plus this read);
                 // the exact figure depends on how many more times the server
                 // evaluated the expression first, so assert the lower bound to
-                // avoid flaking under load. See issue #540.
+                // avoid flaking under load.
                 Assert.GreaterOrEqual(Connection.TestService ().Counter("TestEvent.TestCustomEvent", 1), 21);
             }
         }

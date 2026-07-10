@@ -166,9 +166,6 @@ test_suite(
     ],
 )
 
-# size = "medium" (300s) not "small" (60s): the whole suite runs sequentially in
-# one binary and overruns the 60s cap when the machine is loaded (e.g. under a
-# parallel `bazel test //...`). See issue #540.
 client_test(
     name = "client",
     size = "medium",
