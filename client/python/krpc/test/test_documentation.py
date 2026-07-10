@@ -1,3 +1,4 @@
+import inspect
 import unittest
 from typing import cast
 from krpc.test.servertestcase import ServerTestCase
@@ -9,8 +10,10 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
         super(TestDocumentation, cls).setUpClass()
 
     def check_doc(self, expected: str, obj: object) -> None:
+        # Normalise with cleandoc rather than strip: pre-generated stubs indent
+        # multi-line docstrings, whereas dynamically-created services do not.
         doc = cast(str, obj.__doc__)
-        self.assertEqual(expected, doc.strip())
+        self.assertEqual(expected, inspect.cleandoc(doc))
 
     def test_basic(self) -> None:
         self.check_doc("Service documentation string.", self.conn.test_service)
