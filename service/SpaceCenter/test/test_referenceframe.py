@@ -773,6 +773,43 @@ class TestReferenceFrame(krpctest.TestCase):
         orbital_angular_speed = 2 * math.pi / self.vessel.orbit.period
         self.assertAlmostEqual(orbital_angular_speed, norm(ang_vel), delta=5e-4)
 
+    def test_vessel_angular_velocity_surface_frame_low_noise(self):
+        """Regression for #351: a torque-free vessel's angular velocity in the
+        surface reference frame must not be noisier than in the non-rotating frame.
+
+        #351 reported sign-alternating ~0.1 deg/s (~1.7e-3 rad/s) jitter in the
+        surface frame that was absent from the non-rotating frame. Both are derived
+        from the same rigidbody angular velocity and differ only by a rotation and a
+        frame-angular-velocity subtraction, so the surface frame cannot inject
+        frame-specific noise. With the vessel de-spun the per-tick spread is inherent
+        PhysX float noise (~1e-5 rad/s) and is the same in both frames.
+        """
+        self.set_circular_orbit("Kerbin", 100000)
+        self.vessel.control.sas = False
+        self.vessel.control.rcs = False
+        self.set_pitch_heading_roll(0, 90, 0)  # de-spin, level, facing east
+        self.wait(1)
+        surf = self.vessel.surface_reference_frame
+        nonrot = self.kerbin.non_rotating_reference_frame
+        surf_samples = []
+        nonrot_samples = []
+        for _ in range(30):
+            surf_samples.append(self.vessel.angular_velocity(surf))
+            nonrot_samples.append(self.vessel.angular_velocity(nonrot))
+            self.wait(0.05)
+
+        def peak_to_peak(samples):
+            # Largest per-component spread across the samples (rad/s).
+            return max(max(c) - min(c) for c in zip(*samples))
+
+        surf_noise = peak_to_peak(surf_samples)
+        nonrot_noise = peak_to_peak(nonrot_samples)
+        # Comfortably below the ~1.7e-3 rad/s (~0.1 deg/s) reported in #351.
+        self.assertLess(surf_noise, 5e-4)
+        # The surface frame must not be materially noisier than the non-rotating
+        # frame, since both come from the same rigidbody angular velocity.
+        self.assertLess(surf_noise, nonrot_noise + 2e-4)
+
     def test_vessel_angular_velocity_surface_frame_equatorial(self):
         """The surface frame's zenith axis sweeps with the vessel's orbit, so a
         torque-free (inertially-fixed) vessel's angular velocity in that frame equals
