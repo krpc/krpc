@@ -51,6 +51,7 @@
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AutoPilot\AttitudeController.cs" />
+    <Compile Include="AutoPilot\AttitudeError.cs" />
     <Compile Include="AutoPilot\PIDController.cs" />
     <Compile Include="ExtensionMethods\ActionGroupExtensions.cs" />
     <Compile Include="ExtensionMethods\AlarmMessageActionExtensions.cs" />
