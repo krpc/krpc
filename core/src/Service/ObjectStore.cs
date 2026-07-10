@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using KRPC.Utils;
 
 namespace KRPC.Service
 {
@@ -59,6 +60,39 @@ namespace KRPC.Service
                 instances.Remove (obj);
                 objectIds.Remove (objectId);
             }
+        }
+
+        /// <summary>
+        /// Remove all registered instances that implement <see cref="ITrackedObject"/>
+        /// and whose underlying game object no longer exists. Instances that do not
+        /// implement <see cref="ITrackedObject"/> are left untouched.
+        /// Intended to be called when the game state is (re)loaded, to discard objects
+        /// that have become dangling (see issue #771).
+        /// </summary>
+        public void RemoveDead ()
+        {
+            var dead = new List<object> ();
+            foreach (var obj in instances.Keys) {
+                var tracked = obj as ITrackedObject;
+                if (tracked == null)
+                    continue;
+                bool alive;
+                try {
+                    alive = tracked.IsAlive;
+                } catch (Exception e) {
+                    // A liveness check must never abort the sweep or escape into the
+                    // game's load-event dispatch. Treat a throwing check conservatively
+                    // as still-alive (keep the object) and log it.
+                    Logger.WriteLine (
+                        "ITrackedObject.IsAlive threw during object store sweep for " +
+                        obj.GetType ().Name + "; keeping it. " + e, Logger.Severity.Error);
+                    continue;
+                }
+                if (!alive)
+                    dead.Add (obj);
+            }
+            foreach (var obj in dead)
+                RemoveInstance (obj);
         }
 
         /// <summary>

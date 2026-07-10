@@ -14,13 +14,35 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass(Service = "SpaceCenter")]
     public class Wheel : Equatable<Wheel>
     {
-        readonly ModuleWheelBase wheel;
-        readonly ModuleWheels.ModuleWheelBrakes brakes;
-        readonly ModuleWheels.ModuleWheelDamage damage;
-        readonly ModuleWheels.ModuleWheelDeployment deployment;
-        readonly ModuleWheels.ModuleWheelMotor motor;
-        readonly ModuleWheels.ModuleWheelSteering steering;
-        readonly ModuleWheels.ModuleWheelSuspension suspension;
+        readonly ModuleRef<ModuleWheelBase>? wheelRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelBrakes>? brakesRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelDamage>? damageRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelDeployment>? deploymentRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelMotor>? motorRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelSteering>? steeringRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelSuspension>? suspensionRef;
+
+        ModuleWheelBase wheel {
+            get { return ModuleRef<ModuleWheelBase>.ResolveOrNull (wheelRef, Part.InternalPart); }
+        }
+        ModuleWheels.ModuleWheelBrakes brakes {
+            get { return ModuleRef<ModuleWheels.ModuleWheelBrakes>.ResolveOrNull (brakesRef, Part.InternalPart); }
+        }
+        ModuleWheels.ModuleWheelDamage damage {
+            get { return ModuleRef<ModuleWheels.ModuleWheelDamage>.ResolveOrNull (damageRef, Part.InternalPart); }
+        }
+        ModuleWheels.ModuleWheelDeployment deployment {
+            get { return ModuleRef<ModuleWheels.ModuleWheelDeployment>.ResolveOrNull (deploymentRef, Part.InternalPart); }
+        }
+        ModuleWheels.ModuleWheelMotor motor {
+            get { return ModuleRef<ModuleWheels.ModuleWheelMotor>.ResolveOrNull (motorRef, Part.InternalPart); }
+        }
+        ModuleWheels.ModuleWheelSteering steering {
+            get { return ModuleRef<ModuleWheels.ModuleWheelSteering>.ResolveOrNull (steeringRef, Part.InternalPart); }
+        }
+        ModuleWheels.ModuleWheelSuspension suspension {
+            get { return ModuleRef<ModuleWheels.ModuleWheelSuspension>.ResolveOrNull (suspensionRef, Part.InternalPart); }
+        }
 
         internal static bool Is(Part part)
         {
@@ -35,14 +57,13 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException("Part is not a wheel");
             Part = part;
             var internalPart = part.InternalPart;
-            wheel = internalPart.Module<ModuleWheelBase>();
-            brakes = internalPart.Module<ModuleWheels.ModuleWheelBrakes>();
-            damage = internalPart.Module<ModuleWheels.ModuleWheelDamage>();
-            deployment = internalPart.Module<ModuleWheels.ModuleWheelDeployment>();
-            motor = internalPart.Module<ModuleWheels.ModuleWheelMotor> ();
-            steering = internalPart.Module<ModuleWheels.ModuleWheelSteering>();
-            suspension = internalPart.Module<ModuleWheels.ModuleWheelSuspension>();
-
+            wheelRef = ModuleRef<ModuleWheelBase>.For (internalPart);
+            brakesRef = ModuleRef<ModuleWheels.ModuleWheelBrakes>.For (internalPart);
+            damageRef = ModuleRef<ModuleWheels.ModuleWheelDamage>.For (internalPart);
+            deploymentRef = ModuleRef<ModuleWheels.ModuleWheelDeployment>.For (internalPart);
+            motorRef = ModuleRef<ModuleWheels.ModuleWheelMotor>.For (internalPart);
+            steeringRef = ModuleRef<ModuleWheels.ModuleWheelSteering>.For (internalPart);
+            suspensionRef = ModuleRef<ModuleWheels.ModuleWheelSuspension>.For (internalPart);
         }
 
         /// <summary>
@@ -50,7 +71,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals(Wheel other)
         {
-            return !ReferenceEquals(other, null) && Part == other.Part && wheel == other.wheel;
+            return !ReferenceEquals(other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -58,7 +79,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode()
         {
-            return Part.GetHashCode() ^ wheel.GetHashCode();
+            return Part.GetHashCode();
         }
 
         void CheckBrakes()

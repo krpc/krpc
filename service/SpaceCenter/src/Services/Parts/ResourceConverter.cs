@@ -13,7 +13,20 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class ResourceConverter: Equatable<ResourceConverter>
     {
-        readonly IList<ModuleResourceConverter> converters;
+        // Re-derivable references to the part's converter modules, looked up from the live
+        // part by stored index on each access rather than captured. The set of converters is
+        // fixed for the part's lifetime, so it is captured once at construction.
+        readonly ModuleRef<ModuleResourceConverter>[] converterRefs;
+
+        IList<ModuleResourceConverter> converters {
+            get {
+                var internalPart = Part.InternalPart;
+                var result = new ModuleResourceConverter [converterRefs.Length];
+                for (int i = 0; i < converterRefs.Length; i++)
+                    result [i] = converterRefs [i].Resolve (internalPart);
+                return result;
+            }
+        }
 
         internal static bool Is (Part part)
         {
@@ -23,9 +36,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal ResourceConverter (Part part)
         {
             Part = part;
-            converters = part.InternalPart.Modules.OfType<ModuleResourceConverter> ().ToList ();
-            if (converters.Count == 0)
+            var internalPart = part.InternalPart;
+            var modules = internalPart.Modules.OfType<ModuleResourceConverter> ().ToList ();
+            if (modules.Count == 0)
                 throw new ArgumentException ("Part is does not contain any resource converters");
+            converterRefs = new ModuleRef<ModuleResourceConverter> [modules.Count];
+            for (int i = 0; i < modules.Count; i++)
+                converterRefs [i] = new ModuleRef<ModuleResourceConverter> (internalPart, modules [i]);
         }
 
         /// <summary>
@@ -33,7 +50,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (ResourceConverter other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && converters.SequenceEqual (other.converters);
+            return !ReferenceEquals (other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -41,10 +58,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = Part.GetHashCode ();
-            foreach (var converter in converters)
-                hash ^= converter.GetHashCode ();
-            return hash;
+            return Part.GetHashCode ();
         }
 
         /// <summary>

@@ -22,10 +22,34 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Engine : Equatable<Engine>
     {
-        readonly IList<ModuleEngines> engines;
-        readonly MultiModeEngine multiModeEngine;
-        readonly ModuleGimbal gimbal;
-        readonly IThrustReverser thrustReverser;
+        // null for an engine representing the whole part (all modes); set to the occurrence
+        // of a single ModuleEngines for a per-mode sub-engine created by Modes. Used for
+        // proxy equality.
+        readonly int? singleEngineIndex;
+
+        // Re-derivable references to the ModuleEngines this proxy covers, looked up from the
+        // live part by stored index on each access rather than captured. For an engine
+        // representing the whole part this is all of its ModuleEngines (primary, then any
+        // secondary mode); for a per-mode sub-engine it is the single covered ModuleEngines.
+        readonly ModuleRef<ModuleEngines>[] engineRefs;
+
+        // The engine's gimbal and (for whole-part engines) multi-mode module, re-derived
+        // from the live part by stored index on each access rather than scanned.
+        readonly ModuleRef<ModuleGimbal>? gimbalRef;
+        readonly ModuleRef<MultiModeEngine>? multiModeEngineRef;
+
+        // A per-mode sub-engine behaves as single-mode, so reports no multi-mode module.
+        MultiModeEngine multiModeEngine {
+            get { return singleEngineIndex.HasValue ? null : ModuleRef<MultiModeEngine>.ResolveOrNull (multiModeEngineRef, Part.InternalPart); }
+        }
+
+        ModuleGimbal gimbal {
+            get { return ModuleRef<ModuleGimbal>.ResolveOrNull (gimbalRef, Part.InternalPart); }
+        }
+
+        IThrustReverser thrustReverser {
+            get { return ThrustReverser.Create (Part.InternalPart); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -41,25 +65,26 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             Part = part;
             var internalPart = part.InternalPart;
-            engines = internalPart.Modules.OfType<ModuleEngines> ().ToList ();
-            multiModeEngine = internalPart.Module<MultiModeEngine> ();
-            gimbal = internalPart.Module<ModuleGimbal> ();
-            thrustReverser = ThrustReverser.Create (internalPart);
-            if (engines.Count == 0)
+            var allEngines = internalPart.Modules.OfType<ModuleEngines> ().ToList ();
+            if (allEngines.Count == 0)
                 throw new ArgumentException ("Part is not an engine");
+            engineRefs = new ModuleRef<ModuleEngines> [allEngines.Count];
+            for (int i = 0; i < allEngines.Count; i++)
+                engineRefs [i] = new ModuleRef<ModuleEngines> (internalPart, allEngines [i]);
+            gimbalRef = ModuleRef<ModuleGimbal>.For (internalPart);
+            multiModeEngineRef = ModuleRef<MultiModeEngine>.For (internalPart);
         }
 
         Engine (ModuleEngines engine)
         {
-            Part = new Part (engine.part);
-            engines = new List<ModuleEngines>
-            {
-                engine
-            };
-            gimbal = Part.InternalPart.Module<ModuleGimbal> ();
-            thrustReverser = ThrustReverser.Create (Part.InternalPart);
             if (engine == null)
                 throw new ArgumentException ("Part does not have a ModuleEngines PartModule");
+            Part = new Part (engine.part);
+            var engineRef = new ModuleRef<ModuleEngines> (engine.part, engine);
+            engineRefs = new [] { engineRef };
+            singleEngineIndex = engineRef.Occurrence;
+            gimbalRef = ModuleRef<ModuleGimbal>.For (engine.part);
+            multiModeEngineRef = ModuleRef<MultiModeEngine>.For (engine.part);
         }
 
         /// <summary>
@@ -70,9 +95,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             return
             !ReferenceEquals (other, null) &&
             Part == other.Part &&
-            engines.SequenceEqual (other.engines) &&
-            (multiModeEngine == other.multiModeEngine || multiModeEngine.Equals (other.multiModeEngine)) &&
-            (gimbal == other.gimbal || gimbal.Equals (other.gimbal));
+            singleEngineIndex == other.singleEngineIndex;
         }
 
         /// <summary>
@@ -80,15 +103,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = Part.GetHashCode ();
-            hash ^= engines.GetHashCode ();
-            foreach (var engine in engines)
-                hash ^= engine.GetHashCode ();
-            if (multiModeEngine != null)
-                hash ^= multiModeEngine.GetHashCode ();
-            if (gimbal != null)
-                hash ^= gimbal.GetHashCode ();
-            return hash;
+            return Part.GetHashCode () ^ (singleEngineIndex ?? -1);
         }
 
         /// <summary>
@@ -97,7 +112,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// the ModulesEngine for the current mode.
         /// </summary>
         ModuleEngines CurrentEngine {
-            get { return engines [(multiModeEngine == null || multiModeEngine.runningPrimary) ? 0 : 1]; }
+            get {
+                int index = (multiModeEngine == null || multiModeEngine.runningPrimary) ? 0 : 1;
+                return engineRefs [index].Resolve (Part.InternalPart);
+            }
         }
 
         /// <summary>
@@ -475,8 +493,8 @@ namespace KRPC.SpaceCenter.Services.Parts
                 CheckMultiMode ();
                 var result = new Dictionary<string, Engine>
                 {
-                    [multiModeEngine.primaryEngineID] = new Engine(engines[0]),
-                    [multiModeEngine.secondaryEngineID] = new Engine(engines[1])
+                    [multiModeEngine.primaryEngineID] = new Engine(engineRefs[0].Resolve(Part.InternalPart)),
+                    [multiModeEngine.secondaryEngineID] = new Engine(engineRefs[1].Resolve(Part.InternalPart))
                 };
                 return result;
             }

@@ -12,8 +12,16 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class ResourceHarvester : Equatable<ResourceHarvester>
     {
-        readonly ModuleResourceHarvester harvester;
-        readonly ModuleAnimationGroup animator;
+        readonly ModuleRef<ModuleResourceHarvester>? harvesterRef;
+        readonly ModuleRef<ModuleAnimationGroup>? animatorRef;
+
+        ModuleResourceHarvester harvester {
+            get { return ModuleRef<ModuleResourceHarvester>.ResolveOrNull (harvesterRef, Part.InternalPart); }
+        }
+
+        ModuleAnimationGroup animator {
+            get { return ModuleRef<ModuleAnimationGroup>.ResolveOrNull (animatorRef, Part.InternalPart); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -27,9 +35,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             Part = part;
             var internalPart = part.InternalPart;
-            harvester = internalPart.Module<ModuleResourceHarvester> ();
-            animator = internalPart.Module<ModuleAnimationGroup> ();
-            if (harvester == null || animator == null)
+            harvesterRef = ModuleRef<ModuleResourceHarvester>.For (internalPart);
+            animatorRef = ModuleRef<ModuleAnimationGroup>.For (internalPart);
+            if (!harvesterRef.HasValue || !animatorRef.HasValue)
                 throw new ArgumentException ("Part is not a resource harvester");
         }
 
@@ -40,8 +48,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             return
             !ReferenceEquals (other, null) &&
-            Part == other.Part &&
-            (harvester == other.harvester || harvester.Equals (other.harvester));
+            Part == other.Part;
         }
 
         /// <summary>
@@ -49,7 +56,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ harvester.GetHashCode ();
+            return Part.GetHashCode ();
         }
 
         /// <summary>

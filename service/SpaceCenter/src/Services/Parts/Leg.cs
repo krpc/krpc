@@ -12,9 +12,19 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Leg : Equatable<Leg>
     {
-        readonly ModuleWheelBase wheel;
-        readonly ModuleWheels.ModuleWheelDeployment deployment;
-        readonly ModuleWheels.ModuleWheelDamage damage;
+        readonly ModuleRef<ModuleWheelBase>? wheelRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelDeployment>? deploymentRef;
+        readonly ModuleRef<ModuleWheels.ModuleWheelDamage>? damageRef;
+
+        ModuleWheelBase wheel {
+            get { return ModuleRef<ModuleWheelBase>.ResolveOrNull (wheelRef, Part.InternalPart); }
+        }
+        ModuleWheels.ModuleWheelDeployment deployment {
+            get { return ModuleRef<ModuleWheels.ModuleWheelDeployment>.ResolveOrNull (deploymentRef, Part.InternalPart); }
+        }
+        ModuleWheels.ModuleWheelDamage damage {
+            get { return ModuleRef<ModuleWheels.ModuleWheelDamage>.ResolveOrNull (damageRef, Part.InternalPart); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -29,9 +39,9 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part is not a landing leg");
             Part = part;
             var internalPart = part.InternalPart;
-            wheel = internalPart.Module<ModuleWheelBase> ();
-            deployment = internalPart.Module<ModuleWheels.ModuleWheelDeployment> ();
-            damage = internalPart.Module<ModuleWheels.ModuleWheelDamage> ();
+            wheelRef = ModuleRef<ModuleWheelBase>.For (internalPart);
+            deploymentRef = ModuleRef<ModuleWheels.ModuleWheelDeployment>.For (internalPart);
+            damageRef = ModuleRef<ModuleWheels.ModuleWheelDamage>.For (internalPart);
         }
 
         /// <summary>
@@ -39,7 +49,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Leg other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && wheel == other.wheel;
+            return !ReferenceEquals (other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -47,7 +57,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ wheel.GetHashCode ();
+            return Part.GetHashCode ();
         }
 
         /// <summary>

@@ -9,13 +9,21 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class ScienceData : Equatable<ScienceData>
     {
-        readonly ModuleScienceExperiment experiment;
+        readonly Part part;
+        readonly ModuleRef<ModuleScienceExperiment> experimentRef;
         readonly global::ScienceData data;
 
         internal ScienceData (ModuleScienceExperiment experimentModule, global::ScienceData scienceData)
         {
-            experiment = experimentModule;
+            part = new Part (experimentModule.part);
+            experimentRef = new ModuleRef<ModuleScienceExperiment> (experimentModule.part, experimentModule);
             data = scienceData;
+        }
+
+        // The experiment module, re-derived from the live part on each access, so no
+        // reference to the destroyed module (and its vessel graph) is retained.
+        ModuleScienceExperiment experiment {
+            get { return experimentRef.Resolve (part.InternalPart); }
         }
 
         /// <summary>
@@ -23,7 +31,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (ScienceData other)
         {
-            return !ReferenceEquals (other, null) && experiment == other.experiment && data == other.data;
+            return !ReferenceEquals (other, null) && part == other.part &&
+                   experimentRef.Occurrence == other.experimentRef.Occurrence && data == other.data;
         }
 
         /// <summary>
@@ -31,7 +40,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return experiment.GetHashCode () ^ data.GetHashCode ();
+            return part.GetHashCode () ^ experimentRef.Occurrence ^ (data == null ? 0 : data.GetHashCode ());
         }
 
         /// <summary>

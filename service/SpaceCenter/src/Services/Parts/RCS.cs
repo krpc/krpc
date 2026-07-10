@@ -16,7 +16,11 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class RCS : Equatable<RCS>
     {
-        readonly ModuleRCS rcs;
+        readonly ModuleRef<ModuleRCS>? rcsRef;
+
+        ModuleRCS rcs {
+            get { return ModuleRef<ModuleRCS>.ResolveOrNull (rcsRef, Part.InternalPart); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -31,8 +35,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal RCS (Part part)
         {
             Part = part;
-            rcs = part.InternalPart.Module<ModuleRCS> ();
-            if (rcs == null)
+            rcsRef = ModuleRef<ModuleRCS>.For (part.InternalPart);
+            if (!rcsRef.HasValue)
                 throw new ArgumentException ("Part does not have a ModuleRCS PartModule");
         }
 
@@ -41,7 +45,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (RCS other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && rcs.Equals (other.rcs);
+            return !ReferenceEquals (other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -49,7 +53,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ rcs.GetHashCode ();
+            return Part.GetHashCode ();
         }
 
         /// <summary>

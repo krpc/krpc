@@ -202,6 +202,7 @@ namespace KRPC
             IsPaused = false;
             GameEvents.onGamePause.Add(OnGamePause);
             GameEvents.onGameUnpause.Add(OnGameUnpause);
+            GameEvents.onGameStatePostLoad.Add(OnGameStatePostLoad);
         }
 
         void OnServerStarted(object s, ServerStartedEventArgs e)
@@ -240,6 +241,15 @@ namespace KRPC
             IsPaused = false;
         }
 
+        // Called after the game state has been (re)loaded, e.g. after a quickload.
+        // Notifies the core so it can discard objects that reference the previous
+        // game state (see issue #771). Uses onGameStatePostLoad (rather than
+        // onGameStateLoad) so the new state is fully loaded before objects are checked.
+        void OnGameStatePostLoad(ConfigNode node)
+        {
+            Service.CallContext.NotifyGameStateLoaded();
+        }
+
         void OnGUIApplicationLauncherReady ()
         {
             applauncherButton = ApplicationLauncher.Instance.AddModApplication (
@@ -263,6 +273,7 @@ namespace KRPC
         {
             GameEvents.onGamePause.Remove(OnGamePause);
             GameEvents.onGameUnpause.Remove(OnGameUnpause);
+            GameEvents.onGameStatePostLoad.Remove(OnGameStatePostLoad);
             core.OnServerStarted -= OnServerStarted;
             core.OnServerStopped -= OnServerStopped;
             core.OnClientRequestingConnection -= OnClientRequestingConnection;

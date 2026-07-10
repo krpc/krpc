@@ -11,8 +11,16 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Radiator : Equatable<Radiator>
     {
-        readonly ModuleActiveRadiator activeRadiator;
-        readonly ModuleDeployableRadiator deployableRadiator;
+        readonly ModuleRef<ModuleActiveRadiator>? activeRadiatorRef;
+        readonly ModuleRef<ModuleDeployableRadiator>? deployableRadiatorRef;
+
+        ModuleActiveRadiator activeRadiator {
+            get { return ModuleRef<ModuleActiveRadiator>.ResolveOrNull (activeRadiatorRef, Part.InternalPart); }
+        }
+
+        ModuleDeployableRadiator deployableRadiator {
+            get { return ModuleRef<ModuleDeployableRadiator>.ResolveOrNull (deployableRadiatorRef, Part.InternalPart); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -26,9 +34,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             Part = part;
             var internalPart = part.InternalPart;
-            activeRadiator = internalPart.Module<ModuleActiveRadiator> ();
-            deployableRadiator = internalPart.Module<ModuleDeployableRadiator> ();
-            if (activeRadiator == null && deployableRadiator == null)
+            activeRadiatorRef = ModuleRef<ModuleActiveRadiator>.For (internalPart);
+            deployableRadiatorRef = ModuleRef<ModuleDeployableRadiator>.For (internalPart);
+            if (!activeRadiatorRef.HasValue && !deployableRadiatorRef.HasValue)
                 throw new ArgumentException ("Part is not a radiator");
         }
 
@@ -39,9 +47,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             return
             !ReferenceEquals (other, null) &&
-            Part == other.Part &&
-            activeRadiator == other.activeRadiator &&
-            deployableRadiator == other.deployableRadiator;
+            Part == other.Part;
         }
 
         /// <summary>
@@ -49,12 +55,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = Part.GetHashCode ();
-            if (activeRadiator != null)
-                hash ^= activeRadiator.GetHashCode ();
-            if (deployableRadiator != null)
-                hash ^= deployableRadiator.GetHashCode ();
-            return hash;
+            return Part.GetHashCode ();
         }
 
         /// <summary>

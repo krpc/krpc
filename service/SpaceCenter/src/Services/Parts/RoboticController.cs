@@ -13,7 +13,11 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass(Service = "SpaceCenter")]
     public class RoboticController : Equatable<RoboticController>
     {
-        readonly Expansions.Serenity.ModuleRoboticController controller;
+        readonly ModuleRef<Expansions.Serenity.ModuleRoboticController>? controllerRef;
+
+        Expansions.Serenity.ModuleRoboticController controller {
+            get { return ModuleRef<Expansions.Serenity.ModuleRoboticController>.ResolveOrNull (controllerRef, Part.InternalPart); }
+        }
 
         internal static bool Is(Part part)
         {
@@ -25,8 +29,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!Is(part))
                 throw new ArgumentException("Part is not a robotics controller");
             Part = part;
-            var internalPart = part.InternalPart;
-            controller = internalPart.Module<Expansions.Serenity.ModuleRoboticController>();
+            controllerRef = ModuleRef<Expansions.Serenity.ModuleRoboticController>.For (part.InternalPart);
         }
 
         /// <summary>
@@ -34,7 +37,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals(RoboticController other)
         {
-            return !ReferenceEquals(other, null) && Part == other.Part && controller == other.controller;
+            return !ReferenceEquals(other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -42,7 +45,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode()
         {
-            return Part.GetHashCode() ^ controller.GetHashCode();
+            return Part.GetHashCode();
         }
 
         /// <summary>

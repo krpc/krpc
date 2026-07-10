@@ -20,24 +20,44 @@ namespace KRPC.SpaceCenter.Services.Parts
     public class Thruster : Equatable<Thruster>
     {
         readonly Part part;
-        readonly ModuleEngines engine;
-        readonly ModuleRCS rcs;
-        readonly ModuleGimbal gimbal;
+        // null for an RCS thruster; otherwise a re-derivable reference to the
+        // ModuleEngines that generates this thruster's thrust.
+        readonly ModuleRef<ModuleEngines>? engineRef;
+        // The RCS module (for RCS thrusters) and the gimbal (for engine thrusters),
+        // re-derived from the live part by stored index on each access.
+        readonly ModuleRef<ModuleRCS>? rcsRef;
+        readonly ModuleRef<ModuleGimbal>? gimbalRef;
         readonly int transformIndex;
 
         internal Thruster (Part thrusterPart, ModuleEngines thrusterEngine, ModuleGimbal thrusterGimbal, int thrusterTransformIndex)
         {
             part = thrusterPart;
-            engine = thrusterEngine;
-            gimbal = thrusterGimbal;
+            engineRef = new ModuleRef<ModuleEngines> (thrusterPart.InternalPart, thrusterEngine);
+            gimbalRef = ModuleRef<ModuleGimbal>.For (thrusterPart.InternalPart);
             transformIndex = thrusterTransformIndex;
         }
 
         internal Thruster (Part thrusterPart, ModuleRCS thrusterRCS, int thrusterTransformIndex)
         {
             part = thrusterPart;
-            rcs = thrusterRCS;
+            rcsRef = ModuleRef<ModuleRCS>.For (thrusterPart.InternalPart);
             transformIndex = thrusterTransformIndex;
+        }
+
+        // The engine that generates thrust (null for RCS thrusters), re-derived from the
+        // live part on each access.
+        ModuleEngines engine {
+            get { return engineRef.HasValue ? engineRef.Value.Resolve (part.InternalPart) : null; }
+        }
+
+        // The RCS module that generates thrust (null for engine thrusters).
+        ModuleRCS rcs {
+            get { return engineRef.HasValue ? null : ModuleRef<ModuleRCS>.ResolveOrNull (rcsRef, part.InternalPart); }
+        }
+
+        // The gimbal of the engine (null for RCS thrusters or non-gimballed engines).
+        ModuleGimbal gimbal {
+            get { return engineRef.HasValue ? ModuleRef<ModuleGimbal>.ResolveOrNull (gimbalRef, part.InternalPart) : null; }
         }
 
         /// <summary>

@@ -17,8 +17,16 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class DockingPort : Equatable<DockingPort>
     {
-        readonly ModuleDockingNode port;
-        readonly ModuleAnimateGeneric shield;
+        readonly ModuleRef<ModuleDockingNode>? portRef;
+        readonly ModuleRef<ModuleAnimateGeneric>? shieldRef;
+
+        ModuleDockingNode port {
+            get { return ModuleRef<ModuleDockingNode>.ResolveOrNull (portRef, Part.InternalPart); }
+        }
+
+        ModuleAnimateGeneric shield {
+            get { return ModuleRef<ModuleAnimateGeneric>.ResolveOrNull (shieldRef, Part.InternalPart); }
+        }
 
         internal static bool Is (Part part)
         {
@@ -29,9 +37,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             Part = part;
             var internalPart = part.InternalPart;
-            port = internalPart.Module<ModuleDockingNode> ();
-            shield = internalPart.Module<ModuleAnimateGeneric> ();
-            if (port == null)
+            portRef = ModuleRef<ModuleDockingNode>.For (internalPart);
+            shieldRef = ModuleRef<ModuleAnimateGeneric>.For (internalPart);
+            if (!portRef.HasValue)
                 throw new ArgumentException ("Part is not a docking port");
         }
 
@@ -40,11 +48,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (DockingPort other)
         {
-            return
-            !ReferenceEquals (other, null) &&
-            Part == other.Part &&
-            port.Equals (other.port) &&
-            (shield == other.shield || shield.Equals (other.shield));
+            return !ReferenceEquals (other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -52,10 +56,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = Part.GetHashCode () ^ port.GetHashCode ();
-            if (shield != null)
-                hash ^= shield.GetHashCode ();
-            return hash;
+            return Part.GetHashCode ();
         }
 
         /// <summary>

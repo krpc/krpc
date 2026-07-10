@@ -17,7 +17,11 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass(Service = "SpaceCenter")]
     public class ResourceDrain : Equatable<ResourceDrain>
     {
-        readonly ModuleResourceDrain drain;
+        readonly ModuleRef<ModuleResourceDrain>? drainRef;
+
+        ModuleResourceDrain drain {
+            get { return ModuleRef<ModuleResourceDrain>.ResolveOrNull (drainRef, Part.InternalPart); }
+        }
 
         internal static bool Is(Part part)
         {
@@ -29,8 +33,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!Is (part))
                 throw new ArgumentException ("Part is not a resource drain");
             Part = part;
-            var internalPart = part.InternalPart;
-            drain = internalPart.Module<ModuleResourceDrain>();
+            drainRef = ModuleRef<ModuleResourceDrain>.For (part.InternalPart);
         }
 
         /// <summary>
@@ -38,7 +41,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals(ResourceDrain other)
         {
-            return !ReferenceEquals(other, null) && Part == other.Part && drain == other.drain;
+            return !ReferenceEquals(other, null) && Part == other.Part;
         }
 
         /// <summary>
@@ -46,7 +49,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode()
         {
-            return Part.GetHashCode() ^ drain.GetHashCode();
+            return Part.GetHashCode();
         }
 
         /// <summary>
