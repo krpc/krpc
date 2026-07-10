@@ -10,6 +10,7 @@ from typing import (
     TYPE_CHECKING,
 )
 import keyword
+import warnings
 from collections import defaultdict
 from xml.etree import ElementTree
 from krpc.types import Types, TypeBase, DynamicType, DynamicClassBase, DefaultArgument
@@ -111,6 +112,29 @@ def _construct_func(
     return cast(Callable, fn)  # type: ignore[type-arg]
 
 
+def _deprecated_doc(doc: str, reason: str) -> str:
+    """Prepend a deprecation notice to a constructed docstring"""
+    line = "Deprecated. " + reason if reason else "Deprecated."
+    return line + "\n\n" + doc if doc else line
+
+
+def _wrap_deprecated(
+    func: Callable,  # type: ignore[type-arg]
+    qualified_name: str,
+    reason: str,
+) -> Callable:  # type: ignore[type-arg]
+    """Wrap an invoker so that calling it emits a DeprecationWarning"""
+    message = qualified_name + " is deprecated"
+    if reason:
+        message += ": " + reason
+
+    def wrapper(*args: object, **kwargs: object) -> object:
+        warnings.warn(message, DeprecationWarning, stacklevel=2)
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
 def _indent(lines: Iterable[str], level: int) -> List[str]:
     result = []
     for line in lines:
@@ -186,6 +210,9 @@ def _parse_documentation(xml: str) -> str:
 
 def create_service(client: Client, service: KRPC.Service) -> object:
     """Create a new service type"""
+    doc = _parse_documentation(service.documentation)
+    if service.deprecated:
+        doc = _deprecated_doc(doc, service.deprecated_reason)
     cls = cast(
         ServiceBase,
         type(
@@ -194,7 +221,7 @@ def create_service(client: Client, service: KRPC.Service) -> object:
             {
                 "_client": client,
                 "_name": service.name,
-                "__doc__": _parse_documentation(service.documentation),
+                "__doc__": doc,
             },
         ),
     )
@@ -276,23 +303,32 @@ class ServiceBase(DynamicType):
     def _add_service_class(cls, remote_cls: KRPC.Class) -> None:
         """Add a class type"""
         name = remote_cls.name
-        class_type = cls._client._types.class_type(
-            cls._name, name, _parse_documentation(remote_cls.documentation)
-        )
+        doc = _parse_documentation(remote_cls.documentation)
+        if remote_cls.deprecated:
+            doc = _deprecated_doc(doc, remote_cls.deprecated_reason)
+        class_type = cls._client._types.class_type(cls._name, name, doc)
         setattr(cls, name, class_type.python_type)
 
     @classmethod
     def _add_service_enumeration(cls, enumeration: KRPC.Enumeration) -> None:
         """Add an enum type"""
         name = enumeration.name
-        enumeration_type = cls._client._types.enumeration_type(
-            cls._name, name, _parse_documentation(enumeration.documentation)
-        )
+        doc = _parse_documentation(enumeration.documentation)
+        if enumeration.deprecated:
+            doc = _deprecated_doc(doc, enumeration.deprecated_reason)
+        enumeration_type = cls._client._types.enumeration_type(cls._name, name, doc)
+
+        def value_doc(value: KRPC.EnumerationValue) -> str:
+            vdoc = _parse_documentation(value.documentation)
+            if value.deprecated:
+                vdoc = _deprecated_doc(vdoc, value.deprecated_reason)
+            return vdoc
+
         enumeration_type.set_values(
             dict(
                 (
                     str(snake_case(x.name)),
-                    {"value": x.value, "doc": _parse_documentation(x.documentation)},
+                    {"value": x.value, "doc": value_doc(x)},
                 )
                 for x in enumeration.values
             )
@@ -303,9 +339,10 @@ class ServiceBase(DynamicType):
     def _add_service_exception(cls, exception: KRPC.Exception) -> None:
         """Add an exception type"""
         name = exception.name
-        exception_type = cls._client._types.exception_type(
-            cls._name, name, _parse_documentation(exception.documentation)
-        )
+        doc = _parse_documentation(exception.documentation)
+        if exception.deprecated:
+            doc = _deprecated_doc(doc, exception.deprecated_reason)
+        exception_type = cls._client._types.exception_type(cls._name, name, doc)
         setattr(cls, name, exception_type)
 
     @classmethod
@@ -363,9 +400,13 @@ class ServiceBase(DynamicType):
             return_type,
         )
         name = _member_name(procedure.name)
-        cls._add_class_method(
-            name, func, doc=_parse_documentation(procedure.documentation)
-        )
+        doc = _parse_documentation(procedure.documentation)
+        if procedure.deprecated:
+            func = _wrap_deprecated(
+                func, cls._name + "." + name, procedure.deprecated_reason
+            )
+            doc = _deprecated_doc(doc, procedure.deprecated_reason)
+        cls._add_class_method(name, func, doc=doc)
         cls._add_class_method("_build_call_" + name, build_call)
         cls._add_class_method("_return_type_" + name, lambda cls: return_type)
 
@@ -377,11 +418,17 @@ class ServiceBase(DynamicType):
         setter: Optional[KRPC.Procedure] = None,
     ) -> None:
         """Add a property"""
+        member_name = _member_name(name)
+        qualified_name = cls._name + "." + member_name
         doc = None
         if getter:
             doc = _parse_documentation(getter.documentation)
         elif setter:
             doc = _parse_documentation(setter.documentation)
+        if getter and getter.deprecated:
+            doc = _deprecated_doc(doc or "", getter.deprecated_reason)
+        elif setter and setter.deprecated:
+            doc = _deprecated_doc(doc or "", setter.deprecated_reason)
         getter_fn = None
         setter_fn = None
         if getter:
@@ -398,6 +445,10 @@ class ServiceBase(DynamicType):
                 [],
                 return_type,
             )
+            if getter.deprecated:
+                getter_fn = _wrap_deprecated(
+                    getter_fn, qualified_name, getter.deprecated_reason
+                )
             build_call = _construct_func(
                 cls._client._build_call,
                 cls._name,
@@ -423,7 +474,11 @@ class ServiceBase(DynamicType):
                 [None],
                 None,
             )
-        name = _member_name(name)
+            if setter.deprecated:
+                setter_fn = _wrap_deprecated(
+                    setter_fn, qualified_name, setter.deprecated_reason
+                )
+        name = member_name
         cls._add_property(name, getter_fn, setter_fn, doc=doc)
         if getter:
             cls._add_method("_build_call_" + name, build_call)
@@ -467,9 +522,15 @@ class ServiceBase(DynamicType):
             return_type,
         )
         name = _member_name(method_name)
-        class_cls._add_method(
-            name, func, doc=_parse_documentation(procedure.documentation)
-        )
+        doc = _parse_documentation(procedure.documentation)
+        if procedure.deprecated:
+            func = _wrap_deprecated(
+                func,
+                cls._name + "." + class_name + "." + name,
+                procedure.deprecated_reason,
+            )
+            doc = _deprecated_doc(doc, procedure.deprecated_reason)
+        class_cls._add_method(name, func, doc=doc)
         class_cls._add_method("_build_call_" + name, build_call)
         class_cls._add_method("_return_type_" + name, lambda self: return_type)
 
@@ -508,9 +569,15 @@ class ServiceBase(DynamicType):
             return_type,
         )
         name = _member_name(method_name)
-        class_cls._add_class_method(
-            name, func, doc=_parse_documentation(procedure.documentation)
-        )
+        doc = _parse_documentation(procedure.documentation)
+        if procedure.deprecated:
+            func = _wrap_deprecated(
+                func,
+                cls._name + "." + class_name + "." + name,
+                procedure.deprecated_reason,
+            )
+            doc = _deprecated_doc(doc, procedure.deprecated_reason)
+        class_cls._add_class_method(name, func, doc=doc)
         class_cls._add_class_method("_build_call_" + name, build_call)
         class_cls._add_class_method("_return_type_" + name, lambda cls: return_type)
 
@@ -527,11 +594,17 @@ class ServiceBase(DynamicType):
             DynamicClassBase,
             cls._client._types.class_type(cls._name, class_name).python_type,
         )
+        member_name = _member_name(property_name)
+        qualified_name = cls._name + "." + class_name + "." + member_name
         doc = None
         if getter:
             doc = _parse_documentation(getter.documentation)
         elif setter:
             doc = _parse_documentation(setter.documentation)
+        if getter and getter.deprecated:
+            doc = _deprecated_doc(doc or "", getter.deprecated_reason)
+        elif setter and setter.deprecated:
+            doc = _deprecated_doc(doc or "", setter.deprecated_reason)
         getter_fn: Optional[Callable] = None  # type: ignore[type-arg]
         setter_fn: Optional[Callable] = None  # type: ignore[type-arg]
         if getter:
@@ -551,6 +624,10 @@ class ServiceBase(DynamicType):
                 [None],
                 return_type,
             )
+            if getter.deprecated:
+                getter_fn = _wrap_deprecated(
+                    getter_fn, qualified_name, getter.deprecated_reason
+                )
             build_call = _construct_func(
                 cls._client._build_call,
                 cls._name,
@@ -576,7 +653,11 @@ class ServiceBase(DynamicType):
                 [None, None],
                 None,
             )
-        property_name = _member_name(property_name)
+            if setter.deprecated:
+                setter_fn = _wrap_deprecated(
+                    setter_fn, qualified_name, setter.deprecated_reason
+                )
+        property_name = member_name
         class_cls._add_property(property_name, getter_fn, setter_fn, doc=doc)
         if getter:
             class_cls._add_method("_build_call_" + property_name, build_call)

@@ -39,6 +39,37 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
             "Enum ValueC documentation string.", self.conn.test_service.TestEnum.value_c
         )
 
+    def test_deprecated(self) -> None:
+        self.check_doc(
+            "Deprecated. Use FloatToString instead.\n\n"
+            "Deprecated procedure documentation string.",
+            self.conn.test_service.deprecated_procedure,
+        )
+        self.check_doc(
+            "Deprecated.\n\nDeprecated procedure with no reason documentation string.",
+            self.conn.test_service.deprecated_procedure_no_message,
+        )
+        self.check_doc(
+            "Deprecated. Use StringProperty instead.\n\n"
+            "Deprecated property documentation string.",
+            type(self.conn.test_service).deprecated_property,
+        )
+        self.check_doc(
+            "Deprecated. Use TestClass instead.\n\n"
+            "Deprecated class documentation string.",
+            self.conn.test_service.DeprecatedClass,
+        )
+        self.check_doc(
+            "Deprecated. Use CustomException instead.\n\n"
+            "Deprecated exception documentation string.",
+            self.conn.test_service.DeprecatedException,
+        )
+        self.check_doc(
+            "Deprecated. Use TestEnum instead.\n\n"
+            "Deprecated enum documentation string.",
+            self.conn.test_service.DeprecatedEnum,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
