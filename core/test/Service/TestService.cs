@@ -350,5 +350,79 @@ namespace KRPC.Test.Service
         {
             get { return Service.PropertyAvailableInSpecifiedGameScene; }
         }
+
+        /// <summary>
+        /// A deprecated procedure, annotated with a reason.
+        /// </summary>
+        [KRPCProcedure]
+        [Obsolete ("Use ProcedureNoArgsNoReturn instead.")]
+        public static void DeprecatedProcedure ()
+        {
+        }
+
+        /// <summary>
+        /// A deprecated procedure, annotated without a reason.
+        /// </summary>
+        [KRPCProcedure]
+        [Obsolete]
+        public static void DeprecatedProcedureNoMessage ()
+        {
+        }
+
+        /// <summary>
+        /// A deprecated property, annotated with a reason.
+        /// </summary>
+        [KRPCProperty]
+        [Obsolete ("Use PropertyWithGet instead.")]
+        public static string DeprecatedProperty {
+            get { return string.Empty; }
+        }
+
+        /// <summary>
+        /// A deprecated class, annotated with a reason.
+        /// </summary>
+        [KRPCClass]
+        [Obsolete ("Use TestClass instead.")]
+        public class DeprecatedClass
+        {
+            /// <summary>
+            /// A deprecated class method, annotated with a reason.
+            /// </summary>
+            [KRPCMethod]
+            [Obsolete ("Use TestClass.FloatToString instead.")]
+            public string DeprecatedMethod ()
+            {
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// A deprecated enumeration, annotated with a reason.
+        /// </summary>
+        [KRPCEnum]
+        [Serializable]
+        [Obsolete ("Use TestEnum instead.")]
+        public enum DeprecatedEnum
+        {
+            /// <summary>
+            /// A value that is not deprecated.
+            /// </summary>
+            A,
+
+            /// <summary>
+            /// A deprecated enumeration value, annotated with a reason.
+            /// </summary>
+            [Obsolete ("Use A instead.")]
+            B
+        }
+
+        /// <summary>
+        /// A deprecated exception, annotated with a reason.
+        /// </summary>
+        [KRPCException]
+        [Obsolete ("Use MyException instead.")]
+        public class DeprecatedException : Exception
+        {
+        }
     }
 }
