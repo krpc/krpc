@@ -487,7 +487,7 @@ namespace TestServer
         /// Deprecated procedure documentation string.
         /// </summary>
         [KRPCProcedure]
-        [Obsolete ("Use FloatToString instead.")]
+        [Obsolete ("Use <see cref='FloatToString'/> instead.")]
         public static string DeprecatedProcedure (float value)
         {
             return value.ToString (CultureInfo.InvariantCulture);
@@ -507,14 +507,14 @@ namespace TestServer
         /// Deprecated property documentation string.
         /// </summary>
         [KRPCProperty]
-        [Obsolete ("Use StringProperty instead.")]
+        [Obsolete ("Use <see cref='StringProperty'/> instead.")]
         public static string DeprecatedProperty { get; set; }
 
         /// <summary>
         /// Deprecated class documentation string.
         /// </summary>
         [KRPCClass]
-        [Obsolete ("Use TestClass instead.")]
+        [Obsolete ("Use <see cref='TestClass'/> instead.")]
         public sealed class DeprecatedClass : Equatable<DeprecatedClass>
         {
             public sealed override bool Equals (DeprecatedClass other)
@@ -531,7 +531,7 @@ namespace TestServer
             /// Deprecated method documentation string.
             /// </summary>
             [KRPCMethod]
-            [Obsolete ("Use TestClass.GetValue instead.")]
+            [Obsolete ("Use <see cref='TestClass.GetValue'/> instead.")]
             public string DeprecatedMethod ()
             {
                 return "value";
@@ -543,7 +543,7 @@ namespace TestServer
         /// </summary>
         [KRPCEnum]
         [Serializable]
-        [Obsolete ("Use TestEnum instead.")]
+        [Obsolete ("Use <see cref='TestEnum'/> instead.")]
         public enum DeprecatedEnum
         {
             /// <summary>
@@ -553,7 +553,7 @@ namespace TestServer
             /// <summary>
             /// Deprecated enum ValueB documentation string.
             /// </summary>
-            [Obsolete ("Use ValueA instead.")]
+            [Obsolete ("Use <see cref='ValueA'/> instead.")]
             ValueB
         }
 

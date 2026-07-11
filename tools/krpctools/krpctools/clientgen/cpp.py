@@ -15,6 +15,9 @@ class CppGenerator(Generator):
 
     language = CppLanguage()
 
+    plain_cref_separator = "::"
+    parse_plain_cref_member = staticmethod(snake_case)
+
     def parse_set_client(self, procedure):
         return isinstance(self.get_return_type(procedure), ClassType)
 

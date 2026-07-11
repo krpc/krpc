@@ -1,6 +1,7 @@
 import inspect
 import unittest
 from typing import cast
+
 from krpc.test.servertestcase import ServerTestCase
 
 
@@ -44,7 +45,7 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
 
     def test_deprecated(self) -> None:
         self.check_doc(
-            "Deprecated. Use FloatToString instead.\n\n"
+            "Deprecated. Use float_to_string instead.\n\n"
             "Deprecated procedure documentation string.",
             self.conn.test_service.deprecated_procedure,
         )
@@ -53,7 +54,7 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
             self.conn.test_service.deprecated_procedure_no_message,
         )
         self.check_doc(
-            "Deprecated. Use StringProperty instead.\n\n"
+            "Deprecated. Use string_property instead.\n\n"
             "Deprecated property documentation string.",
             type(self.conn.test_service).deprecated_property,
         )

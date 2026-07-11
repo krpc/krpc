@@ -85,7 +85,7 @@
 
    .. method:: string DeprecatedProcedure(float value)
 
-      .. warning:: Deprecated. Use FloatToString instead.
+      .. warning:: Deprecated. Use :meth:`TestService.FloatToString` instead.
 
       Deprecated procedure documentation string.
 
@@ -109,7 +109,7 @@
 
    .. property:: string DeprecatedProperty { get; set; }
 
-      .. warning:: Deprecated. Use StringProperty instead.
+      .. warning:: Deprecated. Use :prop:`TestService.StringProperty` instead.
 
       Deprecated property documentation string.
 
@@ -511,13 +511,13 @@
 
 .. class:: DeprecatedClass
 
-   .. warning:: Deprecated. Use TestClass instead.
+   .. warning:: Deprecated. Use :type:`TestClass` instead.
 
    Deprecated class documentation string.
 
    .. method:: string DeprecatedMethod()
 
-      .. warning:: Deprecated. Use TestClass.GetValue instead.
+      .. warning:: Deprecated. Use :meth:`TestClass.GetValue` instead.
 
       Deprecated method documentation string.
 
@@ -549,7 +549,7 @@
 
 .. enum:: DeprecatedEnum
 
-   .. warning:: Deprecated. Use TestEnum instead.
+   .. warning:: Deprecated. Use :type:`TestEnum` instead.
 
    Deprecated enum documentation string.
 
@@ -561,7 +561,7 @@
 
    .. value:: ValueB
 
-      .. warning:: Deprecated. Use ValueA instead.
+      .. warning:: Deprecated. Use :enum:`DeprecatedEnum.ValueA` instead.
 
       Deprecated enum ValueB documentation string.
 

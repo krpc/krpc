@@ -1,6 +1,31 @@
 from xml.etree import ElementTree
 
 
+def flatten_deprecation_reason(reason, parse_cref):
+    """Flatten a deprecation reason fragment to plain text, mapping
+    <see cref="..."/> references through parse_cref. Reasons containing
+    no markup are returned unchanged."""
+    if "<" not in reason:
+        return reason
+    parser = ElementTree.XMLParser(encoding="UTF-8")
+    root = ElementTree.XML(("<doc>%s</doc>" % reason).encode("UTF-8"), parser=parser)
+    return _flatten_node(root, parse_cref)
+
+
+def _flatten_node(node, parse_cref):
+    content = node.text or ""
+    for child in node:
+        if child.tag == "see":
+            content += parse_cref(child.attrib["cref"])
+        elif child.tag == "paramref":
+            content += child.attrib["name"]
+        else:
+            content += _flatten_node(child, parse_cref)
+        if child.tail:
+            content += child.tail
+    return content
+
+
 class DocParser:
 
     def parse(self, xml):

@@ -522,7 +522,7 @@ namespace KRPC.Client.Services.TestService
         /// <summary>
         /// Deprecated enum ValueB documentation string.
         /// </summary>
-        [global::System.Obsolete ("Use ValueA instead.")]
+        [global::System.Obsolete ("Use DeprecatedEnum.ValueA instead.")]
         ValueB = 1
     }
 

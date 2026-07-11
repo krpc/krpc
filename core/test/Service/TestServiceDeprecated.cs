@@ -8,7 +8,7 @@ namespace KRPC.Test.Service
     /// A deprecated service, annotated with a reason.
     /// </summary>
     [KRPCService (GameScene = GameScene.Flight)]
-    [Obsolete ("Use TestService instead.")]
+    [Obsolete ("Use <see cref='TestService'/> instead.")]
     public static class TestServiceDeprecated
     {
         [KRPCProcedure]

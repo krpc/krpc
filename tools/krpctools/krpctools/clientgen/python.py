@@ -22,6 +22,8 @@ class PythonGenerator(Generator):
 
     language = PythonLanguage()
 
+    parse_plain_cref_member = staticmethod(snake_case)
+
     def parse_python_type(self, typ):
         if typ is None:
             return "None"

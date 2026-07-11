@@ -85,7 +85,7 @@ Service TestService
 
    .. function:: krpc_error_t krpc_TestService_DeprecatedProcedure(krpc_connection_t connection, char * * result, float value)
 
-      .. warning:: Deprecated. Use FloatToString instead.
+      .. warning:: Deprecated. Use :func:`krpc_TestService_FloatToString` instead.
 
       Deprecated procedure documentation string.
 
@@ -110,7 +110,7 @@ Service TestService
    .. function:: krpc_error_t krpc_TestService_DeprecatedProperty(krpc_connection_t connection, char * * result)
    .. function:: void krpc_TestService_set_DeprecatedProperty(const char * value)
 
-      .. warning:: Deprecated. Use StringProperty instead.
+      .. warning:: Deprecated. Use :func:`krpc_TestService_StringProperty` instead.
 
       Deprecated property documentation string.
 
@@ -516,13 +516,13 @@ Service TestService
 
 .. type:: krpc_TestService_DeprecatedClass_t
 
-   .. warning:: Deprecated. Use TestClass instead.
+   .. warning:: Deprecated. Use :type:`krpc_TestService_TestClass_t` instead.
 
    Deprecated class documentation string.
 
    .. function:: krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod(krpc_connection_t connection, char * * result)
 
-      .. warning:: Deprecated. Use TestClass.GetValue instead.
+      .. warning:: Deprecated. Use :func:`krpc_TestService_TestClass_GetValue` instead.
 
       Deprecated method documentation string.
 
@@ -554,7 +554,7 @@ Service TestService
 
 .. type:: krpc_TestService_DeprecatedEnum_t
 
-   .. warning:: Deprecated. Use TestEnum instead.
+   .. warning:: Deprecated. Use :type:`krpc_TestService_TestEnum_t` instead.
 
    Deprecated enum documentation string.
 
@@ -566,7 +566,7 @@ Service TestService
 
    .. macro:: KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEB
 
-      .. warning:: Deprecated. Use ValueA instead.
+      .. warning:: Deprecated. Use :macro:`KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEA` instead.
 
       Deprecated enum ValueB documentation string.
 

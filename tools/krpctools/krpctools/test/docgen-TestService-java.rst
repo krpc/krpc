@@ -64,7 +64,7 @@
 
    .. method:: String deprecatedProcedure(float value)
 
-      .. warning:: Deprecated. Use FloatToString instead.
+      .. warning:: Deprecated. Use :meth:`floatToString(float)` instead.
 
       Deprecated procedure documentation string.
 
@@ -84,7 +84,7 @@
 
    .. method:: void setDeprecatedProperty(String value)
 
-      .. warning:: Deprecated. Use StringProperty instead.
+      .. warning:: Deprecated. Use :meth:`getStringProperty()` instead.
 
       Deprecated property documentation string.
 
@@ -408,13 +408,13 @@
 
 .. type:: public class DeprecatedClass
 
-   .. warning:: Deprecated. Use TestClass instead.
+   .. warning:: Deprecated. Use :type:`TestClass` instead.
 
    Deprecated class documentation string.
 
    .. method:: String deprecatedMethod()
 
-      .. warning:: Deprecated. Use TestClass.GetValue instead.
+      .. warning:: Deprecated. Use :meth:`TestClass.getValue()` instead.
 
       Deprecated method documentation string.
 
@@ -445,7 +445,7 @@
 
 .. type:: public enum DeprecatedEnum
 
-   .. warning:: Deprecated. Use TestEnum instead.
+   .. warning:: Deprecated. Use :type:`TestEnum` instead.
 
    Deprecated enum documentation string.
 
@@ -457,7 +457,7 @@
 
    .. field:: public DeprecatedEnum VALUE_B
 
-      .. warning:: Deprecated. Use ValueA instead.
+      .. warning:: Deprecated. Use :meth:`DeprecatedEnum.VALUE_A` instead.
 
       Deprecated enum ValueB documentation string.
 

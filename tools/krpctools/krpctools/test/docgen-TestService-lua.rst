@@ -86,7 +86,7 @@ Service documentation string.
 
 .. staticmethod:: deprecated_procedure(value)
 
-   .. warning:: Deprecated. Use FloatToString instead.
+   .. warning:: Deprecated. Use :meth:`TestService.float_to_string` instead.
 
    Deprecated procedure documentation string.
 
@@ -110,7 +110,7 @@ Service documentation string.
 
 .. attribute:: deprecated_property: string
 
-   .. warning:: Deprecated. Use StringProperty instead.
+   .. warning:: Deprecated. Use :attr:`TestService.string_property` instead.
 
    Deprecated property documentation string.
 
@@ -538,13 +538,13 @@ Service documentation string.
 
 .. class:: DeprecatedClass
 
-   .. warning:: Deprecated. Use TestClass instead.
+   .. warning:: Deprecated. Use :class:`TestService.TestClass` instead.
 
    Deprecated class documentation string.
 
    .. method:: deprecated_method()
 
-      .. warning:: Deprecated. Use TestClass.GetValue instead.
+      .. warning:: Deprecated. Use :meth:`TestService.TestClass.get_value` instead.
 
       Deprecated method documentation string.
 
@@ -575,7 +575,7 @@ Service documentation string.
 
 .. class:: DeprecatedEnum
 
-   .. warning:: Deprecated. Use TestEnum instead.
+   .. warning:: Deprecated. Use :class:`TestService.TestEnum` instead.
 
    Deprecated enum documentation string.
 
@@ -587,7 +587,7 @@ Service documentation string.
 
    .. data:: value_b
 
-      .. warning:: Deprecated. Use ValueA instead.
+      .. warning:: Deprecated. Use :attr:`TestService.DeprecatedEnum.value_a` instead.
 
       Deprecated enum ValueB documentation string.
 

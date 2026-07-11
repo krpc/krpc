@@ -355,7 +355,7 @@ namespace KRPC.Test.Service
         /// A deprecated procedure, annotated with a reason.
         /// </summary>
         [KRPCProcedure]
-        [Obsolete ("Use ProcedureNoArgsNoReturn instead.")]
+        [Obsolete ("Use <see cref='ProcedureNoArgsNoReturn'/> instead.")]
         public static void DeprecatedProcedure ()
         {
         }
@@ -373,7 +373,7 @@ namespace KRPC.Test.Service
         /// A deprecated property, annotated with a reason.
         /// </summary>
         [KRPCProperty]
-        [Obsolete ("Use PropertyWithGet instead.")]
+        [Obsolete ("Use <see cref='PropertyWithGet'/> instead.")]
         public static string DeprecatedProperty {
             get { return string.Empty; }
         }
@@ -382,14 +382,14 @@ namespace KRPC.Test.Service
         /// A deprecated class, annotated with a reason.
         /// </summary>
         [KRPCClass]
-        [Obsolete ("Use TestClass instead.")]
+        [Obsolete ("Use <see cref='TestClass'/> instead.")]
         public class DeprecatedClass
         {
             /// <summary>
             /// A deprecated class method, annotated with a reason.
             /// </summary>
             [KRPCMethod]
-            [Obsolete ("Use TestClass.FloatToString instead.")]
+            [Obsolete ("Use <see cref='TestClass.FloatToString'/> instead.")]
             public string DeprecatedMethod ()
             {
                 return string.Empty;
@@ -401,7 +401,7 @@ namespace KRPC.Test.Service
         /// </summary>
         [KRPCEnum]
         [Serializable]
-        [Obsolete ("Use TestEnum instead.")]
+        [Obsolete ("Use <see cref='TestEnum'/> instead.")]
         public enum DeprecatedEnum
         {
             /// <summary>
@@ -412,7 +412,7 @@ namespace KRPC.Test.Service
             /// <summary>
             /// A deprecated enumeration value, annotated with a reason.
             /// </summary>
-            [Obsolete ("Use A instead.")]
+            [Obsolete ("Use <see cref='A'/> instead.")]
             B
         }
 
