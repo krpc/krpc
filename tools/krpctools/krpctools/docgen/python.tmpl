@@ -1,6 +1,9 @@
 {% macro service(x) %}{{ mark_documented(x) }}
 .. module:: {{ x.name }}
 
+{% if x.deprecated %}{{ deprecated(x) }}
+
+{% endif %}
 {{ gendoc(x.documentation) }}
 
 {% for member in x.members.values() %}
@@ -16,6 +19,9 @@
 {% macro class(x) %}{{ mark_documented(x) }}
 .. class:: {{ x.name }}
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
@@ -36,6 +42,9 @@
 {% macro procedure(x) %}{{ mark_documented(x) }}
 .. staticmethod:: {{ domain.method_name(x.name) }}({{ parameters(x.parameters) }})
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
 {% for p in x.parameters %}
@@ -59,6 +68,9 @@
 {% macro property(x) %}{{ mark_documented(x) }}
 .. attribute:: {{ domain.method_name(x.name) }}
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
    :Attribute: {% if x.getter != None and x.setter != None %}Can be read or written{% elif x.getter != None %}Read-only, cannot be set{% else %}Write-only, cannot be read{% endif %}
@@ -78,6 +90,9 @@
 {% macro class_method(x) %}{{ mark_documented(x) }}
 .. method:: {{ domain.method_name(x.name) }}({{ parameters(x.parameters[1:]) }})
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
 {% for p in x.parameters[1:] %}
@@ -101,6 +116,9 @@
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
 .. staticmethod:: {{ domain.method_name(x.name) }}({{ parameters(x.parameters) }})
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
 {% for p in x.parameters %}
@@ -128,12 +146,18 @@
 {% macro enumeration(x) %}{{ mark_documented(x) }}
 .. class:: {{ x.name }}
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
    .. data:: {{ value.name | snakecase }}
 
+{% if value.deprecated %}{{ deprecated(value) | indent(width=6) }}
+
+{% endif %}
 {{ gendoc(value.documentation) | indent(width=6) }}
 
 {% if hasdoc(value.documentation, './remarks') %}{{ remarks(value.documentation) | indent(width=6) }}{% endif %}
@@ -143,6 +167,9 @@
 {% macro exception(x) %}{{ mark_documented(x) }}
 .. class:: {{ x.name }}
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
@@ -168,6 +195,10 @@
 .. note::
 
 {{ gendoc(x, './remarks') | indent }}
+{% endmacro %}
+
+{% macro deprecated(x) %}
+.. warning:: Deprecated.{% if x.deprecated_reason != '' %} {{ gendesc(x.deprecated_reason) }}{% endif %}
 {% endmacro %}
 
 {% macro game_scenes(x) %}

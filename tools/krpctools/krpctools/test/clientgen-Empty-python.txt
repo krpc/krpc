@@ -1,0 +1,52 @@
+# pylint: disable=line-too-long,invalid-name,redefined-builtin,too-many-lines
+from __future__ import annotations
+import warnings
+from typing import Tuple, Set, Dict, List, Optional, TYPE_CHECKING
+import krpc.schema
+from krpc.schema import KRPC_pb2
+from krpc.types import TypeBase, ClassBase, WrappedClass, DocEnum, StaticMethod
+from krpc.event import Event
+if TYPE_CHECKING:
+    from krpc.services import Client
+
+
+class EmptyService:
+
+    def __init__(self, client: Client) -> None:
+        self._client = client
+
+    def __getattribute__(self, name):
+        # Intercepts calls to obtain classes from the service,
+        # to inject the client instance so that it can be used
+        # for static method calls
+        classes = object.__getattribute__(self, "_classes")
+        if name in classes:
+            client = object.__getattribute__(self, "_client")
+            return WrappedClass(client, classes[name])
+
+        # Intercept calls to obtain enumeration types
+        enumerations = object.__getattribute__(self, "_enumerations")
+        if name in enumerations:
+           return enumerations[name]
+
+        # Intercept calls to obtain exception types
+        exceptions = object.__getattribute__(self, "_exceptions")
+        if name in exceptions:
+           return exceptions[name]
+
+        # Fall back to default behaviour
+        return object.__getattribute__(self, name)
+
+    def __dir__(self):
+        result = object.__dir__(self)
+        result.extend(object.__getattribute__(self, "_classes").keys())
+        result.extend(object.__getattribute__(self, "_enumerations").keys())
+        result.extend(object.__getattribute__(self, "_exceptions").keys())
+        return result
+
+    _classes = {
+    }
+    _enumerations = {
+    }
+    _exceptions = {
+    }

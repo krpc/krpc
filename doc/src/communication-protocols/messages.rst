@@ -350,6 +350,8 @@ with the format:
      repeated Enumeration enumerations = 4;
      repeated Exception exceptions = 5;
      string documentation = 6;
+     bool deprecated = 7;
+     string deprecated_reason = 8;
    }
 
 The fields are:
@@ -369,6 +371,11 @@ The fields are:
 
 * ``documentation`` - Documentation for the service, as `C# XML documentation`_.
 
+* ``deprecated`` - Whether the service is deprecated. Deprecated services remain fully functional;
+  this field is informational.
+
+* ``deprecated_reason`` - If the service is deprecated, the reason for its deprecation. May be empty.
+
 .. note:: See the :ref:`extending` documentation for more details about :csharp:attr:`KRPCClass`,
           :csharp:attr:`KRPCEnum` and :csharp:attr:`KRPCException`.
 
@@ -386,6 +393,8 @@ Details about a procedure are given by a ``Procedure`` message, with the format:
      bool return_is_nullable = 4;
      repeated GameScene game_scenes = 6;
      string documentation = 5;
+     bool deprecated = 7;
+     string deprecated_reason = 8;
    }
 
    message Parameter {
@@ -422,6 +431,12 @@ The fields are:
 
 * ``documentation`` - Documentation for the procedure, as `C# XML documentation`_.
 
+* ``deprecated`` - Whether the procedure is deprecated. Deprecated procedures remain fully
+  functional; this field is informational.
+
+* ``deprecated_reason`` - If the procedure is deprecated, the reason for its deprecation. May be
+  empty.
+
 Classes
 ^^^^^^^
 
@@ -432,6 +447,8 @@ Details about each :csharp:attr:`KRPCClass` are specified in a ``Class`` message
    message Class {
      string name = 1;
      string documentation = 2;
+     bool deprecated = 3;
+     string deprecated_reason = 4;
    }
 
 The fields are:
@@ -439,6 +456,11 @@ The fields are:
 * ``name`` - The name of the class.
 
 * ``documentation`` - Documentation for the class, as `C# XML documentation`_.
+
+* ``deprecated`` - Whether the class is deprecated. Deprecated classes remain fully functional;
+  this field is informational.
+
+* ``deprecated_reason`` - If the class is deprecated, the reason for its deprecation. May be empty.
 
 Enumerations
 ^^^^^^^^^^^^
@@ -452,12 +474,16 @@ format:
      string name = 1;
      repeated EnumerationValue values = 2;
      string documentation = 3;
+     bool deprecated = 4;
+     string deprecated_reason = 5;
    }
 
    message EnumerationValue {
      string name = 1;
      int32 value = 2;
      string documentation = 3;
+     bool deprecated = 4;
+     string deprecated_reason = 5;
    }
 
 The fields are:
@@ -473,7 +499,19 @@ The fields are:
 
   * ``documentation`` - Documentation for the enumeration value, as `C# XML documentation`_.
 
+  * ``deprecated`` - Whether the enumeration value is deprecated. Deprecated values remain fully
+    functional; this field is informational.
+
+  * ``deprecated_reason`` - If the enumeration value is deprecated, the reason for its deprecation.
+    May be empty.
+
 * ``documentation`` - Documentation for the enumeration, as `C# XML documentation`_.
+
+* ``deprecated`` - Whether the enumeration is deprecated. Deprecated enumerations remain fully
+  functional; this field is informational.
+
+* ``deprecated_reason`` - If the enumeration is deprecated, the reason for its deprecation. May be
+  empty.
 
 Exceptions
 ^^^^^^^^^^
@@ -486,6 +524,8 @@ format:
    message Exception {
      string name = 1;
      string documentation = 2;
+     bool deprecated = 3;
+     string deprecated_reason = 4;
    }
 
 The fields are:
@@ -493,6 +533,12 @@ The fields are:
 * ``name`` - The name of the exception type.
 
 * ``documentation`` - Documentation for the exception, as `C# XML documentation`_.
+
+* ``deprecated`` - Whether the exception is deprecated. Deprecated exceptions remain fully
+  functional; this field is informational.
+
+* ``deprecated_reason`` - If the exception is deprecated, the reason for its deprecation. May be
+  empty.
 
 .. _communication-protocol-procedure-names:
 

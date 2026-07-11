@@ -71,8 +71,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             if (parachute)
                 parachute.Deploy ();
-            else if (realChute.HasEvent ("Deploy chute"))
-                realChute.TriggerEvent ("Deploy Chute");
+            else if (realChute.HasVisibleEvent ("Deploy chute"))
+                realChute.TriggerVisibleEvent ("Deploy Chute");
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (parachute)
                     return parachute.deploymentState != ModuleParachute.deploymentStates.STOWED;
-                return realChute.Events.Any (x => x.Contains ("Cut"));
+                return realChute.VisibleEventNames.Any (x => x.Contains ("Cut"));
             }
         }
 
@@ -96,8 +96,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             if (realChute != null)
             {
-                if (realChute.HasEvent("Arm parachute"))
-                    realChute.TriggerEvent("Arm parachute");
+                if (realChute.HasVisibleEvent("Arm parachute"))
+                    realChute.TriggerVisibleEvent("Arm parachute");
             }
             else if (parachute)
                 parachute.Deploy();
@@ -110,7 +110,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Armed {
             get {
                 if (realChute != null)
-                    return realChute.HasEvent("Disarm parachute");
+                    return realChute.HasVisibleEvent("Disarm parachute");
                 else if (parachute)
                     return parachute.deploymentState == ModuleParachute.deploymentStates.ACTIVE;
                 else
@@ -125,8 +125,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         public void Cut()
         {
             if (realChute != null) {
-                if (realChute.HasEvent("Cut main chute"))
-                    realChute.TriggerEvent("Cut main chute");
+                if (realChute.HasVisibleEvent("Cut main chute"))
+                    realChute.TriggerVisibleEvent("Cut main chute");
             }
             else if (parachute)
                 parachute.CutParachute();
@@ -144,7 +144,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                     return ParachuteState.Armed;
                 if (Deployed)
                     return ParachuteState.Deployed;
-                if (realChute.Events.Any(x => x.Contains("Deploy")))
+                if (realChute.VisibleEventNames.Any(x => x.Contains("Deploy")))
                     return ParachuteState.Stowed;
                 return ParachuteState.Cut;
             }

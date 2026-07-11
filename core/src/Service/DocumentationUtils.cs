@@ -15,7 +15,34 @@ namespace KRPC.Service
         {
             if (documentation.Length == 0)
                 return string.Empty;
+            return Transform (documentation, ResolveCref);
+        }
 
+        /// <summary>
+        /// Resolve crefs in a deprecation reason (an [Obsolete] attribute message).
+        /// The message is an XML text fragment. Unlike doc comments, the compiler does not
+        /// resolve crefs in attribute strings, so unqualified references are permitted and
+        /// resolved against the declaring type: a member name, a Type.Member pair, or a type
+        /// name (in addition to the fully-qualified compiler form). Messages containing no
+        /// markup are returned unchanged.
+        /// </summary>
+        public static string ResolveDeprecationReason (string reason, Type context)
+        {
+            if (reason.Length == 0 || reason.IndexOf ('<') < 0)
+                return reason;
+            string result;
+            try {
+                result = Transform ("<doc>" + reason + "</doc>", cref => ResolveAuthorCref (cref, context));
+            } catch (XmlException exn) {
+                throw new DocumentationException (
+                    "Failed to parse deprecation reason '" + reason + "' as XML: " + exn.Message);
+            }
+            // Strip the <doc> wrapper element
+            return result.Substring (5, result.Length - 11);
+        }
+
+        static string Transform (string documentation, Func<string, string> resolveCref)
+        {
             var output = new StringBuilder ();
             using (XmlReader reader = XmlReader.Create (new StringReader (documentation))) {
                 var ws = new XmlWriterSettings ();
@@ -32,7 +59,7 @@ namespace KRPC.Service
                                 var name = reader.Name;
                                 var value = reader.Value;
                                 if (name == "cref")
-                                    value = ResolveCref (value);
+                                    value = resolveCref (value);
                                 writer.WriteStartAttribute (name);
                                 writer.WriteValue (value);
                                 writer.WriteEndAttribute ();
@@ -81,9 +108,95 @@ namespace KRPC.Service
             throw new DocumentationException ("Invalid code '" + code + "' in cref '" + cref + "'");
         }
 
+        static string ResolveAuthorCref (string cref, Type context)
+        {
+            // Fully-qualified compiler form, e.g. "M:Full.Name.Of.Type.Member"
+            if (cref.Length > 2 && cref [1] == ':')
+                return ResolveCref (cref);
+            if (cref.Length == 0 || context == null)
+                throw new DocumentationException ("Failed to resolve cref '" + cref + "'");
+            var dot = cref.LastIndexOf ('.');
+            string result = null;
+            if (dot < 0) {
+                // A member of the declaring type, or a type name
+                result = TryResolveMember (context, cref) ?? TryResolveTypeCref (context, cref);
+            } else {
+                // Type.Member, or a (partially) qualified type name
+                var type = FindType (context, cref.Substring (0, dot));
+                if (type != null)
+                    result = TryResolveMember (type, cref.Substring (dot + 1));
+                if (result == null)
+                    result = TryResolveTypeCref (context, cref);
+            }
+            if (result == null)
+                throw new DocumentationException (
+                    "Failed to resolve cref '" + cref + "' in deprecation reason on '" + context.Name + "'");
+            return result;
+        }
+
+        static string TryResolveMember (Type type, string name)
+        {
+            var property = type.GetProperty (name);
+            if (property != null && Reflection.HasAttribute<KRPCPropertyAttribute> (property))
+                return FormatPropertyCref (type, property);
+            MethodInfo method;
+            try {
+                method = type.GetMethod (name);
+            } catch (AmbiguousMatchException) {
+                method = type.GetMethods ().FirstOrDefault (
+                    m => m.Name == name &&
+                    (Reflection.HasAttribute<KRPCProcedureAttribute> (m) ||
+                     Reflection.HasAttribute<KRPCMethodAttribute> (m)));
+            }
+            if (method != null &&
+                (Reflection.HasAttribute<KRPCProcedureAttribute> (method) ||
+                 Reflection.HasAttribute<KRPCMethodAttribute> (method)))
+                return FormatMethodCref (type, method);
+            var field = type.GetField (name);
+            if (field != null && Reflection.HasAttribute<KRPCEnumAttribute> (type))
+                return FormatFieldCref (type, field);
+            return null;
+        }
+
+        static string TryResolveTypeCref (Type context, string name)
+        {
+            var type = FindType (context, name);
+            return type == null ? null : FormatTypeCref (type);
+        }
+
+        /// <summary>
+        /// Find a KRPC-attributed type by (possibly partially qualified) name. Matches the
+        /// context type itself, then types in the context's assembly by simple name, then by
+        /// dotted full-name suffix, then a fully-qualified name in any loaded assembly.
+        /// Throws if the name is ambiguous within the context's assembly.
+        /// </summary>
+        static Type FindType (Type context, string name)
+        {
+            if (context.Name == name)
+                return context;
+            var candidates = context.Assembly.GetTypes ()
+                .Where (t => Reflection.HasAttribute<KRPCServiceAttribute> (t) ||
+                        Reflection.HasAttribute<KRPCClassAttribute> (t) ||
+                        Reflection.HasAttribute<KRPCEnumAttribute> (t))
+                .Where (t => t.Name == name ||
+                        (t.FullName != null && t.FullName.Replace ('+', '.').EndsWith ("." + name, StringComparison.Ordinal)))
+                .ToList ();
+            if (candidates.Count > 1)
+                throw new DocumentationException (
+                    "Ambiguous cref '" + name + "': matches " +
+                    string.Join (", ", candidates.Select (t => t.FullName).ToArray ()));
+            if (candidates.Count == 1)
+                return candidates [0];
+            return Reflection.GetType (name);
+        }
+
         static string ResolveTypeCref (string reference)
         {
-            var type = GetType (reference);
+            return FormatTypeCref (GetType (reference));
+        }
+
+        static string FormatTypeCref (Type type)
+        {
             var name = type.Name;
             if (Reflection.HasAttribute<KRPCServiceAttribute> (type)) {
                 TypeUtils.ValidateKRPCService (type);
@@ -103,6 +216,11 @@ namespace KRPC.Service
             reference = reference.Split (new char[]{'('}) [0];
             var type = GetType (GetTypeName (reference));
             var method = GetMethod (type, GetMemberName (reference));
+            return FormatMethodCref (type, method);
+        }
+
+        static string FormatMethodCref (Type type, MethodInfo method)
+        {
             var name = type.Name + "." + method.Name;
             if (Reflection.HasAttribute<KRPCProcedureAttribute> (method)) {
                 TypeUtils.ValidateKRPCProcedure (method);
@@ -118,6 +236,11 @@ namespace KRPC.Service
         {
             var type = GetType (GetTypeName (reference));
             var property = GetProperty (type, GetMemberName (reference));
+            return FormatPropertyCref (type, property);
+        }
+
+        static string FormatPropertyCref (Type type, PropertyInfo property)
+        {
             var name = type.Name + "." + property.Name;
             if (Reflection.HasAttribute<KRPCServiceAttribute> (type) &&
                 Reflection.HasAttribute<KRPCPropertyAttribute> (property)) {
@@ -135,6 +258,11 @@ namespace KRPC.Service
         {
             var type = GetType (GetTypeName (reference));
             var field = GetField (type, GetMemberName (reference));
+            return FormatFieldCref (type, field);
+        }
+
+        static string FormatFieldCref (Type type, FieldInfo field)
+        {
             var name = type.Name + "." + field.Name;
             if (Reflection.HasAttribute<KRPCEnumAttribute> (type)) {
                 TypeUtils.ValidateKRPCEnum (type);

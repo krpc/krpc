@@ -22,11 +22,16 @@ namespace KRPC.Service.Messages
 
         public string Documentation { get; set; }
 
+        public bool Deprecated { get; set; }
+
+        public string DeprecatedReason { get; set; }
+
         public Procedure (string name)
         {
             Name = name;
             Parameters = new List<Parameter> ();
             Documentation = string.Empty;
+            DeprecatedReason = string.Empty;
         }
     }
 }

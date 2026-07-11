@@ -1,3 +1,6 @@
+v0.6.0
+ * Mark deprecated members with the [Obsolete] attribute (#904)
+
 v0.5.0
  * Update to protobuf v3.22.0
  * Drop support for net35

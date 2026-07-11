@@ -87,22 +87,30 @@ namespace KRPC.Service.KRPC
                     procedure.GameScene = procedureSignature.GameScene;
                     if (procedureSignature.Documentation.Length > 0)
                         procedure.Documentation = procedureSignature.Documentation;
+                    procedure.Deprecated = procedureSignature.Deprecated;
+                    procedure.DeprecatedReason = procedureSignature.DeprecatedReason;
                     service.Procedures.Add (procedure);
                 }
                 foreach (var clsSignature in serviceSignature.Classes.Values) {
                     var cls = new Class (clsSignature.Name);
                     if (clsSignature.Documentation.Length > 0)
                         cls.Documentation = clsSignature.Documentation;
+                    cls.Deprecated = clsSignature.Deprecated;
+                    cls.DeprecatedReason = clsSignature.DeprecatedReason;
                     service.Classes.Add (cls);
                 }
                 foreach (var enmSignature in serviceSignature.Enumerations.Values) {
                     var enm = new Enumeration (enmSignature.Name);
                     if (enmSignature.Documentation.Length > 0)
                         enm.Documentation = enmSignature.Documentation;
+                    enm.Deprecated = enmSignature.Deprecated;
+                    enm.DeprecatedReason = enmSignature.DeprecatedReason;
                     foreach (var enmValueSignature in enmSignature.Values) {
                         var enmValue = new EnumerationValue (enmValueSignature.Name, enmValueSignature.Value);
                         if (enmValueSignature.Documentation.Length > 0)
                             enmValue.Documentation = enmValueSignature.Documentation;
+                        enmValue.Deprecated = enmValueSignature.Deprecated;
+                        enmValue.DeprecatedReason = enmValueSignature.DeprecatedReason;
                         enm.Values.Add (enmValue);
                     }
                     service.Enumerations.Add (enm);
@@ -111,10 +119,14 @@ namespace KRPC.Service.KRPC
                     var exn = new Messages.Exception (exnSignature.Name);
                     if (exnSignature.Documentation.Length > 0)
                         exn.Documentation = exnSignature.Documentation;
+                    exn.Deprecated = exnSignature.Deprecated;
+                    exn.DeprecatedReason = exnSignature.DeprecatedReason;
                     service.Exceptions.Add (exn);
                 }
                 if (serviceSignature.Documentation.Length > 0)
                     service.Documentation = serviceSignature.Documentation;
+                service.Deprecated = serviceSignature.Deprecated;
+                service.DeprecatedReason = serviceSignature.DeprecatedReason;
                 services.ServicesList.Add (service);
             }
             return services;

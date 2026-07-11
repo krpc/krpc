@@ -20,12 +20,23 @@ class Appendable:
 
 class Service(Appendable):
     def __init__(
-        self, name, procedures, classes, enumerations, exceptions, documentation, sort
+        self,
+        name,
+        procedures,
+        classes,
+        enumerations,
+        exceptions,
+        documentation,
+        sort,
+        deprecated=False,
+        deprecated_reason="",
     ):
         super().__init__()
         self.name = name
         self.fullname = name
         self.documentation = documentation
+        self.deprecated = deprecated
+        self.deprecated_reason = deprecated_reason
         self.cref = "T:%s" % name
 
         members = []
@@ -87,12 +98,23 @@ class Service(Appendable):
 
 
 class Class(Appendable):
-    def __init__(self, service_name, name, procedures, documentation, sort):
+    def __init__(
+        self,
+        service_name,
+        name,
+        procedures,
+        documentation,
+        sort,
+        deprecated=False,
+        deprecated_reason="",
+    ):
         super().__init__()
         self.service_name = service_name
         self.name = name
         self.fullname = service_name + "." + name
         self.documentation = documentation
+        self.deprecated = deprecated
+        self.deprecated_reason = deprecated_reason
         self.cref = "T:%s.%s" % (service_name, name)
 
         members = []
@@ -150,6 +172,8 @@ class Procedure(Appendable):
         return_type=None,
         return_is_nullable=False,
         game_scenes=None,
+        deprecated=False,
+        deprecated_reason="",
     ):
         super().__init__()
         self.service_name = service_name
@@ -165,6 +189,8 @@ class Procedure(Appendable):
         ]
         self.game_scenes = game_scenes
         self.documentation = documentation
+        self.deprecated = deprecated
+        self.deprecated_reason = deprecated_reason
         self.cref = "M:%s.%s" % (service_name, name)
 
 
@@ -180,10 +206,14 @@ class Property(Appendable):
             self.type = getter.return_type
             self.game_scenes = getter.game_scenes
             self.documentation = getter.documentation
+            self.deprecated = getter.deprecated
+            self.deprecated_reason = getter.deprecated_reason
         else:
             self.type = setter.parameters[0].type
             self.game_scenes = setter.game_scenes
             self.documentation = setter.documentation
+            self.deprecated = setter.deprecated
+            self.deprecated_reason = setter.deprecated_reason
         self.getter = getter
         self.setter = setter
         self.cref = "M:%s.%s" % (service_name, name)
@@ -202,6 +232,8 @@ class ClassMethod(Appendable):
         return_type=None,
         return_is_nullable=False,
         game_scenes=None,
+        deprecated=False,
+        deprecated_reason="",
     ):
         super().__init__()
         name = Attributes.get_class_member_name(name)
@@ -219,6 +251,8 @@ class ClassMethod(Appendable):
         ]
         self.game_scenes = game_scenes
         self.documentation = documentation
+        self.deprecated = deprecated
+        self.deprecated_reason = deprecated_reason
         self.cref = "M:%s.%s.%s" % (service_name, class_name, name)
 
 
@@ -235,6 +269,8 @@ class ClassStaticMethod(Appendable):
         return_type=None,
         return_is_nullable=False,
         game_scenes=None,
+        deprecated=False,
+        deprecated_reason="",
     ):
         super().__init__()
         name = Attributes.get_class_member_name(name)
@@ -252,6 +288,8 @@ class ClassStaticMethod(Appendable):
         ]
         self.game_scenes = game_scenes
         self.documentation = documentation
+        self.deprecated = deprecated
+        self.deprecated_reason = deprecated_reason
         self.cref = "M:%s.%s.%s" % (service_name, class_name, name)
 
 
@@ -266,10 +304,14 @@ class ClassProperty(Appendable):
             self.type = getter.return_type
             self.game_scenes = getter.game_scenes
             self.documentation = getter.documentation
+            self.deprecated = getter.deprecated
+            self.deprecated_reason = getter.deprecated_reason
         else:
             self.type = setter.parameters[1].type
             self.game_scenes = setter.game_scenes
             self.documentation = setter.documentation
+            self.deprecated = setter.deprecated
+            self.deprecated_reason = setter.deprecated_reason
         self.name = name
         self.fullname = service_name + "." + class_name + "." + name
         self.getter = getter
@@ -278,7 +320,16 @@ class ClassProperty(Appendable):
 
 
 class Enumeration(Appendable):
-    def __init__(self, service_name, name, values, documentation, sort):
+    def __init__(
+        self,
+        service_name,
+        name,
+        values,
+        documentation,
+        sort,
+        deprecated=False,
+        deprecated_reason="",
+    ):
         super().__init__()
         self.service_name = service_name
         self.name = name
@@ -286,11 +337,22 @@ class Enumeration(Appendable):
         values = (EnumerationValue(service_name, name, **value) for value in values)
         self.values = OrderedDict((v.name, v) for v in sorted(values, key=sort))
         self.documentation = documentation
+        self.deprecated = deprecated
+        self.deprecated_reason = deprecated_reason
         self.cref = "T:%s.%s" % (service_name, name)
 
 
 class EnumerationValue(Appendable):
-    def __init__(self, service_name, enum_name, name, value, documentation):
+    def __init__(
+        self,
+        service_name,
+        enum_name,
+        name,
+        value,
+        documentation,
+        deprecated=False,
+        deprecated_reason="",
+    ):
         super().__init__()
         self.service_name = service_name
         self.enum_name = enum_name
@@ -298,14 +360,20 @@ class EnumerationValue(Appendable):
         self.fullname = service_name + "." + enum_name + "." + name
         self.value = value
         self.documentation = documentation
+        self.deprecated = deprecated
+        self.deprecated_reason = deprecated_reason
         self.cref = "M:%s.%s.%s" % (service_name, enum_name, name)
 
 
 class ExceptionNode(Appendable):
-    def __init__(self, service_name, name, documentation):
+    def __init__(
+        self, service_name, name, documentation, deprecated=False, deprecated_reason=""
+    ):
         super().__init__()
         self.service_name = service_name
         self.name = name
         self.fullname = service_name + "." + name
         self.documentation = documentation
+        self.deprecated = deprecated
+        self.deprecated_reason = deprecated_reason
         self.cref = "T:%s.%s" % (service_name, name)

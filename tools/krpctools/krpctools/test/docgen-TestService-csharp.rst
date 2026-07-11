@@ -83,6 +83,38 @@
 
       :Game Scenes: All
 
+   .. method:: string DeprecatedProcedure(float value)
+
+      .. warning:: Deprecated. Use :meth:`TestService.FloatToString` instead.
+
+      Deprecated procedure documentation string.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: string DeprecatedProcedureNoMessage(float value)
+
+      .. warning:: Deprecated.
+
+      Deprecated procedure with no reason documentation string.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. property:: string DeprecatedProperty { get; set; }
+
+      .. warning:: Deprecated. Use :prop:`TestService.StringProperty` instead.
+
+      Deprecated property documentation string.
+
+      :Game Scenes: All
+
    .. method:: System.Collections.Generic.IDictionary<int,bool> DictionaryDefault(System.Collections.Generic.IDictionary<int,bool> x = { 1: false, 2: true })
 
 
@@ -477,6 +509,23 @@
 
 
 
+.. class:: DeprecatedClass
+
+   .. warning:: Deprecated. Use :type:`TestClass` instead.
+
+   Deprecated class documentation string.
+
+   .. method:: string DeprecatedMethod()
+
+      .. warning:: Deprecated. Use :meth:`TestClass.GetValue` instead.
+
+      Deprecated method documentation string.
+
+
+      :Game Scenes: All
+
+
+
 .. enum:: TestEnum
 
    Enum documentation string.
@@ -498,4 +547,34 @@
 
 
 
+.. enum:: DeprecatedEnum
+
+   .. warning:: Deprecated. Use :type:`TestEnum` instead.
+
+   Deprecated enum documentation string.
+
+
+   .. value:: ValueA
+
+      Deprecated enum ValueA documentation string.
+
+
+   .. value:: ValueB
+
+      .. warning:: Deprecated. Use :enum:`DeprecatedEnum.ValueA` instead.
+
+      Deprecated enum ValueB documentation string.
+
+
+
 .. class:: CustomException
+
+
+
+
+
+.. class:: DeprecatedException
+
+   .. warning:: Deprecated. Use CustomException instead.
+
+   Deprecated exception documentation string.

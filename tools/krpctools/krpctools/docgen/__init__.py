@@ -151,6 +151,12 @@ def process_file(domain, services, path):
     def gendoc(xml, selector="./summary"):
         return DocumentationGenerator(domain, services, xml).generate(selector)
 
+    def gendesc(text):
+        # Render a description fragment (e.g. a deprecation reason), which may
+        # contain the same markup as documentation strings
+        xml = "<doc><summary>%s</summary></doc>" % text
+        return DocumentationGenerator(domain, services, xml).generate("./summary")
+
     def see(cref):
         obj = lookup_cref(cref, services)
         return domain.see(obj)
@@ -167,6 +173,7 @@ def process_file(domain, services, path):
         "services": services,
         "hasdoc": hasdoc,
         "gendoc": gendoc,
+        "gendesc": gendesc,
         "see": see,
         "mark_documented": mark_documented,
     }

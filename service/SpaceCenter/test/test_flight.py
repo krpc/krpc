@@ -194,6 +194,43 @@ class TestFlight(krpctest.TestCase):
             longitude = flight.longitude
             self.wait()
 
+    def test_acceleration(self):
+        # On a stable circular orbit the total acceleration (which includes
+        # gravity) is gravitational: directed radially inward with a magnitude
+        # close to the local gravity. KSP's own reported acceleration differs from
+        # mu/r^2 by a few percent on a teleported orbit, so the magnitude is
+        # checked with a loose tolerance; the radially-inward direction is exact.
+        ref = self.vessel.orbit.body.non_rotating_reference_frame
+        flight = self.vessel.flight(ref)
+        g = self.vessel.orbit.body.gravitational_parameter / (
+            self.vessel.orbit.radius**2
+        )
+        acceleration = vector(flight.acceleration)
+        radial_out = normalize(vector(self.vessel.position(ref)))
+        # Directed radially inward (the world-to-frame transform and sign is exact).
+        self.assertAlmostEqual(
+            -norm(acceleration), dot(acceleration, radial_out), delta=0.1
+        )
+        # Gravity-scale magnitude.
+        self.assertAlmostEqual(g, norm(acceleration), delta=1.0)
+
+    def test_aerodynamic_acceleration(self):
+        # aerodynamic_acceleration/lift_acceleration/drag_acceleration should each
+        # equal the corresponding aerodynamic force divided by the vessel's mass.
+        if self.far:
+            self.skipTest("stock aerodynamics only")
+        flight = self.vessel.flight(self.vessel.reference_frame)
+        mass = self.vessel.mass
+        for force_attr, accel_attr in (
+            ("aerodynamic_force", "aerodynamic_acceleration"),
+            ("lift", "lift_acceleration"),
+            ("drag", "drag_acceleration"),
+        ):
+            force = getattr(flight, force_attr)
+            accel = getattr(flight, accel_attr)
+            expected = tuple(f / mass for f in force)
+            self.assertAlmostEqual(expected, accel, delta=1e-3)
+
 
 class TestFlightVerticalSpeed(krpctest.TestCase):
 

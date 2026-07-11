@@ -180,6 +180,8 @@ class CnanoGenerator(Generator):
                     "parameters": [],
                     "return_type": return_type(info["type"]),
                     "documentation": info["documentation"],
+                    "deprecated": info["deprecated"],
+                    "deprecated_reason": info["deprecated_reason"],
                 }
             if info["setter"]:
                 properties["set_" + name] = {
@@ -189,6 +191,8 @@ class CnanoGenerator(Generator):
                     ),
                     "return_type": {"ctype": "void", "cvtype": None, "name": None},
                     "documentation": info["documentation"],
+                    "deprecated": info["deprecated"],
+                    "deprecated_reason": info["deprecated_reason"],
                 }
 
         for _, class_info in context["classes"].items():
@@ -200,6 +204,8 @@ class CnanoGenerator(Generator):
                         "parameters": [],
                         "return_type": return_type(info["type"]),
                         "documentation": info["documentation"],
+                        "deprecated": info["deprecated"],
+                        "deprecated_reason": info["deprecated_reason"],
                     }
                 if info["setter"]:
                     class_properties["set_" + name] = {
@@ -212,6 +218,8 @@ class CnanoGenerator(Generator):
                         "return_type": {"ctype": "void", "cvtype": None, "name": None},
                         "return_set_client": False,
                         "documentation": info["documentation"],
+                        "deprecated": info["deprecated"],
+                        "deprecated_reason": info["deprecated_reason"],
                     }
             class_info["properties"] = class_properties
 
