@@ -135,44 +135,42 @@ class TestControlMixin:
 
     def test_sas_mode(self):
         sas_mode = self.space_center.SASMode
-        self.control.sas = True
-        self.control.sas_mode = sas_mode.stability_assist
         active = self.vessel == self.space_center.active_vessel
         if active:
             self.vessel.control.add_node(self.space_center.ut + 60, 100, 0, 0)
-        self.assertEqual(self.control.sas_mode, sas_mode.stability_assist)
+        # Enable SAS and set a (non-default) mode with no delay between them,
+        # then wait for the game autopilot to enable: the mode must survive
+        # rather than being reset to StabilityAssist when the autopilot enables
+        # (#236). SAS is switched off first so enabling it below is a real state
+        # change, and the wait is essential - the mode is stored immediately but
+        # was only discarded on the following update when the autopilot enabled.
+        self.control.sas = False
         self.wait()
+        self.control.sas = True
+        self.control.sas_mode = sas_mode.prograde
+        self.wait()
+        self.assertTrue(self.control.sas)
+        self.assertEqual(self.control.sas_mode, sas_mode.prograde)
+        # SAS is now enabled, so further mode changes take effect immediately.
         if active:
             self.control.sas_mode = sas_mode.maneuver
             self.assertEqual(self.control.sas_mode, sas_mode.maneuver)
-            self.wait()
-        self.control.sas_mode = sas_mode.prograde
-        self.assertEqual(self.control.sas_mode, sas_mode.prograde)
-        self.wait()
         self.control.sas_mode = sas_mode.retrograde
         self.assertEqual(self.control.sas_mode, sas_mode.retrograde)
-        self.wait()
         self.control.sas_mode = sas_mode.normal
         self.assertEqual(self.control.sas_mode, sas_mode.normal)
-        self.wait()
         self.control.sas_mode = sas_mode.anti_normal
         self.assertEqual(self.control.sas_mode, sas_mode.anti_normal)
-        self.wait()
         self.control.sas_mode = sas_mode.radial
         self.assertEqual(self.control.sas_mode, sas_mode.radial)
-        self.wait()
         self.control.sas_mode = sas_mode.anti_radial
         self.assertEqual(self.control.sas_mode, sas_mode.anti_radial)
-        self.wait()
-        # No target set, should not change
+        # No target set, so these would be ignored
         # TODO: test with a target set
         # self.control.sas_mode = sas_mode.target
-        # self.assertEqual(self.control.sas_mode, sas_mode.anti_radial)
-        # self.wait()
         # self.control.sas_mode = sas_mode.anti_target
-        # self.assertEqual(self.control.sas_mode, sas_mode.anti_radial)
-        # self.wait()
         self.control.sas_mode = sas_mode.stability_assist
+        self.assertEqual(self.control.sas_mode, sas_mode.stability_assist)
         self.control.sas = False
 
     def test_speed_mode(self):
