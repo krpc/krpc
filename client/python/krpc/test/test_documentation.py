@@ -1,6 +1,7 @@
 import inspect
 import unittest
 from typing import cast
+
 from krpc.test.servertestcase import ServerTestCase
 
 
