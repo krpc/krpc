@@ -58,7 +58,7 @@ class {{ service_name }} : public Service {
 
 {% if exception.documentation %}{{ exception.documentation | indent(width=2) }}
 {% endif %}
-  class {{ exception_name }} : public ::krpc::RPCError {
+  class {% if exception.deprecated %}[[deprecated{% if exception.deprecated_reason %}("{{ exception.deprecated_reason }}"){% endif %}]] {% endif %}{{ exception_name }} : public ::krpc::RPCError {
    public:
     inline explicit {{ exception_name }}(const std::string& msg) : ::krpc::RPCError(msg) {}
   };
@@ -68,11 +68,11 @@ class {{ service_name }} : public Service {
 
 {% if enm.documentation %}{{ enm.documentation | indent(width=2) }}
 {% endif %}
-  enum struct {{ enum_name }} {
+  enum struct {% if enm.deprecated %}[[deprecated{% if enm.deprecated_reason %}("{{ enm.deprecated_reason }}"){% endif %}]] {% endif %}{{ enum_name }} {
     {% for value in enm['values'] %}
 {% if value.documentation %}{{ value.documentation | indent(width=4) }}
 {% endif %}
-    {{ value.name }} = {{ value.value }}{% if not loop.last %},{% endif %}
+    {{ value.name }}{% if value.deprecated %} [[deprecated{% if value.deprecated_reason %}("{{ value.deprecated_reason }}"){% endif %}]]{% endif %} = {{ value.value }}{% if not loop.last %},{% endif %}
 
     {% endfor %}
   };
@@ -81,11 +81,15 @@ class {{ service_name }} : public Service {
 
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=2) }}
 {% endif %}
+{% if procedure.deprecated %}  [[deprecated{% if procedure.deprecated_reason %}("{{ procedure.deprecated_reason }}"){% endif %}]]
+{% endif %}
   {{ procedure.return_type }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }});
   {% endfor %}
   {% for property_name,property in properties.items() %}
 
 {% if property.documentation %}{{ property.documentation | indent(width=2) }}
+{% endif %}
+{% if property.deprecated %}  [[deprecated{% if property.deprecated_reason %}("{{ property.deprecated_reason }}"){% endif %}]]
 {% endif %}
   {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
   {% endfor %}
@@ -113,12 +117,14 @@ class {{ service_name }} : public Service {
 
 {% if cls.documentation %}{{ cls.documentation | indent(width=2) }}
 {% endif %}
-  class {{ class_name }} : public krpc::Object<{{ class_name }}> {
+  class {% if cls.deprecated %}[[deprecated{% if cls.deprecated_reason %}("{{ cls.deprecated_reason }}"){% endif %}]] {% endif %}{{ class_name }} : public krpc::Object<{{ class_name }}> {
    public:
     explicit {{ class_name }}(Client* client = nullptr, uint64_t id = 0);
     {% for method_name,method in cls.methods.items() %}
 
 {% if method.documentation %}{{ method.documentation | indent(width=4) }}
+{% endif %}
+{% if method.deprecated %}    [[deprecated{% if method.deprecated_reason %}("{{ method.deprecated_reason }}"){% endif %}]]
 {% endif %}
     {{ method.return_type }} {{ method_name }}({{ sig_parameters(method.parameters) }});
     {% endfor %}
@@ -126,11 +132,15 @@ class {{ service_name }} : public Service {
 
 {% if method.documentation %}{{ method.documentation | indent(width=4) }}
 {% endif %}
+{% if method.deprecated %}    [[deprecated{% if method.deprecated_reason %}("{{ method.deprecated_reason }}"){% endif %}]]
+{% endif %}
     static {{ method.return_type }} {{ method_name }}({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
     {% endfor %}
     {% for property_name,property in cls.properties.items() %}
 
 {% if property.documentation %}{{ property.documentation | indent(width=4) }}
+{% endif %}
+{% if property.deprecated %}    [[deprecated{% if property.deprecated_reason %}("{{ property.deprecated_reason }}"){% endif %}]]
 {% endif %}
     {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
     {% endfor %}

@@ -494,7 +494,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The dynamic pressure acting on the vessel, in Pascals. This is a measure of the
         /// strength of the aerodynamic forces. It is equal to
-        /// <math>\frac{1}{2} . \mbox{air density} . \mbox{velocity}^2</math>.
+        /// ½ · air density · velocity².
         /// It is commonly denoted <math>Q</math>.
         /// </summary>
         [KRPCProperty]

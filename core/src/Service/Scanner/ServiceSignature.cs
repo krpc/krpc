@@ -48,6 +48,16 @@ namespace KRPC.Service.Scanner
         public Dictionary<string,ExceptionSignature> Exceptions { get; private set; }
 
         /// <summary>
+        /// Whether the service is deprecated.
+        /// </summary>
+        public bool Deprecated { get; private set; }
+
+        /// <summary>
+        /// If the service is deprecated, the reason for its deprecation (may be empty).
+        /// </summary>
+        public string DeprecatedReason { get; private set; }
+
+        /// <summary>
         /// The game scene of the service, to be inherited by procedures in the service.
         /// </summary>
         GameScene gameScene;
@@ -66,6 +76,9 @@ namespace KRPC.Service.Scanner
             Procedures = new Dictionary<string, ProcedureSignature> ();
             Exceptions = new Dictionary<string, ExceptionSignature> ();
             gameScene = TypeUtils.GetServiceGameScene (type);
+            string deprecatedReason;
+            Deprecated = TypeUtils.GetDeprecated (type, out deprecatedReason);
+            DeprecatedReason = deprecatedReason;
         }
 
         /// <summary>
@@ -82,6 +95,8 @@ namespace KRPC.Service.Scanner
             Procedures = new Dictionary<string, ProcedureSignature> ();
             Exceptions = new Dictionary<string, ExceptionSignature> ();
             gameScene = GameScene.All;
+            Deprecated = false;
+            DeprecatedReason = string.Empty;
         }
 
         uint nextProcedureId = 1;
@@ -106,10 +121,13 @@ namespace KRPC.Service.Scanner
         public void AddProcedure (MethodInfo method)
         {
             TypeUtils.ValidateKRPCProcedure (method);
+            string deprecatedReason;
+            var deprecated = TypeUtils.GetDeprecated (method, out deprecatedReason);
             AddProcedure (new ProcedureSignature (
                 Name, method.Name, NextProcedureId, method.GetDocumentation (),
                 new ProcedureHandler (method, TypeUtils.GetNullable (method)),
-                TypeUtils.GetProcedureGameScene(method, gameScene)));
+                TypeUtils.GetProcedureGameScene(method, gameScene),
+                deprecated, deprecatedReason));
         }
 
         /// <summary>
@@ -129,9 +147,12 @@ namespace KRPC.Service.Scanner
         void AddPropertyProcedure (PropertyInfo property, MethodInfo method)
         {
             var handler = new ProcedureHandler (method, TypeUtils.GetNullable (property));
+            string deprecatedReason;
+            var deprecated = TypeUtils.GetPropertyDeprecated (property, method, out deprecatedReason);
             AddProcedure (new ProcedureSignature (
                 Name, method.Name, NextProcedureId, property.GetDocumentation (), handler,
-                TypeUtils.GetPropertyGameScene(property, gameScene)));
+                TypeUtils.GetPropertyGameScene(property, gameScene),
+                deprecated, deprecatedReason));
         }
 
         /// <summary>
@@ -144,7 +165,9 @@ namespace KRPC.Service.Scanner
             var name = classType.Name;
             if (Classes.ContainsKey (name))
                 throw new ServiceException ("Service " + Name + " contains duplicate classes " + name);
-            Classes [name] = new ClassSignature (Name, name, classType.GetDocumentation ());
+            string deprecatedReason;
+            var deprecated = TypeUtils.GetDeprecated (classType, out deprecatedReason);
+            Classes [name] = new ClassSignature (Name, name, classType.GetDocumentation (), deprecated, deprecatedReason);
             return name;
         }
 
@@ -160,9 +183,13 @@ namespace KRPC.Service.Scanner
                 throw new ServiceException ("Service " + Name + " contains duplicate enumerations " + name);
             var values = new List<EnumerationValueSignature> ();
             foreach (FieldInfo field in enumType.GetFields(BindingFlags.Public | BindingFlags.Static)) {
-                values.Add (new EnumerationValueSignature (Name, name, field.Name, (int)field.GetRawConstantValue (), field.GetDocumentation ()));
+                string valueDeprecatedReason;
+                var valueDeprecated = TypeUtils.GetDeprecated (field, out valueDeprecatedReason);
+                values.Add (new EnumerationValueSignature (Name, name, field.Name, (int)field.GetRawConstantValue (), field.GetDocumentation (), valueDeprecated, valueDeprecatedReason));
             }
-            Enumerations [name] = new EnumerationSignature (Name, name, values, enumType.GetDocumentation ());
+            string deprecatedReason;
+            var deprecated = TypeUtils.GetDeprecated (enumType, out deprecatedReason);
+            Enumerations [name] = new EnumerationSignature (Name, name, values, enumType.GetDocumentation (), deprecated, deprecatedReason);
             return name;
         }
 
@@ -176,7 +203,9 @@ namespace KRPC.Service.Scanner
             var name = exnType.Name;
             if (Exceptions.ContainsKey (name))
                 throw new ServiceException ("Service " + Name + " contains duplicate exceptions " + name);
-            Exceptions [name] = new ExceptionSignature (Name, name, exnType.GetDocumentation ());
+            string deprecatedReason;
+            var deprecated = TypeUtils.GetDeprecated (exnType, out deprecatedReason);
+            Exceptions [name] = new ExceptionSignature (Name, name, exnType.GetDocumentation (), deprecated, deprecatedReason);
             return name;
         }
 
@@ -192,16 +221,20 @@ namespace KRPC.Service.Scanner
             var name = method.Name;
             var id = NextProcedureId;
             var classGameScene = TypeUtils.GetClassGameScene(classType, gameScene);
+            string deprecatedReason;
+            var deprecated = TypeUtils.GetDeprecated (method, out deprecatedReason);
             if (!method.IsStatic) {
                 var handler = new ClassMethodHandler (classType, method, TypeUtils.GetNullable(method));
                 AddProcedure (new ProcedureSignature (
                     Name, cls + '_' + name, id, method.GetDocumentation (), handler,
-                    TypeUtils.GetMethodGameScene(classType, method, classGameScene)));
+                    TypeUtils.GetMethodGameScene(classType, method, classGameScene),
+                    deprecated, deprecatedReason));
             } else {
                 var handler = new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method));
                 AddProcedure (new ProcedureSignature (
                     Name, cls + "_static_" + name, id, method.GetDocumentation (), handler,
-                    TypeUtils.GetMethodGameScene(classType, method, classGameScene)));
+                    TypeUtils.GetMethodGameScene(classType, method, classGameScene),
+                    deprecated, deprecatedReason));
             }
         }
 
@@ -226,9 +259,12 @@ namespace KRPC.Service.Scanner
         {
             var handler = new ClassMethodHandler (classType, method, nullable);
             var classGameScene = TypeUtils.GetClassGameScene(classType, gameScene);
+            string deprecatedReason;
+            var deprecated = TypeUtils.GetPropertyDeprecated (property, method, out deprecatedReason);
             AddProcedure (new ProcedureSignature (
                 Name, cls + '_' + method.Name, NextProcedureId, property.GetDocumentation (), handler,
-                TypeUtils.GetClassPropertyGameScene(classType, property, classGameScene)));
+                TypeUtils.GetClassPropertyGameScene(classType, property, classGameScene),
+                deprecated, deprecatedReason));
         }
 
         /// <summary>
@@ -242,6 +278,10 @@ namespace KRPC.Service.Scanner
             info.AddValue ("classes", Classes);
             info.AddValue ("enumerations", Enumerations);
             info.AddValue ("exceptions", Exceptions);
+            if (Deprecated) {
+                info.AddValue ("deprecated", true);
+                info.AddValue ("deprecated_reason", DeprecatedReason);
+            }
         }
     }
 }

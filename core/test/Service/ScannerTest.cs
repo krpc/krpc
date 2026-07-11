@@ -21,9 +21,9 @@ namespace KRPC.Test.Service
         [Test]
         public void Services ()
         {
-            Assert.AreEqual (4, services.ServicesList.Count);
+            Assert.AreEqual (5, services.ServicesList.Count);
             CollectionAssert.AreEquivalent (
-                new [] { "KRPC", "TestService", "TestService2", "TestService3Name" },
+                new [] { "KRPC", "TestService", "TestService2", "TestService3Name", "TestServiceDeprecated" },
                 services.ServicesList.Select (x => x.Name).ToList ());
         }
 
@@ -31,10 +31,11 @@ namespace KRPC.Test.Service
         public void TestService ()
         {
             var service = services.ServicesList.First (x => x.Name == "TestService");
-            Assert.AreEqual (49, service.Procedures.Count);
-            Assert.AreEqual (2, service.Classes.Count);
-            Assert.AreEqual (1, service.Enumerations.Count);
+            Assert.AreEqual (53, service.Procedures.Count);
+            Assert.AreEqual (3, service.Classes.Count);
+            Assert.AreEqual (2, service.Enumerations.Count);
             Assert.AreEqual ("<doc>\n<summary>\nTest service documentation.\n</summary>\n</doc>", service.Documentation);
+            MessageAssert.IsNotDeprecated (service);
         }
 
         [Test]
@@ -55,6 +56,15 @@ namespace KRPC.Test.Service
             Assert.AreEqual (1, service.Classes.Count);
             Assert.AreEqual (0, service.Enumerations.Count);
             Assert.AreEqual (string.Empty, service.Documentation);
+            MessageAssert.IsNotDeprecated (service);
+        }
+
+        [Test]
+        public void TestServiceDeprecated ()
+        {
+            var service = services.ServicesList.First (x => x.Name == "TestServiceDeprecated");
+            Assert.AreEqual (1, service.Procedures.Count);
+            MessageAssert.IsDeprecated (service, "Use TestService instead.");
         }
 
         [Test]
@@ -68,6 +78,27 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoReturnType (proc);
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
                     MessageAssert.HasDocumentation (proc, "<doc>\n<summary>\nProcedure with no return arguments.\n</summary>\n</doc>");
+                    MessageAssert.IsNotDeprecated (proc);
+                } else if (proc.Name == "DeprecatedProcedure") {
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasNoReturnType (proc);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.IsDeprecated (proc, "Use ProcedureNoArgsNoReturn instead.");
+                } else if (proc.Name == "DeprecatedProcedureNoMessage") {
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasNoReturnType (proc);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.IsDeprecated (proc, string.Empty);
+                } else if (proc.Name == "get_DeprecatedProperty") {
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.IsDeprecated (proc, "Use PropertyWithGet instead.");
+                } else if (proc.Name == "DeprecatedClass_DeprecatedMethod") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.IsDeprecated (proc, "Use TestClass.FloatToString instead.");
                 } else if (proc.Name == "ProcedureSingleArgNoReturn") {
                     MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasParameter (proc, 0, typeof(string), "x");
@@ -365,8 +396,8 @@ namespace KRPC.Test.Service
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (49, foundProcedures);
-            Assert.AreEqual (49, service.Procedures.Count);
+            Assert.AreEqual (53, foundProcedures);
+            Assert.AreEqual (53, service.Procedures.Count);
         }
 
         [Test]
@@ -377,15 +408,19 @@ namespace KRPC.Test.Service
             foreach (var cls in service.Classes) {
                 if (cls.Name == "TestClass") {
                     MessageAssert.HasNoDocumentation (cls);
+                    MessageAssert.IsNotDeprecated (cls);
                 } else if (cls.Name == "TestTopLevelClass") {
                     MessageAssert.HasDocumentation (cls, "<doc>\n<summary>\nA class defined at the top level, but included in a service\n</summary>\n</doc>");
+                    MessageAssert.IsNotDeprecated (cls);
+                } else if (cls.Name == "DeprecatedClass") {
+                    MessageAssert.IsDeprecated (cls, "Use TestClass instead.");
                 } else {
                     Assert.Fail ();
                 }
                 foundClasses++;
             }
-            Assert.AreEqual (2, foundClasses);
-            Assert.AreEqual (2, service.Classes.Count);
+            Assert.AreEqual (3, foundClasses);
+            Assert.AreEqual (3, service.Classes.Count);
         }
 
         [Test]
@@ -400,13 +435,41 @@ namespace KRPC.Test.Service
                     MessageAssert.HasValue (enumeration, 0, "X", 0, "<doc>\n<summary>\nDocumented enum field\n</summary>\n</doc>");
                     MessageAssert.HasValue (enumeration, 1, "Y", 1);
                     MessageAssert.HasValue (enumeration, 2, "Z", 2);
+                    MessageAssert.IsNotDeprecated (enumeration);
+                    MessageAssert.ValueIsNotDeprecated (enumeration, 0);
+                } else if (enumeration.Name == "DeprecatedEnum") {
+                    MessageAssert.HasValues (enumeration, 2);
+                    MessageAssert.HasValue (enumeration, 0, "A", 0, "<doc>\n<summary>\nA value that is not deprecated.\n</summary>\n</doc>");
+                    MessageAssert.HasValue (enumeration, 1, "B", 1, "<doc>\n<summary>\nA deprecated enumeration value, annotated with a reason.\n</summary>\n</doc>");
+                    MessageAssert.IsDeprecated (enumeration, "Use TestEnum instead.");
+                    MessageAssert.ValueIsNotDeprecated (enumeration, 0);
+                    MessageAssert.ValueIsDeprecated (enumeration, 1, "Use A instead.");
                 } else {
                     Assert.Fail ();
                 }
                 foundEnumerations++;
             }
-            Assert.AreEqual (1, foundEnumerations);
-            Assert.AreEqual (1, service.Enumerations.Count);
+            Assert.AreEqual (2, foundEnumerations);
+            Assert.AreEqual (2, service.Enumerations.Count);
+        }
+
+        [Test]
+        public void TestServiceExceptions ()
+        {
+            var service = services.ServicesList.First (x => x.Name == "TestService");
+            int foundExceptions = 0;
+            foreach (var exception in service.Exceptions) {
+                if (exception.Name == "MyException") {
+                    MessageAssert.IsNotDeprecated (exception);
+                } else if (exception.Name == "DeprecatedException") {
+                    MessageAssert.IsDeprecated (exception, "Use MyException instead.");
+                } else {
+                    Assert.Fail ();
+                }
+                foundExceptions++;
+            }
+            Assert.AreEqual (2, foundExceptions);
+            Assert.AreEqual (2, service.Exceptions.Count);
         }
 
         [Test]

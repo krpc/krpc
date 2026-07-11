@@ -482,5 +482,101 @@ namespace TestServer
                 });
             return evnt.Message;
         }
+
+        /// <summary>
+        /// Deprecated procedure documentation string.
+        /// </summary>
+        [KRPCProcedure]
+        [Obsolete ("Use FloatToString instead.")]
+        public static string DeprecatedProcedure (float value)
+        {
+            return value.ToString (CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Deprecated procedure with no reason documentation string.
+        /// </summary>
+        [KRPCProcedure]
+        [Obsolete]
+        public static string DeprecatedProcedureNoMessage (float value)
+        {
+            return value.ToString (CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Deprecated property documentation string.
+        /// </summary>
+        [KRPCProperty]
+        [Obsolete ("Use StringProperty instead.")]
+        public static string DeprecatedProperty { get; set; }
+
+        /// <summary>
+        /// Deprecated class documentation string.
+        /// </summary>
+        [KRPCClass]
+        [Obsolete ("Use TestClass instead.")]
+        public sealed class DeprecatedClass : Equatable<DeprecatedClass>
+        {
+            public sealed override bool Equals (DeprecatedClass other)
+            {
+                return !ReferenceEquals (other, null);
+            }
+
+            public sealed override int GetHashCode ()
+            {
+                return 0;
+            }
+
+            /// <summary>
+            /// Deprecated method documentation string.
+            /// </summary>
+            [KRPCMethod]
+            [Obsolete ("Use TestClass.GetValue instead.")]
+            public string DeprecatedMethod ()
+            {
+                return "value";
+            }
+        }
+
+        /// <summary>
+        /// Deprecated enum documentation string.
+        /// </summary>
+        [KRPCEnum]
+        [Serializable]
+        [Obsolete ("Use TestEnum instead.")]
+        public enum DeprecatedEnum
+        {
+            /// <summary>
+            /// Deprecated enum ValueA documentation string.
+            /// </summary>
+            ValueA,
+            /// <summary>
+            /// Deprecated enum ValueB documentation string.
+            /// </summary>
+            [Obsolete ("Use ValueA instead.")]
+            ValueB
+        }
+
+        /// <summary>
+        /// Deprecated exception documentation string.
+        /// </summary>
+        [KRPCException]
+        [Obsolete ("Use CustomException instead.")]
+        public sealed class DeprecatedException : System.Exception
+        {
+            public DeprecatedException ()
+            {
+            }
+
+            public DeprecatedException (string message)
+            : base (message)
+            {
+            }
+
+            public DeprecatedException (string message, System.Exception innerException)
+            : base (message, innerException)
+            {
+            }
+        }
     }
 }

@@ -1,3 +1,6 @@
+v0.6.0
+ * Surface deprecated members in generated documentation and client stubs (#904)
+
 v0.5.4
  * Fix incorrect protobuf DLL (#755)
  * Fix required KSP assemblies not being copied (#755)

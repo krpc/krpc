@@ -79,6 +79,8 @@ class Generator:
                 "static_methods": {},
                 "properties": {},
                 "documentation": self.parse_documentation(cls["documentation"]),
+                "deprecated": cls.get("deprecated", False),
+                "deprecated_reason": cls.get("deprecated_reason", ""),
             }
 
         for name, enumeration in self._get_defs("enumerations"):
@@ -88,15 +90,21 @@ class Generator:
                         "name": self.parse_name(x["name"]),
                         "value": x["value"],
                         "documentation": self.parse_documentation(x["documentation"]),
+                        "deprecated": x.get("deprecated", False),
+                        "deprecated_reason": x.get("deprecated_reason", ""),
                     }
                     for x in enumeration["values"]
                 ],
                 "documentation": self.parse_documentation(enumeration["documentation"]),
+                "deprecated": enumeration.get("deprecated", False),
+                "deprecated_reason": enumeration.get("deprecated_reason", ""),
             }
 
         for name, exception in self._get_defs("exceptions"):
             context["exceptions"][name] = {
-                "documentation": self.parse_documentation(exception["documentation"])
+                "documentation": self.parse_documentation(exception["documentation"]),
+                "deprecated": exception.get("deprecated", False),
+                "deprecated_reason": exception.get("deprecated_reason", ""),
             }
 
         for name, procedure in self._get_defs("procedures"):
@@ -112,6 +120,8 @@ class Generator:
                     "documentation": self.parse_documentation(
                         procedure["documentation"]
                     ),
+                    "deprecated": procedure.get("deprecated", False),
+                    "deprecated_reason": procedure.get("deprecated_reason", ""),
                 }
 
             elif Attributes.is_a_property_getter(name):
@@ -124,6 +134,8 @@ class Generator:
                         "documentation": self.parse_documentation(
                             procedure["documentation"]
                         ),
+                        "deprecated": procedure.get("deprecated", False),
+                        "deprecated_reason": procedure.get("deprecated_reason", ""),
                     }
                 context["properties"][property_name]["getter"] = {
                     "procedure": procedure,
@@ -142,6 +154,8 @@ class Generator:
                         "documentation": self.parse_documentation(
                             procedure["documentation"]
                         ),
+                        "deprecated": procedure.get("deprecated", False),
+                        "deprecated_reason": procedure.get("deprecated_reason", ""),
                     }
                 context["properties"][property_name]["setter"] = {
                     "procedure": procedure,
@@ -164,6 +178,8 @@ class Generator:
                     "documentation": self.parse_documentation(
                         procedure["documentation"]
                     ),
+                    "deprecated": procedure.get("deprecated", False),
+                    "deprecated_reason": procedure.get("deprecated_reason", ""),
                 }
 
             elif Attributes.is_a_class_static_method(name):
@@ -181,6 +197,8 @@ class Generator:
                     "documentation": self.parse_documentation(
                         procedure["documentation"]
                     ),
+                    "deprecated": procedure.get("deprecated", False),
+                    "deprecated_reason": procedure.get("deprecated_reason", ""),
                 }
 
             elif Attributes.is_a_class_property_getter(name):
@@ -195,6 +213,8 @@ class Generator:
                         "documentation": self.parse_documentation(
                             procedure["documentation"]
                         ),
+                        "deprecated": procedure.get("deprecated", False),
+                        "deprecated_reason": procedure.get("deprecated_reason", ""),
                     }
                 cls["properties"][property_name]["getter"] = {
                     "procedure": procedure,
@@ -215,6 +235,8 @@ class Generator:
                         "documentation": self.parse_documentation(
                             procedure["documentation"]
                         ),
+                        "deprecated": procedure.get("deprecated", False),
+                        "deprecated_reason": procedure.get("deprecated_reason", ""),
                     }
                 cls["properties"][property_name]["setter"] = {
                     "procedure": procedure,

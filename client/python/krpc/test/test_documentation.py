@@ -1,3 +1,4 @@
+import inspect
 import unittest
 from typing import cast
 from krpc.test.servertestcase import ServerTestCase
@@ -9,8 +10,10 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
         super(TestDocumentation, cls).setUpClass()
 
     def check_doc(self, expected: str, obj: object) -> None:
+        # Normalise with cleandoc rather than strip: pre-generated stubs indent
+        # multi-line docstrings, whereas dynamically-created services do not.
         doc = cast(str, obj.__doc__)
-        self.assertEqual(expected, doc.strip())
+        self.assertEqual(expected, inspect.cleandoc(doc))
 
     def test_basic(self) -> None:
         self.check_doc("Service documentation string.", self.conn.test_service)
@@ -37,6 +40,37 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
         )
         self.check_doc(
             "Enum ValueC documentation string.", self.conn.test_service.TestEnum.value_c
+        )
+
+    def test_deprecated(self) -> None:
+        self.check_doc(
+            "Deprecated. Use FloatToString instead.\n\n"
+            "Deprecated procedure documentation string.",
+            self.conn.test_service.deprecated_procedure,
+        )
+        self.check_doc(
+            "Deprecated.\n\nDeprecated procedure with no reason documentation string.",
+            self.conn.test_service.deprecated_procedure_no_message,
+        )
+        self.check_doc(
+            "Deprecated. Use StringProperty instead.\n\n"
+            "Deprecated property documentation string.",
+            type(self.conn.test_service).deprecated_property,
+        )
+        self.check_doc(
+            "Deprecated. Use TestClass instead.\n\n"
+            "Deprecated class documentation string.",
+            self.conn.test_service.DeprecatedClass,
+        )
+        self.check_doc(
+            "Deprecated. Use CustomException instead.\n\n"
+            "Deprecated exception documentation string.",
+            self.conn.test_service.DeprecatedException,
+        )
+        self.check_doc(
+            "Deprecated. Use TestEnum instead.\n\n"
+            "Deprecated enum documentation string.",
+            self.conn.test_service.DeprecatedEnum,
         )
 
 

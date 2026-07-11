@@ -30,14 +30,26 @@ namespace KRPC.Service.Scanner
         public string Documentation { get; private set; }
 
         /// <summary>
+        /// Whether the enumeration value is deprecated.
+        /// </summary>
+        public bool Deprecated { get; private set; }
+
+        /// <summary>
+        /// If the enumeration value is deprecated, the reason for its deprecation (may be empty).
+        /// </summary>
+        public string DeprecatedReason { get; private set; }
+
+        /// <summary>
         /// Create a signature for an enumeration value.
         /// </summary>
-        public EnumerationValueSignature (string serviceName, string enumName, string valueName, int value, string documentation)
+        public EnumerationValueSignature (string serviceName, string enumName, string valueName, int value, string documentation, bool deprecated, string deprecatedReason)
         {
             Name = valueName;
             FullyQualifiedName = serviceName + "." + enumName + "." + Name;
             Value = value;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
+            Deprecated = deprecated;
+            DeprecatedReason = deprecatedReason;
         }
 
         /// <summary>
@@ -48,6 +60,10 @@ namespace KRPC.Service.Scanner
             info.AddValue ("name", Name);
             info.AddValue ("value", Value);
             info.AddValue ("documentation", Documentation);
+            if (Deprecated) {
+                info.AddValue ("deprecated", true);
+                info.AddValue ("deprecated_reason", DeprecatedReason);
+            }
         }
     }
 }

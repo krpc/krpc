@@ -26,13 +26,25 @@ namespace KRPC.Service.Scanner
         public string Documentation { get; private set; }
 
         /// <summary>
+        /// Whether the exception is deprecated.
+        /// </summary>
+        public bool Deprecated { get; private set; }
+
+        /// <summary>
+        /// If the exception is deprecated, the reason for its deprecation (may be empty).
+        /// </summary>
+        public string DeprecatedReason { get; private set; }
+
+        /// <summary>
         /// Create an exception signature
         /// </summary>
-        public ExceptionSignature (string serviceName, string className, string documentation)
+        public ExceptionSignature (string serviceName, string className, string documentation, bool deprecated, string deprecatedReason)
         {
             Name = className;
             FullyQualifiedName = serviceName + "." + Name;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
+            Deprecated = deprecated;
+            DeprecatedReason = deprecatedReason;
         }
 
         /// <summary>
@@ -41,6 +53,10 @@ namespace KRPC.Service.Scanner
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("documentation", Documentation);
+            if (Deprecated) {
+                info.AddValue ("deprecated", true);
+                info.AddValue ("deprecated_reason", DeprecatedReason);
+            }
         }
     }
 }
