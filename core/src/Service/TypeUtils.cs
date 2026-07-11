@@ -206,16 +206,27 @@ namespace KRPC.Service
         /// <summary>
         /// Get whether the given member is deprecated, i.e. annotated with the standard
         /// [Obsolete] attribute. If it is, <paramref name="reason"/> is set to the
-        /// attribute's message (empty when none was given).
+        /// attribute's message (empty when none was given). The message may contain
+        /// see-cref markup; crefs are resolved relative to the declaring type.
         /// </summary>
         public static bool GetDeprecated (ICustomAttributeProvider member, out string reason)
         {
             if (Reflection.HasAttribute<ObsoleteAttribute> (member)) {
                 reason = Reflection.GetAttribute<ObsoleteAttribute> (member).Message ?? string.Empty;
+                reason = DocumentationUtils.ResolveDeprecationReason (reason, GetDeprecationContext (member));
                 return true;
             }
             reason = string.Empty;
             return false;
+        }
+
+        static Type GetDeprecationContext (ICustomAttributeProvider member)
+        {
+            var type = member as Type;
+            if (type != null)
+                return type;
+            var memberInfo = member as MemberInfo;
+            return memberInfo == null ? null : memberInfo.DeclaringType;
         }
 
         /// <summary>

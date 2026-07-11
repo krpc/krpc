@@ -194,5 +194,5 @@
 {% endmacro %}
 
 {% macro deprecated(x) %}
-.. warning:: Deprecated.{% if x.deprecated_reason != '' %} {{ x.deprecated_reason }}{% endif %}
+.. warning:: Deprecated.{% if x.deprecated_reason != '' %} {{ gendesc(x.deprecated_reason) }}{% endif %}
 {% endmacro %}

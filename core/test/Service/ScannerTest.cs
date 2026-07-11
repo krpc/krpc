@@ -64,7 +64,7 @@ namespace KRPC.Test.Service
         {
             var service = services.ServicesList.First (x => x.Name == "TestServiceDeprecated");
             Assert.AreEqual (1, service.Procedures.Count);
-            MessageAssert.IsDeprecated (service, "Use TestService instead.");
+            MessageAssert.IsDeprecated (service, "Use <see cref=\"T:TestService\" /> instead.");
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasNoReturnType (proc);
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
-                    MessageAssert.IsDeprecated (proc, "Use ProcedureNoArgsNoReturn instead.");
+                    MessageAssert.IsDeprecated (proc, "Use <see cref=\"M:TestService.ProcedureNoArgsNoReturn\" /> instead.");
                 } else if (proc.Name == "DeprecatedProcedureNoMessage") {
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasNoReturnType (proc);
@@ -93,12 +93,12 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasReturnType (proc, typeof(string));
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
-                    MessageAssert.IsDeprecated (proc, "Use PropertyWithGet instead.");
+                    MessageAssert.IsDeprecated (proc, "Use <see cref=\"M:TestService.PropertyWithGet\" /> instead.");
                 } else if (proc.Name == "DeprecatedClass_DeprecatedMethod") {
                     MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasReturnType (proc, typeof(string));
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
-                    MessageAssert.IsDeprecated (proc, "Use TestClass.FloatToString instead.");
+                    MessageAssert.IsDeprecated (proc, "Use <see cref=\"M:TestService.TestClass.FloatToString\" /> instead.");
                 } else if (proc.Name == "ProcedureSingleArgNoReturn") {
                     MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasParameter (proc, 0, typeof(string), "x");
@@ -413,7 +413,7 @@ namespace KRPC.Test.Service
                     MessageAssert.HasDocumentation (cls, "<doc>\n<summary>\nA class defined at the top level, but included in a service\n</summary>\n</doc>");
                     MessageAssert.IsNotDeprecated (cls);
                 } else if (cls.Name == "DeprecatedClass") {
-                    MessageAssert.IsDeprecated (cls, "Use TestClass instead.");
+                    MessageAssert.IsDeprecated (cls, "Use <see cref=\"T:TestService.TestClass\" /> instead.");
                 } else {
                     Assert.Fail ();
                 }
@@ -441,9 +441,9 @@ namespace KRPC.Test.Service
                     MessageAssert.HasValues (enumeration, 2);
                     MessageAssert.HasValue (enumeration, 0, "A", 0, "<doc>\n<summary>\nA value that is not deprecated.\n</summary>\n</doc>");
                     MessageAssert.HasValue (enumeration, 1, "B", 1, "<doc>\n<summary>\nA deprecated enumeration value, annotated with a reason.\n</summary>\n</doc>");
-                    MessageAssert.IsDeprecated (enumeration, "Use TestEnum instead.");
+                    MessageAssert.IsDeprecated (enumeration, "Use <see cref=\"T:TestService.TestEnum\" /> instead.");
                     MessageAssert.ValueIsNotDeprecated (enumeration, 0);
-                    MessageAssert.ValueIsDeprecated (enumeration, 1, "Use A instead.");
+                    MessageAssert.ValueIsDeprecated (enumeration, 1, "Use <see cref=\"M:TestService.DeprecatedEnum.A\" /> instead.");
                 } else {
                     Assert.Fail ();
                 }

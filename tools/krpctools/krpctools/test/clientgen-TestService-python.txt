@@ -60,11 +60,11 @@ class DeprecatedClass(ClassBase):
     """
     def deprecated_method(self) -> str:
         """
-        Deprecated. Use TestClass.GetValue instead.
+        Deprecated. Use TestClass.get_value instead.
 
         Deprecated method documentation string.
         """
-        warnings.warn("TestService.DeprecatedClass.deprecated_method is deprecated: Use TestClass.GetValue instead.", DeprecationWarning, stacklevel=2)
+        warnings.warn("TestService.DeprecatedClass.deprecated_method is deprecated: Use TestClass.get_value instead.", DeprecationWarning, stacklevel=2)
         return self._client._invoke(
             "TestService",
             "DeprecatedClass_DeprecatedMethod",
@@ -384,11 +384,11 @@ class TestService:
     @property
     def deprecated_property(self) -> str:
         """
-        Deprecated. Use StringProperty instead.
+        Deprecated. Use string_property instead.
 
         Deprecated property documentation string.
         """
-        warnings.warn("TestService.deprecated_property is deprecated: Use StringProperty instead.", DeprecationWarning, stacklevel=2)
+        warnings.warn("TestService.deprecated_property is deprecated: Use string_property instead.", DeprecationWarning, stacklevel=2)
         return self._client._invoke(
             "TestService",
             "get_DeprecatedProperty",
@@ -400,7 +400,7 @@ class TestService:
 
     @deprecated_property.setter
     def deprecated_property(self, value: str) -> None:
-        warnings.warn("TestService.deprecated_property is deprecated: Use StringProperty instead.", DeprecationWarning, stacklevel=2)
+        warnings.warn("TestService.deprecated_property is deprecated: Use string_property instead.", DeprecationWarning, stacklevel=2)
         return self._client._invoke(
             "TestService",
             "set_DeprecatedProperty",
@@ -698,11 +698,11 @@ class TestService:
 
     def deprecated_procedure(self, value: float) -> str:
         """
-        Deprecated. Use FloatToString instead.
+        Deprecated. Use float_to_string instead.
 
         Deprecated procedure documentation string.
         """
-        warnings.warn("TestService.deprecated_procedure is deprecated: Use FloatToString instead.", DeprecationWarning, stacklevel=2)
+        warnings.warn("TestService.deprecated_procedure is deprecated: Use float_to_string instead.", DeprecationWarning, stacklevel=2)
         return self._client._invoke(
             "TestService",
             "DeprecatedProcedure",

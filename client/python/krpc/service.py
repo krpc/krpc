@@ -112,8 +112,20 @@ def _construct_func(
     return cast(Callable, fn)  # type: ignore[type-arg]
 
 
+def _parse_deprecation_reason(reason: str) -> str:
+    """Flatten a deprecation reason to plain text. The reason may contain the
+    same see-cref markup as documentation strings; references are converted to
+    Python-cased dotted names."""
+    if "<" not in reason:
+        return reason
+    parser = ElementTree.XMLParser(encoding="UTF-8")
+    node = ElementTree.XML(("<doc>%s</doc>" % reason).encode("UTF-8"), parser=parser)
+    return _parse_documentation_content(node)
+
+
 def _deprecated_doc(doc: str, reason: str) -> str:
     """Prepend a deprecation notice to a constructed docstring"""
+    reason = _parse_deprecation_reason(reason)
     line = "Deprecated. " + reason if reason else "Deprecated."
     return line + "\n\n" + doc if doc else line
 
@@ -126,7 +138,7 @@ def _wrap_deprecated(
     """Wrap an invoker so that calling it emits a DeprecationWarning"""
     message = qualified_name + " is deprecated"
     if reason:
-        message += ": " + reason
+        message += ": " + _parse_deprecation_reason(reason)
 
     def wrapper(*args: object, **kwargs: object) -> object:
         warnings.warn(message, DeprecationWarning, stacklevel=2)

@@ -24,6 +24,8 @@ class JavaGenerator(Generator):
 
     language = JavaLanguage()
 
+    parse_plain_cref_member = staticmethod(lower_camel_case)
+
     def parse_type_specification(self, typ):
         if typ is None:
             return None

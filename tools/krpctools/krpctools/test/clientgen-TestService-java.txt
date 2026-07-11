@@ -139,7 +139,7 @@ public class TestService {
     /**
      * Deprecated procedure documentation string.
      *
-     * @deprecated Use FloatToString instead.
+     * @deprecated Use floatToString instead.
      */
     @Deprecated
     @SuppressWarnings({ "unchecked" })
@@ -457,7 +457,7 @@ public class TestService {
     /**
      * Deprecated property documentation string.
      *
-     * @deprecated Use StringProperty instead.
+     * @deprecated Use stringProperty instead.
      */
     @Deprecated
     @SuppressWarnings({ "unchecked" })
@@ -470,7 +470,7 @@ public class TestService {
     /**
      * Deprecated property documentation string.
      *
-     * @deprecated Use StringProperty instead.
+     * @deprecated Use stringProperty instead.
      */
     @Deprecated
     @SuppressWarnings({ "unchecked" })
@@ -551,7 +551,7 @@ public class TestService {
         /**
          * Deprecated enum ValueB documentation string.
          *
-         * @deprecated Use ValueA instead.
+         * @deprecated Use DeprecatedEnum.valueA instead.
          */
         @Deprecated
         VALUE_B(1);
@@ -638,7 +638,7 @@ public class TestService {
         /**
          * Deprecated method documentation string.
          *
-         * @deprecated Use TestClass.GetValue instead.
+         * @deprecated Use TestClass.getValue instead.
          */
         @Deprecated
         @SuppressWarnings({ "unchecked" })

@@ -90,7 +90,7 @@
 
    .. function:: std::string deprecated_procedure(float value)
 
-      .. warning:: Deprecated. Use FloatToString instead.
+      .. warning:: Deprecated. Use :func:`float_to_string` instead.
 
       Deprecated procedure documentation string.
 
@@ -115,7 +115,7 @@
    .. function:: std::string deprecated_property()
    .. function:: void set_deprecated_property(std::string value)
 
-      .. warning:: Deprecated. Use StringProperty instead.
+      .. warning:: Deprecated. Use :func:`string_property` instead.
 
       Deprecated property documentation string.
 
@@ -521,13 +521,13 @@
 
 .. class:: DeprecatedClass
 
-   .. warning:: Deprecated. Use TestClass instead.
+   .. warning:: Deprecated. Use :class:`TestClass` instead.
 
    Deprecated class documentation string.
 
    .. function:: std::string deprecated_method()
 
-      .. warning:: Deprecated. Use TestClass.GetValue instead.
+      .. warning:: Deprecated. Use :func:`TestClass::get_value` instead.
 
       Deprecated method documentation string.
 
@@ -561,7 +561,7 @@
 .. namespace:: krpc::services::TestService
 .. enum-struct:: DeprecatedEnum
 
-   .. warning:: Deprecated. Use TestEnum instead.
+   .. warning:: Deprecated. Use :enum:`TestEnum` instead.
 
    Deprecated enum documentation string.
 
@@ -573,7 +573,7 @@
 
    .. enumerator:: value_b
 
-      .. warning:: Deprecated. Use ValueA instead.
+      .. warning:: Deprecated. Use :enumerator:`DeprecatedEnum::value_a` instead.
 
       Deprecated enum ValueB documentation string.
 

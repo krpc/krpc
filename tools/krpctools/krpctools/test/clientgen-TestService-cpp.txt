@@ -53,9 +53,9 @@ class TestService : public Service {
     /**
      * Deprecated enum ValueB documentation string.
      *
-     * \deprecated Use ValueA instead.
+     * \deprecated Use DeprecatedEnum::value_a instead.
      */
-    value_b [[deprecated("Use ValueA instead.")]] = 1
+    value_b [[deprecated("Use DeprecatedEnum::value_a instead.")]] = 1
   };
 
   /**
@@ -93,9 +93,9 @@ class TestService : public Service {
   /**
    * Deprecated procedure documentation string.
    *
-   * \deprecated Use FloatToString instead.
+   * \deprecated Use float_to_string instead.
    */
-  [[deprecated("Use FloatToString instead.")]]
+  [[deprecated("Use float_to_string instead.")]]
   std::string deprecated_procedure(float value);
 
   /**
@@ -172,17 +172,17 @@ class TestService : public Service {
   /**
    * Deprecated property documentation string.
    *
-   * \deprecated Use StringProperty instead.
+   * \deprecated Use string_property instead.
    */
-  [[deprecated("Use StringProperty instead.")]]
+  [[deprecated("Use string_property instead.")]]
   std::string deprecated_property();
 
   /**
    * Deprecated property documentation string.
    *
-   * \deprecated Use StringProperty instead.
+   * \deprecated Use string_property instead.
    */
-  [[deprecated("Use StringProperty instead.")]]
+  [[deprecated("Use string_property instead.")]]
   void set_deprecated_property(std::string value);
 
   TestService::TestClass object_property();
@@ -395,9 +395,9 @@ class TestService : public Service {
     /**
      * Deprecated method documentation string.
      *
-     * \deprecated Use TestClass.GetValue instead.
+     * \deprecated Use TestClass::get_value instead.
      */
-    [[deprecated("Use TestClass.GetValue instead.")]]
+    [[deprecated("Use TestClass::get_value instead.")]]
     std::string deprecated_method();
 
     ::krpc::Stream<std::string> deprecated_method_stream();
