@@ -370,7 +370,7 @@ jobs:
       - name: test
         run: bazel test //core:test
 
-  test-service-spacecenter:
+  test-service:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.8.0
@@ -384,7 +384,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: test
-        run: bazel test //service/SpaceCenter:test-attitude-error
+        run: bazel test //service/...
 
   test-client-cnano:
     runs-on: ubuntu-latest
@@ -601,7 +601,7 @@ jobs:
       - build-docs-examples
       - test-docs
       - test-core
-      - test-service-spacecenter
+      - test-service
       - test-client-cnano
       - test-client-cpp
       - test-client-csharp

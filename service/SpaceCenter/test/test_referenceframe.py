@@ -840,7 +840,9 @@ class TestReferenceFrame(krpctest.TestCase):
         # vessel is teleported to periapsis -- its highest latitude (= inclination),
         # independent of orbital phase.
         self.addCleanup(self.set_circular_orbit, "Kerbin", 100000)
-        self.set_orbit("Kerbin", 700000, 0.0, 60.0, 0.0, 90.0, 0.0, self.space_center.ut)
+        self.set_orbit(
+            "Kerbin", 700000, 0.0, 60.0, 0.0, 90.0, 0.0, self.space_center.ut
+        )
         self.vessel.control.sas = False
         self.vessel.control.rcs = False
         self.set_pitch_heading_roll(0, 90, 0)  # de-spin (inertially fixed)
