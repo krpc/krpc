@@ -204,14 +204,11 @@ namespace KRPC.SpaceCenter.AutoPilot
                 // FIXME: QuaternionD.FromToRotation method not available at runtime
                 rotation = Quaternion.FromToRotation (currentDirection, targetDirection);
 
-            // Compute angles for the rotation in pitch (x), roll (y), yaw (z) axes
-            float angleFloat;
-            Vector3 axisFloat;
-            // FIXME: QuaternionD.ToAngleAxis method not available at runtime
-            ((Quaternion)rotation).ToAngleAxis (out angleFloat, out axisFloat);
-            double angle = GeometryExtensions.ClampAngle180 (angleFloat);
-            Vector3d axis = axisFloat;
-            var angles = axis * angle;
+            // Compute the shortest rotation vector in the reference frame. Keep this in double
+            // precision and canonicalize the quaternion sign so q and -q give the same command.
+            var error = AttitudeError.ToRotationVector (
+                rotation.x, rotation.y, rotation.z, rotation.w);
+            var angles = new Vector3d (error.X, error.Y, error.Z);
             angles = vessel.ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.DirectionToWorldSpace (angles));
             return AnglesToAngularVelocity (angles, torque, moi);
         }

@@ -370,6 +370,22 @@ jobs:
       - name: test
         run: bazel test //core:test
 
+  test-service-spacecenter:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.8.0
+      options: --user runner:runner
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: test
+        run: bazel test //service/SpaceCenter:test-attitude-error
+
   test-client-cnano:
     runs-on: ubuntu-latest
     container:
@@ -585,6 +601,7 @@ jobs:
       - build-docs-examples
       - test-docs
       - test-core
+      - test-service-spacecenter
       - test-client-cnano
       - test-client-cpp
       - test-client-csharp
