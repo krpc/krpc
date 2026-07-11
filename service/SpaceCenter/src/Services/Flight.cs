@@ -338,6 +338,22 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The acceleration of the vessel, in the reference frame <see cref="ReferenceFrame"/>.
+        /// This is the total acceleration, including the acceleration due to gravity, and is the
+        /// time derivative of <see cref="Velocity"/>.
+        /// </summary>
+        /// <returns>The acceleration as a vector. The vector points in the direction of the
+        /// acceleration, and its magnitude is the acceleration of the vessel in <math>m/s^2</math>.</returns>
+        [KRPCProperty]
+        public Tuple3 Acceleration {
+            // Use acceleration_immediate (the raw per-frame change in orbital velocity) rather than
+            // the acceleration field, which KSP boxcar-averages over several frames for the G-force
+            // gauge. The immediate value is the true time derivative of Velocity and responds
+            // without the averaging lag.
+            get { return referenceFrame.DirectionFromWorldSpace (InternalVessel.acceleration_immediate).ToTuple (); }
+        }
+
+        /// <summary>
         /// The position of the center of mass of the vessel,
         /// in the reference frame <see cref="ReferenceFrame"/>
         /// </summary>
@@ -641,6 +657,56 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Tuple3 Drag {
             get { return (referenceFrame.DirectionFromWorldSpace (WorldDragDirection) * DragMagnitude).ToTuple (); }
+        }
+
+        /// <summary>
+        /// The acceleration of the vessel due to the total aerodynamic forces acting on it
+        /// (<see cref="AerodynamicForce"/> divided by the vessel's mass),
+        /// in reference frame <see cref="ReferenceFrame"/>.
+        /// </summary>
+        /// <returns>A vector pointing in the direction that the vessel is accelerated,
+        /// with its magnitude equal to the acceleration in <math>m/s^2</math>.</returns>
+        [KRPCProperty]
+        public Tuple3 AerodynamicAcceleration {
+            get {
+                var mass = new Vessel (InternalVessel).Mass;
+                Vector3d worldForce;
+                if (FAR.IsAvailable)
+                    worldForce = WorldDragDirection * DragMagnitude + WorldLiftDirection * LiftMagnitude;
+                else
+                    worldForce = WorldAerodynamicForce;
+                return referenceFrame.DirectionFromWorldSpace (worldForce / mass).ToTuple ();
+            }
+        }
+
+        /// <summary>
+        /// The acceleration of the vessel due to <see cref="Lift"/>
+        /// (the aerodynamic lift divided by the vessel's mass),
+        /// in reference frame <see cref="ReferenceFrame"/>.
+        /// </summary>
+        /// <returns>A vector pointing in the direction that the vessel is accelerated,
+        /// with its magnitude equal to the acceleration in <math>m/s^2</math>.</returns>
+        [KRPCProperty]
+        public Tuple3 LiftAcceleration {
+            get {
+                var mass = new Vessel (InternalVessel).Mass;
+                return (referenceFrame.DirectionFromWorldSpace (WorldLiftDirection) * (LiftMagnitude / mass)).ToTuple ();
+            }
+        }
+
+        /// <summary>
+        /// The acceleration of the vessel due to <see cref="Drag"/>
+        /// (the aerodynamic drag divided by the vessel's mass),
+        /// in reference frame <see cref="ReferenceFrame"/>.
+        /// </summary>
+        /// <returns>A vector pointing in the direction that the vessel is accelerated,
+        /// with its magnitude equal to the acceleration in <math>m/s^2</math>.</returns>
+        [KRPCProperty]
+        public Tuple3 DragAcceleration {
+            get {
+                var mass = new Vessel (InternalVessel).Mass;
+                return (referenceFrame.DirectionFromWorldSpace (WorldDragDirection) * (DragMagnitude / mass)).ToTuple ();
+            }
         }
 
         /// <summary>

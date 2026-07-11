@@ -188,6 +188,12 @@ SpaceCenter.Vessel.AvailableThrustAt
 SpaceCenter.Vessel.MaxThrust
 SpaceCenter.Vessel.MaxThrustAt
 SpaceCenter.Vessel.MaxVacuumThrust
+SpaceCenter.Vessel.Acceleration
+SpaceCenter.Vessel.AvailableAcceleration
+SpaceCenter.Vessel.AvailableAccelerationAt
+SpaceCenter.Vessel.MaxAcceleration
+SpaceCenter.Vessel.MaxAccelerationAt
+SpaceCenter.Vessel.MaxVacuumAcceleration
 SpaceCenter.Vessel.SpecificImpulse
 SpaceCenter.Vessel.SpecificImpulseAt
 SpaceCenter.Vessel.VacuumSpecificImpulse
@@ -198,9 +204,16 @@ SpaceCenter.Vessel.AvailableTorque
 SpaceCenter.Vessel.AvailableReactionWheelTorque
 SpaceCenter.Vessel.AvailableRCSTorque
 SpaceCenter.Vessel.AvailableRCSForce
+SpaceCenter.Vessel.AvailableRCSAcceleration
 SpaceCenter.Vessel.AvailableEngineTorque
 SpaceCenter.Vessel.AvailableControlSurfaceTorque
 SpaceCenter.Vessel.AvailableOtherTorque
+SpaceCenter.Vessel.AvailableAngularAcceleration
+SpaceCenter.Vessel.AvailableReactionWheelAngularAcceleration
+SpaceCenter.Vessel.AvailableRCSAngularAcceleration
+SpaceCenter.Vessel.AvailableEngineAngularAcceleration
+SpaceCenter.Vessel.AvailableControlSurfaceAngularAcceleration
+SpaceCenter.Vessel.AvailableOtherAngularAcceleration
 SpaceCenter.Vessel.ReferenceFrame
 SpaceCenter.Vessel.OrbitalReferenceFrame
 SpaceCenter.Vessel.SurfaceReferenceFrame
@@ -301,6 +314,7 @@ SpaceCenter.Flight.Velocity
 SpaceCenter.Flight.Speed
 SpaceCenter.Flight.HorizontalSpeed
 SpaceCenter.Flight.VerticalSpeed
+SpaceCenter.Flight.Acceleration
 SpaceCenter.Flight.CenterOfMass
 SpaceCenter.Flight.Rotation
 SpaceCenter.Flight.Direction
@@ -324,6 +338,9 @@ SpaceCenter.Flight.SimulateAerodynamicForceAt
 SpaceCenter.Flight.SimulateAerodynamicTorqueAt
 SpaceCenter.Flight.Lift
 SpaceCenter.Flight.Drag
+SpaceCenter.Flight.AerodynamicAcceleration
+SpaceCenter.Flight.LiftAcceleration
+SpaceCenter.Flight.DragAcceleration
 SpaceCenter.Flight.SpeedOfSound
 SpaceCenter.Flight.Mach
 SpaceCenter.Flight.ReynoldsNumber
