@@ -57,6 +57,7 @@ v0.6.0
  * Fix ResourceHarvester.ExtractionRate returning 0 when part action window is not open (#889)
  * Fix Sensor.Value returning zero when the part action window is not open (#883)
  * Fix Engine.AvailableThrust and MaxThrust for air-breathing engines at supersonic speeds (#924)
+ * Fix Control.SASMode being dropped when set in the same physics tick as enabling SAS (#236)
 
 v0.5.4
  * Fix vessel recovery (#782)

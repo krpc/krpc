@@ -77,8 +77,8 @@ namespace KRPC.SpaceCenter.Services
         /// <remarks>Equivalent to <see cref="AutoPilot.SAS"/></remarks>
         [KRPCProperty]
         public bool SAS {
-            get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
-            set { InternalVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value); }
+            get { return AutoPilot.GetSAS (InternalVessel); }
+            set { AutoPilot.SetSAS (InternalVessel, value); }
         }
 
         /// <summary>
@@ -89,25 +89,8 @@ namespace KRPC.SpaceCenter.Services
         /// <remarks>Equivalent to <see cref="AutoPilot.SASMode"/></remarks>
         [KRPCProperty]
         public SASMode SASMode {
-            get { return GetSASMode (InternalVessel); }
-            set { SetSASMode (InternalVessel, value); }
-        }
-
-        internal static SASMode GetSASMode (global::Vessel vessel)
-        {
-            return vessel.Autopilot.Mode.ToSASMode ();
-        }
-
-        internal static void SetSASMode (global::Vessel vessel, SASMode value)
-        {
-            var mode = value.FromSASMode ();
-            if (!vessel.Autopilot.CanSetMode (mode))
-                throw new InvalidOperationException ("Cannot set SAS mode of vessel");
-            vessel.Autopilot.SetMode (mode);
-            // Update the UI buttons
-            var modeIndex = (int)vessel.Autopilot.Mode;
-            var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
-            modeButtons [modeIndex].SetState (true);
+            get { return AutoPilot.GetSASMode (InternalVessel); }
+            set { AutoPilot.SetSASMode (InternalVessel, value); }
         }
 
         /// <summary>
