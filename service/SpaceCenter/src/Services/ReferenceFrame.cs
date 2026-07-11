@@ -668,8 +668,30 @@ namespace KRPC.SpaceCenter.Services
                     var v = InternalVessel.GetOrbit ().GetVel ();
                     return Vector3d.Cross (r, v) / r.sqrMagnitude;
                 }
-                case ReferenceFrameType.VesselSurface:
-                    return InternalVessel.mainBody.angularVelocity;
+                case ReferenceFrameType.VesselSurface: {
+                    // The surface frame's orientation tracks the vessel's inertial
+                    // position (zenith points from the body centre to the vessel) and
+                    // the body's spin axis (north), so its angular velocity is the rate
+                    // at which that basis rotates -- not the body's rotation rate. It is
+                    // the orbital sweep of the zenith axis plus the twist of the north
+                    // direction about the zenith as the vessel's latitude changes.
+                    var vessel = InternalVessel;
+                    var mainBody = vessel.mainBody;
+                    var r = vessel.CoM - mainBody.position;
+                    var v = vessel.GetOrbit ().GetVel ();
+                    var rSqr = r.sqrMagnitude;
+                    var rxv = Vector3d.Cross (r, v);
+                    // Zenith swing (perpendicular to the vertical).
+                    var angularVelocity = rxv / rSqr;
+                    // Twist of the horizon-projected north about the vertical. Vanishes
+                    // on equatorial orbits; singular at the poles (as is the frame).
+                    var spinAxis = (Vector3d)mainBody.transform.up;
+                    var rDotS = Vector3d.Dot (r, spinAxis);
+                    var rPerpSqr = rSqr - rDotS * rDotS;
+                    if (rPerpSqr > rSqr * 1e-6)
+                        angularVelocity += (Vector3d.Dot (spinAxis, rxv) * rDotS / (rPerpSqr * rSqr)) * r;
+                    return angularVelocity;
+                }
                 case ReferenceFrameType.VesselSurfaceVelocity: {
                     var vessel = InternalVessel;
                     var srf_vel = vessel.srf_velocity;
