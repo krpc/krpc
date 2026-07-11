@@ -28,6 +28,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The underlying KSP part module. Used by <see cref="PartField"/>, <see cref="PartEvent"/>
+        /// and <see cref="PartAction"/> to read and write against the host module.
+        /// </summary>
+        internal PartModule InternalModule {
+            get { return module; }
+        }
+
+        /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
         public override bool Equals (Module other)
@@ -110,8 +118,55 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return module.Events.Where (e => e != null && (HighLogic.LoadedSceneIsEditor ? e.guiActiveEditor : e.guiActive) && e.active); }
         }
 
+        IEnumerable<BaseEvent> AllBaseEvents {
+            get { return module.Events.Where (e => e != null); }
+        }
+
         IEnumerable<BaseAction> AllActions {
             get { return module.Actions; }
+        }
+
+        internal IEnumerable<string> VisibleEventNames {
+            get { return AllEvents.Select (x => x.guiName); }
+        }
+
+        internal bool HasVisibleEvent (string name)
+        {
+            return AllEvents.Any (x => x.guiName == name);
+        }
+
+        internal void TriggerVisibleEvent (string name)
+        {
+            AllEvents.First (x => x.guiName == name).Invoke ();
+        }
+
+        /// <summary>
+        /// A list of all the fields of the module, including those not visible in the right-click
+        /// menu of the part. Filter by <see cref="PartField.Visible"/> to get just the visible ones.
+        /// </summary>
+        [KRPCProperty]
+        public IList<PartField> FieldList {
+            get { return AllBaseFields.Select (f => new PartField (this, f)).ToList (); }
+        }
+
+        /// <summary>
+        /// A list of all the events of the module, including those not currently visible or active.
+        /// Events are the clickable buttons visible in the right-click menu of the part. Filter by
+        /// <see cref="PartEvent.Visible"/> and <see cref="PartEvent.Active"/> to get just the ones
+        /// shown in the menu.
+        /// </summary>
+        [KRPCProperty]
+        public IList<PartEvent> EventList {
+            get { return AllBaseEvents.Select (e => new PartEvent (this, e)).ToList (); }
+        }
+
+        /// <summary>
+        /// A list of all the actions of the module. These are the parts actions that can be assigned
+        /// to action groups in the in-game editor.
+        /// </summary>
+        [KRPCProperty]
+        public IList<PartAction> ActionList {
+            get { return AllActions.Select (a => new PartAction (this, a)).ToList (); }
         }
 
         /// <summary>
@@ -122,6 +177,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Throws an exception if there is more than one field with the same name.
         /// In that case, use <see cref="FieldsById"/> to get the fields by identifier.
         /// </remarks>
+        [Obsolete("Use <see cref='FieldList'/> instead, filtering by <see cref='PartField.Visible'/>.")]
         [KRPCProperty]
         public IDictionary<string,string> Fields {
             get {
@@ -136,6 +192,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The modules field identifiers and their associated values, as a dictionary.
         /// These are the values visible in the right-click menu of the part.
         /// </summary>
+        [Obsolete("Use <see cref='FieldList'/> instead, filtering by <see cref='PartField.Visible'/>.")]
         [KRPCProperty]
         public IDictionary<string,string> FieldsById {
             get {
@@ -154,6 +211,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <remarks>
         /// Throws an exception if there is more than one field with the same identifier.
         /// </remarks>
+        [Obsolete("Use <see cref='FieldList'/> instead.")]
         [KRPCProperty]
         public IDictionary<string,string> AllFieldsById {
             get {
@@ -168,6 +226,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Returns <c>true</c> if the module has a field with the given name.
         /// </summary>
         /// <param name="name">Name of the field.</param>
+        [Obsolete("Filter <see cref='FieldList'/> by <see cref='PartField.GuiName'/> instead.")]
         [KRPCMethod]
         public bool HasField (string name)
         {
@@ -178,6 +237,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Returns <c>true</c> if the module has a field with the given identifier.
         /// </summary>
         /// <param name="id">Identifier of the field.</param>
+        [Obsolete("Filter <see cref='FieldList'/> by <see cref='PartField.Name'/> instead.")]
         [KRPCMethod]
         public bool HasFieldWithId (string id)
         {
@@ -198,6 +258,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Returns the value of a field with the given name.
         /// </summary>
         /// <param name="name">Name of the field.</param>
+        [Obsolete("Filter <see cref='FieldList'/> by <see cref='PartField.GuiName'/> and read <see cref='PartField.Value'/> instead.")]
         [KRPCMethod]
         public string GetField (string name)
         {
@@ -208,6 +269,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Returns the value of a field with the given identifier.
         /// </summary>
         /// <param name="id">Identifier of the field.</param>
+        [Obsolete("Filter <see cref='FieldList'/> by <see cref='PartField.Name'/> and read <see cref='PartField.Value'/> instead.")]
         [KRPCMethod]
         public string GetFieldById (string id)
         {
@@ -241,6 +303,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="name">Name of the field.</param>
         /// <param name="value">Value to set.</param>
+        [Obsolete("Set <see cref='PartField.IntValue'/> instead.")]
         [KRPCMethod]
         public void SetFieldInt (string name, int value)
         {
@@ -252,6 +315,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="id">Identifier of the field.</param>
         /// <param name="value">Value to set.</param>
+        [Obsolete("Set <see cref='PartField.IntValue'/> instead.")]
         [KRPCMethod]
         public void SetFieldIntById (string id, int value)
         {
@@ -263,6 +327,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="name">Name of the field.</param>
         /// <param name="value">Value to set.</param>
+        [Obsolete("Set <see cref='PartField.FloatValue'/> instead.")]
         [KRPCMethod]
         public void SetFieldFloat (string name, float value)
         {
@@ -274,6 +339,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="id">Identifier of the field.</param>
         /// <param name="value">Value to set.</param>
+        [Obsolete("Set <see cref='PartField.FloatValue'/> instead.")]
         [KRPCMethod]
         public void SetFieldFloatById (string id, float value)
         {
@@ -285,6 +351,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="name">Name of the field.</param>
         /// <param name="value">Value to set.</param>
+        [Obsolete("Set <see cref='PartField.Value'/> instead.")]
         [KRPCMethod]
         public void SetFieldString (string name, string value)
         {
@@ -296,6 +363,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="id">Identifier of the field.</param>
         /// <param name="value">Value to set.</param>
+        [Obsolete("Set <see cref='PartField.Value'/> instead.")]
         [KRPCMethod]
         public void SetFieldStringById (string id, string value)
         {
@@ -307,6 +375,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="name">Name of the field.</param>
         /// <param name="value">Value to set.</param>
+        [Obsolete("Set <see cref='PartField.BoolValue'/> instead.")]
         [KRPCMethod]
         public void SetFieldBool (string name, bool value)
         {
@@ -318,6 +387,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="id">Identifier of the field.</param>
         /// <param name="value">Value to set.</param>
+        [Obsolete("Set <see cref='PartField.BoolValue'/> instead.")]
         [KRPCMethod]
         public void SetFieldBoolById (string id, bool value)
         {
@@ -328,6 +398,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Set the value of a field to its original value.
         /// </summary>
         /// <param name="name">Name of the field.</param>
+        [Obsolete("Use <see cref='PartField.Reset'/> instead.")]
         [KRPCMethod]
         public void ResetField (string name)
         {
@@ -341,6 +412,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <remarks>
         /// Has no effect on fields that are not visible in the right-click menu of the part.
         /// </remarks>
+        [Obsolete("Use <see cref='PartField.Reset'/> instead.")]
         [KRPCMethod]
         public void ResetFieldById (string id)
         {
@@ -351,15 +423,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A list of the names of all of the modules events. Events are the clickable buttons
         /// visible in the right-click menu of the part.
         /// </summary>
+        [Obsolete("Use <see cref='EventList'/> instead, filtering by <see cref='PartEvent.Visible'/> and <see cref='PartEvent.Active'/>.")]
         [KRPCProperty]
         public IList<string> Events {
-            get { return AllEvents.Select (x => x.guiName).ToList (); }
+            get { return VisibleEventNames.ToList (); }
         }
 
         /// <summary>
         /// A list of the identifiers of all of the modules events. Events are the clickable buttons
         /// visible in the right-click menu of the part.
         /// </summary>
+        [Obsolete("Use <see cref='EventList'/> instead, filtering by <see cref='PartEvent.Visible'/> and <see cref='PartEvent.Active'/>.")]
         [KRPCProperty]
         public IList<string> EventsById {
             get { return AllEvents.Select (x => x.name).ToList (); }
@@ -369,16 +443,18 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <c>true</c> if the module has an event with the given name.
         /// </summary>
         /// <param name="name"></param>
+        [Obsolete("Filter <see cref='EventList'/> by <see cref='PartEvent.GuiName'/> instead.")]
         [KRPCMethod]
         public bool HasEvent (string name)
         {
-            return AllEvents.Any (x => x.guiName == name);
+            return HasVisibleEvent (name);
         }
 
         /// <summary>
         /// <c>true</c> if the module has an event with the given identifier.
         /// </summary>
         /// <param name="id"></param>
+        [Obsolete("Filter <see cref='EventList'/> by <see cref='PartEvent.Name'/> instead.")]
         [KRPCMethod]
         public bool HasEventWithId (string id)
         {
@@ -390,10 +466,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// of the part.
         /// </summary>
         /// <param name="name"></param>
+        [Obsolete("Filter <see cref='EventList'/> by <see cref='PartEvent.GuiName'/> and call <see cref='PartEvent.Trigger'/> instead.")]
         [KRPCMethod]
         public void TriggerEvent (string name)
         {
-            AllEvents.First (x => x.guiName == name).Invoke ();
+            TriggerVisibleEvent (name);
         }
 
         /// <summary>
@@ -401,6 +478,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Equivalent to clicking the button in the right-click menu of the part.
         /// </summary>
         /// <param name="id"></param>
+        [Obsolete("Filter <see cref='EventList'/> by <see cref='PartEvent.Name'/> and call <see cref='PartEvent.Trigger'/> instead.")]
         [KRPCMethod]
         public void TriggerEventById (string id)
         {
@@ -411,6 +489,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A list of all the names of the modules actions. These are the parts actions that can
         /// be assigned to action groups in the in-game editor.
         /// </summary>
+        [Obsolete("Use <see cref='ActionList'/> instead.")]
         [KRPCProperty]
         public IList<string> Actions {
             get { return AllActions.Select (a => a.guiName).ToList (); }
@@ -420,6 +499,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A list of all the identifiers of the modules actions. These are the parts actions
         /// that can be assigned to action groups in the in-game editor.
         /// </summary>
+        [Obsolete("Use <see cref='ActionList'/> instead.")]
         [KRPCProperty]
         public IList<string> ActionsById {
             get { return AllActions.Select (a => a.name).ToList (); }
@@ -429,6 +509,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <c>true</c> if the part has an action with the given name.
         /// </summary>
         /// <param name="name"></param>
+        [Obsolete("Filter <see cref='ActionList'/> by <see cref='PartAction.GuiName'/> instead.")]
         [KRPCMethod]
         public bool HasAction (string name)
         {
@@ -439,6 +520,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <c>true</c> if the part has an action with the given identifier.
         /// </summary>
         /// <param name="id"></param>
+        [Obsolete("Filter <see cref='ActionList'/> by <see cref='PartAction.Name'/> instead.")]
         [KRPCMethod]
         public bool HasActionWithId (string id)
         {
@@ -458,6 +540,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
+        [Obsolete("Filter <see cref='ActionList'/> by <see cref='PartAction.GuiName'/> and call <see cref='PartAction.Set'/> instead.")]
         [KRPCMethod]
         public void SetAction (string name, bool value = true)
         {
@@ -469,6 +552,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="id"></param>
         /// <param name="value"></param>
+        [Obsolete("Filter <see cref='ActionList'/> by <see cref='PartAction.Name'/> and call <see cref='PartAction.Set'/> instead.")]
         [KRPCMethod]
         public void SetActionById (string id, bool value = true)
         {
