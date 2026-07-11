@@ -114,6 +114,44 @@ class TestVessel(krpctest.TestCase):
             ((0, 0, 0), (0, 0, 0)), self.vessel.available_control_surface_torque
         )
 
+    def test_available_angular_acceleration(self):
+        # Each available_*_angular_acceleration should equal the corresponding
+        # available_*_torque divided componentwise by the moment of inertia.
+        self.vessel.control.rcs = True
+        self.wait()
+        moi = self.vessel.moment_of_inertia
+        prefixes = [
+            "available",
+            "available_reaction_wheel",
+            "available_rcs",
+            "available_engine",
+            "available_control_surface",
+            "available_other",
+        ]
+        for prefix in prefixes:
+            accel = getattr(self.vessel, prefix + "_angular_acceleration")
+            torque = getattr(self.vessel, prefix + "_torque")
+            for i in range(2):
+                for j in range(3):
+                    inertia = moi[j]
+                    expected = torque[i][j] / inertia if inertia != 0 else 0
+                    self.assertAlmostEqual(expected, accel[i][j], delta=1e-2)
+        self.vessel.control.rcs = False
+        self.wait()
+
+    def test_available_rcs_acceleration(self):
+        # available_rcs_acceleration should equal available_rcs_force / mass.
+        self.vessel.control.rcs = True
+        self.wait()
+        mass = self.vessel.mass
+        force = self.vessel.available_rcs_force
+        accel = self.vessel.available_rcs_acceleration
+        for i in range(2):
+            for j in range(3):
+                self.assertAlmostEqual(force[i][j] / mass, accel[i][j], delta=1e-2)
+        self.vessel.control.rcs = False
+        self.wait()
+
     def test_bounding_box(self):
         box = self.vessel.bounding_box(self.vessel.reference_frame)
         self.assertAlmostEqual((-1.57, -2.59, -1.57), box[0], places=1)
@@ -351,6 +389,32 @@ class TestVesselEngines(krpctest.TestCase):
         for engine in self.engines:
             engine.active = False
         self.wait(1)
+
+    def test_acceleration(self):
+        # Acceleration members should equal the corresponding thrust divided by
+        # mass. Checked at zero throttle so the mass is stable (no fuel drain).
+        self.control.throttle = 0.0
+        for engine in self.engines:
+            engine.active = True
+        self.wait(0.5)
+        mass = self.vessel.mass
+        self.assertAlmostEqual(0, self.vessel.acceleration, delta=1e-2)
+        self.assertAlmostEqual(
+            self.vessel.available_thrust / mass,
+            self.vessel.available_acceleration,
+            delta=1e-2,
+        )
+        self.assertAlmostEqual(
+            self.vessel.max_thrust / mass, self.vessel.max_acceleration, delta=1e-2
+        )
+        self.assertAlmostEqual(
+            self.vessel.max_vacuum_thrust / mass,
+            self.vessel.max_vacuum_acceleration,
+            delta=1e-2,
+        )
+        for engine in self.engines:
+            engine.active = False
+        self.wait(0.5)
 
 
 if __name__ == "__main__":
