@@ -532,5 +532,64 @@ class TestActionGroupActions(krpctest.TestCase):
         self.assertRaises(ValueError, self.control.get_action_group_actions, 11)
 
 
+class TestControlCustomAxes(krpctest.TestCase):
+    """The custom axes are applied to the vessel they are set on, and read back
+    the value that was set.
+
+    Regression test for two bugs in the custom axis handling: the axis groups
+    module was resolved from the active vessel rather than the vessel the input
+    was set on, and the getter (which reads the flight control state) was
+    decoupled from the setter (which wrote straight to the axis groups module),
+    so a value that had been set never read back.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("Multi")
+        cls.remove_other_vessels()
+        cls.set_circular_orbit("Kerbin", 100000)
+        cls.sc = cls.connect().space_center
+        # Decouple into two vessels, one active and one not
+        next(iter(cls.sc.active_vessel.parts.docking_ports)).undock()
+        cls.wait(1)
+        cls.active = cls.sc.active_vessel
+        cls.other = next(v for v in cls.sc.vessels if v != cls.active)
+
+    def setUp(self):
+        for vessel in (self.active, self.other):
+            for i in range(1, 5):
+                setattr(vessel.control, "custom_axis0%d" % i, 0.0)
+        self.wait(1)
+
+    def test_round_trip(self):
+        self.active.control.custom_axis01 = 0.6
+        self.wait(1)
+        self.assertAlmostEqual(0.6, self.active.control.custom_axis01, places=2)
+        self.active.control.custom_axis01 = -0.3
+        self.wait(1)
+        self.assertAlmostEqual(-0.3, self.active.control.custom_axis01, places=2)
+
+    def test_applied_to_correct_vessel(self):
+        # Setting a custom axis on the non-active vessel must apply to that
+        # vessel, and must not affect the active vessel.
+        self.other.control.custom_axis01 = 0.5
+        self.wait(1)
+        self.assertAlmostEqual(0.5, self.other.control.custom_axis01, places=2)
+        self.assertAlmostEqual(0.0, self.active.control.custom_axis01, places=2)
+
+    def test_axes_independent(self):
+        control = self.other.control
+        control.custom_axis01 = 0.1
+        control.custom_axis02 = 0.2
+        control.custom_axis03 = 0.3
+        control.custom_axis04 = 0.4
+        self.wait(1)
+        self.assertAlmostEqual(0.1, control.custom_axis01, places=2)
+        self.assertAlmostEqual(0.2, control.custom_axis02, places=2)
+        self.assertAlmostEqual(0.3, control.custom_axis03, places=2)
+        self.assertAlmostEqual(0.4, control.custom_axis04, places=2)
+
+
 if __name__ == "__main__":
     unittest.main()
