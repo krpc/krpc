@@ -14,6 +14,7 @@ namespace KRPC.Drawing
     /// </summary>
     /// <remarks>
     /// For drawing and interacting with the user interface, see the UI service.
+    /// Objects drawn by a client are removed when that client disconnects.
     /// </remarks>
     [KRPCService (Id = 3, GameScene = GameScene.Flight)]
     public static class Drawing

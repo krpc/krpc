@@ -17,8 +17,10 @@ namespace KRPC.SpaceCenter.Services
     /// Obtained by calling <see cref="Vessel.Control"/>.
     /// </summary>
     /// <remarks>
-    /// Control inputs (such as pitch, yaw and roll) are zeroed when all clients
-    /// that have set one or more of these inputs are no longer connected.
+    /// Control inputs (pitch, yaw, roll, translation, wheel throttle, wheel steering
+    /// and the custom axes) are zeroed when all clients that have set one or more of
+    /// these inputs are no longer connected. The throttle is an exception: it keeps
+    /// its value when clients disconnect.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Control : Equatable<Control>
@@ -381,6 +383,8 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The state of the throttle. A value between 0 and 1.
+        /// Unlike the other control inputs, the throttle is not zeroed when the
+        /// clients that set it disconnect.
         /// </summary>
         [KRPCProperty]
         public float Throttle {

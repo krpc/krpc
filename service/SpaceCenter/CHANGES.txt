@@ -64,7 +64,7 @@ v0.6.0
  * Deprecate the string-dictionary Module field, event and action members (#859)
  * Remove forces added by Part.AddForce when the client that added them disconnects
  * Cancel in-progress resource transfers when the client that started them disconnects;
-   a cancelled transfer is marked as complete
+   a canceled transfer is marked as complete
  * Fix part highlighting leaking a client-disconnect event handler each time the flight
    scene is loaded
 

@@ -41,6 +41,10 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="toPart">The part to transfer from.</param>
         /// <param name="resource">The name of the resource to transfer.</param>
         /// <param name="maxAmount">The maximum amount of resource to transfer.</param>
+        /// <remarks>
+        /// The transfer is canceled if the client that started it disconnects;
+        /// a canceled transfer is marked as complete.
+        /// </remarks>
         [KRPCMethod]
         public static ResourceTransfer Start (Parts.Part fromPart, Parts.Part toPart, string resource, float maxAmount)
         {
@@ -92,7 +96,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Whether the transfer has completed. Also becomes true if the transfer is
-        /// cancelled because the client that started it disconnected.
+        /// canceled because the client that started it disconnected.
         /// </summary>
         [KRPCProperty]
         public bool Complete { get; private set; }

@@ -124,6 +124,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the part is highlighted.
         /// </summary>
+        /// <remarks>
+        /// The highlighting is removed when the client that enabled it disconnects.
+        /// </remarks>
         [KRPCProperty]
         public bool Highlighted {
             get { return InternalPart.HighlightActive; }

@@ -32,7 +32,7 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// Update the transfers, first cancelling those whose client has disconnected
+        /// Update the transfers, first canceling those whose client has disconnected
         /// so they move no more resource.
         /// </summary>
         public void FixedUpdate ()
