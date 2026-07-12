@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+"""
+invariance_probe.py
+
+Test the rotation invariance of Flight.SimulateAerodynamicForceAt's hypothetical
+attitude machinery (the delta = desired x current^-1 mapping), with zero physics
+confound. Run on the launchpad (any scene with the craft loaded).
+
+Test 1 -- co-rotation invariance: evaluate the force with the attitude AND the
+wind both rotated by the same angle about the same axis. The airflow relative
+to the craft is IDENTICAL in every case (head-on, AoA 0), so the returned force
+magnitude must be constant. Any trend with angle is delta-machinery error, and
+its shape can be compared directly with the drag-ratio-vs-AoA curve measured
+from flight telemetry.
+
+Test 2 -- two-path AoA sweep: sweep AoA by (a) pitching the attitude with the
+wind fixed, and (b) rotating the wind with the attitude fixed. Same relative
+geometry per AoA; (a) exercises large deltas, (b) exercises none. The two
+sweeps must agree; their ratio is the delta error as a function of delta angle.
+
+Usage:
+    python invariance_probe.py [--speed 800] [--altitude 10000]
+"""
+
+import argparse
+import math
+
+import numpy as np
+
+
+def q_mult(a, b):
+    ax, ay, az, aw = a
+    bx, by, bz, bw = b
+    return (
+        aw * bx + bw * ax + ay * bz - az * by,
+        aw * by + bw * ay + az * bx - ax * bz,
+        aw * bz + bw * az + ax * by - ay * bx,
+        aw * bw - ax * bx - ay * by - az * bz,
+    )
+
+
+def q_axis_angle(axis, angle):
+    axis = np.asarray(axis, dtype=float)
+    axis = axis / np.linalg.norm(axis)
+    s = math.sin(angle / 2.0)
+    return (axis[0] * s, axis[1] * s, axis[2] * s, math.cos(angle / 2.0))
+
+
+def rodrigues(v, axis, angle):
+    c, s = math.cos(angle), math.sin(angle)
+    return v * c + np.cross(axis, v) * s + axis * np.dot(axis, v) * (1.0 - c)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--speed", type=float, default=800.0)
+    ap.add_argument("--altitude", type=float, default=10000.0)
+    ap.add_argument("--step", type=float, default=10.0, help="angle step (deg)")
+    ap.add_argument("--name", default="invariance-probe")
+    args = ap.parse_args()
+
+    import krpc
+
+    conn = krpc.connect(name=args.name)
+    sc = conn.space_center
+    vessel = sc.active_vessel
+    body = vessel.orbit.body
+    ref = body.reference_frame
+    flight = vessel.flight(ref)
+
+    up = np.array(vessel.position(ref), dtype=float)
+    up /= np.linalg.norm(up)
+    pos = tuple(up * (body.equatorial_radius + args.altitude))
+    nose = np.array(vessel.direction(ref), dtype=float)
+    pitch = np.cross(nose, up)
+    if np.linalg.norm(pitch) < 0.1:
+        pitch = np.cross(nose, np.array([1.0, 0.0, 0.0]))
+    pitch /= np.linalg.norm(pitch)
+    rot0 = vessel.rotation(ref)
+    rho = body.density_at(args.altitude)
+    print(
+        f"Craft: {vessel.name}, altitude {args.altitude / 1000:.0f} km "
+        f"(rho {rho:.4f}), wind {args.speed:.0f} m/s, "
+        f"rotations about the pitch axis\n"
+    )
+
+    def force(rot, vel):
+        return np.array(
+            flight.simulate_aerodynamic_force_at(body, pos, tuple(vel), tuple(rot))
+        )
+
+    angles = np.arange(0.0, 90.0 + 1e-9, args.step)
+
+    print(
+        "Test 1: attitude AND wind co-rotated (AoA always 0; |F| must be " "constant)"
+    )
+    print(f"{'delta deg':>10} {'|F| N':>12} {'vs delta=0':>11}")
+    f0 = None
+    for ang in angles:
+        th = math.radians(ang)
+        rot = q_mult(q_axis_angle(pitch, th), rot0)
+        wind = args.speed * rodrigues(nose, pitch, th)  # still head-on
+        f = np.linalg.norm(force(rot, wind))
+        if f0 is None:
+            f0 = f
+        print(f"{ang:10.0f} {f:12.1f} {f / f0:11.4f}")
+
+    print(
+        "\nTest 2: AoA sweep two ways -- (a) rotate attitude, wind fixed "
+        "(large delta); (b) rotate wind, attitude fixed (zero delta)"
+    )
+    print(f"{'AoA deg':>8} {'|F| a N':>12} {'|F| b N':>12} {'a/b':>8}")
+    wind0 = args.speed * nose
+    for ang in angles:
+        th = math.radians(ang)
+        rot_a = q_mult(q_axis_angle(pitch, th), rot0)
+        f_a = np.linalg.norm(force(rot_a, wind0))
+        wind_b = args.speed * rodrigues(nose, pitch, -th)
+        f_b = np.linalg.norm(force(rot0, wind_b))
+        print(f"{ang:8.0f} {f_a:12.1f} {f_b:12.1f} {f_a / f_b:8.4f}")
+
+    print(
+        "\nTest 1 flat at 1.0000 and Test 2 a/b flat at 1.0000: the delta "
+        "machinery is exact.\nA trend growing with angle reproduces the "
+        "flight-measured drag-ratio curve and localizes the bug to the "
+        "rotation mapping in SimulateAerodynamicForceAt."
+    )
+
+
+if __name__ == "__main__":
+    main()

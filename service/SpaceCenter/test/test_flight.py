@@ -350,5 +350,88 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
     #             drag_coefficient, self.vessel.flight().drag_coefficient)
 
 
+class TestFlightAero(krpctest.TestCase):
+    # Stock aerodynamic torque simulation (issue #914) for a craft with control
+    # surfaces off the center of mass. The tests are self-consistent: they compare
+    # simulated values against each other under a synthetic 300 m/s wind, so they
+    # need no live airflow and run on the launchpad. Works for stock and FAR,
+    # except where noted.
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("Aero")
+        cls.remove_other_vessels()
+        cls.space_center = cls.connect().space_center
+        cls.vessel = cls.space_center.active_vessel
+        cls.far = cls.space_center.far_available
+
+    def head_on_wind(self, ref):
+        # 300 m/s wind along the nose (angle of attack 0 at the current attitude)
+        return tuple(300 * vector(self.vessel.direction(ref)))
+
+    def pitch_axis(self, ref):
+        nose = vector(self.vessel.direction(ref))
+        axis = cross(nose, (0, 1, 0))
+        if norm(axis) < 0.1:
+            axis = cross(nose, (1, 0, 0))
+        return normalize(axis)
+
+    def test_simulate_aerodynamic_torque_attitude(self):
+        # A head-on wind (angle of attack 0) produces little torque; pitching 90
+        # degrees to a broadside wind produces a large torque about the center of
+        # mass (issue #914). Works for stock and FAR.
+        body = self.vessel.orbit.body
+        ref = body.reference_frame
+        flight = self.vessel.flight(ref)
+        position = self.vessel.position(ref)
+        velocity = self.head_on_wind(ref)
+        rotation = self.vessel.rotation(ref)
+        zero = (0.0, 0.0, 0.0)
+
+        head_on = vector(
+            flight.simulate_aerodynamic_torque_at(
+                body, position, velocity, rotation, zero
+            )
+        )
+        pitched = quaternion_mult(
+            quaternion_axis_angle(self.pitch_axis(ref), math.radians(90)), rotation
+        )
+        broadside = vector(
+            flight.simulate_aerodynamic_torque_at(
+                body, position, velocity, pitched, zero
+            )
+        )
+        self.assertGreater(norm(broadside), 1)  # a real torque
+        self.assertGreater(norm(broadside), norm(head_on))
+
+    def test_simulate_aerodynamic_torque_angular_velocity(self):
+        # Angular velocity adds the solid-body rotation term omega x r to each
+        # part's airflow, producing a damping torque. Stock model only; the FAR
+        # path ignores angular velocity.
+        if self.far:
+            self.skipTest("angular velocity is ignored under FAR")
+        body = self.vessel.orbit.body
+        ref = body.reference_frame
+        flight = self.vessel.flight(ref)
+        position = self.vessel.position(ref)
+        velocity = self.head_on_wind(ref)
+        rotation = self.vessel.rotation(ref)
+        zero = (0.0, 0.0, 0.0)
+        spin = tuple(5 * vector(self.pitch_axis(ref)))  # 5 rad/s pitch rate
+
+        static = vector(
+            flight.simulate_aerodynamic_torque_at(
+                body, position, velocity, rotation, zero
+            )
+        )
+        damped = vector(
+            flight.simulate_aerodynamic_torque_at(
+                body, position, velocity, rotation, spin
+            )
+        )
+        self.assertGreater(norm(damped - static), 1)
+
+
 if __name__ == "__main__":
     unittest.main()
