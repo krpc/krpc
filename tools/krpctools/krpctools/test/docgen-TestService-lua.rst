@@ -110,7 +110,7 @@ Service documentation string.
 
 .. attribute:: deprecated_property: string
 
-   .. warning:: Deprecated. Use :attr:`TestService.string_property` instead.
+   .. warning:: Deprecated. Use :attr:`TestService.string_property <TestService.TestService.string_property>` instead.
 
    Deprecated property documentation string.
 

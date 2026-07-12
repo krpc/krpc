@@ -85,7 +85,7 @@
 
    .. method:: string DeprecatedProcedure(float value)
 
-      .. warning:: Deprecated. Use :meth:`TestService.FloatToString` instead.
+      .. warning:: Deprecated. Use :meth:`TestService.FloatToString <TestService.TestService.FloatToString>` instead.
 
       Deprecated procedure documentation string.
 
@@ -109,7 +109,7 @@
 
    .. property:: string DeprecatedProperty { get; set; }
 
-      .. warning:: Deprecated. Use :prop:`TestService.StringProperty` instead.
+      .. warning:: Deprecated. Use :prop:`TestService.StringProperty <TestService.TestService.StringProperty>` instead.
 
       Deprecated property documentation string.
 
