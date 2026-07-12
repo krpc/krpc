@@ -30,7 +30,7 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreEqual (5, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (67, service.Procedures.Count);
+            Assert.AreEqual (69, service.Procedures.Count);
             Assert.AreEqual (2, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
 
@@ -78,24 +78,34 @@ namespace KRPC.Test.Service.KRPC
                     MessageAssert.HasReturnType (proc, typeof(IList<Tuple<byte[],string,string>>));
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
-                } else if (proc.Name == "get_CurrentGameScene") {
-                    MessageAssert.HasReturnType (proc, typeof(global::KRPC.Service.KRPC.KRPC.GameScene));
+                } else if (proc.Name == "get_GameScene") {
+                    MessageAssert.HasReturnType (proc, typeof(global::KRPC.Service.KRPC.GameScene));
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "set_GameScene") {
+                    MessageAssert.HasNoReturnType (proc);
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(global::KRPC.Service.KRPC.GameScene), "value");
+                    MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "get_CurrentGameScene") {
+                    MessageAssert.HasReturnType (proc, typeof(global::KRPC.Service.KRPC.GameScene));
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasDocumentation (proc);
+                    MessageAssert.IsDeprecated (proc, "Use <see cref=\"M:KRPC.GameScene\" /> instead.");
                 } else {
                     foundProcedures--;
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (10, foundProcedures);
+            Assert.AreEqual (12, foundProcedures);
 
             bool foundEnumeration = false;
             foreach (var enumeration in service.Enumerations) {
                 if (enumeration.Name == "GameScene") {
                     foundEnumeration = true;
                     MessageAssert.HasDocumentation (enumeration,
-                        "<doc>\n<summary>\nThe game scene. See <see cref=\"M:KRPC.CurrentGameScene\" />.\n</summary>\n</doc>");
-                    MessageAssert.HasValues (enumeration, 5);
+                        "<doc>\n<summary>\nThe game scene. See <see cref=\"M:KRPC.GameScene\" />.\n</summary>\n</doc>");
+                    MessageAssert.HasValues (enumeration, 10);
                     MessageAssert.HasValue (enumeration, 0, "SpaceCenter", 0,
                         "<doc>\n<summary>\nThe game scene showing the Kerbal Space Center buildings.\n</summary>\n</doc>");
                     MessageAssert.HasValue (enumeration, 1, "Flight", 1,
@@ -106,6 +116,16 @@ namespace KRPC.Test.Service.KRPC
                         "<doc>\n<summary>\nThe Vehicle Assembly Building.\n</summary>\n</doc>");
                     MessageAssert.HasValue (enumeration, 4, "EditorSPH", 4,
                         "<doc>\n<summary>\nThe Space Plane Hangar.\n</summary>\n</doc>");
+                    MessageAssert.HasValue (enumeration, 5, "MissionBuilder", 5,
+                        "<doc>\n<summary>\nThe mission builder.\n</summary>\n</doc>");
+                    MessageAssert.HasValue (enumeration, 6, "AstronautComplex", 6,
+                        "<doc>\n<summary>\nThe astronaut complex. This is a pseudo-scene, shown when the\nastronaut complex facility is open within the space center scene.\n</summary>\n</doc>");
+                    MessageAssert.HasValue (enumeration, 7, "MissionControl", 7,
+                        "<doc>\n<summary>\nMission control. This is a pseudo-scene, shown when the\nmission control facility is open within the space center scene.\n</summary>\n</doc>");
+                    MessageAssert.HasValue (enumeration, 8, "ResearchAndDevelopment", 8,
+                        "<doc>\n<summary>\nResearch and development. This is a pseudo-scene, shown when the\nresearch and development facility is open within the space center scene.\n</summary>\n</doc>");
+                    MessageAssert.HasValue (enumeration, 9, "Administration", 9,
+                        "<doc>\n<summary>\nThe administration facility. This is a pseudo-scene, shown when the\nadministration facility is open within the space center scene.\n</summary>\n</doc>");
                 }
             }
             Assert.IsTrue (foundEnumeration);

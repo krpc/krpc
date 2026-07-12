@@ -34,6 +34,12 @@ namespace KRPC.Service
         /// </summary>
         public static Action Unpause { get; set; }
 
+        /// <summary>
+        /// Delegate used to switch the game to a different scene.
+        /// Null if the server does not support scene switching.
+        /// </summary>
+        public static Action<global::KRPC.Service.KRPC.GameScene> LoadScene { get; set; }
+
         internal static void Set (IClient client)
         {
             Client = client;

@@ -45,8 +45,8 @@ def build_rpc_list(conn: krpc.client.Client) -> tuple[list[Callable[[], object]]
     rpcs.append(kr.get_status)
     labels.append("krpc.get_status")
 
-    rpcs.append(lambda: kr.current_game_scene)
-    labels.append("krpc.current_game_scene")
+    rpcs.append(lambda: kr.game_scene)
+    labels.append("krpc.game_scene")
 
     rpcs.append(lambda: kr.paused)
     labels.append("krpc.paused")

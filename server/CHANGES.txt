@@ -8,6 +8,7 @@ v0.6.0
  * Add shared component for releasing client-owned in-game state when a client disconnects,
    used by the services; connectivity checks are cached so all state shares one socket poll
    per client per frame
+ * Support switching the game scene by setting KRPC.GameScene, including opening and closing space center facilities (#897)
 
 v0.5.4
  * Fix memory leaks when switching game scene (#779)
