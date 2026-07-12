@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using KRPC.SpaceCenter.Services.Parts;
-using UnityEngine;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter
 {
@@ -8,20 +8,20 @@ namespace KRPC.SpaceCenter
     /// Addon to apply forces to parts.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    public class PartForcesAddon : MonoBehaviour
+    public sealed class PartForcesAddon : ClientCleanupAddon
     {
-        /// <summary>
-        /// The forces currently begin applied.
-        /// </summary>
-        static readonly IList<Force> forces = new List<Force> ();
-        static readonly IList<Force> instantaneousForces = new List<Force> ();
+        static readonly ClientOwnedObjects<Force> forces =
+            new ClientOwnedObjects<Force> ();
+        static readonly ClientOwnedObjects<Force> instantaneousForces =
+            new ClientOwnedObjects<Force> ();
+
+        static readonly IClientOwnedCollection[] collections = { forces, instantaneousForces };
 
         /// <summary>
-        /// Destroy the addon
+        /// The forces currently being applied.
         /// </summary>
-        public void OnDestroy ()
-        {
-            forces.Clear ();
+        protected override IEnumerable<IClientOwnedCollection> Collections {
+            get { return collections; }
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// Add a force
+        /// Remove a force
         /// </summary>
         static internal void Remove (Force force)
         {
@@ -49,14 +49,16 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// Apply the forces to the parts
+        /// Apply the forces to the parts, first dropping the forces of any client that
+        /// has disconnected so they are not applied again.
         /// </summary>
         public void FixedUpdate ()
         {
-            foreach (var force in instantaneousForces)
+            Sweep ();
+            foreach (var force in instantaneousForces.Items)
                 force.Update ();
             instantaneousForces.Clear ();
-            foreach (var force in forces)
+            foreach (var force in forces.Items)
                 force.Update ();
         }
     }

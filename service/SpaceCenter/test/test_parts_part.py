@@ -1,5 +1,6 @@
 import unittest
 import krpctest
+from krpctest.geometry import norm
 
 
 class TestPartsPart(krpctest.TestCase):
@@ -930,6 +931,43 @@ class TestPartsPartForce(krpctest.TestCase):
 
     def test_instantaneous_force(self):
         self.part.instantaneous_force((1, 2, 3), (4, 5, 6), self.part.reference_frame)
+
+
+class TestPartsPartForceDisconnect(krpctest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("Basic")
+        cls.remove_other_vessels()
+        cls.set_circular_orbit("Kerbin", 100000)
+        cls.vessel = cls.connect().space_center.active_vessel
+
+    def angular_speed(self):
+        ref = self.vessel.orbit.body.non_rotating_reference_frame
+        return norm(self.vessel.angular_velocity(ref))
+
+    def test_force_removed_on_disconnect(self):
+        self.vessel.control.sas = False
+        self.wait()
+
+        # A second client applies a constant torque-producing force; the
+        # vessel spins up while that client is connected
+        conn = self.connect(use_cached=False)
+        part = conn.space_center.active_vessel.parts.root
+        part.add_force((1000, 0, 0), (0, 10, 0), part.reference_frame)
+        before = self.angular_speed()
+        self.wait(1)
+        during = self.angular_speed()
+        self.assertGreater(during - before, 0.05)
+
+        # Disconnecting removes the force and the spin-up stops
+        conn.close()
+        self.wait(1)
+        after1 = self.angular_speed()
+        self.wait(1)
+        after2 = self.angular_speed()
+        self.assertLess(abs(after2 - after1), 0.01)
 
 
 if __name__ == "__main__":
