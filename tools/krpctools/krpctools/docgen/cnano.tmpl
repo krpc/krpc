@@ -6,6 +6,9 @@ Service {{ x.name }}
 {% endif %}
 {{ gendoc(x.documentation) | indent }}
 
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
 {% for member in x.members.values() %}
 {% if member.member_type == 'procedure' %}
 {{ procedure(x.name, member) | indent }}

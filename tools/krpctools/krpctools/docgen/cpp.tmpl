@@ -7,6 +7,9 @@
 {% endif %}
 {{ gendoc(x.documentation) | indent }}
 
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
    .. function:: {{ x.name }}(krpc::Client* client)
 
       Construct an instance of this service.

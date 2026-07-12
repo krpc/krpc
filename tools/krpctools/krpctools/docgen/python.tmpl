@@ -6,6 +6,9 @@
 {% endif %}
 {{ gendoc(x.documentation) }}
 
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) }}
+
+{% endif %}
 {% for member in x.members.values() %}
 {% if member.member_type == 'procedure' %}
 {{ procedure(member) }}
