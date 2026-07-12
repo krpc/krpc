@@ -8,6 +8,7 @@ using KRPC.Utils;
 using UnityEngine;
 using Tuple3 = System.Tuple<double, double, double>;
 using Tuple4 = System.Tuple<double, double, double, double>;
+using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -806,6 +807,77 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Simulate and return the total aerodynamic force and torque acting on the vessel,
+        /// if its center of mass were traveling with the given velocity, at the given position,
+        /// orientation and angular velocity, in the atmosphere of the given celestial body.
+        /// </summary>
+        /// <param name="body">The celestial body whose atmosphere the wrench is simulated in.</param>
+        /// <param name="position">The position of the vessel's center of mass, in reference
+        /// frame <see cref="ReferenceFrame"/>.</param>
+        /// <param name="velocity">The velocity of the vessel's center of mass, in reference
+        /// frame <see cref="ReferenceFrame"/>.</param>
+        /// <param name="rotation">The orientation of the vessel, in reference frame
+        /// <see cref="ReferenceFrame"/>, in the same form as <see cref="Vessel.Rotation"/>.
+        /// Pass the vessel's current rotation to evaluate the wrench at its current
+        /// orientation.</param>
+        /// <param name="angularVelocity">The angular velocity of the vessel, in reference
+        /// frame <see cref="ReferenceFrame"/>. This adds the solid-body rotation term to each
+        /// part's local airflow and the per-part rigid-body angular drag the game applies,
+        /// together giving the aerodynamic damping force and torque. Pass a zero vector to
+        /// evaluate the static wrench relative to the reference frame.</param>
+        /// <returns>A pair containing the aerodynamic force in newtons followed by the
+        /// aerodynamic torque in newton-meters about the vessel's center of mass. Both are
+        /// vectors in reference frame <see cref="ReferenceFrame"/>.</returns>
+        /// <remarks>
+        /// The position and velocity describe the hypothetical center-of-mass state. The
+        /// position, velocity, rotation and angular velocity arguments, and both returned
+        /// vectors, are expressed in reference frame <see cref="ReferenceFrame"/>.
+        ///
+        /// This is an instantaneous rigid-body result based on the vessel's current parts,
+        /// drag cubes and control-surface state. When
+        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
+        /// is installed the angular velocity argument is ignored.
+        /// </remarks>
+        [KRPCMethod]
+        public TupleT3 SimulateAerodynamicWrenchAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation, Tuple3 angularVelocity)
+        {
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            var vessel = InternalVessel;
+            var worldVelocity = referenceFrame.VelocityToWorldSpace(position.ToVector(), velocity.ToVector());
+            var worldPosition = referenceFrame.PositionToWorldSpace(position.ToVector());
+            var worldAngularVelocity = referenceFrame.AngularVelocityToWorldSpace(angularVelocity.ToVector());
+            QuaternionD desiredWorld = referenceFrame.RotationToWorldSpace (rotation.ToQuaternion ());
+            QuaternionD currentWorld = vessel.ReferenceTransform.rotation;
+            var delta = desiredWorld * currentWorld.Inverse ();
+            Vector3d force;
+            Vector3d torque;
+            if (!FAR.IsAvailable) {
+                var wrench = StockAerodynamics.SimAeroWrench(
+                    body.InternalBody, vessel, worldVelocity, worldAngularVelocity,
+                    worldPosition, delta, true, false);
+                force = wrench.Force;
+                torque = wrench.Torque;
+            } else {
+                Vector3 farForce;
+                Vector3 farTorque;
+                var adjustedVelocity = delta.Inverse ()
+                    * (worldVelocity - body.InternalBody.getRFrmVel(worldPosition));
+                var altitude = (worldPosition - body.InternalBody.position).magnitude
+                               - body.InternalBody.Radius;
+                FAR.CalculateVesselAeroForces(
+                    vessel, out farForce, out farTorque, adjustedVelocity, altitude);
+                // FAR returns kilonewtons and kilonewton-meters. Rotate the one
+                // evaluation into the hypothetical attitude and convert both to SI.
+                force = delta * (Vector3d)farForce * 1000d;
+                torque = delta * (Vector3d)farTorque * 1000d;
+            }
+            return new TupleT3(
+                referenceFrame.DirectionFromWorldSpace(force).ToTuple(),
+                referenceFrame.DirectionFromWorldSpace(torque).ToTuple());
+        }
+
+        /// <summary>
         /// Simulate and return the total aerodynamic torque acting on the vessel about its
         /// center of mass, if it were traveling with the given velocity, at the given
         /// position, orientation and angular velocity, in the atmosphere of the given
@@ -822,7 +894,7 @@ namespace KRPC.SpaceCenter.Services
         /// orientation.</param>
         /// <param name="angularVelocity">The angular velocity of the vessel, in reference
         /// frame <see cref="ReferenceFrame"/>. This adds the solid-body rotation term to each
-        /// part's local airflow and the per-part rigidbody angular drag the game applies,
+        /// part's local airflow and the per-part rigid-body angular drag the game applies,
         /// together giving the aerodynamic damping torque. Pass a zero vector to
         /// evaluate the static torque.</param>
         /// <returns>A vector pointing along the axis of the torque, with its magnitude equal
@@ -843,33 +915,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 SimulateAerodynamicTorqueAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation, Tuple3 angularVelocity)
         {
-            if (ReferenceEquals (body, null))
-                throw new ArgumentNullException (nameof (body));
-            var vessel = InternalVessel;
-            var worldVelocity = referenceFrame.VelocityToWorldSpace(position.ToVector(), velocity.ToVector());
-            var worldPosition = referenceFrame.PositionToWorldSpace(position.ToVector());
-            var worldAngularVelocity = referenceFrame.DirectionToWorldSpace(angularVelocity.ToVector());
-            QuaternionD desiredWorld = referenceFrame.RotationToWorldSpace (rotation.ToQuaternion ());
-            QuaternionD currentWorld = vessel.ReferenceTransform.rotation;
-            var delta = desiredWorld * currentWorld.Inverse ();
-            Vector3 torque;
-            if (!FAR.IsAvailable) {
-                torque = StockAerodynamics.SimAeroTorque(
-                    body.InternalBody, vessel, worldVelocity, worldAngularVelocity,
-                    worldPosition, delta);
-            } else {
-                Vector3 force;
-                var adjustedVelocity = delta.Inverse ()
-                    * (worldVelocity - body.InternalBody.getRFrmVel(worldPosition));
-                var altitude = (worldPosition - body.InternalBody.position).magnitude
-                               - body.InternalBody.Radius;
-                FAR.CalculateVesselAeroForces(vessel, out force, out torque, adjustedVelocity, altitude);
-                // CalculateVesselAeroForces returns kilonewton-meters; convert to newton-meters
-                // to match the stock path and this method's documented units.
-                torque = torque * 1000f;
-                torque = (Vector3)(delta * (Vector3d)torque);
-            }
-            return referenceFrame.DirectionFromWorldSpace(torque).ToTuple();
+            return SimulateAerodynamicWrenchAt(
+                body, position, velocity, rotation, angularVelocity).Item2;
         }
 
         /// <summary>

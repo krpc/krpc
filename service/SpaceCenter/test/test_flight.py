@@ -377,6 +377,39 @@ class TestFlightAero(krpctest.TestCase):
             axis = cross(nose, (1, 0, 0))
         return normalize(axis)
 
+    def assert_vectors_close(self, expected, actual, rtol=1e-4, atol=1e-3):
+        expected = vector(expected)
+        actual = vector(actual)
+        tolerance = atol + rtol * max(norm(expected), norm(actual))
+        self.assertLessEqual(norm(actual - expected), tolerance)
+
+    def test_simulate_aerodynamic_wrench_compatibility(self):
+        # The public wrench is ordered force then torque. At zero rate its force
+        # agrees with the legacy force API, and its torque exactly backs the
+        # existing torque API.
+        body = self.vessel.orbit.body
+        ref = body.reference_frame
+        flight = self.vessel.flight(ref)
+        position = self.vessel.position(ref)
+        velocity = self.head_on_wind(ref)
+        rotation = self.vessel.rotation(ref)
+        zero = (0.0, 0.0, 0.0)
+
+        force, torque = flight.simulate_aerodynamic_wrench_at(
+            body, position, velocity, rotation, zero
+        )
+        legacy_force = flight.simulate_aerodynamic_force_at(
+            body, position, velocity, rotation
+        )
+        legacy_torque = flight.simulate_aerodynamic_torque_at(
+            body, position, velocity, rotation, zero
+        )
+
+        self.assertEqual(3, len(force))
+        self.assertEqual(3, len(torque))
+        self.assert_vectors_close(legacy_force, force)
+        self.assert_vectors_close(legacy_torque, torque, rtol=1e-7, atol=1e-6)
+
     def test_simulate_aerodynamic_torque_attitude(self):
         # A head-on wind (angle of attack 0) produces little torque; pitching 90
         # degrees to a broadside wind produces a large torque about the center of
@@ -431,6 +464,126 @@ class TestFlightAero(krpctest.TestCase):
             )
         )
         self.assertGreater(norm(damped - static), 1)
+
+    def test_simulate_aerodynamic_wrench_angular_velocity(self):
+        # Central differences expose both the rate-aware force response and the
+        # aerodynamic damping torque. FAR intentionally ignores angular velocity.
+        if self.far:
+            self.skipTest("angular velocity is ignored under FAR")
+        body = self.vessel.orbit.body
+        ref = body.reference_frame
+        flight = self.vessel.flight(ref)
+        position = self.vessel.position(ref)
+        velocity = self.head_on_wind(ref)
+        rotation = self.vessel.rotation(ref)
+        axis = vector(self.pitch_axis(ref))
+        rate = 5.0
+        positive = tuple(rate * axis)
+        negative = tuple(-rate * axis)
+
+        force_positive, torque_positive = flight.simulate_aerodynamic_wrench_at(
+            body, position, velocity, rotation, positive
+        )
+        force_negative, torque_negative = flight.simulate_aerodynamic_wrench_at(
+            body, position, velocity, rotation, negative
+        )
+        force_derivative = (1 / (2 * rate)) * (
+            vector(force_positive) - vector(force_negative)
+        )
+        torque_derivative = (1 / (2 * rate)) * (
+            vector(torque_positive) - vector(torque_negative)
+        )
+
+        self.assertGreater(norm(force_derivative), 0.01)
+        self.assertGreater(norm(torque_derivative), 1)
+        self.assertLess(dot(torque_derivative, axis), 0)
+
+    def test_simulate_aerodynamic_wrench_reference_frames(self):
+        # Express one physical COM state in rotating-body, non-rotating-body and
+        # vessel frames. Transform every result to the non-rotating frame before
+        # comparison. Using Vessel.angular_velocity is important: unlike a plain
+        # direction transform, it accounts for each frame's rotation rate.
+        body = self.vessel.orbit.body
+        common = body.non_rotating_reference_frame
+        rotating = body.reference_frame
+        vessel_frame = self.vessel.reference_frame
+        connection = self.connect()
+        connection.testing_tools.clear_rotation(self.vessel)
+        connection.krpc.paused = True
+        try:
+            common_position = self.vessel.position(common)
+            common_velocity = tuple(300 * vector(self.vessel.direction(common)))
+            common_rotation = self.vessel.rotation(common)
+            results = []
+            for ref in (rotating, common, vessel_frame):
+                position = self.space_center.transform_position(
+                    common_position, common, ref
+                )
+                velocity = self.space_center.transform_velocity(
+                    common_position, common_velocity, common, ref
+                )
+                rotation = self.space_center.transform_rotation(
+                    common_rotation, common, ref
+                )
+                angular_velocity = self.vessel.angular_velocity(ref)
+                force, torque = self.vessel.flight(
+                    ref
+                ).simulate_aerodynamic_wrench_at(
+                    body, position, velocity, rotation, angular_velocity
+                )
+                results.append(
+                    (
+                        self.space_center.transform_direction(force, ref, common),
+                        self.space_center.transform_direction(torque, ref, common),
+                    )
+                )
+
+            expected_force, expected_torque = results[0]
+            for force, torque in results[1:]:
+                self.assert_vectors_close(expected_force, force)
+                self.assert_vectors_close(expected_torque, torque)
+        finally:
+            connection.krpc.paused = False
+
+    def test_simulate_aerodynamic_wrench_edge_cases(self):
+        body = self.vessel.orbit.body
+        ref = body.reference_frame
+        flight = self.vessel.flight(ref)
+        position = vector(self.vessel.position(ref))
+        rotation = self.vessel.rotation(ref)
+        zero = (0.0, 0.0, 0.0)
+
+        # Air fixed in the rotating body frame gives no relative airflow.
+        force, torque = flight.simulate_aerodynamic_wrench_at(
+            body, tuple(position), zero, rotation, zero
+        )
+        self.assert_vectors_close(zero, force, rtol=0, atol=1e-3)
+        self.assert_vectors_close(zero, torque, rtol=0, atol=1e-3)
+
+        # A state above the atmosphere gives no aerodynamic wrench.
+        vacuum_position = tuple(
+            (body.equatorial_radius + body.atmosphere_depth + 10000)
+            * vector(normalize(position))
+        )
+        force, torque = flight.simulate_aerodynamic_wrench_at(
+            body, vacuum_position, self.head_on_wind(ref), rotation, zero
+        )
+        self.assert_vectors_close(zero, force, rtol=0, atol=1e-3)
+        self.assert_vectors_close(zero, torque, rtol=0, atol=1e-3)
+
+        # A hypothetical attitude must affect both components on this asymmetric
+        # fixture without mutating the vessel's real orientation.
+        pitched = quaternion_mult(
+            quaternion_axis_angle(self.pitch_axis(ref), math.radians(90)), rotation
+        )
+        head_on = flight.simulate_aerodynamic_wrench_at(
+            body, tuple(position), self.head_on_wind(ref), rotation, zero
+        )
+        broadside = flight.simulate_aerodynamic_wrench_at(
+            body, tuple(position), self.head_on_wind(ref), pitched, zero
+        )
+        self.assertGreater(norm(vector(broadside[0]) - vector(head_on[0])), 100)
+        self.assertGreater(norm(vector(broadside[1]) - vector(head_on[1])), 1)
 
 
 if __name__ == "__main__":
