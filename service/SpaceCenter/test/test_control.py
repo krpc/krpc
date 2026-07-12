@@ -135,44 +135,42 @@ class TestControlMixin:
 
     def test_sas_mode(self):
         sas_mode = self.space_center.SASMode
-        self.control.sas = True
-        self.control.sas_mode = sas_mode.stability_assist
         active = self.vessel == self.space_center.active_vessel
         if active:
             self.vessel.control.add_node(self.space_center.ut + 60, 100, 0, 0)
-        self.assertEqual(self.control.sas_mode, sas_mode.stability_assist)
+        # Enable SAS and set a (non-default) mode with no delay between them,
+        # then wait for the game autopilot to enable: the mode must survive
+        # rather than being reset to StabilityAssist when the autopilot enables
+        # (#236). SAS is switched off first so enabling it below is a real state
+        # change, and the wait is essential - the mode is stored immediately but
+        # was only discarded on the following update when the autopilot enabled.
+        self.control.sas = False
         self.wait()
+        self.control.sas = True
+        self.control.sas_mode = sas_mode.prograde
+        self.wait()
+        self.assertTrue(self.control.sas)
+        self.assertEqual(self.control.sas_mode, sas_mode.prograde)
+        # SAS is now enabled, so further mode changes take effect immediately.
         if active:
             self.control.sas_mode = sas_mode.maneuver
             self.assertEqual(self.control.sas_mode, sas_mode.maneuver)
-            self.wait()
-        self.control.sas_mode = sas_mode.prograde
-        self.assertEqual(self.control.sas_mode, sas_mode.prograde)
-        self.wait()
         self.control.sas_mode = sas_mode.retrograde
         self.assertEqual(self.control.sas_mode, sas_mode.retrograde)
-        self.wait()
         self.control.sas_mode = sas_mode.normal
         self.assertEqual(self.control.sas_mode, sas_mode.normal)
-        self.wait()
         self.control.sas_mode = sas_mode.anti_normal
         self.assertEqual(self.control.sas_mode, sas_mode.anti_normal)
-        self.wait()
         self.control.sas_mode = sas_mode.radial
         self.assertEqual(self.control.sas_mode, sas_mode.radial)
-        self.wait()
         self.control.sas_mode = sas_mode.anti_radial
         self.assertEqual(self.control.sas_mode, sas_mode.anti_radial)
-        self.wait()
-        # No target set, should not change
+        # No target set, so these would be ignored
         # TODO: test with a target set
         # self.control.sas_mode = sas_mode.target
-        # self.assertEqual(self.control.sas_mode, sas_mode.anti_radial)
-        # self.wait()
         # self.control.sas_mode = sas_mode.anti_target
-        # self.assertEqual(self.control.sas_mode, sas_mode.anti_radial)
-        # self.wait()
         self.control.sas_mode = sas_mode.stability_assist
+        self.assertEqual(self.control.sas_mode, sas_mode.stability_assist)
         self.control.sas = False
 
     def test_speed_mode(self):
@@ -532,6 +530,65 @@ class TestActionGroupActions(krpctest.TestCase):
 
     def test_invalid_group(self):
         self.assertRaises(ValueError, self.control.get_action_group_actions, 11)
+
+
+class TestControlCustomAxes(krpctest.TestCase):
+    """The custom axes are applied to the vessel they are set on, and read back
+    the value that was set.
+
+    Regression test for two bugs in the custom axis handling: the axis groups
+    module was resolved from the active vessel rather than the vessel the input
+    was set on, and the getter (which reads the flight control state) was
+    decoupled from the setter (which wrote straight to the axis groups module),
+    so a value that had been set never read back.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("Multi")
+        cls.remove_other_vessels()
+        cls.set_circular_orbit("Kerbin", 100000)
+        cls.sc = cls.connect().space_center
+        # Decouple into two vessels, one active and one not
+        next(iter(cls.sc.active_vessel.parts.docking_ports)).undock()
+        cls.wait(1)
+        cls.active = cls.sc.active_vessel
+        cls.other = next(v for v in cls.sc.vessels if v != cls.active)
+
+    def setUp(self):
+        for vessel in (self.active, self.other):
+            for i in range(1, 5):
+                setattr(vessel.control, "custom_axis0%d" % i, 0.0)
+        self.wait(1)
+
+    def test_round_trip(self):
+        self.active.control.custom_axis01 = 0.6
+        self.wait(1)
+        self.assertAlmostEqual(0.6, self.active.control.custom_axis01, places=2)
+        self.active.control.custom_axis01 = -0.3
+        self.wait(1)
+        self.assertAlmostEqual(-0.3, self.active.control.custom_axis01, places=2)
+
+    def test_applied_to_correct_vessel(self):
+        # Setting a custom axis on the non-active vessel must apply to that
+        # vessel, and must not affect the active vessel.
+        self.other.control.custom_axis01 = 0.5
+        self.wait(1)
+        self.assertAlmostEqual(0.5, self.other.control.custom_axis01, places=2)
+        self.assertAlmostEqual(0.0, self.active.control.custom_axis01, places=2)
+
+    def test_axes_independent(self):
+        control = self.other.control
+        control.custom_axis01 = 0.1
+        control.custom_axis02 = 0.2
+        control.custom_axis03 = 0.3
+        control.custom_axis04 = 0.4
+        self.wait(1)
+        self.assertAlmostEqual(0.1, control.custom_axis01, places=2)
+        self.assertAlmostEqual(0.2, control.custom_axis02, places=2)
+        self.assertAlmostEqual(0.3, control.custom_axis03, places=2)
+        self.assertAlmostEqual(0.4, control.custom_axis04, places=2)
 
 
 if __name__ == "__main__":

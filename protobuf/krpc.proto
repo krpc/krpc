@@ -91,6 +91,8 @@ message Service {
   repeated Enumeration enumerations = 4;
   repeated Exception exceptions = 5;
   string documentation = 6;
+  bool deprecated = 7;
+  string deprecated_reason = 8;
 }
 
 message Procedure {
@@ -100,6 +102,8 @@ message Procedure {
   bool return_is_nullable = 4;
   repeated GameScene game_scenes = 6;
   string documentation = 5;
+  bool deprecated = 7;
+  string deprecated_reason = 8;
 
   enum GameScene {
     SPACE_CENTER = 0;
@@ -121,23 +125,31 @@ message Parameter {
 message Class {
   string name = 1;
   string documentation = 2;
+  bool deprecated = 3;
+  string deprecated_reason = 4;
 }
 
 message Enumeration {
   string name = 1;
   repeated EnumerationValue values = 2;
   string documentation = 3;
+  bool deprecated = 4;
+  string deprecated_reason = 5;
 }
 
 message EnumerationValue {
   string name = 1;
   int32 value = 2;
   string documentation = 3;
+  bool deprecated = 4;
+  string deprecated_reason = 5;
 }
 
 message Exception {
   string name = 1;
   string documentation = 2;
+  bool deprecated = 3;
+  string deprecated_reason = 4;
 }
 
 message Type {

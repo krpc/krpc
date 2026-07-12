@@ -1073,6 +1073,7 @@ namespace KRPC.SpaceCenter.Services
         /// Switch to the space center view.
         /// </summary>
         [KRPCProcedure]
+        [Obsolete ("Set <see cref='P:KRPC.Service.KRPC.KRPC.GameScene'/> instead.")]
         public static void LoadSpaceCenter()
         {
             HighLogic.LoadScene(GameScenes.SPACECENTER);

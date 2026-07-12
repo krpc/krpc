@@ -37,7 +37,7 @@ deps = [
 
 py_test(
     name = "krpctesttest",
-    size = "small",
+    size = "medium",
     src = ":krpctest",
     pkg = "krpctest-" + python_version,
     deps = deps,
@@ -45,7 +45,7 @@ py_test(
 
 py_lint_test(
     name = "lint",
-    size = "small",
+    size = "medium",
     pkg = ":krpctest",
     pkg_name = "krpctest",
     pylint_config = "pylint.rc",

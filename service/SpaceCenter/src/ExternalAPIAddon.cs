@@ -1,17 +1,18 @@
-using UnityEngine;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter
 {
     /// <summary>
     /// Addon to load external APIs.
     /// </summary>
-    [KSPAddon (KSPAddon.Startup.Flight, false)]
-    public sealed class ExternalAPIAddon : MonoBehaviour
+    [KSPAddon (KSPAddon.Startup.AllGameScenes, false)]
+    public sealed class ExternalAPIAddon : LoadOnceAddon<ExternalAPIAddon>
     {
         /// <summary>
-        /// Load external APIs.
+        /// Load external APIs. The APIs are resolved purely from the loaded
+        /// assemblies, so they do not depend on the flight runtime being active.
         /// </summary>
-        public void Start ()
+        protected override void Load ()
         {
             ExternalAPI.AGX.Load ();
             ExternalAPI.FAR.Load ();

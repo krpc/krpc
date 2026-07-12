@@ -83,6 +83,39 @@ Service TestService
 
    
 
+   .. function:: krpc_error_t krpc_TestService_DeprecatedProcedure(krpc_connection_t connection, char * * result, float value)
+
+      .. warning:: Deprecated. Use :func:`krpc_TestService_FloatToString` instead.
+
+      Deprecated procedure documentation string.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_DeprecatedProcedureNoMessage(krpc_connection_t connection, char * * result, float value)
+
+      .. warning:: Deprecated.
+
+      Deprecated procedure with no reason documentation string.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_DeprecatedProperty(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_TestService_set_DeprecatedProperty(const char * value)
+
+      .. warning:: Deprecated. Use :func:`krpc_TestService_StringProperty` instead.
+
+      Deprecated property documentation string.
+
+   
+
    .. function:: krpc_error_t krpc_TestService_DictionaryDefault(krpc_connection_t connection, krpc_dictionary_int32_bool_t * result, const krpc_dictionary_int32_bool_t * x)
 
 
@@ -481,6 +514,23 @@ Service TestService
 
 
 
+.. type:: krpc_TestService_DeprecatedClass_t
+
+   .. warning:: Deprecated. Use :type:`krpc_TestService_TestClass_t` instead.
+
+   Deprecated class documentation string.
+
+   .. function:: krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod(krpc_connection_t connection, char * * result)
+
+      .. warning:: Deprecated. Use :func:`krpc_TestService_TestClass_GetValue` instead.
+
+      Deprecated method documentation string.
+
+
+   
+
+
+
 .. type:: krpc_TestService_TestEnum_t
 
    Enum documentation string.
@@ -502,4 +552,34 @@ Service TestService
 
 
 
+.. type:: krpc_TestService_DeprecatedEnum_t
+
+   .. warning:: Deprecated. Use :type:`krpc_TestService_TestEnum_t` instead.
+
+   Deprecated enum documentation string.
+
+
+   .. macro:: KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEA
+
+      Deprecated enum ValueA documentation string.
+
+
+   .. macro:: KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEB
+
+      .. warning:: Deprecated. Use :macro:`KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEA` instead.
+
+      Deprecated enum ValueB documentation string.
+
+
+
 Exception class CustomException
+
+
+
+
+
+Exception class DeprecatedException
+
+   .. warning:: Deprecated. Use CustomException instead.
+
+   Deprecated exception documentation string.

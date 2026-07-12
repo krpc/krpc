@@ -110,5 +110,50 @@ class TestResourceTransfer(krpctest.TestCase):
         self.assertTrue("Destination part cannot store" in str(cm.exception))
 
 
+class TestResourceTransferDisconnect(krpctest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("ResourceTransfer")
+        cls.remove_other_vessels()
+        cls.parts = cls.connect().space_center.active_vessel.parts
+
+    def test_transfer_cancelled_on_disconnect(self):
+        from_part = self.parts.with_name("fuelTank")[0]
+        to_part = self.parts.with_name("fuelTankSmallFlat")[0]
+        from_amount = from_part.resources.amount("Oxidizer")
+
+        # A second client starts a transfer that would take several seconds to
+        # complete, then disconnects mid-transfer
+        conn = self.connect(use_cached=False)
+        sc = conn.space_center
+        other_parts = sc.active_vessel.parts
+        sc.ResourceTransfer.start(
+            other_parts.with_name("fuelTank")[0],
+            other_parts.with_name("fuelTankSmallFlat")[0],
+            "Oxidizer",
+            float("inf"),
+        )
+        self.wait(0.5)
+        conn.close()
+        self.wait(0.5)
+
+        # Some, but not all, of the resource was moved before the disconnect
+        # cancelled the transfer (the destination has free space, so the
+        # transfer would still be running had it not been cancelled)...
+        moved = from_amount - from_part.resources.amount("Oxidizer")
+        self.assertGreater(moved, 0.1)
+        self.assertLess(
+            to_part.resources.amount("Oxidizer"), to_part.resources.max("Oxidizer")
+        )
+        # ...and no more is moved afterwards
+        remaining = from_part.resources.amount("Oxidizer")
+        self.wait(1)
+        self.assertAlmostEqual(
+            remaining, from_part.resources.amount("Oxidizer"), places=2
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

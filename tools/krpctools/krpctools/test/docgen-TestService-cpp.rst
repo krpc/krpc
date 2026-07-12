@@ -88,6 +88,39 @@
 
    
 
+   .. function:: std::string deprecated_procedure(float value)
+
+      .. warning:: Deprecated. Use :func:`float_to_string` instead.
+
+      Deprecated procedure documentation string.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::string deprecated_procedure_no_message(float value)
+
+      .. warning:: Deprecated.
+
+      Deprecated procedure with no reason documentation string.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::string deprecated_property()
+   .. function:: void set_deprecated_property(std::string value)
+
+      .. warning:: Deprecated. Use :func:`string_property` instead.
+
+      Deprecated property documentation string.
+
+   
+
    .. function:: std::map<int32_t, bool> dictionary_default(std::map<int32_t, bool> x = std::map<int32_t, bool>({1, false}, {2, true}))
 
 
@@ -486,6 +519,23 @@
 
 
 
+.. class:: DeprecatedClass
+
+   .. warning:: Deprecated. Use :class:`TestClass` instead.
+
+   Deprecated class documentation string.
+
+   .. function:: std::string deprecated_method()
+
+      .. warning:: Deprecated. Use :func:`TestClass::get_value` instead.
+
+      Deprecated method documentation string.
+
+
+   
+
+
+
 .. namespace:: krpc::services::TestService
 .. enum-struct:: TestEnum
 
@@ -509,4 +559,36 @@
 
 
 .. namespace:: krpc::services::TestService
+.. enum-struct:: DeprecatedEnum
+
+   .. warning:: Deprecated. Use :enum:`TestEnum` instead.
+
+   Deprecated enum documentation string.
+
+
+   .. enumerator:: value_a
+
+      Deprecated enum ValueA documentation string.
+
+
+   .. enumerator:: value_b
+
+      .. warning:: Deprecated. Use :enumerator:`DeprecatedEnum::value_a` instead.
+
+      Deprecated enum ValueB documentation string.
+
+
+
+.. namespace:: krpc::services::TestService
 .. class:: CustomException
+
+
+
+
+
+.. namespace:: krpc::services::TestService
+.. class:: DeprecatedException
+
+   .. warning:: Deprecated. Use CustomException instead.
+
+   Deprecated exception documentation string.

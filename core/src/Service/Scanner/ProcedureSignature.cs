@@ -44,6 +44,16 @@ namespace KRPC.Service.Scanner
         public GameScene GameScene { get; private set; }
 
         /// <summary>
+        /// Whether the procedure is deprecated.
+        /// </summary>
+        public bool Deprecated { get; private set; }
+
+        /// <summary>
+        /// If the procedure is deprecated, the reason for its deprecation (may be empty).
+        /// </summary>
+        public string DeprecatedReason { get; private set; }
+
+        /// <summary>
         /// The procedure's parameters.
         /// </summary>
         public IList<ParameterSignature> Parameters { get; private set; }
@@ -93,7 +103,7 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public string PropertyName { get; private set; }
 
-        internal ProcedureSignature (string serviceName, string procedureName, uint id, string documentation, IProcedureHandler handler, GameScene gameScene)
+        internal ProcedureSignature (string serviceName, string procedureName, uint id, string documentation, IProcedureHandler handler, GameScene gameScene, bool deprecated, string deprecatedReason)
         {
             Name = procedureName;
             FullyQualifiedName = serviceName + "." + Name;
@@ -101,6 +111,8 @@ namespace KRPC.Service.Scanner
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Handler = handler;
             GameScene = gameScene;
+            Deprecated = deprecated;
+            DeprecatedReason = deprecatedReason;
             Parameters = handler.Parameters.Select (x => new ParameterSignature (FullyQualifiedName, x)).ToList ();
 
             var returnType = handler.ReturnType;
@@ -158,6 +170,10 @@ namespace KRPC.Service.Scanner
             if (GameScene != GameScene.All)
                 info.AddValue ("game_scenes", GameSceneUtils.Serialize(GameScene));
             info.AddValue ("documentation", Documentation);
+            if (Deprecated) {
+                info.AddValue ("deprecated", true);
+                info.AddValue ("deprecated_reason", DeprecatedReason);
+            }
         }
     }
 }

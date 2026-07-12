@@ -447,6 +447,70 @@ namespace KRPC.SpaceCenter.Services
             get { return ActiveEngines.Sum (e => e.MaxVacuumThrust); }
         }
 
+        /// <summary>
+        /// The acceleration currently produced by the vessel's engines, in
+        /// <math>m/s^2</math>. This is <see cref="Thrust"/> divided by the
+        /// vessel's <see cref="Mass"/>.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float Acceleration {
+            get { return Thrust / Mass; }
+        }
+
+        /// <summary>
+        /// The total available acceleration that can be produced by the vessel's
+        /// active engines, in <math>m/s^2</math>. This is <see cref="AvailableThrust"/>
+        /// divided by the vessel's <see cref="Mass"/>.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float AvailableAcceleration {
+            get { return AvailableThrust / Mass; }
+        }
+
+        /// <summary>
+        /// The total available acceleration that can be produced by the vessel's
+        /// active engines, in <math>m/s^2</math>. This is <see cref="AvailableThrustAt"/>
+        /// divided by the vessel's <see cref="Mass"/>. Takes the given pressure into account.
+        /// </summary>
+        /// <param name="pressure">Atmospheric pressure in atmospheres</param>
+        [KRPCMethod (GameScene = GameScene.Flight)]
+        public float AvailableAccelerationAt (double pressure)
+        {
+            return AvailableThrustAt (pressure) / Mass;
+        }
+
+        /// <summary>
+        /// The total maximum acceleration that can be produced by the vessel's active
+        /// engines, in <math>m/s^2</math>. This is <see cref="MaxThrust"/> divided by
+        /// the vessel's <see cref="Mass"/>.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float MaxAcceleration {
+            get { return MaxThrust / Mass; }
+        }
+
+        /// <summary>
+        /// The total maximum acceleration that can be produced by the vessel's active
+        /// engines, in <math>m/s^2</math>. This is <see cref="MaxThrustAt"/> divided by
+        /// the vessel's <see cref="Mass"/>. Takes the given pressure into account.
+        /// </summary>
+        /// <param name="pressure">Atmospheric pressure in atmospheres</param>
+        [KRPCMethod (GameScene = GameScene.Flight)]
+        public float MaxAccelerationAt (double pressure)
+        {
+            return MaxThrustAt (pressure) / Mass;
+        }
+
+        /// <summary>
+        /// The total maximum acceleration that can be produced by the vessel's active
+        /// engines when the vessel is in a vacuum, in <math>m/s^2</math>. This is
+        /// <see cref="MaxVacuumThrust"/> divided by the vessel's <see cref="Mass"/>.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float MaxVacuumAcceleration {
+            get { return MaxVacuumThrust / Mass; }
+        }
+
         static float SpecificImpulseAtConsumption (IList<Parts.Engine> engines, float fuelConsumption)
         {
             return fuelConsumption > 0f ? engines.Sum (e => e.MaxThrust) / fuelConsumption : 0f;
@@ -618,6 +682,22 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The maximum acceleration that the currently active RCS thrusters can generate.
+        /// This is <see cref="AvailableRCSForce"/> divided by the vessel's <see cref="Mass"/>.
+        /// Returns the accelerations in <math>m/s^2</math> along each of the coordinate axes of the
+        /// vessels reference frame (<see cref="ReferenceFrame"/>).
+        /// These axes are equivalent to the right, forward and bottom directions of the vessel.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public TupleT3 AvailableRCSAcceleration {
+            get {
+                var mass = Mass;
+                var force = AvailableRCSForceVectors;
+                return new TupleV3 (force.Item1 / mass, force.Item2 / mass).ToTuple ();
+            }
+        }
+
+        /// <summary>
         /// The maximum torque that the currently active and gimballed engines can generate.
         /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
@@ -649,6 +729,104 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty (GameScene = GameScene.Flight)]
         public TupleT3 AvailableOtherTorque {
             get { return AvailableOtherTorqueVectors.ToTuple (); }
+        }
+
+        /// <summary>
+        /// The maximum angular acceleration that the vessel can generate. Includes contributions
+        /// from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
+        /// This is <see cref="AvailableTorque"/> divided by the vessel's <see cref="MomentOfInertia"/>.
+        /// Returns the angular accelerations in <math>rad/s^2</math> around each of the coordinate
+        /// axes of the vessels reference frame (<see cref="ReferenceFrame"/>).
+        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public TupleT3 AvailableAngularAcceleration {
+            get { return DivideByMomentOfInertia (AvailableTorqueVectors).ToTuple (); }
+        }
+
+        /// <summary>
+        /// The maximum angular acceleration that the currently active and powered reaction wheels
+        /// can generate. This is <see cref="AvailableReactionWheelTorque"/> divided by the vessel's
+        /// <see cref="MomentOfInertia"/>.
+        /// Returns the angular accelerations in <math>rad/s^2</math> around each of the coordinate
+        /// axes of the vessels reference frame (<see cref="ReferenceFrame"/>).
+        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public TupleT3 AvailableReactionWheelAngularAcceleration {
+            get { return DivideByMomentOfInertia (AvailableReactionWheelTorqueVectors).ToTuple (); }
+        }
+
+        /// <summary>
+        /// The maximum angular acceleration that the currently active RCS thrusters can generate.
+        /// This is <see cref="AvailableRCSTorque"/> divided by the vessel's <see cref="MomentOfInertia"/>.
+        /// Returns the angular accelerations in <math>rad/s^2</math> around each of the coordinate
+        /// axes of the vessels reference frame (<see cref="ReferenceFrame"/>).
+        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public TupleT3 AvailableRCSAngularAcceleration {
+            get { return DivideByMomentOfInertia (AvailableRCSTorqueVectors).ToTuple (); }
+        }
+
+        /// <summary>
+        /// The maximum angular acceleration that the currently active and gimballed engines can
+        /// generate. This is <see cref="AvailableEngineTorque"/> divided by the vessel's
+        /// <see cref="MomentOfInertia"/>.
+        /// Returns the angular accelerations in <math>rad/s^2</math> around each of the coordinate
+        /// axes of the vessels reference frame (<see cref="ReferenceFrame"/>).
+        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public TupleT3 AvailableEngineAngularAcceleration {
+            get { return DivideByMomentOfInertia (AvailableEngineTorqueVectors).ToTuple (); }
+        }
+
+        /// <summary>
+        /// The maximum angular acceleration that the aerodynamic control surfaces can generate.
+        /// This is <see cref="AvailableControlSurfaceTorque"/> divided by the vessel's
+        /// <see cref="MomentOfInertia"/>.
+        /// Returns the angular accelerations in <math>rad/s^2</math> around each of the coordinate
+        /// axes of the vessels reference frame (<see cref="ReferenceFrame"/>).
+        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public TupleT3 AvailableControlSurfaceAngularAcceleration {
+            get { return DivideByMomentOfInertia (AvailableControlSurfaceTorqueVectors).ToTuple (); }
+        }
+
+        /// <summary>
+        /// The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
+        /// RCS and control surfaces) can generate. This is <see cref="AvailableOtherTorque"/> divided
+        /// by the vessel's <see cref="MomentOfInertia"/>.
+        /// Returns the angular accelerations in <math>rad/s^2</math> around each of the coordinate
+        /// axes of the vessels reference frame (<see cref="ReferenceFrame"/>).
+        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public TupleT3 AvailableOtherAngularAcceleration {
+            get { return DivideByMomentOfInertia (AvailableOtherTorqueVectors).ToTuple (); }
+        }
+
+        /// <summary>
+        /// Divide a (min, max) pair of torque vectors componentwise by the vessel's moment of
+        /// inertia to obtain a (min, max) pair of angular accelerations. Axes with zero moment of
+        /// inertia yield zero to avoid producing NaN/infinity.
+        /// </summary>
+        TupleV3 DivideByMomentOfInertia (TupleV3 torque)
+        {
+            var moi = MomentOfInertiaVector;
+            return new TupleV3 (
+                DivideComponentwise (torque.Item1, moi),
+                DivideComponentwise (torque.Item2, moi));
+        }
+
+        static Vector3d DivideComponentwise (Vector3d numerator, Vector3d denominator)
+        {
+            return new Vector3d (
+                denominator.x != 0 ? numerator.x / denominator.x : 0,
+                denominator.y != 0 ? numerator.y / denominator.y : 0,
+                denominator.z != 0 ? numerator.z / denominator.z : 0);
         }
 
         internal TupleV3 AvailableTorqueVectors {

@@ -5,6 +5,10 @@ v0.6.0
  * Fix Stream RPCs Executed and Stream RPC Rate always showing 0 in the info window (#879)
  * Improve the server window UI
  * Fix incorrect unit shown for "max. time per update" and "receive timeout" - they are microseconds, not nanoseconds
+ * Add shared component for releasing client-owned in-game state when a client disconnects,
+   used by the services; connectivity checks are cached so all state shares one socket poll
+   per client per frame
+ * Support switching the game scene by setting KRPC.GameScene, including opening and closing space center facilities (#897)
 
 v0.5.4
  * Fix memory leaks when switching game scene (#779)

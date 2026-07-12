@@ -110,7 +110,7 @@ test_suite(
 
 py_test(
     name = "krpctoolstest",
-    size = "small",
+    size = "medium",
     src = ":krpctools",
     pkg = "krpctools-" + python_version,
     deps = deps,
@@ -118,7 +118,7 @@ py_test(
 
 py_lint_test(
     name = "lint",
-    size = "small",
+    size = "medium",
     pkg = ":krpctools",
     pkg_name = "krpctools",
     pylint_config = "pylint.rc",

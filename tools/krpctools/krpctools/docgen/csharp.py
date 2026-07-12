@@ -105,6 +105,19 @@ class CsharpDomain(Domain):
             prefix = "type"
         else:
             raise RuntimeError(str(obj))
+        if isinstance(obj, (Procedure, Property)):
+            # Service members are documented on the service class, so their
+            # reference target is Service.Service.Member. Sphinx resolves it
+            # relative to the current namespace, which only matches on the
+            # service's own page; give the explicit target so references from
+            # other services' pages resolve too.
+            service = obj.fullname.split(".")[0]
+            return ":%s:`%s <%s.%s>`" % (
+                prefix,
+                self.ref(obj),
+                service,
+                obj.fullname,
+            )
         return ":%s:`%s`" % (prefix, self.ref(obj))
 
     def shorten_ref(self, name, obj=None):

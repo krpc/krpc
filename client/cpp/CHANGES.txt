@@ -8,6 +8,7 @@ v0.6.0
  * CMake dependency options (KRPC_FETCH_PROTOBUF, KRPC_FETCH_ASIO, KRPC_FETCH_ABSL): when OFF
    (default) the system install is required; when ON FetchContent is used.
  * Add KRPC_FETCH_DEPS option to enable FetchContent for all dependencies at once
+ * Mark deprecated members with the [[deprecated]] attribute (#904)
 
 v0.5.2
  * Use protobuf-lite
