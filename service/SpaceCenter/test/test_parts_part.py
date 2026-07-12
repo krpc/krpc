@@ -796,6 +796,40 @@ class TestPartsPart(krpctest.TestCase):
             self.wait(0.5)
         part.highlight_color = init_color
 
+    def test_highlighting_removed_on_disconnect(self):
+        part = self.parts.with_name("Rockomax64.BW")[0]
+        self.assertFalse(part.highlighted)
+
+        conn = self.connect(use_cached=False)
+        other = conn.space_center.active_vessel.parts.with_name("Rockomax64.BW")[0]
+        other.highlighted = True
+        self.wait()
+        self.assertTrue(part.highlighted)
+        conn.close()
+
+        self.wait()
+        self.assertFalse(part.highlighted)
+
+    def test_highlighting_persists_for_connected_client(self):
+        part = self.parts.with_name("Rockomax64.BW")[0]
+        self.assertFalse(part.highlighted)
+        part.highlighted = True
+        self.wait()
+
+        # Another client connecting and disconnecting must not remove the
+        # highlighting owned by this client
+        conn = self.connect(use_cached=False)
+        conn.space_center.active_vessel.parts.root.highlighted = True
+        self.wait()
+        conn.close()
+        self.wait()
+
+        self.assertTrue(part.highlighted)
+        self.assertFalse(self.parts.root.highlighted)
+        part.highlighted = False
+        self.wait()
+        self.assertFalse(part.highlighted)
+
     def test_rotation(self):
         part = self.parts.root
         for target_frame in [
