@@ -1,4 +1,6 @@
 v0.6.0
+ * Fix Flight.SimulateAerodynamicForceAt ignoring the current deflection of
+   aerodynamic control surfaces, including deployed airbrakes (#622)
  * Canonicalize AutoPilot attitude-error vectors for equivalent quaternions at exactly 180° (#571)
  * Fix Maneuver and ManeuverOrbital reference frame velocity (previously returned zero; now returns the orbital velocity at the node UT)
  * Fix angular velocity for VesselSurface, VesselSurfaceVelocity, CelestialBodyOrbital, ManeuverOrbital, Part, PartCenterOfMass, DockingPort and Thrust reference frames (previously returned zero)

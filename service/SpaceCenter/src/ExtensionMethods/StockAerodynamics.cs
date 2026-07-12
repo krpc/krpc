@@ -28,12 +28,23 @@
  * in this Software without prior written authorization from the copyright holders.
  */
 using System;
+using System.Reflection;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class StockAerodynamics
     {
+        // Cached once: ModuleControlSurface.FixedUpdate reads these protected fields
+        // when splitting force between fixed and moving areas (issue #622).
+        static readonly FieldInfo controlSurfaceDeflectionField =
+            typeof(ModuleControlSurface).GetField(
+                "deflection", BindingFlags.Instance | BindingFlags.NonPublic);
+        static readonly FieldInfo liftingSurfaceBaseTransformField =
+            typeof(ModuleLiftingSurface).GetField(
+                "baseTransform", BindingFlags.Instance | BindingFlags.NonPublic);
+        static bool loggedControlSurfaceReflectionFailure;
+
         /// <summary>
         /// This function should return exactly the same value as Vessel.atmDensity, but is more generic because you
         /// don't need an actual vessel updated by KSP to get a value at the desired location.
@@ -220,38 +231,137 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                     total_lift += bodyLift;
                 }
 
-                // Find ModuleLifingSurface for wings and liftforce.
-                // Should catch control surface as it is a subclass
+                // ModuleControlSurface / ModuleAeroSurface need KSP's fixed/moving
+                // area split (issue #622). Plain ModuleLiftingSurface keeps the
+                // previous undeflected path.
                 for (int j = 0; j < p.Modules.Count; ++j) {
                     var m = p.Modules[j];
-                    float mcs_mod;
-                    var wing = m as ModuleLiftingSurface;
-                    if (wing) {
-                        mcs_mod = 1.0f;
-                        var liftQ = dyn_pressure * 1000;
-                        var nVel = Vector3.zero;
-                        var liftVector = Vector3.zero;
-                        float liftdot;
-                        float absdot;
-                        wing.SetupCoefficients(v_wrld_vel, out nVel, out liftVector, out liftdot, out absdot);
-
-                        var prevMach = p.machNumber;
-                        p.machNumber = mach;
-                        var local_lift = mcs_mod * wing.GetLiftVector(liftVector, liftdot, absdot, liftQ, (float)mach);
-                        var local_drag = mcs_mod * wing.GetDragVector(nVel, absdot, liftQ);
-                        p.machNumber = prevMach;
-
+                    var controlSurface = m as ModuleControlSurface;
+                    if (controlSurface != null) {
+                        Vector3 local_lift;
+                        Vector3 local_drag;
+                        SimulateControlSurfaceForce (
+                            controlSurface, v_wrld_vel, dyn_pressure * 1000, (float)mach,
+                            out local_lift, out local_drag);
                         total_lift += local_lift;
                         total_drag += local_drag;
+                        continue;
+                    }
 
-                        //if (partDebug != null) {
-                        //    partDebug.Lift += (float)local_lift.magnitude;
-                        //    partDebug.Drag += (float)local_drag.magnitude;
-                        //}
+                    var wing = m as ModuleLiftingSurface;
+                    if (wing != null) {
+                        Vector3 local_lift;
+                        Vector3 local_drag;
+                        SimulateLiftingSurfaceForce (
+                            wing, v_wrld_vel, dyn_pressure * 1000, (float)mach,
+                            out local_lift, out local_drag);
+                        total_lift += local_lift;
+                        total_drag += local_drag;
                     }
                 }
             }
             return (total_lift + total_drag) * 1000d;
+        }
+
+        static void SimulateLiftingSurfaceForce (
+            ModuleLiftingSurface wing, Vector3 velocity, double liftQ, float mach,
+            out Vector3 lift, out Vector3 drag)
+        {
+            Vector3 nVel;
+            Vector3 liftVector;
+            float liftDot;
+            float absDot;
+            wing.SetupCoefficients (velocity, out nVel, out liftVector, out liftDot, out absDot);
+            lift = wing.GetLiftVector (liftVector, liftDot, absDot, liftQ, mach);
+            // Historical SimAeroForce behaviour: always evaluate internal drag
+            // curves for plain lifting surfaces (mach passed explicitly).
+            drag = wing.GetDragVector (nVel, absDot, liftQ, mach);
+        }
+
+        // F = F_neutral * (1 - A) + F_moving * A, matching ModuleControlSurface.FixedUpdate.
+        // Reflection failure keeps this path with zero deflection so useInternalDragModel
+        // is honored consistently (including for modded parts).
+        static void SimulateControlSurfaceForce (
+            ModuleControlSurface surface, Vector3 velocity, double liftQ, float mach,
+            out Vector3 lift, out Vector3 drag)
+        {
+            float deflection;
+            Transform baseTransform;
+            GetControlSurfaceState (surface, out deflection, out baseTransform);
+
+            Vector3 nVel;
+            Vector3 liftVector;
+            float liftDot;
+            float absDot;
+            surface.SetupCoefficients (velocity, out nVel, out liftVector, out liftDot, out absDot);
+
+            var area = surface.ctrlSurfaceArea;
+            var fixedArea = 1f - area;
+
+            lift = surface.GetLiftVector (liftVector, liftDot, absDot, liftQ, mach) * fixedArea;
+            drag = surface.useInternalDragModel
+                ? surface.GetDragVector (nVel, absDot, liftQ, mach) * fixedArea
+                : Vector3.zero;
+
+            // Default moving contribution to the neutral coefficients. Only rotate the
+            // lift vector when deflection and baseTransform are both available.
+            var movingLiftVector = liftVector;
+            var movingLiftDot = liftDot;
+            var movingAbsDot = absDot;
+            // Unity overloaded == treats destroyed objects as null.
+            if (baseTransform != null && deflection != 0f) {
+                var airflowIncidence = Quaternion.AngleAxis (
+                    deflection, baseTransform.rotation * Vector3.right);
+                movingLiftVector = airflowIncidence * liftVector;
+                movingLiftDot = Vector3.Dot (nVel, movingLiftVector);
+                movingAbsDot = Mathf.Abs (movingLiftDot);
+            }
+
+            lift += surface.GetLiftVector (
+                movingLiftVector, movingLiftDot, movingAbsDot, liftQ, mach) * area;
+            if (surface.useInternalDragModel)
+                drag += surface.GetDragVector (nVel, movingAbsDot, liftQ, mach) * area;
+        }
+
+        static void GetControlSurfaceState (
+            ModuleControlSurface surface, out float deflection, out Transform baseTransform)
+        {
+            deflection = 0f;
+            baseTransform = null;
+            if (controlSurfaceDeflectionField == null || liftingSurfaceBaseTransformField == null) {
+                LogControlSurfaceReflectionFailureOnce ();
+                return;
+            }
+            try {
+                var deflectionValue = controlSurfaceDeflectionField.GetValue (surface);
+                var transformValue = liftingSurfaceBaseTransformField.GetValue (surface);
+                if (!(deflectionValue is float) || !(transformValue is Transform)) {
+                    LogControlSurfaceReflectionFailureOnce ();
+                    return;
+                }
+                var transform = (Transform)transformValue;
+                // Unity overloaded == treats destroyed objects as null.
+                if (transform == null) {
+                    LogControlSurfaceReflectionFailureOnce ();
+                    return;
+                }
+                deflection = (float)deflectionValue;
+                baseTransform = transform;
+            } catch (Exception) {
+                LogControlSurfaceReflectionFailureOnce ();
+            }
+        }
+
+        static void LogControlSurfaceReflectionFailureOnce ()
+        {
+            if (loggedControlSurfaceReflectionFailure)
+                return;
+            loggedControlSurfaceReflectionFailure = true;
+            KRPC.Utils.Logger.WriteLine (
+                "StockAerodynamics: failed to read ModuleControlSurface.deflection " +
+                "or ModuleLiftingSurface.baseTransform; treating control surfaces as " +
+                "undeflected (issue #622)",
+                KRPC.Utils.Logger.Severity.Warning);
         }
     }
 }
