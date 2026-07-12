@@ -413,6 +413,22 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         self.assertRaises(RuntimeError, getattr, engine, "gimbal_actuation")
         self.assertRaises(RuntimeError, setattr, engine, "gimbal_actuation", (0, 0, 0))
 
+    def test_gimbal_override_released_on_disconnect(self):
+        engine = self.get_engine("liquidEngine2")  # LV-T45 "Swivel"
+        self.assertFalse(engine.gimbal_override)
+
+        conn = self.connect(use_cached=False)
+        parts = conn.space_center.active_vessel.parts
+        other = next(iter(parts.with_name("liquidEngine2"))).engine
+        other.gimbal_override = True
+        other.gimbal_actuation = (1, 0, 0)
+        self.wait()
+        self.assertTrue(engine.gimbal_override)
+        conn.close()
+
+        self.wait()
+        self.assertFalse(engine.gimbal_override)
+
     def test_no_thrust_reverser(self):
         engine = self.get_engine("liquidEngine")  # LV-T30 "Reliant"
         self.assertFalse(engine.can_reverse_thrust)
