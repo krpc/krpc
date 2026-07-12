@@ -314,26 +314,86 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 var tauSim = Vector3d.Cross(dragPoint - worldCoM, pf.Drag)
                              + Vector3d.Cross(liftPoint - worldCoM, pf.Lift);
 
-                Vector3d liveDrag = -(Vector3d)p.dragVectorDir * p.dragScalar;
-                Vector3d liveLift = Vector3d.zero;
+                Vector3d liveCubeDrag = -(Vector3d)p.dragVectorDir * p.dragScalar;
+                Vector3d liveBodyLift = Vector3d.zero;
+                Vector3d liveModuleLift = Vector3d.zero;
+                Vector3d liveModuleDrag = Vector3d.zero;
                 Vector3d liveLiftPoint = liftPoint;
                 if (!p.hasLiftModule) {
-                    liveLift = (Vector3d)p.partTransform.TransformDirection(
+                    liveBodyLift = (Vector3d)p.partTransform.TransformDirection(
                         p.bodyLiftLocalVector);
                     liveLiftPoint = p.partTransform.TransformPoint(
                         p.bodyLiftLocalPosition);
                 }
-                var tauLive = Vector3d.Cross(dragPoint - worldCoM, liveDrag)
-                              + Vector3d.Cross(liveLiftPoint - worldCoM, liveLift);
+                var tauLive = Vector3d.Cross(dragPoint - worldCoM, liveCubeDrag)
+                              + Vector3d.Cross(liveLiftPoint - worldCoM, liveBodyLift);
                 foreach (var module in p.Modules) {
                     var wing = module as ModuleLiftingSurface;
                     if (wing == null)
                         continue;
+                    liveModuleLift += (Vector3d)wing.liftForce;
+                    liveModuleDrag += (Vector3d)wing.dragForce;
                     tauLive += Vector3d.Cross(liftPoint - worldCoM,
                                               (Vector3d)wing.liftForce);
                     tauLive += Vector3d.Cross(dragPoint - worldCoM,
                                               (Vector3d)wing.dragForce);
+
+                    var nodeGated = false;
+                    if (wing.nodeEnabled && !string.IsNullOrEmpty(wing.attachNodeName)) {
+                        var node = p.FindAttachNode(wing.attachNodeName);
+                        nodeGated = node != null && node.attachedPart != null;
+                    }
+
+                    var dynPressure = 0.0005 * rho * vPart.sqrMagnitude;
+                    var mach = (float)Math.Min(25.0, vPart.magnitude / soundSpeed);
+                    var liftQ = dynPressure * 1000.0;
+                    Vector3 nVel, liftVector;
+                    float liftDot, absDot;
+                    wing.SetupCoefficients(
+                        vPart, out nVel, out liftVector, out liftDot, out absDot);
+                    var liftCurve = wing.liftCurve.Evaluate(absDot);
+                    var liftMachCurve = wing.liftMachCurve.Evaluate(mach);
+                    var coefficient = Mathf.Sign(liftDot) * liftCurve * liftMachCurve
+                                      * wing.deflectionLiftCoeff;
+                    var preProjection = nodeGated || coefficient == 0f
+                        || float.IsNaN(coefficient)
+                        ? Vector3.zero
+                        : -liftVector * (float)(liftQ
+                            * (PhysicsGlobals.LiftMultiplier * coefficient));
+                    var simModuleLift = wing.perpendicularOnly
+                        ? Vector3.ProjectOnPlane(preProjection, -nVel)
+                        : preProjection;
+
+                    sb.Append("  module ").Append(wing.moduleName)
+                      .Append(" curve=").Append(wing.liftingSurfaceCurve)
+                      .Append(" gated=").Append(nodeGated)
+                      .Append(" mach=").Append(mach.ToString("G6"))
+                      .Append(" qSimPa=").Append(liftQ.ToString("G6"))
+                      .Append(" qLivePa=").Append(
+                          (p.dynamicPressurekPa * 1000.0).ToString("G6"))
+                      .Append(" liftDot=").Append(liftDot.ToString("G6"))
+                      .Append(" absDot=").Append(absDot.ToString("G6"))
+                      .Append(" liftCurve=").Append(liftCurve.ToString("G6"))
+                      .Append(" machCurve=").Append(liftMachCurve.ToString("G6"))
+                      .Append(" deflect=").Append(wing.deflectionLiftCoeff.ToString("G6"))
+                      .Append(" coeff=").Append(coefficient.ToString("G6"))
+                      .Append(" preProjN=").Append(
+                          (preProjection.magnitude * 1000f).ToString("G6"))
+                      .Append(" simN=").Append(
+                          (simModuleLift.magnitude * 1000f).ToString("G6"))
+                      .Append(" liveN=").Append(
+                          (wing.liftForce.magnitude * 1000f).ToString("G6"))
+                      .Append(" liveScalarN=").Append(
+                          (wing.liftScalar * 1000f).ToString("G6"))
+                      .Append(" dirDot=").Append(Vector3.Dot(
+                          simModuleLift.sqrMagnitude > 0f ? simModuleLift.normalized
+                                                        : wing.liftForce.normalized,
+                          wing.liftForce.sqrMagnitude > 0f ? wing.liftForce.normalized
+                                                          : simModuleLift.normalized).ToString("G6"))
+                      .Append('\n');
                 }
+                var liveDrag = liveCubeDrag + liveModuleDrag;
+                var liveLift = liveBodyLift + liveModuleLift;
                 tauSimTotal += tauSim;
                 tauLiveTotal += tauLive;
 
@@ -346,6 +406,10 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                           ? liveDrag.normalized : pf.Drag.normalized).ToString("G4"))
                   .Append(" | liftN sim=").Append((pf.Lift.magnitude * 1000.0).ToString("G6"))
                   .Append(" live=").Append((liveLift.magnitude * 1000.0).ToString("G6"))
+                  .Append(" bodyLive=").Append(
+                      (liveBodyLift.magnitude * 1000.0).ToString("G6"))
+                  .Append(" moduleLive=").Append(
+                      (liveModuleLift.magnitude * 1000.0).ToString("G6"))
                   .Append(" | flow sim=").Append(vPart.magnitude.ToString("G6"))
                   .Append(" real=").Append(p.dragVector.magnitude.ToString("G6"))
                   .Append(" angle=").Append(flowAngle.ToString("G4")).Append("deg")
@@ -481,6 +545,37 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Whether a body-lift provider would be lifting in the hypothetical flow.
+        /// ModuleLiftingSurface.IsLifting reads the module's live liftScalar, so using
+        /// it directly makes hypothetical pod body lift depend on whether the real
+        /// attached heatshield is currently on the pad, in flight, or in vacuum.
+        /// </summary>
+        static bool IsLiftProviderActiveAt(
+            ILiftProvider provider, Vector3 velocity, float mach)
+        {
+            var wing = provider as ModuleLiftingSurface;
+            if (wing == null)
+                return provider.IsLifting;
+            if (wing.part == null || wing.part.ShieldedFromAirstream
+                || wing.part.Rigidbody == null)
+                return false;
+            if (wing.nodeEnabled && !string.IsNullOrEmpty(wing.attachNodeName)) {
+                var node = wing.part.FindAttachNode(wing.attachNodeName);
+                if (node != null && node.attachedPart != null)
+                    return false;
+            }
+
+            Vector3 nVel, liftVector;
+            float liftDot, absDot;
+            wing.SetupCoefficients(
+                velocity, out nVel, out liftVector, out liftDot, out absDot);
+            var liftScalar = Mathf.Sign(liftDot) * wing.liftCurve.Evaluate(absDot)
+                             * wing.liftMachCurve.Evaluate(mach)
+                             * wing.deflectionLiftCoeff;
+            return liftScalar != 0f && !float.IsNaN(liftScalar);
+        }
+
+        /// <summary>
         /// Simulate the aerodynamic lift and drag acting on a single part at the given
         /// air-relative velocity. Mirrors the per-part accumulation in KSP's
         /// FlightIntegrator.
@@ -561,7 +656,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             // during #914 flight validation).
             var bodyLiftGated = p.bodyLiftOnlyUnattachedLiftActual
                                 && p.bodyLiftOnlyProvider != null
-                                && p.bodyLiftOnlyProvider.IsLifting;
+                                && IsLiftProviderActiveAt(
+                                    p.bodyLiftOnlyProvider, v_wrld_vel, mach);
             if (!p.hasLiftModule && !bodyLiftGated) {
                 var simbodyLiftScalar = p.bodyLiftMultiplier * PhysicsGlobals.BodyLiftMultiplier * (float)dyn_pressure;
                 simbodyLiftScalar *= PhysicsGlobals.GetLiftingSurfaceCurve("BodyLift").liftMachCurve.Evaluate(mach);
