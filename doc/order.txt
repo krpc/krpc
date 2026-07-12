@@ -538,9 +538,9 @@ SpaceCenter.Stage.SeaLevelDeltaV
 SpaceCenter.Stage.Thrust
 SpaceCenter.Stage.VacuumThrust
 SpaceCenter.Stage.SeaLevelThrust
-SpaceCenter.Stage.Twr
-SpaceCenter.Stage.VacuumTwr
-SpaceCenter.Stage.SeaLevelTwr
+SpaceCenter.Stage.TWR
+SpaceCenter.Stage.VacuumTWR
+SpaceCenter.Stage.SeaLevelTWR
 SpaceCenter.Stage.SpecificImpulse
 SpaceCenter.Stage.VacuumSpecificImpulse
 SpaceCenter.Stage.SeaLevelSpecificImpulse

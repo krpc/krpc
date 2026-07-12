@@ -78,6 +78,7 @@
     <Compile Include="ExtensionMethods\StockAerodynamics.cs" />
     <Compile Include="ExtensionMethods\TargetableExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselControlStateExtensions.cs" />
+    <Compile Include="ExtensionMethods\VesselExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
     <Compile Include="ActuatorControlAddon.cs" />

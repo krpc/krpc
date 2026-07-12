@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
-using KRPC.SpaceCenter.Services.Parts;
+using Parts = KRPC.SpaceCenter.Services.Parts;
+using Part = KRPC.SpaceCenter.Services.Parts.Part;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -64,7 +65,7 @@ namespace KRPC.SpaceCenter.Services
         /// The parts that belong to this stage.
         /// </summary>
         [KRPCProperty]
-        public IList<KRPC.SpaceCenter.Services.Parts.Part> Parts
+        public IList<Part> Parts
         {
             get
             {
@@ -125,19 +126,19 @@ namespace KRPC.SpaceCenter.Services
         /// Thrust-to-weight ratio in the current situation.
         /// </summary>
         [KRPCProperty]
-        public float Twr => RequireBurnStage ().TWRActual;
+        public float TWR => RequireBurnStage ().TWRActual;
 
         /// <summary>
         /// Vacuum thrust-to-weight ratio.
         /// </summary>
         [KRPCProperty]
-        public float VacuumTwr => RequireBurnStage ().TWRVac;
+        public float VacuumTWR => RequireBurnStage ().TWRVac;
 
         /// <summary>
         /// Sea-level thrust-to-weight ratio.
         /// </summary>
         [KRPCProperty]
-        public float SeaLevelTwr => RequireBurnStage ().TWRASL;
+        public float SeaLevelTWR => RequireBurnStage ().TWRASL;
 
         /// <summary>
         /// Specific impulse in the current situation, in seconds.

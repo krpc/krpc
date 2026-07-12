@@ -236,23 +236,11 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="cumulative">When <c>false</c>, returns the resources for parts
         /// decoupled in just the given stage. When <c>true</c> returns the resources decoupled in
         /// the given stage and all subsequent stages combined.</param>
+        [Obsolete ("Use Vessel.DecoupleStageAt(stage).Resources(cumulative) instead.")]
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Resources ResourcesInDecoupleStage (int stage, bool cumulative = true)
         {
             return new Resources (InternalVessel, stage, cumulative);
-        }
-
-        List<int> ActivationStageNumbers ()
-        {
-            var dv = InternalVessel.VesselDeltaV;
-            if (dv != null && dv.IsReady)
-                return dv.OperatingStageInfo.Select (s => s.stage).ToList ();
-            return InternalVessel.Parts
-                .Where (p => p.hasStagingIcon)
-                .Select (p => p.inverseStage)
-                .Distinct ()
-                .OrderBy (n => n)
-                .ToList ();
         }
 
         List<int> DecoupleStageNumbers ()
@@ -272,7 +260,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         List<int> RawDecoupleStageNumbers ()
         {
-            var indices = ActivationStageNumbers ()
+            var indices = InternalVessel.ActivationStageNumbers ()
                 .Concat (DecoupleStageNumbers ())
                 .ToList ();
             if (indices.Count == 0)
@@ -293,7 +281,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty (GameScene = GameScene.Flight)]
         public IList<Stage> Stages {
             get {
-                return ActivationStageNumbers ()
+                return InternalVessel.ActivationStageNumbers ()
                     .Select (n => new Stage (InternalVessel, n, false))
                     .ToList ();
             }
@@ -305,7 +293,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Stage StageAt (int stage)
         {
-            if (!ActivationStageNumbers ().Contains (stage))
+            if (!InternalVessel.ActivationStageNumbers ().Contains (stage))
                 throw new ArgumentException ("Stage not found", nameof (stage));
             return new Stage (InternalVessel, stage, false);
         }

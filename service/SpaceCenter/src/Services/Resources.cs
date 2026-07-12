@@ -85,16 +85,6 @@ namespace KRPC.SpaceCenter.Services
             }
         }
 
-        IList<int> ActivationStageNumbers ()
-        {
-            return InternalVessel.Parts
-                .Where (part => part.hasStagingIcon)
-                .Select (part => part.inverseStage)
-                .Distinct ()
-                .OrderBy (number => number)
-                .ToList ();
-        }
-
         int ActivationStageForPart (global::Part vesselPart, IList<int> activationStages)
         {
             if (vesselPart.hasStagingIcon)
@@ -111,7 +101,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 var resources = new List<PartResource> ();
                 if (vesselId != Guid.Empty) {
-                    var activationStages = decoupleStage ? null : ActivationStageNumbers ();
+                    var activationStages = decoupleStage ? null : InternalVessel.ActivationStageNumbers ();
                     foreach (var vesselPart in InternalVessel.Parts) {
                         bool include;
                         if (decoupleStage) {
