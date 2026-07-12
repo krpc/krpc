@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using KRPC.SpaceCenter.Services;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter
@@ -8,19 +9,18 @@ namespace KRPC.SpaceCenter
     /// Addon to perform resource transfers between parts.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    public sealed class ResourceTransferAddon : MonoBehaviour
+    public sealed class ResourceTransferAddon : ClientCleanupAddon
     {
+        static readonly ClientOwnedObjects<ResourceTransfer> transfers =
+            new ClientOwnedObjects<ResourceTransfer> (transfer => transfer.Cancel ());
+
+        static readonly IClientOwnedCollection[] collections = { transfers };
+
         /// <summary>
         /// The transfers currently in progress.
         /// </summary>
-        static readonly List<ResourceTransfer> transfers = new List<ResourceTransfer> ();
-
-        /// <summary>
-        /// Destroy the addon
-        /// </summary>
-        public void OnDestroy ()
-        {
-            transfers.Clear ();
+        protected override IEnumerable<IClientOwnedCollection> Collections {
+            get { return collections; }
         }
 
         /// <summary>
@@ -32,11 +32,13 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// Update the transfers
+        /// Update the transfers, first cancelling those whose client has disconnected
+        /// so they move no more resource.
         /// </summary>
         public void FixedUpdate ()
         {
-            foreach (var transfer in transfers)
+            Sweep ();
+            foreach (var transfer in transfers.Items)
                 transfer.Update (Time.fixedDeltaTime);
             transfers.RemoveAll (transfer => transfer.Complete);
         }

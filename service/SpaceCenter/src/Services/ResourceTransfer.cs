@@ -91,10 +91,20 @@ namespace KRPC.SpaceCenter.Services
         public float TotalAmount { get; private set; }
 
         /// <summary>
-        /// Whether the transfer has completed.
+        /// Whether the transfer has completed. Also becomes true if the transfer is
+        /// cancelled because the client that started it disconnected.
         /// </summary>
         [KRPCProperty]
         public bool Complete { get; private set; }
+
+        /// <summary>
+        /// Cancel the transfer. No more resource is moved and the transfer is marked
+        /// as complete.
+        /// </summary>
+        internal void Cancel ()
+        {
+            Complete = true;
+        }
 
         /// <summary>
         /// The amount of the resource that has been transferred.
