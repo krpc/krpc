@@ -97,10 +97,7 @@ namespace KRPC.Drawing
         [KRPCProcedure]
         public static void Clear (bool clientOnly = false)
         {
-            if (clientOnly)
-                Addon.Clear (CallContext.Client);
-            else
-                Addon.Clear ();
+            Addon.Clear (clientOnly);
         }
     }
 }

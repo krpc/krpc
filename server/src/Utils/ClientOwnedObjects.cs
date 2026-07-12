@@ -24,7 +24,7 @@ namespace KRPC.Utils
 
         /// <summary>
         /// Create a collection. The release action, if any, is invoked on each object
-        /// released by <see cref="Sweep" /> and <see cref="Clear" /> (but not on
+        /// released by <see cref="Sweep" /> and <see cref="Clear()" /> (but not on
         /// objects removed with <see cref="Remove" />, whose callers do their own
         /// teardown).
         /// </summary>
@@ -90,6 +90,21 @@ namespace KRPC.Utils
             for (var i = entries.Count - 1; i >= 0; i--) {
                 var entry = entries [i];
                 if (ClientConnections.Disconnected (entry.Owner)) {
+                    entries.RemoveAt (i);
+                    if (release != null)
+                        release (entry.Object);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Release the objects owned by the given client.
+        /// </summary>
+        public void Clear (IClient owner)
+        {
+            for (var i = entries.Count - 1; i >= 0; i--) {
+                var entry = entries [i];
+                if (entry.Owner == owner) {
                     entries.RemoveAt (i);
                     if (release != null)
                         release (entry.Object);
