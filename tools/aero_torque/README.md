@@ -2,8 +2,9 @@
 
 Tools for validating and demonstrating the stock aerodynamic simulation
 endpoints (`Flight.SimulateAerodynamicForceAt`,
-`Flight.SimulateAerodynamicTorqueAt`, and the live `Flight.AerodynamicTorque`
-property), built during the #914 flight-validation campaign.
+`Flight.SimulateAerodynamicTorqueAt`, `Flight.SimulateAerodynamicWrenchAt`,
+and the live `Flight.AerodynamicTorque` property), built during the #914
+flight-validation campaign.
 
 Requirements: `krpc`, `numpy`, `matplotlib` (analysis/plot paths run without
 the game). Teleport-based scenarios use the TestingTools plugin when
@@ -16,9 +17,9 @@ integrator, two modes:
 
 - `baseline`: 3-DOF point mass assuming a permanent retrograde hold, force
   endpoint only. This is what was possible before the torque endpoint.
-- `6dof`: integrates translation and rotation; samples the force endpoint at
-  the integrated attitude and the torque endpoint at the integrated attitude
-  and angular rate. Discovers trim, lift and oscillation on its own.
+- `6dof`: integrates translation and rotation; samples both force and torque
+  with one wrench RPC at each RK4 stage. Discovers trim, lift and oscillation
+  on its own.
 
 Subcommands: `run` (teleport onto an entry arc, capture, predict, fly, log,
 compare), `predict` (capture and predict only; `--replay PREFIX` re-predicts
@@ -41,7 +42,9 @@ See `DEMO.md`.
 
 - `force_fidelity.py --prefix RUN`: sim/measured/live drag ratios binned by
   angle of attack. Newer flight logs record the sim and live forces in-flight
-  (`fsx`/`flx` columns), making the analysis fully offline; `--force-rpc`
+  (`fsx`/`flx` columns), making the analysis fully offline. Current logs use
+  the wrench force component while old logs retain the legacy-force samples;
+  both formats are accepted. `--force-rpc`
   re-evaluates via RPC in the current game context and compares against the
   in-flight values (this is how evaluation-context bugs were caught).
 - `torque_fidelity.py --prefix RUN`: measured/live/sim pitch torque vs signed
@@ -57,10 +60,12 @@ See `DEMO.md`.
   (trim angle, lift, drag, L/D). Use to design trim-ballast craft. Note that
   stock crushes hypersonic body lift (BodyLift liftMach = 0.0625 above
   mach 5): optimize the trim angle (10-15 deg), not L/D.
-- `damping_probe.py`: measures the endpoint's damping coefficient d(tau)/d(omega)
-  against the stock rigidbody angular drag formula (single-part craft).
-- `invariance_probe.py`: rotation-invariance test of the hypothetical-attitude
-  machinery (co-rotated attitude+wind must give constant force).
+- `damping_probe.py`: measures central-difference force and torque derivatives
+  with respect to angular velocity, and compares pitch damping against the
+  stock rigid-body angular-drag formula (single-part craft).
+- `invariance_probe.py`: tests hypothetical-attitude invariance and compares
+  the wrench for one physical state expressed in rotating-body,
+  non-rotating-body and vessel reference frames.
 - `cube_probe.py`: fingerprints the effective drag cube state via forces along
   the six body axes plus a mixing sweep; `--compare A.json B.json` diffs two
   contexts.

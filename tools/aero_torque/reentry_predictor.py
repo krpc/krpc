@@ -142,8 +142,9 @@ ACT_COLUMNS = [
     "fsx",
     "fsy",
     "fsz",
-    # Same pair for torque: Flight.AerodynamicTorque (live) and
-    # SimulateAerodynamicTorqueAt at the logged state.
+    # Same pair for torque: Flight.AerodynamicTorque (live) and the torque
+    # component of SimulateAerodynamicWrenchAt at the logged state. The
+    # existing column names are retained for old-log compatibility.
     "tlx",
     "tly",
     "tlz",
@@ -288,21 +289,17 @@ class RpcAero:
     def __call__(self, r, v, q, w):
         if np.linalg.norm(r) - self.radius >= self.atmo_top:
             return ZERO3, ZERO3
-        force = np.array(
-            self.flight.simulate_aerodynamic_force_at(
-                self.body, tuple(r), tuple(v), tuple(q)
-            )
-        )
-        self.calls += 1
-        torque = ZERO3
         if self.want_torque:
-            torque = np.array(
-                self.flight.simulate_aerodynamic_torque_at(
-                    self.body, tuple(r), tuple(v), tuple(q), tuple(w)
-                )
+            force, torque = self.flight.simulate_aerodynamic_wrench_at(
+                self.body, tuple(r), tuple(v), tuple(q), tuple(w)
             )
             self.calls += 1
-        return force, torque
+            return np.array(force), np.array(torque)
+        force = self.flight.simulate_aerodynamic_force_at(
+            self.body, tuple(r), tuple(v), tuple(q)
+        )
+        self.calls += 1
+        return np.array(force), ZERO3
 
 
 class SyntheticAero:
@@ -797,25 +794,23 @@ def sample_flight(conn, meta, rate, min_altitude):
                 control.pitch = max(-1.0, min(1.0, rate_damp * wb[0]))
                 control.roll = max(-1.0, min(1.0, rate_damp * wb[1]))
                 control.yaw = max(-1.0, min(1.0, rate_damp * wb[2]))
-            # Live game-applied force and the sim force at the same state:
-            # their difference isolates model error from telemetry noise.
+            # Live game-applied force/torque and one simulated wrench at the
+            # same state. Their difference isolates model error from telemetry
+            # noise without making separate force and torque simulation RPCs.
             try:
                 f_live = flight_nr.aerodynamic_force
             except Exception:
                 f_live = nan3
             try:
-                f_sim = flight_nr.simulate_aerodynamic_force_at(body, pos, vel, rot)
-            except Exception:
-                f_sim = nan3
-            try:
                 t_live = flight_nr.aerodynamic_torque
             except Exception:
                 t_live = nan3
             try:
-                t_sim = flight_nr.simulate_aerodynamic_torque_at(
+                f_sim, t_sim = flight_nr.simulate_aerodynamic_wrench_at(
                     body, pos, vel, rot, w_nr
                 )
             except Exception:
+                f_sim = nan3
                 t_sim = nan3
             rows.append(
                 [
@@ -1161,6 +1156,10 @@ def cmd_predict(conn, args, meta=None):
     if hold is not None:
         meta["hold"] = hold  # needed by the predictor; replays keep theirs
     meta["stop_altitude"] = args.stop_altitude
+    # Added in the second-pass log generation. Readers intentionally use
+    # get()/ignore unknown keys so version-1 logs without this field replay
+    # and plot unchanged.
+    meta["aero_api"] = "wrench"
     meta["settings"] = {
         "mode": args.mode,
         "dt_baseline": args.dt_baseline,
@@ -1276,6 +1275,58 @@ def selftest():
     check(
         "retro attitude puts the nose on -v_air",
         np.linalg.norm(q_rot(q_ret, NOSE) + v_air / np.linalg.norm(v_air)) < 1e-9,
+    )
+
+    print("1b. Aerodynamic RPC routing")
+
+    class FakeFlight:
+        def __init__(self):
+            self.force_calls = 0
+            self.wrench_calls = 0
+
+        def simulate_aerodynamic_force_at(self, body, r, v, q):
+            self.force_calls += 1
+            return (1.0, 2.0, 3.0)
+
+        def simulate_aerodynamic_wrench_at(self, body, r, v, q, w):
+            self.wrench_calls += 1
+            return (1.0, 2.0, 3.0), (4.0, 5.0, 6.0)
+
+    def fake_rpc_aero(want_torque):
+        aero = RpcAero.__new__(RpcAero)
+        aero.body = object()
+        aero.flight = FakeFlight()
+        aero.radius = 10.0
+        aero.atmo_top = 100.0
+        aero.want_torque = want_torque
+        aero.calls = 0
+        return aero
+
+    state_args = (
+        np.array([20.0, 0.0, 0.0]),
+        np.zeros(3),
+        np.array(Q_IDENTITY),
+        np.zeros(3),
+    )
+    baseline_rpc = fake_rpc_aero(False)
+    baseline_force, baseline_torque = baseline_rpc(*state_args)
+    check(
+        "baseline uses one legacy force RPC",
+        baseline_rpc.calls == 1
+        and baseline_rpc.flight.force_calls == 1
+        and baseline_rpc.flight.wrench_calls == 0
+        and np.array_equal(baseline_force, [1.0, 2.0, 3.0])
+        and np.array_equal(baseline_torque, ZERO3),
+    )
+    wrench_rpc = fake_rpc_aero(True)
+    wrench_force, wrench_torque = wrench_rpc(*state_args)
+    check(
+        "6-DOF uses one wrench RPC for force and torque",
+        wrench_rpc.calls == 1
+        and wrench_rpc.flight.force_calls == 0
+        and wrench_rpc.flight.wrench_calls == 1
+        and np.array_equal(wrench_force, [1.0, 2.0, 3.0])
+        and np.array_equal(wrench_torque, [4.0, 5.0, 6.0]),
     )
 
     print("2. Circular orbit (gravity only)")
@@ -1691,9 +1742,16 @@ def main(argv=None):
             with open(args.replay + "_meta.json") as f:
                 meta = json.load(f)
             old_actual = meta["files"].get("actual")
+            actual_aero_api = meta.get(
+                "actual_aero_api", meta.get("aero_api", "legacy endpoints")
+            )
             meta["files"] = {}
             if old_actual and os.path.exists(old_actual):
                 meta["files"]["actual"] = old_actual
+                # The new prediction uses the wrench API, but a retained
+                # actual CSV keeps the simulation columns from the generation
+                # that recorded it.
+                meta["actual_aero_api"] = actual_aero_api
             vessel = conn.space_center.active_vessel
             if vessel.name != meta["craft"]:
                 print(

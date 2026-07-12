@@ -18,8 +18,13 @@ wind fixed, and (b) rotating the wind with the attitude fixed. Same relative
 geometry per AoA; (a) exercises large deltas, (b) exercises none. The two
 sweeps must agree; their ratio is the delta error as a function of delta angle.
 
+Test 3 -- reference-frame invariance: express one physical center-of-mass
+state in the rotating body, non-rotating body and vessel frames, call
+SimulateAerodynamicWrenchAt in each, and transform each result to the same
+non-rotating output frame for comparison.
+
 Usage:
-    python invariance_probe.py [--speed 800] [--altitude 10000]
+    python invariance_probe.py [--mode all] [--speed 800] [--altitude 10000]
 """
 
 import argparse
@@ -51,17 +56,98 @@ def rodrigues(v, axis, angle):
     return v * c + np.cross(axis, v) * s + axis * np.dot(axis, v) * (1.0 - c)
 
 
+def compare_reference_frames(conn, speed, altitude):
+    """Compare one physical wrench state through all supported frame types."""
+    sc = conn.space_center
+    vessel = sc.active_vessel
+    body = vessel.orbit.body
+    common = body.non_rotating_reference_frame
+    frames = (
+        ("rotating", body.reference_frame),
+        ("non-rotating", common),
+        ("vessel", vessel.reference_frame),
+    )
+
+    was_paused = conn.krpc.paused
+    conn.krpc.paused = True
+    try:
+        up = np.array(vessel.position(common), dtype=float)
+        up /= np.linalg.norm(up)
+        position = up * (body.equatorial_radius + altitude)
+        nose = np.array(vessel.direction(common), dtype=float)
+        atmosphere_velocity = np.cross(
+            np.array(body.angular_velocity(common), dtype=float), position
+        )
+        velocity = atmosphere_velocity + speed * nose
+        rotation = vessel.rotation(common)
+
+        results = []
+        for label, ref in frames:
+            pos_ref = sc.transform_position(tuple(position), common, ref)
+            vel_ref = sc.transform_velocity(
+                tuple(position), tuple(velocity), common, ref
+            )
+            rot_ref = sc.transform_rotation(rotation, common, ref)
+            rate_ref = vessel.angular_velocity(ref)
+            force, torque = vessel.flight(ref).simulate_aerodynamic_wrench_at(
+                body, pos_ref, vel_ref, rot_ref, rate_ref
+            )
+            results.append(
+                (
+                    label,
+                    np.array(sc.transform_direction(force, ref, common)),
+                    np.array(sc.transform_direction(torque, ref, common)),
+                )
+            )
+    finally:
+        conn.krpc.paused = was_paused
+
+    force0, torque0 = results[0][1:]
+    force_scale = max(np.linalg.norm(force0), 1.0)
+    torque_scale = max(np.linalg.norm(torque0), 1.0)
+    print(
+        "\nTest 3: same physical wrench state in three reference frames "
+        "(outputs transformed to non-rotating)"
+    )
+    print(
+        f"{'input frame':>13} {'|F| N':>13} {'|T| N m':>13} "
+        f"{'rel dF':>11} {'rel dT':>11}"
+    )
+    max_residual = 0.0
+    for label, force, torque in results:
+        df = np.linalg.norm(force - force0) / force_scale
+        dt = np.linalg.norm(torque - torque0) / torque_scale
+        max_residual = max(max_residual, df, dt)
+        print(
+            f"{label:>13} {np.linalg.norm(force):13.4f} "
+            f"{np.linalg.norm(torque):13.4f} {df:11.3e} {dt:11.3e}"
+        )
+    print(
+        f"Maximum relative residual: {max_residual:.3e} "
+        f"({'PASS' if max_residual <= 1e-4 else 'FAIL'} at 1e-4)"
+    )
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--speed", type=float, default=800.0)
     ap.add_argument("--altitude", type=float, default=10000.0)
     ap.add_argument("--step", type=float, default=10.0, help="angle step (deg)")
+    ap.add_argument(
+        "--mode",
+        choices=("attitude", "frames", "all"),
+        default="all",
+        help="run hypothetical-attitude checks, frame comparison, or both",
+    )
     ap.add_argument("--name", default="invariance-probe")
     args = ap.parse_args()
 
     import krpc
 
     conn = krpc.connect(name=args.name)
+    if args.mode == "frames":
+        compare_reference_frames(conn, args.speed, args.altitude)
+        return
     sc = conn.space_center
     vessel = sc.active_vessel
     body = vessel.orbit.body
@@ -125,6 +211,8 @@ def main():
         "flight-measured drag-ratio curve and localizes the bug to the "
         "rotation mapping in SimulateAerodynamicForceAt."
     )
+    if args.mode == "all":
+        compare_reference_frames(conn, args.speed, args.altitude)
 
 
 if __name__ == "__main__":

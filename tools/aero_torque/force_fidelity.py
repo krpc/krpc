@@ -10,10 +10,10 @@ force estimates per sample, all along the airflow direction (pure drag):
 
   measured   from telemetry: F = m * (dv/dt - g(r)), non-rotating frame,
              central differences. The independent oracle.
-  simulated  the force endpoint evaluated at the logged state. From the log's
-             fsx/fsy/fsz columns when present (newer logs record it in-flight;
-             fully offline), else via one RPC per sample (game must be running
-             with the same craft loaded).
+  simulated  the force or wrench endpoint evaluated at the logged state. From
+             the log's fsx/fsy/fsz columns when present (newer logs record it
+             in-flight; fully offline), else via one legacy-force RPC per
+             sample (game must be running with the same craft loaded).
   live       Flight.AerodynamicForce at the same instant (flx/fly/flz
              columns), i.e. the per-part dragScalar forces the game actually
              applied. Only available in newer logs.
@@ -92,6 +92,7 @@ def main():
 
     with open(args.prefix + "_meta.json") as f:
         meta = json.load(f)
+    logged_api = meta.get("actual_aero_api", meta.get("aero_api", "legacy endpoints"))
     act = load_traj(meta["files"]["actual"])
 
     # Trim the frozen post-destruction tail (same rule as the analyzer).
@@ -153,7 +154,10 @@ def main():
         flight = vessel.flight(body.non_rotating_reference_frame)
         print("Log has no sim-force columns; evaluating the endpoint via RPC.")
     else:
-        print("Using sim/live force columns recorded in the log (offline).")
+        print(
+            "Using sim/live force columns recorded in the log "
+            f"(offline, aero API: {logged_api})."
+        )
 
     rows = []
     for i in range(2, len(t) - 2, args.stride):  # skip noisy gradient endpoints

@@ -2,10 +2,10 @@
 """
 damping_probe.py
 
-Measure the aerodynamic damping coefficient dtau/domega that
-Flight.SimulateAerodynamicTorqueAt actually returns, across a grid of
-(altitude, speed), and compare it against the damping stock KSP applies via
-per-part rigidbody angular drag:
+Measure the central-difference aerodynamic force and torque derivatives with
+respect to angular velocity that Flight.SimulateAerodynamicWrenchAt returns,
+across a grid of (altitude, speed). Compare the pitch-torque derivative against
+the damping stock KSP applies via per-part rigid-body angular drag:
 
     rb.angularDrag = part.angularDrag * dynamicPressure(atm)
                      * PhysicsGlobals.AngularDragMultiplier      (FlightIntegrator)
@@ -20,7 +20,8 @@ endpoint's measured c should equal the angular-drag term alone:
 Run anywhere with the probe craft loaded (launchpad is fine; the probe passes
 hypothetical positions). Interpretation:
 
-    c_sim ~ c_expected      the endpoint's angular-drag term is correct
+    -dtau_pitch/domega ~ c_expected
+                            the endpoint's angular-drag term is correct
     c_sim ~ c_expected/1000 unit bug: the term uses tonne-scale inertia with
                             an extra 1/1000
     c_sim ~ 0               the term is missing entirely (stale server build?)
@@ -71,7 +72,8 @@ def main():
         f"I_pitch = {i_pitch:.1f} kg m^2, probe spin {args.spin} rad/s"
     )
     print(
-        f"{'alt km':>7} {'v m/s':>6} {'q_atm':>9} {'c_sim':>10} "
+        f"{'alt':>4} {'speed':>5} {'q_atm':>9} {'|dF/dw|':>10} "
+        f"{'dF_pitch':>10} {'|dT/dw|':>10} {'dT_pitch':>10} "
         f"{'c_expect':>10} {'ratio':>8}"
     )
 
@@ -82,27 +84,32 @@ def main():
         for speed in (1500.0, 800.0, 300.0):
             q_atm = 0.5 * rho * speed * speed / 101325.0
             vel = tuple(speed * nose)  # head-on wind, AoA 0
-            tau_p = np.array(
-                flight.simulate_aerodynamic_torque_at(
-                    body, pos, vel, rot, tuple(w0 * pitch)
-                )
+            force_p, torque_p = flight.simulate_aerodynamic_wrench_at(
+                body, pos, vel, rot, tuple(w0 * pitch)
             )
-            tau_m = np.array(
-                flight.simulate_aerodynamic_torque_at(
-                    body, pos, vel, rot, tuple(-w0 * pitch)
-                )
+            force_m, torque_m = flight.simulate_aerodynamic_wrench_at(
+                body, pos, vel, rot, tuple(-w0 * pitch)
             )
-            # tau = -c * omega about the pitch axis
-            c_sim = float(np.dot(tau_m - tau_p, pitch)) / (2.0 * w0)
+            dforce = (np.array(force_p) - np.array(force_m)) / (2.0 * w0)
+            dtorque = (np.array(torque_p) - np.array(torque_m)) / (2.0 * w0)
+            dforce_pitch = float(np.dot(dforce, pitch))
+            dtorque_pitch = float(np.dot(dtorque, pitch))
+            # tau = -c * omega about the pitch axis.
+            c_sim = -dtorque_pitch
             c_exp = 4.0 * q_atm * i_pitch  # angularDrag(2) * mult(2) * q_atm * I
             ratio = c_sim / c_exp if c_exp > 0 else float("nan")
             print(
-                f"{alt / 1000.0:7.0f} {speed:6.0f} {q_atm:9.5f} "
-                f"{c_sim:10.3f} {c_exp:10.3f} {ratio:8.4f}"
+                f"{alt / 1000.0:4.0f} {speed:5.0f} {q_atm:9.5f} "
+                f"{np.linalg.norm(dforce):10.3f} {dforce_pitch:10.3f} "
+                f"{np.linalg.norm(dtorque):10.3f} {dtorque_pitch:10.3f} "
+                f"{c_exp:10.3f} {ratio:8.4f}"
             )
 
     print(
-        "\nratio ~ (0.5-1): term correct (I_part vs I_vessel difference is "
+        "\nDerivatives use [+spin - (-spin)] / (2*spin); force units are "
+        "N/(rad/s), torque units are N m/(rad/s).\n"
+        "ratio = -dT_pitch/dw / c_expect. ratio ~ (0.5-1): term correct "
+        "(I_part vs I_vessel difference is "
         "expected).\nratio ~ 0.001: tonne/kg unit bug (drop the 1/1000)."
         "\nratio ~ 0: term missing (stale build?)."
     )

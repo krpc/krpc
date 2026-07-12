@@ -10,7 +10,8 @@ offset between the measured and simulated zero crossings.
 
 Per sample:
     measured   tau = I.alpha + omega x (I.omega), body frame, from telemetry
-    simulated  SimulateAerodynamicTorqueAt at the logged state (via RPC)
+    simulated  the torque endpoint, or the torque component of the wrench
+               endpoint, evaluated at the logged state
 
 Both are projected on the instantaneous pitch axis (normal to the plane
 containing the airflow and the nose), against the SIGNED in-plane angle of
@@ -51,6 +52,7 @@ def main():
 
     with open(args.prefix + "_meta.json") as f:
         meta = json.load(f)
+    logged_api = meta.get("actual_aero_api", meta.get("aero_api", "legacy endpoints"))
     if meta.get("rate_damp", 0.0) > 0.0:
         sys.exit(
             "This log was flown WITH rate damping -- wheel torque "
@@ -86,7 +88,10 @@ def main():
     if have_logged:
         t_sim_all = np.column_stack([act["tsx"], act["tsy"], act["tsz"]])
         t_live_all = np.column_stack([act["tlx"], act["tly"], act["tlz"]])
-        print("Using sim/live torque columns recorded in the log (offline).")
+        print(
+            "Using sim/live torque columns recorded in the log "
+            f"(offline, aero API: {logged_api})."
+        )
     else:
         import krpc
 

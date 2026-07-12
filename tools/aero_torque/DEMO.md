@@ -1,11 +1,10 @@
-# Demo: attitude-aware re-entry prediction with SimulateAerodynamicTorqueAt
+# Demo: attitude-aware re-entry prediction with an aerodynamic wrench
 
 This document describes the flight-validated demo for the stock
-`Flight.SimulateAerodynamicTorqueAt` endpoint (#914): a 6-DOF re-entry
-landing predictor that uses the force endpoint for translation and the torque
-endpoint (attitude + angular rate) for rotation, compared against the best
-predictor that was possible before, a 3-DOF force-only model that must assume
-an attitude.
+`Flight.SimulateAerodynamicWrenchAt` endpoint (#914): a 6-DOF re-entry landing
+predictor that obtains force and torque (attitude + angular rate) together,
+compared against the best predictor that was possible before, a 3-DOF
+force-only model that must assume an attitude.
 
 Everything below was measured against real KSP flights (stock aero, KSP
 1.12.5), using `reentry_predictor.py` (see `README.md` in this directory for
@@ -20,7 +19,7 @@ tool usage).
   control law are modeled client-side.
 - `baseline` mode assumes a permanent retrograde hold and samples only
   `SimulateAerodynamicForceAt`. `6dof` mode integrates the full rigid-body
-  attitude driven by `SimulateAerodynamicTorqueAt`.
+  attitude and samples `SimulateAerodynamicWrenchAt` once per RK4 stage.
 - Comparisons are horizontal miss distance between the prediction and the
   logged flight at fixed altitude checkpoints (40 to 2 km), in body-fixed
   coordinates. Repeat trials from quicksaves reproduce to ~0.01 km, so the
