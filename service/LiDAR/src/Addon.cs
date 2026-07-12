@@ -1,17 +1,17 @@
-﻿using UnityEngine;
+using KRPC.Utils;
 
 namespace KRPC.LiDAR
 {
     /// <summary>
     /// kRPC LiDAR addon.
     /// </summary>
-    [KSPAddon(KSPAddon.Startup.Flight, false)]
-    public sealed class Addon : MonoBehaviour
+    [KSPAddon(KSPAddon.Startup.AllGameScenes, false)]
+    public sealed class Addon : LoadOnceAddon<Addon>
     {
         /// <summary>
         /// Load the LiDAR API.
         /// </summary>
-        public void Start()
+        protected override void Load()
         {
             API.Load();
         }

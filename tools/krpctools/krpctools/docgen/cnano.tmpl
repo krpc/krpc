@@ -1,8 +1,14 @@
 {% macro service(x) %}{{ mark_documented(x) }}
 Service {{ x.name }}
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
 {% for member in x.members.values() %}
 {% if member.member_type == 'procedure' %}
 {{ procedure(x.name, member) | indent }}
@@ -16,6 +22,9 @@ Service {{ x.name }}
 {% macro class(x) %}{{ mark_documented(x) }}
 .. type:: krpc_{{ x.service_name }}_{{ x.name }}_t
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
@@ -36,6 +45,9 @@ Service {{ x.name }}
 {% macro procedure(service_name, x) %}{{ mark_documented(x) }}
 .. function:: krpc_error_t krpc_{{ service_name }}_{{ domain.method_name(x.name) }}({{ parameters(x.return_type, x.parameters) }})
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
 {{ parameters_description(x.parameters) }}
@@ -58,6 +70,9 @@ Service {{ x.name }}
 .. function:: void krpc_{{ service_name }}_set_{{ x.name }}({{ domain.parameter_type(x.type) }} value)
 {% endif %}
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
@@ -74,6 +89,9 @@ Service {{ x.name }}
 {% macro class_method(service_name, class_name, x) %}{{ mark_documented(x) }}
 .. function:: krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ domain.method_name(x.name) }}({{ parameters(x.return_type, x.parameters[1:]) }})
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
 {{ parameters_description(x.parameters[1:]) }}
@@ -91,6 +109,9 @@ Service {{ x.name }}
 {% macro class_static_method(service_name, class_name, x) %}{{ mark_documented(x) }}
 .. function:: krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ domain.method_name(x.name) }}({{ parameters(x.return_type, x.parameters) }})
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
 {{ parameters_description(x.parameters) }}
@@ -112,12 +133,18 @@ Service {{ x.name }}
 {% macro enumeration(x) %}{{ mark_documented(x) }}
 .. type:: krpc_{{ x.service_name }}_{{ x.name }}_t
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
    .. macro:: KRPC_{{ x.service_name | upper }}_{{ x.name | upper }}_{{ value.name | upper }}
 
+{% if value.deprecated %}{{ deprecated(value) | indent(width=6) }}
+
+{% endif %}
 {{ gendoc(value.documentation) | indent(width=6) }}
 
 {% if hasdoc(value.documentation, './remarks') %}{{ remarks(value.documentation) | indent(width=6) }}{% endif %}
@@ -127,6 +154,9 @@ Service {{ x.name }}
 {% macro exception(x) %}{{ mark_documented(x) }}
 Exception class {{ x.name }}
 
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
 {{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
@@ -158,6 +188,10 @@ krpc_connection_t connection{% if domain.return_type(return_type) != 'void' %}, 
 .. note::
 
 {{ gendoc(x, './remarks') | indent }}
+{% endmacro %}
+
+{% macro deprecated(x) %}
+.. warning:: Deprecated.{% if x.deprecated_reason != '' %} {{ gendesc(x.deprecated_reason) }}{% endif %}
 {% endmacro %}
 
 {% macro game_scenes(x) %}

@@ -85,6 +85,19 @@ class LuaDomain(Domain):
             prefix = "class"
         else:
             raise RuntimeError(str(obj))
+        if isinstance(obj, Property):
+            # Service properties are registered with the service name doubled
+            # (Service.Service.name, unlike service procedures which register
+            # as Service.name), so the short form only resolves on the
+            # service's own page; give the explicit target so references from
+            # other services' pages resolve too.
+            service = obj.fullname.split(".")[0]
+            return ":%s:`%s <%s.%s>`" % (
+                prefix,
+                self.ref(obj),
+                service,
+                self.ref(obj),
+            )
         return ":%s:`%s`" % (prefix, self.ref(obj))
 
     @staticmethod

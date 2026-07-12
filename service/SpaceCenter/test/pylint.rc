@@ -7,6 +7,9 @@ method-rgx=[a-z_][a-z0-9_]{2,60}$
 [DESIGN]
 max-statements=60
 
+[FORMAT]
+max-module-lines=2000
+
 [MESSAGES CONTROL]
 disable=no-member,missing-docstring,similarities,too-few-public-methods,too-many-public-methods,fixme,consider-using-f-string
 

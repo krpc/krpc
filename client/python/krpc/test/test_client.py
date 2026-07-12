@@ -1,6 +1,8 @@
 import unittest
 import socket
 import threading
+import warnings
+from typing import Callable
 import krpc
 from krpc.test.servertestcase import ServerTestCase
 
@@ -102,6 +104,41 @@ class TestClient(ServerTestCase, unittest.TestCase):
         obj = self.conn.test_service.create_test_object("bar")
         self.conn.test_service.object_property = obj
         self.assertEqual(obj, self.conn.test_service.object_property)
+
+    def assert_warns_deprecation(self, action: Callable[[], None]) -> None:
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            action()
+        self.assertTrue(
+            any(issubclass(w.category, DeprecationWarning) for w in caught),
+            "expected a DeprecationWarning to be raised",
+        )
+
+    # The runtime DeprecationWarning is a feature of the dynamically-created
+    # services, so these tests use a connection without the pre-generated stubs.
+    def test_deprecated_procedure_warns(self) -> None:
+        conn = krpc.connect(
+            name="python_client_test_dynamic",
+            address="localhost",
+            rpc_port=self.rpc_port(),
+            stream_port=self.stream_port(),
+            use_pregenerated_stubs=False,
+        )
+        try:
+            self.assert_warns_deprecation(
+                lambda: conn.test_service.deprecated_procedure(3.14159)
+            )
+            self.assert_warns_deprecation(
+                lambda: conn.test_service.deprecated_procedure_no_message(3.14159)
+            )
+            self.assert_warns_deprecation(
+                lambda: setattr(conn.test_service, "deprecated_property", "foo")
+            )
+            self.assert_warns_deprecation(
+                lambda: getattr(conn.test_service, "deprecated_property")
+            )
+        finally:
+            conn.close()
 
     def test_class_as_return_value(self) -> None:
         obj = self.conn.test_service.create_test_object("jeb")
@@ -381,6 +418,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "set_stream_rate",
                     "remove_stream",
                     "add_event",
+                    "game_scene",
                     "current_game_scene",
                     "GameScene",
                     "paused",
@@ -445,6 +483,12 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "throw_argument_out_of_range_exception",
                     "on_timer",
                     "on_timer_using_lambda",
+                    "deprecated_procedure",
+                    "deprecated_procedure_no_message",
+                    "deprecated_property",
+                    "DeprecatedClass",
+                    "DeprecatedEnum",
+                    "DeprecatedException",
                 ]
             ),
             set(x for x in dir(self.conn.test_service) if not x.startswith("_")),

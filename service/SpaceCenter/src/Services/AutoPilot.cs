@@ -61,12 +61,22 @@ namespace KRPC.SpaceCenter.Services
         /// <remarks>Equivalent to <see cref="Control.SAS"/></remarks>
         [KRPCProperty]
         public bool SAS {
-            get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
+            get { return GetSAS (InternalVessel); }
             set {
                 if (value && Engaged)
                     throw new InvalidOperationException ("SAS cannot be enabled when the auto-pilot is engaged");
-                InternalVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value);
+                SetSAS (InternalVessel, value);
             }
+        }
+
+        internal static bool GetSAS (global::Vessel vessel)
+        {
+            return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)];
+        }
+
+        internal static void SetSAS (global::Vessel vessel, bool value)
+        {
+            vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value);
         }
 
         /// <summary>
@@ -77,8 +87,34 @@ namespace KRPC.SpaceCenter.Services
         /// <remarks>Equivalent to <see cref="Control.SASMode"/></remarks>
         [KRPCProperty]
         public SASMode SASMode {
-            get { return Control.GetSASMode (InternalVessel); }
-            set { Control.SetSASMode (InternalVessel, value); }
+            get { return GetSASMode (InternalVessel); }
+            set { SetSASMode (InternalVessel, value); }
+        }
+
+        internal static SASMode GetSASMode (global::Vessel vessel)
+        {
+            return vessel.Autopilot.Mode.ToSASMode ();
+        }
+
+        internal static void SetSASMode (global::Vessel vessel, SASMode value)
+        {
+            var autopilot = vessel.Autopilot;
+            var mode = value.FromSASMode ();
+            if (!autopilot.CanSetMode (mode))
+                throw new InvalidOperationException ("Cannot set SAS mode of vessel");
+            // When SAS is enabled and the mode is set in the same physics tick,
+            // VesselAutopilot.Update has not yet enabled the autopilot, so
+            // SetMode would only store the mode. The autopilot then enables with
+            // Enable(StabilityAssist) on the next update, discarding the mode.
+            // Enable atomically with the requested mode to avoid this.
+            if (!autopilot.Enabled && GetSAS (vessel))
+                autopilot.Enable (mode);
+            else
+                autopilot.SetMode (mode);
+            // Update the UI buttons
+            var modeIndex = (int)autopilot.Mode;
+            var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
+            modeButtons [modeIndex].SetState (true);
         }
 
         /// <summary>

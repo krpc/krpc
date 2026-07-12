@@ -87,22 +87,30 @@ namespace KRPC.Service.KRPC
                     procedure.GameScene = procedureSignature.GameScene;
                     if (procedureSignature.Documentation.Length > 0)
                         procedure.Documentation = procedureSignature.Documentation;
+                    procedure.Deprecated = procedureSignature.Deprecated;
+                    procedure.DeprecatedReason = procedureSignature.DeprecatedReason;
                     service.Procedures.Add (procedure);
                 }
                 foreach (var clsSignature in serviceSignature.Classes.Values) {
                     var cls = new Class (clsSignature.Name);
                     if (clsSignature.Documentation.Length > 0)
                         cls.Documentation = clsSignature.Documentation;
+                    cls.Deprecated = clsSignature.Deprecated;
+                    cls.DeprecatedReason = clsSignature.DeprecatedReason;
                     service.Classes.Add (cls);
                 }
                 foreach (var enmSignature in serviceSignature.Enumerations.Values) {
                     var enm = new Enumeration (enmSignature.Name);
                     if (enmSignature.Documentation.Length > 0)
                         enm.Documentation = enmSignature.Documentation;
+                    enm.Deprecated = enmSignature.Deprecated;
+                    enm.DeprecatedReason = enmSignature.DeprecatedReason;
                     foreach (var enmValueSignature in enmSignature.Values) {
                         var enmValue = new EnumerationValue (enmValueSignature.Name, enmValueSignature.Value);
                         if (enmValueSignature.Documentation.Length > 0)
                             enmValue.Documentation = enmValueSignature.Documentation;
+                        enmValue.Deprecated = enmValueSignature.Deprecated;
+                        enmValue.DeprecatedReason = enmValueSignature.DeprecatedReason;
                         enm.Values.Add (enmValue);
                     }
                     service.Enumerations.Add (enm);
@@ -111,10 +119,14 @@ namespace KRPC.Service.KRPC
                     var exn = new Messages.Exception (exnSignature.Name);
                     if (exnSignature.Documentation.Length > 0)
                         exn.Documentation = exnSignature.Documentation;
+                    exn.Deprecated = exnSignature.Deprecated;
+                    exn.DeprecatedReason = exnSignature.DeprecatedReason;
                     service.Exceptions.Add (exn);
                 }
                 if (serviceSignature.Documentation.Length > 0)
                     service.Documentation = serviceSignature.Documentation;
+                service.Deprecated = serviceSignature.Deprecated;
+                service.DeprecatedReason = serviceSignature.DeprecatedReason;
                 services.ServicesList.Add (service);
             }
             return services;
@@ -130,41 +142,25 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// The game scene. See <see cref="CurrentGameScene"/>.
-        /// </summary>
-        [KRPCEnum]
-        [Serializable]
-        public enum GameScene
-        {
-            /// <summary>
-            /// The game scene showing the Kerbal Space Center buildings.
-            /// </summary>
-            SpaceCenter,
-            /// <summary>
-            /// The game scene showing a vessel in flight (or on the launchpad/runway).
-            /// </summary>
-            Flight,
-            /// <summary>
-            /// The tracking station.
-            /// </summary>
-            TrackingStation,
-            /// <summary>
-            /// The Vehicle Assembly Building.
-            /// </summary>
-            EditorVAB,
-            /// <summary>
-            /// The Space Plane Hangar.
-            /// </summary>
-            EditorSPH
-        }
-
-        /// <summary>
-        /// Get the current game scene.
+        /// The current game scene. Setting this switches the game to the given
+        /// scene, or opens/closes the corresponding facility for the pseudo-scenes.
+        /// Scene changes happen asynchronously: setting this property returns
+        /// immediately, and clients should poll it until it reports the requested
+        /// scene. Setting it to <see cref="GameScene.Flight"/> resumes the save's
+        /// active vessel, and fails if there is none.
         /// </summary>
         [KRPCProperty]
-        public static GameScene CurrentGameScene {
+        public static GameScene GameScene {
             get {
                 var scene = CallContext.GameScene;
+                if ((scene & Service.GameScene.AstronautComplex) != 0)
+                    return GameScene.AstronautComplex;
+                if ((scene & Service.GameScene.MissionControl) != 0)
+                    return GameScene.MissionControl;
+                if ((scene & Service.GameScene.ResearchAndDevelopment) != 0)
+                    return GameScene.ResearchAndDevelopment;
+                if ((scene & Service.GameScene.Administration) != 0)
+                    return GameScene.Administration;
                 if ((scene & Service.GameScene.SpaceCenter) != 0)
                     return GameScene.SpaceCenter;
                 if ((scene & Service.GameScene.Flight) != 0)
@@ -175,8 +171,26 @@ namespace KRPC.Service.KRPC
                     return GameScene.EditorVAB;
                 if ((scene & Service.GameScene.EditorSPH) != 0)
                     return GameScene.EditorSPH;
+                if ((scene & Service.GameScene.MissionBuilder) != 0)
+                    return GameScene.MissionBuilder;
                 throw new System.InvalidOperationException ("Unknown game scene");
             }
+            set {
+                var loadScene = CallContext.LoadScene;
+                if (loadScene == null)
+                    throw new System.InvalidOperationException (
+                        "Changing the game scene is not supported by this server");
+                loadScene (value);
+            }
+        }
+
+        /// <summary>
+        /// Get the current game scene.
+        /// </summary>
+        [KRPCProperty]
+        [Obsolete ("Use <see cref='GameScene'/> instead.")]
+        public static GameScene CurrentGameScene {
+            get { return GameScene; }
         }
 
         /// <summary>

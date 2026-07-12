@@ -15,6 +15,9 @@ class CppGenerator(Generator):
 
     language = CppLanguage()
 
+    plain_cref_separator = "::"
+    parse_plain_cref_member = staticmethod(snake_case)
+
     def parse_set_client(self, procedure):
         return isinstance(self.get_return_type(procedure), ClassType)
 
@@ -44,6 +47,8 @@ class CppGenerator(Generator):
                         info["getter"]["procedure"]
                     ),
                     "documentation": info["documentation"],
+                    "deprecated": info["deprecated"],
+                    "deprecated_reason": info["deprecated_reason"],
                 }
             if info["setter"]:
                 properties["set_" + name] = {
@@ -54,6 +59,8 @@ class CppGenerator(Generator):
                     "return_type": "void",
                     "return_set_client": False,
                     "documentation": info["documentation"],
+                    "deprecated": info["deprecated"],
+                    "deprecated_reason": info["deprecated_reason"],
                 }
 
         for class_info in context["classes"].values():
@@ -74,6 +81,8 @@ class CppGenerator(Generator):
                             info["getter"]["procedure"]
                         ),
                         "documentation": info["documentation"],
+                        "deprecated": info["deprecated"],
+                        "deprecated_reason": info["deprecated_reason"],
                     }
                 if info["setter"]:
                     class_properties["set_" + name] = {
@@ -86,11 +95,46 @@ class CppGenerator(Generator):
                         "return_type": "void",
                         "return_set_client": False,
                         "documentation": info["documentation"],
+                        "deprecated": info["deprecated"],
+                        "deprecated_reason": info["deprecated_reason"],
                     }
             class_info["properties"] = class_properties
 
         context["properties"] = properties
+
+        # Append a \deprecated doxygen tag for every deprecated member/type
+        deprecatable = (
+            list(context["procedures"].values())
+            + list(context["properties"].values())
+            + list(context["enumerations"].values())
+            + list(context["exceptions"].values())
+            + list(context["classes"].values())
+        )
+        for enm in context["enumerations"].values():
+            deprecatable += list(enm["values"])
+        for class_info in context["classes"].values():
+            deprecatable += (
+                list(class_info["methods"].values())
+                + list(class_info["static_methods"].values())
+                + list(class_info["properties"].values())
+            )
+        for info in deprecatable:
+            self.add_deprecated_doxygen(info)
+
         return context
+
+    @staticmethod
+    def add_deprecated_doxygen(info):
+        if not info.get("deprecated") or not info.get("deprecated_reason"):
+            return
+        tag = " * \\deprecated " + info["deprecated_reason"]
+        documentation = info.get("documentation", "")
+        if documentation:
+            lines = documentation.split("\n")
+            # lines[-1] is the closing ' */'
+            info["documentation"] = "\n".join(lines[:-1] + [" *", tag, " */"])
+        else:
+            info["documentation"] = "\n".join(["/**", tag, " */"])
 
 
 class CppDocParser(DocParser):

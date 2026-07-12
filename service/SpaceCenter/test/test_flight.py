@@ -194,6 +194,43 @@ class TestFlight(krpctest.TestCase):
             longitude = flight.longitude
             self.wait()
 
+    def test_acceleration(self):
+        # On a stable circular orbit the total acceleration (which includes
+        # gravity) is gravitational: directed radially inward with a magnitude
+        # close to the local gravity. KSP's own reported acceleration differs from
+        # mu/r^2 by a few percent on a teleported orbit, so the magnitude is
+        # checked with a loose tolerance; the radially-inward direction is exact.
+        ref = self.vessel.orbit.body.non_rotating_reference_frame
+        flight = self.vessel.flight(ref)
+        g = self.vessel.orbit.body.gravitational_parameter / (
+            self.vessel.orbit.radius**2
+        )
+        acceleration = vector(flight.acceleration)
+        radial_out = normalize(vector(self.vessel.position(ref)))
+        # Directed radially inward (the world-to-frame transform and sign is exact).
+        self.assertAlmostEqual(
+            -norm(acceleration), dot(acceleration, radial_out), delta=0.1
+        )
+        # Gravity-scale magnitude.
+        self.assertAlmostEqual(g, norm(acceleration), delta=1.0)
+
+    def test_aerodynamic_acceleration(self):
+        # aerodynamic_acceleration/lift_acceleration/drag_acceleration should each
+        # equal the corresponding aerodynamic force divided by the vessel's mass.
+        if self.far:
+            self.skipTest("stock aerodynamics only")
+        flight = self.vessel.flight(self.vessel.reference_frame)
+        mass = self.vessel.mass
+        for force_attr, accel_attr in (
+            ("aerodynamic_force", "aerodynamic_acceleration"),
+            ("lift", "lift_acceleration"),
+            ("drag", "drag_acceleration"),
+        ):
+            force = getattr(flight, force_attr)
+            accel = getattr(flight, accel_attr)
+            expected = tuple(f / mass for f in force)
+            self.assertAlmostEqual(expected, accel, delta=1e-3)
+
 
 class TestFlightVerticalSpeed(krpctest.TestCase):
 
@@ -348,6 +385,78 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
     #         drag_coefficient = mass_drag_products / total_mass
     #         self.assertAlmostEqual(
     #             drag_coefficient, self.vessel.flight().drag_coefficient)
+
+
+class TestFlightAirbrake(krpctest.TestCase):
+    """Regression for issue #622: SimulateAerodynamicForceAt must account for
+    the current physical deflection of ModuleAeroSurface airbrakes."""
+
+    # Stock airbrake1: actuatorSpeed 20 deg/s, ctrlSurfaceRange 70 deg.
+    ACTUATOR_WAIT = 5.0
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("FlightAirbrake")
+        cls.remove_other_vessels()
+        cls.space_center = cls.connect().space_center
+        cls.vessel = cls.space_center.active_vessel
+        cls.far = cls.space_center.far_available
+
+    def _airbrakes(self):
+        return [
+            cs
+            for cs in self.vessel.parts.control_surfaces
+            if any(m.name == "ModuleAeroSurface" for m in cs.part.modules)
+        ]
+
+    def _set_airbrakes_deployed(self, deployed):
+        for cs in self._airbrakes():
+            cs.deployed = deployed
+        self.wait(self.ACTUATOR_WAIT)
+
+    def test_simulate_aerodynamic_force_airbrake_deploy(self):
+        if self.far:
+            self.skipTest("Stock airbrake deflection path; skip when FAR is installed")
+
+        airbrakes = self._airbrakes()
+        self.assertGreaterEqual(len(airbrakes), 1)
+
+        body = self.vessel.orbit.body
+        ref = body.reference_frame
+        flight = self.vessel.flight(ref)
+        # Fixed synthetic airflow so the test does not depend on flight.
+        position = self.vessel.position(ref)
+        rotation = self.vessel.rotation(ref)
+        nose = vector(self.vessel.direction(ref))
+        velocity = tuple(300 * nose)
+
+        try:
+            self._set_airbrakes_deployed(False)
+            retracted = vector(
+                flight.simulate_aerodynamic_force_at(body, position, velocity, rotation)
+            )
+            retracted_mag = norm(retracted)
+            self.assertGreater(retracted_mag, 1.0)
+
+            self._set_airbrakes_deployed(True)
+            deployed = vector(
+                flight.simulate_aerodynamic_force_at(body, position, velocity, rotation)
+            )
+            deployed_mag = norm(deployed)
+            # Before the fix, deflection is ignored so deployed == retracted.
+            self.assertGreater(deployed_mag, 1.25 * retracted_mag)
+
+            self._set_airbrakes_deployed(False)
+            retracted_again = vector(
+                flight.simulate_aerodynamic_force_at(body, position, velocity, rotation)
+            )
+            self.assertAlmostEqual(
+                retracted_mag, norm(retracted_again), delta=0.05 * retracted_mag
+            )
+        finally:
+            for cs in self._airbrakes():
+                cs.deployed = False
 
 
 if __name__ == "__main__":

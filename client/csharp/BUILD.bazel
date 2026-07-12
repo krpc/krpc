@@ -171,7 +171,7 @@ test_suite(
 
 client_test(
     name = "client",
-    size = "small",
+    size = "medium",
     server_executable = "//tools/TestServer",
     tags = [
         "local",

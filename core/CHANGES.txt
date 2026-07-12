@@ -1,6 +1,10 @@
 v0.6.0
  * Add Version property to Core, set by the server plugin on startup
  * Make logger configurable in where it writes to (#780)
+ * Surface deprecated members (annotated with [Obsolete]) in the service definition and over the wire (#904)
+ * Rename KRPC.CurrentGameScene to KRPC.GameScene and make it settable to switch the current game scene (#897)
+ * Add AstronautComplex, MissionControl, ResearchAndDevelopment, Administration and MissionBuilder game scenes (#897)
+ * **Deprecated:** KRPC.CurrentGameScene, kept as a read-only alias of KRPC.GameScene (#897)
 
 v0.5.4
  * Initial version, split off from KRPC.dll

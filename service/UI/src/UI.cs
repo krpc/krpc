@@ -36,6 +36,8 @@ namespace KRPC.UI
     /// </summary>
     /// <remarks>
     /// For drawing 3D objects in the flight scene, see the Drawing service.
+    /// User interface elements created by a client are removed when that client
+    /// disconnects.
     /// </remarks>
     [KRPCService (Id = 7, GameScene = GameScene.All)]
     public static class UI
@@ -91,10 +93,7 @@ namespace KRPC.UI
         [KRPCProcedure]
         public static void Clear (bool clientOnly = false)
         {
-            if (clientOnly)
-                Addon.Clear (CallContext.Client);
-            else
-                Addon.Clear ();
+            Addon.Clear (clientOnly);
         }
     }
 }

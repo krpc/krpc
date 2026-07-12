@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using KRPC.Server;
 using KRPC.Service;
-using UnityEngine;
+using KRPC.Utils;
 
 namespace KRPC.Drawing
 {
@@ -11,74 +9,50 @@ namespace KRPC.Drawing
     /// Addon for doing the drawing
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    public sealed class Addon : MonoBehaviour
+    public sealed class Addon : ClientCleanupAddon
     {
-        static IDictionary<IClient, IList<IDrawable>> objects = new Dictionary<IClient, IList<IDrawable>> ();
+        static readonly ClientOwnedObjects<IDrawable> objects =
+            new ClientOwnedObjects<IDrawable> (obj => obj.Destroy ());
+
+        static readonly IClientOwnedCollection[] collections = { objects };
+
+        /// <summary>
+        /// The drawing objects.
+        /// </summary>
+        protected override IEnumerable<IClientOwnedCollection> Collections {
+            get { return collections; }
+        }
 
         internal static void AddObject (IDrawable obj)
         {
-            var client = CallContext.Client;
-            if (!objects.ContainsKey (client))
-                objects [client] = new List<IDrawable> ();
-            objects [client].Add (obj);
+            objects.Add (obj);
         }
 
         internal static void RemoveObject (IDrawable obj)
         {
-            var client = CallContext.Client;
-            if (!objects.ContainsKey (client) || !objects [client].Contains (obj))
+            if (!objects.OwnedByCaller (obj))
                 throw new ArgumentException ("Drawing object not found");
             obj.Destroy ();
-            objects [client].Remove (obj);
+            objects.Remove (obj);
         }
 
-        internal static void Clear ()
+        internal static void Clear (bool clientOnly)
         {
-            foreach (var clientObjects in objects.Values)
-                foreach (var obj in clientObjects)
-                    obj.Destroy ();
-            objects.Clear ();
-        }
-
-        internal static void Clear (IClient client)
-        {
-            if (objects.ContainsKey (client)) {
-                foreach (var obj in objects [client])
-                    obj.Destroy ();
-                objects.Remove (client);
-            }
+            if (clientOnly)
+                objects.Clear (CallContext.Client);
+            else
+                objects.Clear ();
         }
 
         /// <summary>
-        /// Wake the addon
-        /// </summary>
-        public void Awake ()
-        {
-        }
-
-        /// <summary>
-        /// Update the addon
+        /// Update the addon: destroy the objects of clients that have disconnected,
+        /// and update the rest.
         /// </summary>
         public void Update ()
         {
-            if (!objects.Any ())
-                return;
-
-            var disconnectedClients = objects.Keys.Where (x => !x.Connected).ToList ();
-            foreach (var client in disconnectedClients)
-                Clear (client);
-
-            foreach (var clientObjects in objects.Values)
-                foreach (var obj in clientObjects)
-                    obj.Update ();
-        }
-
-        /// <summary>
-        /// Destroy the addon
-        /// </summary>
-        public void OnDestroy ()
-        {
-            Clear ();
+            Sweep ();
+            foreach (var obj in objects.Items)
+                obj.Update ();
         }
     }
 }

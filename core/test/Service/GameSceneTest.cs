@@ -7,7 +7,7 @@ namespace KRPC.Test.Service
     [TestFixture]
     public class GameSceneTest
     {
-        [TestCase ("[\"SPACE_CENTER\",\"FLIGHT\",\"TRACKING_STATION\",\"EDITOR_VAB\",\"EDITOR_SPH\",\"MISSION_BUILDER\"]", GameScene.All)]
+        [TestCase ("[\"SPACE_CENTER\",\"FLIGHT\",\"TRACKING_STATION\",\"EDITOR_VAB\",\"EDITOR_SPH\",\"MISSION_BUILDER\",\"ASTRONAUT_COMPLEX\",\"MISSION_CONTROL\",\"RESEARCH_AND_DEVELOPMENT\",\"ADMINISTRATION\"]", GameScene.All)]
         [TestCase ("[\"SPACE_CENTER\"]", GameScene.SpaceCenter)]
         [TestCase ("[\"FLIGHT\"]", GameScene.Flight)]
         [TestCase ("[\"TRACKING_STATION\"]", GameScene.TrackingStation)]
@@ -15,6 +15,11 @@ namespace KRPC.Test.Service
         [TestCase ("[\"EDITOR_SPH\"]", GameScene.EditorSPH)]
         [TestCase ("[\"EDITOR_VAB\",\"EDITOR_SPH\"]", GameScene.Editor)]
         [TestCase ("[\"MISSION_BUILDER\"]", GameScene.MissionBuilder)]
+        [TestCase ("[\"ASTRONAUT_COMPLEX\"]", GameScene.AstronautComplex)]
+        [TestCase ("[\"MISSION_CONTROL\"]", GameScene.MissionControl)]
+        [TestCase ("[\"RESEARCH_AND_DEVELOPMENT\"]", GameScene.ResearchAndDevelopment)]
+        [TestCase ("[\"ADMINISTRATION\"]", GameScene.Administration)]
+        [TestCase ("[\"SPACE_CENTER\",\"ASTRONAUT_COMPLEX\"]", GameScene.SpaceCenter | GameScene.AstronautComplex)]
         [TestCase ("[]", GameScene.None)]
         [TestCase ("[]", GameScene.Inherit)]
         [TestCase ("[\"SPACE_CENTER\",\"TRACKING_STATION\"]", GameScene.TrackingStation | GameScene.SpaceCenter)]

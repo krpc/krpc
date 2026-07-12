@@ -1,4 +1,7 @@
 v0.6.0
+ * Fix Flight.SimulateAerodynamicForceAt ignoring the current deflection of
+   aerodynamic control surfaces, including deployed airbrakes (#622)
+ * Canonicalize AutoPilot attitude-error vectors for equivalent quaternions at exactly 180° (#571)
  * Fix Maneuver and ManeuverOrbital reference frame velocity (previously returned zero; now returns the orbital velocity at the node UT)
  * Fix angular velocity for VesselSurface, VesselSurfaceVelocity, CelestialBodyOrbital, ManeuverOrbital, Part, PartCenterOfMass, DockingPort and Thrust reference frames (previously returned zero)
  * Fix LookRotation2 producing NaN for rotations near 180° by using Shepperd's method
@@ -56,6 +59,20 @@ v0.6.0
  * Fix reference frame velocity being incorrect at non-equatorial latitudes (#454)
  * Fix ResourceHarvester.ExtractionRate returning 0 when part action window is not open (#889)
  * Fix Sensor.Value returning zero when the part action window is not open (#883)
+ * Fix Engine.AvailableThrust and MaxThrust for air-breathing engines at supersonic speeds (#924)
+ * Fix Control.SASMode being dropped when set in the same physics tick as enabling SAS (#236)
+ * Add RPCs for getting acceleration to Flight and Vessel classes (#581)
+ * Add PartField, PartEvent and PartAction API (#859)
+ * Deprecate the string-dictionary Module field, event and action members (#859)
+ * Remove forces added by Part.AddForce when the client that added them disconnects
+ * Cancel in-progress resource transfers when the client that started them disconnects;
+   a canceled transfer is marked as complete
+ * Fix part highlighting leaking a client-disconnect event handler each time the flight
+   scene is loaded
+ * **Deprecated:** SpaceCenter.LoadSpaceCenter, superseded by setting KRPC.GameScene (#897)
+ * Fix Control.CustomAxis01-04 being applied to the active vessel instead of the
+   target vessel, and the getters not reading back the value that was set
+ * Fix throttle being applied to a vessel with no RemoteTech control connection
 
 v0.5.4
  * Fix vessel recovery (#782)

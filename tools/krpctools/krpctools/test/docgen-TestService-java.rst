@@ -62,6 +62,34 @@
       :param String value:
    
 
+   .. method:: String deprecatedProcedure(float value)
+
+      .. warning:: Deprecated. Use :meth:`floatToString(float)` instead.
+
+      Deprecated procedure documentation string.
+
+      :param float value:
+   
+
+   .. method:: String deprecatedProcedureNoMessage(float value)
+
+      .. warning:: Deprecated.
+
+      Deprecated procedure with no reason documentation string.
+
+      :param float value:
+   
+
+   .. method:: String getDeprecatedProperty()
+
+   .. method:: void setDeprecatedProperty(String value)
+
+      .. warning:: Deprecated. Use :meth:`getStringProperty()` instead.
+
+      Deprecated property documentation string.
+
+   
+
    .. method:: java.util.Map<Integer,Boolean> dictionaryDefault(java.util.Map<Integer,Boolean> x)
 
 
@@ -378,6 +406,22 @@
 
 
 
+.. type:: public class DeprecatedClass
+
+   .. warning:: Deprecated. Use :type:`TestClass` instead.
+
+   Deprecated class documentation string.
+
+   .. method:: String deprecatedMethod()
+
+      .. warning:: Deprecated. Use :meth:`TestClass.getValue()` instead.
+
+      Deprecated method documentation string.
+
+   
+
+
+
 .. type:: public enum TestEnum
 
    Enum documentation string.
@@ -399,4 +443,34 @@
 
 
 
+.. type:: public enum DeprecatedEnum
+
+   .. warning:: Deprecated. Use :type:`TestEnum` instead.
+
+   Deprecated enum documentation string.
+
+
+   .. field:: public DeprecatedEnum VALUE_A
+
+      Deprecated enum ValueA documentation string.
+
+
+   .. field:: public DeprecatedEnum VALUE_B
+
+      .. warning:: Deprecated. Use :meth:`DeprecatedEnum.VALUE_A` instead.
+
+      Deprecated enum ValueB documentation string.
+
+
+
 .. type:: public class CustomException
+
+
+
+
+
+.. type:: public class DeprecatedException
+
+   .. warning:: Deprecated. Use CustomException instead.
+
+   Deprecated exception documentation string.

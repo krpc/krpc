@@ -17,8 +17,10 @@ namespace KRPC.SpaceCenter.Services
     /// Obtained by calling <see cref="Vessel.Control"/>.
     /// </summary>
     /// <remarks>
-    /// Control inputs (such as pitch, yaw and roll) are zeroed when all clients
-    /// that have set one or more of these inputs are no longer connected.
+    /// Control inputs (pitch, yaw, roll, translation, wheel throttle, wheel steering
+    /// and the custom axes) are zeroed when all clients that have set one or more of
+    /// these inputs are no longer connected. The throttle is an exception: it keeps
+    /// its value when clients disconnect.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Control : Equatable<Control>
@@ -77,8 +79,8 @@ namespace KRPC.SpaceCenter.Services
         /// <remarks>Equivalent to <see cref="AutoPilot.SAS"/></remarks>
         [KRPCProperty]
         public bool SAS {
-            get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
-            set { InternalVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value); }
+            get { return AutoPilot.GetSAS (InternalVessel); }
+            set { AutoPilot.SetSAS (InternalVessel, value); }
         }
 
         /// <summary>
@@ -89,25 +91,8 @@ namespace KRPC.SpaceCenter.Services
         /// <remarks>Equivalent to <see cref="AutoPilot.SASMode"/></remarks>
         [KRPCProperty]
         public SASMode SASMode {
-            get { return GetSASMode (InternalVessel); }
-            set { SetSASMode (InternalVessel, value); }
-        }
-
-        internal static SASMode GetSASMode (global::Vessel vessel)
-        {
-            return vessel.Autopilot.Mode.ToSASMode ();
-        }
-
-        internal static void SetSASMode (global::Vessel vessel, SASMode value)
-        {
-            var mode = value.FromSASMode ();
-            if (!vessel.Autopilot.CanSetMode (mode))
-                throw new InvalidOperationException ("Cannot set SAS mode of vessel");
-            vessel.Autopilot.SetMode (mode);
-            // Update the UI buttons
-            var modeIndex = (int)vessel.Autopilot.Mode;
-            var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
-            modeButtons [modeIndex].SetState (true);
+            get { return AutoPilot.GetSASMode (InternalVessel); }
+            set { AutoPilot.SetSASMode (InternalVessel, value); }
         }
 
         /// <summary>
@@ -398,6 +383,8 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The state of the throttle. A value between 0 and 1.
+        /// Unlike the other control inputs, the throttle is not zeroed when the
+        /// clients that set it disconnect.
         /// </summary>
         [KRPCProperty]
         public float Throttle {
