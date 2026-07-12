@@ -1159,7 +1159,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             QuaternionD rollResidual = targetRotation * currentRotation.Inverse () * dirRotation.Inverse ();
             double angle;
             Vector3d axis;
-            GeometryExtensions.ToAngleAxis (rollResidual, out angle, out axis);
+            GeometryExtensions.ToAngleAxis (rollResidual.CanonicalSign (), out angle, out axis);
             if (double.IsInfinity (axis.magnitude))
                 return 0.0;
             angle = GeometryExtensions.ClampAngle180 (angle);
@@ -1204,7 +1204,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             QuaternionD rollResidual = target * currentRotation.Inverse () * dirRotation.Inverse ();
             double rollAngle;
             Vector3d rollAxis;
-            GeometryExtensions.ToAngleAxis (rollResidual, out rollAngle, out rollAxis);
+            GeometryExtensions.ToAngleAxis (rollResidual.CanonicalSign (), out rollAngle, out rollAxis);
             if (!double.IsInfinity (rollAxis.magnitude)) {
                 rollAngle = GeometryExtensions.ClampAngle180 (rollAngle);
                 roll = rollAngle * ApToBody (rollAxis).y;
@@ -1677,7 +1677,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                     QuaternionD rollResidual = effectiveRotation * currentRotation.Inverse () * dirRotation.Inverse ();
                     double rollResAngle;
                     Vector3d rollResAxis;
-                    GeometryExtensions.ToAngleAxis (rollResidual, out rollResAngle, out rollResAxis);
+                    GeometryExtensions.ToAngleAxis (rollResidual.CanonicalSign (), out rollResAngle, out rollResAxis);
                     if (!double.IsInfinity (rollResAxis.magnitude)) {
                         rollResAngle = GeometryExtensions.ClampAngle180 (rollResAngle);
                         // Project the residual axis onto body y (nose). The y-axis is unchanged

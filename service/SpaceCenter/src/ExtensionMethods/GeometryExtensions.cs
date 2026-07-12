@@ -375,6 +375,35 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Canonicalize a rotation quaternion's sign so that <c>q</c> and <c>-q</c> — which are the
+        /// same rotation — decompose identically. <see cref="ToAngleAxis"/> maps them to opposite
+        /// axes at exactly 180 degrees (where w is zero), which flips the sign of the decomposed
+        /// axis*angle vector. Choose w &gt;= 0, and at w == 0 make the largest-magnitude component
+        /// positive, so the axis is deterministic and does not flip under noise in a minor component.
+        /// For any rotation away from 180 degrees this leaves the resulting axis*angle vector
+        /// unchanged (ToAngleAxis followed by <see cref="ClampAngle180"/> already canonicalizes those);
+        /// it only disambiguates the 180-degree singular point.
+        /// </summary>
+        public static QuaternionD CanonicalSign (this QuaternionD q)
+        {
+            if (q.w < 0 || (q.w == 0 && LargestComponentIsNegative (q.x, q.y, q.z)))
+                return new QuaternionD (-q.x, -q.y, -q.z, -q.w);
+            return q;
+        }
+
+        static bool LargestComponentIsNegative (double x, double y, double z)
+        {
+            var absX = Math.Abs (x);
+            var absY = Math.Abs (y);
+            var absZ = Math.Abs (z);
+            if (absX >= absY && absX >= absZ)
+                return x < 0;
+            if (absY >= absZ)
+                return y < 0;
+            return z < 0;
+        }
+
+        /// <summary>
         /// Spherical linear interpolation between two unit quaternions, along the shortest geodesic
         /// (constant angular velocity). t is clamped to [0,1]. Reimplemented here (rather than using
         /// the stubbed KSP QuaternionD.Slerp) using the half-angle of the delta rotation, so it works

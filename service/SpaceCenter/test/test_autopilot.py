@@ -942,6 +942,53 @@ def _make_autopilot_test_class(
             )
             self.check_rotation(0, 270)
 
+        def _assert_roll_flip(self, start_roll, target_roll):
+            # Drive a half-turn roll and assert convergence on the commanded roll,
+            # with the reported roll error staying finite throughout. A 180-degree
+            # roll is the singularity of the roll-residual decomposition: q and -q
+            # decompose to opposite axes there, so the sign of both the commanded
+            # roll rate and the reported roll error is ambiguous. Starting from
+            # upright and from inverted feeds the residual quaternion with opposite
+            # signs, exercising both branches of the sign canonicalization.
+            self.cheat_orientation_to(0, 90, start_roll)
+            self.set_rotation(0, 90, target_roll)
+            self.ap.engaged = True
+            deadline = time.time() + self.recover_timeout
+            settled_since = None
+            while time.time() < deadline:
+                self.wait(0.1)
+                self.assertFalse(math.isnan(self.ap.roll_error))
+                if self.ap.error < self.angle_error:
+                    if settled_since is None:
+                        settled_since = time.time()
+                    elif time.time() - settled_since > 1.0:
+                        break
+                else:
+                    settled_since = None
+            self.ap.engaged = False
+            flight = self.vessel.flight()
+            self.assertAlmostEqual(0, flight.pitch, delta=self.angle_error)
+            self.assertAlmostEqual(90, flight.heading, delta=self.angle_error)
+            # Roll wraps at +/-180, so measure the shortest signed distance to the
+            # target; the inverted hold may read either sign.
+            roll_error = abs((flight.roll - target_roll + 180) % 360 - 180)
+            self.assertLess(
+                roll_error, self.angle_error, "did not converge on the commanded roll"
+            )
+
+        def test_roll_flip_180(self):
+            # A 180-degree roll flip from upright: the vessel must commit to a
+            # direction and converge on the inverted attitude rather than stalling
+            # or chattering at the roll antipode. Regression for the roll-residual
+            # sign canonicalization.
+            self._assert_roll_flip(0, 180)
+
+        def test_roll_flip_180_from_inverted(self):
+            # The reverse half-turn roll, from inverted back to upright. Feeds the
+            # roll residual with the opposite quaternion sign to test_roll_flip_180,
+            # so the canonicalization must resolve both consistently.
+            self._assert_roll_flip(180, 0)
+
         def test_target_step_mid_slew(self):
             # Stepping the target mid-slew is a setpoint discontinuity. The pre-clamp
             # acceleration feedforward legitimately impulses at the step (it
