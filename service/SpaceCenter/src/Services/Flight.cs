@@ -787,20 +787,22 @@ namespace KRPC.SpaceCenter.Services
             QuaternionD desiredWorld = referenceFrame.RotationToWorldSpace (rotation.ToQuaternion ());
             QuaternionD currentWorld = vessel.ReferenceTransform.rotation;
             var delta = desiredWorld * currentWorld.Inverse ();
-            var adjustedVelocity = delta.Inverse () * (worldVelocity - body.InternalBody.getRFrmVel(worldPosition));
             Vector3 force;
             if (!FAR.IsAvailable) {
-                force = StockAerodynamics.SimAeroForce(body.InternalBody, vessel, adjustedVelocity, worldPosition);
+                force = StockAerodynamics.SimAeroForce(
+                    body.InternalBody, vessel, worldVelocity, worldPosition, delta);
             } else {
                 Vector3 torque;
                 var altitude = (worldPosition - body.InternalBody.position).magnitude - body.InternalBody.Radius;
+                var adjustedVelocity = delta.Inverse ()
+                    * (worldVelocity - body.InternalBody.getRFrmVel(worldPosition));
                 FAR.CalculateVesselAeroForces(vessel, out force, out torque, adjustedVelocity, altitude);
                 // CalculateVesselAeroForces returns kilonewtons; convert to newtons to
                 // match the stock path and this method's documented units.
                 force = force * 1000f;
+                force = (Vector3)(delta * (Vector3d)force);
             }
-            var worldForce = (Vector3)(delta * (Vector3d)force);
-            return referenceFrame.DirectionFromWorldSpace(worldForce).ToTuple();
+            return referenceFrame.DirectionFromWorldSpace(force).ToTuple();
         }
 
         /// <summary>
@@ -850,22 +852,24 @@ namespace KRPC.SpaceCenter.Services
             QuaternionD desiredWorld = referenceFrame.RotationToWorldSpace (rotation.ToQuaternion ());
             QuaternionD currentWorld = vessel.ReferenceTransform.rotation;
             var delta = desiredWorld * currentWorld.Inverse ();
-            var adjustedVelocity = delta.Inverse () * (worldVelocity - body.InternalBody.getRFrmVel(worldPosition));
-            var adjustedAngularVelocity = delta.Inverse () * worldAngularVelocity;
-            var altitude = (worldPosition - body.InternalBody.position).magnitude - body.InternalBody.Radius;
             Vector3 torque;
             if (!FAR.IsAvailable) {
                 torque = StockAerodynamics.SimAeroTorque(
-                    body.InternalBody, vessel, adjustedVelocity, adjustedAngularVelocity, WorldCoM, altitude);
+                    body.InternalBody, vessel, worldVelocity, worldAngularVelocity,
+                    worldPosition, delta);
             } else {
                 Vector3 force;
+                var adjustedVelocity = delta.Inverse ()
+                    * (worldVelocity - body.InternalBody.getRFrmVel(worldPosition));
+                var altitude = (worldPosition - body.InternalBody.position).magnitude
+                               - body.InternalBody.Radius;
                 FAR.CalculateVesselAeroForces(vessel, out force, out torque, adjustedVelocity, altitude);
                 // CalculateVesselAeroForces returns kilonewton-meters; convert to newton-meters
                 // to match the stock path and this method's documented units.
                 torque = torque * 1000f;
+                torque = (Vector3)(delta * (Vector3d)torque);
             }
-            var worldTorque = (Vector3)(delta * (Vector3d)torque);
-            return referenceFrame.DirectionFromWorldSpace(worldTorque).ToTuple();
+            return referenceFrame.DirectionFromWorldSpace(torque).ToTuple();
         }
 
         /// <summary>

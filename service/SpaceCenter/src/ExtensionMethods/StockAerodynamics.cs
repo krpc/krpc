@@ -425,96 +425,134 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             return sb.ToString();
         }
 
-        public static Vector3 SimAeroForce(CelestialBody body, Vessel _vessel, Vector3 v_wrld_vel, Vector3 position)
+        /// <summary>
+        /// A complete aerodynamic force/torque result in SI units and world-space
+        /// orientation. Force is in newtons and torque is in newton-meters about the
+        /// hypothetical vessel center of mass.
+        /// </summary>
+        internal struct AerodynamicWrench
         {
-            //double latitude = body.GetLatitude(position) / 180.0 * Math.PI;
-            var altitude = (position - body.position).magnitude - body.Radius;
-            return SimAeroForce(body, _vessel, v_wrld_vel, altitude);
-        }
-
-        public static Vector3 SimAeroForce(CelestialBody body, Vessel _vessel, Vector3 v_wrld_vel, double altitude)
-        {
-            var rho = GetDensity(altitude, body);
-            if (rho <= 0)
-                return Vector3.zero;
-            var soundSpeed = body.GetSpeedOfSound(body.GetPressure(altitude), rho);
-
-            // Loop through all parts, accumulating drag and lift.
-            var total_lift = Vector3d.zero;
-            var total_drag = Vector3d.zero;
-            for (int i = 0; i < _vessel.Parts.Count; ++i) {
-                var p = _vessel.Parts[i];
-                if (p.ShieldedFromAirstream || p.Rigidbody == null)
-                    continue;
-                var partForce = SimPartAeroForce(p, v_wrld_vel, rho, soundSpeed);
-                total_lift += partForce.Lift;
-                total_drag += partForce.Drag;
-            }
-            return (total_lift + total_drag) * 1000d;
+            public Vector3d Force;
+            public Vector3d Torque;
         }
 
         /// <summary>
-        /// Simulate the net aerodynamic torque about the vessel's center of mass, in the
-        /// internal (kilonewton-meter-scale) units used by SimAeroForce. Each part's lift
-        /// is levered at its center-of-lift point and its drag at its center-of-pressure
-        /// point, matching where KSP's FlightIntegrator and the lifting-surface modules
-        /// apply them, and its local airflow includes the solid-body rotation term
-        /// omega x r evaluated at the part's rigidbody center of mass.
-        ///
-        /// Also includes the per-part rigidbody angular drag the game applies: every
-        /// frame the FlightIntegrator sets each part's Unity angular drag to
-        /// part.angularDrag * dynamicPressure(atm) * PhysicsGlobals.AngularDragMultiplier
-        /// (see FlightIntegrator.UpdateAerodynamics), and Unity damps the rigidbody's
-        /// rotation by omega *= 1/(1 + angularDrag * dt), which to first order is a
-        /// torque of -angularDrag * I_part * omega. It is a real attitude torque the
-        /// game applies that never appears as a per-part force, and without it the
-        /// simulated attitude dynamics are visibly under-damped compared with flight
-        /// telemetry from an uncontrolled re-entry.
+        /// Compatibility wrapper for the legacy force endpoint. It intentionally gives
+        /// every part the same center-of-mass airflow and ignores rotational part flow,
+        /// preserving SimulateAerodynamicForceAt's established behavior.
+        /// </summary>
+        public static Vector3 SimAeroForce(
+            CelestialBody body, Vessel vessel, Vector3d worldVelocity,
+            Vector3d worldCoM, QuaternionD attitudeDelta)
+        {
+            var wrench = SimAeroWrench(
+                body, vessel, worldVelocity, Vector3d.zero, worldCoM,
+                attitudeDelta, false, true);
+            return (Vector3)wrench.Force;
+        }
+
+        /// <summary>
+        /// Compatibility wrapper for the torque endpoint. Returns the torque component
+        /// of the full rate-aware aerodynamic wrench.
         /// </summary>
         public static Vector3 SimAeroTorque(
-            CelestialBody body, Vessel _vessel, Vector3 v_wrld_vel, Vector3 angularVelocity,
-            Vector3d worldCoM, double altitude)
+            CelestialBody body, Vessel vessel, Vector3d worldVelocity,
+            Vector3d worldAngularVelocity, Vector3d worldCoM,
+            QuaternionD attitudeDelta)
         {
+            var wrench = SimAeroWrench(
+                body, vessel, worldVelocity, worldAngularVelocity, worldCoM,
+                attitudeDelta, true, false);
+            return (Vector3)wrench.Torque;
+        }
+
+        /// <summary>
+        /// Simulate the instantaneous rigid-body aerodynamic wrench. The input state is
+        /// the hypothetical vessel center-of-mass state in world space. Current part
+        /// geometry is rotated by attitudeDelta into that hypothetical state. Each part
+        /// force is evaluated once, accumulated into the net force, and levered about the
+        /// hypothetical center of mass; rigidbody angular drag is added to the torque.
+        /// The only kN/kN-m to SI conversion occurs when the completed wrench is returned.
+        /// </summary>
+        internal static AerodynamicWrench SimAeroWrench(
+            CelestialBody body, Vessel vessel, Vector3d worldVelocity,
+            Vector3d worldAngularVelocity, Vector3d worldCoM,
+            QuaternionD attitudeDelta, bool includeRotationalPartFlow,
+            bool useLegacyUniformFlow)
+        {
+            var altitude = (worldCoM - body.position).magnitude - body.Radius;
             var rho = GetDensity(altitude, body);
             if (rho <= 0)
-                return Vector3.zero;
+                return new AerodynamicWrench ();
             var soundSpeed = body.GetSpeedOfSound(body.GetPressure(altitude), rho);
 
-            var total_torque = Vector3d.zero;
-            for (int i = 0; i < _vessel.Parts.Count; ++i) {
-                var p = _vessel.Parts[i];
-                if (p.ShieldedFromAirstream || p.Rigidbody == null)
+            var inverseDelta = attitudeDelta.Inverse ();
+            var currentWorldCoM = (Vector3d)vessel.CoM;
+            var angularVelocityCurrent = (Vector3)(inverseDelta * worldAngularVelocity);
+            var uniformAirflowCurrent = (Vector3)(inverseDelta
+                * (worldVelocity - body.getRFrmVel(worldCoM)));
+            var totalForce = Vector3d.zero;
+            var totalTorque = Vector3d.zero;
+
+            for (int i = 0; i < vessel.Parts.Count; ++i) {
+                var part = vessel.Parts[i];
+                if (part.ShieldedFromAirstream || part.Rigidbody == null)
                     continue;
-                // KSP samples each part's airflow at its rigidbody velocity, which is
-                // the velocity of the rigidbody center of mass.
-                var v_part = v_wrld_vel + Vector3.Cross(
-                    angularVelocity, (Vector3)((Vector3d)p.Rigidbody.worldCenterOfMass - worldCoM));
-                var partForce = SimPartAeroForce(p, v_part, rho, soundSpeed);
-                // FlightIntegrator applies cube drag at partTransform.TransformPoint(CoPOffset)
-                // and body lift at partTransform.TransformPoint(CoLOffset); the lifting-surface
-                // modules apply their lift and drag at those same two points. So all lift
-                // levers at the CoL point and all drag at the CoP point.
-                Vector3d liftPoint = p.partTransform.TransformPoint(p.CoLOffset);
-                Vector3d dragPoint = p.partTransform.TransformPoint(p.CoPOffset);
-                total_torque += Vector3d.Cross(liftPoint - worldCoM, partForce.Lift);
-                total_torque += Vector3d.Cross(dragPoint - worldCoM, partForce.Drag);
-                // Per-part rigidbody angular drag (see the summary above). Gate on the
-                // part's OWN rigidbody, as the FlightIntegrator does: physicsless parts
-                // share the parent's rigidbody and get no angular drag of their own.
-                // The part's dynamic pressure uses its own local airflow, mirroring the
-                // game's part.dragVector. KSP runs Unity physics in tonne/kilonewton
-                // units, so rb.inertiaTensor is in tonne*m^2 and angularDrag * I * omega
-                // is already in kilonewton-meters -- the same scale as this accumulator.
-                if (p.angularDragByFI && p.rb != null) {
-                    var qAtm = 0.0005 * rho * (double)v_part.sqrMagnitude
+
+                var currentPartOffset =
+                    (Vector3d)part.Rigidbody.worldCenterOfMass - currentWorldCoM;
+                var hypotheticalPartOffset = attitudeDelta * currentPartOffset;
+                var hypotheticalPartPosition = worldCoM + hypotheticalPartOffset;
+
+                Vector3 partAirflowCurrent;
+                if (useLegacyUniformFlow) {
+                    partAirflowCurrent = uniformAirflowCurrent;
+                } else {
+                    var hypotheticalPartVelocity = worldVelocity;
+                    if (includeRotationalPartFlow)
+                        hypotheticalPartVelocity += Vector3d.Cross(
+                            worldAngularVelocity, hypotheticalPartOffset);
+                    var partAirflowWorld = hypotheticalPartVelocity
+                                           - body.getRFrmVel(hypotheticalPartPosition);
+                    partAirflowCurrent = (Vector3)(inverseDelta * partAirflowWorld);
+                }
+
+                var partForce = SimPartAeroForce(
+                    part, partAirflowCurrent, rho, soundSpeed);
+                var liftWorld = attitudeDelta * partForce.Lift;
+                var dragWorld = attitudeDelta * partForce.Drag;
+                totalForce += liftWorld + dragWorld;
+
+                // FlightIntegrator and ModuleLiftingSurface apply lift at CoL and
+                // drag at CoP. Rotate those current COM-relative offsets into the
+                // hypothetical attitude before taking their moments.
+                var liftOffset = attitudeDelta * (
+                    (Vector3d)part.partTransform.TransformPoint(part.CoLOffset)
+                    - currentWorldCoM);
+                var dragOffset = attitudeDelta * (
+                    (Vector3d)part.partTransform.TransformPoint(part.CoPOffset)
+                    - currentWorldCoM);
+                totalTorque += Vector3d.Cross(liftOffset, liftWorld);
+                totalTorque += Vector3d.Cross(dragOffset, dragWorld);
+
+                // Unity angular drag acts on the part's physical rigidbody inertia.
+                // Evaluate it in the current geometry, then rotate the torque into
+                // the hypothetical attitude with the rest of the wrench.
+                if (part.angularDragByFI && part.rb != null) {
+                    var qAtm = 0.0005 * rho * (double)partAirflowCurrent.sqrMagnitude
                                * 0.009869232667160128;
-                    var angularDrag = p.angularDrag * (float)qAtm
+                    var angularDrag = part.angularDrag * (float)qAtm
                                       * PhysicsGlobals.AngularDragMultiplier;
-                    total_torque -= (Vector3d)(
-                        angularDrag * PartAngularMomentum(p.rb, angularVelocity));
+                    var angularDragTorque = angularDrag
+                        * PartAngularMomentum(part.rb, angularVelocityCurrent);
+                    totalTorque -= attitudeDelta * (Vector3d)angularDragTorque;
                 }
             }
-            return total_torque * 1000d;
+
+            return new AerodynamicWrench {
+                Force = totalForce * 1000d,
+                Torque = totalTorque * 1000d
+            };
         }
 
         /// <summary>
@@ -596,7 +634,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             var sim_dragVectorDirLocal = -(p.transform.InverseTransformDirection(sim_dragVectorDir));
 
             var liftForce = Vector3.zero;
-            Vector3d dragForce;
+            float drag;
 
             switch (p.dragModel) {
                 case Part.DragModel.DEFAULT:
@@ -605,7 +643,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
 
                     var p_drag_data = new DragCubeList.CubeData();
 
-                    float drag;
                     if (cubes.None) { // since 1.0.5, some parts don't have drag cubes (for example fuel lines and struts)
                        drag = p.maximum_drag;
                     } else {
@@ -621,29 +658,41 @@ namespace KRPC.SpaceCenter.ExtensionMethods
 
                         liftForce = p_drag_data.liftForce;
                     }
-
-                    var sim_dragScalar = dyn_pressure * drag * PhysicsGlobals.DragMultiplier * pseudoReDragMult;
-                    dragForce = -(Vector3d)sim_dragVectorDir * sim_dragScalar;
                     break;
 
                 case Part.DragModel.SPHERICAL:
-                    dragForce = -(Vector3d)sim_dragVectorDir * p.maximum_drag;
+                    drag = p.maximum_drag;
                     break;
 
                 case Part.DragModel.CYLINDRICAL:
-                    dragForce = -(Vector3d)sim_dragVectorDir * Mathf.Lerp(p.minimum_drag, p.maximum_drag, Mathf.Abs(Vector3.Dot(p.partTransform.TransformDirection(p.dragReferenceVector), sim_dragVectorDir)));
+                    drag = Mathf.Lerp(
+                        p.minimum_drag, p.maximum_drag,
+                        Mathf.Abs(Vector3.Dot(
+                            p.partTransform.TransformDirection(p.dragReferenceVector),
+                            sim_dragVectorDir)));
                     break;
 
                 case Part.DragModel.CONIC:
-                    dragForce = -(Vector3d)sim_dragVectorDir * Mathf.Lerp(p.minimum_drag, p.maximum_drag, Vector3.Angle(p.partTransform.TransformDirection(p.dragReferenceVector), sim_dragVectorDir) / 180f);
+                    drag = Mathf.Lerp(
+                        p.minimum_drag, p.maximum_drag,
+                        Vector3.Angle(
+                            p.partTransform.TransformDirection(p.dragReferenceVector),
+                            sim_dragVectorDir) / 180f);
                     break;
 
                 default:
                     // no drag to apply
-                    dragForce = Vector3d.zero;
+                    drag = 0f;
                     break;
             }
 
+            // FlightIntegrator applies the same dynamic-pressure, pseudo-Reynolds,
+            // and global drag scaling after every model-specific drag coefficient.
+            // The legacy spherical/cylindrical/conic paths previously returned the
+            // bare coefficient as a force, omitting this entire stock scaling chain.
+            var sim_dragScalar = dyn_pressure * drag * PhysicsGlobals.DragMultiplier
+                                 * pseudoReDragMult;
+            var dragForce = -(Vector3d)sim_dragVectorDir * sim_dragScalar;
             result.Drag += dragForce;
 
             // If it isn't a wing or lifter, get body lift. Mirror the
@@ -711,9 +760,12 @@ namespace KRPC.SpaceCenter.ExtensionMethods
 
                 // GetDragVector is safe: it takes the airflow as a parameter.
                 var prevMach = p.machNumber;
-                p.machNumber = mach;
-                result.Drag += wing.GetDragVector(nVel, absdot, liftQ);
-                p.machNumber = prevMach;
+                try {
+                    p.machNumber = mach;
+                    result.Drag += wing.GetDragVector(nVel, absdot, liftQ);
+                } finally {
+                    p.machNumber = prevMach;
+                }
             }
 
             return result;
