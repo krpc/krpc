@@ -1,5 +1,6 @@
 v0.6.0
  * Surface deprecated members in generated documentation and client stubs (#904)
+ * Fix docgen dropping remarks in service-level documentation
 
 v0.5.4
  * Fix incorrect protobuf DLL (#755)

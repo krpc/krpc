@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using KRPC.Server;
-using KRPC.Service;
-using UnityEngine;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter
 {
@@ -9,52 +7,49 @@ namespace KRPC.SpaceCenter
     /// Addon to highlight parts.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    public class PartHighlightAddon : MonoBehaviour
+    public sealed class PartHighlightAddon : ClientCleanupAddon
     {
-        static readonly IDictionary<IClient, IList<Part>> highlight = new Dictionary<IClient, IList<Part>> ();
+        static readonly ClientOwnedObjects<Part> highlighted =
+            new ClientOwnedObjects<Part> (Unhighlight);
+
+        static readonly IClientOwnedCollection[] collections = { highlighted };
 
         /// <summary>
-        /// Set up the addon
+        /// The highlighted parts.
         /// </summary>
-        public void Awake ()
-        {
-            Core.Instance.OnClientDisconnected += (s, e) => Remove (e.Client);
+        protected override IEnumerable<IClientOwnedCollection> Collections {
+            get { return collections; }
         }
 
         /// <summary>
-        /// Destroy the addon
+        /// Remove the highlighting of clients that have disconnected. Runs in Update,
+        /// rather than FixedUpdate, so highlighting is also removed while the game is
+        /// paused.
         /// </summary>
-        public void OnDestroy ()
+        public void Update ()
         {
-            highlight.Clear ();
+            Sweep ();
+        }
+
+        static void Unhighlight (Part part)
+        {
+            if (part == null)
+                return;
+            part.highlightType = Part.HighlightType.OnMouseOver;
+            part.SetHighlight (false, false);
         }
 
         static internal void Add (Part part)
         {
-            if (!highlight.ContainsKey (CallContext.Client))
-                highlight [CallContext.Client] = new List<Part> ();
-            highlight [CallContext.Client].Add (part);
+            highlighted.Add (part);
             part.highlightType = Part.HighlightType.AlwaysOn;
             part.SetHighlight (true, false);
         }
 
         static internal void Remove (Part part)
         {
-            if (highlight.ContainsKey (CallContext.Client))
-                highlight [CallContext.Client].Remove (part);
-            part.highlightType = Part.HighlightType.OnMouseOver;
-            part.SetHighlight (false, false);
-        }
-
-        static internal void Remove (IClient client)
-        {
-            if (!highlight.ContainsKey (client))
-                return;
-            foreach (var part in highlight [client]) {
-                part.highlightType = Part.HighlightType.OnMouseOver;
-                part.SetHighlight (false, false);
-            }
-            highlight.Remove (client);
+            highlighted.Remove (part);
+            Unhighlight (part);
         }
     }
 }

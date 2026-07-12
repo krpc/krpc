@@ -62,6 +62,11 @@ v0.6.0
  * Add RPCs for getting acceleration to Flight and Vessel classes (#581)
  * Add PartField, PartEvent and PartAction API (#859)
  * Deprecate the string-dictionary Module field, event and action members (#859)
+ * Remove forces added by Part.AddForce when the client that added them disconnects
+ * Cancel in-progress resource transfers when the client that started them disconnects;
+   a canceled transfer is marked as complete
+ * Fix part highlighting leaking a client-disconnect event handler each time the flight
+   scene is loaded
 
 v0.5.4
  * Fix vessel recovery (#782)

@@ -556,7 +556,7 @@ namespace KRPC.SpaceCenter.Services
             if (autoPilot == null)
                 return false;
             // If the client that engaged the auto-pilot has disconnected, disengage and reset the auto-pilot
-            if (autoPilot.requestingClient != null && !autoPilot.requestingClient.Connected) {
+            if (ClientConnections.Disconnected (autoPilot.requestingClient)) {
                 autoPilot.attitudeController.ReferenceFrame = ReferenceFrame.Surface (vessel);
                 autoPilot.attitudeController.TargetPitch = 0;
                 autoPilot.attitudeController.TargetHeading = 0;

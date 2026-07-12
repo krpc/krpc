@@ -127,6 +127,29 @@ class TestPartsControlSurface(krpctest.TestCase):
         self.assertFalse(cs.roll_enabled)
         self.assertFalse(cs.deployed)
 
+    def test_deflection_override_released_on_disconnect(self):
+        cs = self.ctrlsrf
+        self.assertFalse(cs.deflection_override)
+
+        conn = self.connect(use_cached=False)
+        parts = conn.space_center.active_vessel.parts
+        other = parts.with_name("airlinerCtrlSrf")[0].control_surface
+        other.deflection_override = True
+        other.deflection = 1
+        self.wait()
+        self.assertTrue(cs.deflection_override)
+        conn.close()
+
+        # The disconnect restores the prior control-surface state (the axis
+        # baseline and deploy state set up in setUpClass)
+        self.wait()
+        self.assertFalse(cs.deflection_override)
+        self.assertAlmostEqual(0, cs.deflection)
+        self.assertFalse(cs.pitch_enabled)
+        self.assertTrue(cs.yaw_enabled)
+        self.assertFalse(cs.roll_enabled)
+        self.assertFalse(cs.deployed)
+
     def test_surface_area(self):
         self.assertAlmostEqual(1, self.ctrlsrf.surface_area)
         self.assertAlmostEqual(0.2, self.winglet.surface_area)

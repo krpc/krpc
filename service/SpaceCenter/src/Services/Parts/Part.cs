@@ -124,6 +124,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the part is highlighted.
         /// </summary>
+        /// <remarks>
+        /// The highlighting is removed when the client that enabled it disconnects.
+        /// </remarks>
         [KRPCProperty]
         public bool Highlighted {
             get { return InternalPart.HighlightActive; }
@@ -928,6 +931,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <param name="position">The position at which the force acts, as a vector.</param>
         /// <param name="referenceFrame">The reference frame that the
         /// force and position are in.</param>
+        /// <remarks>
+        /// The force is removed when the client that added it disconnects.
+        /// </remarks>
         [KRPCMethod]
         public Force AddForce (Tuple3 force, Tuple3 position, ReferenceFrame referenceFrame)
         {

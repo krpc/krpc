@@ -62,7 +62,12 @@
     <Compile Include="UI\Skin.cs" />
     <Compile Include="UI\Window.cs" />
     <Compile Include="Utils\APILoader.cs" />
+    <Compile Include="Utils\ClientCleanupAddon.cs" />
+    <Compile Include="Utils\ClientConnections.cs" />
+    <Compile Include="Utils\ClientOwnedObjects.cs" />
+    <Compile Include="Utils\ClientOwnedOverrides.cs" />
     <Compile Include="Utils\Compatibility.cs" />
+    <Compile Include="Utils\IClientOwnedCollection.cs" />
     <Compile Include="Utils\ConfigurationStorage.cs" />
     <Compile Include="Utils\ConfigurationStorageNode.cs" />
     <Compile Include="Utils\GameScenesExtensions.cs" />

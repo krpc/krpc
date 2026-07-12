@@ -5,6 +5,7 @@ using KRPC.Server;
 using KRPC.Service;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter
@@ -288,7 +289,7 @@ namespace KRPC.SpaceCenter
         static void CheckClients ()
         {
             foreach (var client in manualInputClients.ToList()) {
-                if (!client.Connected)
+                if (ClientConnections.Disconnected (client))
                     manualInputClients.Remove (client);
             }
             if (manualInputClients.Any ())
