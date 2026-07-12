@@ -68,39 +68,37 @@ def compare_reference_frames(conn, speed, altitude):
         ("vessel", vessel.reference_frame),
     )
 
-    was_paused = conn.krpc.paused
-    conn.krpc.paused = True
-    try:
-        up = np.array(vessel.position(common), dtype=float)
-        up /= np.linalg.norm(up)
-        position = up * (body.equatorial_radius + altitude)
-        nose = np.array(vessel.direction(common), dtype=float)
-        atmosphere_velocity = np.cross(
-            np.array(body.angular_velocity(common), dtype=float), position
-        )
-        velocity = atmosphere_velocity + speed * nose
-        rotation = vessel.rotation(common)
+    up = np.array(vessel.position(common), dtype=float)
+    up /= np.linalg.norm(up)
+    position = up * (body.equatorial_radius + altitude)
+    nose = np.array(vessel.direction(common), dtype=float)
+    atmosphere_velocity = np.cross(
+        np.array(body.angular_velocity(common), dtype=float), position
+    )
+    velocity = atmosphere_velocity + speed * nose
+    rotation = vessel.rotation(common)
 
-        results = []
-        for label, ref in frames:
-            pos_ref = sc.transform_position(tuple(position), common, ref)
-            vel_ref = sc.transform_velocity(
-                tuple(position), tuple(velocity), common, ref
+    # Do not pause KSP here. KRPC.Paused can stop the server before the pause
+    # setter's response is flushed, deadlocking the probe on some launches.
+    # The fixture is stationary on the pad and these calls complete within a
+    # few milliseconds, which keeps the sequential frame-conversion skew far
+    # below the comparison tolerance.
+    results = []
+    for label, ref in frames:
+        pos_ref = sc.transform_position(tuple(position), common, ref)
+        vel_ref = sc.transform_velocity(tuple(position), tuple(velocity), common, ref)
+        rot_ref = sc.transform_rotation(rotation, common, ref)
+        rate_ref = vessel.angular_velocity(ref)
+        force, torque = vessel.flight(ref).simulate_aerodynamic_wrench_at(
+            body, pos_ref, vel_ref, rot_ref, rate_ref
+        )
+        results.append(
+            (
+                label,
+                np.array(sc.transform_direction(force, ref, common)),
+                np.array(sc.transform_direction(torque, ref, common)),
             )
-            rot_ref = sc.transform_rotation(rotation, common, ref)
-            rate_ref = vessel.angular_velocity(ref)
-            force, torque = vessel.flight(ref).simulate_aerodynamic_wrench_at(
-                body, pos_ref, vel_ref, rot_ref, rate_ref
-            )
-            results.append(
-                (
-                    label,
-                    np.array(sc.transform_direction(force, ref, common)),
-                    np.array(sc.transform_direction(torque, ref, common)),
-                )
-            )
-    finally:
-        conn.krpc.paused = was_paused
+        )
 
     force0, torque0 = results[0][1:]
     force_scale = max(np.linalg.norm(force0), 1.0)
@@ -126,6 +124,11 @@ def compare_reference_frames(conn, speed, altitude):
         f"Maximum relative residual: {max_residual:.3e} "
         f"({'PASS' if max_residual <= 1e-4 else 'FAIL'} at 1e-4)"
     )
+    if max_residual > 1e-4:
+        raise SystemExit(
+            "REFERENCE-FRAME INVARIANCE FAILED: "
+            f"relative residual {max_residual:.3e} > 1e-4"
+        )
 
 
 def main():
