@@ -4,7 +4,6 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using Parts = KRPC.SpaceCenter.Services.Parts;
-using Part = KRPC.SpaceCenter.Services.Parts.Part;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -65,7 +64,7 @@ namespace KRPC.SpaceCenter.Services
         /// The parts that belong to this stage.
         /// </summary>
         [KRPCProperty]
-        public IList<Part> Parts
+        public IList<Parts.Part> Parts
         {
             get
             {
