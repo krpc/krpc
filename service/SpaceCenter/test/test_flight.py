@@ -18,6 +18,9 @@ class TestFlight(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
+        active_vessel = cls.connect().space_center.active_vessel
+        if active_vessel is None or active_vessel.name != "Basic":
+            cls.launch_vessel_from_vab("Basic")
         cls.remove_other_vessels()
         cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
