@@ -652,7 +652,23 @@ class TestFlightAirbrake(krpctest.TestCase):
             cs.deployed = deployed
         self.wait(self.ACTUATOR_WAIT)
 
-    def test_simulate_aerodynamic_force_airbrake_deploy(self):
+    def _simulate_force_and_check_wrench(
+        self, flight, body, position, velocity, rotation
+    ):
+        # At zero angular velocity, the wrench force must preserve the legacy
+        # force API for every physical control-surface state.
+        legacy_force = vector(
+            flight.simulate_aerodynamic_force_at(body, position, velocity, rotation)
+        )
+        wrench_force, _ = flight.simulate_aerodynamic_wrench_at(
+            body, position, velocity, rotation, (0.0, 0.0, 0.0)
+        )
+        wrench_force = vector(wrench_force)
+        tolerance = 1e-3 + 1e-4 * max(norm(legacy_force), norm(wrench_force))
+        self.assertLessEqual(norm(wrench_force - legacy_force), tolerance)
+        return legacy_force
+
+    def test_simulate_aerodynamic_force_and_wrench_airbrake_deploy(self):
         if self.far:
             self.skipTest("Stock airbrake deflection path; skip when FAR is installed")
 
@@ -670,23 +686,23 @@ class TestFlightAirbrake(krpctest.TestCase):
 
         try:
             self._set_airbrakes_deployed(False)
-            retracted = vector(
-                flight.simulate_aerodynamic_force_at(body, position, velocity, rotation)
+            retracted = self._simulate_force_and_check_wrench(
+                flight, body, position, velocity, rotation
             )
             retracted_mag = norm(retracted)
             self.assertGreater(retracted_mag, 1.0)
 
             self._set_airbrakes_deployed(True)
-            deployed = vector(
-                flight.simulate_aerodynamic_force_at(body, position, velocity, rotation)
+            deployed = self._simulate_force_and_check_wrench(
+                flight, body, position, velocity, rotation
             )
             deployed_mag = norm(deployed)
             # Before the fix, deflection is ignored so deployed == retracted.
             self.assertGreater(deployed_mag, 1.25 * retracted_mag)
 
             self._set_airbrakes_deployed(False)
-            retracted_again = vector(
-                flight.simulate_aerodynamic_force_at(body, position, velocity, rotation)
+            retracted_again = self._simulate_force_and_check_wrench(
+                flight, body, position, velocity, rotation
             )
             self.assertAlmostEqual(
                 retracted_mag, norm(retracted_again), delta=0.05 * retracted_mag
