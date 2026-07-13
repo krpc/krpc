@@ -1,10 +1,22 @@
 import unittest
+
 import krpctest
-from krpctest import assert_resources_equivalent
+
+
+# FIXME: duplicated in test_stage.py
+def assert_resources_equivalent(testcase, expected, actual, delta=1):
+    """Compare two SpaceCenter Resources objects by resource name, amount, and max."""
+    expected_names = set(expected.names)
+    actual_names = set(actual.names)
+    testcase.assertEqual(expected_names, actual_names)
+    for name in sorted(expected_names):
+        testcase.assertAlmostEqual(
+            expected.amount(name), actual.amount(name), delta=delta
+        )
+        testcase.assertAlmostEqual(expected.max(name), actual.max(name), delta=delta)
 
 
 class FakeResources:
-
     def __init__(self, resources):
         self._resources = resources
         self.names = list(resources.keys())
@@ -17,7 +29,6 @@ class FakeResources:
 
 
 class TestResourcesEquivalence(unittest.TestCase):
-
     def test_detects_name_discrepancies(self):
         expected = FakeResources({"LiquidFuel": (100, 200)})
         actual = FakeResources({"Oxidizer": (100, 200)})
@@ -38,18 +49,15 @@ class TestResourcesEquivalence(unittest.TestCase):
 
 
 class ResourcesTest:
-
     density = {"MonoPropellant": 4, "LiquidFuel": 5, "Oxidizer": 5, "SolidFuel": 7.5}
 
 
 class TestResources(krpctest.TestCase, ResourcesTest):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "Resources":
-            cls.launch_vessel_from_vab("Resources")
+        cls.launch_vessel_from_vab("Resources")
+        cls.remove_other_vessels()
         cls.vessel = cls.connect().space_center.active_vessel
         cls.num_stages = len(cls.expected.keys()) - 1
 
@@ -299,7 +307,6 @@ class TestResources(krpctest.TestCase, ResourcesTest):
 
 
 class TestResourcesStaticMethods(krpctest.TestCase, ResourcesTest):
-
     @classmethod
     def setUpClass(cls):
         cls.resources = cls.connect().space_center.Resources

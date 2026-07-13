@@ -1,18 +1,16 @@
 import unittest
+
 import krpctest
 
 
 class TestAlarm(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
         cls.space_center = cls.connect().space_center
         cls.alarm_manager = cls.space_center.alarm_manager
-        for alarm in list(cls.alarm_manager.alarms):
-            alarm.remove()
 
-    def setUp(self):
+    def tearDown(self):
         for alarm in list(self.alarm_manager.alarms):
             alarm.remove()
 

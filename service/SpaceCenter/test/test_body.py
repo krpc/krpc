@@ -1,11 +1,11 @@
-import unittest
 import math
+import unittest
+
 import krpctest
-from krpctest.geometry import norm, normalize, dot, rad2deg
+from krpctest.geometry import dot, norm, normalize
 
 
 class TestBody(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -27,16 +27,13 @@ class TestBody(krpctest.TestCase):
         self.assertAlmostEqual(9.81, kerbin.surface_gravity, places=2)
         self.assertAlmostEqual(21549.425, kerbin.rotational_period, delta=0.1)
         self.assertAlmostEqual(
-            (2 * 3.14159) / 21549.425, kerbin.rotational_speed, delta=0.1
+            (2 * math.pi) / 21549.425, kerbin.rotational_speed, places=8
         )
-        self.assertAlmostEqual(math.pi / 2, kerbin.initial_rotation, delta=0.1)
-        self.assertDegreesAlmostEqual(
-            rad2deg(
-                kerbin.initial_rotation
-                + (self.space_center.ut * kerbin.rotational_speed)
-            ),
-            rad2deg(kerbin.rotation_angle),
-            delta=0.1,
+        self.assertAlmostEqual(math.pi / 2, kerbin.initial_rotation)
+        self.assertRadiansAlmostEqual(
+            kerbin.initial_rotation + (self.space_center.ut * kerbin.rotational_speed),
+            kerbin.rotation_angle,
+            places=4,
         )
         self.assertAlmostEqual(600000, kerbin.equatorial_radius)
         self.assertAlmostEqual(8.4159e7, kerbin.sphere_of_influence, delta=0.0001e7)
@@ -87,14 +84,12 @@ class TestBody(krpctest.TestCase):
         )
         self.assertAlmostEqual(1.6290, mun.surface_gravity, places=4)
         self.assertAlmostEqual(1.3898e5, mun.rotational_period, delta=0.0001e5)
-        self.assertAlmostEqual(
-            (2 * 3.14159) / 1.3898e5, mun.rotational_speed, delta=0.0001e5
-        )
-        self.assertAlmostEqual(math.pi * 5 / 4, mun.initial_rotation, delta=0.1)
-        self.assertAlmostEqual(
+        self.assertAlmostEqual((2 * math.pi) / 1.3898e5, mun.rotational_speed, places=8)
+        self.assertAlmostEqual(math.radians(230), mun.initial_rotation)
+        self.assertRadiansAlmostEqual(
             mun.initial_rotation + (self.space_center.ut * mun.rotational_speed),
             mun.rotation_angle,
-            delta=0.1,
+            places=4,
         )
         self.assertAlmostEqual(200000, mun.equatorial_radius)
         self.assertAlmostEqual(2.4296e6, mun.sphere_of_influence, delta=0.0001e6)
@@ -219,7 +214,6 @@ class TestBody(krpctest.TestCase):
 
     def test_position(self):
         for body in self.space_center.bodies.values():
-
             # Check body position in body's reference frame
             pos = body.position(body.reference_frame)
             self.assertAlmostEqual((0, 0, 0), pos)

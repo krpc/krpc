@@ -1,11 +1,11 @@
 import unittest
-import krpctest
-from krpctest.geometry import vector, norm, normalize
+
 import krpc
+import krpctest
+from krpctest.geometry import norm, normalize, vector
 
 
 class TestNode(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -13,7 +13,9 @@ class TestNode(krpctest.TestCase):
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel
         cls.control = cls.vessel.control
-        cls.control.remove_nodes()
+
+    def tearDown(self):
+        self.control.remove_nodes()
 
     def check(self, node, delta_v):
         self.assertAlmostEqual(delta_v[0], node.prograde, places=3)
@@ -49,7 +51,6 @@ class TestNode(krpctest.TestCase):
         self.assertAlmostEqual(ut, node.ut, delta=1)
         self.assertAlmostEqual(ut - start_ut, node.time_to, delta=1)
         self.check(node, delta_v)
-        node.remove()
 
     def test_remove_node(self):
         node = self.control.add_node(self.space_center.ut, 0, 0, 0)
@@ -90,7 +91,6 @@ class TestNode(krpctest.TestCase):
         self.assertAlmostEqual(ut2, node.ut, delta=1)
         self.assertAlmostEqual(ut2 - start_ut, node.time_to, delta=1)
         self.check(node, v)
-        node.remove()
 
     def test_set_magnitude(self):
         node = self.control.add_node(self.space_center.ut, 1, -2, 3)
@@ -98,7 +98,6 @@ class TestNode(krpctest.TestCase):
         node.delta_v = magnitude
         delta_v = vector(normalize((1, -2, 3))) * magnitude
         self.check(node, delta_v)
-        node.remove()
 
     def test_orbit(self):
         start_ut = self.space_center.ut

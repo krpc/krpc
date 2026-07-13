@@ -61,6 +61,14 @@ class TestServo(krpctest.TestCase):
         while servo.is_moving:
             self.wait()
         self.assertFalse(servo.is_moving)
+        # Restore the servo to its rest position so other tests are unaffected.
+        self._recenter(servo)
+
+    def _recenter(self, servo):
+        servo.move_center()
+        self.wait()
+        while servo.is_moving:
+            self.wait()
 
     def test_stop(self):
         servo = self.ir.servo_with_name(self.vessel, "Rail Gantry - Short")
@@ -76,6 +84,8 @@ class TestServo(krpctest.TestCase):
         while servo.is_moving:
             self.wait()
         self.assertFalse(servo.is_moving)
+        # Restore the servo to its rest position so other tests are unaffected.
+        self._recenter(servo)
 
 
 if __name__ == "__main__":

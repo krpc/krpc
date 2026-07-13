@@ -1,27 +1,27 @@
 import krpctest
-from krpctest import assert_resources_equivalent
+
+
+# FIXME: duplicated in test_resources.py
+def assert_resources_equivalent(testcase, expected, actual, delta=1):
+    """Compare two SpaceCenter Resources objects by resource name, amount, and max."""
+    expected_names = set(expected.names)
+    actual_names = set(actual.names)
+    testcase.assertEqual(expected_names, actual_names)
+    for name in sorted(expected_names):
+        testcase.assertAlmostEqual(
+            expected.amount(name), actual.amount(name), delta=delta
+        )
+        testcase.assertAlmostEqual(expected.max(name), actual.max(name), delta=delta)
 
 
 class TestStage(krpctest.TestCase):
-    """Integration tests for the new Stage class and related Vessel delta-v per stage functionality.
-    Mirrors the style and structure of test_parts.py and test_vessel.py.
-    Targets a multi-stage craft fixture.
-    """
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        # Use the repository's multi-stage rocket craft fixture.
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "Staging":
-            cls.launch_vessel_from_vab("Staging")
-            cls.remove_other_vessels()
+        cls.launch_vessel_from_vab("Staging")
+        cls.remove_other_vessels()
         cls.vessel = cls.connect().space_center.active_vessel
         cls.space_center = cls.connect().space_center
-        if cls.vessel.name != "Staging":
-            raise AssertionError(
-                "Staging.craft fixture launched vessel named %r" % cls.vessel.name
-            )
 
     def test_stages_count(self):
         stages = self.vessel.stages
