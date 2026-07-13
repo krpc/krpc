@@ -504,19 +504,23 @@ namespace KRPC.InfernalRobotics
 				get { return (float)positionProperty.GetValue(actualServo, null); }
 			}
 
+			// kRPC-local patch (diverges from the upstream vendored IRWrapper): IR-Next's
+			// IServo.MoveLeft/MoveCenter/MoveRight take a target speed, where older IR versions
+			// took no argument. Pass the servo's default speed to preserve the original
+			// no-argument behaviour. The group-level MoveLeft/MoveRight remain parameterless.
 			public void MoveLeft()
 			{
-				moveLeftMethod.Invoke(actualServo, new object [] {});
+				moveLeftMethod.Invoke(actualServo, new object [] { DefaultSpeed });
 			}
 
 			public void MoveCenter()
 			{
-				moveCenterMethod.Invoke(actualServo, new object [] {});
+				moveCenterMethod.Invoke(actualServo, new object [] { DefaultSpeed });
 			}
 
 			public void MoveRight()
 			{
-				moveRightMethod.Invoke(actualServo, new object [] {});
+				moveRightMethod.Invoke(actualServo, new object [] { DefaultSpeed });
 			}
 			public void MoveTo(float position, float speed)
 			{
