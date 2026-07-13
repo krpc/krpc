@@ -46,7 +46,7 @@ def assert_resources_equivalent(testcase, expected, actual, delta=1):
         testcase.assertAlmostEqual(expected.max(name), actual.max(name), delta=delta)
 
 
-class TestCase(unittest.TestCase):
+class TestCase(unittest.TestCase):  # pylint: disable=too-many-public-methods
     # Location of the KSC launch sites, used as the default point for set_flight.
     KSC_LATITUDE = -0.0972
     KSC_LONGITUDE = -74.5577
@@ -57,8 +57,33 @@ class TestCase(unittest.TestCase):
 
     @classmethod
     def new_save(cls, name="krpctest", always_load=False):
-        # Return if the save is already loaded
-        if not always_load and cls.connect().testing_tools.current_save == name:
+        conn = cls.connect()
+
+        # Load a new save if:
+        #  - always_load is True
+        #  - the save name is not as expected
+        #  - we are not in the flight scene
+        #  - the current vessel is not as expected
+        #  - there is more than one vessel in the game
+
+        def one_vessel():
+            return len(conn.space_center.vessels) == 1
+
+        def is_mk1_pod():
+            return (
+                conn.space_center.active_vessel is not None
+                and conn.space_center.active_vessel.name == "Basic"
+                and len(conn.space_center.active_vessel.parts.all) == 1
+                and conn.space_center.active_vessel.parts.all[0].name == "mk1pod.v2"
+            )
+
+        if (
+            not always_load
+            and conn.testing_tools.current_save == name
+            and conn.krpc.game_scene == conn.krpc.GameScene.flight
+            and one_vessel()
+            and is_mk1_pod()
+        ):
             return
 
         # Load a blank save with the given name
@@ -67,7 +92,7 @@ class TestCase(unittest.TestCase):
         if not os.path.exists(save_path):
             os.makedirs(save_path)
         shutil.copy(blank_save, os.path.join(save_path, "persistent.sfs"))
-        cls.connect().testing_tools.load_save(name, "persistent")
+        conn.testing_tools.load_save(name, "persistent")
 
     @classmethod
     def remove_other_vessels(cls):
