@@ -2,7 +2,7 @@ ship = PartsCargoBay
 version = 1.12.5
 description = 
 type = VAB
-size = 17.1390934,3.76625824,3.31010008
+size = 17.1390953,3.76625824,3.31010008
 steamPublishedFileId = 0
 persistentId = 3677580210
 rot = 0,0,0,1
@@ -982,7 +982,7 @@ PART
 	part = ServiceBay.125.v2_4294595734
 	partName = Part
 	persistentId = 1565402649
-	pos = -7.47517872,5.62456799,2.32561994
+	pos = -7.4751792,5.62456799,2.32561994
 	attPos = 0,0,0
 	attPos0 = 0,-0.950000525,0
 	rot = 0,0,-0.707106829,0.707106829
