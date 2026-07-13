@@ -105,6 +105,109 @@ namespace TestingTools
             throw new YieldException<Action> (() => WaitForLanded(0));
         }
 
+        /// <summary>
+        /// Place the active vessel in atmospheric flight over the given point at the given altitude,
+        /// airspeed and attitude, and
+        /// let physics resume so it is flying. Use this to set up in-air scenarios (e.g. testing the
+        /// autopilot's attitude hold on a stock aircraft) without flying the craft up from the runway.
+        /// The pitch/heading/roll match those reported by the vessel's Flight, and the airspeed is set
+        /// along the nose so the craft starts at zero angle of attack when level.
+        /// </summary>
+        /// <param name="body">Name of the body to fly over.</param>
+        /// <param name="latitude">Latitude in degrees.</param>
+        /// <param name="longitude">Longitude in degrees.</param>
+        /// <param name="altitude">Altitude in meters above MSL.</param>
+        /// <param name="speed">Airspeed in meters per second (surface-relative).</param>
+        /// <param name="heading">Compass heading to point along, in degrees (90 = east).</param>
+        /// <param name="pitch">Pitch above the horizon, in degrees. Defaults to 0 (level).</param>
+        /// <param name="roll">Roll, in degrees. Defaults to 0 (wings level).</param>
+        /// <param name="angleOfAttack">Angle of attack in degrees: how far the airspeed vector sits
+        /// below the nose, in the pitch plane. 0 (the default) puts the airspeed along the nose;
+        /// a positive value gives a nose-up attitude relative to the flight path (e.g. a re-entry
+        /// hold), so the flight-path angle is <paramref name="pitch"/> minus this.</param>
+        [KRPCProcedure]
+        public static void SetFlight (
+            string body, double latitude, double longitude, double altitude,
+            double speed, double heading, double pitch = 0, double roll = 0, double angleOfAttack = 0)
+        {
+            var celestialBody = FlightGlobals.Bodies.First (b => b.bodyName == body);
+            var vessel = FlightGlobals.ActiveVessel;
+
+            // Build the world-space attitude for the requested pitch/heading/roll using the same
+            // surface-frame convention (x = zenith, y = north, z = east) as the flight telemetry,
+            // evaluated at the target location rather than the vessel's current one.
+            var worldPosition = celestialBody.GetWorldSurfacePosition (latitude, longitude, altitude);
+            var positionFromBody = worldPosition - celestialBody.position;
+            var toNorthPole = (celestialBody.position + (Vector3d)celestialBody.transform.up * celestialBody.Radius) - worldPosition;
+            var northPole = toNorthPole.normalized;
+            var frameUp = Vector3d.Exclude (positionFromBody, northPole);
+            var frameForward = Vector3d.Cross (positionFromBody, northPole);
+            KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.OrthoNormalize2 (ref frameForward, ref frameUp);
+            var frameRotation = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.LookRotation2 (frameForward, frameUp);
+            var inFrame = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.QuaternionFromPitchHeadingRoll (
+                new Vector3d (pitch, heading, roll));
+            var worldRotation = frameRotation * inFrame;
+
+            // The airspeed points along the flight path, which sits angleOfAttack degrees below the
+            // nose in the pitch plane (so a positive angle of attack is a nose-up attitude). Build it
+            // the same way as the attitude, from the flight-path pitch.
+            var flightPathInFrame = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.QuaternionFromPitchHeadingRoll (
+                new Vector3d (pitch - angleOfAttack, heading, roll));
+            var flightPath = frameRotation * (flightPathInFrame * Vector3d.up);
+
+            // Orbital velocity giving the requested airspeed: the co-rotating surface velocity at
+            // this point plus the airspeed along the flight path.
+            var surfaceVelocity = Vector3d.Cross (celestialBody.angularVelocity, positionFromBody);
+            var worldVelocity = surfaceVelocity + speed * flightPath;
+
+            // Teleport via a state-vector orbit (SetOrbit clears the landed/clamp state and packs the
+            // vessel on rails), then set the attitude; physics resumes when it unpacks.
+            var ut = Planetarium.GetUniversalTime ();
+            var current = vessel.orbitDriver.orbit;
+            var orbit = new Orbit (current.inclination, current.eccentricity, current.semiMajorAxis, current.LAN, current.argumentOfPeriapsis, current.meanAnomalyAtEpoch, current.epoch, current.referenceBody);
+            orbit.UpdateFromStateVectors (positionFromBody.xzy, worldVelocity.xzy, celestialBody, ut);
+            vessel.SetOrbit (orbit);
+            vessel.SetRotation ((Quaternion)worldRotation);
+
+            throw new YieldException<Action> (() => WaitForVesselSwitch (0));
+        }
+
+        /// <summary>
+        /// Fill all resource tanks on the active vessel (or a given vessel) to their maximum
+        /// capacity. Useful in tests that fire engines and need to restore propellant between runs.
+        /// </summary>
+        /// <param name="vessel">Vessel to operate on. Defaults to the active vessel.</param>
+        [KRPCProcedure]
+        public static void FillAllResources (KRPC.SpaceCenter.Services.Vessel vessel = null)
+        {
+            var internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
+            foreach (var part in internalVessel.parts) {
+                foreach (PartResource resource in part.Resources)
+                    resource.amount = resource.maxAmount;
+            }
+        }
+
+        /// <summary>
+        /// Reassign every crew member of the given vessel (default: the active vessel) to the Pilot
+        /// profession at full experience level. The save's auto-crew fills the pod with whichever
+        /// kerbal is next in the roster (often an engineer/scientist), which leaves the vessel on
+        /// "partial control" — no in-game SAS and, after a rails warp, an unreliable control source.
+        /// Overwriting the trait to Pilot gives deterministic full control for every test run without
+        /// changing the craft (a kerbal's mass is the same for any profession, so the calibrated MOI
+        /// and torque are unaffected).
+        /// </summary>
+        /// <param name="vessel">Vessel.</param>
+        [KRPCProcedure]
+        public static void SetCrewToPilot (KRPC.SpaceCenter.Services.Vessel vessel = null)
+        {
+            Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
+            foreach (var crew in internalVessel.GetVesselCrew ()) {
+                KerbalRoster.SetExperienceTrait (crew, KerbalRoster.pilotTrait);
+                KerbalRoster.SetExperienceLevel (crew, 5);
+            }
+            internalVessel.CrewListSetDirty ();
+        }
+
         static Quaternion ZeroRotation {
             get {
                 var vessel = FlightGlobals.ActiveVessel;
