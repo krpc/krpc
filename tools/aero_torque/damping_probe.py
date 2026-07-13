@@ -78,17 +78,18 @@ def main():
     )
 
     w0 = args.spin
+    probe_ut = sc.ut
     for alt in (30000.0, 20000.0, 10000.0, 5000.0):
-        rho = body.density_at(alt)
         pos = tuple(up * (radius + alt))
+        rho = body.atmospheric_density_at_position(pos, ref)
         for speed in (1500.0, 800.0, 300.0):
             q_atm = 0.5 * rho * speed * speed / 101325.0
             vel = tuple(speed * nose)  # head-on wind, AoA 0
             force_p, torque_p = flight.simulate_aerodynamic_wrench_at(
-                body, pos, vel, rot, tuple(w0 * pitch)
+                body, pos, vel, rot, tuple(w0 * pitch), probe_ut
             )
             force_m, torque_m = flight.simulate_aerodynamic_wrench_at(
-                body, pos, vel, rot, tuple(-w0 * pitch)
+                body, pos, vel, rot, tuple(-w0 * pitch), probe_ut
             )
             dforce = (np.array(force_p) - np.array(force_m)) / (2.0 * w0)
             dtorque = (np.array(torque_p) - np.array(torque_m)) / (2.0 * w0)

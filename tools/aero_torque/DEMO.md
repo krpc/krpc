@@ -19,7 +19,10 @@ tool usage).
   control law are modeled client-side.
 - `baseline` mode assumes a permanent retrograde hold and samples only
   `SimulateAerodynamicForceAt`. `6dof` mode integrates the full rigid-body
-  attitude and samples `SimulateAerodynamicWrenchAt` once per RK4 stage.
+  attitude and samples `SimulateAerodynamicWrenchAt` once per RK4 stage. Each
+  call receives the actual RK4 stage UT, so stock atmospheric temperature,
+  density, speed of sound and Mach follow the predicted position and solar
+  geometry.
 - Comparisons are horizontal miss distance between the prediction and the
   logged flight at fixed altitude checkpoints (40 to 2 km), in body-fixed
   coordinates. Repeat trials from quicksaves reproduce to ~0.01 km, so the

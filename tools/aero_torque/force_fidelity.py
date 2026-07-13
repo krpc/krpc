@@ -108,6 +108,9 @@ def main():
     r = np.column_stack([act["x"], act["y"], act["z"]])
     v = np.column_stack([act["vx"], act["vy"], act["vz"]])
     q = np.column_stack([act["qx"], act["qy"], act["qz"], act["qw"]])
+    angular_velocity = (
+        np.column_stack([act["wx"], act["wy"], act["wz"]]) if "wx" in act else None
+    )
     mass = act["mass"]
     mu = meta["mu"]
     w_planet = np.asarray(meta["w_vec"])
@@ -121,6 +124,12 @@ def main():
     have_live = "flx" in act
     have_logged_sim = "fsx" in act
     have_sim = have_logged_sim and not args.force_rpc
+    use_wrench_rpc = (
+        not have_sim
+        and have_logged_sim
+        and logged_api == "wrench"
+        and angular_velocity is not None
+    )
     f_live_all = (
         np.column_stack([act["flx"], act["fly"], act["flz"]]) if have_live else None
     )
@@ -152,7 +161,11 @@ def main():
             )
         body = sc.bodies[meta["body"]]
         flight = vessel.flight(body.non_rotating_reference_frame)
-        print("Log has no sim-force columns; evaluating the endpoint via RPC.")
+        print(
+            "Evaluating the "
+            + ("UT-aware wrench" if use_wrench_rpc else "legacy force")
+            + " endpoint via RPC."
+        )
     else:
         print(
             "Using sim/live force columns recorded in the log "
@@ -172,11 +185,22 @@ def main():
             if not np.isfinite(f_sim).all():
                 continue
         else:
-            f_sim = np.array(
-                flight.simulate_aerodynamic_force_at(
-                    body, tuple(r[i]), tuple(v[i]), tuple(q_normalize(q[i]))
+            if use_wrench_rpc:
+                f_sim, _ = flight.simulate_aerodynamic_wrench_at(
+                    body,
+                    tuple(r[i]),
+                    tuple(v[i]),
+                    tuple(q_normalize(q[i])),
+                    tuple(angular_velocity[i]),
+                    float(t[i]),
                 )
-            )
+                f_sim = np.array(f_sim)
+            else:
+                f_sim = np.array(
+                    flight.simulate_aerodynamic_force_at(
+                        body, tuple(r[i]), tuple(v[i]), tuple(q_normalize(q[i]))
+                    )
+                )
         f_live = f_live_all[i] if have_live else np.full(3, np.nan)
         f_slog = f_slog_all[i] if have_logged_sim else np.full(3, np.nan)
         dhat = -v_air / speed

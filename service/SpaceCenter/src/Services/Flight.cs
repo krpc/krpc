@@ -792,6 +792,7 @@ namespace KRPC.SpaceCenter.Services
         /// force the vessel would experience if it were placed at that position and
         /// orientation with the air flowing past it at that velocity; it is the force at
         /// the requested orientation, not the force in the vessel's current orientation.
+        /// Atmospheric temperature and density are evaluated at the current universal time.
         /// </remarks>
         [KRPCMethod]
         public Tuple3 SimulateAerodynamicForceAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation)
@@ -841,6 +842,9 @@ namespace KRPC.SpaceCenter.Services
         /// part's local airflow and the per-part rigid-body angular drag the game applies,
         /// together giving the aerodynamic damping force and torque. Pass a zero vector to
         /// evaluate the static wrench relative to the reference frame.</param>
+        /// <param name="ut">The universal time used for the atmospheric ephemeris. It
+        /// selects the body/Sun geometry used for temperature and density, but does not
+        /// change or propagate <see cref="ReferenceFrame"/> or any of the state arguments.</param>
         /// <returns>A pair containing the aerodynamic force in newtons followed by the
         /// aerodynamic torque in newton-meters about the vessel's center of mass. Both are
         /// vectors in reference frame <see cref="ReferenceFrame"/>.</returns>
@@ -848,14 +852,16 @@ namespace KRPC.SpaceCenter.Services
         /// The position and velocity describe the hypothetical center-of-mass state. The
         /// position, velocity, rotation and angular velocity arguments, and both returned
         /// vectors, are expressed in reference frame <see cref="ReferenceFrame"/>.
+        /// For future-state prediction, <see cref="CelestialBody.NonRotatingReferenceFrame"/>
+        /// is recommended so that the spatial state has unambiguous inertial semantics.
         ///
         /// This is an instantaneous rigid-body result based on the vessel's current parts,
         /// drag cubes and control-surface state. When
         /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
-        /// is installed the angular velocity argument is ignored.
+        /// is installed the angular velocity and <paramref name="ut"/> arguments are ignored.
         /// </remarks>
         [KRPCMethod]
-        public TupleT3 SimulateAerodynamicWrenchAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation, Tuple3 angularVelocity)
+        public TupleT3 SimulateAerodynamicWrenchAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation, Tuple3 angularVelocity, double ut)
         {
             if (ReferenceEquals (body, null))
                 throw new ArgumentNullException (nameof (body));
@@ -871,7 +877,7 @@ namespace KRPC.SpaceCenter.Services
             if (!FAR.IsAvailable) {
                 var wrench = StockAerodynamics.SimAeroWrench(
                     body.InternalBody, vessel, worldVelocity, worldAngularVelocity,
-                    worldPosition, delta, true, false);
+                    worldPosition, delta, ut, true, false);
                 force = wrench.Force;
                 torque = wrench.Torque;
             } else {
@@ -921,6 +927,7 @@ namespace KRPC.SpaceCenter.Services
         /// torque, are all expressed in reference frame <see cref="ReferenceFrame"/>. When
         /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
         /// is installed the angular velocity argument is ignored.
+        /// Atmospheric temperature and density are evaluated at the current universal time.
         ///
         /// This is the ideal rigid-body aerodynamic torque, summed from the per-part forces
         /// about the center of mass. A vessel may not visibly rotate by the full amount when
@@ -932,7 +939,8 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 SimulateAerodynamicTorqueAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation, Tuple3 angularVelocity)
         {
             return SimulateAerodynamicWrenchAt(
-                body, position, velocity, rotation, angularVelocity).Item2;
+                body, position, velocity, rotation, angularVelocity,
+                Planetarium.GetUniversalTime()).Item2;
         }
 
         /// <summary>

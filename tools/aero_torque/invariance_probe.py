@@ -83,6 +83,7 @@ def compare_reference_frames(conn, speed, altitude):
     # The fixture is stationary on the pad and these calls complete within a
     # few milliseconds, which keeps the sequential frame-conversion skew far
     # below the comparison tolerance.
+    probe_ut = sc.ut
     results = []
     for label, ref in frames:
         pos_ref = sc.transform_position(tuple(position), common, ref)
@@ -90,7 +91,7 @@ def compare_reference_frames(conn, speed, altitude):
         rot_ref = sc.transform_rotation(rotation, common, ref)
         rate_ref = vessel.angular_velocity(ref)
         force, torque = vessel.flight(ref).simulate_aerodynamic_wrench_at(
-            body, pos_ref, vel_ref, rot_ref, rate_ref
+            body, pos_ref, vel_ref, rot_ref, rate_ref, probe_ut
         )
         results.append(
             (

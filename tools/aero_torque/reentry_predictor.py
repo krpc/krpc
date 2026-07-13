@@ -286,12 +286,12 @@ class RpcAero:
         self.want_torque = want_torque
         self.calls = 0
 
-    def __call__(self, r, v, q, w):
+    def __call__(self, r, v, q, w, ut):
         if np.linalg.norm(r) - self.radius >= self.atmo_top:
             return ZERO3, ZERO3
         if self.want_torque:
             force, torque = self.flight.simulate_aerodynamic_wrench_at(
-                self.body, tuple(r), tuple(v), tuple(q), tuple(w)
+                self.body, tuple(r), tuple(v), tuple(q), tuple(w), ut
             )
             self.calls += 1
             return np.array(force), np.array(torque)
@@ -315,7 +315,7 @@ class SyntheticAero:
         self.cd_a = cd_a
         self.calls = 0
 
-    def __call__(self, r, v, q, w):
+    def __call__(self, r, v, q, w, ut):
         alt = np.linalg.norm(r) - self.radius
         if alt >= self.atmo_top:
             return ZERO3, ZERO3
@@ -364,7 +364,7 @@ def integrate(
 
     phys:   dict with mu, radius, atmo_depth, mass, inertia (3x3, body frame),
             w_vec (planet angular velocity, non-rotating frame).
-    aero:   callable (r, v, q, w) -> (force_N, torque_Nm), non-rotating frame.
+    aero:   callable (r, v, q, w, ut) -> (force_N, torque_Nm), non-rotating frame.
     mode:   "baseline" (attitude snapped to retrograde, force only) or
             "6dof" (attitude integrated from the torque).
     state0: dict with t, r, v, q, w (non-rotating frame).
@@ -391,16 +391,16 @@ def integrate(
         q = retro_attitude(v - np.cross(w_planet, r), q)
         seed[0] = q.copy()
 
-    def deriv(r_, v_, q_, w_):
+    def deriv(t_, r_, v_, q_, w_):
         rn = np.linalg.norm(r_)
         g = -mu / rn**3 * r_
         if not sixdof:
             v_air = v_ - np.cross(w_planet, r_)
             q_used = retro_attitude(v_air, seed[0])
             seed[0] = q_used
-            force, _ = aero(r_, v_, q_used, ZERO3)
+            force, _ = aero(r_, v_, q_used, ZERO3, t_)
             return v_, g + force / mass, None, None, q_used
-        force, torque = aero(r_, v_, q_, w_)
+        force, torque = aero(r_, v_, q_, w_, t_)
         qc = q_conj(q_)
         w_body = q_rot(qc, w_)
         tau_body = q_rot(qc, torque)
@@ -446,10 +446,10 @@ def integrate(
         dt = dt_vac if alt > atmo_top + 2000.0 else dt_atmo
         prev = (t, r.copy(), v.copy(), q.copy(), w.copy())
 
-        k1 = deriv(r, v, q, w)
-        k2 = deriv(*_advance(r, v, q, w, k1, 0.5 * dt, sixdof))
-        k3 = deriv(*_advance(r, v, q, w, k2, 0.5 * dt, sixdof))
-        k4 = deriv(*_advance(r, v, q, w, k3, dt, sixdof))
+        k1 = deriv(t, r, v, q, w)
+        k2 = deriv(t + 0.5 * dt, *_advance(r, v, q, w, k1, 0.5 * dt, sixdof))
+        k3 = deriv(t + 0.5 * dt, *_advance(r, v, q, w, k2, 0.5 * dt, sixdof))
+        k4 = deriv(t + dt, *_advance(r, v, q, w, k3, dt, sixdof))
         rd = (k1[0] + 2.0 * k2[0] + 2.0 * k3[0] + k4[0]) / 6.0
         vd = (k1[1] + 2.0 * k2[1] + 2.0 * k3[1] + k4[1]) / 6.0
         r = r + dt * rd
@@ -782,6 +782,7 @@ def sample_flight(conn, meta, rate, min_altitude):
                 )
                 rows = rows[: len(rows) - frozen + 1]
                 break
+            sample_ut = sc.ut
             pos = vessel.position(nonrot)
             vel = vessel.velocity(nonrot)
             rot = vessel.rotation(nonrot)
@@ -807,14 +808,14 @@ def sample_flight(conn, meta, rate, min_altitude):
                 t_live = nan3
             try:
                 f_sim, t_sim = flight_nr.simulate_aerodynamic_wrench_at(
-                    body, pos, vel, rot, w_nr
+                    body, pos, vel, rot, w_nr, sample_ut
                 )
             except Exception:
                 f_sim = nan3
                 t_sim = nan3
             rows.append(
                 [
-                    sc.ut,
+                    sample_ut,
                     alt,
                     flight.latitude,
                     flight.longitude,
@@ -1283,13 +1284,15 @@ def selftest():
         def __init__(self):
             self.force_calls = 0
             self.wrench_calls = 0
+            self.wrench_uts = []
 
         def simulate_aerodynamic_force_at(self, body, r, v, q):
             self.force_calls += 1
             return (1.0, 2.0, 3.0)
 
-        def simulate_aerodynamic_wrench_at(self, body, r, v, q, w):
+        def simulate_aerodynamic_wrench_at(self, body, r, v, q, w, ut):
             self.wrench_calls += 1
+            self.wrench_uts.append(ut)
             return (1.0, 2.0, 3.0), (4.0, 5.0, 6.0)
 
     def fake_rpc_aero(want_torque):
@@ -1307,6 +1310,7 @@ def selftest():
         np.zeros(3),
         np.array(Q_IDENTITY),
         np.zeros(3),
+        1000.0,
     )
     baseline_rpc = fake_rpc_aero(False)
     baseline_force, baseline_torque = baseline_rpc(*state_args)
@@ -1325,8 +1329,48 @@ def selftest():
         wrench_rpc.calls == 1
         and wrench_rpc.flight.force_calls == 0
         and wrench_rpc.flight.wrench_calls == 1
+        and wrench_rpc.flight.wrench_uts == [1000.0]
         and np.array_equal(wrench_force, [1.0, 2.0, 3.0])
         and np.array_equal(wrench_torque, [4.0, 5.0, 6.0]),
+    )
+
+    class StageTimeAero:
+        def __init__(self):
+            self.uts = []
+
+        def __call__(self, r, v, q, w, ut):
+            self.uts.append(ut)
+            return ZERO3, ZERO3
+
+    stage_aero = StageTimeAero()
+    integrate(
+        {
+            "mu": 0.0,
+            "radius": 10.0,
+            "atmo_depth": 100.0,
+            "mass": 1.0,
+            "inertia": np.eye(3).ravel().tolist(),
+            "w_vec": [0.0, 0.0, 0.0],
+        },
+        stage_aero,
+        "6dof",
+        {
+            "t": 100.0,
+            "r": [20.0, 0.0, 0.0],
+            "v": [-1.0, 0.0, 0.0],
+            "q": Q_IDENTITY,
+            "w": [0.0, 0.0, 0.0],
+        },
+        dt_atmo=1.0,
+        dt_vac=1.0,
+        record_dt=1.0,
+        stop_alt=9.5,
+        max_time=2.0,
+    )
+    check(
+        "RK4 passes each stage's actual UT to the wrench",
+        stage_aero.uts == [100.0, 100.5, 100.5, 101.0],
+        f"UTs {stage_aero.uts}",
     )
 
     print("2. Circular orbit (gravity only)")
@@ -1370,7 +1414,7 @@ def selftest():
     class LinearDrag:
         calls = 0
 
-        def __call__(self, r, v, q, w):
+        def __call__(self, r, v, q, w, ut):
             return -1000.0 * v, ZERO3  # b = 1000 kg/s; m = 1000 kg -> tau = 1 s
 
     g_alt = mu / (radius + 5000.0) ** 2  # gravity at the fall altitude
@@ -1450,7 +1494,7 @@ def selftest():
         def __init__(self, k, c):
             self.k, self.c = k, c
 
-        def __call__(self, r, v, q_, w_):
+        def __call__(self, r, v, q_, w_, ut):
             target = -v / np.linalg.norm(v)
             nose = q_rot(q_, NOSE)
             return ZERO3, self.k * np.cross(nose, target) - self.c * np.asarray(w_)

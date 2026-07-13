@@ -18,8 +18,9 @@ integrator, two modes:
 - `baseline`: 3-DOF point mass assuming a permanent retrograde hold, force
   endpoint only. This is what was possible before the torque endpoint.
 - `6dof`: integrates translation and rotation; samples both force and torque
-  with one wrench RPC at each RK4 stage. Discovers trim, lift and oscillation
-  on its own.
+  with one wrench RPC at each RK4 stage, passing that stage's UT for the stock
+  solar-exposure-dependent atmospheric state. Discovers trim, lift and
+  oscillation on its own.
 
 Subcommands: `run` (teleport onto an entry arc, capture, predict, fly, log,
 compare), `predict` (capture and predict only; `--replay PREFIX` re-predicts
@@ -46,7 +47,9 @@ See `DEMO.md`.
   the wrench force component while old logs retain the legacy-force samples;
   both formats are accepted. `--force-rpc`
   re-evaluates via RPC in the current game context and compares against the
-  in-flight values (this is how evaluation-context bugs were caught).
+  in-flight values (this is how evaluation-context bugs were caught). For a
+  wrench-format log it reuses each sample's logged UT and angular velocity;
+  legacy logs retain the legacy force endpoint path.
 - `torque_fidelity.py --prefix RUN`: measured/live/sim pitch torque vs signed
   angle of attack, with trim zero crossings and stiffness. Requires an
   UNDAMPED, uncontrolled log (wheel torque contaminates the measured series).
@@ -62,10 +65,11 @@ See `DEMO.md`.
   mach 5): optimize the trim angle (10-15 deg), not L/D.
 - `damping_probe.py`: measures central-difference force and torque derivatives
   with respect to angular velocity, and compares pitch damping against the
-  stock rigid-body angular-drag formula (single-part craft).
+  stock rigid-body angular-drag formula (single-part craft). Paired calls use
+  one frozen atmospheric UT.
 - `invariance_probe.py`: tests hypothetical-attitude invariance and compares
   the wrench for one physical state expressed in rotating-body,
-  non-rotating-body and vessel reference frames.
+  non-rotating-body and vessel reference frames at one frozen UT.
 - `cube_probe.py`: fingerprints the effective drag cube state via forces along
   the six body axes plus a mixing sweep; `--compare A.json B.json` diffs two
   contexts.

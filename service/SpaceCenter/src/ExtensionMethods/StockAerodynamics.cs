@@ -46,37 +46,124 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         static bool loggedControlSurfaceReflectionFailure;
 
         /// <summary>
-        /// This function should return exactly the same value as Vessel.atmDensity, but is more generic because you
-        /// don't need an actual vessel updated by KSP to get a value at the desired location.
-        /// Computations are performed for the current body position, which means it's theoritically wrong if you want
-        /// to know the temperature in the future, but since body rotation is not used (position is given in sun frame),
-        /// you should get accurate results up to a few weeks.
+        /// Stock atmospheric state at a hypothetical body-relative position and UT.
+        /// Pressure is in KSP's native kilopascals; the other quantities are SI.
+        /// </summary>
+        internal struct AtmosphericState
+        {
+            public double Altitude;
+            public double Pressure;
+            public double Temperature;
+            public double Density;
+            public double SpeedOfSound;
+        }
+
+        /// <summary>
+        /// Evaluate the KSP 1.12.5 FlightIntegrator atmospheric-state chain once.
+        /// The supplied world position provides the hypothetical body-relative radial
+        /// direction; UT is used only for the body/Sun ephemeris and seasonal curves.
+        /// </summary>
+        internal static AtmosphericState GetAtmosphericState(
+            Vector3d position, CelestialBody body, double ut)
+        {
+            var relativePosition = position - body.position;
+            var altitude = relativePosition.magnitude - body.Radius;
+            if (!body.atmosphere || altitude >= body.atmosphereDepth) {
+                return new AtmosphericState {
+                    Altitude = altitude,
+                    Temperature = PhysicsGlobals.SpaceTemperature
+                };
+            }
+
+            var pressure = body.GetPressure(altitude);
+            if (pressure <= 0d) {
+                return new AtmosphericState {
+                    Altitude = altitude,
+                    Temperature = PhysicsGlobals.SpaceTemperature
+                };
+            }
+
+            var up = (Vector3)relativePosition.normalized;
+            var bodyAxis = body.bodyTransform.up;
+            var sun = Planetarium.fetch.Sun;
+            var sunDirectionAtUT = (sun.getTruePositionAtUT(ut)
+                                    - body.getTruePositionAtUT(ut)).normalized;
+            var sunDirection = (Vector3)sunDirectionAtUT;
+
+            // CelestialBody.GetAtmoThermalStats calculates the latitude and the
+            // normalization bounds from these two polar angles. Clamp the dot
+            // products only against round-off at the acos domain boundary.
+            var bodyAxisDot = Math.Max(-1d, Math.Min(1d,
+                (double)Vector3.Dot(bodyAxis, up)));
+            var sunAxisDot = Math.Max(-1d, Math.Min(1d,
+                (double)Vector3.Dot(sunDirection, bodyAxis)));
+            var bodyPolarAngle = Math.Acos(bodyAxisDot);
+            var sunPolarAngle = Math.Acos(sunAxisDot);
+            var maximumSunDot = (1d + Math.Cos(
+                sunPolarAngle - bodyPolarAngle)) * 0.5d;
+            var minimumSunDot = (1d + Math.Cos(
+                sunPolarAngle + bodyPolarAngle)) * 0.5d;
+
+            var phaseRotation = Quaternion.AngleAxis(
+                45f * Mathf.Sign((float)body.rotationPeriod), bodyAxis);
+            var correctedSunDot = (1d + Vector3.Dot(
+                sunDirection, phaseRotation * up)) * 0.5d;
+            var sunDotRange = maximumSunDot - minimumSunDot;
+            var normalizedSunlight = sunDotRange > 0.001d
+                ? (correctedSunDot - minimumSunDot) / sunDotRange
+                : minimumSunDot + sunDotRange * 0.5d;
+
+            var foldedPolarAngle = bodyPolarAngle;
+            if (foldedPolarAngle > Math.PI / 2d)
+                foldedPolarAngle = Math.PI - foldedPolarAngle;
+            var latitude = (float)((Math.PI / 2d - foldedPolarAngle)
+                                   * 57.29578d);
+
+            // The axial and eccentricity terms use the body in this body's
+            // hierarchy that directly orbits the stock system's single Sun.
+            var bodyReferencingSun = global::CelestialBody.GetBodyReferencing(
+                body, sun);
+            var axialPhase = 0f;
+            var eccentricityOffset = 0d;
+            if (bodyReferencingSun != null && bodyReferencingSun.orbit != null) {
+                var orbit = bodyReferencingSun.orbit;
+                axialPhase = (float)((orbit.TrueAnomalyAtUT(ut) * 57.29578d
+                                      + 360d) % 360d);
+                if (orbit.eccentricity != 0d) {
+                    var radiusAtUT = orbit.getRelativePositionAtUT(ut).magnitude;
+                    eccentricityOffset = body.eccentricityTemperatureBiasCurve.Evaluate(
+                        (float)((radiusAtUT - orbit.PeR) / (orbit.ApR - orbit.PeR)));
+                }
+            }
+
+            var temperatureOffset =
+                (double)body.latitudeTemperatureBiasCurve.Evaluate(latitude)
+                + (double)body.latitudeTemperatureSunMultCurve.Evaluate(latitude)
+                    * normalizedSunlight
+                + (double)body.axialTemperatureSunBiasCurve.Evaluate(axialPhase)
+                    * body.axialTemperatureSunMultCurve.Evaluate(latitude)
+                + eccentricityOffset;
+            var temperature = body.GetTemperature(altitude)
+                + body.atmosphereTemperatureSunMultCurve.Evaluate((float)altitude)
+                    * temperatureOffset;
+            var density = body.GetDensity(pressure, temperature);
+            var speedOfSound = body.GetSpeedOfSound(pressure, density);
+            return new AtmosphericState {
+                Altitude = altitude,
+                Pressure = pressure,
+                Temperature = temperature,
+                Density = density,
+                SpeedOfSound = speedOfSound
+            };
+        }
+
+        /// <summary>
+        /// Gets the exact stock atmospheric temperature at the current UT.
         /// </summary>
         public static double GetTemperature(Vector3d position, CelestialBody body)
         {
-            if (!body.atmosphere)
-                return PhysicsGlobals.SpaceTemperature;
-
-            var altitude = (position - body.position).magnitude - body.Radius;
-            if (altitude > body.atmosphereDepth)
-                return PhysicsGlobals.SpaceTemperature;
-
-            var up = (position - body.position).normalized;
-            var polarAngle = Mathf.Acos(Vector3.Dot(body.bodyTransform.up, up));
-            if (polarAngle > Mathf.PI / 2.0f)
-                polarAngle = Mathf.PI - polarAngle;
-            var time = (Mathf.PI / 2.0f - polarAngle) * 57.29578f;
-
-            var sunVector = (FlightGlobals.Bodies[0].position - position).normalized;
-            var sunAxialDot = Vector3.Dot(sunVector, body.bodyTransform.up);
-            var bodyPolarAngle = Mathf.Acos(Vector3.Dot(body.bodyTransform.up, up));
-            var sunPolarAngle = Mathf.Acos(sunAxialDot);
-            var sunBodyMaxDot = (1.0f + Mathf.Cos(sunPolarAngle - bodyPolarAngle)) * 0.5f;
-            var sunBodyMinDot = (1.0f + Mathf.Cos(sunPolarAngle + bodyPolarAngle)) * 0.5f;
-            var sunDotCorrected = (1.0f + Vector3.Dot(sunVector, Quaternion.AngleAxis(45f * Mathf.Sign((float)body.rotationPeriod), body.bodyTransform.up) * up)) * 0.5f;
-            var sunDotNormalized = (sunDotCorrected - sunBodyMinDot) / (sunBodyMaxDot - sunBodyMinDot);
-            double atmosphereTemperatureOffset = body.latitudeTemperatureBiasCurve.Evaluate(time) + (double)body.latitudeTemperatureSunMultCurve.Evaluate(time) * sunDotNormalized + body.axialTemperatureSunMultCurve.Evaluate(sunAxialDot);
-            return body.GetTemperature(altitude) + body.atmosphereTemperatureSunMultCurve.Evaluate((float)altitude) * atmosphereTemperatureOffset;
+            return GetAtmosphericState(
+                position, body, Planetarium.GetUniversalTime()).Temperature;
         }
 
         /// <summary>
@@ -125,9 +212,11 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static string TraceAeroForce(CelestialBody body, Vessel _vessel, Vector3 v_wrld_vel, Vector3 position)
         {
             var sb = new System.Text.StringBuilder();
-            var altitude = (position - body.position).magnitude - body.Radius;
-            var rho = GetDensity(altitude, body);
-            var soundSpeed = body.GetSpeedOfSound(body.GetPressure(altitude), rho);
+            var atmosphere = GetAtmosphericState(
+                position, body, Planetarium.GetUniversalTime());
+            var altitude = atmosphere.Altitude;
+            var rho = atmosphere.Density;
+            var soundSpeed = atmosphere.SpeedOfSound;
             var dyn_pressure = 0.0005 * rho * v_wrld_vel.sqrMagnitude;
             var mach = (float)Math.Min(25.0, v_wrld_vel.magnitude / soundSpeed);
             var pseudoRe = PhysicsGlobals.DragCurvePseudoReynolds.Evaluate(
@@ -300,11 +389,13 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             var sb = new System.Text.StringBuilder();
             Vector3d worldCoM = _vessel.CoM;
             var vAir = (Vector3)_vessel.srf_velocity;
-            var altitude = _vessel.altitude;
-            var rho = GetDensity(altitude, body);
+            var atmosphere = GetAtmosphericState(
+                worldCoM, body, Planetarium.GetUniversalTime());
+            var altitude = atmosphere.Altitude;
+            var rho = atmosphere.Density;
             if (rho <= 0)
                 return "no airflow (rho <= 0)";
-            var soundSpeed = body.GetSpeedOfSound(body.GetPressure(altitude), rho);
+            var soundSpeed = atmosphere.SpeedOfSound;
             var omegaWorld = (Vector3)(_vessel.ReferenceTransform.rotation
                                        * _vessel.angularVelocity);
             sb.Append("alt=").Append(altitude.ToString("G6"))
@@ -458,7 +549,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         {
             var wrench = SimAeroWrench(
                 body, vessel, worldVelocity, Vector3d.zero, worldCoM,
-                attitudeDelta, false, true);
+                attitudeDelta, Planetarium.GetUniversalTime(), false, true);
             return (Vector3)wrench.Force;
         }
 
@@ -473,7 +564,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         {
             var wrench = SimAeroWrench(
                 body, vessel, worldVelocity, worldAngularVelocity, worldCoM,
-                attitudeDelta, true, false);
+                attitudeDelta, Planetarium.GetUniversalTime(), true, false);
             return (Vector3)wrench.Torque;
         }
 
@@ -488,14 +579,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         internal static AerodynamicWrench SimAeroWrench(
             CelestialBody body, Vessel vessel, Vector3d worldVelocity,
             Vector3d worldAngularVelocity, Vector3d worldCoM,
-            QuaternionD attitudeDelta, bool includeRotationalPartFlow,
+            QuaternionD attitudeDelta, double ut, bool includeRotationalPartFlow,
             bool useLegacyUniformFlow)
         {
-            var altitude = (worldCoM - body.position).magnitude - body.Radius;
-            var rho = GetDensity(altitude, body);
+            var atmosphere = GetAtmosphericState(worldCoM, body, ut);
+            var rho = atmosphere.Density;
             if (rho <= 0)
                 return new AerodynamicWrench ();
-            var soundSpeed = body.GetSpeedOfSound(body.GetPressure(altitude), rho);
+            var soundSpeed = atmosphere.SpeedOfSound;
 
             var inverseDelta = attitudeDelta.Inverse ();
             var currentWorldCoM = (Vector3d)vessel.CoM;
