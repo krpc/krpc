@@ -236,7 +236,7 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="cumulative">When <c>false</c>, returns the resources for parts
         /// decoupled in just the given stage. When <c>true</c> returns the resources decoupled in
         /// the given stage and all subsequent stages combined.</param>
-        [Obsolete ("Use Vessel.DecoupleStageAt(stage).Resources(cumulative) instead.")]
+        [Obsolete ("Use <see cref=\"Stage.Resources\" /> from the object returned by <see cref=\"DecoupleStageAt\" /> instead.")]
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Resources ResourcesInDecoupleStage (int stage, bool cumulative = true)
         {
@@ -290,6 +290,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The activation stage with the given number.
         /// </summary>
+        /// <param name="stage">Get activation stage at this index.</param>
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Stage StageAt (int stage)
         {
@@ -313,6 +314,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The decouple stage with the given number.
         /// </summary>
+        /// <param name="stage">Get decouple stage at this index.</param>
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Stage DecoupleStageAt (int stage)
         {

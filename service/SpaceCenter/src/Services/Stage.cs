@@ -22,10 +22,25 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public class Stage : Equatable<Stage>
     {
+        /// <summary>
+        /// The internal vessel object.
+        /// </summary>
         readonly global::Vessel internalVessel;
+
+        /// <summary>
+        /// The stage number.
+        /// </summary>
         readonly int stageNumber;
+        
+        /// <summary>
+        /// Whether this is a decouple stage.
+        /// </summary>
         readonly bool decoupleStage;
 
+        /// <summary>
+        /// Initializes a stage object by storing the vessel, stage number, 
+        /// and whether it is a decouple stage, while rejecting a null vessel.
+        /// </summary>
         internal Stage (global::Vessel vessel, int number, bool decouple)
         {
             if (ReferenceEquals (vessel, null))
@@ -78,7 +93,14 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Returns a <see cref="Resources"/> object for this stage.
         /// </summary>
-        /// <param name="cumulative">When <c>false</c>, only resources assigned to this stage. When <c>true</c>, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached. Defaults to <c>true</c> so decouple-stage calls match the legacy <c>Vessel.ResourcesInDecoupleStage</c> RPC.</param>
+        /// <param name="cumulative">
+        /// When <c>false</c>, only resources assigned to this stage. 
+        /// When <c>true</c>, resources for this stage and all later activation or decouple stage 
+        /// numbers are included. On activation stages, unstaged resource containers (for example 
+        /// fuel tanks) are grouped with the first higher activation stage before they are detached. 
+        /// Defaults to <c>true</c> so decouple-stage calls match the legacy 
+        /// <c>Vessel.ResourcesInDecoupleStage</c> RPC.
+        /// </param>
         [KRPCMethod]
         public Resources Resources (bool cumulative = true)
         {
@@ -187,6 +209,13 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float FuelMass => RequireBurnStage ().fuelMass * 1000f;
 
+        /// <summary>
+        /// Validates that a stage can provide burn-related delta-v data 
+        /// before returning it. It throws an exception for decouple stages, 
+        /// for vessels whose delta-v calculations are not ready, or when 
+        /// the requested activation stage has no available delta-v 
+        /// information.
+        /// </summary>
         DeltaVStageInfo RequireBurnStage ()
         {
             if (decoupleStage)

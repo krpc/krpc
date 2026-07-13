@@ -129,7 +129,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="stage"></param>
         [KRPCMethod]
-        [Obsolete ("Use Vessel.StageAt(stage).Parts instead.")]
+        [Obsolete ("Use <see cref=\"Stage.Parts\" /> from the object returned by <see cref=\"Vessel.StageAt\" /> instead.")]
         public IList<Part> InStage (int stage)
         {
             return All.Where (part => part.Stage == stage).ToList ();
@@ -140,7 +140,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="stage"></param>
         [KRPCMethod]
-        [Obsolete ("Use Vessel.DecoupleStageAt(stage).Parts instead.")]
+        [Obsolete ("Use <see cref=\"Stage.Parts\" /> from the object returned by <see cref=\"Vessel.DecoupleStageAt\" /> instead.")]
         public IList<Part> InDecoupleStage (int stage)
         {
             return All.Where (part => part.DecoupleStage == stage).ToList ();
