@@ -91,6 +91,45 @@ Service documentation string.
 
 
 
+.. staticmethod:: deprecated_procedure(value)
+
+   .. warning:: Deprecated. Use :meth:`float_to_string` instead.
+
+   Deprecated procedure documentation string.
+
+   :param float value:
+   :rtype: str
+   
+
+
+
+
+.. staticmethod:: deprecated_procedure_no_message(value)
+
+   .. warning:: Deprecated.
+
+   Deprecated procedure with no reason documentation string.
+
+   :param float value:
+   :rtype: str
+   
+
+
+
+
+.. attribute:: deprecated_property
+
+   .. warning:: Deprecated. Use :attr:`string_property` instead.
+
+   Deprecated property documentation string.
+
+   :Attribute: Can be read or written
+   :rtype: str
+   
+
+
+
+
 .. staticmethod:: dictionary_default([x = {1: False, 2: True}])
 
 
@@ -551,6 +590,23 @@ Service documentation string.
 
 
 
+.. class:: DeprecatedClass
+
+   .. warning:: Deprecated. Use :class:`TestClass` instead.
+
+   Deprecated class documentation string.
+
+   .. method:: deprecated_method()
+
+      .. warning:: Deprecated. Use :meth:`TestClass.get_value` instead.
+
+      Deprecated method documentation string.
+
+      :rtype: str
+   
+
+
+
 .. class:: TestEnum
 
    Enum documentation string.
@@ -572,4 +628,34 @@ Service documentation string.
 
 
 
+.. class:: DeprecatedEnum
+
+   .. warning:: Deprecated. Use :class:`TestEnum` instead.
+
+   Deprecated enum documentation string.
+
+
+   .. data:: value_a
+
+      Deprecated enum ValueA documentation string.
+
+
+   .. data:: value_b
+
+      .. warning:: Deprecated. Use :attr:`DeprecatedEnum.value_a` instead.
+
+      Deprecated enum ValueB documentation string.
+
+
+
 .. class:: CustomException
+
+
+
+
+
+.. class:: DeprecatedException
+
+   .. warning:: Deprecated. Use CustomException instead.
+
+   Deprecated exception documentation string.

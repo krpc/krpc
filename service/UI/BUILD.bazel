@@ -64,7 +64,7 @@ test_suite(
 
 py_lint_test(
     name = "pylint",
-    size = "small",
+    size = "medium",
     srcs = glob(["test/*.py"]),
     pylint_config = "test/pylint.rc",
     deps = [

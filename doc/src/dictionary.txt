@@ -25,6 +25,7 @@ NUnit
 Olex
 Tron
 Wheesley
+accelerometers
 amongst
 apoapsis
 arg

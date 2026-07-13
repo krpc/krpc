@@ -51,6 +51,7 @@
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AutoPilot\AttitudeController.cs" />
+    <Compile Include="AutoPilot\AttitudeError.cs" />
     <Compile Include="AutoPilot\PIDController.cs" />
     <Compile Include="ExtensionMethods\ActionGroupExtensions.cs" />
     <Compile Include="ExtensionMethods\AlarmMessageActionExtensions.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Services\Parts\Engine.cs" />
     <Compile Include="Services\Parts\Experiment.cs" />
     <Compile Include="Services\Parts\Fairing.cs" />
+    <Compile Include="Services\Parts\FieldType.cs" />
     <Compile Include="Services\Parts\Force.cs" />
     <Compile Include="Services\Parts\Intake.cs" />
     <Compile Include="Services\Parts\LaunchClamp.cs" />
@@ -151,6 +153,9 @@
     <Compile Include="Services\Parts\Parachute.cs" />
     <Compile Include="Services\Parts\ParachuteState.cs" />
     <Compile Include="Services\Parts\Part.cs" />
+    <Compile Include="Services\Parts\PartAction.cs" />
+    <Compile Include="Services\Parts\PartEvent.cs" />
+    <Compile Include="Services\Parts\PartField.cs" />
     <Compile Include="Services\Parts\Parts.cs" />
     <Compile Include="Services\Parts\Propellant.cs" />
     <Compile Include="Services\Parts\RCS.cs" />

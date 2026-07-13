@@ -128,6 +128,7 @@
     <Compile Include="Service\KRPC\ArgumentNullException.cs" />
     <Compile Include="Service\KRPC\ArgumentOutOfRangeException.cs" />
     <Compile Include="Service\KRPC\Expression.cs" />
+    <Compile Include="Service\KRPC\GameScene.cs" />
     <Compile Include="Service\KRPC\InvalidOperationException.cs" />
     <Compile Include="Service\KRPC\KRPC.cs" />
     <Compile Include="Service\KRPC\Type.cs" />

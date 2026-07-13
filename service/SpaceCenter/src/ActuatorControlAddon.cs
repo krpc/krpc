@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Expansions.Missions.Adjusters;
-using KRPC.Server;
-using KRPC.Service;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter
@@ -27,7 +24,7 @@ namespace KRPC.SpaceCenter
     /// such gate.
     /// </remarks>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    public sealed class ActuatorControlAddon : MonoBehaviour
+    public sealed class ActuatorControlAddon : ClientCleanupAddon
     {
         /// <summary>
         /// Overrides a gimbal's actuation. ModuleGimbal calls this mid-FixedUpdate,
@@ -84,20 +81,11 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// An override on a single actuator, tagged with the client that owns it (so it
-        /// can be released when that client disconnects).
-        /// </summary>
-        abstract class Entry
-        {
-            public IClient Client;
-        }
-
-        /// <summary>
         /// A gimbal override, installed as an adjuster on the module. The prior active
         /// state is saved and forced on so the module's FixedUpdate (which is skipped
         /// when inactive) runs the adjuster.
         /// </summary>
-        sealed class GimbalEntry : Entry
+        sealed class GimbalEntry : ClientOwnedEntry
         {
             public GimbalAdjuster Adjuster;
             public bool SavedGimbalActive;
@@ -106,7 +94,7 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// An RCS override, installed as an adjuster on the module.
         /// </summary>
-        sealed class RCSEntry : Entry
+        sealed class RCSEntry : ClientOwnedEntry
         {
             public RCSAdjuster Adjuster;
         }
@@ -118,7 +106,7 @@ namespace KRPC.SpaceCenter
         /// control removed via the <c>ignore*</c> flags. The prior state is saved so it
         /// can be restored on release.
         /// </summary>
-        sealed class ControlSurfaceEntry : Entry
+        sealed class ControlSurfaceEntry : ClientOwnedEntry
         {
             public float Deflection;
             public bool SavedIgnorePitch;
@@ -127,100 +115,22 @@ namespace KRPC.SpaceCenter
             public bool SavedDeploy;
         }
 
-        /// <summary>
-        /// A set of actuator overrides of one kind, keyed by the part module. Owns the
-        /// shared lifecycle: installing an override on enable, releasing it on disable,
-        /// and dropping overrides whose owning client has disconnected or whose module
-        /// has been destroyed. The per-kind behaviour is supplied as delegates.
-        /// </summary>
-        sealed class OverrideRegistry<TModule, TEntry>
-            where TModule : PartModule
-            where TEntry : Entry
-        {
-            readonly IDictionary<TModule, TEntry> entries = new Dictionary<TModule, TEntry> ();
-            readonly Func<TModule, TEntry> install;
-            readonly Action<TModule, TEntry> release;
-
-            public OverrideRegistry (Func<TModule, TEntry> install, Action<TModule, TEntry> release)
-            {
-                this.install = install;
-                this.release = release;
-            }
-
-            public bool IsSet (TModule module)
-            {
-                return entries.ContainsKey (module);
-            }
-
-            /// <summary>
-            /// The override for the given module, or null if it is not being overridden.
-            /// </summary>
-            public TEntry Get (TModule module)
-            {
-                TEntry entry;
-                return entries.TryGetValue (module, out entry) ? entry : null;
-            }
-
-            /// <summary>
-            /// The override for the given module, re-tagged with the calling client, or
-            /// null if it is not being overridden. Used when changing a live override's
-            /// command.
-            /// </summary>
-            public TEntry Own (TModule module)
-            {
-                var entry = Get (module);
-                if (entry != null)
-                    entry.Client = CallContext.Client;
-                return entry;
-            }
-
-            public void Set (TModule module, bool enabled)
-            {
-                var entry = Get (module);
-                if (entry != null) {
-                    if (enabled)
-                        entry.Client = CallContext.Client;
-                    else {
-                        release (module, entry);
-                        entries.Remove (module);
-                    }
-                } else if (enabled) {
-                    entry = install (module);
-                    entry.Client = CallContext.Client;
-                    entries [module] = entry;
-                }
-            }
-
-            /// <summary>
-            /// Drop overrides whose module has been destroyed or whose client has
-            /// disconnected.
-            /// </summary>
-            public void Sweep ()
-            {
-                foreach (var module in entries.Keys.ToList ()) {
-                    var entry = entries [module];
-                    if (Destroyed (module) || Disconnected (entry.Client)) {
-                        release (module, entry);
-                        entries.Remove (module);
-                    }
-                }
-            }
-
-            public void Clear ()
-            {
-                foreach (var entry in entries)
-                    release (entry.Key, entry.Value);
-                entries.Clear ();
-            }
-        }
-
-        static readonly OverrideRegistry<ModuleGimbal, GimbalEntry> gimbals =
-            new OverrideRegistry<ModuleGimbal, GimbalEntry> (InstallGimbal, ReleaseGimbal);
-        static readonly OverrideRegistry<ModuleRCS, RCSEntry> rcs =
-            new OverrideRegistry<ModuleRCS, RCSEntry> (InstallRCS, ReleaseRCS);
-        static readonly OverrideRegistry<ModuleControlSurface, ControlSurfaceEntry> controlSurfaces =
-            new OverrideRegistry<ModuleControlSurface, ControlSurfaceEntry> (
+        static readonly ClientOwnedOverrides<ModuleGimbal, GimbalEntry> gimbals =
+            new ClientOwnedOverrides<ModuleGimbal, GimbalEntry> (InstallGimbal, ReleaseGimbal);
+        static readonly ClientOwnedOverrides<ModuleRCS, RCSEntry> rcs =
+            new ClientOwnedOverrides<ModuleRCS, RCSEntry> (InstallRCS, ReleaseRCS);
+        static readonly ClientOwnedOverrides<ModuleControlSurface, ControlSurfaceEntry> controlSurfaces =
+            new ClientOwnedOverrides<ModuleControlSurface, ControlSurfaceEntry> (
                 InstallControlSurface, RestoreControlSurface);
+
+        static readonly IClientOwnedCollection[] collections = { gimbals, rcs, controlSurfaces };
+
+        /// <summary>
+        /// The actuator override registries.
+        /// </summary>
+        protected override IEnumerable<IClientOwnedCollection> Collections {
+            get { return collections; }
+        }
 
         // The module's adjuster list is private; AddPartModuleAdjuster (which would
         // populate it) is gated behind the Making History expansion, so add/remove
@@ -231,48 +141,18 @@ namespace KRPC.SpaceCenter
             typeof (ModuleRCS).GetField ("adjusterCache", BindingFlags.NonPublic | BindingFlags.Instance);
 
         /// <summary>
-        /// Wake the addon
-        /// </summary>
-        public void Awake ()
-        {
-            Clear ();
-        }
-
-        /// <summary>
-        /// Destroy the addon
-        /// </summary>
-        public void OnDestroy ()
-        {
-            Clear ();
-        }
-
-        static void Clear ()
-        {
-            gimbals.Clear ();
-            rcs.Clear ();
-            controlSurfaces.Clear ();
-        }
-
-        /// <summary>
         /// Drop overrides whose controlling client has disconnected or whose part module has been
         /// destroyed, returning those actuators to normal control. The overrides themselves are
         /// applied by the modules calling into the installed adjusters, so nothing is driven here.
         /// </summary>
         public void FixedUpdate ()
         {
-            gimbals.Sweep ();
-            rcs.Sweep ();
-            controlSurfaces.Sweep ();
+            Sweep ();
         }
 
         static bool Destroyed (UnityEngine.Object module)
         {
             return module == null;
-        }
-
-        static bool Disconnected (IClient client)
-        {
-            return client != null && !client.Connected;
         }
 
         static void CacheAdd (FieldInfo cache, PartModule module, object adjuster)

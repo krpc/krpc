@@ -11,11 +11,16 @@ namespace KRPC.Service.Messages
 
         public string Documentation { get; set; }
 
+        public bool Deprecated { get; set; }
+
+        public string DeprecatedReason { get; set; }
+
         public Enumeration (string name)
         {
             Name = name;
             Values = new List<EnumerationValue> ();
             Documentation = string.Empty;
+            DeprecatedReason = string.Empty;
         }
     }
 }

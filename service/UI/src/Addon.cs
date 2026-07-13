@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using KRPC.Server;
 using KRPC.Service;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -11,7 +10,7 @@ namespace KRPC.UI
     /// Addon for managing the UI
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    public sealed class Addon : MonoBehaviour
+    public sealed class Addon : ClientCleanupAddon
     {
         static AssetBundle prefabs;
 
@@ -39,68 +38,45 @@ namespace KRPC.UI
             return obj;
         }
 
-        static IDictionary<IClient, IList<Object>> objects = new Dictionary<IClient, IList<Object>> ();
+        static readonly ClientOwnedObjects<Object> objects =
+            new ClientOwnedObjects<Object> (obj => obj.Destroy ());
+
+        static readonly IClientOwnedCollection[] collections = { objects };
+
+        /// <summary>
+        /// The UI objects.
+        /// </summary>
+        protected override IEnumerable<IClientOwnedCollection> Collections {
+            get { return collections; }
+        }
 
         internal static void Add (Object obj)
         {
-            var client = CallContext.Client;
-            if (!objects.ContainsKey (client))
-                objects [client] = new List<Object> ();
-            objects [client].Add (obj);
+            objects.Add (obj);
         }
 
         internal static void Remove (Object obj)
         {
-            var client = CallContext.Client;
-            if (!objects.ContainsKey (client) || !objects [client].Contains (obj))
+            if (!objects.OwnedByCaller (obj))
                 throw new ArgumentException ("UI object not found");
             obj.Destroy ();
-            objects [client].Remove (obj);
+            objects.Remove (obj);
         }
 
-        internal static void Clear ()
+        internal static void Clear (bool clientOnly)
         {
-            foreach (var clientObjects in objects.Values)
-                foreach (var obj in clientObjects)
-                    obj.Destroy ();
-            objects.Clear ();
-        }
-
-        internal static void Clear (IClient client)
-        {
-            if (objects.ContainsKey (client)) {
-                foreach (var obj in objects [client])
-                    obj.Destroy ();
-                objects.Remove (client);
-            }
+            if (clientOnly)
+                objects.Clear (CallContext.Client);
+            else
+                objects.Clear ();
         }
 
         /// <summary>
-        /// Wake the addon
-        /// </summary>
-        public void Awake ()
-        {
-        }
-
-        /// <summary>
-        /// Update the addon
+        /// Update the addon: destroy the objects of clients that have disconnected.
         /// </summary>
         public void Update ()
         {
-            if (!objects.Any ())
-                return;
-
-            var disconnectedClients = objects.Keys.Where (x => !x.Connected).ToList ();
-            foreach (var client in disconnectedClients)
-                Clear (client);
-        }
-
-        /// <summary>
-        /// Destroy the addon
-        /// </summary>
-        public void OnDestroy ()
-        {
-            Clear ();
+            Sweep ();
         }
     }
 }

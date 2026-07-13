@@ -10,6 +10,9 @@ import krpc.client.RPCInfo;
 import krpc.client.RPCException;
 import krpc.client.Types;
 
+// Generated code references its own deprecated members (e.g. when registering
+// exception types), so suppress the deprecation warnings within this class.
+@SuppressWarnings("deprecation")
 public class TestService {
 
     public static TestService newInstance(Connection connection) {
@@ -35,8 +38,27 @@ public class TestService {
         }
     }
 
+    /**
+     * Deprecated exception documentation string.
+     *
+     * @deprecated Use CustomException instead.
+     */
+    @Deprecated
+    public static class DeprecatedException extends krpc.client.RPCException {
+        private static final long serialVersionUID = 483570852596919585L;
+
+        public DeprecatedException(String message) {
+            super(message);
+        }
+
+        public DeprecatedException(String message, Exception innerException) {
+            super(message, innerException);
+        }
+    }
+
     private void addExceptionTypes(Connection connection) {
         connection.addExceptionType("TestService", "CustomException", CustomException.class);
+        connection.addExceptionType("TestService", "DeprecatedException", DeprecatedException.class);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -112,6 +134,36 @@ public class TestService {
         };
         ByteString _data = this.connection.invoke("TestService", "CreateTestObject", _args);
         return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
+    }
+
+    /**
+     * Deprecated procedure documentation string.
+     *
+     * @deprecated Use floatToString instead.
+     */
+    @Deprecated
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "DeprecatedProcedure", types = _Types.class)
+    public String deprecatedProcedure(float value) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT))
+        };
+        ByteString _data = this.connection.invoke("TestService", "DeprecatedProcedure", _args);
+        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+    }
+
+    /**
+     * Deprecated procedure with no reason documentation string.
+     */
+    @Deprecated
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "DeprecatedProcedureNoMessage", types = _Types.class)
+    public String deprecatedProcedureNoMessage(float value) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT))
+        };
+        ByteString _data = this.connection.invoke("TestService", "DeprecatedProcedureNoMessage", _args);
+        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -402,6 +454,34 @@ public class TestService {
         return (org.javatuples.Pair<Integer,Boolean>) Encoder.decode(_data, krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)), this.connection);
     }
 
+    /**
+     * Deprecated property documentation string.
+     *
+     * @deprecated Use stringProperty instead.
+     */
+    @Deprecated
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "get_DeprecatedProperty", types = _Types.class)
+    public String getDeprecatedProperty() throws RPCException {
+        ByteString _data = this.connection.invoke("TestService", "get_DeprecatedProperty");
+        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+    }
+
+    /**
+     * Deprecated property documentation string.
+     *
+     * @deprecated Use stringProperty instead.
+     */
+    @Deprecated
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "set_DeprecatedProperty", types = _Types.class)
+    public void setDeprecatedProperty(String value) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
+        };
+        this.connection.invoke("TestService", "set_DeprecatedProperty", _args);
+    }
+
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "get_ObjectProperty", types = _Types.class)
     public krpc.client.services.TestService.TestClass getObjectProperty() throws RPCException {
@@ -457,6 +537,48 @@ public class TestService {
     }
 
     /**
+     * Deprecated enum documentation string.
+     *
+     * @deprecated Use TestEnum instead.
+     */
+    @Deprecated
+    public enum DeprecatedEnum implements RemoteEnum {
+        /**
+         * Deprecated enum ValueA documentation string.
+         */
+        VALUE_A(0),
+
+        /**
+         * Deprecated enum ValueB documentation string.
+         *
+         * @deprecated Use DeprecatedEnum.valueA instead.
+         */
+        @Deprecated
+        VALUE_B(1);
+
+        private final int value;
+
+        private DeprecatedEnum (int value) {
+            this.value = value;
+        }
+
+        @Override
+        public int getValue() {
+            return value;
+        }
+
+        public static DeprecatedEnum fromValue(int value) {
+            switch (value) {
+            case 0:
+                 return VALUE_A;
+            case 1:
+                 return VALUE_B;
+            }
+            return null;
+        }
+    }
+
+    /**
      * Enum documentation string.
      */
     public enum TestEnum implements RemoteEnum {
@@ -496,6 +618,38 @@ public class TestService {
                  return VALUE_C;
             }
             return null;
+        }
+    }
+
+    /**
+     * Deprecated class documentation string.
+     *
+     * @deprecated Use TestClass instead.
+     */
+    @Deprecated
+    public static class DeprecatedClass extends RemoteObject {
+
+        private static final long serialVersionUID = 17653684528050254L;
+
+        public DeprecatedClass(Connection connection, long id) {
+            super(connection, id);
+        }
+
+        /**
+         * Deprecated method documentation string.
+         *
+         * @deprecated Use TestClass.getValue instead.
+         */
+        @Deprecated
+        @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "TestService", procedure = "DeprecatedClass_DeprecatedMethod", types = _Types.class)
+        public String deprecatedMethod() throws RPCException
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(this, krpc.client.Types.createClass("TestService", "DeprecatedClass"))
+            };
+            ByteString _data = this.connection.invoke("TestService", "DeprecatedClass_DeprecatedMethod", _args);
+            return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
         }
     }
 
@@ -665,6 +819,10 @@ public class TestService {
                 return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32);
             case "CreateTestObject":
                 return krpc.client.Types.createClass("TestService", "TestClass");
+            case "DeprecatedProcedure":
+                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
+            case "DeprecatedProcedureNoMessage":
+                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
             case "DictionaryDefault":
                 return krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL));
             case "DoubleToString":
@@ -727,6 +885,10 @@ public class TestService {
                 return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32);
             case "TupleDefault":
                 return krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL));
+            case "get_DeprecatedProperty":
+                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
+            case "set_DeprecatedProperty":
+                return null;
             case "get_ObjectProperty":
                 return krpc.client.Types.createClass("TestService", "TestClass");
             case "set_ObjectProperty":
@@ -738,6 +900,8 @@ public class TestService {
             case "set_StringPropertyPrivateGet":
                 return null;
             case "get_StringPropertyPrivateSet":
+                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
+            case "DeprecatedClass_DeprecatedMethod":
                 return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
             case "TestClass_FloatToString":
                 return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
@@ -799,6 +963,14 @@ public class TestService {
             case "CreateTestObject":
                 return new krpc.schema.KRPC.Type[] {
                     krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
+                };
+            case "DeprecatedProcedure":
+                return new krpc.schema.KRPC.Type[] {
+                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)
+                };
+            case "DeprecatedProcedureNoMessage":
+                return new krpc.schema.KRPC.Type[] {
+                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)
                 };
             case "DictionaryDefault":
                 return new krpc.schema.KRPC.Type[] {
@@ -919,6 +1091,13 @@ public class TestService {
                 return new krpc.schema.KRPC.Type[] {
                     krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL))
                 };
+            case "get_DeprecatedProperty":
+                return new krpc.schema.KRPC.Type[] {
+                };
+            case "set_DeprecatedProperty":
+                return new krpc.schema.KRPC.Type[] {
+                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
+                };
             case "get_ObjectProperty":
                 return new krpc.schema.KRPC.Type[] {
                 };
@@ -939,6 +1118,10 @@ public class TestService {
                 };
             case "get_StringPropertyPrivateSet":
                 return new krpc.schema.KRPC.Type[] {
+                };
+            case "DeprecatedClass_DeprecatedMethod":
+                return new krpc.schema.KRPC.Type[] {
+                    krpc.client.Types.createClass("TestService", "DeprecatedClass")
                 };
             case "TestClass_FloatToString":
                 return new krpc.schema.KRPC.Type[] {

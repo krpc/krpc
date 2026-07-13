@@ -1,5 +1,6 @@
 # pylint: disable=line-too-long,invalid-name,redefined-builtin,too-many-lines
 from __future__ import annotations
+import warnings
 from typing import Tuple, Set, Dict, List, Optional, TYPE_CHECKING
 import krpc.schema
 from krpc.schema import KRPC_pb2
@@ -51,6 +52,8 @@ class {{class_name}}(ClassBase):
     def {{prop_name}}(self) -> {{ prop.getter.return_type.spec }}:
 {% if prop.getter.documentation %}{{ prop.getter.documentation | indent(width=8) }}
 {% endif %}
+{% if prop.getter.deprecated %}        warnings.warn("{{ service_name }}.{{ class_name }}.{{ prop_name }} is deprecated{% if prop.getter.deprecated_reason %}: {{ prop.getter.deprecated_reason }}{% endif %}", DeprecationWarning, stacklevel=2)
+{% endif %}
         return self._client._invoke(
             "{{ service_name }}",
             "{{ prop.getter.remote_name }}",
@@ -69,6 +72,8 @@ class {{class_name}}(ClassBase):
     {% if 'setter' in prop %}
     @{{prop_name}}.setter
     def {{prop_name}}({{ arg_list(prop.setter.parameters) }}) -> None:
+{% if prop.setter.deprecated %}        warnings.warn("{{ service_name }}.{{ class_name }}.{{ prop_name }} is deprecated{% if prop.setter.deprecated_reason %}: {{ prop.setter.deprecated_reason }}{% endif %}", DeprecationWarning, stacklevel=2)
+{% endif %}
         return self._client._invoke(
             "{{ service_name }}",
             "{{ prop.setter.remote_name }}",
@@ -99,6 +104,8 @@ class {{class_name}}(ClassBase):
     def {{proc_name}}({{ arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
 {% endif %}
+{% if procedure.deprecated %}        warnings.warn("{{ service_name }}.{{ class_name }}.{{ proc_name }} is deprecated{% if procedure.deprecated_reason %}: {{ procedure.deprecated_reason }}{% endif %}", DeprecationWarning, stacklevel=2)
+{% endif %}
         return self._client._invoke(
             "{{ service_name }}",
             "{{ procedure.remote_name }}",
@@ -126,6 +133,8 @@ class {{class_name}}(ClassBase):
     @StaticMethod
     def {{proc_name}}(cls, {{ static_arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
+{% endif %}
+{% if procedure.deprecated %}        warnings.warn("{{ service_name }}.{{ class_name }}.{{ proc_name }} is deprecated{% if procedure.deprecated_reason %}: {{ procedure.deprecated_reason }}{% endif %}", DeprecationWarning, stacklevel=2)
 {% endif %}
         self = cls
         return cls._client._invoke(
@@ -216,6 +225,8 @@ class {{ service_name }}:
     def {{prop_name}}(self) -> {{ prop.getter.return_type.spec }}:
 {% if prop.getter.documentation %}{{ prop.getter.documentation | indent(width=8) }}
 {% endif %}
+{% if prop.getter.deprecated %}        warnings.warn("{{ service_name }}.{{ prop_name }} is deprecated{% if prop.getter.deprecated_reason %}: {{ prop.getter.deprecated_reason }}{% endif %}", DeprecationWarning, stacklevel=2)
+{% endif %}
         return self._client._invoke(
             "{{ service_name }}",
             "{{ prop.getter.remote_name }}",
@@ -234,6 +245,8 @@ class {{ service_name }}:
     {% if 'setter' in prop %}
     @{{prop_name}}.setter
     def {{prop_name}}({{ arg_list(prop.setter.parameters) }}) -> None:
+{% if prop.setter.deprecated %}        warnings.warn("{{ service_name }}.{{ prop_name }} is deprecated{% if prop.setter.deprecated_reason %}: {{ prop.setter.deprecated_reason }}{% endif %}", DeprecationWarning, stacklevel=2)
+{% endif %}
         return self._client._invoke(
             "{{ service_name }}",
             "{{ prop.setter.remote_name }}",
@@ -263,6 +276,8 @@ class {{ service_name }}:
     {% for proc_name, procedure in procedures.items() %}
     def {{proc_name}}({{ arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
+{% endif %}
+{% if procedure.deprecated %}        warnings.warn("{{ service_name }}.{{ proc_name }} is deprecated{% if procedure.deprecated_reason %}: {{ procedure.deprecated_reason }}{% endif %}", DeprecationWarning, stacklevel=2)
 {% endif %}
         return self._client._invoke(
             "{{ service_name }}",

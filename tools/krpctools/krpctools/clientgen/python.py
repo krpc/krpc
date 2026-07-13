@@ -22,6 +22,8 @@ class PythonGenerator(Generator):
 
     language = PythonLanguage()
 
+    parse_plain_cref_member = staticmethod(snake_case)
+
     def parse_python_type(self, typ):
         if typ is None:
             return "None"
@@ -116,6 +118,8 @@ class PythonGenerator(Generator):
                     "parameters": [],
                     "return_type": info["type"],
                     "documentation": info["documentation"],
+                    "deprecated": info["deprecated"],
+                    "deprecated_reason": info["deprecated_reason"],
                 }
             if info["setter"]:
                 properties[name]["setter"] = {
@@ -126,6 +130,8 @@ class PythonGenerator(Generator):
                     ),
                     "return_type": "None",
                     "documentation": info["documentation"],
+                    "deprecated": info["deprecated"],
+                    "deprecated_reason": info["deprecated_reason"],
                 }
         context["properties"] = properties
 
@@ -142,6 +148,8 @@ class PythonGenerator(Generator):
                         "parameters": [],
                         "return_type": info["type"],
                         "documentation": info["documentation"],
+                        "deprecated": info["deprecated"],
+                        "deprecated_reason": info["deprecated_reason"],
                     }
                 if info["setter"]:
                     class_properties[name]["setter"] = {
@@ -154,6 +162,8 @@ class PythonGenerator(Generator):
                         ],
                         "return_type": "None",
                         "documentation": info["documentation"],
+                        "deprecated": info["deprecated"],
+                        "deprecated_reason": info["deprecated_reason"],
                     }
             class_info["properties"] = class_properties
 
@@ -279,7 +289,47 @@ class PythonGenerator(Generator):
                     }
                     pos += 1
 
+        self.add_deprecated_docstrings(context)
         return context
+
+    @classmethod
+    def add_deprecated_docstrings(cls, context):
+        # Prepend a "Deprecated:" line to the docstring of every deprecated member/type
+        deprecatable = (
+            list(context["procedures"].values())
+            + [
+                accessor
+                for property in context["properties"].values()
+                for accessor in property.values()
+            ]
+            + list(context["enumerations"].values())
+            + list(context["exceptions"].values())
+            + list(context["classes"].values())
+        )
+        for class_info in context["classes"].values():
+            deprecatable += list(class_info["methods"].values())
+            deprecatable += list(class_info["static_methods"].values())
+            deprecatable += [
+                accessor
+                for property in class_info["properties"].values()
+                for accessor in property.values()
+            ]
+        for info in deprecatable:
+            cls.add_deprecated_docstring(info)
+
+    @staticmethod
+    def add_deprecated_docstring(info):
+        if not info.get("deprecated"):
+            return
+        reason = info.get("deprecated_reason", "")
+        line = "Deprecated. " + reason if reason else "Deprecated."
+        documentation = info.get("documentation", "")
+        if documentation:
+            # documentation is '"""\n<content>\n"""'
+            body = documentation[len('"""\n') : -len('\n"""')]
+            info["documentation"] = '"""\n' + line + "\n\n" + body + '\n"""'
+        else:
+            info["documentation"] = '"""\n' + line + '\n"""'
 
     def parse_default_value(self, value, typ):
         result = super().parse_default_value(value, typ)

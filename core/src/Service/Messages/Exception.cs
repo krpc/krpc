@@ -8,10 +8,15 @@ namespace KRPC.Service.Messages
 
         public string Documentation { get; set; }
 
+        public bool Deprecated { get; set; }
+
+        public string DeprecatedReason { get; set; }
+
         public Exception (string name)
         {
             Name = name;
             Documentation = string.Empty;
+            DeprecatedReason = string.Empty;
         }
     }
 }

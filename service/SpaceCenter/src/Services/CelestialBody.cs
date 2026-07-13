@@ -117,7 +117,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The current rotation angle of the body, in radians.
-        /// A value between 0 and <math>2\pi</math>
+        /// A value between 0 and 2·pi
         /// </summary>
         [KRPCProperty]
         public double RotationAngle {
@@ -126,7 +126,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The initial rotation angle of the body (at UT 0), in radians.
-        /// A value between 0 and <math>2\pi</math>
+        /// A value between 0 and 2·pi
         /// </summary>
         [KRPCProperty]
         public double InitialRotation {

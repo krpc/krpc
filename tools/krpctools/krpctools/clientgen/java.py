@@ -24,6 +24,8 @@ class JavaGenerator(Generator):
 
     language = JavaLanguage()
 
+    parse_plain_cref_member = staticmethod(lower_camel_case)
+
     def parse_type_specification(self, typ):
         if typ is None:
             return None
@@ -87,6 +89,8 @@ class JavaGenerator(Generator):
                     "parameters": [],
                     "return_type": info["type"],
                     "documentation": info["documentation"],
+                    "deprecated": info["deprecated"],
+                    "deprecated_reason": info["deprecated_reason"],
                 }
             if info["setter"]:
                 properties["set" + upper_camel_case(name)] = {
@@ -97,6 +101,8 @@ class JavaGenerator(Generator):
                     ),
                     "return_type": "void",
                     "documentation": info["documentation"],
+                    "deprecated": info["deprecated"],
+                    "deprecated_reason": info["deprecated_reason"],
                 }
         context["properties"] = properties
 
@@ -111,6 +117,8 @@ class JavaGenerator(Generator):
                         "parameters": [],
                         "return_type": info["type"],
                         "documentation": info["documentation"],
+                        "deprecated": info["deprecated"],
+                        "deprecated_reason": info["deprecated_reason"],
                     }
                 if info["setter"]:
                     class_properties["set" + upper_camel_case(name)] = {
@@ -123,6 +131,8 @@ class JavaGenerator(Generator):
                         ],
                         "return_type": "void",
                         "documentation": info["documentation"],
+                        "deprecated": info["deprecated"],
+                        "deprecated_reason": info["deprecated_reason"],
                     }
             class_info["properties"] = class_properties
 
@@ -191,7 +201,39 @@ class JavaGenerator(Generator):
             hsh = hashlib.sha1(tohash.encode("utf-8")).hexdigest()
             cls["serial_version_uid"] = int(hsh, 16) % (10**18)
 
+        # Append an @deprecated javadoc tag for every deprecated member/type
+        deprecatable = (
+            list(context["procedures"].values())
+            + list(context["properties"].values())
+            + list(context["enumerations"].values())
+            + list(context["exceptions"].values())
+            + list(context["classes"].values())
+        )
+        for enm in context["enumerations"].values():
+            deprecatable += list(enm["values"])
+        for cls in context["classes"].values():
+            deprecatable += (
+                list(cls["methods"].values())
+                + list(cls["static_methods"].values())
+                + list(cls["properties"].values())
+            )
+        for info in deprecatable:
+            self.add_deprecated_javadoc(info)
+
         return context
+
+    @staticmethod
+    def add_deprecated_javadoc(info):
+        if not info.get("deprecated") or not info.get("deprecated_reason"):
+            return
+        tag = " * @deprecated " + info["deprecated_reason"]
+        documentation = info.get("documentation", "")
+        if documentation:
+            lines = documentation.split("\n")
+            # lines[-1] is the closing ' */'
+            info["documentation"] = "\n".join(lines[:-1] + [" *", tag, " */"])
+        else:
+            info["documentation"] = "\n".join(["/**", tag, " */"])
 
 
 class JavaDocParser(DocParser):

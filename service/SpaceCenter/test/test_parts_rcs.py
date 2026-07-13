@@ -213,6 +213,23 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
         self.assertAlmostEqual((0, 0, 0), rcs.rotation_override)
         self.assertAlmostEqual((0, 0, 0), rcs.translation_override)
 
+    def test_input_override_released_on_disconnect(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        self.assertFalse(rcs.input_override)
+
+        conn = self.connect(use_cached=False)
+        parts = conn.space_center.active_vessel.parts
+        other = parts.with_name("RCSBlock.v2")[0].rcs
+        other.input_override = True
+        other.rotation_override = (1, 0, 0)
+        self.wait()
+        self.assertTrue(rcs.input_override)
+        conn.close()
+
+        self.wait()
+        self.assertFalse(rcs.input_override)
+        self.assertAlmostEqual((0, 0, 0), rcs.rotation_override)
+
     def test_has_fuel(self):
         rcs = self.get_rcs("RCSBlock.v2")
         self.assertTrue(rcs.has_fuel)
