@@ -98,25 +98,25 @@ namespace TestingTools
 
             Debug.Log("[kRPC testing tools]: Loading game \"" + Game + "\" save \"" + Save + "\"");
             var gameObj = GamePersistence.LoadSFSFile(Save, Game);
-            if (gameObj == null) {
-                Debug.LogWarning("[kRPC testing tools]: Failed to load game, got null when loading sfs file");
-                return;
-            }
+            if (gameObj == null)
+                throw Fatal.Error(
+                    "Failed to load save \"" + Save + "\" from folder saves/" + Game +
+                    " (does saves/" + Game + "/" + Save + ".sfs exist?)");
             KSPUpgradePipeline.Process(gameObj, Game, LoadContext.SFS, OnLoadDialogPipelineFinished, OnLoadDialogPipelineError);
         }
 
         static void OnLoadDialogPipelineError(KSPUpgradePipeline.UpgradeFailOption opt, ConfigNode node) {
-            Debug.LogError("[kRPC testing tools]: KSPUpgradePipeline failed " + opt.ToString() + " " + node);
+            throw Fatal.Error(
+                "KSPUpgradePipeline failed to upgrade save \"" + Save + "\" (" + opt + ")");
         }
 
         static void OnLoadDialogPipelineFinished(ConfigNode node)
         {
             // Load game cfg
             HighLogic.CurrentGame = GamePersistence.LoadGameCfg(node, Game, true, false);
-            if (HighLogic.CurrentGame == null) {
-                Debug.LogWarning("[kRPC testing tools]: Failed to load game, got null when loading game cfg");
-                return;
-            }
+            if (HighLogic.CurrentGame == null)
+                throw Fatal.Error(
+                    "Failed to load game configuration for save \"" + Save + "\" in folder saves/" + Game);
             // Ensure the loaded save has every scenario module the current install
             // expects. Loading a clean save into a modded install commonly adds
             // modules and makes this return true; that is normal, not a failure, so
@@ -129,55 +129,35 @@ namespace TestingTools
             HighLogic.SaveFolder = Game;
 
             if (Options.HasCraft) {
-                // Still start into the Space Center if staging fails, rather than
-                // leaving KSP stuck at the main menu. PrepareCraftLaunch has already
-                // logged why; loading the save anyway lets a test client connect and
-                // fail with a real assertion instead of a connection timeout.
-                if (PrepareCraftLaunch(Options))
-                    AutoSwitchVessel.SetCraftLaunch(
-                        Options.Craft, Options.CraftDirectory, Options.LaunchSite);
-                else
-                    Debug.LogWarning(
-                        "[kRPC testing tools]: Loading into the Space Center without " +
-                        "launching a craft");
+                // A failure here quits KSP (via Fatal.Error) rather than loading into the
+                // Space Center without the requested craft, so the launch fails fast instead
+                // of leaving the user or the test framework to guess why the craft is missing.
+                PrepareCraftLaunch(Options);
+                AutoSwitchVessel.SetCraftLaunch(
+                    Options.Craft, Options.CraftDirectory, Options.LaunchSite);
             } else if (Options.Vessel.HasValue) {
                 // Only switch to a vessel when one was explicitly requested with
-                // --krpc-auto-load-vessel. Without it (and without a craft) the save
+                // --krpctest-load-vessel. Without it (and without a craft) the save
                 // is loaded into the Space Center and no vessel is focused.
-                var vesselIdx = FindVesselToSwitchTo(Options);
-                if (vesselIdx >= 0)
-                    AutoSwitchVessel.Vessel = vesselIdx;
-                else
-                    Debug.LogWarning(
-                        "[kRPC testing tools]: No vessel to switch to; loading into " +
-                        "the Space Center");
+                AutoSwitchVessel.Vessel = ResolveVessel(Options);
             }
 
             HighLogic.CurrentGame.Start();
         }
 
-        static int FindVesselToSwitchTo(TestingToolsOptions options)
+        static int ResolveVessel(TestingToolsOptions options)
         {
             var vessels = HighLogic.CurrentGame.flightState.protoVessels;
-            if (options.Vessel.HasValue) {
-                var vesselIdx = options.Vessel.Value;
-                if (vesselIdx >= 0 && vesselIdx < vessels.Count) {
-                    Debug.Log("[kRPC testing tools]: Switching to vessel index " + vesselIdx);
-                    return vesselIdx;
-                }
-                Debug.LogWarning(
-                    "[kRPC testing tools]: Vessel index " + vesselIdx +
-                    " is out of range; falling back to the first non-space-object vessel");
-            }
-
-            for (int i = 0; i < vessels.Count; i++) {
-                if (vessels [i].vesselType != VesselType.SpaceObject)
-                    return i;
-            }
-            return -1;
+            var vesselIdx = options.Vessel.Value;
+            if (vesselIdx < 0 || vesselIdx >= vessels.Count)
+                throw Fatal.Error(
+                    "Requested vessel index " + vesselIdx + " is out of range; save \"" + Game +
+                    "\" has " + vessels.Count + " vessel(s)");
+            Debug.Log("[kRPC testing tools]: Switching to vessel index " + vesselIdx);
+            return vesselIdx;
         }
 
-        static bool PrepareCraftLaunch(TestingToolsOptions options)
+        static void PrepareCraftLaunch(TestingToolsOptions options)
         {
             var craftName = options.Craft;
             var targetDirectory = Path.Combine(
@@ -190,13 +170,11 @@ namespace TestingTools
                     Debug.Log(
                         "[kRPC testing tools]: Launching already-staged " +
                         options.CraftDirectory + " craft \"" + craftName + "\"");
-                    return true;
+                    return;
                 }
-                Debug.LogWarning(
-                    "[kRPC testing tools]: Failed to find craft \"" + craftName +
-                    "\" in save Ships/" + options.CraftDirectory +
-                    " (pass --krpc-auto-load-craft-fixture-dir to stage one from elsewhere)");
-                return false;
+                throw Fatal.Error(
+                    "Failed to find craft \"" + craftName + "\" in save Ships/" + options.CraftDirectory +
+                    " (pass --krpctest-load-craft-fixture-dir to stage one from elsewhere)");
             }
 
             try {
@@ -212,11 +190,8 @@ namespace TestingTools
                 Debug.Log(
                     "[kRPC testing tools]: Staged " + options.CraftDirectory +
                     " craft \"" + craftName + "\" from " + sourceCraft);
-                return true;
             } catch (Exception e) {
-                Debug.LogError(
-                    "[kRPC testing tools]: Failed to stage craft \"" + craftName + "\": " + e);
-                return false;
+                throw Fatal.Error("Failed to stage craft \"" + craftName + "\": " + e);
             }
         }
 

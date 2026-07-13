@@ -3,6 +3,7 @@ import krpctest
 
 
 class TestServo(krpctest.TestCase):
+    mods = ["InfernalRobotics"]
 
     @classmethod
     def setUpClass(cls):

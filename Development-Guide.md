@@ -188,21 +188,6 @@ bazel build //...
 bazel test //:test
 ```
 
-## Tools
-
-Included in the project are various tools to aid development.
-
- * `tools/serve-docs.sh`
-   - Running this script build the documentation website, and starts a local webserver. You can use
-   this to try out building the documentation and then view it by pointing a web browser at
-   `http://localhost:8080`
- * `tools/install.sh`
-   - Running this script builds the mod, and the `TestingTools` DLL, and installs them into the
-   GameData directory of the copy of KSP in `lib/ksp`.
- * `tools/run-ksp.sh`
-   - This script uses `tools/install.sh` to install the mod (as above) and then launches the
-   game. It also pipes the game's log output to the terminal for ease of debugging.
-
 ## Running the Tests
 
 kRPC contains a suite of tests for the server plugin, services, client libraries and other parts of
@@ -228,26 +213,40 @@ the server plugin without needing to launch the game.
 
 kRPC also includes a suite of tests that test interaction with the KSP. This requires the game to be
 running. To run these tests:
- * First run `tools/install.sh`
-   This script builds kRPC and the `TestingTools` DLL, and installs them into the GameData directory
-   of the copy of KSP found at `lib/ksp`.
- * Then run KSP (in `lib/ksp`). Pass an auto-load argument so `TestingTools` loads a save and puts
-   you in-game at the Space Center, for example `tools/run-ksp.sh --krpc-auto-load-game=default`.
-   With no auto-load arguments KSP stays at the main menu. See `tools/TestingTools/README.md` for
-   the full set of arguments.
- * Install the python client package, the krpctest package. This can be done using:
+ * First install the python client package and the `krpctest` package. This can be done using:
    ```
    bazel build //client/python //tools/krpctest
    pip install --upgrade bazel-bin/client/python/krpc-<version>.tar.gz
    pip install --upgrade bazel-bin/tools/krpctest/krpctest-<version>.tar.gz
    ```
-   These python packages are also available from the GitHub releases page.
- * Now you are ready to run the tests.
+   These python packages are also available from the GitHub releases page. Installing `krpctest`
+   provides the `krpc-install` and `krpc-run-ksp` console scripts, and registers a pytest
+   plugin so the tests run with `pytest`.
+ * Then run the tests using `pytest`. With no arguments it runs every
+   `service/*/test` directory. Pass test directories or files, or `-k`, to run a subset,
+   and `--ksp-dir` to point at a KSP install other than `lib/ksp`. KSP is automatically launched
+   (if its not already running) and the required mods are managed automatically.
 
-For example, there are python scripts in `service/SpaceCenter/test/...` that can be used to test the
-space center service. These tests use the `krpctest` package to automatically load a save game
-called `krpctest` and launch a vessel. They then use the python client to communicate with the game,
-and test the various RPCs.
+If the game is already running (via `krpc-run-ksp` - see below) then running `pytest` does not launch
+the game, it just makes use of the existing running game. If the game is not in the expected state (e.g.
+the wrong mods are installed) then the tests will fail.
+
+## Tools
+
+Included in the project are various tools to aid development.
+
+ * `tools/serve-docs.sh`
+   - Running this script build the documentation website, and starts a local webserver. You can use
+   this to try out building the documentation and then view it by pointing a web browser at
+   `http://localhost:8080`
+ * `krpc-install`
+   - Console script from the `krpctest` package. It builds the mod, and the `TestingTools` DLL, and
+   installs them into the GameData directory of the copy of KSP in `lib/ksp`. Run it from the
+   repository root.
+ * `krpc-run-ksp`
+   - Console script from the `krpctest` package. It uses `krpc-install` to install the mod (as
+   above) and then launches the game. It also pipes the game's log output to the terminal for ease
+   of debugging.
 
 ## Bazel cheat sheet
 

@@ -15,6 +15,7 @@ from krpctest.geometry import (
 
 
 class TestGeometry(krpctest.TestCase):
+    game_required = False
 
     def test_rad2deg(self):
         self.assertAlmostEqual(0, 0)

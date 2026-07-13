@@ -4,11 +4,8 @@ import krpctest
 # TODO: expand the KAC tests
 
 
-@unittest.skipIf(
-    not krpctest.TestCase.connect().kerbal_alarm_clock.available,
-    "KerbalAlarmClock is not installed",
-)
 class TestKerbalAlarmClock(krpctest.TestCase):
+    mods = ["KerbalAlarmClock"]
 
     @classmethod
     def setUpClass(cls):

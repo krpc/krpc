@@ -12,7 +12,7 @@ description = "Utilities for running service tests for kRPC."
 readme = "README.txt"
 license = "GPL-3.0-only"
 requires-python = ">=3.10"
-dependencies = ["krpc >= 0.4"]
+dependencies = ["krpc >= 0.4", "pytest >= 7"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: End Users/Desktop",
@@ -21,6 +21,13 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: Unix",
 ]
+
+[project.scripts]
+krpc-run-ksp = "krpctest.run_ksp:main"
+krpc-install = "krpctest.install:main"
+
+[project.entry-points.pytest11]
+krpctest = "krpctest.pytest_plugin"
 
 [project.urls]
 Homepage = "https://krpc.github.io/krpc"

@@ -3,9 +3,6 @@ import unittest
 import krpctest
 
 
-@unittest.skipUnless(
-    krpctest.TestCase.connect().remote_tech.available, "RemoteTech not installed"
-)
 class TestControlThrottleRemoteTechConnected(krpctest.TestCase):
     """Throttle is applied to a vessel that is controllable via RemoteTech.
 
@@ -13,6 +10,8 @@ class TestControlThrottleRemoteTechConnected(krpctest.TestCase):
     must follow RemoteTech's controllability rule rather than either being
     blocked when the vessel is controllable, or leaking through when it is not.
     """
+
+    mods = ["RemoteTech"]
 
     @classmethod
     def setUpClass(cls):
@@ -39,9 +38,6 @@ class TestControlThrottleRemoteTechConnected(krpctest.TestCase):
         self.assertAlmostEqual(0, self.engine.throttle, places=2)
 
 
-@unittest.skipUnless(
-    krpctest.TestCase.connect().remote_tech.available, "RemoteTech not installed"
-)
 class TestControlThrottleRemoteTechNoConnection(krpctest.TestCase):
     """Throttle is dropped for a vessel that is not controllable via RemoteTech.
 
@@ -49,6 +45,8 @@ class TestControlThrottleRemoteTechNoConnection(krpctest.TestCase):
     ground station: with no local control and no connection it cannot be
     controlled, and throttle set over kRPC must not be applied.
     """
+
+    mods = ["RemoteTech"]
 
     @classmethod
     def setUpClass(cls):

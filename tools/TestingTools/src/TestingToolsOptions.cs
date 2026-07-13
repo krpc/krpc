@@ -1,15 +1,16 @@
 using System;
 using System.IO;
-using UnityEngine;
 
 namespace TestingTools
 {
     sealed class TestingToolsOptions
     {
-        // All auto-load arguments share this prefix. Auto-load is enabled by the
-        // presence of any argument with this prefix, so future TestingTools
-        // arguments that use a different prefix will not trigger a load.
-        const string AutoLoadPrefix = "--krpc-auto-load-";
+        // TestingTools owns the whole "--krpctest-" command-line namespace, so any
+        // unrecognized "--krpctest-" argument is a mistake and is rejected (see Parse).
+        // Auto-load specifically is enabled by the presence of a "--krpctest-load-"
+        // argument, so future non-load "--krpctest-" arguments will not trigger a load.
+        const string TestingToolsPrefix = "--krpctest-";
+        const string AutoLoadPrefix = TestingToolsPrefix + "load-";
         const string GameArgument = AutoLoadPrefix + "game=";
         const string SaveArgument = AutoLoadPrefix + "save=";
         const string VesselArgument = AutoLoadPrefix + "vessel=";
@@ -59,9 +60,12 @@ namespace TestingTools
         {
             var options = new TestingToolsOptions();
             foreach (var arg in args) {
-                // Any auto-load argument requests a load. Keyed off the shared
-                // prefix, not the individual arguments, so unrelated TestingTools
-                // arguments added later cannot trigger a load by accident.
+                // Only TestingTools arguments are our concern; leave KSP's own arguments alone.
+                if (!arg.StartsWith(TestingToolsPrefix, StringComparison.Ordinal))
+                    continue;
+                // Any auto-load argument requests a load. Keyed off the shared prefix, not
+                // the individual arguments, so future non-load "--krpctest-" arguments will
+                // not trigger a load by accident.
                 if (arg.StartsWith(AutoLoadPrefix, StringComparison.Ordinal))
                     options.AutoLoadRequested = true;
 
@@ -81,7 +85,17 @@ namespace TestingTools
                 else if (TryGetArgumentValue(arg, LaunchSiteArgument, out value)) {
                     options.LaunchSite = value;
                     options.launchSiteSpecified = true;
-                }
+                } else
+                    // A "--krpctest-" argument matching no known option: a typo, an empty
+                    // value like "--krpctest-load-game=", or a flag we do not handle. Fail
+                    // loudly rather than silently ignoring it and doing something other than
+                    // what was asked.
+                    throw Fatal.Error(
+                        "Unrecognized or empty TestingTools argument \"" + arg + "\". Valid arguments: " +
+                        GameArgument + "<folder>, " + SaveArgument + "<name>, " +
+                        VesselArgument + "<index>, " + CraftArgument + "<name>, " +
+                        CraftDirectoryArgument + "VAB|SPH, " + CraftFixtureDirectoryArgument + "<path>, " +
+                        LaunchSiteArgument + "<site>");
             }
             options.ResolveCraftDefaults();
             return options;
@@ -94,7 +108,8 @@ namespace TestingTools
                 Vessel = vessel;
                 return;
             }
-            Debug.LogWarning("[kRPC testing tools]: Ignoring invalid vessel index '" + value + "'");
+            throw Fatal.Error(
+                "Invalid vessel index \"" + value + "\"; expected a non-negative integer");
         }
 
         void ParseCraftDirectory(string value)
@@ -105,7 +120,8 @@ namespace TestingTools
                 craftDirectorySpecified = true;
                 return;
             }
-            Debug.LogWarning("[kRPC testing tools]: Ignoring invalid craft directory '" + value + "'");
+            throw Fatal.Error(
+                "Invalid craft directory \"" + value + "\"; expected VAB or SPH");
         }
 
         void ResolveCraftDefaults()
