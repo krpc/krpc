@@ -299,6 +299,18 @@ class TestCase(unittest.TestCase):
                 first_clamped, second_clamped, msg=msg, places=places
             )
 
+    def assertRadiansAlmostEqual(self, first, second, places=7, msg=None, delta=None):
+        """Check that angle first (radians) is equal to angle second,
+        within the given error. Compares the shortest angular distance,
+        so it is robust to 2*pi wrapping and to values straddling 0/2*pi."""
+        diff = (first - second) % (2 * math.pi)
+        diff = min(diff, 2 * math.pi - diff)
+        if msg is None:
+            msg = self._almost_equal_error_msg(
+                "Angle %f is not close to %f" % (first, second), places, delta
+            )
+        self.assertAlmostEqual(0, diff, places=places, msg=msg, delta=delta)
+
     def assertQuaternionsAlmostEqual(
         self, second, first, places=7, msg=None, delta=None
     ):
