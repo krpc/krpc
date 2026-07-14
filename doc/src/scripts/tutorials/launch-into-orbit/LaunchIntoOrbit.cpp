@@ -18,7 +18,7 @@ int main() {
   auto ut = space_center.ut_stream();
   auto altitude = vessel.flight().mean_altitude_stream();
   auto apoapsis = vessel.orbit().apoapsis_altitude_stream();
-  auto stage_2_resources = vessel.resources_in_decouple_stage(2, false);
+  auto stage_2_resources = vessel.decouple_stage_at(2).resources(false);
   auto srb_fuel = stage_2_resources.amount_stream("SolidFuel");
 
   // Pre-launch setup

@@ -11,7 +11,7 @@ local conn = krpc.connect('Launch into orbit')
 local vessel = conn.space_center.active_vessel
 
 flight = vessel:flight()
-stage_2_resources = vessel:resources_in_decouple_stage(2, False)
+stage_2_resources = vessel:decouple_stage_at(2):resources(false)
 
 -- Pre-launch setup
 vessel.control.sas = false

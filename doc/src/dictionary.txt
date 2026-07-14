@@ -71,6 +71,7 @@ internet
 intra
 javac
 kOS
+kN
 kRPC
 kRPCs
 kerbal
@@ -150,6 +151,7 @@ undocking
 undocks
 unowned
 unpaused
+unstaged
 unserialize
 vab
 varint

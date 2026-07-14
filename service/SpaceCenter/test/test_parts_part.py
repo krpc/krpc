@@ -198,7 +198,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["SyncModuleControlSurface", "ModuleCargoPart", "KOSNameTag"]
+        modules = ["ModuleControlSurface", "ModuleCargoPart", "KOSNameTag"]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])

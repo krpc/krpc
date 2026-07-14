@@ -32,7 +32,7 @@ public class LaunchIntoOrbit {
         Stream<Double> altitude = connection.addStream(flight, "getMeanAltitude");
         Stream<Double> apoapsis =
             connection.addStream(vessel.getOrbit(), "getApoapsisAltitude");
-        Resources stage2Resources = vessel.resourcesInDecoupleStage(2, false);
+        Resources stage2Resources = vessel.decoupleStageAt(2).resources(false);
         Stream<Float> srbFuel =
             connection.addStream(stage2Resources, "amount", "SolidFuel");
 

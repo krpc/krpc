@@ -79,6 +79,7 @@
     <Compile Include="ExtensionMethods\StockAerodynamics.cs" />
     <Compile Include="ExtensionMethods\TargetableExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselControlStateExtensions.cs" />
+    <Compile Include="ExtensionMethods\VesselExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
     <Compile Include="ActuatorControlAddon.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Services\SpaceCenter.cs" />
     <Compile Include="Services\SpeedMode.cs" />
     <Compile Include="Services\SuitType.cs" />
+    <Compile Include="Services\Stage.cs" />
     <Compile Include="Services\Vessel.cs" />
     <Compile Include="Services\VesselSituation.cs" />
     <Compile Include="Services\VesselType.cs" />
