@@ -28,6 +28,11 @@ a stored capture against its logged flight with zero flight-to-flight
 variance), `plot` (offline re-analysis), `selftest` (offline integrator,
 attitude and geometry checks; no game needed).
 
+The replay plot retains the total-AoA envelope and also resolves the 6-DOF
+state into signed pitch AoA, sideslip, bank about the relative wind, and the
+vertical/crossrange components of lift acceleration. These panels expose a
+bank or phase error that total AoA alone can hide.
+
 Key options: `--hold {retrograde,retro-release,none}` (retro-release gives a
 deterministic gentle release at the atmosphere interface, best for trim
 craft), `--rate-damp K` (reaction-wheel rate damping applied to the flight

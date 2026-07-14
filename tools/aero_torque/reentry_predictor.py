@@ -90,7 +90,10 @@ import time
 
 import numpy as np
 
+MONITOR_API_VERSION = 1
+
 NOSE = np.array([0.0, 1.0, 0.0])  # vessel-frame forward/nose axis
+BODY_UP = np.array([0.0, 0.0, -1.0])  # opposite vessel-frame down axis
 ZERO3 = np.zeros(3)
 Q_IDENTITY = np.array([0.0, 0.0, 0.0, 1.0])
 
@@ -226,6 +229,19 @@ def retro_attitude(v_air, q_seed):
     return q_normalize(q_mult(q_shortest_arc(nose, n), q_seed))
 
 
+def roll_about_relative_wind(q, r, v, w_planet, angle_deg):
+    """Roll a body-to-world attitude about its incoming-air axis."""
+    if abs(angle_deg) < 1e-12:
+        return q
+    v_air = v - np.cross(w_planet, r)
+    speed = np.linalg.norm(v_air)
+    if speed < 1e-6:
+        return q
+    incoming = -v_air / speed
+    correction = q_axis_angle(incoming, math.radians(angle_deg))
+    return q_normalize(q_mult(correction, q))
+
+
 def total_aoa_deg(q, r, v, w_planet):
     """Total angle of attack: angle between the nose and the airflow."""
     v_air = v - np.cross(w_planet, r)
@@ -350,6 +366,8 @@ def integrate(
     max_time=2000.0,
     progress=None,
     hold_retro_vacuum=False,
+    release_bank_offset=0.0,
+    hold_retro_until=None,
 ):
     """Integrate the entry with classic RK4. Returns a list of PRED_COLUMNS
     rows, ending with a row interpolated to stop_alt if it was reached.
@@ -368,7 +386,15 @@ def integrate(
     mode:   "baseline" (attitude snapped to retrograde, force only) or
             "6dof" (attitude integrated from the torque).
     state0: dict with t, r, v, q, w (non-rotating frame).
+    release_bank_offset: diagnostic roll correction, in degrees, applied once
+        about the incoming-air axis when a retro-release prediction crosses the
+        atmospheric interface. Angular velocity is deliberately unchanged.
+    hold_retro_until: optional callable (r, v, ut) -> bool overriding the
+        atmosphere-interface release condition while hold_retro_vacuum is
+        active. This lets callers mirror a dynamic-pressure-gated SAS release.
     """
+    if record_dt <= 0.0:
+        raise ValueError("record_dt must be greater than zero")
     mu = phys["mu"]
     radius = phys["radius"]
     atmo_top = phys["atmo_depth"]
@@ -376,6 +402,8 @@ def integrate(
     inertia = np.asarray(phys["inertia"], dtype=float).reshape(3, 3)
     w_planet = np.asarray(phys["w_vec"], dtype=float)
     rate_damp = phys.get("rate_damp", 0.0)
+    torque_scale = phys.get("torque_scale", 1.0)
+    aero_state_lag = phys.get("aero_state_lag", 0.0)
     wheel_torque = np.asarray(phys.get("wheel_torque", [0.0, 0.0, 0.0]), dtype=float)
     sixdof = mode != "baseline"
 
@@ -400,7 +428,18 @@ def integrate(
             seed[0] = q_used
             force, _ = aero(r_, v_, q_used, ZERO3, t_)
             return v_, g + force / mass, None, None, q_used
-        force, torque = aero(r_, v_, q_, w_, t_)
+        q_aero = q_
+        if aero_state_lag != 0.0:
+            rate = np.linalg.norm(w_)
+            if rate > 1e-12:
+                q_aero = q_normalize(
+                    q_mult(
+                        q_axis_angle(w_ / rate, -rate * aero_state_lag),
+                        q_,
+                    )
+                )
+        force, torque = aero(r_, v_, q_aero, w_, t_)
+        torque = torque_scale * torque
         qc = q_conj(q_)
         w_body = q_rot(qc, w_)
         tau_body = q_rot(qc, torque)
@@ -424,8 +463,18 @@ def integrate(
         aoa = total_aoa_deg(q_, r_, v_, w_planet)
         return [t_, alt_, *r_, *v_, *q_, *w_, aoa]
 
+    t0 = t
+    alt0 = np.linalg.norm(r) - radius
+    retro_hold_active = False
+    if sixdof and hold_retro_vacuum:
+        should_hold_retro = alt0 > atmo_top
+        if hold_retro_until is not None:
+            should_hold_retro = bool(hold_retro_until(r, v, t))
+        if should_hold_retro:
+            q = retro_attitude(v - np.cross(w_planet, r), q)
+            w = np.zeros(3)
+            retro_hold_active = True
     rows = [make_row(t, r, v, q, w)]
-    t0, alt0 = t, rows[0][1]
     next_record = t + record_dt
     wall0, last_report = time.time(), time.time()
 
@@ -459,20 +508,30 @@ def integrate(
             wd = (k1[3] + 2.0 * k2[3] + 2.0 * k3[3] + k4[3]) / 6.0
             q = q_normalize(q + dt * qd)
             w = w + dt * wd
-            if hold_retro_vacuum and np.linalg.norm(r) - radius > atmo_top:
-                # Mirror a retro-release flight: SAS tracks the (rotating)
-                # surface-retrograde marker through the vacuum coast and lets
-                # go at the atmosphere interface. Without this the frozen
-                # inertial attitude drifts ~10 deg off retro during the coast.
-                q = retro_attitude(v - np.cross(w_planet, r), q)
-                w = np.zeros(3)
+            if hold_retro_vacuum:
+                should_hold_retro = np.linalg.norm(r) - radius > atmo_top
+                if hold_retro_until is not None:
+                    should_hold_retro = bool(hold_retro_until(r, v, t + dt))
+                if should_hold_retro:
+                    # Mirror a retro-release flight: SAS tracks the (rotating)
+                    # surface-retrograde marker through the vacuum coast (and,
+                    # optionally, until a caller-defined release condition).
+                    # Without this the frozen inertial attitude drifts ~10 deg
+                    # off retro during the coast.
+                    q = retro_attitude(v - np.cross(w_planet, r), q)
+                    w = np.zeros(3)
+                    retro_hold_active = True
+                elif retro_hold_active:
+                    q = roll_about_relative_wind(q, r, v, w_planet, release_bank_offset)
+                    retro_hold_active = False
         else:
             q = k4[4]  # the retro-snapped attitude from the last stage
         t += dt
 
         if t >= next_record:
             rows.append(make_row(t, r, v, q, w))
-            next_record += record_dt
+            while next_record <= t:
+                next_record += record_dt
 
         now = time.time()
         if progress and now - last_report > 5.0:
@@ -629,6 +688,23 @@ def capture_state(conn, spin_wait=5.0):
     return meta
 
 
+def capture_body_calibration(conn, spin_wait=5.0):
+    """Calibrate body-fixed geometry early for a later precise state capture.
+
+    The returned object is also a complete capture for callers that do not need
+    to defer the dynamic-state snapshot.  ``capture_vehicle_state`` refreshes
+    it without another timed spin wait.
+    """
+    return capture_state(conn, spin_wait=spin_wait)
+
+
+def capture_vehicle_state(conn, calibration):
+    """Capture a fresh vessel epoch while reusing an earlier spin calibration."""
+    meta = capture_state(conn, spin_wait=0.0)
+    meta["spin_sign"] = calibration["spin_sign"]
+    return meta
+
+
 def _release_keep_wheels(vessel):
     """Uncontrolled except reaction wheels stay enabled (for rate damping)."""
     control = vessel.control
@@ -692,6 +768,8 @@ def run_prediction(conn, meta, mode, args):
     phys["atmo_depth"] = meta["atmosphere_depth"]
     phys["rate_damp"] = meta.get("rate_damp", 0.0)
     phys["wheel_torque"] = meta.get("wheel_torque", [0.0, 0.0, 0.0])
+    phys["torque_scale"] = getattr(args, "torque_scale", 1.0)
+    phys["aero_state_lag"] = getattr(args, "aero_state_lag", 0.0)
     state0 = {
         "t": meta["ut0"],
         "r": meta["r0"],
@@ -699,6 +777,26 @@ def run_prediction(conn, meta, mode, args):
         "q": meta["q0"],
         "w": meta["w0"],
     }
+    hold_retro_vacuum = meta.get("hold") == "retro-release"
+    if getattr(args, "start_from_actual", False):
+        actual_path = meta.get("files", {}).get("actual")
+        if not actual_path:
+            raise RuntimeError(
+                "--start-from-actual requires a replay with an actual-flight log"
+            )
+        actual = load_traj(actual_path)
+        state0 = {
+            "t": actual["ut"][0],
+            "r": [actual[axis][0] for axis in ("x", "y", "z")],
+            "v": [actual[axis][0] for axis in ("vx", "vy", "vz")],
+            "q": [actual[axis][0] for axis in ("qx", "qy", "qz", "qw")],
+            "w": [actual[axis][0] for axis in ("wx", "wy", "wz")],
+        }
+        hold_retro_vacuum = False
+        print(
+            "  Oracle diagnostic: starting from the first actual atmospheric "
+            f"sample at {actual['alt'][0] / 1000.0:.1f} km"
+        )
     dt = args.dt_baseline if mode == "baseline" else args.dt_6dof
     if phys["rate_damp"] > 0.0 and mode != "baseline":
         diag = np.asarray(meta["inertia"], dtype=float).reshape(3, 3).diagonal()
@@ -726,7 +824,8 @@ def run_prediction(conn, meta, mode, args):
         stop_alt=args.stop_altitude,
         max_time=args.max_time,
         progress=mode,
-        hold_retro_vacuum=meta.get("hold") == "retro-release",
+        hold_retro_vacuum=hold_retro_vacuum,
+        release_bank_offset=getattr(args, "release_bank_offset", 0.0),
     )
     last = rows[-1]
     p_fixed = derotate(np.array(last[2:5]), last[0], meta)
@@ -742,6 +841,81 @@ def run_prediction(conn, meta, mode, args):
     return rows
 
 
+class FlightSampleReader:
+    """Cache read-only RPC proxies and return one canonical ACT_COLUMNS row."""
+
+    def __init__(self, conn):
+        self.conn = conn
+        self.space_center = conn.space_center
+        self.vessel = self.space_center.active_vessel
+        self.body = self.vessel.orbit.body
+        self.nonrot = self.body.non_rotating_reference_frame
+        self.flight = self.vessel.flight(self.body.reference_frame)
+        self.flight_nr = self.vessel.flight(self.nonrot)
+
+    def read(self, after_state=None):
+        """Read one sample; ``after_state`` is for the legacy controlled logger.
+
+        Public monitor callers omit the callback, making this path strictly
+        read-only.  The callback preserves the original rate-damping update
+        point used by ``sample_flight``.
+        """
+        nan3 = (float("nan"),) * 3
+        sample_ut = self.space_center.ut
+        altitude = self.flight.mean_altitude
+        position = self.vessel.position(self.nonrot)
+        velocity = self.vessel.velocity(self.nonrot)
+        rotation = self.vessel.rotation(self.nonrot)
+        angular_velocity = self.vessel.angular_velocity(self.nonrot)
+        if after_state is not None:
+            after_state(angular_velocity)
+        try:
+            force_live = self.flight_nr.aerodynamic_force
+        except Exception:
+            force_live = nan3
+        try:
+            torque_live = self.flight_nr.aerodynamic_torque
+        except Exception:
+            torque_live = nan3
+        try:
+            force_simulated, torque_simulated = (
+                self.flight_nr.simulate_aerodynamic_wrench_at(
+                    self.body,
+                    position,
+                    velocity,
+                    rotation,
+                    angular_velocity,
+                    sample_ut,
+                )
+            )
+        except Exception:
+            force_simulated = nan3
+            torque_simulated = nan3
+        return [
+            sample_ut,
+            altitude,
+            self.flight.latitude,
+            self.flight.longitude,
+            self.flight.speed,
+            self.flight.dynamic_pressure,
+            self.vessel.mass,
+            *position,
+            *velocity,
+            *rotation,
+            *angular_velocity,
+            *force_live,
+            *force_simulated,
+            *torque_live,
+            *torque_simulated,
+        ]
+
+
+def read_flight_sample(conn, meta=None):
+    """Return one strictly read-only live sample in ``ACT_COLUMNS`` order."""
+    del meta  # reserved for future schema-compatible sampling options
+    return FlightSampleReader(conn).read()
+
+
 def sample_flight(conn, meta, rate, min_altitude):
     """Log the actual flight until it splashes/lands or drops below
     min_altitude. Returns ACT_COLUMNS rows."""
@@ -750,8 +924,7 @@ def sample_flight(conn, meta, rate, min_altitude):
     body = vessel.orbit.body
     nonrot = body.non_rotating_reference_frame
     flight = vessel.flight(body.reference_frame)
-    flight_nr = vessel.flight(nonrot)
-    nan3 = (float("nan"),) * 3
+    reader = FlightSampleReader(conn)
     period = 1.0 / rate
     rows = []
     frozen = 0
@@ -782,12 +955,10 @@ def sample_flight(conn, meta, rate, min_altitude):
                 )
                 rows = rows[: len(rows) - frozen + 1]
                 break
-            sample_ut = sc.ut
-            pos = vessel.position(nonrot)
-            vel = vessel.velocity(nonrot)
-            rot = vessel.rotation(nonrot)
-            w_nr = vessel.angular_velocity(nonrot)
-            if rate_damp > 0.0:
+
+            def apply_rate_damping(w_nr):
+                if rate_damp <= 0.0:
+                    return
                 # Same law the prediction models: input = clamp(K * omega)
                 # per body axis (pitch<->x, roll<->y, yaw<->z; KSP's positive
                 # inputs torque about the negative axes, so +K damps).
@@ -795,43 +966,8 @@ def sample_flight(conn, meta, rate, min_altitude):
                 control.pitch = max(-1.0, min(1.0, rate_damp * wb[0]))
                 control.roll = max(-1.0, min(1.0, rate_damp * wb[1]))
                 control.yaw = max(-1.0, min(1.0, rate_damp * wb[2]))
-            # Live game-applied force/torque and one simulated wrench at the
-            # same state. Their difference isolates model error from telemetry
-            # noise without making separate force and torque simulation RPCs.
-            try:
-                f_live = flight_nr.aerodynamic_force
-            except Exception:
-                f_live = nan3
-            try:
-                t_live = flight_nr.aerodynamic_torque
-            except Exception:
-                t_live = nan3
-            try:
-                f_sim, t_sim = flight_nr.simulate_aerodynamic_wrench_at(
-                    body, pos, vel, rot, w_nr, sample_ut
-                )
-            except Exception:
-                f_sim = nan3
-                t_sim = nan3
-            rows.append(
-                [
-                    sample_ut,
-                    alt,
-                    flight.latitude,
-                    flight.longitude,
-                    flight.speed,
-                    flight.dynamic_pressure,
-                    vessel.mass,
-                    *pos,
-                    *vel,
-                    *rot,
-                    *w_nr,
-                    *f_live,
-                    *f_sim,
-                    *t_live,
-                    *t_sim,
-                ]
-            )
+
+            rows.append(reader.read(after_state=apply_rate_damping))
             if alt < min_altitude:
                 print("Reached minimum altitude; stopping log.")
                 break
@@ -865,6 +1001,17 @@ def write_csv(path, columns, rows):
 def load_traj(path):
     data = np.genfromtxt(path, delimiter=",", names=True)
     return {name: np.atleast_1d(data[name]).astype(float) for name in data.dtype.names}
+
+
+def trajectory_from_rows(columns, rows):
+    """Convert in-memory canonical rows to the trajectory mapping used below."""
+    columns = list(columns)
+    if not rows:
+        return {column: np.array([], dtype=float) for column in columns}
+    values = np.asarray(rows, dtype=float)
+    if values.ndim != 2 or values.shape[1] != len(columns):
+        raise ValueError("trajectory rows do not match the supplied columns")
+    return {column: values[:, index] for index, column in enumerate(columns)}
 
 
 def _fixed_positions(traj, meta):
@@ -910,6 +1057,196 @@ def _traj_aoa(traj, meta):
         v = np.array([traj["vx"][i], traj["vy"][i], traj["vz"][i]])
         out[i] = total_aoa_deg(q_normalize(q), r, v, w_planet)
     return out
+
+
+def _traj_aero_angles(traj, meta):
+    """Signed airflow angles and bank about the relative-wind direction.
+
+    Pitch AoA and sideslip are the incoming-air direction expressed in vessel
+    axes. Bank compares the vessel's projected up axis with projected local up,
+    rotating about the incoming-air direction. Unlike total AoA, these retain
+    the azimuth of the lift-producing attitude error.
+    """
+    w_planet = np.asarray(meta["w_vec"])
+    pitch = np.full(len(traj["ut"]), np.nan)
+    sideslip = np.full(len(traj["ut"]), np.nan)
+    bank = np.full(len(traj["ut"]), np.nan)
+    for i in range(len(traj["ut"])):
+        q = q_normalize(
+            np.array([traj["qx"][i], traj["qy"][i], traj["qz"][i], traj["qw"][i]])
+        )
+        r = np.array([traj["x"][i], traj["y"][i], traj["z"][i]])
+        v = np.array([traj["vx"][i], traj["vy"][i], traj["vz"][i]])
+        v_air = v - np.cross(w_planet, r)
+        speed = np.linalg.norm(v_air)
+        radius = np.linalg.norm(r)
+        if speed < 1e-3 or radius < 1e-3:
+            continue
+
+        incoming = -v_air / speed
+        incoming_body = q_rot(q_conj(q), incoming)
+        pitch[i] = math.degrees(math.atan2(incoming_body[2], incoming_body[1]))
+        sideslip[i] = math.degrees(
+            math.atan2(
+                incoming_body[0],
+                math.hypot(incoming_body[1], incoming_body[2]),
+            )
+        )
+
+        local_up = r / radius
+        reference_up = local_up - incoming * np.dot(local_up, incoming)
+        vessel_up = q_rot(q, BODY_UP)
+        vessel_up -= incoming * np.dot(vessel_up, incoming)
+        reference_norm = np.linalg.norm(reference_up)
+        vessel_norm = np.linalg.norm(vessel_up)
+        if reference_norm < 1e-6 or vessel_norm < 1e-6:
+            continue
+        reference_up /= reference_norm
+        vessel_up /= vessel_norm
+        bank[i] = math.degrees(
+            math.atan2(
+                float(np.dot(incoming, np.cross(reference_up, vessel_up))),
+                float(np.dot(reference_up, vessel_up)),
+            )
+        )
+
+    valid = np.isfinite(bank)
+    if valid.any():
+        bank[valid] = np.degrees(np.unwrap(np.radians(bank[valid])))
+    return pitch, sideslip, bank
+
+
+def _rolling_mean(t, x, window=3.0):
+    """Time-windowed mean for irregularly sampled diagnostic traces."""
+    out = np.full(len(x), np.nan)
+    half = 0.5 * window
+    for i, center in enumerate(t):
+        lo = np.searchsorted(t, center - half, side="left")
+        hi = np.searchsorted(t, center + half, side="right")
+        values = x[lo:hi]
+        if np.isfinite(values).any():
+            out[i] = np.nanmean(values)
+    return out
+
+
+def _traj_lift_acceleration(traj, meta, smooth=3.0):
+    """Vertical and cross-track lift acceleration in the local flight frame.
+
+    Actual logs use the live aerodynamic force when available. Prediction logs
+    do not store force, so their aerodynamic acceleration is reconstructed from
+    dv/dt minus gravity. Both traces are smoothed to expose the sustained lift
+    direction rather than sub-second oscillation and differentiation noise.
+    """
+    t = traj["ut"]
+    if len(t) < 2:
+        empty = np.full(len(t), np.nan)
+        return empty.copy(), empty
+    r = np.column_stack([traj["x"], traj["y"], traj["z"]])
+    v = np.column_stack([traj["vx"], traj["vy"], traj["vz"]])
+    radius = np.linalg.norm(r, axis=1)
+    gravity = -meta["mu"] * r / radius[:, None] ** 3
+    edge_order = 2 if len(t) >= 3 else 1
+    aero_acceleration = np.gradient(v, t, axis=0, edge_order=edge_order) - gravity
+
+    live_columns = ("flx", "fly", "flz")
+    if all(column in traj for column in live_columns):
+        live_force = np.column_stack([traj[column] for column in live_columns])
+        valid = np.isfinite(live_force).all(axis=1)
+        if "mass" in traj:
+            mass = np.maximum(traj["mass"], 1e-9)
+        else:
+            mass = np.full(len(t), meta["mass"])
+        aero_acceleration[valid] = live_force[valid] / mass[valid, None]
+
+    w_planet = np.asarray(meta["w_vec"])
+    vertical = np.full(len(t), np.nan)
+    crossrange = np.full(len(t), np.nan)
+    for i in range(len(t)):
+        local_up = r[i] / radius[i]
+        v_air = v[i] - np.cross(w_planet, r[i])
+        speed = np.linalg.norm(v_air)
+        if speed < 1e-3:
+            continue
+        velocity_axis = v_air / speed
+        lift = aero_acceleration[i] - velocity_axis * np.dot(
+            aero_acceleration[i], velocity_axis
+        )
+        along = velocity_axis - local_up * np.dot(velocity_axis, local_up)
+        along_norm = np.linalg.norm(along)
+        if along_norm < 1e-6:
+            continue
+        along /= along_norm
+        cross = np.cross(local_up, along)
+        cross /= np.linalg.norm(cross)
+        vertical[i] = np.dot(lift, local_up)
+        crossrange[i] = np.dot(lift, cross)
+
+    return (
+        _rolling_mean(t, vertical, smooth),
+        _rolling_mean(t, crossrange, smooth),
+    )
+
+
+def trajectory_diagnostics(traj, meta):
+    """Return plot-ready diagnostics for an in-memory prediction or live log."""
+    count = len(traj.get("ut", []))
+    if count == 0:
+        return {
+            key: []
+            for key in (
+                "ut",
+                "mission_time",
+                "altitude",
+                "latitude",
+                "longitude",
+                "downrange",
+                "speed",
+                "dynamic_pressure",
+                "aoa",
+                "aoa_envelope_time",
+                "aoa_envelope",
+                "pitch",
+                "sideslip",
+                "bank",
+                "lift_vertical",
+                "lift_crossrange",
+            )
+        }
+    fixed = _fixed_positions(traj, meta)
+    coordinates = np.array([latlon_deg(position, meta) for position in fixed])
+    capture_fixed = derotate(np.asarray(meta["r0"], dtype=float), meta["ut0"], meta)
+    downrange = np.array(
+        [gc_distance(capture_fixed, position, meta["radius"]) for position in fixed]
+    )
+    if "speed" in traj:
+        speed = np.asarray(traj["speed"], dtype=float)
+    else:
+        velocity = np.column_stack([traj[key] for key in ("vx", "vy", "vz")])
+        speed = np.linalg.norm(velocity, axis=1)
+    dynamic_pressure = np.asarray(traj.get("qdyn", np.full(count, np.nan)), dtype=float)
+    aoa = _traj_aoa(traj, meta)
+    envelope_time, envelope = _rolling_peak(np.asarray(traj["ut"]), aoa)
+    pitch, sideslip, bank = _traj_aero_angles(traj, meta)
+    lift_vertical, lift_crossrange = _traj_lift_acceleration(traj, meta)
+    result = {
+        "ut": np.asarray(traj["ut"]),
+        "mission_time": np.asarray(traj["ut"]) - meta["ut0"],
+        "altitude": np.asarray(traj["alt"]),
+        "latitude": coordinates[:, 0],
+        "longitude": coordinates[:, 1],
+        "downrange": downrange,
+        "speed": speed,
+        "dynamic_pressure": dynamic_pressure,
+        "aoa": aoa,
+        "aoa_envelope_time": envelope_time - meta["ut0"],
+        "aoa_envelope": envelope,
+        "pitch": pitch,
+        "sideslip": sideslip,
+        "bank": bank,
+        "lift_vertical": lift_vertical,
+        "lift_crossrange": lift_crossrange,
+    }
+    return {key: value.tolist() for key, value in result.items()}
 
 
 def analyze(prefix, png=None, checkpoints_km=None):
@@ -1029,8 +1366,14 @@ def _plot(prefix, png, meta, trajs, fixed, table, pred_keys):
         "6dof": "6-DOF (force + torque)",
     }
 
-    fig = plt.figure(figsize=(13, 10))
-    gs = fig.add_gridspec(3, 2, height_ratios=[1.3, 1.0, 1.0], hspace=0.42, wspace=0.26)
+    fig = plt.figure(figsize=(13, 16))
+    gs = fig.add_gridspec(
+        5,
+        2,
+        height_ratios=[1.3, 1.0, 1.0, 1.0, 1.0],
+        hspace=0.48,
+        wspace=0.26,
+    )
 
     # (1) Ground track.
     ax0 = fig.add_subplot(gs[0, :])
@@ -1131,11 +1474,96 @@ def _plot(prefix, png, meta, trajs, fixed, table, pred_keys):
         transform=ax4.transAxes,
     )
 
+    # (6/7) Resolve total AoA into signed pitch/sideslip and bank. The 6-DOF
+    # integrator never assumes planar lift; these diagnostics make its full
+    # three-dimensional attitude visible instead of collapsing it to one angle.
+    diagnostic_keys = [key for key in ("actual", "6dof") if key in trajs]
+    if not diagnostic_keys and "baseline" in trajs:
+        diagnostic_keys = ["baseline"]
+    angles = {key: _traj_aero_angles(trajs[key], meta) for key in diagnostic_keys}
+    if "actual" in angles and "6dof" in angles:
+        reference_t = trajs["actual"]["ut"][0]
+        actual_bank = np.interp(reference_t, trajs["actual"]["ut"], angles["actual"][2])
+        predicted_bank = np.interp(reference_t, trajs["6dof"]["ut"], angles["6dof"][2])
+        angles["6dof"] = (
+            angles["6dof"][0],
+            angles["6dof"][1],
+            angles["6dof"][2] + 360.0 * round((actual_bank - predicted_bank) / 360.0),
+        )
+
+    diagnostic_start = (
+        trajs["actual"]["ut"][0] - meta["ut0"]
+        if "actual" in trajs
+        else min(trajs[key]["ut"][0] - meta["ut0"] for key in diagnostic_keys)
+    )
+    diagnostic_end = (
+        trajs["actual"]["ut"][-1] - meta["ut0"]
+        if "actual" in trajs
+        else max(trajs[key]["ut"][-1] - meta["ut0"] for key in diagnostic_keys)
+    )
+
+    ax5 = fig.add_subplot(gs[3, 0])
+    for key in diagnostic_keys:
+        t_rel = trajs[key]["ut"] - meta["ut0"]
+        pitch, sideslip, _ = angles[key]
+        ax5.plot(t_rel, pitch, label=f"{nice[key]} pitch AoA", **styles[key])
+        slip_style = dict(styles[key], lw=1.0, ls=":")
+        ax5.plot(t_rel, sideslip, label=f"{nice[key]} sideslip", **slip_style)
+    ax5.axhline(0.0, color="0.55", lw=0.7)
+    ax5.set_xlim(diagnostic_start, diagnostic_end)
+    ax5.set_xlabel("time since capture (s)")
+    ax5.set_ylabel("signed angle (deg)")
+    ax5.set_title("Signed pitch AoA and sideslip")
+    ax5.legend(loc="best", fontsize=8)
+    ax5.grid(alpha=0.3)
+
+    ax6 = fig.add_subplot(gs[3, 1])
+    for key in diagnostic_keys:
+        t_rel = trajs[key]["ut"] - meta["ut0"]
+        ax6.plot(t_rel, angles[key][2], label=nice[key], **styles[key])
+    ax6.set_xlim(diagnostic_start, diagnostic_end)
+    ax6.set_xlabel("time since capture (s)")
+    ax6.set_ylabel("bank about relative wind (deg)")
+    ax6.set_title("Vessel bank: body up relative to projected local up")
+    ax6.legend(loc="best", fontsize=8)
+    ax6.grid(alpha=0.3)
+
+    # (8) Resolve lift acceleration into local vertical and crossrange. Actual
+    # logs use the live force; predictions infer force from their state history.
+    # A short mean exposes sustained steering without hiding its sign.
+    ax7 = fig.add_subplot(gs[4, :])
+    for key in diagnostic_keys:
+        t_rel = trajs[key]["ut"] - meta["ut0"]
+        vertical, crossrange = _traj_lift_acceleration(trajs[key], meta)
+        ax7.plot(
+            t_rel,
+            vertical,
+            label=f"{nice[key]} vertical",
+            **styles[key],
+        )
+        cross_style = dict(styles[key], lw=1.0, ls="--")
+        ax7.plot(
+            t_rel,
+            crossrange,
+            label=f"{nice[key]} crossrange",
+            **cross_style,
+        )
+    ax7.axhline(0.0, color="0.55", lw=0.7)
+    ax7.set_xlim(diagnostic_start, diagnostic_end)
+    ax7.set_xlabel("time since capture (s)")
+    ax7.set_ylabel("lift acceleration (m/s²)")
+    ax7.set_title(
+        "Lift acceleration by local direction "
+        "(3 s mean; actual live force, prediction state-derived)"
+    )
+    ax7.legend(loc="best", fontsize=8, ncol=2)
+    ax7.grid(alpha=0.3)
+
     fig.suptitle(
         "Re-entry landing prediction: baseline (force only) vs "
         "6-DOF (force + torque, issue #914)",
         fontsize=14,
-        y=0.98,
+        y=0.995,
     )
     png = png or (prefix + ".png")
     fig.savefig(png, dpi=130, bbox_inches="tight")
@@ -1168,6 +1596,10 @@ def cmd_predict(conn, args, meta=None):
         "dt_vacuum": args.dt_vacuum,
         "record": args.record,
         "max_time": args.max_time,
+        "release_bank_offset": getattr(args, "release_bank_offset", 0.0),
+        "start_from_actual": getattr(args, "start_from_actual", False),
+        "torque_scale": getattr(args, "torque_scale", 1.0),
+        "aero_state_lag": getattr(args, "aero_state_lag", 0.0),
     }
     modes = ["baseline", "6dof"] if args.mode == "both" else [args.mode]
     for mode in modes:
@@ -1277,6 +1709,23 @@ def selftest():
         "retro attitude puts the nose on -v_air",
         np.linalg.norm(q_rot(q_ret, NOSE) + v_air / np.linalg.norm(v_air)) < 1e-9,
     )
+    roll_r = np.array([600000.0, 0.0, 0.0])
+    roll_v = np.array([0.0, -1000.0, 0.0])
+    roll_q = roll_about_relative_wind(np.array(Q_IDENTITY), roll_r, roll_v, ZERO3, 5.0)
+    roll_axis = -roll_v / np.linalg.norm(roll_v)
+    up_before = q_rot(Q_IDENTITY, BODY_UP)
+    up_after = q_rot(roll_q, BODY_UP)
+    measured_roll = math.degrees(
+        math.atan2(
+            float(np.dot(roll_axis, np.cross(up_before, up_after))),
+            float(np.dot(up_before, up_after)),
+        )
+    )
+    check(
+        "relative-wind roll preserves nose and sign",
+        np.linalg.norm(q_rot(roll_q, NOSE) - NOSE) < 1e-12
+        and abs(measured_roll - 5.0) < 1e-12,
+    )
 
     print("1b. Aerodynamic RPC routing")
 
@@ -1364,13 +1813,46 @@ def selftest():
         dt_atmo=1.0,
         dt_vac=1.0,
         record_dt=1.0,
-        stop_alt=9.5,
+        stop_alt=9.0,
         max_time=2.0,
     )
     check(
         "RK4 passes each stage's actual UT to the wrench",
         stage_aero.uts == [100.0, 100.5, 100.5, 101.0],
         f"UTs {stage_aero.uts}",
+    )
+    release_gate_uts = []
+    gated_rows = integrate(
+        {
+            "mu": 0.0,
+            "radius": 10.0,
+            "atmo_depth": 100.0,
+            "mass": 1.0,
+            "inertia": np.eye(3).ravel().tolist(),
+            "w_vec": [0.0, 0.0, 0.0],
+        },
+        StageTimeAero(),
+        "6dof",
+        {
+            "t": 100.0,
+            "r": [20.0, 0.0, 0.0],
+            "v": [-1.0, 0.0, 0.0],
+            "q": Q_IDENTITY,
+            "w": [0.0, 0.0, 0.5],
+        },
+        dt_atmo=1.0,
+        dt_vac=1.0,
+        record_dt=1.0,
+        stop_alt=9.0,
+        max_time=2.0,
+        hold_retro_vacuum=True,
+        hold_retro_until=lambda _r, _v, ut: release_gate_uts.append(ut) or True,
+    )
+    check(
+        "caller-defined SAS release gate holds retrograde and zero rate",
+        release_gate_uts == [100.0, 101.0]
+        and np.linalg.norm(np.asarray(gated_rows[-1][12:15])) < 1.0e-12,
+        f"gate UTs {release_gate_uts}",
     )
 
     print("2. Circular orbit (gravity only)")
@@ -1681,6 +2163,34 @@ def _add_predict_args(p):
         "= -wheel_torque * clamp(K * omega) per axis). 0 = off. "
         "Suppresses the phase-sensitive trim oscillation so the "
         "attitude history is deterministic; ~0.5 is a good start.",
+    )
+    p.add_argument(
+        "--release-bank-offset",
+        type=float,
+        default=0.0,
+        help="diagnostic roll correction in degrees, applied once about the "
+        "incoming-air axis when a retro-release prediction crosses the "
+        "atmospheric interface; angular velocity is unchanged",
+    )
+    p.add_argument(
+        "--start-from-actual",
+        action="store_true",
+        help="diagnostic replay mode: start at the first actual atmospheric "
+        "sample, bypassing the modeled SAS-held coast and release state",
+    )
+    p.add_argument(
+        "--torque-scale",
+        type=float,
+        default=1.0,
+        help="diagnostic multiplier applied to aerodynamic torque in the "
+        "6-DOF integrator (force is unchanged)",
+    )
+    p.add_argument(
+        "--aero-state-lag",
+        type=float,
+        default=0.0,
+        help="diagnostic aerodynamic-attitude lag in seconds; 0.02 "
+        "approximates one KSP physics tick",
     )
     p.add_argument("--out", default="reentry_run", help="output file prefix")
     p.add_argument("--name", default="reentry-predictor")
