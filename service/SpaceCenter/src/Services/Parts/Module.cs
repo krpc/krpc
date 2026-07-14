@@ -553,7 +553,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        [Obsolete("Filter <see cref='ActionList'/> by <see cref='PartAction.GuiName'/> and call <see cref='PartAction.Set'/> instead.")]
+        [Obsolete("Filter <see cref='ActionList'/> by <see cref='PartAction.GuiName'/> and set <see cref='PartAction.Activated'/> instead.")]
         [KRPCMethod]
         public void SetAction (string name, bool value = true)
         {
@@ -565,7 +565,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="id"></param>
         /// <param name="value"></param>
-        [Obsolete("Filter <see cref='ActionList'/> by <see cref='PartAction.Name'/> and call <see cref='PartAction.Set'/> instead.")]
+        [Obsolete("Filter <see cref='ActionList'/> by <see cref='PartAction.Name'/> and set <see cref='PartAction.Activated'/> instead.")]
         [KRPCMethod]
         public void SetActionById (string id, bool value = true)
         {

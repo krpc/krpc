@@ -66,9 +66,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The current amount of propellant.
+        /// The current amount of propellant consumed in the current physics update.
         /// </summary>
-        // TODO: units?
         [KRPCProperty]
         public double CurrentAmount {
             get
@@ -76,9 +75,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The required amount of propellant.
+        /// The required amount of propellant for the current physics update.
         /// </summary>
-        // TODO: units?
         [KRPCProperty]
         public double CurrentRequirement {
             get
@@ -89,7 +87,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The total amount of the underlying resource currently reachable given
         /// resource flow rules.
         /// </summary>
-        // TODO: units?
         [KRPCProperty]
         public double TotalResourceAvailable {
             get
@@ -100,7 +97,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The total vehicle capacity for the underlying propellant resource,
         /// restricted by resource flow rules.
         /// </summary>
-        // TODO: units?
         [KRPCProperty]
         public double TotalResourceCapacity {
             get
@@ -111,7 +107,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// If this propellant should be ignored when calculating required mass flow
         /// given specific impulse.
         /// </summary>
-        // TODO: units?
         [KRPCProperty]
         public bool IgnoreForIsp {
             get

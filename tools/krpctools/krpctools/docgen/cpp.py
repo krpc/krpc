@@ -85,6 +85,8 @@ class CppDomain(Domain):
             )
         ):
             name[-1] = snake_case(name[-1])
+        if isinstance(obj, (Property, ClassProperty)) and obj.getter is None:
+            name[-1] = "set_" + name[-1]
         return self.shorten_ref(".".join(name)).replace(".", "::")
 
     def see(self, obj):

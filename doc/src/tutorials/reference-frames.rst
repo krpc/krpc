@@ -544,6 +544,10 @@ velocity relative to the surface:
       .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.py
          :language: python
 
+.. note:: :attr:`Vessel.surface_velocity_reference_frame` is singular when the
+   vessel's surface speed is zero (hovering, landed). Calling this when the
+   vessel is stationary will raise an error.
+
 This code uses the :attr:`Vessel.surface_velocity_reference_frame`, pictured
 below:
 

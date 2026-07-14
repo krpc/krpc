@@ -774,7 +774,7 @@ SpaceCenter.PartAction
 SpaceCenter.PartAction.Module
 SpaceCenter.PartAction.Name
 SpaceCenter.PartAction.GuiName
-SpaceCenter.PartAction.Set
+SpaceCenter.PartAction.Activated
 SpaceCenter.ConfigNode
 SpaceCenter.ConfigNode.Name
 SpaceCenter.ConfigNode.Values

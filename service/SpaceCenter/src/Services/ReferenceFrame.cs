@@ -703,8 +703,14 @@ namespace KRPC.SpaceCenter.Services
                     var a_srf = grav - Vector3d.Cross (vessel.mainBody.angularVelocity, v_orb);
                     return vessel.mainBody.angularVelocity + Vector3d.Cross (srf_vel, a_srf) / srf_vel.sqrMagnitude;
                 }
-                case ReferenceFrameType.Maneuver:
-                    return Vector3d.zero;
+                case ReferenceFrameType.Maneuver: {
+                    // The burn vector is stored in prograde/normal/radial components, so it rotates
+                    // with the orbital frame. The z-axis (arbitrary inertial projection) introduces
+                    // a small spin correction about ŷ that is neglected here.
+                    var r = node.patch.getRelativePositionAtUT (node.UT).SwapYZ ();
+                    var v = node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
+                    return Vector3d.Cross (r, v) / r.sqrMagnitude;
+                }
                 case ReferenceFrameType.ManeuverOrbital: {
                     var r = node.patch.getRelativePositionAtUT (node.UT).SwapYZ ();
                     var v = node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();

@@ -157,7 +157,14 @@ namespace KRPC.SpaceCenter.Services.Parts
                 // GetPotentialTorque already applies the authority limiter (via
                 // ModuleControlSurface.GetPotentialLift, which scales the deflection by
                 // authorityLimiter * 0.01), so no further scaling is needed here.
-                return controlSurface.GetPotentialTorque ();
+                var torque = controlSurface.GetPotentialTorque ();
+                // ModuleControlSurface.GetPotentialTorque negates the roll (y) axis of both the
+                // positive and negative torque vectors, unlike other ITorqueProvider
+                // implementations. Normalise to the kRPC convention (positive torque >= 0,
+                // negative torque <= 0) with Math.Abs, matching ITorqueProviderExtensions.Sum.
+                return new TupleV3 (
+                    new Vector3d (Math.Abs (torque.Item1.x), Math.Abs (torque.Item1.y), Math.Abs (torque.Item1.z)),
+                    new Vector3d (-Math.Abs (torque.Item2.x), -Math.Abs (torque.Item2.y), -Math.Abs (torque.Item2.z)));
             }
         }
     }

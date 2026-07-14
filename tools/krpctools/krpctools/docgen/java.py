@@ -111,7 +111,10 @@ class JavaDomain(Domain):
             name = ".".join(name)
         elif isinstance(obj, (Property, ClassProperty)):
             name = name.split(".")
-            name[-1] = "get" + name[-1] + "()"
+            if obj.getter is not None:
+                name[-1] = "get" + name[-1] + "()"
+            else:
+                name[-1] = "set" + name[-1] + "(" + self.type(obj.type) + ")"
             name = ".".join(name)
         elif isinstance(obj, EnumerationValue):
             name = name.split(".")
