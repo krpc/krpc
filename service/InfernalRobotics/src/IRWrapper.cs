@@ -611,13 +611,19 @@ namespace KRPC.InfernalRobotics
 
 		#region Non-active vessel support (kRPC-local)
 
-		// Refresh the Controller wrapping if the mod is present but not yet ready (its
-		// servo-group cache is populated after the flight scene loads), mirroring the
-		// InfernalRobotics.Ready property, so the active-vessel Controller path below is used
-		// whenever it is actually available rather than losing a race with a stale cache.
+		// Wrap the IR assembly once, the first time it is needed (its types resolve as soon
+		// as the mod is loaded; the singleton once the flight scene is up). This must gate on
+		// isWrapped, NOT APIReady: APIReady reflects IR's Controller.Ready, which is only true
+		// when the *active* vessel has servos (servosState is populated from the active vessel
+		// alone). Gating on APIReady would re-run the full assembly-wide reflection scan in
+		// InitWrapper on every RPC whenever the active vessel has no IR parts - exactly the
+		// non-active-vessel case this whole path exists for - stalling the physics frame each
+		// poll and making the controlled servo stutter. APIReady is still returned so callers
+		// correctly fall through to the synthesized (non-active) path when the Controller does
+		// not hold the requested vessel.
 		private static bool EnsureReady ()
 		{
-			if (AssemblyExists && !APIReady)
+			if (AssemblyExists && !isWrapped)
 				InitWrapper ();
 			return APIReady;
 		}
