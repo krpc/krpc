@@ -18,6 +18,17 @@ namespace KRPC.InfernalRobotics
 
 		protected internal static Type IRServoType { get; set; }
 
+		// kRPC-local addition (diverges from the upstream vendored IRWrapper): the pieces
+		// needed to enumerate and control servos on loaded vessels *other* than the active
+		// one. IR's Controller only ever populates its ServoGroups/servosState from the
+		// active vessel, but a servo's motion is driven entirely by its own PartModule in
+		// FixedUpdate (gated only on isOnRails/isLocked, never on isActiveVessel), so any
+		// loaded, off-rails vessel's servos can be enumerated and commanded directly.
+		protected internal static Type ServoHelperType { get; set; }
+		protected internal static Type ModuleServoType { get; set; }
+		protected internal static MethodInfo ToServosMethod { get; set; }
+		protected internal static FieldInfo GroupNameField { get; set; }
+
 		protected internal static object ActualController { get; set; }
 
 		internal static IRAPI IRController { get; set; }
@@ -61,6 +72,25 @@ namespace KRPC.InfernalRobotics
 				LogFormatted("[IR Wrapper] Failed to grab ServoGroup Type");
 				return false;
 			}
+
+			// kRPC-local addition: resolve the helper used to enumerate a specific vessel's
+			// servo modules directly (ServoHelper.ToServos(Vessel) == vessel
+			// .FindPartModulesImplementing<ModuleIRServo_v3>()), plus the module's groupName
+			// field, so groups can be reconstructed for non-active vessels. These are only
+			// used by the non-active-vessel fallback; a missing one leaves that path empty
+			// but does not break the active-vessel Controller path, so do not fail here.
+			ServoHelperType = null;
+			AssemblyLoader.loadedAssemblies.TypeOperation (t => {
+				if(t.FullName == "InfernalRobotics_v3.Utility.ServoHelper") { ServoHelperType = t; } });
+			ModuleServoType = null;
+			AssemblyLoader.loadedAssemblies.TypeOperation (t => {
+				if(t.FullName == "InfernalRobotics_v3.Module.ModuleIRServo_v3") { ModuleServoType = t; } });
+			ToServosMethod = ServoHelperType != null
+				? ServoHelperType.GetMethod ("ToServos", new [] { typeof(Vessel) })
+				: null;
+			GroupNameField = ModuleServoType != null
+				? ModuleServoType.GetField ("groupName")
+				: null;
 
 			LogFormatted("Got Assembly Types, grabbing Instance");
 
@@ -578,6 +608,245 @@ namespace KRPC.InfernalRobotics
 		}
 
 		#endregion Private Implementation
+
+		#region Non-active vessel support (kRPC-local)
+
+		// Refresh the Controller wrapping if the mod is present but not yet ready (its
+		// servo-group cache is populated after the flight scene loads), mirroring the
+		// InfernalRobotics.Ready property, so the active-vessel Controller path below is used
+		// whenever it is actually available rather than losing a race with a stale cache.
+		private static bool EnsureReady ()
+		{
+			if (AssemblyExists && !APIReady)
+				InitWrapper ();
+			return APIReady;
+		}
+
+		// Servos for a given vessel. IR's Controller only tracks the active vessel, so prefer
+		// its data (full fidelity) when it holds the requested vessel, and otherwise fall back
+		// to enumerating the vessel's servo modules directly - which works for any loaded,
+		// off-rails vessel.
+		internal static IList<IServo> ServosForVessel (Vessel vessel)
+		{
+			if (EnsureReady ()) {
+				var fromController = new List<IServo> ();
+				foreach (var group in IRController.ServoGroups)
+					if (group.Vessel != null && group.Vessel.id == vessel.id)
+						foreach (var servo in group.Servos)
+							fromController.Add (servo);
+				if (fromController.Count > 0)
+					return fromController;
+			}
+			return SynthesizeServos (vessel);
+		}
+
+		// Servo groups for a given vessel; same active-vessel-first strategy as ServosForVessel.
+		internal static IList<IServoGroup> ServoGroupsForVessel (Vessel vessel)
+		{
+			if (EnsureReady ()) {
+				var fromController = new List<IServoGroup> ();
+				foreach (var group in IRController.ServoGroups)
+					if (group.Vessel != null && group.Vessel.id == vessel.id)
+						fromController.Add (group);
+				if (fromController.Count > 0)
+					return fromController;
+			}
+			return SynthesizeServoGroups (vessel);
+		}
+
+		private static IList<object> RawServos (Vessel vessel)
+		{
+			var result = new List<object> ();
+			if (ToServosMethod == null)
+				return result;
+			var servos = ToServosMethod.Invoke (null, new object [] { vessel }) as IEnumerable;
+			if (servos == null)
+				return result;
+			foreach (var servo in servos)
+				result.Add (servo);
+			return result;
+		}
+
+		private static IList<IServo> SynthesizeServos (Vessel vessel)
+		{
+			var result = new List<IServo> ();
+			foreach (var servo in RawServos (vessel))
+				result.Add (new IRServo (servo));
+			return result;
+		}
+
+		private static IList<IServoGroup> SynthesizeServoGroups (Vessel vessel)
+		{
+			var result = new List<IServoGroup> ();
+			var order = new List<string> ();
+			var byGroup = new Dictionary<string, List<KeyValuePair<int, object>>> ();
+			foreach (var servo in RawServos (vessel)) {
+				// A servo's groupName encodes every group it belongs to, matching IR's own
+				// parsing in Controller.RebuildServoGroupsFlight: memberships are separated
+				// by '|', and each membership is "<group name>;<ordering index>".
+				var raw = GroupNameField != null ? GroupNameField.GetValue (servo) as string : null;
+				if (string.IsNullOrEmpty (raw))
+					continue;
+				foreach (var membership in raw.Split ('|')) {
+					var parts = membership.Split (';');
+					var name = parts [0];
+					int index;
+					if (parts.Length < 2 || !int.TryParse (parts [1], out index))
+						index = int.MaxValue;
+					List<KeyValuePair<int, object>> members;
+					if (!byGroup.TryGetValue (name, out members)) {
+						members = new List<KeyValuePair<int, object>> ();
+						byGroup [name] = members;
+						order.Add (name);
+					}
+					members.Add (new KeyValuePair<int, object> (index, servo));
+				}
+			}
+			foreach (var name in order) {
+				// OrderBy is a stable sort, so servos with an equal (or absent) index keep
+				// their discovery order within the group.
+				var servos = byGroup [name].OrderBy (m => m.Key).Select (m => m.Value).ToList ();
+				result.Add (new SynthesizedServoGroup (vessel, name, servos));
+			}
+			return result;
+		}
+
+		// A servo group reconstructed by kRPC for a non-active (but loaded) vessel, backed
+		// directly by the vessel's servo modules and grouped by their groupName. Movement is
+		// delegated to the member servos, which drive themselves in FixedUpdate on any loaded,
+		// off-rails vessel. Group state that lives only in IR's Controller for the active
+		// vessel (preset lists, forward/reverse keys, group speed factor, UI expanded flag)
+		// has no backing store here and throws when accessed.
+		private class SynthesizedServoGroup : IServoGroup
+		{
+			private readonly Vessel vessel;
+			private readonly IList<object> rawServos;
+			private string name;
+
+			public SynthesizedServoGroup (Vessel groupVessel, string groupName, IList<object> groupServos)
+			{
+				vessel = groupVessel;
+				name = groupName;
+				rawServos = groupServos;
+			}
+
+			private IList<IServo> WrapServos ()
+			{
+				var servos = new List<IServo> ();
+				foreach (var servo in rawServos)
+					servos.Add (new IRServo (servo));
+				return servos;
+			}
+
+			public string Name
+			{
+				get { return name; }
+				set {
+					// Rewrite only this group's membership token on each servo, preserving the
+					// "<name>;<index>" encoding and any other groups the servo belongs to.
+					if (GroupNameField != null) {
+						foreach (var servo in rawServos) {
+							var raw = GroupNameField.GetValue (servo) as string ?? string.Empty;
+							var memberships = raw.Split ('|');
+							for (int i = 0; i < memberships.Length; i++) {
+								var parts = memberships [i].Split (';');
+								if (parts [0] == name) {
+									parts [0] = value;
+									memberships [i] = string.Join (";", parts);
+								}
+							}
+							GroupNameField.SetValue (servo, string.Join ("|", memberships));
+						}
+					}
+					name = value;
+				}
+			}
+
+			public Vessel Vessel
+			{
+				get { return vessel; }
+			}
+
+			public IList<IServo> Servos
+			{
+				get { return WrapServos (); }
+			}
+
+			public void MoveLeft ()
+			{
+				foreach (var servo in WrapServos ())
+					servo.MoveLeft ();
+			}
+
+			public void MoveCenter ()
+			{
+				foreach (var servo in WrapServos ())
+					servo.MoveCenter ();
+			}
+
+			public void MoveRight ()
+			{
+				foreach (var servo in WrapServos ())
+					servo.MoveRight ();
+			}
+
+			public void Stop ()
+			{
+				foreach (var servo in WrapServos ())
+					servo.Stop ();
+			}
+
+			private static Exception NotAvailable ()
+			{
+				return new InvalidOperationException (
+					"This member is not available for a servo group on a non-active vessel. " +
+					"Such groups support Name, Vessel and Servos, movement (MoveLeft, MoveRight, " +
+					"MoveCenter, Stop) and full per-servo control; preset, key, speed-factor and " +
+					"expanded state are only available for the active vessel.");
+			}
+
+			public float GroupSpeedFactor
+			{
+				get { throw NotAvailable (); }
+				set { throw NotAvailable (); }
+			}
+
+			public bool Expanded
+			{
+				get { throw NotAvailable (); }
+				set { throw NotAvailable (); }
+			}
+
+			public void MoveNextPreset ()
+			{
+				throw NotAvailable ();
+			}
+
+			public void MovePrevPreset ()
+			{
+				throw NotAvailable ();
+			}
+
+			public string ForwardKey
+			{
+				get { throw NotAvailable (); }
+				set { throw NotAvailable (); }
+			}
+
+			public string ReverseKey
+			{
+				get { throw NotAvailable (); }
+				set { throw NotAvailable (); }
+			}
+
+			public bool Equals (IServoGroup other)
+			{
+				var group = other as SynthesizedServoGroup;
+				return group != null && vessel == group.vessel && name == group.name;
+			}
+		}
+
+		#endregion Non-active vessel support (kRPC-local)
 
 		#region API Contract
 

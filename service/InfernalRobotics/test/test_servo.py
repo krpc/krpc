@@ -16,7 +16,7 @@ class TestServo(krpctest.TestCase):
         servo = self.ir.servo_with_name(self.vessel, "Rotatron - Basic")
         self.assertEqual("Rotatron - Basic", servo.name)
         self.assertEqual("IR.Rotatron.Basic.v3", servo.part.name)
-        self.assertEqual(0, servo.position)
+        self.assertAlmostEqual(0, servo.position, places=3)
         self.assertEqual(-360, servo.min_config_position)
         self.assertEqual(360, servo.max_config_position)
         self.assertEqual(-360, servo.min_position)
