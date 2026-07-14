@@ -1918,7 +1918,7 @@ PART
 	pos = -5.30613279,5.17441702,0.0791302621
 	attPos = 0,0,0
 	attPos0 = 0,0.555254579,0.455307007
-	rot = 0.707106829,0,0.707106829,1.62216907E-10
+	rot = 0.707106829,0,0.707106829,8.11155587E-11
 	attRot = 0,0,0,1
 	attRot0 = 0.707106829,0,0,0.707106829
 	mir = 1,1,1
@@ -2135,7 +2135,7 @@ PART
 	part = launchClamp1_4294711084
 	partName = Part
 	persistentId = 601822108
-	pos = -2.45589709,3.20414066,-1.3156004
+	pos = -2.45589709,3.20414019,-1.31560063
 	attPos = 0,0,0
 	attPos0 = -3.85046292E-07,-1.29811096,-1.35603702
 	rot = 0,-2.38418579E-07,0,-1.00000012
@@ -2182,8 +2182,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.53150618
-		height = 3.86429167
+		scaleFactor = 1.53150594
+		height = 3.86429119
 		stagingEnabled = True
 		towerRot = 0,3.27825518E-07,0,-1
 		EVENTS
@@ -2825,7 +2825,7 @@ PART
 		scaleFactor = 1.42659891
 		height = 3.59959102
 		stagingEnabled = True
-		towerRot = -1.68587363E-07,2.08616228E-07,-4.21468727E-08,-1
+		towerRot = -1.68587363E-07,2.08616228E-07,-4.21468904E-08,-1
 		EVENTS
 		{
 		}

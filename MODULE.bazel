@@ -848,3 +848,30 @@ http_file(
     sha256 = "95847827ab293b9e82a19b7efb97ffea3e98cc03b181862536ac8eb572e30d7d",
     url = "https://ksp.sarbian.com/jenkins/job/ModuleManager/163/artifact/ModuleManager.4.2.3.dll",
 )
+
+# ----------------------- Third-party mods (integration testing) -------------------------
+# The RemoteTech, InfernalRobotics and KerbalAlarmClock services wrap these mods. They are
+# installed into GameData by `krpc-install --mods=...` for the integration tests, and are
+# not part of the release. Each filegroup exports only the mod's own GameData subtree (the
+# RemoteTech archive also bundles an older ModuleManager, which is deliberately excluded).
+
+http_archive(
+    name = "remotetech",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/RemoteTech/**']), visibility = ['//visibility:public'])",
+    sha256 = "cd425571cedd4256444aaa23dcbd5f2bf581ca61f132ec2f04643cefe92f65f4",
+    url = "https://github.com/RemoteTechnologiesGroup/RemoteTech/releases/download/1.9.12/RemoteTech-1.9.12.zip",
+)
+
+http_archive(
+    name = "infernal_robotics",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/MagicSmokeIndustries/**']), visibility = ['//visibility:public'])",
+    sha256 = "7e5819e06909c86e7cc117fb89582727ee9b8dfe169882e12835fa1929c59052",
+    url = "https://github.com/meirumeiru/InfernalRobotics/releases/download/v3.1.22/InfernalRobotics_v3.1.22.zip",
+)
+
+http_archive(
+    name = "kerbal_alarm_clock",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/TriggerTech/**']), visibility = ['//visibility:public'])",
+    sha256 = "5fbaf7a1c69dec68557f4ce956e0f85956e66ffd828545914f23b79024fc3d67",
+    url = "https://github.com/TriggerAu/KerbalAlarmClock/releases/download/v3.14.0.0/KerbalAlarmClock_3.14.0.0.zip",
+)

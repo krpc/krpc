@@ -3,6 +3,7 @@ from krpctest import TestCase
 
 
 class TestTestCase(TestCase):
+    game_required = False
 
     def check_fails(self, fn, *args, **kwargs):
         failed = False

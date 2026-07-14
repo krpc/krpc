@@ -1,0 +1,31 @@
+# Third-party KSP mods wrapped by kRPC services, used by the integration tests.
+#
+# These are NOT part of the kRPC release. `krpc-install --mods=...` installs a
+# requested subset into the KSP GameData directory so the RemoteTech / InfernalRobotics /
+# KerbalAlarmClock service tests can exercise the real mods. Building a target here fetches
+# the corresponding archive (declared in MODULE.bazel); krpctest.install then copies the
+# mod's GameData subtree from the external repo.
+#
+# The mod name accepted by `--mods` maps to the GameData folder it installs as follows:
+#   RemoteTech        -> GameData/RemoteTech
+#   InfernalRobotics  -> GameData/MagicSmokeIndustries
+#   KerbalAlarmClock  -> GameData/TriggerTech
+# tools/krpctest mirrors this registry on the Python side.
+
+filegroup(
+    name = "remotetech",
+    srcs = ["@remotetech//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "infernal_robotics",
+    srcs = ["@infernal_robotics//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "kerbal_alarm_clock",
+    srcs = ["@kerbal_alarm_clock//:gamedata"],
+    visibility = ["//visibility:public"],
+)

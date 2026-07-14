@@ -2,10 +2,8 @@ import unittest
 import krpctest
 
 
-@unittest.skipIf(
-    not krpctest.TestCase.connect().remote_tech.available, "RemoteTech not installed"
-)
 class TestComms(krpctest.TestCase):
+    mods = ["RemoteTech"]
 
     @classmethod
     def setUpClass(cls):

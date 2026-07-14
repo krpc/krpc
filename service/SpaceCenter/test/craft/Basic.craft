@@ -16,7 +16,7 @@ PART
 {
 	part = mk1pod.v2_4294866428
 	partName = Part
-	persistentId = 937225014
+	persistentId = 3419784367
 	pos = -0.0407842882,4.5464468,0.128956094
 	attPos = 0,0,0
 	attPos0 = -0.0407842882,4.5464468,0.128956094
@@ -372,7 +372,7 @@ PART
 {
 	part = fuelTank_4294866334
 	partName = Part
-	persistentId = 1012125500
+	persistentId = 3028934899
 	pos = -0.0407842882,3.15968394,0.128956094
 	attPos = 0,0,0
 	attPos0 = 0,0,0
@@ -500,7 +500,7 @@ PART
 {
 	part = batteryPack_4294866210
 	partName = Part
-	persistentId = 880147554
+	persistentId = 2756507536
 	pos = -0.0407843404,2.66720486,-0.4934237
 	attPos = 0,0,0
 	attPos0 = 0,0,0
@@ -595,7 +595,7 @@ PART
 {
 	part = batteryPack_4294866176
 	partName = Part
-	persistentId = 84799759
+	persistentId = 1884060856
 	pos = -0.0407841802,2.66720486,0.751335919
 	attPos = 0,0,0
 	attPos0 = 0,0,0
@@ -690,7 +690,7 @@ PART
 {
 	part = solarPanels1_4294866142
 	partName = Part
-	persistentId = 368747606
+	persistentId = 3986995044
 	pos = -0.0407843404,3.7102828,-0.49105531
 	attPos = 0,0,0
 	attPos0 = 0,0,0
@@ -808,7 +808,7 @@ PART
 {
 	part = solarPanels1_4294866032
 	partName = Part
-	persistentId = 2430307642
+	persistentId = 3335817718
 	pos = -0.577729821,3.7102828,0.438961864
 	attPos = 0,0,0
 	attPos0 = 0,0,0
@@ -926,7 +926,7 @@ PART
 {
 	part = solarPanels1_4294865922
 	partName = Part
-	persistentId = 918354299
+	persistentId = 556187693
 	pos = 0.496161282,3.7102828,0.438961685
 	attPos = 0,0,0
 	attPos0 = 0,0,0
@@ -1044,7 +1044,7 @@ PART
 {
 	part = liquidEngine2_4294859514
 	partName = Part
-	persistentId = 2452421555
+	persistentId = 2326516452
 	pos = -0.0407842882,1.34535789,0.128956094
 	attPos = 0,0,0
 	attPos0 = 0,0,0
@@ -1334,7 +1334,7 @@ PART
 {
 	part = dockingPort3_4294740730
 	partName = Part
-	persistentId = 2141227850
+	persistentId = 392827077
 	pos = -0.0407842882,5.18882704,0.128956094
 	attPos = 0,0,0
 	attPos0 = 0,0.642375886,0

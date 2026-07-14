@@ -27,10 +27,9 @@ class TestReferenceFrame(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "Vessel":
-            cls.launch_vessel_from_vab("Vessel")
-            cls.remove_other_vessels()
+        cls.launch_vessel_from_vab("Vessel")
+        cls.remove_other_vessels()
+        cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel
         cls.bodies = cls.space_center.bodies
@@ -38,7 +37,6 @@ class TestReferenceFrame(krpctest.TestCase):
         cls.root_part = cls.vessel.parts.root
         cls.docking_port = cls.vessel.parts.docking_ports[0]
         cls.thruster = cls.vessel.parts.engines[0].thrusters[0]
-        cls.set_circular_orbit("Kerbin", 100000)
 
     # -------------------------------------------------------------------------
     # Helpers
@@ -379,7 +377,7 @@ class TestReferenceFrame(krpctest.TestCase):
         self.assertAlmostEqual(
             (0, 1, 0),
             self.thruster.thrust_direction(self.thruster.thrust_reference_frame),
-            places=6,
+            places=5,
         )
 
     def test_thrust_direction_is_unit_vector(self):

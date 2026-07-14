@@ -120,6 +120,8 @@ pkg_zip(
         "//service/UI",
         "//service/LiDAR",
         "//service/DockingCamera",
+        # Module Manager
+        "@module_manager//file",
         # Schema
         "//protobuf:krpc.proto",
         "//protobuf:LICENSE",
@@ -153,7 +155,7 @@ pkg_zip(
         "service/DockingCamera/": "GameData/kRPC/",
         "service/DockingCamera/CHANGES.txt": "GameData/kRPC/CHANGES.DockingCamera.txt",
         # Module Manager
-        "../_main~_repo_rules~module_manager/file/ModuleManager.4.2.3.dll": "GameData/ModuleManager.4.2.3.dll",
+        "../+http_file+module_manager/file/ModuleManager.4.2.3.dll": "GameData/ModuleManager.4.2.3.dll",
         # Schema
         "protobuf/": "schema/",
     },

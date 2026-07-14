@@ -1,10 +1,10 @@
 import unittest
+
 import krpctest
 from krpctest.geometry import dot
 
 
 class TestParts(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -76,9 +76,6 @@ class TestParts(krpctest.TestCase):
                 "radialDecoupler2",
                 "radialDecoupler2",
                 "launchClamp1",  # TT18-A Launch Stability Enhancer
-                "launchClamp1",
-                "launchClamp1",
-                "launchClamp1",
                 "launchClamp1",
                 "launchClamp1",
                 "foldingRadSmall",  # Thermal Control System (small)
@@ -232,7 +229,7 @@ class TestParts(krpctest.TestCase):
         self.assertCountEqual(
             ["liquidEngineMainsail.v2"]  # RE-M3 "Mainsail" Liquid Fuel Engine
             + ["MassiveBooster"] * 3  # S1 SRB-KD25k "Kickback"
-            + ["launchClamp1"] * 6,  # TT18-A Launch Stability Enhancer
+            + ["launchClamp1"] * 3,  # TT18-A Launch Stability Enhancer
             part_names_in_stage(6),
         )
         with self.assertRaises(ValueError):
@@ -267,7 +264,8 @@ class TestParts(krpctest.TestCase):
             part_names_in_decouple_stage(5),
         )
         self.assertCountEqual(
-            ["launchClamp1"] * 6, part_names_in_decouple_stage(6)  # TT18-A
+            ["launchClamp1"] * 3,
+            part_names_in_decouple_stage(6),  # TT18-A
         )
         with self.assertRaises(ValueError):
             part_names_in_decouple_stage(7)
@@ -364,7 +362,7 @@ class TestParts(krpctest.TestCase):
 
     def test_launch_clamps(self):
         self.assertCountEqual(
-            ["launchClamp1"] * 6,
+            ["launchClamp1"] * 3,
             [p.part.name for p in self.parts.launch_clamps],
         )
 
