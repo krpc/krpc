@@ -165,7 +165,7 @@ class TestParts(krpctest.TestCase):
     def test_parts_in_stage(self):
         # Assert on language-independent internal names (part.name).
         def part_names_in_stage(stage):
-            return [part.name for part in self.parts.in_stage(stage)]
+            return [part.name for part in self.vessel.stage_at(stage).parts]
 
         self.assertCountEqual(
             [
@@ -235,12 +235,13 @@ class TestParts(krpctest.TestCase):
             + ["launchClamp1"] * 6,  # TT18-A Launch Stability Enhancer
             part_names_in_stage(6),
         )
-        self.assertCountEqual([], part_names_in_stage(7))
+        with self.assertRaises(ValueError):
+            part_names_in_stage(7)
 
     def test_parts_in_decouple_stage(self):
         # Assert on language-independent internal names (part.name).
         def part_names_in_decouple_stage(stage):
-            return [part.name for part in self.parts.in_decouple_stage(stage)]
+            return [part.name for part in self.vessel.decouple_stage_at(stage).parts]
 
         self.assertCountEqual(
             ["fairingSize1"]  # AE-FF1 Airstream Protective Shell (1.25m)
@@ -268,7 +269,8 @@ class TestParts(krpctest.TestCase):
         self.assertCountEqual(
             ["launchClamp1"] * 6, part_names_in_decouple_stage(6)  # TT18-A
         )
-        self.assertCountEqual([], part_names_in_decouple_stage(7))
+        with self.assertRaises(ValueError):
+            part_names_in_decouple_stage(7)
 
     def test_modules_with_name(self):
         modules = self.parts.modules_with_name("ModuleLight")

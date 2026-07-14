@@ -247,7 +247,6 @@ namespace KRPC.SpaceCenter.Services
         {
             return InternalVessel.Parts
                 .Select (p => p.DecoupledAt ())
-                .Where (n => n >= 0)
                 .Distinct ()
                 .OrderBy (n => n)
                 .ToList ();
@@ -255,7 +254,8 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Stage indices valid for decouple-stage queries (resources, parts).
-        /// Includes zero-value stages with no decoupling parts, matching legacy
+        /// Includes the -1 stage (parts that are never decoupled and remain on the
+        /// vessel) and zero-value stages with no decoupling parts, matching legacy
         /// <see cref="ResourcesInDecoupleStage"/> iteration over raw stage numbers.
         /// </summary>
         List<int> RawDecoupleStageNumbers ()
@@ -263,10 +263,10 @@ namespace KRPC.SpaceCenter.Services
             var indices = InternalVessel.ActivationStageNumbers ()
                 .Concat (DecoupleStageNumbers ())
                 .ToList ();
-            if (indices.Count == 0)
-                return new List<int> { 0 };
-            var max = indices.Max ();
-            return Enumerable.Range (0, max + 1).ToList ();
+            var max = indices.Count == 0 ? 0 : indices.Max ();
+            return new List<int> { -1 }
+                .Concat (Enumerable.Range (0, max + 1))
+                .ToList ();
         }
 
         void RequireVesselDeltaVReady ()
@@ -276,7 +276,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Activation (burn) stages for this vessel, in ascending stage order.
+        /// Activation (burn) stages for this vessel, in ascending stage order. This does
+        /// not include the -1 stage (parts with no staging icon), as it carries no
+        /// delta-v; use <see cref="StageAt"/> with -1 to get those parts.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public IList<Stage> Stages {
@@ -288,19 +290,22 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The activation stage with the given number.
+        /// The activation stage with the given number. Pass -1 to get the parts that are
+        /// never activated (those with no staging icon).
         /// </summary>
         /// <param name="stage">Get activation stage at this index.</param>
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Stage StageAt (int stage)
         {
-            if (!InternalVessel.ActivationStageNumbers ().Contains (stage))
+            if (stage != -1 && !InternalVessel.ActivationStageNumbers ().Contains (stage))
                 throw new ArgumentException ("Stage not found", nameof (stage));
             return new Stage (InternalVessel, stage, false);
         }
 
         /// <summary>
-        /// Decouple stages for this vessel, in ascending stage order.
+        /// Decouple stages for this vessel, in ascending stage order. The -1 stage,
+        /// containing the parts that are never decoupled and remain on the vessel, is
+        /// included first when any such parts exist.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public IList<Stage> DecoupleStages {
@@ -312,7 +317,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The decouple stage with the given number.
+        /// The decouple stage with the given number. Pass -1 to get the parts that are
+        /// never decoupled and remain on the vessel after all stages have fired.
         /// </summary>
         /// <param name="stage">Get decouple stage at this index.</param>
         [KRPCMethod (GameScene = GameScene.Flight)]
