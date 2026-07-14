@@ -20,6 +20,7 @@ The codebase is structured as follows:
  * `server/...` - C# implementation of the main server that runs in the game.
  * `service/...` - C# implementations of the various services that run in the game, and add RPCs to
    the server.
+ * `core/...` - C# shared core library used by the server and services.
  * `lib/...` - symlinks (or copies) of DLLs required to build the C# projects.
  * `client/...` - the client libraries, with one directory for each language.
  * `client/serialio/...` and `client/websockets/...` - tests for the serialio and websockets
@@ -60,8 +61,8 @@ project, but the following needs to be installed on your system:
 
  * Bazel
  * C# compiler, runtime and tools (for example [Mono](https://www.mono-project.com/))
- * Python 3.12+
- * Autotools
+ * Python 3.10+
+ * CMake 3.15+ and a C++17 compiler (for the C++ client)
  * LuaRocks
  * Maven
  * pdflatex and svg tools (for building the documentation)
@@ -85,12 +86,19 @@ sudo apt-get install mono-complete python-is-python3 python3-dev python3-pip \
   texlive-latex-extra texlive-fonts-extra tex-gyre librsvg2-bin libenchant-2-2
 ```
 
-You also need to set up the necessary libraries in the `lib` diretory.
+You also need to set up the necessary libraries in the `lib` directory.
 `lib/ksp` should contain a copy of the game. You can either create this directory, and copy the
 game files into it, or create a symlink to point to an existing copy of the game. For example,
 run the following command from the root of the krpc source to point to KSP installed in the
 default Steam location:
-```ln -s "$HOME/.local/share/Steam/steamapps/common/Kerbal Space Program" ksp lib/ksp```
+```ln -s "$HOME/.local/share/Steam/steamapps/common/Kerbal Space Program" lib/ksp```
+
+`lib/ksp` is used both to build the C# projects against the KSP DLLs, and by the integration-test
+tooling as the KSP install to install the mod into and launch. To point the test tooling at a
+different KSP install without changing `lib/ksp`, set the `KSP_DIR` environment variable to its
+path — the `krpc-install`, `krpc-run-ksp` and `pytest` commands all pick it up (and also accept an
+equivalent `--ksp-dir` option). Note that the Bazel build itself always uses `lib/ksp`, regardless
+of `KSP_DIR`.
 
 You may also need to modify the symlink at `lib/mono-4.5` to point to the correct location of your
 Mono installation. On Ubuntu 24.04 with the latest version of Mono, `lib/mono-4.5` should be a
@@ -100,7 +108,7 @@ symlink pointing to `/usr/lib/mono/4.5`
 
 To build the kRPC mod release archive, containing the server DLL and service DLLs, run `bazel build
 //:krpc`. The resulting archive containing the GameData directory will be created at
-`bazel-out/krpc-<version>.zip`
+`bazel-bin/krpc-<version>.zip`
 
 The build scripts define various "targets" that can be used to build different parts of the project,
 by running `bazel build <target>` These targets are available:
@@ -121,6 +129,8 @@ by running `bazel build <target>` These targets are available:
    * `//service/InfernalRobotics`
    * `//service/KerbalAlarmClock`
    * `//service/RemoteTech`
+   * `//service/LiDAR`
+   * `//service/DockingCamera`
  * Protobuf definitions:
    * `//protobuf:csharp`
    * `//protobuf:cpp`
@@ -196,7 +206,7 @@ the project.
 To run the tests, the following dependencies need to be installed. Without them, some of the tests
 will fail.
 
- * Python 3.12+ development files
+ * Python 3.10+ development files
  * CppCheck
  * socat
 
@@ -224,8 +234,9 @@ running. To run these tests:
    plugin so the tests run with `pytest`.
  * Then run the tests using `pytest`. With no arguments it runs every
    `service/*/test` directory. Pass test directories or files, or `-k`, to run a subset,
-   and `--ksp-dir` to point at a KSP install other than `lib/ksp`. KSP is automatically launched
-   (if its not already running) and the required mods are managed automatically.
+   and `--ksp-dir` (or the `KSP_DIR` environment variable) to point at a KSP install other than
+   `lib/ksp`. KSP is automatically launched (if its not already running) and the required mods are
+   managed automatically.
 
 If the game is already running (via `krpc-run-ksp` - see below) then running `pytest` does not launch
 the game, it just makes use of the existing running game. If the game is not in the expected state (e.g.
@@ -240,9 +251,9 @@ Included in the project are various tools to aid development.
    this to try out building the documentation and then view it by pointing a web browser at
    `http://localhost:8080`
  * `krpc-install`
-   - Console script from the `krpctest` package. It builds the mod, and the `TestingTools` DLL, and
-   installs them into the GameData directory of the copy of KSP in `lib/ksp`. Run it from the
-   repository root.
+   - Console script from the `krpctest` package. It builds the `//:krpc` release archive and the
+   `TestingTools` DLL, and installs them into the GameData directory of the copy of KSP in `lib/ksp`
+   (or the install given by `KSP_DIR` / `--ksp-dir`). Run it from the repository root.
  * `krpc-run-ksp`
    - Console script from the `krpctest` package. It uses `krpc-install` to install the mod (as
    above) and then launches the game. It also pipes the game's log output to the terminal for ease

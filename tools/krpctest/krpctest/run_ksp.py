@@ -89,7 +89,7 @@ def main():
             "The --load-* options configure the TestingTools add-on; each is "
             "forwarded to KSP as the matching --krpctest-load-* argument. Auto-load "
             "happens only when at least one --load-* option is given; with none, "
-            "KSP stays at the main menu. See tools/TestingTools/README.md for details."
+            "KSP stays at the main menu. See tools/krpctest/README.md for details."
         ),
     )
     parser.add_argument(

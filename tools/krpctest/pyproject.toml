@@ -9,7 +9,7 @@ authors = [
     {name = "djungelorm", email = "djungelorm@users.noreply.github.com"},
 ]
 description = "Utilities for running service tests for kRPC."
-readme = "README.txt"
+readme = "README.md"
 license = "GPL-3.0-only"
 requires-python = ">=3.10"
 dependencies = ["krpc >= 0.4", "pytest >= 7"]
@@ -39,7 +39,7 @@ pattern = '__version__ = "(?P<version>[^"]+)"'
 [tool.hatch.build.targets.sdist]
 include = [
     "krpctest/",
-    "README.txt",
+    "README.md",
     "CHANGES.txt",
     "LICENSE",
     "COPYING",
