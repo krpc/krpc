@@ -436,14 +436,22 @@ class TestFlightAero(krpctest.TestCase):
         zero = (0.0, 0.0, 0.0)
         ut = self.space_center.ut
 
+        # A newly spawned craft can take the DragCubeList exception/fallback path on
+        # its first hypothetical direction and initialize KSP's cube caches. Warm all
+        # three paths before comparing their steady-state semantics.
+        flight.simulate_aerodynamic_wrench_at(
+            body, position, velocity, rotation, zero, ut
+        )
+        flight.simulate_aerodynamic_force_at(body, position, velocity, rotation)
+        flight.simulate_aerodynamic_torque_at(body, position, velocity, rotation, zero)
         force, torque = flight.simulate_aerodynamic_wrench_at(
             body, position, velocity, rotation, zero, ut
         )
-        legacy_force = flight.simulate_aerodynamic_force_at(
-            body, position, velocity, rotation
-        )
         legacy_torque = flight.simulate_aerodynamic_torque_at(
             body, position, velocity, rotation, zero
+        )
+        legacy_force = flight.simulate_aerodynamic_force_at(
+            body, position, velocity, rotation
         )
 
         self.assertEqual(3, len(force))
@@ -488,9 +496,7 @@ class TestFlightAero(krpctest.TestCase):
         force_quarter_orbit, _ = flight.simulate_aerodynamic_wrench_at(
             body, position, velocity, rotation, zero, ut + body.orbit.period / 4.0
         )
-        self.assertGreater(
-            norm(vector(force_quarter_orbit) - vector(force_now)), 0.1
-        )
+        self.assertGreater(norm(vector(force_quarter_orbit) - vector(force_now)), 0.1)
 
     def test_simulate_aerodynamic_torque_attitude(self):
         # A head-on wind (angle of attack 0) produces little torque; pitching 90
@@ -584,48 +590,56 @@ class TestFlightAero(krpctest.TestCase):
     def test_simulate_aerodynamic_wrench_reference_frames(self):
         # Express one physical COM state in rotating-body, non-rotating-body and
         # vessel frames. Transform every result to the non-rotating frame before
-        # comparison. Using Vessel.angular_velocity is important: unlike a plain
-        # direction transform, it accounts for each frame's rotation rate.
+        # comparison. CelestialBody.angular_velocity supplies one stable physical
+        # body rate while accounting for each reference frame's rotation rate.
         body = self.vessel.orbit.body
         common = body.non_rotating_reference_frame
         rotating = body.reference_frame
         vessel_frame = self.vessel.reference_frame
-        connection = self.connect()
-        connection.testing_tools.clear_rotation(self.vessel)
-        connection.krpc.paused = True
-        try:
-            common_position = self.vessel.position(common)
-            common_velocity = tuple(300 * vector(self.vessel.direction(common)))
-            common_rotation = self.vessel.rotation(common)
-            ut = self.space_center.ut
-            results = []
-            for ref in (rotating, common, vessel_frame):
-                position = self.space_center.transform_position(
-                    common_position, common, ref
-                )
-                velocity = self.space_center.transform_velocity(
-                    common_position, common_velocity, common, ref
-                )
-                rotation = self.space_center.transform_rotation(
-                    common_rotation, common, ref
-                )
-                angular_velocity = self.vessel.angular_velocity(ref)
-                force, torque = self.vessel.flight(ref).simulate_aerodynamic_wrench_at(
-                    body, position, velocity, rotation, angular_velocity, ut
-                )
-                results.append(
-                    (
-                        self.space_center.transform_direction(force, ref, common),
-                        self.space_center.transform_direction(torque, ref, common),
-                    )
-                )
 
-            expected_force, expected_torque = results[0]
-            for force, torque in results[1:]:
-                self.assert_vectors_close(expected_force, force)
-                self.assert_vectors_close(expected_torque, torque)
-        finally:
-            connection.krpc.paused = False
+        def capture_common_state():
+            return (
+                self.vessel.position(common),
+                tuple(300 * vector(self.vessel.direction(common))),
+                self.vessel.rotation(common),
+            )
+
+        common_position, common_velocity, common_rotation = capture_common_state()
+        ut = self.space_center.ut
+
+        def evaluate(ref):
+            position = self.space_center.transform_position(
+                common_position, common, ref
+            )
+            velocity = self.space_center.transform_velocity(
+                common_position, common_velocity, common, ref
+            )
+            rotation = self.space_center.transform_rotation(
+                common_rotation, common, ref
+            )
+            angular_velocity = body.angular_velocity(ref)
+            force, torque = self.vessel.flight(ref).simulate_aerodynamic_wrench_at(
+                body, position, velocity, rotation, angular_velocity, ut
+            )
+            return (
+                self.space_center.transform_direction(force, ref, common),
+                self.space_center.transform_direction(torque, ref, common),
+            )
+
+        # Initialize any fresh-craft drag-cube cache paths before recording the
+        # invariant outputs. KRPC.Paused cannot be used here because it may stop
+        # the server before the setter response is flushed.
+        for ref in (rotating, common, vessel_frame):
+            evaluate(ref)
+
+        common_position, common_velocity, common_rotation = capture_common_state()
+        ut = self.space_center.ut
+        results = [evaluate(ref) for ref in (rotating, common, vessel_frame)]
+
+        expected_force, expected_torque = results[0]
+        for force, torque in results[1:]:
+            self.assert_vectors_close(expected_force, force)
+            self.assert_vectors_close(expected_torque, torque)
 
     def test_simulate_aerodynamic_wrench_edge_cases(self):
         body = self.vessel.orbit.body
