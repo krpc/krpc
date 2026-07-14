@@ -1,5 +1,4 @@
 v0.6.0
- * Add SpaceCenter staging API: Stage objects, vessel delta-v helpers, decouple-stage resources migration, and integration tests
  * Fix Flight.SimulateAerodynamicForceAt ignoring the current deflection of
    aerodynamic control surfaces, including deployed airbrakes (#622)
  * Canonicalize AutoPilot attitude-error vectors for equivalent quaternions at exactly 180° (#571)
@@ -74,6 +73,7 @@ v0.6.0
  * Fix Control.CustomAxis01-04 being applied to the active vessel instead of the
    target vessel, and the getters not reading back the value that was set
  * Fix throttle being applied to a vessel with no RemoteTech control connection
+ * Add staging API giving per-stage delta-v and resource information (#920)
 
 v0.5.4
  * Fix vessel recovery (#782)
