@@ -89,7 +89,7 @@ def compare_reference_frames(conn, speed, altitude):
         pos_ref = sc.transform_position(tuple(position), common, ref)
         vel_ref = sc.transform_velocity(tuple(position), tuple(velocity), common, ref)
         rot_ref = sc.transform_rotation(rotation, common, ref)
-        rate_ref = vessel.angular_velocity(ref)
+        rate_ref = body.angular_velocity(ref)
         force, torque = vessel.flight(ref).simulate_aerodynamic_wrench_at(
             body, pos_ref, vel_ref, rot_ref, rate_ref, probe_ut
         )
