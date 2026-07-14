@@ -302,7 +302,7 @@ namespace TestingTools
 
         static void WaitForVesselSwitch (int tick)
         {
-            if (FlightGlobals.ActiveVessel.packed)
+            if (FlightGlobals.ActiveVessel == null || FlightGlobals.ActiveVessel.packed)
                 throw new YieldException<Action> (() => WaitForVesselSwitch(0));
             if (tick < 10)
                 throw new YieldException<Action> (() => WaitForVesselSwitch(tick + 1));
