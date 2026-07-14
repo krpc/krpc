@@ -84,7 +84,7 @@ namespace KRPC.Service
 
     static class GameSceneUtils {
         public static string Name(GameScene scene) {
-            return string.Join(", ", scene.ToString().Split(',').Where(x => x != "Inherit").Select(x => x.Trim()).ToArray());
+            return string.Join(", ", scene.ToString().Split(new char[] { ',' }).Where(x => x != "Inherit").Select(x => x.Trim()).ToArray());
         }
 
         public static IList<string> Serialize(GameScene scene) {

@@ -291,6 +291,8 @@ namespace KRPC
 
         void OnGUIApplicationLauncherReady ()
         {
+            if (applauncherButton != null)
+                return;
             applauncherButton = ApplicationLauncher.Instance.AddModApplication (
                 () => mainWindow.Visible = !mainWindow.Visible,
                 () => mainWindow.Visible = !mainWindow.Visible,
