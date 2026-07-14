@@ -1,10 +1,10 @@
 import unittest
+
 import krpctest
 from krpctest.geometry import norm, normalize
 
 
 class TestSpaceCenter(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -336,7 +336,6 @@ class TestSpaceCenter(krpctest.TestCase):
 
 
 class WarpTestBase:
-
     def test_no_warp(self):
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
         self.assertEqual(0, self.sc.rails_warp_factor)
@@ -452,7 +451,6 @@ class WarpTestBase:
 
 
 class TestWarpOnLaunchpad(krpctest.TestCase, WarpTestBase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -471,7 +469,6 @@ class TestWarpOnLaunchpad(krpctest.TestCase, WarpTestBase):
 
 
 class TestWarpInOrbit(krpctest.TestCase, WarpTestBase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -486,7 +483,6 @@ class TestWarpInOrbit(krpctest.TestCase, WarpTestBase):
 
 
 class TestWarpInSpace(krpctest.TestCase, WarpTestBase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -501,7 +497,6 @@ class TestWarpInSpace(krpctest.TestCase, WarpTestBase):
 
 
 class TestSpaceCenterCareer(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save("krpctest_career", always_load=True)

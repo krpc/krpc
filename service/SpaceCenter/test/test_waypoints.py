@@ -1,9 +1,9 @@
 import unittest
+
 import krpctest
 
 
 class TestWaypoints(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -12,11 +12,11 @@ class TestWaypoints(krpctest.TestCase):
         cls.body = cls.space_center.bodies["Kerbin"]
 
     def test_manager(self):
-        # On a fresh save KSP creates a waypoint for each launch site. The two
+        # On a fresh save KSP creates a waypoint for each launch site. The three
         # Making History launch sites are only present when that DLC is
         # installed, so they are optional; the base-game sites are always there.
-        base_game_sites = {"Dessert Airfield", "Island Airfield", "KSC"}
-        dlc_sites = {"Dessert Launch Site", "Woomerang Launch Site"}
+        base_game_sites = {"Island Airfield", "KSC"}
+        dlc_sites = {"Dessert Airfield", "Dessert Launch Site", "Woomerang Launch Site"}
         waypoint_names = {wp.name for wp in self.wpm.waypoints}
         # All base-game launch site waypoints are present
         self.assertEqual(set(), base_game_sites - waypoint_names)

@@ -1,9 +1,9 @@
 import unittest
+
 import krpctest
 
 
 class TestGameScene(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -86,19 +86,6 @@ class TestGameScene(krpctest.TestCase):
         self.ensure_space_center()
         self.set_scene(self.scenes.tracking_station)
         self.set_scene(self.scenes.space_center)
-
-    def test_deprecated_current_game_scene(self):
-        self.assertEqual(self.krpc.game_scene, self.krpc.current_game_scene)
-
-    def test_deprecated_load_space_center(self):
-        self.ensure_space_center()
-        self.set_scene(self.scenes.tracking_station)
-        self.connect().space_center.load_space_center()
-        self.wait_until(
-            lambda: self.krpc.game_scene == self.scenes.space_center,
-            timeout=120,
-            message="game scene to become the space center",
-        )
 
 
 if __name__ == "__main__":

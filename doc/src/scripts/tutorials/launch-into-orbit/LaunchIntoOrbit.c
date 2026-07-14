@@ -19,8 +19,10 @@ int main() {
   krpc_SpaceCenter_Vessel_Flight(conn, &flight, vessel, KRPC_NULL);
   krpc_SpaceCenter_Orbit_t orbit;
   krpc_SpaceCenter_Vessel_Orbit(conn, &orbit, vessel);
+  krpc_SpaceCenter_Stage_t stage_2;
+  krpc_SpaceCenter_Vessel_DecoupleStageAt(conn, &stage_2, vessel, 2);
   krpc_SpaceCenter_Resources_t stage_2_resources;
-  krpc_SpaceCenter_Vessel_ResourcesInDecoupleStage(conn, &stage_2_resources, vessel, 2, false);
+  krpc_SpaceCenter_Stage_Resources(conn, &stage_2_resources, stage_2, false);
 
   krpc_SpaceCenter_Control_t control;
   krpc_SpaceCenter_Vessel_Control(conn, &control, vessel);

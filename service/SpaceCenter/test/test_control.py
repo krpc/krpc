@@ -1,11 +1,11 @@
 import time
 import unittest
+
 import krpctest
 from krpctest.geometry import normalize
 
 
-class TestControlMixin:
-
+class ControlMixin:
     def test_state(self):
         self.assertEqual(self.space_center.ControlState.full, self.control.state)
         self.assertEqual(self.space_center.ControlSource.kerbal, self.control.source)
@@ -33,13 +33,15 @@ class TestControlMixin:
         self.auto_pilot.sas = False
         self.connect().testing_tools.clear_rotation(self.vessel)
         self.wait_until(
-            lambda: max(
-                abs(v)
-                for v in self.vessel.angular_velocity(
-                    self.vessel.orbital_reference_frame
+            lambda: (
+                max(
+                    abs(v)
+                    for v in self.vessel.angular_velocity(
+                        self.vessel.orbital_reference_frame
+                    )
                 )
+                < 0.01
             )
-            < 0.01
         )
 
         self.control.pitch = 1
@@ -56,13 +58,15 @@ class TestControlMixin:
         self.auto_pilot.sas = False
         self.connect().testing_tools.clear_rotation(self.vessel)
         self.wait_until(
-            lambda: max(
-                abs(v)
-                for v in self.vessel.angular_velocity(
-                    self.vessel.orbital_reference_frame
+            lambda: (
+                max(
+                    abs(v)
+                    for v in self.vessel.angular_velocity(
+                        self.vessel.orbital_reference_frame
+                    )
                 )
+                < 0.01
             )
-            < 0.01
         )
 
         self.control.yaw = 1
@@ -81,13 +85,15 @@ class TestControlMixin:
         self.auto_pilot.sas = False
         self.connect().testing_tools.clear_rotation(self.vessel)
         self.wait_until(
-            lambda: max(
-                abs(v)
-                for v in self.vessel.angular_velocity(
-                    self.vessel.orbital_reference_frame
+            lambda: (
+                max(
+                    abs(v)
+                    for v in self.vessel.angular_velocity(
+                        self.vessel.orbital_reference_frame
+                    )
                 )
+                < 0.01
             )
-            < 0.01
         )
 
         pitch = self.orbital_flight.pitch
@@ -190,14 +196,11 @@ class TestControlMixin:
         # self.assertEqual(self.control.speed_mode, speed_mode.orbit)
 
 
-class TestControlActiveVessel(krpctest.TestCase, TestControlMixin):
-
+class TestControlActiveVessel(krpctest.TestCase, ControlMixin):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "Basic":
-            cls.launch_vessel_from_vab("Basic")
+        cls.launch_vessel_from_vab("Basic")
         cls.remove_other_vessels()
         cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
@@ -228,8 +231,7 @@ class TestControlActiveVessel(krpctest.TestCase, TestControlMixin):
         self.assertEqual(self.control.roll, 0)
 
 
-class TestControlNonActiveVessel(krpctest.TestCase, TestControlMixin):
-
+class TestControlNonActiveVessel(krpctest.TestCase, ControlMixin):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -268,6 +270,9 @@ class TestControlNonActiveVessel(krpctest.TestCase, TestControlMixin):
 
 
 class TestControlStaging(krpctest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
 
     def setUp(self):
         self.launch_vessel_from_vab("Staging")
@@ -306,7 +311,6 @@ class TestControlStaging(krpctest.TestCase):
 
 
 class TestControlRover(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -461,7 +465,6 @@ class TestControlRover(krpctest.TestCase):
 
 
 class TestControlProbe(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -477,7 +480,6 @@ class TestControlProbe(krpctest.TestCase):
 
 
 class TestControlProbePartialControl(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -494,12 +496,10 @@ class TestControlProbePartialControl(krpctest.TestCase):
 
 
 class TestActionGroupActions(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        if cls.connect().space_center.active_vessel.name != "ActionGroups":
-            cls.launch_vessel_from_vab("ActionGroups")
+        cls.launch_vessel_from_vab("ActionGroups")
         cls.remove_other_vessels()
         cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center

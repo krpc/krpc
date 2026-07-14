@@ -1,9 +1,9 @@
 import unittest
+
 import krpctest
 
 
 class TestCamera(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -45,11 +45,7 @@ class TestCamera(krpctest.TestCase):
 
 
 class CameraTestBase:
-
     def test_distance(self):
-        # TODO: not supported in IVA mode
-        if self.camera.mode == self.mode.iva:
-            return
         self.assertGreater(self.camera.default_distance, self.camera.min_distance)
         self.assertLess(self.camera.default_distance, self.camera.max_distance)
         for distance in self.distances:
@@ -60,9 +56,6 @@ class CameraTestBase:
             self.assertAlmostEqual(distance, self.camera.distance, places=3)
 
     def test_heading(self):
-        # TODO: not supported in IVA mode
-        if self.camera.mode == self.mode.iva:
-            return
         self.camera.pitch = 0
         self.camera.distance = self.camera.default_distance
         for heading in self.headings:
@@ -71,9 +64,6 @@ class CameraTestBase:
             self.assertAlmostEqual(heading, self.camera.heading, places=3)
 
     def test_pitch(self):
-        # TODO: not supported in IVA mode
-        if self.camera.mode == self.mode.iva:
-            return
         self.camera.heading = 0
         self.camera.distance = self.camera.default_distance
         for pitch in self.pitches:
@@ -85,7 +75,6 @@ class CameraTestBase:
 
 
 class TestCameraFlight(krpctest.TestCase, CameraTestBase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -101,28 +90,25 @@ class TestCameraFlight(krpctest.TestCase, CameraTestBase):
         cls.distances = (1, 5, 10, 20)
 
 
-class TestCameraIVA(krpctest.TestCase, CameraTestBase):
-
-    @classmethod
-    def setUpClass(cls):
-        cls.new_save()
-        space_center = cls.connect().space_center
-        cls.camera = space_center.camera
-        cls.mode = space_center.CameraMode
-        if cls.camera.mode != cls.mode.iva:
-            cls.camera.mode = cls.mode.iva
-        cls.wait(1)
-        cls.pitches = range(-30, 30, 5)
-        cls.headings = range(-60, 60, 5)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.camera.mode = cls.mode.automatic
-        cls.wait(1)
+# TODO: test camera in IVA mode
+# class TestCameraIVA(krpctest.TestCase, CameraTestBase):
+#     @classmethod
+#     def setUpClass(cls):
+#         super().setUpClass()
+#         cls.camera = cls.space_center.camera
+#         cls.mode = cls.space_center.CameraMode
+#         cls.camera.mode = cls.mode.iva
+#         cls.wait(1)
+#         cls.pitches = range(-30, 30, 5)
+#         cls.headings = range(-60, 60, 5)
+#
+#     @classmethod
+#     def tearDownClass(cls):
+#         cls.camera.mode = cls.mode.automatic
+#         cls.wait(1)
 
 
 class TestCameraMap(krpctest.TestCase, CameraTestBase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

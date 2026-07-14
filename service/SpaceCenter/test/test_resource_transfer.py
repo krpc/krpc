@@ -1,9 +1,9 @@
 import unittest
+
 import krpctest
 
 
 class TestResourceTransfer(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -111,7 +111,6 @@ class TestResourceTransfer(krpctest.TestCase):
 
 
 class TestResourceTransferDisconnect(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

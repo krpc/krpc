@@ -1,10 +1,10 @@
 import unittest
+
 import krpctest
 from krpctest.geometry import dot
 
 
 class TestParts(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -76,9 +76,6 @@ class TestParts(krpctest.TestCase):
                 "radialDecoupler2",
                 "radialDecoupler2",
                 "launchClamp1",  # TT18-A Launch Stability Enhancer
-                "launchClamp1",
-                "launchClamp1",
-                "launchClamp1",
                 "launchClamp1",
                 "launchClamp1",
                 "foldingRadSmall",  # Thermal Control System (small)
@@ -165,7 +162,7 @@ class TestParts(krpctest.TestCase):
     def test_parts_in_stage(self):
         # Assert on language-independent internal names (part.name).
         def part_names_in_stage(stage):
-            return [part.name for part in self.parts.in_stage(stage)]
+            return [part.name for part in self.vessel.stage_at(stage).parts]
 
         self.assertCountEqual(
             [
@@ -232,15 +229,16 @@ class TestParts(krpctest.TestCase):
         self.assertCountEqual(
             ["liquidEngineMainsail.v2"]  # RE-M3 "Mainsail" Liquid Fuel Engine
             + ["MassiveBooster"] * 3  # S1 SRB-KD25k "Kickback"
-            + ["launchClamp1"] * 6,  # TT18-A Launch Stability Enhancer
+            + ["launchClamp1"] * 3,  # TT18-A Launch Stability Enhancer
             part_names_in_stage(6),
         )
-        self.assertCountEqual([], part_names_in_stage(7))
+        with self.assertRaises(ValueError):
+            part_names_in_stage(7)
 
     def test_parts_in_decouple_stage(self):
         # Assert on language-independent internal names (part.name).
         def part_names_in_decouple_stage(stage):
-            return [part.name for part in self.parts.in_decouple_stage(stage)]
+            return [part.name for part in self.vessel.decouple_stage_at(stage).parts]
 
         self.assertCountEqual(
             ["fairingSize1"]  # AE-FF1 Airstream Protective Shell (1.25m)
@@ -266,9 +264,11 @@ class TestParts(krpctest.TestCase):
             part_names_in_decouple_stage(5),
         )
         self.assertCountEqual(
-            ["launchClamp1"] * 6, part_names_in_decouple_stage(6)  # TT18-A
+            ["launchClamp1"] * 3,
+            part_names_in_decouple_stage(6),  # TT18-A
         )
-        self.assertCountEqual([], part_names_in_decouple_stage(7))
+        with self.assertRaises(ValueError):
+            part_names_in_decouple_stage(7)
 
     def test_modules_with_name(self):
         modules = self.parts.modules_with_name("ModuleLight")
@@ -362,7 +362,7 @@ class TestParts(krpctest.TestCase):
 
     def test_launch_clamps(self):
         self.assertCountEqual(
-            ["launchClamp1"] * 6,
+            ["launchClamp1"] * 3,
             [p.part.name for p in self.parts.launch_clamps],
         )
 

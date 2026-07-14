@@ -3,6 +3,7 @@ import krpctest
 
 
 class TestInfernalRobotics(krpctest.TestCase):
+    mods = ["InfernalRobotics"]
 
     @classmethod
     def setUpClass(cls):

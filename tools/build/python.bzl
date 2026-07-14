@@ -174,7 +174,7 @@ def _test_impl(ctx):
             "env/bin/python3 -m pip install --quiet --disable-pip-version-check hatchling pytest" +
             " && env/bin/python3 -m pip install --quiet --disable-pip-version-check --no-deps --no-cache-dir %s/" %
             ctx.attr.pkg +
-            " && env/bin/python -m pytest %s/" % ctx.attr.pkg,
+            " && env/bin/python -m pytest --import-mode=importlib %s/" % ctx.attr.pkg,
         ],
     )
     ctx.actions.write(
