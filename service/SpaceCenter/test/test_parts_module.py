@@ -62,8 +62,8 @@ class TestPartsModule(krpctest.TestCase):
         for candidate in module.action_list:
             if candidate.name == "MakeReferenceToggle":
                 action = candidate
-        action.set(True)
-        action.set(False)
+        action.enabled = True
+        action.enabled = False
 
     def test_solar_panel(self):
         part = self.parts.with_name("solarPanels2")[0]
@@ -200,10 +200,10 @@ class TestPartsModule(krpctest.TestCase):
 
         toggle = next(a for a in action_list if a.gui_name == "Toggle Light")
         self.assertIsNotNone(self._visible_event(module, "Lights On"))
-        toggle.set(True)
+        toggle.activated = True
         self.wait()
         self.assertIsNotNone(self._visible_event(module, "Lights Off"))
-        toggle.set(False)
+        toggle.activated = False
         self.wait()
         self.assertIsNotNone(self._visible_event(module, "Lights On"))
 
