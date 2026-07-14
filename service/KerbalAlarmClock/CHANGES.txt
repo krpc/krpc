@@ -1,3 +1,6 @@
+v0.6.0
+ * Make available in all game scenes
+
 v0.5.0
  * Update API wrapper to work with KerbalAlarmClock v3.13.0.0
 
