@@ -545,10 +545,11 @@ namespace KRPC.SpaceCenter
         }
 
         // Frequency lamp: green showing the detected structural frequency once the tracker has a
-        // lock, amber "NO LOCK" until then (and dim when disengaged).
+        // lock, amber em dash until then (and dim when disengaged). A single glyph so it fits the
+        // one-column RLL cell without word-wrapping the way "NO LOCK" did.
         static string FreqText (double freq)
         {
-            return double.IsNaN (freq) ? "NO LOCK" : string.Format ("{0:F1} Hz", freq);
+            return double.IsNaN (freq) ? "—" : string.Format ("{0:F1}Hz", freq);
         }
 
         // The axis is identified by the PCH/YAW/RLL column header, so the lamp shows only the level value.
@@ -732,10 +733,19 @@ namespace KRPC.SpaceCenter
         // not stretch to fill its column, but a non-breaking space measures as a real glyph.
         const string NonBreakingSpace = " ";
 
-        // An angle readout that is blank for an unset (NaN) roll target, otherwise the degrees.
+        // An angle readout that is blank for an unset (NaN) roll target, otherwise the degrees. Roll
+        // (unlike pitch and heading) can reach ±180, and "-100.0°" is 7 glyphs — one too many for the
+        // one-column RLL cell, which wraps it the way "12.3 Hz" wrapped before it lost its space. Drop
+        // the fractional degree once past ±100° so the readout stays inside the cell; the cutoff is on
+        // the magnitude so both signs are shown the same way, and the common sub-100° case keeps its
+        // 0.1° resolution.
         static string DegOrBlank (float value)
         {
-            return float.IsNaN (value) ? Blank : Deg (value);
+            if (float.IsNaN (value))
+                return Blank;
+            return Math.Abs (Stable (value, 1)) >= 100.0
+                ? string.Format ("{0:F0}°", Stable (value, 0))
+                : Deg (value);
         }
 
         static string Deg (float value)
