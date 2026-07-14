@@ -13,11 +13,11 @@ namespace KRPC.InfernalRobotics
     [KRPCService (Id = 4, GameScene = GameScene.Flight)]
     public static class InfernalRobotics
     {
-        static void CheckAPI ()
+        static void CheckAvailable ()
         {
-            if (!Ready)
-                throw new InvalidOperationException(
-                    "Infernal Robotics is not ready. Does the vessel have an Infernal Robotics part?");
+            if (!Available)
+                throw new InvalidOperationException (
+                    "Infernal Robotics is not installed.");
         }
 
         /// <summary>
@@ -55,11 +55,16 @@ namespace KRPC.InfernalRobotics
         /// <summary>
         /// A list of all the servo groups in the given <paramref name="vessel"/>.
         /// </summary>
+        /// <remarks>
+        /// Works for any loaded vessel, not just the active one. Groups on a non-active vessel
+        /// support movement and per-servo control, but not preset, key, speed-factor or
+        /// expanded state, which are only tracked by Infernal Robotics for the active vessel.
+        /// </remarks>
         [KRPCProcedure]
         public static IList<ServoGroup> ServoGroups (SpaceCenter.Services.Vessel vessel)
         {
-            CheckAPI ();
-            return IRWrapper.IRController.ServoGroups.Where (x => x.Vessel.id == vessel.Id).Select (x => new ServoGroup (x)).ToList ();
+            CheckAvailable ();
+            return IRWrapper.ServoGroupsForVessel (vessel.InternalVessel).Select (x => new ServoGroup (x)).ToList ();
         }
 
         /// <summary>
@@ -71,8 +76,8 @@ namespace KRPC.InfernalRobotics
         [KRPCProcedure (Nullable = true)]
         public static ServoGroup ServoGroupWithName (SpaceCenter.Services.Vessel vessel, string name)
         {
-            CheckAPI ();
-            var servoGroup = IRWrapper.IRController.ServoGroups.FirstOrDefault (x => x.Vessel.id == vessel.Id && x.Name == name);
+            CheckAvailable ();
+            var servoGroup = IRWrapper.ServoGroupsForVessel (vessel.InternalVessel).FirstOrDefault (x => x.Name == name);
             return servoGroup != null ? new ServoGroup (servoGroup) : null;
         }
 
@@ -85,11 +90,8 @@ namespace KRPC.InfernalRobotics
         [KRPCProcedure (Nullable = true)]
         public static Servo ServoWithName (SpaceCenter.Services.Vessel vessel, string name)
         {
-            CheckAPI ();
-            var servo = IRWrapper.IRController.ServoGroups
-                .Where (x => x.Vessel.id == vessel.Id)
-                .SelectMany (x => x.Servos)
-                .FirstOrDefault (x => x.Name == name);
+            CheckAvailable ();
+            var servo = IRWrapper.ServosForVessel (vessel.InternalVessel).FirstOrDefault (x => x.Name == name);
             return servo != null ? new Servo (servo) : null;
         }
     }
