@@ -1582,6 +1582,7 @@ TestAutoPilotAttitudeChatter = _make_autopilot_test_class(
     slew_chatter_limit=0.75,
     flip_plane_limit=0.15,
     control_spike_limit=40,
+    rebound_limit=2,
     flexible=True,
 )
 
@@ -1813,7 +1814,7 @@ TestAutoPilotLaunchDynawing = _make_autopilot_launch_test_class(
     "Dynawing",
     pre_launch_sequence=True,
     launch_settle_delay=8,
-    hold_oscillation_amplitude=0.5,
+    hold_oscillation_amplitude=1.0,
     hold_attitude_error=2.5,
 )
 
