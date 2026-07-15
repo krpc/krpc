@@ -235,6 +235,7 @@ filegroup(
         "//tools/ServiceDefinitions",
         "//tools/TestServer",
         "//tools/TestingTools",
+        "//tools/build/ksp:Google.Protobuf.dll",
         "//tools/build/ksp:KRPC.IO.Ports.dll",
     ],
 )
