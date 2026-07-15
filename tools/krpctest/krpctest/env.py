@@ -9,10 +9,16 @@ import os
 
 
 def get_ksp_dir(ksp_dir=None):
-    """Resolve the KSP install directory. Precedence: an explicit ksp_dir argument, then
-    the KSP_DIR environment variable, then lib/ksp under the working directory."""
+    """Resolve the KSP install directory. Precedence: an explicit ksp_dir argument, then the
+    KSP_DIR environment variable. There is no default - set KSP_DIR (or pass --ksp-dir) to the
+    path of your KSP install."""
     if ksp_dir is None:
-        ksp_dir = os.environ.get("KSP_DIR", os.path.join(os.getcwd(), "lib/ksp"))
+        ksp_dir = os.environ.get("KSP_DIR")
+    if not ksp_dir:
+        raise RuntimeError(
+            "No KSP install specified. Set the KSP_DIR environment variable, or pass --ksp-dir, "
+            "to the path of your KSP install."
+        )
     if not os.path.exists(ksp_dir):
         raise RuntimeError("KSP dir not found at %s" % ksp_dir)
     return ksp_dir

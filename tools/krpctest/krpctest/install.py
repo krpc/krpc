@@ -1,7 +1,7 @@
 """Build the kRPC mod and install it into a KSP GameData directory.
 
 Builds the ``//:krpc`` release archive with Bazel and extracts its ``GameData`` tree
-into the KSP install (``lib/ksp`` by default, or ``KSP_DIR``) - exactly as a user
+into the KSP install (from ``KSP_DIR`` or ``--ksp-dir``) - exactly as a user
 installs a release - then adds the test-only bits the public release omits (the
 ``TestingTools`` add-on and the test ``settings.cfg``). The optional set of managed
 third-party mods (RemoteTech, InfernalRobotics, KerbalAlarmClock) used by some service
@@ -80,7 +80,7 @@ def _normalize_permissions(path):
 def install(mods=(), ksp_dir=None):
     """Build the mod and install it (plus exactly the requested managed mods) into the KSP
     GameData directory. mods is an iterable of names from MODS; ksp_dir defaults to the
-    usual KSP install (KSP_DIR or lib/ksp)."""
+    KSP install given by KSP_DIR."""
     mods = list(mods)
     unknown = [m for m in mods if m not in MODS]
     if unknown:
@@ -152,7 +152,7 @@ def main():
         prog="krpc-install",
         description=(
             "Build the kRPC mod and install it into KSP's GameData directory "
-            "(lib/ksp, or KSP_DIR). Run from the repository root."
+            "(from KSP_DIR or --ksp-dir). Run from the repository root."
         ),
     )
     parser.add_argument(
@@ -172,7 +172,7 @@ def main():
         "--ksp-dir",
         default=None,
         metavar="DIR",
-        help="path to the KSP install (default: $KSP_DIR, or lib/ksp)",
+        help="path to the KSP install (defaults to $KSP_DIR)",
     )
     args = parser.parse_args()
     mods = [m for m in args.mods.split(",") if m]

@@ -22,7 +22,7 @@ def pytest_addoption(parser):
         action="store",
         default=None,
         metavar="DIR",
-        help="path to the KSP install (default: $KSP_DIR, or lib/ksp)",
+        help="path to the KSP install (defaults to $KSP_DIR)",
     )
 
 
