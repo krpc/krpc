@@ -1,4 +1,10 @@
 build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
+
+# The LLVM toolchain adds -stdlib=libc++ to every C++ compile; clang treats it as
+# a link-phase flag and warns it is "unused during compilation" on each .cc file
+# (noisy across the third-party gtest/protobuf builds). Suppress that one benign
+# warning for both the target and exec (`[for tool]`) configurations.
+build --cxxopt=-Wno-unused-command-line-argument --host_cxxopt=-Wno-unused-command-line-argument
 build --java_runtime_version=remotejdk_11
 
 # Windows: rules_dotnet (and the symlink-based staging rules) need real symlinks
