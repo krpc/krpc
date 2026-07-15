@@ -88,26 +88,8 @@ namespace TestingTools
         }
 
         /// <summary>
-        /// Place the active vessel on the surface of a body at the given latitude and longitude,
-        /// and wait for it to come to rest. Use this to set up landed scenarios away from a launch
-        /// site, for example testing surface harvesters on an ore-rich biome.
-        /// </summary>
-        /// <param name="body">Name of the body to land on.</param>
-        /// <param name="latitude">Latitude in degrees.</param>
-        /// <param name="longitude">Longitude in degrees.</param>
-        /// <param name="altitude">Height above the terrain to settle at, in meters.
-        /// Defaults to 0, resting on the surface.</param>
-        [KRPCProcedure]
-        public static void SetLanded (string body, double latitude, double longitude, double altitude = 0)
-        {
-            var celestialBody = FlightGlobals.Bodies.First (b => b.bodyName == body);
-            FlightGlobals.ActiveVessel.SetLanded(celestialBody, latitude, longitude, altitude);
-            throw new YieldException<Action> (() => WaitForLanded(0));
-        }
-
-        /// <summary>
-        /// Place the active vessel in atmospheric flight over the given point at the given altitude,
-        /// airspeed and attitude, and
+        /// Place the active vessel in level atmospheric flight over the given point: at the given
+        /// altitude and airspeed, pointing along the given heading at the given pitch and roll, and
         /// let physics resume so it is flying. Use this to set up in-air scenarios (e.g. testing the
         /// autopilot's attitude hold on a stock aircraft) without flying the craft up from the runway.
         /// The pitch/heading/roll match those reported by the vessel's Flight, and the airspeed is set
@@ -173,6 +155,24 @@ namespace TestingTools
         }
 
         /// <summary>
+        /// Place the active vessel on the surface of a body at the given latitude and longitude,
+        /// and wait for it to come to rest. Use this to set up landed scenarios away from a launch
+        /// site, for example testing surface harvesters on an ore-rich biome.
+        /// </summary>
+        /// <param name="body">Name of the body to land on.</param>
+        /// <param name="latitude">Latitude in degrees.</param>
+        /// <param name="longitude">Longitude in degrees.</param>
+        /// <param name="altitude">Height above the terrain to settle at, in meters.
+        /// Defaults to 0, resting on the surface.</param>
+        [KRPCProcedure]
+        public static void SetLanded (string body, double latitude, double longitude, double altitude = 0)
+        {
+            var celestialBody = FlightGlobals.Bodies.First (b => b.bodyName == body);
+            FlightGlobals.ActiveVessel.SetLanded(celestialBody, latitude, longitude, altitude);
+            throw new YieldException<Action> (() => WaitForLanded(0));
+        }
+
+        /// <summary>
         /// Fill all resource tanks on the active vessel (or a given vessel) to their maximum
         /// capacity. Useful in tests that fire engines and need to restore propellant between runs.
         /// </summary>
@@ -188,24 +188,21 @@ namespace TestingTools
         }
 
         /// <summary>
-        /// Reassign every crew member of the given vessel (default: the active vessel) to the Pilot
-        /// profession at full experience level. The save's auto-crew fills the pod with whichever
-        /// kerbal is next in the roster (often an engineer/scientist), which leaves the vessel on
-        /// "partial control" — no in-game SAS and, after a rails warp, an unreliable control source.
-        /// Overwriting the trait to Pilot gives deterministic full control for every test run without
-        /// changing the craft (a kerbal's mass is the same for any profession, so the calibrated MOI
-        /// and torque are unaffected).
+        /// Fill tanks of a specific resource on the active vessel (or a given vessel) to their
+        /// maximum capacity.
         /// </summary>
-        /// <param name="vessel">Vessel.</param>
+        /// <param name="resourceName">Name of the resource to fill, e.g. "LiquidFuel".</param>
+        /// <param name="vessel">Vessel to operate on. Defaults to the active vessel.</param>
         [KRPCProcedure]
-        public static void SetCrewToPilot (KRPC.SpaceCenter.Services.Vessel vessel = null)
+        public static void FillResources (string resourceName, KRPC.SpaceCenter.Services.Vessel vessel = null)
         {
-            Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
-            foreach (var crew in internalVessel.GetVesselCrew ()) {
-                KerbalRoster.SetExperienceTrait (crew, KerbalRoster.pilotTrait);
-                KerbalRoster.SetExperienceLevel (crew, 5);
+            var internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
+            foreach (var part in internalVessel.parts) {
+                foreach (PartResource resource in part.Resources) {
+                    if (resource.resourceName == resourceName)
+                        resource.amount = resource.maxAmount;
+                }
             }
-            internalVessel.CrewListSetDirty ();
         }
 
         static Quaternion ZeroRotation {
@@ -265,11 +262,46 @@ namespace TestingTools
         }
 
         /// <summary>
+        /// Reassign every crew member of the given vessel (default: the active vessel) to the Pilot
+        /// profession at full experience level. The save's auto-crew fills the pod with whichever
+        /// kerbal is next in the roster (often an engineer/scientist), which leaves the vessel on
+        /// "partial control" — no in-game SAS and, after a rails warp, an unreliable control source.
+        /// Overwriting the trait to Pilot gives deterministic full control for every test run without
+        /// changing the craft (a kerbal's mass is the same for any profession, so the calibrated MOI
+        /// and torque are unaffected).
+        /// </summary>
+        /// <param name="vessel">Vessel.</param>
+        [KRPCProcedure]
+        public static void SetCrewToPilot (KRPC.SpaceCenter.Services.Vessel vessel = null)
+        {
+            Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
+            foreach (var crew in internalVessel.GetVesselCrew ()) {
+                KerbalRoster.SetExperienceTrait (crew, KerbalRoster.pilotTrait);
+                KerbalRoster.SetExperienceLevel (crew, 5);
+            }
+            internalVessel.CrewListSetDirty ();
+        }
+
+        /// <summary>
+        /// Apply a rotation to the given vessel.
+        /// </summary>
+        [KRPCProcedure]
+        public static void ApplyRotation (float angle, Tuple<float,float,float> axis, KRPC.SpaceCenter.Services.Vessel vessel = null)
+        {
+            if (axis == null)
+                throw new ArgumentNullException (nameof (axis));
+            Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
+            var axisVector = new Vector3 (axis.Item1, axis.Item2, axis.Item3).normalized;
+            var rotation = internalVessel.transform.rotation * Quaternion.AngleAxis (angle, axisVector);
+            internalVessel.SetRotation (rotation);
+        }
+
+        /// <summary>
         /// Set the absolute attitude of the given vessel (default: the active vessel) to the given
         /// pitch, heading and roll (degrees) in the given reference frame (default: the vessel's
-        /// surface reference frame), and zero its rotational velocity. Lets a test start from a
-        /// fixed, still pose without first flying the autopilot there. The angles match those
-        /// reported by the vessel's Flight pitch/heading/roll.
+        /// surface reference frame), and zero its rotational velocity. Lets a test start from a fixed,
+        /// still pose without first flying the autopilot there. The angles match those reported by
+        /// the vessel's Flight pitch/heading/roll.
         /// </summary>
         [KRPCProcedure]
         public static void SetPitchHeadingRoll (
@@ -287,17 +319,92 @@ namespace TestingTools
         }
 
         /// <summary>
-        /// Apply a rotation to the given vessel.
+        /// Point the given vessel (default: the active vessel) along the given direction in the
+        /// given reference frame (default: the vessel's surface reference frame), and zero its
+        /// rotational velocity. The direction sets where the nose points; pass a real
+        /// <paramref name="roll"/> (degrees) to also fix the roll, or NaN to leave it uncontrolled.
+        /// This mirrors <see cref="SetPitchHeadingRoll"/> but takes a pointing vector instead of
+        /// pitch/heading, matching the attitude the autopilot holds for the same target direction
+        /// and roll.
         /// </summary>
         [KRPCProcedure]
-        public static void ApplyRotation (float angle, Tuple<float,float,float> axis, KRPC.SpaceCenter.Services.Vessel vessel = null)
+        public static void SetDirectionAndRoll (
+            Tuple<double,double,double> direction, double roll,
+            KRPC.SpaceCenter.Services.ReferenceFrame referenceFrame = null,
+            KRPC.SpaceCenter.Services.Vessel vessel = null)
         {
-            if (axis == null)
-                throw new ArgumentNullException (nameof (axis));
-            Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
-            var axisVector = new Vector3 (axis.Item1, axis.Item2, axis.Item3).normalized;
-            var rotation = internalVessel.transform.rotation * Quaternion.AngleAxis (angle, axisVector);
-            internalVessel.SetRotation (rotation);
+            if (direction == null)
+                throw new ArgumentNullException (nameof (direction));
+            var serviceVessel = vessel ?? new KRPC.SpaceCenter.Services.Vessel (FlightGlobals.ActiveVessel);
+            var internalVessel = serviceVessel.InternalVessel;
+            var frame = referenceFrame ?? serviceVessel.SurfaceReferenceFrame;
+            var dir = new Vector3d (direction.Item1, direction.Item2, direction.Item3).normalized;
+            // Point the vessel's forward (local up) along the target direction. When a roll is
+            // requested, rebuild the rotation from the equivalent pitch/heading plus that roll, the
+            // same chain the autopilot uses when a roll is set on top of a target direction.
+            var inFrame = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.FromToRotation (
+                Vector3d.up, dir);
+            if (!double.IsNaN (roll)) {
+                var phr = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.PitchHeadingRoll (inFrame);
+                inFrame = KRPC.SpaceCenter.ExtensionMethods.GeometryExtensions.QuaternionFromPitchHeadingRoll (
+                    new Vector3d (phr.x, phr.y, roll));
+            }
+            internalVessel.SetRotation ((Quaternion)frame.RotationToWorldSpace (inFrame));
+            ZeroAngularVelocity (internalVessel);
+        }
+
+        /// <summary>
+        /// Set the angular velocity of the given vessel (default: the active vessel), expressed in
+        /// the given reference frame (default: the vessel's surface reference frame). The whole
+        /// assembly is put into a rigid rotation about its centre of mass — every part rigidbody
+        /// gets the commanded spin and the linear velocity it would have under that rotation — so
+        /// the craft spins in place rather than shearing apart or translating. Intended for tests
+        /// that need a deterministic, repeatable "nudge", e.g. injecting a tangential spin to probe
+        /// the autopilot's precession / limit-cycle behaviour.
+        /// </summary>
+        [KRPCProcedure]
+        public static void ApplyAngularVelocity (
+            Tuple<double,double,double> angularVelocity,
+            KRPC.SpaceCenter.Services.ReferenceFrame referenceFrame = null,
+            KRPC.SpaceCenter.Services.Vessel vessel = null)
+        {
+            if (angularVelocity == null)
+                throw new ArgumentNullException (nameof (angularVelocity));
+            var serviceVessel = vessel ?? new KRPC.SpaceCenter.Services.Vessel (FlightGlobals.ActiveVessel);
+            var internalVessel = serviceVessel.InternalVessel;
+            if (!internalVessel.loaded)
+                return;
+            var frame = referenceFrame ?? serviceVessel.SurfaceReferenceFrame;
+            var commanded = new Vector3d (angularVelocity.Item1, angularVelocity.Item2, angularVelocity.Item3);
+            var worldAngularVelocity = (Vector3)frame.AngularVelocityToWorldSpace (commanded);
+
+            // Centre of mass position and velocity of the loaded assembly.
+            var momentum = Vector3.zero;
+            var comPosition = Vector3.zero;
+            var totalMass = 0f;
+            foreach (var part in internalVessel.parts) {
+                var rb = part.rb;
+                if (rb == null)
+                    continue;
+                momentum += rb.velocity * rb.mass;
+                comPosition += rb.worldCenterOfMass * rb.mass;
+                totalMass += rb.mass;
+            }
+            if (totalMass <= 0f)
+                return;
+            var comVelocity = momentum / totalMass;
+            comPosition /= totalMass;
+
+            // Rigid-body kinematics: v_part = v_com + omega x (r_part - r_com). Setting the per-part
+            // velocities consistently avoids injecting spurious internal stress that would excite
+            // structural modes (important for the flexible test craft).
+            foreach (var part in internalVessel.parts) {
+                var rb = part.rb;
+                if (rb == null)
+                    continue;
+                rb.angularVelocity = worldAngularVelocity;
+                rb.velocity = comVelocity + Vector3.Cross (worldAngularVelocity, rb.worldCenterOfMass - comPosition);
+            }
         }
 
         static void WaitForVesselSwitch (int tick)

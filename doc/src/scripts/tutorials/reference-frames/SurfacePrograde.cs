@@ -12,9 +12,9 @@ class SurfacePrograde
 
             ap.ReferenceFrame = vessel.SurfaceVelocityReferenceFrame;
             ap.TargetDirection = new Tuple<double,double,double> (0, 1, 0);
-            ap.Engage ();
+            ap.Engaged = true;
             ap.Wait ();
-            ap.Disengage ();
+            ap.Engaged = false;
         }
     }
 }

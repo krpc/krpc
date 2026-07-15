@@ -18,28 +18,28 @@ int main() {
   krpc_SpaceCenter_AutoPilot_t ap;
   krpc_SpaceCenter_Vessel_AutoPilot(conn, &ap, vessel);
   krpc_SpaceCenter_AutoPilot_set_ReferenceFrame(conn, ap, vessel_srf_ref);
-  krpc_SpaceCenter_AutoPilot_Engage(conn, ap);
+  krpc_SpaceCenter_AutoPilot_set_Engaged(conn, ap, true);
 
   // Point the vessel north on the navball, with a pitch of 0 degrees
   {
     krpc_tuple_double_double_double_t direction = { 0, 1, 0 };
     krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, ap, &direction);
-    krpc_SpaceCenter_AutoPilot_Wait(conn, ap);
+    krpc_SpaceCenter_AutoPilot_Wait(conn, ap, -1);
   }
 
   // Point the vessel vertically upwards on the navball
   {
     krpc_tuple_double_double_double_t direction = { 1, 0, 0 };
     krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, ap, &direction);
-    krpc_SpaceCenter_AutoPilot_Wait(conn, ap);
+    krpc_SpaceCenter_AutoPilot_Wait(conn, ap, -1);
   }
 
   // Point the vessel west (heading of 270 degrees), with a pitch of 0 degrees
   {
     krpc_tuple_double_double_double_t direction = { 0, 0, -1 };
     krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, ap, &direction);
-    krpc_SpaceCenter_AutoPilot_Wait(conn, ap);
+    krpc_SpaceCenter_AutoPilot_Wait(conn, ap, -1);
   }
 
-  krpc_SpaceCenter_AutoPilot_Disengage(conn, ap);
+  krpc_SpaceCenter_AutoPilot_set_Engaged(conn, ap, false);
 }

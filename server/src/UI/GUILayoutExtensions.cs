@@ -1,3 +1,5 @@
+#pragma warning disable 1591
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -5,7 +7,7 @@ using UnityEngine;
 
 namespace KRPC.UI
 {
-    static class GUILayoutExtensions
+    public static class GUILayoutExtensions
     {
         public static void Init (GameObject gameObject)
         {

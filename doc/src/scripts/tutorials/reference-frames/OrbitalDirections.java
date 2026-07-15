@@ -15,21 +15,21 @@ public class OrbitalDirections {
         Vessel vessel = spaceCenter.getActiveVessel();
         AutoPilot ap = vessel.getAutoPilot();
         ap.setReferenceFrame(vessel.getOrbitalReferenceFrame());
-        ap.engage();
+        ap.setEngaged(true);
 
         // Point the vessel in the prograde direction
         ap.setTargetDirection(new Triplet<Double,Double,Double> (0.0, 1.0, 0.0));
-        ap.wait_();
+        ap.wait_(-1);
 
         // Point the vessel in the orbit normal direction
         ap.setTargetDirection(new Triplet<Double,Double,Double> (0.0, 0.0, 1.0));
-        ap.wait_();
+        ap.wait_(-1);
 
         // Point the vessel in the orbit radial direction
         ap.setTargetDirection(new Triplet<Double,Double,Double> (-1.0, 0.0, 0.0));
-        ap.wait_();
+        ap.wait_(-1);
 
-        ap.disengage();
+        ap.setEngaged(false);
         connection.close();
     }
 }

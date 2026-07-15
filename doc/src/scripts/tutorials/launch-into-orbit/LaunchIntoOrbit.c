@@ -42,7 +42,7 @@ int main() {
   printf("Launch!\n");
 
   krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
-  krpc_SpaceCenter_AutoPilot_Engage(conn, auto_pilot);
+  krpc_SpaceCenter_AutoPilot_set_Engaged(conn, auto_pilot, true);
   krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90, 90);
 
   bool srbs_separated = false;
@@ -133,7 +133,7 @@ int main() {
   krpc_SpaceCenter_AutoPilot_set_ReferenceFrame(conn, auto_pilot, node_ref);
   krpc_tuple_double_double_double_t burn_direction = {0, 1, 0};
   krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, auto_pilot, &burn_direction);
-  krpc_SpaceCenter_AutoPilot_Wait(conn, auto_pilot);
+  krpc_SpaceCenter_AutoPilot_Wait(conn, auto_pilot, -1);
 
   printf("Waiting until circularization burn\n");
   krpc_SpaceCenter_UT(conn, &ut);

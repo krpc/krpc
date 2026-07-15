@@ -24,7 +24,7 @@ public class SubOrbitalFlight {
     SpaceCenter.Vessel vessel = spaceCenter.getActiveVessel();
 
     vessel.getAutoPilot().targetPitchAndHeading(90, 90);
-    vessel.getAutoPilot().engage();
+    vessel.getAutoPilot().setEngaged(true);
     vessel.getControl().setThrottle(1);
     Thread.sleep(1000);
 
@@ -78,7 +78,7 @@ public class SubOrbitalFlight {
     vessel.getControl().setThrottle(0);
     Thread.sleep(1000);
     vessel.getControl().activateNextStage();
-    vessel.getAutoPilot().disengage();
+    vessel.getAutoPilot().setEngaged(false);
 
     {
       ProcedureCall srfAltitude = connection.getCall(

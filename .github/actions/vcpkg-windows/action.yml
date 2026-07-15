@@ -4,17 +4,27 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: get-vcpkg-hash
-      id: vcpkg-hash
+    - name: cache-key
+      id: cache-key
       shell: pwsh
+      env:
+        PACKAGES: ${{ inputs.packages }}
       run: |
-        $commitHash = ((vcpkg version)[0] -split ' ')[-1]
-        echo "value=$commitHash" >> $env:GITHUB_OUTPUT
+        $commit = ((vcpkg version)[0] -split ' ')[-1]
+        $parts = @('vcpkg', 'windows', $env:ImageOS, $env:ImageVersion, $commit, $env:PACKAGES)
+        Write-Host 'cache key inputs:'
+        $parts | ForEach-Object { Write-Host "  $_" }
+        $info = $parts -join "`n"
+        $hash = [BitConverter]::ToString(
+          [Security.Cryptography.SHA256]::Create().ComputeHash(
+            [Text.Encoding]::UTF8.GetBytes($info))).Replace('-', '').ToLower()
+        Write-Host "cache key: vcpkg-$hash"
+        echo "hash=$hash" >> $env:GITHUB_OUTPUT
     - name: cache-vcpkg
       uses: actions/cache@v5
       with:
         path: C:\vcpkg-binary-cache
-        key: ${{ github.job }}-vcpkg-${{ steps.vcpkg-hash.outputs.value }}
+        key: vcpkg-${{ steps.cache-key.outputs.hash }}
     - name: install-deps
       shell: pwsh
       env:

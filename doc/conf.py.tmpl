@@ -8,6 +8,7 @@ master_doc = 'index'
 source_suffix = '.rst'
 extensions = [
     'sphinx.ext.mathjax',
+    'sphinx.ext.graphviz',
     'sphinx.ext.todo',
     'sphinx.ext.extlinks',
     'sphinxcontrib.spelling',
@@ -18,6 +19,9 @@ extensions = [
     'javasphinx'
 ]
 templates_path = ['_templates']
+
+# Render Graphviz diagrams as SVG in HTML so they stay crisp when scaled.
+graphviz_output_format = 'svg'
 
 pygments_style = 'sphinx'
 html_theme = 'sphinx_rtd_theme'

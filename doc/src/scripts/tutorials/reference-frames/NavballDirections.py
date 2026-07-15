@@ -4,7 +4,7 @@ conn = krpc.connect(name="Navball directions")
 vessel = conn.space_center.active_vessel
 ap = vessel.auto_pilot
 ap.reference_frame = vessel.surface_reference_frame
-ap.engage()
+ap.engaged = True
 
 # Point the vessel north on the navball, with a pitch of 0 degrees
 ap.target_direction = (0, 1, 0)
@@ -18,4 +18,4 @@ ap.wait()
 ap.target_direction = (0, 0, -1)
 ap.wait()
 
-ap.disengage()
+ap.engaged = False

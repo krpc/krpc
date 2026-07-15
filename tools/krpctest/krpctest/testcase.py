@@ -242,6 +242,10 @@ class TestCase(AssertionsMixin):
         cls.connect().testing_tools.fill_all_resources()
 
     @classmethod
+    def fill_resources(cls, resource_name):
+        cls.connect().testing_tools.fill_resources(resource_name)
+
+    @classmethod
     def set_crew_to_pilot(cls):
         cls.connect().testing_tools.set_crew_to_pilot()
 

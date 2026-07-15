@@ -7,7 +7,7 @@ int main() {
   auto vessel = space_center.active_vessel();
   auto ap = vessel.auto_pilot();
   ap.set_reference_frame(vessel.orbital_reference_frame());
-  ap.engage();
+  ap.set_engaged(true);
 
   // Point the vessel in the prograde direction
   ap.set_target_direction(std::make_tuple(0, 1, 0));
@@ -21,5 +21,5 @@ int main() {
   ap.set_target_direction(std::make_tuple(-1, 0, 0));
   ap.wait();
 
-  ap.disengage();
+  ap.set_engaged(false);
 }

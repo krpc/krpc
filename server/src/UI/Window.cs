@@ -1,10 +1,12 @@
+#pragma warning disable 1591
+
 using System;
 using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.UI
 {
-    abstract class Window : MonoBehaviour
+    public abstract class Window : MonoBehaviour
     {
         int id;
         bool hasInit;

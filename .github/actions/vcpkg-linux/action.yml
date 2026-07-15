@@ -1,12 +1,24 @@
+inputs:
+  packages:
+    required: true
 runs:
   using: composite
   steps:
-    - name: get-vcpkg-hash
-      id: vcpkg-hash
+    - name: cache-key
+      id: cache-key
       shell: bash
-      run: echo "value=$(vcpkg version | head -n1 | awk '{print $NF}')" >> "$GITHUB_OUTPUT"
+      env:
+        PACKAGES: ${{ inputs.packages }}
+      run: |
+        commit=$(vcpkg version | head -n1 | awk '{print $NF}')
+        info=$(printf '%s\n' vcpkg linux "$ImageOS" "$ImageVersion" "$commit" "$PACKAGES")
+        echo 'cache key inputs:'
+        printf '%s\n' "$info" | sed 's/^/  /'
+        hash=$(printf '%s' "$info" | sha256sum | cut -d' ' -f1)
+        echo "cache key: vcpkg-$hash"
+        echo "hash=$hash" >> "$GITHUB_OUTPUT"
     - name: cache-vcpkg
       uses: actions/cache@v5
       with:
         path: ~/.cache/vcpkg
-        key: ${{ github.job }}-vcpkg-${{ steps.vcpkg-hash.outputs.value }}
+        key: vcpkg-${{ steps.cache-key.outputs.hash }}

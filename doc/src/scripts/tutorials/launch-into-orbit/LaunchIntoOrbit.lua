@@ -29,7 +29,7 @@ print('Launch!')
 
 -- Activate the first stage
 vessel.control:activate_next_stage()
-vessel.auto_pilot:engage()
+vessel.auto_pilot.engaged = true
 vessel.auto_pilot:target_pitch_and_heading(90, 90)
 
 -- Main ascent loop

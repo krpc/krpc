@@ -51,7 +51,11 @@
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AutoPilot\AttitudeController.cs" />
-    <Compile Include="AutoPilot\AttitudeError.cs" />
+    <Compile Include="AutoPilot\DiagnosticLogBuffer.cs" />
+    <Compile Include="AutoPilot\MitigationPolicy.cs" />
+    <Compile Include="AutoPilot\OscillationDetectors.cs" />
+    <Compile Include="AutoPilot\OscillationFilters.cs" />
+    <Compile Include="AutoPilot\OscillationMitigations.cs" />
     <Compile Include="AutoPilot\PIDController.cs" />
     <Compile Include="ExtensionMethods\ActionGroupExtensions.cs" />
     <Compile Include="ExtensionMethods\AlarmMessageActionExtensions.cs" />
@@ -93,6 +97,8 @@
     <Compile Include="NameTag\Window.cs" />
     <Compile Include="PartForcesAddon.cs" />
     <Compile Include="PartHighlightAddon.cs" />
+    <Compile Include="AutoPilotInfoAddon.cs" />
+    <Compile Include="AutoPilotInfoWindow.cs" />
     <Compile Include="PilotAddon.cs" />
     <Compile Include="ResourceTransferAddon.cs" />
     <Compile Include="Services\Alarm.cs" />
@@ -125,6 +131,7 @@
     <Compile Include="Services\Flight.cs" />
     <Compile Include="Services\GameMode.cs" />
     <Compile Include="Services\MapFilterType.cs" />
+    <Compile Include="Services\MitigationMode.cs" />
     <Compile Include="Services\Node.cs" />
     <Compile Include="Services\Orbit.cs" />
     <Compile Include="Services\Parts\ActionGroupAction.cs" />
@@ -182,6 +189,7 @@
     <Compile Include="Services\Parts\ThrustReverser.cs" />
     <Compile Include="Services\Parts\Wheel.cs" />
     <Compile Include="Services\Parts\WheelState.cs" />
+    <Compile Include="Services\RateFilterMode.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />
     <Compile Include="Services\ReferenceFrameType.cs" />
     <Compile Include="Services\Resource.cs" />

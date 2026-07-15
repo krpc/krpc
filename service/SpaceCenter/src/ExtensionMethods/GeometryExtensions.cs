@@ -304,6 +304,157 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Double-precision rotation from one vector to another.
+        /// Uses the half-angle trick: q = (cross, 1 + dot), normalized.
+        /// Handles near-antiparallel vectors by picking an arbitrary perpendicular axis.
+        /// </summary>
+        public static QuaternionD FromToRotation (Vector3d from, Vector3d to)
+        {
+            from = from.normalized;
+            to = to.normalized;
+            var dot = Vector3d.Dot (from, to);
+            if (dot >= 1.0 - 1e-10)
+                return QuaternionD.identity;
+            if (dot <= -1.0 + 1e-10) {
+                // 180° rotation — pick an arbitrary perpendicular axis
+                var perp = Math.Abs (from.x) < 0.9 ? Vector3d.Cross (from, Vector3d.right) : Vector3d.Cross (from, Vector3d.up);
+                perp.Normalize ();
+                return new QuaternionD (perp.x, perp.y, perp.z, 0);
+            }
+            var axis = Vector3d.Cross (from, to);
+            return new QuaternionD (axis.x, axis.y, axis.z, 1.0 + dot).Normalize ();
+        }
+
+        /// <summary>
+        /// Double-precision rotation of <paramref name="angle"/> degrees about <paramref name="axis"/>
+        /// (right-handed). Mirrors Unity's <c>Quaternion.AngleAxis</c> (angle first).
+        /// </summary>
+        public static QuaternionD AngleAxis (double angle, Vector3d axis)
+        {
+            axis = axis.normalized;
+            var half = ToRadians (angle) * 0.5;
+            var s = Math.Sin (half);
+            return new QuaternionD (axis.x * s, axis.y * s, axis.z * s, Math.Cos (half));
+        }
+
+        /// <summary>
+        /// The signed angle, in degrees, to rotate <paramref name="from"/> onto <paramref name="to"/>
+        /// about <paramref name="axis"/> (right-handed: positive when <c>from × to</c> points along
+        /// <paramref name="axis"/>). Both vectors are projected onto the plane perpendicular to the
+        /// axis first; returns 0 if either projection vanishes.
+        /// </summary>
+        public static double SignedAngle (Vector3d from, Vector3d to, Vector3d axis)
+        {
+            axis = axis.normalized;
+            var f = from - Vector3d.Dot (from, axis) * axis;
+            var t = to - Vector3d.Dot (to, axis) * axis;
+            if (f.magnitude < 1e-10 || t.magnitude < 1e-10)
+                return 0.0;
+            f.Normalize ();
+            t.Normalize ();
+            var unsigned = ToDegrees (Math.Acos (Vector3d.Dot (f, t).Clamp (-1.0, 1.0)));
+            return Vector3d.Dot (axis, Vector3d.Cross (f, t)) < 0 ? -unsigned : unsigned;
+        }
+
+        /// <summary>
+        /// Double-precision quaternion to angle-axis decomposition.
+        /// Angle is returned in degrees (matching Unity convention).
+        /// </summary>
+        public static void ToAngleAxis (this QuaternionD q, out double angle, out Vector3d axis)
+        {
+            q = q.Normalize ();
+            var w = q.w.Clamp (-1.0, 1.0);
+            var sinHalfAngle = Math.Sqrt (1.0 - w * w);
+            angle = ToDegrees (2.0 * Math.Acos (w));
+            if (sinHalfAngle < 1e-10) {
+                axis = Vector3d.up;
+                angle = 0;
+            } else {
+                axis = new Vector3d (q.x / sinHalfAngle, q.y / sinHalfAngle, q.z / sinHalfAngle);
+            }
+        }
+
+        /// <summary>
+        /// Canonicalize a rotation quaternion's sign so that <c>q</c> and <c>-q</c> — which are the
+        /// same rotation — decompose identically. <see cref="ToAngleAxis"/> maps them to opposite
+        /// axes at exactly 180 degrees (where w is zero), which flips the sign of the decomposed
+        /// axis*angle vector. Choose w &gt;= 0, and at w == 0 make the largest-magnitude component
+        /// positive, so the axis is deterministic and does not flip under noise in a minor component.
+        /// For any rotation away from 180 degrees this leaves the resulting axis*angle vector
+        /// unchanged (ToAngleAxis followed by <see cref="ClampAngle180"/> already canonicalizes those);
+        /// it only disambiguates the 180-degree singular point.
+        /// </summary>
+        public static QuaternionD CanonicalSign (this QuaternionD q)
+        {
+            if (q.w < 0 || (q.w == 0 && LargestComponentIsNegative (q.x, q.y, q.z)))
+                return new QuaternionD (-q.x, -q.y, -q.z, -q.w);
+            return q;
+        }
+
+        static bool LargestComponentIsNegative (double x, double y, double z)
+        {
+            var absX = Math.Abs (x);
+            var absY = Math.Abs (y);
+            var absZ = Math.Abs (z);
+            if (absX >= absY && absX >= absZ)
+                return x < 0;
+            if (absY >= absZ)
+                return y < 0;
+            return z < 0;
+        }
+
+        /// <summary>
+        /// Spherical linear interpolation between two unit quaternions, along the shortest geodesic
+        /// (constant angular velocity). t is clamped to [0,1]. Reimplemented here (rather than using
+        /// the stubbed KSP QuaternionD.Slerp) using the half-angle of the delta rotation, so it works
+        /// against the stripped stub DLLs as well as the real in-game QuaternionD.
+        /// </summary>
+        public static QuaternionD Slerp (QuaternionD from, QuaternionD to, double t)
+        {
+            if (t <= 0)
+                return from;
+            if (t >= 1)
+                return to;
+            var delta = to * from.Inverse ();
+            double angle;
+            Vector3d axis;
+            ToAngleAxis (delta, out angle, out axis);
+            angle = ClampAngle180 (angle);
+            // ToAngleAxis collapses a near-zero rotation to angle=0 (unit axis), so no need to guard
+            // against an infinite/degenerate axis here.
+            if (Math.Abs (angle) < 1e-9)
+                return to;
+            var half = ToRadians (angle * t) * 0.5;
+            var s = Math.Sin (half);
+            var partial = new QuaternionD (axis.x * s, axis.y * s, axis.z * s, Math.Cos (half)).Normalize ();
+            return (partial * from).Normalize ();
+        }
+
+        /// <summary>
+        /// The angle, in degrees, of the shortest rotation between two unit quaternions.
+        /// </summary>
+        public static double Angle (QuaternionD a, QuaternionD b)
+        {
+            var delta = b * a.Inverse ();
+            double angle;
+            Vector3d axis;
+            ToAngleAxis (delta, out angle, out axis);
+            return Math.Abs (ClampAngle180 (angle));
+        }
+
+        /// <summary>
+        /// Rotate from one orientation toward another by at most maxDegrees (along the shortest
+        /// geodesic). Reaches and clamps at <paramref name="to"/> once within maxDegrees.
+        /// </summary>
+        public static QuaternionD RotateTowards (QuaternionD from, QuaternionD to, double maxDegrees)
+        {
+            var angle = Angle (from, to);
+            if (angle <= maxDegrees || angle < 1e-9)
+                return to;
+            return Slerp (from, to, maxDegrees / angle);
+        }
+
+        /// <summary>
         /// Normalize a quaternion to unit length.
         /// </summary>
         public static QuaternionD Normalize (this QuaternionD q)

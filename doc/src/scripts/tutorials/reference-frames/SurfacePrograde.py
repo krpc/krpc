@@ -6,6 +6,6 @@ ap = vessel.auto_pilot
 
 ap.reference_frame = vessel.surface_velocity_reference_frame
 ap.target_direction = (0, 1, 0)
-ap.engage()
+ap.engaged = True
 ap.wait()
-ap.disengage()
+ap.engaged = False
