@@ -1,15 +1,27 @@
-build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
+# Apply the build:<os> groups below automatically, keyed on the host OS, so the
+# right C++ flags reach clang/gcc (Linux, macOS) versus MSVC (Windows) without
+# every invocation having to pass --config.
+common --enable_platform_specific_config
+
+# C++17 for every C++ compile, spelled for the active compiler: clang/gcc take
+# -std=c++17, MSVC takes /std:c++17.
+build:linux --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
+build:macos --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
+build:windows --cxxopt=/std:c++17 --host_cxxopt=/std:c++17
 
 # The LLVM toolchain adds -stdlib=libc++ to every C++ compile; clang treats it as
 # a link-phase flag and warns it is "unused during compilation" on each .cc file
 # (noisy across the third-party gtest/protobuf builds). Suppress that one benign
-# warning for both the target and exec (`[for tool]`) configurations.
-build --cxxopt=-Wno-unused-command-line-argument --host_cxxopt=-Wno-unused-command-line-argument
+# warning for both the target and exec (`[for tool]`) configurations. MSVC does
+# not use libc++, so Windows omits it.
+build:linux --cxxopt=-Wno-unused-command-line-argument --host_cxxopt=-Wno-unused-command-line-argument
+build:macos --cxxopt=-Wno-unused-command-line-argument --host_cxxopt=-Wno-unused-command-line-argument
+
 build --java_runtime_version=remotejdk_11
 
 # Windows: rules_dotnet (and the symlink-based staging rules) need real symlinks
-# and runfiles trees. The startup flag is a no-op off Windows; pass
-# `--config=windows` on Windows builds for the rest.
+# and runfiles trees. The startup flag is a no-op off Windows; the windows config
+# group is auto-selected on Windows hosts (and CI also passes --config=windows).
 startup --windows_enable_symlinks
 common:windows --enable_runfiles
 
