@@ -4,7 +4,7 @@
 
 --entry adds a single file as ARCNAME. --tree adds every file under DIR at its
 path relative to DIR. Entries are sorted and stamped with a fixed timestamp so
-the archive is reproducible. Cross-platform replacement for the system `zip`.
+the archive is reproducible, with no dependency on a system `zip`.
 """
 
 import argparse

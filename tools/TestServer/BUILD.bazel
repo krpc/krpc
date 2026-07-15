@@ -74,8 +74,7 @@ csharp_binary(
 
 # Published (framework-dependent) layout of TestServer for the release
 # archive; requires the .NET 8 runtime to be installed to run.
-# TODO: publish per-platform archives when Windows support lands (phase 7 of
-# the build system migration).
+# TODO: publish per-platform archives when Windows support lands.
 publish_binary(
     name = "publish",
     binary = ":TestServer",

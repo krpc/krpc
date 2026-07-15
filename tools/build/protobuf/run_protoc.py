@@ -1,8 +1,8 @@
 """Runs protoc into a scratch directory and copies/rewrites the generated files.
 
-Cross-platform replacement for the protobuf codegen rules' shell orchestration
-(mkdir -p / cp / sed / find). All paths are relative to the Bazel exec root,
-which is the action's working directory.
+Drives the protobuf codegen rules' file orchestration portably, in one step. All
+paths are relative to the Bazel exec root, which is the action's working
+directory.
 
 Steps run in this fixed order:
   --mkdir DIR       recreate DIR (rm -rf then mkdir -p)      (repeatable)

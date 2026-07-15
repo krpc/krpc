@@ -1,8 +1,7 @@
 """pytest plugin for the kRPC integration tests.
 
 Registered via the ``pytest11`` entry point (see pyproject.toml), so it loads automatically
-whenever pytest runs with krpctest installed. It replaces the old custom runner
-(``krpctest.__main__``) with two small pieces of behaviour:
+whenever pytest runs with krpctest installed. It adds two small pieces of behaviour:
 
  * a ``--ksp-dir`` option that points the framework at a KSP install, and
  * ordering the collected tests by their required mods so KSP is restarted at most once per

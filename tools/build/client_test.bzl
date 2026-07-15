@@ -96,8 +96,6 @@ _client_test = rule(
 def client_test(**kwargs):
     # The integration harness is a generated bash script that drives TestServer
     # (and socat for the serial transport), so it is Linux-only by design.
-    # Making the harness cross-platform is out of scope (see the build-system
-    # migration design doc, Phase 8).
     _client_test(
         target_compatible_with = ["@platforms//os:linux"],
         **kwargs

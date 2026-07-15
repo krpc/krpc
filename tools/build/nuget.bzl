@@ -88,8 +88,7 @@ def _nuget_package_impl(ctx):
     ])
 
     # A .nupkg is an OPC zip. Write the generated XML parts to files and archive
-    # them (with the pinned assemblies) via the cross-platform write_zip helper,
-    # so no shell mkdir/cp/cat/zip is needed.
+    # them, with the pinned assemblies, via the write_zip helper.
     content_types_file = ctx.actions.declare_file(ctx.attr.id + ".Content_Types.xml")
     ctx.actions.write(output = content_types_file, content = content_types)
     rels_file = ctx.actions.declare_file(ctx.attr.id + ".rels")

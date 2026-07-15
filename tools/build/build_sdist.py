@@ -4,8 +4,7 @@
 
 The staging tree contains symlinks; copy it dereferencing them into the build
 dir (hatchling needs real files), run `hatchling build -t sdist` there, and copy
-the resulting tarball to OUT. Cross-platform replacement for the sdist rule's
-`cp -rL` / `cd` / hatchling shell pipeline.
+the resulting tarball to OUT.
 """
 
 import argparse

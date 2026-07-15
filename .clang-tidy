@@ -1,7 +1,7 @@
 ---
 # clang-tidy configuration for the C++ (client/cpp) and C (client/cnano)
-# clients. Replaces the cppcheck --check-config gate and takes over cpplint's
-# non-formatting style checks (formatting moves to clang-format).
+# clients. Covers non-formatting style and correctness checks; formatting is
+# handled separately by clang-format.
 Checks: >
   bugprone-*,
   performance-*,
@@ -19,8 +19,7 @@ WarningsAsErrors: '*'
 #  * bugprone-assignment-in-if-condition — the KRPC_RETURN_ON_ERROR family of
 #    macros expands to an assignment inside an if; pervasive and intentional.
 #  * bugprone-macro-parentheses — the cnano struct-init / KRPC_FREE_* macros take
-#    a plain lvalue and use it as `x.member`; parenthesising reads worse and
-#    cpplint did not require it.
+#    a plain lvalue and use it as `x.member`; parenthesising reads worse here.
 #  * performance-no-int-to-ptr — the cnano connection handle is stashed in
 #    nanopb's void* stream arg via the correct (void*)(intptr_t) idiom.
 # Only diagnose our own hand-written sources, not third-party headers (asio,

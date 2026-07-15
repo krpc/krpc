@@ -89,8 +89,7 @@ import_dll(
 )
 
 # Copies of DLLs that are shipped in release archives or staged into other
-# packages. These reproduce the output paths of the old csharp_reference
-# targets (tools/build/ksp/<name>.dll) so packaging path maps are unchanged.
+# packages, exposed at tools/build/ksp/<name>.dll for the packaging path maps.
 
 copy_file(
     name = "Google.Protobuf-file",

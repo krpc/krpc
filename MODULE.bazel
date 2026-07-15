@@ -94,9 +94,9 @@ http_archive(
 # ----------------------- KSP libraries --------------------------------------------------
 
 # Stripped KSP assemblies to compile the mod against, downloaded from the ksp-lib
-# repo (the same archive CI previously unpacked into lib/ksp). The archive lays
-# the managed DLLs out under KSP_Data/Managed/; the build references them via
-# //tools/build/ksp. Keep the version in step with config.bzl's ksp_version_*.
+# repo. The archive lays the managed DLLs out under KSP_Data/Managed/; the build
+# references them via //tools/build/ksp. Keep the version in step with
+# config.bzl's ksp_version_*.
 http_archive(
     name = "ksp",
     build_file_content = "exports_files(glob(['KSP_Data/Managed/*.dll']))",

@@ -53,7 +53,7 @@ import_dll(
 # System.IO.Ports needs the unix runtime assembly and native shim at runtime;
 # the lib/ assembly is only used at compile time.
 # TODO: select() the win runtime assembly and drop the native lib when
-# building for Windows (phase 7 of the build system migration).
+# building for Windows.
 import_library(
     name = "System.IO.Ports",
     library_name = "System.IO.Ports",

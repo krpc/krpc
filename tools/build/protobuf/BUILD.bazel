@@ -4,8 +4,7 @@ package(default_visibility = ["//visibility:public"])
 
 exports_files(["LICENSE"])
 
-# Cross-platform driver for the codegen rules: runs protoc and copies/rewrites
-# its output (replaces the rules' mkdir/cp/sed shell orchestration).
+# Driver for the codegen rules: runs protoc and copies/rewrites its output.
 py_binary(
     name = "run_protoc",
     srcs = ["run_protoc.py"],
@@ -60,10 +59,8 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-# Key the Windows protoc on the target OS like the other platforms, rather than
-# on the C++ `compiler` value (windows_mingw/msys64/clang). The compiler-keyed
-# settings never matched a default MSVC or hermetic-clang Windows build, so the
-# select had no matching condition there.
+# The windows config_setting keys on the target OS (like darwin/linux below), so
+# it resolves for any Windows build regardless of the C++ compiler in use.
 config_setting(
     name = "windows",
     constraint_values = ["@platforms//os:windows"],

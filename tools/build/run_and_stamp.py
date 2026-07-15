@@ -1,7 +1,7 @@
 """Runs a command and, on success, writes a stamp file.
 
-Cross-platform replacement for the `<tool> ... && touch <stamp>` shell idiom
-used by the clang-tidy / clang-format lint rules. Usage:
+Used by the clang-tidy / clang-format lint rules to gate a stamp file on the
+tool succeeding, portably across platforms. Usage:
 
     run_and_stamp.py <stamp> <tool> [tool args...]
 
