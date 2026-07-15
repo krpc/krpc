@@ -78,6 +78,7 @@ csharp_library(
         ":AssemblyInfo",
         "//protobuf:csharp",
     ],
+    out = "KRPC.Core",
     internals_visible_to = [
         "KRPC.Core.Test",
         "DynamicProxyGenAssembly2",
@@ -86,7 +87,6 @@ csharp_library(
     # assemblies; unification handles this at runtime (MSBuild suppresses
     # this warning by default)
     nowarn = ["CS1701"],
-    out = "KRPC.Core",
     target_frameworks = ["net8.0"],
     treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
@@ -120,6 +120,7 @@ csharp_nunit_test(
     name = "test-KRPC.Core",
     size = "small",
     srcs = glob(["test/**/*.cs"]) + [":TestAssemblyInfo"],
+    out = "KRPC.Core.Test",
     defines = ["CODE_ANALYSIS"],
     # CS1701: Google.Protobuf/Newtonsoft.Json/Moq reference net5/6-era framework
     # assemblies; unification handles this at runtime (MSBuild suppresses this
@@ -129,7 +130,6 @@ csharp_nunit_test(
         "CS1685",
         "CS1701",
     ],
-    out = "KRPC.Core.Test",
     target_frameworks = ["net8.0"],
     visibility = ["//:__pkg__"],
     deps = [

@@ -1,7 +1,7 @@
 load("@rules_dotnet//dotnet:defs.bzl", "csharp_library", "csharp_nunit_test")
 load("//:config.bzl", "assembly_version", "author", "nuget_version", "version")
-load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
+load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:nuget.bzl", "nuget_package")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/krpctools:clientgen.bzl", "clientgen_csharp")
@@ -98,6 +98,7 @@ csharp_library(
 csharp_library(
     name = "KRPC.Client.net8",
     srcs = srcs,
+    out = "KRPC.Client",
     internals_visible_to = ["KRPC.Client.Test"],
     # CS1701: Google.Protobuf's net5.0 build references net5-era framework
     # assemblies; unification handles this at runtime (MSBuild suppresses
@@ -106,7 +107,6 @@ csharp_library(
         "CS1685",
         "CS1701",
     ],
-    out = "KRPC.Client",
     target_frameworks = ["net8.0"],
     treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
@@ -220,6 +220,7 @@ csharp_nunit_test(
     name = "test-KRPC.Client",
     size = "small",
     srcs = glob(["test/**/*.cs"]) + [":TestAssemblyInfo"] + [":services-testservice"],
+    out = "KRPC.Client.Test",
     defines = ["CODE_ANALYSIS"],
     # CS1701: Google.Protobuf/Moq reference net5/6-era framework assemblies;
     # unification handles this at runtime (MSBuild suppresses this warning by
@@ -230,7 +231,6 @@ csharp_nunit_test(
         "CS1685",
         "CS1701",
     ],
-    out = "KRPC.Client.Test",
     tags = ["requires-network"],
     target_frameworks = ["net8.0"],
     visibility = ["//:__pkg__"],

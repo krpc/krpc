@@ -15,8 +15,8 @@ csharp_binary(
     warning_level = 4,
     deps = [
         "//core:KRPC.Core.net8",
-        "//tools/build/dotnet:Newtonsoft.Json",
         "//tools/build/dotnet:NDesk.Options",
+        "//tools/build/dotnet:Newtonsoft.Json",
     ],
 )
 

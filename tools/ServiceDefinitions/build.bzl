@@ -1,6 +1,7 @@
 " service definitions tool "
 
-load("@rules_dotnet//dotnet/private:providers.bzl", "DotnetAssemblyRuntimeInfo")
+# DotnetAssemblyRuntimeInfo is only available from rules_dotnet's private module.
+load("@rules_dotnet//dotnet/private:providers.bzl", "DotnetAssemblyRuntimeInfo")  # buildifier: disable=bzl-visibility
 load("//tools/build/ksp:build.bzl", "ksp_unity_libs")
 
 def _impl(ctx):

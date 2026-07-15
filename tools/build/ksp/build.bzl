@@ -17,4 +17,3 @@ ksp_unity_libs = [
     "//tools/build/ksp:UnityEngine.UIModule",
     "//tools/build/ksp:UnityEngine.UnityWebRequestWWWModule",
 ]
-

@@ -1,6 +1,7 @@
 " Builds a NuGet package from a compiled assembly "
 
-load("@rules_dotnet//dotnet/private:providers.bzl", "DotnetAssemblyRuntimeInfo")
+# DotnetAssemblyRuntimeInfo is only available from rules_dotnet's private module.
+load("@rules_dotnet//dotnet/private:providers.bzl", "DotnetAssemblyRuntimeInfo")  # buildifier: disable=bzl-visibility
 
 _NUGET_FRAMEWORK_NAMES = {
     "net45": ".NETFramework4.5",

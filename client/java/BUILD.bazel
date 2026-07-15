@@ -51,8 +51,8 @@ java_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        "@maven//:org_javatuples_javatuples",
         "@maven//:com_google_protobuf_protobuf_java",
+        "@maven//:org_javatuples_javatuples",
     ],
 )
 
@@ -62,10 +62,10 @@ java_library(
     javacopts = copts,
     deps = [
         ":krpc",
+        "@maven//:com_google_protobuf_protobuf_java",
+        "@maven//:junit_junit",
         "@maven//:org_hamcrest_hamcrest",
         "@maven//:org_javatuples_javatuples",
-        "@maven//:junit_junit",
-        "@maven//:com_google_protobuf_protobuf_java",
     ],
 )
 
@@ -78,10 +78,10 @@ java_test(
     runtime_deps = [
         ":krpc",
         ":testlib",
+        "@maven//:com_google_protobuf_protobuf_java",
+        "@maven//:junit_junit",
         "@maven//:org_hamcrest_hamcrest",
         "@maven//:org_javatuples_javatuples",
-        "@maven//:junit_junit",
-        "@maven//:com_google_protobuf_protobuf_java",
     ],
 )
 

@@ -5,7 +5,6 @@ java_binary(
     main_class = "com.puppycrawl.tools.checkstyle.Main",
     visibility = ["//visibility:public"],
     runtime_deps = ["@maven//:com_puppycrawl_tools_checkstyle"],
-
 )
 
 exports_files([
