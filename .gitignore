@@ -2,12 +2,10 @@ MODULE.bazel.lock
 /bazel-*
 .vs/
 .idea/
-lib/ksp
 generated_deps
 KRPC.userprefs
 bin
 obj
-lib/mono-4.5
 *.user
 *.pyc
 packages

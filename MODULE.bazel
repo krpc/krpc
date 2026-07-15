@@ -91,6 +91,19 @@ http_archive(
     url = "https://github.com/google/googletest/archive/refs/tags/v1.17.0.tar.gz",
 )
 
+# ----------------------- KSP libraries --------------------------------------------------
+
+# Stripped KSP assemblies to compile the mod against, downloaded from the ksp-lib
+# repo (the same archive CI previously unpacked into lib/ksp). The archive lays
+# the managed DLLs out under KSP_Data/Managed/; the build references them via
+# //tools/build/ksp. Keep the version in step with config.bzl's ksp_version_*.
+http_archive(
+    name = "ksp",
+    build_file_content = "exports_files(glob(['KSP_Data/Managed/*.dll']))",
+    sha256 = "e3de286fd4bf2993e23cc996a8fe3426aa575ea0a296376b43dd2fe289826ad8",
+    url = "https://github.com/krpc/ksp-lib/raw/main/ksp/ksp-1.12.5.zip",
+)
+
 # ----------------------- Protobuf Compiler ----------------------------------------------
 
 http_archive(

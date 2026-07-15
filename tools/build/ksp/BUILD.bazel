@@ -5,77 +5,77 @@ package(default_visibility = ["//visibility:public"])
 
 import_dll(
     name = "UnityEngine",
-    dll = "//lib:ksp/KSP_Data/Managed/UnityEngine.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.dll",
 )
 
 import_dll(
     name = "UnityEngine.AnimationModule",
-    dll = "//lib:ksp/KSP_Data/Managed/UnityEngine.AnimationModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.AnimationModule.dll",
 )
 
 import_dll(
     name = "UnityEngine.AssetBundleModule",
-    dll = "//lib:ksp/KSP_Data/Managed/UnityEngine.AssetBundleModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.AssetBundleModule.dll",
 )
 
 import_dll(
     name = "UnityEngine.CoreModule",
-    dll = "//lib:ksp/KSP_Data/Managed/UnityEngine.CoreModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.CoreModule.dll",
 )
 
 import_dll(
     name = "UnityEngine.IMGUIModule",
-    dll = "//lib:ksp/KSP_Data/Managed/UnityEngine.IMGUIModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.IMGUIModule.dll",
 )
 
 import_dll(
     name = "UnityEngine.InputLegacyModule",
-    dll = "//lib:ksp/KSP_Data/Managed/UnityEngine.InputLegacyModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.InputLegacyModule.dll",
 )
 
 import_dll(
     name = "UnityEngine.PhysicsModule",
-    dll = "//lib:ksp/KSP_Data/Managed/UnityEngine.PhysicsModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.PhysicsModule.dll",
 )
 
 import_dll(
     name = "UnityEngine.ScreenCaptureModule",
-    dll = "//lib:ksp/KSP_Data/Managed/UnityEngine.ScreenCaptureModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.ScreenCaptureModule.dll",
 )
 
 import_dll(
     name = "UnityEngine.SharedInternalsModule",
-    dll = "//lib:ksp/KSP_Data/Managed/UnityEngine.SharedInternalsModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.SharedInternalsModule.dll",
 )
 
 import_dll(
     name = "UnityEngine.TextRenderingModule",
-    dll = "//lib:ksp/KSP_Data/Managed/UnityEngine.TextRenderingModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.TextRenderingModule.dll",
 )
 
 import_dll(
     name = "UnityEngine.UI",
-    dll = "//lib:ksp/KSP_Data/Managed/UnityEngine.UI.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.UI.dll",
 )
 
 import_dll(
     name = "UnityEngine.UIModule",
-    dll = "//lib:ksp/KSP_Data/Managed/UnityEngine.UIModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.UIModule.dll",
 )
 
 import_dll(
     name = "UnityEngine.UnityWebRequestWWWModule",
-    dll = "//lib:ksp/KSP_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll",
 )
 
 import_dll(
     name = "Assembly-CSharp",
-    dll = "//lib:ksp/KSP_Data/Managed/Assembly-CSharp.dll",
+    dll = "@ksp//:KSP_Data/Managed/Assembly-CSharp.dll",
 )
 
 import_dll(
     name = "Assembly-CSharp-firstpass",
-    dll = "//lib:ksp/KSP_Data/Managed/Assembly-CSharp-firstpass.dll",
+    dll = "@ksp//:KSP_Data/Managed/Assembly-CSharp-firstpass.dll",
 )
 
 import_dll(
