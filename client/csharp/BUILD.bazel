@@ -221,10 +221,14 @@ csharp_nunit_test(
     size = "small",
     srcs = glob(["test/**/*.cs"]) + [":TestAssemblyInfo"] + [":services-testservice"],
     defines = ["CODE_ANALYSIS"],
+    # CS1701: Google.Protobuf/Moq reference net5/6-era framework assemblies;
+    # unification handles this at runtime (MSBuild suppresses this warning by
+    # default). Matches the KRPC.Core targets.
     nowarn = [
         "CS1591",
         "CS1573",
         "CS1685",
+        "CS1701",
     ],
     out = "KRPC.Client.Test",
     tags = ["requires-network"],
