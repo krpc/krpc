@@ -23,6 +23,17 @@ config_setting(
     visibility = ["//visibility:public"],
 )
 
+# toolchains_llvm only declares the clang-tidy/clang-format/include targets in
+# its Linux LLVM distribution, so on Windows these aliases resolve to the
+# non-hermetic fallbacks. The C++ lint rules are Linux-only (see
+# //tools/build:cpp.bzl), so nothing actually runs them there -- the aliases
+# just need to resolve so a Windows `bazel build //...` can analyse them.
+config_setting(
+    name = "windows",
+    constraint_values = ["@platforms//os:windows"],
+    visibility = ["//visibility:public"],
+)
+
 # clang-tidy / clang-format for the lint rules in //tools/build:cpp.bzl. Hermetic
 # mode uses the downloaded toolchain's Bazel targets; system mode execs the
 # apt.llvm.org clang-20 binaries via wrapper scripts (path-mode toolchains_llvm
@@ -33,6 +44,7 @@ alias(
     name = "clang-tidy",
     actual = select({
         ":system": ":clang-tidy-system",
+        ":windows": ":clang-tidy-system",
         "//conditions:default": "@llvm_toolchain_llvm//:clang-tidy",
     }),
     visibility = ["//visibility:public"],
@@ -42,6 +54,7 @@ alias(
     name = "clang-format",
     actual = select({
         ":system": ":clang-format-system",
+        ":windows": ":clang-format-system",
         "//conditions:default": "@llvm_toolchain_llvm//:clang-format",
     }),
     visibility = ["//visibility:public"],
@@ -64,6 +77,7 @@ alias(
     name = "include",
     actual = select({
         ":system": ":no-includes",
+        ":windows": ":no-includes",
         "//conditions:default": "@llvm_toolchain_llvm//:include",
     }),
     visibility = ["//visibility:public"],
