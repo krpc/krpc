@@ -2,12 +2,9 @@ runs:
   using: composite
   steps:
     - name: get-bazel-info
+      shell: bash
       run: |
-        import os, subprocess
-
-        version = subprocess.check_output(["bazel", "--version"]).decode().strip().partition(" ")[2]
-        print(f"version = {version}")
-
+        echo "BAZEL_VERSION=$(bazel --version | cut -d' ' -f2)" >> "$GITHUB_ENV"
         # Cache only the download archives -- /var/cache/bazel-repo/content_addressable
         # (matches `common --repository_cache` in /etc/bazel.bazelrc). We deliberately
         # do NOT cache the whole /var/cache/bazel-repo: Bazel 9 also puts a "repo
@@ -15,15 +12,7 @@ runs:
         # which must stay out of the GitHub cache. CI uses a system LLVM, so no ~2 GB
         # LLVM archive lands here -- the subdir is just the .NET SDK + misc. This
         # action only runs in the Linux buildenv container, so the path is fixed.
-        download_cache = "/var/cache/bazel-repo/content_addressable"
-        print(f"download_cache = {download_cache}")
-
-        env_file = os.getenv("GITHUB_ENV")
-        with open(env_file, "a") as fp:
-            fp.write("BAZEL_VERSION=" + version + "\n")
-            fp.write("BAZEL_DOWNLOAD_CACHE=" + download_cache + "\n")
-
-      shell: python
+        echo "BAZEL_DOWNLOAD_CACHE=/var/cache/bazel-repo/content_addressable" >> "$GITHUB_ENV"
     - name: restore-bazel-cache
       id: bazel-cache
       uses: actions/cache/restore@v5
@@ -32,10 +21,8 @@ runs:
         key: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel') }}
     - name: bazel-fetch
       if: steps.bazel-cache.outputs.cache-hit != 'true'
-      run: |
-        import subprocess
-        subprocess.check_call(['bazel', 'fetch', '//...'])
-      shell: python
+      shell: bash
+      run: bazel fetch //...
     - name: save-bazel-cache
       if: steps.bazel-cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v5
