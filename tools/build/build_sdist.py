@@ -31,8 +31,17 @@ def main():
     # symlinks=False dereferences the staged symlinks into real files.
     shutil.copytree(opts.staging, opts.build, symlinks=False)
 
-    result = subprocess.run([hatchling, "build", "-t", "sdist"], cwd=opts.build)
+    # Capture hatchling's output so its "dist/<name>.tar.gz" success line does
+    # not clutter the build log; only surface it if the build fails.
+    result = subprocess.run(
+        [hatchling, "build", "-t", "sdist"],
+        cwd=opts.build,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+    )
     if result.returncode != 0:
+        sys.stderr.write(result.stdout)
         return result.returncode
 
     tarballs = glob.glob(os.path.join(opts.build, "dist", "*.tar.gz"))
