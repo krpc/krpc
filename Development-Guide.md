@@ -49,25 +49,26 @@ The codebase is structured as follows:
 kRPC uses the [Bazel build system](https://bazel.build). This provides us with fast, repeatable
 builds, and support for many languages. (See below for a Bazel cheat sheet.)
 
-Note: we don't support building using Bazel on Windows. However, you can build the C# projects
-on Windows. See the section below named "Building the C# projects using an IDE".
-You can also build the project using a docker container running on
-Windows. See the section below named "Building using Docker".
+Note: building on Windows using Bazel is experimental. There is a `--config=windows` Bazel
+configuration and a (non-blocking) Windows CI job, but it is not yet fully supported. On Windows you
+can instead build the C# projects using an IDE (see the section below named "Building the C# projects
+using an IDE"), or build the whole project using a docker container (see the section below named
+"Building using Docker").
 
 ### Setting up your Environment
 
-The Bazel build scripts will automatically download most of the required dependencies to build the
-project, but the following needs to be installed on your system:
+The Bazel build is hermetic: it automatically downloads the toolchains and dependencies for C#
+(rules_dotnet), Python (rules_python), Java (rules_jvm_external), C/C++ (an LLVM toolchain) and
+protobuf. You therefore do **not** need Mono, the .NET SDK, a system Python, a JDK, Maven or a C++
+compiler installed to build and test the project with Bazel.
 
- * Bazel
- * C# compiler, runtime and tools (for example [Mono](https://www.mono-project.com/))
- * Python 3.10+
- * CMake 3.15+ and a C++17 compiler (for the C++ client)
- * LuaRocks
- * Maven
- * pdflatex and svg tools (for building the documentation)
+A few components are not hermetic and need supporting packages installed on your system:
 
-On Ubuntu, these can be installed via apt as follows. Install bazel (via bazelisk) using:
+ * Bazel (installed via bazelisk, below)
+ * Lua and LuaRocks (for building the Lua client)
+ * pdflatex, latexmk and svg/graphviz tools (for building the documentation)
+
+On Ubuntu, install bazel (via bazelisk) using:
 
 ```
 wget https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64
@@ -75,16 +76,18 @@ chmod +x bazelisk-linux-amd64
 sudo mv bazelisk-linux-amd64 /usr/local/bin/bazel
 ```
 
-Then follow the instructions on [Mono's website](http://www.mono-project.com/download) to add
-their apt repository.
-
-Then install packages:
+Then install the supporting packages:
 ```
-sudo apt-get install mono-complete python-is-python3 python3-dev python3-pip \
-  python3-venv gcc g++ cmake luarocks maven openjdk-11-jdk \
+sudo apt-get install luarocks \
   latexmk texlive-latex-base texlive-latex-recommended texlive-fonts-recommended \
-  texlive-latex-extra texlive-fonts-extra tex-gyre librsvg2-bin libenchant-2-2
+  texlive-latex-extra texlive-fonts-extra tex-gyre librsvg2-bin graphviz libenchant-2-2
 ```
+
+By default the Bazel build downloads its own hermetic LLVM toolchain to build the C/C++ clients.
+Pass `--config=system-llvm` to build them against a system LLVM install instead (as CI does; this
+requires an LLVM install at the path in `MODULE.bazel`'s `llvm.toolchain_root`). Building the C/C++
+clients through their standalone CMake build, rather than via Bazel, additionally needs CMake 3.15+,
+a C++17 compiler and the protobuf, nanopb and ASIO development libraries.
 
 You also need to set up the necessary libraries in the `lib` directory.
 `lib/ksp` should contain a copy of the game. You can either create this directory, and copy the
@@ -99,10 +102,6 @@ different KSP install without changing `lib/ksp`, set the `KSP_DIR` environment 
 path — the `krpc-install`, `krpc-run-ksp` and `pytest` commands all pick it up (and also accept an
 equivalent `--ksp-dir` option). Note that the Bazel build itself always uses `lib/ksp`, regardless
 of `KSP_DIR`.
-
-You may also need to modify the symlink at `lib/mono-4.5` to point to the correct location of your
-Mono installation. On Ubuntu 24.04 with the latest version of Mono, `lib/mono-4.5` should be a
-symlink pointing to `/usr/lib/mono/4.5`
 
 ### Building using Bazel
 
@@ -193,7 +192,6 @@ the tests, using the following commands:
 git clone https://github.com/krpc/krpc.git
 cd krpc
 ln -s `pwd`/../ksp lib/ksp
-ln -s /usr/lib/mono/4.5 lib/mono-4.5
 bazel build //...
 bazel test //:test
 ```
@@ -203,16 +201,10 @@ bazel test //:test
 kRPC contains a suite of tests for the server plugin, services, client libraries and other parts of
 the project.
 
-To run the tests, the following dependencies need to be installed. Without them, some of the tests
-will fail.
-
- * Python 3.10+ development files
- * CppCheck
- * socat
-
-To install these dependencies via apt on Ubuntu run the following command:
+The SerialIO communication tests need `socat` installed. Without it, those tests will fail. Install
+it via apt on Ubuntu with:
 ```
-sudo apt-get install cppcheck socat
+sudo apt-get install socat
 ```
 
 The unit tests can be run using: `bazel test //:test`
