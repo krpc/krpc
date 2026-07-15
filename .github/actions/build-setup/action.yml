@@ -2,16 +2,12 @@ inputs:
   long-version:
     required: false
     default: "true"
-  ksp-version:
-    required: false
-    default: "1.12.5"
 runs:
   using: composite
   steps:
     - run: tools/github-actions/set-version.py
       if: ${{ inputs.long-version == 'true' }}
       shell: bash
+    # Fetches all external repos, including the stripped KSP DLLs (@ksp), which the
+    # Bazel build now compiles against -- no separate ksp-lib download step needed.
     - uses: ./.github/actions/bazel-fetch
-    - uses: ./.github/actions/ksp-lib
-      with:
-        version: ${{ inputs.ksp-version }}
