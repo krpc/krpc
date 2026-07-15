@@ -399,7 +399,7 @@ jobs:
   test-service:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.9.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}

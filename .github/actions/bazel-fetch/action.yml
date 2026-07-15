@@ -3,32 +3,33 @@ runs:
   steps:
     - name: get-bazel-info
       run: |
-        import os, subprocess, platform, shutil
+        import os, subprocess
 
         version = subprocess.check_output(["bazel", "--version"]).decode().strip().partition(" ")[2]
         print(f"version = {version}")
 
-        if platform.system().lower() == 'linux':
-            cache_path = "~/.cache/bazel"
-        elif platform.system().lower() == 'windows':
-            username = os.getenv("USERNAME")
-            cache_path = f"c:/users/{username}/_bazel_{username}"
-        else:
-            raise RuntimeError("Unsupported platform")
-        print(f"cache_path = {cache_path}")
+        # Cache only the download archives -- /var/cache/bazel-repo/content_addressable
+        # (matches `common --repository_cache` in /etc/bazel.bazelrc). We deliberately
+        # do NOT cache the whole /var/cache/bazel-repo: Bazel 9 also puts a "repo
+        # contents cache" of *extracted* repositories under a sibling contents/ dir,
+        # which must stay out of the GitHub cache. CI uses a system LLVM, so no ~2 GB
+        # LLVM archive lands here -- the subdir is just the .NET SDK + misc. This
+        # action only runs in the Linux buildenv container, so the path is fixed.
+        download_cache = "/var/cache/bazel-repo/content_addressable"
+        print(f"download_cache = {download_cache}")
 
         env_file = os.getenv("GITHUB_ENV")
         with open(env_file, "a") as fp:
             fp.write("BAZEL_VERSION=" + version + "\n")
-            fp.write("BAZEL_CACHE_PATH=" + cache_path + "\n")
+            fp.write("BAZEL_DOWNLOAD_CACHE=" + download_cache + "\n")
 
       shell: python
     - name: restore-bazel-cache
       id: bazel-cache
       uses: actions/cache/restore@v5
       with:
-        path: ${{ env.BAZEL_CACHE_PATH }}
-        key: bazel-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel') }}
+        path: ${{ env.BAZEL_DOWNLOAD_CACHE }}
+        key: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel') }}
     - name: bazel-fetch
       if: steps.bazel-cache.outputs.cache-hit != 'true'
       run: |
@@ -39,5 +40,5 @@ runs:
       if: steps.bazel-cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v5
       with:
-        path: ${{ env.BAZEL_CACHE_PATH }}
-        key: bazel-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel') }}
+        path: ${{ env.BAZEL_DOWNLOAD_CACHE }}
+        key: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel') }}

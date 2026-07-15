@@ -4,3 +4,22 @@ test --test_strategy=standalone
 
 # Output errors to log
 test --test_output=errors
+
+# Use the system LLVM baked into this image for the C/C++ clients instead of
+# downloading the ~2 GB hermetic LLVM release. Container-only: the config (defined
+# in the repo-root .bazelrc) points at /usr/lib/llvm-20, which exists only inside
+# ghcr.io/krpc/buildenv. Dev checkouts default to the hermetic toolchain. `common`
+# so `bazel fetch`/`build`/`test` all pick it up.
+common --config=system-llvm
+
+# Content-addressable cache of downloaded (compressed) archives, under
+# /var/cache/bazel-repo/content_addressable. CI caches only that subdirectory (see
+# .github/actions/bazel-fetch), in place of the huge extracted output base.
+#
+# NB: Bazel 9's repository_cache dir also hosts a "repo contents cache" (extracted
+# repositories, under a sibling contents/ dir) -- ~12 GB of expanded LLVM/etc. We
+# deliberately do NOT try to disable it here: `--repo_contents_cache=` (empty)
+# triggers a symlink-replant failure during `bazel fetch //...`. Instead CI simply
+# caches the content_addressable/ subdir and ignores contents/, which is ephemeral
+# per job.
+common --repository_cache=/var/cache/bazel-repo

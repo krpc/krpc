@@ -68,11 +68,11 @@ _clang_tidy = rule(
             cfg = "exec",
         ),
         "_clang_tidy": attr.label(
-            default = Label("@llvm_toolchain_llvm//:clang-tidy"),
+            default = Label("//tools/build/llvm:clang-tidy"),
             allow_files = True,
         ),
         "_llvm_includes": attr.label(
-            default = Label("@llvm_toolchain_llvm//:include"),
+            default = Label("//tools/build/llvm:include"),
             allow_files = True,
         ),
     },
@@ -132,7 +132,7 @@ _clang_format = rule(
             cfg = "exec",
         ),
         "_clang_format": attr.label(
-            default = Label("@llvm_toolchain_llvm//:clang-format"),
+            default = Label("//tools/build/llvm:clang-format"),
             allow_files = True,
         ),
     },

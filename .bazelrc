@@ -6,3 +6,12 @@ build --java_runtime_version=remotejdk_11
 # `--config=windows` on Windows builds for the rest.
 startup --windows_enable_symlinks
 common:windows --enable_runfiles
+
+# Build the C/C++ clients against a system LLVM instead of downloading the ~2 GB
+# hermetic LLVM release. Selects system clang-tidy/clang-format/libc++ (via the
+# flag) and the system C++ compiler toolchain (via --extra_toolchains, which
+# outranks the registered hermetic toolchain). Requires an LLVM install at the
+# path in MODULE.bazel's llvm.toolchain_root (present in the buildenv image).
+# CI activates this in the container bazelrc; dev can pass it to reproduce CI.
+common:system-llvm --//tools/build/llvm:toolchain=system
+common:system-llvm --extra_toolchains=@llvm_system//:all
