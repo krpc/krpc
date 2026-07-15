@@ -64,6 +64,7 @@ maven.install(
         "org.hamcrest:hamcrest:3.0",
         "org.javatuples:javatuples:1.2",
     ],
+    known_contributing_modules = ["protobuf"],
     lock_file = "//:maven_install.json",
     repositories = ["https://repo1.maven.org/maven2"],
 )
