@@ -182,8 +182,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IDictionary<string,string> Fields {
             get {
                 var result = new Dictionary<string,string> ();
-                foreach (var field in VisibleFields)
-                    result.Add (field.guiName, field.GetValue (module).ToString ());
+                foreach (var f in VisibleFields)
+                    result.Add (f.guiName, f.GetValue (module).ToString ());
                 return result;
             }
         }
@@ -197,8 +197,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IDictionary<string,string> FieldsById {
             get {
                 var result = new Dictionary<string,string> ();
-                foreach (var field in VisibleFields)
-                    result.Add (field.name, field.GetValue (module).ToString ());
+                foreach (var f in VisibleFields)
+                    result.Add (f.name, f.GetValue (module).ToString ());
                 return result;
             }
         }
@@ -216,8 +216,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IDictionary<string,string> AllFieldsById {
             get {
                 var result = new Dictionary<string,string> ();
-                foreach (var field in AllBaseFields)
-                    result.Add (field.name, field.GetValue (module).ToString ());
+                foreach (var f in AllBaseFields)
+                    result.Add (f.name, f.GetValue (module).ToString ());
                 return result;
             }
         }
