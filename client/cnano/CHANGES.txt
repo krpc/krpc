@@ -10,6 +10,8 @@ v0.6.0
  * Add KRPC_FETCH_DEPS option to enable FetchContent for all dependencies at once
  * Add support for socket communication on Windows
  * Mark deprecated functions with the KRPC_DEPRECATED attribute macro (#904)
+ * Generated functions are now defined as static inline, so the generated
+   service headers can be safely included from multiple translation units
 
 v0.5.2
  * The arduino compatible version of the library now uses the same "krpc_cnano/..." include directory as the version released on GitHub.
