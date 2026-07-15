@@ -21,7 +21,6 @@ The codebase is structured as follows:
  * `service/...` - C# implementations of the various services that run in the game, and add RPCs to
    the server.
  * `core/...` - C# shared core library used by the server and services.
- * `lib/...` - symlinks (or copies) of DLLs required to build the C# projects.
  * `client/...` - the client libraries, with one directory for each language.
  * `client/serialio/...` and `client/websockets/...` - tests for the serialio and websockets
    communication protocols.
@@ -89,19 +88,18 @@ requires an LLVM install at the path in `MODULE.bazel`'s `llvm.toolchain_root`).
 clients through their standalone CMake build, rather than via Bazel, additionally needs CMake 3.15+,
 a C++17 compiler and the protobuf, nanopb and ASIO development libraries.
 
-You also need to set up the necessary libraries in the `lib` directory.
-`lib/ksp` should contain a copy of the game. You can either create this directory, and copy the
-game files into it, or create a symlink to point to an existing copy of the game. For example,
-run the following command from the root of the krpc source to point to KSP installed in the
-default Steam location:
-```ln -s "$HOME/.local/share/Steam/steamapps/common/Kerbal Space Program" lib/ksp```
+You do **not** need to set up any KSP libraries by hand to build the project. The Bazel build
+downloads a stripped set of KSP assemblies (the `@ksp` archive, from the
+[ksp-lib](https://github.com/krpc/ksp-lib) repository) and compiles the mod against them
+automatically.
 
-`lib/ksp` is used both to build the C# projects against the KSP DLLs, and by the integration-test
-tooling as the KSP install to install the mod into and launch. To point the test tooling at a
-different KSP install without changing `lib/ksp`, set the `KSP_DIR` environment variable to its
-path — the `krpc-install`, `krpc-run-ksp` and `pytest` commands all pick it up (and also accept an
-equivalent `--ksp-dir` option). Note that the Bazel build itself always uses `lib/ksp`, regardless
-of `KSP_DIR`.
+To run the **integration tests** (see "Running the Tests" below) you do need a real copy of the
+game, since those launch KSP. Point the test tooling at it by setting the `KSP_DIR` environment
+variable to the KSP install directory — the `krpc-install`, `krpc-run-ksp` and `pytest` commands all
+pick it up (and also accept an equivalent `--ksp-dir` option). For example:
+```
+export KSP_DIR="$HOME/.local/share/Steam/steamapps/common/Kerbal Space Program"
+```
 
 ### Building using Bazel
 
@@ -170,31 +168,20 @@ docker run --user 1001:121 -it ghcr.io/krpc/buildenv:latest
 ```
 Note: the user id and group id are set to match what is used on GitHub Actions, which is what the image expects.
 
-This will drop you into a command line. Next you need to get the KSP DLLs using the following
-commands:
-
-```
-mkdir ksp
-pushd ksp
-wget https://github.com/krpc/ksp-lib/raw/main/ksp/ksp-1.12.5.zip
-unzip ksp-1.12.5.zip
-popd
-```
-
-Note: these KSP DLLs are downloaded from the ksp-lib repository. These DLLs have had their
-implementation stripped out. This is sufficient to build the code, without needing to publicly
-distribute the original KSP DLLs.
-
-You can then clone the repository, set up some symlinks to the libraries, build everything and run
-the tests, using the following commands:
+This will drop you into a command line, from which you can clone the repository, build everything and
+run the tests:
 
 ```
 git clone https://github.com/krpc/krpc.git
 cd krpc
-ln -s `pwd`/../ksp lib/ksp
 bazel build //...
 bazel test //:test
 ```
+
+The build downloads a stripped set of KSP assemblies from the
+[ksp-lib](https://github.com/krpc/ksp-lib) repository. These DLLs have had their implementation
+stripped out, which is sufficient to build the code without needing to publicly distribute the
+original KSP DLLs.
 
 ## Running the Tests
 
@@ -225,9 +212,9 @@ running. To run these tests:
    provides the `krpc-install` and `krpc-run-ksp` console scripts, and registers a pytest
    plugin so the tests run with `pytest`.
  * Then run the tests using `pytest`. With no arguments it runs every
-   `service/*/test` directory. Pass test directories or files, or `-k`, to run a subset,
-   and `--ksp-dir` (or the `KSP_DIR` environment variable) to point at a KSP install other than
-   `lib/ksp`. KSP is automatically launched (if its not already running) and the required mods are
+   `service/*/test` directory. Pass test directories or files, or `-k`, to run a subset. The KSP
+   install is taken from the `KSP_DIR` environment variable (or the `--ksp-dir` option); one of them
+   must be set. KSP is automatically launched (if its not already running) and the required mods are
    managed automatically.
 
 If the game is already running (via `krpc-run-ksp` - see below) then running `pytest` does not launch
@@ -244,8 +231,8 @@ Included in the project are various tools to aid development.
    `http://localhost:8080`
  * `krpc-install`
    - Console script from the `krpctest` package. It builds the `//:krpc` release archive and the
-   `TestingTools` DLL, and installs them into the GameData directory of the copy of KSP in `lib/ksp`
-   (or the install given by `KSP_DIR` / `--ksp-dir`). Run it from the repository root.
+   `TestingTools` DLL, and installs them into the GameData directory of the KSP install given by
+   `KSP_DIR` (or `--ksp-dir`). Run it from the repository root.
  * `krpc-run-ksp`
    - Console script from the `krpctest` package. It uses `krpc-install` to install the mod (as
    above) and then launches the game. It also pipes the game's log output to the terminal for ease
