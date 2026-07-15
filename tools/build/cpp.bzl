@@ -78,6 +78,12 @@ _clang_tidy = rule(
     },
 )
 
+# The hermetic clang-tidy/clang-format tools and libc++ :include come from the
+# LLVM toolchain's Bazel targets, which toolchains_llvm only declares on Linux;
+# there is no system-llvm fallback on Windows. So the lint rules are Linux-only,
+# and a Windows `bazel build //...` skips them.
+_LINT_ONLY_ON = ["@platforms//os:linux"]
+
 # buildifier: disable=function-docstring
 def clang_tidy_test(name, srcs, deps, copts = [], config = None, **kwargs):
     check = name + ".check"
@@ -89,8 +95,14 @@ def clang_tidy_test(name, srcs, deps, copts = [], config = None, **kwargs):
         config = config or Label("//:.clang-tidy"),
         tags = ["manual"],
         testonly = True,
+        target_compatible_with = _LINT_ONLY_ON,
     )
-    build_test(name = name, targets = [":" + check], **kwargs)
+    build_test(
+        name = name,
+        targets = [":" + check],
+        target_compatible_with = _LINT_ONLY_ON,
+        **kwargs
+    )
 
 def _clang_format_impl(ctx):
     fmt = ctx.files._clang_format[0]
@@ -147,5 +159,11 @@ def clang_format_test(name, srcs, config = None, **kwargs):
         config = config or Label("//:.clang-format"),
         tags = ["manual"],
         testonly = True,
+        target_compatible_with = _LINT_ONLY_ON,
     )
-    build_test(name = name, targets = [":" + check], **kwargs)
+    build_test(
+        name = name,
+        targets = [":" + check],
+        target_compatible_with = _LINT_ONLY_ON,
+        **kwargs
+    )
