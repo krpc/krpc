@@ -1,4 +1,4 @@
-FROM mono:6
+FROM mcr.microsoft.com/dotnet/runtime:8.0
 LABEL maintainer="djungelorm <djungelorm@users.noreply.github.com>"
 
 RUN apt-get update && \
@@ -12,7 +12,7 @@ EXPOSE 50000
 EXPOSE 50001
 
 ENTRYPOINT [ \
-  "mono", "./TestServer.exe", \
+  "dotnet", "./TestServer.dll", \
   "--bind", "0.0.0.0", \
   "--rpc-port", "50000", \
   "--stream-port", "50001"]
