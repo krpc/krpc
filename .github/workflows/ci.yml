@@ -129,11 +129,22 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: client-cnano
+      - name: cache-key
+        id: cache-key
+        run: |
+          tmpl=$(sha256sum client/cnano/CMakeLists.txt.tmpl | cut -d' ' -f1)
+          cc=$(cc --version 2>/dev/null | head -n1 || echo unknown-cc)
+          info=$(printf '%s\n' ccache cnano "$cc" "$tmpl")
+          echo 'cache key inputs:'
+          printf '%s\n' "$info" | sed 's/^/  /'
+          hash=$(printf '%s' "$info" | sha256sum | cut -d' ' -f1)
+          echo "cache key: ccache-$hash"
+          echo "hash=$hash" >> "$GITHUB_OUTPUT"
       - name: ccache-restore
         uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: build-client-cnano-cmake-linux-${{ hashFiles('client/cnano/CMakeLists.txt.tmpl') }}
+          key: ccache-${{ steps.cache-key.outputs.hash }}
       - name: build-system
         run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system
       - name: build-fetch
@@ -169,6 +180,8 @@ jobs:
           name: client-cnano
       - name: vcpkg
         uses: ./.github/actions/vcpkg-linux
+        with:
+          packages: nanopb
       - name: test-vcpkg
         env:
           VCPKG_ROOT: /usr/local/share/vcpkg
@@ -215,11 +228,22 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: client-cpp
+      - name: cache-key
+        id: cache-key
+        run: |
+          tmpl=$(sha256sum client/cpp/CMakeLists.txt.tmpl | cut -d' ' -f1)
+          cc=$(cc --version 2>/dev/null | head -n1 || echo unknown-cc)
+          info=$(printf '%s\n' ccache cpp "$cc" "$tmpl")
+          echo 'cache key inputs:'
+          printf '%s\n' "$info" | sed 's/^/  /'
+          hash=$(printf '%s' "$info" | sha256sum | cut -d' ' -f1)
+          echo "cache key: ccache-$hash"
+          echo "hash=$hash" >> "$GITHUB_OUTPUT"
       - name: ccache-restore
         uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: build-client-cpp-cmake-linux-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
+          key: ccache-${{ steps.cache-key.outputs.hash }}
       - name: build-system
         run: client/cpp/test-cmake-linux.sh krpc-cpp-*.zip system
       - name: build-fetch
@@ -255,6 +279,8 @@ jobs:
           name: client-cpp
       - name: vcpkg
         uses: ./.github/actions/vcpkg-linux
+        with:
+          packages: protobuf asio
       - name: test-vcpkg
         env:
           VCPKG_ROOT: /usr/local/share/vcpkg
