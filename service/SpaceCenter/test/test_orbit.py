@@ -24,6 +24,13 @@ class TestOrbit(krpctest.TestCase):
         )
         self.assertAlmostEqual(speed, orbit.speed, delta=1)
 
+    def check_orbital_energy(self, orbit):
+        # Specific orbital energy is -mu / (2a) for a bound orbit. KSP derives
+        # it from the instantaneous state vectors, so compare as a ratio to
+        # tolerate the small jitter in an active vessel's velocity.
+        energy = -orbit.body.gravitational_parameter / (2 * orbit.semi_major_axis)
+        self.assertAlmostEqual(energy / orbit.orbital_energy, 1, places=3)
+
     def check_angles_close(self, angle, other_angle, places=2):
         # Compare two angles, in radians, ignoring multiples of 2*pi
         diff = (angle - other_angle + math.pi) % (2 * math.pi) - math.pi
@@ -78,6 +85,7 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual(700000, orbit.radius, delta=50)
         self.assertAlmostEqual(2246.1, orbit.speed, delta=1)
         self.check_radius_and_speed(vessel, orbit)
+        self.check_orbital_energy(orbit)
         # self.check_time_to_apoapsis_and_periapsis(vessel, orbit)
         self.assertIsNaN(orbit.time_to_soi_change)
         self.assertAlmostEqual(0, orbit.eccentricity, places=1)
@@ -190,6 +198,7 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual(13599840256, orbit.radius)
         self.assertAlmostEqual(9284.50, orbit.speed, places=1)
         self.check_radius_and_speed(body, orbit)
+        self.check_orbital_energy(orbit)
         # self.check_time_to_apoapsis_and_periapsis(body, orbit)
         self.assertIsNaN(orbit.time_to_soi_change)
         self.assertAlmostEqual(0, orbit.eccentricity)
@@ -211,6 +220,7 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual(47000000, orbit.radius)
         self.assertAlmostEqual(274.1, orbit.speed, delta=0.5)
         self.check_radius_and_speed(body, orbit)
+        self.check_orbital_energy(orbit)
         # self.check_time_to_apoapsis_and_periapsis(body, orbit)
         self.assertIsNaN(orbit.time_to_soi_change)
         self.assertAlmostEqual(0, orbit.eccentricity)

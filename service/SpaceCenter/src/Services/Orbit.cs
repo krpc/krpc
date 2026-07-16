@@ -398,6 +398,17 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The specific orbital energy of the orbit, in Joules per kilogram
+        /// (equivalently, meters squared per second squared). This is the sum
+        /// of the orbit's specific kinetic and potential energy, and is
+        /// negative for a bound (elliptical) orbit.
+        /// </summary>
+        [KRPCProperty]
+        public double OrbitalEnergy {
+            get { return InternalOrbit.orbitalEnergy; }
+        }
+
+        /// <summary>
         /// The orbital radius at the given time, in meters.
         /// </summary>
         /// <param name="ut">The universal time to measure the radius at.</param>

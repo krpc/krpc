@@ -108,6 +108,7 @@ v0.6.0
    * Add an optional timeout to AutoPilot.Wait(), throwing TimeoutException if it expires
    * Add AutoPilot.DiagnosticLogging and DiagnosticLog for per-tick controller diagnostics
    * On client disconnect the AutoPilot is now disengaged but its settings and target are kept
+ * Add Orbit.OrbitalEnergy (#303)
 
 v0.5.4
  * Fix vessel recovery (#782)
