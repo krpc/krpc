@@ -130,11 +130,6 @@ def render(components):
     ordered = sorted(all_versions, key=version_key, reverse=True)
 
     out = [heading("Changelog", "=")]
-    out.append(
-        "The complete history of changes across every kRPC component, newest\n"
-        "release first.\n"
-    )
-    out.append(".. contents::\n   :local:\n   :depth: 1\n")
 
     for version in ordered:
         out.append("\n" + heading(version, "-"))
