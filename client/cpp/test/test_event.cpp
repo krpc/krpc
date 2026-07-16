@@ -6,16 +6,13 @@
 // IWYU pragma: no_include <ext/alloc_traits.h>
 
 #include "gtest/gtest.h"
-
 #include "krpc/event.hpp"
 #include "krpc/services/krpc.hpp"
 #include "krpc/stream.hpp"
-
 #include "server_test.hpp"
 #include "services/test_service.hpp"
 
-class test_event: public server_test {
-};
+class test_event : public server_test {};
 
 TEST_F(test_event, test_event) {
   auto event = test_service.on_timer(200);
@@ -72,10 +69,9 @@ TEST_F(test_event, test_event_loop) {
     std::chrono::duration<double> duration = end_time - start_time;
     ASSERT_TRUE(event.stream()());
     repeat++;
-    ASSERT_GT(duration.count(), 0.2*repeat - 0.05);
-    ASSERT_LT(duration.count(), 0.2*repeat + 2);
-    if (repeat == 5)
-      break;
+    ASSERT_GT(duration.count(), 0.2 * repeat - 0.05);
+    ASSERT_LT(duration.count(), 0.2 * repeat + 2);
+    if (repeat == 5) break;
   }
   event.release();
 }
@@ -84,7 +80,7 @@ TEST_F(test_event, test_event_callback) {
   auto event = test_service.on_timer(200);
   std::atomic_flag called;
   called.test_and_set();
-  event.add_callback([&called] () { called.clear(); });
+  event.add_callback([&called]() { called.clear(); });
   auto start_time = std::chrono::high_resolution_clock::now();
   event.start();
   while (called.test_and_set()) {
@@ -99,14 +95,13 @@ TEST_F(test_event, test_event_callback_timeout) {
   auto event = test_service.on_timer(1000);
   std::atomic_flag called;
   called.test_and_set();
-  event.add_callback([&called] () { called.clear(); });
+  event.add_callback([&called]() { called.clear(); });
   auto start_time = std::chrono::high_resolution_clock::now();
   event.start();
   while (called.test_and_set()) {
     auto time = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = time - start_time;
-    if (duration.count() >= 0.1)
-      break;
+    if (duration.count() >= 0.1) break;
   }
   auto end_time = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> duration = end_time - start_time;
@@ -119,7 +114,7 @@ TEST_F(test_event, test_event_callback_timeout) {
 TEST_F(test_event, test_event_callback_loop) {
   auto event = test_service.on_timer(200, 5);
   std::atomic<int> count(0);
-  event.add_callback([&count] () { count++; });
+  event.add_callback([&count]() { count++; });
   auto start_time = std::chrono::high_resolution_clock::now();
   event.start();
   while (count < 5) {
@@ -137,8 +132,8 @@ TEST_F(test_event, test_event_remove_callback) {
   called1.test_and_set();
   std::atomic_flag called2;
   called2.test_and_set();
-  event.add_callback([&called1] () { called1.clear(); });
-  auto called2_tag = event.add_callback([&called2] () { called2.clear(); });
+  event.add_callback([&called1]() { called1.clear(); });
+  auto called2_tag = event.add_callback([&called2]() { called2.clear(); });
   event.remove_callback(called2_tag);
   auto start_time = std::chrono::high_resolution_clock::now();
   event.start();
@@ -154,11 +149,9 @@ TEST_F(test_event, test_event_remove_callback) {
 TEST_F(test_event, test_custom_event) {
   typedef krpc::services::KRPC::Expression Expr;
   auto counter = Expr::call(conn, test_service.counter_call("test_event.test_custom_event"));
-  auto expr = Expr::equal(conn,
-    Expr::multiply(conn,
-      Expr::constant_int(conn, 2),
-      Expr::constant_int(conn, 10)),
-    counter);
+  auto expr = Expr::equal(
+      conn, Expr::multiply(conn, Expr::constant_int(conn, 2), Expr::constant_int(conn, 10)),
+      counter);
   auto event = krpc.add_event(expr);
   event.acquire();
   event.wait();

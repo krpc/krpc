@@ -269,14 +269,18 @@ namespace KRPC.Client.Test
         public void ArgumentNullException ()
         {
             var exn = Assert.Throws<System.ArgumentNullException> (() => Connection.TestService ().ThrowArgumentNullException (string.Empty));
-            Assert.That (exn.Message, Does.Contain ("Value cannot be null.\nParameter name: foo"));
+            Assert.That (exn.Message, Does.Contain ("Value cannot be null."));
+            // The parameter name formatting differs between .NET Framework/mono
+            // ("Parameter name: foo") and modern .NET ("(Parameter 'foo')")
+            Assert.That (exn.Message, Does.Contain ("foo"));
         }
 
         [Test]
         public void ArgumentOutOfRangeException ()
         {
             var exn = Assert.Throws<System.ArgumentOutOfRangeException> (() => Connection.TestService ().ThrowArgumentOutOfRangeException (0));
-            Assert.That (exn.Message, Does.Contain ("Specified argument was out of the range of valid values.\nParameter name: foo"));
+            Assert.That (exn.Message, Does.Contain ("Specified argument was out of the range of valid values."));
+            Assert.That (exn.Message, Does.Contain ("foo"));
         }
 
         [Test]

@@ -5,7 +5,6 @@
 #include <utility>
 #include <vector>
 
-
 #include "krpc/connection.hpp"
 #include "krpc/decoder.hpp"
 #include "krpc/encoder.hpp"
@@ -16,11 +15,11 @@ namespace krpc {
 
 class StreamImpl;
 
-Client::Client(): lock(new std::mutex) {}
+Client::Client() : lock(new std::mutex) {}
 
-Client::Client(const std::string& name, const std::string& address,
-               unsigned int rpc_port, unsigned int stream_port) :
-  lock(new std::mutex) {
+Client::Client(const std::string& name, const std::string& address, unsigned int rpc_port,
+               unsigned int stream_port)
+    : lock(new std::mutex) {
   // Connect to RPC server
   rpc_connection = std::make_shared<Connection>(address, rpc_port);
   rpc_connection->connect();
@@ -61,11 +60,9 @@ std::string Client::invoke(const schema::Request& request) {
   schema::Response response;
   decoder::decode(response, data, this);
 
-  if (response.has_error())
-    throw_exception(response.error());
+  if (response.has_error()) throw_exception(response.error());
 
-  if (response.results(0).has_error())
-    throw_exception(response.results(0).error());
+  if (response.results(0).has_error()) throw_exception(response.results(0).error());
 
   return response.results(0).value();
 }
@@ -76,7 +73,7 @@ std::string Client::invoke(const schema::ProcedureCall& call) {
   schema::ProcedureCall* call2 = request.add_calls();
   call2->set_service(call.service());
   call2->set_procedure(call.procedure());
-  for (auto arg : call.arguments()) {
+  for (const auto& arg : call.arguments()) {
     schema::Argument* arg2 = call2->add_arguments();
     arg2->set_position(arg.position());
     arg2->set_value(arg.value());
@@ -84,17 +81,15 @@ std::string Client::invoke(const schema::ProcedureCall& call) {
   return this->invoke(request);
 }
 
-std::string Client::invoke(const std::string& service,
-                           const std::string& procedure,
+std::string Client::invoke(const std::string& service, const std::string& procedure,
                            const std::vector<std::string>& args) {
   return this->invoke(this->build_request(service, procedure, args));
 }
 
-schema::Request Client::build_request(const std::string& service,
-                                      const std::string& procedure,
+schema::Request Client::build_request(const std::string& service, const std::string& procedure,
                                       const std::vector<std::string>& args) {
   schema::Request request;
-  schema::ProcedureCall * call = request.add_calls();
+  schema::ProcedureCall* call = request.add_calls();
   call->set_service(service);
   call->set_procedure(procedure);
   for (unsigned int i = 0; i < args.size(); i++) {
@@ -105,8 +100,7 @@ schema::Request Client::build_request(const std::string& service,
   return request;
 }
 
-schema::ProcedureCall Client::build_call(const std::string& service,
-                                         const std::string& procedure,
+schema::ProcedureCall Client::build_call(const std::string& service, const std::string& procedure,
                                          const std::vector<std::string>& args) {
   schema::ProcedureCall call;
   call.set_service(service);
@@ -142,41 +136,31 @@ std::shared_ptr<StreamImpl> Client::get_stream(uint64_t id) {
   return stream_manager->get_stream(id);
 }
 
-void Client::remove_stream(uint64_t id) {
-  stream_manager->remove_stream(id);
-}
+void Client::remove_stream(uint64_t id) { stream_manager->remove_stream(id); }
 
-void Client::freeze_streams() {
-  stream_manager->freeze();
-}
+void Client::freeze_streams() { stream_manager->freeze(); }
 
-void Client::thaw_streams() {
-  stream_manager->thaw();
-}
+void Client::thaw_streams() { stream_manager->thaw(); }
 
 std::condition_variable& Client::get_stream_update_condition() const {
   return stream_manager->get_update_condition();
 }
 
-std::unique_lock<std::mutex>& Client::get_stream_update_condition_lock() const  {
+std::unique_lock<std::mutex>& Client::get_stream_update_condition_lock() const {
   return stream_manager->get_update_condition_lock();
 }
 
-void Client::acquire_stream_update() {
-  stream_manager->get_update_condition_lock().lock();
-}
+void Client::acquire_stream_update() { stream_manager->get_update_condition_lock().lock(); }
 
-void Client::release_stream_update() {
-  stream_manager->get_update_condition_lock().unlock();
-}
+void Client::release_stream_update() { stream_manager->get_update_condition_lock().unlock(); }
 
 void Client::wait_for_stream_update(double timeout) {
   if (timeout < 0) {
     stream_manager->get_update_condition().wait(stream_manager->get_update_condition_lock());
   } else {
-    auto rel_time = std::chrono::milliseconds(static_cast<int>(timeout*1000));
-    stream_manager->get_update_condition().wait_for(
-      stream_manager->get_update_condition_lock(), rel_time);
+    auto rel_time = std::chrono::milliseconds(static_cast<int>(timeout * 1000));
+    stream_manager->get_update_condition().wait_for(stream_manager->get_update_condition_lock(),
+                                                    rel_time);
   }
 }
 
@@ -184,8 +168,6 @@ int Client::add_stream_update_callback(const Callback& callback) {
   return stream_manager->add_update_callback(callback);
 }
 
-void Client::remove_stream_update_callback(int tag) {
-  stream_manager->remove_update_callback(tag);
-}
+void Client::remove_stream_update_callback(int tag) { stream_manager->remove_update_callback(tag); }
 
 }  // namespace krpc

@@ -8,25 +8,19 @@
 
 namespace krpc {
 
-StreamImpl::StreamImpl(Client * client, uint64_t id,
-                       std::recursive_mutex * update_lock) :
-  client(client),
-  id(id),
-  update_lock(update_lock),
-  started(false),
-  updated(false),
-  condition_lock(condition_mutex, std::defer_lock),
-  next_callback_tag(0),
-  _rate(0) {
-}
+StreamImpl::StreamImpl(Client* client, uint64_t id, std::recursive_mutex* update_lock)
+    : client(client),
+      id(id),
+      update_lock(update_lock),
+      started(false),
+      updated(false),
+      condition_lock(condition_mutex, std::defer_lock),
+      next_callback_tag(0),
+      _rate(0) {}
 
-Client * StreamImpl::get_client() const {
-  return client;
-}
+Client* StreamImpl::get_client() const { return client; }
 
-uint64_t StreamImpl::get_id() const {
-  return id;
-}
+uint64_t StreamImpl::get_id() const { return id; }
 
 void StreamImpl::start() {
   if (!started) {
@@ -35,24 +29,18 @@ void StreamImpl::start() {
   }
 }
 
-float StreamImpl::rate() const {
-  return _rate;
-}
+float StreamImpl::rate() const { return _rate; }
 
 void StreamImpl::set_rate(float value) {
   _rate = value;
   services::KRPC(client).set_stream_rate(id, value);
 }
 
-bool StreamImpl::has_started() const {
-  return started;
-}
+bool StreamImpl::has_started() const { return started; }
 
 const std::string& StreamImpl::get_data() {
-  if (!updated)
-    throw StreamError("Stream has no value");
-  if (exception)
-    std::rethrow_exception(exception);
+  if (!updated) throw StreamError("Stream has no value");
+  if (exception) std::rethrow_exception(exception);
   return data;
 }
 
@@ -63,21 +51,13 @@ void StreamImpl::update(const std::string& data, const std::exception_ptr& excep
   this->exception = exception;
 }
 
-bool StreamImpl::has_updated() const {
-  return updated;
-}
+bool StreamImpl::has_updated() const { return updated; }
 
-std::condition_variable& StreamImpl::get_condition() {
-  return condition;
-}
+std::condition_variable& StreamImpl::get_condition() { return condition; }
 
-std::unique_lock<std::mutex>& StreamImpl::get_condition_lock() {
-  return condition_lock;
-}
+std::unique_lock<std::mutex>& StreamImpl::get_condition_lock() { return condition_lock; }
 
-const StreamImpl::Callbacks& StreamImpl::get_callbacks() const {
-  return callbacks;
-}
+const StreamImpl::Callbacks& StreamImpl::get_callbacks() const { return callbacks; }
 
 int StreamImpl::add_callback(const Callback& callback) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
@@ -92,8 +72,6 @@ void StreamImpl::remove_callback(int tag) {
   callbacks.erase(tag);
 }
 
-void StreamImpl::remove() {
-  client->remove_stream(id);
-}
+void StreamImpl::remove() { client->remove_stream(id); }
 
 }  // namespace krpc

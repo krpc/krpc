@@ -18,17 +18,17 @@
 
 namespace krpc {
 
-StreamManager::StreamManager(Client * client, const std::shared_ptr<Connection>& connection)
-  : client(client), connection(connection),
-    update_lock(new std::recursive_mutex),
-    stop(new std::atomic_bool(false)),
-    should_freeze(new std::atomic_bool(false)),
-    frozen(new std::atomic_bool(false)),
-    update_thread(new std::thread(update_thread_main, this, connection,
-                                  stop, should_freeze, frozen)),
-    condition_lock(condition_mutex, std::defer_lock),
-    next_callback_tag(0) {
-}
+StreamManager::StreamManager(Client* client, const std::shared_ptr<Connection>& connection)
+    : client(client),
+      connection(connection),
+      update_lock(new std::recursive_mutex),
+      stop(new std::atomic_bool(false)),
+      should_freeze(new std::atomic_bool(false)),
+      frozen(new std::atomic_bool(false)),
+      update_thread(
+          new std::thread(update_thread_main, this, connection, stop, should_freeze, frozen)),
+      condition_lock(condition_mutex, std::defer_lock),
+      next_callback_tag(0) {}
 
 StreamManager::~StreamManager() {
   stop->store(true);
@@ -41,8 +41,7 @@ std::shared_ptr<StreamImpl> StreamManager::add_stream(const schema::ProcedureCal
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
   auto it = streams.find(stream.id());
   if (it != streams.end())
-    if (auto stream = it->second.lock())
-      return stream;
+    if (auto stream = it->second.lock()) return stream;
   auto stream_impl = std::make_shared<StreamImpl>(client, stream.id(), update_lock.get());
   streams[stream.id()] = stream_impl;
   return stream_impl;
@@ -52,8 +51,7 @@ std::shared_ptr<StreamImpl> StreamManager::get_stream(uint64_t id) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
   auto it = streams.find(id);
   if (it != streams.end())
-    if (auto stream = it->second.lock())
-      return stream;
+    if (auto stream = it->second.lock()) return stream;
   auto stream_impl = std::make_shared<StreamImpl>(client, id, update_lock.get());
   streams[id] = stream_impl;
   return stream_impl;
@@ -61,8 +59,7 @@ std::shared_ptr<StreamImpl> StreamManager::get_stream(uint64_t id) {
 
 void StreamManager::remove_stream(uint64_t id) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  if (streams.find(id) == streams.end())
-    return;
+  if (streams.find(id) == streams.end()) return;
   services::KRPC(client).remove_stream(id);
   streams.erase(id);
 }
@@ -70,11 +67,9 @@ void StreamManager::remove_stream(uint64_t id) {
 void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
   auto it = streams.find(id);
-  if (it == streams.end())
-    return;
+  if (it == streams.end()) return;
   auto stream = it->second.lock();
-  if (!stream)
-    return;
+  if (!stream) return;
   if (!result.has_error()) {
     stream->update(result.value(), nullptr);
   } else {
@@ -85,8 +80,7 @@ void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
     }
   }
   stream->get_condition().notify_all();
-  for (auto callback : stream->get_callbacks())
-    callback.second(stream->get_data());
+  for (const auto& callback : stream->get_callbacks()) callback.second(stream->get_data());
 }
 
 void StreamManager::freeze() {
@@ -101,13 +95,9 @@ void StreamManager::thaw() {
   }
 }
 
-std::condition_variable& StreamManager::get_update_condition() {
-  return condition;
-}
+std::condition_variable& StreamManager::get_update_condition() { return condition; }
 
-std::unique_lock<std::mutex>& StreamManager::get_update_condition_lock() {
-  return condition_lock;
-}
+std::unique_lock<std::mutex>& StreamManager::get_update_condition_lock() { return condition_lock; }
 
 int StreamManager::add_update_callback(const Callback& callback) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
@@ -127,16 +117,15 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
                                        const std::shared_ptr<std::atomic_bool>& stop,
                                        const std::shared_ptr<std::atomic_bool>& should_freeze,
                                        const std::shared_ptr<std::atomic_bool>& frozen) {
-  Client * client = stream_manager->client;
+  Client* client = stream_manager->client;
 
-  auto apply_update = [stream_manager, client] (const std::string& data) {
+  auto apply_update = [stream_manager, client](const std::string& data) {
     schema::StreamUpdate update;
     decoder::decode(update, data, client);
-    for (auto result : update.results())
+    for (const auto& result : update.results())
       stream_manager->update(result.id(), result.result());
     stream_manager->condition.notify_all();
-    for (auto callback : stream_manager->callbacks)
-      callback.second();
+    for (const auto& callback : stream_manager->callbacks) callback.second();
   };
 
   while (!stop->load()) {
@@ -148,11 +137,10 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
         data += connection->partial_receive(1);
         size = decoder::decode_size(data);
         break;
-      } catch (EncodingError&) {
+      } catch (EncodingError&) {  // NOLINT(bugprone-empty-catch): need more bytes
       }
     }
-    if (stop->load())
-      break;
+    if (stop->load()) break;
 
     // Decode and apply the update
     apply_update(connection->receive(size));
@@ -171,19 +159,16 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
             data += connection->partial_receive(1);
             size = decoder::decode_size(data);
             break;
-          } catch (EncodingError&) {
+          } catch (EncodingError&) {  // NOLINT(bugprone-empty-catch): need more bytes
           }
           // Stop if requested
-          if (stop->load())
-            return;
+          if (stop->load()) return;
         }
-        if (size > 0)
-          last_update = connection->receive(size);
+        if (size > 0) last_update = connection->receive(size);
       }
 
       // Apply the last received update when thawing
-      if (!last_update.empty())
-        apply_update(last_update);
+      if (!last_update.empty()) apply_update(last_update);
 
       frozen->store(false);
     }

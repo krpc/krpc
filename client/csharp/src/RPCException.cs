@@ -30,11 +30,13 @@ namespace KRPC.Client
         {
         }
 
+#if !NET
         /// <summary>
         /// Construct an RPCException with the given serialization info and streaming context.
         /// </summary>
         protected RPCException (SerializationInfo info, StreamingContext context) : base (info, context)
         {
         }
+#endif
     }
 }

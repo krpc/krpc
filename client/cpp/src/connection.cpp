@@ -1,16 +1,15 @@
 #include "krpc/connection.hpp"
 
-#include <memory>
-#include <new>
-#include <ostream>
-#include <string>
-
 #include <asio/buffer.hpp>
 #include <asio/connect.hpp>  // IWYU pragma: keep
 #include <asio/error_code.hpp>
 #include <asio/read.hpp>  // IWYU pragma: keep
 #include <asio/steady_timer.hpp>
 #include <asio/write.hpp>  // IWYU pragma: keep
+#include <memory>
+#include <new>
+#include <ostream>
+#include <string>
 // IWYU pragma: no_include <asio/detail/impl/epoll_reactor.hpp>
 // IWYU pragma: no_include <asio/detail/impl/reactive_socket_service_base.ipp>
 // IWYU pragma: no_include <asio/impl/connect.hpp>
@@ -22,8 +21,8 @@
 
 namespace krpc {
 
-Connection::Connection(const std::string& address, unsigned int port):
-  socket(io_context), address(address), port(port), resolver(io_context) {}
+Connection::Connection(const std::string& address, unsigned int port)
+    : socket(io_context), address(address), port(port), resolver(io_context) {}
 
 void Connection::connect() {
   std::ostringstream port_str;
@@ -36,9 +35,7 @@ void Connection::send(const char* data, size_t length) {
   asio::write(socket, asio::buffer(data, length));
 }
 
-void Connection::send(const std::string& data) {
-  asio::write(socket, asio::buffer(data));
-}
+void Connection::send(const std::string& data) { asio::write(socket, asio::buffer(data)); }
 
 std::string Connection::receive_message() {
   std::string data;
@@ -48,7 +45,7 @@ std::string Connection::receive_message() {
       data += this->receive(1);
       size = decoder::decode_size(data);
       break;
-    } catch (EncodingError&) {
+    } catch (EncodingError&) {  // NOLINT(bugprone-empty-catch): need more bytes
     }
   }
   return this->receive(size);
@@ -69,18 +66,14 @@ std::string Connection::partial_receive(size_t length, std::chrono::milliseconds
   bool timer_complete = false;
   asio::steady_timer timer(socket.get_executor());
   timer.expires_after(timeout);
-  timer.async_wait(
-    [&timer_complete] (const asio::error_code& error) {
-      timer_complete = true;
-    });
+  timer.async_wait([&timer_complete](const asio::error_code& error) { timer_complete = true; });
 
   bool read_complete = false;
-  asio::async_read(
-    socket, asio::buffer(&data[0], length),
-    [&read, &read_complete] (const asio::error_code& error, size_t length) {
-      read = length;
-      read_complete = true;
-    });
+  asio::async_read(socket, asio::buffer(&data[0], length),
+                   [&read, &read_complete](const asio::error_code& error, size_t length) {
+                     read = length;
+                     read_complete = true;
+                   });
 
   io_context.restart();
   while (io_context.run_one()) {
@@ -90,8 +83,7 @@ std::string Connection::partial_receive(size_t length, std::chrono::milliseconds
       socket.cancel();
   }
 
-  if (read < length)
-    data.resize(read);
+  if (read < length) data.resize(read);
   return data;
 }
 

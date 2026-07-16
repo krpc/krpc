@@ -1,5 +1,9 @@
 using System;
+#if NET
+using System.IO.Ports;
+#else
 using KRPC.IO.Ports;
+#endif
 
 namespace KRPC.Server.SerialIO
 {

@@ -6,8 +6,7 @@ RPCs against a running copy of Kerbal Space Program.
 Installing the package provides:
 
 - `krpc-install` — builds the `//:krpc` release archive and the `TestingTools` add-on, and
-  installs them into a KSP `GameData` directory (`lib/ksp` by default, or the install given by
-  `KSP_DIR` / `--ksp-dir`).
+  installs them into a KSP `GameData` directory (the install given by `KSP_DIR` / `--ksp-dir`).
 - `krpc-run-ksp` — installs the mod, launches KSP, and streams its kRPC log output to the
   terminal. Its `--load-*` options drive the auto-load behaviour documented below.
 - a pytest plugin — so `pytest` discovers and runs the `krpctest.TestCase` tests natively,

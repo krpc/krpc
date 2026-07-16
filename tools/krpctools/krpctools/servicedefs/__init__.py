@@ -52,8 +52,8 @@ def main():
 
 
 def servicedefs(ksp, service, assemblies):
-    """Generate service definitions from assembly DLLs
-    using ServiceDefinitions.exe"""
+    """Generate service definitions from assembly DLLs using the
+    ServiceDefinitions tool (requires the .NET 8 runtime)"""
 
     if not os.path.exists(ksp):
         raise RuntimeError("Kerbal Space Program directory does not exist.")
@@ -94,7 +94,7 @@ def servicedefs(ksp, service, assemblies):
     # Generate the service definitions
     try:
         subprocess.check_output(
-            [bindir + "/ServiceDefinitions.exe", "--output=%s" % tmpout, service]
+            [bindir + "/ServiceDefinitions", "--output=%s" % tmpout, service]
             + assemblies,
             stderr=subprocess.STDOUT,
         )

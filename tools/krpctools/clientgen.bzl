@@ -10,7 +10,7 @@ def _impl(ctx):
         inputs = [defs],
         outputs = [output],
         progress_message = "Generating %s code for %s service" % (language, service),
-        executable = ctx.file._clientgen,
+        executable = ctx.executable._clientgen,
         arguments = [language, service, defs.path, "--output=%s" % output.path],
     )
 
@@ -24,7 +24,6 @@ clientgen = rule(
         "_clientgen": attr.label(
             default = Label("//tools/krpctools:clientgen"),
             executable = True,
-            allow_single_file = True,
             cfg = "exec",
         ),
     },

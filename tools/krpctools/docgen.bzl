@@ -25,7 +25,7 @@ def _impl(ctx):
         inputs = ctx.files.defs + [src, ctx.file._order],
         outputs = [out, documented],
         progress_message = "Generating %s documentation %s" % (language, out.path),
-        executable = ctx.file._docgen,
+        executable = ctx.executable._docgen,
         arguments = args,
     )
 
@@ -39,7 +39,6 @@ docgen = rule(
         "_docgen": attr.label(
             default = Label("//tools/krpctools:docgen"),
             executable = True,
-            allow_single_file = True,
             cfg = "exec",
         ),
         "_order": attr.label(default = Label("//doc:order.txt"), allow_single_file = True),

@@ -6,9 +6,10 @@ namespace krpc {
 
 class Service {
  public:
-  explicit Service(Client * client) : _client(client) {}
+  explicit Service(Client* client) : _client(client) {}
+
  protected:
-  Client * _client;
+  Client* _client;
 };
 
 }  // namespace krpc

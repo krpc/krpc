@@ -20,7 +20,7 @@ typedef enum {
 } krpc_error_t;
 
 /* Convert an error code to a string */
-const char * krpc_get_error(krpc_error_t error);
+const char* krpc_get_error(krpc_error_t error);
 
 /* Print an error message when it occurs */
 #if !defined(KRPC_PRINT_ERROR)
@@ -39,77 +39,85 @@ const char * krpc_get_error(krpc_error_t error);
  */
 #ifndef KRPC_CHECK
 #if defined(KRPC_ERROR_CHECK_ASSERT)
-#define KRPC_CHECK(x) {     \
-  krpc_error_t error = (x); \
-  if (error != KRPC_OK) {                                        \
-    KRPC_PRINT_ERROR("kRPC error: %s\n", krpc_get_error(error)); \
-    assert(error == KRPC_OK);                                    \
-  }                                                              \
-}
+#define KRPC_CHECK(x)                                              \
+  {                                                                \
+    krpc_error_t error = (x);                                      \
+    if (error != KRPC_OK) {                                        \
+      KRPC_PRINT_ERROR("kRPC error: %s\n", krpc_get_error(error)); \
+      assert(error == KRPC_OK);                                    \
+    }                                                              \
+  }
 #elif defined(KRPC_ERROR_CHECK_EXIT)
-#define KRPC_CHECK(x) {                                          \
-  krpc_error_t error = (x);                                      \
-  if (error != KRPC_OK) {                                        \
-    KRPC_PRINT_ERROR("kRPC error: %s\n", krpc_get_error(error)); \
-    exit((int)error);                                            \
-  }                                                              \
-}
+#define KRPC_CHECK(x)                                              \
+  {                                                                \
+    krpc_error_t error = (x);                                      \
+    if (error != KRPC_OK) {                                        \
+      KRPC_PRINT_ERROR("kRPC error: %s\n", krpc_get_error(error)); \
+      exit((int)error);                                            \
+    }                                                              \
+  }
 #elif defined(KRPC_ERROR_CHECK_FN)
 extern void (*krpc_error_handler)(krpc_error_t);
-#define KRPC_CHECK(x) {                                          \
-  krpc_error_t error = (x);                                      \
-  if (error != KRPC_OK) {                                        \
-    KRPC_PRINT_ERROR("kRPC error: %s\n", krpc_get_error(error)); \
-    (*(krpc_error_handler))(error);                              \
-  }                                                              \
-}
+#define KRPC_CHECK(x)                                              \
+  {                                                                \
+    krpc_error_t error = (x);                                      \
+    if (error != KRPC_OK) {                                        \
+      KRPC_PRINT_ERROR("kRPC error: %s\n", krpc_get_error(error)); \
+      (*(krpc_error_handler))(error);                              \
+    }                                                              \
+  }
 #else  // KRPC_ERROR_CHECK_RETURN
-#define KRPC_CHECK(x) {     \
-  krpc_error_t error = (x); \
-  if (error != KRPC_OK) {                                        \
-    KRPC_PRINT_ERROR("kRPC error: %s\n", krpc_get_error(error)); \
-    return error;                                                \
-  }                                                              \
-}
+#define KRPC_CHECK(x)                                              \
+  {                                                                \
+    krpc_error_t error = (x);                                      \
+    if (error != KRPC_OK) {                                        \
+      KRPC_PRINT_ERROR("kRPC error: %s\n", krpc_get_error(error)); \
+      return error;                                                \
+    }                                                              \
+  }
 #endif
 #endif  // KRPC_CHECK
 
 /* Print an error message and return an error code */
-#define KRPC_RETURN_ERROR(error, msg) {      \
-  KRPC_PRINT_ERROR("kRPC error: %s\n", msg); \
-  return (KRPC_ERROR_##error);               \
-}
+#define KRPC_RETURN_ERROR(error, msg)          \
+  {                                            \
+    KRPC_PRINT_ERROR("kRPC error: %s\n", msg); \
+    return (KRPC_ERROR_##error);               \
+  }
 
 /* Print an error message, along with the error message from a stream, and return an error code */
-#define KRPC_RETURN_STREAM_ERROR(error, msg, stream) {                \
-  KRPC_PRINT_ERROR("kRPC error: %s (%s)\n", msg, (stream)->errmsg);   \
-  return (KRPC_ERROR_##error);                                        \
-}
+#define KRPC_RETURN_STREAM_ERROR(error, msg, stream)                  \
+  {                                                                   \
+    KRPC_PRINT_ERROR("kRPC error: %s (%s)\n", msg, (stream)->errmsg); \
+    return (KRPC_ERROR_##error);                                      \
+  }
 
 /* Runs the code x and returns an error if it fails. */
-#define KRPC_RETURN_ON_ERROR(x) { \
-  krpc_error_t error;             \
-  if ((error = (x)) != KRPC_OK)   \
-    return error;                 \
-}
+#define KRPC_RETURN_ON_ERROR(x)                 \
+  {                                             \
+    krpc_error_t error;                         \
+    if ((error = (x)) != KRPC_OK) return error; \
+  }
 
 /* Return an error from a nanopb callback function */
-#define KRPC_CALLBACK_RETURN_ERROR(msg) {                  \
-  KRPC_PRINT_ERROR("kRPC error: %s (in callback)\n", msg); \
-  return false;                                            \
-}
+#define KRPC_CALLBACK_RETURN_ERROR(msg)                      \
+  {                                                          \
+    KRPC_PRINT_ERROR("kRPC error: %s (in callback)\n", msg); \
+    return false;                                            \
+  }
 
 /* Return a stream error from a nanopb callback function */
-#define KRPC_CALLBACK_RETURN_STREAM_ERROR(msg, stream) {                         \
-  KRPC_PRINT_ERROR("kRPC error: %s, %s (in callback)\n", msg, (stream)->errmsg); \
-  return false;                                                                  \
-}
+#define KRPC_CALLBACK_RETURN_STREAM_ERROR(msg, stream)                             \
+  {                                                                                \
+    KRPC_PRINT_ERROR("kRPC error: %s, %s (in callback)\n", msg, (stream)->errmsg); \
+    return false;                                                                  \
+  }
 
 /* Return an error from a nanopb callback function if the given code returns an error */
-#define KRPC_CALLBACK_RETURN_ON_ERROR(x) { \
-  if ((x) != KRPC_OK)                      \
-    return false;                          \
-}
+#define KRPC_CALLBACK_RETURN_ON_ERROR(x) \
+  {                                      \
+    if ((x) != KRPC_OK) return false;    \
+  }
 
 #ifdef __cplusplus
 }  // extern "C"

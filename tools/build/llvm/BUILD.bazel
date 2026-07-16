@@ -1,0 +1,89 @@
+# Selectable LLVM tooling: hermetic (downloaded) by default, or a system install.
+
+load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
+
+# Which LLVM the C/C++ client build + lint use. `hermetic` (default) downloads the
+# LLVM release; `system` uses the install baked into the buildenv image. Flip with
+# `--//tools/build/llvm:toolchain=system`, or the `--config=system-llvm` group in
+# the repo-root .bazelrc (which also swaps the compiler toolchain via
+# --extra_toolchains). CI sets that config in the container bazelrc.
+string_flag(
+    name = "toolchain",
+    build_setting_default = "hermetic",
+    values = [
+        "hermetic",
+        "system",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+config_setting(
+    name = "system",
+    flag_values = {":toolchain": "system"},
+    visibility = ["//visibility:public"],
+)
+
+# toolchains_llvm only declares the clang-tidy/clang-format/include targets in
+# its Linux LLVM distribution, so on Windows these aliases resolve to the
+# non-hermetic fallbacks. The C++ lint rules are Linux-only (see
+# //tools/build:cpp.bzl), so nothing actually runs them there -- the aliases
+# just need to resolve so a Windows `bazel build //...` can analyse them.
+config_setting(
+    name = "windows",
+    constraint_values = ["@platforms//os:windows"],
+    visibility = ["//visibility:public"],
+)
+
+# clang-tidy / clang-format for the lint rules in //tools/build:cpp.bzl. Hermetic
+# mode uses the downloaded toolchain's Bazel targets; system mode execs the
+# apt.llvm.org clang-20 binaries via wrapper scripts (path-mode toolchains_llvm
+# provides the compiler but no Bazel target for these tools). Switching these --
+# not just the compiler toolchain -- is what keeps the ~2 GB hermetic archive from
+# being fetched in system mode.
+alias(
+    name = "clang-tidy",
+    actual = select({
+        ":system": ":clang-tidy-system",
+        ":windows": ":clang-tidy-system",
+        "//conditions:default": "@llvm_toolchain_llvm//:clang-tidy",
+    }),
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "clang-format",
+    actual = select({
+        ":system": ":clang-format-system",
+        ":windows": ":clang-format-system",
+        "//conditions:default": "@llvm_toolchain_llvm//:clang-format",
+    }),
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "clang-tidy-system",
+    srcs = ["clang-tidy-system.sh"],
+)
+
+filegroup(
+    name = "clang-format-system",
+    srcs = ["clang-format-system.sh"],
+)
+
+# libc++ headers passed to clang-tidy. Hermetic supplies them via the toolchain's
+# :include; system clang-tidy resolves its own libc++ (/usr/lib/llvm-20/include/
+# c++/v1) from `-stdlib=libc++`, so no extra inputs are needed.
+alias(
+    name = "include",
+    actual = select({
+        ":system": ":no-includes",
+        ":windows": ":no-includes",
+        "//conditions:default": "@llvm_toolchain_llvm//:include",
+    }),
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "no-includes",
+    srcs = [],
+)

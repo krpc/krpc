@@ -4,19 +4,20 @@ def _impl(ctx):
     output = ctx.outputs.out
     protoc_output = output.path + ".tmp-proto-java"
 
-    sub_commands = [
-        "rm -rf %s" % protoc_output,
-        "mkdir -p %s" % protoc_output,
-        "%s --java_out=%s %s" % (ctx.file._protoc.path, protoc_output, ctx.file.src.path),
-        "cp `find %s -name *.java` %s" % (protoc_output, output.path),
-    ]
+    args = ctx.actions.args()
+    args.add("--protoc", ctx.file._protoc.path)
+    args.add("--mkdir", protoc_output)
+    args.add("--copy", protoc_output + "/**/*.java=" + output.path)
+    args.add("--")
+    args.add("--java_out=" + protoc_output)
+    args.add(ctx.file.src.path)
 
-    ctx.actions.run_shell(
+    ctx.actions.run(
+        executable = ctx.executable._runner,
+        arguments = [args],
         inputs = [ctx.file.src, ctx.file._protoc],
         outputs = [output],
-        command = " && ".join(sub_commands),
         mnemonic = "ProtobufJava",
-        use_default_shell_env = True,
     )
 
 protobuf_java = rule(
@@ -25,5 +26,10 @@ protobuf_java = rule(
         "src": attr.label(allow_single_file = [".proto"]),
         "_protoc": attr.label(default = Label("//tools/build/protobuf:protoc"), allow_single_file = True),
         "out": attr.output(mandatory = True),
+        "_runner": attr.label(
+            default = Label("//tools/build/protobuf:run_protoc"),
+            executable = True,
+            cfg = "exec",
+        ),
     },
 )

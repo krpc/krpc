@@ -10,20 +10,22 @@ def _impl(ctx):
     if (not output_pyi.path.endswith("_pb2.pyi")):
         fail("protoc pyi output path must end with _pb2.pyi")
 
-    sub_commands = [
-        "rm -rf %s" % protoc_output,
-        "mkdir -p %s" % protoc_output,
-        "%s --python_out=%s --pyi_out=%s %s" % (ctx.file._protoc.path, protoc_output, protoc_output, ctx.file.src.path),
-        "cp %s/protobuf/*.py %s" % (protoc_output, output.path),
-        "cp %s/protobuf/*.pyi %s" % (protoc_output, output_pyi.path),
-    ]
+    args = ctx.actions.args()
+    args.add("--protoc", ctx.file._protoc.path)
+    args.add("--mkdir", protoc_output)
+    args.add("--copy", protoc_output + "/protobuf/*.py=" + output.path)
+    args.add("--copy", protoc_output + "/protobuf/*.pyi=" + output_pyi.path)
+    args.add("--")
+    args.add("--python_out=" + protoc_output)
+    args.add("--pyi_out=" + protoc_output)
+    args.add(ctx.file.src.path)
 
-    ctx.actions.run_shell(
+    ctx.actions.run(
+        executable = ctx.executable._runner,
+        arguments = [args],
         inputs = [ctx.file.src, ctx.file._protoc],
         outputs = [output, output_pyi],
-        command = " && ".join(sub_commands),
         mnemonic = "ProtobufPython",
-        use_default_shell_env = True,
     )
 
 protobuf_py = rule(
@@ -36,5 +38,10 @@ protobuf_py = rule(
         ),
         "out": attr.output(mandatory = True),
         "out_pyi": attr.output(mandatory = True),
+        "_runner": attr.label(
+            default = Label("//tools/build/protobuf:run_protoc"),
+            executable = True,
+            cfg = "exec",
+        ),
     },
 )

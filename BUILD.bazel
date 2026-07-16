@@ -2,6 +2,8 @@ load("//:config.bzl", "avc_version", "ksp_avc_version_max", "ksp_avc_version_min
 load("//tools/build:pkg.bzl", "pkg_zip")
 
 exports_files([
+    ".clang-format",
+    ".clang-tidy",
     "COPYING",
     "COPYING.LESSER",
 ])
@@ -107,9 +109,9 @@ pkg_zip(
         "//core",
         "//server",
         ":blank_settings",
-        "//tools/build/ksp:Google.Protobuf",
+        "//tools/build/ksp:Google.Protobuf.dll",
         "//tools/build/protobuf:LICENSE",
-        "//tools/build/ksp:KRPC.IO.Ports",
+        "//tools/build/ksp:KRPC.IO.Ports.dll",
         "@csharp_krpc_io_ports_license//file",
         # Services
         "//service/SpaceCenter",
@@ -129,29 +131,39 @@ pkg_zip(
     path_map = {
         "kRPC.version": "GameData/kRPC/kRPC.version",
         # Server
+        "core/KRPC.Core/net472/": "GameData/kRPC/",
         "core/": "GameData/kRPC/",
+        "server/KRPC/net472/": "GameData/kRPC/",
         "server/": "GameData/kRPC/",
         "server/src/icons": "GameData/kRPC/icons",
         "tools/build/ksp/": "GameData/kRPC/",
         "tools/build/protobuf/LICENSE": "LICENSE.Google.Protobuf",
-        "../_main~_repo_rules~csharp_krpc_io_ports_license/file/LICENSE.KRPC.IO.Ports": "LICENSE.KRPC.IO.Ports",
+        "../+http_file+csharp_krpc_io_ports_license/file/LICENSE.KRPC.IO.Ports": "LICENSE.KRPC.IO.Ports",
         # Services
+        "service/SpaceCenter/KRPC.SpaceCenter/net472/": "GameData/kRPC/",
         "service/SpaceCenter/": "GameData/kRPC/",
         "service/SpaceCenter/CHANGES.txt": "GameData/kRPC/CHANGES.SpaceCenter.txt",
         "service/SpaceCenter/LICENSE": "LICENSE.KRPC.SpaceCenter",
         "service/SpaceCenter/src/module-manager.cfg": "GameData/kRPC/module-manager.cfg",
+        "service/Drawing/KRPC.Drawing/net472/": "GameData/kRPC/",
         "service/Drawing/": "GameData/kRPC/",
         "service/Drawing/CHANGES.txt": "GameData/kRPC/CHANGES.Drawing.txt",
+        "service/InfernalRobotics/KRPC.InfernalRobotics/net472/": "GameData/kRPC/",
         "service/InfernalRobotics/": "GameData/kRPC/",
         "service/InfernalRobotics/CHANGES.txt": "GameData/kRPC/CHANGES.InfernalRobotics.txt",
+        "service/KerbalAlarmClock/KRPC.KerbalAlarmClock/net472/": "GameData/kRPC/",
         "service/KerbalAlarmClock/": "GameData/kRPC/",
         "service/KerbalAlarmClock/CHANGES.txt": "GameData/kRPC/CHANGES.KerbalAlarmClock.txt",
+        "service/RemoteTech/KRPC.RemoteTech/net472/": "GameData/kRPC/",
         "service/RemoteTech/": "GameData/kRPC/",
         "service/RemoteTech/CHANGES.txt": "GameData/kRPC/CHANGES.RemoteTech.txt",
+        "service/UI/KRPC.UI/net472/": "GameData/kRPC/",
         "service/UI/": "GameData/kRPC/",
         "service/UI/CHANGES.txt": "GameData/kRPC/CHANGES.UI.txt",
+        "service/LiDAR/KRPC.LiDAR/net472/": "GameData/kRPC/",
         "service/LiDAR/": "GameData/kRPC/",
         "service/LiDAR/CHANGES.txt": "GameData/kRPC/CHANGES.LiDAR.txt",
+        "service/DockingCamera/KRPC.DockingCamera/net472/": "GameData/kRPC/",
         "service/DockingCamera/": "GameData/kRPC/",
         "service/DockingCamera/CHANGES.txt": "GameData/kRPC/CHANGES.DockingCamera.txt",
         # Module Manager
@@ -205,11 +217,12 @@ test_suite(
 
 filegroup(
     name = "csproj",
+    testonly = True,
     srcs = [
         "//client/csharp",
-        "//client/csharp:KRPC.Client.Test",
+        "//client/csharp:test-KRPC.Client",
         "//core",
-        "//core:KRPC.Core.Test",
+        "//core:test-KRPC.Core",
         "//server",
         "//service/DockingCamera",
         "//service/Drawing",
@@ -222,6 +235,7 @@ filegroup(
         "//tools/ServiceDefinitions",
         "//tools/TestServer",
         "//tools/TestingTools",
+        "//tools/build/ksp:Google.Protobuf.dll",
         "//tools/build/ksp:KRPC.IO.Ports.dll",
     ],
 )

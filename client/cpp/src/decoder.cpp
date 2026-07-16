@@ -15,103 +15,90 @@ namespace krpc {
 namespace decoder {
 
 std::string guid(const std::string& data) {
-  if (data.size() != 16)
-    throw EncodingError("GUID is not 16 characters");
-  return
-    platform::hexlify(std::string(data.rbegin() + 12, data.rend()))        + "-" +
-    platform::hexlify(std::string(data.rbegin() + 10, data.rbegin() + 12)) + "-" +
-    platform::hexlify(std::string(data.rbegin() + 8,  data.rbegin() + 10)) + "-" +
-    platform::hexlify(std::string(data.begin()  + 8,  data.begin()  + 10)) + "-" +
-    platform::hexlify(std::string(data.begin()  + 10, data.end()));
+  if (data.size() != 16) throw EncodingError("GUID is not 16 characters");
+  return platform::hexlify(std::string(data.rbegin() + 12, data.rend())) + "-" +
+         platform::hexlify(std::string(data.rbegin() + 10, data.rbegin() + 12)) + "-" +
+         platform::hexlify(std::string(data.rbegin() + 8, data.rbegin() + 10)) + "-" +
+         platform::hexlify(std::string(data.begin() + 8, data.begin() + 10)) + "-" +
+         platform::hexlify(std::string(data.begin() + 10, data.end()));
 }
 
 void decode(double& value, const std::string& data, Client* client) {
-  google::protobuf::io::CodedInputStream stream(
-    reinterpret_cast<const uint8_t*>(&data[0]), static_cast<int>(data.size()));
+  google::protobuf::io::CodedInputStream stream(reinterpret_cast<const uint8_t*>(&data[0]),
+                                                static_cast<int>(data.size()));
   uint64_t value2 = 0;
-  if (!stream.ReadLittleEndian64(&value2))
-    throw EncodingError("Failed to decode double");
+  if (!stream.ReadLittleEndian64(&value2)) throw EncodingError("Failed to decode double");
   value = google::protobuf::internal::WireFormatLite::DecodeDouble(value2);
 }
 
 void decode(float& value, const std::string& data, Client* client) {
-  google::protobuf::io::CodedInputStream stream(
-    reinterpret_cast<const uint8_t*>(&data[0]), static_cast<int>(data.size()));
+  google::protobuf::io::CodedInputStream stream(reinterpret_cast<const uint8_t*>(&data[0]),
+                                                static_cast<int>(data.size()));
   uint32_t value2;
-  if (!stream.ReadLittleEndian32(&value2))
-    throw EncodingError("Failed to decode float");
+  if (!stream.ReadLittleEndian32(&value2)) throw EncodingError("Failed to decode float");
   value = google::protobuf::internal::WireFormatLite::DecodeFloat(value2);
 }
 
 void decode(int32_t& value, const std::string& data, Client* client) {
-  google::protobuf::io::CodedInputStream stream(
-    reinterpret_cast<const uint8_t*>(&data[0]), static_cast<int>(data.size()));
+  google::protobuf::io::CodedInputStream stream(reinterpret_cast<const uint8_t*>(&data[0]),
+                                                static_cast<int>(data.size()));
   uint32_t zigZagValue = 0;
-  if (!stream.ReadVarint32(&zigZagValue))
-    throw EncodingError("Failed to decode sint32");
+  if (!stream.ReadVarint32(&zigZagValue)) throw EncodingError("Failed to decode sint32");
   value = google::protobuf::internal::WireFormatLite::ZigZagDecode32(zigZagValue);
 }
 
 void decode(int64_t& value, const std::string& data, Client* client) {
-  google::protobuf::io::CodedInputStream stream(
-    reinterpret_cast<const uint8_t*>(&data[0]), static_cast<int>(data.size()));
+  google::protobuf::io::CodedInputStream stream(reinterpret_cast<const uint8_t*>(&data[0]),
+                                                static_cast<int>(data.size()));
   uint64_t zigZagValue = 0;
-  if (!stream.ReadVarint64(&zigZagValue))
-    throw EncodingError("Failed to decode sint64");
+  if (!stream.ReadVarint64(&zigZagValue)) throw EncodingError("Failed to decode sint64");
   value = google::protobuf::internal::WireFormatLite::ZigZagDecode64(zigZagValue);
 }
 
 void decode(uint32_t& value, const std::string& data, Client* client) {
-  google::protobuf::io::CodedInputStream stream(
-    reinterpret_cast<const uint8_t*>(&data[0]), static_cast<int>(data.size()));
-  if (!stream.ReadVarint32(&value))
-    throw EncodingError("Failed to decode uint32");
+  google::protobuf::io::CodedInputStream stream(reinterpret_cast<const uint8_t*>(&data[0]),
+                                                static_cast<int>(data.size()));
+  if (!stream.ReadVarint32(&value)) throw EncodingError("Failed to decode uint32");
 }
 
 void decode(uint64_t& value, const std::string& data, Client* client) {
-  google::protobuf::io::CodedInputStream stream(
-    reinterpret_cast<const uint8_t*>(&data[0]), static_cast<int>(data.size()));
-  if (!stream.ReadVarint64(&value))
-    throw EncodingError("Failed to decode uint64");
+  google::protobuf::io::CodedInputStream stream(reinterpret_cast<const uint8_t*>(&data[0]),
+                                                static_cast<int>(data.size()));
+  if (!stream.ReadVarint64(&value)) throw EncodingError("Failed to decode uint64");
 }
 
 void decode(bool& value, const std::string& data, Client* client) {
-  google::protobuf::io::CodedInputStream stream(
-    reinterpret_cast<const uint8_t*>(&data[0]), static_cast<int>(data.size()));
+  google::protobuf::io::CodedInputStream stream(reinterpret_cast<const uint8_t*>(&data[0]),
+                                                static_cast<int>(data.size()));
   uint64_t value2 = 0;
-  if (!stream.ReadVarint64(&value2))
-    throw EncodingError("Failed to decode bool");
+  if (!stream.ReadVarint64(&value2)) throw EncodingError("Failed to decode bool");
   value = (value2 != 0);
 }
 
 void decode(std::string& value, const std::string& data, Client* client) {
-  google::protobuf::io::CodedInputStream stream(
-    reinterpret_cast<const uint8_t*>(&data[0]), static_cast<int>(data.size()));
+  google::protobuf::io::CodedInputStream stream(reinterpret_cast<const uint8_t*>(&data[0]),
+                                                static_cast<int>(data.size()));
   uint64_t length;
-  if (!stream.ReadVarint64(&length))
-    throw EncodingError("Failed to decode string (length)");
+  if (!stream.ReadVarint64(&length)) throw EncodingError("Failed to decode string (length)");
   if (!stream.ReadString(&value, static_cast<int>(length)))
     throw EncodingError("Failed to decode string");
 }
 
 void decode(Event& event, const std::string& data, Client* client) {
   krpc::schema::Event message;
-  if (!message.ParseFromString(data))
-    throw EncodingError("Failed to decode message");
+  if (!message.ParseFromString(data)) throw EncodingError("Failed to decode message");
   event = Event(client, message);
 }
 
 void decode(google::protobuf::MessageLite& message, const std::string& data, Client* client) {
-  if (!message.ParseFromString(data))
-    throw EncodingError("Failed to decode message");
+  if (!message.ParseFromString(data)) throw EncodingError("Failed to decode message");
 }
 
 uint32_t decode_size(const std::string& data) {
   uint32_t result;
-  google::protobuf::io::CodedInputStream stream(
-    reinterpret_cast<const uint8_t*>(&data[0]), static_cast<int>(data.size()));
-  if (!stream.ReadVarint32(&result))
-    throw EncodingError("Failed to decode size");
+  google::protobuf::io::CodedInputStream stream(reinterpret_cast<const uint8_t*>(&data[0]),
+                                                static_cast<int>(data.size()));
+  if (!stream.ReadVarint32(&result)) throw EncodingError("Failed to decode size");
   return result;
 }
 

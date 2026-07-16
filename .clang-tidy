@@ -1,0 +1,31 @@
+---
+# clang-tidy configuration for the C++ (client/cpp) and C (client/cnano)
+# clients. Covers non-formatting style and correctness checks; formatting is
+# handled separately by clang-format.
+Checks: >
+  bugprone-*,
+  performance-*,
+  -bugprone-crtp-constructor-accessibility,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-assignment-in-if-condition,
+  -bugprone-macro-parentheses,
+  -performance-no-int-to-ptr,
+WarningsAsErrors: '*'
+# Disabled checks and why:
+#  * bugprone-crtp-constructor-accessibility — Object<T>'s public constructor is
+#    deliberate (the encoder/decoder need access; see object.hpp).
+#  * bugprone-easily-swappable-parameters — noise; the generated service stubs
+#    have many same-typed parameters by design.
+#  * bugprone-assignment-in-if-condition — the KRPC_RETURN_ON_ERROR family of
+#    macros expands to an assignment inside an if; pervasive and intentional.
+#  * bugprone-macro-parentheses — the cnano struct-init / KRPC_FREE_* macros take
+#    a plain lvalue and use it as `x.member`; parenthesising reads worse here.
+#  * performance-no-int-to-ptr — the cnano connection handle is stashed in
+#    nanopb's void* stream arg via the correct (void*)(intptr_t) idiom.
+# Only diagnose our own hand-written sources, not third-party headers (asio,
+# protobuf, nanopb). The exclude drops generated code — the protobuf stubs
+# (*.pb.hpp) and the generated service stubs (include/krpc/services/, all under
+# a bazel-out/ path) — which live under a client/cpp/include/ path substring.
+HeaderFilterRegex: 'client/c(pp|nano)/(include|src|test)/'
+ExcludeHeaderFilterRegex: 'bazel-out|/services/|\.pb\.'
+...

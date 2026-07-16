@@ -182,23 +182,45 @@ class {{ service_name }} : public Service {
 {% if enumerations | length > 0 %}
 
 namespace encoder {
-  {% for enum_name,values in enumerations.items() %}
+  {% for enum_name,enm in enumerations.items() %}
 
+  {% if enm.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  {% endif %}
   inline std::string encode(const services::{{ service_name }}::{{ enum_name }}& value) {
     return krpc::encoder::encode(static_cast<int32_t>(value));
   }
+  {% if enm.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+  {% endif %}
   {% endfor %}
 
 }  // namespace encoder
 
 namespace decoder {
-  {% for enum_name,values in enumerations.items() %}
+  {% for enum_name,enm in enumerations.items() %}
 
+  {% if enm.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  {% endif %}
   inline void decode(services::{{ service_name }}::{{ enum_name }}& value, const std::string& data, Client* client) {
     int32_t x;
     decode(x, data, client);
     value = static_cast<services::{{ service_name }}::{{ enum_name }}>(x);
   }
+  {% if enm.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+  {% endif %}
   {% endfor %}
 
 }  // namespace decoder
@@ -208,10 +230,21 @@ namespace services {
 
 inline {{ service_name }}::{{ service_name }}(Client* client):
   Service(client) {
-  {% for exception_name in exceptions.keys() %}
+  {% for exception_name,exception in exceptions.items() %}
+  {% if exception.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  {% endif %}
   client->add_exception_thrower(
     "{{ service_name }}", "{{ exception_name }}",
     [] (const std::string& msg) { throw {{ exception_name }}(msg); });
+  {% if exception.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+  {% endif %}
   {% endfor %}
 }
 {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}

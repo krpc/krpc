@@ -1,21 +1,44 @@
-load("//tools/build/protobuf:lua.bzl", "protoc_lua_env")
-load("//tools/build/protobuf:nanopb.bzl", "protoc_nanopb_env")
+load("@rules_python//python:defs.bzl", "py_binary")
 
 package(default_visibility = ["//visibility:public"])
 
 exports_files(["LICENSE"])
 
-protoc_lua_env(name = "protoc-lua-env")
+# Driver for the codegen rules: runs protoc and copies/rewrites its output.
+py_binary(
+    name = "run_protoc",
+    srcs = ["run_protoc.py"],
+)
 
-protoc_nanopb_env(name = "protoc-nanopb-env")
+# protoc plugins for languages without built-in protoc support, run on the
+# hermetic python toolchain with the protobuf package from the pip hub
+
+py_binary(
+    name = "protoc-gen-lua",
+    srcs = ["protoc_gen_lua.py"],
+    data = ["@protoc_lua//:plugin"],
+    main = "protoc_gen_lua.py",
+    deps = [
+        "@pypi//protobuf",
+        "@rules_python//python/runfiles",
+    ],
+)
+
+py_binary(
+    name = "protoc-gen-nanopb",
+    srcs = ["protoc_gen_nanopb.py"],
+    data = ["@protoc_nanopb//:plugin"],
+    main = "protoc_gen_nanopb.py",
+    deps = [
+        "@pypi//protobuf",
+        "@rules_python//python/runfiles",
+    ],
+)
 
 filegroup(
     name = "protoc",
     srcs = select({
-        ":windows_mingw": ["@protoc_win32//:bin/protoc.exe"],
-        ":windows_msys64_mingw64": ["@protoc_win32//:bin/protoc.exe"],
-        ":windows_msys64": ["@protoc_win32//:bin/protoc.exe"],
-        ":windows_clang": ["@protoc_win32//:bin/protoc.exe"],
+        ":windows": ["@protoc_win32//:bin/protoc.exe"],
         ":darwin": ["@protoc_osx_x86_64//:bin/protoc"],
         ":k8": ["@protoc_linux_x86_64//:bin/protoc"],
         ":piii": ["@protoc_linux_x86_32//:bin/protoc"],
@@ -27,10 +50,7 @@ filegroup(
 filegroup(
     name = "protoc_unity",
     srcs = select({
-        ":windows_mingw": ["@protoc_unity_win32//:bin/protoc.exe"],
-        ":windows_msys64_mingw64": ["@protoc_unity_win32//:bin/protoc.exe"],
-        ":windows_msys64": ["@protoc_unity_win32//:bin/protoc.exe"],
-        ":windows_clang": ["@protoc_unity_win32//:bin/protoc.exe"],
+        ":windows": ["@protoc_unity_win32//:bin/protoc.exe"],
         ":darwin": ["@protoc_unity_osx_x86_64//:bin/protoc"],
         ":k8": ["@protoc_unity_linux_x86_64//:bin/protoc"],
         ":piii": ["@protoc_unity_linux_x86_32//:bin/protoc"],
@@ -39,24 +59,11 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+# The windows config_setting keys on the target OS (like darwin/linux below), so
+# it resolves for any Windows build regardless of the C++ compiler in use.
 config_setting(
-    name = "windows_mingw",
-    values = {"compiler": "windows_mingw"},
-)
-
-config_setting(
-    name = "windows_msys64",
-    values = {"compiler": "windows_msys64"},
-)
-
-config_setting(
-    name = "windows_msys64_mingw64",
-    values = {"compiler": "windows_msys64_mingw64"},
-)
-
-config_setting(
-    name = "windows_clang",
-    values = {"compiler": "windows_clang"},
+    name = "windows",
+    constraint_values = ["@platforms//os:windows"],
 )
 
 config_setting(

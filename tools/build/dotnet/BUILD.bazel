@@ -1,0 +1,64 @@
+load("@rules_dotnet//dotnet:defs.bzl", "import_dll", "import_library")
+
+package(default_visibility = ["//visibility:public"])
+
+# NuGet library DLLs, pinned as http_archives in MODULE.bazel. Targets built
+# for modern .NET (net8.0) use the plain-named imports; net472 builds of the
+# client use the net45/net462 assets below. The mod itself uses the assets in
+# //tools/build/ksp, which are pinned to versions compatible with KSP's
+# version of Unity.
+
+import_dll(
+    name = "Google.Protobuf",
+    dll = "@csharp_protobuf//:lib/net5.0/Google.Protobuf.dll",
+)
+
+import_dll(
+    name = "Newtonsoft.Json",
+    dll = "@csharp_json//:lib/net6.0/Newtonsoft.Json.dll",
+)
+
+import_dll(
+    name = "Moq",
+    dll = "@csharp_moq//:lib/net6.0/Moq.dll",
+)
+
+import_dll(
+    name = "Castle.Core",
+    dll = "@csharp_castle_core//:lib/net6.0/Castle.Core.dll",
+)
+
+import_dll(
+    name = "NDesk.Options",
+    dll = "@csharp_options//:lib/NDesk.Options.dll",
+)
+
+# net4x assets, for the net472 build of the client library
+
+import_dll(
+    name = "Google.Protobuf.net45",
+    dll = "@csharp_protobuf//:lib/net45/Google.Protobuf.dll",
+)
+
+import_dll(
+    name = "System.Memory",
+    dll = "@csharp_system_memory//:lib/net462/System.Memory.dll",
+)
+
+import_dll(
+    name = "System.Runtime.CompilerServices.Unsafe",
+    dll = "@csharp_system_runtime_compilerservices_unsafe//:lib/net462/System.Runtime.CompilerServices.Unsafe.dll",
+)
+
+# System.IO.Ports needs the unix runtime assembly and native shim at runtime;
+# the lib/ assembly is only used at compile time.
+# TODO: select() the win runtime assembly and drop the native lib when
+# building for Windows.
+import_library(
+    name = "System.IO.Ports",
+    library_name = "System.IO.Ports",
+    libs = ["@csharp_system_io_ports//:runtimes/unix/lib/net8.0/System.IO.Ports.dll"],
+    native = ["@csharp_system_io_ports_native_linux_x64//:runtimes/linux-x64/native/libSystem.IO.Ports.Native.so"],
+    refs = ["@csharp_system_io_ports//:lib/net8.0/System.IO.Ports.dll"],
+    version = "8.0.0",
+)

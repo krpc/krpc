@@ -1,108 +1,104 @@
-load("//tools/build:csharp.bzl", "csharp_reference")
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
+load("@rules_dotnet//dotnet:defs.bzl", "import_dll")
 
 package(default_visibility = ["//visibility:public"])
 
-csharp_reference(
+import_dll(
     name = "UnityEngine",
-    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "UnityEngine.AnimationModule",
-    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.AnimationModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.AnimationModule.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "UnityEngine.AssetBundleModule",
-    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.AssetBundleModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.AssetBundleModule.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "UnityEngine.CoreModule",
-    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.CoreModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.CoreModule.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "UnityEngine.IMGUIModule",
-    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.IMGUIModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.IMGUIModule.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "UnityEngine.InputLegacyModule",
-    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.InputLegacyModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.InputLegacyModule.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "UnityEngine.PhysicsModule",
-    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.PhysicsModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.PhysicsModule.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "UnityEngine.ScreenCaptureModule",
-    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.ScreenCaptureModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.ScreenCaptureModule.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "UnityEngine.SharedInternalsModule",
-    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.SharedInternalsModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.SharedInternalsModule.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "UnityEngine.TextRenderingModule",
-    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.TextRenderingModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.TextRenderingModule.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "UnityEngine.UI",
-    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.UI.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.UI.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "UnityEngine.UIModule",
-    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.UIModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.UIModule.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "UnityEngine.UnityWebRequestWWWModule",
-    file = "//lib:ksp/KSP_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "Assembly-CSharp",
-    file = "//lib:ksp/KSP_Data/Managed/Assembly-CSharp.dll",
+    dll = "@ksp//:KSP_Data/Managed/Assembly-CSharp.dll",
 )
 
-csharp_reference(
+import_dll(
     name = "Assembly-CSharp-firstpass",
-    file = "//lib:ksp/KSP_Data/Managed/Assembly-CSharp-firstpass.dll",
+    dll = "@ksp//:KSP_Data/Managed/Assembly-CSharp-firstpass.dll",
 )
 
-csharp_reference(
-    name = "mscorlib",
-    file = "//lib:ksp/KSP_Data/Managed/mscorlib.dll",
-)
-
-csharp_reference(
-    name = "System",
-    file = "//lib:ksp/KSP_Data/Managed/System.dll",
-)
-
-csharp_reference(
-    name = "System.Core",
-    file = "//lib:ksp/KSP_Data/Managed/System.Core.dll",
-)
-
-csharp_reference(
-    name = "System.Xml",
-    file = "//lib:ksp/KSP_Data/Managed/System.Xml.dll",
-)
-
-csharp_reference(
+import_dll(
     name = "KRPC.IO.Ports",
-    file = "@csharp_krpc_io_ports//file",
+    dll = "@csharp_krpc_io_ports//file",
 )
 
-csharp_reference(
+import_dll(
     name = "Google.Protobuf",
-    file = "@csharp_protobuf_unity//:lib/net45/Google.Protobuf.dll",
+    dll = "@csharp_protobuf_unity//:lib/net45/Google.Protobuf.dll",
+)
+
+# Copies of DLLs that are shipped in release archives or staged into other
+# packages, exposed at tools/build/ksp/<name>.dll for the packaging path maps.
+
+copy_file(
+    name = "Google.Protobuf-file",
+    src = "@csharp_protobuf_unity//:lib/net45/Google.Protobuf.dll",
+    out = "Google.Protobuf.dll",
+)
+
+copy_file(
+    name = "KRPC.IO.Ports-file",
+    src = "@csharp_krpc_io_ports//file",
+    out = "KRPC.IO.Ports.dll",
 )

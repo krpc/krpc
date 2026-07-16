@@ -2,14 +2,11 @@
 #include <gtest/gtest-test-part.h>
 
 #include "gtest/gtest.h"
-
 #include "krpc/object.hpp"
-
 #include "server_test.hpp"
 #include "services/test_service.hpp"
 
-class test_object: public server_test {
-};
+class test_object : public server_test {};
 
 TEST_F(test_object, test_equality) {
   krpc::services::TestService::TestClass obj1 = test_service.create_test_object("jeb");

@@ -91,13 +91,13 @@ struct krpc_{{ typ.name }}_s {
 };
 {% endif %}
 
-krpc_error_t krpc_encode_{{ typ.name }}(
+static inline krpc_error_t krpc_encode_{{ typ.name }}(
   pb_ostream_t * stream, {{ typ.ccvtype }} value);
-krpc_error_t krpc_encode_size_{{ typ.name }}(
+static inline krpc_error_t krpc_encode_size_{{ typ.name }}(
   size_t * size, {{ typ.ccvtype }} value);
-bool krpc_encode_callback_{{ typ.name }}(
+static inline bool krpc_encode_callback_{{ typ.name }}(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
-krpc_error_t krpc_decode_{{ typ.name }}(
+static inline krpc_error_t krpc_decode_{{ typ.name }}(
   pb_istream_t * stream, {{ typ.ctype }} * value);
 
 #endif  // KRPC_TYPE_{{ typ.name | upper }}
@@ -121,7 +121,7 @@ typedef enum {
 {% endif %}
 {% if procedure.deprecated %}KRPC_DEPRECATED("{{ procedure.deprecated_reason }}")
 {% endif %}
-krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ procedure_parameters(procedure) }});
+static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ procedure_parameters(procedure) }});
 {% endfor %}
 {% for property_name,property in properties.items() %}
 
@@ -129,7 +129,7 @@ krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ procedure_parameter
 {% endif %}
 {% if property.deprecated %}KRPC_DEPRECATED("{{ property.deprecated_reason }}")
 {% endif %}
-krpc_error_t krpc_{{ service_name }}_{{ property_name }}({{ procedure_parameters(property) }});
+static inline krpc_error_t krpc_{{ service_name }}_{{ property_name }}({{ procedure_parameters(property) }});
 {% endfor %}
 {% for class_name,cls in classes.items() %}
 {% for method_name,method in cls.methods.items() %}
@@ -138,7 +138,7 @@ krpc_error_t krpc_{{ service_name }}_{{ property_name }}({{ procedure_parameters
 {% endif %}
 {% if method.deprecated %}KRPC_DEPRECATED("{{ method.deprecated_reason }}")
 {% endif %}
-krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ method_parameters(service_name, class_name, method) }});
+static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ method_parameters(service_name, class_name, method) }});
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
@@ -146,7 +146,7 @@ krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ metho
 {% endif %}
 {% if method.deprecated %}KRPC_DEPRECATED("{{ method.deprecated_reason }}")
 {% endif %}
-krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ static_method_parameters(method) }});
+static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ static_method_parameters(method) }});
 {% endfor %}
 {% for property_name,property in cls.properties.items() %}
 
@@ -154,7 +154,7 @@ krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ stati
 {% endif %}
 {% if property.deprecated %}KRPC_DEPRECATED("{{ property.deprecated_reason }}")
 {% endif %}
-krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ property_name }}({{ method_parameters(service_name, class_name, property) }});
+static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ property_name }}({{ method_parameters(service_name, class_name, property) }});
 {% endfor %}
 {% endfor %}
 
@@ -165,7 +165,7 @@ krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ property_name }}({{ met
 #define KRPC_IMPL_TYPE_{{ typ.name | upper }}
 
 {% if typ.name.startswith('tuple_') %}
-static bool krpc_encode_callback_items_{{ typ.name }}(
+static inline bool krpc_encode_callback_items_{{ typ.name }}(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const {{ typ.ctype }} * value = (const {{ typ.ctype }}*)(*arg);
   {% for value_type in typ.value_types %}
@@ -182,7 +182,7 @@ static bool krpc_encode_callback_items_{{ typ.name }}(
   return true;
 }
 {% elif typ.name.startswith('list_') %}
-static bool krpc_encode_callback_items_{{ typ.name }}(
+static inline bool krpc_encode_callback_items_{{ typ.name }}(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const {{ typ.ctype }} * value = (const {{ typ.ctype }}*)(*arg);
   size_t i = 0;
@@ -198,7 +198,7 @@ static bool krpc_encode_callback_items_{{ typ.name }}(
   return true;
 }
 {% elif typ.name.startswith('set_') %}
-static bool krpc_encode_callback_items_{{ typ.name }}(
+static inline bool krpc_encode_callback_items_{{ typ.name }}(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const {{ typ.ctype }} * value = (const {{ typ.ctype }}*)(*arg);
   size_t i = 0;
@@ -214,7 +214,7 @@ static bool krpc_encode_callback_items_{{ typ.name }}(
   return true;
 }
 {% elif typ.name.startswith('dictionary_') %}
-static bool krpc_encode_callback_key_{{ typ.name }}(
+static inline bool krpc_encode_callback_key_{{ typ.name }}(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for dictionary entry key");
@@ -227,7 +227,7 @@ static bool krpc_encode_callback_key_{{ typ.name }}(
   return true;
 }
 
-static bool krpc_encode_callback_value_{{ typ.name }}(
+static inline bool krpc_encode_callback_value_{{ typ.name }}(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for dictionary entry value");
@@ -240,7 +240,7 @@ static bool krpc_encode_callback_value_{{ typ.name }}(
   return true;
 }
 
-static bool krpc_encode_callback_entry_{{ typ.name }}(
+static inline bool krpc_encode_callback_entry_{{ typ.name }}(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const {{ typ.ctype }} * value = (const {{ typ.ctype }}*)(*arg);
   krpc_schema_DictionaryEntry entry = krpc_schema_DictionaryEntry_init_default;
@@ -262,7 +262,7 @@ static bool krpc_encode_callback_entry_{{ typ.name }}(
 }
 {% endif %}
 
-inline krpc_error_t krpc_encode_{{ typ.name }}(
+static inline krpc_error_t krpc_encode_{{ typ.name }}(
   pb_ostream_t * stream, {{ typ.ccvtype }} value) {
 {% if typ.name.startswith('tuple_') %}
   krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
@@ -288,7 +288,7 @@ inline krpc_error_t krpc_encode_{{ typ.name }}(
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_encode_size_{{ typ.name }}(
+static inline krpc_error_t krpc_encode_size_{{ typ.name }}(
   size_t * size, {{ typ.ccvtype }} value) {
   pb_ostream_t stream = PB_OSTREAM_SIZING;
   KRPC_RETURN_ON_ERROR(krpc_encode_{{ typ.name }}(&stream, value));
@@ -296,7 +296,7 @@ inline krpc_error_t krpc_encode_size_{{ typ.name }}(
   return KRPC_OK;
 }
 
-inline bool krpc_encode_callback_{{ typ.name }}(
+static inline bool krpc_encode_callback_{{ typ.name }}(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for {{ typ.name }}");
@@ -310,9 +310,9 @@ inline bool krpc_encode_callback_{{ typ.name }}(
 }
 
 {% if typ.name.startswith('tuple_') %}
-static bool krpc_decode_callback_item_{{ typ.name }}(
+static inline bool krpc_decode_callback_item_{{ typ.name }}(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct {size_t pos; {{ typ.ctype }} * value;} State;
+  typedef struct State {size_t pos; {{ typ.ctype }} * value;} State;
   State * state = (State*)(*arg);
   {{ typ.ctype }} * value = state->value;
   switch (state->pos) {
@@ -328,9 +328,9 @@ static bool krpc_decode_callback_item_{{ typ.name }}(
   return true;
 }
 {% elif typ.name.startswith('list_') or typ.name.startswith('set_') %}
-static bool krpc_decode_callback_item_{{ typ.name }}(
+static inline bool krpc_decode_callback_item_{{ typ.name }}(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; {{ typ.ctype }} * value; } State;
+  typedef struct State { size_t capacity; {{ typ.ctype }} * value; } State;
   State * state = (State*)(*arg);
   size_t i = state->value->size;
   state->value->size++;
@@ -342,23 +342,23 @@ static bool krpc_decode_callback_item_{{ typ.name }}(
   return true;
 }
 {% elif typ.name.startswith('dictionary_') %}
-static bool krpc_decode_callback_key_{{ typ.name }}(
+static inline bool krpc_decode_callback_key_{{ typ.name }}(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
   {{ typ.key_type.ctype }} * key = ({{ typ.key_type.ctype }}*)(*arg);
   KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_{{ typ.key_type.name }}(stream, key));
   return true;
 }
 
-static bool krpc_decode_callback_value_{{ typ.name }}(
+static inline bool krpc_decode_callback_value_{{ typ.name }}(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
   {{ typ.value_type.ctype }} * value = ({{ typ.value_type.ctype }}*)(*arg);
   KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_{{ typ.value_type.name }}(stream, value));
   return true;
 }
 
-static bool krpc_decode_callback_entry_{{ typ.name }}(
+static inline bool krpc_decode_callback_entry_{{ typ.name }}(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; {{ typ.ctype }} * value; } State;
+  typedef struct State { size_t capacity; {{ typ.ctype }} * value; } State;
   State * state = (State*)(*arg);
   {{ typ.ctype }} * value = state->value;
   size_t i = value->size;
@@ -377,17 +377,17 @@ static bool krpc_decode_callback_entry_{{ typ.name }}(
 }
 {% endif %}
 
-inline krpc_error_t krpc_decode_{{ typ.name }}(
+static inline krpc_error_t krpc_decode_{{ typ.name }}(
   pb_istream_t * stream, {{ typ.ctype }} * value) {
 {% if typ.name.startswith('tuple_') %}
   krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
   message.items.funcs.decode = &krpc_decode_callback_item_{{ typ.name }};
-  typedef struct { size_t pos; {{ typ.ctype }} * value; } State;
+  typedef struct State { size_t pos; {{ typ.ctype }} * value; } State;
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
 {% elif typ.name.startswith('list_') or typ.name.startswith('set_') %}
-  typedef struct { size_t capacity; {{ typ.ctype }} * value; } State;
+  typedef struct State { size_t capacity; {{ typ.ctype }} * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->items == NULL) {
@@ -406,7 +406,7 @@ inline krpc_error_t krpc_decode_{{ typ.name }}(
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Set(stream, &message));
   {% endif %}
 {% elif typ.name.startswith('dictionary_') %}
-  typedef struct { size_t capacity; {{ typ.ctype }} * value; } State;
+  typedef struct State { size_t capacity; {{ typ.ctype }} * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->entries == NULL) {
@@ -425,7 +425,7 @@ inline krpc_error_t krpc_decode_{{ typ.name }}(
 {% endfor %}
 {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
 
-inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ procedure_parameters(procedure) }}) {
+static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ procedure_parameters(procedure) }}) {
 {{ call(service_id, procedure.remote_id, procedure.parameters) | indent(2) }}
 {{ return(procedure.return_type) | indent(2) }}
 }
@@ -433,14 +433,14 @@ inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ procedure_pa
 {% for class_name,cls in classes.items() %}
 {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
 
-inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ method_parameters(service_name, class_name, method) }}) {
+static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ method_parameters(service_name, class_name, method) }}) {
 {{ call(service_id, method.remote_id, [{'type': {'ccvtype': 'krpc_'+service_name+'_'+class_name+'_t', 'name': 'uint64', 'getptr': '&'}, 'name': 'instance'}] + method.parameters) | indent(2) }}
 {{ return(method.return_type) | indent(2) }}
 }
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
-inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ static_method_parameters(method) }}) {
+static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ static_method_parameters(method) }}) {
 {{ call(service_id, method.remote_id, method.parameters) | indent(2) }}
 {{ return(method.return_type) | indent(2) }}
 }

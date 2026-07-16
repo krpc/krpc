@@ -29,7 +29,7 @@ def _test_impl(ctx):
         runfiles = runfiles,
     )
 
-lua_test = rule(
+_lua_test = rule(
     implementation = _test_impl,
     attrs = {
         "rockspec": attr.label(allow_single_file = True),
@@ -39,3 +39,12 @@ lua_test = rule(
     },
     test = True,
 )
+
+# buildifier: disable=function-docstring
+def lua_test(**kwargs):
+    # Runs the generated bash test through luarocks + the system lua interpreter;
+    # there is no maintained hermetic Lua Bazel ruleset, so this is Linux-only.
+    _lua_test(
+        target_compatible_with = ["@platforms//os:linux"],
+        **kwargs
+    )

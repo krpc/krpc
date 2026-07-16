@@ -234,7 +234,7 @@ end
 
 function TestClient:test_argument_out_of_range_exception()
   luaunit.assertErrorMsgContains(
-    'KRPC.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.\nParameter name: foo',
+    'KRPC.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.',
     self.conn.test_service.throw_argument_out_of_range_exception, 0)
 end
 

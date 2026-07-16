@@ -1,9 +1,10 @@
+load("@rules_python//python/entry_points:py_console_script_binary.bzl", "py_console_script_binary")
 load("//:config.bzl", "version")
-load("//doc:macros.bzl", "cc_binary_multiple", "csharp_binary_multiple", "csharp_library_multiple", "java_binary_multiple")
+load("//doc:macros.bzl", "cc_binary_multiple", "csharp_library_multiple", "java_binary_multiple")
 load("//doc:test.bzl", "check_documented_test")
 load("//tools/build:image.bzl", "png_images")
 load("//tools/build:pkg.bzl", "stage_files")
-load("//tools/build:python.bzl", "py_lint_test", "py_script")
+load("//tools/build:python.bzl", "py_lint_test")
 load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
 load("//tools/krpctools:docgen.bzl", "docgen_multiple")
 
@@ -47,43 +48,21 @@ stage_files(
     },
 )
 
-py_script(
+py_console_script_binary(
     name = "sphinx-build",
-    pkg = "@python_sphinx//file",
+    pkg = "@pypi//sphinx",
     script = "sphinx-build",
     visibility = ["//visibility:public"],
     deps = [
-        "@python_alabaster//file",
-        "@python_babel//file",
-        "@python_certifi//file",
-        "@python_charset_normalizer//file",
-        "@python_docutils//file",
-        "@python_idna//file",
-        "@python_imagesize//file",
-        "@python_javalang//file",
-        "@python_javasphinx//file",
-        "@python_jinja2//file",
-        "@python_markupsafe//file",
-        "@python_packaging//file",
-        "@python_pyenchant//file",
-        "@python_pygments//file",
-        "@python_pytz//file",
-        "@python_requests//file",
-        "@python_roman_numerals//file",
-        "@python_snowballstemmer//file",
-        "@python_sphinx_csharp//file",
-        "@python_sphinx_rtd_theme//file",
-        "@python_sphinx_tabs//file",
-        "@python_sphinxcontrib_applehelp//file",
-        "@python_sphinxcontrib_devhelp//file",
-        "@python_sphinxcontrib_htmlhelp//file",
-        "@python_sphinxcontrib_jquery//file",
-        "@python_sphinxcontrib_jsmath//file",
-        "@python_sphinxcontrib_luadomain//file",
-        "@python_sphinxcontrib_qthelp//file",
-        "@python_sphinxcontrib_serializinghtml//file",
-        "@python_sphinxcontrib_spelling//file",
-        "@python_urllib3//file",
+        "@pypi//javalang",
+        "@pypi//javasphinx",
+        "@pypi//pyenchant",
+        "@pypi//requests",
+        "@pypi//sphinx_csharp",
+        "@pypi//sphinx_rtd_theme",
+        "@pypi//sphinx_tabs",
+        "@pypi//sphinxcontrib_luadomain",
+        "@pypi//sphinxcontrib_spelling",
     ],
 )
 
@@ -110,6 +89,8 @@ sphinx_build(
     builder = "latex",
     opts = {"version": version},
     sphinx_build = ":sphinx-build",
+    # The latex->pdf step needs `make` and a LaTeX toolchain (texlive).
+    target_compatible_with = ["@platforms//os:linux"],
     visibility = ["//:__pkg__"],
 )
 
@@ -193,6 +174,9 @@ sphinx_spelling_test(
     srcs = [":srcs"],
     opts = {"version": version},
     sphinx_build = ":sphinx-build",
+    # Generated bash test wrapper (grep + writable-dictionary hack); convertible
+    # to python later, but Linux-only for now.
+    target_compatible_with = ["@platforms//os:linux"],
 )
 
 sphinx_linkcheck_test(
@@ -201,6 +185,8 @@ sphinx_linkcheck_test(
     opts = {"version": version},
     sphinx_build = ":sphinx-build",
     tags = ["requires-network"],
+    # Generated bash test wrapper; convertible to python later, Linux-only now.
+    target_compatible_with = ["@platforms//os:linux"],
 )
 
 test_suite(
@@ -275,13 +261,19 @@ filegroup(
     ],
 )
 
+# The C example scripts include <unistd.h> for sleep(), so they only compile on
+# POSIX hosts; the compile check is Linux-only. The C++ examples use portable
+# <thread>, so compile-scripts-cpp stays cross-platform.
 cc_binary_multiple(
     name = "compile-scripts-cnano",
     srcs = glob(["src/scripts/**/*.c"]),
+    target_compatible_with = ["@platforms//os:linux"],
     deps = ["//client/cnano:krpc_cnano"],
 )
 
-csharp_binary_multiple(
+# The example scripts are compiled as libraries; this only checks that they
+# compile, they are never executed
+csharp_library_multiple(
     name = "compile-scripts-csharp-exes",
     srcs = glob(
         ["src/scripts/**/*.cs"],
@@ -289,13 +281,7 @@ csharp_binary_multiple(
     ),
     deps = [
         "//client/csharp:KRPC.Client",
-        "//tools/build/mono-4.5:Google.Protobuf",
-        "//tools/build/mono-4.5:System",
-        "//tools/build/mono-4.5:System.Core",
-        "//tools/build/mono-4.5:System.IO",
-        "//tools/build/mono-4.5:System.Runtime",
-        "//tools/build/mono-4.5:System.Xml",
-        "//tools/build/mono-4.5:mscorlib",
+        "//tools/build/dotnet:Google.Protobuf.net45",
     ],
 )
 
@@ -307,16 +293,12 @@ csharp_library_multiple(
         "//tools/build/ksp:Assembly-CSharp",
         "//tools/build/ksp:Assembly-CSharp-firstpass",
         "//tools/build/ksp:Google.Protobuf",
-        "//tools/build/ksp:System",
-        "//tools/build/ksp:System.Core",
-        "//tools/build/ksp:System.Xml",
         "//tools/build/ksp:UnityEngine",
         "//tools/build/ksp:UnityEngine.AnimationModule",
         "//tools/build/ksp:UnityEngine.CoreModule",
         "//tools/build/ksp:UnityEngine.IMGUIModule",
         "//tools/build/ksp:UnityEngine.InputLegacyModule",
         "//tools/build/ksp:UnityEngine.UI",
-        "//tools/build/ksp:mscorlib",
     ],
 )
 
@@ -337,8 +319,8 @@ java_binary_multiple(
     ],
     deps = [
         "//client/java:krpc-jar",
-        "@java_javatuples//jar",
-        "@java_protobuf//jar",
+        "@maven//:com_google_protobuf_protobuf_java",
+        "@maven//:org_javatuples_javatuples",
     ],
 )
 
