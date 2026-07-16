@@ -15,7 +15,6 @@ inline server_test::server_test() : conn(connect()) {}
 
 inline server_test::~server_test() {
   if (KRPC_OK != krpc_close(conn)) exit(1);
-  conn = -1;
 }
 
 inline krpc_connection_t server_test::connect() {
