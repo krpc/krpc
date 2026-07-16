@@ -6,6 +6,8 @@ load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/protobuf:cpp.bzl", "protobuf_cpp")
 load("//tools/krpctools:clientgen.bzl", "clientgen_cpp")
 
+exports_files(["CHANGES.txt"])
+
 name = "krpc-cpp-%s" % version
 
 pkg_zip(

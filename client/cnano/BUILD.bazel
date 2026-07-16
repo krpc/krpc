@@ -222,4 +222,7 @@ protobuf_nanopb(
     source = "src/krpc.pb.c",
 )
 
-exports_files(["src/krpc.options"])
+exports_files([
+    "CHANGES.txt",
+    "src/krpc.options",
+])

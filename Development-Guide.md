@@ -227,10 +227,10 @@ the wrong mods are installed) then the tests will fail.
 
 Included in the project are various tools to aid development.
 
- * `tools/serve-docs.sh`
-   - Running this script build the documentation website, and starts a local webserver. You can use
-   this to try out building the documentation and then view it by pointing a web browser at
-   `http://localhost:8080`
+ * `bazel run //doc:serve`
+   - Builds the documentation website and starts a local webserver, rebuilding automatically as you
+   edit the sources. A web browser is opened at `http://localhost:8080` once the site is ready; pass
+   `-- --no-browser` to skip that, or `-- --port <PORT>` to serve on a different port.
  * `krpc-install`
    - Console script from the `krpctest` package. It builds the `//:krpc` release archive and the
    `TestingTools` DLL, and installs them into the GameData directory of the KSP install given by

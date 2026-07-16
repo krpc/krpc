@@ -4,6 +4,8 @@ load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:java.bzl", "java_checkstyle_test")
 load("//tools/krpctools:clientgen.bzl", "clientgen_java")
 
+exports_files(["CHANGES.txt"])
+
 copts = [
     "-Werror",
     "-Xlint:all",

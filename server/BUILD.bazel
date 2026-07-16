@@ -4,6 +4,8 @@ load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:image.bzl", "png_images")
 load("//tools/build/ksp:build.bzl", "ksp_unity_libs")
 
+exports_files(["CHANGES.txt"])
+
 filegroup(
     name = "server",
     srcs = [
