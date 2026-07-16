@@ -13,10 +13,6 @@ It comes with client libraries for many popular languages including
 and :doc:`others <third-party>`.
 It also supports websockets and serialio (for example on Arduino).
 
- * :doc:`Getting Started Guide <getting-started>`
- * :doc:`Tutorials and Examples <tutorials>`
- * :doc:`Clients, services and tools made by others <third-party>`
-
 The mod exposes most of KSPs API for controlling and interacting with rockets,
 and also includes support several popular mods including Ferram Aerospace
 Research, Kerbal Alarm Clock and Infernal Robotics.
@@ -29,7 +25,7 @@ extensible - additional remote procedures (grouped into "services") can be added
 to the server using the :doc:`Service API <extending>`.
 
 .. toctree::
-   :hidden:
+   :caption: Contents
 
    getting-started
    tutorials
