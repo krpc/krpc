@@ -29,16 +29,29 @@ public class EmptyService {
     }
 
     public static class _Types {
+        // Procedure return and parameter types are held in lookup maps that are
+        // populated by chunked initializer methods. Emitting them this way keeps
+        // every generated method under the JVM's 64KB bytecode limit as a service
+        // accumulates procedures.
+        private static final java.util.Map<String, krpc.schema.KRPC.Type> RETURN_TYPES =
+            new java.util.HashMap<String, krpc.schema.KRPC.Type>();
+        private static final java.util.Map<String, krpc.schema.KRPC.Type[]> PARAMETER_TYPES =
+            new java.util.HashMap<String, krpc.schema.KRPC.Type[]>();
+
+        static {
+        }
+
         public static krpc.schema.KRPC.Type getReturnType(String procedure) {
-            switch (procedure) {
-            }
-            throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+            if (!RETURN_TYPES.containsKey(procedure))
+                throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+            return RETURN_TYPES.get(procedure);
         }
 
         public static krpc.schema.KRPC.Type[] getParameterTypes(String procedure) {
-            switch (procedure) {
-            }
-            throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+            krpc.schema.KRPC.Type[] parameterTypes = PARAMETER_TYPES.get(procedure);
+            if (parameterTypes == null)
+                throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+            return parameterTypes;
         }
     }
 }
