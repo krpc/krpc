@@ -1,13 +1,14 @@
 FROM ubuntu:24.04
 LABEL maintainer="djungelorm <djungelorm@users.noreply.github.com>"
 
-# Install essential packages. python3 + pip are here only for the system nanopb
-# generator used by the C-nano CMake consumer jobs; the Bazel build uses the
-# hermetic rules_python toolchain.
+# Install essential packages. python3 + pip are for the system nanopb generator
+# used by the C-nano CMake consumer jobs; python-is-python3 provides a `python`
+# executable for the build-setup action's version-stamping step. The Bazel build
+# uses the hermetic rules_python toolchain, not these.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     curl ca-certificates gnupg git wget gosu \
-    python3 python3-pip && \
+    python3 python3-pip python-is-python3 && \
     apt-get clean
 
 # Install Bazel
