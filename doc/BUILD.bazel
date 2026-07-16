@@ -261,9 +261,13 @@ filegroup(
     ],
 )
 
+# The C example scripts include <unistd.h> for sleep(), so they only compile on
+# POSIX hosts; the compile check is Linux-only. The C++ examples use portable
+# <thread>, so compile-scripts-cpp stays cross-platform.
 cc_binary_multiple(
     name = "compile-scripts-cnano",
     srcs = glob(["src/scripts/**/*.c"]),
+    target_compatible_with = ["@platforms//os:linux"],
     deps = ["//client/cnano:krpc_cnano"],
 )
 

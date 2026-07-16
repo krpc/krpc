@@ -19,7 +19,7 @@ def csharp_library_multiple(name, srcs, deps):
     native.filegroup(name = name, srcs = names)
 
 # buildifier: disable=function-docstring
-def cc_binary_multiple(name, srcs, deps):
+def cc_binary_multiple(name, srcs, deps, target_compatible_with = None):
     names = []
     for src in srcs:
         subname = name + "/" + src
@@ -28,8 +28,13 @@ def cc_binary_multiple(name, srcs, deps):
             name = subname,
             srcs = [src],
             deps = deps,
+            target_compatible_with = target_compatible_with,
         )
-    native.filegroup(name = name, srcs = names)
+    native.filegroup(
+        name = name,
+        srcs = names,
+        target_compatible_with = target_compatible_with,
+    )
 
 # buildifier: disable=function-docstring
 def java_binary_multiple(name, srcs, deps, copts):
