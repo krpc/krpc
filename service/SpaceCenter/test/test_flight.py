@@ -552,6 +552,7 @@ class TestFlightAero(krpctest.TestCase):
         self.assertGreater(norm(damped - static), 1)
 
     def test_simulate_aerodynamic_wrench_angular_velocity(self):
+        # pylint: disable=too-many-locals
         # Central differences expose both the rate-aware force response and the
         # aerodynamic damping torque. FAR intentionally ignores angular velocity.
         if self.far:
@@ -586,6 +587,7 @@ class TestFlightAero(krpctest.TestCase):
         self.assertLess(dot(torque_derivative, axis), 0)
 
     def test_simulate_aerodynamic_wrench_reference_frames(self):
+        # pylint: disable=too-many-locals
         # Express one physical COM state in rotating-body, non-rotating-body and
         # vessel frames. Transform every result to the non-rotating frame before
         # comparison. CelestialBody.angular_velocity supplies one stable physical
