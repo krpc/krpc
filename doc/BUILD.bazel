@@ -32,7 +32,7 @@ stage_files(
         "src/scripts/**/*.js",
     ]) + [
         "src/_static/custom.css",
-        "src/_templates/layout.html",
+        "src/_static/external-links.js",
         "src/dictionary.txt",
         ":cnano-api",
         ":conf",
@@ -58,8 +58,8 @@ py_console_script_binary(
         "@pypi//javasphinx",
         "@pypi//pyenchant",
         "@pypi//requests",
+        "@pypi//pydata_sphinx_theme",
         "@pypi//sphinx_csharp",
-        "@pypi//sphinx_rtd_theme",
         "@pypi//sphinx_tabs",
         "@pypi//sphinxcontrib_luadomain",
         "@pypi//sphinxcontrib_spelling",

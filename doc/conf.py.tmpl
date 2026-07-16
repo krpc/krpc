@@ -12,22 +12,34 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.extlinks',
     'sphinxcontrib.spelling',
-    'sphinxcontrib.jquery',
     'sphinx_tabs.tabs',
     'sphinxcontrib.luadomain',
     'sphinx_csharp.csharp',
     'javasphinx'
 ]
-templates_path = ['_templates']
 
 # Render Graphviz diagrams as SVG in HTML so they stay crisp when scaled.
 graphviz_output_format = 'svg'
 
-pygments_style = 'sphinx'
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'pydata_sphinx_theme'
 htmlhelp_basename = 'krpc-doc'
 html_static_path = ['crafts', 'scripts', '_static']
 html_css_files = ['custom.css']
+html_js_files = ['external-links.js']
+
+html_theme_options = {
+    # Show all six client languages in the header (getting-started, tutorials
+    # and the languages); the remaining sections collapse into "More".
+    'header_links_before_dropdown': 8,
+    'navbar_end': ['theme-switcher', 'navbar-icon-links'],
+    'icon_links': [
+        {
+            'name': 'GitHub',
+            'url': 'https://github.com/krpc/krpc',
+            'icon': 'fa-brands fa-github',
+        },
+    ],
+}
 
 toc_object_entries = False
 

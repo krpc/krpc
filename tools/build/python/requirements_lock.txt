@@ -4,6 +4,10 @@
 #
 #    bazel run //tools/build/python:requirements.update
 #
+accessible-pygments==0.0.5 \
+    --hash=sha256:40918d3e6a2b619ad424cb91e556bd3bd8865443d9f22f1dcdf79e33c8046872 \
+    --hash=sha256:88ae3211e68a1d0b011504b2ffc1691feafce124b845bd072ab6f9f66f34d4b7
+    # via pydata-sphinx-theme
 alabaster==1.0.0 \
     --hash=sha256:c00dca57bca26fa62a6d7d0a9fcce65f3e026e9bfe33e9c538fd3fbb2144fd9e \
     --hash=sha256:fc6786402dc3fcb2de3cabd5fe455a2db534b371124f1f21de8731783dec828b
@@ -15,11 +19,15 @@ astroid==4.0.4 \
 babel==2.18.0 \
     --hash=sha256:b80b99a14bd085fcacfa15c9165f651fbb3406e66cc603abf11c5750937c992d \
     --hash=sha256:e2b422b277c2b9a9630c1d7903c2a00d0830c409c59ac8cae9081c92f1aeba35
-    # via sphinx
+    # via
+    #   pydata-sphinx-theme
+    #   sphinx
 beautifulsoup4==4.15.0 \
     --hash=sha256:288e3ca7d54b06f2ac191970bc275c1939cb46d450b255bf6718b04aa37ab4f7 \
     --hash=sha256:d6f88de62e1d4e38ecb1077eb9724cd0eff29d2a08ca16a401e9b9e93f117cf9
-    # via javasphinx
+    # via
+    #   javasphinx
+    #   pydata-sphinx-theme
 black==26.5.1 \
     --hash=sha256:0e48b87e03bf109288e55cfceadcfa15ff5470aca2851a851950ed2926f450d7 \
     --hash=sha256:1037d5ac7b7b310b2632ad867ec8d0e4c4819dcdb0b820f63135da746a24e418 \
@@ -197,8 +205,8 @@ docutils==0.22.4 \
     --hash=sha256:d0013f540772d1420576855455d050a2180186c91c15779301ac2ccb3eeb68de
     # via
     #   javasphinx
+    #   pydata-sphinx-theme
     #   sphinx
-    #   sphinx-rtd-theme
     #   sphinx-tabs
 future==1.0.0 \
     --hash=sha256:929292d34f5872e70396626ef385ec22355a1fae8ad29e1a734c3e43f9fbc216 \
@@ -237,6 +245,7 @@ jinja2==3.1.6 \
     --hash=sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67
     # via
     #   -r tools/build/python/requirements.in
+    #   pydata-sphinx-theme
     #   sphinx
 lxml==6.1.1 \
     --hash=sha256:05a82eb6e1530a64f26225b55cbd178113bd0b5af1c2b625f25e5296742c26d2 \
@@ -509,6 +518,10 @@ protobuf==7.35.1 \
     --hash=sha256:b73f9489a4b8b1c9cb1f8ed951c736392592edb24b9d6819f36d2e10b171d5b4 \
     --hash=sha256:ce115a26fe0c39a2c29973d914d327e516a6455464489fe3cd1e51a1b354f81a
     # via -r tools/build/python/requirements.in
+pydata-sphinx-theme==0.20.0 \
+    --hash=sha256:0da172d41e19a66de875f4002f7054b385372ec65763852193791e658d50bb4a \
+    --hash=sha256:56744483c9d72c783e075de716ab95d486108b69605df7528078090b73f11f69
+    # via -r tools/build/python/requirements.in
 pyenchant==3.3.0 \
     --hash=sha256:04a5bd0e022ebe2e8c6d9e498ec3d650602e264ec5486e9c6a1b7f99c9507c49 \
     --hash=sha256:1d55e075645a6edbb3c590fb42f9e02b4d455e4affe28a2227d5cb6d4868e626 \
@@ -521,6 +534,8 @@ pygments==2.20.0 \
     --hash=sha256:6757cd03768053ff99f3039c1a36d6c0aa0b263438fcab17520b30a303a82b5f \
     --hash=sha256:81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176
     # via
+    #   accessible-pygments
+    #   pydata-sphinx-theme
     #   pytest
     #   sphinx
     #   sphinx-tabs
@@ -585,6 +600,7 @@ requests==2.34.2 \
     --hash=sha256:f288924cae4e29463698d6d60bc6a4da69c89185ad1e0bcc4104f584e960b9ed
     # via
     #   -r tools/build/python/requirements.in
+    #   pydata-sphinx-theme
     #   sphinx
     #   sphinxcontrib-spelling
 roman-numerals==4.1.0 \
@@ -609,18 +625,13 @@ sphinx==9.1.0 \
     # via
     #   -r tools/build/python/requirements.in
     #   javasphinx
+    #   pydata-sphinx-theme
     #   sphinx-csharp
-    #   sphinx-rtd-theme
     #   sphinx-tabs
-    #   sphinxcontrib-jquery
     #   sphinxcontrib-luadomain
     #   sphinxcontrib-spelling
 sphinx-csharp==0.1.8 \
     --hash=sha256:b6aaab9057187f3e8a0c83c400d2d16ca21254a0d2f9af1d141d7f1cf7cfaf34
-    # via -r tools/build/python/requirements.in
-sphinx-rtd-theme==3.1.0 \
-    --hash=sha256:1785824ae8e6632060490f67cf3a72d404a85d2d9fc26bce3619944de5682b89 \
-    --hash=sha256:b44276f2c276e909239a4f6c955aa667aaafeb78597923b1c60babc76db78e4c
     # via -r tools/build/python/requirements.in
 sphinx-tabs==3.5.0 \
     --hash=sha256:154be49de4d5c8249ea08c5d9bf88ca8f9c31e00a178305a93cbc33e000339e5 \
@@ -638,10 +649,6 @@ sphinxcontrib-htmlhelp==2.1.0 \
     --hash=sha256:166759820b47002d22914d64a075ce08f4c46818e17cfc9470a9786b759b19f8 \
     --hash=sha256:c9e2916ace8aad64cc13a0d233ee22317f2b9025b9cf3295249fa985cc7082e9
     # via sphinx
-sphinxcontrib-jquery==4.1 \
-    --hash=sha256:1620739f04e36a2c779f1a131a2dfd49b2fd07351bf1968ced074365933abc7a \
-    --hash=sha256:f936030d7d0147dd026a4f2b5a57343d233f1fc7b363f68b3d4f1cb0993878ae
-    # via sphinx-rtd-theme
 sphinxcontrib-jsmath==1.0.1 \
     --hash=sha256:2ec2eaebfb78f3f2078e73666b1415417a116cc848b72e5172e596c871103178 \
     --hash=sha256:a9925e4a4587247ed2191a22df5f6970656cb8ca2bd6284309578f2153e0c4b8
