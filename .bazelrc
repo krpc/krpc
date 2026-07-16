@@ -25,6 +25,11 @@ build --java_runtime_version=remotejdk_11
 startup --windows_enable_symlinks
 common:windows --enable_runfiles
 
+# The MSVC toolchain links fastbuild binaries with /DEBUG:FASTLINK, which recent
+# MSVC toolchains dropped (warning LNK4315, falling back to /DEBUG:FULL). Ask for
+# /DEBUG:FULL explicitly so the linker does not warn.
+build:windows --linkopt=/DEBUG:FULL
+
 # Build the C/C++ clients against a system LLVM instead of downloading the ~2 GB
 # hermetic LLVM release. Selects system clang-tidy/clang-format/libc++ (via the
 # flag) and the system C++ compiler toolchain (via --extra_toolchains, which
