@@ -28,6 +28,10 @@ sphinx-tabs==3.5.0
 sphinxcontrib-luadomain==1.1.2
 sphinxcontrib-spelling==8.0.2
 
+# Live-serving the documentation website (bazel run //doc:serve)
+sphinx-autobuild
+watchdog
+
 # Java API docs; custom builds hosted on S3 (see PYTHON_PACKAGING.md)
 javalang @ https://krpc.s3.amazonaws.com/lib/javasphinx/javalang-0.13.1.tar.gz
 javasphinx @ https://krpc.s3.amazonaws.com/lib/javasphinx/javasphinx-0.9.16.tar.gz
