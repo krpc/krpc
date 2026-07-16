@@ -31,9 +31,9 @@ html_js_files = ['external-links.js']
 
 # Per-version publishing. %SUBPATH% is
 # the path this build is published under: a release version (e.g. '0.5.4') or
-# 'dev'. It is substituted by the :conf genrule and defaults to the release
-# version; CI overrides it to 'dev' for main-branch builds. html_baseurl gives
-# correct canonical links per subpath.
+# 'dev'. The :conf genrule substitutes it with 'dev' when config.bzl's version
+# carries a dev suffix and with the release number otherwise. html_baseurl
+# gives correct canonical links per subpath.
 html_baseurl = 'https://krpc.github.io/krpc/%SUBPATH%/'
 
 html_theme_options = {
