@@ -368,6 +368,7 @@ def integrate(
     hold_retro_vacuum=False,
     release_bank_offset=0.0,
     hold_retro_until=None,
+    hold_attitude=None,
 ):
     """Integrate the entry with classic RK4. Returns a list of PRED_COLUMNS
     rows, ending with a row interpolated to stop_alt if it was reached.
@@ -392,6 +393,9 @@ def integrate(
     hold_retro_until: optional callable (r, v, ut) -> bool overriding the
         atmosphere-interface release condition while hold_retro_vacuum is
         active. This lets callers mirror a dynamic-pressure-gated SAS release.
+    hold_attitude: optional callable (r, v, ut, q_seed) -> q overriding the
+        attitude used while that hold is active. The default tracks retrograde
+        while preserving roll; callers can instead impose a deterministic bank.
     """
     if record_dt <= 0.0:
         raise ValueError("record_dt must be greater than zero")
@@ -463,6 +467,13 @@ def integrate(
         aoa = total_aoa_deg(q_, r_, v_, w_planet)
         return [t_, alt_, *r_, *v_, *q_, *w_, aoa]
 
+    def held_attitude_at(r_, v_, t_, q_seed):
+        if hold_attitude is not None:
+            return q_normalize(
+                np.asarray(hold_attitude(r_, v_, t_, q_seed), dtype=float)
+            )
+        return retro_attitude(v_ - np.cross(w_planet, r_), q_seed)
+
     t0 = t
     alt0 = np.linalg.norm(r) - radius
     retro_hold_active = False
@@ -471,7 +482,7 @@ def integrate(
         if hold_retro_until is not None:
             should_hold_retro = bool(hold_retro_until(r, v, t))
         if should_hold_retro:
-            q = retro_attitude(v - np.cross(w_planet, r), q)
+            q = held_attitude_at(r, v, t, q)
             w = np.zeros(3)
             retro_hold_active = True
     rows = [make_row(t, r, v, q, w)]
@@ -518,7 +529,7 @@ def integrate(
                     # optionally, until a caller-defined release condition).
                     # Without this the frozen inertial attitude drifts ~10 deg
                     # off retro during the coast.
-                    q = retro_attitude(v - np.cross(w_planet, r), q)
+                    q = held_attitude_at(r, v, t + dt, q)
                     w = np.zeros(3)
                     retro_hold_active = True
                 elif retro_hold_active:
@@ -1822,6 +1833,7 @@ def selftest():
         f"UTs {stage_aero.uts}",
     )
     release_gate_uts = []
+    explicit_hold_q = q_axis_angle(np.array([1.0, 0.0, 0.0]), 0.25)
     gated_rows = integrate(
         {
             "mu": 0.0,
@@ -1847,11 +1859,18 @@ def selftest():
         max_time=2.0,
         hold_retro_vacuum=True,
         hold_retro_until=lambda _r, _v, ut: release_gate_uts.append(ut) or True,
+        hold_attitude=lambda _r, _v, _ut, _seed: explicit_hold_q,
     )
     check(
-        "caller-defined SAS release gate holds retrograde and zero rate",
+        "caller-defined SAS gate holds explicit attitude and zero rate",
         release_gate_uts == [100.0, 101.0]
-        and np.linalg.norm(np.asarray(gated_rows[-1][12:15])) < 1.0e-12,
+        and np.linalg.norm(np.asarray(gated_rows[-1][12:15])) < 1.0e-12
+        and abs(
+            float(
+                np.dot(q_normalize(np.asarray(gated_rows[-1][8:12])), explicit_hold_q)
+            )
+        )
+        > 1.0 - 1.0e-12,
         f"gate UTs {release_gate_uts}",
     )
 
