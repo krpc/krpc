@@ -4,6 +4,8 @@ load("//service:build.bzl", "service_deps")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 
+exports_files(["CHANGES.txt"])
+
 filegroup(
     name = "KerbalAlarmClock",
     srcs = [

@@ -7,6 +7,7 @@ load("//tools/build:image.bzl", "png_images")
 load("//tools/build:pkg.bzl", "stage_files")
 load("//tools/build:python.bzl", "py_lint_test")
 load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
+load("//tools/krpctools:changelog.bzl", "changeloggen")
 load("//tools/krpctools:docgen.bzl", "docgen_multiple")
 
 filegroup(
@@ -35,6 +36,7 @@ stage_files(
         "src/_static/custom.css",
         "src/_static/external-links.js",
         "src/dictionary.txt",
+        ":changelog",
         ":cnano-api",
         ":conf",
         ":cpp-api",
@@ -46,6 +48,32 @@ stage_files(
     ],
     path_map = {
         "doc/src/": "",
+    },
+)
+
+# Unified changelog page, merged from every component's CHANGES.txt. The dict
+# order below sets the per-version component order on the rendered page.
+changeloggen(
+    name = "changelog",
+    out = "src/changelog.rst",
+    components = {
+        "//server:CHANGES.txt": "Server",
+        "//core:CHANGES.txt": "Core",
+        "//service/SpaceCenter:CHANGES.txt": "SpaceCenter service",
+        "//service/Drawing:CHANGES.txt": "Drawing service",
+        "//service/UI:CHANGES.txt": "UI service",
+        "//service/InfernalRobotics:CHANGES.txt": "InfernalRobotics service",
+        "//service/KerbalAlarmClock:CHANGES.txt": "KerbalAlarmClock service",
+        "//service/RemoteTech:CHANGES.txt": "RemoteTech service",
+        "//service/LiDAR:CHANGES.txt": "LiDAR service",
+        "//service/DockingCamera:CHANGES.txt": "DockingCamera service",
+        "//client/python:CHANGES.txt": "Python client",
+        "//client/csharp:CHANGES.txt": "C# client",
+        "//client/cpp:CHANGES.txt": "C++ client",
+        "//client/cnano:CHANGES.txt": "C-nano client",
+        "//client/java:CHANGES.txt": "Java client",
+        "//client/lua:CHANGES.txt": "Lua client",
+        "//tools/krpctools:CHANGES.txt": "krpctools",
     },
 )
 

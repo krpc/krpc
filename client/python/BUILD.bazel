@@ -4,6 +4,8 @@ load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
 load("//tools/krpctools:clientgen.bzl", "clientgen_python")
 
+exports_files(["CHANGES.txt"])
+
 # The krpc package as an importable python library, for use by other python
 # targets in this workspace (the sdists below are what is released)
 py_library(

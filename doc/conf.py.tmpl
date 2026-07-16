@@ -80,11 +80,23 @@ todo_include_todos = True
 spelling_word_list_filename = 'dictionary.txt'
 spelling_ignore_contributor_names = True
 
+# The changelog page is generated verbatim from the CHANGES.txt files and is
+# dense with API identifiers; exclude it from the spell checker (only -- it is
+# still built and rendered) rather than listing every identifier in dictionary.txt.
+spelling_exclude_patterns = ['changelog.rst']
+
 javadoc_url_map = {
     'org.javatuples' : ('http://www.javatuples.org/apidocs/', 'javadoc')
 }
 
 add_module_names = False
+
+# Clickable (#NNN) issue/PR references on the changelog page. GitHub redirects
+# /issues/N to /pull/N (and vice versa), so `issue` resolves either kind.
+extlinks = {
+    'issue': ('https://github.com/krpc/krpc/issues/%s', '#%s'),
+    'pr': ('https://github.com/krpc/krpc/pull/%s', '#%s'),
+}
 
 sphinx_tabs_disable_tab_closing = True
 

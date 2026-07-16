@@ -6,6 +6,8 @@ load("//tools/build:nuget.bzl", "nuget_package")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/krpctools:clientgen.bzl", "clientgen_csharp")
 
+exports_files(["CHANGES.txt"])
+
 pkg_zip(
     name = "csharp",
     out = "krpc-csharp-%s.zip" % version,
