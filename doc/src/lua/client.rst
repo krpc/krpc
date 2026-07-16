@@ -9,8 +9,8 @@ written in Lua. It can be `installed using LuaRocks
 <https://luarocks.org/modules/djungelorm/krpc>`_ or
 `downloaded from GitHub <https://github.com/krpc/krpc/releases>`_.
 
-Installing the Library
-----------------------
+Installing
+----------
 
 The Lua client and all of its dependencies can be installed using luarocks with
 a single command:
@@ -19,13 +19,13 @@ a single command:
 
    luarocks install krpc
 
-Using the Library
------------------
+Getting Started
+---------------
 
 Once it's installed, simply ``require 'krpc'`` and you are good to go!
 
 Connecting to the Server
-------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 To connect to a server, use the :func:`krpc.connect` function. This returns a
 connection object through which you can interact with the server. For example to
@@ -56,10 +56,10 @@ InfernalRobotics service is accessible via ``conn.infernal_robotics``.
 Calling methods, getting or setting properties, etc. are mapped to remote
 procedure calls and passed to the server by the lua client.
 
-Streaming Data from the Server
-------------------------------
+Streams and Events
+------------------
 
-Streams are not yet supported by the Lua client.
+These features are not supported by the Lua client.
 
 Reference
 ---------

@@ -4,6 +4,24 @@
     clear: both !important;
 }
 
+/* pydata-sphinx-theme's heading scale is subtle and puts no rule under section
+   headings, so h2 sections and h3 subsections read almost the same. Rule off
+   each section heading and widen the size/weight/spacing gap between the levels
+   so the section -> subsection boundary is clear. */
+.bd-article h2 {
+    margin-top: 2.5rem;
+    padding-bottom: 0.3rem;
+    font-size: 1.9rem;
+    font-weight: 700;
+    border-bottom: 1px solid var(--pst-color-border);
+}
+
+.bd-article h3 {
+    margin-top: 2rem;
+    font-size: 1.35rem;
+    font-weight: 600;
+}
+
 /* Key sphinx-tabs' colors to the theme's light/dark mode. Its stock tabs.css
    only reacts to body[data-theme], but pydata-sphinx-theme sets data-theme on
    the html element, so its dark styling never applies; restyle the tabs with

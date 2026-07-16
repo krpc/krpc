@@ -1,7 +1,7 @@
 Communication Protocols
 =======================
 
-kRPC provides two communication protocols:
+kRPC provides three communication protocols:
 
  * :doc:`communication-protocols/tcpip` for languages that can communicate over a
    TCP/IP socket.

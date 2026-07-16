@@ -12,20 +12,14 @@ Installing the Library
 The library can be found on `PyPI <https://pypi.python.org/pypi/krpc>`_ or
 `downloaded from GitHub <https://github.com/krpc/krpc/releases>`_.
 
-To install using pip on Linux:
+To install using pip:
 
 .. code-block:: bash
 
    pip install krpc
 
-Or on Windows:
-
-.. code-block:: none
-
-   C:\Python310\Scripts\pip.exe install krpc
-
-Connecting to the Server
-------------------------
+Getting Started
+---------------
 
 The :func:`krpc.connect` function is used to open a connection to a server. It returns a connection
 object (of type :class:`krpc.client.Client`) through which you can interact with the server. The
@@ -63,8 +57,8 @@ will list all of the classes, enumerations, procedures and properties provides b
 
 .. _python-client-streams:
 
-Streaming Data from the Server
-------------------------------
+Streaming Data
+--------------
 
 A common use case for kRPC is to continuously extract data from the game. The naive approach to do
 this would be to repeatedly call a remote procedure, such as in the following which repeatedly

@@ -8,8 +8,8 @@ This client provides a Java API for interacting with a kRPC server. A jar contai
 ``krpc.client`` package can be `downloaded from GitHub <https://github.com/krpc/krpc/releases>`_.
 It requires Java version 1.8.
 
-Using the Library
------------------
+Getting Started
+---------------
 
 The kRPC client library depends on the `protobuf
 <https://github.com/google/protobuf/tree/master/java>`_ and `javatuples
@@ -21,16 +21,16 @@ The following example program connects to the server, queries it for its version
 .. literalinclude:: /scripts/client/java/Basic.java
 
 To compile this program using javac on the command line, save the source as ``Example.java`` and run
-the following:
+the following (replace ``<VERSION>`` with the kRPC version you are using):
 
 .. code-block:: bash
 
-   javac -cp krpc-java-0.5.2.jar:protobuf-java-3.4.0.jar:javatuples-1.2.jar Example.java
+   javac -cp krpc-java-<VERSION>.jar:protobuf-java-3.4.0.jar:javatuples-1.2.jar Example.java
 
 Note that you may need to change the paths to the JAR files.
 
 Connecting to the Server
-------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 To connect to a server, call :meth:`Connection.newInstance()` which returns a connection object. All
 interaction with the server is done via this object. When constructed without any arguments, it will
@@ -58,8 +58,8 @@ vessel and then prints out its altitude:
 
 .. _java-client-streams:
 
-Streaming Data from the Server
-------------------------------
+Streaming Data
+--------------
 
 A common use case for kRPC is to continuously extract data from the game. The naive approach to do
 this would be to repeatedly call a remote procedure, such as in the following which repeatedly

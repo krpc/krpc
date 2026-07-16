@@ -6,41 +6,30 @@ C++ Client
 
 This client provides a C++ API for interacting with a kRPC server.
 
-Installing the Library
-----------------------
+Installing
+----------
 
-Dependencies
-^^^^^^^^^^^^
+vcpkg
+^^^^^
 
-The kRPC C++ client requires `ASIO <http://think-async.com/>`_ (for network communication) and
-`protobuf <https://github.com/google/protobuf>`_ (for message serialization). By default, CMake
-looks for system-installed packages. On Ubuntu:
+The C++ client is available from `vcpkg <https://vcpkg.io>`_, which builds it along with
+its `ASIO <http://think-async.com/>`_ (network communication) and `protobuf
+<https://github.com/google/protobuf>`_ (message serialization) dependencies. It can be
+installed as follows:
 
-.. code-block:: bash
+.. tabs::
 
-   sudo apt-get install libasio-dev libprotobuf-dev protobuf-compiler
+   .. tab:: Linux
 
-Alternatively, CMake can download dependencies automatically via FetchContent — pass
-``-DKRPC_FETCH_DEPS=ON`` to the configure step (see below).
+      .. code-block:: bash
 
-Using vcpkg
-^^^^^^^^^^^
+         vcpkg install krpc
 
-The C++ client can be installed via `vcpkg <https://vcpkg.io>`_. The port files are included in the
-source archive — `download it from the releases page <https://github.com/krpc/krpc/releases>`_,
-extract it, and install using the bundled overlay port:
+   .. tab:: Windows
 
-On Linux:
+      .. code-block:: bash
 
-.. code-block:: bash
-
-   vcpkg install krpc --overlay-ports=/path/to/krpc-cpp-VERSION/vcpkg-port
-
-On Windows:
-
-.. code-block:: bash
-
-   vcpkg install krpc:x64-windows --overlay-ports=C:\path\to\krpc-cpp-VERSION\vcpkg-port
+         vcpkg install krpc:x64-windows
 
 Then integrate with your CMake project by passing the vcpkg toolchain file at configure time:
 
@@ -48,63 +37,58 @@ Then integrate with your CMake project by passing the vcpkg toolchain file at co
 
    cmake -B build -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
 
-And link the library in your ``CMakeLists.txt``:
+CMake
+^^^^^
 
-.. code-block:: cmake
+The C++ client requires `ASIO <http://think-async.com/>`_ (for network communication) and
+`protobuf <https://github.com/google/protobuf>`_ (for message serialization). By default, CMake
+looks for these as system-installed packages. On Ubuntu they can be installed using:
 
-   find_package(krpc CONFIG REQUIRED)
-   target_link_libraries(my_app PRIVATE krpc::krpc)
+.. code-block:: bash
 
-Using CMake
-^^^^^^^^^^^
+   apt-get install libasio-dev \
+       libprotobuf-dev protobuf-compiler
 
-CMake 3.15 or later is required.
-`Download the source archive <https://github.com/krpc/krpc/releases>`_, extract it and run:
+CMake 3.15 or later is required.  `Download the source archive
+<https://github.com/krpc/krpc/releases>`_, extract it and run:
 
 .. code-block:: bash
 
    cmake -B build
    cmake --build build
-   sudo cmake --install build
-   sudo ldconfig
-
-To install to a custom prefix:
-
-.. code-block:: bash
-
-   cmake -B build -DCMAKE_INSTALL_PREFIX=/install/path
-   cmake --build build
    cmake --install build
 
 To download all dependencies automatically via FetchContent instead of using system packages,
-pass ``-DKRPC_FETCH_DEPS=ON`` to the configure step. Fine-grained options
+pass ``-DKRPC_FETCH_DEPS=ON`` to the CMake configure step. Fine-grained options
 ``-DKRPC_FETCH_PROTOBUF=ON``, ``-DKRPC_FETCH_ASIO=ON``, and ``-DKRPC_FETCH_ABSL=ON`` are also
-available. When an option is OFF (the default), the system package is required.
+available. When an option is ``OFF`` (the default) the system package is required.
 
-After installation, downstream CMake projects can link the library with:
+Getting Started
+---------------
+
+The following example program connects to the server, queries it for its version and prints it out:
+
+.. literalinclude:: /scripts/client/cpp/Basic.cpp
+
+A kRPC program needs to be compiled with C++17 support enabled, and linked against ``libkrpc``,
+``libprotobuf-lite`` and ``libz``.
+
+To compile this example using GCC, save the source as ``main.cpp`` and run the
+following:
+
+.. code-block:: bash
+
+   g++ main.cpp -std=c++17 -lkrpc -lprotobuf-lite -lz
+
+If you build your program with CMake, link against the installed library in your ``CMakeLists.txt``:
 
 .. code-block:: cmake
 
    find_package(krpc CONFIG REQUIRED)
    target_link_libraries(my_app PRIVATE krpc::krpc)
 
-Using the Library
------------------
-
-A kRPC program needs to be compiled with C++17 support enabled, and linked against
-``libkrpc``, ``libprotobuf-lite`` and ``libz``. The following example program connects
-to the server, queries it for its version and prints it out:
-
-.. literalinclude:: /scripts/client/cpp/Basic.cpp
-
-To compile this program using GCC, save the source as ``main.cpp`` and run the following:
-
-.. code-block:: bash
-
-   g++ main.cpp -std=c++17 -lkrpc -lprotobuf-lite -lz
-
 Connecting to the Server
-------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The :func:`krpc::connect` function is used to open a connection to a server. It returns a client
 object (of type :class:`krpc::Client`) through which you can interact with the server. When called
@@ -134,8 +118,8 @@ its altitude:
 
 .. _cpp-client-streams:
 
-Streaming Data from the Server
-------------------------------
+Streaming Data
+--------------
 
 A common use case for kRPC is to continuously extract data from the game. The naive approach to do
 this would be to repeatedly call a remote procedure, such as in the following which repeatedly

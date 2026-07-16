@@ -1,19 +1,17 @@
 {% macro service(x) %}{{ mark_documented(x) }}
-Service {{ x.name }}
-
-{% if x.deprecated %}{{ deprecated(x) | indent }}
+{% if x.deprecated %}{{ deprecated(x) }}
 
 {% endif %}
-{{ gendoc(x.documentation) | indent }}
+{{ gendoc(x.documentation) }}
 
-{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) }}
 
 {% endif %}
 {% for member in x.members.values() %}
 {% if member.member_type == 'procedure' %}
-{{ procedure(x.name, member) | indent }}
+{{ procedure(x.name, member) }}
 {% elif member.member_type == 'property' %}
-{{ property(x.name, member) | indent }}
+{{ property(x.name, member) }}
 {% endif %}
 
 {% endfor %}
@@ -154,12 +152,12 @@ Service {{ x.name }}
 {% macro exception(x) %}{{ mark_documented(x) }}
 Exception class {{ x.name }}
 
-{% if x.deprecated %}{{ deprecated(x) | indent }}
+{% if x.deprecated %}{{ deprecated(x) }}
 
 {% endif %}
-{{ gendoc(x.documentation) | indent }}
+{{ gendoc(x.documentation) }}
 
-{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) }}{% endif %}
 {% endmacro %}
 
 {% macro parameters(return_type, parameters) %}
