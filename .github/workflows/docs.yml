@@ -44,7 +44,7 @@ jobs:
         with:
           # A tag build is a release: keep the plain version so it publishes
           # under /<version>/. A main build is a dev build: take the suffixed
-          # version (set-version.py) so it publishes under /dev/.
+          # version (the build-setup version step) so it publishes under /dev/.
           long-version: ${{ startsWith(github.ref, 'refs/tags/') && 'false' || 'true' }}
       - name: determine target
         id: target
