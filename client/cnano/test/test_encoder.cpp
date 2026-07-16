@@ -13,8 +13,7 @@
 TEST(test_encoder, test_encode_procedure_message) {
   uint8_t data[256];
   krpc_call_t call;
-  krpc_argument_t arguments[0];
-  ASSERT_EQ(KRPC_OK, krpc_call(&call, 99, 42, 0, arguments));
+  ASSERT_EQ(KRPC_OK, krpc_call(&call, 99, 42, 0, NULL));
   pb_ostream_t stream = pb_ostream_from_buffer(data, sizeof(data));
   ASSERT_EQ(KRPC_OK, krpc_encode_message_ProcedureCall(&stream, &call.message));
   std::string expected = "2063282a";
