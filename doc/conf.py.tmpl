@@ -1,9 +1,11 @@
+import datetime
 import os
 
 project = 'kRPC'
 version = '%VERSION%'
 release = version
-copyright = '2015-2023, kRPC Org'
+# End year is the build year, so the footer stays current without edits.
+copyright = '2015-%d, kRPC Org' % datetime.date.today().year
 author = ''
 
 master_doc = 'index'
