@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
   </ItemGroup>
-  <Import Project="$(SolutionDir)tools\msbuild\ksplibs.props" />
+  <Import Project="$(SolutionDir)tools\build\msbuild\ksplibs.props" />
   <ItemGroup>
     <Reference Include="Google.Protobuf">
       <HintPath>$(bazel-bin)\tools\build\ksp\Google.Protobuf.dll</HintPath>
