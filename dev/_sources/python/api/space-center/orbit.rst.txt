@@ -323,6 +323,17 @@ Orbit
       :rtype: float
    
 
+   .. attribute:: orbital_energy
+
+      The specific orbital energy of the orbit, in Joules per kilogram
+      (equivalently, meters squared per second squared). This is the sum
+      of the orbit's specific kinetic and potential energy, and is
+      negative for a bound (elliptical) orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
    .. staticmethod:: reference_plane_normal(reference_frame)
 
       The direction that is normal to the orbits reference plane,

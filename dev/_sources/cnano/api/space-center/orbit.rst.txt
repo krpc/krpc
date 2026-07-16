@@ -301,6 +301,15 @@ Orbit
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_OrbitalEnergy(krpc_connection_t connection, double * result)
+
+      The specific orbital energy of the orbit, in Joules per kilogram
+      (equivalently, meters squared per second squared). This is the sum
+      of the orbit's specific kinetic and potential energy, and is
+      negative for a bound (elliptical) orbit.
+
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_ReferencePlaneNormal(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The direction that is normal to the orbits reference plane,

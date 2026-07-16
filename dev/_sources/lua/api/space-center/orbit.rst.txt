@@ -290,6 +290,16 @@ Orbit
       :param number time: Time from now, in seconds.
       :rtype: number
 
+   .. attribute:: orbital_energy: number
+
+      The specific orbital energy of the orbit, in Joules per kilogram
+      (equivalently, meters squared per second squared). This is the sum
+      of the orbit's specific kinetic and potential energy, and is
+      negative for a bound (elliptical) orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
    .. staticmethod:: reference_plane_normal(reference_frame)
 
       The direction that is normal to the orbits reference plane,

@@ -309,6 +309,15 @@ Orbit
 
       :Game Scenes: All
 
+   .. property:: double OrbitalEnergy { get; }
+
+      The specific orbital energy of the orbit, in Joules per kilogram
+      (equivalently, meters squared per second squared). This is the sum
+      of the orbit's specific kinetic and potential energy, and is
+      negative for a bound (elliptical) orbit.
+
+      :Game Scenes: All
+
    .. method:: static System.Tuple<double,double,double> ReferencePlaneNormal(IConnection connection, ReferenceFrame referenceFrame)
 
       The direction that is normal to the orbits reference plane,

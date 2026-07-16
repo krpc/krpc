@@ -290,6 +290,16 @@ Orbit
       :param double time: Time from now, in seconds.
    
 
+   .. method:: double getOrbitalEnergy()
+
+
+      The specific orbital energy of the orbit, in Joules per kilogram
+      (equivalently, meters squared per second squared). This is the sum
+      of the orbit's specific kinetic and potential energy, and is
+      negative for a bound (elliptical) orbit.
+
+   
+
    .. method:: static org.javatuples.Triplet<Double,Double,Double> referencePlaneNormal(Connection connection, ReferenceFrame referenceFrame)
 
       The direction that is normal to the orbits reference plane,
