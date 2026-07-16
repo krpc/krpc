@@ -9,9 +9,7 @@ runs:
     # commit sha, followed by the truncated sha. The build number is kept in
     # 0-65535 to satisfy the .NET assembly version format.
     - if: ${{ inputs.long-version == 'true' }}
-      # The buildenv container ships python3 but no "python" executable, so
-      # spell out the interpreter rather than using the built-in python shell.
-      shell: python3 {0}
+      shell: python
       run: |
         import os
 
