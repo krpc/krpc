@@ -90,11 +90,22 @@ py_binary(
     ],
 )
 
+# The subpath a docs build is published under. Defaults to the release version
+# (a frozen /<version>/ build); CI selects 'dev' for main-branch builds with
+# `--define docs_channel=dev`.
+config_setting(
+    name = "docs_dev",
+    values = {"define": "docs_channel=dev"},
+)
+
 genrule(
     name = "conf",
     srcs = ["conf.py.tmpl"],
     outs = ["src/conf.py"],
-    cmd = "sed 's/%VERSION%/" + version + '/g\' "$<" > "$@"',
+    cmd = select({
+        ":docs_dev": "sed -e 's/%VERSION%/" + version + "/g' -e 's/%SUBPATH%/dev/g' \"$<\" > \"$@\"",
+        "//conditions:default": "sed -e 's/%VERSION%/" + version + "/g' -e 's/%SUBPATH%/" + version + "/g' \"$<\" > \"$@\"",
+    }),
 )
 
 sphinx_build(

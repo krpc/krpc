@@ -1,3 +1,5 @@
+import os
+
 project = 'kRPC'
 version = '%VERSION%'
 release = version
@@ -27,11 +29,32 @@ html_static_path = ['crafts', 'scripts', '_static']
 html_css_files = ['custom.css']
 html_js_files = ['external-links.js']
 
+# Per-version publishing. %SUBPATH% is
+# the path this build is published under: a release version (e.g. '0.5.4') or
+# 'dev'. It is substituted by the :conf genrule and defaults to the release
+# version; CI overrides it to 'dev' for main-branch builds. html_baseurl gives
+# correct canonical links per subpath.
+html_baseurl = 'https://krpc.github.io/krpc/%SUBPATH%/'
+
 html_theme_options = {
+    # Runtime version switcher. Each version's HTML is built once and frozen, so
+    # the version list is not baked into the pages: every page fetches
+    # switcher.json from a stable absolute URL at page-load time, and
+    # regenerating that one file (doc/gen_docs_index.py) makes new versions
+    # appear in the dropdown of already-published builds.
+    'switcher': {
+        'json_url': 'https://krpc.github.io/krpc/switcher.json',
+        'version_match': '%SUBPATH%',
+    },
+    # The build sandbox has no network access and builds run with -W, so the
+    # theme must not try to fetch json_url at build time.
+    'check_switcher': False,
+    # Banner on pages that are not the preferred (newest release) version.
+    'show_version_warning_banner': True,
     # Show all six client languages in the header (getting-started, tutorials
     # and the languages); the remaining sections collapse into "More".
     'header_links_before_dropdown': 8,
-    'navbar_end': ['theme-switcher', 'navbar-icon-links'],
+    'navbar_end': ['version-switcher', 'theme-switcher', 'navbar-icon-links'],
     'icon_links': [
         {
             'name': 'GitHub',
@@ -40,6 +63,15 @@ html_theme_options = {
         },
     ],
 }
+
+# The version switcher fetches switcher.json from the published documentation
+# site, which a local `bazel run //doc:serve` build cannot reach; rather than
+# render a broken single-entry dropdown, drop the switcher and the old-version
+# warning banner when serving locally. serve_docs.py sets this variable.
+if os.environ.get('KRPC_DOCS_LOCAL_SERVE'):
+    html_theme_options.pop('switcher', None)
+    html_theme_options['show_version_warning_banner'] = False
+    html_theme_options['navbar_end'] = ['theme-switcher', 'navbar-icon-links']
 
 toc_object_entries = False
 
