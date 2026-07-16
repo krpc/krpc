@@ -35,6 +35,7 @@ stage_files(
     ]) + [
         "src/_static/custom.css",
         "src/_static/external-links.js",
+        "src/_templates/build-info.html",
         "src/dictionary.txt",
         ":changelog",
         ":cnano-api",
@@ -118,22 +119,22 @@ py_binary(
     ],
 )
 
-# The subpath a docs build is published under. Defaults to the release version
-# (a frozen /<version>/ build); CI selects 'dev' for main-branch builds with
-# `--define docs_channel=dev`.
-config_setting(
-    name = "docs_dev",
-    values = {"define": "docs_channel=dev"},
-)
+# Release builds carry a plain "x.y.z" version; CI stamps dev builds with a
+# "-<build>-<sha>" suffix (tools/github-actions/set-version.py). A dev build is
+# published under /dev/ and stamped "dev" so the theme's version switcher and
+# old-version warning banner flag it as unreleased; a release publishes under
+# /<version>/ stamped with its number. Deriving the channel from the version
+# string keeps the docs in step with the version everything else builds with.
+docs_version = "dev" if "-" in version else version
 
 genrule(
     name = "conf",
     srcs = ["conf.py.tmpl"],
     outs = ["src/conf.py"],
-    cmd = select({
-        ":docs_dev": "sed -e 's/%VERSION%/" + version + "/g' -e 's/%SUBPATH%/dev/g' \"$<\" > \"$@\"",
-        "//conditions:default": "sed -e 's/%VERSION%/" + version + "/g' -e 's/%SUBPATH%/" + version + "/g' \"$<\" > \"$@\"",
-    }),
+    # %VERSION%/%SUBPATH% get the channel ('dev' or the release number);
+    # %BUILDVERSION% keeps the full version, including a dev build's commit-sha
+    # suffix, which conf.py turns into the footer commit link.
+    cmd = "sed -e 's/%VERSION%/" + docs_version + "/g' -e 's/%SUBPATH%/" + docs_version + "/g' -e 's/%BUILDVERSION%/" + version + "/g' \"$<\" > \"$@\"",
 )
 
 sphinx_build(
@@ -141,7 +142,9 @@ sphinx_build(
     srcs = [":srcs"],
     out = "html.zip",
     builder = "html",
-    opts = {"version": version},
+    # Stamp -Dversion to match conf.py's version, so DOCUMENTATION_OPTIONS.VERSION
+    # is "dev" for a dev build and the release number otherwise.
+    opts = {"version": docs_version},
     sphinx_build = ":sphinx-build",
 )
 

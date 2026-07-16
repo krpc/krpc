@@ -1,9 +1,11 @@
+import datetime
 import os
 
 project = 'kRPC'
 version = '%VERSION%'
 release = version
-copyright = '2015-2023, kRPC Org'
+# End year is the build year, so the footer stays current without edits.
+copyright = '2015-%d, kRPC Org' % datetime.date.today().year
 author = ''
 
 master_doc = 'index'
@@ -26,14 +28,24 @@ graphviz_output_format = 'svg'
 html_theme = 'pydata_sphinx_theme'
 htmlhelp_basename = 'krpc-doc'
 html_static_path = ['crafts', 'scripts', '_static']
+templates_path = ['_templates']
 html_css_files = ['custom.css']
 html_js_files = ['external-links.js']
 
+# A dev build's version carries a "-<build>-<sha>" suffix (set-version.py); a
+# release version does not. Surface that commit sha as a footer link so a dev
+# page shows which commit it was built from. %BUILDVERSION% is the full
+# config.bzl version, substituted by the :conf genrule.
+build_version = '%BUILDVERSION%'
+html_context = {}
+if '-' in build_version:
+    html_context['build_commit'] = build_version.rsplit('-', 1)[-1]
+
 # Per-version publishing. %SUBPATH% is
 # the path this build is published under: a release version (e.g. '0.5.4') or
-# 'dev'. It is substituted by the :conf genrule and defaults to the release
-# version; CI overrides it to 'dev' for main-branch builds. html_baseurl gives
-# correct canonical links per subpath.
+# 'dev'. The :conf genrule substitutes it with 'dev' when config.bzl's version
+# carries a dev suffix and with the release number otherwise. html_baseurl
+# gives correct canonical links per subpath.
 html_baseurl = 'https://krpc.github.io/krpc/%SUBPATH%/'
 
 html_theme_options = {
@@ -54,6 +66,8 @@ html_theme_options = {
     # Show all six client languages in the header (getting-started, tutorials
     # and the languages); the remaining sections collapse into "More".
     'header_links_before_dropdown': 8,
+    # Footer commit link, rendered by _templates/build-info.html for dev builds.
+    'footer_center': ['build-info'],
     'navbar_end': ['version-switcher', 'theme-switcher', 'navbar-icon-links'],
     'icon_links': [
         {

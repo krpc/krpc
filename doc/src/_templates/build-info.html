@@ -1,0 +1,6 @@
+{%- if build_commit %}
+<p class="build-info">
+  Built from commit
+  <a href="https://github.com/krpc/krpc/commit/{{ build_commit }}">{{ build_commit }}</a>
+</p>
+{%- endif %}
