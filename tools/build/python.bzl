@@ -65,7 +65,7 @@ py_sdist = rule(
             cfg = "exec",
         ),
         "_sdist_builder": attr.label(
-            default = Label("//tools/build:build_sdist"),
+            default = Label("//tools/build/python:build_sdist"),
             executable = True,
             cfg = "exec",
         ),

@@ -14,7 +14,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
   </ItemGroup>
-  <Import Project="$(SolutionDir)tools\msbuild\bazeldirs.props" />
+  <Import Project="$(SolutionDir)tools\build\msbuild\bazeldirs.props" />
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="System" />

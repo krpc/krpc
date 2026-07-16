@@ -13,7 +13,7 @@
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
     <PackageReference Include="Google.Protobuf" Version="3.35.1" />
   </ItemGroup>
-  <Import Project="$(SolutionDir)tools\msbuild\bazeldirs.props" />
+  <Import Project="$(SolutionDir)tools\build\msbuild\bazeldirs.props" />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />

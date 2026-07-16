@@ -31,7 +31,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.0
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -44,13 +44,14 @@ jobs:
         with:
           # A tag build is a release: keep the plain version so it publishes
           # under /<version>/. A main build is a dev build: take the suffixed
-          # version (set-version.py) so it publishes under /dev/.
+          # version (the build-setup version step) so it publishes under /dev/.
           long-version: ${{ startsWith(github.ref, 'refs/tags/') && 'false' || 'true' }}
       - name: determine target
         id: target
-        # The buildenv container has no bash, so this runs under POSIX sh. The
-        # subpath follows the version stamped in config.bzl: a suffixed (dev)
-        # version publishes under /dev/, a plain release version under /x.y.z/.
+        # Kept POSIX-sh compatible so it doesn't depend on the container's
+        # shell. The subpath follows the version stamped in config.bzl: a
+        # suffixed (dev) version publishes under /dev/, a plain release version
+        # under /x.y.z/.
         run: |
           version=$(sed -n 's/^version = "\(.*\)"$/\1/p' config.bzl)
           case "$version" in
