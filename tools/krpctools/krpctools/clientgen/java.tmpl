@@ -172,65 +172,41 @@ public class {{ service_name }} {
     {% endfor %}
 
     public static class _Types {
+        // Procedure return and parameter types are held in lookup maps that are
+        // populated by chunked initializer methods. Emitting them this way keeps
+        // every generated method under the JVM's 64KB bytecode limit as a service
+        // accumulates procedures.
+        private static final java.util.Map<String, krpc.schema.KRPC.Type> RETURN_TYPES =
+            new java.util.HashMap<String, krpc.schema.KRPC.Type>();
+        private static final java.util.Map<String, krpc.schema.KRPC.Type[]> PARAMETER_TYPES =
+            new java.util.HashMap<String, krpc.schema.KRPC.Type[]>();
+
+        static {
+            {% for batch in types_table | batch(50) %}
+            initTypes{{ loop.index0 }}();
+            {% endfor %}
+        }
+        {% for batch in types_table | batch(50) %}
+
+        private static void initTypes{{ loop.index0 }}() {
+            {% for entry in batch %}
+            RETURN_TYPES.put("{{ entry.remote_name }}", {% if entry.return_spec %}{{ entry.return_spec }}{% else %}null{% endif %});
+            PARAMETER_TYPES.put("{{ entry.remote_name }}", new krpc.schema.KRPC.Type[] { {{ entry.parameter_specs | join(', ') }} });
+            {% endfor %}
+        }
+        {% endfor %}
+
         public static krpc.schema.KRPC.Type getReturnType(String procedure) {
-            switch (procedure) {
-            {% for procedure in procedures.values()|list + properties.values()|list %}
-            case "{{ procedure.remote_name }}":
-            {% if procedure.return_type.name != 'void' %}
-                return {{ procedure.return_type.spec }};
-            {% else %}
-                return null;
-            {% endif %}
-            {% endfor %}
-            {% for cls in classes.values() %}
-            {% for procedure in cls.methods.values()|list + cls.static_methods.values()|list + cls.properties.values()|list %}
-            case "{{ procedure.remote_name }}":
-            {% if procedure.return_type.name != 'void' %}
-                return {{ procedure.return_type.spec }};
-            {% else %}
-                return null;
-            {% endif %}
-            {% endfor %}
-            {% endfor %}
-            }
-            throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+            if (!RETURN_TYPES.containsKey(procedure))
+                throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+            return RETURN_TYPES.get(procedure);
         }
 
         public static krpc.schema.KRPC.Type[] getParameterTypes(String procedure) {
-            switch (procedure) {
-            {% for procedure in procedures.values()|list + properties.values()|list %}
-            case "{{ procedure.remote_name }}":
-                return new krpc.schema.KRPC.Type[] {
-                    {% for parameter in procedure.parameters %}
-                    {{ parameter.type.spec }}{% if not loop.last %},{% endif %}
-
-                    {% endfor %}
-                };
-            {% endfor %}
-            {% for class_name, cls in classes.items() %}
-            {% for procedure in cls.methods.values()|list + cls.properties.values()|list %}
-            case "{{ procedure.remote_name }}":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createClass("{{ service_name }}", "{{ class_name }}"){% if procedure.parameters | length > 0 %},{% endif %}
-
-                    {% for parameter in procedure.parameters %}
-                    {{ parameter.type.spec }}{% if not loop.last %},{% endif %}
-
-                    {% endfor %}
-                };
-            {% endfor %}
-            {% for procedure in cls.static_methods.values()|list %}
-            case "{{ procedure.remote_name }}":
-                return new krpc.schema.KRPC.Type[] {
-                    {% for parameter in procedure.parameters %}
-                    {{ parameter.type.spec }}{% if not loop.last %},{% endif %}
-
-                    {% endfor %}
-                };
-            {% endfor %}
-            {% endfor %}
-            }
-            throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+            krpc.schema.KRPC.Type[] parameterTypes = PARAMETER_TYPES.get(procedure);
+            if (parameterTypes == null)
+                throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+            return parameterTypes;
         }
     }
 }
