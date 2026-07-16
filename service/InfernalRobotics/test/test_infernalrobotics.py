@@ -13,6 +13,10 @@ class TestInfernalRobotics(krpctest.TestCase):
         cls.ir = cls.connect().infernal_robotics
         cls.vessel = cls.connect().space_center.active_vessel
 
+    def test_available_and_ready(self):
+        self.assertTrue(self.ir.available)
+        self.assertTrue(self.ir.ready)
+
     def test_servo_groups(self):
         groups = self.ir.servo_groups(self.vessel)
         self.assertCountEqual(["Group1", "Group2"], [g.name for g in groups])

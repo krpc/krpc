@@ -140,6 +140,7 @@ rect
 rethrow
 reverser
 reversers
+rotationally
 rsvg
 runtime
 serialio

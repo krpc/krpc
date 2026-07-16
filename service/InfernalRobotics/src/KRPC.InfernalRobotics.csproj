@@ -44,5 +44,6 @@
     <Compile Include="InfernalRobotics.cs" />
     <Compile Include="Servo.cs" />
     <Compile Include="ServoGroup.cs" />
+    <Compile Include="ServoMode.cs" />
   </ItemGroup>
 </Project>
