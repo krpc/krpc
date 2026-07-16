@@ -1,0 +1,417 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: SpaceCenter
+
+Flight
+======
+
+
+.. class:: Flight
+
+   Used to get flight telemetry for a vessel, by calling :meth:`SpaceCenter.Vessel.flight`.
+   All of the information returned by this class is given in the reference frame
+   passed to that method.
+   Obtained by calling :meth:`SpaceCenter.Vessel.flight`.
+
+   .. note::
+
+      To get orbital information, such as the apoapsis or inclination, see :class:`SpaceCenter.Orbit`.
+
+   .. attribute:: g_force: number
+
+      The current G force acting on the vessel in :math:`g`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: mean_altitude: number
+
+      The altitude above sea level, in meters.
+      Measured from the center of mass of the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: surface_altitude: number
+
+      The altitude above the surface of the body or sea level, whichever is closer, in meters.
+      Measured from the center of mass of the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: bedrock_altitude: number
+
+      The altitude above the surface of the body, in meters. When over water, this is the altitude above the sea floor.
+      Measured from the center of mass of the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: elevation: number
+
+      The elevation of the terrain under the vessel, in meters. This is the height of the terrain above sea level,
+      and is negative when the vessel is over the sea.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: latitude: number
+
+      The `latitude <https://en.wikipedia.org/wiki/Latitude>`_ of the vessel for the body being orbited, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: longitude: number
+
+      The `longitude <https://en.wikipedia.org/wiki/Longitude>`_ of the vessel for the body being orbited, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: velocity: Tuple
+
+      The velocity of the vessel, in the reference frame :class:`SpaceCenter.ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the vessel in meters per second.
+      :rtype: Tuple
+
+   .. attribute:: speed: number
+
+      The speed of the vessel in meters per second,
+      in the reference frame :class:`SpaceCenter.ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: horizontal_speed: number
+
+      The horizontal speed of the vessel in meters per second,
+      in the reference frame :class:`SpaceCenter.ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: vertical_speed: number
+
+      The vertical speed of the vessel in meters per second,
+      in the reference frame :class:`SpaceCenter.ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: center_of_mass: Tuple
+
+      The position of the center of mass of the vessel,
+      in the reference frame :class:`SpaceCenter.ReferenceFrame`
+
+      :Attribute: Read-only, cannot be set
+      :returns: The position as a vector.
+      :rtype: Tuple
+
+   .. attribute:: rotation: Tuple
+
+      The rotation of the vessel, in the reference frame :class:`SpaceCenter.ReferenceFrame`
+
+      :Attribute: Read-only, cannot be set
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :rtype: Tuple
+
+   .. attribute:: direction: Tuple
+
+      The direction that the vessel is pointing in,
+      in the reference frame :class:`SpaceCenter.ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The direction as a unit vector.
+      :rtype: Tuple
+
+   .. attribute:: pitch: number
+
+      The pitch of the vessel relative to the horizon, in degrees.
+      A value between -90° and +90°.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: heading: number
+
+      The heading of the vessel (its angle relative to north), in degrees.
+      A value between 0° and 360°.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: roll: number
+
+      The roll of the vessel relative to the horizon, in degrees.
+      A value between -180° and +180°.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: prograde: Tuple
+
+      The prograde direction of the vessels orbit,
+      in the reference frame :class:`SpaceCenter.ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The direction as a unit vector.
+      :rtype: Tuple
+
+   .. attribute:: retrograde: Tuple
+
+      The retrograde direction of the vessels orbit,
+      in the reference frame :class:`SpaceCenter.ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The direction as a unit vector.
+      :rtype: Tuple
+
+   .. attribute:: normal: Tuple
+
+      The direction normal to the vessels orbit,
+      in the reference frame :class:`SpaceCenter.ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The direction as a unit vector.
+      :rtype: Tuple
+
+   .. attribute:: anti_normal: Tuple
+
+      The direction opposite to the normal of the vessels orbit,
+      in the reference frame :class:`SpaceCenter.ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The direction as a unit vector.
+      :rtype: Tuple
+
+   .. attribute:: radial: Tuple
+
+      The radial direction of the vessels orbit,
+      in the reference frame :class:`SpaceCenter.ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The direction as a unit vector.
+      :rtype: Tuple
+
+   .. attribute:: anti_radial: Tuple
+
+      The direction opposite to the radial direction of the vessels orbit,
+      in the reference frame :class:`SpaceCenter.ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The direction as a unit vector.
+      :rtype: Tuple
+
+   .. attribute:: atmosphere_density: number
+
+      The current density of the atmosphere around the vessel, in :math:`kg/m^3`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: dynamic_pressure: number
+
+      The dynamic pressure acting on the vessel, in Pascals. This is a measure of the
+      strength of the aerodynamic forces. It is equal to
+      :math:`\frac{1}{2} . \mbox{air density} . \mbox{velocity}^2`.
+      It is commonly denoted :math:`Q`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: static_pressure: number
+
+      The static atmospheric pressure acting on the vessel, in Pascals.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: static_pressure_at_msl: number
+
+      The static atmospheric pressure at mean sea level, in Pascals.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: aerodynamic_force: Tuple
+
+      The total aerodynamic forces acting on the vessel,
+      in reference frame :class:`SpaceCenter.ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :rtype: Tuple
+
+   .. method:: simulate_aerodynamic_force_at(body, position, velocity)
+
+      Simulate and return the total aerodynamic forces acting on the vessel,
+      if it where to be traveling with the given velocity at the given position in the
+      atmosphere of the given celestial body.
+
+      :param SpaceCenter.CelestialBody body:
+      :param Tuple position:
+      :param Tuple velocity:
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :rtype: Tuple
+
+   .. attribute:: lift: Tuple
+
+      The `aerodynamic lift <https://en.wikipedia.org/wiki/Aerodynamic_force>`_
+      currently acting on the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :rtype: Tuple
+
+   .. attribute:: drag: Tuple
+
+      The `aerodynamic drag <https://en.wikipedia.org/wiki/Aerodynamic_force>`_ currently acting on the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :returns: A vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
+      :rtype: Tuple
+
+   .. attribute:: speed_of_sound: number
+
+      The speed of sound, in the atmosphere around the vessel, in :math:`m/s`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: mach: number
+
+      The speed of the vessel, in multiples of the speed of sound.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: reynolds_number: number
+
+      The vessels Reynolds number.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+      .. note::
+
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+
+   .. attribute:: true_air_speed: number
+
+      The `true air speed <https://en.wikipedia.org/wiki/True_airspeed>`_
+      of the vessel, in meters per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: equivalent_air_speed: number
+
+      The `equivalent air speed <https://en.wikipedia.org/wiki/Equivalent_airspeed>`_
+      of the vessel, in meters per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: terminal_velocity: number
+
+      An estimate of the current terminal velocity of the vessel, in meters per second.
+      This is the speed at which the drag forces cancel out the force of gravity.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: angle_of_attack: number
+
+      The pitch angle between the orientation of the vessel and its velocity vector,
+      in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: sideslip_angle: number
+
+      The yaw angle between the orientation of the vessel and its velocity vector, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: total_air_temperature: number
+
+      The `total air temperature <https://en.wikipedia.org/wiki/Total_air_temperature>`_
+      of the atmosphere around the vessel, in Kelvin.
+      This includes the :attr:`SpaceCenter.Flight.static_air_temperature` and the vessel's kinetic energy.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: static_air_temperature: number
+
+      The `static (ambient) temperature <https://en.wikipedia.org/wiki/Total_air_temperature>`_ of the atmosphere around the vessel, in Kelvin.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: stall_fraction: number
+
+      The current amount of stall, between 0 and 1. A value greater than 0.005 indicates
+      a minor stall and a value greater than 0.5 indicates a large-scale stall.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+      .. note::
+
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+
+   .. attribute:: drag_coefficient: number
+
+      The coefficient of drag. This is the amount of drag produced by the vessel.
+      It depends on air speed, air density and wing area.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+      .. note::
+
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+
+   .. attribute:: lift_coefficient: number
+
+      The coefficient of lift. This is the amount of lift produced by the vessel, and
+      depends on air speed, air density and wing area.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+      .. note::
+
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+
+   .. attribute:: ballistic_coefficient: number
+
+      The `ballistic coefficient <https://en.wikipedia.org/wiki/Ballistic_coefficient>`_.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+      .. note::
+
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+
+   .. attribute:: thrust_specific_fuel_consumption: number
+
+      The thrust specific fuel consumption for the jet engines on the vessel. This is a
+      measure of the efficiency of the engines, with a lower value indicating a more
+      efficient vessel. This value is the number of Newtons of fuel that are burned,
+      per hour, to produce one newton of thrust.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+      .. note::
+
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.

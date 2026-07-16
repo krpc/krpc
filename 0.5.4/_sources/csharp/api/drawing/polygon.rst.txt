@@ -1,0 +1,55 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Drawing
+
+Polygon
+=======
+
+
+.. class:: Polygon
+
+   A polygon. Created using :meth:`Drawing.AddPolygon <Drawing.Drawing.AddPolygon>`.
+
+   .. property:: System.Collections.Generic.IList<System.Tuple<double,double,double>> Vertices { get; set; }
+
+      Vertices for the polygon.
+
+      :Game Scenes: Flight
+
+   .. property:: SpaceCenter.ReferenceFrame ReferenceFrame { get; set; }
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight
+
+   .. method:: void Remove()
+
+      Remove the object.
+
+
+      :Game Scenes: Flight
+
+   .. property:: System.Tuple<double,double,double> Color { get; set; }
+
+      Set the color
+
+      :Game Scenes: Flight
+
+   .. property:: string Material { get; set; }
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight
+
+   .. property:: float Thickness { get; set; }
+
+      Set the thickness
+
+      :Game Scenes: Flight

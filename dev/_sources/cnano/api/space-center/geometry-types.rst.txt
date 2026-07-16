@@ -1,0 +1,21 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Geometry Types
+==============
+
+Vectors
+-------
+
+3-dimensional vectors are represented as a 3-tuple. For example:
+
+.. literalinclude:: /scripts/services/space-center/Vector3.c
+
+Quaternions
+-----------
+
+Quaternions (rotations in 3-dimensional space) are encoded as a 4-tuple
+containing the x, y, z and w components. For example:
+
+.. literalinclude:: /scripts/services/space-center/Quaternion.c

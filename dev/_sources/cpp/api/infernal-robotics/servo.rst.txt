@@ -1,0 +1,157 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::InfernalRobotics
+
+Servo
+=====
+
+
+.. class:: Servo
+
+   Represents a servo. Obtained using
+   :func:`ServoGroup::servos`,
+   :func:`ServoGroup::servo_with_name`
+   or :func:`servo_with_name`.
+
+   .. function:: std::string name()
+   .. function:: void set_name(std::string value)
+
+      The name of the servo.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Part part()
+
+      The part containing the servo.
+
+      :Game Scenes: Flight
+
+   .. function:: void set_highlight(bool value)
+
+      Whether the servo should be highlighted in-game.
+
+      :Game Scenes: Flight
+
+   .. function:: float position()
+
+      The position of the servo.
+
+      :Game Scenes: Flight
+
+   .. function:: float min_config_position()
+
+      The minimum position of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. function:: float max_config_position()
+
+      The maximum position of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. function:: float min_position()
+   .. function:: void set_min_position(float value)
+
+      The minimum position of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. function:: float max_position()
+   .. function:: void set_max_position(float value)
+
+      The maximum position of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. function:: float config_speed()
+
+      The speed multiplier of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. function:: float speed()
+   .. function:: void set_speed(float value)
+
+      The speed multiplier of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. function:: float current_speed()
+
+      The current speed at which the servo is moving.
+
+      :Game Scenes: Flight
+
+   .. function:: float acceleration()
+   .. function:: void set_acceleration(float value)
+
+      The current speed multiplier set in the UI.
+
+      :Game Scenes: Flight
+
+   .. function:: bool is_moving()
+
+      Whether the servo is moving.
+
+      :Game Scenes: Flight
+
+   .. function:: bool is_free_moving()
+
+      Whether the servo is freely moving.
+
+      :Game Scenes: Flight
+
+   .. function:: bool is_locked()
+   .. function:: void set_is_locked(bool value)
+
+      Whether the servo is locked.
+
+      :Game Scenes: Flight
+
+   .. function:: bool is_axis_inverted()
+   .. function:: void set_is_axis_inverted(bool value)
+
+      Whether the servos axis is inverted.
+
+      :Game Scenes: Flight
+
+   .. function:: void move_right()
+
+      Moves the servo to the right.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void move_left()
+
+      Moves the servo to the left.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void move_center()
+
+      Moves the servo to the center.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void move_to(float position, float speed)
+
+      Moves the servo to *position* and sets the
+      speed multiplier to *speed*.
+
+      :Parameters:
+
+       * **position** -- The position to move the servo to.
+       * **speed** -- Speed multiplier for the movement.
+
+      :Game Scenes: Flight
+
+   .. function:: void stop()
+
+      Stops the servo.
+
+
+      :Game Scenes: Flight

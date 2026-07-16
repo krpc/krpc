@@ -1,0 +1,41 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KerbalAlarmClock
+
+AlarmAction
+===========
+
+
+.. type:: public enum AlarmAction
+
+   The action performed by an alarm when it fires.
+
+
+   .. field:: public AlarmAction DO_NOTHING
+
+      Don't do anything at all...
+
+
+   .. field:: public AlarmAction DO_NOTHING_DELETE_WHEN_PASSED
+
+      Don't do anything, and delete the alarm.
+
+
+   .. field:: public AlarmAction KILL_WARP
+
+      Drop out of time warp.
+
+
+   .. field:: public AlarmAction KILL_WARP_ONLY
+
+      Drop out of time warp.
+
+
+   .. field:: public AlarmAction MESSAGE_ONLY
+
+      Display a message.
+
+
+   .. field:: public AlarmAction PAUSE_GAME
+
+      Pause the game.

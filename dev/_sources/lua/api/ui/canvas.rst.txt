@@ -1,0 +1,59 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: UI
+
+Canvas
+======
+
+
+.. class:: Canvas
+
+   A canvas for user interface elements. See :attr:`UI.stock_canvas <UI.UI.stock_canvas>` and :meth:`UI.add_canvas`.
+
+   .. attribute:: rect_transform: UI.RectTransform
+
+      The rect transform for the canvas.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`UI.RectTransform`
+
+   .. attribute:: visible: boolean
+
+      Whether the UI object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. method:: add_panel([visible = True])
+
+      Create a new container for user interface elements.
+
+      :param boolean visible: Whether the panel is visible.
+      :rtype: :class:`UI.Panel`
+
+   .. method:: add_text(content, [visible = True])
+
+      Add text to the canvas.
+
+      :param string content: The text.
+      :param boolean visible: Whether the text is visible.
+      :rtype: :class:`UI.Text`
+
+   .. method:: add_input_field([visible = True])
+
+      Add an input field to the canvas.
+
+      :param boolean visible: Whether the input field is visible.
+      :rtype: :class:`UI.InputField`
+
+   .. method:: add_button(content, [visible = True])
+
+      Add a button to the canvas.
+
+      :param string content: The label for the button.
+      :param boolean visible: Whether the button is visible.
+      :rtype: :class:`UI.Button`
+
+   .. method:: remove()
+
+      Remove the UI object.

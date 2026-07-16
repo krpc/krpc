@@ -1,0 +1,24 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.LiDAR
+
+Laser
+=====
+
+
+.. type:: public class Laser
+
+   A LaserDist laser.
+
+   .. method:: SpaceCenter.Part getPart()
+
+
+      Get the part containing this LiDAR.
+
+   
+
+   .. method:: java.util.List<Double> getCloud()
+
+
+      Get the point cloud from the LiDAR.
+      Returns an empty list on failure.

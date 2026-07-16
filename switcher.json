@@ -1,0 +1,13 @@
+[
+  {
+    "name": "0.5.4 (stable)",
+    "version": "0.5.4",
+    "url": "https://krpc.github.io/krpc/0.5.4/",
+    "preferred": true
+  },
+  {
+    "name": "dev",
+    "version": "dev",
+    "url": "https://krpc.github.io/krpc/dev/"
+  }
+]

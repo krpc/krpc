@@ -1,0 +1,70 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::UI
+
+Canvas
+======
+
+
+.. class:: Canvas
+
+   A canvas for user interface elements. See :func:`stock_canvas` and :func:`add_canvas`.
+
+   .. function:: RectTransform rect_transform()
+
+      The rect transform for the canvas.
+
+   
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the UI object is visible.
+
+   
+
+   .. function:: Panel add_panel(bool visible = true)
+
+      Create a new container for user interface elements.
+
+      :Parameters:
+
+       * **visible** -- Whether the panel is visible.
+
+   
+
+   .. function:: Text add_text(std::string content, bool visible = true)
+
+      Add text to the canvas.
+
+      :Parameters:
+
+       * **content** -- The text.
+       * **visible** -- Whether the text is visible.
+
+   
+
+   .. function:: InputField add_input_field(bool visible = true)
+
+      Add an input field to the canvas.
+
+      :Parameters:
+
+       * **visible** -- Whether the input field is visible.
+
+   
+
+   .. function:: Button add_button(std::string content, bool visible = true)
+
+      Add a button to the canvas.
+
+      :Parameters:
+
+       * **content** -- The label for the button.
+       * **visible** -- Whether the button is visible.
+
+   
+
+   .. function:: void remove()
+
+      Remove the UI object.

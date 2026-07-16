@@ -1,0 +1,716 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.SpaceCenter
+
+Control
+=======
+
+
+.. type:: public class Control
+
+   Used to manipulate the controls of a vessel. This includes adjusting the
+   throttle, enabling/disabling systems such as SAS and RCS, or altering the
+   direction in which the vessel is pointing.
+   Obtained by calling :meth:`Vessel.getControl()`.
+
+   .. note::
+
+      Control inputs (pitch, yaw, roll, translation, wheel throttle, wheel steering
+      and the custom axes) are zeroed when all clients that have set one or more of
+      these inputs are no longer connected. The throttle is an exception: it keeps
+      its value when clients disconnect.
+
+   .. method:: ControlSource getSource()
+
+
+      The source of the vessels control, for example by a kerbal or a probe core.
+
+      :Game Scenes: Flight
+
+   .. method:: ControlState getState()
+
+
+      The control state of the vessel.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getSAS()
+
+   .. method:: void setSAS(boolean value)
+
+      The state of SAS.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :meth:`AutoPilot.getSAS()`
+
+   .. method:: SASMode getSASMode()
+
+   .. method:: void setSASMode(SASMode value)
+
+      The current :meth:`Control.getSASMode()`.
+      These modes are equivalent to the mode buttons to
+      the left of the navball that appear when SAS is enabled.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :meth:`AutoPilot.getSASMode()`
+
+   .. method:: SpeedMode getSpeedMode()
+
+   .. method:: void setSpeedMode(SpeedMode value)
+
+      The current :meth:`Control.getSpeedMode()` of the navball.
+      This is the mode displayed next to the speed at the top of the navball.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getEngineGimbals()
+
+   .. method:: void setEngineGimbals(boolean value)
+
+      Returns whether all gimballed engines on the vessel have gimbal enabled,
+      and sets the gimbal enabled state of all gimballed engines.
+      See :meth:`Engine.getGimbalLocked()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getThrustReversers()
+
+   .. method:: void setThrustReversers(boolean value)
+
+      Returns whether all engines with a thrust reverser on the vessel have
+      their thrust reverser engaged, and sets the thrust reverser state of all
+      such engines.
+      See :meth:`Engine.getThrustReversed()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAeroSurfaces()
+
+   .. method:: void setAeroSurfaces(boolean value)
+
+      Returns whether all control surfaces on the vessel have pitch, yaw and roll enabled,
+      and sets the pitch, yaw and roll enabled state of all control surfaces.
+      See :meth:`ControlSurface.getPitchEnabled()`,
+      :meth:`ControlSurface.getYawEnabled()` and
+      :meth:`ControlSurface.getRollEnabled()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getRCS()
+
+   .. method:: void setRCS(boolean value)
+
+      The state of RCS.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getReactionWheels()
+
+   .. method:: void setReactionWheels(boolean value)
+
+      Returns whether all reactive wheels on the vessel are active,
+      and sets the active state of all reaction wheels.
+      See :meth:`ReactionWheel.getActive()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getGear()
+
+   .. method:: void setGear(boolean value)
+
+      The state of the landing gear/legs.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getLegs()
+
+   .. method:: void setLegs(boolean value)
+
+      Returns whether all landing legs on the vessel are deployed,
+      and sets the deployment state of all landing legs.
+      Does not include wheels (for example landing gear).
+      See :meth:`Leg.getDeployed()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getWheels()
+
+   .. method:: void setWheels(boolean value)
+
+      Returns whether all wheels on the vessel are deployed,
+      and sets the deployment state of all wheels.
+      Does not include landing legs.
+      See :meth:`Wheel.getDeployed()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getLights()
+
+   .. method:: void setLights(boolean value)
+
+      The state of the lights.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getBrakes()
+
+   .. method:: void setBrakes(boolean value)
+
+      The state of the wheel brakes.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAntennas()
+
+   .. method:: void setAntennas(boolean value)
+
+      Returns whether all antennas on the vessel are deployed,
+      and sets the deployment state of all antennas.
+      See :meth:`Antenna.getDeployed()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getCargoBays()
+
+   .. method:: void setCargoBays(boolean value)
+
+      Returns whether any of the cargo bays on the vessel are open,
+      and sets the open state of all cargo bays.
+      See :meth:`CargoBay.getOpen()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getIntakes()
+
+   .. method:: void setIntakes(boolean value)
+
+      Returns whether all of the air intakes on the vessel are open,
+      and sets the open state of all air intakes.
+      See :meth:`Intake.getOpen()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getParachutes()
+
+   .. method:: void setParachutes(boolean value)
+
+      Returns whether all parachutes on the vessel are deployed,
+      and sets the deployment state of all parachutes.
+      Cannot be set to ``false``.
+      See :meth:`Parachute.getDeployed()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getRadiators()
+
+   .. method:: void setRadiators(boolean value)
+
+      Returns whether all radiators on the vessel are deployed,
+      and sets the deployment state of all radiators.
+      See :meth:`Radiator.getDeployed()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getResourceHarvesters()
+
+   .. method:: void setResourceHarvesters(boolean value)
+
+      Returns whether all of the resource harvesters on the vessel are deployed,
+      and sets the deployment state of all resource harvesters.
+      See :meth:`ResourceHarvester.getDeployed()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getResourceHarvestersActive()
+
+   .. method:: void setResourceHarvestersActive(boolean value)
+
+      Returns whether any of the resource harvesters on the vessel are active,
+      and sets the active state of all resource harvesters.
+      See :meth:`ResourceHarvester.getActive()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getSolarPanels()
+
+   .. method:: void setSolarPanels(boolean value)
+
+      Returns whether all solar panels on the vessel are deployed,
+      and sets the deployment state of all solar panels.
+      See :meth:`SolarPanel.getDeployed()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAbort()
+
+   .. method:: void setAbort(boolean value)
+
+      The state of the abort action group.
+
+      :Game Scenes: Flight
+
+   .. method:: float getThrottle()
+
+   .. method:: void setThrottle(float value)
+
+      The state of the throttle. A value between 0 and 1.
+      Unlike the other control inputs, the throttle is not zeroed when the
+      clients that set it disconnect.
+
+      :Game Scenes: Flight
+
+   .. method:: ControlInputMode getInputMode()
+
+   .. method:: void setInputMode(ControlInputMode value)
+
+      Sets the behavior of the pitch, yaw, roll and translation control inputs.
+      When set to additive, these inputs are added to the vessels current inputs.
+      This mode is the default.
+      When set to override, these inputs (if non-zero) override the vessels inputs.
+      This mode prevents keyboard control, or SAS, from interfering with the controls when
+      they are set.
+
+      :Game Scenes: Flight
+
+   .. method:: float getPitch()
+
+   .. method:: void setPitch(float value)
+
+      The state of the pitch control.
+      A value between -1 and 1.
+      Equivalent to the w and s keys.
+
+      :Game Scenes: Flight
+
+   .. method:: float getYaw()
+
+   .. method:: void setYaw(float value)
+
+      The state of the yaw control.
+      A value between -1 and 1.
+      Equivalent to the a and d keys.
+
+      :Game Scenes: Flight
+
+   .. method:: float getRoll()
+
+   .. method:: void setRoll(float value)
+
+      The state of the roll control.
+      A value between -1 and 1.
+      Equivalent to the q and e keys.
+
+      :Game Scenes: Flight
+
+   .. method:: float getPitchTrim()
+
+   .. method:: void setPitchTrim(float value)
+
+      The state of the pitch trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+W and Alt+S keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Game Scenes: Flight
+
+   .. method:: float getYawTrim()
+
+   .. method:: void setYawTrim(float value)
+
+      The state of the yaw trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+A and Alt+D keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Game Scenes: Flight
+
+   .. method:: float getRollTrim()
+
+   .. method:: void setRollTrim(float value)
+
+      The state of the roll trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+Q and Alt+E keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Game Scenes: Flight
+
+   .. method:: float getForward()
+
+   .. method:: void setForward(float value)
+
+      The state of the forward translational control.
+      A value between -1 and 1.
+      Equivalent to the h and n keys.
+
+      :Game Scenes: Flight
+
+   .. method:: float getUp()
+
+   .. method:: void setUp(float value)
+
+      The state of the up translational control.
+      A value between -1 and 1.
+      Equivalent to the i and k keys.
+
+      :Game Scenes: Flight
+
+   .. method:: float getRight()
+
+   .. method:: void setRight(float value)
+
+      The state of the right translational control.
+      A value between -1 and 1.
+      Equivalent to the j and l keys.
+
+      :Game Scenes: Flight
+
+   .. method:: float getWheelThrottle()
+
+   .. method:: void setWheelThrottle(float value)
+
+      The state of the wheel throttle.
+      A value between -1 and 1.
+      A value of 1 rotates the wheels forwards, a value of -1 rotates
+      the wheels backwards.
+
+      :Game Scenes: Flight
+
+   .. method:: float getWheelSteering()
+
+   .. method:: void setWheelSteering(float value)
+
+      The state of the wheel steering.
+      A value between -1 and 1.
+      A value of 1 steers to the left, and a value of -1 steers to the right.
+
+      :Game Scenes: Flight
+
+   .. method:: float getCustomAxis01()
+
+   .. method:: void setCustomAxis01(float value)
+
+      The state of CustomAxis01.
+      A value between -1 and 1.
+
+      :Game Scenes: Flight
+
+   .. method:: float getCustomAxis02()
+
+   .. method:: void setCustomAxis02(float value)
+
+      The state of CustomAxis02.
+      A value between -1 and 1.
+
+      :Game Scenes: Flight
+
+   .. method:: float getCustomAxis03()
+
+   .. method:: void setCustomAxis03(float value)
+
+      The state of CustomAxis03.
+      A value between -1 and 1.
+
+      :Game Scenes: Flight
+
+   .. method:: float getCustomAxis04()
+
+   .. method:: void setCustomAxis04(float value)
+
+      The state of CustomAxis04.
+      A value between -1 and 1.
+
+      :Game Scenes: Flight
+
+   .. method:: int getCurrentStage()
+
+
+      The current stage of the vessel. Corresponds to the stage number in
+      the in-game UI.
+
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<Vessel> activateNextStage()
+
+      Activates the next stage. Equivalent to pressing the space bar in-game.
+
+      :returns: A list of vessel objects that are jettisoned from the active vessel.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :meth:`getActiveVessel()` no longer refer to the active vessel.
+         Throws an exception if staging is locked.
+
+   .. method:: boolean getStageLock()
+
+   .. method:: void setStageLock(boolean value)
+
+      Whether staging is locked on the vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is equivalent to locking the staging using Alt+L
+
+   .. method:: boolean getActionGroup(int group)
+
+      Returns ``true`` if the given action group is enabled.
+
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :Game Scenes: Flight
+
+   .. method:: void setActionGroup(int group, boolean state)
+
+      Sets the state of the given action group.
+
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param boolean state:
+      :Game Scenes: Flight
+
+   .. method:: void toggleActionGroup(int group)
+
+      Toggles the state of the given action group.
+
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<ActionGroupAction> getActionGroupActions(int group)
+
+      Returns a list of all the part actions that are assigned to the given action group.
+      Each entry identifies the part, the part module, and the action's name and identifier.
+      Returns an empty list if no actions are assigned to the group.
+
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         For stock action groups, the assignments are read from each part action directly.
+         When the Extended Action Groups mod is installed, the assignments are queried from
+         the mod instead, so that actions assigned to its additional groups are included.
+
+   .. method:: Node addNode(double ut, float prograde, float normal, float radial)
+
+      Creates a maneuver node at the given universal time, and returns a
+      :type:`Node` object that can be used to modify it.
+      Optionally sets the magnitude of the delta-v for the maneuver node
+      in the prograde, normal and radial directions.
+
+      :param double ut: Universal time of the maneuver node.
+      :param float prograde: Delta-v in the prograde direction.
+      :param float normal: Delta-v in the normal direction.
+      :param float radial: Delta-v in the radial direction.
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<Node> getNodes()
+
+
+      Returns a list of all existing maneuver nodes, ordered by time from first to last.
+
+      :Game Scenes: Flight
+
+   .. method:: void removeNodes()
+
+      Remove all maneuver nodes.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: public class ActionGroupAction
+
+   An action, belonging to a part module, that is assigned to an action group.
+   Obtained by calling :meth:`Control.getActionGroupActions(int)`.
+
+   .. method:: Part getPart()
+
+
+      The part that the action acts on.
+
+   
+
+   .. method:: Module getModule()
+
+
+      The part module that the action belongs to. Returns ``null`` for a
+      part-level action that is not associated with a module. This only occurs when
+      the Extended Action Groups mod is installed, as it can assign actions defined
+      directly on a part, rather than on one of its modules, to an action group.
+
+   
+
+   .. method:: String getName()
+
+
+      The human-readable name of the action, as shown in the action group editor.
+
+   
+
+   .. method:: String getId()
+
+
+      The non-localized identifier for the action.
+
+   
+
+
+
+.. type:: public enum ControlState
+
+   The control state of a vessel.
+   See :meth:`Control.getState()`.
+
+
+   .. field:: public ControlState FULL
+
+      Full controllable.
+
+
+   .. field:: public ControlState PARTIAL
+
+      Partially controllable.
+
+
+   .. field:: public ControlState NONE
+
+      Not controllable.
+
+
+
+.. type:: public enum ControlSource
+
+   The control source of a vessel.
+   See :meth:`Control.getSource()`.
+
+
+   .. field:: public ControlSource KERBAL
+
+      Vessel is controlled by a Kerbal.
+
+
+   .. field:: public ControlSource PROBE
+
+      Vessel is controlled by a probe core.
+
+
+   .. field:: public ControlSource NONE
+
+      Vessel is not controlled.
+
+
+
+.. type:: public enum SASMode
+
+   The behavior of the SAS auto-pilot. See :meth:`AutoPilot.getSASMode()`.
+
+
+   .. field:: public SASMode STABILITY_ASSIST
+
+      Stability assist mode. Dampen out any rotation.
+
+
+   .. field:: public SASMode MANEUVER
+
+      Point in the burn direction of the next maneuver node.
+
+
+   .. field:: public SASMode PROGRADE
+
+      Point in the prograde direction.
+
+
+   .. field:: public SASMode RETROGRADE
+
+      Point in the retrograde direction.
+
+
+   .. field:: public SASMode NORMAL
+
+      Point in the orbit normal direction.
+
+
+   .. field:: public SASMode ANTI_NORMAL
+
+      Point in the orbit anti-normal direction.
+
+
+   .. field:: public SASMode RADIAL
+
+      Point in the orbit radial direction.
+
+
+   .. field:: public SASMode ANTI_RADIAL
+
+      Point in the orbit anti-radial direction.
+
+
+   .. field:: public SASMode TARGET
+
+      Point in the direction of the current target.
+
+
+   .. field:: public SASMode ANTI_TARGET
+
+      Point away from the current target.
+
+
+
+.. type:: public enum SpeedMode
+
+   The mode of the speed reported in the navball.
+   See :meth:`Control.getSpeedMode()`.
+
+
+   .. field:: public SpeedMode ORBIT
+
+      Speed is relative to the vessel's orbit.
+
+
+   .. field:: public SpeedMode SURFACE
+
+      Speed is relative to the surface of the body being orbited.
+
+
+   .. field:: public SpeedMode TARGET
+
+      Speed is relative to the current target.
+
+
+
+.. type:: public enum ControlInputMode
+
+   See :meth:`Control.getInputMode()`.
+
+
+   .. field:: public ControlInputMode ADDITIVE
+
+      Control inputs are added to the vessels current control inputs.
+
+
+   .. field:: public ControlInputMode OVERRIDE
+
+      Control inputs (when they are non-zero) override the vessels current control inputs.

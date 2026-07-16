@@ -1,0 +1,90 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Drawing
+=======
+
+
+Service Drawing
+
+   Provides functionality for drawing objects in the flight scene.
+
+   .. note::
+
+      For drawing and interacting with the user interface, see the UI service.
+
+   .. function:: krpc_error_t krpc_Drawing_AddLine(krpc_connection_t connection, krpc_Drawing_Line_t * result, const krpc_tuple_double_double_double_t * start, const krpc_tuple_double_double_double_t * end, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
+
+      Draw a line in the scene.
+
+      :Parameters:
+
+       * **start** -- Position of the start of the line.
+       * **end** -- Position of the end of the line.
+       * **referenceFrame** -- Reference frame that the positions are in.
+       * **visible** -- Whether the line is visible.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_AddDirection(krpc_connection_t connection, krpc_Drawing_Line_t * result, const krpc_tuple_double_double_double_t * direction, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, float length, bool visible)
+
+      Draw a direction vector in the scene, starting from the origin of the given reference frame.
+
+      :Parameters:
+
+       * **direction** -- Direction to draw the line in.
+       * **referenceFrame** -- Reference frame that the direction is in and defines the start position.
+       * **length** -- The length of the line.
+       * **visible** -- Whether the line is visible.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_AddDirectionFromCom(krpc_connection_t connection, krpc_Drawing_Line_t * result, const krpc_tuple_double_double_double_t * direction, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, float length, bool visible)
+
+      Draw a direction vector in the scene, from the center of mass of the active vessel.
+
+      :Parameters:
+
+       * **direction** -- Direction to draw the line in.
+       * **referenceFrame** -- Reference frame that the direction is in.
+       * **length** -- The length of the line.
+       * **visible** -- Whether the line is visible.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_AddPolygon(krpc_connection_t connection, krpc_Drawing_Polygon_t * result, const krpc_list_tuple_double_double_double_t * vertices, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
+
+      Draw a polygon in the scene, defined by a list of vertices.
+
+      :Parameters:
+
+       * **vertices** -- Vertices of the polygon.
+       * **referenceFrame** -- Reference frame that the vertices are in.
+       * **visible** -- Whether the polygon is visible.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_AddText(krpc_connection_t connection, krpc_Drawing_Text_t * result, const char * text, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_double_t * rotation, bool visible)
+
+      Draw text in the scene.
+
+      :Parameters:
+
+       * **text** -- The string to draw.
+       * **referenceFrame** -- Reference frame that the text position is in.
+       * **position** -- Position of the text.
+       * **rotation** -- Rotation of the text, as a quaternion.
+       * **visible** -- Whether the text is visible.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Clear(krpc_connection_t connection, bool clientOnly)
+
+      Remove all objects being drawn.
+
+      :Parameters:
+
+       * **clientOnly** -- If true, only remove objects created by the calling client.
+
+      :Game Scenes: Flight

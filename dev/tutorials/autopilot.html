@@ -1,0 +1,2059 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AutoPilot &#8212; kRPC 0.5.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0da409bd" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/autopilot';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/external-links.js?v=e8892020"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/tutorials/autopilot.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="C-nano" href="../cnano.html" />
+    <link rel="prev" title="User Interface" href="user-interface.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.4" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC 0.5.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="suborbital-flight.html">Sub-Orbital Flight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-frames.html">Reference Frames</a></li>
+<li class="toctree-l1"><a class="reference internal" href="launch-into-orbit.html">Launch into Orbit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pitch-heading-roll.html">Pitch, Heading and Roll</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parts.html">Interacting with Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">AutoPilot</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials and Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">AutoPilot</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="autopilot">
+<h1>AutoPilot<a class="headerlink" href="#autopilot" title="Link to this heading">#</a></h1>
+<p>kRPC provides an autopilot that can be used to hold a vessel in a chosen orientation. It
+automatically tunes itself to cope with vessels of differing size and control authority.</p>
+<p>This tutorial is in two parts. <a class="reference internal" href="#using-the-autopilot"><span class="std std-ref">Using the AutoPilot</span></a> covers
+how to drive the autopilot and configure it for your craft, and is all most users need.
+<a class="reference internal" href="#how-it-works"><span class="std std-ref">How it works</span></a> explains the control law and mathematics behind it,
+for those who want to fully understand or extend it.</p>
+<section id="using-the-autopilot">
+<span id="id1"></span><h2>Using the AutoPilot<a class="headerlink" href="#using-the-autopilot" title="Link to this heading">#</a></h2>
+<p>The autopilot holds a vessel pointing in a chosen orientation, automatically tuning
+itself to the vessel’s size and control authority. You give it a <strong>reference frame</strong>
+defining where zero rotation is, and a <strong>target attitude</strong> in that frame — set as a full
+rotation, as a direction for the nose, or as a direction together with an up vector (see
+<a class="reference internal" href="#setting-target-attitude"><span class="std std-ref">Setting the target attitude</span></a> below for the full menu).</p>
+<p>A minimal use case looks like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">reference_frame</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">surface_reference_frame</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>   <span class="c1"># point straight up, facing east</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>                             <span class="c1"># blocks until the vessel has settled on the target</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">wait()</span></code> returns once the vessel has <em>settled</em> on the target: both the pointing error
+and the vessel’s angular velocity must fall below a threshold, so it does not return while
+the nose is still swinging through the target. The two thresholds are the <strong>stopping angle
+threshold</strong> (default 1°) and the <strong>stopping velocity threshold</strong> (default 0.05 rad/s), and
+both can be adjusted. <code class="docutils literal notranslate"><span class="pre">wait()</span></code> also takes an optional <code class="docutils literal notranslate"><span class="pre">timeout</span></code> (in seconds), after
+which it raises rather than blocking indefinitely.</p>
+<p>While the autopilot is engaged it keeps SAS switched off, so that the two do not fight
+each other for control of the vessel.</p>
+<p>The autopilot handles structurally flexible craft automatically, detecting and
+suppressing any structural oscillation (wobble) with no tuning required (see
+<a class="reference internal" href="#flexible-craft"><span class="std std-ref">Flexible craft</span></a>), and can ease target changes in over time for
+smooth maneuvers (see <a class="reference internal" href="#target-smoothing"><span class="std std-ref">Smoothing target changes</span></a>). Internally it
+is a two-loop cascade controller; if you want to know how it turns an attitude error into
+control inputs, see <a class="reference internal" href="#how-it-works"><span class="std std-ref">How it works</span></a>.</p>
+<section id="setting-the-target-attitude">
+<span id="setting-target-attitude"></span><h3>Setting the target attitude<a class="headerlink" href="#setting-the-target-attitude" title="Link to this heading">#</a></h3>
+<p>An orientation has two parts: where the nose points, and how the vessel is rolled about
+that nose. The three primary ways to set the target differ in how much of the roll you
+want to pin.</p>
+<section id="the-three-primary-ways">
+<h4>The three primary ways<a class="headerlink" href="#the-three-primary-ways" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>target rotation</strong> — a full rotation (quaternion). Pins the complete attitude, nose
+and roll together. Always well-defined, and the canonical form; best when you already
+have a rotation to hand — copied from another vessel, or a saved orientation.</p></li>
+<li><p><strong>target direction</strong> — a vector for the nose to point along. <strong>Roll is held</strong>: the
+autopilot drives the roll rate to zero but does not hold any particular roll angle. This
+is the “point here, don’t care which way is up” knob.</p></li>
+<li><p><strong>set_direction_and_up(direction, up, roll=0)</strong> — point the nose along <code class="docutils literal notranslate"><span class="pre">direction</span></code> and
+roll so the vessel’s roof aligns with the <code class="docutils literal notranslate"><span class="pre">up</span></code> vector (its component perpendicular to
+the nose), plus an optional <code class="docutils literal notranslate"><span class="pre">roll</span></code> offset in degrees. This is the way to <strong>hold an
+orientation through a maneuver</strong>. The <code class="docutils literal notranslate"><span class="pre">up</span></code> vector need not be perpendicular to
+<code class="docutils literal notranslate"><span class="pre">direction</span></code> or normalized; it is only singular when <code class="docutils literal notranslate"><span class="pre">up</span></code> is parallel to <code class="docutils literal notranslate"><span class="pre">direction</span></code>
+(asking the roof to point where the nose already does), which — because you choose
+<code class="docutils literal notranslate"><span class="pre">up</span></code> — you can keep off the flight path.</p></li>
+</ul>
+<p>The <strong>roll sign</strong> follows standard aircraft bank: positive roll rolls the vessel to the
+right (right wing down) — clockwise seen from behind, looking along the nose. So
+<code class="docutils literal notranslate"><span class="pre">set_direction_and_up(horizon_dir,</span> <span class="pre">up,</span> <span class="pre">30)</span></code> banks 30° to the right of wings-level.</p>
+<p><code class="docutils literal notranslate"><span class="pre">set_direction_and_up</span></code> also stores <code class="docutils literal notranslate"><span class="pre">up</span></code> as a persistent <strong>up reference</strong>
+(<code class="docutils literal notranslate"><span class="pre">up_reference</span></code>, default the frame’s up / zenith). The reference is what
+<a class="reference internal" href="#convenience-setters"><span class="std std-ref">target roll</span></a> is measured against, and it persists across
+direction changes: set it once and every later roll is measured against the same vector.
+Setting the target rotation, the target direction, or the scalar pitch/heading leaves it
+unchanged.</p>
+<p>This is what makes holding an orientation through the vertical trivial. During a gravity
+turn the nose sweeps from straight up to downrange — straight through the point where a
+roll measured against the vertical plane is undefined. Anchoring the roll to a fixed
+horizontal <code class="docutils literal notranslate"><span class="pre">up</span></code> (say north) keeps it defined the whole way:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">reference_frame</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">surface_reference_frame</span>
+<span class="n">up</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>   <span class="c1"># north, in the surface frame — off the flight path</span>
+
+<span class="c1"># straight up at the pad, wings aligned to north</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">set_direction_and_up</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">up</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+<span class="c1"># ease over towards the eastern horizon; roll stays defined through the vertical</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">91</span><span class="p">):</span>
+    <span class="n">pitch</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">90</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>            <span class="c1"># 90° down to 0°</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">pitch</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">pitch</span><span class="p">))</span>
+    <span class="n">ap</span><span class="o">.</span><span class="n">set_direction_and_up</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">up</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">ap</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="the-convenience-ways">
+<span id="convenience-setters"></span><h4>The convenience ways<a class="headerlink" href="#the-convenience-ways" title="Link to this heading">#</a></h4>
+<p>Two more ways aim the nose by angle. They are ergonomic but heading-singular near the
+vertical, so prefer the primary setters there.</p>
+<ul>
+<li><p><strong>target pitch</strong>, <strong>target heading</strong>, and <strong>target_pitch_and_heading(pitch, heading)</strong> —
+aim the nose by pitch and heading angle.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Heading (and hence roll) is ill-defined when the nose is near vertical (pitch → ±90°),
+so near the vertical prefer <strong>target direction</strong> or <strong>set_direction_and_up</strong>. Setting
+pitch or heading preserves the current roll relative to the up reference, so a
+pitch/heading change no longer perturbs roll near the vertical.</p>
+</div>
+</li>
+<li><p><strong>target roll</strong> — the roll angle about the nose, measured relative to the up reference
+(roll 0 aligns the roof with the reference; positive banks right). <code class="docutils literal notranslate"><span class="pre">NaN</span></code> (the default,
+unset) holds roll without fixing an angle. With the default reference this reproduces the
+familiar roll away from the vertical, and is ill-defined only when the nose points along
+the reference (near straight up or down) — set the reference off the flight path (via
+<code class="docutils literal notranslate"><span class="pre">set_direction_and_up</span></code> or <code class="docutils literal notranslate"><span class="pre">up_reference</span></code>) to keep it defined through the vertical.</p></li>
+</ul>
+</section>
+<section id="reading-the-state-back">
+<h4>Reading the state back<a class="headerlink" href="#reading-the-state-back" title="Link to this heading">#</a></h4>
+<ul>
+<li><p><strong>Attitude and target</strong> — <strong>rotation</strong> / <strong>target rotation</strong> and <strong>direction</strong> /
+<strong>target direction</strong> are always well-defined; prefer these for reading orientation back.</p></li>
+<li><p><strong>Errors</strong> — <strong>error</strong> is the total pointing error, and <strong>pitch error</strong>, <strong>heading
+error</strong> and <strong>roll error</strong> are the per-axis errors. All are singularity-free (they come
+from one residual decomposition, exposed together as <strong>attitude_error</strong>), so they stay
+meaningful near the vertical — including the roll error, which is measured about the
+nose. These are the robust way to see how far off the vessel is.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The scalar <strong>pitch</strong> / <strong>heading</strong> / <strong>roll</strong> readouts (on both the target and the
+vessel’s <a class="reference internal" href="reference-frames.html#tutorial-reference-frames"><span class="std std-ref">flight</span></a> telemetry) are absolute Euler
+angles and are ill-defined near the vertical. Use <strong>rotation</strong> / <strong>direction</strong> or the
+error readouts above instead.</p>
+</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="tuning-the-autopilot">
+<h3>Tuning the AutoPilot<a class="headerlink" href="#tuning-the-autopilot" title="Link to this heading">#</a></h3>
+<p>The following parameters affect the behavior of the autopilot. The default values should
+suffice in most cases, but they can be adjusted to fit your needs.</p>
+<ul class="simple">
+<li><p>The <strong>roll start angle</strong> (default 20°) and <strong>roll engage angle</strong> (default 15°) define
+the band of direction error over which roll control is blended in. Above the roll
+start angle the vessel’s roll is ignored, so that all of the available control
+authority is used to point the nose. Below the roll engage angle roll is fully
+controlled. Between the two, roll is blended in linearly.</p></li>
+<li><p>The <strong>maximum angular velocity</strong> (default 1 rad/s along each axis) caps the target
+angular velocity used when slewing the vessel towards the target. It is a vector of
+three values, one for each of the pitch, roll and yaw axes. Vessels with low or
+moderate control authority rarely reach this cap; it mainly prevents very high-torque
+craft from rotating faster than desired.</p></li>
+<li><p>The <strong>pitch/yaw attenuation angle</strong> and the <strong>roll attenuation angle</strong> (both default
+to 1 degree) set the region in which the autopilot considers the vessel to be ‘close’
+to the target. The target velocity is at full above this angle and ramps linearly to
+zero at half of it — a <em>pointing deadband</em> — so the vessel coasts to a stop rather than
+the controls chasing sub-degree jitter when the vessel is pointing in the correct
+direction.</p></li>
+<li><p><strong>PI auto-tuning</strong> (default <code class="docutils literal notranslate"><span class="pre">True</span></code>) controls whether the PI controller gains are
+automatically tuned from the vessel’s available torque and moment of inertia, as
+described in <a class="reference internal" href="#tuning-the-controllers"><span class="std std-ref">Controller gain tuning</span></a>. When disabled,
+the gains can be set manually.</p></li>
+<li><p>The <strong>time to peak</strong> (default is 1 second per axis) is the time, in seconds, that the
+PI controllers take to adjust the vessel’s angular velocity to the target angular
+velocity. Decreasing it makes the controllers match the target velocity more
+aggressively, at the cost of a higher control bandwidth. Increasing it lowers the
+control bandwidth, making the controller gentler — useful for a very large or
+structurally flexible craft, where too high a bandwidth can excite the structure into
+a wobble (the autopilot normally damps this on its own, so raising the time to peak is
+mainly a manual fallback for unusual cases; see <a class="reference internal" href="#flexible-craft"><span class="std std-ref">Flexible craft</span></a>). It is a vector of three times, one for each of the pitch, roll and
+yaw axes.</p></li>
+<li><p>The <strong>overshoot</strong> (default is 0.01 in each axis) is the fraction by which the PI
+controllers are allowed to overshoot the target angular velocity. Increasing it makes
+the controllers match the target velocity more aggressively, but causes more
+overshoot. It is a vector of three values, between 0 and 1, for each of the pitch,
+roll and yaw axes.</p></li>
+<li><p><strong>Oscillation mitigations</strong> suppress any oscillation or wobble in a structurally
+flexible vessel. By default they are fully automatic, and a rigid craft is left
+untouched. Each individual mitigation can be inspected, forced on or off, or tuned
+separately, as described in <a class="reference internal" href="#flexible-craft"><span class="std std-ref">Flexible craft</span></a>.</p></li>
+<li><p>The <strong>soft-start time</strong> (default 0.5 seconds) is the time over which the control
+output is faded in when the autopilot is engaged, so that engaging does not deliver a
+sudden kick.  Set it to zero to disable the fade-in. See <a class="reference internal" href="#first-engaging"><span class="std std-ref">When first engaging</span></a>.</p></li>
+<li><p>The <strong>target smoothing time</strong> (default 0 seconds) makes the autopilot slew towards a
+new target over the given time, at a constant angular rate, rather than acting on the
+change immediately. Zero (the default) means changes take effect at once. See
+<a class="reference internal" href="#target-smoothing"><span class="std std-ref">Smoothing target changes</span></a>.</p></li>
+</ul>
+</section>
+<section id="smoothing-target-changes">
+<span id="target-smoothing"></span><h3>Smoothing target changes<a class="headerlink" href="#smoothing-target-changes" title="Link to this heading">#</a></h3>
+<p>By default, changing the target — its pitch, heading, roll, direction or rotation —
+takes effect immediately, and the autopilot reorients to it as quickly as the vessel’s
+control authority allows. Sometimes you instead want a slow, deliberate reorientation,
+moving to the new attitude gradually rather than as fast as possible. You could script
+that yourself by feeding the autopilot a series of small intermediate target
+changes. Such a loop risks exciting a bending mode of the craft, and consumes RPC
+throughput that could be used for other tasks. The autopilot can do this smoothing for
+you from a single command.</p>
+<p>Setting the <strong>target smoothing time</strong> to a value greater than zero makes the autopilot
+slew towards a new target instead of jumping to it. The control loop no longer tracks
+the <strong>commanded</strong> target you set directly; it tracks an <strong>effective</strong> target that moves
+towards the commanded one at a constant angular rate, reaching it in exactly the target
+smoothing time. A single change to the target therefore produces a smooth reorientation
+spread over that time, with no per-tick scripting on your part.</p>
+<p>For example, to pitch the nose over by 10° across 20 seconds:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">reference_frame</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">surface_reference_frame</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>   <span class="c1"># start pointing straight up</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+<span class="c1"># ease a 10° pitch-over (90° → 80°) in over 20 seconds</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">target_smoothing_time</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>                             <span class="c1"># returns once the 80° target is reached</span>
+</pre></div>
+</div>
+<p>Properties related to the commanded and effective targets are accessible via the API:</p>
+<ul class="simple">
+<li><p>The target properties (<strong>target pitch</strong>, <strong>target heading</strong>, <strong>target roll</strong>,
+<strong>target direction</strong>, <strong>target rotation</strong>) and the error properties (<strong>error</strong>, <strong>pitch
+error</strong>, and so on) all refer to the <strong>commanded</strong> target. Reading a target back therefore
+returns exactly what you set, and waiting for the autopilot blocks until the vessel reaches
+the final commanded attitude.</p></li>
+<li><p>A similar set of read-only properties — <strong>current target pitch</strong>, <strong>current target
+heading</strong>, <strong>current target roll</strong>, <strong>current target direction</strong>, <strong>current target
+rotation</strong>, and <strong>current error</strong>, <strong>current pitch error</strong>, and so on — expose the
+<strong>effective</strong> target and the error to it. These stay small while a smoothed change is
+being fed in, since the vessel is tracking the effective target closely.</p></li>
+</ul>
+<p>When the target smoothing time is zero (the default), the effective target always equals
+the commanded target and both sets of properties read the same.</p>
+</section>
+<section id="flexible-craft">
+<span id="id2"></span><h3>Flexible craft<a class="headerlink" href="#flexible-craft" title="Link to this heading">#</a></h3>
+<p>Large rockets built from many parts are not perfectly rigid: KSP joins parts with
+springy joints, so a tall or heavy vehicle flexes, and the autopilot can pick up the
+structural wobble and feed it back into the controls. The autopilot tries to
+automatically detect this and damps it, with no tuning required, so a flexible craft
+will normally settle and hold steadily with the default settings. The full mechanism is
+described under <a class="reference internal" href="#oscillation"><span class="std std-ref">Oscillation detection and mitigation</span></a>.</p>
+<p>The autopilot detects two kinds of oscillation. <em>Attitude oscillation</em> is the craft
+physically wobbling — the structural bending, visible in the measured angular
+velocity. This is the primary signal: detecting it is what marks a craft as flexible and
+switches the damping on. <em>Control oscillation</em> is the autopilot’s own control output
+swinging back and forth. On a craft already marked flexible it keeps the damping engaged
+through a maneuver; and on its own, a sustained control oscillation also switches on the
+bandwidth reduction directly, catching a craft that limit-cycles for a non-structural
+reason — typically an aggressively-tuned loop driving slow gimbal or aerodynamic actuators
+(see <a class="reference internal" href="#autopilot-limitations"><span class="std std-ref">Limitations</span></a>).</p>
+<p>As soon as the autopilot sees a craft begin to wobble, it <em>latches</em> that craft as
+flexible and switches on up to four independent mitigations. The first — a <a class="reference internal" href="#rate-filter"><span class="std std-ref">rate
+filter</span></a> — removes the attitude oscillation from its rate measurements so the
+control loop does not chase it, and stays on whether the craft is holding or slewing. The
+other three — a <a class="reference internal" href="#bandwidth-floor"><span class="std std-ref">bandwidth floor</span></a>, a <a class="reference internal" href="#feedforward-cut"><span class="std std-ref">feedforward cut</span></a> and an <a class="reference internal" href="#output-filter"><span class="std std-ref">output filter</span></a> — stop the loop feeding
+energy back into the structure, and apply only while the craft is <em>holding</em> attitude, so
+that a
+commanded maneuver stays responsive. If a maneuver sets the wobble going again, the
+autopilot detects the resulting control oscillation and re-applies the holding
+mitigations until the craft settles.</p>
+<p>Each mitigation is exposed separately, so you can inspect, force, disable or tune any one
+of them without disturbing the others (they are <em>orthogonal</em>). The remainder of this
+section covers each in turn; the mechanism behind them is described under
+<a class="reference internal" href="#oscillation"><span class="std std-ref">Oscillation detection and mitigation</span></a>.</p>
+<section id="rate-filter">
+<span id="id3"></span><h4>Rate filter<a class="headerlink" href="#rate-filter" title="Link to this heading">#</a></h4>
+<p>The rate filter removes the structural oscillation from the <em>measured</em> angular velocity
+before the control loops act on it, so the loop has no gain at the bending frequency. It
+is selected per axis group by the <strong>pitch/yaw rate filter mode</strong> and <strong>roll rate filter
+mode</strong> properties, each taking one of:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">AUTOMATIC</span></code> (the default) — detect and latch the oscillation, estimate its frequency,
+and route it to the right filter automatically: a notch for a low-frequency mode near
+the control band, a low-pass for a high-frequency mode, or a broadband low-pass while
+the frequency is not yet known. A rigid craft is left untouched.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">OFF</span></code> — no rate filtering. The other mitigations are unaffected.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NOTCH</span></code> — always apply a notch filter at the manually set frequency. Use this when you
+already know the craft has a low-frequency structural mode near the control band.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LOW_PASS</span></code> — always apply a low-pass filter derived from the manually set frequency.
+Use this when you already know the craft has a high-frequency structural mode.</p></li>
+</ul>
+<p>When forcing a tool, set the mode frequency for that axis group with the <strong>pitch/yaw
+oscillation frequency</strong> or <strong>roll oscillation frequency</strong> property (in Hz, default 1.5);
+the same properties also seed the automatic estimator before it acquires. The <strong>oscillation
+notch Q</strong> (default 2.5) sets how narrow the notch is — higher is narrower, with less
+in-band lag but less tolerance to the mode frequency drifting.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
+<span class="c1"># treat the craft as flexible from the start, notching a 1.4 Hz bending mode</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">pitch_yaw_rate_filter_mode</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">RateFilterMode</span><span class="o">.</span><span class="n">notch</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">pitch_yaw_oscillation_frequency</span> <span class="o">=</span> <span class="mf">1.4</span>
+</pre></div>
+</div>
+</section>
+<section id="bandwidth-floor">
+<span id="id4"></span><h4>Bandwidth floor<a class="headerlink" href="#bandwidth-floor" title="Link to this heading">#</a></h4>
+<p>The bandwidth floor reduces the inner control loop’s bandwidth on a flexible axis while
+it holds attitude, dropping the loop’s crossover well below the bending frequency so it
+has little authority left with which to excite the mode. This is the <em>primary</em> stabilizer
+— it needs no accurate frequency estimate — so a flexible craft is held more gently than a
+rigid one. It is controlled by the <strong>oscillation bandwidth floor mode</strong> property, taking
+<code class="docutils literal notranslate"><span class="pre">AUTOMATIC</span></code> (the default; engage on a latched axis while holding), <code class="docutils literal notranslate"><span class="pre">OFF</span></code> (never reduce
+the bandwidth) or <code class="docutils literal notranslate"><span class="pre">FORCED</span></code> (keep it fully reduced at all times). The <strong>oscillation
+bandwidth floor</strong> property (in rad/s, default 1) sets the bandwidth an axis is reduced
+towards: lower suppresses oscillation more strongly, higher keeps more control authority
+at the cost of allowing more wobble.</p>
+</section>
+<section id="feedforward-cut">
+<span id="id5"></span><h4>Feedforward cut<a class="headerlink" href="#feedforward-cut" title="Link to this heading">#</a></h4>
+<p>The feedforward cut removes the <a class="reference internal" href="#acceleration-feedforward"><span class="std std-ref">acceleration feedforward</span></a>
+on a flexible axis while it holds attitude. Being an open-loop plant inversion whose gain
+rises with frequency, the feedforward is the path most able to re-excite the mode once the
+bandwidth has been floored. It is controlled by the <strong>oscillation feedforward mode</strong>
+property, taking <code class="docutils literal notranslate"><span class="pre">AUTOMATIC</span></code> (the default; follow the hold gate on a latched axis),
+<code class="docutils literal notranslate"><span class="pre">OFF</span></code> (never cut the feedforward) or <code class="docutils literal notranslate"><span class="pre">FORCED</span></code> (always cut it fully).</p>
+</section>
+<section id="output-filter">
+<span id="id6"></span><h4>Output filter<a class="headerlink" href="#output-filter" title="Link to this heading">#</a></h4>
+<p>The output filter is a light low-pass on the delivered actuator command — a
+frequency-independent backstop that caps any residual control chatter left by the other
+mitigations.</p>
+<p>The other three mitigations are each <em>targeted</em>: the rate filter depends on a good
+frequency estimate, and the bandwidth floor and feedforward cut each close off one
+particular path by which the wobble reaches the actuators. Between them they can still
+leave a little high-frequency buzz on the command. The output filter is a catch-all for
+that remainder — applied directly to the command the game actuates, it needs neither a
+frequency estimate nor any particular gain, so it removes residual chatter whatever its
+source. Because a flexible craft is already held at a reduced bandwidth, the small phase
+lag it adds costs almost nothing.</p>
+<p>It is controlled by the <strong>oscillation output filter mode</strong> property, taking
+<code class="docutils literal notranslate"><span class="pre">AUTOMATIC</span></code> (the default; engage on a latched axis, and lightly while the detector is
+firing on an unlatched one), <code class="docutils literal notranslate"><span class="pre">OFF</span></code> (never smooth) or <code class="docutils literal notranslate"><span class="pre">FORCED</span></code> (smooth fully at all
+times).</p>
+</section>
+<section id="holding-versus-slewing">
+<h4>Holding versus slewing<a class="headerlink" href="#holding-versus-slewing" title="Link to this heading">#</a></h4>
+<p>The bandwidth floor, feedforward cut and output filter engage only while a latched axis is
+<em>holding</em> attitude, and are released while it is <em>slewing</em>, so that a commanded maneuver
+runs at full responsiveness. The autopilot decides holding versus slewing from the
+pointing error, keyed per axis group: pitch/yaw on the pointing error, and roll on the
+larger of the pointing error and the roll error (so a pure roll maneuver releases the roll
+axis). This is the <em>hold gate</em>.</p>
+<p>The gate has a blind spot: a maneuver on a very flexible craft can excite a limit cycle
+that parks the pointing error just large enough to keep the gate released, so the craft
+never settles. To close it, the autopilot watches its own control output for a sustained
+oscillation and, on a latched axis, re-engages the holding mitigations regardless of the
+pointing error until the oscillation dies away. This recovery runs at the floored
+bandwidth and can take a few seconds.</p>
+<p>Setting a mitigation’s mode to <code class="docutils literal notranslate"><span class="pre">FORCED</span></code> engages it at all times regardless of the hold
+gate — use this when you know in advance that a maneuver will excite the craft and want
+the holding mitigations held on throughout.</p>
+</section>
+<section id="monitoring">
+<h4>Monitoring<a class="headerlink" href="#monitoring" title="Link to this heading">#</a></h4>
+<p>Several read-only properties expose the detector and estimator state, and run in every
+mode (so they remain observable even when a mitigation is forced or off):</p>
+<ul class="simple">
+<li><p><strong>oscillation level</strong> — a value between 0 and 1 per axis measuring how strongly
+structural oscillation is currently detected.</p></li>
+<li><p><strong>pitch/yaw oscillation latched</strong> and <strong>roll oscillation latched</strong> — whether the axis
+group has been confirmed <em>structurally</em> flexible from the measured rate (the attitude
+oscillation), which is what switches the damping on.</p></li>
+<li><p><strong>pitch/yaw oscillation detected frequency</strong> and <strong>roll oscillation detected
+frequency</strong> — the estimated mode frequency in Hz, or not-a-number until the estimator
+has acquired it.</p></li>
+<li><p><strong>pitch/yaw control oscillation</strong> and <strong>roll control oscillation</strong> — the amplitude of
+oscillation in the control output about its slowly-varying trim; near zero for a settled
+hold, approaching 1 for a sustained limit cycle.</p></li>
+<li><p><strong>pitch/yaw control oscillation latched</strong> and <strong>roll control oscillation latched</strong> —
+whether the axis group has been latched from a sustained <em>control</em> oscillation with no
+structural signature: a rigid-body limit cycle, typically an aggressively-tuned loop
+driving slow gimbal or aerodynamic actuators (see <a class="reference internal" href="#autopilot-limitations"><span class="std std-ref">Limitations</span></a>). This latch engages the bandwidth floor and output filter but
+not the rate filter or feedforward cut, and is distinct from the structural
+<em>oscillation latched</em> flag above.</p></li>
+</ul>
+</section>
+<section id="when-first-engaging">
+<span id="first-engaging"></span><h4>When first engaging<a class="headerlink" href="#when-first-engaging" title="Link to this heading">#</a></h4>
+<p>When the autopilot is engaged it may be pointing far from its target, and its gains
+may not yet reflect the vessel’s current torque. Driving the full correction on the
+very first tick would deliver a sudden kick to the controls, which on a flexible
+vehicle can excite a structural oscillation.</p>
+<p>To avoid this, the control output is faded in smoothly from zero over the <strong>soft-start
+time</strong> (default 0.5 seconds), using a ramp with zero slope at the start so the onset is
+gentlest exactly when the loop is furthest from steady state. The integral terms are
+held at zero throughout the fade, so they only begin to accumulate once the ramp is
+complete — and the controls are therefore not kicked when it finishes. Setting the
+soft-start time to zero disables the fade-in.</p>
+</section>
+</section>
+<section id="corner-cases">
+<span id="id7"></span><h3>Corner cases<a class="headerlink" href="#corner-cases" title="Link to this heading">#</a></h3>
+<section id="when-sitting-on-the-launchpad">
+<h4>When sitting on the launchpad<a class="headerlink" href="#when-sitting-on-the-launchpad" title="Link to this heading">#</a></h4>
+<p>While the vessel is held on the launch clamps it cannot rotate, and with its engines
+unlit its available torque is near zero. The autopilot therefore does not try to control
+it at all: it holds the pitch, yaw and roll controls at zero and keeps its internal state
+in the freshly-engaged condition, until the clamps release.</p>
+<p>This avoids two problems. First, because the vessel cannot move, the integral terms in the
+controllers would otherwise wind up to a large value — even when the vessel is pointing
+correctly, since small floating-point variations in the computed error still accumulate.
+Second, the gain auto-tuning scales the gains by the moment of inertia divided by the
+available torque, so against the near-zero pad torque it would compute enormous gains and
+saturate the controls against sensor jitter — a full-deflection command that would then be
+delivered as a violent kick the instant the clamps release and the gains collapse onto the
+now-large engine torque.</p>
+<p>The <a class="reference internal" href="#first-engaging"><span class="std std-ref">engagement soft-start</span></a> begins the moment the clamps release:
+holding on the pad is equivalent to engaging the autopilot the instant the clamps drop.</p>
+</section>
+<section id="when-the-available-torque-is-zero">
+<h4>When the available torque is zero<a class="headerlink" href="#when-the-available-torque-is-zero" title="Link to this heading">#</a></h4>
+<p>An axis can lose all of its control authority — for example if the reaction wheels run out
+of electric charge — leaving it with no available torque to control attitude.</p>
+<p>Two things are then done on any axis whose available torque is zero. First, its controller
+output is forced to zero and its integral term is cleared. With no torque to act on, the
+controller cannot reduce the error, so its integral would otherwise wind up to a large value
+and deliver a kick the moment authority returned. Second, gain auto-tuning is skipped for that
+axis: the auto-tuned gains scale as the moment of inertia divided by the available torque, so
+they grow without bound as the torque falls towards zero — and would divide by zero at zero.
+The gains are left at their last values until torque is available again.</p>
+</section>
+<section id="when-the-controlling-client-disconnects">
+<h4>When the controlling client disconnects<a class="headerlink" href="#when-the-controlling-client-disconnects" title="Link to this heading">#</a></h4>
+<p>The autopilot is engaged by a client over the network. If that client disconnects
+while the autopilot is still engaged, the autopilot disengages, so that a dropped
+connection does not leave the vessel locked under control with no way to release it.
+Its configuration and target are left unchanged, so re-engaging resumes from where it
+left off.</p>
+</section>
+</section>
+<section id="limitations">
+<span id="autopilot-limitations"></span><h3>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">#</a></h3>
+<p>The autopilot models each axis as having a single maximum torque, which it reads afresh
+every physics tick. That figure already reflects the current state of the vessel — the
+engine gimbals at the current throttle, RCS at its current thrust limiter, control
+surfaces at the current dynamic pressure — so the model follows these as they change
+rather than assuming a fixed value. What it does not capture is finer structure within
+that figure. It is a single number per axis, taken in one direction only, so it is exact
+for reaction wheels but only approximate for a vessel whose authority is asymmetric
+(different in the two directions of an axis). Because the torque is read reactively
+rather than predicted, the auto-tuner adapts to a change in authority only as fast as
+the inner loop can respond.</p>
+<p>The same single-figure model can also affect <em>stability</em>, not just accuracy. It treats
+the commanded torque as taking effect instantly, but a vessel steered by gimbaled engines
+or aerodynamic control surfaces responds with a lag — the gimbal takes time to slew, a
+control surface to deflect and its aerodynamic force to build. Working only from the
+instantaneous torque figure, the auto-tuner can then tune the loop more aggressively than
+the delayed response can support, and the controller limit-cycles: the nose orbits the
+target and the controls swing hard, even though the craft is perfectly rigid. This is
+distinct from structural flexibility — there is no bending, and the oscillation is genuine
+rigid-body motion rather than a bending mode showing up in the measured angular velocity,
+so the flexibility detector does not see it. Instead, the autopilot treats a sustained
+<em>control</em> oscillation (its own output swinging) as the trigger and applies the same
+<a class="reference internal" href="#bandwidth-floor"><span class="std std-ref">bandwidth floor</span></a> it uses for a flexible craft — but keeping the
+feedforward, which the slower loop needs to hold attitude — which lets it hold cleanly. As
+with a flexible craft, the reduced bandwidth makes it track a large, continuous slew less
+precisely. Modeling the actuator’s <em>response</em>, not just its peak torque, would let the
+loop keep a higher bandwidth here; until then such a craft is held gently rather than
+tracked tightly.</p>
+<p>While the autopilot detects and damps structural flexibility automatically, it leans
+most heavily on <strong>reducing the affected craft’s control bandwidth</strong> while it holds
+attitude, rather than on the notch filter it also applies. In principle a notch placed
+exactly at the bending frequency would damp the mode without reducing the bandwidth at
+all, but the autopilot’s online estimate of that frequency is not reliable enough on the
+craft tested to make the notch carry the damping on its own, so the bandwidth reduction
+does the heavy lifting. As a result a flexible craft is held more gently than a rigid
+one. The bandwidth reduction is applied only while holding attitude — released during a
+commanded slew so the craft stays responsive, and re-applied once it has settled — so
+while holding, the craft rejects a <em>small</em> disturbance (a light nudge, or a gust) more
+slowly than a rigid craft would, because it is deliberately running at a reduced
+bandwidth. For the same reason, recovering from a maneuver that has excited the bending
+mode runs at the reduced bandwidth and can take several seconds.</p>
+<p>The autopilot is primarily designed for, and tested in, vacuum. It is a closed-loop
+attitude tracker: aerodynamic torques appear to it as disturbances that the inner loop
+only rejects once an error has built up. In a thick atmosphere — during ascent through
+maximum dynamic pressure, or re-entry at a high angle of attack — the aerodynamic torque
+can be large and fast-changing, and may even exceed the vessel’s control authority. The
+autopilot will still drive towards the target, but a low-authority craft can lag the
+target by many degrees, or fail to hold attitude at all. It also does <strong>not</strong> manage
+angle of attack: keeping the vessel within safe structural and thermal limits in
+atmosphere is the responsibility of your script, not the autopilot.</p>
+</section>
+<section id="the-info-window">
+<span id="info-window"></span><h3>The info window<a class="headerlink" href="#the-info-window" title="Link to this heading">#</a></h3>
+<p>For debugging, the autopilot can display an in-game window showing its live internal
+state. It is enabled per vessel, and hidden again when the game restarts:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">show_info_ui</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>The window is laid out like a control panel of annunciator lamps and digital registers.
+Lamps are dim when nominal and light amber to flag something worth attention; the
+<strong>ENGAGED</strong> lamp reads green (amber <strong>HELD</strong> while the craft is held on the launch
+clamps). Hovering the mouse over a row shows a tooltip with a short description of it.
+From top to bottom it shows:</p>
+<ul class="simple">
+<li><p><strong>TARGET</strong> — the attitude being tracked, in pitch, heading and roll (<code class="docutils literal notranslate"><span class="pre">CURRENT</span></code>, the
+target the loop is currently tracking, and <code class="docutils literal notranslate"><span class="pre">COMMAND</span></code>, the commanded target, shown only
+while a change is being <a class="reference internal" href="#target-smoothing"><span class="std std-ref">smoothed</span></a> in).</p></li>
+<li><p><strong>ATTITUDE ERROR</strong> — the total and per-axis pointing error to that target.</p></li>
+<li><p><strong>PID GAIN</strong> — the autotuned inner-loop gains (<span class="math notranslate nohighlight">\(K_P\)</span> and <span class="math notranslate nohighlight">\(K_I\)</span>) per axis.</p></li>
+<li><p><strong>OSCILLATION</strong> — the flexible-craft handling, mirroring the <a class="reference internal" href="#oscillation"><span class="std std-ref">detector, gates and
+mitigations</span></a> structure: the detector readouts (structural level,
+control-output envelope and estimated mode frequency), the gate weights (hold factor,
+latch, ramp, back-off and the net gate), and a lamp per mitigation showing its mode and
+how strongly it is engaged.</p></li>
+</ul>
+<p>It is purely a diagnostic aid, most useful on a flexible craft where it shows the
+oscillation detector, gates and mitigations working in real time.</p>
+</section>
+</section>
+<section id="how-it-works">
+<span id="id8"></span><h2>How it works<a class="headerlink" href="#how-it-works" title="Link to this heading">#</a></h2>
+<p>This part explains the control law in detail: how the autopilot turns an attitude error
+into control inputs, and how it tunes itself. It is not needed in order to use the
+autopilot, but is useful if you want a deeper understanding of how it works, or want to
+extend it.</p>
+<section id="the-control-cascade">
+<h3>The control cascade<a class="headerlink" href="#the-control-cascade" title="Link to this heading">#</a></h3>
+<p>Each physics tick the autopilot does the following:</p>
+<ol class="arabic simple">
+<li><p>It compares the current rotation with the target rotation to compute the
+<a class="reference internal" href="#target-angular-velocity"><span class="std std-ref">target angular velocity</span></a> needed to rotate
+the vessel towards the target.</p></li>
+<li><p>It passes the target angular velocity to three PI controllers (one per axis),
+which compare it against the vessel’s measured angular velocity. Two feedforward
+terms are added to each controller’s output: an <a class="reference internal" href="#acceleration-feedforward"><span class="std std-ref">acceleration feedforward</span></a> — the time derivative of the target angular velocity,
+normalized by the maximum angular acceleration <span class="math notranslate nohighlight">\(\alpha = \tau_{max} / I\)</span> — and
+a <a class="reference internal" href="#gyroscopic-feedforward"><span class="std std-ref">gyroscopic feedforward</span></a> that cancels the rigid-body
+cross-coupling between the axes. The sum is clamped to <span class="math notranslate nohighlight">\([-1, 1]\)</span> to give the
+pitch, yaw and roll control inputs for the vessel.</p></li>
+</ol>
+<p>Together these two steps form a <em>cascade</em>: an outer loop converts the attitude error
+into a target angular velocity, and an inner loop of three PI controllers drives the
+vessel’s measured angular velocity onto that target. The outer loop is the velocity
+profile described in <a class="reference internal" href="#target-angular-velocity"><span class="std std-ref">Computing the target angular velocity</span></a>; the inner loop is the set of PI controllers described in
+<a class="reference internal" href="#tuning-the-controllers"><span class="std std-ref">Controller gain tuning</span></a>.</p>
+<p>Pitch and yaw are not controlled independently of each other. They are computed
+together, in a frame from which the vessel’s current roll has been removed (the
+<a class="reference internal" href="#roll-invariant-frame"><span class="std std-ref">roll-invariant frame</span></a>), so that the nose follows the
+shortest, great-circle path to the target direction and so that rolling the vessel does
+not disturb that path. Roll is controlled separately, and is only blended in once the
+vessel is already pointing close to the target.</p>
+</section>
+<section id="the-roll-invariant-frame">
+<span id="roll-invariant-frame"></span><h3>The roll-invariant frame<a class="headerlink" href="#the-roll-invariant-frame" title="Link to this heading">#</a></h3>
+<p>Pitch and yaw are computed in a <em>roll-invariant frame</em>: the vessel body frame with the
+vessel’s current roll removed. It shares the vessel’s nose direction, but its pitch and
+yaw axes are held fixed relative to the autopilot reference frame for the current
+pointing direction, rather than turning with the vessel as it rolls.</p>
+<p>The reason for this is decoupling. If the pitch and yaw controllers ran directly in the
+body frame, then as the vessel rolled its body pitch and yaw axes would rotate around
+the nose. A roll correction would then change which axis a given direction error
+projects onto, disturbing the path the nose takes towards the target. Removing the roll
+means that roll corrections and pitch/yaw corrections do not interfere with one another.</p>
+<p>The roll angle <span class="math notranslate nohighlight">\(\varphi\)</span> is recovered each tick from the vessel’s body x-axis
+expressed in the roll-invariant frame. Pitch/yaw quantities are rotated from the body
+frame into the roll-invariant frame by a rotation of <span class="math notranslate nohighlight">\(\varphi\)</span> about the nose:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{pmatrix} p \\ y \end{pmatrix}_{\!ri} =
+\begin{pmatrix} \cos\varphi &amp; \sin\varphi \\ -\sin\varphi &amp; \cos\varphi \end{pmatrix}
+\begin{pmatrix} p \\ y \end{pmatrix}_{\!body}\end{split}\]</div>
+<p>The pitch and yaw controllers run in this frame, and their outputs are rotated back into
+the body frame (by <span class="math notranslate nohighlight">\(-\varphi\)</span>) to become the actual pitch and yaw control inputs.
+Roll is measured about the nose itself, which the rotation leaves unchanged, so the roll
+controller needs no transformation.</p>
+<section id="continuity-through-the-antipode">
+<h4>Continuity through the antipode<a class="headerlink" href="#continuity-through-the-antipode" title="Link to this heading">#</a></h4>
+<p>To measure <span class="math notranslate nohighlight">\(\varphi\)</span> the autopilot first needs the roll-invariant frame itself. That
+frame is the autopilot reference frame turned by a <em>pointing-only rotation</em>: the shortest
+rotation taking a fixed reference axis <span class="math notranslate nohighlight">\(\hat{\boldsymbol{u}}\)</span> of the reference frame
+onto the current nose direction <span class="math notranslate nohighlight">\(\hat{\boldsymbol{c}}\)</span>. Applied to the reference
+frame it produces a frame that shares the nose but adds no twist about it.</p>
+<p>Computed directly, that shortest rotation is singular when the nose reaches the <em>antipode</em>
+of the reference axis — pointing exactly opposite <span class="math notranslate nohighlight">\(\hat{\boldsymbol{u}}\)</span>. (For the
+surface reference frame, whose reference axis points north, that is due south along the
+horizon.) There it is a half-turn whose axis is undefined, and — the same hyper-sensitivity
+to transverse motion that makes a 180° flip’s plane ill-defined (<a class="reference internal" href="#antipodal-flip"><span class="std std-ref">Flipping to the
+antipode</span></a>) — a tiny jitter in the nose direction swings the whole frame
+through nearly 180°. That is not cosmetic: the frame carries stateful quantities — the
+integral terms and the <a class="reference internal" href="#acceleration-feedforward"><span class="std std-ref">acceleration feedforward</span></a> are
+expressed in it — so reinterpreting it by half a turn in a single tick delivers a
+full-deflection kick to the controls.</p>
+<p>The frame is therefore not rebuilt from scratch each tick. Writing
+<span class="math notranslate nohighlight">\(\rho(\boldsymbol{a}, \boldsymbol{b})\)</span> for the shortest rotation taking
+<span class="math notranslate nohighlight">\(\boldsymbol{a}\)</span> onto <span class="math notranslate nohighlight">\(\boldsymbol{b}\)</span>, the pointing rotation is seeded once,
+at engagement, as <span class="math notranslate nohighlight">\(\rho(\hat{\boldsymbol{u}}, \hat{\boldsymbol{c}})\)</span>, and thereafter
+carried forward by composing it with the small rotation between the previous and current
+nose directions:</p>
+<div class="math notranslate nohighlight">
+\[R_{point}(t) = \rho\big(\hat{\boldsymbol{c}}_{t-1},\ \hat{\boldsymbol{c}}_{t}\big)\;
+               R_{point}(t-1)\]</div>
+<p>The nose cannot reverse within a single physics tick, so this incremental rotation is
+always through a tiny, well-conditioned angle and never approaches its own singularity. The
+frame slides smoothly across the reference antipode instead of flipping across it.</p>
+</section>
+<section id="separating-the-direction-and-roll-errors">
+<h4>Separating the direction and roll errors<a class="headerlink" href="#separating-the-direction-and-roll-errors" title="Link to this heading">#</a></h4>
+<p>The attitude error has two parts — a <em>direction</em> error (where the nose points) and a
+<em>roll</em> error (the rotation about the nose) — and the autopilot computes them separately
+rather than from a single combined error rotation.</p>
+<p>The direction error is the shortest rotation that brings the nose from its current
+direction onto the target direction. The axis of this rotation is perpendicular to the
+nose, so it represents pure pitch and yaw with no roll component. This is what the
+pitch/yaw velocity profile acts on.</p>
+<p>The roll error is whatever rotation remains once the direction has been aligned. Its
+axis is <em>not</em> generally aligned with the nose while the direction error is large, so
+folding it into the direction error would contaminate the pitch and yaw errors and curve
+the nose’s path. Instead the residual rotation is projected onto the nose axis,
+extracting only the part that is a genuine roll, and that component is scaled by the roll
+blend weight (see <a class="reference internal" href="#roll-control"><span class="std std-ref">Roll</span></a> below) before being used.</p>
+</section>
+</section>
+<section id="computing-the-target-angular-velocity">
+<span id="target-angular-velocity"></span><h3>Computing the target angular velocity<a class="headerlink" href="#computing-the-target-angular-velocity" title="Link to this heading">#</a></h3>
+<p>The target angular velocity is the angular velocity that will rotate the vessel
+towards the target direction. The core of the calculation is a one-dimensional
+function that, given the angular error <span class="math notranslate nohighlight">\(\theta\)</span> about an axis, returns the
+target angular speed <span class="math notranslate nohighlight">\(\omega\)</span> for that axis:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\omega &amp;= -\frac{\theta}{\lvert\theta\rvert}
+          \min \big(
+              \omega_{max},
+              \sqrt{2 \alpha \lvert\theta\rvert},
+              \kappa\,\text{bw}\,\lvert\theta\rvert
+          \big) \cdot D(\theta) \\
+\text{where} &amp; \\
+\alpha &amp;= \frac{\tau_{max}}{I} \\
+D(\theta) &amp;= \operatorname{clamp}\!\left(
+    \frac{\lvert\theta\rvert - \theta_a/2}{\theta_a/2},\ 0,\ 1\right)\end{split}\]</div>
+<p>The reasoning and derivation for this is as follows.</p>
+<section id="decelerating-to-the-target">
+<h4>Decelerating to the target<a class="headerlink" href="#decelerating-to-the-target" title="Link to this heading">#</a></h4>
+<p>The vessel needs to rotate towards <span class="math notranslate nohighlight">\(\theta = 0\)</span>. The target speed
+<span class="math notranslate nohighlight">\(\omega\)</span> must therefore be positive when <span class="math notranslate nohighlight">\(\theta\)</span> is negative, and
+negative when <span class="math notranslate nohighlight">\(\theta\)</span> is positive. This is the role of the term
+<span class="math notranslate nohighlight">\(-\frac{\theta}{\lvert\theta\rvert}\)</span>, which is <span class="math notranslate nohighlight">\(+1\)</span> when
+<span class="math notranslate nohighlight">\(\theta &lt; 0\)</span> and <span class="math notranslate nohighlight">\(-1\)</span> when <span class="math notranslate nohighlight">\(\theta &gt; 0\)</span>.</p>
+<p>The autopilot plans to decelerate the vessel to rest exactly as it reaches the
+target, using the maximum angular acceleration the vessel can produce. This is a
+<em>bang-bang</em> deceleration profile. The maximum angular acceleration is:</p>
+<div class="math notranslate nohighlight">
+\[\alpha = \frac{\tau_{max}}{I}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\tau_{max}\)</span> is the maximum torque the vessel can generate and
+<span class="math notranslate nohighlight">\(I\)</span> is its moment of inertia.</p>
+<p>Under a constant deceleration <span class="math notranslate nohighlight">\(\alpha\)</span>, a vessel rotating at speed
+<span class="math notranslate nohighlight">\(\omega\)</span> comes to rest after rotating through an angle:</p>
+<div class="math notranslate nohighlight">
+\[\theta = \frac{\omega^2}{2\alpha}\]</div>
+<p>Rearranging gives the largest speed from which the vessel can still stop within
+the remaining error <span class="math notranslate nohighlight">\(\theta\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\omega = \sqrt{2 \alpha \theta}\]</div>
+<p>This is used as the target speed. It is the minimum-time profile: the vessel
+accelerates up to this speed and then decelerates at full torque, coming to rest
+on the target.</p>
+<p>The target speed is capped at the maximum angular velocity <span class="math notranslate nohighlight">\(\omega_{max}\)</span>.</p>
+</section>
+<section id="speed-cone">
+<h4>Speed cone<a class="headerlink" href="#speed-cone" title="Link to this heading">#</a></h4>
+<p>The square-root profile has infinite gradient at the origin, so near the target
+it can command speeds that fall towards zero faster than the inner rate loop
+(bandwidth <span class="math notranslate nohighlight">\(\text{bw}\)</span>, described <a class="reference internal" href="#tuning-the-controllers"><span class="std std-ref">below</span></a>)
+can follow. On a vessel with very high control authority this produces a
+sustained oscillation just outside the pointing deadband: the profile commands a
+large speed at a degree or so of error, the vessel cannot shed that speed inside
+the band, coasts through the target, and is symmetrically re-accelerated on the
+far side. The target speed is therefore also capped by a linear <em>speed cone</em>
+<span class="math notranslate nohighlight">\(\kappa\,\text{bw}\,\lvert\theta\rvert\)</span> (<span class="math notranslate nohighlight">\(\kappa = 1/2\)</span>, with
+<span class="math notranslate nohighlight">\(\text{bw}\)</span> the rate loop’s closed-loop bandwidth — see
+<a class="reference internal" href="#tuning-the-controllers"><span class="std std-ref">Tuning the controllers</span></a>) — the steepest
+straight-line decay the inner loop can actually track down to zero.
+Far from the target the cone is above the other terms and has no effect; its
+reach scales with the vessel’s authority, covering the whole final approach on a
+very agile vessel and only the last few degrees on a sluggish one.</p>
+</section>
+<section id="pointing-deadband">
+<h4>Pointing deadband<a class="headerlink" href="#pointing-deadband" title="Link to this heading">#</a></h4>
+<p>To prevent the vessel from oscillating when it is pointing at the target, the
+target speed must fall to zero as the error vanishes, rather than following the
+square root all the way to the origin — where its infinite gradient would chase
+sub-degree jitter into the actuators. The square-root profile is therefore
+multiplied by a linear <em>pointing deadband</em> <span class="math notranslate nohighlight">\(D(\theta)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[D(\theta) = \operatorname{clamp}\!\left(
+    \frac{\lvert\theta\rvert - \theta_a/2}{\theta_a/2},\ 0,\ 1\right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\theta_a\)</span> is the attenuation angle. The deadband is 1 at and above
+<span class="math notranslate nohighlight">\(\theta_a\)</span>, ramps linearly to 0 at <span class="math notranslate nohighlight">\(\theta_a/2\)</span>, and is 0 below that.
+The autopilot therefore uses the full bang-bang profile until the vessel is close
+to the target direction, then eases the target speed cleanly to zero and lets the
+vessel coast to a stop inside the band. The deadband is keyed on the pure pointing
+error <span class="math notranslate nohighlight">\(\theta\)</span>, not the stopping-point prediction <a class="reference internal" href="#stopping-distance-feedforward"><span class="std std-ref">below</span></a>, so measured-rate jitter is not fed through its
+ramp.</p>
+</section>
+<section id="stopping-distance-feedforward">
+<span id="id9"></span><h4>Stopping-distance feedforward<a class="headerlink" href="#stopping-distance-feedforward" title="Link to this heading">#</a></h4>
+<p>The profile above gives the speed to aim for assuming the vessel starts from
+rest. In practice the vessel is usually already rotating — towards or away from
+the target. Feeding the raw error <span class="math notranslate nohighlight">\(\theta\)</span> into the profile would then
+cause overshoot (when already rotating towards the target) or sluggishness (when
+rotating away). To correct for this, the autopilot predicts how far the vessel
+will rotate before it can stop, and evaluates the profile at that predicted
+stopping point <span class="math notranslate nohighlight">\(\theta_{ff}\)</span> instead of the current error <span class="math notranslate nohighlight">\(\theta\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\theta_{ff} = \theta + \Delta\theta\]</div>
+<p>Two estimates of the stopping distance are computed, and the one with the larger
+magnitude is used:</p>
+<div class="math notranslate nohighlight">
+\[\Delta\theta = \max\nolimits_{\lvert\cdot\rvert}\big(
+    \Delta\theta_{quad},\ \Delta\theta_{lin} \big)\]</div>
+<p>The quadratic term is the stopping distance under full-torque (bang-bang)
+deceleration, obtained from the same kinematic relation as above (signed to keep
+the direction of the current angular velocity <span class="math notranslate nohighlight">\(\omega\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[\Delta\theta_{quad} = \frac{\omega\lvert\omega\rvert}{2\alpha}\]</div>
+<p>The linear term accounts for the finite bandwidth of the closed loop: a PI
+controller that is not saturated decelerates more gently than full torque, so its
+true stopping distance is larger. It is approximated by:</p>
+<div class="math notranslate nohighlight">
+\[\Delta\theta_{lin} = \frac{\omega}{\text{bw}}, \quad
+\text{bw} = K_P \frac{\tau_{max}}{I} = 2\zeta\omega_0\]</div>
+<p>where <span class="math notranslate nohighlight">\(\text{bw}\)</span> is the closed-loop bandwidth (see <a class="reference internal" href="#tuning-the-controllers"><span class="std std-ref">Controller gain tuning</span></a> for <span class="math notranslate nohighlight">\(K_P\)</span>, <span class="math notranslate nohighlight">\(\zeta\)</span> and <span class="math notranslate nohighlight">\(\omega_0\)</span>). The
+<em>unfloored</em> proportional gain is used here: on a flexible craft the <a class="reference internal" href="#oscillation"><span class="std std-ref">bandwidth floor</span></a> deliberately lowers <span class="math notranslate nohighlight">\(K_P\)</span> while holding, but the stopping-distance
+term uses the gain <em>before</em> that reduction, so flooring the bandwidth does not inflate the
+predicted <span class="math notranslate nohighlight">\(1/\text{bw}\)</span> stopping distance. This term improves the approach on small,
+rigid craft; on large flexible rockets the autopilot suppresses the bending mode
+automatically — see <a class="reference internal" href="#oscillation"><span class="std std-ref">Oscillation detection and mitigation</span></a>.</p>
+</section>
+<section id="pitch-and-yaw-together">
+<h4>Pitch and yaw together<a class="headerlink" href="#pitch-and-yaw-together" title="Link to this heading">#</a></h4>
+<p>If pitch and yaw were each driven by the one-dimensional profile above
+independently, each axis would target a speed proportional to
+<span class="math notranslate nohighlight">\(\sqrt{\lvert\theta\rvert}\)</span> in that axis. The direction of the combined
+rotation would then differ from the direction of the error, and the nose would
+trace a curved path to the target.</p>
+<p>To avoid this, pitch and yaw are treated as a single two-dimensional problem in
+the roll-invariant frame. Rather than building a setpoint along the current error
+direction, the autopilot predicts the <strong>stopping point as a vector</strong> — where the nose
+would coast to if the current angular velocity <span class="math notranslate nohighlight">\(\boldsymbol{\omega}\)</span> were braked
+at full authority — and aims the velocity profile straight at it:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\boldsymbol{e}_{stop} &amp;= \boldsymbol{\theta} + c\,\boldsymbol{\omega} \\
+\hat{s} &amp;= \frac{\boldsymbol{e}_{stop}}{\lvert\boldsymbol{e}_{stop}\rvert} \\
+(\omega_{pitch},\,\omega_{yaw}) &amp;= -\hat{s}\;
+    \min\big(\omega_{max},\ \sqrt{2\alpha\lvert\boldsymbol{e}_{stop}\rvert},\
+    \kappa\,\text{bw}\,\lvert\boldsymbol{e}_{stop}\rvert\big)\,
+    D(\lvert\boldsymbol{\theta}\rvert)\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol{\theta} = (\theta_{pitch}, \theta_{yaw})\)</span> is the direction
+error and <span class="math notranslate nohighlight">\(c\,\boldsymbol{\omega}\)</span> is the predicted coasting displacement. The
+coefficient <span class="math notranslate nohighlight">\(c\)</span> is the same stopping distance as in the one-dimensional case —
+the larger in magnitude of the quadratic (bang-bang) and linear (PI-lag) terms, which
+are both collinear with <span class="math notranslate nohighlight">\(\boldsymbol{\omega}\)</span> and so collapse to a single scalar.
+The acceleration <span class="math notranslate nohighlight">\(\alpha\)</span>, the cap <span class="math notranslate nohighlight">\(\omega_{max}\)</span> and the speed-cone
+bandwidth <span class="math notranslate nohighlight">\(\text{bw}\)</span> are projected along <span class="math notranslate nohighlight">\(\hat{\boldsymbol{\omega}}\)</span> for
+the prediction and along <span class="math notranslate nohighlight">\(\hat{s}\)</span> for the speed profile. This makes the nose
+follow the shortest, great-circle path to the target.</p>
+</section>
+<section id="tangential-damping">
+<h4>Tangential damping<a class="headerlink" href="#tangential-damping" title="Link to this heading">#</a></h4>
+<p>Aiming at the predicted stopping point gives tangential damping for free, with no
+separate term. When the vessel has an angular velocity component <em>perpendicular</em> to the
+error direction — for example after a keyboard nudge — the coasting displacement
+<span class="math notranslate nohighlight">\(c\,\boldsymbol{\omega}\)</span> tilts <span class="math notranslate nohighlight">\(\boldsymbol{e}_{stop}\)</span> off-axis, rotating
+<span class="math notranslate nohighlight">\(\hat{s}\)</span> so that the command <span class="math notranslate nohighlight">\(-\hat{s}\,(\dots)\)</span> acquires a component
+opposing the sideways drift. The autopilot therefore leads the turn to place the
+predicted stopping point on the target, rather than letting the nose enter a
+self-sustaining circular orbit around the target direction and correcting it after the
+fact.</p>
+<p>When the angular velocity is purely along the error direction
+(<span class="math notranslate nohighlight">\(\boldsymbol{\omega}_{\perp} = 0\)</span>) the law reduces exactly to the
+one-dimensional profile applied along that direction, so great-circle slews and ordinary
+settling are unchanged; the off-axis behavior appears only in the nudge/orbit regime.
+The singularity guard is on <span class="math notranslate nohighlight">\(\lvert\boldsymbol{e}_{stop}\rvert\)</span> rather than
+<span class="math notranslate nohighlight">\(\theta\)</span>: only when both the error and the predicted drift vanish is there nothing
+to command.</p>
+</section>
+<section id="flipping-to-the-antipode">
+<span id="antipodal-flip"></span><h4>Flipping to the antipode<a class="headerlink" href="#flipping-to-the-antipode" title="Link to this heading">#</a></h4>
+<p>Everything above acts on the direction error <span class="math notranslate nohighlight">\(\boldsymbol{\theta}\)</span>, whose axis is
+the rotation that carries the nose onto the target — equivalently, the normal of the
+great-circle plane the nose should sweep along. Writing the current nose direction as
+<span class="math notranslate nohighlight">\(\boldsymbol{c}\)</span>, the target direction as <span class="math notranslate nohighlight">\(\boldsymbol{t}\)</span>, and the angle
+between them as <span class="math notranslate nohighlight">\(\theta\)</span>, that plane normal is</p>
+<div class="math notranslate nohighlight">
+\[\hat{\boldsymbol{n}} = \frac{\boldsymbol{c} \times \boldsymbol{t}}
+                            {\lvert \boldsymbol{c} \times \boldsymbol{t} \rvert},
+\qquad
+\lvert \boldsymbol{c} \times \boldsymbol{t} \rvert = \sin\theta\]</div>
+<p>This is well behaved for an ordinary slew, but it degenerates for a <strong>180° flip</strong> —
+commanding the nose to the point exactly opposite where it currently points.
+There <span class="math notranslate nohighlight">\(\boldsymbol{c}\)</span> and <span class="math notranslate nohighlight">\(\boldsymbol{t}\)</span> are antipodal,
+<span class="math notranslate nohighlight">\(\sin\theta \to 0\)</span>, and <em>every</em> plane through the antipodal pair is an equally
+valid geodesic, so <span class="math notranslate nohighlight">\(\hat{\boldsymbol{n}}\)</span> is undefined.</p>
+<p>The difficulty is not confined to exactly 180°. Suppose the nose has drifted a small
+angle <span class="math notranslate nohighlight">\(\delta\)</span> out of the intended plane. The cross product then gains an
+out-of-plane component, and because it is divided by <span class="math notranslate nohighlight">\(\sin\theta\)</span>, the resulting
+tilt of <span class="math notranslate nohighlight">\(\hat{\boldsymbol{n}}\)</span> away from the intended plane is</p>
+<div class="math notranslate nohighlight">
+\[\Delta\hat{\boldsymbol{n}} \sim \frac{\delta}{\sin\theta}\]</div>
+<p>which diverges as <span class="math notranslate nohighlight">\(\theta \to 180°\)</span>. Near the antipode the geodesic axis is
+therefore <em>hyper-sensitive</em>: a tiny out-of-plane offset swings the commanded rotation
+plane by a large angle.</p>
+<p>This interacts badly with the fact that a large flip is slow to leave the antipode. The
+rate loop can only build angular velocity at the available acceleration <span class="math notranslate nohighlight">\(\alpha\)</span>,
+so the vessel unavoidably crawls through the near-antipodal region while it accelerates.
+During that crawl, if the profile tracks the live <span class="math notranslate nohighlight">\(\hat{\boldsymbol{n}}\)</span>, each
+small out-of-plane disturbance swings the hyper-sensitive axis, the commanded plane
+rotates under the nose, and the disturbance is fed back and amplified — the nose bows out
+of the intended plane, pitching away from the great circle. The slower the crawl the more
+it accumulates, so a flip started from rest bows the worst, while a 90° slew — which never
+comes near the antipode — is entirely unaffected.</p>
+<p>To avoid this, within a band of the antipode the autopilot stops tracking the live
+geodesic axis and instead <strong>latches a fixed flip plane</strong>, commanding the rotation about
+it. The normal is captured once, on entering the band, from the vessel’s perpendicular
+angular velocity <span class="math notranslate nohighlight">\(\boldsymbol{\omega}_{\perp}\)</span> if it is already committed to a
+rotation, or from the (arbitrary but consistent) geodesic axis for a flip started from
+rest:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\hat{\boldsymbol{n}}_{latched} = \begin{cases}
+    \hat{\boldsymbol{\omega}}_{\perp}
+        &amp; \lvert \boldsymbol{\omega}_{\perp} \rvert \ge \omega_{lead} \\
+    \hat{\boldsymbol{n}} &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+<p>Because the latched plane is a great circle through the nose and its antipode — which
+<em>is</em> the target — rotating within it still carries the nose all the way to the target;
+the flip simply commits to one plane instead of chasing a singular one. The latched
+normal is held in full within the hold angle <span class="math notranslate nohighlight">\(\theta_{hold}\)</span> of the antipode
+(spanning the crawl), then blended smoothly back to the live geodesic axis by the blend
+angle <span class="math notranslate nohighlight">\(\theta_{blend}\)</span>, using a weight <span class="math notranslate nohighlight">\(w\)</span> on the latched plane:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}w = \begin{cases}
+    1 &amp; 180° - \theta \le \theta_{hold} \\
+    \text{smoothstep}\!\left(
+        \dfrac{\theta_{blend} - (180° - \theta)}{\theta_{blend} - \theta_{hold}}
+    \right) &amp; \theta_{hold} &lt; 180° - \theta &lt; \theta_{blend} \\
+    0 &amp; 180° - \theta \ge \theta_{blend}
+\end{cases}\end{split}\]</div>
+<p>The commanded axis is rebuilt from the latched-plane and geodesic tangents blended by
+<span class="math notranslate nohighlight">\(w\)</span>. Outside the band (<span class="math notranslate nohighlight">\(w = 0\)</span>) the live geodesic axis is recovered exactly,
+so ordinary slews are untouched — and there <span class="math notranslate nohighlight">\(\sin\theta\)</span> is no longer small, so
+<span class="math notranslate nohighlight">\(\hat{\boldsymbol{n}}\)</span> is well conditioned and correctly steers to a target that is
+no longer antipodal. The mitigation changes only the <em>plane</em> the flip is commanded in, not
+the speed profile, so the flip still runs at the full <span class="math notranslate nohighlight">\(\omega_{max}\)</span>; no control
+authority is given up.</p>
+<p>The thresholds are the hold angle <span class="math notranslate nohighlight">\(\theta_{hold} = 35°\)</span> and blend angle
+<span class="math notranslate nohighlight">\(\theta_{blend} = 50°\)</span> (both measured from the antipode), and the perpendicular-rate
+threshold <span class="math notranslate nohighlight">\(\omega_{lead} = 0.004\)</span> rad/s, above which the plane is latched from the
+vessel’s own rotation rather than from the geodesic axis.</p>
+<p>One caveat follows from holding the plane only <em>partially</em> across the blend band. A slew
+that starts within the band while rotating <strong>towards</strong> the target simply moves away from
+the antipode and holds plane cleanly. But if the vessel enters the band rotating <em>away</em>
+from the target — for example when a near-full reversal is commanded while it is already
+slewing the other way — it must decelerate and pass back through the near-antipodal region,
+where the partial latch does not fully suppress the out-of-plane growth. The nose can then
+wobble a few degrees out of plane before settling. This is bounded and self-correcting,
+unlike the unmitigated case, and it only arises from the unusual combination of a
+near-180° reversal commanded in the middle of a slew.</p>
+</section>
+<section id="roll">
+<span id="roll-control"></span><h4>Roll<a class="headerlink" href="#roll" title="Link to this heading">#</a></h4>
+<p>Roll is controlled separately, using the one-dimensional profile directly on the roll
+axis. It is only worth controlling once the vessel is pointing close to the target;
+holding a roll angle while the nose is still slewing wastes control authority and can
+curve the path. The target roll speed is therefore scaled by a weight that is 0 above
+the roll start angle, 1 below the roll engage angle, and blends linearly between the
+two. When no target roll is set, the roll target speed is simply 0, so that the
+autopilot damps roll rotation without holding a specific angle.</p>
+</section>
+</section>
+<section id="feedforward">
+<h3>Feedforward<a class="headerlink" href="#feedforward" title="Link to this heading">#</a></h3>
+<p>Two feedforward terms are added to the PI controllers’ output before the final clamp to
+<span class="math notranslate nohighlight">\([-1, 1]\)</span>: an <em>acceleration feedforward</em> derived from the velocity setpoint, and a
+<em>gyroscopic feedforward</em> that cancels the rigid-body cross-coupling between the axes.</p>
+<section id="acceleration-feedforward">
+<span id="id10"></span><h4>Acceleration feedforward<a class="headerlink" href="#acceleration-feedforward" title="Link to this heading">#</a></h4>
+<p>The velocity setpoint <span class="math notranslate nohighlight">\(\omega_{ref}\)</span> changes from tick to tick as the vessel
+rotates and the bang-bang profile is re-evaluated. Its time derivative is the angular
+acceleration the vessel must produce to stay on the trajectory:</p>
+<div class="math notranslate nohighlight">
+\[\alpha_{ref} = \frac{d\omega_{ref}}{dt}\]</div>
+<p>Rather than estimate this by differencing the setpoint between ticks — which would amplify
+the measured-rate jitter by <span class="math notranslate nohighlight">\(1/\Delta t\)</span> — the autopilot computes it <em>analytically</em>
+from the profile’s own branch decisions. The commanded speed is the product
+<span class="math notranslate nohighlight">\(g = \text{speed}\cdot D\)</span> of the square-root (or capped) speed and the
+<a class="reference internal" href="#target-angular-velocity"><span class="std std-ref">pointing deadband</span></a>, and its rate <span class="math notranslate nohighlight">\(\dot g\)</span> has a
+closed form on each branch of the profile:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\dot g = \begin{cases}
+    -\tfrac{1}{2}\,\alpha\,D &amp; \text{quadratic (bang-bang) braking} \\[4pt]
+    -\dfrac{\alpha\,\text{bw}\,\text{speed}}{\text{bw}\,\text{speed} + \alpha}\,D
+        &amp; \text{linear (PI-lag) braking} \\[4pt]
+    0 &amp; \text{velocity cap} \\[4pt]
+    -\dfrac{c_{\kappa}\,\text{bw}\,\text{speed}}{\text{bw} + c_{\kappa}}\,D
+        &amp; \text{speed cone, linear stopping} \\[4pt]
+    -\dfrac{c_{\kappa}\,\alpha\,\text{speed}}{\alpha + c_{\kappa}\,\text{speed}}\,D
+        &amp; \text{speed cone, quadratic stopping}
+\end{cases}
+\;+\; \text{speed}\,D'\,\dot\theta\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(c_{\kappa} = \kappa\,\text{bw}\)</span> is the speed cone’s slope: on the cone the
+profile’s gradient is the constant <span class="math notranslate nohighlight">\(c_{\kappa}\)</span> rather than the square root’s
+<span class="math notranslate nohighlight">\(\alpha/\text{speed}\)</span>, and the same self-consistent on-profile error rate gives the
+two sub-cases above.</p>
+<p>The final term is the deadband’s own contribution while it is on its ramp
+(<span class="math notranslate nohighlight">\(D' = 2/\theta_a\)</span> is constant there, and <span class="math notranslate nohighlight">\(\dot\theta\)</span> is the rate of change
+of the pointing error); like the braking terms it is scaled by the <em>tracking fraction</em>
+described below, since it too is an on-profile value — the acceleration needed for the
+measured rate to follow the collapsing command through the band, meaningful only while
+the vessel is actually tracking the command. Every term is an algebraic product of the current state with
+bounded coefficients — there is no <span class="math notranslate nohighlight">\(1/\Delta t\)</span>, so jitter is never amplified. The
+result is normalized by the maximum angular acceleration and aimed along the commanded
+direction <span class="math notranslate nohighlight">\(-\hat{s}\)</span> to give the feedforward control fraction:</p>
+<div class="math notranslate nohighlight">
+\[x_{ff} = -\hat{s}\,\frac{\dot g}{\alpha}\]</div>
+<p>which is added to the PI controller’s output before clamping to <span class="math notranslate nohighlight">\([-1, 1]\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[x = \operatorname{clamp}(x_{ff} + x_{PI},\ -1,\ 1)\]</div>
+<p>When the vessel is following the trajectory perfectly, the PI error
+<span class="math notranslate nohighlight">\(\omega_{ref} - \omega\)</span> is near zero and the feedforward alone drives the
+actuators. The PI controller then only needs to correct for disturbances (atmospheric
+drag, center-of-mass offsets) rather than the trajectory itself, cleanly separating the
+two concerns so they can be tuned independently.</p>
+<p>The closed forms above are the <em>on-profile</em> accelerations — exact only while the vessel is
+actually tracking the profile down towards the target. At the start of a maneuver the
+vessel is nearly at rest, far below the commanded speed, and the planned braking is
+fiction; applying it there would fight the saturated PI. The braking terms are therefore
+scaled by the <em>tracking fraction</em> — the attained fraction of the commanded speed along the
+command direction, clamped to <span class="math notranslate nohighlight">\([0, 1]\)</span> — which is near zero at spin-up (leaving the
+saturated PI to provide the acceleration phase) and rises to one as the vessel settles
+onto the profile.</p>
+<p>The tracking fraction guards only the <em>slow</em> side of the profile — the vessel moving below
+the commanded speed. The opposite case also needs handling. A vessel with very high control
+authority can reach the target region still rotating far <em>faster</em> than the profile plans,
+and cross the target before it can stop. As it nears the crossing the commanded speed
+collapses towards zero, but the predicted stopping point <span class="math notranslate nohighlight">\(\boldsymbol{e}_{stop}\)</span> swings
+past the target and flips the command direction <span class="math notranslate nohighlight">\(\hat{s}\)</span> to the far side; the
+feedforward — dominated near the target by the deadband term
+<span class="math notranslate nohighlight">\(\text{speed}\,D'\,\dot\theta\)</span>, which is large when the vessel sweeps quickly through
+the band — then drives <em>towards</em> the overshoot instead of braking it, and can pump a
+sustained oscillation about the target. To prevent this the whole feedforward is scaled by an
+<em>overshoot gate</em>, the complementary factor</p>
+<div class="math notranslate nohighlight">
+\[\min\!\left(1,\ \frac{\text{speed}}{\omega_{\parallel}}\right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\omega_{\parallel}\)</span> is the measured angular rate along the command direction
+<span class="math notranslate nohighlight">\(-\hat{s}\)</span>. It is one while the vessel is on the profile
+(<span class="math notranslate nohighlight">\(\omega_{\parallel} \approx \text{speed}\)</span>) or rotating away from the command
+(<span class="math notranslate nohighlight">\(\omega_{\parallel} \le 0\)</span>), so ordinary slews, holds and the feedforward’s normal role
+are untouched, and it falls below one only once the vessel is crossing faster than the profile
+commands — handing the braking there back to the PI controller, which is well damped on its
+own.</p>
+<p>The setpoint is continuous but not smooth: <span class="math notranslate nohighlight">\(\dot g\)</span> steps by a bounded amount at the
+seams where the profile switches branch (the velocity cap engaging, the quadratic and
+linear stopping terms swapping). To smear these few genuine transitions the feedforward is
+passed through a short first-order low-pass filter, with a time constant of a few physics
+ticks. The lag this introduces is small and is absorbed by the PI controller, which sees
+the unfiltered velocity error.</p>
+<p>On a craft the autopilot has detected as structurally flexible, this feedforward is cut
+while the craft is holding attitude. As an open-loop plant inversion its gain is largest
+at high frequency, making it the control path most able to re-excite the bending mode once
+the inner-loop bandwidth has been floored (see <a class="reference internal" href="#oscillation"><span class="std std-ref">Oscillation detection and mitigation</span></a>). It is restored in full while the craft is slewing, and is always present
+on a rigid craft.</p>
+</section>
+<section id="gyroscopic-feedforward">
+<span id="id11"></span><h4>Gyroscopic feedforward<a class="headerlink" href="#gyroscopic-feedforward" title="Link to this heading">#</a></h4>
+<p>The <a class="reference internal" href="#tuning-the-controllers"><span class="std std-ref">controller gain tuning</span></a> models each axis as an independent
+plant <span class="math notranslate nohighlight">\(\tau = I\dot\omega\)</span>. The true rigid-body equation of motion, however,
+couples the axes through a gyroscopic term:</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\tau} = I\dot{\boldsymbol{\omega}} +
+    \boldsymbol{\omega} \times (I\boldsymbol{\omega})\]</div>
+<p>The cross term <span class="math notranslate nohighlight">\(\boldsymbol{\omega}\times(I\boldsymbol{\omega})\)</span> is a torque that
+the per-axis model ignores; left uncorrected the PI controllers would have to reject it
+as a disturbance. The autopilot instead cancels it directly, adding a feedforward control
+fraction equal to the negative of that torque normalized by the available torque on each
+axis:</p>
+<div class="math notranslate nohighlight">
+\[x_{gyro} = -\frac{\boldsymbol{\omega} \times (I\boldsymbol{\omega})}{\tau_{max}}\]</div>
+<p>This is computed in the body frame, where the moment of inertia and available torque are
+defined per axis, and summed with the other control terms before clamping to
+<span class="math notranslate nohighlight">\([-1, 1]\)</span>. A diagonal moment of inertia is assumed, matching the rest of the
+controller.</p>
+<p>Because the term is quadratic in <span class="math notranslate nohighlight">\(\boldsymbol{\omega}\)</span>, it is negligible at the low
+angular rates of normal attitude holding — including the structural bending oscillation
+that affects flexible craft — and only becomes significant for fast slews or vessels with
+strongly asymmetric inertia.</p>
+</section>
+</section>
+<section id="controller-gain-tuning">
+<span id="tuning-the-controllers"></span><h3>Controller gain tuning<a class="headerlink" href="#controller-gain-tuning" title="Link to this heading">#</a></h3>
+<p>Three PI controllers, one for each of the pitch, roll and yaw control axes, are
+used to control the vessel. Each controller takes the relevant component of the
+target angular velocity as its setpoint and the vessel’s current angular velocity
+as its input, and outputs a control input in the range <span class="math notranslate nohighlight">\([-1, 1]\)</span>. The
+following describes how the gains for these controllers are automatically tuned
+based on the vessel’s available torque and moment of inertia.</p>
+<p>Consider the system in a single control axis. The input to the system is the
+target angular speed <span class="math notranslate nohighlight">\(\omega\)</span>. The error in the angular speed
+<span class="math notranslate nohighlight">\(\omega_\epsilon\)</span> is passed to the controller <span class="math notranslate nohighlight">\(C\)</span>, whose output is
+the control input <span class="math notranslate nohighlight">\(x\)</span> passed to the vessel. The plant <span class="math notranslate nohighlight">\(H\)</span> describes
+how that control input affects the vessel’s angular acceleration; integrating it
+gives the new angular speed, which is fed back to compute the new error.</p>
+<p>For the controller <span class="math notranslate nohighlight">\(C\)</span> we use a proportional-integral controller. It has no
+derivative term, so that the closed loop behaves like a second order system and
+is therefore easy to tune. Its transfer function in the <span class="math notranslate nohighlight">\(s\)</span> domain is:</p>
+<div class="math notranslate nohighlight">
+\[C(s) = K_P + K_I s^{-1}\]</div>
+<p>The control input <span class="math notranslate nohighlight">\(x\)</span> is the fraction of the available torque
+<span class="math notranslate nohighlight">\(\tau_{max}\)</span> being applied, so the applied torque is
+<span class="math notranslate nohighlight">\(\tau = x\tau_{max}\)</span>. Combining this with the angular equation of motion
+gives the angular acceleration in terms of the control input:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}I &amp;= \text{moment of inertia of the vessel} \\
+\tau &amp;= I \dot\omega_\epsilon \\
+\Rightarrow \dot\omega_\epsilon &amp;= \frac{x\tau_{max}}{I}\end{split}\]</div>
+<p>Taking the Laplace transform of this gives the transfer function for the plant
+<span class="math notranslate nohighlight">\(H\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathcal{L}(\dot\omega_\epsilon(t)) &amp;= s\omega_\epsilon(s)
+                             = \frac{X(s)\tau_{max}}{I} \\
+\Rightarrow H(s) = \frac{\omega_\epsilon(s)}{X(s)} &amp;= \frac{\tau_{max}}{Is}\end{split}\]</div>
+<p>The open loop transfer function for the entire system is:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}G_{OL}(s) &amp;= C(s) \cdot H(s) \\
+          &amp;= (K_P + K_I s^{-1}) \frac{\tau_{max}}{Is}\end{split}\]</div>
+<p>The closed loop transfer function is then:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}G(s) &amp;= \frac{G_{OL}(s)}{1 + G_{OL}(s)} \\
+     &amp;= \frac{a K_P s + a  K_I}{s^2 + a K_P s + a K_I}
+        \text{ where } a = \frac{\tau_{max}}{I}\end{split}\]</div>
+<p>The characteristic equation for the system is therefore:</p>
+<div class="math notranslate nohighlight">
+\[\Phi = s^2 + \frac{\tau_{max}}{I} K_P s + \frac{\tau_{max}}{I} K_I\]</div>
+<p>The characteristic equation for a standard second order system is:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\Phi_{standard} &amp;= s^2 + 2 \zeta \omega_0 s + \omega_0^2 \\\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\zeta\)</span> is the damping ratio and <span class="math notranslate nohighlight">\(\omega_0\)</span> is the natural
+frequency of the system.</p>
+<p>Equating coefficients between these equations, and rearranging, gives the gains
+for the PI controller in terms of <span class="math notranslate nohighlight">\(\zeta\)</span> and <span class="math notranslate nohighlight">\(\omega_0\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}K_P &amp;= \frac{2 \zeta \omega_0 I}{\tau_{max}} \\
+K_I &amp;= \frac{I\omega_0^2}{\tau_{max}}\end{split}\]</div>
+<p>We now need some performance requirements to place on the system, which determine
+the values of <span class="math notranslate nohighlight">\(\zeta\)</span> and <span class="math notranslate nohighlight">\(\omega_0\)</span>, and therefore the gains. The
+fraction by which a second order system overshoots is:</p>
+<div class="math notranslate nohighlight">
+\[O = e^{-\frac{\pi\zeta}{\sqrt{1-\zeta^2}}}\]</div>
+<p>and the time it takes to reach the first peak in its output is:</p>
+<div class="math notranslate nohighlight">
+\[T_P = \frac{\pi}{\omega_0\sqrt{1-\zeta^2}}\]</div>
+<p>These can be rearranged to give <span class="math notranslate nohighlight">\(\zeta\)</span> and <span class="math notranslate nohighlight">\(\omega_0\)</span> in terms of
+the overshoot and time to peak:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\zeta &amp;= \sqrt{\frac{\ln^2(O)}{\pi^2+\ln^2(O)}} \\
+\omega_0 &amp;= \frac{\pi}{T_P\sqrt{1-\zeta^2}}\end{split}\]</div>
+<p>By default, kRPC uses the values <span class="math notranslate nohighlight">\(O = 0.01\)</span> and <span class="math notranslate nohighlight">\(T_P = 1\)</span>. Note that
+the closed-loop bandwidth <span class="math notranslate nohighlight">\(\text{bw} = 2\zeta\omega_0\)</span> used in the
+<a class="reference internal" href="#stopping-distance-feedforward"><span class="std std-ref">stopping-distance feedforward</span></a> is
+proportional to <span class="math notranslate nohighlight">\(\omega_0\)</span>; increasing the time to peak <span class="math notranslate nohighlight">\(T_P\)</span> lowers
+both.</p>
+<p>The gains are recomputed every physics tick, so the autopilot adapts as the
+vessel’s available torque and moment of inertia change — for example as fuel is
+burned, stages are dropped, or engines are throttled. The available torque is
+smoothed slightly before being used, so that a sudden drop (such as an engine
+shutting down while a reaction wheel keeps a small amount of torque available)
+does not cause a momentary spike in the gains.</p>
+<p>Because the <a class="reference internal" href="#acceleration-feedforward"><span class="std std-ref">acceleration feedforward</span></a> carries the
+nominal trajectory demand, the PI controller only needs to reject disturbances — the
+small, slowly-varying corrections from atmospheric drag, off-axis thrust, or mass
+changes. The gains <span class="math notranslate nohighlight">\(K_P\)</span> and <span class="math notranslate nohighlight">\(K_I\)</span> derived from the overshoot and
+time-to-peak parameters remain valid for this purpose, and the same settings produce a
+less loaded controller that relies more on the feedforward for large maneuvers.</p>
+<section id="integral-anti-windup">
+<h4>Integral anti-windup<a class="headerlink" href="#integral-anti-windup" title="Link to this heading">#</a></h4>
+<p>The integral term of a PI controller can <em>wind up</em> — accumulate a large value — whenever
+the controller is unable to reduce the error for a sustained period, for example during a
+long slew while the output is already saturated. A wound-up integral then overshoots
+badly once the error finally clears, because it takes time to unwind. To prevent this,
+the controllers use <em>conditional integration</em>: the integral stops accumulating whenever
+it is already at the <span class="math notranslate nohighlight">\([-1, 1]\)</span> output limit and the new contribution would only
+push it further into saturation. The integral term is also reset outright in the special
+cases described under <a class="reference internal" href="#corner-cases"><span class="std std-ref">Corner cases</span></a> — on the launchpad, and on any
+axis that currently has no available torque.</p>
+</section>
+</section>
+<section id="oscillation-detection-and-mitigation">
+<span id="oscillation"></span><h3>Oscillation detection and mitigation<a class="headerlink" href="#oscillation-detection-and-mitigation" title="Link to this heading">#</a></h3>
+<p>The autopilot measures angular velocity at the vessel’s root part, so on a structurally
+flexible craft (see <a class="reference internal" href="#flexible-craft"><span class="std std-ref">Flexible craft</span></a>) this measured value contains
+an oscillating component from the structural bending modes — typically of the order of
+0.01 to 0.1 rad/s — even when the vessel as a whole is barely rotating. If the autopilot
+reacted to this oscillation it would pump energy into the bending mode and drive a growing
+wobble. A single always-on broadband filter would remove it, but at the cost of phase lag
+that destabilizes a responsive, high-authority craft, so the suppression must be applied
+only when, and only as strongly as, it is actually needed.</p>
+<p>The machinery is organized in three layers. An <em>observation</em> layer watches the craft and
+decides whether it is flexible and, if so, at what frequency it is oscillating. A <em>gating</em>
+layer turns those observations into a per-tick, per-axis decision about which mitigations
+to apply and how strongly. Four independent <em>mitigation</em> primitives — the rate filter,
+bandwidth floor, feedforward cut and output filter — carry out the suppression. Because
+each primitive only consumes the gating layer’s output, any one can be forced or disabled
+on its own without disturbing the others (see <a class="reference internal" href="#flexible-craft"><span class="std std-ref">Flexible craft</span></a> for
+the manual controls).</p>
+<p>In outline, the signals flow from the two measured inputs, through the observation and
+gating layers, to the four mitigations that tap into the control loop:</p>
+<figure class="align-center" id="id12">
+<div class="graphviz"><object data="../_images/graphviz-8b7074241ad133cd625ad8a4de6ae49368e83ed0.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph oscillation {
+    rankdir=TB;
+    bgcolor=&quot;transparent&quot;;
+    node [shape=box, style=rounded, fontname=&quot;Helvetica,Arial,sans-serif&quot;, fontsize=11];
+    edge [fontname=&quot;Helvetica,Arial,sans-serif&quot;, fontsize=9, color=&quot;#555555&quot;];
+
+    // Inputs
+    omega [label=&quot;measured rate ω\n(root part, carries wobble)&quot;, shape=box, style=filled, fillcolor=&quot;#eeeeee&quot;];
+    uout  [label=&quot;delivered control output&quot;, shape=box, style=filled, fillcolor=&quot;#eeeeee&quot;];
+    theta [label=&quot;pointing error θ&quot;, shape=box, style=filled, fillcolor=&quot;#eeeeee&quot;];
+
+    // Observation layer
+    subgraph cluster_obs {
+        label=&quot;OBSERVATION&quot;; labeljust=&quot;l&quot;; fontsize=10; fontname=&quot;Helvetica,Arial,sans-serif&quot;;
+        style=&quot;dashed,rounded&quot;; color=&quot;#999999&quot;;
+        chatter [label=&quot;chatter\ndetector&quot;];
+        freq    [label=&quot;frequency\nestimator&quot;];
+        envel   [label=&quot;control-osc.\nenvelope&quot;];
+    }
+
+    // Gating layer
+    subgraph cluster_gate {
+        label=&quot;GATING&quot;; labeljust=&quot;l&quot;; fontsize=10; fontname=&quot;Helvetica,Arial,sans-serif&quot;;
+        style=&quot;dashed,rounded&quot;; color=&quot;#999999&quot;;
+        node [shape=box, style=&quot;filled,rounded&quot;, fillcolor=&quot;#dce8f5&quot;, color=&quot;#4a6f9c&quot;];
+        hold    [label=&quot;hold factor\n= f(θ)&quot;];
+        backoff [label=&quot;back-off = f(envelope)\n[latched axes only]&quot;];
+        level   [label=&quot;level = ramp ·\nmax(hold factor, back-off)&quot;];
+        tool    [label=&quot;tool = notch /\nlow-pass / broadband&quot;];
+        hold    -&gt; level;
+        backoff -&gt; level;
+    }
+
+    // Mitigation layer
+    subgraph cluster_mit {
+        label=&quot;MITIGATION&quot;; labeljust=&quot;l&quot;; fontsize=10; fontname=&quot;Helvetica,Arial,sans-serif&quot;;
+        style=&quot;dashed,rounded&quot;; color=&quot;#999999&quot;;
+        rate  [label=&quot;rate filter\n→ measured rate&quot;];
+        bw    [label=&quot;bandwidth floor\n→ inner-loop gain&quot;];
+        ffcut [label=&quot;feedforward cut\n→ accel. feedforward&quot;];
+        outf  [label=&quot;output filter\n→ delivered command&quot;];
+    }
+
+    loop [label=&quot;control loop  —  actuates in [−1, 1]&quot;, shape=box, style=filled, fillcolor=&quot;#eeeeee&quot;];
+
+    omega -&gt; chatter;
+    omega -&gt; freq;
+    uout  -&gt; envel;
+
+    chatter -&gt; level   [label=&quot;latch → ramp&quot;];
+    freq    -&gt; tool    [label=&quot;f&quot;];
+    envel   -&gt; backoff [label=&quot;envelope&quot;];
+    theta   -&gt; hold;
+
+    tool  -&gt; rate  [label=&quot;tool, f, latch&quot;];
+    level -&gt; bw    [label=&quot;level&quot;];
+    level -&gt; ffcut [label=&quot;level (hold gate)&quot;];
+    level -&gt; outf  [label=&quot;latch, level&quot;];
+
+    rate  -&gt; loop;
+    bw    -&gt; loop;
+    ffcut -&gt; loop;
+    outf  -&gt; loop;
+}</p></object></div>
+<figcaption>
+<p><span class="caption-text">Oscillation observation, gating and mitigation pipeline.</span><a class="headerlink" href="#id12" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The observation layer never acts on the craft; it only sets the latch, frequency and
+envelope. The gating layer combines those with the pointing error into the per-axis
+weights and the tool choice. Each of the four mitigations then reads only what it needs
+from the gating layer, which is why any one can be overridden without disturbing the rest.</p>
+<section id="observation-detection-and-frequency-estimation">
+<h4>Observation: detection and frequency estimation<a class="headerlink" href="#observation-detection-and-frequency-estimation" title="Link to this heading">#</a></h4>
+<p>The primary signal is the <em>measured angular velocity</em>. The autopilot watches for the
+tell-tale signature of a bending-mode limit cycle: the measured rate changing from one tick
+to the next by more than the available torque could physically cause. This test is
+independent of the loop gains and of any commanded maneuver. It produces a level between 0
+and 1 per axis — rising quickly when excitation appears, decaying slowly once it subsides —
+and once that level is high enough the axis is <em>latched</em> as flexible. The latch persists if
+the autopilot is briefly disengaged and re-engaged, so a craft known to be flexible stays
+damped. Pitch and yaw are treated together: a long vehicle’s bending mode appears in both,
+so if one is found flexible the other is too.</p>
+<p>In parallel, a frequency estimator tracks the oscillation frequency from the intervals
+between sign changes of the high-passed rate. It is used only to route and tune the rate
+filter, not to carry the suppression, and stays not-a-number until several half-periods
+agree. It is the weak link — noisy and sometimes multi-modal — which is why the bandwidth
+floor, not the notch, does the heavy lifting.</p>
+<p>The secondary signal is the autopilot’s <em>own control output</em>. On an axis already latched as
+flexible, the autopilot measures the amplitude of its delivered command about the command’s
+slowly-varying mean: a genuine slew is a steady, one-sided push, whereas a limit cycle shows
+up as a large oscillating command. This is used only for maneuver recovery, described under
+<a class="reference internal" href="#hold-gate"><span class="std std-ref">the hold gate</span></a> below.</p>
+</section>
+<section id="the-rate-filter">
+<h4>The rate filter<a class="headerlink" href="#the-rate-filter" title="Link to this heading">#</a></h4>
+<p>The rate filter removes the oscillation from the <em>measured</em> angular velocity before any
+control loop consumes it, so the loop has no gain at the bending frequency. It uses the
+frequency estimate to pick the right tool: a <strong>notch</strong> for a low-frequency mode near the
+control band (such as the roughly 1 Hz bending mode of a tall launch vehicle held vertical
+on ascent), or a <strong>low-pass</strong> for a high-frequency mode well above the band, with its corner
+derived from the estimate (at roughly a third of it). A notch is transparent everywhere
+except at the mode frequency, so it can stay on permanently without slowing the craft’s
+response. Until the estimator has acquired a frequency the autopilot does not guess: rather
+than risk a notch at the wrong place it falls back to a fixed, broadband low-pass with a
+corner of about 2 Hz. This fallback — together with the bandwidth floor — is what keeps the
+suppression robust when the frequency estimate is poor. The rate filter is kept up on a
+latched axis whether the craft is holding or slewing.</p>
+</section>
+<section id="the-bandwidth-floor">
+<h4>The bandwidth floor<a class="headerlink" href="#the-bandwidth-floor" title="Link to this heading">#</a></h4>
+<p>The bandwidth floor is the <em>primary</em> stabilizer. On a latched axis it reduces the
+inner-loop bandwidth (see <a class="reference internal" href="#tuning-the-controllers"><span class="std std-ref">Controller gain tuning</span></a>) towards
+the oscillation bandwidth floor, dropping the loop’s crossover well below the bending
+frequency so the loop has little authority left with which to excite the mode. It only ever
+<em>lowers</em> the bandwidth, so a rigid craft — which is never latched — is untouched. Crucially
+it needs no frequency estimate, which is why it, rather than the surgical notch, carries the
+suppression. Because the floored gain would otherwise distort the outer loop’s
+stopping-distance prediction, that prediction uses the <em>unfloored</em> gain instead (see
+<a class="reference internal" href="#stopping-distance-feedforward"><span class="std std-ref">Stopping-distance feedforward</span></a>).</p>
+</section>
+<section id="the-feedforward-cut">
+<h4>The feedforward cut<a class="headerlink" href="#the-feedforward-cut" title="Link to this heading">#</a></h4>
+<p>Lowering the bandwidth alone is not enough, because the residual wobble can still leak into
+the actuators through the feedforward. The <a class="reference internal" href="#acceleration-feedforward"><span class="std std-ref">acceleration feedforward</span></a> is an open-loop plant inversion whose gain rises with frequency,
+so once the bandwidth has been floored it becomes the path most able to re-drive the mode.
+The feedforward cut removes it on a flexible axis while holding.</p>
+</section>
+<section id="the-output-filter">
+<h4>The output filter<a class="headerlink" href="#the-output-filter" title="Link to this heading">#</a></h4>
+<p>Finally, a light first-order low-pass is applied to the delivered actuator command, as a
+frequency-independent backstop on any residual chatter that leaks through the other paths. A
+lighter version of the same filter is blended in — in proportion to the detector level — on
+an axis that is <em>firing but not yet latched</em>, a noisy-but-controllable craft, to take the
+buzz off the controls without committing to the full latched regime.</p>
+</section>
+<section id="the-hold-gate">
+<span id="hold-gate"></span><h4>The hold gate<a class="headerlink" href="#the-hold-gate" title="Link to this heading">#</a></h4>
+<p>The rate filter stays on whenever an axis is latched, but the bandwidth floor, feedforward
+cut and output filter are gated on whether the axis is <em>holding</em> attitude or <em>slewing</em>. The
+gating layer computes a continuous hold factor from the pointing error — 1 while holding, 0
+while slewing — and applies these three mitigations only while holding, so that a commanded
+maneuver runs at full authority and responsiveness. The factor is per axis group: pitch and
+yaw key on the pointing error, while roll keys on the larger of the pointing and roll
+errors, so a pure roll maneuver releases the roll axis.</p>
+<p>This gate has a blind spot. A large maneuver on a very flexible craft can itself excite the
+bending mode into a sustained oscillation that holds the pointing error just large enough to
+keep the gate released — so the craft never settles. This is where the control-output signal
+comes in: when a latched axis shows a sustained control oscillation, the holding mitigations
+are re-engaged regardless of the pointing error, until the oscillation dies away. This
+recovery runs at the floored bandwidth and so takes a few seconds. Because it is OR-ed into
+the hold gate, it only matters while the axis would otherwise be slewing, and cannot cause
+hunting once the craft has settled.</p>
+<p>A rigid or high-authority craft never latches and so triggers none of this; the adaptation
+is safe to leave always on.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="user-interface.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">User Interface</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../cnano.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">C-nano</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-autopilot">Using the AutoPilot</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-the-target-attitude">Setting the target attitude</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-three-primary-ways">The three primary ways</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-convenience-ways">The convenience ways</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-the-state-back">Reading the state back</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tuning-the-autopilot">Tuning the AutoPilot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smoothing-target-changes">Smoothing target changes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flexible-craft">Flexible craft</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rate-filter">Rate filter</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bandwidth-floor">Bandwidth floor</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#feedforward-cut">Feedforward cut</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#output-filter">Output filter</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#holding-versus-slewing">Holding versus slewing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring">Monitoring</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#when-first-engaging">When first engaging</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corner-cases">Corner cases</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#when-sitting-on-the-launchpad">When sitting on the launchpad</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#when-the-available-torque-is-zero">When the available torque is zero</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#when-the-controlling-client-disconnects">When the controlling client disconnects</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#limitations">Limitations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-info-window">The info window</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-it-works">How it works</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-control-cascade">The control cascade</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-roll-invariant-frame">The roll-invariant frame</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#continuity-through-the-antipode">Continuity through the antipode</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#separating-the-direction-and-roll-errors">Separating the direction and roll errors</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-the-target-angular-velocity">Computing the target angular velocity</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#decelerating-to-the-target">Decelerating to the target</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#speed-cone">Speed cone</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pointing-deadband">Pointing deadband</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stopping-distance-feedforward">Stopping-distance feedforward</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pitch-and-yaw-together">Pitch and yaw together</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tangential-damping">Tangential damping</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#flipping-to-the-antipode">Flipping to the antipode</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#roll">Roll</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#feedforward">Feedforward</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acceleration-feedforward">Acceleration feedforward</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gyroscopic-feedforward">Gyroscopic feedforward</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#controller-gain-tuning">Controller gain tuning</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#integral-anti-windup">Integral anti-windup</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#oscillation-detection-and-mitigation">Oscillation detection and mitigation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#observation-detection-and-frequency-estimation">Observation: detection and frequency estimation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rate-filter">The rate filter</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-bandwidth-floor">The bandwidth floor</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-feedforward-cut">The feedforward cut</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-output-filter">The output filter</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-hold-gate">The hold gate</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/tutorials/autopilot.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2023, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

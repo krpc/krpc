@@ -1,0 +1,1202 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Orbit &#8212; kRPC 0.5.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=0da409bd" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cpp/api/space-center/orbit';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.5.4';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.5.4/cpp/api/space-center/orbit.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Control" href="control.html" />
+    <link rel="prev" title="Flight" href="flight.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.4" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC 0.5.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../client.html">C++ Client</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/krpc.html">KRPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="space-center.html">SpaceCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vessel.html">Vessel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comms.html">Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="waypoints.html">Waypoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry-types.html">Geometry Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ui.html">User Interface API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ui/ui.html">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/canvas.html">Canvas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/panel.html">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/text.html">Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/button.html">Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/remote-tech.html">RemoteTech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../cpp.html" class="nav-link">C++</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../space-center.html" class="nav-link">SpaceCenter API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Orbit</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="orbit">
+<h1>Orbit<a class="headerlink" href="#orbit" title="Link to this heading">#</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5OrbitE">
+<span id="_CPPv3N4krpc8services11SpaceCenter5OrbitE"></span><span id="_CPPv2N4krpc8services11SpaceCenter5OrbitE"></span><span id="krpc::services::SpaceCenter::Orbit"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Orbit</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5OrbitE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Describes an orbit. For example, the orbit of a vessel, obtained by calling
+<a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel5orbitEv" title="krpc::services::SpaceCenter::Vessel::orbit"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::orbit()</span></code></a>, or a celestial body, obtained by calling
+<a class="reference internal" href="celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody5orbitEv" title="krpc::services::SpaceCenter::CelestialBody::orbit"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CelestialBody::orbit()</span></code></a>.</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit4bodyEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit4bodyEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit4bodyEv"></span><span id="krpc::services::SpaceCenter::Orbit::body"></span><a class="reference internal" href="celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBodyE" title="krpc::services::SpaceCenter::CelestialBody"><span class="n"><span class="pre">CelestialBody</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">body</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit4bodyEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The celestial body (e.g. planet or moon) around which the object is orbiting.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit8apoapsisEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit8apoapsisEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit8apoapsisEv"></span><span id="krpc::services::SpaceCenter::Orbit::apoapsis"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">apoapsis</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit8apoapsisEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Gets the apoapsis of the orbit, in meters, from the center of mass
+of the body being orbited.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the apoapsis altitude reported on the in-game map view,
+use <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit17apoapsis_altitudeEv" title="krpc::services::SpaceCenter::Orbit::apoapsis_altitude"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::apoapsis_altitude()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit9periapsisEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit9periapsisEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit9periapsisEv"></span><span id="krpc::services::SpaceCenter::Orbit::periapsis"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">periapsis</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit9periapsisEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The periapsis of the orbit, in meters, from the center of mass
+of the body being orbited.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the periapsis altitude reported on the in-game map view,
+use <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit18periapsis_altitudeEv" title="krpc::services::SpaceCenter::Orbit::periapsis_altitude"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::periapsis_altitude()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit17apoapsis_altitudeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit17apoapsis_altitudeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit17apoapsis_altitudeEv"></span><span id="krpc::services::SpaceCenter::Orbit::apoapsis_altitude"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">apoapsis_altitude</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit17apoapsis_altitudeEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The apoapsis of the orbit, in meters, above the sea level of the body being orbited.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is equal to <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit8apoapsisEv" title="krpc::services::SpaceCenter::Orbit::apoapsis"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::apoapsis()</span></code></a> minus the equatorial radius of the body.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit18periapsis_altitudeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit18periapsis_altitudeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit18periapsis_altitudeEv"></span><span id="krpc::services::SpaceCenter::Orbit::periapsis_altitude"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">periapsis_altitude</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit18periapsis_altitudeEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The periapsis of the orbit, in meters, above the sea level of the body being orbited.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is equal to <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit9periapsisEv" title="krpc::services::SpaceCenter::Orbit::periapsis"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::periapsis()</span></code></a> minus the equatorial radius of the body.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit15semi_major_axisEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit15semi_major_axisEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit15semi_major_axisEv"></span><span id="krpc::services::SpaceCenter::Orbit::semi_major_axis"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">semi_major_axis</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit15semi_major_axisEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The semi-major axis of the orbit, in meters.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit15semi_minor_axisEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit15semi_minor_axisEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit15semi_minor_axisEv"></span><span id="krpc::services::SpaceCenter::Orbit::semi_minor_axis"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">semi_minor_axis</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit15semi_minor_axisEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The semi-minor axis of the orbit, in meters.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit6radiusEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit6radiusEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit6radiusEv"></span><span id="krpc::services::SpaceCenter::Orbit::radius"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radius</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit6radiusEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The current radius of the orbit, in meters. This is the distance between the center
+of mass of the object in orbit, and the center of mass of the body around which it
+is orbiting.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This value will change over time if the orbit is elliptical.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit9radius_atEd">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit9radius_atEd"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit9radius_atEd"></span><span id="krpc::services::SpaceCenter::Orbit::radius_at__double"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radius_at</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ut</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit9radius_atEd" title="Link to this definition">#</a><br /></dt>
+<dd><p>The orbital radius at the given time, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time to measure the radius at.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit11position_atEd14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit11position_atEd14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit11position_atEd14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Orbit::position_at__double.ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">position_at</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ut</span></span>, <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit11position_atEd14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position at a given time, in the specified reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time to measure the position at.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit5speedEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit5speedEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit5speedEv"></span><span id="krpc::services::SpaceCenter::Orbit::speed"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">speed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit5speedEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The current orbital speed of the object in meters per second.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This value will change over time if the orbit is elliptical.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit6periodEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit6periodEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit6periodEv"></span><span id="krpc::services::SpaceCenter::Orbit::period"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">period</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit6periodEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The orbital period, in seconds.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit16time_to_apoapsisEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit16time_to_apoapsisEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit16time_to_apoapsisEv"></span><span id="krpc::services::SpaceCenter::Orbit::time_to_apoapsis"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_to_apoapsis</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit16time_to_apoapsisEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time until the object reaches apoapsis, in seconds.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit17time_to_periapsisEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit17time_to_periapsisEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit17time_to_periapsisEv"></span><span id="krpc::services::SpaceCenter::Orbit::time_to_periapsis"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_to_periapsis</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit17time_to_periapsisEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time until the object reaches periapsis, in seconds.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit12eccentricityEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit12eccentricityEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit12eccentricityEv"></span><span id="krpc::services::SpaceCenter::Orbit::eccentricity"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eccentricity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit12eccentricityEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Orbital_eccentricity">eccentricity</a>
+of the orbit.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit11inclinationEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit11inclinationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit11inclinationEv"></span><span id="krpc::services::SpaceCenter::Orbit::inclination"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">inclination</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit11inclinationEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Orbital_inclination">inclination</a>
+of the orbit,
+in radians.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit27longitude_of_ascending_nodeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit27longitude_of_ascending_nodeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit27longitude_of_ascending_nodeEv"></span><span id="krpc::services::SpaceCenter::Orbit::longitude_of_ascending_node"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">longitude_of_ascending_node</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit27longitude_of_ascending_nodeEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node">longitude of the ascending node</a>, in radians.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit21argument_of_periapsisEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit21argument_of_periapsisEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit21argument_of_periapsisEv"></span><span id="krpc::services::SpaceCenter::Orbit::argument_of_periapsis"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">argument_of_periapsis</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit21argument_of_periapsisEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Argument_of_periapsis">argument of periapsis</a>, in radians.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit21mean_anomaly_at_epochEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit21mean_anomaly_at_epochEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit21mean_anomaly_at_epochEv"></span><span id="krpc::services::SpaceCenter::Orbit::mean_anomaly_at_epoch"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mean_anomaly_at_epoch</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit21mean_anomaly_at_epochEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly at epoch</a>.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit5epochEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit5epochEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit5epochEv"></span><span id="krpc::services::SpaceCenter::Orbit::epoch"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">epoch</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit5epochEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time since the epoch (the point at which the
+<a class="reference external" href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly at epoch</a>
+was measured, in seconds.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit12mean_anomalyEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit12mean_anomalyEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit12mean_anomalyEv"></span><span id="krpc::services::SpaceCenter::Orbit::mean_anomaly"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mean_anomaly</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit12mean_anomalyEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly</a>.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit18mean_anomaly_at_utEd">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit18mean_anomaly_at_utEd"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit18mean_anomaly_at_utEd"></span><span id="krpc::services::SpaceCenter::Orbit::mean_anomaly_at_ut__double"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mean_anomaly_at_ut</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ut</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit18mean_anomaly_at_utEd" title="Link to this definition">#</a><br /></dt>
+<dd><p>The mean anomaly at the given time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time in seconds.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit17eccentric_anomalyEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit17eccentric_anomalyEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit17eccentric_anomalyEv"></span><span id="krpc::services::SpaceCenter::Orbit::eccentric_anomaly"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eccentric_anomaly</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit17eccentric_anomalyEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Eccentric_anomaly">eccentric anomaly</a>.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit23eccentric_anomaly_at_utEd">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit23eccentric_anomaly_at_utEd"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit23eccentric_anomaly_at_utEd"></span><span id="krpc::services::SpaceCenter::Orbit::eccentric_anomaly_at_ut__double"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eccentric_anomaly_at_ut</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ut</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit23eccentric_anomaly_at_utEd" title="Link to this definition">#</a><br /></dt>
+<dd><p>The eccentric anomaly at the given universal time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time, in seconds.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit12true_anomalyEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit12true_anomalyEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit12true_anomalyEv"></span><span id="krpc::services::SpaceCenter::Orbit::true_anomaly"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">true_anomaly</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit12true_anomalyEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/True_anomaly">true anomaly</a>.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_utEd">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_utEd"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_utEd"></span><span id="krpc::services::SpaceCenter::Orbit::true_anomaly_at_ut__double"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">true_anomaly_at_ut</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ut</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_utEd" title="Link to this definition">#</a><br /></dt>
+<dd><p>The true anomaly at the given time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time in seconds.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit22true_anomaly_at_radiusEd">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit22true_anomaly_at_radiusEd"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit22true_anomaly_at_radiusEd"></span><span id="krpc::services::SpaceCenter::Orbit::true_anomaly_at_radius__double"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">true_anomaly_at_radius</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radius</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit22true_anomaly_at_radiusEd" title="Link to this definition">#</a><br /></dt>
+<dd><p>The true anomaly at the given orbital radius.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> – The orbital radius in meters.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit18ut_at_true_anomalyEd">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit18ut_at_true_anomalyEd"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit18ut_at_true_anomalyEd"></span><span id="krpc::services::SpaceCenter::Orbit::ut_at_true_anomaly__double"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ut_at_true_anomaly</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">true_anomaly</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit18ut_at_true_anomalyEd" title="Link to this definition">#</a><br /></dt>
+<dd><p>The universal time, in seconds, corresponding to the given true anomaly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true_anomaly</strong> – True anomaly.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit22radius_at_true_anomalyEd">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit22radius_at_true_anomalyEd"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit22radius_at_true_anomalyEd"></span><span id="krpc::services::SpaceCenter::Orbit::radius_at_true_anomaly__double"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radius_at_true_anomaly</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">true_anomaly</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit22radius_at_true_anomalyEd" title="Link to this definition">#</a><br /></dt>
+<dd><p>The orbital radius at the point in the orbit given by the true anomaly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true_anomaly</strong> – The true anomaly.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_anE5Orbit">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_anE5Orbit"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_anE5Orbit"></span><span id="krpc::services::SpaceCenter::Orbit::true_anomaly_at_an__Orbit"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">true_anomaly_at_an</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5OrbitE" title="krpc::services::SpaceCenter::Orbit"><span class="n"><span class="pre">Orbit</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_anE5Orbit" title="Link to this definition">#</a><br /></dt>
+<dd><p>The true anomaly of the ascending node with the given target orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_dnE5Orbit">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_dnE5Orbit"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_dnE5Orbit"></span><span id="krpc::services::SpaceCenter::Orbit::true_anomaly_at_dn__Orbit"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">true_anomaly_at_dn</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5OrbitE" title="krpc::services::SpaceCenter::Orbit"><span class="n"><span class="pre">Orbit</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_dnE5Orbit" title="Link to this definition">#</a><br /></dt>
+<dd><p>The true anomaly of the descending node with the given target orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit13orbital_speedEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit13orbital_speedEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit13orbital_speedEv"></span><span id="krpc::services::SpaceCenter::Orbit::orbital_speed"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">orbital_speed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit13orbital_speedEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The current orbital speed in meters per second.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit16orbital_speed_atEd">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit16orbital_speed_atEd"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit16orbital_speed_atEd"></span><span id="krpc::services::SpaceCenter::Orbit::orbital_speed_at__double"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">orbital_speed_at</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit16orbital_speed_atEd" title="Link to this definition">#</a><br /></dt>
+<dd><p>The orbital speed at the given time, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> – Time from now, in seconds.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit22reference_plane_normalER6Client14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit22reference_plane_normalER6Client14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit22reference_plane_normalER6Client14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Orbit::reference_plane_normal__ClientR.ReferenceFrame"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reference_plane_normal</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../client.html#_CPPv4N4krpc6ClientE" title="krpc::Client"><span class="n"><span class="pre">Client</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">connection</span></span>, <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit22reference_plane_normalER6Client14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The direction that is normal to the orbits reference plane,
+in the given reference frame.
+The reference plane is the plane from which the orbits inclination is measured.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> – The reference frame that the returned direction is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The direction as a unit vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit25reference_plane_directionER6Client14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit25reference_plane_directionER6Client14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit25reference_plane_directionER6Client14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Orbit::reference_plane_direction__ClientR.ReferenceFrame"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reference_plane_direction</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../client.html#_CPPv4N4krpc6ClientE" title="krpc::Client"><span class="n"><span class="pre">Client</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">connection</span></span>, <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit25reference_plane_directionER6Client14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The direction from which the orbits longitude of ascending node is measured,
+in the given reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> – The reference frame that the returned direction is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The direction as a unit vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit20relative_inclinationE5Orbit">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit20relative_inclinationE5Orbit"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit20relative_inclinationE5Orbit"></span><span id="krpc::services::SpaceCenter::Orbit::relative_inclination__Orbit"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">relative_inclination</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5OrbitE" title="krpc::services::SpaceCenter::Orbit"><span class="n"><span class="pre">Orbit</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit20relative_inclinationE5Orbit" title="Link to this definition">#</a><br /></dt>
+<dd><p>Relative inclination of this orbit and the target orbit, in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit18time_to_soi_changeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit18time_to_soi_changeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit18time_to_soi_changeEv"></span><span id="krpc::services::SpaceCenter::Orbit::time_to_soi_change"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_to_soi_change</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit18time_to_soi_changeEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time until the object changes sphere of influence, in seconds. Returns <code class="docutils literal notranslate"><span class="pre">NaN</span></code>
+if the object is not going to change sphere of influence.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit10next_orbitEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit10next_orbitEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit10next_orbitEv"></span><span id="krpc::services::SpaceCenter::Orbit::next_orbit"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5OrbitE" title="krpc::services::SpaceCenter::Orbit"><span class="n"><span class="pre">Orbit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next_orbit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit10next_orbitEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>If the object is going to change sphere of influence in the future, returns the new
+orbit after the change. Otherwise returns <code class="docutils literal notranslate"><span class="pre">NULL</span></code>.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit24time_of_closest_approachE5Orbit">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit24time_of_closest_approachE5Orbit"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit24time_of_closest_approachE5Orbit"></span><span id="krpc::services::SpaceCenter::Orbit::time_of_closest_approach__Orbit"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_of_closest_approach</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5OrbitE" title="krpc::services::SpaceCenter::Orbit"><span class="n"><span class="pre">Orbit</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit24time_of_closest_approachE5Orbit" title="Link to this definition">#</a><br /></dt>
+<dd><p>Estimates and returns the time at closest approach to a target orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The universal time at closest approach, in seconds.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit28distance_at_closest_approachE5Orbit">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit28distance_at_closest_approachE5Orbit"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit28distance_at_closest_approachE5Orbit"></span><span id="krpc::services::SpaceCenter::Orbit::distance_at_closest_approach__Orbit"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">distance_at_closest_approach</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5OrbitE" title="krpc::services::SpaceCenter::Orbit"><span class="n"><span class="pre">Orbit</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit28distance_at_closest_approachE5Orbit" title="Link to this definition">#</a><br /></dt>
+<dd><p>Estimates and returns the distance at closest approach to a target orbit, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit23list_closest_approachesE5Orbit7int32_t">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit23list_closest_approachesE5Orbit7int32_t"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit23list_closest_approachesE5Orbit7int32_t"></span><span id="krpc::services::SpaceCenter::Orbit::list_closest_approaches__Orbit.int32_t"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">list_closest_approaches</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5OrbitE" title="krpc::services::SpaceCenter::Orbit"><span class="n"><span class="pre">Orbit</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">target</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">orbits</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit23list_closest_approachesE5Orbit7int32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns the times at closest approach and corresponding distances, to a target orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+<li><p><strong>orbits</strong> – The number of future orbits to search.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of two lists. The first is a list of times at closest approach, as universal times in seconds. The second is a list of corresponding distances at closest approach, in meters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="flight.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Flight</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="control.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Control</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/cpp/api/space-center/orbit.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2023, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

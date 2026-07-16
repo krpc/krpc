@@ -1,0 +1,135 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::SpaceCenter
+
+Communications
+==============
+
+
+.. class:: Comms
+
+   Used to interact with CommNet for a given vessel.
+   Obtained by calling :func:`Vessel::comms`.
+
+   .. function:: bool can_communicate()
+
+      Whether the vessel can communicate with KSC.
+
+      :Game Scenes: Flight
+
+   .. function:: bool can_transmit_science()
+
+      Whether the vessel can transmit science data to KSC.
+
+      :Game Scenes: Flight
+
+   .. function:: double signal_strength()
+
+      Signal strength to KSC.
+
+      :Game Scenes: Flight
+
+   .. function:: double signal_delay()
+
+      Signal delay to KSC in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: double power()
+
+      The combined power of all active antennae on the vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<CommLink> control_path()
+
+      The communication path used to control the vessel.
+
+      :Game Scenes: Flight
+
+
+
+.. class:: CommLink
+
+   Represents a communication node in the network. For example, a vessel or the KSC.
+
+   .. function:: CommLinkType type()
+
+      The type of link.
+
+   
+
+   .. function:: double signal_strength()
+
+      Signal strength of the link.
+
+   
+
+   .. function:: CommNode start()
+
+      Start point of the link.
+
+   
+
+   .. function:: CommNode end()
+
+      Start point of the link.
+
+   
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: CommLinkType
+
+   The type of a communication link.
+   See :func:`CommLink::type`.
+
+
+   .. enumerator:: home
+
+      Link is to a base station on Kerbin.
+
+
+   .. enumerator:: control
+
+      Link is to a control source, for example a manned spacecraft.
+
+
+   .. enumerator:: relay
+
+      Link is to a relay satellite.
+
+
+
+.. class:: CommNode
+
+   Represents a communication node in the network. For example, a vessel or the KSC.
+
+   .. function:: std::string name()
+
+      Name of the communication node.
+
+   
+
+   .. function:: bool is_home()
+
+      Whether the communication node is on Kerbin.
+
+   
+
+   .. function:: bool is_control_point()
+
+      Whether the communication node is a control point, for example a manned vessel.
+
+   
+
+   .. function:: bool is_vessel()
+
+      Whether the communication node is a vessel.
+
+   
+
+   .. function:: Vessel vessel()
+
+      The vessel for this communication node.

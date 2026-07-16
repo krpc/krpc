@@ -1,0 +1,740 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+SpaceCenter
+===========
+
+
+Service SpaceCenter
+
+   Provides functionality to interact with Kerbal Space Program. This includes controlling
+   the active vessel, managing its resources, planning maneuver nodes and auto-piloting.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Science(krpc_connection_t connection, float * result)
+
+      The current amount of science.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Funds(krpc_connection_t connection, double * result)
+
+      The current amount of funds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Reputation(krpc_connection_t connection, float * result)
+
+      The current amount of reputation.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ActiveVessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+   .. function:: void krpc_SpaceCenter_set_ActiveVessel(krpc_SpaceCenter_Vessel_t value)
+
+      The currently active vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessels(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all the vessels in the game.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_LaunchSites(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of available launch sites.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Bodies(krpc_connection_t connection, krpc_dictionary_string_object_t * result)
+
+      A dictionary of all celestial bodies (planets, moons, etc.) in the game,
+      keyed by the name of the body.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_TargetBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
+   .. function:: void krpc_SpaceCenter_set_TargetBody(krpc_SpaceCenter_CelestialBody_t value)
+
+      The currently targeted celestial body.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_TargetVessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+   .. function:: void krpc_SpaceCenter_set_TargetVessel(krpc_SpaceCenter_Vessel_t value)
+
+      The currently targeted vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_TargetDockingPort(krpc_connection_t connection, krpc_SpaceCenter_DockingPort_t * result)
+   .. function:: void krpc_SpaceCenter_set_TargetDockingPort(krpc_SpaceCenter_DockingPort_t value)
+
+      The currently targeted docking port.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClearTarget(krpc_connection_t connection)
+
+      Clears the current target.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_LaunchableVessels(krpc_connection_t connection, krpc_list_string_t * result, const char * craftDirectory)
+
+      Returns a list of vessels from the given *craftDirectory*
+      that can be launched.
+
+      :Parameters:
+
+       * **craftDirectory** -- Name of the directory in the current saves "Ships" directory. For example ``"VAB"`` or ``"SPH"``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_LaunchVessel(krpc_connection_t connection, const char * craftDirectory, const char * name, const char * launchSite, const krpc_list_string_t * crew, bool recover, const char * flagUrl)
+
+      Launch a vessel.
+
+      :Parameters:
+
+       * **craftDirectory** -- Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
+       * **name** -- Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
+       * **launchSite** -- Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
+       * **crew** -- A list of names of Kerbals to place in the craft. Pass an empty list to use default crew assignments.
+       * **recover** -- If true and there is a vessel on the launch site, recover it before launching.
+       * **flagUrl** -- If not ``nullptr``, the asset URL of the mission flag to use for the launch.
+
+   
+
+      .. note::
+
+         Throws an exception if any of the games pre-flight checks fail.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_LaunchVesselFromVAB(krpc_connection_t connection, const char * name, bool recover)
+
+      Launch a new vessel from the VAB onto the launchpad.
+
+      :Parameters:
+
+       * **name** -- Name of the vessel to launch.
+       * **recover** -- If true and there is a vessel on the launch pad, recover it before launching.
+
+   
+
+      .. note::
+
+         This is equivalent to calling :func:`krpc_SpaceCenter_LaunchVessel` with the craft directory
+         set to "VAB" and the launch site set to "LaunchPad".
+         Throws an exception if any of the games pre-flight checks fail.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_LaunchVesselFromSPH(krpc_connection_t connection, const char * name, bool recover)
+
+      Launch a new vessel from the SPH onto the runway.
+
+      :Parameters:
+
+       * **name** -- Name of the vessel to launch.
+       * **recover** -- If true and there is a vessel on the runway, recover it before launching.
+
+   
+
+      .. note::
+
+         This is equivalent to calling :func:`krpc_SpaceCenter_LaunchVessel` with the craft directory
+         set to "SPH" and the launch site set to "Runway".
+         Throws an exception if any of the games pre-flight checks fail.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Save(krpc_connection_t connection, const char * name)
+
+      Save the game with a given name.
+      This will create a save file called ``name.sfs`` in the folder of the
+      current save game.
+
+      :Parameters:
+
+       * **name** -- Name of the save.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Load(krpc_connection_t connection, const char * name)
+
+      Load the game with the given name.
+      This will create a load a save file called ``name.sfs`` from the folder of the
+      current save game.
+
+      :Parameters:
+
+       * **name** -- Name of the save.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Quicksave(krpc_connection_t connection)
+
+      Save a quicksave.
+
+
+   
+
+      .. note::
+
+         This is the same as calling :func:`krpc_SpaceCenter_Save` with the name "quicksave".
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Quickload(krpc_connection_t connection)
+
+      Load a quicksave.
+
+
+   
+
+      .. note::
+
+         This is the same as calling :func:`krpc_SpaceCenter_Load` with the name "quicksave".
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CanRevertToLaunch(krpc_connection_t connection, bool * result)
+
+      Whether the current flight can be reverted to launch.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RevertToLaunch(krpc_connection_t connection)
+
+      Revert the current flight to launch.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_TransferCrew(krpc_connection_t connection, krpc_SpaceCenter_CrewMember_t crewMember, krpc_SpaceCenter_Part_t targetPart)
+
+      Transfers a crew member to a different part.
+
+      :Parameters:
+
+       * **crewMember** -- The crew member to transfer.
+       * **targetPart** -- The part to move them to.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_UIVisible(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_set_UIVisible(bool value)
+
+      Whether the UI is visible.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Navball(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_set_Navball(bool value)
+
+      Whether the navball is visible.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AltimeterMode(krpc_connection_t connection, krpc_SpaceCenter_AltimeterMode_t * result)
+   .. function:: void krpc_SpaceCenter_set_AltimeterMode(krpc_SpaceCenter_AltimeterMode_t value)
+
+      The current mode of the altimeter.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_UT(krpc_connection_t connection, double * result)
+
+      The current universal time in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_G(krpc_connection_t connection, double * result)
+
+      The value of the `gravitational constant <https://en.wikipedia.org/wiki/Gravitational_constant>`_ G in :math:`N(m/kg)^2`.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_WarpRate(krpc_connection_t connection, float * result)
+
+      The current warp rate. This is the rate at which time is passing for
+      either on-rails or physical time warp. For example, a value of 10 means
+      time is passing 10x faster than normal. Returns 1 if time warp is not
+      active.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_WarpFactor(krpc_connection_t connection, float * result)
+
+      The current warp factor. This is the index of the rate at which time
+      is passing for either regular "on-rails" or physical time warp. Returns 0
+      if time warp is not active. When in on-rails time warp, this is equal to
+      :func:`krpc_SpaceCenter_RailsWarpFactor`, and in physics time warp, this is equal to
+      :func:`krpc_SpaceCenter_PhysicsWarpFactor`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RailsWarpFactor(krpc_connection_t connection, int32_t * result)
+   .. function:: void krpc_SpaceCenter_set_RailsWarpFactor(int32_t value)
+
+      The time warp rate, using regular "on-rails" time warp. A value between
+      0 and 7 inclusive. 0 means no time warp. Returns 0 if physical time warp
+      is active.
+
+      If requested time warp factor cannot be set, it will be set to the next
+      lowest possible value. For example, if the vessel is too close to a
+      planet. See `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_ for details.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_PhysicsWarpFactor(krpc_connection_t connection, int32_t * result)
+   .. function:: void krpc_SpaceCenter_set_PhysicsWarpFactor(int32_t value)
+
+      The physical time warp rate. A value between 0 and 3 inclusive. 0 means
+      no time warp. Returns 0 if regular "on-rails" time warp is active.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CanRailsWarpAt(krpc_connection_t connection, bool * result, int32_t factor)
+
+      Returns ``true`` if regular "on-rails" time warp can be used, at the specified warp
+      *factor*. The maximum time warp rate is limited by various things,
+      including how close the active vessel is to a planet. See
+      `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_
+      for details.
+
+      :Parameters:
+
+       * **factor** -- The warp factor to check.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_MaximumRailsWarpFactor(krpc_connection_t connection, int32_t * result)
+
+      The current maximum regular "on-rails" warp factor that can be set.
+      A value between 0 and 7 inclusive. See
+      `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_
+      for details.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_WarpTo(krpc_connection_t connection, double ut, float maxRailsRate, float maxPhysicsRate)
+
+      Uses time acceleration to warp forward to a time in the future, specified
+      by universal time *ut*. This call blocks until the desired
+      time is reached. Uses regular "on-rails" or physical time warp as appropriate.
+      For example, physical time warp is used when the active vessel is traveling
+      through an atmosphere. When using regular "on-rails" time warp, the warp
+      rate is limited by *maxRailsRate*, and when using physical
+      time warp, the warp rate is limited by *maxPhysicsRate*.
+
+      :Parameters:
+
+       * **ut** -- The universal time to warp to, in seconds.
+       * **maxRailsRate** -- The maximum warp rate in regular "on-rails" time warp.
+       * **maxPhysicsRate** -- The maximum warp rate in physical time warp.
+
+      :returns: When the time warp is complete.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_TransformPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t from, krpc_SpaceCenter_ReferenceFrame_t to)
+
+      Converts a position from one reference frame to another.
+
+      :Parameters:
+
+       * **position** -- Position, as a vector, in reference frame *from*.
+       * **from** -- The reference frame that the position is in.
+       * **to** -- The reference frame to covert the position to.
+
+      :returns: The corresponding position, as a vector, in reference frame *to*.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_TransformDirection(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, const krpc_tuple_double_double_double_t * direction, krpc_SpaceCenter_ReferenceFrame_t from, krpc_SpaceCenter_ReferenceFrame_t to)
+
+      Converts a direction from one reference frame to another.
+
+      :Parameters:
+
+       * **direction** -- Direction, as a vector, in reference frame *from*.
+       * **from** -- The reference frame that the direction is in.
+       * **to** -- The reference frame to covert the direction to.
+
+      :returns: The corresponding direction, as a vector, in reference frame *to*.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_TransformRotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result, const krpc_tuple_double_double_double_double_t * rotation, krpc_SpaceCenter_ReferenceFrame_t from, krpc_SpaceCenter_ReferenceFrame_t to)
+
+      Converts a rotation from one reference frame to another.
+
+      :Parameters:
+
+       * **rotation** -- Rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *from*.
+       * **from** -- The reference frame that the rotation is in.
+       * **to** -- The reference frame to covert the rotation to.
+
+      :returns: The corresponding rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *to*.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_TransformVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_t * velocity, krpc_SpaceCenter_ReferenceFrame_t from, krpc_SpaceCenter_ReferenceFrame_t to)
+
+      Converts a velocity (acting at the specified position) from one reference frame
+      to another. The position is required to take the relative angular velocity of the
+      reference frames into account.
+
+      :Parameters:
+
+       * **position** -- Position, as a vector, in reference frame *from*.
+       * **velocity** -- Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in meters per second, in reference frame *from*.
+       * **from** -- The reference frame that the position and velocity are in.
+       * **to** -- The reference frame to covert the velocity to.
+
+      :returns: The corresponding velocity, as a vector, in reference frame *to*.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RaycastDistance(krpc_connection_t connection, double * result, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_t * direction, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      Cast a ray from a given position in a given direction, and return the distance to the hit point.
+      If no hit occurs, returns infinity.
+
+      :Parameters:
+
+       * **position** -- Position, as a vector, of the origin of the ray.
+       * **direction** -- Direction of the ray, as a unit vector.
+       * **referenceFrame** -- The reference frame that the position and direction are in.
+
+      :returns: The distance to the hit, in meters, or infinity if there was no hit.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RaycastPart(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_t * direction, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      Cast a ray from a given position in a given direction, and return the part that it hits.
+      If no hit occurs, returns ``nullptr``.
+
+      :Parameters:
+
+       * **position** -- Position, as a vector, of the origin of the ray.
+       * **direction** -- Direction of the ray, as a unit vector.
+       * **referenceFrame** -- The reference frame that the position and direction are in.
+
+      :returns: The part that was hit or ``nullptr`` if there was no hit.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_FARAvailable(krpc_connection_t connection, bool * result)
+
+      Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_ is installed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CreateKerbal(krpc_connection_t connection, const char * name, const char * job, bool male)
+
+      Creates a Kerbal.
+
+      :Parameters:
+
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_GetKerbal(krpc_connection_t connection, krpc_SpaceCenter_CrewMember_t * result, const char * name)
+
+      Find a Kerbal by name.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_LoadSpaceCenter(krpc_connection_t connection)
+
+      .. warning:: Deprecated. Set :func:`krpc_KRPC_GameScene` instead.
+
+      Switch to the space center view.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_MapFilter(krpc_connection_t connection, krpc_SpaceCenter_MapFilterType_t * result)
+   .. function:: void krpc_SpaceCenter_set_MapFilter(krpc_SpaceCenter_MapFilterType_t value)
+
+      The visible objects in map mode.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Screenshot(krpc_connection_t connection, const char * filePath, int32_t scale)
+
+      Saves a screenshot.
+
+      :Parameters:
+
+       * **filePath** -- The path of the file to save.
+       * **scale** -- Resolution scaling factor
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_GameMode(krpc_connection_t connection, krpc_SpaceCenter_GameMode_t * result)
+
+      The current mode the game is in.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_WarpMode(krpc_connection_t connection, krpc_SpaceCenter_WarpMode_t * result)
+
+      The current time warp mode. Returns :macro:`KRPC_SPACECENTER_WARPMODE_NONE` if time
+      warp is not active, :macro:`KRPC_SPACECENTER_WARPMODE_RAILS` if regular "on-rails" time warp
+      is active, or :macro:`KRPC_SPACECENTER_WARPMODE_PHYSICS` if physical time warp is active.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Camera(krpc_connection_t connection, krpc_SpaceCenter_Camera_t * result)
+
+      An object that can be used to control the camera.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_WaypointManager(krpc_connection_t connection, krpc_SpaceCenter_WaypointManager_t * result)
+
+      The waypoint manager.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractManager(krpc_connection_t connection, krpc_SpaceCenter_ContractManager_t * result)
+
+      The contract manager.
+
+      :Game Scenes: Space Center, Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager(krpc_connection_t connection, krpc_SpaceCenter_AlarmManager_t * result)
+
+      The alarm manager.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_GameMode_t
+
+   The game mode.
+   Returned by :type:`krpc_SpaceCenter_GameMode_t`
+
+
+   .. macro:: KRPC_SPACECENTER_GAMEMODE_SANDBOX
+
+      Sandbox mode.
+
+
+   .. macro:: KRPC_SPACECENTER_GAMEMODE_CAREER
+
+      Career mode.
+
+
+   .. macro:: KRPC_SPACECENTER_GAMEMODE_SCIENCE
+
+      Science career mode.
+
+
+   .. macro:: KRPC_SPACECENTER_GAMEMODE_SCIENCESANDBOX
+
+      Science sandbox mode.
+
+
+   .. macro:: KRPC_SPACECENTER_GAMEMODE_MISSION
+
+      Mission mode.
+
+
+   .. macro:: KRPC_SPACECENTER_GAMEMODE_MISSIONBUILDER
+
+      Mission builder mode.
+
+
+   .. macro:: KRPC_SPACECENTER_GAMEMODE_SCENARIO
+
+      Scenario mode.
+
+
+   .. macro:: KRPC_SPACECENTER_GAMEMODE_SCENARIONONRESUMABLE
+
+      Scenario mode that cannot be resumed.
+
+
+
+.. type:: krpc_SpaceCenter_AltimeterMode_t
+
+   The mode of the altitude reported on the altimeter.
+   See :func:`krpc_SpaceCenter_AltimeterMode`.
+
+
+   .. macro:: KRPC_SPACECENTER_ALTIMETERMODE_DEFAULT
+
+      The altimeter is in the default mode.
+
+
+   .. macro:: KRPC_SPACECENTER_ALTIMETERMODE_ASL
+
+      The altimeter is in the "Above Sea Level" mode.
+
+
+   .. macro:: KRPC_SPACECENTER_ALTIMETERMODE_AGL
+
+      The altimeter is in the "Above Ground Level" mode.
+
+
+
+.. type:: krpc_SpaceCenter_WarpMode_t
+
+   The time warp mode.
+   Returned by :type:`krpc_SpaceCenter_WarpMode_t`
+
+
+   .. macro:: KRPC_SPACECENTER_WARPMODE_RAILS
+
+      Time warp is active, and in regular "on-rails" mode.
+
+
+   .. macro:: KRPC_SPACECENTER_WARPMODE_PHYSICS
+
+      Time warp is active, and in physical time warp mode.
+
+
+   .. macro:: KRPC_SPACECENTER_WARPMODE_NONE
+
+      Time warp is not active.
+
+
+
+.. type:: krpc_SpaceCenter_MapFilterType_t
+
+   The set of things that are visible in map mode.
+   These may be combined with bitwise logic.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_ALL
+
+      Everything.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_NONE
+
+      Nothing.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_DEBRIS
+
+      Debris.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_UNKNOWN
+
+      Unknown.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_SPACEOBJECTS
+
+      SpaceObjects.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_PROBES
+
+      Probes.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_ROVERS
+
+      Rovers.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_LANDERS
+
+      Landers.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_SHIPS
+
+      Ships.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_STATIONS
+
+      Stations.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_BASES
+
+      Bases.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_EVAS
+
+      EVAs.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_FLAGS
+
+      Flags.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_PLANE
+
+      Planes.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_RELAY
+
+      Relays.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_SITE
+
+      Launch Sites.
+
+
+   .. macro:: KRPC_SPACECENTER_MAPFILTERTYPE_DEPLOYEDSCIENCECONTROLLER
+
+      Deployed Science Controllers.
+
+
+
+.. type:: krpc_SpaceCenter_LaunchSite_t
+
+   A place where craft can be launched from.
+   More of these can be added with mods like Kerbal Konstructs.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_LaunchSite_Name(krpc_connection_t connection, char * * result)
+
+      The name of the launch site.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_LaunchSite_Body(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
+
+      The celestial body the launch site is on.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_LaunchSite_EditorFacility(krpc_connection_t connection, krpc_SpaceCenter_EditorFacility_t * result)
+
+      Which editor is normally used for this launch site.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_EditorFacility_t
+
+   Editor facility.
+   See :func:`krpc_SpaceCenter_LaunchSite_EditorFacility`.
+
+
+   .. macro:: KRPC_SPACECENTER_EDITORFACILITY_VAB
+
+      Vehicle Assembly Building.
+
+
+   .. macro:: KRPC_SPACECENTER_EDITORFACILITY_SPH
+
+      Space Plane Hanger.
+
+
+   .. macro:: KRPC_SPACECENTER_EDITORFACILITY_NONE
+
+      None.

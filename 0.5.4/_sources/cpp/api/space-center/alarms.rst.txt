@@ -1,0 +1,151 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::SpaceCenter
+
+Alarms
+======
+
+
+.. class:: AlarmManager
+
+   Alarm manager.
+   Obtained by calling :func:`alarm_manager`.
+
+   .. function:: std::vector<Alarm> alarms()
+
+      A list of all alarms.
+
+   
+
+   .. function:: static Alarm add_alarm(Client& connection, double time, std::string title = "Alarm", std::string description = "")
+
+      Create an alarm.
+
+      :Parameters:
+
+       * **time** -- Number of seconds from now that the alarm should trigger.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: static Alarm add_vessel_alarm(Client& connection, double time, Vessel vessel, std::string title = "Vessel Alarm", std::string description = "")
+
+      Create an alarm linked to a vessel.
+
+      :Parameters:
+
+       * **time** -- Number of seconds from now that the alarm should trigger.
+       * **vessel** -- Vessel to link the alarm to.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: static Alarm add_apoapsis_alarm(Client& connection, Vessel vessel, double offset = 60.0, std::string title = "Apoapsis Alarm", std::string description = "")
+
+      Create an alarm for the given vessel's next apoapsis.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: static Alarm add_periapsis_alarm(Client& connection, Vessel vessel, double offset = 60.0, std::string title = "Periapsis Alarm", std::string description = "")
+
+      Create an alarm for the given vessel's next periapsis.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: static Alarm add_maneuver_node_alarm(Client& connection, Vessel vessel, Node node, double offset = 60.0, bool add_burn_time = true, std::string title = "Maneuver Node Alarm", std::string description = "")
+
+      Create an alarm for the given vessel and maneuver node.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **node** -- The maneuver node.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **add_burn_time** -- Whether the node's burn time should be included in the alarm.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: static Alarm add_soi_alarm(Client& connection, Vessel vessel, double offset = 60.0, std::string title = "SOI Change Alarm", std::string description = "")
+
+      Create an alarm for the given vessel's next sphere of influence change.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+
+
+.. class:: Alarm
+
+   An alarm. Can be accessed using :func:`alarm_manager`.
+
+   .. function:: uint32_t id()
+
+      Unique identifier of the alarm.
+      KSP destroys and recreates an alarm when it is edited.
+      This id will remain constant between the old and new alarms.
+
+   
+
+   .. function:: std::string type()
+
+      Type of alarm
+
+   
+
+   .. function:: std::string title()
+
+      Title of the alarm
+
+   
+
+   .. function:: std::string description()
+
+      Description of the alarm.
+
+   
+
+   .. function:: double time()
+
+      Time the alarm will trigger.
+
+   
+
+   .. function:: double time_until()
+
+      Time until the alarm triggers.
+
+   
+
+   .. function:: double event_offset()
+
+      Seconds between the alarm going off and the event it references.
+
+   
+
+   .. function:: Vessel vessel()
+
+      Vessel the alarm references. ``NULL`` if it does not reference a vessel.

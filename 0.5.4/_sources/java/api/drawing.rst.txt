@@ -1,0 +1,14 @@
+.. default-domain:: java
+.. highlight:: java
+
+Drawing API
+===========
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   drawing/drawing
+   drawing/line
+   drawing/polygon
+   drawing/text

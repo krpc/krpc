@@ -1,0 +1,172 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KRPC
+
+KRPC
+====
+
+
+
+
+
+
+
+
+
+
+
+
+
+.. type:: public class KRPC
+
+   Main kRPC service, used by clients to interact with basic server functionality.
+
+   .. method:: byte[] getClientID()
+
+      Returns the identifier for the current client.
+
+   
+
+   .. method:: String getClientName()
+
+      Returns the name of the current client.
+      This is an empty string if the client has no name.
+
+   
+
+   .. method:: java.util.List<org.javatuples.Triplet<byte[],String,String>> getClients()
+
+
+      A list of RPC clients that are currently connected to the server.
+      Each entry in the list is a clients identifier, name and address.
+
+   
+
+   .. method:: krpc.schema.KRPC.Status getStatus()
+
+      Returns some information about the server, such as the version.
+
+   
+
+   .. method:: krpc.schema.KRPC.Services getServices()
+
+      Returns information on all services, procedures, classes, properties etc. provided by the server.
+      Can be used by client libraries to automatically create functionality such as stubs.
+
+   
+
+   .. method:: GameScene getGameScene()
+
+   .. method:: void setGameScene(GameScene value)
+
+      The current game scene. Setting this switches the game to the given
+      scene, or opens/closes the corresponding facility for the pseudo-scenes.
+      Scene changes happen asynchronously: setting this property returns
+      immediately, and clients should poll it until it reports the requested
+      scene. Setting it to :meth:`GameScene.FLIGHT` resumes the save's
+      active vessel, and fails if there is none.
+
+   
+
+   .. method:: GameScene getCurrentGameScene()
+
+
+      .. warning:: Deprecated. Use :meth:`getGameScene()` instead.
+
+      Get the current game scene.
+
+   
+
+   .. method:: boolean getPaused()
+
+   .. method:: void setPaused(boolean value)
+
+      Whether the game is paused.
+
+   
+
+
+
+.. type:: public enum GameScene
+
+   The game scene. See :meth:`getGameScene()`.
+
+
+   .. field:: public GameScene SPACE_CENTER
+
+      The game scene showing the Kerbal Space Center buildings.
+
+
+   .. field:: public GameScene FLIGHT
+
+      The game scene showing a vessel in flight (or on the launchpad/runway).
+
+
+   .. field:: public GameScene TRACKING_STATION
+
+      The tracking station.
+
+
+   .. field:: public GameScene EDITOR_VAB
+
+      The Vehicle Assembly Building.
+
+
+   .. field:: public GameScene EDITOR_SPH
+
+      The Space Plane Hangar.
+
+
+   .. field:: public GameScene MISSION_BUILDER
+
+      The mission builder.
+
+
+   .. field:: public GameScene ASTRONAUT_COMPLEX
+
+      The astronaut complex. This is a pseudo-scene, shown when the
+      astronaut complex facility is open within the space center scene.
+
+
+   .. field:: public GameScene MISSION_CONTROL
+
+      Mission control. This is a pseudo-scene, shown when the
+      mission control facility is open within the space center scene.
+
+
+   .. field:: public GameScene RESEARCH_AND_DEVELOPMENT
+
+      Research and development. This is a pseudo-scene, shown when the
+      research and development facility is open within the space center scene.
+
+
+   .. field:: public GameScene ADMINISTRATION
+
+      The administration facility. This is a pseudo-scene, shown when the
+      administration facility is open within the space center scene.
+
+
+
+.. type:: public class InvalidOperationException
+
+   A method call was made to a method that is invalid
+   given the current state of the object.
+
+
+
+.. type:: public class ArgumentException
+
+   A method was invoked where at least one of the passed arguments does not
+   meet the parameter specification of the method.
+
+
+
+.. type:: public class ArgumentNullException
+
+   A null reference was passed to a method that does not accept it as a valid argument.
+
+
+
+.. type:: public class ArgumentOutOfRangeException
+
+   The value of an argument is outside the allowable range of values as defined by the invoked method.

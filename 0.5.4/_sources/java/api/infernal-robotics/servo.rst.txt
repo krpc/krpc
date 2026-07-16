@@ -1,0 +1,165 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.InfernalRobotics
+
+Servo
+=====
+
+
+.. type:: public class Servo
+
+   Represents a servo. Obtained using
+   :meth:`ServoGroup.getServos()`,
+   :meth:`ServoGroup.servoWithName(String)`
+   or :meth:`servoWithName(SpaceCenter.Vessel, String)`.
+
+   .. method:: String getName()
+
+   .. method:: void setName(String value)
+
+      The name of the servo.
+
+      :Game Scenes: Flight
+
+   .. method:: SpaceCenter.Part getPart()
+
+
+      The part containing the servo.
+
+      :Game Scenes: Flight
+
+   .. method:: void setHighlight(boolean value)
+
+      Whether the servo should be highlighted in-game.
+
+      :Game Scenes: Flight
+
+   .. method:: float getPosition()
+
+
+      The position of the servo.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMinConfigPosition()
+
+
+      The minimum position of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMaxConfigPosition()
+
+
+      The maximum position of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMinPosition()
+
+   .. method:: void setMinPosition(float value)
+
+      The minimum position of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMaxPosition()
+
+   .. method:: void setMaxPosition(float value)
+
+      The maximum position of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. method:: float getConfigSpeed()
+
+
+      The speed multiplier of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. method:: float getSpeed()
+
+   .. method:: void setSpeed(float value)
+
+      The speed multiplier of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. method:: float getCurrentSpeed()
+
+
+      The current speed at which the servo is moving.
+
+      :Game Scenes: Flight
+
+   .. method:: float getAcceleration()
+
+   .. method:: void setAcceleration(float value)
+
+      The current speed multiplier set in the UI.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getIsMoving()
+
+
+      Whether the servo is moving.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getIsFreeMoving()
+
+
+      Whether the servo is freely moving.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getIsLocked()
+
+   .. method:: void setIsLocked(boolean value)
+
+      Whether the servo is locked.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getIsAxisInverted()
+
+   .. method:: void setIsAxisInverted(boolean value)
+
+      Whether the servos axis is inverted.
+
+      :Game Scenes: Flight
+
+   .. method:: void moveRight()
+
+      Moves the servo to the right.
+
+      :Game Scenes: Flight
+
+   .. method:: void moveLeft()
+
+      Moves the servo to the left.
+
+      :Game Scenes: Flight
+
+   .. method:: void moveCenter()
+
+      Moves the servo to the center.
+
+      :Game Scenes: Flight
+
+   .. method:: void moveTo(float position, float speed)
+
+      Moves the servo to *position* and sets the
+      speed multiplier to *speed*.
+
+      :param float position: The position to move the servo to.
+      :param float speed: Speed multiplier for the movement.
+      :Game Scenes: Flight
+
+   .. method:: void stop()
+
+      Stops the servo.
+
+      :Game Scenes: Flight

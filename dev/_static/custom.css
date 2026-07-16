@@ -1,0 +1,30 @@
+/* Site-specific tweaks on top of pydata-sphinx-theme. */
+
+.clearer {
+    clear: both !important;
+}
+
+/* Key sphinx-tabs' colors to the theme's light/dark mode. Its stock tabs.css
+   only reacts to body[data-theme], but pydata-sphinx-theme sets data-theme on
+   the html element, so its dark styling never applies; restyle the tabs with
+   the theme's CSS variables, which track the mode toggle in both directions. */
+[role="tablist"] {
+    border-bottom-color: var(--pst-color-border);
+}
+
+.sphinx-tabs-tab {
+    color: var(--pst-color-primary);
+    background-color: transparent;
+}
+
+.sphinx-tabs-tab[aria-selected="true"] {
+    border-color: var(--pst-color-border);
+    border-bottom-color: var(--pst-color-on-background);
+    background-color: var(--pst-color-on-background);
+}
+
+.sphinx-tabs-panel {
+    color: var(--pst-color-text-base);
+    border-color: var(--pst-color-border);
+    background: var(--pst-color-on-background);
+}

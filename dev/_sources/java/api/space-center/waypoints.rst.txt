@@ -1,0 +1,193 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.SpaceCenter
+
+Waypoints
+=========
+
+
+.. type:: public class WaypointManager
+
+   Waypoints are the location markers you can see on the map view showing you where contracts are targeted for.
+   With this structure, you can obtain coordinate data for the locations of these waypoints.
+   Obtained by calling :meth:`getWaypointManager()`.
+
+   .. method:: java.util.List<Waypoint> getWaypoints()
+
+
+      A list of all existing waypoints.
+
+   
+
+   .. method:: Waypoint addWaypoint(double latitude, double longitude, CelestialBody body, String name)
+
+      Creates a waypoint at the given position at ground level, and returns a
+      :type:`Waypoint` object that can be used to modify it.
+
+      :param double latitude: Latitude of the waypoint.
+      :param double longitude: Longitude of the waypoint.
+      :param CelestialBody body: Celestial body the waypoint is attached to.
+      :param String name: Name of the waypoint.
+   
+
+   .. method:: Waypoint addWaypointAtAltitude(double latitude, double longitude, double altitude, CelestialBody body, String name)
+
+      Creates a waypoint at the given position and altitude, and returns a
+      :type:`Waypoint` object that can be used to modify it.
+
+      :param double latitude: Latitude of the waypoint.
+      :param double longitude: Longitude of the waypoint.
+      :param double altitude: Altitude (above sea level) of the waypoint.
+      :param CelestialBody body: Celestial body the waypoint is attached to.
+      :param String name: Name of the waypoint.
+   
+
+   .. method:: java.util.Map<String,Integer> getColors()
+
+
+      An example map of known color - seed pairs.
+      Any other integers may be used as seed.
+
+   
+
+   .. method:: java.util.List<String> getIcons()
+
+
+      Returns all available icons (from "GameData/Squad/Contracts/Icons/").
+
+   
+
+
+
+.. type:: public class Waypoint
+
+   Represents a waypoint. Can be created using :meth:`WaypointManager.addWaypoint(double, double, CelestialBody, String)`.
+
+   .. method:: CelestialBody getBody()
+
+   .. method:: void setBody(CelestialBody value)
+
+      The celestial body the waypoint is attached to.
+
+      :Game Scenes: Flight
+
+   .. method:: String getName()
+
+   .. method:: void setName(String value)
+
+      The name of the waypoint as it appears on the map and the contract.
+
+      :Game Scenes: Flight
+
+   .. method:: int getColor()
+
+   .. method:: void setColor(int value)
+
+      The seed of the icon color. See :meth:`WaypointManager.getColors()` for example colors.
+
+      :Game Scenes: Flight
+
+   .. method:: String getIcon()
+
+   .. method:: void setIcon(String value)
+
+      The icon of the waypoint.
+
+      :Game Scenes: Flight
+
+   .. method:: double getLatitude()
+
+   .. method:: void setLatitude(double value)
+
+      The latitude of the waypoint.
+
+      :Game Scenes: Flight
+
+   .. method:: double getLongitude()
+
+   .. method:: void setLongitude(double value)
+
+      The longitude of the waypoint.
+
+      :Game Scenes: Flight
+
+   .. method:: double getMeanAltitude()
+
+   .. method:: void setMeanAltitude(double value)
+
+      The altitude of the waypoint above sea level, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: double getSurfaceAltitude()
+
+   .. method:: void setSurfaceAltitude(double value)
+
+      The altitude of the waypoint above the surface of the body or sea level,
+      whichever is closer, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: double getBedrockAltitude()
+
+   .. method:: void setBedrockAltitude(double value)
+
+      The altitude of the waypoint above the surface of the body, in meters.
+      When over water, this is the altitude above the sea floor.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getNearSurface()
+
+
+      ``true`` if the waypoint is near to the surface of a body.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getGrounded()
+
+
+      ``true`` if the waypoint is attached to the ground.
+
+      :Game Scenes: Flight
+
+   .. method:: int getIndex()
+
+
+      The integer index of this waypoint within its cluster of sibling waypoints.
+      In other words, when you have a cluster of waypoints called "Somewhere Alpha",
+      "Somewhere Beta" and "Somewhere Gamma", the alpha site has index 0, the beta
+      site has index 1 and the gamma site has index 2.
+      When :meth:`Waypoint.getClustered()` is ``false``, this is zero.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getClustered()
+
+
+      ``true`` if this waypoint is part of a set of clustered waypoints with greek letter
+      names appended (Alpha, Beta, Gamma, etc).
+      If ``true``, there is a one-to-one correspondence with the greek letter name and
+      the :meth:`Waypoint.getIndex()`.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getHasContract()
+
+
+      Whether the waypoint belongs to a contract.
+
+      :Game Scenes: Flight
+
+   .. method:: Contract getContract()
+
+
+      The associated contract.
+
+      :Game Scenes: Flight
+
+   .. method:: void remove()
+
+      Removes the waypoint.
+
+      :Game Scenes: Flight

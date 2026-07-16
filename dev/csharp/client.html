@@ -1,0 +1,1267 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>C# Client &#8212; kRPC 0.5.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0da409bd" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'csharp/client';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/external-links.js?v=e8892020"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/csharp/client.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="KRPC API" href="api/krpc.html" />
+    <link rel="prev" title="C#" href="../csharp.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.4" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC 0.5.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">C# Client</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/krpc/krpc.html">KRPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/space-center.html">SpaceCenter API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/space-center.html">SpaceCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/vessel.html">Vessel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/flight.html">Flight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/orbit.html">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/control.html">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/comms.html">Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/parts.html">Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/camera.html">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/waypoints.html">Waypoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/geometry-types.html">Geometry Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/ui.html">User Interface API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/ui.html">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/canvas.html">Canvas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/panel.html">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/text.html">Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/button.html">Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/remote-tech/remote-tech.html">RemoteTech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/docking-camera/docking-camera.html">DockingCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../csharp.html" class="nav-link">C#</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">C# Client</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="c-client">
+<h1>C# Client<a class="headerlink" href="#c-client" title="Link to this heading">#</a></h1>
+<p>This client provides a C# API for interacting with a kRPC server. It is distributed as an assembly
+named <code class="docutils literal notranslate"><span class="pre">KRPC.Client.dll</span></code>.</p>
+<section id="installing-the-library">
+<h2>Installing the Library<a class="headerlink" href="#installing-the-library" title="Link to this heading">#</a></h2>
+<p>The C# client can be <a class="reference external" href="https://www.nuget.org/packages/KRPC.Client">installed using NuGet</a> or
+<a class="reference external" href="https://github.com/krpc/krpc/releases">downloaded from GitHub</a>. The client is compatible with .NET 4.5+.</p>
+<p>You also need to <a class="reference external" href="https://www.nuget.org/packages/Google.Protobuf">install Google.Protobuf using NuGet</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The copy of <code class="docutils literal notranslate"><span class="pre">Google.Protobuf.dll</span></code> in the GameData folder included with the kRPC server plugin
+should not be used with the client library. It is a modified version to work within KSP.</p>
+</div>
+</section>
+<section id="connecting-to-the-server">
+<h2>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h2>
+<p>To connect to a server, create a <a class="reference internal" href="#class-Connection" title="Connection class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Connection</span></code></a> object. All interaction with the server is done
+via this object. When constructed without any arguments, it will connect to the local machine on the
+default port numbers. You can specify different connection settings, and also a descriptive name for
+the connection, as follows:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Net</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.KRPC</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">(</span>
+<span class="w">                   </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My Example Program&quot;</span><span class="p">,</span>
+<span class="w">                   </span><span class="n">address</span><span class="p">:</span><span class="w"> </span><span class="n">IPAddress</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="s">&quot;192.168.0.10&quot;</span><span class="p">),</span>
+<span class="w">                   </span><span class="n">rpcPort</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
+<span class="w">                   </span><span class="n">streamPort</span><span class="p">:</span><span class="w"> </span><span class="mi">1001</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">KRPC</span><span class="p">();</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">krpc</span><span class="p">.</span><span class="n">GetStatus</span><span class="p">().</span><span class="n">Version</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#class-Connection" title="Connection class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Connection</span></code></a> object needs to be disposed of correctly when finished with, so that the
+network connection it manages can be released. This can be done with a <code class="docutils literal notranslate"><span class="pre">using</span></code> block (as in the
+example above) or by calling <a class="reference internal" href="#method-Connection.Dispose" title="Connection.Dispose method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.Dispose</span></code></a> directly.</p>
+</section>
+<section id="calling-remote-procedures">
+<h2>Calling Remote Procedures<a class="headerlink" href="#calling-remote-procedures" title="Link to this heading">#</a></h2>
+<p>The kRPC server provides <em>procedures</em> that a client can run. These procedures are arranged in groups
+called <em>services</em> to keep things organized. The functionality for the services are defined in the
+namespace <code class="docutils literal notranslate"><span class="pre">KRPC.Client.Services.*</span></code>. For example, all of the functionality provided by the
+<code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code> service is contained in the namespace <code class="docutils literal notranslate"><span class="pre">KRPC.Client.Services.SpaceCenter</span></code>.</p>
+<p>To interact with a service, you must first instantiate it. You can then call its methods and
+properties to invoke remote procedures. The following example demonstrates how to do this. It
+instantiates the <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code> service and calls
+<a class="reference internal" href="api/space-center/space-center.html#property-KRPC.Client.Services.SpaceCenter.SpaceCenter.ActiveVessel" title="KRPC.Client.Services.SpaceCenter.SpaceCenter.ActiveVessel property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">KRPC.Client.Services.SpaceCenter.SpaceCenter.ActiveVessel</span></code></a> to get an object representing the
+active vessel (of type <a class="reference internal" href="api/space-center/vessel.html#class-KRPC.Client.Services.SpaceCenter.Vessel" title="KRPC.Client.Services.SpaceCenter.Vessel class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">KRPC.Client.Services.SpaceCenter.Vessel</span></code></a>). It sets the name of the
+vessel and then prints out its altitude:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">;</span>
+<span class="w">            </span><span class="n">vessel</span><span class="p">.</span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;My Vessel&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">flightInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Flight</span><span class="p">();</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">flightInfo</span><span class="p">.</span><span class="n">MeanAltitude</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="streaming-data-from-the-server">
+<span id="csharp-client-streams"></span><h2>Streaming Data from the Server<a class="headerlink" href="#streaming-data-from-the-server" title="Link to this heading">#</a></h2>
+<p>A common use case for kRPC is to continuously extract data from the game. The naive approach to do
+this would be to repeatedly call a remote procedure, such as in the following which repeatedly
+prints the position of the active vessel:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">refFrame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Orbit</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">ReferenceFrame</span><span class="p">;</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">Position</span><span class="p">(</span><span class="n">refFrame</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This approach requires significant communication overhead as request/response messages are
+repeatedly sent between the client and server. kRPC provides a more efficient mechanism to achieve
+this, called <em>streams</em>.</p>
+<p>A stream repeatedly executes a procedure on the server (with a fixed set of argument values) and
+sends the result to the client. It only requires a single message to be sent to the server to
+establish the stream, which will then continuously send data to the client until the stream is
+closed.</p>
+<p>The following example does the same thing as above using streams:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">refFrame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Orbit</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">ReferenceFrame</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">posStream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddStream</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Position</span><span class="p">(</span><span class="n">refFrame</span><span class="p">));</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">posStream</span><span class="p">.</span><span class="n">Get</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It calls <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> once at the start of the program to create the stream, and
+then repeatedly prints the position returned by the stream. The stream is automatically closed when
+the client disconnects.</p>
+<p>A stream can be created for any method call by calling <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> and passing it
+a lambda expression that invokes the desired method. This lambda expression must take zero arguments
+and be either a method call expression or a parameter call expression. It returns a stream object of
+type <a class="reference internal" href="#class-Stream" title="Stream class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. The most recent value of the stream can be obtained by calling
+<a class="reference internal" href="#method-Stream.Get" title="Stream.Get method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stream.Get</span></code></a>. A stream can be stopped and removed from the server by calling
+<a class="reference internal" href="#method-Stream.Remove" title="Stream.Remove method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stream.Remove</span></code></a> on the stream object. All of a clients streams are automatically stopped when
+it disconnects.</p>
+</section>
+<section id="synchronizing-with-stream-updates">
+<h2>Synchronizing with Stream Updates<a class="headerlink" href="#synchronizing-with-stream-updates" title="Link to this heading">#</a></h2>
+<p>A common use case for kRPC is to wait until the value returned by a method or attribute changes, and
+then take some action. kRPC provides two mechanisms to do this efficiently: <em>condition variables</em>
+and <em>callbacks</em>.</p>
+<section id="condition-variables">
+<h3>Condition Variables<a class="headerlink" href="#condition-variables" title="Link to this heading">#</a></h3>
+<p>Each stream has a condition variable associated with it, that is notified whenever the value of the
+stream changes. These can be used to block the current thread of execution until the value of the
+stream changes.</p>
+<p>The following example waits until the abort button is pressed in game, by waiting for the value of
+<a class="reference internal" href="api/space-center/control.html#property-KRPC.Client.Services.SpaceCenter.Control.Abort" title="KRPC.Client.Services.SpaceCenter.Control.Abort property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">KRPC.Client.Services.SpaceCenter.Control.Abort</span></code></a> to change to true:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">.</span><span class="n">Control</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">abort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddStream</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">Abort</span><span class="p">);</span>
+<span class="w">        </span><span class="k">lock</span><span class="w"> </span><span class="p">(</span><span class="n">abort</span><span class="p">.</span><span class="n">Condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">abort</span><span class="p">.</span><span class="n">Get</span><span class="p">())</span>
+<span class="w">                </span><span class="n">abort</span><span class="p">.</span><span class="n">Wait</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This code creates a stream, acquires a lock on the streams condition variable (by using a <code class="docutils literal notranslate"><span class="pre">lock</span></code>
+statement) and then repeatedly checks the value of <code class="docutils literal notranslate"><span class="pre">Abort</span></code>. It leaves the loop when it changes to
+true.</p>
+<p>The body of the loop calls <code class="docutils literal notranslate"><span class="pre">Wait</span></code> on the stream, which causes the program to block until the value
+changes. This prevents the loop from ‘spinning’ and so it does not consume processing resources
+whilst waiting.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The stream does not start receiving updates until the first call to <code class="docutils literal notranslate"><span class="pre">Wait</span></code>. This means that the
+example code will not miss any updates to the streams value, as it will have already locked the
+condition variable before the first stream update is received.</p>
+</div>
+</section>
+<section id="callbacks">
+<h3>Callbacks<a class="headerlink" href="#callbacks" title="Link to this heading">#</a></h3>
+<p>Streams allow you to register callback functions that are called whenever the value of the stream
+changes. Callback functions should take a single argument, which is the new value of the stream, and
+should return nothing.</p>
+<p>For example the following program registers two callbacks that are invoked when the value of
+<a class="reference internal" href="api/space-center/control.html#property-KRPC.Client.Services.SpaceCenter.Control.Abort" title="KRPC.Client.Services.SpaceCenter.Control.Abort property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">KRPC.Client.Services.SpaceCenter.Control.Abort</span></code></a> changes:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">.</span><span class="n">Control</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">abort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddStream</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">control</span><span class="p">.</span><span class="n">Abort</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">abort</span><span class="p">.</span><span class="n">AddCallback</span><span class="p">(</span>
+<span class="w">            </span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Abort 1 called with a value of &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+<span class="w">            </span><span class="p">});</span>
+<span class="w">        </span><span class="n">abort</span><span class="p">.</span><span class="n">AddCallback</span><span class="p">(</span>
+<span class="w">            </span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Abort 2 called with a value of &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+<span class="w">            </span><span class="p">});</span>
+<span class="w">        </span><span class="n">abort</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Keep the program running...</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When a stream is created it does not start receiving updates until <code class="docutils literal notranslate"><span class="pre">Start</span></code> is called. This is
+implicitly called when accessing the value of a stream, but as this example does not do this an
+explicit call to <code class="docutils literal notranslate"><span class="pre">Start</span></code> is required.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The callbacks are registered before the call to <code class="docutils literal notranslate"><span class="pre">Start</span></code> so that stream updates are not missed.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The callback function may be called from a different thread to that which created the stream. Any
+changes to shared state must therefore be protected with appropriate synchronization.</p>
+</div>
+</section>
+</section>
+<section id="custom-events">
+<span id="csharp-client-events"></span><h2>Custom Events<a class="headerlink" href="#custom-events" title="Link to this heading">#</a></h2>
+<p>Some procedures return event objects of type <a class="reference internal" href="#class-Event" title="Event class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Event</span></code></a>. These allow you to wait until an event
+occurs, by calling <a class="reference internal" href="#method-Event.Wait" title="Event.Wait method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Event.Wait</span></code></a>. Under the hood, these are implemented using streams and
+condition variables.</p>
+<p>Custom events can also be created. An expression API allows you to create code that runs on the
+server and these can be used to build a custom event. For example, the following creates the
+expression <code class="docutils literal notranslate"><span class="pre">MeanAltitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code> and then creates an event that will be triggered when the
+expression returns true:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.KRPC</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">KRPC</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">.</span><span class="n">Flight</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Get the remote procedure call as a message object,</span>
+<span class="w">        </span><span class="c1">// so it can be passed to the server</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="n">GetCall</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">MeanAltitude</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Create an expression on the server</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">GreaterThan</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Expression</span><span class="p">.</span><span class="n">Call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">meanAltitude</span><span class="p">),</span>
+<span class="w">            </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
+
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">evnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="n">AddEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="w">        </span><span class="k">lock</span><span class="w"> </span><span class="p">(</span><span class="n">evnt</span><span class="p">.</span><span class="n">Condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">evnt</span><span class="p">.</span><span class="n">Wait</span><span class="p">();</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Altitude reached 1000m&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="client-api-reference">
+<h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-IConnection">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">IConnection</span></span><a class="headerlink" href="#class-IConnection" title="Link to this definition">#</a></dt>
+<dd><p>Interface implemented by the <a class="reference internal" href="#class-Connection" title="Connection class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Connection</span></code></a> class.</p>
+</dd></dl>
+
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-Connection">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">Connection</span></span><a class="headerlink" href="#class-Connection" title="Link to this definition">#</a></dt>
+<dd><p>A connection to the kRPC server. All interaction with kRPC is performed via an instance of this
+class.</p>
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Connection.Connection">
+<span class="sig-name descname"><span class="pre">Connection</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">name</span></em><em> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.net.ipaddress" title="System.Net.IPAddress"><span class="pre">Net.IPAddress</span></a> <em><span class="pre">address</span></em><em> <span class="pre">=</span> <span class="pre">null</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">rpcPort</span></em><em> <span class="pre">=</span> <span class="pre">50000</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">streamPort</span></em><em> <span class="pre">=</span> <span class="pre">50001</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.Connection" title="Link to this definition">#</a></dt>
+<dd><p>Connect to a kRPC server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – A descriptive name for the connection. This is passed to the server and appears
+in the in-game server window.</p></li>
+<li><p><strong>address</strong> – The address of the server to connect to. Defaults to 127.0.0.1.</p></li>
+<li><p><strong>rpc_port</strong> – The port number of the RPC Server. Defaults to 50000. This should match the
+RPC port number of the server you want to connect to.</p></li>
+<li><p><strong>stream_port</strong> – The port number of the Stream Server. Defaults to 50001. This should
+match the stream port number of the server you want to connect to.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Connection.AddStream">
+<a class="reference internal" href="#class-Stream" title="Stream class"><span class="pre">Stream</span></a><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">AddStream</span></span><span class="pre">&lt;ReturnType&gt;</span> <span class="sig-paren">(</span><span class="pre">LambdaExpression</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.AddStream" title="Link to this definition">#</a></dt>
+<dd><p>Create a new stream from the given lambda expression.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Connection.GetCall">
+<span class="pre">KRPC.Schema.KRPC.ProcedureCall</span> <span class="sig-name descname"><span class="pre">GetCall</span></span> <span class="sig-paren">(</span><span class="pre">LambdaExpression</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.GetCall" title="Link to this definition">#</a></dt>
+<dd><p>Returns a procedure call message for the given lambda expression. This allows descriptions of
+procedure calls to be passed to the server, for example when constructing custom events. See
+<a class="reference internal" href="#csharp-client-events"><span class="std std-ref">Custom Events</span></a>.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Connection.Dispose">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Dispose</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.Dispose" title="Link to this definition">#</a></dt>
+<dd><p>Closes the connection and frees the resources associated with it.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-Stream">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">Stream&lt;ReturnType&gt;</span></span><a class="headerlink" href="#class-Stream" title="Link to this definition">#</a></dt>
+<dd><p>This class represents a stream. See <a class="reference internal" href="#csharp-client-streams"><span class="std std-ref">Streaming Data from the Server</span></a>.</p>
+<p>Stream objects implement <code class="docutils literal notranslate"><span class="pre">GetHashCode</span></code>, <code class="docutils literal notranslate"><span class="pre">Equals</span></code>, <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">==</span></code> and <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">!=</span></code> such
+that two stream objects are equal if they are bound to the same stream on the server.</p>
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Stream.Start">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Start</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <em><span class="pre">wait</span></em><em> <span class="pre">=</span> <span class="pre">true</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Stream.Start" title="Link to this definition">#</a></dt>
+<dd><p>Starts the stream. When a stream is created by calling <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> it does
+not start sending updates to the client until this method is called.</p>
+<p>If wait is true, this method will block until at least one update has been received from the
+server.</p>
+<p>If wait is false, the method starts the stream and returns immediately. Subsequent calls to
+<a class="reference internal" href="#method-Stream.Get" title="Stream.Get method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Get</span></code></a> may raise an <code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code> if the stream does not yet contain a
+value.</p>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-Stream.Rate">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">Rate</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-Stream.Rate" title="Link to this definition">#</a></dt>
+<dd><p>The update rate of the stream in Hertz. When set to zero, the rate is unlimited.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Stream.Get">
+<span class="pre">ReturnType</span> <span class="sig-name descname"><span class="pre">Get</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Stream.Get" title="Link to this definition">#</a></dt>
+<dd><p>Returns the most recent value for the stream. If executing the remote procedure for the stream
+throws an exception, calling this method will rethrow the exception. Raises an
+<code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code> if no update has been received from the server.</p>
+<p>If the stream has not been started this method calls <code class="docutils literal notranslate"><span class="pre">Start(true)</span></code> to start the stream and
+wait until at least one update has been received.</p>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-Stream.Condition">
+<span class="pre">object</span> <span class="sig-name descname"><span class="pre">Condition</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-Stream.Condition" title="Link to this definition">#</a></dt>
+<dd><p>A condition variable that is notified (using <code class="docutils literal notranslate"><span class="pre">Monitor.PulseAll</span></code>) whenever the value of the
+stream changes.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Stream.Wait">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Wait</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">timeout</span></em><em> <span class="pre">=</span> <span class="pre">-1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Stream.Wait" title="Link to this definition">#</a></dt>
+<dd><p>This method blocks until the value of the stream changes or the operation times out.</p>
+<p>The streams condition variable must be locked before calling this method.</p>
+<p>If <em>timeout</em> is specified and is greater than or equal to 0, it is the timeout in seconds for
+the operation.</p>
+<p>If the stream has not been started this method calls <code class="docutils literal notranslate"><span class="pre">Start(false)</span></code> to start the stream
+(without waiting for at least one update to be received).</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Stream.AddCallback">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <span class="sig-name descname"><span class="pre">AddCallback</span></span> <span class="sig-paren">(</span><span class="pre">Action</span><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <em><span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Stream.AddCallback" title="Link to this definition">#</a></dt>
+<dd><p>Adds a callback function that is invoked whenever the value of the stream changes. The
+callback function should take one argument, which is passed the new value of the
+stream. Returns a unique identifier for the callback which can be used to remove it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The callback function may be called from a different thread to that which created the
+stream. Any changes to shared state must therefore be protected with appropriate
+synchronization.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Stream.RemoveCallback">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">RemoveCallback</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Stream.RemoveCallback" title="Link to this definition">#</a></dt>
+<dd><p>Removes a callback from the stream. The tag is the identifier returned when the callback was
+added.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Stream.Remove">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Remove</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Stream.Remove" title="Link to this definition">#</a></dt>
+<dd><p>Removes the stream from the server.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-Event">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">Event</span></span><a class="headerlink" href="#class-Event" title="Link to this definition">#</a></dt>
+<dd><p>This class represents an event. See <a class="reference internal" href="#csharp-client-events"><span class="std std-ref">Custom Events</span></a>. It is wrapper around a
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> that indicates when the event occurs.</p>
+<p>Event objects implement <code class="docutils literal notranslate"><span class="pre">GetHashCode</span></code>, <code class="docutils literal notranslate"><span class="pre">Equals</span></code>, <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">==</span></code> and <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">!=</span></code> such
+that two event objects are equal if they are bound to the same underlying stream on the server.</p>
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Event.Start">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Start</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Event.Start" title="Link to this definition">#</a></dt>
+<dd><p>Starts the event. When an event is created, it will not receive updates from the server until
+this method is called.</p>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-Event.Condition">
+<span class="pre">object</span> <span class="sig-name descname"><span class="pre">Condition</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-Event.Condition" title="Link to this definition">#</a></dt>
+<dd><p>The condition variable that is notified (using <code class="docutils literal notranslate"><span class="pre">Monitor.PulseAll</span></code>) whenever the event
+occurs.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Event.Wait">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Wait</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">timeout</span></em><em> <span class="pre">=</span> <span class="pre">-1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Event.Wait" title="Link to this definition">#</a></dt>
+<dd><p>This method blocks until the event occurs or the operation times out.</p>
+<p>The events condition variable must be locked before calling this method.</p>
+<p>If <em>timeout</em> is specified and is greater than or equal to 0, it is the timeout in seconds for
+the operation.</p>
+<p>If the event has not been started this method calls <code class="docutils literal notranslate"><span class="pre">Start()</span></code> to start the underlying
+stream.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Event.AddCallback">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <span class="sig-name descname"><span class="pre">AddCallback</span></span> <span class="sig-paren">(</span><span class="pre">Action</span> <em><span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Event.AddCallback" title="Link to this definition">#</a></dt>
+<dd><p>Adds a callback function that is invoked whenever the event occurs. The callback function
+should be a function that takes zero arguments. Returns a unique identifier for the callback
+which can be used to remove it.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Event.RemoveCallback">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">RemoveCallback</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Event.RemoveCallback" title="Link to this definition">#</a></dt>
+<dd><p>Removes a callback from the event. The tag is the identifier returned when the callback was
+added.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Event.Remove">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Remove</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Event.Remove" title="Link to this definition">#</a></dt>
+<dd><p>Removes the event from the server.</p>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-Event.Stream">
+<a class="reference internal" href="#class-Stream" title="Stream class"><span class="pre">Stream</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Stream</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-Event.Stream" title="Link to this definition">#</a></dt>
+<dd><p>Returns the underlying stream for the event.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../csharp.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">C#</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="api/krpc.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">KRPC API</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-library">Installing the Library</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-server">Connecting to the Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data-from-the-server">Streaming Data from the Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronizing-with-stream-updates">Synchronizing with Stream Updates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#condition-variables">Condition Variables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-events">Custom Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-api-reference">Client API Reference</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/csharp/client.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2023, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

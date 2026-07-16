@@ -1,0 +1,1272 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Messaging Protocol &#8212; kRPC 0.5.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0da409bd" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'communication-protocols/messages';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.5.4';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/external-links.js?v=e8892020"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.5.4/communication-protocols/messages.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Internals of kRPC" href="../internals.html" />
+    <link rel="prev" title="Protocol Buffers over Serial I/O" href="serialio.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.4" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC 0.5.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tcpip.html">Protocol Buffers over TCP/IP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="websockets.html">Protocol Buffers over WebSockets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="serialio.html">Protocol Buffers over Serial I/O</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Messaging Protocol</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../communication-protocols.html" class="nav-link">Communication Protocols</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Messaging Protocol</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="messaging-protocol">
+<h1>Messaging Protocol<a class="headerlink" href="#messaging-protocol" title="Link to this heading">#</a></h1>
+<p>Communication with a kRPC server is performed via Protocol Buffer messages. The <a class="reference external" href="https://github.com/krpc/krpc/releases/latest">kRPC download</a> comes with a protocol buffer message definitions
+file (<a class="reference external" href="https://github.com/krpc/krpc/blob/latest-version/protobuf/krpc.proto">schema/krpc.proto</a>)
+that defines the structure of these messages. It also contains versions of this file for C#, C++,
+Java, Lua and Python, compiled using <a class="reference external" href="https://github.com/google/protobuf">Google’s protocol buffers compiler</a>.</p>
+<section id="invoking-remote-procedures">
+<h2>Invoking Remote Procedures<a class="headerlink" href="#invoking-remote-procedures" title="Link to this heading">#</a></h2>
+<p>Remote procedures are arranged into groups called <em>services</em>. These act as a single-level
+namespacing to keep things organized. Each service has a unique name used to identify it, and within
+a service <a class="reference internal" href="#communication-protocol-procedure-names"><span class="std std-ref">each procedure has a unique name</span></a>.</p>
+<p>Remote procedures are invoked by sending a request message to the RPC server, and waiting for a
+response message.</p>
+<p>The request message contains one or more procedure calls to run, which include the names of the
+procedures and the values of their arguments. The response message contains the value(s) returned by
+the procedure(s) and any errors that were encountered.</p>
+<p>Requests are processed in order of receipt. The next request from a client will not be processed
+until the previous one completes execution and it’s response has been received by the client. When
+there are multiple client connections, requests are processed in round-robin order.</p>
+<p>Within a single request, the procedure calls are also processed in order of receipt. The results
+list in the response is also ordered so that the results match the calls.</p>
+<section id="anatomy-of-a-request">
+<span id="communication-protocol-anatomy-of-a-request"></span><h3>Anatomy of a Request<a class="headerlink" href="#anatomy-of-a-request" title="Link to this heading">#</a></h3>
+<p>A request is sent to the server using a <code class="docutils literal notranslate"><span class="pre">Request</span></code> Protocol Buffer message with the following
+format:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Request</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="na">calls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">ProcedureCall</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="kd">service</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">serviceId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">procedureId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Argument</span><span class="w"> </span><span class="na">arguments</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">Argument</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bytes</span><span class="w"> </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A request message contains one or more procedure calls. This allows efficient batching of multiple
+calls in a single message, if desired.</p>
+<p>The fields of a procedure call are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">service</span></code> - The name of the service in which the remote procedure is defined.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">procedure</span></code> - The name of the remote procedure to invoke.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">service_id</span></code> - The integer identifier of the service in which the remote procedure is defined.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">procedure_id</span></code> - The integer identifier of the remote procedure to invoke.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">arguments</span></code> - A sequence of <code class="docutils literal notranslate"><span class="pre">Argument</span></code> messages containing the values of the procedure’s
+arguments. The fields of an argument message are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">position</span></code> - The zero-indexed position of the of the argument in the procedure’s
+signature.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code> - The value of the argument, encoded in Protocol Buffer format.</p></li>
+</ul>
+</li>
+</ul>
+<p>The service containing the procedure to call is specified by setting either <code class="docutils literal notranslate"><span class="pre">service</span></code> or
+<code class="docutils literal notranslate"><span class="pre">service_id</span></code>. The procedure to call is specified by setting either <code class="docutils literal notranslate"><span class="pre">procedure</span></code> or
+<code class="docutils literal notranslate"><span class="pre">procedure_id</span></code>. Use of <code class="docutils literal notranslate"><span class="pre">service</span></code> and <code class="docutils literal notranslate"><span class="pre">procedure</span></code> (i.e. descriptive strings) should be
+preferred as these will not change between server versions. For clients where code size or
+communication overhead must be kept to an absolute minimum, <code class="docutils literal notranslate"><span class="pre">service_id</span></code> and <code class="docutils literal notranslate"><span class="pre">procedure_id</span></code>
+can be used. However, note that the identifiers may change between server versions.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Argument</span></code> messages have a position field to allow values for default arguments to be
+omitted. See <a class="reference internal" href="#communication-protocol-protobuf-encoding"><span class="std std-ref">Protocol Buffer Encoding</span></a> for details on how to encode the
+argument values.</p>
+</section>
+<section id="anatomy-of-a-response">
+<span id="communication-protocol-anatomy-of-a-response"></span><h3>Anatomy of a Response<a class="headerlink" href="#anatomy-of-a-response" title="Link to this heading">#</a></h3>
+<p>A response is sent to the client using a <code class="docutils literal notranslate"><span class="pre">Response</span></code> Protocol Buffer message with the following
+format:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Response</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Error</span><span class="w"> </span><span class="na">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">ProcedureResult</span><span class="w"> </span><span class="na">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">ProcedureResult</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Error</span><span class="w"> </span><span class="na">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bytes</span><span class="w"> </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">Error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="kd">service</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">stack_trace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A response message contains one or more results, corresponding to the procedure calls made in the
+associated request message.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">value</span></code> field of a procedure result message contains the value of the return value of the
+remote procedure, if any, encoded in protocol buffer format. See
+<a class="reference internal" href="#communication-protocol-protobuf-encoding"><span class="std std-ref">Protocol Buffer Encoding</span></a> for details on how to decode the return value.</p>
+<p>If an error occurs processing a request message, the <code class="docutils literal notranslate"><span class="pre">error</span></code> field in the response message will
+contain a description of the error. If an individual procedure call encounters an error, the
+<code class="docutils literal notranslate"><span class="pre">error</span></code> field in the corresponding procedure result message will contain a description of the
+error.</p>
+<p>The fields of an error message are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">service</span></code> - If the error was caused by an exception, this is the name of the service in which the
+exception type is defined.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - If the error was caused by an exception, this is the name of the exception type.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">description</span></code> - A human readable description of the error</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stack_trace</span></code> - If the error was caused by an exception, this is a server-side stack trace for
+the exception.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="example-rpc-invocation">
+<h3>Example RPC invocation<a class="headerlink" href="#example-rpc-invocation" title="Link to this heading">#</a></h3>
+<p>The following Python code invokes the <code class="docutils literal notranslate"><span class="pre">GetStatus</span></code> procedure from the <a class="reference internal" href="#communication-protocol-krpc-service"><span class="std std-ref">KRPC service</span></a> using an already established connection to the server (the
+<code class="docutils literal notranslate"><span class="pre">rpc_conn</span></code> variable).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">krpc.schema.KRPC</span></code> package contains the various Protocol Buffer message formats compiled to
+python code using the Protocol Buffer compiler. The <code class="docutils literal notranslate"><span class="pre">send_message</span></code> and <code class="docutils literal notranslate"><span class="pre">recv_message</span></code> are helper
+functions used to send/receive messages from the server.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">call</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ProcedureCall</span><span class="p">()</span>
+<span class="n">call</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="s1">&#39;KRPC&#39;</span>
+<span class="n">call</span><span class="o">.</span><span class="n">procedure</span> <span class="o">=</span> <span class="s1">&#39;GetStatus&#39;</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Request</span><span class="p">()</span>
+<span class="n">request</span><span class="o">.</span><span class="n">calls</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">call</span><span class="p">])</span>
+<span class="n">send_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+
+<span class="c1"># Receive the response</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">recv_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Response</span><span class="p">)</span>
+
+<span class="c1"># Check for an error in the response</span>
+<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;ERROR: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">error</span><span class="p">))</span>
+
+<span class="c1"># Check for an error in the results</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;ERROR: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">error</span><span class="p">))</span>
+
+<span class="c1"># Decode the return value as a Status message</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Status</span><span class="p">()</span>
+<span class="n">status</span><span class="o">.</span><span class="n">ParseFromString</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="c1"># Print out the Status message</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="protocol-buffer-encoding">
+<span id="communication-protocol-protobuf-encoding"></span><h3>Protocol Buffer Encoding<a class="headerlink" href="#protocol-buffer-encoding" title="Link to this heading">#</a></h3>
+<p>Values passed as arguments or received as return values are encoded using the
+Protocol Buffer version 3 serialization format:</p>
+<ul class="simple">
+<li><p>Documentation for this encoding can be found here:
+<a class="reference external" href="https://developers.google.com/protocol-buffers/docs/encoding">https://developers.google.com/protocol-buffers/docs/encoding</a></p></li>
+<li><p>Protocol Buffer libraries in many languages are available here:
+<a class="github reference external" href="https://github.com/google/protobuf/releases">google/protobuf</a></p></li>
+</ul>
+</section>
+</section>
+<section id="streams">
+<span id="communication-protocol-streams"></span><h2>Streams<a class="headerlink" href="#streams" title="Link to this heading">#</a></h2>
+<p>Streams allow the client to repeatedly execute an RPC on the server and receive its results, without
+needing to repeatedly call the RPC directly, avoiding the communication overhead that this would
+involve.</p>
+<p>A client can create a stream on the server by calling <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a>. This
+procedure takes an optional boolean argument that controls whether the stream starts sending data to
+the client or not. If not, <a class="reference internal" href="#communication-protocol-start-stream"><span class="std std-ref">StartStream</span></a> can be called later on to
+start the stream. Once the client is finished with the stream, it can remove it from the server by
+calling <a class="reference internal" href="#communication-protocol-remove-stream"><span class="std std-ref">RemoveStream</span></a>. Streams are automatically removed when the
+client that created it disconnects from the server. Streams are local to each client and there is no
+way to share a stream between clients.</p>
+<p>The RPC for each stream is invoked every <a class="reference external" href="https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html">fixed update</a> and the return values
+for all of these RPCs are collected together into a stream update message. This is then sent to the
+client over its stream server connection. If the value returned by a streams RPC does not change
+since the last update that was sent, its value is omitted from the update message in order to
+minimize network traffic. A client can also control the rate of the stream, by specifying a target
+number of Hertz. The server computes a time delay from the target rate, and only updates the stream
+if at least that time has passed since the last time the stream was updated.</p>
+<section id="anatomy-of-a-stream-update">
+<h3>Anatomy of a Stream Update<a class="headerlink" href="#anatomy-of-a-stream-update" title="Link to this heading">#</a></h3>
+<p>Stream updates are sent to the client using a <code class="docutils literal notranslate"><span class="pre">StreamUpdate</span></code> Protocol Buffer message with the
+following format:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">StreamUpdate</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">StreamResult</span><span class="w"> </span><span class="na">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This contains a list of <code class="docutils literal notranslate"><span class="pre">StreamResult</span></code> messages, one for each stream that exists on the server for
+that client, and whose return value changed since the last update was sent. It has the following
+format:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">StreamResult</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">uint64</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="n">ProcedureResult</span><span class="w"> </span><span class="na">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The fields are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - The identifier of the stream. This is the value returned by
+<a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a> when the stream is created.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">result</span></code> - A <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> message containing the result of the streams RPC. This is
+identical to the <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> message returned when calling the RPC directly. See
+<a class="reference internal" href="#communication-protocol-anatomy-of-a-response"><span class="std std-ref">Anatomy of a Response</span></a> for details on the format and contents of this
+message.</p></li>
+</ul>
+</section>
+</section>
+<section id="events">
+<h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
+<p>Events are a wrapper over a stream that returns a boolean value. The event is triggered when the
+stream returns to true. Remote procedures that return an event return an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message that
+contains a <code class="docutils literal notranslate"><span class="pre">Stream</span></code> message describing the underlying stream for the event.</p>
+<p>The format for an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message is simply the following:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Event</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Stream</span><span class="w"> </span><span class="na">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="krpc-service">
+<span id="communication-protocol-krpc-service"></span><h2>KRPC Service<a class="headerlink" href="#krpc-service" title="Link to this heading">#</a></h2>
+<p>The server provides a service called <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> containing procedures that are
+used to retrieve information about the server and to manage streams.</p>
+<section id="getstatus">
+<h3>GetStatus<a class="headerlink" href="#getstatus" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">GetStatus</span></code> procedure returns status information about the server. It
+returns a Protocol Buffer message with the format:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Status</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint64</span><span class="w"> </span><span class="na">bytes_read</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint64</span><span class="w"> </span><span class="na">bytes_written</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">bytes_read_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">bytes_written_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint64</span><span class="w"> </span><span class="na">rpcs_executed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">rpc_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">one_rpc_per_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">max_time_per_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">adaptive_rate_control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">blocking_recv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">recv_timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">time_per_rpc_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">13</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">poll_time_per_rpc_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">14</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">exec_time_per_rpc_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">stream_rpcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint64</span><span class="w"> </span><span class="na">stream_rpcs_executed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">17</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">stream_rpc_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">18</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">time_per_stream_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">19</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">version</span></code> field contains the version string of the server. The remaining
+fields contain performance information about the server.</p>
+</section>
+<section id="getservices">
+<span id="communication-protocol-get-services"></span><h3>GetServices<a class="headerlink" href="#getservices" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">GetServices</span></code> procedure returns a Protocol Buffer message containing information about all of
+the services and procedures provided by the server. The format of the message is:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Services</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Service</span><span class="w"> </span><span class="na">services</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This contains a single field, which is a list of <code class="docutils literal notranslate"><span class="pre">Service</span></code> messages with information about each
+service provided by the server. The content of these <code class="docutils literal notranslate"><span class="pre">Service</span></code> messages are <a class="reference internal" href="#communication-protocol-service-description-message"><span class="std std-ref">documented below</span></a>.</p>
+</section>
+<section id="addstream">
+<span id="communication-protocol-add-stream"></span><h3>AddStream<a class="headerlink" href="#addstream" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> procedure adds a new stream to the server. Its first argument is the RPC to
+invoke, encoded as a <code class="docutils literal notranslate"><span class="pre">ProcedureCall</span></code> message. The second argument is a boolean value indicating
+whether the stream should start sending data to the client immediately. The procedure returns a
+<code class="docutils literal notranslate"><span class="pre">Stream</span></code> message describing the stream that was added. See
+<a class="reference internal" href="#communication-protocol-anatomy-of-a-request"><span class="std std-ref">Anatomy of a Request</span></a> for the format and contents of this message. See
+<a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a> for more information on working with streams.</p>
+</section>
+<section id="startstream">
+<span id="communication-protocol-start-stream"></span><h3>StartStream<a class="headerlink" href="#startstream" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">StartStream</span></code> procedure starts a stream sending data to a client, if it has not yet been
+started. It takes a single argument – the identifier of the stream to start. This is the identifier
+returned when the stream was added by calling <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a>. See
+<a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a> for more information on working with streams.</p>
+</section>
+<section id="removestream">
+<span id="communication-protocol-remove-stream"></span><h3>RemoveStream<a class="headerlink" href="#removestream" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">RemoveStream</span></code> procedure removes a stream from the server. It takes a single argument – the
+identifier of the stream to be removed. This is the identifier returned when the stream was added by
+calling <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a>. See <a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a> for more
+information on working with streams.</p>
+</section>
+</section>
+<section id="service-description-message">
+<span id="communication-protocol-service-description-message"></span><h2>Service Description Message<a class="headerlink" href="#service-description-message" title="Link to this heading">#</a></h2>
+<p>The <a class="reference internal" href="#communication-protocol-get-services"><span class="std std-ref">GetServices procedure</span></a> returns information about all
+of the services provided by the server. Details about a service are given by a <code class="docutils literal notranslate"><span class="pre">Service</span></code> message,
+with the format:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Service</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Procedure</span><span class="w"> </span><span class="na">procedures</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Class</span><span class="w"> </span><span class="na">classes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Enumeration</span><span class="w"> </span><span class="na">enumerations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="na">exceptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The fields are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">procedures</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">Procedure</span></code> messages, one for each procedure defined by the service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">classes</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">Class</span></code> messages, one for each <a class="reference internal" href="../extending.html#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> defined by the
+service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enumerations</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">Enumeration</span></code> messages, one for each <a class="reference internal" href="../extending.html#attribute-KRPCEnum" title="KRPCEnum attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCEnum</span></code></a>
+defined by the service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exceptions</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">Exception</span></code> messages, one for each <a class="reference internal" href="../extending.html#attribute-KRPCException" title="KRPCException attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCException</span></code></a>
+defined by the service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">documentation</span></code> - Documentation for the service, as <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx">C# XML documentation</a>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See the <a class="reference internal" href="../extending.html#extending"><span class="std std-ref">Extending kRPC</span></a> documentation for more details about <a class="reference internal" href="../extending.html#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>,
+<a class="reference internal" href="../extending.html#attribute-KRPCEnum" title="KRPCEnum attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCEnum</span></code></a> and <a class="reference internal" href="../extending.html#attribute-KRPCException" title="KRPCException attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCException</span></code></a>.</p>
+</div>
+<section id="procedures">
+<h3>Procedures<a class="headerlink" href="#procedures" title="Link to this heading">#</a></h3>
+<p>Details about a procedure are given by a <code class="docutils literal notranslate"><span class="pre">Procedure</span></code> message, with the format:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Procedure</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Parameter</span><span class="w"> </span><span class="na">parameters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Type</span><span class="w"> </span><span class="na">return_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">return_is_nullable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">GameScene</span><span class="w"> </span><span class="na">game_scenes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">Parameter</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Type</span><span class="w"> </span><span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bytes</span><span class="w"> </span><span class="na">default_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">nullable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The fields are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the procedure. See <a class="reference internal" href="#communication-protocol-procedure-names"><span class="std std-ref">Procedure Names</span></a> for more
+information.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parameters</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> messages containing details of the
+procedure’s parameters, with the following fields:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the parameter, to allow parameter passing by name.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code> - The <a class="reference internal" href="#communication-protocol-type"><span class="std std-ref">type</span></a> of the parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">default_value</span></code> - The value of the default value of the parameter, if any, <a class="reference internal" href="#communication-protocol-protobuf-encoding"><span class="std std-ref">encoded
+using Protocol Buffer format</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullable</span></code> - If the parameter has a class type, indicates whether null can be passed.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">return_type</span></code> - The <a class="reference internal" href="#communication-protocol-type"><span class="std std-ref">return type</span></a> of the procedure. If the
+procedure does not return anything its type is set to <code class="docutils literal notranslate"><span class="pre">NONE</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">return_is_nullable</span></code> - If the return type is a class type, indicates whether null could returned.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">game_scenes</span></code> - The <a class="reference internal" href="#communication-protocol-game-scene"><span class="std std-ref">game scenes</span></a> that the procedure is
+available in. If this repeated field is empty, the procedure is available in all game scenes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">documentation</span></code> - Documentation for the procedure, as <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx">C# XML documentation</a>.</p></li>
+</ul>
+</section>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h3>
+<p>Details about each <a class="reference internal" href="../extending.html#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> are specified in a <code class="docutils literal notranslate"><span class="pre">Class</span></code> message, with the format:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Class</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The fields are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the class.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">documentation</span></code> - Documentation for the class, as <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx">C# XML documentation</a>.</p></li>
+</ul>
+</section>
+<section id="enumerations">
+<h3>Enumerations<a class="headerlink" href="#enumerations" title="Link to this heading">#</a></h3>
+<p>Details about each <a class="reference internal" href="../extending.html#attribute-KRPCEnum" title="KRPCEnum attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCEnum</span></code></a> are specified in an <code class="docutils literal notranslate"><span class="pre">Enumeration</span></code> message, with the
+format:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Enumeration</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">EnumerationValue</span><span class="w"> </span><span class="na">values</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">EnumerationValue</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int32</span><span class="w"> </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The fields are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the enumeration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">values</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">EnumerationValue</span></code> messages, indicating the values that the enumeration
+can be assigned. The fields are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name associated with the value for the enumeration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code> - The possible value for the enumeration as a 32-bit integer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">documentation</span></code> - Documentation for the enumeration value, as <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx">C# XML documentation</a>.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">documentation</span></code> - Documentation for the enumeration, as <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx">C# XML documentation</a>.</p></li>
+</ul>
+</section>
+<section id="exceptions">
+<h3>Exceptions<a class="headerlink" href="#exceptions" title="Link to this heading">#</a></h3>
+<p>Details about each <a class="reference internal" href="../extending.html#attribute-KRPCException" title="KRPCException attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCException</span></code></a> are specified in an <code class="docutils literal notranslate"><span class="pre">Exception</span></code> message, with the
+format:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Exception</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The fields are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the exception type.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">documentation</span></code> - Documentation for the exception, as <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx">C# XML documentation</a>.</p></li>
+</ul>
+</section>
+</section>
+<section id="procedure-names">
+<span id="communication-protocol-procedure-names"></span><h2>Procedure Names<a class="headerlink" href="#procedure-names" title="Link to this heading">#</a></h2>
+<p>Procedures names are CamelCase. Whether a procedure is a service procedure, class method, class
+property, and what class (if any) it belongs to is determined by its name:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ProcedureName</span></code> - a standard procedure that is just part of a service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_PropertyName</span></code> - a procedure that returns the value of a property in a service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">set_PropertyName</span></code> - a procedure that sets the value of a property in a service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ClassName_MethodName</span></code> - a class method.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ClassName_static_StaticMethodName</span></code> - a static class method.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ClassName_get_PropertyName</span></code> - a class property getter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ClassName_set_PropertyName</span></code> - a class property setter.</p></li>
+</ul>
+</div></blockquote>
+<p>Only letters and numbers are permitted in class, method and property names. Underscores can
+therefore be used to split the name into its constituent parts.</p>
+</section>
+<section id="type">
+<span id="communication-protocol-type"></span><h2>Type<a class="headerlink" href="#type" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">GetServices</span></code> procedure returns type information about parameters, return values and others as
+<code class="docutils literal notranslate"><span class="pre">Type</span></code> messages. The format of these messages is as follows:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Type</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">TypeCode</span><span class="w"> </span><span class="na">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="kd">service</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="na">types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+
+<span class="w">  </span><span class="kd">enum</span><span class="w"> </span><span class="n">TypeCode</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">NONE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Values</span>
+<span class="w">    </span><span class="na">DOUBLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="na">FLOAT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">    </span><span class="na">SINT32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">    </span><span class="na">SINT64</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">    </span><span class="na">UINT32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">    </span><span class="na">UINT64</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">    </span><span class="na">BOOL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
+<span class="w">    </span><span class="na">STRING</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span>
+<span class="w">    </span><span class="na">BYTES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Objects</span>
+<span class="w">    </span><span class="na">CLASS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+<span class="w">    </span><span class="na">ENUMERATION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">101</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Messages</span>
+<span class="w">    </span><span class="na">PROCEDURE_CALL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span>
+<span class="w">    </span><span class="na">STREAM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">201</span><span class="p">;</span>
+<span class="w">    </span><span class="na">STATUS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">202</span><span class="p">;</span>
+<span class="w">    </span><span class="na">SERVICES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">203</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Collections</span>
+<span class="w">    </span><span class="na">TUPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">300</span><span class="p">;</span>
+<span class="w">    </span><span class="na">LIST</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">301</span><span class="p">;</span>
+<span class="w">    </span><span class="na">SET</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">302</span><span class="p">;</span>
+<span class="w">    </span><span class="na">DICTIONARY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">303</span><span class="p">;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">code</span></code> field specifies the type. <code class="docutils literal notranslate"><span class="pre">NONE</span></code> is used as the return type for procedures that do
+not return a value.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">CLASS</span></code> and <code class="docutils literal notranslate"><span class="pre">ENUMERATION</span></code> types the <code class="docutils literal notranslate"><span class="pre">service</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> fields specify the service that
+defines the class/enumeration and the name of the class/enumeration. For all other types these
+fields are empty.</p>
+<p>For collection types the <code class="docutils literal notranslate"><span class="pre">types</span></code> repeated field will contain the sub-types:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TUPLE</span></code> types contain 1 or more types in the <code class="docutils literal notranslate"><span class="pre">types</span></code> field.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LIST</span></code> and <code class="docutils literal notranslate"><span class="pre">SET</span></code> types contain a single type in the <code class="docutils literal notranslate"><span class="pre">types</span></code> field.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DICTIONARY</span></code> types contain a 2 types in the <code class="docutils literal notranslate"><span class="pre">types</span></code> field - the key and value types, in that
+order.</p></li>
+</ul>
+</div></blockquote>
+<p>For all other types the <code class="docutils literal notranslate"><span class="pre">types</span></code> field is empty.</p>
+</section>
+<section id="gamescene">
+<span id="communication-protocol-game-scene"></span><h2>GameScene<a class="headerlink" href="#gamescene" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">GetServices</span></code> procedure returns information about which game scenes a procedure can be called
+from. These are returned as a repeated field containing <code class="docutils literal notranslate"><span class="pre">GameScene</span></code> enumeration values. If the
+procedure is available in all game scenes, this field is empty. The enumeration is defined as
+follows:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">enum</span><span class="w"> </span><span class="n">GameScene</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">SPACE_CENTER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="na">FLIGHT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="na">TRACKING_STATION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="na">EDITOR_VAB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">  </span><span class="na">EDITOR_SPH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">  </span><span class="na">MISSION_BUILDER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</section>
+<section id="proxy-objects">
+<span id="communication-protocol-proxy-objects"></span><h2>Proxy Objects<a class="headerlink" href="#proxy-objects" title="Link to this heading">#</a></h2>
+<p>kRPC allows procedures to create objects on the server, and pass a unique identifier for them to the
+client. This allows the client to create a <em>proxy</em> object for the actual object, whose methods and
+properties make remote procedure calls to the server. Object identifiers have type <code class="docutils literal notranslate"><span class="pre">uint64</span></code>.</p>
+<p>When a procedure returns a proxy object or takes one as a parameter, the type code will be set to
+<code class="docutils literal notranslate"><span class="pre">CLASS</span></code>.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="serialio.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Protocol Buffers over Serial I/O</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../internals.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Internals of kRPC</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#invoking-remote-procedures">Invoking Remote Procedures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#anatomy-of-a-request">Anatomy of a Request</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#anatomy-of-a-response">Anatomy of a Response</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-rpc-invocation">Example RPC invocation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#protocol-buffer-encoding">Protocol Buffer Encoding</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams">Streams</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#anatomy-of-a-stream-update">Anatomy of a Stream Update</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#krpc-service">KRPC Service</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getstatus">GetStatus</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getservices">GetServices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#addstream">AddStream</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#startstream">StartStream</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#removestream">RemoveStream</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#service-description-message">Service Description Message</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#procedures">Procedures</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enumerations">Enumerations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#procedure-names">Procedure Names</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type">Type</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gamescene">GameScene</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proxy-objects">Proxy Objects</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/communication-protocols/messages.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2023, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,179 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+Camera
+======
+
+
+.. class:: Camera
+
+   Controls the game's camera.
+   Obtained by calling :prop:`SpaceCenter.Camera <SpaceCenter.SpaceCenter.Camera>`.
+
+   .. property:: CameraMode Mode { get; set; }
+
+      The current mode of the camera.
+
+      :Game Scenes: Flight
+
+   .. property:: float Pitch { get; set; }
+
+      The pitch of the camera, in degrees.
+      A value between :prop:`Camera.MinPitch` and :prop:`Camera.MaxPitch`
+
+      :Game Scenes: Flight
+
+   .. property:: float Heading { get; set; }
+
+      The heading of the camera, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: float Distance { get; set; }
+
+      The distance from the camera to the subject, in meters.
+      A value between :prop:`Camera.MinDistance` and :prop:`Camera.MaxDistance`.
+
+      :Game Scenes: Flight
+
+   .. property:: float FoV { get; set; }
+
+      The Field of View of the camera, in degrees.
+      A value between :prop:`Camera.MinFoV` and :prop:`Camera.MaxFoV`.
+
+      :Game Scenes: Flight
+
+   .. property:: float MinPitch { get; }
+
+      The minimum pitch of the camera.
+
+      :Game Scenes: Flight
+
+   .. property:: float MaxPitch { get; }
+
+      The maximum pitch of the camera.
+
+      :Game Scenes: Flight
+
+   .. property:: float MinDistance { get; }
+
+      Minimum distance from the camera to the subject, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: float MaxDistance { get; }
+
+      Maximum distance from the camera to the subject, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: float MinFoV { get; }
+
+      The minimum field of view the camera in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: float MaxFoV { get; }
+
+      The maximum field of view the camera in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: float DefaultDistance { get; }
+
+      Default distance from the camera to the subject, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: float DefaultFoV { get; }
+
+      The default field of view the camera in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: CelestialBody FocussedBody { get; set; }
+
+      In map mode, the celestial body that the camera is focussed on.
+      Returns ``null`` if the camera is not focussed on a celestial body.
+      Returns an error is the camera is not in map mode.
+
+      :Game Scenes: Flight
+
+   .. property:: Vessel FocussedVessel { get; set; }
+
+      In map mode, the vessel that the camera is focussed on.
+      Returns ``null`` if the camera is not focussed on a vessel.
+      Returns an error is the camera is not in map mode.
+
+      :Game Scenes: Flight
+
+   .. property:: Node FocussedNode { get; set; }
+
+      In map mode, the maneuver node that the camera is focussed on.
+      Returns ``null`` if the camera is not focussed on a maneuver node.
+      Returns an error is the camera is not in map mode.
+
+      :Game Scenes: Flight
+
+   .. property:: CrewMember FocussedCrewMember { get; set; }
+
+      When the internal camera is active the kerbal that is in focus
+      Returns an error if the camera is not in IVA mode.
+
+      :Game Scenes: Flight
+
+   .. method:: void NextCamera()
+
+      Switch to the next available camera
+
+
+      :Game Scenes: Flight
+
+   .. method:: void PreviousCamera()
+
+      Switch to the previous available camera
+
+
+      :Game Scenes: Flight
+
+
+
+.. enum:: CameraMode
+
+   See :prop:`Camera.Mode`.
+
+
+   .. value:: Automatic
+
+      The camera is showing the active vessel, in "auto" mode.
+
+
+   .. value:: Free
+
+      The camera is showing the active vessel, in "free" mode.
+
+
+   .. value:: Chase
+
+      The camera is showing the active vessel, in "chase" mode.
+
+
+   .. value:: Locked
+
+      The camera is showing the active vessel, in "locked" mode.
+
+
+   .. value:: Orbital
+
+      The camera is showing the active vessel, in "orbital" mode.
+
+
+   .. value:: IVA
+
+      The Intra-Vehicular Activity view is being shown.
+
+
+   .. value:: Map
+
+      The map view is being shown.

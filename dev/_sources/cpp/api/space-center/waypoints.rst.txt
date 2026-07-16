@@ -1,0 +1,182 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::SpaceCenter
+
+Waypoints
+=========
+
+
+.. class:: WaypointManager
+
+   Waypoints are the location markers you can see on the map view showing you where contracts are targeted for.
+   With this structure, you can obtain coordinate data for the locations of these waypoints.
+   Obtained by calling :func:`waypoint_manager`.
+
+   .. function:: std::vector<Waypoint> waypoints()
+
+      A list of all existing waypoints.
+
+   
+
+   .. function:: Waypoint add_waypoint(double latitude, double longitude, CelestialBody body, std::string name)
+
+      Creates a waypoint at the given position at ground level, and returns a
+      :class:`Waypoint` object that can be used to modify it.
+
+      :Parameters:
+
+       * **latitude** -- Latitude of the waypoint.
+       * **longitude** -- Longitude of the waypoint.
+       * **body** -- Celestial body the waypoint is attached to.
+       * **name** -- Name of the waypoint.
+
+   
+
+   .. function:: Waypoint add_waypoint_at_altitude(double latitude, double longitude, double altitude, CelestialBody body, std::string name)
+
+      Creates a waypoint at the given position and altitude, and returns a
+      :class:`Waypoint` object that can be used to modify it.
+
+      :Parameters:
+
+       * **latitude** -- Latitude of the waypoint.
+       * **longitude** -- Longitude of the waypoint.
+       * **altitude** -- Altitude (above sea level) of the waypoint.
+       * **body** -- Celestial body the waypoint is attached to.
+       * **name** -- Name of the waypoint.
+
+   
+
+   .. function:: std::map<std::string, int32_t> colors()
+
+      An example map of known color - seed pairs.
+      Any other integers may be used as seed.
+
+   
+
+   .. function:: std::vector<std::string> icons()
+
+      Returns all available icons (from "GameData/Squad/Contracts/Icons/").
+
+   
+
+
+
+.. class:: Waypoint
+
+   Represents a waypoint. Can be created using :func:`WaypointManager::add_waypoint`.
+
+   .. function:: CelestialBody body()
+   .. function:: void set_body(CelestialBody value)
+
+      The celestial body the waypoint is attached to.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string name()
+   .. function:: void set_name(std::string value)
+
+      The name of the waypoint as it appears on the map and the contract.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t color()
+   .. function:: void set_color(int32_t value)
+
+      The seed of the icon color. See :func:`WaypointManager::colors` for example colors.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string icon()
+   .. function:: void set_icon(std::string value)
+
+      The icon of the waypoint.
+
+      :Game Scenes: Flight
+
+   .. function:: double latitude()
+   .. function:: void set_latitude(double value)
+
+      The latitude of the waypoint.
+
+      :Game Scenes: Flight
+
+   .. function:: double longitude()
+   .. function:: void set_longitude(double value)
+
+      The longitude of the waypoint.
+
+      :Game Scenes: Flight
+
+   .. function:: double mean_altitude()
+   .. function:: void set_mean_altitude(double value)
+
+      The altitude of the waypoint above sea level, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: double surface_altitude()
+   .. function:: void set_surface_altitude(double value)
+
+      The altitude of the waypoint above the surface of the body or sea level,
+      whichever is closer, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: double bedrock_altitude()
+   .. function:: void set_bedrock_altitude(double value)
+
+      The altitude of the waypoint above the surface of the body, in meters.
+      When over water, this is the altitude above the sea floor.
+
+      :Game Scenes: Flight
+
+   .. function:: bool near_surface()
+
+      ``true`` if the waypoint is near to the surface of a body.
+
+      :Game Scenes: Flight
+
+   .. function:: bool grounded()
+
+      ``true`` if the waypoint is attached to the ground.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t index()
+
+      The integer index of this waypoint within its cluster of sibling waypoints.
+      In other words, when you have a cluster of waypoints called "Somewhere Alpha",
+      "Somewhere Beta" and "Somewhere Gamma", the alpha site has index 0, the beta
+      site has index 1 and the gamma site has index 2.
+      When :func:`Waypoint::clustered` is ``false``, this is zero.
+
+      :Game Scenes: Flight
+
+   .. function:: bool clustered()
+
+      ``true`` if this waypoint is part of a set of clustered waypoints with greek letter
+      names appended (Alpha, Beta, Gamma, etc).
+      If ``true``, there is a one-to-one correspondence with the greek letter name and
+      the :func:`Waypoint::index`.
+
+      :Game Scenes: Flight
+
+   .. function:: bool has_contract()
+
+      Whether the waypoint belongs to a contract.
+
+      :Game Scenes: Flight
+
+   .. function:: Contract contract()
+
+      The associated contract.
+
+      :Game Scenes: Flight
+
+   .. function:: void remove()
+
+      Removes the waypoint.
+
+
+      :Game Scenes: Flight

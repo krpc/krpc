@@ -1,0 +1,94 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: InfernalRobotics
+
+ServoGroup
+==========
+
+
+.. class:: ServoGroup
+
+   A group of servos, obtained by calling :meth:`InfernalRobotics.servo_groups`
+   or :meth:`InfernalRobotics.servo_group_with_name`. Represents the "Servo Groups"
+   in the InfernalRobotics UI.
+
+   .. attribute:: name: string
+
+      The name of the group.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: forward_key: string
+
+      The key assigned to be the "forward" key for the group.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: reverse_key: string
+
+      The key assigned to be the "reverse" key for the group.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: speed: number
+
+      The speed multiplier for the group.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: expanded: boolean
+
+      Whether the group is expanded in the InfernalRobotics UI.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: servos: List
+
+      The servos that are in the group.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. method:: servo_with_name(name)
+
+      Returns the servo with the given *name* from this group,
+      or ``nil`` if none exists.
+
+      :param string name: Name of servo to find.
+      :rtype: :class:`InfernalRobotics.Servo`
+
+   .. attribute:: parts: List
+
+      The parts containing the servos in the group.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. method:: move_right()
+
+      Moves all of the servos in the group to the right.
+
+   .. method:: move_left()
+
+      Moves all of the servos in the group to the left.
+
+   .. method:: move_center()
+
+      Moves all of the servos in the group to the center.
+
+   .. method:: move_next_preset()
+
+      Moves all of the servos in the group to the next preset.
+
+   .. method:: move_prev_preset()
+
+      Moves all of the servos in the group to the previous preset.
+
+   .. method:: stop()
+
+      Stops the servos in the group.

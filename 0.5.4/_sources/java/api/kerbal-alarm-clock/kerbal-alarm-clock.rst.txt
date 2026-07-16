@@ -1,0 +1,50 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KerbalAlarmClock
+
+KerbalAlarmClock
+================
+
+
+.. type:: public class KerbalAlarmClock
+
+   This service provides functionality to interact with
+   `Kerbal Alarm Clock <https://forum.kerbalspaceprogram.com/index.php?/topic/22809-13x-kerbal-alarm-clock-v3850-may-30/>`_.
+
+   .. method:: boolean getAvailable()
+
+
+      Whether Kerbal Alarm Clock is available.
+
+   
+
+   .. method:: java.util.List<Alarm> getAlarms()
+
+
+      A list of all the alarms.
+
+   
+
+   .. method:: Alarm alarmWithName(String name)
+
+      Get the alarm with the given *name*, or ``null``
+      if no alarms have that name. If more than one alarm has the name,
+      only returns one of them.
+
+      :param String name: Name of the alarm to search for.
+   
+
+   .. method:: java.util.List<Alarm> alarmsWithType(AlarmType type)
+
+      Get a list of alarms of the specified *type*.
+
+      :param AlarmType type: Type of alarm to return.
+   
+
+   .. method:: Alarm createAlarm(AlarmType type, String name, double ut)
+
+      Create a new alarm and return it.
+
+      :param AlarmType type: Type of the new alarm.
+      :param String name: Name of the new alarm.
+      :param double ut: Time at which the new alarm should trigger.

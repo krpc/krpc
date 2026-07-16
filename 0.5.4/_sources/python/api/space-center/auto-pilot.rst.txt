@@ -1,0 +1,273 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: SpaceCenter
+
+AutoPilot
+=========
+
+
+.. class:: AutoPilot
+
+   Provides basic auto-piloting utilities for a vessel.
+   Created by calling :attr:`Vessel.auto_pilot`.
+
+   .. note::
+
+      If a client engages the auto-pilot and then closes its connection to the server,
+      the auto-pilot will be disengaged and its target reference frame, direction and roll
+      reset to default.
+
+   .. method:: engage()
+
+      Engage the auto-pilot.
+
+      :Game Scenes: Flight
+
+   .. method:: disengage()
+
+      Disengage the auto-pilot.
+
+      :Game Scenes: Flight
+
+   .. method:: wait()
+
+      Blocks until the vessel is pointing in the target direction and has
+      the target roll (if set). Throws an exception if the auto-pilot has not been engaged.
+
+      :Game Scenes: Flight
+
+   .. attribute:: error
+
+      The error, in degrees, between the direction the ship has been asked
+      to point in and the direction it is pointing in. Throws an exception if the auto-pilot
+      has not been engaged and SAS is not enabled or is in stability assist mode.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: pitch_error
+
+      The error, in degrees, between the vessels current and target pitch.
+      Throws an exception if the auto-pilot has not been engaged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: heading_error
+
+      The error, in degrees, between the vessels current and target heading.
+      Throws an exception if the auto-pilot has not been engaged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: roll_error
+
+      The error, in degrees, between the vessels current and target roll.
+      Throws an exception if the auto-pilot has not been engaged or no target roll is set.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: reference_frame
+
+      The reference frame for the target direction (:attr:`AutoPilot.target_direction`).
+
+      :Attribute: Can be read or written
+      :rtype: :class:`ReferenceFrame`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         An error will be thrown if this property is set to a reference frame that rotates with
+         the vessel being controlled, as it is impossible to rotate the vessel in such a
+         reference frame.
+
+   .. attribute:: target_pitch
+
+      The target pitch, in degrees, between -90° and +90°.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: target_heading
+
+      The target heading, in degrees, between 0° and 360°.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: target_roll
+
+      The target roll, in degrees. ``NaN`` if no target roll is set.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: target_direction
+
+      Direction vector corresponding to the target pitch and heading.
+      This is in the reference frame specified by :attr:`AutoPilot.reference_frame`.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. method:: target_pitch_and_heading(pitch, heading)
+
+      Set target pitch and heading angles.
+
+      :param float pitch: Target pitch angle, in degrees between -90° and +90°.
+      :param float heading: Target heading angle, in degrees between 0° and 360°.
+      :Game Scenes: Flight
+
+   .. attribute:: sas
+
+      The state of SAS.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :attr:`Control.sas`
+
+   .. attribute:: sas_mode
+
+      The current :attr:`AutoPilot.sas_mode`.
+      These modes are equivalent to the mode buttons to the left of the navball that appear
+      when SAS is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SASMode`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :attr:`Control.sas_mode`
+
+   .. attribute:: roll_threshold
+
+      The threshold at which the autopilot will try to match the target roll angle, if any.
+      Defaults to 5 degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: stopping_time
+
+      The maximum amount of time that the vessel should need to come to a complete stop.
+      This determines the maximum angular velocity of the vessel.
+      A vector of three stopping times, in seconds, one for each of the pitch, roll
+      and yaw axes. Defaults to 0.5 seconds for each axis.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: deceleration_time
+
+      The time the vessel should take to come to a stop pointing in the target direction.
+      This determines the angular acceleration used to decelerate the vessel.
+      A vector of three times, in seconds, one for each of the pitch, roll and yaw axes.
+      Defaults to 5 seconds for each axis.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: attenuation_angle
+
+      The angle at which the autopilot considers the vessel to be pointing
+      close to the target.
+      This determines the midpoint of the target velocity attenuation function.
+      A vector of three angles, in degrees, one for each of the pitch, roll and yaw axes.
+      Defaults to 1° for each axis.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: auto_tune
+
+      Whether the rotation rate controllers PID parameters should be automatically tuned
+      using the vessels moment of inertia and available torque. Defaults to ``True``.
+      See :attr:`AutoPilot.time_to_peak` and :attr:`AutoPilot.overshoot`.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: time_to_peak
+
+      The target time to peak used to autotune the PID controllers.
+      A vector of three times, in seconds, for each of the pitch, roll and yaw axes.
+      Defaults to 3 seconds for each axis.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: overshoot
+
+      The target overshoot percentage used to autotune the PID controllers.
+      A vector of three values, between 0 and 1, for each of the pitch, roll and yaw axes.
+      Defaults to 0.01 for each axis.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: pitch_pid_gains
+
+      Gains for the pitch PID controller.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :attr:`AutoPilot.auto_tune` is true, these values are updated automatically,
+         which will overwrite any manual changes.
+
+   .. attribute:: roll_pid_gains
+
+      Gains for the roll PID controller.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :attr:`AutoPilot.auto_tune` is true, these values are updated automatically,
+         which will overwrite any manual changes.
+
+   .. attribute:: yaw_pid_gains
+
+      Gains for the yaw PID controller.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :attr:`AutoPilot.auto_tune` is true, these values are updated automatically,
+         which will overwrite any manual changes.

@@ -1,0 +1,58 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::UI
+
+InputField
+==========
+
+
+.. class:: InputField
+
+   An input field. See :func:`Panel::add_input_field`.
+
+   .. function:: RectTransform rect_transform()
+
+      The rect transform for the input field.
+
+   
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the UI object is visible.
+
+   
+
+   .. function:: std::string value()
+   .. function:: void set_value(std::string value)
+
+      The value of the input field.
+
+   
+
+   .. function:: Text text()
+
+      The text component of the input field.
+
+   
+
+      .. note::
+
+         Use :func:`InputField::value` to get and set the value in the field.
+         This object can be used to alter the style of the input field's text.
+
+   .. function:: bool changed()
+   .. function:: void set_changed(bool value)
+
+      Whether the input field has been changed.
+
+   
+
+      .. note::
+
+         This property is set to true when the user modifies the value of the input field.
+         A client script should reset the property to false in order to detect subsequent changes.
+
+   .. function:: void remove()
+
+      Remove the UI object.

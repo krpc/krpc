@@ -1,0 +1,86 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Rect Transform
+==============
+
+
+.. type:: krpc_UI_RectTransform_t
+
+   A Unity engine Rect Transform for a UI object.
+   See the `Unity manual <https://docs.unity3d.com/Manual/class-RectTransform.html>`_ for more details.
+
+   .. function:: krpc_error_t krpc_UI_RectTransform_Position(krpc_connection_t connection, krpc_tuple_double_double_t * result)
+   .. function:: void krpc_UI_RectTransform_set_Position(const krpc_tuple_double_double_t * value)
+
+      Position of the rectangles pivot point relative to the anchors.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_RectTransform_LocalPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_UI_RectTransform_set_LocalPosition(const krpc_tuple_double_double_double_t * value)
+
+      Position of the rectangles pivot point relative to the anchors.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_RectTransform_Size(krpc_connection_t connection, krpc_tuple_double_double_t * result)
+   .. function:: void krpc_UI_RectTransform_set_Size(const krpc_tuple_double_double_t * value)
+
+      Width and height of the rectangle.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_RectTransform_UpperRight(krpc_connection_t connection, krpc_tuple_double_double_t * result)
+   .. function:: void krpc_UI_RectTransform_set_UpperRight(const krpc_tuple_double_double_t * value)
+
+      Position of the rectangles upper right corner relative to the anchors.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_RectTransform_LowerLeft(krpc_connection_t connection, krpc_tuple_double_double_t * result)
+   .. function:: void krpc_UI_RectTransform_set_LowerLeft(const krpc_tuple_double_double_t * value)
+
+      Position of the rectangles lower left corner relative to the anchors.
+
+   
+
+   .. function:: void krpc_UI_RectTransform_set_Anchor(const krpc_tuple_double_double_t * value)
+
+      Set the minimum and maximum anchor points as a fraction of the size of the parent rectangle.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_RectTransform_AnchorMax(krpc_connection_t connection, krpc_tuple_double_double_t * result)
+   .. function:: void krpc_UI_RectTransform_set_AnchorMax(const krpc_tuple_double_double_t * value)
+
+      The anchor point for the lower left corner of the rectangle defined as a fraction of the size of the parent rectangle.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_RectTransform_AnchorMin(krpc_connection_t connection, krpc_tuple_double_double_t * result)
+   .. function:: void krpc_UI_RectTransform_set_AnchorMin(const krpc_tuple_double_double_t * value)
+
+      The anchor point for the upper right corner of the rectangle defined as a fraction of the size of the parent rectangle.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_RectTransform_Pivot(krpc_connection_t connection, krpc_tuple_double_double_t * result)
+   .. function:: void krpc_UI_RectTransform_set_Pivot(const krpc_tuple_double_double_t * value)
+
+      Location of the pivot point around which the rectangle rotates, defined as a fraction of the size of the rectangle itself.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_RectTransform_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result)
+   .. function:: void krpc_UI_RectTransform_set_Rotation(const krpc_tuple_double_double_double_double_t * value)
+
+      Rotation, as a quaternion, of the object around its pivot point.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_RectTransform_Scale(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_UI_RectTransform_set_Scale(const krpc_tuple_double_double_double_t * value)
+
+      Scale factor applied to the object in the x, y and z dimensions.

@@ -1,0 +1,431 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+CelestialBody
+=============
+
+
+.. class:: CelestialBody
+
+   Represents a celestial body (such as a planet or moon).
+   See :prop:`SpaceCenter.Bodies <SpaceCenter.SpaceCenter.Bodies>`.
+
+   .. property:: string Name { get; }
+
+      The name of the body.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<CelestialBody> Satellites { get; }
+
+      A list of celestial bodies that are in orbit around this celestial body.
+
+      :Game Scenes: All
+
+   .. property:: Orbit Orbit { get; }
+
+      The orbit of the body.
+
+      :Game Scenes: All
+
+   .. property:: double Mass { get; }
+
+      The mass of the body, in kilograms.
+
+      :Game Scenes: All
+
+   .. property:: double GravitationalParameter { get; }
+
+      The `standard gravitational parameter <https://en.wikipedia.org/wiki/Standard_gravitational_parameter>`_ of the body in :math:`m^3s^{-2}`.
+
+      :Game Scenes: All
+
+   .. property:: double SurfaceGravity { get; }
+
+      The acceleration due to gravity at sea level (mean altitude) on the body,
+      in :math:`m/s^2`.
+
+      :Game Scenes: All
+
+   .. property:: double RotationalPeriod { get; }
+
+      The sidereal rotational period of the body, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: double RotationalSpeed { get; }
+
+      The rotational speed of the body, in radians per second.
+
+      :Game Scenes: All
+
+   .. property:: double RotationAngle { get; }
+
+      The current rotation angle of the body, in radians.
+      A value between 0 and :math:`2\pi`
+
+      :Game Scenes: All
+
+   .. property:: double InitialRotation { get; }
+
+      The initial rotation angle of the body (at UT 0), in radians.
+      A value between 0 and :math:`2\pi`
+
+      :Game Scenes: All
+
+   .. property:: double EquatorialRadius { get; }
+
+      The equatorial radius of the body, in meters.
+
+      :Game Scenes: All
+
+   .. method:: double SurfaceHeight(double latitude, double longitude)
+
+      The height of the surface relative to mean sea level, in meters,
+      at the given position. When over water this is equal to 0.
+
+      :parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+
+      :Game Scenes: All
+
+   .. method:: double BedrockHeight(double latitude, double longitude)
+
+      The height of the surface relative to mean sea level, in meters,
+      at the given position. When over water, this is the height
+      of the sea-bed and is therefore  negative value.
+
+      :parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> MSLPosition(double latitude, double longitude, ReferenceFrame referenceFrame)
+
+      The position at mean sea level at the given latitude and longitude,
+      in the given reference frame.
+
+      :parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **referenceFrame** -- Reference frame for the returned position vector.
+
+      :returns: Position as a vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> SurfacePosition(double latitude, double longitude, ReferenceFrame referenceFrame)
+
+      The position of the surface at the given latitude and longitude, in the given
+      reference frame. When over water, this is the position of the surface of the water.
+
+      :parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **referenceFrame** -- Reference frame for the returned position vector.
+
+      :returns: Position as a vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> BedrockPosition(double latitude, double longitude, ReferenceFrame referenceFrame)
+
+      The position of the surface at the given latitude and longitude, in the given
+      reference frame. When over water, this is the position at the bottom of the sea-bed.
+
+      :parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **referenceFrame** -- Reference frame for the returned position vector.
+
+      :returns: Position as a vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> PositionAtAltitude(double latitude, double longitude, double altitude, ReferenceFrame referenceFrame)
+
+      The position at the given latitude, longitude and altitude, in the given reference frame.
+
+      :parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **altitude** -- Altitude in meters above sea level.
+       * **referenceFrame** -- Reference frame for the returned position vector.
+
+      :returns: Position as a vector.
+      :Game Scenes: All
+
+   .. method:: double AltitudeAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+
+      The altitude, in meters, of the given position in the given reference frame.
+
+      :parameters:
+
+       * **position** -- Position as a vector.
+       * **referenceFrame** -- Reference frame for the position vector.
+
+      :Game Scenes: All
+
+   .. method:: double LatitudeAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+
+      The latitude of the given position, in the given reference frame.
+
+      :parameters:
+
+       * **position** -- Position as a vector.
+       * **referenceFrame** -- Reference frame for the position vector.
+
+      :Game Scenes: All
+
+   .. method:: double LongitudeAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+
+      The longitude of the given position, in the given reference frame.
+
+      :parameters:
+
+       * **position** -- Position as a vector.
+       * **referenceFrame** -- Reference frame for the position vector.
+
+      :Game Scenes: All
+
+   .. property:: double SphereOfInfluence { get; }
+
+      The radius of the sphere of influence of the body, in meters.
+
+      :Game Scenes: All
+
+   .. property:: bool IsStar { get; }
+
+      Whether or not the body is a star.
+
+      :Game Scenes: All
+
+   .. property:: bool HasSolidSurface { get; }
+
+      Whether or not the body has a solid surface.
+
+      :Game Scenes: All
+
+   .. property:: bool HasAtmosphere { get; }
+
+      ``true`` if the body has an atmosphere.
+
+      :Game Scenes: All
+
+   .. property:: double AtmosphereDepth { get; }
+
+      The depth of the atmosphere, in meters.
+
+      :Game Scenes: All
+
+   .. method:: double AtmosphericDensityAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+
+      The atmospheric density at the given position, in :math:`kg/m^3`,
+      in the given reference frame.
+
+      :parameters:
+
+       * **position** -- The position vector at which to measure the density.
+       * **referenceFrame** -- Reference frame that the position vector is in.
+
+      :Game Scenes: All
+
+   .. property:: bool HasAtmosphericOxygen { get; }
+
+      ``true`` if there is oxygen in the atmosphere, required for air-breathing engines.
+
+      :Game Scenes: All
+
+   .. method:: double TemperatureAt(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+
+      The temperature on the body at the given position, in the given reference frame.
+
+      :parameters:
+
+       * **position** -- Position as a vector.
+       * **referenceFrame** -- The reference frame that the position is in.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This calculation is performed using the bodies current position, which means that
+         the value could be wrong if you want to know the temperature in the far future.
+
+   .. method:: double DensityAt(double altitude)
+
+      Gets the air density, in :math:`kg/m^3`, for the specified
+      altitude above sea level, in meters.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is an approximation, because actual calculations, taking sun exposure into account
+         to compute air temperature, require us to know the exact point on the body where the
+         density is to be computed (knowing the altitude is not enough).
+         However, the difference is small for high altitudes, so it makes very little difference
+         for trajectory prediction.
+
+   .. method:: double PressureAt(double altitude)
+
+      Gets the air pressure, in Pascals, for the specified
+      altitude above sea level, in meters.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.ISet<string> Biomes { get; }
+
+      The biomes present on this body.
+
+      :Game Scenes: All
+
+   .. method:: string BiomeAt(double latitude, double longitude)
+
+      The biome at the given latitude and longitude, in degrees.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. property:: float FlyingHighAltitudeThreshold { get; }
+
+      The altitude, in meters, above which a vessel is considered to be
+      flying "high" when doing science.
+
+      :Game Scenes: All
+
+   .. property:: float SpaceHighAltitudeThreshold { get; }
+
+      The altitude, in meters, above which a vessel is considered to be
+      in "high" space when doing science.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame ReferenceFrame { get; }
+
+      The reference frame that is fixed relative to the celestial body.
+
+      * The origin is at the center of the body.
+      * The axes rotate with the body.
+      * The x-axis points from the center of the body
+        towards the intersection of the prime meridian and equator (the
+        position at 0° longitude, 0° latitude).
+      * The y-axis points from the center of the body
+        towards the north pole.
+      * The z-axis points from the center of the body
+        towards the equator at 90°E longitude.
+
+      :Game Scenes: All
+
+
+      .. figure:: /images/reference-frames/celestial-body.png
+         :align: center
+
+         Celestial body reference frame origin and axes. The equator is shown in
+         blue, and the prime meridian in red.
+
+   .. property:: ReferenceFrame NonRotatingReferenceFrame { get; }
+
+      The reference frame that is fixed relative to this celestial body, and
+      orientated in a fixed direction (it does not rotate with the body).
+
+      * The origin is at the center of the body.
+      * The axes do not rotate.
+      * The x-axis points in an arbitrary direction through the
+        equator.
+      * The y-axis points from the center of the body towards
+        the north pole.
+      * The z-axis points in an arbitrary direction through the
+        equator.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame OrbitalReferenceFrame { get; }
+
+      The reference frame that is fixed relative to this celestial body, but
+      orientated with the body's orbital prograde/normal/radial directions.
+
+      * The origin is at the center of the body.
+      * The axes rotate with the orbital prograde/normal/radial
+        directions.
+      * The x-axis points in the orbital anti-radial direction.
+      * The y-axis points in the orbital prograde direction.
+      * The z-axis points in the orbital normal direction.
+
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+
+      The position of the center of the body, in the specified reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
+
+      The linear velocity of the body, in the specified reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned velocity vector is in.
+
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
+
+      The rotation of the body, in the specified reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned rotation is in.
+
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
+
+      The direction in which the north pole of the celestial body is pointing,
+      in the specified reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> AngularVelocity(ReferenceFrame referenceFrame)
+
+      The angular velocity of the body in the specified reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame the returned angular velocity is in.
+
+      :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the body, in radians per second. The direction of the vector indicates the axis of rotation, using the right-hand rule.
+      :Game Scenes: All

@@ -1,0 +1,718 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::SpaceCenter
+
+SpaceCenter
+===========
+
+
+.. namespace:: krpc::services
+.. class:: SpaceCenter : public krpc::Service
+
+   Provides functionality to interact with Kerbal Space Program. This includes controlling
+   the active vessel, managing its resources, planning maneuver nodes and auto-piloting.
+
+   .. function:: SpaceCenter(krpc::Client* client)
+
+      Construct an instance of this service.
+
+   .. function:: float science()
+
+      The current amount of science.
+
+   
+
+   .. function:: double funds()
+
+      The current amount of funds.
+
+   
+
+   .. function:: float reputation()
+
+      The current amount of reputation.
+
+   
+
+   .. function:: Vessel active_vessel()
+   .. function:: void set_active_vessel(Vessel value)
+
+      The currently active vessel.
+
+   
+
+   .. function:: std::vector<Vessel> vessels()
+
+      A list of all the vessels in the game.
+
+   
+
+   .. function:: std::vector<LaunchSite> launch_sites()
+
+      A list of available launch sites.
+
+   
+
+   .. function:: std::map<std::string, CelestialBody> bodies()
+
+      A dictionary of all celestial bodies (planets, moons, etc.) in the game,
+      keyed by the name of the body.
+
+   
+
+   .. function:: CelestialBody target_body()
+   .. function:: void set_target_body(CelestialBody value)
+
+      The currently targeted celestial body.
+
+      :Game Scenes: Flight
+
+   .. function:: Vessel target_vessel()
+   .. function:: void set_target_vessel(Vessel value)
+
+      The currently targeted vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: DockingPort target_docking_port()
+   .. function:: void set_target_docking_port(DockingPort value)
+
+      The currently targeted docking port.
+
+      :Game Scenes: Flight
+
+   .. function:: void clear_target()
+
+      Clears the current target.
+
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<std::string> launchable_vessels(std::string craft_directory)
+
+      Returns a list of vessels from the given *craft_directory*
+      that can be launched.
+
+      :Parameters:
+
+       * **craft_directory** -- Name of the directory in the current saves "Ships" directory. For example ``"VAB"`` or ``"SPH"``.
+
+   
+
+   .. function:: void launch_vessel(std::string craft_directory, std::string name, std::string launch_site, bool recover = true, std::vector<std::string> crew = std::vector<std::string>(), std::string flag_url = "")
+
+      Launch a vessel.
+
+      :Parameters:
+
+       * **craft_directory** -- Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
+       * **name** -- Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
+       * **launch_site** -- Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
+       * **recover** -- If true and there is a vessel on the launch site, recover it before launching.
+       * **crew** -- If not ``NULL``, a list of names of Kerbals to place in the craft. Otherwise the crew will use default assignments.
+       * **flag_url** -- If not ``NULL``, the asset URL of the mission flag to use for the launch.
+
+   
+
+      .. note::
+
+         Throws an exception if any of the games pre-flight checks fail.
+
+   .. function:: void launch_vessel_from_vab(std::string name, bool recover = true)
+
+      Launch a new vessel from the VAB onto the launchpad.
+
+      :Parameters:
+
+       * **name** -- Name of the vessel to launch.
+       * **recover** -- If true and there is a vessel on the launch pad, recover it before launching.
+
+   
+
+      .. note::
+
+         This is equivalent to calling :func:`launch_vessel` with the craft directory
+         set to "VAB" and the launch site set to "LaunchPad".
+         Throws an exception if any of the games pre-flight checks fail.
+
+   .. function:: void launch_vessel_from_sph(std::string name, bool recover = true)
+
+      Launch a new vessel from the SPH onto the runway.
+
+      :Parameters:
+
+       * **name** -- Name of the vessel to launch.
+       * **recover** -- If true and there is a vessel on the runway, recover it before launching.
+
+   
+
+      .. note::
+
+         This is equivalent to calling :func:`launch_vessel` with the craft directory
+         set to "SPH" and the launch site set to "Runway".
+         Throws an exception if any of the games pre-flight checks fail.
+
+   .. function:: void save(std::string name)
+
+      Save the game with a given name.
+      This will create a save file called ``name.sfs`` in the folder of the
+      current save game.
+
+      :Parameters:
+
+       * **name** -- Name of the save.
+
+   
+
+   .. function:: void load(std::string name)
+
+      Load the game with the given name.
+      This will create a load a save file called ``name.sfs`` from the folder of the
+      current save game.
+
+      :Parameters:
+
+       * **name** -- Name of the save.
+
+   
+
+   .. function:: void quicksave()
+
+      Save a quicksave.
+
+
+   
+
+      .. note::
+
+         This is the same as calling :func:`save` with the name "quicksave".
+
+   .. function:: void quickload()
+
+      Load a quicksave.
+
+
+   
+
+      .. note::
+
+         This is the same as calling :func:`load` with the name "quicksave".
+
+   .. function:: bool can_revert_to_launch()
+
+      Whether the current flight can be reverted to launch.
+
+
+   
+
+   .. function:: void revert_to_launch()
+
+      Revert the current flight to launch.
+
+
+   
+
+   .. function:: void transfer_crew(CrewMember crew_member, Part target_part)
+
+      Transfers a crew member to a different part.
+
+      :Parameters:
+
+       * **crew_member** -- The crew member to transfer.
+       * **target_part** -- The part to move them to.
+
+      :Game Scenes: Flight
+
+   .. function:: bool ui_visible()
+   .. function:: void set_ui_visible(bool value)
+
+      Whether the UI is visible.
+
+      :Game Scenes: Flight
+
+   .. function:: bool navball()
+   .. function:: void set_navball(bool value)
+
+      Whether the navball is visible.
+
+      :Game Scenes: Flight
+
+   .. function:: double ut()
+
+      The current universal time in seconds.
+
+   
+
+   .. function:: double g()
+
+      The value of the `gravitational constant <https://en.wikipedia.org/wiki/Gravitational_constant>`_ G in :math:`N(m/kg)^2`.
+
+   
+
+   .. function:: float warp_rate()
+
+      The current warp rate. This is the rate at which time is passing for
+      either on-rails or physical time warp. For example, a value of 10 means
+      time is passing 10x faster than normal. Returns 1 if time warp is not
+      active.
+
+      :Game Scenes: Flight
+
+   .. function:: float warp_factor()
+
+      The current warp factor. This is the index of the rate at which time
+      is passing for either regular "on-rails" or physical time warp. Returns 0
+      if time warp is not active. When in on-rails time warp, this is equal to
+      :func:`rails_warp_factor`, and in physics time warp, this is equal to
+      :func:`physics_warp_factor`.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t rails_warp_factor()
+   .. function:: void set_rails_warp_factor(int32_t value)
+
+      The time warp rate, using regular "on-rails" time warp. A value between
+      0 and 7 inclusive. 0 means no time warp. Returns 0 if physical time warp
+      is active.
+
+      If requested time warp factor cannot be set, it will be set to the next
+      lowest possible value. For example, if the vessel is too close to a
+      planet. See `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_ for details.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t physics_warp_factor()
+   .. function:: void set_physics_warp_factor(int32_t value)
+
+      The physical time warp rate. A value between 0 and 3 inclusive. 0 means
+      no time warp. Returns 0 if regular "on-rails" time warp is active.
+
+      :Game Scenes: Flight
+
+   .. function:: bool can_rails_warp_at(int32_t factor = 1)
+
+      Returns ``true`` if regular "on-rails" time warp can be used, at the specified warp
+      *factor*. The maximum time warp rate is limited by various things,
+      including how close the active vessel is to a planet. See
+      `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_
+      for details.
+
+      :Parameters:
+
+       * **factor** -- The warp factor to check.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t maximum_rails_warp_factor()
+
+      The current maximum regular "on-rails" warp factor that can be set.
+      A value between 0 and 7 inclusive. See
+      `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_
+      for details.
+
+      :Game Scenes: Flight
+
+   .. function:: void warp_to(double ut, float max_rails_rate = 100000.0, float max_physics_rate = 2.0)
+
+      Uses time acceleration to warp forward to a time in the future, specified
+      by universal time *ut*. This call blocks until the desired
+      time is reached. Uses regular "on-rails" or physical time warp as appropriate.
+      For example, physical time warp is used when the active vessel is traveling
+      through an atmosphere. When using regular "on-rails" time warp, the warp
+      rate is limited by *max_rails_rate*, and when using physical
+      time warp, the warp rate is limited by *max_physics_rate*.
+
+      :Parameters:
+
+       * **ut** -- The universal time to warp to, in seconds.
+       * **max_rails_rate** -- The maximum warp rate in regular "on-rails" time warp.
+       * **max_physics_rate** -- The maximum warp rate in physical time warp.
+
+      :returns: When the time warp is complete.
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> transform_position(std::tuple<double, double, double> position, ReferenceFrame from, ReferenceFrame to)
+
+      Converts a position from one reference frame to another.
+
+      :Parameters:
+
+       * **position** -- Position, as a vector, in reference frame *from*.
+       * **from** -- The reference frame that the position is in.
+       * **to** -- The reference frame to covert the position to.
+
+      :returns: The corresponding position, as a vector, in reference frame *to*.
+   
+
+   .. function:: std::tuple<double, double, double> transform_direction(std::tuple<double, double, double> direction, ReferenceFrame from, ReferenceFrame to)
+
+      Converts a direction from one reference frame to another.
+
+      :Parameters:
+
+       * **direction** -- Direction, as a vector, in reference frame *from*.
+       * **from** -- The reference frame that the direction is in.
+       * **to** -- The reference frame to covert the direction to.
+
+      :returns: The corresponding direction, as a vector, in reference frame *to*.
+   
+
+   .. function:: std::tuple<double, double, double, double> transform_rotation(std::tuple<double, double, double, double> rotation, ReferenceFrame from, ReferenceFrame to)
+
+      Converts a rotation from one reference frame to another.
+
+      :Parameters:
+
+       * **rotation** -- Rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *from*.
+       * **from** -- The reference frame that the rotation is in.
+       * **to** -- The reference frame to covert the rotation to.
+
+      :returns: The corresponding rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *to*.
+   
+
+   .. function:: std::tuple<double, double, double> transform_velocity(std::tuple<double, double, double> position, std::tuple<double, double, double> velocity, ReferenceFrame from, ReferenceFrame to)
+
+      Converts a velocity (acting at the specified position) from one reference frame
+      to another. The position is required to take the relative angular velocity of the
+      reference frames into account.
+
+      :Parameters:
+
+       * **position** -- Position, as a vector, in reference frame *from*.
+       * **velocity** -- Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in meters per second, in reference frame *from*.
+       * **from** -- The reference frame that the position and velocity are in.
+       * **to** -- The reference frame to covert the velocity to.
+
+      :returns: The corresponding velocity, as a vector, in reference frame *to*.
+   
+
+   .. function:: double raycast_distance(std::tuple<double, double, double> position, std::tuple<double, double, double> direction, ReferenceFrame reference_frame)
+
+      Cast a ray from a given position in a given direction, and return the distance to the hit point.
+      If no hit occurs, returns infinity.
+
+      :Parameters:
+
+       * **position** -- Position, as a vector, of the origin of the ray.
+       * **direction** -- Direction of the ray, as a unit vector.
+       * **reference_frame** -- The reference frame that the position and direction are in.
+
+      :returns: The distance to the hit, in meters, or infinity if there was no hit.
+   
+
+   .. function:: Part raycast_part(std::tuple<double, double, double> position, std::tuple<double, double, double> direction, ReferenceFrame reference_frame)
+
+      Cast a ray from a given position in a given direction, and return the part that it hits.
+      If no hit occurs, returns ``NULL``.
+
+      :Parameters:
+
+       * **position** -- Position, as a vector, of the origin of the ray.
+       * **direction** -- Direction of the ray, as a unit vector.
+       * **reference_frame** -- The reference frame that the position and direction are in.
+
+      :returns: The part that was hit or ``NULL`` if there was no hit.
+      :Game Scenes: Flight
+
+   .. function:: bool far_available()
+
+      Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_ is installed.
+
+   
+
+   .. function:: void create_kerbal(std::string name, std::string job, bool male)
+
+      Creates a Kerbal.
+
+      :Parameters:
+
+
+
+
+
+   
+
+   .. function:: CrewMember get_kerbal(std::string name)
+
+      Find a Kerbal by name.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: void load_space_center()
+
+      Switch to the space center view.
+
+
+   
+
+   .. function:: MapFilterType map_filter()
+   .. function:: void set_map_filter(MapFilterType value)
+
+      The visible objects in map mode.
+
+   
+
+   .. function:: void screenshot(std::string file_path, int32_t scale = 1)
+
+      Saves a screenshot.
+
+      :Parameters:
+
+       * **file_path** -- The path of the file to save.
+       * **scale** -- Resolution scaling factor
+
+      :Game Scenes: Flight
+
+   .. function:: GameMode game_mode()
+
+      The current mode the game is in.
+
+   
+
+   .. function:: WarpMode warp_mode()
+
+      The current time warp mode. Returns :enumerator:`WarpMode::none` if time
+      warp is not active, :enumerator:`WarpMode::rails` if regular "on-rails" time warp
+      is active, or :enumerator:`WarpMode::physics` if physical time warp is active.
+
+      :Game Scenes: Flight
+
+   .. function:: Camera camera()
+
+      An object that can be used to control the camera.
+
+      :Game Scenes: Flight
+
+   .. function:: WaypointManager waypoint_manager()
+
+      The waypoint manager.
+
+      :Game Scenes: Flight
+
+   .. function:: ContractManager contract_manager()
+
+      The contract manager.
+
+   
+
+   .. function:: AlarmManager alarm_manager()
+
+      The alarm manager.
+
+   
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: GameMode
+
+   The game mode.
+   Returned by :enum:`GameMode`
+
+
+   .. enumerator:: sandbox
+
+      Sandbox mode.
+
+
+   .. enumerator:: career
+
+      Career mode.
+
+
+   .. enumerator:: science
+
+      Science career mode.
+
+
+   .. enumerator:: science_sandbox
+
+      Science sandbox mode.
+
+
+   .. enumerator:: mission
+
+      Mission mode.
+
+
+   .. enumerator:: mission_builder
+
+      Mission builder mode.
+
+
+   .. enumerator:: scenario
+
+      Scenario mode.
+
+
+   .. enumerator:: scenario_non_resumable
+
+      Scenario mode that cannot be resumed.
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: WarpMode
+
+   The time warp mode.
+   Returned by :enum:`WarpMode`
+
+
+   .. enumerator:: rails
+
+      Time warp is active, and in regular "on-rails" mode.
+
+
+   .. enumerator:: physics
+
+      Time warp is active, and in physical time warp mode.
+
+
+   .. enumerator:: none
+
+      Time warp is not active.
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: MapFilterType
+
+   The set of things that are visible in map mode.
+   These may be combined with bitwise logic.
+
+
+   .. enumerator:: all
+
+      Everything.
+
+
+   .. enumerator:: none
+
+      Nothing.
+
+
+   .. enumerator:: debris
+
+      Debris.
+
+
+   .. enumerator:: unknown
+
+      Unknown.
+
+
+   .. enumerator:: space_objects
+
+      SpaceObjects.
+
+
+   .. enumerator:: probes
+
+      Probes.
+
+
+   .. enumerator:: rovers
+
+      Rovers.
+
+
+   .. enumerator:: landers
+
+      Landers.
+
+
+   .. enumerator:: ships
+
+      Ships.
+
+
+   .. enumerator:: stations
+
+      Stations.
+
+
+   .. enumerator:: bases
+
+      Bases.
+
+
+   .. enumerator:: ev_as
+
+      EVAs.
+
+
+   .. enumerator:: flags
+
+      Flags.
+
+
+   .. enumerator:: plane
+
+      Planes.
+
+
+   .. enumerator:: relay
+
+      Relays.
+
+
+   .. enumerator:: site
+
+      Launch Sites.
+
+
+   .. enumerator:: deployed_science_controller
+
+      Deployed Science Controllers.
+
+
+
+.. class:: LaunchSite
+
+   A place where craft can be launched from.
+   More of these can be added with mods like Kerbal Konstructs.
+
+   .. function:: std::string name()
+
+      The name of the launch site.
+
+   
+
+   .. function:: CelestialBody body()
+
+      The celestial body the launch site is on.
+
+   
+
+   .. function:: EditorFacility editor_facility()
+
+      Which editor is normally used for this launch site.
+
+   
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: EditorFacility
+
+   Editor facility.
+   See :func:`LaunchSite::editor_facility`.
+
+
+   .. enumerator:: vab
+
+      Vehicle Assembly Building.
+
+
+   .. enumerator:: sph
+
+      Space Plane Hanger.
+
+
+   .. enumerator:: none
+
+      None.

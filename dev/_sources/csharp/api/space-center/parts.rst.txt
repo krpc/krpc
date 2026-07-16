@@ -1,0 +1,5013 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+
+
+.. _csharp-api-parts:
+
+Parts
+=====
+
+The following classes allow interaction with a vessels individual parts.
+
+.. contents::
+   :local:
+
+Parts
+-----
+
+
+.. class:: Parts
+
+   Instances of this class are used to interact with the parts of a vessel.
+   An instance can be obtained by calling :prop:`Vessel.Parts`.
+
+   .. property:: System.Collections.Generic.IList<Part> All { get; }
+
+      A list of all of the vessels parts.
+
+      :Game Scenes: All
+
+   .. property:: Part Root { get; }
+
+      The vessels root part.
+
+      :Game Scenes: All
+
+
+      .. note:: See the discussion on :rst:ref:`csharp-api-parts-trees-of-parts`.
+
+   .. property:: Part Controlling { get; set; }
+
+      The part from which the vessel is controlled.
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<Part> WithName(string name)
+
+      A list of parts whose :prop:`Part.Name` is *name*.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<Part> WithTitle(string title)
+
+      A list of all parts whose :prop:`Part.Title` is *title*.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<Part> WithTag(string tag)
+
+      A list of all parts whose :prop:`Part.Tag` is *tag*.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<Part> WithModule(string moduleName)
+
+      A list of all parts that contain a :type:`Module` whose
+      :prop:`Module.Name` is *moduleName*.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<Part> InStage(int stage)
+
+      .. warning:: Deprecated. Use :prop:`Stage.Parts` from the object returned by :meth:`Vessel.StageAt` instead.
+
+      A list of all parts that are activated in the given *stage*.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+
+      .. note:: Deprecated. Use :meth:`Vessel.StageAt` and
+                :prop:`Stage.Parts` instead. See the discussion on
+                :rst:ref:`csharp-api-parts-staging`.
+
+   .. method:: System.Collections.Generic.IList<Part> InDecoupleStage(int stage)
+
+      .. warning:: Deprecated. Use :prop:`Stage.Parts` from the object returned by :meth:`Vessel.DecoupleStageAt` instead.
+
+      A list of all parts that are decoupled in the given *stage*.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+
+      .. note:: Deprecated. Use :meth:`Vessel.DecoupleStageAt` and
+                :prop:`Stage.Parts` instead. See the discussion on
+                :rst:ref:`csharp-api-parts-staging`.
+
+   .. method:: System.Collections.Generic.IList<Module> ModulesWithName(string moduleName)
+
+      A list of modules (combined across all parts in the vessel) whose
+      :prop:`Module.Name` is *moduleName*.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Antenna> Antennas { get; }
+
+      A list of all antennas in the vessel.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         If RemoteTech is installed, this will always return an empty list.
+         To interact with RemoteTech antennas, use the RemoteTech service APIs.
+
+   .. property:: System.Collections.Generic.IList<CargoBay> CargoBays { get; }
+
+      A list of all cargo bays in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<ControlSurface> ControlSurfaces { get; }
+
+      A list of all control surfaces in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Decoupler> Decouplers { get; }
+
+      A list of all decouplers in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<DockingPort> DockingPorts { get; }
+
+      A list of all docking ports in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Engine> Engines { get; }
+
+      A list of all engines in the vessel.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This includes any part that generates thrust. This covers many different types
+         of engine, including liquid fuel rockets, solid rocket boosters, jet engines and
+         RCS thrusters.
+
+   .. property:: System.Collections.Generic.IList<Experiment> Experiments { get; }
+
+      A list of all science experiments in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Fairing> Fairings { get; }
+
+      A list of all fairings in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Intake> Intakes { get; }
+
+      A list of all intakes in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Leg> Legs { get; }
+
+      A list of all landing legs attached to the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<LaunchClamp> LaunchClamps { get; }
+
+      A list of all launch clamps attached to the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Light> Lights { get; }
+
+      A list of all lights in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Parachute> Parachutes { get; }
+
+      A list of all parachutes in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Radiator> Radiators { get; }
+
+      A list of all radiators in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<ResourceDrain> ResourceDrains { get; }
+
+      A list of all resource drains in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<RCS> RCS { get; }
+
+      A list of all RCS blocks/thrusters in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<ReactionWheel> ReactionWheels { get; }
+
+      A list of all reaction wheels in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<ResourceConverter> ResourceConverters { get; }
+
+      A list of all resource converters in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<ResourceHarvester> ResourceHarvesters { get; }
+
+      A list of all resource harvesters in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<RoboticHinge> RoboticHinges { get; }
+
+      A list of all robotic hinges in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<RoboticPiston> RoboticPistons { get; }
+
+      A list of all robotic pistons in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<RoboticRotation> RoboticRotations { get; }
+
+      A list of all robotic rotations in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<RoboticRotor> RoboticRotors { get; }
+
+      A list of all robotic rotors in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Sensor> Sensors { get; }
+
+      A list of all sensors in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<SolarPanel> SolarPanels { get; }
+
+      A list of all solar panels in the vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Wheel> Wheels { get; }
+
+      A list of all wheels in the vessel.
+
+      :Game Scenes: All
+
+
+
+Part
+----
+
+
+.. class:: Part
+
+   Represents an individual part. Vessels are made up of multiple parts.
+   Instances of this class can be obtained by several methods in :type:`Parts`.
+
+   .. property:: string Name { get; }
+
+      Internal name of the part, as used in
+      `part cfg files <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
+      For example "Mark1-2Pod".
+
+      :Game Scenes: All
+
+   .. property:: string Title { get; }
+
+      Title of the part, as shown when the part is right clicked in-game. For example "Mk1-2 Command Pod".
+
+      :Game Scenes: All
+
+   .. property:: ConfigNode Config { get; }
+
+      The static configuration of the part, as found in its
+      `part cfg file <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
+      This provides access to data that is not exposed elsewhere, such as the
+      configuration of the part's modules. Returns ``null`` if the part has no
+      associated configuration node.
+
+      :Game Scenes: All
+
+   .. property:: string Tag { get; set; }
+
+      The name tag for the part. Can be set to a custom string using the
+      in-game user interface.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This string is shared with
+         `kOS <https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/>`_
+         if it is installed.
+
+   .. property:: string FlagURL { get; set; }
+
+      The asset URL for the part's flag.
+
+      :Game Scenes: All
+
+   .. property:: bool Highlighted { get; set; }
+
+      Whether the part is highlighted.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The highlighting is removed when the client that enabled it disconnects.
+
+   .. property:: System.Tuple<double,double,double> HighlightColor { get; set; }
+
+      The color used to highlight the part, as an RGB triple.
+
+      :Game Scenes: All
+
+   .. property:: double Cost { get; }
+
+      The cost of the part, in units of funds.
+
+      :Game Scenes: All
+
+   .. property:: Vessel Vessel { get; }
+
+      The vessel that contains this part.
+
+      :Game Scenes: All
+
+   .. property:: Part Parent { get; }
+
+      The parts parent. Returns ``null`` if the part does not have a parent.
+      This, in combination with :prop:`Part.Children`, can be used to traverse the vessels
+      parts tree.
+
+      :Game Scenes: All
+
+
+      .. note:: See the discussion on :rst:ref:`csharp-api-parts-trees-of-parts`.
+
+   .. property:: System.Collections.Generic.IList<Part> Children { get; }
+
+      The parts children. Returns an empty list if the part has no children.
+      This, in combination with :prop:`Part.Parent`, can be used to traverse the vessels
+      parts tree.
+
+      :Game Scenes: All
+
+
+      .. note:: See the discussion on :rst:ref:`csharp-api-parts-trees-of-parts`.
+
+   .. property:: bool AxiallyAttached { get; }
+
+      Whether the part is axially attached to its parent, i.e. on the top
+      or bottom of its parent. If the part has no parent, returns ``false``.
+
+      :Game Scenes: All
+
+
+      .. note:: See the discussion on :rst:ref:`csharp-api-parts-attachment-modes`.
+
+   .. property:: bool RadiallyAttached { get; }
+
+      Whether the part is radially attached to its parent, i.e. on the side of its parent.
+      If the part has no parent, returns ``false``.
+
+      :Game Scenes: All
+
+
+      .. note:: See the discussion on :rst:ref:`csharp-api-parts-attachment-modes`.
+
+   .. property:: int Stage { get; }
+
+      The stage in which this part will be activated. Returns -1 if the part is not
+      activated by staging.
+
+      :Game Scenes: All
+
+
+      .. note:: See the discussion on :rst:ref:`csharp-api-parts-staging`.
+
+   .. property:: int DecoupleStage { get; }
+
+      The stage in which this part will be decoupled. Returns -1 if the part is never
+      decoupled from the vessel.
+
+      :Game Scenes: All
+
+
+      .. note:: See the discussion on :rst:ref:`csharp-api-parts-staging`.
+
+   .. property:: bool Massless { get; }
+
+      Whether the part is
+      `massless <https://wiki.kerbalspaceprogram.com/wiki/Massless_part>`_.
+
+      :Game Scenes: All
+
+   .. property:: double Mass { get; }
+
+      The current mass of the part, including resources it contains, in kilograms.
+      Returns zero if the part is massless.
+
+      :Game Scenes: All
+
+   .. property:: double DryMass { get; }
+
+      The mass of the part, not including any resources it contains, in kilograms.
+      Returns zero if the part is massless.
+
+      :Game Scenes: All
+
+   .. property:: bool Shielded { get; }
+
+      Whether the part is shielded from the exterior of the vessel, for example by a fairing.
+
+      :Game Scenes: All
+
+   .. property:: float DynamicPressure { get; }
+
+      The dynamic pressure acting on the part, in Pascals.
+
+      :Game Scenes: All
+
+   .. property:: double ImpactTolerance { get; }
+
+      The impact tolerance of the part, in meters per second.
+
+      :Game Scenes: All
+
+   .. property:: double Temperature { get; }
+
+      Temperature of the part, in Kelvin.
+
+      :Game Scenes: All
+
+   .. property:: double SkinTemperature { get; }
+
+      Temperature of the skin of the part, in Kelvin.
+
+      :Game Scenes: All
+
+   .. property:: double MaxTemperature { get; }
+
+      Maximum temperature that the part can survive, in Kelvin.
+
+      :Game Scenes: All
+
+   .. property:: double MaxSkinTemperature { get; }
+
+      Maximum temperature that the skin of the part can survive, in Kelvin.
+
+      :Game Scenes: All
+
+   .. property:: float ThermalMass { get; }
+
+      A measure of how much energy it takes to increase the internal temperature of the part,
+      in Joules per Kelvin.
+
+      :Game Scenes: All
+
+   .. property:: float ThermalSkinMass { get; }
+
+      A measure of how much energy it takes to increase the skin temperature of the part,
+      in Joules per Kelvin.
+
+      :Game Scenes: All
+
+   .. property:: float ThermalResourceMass { get; }
+
+      A measure of how much energy it takes to increase the temperature of the resources
+      contained in the part, in Joules per Kelvin.
+
+      :Game Scenes: All
+
+   .. property:: float ThermalConductionFlux { get; }
+
+      The rate at which heat energy is conducting into or out of the part via contact with
+      other parts. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+      :Game Scenes: All
+
+   .. property:: float ThermalConvectionFlux { get; }
+
+      The rate at which heat energy is convecting into or out of the part from the
+      surrounding atmosphere. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+      :Game Scenes: All
+
+   .. property:: float ThermalRadiationFlux { get; }
+
+      The rate at which heat energy is radiating into or out of the part from the surrounding
+      environment. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+      :Game Scenes: All
+
+   .. property:: float ThermalInternalFlux { get; }
+
+      The rate at which heat energy is begin generated by the part.
+      For example, some engines generate heat by combusting fuel.
+      Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is losing
+      heat energy.
+
+      :Game Scenes: All
+
+   .. property:: float ThermalSkinToInternalFlux { get; }
+
+      The rate at which heat energy is transferring between the part's skin and its internals.
+      Measured in energy per unit time, or power, in Watts.
+      A positive value means the part's internals are gaining heat energy,
+      and negative means its skin is gaining heat energy.
+
+      :Game Scenes: All
+
+   .. property:: uint AvailableSeats { get; }
+
+      How many open seats the part has.
+
+      :Game Scenes: All
+
+   .. property:: Resources Resources { get; }
+
+      A :prop:`Part.Resources` object for the part.
+
+      :Game Scenes: All
+
+   .. property:: bool Crossfeed { get; }
+
+      Whether this part is crossfeed capable.
+
+      :Game Scenes: All
+
+   .. property:: bool IsFuelLine { get; }
+
+      Whether this part is a fuel line.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Part> FuelLinesFrom { get; }
+
+      The parts that are connected to this part via fuel lines, where the direction of the
+      fuel line is into this part.
+
+      :Game Scenes: All
+
+
+      .. note:: See the discussion on :rst:ref:`csharp-api-parts-fuel-lines`.
+
+   .. property:: System.Collections.Generic.IList<Part> FuelLinesTo { get; }
+
+      The parts that are connected to this part via fuel lines, where the direction of the
+      fuel line is out of this part.
+
+      :Game Scenes: All
+
+
+      .. note:: See the discussion on :rst:ref:`csharp-api-parts-fuel-lines`.
+
+   .. property:: System.Collections.Generic.IList<Module> Modules { get; }
+
+      The modules for this part.
+
+      :Game Scenes: All
+
+   .. property:: Antenna Antenna { get; }
+
+      An :prop:`Part.Antenna` if the part is an antenna, otherwise ``null``.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         If RemoteTech is installed, this will always return ``null``.
+         To interact with RemoteTech antennas, use the RemoteTech service APIs.
+
+   .. property:: CargoBay CargoBay { get; }
+
+      A :prop:`Part.CargoBay` if the part is a cargo bay, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: ControlSurface ControlSurface { get; }
+
+      A :prop:`Part.ControlSurface` if the part is an aerodynamic control surface,
+      otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: Decoupler Decoupler { get; }
+
+      A :prop:`Part.Decoupler` if the part is a decoupler, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: DockingPort DockingPort { get; }
+
+      A :prop:`Part.DockingPort` if the part is a docking port, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: Engine Engine { get; }
+
+      An :prop:`Part.Engine` if the part is an engine, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: Experiment Experiment { get; }
+
+      An :prop:`Part.Experiment` if the part contains a
+      single science experiment, otherwise ``null``.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the part contains more than one experiment.
+         In that case, use :prop:`Part.Experiments` to get the list of experiments in the part.
+
+   .. property:: System.Collections.Generic.IList<Experiment> Experiments { get; }
+
+      A list of :prop:`Part.Experiment` objects that the part contains.
+
+      :Game Scenes: All
+
+   .. property:: Fairing Fairing { get; }
+
+      A :prop:`Part.Fairing` if the part is a fairing, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: Intake Intake { get; }
+
+      An :prop:`Part.Intake` if the part is an intake, otherwise ``null``.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This includes any part that generates thrust. This covers many different types
+         of engine, including liquid fuel rockets, solid rocket boosters and jet engines.
+         For RCS thrusters see :prop:`Part.RCS`.
+
+   .. property:: Leg Leg { get; }
+
+      A :prop:`Part.Leg` if the part is a landing leg, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: LaunchClamp LaunchClamp { get; }
+
+      A :prop:`Part.LaunchClamp` if the part is a launch clamp, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: Light Light { get; }
+
+      A :prop:`Part.Light` if the part is a light, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: Parachute Parachute { get; }
+
+      A :prop:`Part.Parachute` if the part is a parachute, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: Radiator Radiator { get; }
+
+      A :prop:`Part.Radiator` if the part is a radiator, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: ResourceDrain ResourceDrain { get; }
+
+      A :prop:`Part.ResourceDrain` if the part is a resource drain, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: RCS RCS { get; }
+
+      A :prop:`Part.RCS` if the part is an RCS block/thruster, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: ReactionWheel ReactionWheel { get; }
+
+      A :prop:`Part.ReactionWheel` if the part is a reaction wheel, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: ResourceConverter ResourceConverter { get; }
+
+      A :prop:`Part.ResourceConverter` if the part is a resource converter,
+      otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: ResourceHarvester ResourceHarvester { get; }
+
+      A :prop:`Part.ResourceHarvester` if the part is a resource harvester,
+      otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: RoboticController RoboticController { get; }
+
+      A :prop:`Part.RoboticController` if the part is a robotic controller,
+      otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: RoboticHinge RoboticHinge { get; }
+
+      A :prop:`Part.RoboticHinge` if the part is a robotic hinge, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: RoboticPiston RoboticPiston { get; }
+
+      A :prop:`Part.RoboticPiston` if the part is a robotic piston, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: RoboticRotation RoboticRotation { get; }
+
+      A :prop:`Part.RoboticRotation` if the part is a robotic rotation servo, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: RoboticRotor RoboticRotor { get; }
+
+      A :prop:`Part.RoboticRotor` if the part is a robotic rotor, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: Sensor Sensor { get; }
+
+      A :prop:`Part.Sensor` if the part is a sensor, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: SolarPanel SolarPanel { get; }
+
+      A :prop:`Part.SolarPanel` if the part is a solar panel, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. property:: Wheel Wheel { get; }
+
+      A :prop:`Part.Wheel` if the part is a wheel, otherwise ``null``.
+
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+
+      The position of the part in the given reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is a fixed position in the part, defined by the parts model.
+         It s not necessarily the same as the parts center of mass.
+         Use :meth:`Part.CenterOfMass` to get the parts center of mass.
+
+   .. method:: System.Tuple<double,double,double> CenterOfMass(ReferenceFrame referenceFrame)
+
+      The position of the parts center of mass in the given reference frame.
+      If the part is physicsless, this is equivalent to :meth:`Part.Position`.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> BoundingBox(ReferenceFrame referenceFrame)
+
+      The axis-aligned bounding box of the part in the given reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vectors are in.
+
+      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is computed from the collision mesh of the part.
+         If the part is not collidable, the box has zero volume and is centered on
+         the :meth:`Part.Position` of the part.
+
+   .. method:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
+
+      The direction the part points in, in the given reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
+
+      The linear velocity of the part in the given reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned velocity vector is in.
+
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
+
+      The rotation of the part, in the given reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned rotation is in.
+
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> MomentOfInertia { get; }
+
+      The moment of inertia of the part in :math:`kg.m^2` around its center of mass
+      in the parts reference frame (:prop:`Part.ReferenceFrame`).
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<double> InertiaTensor { get; }
+
+      The inertia tensor of the part in the parts reference frame
+      (:prop:`Part.ReferenceFrame`).
+      Returns the 3x3 matrix as a list of elements, in row-major order.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame ReferenceFrame { get; }
+
+      The reference frame that is fixed relative to this part, and centered on a fixed
+      position within the part, defined by the parts model.
+
+      * The origin is at the position of the part, as returned by
+        :meth:`Part.Position`.
+      * The axes rotate with the part.
+      * The x, y and z axis directions depend on the design of the part.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         For docking port parts, this reference frame is not necessarily equivalent to the
+         reference frame for the docking port, returned by
+         :prop:`DockingPort.ReferenceFrame`.
+
+      .. figure:: /images/reference-frames/part.png
+         :align: center
+
+         Mk1 Command Pod reference frame origin and axes
+
+   .. property:: ReferenceFrame CenterOfMassReferenceFrame { get; }
+
+      The reference frame that is fixed relative to this part, and centered on its
+      center of mass.
+
+      * The origin is at the center of mass of the part, as returned by
+        :meth:`Part.CenterOfMass`.
+      * The axes rotate with the part.
+      * The x, y and z axis directions depend on the design of the part.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         For docking port parts, this reference frame is not necessarily equivalent to the
+         reference frame for the docking port, returned by
+         :prop:`DockingPort.ReferenceFrame`.
+
+   .. method:: Force AddForce(System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+
+      Exert a constant force on the part, acting at the given position.
+
+      :parameters:
+
+       * **force** -- A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+       * **position** -- The position at which the force acts, as a vector.
+       * **referenceFrame** -- The reference frame that the force and position are in.
+
+      :returns: An object that can be used to remove or modify the force.
+      :Game Scenes: All
+
+
+      .. note::
+
+         The force is removed when the client that added it disconnects.
+
+   .. method:: void InstantaneousForce(System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+
+      Exert an instantaneous force on the part, acting at the given position.
+
+      :parameters:
+
+       * **force** -- A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+       * **position** -- The position at which the force acts, as a vector.
+       * **referenceFrame** -- The reference frame that the force and position are in.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The force is applied instantaneously in a single physics update.
+
+   .. property:: bool Glow { set; }
+
+      Whether the part is glowing.
+
+      :Game Scenes: All
+
+   .. property:: AutoStrutMode AutoStrutMode { get; }
+
+      Auto-strut mode.
+
+      :Game Scenes: All
+
+
+
+.. enum:: AutoStrutMode
+
+   The state of an auto-strut. :prop:`Part.AutoStrutMode`
+
+
+   .. value:: Off
+
+      Off
+
+
+   .. value:: Root
+
+      Root
+
+
+   .. value:: Heaviest
+
+      Heaviest
+
+
+   .. value:: Grandparent
+
+      Grandparent
+
+
+   .. value:: ForceRoot
+
+      ForceRoot
+
+
+   .. value:: ForceHeaviest
+
+      ForceHeaviest
+
+
+   .. value:: ForceGrandparent
+
+      ForceGrandparent
+
+
+
+.. class:: Force
+
+   Obtained by calling :meth:`Part.AddForce`.
+
+   .. property:: Part Part { get; }
+
+      The part that this force is applied to.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> ForceVector { get; set; }
+
+      The force vector, in Newtons.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> Position { get; set; }
+
+      The position at which the force acts, in reference frame :prop:`Force.ReferenceFrame`.
+
+      :returns: The position as a vector.
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame ReferenceFrame { get; set; }
+
+      The reference frame of the force vector and position.
+
+      :Game Scenes: All
+
+   .. method:: void Remove()
+
+      Remove the force.
+
+
+      :Game Scenes: All
+
+
+
+Module
+------
+
+
+.. class:: Module
+
+   This can be used to interact with a specific part module. This includes part modules in
+   stock KSP, and those added by mods.
+
+   In KSP, each part has zero or more
+   `PartModules <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES>`_
+   associated with it. Each one contains some of the functionality of the part.
+   For example, an engine has a "ModuleEngines" part module that contains all the
+   functionality of an engine.
+
+   .. property:: string Name { get; }
+
+      Name of the PartModule. For example, "ModuleEngines".
+
+      :Game Scenes: All
+
+   .. property:: Part Part { get; }
+
+      The part that contains this module.
+
+      :Game Scenes: All
+
+   .. property:: ConfigNode Config { get; }
+
+      The static configuration of the module, as found in the part's
+      `cfg file <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES>`_.
+      This provides access to data that is not exposed as a field, such as the
+      resources produced by a generator. Returns ``null`` if the module's
+      configuration node cannot be found.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<PartField> FieldList { get; }
+
+      A list of all the fields of the module, including those not visible in the right-click
+      menu of the part. Filter by :prop:`PartField.Visible` to get just the visible ones.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<PartEvent> EventList { get; }
+
+      A list of all the events of the module, including those not currently visible or active.
+      Events are the clickable buttons visible in the right-click menu of the part. Filter by
+      :prop:`PartEvent.Visible` and :prop:`PartEvent.Active` to get just the ones
+      shown in the menu.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<PartAction> ActionList { get; }
+
+      A list of all the actions of the module. These are the parts actions that can be assigned
+      to action groups in the in-game editor.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IDictionary<string,string> Fields { get; }
+
+      .. warning:: Deprecated. Use :prop:`Module.FieldList` instead, filtering by :prop:`PartField.Visible`.
+
+      The modules field names and their associated values, as a dictionary.
+      These are the values visible in the right-click menu of the part.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if there is more than one field with the same name.
+         In that case, use :prop:`Module.FieldsById` to get the fields by identifier.
+
+   .. property:: System.Collections.Generic.IDictionary<string,string> FieldsById { get; }
+
+      .. warning:: Deprecated. Use :prop:`Module.FieldList` instead, filtering by :prop:`PartField.Visible`.
+
+      The modules field identifiers and their associated values, as a dictionary.
+      These are the values visible in the right-click menu of the part.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IDictionary<string,string> AllFieldsById { get; }
+
+      .. warning:: Deprecated. Use :prop:`Module.FieldList` instead.
+
+      The modules field identifiers and their associated values, as a dictionary.
+      This is the same as :prop:`Module.FieldsById`, except that it also includes
+      fields that are not visible in the right-click menu of the part.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if there is more than one field with the same identifier.
+
+   .. method:: bool HasField(string name)
+
+      .. warning:: Deprecated. Filter :prop:`Module.FieldList` by :prop:`PartField.GuiName` instead.
+
+      Returns ``true`` if the module has a field with the given name.
+
+      :parameters:
+
+       * **name** -- Name of the field.
+
+      :Game Scenes: All
+
+   .. method:: bool HasFieldWithId(string id)
+
+      .. warning:: Deprecated. Filter :prop:`Module.FieldList` by :prop:`PartField.Name` instead.
+
+      Returns ``true`` if the module has a field with the given identifier.
+
+      :parameters:
+
+       * **id** -- Identifier of the field.
+
+      :Game Scenes: All
+
+   .. method:: string GetField(string name)
+
+      .. warning:: Deprecated. Filter :prop:`Module.FieldList` by :prop:`PartField.GuiName` and read :prop:`PartField.Value` instead.
+
+      Returns the value of a field with the given name.
+
+      :parameters:
+
+       * **name** -- Name of the field.
+
+      :Game Scenes: All
+
+   .. method:: string GetFieldById(string id)
+
+      .. warning:: Deprecated. Filter :prop:`Module.FieldList` by :prop:`PartField.Name` and read :prop:`PartField.Value` instead.
+
+      Returns the value of a field with the given identifier.
+
+      :parameters:
+
+       * **id** -- Identifier of the field.
+
+      :Game Scenes: All
+
+   .. method:: void SetFieldInt(string name, int value)
+
+      .. warning:: Deprecated. Set :prop:`PartField.IntValue` instead.
+
+      Set the value of a field to the given integer number.
+
+      :parameters:
+
+       * **name** -- Name of the field.
+       * **value** -- Value to set.
+
+      :Game Scenes: All
+
+   .. method:: void SetFieldIntById(string id, int value)
+
+      .. warning:: Deprecated. Set :prop:`PartField.IntValue` instead.
+
+      Set the value of a field to the given integer number.
+
+      :parameters:
+
+       * **id** -- Identifier of the field.
+       * **value** -- Value to set.
+
+      :Game Scenes: All
+
+   .. method:: void SetFieldFloat(string name, float value)
+
+      .. warning:: Deprecated. Set :prop:`PartField.FloatValue` instead.
+
+      Set the value of a field to the given floating point number.
+
+      :parameters:
+
+       * **name** -- Name of the field.
+       * **value** -- Value to set.
+
+      :Game Scenes: All
+
+   .. method:: void SetFieldFloatById(string id, float value)
+
+      .. warning:: Deprecated. Set :prop:`PartField.FloatValue` instead.
+
+      Set the value of a field to the given floating point number.
+
+      :parameters:
+
+       * **id** -- Identifier of the field.
+       * **value** -- Value to set.
+
+      :Game Scenes: All
+
+   .. method:: void SetFieldString(string name, string value)
+
+      .. warning:: Deprecated. Set :prop:`PartField.Value` instead.
+
+      Set the value of a field to the given string.
+
+      :parameters:
+
+       * **name** -- Name of the field.
+       * **value** -- Value to set.
+
+      :Game Scenes: All
+
+   .. method:: void SetFieldStringById(string id, string value)
+
+      .. warning:: Deprecated. Set :prop:`PartField.Value` instead.
+
+      Set the value of a field to the given string.
+
+      :parameters:
+
+       * **id** -- Identifier of the field.
+       * **value** -- Value to set.
+
+      :Game Scenes: All
+
+   .. method:: void SetFieldBool(string name, bool value)
+
+      .. warning:: Deprecated. Set :prop:`PartField.BoolValue` instead.
+
+      Set the value of a field to true or false.
+
+      :parameters:
+
+       * **name** -- Name of the field.
+       * **value** -- Value to set.
+
+      :Game Scenes: All
+
+   .. method:: void SetFieldBoolById(string id, bool value)
+
+      .. warning:: Deprecated. Set :prop:`PartField.BoolValue` instead.
+
+      Set the value of a field to true or false.
+
+      :parameters:
+
+       * **id** -- Identifier of the field.
+       * **value** -- Value to set.
+
+      :Game Scenes: All
+
+   .. method:: void ResetField(string name)
+
+      .. warning:: Deprecated. Use :meth:`PartField.Reset` instead.
+
+      Set the value of a field to its original value.
+
+      :parameters:
+
+       * **name** -- Name of the field.
+
+      :Game Scenes: All
+
+   .. method:: void ResetFieldById(string id)
+
+      .. warning:: Deprecated. Use :meth:`PartField.Reset` instead.
+
+      Set the value of a field to its original value.
+
+      :parameters:
+
+       * **id** -- Identifier of the field.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The original value is the value the field had when the part was loaded.
+
+   .. property:: System.Collections.Generic.IList<string> Events { get; }
+
+      .. warning:: Deprecated. Use :prop:`Module.EventList` instead, filtering by :prop:`PartEvent.Visible` and :prop:`PartEvent.Active`.
+
+      A list of the names of all of the modules events. Events are the clickable buttons
+      visible in the right-click menu of the part.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<string> EventsById { get; }
+
+      .. warning:: Deprecated. Use :prop:`Module.EventList` instead, filtering by :prop:`PartEvent.Visible` and :prop:`PartEvent.Active`.
+
+      A list of the identifiers of all of the modules events. Events are the clickable buttons
+      visible in the right-click menu of the part.
+
+      :Game Scenes: All
+
+   .. method:: bool HasEvent(string name)
+
+      .. warning:: Deprecated. Filter :prop:`Module.EventList` by :prop:`PartEvent.GuiName` instead.
+
+      ``true`` if the module has an event with the given name.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: bool HasEventWithId(string id)
+
+      .. warning:: Deprecated. Filter :prop:`Module.EventList` by :prop:`PartEvent.Name` instead.
+
+      ``true`` if the module has an event with the given identifier.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: void TriggerEvent(string name)
+
+      .. warning:: Deprecated. Filter :prop:`Module.EventList` by :prop:`PartEvent.GuiName` and call :meth:`PartEvent.Trigger` instead.
+
+      Trigger the named event. Equivalent to clicking the button in the right-click menu
+      of the part.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: void TriggerEventById(string id)
+
+      .. warning:: Deprecated. Filter :prop:`Module.EventList` by :prop:`PartEvent.Name` and call :meth:`PartEvent.Trigger` instead.
+
+      Trigger the event with the given identifier.
+      Equivalent to clicking the button in the right-click menu of the part.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<string> Actions { get; }
+
+      .. warning:: Deprecated. Use :prop:`Module.ActionList` instead.
+
+      A list of all the names of the modules actions. These are the parts actions that can
+      be assigned to action groups in the in-game editor.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<string> ActionsById { get; }
+
+      .. warning:: Deprecated. Use :prop:`Module.ActionList` instead.
+
+      A list of all the identifiers of the modules actions. These are the parts actions
+      that can be assigned to action groups in the in-game editor.
+
+      :Game Scenes: All
+
+   .. method:: bool HasAction(string name)
+
+      .. warning:: Deprecated. Filter :prop:`Module.ActionList` by :prop:`PartAction.GuiName` instead.
+
+      ``true`` if the part has an action with the given name.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: bool HasActionWithId(string id)
+
+      .. warning:: Deprecated. Filter :prop:`Module.ActionList` by :prop:`PartAction.Name` instead.
+
+      ``true`` if the part has an action with the given identifier.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: void SetAction(string name, bool value = true)
+
+      .. warning:: Deprecated. Filter :prop:`Module.ActionList` by :prop:`PartAction.GuiName` and set :prop:`PartAction.Activated` instead.
+
+      Set the value of an action with the given name.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: void SetActionById(string id, bool value = true)
+
+      .. warning:: Deprecated. Filter :prop:`Module.ActionList` by :prop:`PartAction.Name` and set :prop:`PartAction.Activated` instead.
+
+      Set the value of an action with the given identifier.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+
+
+.. class:: PartField
+
+   A field of a part module. Obtained by calling :prop:`Module.FieldList`.
+
+   .. property:: Module Module { get; }
+
+      The part module that contains this field.
+
+      :Game Scenes: All
+
+   .. property:: string Name { get; }
+
+      The identifier of the field. This is stable and does not change between game versions,
+      unlike :prop:`PartField.GuiName`.
+
+      :Game Scenes: All
+
+   .. property:: string GuiName { get; }
+
+      The name of the field, as displayed in the right-click menu of the part. This may be
+      empty for fields that are not visible in the menu.
+
+      :Game Scenes: All
+
+   .. property:: bool Visible { get; }
+
+      Whether the field is visible in the right-click menu of the part, in the current scene
+      (flight or editor).
+
+      :Game Scenes: All
+
+   .. property:: FieldType Type { get; }
+
+      The type of the field.
+
+      :Game Scenes: All
+
+   .. property:: string Value { get; set; }
+
+      The value of the field, as a string. This works for fields of any type, and returns the
+      same string that is shown in the right-click menu of the part.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Setting the value using this property is only permitted for string fields. Use the typed
+         properties (:prop:`PartField.BoolValue`, :prop:`PartField.IntValue`, :prop:`PartField.FloatValue`,
+         :prop:`PartField.DoubleValue`) to set fields of other types.
+
+   .. property:: bool BoolValue { get; set; }
+
+      The value of a boolean field.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The getter throws an exception if the field is not a boolean field
+         (see :prop:`PartField.Type`).
+
+   .. property:: int IntValue { get; set; }
+
+      The value of an integer field.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The getter throws an exception if the field is not an integer field
+         (see :prop:`PartField.Type`).
+
+   .. property:: float FloatValue { get; set; }
+
+      The value of a single precision floating point field.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The getter throws an exception if the field is not a single precision floating point
+         field (see :prop:`PartField.Type`).
+
+   .. property:: double DoubleValue { get; set; }
+
+      The value of a double precision floating point field.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The getter throws an exception if the field is not a double precision floating point
+         field (see :prop:`PartField.Type`).
+
+   .. method:: void Reset()
+
+      Set the value of the field to its original value.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The original value is the value the field had when the part was loaded.
+         Works for any field, including those not visible in the right-click menu.
+
+
+
+.. enum:: FieldType
+
+   The type of a part module field. See :prop:`PartField.Type`.
+
+
+   .. value:: Boolean
+
+      A boolean field. Access using :prop:`PartField.BoolValue`.
+
+
+   .. value:: Integer
+
+      An integer field. Access using :prop:`PartField.IntValue`.
+
+
+   .. value:: Float
+
+      A single precision floating point field. Access using :prop:`PartField.FloatValue`.
+
+
+   .. value:: Double
+
+      A double precision floating point field. Access using :prop:`PartField.DoubleValue`.
+
+
+   .. value:: String
+
+      A string field. Access using :prop:`PartField.Value`.
+
+
+   .. value:: Unknown
+
+      A field whose type is not one of the above. Its value can still be read as a
+      string using :prop:`PartField.Value`.
+
+
+
+.. class:: PartEvent
+
+   An event of a part module. Events are the clickable buttons visible in the right-click menu
+   of the part. Obtained by calling :prop:`Module.EventList`.
+
+   .. property:: Module Module { get; }
+
+      The part module that contains this event.
+
+      :Game Scenes: All
+
+   .. property:: string Name { get; }
+
+      The identifier of the event. This is stable and does not change between game versions,
+      unlike :prop:`PartEvent.GuiName`.
+
+      :Game Scenes: All
+
+   .. property:: string GuiName { get; }
+
+      The name of the event, as displayed in the right-click menu of the part.
+
+      :Game Scenes: All
+
+   .. property:: bool Visible { get; }
+
+      Whether the event is visible in the right-click menu of the part, in the current scene
+      (flight or editor).
+
+      :Game Scenes: All
+
+   .. property:: bool Active { get; }
+
+      Whether the event is currently active.
+
+      :Game Scenes: All
+
+   .. method:: void Trigger()
+
+      Trigger the event. Equivalent to clicking the button in the right-click menu of the part.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: PartAction
+
+   An action of a part module. These are the part actions that can be assigned to action groups
+   in the in-game editor. Obtained by calling :prop:`Module.ActionList`.
+
+   .. property:: Module Module { get; }
+
+      The part module that contains this action.
+
+      :Game Scenes: All
+
+   .. property:: string Name { get; }
+
+      The identifier of the action. This is stable and does not change between game versions,
+      unlike :prop:`PartAction.GuiName`.
+
+      :Game Scenes: All
+
+   .. property:: string GuiName { get; }
+
+      The name of the action, as displayed in the in-game editor.
+
+      :Game Scenes: All
+
+   .. property:: bool Activated { set; }
+
+      Activate or deactivate the action. Equivalent to triggering the action from an action
+      group. Set to ``true`` to activate the action, or ``false`` to deactivate it.
+
+      :Game Scenes: All
+
+
+
+Config Node
+-----------
+
+
+.. class:: ConfigNode
+
+   Represents a configuration node, as found in a part's configuration file. A node has a
+   name, a set of named values and a set of child nodes. This is used to access the
+   static configuration of a part or part module, for example via
+   :prop:`Part.Config` and :prop:`Module.Config`.
+
+   .. property:: string Name { get; }
+
+      The name of the configuration node. For example "MODULE".
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IDictionary<string,string> Values { get; }
+
+      The values stored in the node, as a dictionary mapping names to values.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         If a name appears more than once, only the first value is included. Use
+         :meth:`ConfigNode.GetValues` to get all of the values with a given name.
+
+   .. method:: bool HasValue(string name)
+
+      Returns ``true`` if the node has a value with the given name.
+
+      :parameters:
+
+       * **name** -- Name of the value.
+
+      :Game Scenes: All
+
+   .. method:: string GetValue(string name)
+
+      Returns the value with the given name. If there is more than one value with
+      the given name, the first is returned. Throws an exception if there is no
+      value with the given name.
+
+      :parameters:
+
+       * **name** -- Name of the value.
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<string> GetValues(string name)
+
+      Returns all of the values with the given name, as a list.
+
+      :parameters:
+
+       * **name** -- Name of the values.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<ConfigNode> Nodes { get; }
+
+      The child nodes contained in this node.
+
+      :Game Scenes: All
+
+   .. method:: bool HasNode(string name)
+
+      Returns ``true`` if the node has a child node with the given name.
+
+      :parameters:
+
+       * **name** -- Name of the child node.
+
+      :Game Scenes: All
+
+   .. method:: ConfigNode GetNode(string name)
+
+      Returns the child node with the given name. If there is more than one child
+      node with the given name, the first is returned. Throws an exception if there
+      is no child node with the given name.
+
+      :parameters:
+
+       * **name** -- Name of the child node.
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<ConfigNode> GetNodes(string name)
+
+      Returns all of the child nodes with the given name, as a list.
+
+      :parameters:
+
+       * **name** -- Name of the child nodes.
+
+      :Game Scenes: All
+
+
+
+Specific Types of Part
+----------------------
+
+The following classes provide functionality for specific types of part.
+
+.. contents::
+   :local:
+
+Antenna
+^^^^^^^
+
+.. note:: If RemoteTech is installed, use the RemoteTech service APIs to interact with antennas.
+          This class is only for stock KSP antennas.
+
+
+.. class:: Antenna
+
+   An antenna. Obtained by calling :prop:`Part.Antenna`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this antenna.
+
+      :Game Scenes: All
+
+   .. property:: AntennaState State { get; }
+
+      The current state of the antenna.
+
+      :Game Scenes: All
+
+   .. property:: bool Deployable { get; }
+
+      Whether the antenna is deployable.
+
+      :Game Scenes: All
+
+   .. property:: bool Deployed { get; set; }
+
+      Whether the antenna is deployed.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Fixed antennas are always deployed.
+         Returns an error if you try to deploy a fixed antenna.
+
+   .. property:: bool CanTransmit { get; }
+
+      Whether data can be transmitted by this antenna.
+
+      :Game Scenes: All
+
+   .. method:: void Transmit()
+
+      Transmit data.
+
+
+      :Game Scenes: All
+
+   .. method:: void Cancel()
+
+      Cancel current transmission of data.
+
+
+      :Game Scenes: All
+
+   .. property:: bool AllowPartial { get; set; }
+
+      Whether partial data transmission is permitted.
+
+      :Game Scenes: All
+
+   .. property:: double Power { get; }
+
+      The power of the antenna.
+
+      :Game Scenes: All
+
+   .. property:: bool Combinable { get; }
+
+      Whether the antenna can be combined with other antennae on the vessel
+      to boost the power.
+
+      :Game Scenes: All
+
+   .. property:: double CombinableExponent { get; }
+
+      Exponent used to calculate the combined power of multiple antennae on a vessel.
+
+      :Game Scenes: All
+
+   .. property:: float PacketInterval { get; }
+
+      Interval between sending packets in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float PacketSize { get; }
+
+      Amount of data sent per packet in Mits.
+
+      :Game Scenes: All
+
+   .. property:: double PacketResourceCost { get; }
+
+      Units of electric charge consumed per packet sent.
+
+      :Game Scenes: All
+
+
+
+.. enum:: AntennaState
+
+   The state of an antenna. See :prop:`Antenna.State`.
+
+
+   .. value:: Deployed
+
+      Antenna is fully deployed.
+
+
+   .. value:: Retracted
+
+      Antenna is fully retracted.
+
+
+   .. value:: Deploying
+
+      Antenna is being deployed.
+
+
+   .. value:: Retracting
+
+      Antenna is being retracted.
+
+
+   .. value:: Broken
+
+      Antenna is broken.
+
+
+
+Cargo Bay
+^^^^^^^^^
+
+
+.. class:: CargoBay
+
+   A cargo bay. Obtained by calling :prop:`Part.CargoBay`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this cargo bay.
+
+      :Game Scenes: All
+
+   .. property:: CargoBayState State { get; }
+
+      The state of the cargo bay.
+
+      :Game Scenes: All
+
+   .. property:: bool Open { get; set; }
+
+      Whether the cargo bay is open.
+
+      :Game Scenes: All
+
+
+
+.. enum:: CargoBayState
+
+   The state of a cargo bay. See :prop:`CargoBay.State`.
+
+
+   .. value:: Open
+
+      Cargo bay is fully open.
+
+
+   .. value:: Closed
+
+      Cargo bay closed and locked.
+
+
+   .. value:: Opening
+
+      Cargo bay is opening.
+
+
+   .. value:: Closing
+
+      Cargo bay is closing.
+
+
+
+Control Surface
+^^^^^^^^^^^^^^^
+
+
+.. class:: ControlSurface
+
+   An aerodynamic control surface. Obtained by calling :prop:`Part.ControlSurface`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this control surface.
+
+      :Game Scenes: All
+
+   .. property:: bool PitchEnabled { get; set; }
+
+      Whether the control surface has pitch control enabled.
+
+      :Game Scenes: All
+
+   .. property:: bool YawEnabled { get; set; }
+
+      Whether the control surface has yaw control enabled.
+
+      :Game Scenes: All
+
+   .. property:: bool RollEnabled { get; set; }
+
+      Whether the control surface has roll control enabled.
+
+      :Game Scenes: All
+
+   .. property:: float AuthorityLimiter { get; set; }
+
+      The authority limiter for the control surface, which controls how far the
+      control surface will move.
+
+      :Game Scenes: All
+
+   .. property:: bool Inverted { get; set; }
+
+      Whether the control surface movement is inverted.
+
+      :Game Scenes: All
+
+   .. property:: bool Deployed { get; set; }
+
+      Whether the control surface has been fully deployed.
+
+      :Game Scenes: All
+
+   .. property:: bool DeflectionOverride { get; set; }
+
+      Whether the control surface deflection is being set directly, bypassing the vessel's
+      normal flight control. When enabled, the surface holds the deflection set by
+      :prop:`ControlSurface.Deflection` instead of responding to pitch, yaw and roll control inputs.
+      The prior state is restored when the override is released, when the
+      controlling client disconnects, or when the vessel changes.
+
+      :Game Scenes: All
+
+   .. property:: float Deflection { get; set; }
+
+      The deflection command applied when :prop:`ControlSurface.DeflectionOverride` is enabled, as a
+      value between -1 and 1, mapped onto the surface's deploy angle range.
+
+      :Game Scenes: All
+
+   .. property:: float SurfaceArea { get; }
+
+      Surface area of the control surface in :math:`m^2`.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
+
+      The available torque, in Newton meters, that can be produced by this control surface,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
+
+      :Game Scenes: All
+
+
+
+Decoupler
+^^^^^^^^^
+
+
+.. class:: Decoupler
+
+   A decoupler. Obtained by calling :prop:`Part.Decoupler`
+
+   .. property:: Part Part { get; }
+
+      The part object for this decoupler.
+
+      :Game Scenes: All
+
+   .. method:: Vessel Decouple()
+
+      Fires the decoupler. Returns the new vessel created when the decoupler fires.
+      Throws an exception if the decoupler has already fired.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :prop:`SpaceCenter.ActiveVessel <SpaceCenter.SpaceCenter.ActiveVessel>` no longer refer to the active vessel.
+
+   .. property:: bool Decoupled { get; }
+
+      Whether the decoupler has fired.
+
+      :Game Scenes: All
+
+   .. property:: bool Staged { get; }
+
+      Whether the decoupler is enabled in the staging sequence.
+
+      :Game Scenes: All
+
+   .. property:: float Impulse { get; }
+
+      The impulse that the decoupler imparts when it is fired, in Newton seconds.
+
+      :Game Scenes: All
+
+   .. property:: bool IsOmniDecoupler { get; }
+
+      Whether the decoupler is an omni-decoupler (e.g. stack separator)
+
+      :Game Scenes: All
+
+   .. property:: Part AttachedPart { get; }
+
+      The part attached to this decoupler's explosive node.
+
+      :Game Scenes: All
+
+
+
+Docking Port
+^^^^^^^^^^^^
+
+
+.. class:: DockingPort
+
+   A docking port. Obtained by calling :prop:`Part.DockingPort`
+
+   .. property:: Part Part { get; }
+
+      The part object for this docking port.
+
+      :Game Scenes: All
+
+   .. property:: DockingPortState State { get; }
+
+      The current state of the docking port.
+
+      :Game Scenes: All
+
+   .. property:: Part DockedPart { get; }
+
+      The part that this docking port is docked to. Returns ``null`` if this
+      docking port is not docked to anything.
+
+      :Game Scenes: All
+
+   .. method:: Vessel Undock()
+
+      Undocks the docking port and returns the new :type:`Vessel` that is created.
+      This method can be called for either docking port in a docked pair.
+      Throws an exception if the docking port is not docked to anything.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :prop:`SpaceCenter.ActiveVessel <SpaceCenter.SpaceCenter.ActiveVessel>` no longer refer to the active vessel.
+
+   .. property:: float ReengageDistance { get; }
+
+      The distance a docking port must move away when it undocks before it
+      becomes ready to dock with another port, in meters.
+
+      :Game Scenes: All
+
+   .. property:: bool HasShield { get; }
+
+      Whether the docking port has a shield.
+
+      :Game Scenes: All
+
+   .. property:: bool Shielded { get; set; }
+
+      The state of the docking ports shield, if it has one.
+
+      Returns ``true`` if the docking port has a shield, and the shield is
+      closed. Otherwise returns ``false``. When set to ``true``, the shield is
+      closed, and when set to ``false`` the shield is opened. If the docking
+      port does not have a shield, setting this attribute has no effect.
+
+      :Game Scenes: All
+
+   .. property:: bool CanRotate { get; }
+
+      Whether the docking port can be commanded to rotate while docked.
+
+      :Game Scenes: All
+
+   .. property:: float MaximumRotation { get; }
+
+      Maximum rotation angle in degrees.
+
+      :Game Scenes: All
+
+   .. property:: float MinimumRotation { get; }
+
+      Minimum rotation angle in degrees.
+
+      :Game Scenes: All
+
+   .. property:: float RotationTarget { get; set; }
+
+      Rotation target angle in degrees.
+
+      :Game Scenes: All
+
+   .. property:: bool RotationLocked { get; set; }
+
+      Lock rotation. When locked, allows auto-strut to work across the joint.
+
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+
+      The position of the docking port, in the given reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
+
+      The direction that docking port points in, in the given reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
+
+      The rotation of the docking port, in the given reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned rotation is in.
+
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame ReferenceFrame { get; }
+
+      The reference frame that is fixed relative to this docking port, and
+      oriented with the port.
+
+      * The origin is at the position of the docking port.
+      * The axes rotate with the docking port.
+      * The x-axis points out to the right side of the docking port.
+      * The y-axis points in the direction the docking port is facing.
+      * The z-axis points out of the bottom off the docking port.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This reference frame is not necessarily equivalent to the reference frame
+         for the part, returned by :prop:`Part.ReferenceFrame`.
+
+      .. figure:: /images/reference-frames/docking-port.png
+         :align: center
+
+         Docking port reference frame origin and axes
+
+      .. figure:: /images/reference-frames/docking-port-inline.png
+         :align: center
+
+         Inline docking port reference frame origin and axes
+
+
+
+.. enum:: DockingPortState
+
+   The state of a docking port. See :prop:`DockingPort.State`.
+
+
+   .. value:: Ready
+
+      The docking port is ready to dock to another docking port.
+
+
+   .. value:: Docked
+
+      The docking port is docked to another docking port, or docked to
+      another part (from the VAB/SPH).
+
+
+   .. value:: Docking
+
+      The docking port is very close to another docking port,
+      but has not docked. It is using magnetic force to acquire a solid dock.
+
+
+   .. value:: Undocking
+
+      The docking port has just been undocked from another docking port,
+      and is disabled until it moves away by a sufficient distance
+      (:prop:`DockingPort.ReengageDistance`).
+
+
+   .. value:: Shielded
+
+      The docking port has a shield, and the shield is closed.
+
+
+   .. value:: Moving
+
+      The docking ports shield is currently opening/closing.
+
+
+
+Engine
+^^^^^^
+
+
+.. class:: Engine
+
+   An engine, including ones of various types.
+   For example liquid fuelled gimballed engines, solid rocket boosters and jet engines.
+   Obtained by calling :prop:`Part.Engine`.
+
+   .. note::
+
+      For RCS thrusters :prop:`Part.RCS`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this engine.
+
+      :Game Scenes: All
+
+   .. property:: bool Active { get; set; }
+
+      Whether the engine is active. Setting this attribute may have no effect,
+      depending on :prop:`Engine.CanShutdown` and :prop:`Engine.CanRestart`.
+
+      :Game Scenes: All
+
+   .. property:: float Thrust { get; }
+
+      The current amount of thrust being produced by the engine, in Newtons.
+
+      :Game Scenes: All
+
+   .. property:: float AvailableThrust { get; }
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and with its throttle set to 100%.
+      Returns zero if the engine does not have any fuel.
+      Takes the engine's current :prop:`Engine.ThrustLimit` and atmospheric conditions
+      into account.
+
+      :Game Scenes: All
+
+   .. method:: float AvailableThrustAt(double pressure)
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and with its throttle set to 100%.
+      Returns zero if the engine does not have any fuel.
+      Takes the given pressure into account.
+
+      :parameters:
+
+       * **pressure** -- Atmospheric pressure in atmospheres
+
+      :Game Scenes: All
+
+   .. property:: float MaxThrust { get; }
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and fueled, with its throttle and throttle limiter set to 100%.
+
+      :Game Scenes: All
+
+   .. method:: float MaxThrustAt(double pressure)
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and fueled, with its throttle and throttle limiter set to 100%.
+      Takes the given pressure into account.
+
+      :parameters:
+
+       * **pressure** -- Atmospheric pressure in atmospheres
+
+      :Game Scenes: All
+
+   .. property:: float MaxVacuumThrust { get; }
+
+      The maximum amount of thrust that can be produced by the engine in a
+      vacuum, in Newtons. This is the amount of thrust produced by the engine
+      when activated, :prop:`Engine.ThrustLimit` is set to 100%, the main
+      vessel's throttle is set to 100% and the engine is in a vacuum.
+
+      :Game Scenes: All
+
+   .. property:: float ThrustLimit { get; set; }
+
+      The thrust limiter of the engine. A value between 0 and 1. Setting this
+      attribute may have no effect, for example the thrust limit for a solid
+      rocket booster cannot be changed in flight.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Thruster> Thrusters { get; }
+
+      The components of the engine that generate thrust.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         For example, this corresponds to the rocket nozzel on a solid rocket booster,
+         or the individual nozzels on a RAPIER engine.
+         The overall thrust produced by the engine, as reported by :prop:`Engine.AvailableThrust`,
+         :prop:`Engine.MaxThrust` and others, is the sum of the thrust generated by each thruster.
+
+   .. property:: float SpecificImpulse { get; }
+
+      The current specific impulse of the engine, in seconds. Returns zero
+      if the engine is not active.
+
+      :Game Scenes: All
+
+   .. method:: float SpecificImpulseAt(double pressure)
+
+      The specific impulse of the engine under the given pressure, in seconds. Returns zero
+      if the engine is not active.
+
+      :parameters:
+
+       * **pressure** -- Atmospheric pressure in atmospheres
+
+      :Game Scenes: All
+
+   .. property:: float VacuumSpecificImpulse { get; }
+
+      The vacuum specific impulse of the engine, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float KerbinSeaLevelSpecificImpulse { get; }
+
+      The specific impulse of the engine at sea level on Kerbin, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<string> PropellantNames { get; }
+
+      The names of the propellants that the engine consumes.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IDictionary<string,float> PropellantRatios { get; }
+
+      The ratio of resources that the engine consumes. A dictionary mapping resource names
+      to the ratio at which they are consumed by the engine.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         For example, if the ratios are 0.6 for LiquidFuel and 0.4 for Oxidizer, then for every
+         0.6 units of LiquidFuel that the engine burns, it will burn 0.4 units of Oxidizer.
+
+   .. property:: System.Collections.Generic.IList<Propellant> Propellants { get; }
+
+      The propellants that the engine consumes.
+
+      :Game Scenes: All
+
+   .. property:: bool HasFuel { get; }
+
+      Whether the engine has any fuel available.
+
+      :Game Scenes: All
+
+   .. property:: float Throttle { get; set; }
+
+      The current throttle setting for the engine. A value between 0 and 1.
+      This is not necessarily the same as the vessel's main throttle
+      setting, as some engines take time to adjust their throttle
+      (such as jet engines), or independent throttle may be enabled.
+
+      When the engine's independent throttle is enabled
+      (see :prop:`Engine.IndependentThrottle`), can be used to set the throttle percentage.
+
+      :Game Scenes: All
+
+   .. property:: bool ThrottleLocked { get; }
+
+      Whether the :prop:`Control.Throttle` affects the engine. For example,
+      this is ``true`` for liquid fueled rockets, and ``false`` for solid rocket
+      boosters.
+
+      :Game Scenes: All
+
+   .. property:: bool IndependentThrottle { get; set; }
+
+      Whether the independent throttle is enabled for the engine.
+
+      :Game Scenes: All
+
+   .. property:: bool CanRestart { get; }
+
+      Whether the engine can be restarted once shutdown. If the engine cannot be shutdown,
+      returns ``false``. For example, this is ``true`` for liquid fueled rockets
+      and ``false`` for solid rocket boosters.
+
+      :Game Scenes: All
+
+   .. property:: bool CanShutdown { get; }
+
+      Whether the engine can be shutdown once activated. For example, this is
+      ``true`` for liquid fueled rockets and ``false`` for solid rocket boosters.
+
+      :Game Scenes: All
+
+   .. property:: bool HasModes { get; }
+
+      Whether the engine has multiple modes of operation.
+
+      :Game Scenes: All
+
+   .. property:: string Mode { get; set; }
+
+      The name of the current engine mode.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IDictionary<string,Engine> Modes { get; }
+
+      The available modes for the engine.
+      A dictionary mapping mode names to :type:`Engine` objects.
+
+      :Game Scenes: All
+
+   .. method:: void ToggleMode()
+
+      Toggle the current engine mode.
+
+
+      :Game Scenes: All
+
+   .. property:: bool AutoModeSwitch { get; set; }
+
+      Whether the engine will automatically switch modes.
+
+      :Game Scenes: All
+
+   .. property:: bool Gimballed { get; }
+
+      Whether the engine is gimballed.
+
+      :Game Scenes: All
+
+   .. property:: float GimbalRange { get; }
+
+      The range over which the gimbal can move, in degrees.
+      Returns 0 if the engine is not gimballed.
+
+      :Game Scenes: All
+
+   .. property:: bool GimbalLocked { get; set; }
+
+      Whether the engines gimbal is locked in place. Setting this attribute has
+      no effect if the engine is not gimballed.
+
+      :Game Scenes: All
+
+   .. property:: float GimbalLimit { get; set; }
+
+      The gimbal limiter of the engine. A value between 0 and 1.
+      Returns 0 if the gimbal is locked.
+
+      :Game Scenes: All
+
+   .. property:: bool GimbalOverride { get; set; }
+
+      Whether the gimbal is being controlled directly, bypassing the vessel's normal
+      flight controls. When enabled, the gimbal deflection is set by
+      :prop:`Engine.GimbalActuation` instead of the normal control inputs.
+      The override is automatically released if the controlling client disconnects or the
+      vessel changes. Has no effect if the engine is not gimballed.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> GimbalActuation { get; set; }
+
+      The gimbal actuation command applied when :prop:`Engine.GimbalOverride` is enabled, in
+      the pitch, roll and yaw axes. Each component is a normalized control input between -1
+      and 1. The physical deflection is scaled by :prop:`Engine.GimbalRange`
+      and :prop:`Engine.GimbalLimit`. When the gimbal is not being overridden,
+      returns the current actuation.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
+
+      The available torque, in Newton meters, that can be produced by this engine,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
+      Returns zero if the engine is inactive, or not gimballed.
+
+      :Game Scenes: All
+
+   .. property:: bool CanReverseThrust { get; }
+
+      Whether the engine has a recognized thrust reverser. This is ``true`` for
+      stock engines with a thrust reverser (such as the J-33 "Wheesley" and
+      J-90 "Goliath" turbofan engines) and for selected mod engines. It is
+      ``false`` for engines whose reverser is not recognized, as KSP provides no
+      standard way to detect one.
+
+      :Game Scenes: All
+
+   .. property:: bool ThrustReversed { get; set; }
+
+      Whether the engine's thrust reverser is engaged, reversing the
+      direction of thrust. Raises an exception if the engine does not have a
+      thrust reverser (see :prop:`Engine.CanReverseThrust`).
+
+      :Game Scenes: All
+
+   .. method:: void ToggleThrustReversal()
+
+      Toggle the engine's thrust reverser. Raises an exception if the engine
+      does not have a thrust reverser (see :prop:`Engine.CanReverseThrust`).
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Propellant
+
+   A propellant for an engine. Obtains by calling :prop:`Engine.Propellants`.
+
+   .. property:: string Name { get; }
+
+      The name of the propellant.
+
+      :Game Scenes: All
+
+   .. property:: double CurrentAmount { get; }
+
+      The current amount of propellant consumed in the current physics update.
+
+      :Game Scenes: All
+
+   .. property:: double CurrentRequirement { get; }
+
+      The required amount of propellant for the current physics update.
+
+      :Game Scenes: All
+
+   .. property:: double TotalResourceAvailable { get; }
+
+      The total amount of the underlying resource currently reachable given
+      resource flow rules.
+
+      :Game Scenes: All
+
+   .. property:: double TotalResourceCapacity { get; }
+
+      The total vehicle capacity for the underlying propellant resource,
+      restricted by resource flow rules.
+
+      :Game Scenes: All
+
+   .. property:: bool IgnoreForIsp { get; }
+
+      If this propellant should be ignored when calculating required mass flow
+      given specific impulse.
+
+      :Game Scenes: All
+
+   .. property:: bool IgnoreForThrustCurve { get; }
+
+      If this propellant should be ignored for thrust curve calculations.
+
+      :Game Scenes: All
+
+   .. property:: bool DrawStackGauge { get; }
+
+      If this propellant has a stack gauge or not.
+
+      :Game Scenes: All
+
+   .. property:: bool IsDeprived { get; }
+
+      If this propellant is deprived.
+
+      :Game Scenes: All
+
+   .. property:: float Ratio { get; }
+
+      The propellant ratio.
+
+      :Game Scenes: All
+
+
+
+Experiment
+^^^^^^^^^^
+
+
+.. class:: Experiment
+
+   Obtained by calling :prop:`Part.Experiment`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this experiment.
+
+      :Game Scenes: All
+
+   .. property:: string Name { get; }
+
+      Internal name of the experiment, as used in
+      `part cfg files <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
+
+      :Game Scenes: All
+
+   .. property:: string Title { get; }
+
+      Title of the experiment, as shown on the in-game UI.
+
+      :Game Scenes: All
+
+   .. method:: void Run()
+
+      Run the experiment.
+
+
+      :Game Scenes: All
+
+   .. method:: void Transmit()
+
+      Transmit all experimental data contained by this part.
+
+
+      :Game Scenes: All
+
+   .. method:: void Dump()
+
+      Dump the experimental data contained by the experiment.
+
+
+      :Game Scenes: All
+
+   .. method:: void Reset()
+
+      Reset the experiment.
+
+
+      :Game Scenes: All
+
+   .. property:: bool Deployed { get; }
+
+      Whether the experiment has been deployed.
+
+      :Game Scenes: All
+
+   .. property:: bool Rerunnable { get; }
+
+      Whether the experiment can be re-run.
+
+      :Game Scenes: All
+
+   .. property:: bool Inoperable { get; }
+
+      Whether the experiment is inoperable.
+
+      :Game Scenes: All
+
+   .. property:: bool HasData { get; }
+
+      Whether the experiment contains data.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<ScienceData> Data { get; }
+
+      The data contained in this experiment.
+
+      :Game Scenes: All
+
+   .. property:: string Biome { get; }
+
+      The name of the biome the experiment is currently in.
+
+      :Game Scenes: All
+
+   .. property:: bool Available { get; }
+
+      Determines if the experiment is available given the current conditions.
+
+      :Game Scenes: All
+
+   .. property:: ScienceSubject ScienceSubject { get; }
+
+      Containing information on the corresponding specific science result for the current
+      conditions. Returns ``null`` if the experiment is unavailable.
+
+      :Game Scenes: All
+
+
+
+.. class:: ScienceData
+
+   Obtained by calling :prop:`Experiment.Data`.
+
+   .. property:: float DataAmount { get; }
+
+      Data amount.
+
+      :Game Scenes: All
+
+   .. property:: float ScienceValue { get; }
+
+      Science value.
+
+      :Game Scenes: All
+
+   .. property:: float TransmitValue { get; }
+
+      Transmit value.
+
+      :Game Scenes: All
+
+
+
+.. class:: ScienceSubject
+
+   Obtained by calling :prop:`Experiment.ScienceSubject`.
+
+   .. property:: string Title { get; }
+
+      Title of science subject, displayed in science archives
+
+      :Game Scenes: All
+
+   .. property:: bool IsComplete { get; }
+
+      Whether the experiment has been completed.
+
+      :Game Scenes: All
+
+   .. property:: float Science { get; }
+
+      Amount of science already earned from this subject, not updated until after
+      transmission/recovery.
+
+      :Game Scenes: All
+
+   .. property:: float ScienceCap { get; }
+
+      Total science allowable for this subject.
+
+      :Game Scenes: All
+
+   .. property:: float DataScale { get; }
+
+      Multiply science value by this to determine data amount in mits.
+
+      :Game Scenes: All
+
+   .. property:: float SubjectValue { get; }
+
+      Multiplier for specific Celestial Body/Experiment Situation combination.
+
+      :Game Scenes: All
+
+   .. property:: float ScientificValue { get; }
+
+      Diminishing value multiplier for decreasing the science value returned from repeated
+      experiments.
+
+      :Game Scenes: All
+
+
+
+Fairing
+^^^^^^^
+
+
+.. class:: Fairing
+
+   A fairing. Obtained by calling :prop:`Part.Fairing`.
+   Supports both stock fairings, and those from the ProceduralFairings mod.
+
+   .. property:: Part Part { get; }
+
+      The part object for this fairing.
+
+      :Game Scenes: All
+
+   .. method:: void Jettison()
+
+      Jettison the fairing. Has no effect if it has already been jettisoned.
+
+
+      :Game Scenes: All
+
+   .. property:: bool Jettisoned { get; }
+
+      Whether the fairing has been jettisoned.
+
+      :Game Scenes: All
+
+
+
+Intake
+^^^^^^
+
+
+.. class:: Intake
+
+   An air intake. Obtained by calling :prop:`Part.Intake`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this intake.
+
+      :Game Scenes: All
+
+   .. property:: bool Open { get; set; }
+
+      Whether the intake is open.
+
+      :Game Scenes: All
+
+   .. property:: float Speed { get; }
+
+      Speed of the flow into the intake, in :math:`m/s`.
+
+      :Game Scenes: All
+
+   .. property:: float Flow { get; }
+
+      The rate of flow into the intake, in units of resource per second.
+
+      :Game Scenes: All
+
+   .. property:: float Area { get; }
+
+      The area of the intake's opening, in square meters.
+
+      :Game Scenes: All
+
+
+
+Leg
+^^^
+
+
+.. class:: Leg
+
+   A landing leg. Obtained by calling :prop:`Part.Leg`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this landing leg.
+
+      :Game Scenes: All
+
+   .. property:: LegState State { get; }
+
+      The current state of the landing leg.
+
+      :Game Scenes: All
+
+   .. property:: bool Deployable { get; }
+
+      Whether the leg is deployable.
+
+      :Game Scenes: All
+
+   .. property:: bool Deployed { get; set; }
+
+      Whether the landing leg is deployed.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Fixed landing legs are always deployed.
+         Returns an error if you try to deploy fixed landing gear.
+
+   .. property:: bool IsGrounded { get; }
+
+      Returns whether the leg is touching the ground.
+
+      :Game Scenes: All
+
+
+
+.. enum:: LegState
+
+   The state of a landing leg. See :prop:`Leg.State`.
+
+
+   .. value:: Deployed
+
+      Landing leg is fully deployed.
+
+
+   .. value:: Retracted
+
+      Landing leg is fully retracted.
+
+
+   .. value:: Deploying
+
+      Landing leg is being deployed.
+
+
+   .. value:: Retracting
+
+      Landing leg is being retracted.
+
+
+   .. value:: Broken
+
+      Landing leg is broken.
+
+
+
+Launch Clamp
+^^^^^^^^^^^^
+
+
+.. class:: LaunchClamp
+
+   A launch clamp. Obtained by calling :prop:`Part.LaunchClamp`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this launch clamp.
+
+      :Game Scenes: All
+
+   .. method:: void Release()
+
+      Releases the docking clamp. Has no effect if the clamp has already been released.
+
+
+      :Game Scenes: All
+
+
+
+Light
+^^^^^
+
+
+.. class:: Light
+
+   A light. Obtained by calling :prop:`Part.Light`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this light.
+
+      :Game Scenes: All
+
+   .. property:: bool Active { get; set; }
+
+      Whether the light is switched on.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<float,float,float> Color { get; set; }
+
+      The color of the light, as an RGB triple.
+
+      :Game Scenes: All
+
+   .. property:: bool Blink { get; set; }
+
+      Whether blinking is enabled.
+
+      :Game Scenes: All
+
+   .. property:: float BlinkRate { get; set; }
+
+      The blink rate of the light.
+
+      :Game Scenes: All
+
+   .. property:: float PowerUsage { get; }
+
+      The current power usage, in units of charge per second.
+
+      :Game Scenes: All
+
+
+
+Parachute
+^^^^^^^^^
+
+
+.. class:: Parachute
+
+   A parachute. Obtained by calling :prop:`Part.Parachute`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this parachute.
+
+      :Game Scenes: All
+
+   .. method:: void Deploy()
+
+      Deploys the parachute. This has no effect if the parachute has already
+      been deployed.
+
+
+      :Game Scenes: All
+
+   .. property:: bool Deployed { get; }
+
+      Whether the parachute has been deployed.
+
+      :Game Scenes: All
+
+   .. method:: void Arm()
+
+      Deploys the parachute. This has no effect if the parachute has already
+      been armed or deployed.
+
+
+      :Game Scenes: All
+
+   .. property:: bool Armed { get; }
+
+      Whether the parachute has been armed or deployed.
+
+      :Game Scenes: All
+
+   .. method:: void Cut()
+
+      Cuts the parachute.
+
+
+      :Game Scenes: All
+
+   .. property:: ParachuteState State { get; }
+
+      The current state of the parachute.
+
+      :Game Scenes: All
+
+   .. property:: float DeployAltitude { get; set; }
+
+      The altitude at which the parachute will full deploy, in meters.
+      Only applicable to stock parachutes.
+
+      :Game Scenes: All
+
+   .. property:: float DeployMinPressure { get; set; }
+
+      The minimum pressure at which the parachute will semi-deploy, in atmospheres.
+      Only applicable to stock parachutes.
+
+      :Game Scenes: All
+
+
+
+.. enum:: ParachuteState
+
+   The state of a parachute. See :prop:`Parachute.State`.
+
+
+   .. value:: Stowed
+
+      The parachute is safely tucked away inside its housing.
+
+
+   .. value:: Armed
+
+      The parachute is armed for deployment.
+
+
+   .. value:: SemiDeployed
+
+      The parachute has been deployed and is providing some drag,
+      but is not fully deployed yet. (Stock parachutes only)
+
+
+   .. value:: Deployed
+
+      The parachute is fully deployed.
+
+
+   .. value:: Cut
+
+      The parachute has been cut.
+
+
+
+Radiator
+^^^^^^^^
+
+
+.. class:: Radiator
+
+   A radiator. Obtained by calling :prop:`Part.Radiator`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this radiator.
+
+      :Game Scenes: All
+
+   .. property:: bool Deployable { get; }
+
+      Whether the radiator is deployable.
+
+      :Game Scenes: All
+
+   .. property:: bool Deployed { get; set; }
+
+      For a deployable radiator, ``true`` if the radiator is extended.
+      If the radiator is not deployable, this is always ``true``.
+
+      :Game Scenes: All
+
+   .. property:: RadiatorState State { get; }
+
+      The current state of the radiator.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         A fixed radiator is always :enum:`RadiatorState.Extended`.
+
+
+
+.. enum:: RadiatorState
+
+   The state of a radiator. :prop:`Radiator.State`
+
+
+   .. value:: Extended
+
+      Radiator is fully extended.
+
+
+   .. value:: Retracted
+
+      Radiator is fully retracted.
+
+
+   .. value:: Extending
+
+      Radiator is being extended.
+
+
+   .. value:: Retracting
+
+      Radiator is being retracted.
+
+
+   .. value:: Broken
+
+      Radiator is broken.
+
+
+
+Resource Converter
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: ResourceConverter
+
+   A resource converter. Obtained by calling :prop:`Part.ResourceConverter`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this converter.
+
+      :Game Scenes: All
+
+   .. property:: int Count { get; }
+
+      The number of converters in the part.
+
+      :Game Scenes: All
+
+   .. method:: string Name(int index)
+
+      The name of the specified converter.
+
+      :parameters:
+
+       * **index** -- Index of the converter.
+
+      :Game Scenes: All
+
+   .. method:: bool Active(int index)
+
+      True if the specified converter is active.
+
+      :parameters:
+
+       * **index** -- Index of the converter.
+
+      :Game Scenes: All
+
+   .. method:: void Start(int index)
+
+      Start the specified converter.
+
+      :parameters:
+
+       * **index** -- Index of the converter.
+
+      :Game Scenes: All
+
+   .. method:: void Stop(int index)
+
+      Stop the specified converter.
+
+      :parameters:
+
+       * **index** -- Index of the converter.
+
+      :Game Scenes: All
+
+   .. method:: ResourceConverterState State(int index)
+
+      The state of the specified converter.
+
+      :parameters:
+
+       * **index** -- Index of the converter.
+
+      :Game Scenes: All
+
+   .. method:: string StatusInfo(int index)
+
+      Status information for the specified converter.
+      This is the full status message shown in the in-game UI.
+
+      :parameters:
+
+       * **index** -- Index of the converter.
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<string> Inputs(int index)
+
+      List of the names of resources consumed by the specified converter.
+
+      :parameters:
+
+       * **index** -- Index of the converter.
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<string> Outputs(int index)
+
+      List of the names of resources produced by the specified converter.
+
+      :parameters:
+
+       * **index** -- Index of the converter.
+
+      :Game Scenes: All
+
+   .. property:: float OptimumCoreTemperature { get; }
+
+      The core temperature at which the converter will operate with peak efficiency, in Kelvin.
+
+      :Game Scenes: All
+
+   .. property:: float CoreTemperature { get; }
+
+      The core temperature of the converter, in Kelvin.
+
+      :Game Scenes: All
+
+   .. property:: float ThermalEfficiency { get; }
+
+      The thermal efficiency of the converter, as a percentage of its maximum.
+
+      :Game Scenes: All
+
+
+
+.. enum:: ResourceConverterState
+
+   The state of a resource converter. See :meth:`ResourceConverter.State`.
+
+
+   .. value:: Running
+
+      Converter is running.
+
+
+   .. value:: Idle
+
+      Converter is idle.
+
+
+   .. value:: MissingResource
+
+      Converter is missing a required resource.
+
+
+   .. value:: StorageFull
+
+      No available storage for output resource.
+
+
+   .. value:: Capacity
+
+      At preset resource capacity.
+
+
+   .. value:: Unknown
+
+      Unknown state. Possible with modified resource converters.
+      In this case, check :meth:`ResourceConverter.StatusInfo` for more information.
+
+
+
+Resource Harvester
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: ResourceHarvester
+
+   A resource harvester (drill). Obtained by calling :prop:`Part.ResourceHarvester`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this harvester.
+
+      :Game Scenes: All
+
+   .. property:: ResourceHarvesterState State { get; }
+
+      The state of the harvester.
+
+      :Game Scenes: All
+
+   .. property:: bool Deployed { get; set; }
+
+      Whether the harvester is deployed.
+
+      :Game Scenes: All
+
+   .. property:: bool Active { get; set; }
+
+      Whether the harvester is actively drilling.
+
+      :Game Scenes: All
+
+   .. property:: float ExtractionRate { get; }
+
+      The rate at which the drill is extracting ore, in units per second.
+
+      :Game Scenes: All
+
+   .. property:: float ThermalEfficiency { get; }
+
+      The thermal efficiency of the drill, as a percentage of its maximum.
+
+      :Game Scenes: All
+
+   .. property:: float CoreTemperature { get; }
+
+      The core temperature of the drill, in Kelvin.
+
+      :Game Scenes: All
+
+   .. property:: float OptimumCoreTemperature { get; }
+
+      The core temperature at which the drill will operate with peak efficiency, in Kelvin.
+
+      :Game Scenes: All
+
+
+
+.. enum:: ResourceHarvesterState
+
+   The state of a resource harvester. See :prop:`ResourceHarvester.State`.
+
+
+   .. value:: Deploying
+
+      The drill is deploying.
+
+
+   .. value:: Deployed
+
+      The drill is deployed and ready.
+
+
+   .. value:: Retracting
+
+      The drill is retracting.
+
+
+   .. value:: Retracted
+
+      The drill is retracted.
+
+
+   .. value:: Active
+
+      The drill is running.
+
+
+
+Reaction Wheel
+^^^^^^^^^^^^^^
+
+
+.. class:: ReactionWheel
+
+   A reaction wheel. Obtained by calling :prop:`Part.ReactionWheel`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this reaction wheel.
+
+      :Game Scenes: All
+
+   .. property:: bool Active { get; set; }
+
+      Whether the reaction wheel is active.
+
+      :Game Scenes: All
+
+   .. property:: bool Broken { get; }
+
+      Whether the reaction wheel is broken.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
+
+      The available torque, in Newton meters, that can be produced by this reaction wheel,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
+      Returns zero if the reaction wheel is inactive or broken.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> MaxTorque { get; }
+
+      The maximum torque, in Newton meters, that can be produced by this reaction wheel,
+      when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
+      These axes correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
+
+      :Game Scenes: All
+
+   .. property:: float AuthorityLimiter { get; set; }
+
+      The authority limiter for the reaction wheel, as a percentage of maximum torque.
+      A value between 0 and 1.
+
+      :Game Scenes: All
+
+
+
+Resource Drain
+^^^^^^^^^^^^^^
+
+
+.. class:: ResourceDrain
+
+   A resource drain. Obtained by calling :prop:`Part.ResourceDrain`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this resource drain.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Resource> AvailableResources { get; }
+
+      List of available resources.
+
+      :Game Scenes: All
+
+   .. method:: void SetResource(Resource resource, bool enabled)
+
+      Whether the given resource should be drained.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: bool CheckResource(Resource resource)
+
+      Whether the provided resource is enabled for draining.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. property:: DrainMode DrainMode { get; set; }
+
+      The drain mode.
+
+      :Game Scenes: All
+
+   .. property:: float MinRate { get; }
+
+      Minimum possible drain rate
+
+      :Game Scenes: All
+
+   .. property:: float MaxRate { get; }
+
+      Maximum possible drain rate.
+
+      :Game Scenes: All
+
+   .. property:: float Rate { get; set; }
+
+      Current drain rate.
+
+      :Game Scenes: All
+
+   .. method:: void Start()
+
+      Activates resource draining for all enabled parts.
+
+
+      :Game Scenes: All
+
+   .. method:: void Stop()
+
+      Turns off resource draining.
+
+
+      :Game Scenes: All
+
+
+
+.. enum:: DrainMode
+
+   Resource drain mode.
+   See :prop:`ResourceDrain.DrainMode`.
+
+
+   .. value:: Part
+
+      Drains from the parent part.
+
+
+   .. value:: Vessel
+
+      Drains from all available parts.
+
+
+
+Robotic Controller
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: RoboticController
+
+   A robotic controller. Obtained by calling :prop:`Part.RoboticController`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this controller.
+
+      :Game Scenes: All
+
+   .. method:: bool HasPart(Part part)
+
+      Whether the controller has a part.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<System.Collections.Generic.IList<string>> Axes()
+
+      The axes for the controller.
+
+
+      :Game Scenes: All
+
+   .. method:: bool AddAxis(Module module, string fieldName)
+
+      Add an axis to the controller.
+
+      :parameters:
+
+
+
+
+      :returns: Returns ``true`` if the axis is added successfully.
+      :Game Scenes: All
+
+   .. method:: bool AddKeyFrame(Module module, string fieldName, float time, float value)
+
+      Add key frame value for controller axis.
+
+      :parameters:
+
+
+
+
+
+
+      :returns: Returns ``true`` if the key frame is added successfully.
+      :Game Scenes: All
+
+   .. method:: bool ClearAxis(Module module, string fieldName)
+
+      Clear axis.
+
+      :parameters:
+
+
+
+
+      :returns: Returns ``true`` if the axis is cleared successfully.
+      :Game Scenes: All
+
+
+
+Robotic Hinge
+^^^^^^^^^^^^^
+
+
+.. class:: RoboticHinge
+
+   A robotic hinge. Obtained by calling :prop:`Part.RoboticHinge`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this robotic hinge.
+
+      :Game Scenes: All
+
+   .. property:: float TargetAngle { get; set; }
+
+      Target angle.
+
+      :Game Scenes: All
+
+   .. property:: float CurrentAngle { get; }
+
+      Current angle.
+
+      :Game Scenes: All
+
+   .. property:: float Rate { get; set; }
+
+      Target movement rate in degrees per second.
+
+      :Game Scenes: All
+
+   .. property:: float Damping { get; set; }
+
+      Damping percentage.
+
+      :Game Scenes: All
+
+   .. property:: bool Locked { get; set; }
+
+      Lock movement.
+
+      :Game Scenes: All
+
+   .. property:: bool MotorEngaged { get; set; }
+
+      Whether the motor is engaged.
+
+      :Game Scenes: All
+
+   .. method:: void MoveHome()
+
+      Move hinge to it's built position.
+
+
+      :Game Scenes: All
+
+
+
+Robotic Piston
+^^^^^^^^^^^^^^
+
+
+.. class:: RoboticPiston
+
+   A robotic piston part. Obtained by calling :prop:`Part.RoboticPiston`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this robotic piston.
+
+      :Game Scenes: All
+
+   .. property:: float TargetExtension { get; set; }
+
+      Target extension of the piston.
+
+      :Game Scenes: All
+
+   .. property:: float CurrentExtension { get; }
+
+      Current extension of the piston.
+
+      :Game Scenes: All
+
+   .. property:: float Rate { get; set; }
+
+      Target movement rate in degrees per second.
+
+      :Game Scenes: All
+
+   .. property:: float Damping { get; set; }
+
+      Damping percentage.
+
+      :Game Scenes: All
+
+   .. property:: bool Locked { get; set; }
+
+      Lock movement.
+
+      :Game Scenes: All
+
+   .. property:: bool MotorEngaged { get; set; }
+
+      Whether the motor is engaged.
+
+      :Game Scenes: All
+
+   .. method:: void MoveHome()
+
+      Move piston to it's built position.
+
+
+      :Game Scenes: All
+
+
+
+Robotic Rotation
+^^^^^^^^^^^^^^^^
+
+
+.. class:: RoboticRotation
+
+   A robotic rotation servo. Obtained by calling :prop:`Part.RoboticRotation`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this robotic rotation servo.
+
+      :Game Scenes: All
+
+   .. property:: float TargetAngle { get; set; }
+
+      Target angle.
+
+      :Game Scenes: All
+
+   .. property:: float CurrentAngle { get; }
+
+      Current angle.
+
+      :Game Scenes: All
+
+   .. property:: float Rate { get; set; }
+
+      Target movement rate in degrees per second.
+
+      :Game Scenes: All
+
+   .. property:: float Damping { get; set; }
+
+      Damping percentage.
+
+      :Game Scenes: All
+
+   .. property:: bool Locked { get; set; }
+
+      Lock Movement
+
+      :Game Scenes: All
+
+   .. property:: bool MotorEngaged { get; set; }
+
+      Whether the motor is engaged.
+
+      :Game Scenes: All
+
+   .. method:: void MoveHome()
+
+      Move rotation servo to it's built position.
+
+
+      :Game Scenes: All
+
+
+
+Robotic Rotor
+^^^^^^^^^^^^^
+
+
+.. class:: RoboticRotor
+
+   A robotic rotor. Obtained by calling :prop:`Part.RoboticRotor`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this robotic rotor.
+
+      :Game Scenes: All
+
+   .. property:: float TargetRPM { get; set; }
+
+      Target RPM.
+
+      :Game Scenes: All
+
+   .. property:: float CurrentRPM { get; }
+
+      Current RPM.
+
+      :Game Scenes: All
+
+   .. property:: bool Inverted { get; set; }
+
+      Whether the rotor direction is inverted.
+
+      :Game Scenes: All
+
+   .. property:: float TorqueLimit { get; set; }
+
+      Torque limit percentage.
+
+      :Game Scenes: All
+
+   .. property:: bool Locked { get; set; }
+
+      Lock movement.
+
+      :Game Scenes: All
+
+   .. property:: bool MotorEngaged { get; set; }
+
+      Whether the motor is engaged.
+
+      :Game Scenes: All
+
+
+
+RCS
+^^^
+
+
+.. class:: RCS
+
+   An RCS block or thruster. Obtained by calling :prop:`Part.RCS`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this RCS.
+
+      :Game Scenes: All
+
+   .. property:: bool Active { get; }
+
+      Whether the RCS thrusters are active.
+      An RCS thruster is inactive if the RCS action group is disabled
+      (:prop:`Control.RCS`), the RCS thruster itself is not enabled
+      (:prop:`RCS.Enabled`) or it is covered by a fairing (:prop:`Part.Shielded`).
+
+      :Game Scenes: All
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the RCS thrusters are enabled.
+
+      :Game Scenes: All
+
+   .. property:: bool PitchEnabled { get; set; }
+
+      Whether the RCS thruster will fire when pitch control input is given.
+
+      :Game Scenes: All
+
+   .. property:: bool YawEnabled { get; set; }
+
+      Whether the RCS thruster will fire when yaw control input is given.
+
+      :Game Scenes: All
+
+   .. property:: bool RollEnabled { get; set; }
+
+      Whether the RCS thruster will fire when roll control input is given.
+
+      :Game Scenes: All
+
+   .. property:: bool ForwardEnabled { get; set; }
+
+      Whether the RCS thruster will fire when pitch control input is given.
+
+      :Game Scenes: All
+
+   .. property:: bool UpEnabled { get; set; }
+
+      Whether the RCS thruster will fire when yaw control input is given.
+
+      :Game Scenes: All
+
+   .. property:: bool RightEnabled { get; set; }
+
+      Whether the RCS thruster will fire when roll control input is given.
+
+      :Game Scenes: All
+
+   .. property:: bool InputOverride { get; set; }
+
+      Whether the RCS control is being set directly, bypassing the vessel's
+      normal flight controls. When enabled, the rotation and translation demand is set by
+      :prop:`RCS.RotationOverride` and :prop:`RCS.TranslationOverride` instead of the
+      normal control inputs. The override is automatically released if the
+      controlling client disconnects or the vessel changes.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> RotationOverride { get; set; }
+
+      The rotation demand applied when :prop:`RCS.InputOverride` is enabled, in the pitch,
+      roll and yaw axes. Each component is a normalized control input between -1 and 1.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> TranslationOverride { get; set; }
+
+      The translation demand applied when :prop:`RCS.InputOverride` is enabled, in the
+      right, up and forward axes. Each component is a normalized control input between -1
+      and 1.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
+
+      The available torque, in Newton meters, that can be produced by this RCS,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
+      Returns zero if RCS is disable.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableForce { get; }
+
+      The available force, in Newtons, that can be produced by this RCS,
+      in the positive and negative x, y and z axes of the vessel. These axes
+      correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
+      Returns zero if RCS is disabled.
+
+      :Game Scenes: All
+
+   .. property:: float AvailableThrust { get; }
+
+      The amount of thrust, in Newtons, that would be produced by the thruster when activated.
+      Returns zero if the thruster does not have any fuel.
+      Takes the thrusters current :prop:`RCS.ThrustLimit` and atmospheric conditions
+      into account.
+
+      :Game Scenes: All
+
+   .. property:: float MaxThrust { get; }
+
+      The maximum amount of thrust that can be produced by the RCS thrusters when active,
+      in Newtons, with the :prop:`RCS.ThrustLimit` set to 100%.
+      Takes atmospheric conditions into account.
+
+      :Game Scenes: All
+
+   .. property:: float MaxVacuumThrust { get; }
+
+      The maximum amount of thrust that can be produced by the RCS thrusters when active
+      in a vacuum, in Newtons.
+
+      :Game Scenes: All
+
+   .. property:: float ThrustLimit { get; set; }
+
+      The thrust limiter of the thruster. A value between 0 and 1.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Thruster> Thrusters { get; }
+
+      A list of thrusters, one of each nozzel in the RCS part.
+
+      :Game Scenes: All
+
+   .. property:: float SpecificImpulse { get; }
+
+      The current specific impulse of the RCS, in seconds. Returns zero
+      if the RCS is not active.
+
+      :Game Scenes: All
+
+   .. property:: float VacuumSpecificImpulse { get; }
+
+      The vacuum specific impulse of the RCS, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float KerbinSeaLevelSpecificImpulse { get; }
+
+      The specific impulse of the RCS at sea level on Kerbin, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<string> Propellants { get; }
+
+      The names of resources that the RCS consumes.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IDictionary<string,float> PropellantRatios { get; }
+
+      The ratios of resources that the RCS consumes. A dictionary mapping resource names
+      to the ratios at which they are consumed by the RCS.
+
+      :Game Scenes: All
+
+   .. property:: bool HasFuel { get; }
+
+      Whether the RCS has fuel available.
+
+      :Game Scenes: All
+
+
+
+Sensor
+^^^^^^
+
+
+.. class:: Sensor
+
+   A sensor, such as a thermometer. Obtained by calling :prop:`Part.Sensor`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this sensor.
+
+      :Game Scenes: All
+
+   .. property:: bool Active { get; set; }
+
+      Whether the sensor is active.
+
+      :Game Scenes: All
+
+   .. property:: string Value { get; }
+
+      The current value of the sensor.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is the same readout string shown in the part's right-click menu
+         in-game. For programmatic access to the underlying quantities, consider
+         :prop:`Part.Temperature` (temperature sensors),
+         :prop:`Flight.GForce` (accelerometers) or
+         :prop:`Flight.StaticPressure` (barometers).
+
+
+
+Solar Panel
+^^^^^^^^^^^
+
+
+.. class:: SolarPanel
+
+   A solar panel. Obtained by calling :prop:`Part.SolarPanel`.
+
+   .. property:: Part Part { get; }
+
+      The part object for this solar panel.
+
+      :Game Scenes: All
+
+   .. property:: bool Deployable { get; }
+
+      Whether the solar panel is deployable.
+
+      :Game Scenes: All
+
+   .. property:: bool Deployed { get; set; }
+
+      Whether the solar panel is extended.
+
+      :Game Scenes: All
+
+   .. property:: SolarPanelState State { get; }
+
+      The current state of the solar panel.
+
+      :Game Scenes: All
+
+   .. property:: float EnergyFlow { get; }
+
+      The current amount of energy being generated by the solar panel, in
+      units of charge per second.
+
+      :Game Scenes: All
+
+   .. property:: float SunExposure { get; }
+
+      The current amount of sunlight that is incident on the solar panel,
+      as a percentage. A value between 0 and 1.
+
+      :Game Scenes: All
+
+
+
+.. enum:: SolarPanelState
+
+   The state of a solar panel. See :prop:`SolarPanel.State`.
+
+
+   .. value:: Extended
+
+      Solar panel is fully extended.
+
+
+   .. value:: Retracted
+
+      Solar panel is fully retracted.
+
+
+   .. value:: Extending
+
+      Solar panel is being extended.
+
+
+   .. value:: Retracting
+
+      Solar panel is being retracted.
+
+
+   .. value:: Broken
+
+      Solar panel is broken.
+
+
+
+Thruster
+^^^^^^^^
+
+
+.. class:: Thruster
+
+   The component of an :type:`Engine` or :type:`RCS` part that generates thrust.
+   Can obtained by calling :prop:`Engine.Thrusters` or :prop:`RCS.Thrusters`.
+
+   .. note::
+
+      Engines can consist of multiple thrusters.
+      For example, the S3 KS-25x4 "Mammoth" has four rocket nozzels, and so consists of
+      four thrusters.
+
+   .. property:: Part Part { get; }
+
+      The :prop:`Thruster.Part` that contains this thruster.
+
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> ThrustPosition(ReferenceFrame referenceFrame)
+
+      The position at which the thruster generates thrust, in the given reference frame.
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> ThrustDirection(ReferenceFrame referenceFrame)
+
+      The direction of the force generated by the thruster, in the given reference frame.
+      This is opposite to the direction in which the thruster expels propellant.
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame ThrustReferenceFrame { get; }
+
+      A reference frame that is fixed relative to the thruster and orientated with
+      its thrust direction (:meth:`Thruster.ThrustDirection`).
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      * The origin is at the position of thrust for this thruster
+        (:meth:`Thruster.ThrustPosition`).
+      * The axes rotate with the thrust direction.
+        This is the direction in which the thruster expels propellant, including any gimballing.
+      * The y-axis points along the thrust direction.
+      * The x-axis and z-axis are perpendicular to the thrust direction.
+
+      :Game Scenes: All
+
+   .. property:: bool Gimballed { get; }
+
+      Whether the thruster is gimballed.
+
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> GimbalPosition(ReferenceFrame referenceFrame)
+
+      Position around which the gimbal pivots.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> GimbalAngle { get; }
+
+      The current gimbal angle in the pitch, roll and yaw axes, in degrees.
+
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> InitialThrustPosition(ReferenceFrame referenceFrame)
+
+      The position at which the thruster generates thrust, when the engine is in its
+      initial position (no gimballing), in the given reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: All
+
+
+      .. note::
+
+         This position can move when the gimbal rotates. This is because the thrust position and
+         gimbal position are not necessarily the same.
+
+   .. method:: System.Tuple<double,double,double> InitialThrustDirection(ReferenceFrame referenceFrame)
+
+      The direction of the force generated by the thruster, when the engine is in its
+      initial position (no gimballing), in the given reference frame.
+      This is opposite to the direction in which the thruster expels propellant.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: All
+
+
+
+Wheel
+^^^^^
+
+
+.. class:: Wheel
+
+   A wheel. Includes landing gear and rover wheels.
+   Obtained by calling :prop:`Part.Wheel`.
+   Can be used to control the motors, steering and deployment of wheels, among other things.
+
+   .. property:: Part Part { get; }
+
+      The part object for this wheel.
+
+      :Game Scenes: All
+
+   .. property:: WheelState State { get; }
+
+      The current state of the wheel.
+
+      :Game Scenes: All
+
+   .. property:: float Radius { get; }
+
+      Radius of the wheel, in meters.
+
+      :Game Scenes: All
+
+   .. property:: bool Grounded { get; }
+
+      Whether the wheel is touching the ground.
+
+      :Game Scenes: All
+
+   .. property:: bool HasBrakes { get; }
+
+      Whether the wheel has brakes.
+
+      :Game Scenes: All
+
+   .. property:: float Brakes { get; set; }
+
+      The braking force, as a percentage of maximum, when the brakes are applied.
+
+      :Game Scenes: All
+
+   .. property:: bool AutoFrictionControl { get; set; }
+
+      Whether automatic friction control is enabled.
+
+      :Game Scenes: All
+
+   .. property:: float ManualFrictionControl { get; set; }
+
+      Manual friction control value. Only has an effect if automatic friction control is disabled.
+      A value between 0 and 5 inclusive.
+
+      :Game Scenes: All
+
+   .. property:: bool Deployable { get; }
+
+      Whether the wheel is deployable.
+
+      :Game Scenes: All
+
+   .. property:: bool Deployed { get; set; }
+
+      Whether the wheel is deployed.
+
+      :Game Scenes: All
+
+   .. property:: bool Powered { get; }
+
+      Whether the wheel is powered by a motor.
+
+      :Game Scenes: All
+
+   .. property:: bool MotorEnabled { get; set; }
+
+      Whether the motor is enabled.
+
+      :Game Scenes: All
+
+   .. property:: bool MotorInverted { get; set; }
+
+      Whether the direction of the motor is inverted.
+
+      :Game Scenes: All
+
+   .. property:: MotorState MotorState { get; }
+
+      Whether the direction of the motor is inverted.
+
+      :Game Scenes: All
+
+   .. property:: float MotorOutput { get; }
+
+      The output of the motor. This is the torque currently being generated, in Newton meters.
+
+      :Game Scenes: All
+
+   .. property:: bool TractionControlEnabled { get; set; }
+
+      Whether automatic traction control is enabled.
+      A wheel only has traction control if it is powered.
+
+      :Game Scenes: All
+
+   .. property:: float TractionControl { get; set; }
+
+      Setting for the traction control.
+      Only takes effect if the wheel has automatic traction control enabled.
+      A value between 0 and 5 inclusive.
+
+      :Game Scenes: All
+
+   .. property:: float DriveLimiter { get; set; }
+
+      Manual setting for the motor limiter.
+      Only takes effect if the wheel has automatic traction control disabled.
+      A value between 0 and 100 inclusive.
+
+      :Game Scenes: All
+
+   .. property:: bool Steerable { get; }
+
+      Whether the wheel has steering.
+
+      :Game Scenes: All
+
+   .. property:: bool SteeringEnabled { get; set; }
+
+      Whether the wheel steering is enabled.
+
+      :Game Scenes: All
+
+   .. property:: bool SteeringInverted { get; set; }
+
+      Whether the wheel steering is inverted.
+
+      :Game Scenes: All
+
+   .. property:: float SteeringAngleLimit { get; set; }
+
+      The steering angle limit.
+
+      :Game Scenes: All
+
+   .. property:: float SteeringResponseTime { get; set; }
+
+      Steering response time.
+
+      :Game Scenes: All
+
+   .. property:: bool HasSuspension { get; }
+
+      Whether the wheel has suspension.
+
+      :Game Scenes: All
+
+   .. property:: float SuspensionSpringStrength { get; }
+
+      Suspension spring strength, as set in the editor.
+
+      :Game Scenes: All
+
+   .. property:: float SuspensionDamperStrength { get; }
+
+      Suspension damper strength, as set in the editor.
+
+      :Game Scenes: All
+
+   .. property:: bool Broken { get; }
+
+      Whether the wheel is broken.
+
+      :Game Scenes: All
+
+   .. property:: bool Repairable { get; }
+
+      Whether the wheel is repairable.
+
+      :Game Scenes: All
+
+   .. property:: float Stress { get; }
+
+      Current stress on the wheel.
+
+      :Game Scenes: All
+
+   .. property:: float StressTolerance { get; }
+
+      Stress tolerance of the wheel.
+
+      :Game Scenes: All
+
+   .. property:: float StressPercentage { get; }
+
+      Current stress on the wheel as a percentage of its stress tolerance.
+
+      :Game Scenes: All
+
+   .. property:: float Deflection { get; }
+
+      Current deflection of the wheel.
+
+      :Game Scenes: All
+
+   .. property:: float Slip { get; }
+
+      Current slip of the wheel.
+
+      :Game Scenes: All
+
+
+
+.. enum:: WheelState
+
+   The state of a wheel. See :prop:`Wheel.State`.
+
+
+   .. value:: Deployed
+
+      Wheel is fully deployed.
+
+
+   .. value:: Retracted
+
+      Wheel is fully retracted.
+
+
+   .. value:: Deploying
+
+      Wheel is being deployed.
+
+
+   .. value:: Retracting
+
+      Wheel is being retracted.
+
+
+   .. value:: Broken
+
+      Wheel is broken.
+
+
+
+.. enum:: MotorState
+
+   The state of the motor on a powered wheel. See :prop:`Wheel.MotorState`.
+
+
+   .. value:: Idle
+
+      The motor is idle.
+
+
+   .. value:: Running
+
+      The motor is running.
+
+
+   .. value:: Disabled
+
+      The motor is disabled.
+
+
+   .. value:: Inoperable
+
+      The motor is inoperable.
+
+
+   .. value:: NotEnoughResources
+
+      The motor does not have enough resources to run.
+
+
+
+.. _csharp-api-parts-trees-of-parts:
+
+Trees of Parts
+--------------
+
+Vessels in KSP are comprised of a number of parts, connected to one another in a
+*tree* structure. An example vessel is shown in Figure 1, and the corresponding
+tree of parts in Figure 2. The craft file for this example can also be
+:download:`downloaded here </crafts/PartsTree.craft>`.
+
+.. only:: html
+
+   .. container:: clearer
+
+      ..
+
+   .. figure:: /images/api/parts.png
+      :align: left
+      :figwidth: 275
+
+      **Figure 1** -- Example parts making up a vessel.
+
+   .. figure:: /images/api/parts-tree.png
+      :align: right
+      :figwidth: 275
+
+      **Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from the parent part to the child part.
+
+   .. container:: clearer
+
+      ..
+
+.. only:: latex
+
+   .. figure:: /images/api/parts.png
+      :align: center
+      :width: 55%
+
+      **Figure 1** -- Example parts making up a vessel.
+
+   .. figure:: /images/api/parts-tree.png
+      :align: center
+      :width: 55%
+
+      **Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from the parent part to the child part.
+
+
+Traversing the Tree
+^^^^^^^^^^^^^^^^^^^
+
+The tree of parts can be traversed using the attributes :prop:`Parts.Root`,
+:prop:`Part.Parent` and :prop:`Part.Children`.
+
+The root of the tree is the same as the vessels *root part* (part number 1 in
+the example above) and can be obtained by calling :prop:`Parts.Root`.
+A parts children can be obtained by calling :prop:`Part.Children`.
+If the part does not have any children, :prop:`Part.Children`
+returns an empty list. A parts parent can be obtained by calling
+:prop:`Part.Parent`. If the part does not have a parent
+(as is the case for the root part), :prop:`Part.Parent`
+returns ``null``.
+
+The following C# example uses these attributes to perform a
+depth-first traversal over all of the parts in a vessel:
+
+.. literalinclude:: /scripts/services/space-center/TreeTraversal.cs
+
+When this code is execute using the craft file for the example vessel pictured
+above, the following is printed out::
+
+    Command Pod Mk1
+     TR-18A Stack Decoupler
+      FL-T400 Fuel Tank
+       LV-909 Liquid Fuel Engine
+        TR-18A Stack Decoupler
+         FL-T800 Fuel Tank
+          LV-909 Liquid Fuel Engine
+          TT-70 Radial Decoupler
+           FL-T400 Fuel Tank
+            TT18-A Launch Stability Enhancer
+            FTX-2 External Fuel Duct
+            LV-909 Liquid Fuel Engine
+            Aerodynamic Nose Cone
+          TT-70 Radial Decoupler
+           FL-T400 Fuel Tank
+            TT18-A Launch Stability Enhancer
+            FTX-2 External Fuel Duct
+            LV-909 Liquid Fuel Engine
+            Aerodynamic Nose Cone
+       LT-1 Landing Struts
+       LT-1 Landing Struts
+     Mk16 Parachute
+
+.. _csharp-api-parts-attachment-modes:
+
+Attachment Modes
+^^^^^^^^^^^^^^^^
+
+Parts can be attached to other parts either *radially* (on the side of the
+parent part) or *axially* (on the end of the parent part, to form a stack).
+
+For example, in the vessel pictured above, the parachute (part 2) is *axially*
+connected to its parent (the command pod -- part 1), and the landing leg
+(part 5) is *radially* connected to its parent (the fuel tank -- part 4).
+
+The root part of a vessel (for example the command pod -- part 1) does not have
+a parent part, so does not have an attachment mode. However, the part is
+consider to be *axially* attached to nothing.
+
+The following C# example does a depth-first traversal as before,
+but also prints out the attachment mode used by the part:
+
+.. literalinclude:: /scripts/services/space-center/AttachmentModes.cs
+
+When this code is execute using the craft file for the example vessel pictured
+above, the following is printed out::
+
+ Command Pod Mk1 - axial
+  TR-18A Stack Decoupler - axial
+   FL-T400 Fuel Tank - axial
+    LV-909 Liquid Fuel Engine - axial
+     TR-18A Stack Decoupler - axial
+      FL-T800 Fuel Tank - axial
+       LV-909 Liquid Fuel Engine - axial
+       TT-70 Radial Decoupler - radial
+        FL-T400 Fuel Tank - radial
+         TT18-A Launch Stability Enhancer - radial
+         FTX-2 External Fuel Duct - radial
+         LV-909 Liquid Fuel Engine - axial
+         Aerodynamic Nose Cone - axial
+       TT-70 Radial Decoupler - radial
+        FL-T400 Fuel Tank - radial
+         TT18-A Launch Stability Enhancer - radial
+         FTX-2 External Fuel Duct - radial
+         LV-909 Liquid Fuel Engine - axial
+         Aerodynamic Nose Cone - axial
+    LT-1 Landing Struts - radial
+    LT-1 Landing Struts - radial
+  Mk16 Parachute - axial
+
+.. _csharp-api-parts-fuel-lines:
+
+Fuel Lines
+----------
+
+.. only:: html
+
+   .. figure:: /images/api/parts-fuel-lines.png
+      :align: right
+      :figwidth: 200
+
+      **Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the parts highlighted in green, into the part highlighted in blue.
+
+.. only:: latex
+
+   .. figure:: /images/api/parts-fuel-lines.png
+      :align: center
+      :width: 55%
+
+      **Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the parts highlighted in green, into the part highlighted in blue.
+
+
+.. only:: html
+
+   .. figure:: /images/api/parts-fuel-lines-tree.png
+      :align: right
+      :figwidth: 200
+
+      **Figure 4** -- A subset of the parts tree from Figure 2 above.
+
+.. only:: latex
+
+   .. figure:: /images/api/parts-fuel-lines-tree.png
+      :align: center
+      :width: 55%
+
+      **Figure 4** -- A subset of the parts tree from Figure 2 above.
+
+
+Fuel lines are considered parts, and are included in the parts tree (for
+example, as pictured in Figure 4). However, the parts tree does not contain
+information about which parts fuel lines connect to. The parent part of a fuel
+line is the part from which it will take fuel (as shown in Figure 4) however the
+part that it will send fuel to is not represented in the parts tree.
+
+Figure 5 shows the fuel lines from the example vessel pictured earlier. Fuel
+line part 15 (in red) takes fuel from a fuel tank (part 11 -- in green) and
+feeds it into another fuel tank (part 9 -- in blue). The fuel line is therefore
+a child of part 11, but its connection to part 9 is not represented in the tree.
+
+The attributes :prop:`Part.FuelLinesFrom` and
+:prop:`Part.FuelLinesTo` can be used to discover these
+connections. In the example in Figure 5, when
+:prop:`Part.FuelLinesTo` is called on fuel tank part
+11, it will return a list of parts containing just fuel tank part 9 (the blue
+part). When :prop:`Part.FuelLinesFrom` is called on
+fuel tank part 9, it will return a list containing fuel tank parts 11 and 17
+(the parts colored green).
+
+.. _csharp-api-parts-staging:
+
+Staging
+-------
+
+For vessel-level summaries (delta-v, thrust, fuel, and resources grouped per
+stage), use the :rst:ref:`csharp-api-stage` class via
+:prop:`Vessel.Stages` and
+:prop:`Vessel.DecoupleStages`. Legacy helpers
+:meth:`Parts.InStage`,
+:meth:`Parts.InDecoupleStage`, and
+:meth:`Vessel.ResourcesInDecoupleStage` remain available but
+are deprecated.
+
+.. only:: html
+
+   .. figure:: /images/api/parts-staging.png
+      :align: right
+      :figwidth: 340
+
+      **Figure 6** -- Example vessel from Figure 1 with a staging sequence.
+
+.. only:: latex
+
+   .. figure:: /images/api/parts-staging.png
+      :align: center
+      :width: 55%
+
+      **Figure 6** -- Example vessel from Figure 1 with a staging sequence.
+
+
+Each part has two staging numbers associated with it: the stage in which the
+part is *activated* and the stage in which the part is *decoupled*. These values
+can be obtained using :prop:`Part.Stage` and
+:prop:`Part.DecoupleStage` respectively. For parts that
+are not activated by staging, :prop:`Part.Stage` returns
+-1. For parts that are never decoupled,
+:prop:`Part.DecoupleStage` returns a value of -1.
+
+Figure 6 shows an example staging sequence for a vessel. Figure 7 shows the
+stages in which each part of the vessel will be *activated*. Figure 8 shows the
+stages in which each part of the vessel will be *decoupled*.
+
+.. only:: html
+
+   .. container:: clearer
+
+      ..
+
+   .. figure:: /images/api/parts-staging-activate.png
+      :align: left
+      :figwidth: 250
+
+      **Figure 7** -- The stage in which each part is *activated*.
+
+   .. figure:: /images/api/parts-staging-decouple.png
+      :align: right
+      :figwidth: 250
+
+      **Figure 8** -- The stage in which each part is *decoupled*.
+
+   .. container:: clearer
+
+      ..
+
+.. only:: latex
+
+   .. figure:: /images/api/parts-staging-activate.png
+      :align: center
+      :width: 55%
+
+      **Figure 7** -- The stage in which each part is *activated*.
+
+   .. figure:: /images/api/parts-staging-decouple.png
+      :align: center
+      :width: 55%
+
+      **Figure 8** -- The stage in which each part is *decoupled*.

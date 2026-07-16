@@ -1,0 +1,56 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+KerbalAlarmClock
+================
+
+
+Service KerbalAlarmClock
+
+   This service provides functionality to interact with
+   `Kerbal Alarm Clock <https://forum.kerbalspaceprogram.com/index.php?/topic/22809-13x-kerbal-alarm-clock-v3850-may-30/>`_.
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Available(krpc_connection_t connection, bool * result)
+
+      Whether Kerbal Alarm Clock is available.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarms(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all the alarms.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_AlarmWithName(krpc_connection_t connection, krpc_KerbalAlarmClock_Alarm_t * result, const char * name)
+
+      Get the alarm with the given *name*, or ``nullptr``
+      if no alarms have that name. If more than one alarm has the name,
+      only returns one of them.
+
+      :Parameters:
+
+       * **name** -- Name of the alarm to search for.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_AlarmsWithType(krpc_connection_t connection, krpc_list_object_t * result, krpc_KerbalAlarmClock_AlarmType_t type)
+
+      Get a list of alarms of the specified *type*.
+
+      :Parameters:
+
+       * **type** -- Type of alarm to return.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_CreateAlarm(krpc_connection_t connection, krpc_KerbalAlarmClock_Alarm_t * result, krpc_KerbalAlarmClock_AlarmType_t type, const char * name, double ut)
+
+      Create a new alarm and return it.
+
+      :Parameters:
+
+       * **type** -- Type of the new alarm.
+       * **name** -- Name of the new alarm.
+       * **ut** -- Time at which the new alarm should trigger.

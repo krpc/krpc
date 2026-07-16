@@ -1,0 +1,213 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Resources
+=========
+
+
+.. type:: krpc_SpaceCenter_Resources_t
+
+   Represents the collection of resources stored in a vessel, stage or part.
+   Created by calling :func:`krpc_SpaceCenter_Vessel_Resources`,
+   :func:`krpc_SpaceCenter_Vessel_ResourcesInDecoupleStage` or
+   :func:`krpc_SpaceCenter_Part_Resources`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_All(krpc_connection_t connection, krpc_list_object_t * result)
+
+      All the individual resources that can be stored.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_WithResource(krpc_connection_t connection, krpc_list_object_t * result, const char * name)
+
+      All the individual resources with the given name that can be stored.
+
+      :Parameters:
+
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Names(krpc_connection_t connection, krpc_list_string_t * result)
+
+      A list of resource names that can be stored.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_HasResource(krpc_connection_t connection, bool * result, const char * name)
+
+      Check whether the named resource can be stored.
+
+      :Parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Amount(krpc_connection_t connection, float * result, const char * name)
+
+      Returns the amount of a resource that is currently stored.
+
+      :Parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Max(krpc_connection_t connection, float * result, const char * name)
+
+      Returns the amount of a resource that can be stored.
+
+      :Parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Density(krpc_connection_t connection, float * result, const char * name)
+
+      Returns the density of a resource, in :math:`kg/l`.
+
+      :Parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_FlowMode(krpc_connection_t connection, krpc_SpaceCenter_ResourceFlowMode_t * result, const char * name)
+
+      Returns the flow mode of a resource.
+
+      :Parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Enabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Resources_set_Enabled(bool value)
+
+      Whether use of all the resources are enabled.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is ``true`` if all of the resources are enabled.
+         If any of the resources are not enabled, this is ``false``.
+
+
+
+.. type:: krpc_SpaceCenter_Resource_t
+
+   An individual resource stored within a part.
+   Created using methods in the :type:`krpc_SpaceCenter_Resources_t` class.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Name(krpc_connection_t connection, char * * result)
+
+      The name of the resource.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part containing the resource.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Amount(krpc_connection_t connection, float * result)
+
+      The amount of the resource that is currently stored in the part.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Max(krpc_connection_t connection, float * result)
+
+      The total amount of the resource that can be stored in the part.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Density(krpc_connection_t connection, float * result)
+
+      The density of the resource, in :math:`kg/l`.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_FlowMode(krpc_connection_t connection, krpc_SpaceCenter_ResourceFlowMode_t * result)
+
+      The flow mode of the resource.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Enabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Resource_set_Enabled(bool value)
+
+      Whether use of this resource is enabled.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_ResourceTransfer_t
+
+   Transfer resources between parts.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Start(krpc_connection_t connection, krpc_SpaceCenter_ResourceTransfer_t * result, krpc_SpaceCenter_Part_t fromPart, krpc_SpaceCenter_Part_t toPart, const char * resource, float maxAmount)
+
+      Start transferring a resource transfer between a pair of parts. The transfer will move
+      at most *maxAmount* units of the resource, depending on how much of
+      the resource is available in the source part and how much storage is available in the
+      destination part.
+      Use :func:`krpc_SpaceCenter_ResourceTransfer_Complete` to check if the transfer is complete.
+      Use :func:`krpc_SpaceCenter_ResourceTransfer_Amount` to see how much of the resource has been transferred.
+
+      :Parameters:
+
+       * **fromPart** -- The part to transfer to.
+       * **toPart** -- The part to transfer from.
+       * **resource** -- The name of the resource to transfer.
+       * **maxAmount** -- The maximum amount of resource to transfer.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Amount(krpc_connection_t connection, float * result)
+
+      The amount of the resource that has been transferred.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Complete(krpc_connection_t connection, bool * result)
+
+      Whether the transfer has completed.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_ResourceFlowMode_t
+
+   The way in which a resource flows between parts. See :func:`krpc_SpaceCenter_Resources_FlowMode`.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCEFLOWMODE_VESSEL
+
+      The resource flows to any part in the vessel. For example, electric charge.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCEFLOWMODE_STAGE
+
+      The resource flows from parts in the first stage, followed by the second,
+      and so on. For example, mono-propellant.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCEFLOWMODE_ADJACENT
+
+      The resource flows between adjacent parts within the vessel. For example,
+      liquid fuel or oxidizer.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCEFLOWMODE_NONE
+
+      The resource does not flow. For example, solid fuel.

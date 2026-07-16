@@ -1,0 +1,705 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+SpaceCenter
+===========
+
+
+.. class:: SpaceCenter
+
+   Provides functionality to interact with Kerbal Space Program. This includes controlling
+   the active vessel, managing its resources, planning maneuver nodes and auto-piloting.
+
+   .. property:: float Science { get; }
+
+      The current amount of science.
+
+      :Game Scenes: All
+
+   .. property:: double Funds { get; }
+
+      The current amount of funds.
+
+      :Game Scenes: All
+
+   .. property:: float Reputation { get; }
+
+      The current amount of reputation.
+
+      :Game Scenes: All
+
+   .. property:: Vessel ActiveVessel { get; set; }
+
+      The currently active vessel.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Vessel> Vessels { get; }
+
+      A list of all the vessels in the game.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<LaunchSite> LaunchSites { get; }
+
+      A list of available launch sites.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IDictionary<string,CelestialBody> Bodies { get; }
+
+      A dictionary of all celestial bodies (planets, moons, etc.) in the game,
+      keyed by the name of the body.
+
+      :Game Scenes: All
+
+   .. property:: CelestialBody TargetBody { get; set; }
+
+      The currently targeted celestial body.
+
+      :Game Scenes: Flight
+
+   .. property:: Vessel TargetVessel { get; set; }
+
+      The currently targeted vessel.
+
+      :Game Scenes: Flight
+
+   .. property:: DockingPort TargetDockingPort { get; set; }
+
+      The currently targeted docking port.
+
+      :Game Scenes: Flight
+
+   .. method:: void ClearTarget()
+
+      Clears the current target.
+
+
+      :Game Scenes: Flight
+
+   .. method:: System.Collections.Generic.IList<string> LaunchableVessels(string craftDirectory)
+
+      Returns a list of vessels from the given *craftDirectory*
+      that can be launched.
+
+      :parameters:
+
+       * **craftDirectory** -- Name of the directory in the current saves "Ships" directory. For example ``"VAB"`` or ``"SPH"``.
+
+      :Game Scenes: All
+
+   .. method:: void LaunchVessel(string craftDirectory, string name, string launchSite, bool recover = true, System.Collections.Generic.IList<string> crew = {  }, string flagUrl = "")
+
+      Launch a vessel.
+
+      :parameters:
+
+       * **craftDirectory** -- Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
+       * **name** -- Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
+       * **launchSite** -- Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
+       * **recover** -- If true and there is a vessel on the launch site, recover it before launching.
+       * **crew** -- If not ``null``, a list of names of Kerbals to place in the craft. Otherwise the crew will use default assignments.
+       * **flagUrl** -- If not ``null``, the asset URL of the mission flag to use for the launch.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if any of the games pre-flight checks fail.
+
+   .. method:: void LaunchVesselFromVAB(string name, bool recover = true)
+
+      Launch a new vessel from the VAB onto the launchpad.
+
+      :parameters:
+
+       * **name** -- Name of the vessel to launch.
+       * **recover** -- If true and there is a vessel on the launch pad, recover it before launching.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is equivalent to calling :meth:`SpaceCenter.LaunchVessel <SpaceCenter.SpaceCenter.LaunchVessel>` with the craft directory
+         set to "VAB" and the launch site set to "LaunchPad".
+         Throws an exception if any of the games pre-flight checks fail.
+
+   .. method:: void LaunchVesselFromSPH(string name, bool recover = true)
+
+      Launch a new vessel from the SPH onto the runway.
+
+      :parameters:
+
+       * **name** -- Name of the vessel to launch.
+       * **recover** -- If true and there is a vessel on the runway, recover it before launching.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is equivalent to calling :meth:`SpaceCenter.LaunchVessel <SpaceCenter.SpaceCenter.LaunchVessel>` with the craft directory
+         set to "SPH" and the launch site set to "Runway".
+         Throws an exception if any of the games pre-flight checks fail.
+
+   .. method:: void Save(string name)
+
+      Save the game with a given name.
+      This will create a save file called ``name.sfs`` in the folder of the
+      current save game.
+
+      :parameters:
+
+       * **name** -- Name of the save.
+
+      :Game Scenes: All
+
+   .. method:: void Load(string name)
+
+      Load the game with the given name.
+      This will create a load a save file called ``name.sfs`` from the folder of the
+      current save game.
+
+      :parameters:
+
+       * **name** -- Name of the save.
+
+      :Game Scenes: All
+
+   .. method:: void Quicksave()
+
+      Save a quicksave.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is the same as calling :meth:`SpaceCenter.Save <SpaceCenter.SpaceCenter.Save>` with the name "quicksave".
+
+   .. method:: void Quickload()
+
+      Load a quicksave.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is the same as calling :meth:`SpaceCenter.Load <SpaceCenter.SpaceCenter.Load>` with the name "quicksave".
+
+   .. method:: bool CanRevertToLaunch()
+
+      Whether the current flight can be reverted to launch.
+
+
+      :Game Scenes: All
+
+   .. method:: void RevertToLaunch()
+
+      Revert the current flight to launch.
+
+
+      :Game Scenes: All
+
+   .. method:: void TransferCrew(CrewMember crewMember, Part targetPart)
+
+      Transfers a crew member to a different part.
+
+      :parameters:
+
+       * **crewMember** -- The crew member to transfer.
+       * **targetPart** -- The part to move them to.
+
+      :Game Scenes: Flight
+
+   .. property:: bool UIVisible { get; set; }
+
+      Whether the UI is visible.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Navball { get; set; }
+
+      Whether the navball is visible.
+
+      :Game Scenes: Flight
+
+   .. property:: double UT { get; }
+
+      The current universal time in seconds.
+
+      :Game Scenes: All
+
+   .. property:: double G { get; }
+
+      The value of the `gravitational constant <https://en.wikipedia.org/wiki/Gravitational_constant>`_ G in :math:`N(m/kg)^2`.
+
+      :Game Scenes: All
+
+   .. property:: float WarpRate { get; }
+
+      The current warp rate. This is the rate at which time is passing for
+      either on-rails or physical time warp. For example, a value of 10 means
+      time is passing 10x faster than normal. Returns 1 if time warp is not
+      active.
+
+      :Game Scenes: Flight
+
+   .. property:: float WarpFactor { get; }
+
+      The current warp factor. This is the index of the rate at which time
+      is passing for either regular "on-rails" or physical time warp. Returns 0
+      if time warp is not active. When in on-rails time warp, this is equal to
+      :prop:`SpaceCenter.RailsWarpFactor <SpaceCenter.SpaceCenter.RailsWarpFactor>`, and in physics time warp, this is equal to
+      :prop:`SpaceCenter.PhysicsWarpFactor <SpaceCenter.SpaceCenter.PhysicsWarpFactor>`.
+
+      :Game Scenes: Flight
+
+   .. property:: int RailsWarpFactor { get; set; }
+
+      The time warp rate, using regular "on-rails" time warp. A value between
+      0 and 7 inclusive. 0 means no time warp. Returns 0 if physical time warp
+      is active.
+
+      If requested time warp factor cannot be set, it will be set to the next
+      lowest possible value. For example, if the vessel is too close to a
+      planet. See `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_ for details.
+
+      :Game Scenes: Flight
+
+   .. property:: int PhysicsWarpFactor { get; set; }
+
+      The physical time warp rate. A value between 0 and 3 inclusive. 0 means
+      no time warp. Returns 0 if regular "on-rails" time warp is active.
+
+      :Game Scenes: Flight
+
+   .. method:: bool CanRailsWarpAt(int factor = 1)
+
+      Returns ``true`` if regular "on-rails" time warp can be used, at the specified warp
+      *factor*. The maximum time warp rate is limited by various things,
+      including how close the active vessel is to a planet. See
+      `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_
+      for details.
+
+      :parameters:
+
+       * **factor** -- The warp factor to check.
+
+      :Game Scenes: Flight
+
+   .. property:: int MaximumRailsWarpFactor { get; }
+
+      The current maximum regular "on-rails" warp factor that can be set.
+      A value between 0 and 7 inclusive. See
+      `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_
+      for details.
+
+      :Game Scenes: Flight
+
+   .. method:: void WarpTo(double ut, float maxRailsRate = 100000.0f, float maxPhysicsRate = 2.0f)
+
+      Uses time acceleration to warp forward to a time in the future, specified
+      by universal time *ut*. This call blocks until the desired
+      time is reached. Uses regular "on-rails" or physical time warp as appropriate.
+      For example, physical time warp is used when the active vessel is traveling
+      through an atmosphere. When using regular "on-rails" time warp, the warp
+      rate is limited by *maxRailsRate*, and when using physical
+      time warp, the warp rate is limited by *maxPhysicsRate*.
+
+      :parameters:
+
+       * **ut** -- The universal time to warp to, in seconds.
+       * **maxRailsRate** -- The maximum warp rate in regular "on-rails" time warp.
+       * **maxPhysicsRate** -- The maximum warp rate in physical time warp.
+
+      :returns: When the time warp is complete.
+      :Game Scenes: Flight
+
+   .. method:: System.Tuple<double,double,double> TransformPosition(System.Tuple<double,double,double> position, ReferenceFrame from, ReferenceFrame to)
+
+      Converts a position from one reference frame to another.
+
+      :parameters:
+
+       * **position** -- Position, as a vector, in reference frame *from*.
+       * **from** -- The reference frame that the position is in.
+       * **to** -- The reference frame to covert the position to.
+
+      :returns: The corresponding position, as a vector, in reference frame *to*.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> TransformDirection(System.Tuple<double,double,double> direction, ReferenceFrame from, ReferenceFrame to)
+
+      Converts a direction from one reference frame to another.
+
+      :parameters:
+
+       * **direction** -- Direction, as a vector, in reference frame *from*.
+       * **from** -- The reference frame that the direction is in.
+       * **to** -- The reference frame to covert the direction to.
+
+      :returns: The corresponding direction, as a vector, in reference frame *to*.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double,double> TransformRotation(System.Tuple<double,double,double,double> rotation, ReferenceFrame from, ReferenceFrame to)
+
+      Converts a rotation from one reference frame to another.
+
+      :parameters:
+
+       * **rotation** -- Rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *from*.
+       * **from** -- The reference frame that the rotation is in.
+       * **to** -- The reference frame to covert the rotation to.
+
+      :returns: The corresponding rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *to*.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> TransformVelocity(System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, ReferenceFrame from, ReferenceFrame to)
+
+      Converts a velocity (acting at the specified position) from one reference frame
+      to another. The position is required to take the relative angular velocity of the
+      reference frames into account.
+
+      :parameters:
+
+       * **position** -- Position, as a vector, in reference frame *from*.
+       * **velocity** -- Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in meters per second, in reference frame *from*.
+       * **from** -- The reference frame that the position and velocity are in.
+       * **to** -- The reference frame to covert the velocity to.
+
+      :returns: The corresponding velocity, as a vector, in reference frame *to*.
+      :Game Scenes: All
+
+   .. method:: double RaycastDistance(System.Tuple<double,double,double> position, System.Tuple<double,double,double> direction, ReferenceFrame referenceFrame)
+
+      Cast a ray from a given position in a given direction, and return the distance to the hit point.
+      If no hit occurs, returns infinity.
+
+      :parameters:
+
+       * **position** -- Position, as a vector, of the origin of the ray.
+       * **direction** -- Direction of the ray, as a unit vector.
+       * **referenceFrame** -- The reference frame that the position and direction are in.
+
+      :returns: The distance to the hit, in meters, or infinity if there was no hit.
+      :Game Scenes: All
+
+   .. method:: Part RaycastPart(System.Tuple<double,double,double> position, System.Tuple<double,double,double> direction, ReferenceFrame referenceFrame)
+
+      Cast a ray from a given position in a given direction, and return the part that it hits.
+      If no hit occurs, returns ``null``.
+
+      :parameters:
+
+       * **position** -- Position, as a vector, of the origin of the ray.
+       * **direction** -- Direction of the ray, as a unit vector.
+       * **referenceFrame** -- The reference frame that the position and direction are in.
+
+      :returns: The part that was hit or ``null`` if there was no hit.
+      :Game Scenes: Flight
+
+   .. property:: bool FARAvailable { get; }
+
+      Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_ is installed.
+
+      :Game Scenes: All
+
+   .. method:: void CreateKerbal(string name, string job, bool male)
+
+      Creates a Kerbal.
+
+      :parameters:
+
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: CrewMember GetKerbal(string name)
+
+      Find a Kerbal by name.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: void LoadSpaceCenter()
+
+      Switch to the space center view.
+
+
+      :Game Scenes: All
+
+   .. property:: MapFilterType MapFilter { get; set; }
+
+      The visible objects in map mode.
+
+      :Game Scenes: All
+
+   .. method:: void Screenshot(string filePath, int scale = 1)
+
+      Saves a screenshot.
+
+      :parameters:
+
+       * **filePath** -- The path of the file to save.
+       * **scale** -- Resolution scaling factor
+
+      :Game Scenes: Flight
+
+   .. property:: GameMode GameMode { get; }
+
+      The current mode the game is in.
+
+      :Game Scenes: All
+
+   .. property:: WarpMode WarpMode { get; }
+
+      The current time warp mode. Returns :enum:`WarpMode.None` if time
+      warp is not active, :enum:`WarpMode.Rails` if regular "on-rails" time warp
+      is active, or :enum:`WarpMode.Physics` if physical time warp is active.
+
+      :Game Scenes: Flight
+
+   .. property:: Camera Camera { get; }
+
+      An object that can be used to control the camera.
+
+      :Game Scenes: Flight
+
+   .. property:: WaypointManager WaypointManager { get; }
+
+      The waypoint manager.
+
+      :Game Scenes: Flight
+
+   .. property:: ContractManager ContractManager { get; }
+
+      The contract manager.
+
+      :Game Scenes: All
+
+   .. property:: AlarmManager AlarmManager { get; }
+
+      The alarm manager.
+
+      :Game Scenes: All
+
+
+
+.. enum:: GameMode
+
+   The game mode.
+   Returned by :type:`GameMode`
+
+
+   .. value:: Sandbox
+
+      Sandbox mode.
+
+
+   .. value:: Career
+
+      Career mode.
+
+
+   .. value:: Science
+
+      Science career mode.
+
+
+   .. value:: ScienceSandbox
+
+      Science sandbox mode.
+
+
+   .. value:: Mission
+
+      Mission mode.
+
+
+   .. value:: MissionBuilder
+
+      Mission builder mode.
+
+
+   .. value:: Scenario
+
+      Scenario mode.
+
+
+   .. value:: ScenarioNonResumable
+
+      Scenario mode that cannot be resumed.
+
+
+
+.. enum:: WarpMode
+
+   The time warp mode.
+   Returned by :type:`WarpMode`
+
+
+   .. value:: Rails
+
+      Time warp is active, and in regular "on-rails" mode.
+
+
+   .. value:: Physics
+
+      Time warp is active, and in physical time warp mode.
+
+
+   .. value:: None
+
+      Time warp is not active.
+
+
+
+.. enum:: MapFilterType
+
+   The set of things that are visible in map mode.
+   These may be combined with bitwise logic.
+
+
+   .. value:: All
+
+      Everything.
+
+
+   .. value:: None
+
+      Nothing.
+
+
+   .. value:: Debris
+
+      Debris.
+
+
+   .. value:: Unknown
+
+      Unknown.
+
+
+   .. value:: SpaceObjects
+
+      SpaceObjects.
+
+
+   .. value:: Probes
+
+      Probes.
+
+
+   .. value:: Rovers
+
+      Rovers.
+
+
+   .. value:: Landers
+
+      Landers.
+
+
+   .. value:: Ships
+
+      Ships.
+
+
+   .. value:: Stations
+
+      Stations.
+
+
+   .. value:: Bases
+
+      Bases.
+
+
+   .. value:: EVAs
+
+      EVAs.
+
+
+   .. value:: Flags
+
+      Flags.
+
+
+   .. value:: Plane
+
+      Planes.
+
+
+   .. value:: Relay
+
+      Relays.
+
+
+   .. value:: Site
+
+      Launch Sites.
+
+
+   .. value:: DeployedScienceController
+
+      Deployed Science Controllers.
+
+
+
+.. class:: LaunchSite
+
+   A place where craft can be launched from.
+   More of these can be added with mods like Kerbal Konstructs.
+
+   .. property:: string Name { get; }
+
+      The name of the launch site.
+
+      :Game Scenes: All
+
+   .. property:: CelestialBody Body { get; }
+
+      The celestial body the launch site is on.
+
+      :Game Scenes: All
+
+   .. property:: EditorFacility EditorFacility { get; }
+
+      Which editor is normally used for this launch site.
+
+      :Game Scenes: All
+
+
+
+.. enum:: EditorFacility
+
+   Editor facility.
+   See :prop:`LaunchSite.EditorFacility`.
+
+
+   .. value:: VAB
+
+      Vehicle Assembly Building.
+
+
+   .. value:: SPH
+
+      Space Plane Hanger.
+
+
+   .. value:: None
+
+      None.

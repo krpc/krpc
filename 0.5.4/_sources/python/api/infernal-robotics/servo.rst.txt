@@ -1,0 +1,175 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: InfernalRobotics
+
+Servo
+=====
+
+
+.. class:: Servo
+
+   Represents a servo. Obtained using
+   :attr:`ServoGroup.servos`,
+   :meth:`ServoGroup.servo_with_name`
+   or :meth:`servo_with_name`.
+
+   .. attribute:: name
+
+      The name of the servo.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: part
+
+      The part containing the servo.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+      :Game Scenes: Flight
+
+   .. attribute:: highlight
+
+      Whether the servo should be highlighted in-game.
+
+      :Attribute: Write-only, cannot be read
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: position
+
+      The position of the servo.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: min_config_position
+
+      The minimum position of the servo, specified by the part configuration.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: max_config_position
+
+      The maximum position of the servo, specified by the part configuration.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: min_position
+
+      The minimum position of the servo, specified by the in-game tweak menu.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: max_position
+
+      The maximum position of the servo, specified by the in-game tweak menu.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: config_speed
+
+      The speed multiplier of the servo, specified by the part configuration.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: speed
+
+      The speed multiplier of the servo, specified by the in-game tweak menu.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: current_speed
+
+      The current speed at which the servo is moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: acceleration
+
+      The current speed multiplier set in the UI.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: is_moving
+
+      Whether the servo is moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: is_free_moving
+
+      Whether the servo is freely moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: is_locked
+
+      Whether the servo is locked.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: is_axis_inverted
+
+      Whether the servos axis is inverted.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. method:: move_right()
+
+      Moves the servo to the right.
+
+      :Game Scenes: Flight
+
+   .. method:: move_left()
+
+      Moves the servo to the left.
+
+      :Game Scenes: Flight
+
+   .. method:: move_center()
+
+      Moves the servo to the center.
+
+      :Game Scenes: Flight
+
+   .. method:: move_to(position, speed)
+
+      Moves the servo to *position* and sets the
+      speed multiplier to *speed*.
+
+      :param float position: The position to move the servo to.
+      :param float speed: Speed multiplier for the movement.
+      :Game Scenes: Flight
+
+   .. method:: stop()
+
+      Stops the servo.
+
+      :Game Scenes: Flight

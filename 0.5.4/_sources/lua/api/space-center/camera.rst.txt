@@ -1,0 +1,145 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: SpaceCenter
+
+Camera
+======
+
+
+.. class:: Camera
+
+   Controls the game's camera.
+   Obtained by calling :attr:`SpaceCenter.camera <SpaceCenter.SpaceCenter.camera>`.
+
+   .. attribute:: mode: SpaceCenter.CameraMode
+
+      The current mode of the camera.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.CameraMode`
+
+   .. attribute:: pitch: number
+
+      The pitch of the camera, in degrees.
+      A value between :attr:`SpaceCenter.Camera.min_pitch` and :attr:`SpaceCenter.Camera.max_pitch`
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: heading: number
+
+      The heading of the camera, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: distance: number
+
+      The distance from the camera to the subject, in meters.
+      A value between :attr:`SpaceCenter.Camera.min_distance` and :attr:`SpaceCenter.Camera.max_distance`.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: min_pitch: number
+
+      The minimum pitch of the camera.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: max_pitch: number
+
+      The maximum pitch of the camera.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: min_distance: number
+
+      Minimum distance from the camera to the subject, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: max_distance: number
+
+      Maximum distance from the camera to the subject, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: default_distance: number
+
+      Default distance from the camera to the subject, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: focussed_body: SpaceCenter.CelestialBody
+
+      In map mode, the celestial body that the camera is focussed on.
+      Returns ``nil`` if the camera is not focussed on a celestial body.
+      Returns an error is the camera is not in map mode.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody`
+
+   .. attribute:: focussed_vessel: SpaceCenter.Vessel
+
+      In map mode, the vessel that the camera is focussed on.
+      Returns ``nil`` if the camera is not focussed on a vessel.
+      Returns an error is the camera is not in map mode.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.Vessel`
+
+   .. attribute:: focussed_node: SpaceCenter.Node
+
+      In map mode, the maneuver node that the camera is focussed on.
+      Returns ``nil`` if the camera is not focussed on a maneuver node.
+      Returns an error is the camera is not in map mode.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.Node`
+
+
+
+.. class:: CameraMode
+
+   See :attr:`SpaceCenter.Camera.mode`.
+
+
+   .. data:: automatic
+
+      The camera is showing the active vessel, in "auto" mode.
+
+
+   .. data:: free
+
+      The camera is showing the active vessel, in "free" mode.
+
+
+   .. data:: chase
+
+      The camera is showing the active vessel, in "chase" mode.
+
+
+   .. data:: locked
+
+      The camera is showing the active vessel, in "locked" mode.
+
+
+   .. data:: orbital
+
+      The camera is showing the active vessel, in "orbital" mode.
+
+
+   .. data:: iva
+
+      The Intra-Vehicular Activity view is being shown.
+
+
+   .. data:: map
+
+      The map view is being shown.

@@ -1,0 +1,66 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.Drawing
+
+Polygon
+=======
+
+
+.. type:: public class Polygon
+
+   A polygon. Created using :meth:`addPolygon(java.util.List<org.javatuples.Triplet<Double,Double,Double>>, SpaceCenter.ReferenceFrame, boolean)`.
+
+   .. method:: java.util.List<org.javatuples.Triplet<Double,Double,Double>> getVertices()
+
+   .. method:: void setVertices(java.util.List<org.javatuples.Triplet<Double,Double,Double>> value)
+
+      Vertices for the polygon.
+
+      :Game Scenes: Flight
+
+   .. method:: SpaceCenter.ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(SpaceCenter.ReferenceFrame value)
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight
+
+   .. method:: void remove()
+
+      Remove the object.
+
+      :Game Scenes: Flight
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getColor()
+
+   .. method:: void setColor(org.javatuples.Triplet<Double,Double,Double> value)
+
+      Set the color
+
+      :Game Scenes: Flight
+
+   .. method:: String getMaterial()
+
+   .. method:: void setMaterial(String value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight
+
+   .. method:: float getThickness()
+
+   .. method:: void setThickness(float value)
+
+      Set the thickness
+
+      :Game Scenes: Flight

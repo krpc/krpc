@@ -1,0 +1,502 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KRPC
+
+Expressions
+===========
+
+
+.. class:: Expression
+
+   A server side expression.
+
+   .. staticmethod:: constant_double(value)
+
+      A constant value of double precision floating point type.
+
+      :param float value:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: constant_float(value)
+
+      A constant value of single precision floating point type.
+
+      :param float value:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: constant_int(value)
+
+      A constant value of integer type.
+
+      :param int value:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: constant_bool(value)
+
+      A constant value of boolean type.
+
+      :param bool value:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: constant_string(value)
+
+      A constant value of string type.
+
+      :param str value:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: call(call)
+
+      An RPC call.
+
+      :param krpc.schema.KRPC.ProcedureCall call:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: equal(arg0, arg1)
+
+      Equality comparison.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: not_equal(arg0, arg1)
+
+      Inequality comparison.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: greater_than(arg0, arg1)
+
+      Greater than numerical comparison.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: greater_than_or_equal(arg0, arg1)
+
+      Greater than or equal numerical comparison.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: less_than(arg0, arg1)
+
+      Less than numerical comparison.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: less_than_or_equal(arg0, arg1)
+
+      Less than or equal numerical comparison.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: and_(arg0, arg1)
+
+      Boolean and operator.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: or_(arg0, arg1)
+
+      Boolean or operator.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: exclusive_or(arg0, arg1)
+
+      Boolean exclusive-or operator.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: not_(arg)
+
+      Boolean negation operator.
+
+      :param Expression arg:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: add(arg0, arg1)
+
+      Numerical addition.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: subtract(arg0, arg1)
+
+      Numerical subtraction.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: multiply(arg0, arg1)
+
+      Numerical multiplication.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: divide(arg0, arg1)
+
+      Numerical division.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: modulo(arg0, arg1)
+
+      Numerical modulo operator.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :returns: The remainder of arg0 divided by arg1
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: power(arg0, arg1)
+
+      Numerical power operator.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :returns: arg0 raised to the power of arg1, with type of arg0
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: left_shift(arg0, arg1)
+
+      Bitwise left shift.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: right_shift(arg0, arg1)
+
+      Bitwise right shift.
+
+      :param Expression arg0:
+      :param Expression arg1:
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: cast(arg, type)
+
+      Perform a cast to the given type.
+
+      :param Expression arg:
+      :param Type type: Type to cast the argument to.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: parameter(name, type)
+
+      A named parameter of type double.
+
+      :param str name: The name of the parameter.
+      :param Type type: The type of the parameter.
+      :returns: A named parameter.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: function(parameters, body)
+
+      A function.
+
+      :param list parameters: The parameters of the function.
+      :param Expression body: The body of the function.
+      :returns: A function.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: invoke(function, args)
+
+      A function call.
+
+      :param Expression function: The function to call.
+      :param dict args: The arguments to call the function with.
+      :returns: A function call.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: create_tuple(elements)
+
+      Construct a tuple.
+
+      :param list elements: The elements.
+      :returns: The tuple.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: create_list(values)
+
+      Construct a list.
+
+      :param list values: The value. Should all be of the same type.
+      :returns: The list.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: create_set(values)
+
+      Construct a set.
+
+      :param set values: The values. Should all be of the same type.
+      :returns: The set.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: create_dictionary(keys, values)
+
+      Construct a dictionary, from a list of corresponding keys and values.
+
+      :param list keys: The keys. Should all be of the same type.
+      :param list values: The values. Should all be of the same type.
+      :returns: The dictionary.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: to_list(arg)
+
+      Convert a collection to a list.
+
+      :param Expression arg: The collection.
+      :returns: The collection as a list.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: to_set(arg)
+
+      Convert a collection to a set.
+
+      :param Expression arg: The collection.
+      :returns: The collection as a set.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: get(arg, index)
+
+      Access an element in a tuple, list or dictionary.
+
+      :param Expression arg: The tuple, list or dictionary.
+      :param Expression index: The index of the element to access. A zero indexed integer for a tuple or list, or a key for a dictionary.
+      :returns: The element.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: count(arg)
+
+      Number of elements in a collection.
+
+      :param Expression arg: The list, set or dictionary.
+      :returns: The number of elements in the collection.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: sum(arg)
+
+      Sum all elements of a collection.
+
+      :param Expression arg: The list or set.
+      :returns: The sum of the elements in the collection.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: max(arg)
+
+      Maximum of all elements in a collection.
+
+      :param Expression arg: The list or set.
+      :returns: The maximum elements in the collection.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: min(arg)
+
+      Minimum of all elements in a collection.
+
+      :param Expression arg: The list or set.
+      :returns: The minimum elements in the collection.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: average(arg)
+
+      Minimum of all elements in a collection.
+
+      :param Expression arg: The list or set.
+      :returns: The minimum elements in the collection.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: select(arg, func)
+
+      Run a function on every element in the collection.
+
+      :param Expression arg: The list or set.
+      :param Expression func: The function.
+      :returns: The modified collection.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: where(arg, func)
+
+      Run a function on every element in the collection.
+
+      :param Expression arg: The list or set.
+      :param Expression func: The function.
+      :returns: The modified collection.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: contains(arg, value)
+
+      Determine if a collection contains a value.
+
+      :param Expression arg: The collection.
+      :param Expression value: The value to look for.
+      :returns: Whether the collection contains a value.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: aggregate(arg, func)
+
+      Applies an accumulator function over a sequence.
+
+      :param Expression arg: The collection.
+      :param Expression func: The accumulator function.
+      :returns: The accumulated value.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: aggregate_with_seed(arg, seed, func)
+
+      Applies an accumulator function over a sequence, with a given seed.
+
+      :param Expression arg: The collection.
+      :param Expression seed: The seed value.
+      :param Expression func: The accumulator function.
+      :returns: The accumulated value.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: concat(arg1, arg2)
+
+      Concatenate two sequences.
+
+      :param Expression arg1: The first sequence.
+      :param Expression arg2: The second sequence.
+      :returns: The first sequence followed by the second sequence.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: order_by(arg, key)
+
+      Order a collection using a key function.
+
+      :param Expression arg: The collection to order.
+      :param Expression key: A function that takes a value from the collection and generates a key to sort on.
+      :returns: The ordered collection.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: all(arg, predicate)
+
+      Determine whether all items in a collection satisfy a boolean predicate.
+
+      :param Expression arg: The collection.
+      :param Expression predicate: The predicate function.
+      :returns: Whether all items satisfy the predicate.
+      :rtype: :class:`Expression`
+   
+
+   .. staticmethod:: any(arg, predicate)
+
+      Determine whether any item in a collection satisfies a boolean predicate.
+
+      :param Expression arg: The collection.
+      :param Expression predicate: The predicate function.
+      :returns: Whether any item satisfies the predicate.
+      :rtype: :class:`Expression`
+   
+
+
+
+.. class:: Type
+
+   A server side expression.
+
+   .. staticmethod:: double()
+
+      Double type.
+
+      :rtype: :class:`Type`
+   
+
+   .. staticmethod:: float()
+
+      Float type.
+
+      :rtype: :class:`Type`
+   
+
+   .. staticmethod:: int()
+
+      Int type.
+
+      :rtype: :class:`Type`
+   
+
+   .. staticmethod:: bool()
+
+      Bool type.
+
+      :rtype: :class:`Type`
+   
+
+   .. staticmethod:: string()
+
+      String type.
+
+      :rtype: :class:`Type`

@@ -1,0 +1,82 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: RemoteTech
+
+Comms
+=====
+
+
+.. class:: Comms
+
+   Communications for a vessel.
+
+   .. attribute:: vessel
+
+      Get the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Vessel`
+   
+
+   .. attribute:: has_local_control
+
+      Whether the vessel can be controlled locally.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: has_flight_computer
+
+      Whether the vessel has a flight computer on board.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: has_connection
+
+      Whether the vessel has any connection.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: has_connection_to_ground_station
+
+      Whether the vessel has a connection to a ground station.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: signal_delay
+
+      The shortest signal delay to the vessel, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: signal_delay_to_ground_station
+
+      The signal delay between the vessel and the closest ground station, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. method:: signal_delay_to_vessel(other)
+
+      The signal delay between the this vessel and another vessel, in seconds.
+
+      :param SpaceCenter.Vessel other:
+      :rtype: float
+   
+
+   .. attribute:: antennas
+
+      The antennas for this vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Antenna`)

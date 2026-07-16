@@ -1,0 +1,184 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Text
+====
+
+
+.. type:: krpc_UI_Text_t
+
+   A text label. See :func:`krpc_UI_Panel_AddText`.
+
+   .. function:: krpc_error_t krpc_UI_Text_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * result)
+
+      The rect transform for the text.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_Visible(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_Text_set_Visible(bool value)
+
+      Whether the UI object is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_Content(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_UI_Text_set_Content(const char * value)
+
+      The text string
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_Font(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_UI_Text_set_Font(const char * value)
+
+      Name of the font
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_AvailableFonts(krpc_connection_t connection, krpc_list_string_t * result)
+
+      A list of all available fonts.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_Size(krpc_connection_t connection, int32_t * result)
+   .. function:: void krpc_UI_Text_set_Size(int32_t value)
+
+      Font size.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_Style(krpc_connection_t connection, krpc_UI_FontStyle_t * result)
+   .. function:: void krpc_UI_Text_set_Style(krpc_UI_FontStyle_t value)
+
+      Font style.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_UI_Text_set_Color(const krpc_tuple_double_double_double_t * value)
+
+      Set the color
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_Alignment(krpc_connection_t connection, krpc_UI_TextAnchor_t * result)
+   .. function:: void krpc_UI_Text_set_Alignment(krpc_UI_TextAnchor_t value)
+
+      Alignment.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_LineSpacing(krpc_connection_t connection, float * result)
+   .. function:: void krpc_UI_Text_set_LineSpacing(float value)
+
+      Line spacing.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_Remove(krpc_connection_t connection)
+
+      Remove the UI object.
+
+
+   
+
+
+
+.. type:: krpc_UI_FontStyle_t
+
+   Font style.
+
+
+   .. macro:: KRPC_UI_FONTSTYLE_NORMAL
+
+      Normal.
+
+
+   .. macro:: KRPC_UI_FONTSTYLE_BOLD
+
+      Bold.
+
+
+   .. macro:: KRPC_UI_FONTSTYLE_ITALIC
+
+      Italic.
+
+
+   .. macro:: KRPC_UI_FONTSTYLE_BOLDANDITALIC
+
+      Bold and italic.
+
+
+
+.. type:: krpc_UI_TextAlignment_t
+
+   Text alignment.
+
+
+   .. macro:: KRPC_UI_TEXTALIGNMENT_LEFT
+
+      Left aligned.
+
+
+   .. macro:: KRPC_UI_TEXTALIGNMENT_RIGHT
+
+      Right aligned.
+
+
+   .. macro:: KRPC_UI_TEXTALIGNMENT_CENTER
+
+      Center aligned.
+
+
+
+.. type:: krpc_UI_TextAnchor_t
+
+   Text alignment.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_LOWERCENTER
+
+      Lower center.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_LOWERLEFT
+
+      Lower left.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_LOWERRIGHT
+
+      Lower right.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_MIDDLECENTER
+
+      Middle center.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_MIDDLELEFT
+
+      Middle left.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_MIDDLERIGHT
+
+      Middle right.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_UPPERCENTER
+
+      Upper center.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_UPPERLEFT
+
+      Upper left.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_UPPERRIGHT
+
+      Upper right.

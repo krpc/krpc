@@ -1,0 +1,364 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.SpaceCenter
+
+Alarms
+======
+
+
+.. type:: public class AlarmManager
+
+   Alarm manager.
+   Obtained by calling :meth:`getAlarmManager()`.
+
+   .. method:: java.util.List<Alarm> getAlarms()
+
+
+      A list of all alarms.
+
+   
+
+   .. method:: java.util.List<Alarm> alarmsWithType(AlarmType type)
+
+      A list of all alarms of the given type.
+
+      :param AlarmType type: The type of alarm to return.
+   
+
+   .. method:: Alarm alarmWithName(String name)
+
+      Returns the first alarm with the given title, or ``null`` if no such
+      alarm exists. Alarm titles are not guaranteed to be unique; if more than
+      one alarm shares the given title, the first one found is returned.
+
+      :param String name: The title of the alarm to return.
+   
+
+   .. method:: static Alarm addAlarm(Connection connection, double time, String title, String description)
+
+      Create an alarm.
+
+      :param double time: Number of seconds from now that the alarm should trigger.
+      :param String title: Title for the alarm.
+      :param String description: Description for the alarm.
+   
+
+   .. method:: static Alarm addVesselAlarm(Connection connection, double time, Vessel vessel, String title, String description)
+
+      Create an alarm linked to a vessel.
+
+      :param double time: Number of seconds from now that the alarm should trigger.
+      :param Vessel vessel: Vessel to link the alarm to.
+      :param String title: Title for the alarm.
+      :param String description: Description for the alarm.
+   
+
+   .. method:: static Alarm addApoapsisAlarm(Connection connection, Vessel vessel, double offset, String title, String description)
+
+      Create an alarm for the given vessel's next apoapsis.
+
+      :param Vessel vessel: The vessel.
+      :param double offset: Time in seconds to offset the alarm by.
+      :param String title: Title for the alarm.
+      :param String description: Description for the alarm.
+   
+
+   .. method:: static Alarm addPeriapsisAlarm(Connection connection, Vessel vessel, double offset, String title, String description)
+
+      Create an alarm for the given vessel's next periapsis.
+
+      :param Vessel vessel: The vessel.
+      :param double offset: Time in seconds to offset the alarm by.
+      :param String title: Title for the alarm.
+      :param String description: Description for the alarm.
+   
+
+   .. method:: static Alarm addManeuverNodeAlarm(Connection connection, Vessel vessel, Node node, double offset, boolean addBurnTime, String title, String description)
+
+      Create an alarm for the given vessel and maneuver node.
+
+      :param Vessel vessel: The vessel.
+      :param Node node: The maneuver node.
+      :param double offset: Time in seconds to offset the alarm by.
+      :param boolean addBurnTime: Whether the node's burn time should be included in the alarm.
+      :param String title: Title for the alarm.
+      :param String description: Description for the alarm.
+   
+
+   .. method:: static Alarm addSOIAlarm(Connection connection, Vessel vessel, double offset, String title, String description)
+
+      Create an alarm for the given vessel's next sphere of influence change.
+
+      :param Vessel vessel: The vessel.
+      :param double offset: Time in seconds to offset the alarm by.
+      :param String title: Title for the alarm.
+      :param String description: Description for the alarm.
+   
+
+   .. method:: static Alarm addTransferWindowAlarm(Connection connection, Vessel vessel, CelestialBody target, String title, String description)
+
+      Create an alarm for the next planetary transfer window from the vessel's
+      current parent body to the target body.
+
+      :param Vessel vessel: The vessel.
+      :param CelestialBody target: The target body.
+      :param String title: Title for the alarm.
+      :param String description: Description for the alarm.
+   
+
+      .. note::
+
+         This relies on KSP's stock transfer-window alarm logic. If KSP cannot
+         compute a transfer from the vessel's current parent body to the target,
+         the resulting alarm may not fire at a useful time; in that case the
+         properties on the returned alarm can still be used to inspect or adjust it.
+
+
+
+.. type:: public class Alarm
+
+   An alarm. Can be accessed using :meth:`getAlarmManager()`.
+
+   .. method:: int getID()
+
+
+      Unique identifier of the alarm.
+      KSP destroys and recreates an alarm when it is edited.
+      This id will remain constant between the old and new alarms.
+
+   
+
+   .. method:: AlarmType getType()
+
+
+      Type of alarm.
+
+   
+
+   .. method:: String getTitle()
+
+   .. method:: void setTitle(String value)
+
+      Title of the alarm.
+
+   
+
+   .. method:: String getDescription()
+
+   .. method:: void setDescription(String value)
+
+      Description of the alarm.
+
+   
+
+   .. method:: double getTime()
+
+   .. method:: void setTime(double value)
+
+      Time the alarm will trigger, in seconds since epoch.
+
+   
+
+   .. method:: double getTimeUntil()
+
+
+      Time until the alarm triggers, in seconds.
+
+   
+
+   .. method:: double getEventOffset()
+
+   .. method:: void setEventOffset(double value)
+
+      Seconds between the alarm going off and the event it references.
+
+   
+
+   .. method:: Vessel getVessel()
+
+
+      Vessel the alarm references. ``null`` if it does not reference a vessel.
+
+   
+
+   .. method:: Node getNode()
+
+   .. method:: void setNode(Node value)
+
+      Maneuver node the alarm references. Only valid for alarms of type
+      :meth:`AlarmType.MANEUVER`.
+
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :meth:`AlarmType.MANEUVER`.
+
+   .. method:: CelestialBody getOriginBody()
+
+   .. method:: void setOriginBody(CelestialBody value)
+
+      Origin body for the transfer window. Only valid for alarms of type
+      :meth:`AlarmType.TRANSFER_WINDOW`.
+
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :meth:`AlarmType.TRANSFER_WINDOW`.
+
+   .. method:: CelestialBody getDestinationBody()
+
+   .. method:: void setDestinationBody(CelestialBody value)
+
+      Destination body for the transfer window. Only valid for alarms of type
+      :meth:`AlarmType.TRANSFER_WINDOW`.
+
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :meth:`AlarmType.TRANSFER_WINDOW`.
+
+   .. method:: AlarmWarpAction getWarpAction()
+
+   .. method:: void setWarpAction(AlarmWarpAction value)
+
+      The action taken on time warp when the alarm fires.
+
+   
+
+   .. method:: AlarmMessageAction getMessageAction()
+
+   .. method:: void setMessageAction(AlarmMessageAction value)
+
+      The on-screen message behavior when the alarm fires.
+
+   
+
+   .. method:: boolean getPlaySound()
+
+   .. method:: void setPlaySound(boolean value)
+
+      Whether the alarm plays a sound when it fires.
+
+   
+
+   .. method:: boolean getDeleteOnDismiss()
+
+   .. method:: void setDeleteOnDismiss(boolean value)
+
+      Whether the alarm is deleted automatically once the player has dismissed
+      the triggered message.
+
+   
+
+   .. method:: boolean getTriggered()
+
+
+      Whether the time of the alarm has passed and its actions have been triggered.
+
+   
+
+   .. method:: boolean getActioned()
+
+
+      Whether the alarm's actions were triggered and then completed or closed.
+
+   
+
+   .. method:: void remove()
+
+      Removes the alarm.
+
+   
+
+
+
+.. type:: public enum AlarmType
+
+   The type of an alarm. See :meth:`Alarm.getType()`.
+
+
+   .. field:: public AlarmType RAW
+
+      An alarm for a specific date/time or a specific period in the future.
+
+
+   .. field:: public AlarmType APOAPSIS
+
+      An alarm for the next apoapsis of a vessel.
+
+
+   .. field:: public AlarmType PERIAPSIS
+
+      An alarm for the next periapsis of a vessel.
+
+
+   .. field:: public AlarmType MANEUVER
+
+      An alarm based on a maneuver node on the vessel's flight path.
+
+
+   .. field:: public AlarmType SOI_CHANGE
+
+      An alarm for the next sphere of influence change on the vessel's flight path.
+
+
+   .. field:: public AlarmType TRANSFER_WINDOW
+
+      An alarm for the next planetary transfer window from the vessel's current
+      orbit to a target body.
+
+
+   .. field:: public AlarmType UNKNOWN
+
+      The alarm is of a type not recognized by kRPC. Typically this is a type
+      introduced by a mod.
+
+
+
+.. type:: public enum AlarmWarpAction
+
+   The warp action taken when an alarm fires.
+   See :meth:`Alarm.getWarpAction()`.
+
+
+   .. field:: public AlarmWarpAction NO_CHANGE
+
+      Do not change time warp when the alarm fires.
+
+
+   .. field:: public AlarmWarpAction STOP_WARP
+
+      Drop out of time warp when the alarm fires.
+
+
+   .. field:: public AlarmWarpAction PAUSE_GAME
+
+      Pause the game when the alarm fires.
+
+
+
+.. type:: public enum AlarmMessageAction
+
+   The on-screen message action taken when an alarm fires.
+   See :meth:`Alarm.getMessageAction()`.
+
+
+   .. field:: public AlarmMessageAction NO_MESSAGE
+
+      Do not display a message when the alarm fires.
+
+
+   .. field:: public AlarmMessageAction MESSAGE
+
+      Display a message when the alarm fires.
+
+
+   .. field:: public AlarmMessageAction MESSAGE_IF_NOT_ACTIVE_VESSEL
+
+      Display a message only if the alarm's vessel is not the currently active vessel.

@@ -1,0 +1,58 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: Drawing
+
+Polygon
+=======
+
+
+.. class:: Polygon
+
+   A polygon. Created using :meth:`Drawing.add_polygon`.
+
+   .. attribute:: vertices: List
+
+      Vertices for the polygon.
+
+      :Attribute: Can be read or written
+      :rtype: List
+
+   .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
+
+      Reference frame for the positions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+
+   .. attribute:: visible: boolean
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. method:: remove()
+
+      Remove the object.
+
+   .. attribute:: color: Tuple
+
+      Set the color
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: material: string
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: thickness: number
+
+      Set the thickness
+
+      :Attribute: Can be read or written
+      :rtype: number

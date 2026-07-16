@@ -1,0 +1,843 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: SpaceCenter
+
+SpaceCenter
+===========
+
+
+.. module:: SpaceCenter
+
+Provides functionality to interact with Kerbal Space Program. This includes controlling
+the active vessel, managing its resources, planning maneuver nodes and auto-piloting.
+
+
+.. attribute:: science: number
+
+   The current amount of science.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: number
+
+
+
+
+.. attribute:: funds: number
+
+   The current amount of funds.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: number
+
+
+
+
+.. attribute:: reputation: number
+
+   The current amount of reputation.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: number
+
+
+
+
+.. attribute:: active_vessel: SpaceCenter.Vessel
+
+   The currently active vessel.
+
+   :Attribute: Can be read or written
+   :rtype: :class:`SpaceCenter.Vessel`
+
+
+
+
+.. attribute:: vessels: List
+
+   A list of all the vessels in the game.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: List
+
+
+
+
+.. attribute:: launch_sites: List
+
+   A list of available launch sites.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: List
+
+
+
+
+.. attribute:: bodies: Map
+
+   A dictionary of all celestial bodies (planets, moons, etc.) in the game,
+   keyed by the name of the body.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: Map
+
+
+
+
+.. attribute:: target_body: SpaceCenter.CelestialBody
+
+   The currently targeted celestial body.
+
+   :Attribute: Can be read or written
+   :rtype: :class:`SpaceCenter.CelestialBody`
+
+
+
+
+.. attribute:: target_vessel: SpaceCenter.Vessel
+
+   The currently targeted vessel.
+
+   :Attribute: Can be read or written
+   :rtype: :class:`SpaceCenter.Vessel`
+
+
+
+
+.. attribute:: target_docking_port: SpaceCenter.DockingPort
+
+   The currently targeted docking port.
+
+   :Attribute: Can be read or written
+   :rtype: :class:`SpaceCenter.DockingPort`
+
+
+
+
+.. staticmethod:: clear_target()
+
+   Clears the current target.
+
+
+
+
+
+.. staticmethod:: launchable_vessels(craft_directory)
+
+   Returns a list of vessels from the given *craft_directory*
+   that can be launched.
+
+   :param string craft_directory: Name of the directory in the current saves "Ships" directory. For example ``"VAB"`` or ``"SPH"``.
+   :rtype: List
+
+
+
+
+.. staticmethod:: launch_vessel(craft_directory, name, launch_site, crew, [recover = True], [flag_url = ''])
+
+   Launch a vessel.
+
+   :param string craft_directory: Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
+   :param string name: Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
+   :param string launch_site: Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
+   :param List crew: A list of names of Kerbals to place in the craft. Pass an empty list to use default crew assignments.
+   :param boolean recover: If true and there is a vessel on the launch site, recover it before launching.
+   :param string flag_url: If not ``nil``, the asset URL of the mission flag to use for the launch.
+
+   .. note::
+
+      Throws an exception if any of the games pre-flight checks fail.
+
+
+
+
+.. staticmethod:: launch_vessel_from_vab(name, [recover = True])
+
+   Launch a new vessel from the VAB onto the launchpad.
+
+   :param string name: Name of the vessel to launch.
+   :param boolean recover: If true and there is a vessel on the launch pad, recover it before launching.
+
+   .. note::
+
+      This is equivalent to calling :meth:`SpaceCenter.launch_vessel` with the craft directory
+      set to "VAB" and the launch site set to "LaunchPad".
+      Throws an exception if any of the games pre-flight checks fail.
+
+
+
+
+.. staticmethod:: launch_vessel_from_sph(name, [recover = True])
+
+   Launch a new vessel from the SPH onto the runway.
+
+   :param string name: Name of the vessel to launch.
+   :param boolean recover: If true and there is a vessel on the runway, recover it before launching.
+
+   .. note::
+
+      This is equivalent to calling :meth:`SpaceCenter.launch_vessel` with the craft directory
+      set to "SPH" and the launch site set to "Runway".
+      Throws an exception if any of the games pre-flight checks fail.
+
+
+
+
+.. staticmethod:: save(name)
+
+   Save the game with a given name.
+   This will create a save file called ``name.sfs`` in the folder of the
+   current save game.
+
+   :param string name: Name of the save.
+
+
+
+
+.. staticmethod:: load(name)
+
+   Load the game with the given name.
+   This will create a load a save file called ``name.sfs`` from the folder of the
+   current save game.
+
+   :param string name: Name of the save.
+
+
+
+
+.. staticmethod:: quicksave()
+
+   Save a quicksave.
+
+
+   .. note::
+
+      This is the same as calling :meth:`SpaceCenter.save` with the name "quicksave".
+
+
+
+
+.. staticmethod:: quickload()
+
+   Load a quicksave.
+
+
+   .. note::
+
+      This is the same as calling :meth:`SpaceCenter.load` with the name "quicksave".
+
+
+
+
+.. staticmethod:: can_revert_to_launch()
+
+   Whether the current flight can be reverted to launch.
+
+   :rtype: boolean
+
+
+
+
+.. staticmethod:: revert_to_launch()
+
+   Revert the current flight to launch.
+
+
+
+
+
+.. staticmethod:: transfer_crew(crew_member, target_part)
+
+   Transfers a crew member to a different part.
+
+   :param SpaceCenter.CrewMember crew_member: The crew member to transfer.
+   :param SpaceCenter.Part target_part: The part to move them to.
+
+
+
+
+.. attribute:: ui_visible: boolean
+
+   Whether the UI is visible.
+
+   :Attribute: Can be read or written
+   :rtype: boolean
+
+
+
+
+.. attribute:: navball: boolean
+
+   Whether the navball is visible.
+
+   :Attribute: Can be read or written
+   :rtype: boolean
+
+
+
+
+.. attribute:: altimeter_mode: SpaceCenter.AltimeterMode
+
+   The current mode of the altimeter.
+
+   :Attribute: Can be read or written
+   :rtype: :class:`SpaceCenter.AltimeterMode`
+
+
+
+
+.. attribute:: ut: number
+
+   The current universal time in seconds.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: number
+
+
+
+
+.. attribute:: g: number
+
+   The value of the `gravitational constant <https://en.wikipedia.org/wiki/Gravitational_constant>`_ G in :math:`N(m/kg)^2`.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: number
+
+
+
+
+.. attribute:: warp_rate: number
+
+   The current warp rate. This is the rate at which time is passing for
+   either on-rails or physical time warp. For example, a value of 10 means
+   time is passing 10x faster than normal. Returns 1 if time warp is not
+   active.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: number
+
+
+
+
+.. attribute:: warp_factor: number
+
+   The current warp factor. This is the index of the rate at which time
+   is passing for either regular "on-rails" or physical time warp. Returns 0
+   if time warp is not active. When in on-rails time warp, this is equal to
+   :attr:`SpaceCenter.rails_warp_factor <SpaceCenter.SpaceCenter.rails_warp_factor>`, and in physics time warp, this is equal to
+   :attr:`SpaceCenter.physics_warp_factor <SpaceCenter.SpaceCenter.physics_warp_factor>`.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: number
+
+
+
+
+.. attribute:: rails_warp_factor: number
+
+   The time warp rate, using regular "on-rails" time warp. A value between
+   0 and 7 inclusive. 0 means no time warp. Returns 0 if physical time warp
+   is active.
+
+   If requested time warp factor cannot be set, it will be set to the next
+   lowest possible value. For example, if the vessel is too close to a
+   planet. See `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_ for details.
+
+   :Attribute: Can be read or written
+   :rtype: number
+
+
+
+
+.. attribute:: physics_warp_factor: number
+
+   The physical time warp rate. A value between 0 and 3 inclusive. 0 means
+   no time warp. Returns 0 if regular "on-rails" time warp is active.
+
+   :Attribute: Can be read or written
+   :rtype: number
+
+
+
+
+.. staticmethod:: can_rails_warp_at([factor = 1])
+
+   Returns ``True`` if regular "on-rails" time warp can be used, at the specified warp
+   *factor*. The maximum time warp rate is limited by various things,
+   including how close the active vessel is to a planet. See
+   `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_
+   for details.
+
+   :param number factor: The warp factor to check.
+   :rtype: boolean
+
+
+
+
+.. attribute:: maximum_rails_warp_factor: number
+
+   The current maximum regular "on-rails" warp factor that can be set.
+   A value between 0 and 7 inclusive. See
+   `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_
+   for details.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: number
+
+
+
+
+.. staticmethod:: warp_to(ut, [max_rails_rate = 100000.0], [max_physics_rate = 2.0])
+
+   Uses time acceleration to warp forward to a time in the future, specified
+   by universal time *ut*. This call blocks until the desired
+   time is reached. Uses regular "on-rails" or physical time warp as appropriate.
+   For example, physical time warp is used when the active vessel is traveling
+   through an atmosphere. When using regular "on-rails" time warp, the warp
+   rate is limited by *max_rails_rate*, and when using physical
+   time warp, the warp rate is limited by *max_physics_rate*.
+
+   :param number ut: The universal time to warp to, in seconds.
+   :param number max_rails_rate: The maximum warp rate in regular "on-rails" time warp.
+   :param number max_physics_rate: The maximum warp rate in physical time warp.
+   :returns: When the time warp is complete.
+
+
+
+
+.. staticmethod:: transform_position(position, from, to)
+
+   Converts a position from one reference frame to another.
+
+   :param Tuple position: Position, as a vector, in reference frame *from*.
+   :param SpaceCenter.ReferenceFrame from: The reference frame that the position is in.
+   :param SpaceCenter.ReferenceFrame to: The reference frame to covert the position to.
+   :returns: The corresponding position, as a vector, in reference frame *to*.
+   :rtype: Tuple
+
+
+
+
+.. staticmethod:: transform_direction(direction, from, to)
+
+   Converts a direction from one reference frame to another.
+
+   :param Tuple direction: Direction, as a vector, in reference frame *from*.
+   :param SpaceCenter.ReferenceFrame from: The reference frame that the direction is in.
+   :param SpaceCenter.ReferenceFrame to: The reference frame to covert the direction to.
+   :returns: The corresponding direction, as a vector, in reference frame *to*.
+   :rtype: Tuple
+
+
+
+
+.. staticmethod:: transform_rotation(rotation, from, to)
+
+   Converts a rotation from one reference frame to another.
+
+   :param Tuple rotation: Rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *from*.
+   :param SpaceCenter.ReferenceFrame from: The reference frame that the rotation is in.
+   :param SpaceCenter.ReferenceFrame to: The reference frame to covert the rotation to.
+   :returns: The corresponding rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *to*.
+   :rtype: Tuple
+
+
+
+
+.. staticmethod:: transform_velocity(position, velocity, from, to)
+
+   Converts a velocity (acting at the specified position) from one reference frame
+   to another. The position is required to take the relative angular velocity of the
+   reference frames into account.
+
+   :param Tuple position: Position, as a vector, in reference frame *from*.
+   :param Tuple velocity: Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in meters per second, in reference frame *from*.
+   :param SpaceCenter.ReferenceFrame from: The reference frame that the position and velocity are in.
+   :param SpaceCenter.ReferenceFrame to: The reference frame to covert the velocity to.
+   :returns: The corresponding velocity, as a vector, in reference frame *to*.
+   :rtype: Tuple
+
+
+
+
+.. staticmethod:: raycast_distance(position, direction, reference_frame)
+
+   Cast a ray from a given position in a given direction, and return the distance to the hit point.
+   If no hit occurs, returns infinity.
+
+   :param Tuple position: Position, as a vector, of the origin of the ray.
+   :param Tuple direction: Direction of the ray, as a unit vector.
+   :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the position and direction are in.
+   :returns: The distance to the hit, in meters, or infinity if there was no hit.
+   :rtype: number
+
+
+
+
+.. staticmethod:: raycast_part(position, direction, reference_frame)
+
+   Cast a ray from a given position in a given direction, and return the part that it hits.
+   If no hit occurs, returns ``nil``.
+
+   :param Tuple position: Position, as a vector, of the origin of the ray.
+   :param Tuple direction: Direction of the ray, as a unit vector.
+   :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the position and direction are in.
+   :returns: The part that was hit or ``nil`` if there was no hit.
+   :rtype: :class:`SpaceCenter.Part`
+
+
+
+
+.. attribute:: far_available: boolean
+
+   Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_ is installed.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: boolean
+
+
+
+
+.. staticmethod:: create_kerbal(name, job, male)
+
+   Creates a Kerbal.
+
+   :param string name:
+   :param string job:
+   :param boolean male:
+
+
+
+
+.. staticmethod:: get_kerbal(name)
+
+   Find a Kerbal by name.
+
+   :param string name:
+   :rtype: :class:`SpaceCenter.CrewMember`
+
+
+
+
+.. staticmethod:: load_space_center()
+
+   .. warning:: Deprecated. Set :attr:`KRPC.game_scene <KRPC.KRPC.game_scene>` instead.
+
+   Switch to the space center view.
+
+
+
+
+
+.. attribute:: map_filter: SpaceCenter.MapFilterType
+
+   The visible objects in map mode.
+
+   :Attribute: Can be read or written
+   :rtype: :class:`SpaceCenter.MapFilterType`
+
+
+
+
+.. staticmethod:: screenshot(file_path, [scale = 1])
+
+   Saves a screenshot.
+
+   :param string file_path: The path of the file to save.
+   :param number scale: Resolution scaling factor
+
+
+
+
+.. attribute:: game_mode: SpaceCenter.GameMode
+
+   The current mode the game is in.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`SpaceCenter.GameMode`
+
+
+
+
+.. attribute:: warp_mode: SpaceCenter.WarpMode
+
+   The current time warp mode. Returns :attr:`SpaceCenter.WarpMode.none` if time
+   warp is not active, :attr:`SpaceCenter.WarpMode.rails` if regular "on-rails" time warp
+   is active, or :attr:`SpaceCenter.WarpMode.physics` if physical time warp is active.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`SpaceCenter.WarpMode`
+
+
+
+
+.. attribute:: camera: SpaceCenter.Camera
+
+   An object that can be used to control the camera.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`SpaceCenter.Camera`
+
+
+
+
+.. attribute:: waypoint_manager: SpaceCenter.WaypointManager
+
+   The waypoint manager.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`SpaceCenter.WaypointManager`
+
+
+
+
+.. attribute:: contract_manager: SpaceCenter.ContractManager
+
+   The contract manager.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`SpaceCenter.ContractManager`
+
+
+
+
+.. attribute:: alarm_manager: SpaceCenter.AlarmManager
+
+   The alarm manager.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`SpaceCenter.AlarmManager`
+
+
+
+
+
+.. class:: GameMode
+
+   The game mode.
+   Returned by :class:`SpaceCenter.GameMode`
+
+
+   .. data:: sandbox
+
+      Sandbox mode.
+
+
+   .. data:: career
+
+      Career mode.
+
+
+   .. data:: science
+
+      Science career mode.
+
+
+   .. data:: science_sandbox
+
+      Science sandbox mode.
+
+
+   .. data:: mission
+
+      Mission mode.
+
+
+   .. data:: mission_builder
+
+      Mission builder mode.
+
+
+   .. data:: scenario
+
+      Scenario mode.
+
+
+   .. data:: scenario_non_resumable
+
+      Scenario mode that cannot be resumed.
+
+
+
+.. class:: AltimeterMode
+
+   The mode of the altitude reported on the altimeter.
+   See :attr:`SpaceCenter.altimeter_mode <SpaceCenter.SpaceCenter.altimeter_mode>`.
+
+
+   .. data:: default
+
+      The altimeter is in the default mode.
+
+
+   .. data:: asl
+
+      The altimeter is in the "Above Sea Level" mode.
+
+
+   .. data:: agl
+
+      The altimeter is in the "Above Ground Level" mode.
+
+
+
+.. class:: WarpMode
+
+   The time warp mode.
+   Returned by :class:`SpaceCenter.WarpMode`
+
+
+   .. data:: rails
+
+      Time warp is active, and in regular "on-rails" mode.
+
+
+   .. data:: physics
+
+      Time warp is active, and in physical time warp mode.
+
+
+   .. data:: none
+
+      Time warp is not active.
+
+
+
+.. class:: MapFilterType
+
+   The set of things that are visible in map mode.
+   These may be combined with bitwise logic.
+
+
+   .. data:: all
+
+      Everything.
+
+
+   .. data:: none
+
+      Nothing.
+
+
+   .. data:: debris
+
+      Debris.
+
+
+   .. data:: unknown
+
+      Unknown.
+
+
+   .. data:: space_objects
+
+      SpaceObjects.
+
+
+   .. data:: probes
+
+      Probes.
+
+
+   .. data:: rovers
+
+      Rovers.
+
+
+   .. data:: landers
+
+      Landers.
+
+
+   .. data:: ships
+
+      Ships.
+
+
+   .. data:: stations
+
+      Stations.
+
+
+   .. data:: bases
+
+      Bases.
+
+
+   .. data:: ev_as
+
+      EVAs.
+
+
+   .. data:: flags
+
+      Flags.
+
+
+   .. data:: plane
+
+      Planes.
+
+
+   .. data:: relay
+
+      Relays.
+
+
+   .. data:: site
+
+      Launch Sites.
+
+
+   .. data:: deployed_science_controller
+
+      Deployed Science Controllers.
+
+
+
+.. class:: LaunchSite
+
+   A place where craft can be launched from.
+   More of these can be added with mods like Kerbal Konstructs.
+
+   .. attribute:: name: string
+
+      The name of the launch site.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: string
+
+   .. attribute:: body: SpaceCenter.CelestialBody
+
+      The celestial body the launch site is on.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.CelestialBody`
+
+   .. attribute:: editor_facility: SpaceCenter.EditorFacility
+
+      Which editor is normally used for this launch site.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.EditorFacility`
+
+
+
+.. class:: EditorFacility
+
+   Editor facility.
+   See :attr:`SpaceCenter.LaunchSite.editor_facility`.
+
+
+   .. data:: vab
+
+      Vehicle Assembly Building.
+
+
+   .. data:: sph
+
+      Space Plane Hanger.
+
+
+   .. data:: none
+
+      None.

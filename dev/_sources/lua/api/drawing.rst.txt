@@ -1,0 +1,14 @@
+.. default-domain:: lua
+.. highlight:: lua
+
+Drawing API
+===========
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   drawing/drawing
+   drawing/line
+   drawing/polygon
+   drawing/text

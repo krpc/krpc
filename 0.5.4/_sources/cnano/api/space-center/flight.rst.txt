@@ -1,0 +1,381 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Flight
+======
+
+
+.. type:: krpc_SpaceCenter_Flight_t
+
+   Used to get flight telemetry for a vessel, by calling :func:`krpc_SpaceCenter_Vessel_Flight`.
+   All of the information returned by this class is given in the reference frame
+   passed to that method.
+   Obtained by calling :func:`krpc_SpaceCenter_Vessel_Flight`.
+
+   .. note::
+
+      To get orbital information, such as the apoapsis or inclination, see :type:`krpc_SpaceCenter_Orbit_t`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_GForce(krpc_connection_t connection, float * result)
+
+      The current G force acting on the vessel in :math:`g`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_MeanAltitude(krpc_connection_t connection, double * result)
+
+      The altitude above sea level, in meters.
+      Measured from the center of mass of the vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_SurfaceAltitude(krpc_connection_t connection, double * result)
+
+      The altitude above the surface of the body or sea level, whichever is closer, in meters.
+      Measured from the center of mass of the vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_BedrockAltitude(krpc_connection_t connection, double * result)
+
+      The altitude above the surface of the body, in meters. When over water, this is the altitude above the sea floor.
+      Measured from the center of mass of the vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Elevation(krpc_connection_t connection, double * result)
+
+      The elevation of the terrain under the vessel, in meters. This is the height of the terrain above sea level,
+      and is negative when the vessel is over the sea.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Latitude(krpc_connection_t connection, double * result)
+
+      The `latitude <https://en.wikipedia.org/wiki/Latitude>`_ of the vessel for the body being orbited, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Longitude(krpc_connection_t connection, double * result)
+
+      The `longitude <https://en.wikipedia.org/wiki/Longitude>`_ of the vessel for the body being orbited, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The velocity of the vessel, in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the vessel in meters per second.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Speed(krpc_connection_t connection, double * result)
+
+      The speed of the vessel in meters per second,
+      in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_HorizontalSpeed(krpc_connection_t connection, double * result)
+
+      The horizontal speed of the vessel in meters per second,
+      in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_VerticalSpeed(krpc_connection_t connection, double * result)
+
+      The vertical speed of the vessel in meters per second,
+      in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_CenterOfMass(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The position of the center of mass of the vessel,
+      in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`
+
+      :returns: The position as a vector.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result)
+
+      The rotation of the vessel, in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`
+
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The direction that the vessel is pointing in,
+      in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Pitch(krpc_connection_t connection, float * result)
+
+      The pitch of the vessel relative to the horizon, in degrees.
+      A value between -90° and +90°.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Heading(krpc_connection_t connection, float * result)
+
+      The heading of the vessel (its angle relative to north), in degrees.
+      A value between 0° and 360°.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Roll(krpc_connection_t connection, float * result)
+
+      The roll of the vessel relative to the horizon, in degrees.
+      A value between -180° and +180°.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Prograde(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The prograde direction of the vessels orbit,
+      in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Retrograde(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The retrograde direction of the vessels orbit,
+      in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Normal(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The direction normal to the vessels orbit,
+      in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_AntiNormal(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The direction opposite to the normal of the vessels orbit,
+      in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Radial(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The radial direction of the vessels orbit,
+      in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_AntiRadial(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The direction opposite to the radial direction of the vessels orbit,
+      in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_AtmosphereDensity(krpc_connection_t connection, float * result)
+
+      The current density of the atmosphere around the vessel, in :math:`kg/m^3`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_DynamicPressure(krpc_connection_t connection, float * result)
+
+      The dynamic pressure acting on the vessel, in Pascals. This is a measure of the
+      strength of the aerodynamic forces. It is equal to
+      :math:`\frac{1}{2} . \mbox{air density} . \mbox{velocity}^2`.
+      It is commonly denoted :math:`Q`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_StaticPressure(krpc_connection_t connection, float * result)
+
+      The static atmospheric pressure acting on the vessel, in Pascals.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_StaticPressureAtMSL(krpc_connection_t connection, float * result)
+
+      The static atmospheric pressure at mean sea level, in Pascals.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_AerodynamicForce(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The total aerodynamic forces acting on the vessel,
+      in reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_SimulateAerodynamicForceAt(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_CelestialBody_t body, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_t * velocity)
+
+      Simulate and return the total aerodynamic forces acting on the vessel,
+      if it where to be traveling with the given velocity at the given position in the
+      atmosphere of the given celestial body.
+
+      :Parameters:
+
+
+
+
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Lift(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The `aerodynamic lift <https://en.wikipedia.org/wiki/Aerodynamic_force>`_
+      currently acting on the vessel.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Drag(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The `aerodynamic drag <https://en.wikipedia.org/wiki/Aerodynamic_force>`_ currently acting on the vessel.
+
+      :returns: A vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_SpeedOfSound(krpc_connection_t connection, float * result)
+
+      The speed of sound, in the atmosphere around the vessel, in :math:`m/s`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Mach(krpc_connection_t connection, float * result)
+
+      The speed of the vessel, in multiples of the speed of sound.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_ReynoldsNumber(krpc_connection_t connection, float * result)
+
+      The vessels Reynolds number.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_TrueAirSpeed(krpc_connection_t connection, float * result)
+
+      The `true air speed <https://en.wikipedia.org/wiki/True_airspeed>`_
+      of the vessel, in meters per second.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_EquivalentAirSpeed(krpc_connection_t connection, float * result)
+
+      The `equivalent air speed <https://en.wikipedia.org/wiki/Equivalent_airspeed>`_
+      of the vessel, in meters per second.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_TerminalVelocity(krpc_connection_t connection, float * result)
+
+      An estimate of the current terminal velocity of the vessel, in meters per second.
+      This is the speed at which the drag forces cancel out the force of gravity.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_AngleOfAttack(krpc_connection_t connection, float * result)
+
+      The pitch angle between the orientation of the vessel and its velocity vector,
+      in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_SideslipAngle(krpc_connection_t connection, float * result)
+
+      The yaw angle between the orientation of the vessel and its velocity vector, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_TotalAirTemperature(krpc_connection_t connection, float * result)
+
+      The `total air temperature <https://en.wikipedia.org/wiki/Total_air_temperature>`_
+      of the atmosphere around the vessel, in Kelvin.
+      This includes the :func:`krpc_SpaceCenter_Flight_StaticAirTemperature` and the vessel's kinetic energy.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_StaticAirTemperature(krpc_connection_t connection, float * result)
+
+      The `static (ambient) temperature <https://en.wikipedia.org/wiki/Total_air_temperature>`_ of the atmosphere around the vessel, in Kelvin.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_StallFraction(krpc_connection_t connection, float * result)
+
+      The current amount of stall, between 0 and 1. A value greater than 0.005 indicates
+      a minor stall and a value greater than 0.5 indicates a large-scale stall.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_DragCoefficient(krpc_connection_t connection, float * result)
+
+      The coefficient of drag. This is the amount of drag produced by the vessel.
+      It depends on air speed, air density and wing area.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_LiftCoefficient(krpc_connection_t connection, float * result)
+
+      The coefficient of lift. This is the amount of lift produced by the vessel, and
+      depends on air speed, air density and wing area.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_BallisticCoefficient(krpc_connection_t connection, float * result)
+
+      The `ballistic coefficient <https://en.wikipedia.org/wiki/Ballistic_coefficient>`_.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_ThrustSpecificFuelConsumption(krpc_connection_t connection, float * result)
+
+      The thrust specific fuel consumption for the jet engines on the vessel. This is a
+      measure of the efficiency of the engines, with a lower value indicating a more
+      efficient vessel. This value is the number of Newtons of fuel that are burned,
+      per hour, to produce one newton of thrust.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.

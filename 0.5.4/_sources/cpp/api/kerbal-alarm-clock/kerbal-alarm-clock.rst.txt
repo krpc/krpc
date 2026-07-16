@@ -1,0 +1,61 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KerbalAlarmClock
+
+KerbalAlarmClock
+================
+
+
+.. namespace:: krpc::services
+.. class:: KerbalAlarmClock : public krpc::Service
+
+   This service provides functionality to interact with
+   `Kerbal Alarm Clock <https://forum.kerbalspaceprogram.com/index.php?/topic/22809-13x-kerbal-alarm-clock-v3850-may-30/>`_.
+
+   .. function:: KerbalAlarmClock(krpc::Client* client)
+
+      Construct an instance of this service.
+
+   .. function:: bool available()
+
+      Whether Kerbal Alarm Clock is available.
+
+   
+
+   .. function:: std::vector<Alarm> alarms()
+
+      A list of all the alarms.
+
+   
+
+   .. function:: Alarm alarm_with_name(std::string name)
+
+      Get the alarm with the given *name*, or ``NULL``
+      if no alarms have that name. If more than one alarm has the name,
+      only returns one of them.
+
+      :Parameters:
+
+       * **name** -- Name of the alarm to search for.
+
+   
+
+   .. function:: std::vector<Alarm> alarms_with_type(AlarmType type)
+
+      Get a list of alarms of the specified *type*.
+
+      :Parameters:
+
+       * **type** -- Type of alarm to return.
+
+   
+
+   .. function:: Alarm create_alarm(AlarmType type, std::string name, double ut)
+
+      Create a new alarm and return it.
+
+      :Parameters:
+
+       * **type** -- Type of the new alarm.
+       * **name** -- Name of the new alarm.
+       * **ut** -- Time at which the new alarm should trigger.

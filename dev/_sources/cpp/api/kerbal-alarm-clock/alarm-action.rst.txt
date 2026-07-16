@@ -1,0 +1,42 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KerbalAlarmClock
+
+AlarmAction
+===========
+
+
+.. namespace:: krpc::services::KerbalAlarmClock
+.. enum-struct:: AlarmAction
+
+   The action performed by an alarm when it fires.
+
+
+   .. enumerator:: do_nothing
+
+      Don't do anything at all...
+
+
+   .. enumerator:: do_nothing_delete_when_passed
+
+      Don't do anything, and delete the alarm.
+
+
+   .. enumerator:: kill_warp
+
+      Drop out of time warp.
+
+
+   .. enumerator:: kill_warp_only
+
+      Drop out of time warp.
+
+
+   .. enumerator:: message_only
+
+      Display a message.
+
+
+   .. enumerator:: pause_game
+
+      Pause the game.

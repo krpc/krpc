@@ -1,0 +1,69 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.RemoteTech
+
+Comms
+=====
+
+
+.. class:: Comms
+
+   Communications for a vessel.
+
+   .. property:: SpaceCenter.Vessel Vessel { get; }
+
+      Get the vessel.
+
+      :Game Scenes: All
+
+   .. property:: bool HasLocalControl { get; }
+
+      Whether the vessel can be controlled locally.
+
+      :Game Scenes: All
+
+   .. property:: bool HasFlightComputer { get; }
+
+      Whether the vessel has a flight computer on board.
+
+      :Game Scenes: All
+
+   .. property:: bool HasConnection { get; }
+
+      Whether the vessel has any connection.
+
+      :Game Scenes: All
+
+   .. property:: bool HasConnectionToGroundStation { get; }
+
+      Whether the vessel has a connection to a ground station.
+
+      :Game Scenes: All
+
+   .. property:: double SignalDelay { get; }
+
+      The shortest signal delay to the vessel, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: double SignalDelayToGroundStation { get; }
+
+      The signal delay between the vessel and the closest ground station, in seconds.
+
+      :Game Scenes: All
+
+   .. method:: double SignalDelayToVessel(SpaceCenter.Vessel other)
+
+      The signal delay between the this vessel and another vessel, in seconds.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Antenna> Antennas { get; }
+
+      The antennas for this vessel.
+
+      :Game Scenes: All

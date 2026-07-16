@@ -1,0 +1,67 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::RemoteTech
+
+Comms
+=====
+
+
+.. class:: Comms
+
+   Communications for a vessel.
+
+   .. function:: SpaceCenter::Vessel vessel()
+
+      Get the vessel.
+
+   
+
+   .. function:: bool has_local_control()
+
+      Whether the vessel can be controlled locally.
+
+   
+
+   .. function:: bool has_flight_computer()
+
+      Whether the vessel has a flight computer on board.
+
+   
+
+   .. function:: bool has_connection()
+
+      Whether the vessel has any connection.
+
+   
+
+   .. function:: bool has_connection_to_ground_station()
+
+      Whether the vessel has a connection to a ground station.
+
+   
+
+   .. function:: double signal_delay()
+
+      The shortest signal delay to the vessel, in seconds.
+
+   
+
+   .. function:: double signal_delay_to_ground_station()
+
+      The signal delay between the vessel and the closest ground station, in seconds.
+
+   
+
+   .. function:: double signal_delay_to_vessel(SpaceCenter::Vessel other)
+
+      The signal delay between the this vessel and another vessel, in seconds.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<Antenna> antennas()
+
+      The antennas for this vessel.

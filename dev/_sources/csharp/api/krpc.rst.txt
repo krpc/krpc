@@ -1,0 +1,12 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+
+KRPC API
+========
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   krpc/krpc
+   krpc/expressions

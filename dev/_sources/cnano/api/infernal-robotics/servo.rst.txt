@@ -1,0 +1,157 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Servo
+=====
+
+
+.. type:: krpc_InfernalRobotics_Servo_t
+
+   Represents a servo. Obtained using
+   :func:`krpc_InfernalRobotics_ServoGroup_Servos`,
+   :func:`krpc_InfernalRobotics_ServoGroup_ServoWithName`
+   or :func:`krpc_InfernalRobotics_ServoWithName`.
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_Name(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_InfernalRobotics_Servo_set_Name(const char * value)
+
+      The name of the servo.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part containing the servo.
+
+      :Game Scenes: Flight
+
+   .. function:: void krpc_InfernalRobotics_Servo_set_Highlight(bool value)
+
+      Whether the servo should be highlighted in-game.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_Position(krpc_connection_t connection, float * result)
+
+      The position of the servo.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_MinConfigPosition(krpc_connection_t connection, float * result)
+
+      The minimum position of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_MaxConfigPosition(krpc_connection_t connection, float * result)
+
+      The maximum position of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_MinPosition(krpc_connection_t connection, float * result)
+   .. function:: void krpc_InfernalRobotics_Servo_set_MinPosition(float value)
+
+      The minimum position of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_MaxPosition(krpc_connection_t connection, float * result)
+   .. function:: void krpc_InfernalRobotics_Servo_set_MaxPosition(float value)
+
+      The maximum position of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_ConfigSpeed(krpc_connection_t connection, float * result)
+
+      The speed multiplier of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_Speed(krpc_connection_t connection, float * result)
+   .. function:: void krpc_InfernalRobotics_Servo_set_Speed(float value)
+
+      The speed multiplier of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_CurrentSpeed(krpc_connection_t connection, float * result)
+
+      The current speed at which the servo is moving.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_Acceleration(krpc_connection_t connection, float * result)
+   .. function:: void krpc_InfernalRobotics_Servo_set_Acceleration(float value)
+
+      The current speed multiplier set in the UI.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_IsMoving(krpc_connection_t connection, bool * result)
+
+      Whether the servo is moving.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_IsFreeMoving(krpc_connection_t connection, bool * result)
+
+      Whether the servo is freely moving.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_IsLocked(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_InfernalRobotics_Servo_set_IsLocked(bool value)
+
+      Whether the servo is locked.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_IsAxisInverted(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_InfernalRobotics_Servo_set_IsAxisInverted(bool value)
+
+      Whether the servos axis is inverted.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_MoveRight(krpc_connection_t connection)
+
+      Moves the servo to the right.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_MoveLeft(krpc_connection_t connection)
+
+      Moves the servo to the left.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_MoveCenter(krpc_connection_t connection)
+
+      Moves the servo to the center.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_MoveTo(krpc_connection_t connection, float position, float speed)
+
+      Moves the servo to *position* and sets the
+      speed multiplier to *speed*.
+
+      :Parameters:
+
+       * **position** -- The position to move the servo to.
+       * **speed** -- Speed multiplier for the movement.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_Stop(krpc_connection_t connection)
+
+      Stops the servo.
+
+
+      :Game Scenes: Flight

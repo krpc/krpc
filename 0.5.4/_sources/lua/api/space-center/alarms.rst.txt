@@ -1,0 +1,144 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: SpaceCenter
+
+Alarms
+======
+
+
+.. class:: AlarmManager
+
+   Alarm manager.
+   Obtained by calling :attr:`SpaceCenter.alarm_manager <SpaceCenter.SpaceCenter.alarm_manager>`.
+
+   .. attribute:: alarms: List
+
+      A list of all alarms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. staticmethod:: add_alarm(time, [title = 'Alarm'], [description = ''])
+
+      Create an alarm.
+
+      :param number time: Number of seconds from now that the alarm should trigger.
+      :param string title: Title for the alarm.
+      :param string description: Description for the alarm.
+      :rtype: :class:`SpaceCenter.Alarm`
+
+   .. staticmethod:: add_vessel_alarm(time, vessel, [title = 'Vessel Alarm'], [description = ''])
+
+      Create an alarm linked to a vessel.
+
+      :param number time: Number of seconds from now that the alarm should trigger.
+      :param SpaceCenter.Vessel vessel: Vessel to link the alarm to.
+      :param string title: Title for the alarm.
+      :param string description: Description for the alarm.
+      :rtype: :class:`SpaceCenter.Alarm`
+
+   .. staticmethod:: add_apoapsis_alarm(vessel, [offset = 60.0], [title = 'Apoapsis Alarm'], [description = ''])
+
+      Create an alarm for the given vessel's next apoapsis.
+
+      :param SpaceCenter.Vessel vessel: The vessel.
+      :param number offset: Time in seconds to offset the alarm by.
+      :param string title: Title for the alarm.
+      :param string description: Description for the alarm.
+      :rtype: :class:`SpaceCenter.Alarm`
+
+   .. staticmethod:: add_periapsis_alarm(vessel, [offset = 60.0], [title = 'Periapsis Alarm'], [description = ''])
+
+      Create an alarm for the given vessel's next periapsis.
+
+      :param SpaceCenter.Vessel vessel: The vessel.
+      :param number offset: Time in seconds to offset the alarm by.
+      :param string title: Title for the alarm.
+      :param string description: Description for the alarm.
+      :rtype: :class:`SpaceCenter.Alarm`
+
+   .. staticmethod:: add_maneuver_node_alarm(vessel, node, [offset = 60.0], [add_burn_time = True], [title = 'Maneuver Node Alarm'], [description = ''])
+
+      Create an alarm for the given vessel and maneuver node.
+
+      :param SpaceCenter.Vessel vessel: The vessel.
+      :param SpaceCenter.Node node: The maneuver node.
+      :param number offset: Time in seconds to offset the alarm by.
+      :param boolean add_burn_time: Whether the node's burn time should be included in the alarm.
+      :param string title: Title for the alarm.
+      :param string description: Description for the alarm.
+      :rtype: :class:`SpaceCenter.Alarm`
+
+   .. staticmethod:: add_soi_alarm(vessel, [offset = 60.0], [title = 'SOI Change Alarm'], [description = ''])
+
+      Create an alarm for the given vessel's next sphere of influence change.
+
+      :param SpaceCenter.Vessel vessel: The vessel.
+      :param number offset: Time in seconds to offset the alarm by.
+      :param string title: Title for the alarm.
+      :param string description: Description for the alarm.
+      :rtype: :class:`SpaceCenter.Alarm`
+
+
+
+.. class:: Alarm
+
+   An alarm. Can be accessed using :attr:`SpaceCenter.alarm_manager <SpaceCenter.SpaceCenter.alarm_manager>`.
+
+   .. attribute:: id: number
+
+      Unique identifier of the alarm.
+      KSP destroys and recreates an alarm when it is edited.
+      This id will remain constant between the old and new alarms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: type: string
+
+      Type of alarm
+
+      :Attribute: Read-only, cannot be set
+      :rtype: string
+
+   .. attribute:: title: string
+
+      Title of the alarm
+
+      :Attribute: Read-only, cannot be set
+      :rtype: string
+
+   .. attribute:: description: string
+
+      Description of the alarm.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: string
+
+   .. attribute:: time: number
+
+      Time the alarm will trigger.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: time_until: number
+
+      Time until the alarm triggers.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: event_offset: number
+
+      Seconds between the alarm going off and the event it references.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: vessel: SpaceCenter.Vessel
+
+      Vessel the alarm references. ``nil`` if it does not reference a vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Vessel`

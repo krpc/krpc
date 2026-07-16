@@ -1,0 +1,193 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.UI
+
+Text
+====
+
+
+.. type:: public class Text
+
+   A text label. See :meth:`Panel.addText(String, boolean)`.
+
+   .. method:: RectTransform getRectTransform()
+
+
+      The rect transform for the text.
+
+   
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the UI object is visible.
+
+   
+
+   .. method:: String getContent()
+
+   .. method:: void setContent(String value)
+
+      The text string
+
+   
+
+   .. method:: String getFont()
+
+   .. method:: void setFont(String value)
+
+      Name of the font
+
+   
+
+   .. method:: java.util.List<String> getAvailableFonts()
+
+
+      A list of all available fonts.
+
+   
+
+   .. method:: int getSize()
+
+   .. method:: void setSize(int value)
+
+      Font size.
+
+   
+
+   .. method:: FontStyle getStyle()
+
+   .. method:: void setStyle(FontStyle value)
+
+      Font style.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getColor()
+
+   .. method:: void setColor(org.javatuples.Triplet<Double,Double,Double> value)
+
+      Set the color
+
+   
+
+   .. method:: TextAnchor getAlignment()
+
+   .. method:: void setAlignment(TextAnchor value)
+
+      Alignment.
+
+   
+
+   .. method:: float getLineSpacing()
+
+   .. method:: void setLineSpacing(float value)
+
+      Line spacing.
+
+   
+
+   .. method:: void remove()
+
+      Remove the UI object.
+
+   
+
+
+
+.. type:: public enum FontStyle
+
+   Font style.
+
+
+   .. field:: public FontStyle NORMAL
+
+      Normal.
+
+
+   .. field:: public FontStyle BOLD
+
+      Bold.
+
+
+   .. field:: public FontStyle ITALIC
+
+      Italic.
+
+
+   .. field:: public FontStyle BOLD_AND_ITALIC
+
+      Bold and italic.
+
+
+
+.. type:: public enum TextAlignment
+
+   Text alignment.
+
+
+   .. field:: public TextAlignment LEFT
+
+      Left aligned.
+
+
+   .. field:: public TextAlignment RIGHT
+
+      Right aligned.
+
+
+   .. field:: public TextAlignment CENTER
+
+      Center aligned.
+
+
+
+.. type:: public enum TextAnchor
+
+   Text alignment.
+
+
+   .. field:: public TextAnchor LOWER_CENTER
+
+      Lower center.
+
+
+   .. field:: public TextAnchor LOWER_LEFT
+
+      Lower left.
+
+
+   .. field:: public TextAnchor LOWER_RIGHT
+
+      Lower right.
+
+
+   .. field:: public TextAnchor MIDDLE_CENTER
+
+      Middle center.
+
+
+   .. field:: public TextAnchor MIDDLE_LEFT
+
+      Middle left.
+
+
+   .. field:: public TextAnchor MIDDLE_RIGHT
+
+      Middle right.
+
+
+   .. field:: public TextAnchor UPPER_CENTER
+
+      Upper center.
+
+
+   .. field:: public TextAnchor UPPER_LEFT
+
+      Upper left.
+
+
+   .. field:: public TextAnchor UPPER_RIGHT
+
+      Upper right.

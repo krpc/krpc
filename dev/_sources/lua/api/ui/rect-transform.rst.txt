@@ -1,0 +1,89 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: UI
+
+Rect Transform
+==============
+
+
+.. class:: RectTransform
+
+   A Unity engine Rect Transform for a UI object.
+   See the `Unity manual <https://docs.unity3d.com/Manual/class-RectTransform.html>`_ for more details.
+
+   .. attribute:: position: Tuple
+
+      Position of the rectangles pivot point relative to the anchors.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: local_position: Tuple
+
+      Position of the rectangles pivot point relative to the anchors.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: size: Tuple
+
+      Width and height of the rectangle.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: upper_right: Tuple
+
+      Position of the rectangles upper right corner relative to the anchors.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: lower_left: Tuple
+
+      Position of the rectangles lower left corner relative to the anchors.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: anchor: Tuple
+
+      Set the minimum and maximum anchor points as a fraction of the size of the parent rectangle.
+
+      :Attribute: Write-only, cannot be read
+      :rtype: Tuple
+
+   .. attribute:: anchor_max: Tuple
+
+      The anchor point for the lower left corner of the rectangle defined as a fraction of the size of the parent rectangle.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: anchor_min: Tuple
+
+      The anchor point for the upper right corner of the rectangle defined as a fraction of the size of the parent rectangle.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: pivot: Tuple
+
+      Location of the pivot point around which the rectangle rotates, defined as a fraction of the size of the rectangle itself.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: rotation: Tuple
+
+      Rotation, as a quaternion, of the object around its pivot point.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: scale: Tuple
+
+      Scale factor applied to the object in the x, y and z dimensions.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple

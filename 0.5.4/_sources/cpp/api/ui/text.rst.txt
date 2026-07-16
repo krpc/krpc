@@ -1,0 +1,187 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::UI
+
+Text
+====
+
+
+.. class:: Text
+
+   A text label. See :func:`Panel::add_text`.
+
+   .. function:: RectTransform rect_transform()
+
+      The rect transform for the text.
+
+   
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the UI object is visible.
+
+   
+
+   .. function:: std::string content()
+   .. function:: void set_content(std::string value)
+
+      The text string
+
+   
+
+   .. function:: std::string font()
+   .. function:: void set_font(std::string value)
+
+      Name of the font
+
+   
+
+   .. function:: std::vector<std::string> available_fonts()
+
+      A list of all available fonts.
+
+   
+
+   .. function:: int32_t size()
+   .. function:: void set_size(int32_t value)
+
+      Font size.
+
+   
+
+   .. function:: FontStyle style()
+   .. function:: void set_style(FontStyle value)
+
+      Font style.
+
+   
+
+   .. function:: std::tuple<double, double, double> color()
+   .. function:: void set_color(std::tuple<double, double, double> value)
+
+      Set the color
+
+   
+
+   .. function:: TextAnchor alignment()
+   .. function:: void set_alignment(TextAnchor value)
+
+      Alignment.
+
+   
+
+   .. function:: float line_spacing()
+   .. function:: void set_line_spacing(float value)
+
+      Line spacing.
+
+   
+
+   .. function:: void remove()
+
+      Remove the UI object.
+
+
+   
+
+
+
+.. namespace:: krpc::services::UI
+.. enum-struct:: FontStyle
+
+   Font style.
+
+
+   .. enumerator:: normal
+
+      Normal.
+
+
+   .. enumerator:: bold
+
+      Bold.
+
+
+   .. enumerator:: italic
+
+      Italic.
+
+
+   .. enumerator:: bold_and_italic
+
+      Bold and italic.
+
+
+
+.. namespace:: krpc::services::UI
+.. enum-struct:: TextAlignment
+
+   Text alignment.
+
+
+   .. enumerator:: left
+
+      Left aligned.
+
+
+   .. enumerator:: right
+
+      Right aligned.
+
+
+   .. enumerator:: center
+
+      Center aligned.
+
+
+
+.. namespace:: krpc::services::UI
+.. enum-struct:: TextAnchor
+
+   Text alignment.
+
+
+   .. enumerator:: lower_center
+
+      Lower center.
+
+
+   .. enumerator:: lower_left
+
+      Lower left.
+
+
+   .. enumerator:: lower_right
+
+      Lower right.
+
+
+   .. enumerator:: middle_center
+
+      Middle center.
+
+
+   .. enumerator:: middle_left
+
+      Middle left.
+
+
+   .. enumerator:: middle_right
+
+      Middle right.
+
+
+   .. enumerator:: upper_center
+
+      Upper center.
+
+
+   .. enumerator:: upper_left
+
+      Upper left.
+
+
+   .. enumerator:: upper_right
+
+      Upper right.

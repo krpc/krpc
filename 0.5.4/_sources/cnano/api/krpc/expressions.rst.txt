@@ -1,0 +1,598 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Expressions
+===========
+
+
+.. type:: krpc_KRPC_Expression_t
+
+   A server side expression.
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_ConstantDouble(krpc_connection_t connection, krpc_KRPC_Expression_t * result, double value)
+
+      A constant value of double precision floating point type.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_ConstantFloat(krpc_connection_t connection, krpc_KRPC_Expression_t * result, float value)
+
+      A constant value of single precision floating point type.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_ConstantInt(krpc_connection_t connection, krpc_KRPC_Expression_t * result, int32_t value)
+
+      A constant value of integer type.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_ConstantBool(krpc_connection_t connection, krpc_KRPC_Expression_t * result, bool value)
+
+      A constant value of boolean type.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_ConstantString(krpc_connection_t connection, krpc_KRPC_Expression_t * result, const char * value)
+
+      A constant value of string type.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Call(krpc_connection_t connection, krpc_KRPC_Expression_t * result, const krpc_schema_ProcedureCall * call)
+
+      An RPC call.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Equal(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Equality comparison.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_NotEqual(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Inequality comparison.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_GreaterThan(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Greater than numerical comparison.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_GreaterThanOrEqual(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Greater than or equal numerical comparison.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_LessThan(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Less than numerical comparison.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_LessThanOrEqual(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Less than or equal numerical comparison.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_And(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Boolean and operator.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Or(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Boolean or operator.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_ExclusiveOr(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Boolean exclusive-or operator.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Not(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg)
+
+      Boolean negation operator.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Add(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Numerical addition.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Subtract(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Numerical subtraction.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Multiply(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Numerical multiplication.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Divide(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Numerical division.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Modulo(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Numerical modulo operator.
+
+      :Parameters:
+
+
+
+
+      :returns: The remainder of arg0 divided by arg1
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Power(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Numerical power operator.
+
+      :Parameters:
+
+
+
+
+      :returns: arg0 raised to the power of arg1, with type of arg0
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_LeftShift(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Bitwise left shift.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_RightShift(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1)
+
+      Bitwise right shift.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Cast(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg, krpc_KRPC_Type_t type)
+
+      Perform a cast to the given type.
+
+      :Parameters:
+
+
+       * **type** -- Type to cast the argument to.
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Parameter(krpc_connection_t connection, krpc_KRPC_Expression_t * result, const char * name, krpc_KRPC_Type_t type)
+
+      A named parameter of type double.
+
+      :Parameters:
+
+       * **name** -- The name of the parameter.
+       * **type** -- The type of the parameter.
+
+      :returns: A named parameter.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Function(krpc_connection_t connection, krpc_KRPC_Expression_t * result, const krpc_list_object_t * parameters, krpc_KRPC_Expression_t body)
+
+      A function.
+
+      :Parameters:
+
+       * **parameters** -- The parameters of the function.
+       * **body** -- The body of the function.
+
+      :returns: A function.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Invoke(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t function, const krpc_dictionary_string_object_t * args)
+
+      A function call.
+
+      :Parameters:
+
+       * **function** -- The function to call.
+       * **args** -- The arguments to call the function with.
+
+      :returns: A function call.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_CreateTuple(krpc_connection_t connection, krpc_KRPC_Expression_t * result, const krpc_list_object_t * elements)
+
+      Construct a tuple.
+
+      :Parameters:
+
+       * **elements** -- The elements.
+
+      :returns: The tuple.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_CreateList(krpc_connection_t connection, krpc_KRPC_Expression_t * result, const krpc_list_object_t * values)
+
+      Construct a list.
+
+      :Parameters:
+
+       * **values** -- The value. Should all be of the same type.
+
+      :returns: The list.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_CreateSet(krpc_connection_t connection, krpc_KRPC_Expression_t * result, const krpc_set_object_t * values)
+
+      Construct a set.
+
+      :Parameters:
+
+       * **values** -- The values. Should all be of the same type.
+
+      :returns: The set.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_CreateDictionary(krpc_connection_t connection, krpc_KRPC_Expression_t * result, const krpc_list_object_t * keys, const krpc_list_object_t * values)
+
+      Construct a dictionary, from a list of corresponding keys and values.
+
+      :Parameters:
+
+       * **keys** -- The keys. Should all be of the same type.
+       * **values** -- The values. Should all be of the same type.
+
+      :returns: The dictionary.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_ToList(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg)
+
+      Convert a collection to a list.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The collection as a list.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_ToSet(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg)
+
+      Convert a collection to a set.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The collection as a set.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Get(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg, krpc_KRPC_Expression_t index)
+
+      Access an element in a tuple, list or dictionary.
+
+      :Parameters:
+
+       * **arg** -- The tuple, list or dictionary.
+       * **index** -- The index of the element to access. A zero indexed integer for a tuple or list, or a key for a dictionary.
+
+      :returns: The element.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Count(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg)
+
+      Number of elements in a collection.
+
+      :Parameters:
+
+       * **arg** -- The list, set or dictionary.
+
+      :returns: The number of elements in the collection.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Sum(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg)
+
+      Sum all elements of a collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The sum of the elements in the collection.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Max(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg)
+
+      Maximum of all elements in a collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The maximum elements in the collection.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Min(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg)
+
+      Minimum of all elements in a collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The minimum elements in the collection.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Average(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg)
+
+      Minimum of all elements in a collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The minimum elements in the collection.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Select(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg, krpc_KRPC_Expression_t func)
+
+      Run a function on every element in the collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+       * **func** -- The function.
+
+      :returns: The modified collection.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Where(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg, krpc_KRPC_Expression_t func)
+
+      Run a function on every element in the collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+       * **func** -- The function.
+
+      :returns: The modified collection.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Contains(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg, krpc_KRPC_Expression_t value)
+
+      Determine if a collection contains a value.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **value** -- The value to look for.
+
+      :returns: Whether the collection contains a value.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Aggregate(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg, krpc_KRPC_Expression_t func)
+
+      Applies an accumulator function over a sequence.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **func** -- The accumulator function.
+
+      :returns: The accumulated value.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_AggregateWithSeed(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg, krpc_KRPC_Expression_t seed, krpc_KRPC_Expression_t func)
+
+      Applies an accumulator function over a sequence, with a given seed.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **seed** -- The seed value.
+       * **func** -- The accumulator function.
+
+      :returns: The accumulated value.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Concat(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg1, krpc_KRPC_Expression_t arg2)
+
+      Concatenate two sequences.
+
+      :Parameters:
+
+       * **arg1** -- The first sequence.
+       * **arg2** -- The second sequence.
+
+      :returns: The first sequence followed by the second sequence.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_OrderBy(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg, krpc_KRPC_Expression_t key)
+
+      Order a collection using a key function.
+
+      :Parameters:
+
+       * **arg** -- The collection to order.
+       * **key** -- A function that takes a value from the collection and generates a key to sort on.
+
+      :returns: The ordered collection.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_All(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg, krpc_KRPC_Expression_t predicate)
+
+      Determine whether all items in a collection satisfy a boolean predicate.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **predicate** -- The predicate function.
+
+      :returns: Whether all items satisfy the predicate.
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Expression_Any(krpc_connection_t connection, krpc_KRPC_Expression_t * result, krpc_KRPC_Expression_t arg, krpc_KRPC_Expression_t predicate)
+
+      Determine whether any item in a collection satisfies a boolean predicate.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **predicate** -- The predicate function.
+
+      :returns: Whether any item satisfies the predicate.
+   
+
+
+
+.. type:: krpc_KRPC_Type_t
+
+   A server side expression.
+
+   .. function:: krpc_error_t krpc_KRPC_Type_Double(krpc_connection_t connection, krpc_KRPC_Type_t * result)
+
+      Double type.
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Type_Float(krpc_connection_t connection, krpc_KRPC_Type_t * result)
+
+      Float type.
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Type_Int(krpc_connection_t connection, krpc_KRPC_Type_t * result)
+
+      Int type.
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Type_Bool(krpc_connection_t connection, krpc_KRPC_Type_t * result)
+
+      Bool type.
+
+
+   
+
+   .. function:: krpc_error_t krpc_KRPC_Type_String(krpc_connection_t connection, krpc_KRPC_Type_t * result)
+
+      String type.

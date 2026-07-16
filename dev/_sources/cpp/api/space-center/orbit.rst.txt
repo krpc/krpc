@@ -1,0 +1,383 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::SpaceCenter
+
+Orbit
+=====
+
+
+.. class:: Orbit
+
+   Describes an orbit. For example, the orbit of a vessel, obtained by calling
+   :func:`Vessel::orbit`, or a celestial body, obtained by calling
+   :func:`CelestialBody::orbit`.
+
+   .. function:: CelestialBody body()
+
+      The celestial body (e.g. planet or moon) around which the object is orbiting.
+
+   
+
+   .. function:: double apoapsis()
+
+      Gets the apoapsis of the orbit, in meters, from the center of mass
+      of the body being orbited.
+
+   
+
+      .. note::
+
+         For the apoapsis altitude reported on the in-game map view,
+         use :func:`Orbit::apoapsis_altitude`.
+
+   .. function:: double periapsis()
+
+      The periapsis of the orbit, in meters, from the center of mass
+      of the body being orbited.
+
+   
+
+      .. note::
+
+         For the periapsis altitude reported on the in-game map view,
+         use :func:`Orbit::periapsis_altitude`.
+
+   .. function:: double apoapsis_altitude()
+
+      The apoapsis of the orbit, in meters, above the sea level of the body being orbited.
+
+   
+
+      .. note::
+
+         This is equal to :func:`Orbit::apoapsis` minus the equatorial radius of the body.
+
+   .. function:: double periapsis_altitude()
+
+      The periapsis of the orbit, in meters, above the sea level of the body being orbited.
+
+   
+
+      .. note::
+
+         This is equal to :func:`Orbit::periapsis` minus the equatorial radius of the body.
+
+   .. function:: double semi_major_axis()
+
+      The semi-major axis of the orbit, in meters.
+
+   
+
+   .. function:: double semi_minor_axis()
+
+      The semi-minor axis of the orbit, in meters.
+
+   
+
+   .. function:: double radius()
+
+      The current radius of the orbit, in meters. This is the distance between the center
+      of mass of the object in orbit, and the center of mass of the body around which it
+      is orbiting.
+
+   
+
+      .. note::
+
+         This value will change over time if the orbit is elliptical.
+
+   .. function:: double radius_at(double ut)
+
+      The orbital radius at the given time, in meters.
+
+      :Parameters:
+
+       * **ut** -- The universal time to measure the radius at.
+
+   
+
+   .. function:: std::tuple<double, double, double> position_at(double ut, ReferenceFrame reference_frame)
+
+      The position at a given time, in the specified reference frame.
+
+      :Parameters:
+
+       * **ut** -- The universal time to measure the position at.
+       * **reference_frame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: double speed()
+
+      The current orbital speed of the object in meters per second.
+
+   
+
+      .. note::
+
+         This value will change over time if the orbit is elliptical.
+
+   .. function:: double period()
+
+      The orbital period, in seconds.
+
+   
+
+   .. function:: double time_to_apoapsis()
+
+      The time until the object reaches apoapsis, in seconds.
+
+   
+
+   .. function:: double time_to_periapsis()
+
+      The time until the object reaches periapsis, in seconds.
+
+   
+
+   .. function:: double eccentricity()
+
+      The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+      of the orbit.
+
+   
+
+   .. function:: double inclination()
+
+      The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+      of the orbit,
+      in radians.
+
+   
+
+   .. function:: double longitude_of_ascending_node()
+
+      The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+   
+
+      .. note::
+
+         For a near-equatorial orbit, the ascending node is ill-defined and
+         this value may vary erratically over time.
+
+   .. function:: double argument_of_periapsis()
+
+      The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+   
+
+      .. note::
+
+         For a near-circular orbit, the periapsis is ill-defined and
+         this value may vary erratically over time.
+
+   .. function:: double mean_anomaly_at_epoch()
+
+      The `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
+
+   
+
+   .. function:: double epoch()
+
+      The time since the epoch (the point at which the
+      `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_
+      was measured, in seconds.
+
+   
+
+   .. function:: double mean_anomaly()
+
+      The `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
+
+   
+
+   .. function:: double mean_anomaly_at_ut(double ut)
+
+      The mean anomaly at the given time.
+
+      :Parameters:
+
+       * **ut** -- The universal time in seconds.
+
+   
+
+   .. function:: double eccentric_anomaly()
+
+      The `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_.
+
+   
+
+   .. function:: double eccentric_anomaly_at_ut(double ut)
+
+      The eccentric anomaly at the given universal time.
+
+      :Parameters:
+
+       * **ut** -- The universal time, in seconds.
+
+   
+
+   .. function:: double true_anomaly()
+
+      The `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_.
+
+   
+
+   .. function:: double true_anomaly_at_ut(double ut)
+
+      The true anomaly at the given time.
+
+      :Parameters:
+
+       * **ut** -- The universal time in seconds.
+
+   
+
+   .. function:: double true_anomaly_at_radius(double radius)
+
+      The true anomaly at the given orbital radius.
+
+      :Parameters:
+
+       * **radius** -- The orbital radius in meters.
+
+   
+
+   .. function:: double ut_at_true_anomaly(double true_anomaly)
+
+      The universal time, in seconds, corresponding to the given true anomaly.
+
+      :Parameters:
+
+       * **true_anomaly** -- True anomaly.
+
+   
+
+   .. function:: double radius_at_true_anomaly(double true_anomaly)
+
+      The orbital radius at the point in the orbit given by the true anomaly.
+
+      :Parameters:
+
+       * **true_anomaly** -- The true anomaly.
+
+   
+
+   .. function:: double true_anomaly_at_an(Orbit target)
+
+      The true anomaly of the ascending node with the given target orbit.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+
+   
+
+   .. function:: double true_anomaly_at_dn(Orbit target)
+
+      The true anomaly of the descending node with the given target orbit.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+
+   
+
+   .. function:: double orbital_speed()
+
+      The current orbital speed in meters per second.
+
+   
+
+   .. function:: double orbital_speed_at(double time)
+
+      The orbital speed at the given time, in meters per second.
+
+      :Parameters:
+
+       * **time** -- Time from now, in seconds.
+
+   
+
+   .. function:: static std::tuple<double, double, double> reference_plane_normal(Client& connection, ReferenceFrame reference_frame)
+
+      The direction that is normal to the orbits reference plane,
+      in the given reference frame.
+      The reference plane is the plane from which the orbits inclination is measured.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+   
+
+   .. function:: static std::tuple<double, double, double> reference_plane_direction(Client& connection, ReferenceFrame reference_frame)
+
+      The direction from which the orbits longitude of ascending node is measured,
+      in the given reference frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+   
+
+   .. function:: double relative_inclination(Orbit target)
+
+      Relative inclination of this orbit and the target orbit, in radians.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+
+   
+
+   .. function:: double time_to_soi_change()
+
+      The time until the object changes sphere of influence, in seconds. Returns ``NaN``
+      if the object is not going to change sphere of influence.
+
+   
+
+   .. function:: Orbit next_orbit()
+
+      If the object is going to change sphere of influence in the future, returns the new
+      orbit after the change. Otherwise returns ``NULL``.
+
+   
+
+   .. function:: double time_of_closest_approach(Orbit target)
+
+      Estimates and returns the time at closest approach to a target orbit.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+
+      :returns: The universal time at closest approach, in seconds.
+   
+
+   .. function:: double distance_at_closest_approach(Orbit target)
+
+      Estimates and returns the distance at closest approach to a target orbit, in meters.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+
+   
+
+   .. function:: std::vector<std::vector<double>> list_closest_approaches(Orbit target, int32_t orbits)
+
+      Returns the times at closest approach and corresponding distances, to a target orbit.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+       * **orbits** -- The number of future orbits to search.
+
+      :returns: A list of two lists. The first is a list of times at closest approach, as universal times in seconds. The second is a list of corresponding distances at closest approach, in meters.

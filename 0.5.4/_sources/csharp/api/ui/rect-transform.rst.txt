@@ -1,0 +1,78 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.UI
+
+Rect Transform
+==============
+
+
+.. class:: RectTransform
+
+   A Unity engine Rect Transform for a UI object.
+   See the `Unity manual <https://docs.unity3d.com/Manual/class-RectTransform.html>`_ for more details.
+
+   .. property:: System.Tuple<double,double> Position { get; set; }
+
+      Position of the rectangles pivot point relative to the anchors.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> LocalPosition { get; set; }
+
+      Position of the rectangles pivot point relative to the anchors.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double> Size { get; set; }
+
+      Width and height of the rectangle.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double> UpperRight { get; set; }
+
+      Position of the rectangles upper right corner relative to the anchors.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double> LowerLeft { get; set; }
+
+      Position of the rectangles lower left corner relative to the anchors.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double> Anchor { set; }
+
+      Set the minimum and maximum anchor points as a fraction of the size of the parent rectangle.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double> AnchorMax { get; set; }
+
+      The anchor point for the lower left corner of the rectangle defined as a fraction of the size of the parent rectangle.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double> AnchorMin { get; set; }
+
+      The anchor point for the upper right corner of the rectangle defined as a fraction of the size of the parent rectangle.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double> Pivot { get; set; }
+
+      Location of the pivot point around which the rectangle rotates, defined as a fraction of the size of the rectangle itself.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double,double> Rotation { get; set; }
+
+      Rotation, as a quaternion, of the object around its pivot point.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> Scale { get; set; }
+
+      Scale factor applied to the object in the x, y and z dimensions.
+
+      :Game Scenes: All

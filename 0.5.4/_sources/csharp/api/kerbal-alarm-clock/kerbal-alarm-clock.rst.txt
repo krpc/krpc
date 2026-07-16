@@ -1,0 +1,58 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KerbalAlarmClock
+
+KerbalAlarmClock
+================
+
+
+.. class:: KerbalAlarmClock
+
+   This service provides functionality to interact with
+   `Kerbal Alarm Clock <https://forum.kerbalspaceprogram.com/index.php?/topic/22809-13x-kerbal-alarm-clock-v3850-may-30/>`_.
+
+   .. property:: bool Available { get; }
+
+      Whether Kerbal Alarm Clock is available.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Alarm> Alarms { get; }
+
+      A list of all the alarms.
+
+      :Game Scenes: All
+
+   .. method:: Alarm AlarmWithName(string name)
+
+      Get the alarm with the given *name*, or ``null``
+      if no alarms have that name. If more than one alarm has the name,
+      only returns one of them.
+
+      :parameters:
+
+       * **name** -- Name of the alarm to search for.
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<Alarm> AlarmsWithType(AlarmType type)
+
+      Get a list of alarms of the specified *type*.
+
+      :parameters:
+
+       * **type** -- Type of alarm to return.
+
+      :Game Scenes: All
+
+   .. method:: Alarm CreateAlarm(AlarmType type, string name, double ut)
+
+      Create a new alarm and return it.
+
+      :parameters:
+
+       * **type** -- Type of the new alarm.
+       * **name** -- Name of the new alarm.
+       * **ut** -- Time at which the new alarm should trigger.
+
+      :Game Scenes: All

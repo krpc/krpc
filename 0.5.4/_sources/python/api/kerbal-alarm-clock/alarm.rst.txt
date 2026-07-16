@@ -1,0 +1,122 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KerbalAlarmClock
+
+Alarm
+=====
+
+
+.. class:: Alarm
+
+   Represents an alarm. Obtained by calling
+   :attr:`alarms`,
+   :meth:`alarm_with_name` or
+   :meth:`alarms_with_type`.
+
+   .. attribute:: action
+
+      The action that the alarm triggers.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`AlarmAction`
+   
+
+   .. attribute:: margin
+
+      The number of seconds before the event that the alarm will fire.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: time
+
+      The time at which the alarm will fire.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: type
+
+      The type of the alarm.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`AlarmType`
+   
+
+   .. attribute:: id
+
+      The unique identifier for the alarm.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: name
+
+      The short name of the alarm.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: notes
+
+      The long description of the alarm.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: remaining
+
+      The number of seconds until the alarm will fire.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: repeat
+
+      Whether the alarm will be repeated after it has fired.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: repeat_period
+
+      The time delay to automatically create an alarm after it has fired.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: vessel
+
+      The vessel that the alarm is attached to.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.Vessel`
+   
+
+   .. attribute:: xfer_origin_body
+
+      The celestial body the vessel is departing from.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody`
+   
+
+   .. attribute:: xfer_target_body
+
+      The celestial body the vessel is arriving at.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody`
+   
+
+   .. method:: remove()
+
+      Removes the alarm.

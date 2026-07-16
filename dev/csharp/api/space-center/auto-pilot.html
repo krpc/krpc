@@ -1,0 +1,1851 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AutoPilot &#8212; kRPC 0.5.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=0da409bd" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'csharp/api/space-center/auto-pilot';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/csharp/api/space-center/auto-pilot.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Camera" href="camera.html" />
+    <link rel="prev" title="ReferenceFrame" href="reference-frame.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.4" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC 0.5.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../client.html">C# Client</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/krpc.html">KRPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="space-center.html">SpaceCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vessel.html">Vessel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comms.html">Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">AutoPilot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="waypoints.html">Waypoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry-types.html">Geometry Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ui.html">User Interface API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ui/ui.html">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/canvas.html">Canvas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/panel.html">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/text.html">Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/button.html">Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/remote-tech.html">RemoteTech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../csharp.html" class="nav-link">C#</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../space-center.html" class="nav-link">SpaceCenter API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">AutoPilot</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="autopilot">
+<h1>AutoPilot<a class="headerlink" href="#autopilot" title="Link to this heading">#</a></h1>
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-KRPC.Client.Services.SpaceCenter.AutoPilot">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">AutoPilot</span></span><a class="headerlink" href="#class-KRPC.Client.Services.SpaceCenter.AutoPilot" title="Link to this definition">#</a></dt>
+<dd><p>Provides basic auto-piloting utilities for a vessel.
+Created by calling <a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.AutoPilot" title="KRPC.Client.Services.SpaceCenter.Vessel.AutoPilot property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.AutoPilot</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a client engages the auto-pilot and then closes its connection to the server,
+the auto-pilot will be disengaged. Its configuration and target are left unchanged.</p>
+</div>
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.SAS">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">SAS</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.SAS" title="Link to this definition">#</a></dt>
+<dd><p>The state of SAS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Equivalent to <a class="reference internal" href="control.html#property-KRPC.Client.Services.SpaceCenter.Control.SAS" title="KRPC.Client.Services.SpaceCenter.Control.SAS property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Control.SAS</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.SASMode">
+<a class="reference internal" href="control.html#enum-KRPC.Client.Services.SpaceCenter.SASMode" title="KRPC.Client.Services.SpaceCenter.SASMode enum"><span class="pre">SASMode</span></a> <span class="sig-name descname"><span class="pre">SASMode</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.SASMode" title="Link to this definition">#</a></dt>
+<dd><p>The current <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.SASMode" title="KRPC.Client.Services.SpaceCenter.AutoPilot.SASMode property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.SASMode</span></code></a>.
+These modes are equivalent to the mode buttons to the left of the navball that appear
+when SAS is enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Equivalent to <a class="reference internal" href="control.html#property-KRPC.Client.Services.SpaceCenter.Control.SASMode" title="KRPC.Client.Services.SpaceCenter.Control.SASMode property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Control.SASMode</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.Engaged">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">Engaged</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.Engaged" title="Link to this definition">#</a></dt>
+<dd><p>Whether the auto-pilot is engaged.
+Setting to <code class="docutils literal notranslate"><span class="pre">true</span></code> engages the auto-pilot; setting to <code class="docutils literal notranslate"><span class="pre">false</span></code> disengages it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.ShowInfoUI">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">ShowInfoUI</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.ShowInfoUI" title="Link to this definition">#</a></dt>
+<dd><p>Whether an in-game window showing the auto-pilot’s state (engagement, attitude error,
+target, angular rate, inner-loop PID gains and oscillation suppression) is displayed for
+this vessel. Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>. This is a debugging aid; the window is reset to
+hidden when the game is restarted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.AutoPilot.Reset">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Reset</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.Reset" title="Link to this definition">#</a></dt>
+<dd><p>Disengages the auto-pilot and resets all configuration parameters to their defaults.
+Also resets the target pitch, heading and roll, and clears all internal controller
+state, including the oscillation detector’s structural level — which otherwise
+persists across engagements so that a craft known to be flexible re-latches quickly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.ReferenceFrame">
+<a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">ReferenceFrame</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.ReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame for the target direction (<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetDirection</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An error will be thrown if this property is set to a reference frame that rotates with
+the vessel being controlled, as it is impossible to rotate the vessel in such a
+reference frame.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">TargetPitch</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch" title="Link to this definition">#</a></dt>
+<dd><p>The target pitch, in degrees, between -90° and +90°.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A convenience for aiming the nose by angle. Heading (and hence roll) is ill-defined when
+the nose is near vertical (pitch → ±90°); near the vertical prefer
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetDirection</span></code></a> or <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp" title="KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">AutoPilot.SetDirectionAndUp</span></code></a>. The setter preserves the
+current roll relative to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetHeading">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">TargetHeading</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetHeading" title="Link to this definition">#</a></dt>
+<dd><p>The target heading, in degrees, between 0° and 360°.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A convenience for aiming the nose by angle, ill-defined when the nose is near vertical
+(pitch → ±90°) — see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetPitch</span></code></a>. The setter preserves the current roll
+relative to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRoll">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">TargetRoll</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRoll" title="Link to this definition">#</a></dt>
+<dd><p>The target roll, in degrees, measured about the vessel’s nose relative to the
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code></a> (roll 0 aligns the vessel’s dorsal/roof axis with the reference;
+positive roll banks right). <code class="docutils literal notranslate"><span class="pre">NaN</span></code> if no target roll is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When left unset (<code class="docutils literal notranslate"><span class="pre">NaN</span></code>) the auto-pilot suppresses roll rotation — it drives the roll
+rate to zero rather than holding a specific roll angle. Setting a value re-rolls the
+current target to that angle relative to the up reference while keeping the nose direction.
+With the default reference (the frame’s up) this reproduces the historical roll away from
+the vertical, and is ill-defined only when the nose points along the reference (near
+straight up or down). To hold a well-defined roll through the vertical — for example a
+gravity turn — set the up reference off the flight path (see
+<a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp" title="KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">AutoPilot.SetDirectionAndUp</span></code></a> / <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code></a>).</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">UpReference</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="Link to this definition">#</a></dt>
+<dd><p>The reference direction, in the reference frame specified by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.AutoPilot.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.ReferenceFrame</span></code></a>,
+that <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRoll" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRoll property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetRoll</span></code></a> is measured against: at roll 0 the vessel’s dorsal (roof)
+axis is aligned with this vector’s component perpendicular to the nose. Defaults to the
+frame’s up (the zenith / radial-out direction).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Setting this re-anchors how roll is measured without moving the current target, so
+the reference can be set once and then rolls commanded against it with
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRoll" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRoll property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetRoll</span></code></a> while the nose direction changes freely. It is also set as a side
+effect of <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp" title="KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">AutoPilot.SetDirectionAndUp</span></code></a>. Setting the target rotation, target direction,
+or the scalar pitch/heading leaves it unchanged. Choosing a reference off the flight path
+keeps roll well-defined through the vertical.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitchAndHeading">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">TargetPitchAndHeading</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <em><span class="pre">pitch</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <em><span class="pre">heading</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitchAndHeading" title="Link to this definition">#</a></dt>
+<dd><p>Set target pitch and heading angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pitch</strong> – Target pitch angle, in degrees between -90° and +90°.</p></li>
+<li><p><strong>heading</strong> – Target heading angle, in degrees between 0° and 360°.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A convenience for aiming the nose by angle; heading is ill-defined when the nose is near
+vertical (pitch → ±90°), so near the vertical prefer <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetDirection</span></code></a> or
+<a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp" title="KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">AutoPilot.SetDirectionAndUp</span></code></a>. Preserves the current roll relative to
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">TargetDirection</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection" title="Link to this definition">#</a></dt>
+<dd><p>Direction vector corresponding to the target pitch and heading.
+This is in the reference frame specified by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.AutoPilot.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.ReferenceFrame</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRotation">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">TargetRotation</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRotation" title="Link to this definition">#</a></dt>
+<dd><p>The target rotation quaternion. Setting this also sets the target roll.
+This is in the reference frame specified by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.AutoPilot.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.ReferenceFrame</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">SetDirectionAndUp</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <em><span class="pre">direction</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <em><span class="pre">up</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <em><span class="pre">roll</span></em><em> <span class="pre">=</span> <span class="pre">0.0f</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp" title="Link to this definition">#</a></dt>
+<dd><p>Set the target attitude from a nose direction and an up vector: point the nose along
+<em>direction</em> and roll so the vessel’s dorsal (roof) axis aligns with
+<em>up</em> (its component perpendicular to the nose), then apply an optional
+<em>roll</em> offset about the nose. Both vectors are in the reference frame
+specified by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.AutoPilot.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.ReferenceFrame</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>direction</strong> – The direction to point the nose in.</p></li>
+<li><p><strong>up</strong> – The reference direction the roof is rolled towards. Need not be normalized or perpendicular to <em>direction</em> — its component perpendicular to the nose is used. Stored as the <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code></a>.</p></li>
+<li><p><strong>roll</strong> – An additional roll about the nose, in degrees (positive banks right). Defaults to 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the way to hold a well-defined orientation through a maneuver — for example a
+gravity turn: pass a fixed <em>up</em> (say north) and the roll stays defined the
+whole way, with no singularity at the vertical. It is well-defined for every nose direction
+except <em>up</em> parallel to <em>direction</em> (asking the roof to
+point where the nose already points), where it falls back to pointing the nose only.
+Equivalent to setting <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code></a> to <em>up</em>, aiming at
+<em>direction</em> and setting <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRoll" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRoll property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetRoll</span></code></a> to
+<em>roll</em>.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetPitch">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">CurrentTargetPitch</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetPitch" title="Link to this definition">#</a></dt>
+<dd><p>The current target pitch the auto-pilot is tracking, in degrees. When
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetSmoothingTime</span></code></a> is non-zero this lags the commanded
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetPitch</span></code></a> while a change is slewed in; otherwise the two are equal.
+A convenience scalar, ill-defined near the vertical — see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetPitch</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetHeading">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">CurrentTargetHeading</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetHeading" title="Link to this definition">#</a></dt>
+<dd><p>The current target heading the auto-pilot is tracking, in degrees. When
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetSmoothingTime</span></code></a> is non-zero this lags the commanded
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetHeading" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetHeading property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetHeading</span></code></a> while a change is slewed in; otherwise the two are equal.
+A convenience scalar, ill-defined near the vertical — see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetHeading" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetHeading property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetHeading</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetRoll">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">CurrentTargetRoll</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetRoll" title="Link to this definition">#</a></dt>
+<dd><p>The current target roll the auto-pilot is tracking, in degrees. When
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetSmoothingTime</span></code></a> is non-zero this lags the commanded
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRoll" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRoll property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetRoll</span></code></a> while a change is slewed in; otherwise the two are equal.
+<code class="docutils literal notranslate"><span class="pre">NaN</span></code> if no target roll is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetDirection">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">CurrentTargetDirection</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetDirection" title="Link to this definition">#</a></dt>
+<dd><p>Direction vector corresponding to the current target pitch and heading
+(see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetPitch" title="KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetPitch property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.CurrentTargetPitch</span></code></a>), in the reference frame specified by
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.AutoPilot.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.ReferenceFrame</span></code></a>. Lags <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetDirection</span></code></a> while a change is
+slewed in when <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetSmoothingTime</span></code></a> is non-zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetRotation">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">CurrentTargetRotation</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetRotation" title="Link to this definition">#</a></dt>
+<dd><p>The current target rotation quaternion the auto-pilot is tracking, in the reference frame
+specified by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.AutoPilot.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.ReferenceFrame</span></code></a>. Lags <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRotation" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetRotation property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetRotation</span></code></a> while a
+change is slewed in when <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetSmoothingTime</span></code></a> is non-zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.AutoPilot.Wait">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Wait</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">timeout</span></em><em> <span class="pre">=</span> <span class="pre">-1.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.Wait" title="Link to this definition">#</a></dt>
+<dd><p>Blocks until the vessel is pointing in the target direction and has
+the target roll (if set). Throws an exception if the auto-pilot has not been engaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timeout</strong> – Maximum time to wait in seconds. If not specified, waits indefinitely.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.StoppingAngleThreshold">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">StoppingAngleThreshold</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.StoppingAngleThreshold" title="Link to this definition">#</a></dt>
+<dd><p>The threshold, in degrees, below which the pointing error must fall for
+<a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.Wait" title="KRPC.Client.Services.SpaceCenter.AutoPilot.Wait method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">AutoPilot.Wait</span></code></a> to return. Defaults to 1 degree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.StoppingVelocityThreshold">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">StoppingVelocityThreshold</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.StoppingVelocityThreshold" title="Link to this definition">#</a></dt>
+<dd><p>The threshold angular velocity, in rad/s, below which the vessel’s angular
+velocity magnitude must fall for <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.Wait" title="KRPC.Client.Services.SpaceCenter.AutoPilot.Wait method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">AutoPilot.Wait</span></code></a> to return.
+Defaults to 0.05 rad/s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.Error">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">Error</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.Error" title="Link to this definition">#</a></dt>
+<dd><p>The error, in degrees, between the direction the ship has been asked
+to point in and the direction it is pointing in. Throws an exception if the auto-pilot
+has not been engaged and SAS is not enabled or is in stability assist mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the error relative to the commanded target. While a change is being slewed in
+(see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetSmoothingTime</span></code></a>) it differs from <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.CurrentError</span></code></a>, the
+error relative to the target the auto-pilot is currently tracking.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">AttitudeError</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError" title="Link to this definition">#</a></dt>
+<dd><p>The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel’s current
+attitude and the commanded target. All three components come from one singularity-free
+residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
+of pitch/heading/roll angles). The scalar <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.PitchError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.PitchError</span></code></a>,
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.HeadingError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.HeadingError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.HeadingError</span></code></a> and <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.RollError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.RollError</span></code></a> are the magnitudes of the pitch, yaw
+and roll components respectively. Throws an exception if the auto-pilot has not been
+engaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchError">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">PitchError</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchError" title="Link to this definition">#</a></dt>
+<dd><p>The error, in degrees, between the vessels current and target pitch.
+Throws an exception if the auto-pilot has not been engaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The pitch component of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.AttitudeError</span></code></a> — the pitch part of the direction error
+resolved in the roll-invariant frame, well-defined near the vertical.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.HeadingError">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">HeadingError</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.HeadingError" title="Link to this definition">#</a></dt>
+<dd><p>The error, in degrees, between the vessels current and target heading.
+Throws an exception if the auto-pilot has not been engaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The yaw component of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.AttitudeError</span></code></a> — the yaw part of the direction error
+resolved in the roll-invariant frame, well-defined near the vertical (unlike the absolute
+heading, which is undefined at the pole).</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollError">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">RollError</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollError" title="Link to this definition">#</a></dt>
+<dd><p>The error, in degrees, between the vessels current and target roll.
+Throws an exception if the auto-pilot has not been engaged or no target roll is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Measured about the vessel’s nose axis, so it stays well-defined near the vertical
+singularity — unlike a subtraction of pitch/heading/roll angles, whose roll term is
+ill-conditioned when the vessel points close to straight up or down.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentError">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">CurrentError</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentError" title="Link to this definition">#</a></dt>
+<dd><p>The error, in degrees, between the direction the auto-pilot is currently tracking and the
+direction the ship is pointing in. Unlike <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.Error" title="KRPC.Client.Services.SpaceCenter.AutoPilot.Error property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.Error</span></code></a> (which is relative to the
+commanded target), this is relative to the slewed target the auto-pilot is currently
+holding, so it stays small while a smoothed change (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetSmoothingTime</span></code></a>)
+is fed in. Equal to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.Error" title="KRPC.Client.Services.SpaceCenter.AutoPilot.Error property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.Error</span></code></a> when smoothing is off. Throws an exception if the
+auto-pilot has not been engaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentAttitudeError">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">CurrentAttitudeError</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentAttitudeError" title="Link to this definition">#</a></dt>
+<dd><p>The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel’s current
+attitude and the target the auto-pilot is currently tracking (the slewed target — see
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetRotation" title="KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetRotation property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.CurrentTargetRotation</span></code></a>). Like <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.AttitudeError</span></code></a> but relative to the
+current target, so it stays small while a smoothed change (see
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetSmoothingTime</span></code></a>) is fed in; equal to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.AttitudeError</span></code></a> when
+smoothing is off. Throws an exception if the auto-pilot has not been engaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentPitchError">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">CurrentPitchError</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentPitchError" title="Link to this definition">#</a></dt>
+<dd><p>The error, in degrees, between the vessels current pitch and the pitch the auto-pilot is
+currently tracking (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetPitch" title="KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetPitch property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.CurrentTargetPitch</span></code></a>). Throws an exception if the
+auto-pilot has not been engaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The pitch component of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentAttitudeError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentAttitudeError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.CurrentAttitudeError</span></code></a>, well-defined near the vertical.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentHeadingError">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">CurrentHeadingError</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentHeadingError" title="Link to this definition">#</a></dt>
+<dd><p>The error, in degrees, between the vessels current heading and the heading the auto-pilot
+is currently tracking (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetHeading" title="KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetHeading property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.CurrentTargetHeading</span></code></a>). Throws an exception if the
+auto-pilot has not been engaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The yaw component of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentAttitudeError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentAttitudeError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.CurrentAttitudeError</span></code></a>, well-defined near the vertical.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentRollError">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">CurrentRollError</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentRollError" title="Link to this definition">#</a></dt>
+<dd><p>The error, in degrees, between the vessels current roll and the roll the auto-pilot is
+currently tracking (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetRoll" title="KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetRoll property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.CurrentTargetRoll</span></code></a>). Throws an exception if the
+auto-pilot has not been engaged or no target roll is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Measured about the vessel’s nose axis, so it stays well-defined near the vertical
+singularity — see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.RollError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.RollError</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollStartAngle">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">RollStartAngle</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollStartAngle" title="Link to this definition">#</a></dt>
+<dd><p>The direction error, in degrees, above which roll blending is fully suppressed.
+Defaults to 20 degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollEngageAngle">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">RollEngageAngle</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollEngageAngle" title="Link to this definition">#</a></dt>
+<dd><p>The direction error, in degrees, below which roll is fully engaged.
+Roll blends linearly between <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollStartAngle" title="KRPC.Client.Services.SpaceCenter.AutoPilot.RollStartAngle property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.RollStartAngle</span></code></a> and this value.
+Defaults to 15 degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.MaxAngularVelocity">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">MaxAngularVelocity</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.MaxAngularVelocity" title="Link to this definition">#</a></dt>
+<dd><p>The maximum angular velocity of the vessel, in rad/s, for each of the pitch, roll
+and yaw axes. Limits the target angular velocity computed by the bang-bang profile so
+that vessels with very high torque availability do not spin faster than desired.
+Defaults to 1 rad/s for each axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawAttenuationAngle">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">PitchYawAttenuationAngle</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawAttenuationAngle" title="Link to this definition">#</a></dt>
+<dd><p>The angle, in degrees, at which the autopilot considers the vessel to be pointing close
+to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
+or above this error the target velocity is at full, and below it the target velocity
+ramps linearly to zero at half this angle, so the vessel coasts to a stop. Pitch and yaw
+are controlled jointly, so a single angle applies to both. Defaults to 1°.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollAttenuationAngle">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">RollAttenuationAngle</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollAttenuationAngle" title="Link to this definition">#</a></dt>
+<dd><p>The angle, in degrees, at which the autopilot considers the vessel to be pointing close
+to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
+above this error the target velocity is at full, and below it the target velocity ramps
+linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.AutoTune">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">AutoTune</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AutoTune" title="Link to this definition">#</a></dt>
+<dd><p>Whether the rotation rate controllers PID parameters should be automatically tuned
+using the vessels moment of inertia and available torque. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.
+See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TimeToPeak" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TimeToPeak property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TimeToPeak</span></code></a> and <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.Overshoot" title="KRPC.Client.Services.SpaceCenter.AutoPilot.Overshoot property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.Overshoot</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.TimeToPeak">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">TimeToPeak</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TimeToPeak" title="Link to this definition">#</a></dt>
+<dd><p>The target time to peak used to autotune the PID controllers.
+A vector of three times, in seconds, for each of the pitch, roll and yaw axes.
+Defaults to 1 second for each axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.SoftStartTime">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">SoftStartTime</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.SoftStartTime" title="Link to this definition">#</a></dt>
+<dd><p>The duration, in seconds, over which the control output is faded in when the
+autopilot is engaged. This soft-start spreads the engagement transient over many
+physics ticks so engaging (on the pad or mid-flight) does not command a near-maximum
+control deflection that can excite an oscillation. Defaults to 0.5 seconds.
+Set to 0 to disable the fade-in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">TargetSmoothingTime</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime" title="Link to this definition">#</a></dt>
+<dd><p>The duration, in seconds, over which a change to the target attitude is applied to the
+control target. When set above zero, changing the target pitch, heading, roll, direction
+or rotation makes the effective control target ramp smoothly (a constant-rate rotation)
+from its current value to the new value over this many seconds, rather than jumping
+instantly. This lets a slow control loop drive a smooth maneuver (for example a gravity
+turn) without inducing oscillation from stepwise target changes. Defaults to 0
+(instantaneous).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.Overshoot">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Overshoot</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.Overshoot" title="Link to this definition">#</a></dt>
+<dd><p>The target overshoot percentage used to autotune the PID controllers.
+A vector of three values, between 0 and 1, for each of the pitch, roll and yaw axes.
+Defaults to 0.01 for each axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchPIDGains">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">PitchPIDGains</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchPIDGains" title="Link to this definition">#</a></dt>
+<dd><p>Gains for the pitch PID controller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AutoTune" title="KRPC.Client.Services.SpaceCenter.AutoPilot.AutoTune property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.AutoTune</span></code></a> is true, these values are updated automatically,
+which will overwrite any manual changes.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollPIDGains">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">RollPIDGains</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollPIDGains" title="Link to this definition">#</a></dt>
+<dd><p>Gains for the roll PID controller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AutoTune" title="KRPC.Client.Services.SpaceCenter.AutoPilot.AutoTune property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.AutoTune</span></code></a> is true, these values are updated automatically,
+which will overwrite any manual changes.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.YawPIDGains">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">YawPIDGains</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.YawPIDGains" title="Link to this definition">#</a></dt>
+<dd><p>Gains for the yaw PID controller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AutoTune" title="KRPC.Client.Services.SpaceCenter.AutoPilot.AutoTune property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.AutoTune</span></code></a> is true, these values are updated automatically,
+which will overwrite any manual changes.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawRateFilterMode">
+<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.RateFilterMode" title="KRPC.Client.Services.SpaceCenter.RateFilterMode enum"><span class="pre">RateFilterMode</span></a> <span class="sig-name descname"><span class="pre">PitchYawRateFilterMode</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawRateFilterMode" title="Link to this definition">#</a></dt>
+<dd><p>Controls the rate-feedback filtering (the wobble-suppression filter on the measured
+angular velocity) for the pitch and yaw axes of a structurally flexible vessel. When
+<a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Automatic" title="KRPC.Client.Services.SpaceCenter.RateFilterMode.Automatic value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">RateFilterMode.Automatic</span></code></a> (the default) the auto-pilot detects the
+oscillation at runtime, estimates its frequency and routes it to the appropriate tool
+(a notch filter for a low-frequency mode near the control band, a low-pass for a
+high-frequency mode). <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Off" title="KRPC.Client.Services.SpaceCenter.RateFilterMode.Off value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">RateFilterMode.Off</span></code></a> disables rate filtering only —
+the other oscillation mitigations are unaffected. <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Notch" title="KRPC.Client.Services.SpaceCenter.RateFilterMode.Notch value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">RateFilterMode.Notch</span></code></a>
+and <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.LowPass" title="KRPC.Client.Services.SpaceCenter.RateFilterMode.LowPass value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">RateFilterMode.LowPass</span></code></a> force the respective tool unconditionally at
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationFrequency" title="KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationFrequency property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.PitchYawOscillationFrequency</span></code></a>, for a vessel known in advance to be
+flexible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollRateFilterMode">
+<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.RateFilterMode" title="KRPC.Client.Services.SpaceCenter.RateFilterMode enum"><span class="pre">RateFilterMode</span></a> <span class="sig-name descname"><span class="pre">RollRateFilterMode</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollRateFilterMode" title="Link to this definition">#</a></dt>
+<dd><p>Controls the rate-feedback filtering for the roll axis. Behaves as
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawRateFilterMode" title="KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawRateFilterMode property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.PitchYawRateFilterMode</span></code></a> but for roll, using
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollOscillationFrequency" title="KRPC.Client.Services.SpaceCenter.AutoPilot.RollOscillationFrequency property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.RollOscillationFrequency</span></code></a>. Defaults to
+<a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Automatic" title="KRPC.Client.Services.SpaceCenter.RateFilterMode.Automatic value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">RateFilterMode.Automatic</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationFrequency">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">PitchYawOscillationFrequency</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationFrequency" title="Link to this definition">#</a></dt>
+<dd><p>The structural mode frequency, in Hz, for the pitch/yaw axis group. Used directly as the
+filter frequency in <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Notch" title="KRPC.Client.Services.SpaceCenter.RateFilterMode.Notch value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">RateFilterMode.Notch</span></code></a> / <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.LowPass" title="KRPC.Client.Services.SpaceCenter.RateFilterMode.LowPass value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">RateFilterMode.LowPass</span></code></a>
+mode, and as the seed for the automatic frequency estimator before it acquires. Defaults
+to 1.5 Hz.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollOscillationFrequency">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">RollOscillationFrequency</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollOscillationFrequency" title="Link to this definition">#</a></dt>
+<dd><p>The structural mode frequency, in Hz, for the roll axis. Behaves as
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationFrequency" title="KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationFrequency property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.PitchYawOscillationFrequency</span></code></a> but for roll. Defaults to 1.5 Hz.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationNotchQ">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">OscillationNotchQ</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationNotchQ" title="Link to this definition">#</a></dt>
+<dd><p>The quality factor of the notch filter used to suppress a low-frequency structural mode.
+A higher value gives a narrower notch (less in-band control lag but less tolerance to the
+mode frequency drifting); a lower value gives a wider notch. Defaults to 2.5. This is an
+advanced tuning parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationBandwidthFloorMode">
+<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.MitigationMode" title="KRPC.Client.Services.SpaceCenter.MitigationMode enum"><span class="pre">MitigationMode</span></a> <span class="sig-name descname"><span class="pre">OscillationBandwidthFloorMode</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationBandwidthFloorMode" title="Link to this definition">#</a></dt>
+<dd><p>Controls the bandwidth-floor mitigation: the reduction of the inner control loop
+bandwidth on a structurally flexible axis — the primary oscillation stabilizer. When
+<a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Automatic" title="KRPC.Client.Services.SpaceCenter.MitigationMode.Automatic value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">MitigationMode.Automatic</span></code></a> (the default) it engages on a latched axis
+while holding (and during a detected limit cycle). <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Off" title="KRPC.Client.Services.SpaceCenter.MitigationMode.Off value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">MitigationMode.Off</span></code></a>
+never reduces the bandwidth; <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Forced" title="KRPC.Client.Services.SpaceCenter.MitigationMode.Forced value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">MitigationMode.Forced</span></code></a> keeps it fully
+reduced at all times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationBandwidthFloor">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">OscillationBandwidthFloor</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationBandwidthFloor" title="Link to this definition">#</a></dt>
+<dd><p>The inner control loop bandwidth, in rad/s, that an axis is reduced towards while the
+bandwidth-floor mitigation is engaged on it. Lowering it suppresses oscillation more
+strongly; raising it keeps more control authority at the cost of allowing more wobble.
+Defaults to 1 rad/s. This is an advanced tuning parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationFeedforwardMode">
+<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.MitigationMode" title="KRPC.Client.Services.SpaceCenter.MitigationMode enum"><span class="pre">MitigationMode</span></a> <span class="sig-name descname"><span class="pre">OscillationFeedforwardMode</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationFeedforwardMode" title="Link to this definition">#</a></dt>
+<dd><p>Controls the feedforward-cut mitigation: removal of the acceleration feedforward on a
+structurally flexible axis while holding, so it cannot re-excite a residual mode at
+the reduced bandwidth. When <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Automatic" title="KRPC.Client.Services.SpaceCenter.MitigationMode.Automatic value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">MitigationMode.Automatic</span></code></a> (the default) it
+follows the hold gate on a latched axis. <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Off" title="KRPC.Client.Services.SpaceCenter.MitigationMode.Off value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">MitigationMode.Off</span></code></a> never cuts
+the feedforward; <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Forced" title="KRPC.Client.Services.SpaceCenter.MitigationMode.Forced value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">MitigationMode.Forced</span></code></a> always cuts it fully.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationOutputFilterMode">
+<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.MitigationMode" title="KRPC.Client.Services.SpaceCenter.MitigationMode enum"><span class="pre">MitigationMode</span></a> <span class="sig-name descname"><span class="pre">OscillationOutputFilterMode</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationOutputFilterMode" title="Link to this definition">#</a></dt>
+<dd><p>Controls the output-smoothing mitigation: a low-pass on the delivered actuator
+command that caps residual control chatter. When
+<a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Automatic" title="KRPC.Client.Services.SpaceCenter.MitigationMode.Automatic value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">MitigationMode.Automatic</span></code></a> (the default) it engages on a latched axis
+(and, lightly, while the oscillation detector is firing on an unlatched one).
+<a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Off" title="KRPC.Client.Services.SpaceCenter.MitigationMode.Off value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">MitigationMode.Off</span></code></a> never smooths; <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Forced" title="KRPC.Client.Services.SpaceCenter.MitigationMode.Forced value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">MitigationMode.Forced</span></code></a>
+smooths fully at all times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawControlOscillation">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">PitchYawControlOscillation</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawControlOscillation" title="Link to this definition">#</a></dt>
+<dd><p>The current amplitude of control-output oscillation on the pitch/yaw axis group, measured as
+the deviation of the delivered control about its slowly-varying trim. A settled hold sits
+near zero; a sustained limit cycle drives it toward 1. Read-only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollControlOscillation">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">RollControlOscillation</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollControlOscillation" title="Link to this definition">#</a></dt>
+<dd><p>The current amplitude of control-output oscillation on the roll axis, measured as the
+deviation of the delivered control about its slowly-varying trim. Read-only. See
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawControlOscillation" title="KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawControlOscillation property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.PitchYawControlOscillation</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationLevel">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">OscillationLevel</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationLevel" title="Link to this definition">#</a></dt>
+<dd><p>A measure, between 0 and 1 for each of the pitch, roll and yaw axes, of how strongly the
+auto-pilot currently detects structural oscillation (wobble) on that axis. 0 means none
+detected; values approaching 1 mean a sustained structural oscillation. Read-only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationLatched">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">PitchYawOscillationLatched</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationLatched" title="Link to this definition">#</a></dt>
+<dd><p>Whether the auto-pilot has confirmed the pitch/yaw axes to be structurally flexible and
+latched oscillation suppression on for them. Read-only. See
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawRateFilterMode" title="KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawRateFilterMode property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.PitchYawRateFilterMode</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollOscillationLatched">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">RollOscillationLatched</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollOscillationLatched" title="Link to this definition">#</a></dt>
+<dd><p>Whether the auto-pilot has confirmed the roll axis to be structurally flexible and latched
+oscillation suppression on for it. Read-only. See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollRateFilterMode" title="KRPC.Client.Services.SpaceCenter.AutoPilot.RollRateFilterMode property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.RollRateFilterMode</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationDetectedFrequency">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">PitchYawOscillationDetectedFrequency</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationDetectedFrequency" title="Link to this definition">#</a></dt>
+<dd><p>The structural oscillation frequency, in Hz, estimated by the automatic detector for the
+pitch/yaw axis group, or <code class="docutils literal notranslate"><span class="pre">NaN</span></code> until the estimator acquires. The estimator runs in
+all modes, so this is observable even when suppression is off or forced. Read-only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollOscillationDetectedFrequency">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">RollOscillationDetectedFrequency</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollOscillationDetectedFrequency" title="Link to this definition">#</a></dt>
+<dd><p>The structural oscillation frequency, in Hz, estimated by the automatic detector for the
+roll axis, or <code class="docutils literal notranslate"><span class="pre">NaN</span></code> until the estimator acquires. Read-only. See
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationDetectedFrequency" title="KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationDetectedFrequency property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.PitchYawOscillationDetectedFrequency</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.DiagnosticLogging">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">DiagnosticLogging</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.DiagnosticLogging" title="Link to this definition">#</a></dt>
+<dd><p>When <code class="docutils literal notranslate"><span class="pre">true</span></code>, records one row of diagnostic data per physics tick to an
+in-memory buffer (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.DiagnosticLog" title="KRPC.Client.Services.SpaceCenter.AutoPilot.DiagnosticLog property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.DiagnosticLog</span></code></a>), and echoes each row to
+Player.log prefixed with <code class="docutils literal notranslate"><span class="pre">[KRPC.AP]</span></code>. The data is CSV: the first row is a
+header naming every column, and each subsequent row records the auto-pilot’s full
+control-loop state for one tick (setpoints, errors, measured rates, gains,
+velocity-profile and feedforward internals, control outputs, and the oscillation
+detector/gate/mitigation state). The buffer is capped at 3000 data rows (one minute
+at the 50 Hz physics rate); when full, this property switches itself back to
+<code class="docutils literal notranslate"><span class="pre">false</span></code> and the buffer holds the minute following the enable. Setting to
+<code class="docutils literal notranslate"><span class="pre">true</span></code> clears the buffer. Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.DiagnosticLog">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">DiagnosticLog</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.DiagnosticLog" title="Link to this definition">#</a></dt>
+<dd><p>The diagnostic log collected since <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.DiagnosticLogging" title="KRPC.Client.Services.SpaceCenter.AutoPilot.DiagnosticLogging property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.DiagnosticLogging</span></code></a> was last set to
+<code class="docutils literal notranslate"><span class="pre">true</span></code>: CSV text whose first line is the column header and each subsequent
+line records one physics tick. Vector-valued channels use one column per component
+(suffixed <code class="docutils literal notranslate"><span class="pre">.p/.r/.y</span></code> for pitch, roll, yaw); pitch-yaw-group/roll channel pairs
+are suffixed <code class="docutils literal notranslate"><span class="pre">.py/.roll</span></code>. Returns an empty string if diagnostic logging has
+not been enabled or no ticks have occurred.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="csharp enum">
+<dt class="sig sig-object csharp" id="enum-KRPC.Client.Services.SpaceCenter.RateFilterMode">
+<span class="sig-name descname"><span class="pre">enum</span> <span class="pre">RateFilterMode</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.RateFilterMode" title="Link to this definition">#</a></dt>
+<dd><p>Controls the auto-pilot’s rate-feedback filtering for an axis group — the mitigation that
+removes a structural oscillation (wobble) from the measured angular velocity before the
+control loops consume it.
+See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawRateFilterMode" title="KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawRateFilterMode property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.PitchYawRateFilterMode</span></code></a> and <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollRateFilterMode" title="KRPC.Client.Services.SpaceCenter.AutoPilot.RollRateFilterMode property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.RollRateFilterMode</span></code></a>.</p>
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Automatic">
+<span class="sig-name descname"><span class="pre">Automatic</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Automatic" title="Link to this definition">#</a></dt>
+<dd><p>The default. The auto-pilot detects structural oscillation at runtime, estimates its
+frequency and routes it to the appropriate filter: a notch for a low-frequency mode
+near the control band, a low-pass for a high-frequency mode, or a broadband low-pass
+while the frequency is not yet known. Rigid vessels are left untouched.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Off">
+<span class="sig-name descname"><span class="pre">Off</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Off" title="Link to this definition">#</a></dt>
+<dd><p>No rate filtering. The other oscillation mitigations are unaffected.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Notch">
+<span class="sig-name descname"><span class="pre">Notch</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Notch" title="Link to this definition">#</a></dt>
+<dd><p>Force a notch filter at the manually set frequency
+(<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationFrequency" title="KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationFrequency property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.PitchYawOscillationFrequency</span></code></a> /
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollOscillationFrequency" title="KRPC.Client.Services.SpaceCenter.AutoPilot.RollOscillationFrequency property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.RollOscillationFrequency</span></code></a>), for a vessel whose structural mode
+is known in advance.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.RateFilterMode.LowPass">
+<span class="sig-name descname"><span class="pre">LowPass</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.LowPass" title="Link to this definition">#</a></dt>
+<dd><p>Force a low-pass filter derived from the manually set frequency.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="csharp enum">
+<dt class="sig sig-object csharp" id="enum-KRPC.Client.Services.SpaceCenter.MitigationMode">
+<span class="sig-name descname"><span class="pre">enum</span> <span class="pre">MitigationMode</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.MitigationMode" title="Link to this definition">#</a></dt>
+<dd><p>Controls one of the auto-pilot’s individually-toggleable oscillation mitigations
+(<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationBandwidthFloorMode" title="KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationBandwidthFloorMode property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.OscillationBandwidthFloorMode</span></code></a>,
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationFeedforwardMode" title="KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationFeedforwardMode property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.OscillationFeedforwardMode</span></code></a>,
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationOutputFilterMode" title="KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationOutputFilterMode property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.OscillationOutputFilterMode</span></code></a>).</p>
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.MitigationMode.Automatic">
+<span class="sig-name descname"><span class="pre">Automatic</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Automatic" title="Link to this definition">#</a></dt>
+<dd><p>The default: the mitigation engages automatically, driven by the runtime oscillation
+detector and the hold gate. Rigid vessels are left untouched.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.MitigationMode.Off">
+<span class="sig-name descname"><span class="pre">Off</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Off" title="Link to this definition">#</a></dt>
+<dd><p>The mitigation never engages. The other mitigations are unaffected.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.MitigationMode.Forced">
+<span class="sig-name descname"><span class="pre">Forced</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Forced" title="Link to this definition">#</a></dt>
+<dd><p>The mitigation is fully engaged at all times, regardless of what the oscillation
+detector reports.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="reference-frame.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">ReferenceFrame</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="camera.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Camera</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/csharp/api/space-center/auto-pilot.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2023, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
