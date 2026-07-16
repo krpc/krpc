@@ -1,0 +1,24 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('SpaceCenter') }}
+{% import domain.macros as macros with context %}
+
+.. _{{ domain.name }}-api-stage:
+
+Stage
+=====
+
+{% append services['SpaceCenter'].classes['Stage'].members['DeltaV'] %}
+.. note:: Delta-v is only defined for **activation** stages (``decouple`` is ``false``).
+          Calling this on a decouple stage raises an error.
+{% endappend %}
+{% append services['SpaceCenter'].classes['Stage'].members['Resources'] %}
+.. note:: This is an RPC method: call ``resources()`` (optional ``cumulative`` argument).
+          The default ``cumulative=true`` matches the legacy
+          {{ see('M:SpaceCenter.Vessel.ResourcesInDecoupleStage') }} RPC.
+          For decouple stages, grouping is the same as that deprecated method.
+          For activation stages, unstaged resource containers (for example fuel tanks)
+          are grouped with the first higher activation stage before they detach, matching
+          the C# ``Resources()`` documentation.
+{% endappend %}
+{{ macros.class(services['SpaceCenter'].classes['Stage']) }}

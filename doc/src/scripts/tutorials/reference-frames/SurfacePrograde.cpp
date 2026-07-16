@@ -10,7 +10,7 @@ int main() {
 
   ap.set_reference_frame(vessel.surface_velocity_reference_frame());
   ap.set_target_direction(std::make_tuple(0.0, 1.0, 0.0));
-  ap.engage();
+  ap.set_engaged(true);
   ap.wait();
-  ap.disengage();
+  ap.set_engaged(false);
 }

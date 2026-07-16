@@ -1,10 +1,10 @@
 ship = FlightAirbrake
 version = 1.12.5
-description =
+description = 
 type = VAB
-size = 4.32162142,4.8781414,4.99468231
+size = 1.51002216,4.8561039,1.25001168
 steamPublishedFileId = 0
-persistentId = 2580781388
+persistentId = 3809511199
 rot = 0,0,0,1
 missionFlag = Squad/Flags/default
 vesselType = Debris
@@ -16,7 +16,7 @@ PART
 {
 	part = mk1pod.v2_4294682792
 	partName = Part
-	persistentId = 3232611499
+	persistentId = 1202711665
 	pos = -1.35388505,5.4993329,0.895606816
 	attPos = 0,0,0
 	attPos0 = -1.35388505,5.4993329,0.895606816
@@ -50,14 +50,17 @@ PART
 		ToggleSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 		SetSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 		RemoveSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 	}
 	PARTDATA
@@ -79,11 +82,13 @@ PART
 			MakeReferenceToggle
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			HibernateToggle
 			{
 				actionGroup = None
 				active = False
+				wasActiveBeforePartWasAdjusted = False
 			}
 		}
 		UPGRADESAPPLIED
@@ -107,18 +112,22 @@ PART
 			CycleAction
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			Activate
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			Deactivate
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			Toggle
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 		}
 		UPGRADESAPPLIED
@@ -139,6 +148,7 @@ PART
 			ToggleAction
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 		}
 		UPGRADESAPPLIED
@@ -161,10 +171,12 @@ PART
 			DeployAction
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			ResetAction
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 		}
 		UPGRADESAPPLIED
@@ -184,6 +196,7 @@ PART
 			CollectAllAction
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 		}
 		UPGRADESAPPLIED
@@ -220,6 +233,7 @@ PART
 			{
 				actionGroup = None
 				active = False
+				wasActiveBeforePartWasAdjusted = False
 			}
 		}
 		UPGRADESAPPLIED
@@ -314,7 +328,7 @@ PART
 	{
 		name = KOSNameTag
 		isEnabled = True
-		nameTag =
+		nameTag = 
 		stagingEnabled = True
 		EVENTS
 		{
@@ -372,7 +386,7 @@ PART
 {
 	part = fuelTank.long_4294669568
 	partName = Part
-	persistentId = 787376309
+	persistentId = 380526954
 	pos = -1.35388505,3.21929502,0.895606816
 	attPos = 0,0,0
 	attPos0 = 0,-2.28003812,0
@@ -394,8 +408,8 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	link = airbrake1_4294651602
-	link = airbrake1_4294649916
+	link = airbrake1_4294461884
+	link = airbrake1_4294460868
 	attN = top,mk1pod.v2_4294682792_0|1.875|0_0|1|0_0|1.875|0_0|1|0
 	attN = bottom,Null_0_0|-1.88750005|0_0|-1|0_0|-1.88750005|0_0|-1|0
 	EVENTS
@@ -406,14 +420,17 @@ PART
 		ToggleSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 		SetSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 		RemoveSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 	}
 	PARTDATA
@@ -439,7 +456,7 @@ PART
 	{
 		name = KOSNameTag
 		isEnabled = True
-		nameTag =
+		nameTag = 
 		stagingEnabled = True
 		EVENTS
 		{
@@ -478,7 +495,7 @@ PART
 {
 	part = launchClamp1_4294653222
 	partName = Part
-	persistentId = 3275316106
+	persistentId = 946496483
 	pos = -1.35388398,4.69415808,2.57140994
 	attPos = 0,0,0
 	attPos0 = 2.75913209E-07,-0.805174828,1.67580295
@@ -509,14 +526,17 @@ PART
 		ToggleSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 		SetSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 		RemoveSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 	}
 	PARTDATA
@@ -538,6 +558,7 @@ PART
 			ReleaseClamp
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 		}
 		UPGRADESAPPLIED
@@ -560,16 +581,19 @@ PART
 			{
 				actionGroup = None
 				active = False
+				wasActiveBeforePartWasAdjusted = False
 			}
 			ActivateAction
 			{
 				actionGroup = None
 				active = False
+				wasActiveBeforePartWasAdjusted = False
 			}
 			ShutdownAction
 			{
 				actionGroup = None
 				active = False
+				wasActiveBeforePartWasAdjusted = False
 			}
 		}
 		UPGRADESAPPLIED
@@ -595,7 +619,7 @@ PART
 	{
 		name = KOSNameTag
 		isEnabled = True
-		nameTag =
+		nameTag = 
 		stagingEnabled = True
 		EVENTS
 		{
@@ -610,15 +634,15 @@ PART
 }
 PART
 {
-	part = airbrake1_4294651602
+	part = airbrake1_4294461884
 	partName = Part
-	persistentId = 3989103925
-	pos = -2.45103908,2.5557251,0.895606875
+	persistentId = 3104196001
+	pos = -0.724852979,4.35691643,0.895606875
 	attPos = 0,0,0
-	attPos0 = -1.09715402,-0.663570404,3.68998094E-08
-	rot = -7.48678413E-23,0,-1.84229708E-15,1
+	attPos0 = 0.629032075,1.1376214,5.96046448E-08
+	rot = 0,0.707106829,0,0.707106829
 	attRot = 0,0,0,1
-	attRot0 = -7.48678413E-23,0,-1.84229708E-15,1
+	attRot0 = 0,0.707106829,0,0.707106829
 	mir = 1,1,1
 	symMethod = Radial
 	autostrutMode = Off
@@ -634,8 +658,8 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	sym = airbrake1_4294649916
-	srfN = srfAttach,fuelTank.long_4294669568,,0.478078097|0.132254407|0,1|0|0,0.478078097|0.132254407|0
+	sym = airbrake1_4294460868
+	srfN = srfAttach,fuelTank.long_4294669568,COL4,0|0|-0.0250000004,0|0|1,0|0|-0.0250000004
 	EVENTS
 	{
 	}
@@ -644,14 +668,17 @@ PART
 		ToggleSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 		SetSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 		RemoveSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 	}
 	PARTDATA
@@ -661,8 +688,10 @@ PART
 	{
 		name = ModuleAeroSurface
 		isEnabled = True
+		aeroAuthorityLimiter = 100
+		aeroDeployAngle = 70
 		mirrorDeploy = False
-		usesMirrorDeploy = True
+		usesMirrorDeploy = False
 		ignorePitch = True
 		ignoreYaw = True
 		ignoreRoll = True
@@ -670,8 +699,6 @@ PART
 		deployInvert = False
 		partDeployInvert = False
 		deployAngle = 70
-		aeroDeployAngle = 70
-		aeroAuthorityLimiter = 100
 		authorityLimiter = 100
 		stagingEnabled = True
 		EVENTS
@@ -679,69 +706,96 @@ PART
 		}
 		ACTIONS
 		{
+			ActionToggleBrakes
+			{
+				actionGroup = Brakes
+				wasActiveBeforePartWasAdjusted = False
+			}
 			ActionToggle
 			{
 				actionGroup = None
+				active = False
+				wasActiveBeforePartWasAdjusted = False
 			}
 			ActionExtend
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			ActionRetract
 			{
 				actionGroup = None
-			}
-			ActionToggleBrakes
-			{
-				actionGroup = Brakes
+				wasActiveBeforePartWasAdjusted = False
 			}
 			PitchActive
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			PitchInactive
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			TogglePitch
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			YawActive
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			YawInactive
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			ToggleYaw
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			RollActive
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			RollInactive
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			ToggleRoll
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			ActivateAllControls
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			DeactivateAllControls
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 		}
 		AXISGROUPS
 		{
+			aeroAuthorityLimiter
+			{
+				axisGroup = None
+				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
+				axisInverted = None
+				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				overrideIncremental2 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				overrideIncremental3 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+			}
 			aeroDeployAngle
 			{
 				axisGroup = None
@@ -753,7 +807,18 @@ PART
 				overrideIncremental2 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				overrideIncremental3 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 			}
-			aeroAuthorityLimiter
+			deployAngle
+			{
+				axisGroup = None
+				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
+				axisInverted = None
+				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				overrideIncremental2 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				overrideIncremental3 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+			}
+			authorityLimiter
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
@@ -779,16 +844,6 @@ PART
 		}
 		ACTIONS
 		{
-		}
-		CONSTRAINLOOKFX
-		{
-			targetName = PistonArm
-			rotatorsName = PistonBase
-		}
-		CONSTRAINLOOKFX
-		{
-			targetName = PistonBase
-			rotatorsName = PistonArm
 		}
 		UPGRADESAPPLIED
 		{
@@ -816,7 +871,7 @@ PART
 	{
 		name = KOSNameTag
 		isEnabled = True
-		nameTag =
+		nameTag = 
 		stagingEnabled = True
 		EVENTS
 		{
@@ -831,15 +886,15 @@ PART
 }
 PART
 {
-	part = airbrake1_4294649916
+	part = airbrake1_4294460868
 	partName = Part
-	persistentId = 3112101948
-	pos = -0.256730676,2.5557251,0.895606697
+	persistentId = 3797086703
+	pos = -1.98291707,4.35691643,0.895606816
 	attPos = 0,0,0
-	attPos0 = 1.09715402,-0.663570404,-1.32816098E-07
-	rot = -1.84229708E-15,1,1.55397205E-22,-4.37113883E-08
+	attPos0 = -0.629032016,1.1376214,0
+	rot = 0,0.707106769,0,-0.707106888
 	attRot = 0,0,0,1
-	attRot0 = -1.84229708E-15,1,1.55397205E-22,-4.37113883E-08
+	attRot0 = 0,0.707106769,0,-0.707106888
 	mir = 1,1,1
 	symMethod = Radial
 	autostrutMode = Off
@@ -855,8 +910,8 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	sym = airbrake1_4294651602
-	srfN = srfAttach,fuelTank.long_4294669568,,0.478078097|0.132254407|0,1|0|0,0.478078097|0.132254407|0
+	sym = airbrake1_4294461884
+	srfN = srfAttach,fuelTank.long_4294669568,COL4,0|0|-0.0250000004,0|0|1,0|0|-0.0250000004
 	EVENTS
 	{
 	}
@@ -865,14 +920,17 @@ PART
 		ToggleSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 		SetSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 		RemoveSameVesselInteraction
 		{
 			actionGroup = None
+			wasActiveBeforePartWasAdjusted = False
 		}
 	}
 	PARTDATA
@@ -882,8 +940,10 @@ PART
 	{
 		name = ModuleAeroSurface
 		isEnabled = True
+		aeroAuthorityLimiter = 100
+		aeroDeployAngle = 70
 		mirrorDeploy = False
-		usesMirrorDeploy = True
+		usesMirrorDeploy = False
 		ignorePitch = True
 		ignoreYaw = True
 		ignoreRoll = True
@@ -891,8 +951,6 @@ PART
 		deployInvert = False
 		partDeployInvert = False
 		deployAngle = 70
-		aeroDeployAngle = 70
-		aeroAuthorityLimiter = 100
 		authorityLimiter = 100
 		stagingEnabled = True
 		EVENTS
@@ -900,90 +958,112 @@ PART
 		}
 		ACTIONS
 		{
+			ActionToggleBrakes
+			{
+				actionGroup = Brakes
+				wasActiveBeforePartWasAdjusted = False
+			}
 			ActionToggle
 			{
 				actionGroup = None
+				active = False
+				wasActiveBeforePartWasAdjusted = False
 			}
 			ActionExtend
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			ActionRetract
 			{
 				actionGroup = None
-			}
-			ActionToggleBrakes
-			{
-				actionGroup = Brakes
+				wasActiveBeforePartWasAdjusted = False
 			}
 			PitchActive
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			PitchInactive
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			TogglePitch
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			YawActive
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			YawInactive
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			ToggleYaw
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			RollActive
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			RollInactive
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			ToggleRoll
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			ActivateAllControls
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 			DeactivateAllControls
 			{
 				actionGroup = None
+				wasActiveBeforePartWasAdjusted = False
 			}
 		}
 		AXISGROUPS
 		{
-			aeroDeployAngle
-			{
-				axisGroup = None
-				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
-				axisSpeedMultiplier = 0
-				axisInverted = None
-				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
-				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
-				overrideIncremental2 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
-				overrideIncremental3 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
-			}
 			aeroAuthorityLimiter
 			{
 				axisGroup = None
 				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
 				axisSpeedMultiplier = 0
 				axisInverted = None
-				overrideIncremental0 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
-				overrideIncremental1 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
-				overrideIncremental2 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
-				overrideIncremental3 = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+			}
+			aeroDeployAngle
+			{
+				axisGroup = None
+				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
+				axisInverted = None
+			}
+			deployAngle
+			{
+				axisGroup = None
+				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
+				axisInverted = None
+			}
+			authorityLimiter
+			{
+				axisGroup = None
+				axisIncremental = Pitch, Yaw, Roll, TranslateX, TranslateY, TranslateZ, WheelSteer, WheelThrottle, Custom01, Custom02, Custom03, Custom04
+				axisSpeedMultiplier = 0
+				axisInverted = None
 			}
 		}
 		UPGRADESAPPLIED
@@ -1000,16 +1080,6 @@ PART
 		}
 		ACTIONS
 		{
-		}
-		CONSTRAINLOOKFX
-		{
-			targetName = PistonArm
-			rotatorsName = PistonBase
-		}
-		CONSTRAINLOOKFX
-		{
-			targetName = PistonBase
-			rotatorsName = PistonArm
 		}
 		UPGRADESAPPLIED
 		{
@@ -1037,7 +1107,7 @@ PART
 	{
 		name = KOSNameTag
 		isEnabled = True
-		nameTag =
+		nameTag = 
 		stagingEnabled = True
 		EVENTS
 		{

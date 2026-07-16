@@ -114,8 +114,8 @@ namespace TestingTools
             yield return KRPC.SpaceCenter.Services.SpaceCenter.LaunchVesselCoroutine(
                 directory, name, site, new List<string>(), result);
             if (!string.IsNullOrEmpty(result.Error))
-                Debug.LogError(
-                    "[kRPC testing tools]: Failed to launch craft \"" + name + "\": " + result.Error);
+                throw Fatal.Error(
+                    "Failed to launch craft \"" + name + "\": " + result.Error);
         }
 
         static void SwitchVessel()

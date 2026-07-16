@@ -1,9 +1,9 @@
 v0.6.0
  * Fix Flight.SimulateAerodynamicForceAt ignoring the current deflection of
    aerodynamic control surfaces, including deployed airbrakes (#622)
- * Canonicalize AutoPilot attitude-error vectors for equivalent quaternions at exactly 180° (#571)
  * Fix Maneuver and ManeuverOrbital reference frame velocity (previously returned zero; now returns the orbital velocity at the node UT)
- * Fix angular velocity for VesselSurface, VesselSurfaceVelocity, CelestialBodyOrbital, ManeuverOrbital, Part, PartCenterOfMass, DockingPort and Thrust reference frames (previously returned zero)
+ * Fix angular velocity for VesselSurface, VesselSurfaceVelocity, CelestialBodyOrbital, Maneuver, ManeuverOrbital, Part, PartCenterOfMass, DockingPort and Thrust reference frames (previously returned zero)
+ * Fix ControlSurface.AvailableTorque returning inconsistent signs (ModuleControlSurface negates the roll axis); now normalised to positive/negative torque like other parts
  * Fix LookRotation2 producing NaN for rotations near 180° by using Shepperd's method
  * Fix VesselSurfaceVelocity reference frame producing NaN when surface velocity is near zero; now throws InvalidOperationException
  * Fix ReferenceFrame.CreateHybrid using velocity frame's angular velocity instead of the angularVelocity frame
@@ -73,6 +73,41 @@ v0.6.0
  * Fix Control.CustomAxis01-04 being applied to the active vessel instead of the
    target vessel, and the getters not reading back the value that was set
  * Fix throttle being applied to a vessel with no RemoteTech control connection
+ * Add staging API giving per-stage delta-v and resource information (#920)
+ * InfernalRobotics support for non-active vessels (#943)
+ * Rework the AutoPilot for smoother, more accurate pointing across a wide range of craft,
+   from small probes to large flexible launchers, with no per-craft tuning (#882, #571,
+   #394, #220, #248, #542):
+   * Pitch and yaw are now controlled together, so the nose tracks a straight path to the
+     target and holding a roll no longer curves that path
+   * Structural oscillations on long or flexible craft are detected and damped automatically;
+     rigid craft are unaffected
+   * Replace AutoPilot.Engage and Disengage with the AutoPilot.Engaged property
+   * Add AutoPilot.TargetRotation to command a full target orientation (direction and roll)
+   * Add AutoPilot.SetDirectionAndUp to aim the nose along a direction while keeping the roof
+     aligned to an up vector, so an orientation can be held through a maneuver without the
+     singularity the old roll control hit at the vertical
+   * Add AutoPilot.UpReference, a persistent reference that AutoPilot.TargetRoll is measured
+     against, and make TargetRoll well-defined through the vertical
+   * Add AutoPilot.AttitudeError for a singularity-free (pitch, yaw, roll) attitude error;
+     PitchError and HeadingError now use the same well-defined decomposition
+   * Fix AutoPilot.RollError returning spurious large values near vertical (#564)
+   * Document Flight.Pitch, Heading and Roll and the scalar target pitch/heading/roll as
+     ill-defined near vertical, pointing to the rotation and error readouts instead
+   * Add AutoPilot.TargetSmoothingTime to slew the target smoothly when it changes, with
+     matching Current* readouts of the smoothed target actually being tracked
+   * Add AutoPilot.SoftStartTime to fade in control output on engagement
+   * Add AutoPilot.Reset to disengage and restore all settings to their defaults
+   * Add AutoPilot.ShowInfoUI to show an in-game autopilot info window
+   * Replace AutoPilot.RollThreshold with RollStartAngle and RollEngageAngle
+   * Replace AutoPilot.StoppingTime and DecelerationTime with AutoPilot.MaxAngularVelocity
+   * Replace AutoPilot.AttenuationAngle with PitchYawAttenuationAngle and RollAttenuationAngle
+   * Add controls to tune and observe the oscillation mitigation (rate filter, bandwidth floor,
+     feedforward-cut and output-filter modes, and manual structural-frequency settings)
+   * Add AutoPilot.StoppingAngleThreshold and StoppingVelocityThreshold to control when Wait() returns
+   * Add an optional timeout to AutoPilot.Wait(), throwing TimeoutException if it expires
+   * Add AutoPilot.DiagnosticLogging and DiagnosticLog for per-tick controller diagnostics
+   * On client disconnect the AutoPilot is now disengaged but its settings and target are kept
 
 v0.5.4
  * Fix vessel recovery (#782)

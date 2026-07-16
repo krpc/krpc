@@ -1,3 +1,6 @@
+v3.8.1
+ * Add graphviz for dot graph generation in documentation
+
 v3.8.0
  * Add system-installed nanopb for C-nano client testing
  * Remove autotools

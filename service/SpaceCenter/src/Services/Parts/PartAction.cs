@@ -60,16 +60,16 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Activate or deactivate the action. Equivalent to triggering the action from an action
-        /// group.
+        /// group. Set to <c>true</c> to activate the action, or <c>false</c> to deactivate it.
         /// </summary>
-        /// <param name="value"><c>true</c> to activate the action, <c>false</c> to deactivate it.</param>
-        [KRPCMethod]
-        public void Set (bool value = true)
-        {
-            action.Invoke (new KSPActionParam (
-                action.actionGroup,
-                value ? KSPActionType.Activate : KSPActionType.Deactivate
-            ));
+        [KRPCProperty]
+        public bool Activated {
+            set {
+                action.Invoke (new KSPActionParam (
+                    action.actionGroup,
+                    value ? KSPActionType.Activate : KSPActionType.Deactivate
+                ));
+            }
         }
     }
 }

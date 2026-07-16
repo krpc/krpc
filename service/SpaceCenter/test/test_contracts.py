@@ -1,9 +1,9 @@
 import unittest
+
 import krpctest
 
 
 class TestContracts(krpctest.TestCase):
-
     # NOTE: contract titles, descriptions, and parameter titles below are
     # localized by KSP and there is no language-independent identifier for them
     # (unlike parts, which expose part.name). These assertions therefore assume

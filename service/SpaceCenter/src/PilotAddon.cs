@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Server;
 using KRPC.Service;
+using KRPC.SpaceCenter.AutoPilot;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
 using KRPC.Utils;
@@ -270,6 +271,14 @@ namespace KRPC.SpaceCenter
         /// Set of FlyByWire callbacks that have been registered with RemoteTech.
         /// </summary>
         static HashSet<Vessel> remoteTechSanctionedDelegates = new HashSet<Vessel> ();
+        /// <summary>
+        /// The attitude controller for each vessel. Owned here rather than by the AutoPilot
+        /// service objects — those are transient API surface objects, so controller state (the
+        /// autotuner, the oscillation detector's persistent structural level, ...) must not be
+        /// tied to their lifetime. Held per vessel for the duration of the flight session,
+        /// however many AutoPilot objects come and go.
+        /// </summary>
+        static IDictionary<Guid, AttitudeController> attitudeControllers = new Dictionary<Guid, AttitudeController> ();
 
         /// <summary>
         /// Wake the addon
@@ -295,6 +304,31 @@ namespace KRPC.SpaceCenter
             autoPilotInputs.Clear ();
             controlDelegates.Clear ();
             remoteTechSanctionedDelegates.Clear ();
+            attitudeControllers.Clear ();
+        }
+
+        /// <summary>
+        /// The vessel's attitude controller, created on first use.
+        /// </summary>
+        internal static AttitudeController GetAttitudeController (Vessel vessel)
+        {
+            AttitudeController controller;
+            if (!attitudeControllers.TryGetValue (vessel.id, out controller)) {
+                controller = new AttitudeController (vessel);
+                attitudeControllers [vessel.id] = controller;
+            }
+            return controller;
+        }
+
+        /// <summary>
+        /// The vessel's attitude controller, or null if none has been created. A lookup that
+        /// never creates, for the per-tick fly-by-wire path (which runs for every vessel) and
+        /// the info window.
+        /// </summary>
+        internal static AttitudeController FindAttitudeController (Guid vesselId)
+        {
+            AttitudeController controller;
+            return attitudeControllers.TryGetValue (vesselId, out controller) ? controller : null;
         }
 
         internal static ControlInputs Get (Vessel vessel)
@@ -370,7 +404,8 @@ namespace KRPC.SpaceCenter
             // Auto-pilot inputs
             if (!autoPilotInputs.ContainsKey (vessel))
                 autoPilotInputs [vessel] = new ControlInputs (vessel);
-            if (Services.AutoPilot.Fly (vessel, autoPilotInputs [vessel]))
+            var attitudeController = FindAttitudeController (vessel.id);
+            if (attitudeController != null && attitudeController.Fly (autoPilotInputs [vessel]))
                 inputs.Add (autoPilotInputs [vessel]);
 
             // Apply the merged custom axes to the vessel's axis groups

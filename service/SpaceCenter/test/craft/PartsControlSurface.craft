@@ -16,7 +16,7 @@ PART
 {
 	part = mk1pod.v2_4294682792
 	partName = Part
-	persistentId = 3232611499
+	persistentId = 2005355312
 	pos = -1.35388505,5.4993329,0.895606816
 	attPos = 0,0,0
 	attPos0 = -1.35388505,5.4993329,0.895606816
@@ -372,7 +372,7 @@ PART
 {
 	part = fuelTank.long_4294669568
 	partName = Part
-	persistentId = 787376309
+	persistentId = 4132837205
 	pos = -1.35388505,3.21929502,0.895606816
 	attPos = 0,0,0
 	attPos0 = 0,-2.28003812,0
@@ -479,7 +479,7 @@ PART
 {
 	part = launchClamp1_4294653222
 	partName = Part
-	persistentId = 3275316106
+	persistentId = 2234266357
 	pos = -1.35388398,4.69415808,2.57140994
 	attPos = 0,0,0
 	attPos0 = 2.75913209E-07,-0.805174828,1.67580295
@@ -613,7 +613,7 @@ PART
 {
 	part = winglet3_4294651602
 	partName = Part
-	persistentId = 3989103925
+	persistentId = 3751778079
 	pos = -2.45103908,2.5557251,0.895606875
 	attPos = 0,0,0
 	attPos0 = -1.09715402,-0.663570404,3.68998094E-08
@@ -803,7 +803,7 @@ PART
 {
 	part = winglet3_4294649916
 	partName = Part
-	persistentId = 3112101948
+	persistentId = 1714048886
 	pos = -0.256730676,2.5557251,0.895606697
 	attPos = 0,0,0
 	attPos0 = 1.09715402,-0.663570404,-1.32816098E-07

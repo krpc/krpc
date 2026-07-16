@@ -1,12 +1,14 @@
+#pragma warning disable 1591
+
 using UnityEngine;
 
 namespace KRPC.UI
 {
-    static class Skin
+    public static class Skin
     {
         static GUISkin defaultSkin;
 
-        internal static GUISkin DefaultSkin {
+        public static GUISkin DefaultSkin {
             get {
                 if (defaultSkin == null)
                     defaultSkin = GUI.skin;

@@ -1,9 +1,9 @@
 import unittest
+
 import krpctest
 
 
 class TestVessel(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -179,7 +179,6 @@ class TestVessel(krpctest.TestCase):
 
 
 class TestVesselEngines(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -278,6 +277,10 @@ class TestVesselEngines(krpctest.TestCase):
             t / i if i > 0 else 0 for t, i in zip(max_thrusts, msl_isps)
         )
 
+    def tearDown(self):
+        self.control.throttle = 0.0
+        self.connect().testing_tools.clear_rotation()
+
     def test_inactive(self):
         self.control.throttle = 0.0
         for engine in self.engines:
@@ -331,25 +334,21 @@ class TestVesselEngines(krpctest.TestCase):
             engine.active = True
         self.wait(0.5)
 
-        # FIXME: need to run the engines to update their has fuel status
-        self.control.throttle = 0.1
-        self.wait(0.5)
-        self.control.throttle = 0.0
-        self.wait(0.5)
-
-        self.assertAlmostEqual(0, self.vessel.thrust, delta=1)
+        self.assertAlmostEqual(0, self.vessel.thrust, places=1)
         self.assertAlmostEqual(
-            self.available_thrust, self.vessel.available_thrust, delta=1
+            self.available_thrust, self.vessel.available_thrust, places=1
         )
-        self.assertAlmostEqual(self.max_thrust, self.vessel.max_thrust, delta=1)
-        self.assertAlmostEqual(self.combined_isp, self.vessel.specific_impulse, delta=1)
+        self.assertAlmostEqual(self.max_thrust, self.vessel.max_thrust, places=1)
         self.assertAlmostEqual(
-            self.vac_combined_isp, self.vessel.vacuum_specific_impulse, delta=1
+            self.combined_isp, self.vessel.specific_impulse, places=1
+        )
+        self.assertAlmostEqual(
+            self.vac_combined_isp, self.vessel.vacuum_specific_impulse, places=1
         )
         self.assertAlmostEqual(
             self.msl_combined_isp,
             self.vessel.kerbin_sea_level_specific_impulse,
-            delta=1,
+            places=1,
         )
         self.assertAlmostEqual(
             ((0, 0, 0), (0, 0, 0)), self.vessel.available_engine_torque

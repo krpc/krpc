@@ -5,7 +5,7 @@ local conn = krpc.connect('Sub-orbital flight')
 local vessel = conn.space_center.active_vessel
 
 vessel.auto_pilot:target_pitch_and_heading(90, 90)
-vessel.auto_pilot:engage()
+vessel.auto_pilot.engaged = true
 vessel.control.throttle = 1
 platform.sleep(1)
 
@@ -32,7 +32,7 @@ print('Launch stage separation')
 vessel.control.throttle = 0
 platform.sleep(1)
 vessel.control:activate_next_stage()
-vessel.auto_pilot:disengage()
+vessel.auto_pilot.engaged = false
 
 while vessel:flight().surface_altitude > 1000 do
     platform.sleep(1)

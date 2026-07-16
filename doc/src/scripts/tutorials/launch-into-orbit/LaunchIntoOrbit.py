@@ -13,7 +13,7 @@ vessel = conn.space_center.active_vessel
 ut = conn.add_stream(getattr, conn.space_center, "ut")
 altitude = conn.add_stream(getattr, vessel.flight(), "mean_altitude")
 apoapsis = conn.add_stream(getattr, vessel.orbit, "apoapsis_altitude")
-stage_2_resources = vessel.resources_in_decouple_stage(stage=2, cumulative=False)
+stage_2_resources = vessel.decouple_stage_at(stage=2).resources(cumulative=False)
 srb_fuel = conn.add_stream(stage_2_resources.amount, "SolidFuel")
 
 # Pre-launch setup
@@ -32,7 +32,7 @@ print("Launch!")
 
 # Activate the first stage
 vessel.control.activate_next_stage()
-vessel.auto_pilot.engage()
+vessel.auto_pilot.engaged = True
 vessel.auto_pilot.target_pitch_and_heading(90, 90)
 
 # Main ascent loop

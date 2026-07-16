@@ -107,11 +107,17 @@ class JavaDomain(Domain):
             if isinstance(obj, ClassMethod):
                 parameters = parameters[1:]
             name = name.split(".")
-            name[-1] = lower_camel_case(name[-1]) + "(" + ", ".join(parameters) + ")"
+            method = lower_camel_case(name[-1])
+            if method in self.language.keywords:
+                method += "_"
+            name[-1] = method + "(" + ", ".join(parameters) + ")"
             name = ".".join(name)
         elif isinstance(obj, (Property, ClassProperty)):
             name = name.split(".")
-            name[-1] = "get" + name[-1] + "()"
+            if obj.getter is not None:
+                name[-1] = "get" + name[-1] + "()"
+            else:
+                name[-1] = "set" + name[-1] + "(" + self.type(obj.type) + ")"
             name = ".".join(name)
         elif isinstance(obj, EnumerationValue):
             name = name.split(".")

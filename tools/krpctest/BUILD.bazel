@@ -7,7 +7,7 @@ py_sdist(
     files = [
         "CHANGES.txt",
         "LICENSE",
-        "README.txt",
+        "README.md",
         "krpctest/krpctest.sfs",
         "krpctest/krpctest_career.sfs",
         "pyproject.toml",

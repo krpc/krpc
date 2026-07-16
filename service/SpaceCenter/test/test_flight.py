@@ -1,34 +1,27 @@
-import unittest
 import math
+import unittest
+
 import krpctest
 from krpctest.geometry import (
-    rad2deg,
+    cross,
+    dot,
     norm,
     normalize,
-    dot,
-    cross,
-    vector,
     quaternion_axis_angle,
     quaternion_mult,
+    rad2deg,
+    vector,
 )
 
 
 class TestFlight(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        active_vessel = cls.connect().space_center.active_vessel
-        if active_vessel is None or active_vessel.name != "Basic":
-            cls.launch_vessel_from_vab("Basic")
-        cls.remove_other_vessels()
         cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel
-        cls.connect().testing_tools.clear_rotation()
-        cls.connect().testing_tools.apply_rotation(116, (0, 0, -1))
-        cls.connect().testing_tools.apply_rotation(27, (-1, 0, 0))
-        cls.connect().testing_tools.apply_rotation(40, (0, -1, 0))
+        cls.set_pitch_heading_roll(27, 116, 40)
         cls.far = cls.space_center.far_available
 
     def test_equality(self):
@@ -236,11 +229,9 @@ class TestFlight(krpctest.TestCase):
 
 
 class TestFlightVerticalSpeed(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.remove_other_vessels()
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel
 
@@ -304,7 +295,6 @@ class TestFlightVerticalSpeed(krpctest.TestCase):
 
 
 class TestFlightAtLaunchpad(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -320,7 +310,6 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
 
     def test_ferram_aerospace_research(self):
         if self.far:
-
             flight = self.vessel.flight()
 
             self.assertAlmostEqual(1.188, flight.atmosphere_density, places=3)

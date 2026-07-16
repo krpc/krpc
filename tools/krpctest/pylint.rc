@@ -3,10 +3,11 @@ good-names=i,j,k,ex,Run,_,u,v,q,r,g,x,y,z,w
 variable-rgx=[a-z_][a-z0-9_]{1,30}$
 argument-rgx=[a-z_][a-z0-9_]{1,30}$
 attr-rgx=[a-z_][a-z0-9_]{1,30}$
-method-rgx=([a-z_][a-z0-9_]{2,60}|assertDegreesAlmostEqual|assertQuaternionsAlmostEqual|assertIsNaN|assertIsNotNaN)$
+method-rgx=([a-z_][a-z0-9_]{2,60}|assertDegreesAlmostEqual|assertRadiansAlmostEqual|assertQuaternionsAlmostEqual|assertIsNaN|assertIsNotNaN)$
 
 [DESIGN]
 max-args=10
+max-public-methods=30
 
 [MESSAGES CONTROL]
 disable=no-member,missing-docstring,similarities,too-few-public-methods,consider-using-f-string,too-many-positional-arguments

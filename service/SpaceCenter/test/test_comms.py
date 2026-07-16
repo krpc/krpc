@@ -1,11 +1,11 @@
+import math
 import time
 import unittest
-import math
+
 import krpctest
 
 
 class TestCommsSingleHop(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -67,7 +67,6 @@ class TestCommsSingleHop(krpctest.TestCase):
 
 
 class TestCommsMultiHop(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

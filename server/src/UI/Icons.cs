@@ -1,9 +1,11 @@
+#pragma warning disable 1591
+
 using System;
 using UnityEngine;
 
 namespace KRPC.UI
 {
-    sealed class Icons
+    public sealed class Icons
     {
         /// <summary>
         /// Path to directory in GameData when icons are stored

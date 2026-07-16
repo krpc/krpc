@@ -1,10 +1,10 @@
 import unittest
+
 import krpctest
 from krpctest.geometry import norm
 
 
 class TestPartsPart(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -198,7 +198,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["SyncModuleControlSurface", "ModuleCargoPart", "KOSNameTag"]
+        modules = ["ModuleControlSurface", "ModuleCargoPart", "KOSNameTag"]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
@@ -847,7 +847,6 @@ class TestPartsPart(krpctest.TestCase):
 
 
 class TestPartsPartDecoupleStage(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -912,7 +911,6 @@ class TestPartsPartDecoupleStage(krpctest.TestCase):
 
 
 class TestPartsPartForce(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -934,7 +932,6 @@ class TestPartsPartForce(krpctest.TestCase):
 
 
 class TestPartsPartForceDisconnect(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

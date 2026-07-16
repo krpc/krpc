@@ -18,28 +18,28 @@ int main() {
   krpc_SpaceCenter_AutoPilot_t ap;
   krpc_SpaceCenter_Vessel_AutoPilot(conn, &ap, vessel);
   krpc_SpaceCenter_AutoPilot_set_ReferenceFrame(conn, ap, vessel_obt_ref);
-  krpc_SpaceCenter_AutoPilot_Engage(conn, ap);
+  krpc_SpaceCenter_AutoPilot_set_Engaged(conn, ap, true);
 
   // Point the vessel in the prograde direction
   {
     krpc_tuple_double_double_double_t direction = { 0, 1, 0 };
     krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, ap, &direction);
-    krpc_SpaceCenter_AutoPilot_Wait(conn, ap);
+    krpc_SpaceCenter_AutoPilot_Wait(conn, ap, -1);
   }
 
   // Point the vessel in the orbit normal direction
   {
     krpc_tuple_double_double_double_t direction = { 0, 0, 1 };
     krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, ap, &direction);
-    krpc_SpaceCenter_AutoPilot_Wait(conn, ap);
+    krpc_SpaceCenter_AutoPilot_Wait(conn, ap, -1);
   }
 
   // Point the vessel in the orbit radial direction
   {
     krpc_tuple_double_double_double_t direction = { -1, 0, 0 };
     krpc_SpaceCenter_AutoPilot_set_TargetDirection(conn, ap, &direction);
-    krpc_SpaceCenter_AutoPilot_Wait(conn, ap);
+    krpc_SpaceCenter_AutoPilot_Wait(conn, ap, -1);
   }
 
-  krpc_SpaceCenter_AutoPilot_Disengage(conn, ap);
+  krpc_SpaceCenter_AutoPilot_set_Engaged(conn, ap, false);
 }

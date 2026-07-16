@@ -13,7 +13,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -27,7 +27,7 @@ jobs:
   build-krpc:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -63,7 +63,7 @@ jobs:
   build-genfiles:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -85,7 +85,7 @@ jobs:
     needs: build-genfiles
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -112,7 +112,7 @@ jobs:
     needs: test-client-cnano
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -129,11 +129,22 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: client-cnano
+      - name: cache-key
+        id: cache-key
+        run: |
+          tmpl=$(sha256sum client/cnano/CMakeLists.txt.tmpl | cut -d' ' -f1)
+          cc=$(cc --version 2>/dev/null | head -n1 || echo unknown-cc)
+          info=$(printf '%s\n' ccache cnano "$cc" "$tmpl")
+          echo 'cache key inputs:'
+          printf '%s\n' "$info" | sed 's/^/  /'
+          hash=$(printf '%s' "$info" | sha256sum | cut -d' ' -f1)
+          echo "cache key: ccache-$hash"
+          echo "hash=$hash" >> "$GITHUB_OUTPUT"
       - name: ccache-restore
         uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: build-client-cnano-cmake-linux-${{ hashFiles('client/cnano/CMakeLists.txt.tmpl') }}
+          key: ccache-${{ steps.cache-key.outputs.hash }}
       - name: build-system
         run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system
       - name: build-fetch
@@ -169,6 +180,8 @@ jobs:
           name: client-cnano
       - name: vcpkg
         uses: ./.github/actions/vcpkg-linux
+        with:
+          packages: nanopb
       - name: test-vcpkg
         env:
           VCPKG_ROOT: /usr/local/share/vcpkg
@@ -198,7 +211,7 @@ jobs:
     needs: test-client-cpp
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -215,11 +228,22 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: client-cpp
+      - name: cache-key
+        id: cache-key
+        run: |
+          tmpl=$(sha256sum client/cpp/CMakeLists.txt.tmpl | cut -d' ' -f1)
+          cc=$(cc --version 2>/dev/null | head -n1 || echo unknown-cc)
+          info=$(printf '%s\n' ccache cpp "$cc" "$tmpl")
+          echo 'cache key inputs:'
+          printf '%s\n' "$info" | sed 's/^/  /'
+          hash=$(printf '%s' "$info" | sha256sum | cut -d' ' -f1)
+          echo "cache key: ccache-$hash"
+          echo "hash=$hash" >> "$GITHUB_OUTPUT"
       - name: ccache-restore
         uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: build-client-cpp-cmake-linux-${{ hashFiles('client/cpp/CMakeLists.txt.tmpl') }}
+          key: ccache-${{ steps.cache-key.outputs.hash }}
       - name: build-system
         run: client/cpp/test-cmake-linux.sh krpc-cpp-*.zip system
       - name: build-fetch
@@ -255,6 +279,8 @@ jobs:
           name: client-cpp
       - name: vcpkg
         uses: ./.github/actions/vcpkg-linux
+        with:
+          packages: protobuf asio
       - name: test-vcpkg
         env:
           VCPKG_ROOT: /usr/local/share/vcpkg
@@ -283,7 +309,7 @@ jobs:
   build-docs-html:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -304,7 +330,7 @@ jobs:
   build-docs-pdf:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -325,7 +351,7 @@ jobs:
   build-docs-examples:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -341,7 +367,7 @@ jobs:
   test-docs:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -357,7 +383,7 @@ jobs:
   test-core:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -389,7 +415,7 @@ jobs:
   test-client-cnano:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -412,7 +438,7 @@ jobs:
   test-client-cpp:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -435,7 +461,7 @@ jobs:
   test-client-csharp:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -463,7 +489,7 @@ jobs:
   test-client-java:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -486,7 +512,7 @@ jobs:
   test-client-python:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -509,7 +535,7 @@ jobs:
   test-client-lua:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -532,7 +558,7 @@ jobs:
   test-client-serialio:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -548,7 +574,7 @@ jobs:
   test-client-websockets:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -564,7 +590,7 @@ jobs:
   test-tools:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.8.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
