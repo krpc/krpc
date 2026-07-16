@@ -32,7 +32,8 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0da409bd" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=620a2ebf" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
@@ -43,6 +44,7 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cnano/client';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
@@ -676,8 +678,8 @@
 <h1>C-nano Client<a class="headerlink" href="#c-nano-client" title="Link to this heading">#</a></h1>
 <p>This client provides a C API for interacting with a kRPC server. It is intended for use on embedded
 systems with tight resource constraints, hence the “nano” in its name.</p>
-<section id="installing-the-library">
-<h2>Installing the Library<a class="headerlink" href="#installing-the-library" title="Link to this heading">#</a></h2>
+<section id="installing">
+<h2>Installing<a class="headerlink" href="#installing" title="Link to this heading">#</a></h2>
 <section id="manually-include-the-source-in-your-project">
 <h3>Manually include the source in your project<a class="headerlink" href="#manually-include-the-source-in-your-project" title="Link to this heading">#</a></h3>
 <p>The source files can be included in your project manually, by downloading and extracting the
@@ -695,51 +697,33 @@ that they are built using the C++ compiler. This allows the library to use the C
 <code class="docutils literal notranslate"><span class="pre">HardwareSerial</span></code> class for communication.</p>
 </div>
 </section>
-<section id="using-vcpkg">
-<h3>Using vcpkg<a class="headerlink" href="#using-vcpkg" title="Link to this heading">#</a></h3>
-<p>The C-nano client can be installed via <a class="reference external" href="https://vcpkg.io">vcpkg</a>. The port files are included in
-the source archive — <a class="reference external" href="https://github.com/krpc/krpc/releases">download it from the releases page</a>,
-extract it, and install using the bundled overlay port:</p>
-<p>On Linux:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span>krpc-cnano<span class="w"> </span>--overlay-ports<span class="o">=</span>/path/to/krpc-cnano-VERSION/vcpkg-port
+<section id="vcpkg">
+<h3>vcpkg<a class="headerlink" href="#vcpkg" title="Link to this heading">#</a></h3>
+<p>The C-nano client is available from <a class="reference external" href="https://vcpkg.io">vcpkg</a>. It can be installed as follows:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Linux</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Windows</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span>krpc-cnano
 </pre></div>
 </div>
-<p>On Windows:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span>krpc-cnano:x64-windows<span class="w"> </span>--overlay-ports<span class="o">=</span>C:<span class="se">\p</span>ath<span class="se">\t</span>o<span class="se">\k</span>rpc-cnano-VERSION<span class="se">\v</span>cpkg-port
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span>krpc-cnano:x64-windows
 </pre></div>
 </div>
-<p>Then integrate with your CMake project by passing the vcpkg toolchain file at configure time:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
-</pre></div>
-</div>
-<p>And link the library in your <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>:</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">find_package</span><span class="p">(</span><span class="s">krpc_cnano</span><span class="w"> </span><span class="s">CONFIG</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_app</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">krpc_cnano::krpc_cnano</span><span class="p">)</span>
-</pre></div>
-</div>
+</div></div>
 </section>
-<section id="using-cmake">
-<h3>Using CMake<a class="headerlink" href="#using-cmake" title="Link to this heading">#</a></h3>
-<p>CMake 3.15 or later is required.
-<a class="reference external" href="https://github.com/krpc/krpc/releases">Download the source archive</a>, extract it and run:</p>
+<section id="cmake">
+<h3>CMake<a class="headerlink" href="#cmake" title="Link to this heading">#</a></h3>
+<p>CMake 3.15 or later is required.  <a class="reference external" href="https://github.com/krpc/krpc/releases">Download the source archive</a>, extract it and run:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-B<span class="w"> </span>build
-cmake<span class="w"> </span>--build<span class="w"> </span>build
-sudo<span class="w"> </span>cmake<span class="w"> </span>--install<span class="w"> </span>build
-sudo<span class="w"> </span>ldconfig
-</pre></div>
-</div>
-<p>By default, CMake looks for a system-installed nanopb. To download nanopb automatically at build
-time instead, pass <code class="docutils literal notranslate"><span class="pre">-DKRPC_FETCH_DEPS=ON</span></code> (or <code class="docutils literal notranslate"><span class="pre">-DKRPC_FETCH_NANOPB=ON</span></code>) to the configure
-step. When OFF (the default), the system package is required.</p>
-<p>To install to a custom prefix:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>/install/path
 cmake<span class="w"> </span>--build<span class="w"> </span>build
 cmake<span class="w"> </span>--install<span class="w"> </span>build
 </pre></div>
 </div>
-<p>After installation, downstream CMake projects can link the library with:</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">find_package</span><span class="p">(</span><span class="s">krpc_cnano</span><span class="w"> </span><span class="s">CONFIG</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_app</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">krpc_cnano::krpc_cnano</span><span class="p">)</span>
+<p>By default, CMake looks for a system-installed nanopb. To download nanopb automatically
+at build time instead, pass <code class="docutils literal notranslate"><span class="pre">-DKRPC_FETCH_DEPS=ON</span></code> (or <code class="docutils literal notranslate"><span class="pre">-DKRPC_FETCH_NANOPB=ON</span></code>) to
+the configure step. When <code class="docutils literal notranslate"><span class="pre">OFF</span></code> (the default) the system package is required.</p>
+<p>To install to a custom prefix:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>/install/path
+cmake<span class="w"> </span>--build<span class="w"> </span>build
+cmake<span class="w"> </span>--install<span class="w"> </span>build
 </pre></div>
 </div>
 </section>
@@ -800,15 +784,29 @@ minimize the memory footprint of kRPC.</p>
 </div>
 </section>
 </section>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
 <section id="configuring-the-server">
-<h2>Configuring the Server<a class="headerlink" href="#configuring-the-server" title="Link to this heading">#</a></h2>
+<h3>Configuring the Server<a class="headerlink" href="#configuring-the-server" title="Link to this heading">#</a></h3>
 <p>The C-nano client library communicates with the server over a serial port using <a class="reference external" href="https://github.com/nanopb/nanopb">protobuf messages</a>. The kRPC server, which runs in the game, needs to be
 configured to use the serial port protocol (instead of the default TCP/IP protocol). This can be
-done from the in-game server configuration window, which also allows settings such as the port name
-and baud rate to be configured.</p>
+done from the in-game server configuration window, which also allows settings such as
+the port name, baud rate and parity settings.</p>
 </section>
-<section id="using-the-library-on-a-posix-system">
-<h2>Using the Library on a POSIX System<a class="headerlink" href="#using-the-library-on-a-posix-system" title="Link to this heading">#</a></h2>
+<section id="linking">
+<h3>Linking<a class="headerlink" href="#linking" title="Link to this heading">#</a></h3>
+<p>After installation, CMake projects can link the library with:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">find_package</span><span class="p">(</span><span class="s">krpc_cnano</span><span class="w"> </span><span class="s">CONFIG</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_app</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">krpc_cnano::krpc_cnano</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When installed via vcpkg, pass the vcpkg toolchain file at configure time:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
+</pre></div>
+</div>
+</section>
+<section id="posix-systems">
+<h3>POSIX Systems<a class="headerlink" href="#posix-systems" title="Link to this heading">#</a></h3>
 <p>On POSIX systems (such as Linux) the following example program connects to the server, queries it
 for its version and prints it out:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
@@ -824,17 +822,13 @@ for its version and prints it out:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>To compile this program using GCC, save the source as <code class="docutils literal notranslate"><span class="pre">main.c</span></code> and run the following:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcc<span class="w"> </span>main.c<span class="w"> </span>-lkrpc_cnano
-</pre></div>
-</div>
 <p>The <a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> function is used to open a connection to a server. It takes as its first
 argument a connection object into which the connection information is written. This is passed to
 subsequent calls to interact with the server. The second argument is a name for the connection
 (displayed in game) and the third is the name of the serial port to connect over.</p>
 </section>
-<section id="using-the-library-on-an-arduino">
-<h2>Using the Library on an Arduino<a class="headerlink" href="#using-the-library-on-an-arduino" title="Link to this heading">#</a></h2>
+<section id="arduino">
+<h3>Arduino<a class="headerlink" href="#arduino" title="Link to this heading">#</a></h3>
 <p>The following example demonstrates how to connect to the server from an Arduino, through its serial
 port interface:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
@@ -860,6 +854,7 @@ port interface:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
+</section>
 </section>
 <section id="calling-remote-procedures">
 <h2>Calling Remote Procedures<a class="headerlink" href="#calling-remote-procedures" title="Link to this heading">#</a></h2>
@@ -896,7 +891,7 @@ SpaceCenter service is contained in the header file <code class="docutils litera
 </section>
 <section id="streams-and-events">
 <span id="cnano-client-events"></span><span id="cnano-client-streams"></span><h2>Streams and Events<a class="headerlink" href="#streams-and-events" title="Link to this heading">#</a></h2>
-<p>These features are not yet supported by this client.</p>
+<p>These features are not supported by this client.</p>
 </section>
 <section id="client-api-reference">
 <h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
@@ -1063,17 +1058,21 @@ server and appears in the in-game server window.</p></li>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-library">Installing the Library</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing">Installing</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manually-include-the-source-in-your-project">Manually include the source in your project</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arduino-library-manager">Arduino Library Manager</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-vcpkg">Using vcpkg</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-cmake">Using CMake</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vcpkg">vcpkg</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cmake">CMake</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compilation-options">Compilation Options</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-the-server">Configuring the Server</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-library-on-a-posix-system">Using the Library on a POSIX System</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-library-on-an-arduino">Using the Library on an Arduino</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-the-server">Configuring the Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linking">Linking</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#posix-systems">POSIX Systems</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arduino">Arduino</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-and-events">Streams and Events</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-api-reference">Client API Reference</a></li>
@@ -1136,7 +1135,7 @@ server and appears in the in-game server window.</p></li>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/26c2e88">26c2e88</a>
+  <a href="https://github.com/krpc/krpc/commit/9d5493c">9d5493c</a>
 </p></div>
       
     </div>

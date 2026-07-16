@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0da409bd" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=620a2ebf" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
@@ -679,17 +679,13 @@
 <h2>Installing the Library<a class="headerlink" href="#installing-the-library" title="Link to this heading">#</a></h2>
 <p>The library can be found on <a class="reference external" href="https://pypi.python.org/pypi/krpc">PyPI</a> or
 <a class="reference external" href="https://github.com/krpc/krpc/releases">downloaded from GitHub</a>.</p>
-<p>To install using pip on Linux:</p>
+<p>To install using pip:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>krpc
 </pre></div>
 </div>
-<p>Or on Windows:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>C:\Python310\Scripts\pip.exe install krpc
-</pre></div>
-</div>
 </section>
-<section id="connecting-to-the-server">
-<h2>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h2>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
 <p>The <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> function is used to open a connection to a server. It returns a connection
 object (of type <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>) through which you can interact with the server. The
 following example connects to a server running on the local machine, queries its version and prints
@@ -739,8 +735,8 @@ will list all of the classes, enumerations, procedures and properties provides b
 <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code> service. This works similarly for class types, for example:
 <code class="docutils literal notranslate"><span class="pre">help(conn.space_center.Vessel)</span></code>.</p>
 </section>
-<section id="streaming-data-from-the-server">
-<span id="python-client-streams"></span><h2>Streaming Data from the Server<a class="headerlink" href="#streaming-data-from-the-server" title="Link to this heading">#</a></h2>
+<section id="streaming-data">
+<span id="python-client-streams"></span><h2>Streaming Data<a class="headerlink" href="#streaming-data" title="Link to this heading">#</a></h2>
 <p>A common use case for kRPC is to continuously extract data from the game. The naive approach to do
 this would be to repeatedly call a remote procedure, such as in the following which repeatedly
 prints the position of the active vessel:</p>
@@ -1053,7 +1049,7 @@ remove streams) and therefore does not need to be used directly from application
 <dl class="py class">
 <dt class="sig sig-object py" id="krpc.stream.Stream">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.stream.</span></span><span class="sig-name descname"><span class="pre">Stream</span></span><a class="headerlink" href="#krpc.stream.Stream" title="Link to this definition">#</a></dt>
-<dd><p>This class represents a stream. See <a class="reference internal" href="#python-client-streams"><span class="std std-ref">Streaming Data from the Server</span></a>.</p>
+<dd><p>This class represents a stream. See <a class="reference internal" href="#python-client-streams"><span class="std std-ref">Streaming Data</span></a>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="krpc.stream.Stream.start">
 <span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wait</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.stream.Stream.start" title="Link to this definition">#</a></dt>
@@ -1235,9 +1231,9 @@ should be a function that takes zero arguments.</p>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-library">Installing the Library</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-server">Connecting to the Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data-from-the-server">Streaming Data from the Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data">Streaming Data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronizing-with-stream-updates">Synchronizing with Stream Updates</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#condition-variables">Condition Variables</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>
@@ -1304,7 +1300,7 @@ should be a function that takes zero arguments.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/26c2e88">26c2e88</a>
+  <a href="https://github.com/krpc/krpc/commit/9d5493c">9d5493c</a>
 </p></div>
       
     </div>

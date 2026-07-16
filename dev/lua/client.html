@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0da409bd" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=620a2ebf" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
@@ -677,20 +677,19 @@
 <p>This client provides functionality to interact with a kRPC server from programs
 written in Lua. It can be <a class="reference external" href="https://luarocks.org/modules/djungelorm/krpc">installed using LuaRocks</a> or
 <a class="reference external" href="https://github.com/krpc/krpc/releases">downloaded from GitHub</a>.</p>
-<section id="installing-the-library">
-<h2>Installing the Library<a class="headerlink" href="#installing-the-library" title="Link to this heading">#</a></h2>
+<section id="installing">
+<h2>Installing<a class="headerlink" href="#installing" title="Link to this heading">#</a></h2>
 <p>The Lua client and all of its dependencies can be installed using luarocks with
 a single command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>luarocks<span class="w"> </span>install<span class="w"> </span>krpc
 </pre></div>
 </div>
 </section>
-<section id="using-the-library">
-<h2>Using the Library<a class="headerlink" href="#using-the-library" title="Link to this heading">#</a></h2>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
 <p>Once it’s installed, simply <code class="docutils literal notranslate"><span class="pre">require</span> <span class="pre">'krpc'</span></code> and you are good to go!</p>
-</section>
 <section id="connecting-to-the-server">
-<h2>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h2>
+<h3>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h3>
 <p>To connect to a server, use the <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> function. This returns a
 connection object through which you can interact with the server. For example to
 connect to a server running on the local machine:</p>
@@ -707,6 +706,7 @@ to connect to. For example:</p>
 </pre></div>
 </div>
 </section>
+</section>
 <section id="interacting-with-the-server">
 <h2>Interacting with the Server<a class="headerlink" href="#interacting-with-the-server" title="Link to this heading">#</a></h2>
 <p>Interaction with the server is performed via the client object (of type
@@ -721,9 +721,9 @@ InfernalRobotics service is accessible via <code class="docutils literal notrans
 <p>Calling methods, getting or setting properties, etc. are mapped to remote
 procedure calls and passed to the server by the lua client.</p>
 </section>
-<section id="streaming-data-from-the-server">
-<h2>Streaming Data from the Server<a class="headerlink" href="#streaming-data-from-the-server" title="Link to this heading">#</a></h2>
-<p>Streams are not yet supported by the Lua client.</p>
+<section id="streams-and-events">
+<h2>Streams and Events<a class="headerlink" href="#streams-and-events" title="Link to this heading">#</a></h2>
+<p>These features are not supported by the Lua client.</p>
 </section>
 <section id="reference">
 <h2>Reference<a class="headerlink" href="#reference" title="Link to this heading">#</a></h2>
@@ -859,11 +859,13 @@ over the network:</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-library">Installing the Library</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-library">Using the Library</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-server">Connecting to the Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing">Installing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-server">Connecting to the Server</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interacting-with-the-server">Interacting with the Server</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data-from-the-server">Streaming Data from the Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-and-events">Streams and Events</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference">Reference</a></li>
 </ul>
   </nav></div>
@@ -924,7 +926,7 @@ over the network:</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/26c2e88">26c2e88</a>
+  <a href="https://github.com/krpc/krpc/commit/9d5493c">9d5493c</a>
 </p></div>
       
     </div>

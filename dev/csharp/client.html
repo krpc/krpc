@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0da409bd" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=620a2ebf" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
@@ -676,8 +676,8 @@
 <h1>C# Client<a class="headerlink" href="#c-client" title="Link to this heading">#</a></h1>
 <p>This client provides a C# API for interacting with a kRPC server. It is distributed as an assembly
 named <code class="docutils literal notranslate"><span class="pre">KRPC.Client.dll</span></code>.</p>
-<section id="installing-the-library">
-<h2>Installing the Library<a class="headerlink" href="#installing-the-library" title="Link to this heading">#</a></h2>
+<section id="installing">
+<h2>Installing<a class="headerlink" href="#installing" title="Link to this heading">#</a></h2>
 <p>The C# client can be <a class="reference external" href="https://www.nuget.org/packages/KRPC.Client">installed using NuGet</a> or
 <a class="reference external" href="https://github.com/krpc/krpc/releases">downloaded from GitHub</a>. The client is compatible with .NET 4.5+.</p>
 <p>You also need to <a class="reference external" href="https://www.nuget.org/packages/Google.Protobuf">install Google.Protobuf using NuGet</a>.</p>
@@ -687,8 +687,8 @@ named <code class="docutils literal notranslate"><span class="pre">KRPC.Client.d
 should not be used with the client library. It is a modified version to work within KSP.</p>
 </div>
 </section>
-<section id="connecting-to-the-server">
-<h2>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h2>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
 <p>To connect to a server, create a <a class="reference internal" href="#class-Connection" title="Connection class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Connection</span></code></a> object. All interaction with the server is done
 via this object. When constructed without any arguments, it will connect to the local machine on the
 default port numbers. You can specify different connection settings, and also a descriptive name for
@@ -746,8 +746,8 @@ vessel and then prints out its altitude:</p>
 </pre></div>
 </div>
 </section>
-<section id="streaming-data-from-the-server">
-<span id="csharp-client-streams"></span><h2>Streaming Data from the Server<a class="headerlink" href="#streaming-data-from-the-server" title="Link to this heading">#</a></h2>
+<section id="streaming-data">
+<span id="csharp-client-streams"></span><h2>Streaming Data<a class="headerlink" href="#streaming-data" title="Link to this heading">#</a></h2>
 <p>A common use case for kRPC is to continuously extract data from the game. The naive approach to do
 this would be to repeatedly call a remote procedure, such as in the following which repeatedly
 prints the position of the active vessel:</p>
@@ -995,7 +995,7 @@ procedure calls to be passed to the server, for example when constructing custom
 <dl class="csharp class">
 <dt class="sig sig-object csharp" id="class-Stream">
 <span class="sig-name descname"><span class="pre">class</span> <span class="pre">Stream&lt;ReturnType&gt;</span></span><a class="headerlink" href="#class-Stream" title="Link to this definition">#</a></dt>
-<dd><p>This class represents a stream. See <a class="reference internal" href="#csharp-client-streams"><span class="std std-ref">Streaming Data from the Server</span></a>.</p>
+<dd><p>This class represents a stream. See <a class="reference internal" href="#csharp-client-streams"><span class="std std-ref">Streaming Data</span></a>.</p>
 <p>Stream objects implement <code class="docutils literal notranslate"><span class="pre">GetHashCode</span></code>, <code class="docutils literal notranslate"><span class="pre">Equals</span></code>, <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">==</span></code> and <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">!=</span></code> such
 that two stream objects are equal if they are bound to the same stream on the server.</p>
 <dl class="csharp method">
@@ -1184,10 +1184,10 @@ added.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-library">Installing the Library</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-server">Connecting to the Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing">Installing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data-from-the-server">Streaming Data from the Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data">Streaming Data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronizing-with-stream-updates">Synchronizing with Stream Updates</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#condition-variables">Condition Variables</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>
@@ -1254,7 +1254,7 @@ added.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/26c2e88">26c2e88</a>
+  <a href="https://github.com/krpc/krpc/commit/9d5493c">9d5493c</a>
 </p></div>
       
     </div>

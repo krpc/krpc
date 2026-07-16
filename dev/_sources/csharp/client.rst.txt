@@ -7,8 +7,8 @@ C# Client
 This client provides a C# API for interacting with a kRPC server. It is distributed as an assembly
 named ``KRPC.Client.dll``.
 
-Installing the Library
-----------------------
+Installing
+----------
 
 The C# client can be `installed using NuGet <https://www.nuget.org/packages/KRPC.Client>`_ or
 `downloaded from GitHub <https://github.com/krpc/krpc/releases>`_. The client is compatible with .NET 4.5+.
@@ -21,8 +21,8 @@ You also need to `install Google.Protobuf using NuGet
    The copy of ``Google.Protobuf.dll`` in the GameData folder included with the kRPC server plugin
    should not be used with the client library. It is a modified version to work within KSP.
 
-Connecting to the Server
-------------------------
+Getting Started
+---------------
 
 To connect to a server, create a :type:`Connection` object. All interaction with the server is done
 via this object. When constructed without any arguments, it will connect to the local machine on the
@@ -54,8 +54,8 @@ vessel and then prints out its altitude:
 
 .. _csharp-client-streams:
 
-Streaming Data from the Server
-------------------------------
+Streaming Data
+--------------
 
 A common use case for kRPC is to continuously extract data from the game. The naive approach to do
 this would be to repeatedly call a remote procedure, such as in the following which repeatedly

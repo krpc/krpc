@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=0da409bd" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=620a2ebf" />
   
   <!-- So that users can add custom icons -->
   <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
@@ -567,13 +567,24 @@ It comes with client libraries for many popular languages including
 <a class="reference internal" href="python/client.html"><span class="doc">Python</span></a>
 and <a class="reference internal" href="third-party.html"><span class="doc">others</span></a>.
 It also supports websockets and serialio (for example on Arduino).</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><a class="reference internal" href="getting-started.html"><span class="doc">Getting Started Guide</span></a></p></li>
-<li><p><a class="reference internal" href="tutorials.html"><span class="doc">Tutorials and Examples</span></a></p></li>
-<li><p><a class="reference internal" href="third-party.html"><span class="doc">Clients, services and tools made by others</span></a></p></li>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials and Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cnano.html">C-nano</a></li>
+<li class="toctree-l1"><a class="reference internal" href="csharp.html">C#</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java.html">Java</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lua.html">Lua</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="third-party.html">Other Clients, Services and Scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiling.html">Compiling kRPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending kRPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="communication-protocols.html">Communication Protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals.html">Internals of kRPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
-</div></blockquote>
+</div>
 <p>The mod exposes most of KSPs API for controlling and interacting with rockets,
 and also includes support several popular mods including Ferram Aerospace
 Research, Kerbal Alarm Clock and Infernal Robotics.</p>
@@ -583,8 +594,6 @@ procedures’. This communication can be done on local machine only, over a loca
 network, or even over the wider internet if configured correctly. The server is
 extensible - additional remote procedures (grouped into “services”) can be added
 to the server using the <a class="reference internal" href="extending.html"><span class="doc">Service API</span></a>.</p>
-<div class="toctree-wrapper compound">
-</div>
 </section>
 
 
@@ -673,7 +682,7 @@ to the server using the <a class="reference internal" href="extending.html"><spa
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/26c2e88">26c2e88</a>
+  <a href="https://github.com/krpc/krpc/commit/9d5493c">9d5493c</a>
 </p></div>
       
     </div>
