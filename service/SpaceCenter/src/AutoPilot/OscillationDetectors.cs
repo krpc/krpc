@@ -10,7 +10,7 @@ namespace KRPC.SpaceCenter.AutoPilot
     /// held estimates, the control-output oscillation envelope, and the pointing-error hold
     /// factor. Fed the raw measured rate and the delivered command each tick by
     /// <see cref="AttitudeController"/>; consumed by the mitigation policy and the public
-    /// observables. See doc/design/autopilot-control-loop-redesign.md (Phase 2).
+    /// observables.
     /// </summary>
     sealed class OscillationDetectors
     {
