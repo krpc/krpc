@@ -79,12 +79,6 @@ See `DEMO.md`.
   the six body axes plus a mixing sweep; `--compare A.json B.json` diffs two
   contexts.
 
-## Debug-endpoint clients (temporary)
-
-`state_watch.py`, `trace_probe.py`, `torque_trace.py` require the TEMPORARY
-server debug members and are removed together with them before merge (see
-`README_BEFORE_MERGE.md` at the repository root).
-
 ## Craft conventions
 
 Few parts; ablator tweaked low (the predictor assumes constant mass); aim
