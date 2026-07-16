@@ -11,8 +11,3 @@ py_binary(
     name = "write_zip",
     srcs = ["write_zip.py"],
 )
-
-py_binary(
-    name = "build_sdist",
-    srcs = ["build_sdist.py"],
-)
