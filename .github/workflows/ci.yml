@@ -615,6 +615,11 @@ jobs:
   build-windows:
     runs-on: windows-latest
     continue-on-error: true
+    # Git Bash (MSYS2) rewrites arguments that look like POSIX paths, which
+    # mangles Bazel's //pkg:target patterns (e.g. //core:test -> /core:test).
+    # Disable that conversion so the target patterns reach Bazel intact.
+    env:
+      MSYS2_ARG_CONV_EXCL: "*"
     steps:
       - name: checkout
         uses: actions/checkout@v6
