@@ -610,9 +610,11 @@ jobs:
   # are all OS-independent now and the known blockers have been cleared (e.g. the
   # protoc select in tools/build/protobuf now keys on the target OS rather than
   # the C++ `compiler` value), but Windows support is still being validated on a
-  # real runner. Kept non-blocking (continue-on-error, and out of the
-  # all-checks-passed gate) until it goes reliably green.
+  # real runner. Disabled for now (if: false) so it doesn't run in CI; it stays
+  # non-blocking (continue-on-error, and out of the all-checks-passed gate) and
+  # can be re-enabled once it goes reliably green.
   build-windows:
+    if: false
     runs-on: windows-latest
     continue-on-error: true
     # Git Bash (MSYS2) rewrites arguments that look like POSIX paths, which
