@@ -48,11 +48,13 @@ The codebase is structured as follows:
 kRPC uses the [Bazel build system](https://bazel.build). This provides us with fast, repeatable
 builds, and support for many languages. (See below for a Bazel cheat sheet.)
 
-Note: building on Windows using Bazel is experimental. There is a `--config=windows` Bazel
-configuration and a (non-blocking) Windows CI job, but it is not yet fully supported. On Windows you
-can instead build the C# projects using an IDE (see the section below named "Building the C# projects
-using an IDE"), or build the whole project using a docker container (see the section below named
-"Building using Docker").
+Note: on Windows, pass `--config=windows` to Bazel. The whole tree builds under MSVC and a
+smoke-test subset (`//core:test`, `//client/csharp:test`) runs in CI, but Windows is not the primary
+build platform — the CI job is non-blocking and the full test suite is only run on Linux. Under Git
+Bash, set `MSYS2_ARG_CONV_EXCL="*"` so it does not rewrite Bazel's `//pkg:target` patterns. On
+Windows you can also build the C# projects using an IDE (see the section below named "Building the C#
+projects using an IDE"), or build the whole project using a docker container (see the section below
+named "Building using Docker").
 
 ### Setting up your Environment
 
