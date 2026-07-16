@@ -35,6 +35,7 @@ stage_files(
     ]) + [
         "src/_static/custom.css",
         "src/_static/external-links.js",
+        "src/_templates/build-info.html",
         "src/dictionary.txt",
         ":changelog",
         ":cnano-api",
@@ -130,7 +131,10 @@ genrule(
     name = "conf",
     srcs = ["conf.py.tmpl"],
     outs = ["src/conf.py"],
-    cmd = "sed -e 's/%VERSION%/" + docs_version + "/g' -e 's/%SUBPATH%/" + docs_version + "/g' \"$<\" > \"$@\"",
+    # %VERSION%/%SUBPATH% get the channel ('dev' or the release number);
+    # %BUILDVERSION% keeps the full version, including a dev build's commit-sha
+    # suffix, which conf.py turns into the footer commit link.
+    cmd = "sed -e 's/%VERSION%/" + docs_version + "/g' -e 's/%SUBPATH%/" + docs_version + "/g' -e 's/%BUILDVERSION%/" + version + "/g' \"$<\" > \"$@\"",
 )
 
 sphinx_build(

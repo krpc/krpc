@@ -28,8 +28,18 @@ graphviz_output_format = 'svg'
 html_theme = 'pydata_sphinx_theme'
 htmlhelp_basename = 'krpc-doc'
 html_static_path = ['crafts', 'scripts', '_static']
+templates_path = ['_templates']
 html_css_files = ['custom.css']
 html_js_files = ['external-links.js']
+
+# A dev build's version carries a "-<build>-<sha>" suffix (set-version.py); a
+# release version does not. Surface that commit sha as a footer link so a dev
+# page shows which commit it was built from. %BUILDVERSION% is the full
+# config.bzl version, substituted by the :conf genrule.
+build_version = '%BUILDVERSION%'
+html_context = {}
+if '-' in build_version:
+    html_context['build_commit'] = build_version.rsplit('-', 1)[-1]
 
 # Per-version publishing. %SUBPATH% is
 # the path this build is published under: a release version (e.g. '0.5.4') or
@@ -56,6 +66,8 @@ html_theme_options = {
     # Show all six client languages in the header (getting-started, tutorials
     # and the languages); the remaining sections collapse into "More".
     'header_links_before_dropdown': 8,
+    # Footer commit link, rendered by _templates/build-info.html for dev builds.
+    'footer_center': ['build-info'],
     'navbar_end': ['version-switcher', 'theme-switcher', 'navbar-icon-links'],
     'icon_links': [
         {
