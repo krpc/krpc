@@ -15,7 +15,7 @@ from krpc.utils import snake_case
 from .generator import Generator
 from .docparser import DocParser
 from ..lang.python import PythonLanguage
-from ..utils import lower_camel_case, as_type
+from ..utils import as_type
 
 
 class PythonGenerator(Generator):
@@ -398,10 +398,9 @@ class PythonDocParser(DocParser):
 
     @staticmethod
     def parse_cref(cref):
-        # FIXME: is this correct?
         if cref[0] == "M":
             cref = cref[2:].split(".")
-            member = lower_camel_case(cref[-1])
+            member = snake_case(cref[-1])
             del cref[-1]
             return ".".join(cref) + "#" + member
         if cref[0] == "T":
