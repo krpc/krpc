@@ -10,6 +10,9 @@ namespace KRPC.Server.ProtocolBuffers
 {
     static class Utils
     {
+        // Size of the chunk read from the stream on each call. Messages larger than this are
+        // accumulated across successive reads via the DynamicBuffer.
+        const int ReadChunkSize = 4096;
 
         static IDictionary<IClient<byte, byte>, Stopwatch> readMessageTimers = new Dictionary<IClient<byte, byte>, Stopwatch> ();
         static IDictionary<IClient<byte, byte>, DynamicBuffer> readMessageBuffers = new Dictionary<IClient<byte, byte>, DynamicBuffer> ();
@@ -54,7 +57,7 @@ namespace KRPC.Server.ProtocolBuffers
 
             if (data == null)
                 data = new DynamicBuffer ();
-            byte[] buffer = new byte[4096]; //TODO: sensible default???
+            byte[] buffer = new byte[ReadChunkSize];
 
             int read = stream.Read (buffer, 0, buffer.Length);
             if (read == 0)
