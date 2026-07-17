@@ -13,6 +13,7 @@
 #   RealChute         -> GameData/RealChute
 #                        + GameData/000_Harmony, GameData/000_ClickThroughBlocker,
 #                          GameData/001_ToolbarControl (deps)
+#   DMagic            -> GameData/DMagicScienceAnimate
 # tools/krpctest mirrors this registry on the Python side.
 
 filegroup(
@@ -57,5 +58,13 @@ filegroup(
 filegroup(
     name = "toolbarcontrol",
     srcs = ["@toolbarcontrol//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+# DMagic's DMModuleScienceAnimateGeneric part module. Adds no parts of its own; a test-only part
+# config (tools/mods/config/DMagicScienceAnimate) supplies a part that uses it. No dependencies.
+filegroup(
+    name = "dmagic_science_animate",
+    srcs = ["@dmagic_science_animate//:gamedata"],
     visibility = ["//visibility:public"],
 )

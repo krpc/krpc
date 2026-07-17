@@ -500,3 +500,14 @@ http_archive(
     sha256 = "0f44f5500f8e914346cb2e6dd5c5e5f26df9f26caa6ce8179738a3842aac2a5b",
     url = "https://github.com/linuxgurugamer/ToolbarControl/releases/download/0.1.9.14/ToolbarControl-1.12.0-0.1.9.14.zip",
 )
+
+# DMagic's science part module, wrapped by the SpaceCenter Experiment class. This standalone
+# release is just the part-module assembly with no parts and no dependencies; a test-only part
+# config in tools/mods/config/DMagicScienceAnimate adds a part that uses it, so the DMagic code
+# path is exercised by the integration tests.
+http_archive(
+    name = "dmagic_science_animate",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/DMagicScienceAnimate/**']), visibility = ['//visibility:public'])",
+    sha256 = "a4821a1d76ddf0757b57a383bd4c76c153851159d533f7bcf31f1b74401d9b60",
+    url = "https://github.com/DMagic1/DMModuleScienceAnimateGeneric/releases/download/v0.23/DMModuleScienceAnimateGeneric_v0.23.zip",
+)

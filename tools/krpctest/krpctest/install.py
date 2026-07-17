@@ -37,6 +37,7 @@ MODS = {
         ("clickthroughblocker", "000_ClickThroughBlocker"),
         ("toolbarcontrol", "001_ToolbarControl"),
     ],
+    "DMagic": [("dmagic_science_animate", "DMagicScienceAnimate")],
 }
 
 # All managed GameData subdirs, every one a candidate for removal during reconcile.
