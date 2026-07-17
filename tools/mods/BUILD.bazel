@@ -6,10 +6,13 @@
 # the corresponding archive (declared in MODULE.bazel); krpctest.install then copies the
 # mod's GameData subtree from the external repo.
 #
-# The mod name accepted by `--mods` maps to the GameData folder it installs as follows:
+# The mod name accepted by `--mods` maps to the GameData folder(s) it installs as follows:
 #   RemoteTech        -> GameData/RemoteTech
 #   InfernalRobotics  -> GameData/MagicSmokeIndustries
 #   KerbalAlarmClock  -> GameData/TriggerTech
+#   RealChute         -> GameData/RealChute
+#                        + GameData/000_Harmony, GameData/000_ClickThroughBlocker,
+#                          GameData/001_ToolbarControl (deps)
 # tools/krpctest mirrors this registry on the Python side.
 
 filegroup(
@@ -27,5 +30,32 @@ filegroup(
 filegroup(
     name = "kerbal_alarm_clock",
     srcs = ["@kerbal_alarm_clock//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "realchute",
+    srcs = ["@realchute//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+# RealChute's runtime dependencies. Installed only alongside RealChute (its plugin will not
+# load without ClickThroughBlocker + ToolbarControl, and ClickThroughBlocker references
+# Harmony), never requested on their own.
+filegroup(
+    name = "harmony",
+    srcs = ["@harmony//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "clickthroughblocker",
+    srcs = ["@clickthroughblocker//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "toolbarcontrol",
+    srcs = ["@toolbarcontrol//:gamedata"],
     visibility = ["//visibility:public"],
 )

@@ -28,14 +28,24 @@ from krpctest.env import get_ksp_dir
 # when these functions lived in krpctest/__init__.py.
 log = logging.getLogger("krpctest")
 
-# Third-party mods the integration tests can require. Maps the canonical mod name (as
-# declared in a test's `mods` list and passed to `krpc-install --mods`) to the kRPC
-# service whose `.available` property reports whether the mod is loaded in the game. This
-# mirrors the registry in tools/mods/BUILD.bazel and krpctest/install.py.
+# Third-party mods the integration tests can require, declared in a test's `mods` list and
+# passed to `krpc-install --mods`. The set of installable mods mirrors the registry in
+# tools/mods/BUILD.bazel and krpctest/install.py; here each mod also needs a way to tell
+# whether it actually loaded in the running game.
+#
+# Most mods are wrapped by a kRPC service, so their `.available` property reports presence.
 _MOD_SERVICES = {
     "RemoteTech": "remote_tech",
     "InfernalRobotics": "infernal_robotics",
     "KerbalAlarmClock": "kerbal_alarm_clock",
+}
+
+# Some mods add parts but no dedicated service (RealChute is wrapped by the SpaceCenter
+# Parachute class). Detect these by probing the part catalog for a part they contribute,
+# via the test-only TestingTools helper. The probe name is the in-game part name, in which
+# KSP replaces underscores with periods (config `RC_stack` becomes `RC.stack`).
+_MOD_PARTS = {
+    "RealChute": "RC.stack",
 }
 
 # The KSP process this test run launched, or None if KSP was started externally (a
@@ -92,19 +102,26 @@ def _try_connect():
 
 def _installed_mods(conn):
     """The set of managed mods currently loaded in the running game."""
-    return {
+    installed = {
         name
         for name, service in _MOD_SERVICES.items()
         if getattr(conn, service).available
     }
+    installed |= {
+        name
+        for name, part in _MOD_PARTS.items()
+        if conn.testing_tools.part_available(part)
+    }
+    return installed
 
 
 def _validate_mods(required):
-    unknown = set(required) - set(_MOD_SERVICES)
+    known = set(_MOD_SERVICES) | set(_MOD_PARTS)
+    unknown = set(required) - known
     if unknown:
         raise ValueError(
             "Unknown mod(s) in `mods`: %s (known: %s)"
-            % (", ".join(sorted(unknown)), ", ".join(sorted(_MOD_SERVICES)))
+            % (", ".join(sorted(unknown)), ", ".join(sorted(known)))
         )
 
 

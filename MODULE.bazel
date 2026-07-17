@@ -442,10 +442,11 @@ http_file(
 )
 
 # ----------------------- Third-party mods (integration testing) -------------------------
-# The RemoteTech, InfernalRobotics and KerbalAlarmClock services wrap these mods. They are
-# installed into GameData by `krpc-install --mods=...` for the integration tests, and are
-# not part of the release. Each filegroup exports only the mod's own GameData subtree (the
-# RemoteTech archive also bundles an older ModuleManager, which is deliberately excluded).
+# The RemoteTech, InfernalRobotics and KerbalAlarmClock services wrap these mods, and the
+# SpaceCenter Parachute class wraps RealChute. They are installed into GameData by
+# `krpc-install --mods=...` for the integration tests, and are not part of the release. Each
+# filegroup exports only the mod's own GameData subtree (the RemoteTech archive also bundles
+# an older ModuleManager, which is deliberately excluded).
 
 http_archive(
     name = "remotetech",
@@ -466,4 +467,36 @@ http_archive(
     build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/TriggerTech/**']), visibility = ['//visibility:public'])",
     sha256 = "5fbaf7a1c69dec68557f4ce956e0f85956e66ffd828545914f23b79024fc3d67",
     url = "https://github.com/TriggerAu/KerbalAlarmClock/releases/download/v3.14.0.0/KerbalAlarmClock_3.14.0.0.zip",
+)
+
+http_archive(
+    name = "realchute",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/RealChute/**']), visibility = ['//visibility:public'])",
+    sha256 = "3b135ae03d2214d4721a655e2d63e7c93c9a69558d8eae2473fced2bbf92bdf0",
+    url = "https://github.com/ChrisViral/RealChute/releases/download/v1.4.9.5/RealChute_v1.4.9.5.zip",
+)
+
+# RealChute's plugin assembly hard-depends on ClickThroughBlocker and ToolbarControl, so its
+# part modules do not register unless both are installed alongside it; ClickThroughBlocker in
+# turn references Harmony, whose absence otherwise crashes kRPC's assembly scanner at startup.
+# All three are installed only as RealChute's dependencies, not requested on their own.
+http_archive(
+    name = "harmony",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/000_Harmony/**']), visibility = ['//visibility:public'])",
+    sha256 = "51d63f6739eaf22f12ce9456adace54385520c67cc13735d5300d5aa15c79476",
+    url = "https://github.com/KSPModdingLibs/HarmonyKSP/releases/download/2.2.1.0/HarmonyKSP_2.2.1.0_for_KSP1.8%2B.zip",
+)
+
+http_archive(
+    name = "clickthroughblocker",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/000_ClickThroughBlocker/**']), visibility = ['//visibility:public'])",
+    sha256 = "83bf6c3556a7d2c46634260100a535f1ccda99f83fc999c846b45a93c6369e3e",
+    url = "https://github.com/linuxgurugamer/ClickThroughBlocker/releases/download/2.1.10.23/ClickThroughBlocker-1.12.5-2.1.10.23.zip",
+)
+
+http_archive(
+    name = "toolbarcontrol",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/001_ToolbarControl/**']), visibility = ['//visibility:public'])",
+    sha256 = "0f44f5500f8e914346cb2e6dd5c5e5f26df9f26caa6ce8179738a3842aac2a5b",
+    url = "https://github.com/linuxgurugamer/ToolbarControl/releases/download/0.1.9.14/ToolbarControl-1.12.0-0.1.9.14.zip",
 )
