@@ -36,7 +36,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the experiment has been completed.
+        /// Whether the subject has been fully researched. This is true once the science banked for
+        /// the subject reaches the science cap. As the banked science (see <see cref="Science"/>) is
+        /// only updated after transmission/recovery, this reflects fully mining the subject over
+        /// repeated experiments, not whether a single run has produced data. To check whether a run
+        /// has produced data, and how valuable it is, use <see cref="Experiment.HasData"/> and
+        /// <see cref="ScienceData.TransmitValue"/>.
         /// </summary>
         [KRPCProperty]
         public bool IsComplete {
