@@ -77,6 +77,7 @@ SpaceCenter service
 * Fix VesselOrbital reference frame angular velocity (missing Coriolis correction) (:issue:`823`)
 * Fix Vessel.AvailableTorque due to sign inconsistency in KSP's ITorqueProvider implementations (:issue:`525`)
 * Fix AutoPilot.Error to return the absolute value of the normalized angle (:issue:`893`)
+* Fix the auto-pilot no longer controlling the vessel after a Revert to Launch when a client keeps its auto-pilot object across the reload (it appeared engaged but stopped driving the vessel until the game was restarted)
 * Fix CelestialBody.Rotation returning incorrect values before a flight scene loads (:issue:`890`)
 * Fix ResourceConverter.State and ResourceHarvester.ThermalEfficiency misreading the KSP status string (:issue:`892`)
 * Fix Waypoint.MeanAltitude, SurfaceAltitude, BedrockAltitude (:issue:`891`)

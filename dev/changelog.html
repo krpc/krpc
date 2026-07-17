@@ -669,6 +669,7 @@
 <li><p>Fix VesselOrbital reference frame angular velocity (missing Coriolis correction) (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/823">#823</a>)</p></li>
 <li><p>Fix Vessel.AvailableTorque due to sign inconsistency in KSP’s ITorqueProvider implementations (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/525">#525</a>)</p></li>
 <li><p>Fix AutoPilot.Error to return the absolute value of the normalized angle (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/893">#893</a>)</p></li>
+<li><p>Fix the auto-pilot no longer controlling the vessel after a Revert to Launch when a client keeps its auto-pilot object across the reload (it appeared engaged but stopped driving the vessel until the game was restarted)</p></li>
 <li><p>Fix CelestialBody.Rotation returning incorrect values before a flight scene loads (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/890">#890</a>)</p></li>
 <li><p>Fix ResourceConverter.State and ResourceHarvester.ThermalEfficiency misreading the KSP status string (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/892">#892</a>)</p></li>
 <li><p>Fix Waypoint.MeanAltitude, SurfaceAltitude, BedrockAltitude (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/891">#891</a>)</p></li>
@@ -3132,7 +3133,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/62e83ab">62e83ab</a>
+  <a href="https://github.com/krpc/krpc/commit/803c8bf">803c8bf</a>
 </p></div>
       
     </div>
