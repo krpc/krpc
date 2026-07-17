@@ -12,8 +12,10 @@ Installing the package provides:
 - a pytest plugin — so `pytest` discovers and runs the `krpctest.TestCase` tests natively,
   launching and managing KSP automatically.
 
-See the [Development Guide](../../Development-Guide.md) for how to install these packages and run
-the test suite.
+From a checkout of the kRPC repository there is no need to install the package: `bazel run
+//:test-ingame` runs the tests and `bazel run //:run-ksp` runs the game, taking this package and
+the client from the build. See the [Development Guide](../../Development-Guide.md) for both ways
+of running the test suite.
 
 ## TestingTools
 

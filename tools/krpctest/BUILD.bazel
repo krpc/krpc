@@ -1,4 +1,4 @@
-load("@rules_python//python:defs.bzl", "py_library")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load("//:config.bzl", "python_version", "version")
 load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
 
@@ -21,6 +21,31 @@ genrule(
     srcs = ["//:python_version"],
     outs = ["krpctest/version.py"],
     cmd = 'cp "$<" "$@"',
+)
+
+# Run the integration tests that need the game: `bazel run //:test-ingame -- [pytest args]`.
+# The tests themselves are read from the repository (the runner works there rather than in
+# the runfiles tree), so adding or editing one needs no change here.
+py_binary(
+    name = "test-ingame",
+    srcs = ["run_tests.py"],
+    main = "run_tests.py",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":krpctest_lib",
+        "@pypi//pytest",
+    ],
+)
+
+# Install the mod and run the game: `bazel run //:run-ksp -- [--mods=... --load-*=...]`.
+# This is the module behind the krpc-run-ksp console script, run directly: it takes the
+# repository from BUILD_WORKSPACE_DIRECTORY and runs KSP in KSP_DIR, so it needs no wrapper.
+py_binary(
+    name = "run-ksp",
+    srcs = ["krpctest/run_ksp.py"],
+    main = "krpctest/run_ksp.py",
+    visibility = ["//visibility:public"],
+    deps = [":krpctest_lib"],
 )
 
 py_sdist(
