@@ -15,16 +15,28 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public class Orbit : Equatable<Orbit>
     {
-        internal Orbit (global::Vessel vessel)
+        readonly Vessel ownerVessel;
+        readonly CelestialBody ownerBody;
+        readonly Node ownerNode;
+
+        internal Orbit (Vessel vessel)
         {
-            InternalOrbit = vessel.GetOrbit ();
+            InternalOrbit = vessel.InternalVessel.GetOrbit ();
+            ownerVessel = vessel;
         }
 
-        internal Orbit (global::CelestialBody body)
+        internal Orbit (CelestialBody body)
         {
-            if (body == body.referenceBody)
+            if (body.InternalBody == body.InternalBody.referenceBody)
                 throw new ArgumentException ("Body does not orbit anything");
-            InternalOrbit = body.GetOrbit ();
+            InternalOrbit = body.InternalBody.GetOrbit ();
+            ownerBody = body;
+        }
+
+        internal Orbit (Node node)
+        {
+            InternalOrbit = node.InternalNode.nextPatch;
+            ownerNode = node;
         }
 
         /// <summary>
@@ -33,6 +45,17 @@ namespace KRPC.SpaceCenter.Services
         public Orbit (global::Orbit orbit)
         {
             InternalOrbit = orbit;
+        }
+
+        // Construct an orbit from a KSP orbit object, inheriting the owner of an
+        // existing orbit (used for a patch that follows a sphere-of-influence change,
+        // which belongs to the same object).
+        internal Orbit (global::Orbit orbit, Orbit owner)
+        {
+            InternalOrbit = orbit;
+            ownerVessel = owner.ownerVessel;
+            ownerBody = owner.ownerBody;
+            ownerNode = owner.ownerNode;
         }
 
         /// <summary>
@@ -62,6 +85,35 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public CelestialBody Body {
             get { return SpaceCenter.Bodies [InternalOrbit.referenceBody.name]; }
+        }
+
+        // The reference frame used by the closest-approach members when the caller
+        // does not specify one: the orbital frame of the object the orbit belongs to,
+        // falling back to the reference body's non-rotating (inertial) frame when the
+        // owner is unknown.
+        internal ReferenceFrame DefaultReferenceFrame {
+            get {
+                if (ownerNode != null)
+                    return ownerNode.OrbitalReferenceFrame;
+                if (ownerVessel != null)
+                    return ownerVessel.OrbitalReferenceFrame;
+                if (ownerBody != null)
+                    return ownerBody.OrbitalReferenceFrame;
+                return Body.NonRotatingReferenceFrame;
+            }
+        }
+
+        // The vessel this orbit belongs to, or null if it belongs to something else or
+        // the owner is unknown.
+        internal Vessel OwnerVessel {
+            get { return ownerVessel; }
+        }
+
+        // The celestial body this orbit belongs to (the orbiting body, not the parent
+        // it orbits — that is Body), or null if it belongs to something else or the
+        // owner is unknown.
+        internal CelestialBody OwnerBody {
+            get { return ownerBody; }
         }
 
         /// <summary>
@@ -303,7 +355,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty (Nullable = true)]
         public Orbit NextOrbit {
-            get { return (double.IsNaN (TimeToSOIChange)) ? null : new Orbit (InternalOrbit.nextPatch); }
+            get { return (double.IsNaN (TimeToSOIChange)) ? null : new Orbit (InternalOrbit.nextPatch, this); }
         }
 
         /// <summary>
@@ -434,10 +486,44 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The next closest approach to a target orbit.
+        /// </summary>
+        /// <param name="target">Target orbit.</param>
+        [KRPCMethod]
+        public ClosestApproach NextClosestApproach (Orbit target)
+        {
+            if (ReferenceEquals (target, null))
+                throw new ArgumentNullException (nameof (target));
+            return new ClosestApproach (this, target, Planetarium.GetUniversalTime ());
+        }
+
+        /// <summary>
+        /// A list of the closest approaches to a target orbit, one for each of the next
+        /// <paramref name="orbits"/> orbital periods.
+        /// </summary>
+        /// <param name="target">Target orbit.</param>
+        /// <param name="orbits">The number of future orbits to search.</param>
+        [KRPCMethod]
+        public IList<ClosestApproach> ClosestApproaches (Orbit target, int orbits)
+        {
+            if (ReferenceEquals (target, null))
+                throw new ArgumentNullException (nameof (target));
+            var approaches = new List<ClosestApproach> ();
+            double orbitstart = Planetarium.GetUniversalTime ();
+            double period = InternalOrbit.period;
+            for (int i = 0; i < orbits; i++) {
+                approaches.Add (new ClosestApproach (this, target, orbitstart));
+                orbitstart += period;
+            }
+            return approaches;
+        }
+
+        /// <summary>
         /// Estimates and returns the time at closest approach to a target orbit.
         /// </summary>
         /// <returns>The universal time at closest approach, in seconds.</returns>
         /// <param name="target">Target orbit.</param>
+        [Obsolete ("Use <see cref='NextClosestApproach'/> and read <see cref='ClosestApproach.UT'/> instead.")]
         [KRPCMethod]
         public double TimeOfClosestApproach (Orbit target)
         {
@@ -451,6 +537,7 @@ namespace KRPC.SpaceCenter.Services
         /// Estimates and returns the distance at closest approach to a target orbit, in meters.
         /// </summary>
         /// <param name="target">Target orbit.</param>
+        [Obsolete ("Use <see cref='NextClosestApproach'/> and read <see cref='ClosestApproach.Distance'/> instead.")]
         [KRPCMethod]
         public double DistanceAtClosestApproach (Orbit target)
         {
@@ -471,6 +558,7 @@ namespace KRPC.SpaceCenter.Services
         /// </returns>
         /// <param name="target">Target orbit.</param>
         /// <param name="orbits">The number of future orbits to search.</param>
+        [Obsolete ("Use <see cref='ClosestApproaches'/> instead.")]
         [KRPCMethod]
         public IList<IList<double>> ListClosestApproaches(Orbit target, int orbits)
         {

@@ -164,7 +164,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Orbit Orbit {
-            get { return new Orbit (InternalVessel); }
+            get { return new Orbit (this); }
         }
 
         /// <summary>
