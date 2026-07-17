@@ -2202,5 +2202,74 @@ class TestAutoPilotOtherVessel(krpctest.TestCase):
         ap.engaged = False
 
 
+class TestAutoPilotRevertToLaunch(krpctest.TestCase):
+    # Regression for the auto-pilot no longer engaging after a Revert to Launch. A client
+    # that keeps its auto-pilot handle across the revert (a persistent connection, or a
+    # script re-run without reconnecting) must be able to re-engage and actually control
+    # the vessel — previously the handle pointed at an orphaned controller that the
+    # per-tick pilot loop never drove, so the vessel was left uncontrolled until a game
+    # restart.
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.remove_other_vessels()
+        cls.launch_vessel_from_vab("AutoPilot")
+
+    def wait_for_flight(self):
+        conn = self.connect()
+
+        def in_flight():
+            try:
+                return (
+                    conn.krpc.game_scene == conn.krpc.GameScene.flight
+                    and conn.space_center.active_vessel is not None
+                    and conn.space_center.active_vessel.parts.root is not None
+                )
+            except RuntimeError:
+                return False
+
+        self.wait_until(in_flight, timeout=60, message="flight scene after revert")
+
+    def assert_pilot_loop_drives(self, auto_pilot, vessel):
+        # An engaged auto-pilot that the per-tick pilot loop is actually driving forces the
+        # stock SAS action group off every physics tick. Enabling SAS and watching it clear
+        # is a ground-independent signal that the engaged handle is wired to the vessel's
+        # live controller — a revert leaves the craft on the launch pad, where it cannot be
+        # slewed to a target, so this checks the drive path rather than actual rotation.
+        auto_pilot.reference_frame = vessel.surface_reference_frame
+        auto_pilot.target_pitch_and_heading(0, 90)
+        vessel.control.sas = True
+        auto_pilot.engaged = True
+        self.assertTrue(auto_pilot.engaged)
+        self.wait_until(
+            lambda: not vessel.control.sas,
+            timeout=5,
+            message="the auto-pilot to hold SAS off",
+        )
+
+    def test_reengage_after_revert_to_launch(self):
+        space_center = self.connect().space_center
+        vessel = space_center.active_vessel
+        auto_pilot = vessel.auto_pilot
+
+        # The pilot loop drives the vessel before the revert.
+        self.assert_pilot_loop_drives(auto_pilot, vessel)
+
+        # Revert to launch with the auto-pilot still engaged, as the bug report describes.
+        self.assertTrue(space_center.can_revert_to_launch)
+        space_center.revert_to_launch()
+        self.wait_for_flight()
+
+        # Reuse the same auto-pilot handle after the scene reload. Pre-fix the handle
+        # pointed at a controller orphaned from the live per-vessel registry, so it
+        # reported engaged but the pilot loop never drove the recreated vessel (SAS was
+        # never forced off) until the game was restarted.
+        space_center = self.connect().space_center
+        vessel = space_center.active_vessel
+        self.assert_pilot_loop_drives(auto_pilot, vessel)
+        auto_pilot.engaged = False
+
+
 if __name__ == "__main__":
     unittest.main()
