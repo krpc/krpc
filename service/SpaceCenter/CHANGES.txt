@@ -18,6 +18,7 @@ v0.6.0
  * Add Flight.SurfacePrograde and Flight.SurfaceRetrograde direction vectors (surface-relative velocity direction, matching navball surface mode) (#582)
  * Add Flight.SimulateAerodynamicTorqueAt (#825)
  * Add Control.AeroSurfaces to enable/disable pitch, yaw and roll on all control surfaces (#827)
+ * Add Engine.Flameout (#311)
  * Add Control.EngineGimbals to enable/disable gimbal on all gimballed engines (#827)
  * Add Module.AllFieldsById to expose all part module field values, including those not
    visible in the UI (#858)
