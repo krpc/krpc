@@ -375,6 +375,18 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Whether the engine has flamed out - it is active but has run out of
+        /// propellant, so it is producing no thrust. This is the signal a client
+        /// can use to decide when to activate the next stage. Note that on a
+        /// vessel with drop tanks or asparagus staging some engines can flame out
+        /// while others keep burning.
+        /// </summary>
+        [KRPCProperty]
+        public bool Flameout {
+            get { return CurrentEngine.flameout; }
+        }
+
+        /// <summary>
         /// The current throttle setting for the engine. A value between 0 and 1.
         /// This is not necessarily the same as the vessel's main throttle
         /// setting, as some engines take time to adjust their throttle
