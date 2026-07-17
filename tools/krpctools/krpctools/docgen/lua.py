@@ -72,7 +72,8 @@ class LuaDomain(Domain):
             name = ".".join(name)
         return self.shorten_ref(name)
 
-    # FIXME: reference shortening does not work with sphinx-lua
+    # sphinx-lua cannot resolve references written in the shortened, module-relative form the other
+    # domains use, so Lua references are left fully qualified.
     def shorten_ref(self, name, obj=None):
         return name
 
