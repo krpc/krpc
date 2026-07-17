@@ -879,6 +879,7 @@ SpaceCenter.Engine.PropellantNames
 SpaceCenter.Engine.PropellantRatios
 SpaceCenter.Engine.Propellants
 SpaceCenter.Engine.HasFuel
+SpaceCenter.Engine.Flameout
 SpaceCenter.Engine.Throttle
 SpaceCenter.Engine.ThrottleLocked
 SpaceCenter.Engine.IndependentThrottle
