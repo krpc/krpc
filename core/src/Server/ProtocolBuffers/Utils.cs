@@ -86,19 +86,45 @@ namespace KRPC.Server.ProtocolBuffers
         public static int ReadMessage <T> (ref T message, MessageParser<T> parser, byte[] data,
                                            int offset, int length) where T : IMessage<T>, new()
         {
-            var codedStream = new CodedInputStream (data, offset, length);
-            // Get the protobuf message size
-            var size = (int)codedStream.ReadUInt32 ();
-            var totalSize = (int)codedStream.Position + size;
-            // Check if enough data is available
+            // Messages are length-delimited: a varint byte-length prefix followed by the message body.
+            int prefixLength;
+            var size = DecodeMessageLength (data, offset, length, out prefixLength);
+            if (prefixLength == 0)
+                return 0; // The length prefix has not been fully received yet.
+            var totalSize = prefixLength + size;
             if (length < totalSize)
-                return 0;
-            // Decode the message
-            // FIXME: If multiple requests are received, decoding a single request fails unless
-            // the coded stream is recreated to be precisely the message size. Why is this?
-            codedStream = new CodedInputStream (data, offset + (int)codedStream.Position, size);
-            message = parser.ParseFrom (codedStream);
+                return 0; // The message body has not been fully received yet.
+            // Parse the message body straight out of the buffer. This copies no payload bytes and
+            // allocates no intermediate stream, and reads exactly the message's own bytes, so a
+            // following message in the same buffer is left untouched.
+            message = parser.ParseFrom (data, offset + prefixLength, size);
             return totalSize;
+        }
+
+        /// <summary>
+        /// Decode the base-128 varint that prefixes a length-delimited message. Returns the message
+        /// length in bytes and sets prefixLength to the number of bytes the varint occupies, or sets
+        /// prefixLength to zero if the buffer does not yet contain the complete varint.
+        /// </summary>
+        static int DecodeMessageLength (byte[] data, int offset, int length, out int prefixLength)
+        {
+            var result = 0;
+            // A varint encoding a 32-bit value is at most five bytes long.
+            for (var i = 0; i < 5; i++) {
+                if (i >= length) {
+                    prefixLength = 0;
+                    return 0;
+                }
+                int b = data [offset + i];
+                result |= (b & 0x7f) << (7 * i);
+                if ((b & 0x80) == 0) {
+                    if (result < 0)
+                        throw new InvalidOperationException ("Message length prefix is out of range");
+                    prefixLength = i + 1;
+                    return result;
+                }
+            }
+            throw new InvalidOperationException ("Message length prefix is not a valid varint");
         }
 
         /// <summary>
