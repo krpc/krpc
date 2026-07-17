@@ -3620,6 +3620,16 @@ to the ratio at which they are consumed by the engine.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_Flameout">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Engine_Flameout</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_Flameout" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the engine has flamed out - it is active but has run out of
+propellant, so it is producing no thrust. This is the signal a client
+can use to decide when to activate the next stage. Note that on a
+vessel with drop tanks or asparagus staging some engines can flame out
+while others keep burning.</p>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_Throttle">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Engine_Throttle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_Throttle" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
@@ -6632,7 +6642,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/8c1b105">8c1b105</a>
+  <a href="https://github.com/krpc/krpc/commit/62e83ab">62e83ab</a>
 </p></div>
       
     </div>

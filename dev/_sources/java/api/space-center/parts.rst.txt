@@ -2580,6 +2580,17 @@ Engine
 
    
 
+   .. method:: boolean getFlameout()
+
+
+      Whether the engine has flamed out - it is active but has run out of
+      propellant, so it is producing no thrust. This is the signal a client
+      can use to decide when to activate the next stage. Note that on a
+      vessel with drop tanks or asparagus staging some engines can flame out
+      while others keep burning.
+
+   
+
    .. method:: float getThrottle()
 
    .. method:: void setThrottle(float value)

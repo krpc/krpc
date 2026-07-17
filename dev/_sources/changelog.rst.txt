@@ -59,6 +59,7 @@ SpaceCenter service
 * Add Flight.SurfacePrograde and Flight.SurfaceRetrograde direction vectors (surface-relative velocity direction, matching navball surface mode) (:issue:`582`)
 * Add Flight.SimulateAerodynamicTorqueAt (:issue:`825`)
 * Add Control.AeroSurfaces to enable/disable pitch, yaw and roll on all control surfaces (:issue:`827`)
+* Add Engine.Flameout (:issue:`311`)
 * Add Control.EngineGimbals to enable/disable gimbal on all gimballed engines (:issue:`827`)
 * Add Module.AllFieldsById to expose all part module field values, including those not visible in the UI (:issue:`858`)
 * Allow Module.HasFieldWithId, GetFieldById, SetFieldIntById, SetFieldFloatById, SetFieldStringById, SetFieldBoolById and ResetFieldById to also access fields not visible in the UI (:issue:`858`)

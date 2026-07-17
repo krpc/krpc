@@ -5164,6 +5164,24 @@ to the ratio at which they are consumed by the engine.</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Engine.flameout">
+<span class="sig-name descname"><span class="pre">flameout</span></span><a class="headerlink" href="#SpaceCenter.Engine.flameout" title="Link to this definition">#</a></dt>
+<dd><p>Whether the engine has flamed out - it is active but has run out of
+propellant, so it is producing no thrust. This is the signal a client
+can use to decide when to activate the next stage. Note that on a
+vessel with drop tanks or asparagus staging some engines can flame out
+while others keep burning.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Engine.throttle">
 <span class="sig-name descname"><span class="pre">throttle</span></span><a class="headerlink" href="#SpaceCenter.Engine.throttle" title="Link to this definition">#</a></dt>
 <dd><p>The current throttle setting for the engine. A value between 0 and 1.
@@ -9433,7 +9451,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/8c1b105">8c1b105</a>
+  <a href="https://github.com/krpc/krpc/commit/62e83ab">62e83ab</a>
 </p></div>
       
     </div>

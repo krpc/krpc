@@ -2535,6 +2535,16 @@ Engine
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_Flameout(krpc_connection_t connection, bool * result)
+
+      Whether the engine has flamed out - it is active but has run out of
+      propellant, so it is producing no thrust. This is the signal a client
+      can use to decide when to activate the next stage. Note that on a
+      vessel with drop tanks or asparagus staging some engines can flame out
+      while others keep burning.
+
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_Throttle(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Engine_set_Throttle(float value)
 

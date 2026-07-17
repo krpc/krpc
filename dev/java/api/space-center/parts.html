@@ -3667,6 +3667,16 @@ to the ratio at which they are consumed by the engine.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Engine.getFlameout()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getFlameout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Engine.getFlameout()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the engine has flamed out - it is active but has run out of
+propellant, so it is producing no thrust. This is the signal a client
+can use to decide when to activate the next stage. Note that on a
+vessel with drop tanks or asparagus staging some engines can flame out
+while others keep burning.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Engine.getThrottle()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getThrottle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Engine.getThrottle()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -6682,7 +6692,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/8c1b105">8c1b105</a>
+  <a href="https://github.com/krpc/krpc/commit/62e83ab">62e83ab</a>
 </p></div>
       
     </div>
