@@ -1670,6 +1670,48 @@ the <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCen
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Lift">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_Lift</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Lift" title="Link to this definition">#</a><br /></dt>
+<dd><p>The aerodynamic <a class="reference external" href="https://en.wikipedia.org/wiki/Aerodynamic_force">lift</a>
+currently acting on the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not available when the Ferram Aerospace Research mod is installed.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Drag">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_Drag</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Drag" title="Link to this definition">#</a><br /></dt>
+<dd><p>The aerodynamic <a class="reference external" href="https://en.wikipedia.org/wiki/Aerodynamic_force">drag</a>
+currently acting on the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not available when the Ferram Aerospace Research mod is installed.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_MomentOfInertia">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_MomentOfInertia</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_MomentOfInertia" title="Link to this definition">#</a><br /></dt>
 <dd><p>The moment of inertia of the part in <span class="math notranslate nohighlight">\(kg.m^2\)</span> around its center of mass
@@ -6642,7 +6684,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/a610689">a610689</a>
+  <a href="https://github.com/krpc/krpc/commit/331c8af">331c8af</a>
 </p></div>
       
     </div>

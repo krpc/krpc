@@ -1670,6 +1670,48 @@ the <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part4liftE14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part4liftE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part4liftE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Part::lift__ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lift</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part4liftE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The aerodynamic <a class="reference external" href="https://en.wikipedia.org/wiki/Aerodynamic_force">lift</a>
+currently acting on the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> – The reference frame that the returned vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not available when the Ferram Aerospace Research mod is installed.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part4dragE14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part4dragE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part4dragE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Part::drag__ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">drag</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part4dragE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The aerodynamic <a class="reference external" href="https://en.wikipedia.org/wiki/Aerodynamic_force">drag</a>
+currently acting on the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> – The reference frame that the returned vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not available when the Ferram Aerospace Research mod is installed.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part17moment_of_inertiaEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter4Part17moment_of_inertiaEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part17moment_of_inertiaEv"></span><span id="krpc::services::SpaceCenter::Part::moment_of_inertia"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">moment_of_inertia</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part17moment_of_inertiaEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The moment of inertia of the part in <span class="math notranslate nohighlight">\(kg.m^2\)</span> around its center of mass
@@ -6605,7 +6647,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/a610689">a610689</a>
+  <a href="https://github.com/krpc/krpc/commit/331c8af">331c8af</a>
 </p></div>
       
     </div>

@@ -1691,6 +1691,48 @@ the <a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.p
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.lift(ReferenceFrame)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">lift</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.lift(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The aerodynamic <a class="reference external" href="https://en.wikipedia.org/wiki/Aerodynamic_force">lift</a>
+currently acting on the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not available when the Ferram Aerospace Research mod is installed.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.drag(ReferenceFrame)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">drag</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.drag(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The aerodynamic <a class="reference external" href="https://en.wikipedia.org/wiki/Aerodynamic_force">drag</a>
+currently acting on the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not available when the Ferram Aerospace Research mod is installed.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getMomentOfInertia()">
  <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getMomentOfInertia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getMomentOfInertia()" title="Link to this definition">#</a></dt>
 <dd><p>The moment of inertia of the part in <span class="math notranslate nohighlight">\(kg.m^2\)</span> around its center of mass
@@ -6692,7 +6734,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/a610689">a610689</a>
+  <a href="https://github.com/krpc/krpc/commit/331c8af">331c8af</a>
 </p></div>
       
     </div>

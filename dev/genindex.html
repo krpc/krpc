@@ -2174,10 +2174,10 @@
 </li>
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.distanceAtClosestApproach(Orbit)">distanceAtClosestApproach(Orbit) (Java method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.divide">divide() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.divide">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.divide(Connection, Expression, Expression)">divide(Connection, Expression, Expression) (Java method)</a>
 </li>
       <li><a href="java/api/kerbal-alarm-clock/alarm-action.html#krpc.client.services.KerbalAlarmClock.AlarmAction.DO_NOTHING">DO_NOTHING (Java field)</a>
@@ -2246,6 +2246,10 @@
       <li><a href="python/api/space-center/parts.html#SpaceCenter.PartField.double_value">double_value (PartField attribute)</a>
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.drag">drag (Flight attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.Part.drag">drag() (Part method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Part.drag">[1]</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.drag(ReferenceFrame)">drag(ReferenceFrame) (Java method)</a>
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.drag_acceleration">drag_acceleration (Flight attribute)</a>
 </li>
@@ -7278,6 +7282,8 @@
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part12docking_portEv">krpc::services::SpaceCenter::Part::docking_port (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part4dragE14ReferenceFrame">krpc::services::SpaceCenter::Part::drag (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part8dry_massEv">krpc::services::SpaceCenter::Part::dry_mass (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part16dynamic_pressureEv">krpc::services::SpaceCenter::Part::dynamic_pressure (C++ function)</a>
@@ -7313,6 +7319,8 @@
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part12launch_clampEv">krpc::services::SpaceCenter::Part::launch_clamp (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part3legEv">krpc::services::SpaceCenter::Part::leg (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part4liftE14ReferenceFrame">krpc::services::SpaceCenter::Part::lift (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part5lightEv">krpc::services::SpaceCenter::Part::light (C++ function)</a>
 </li>
@@ -11378,6 +11386,8 @@
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_DockingPort">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_DockingPort (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Drag">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Drag (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_DryMass">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_DryMass (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_DynamicPressure">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_DynamicPressure (C function)</a>
@@ -11413,6 +11423,8 @@
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_LaunchClamp">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_LaunchClamp (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Leg">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Leg (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Lift">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Lift (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Light">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Light (C function)</a>
 </li>
@@ -13030,10 +13042,10 @@
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.less_than">less_than() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.less_than">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.less_than_or_equal">less_than_or_equal() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.less_than_or_equal">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.lessThan(Connection, Expression, Expression)">lessThan(Connection, Expression, Expression) (Java method)</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.lessThanOrEqual(Connection, Expression, Expression)">lessThanOrEqual(Connection, Expression, Expression) (Java method)</a>
@@ -13058,6 +13070,10 @@
       <li><a href="lua/api/lidar/laser.html#LiDAR.LiDAR.Laser.part">LiDAR.LiDAR.Laser.part (attribute)</a>
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.lift">lift (Flight attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.Part.lift">lift() (Part method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Part.lift">[1]</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.lift(ReferenceFrame)">lift(ReferenceFrame) (Java method)</a>
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.lift_acceleration">lift_acceleration (Flight attribute)</a>
 </li>
@@ -18441,7 +18457,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/a610689">a610689</a>
+  <a href="https://github.com/krpc/krpc/commit/331c8af">331c8af</a>
 </p></div>
       
     </div>

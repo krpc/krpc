@@ -883,6 +883,38 @@ Part
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
    
 
+   .. function:: std::tuple<double, double, double> lift(ReferenceFrame reference_frame)
+
+      The aerodynamic `lift <https://en.wikipedia.org/wiki/Aerodynamic_force>`_
+      currently acting on the part.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned vector is in.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   
+
+      .. note::
+
+         Not available when the Ferram Aerospace Research mod is installed.
+
+   .. function:: std::tuple<double, double, double> drag(ReferenceFrame reference_frame)
+
+      The aerodynamic `drag <https://en.wikipedia.org/wiki/Aerodynamic_force>`_
+      currently acting on the part.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned vector is in.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   
+
+      .. note::
+
+         Not available when the Ferram Aerospace Research mod is installed.
+
    .. function:: std::tuple<double, double, double> moment_of_inertia()
 
       The moment of inertia of the part in :math:`kg.m^2` around its center of mass
