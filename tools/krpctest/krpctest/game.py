@@ -198,6 +198,23 @@ def _unsatisfiable_message(required, installed=None):
     )
 
 
+def _run_ksp_command(mods_arg):
+    """The command that starts a game to test against, written the way the reader runs it:
+    the bazel target from a checkout, the console script from an installed package."""
+    if os.environ.get("BUILD_WORKSPACE_DIRECTORY"):
+        prefix = "bazel run //:run-ksp -- "
+    else:
+        prefix = "krpc-run-ksp "
+    return (prefix + "--load-game=krpctest " + mods_arg).strip()
+
+
+def _run_tests_command():
+    """The command that runs the suite, written the way the reader runs it."""
+    if os.environ.get("BUILD_WORKSPACE_DIRECTORY"):
+        return "bazel run //:test-ingame"
+    return "pytest"
+
+
 def _mismatch_message(required, installed):
     parts = []
     missing = sorted(required - installed)
@@ -209,9 +226,9 @@ def _mismatch_message(required, installed):
     suffix = ("--mods=" + ",".join(sorted(required))) if required else "--mods="
     return (
         "The running KSP has the wrong mods (%s). It was not started by the tests, so it "
-        "will not be modified. Restart it with the correct mods, e.g. "
-        "`krpc-run-ksp --load-game=krpctest %s`, or run the suite with "
-        "`pytest`." % ("; ".join(parts), suffix)
+        "will not be modified. Restart it with the correct mods, e.g. `%s`, or run the "
+        "suite with `%s` and let it manage the game."
+        % ("; ".join(parts), _run_ksp_command(suffix), _run_tests_command())
     )
 
 
@@ -245,11 +262,11 @@ def ensure_game(mods=None):
         _stop_ksp()
     elif not _auto_launch_enabled():
         raise RuntimeError(
-            "No kRPC server is reachable and auto-launch is disabled "
-            "(KRPC_AUTO_LAUNCH=0). Start KSP first, e.g. "
-            "`krpc-run-ksp --load-game=krpctest"
-            + ((" --mods=" + ",".join(sorted(required))) if required else "")
-            + "`."
+            "No kRPC server is reachable and auto-launch is disabled (--no-launch or "
+            "KRPC_AUTO_LAUNCH=0). Start KSP first, e.g. `%s`, and wait for it to load."
+            % _run_ksp_command(
+                ("--mods=" + ",".join(sorted(required))) if required else ""
+            )
         )
     # Launch (from cold, or after stopping a wrong-state game we own) and confirm the
     # required mods actually became available before running any tests against it.

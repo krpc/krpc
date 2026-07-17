@@ -196,6 +196,20 @@ test_suite(
     ],
 )
 
+# The tests that need the game, which //:test does not cover:
+# `bazel run //:test-ingame -- [pytest args]` runs them, launching the game as needed, and
+# `bazel run //:run-ksp` starts the game on its own, to run tests against without
+# restarting it each time.
+alias(
+    name = "test-ingame",
+    actual = "//tools/krpctest:test-ingame",
+)
+
+alias(
+    name = "run-ksp",
+    actual = "//tools/krpctest:run-ksp",
+)
+
 test_suite(
     name = "lint",
     tests = [
