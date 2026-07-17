@@ -46,6 +46,7 @@ _MOD_SERVICES = {
 # KSP replaces underscores with periods (config `RC_stack` becomes `RC.stack`).
 _MOD_PARTS = {
     "RealChute": "RC.stack",
+    "DMagic": "dmagicSensorTest",
 }
 
 # The KSP process this test run launched, or None if KSP was started externally (a

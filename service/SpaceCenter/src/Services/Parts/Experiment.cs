@@ -145,6 +145,11 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (Inoperable)
                 throw new InvalidOperationException ("Experiment is inoperable");
             experiment.ResetExperiment ();
+            // ResetExperiment only clears the base ModuleScienceExperiment slot. DMagic science
+            // experiments keep their results in their own IScienceDataContainer, which the base
+            // reset leaves untouched, so dump the container through the interface reference too.
+            foreach (var data in dataContainer.GetData ())
+                dataContainer.DumpData (data);
         }
 
         /// <summary>

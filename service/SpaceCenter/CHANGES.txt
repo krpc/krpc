@@ -2,6 +2,8 @@ v0.6.0
  * Fix Flight.SimulateAerodynamicForceAt ignoring the current deflection of
    aerodynamic control surfaces, including deployed airbrakes (#622)
  * Fix Parachute.Deploy being a silent no-op for RealChute parachutes (#382)
+ * Fix Experiment.Reset not clearing the science data stored by DMagic experiments,
+   which caused the next call to Run to fail with "Experiment already contains data" (#550)
  * Fix Camera Distance, Pitch, Heading and FoV setters being lost when set during a camera mode switch (#318)
  * Fix Maneuver and ManeuverOrbital reference frame velocity (previously returned zero; now returns the orbital velocity at the node UT)
  * Fix angular velocity for VesselSurface, VesselSurfaceVelocity, CelestialBodyOrbital, Maneuver, ManeuverOrbital, Part, PartCenterOfMass, DockingPort and Thrust reference frames (previously returned zero)
